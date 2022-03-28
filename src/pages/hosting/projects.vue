@@ -1,0 +1,3 @@
+<template>
+  <h-projects />
+</template>

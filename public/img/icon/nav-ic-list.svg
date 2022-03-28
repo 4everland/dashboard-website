@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="16px" viewBox="0 0 12 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>group</title>
+    <desc>Created with Sketch.</desc>
+    <g id="page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="AR-History" transform="translate(-1289.000000, -104.000000)">
+            <g id="group" transform="translate(1289.000000, 104.000000)">
+                <path d="M9,5 C7.896,5 7,4.104 7,3 L7,0 L2,0 C0.896,0 0,0.896 0,2 L0,14 C0,15.104 0.896,16 2,16 L10,16 C11.104,16 12,15.104 12,14 L12,5 L9,5 Z" id="Fill-1" fill="#83BD5A"></path>
+                <path d="M7.5,0 L7.5,2.648 C7.5,3.671 8.329,4.5 9.352,4.5 L12,4.5" id="Fill-3" fill="#BCDAAC"></path>
+                <path d="M9.5,9 L2.5,9 C2.225,9 2,8.775 2,8.5 C2,8.225 2.225,8 2.5,8 L9.5,8 C9.775,8 10,8.225 10,8.5 C10,8.775 9.775,9 9.5,9" id="Fill-5" fill="#BCDAAC"></path>
+                <path d="M9.5,12 L2.5,12 C2.225,12 2,11.775 2,11.5 C2,11.225 2.225,11 2.5,11 L9.5,11 C9.775,11 10,11.225 10,11.5 C10,11.775 9.775,12 9.5,12" id="Fill-7" fill="#BCDAAC"></path>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,322 @@
+<template>
+  <div v-if="info" class="hide-msg">
+    <div class="main-wrap">
+      <h3>Github Repository</h3>
+      <!-- <div class="gray fz-14">Import project from github repository.</div> -->
+      <div class="d-flex al-c">
+        <e-icon-link img="img/svg/hosting/m-github.svg" :link="info.cloneUrl">
+          4everland/hosting-website
+        </e-icon-link>
+        <e-icon-link
+          class="ml-6"
+          img="img/svg/hosting/m-branch.svg"
+          :link="info.cloneUrl.replace('.git', '/tree/' + form.currentBranch)"
+        >
+          {{ form.currentBranch }}
+        </e-icon-link>
+      </div>
+    </div>
+    <div class="main-wrap mt-5">
+      <h3>Basic Configuration</h3>
+      <v-row>
+        <v-col cols="6" md="4">
+          <h4>Project Name</h4>
+          <v-text-field
+            v-model="form.name"
+            persistent-placeholder
+            outlined
+            dense
+          />
+        </v-col>
+        <v-col cols="6" md="4">
+          <h4>Branch</h4>
+          <v-select
+            v-model="form.currentBranch"
+            :items="branchList"
+            outlined
+            dense
+            :menu-props="{ offsetY: true }"
+          >
+          </v-select>
+        </v-col>
+        <v-col cols="6" md="4">
+          <h4>Root Directory</h4>
+          <e-menu offset-y>
+            <v-text-field
+              slot="ref"
+              v-model="form.rootDirectory"
+              outlined
+              dense
+            ></v-text-field>
+            <div class="bg-white ov-a" style="max-height: 300px">
+              <div class="pa-10 ta-c" v-if="!dirList.length">
+                <v-progress-circular
+                  :size="40"
+                  color="primary"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+              <v-radio-group v-model="form.rootDirectory" v-else>
+                <v-treeview
+                  dense
+                  :open="[srcDir]"
+                  :load-children="getRepoDir"
+                  :items="dirList"
+                >
+                  <template v-slot:prepend="{ item }">
+                    <v-radio v-if="item.radio" :value="item.id"></v-radio>
+                  </template>
+                </v-treeview>
+              </v-radio-group>
+            </div>
+          </e-menu>
+        </v-col>
+      </v-row>
+    </div>
+    <div class="main-wrap mt-5">
+      <h3>Build Configuration</h3>
+      <v-row>
+        <v-col cols="6" md="4">
+          <h4>Framework Preset</h4>
+          <v-select
+            v-model="form.framework"
+            outlined
+            dense
+            :items="frameworks"
+            item-text="name"
+            item-value="slug"
+          >
+          </v-select>
+        </v-col>
+        <v-col cols="6" md="4">
+          <h4>Build Command</h4>
+          <build-cmd
+            v-model="form.buildCommand"
+            :placeholder="buildCommandHint"
+            :scripts="scripts"
+          ></build-cmd>
+        </v-col>
+        <v-col cols="6" md="4">
+          <h4>Output Directory</h4>
+          <v-text-field
+            v-model="form.outputDirectory"
+            outlined
+            dense
+          ></v-text-field>
+        </v-col>
+        <v-col cols="6" md="4">
+          <h4>Deploy Hooks</h4>
+          <v-switch v-model="form.hookSwitch" dense></v-switch>
+        </v-col>
+      </v-row>
+      <env-form class="mt-5" v-model="form.env" />
+      <div class="gray mt-5 fz-14">
+        Tips: 4EVERLAND HOSTING only serves static pages (Server-Side-Rendering
+        is not supported now)
+      </div>
+    </div>
+    <div class="ta-r mt-4">
+      <v-btn color="primary" rounded @click="onDeploy" min-width="100"
+        >Deploy</v-btn
+      >
+      <v-btn
+        rounded
+        outlined
+        class="ml-6"
+        min-width="100"
+        @click="$emit('back')"
+        >Back</v-btn
+      >
+    </div>
+  </div>
+</template>
+
+<script>
+import frameworks from "../../../plugins/config/frameworks";
+
+const srcDir = "./";
+
+export default {
+  props: {
+    info: Object,
+  },
+  data() {
+    return {
+      frameworks,
+      dirList: [],
+      srcDir,
+      form: {
+        name: "",
+        currentBranch: "",
+        rootDirectory: srcDir,
+        framework: "",
+        buildCommand: "",
+        outputDirectory: "",
+        hookSwitch: true,
+        env: [],
+      },
+      buildCommandHint: "",
+      scripts: null,
+      rootDirList: [],
+      branchList: [],
+    };
+  },
+  watch: {
+    info() {
+      this.onInit();
+    },
+    "form.currentBranch"(val) {
+      if (this.dirBranch && val != this.dirBranch) {
+        this.getRepoDir();
+      }
+    },
+    "form.framework"(val) {
+      this.onFramework(val);
+    },
+  },
+  created() {
+    this.onInit();
+  },
+  methods: {
+    async onInit() {
+      const {
+        id,
+        name,
+        defaultBranch = "",
+        frameWorkAdvice = "",
+        envList = [],
+      } = this.info;
+      Object.assign(this.form, {
+        repoId: id,
+        name,
+        currentBranch: defaultBranch,
+        rootDirectory: srcDir,
+        framework: frameWorkAdvice,
+        env: envList,
+      });
+      this.branchList = defaultBranch ? [defaultBranch] : [];
+      this.dirList = [];
+      this.$loading();
+      try {
+        await this.getBranchList();
+        await this.detectFramework();
+      } catch (error) {
+        //
+      }
+      this.$loading.close();
+    },
+    async onDeploy() {
+      const body = {
+        ...this.form,
+      };
+      if (!body.outputDirectory && body.framework == "vue") {
+        body.outputDirectory = "dist";
+      }
+      console.log(body);
+      try {
+        this.$loading();
+        const { data } = await this.$http2.post("/project", body);
+        const {
+          data: { taskId },
+        } = await this.$http2.post(`/project/${data.projectId}/build`);
+        this.$router.replace("/hosting/new?taskId=" + taskId);
+        this.$emit("next");
+      } catch (error) {
+        console.log(error);
+      }
+      this.$loading.close();
+    },
+    onFramework(val) {
+      const item = this.$getFramework(val);
+      const { buildCommand = {}, outputDirectory = {} } = item.settings || {};
+      Object.assign(this.form, {
+        buildCommand: buildCommand.value || "",
+        outputDirectory: outputDirectory.value || "./",
+      });
+      this.buildCommandHint = buildCommand.placeholder || "";
+    },
+    async detectFramework() {
+      try {
+        this.scripts = null;
+        let params = {};
+        const form = this.form;
+        if (form.rootDirectory != srcDir) {
+          params.path = form.rootDirectory.replace(/^\//, "");
+        }
+        const { data } = await this.$http2.get(
+          "/project/detect-framework/" + this.info.id,
+          { params }
+        );
+        let { scripts, framework = null } = data;
+        Object.assign(form, {
+          framework,
+        });
+        if (scripts) {
+          this.scripts = JSON.parse(scripts);
+          const { build } = this.scripts;
+          if (build && framework != "nextjs") {
+            Object.assign(form, {
+              buildCommand: "npm run build",
+            });
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getBranchList() {
+      try {
+        const { data } = await this.$http2.get(
+          "/project/branch/repo/" + this.info.id
+        );
+        this.branchList = data;
+        this.form.currentBranch = data[0];
+        this.getRepoDir();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getRepoDir(item) {
+      const params = {};
+      if (item) {
+        params.rootPath = item.id;
+      } else {
+        this.dirList = [];
+      }
+      this.dirBranch = params.ref = this.form.currentBranch;
+      const { name, namespace } = this.info;
+      let { data } = await this.$http2.get(
+        `/repo/${namespace}/dir/${name}/ref`,
+        {
+          params,
+        }
+      );
+      data = data
+        .map((it) => {
+          it.id = it.fullPath;
+          if (it.type == "dir") {
+            it.children = [];
+            if (!item) it.radio = true;
+          }
+          return it;
+        })
+        .sort((a) => {
+          return a.type == "dir" ? -1 : 1;
+        });
+      if (item) {
+        item.children = data;
+      } else {
+        this.dirList = [
+          {
+            name,
+            id: srcDir,
+            type: "dir",
+            radio: true,
+            children: data,
+          },
+        ];
+      }
+    },
+  },
+};
+</script>

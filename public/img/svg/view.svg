@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="9px" viewBox="0 0 16 9" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/visual</title>
+    <defs>
+        <path d="M8,4 C3.582,4 0,8.5 0,8.5 C0,8.5 3.582,13 8,13 C12.418,13 16,8.5 16,8.5 C16,8.5 12.418,4 8,4 M8,5.5 C10.487,5.5 12.76,7.333 13.952,8.497 C12.755,9.66 10.471,11.5 8,11.5 C5.513,11.5 3.24,9.667 2.048,8.503 C3.246,7.339 5.53,5.5 8,5.5 M8,7 C7.171,7 6.5,7.671 6.5,8.5 C6.5,9.329 7.171,10 8,10 C8.829,10 9.5,9.329 9.5,8.5 C9.5,7.671 8.829,7 8,7" id="path-1"></path>
+    </defs>
+    <g id="page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="selete-" transform="translate(-571.000000, -405.000000)">
+            <g id="icon/visual" transform="translate(571.000000, 401.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="mask" fill="#231916" xlink:href="#path-1"></use>
+                <g id="group" mask="url(#mask-2)" fill="#34A9FF">
+                    <g id="Colors/Background">
+                        <rect id="Color" x="0" y="0" width="16" height="16"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

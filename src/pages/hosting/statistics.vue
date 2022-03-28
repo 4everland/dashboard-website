@@ -1,0 +1,91 @@
+
+<template>
+  <div>
+    <v-data-table
+      :loading="loading"
+      :headers="headers"
+      :items="list"
+      no-data-text=""
+      loading-text=""
+      hide-default-footer
+    >
+      <template v-slot:item.projectName="{ item }">
+        <v-btn
+          text
+          color="primary"
+          :to="`/hosting/statistics/${item.projectName}/${item.projectId}`"
+        >
+          {{ item.projectName }}
+        </v-btn>
+      </template>
+    </v-data-table>
+
+    <div class="mt-8" v-if="!list.length">
+      <e-empty :loading="loading">
+        {{ loading ? "Loading Projects..." : "No Projects" }}
+      </e-empty>
+    </div>
+
+    <div class="mt-6" v-if="pageLen > 1">
+      <v-pagination
+        @input="onPage"
+        v-model="page"
+        :length="pageLen"
+        prev-icon="mdi-menu-left"
+        next-icon="mdi-menu-right"
+        :total-visible="7"
+      ></v-pagination>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      loading: false,
+      headers: [
+        { text: "Project", value: "projectName" },
+        { text: "New Users", value: "newUsers" },
+        { text: "Total Users", value: "totalUsers" },
+        { text: "Total UV", value: "totalUv" },
+        { text: "Total PV", value: "queryCount" },
+      ].map((it) => {
+        it.align = "center";
+        return it;
+      }),
+      list: [],
+      page: 1,
+      pageLen: 1,
+    };
+  },
+  mounted() {
+    this.getList();
+  },
+  methods: {
+    onPage() {
+      this.getList();
+    },
+    async getList() {
+      try {
+        this.loading = true;
+        const params = {
+          page: this.page - 1,
+          size: 10,
+        };
+        let { data } = await this.$http2.get(
+          "/analytics/user/project/page/list",
+          {
+            params,
+          }
+        );
+        this.list = data.content;
+        this.pageLen = Math.max(1, Math.ceil(data.totalElements / params.size));
+      } catch (error) {
+        console.log(error);
+      }
+      this.loading = false;
+    },
+  },
+};
+</script>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="7px" viewBox="0 0 10 7" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/down</title>
+    <defs>
+        <path d="M5.09246312,5.516 L9.75446312,0.854 C10.0694631,0.539 9.84646312,0 9.40146312,0 L0.501463119,0 C0.0554631194,0 -0.167536881,0.539 0.147463119,0.854 L4.80946312,5.516 C4.88746312,5.594 5.01446312,5.594 5.09246312,5.516" id="path-1"></path>
+    </defs>
+    <g id="page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Domains" transform="translate(-1138.000000, -37.000000)">
+            <g id="Forms/Dropdown" transform="translate(1069.000000, 29.500000)">
+                <g id="icon/down" transform="translate(69.000000, 8.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="mask" fill="#231916" xlink:href="#path-1"></use>
+                    <g id="group" mask="url(#mask-2)">
+                        <g transform="translate(-12.000000, -8.000000)" id="Colors/Background">
+                            <rect id="Color" fill="#0B0817" x="0" y="0" width="22" height="22"></rect>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/right</title>
+    <defs>
+        <path d="M6.74965564,8.8817842e-14 L8.19601042,1.44635478 L2.893,6.749 L8.19601042,12.0529565 L6.74965564,13.4993113 L1.44635478,8.19601042 L-1.14130927e-13,6.74965564 L6.74965564,8.8817842e-14 Z M10.6751279,2.89270956 L12.1214827,4.33906434 L9.711,6.75 L12.1214827,9.16024694 L10.6751279,10.6066017 L8.265,8.196 L8.2645366,8.19601042 L6.81818182,6.74965564 L10.6751279,2.89270956 Z" id="path-1"></path>
+    </defs>
+    <g id="page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="view（Syncing）" transform="translate(-252.000000, -1024.000000)">
+            <g id="icon/right" transform="translate(252.909091, 1024.181818)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <use id="mask" fill="#D8D8D8" transform="translate(6.060741, 6.749656) rotate(-360.000000) translate(-6.060741, -6.749656) " xlink:href="#path-1"></use>
+                <g id="group" mask="url(#mask-2)">
+                    <g transform="translate(-10.909091, -8.181818)" id="Colors/Background">
+                        <rect id="Color" fill="#617083" x="0" y="0" width="30" height="30"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
