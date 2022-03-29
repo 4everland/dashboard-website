@@ -9,12 +9,12 @@
             :src="$getImgSrc(info.screenshotPath)"
             lazy-src="img/bg/empty/project.png"
             aspect-ratio="1"
-            max-height="260"
+            max-height="240"
           ></v-img>
         </e-link>
       </v-col>
       <v-col cols="12" md="6">
-        <v-row>
+        <v-row class="pt-1">
           <v-col>
             <e-kv2 label="Status">
               <h-status :val="state"></h-status>
@@ -50,7 +50,12 @@
               <e-commit :info="info.commits" class="fz-14 ml-3"></e-commit>
             </div>
           </e-kv2>
-          <e-kv2 class="ml-auto" label="IPFS" style="min-width: 120px">
+          <e-kv2
+            class="ml-auto"
+            label="IPFS"
+            style="min-width: 120px"
+            v-if="info.cid"
+          >
             <e-link class="fz-14" :href="$utils.getCidLink(info.cid)">
               {{ info.cid ? "Verify on IPFS" : "Pending" }}
             </e-link>

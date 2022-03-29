@@ -50,16 +50,18 @@ export default {
   data() {
     const curIdx = this.getIdx();
     return {
+      initPath: "",
       curIdx,
       activeIdxList: [curIdx],
     };
   },
   watch: {
-    curIdx(tab) {
-      if (!this.activeIdxList.includes(tab)) {
-        this.activeIdxList.push(tab);
+    curIdx(val) {
+      if (this.path != this.initPath) return;
+      if (!this.activeIdxList.includes(val)) {
+        this.activeIdxList.push(val);
       }
-      const it = this.list[tab];
+      const it = this.list[val];
       this.$router.replace({
         query: {
           tab: it.text.replace(" ", "_").toLowerCase(),
@@ -74,6 +76,9 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    path() {
+      return this.$route.path;
+    },
     curItem() {
       return this.list[this.curIdx] || {};
     },
@@ -83,6 +88,9 @@ export default {
       });
     },
   },
+  mounted() {
+    this.initPath = this.path;
+  },
   methods: {
     getIdx() {
       const { tab = this.defTab } = this.$route.query;
@@ -91,7 +99,7 @@ export default {
       else if (tab) {
         this.list.forEach((it, i) => {
           if (it.text.toLowerCase() == tab.replace("_", " ").toLowerCase())
-            curIdx = i;
+            curIdx = i * 1;
         });
       }
       return curIdx;

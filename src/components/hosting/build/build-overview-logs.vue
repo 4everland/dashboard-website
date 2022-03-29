@@ -9,7 +9,7 @@
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
     <e-toggle-card class="mt-5" title="Assigning Domains" :value="cardOpen(2)">
-      <div v-if="domains.length">
+      <div v-if="domains.length && isDone">
         <p v-for="(it, i) in domains" :key="i">
           <h-domain :val="it" class="fz-14"></h-domain>
         </p>

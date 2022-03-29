@@ -167,6 +167,7 @@ export default {
           .replace("{id}", this.id)
           .replace("{taskId}", it.taskId)
           .replace("{projName}", it.buildConfig.name);
+        // console.log(link);
         this.$router.push(link);
       } else if (name == "copy") {
         this.$toast("Copied to clipboard !");

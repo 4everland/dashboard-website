@@ -56,11 +56,9 @@
 <script>
 export default {
   data() {
-    const { taskId } = this.$route.params;
     return {
       initLoading: true,
       isEmpty: false,
-      taskId,
       dirList: [],
       files: {
         html: "mdi-language-html5",
@@ -83,6 +81,9 @@ export default {
     };
   },
   computed: {
+    taskId() {
+      return this.$route.params.taskId;
+    },
     buildInfo() {
       return this.$store.state.buildInfo;
     },
@@ -113,10 +114,11 @@ export default {
   watch: {
     buildInfo({ data }) {
       if (data.taskId == this.taskId && data.state == "SUCCESS") {
-        this.initLoading = true;
-        this.isEmpty = false;
         this.initData();
       }
+    },
+    taskId() {
+      this.initData();
     },
   },
   mounted() {
@@ -128,7 +130,10 @@ export default {
       return mat ? mat[1] : "";
     },
     async initData() {
+      if (!this.taskId) return;
       try {
+        this.initLoading = true;
+        this.isEmpty = false;
         const { data } = await this.$http2.get(
           `/project/task/object/${this.taskId}`,
           {
