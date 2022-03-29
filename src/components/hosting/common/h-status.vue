@@ -1,6 +1,6 @@
 <template>
   <div v-if="val" class="h-status" :class="staCls">
-    <span>{{ state.capitalize() }}</span>
+    <span>{{ text || state.capitalize() }}</span>
   </div>
 </template>
 
@@ -8,6 +8,7 @@
 export default {
   props: {
     val: String,
+    text: String,
   },
   computed: {
     state() {

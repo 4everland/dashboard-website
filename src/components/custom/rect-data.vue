@@ -47,7 +47,7 @@
 </style>
 
 <template>
-  <v-row class="rect-data bd-1 bdrs-5" v-if="list">
+  <v-row class="rect-data bd-1 bdrs-5" v-if="info">
     <v-col cols="6" class="item" v-for="(it, i) in resList" :key="i">
       <div class="ta-c" v-if="it.title">
         <p class="fz-14 gray-6">{{ it.title }}</p>
@@ -70,11 +70,11 @@
 <script>
 export default {
   props: {
-    list: Array,
+    info: Array,
   },
   computed: {
     resList() {
-      const list = [...this.list];
+      const list = [...this.info];
       if (list.length % 2 != 0) list.push({});
       return list;
     },

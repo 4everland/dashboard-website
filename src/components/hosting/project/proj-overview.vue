@@ -15,7 +15,9 @@
     </v-col>
     <v-col cols="12" md="6">
       <e-kv2 label="Deployment" class="mt-2">
-        <h-domain :val="info.domain" />
+        <a :href="'#' + buildPath">
+          {{ info.domain }}
+        </a>
       </e-kv2>
 
       <e-kv2 label="Domains" class="mt-8" v-if="info.domains">
@@ -70,6 +72,10 @@ export default {
       userInfo: (s) => s.userInfo,
       info: (s) => s.projectInfo,
     }),
+    buildPath() {
+      const { name, id, taskId } = this.info;
+      return `/hosting/build/${name}/${id}/${taskId}`;
+    },
   },
 };
 </script>

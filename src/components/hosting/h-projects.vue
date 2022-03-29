@@ -91,14 +91,14 @@
                 :key="j"
               >
                 <div class="pa-3">
-                  <component :is="row.comp" :list="row.data" />
+                  <component :is="row.comp" :info="row.data" />
                 </div>
               </v-col>
               <!-- <v-col cols="4">
                 <rect-data :list="it.statis2" />
               </v-col> -->
             </v-row>
-            <div class="mt-3 ta-r">
+            <div class="mt-5 ta-r">
               <v-btn
                 v-if="it.taskId"
                 color="primary"
@@ -211,6 +211,7 @@ export default {
         it.loading = true;
         const { data } = await this.$http2.get("/project/v3/detail/" + it.id);
         console.log(data);
+        data.name = it.name;
         const statisList = [
           {
             comp: "rect-data",
@@ -250,6 +251,10 @@ export default {
                 ...this.$utils.getFileSize(data.usedStorage, 1),
               },
             ],
+          },
+          {
+            comp: "h-build-domain",
+            data,
           },
         ];
         this.$set(it, "statisList", statisList);
