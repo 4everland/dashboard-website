@@ -31,50 +31,25 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
   props: {
     taskId: String,
-    logs: Array,
+    list: Array,
     maxHeight: {
       type: String,
       default: "140px",
     },
   },
-  computed: {
-    ...mapState({
-      buildInfo: (s) => s.buildInfo,
-    }),
-    list() {
-      return [...this.logs, ...this.newLogs];
-    },
-  },
   data() {
     return {
-      newLogs: [],
       isBtm: true,
       newNum: 0,
     };
   },
   watch: {
-    buildInfo({ name, data }) {
-      if (data.taskId == this.taskId) {
-        console.log(this.taskId, name);
-        const last = this.list[this.list.length - 1];
-        if (name != "log") {
-          if (data.state == "SUCCESS") {
-            this.$emit("done");
-          }
-        } else if (last && last.content != data.content) {
-          this.newLogs.push(data);
-          if (!this.isBtm) this.newNum++;
-          this.$emit("push", data);
-        }
-        // this.state = data.state.toLowerCase();
-      }
-    },
-    list() {
+    list(val, oldVal) {
+      const num = val.length - oldVal.length;
+      if (!this.isBtm && num) this.newNum = num;
       this.goLogEnd();
     },
   },

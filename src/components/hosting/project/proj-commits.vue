@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="pd-15" v-if="!list">
+    <div v-if="!list">
       <v-skeleton-loader type="article" />
     </div>
     <div class="pr-6 pos-r" v-else>

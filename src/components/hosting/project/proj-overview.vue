@@ -11,7 +11,6 @@
           max-height="320"
         ></v-img>
       </e-link>
-      <v-img></v-img>
     </v-col>
     <v-col cols="12" md="6">
       <e-kv2 label="Deployment" class="mt-2">
@@ -51,10 +50,13 @@
 
       <div class="mt-7 d-flex">
         <e-kv2 label="Branch">
-          <h-branch :info="info" class="fz-15" />
+          <div class="d-flex al-c f-wrap">
+            <h-branch :info="info" class="fz-15" />
+            <e-commit :info="info.commits" class="fz-14 ml-3"></e-commit>
+          </div>
         </e-kv2>
         <e-kv2 class="ml-auto" label="IPFS" style="min-width: 120px">
-          <e-link class="fz-15" :href="$utils.getCidLink(info.cid)">
+          <e-link class="fz-14" :href="$utils.getCidLink(info.cid)">
             {{ info.cid ? "Verify on IPFS" : "Pending" }}
           </e-link>
         </e-kv2>
