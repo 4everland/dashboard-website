@@ -1,5 +1,5 @@
 <template>
   <div>
-    <h2>Overview</h2>
+    <build-overview-logs />
   </div>
 </template>
