@@ -244,7 +244,7 @@ export default {
               {
                 title: "Build Minutes used",
                 unit: "Minutes",
-                num: data.usedBuildMinutes,
+                num: data.usedBuildMinutes.toFixed(2),
               },
               {
                 title: "Storage used",
