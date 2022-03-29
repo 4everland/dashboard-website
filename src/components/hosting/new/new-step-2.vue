@@ -1,5 +1,57 @@
 <template>
   <div v-if="info">
+    <v-dialog v-model="isDone" max-width="650" persistent>
+      <div class="pa-5 d-flex al-c">
+        <!--  -->
+        <v-img
+          class="bd-1 bdrs-5 w100p"
+          :src="$getImgSrc(info.screenshotPath)"
+          lazy-src="img/bg/empty/project.png"
+          aspect-ratio="1"
+          width="160"
+        ></v-img>
+        <div class="ml-5">
+          <h3 class="fz-20">Congratulations!</h3>
+          <div class="fz-14 mt-5 gray-6">
+            <p>Your project has been successfully deployed.</p>
+            <p class="mt-2">
+              We also offer CLI deployment methods. Click here to
+              <a href="https://docs.hosting.4everland.org/cli/" target="_blank"
+                >learn more</a
+              >.
+            </p>
+          </div>
+          <div class="mt-8">
+            <v-btn
+              :href="'//' + info.domain"
+              target="_blank"
+              color="primary"
+              rounded
+              small
+              width="120"
+            >
+              <span>Visit</span>
+              <img
+                src="img/svg/hosting/share-open.svg"
+                width="14"
+                class="ml-2"
+              />
+            </v-btn>
+            <v-btn
+              to="/hosting/projects"
+              outlined
+              rounded
+              small
+              min-width="130"
+              class="ml-3"
+            >
+              Open Dashboard
+            </v-btn>
+          </div>
+        </div>
+      </div>
+    </v-dialog>
+
     <div class="main-wrap">
       <h3>Deploy</h3>
       <div class="d-flex al-c" v-if="!isDone">

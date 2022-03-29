@@ -11,10 +11,8 @@ import { S3 } from "@aws-sdk/client-s3";
 Vue.config.productionTip = false;
 const Minio = require("minio-s");
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
   let { title, group } = to.meta || {};
-  // console.log(to, "to");
-  // console.log(from, "from");
   const name = "4EVERLAND";
   if (title) {
     if (group) {
