@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-5 bd-1 bdrs-3">
+  <div class="pa-5 bd-1 bdrs-3 bg-white">
     <div class="d-flex al-c hover-1" @click="isShow = !isShow">
       <v-icon
         :color="color"

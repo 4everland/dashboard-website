@@ -1,6 +1,6 @@
 <template>
-  <div v-if="info">
-    <v-dialog v-model="isDone" max-width="650" persistent>
+  <div>
+    <v-dialog v-if="info" v-model="isDone" max-width="650" persistent>
       <div class="pa-5 d-flex al-c">
         <!--  -->
         <v-img
@@ -39,6 +39,7 @@
             </v-btn>
             <v-btn
               to="/hosting/projects"
+              @click="showPop = false"
               outlined
               rounded
               small
@@ -54,7 +55,7 @@
 
     <div class="main-wrap">
       <h3>Deploy</h3>
-      <div class="d-flex al-c" v-if="!isDone">
+      <div class="d-flex al-c" v-if="!isDone && info">
         <v-progress-circular
           :size="15"
           :width="1.5"
@@ -62,7 +63,7 @@
           indeterminate
         />
         <div class="gray fz-15 ml-3">
-          Deployment started <e-time>{{ Date.now() }}</e-time>
+          Deployment started <e-time>{{ info.createAt }}</e-time>
         </div>
       </div>
     </div>
@@ -73,9 +74,6 @@
       <v-btn rounded outlined @click="onCancel">Cancel</v-btn>
     </div>
   </div>
-  <div class="main-wrap" v-else>
-    <v-skeleton-loader type="article" />
-  </div>
 </template>
 
 <script>
@@ -84,7 +82,16 @@ export default {
     return {
       isDone: false,
       info: null,
+      showPop: false,
     };
+  },
+  watch: {
+    isDone(val) {
+      if (val)
+        setTimeout(() => {
+          this.showPop = true;
+        }, 500);
+    },
   },
   methods: {
     onCancel() {
