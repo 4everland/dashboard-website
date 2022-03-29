@@ -135,7 +135,7 @@
               </v-list-item>
             </template>
             <template v-else-if="inBucket">
-              <v-list-item :to="`/domain?bucket=${selected[0].name}`">
+              <v-list-item :to="`/bucket/domains?bucket=${selected[0].name}`">
                 <img src="img/icon/ic-domain.svg" width="14" class="mr-2" />
                 <span class="gray-7">Add Domain</span>
               </v-list-item>

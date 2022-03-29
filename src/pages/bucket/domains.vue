@@ -203,10 +203,13 @@ export default {
       }
     },
     "$route.path"(val) {
-      if (val == "/domain") {
+      if (val == "/bucket/domains") {
         this.getList();
         this.checkNew();
       }
+    },
+    s3() {
+      this.checkNew();
     },
   },
   mounted() {
