@@ -60,7 +60,7 @@ export default {
     async getData() {
       try {
         this.tableLoading = true;
-        const { data: list } = await this.$http.get(
+        const { data: list } = await this.$http2.get(
           "/analytics/user/retention/project/" + this.appId
         );
         this.tableList = list.map((it) => {

@@ -143,7 +143,7 @@ export default {
       }
       try {
         this.loading = true;
-        const { data } = await this.$http.get(this.api, {
+        const { data } = await this.$http2.get(this.api, {
           params,
         });
         this.list = data.content.map((it) => {

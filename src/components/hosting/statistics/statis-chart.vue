@@ -101,7 +101,7 @@ export default {
         }
         const {
           data: { data },
-        } = await this.$http.get("/analytics/user/view/data", {
+        } = await this.$http2.get("/analytics/user/view/data", {
           params,
         });
         // console.log(data)
