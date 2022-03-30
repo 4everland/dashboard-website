@@ -63,7 +63,7 @@ export default {
     buildInfo({ name, data }) {
       if (data.taskId == this.taskId) {
         console.log(this.taskId, name);
-        const last = this.list[this.list.length - 1];
+        const last = this.logs[this.logs.length - 1];
         if (name != "log") {
           if (data.state == "SUCCESS") {
             this.getInfo();

@@ -102,6 +102,7 @@ new Vue({
         } else {
           data.state = name.replace("build_", "").toUpperCase();
         }
+        console.log(name, data);
         this.$setState({
           buildInfo: {
             name,
