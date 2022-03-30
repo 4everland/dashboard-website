@@ -1,14 +1,34 @@
 <template>
   <div>
-    <e-toggle-card class="mt-5" title="Building" :value="cardOpen(0)">
+    <e-toggle-card
+      class="mt-5"
+      title="Building"
+      :value="getOpen(0)"
+      :icon="getIcon(0)"
+    >
+      <template #time>
+        <div class="fz-14 gray" v-if="info && !isDone">
+          <e-time :endAt="info.endAt || nowDate">{{ info.createAt }}</e-time>
+        </div>
+      </template>
       <build-log v-if="info" :list="logs" />
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
-    <e-toggle-card class="mt-5" title="Syncing to IPFS" :value="cardOpen(1)">
+    <e-toggle-card
+      class="mt-5"
+      title="Syncing to IPFS"
+      :value="getOpen(1)"
+      :icon="getIcon(1)"
+    >
       <e-kv label="IPFS Hash" v-if="info && info.cid">{{ info.cid }}</e-kv>
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
-    <e-toggle-card class="mt-5" title="Assigning Domains" :value="cardOpen(2)">
+    <e-toggle-card
+      class="mt-5"
+      title="Assigning Domains"
+      :value="getOpen(2)"
+      :icon="getIcon(2)"
+    >
       <div v-if="domains.length && isDone">
         <p v-for="(it, i) in domains" :key="i">
           <h-domain :val="it" class="fz-14"></h-domain>
@@ -109,8 +129,13 @@ export default {
         console.log(error);
       }
     },
-    cardOpen(i) {
+    getOpen(i) {
       return i > -1 && i <= this.curIdx;
+    },
+    getIcon(i) {
+      if (!this.info) return "";
+      if (i < this.curIdx || this.isDone) return "checked";
+      return i == this.curIdx ? "loading" : "pending";
     },
   },
 };

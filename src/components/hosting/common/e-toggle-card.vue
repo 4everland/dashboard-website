@@ -9,6 +9,26 @@
         >mdi-menu-right</v-icon
       >
       <span class="fz-14">{{ title }}</span>
+      <div class="ml-auto d-flex al-c">
+        <span>
+          <slot name="time"></slot>
+        </span>
+        <div v-if="icon" class="ml-2 d-flex">
+          <img
+            src="img/svg/common/ic-checked.svg"
+            height="15"
+            class="d-b"
+            v-if="icon == 'checked'"
+          />
+          <v-progress-circular
+            v-else
+            :size="15"
+            :width="1.5"
+            color="#999"
+            :indeterminate="icon == 'loading'"
+          />
+        </div>
+      </div>
     </div>
     <div class="mt-5" v-if="isShow">
       <slot></slot>
@@ -25,6 +45,7 @@ export default {
       type: String,
       default: "#34A9FF",
     },
+    icon: String,
   },
   data() {
     return {
