@@ -143,7 +143,14 @@
         </div>
       </v-col>
       <v-col cols="12" md="6">
-        <!-- <new-tpl :minHeight="minHeight" /> -->
+        <div
+          class="main-wrap"
+          :style="{
+            'min-height': minHeight,
+          }"
+        >
+          <new-step-0-tpl />
+        </div>
       </v-col>
     </v-row>
   </div>

@@ -8,7 +8,7 @@
     padding: 20px;
     h3 {
       margin-bottom: 20px;
-      font-size: 18px;
+      font-size: 20px;
       line-height: 1;
     }
     h4 {
@@ -30,7 +30,7 @@
         <component
           :is="'new-step-' + i"
           :active="i == curStep"
-          :info="info"
+          :data="info"
           @set-info="info = $event"
           @next="curStep += 1"
           @back="curStep -= 1"
@@ -53,10 +53,19 @@ export default {
     "$route.path"() {
       this.curStep = 0;
     },
+    "$route.query"() {
+      this.onQuery();
+    },
   },
   mounted() {
-    const { taskId } = this.$route.query;
-    if (taskId) this.curStep = 2;
+    this.onQuery();
+  },
+  methods: {
+    onQuery() {
+      const { taskId, type } = this.$route.query;
+      if (type == "clone-flow") this.curStep = 1;
+      else if (taskId) this.curStep = 2;
+    },
   },
 };
 </script>

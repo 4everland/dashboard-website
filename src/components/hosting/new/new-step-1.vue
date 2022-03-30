@@ -5,7 +5,7 @@
       <!-- <div class="gray fz-14">Import project from github repository.</div> -->
       <div class="d-flex al-c">
         <e-icon-link img="img/svg/hosting/m-github.svg" :link="info.cloneUrl">
-          4everland/hosting-website
+          {{ info.namespace }}/{{ info.name }}
         </e-icon-link>
         <e-icon-link
           class="ml-6"
@@ -21,12 +21,7 @@
       <v-row>
         <v-col cols="6" md="4">
           <h4>Project Name</h4>
-          <v-text-field
-            v-model="form.name"
-            persistent-placeholder
-            outlined
-            dense
-          />
+          <v-text-field v-model="form.name" outlined dense />
         </v-col>
         <v-col cols="6" md="4">
           <h4>Branch</h4>
@@ -129,6 +124,9 @@
       >
     </div>
   </div>
+  <div v-else-if="isTpl">
+    <new-step-1-tpl :query="query" />
+  </div>
 </template>
 
 <script>
@@ -138,10 +136,19 @@ const srcDir = "./";
 
 export default {
   props: {
-    info: Object,
+    data: Object,
+  },
+  computed: {
+    query() {
+      return this.$route.query;
+    },
+    isTpl() {
+      return this.query.type == "clone-flow";
+    },
   },
   data() {
     return {
+      info: null,
       frameworks,
       dirList: [],
       srcDir,
@@ -179,6 +186,8 @@ export default {
   },
   methods: {
     async onInit() {
+      if (!this.data) return;
+      this.info = this.data;
       const {
         id,
         name,

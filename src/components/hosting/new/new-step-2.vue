@@ -89,7 +89,8 @@ export default {
     isDone(val) {
       if (val)
         setTimeout(() => {
-          this.showPop = true;
+          const { path, query } = this.$route;
+          if (path == "/hosting/new" && query.taskId) this.showPop = true;
         }, 500);
     },
   },
