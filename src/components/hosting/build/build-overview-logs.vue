@@ -6,11 +6,11 @@
       :value="getOpen(0)"
       :icon="getIcon(0)"
     >
-      <template #time>
+      <!-- <template #time>
         <div class="fz-14 gray" v-if="info && !isDone">
           <e-time :endAt="info.endAt || nowDate">{{ info.createAt }}</e-time>
         </div>
-      </template>
+      </template> -->
       <build-log v-if="info" :list="logs" />
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>

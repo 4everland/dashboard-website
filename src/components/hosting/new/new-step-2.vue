@@ -54,8 +54,10 @@
     </v-dialog>
 
     <div class="main-wrap">
-      <h3>Deploy</h3>
-      <div class="d-flex al-c" v-if="!isDone && info">
+      <h3>
+        Deploy <span v-if="info">{{ info.buildConfig.name }}</span>
+      </h3>
+      <div class="d-flex al-c mb-5" v-if="!isDone && info">
         <v-progress-circular
           :size="15"
           :width="1.5"
@@ -66,9 +68,8 @@
           Deployment started <e-time>{{ info.createAt }}</e-time>
         </div>
       </div>
+      <build-overview-logs @done="isDone = true" @info="onInfo" />
     </div>
-
-    <build-overview-logs @done="isDone = true" @info="info = $event" />
 
     <div class="ta-r mt-4" v-if="!isDone">
       <v-btn rounded outlined @click="onCancel">Cancel</v-btn>
@@ -99,6 +100,10 @@ export default {
       this.$confirm("", "Are you sure to quit this deployment ?").then(() => {
         this.$router.replace("/hosting/projects");
       });
+    },
+    onInfo(obj) {
+      this.info = obj;
+      this.isDone = false;
     },
   },
 };
