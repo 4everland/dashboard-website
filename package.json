@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "d": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "p": "vue-cli-service build && 4ever-hosting deploy",
     "lint": "vue-cli-service lint",
     "format": "vue-cli-service lint --format"
   },

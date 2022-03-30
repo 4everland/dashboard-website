@@ -99,7 +99,7 @@
                     :class="{
                       'bdt-1': i > 0,
                     }"
-                    v-for="(it, i) in bucketList"
+                    v-for="(it, i) in resBucketList"
                     :key="i"
                   >
                     <v-icon size="14">mdi-folder-multiple</v-icon>
@@ -115,7 +115,12 @@
                   </div>
                 </div>
                 <div class="d-flex al-c bdt-1 pa-3">
-                  <v-btn text small color="primary" to="/storage/?new=bucket">
+                  <v-btn
+                    text
+                    small
+                    color="primary"
+                    to="/bucket/storage/?new=bucket"
+                  >
                     <v-icon size="16">mdi-folder-multiple-plus</v-icon>
                     <span class="ml-1">Create a new bucket</span>
                   </v-btn>
@@ -172,6 +177,11 @@ export default {
     ...mapState({
       s3: (s) => s.s3,
     }),
+    resBucketList() {
+      return (this.bucketList || []).filter((it) => {
+        return new RegExp(this.keyword, "i").test(it.name);
+      });
+    },
   },
   data() {
     return {
