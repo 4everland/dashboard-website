@@ -286,7 +286,7 @@ export default {
         });
         this.showPop = false;
         // this.getList();
-        this.$router.push(`/domain/${this.domain}`);
+        this.$router.push(`/bucket/domain/${this.domain}`);
         this.$toast("Added successfully");
         this.domain = "";
       } catch (error) {
