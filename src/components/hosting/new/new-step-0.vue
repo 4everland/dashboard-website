@@ -336,30 +336,11 @@ export default {
         //   it.fwImg = this.$getFramework(it.frameWorkAdvice).logo;
         //   return it;
         // });
-        let envList = [];
         if (this.cloneDir) {
           const item = this.list.filter((it) => it.name == this.cloneDir)[0];
           if (item) {
             this.isClone = true;
-            let { e } = this.$route.query;
-            if (e) {
-              envList = decodeURIComponent(e)
-                .split(";")
-                .map((txt) => {
-                  return txt.split(":");
-                })
-                .filter((it) => it.length == 2)
-                .map((arr) => {
-                  return {
-                    key: arr[0],
-                    value: arr[1],
-                  };
-                });
-            }
-            this.onImport({
-              ...item,
-              envList,
-            });
+            this.onImport(item);
           }
           this.cloneDir = "";
         }

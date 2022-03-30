@@ -62,8 +62,8 @@ export default {
   },
   methods: {
     onQuery() {
-      const { taskId, type } = this.$route.query;
-      if (type == "clone-flow") this.curStep = 1;
+      const { taskId, type, s } = this.$route.query;
+      if (type == "clone-flow" && s) this.curStep = 1;
       else if (taskId) this.curStep = 2;
     },
     onBack() {

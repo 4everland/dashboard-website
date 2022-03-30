@@ -16,7 +16,7 @@
 export default {
   props: {
     height: {
-      type: Number,
+      type: null,
       default: 18,
     },
     img: String,

@@ -203,14 +203,24 @@ export default {
   },
   methods: {
     async onInit() {
-      if (!this.info || !this.query.c) return;
-      const {
-        id,
-        name,
-        defaultBranch = "",
-        frameWorkAdvice = "",
-        envList = [],
-      } = this.info;
+      const { c, e } = this.query;
+      if (!this.info || !c) return;
+      const { id, name, defaultBranch = "", frameWorkAdvice = "" } = this.info;
+      let envList = [];
+      if (e) {
+        envList = decodeURIComponent(e)
+          .split(";")
+          .map((txt) => {
+            return txt.split(":");
+          })
+          .filter((it) => it.length == 2)
+          .map((arr) => {
+            return {
+              key: arr[0],
+              value: arr[1],
+            };
+          });
+      }
       Object.assign(this.form, {
         repoId: id,
         name,
@@ -254,10 +264,13 @@ export default {
     onFramework(val) {
       const item = this.$getFramework(val);
       const { buildCommand = {}, outputDirectory = {} } = item.settings || {};
-      Object.assign(this.form, {
-        buildCommand: buildCommand.value || "",
+      const obj = {
         outputDirectory: outputDirectory.value || "./",
-      });
+      };
+      if (!this.scripts) {
+        obj.buildCommand = buildCommand.value || "";
+      }
+      Object.assign(this.form, obj);
       this.buildCommandHint = buildCommand.placeholder || "";
     },
     async detectFramework() {
@@ -273,14 +286,20 @@ export default {
           { params }
         );
         let { scripts, framework = null } = data;
-        this.$set(form, "framework", framework);
+        const obj = {
+          framework,
+        };
         if (scripts) {
           this.scripts = JSON.parse(scripts);
           const { build } = this.scripts;
           if (build && framework != "nextjs") {
-            this.$set(form, "buildCommand", "npm run build");
+            obj.buildCommand = "npm run build";
           }
         }
+        this.form = {
+          ...form,
+          ...obj,
+        };
       } catch (error) {
         console.log(error);
       }

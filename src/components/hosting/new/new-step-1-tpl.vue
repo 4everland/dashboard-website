@@ -21,6 +21,7 @@
             {{ info.defaultBranch }}
           </e-icon-link>
           <e-icon-link
+            height="15px"
             class="ml-6"
             img="img/svg/hosting/m-folder.svg"
             :link="info.url + '/tree/' + info.defaultBranch + info.dir"
@@ -89,7 +90,7 @@ export default {
   methods: {
     async getInfo() {
       const { s: url } = this.query;
-      if (!url) return this.$alert("parameter s required");
+      if (!url) return;
       try {
         this.loading = true;
         const { data } = await this.$http2.get("/template/git-repo", {
@@ -124,7 +125,10 @@ export default {
         const item = data.repoList.filter((it) => it.name == this.gitName)[0];
         if (!item) throw new Error("Failed to fetch git repo");
         this.$emit("git-repo", item);
-        this.$router.replace("/hosting/new?type=clone-flow&c=" + this.gitName);
+        const { e } = this.query;
+        let link = "/hosting/new?type=clone-flow&c=" + this.gitName;
+        if (e) link += `&e=${encodeURIComponent(e)}`;
+        this.$router.replace(link);
       } catch (error) {
         console.log(error);
         this.$confirm(error.message, "Network Error", {
@@ -157,8 +161,6 @@ export default {
         );
         this.gitName = gitName;
         await this.getGitInfo();
-        // const { e } = this.$route.query;
-        // if (e) link += `&e=${encodeURIComponent(e)}`;
       } catch (error) {
         if (error.code == 10026) {
           this.$confirm(error.message).then(() => {
