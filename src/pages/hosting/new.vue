@@ -33,7 +33,7 @@
           :data="info"
           @set-info="info = $event"
           @next="curStep += 1"
-          @back="curStep -= 1"
+          @back="onBack"
         />
       </v-window-item>
     </v-window>
@@ -65,6 +65,10 @@ export default {
       const { taskId, type } = this.$route.query;
       if (type == "clone-flow") this.curStep = 1;
       else if (taskId) this.curStep = 2;
+    },
+    onBack() {
+      this.$router.back();
+      this.curStep -= 1;
     },
   },
 };

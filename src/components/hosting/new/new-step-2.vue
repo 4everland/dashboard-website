@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-if="info" v-model="isDone" max-width="650" persistent>
+    <v-dialog v-if="info" v-model="showPop" max-width="650">
       <div class="pa-5 d-flex al-c">
         <!--  -->
         <v-img

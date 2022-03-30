@@ -234,6 +234,7 @@ export default {
     },
     onImport(it) {
       this.$emit("set-info", it);
+      this.$router.push("/hosting/new?c=" + it.name);
       this.$emit("next");
     },
     async addNew() {
@@ -330,10 +331,11 @@ export default {
         });
         this.usedKeyword = this.keyword;
         this.pageLen = Math.max(1, Math.ceil(data.totalCount / 5));
-        this.list = (data.repoList || []).map((it) => {
-          it.fwImg = this.$getFramework(it.frameWorkAdvice).logo;
-          return it;
-        });
+        this.list = data.repoList || [];
+        // .map((it) => {
+        //   it.fwImg = this.$getFramework(it.frameWorkAdvice).logo;
+        //   return it;
+        // });
         let envList = [];
         if (this.cloneDir) {
           const item = this.list.filter((it) => it.name == this.cloneDir)[0];

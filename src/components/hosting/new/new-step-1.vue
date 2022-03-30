@@ -125,7 +125,17 @@
     </div>
   </div>
   <div v-else-if="isTpl">
-    <new-step-1-tpl :query="query" />
+    <new-step-1-tpl :query="query" @git-repo="repoInfo = $event" />
+    <div class="ta-r mt-4">
+      <v-btn
+        rounded
+        outlined
+        class="ml-6"
+        min-width="100"
+        @click="$emit('back')"
+        >Back</v-btn
+      >
+    </div>
   </div>
 </template>
 
@@ -145,10 +155,14 @@ export default {
     isTpl() {
       return this.query.type == "clone-flow";
     },
+    info() {
+      if (this.isTpl) return this.repoInfo;
+      return this.data;
+    },
   },
   data() {
     return {
-      info: null,
+      repoInfo: null,
       frameworks,
       dirList: [],
       srcDir,
@@ -172,6 +186,9 @@ export default {
     info() {
       this.onInit();
     },
+    query(obj) {
+      if (obj.s) this.repoInfo = null;
+    },
     "form.currentBranch"(val) {
       if (this.dirBranch && val != this.dirBranch) {
         this.getRepoDir();
@@ -186,8 +203,7 @@ export default {
   },
   methods: {
     async onInit() {
-      if (!this.data) return;
-      this.info = this.data;
+      if (!this.info || !this.query.c) return;
       const {
         id,
         name,
@@ -257,16 +273,12 @@ export default {
           { params }
         );
         let { scripts, framework = null } = data;
-        Object.assign(form, {
-          framework,
-        });
+        this.$set(form, "framework", framework);
         if (scripts) {
           this.scripts = JSON.parse(scripts);
           const { build } = this.scripts;
           if (build && framework != "nextjs") {
-            Object.assign(form, {
-              buildCommand: "npm run build",
-            });
+            this.$set(form, "buildCommand", "npm run build");
           }
         }
       } catch (error) {

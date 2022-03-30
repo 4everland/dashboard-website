@@ -85,7 +85,7 @@ new Vue({
         : "ws.4everland.org";
       this.socket = window.io(url, {
         path: "/socket.io",
-        query: "token=" + this.token,
+        query: "authorization=" + encodeURIComponent(this.token),
         withCredentials: false,
         transports: ["websocket", "polling"],
       });

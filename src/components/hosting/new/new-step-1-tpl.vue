@@ -27,12 +27,24 @@
           >
             {{ info.dir }}
           </e-icon-link>
+
+          <div class="ml-10 pl-10 bdl-1 hide-msg d-flex al-c">
+            <span class="mr-3">Private</span>
+            <v-switch v-model="isPrivate"></v-switch>
+          </div>
         </div>
         <div class="mt-8" style="max-width: 600px">
           <h4>Project Name</h4>
           <div class="d-flex al-c hide-msg">
-            <v-text-field v-model="name" outlined dense />
-            <v-btn class="ml-5" color="primary" rounded>Create</v-btn>
+            <v-text-field v-model.trim="name" outlined dense />
+            <v-btn
+              class="ml-5"
+              color="primary"
+              rounded
+              :loading="creating"
+              @click="onCreate"
+              >Create</v-btn
+            >
           </div>
         </div>
       </div>
@@ -61,8 +73,9 @@ export default {
     return {
       info: null,
       loading: true,
+      creating: false,
       name: "",
-      isPrivate: false,
+      isPrivate: true,
     };
   },
   watch: {
@@ -95,28 +108,57 @@ export default {
       }
       this.loading = false;
     },
+    async getGitInfo() {
+      try {
+        this.$loading("Fetch Repo...");
+        const { data: accountList } = await this.$http2.get(
+          "/user/git-namespaces"
+        );
+        const { data } = await this.$http2.get("/repo/refresh/list", {
+          params: {
+            githubId: accountList[0].githubId,
+            page: 0,
+            word: this.gitName,
+          },
+        });
+        const item = data.repoList.filter((it) => it.name == this.gitName)[0];
+        if (!item) throw new Error("Failed to fetch git repo");
+        this.$emit("git-repo", item);
+        this.$router.replace("/hosting/new?type=clone-flow&c=" + this.gitName);
+      } catch (error) {
+        console.log(error);
+        this.$confirm(error.message, "Network Error", {
+          confirmText: "Retry",
+        }).then(() => {
+          this.getGitInfo();
+        });
+      }
+    },
     async onCreate() {
       try {
-        if (!this.name) {
+        const name = this.name.trim();
+        if (!name) {
           return this.$toast("Invalid Name");
         }
-        this.creating = true;
+        this.$loading("Create Repo...");
         const { data: pushUrl } = await this.$http2.get("/repo/create/new", {
           params: {
-            name: this.name,
+            name,
             isPrivate: this.isPrivate,
           },
           noTip: true,
         });
-        const { data } = await this.$http2.post("/template/clone-push", {
-          pushUrl,
-          ...this.info,
-        });
-        let link = "/new?c=" + data;
-        const { e } = this.$route.query;
-        if (e) link += `&e=${encodeURIComponent(e)}`;
-        console.log(link);
-        this.$router.replace(link);
+        const { data: gitName } = await this.$http2.post(
+          "/template/clone-push",
+          {
+            pushUrl,
+            ...this.info,
+          }
+        );
+        this.gitName = gitName;
+        await this.getGitInfo();
+        // const { e } = this.$route.query;
+        // if (e) link += `&e=${encodeURIComponent(e)}`;
       } catch (error) {
         if (error.code == 10026) {
           this.$confirm(error.message).then(() => {
@@ -126,7 +168,7 @@ export default {
           this.$alert(error.message);
         }
       }
-      this.creating = false;
+      this.$loading.close();
     },
     async setGithub() {
       this.isAddClick = true;
