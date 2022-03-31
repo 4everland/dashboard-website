@@ -503,10 +503,6 @@ export default {
   watch: {
     path() {
       if (!this.inStorage) return;
-      // if (oldVal == this.BasePath) {
-      //   const { Bucket } = this.pathInfo;
-      //   console.log(Bucket);
-      // }
       this.selected = [];
       this.folderList = [];
       this.getList();

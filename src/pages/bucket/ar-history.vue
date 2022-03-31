@@ -133,7 +133,7 @@ export default {
   },
   watch: {
     path() {
-      if (this.path == "/arweave") {
+      if (this.path == "/bucket/arweave") {
         this.getList();
       }
     },
