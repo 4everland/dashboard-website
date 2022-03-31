@@ -15,9 +15,8 @@
         <e-nav></e-nav>
         <div class="pa-5">
           <e-wrap :class="meta.wrapCls || (meta.isTab ? 'pa-0' : 'main-wrap')">
-            <keep-alive>
-              <router-view></router-view>
-            </keep-alive>
+            <!-- <keep-alive></keep-alive> -->
+            <router-view></router-view>
           </e-wrap>
         </div>
       </v-main>

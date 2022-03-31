@@ -313,7 +313,17 @@ export default {
         this.page = 1;
         this.getList();
       } catch (error) {
-        //
+        console.log(error.code);
+        if (error.code == 100063) {
+          await this.$sleep(100);
+          this.$alert(error.message)
+            .then(() => {
+              this.$router.push("/settings?tab=account_binding");
+            })
+            .catch(() => {
+              this.$router.replace("/hosting/projects");
+            });
+        }
       }
       this.loading = false;
     },
