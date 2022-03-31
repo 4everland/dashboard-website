@@ -116,6 +116,18 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
+
+    <div class="mt-6" v-if="pageLen && !limit">
+      <v-pagination
+        @input="onPage"
+        v-model="page"
+        :length="pageLen"
+        prev-icon="mdi-menu-left"
+        next-icon="mdi-menu-right"
+        :total-visible="7"
+      ></v-pagination>
+    </div>
+
     <div class="ta-c">
       <div :class="!limit ? 'main-wrap' : ''" class="pb-15" v-if="!list.length">
         <div
@@ -162,16 +174,22 @@ export default {
     path() {
       return this.$route.path;
     },
-    inPage() {
-      return !this.pagePath || this.pagePath == this.path;
+    inCurPath() {
+      return !this.curPath || this.curPath == this.path;
+    },
+    pageLen() {
+      return Math.ceil(this.total / this.pageSize);
     },
   },
   data() {
     return {
       curIdx: [],
       list: [],
+      total: 0,
       loading: false,
-      pagePath: "",
+      curPath: "",
+      page: 1,
+      pageSize: 5,
     };
   },
   watch: {
@@ -179,12 +197,12 @@ export default {
       if (data.state != this.lastState) {
         console.log(data.taskId, data.state);
         this.lastState = data.state;
-        if (this.inPage) this.getList();
+        if (this.inCurPath) this.getList();
         else this.needRefresh = true;
       }
     },
-    inPage(val) {
-      // console.log(this.pagePath, val);
+    inCurPath(val) {
+      // console.log(this.curPath, val);
       if (val && this.needRefresh) {
         this.needRefresh = false;
         this.getList();
@@ -193,7 +211,7 @@ export default {
   },
   mounted() {
     this.getList();
-    this.pagePath = this.path;
+    this.curPath = this.path;
   },
   methods: {
     onStop() {},
@@ -266,19 +284,29 @@ export default {
       }
       it.loading = false;
     },
+    onPage() {
+      this.getList();
+    },
     async getList() {
       try {
-        this.loading = true;
-        const { data } = await this.$http2.get("/project/v3/list");
-        this.list = data.list;
-        // .map((it) => {
-        //   return it;
-        // });
-        this.total = data.total;
+        if (this.list.length) this.$loading();
+        else this.loading = true;
+        const {
+          data: { list, total },
+        } = await this.$http2.get("/project/v3/list", {
+          params: {
+            page: this.page - 1,
+            size: this.pageSize,
+          },
+        });
+        this.list = list;
+        this.total = total;
+        this.pageLen;
       } catch (error) {
         console.log(error);
       }
       this.loading = false;
+      this.$loading.close();
     },
   },
 };
