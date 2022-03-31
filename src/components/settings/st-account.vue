@@ -121,6 +121,7 @@ export default {
       this.$loading.close();
     },
     async onBind(it) {
+      if (it.type != 1) return this.$toast("todo");
       try {
         this.$loading();
         const { data } = await this.$http.post(

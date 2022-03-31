@@ -151,7 +151,7 @@
               </p>
             </div>
             <div class="mt-16 pt-3">
-              <v-btn color="primary" @click="onBind">
+              <v-btn color="primary" @click="onBind" :loading="connecting">
                 <v-icon size="20">mdi-github</v-icon>
                 <span class="ml-2">Connect with Github</span>
               </v-btn>
@@ -188,6 +188,7 @@ export default {
   data() {
     const { c } = this.$route.query;
     return {
+      connecting: false,
       minHeight: "64vh",
       cloneDir: c,
       isClone: false,
@@ -254,7 +255,8 @@ export default {
       if (name == "check-agree") this.onBind();
     },
   },
-  mounted() {
+  async mounted() {
+    await this.checkBind();
     this.getAccounts();
   },
   methods: {
@@ -272,13 +274,49 @@ export default {
     onCheck() {
       return this.$refs.stor.checkStorage();
     },
+    async checkBind() {
+      const { code } = this.$route.query;
+      if (!code || code == localStorage.last_github_code) return;
+      localStorage.last_github_code = code;
+      try {
+        this.connecting = true;
+        await this.$http.get(`/auth/vcode/${code}`, {
+          params: {
+            _auth: 1,
+            type: 1,
+          },
+        });
+        this.$setMsg({
+          name: "updateUser",
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      this.connecting = false;
+    },
     async onBind() {
       const needCheck = await this.onCheck();
       if (needCheck) return;
-      const link = `/settings?tab=account_binding&type=1&redirect=${encodeURIComponent(
-        "/hosting/new"
-      )}`;
-      this.$router.push(link);
+      // const link = `/settings?tab=account_binding&type=1&redirect=${encodeURIComponent()}`;
+      try {
+        this.connecting = true;
+        const { data } = await this.$http.post(
+          "/bind",
+          {
+            type: 1,
+            entranceId: 3,
+          },
+          {
+            params: {
+              _auth: 1,
+            },
+          }
+        );
+        location.href = data.applyR;
+      } catch (error) {
+        console.log(error);
+        this.connecting = false;
+      }
     },
     async addNew() {
       if (this.isTouch && !this.popAccounts && this.accountList.length) {
