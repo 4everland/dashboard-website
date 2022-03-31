@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  mounted() {
+  async mounted() {
     const { stoken, test } = this.$route.query;
     if (stoken) {
       this.ssoLogin(stoken);
