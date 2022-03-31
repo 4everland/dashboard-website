@@ -1,12 +1,12 @@
 <template>
   <div>
     <h3>Clone Template</h3>
-    <div class="mt-6 gray fz-16">Alternatively, get Started with template</div>
-    <v-row class="mt-8">
+    <div class="gray fz-15">Alternatively, get Started with template</div>
+    <v-row class="mt-2 mb-2">
       <v-col cols="6" v-for="(it, i) in tplList" :key="i">
         <a
           class="bd-1 d-b hover-1 pos-r pd-20"
-          style="height: 188px"
+          style="height: 192px"
           :style="{
             background: `-webkit-linear-gradient(-65deg, ${it.bg1}, #fff 50%)`,
           }"

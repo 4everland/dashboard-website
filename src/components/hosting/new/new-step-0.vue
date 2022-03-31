@@ -94,7 +94,8 @@
               style="min-height: 355px"
               v-else-if="!list.length"
             >
-              <div class="ta-c mt-8" v-if="keyword">
+              <div class="ta-c mt-8">
+                <!-- v-if="keyword" -->
                 <h3>No Results Found</h3>
               </div>
             </div>
@@ -103,7 +104,7 @@
                 <div v-for="(it, i) in list" :key="it.id">
                   <div class="pd-20 d-flex al-c">
                     <!-- <v-icon class="mr-5">mdi-wallet</v-icon> -->
-                    <img :src="it.fwImg" style="width: 22px" class="mr-2" />
+                    <img :src="it.fwImg" width="18" class="mr-2" />
                     <span class="fz-17 line-1 mr-1">{{ it.name }}</span>
                     <v-icon
                       v-if="it.private"
@@ -384,11 +385,10 @@ export default {
         });
         this.usedKeyword = this.keyword;
         this.pageLen = Math.max(1, Math.ceil(data.totalCount / 5));
-        this.list = data.repoList || [];
-        // .map((it) => {
-        //   it.fwImg = this.$getFramework(it.frameWorkAdvice).logo;
-        //   return it;
-        // });
+        this.list = (data.repoList || []).map((it) => {
+          it.fwImg = this.$getFramework(it.frameWorkAdvice).logo;
+          return it;
+        });
         if (this.cloneDir) {
           const item = this.list.filter((it) => it.name == this.cloneDir)[0];
           if (item) {
