@@ -252,7 +252,7 @@ export default {
       this.getAccounts();
     },
     noticeMsg({ name }) {
-      if (name == "check-agree") this.onBind();
+      if (name == "check-agree") this.addNew();
     },
   },
   async mounted() {
