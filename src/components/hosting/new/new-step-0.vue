@@ -151,7 +151,7 @@
               </p>
             </div>
             <div class="mt-16 pt-3">
-              <v-btn color="primary" @click="onBind" :loading="connecting">
+              <v-btn color="primary" @click="addNew" :loading="loading">
                 <v-icon size="20">mdi-github</v-icon>
                 <span class="ml-2">Connect with Github</span>
               </v-btn>
@@ -201,6 +201,7 @@ export default {
       popAccounts: false,
       page: 1,
       pageLen: 1,
+      isBind: false,
     };
   },
   computed: {
@@ -210,9 +211,6 @@ export default {
       isTouch: (s) => s.isTouch,
       noticeMsg: (s) => s.noticeMsg,
     }),
-    isBind() {
-      return !!this.userInfo.github;
-    },
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
@@ -248,15 +246,12 @@ export default {
     active(val) {
       if (val) this.getList();
     },
-    isBind() {
-      this.getAccounts();
-    },
     noticeMsg({ name }) {
       if (name == "check-agree") this.onBind();
     },
   },
   async mounted() {
-    await this.checkBind();
+    // await this.checkBind();
     this.getAccounts();
   },
   methods: {
@@ -365,11 +360,13 @@ export default {
       this.getList();
     },
     async getAccounts() {
-      if (!this.isBind) return;
       try {
         this.loading = true;
-        const { data } = await this.$http2.get("/user/git-namespaces");
+        const { data } = await this.$http2.get("/user/git-namespaces", {
+          noTip: true,
+        });
         if (data.length) {
+          this.isBind = true;
           data.sort((a, b) => {
             if (a.ownerType == "User" && b) return -1;
             return 0;
@@ -396,16 +393,7 @@ export default {
         this.getList();
       } catch (error) {
         console.log(error.code);
-        if (error.code == 100063) {
-          await this.$sleep(100);
-          this.$alert(error.message)
-            .then(() => {
-              this.$router.push("/settings?tab=account_binding");
-            })
-            .catch(() => {
-              this.$router.replace("/hosting/projects");
-            });
-        }
+        this.isBind = false;
       }
       this.loading = false;
     },

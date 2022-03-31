@@ -95,7 +95,7 @@ const lock = new AsyncLock({ timeout: 5000 });
       if (typeof data == "object" && data && "code" in data) {
         if (data.code != 200 && data.code != "SUCCESS") {
           let msg = data.message || `${data.code} error`;
-          handleMsg(200, data.code, msg);
+          handleMsg(200, data.code, msg, res.config);
           Vue.prototype.$loading.close();
           // console.log(data, res.config);
           const error = new Error(msg);
@@ -109,10 +109,15 @@ const lock = new AsyncLock({ timeout: 5000 });
       return res;
     },
     (error) => {
-      const { data = {}, status, statusText } = error.response || {};
+      const {
+        data = {},
+        status,
+        statusText,
+        config = {},
+      } = error.response || {};
       console.log(error, status, statusText);
       let msg = data.message || error.message;
-      handleMsg(status, data.code, msg);
+      handleMsg(status, data.code, msg, config);
       error.code = data.code;
       return Promise.reject(error);
     }
@@ -129,36 +134,7 @@ function goLogin() {
   }
 }
 
-http.interceptors.response.use(
-  (res) => {
-    const data = res.data;
-    if (typeof data == "object" && data && "code" in data) {
-      if (data.code != 200 && data.code != "SUCCESS") {
-        let msg = data.message || `${data.code} error`;
-        handleMsg(200, data.code, msg);
-        Vue.prototype.$loading.close();
-        // console.log(data, res.config);
-        const error = new Error(msg);
-        error.code = data.code;
-        throw error;
-      }
-      if ("data" in data) {
-        return data;
-      }
-    }
-    return res;
-  },
-  (error) => {
-    const { data = {}, status, statusText } = error.response || {};
-    console.log(error, status, statusText);
-    let msg = data.message || error.message;
-    handleMsg(status, data.code, msg);
-    error.code = data.code;
-    return Promise.reject(error);
-  }
-);
-
-function handleMsg(status, code, msg) {
+function handleMsg(status, code, msg, config) {
   console.log(code, msg);
   if (msg == "Network Error")
     msg =
@@ -170,7 +146,7 @@ function handleMsg(status, code, msg) {
 
   if (status == 401 || code == 401) {
     goLogin();
-  } else if (msg) {
+  } else if (msg && !config.noTip) {
     setTimeout(() => {
       Vue.prototype.$alert(msg).then(() => {
         if (msg == "Request aborted") {
