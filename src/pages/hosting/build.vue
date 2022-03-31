@@ -1,6 +1,6 @@
 <template>
   <div>
-    <e-settings :list="list" />
+    <e-tabs :list="list" />
   </div>
 </template>
 
