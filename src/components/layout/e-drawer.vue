@@ -80,6 +80,9 @@
           <v-list-item
             :ref="i + '-' + j"
             class="sub"
+            :class="{
+              'v-list-item--active': sub.matPath && sub.matPath.test(path),
+            }"
             :to="sub.to"
             :href="sub.href"
             :target="sub.href ? '_blank' : ''"
@@ -161,6 +164,7 @@ export default {
             {
               label: "Projects",
               to: "/hosting/projects",
+              matPath: /hosting\/(new|project|build)/,
             },
             {
               label: "Domains",
@@ -191,6 +195,7 @@ export default {
             {
               label: "Domains",
               to: "/bucket/domains",
+              matPath: /bucket\/domain/,
             },
           ],
         },
