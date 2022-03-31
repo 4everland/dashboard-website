@@ -10,139 +10,159 @@
           }"
         >
           <h3>Import Git Repository</h3>
-          <div class="d-flex al-c mb-3">
-            <v-btn
-              icon
-              small
-              :loading="loading"
-              @click="onRefresh"
-              class="mr-3"
-            >
-              <v-icon>mdi-refresh</v-icon>
-            </v-btn>
-            <v-menu offset-y :open-on-hover="!isTouch" v-model="popAccounts">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  rounded
-                  color="primary"
-                  class="mr-3"
-                  @click="addNew"
-                  small
-                  v-bind="attrs"
-                  v-on="on"
-                >
-                  <v-icon size="18" class="mr-1">mdi-github</v-icon>
-                  <span>{{ selectLabel }}</span>
-                </v-btn>
-              </template>
-              <v-list dense v-if="accountList.length > 0">
-                <v-list-item
-                  @click="onChooseAccount(it)"
-                  link
-                  v-for="it in accountList"
-                  :key="it.githubId"
-                >
-                  <v-list-item-title class="d-flex al-c">
-                    <v-icon
-                      size="18"
-                      class="mr-1"
-                      :color="it.githubId == chooseGithubId ? '#4A96FA' : null"
-                    >
-                      mdi-{{
-                        it.ownerType == "Organization"
-                          ? "account-group-outline"
-                          : "account-outline"
-                      }}
-                    </v-icon>
-                    <span
-                      :class="{
-                        'fw-b color-1': it.githubId == chooseGithubId,
-                      }"
-                      >{{ it.name }}</span
-                    >
-                  </v-list-item-title>
-                </v-list-item>
-                <v-divider></v-divider>
-                <v-list-item link @click="addNew">
-                  <v-list-item-title class="d-flex al-c">
-                    <v-icon size="18" class="mr-1">mdi-plus</v-icon>
-                    <span>Add Org or Account</span>
-                  </v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-
-            <v-text-field
-              v-model="keyword"
-              clearable
-              @keyup="onSearch"
-              prepend-icon="mdi-magnify"
-              style="margin-top: 14px"
-              placeholder="Search"
-              dense
-              autocomplete="off"
-            ></v-text-field>
-          </div>
-
-          <v-skeleton-loader v-if="!list" type="article" />
-
-          <div
-            class="bd-1 bg-f5 bdrs-5 pa-10 d-flex flex-center al-c"
-            style="min-height: 355px"
-            v-else-if="!list.length"
-          >
-            <div class="ta-c mt-8" v-if="keyword">
-              <h3>No Results Found</h3>
-            </div>
-            <div class="ta-l" v-else>
-              <div>Continuous Deployment</div>
-              <div class="gray fz-14 mt-3">
-                <p>
-                  We use Deployhooks to connect with your Github, and if we
-                  receive push, we will automatically deploy updates.
-                </p>
-              </div>
-              <v-skeleton-loader v-if="timing" class="mt-5" type="article" />
-            </div>
-          </div>
-          <div v-else>
-            <div class="bd-1 bdrs-5 ov-a" style="max-height: 355px">
-              <div v-for="(it, i) in list" :key="it.id">
-                <div class="pd-20 d-flex al-c">
-                  <!-- <v-icon class="mr-5">mdi-wallet</v-icon> -->
-                  <img :src="it.fwImg" style="width: 22px" class="mr-2" />
-                  <span class="fz-17 line-1 mr-1">{{ it.name }}</span>
-                  <v-icon v-if="it.private" color="#999" size="16" class="ml-1"
-                    >mdi-lock-outline</v-icon
-                  >
-                  <span class="ml-2 mr-3 gray fz-13 shrink-0" v-if="!asMobile">
-                    <e-time>{{ it.updateAt }}</e-time>
-                  </span>
+          <template v-if="isBind">
+            <div class="d-flex al-c mb-3">
+              <v-btn
+                icon
+                small
+                :loading="loading"
+                @click="onRefresh"
+                class="mr-3"
+              >
+                <v-icon>mdi-refresh</v-icon>
+              </v-btn>
+              <v-menu offset-y :open-on-hover="!isTouch" v-model="popAccounts">
+                <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    class="ml-auto"
+                    rounded
                     color="primary"
+                    class="mr-3"
+                    @click="addNew"
                     small
-                    @click="onImport(it)"
-                    >Import</v-btn
+                    v-bind="attrs"
+                    v-on="on"
                   >
-                </div>
-                <v-divider v-if="i < list.length - 1"></v-divider>
+                    <v-icon size="18" class="mr-1">mdi-github</v-icon>
+                    <span>{{ selectLabel }}</span>
+                  </v-btn>
+                </template>
+                <v-list dense v-if="accountList.length > 0">
+                  <v-list-item
+                    @click="onChooseAccount(it)"
+                    link
+                    v-for="it in accountList"
+                    :key="it.githubId"
+                  >
+                    <v-list-item-title class="d-flex al-c">
+                      <v-icon
+                        size="18"
+                        class="mr-1"
+                        :color="
+                          it.githubId == chooseGithubId ? '#4A96FA' : null
+                        "
+                      >
+                        mdi-{{
+                          it.ownerType == "Organization"
+                            ? "account-group-outline"
+                            : "account-outline"
+                        }}
+                      </v-icon>
+                      <span
+                        :class="{
+                          'fw-b color-1': it.githubId == chooseGithubId,
+                        }"
+                        >{{ it.name }}</span
+                      >
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-divider></v-divider>
+                  <v-list-item link @click="addNew">
+                    <v-list-item-title class="d-flex al-c">
+                      <v-icon size="18" class="mr-1">mdi-plus</v-icon>
+                      <span>Add Org or Account</span>
+                    </v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+
+              <v-text-field
+                v-model="keyword"
+                clearable
+                @keyup="onSearch"
+                prepend-icon="mdi-magnify"
+                style="margin-top: 14px"
+                placeholder="Search"
+                dense
+                autocomplete="off"
+              ></v-text-field>
+            </div>
+
+            <v-skeleton-loader v-if="!list" type="article" />
+
+            <div
+              class="bd-1 bg-f5 bdrs-5 pa-10 d-flex flex-center al-c"
+              style="min-height: 355px"
+              v-else-if="!list.length"
+            >
+              <div class="ta-c mt-8" v-if="keyword">
+                <h3>No Results Found</h3>
               </div>
             </div>
-            <div class="mt-3" v-show="pageLen > 1">
-              <v-pagination
-                @input="onPage"
-                v-model="page"
-                :length="pageLen"
-                prev-icon="mdi-menu-left"
-                next-icon="mdi-menu-right"
-                :total-visible="6"
-              ></v-pagination>
+            <div v-else>
+              <div class="bd-1 bdrs-5 ov-a" style="max-height: 355px">
+                <div v-for="(it, i) in list" :key="it.id">
+                  <div class="pd-20 d-flex al-c">
+                    <!-- <v-icon class="mr-5">mdi-wallet</v-icon> -->
+                    <img :src="it.fwImg" style="width: 22px" class="mr-2" />
+                    <span class="fz-17 line-1 mr-1">{{ it.name }}</span>
+                    <v-icon
+                      v-if="it.private"
+                      color="#999"
+                      size="16"
+                      class="ml-1"
+                      >mdi-lock-outline</v-icon
+                    >
+                    <span
+                      class="ml-2 mr-3 gray fz-13 shrink-0"
+                      v-if="!asMobile"
+                    >
+                      <e-time>{{ it.updateAt }}</e-time>
+                    </span>
+                    <v-btn
+                      class="ml-auto"
+                      color="primary"
+                      small
+                      @click="onImport(it)"
+                      >Import</v-btn
+                    >
+                  </div>
+                  <v-divider v-if="i < list.length - 1"></v-divider>
+                </div>
+              </div>
+              <div class="mt-3" v-show="pageLen > 1">
+                <v-pagination
+                  @input="onPage"
+                  v-model="page"
+                  :length="pageLen"
+                  prev-icon="mdi-menu-left"
+                  next-icon="mdi-menu-right"
+                  :total-visible="6"
+                ></v-pagination>
+              </div>
+            </div>
+          </template>
+          <div class="bg-f9 pa-5 pt-8 pb-8 mt-10" v-else>
+            <p class="fz-18 fw-b mb-10">Continuous Deployment</p>
+            <div class="gray fz-15 mt-3">
+              <p>
+                We use Deloyhooks to connect with your GitHub, and if we receive
+                push, we will automatically deploy updates.
+              </p>
+            </div>
+            <div class="mt-16 pt-3">
+              <v-btn color="primary" @click="onBind">
+                <v-icon size="20">mdi-github</v-icon>
+                <span class="ml-2">Connect with Github</span>
+              </v-btn>
+            </div>
+            <div class="mt-4 gray fz-14">
+              GitHub binds your Git account with your 4EVERLAND account by
+              default.
             </div>
           </div>
         </div>
       </v-col>
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="6" v-if="isBind">
         <div
           class="main-wrap"
           :style="{
@@ -183,9 +203,14 @@ export default {
   },
   computed: {
     ...mapState({
+      userInfo: (s) => s.userInfo,
       isFocus: (s) => s.isFocus,
       isTouch: (s) => s.isTouch,
+      noticeMsg: (s) => s.noticeMsg,
     }),
+    isBind() {
+      return !!this.userInfo.github;
+    },
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
@@ -221,6 +246,12 @@ export default {
     active(val) {
       if (val) this.getList();
     },
+    isBind() {
+      this.getAccounts();
+    },
+    noticeMsg({ name }) {
+      if (name == "check-agree") this.onBind();
+    },
   },
   mounted() {
     this.getAccounts();
@@ -237,12 +268,23 @@ export default {
       this.$router.push("/hosting/new?c=" + it.name);
       this.$emit("next");
     },
+    onCheck() {
+      return this.$refs.stor.checkStorage();
+    },
+    async onBind() {
+      const needCheck = await this.onCheck();
+      if (needCheck) return;
+      const link = `/settings?tab=account_binding&type=1&redirect=${encodeURIComponent(
+        "/hosting/new"
+      )}`;
+      this.$router.push(link);
+    },
     async addNew() {
       if (this.isTouch && !this.popAccounts && this.accountList.length) {
         this.popAccounts = true;
         return;
       }
-      const needCheck = await this.$refs.stor.checkStorage();
+      const needCheck = await this.onCheck();
       if (needCheck) return;
       this.isAddClick = true;
       try {
@@ -284,6 +326,7 @@ export default {
       this.getList();
     },
     async getAccounts() {
+      if (!this.isBind) return;
       try {
         this.loading = true;
         const { data } = await this.$http2.get("/user/git-namespaces");

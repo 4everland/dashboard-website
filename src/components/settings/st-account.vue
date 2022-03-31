@@ -67,11 +67,37 @@ export default {
         },
       ];
     },
+    query() {
+      return this.$route.query;
+    },
+  },
+  watch: {
+    query() {
+      this.checkQuery();
+    },
   },
   mounted() {
     this.onGithubCode();
+    this.checkQuery();
   },
   methods: {
+    checkQuery() {
+      const { type, redirect } = this.query;
+      if (type) {
+        const item = this.list.filter((it) => it.type == type)[0];
+        if (item) {
+          if (redirect) localStorage.bind_redirect = redirect;
+          this.onBind(item);
+        }
+      }
+    },
+    onBindSuc() {
+      const link = localStorage.bind_redirect;
+      if (link) {
+        this.$navTo(link);
+        localStorage.bind_redirect = "";
+      }
+    },
     async onGithubCode() {
       const { code } = this.$route.query;
       if (!code || code == localStorage.last_github_code) return;
@@ -88,6 +114,7 @@ export default {
         this.$setMsg({
           name: "updateUser",
         });
+        this.onBindSuc();
       } catch (error) {
         console.log(error);
       }

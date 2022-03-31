@@ -154,7 +154,12 @@ export default {
         this.$alert(html, "Welcome to 4EVERLAND HOSTING.", {
           type: "success",
         }).then(() => {
-          this.$router.push("/new");
+          const link = "/hosting/new";
+          if (this.$route.path != link) this.$router.push(link);
+          else
+            this.$setMsg({
+              name: "check-agree",
+            });
         });
       } catch (error) {
         //
