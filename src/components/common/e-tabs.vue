@@ -21,7 +21,7 @@
   <div v-else class="e-settings" :class="vertical ? 'd-flex' : ''">
     <div>
       <v-tabs
-        :class="vertical ? '' : 'v3-tabs'"
+        :class="vertical ? 'v3-vertical bdr-1' : 'v3-horizon'"
         color="black"
         v-model="curIdx"
         :height="vertical ? null : 44"
@@ -71,6 +71,7 @@ export default {
         this.activeIdxList.push(val);
       }
       const it = this.list[val];
+      if (!it) return;
       const query = { ...this.$route.query };
       const tabVal = it.text.replace(" ", "_").toLowerCase();
       if (query[this.tabKey] == tabVal) return;
@@ -131,7 +132,29 @@ export default {
   .theme--light.v-tabs > .v-tabs-bar {
     background-color: transparent;
   }
-  .v3-tabs {
+  .v3-vertical {
+    width: 160px;
+    min-height: 63vh;
+    margin-right: 20px;
+    .v-tab {
+      text-align: left;
+    }
+    .v-tab--active {
+      color: #34a9ff;
+      &::after {
+        position: absolute;
+        content: "";
+        right: -1px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 20px;
+        width: 3px;
+        background: #34a9ff;
+        border-radius: 1px;
+      }
+    }
+  }
+  .v3-horizon {
     .v-slide-group__content {
       padding-top: 4px;
       padding-left: 2px;
