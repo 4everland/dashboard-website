@@ -42,12 +42,12 @@
     </div>
 
     <v-skeleton-loader type="article" v-if="!list" />
-    <div class="bd-1" v-else-if="list.length">
-      <div v-for="(it, i) in list" :key="i">
-        <div class="pd-20 d-flex al-c flex-wrap">
+    <div v-else-if="list.length">
+      <div class="bd-1 mb-5" v-for="(it, i) in list" :key="i">
+        <div class="d-flex al-c flex-wrap">
           <div class="mr-auto">
-            <h3 class="mr-auto">{{ it.domain }}</h3>
-            <div class="d-flex al-c mt-2">
+            <div class="mr-auto fz-20 lh-1">{{ it.domain }}</div>
+            <div class="d-flex al-c mt-3">
               <v-icon :color="it.valid ? 'success' : 'error'" size="18">
                 mdi-{{ it.valid ? "check-circle" : "information" }}
               </v-icon>
@@ -73,7 +73,7 @@
             <v-btn
               small
               rounded
-              color="error"
+              outlined
               @click="onRemove(it)"
               :loading="it.removing"
             >
@@ -81,26 +81,23 @@
             </v-btn>
           </div>
         </div>
-        <div class="pd-20 bdt-1" v-if="!it.valid">
-          <!-- <div class="fz-14">
-          <b>Nameservers</b>
-        </div> -->
+        <div class="mt-5" v-if="!it.valid">
           <template v-if="it.conflicts.length">
-            <p class="gray mt-1 fz-14">
+            <p class="gray fz-14">
               Please remove the following conflicting DNS records from your DNS
               provider:
             </p>
-            <div class="bg-f4 pd-10 fz-14 mt-3 mb-5">
+            <div class="fz-14 mt-3 mb-5">
               <table class="w100p">
                 <tr class="gray">
                   <td>Type</td>
                   <td>Name</td>
                   <td>Value</td>
                 </tr>
-                <tr v-for="(row, j) in it.conflicts" :key="j">
+                <tr class="fz-16" v-for="(row, j) in it.conflicts" :key="j">
                   <td>{{ row.type }}</td>
                   <td>@</td>
-                  <td class="wb-all">{{ row.value }}</td>
+                  <td class="wb-all color-1 fw-b">{{ row.value }}</td>
                 </tr>
               </table>
             </div>
@@ -109,19 +106,19 @@
             <span v-if="it.conflicts.length">Afterwards,</span>
             Set the following record on your DNS provider to continue:
           </p>
-          <div class="bg-f4 pd-10 fz-14 mt-3">
+          <div class="fz-14 mt-5">
             <table class="w100p">
               <tr class="gray">
                 <td>Type</td>
                 <td>Name</td>
                 <td>Value</td>
               </tr>
-              <tr>
+              <tr class="fz-16">
                 <td>{{ it.isA ? "A" : "CNAME" }}</td>
                 <td>{{ it.pre }}</td>
                 <td>
                   <p
-                    class="hover-1 wb-all"
+                    class="hover-1 wb-all color-1 fw-b"
                     v-clipboard="it.isA ? dns.ip : dns.cname"
                     @success="$toast('Copied to clipboard !')"
                   >
