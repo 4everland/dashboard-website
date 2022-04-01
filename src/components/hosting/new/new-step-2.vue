@@ -57,16 +57,23 @@
       <h3>
         Deploy <span v-if="info">{{ info.buildConfig.name }}</span>
       </h3>
-      <div class="d-flex al-c mb-5" v-if="!isDone && info">
-        <v-progress-circular
-          :size="15"
-          :width="1.5"
-          color="#999"
-          indeterminate
-        />
-        <div class="gray fz-15 ml-3">
-          Deployment started <e-time>{{ info.createAt }}</e-time>
-        </div>
+
+      <div class="d-flex al-c gray fz-15" v-if="info">
+        <template v-if="info.isFail">
+          <img src="img/svg/common/ic-error.svg" width="18" />
+          <span class="ml-3">{{ errMsg || "Build failed" }}</span>
+        </template>
+        <template v-else-if="!isDone">
+          <v-progress-circular
+            :size="15"
+            :width="1.5"
+            color="#999"
+            indeterminate
+          />
+          <div class="ml-3">
+            Deployment started <e-time>{{ info.createAt }}</e-time>
+          </div>
+        </template>
       </div>
       <build-overview-logs @done="isDone = true" @info="onInfo" />
     </div>
@@ -84,6 +91,7 @@ export default {
       isDone: false,
       info: null,
       showPop: false,
+      errMsg: "",
     };
   },
   watch: {
@@ -93,6 +101,20 @@ export default {
           const { path, query } = this.$route;
           if (path == "/hosting/new" && query.taskId) this.showPop = true;
         }, 500);
+    },
+    async "info.isFail"(val) {
+      if (!val) {
+        this.errMsg = "";
+        return;
+      }
+      try {
+        const { data } = await this.$http2.get(
+          "/project/task/error/" + this.info.taskId
+        );
+        if (data) this.errMsg = data.capitalize();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   methods: {

@@ -6,11 +6,11 @@
       :value="getOpen(0)"
       :icon="getIcon(0)"
     >
-      <!-- <template #time>
-        <div class="fz-14 gray" v-if="info && !isDone">
-          <e-time :endAt="info.endAt || nowDate">{{ info.createAt }}</e-time>
+      <template #time v-if="isFail">
+        <div class="fz-14 gray" v-if="info">
+          <e-time :endAt="info.endAt">{{ info.createAt }}</e-time>
         </div>
-      </template> -->
+      </template>
       <build-log v-if="info" :list="logs" />
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
@@ -75,6 +75,9 @@ export default {
       if (!arr.includes(domain)) arr.push(domain);
       return arr;
     },
+    isFail() {
+      return this.info && this.info.isFail;
+    },
   },
   watch: {
     taskId() {
@@ -99,6 +102,7 @@ export default {
     },
     state(val) {
       this.$emit("state", val);
+      this.getInfo();
     },
   },
   mounted() {
@@ -114,11 +118,14 @@ export default {
         const { data } = await this.$http2.get(
           `/project/task/object/${this.taskId}`
         );
-        this.$emit("info", data.task);
-        this.logs = data.log;
-        const { cid, state = "" } = (this.info = data.task);
+        const info = data.task;
+        const { cid, state = "" } = info;
         this.state = state.toLowerCase();
         this.isDone = this.state == "success";
+        info.isFail = !this.isDone && info.endAt;
+        this.info = info;
+        this.$emit("info", info);
+        this.logs = data.log;
         if (this.isDone) {
           this.curIdx = 2;
           this.$store.dispatch("getProjectInfo", this.info.projectId);
@@ -134,6 +141,7 @@ export default {
     },
     getIcon(i) {
       if (!this.info) return "";
+      if (i == 0 && this.isFail) return "fail";
       if (i < this.curIdx || this.isDone) return "checked";
       return i == this.curIdx ? "loading" : "pending";
     },

@@ -1,5 +1,8 @@
 <template>
-  <div class="pa-5 bd-1 bdrs-3 bg-white">
+  <div
+    class="pa-5 bd-1 bdrs-3 bg-white"
+    :style="icon == 'fail' ? 'border-color: #FF6960' : ''"
+  >
     <div class="d-flex al-c hover-1" @click="isShow = !isShow">
       <v-icon
         :color="color"
@@ -13,7 +16,7 @@
         <span>
           <slot name="time"></slot>
         </span>
-        <div v-if="icon" class="ml-2 d-flex">
+        <div v-if="icon && icon != 'fail'" class="ml-2 d-flex">
           <img
             src="img/svg/common/ic-checked.svg"
             height="15"
