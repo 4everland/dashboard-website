@@ -247,7 +247,7 @@ export default {
       if (val) this.getList();
     },
     noticeMsg({ name }) {
-      if (name == "check-agree") this.onBind();
+      if (name == "check-agree") this.addNew();
     },
   },
   async mounted() {
