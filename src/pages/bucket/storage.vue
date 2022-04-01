@@ -286,7 +286,7 @@
         item-key="name"
         no-data-text=""
         loading-text=""
-        checkbox-color="#0F8DFF"
+        :checkbox-color="$color1"
         hide-default-footer
         disable-pagination
         @click:row="onRow"

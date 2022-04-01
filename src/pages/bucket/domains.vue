@@ -37,7 +37,7 @@
         no-data-text=""
         loading-text=""
         hide-default-footer
-        checkbox-color="#0F8DFF"
+        :checkbox-color="$color1"
       >
         <template v-slot:item.domain="{ item }">
           <v-btn

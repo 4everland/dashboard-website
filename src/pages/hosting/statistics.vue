@@ -12,7 +12,7 @@
     >
       <template v-slot:item.projectName="{ item }">
         <v-btn text small rounded color="primary" :to="getPath(item)">
-          {{ item.projectName }}
+          <b>{{ item.projectName }}</b>
         </v-btn>
       </template>
     </v-data-table>

@@ -30,6 +30,7 @@
       no-data-text=""
       loading-text=""
       hide-default-footer
+      :checkbox-color="$color1"
       @click:row="onRow"
     >
       <template v-slot:item.domain="{ item }">
@@ -40,7 +41,7 @@
           :color="item.valid ? 'success' : 'error'"
           :to="getPath(item)"
         >
-          {{ item.domain }}
+          <b>{{ item.domain }}</b>
         </v-btn>
       </template>
     </v-data-table>
