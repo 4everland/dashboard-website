@@ -151,7 +151,6 @@ export default {
             name,
             isPrivate: this.isPrivate,
           },
-          noTip: true,
         });
         const { data: gitName } = await this.$http2.post(
           "/template/clone-push",
@@ -163,24 +162,7 @@ export default {
         this.gitName = gitName;
         await this.getGitInfo();
       } catch (error) {
-        if (error.code == 10026) {
-          this.$confirm(error.message).then(() => {
-            this.setGithub();
-          });
-        } else {
-          this.$alert(error.message);
-        }
-      }
-      this.$loading.close();
-    },
-    async setGithub() {
-      this.isAddClick = true;
-      try {
-        this.$loading();
-        const { data } = await this.$http2.get("/githubapp/install");
-        this.$openWindow(data.installUrl);
-      } catch (error) {
-        //
+        console.log(error);
       }
       this.$loading.close();
     },
