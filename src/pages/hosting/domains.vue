@@ -5,14 +5,15 @@
         <img src="img/svg/add1.svg" width="12" />
         <span class="ml-2">Add</span>
       </v-btn>
+
       <v-btn
-        rounded
-        color="error"
-        class="ml-5"
         @click="onDelete"
         :loading="deleting"
-        :disabled="selected.length == 0"
-        v-if="list.length > 0"
+        outlined
+        rounded
+        class="ml-5"
+        min-width="36"
+        v-show="selected.length"
       >
         <img src="img/svg/delete.svg" width="12" />
         <span class="ml-2">Delete</span>
@@ -29,14 +30,15 @@
       no-data-text=""
       loading-text=""
       hide-default-footer
+      @click:row="onRow"
     >
       <template v-slot:item.domain="{ item }">
         <v-btn
           text
+          small
+          rounded
           :color="item.valid ? 'success' : 'error'"
-          :to="`/project/${item.projectName || 'project'}/${
-            item.projectId
-          }/settings?tab=1`"
+          :to="getPath(item)"
         >
           {{ item.domain }}
         </v-btn>
@@ -100,7 +102,7 @@
                       small
                       color="primary"
                       class="ml-auto"
-                      :to="`/project/${it.name}/${it.id}/settings?tab=1`"
+                      :to="`/hosting/project/${it.name}/${it.id}?tab=settings&sub=domains`"
                       >Select</v-btn
                     >
                   </div>
@@ -131,9 +133,9 @@
         </v-window>
 
         <div class="ta-c mt-8">
-          <v-btn @click="showPop = false" small>Cancel</v-btn>
+          <v-btn @click="showPop = false" outlined rounded>Cancel</v-btn>
           <v-btn
-            small
+            rounded
             color="primary"
             class="ml-6"
             v-if="curStep > 0"
@@ -199,6 +201,15 @@ export default {
     this.getList();
   },
   methods: {
+    getPath(item) {
+      return `/hosting/project/${item.projectName || "project"}/${
+        item.projectId
+      }?tab=settings&sub=domains`;
+    },
+    onRow(it) {
+      const url = this.getPath(it);
+      this.$router.push(url);
+    },
     async onDelete() {
       try {
         let html = `The following domains will be permanently deleted along with associated <b>aliases</b> and <b>certs</b>. If the domain is used as Staging Domain it will be <b>cleared</b>. Are you sure you want to continue?`;

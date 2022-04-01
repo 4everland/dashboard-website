@@ -20,7 +20,7 @@
         <v-btn
           small
           rounded
-          color="error"
+          outlined
           class="ml-5"
           @click="onDelete"
           :loading="deleting"
@@ -65,10 +65,10 @@
           >
           </v-select>
         </div>
-        <div class="mt-5 ta-r">
-          <v-btn small @click="showPop = false"> Cancel </v-btn>
+        <div class="mt-5 ta-c">
+          <v-btn rounded outlined @click="showPop = false"> Cancel </v-btn>
           <v-btn
-            small
+            rounded
             color="primary"
             class="ml-5"
             :loading="adding"

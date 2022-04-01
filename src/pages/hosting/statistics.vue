@@ -8,13 +8,10 @@
       no-data-text=""
       loading-text=""
       hide-default-footer
+      @click:row="onRow"
     >
       <template v-slot:item.projectName="{ item }">
-        <v-btn
-          text
-          color="primary"
-          :to="`/hosting/statistics/${item.projectName}/${item.projectId}`"
-        >
+        <v-btn text small rounded color="primary" :to="getPath(item)">
           {{ item.projectName }}
         </v-btn>
       </template>
@@ -51,7 +48,7 @@ export default {
         { text: "Total UV", value: "totalUv" },
         { text: "Total PV", value: "queryCount" },
       ].map((it) => {
-        it.align = "center";
+        // it.align = "center";
         return it;
       }),
       list: [],
@@ -63,6 +60,13 @@ export default {
     this.getList();
   },
   methods: {
+    getPath(item) {
+      return `/hosting/statistics/${item.projectName}/${item.projectId}`;
+    },
+    onRow(it) {
+      const url = this.getPath(it);
+      this.$router.push(url);
+    },
     onPage() {
       this.getList();
     },
