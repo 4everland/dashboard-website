@@ -54,7 +54,7 @@ Vue.prototype.$getFramework = (name) => {
 
 Vue.prototype.$getImgSrc = function (src) {
   if (!src) src = "img/bg/empty/project.png";
-  else if (!/^http/.test(src)) src = process.env.VUE_APP_BASE_URL + src;
+  else if (!/^http/.test(src)) src = process.env.VUE_APP_HOST_URL + src;
   return src;
 };
 
