@@ -11,7 +11,7 @@
 <template>
   <div class="st-domains">
     <div class="bd-1 mb-5">
-      <h4>Domains</h4>
+      <h3>Domains</h3>
       <div class="gray fz-14">
         These domains are assigned to your Production Deployments.
         <!-- Optionally, a different Git branch or a redirection to another domain can be configured

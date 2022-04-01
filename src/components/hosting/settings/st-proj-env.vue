@@ -2,7 +2,7 @@
   <div class="bd-1">
     <div class="d-flex al-c">
       <div class="mr-5">
-        <h4>Environment Variable</h4>
+        <h3>Environment Variable</h3>
         <div class="gray fz-14">
           In order to provide your Deployment with Environment Variables at
           Build and Runtime, you may enter them right here, for the Environment
@@ -12,7 +12,7 @@
     </div>
 
     <div class="mt-5">
-      <v-btn small color="primary" @click="clickAdd" rounded min-width="80">
+      <v-btn small color="primary" @click="clickAdd" rounded min-width="70">
         Add
       </v-btn>
       <v-btn

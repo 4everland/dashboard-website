@@ -3,19 +3,23 @@
     <v-text-field
       v-if="!options.length"
       v-model="val"
-      outlined
+      :outlined="!label"
       dense
       :placeholder="placeholder"
+      :label="label"
+      persistent-placeholder
     />
     <v-select
       v-else
       v-model="val"
-      outlined
+      :outlined="!label"
       dense
       :menu-props="{ offsetY: true }"
       :items="options"
       item-text="text"
       item-value="value"
+      :label="label"
+      persistent-placeholder
     >
       <template #item="{ item }">
         <span>{{ item.key }}</span>
@@ -34,6 +38,7 @@ export default {
     value: String,
     placeholder: String,
     scripts: null,
+    label: String,
   },
   watch: {
     val() {

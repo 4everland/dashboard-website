@@ -41,8 +41,16 @@ export default {
           text: "Domains",
         },
         {
+          comp: "st-proj-git",
+          text: "Git",
+        },
+        {
           comp: "st-proj-env",
           text: "Environment Variable",
+        },
+        {
+          comp: "st-proj-advanced",
+          text: "Advanced",
         },
       ],
     };
