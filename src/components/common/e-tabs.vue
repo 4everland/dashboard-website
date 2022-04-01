@@ -33,7 +33,7 @@
         </v-tab>
       </v-tabs>
     </div>
-    <div class="" :class="vertical ? 'flex-1' : 'main-wrap pa-5 bg-white'">
+    <div class="" :class="vertical ? 'flex-1 ml-5' : 'main-wrap pa-5 bg-white'">
       <component
         :is="it.comp"
         v-bind="it.props"
@@ -54,6 +54,10 @@ export default {
     info: Object,
     defTab: Number,
     vertical: Boolean,
+    width: {
+      type: String,
+      default: "200px",
+    },
   },
   data() {
     const tabKey = this.vertical ? "sub" : "tab";
@@ -133,9 +137,7 @@ export default {
     background-color: transparent;
   }
   .v3-vertical {
-    width: 160px;
     min-height: 63vh;
-    margin-right: 20px;
     .v-tab {
       text-align: left;
     }

@@ -1,7 +1,22 @@
+<style lang="scss">
+.proj-settings {
+  .bd-1 {
+    border-radius: 2px;
+    padding: 16px;
+  }
+}
+</style>
+
 <template>
   <div>
     <v-skeleton-loader type="article" v-if="!info.id" />
-    <e-tabs :list="list" vertical query-key="sub" v-else></e-tabs>
+    <e-tabs
+      class="proj-settings"
+      :list="list"
+      vertical
+      query-key="sub"
+      v-else
+    ></e-tabs>
   </div>
 </template>
 
@@ -18,12 +33,16 @@ export default {
     return {
       list: [
         {
-          comp: "st-project-general",
+          comp: "st-proj-general",
           text: "General",
         },
         {
-          comp: "st-project-domains",
+          comp: "st-proj-domains",
           text: "Domains",
+        },
+        {
+          comp: "st-proj-env",
+          text: "Environment Variable",
         },
       ],
     };

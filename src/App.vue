@@ -46,5 +46,16 @@ export default {
   min-height: 77vh;
   background: #fff;
   box-shadow: 0 0 6px rgb(205 205 205 / 50%);
+  h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    line-height: 1;
+  }
+  h4 {
+    margin-bottom: 10px;
+    line-height: 1;
+    font-size: 15px;
+    font-weight: normal;
+  }
 }
 </style>
