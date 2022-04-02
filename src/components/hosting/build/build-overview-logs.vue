@@ -113,7 +113,7 @@ export default {
       if (!this.taskId) return;
       try {
         this.isDone = false;
-        this.info = null;
+        // this.info = null;
         this.logs = [];
         const { data } = await this.$http2.get(
           `/project/task/object/${this.taskId}`
@@ -122,7 +122,7 @@ export default {
         const { cid, state = "" } = info;
         this.state = state.toLowerCase();
         this.isDone = this.state == "success";
-        info.isFail = !this.isDone && info.endAt;
+        info.isFail = /fail|timeout|error|cancel/.test(this.state);
         this.info = info;
         this.$emit("info", info);
         this.logs = data.log;
@@ -142,6 +142,7 @@ export default {
     getIcon(i) {
       if (!this.info) return "";
       if (i == 0 && this.isFail) return "fail";
+      if (this.isFail) return "pending";
       if (i < this.curIdx || this.isDone) return "checked";
       return i == this.curIdx ? "loading" : "pending";
     },
