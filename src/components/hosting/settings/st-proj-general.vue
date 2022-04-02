@@ -39,14 +39,17 @@
         >
         </v-select>
 
-        <build-cmd
-          class="mt-2"
-          v-model="form.buildCommand"
-          :placeholder="buildCommandHint"
-          :options="[]"
-          :scripts="scripts"
-          label="Build Command"
-        />
+        <div class="d-flex al-c">
+          <build-cmd
+            class="mt-2 flex-1"
+            v-model="form.buildCommand"
+            :placeholder="buildCommandHint"
+            :options="[]"
+            :scripts="scripts"
+            label="Build Command"
+          />
+          <build-cmd-tip />
+        </div>
 
         <div class="d-flex al-c">
           <v-text-field
@@ -55,18 +58,7 @@
             label="Output Directory"
             :placeholder="outputDirHint"
           ></v-text-field>
-          <e-tooltip bottom max-width="300">
-            <template #ref>
-              <v-icon size="15" class="ml-2"> mdi-help-circle-outline </v-icon>
-            </template>
-            <p>
-              The directory in which your compiled frontend will be located.
-            </p>
-            <p>
-              If you want to serve everything instead of a sub directory, leave
-              this field empty.
-            </p>
-          </e-tooltip>
+          <build-output-tip />
         </div>
 
         <div class="d-flex al-c">
@@ -78,7 +70,9 @@
           ></v-text-field>
           <e-tooltip bottom max-width="300">
             <template #ref>
-              <v-icon class="ml-2" size="15"> mdi-help-circle-outline </v-icon>
+              <v-icon class="ml-2" size="16" :color="$color1">
+                mdi-help-circle-outline
+              </v-icon>
             </template>
             <p>
               The command that is used to install your Project's software

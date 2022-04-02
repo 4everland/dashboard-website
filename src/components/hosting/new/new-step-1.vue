@@ -84,7 +84,10 @@
           </v-select>
         </v-col>
         <v-col cols="6" md="4">
-          <h4>Build Command</h4>
+          <h4>
+            <span>Build Command</span>
+            <build-cmd-tip />
+          </h4>
           <build-cmd
             v-model="form.buildCommand"
             :placeholder="buildCommandHint"
@@ -92,7 +95,10 @@
           ></build-cmd>
         </v-col>
         <v-col cols="6" md="4">
-          <h4>Output Directory</h4>
+          <h4>
+            <span>Output Directory</span>
+            <build-output-tip />
+          </h4>
           <v-text-field
             v-model="form.outputDirectory"
             outlined
@@ -100,7 +106,19 @@
           ></v-text-field>
         </v-col>
         <v-col cols="6" md="4">
-          <h4>Deploy Hooks</h4>
+          <h4>
+            <span>Deploy Hooks</span>
+            <e-tooltip right max-width="300">
+              <v-icon slot="ref" size="16" class="ml-2" :color="$color1">
+                mdi-help-circle-outline
+              </v-icon>
+              <p>
+                Deloyhooks allow external services to be notified when certain
+                events happen. When the specified events happen, we’ll update
+                the deployment.
+              </p>
+            </e-tooltip>
+          </h4>
           <v-switch v-model="form.hookSwitch" dense></v-switch>
         </v-col>
       </v-row>
