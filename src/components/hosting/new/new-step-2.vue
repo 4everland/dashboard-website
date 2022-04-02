@@ -102,6 +102,9 @@ export default {
           if (path == "/hosting/new" && query.taskId) this.showPop = true;
         }, 500);
     },
+    showPop(val) {
+      if (!val) this.goHome();
+    },
     async "info.isFail"(val) {
       if (!val) {
         this.errMsg = "";
@@ -118,14 +121,16 @@ export default {
     },
   },
   methods: {
+    goHome() {
+      this.$router.replace("/hosting/projects");
+    },
     onCancel() {
       this.$confirm("", "Are you sure to quit this deployment ?").then(() => {
-        this.$router.replace("/hosting/projects");
+        this.goHome();
       });
     },
     onInfo(obj) {
       this.info = obj;
-      this.isDone = false;
     },
   },
 };

@@ -127,7 +127,7 @@ export default {
           this.curIdx = 2;
           this.$store.dispatch("getProjectInfo", this.info.projectId);
         } else if (cid) {
-          this.curIdx = 1;
+          this.curIdx = 2;
         }
       } catch (error) {
         console.log(error);
