@@ -31,7 +31,8 @@
       }
     }
     &.prev {
-      background: #fff;
+      background: #fff url(/img/svg/common/ic-check.svg) 98% center no-repeat;
+      background-size: 18px;
       color: $color1;
       .num {
         background: $color1;
