@@ -112,9 +112,6 @@ export default {
     async getInfo() {
       if (!this.taskId) return;
       try {
-        this.isDone = false;
-        // this.info = null;
-        this.logs = [];
         const { data } = await this.$http2.get(
           `/project/task/object/${this.taskId}`
         );
