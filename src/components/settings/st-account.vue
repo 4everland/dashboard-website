@@ -64,7 +64,7 @@ export default {
           desc: "Verify your email address to receive updates and notices for your account.",
           icon: "m-email",
           type: 3,
-          // account: info.email,
+          account: info.email,
         },
       ];
     },
