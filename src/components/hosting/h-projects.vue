@@ -41,8 +41,8 @@
     <v-expansion-panels v-model="curIdx" multiple :disabled="limit > 0">
       <v-expansion-panel
         class="mb-3"
-        v-for="(it, i) in list.slice(0, limit)"
-        :key="i"
+        v-for="it in list.slice(0, limit)"
+        :key="it.id"
         @change="onOpen(it)"
       >
         <v-expansion-panel-header @click="onItem(it)">
