@@ -134,26 +134,34 @@ function goLogin() {
   }
 }
 
-function handleMsg(status, code, msg, config) {
+async function handleMsg(status, code, msg, config) {
   console.log(code, msg);
-  if (msg == "Network Error")
-    msg =
-      "A network error has occurred. Please check your connections and try again.";
   if (!msg && typeof code == "string") {
     msg = code;
   }
   msg = msg || "Unknown Error";
-
+  const vue = Vue.prototype;
+  await vue.$sleep(10);
   if (status == 401 || code == 401) {
     goLogin();
-  } else if (msg && !config.noTip) {
-    setTimeout(() => {
-      Vue.prototype.$alert(msg).then(() => {
-        if (msg == "Request aborted") {
-          location.reload();
+  } else if (msg == "Network Error") {
+    vue
+      .$confirm(
+        "A network error has occurred. Please check your connections and try again.",
+        msg,
+        {
+          confirmText: "Retry",
         }
+      )
+      .then(() => {
+        location.reload();
       });
-    }, 10);
+  } else if (msg && !config.noTip) {
+    vue.$alert(msg).then(() => {
+      if (msg == "Request aborted") {
+        location.reload();
+      }
+    });
   }
 }
 
