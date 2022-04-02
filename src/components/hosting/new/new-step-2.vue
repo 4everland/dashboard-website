@@ -2,19 +2,19 @@
   <div>
     <v-dialog v-if="info" v-model="showPop" max-width="650">
       <div class="pa-5 d-flex al-c">
-        <!--  -->
-        <v-img
-          class="bd-1 bdrs-5 w100p"
-          :src="$getImgSrc(info.screenshotPath)"
-          lazy-src="img/bg/empty/project.png"
+        <!-- :src="$getImgSrc(info.screenshotPath)" -->
+        <!-- lazy-src="img/bg/empty/project.png" -->
+        <img
+          class="bdrs-5"
+          src="https://4ever-web.4everland.store/bg/party.gif"
           aspect-ratio="1"
-          width="160"
-        ></v-img>
-        <div class="ml-5">
+          width="220"
+        />
+        <div class="ml-5 flex-1">
           <h3 class="fz-20">Congratulations!</h3>
           <div class="fz-14 mt-5 gray-6">
             <p>Your project has been successfully deployed.</p>
-            <p class="mt-2">
+            <p class="mt-4">
               We also offer CLI deployment methods. Click here to
               <a href="https://docs.hosting.4everland.org/cli/" target="_blank"
                 >learn more</a
