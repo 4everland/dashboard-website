@@ -63,7 +63,7 @@ export default {
     },
     noRepo() {
       const { id } = this.info.repo || {};
-      return !!id;
+      return !id;
     },
   },
   data() {
