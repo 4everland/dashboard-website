@@ -77,7 +77,7 @@ export default {
       const it = this.list[val];
       if (!it) return;
       const query = { ...this.$route.query };
-      const tabVal = it.text.replace(" ", "_").toLowerCase();
+      const tabVal = it.text.replaceAll(" ", "_").toLowerCase();
       if (query[this.tabKey] == tabVal) return;
       query[this.tabKey] = tabVal;
       if (!this.vertical) {
@@ -121,7 +121,7 @@ export default {
       if (tab > -1) curIdx = tab * 1;
       else if (tab) {
         this.list.forEach((it, i) => {
-          if (it.text.toLowerCase() == tab.replace("_", " ").toLowerCase())
+          if (it.text.toLowerCase() == tab.replaceAll("_", " ").toLowerCase())
             curIdx = i * 1;
         });
       }
