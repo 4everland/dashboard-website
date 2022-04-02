@@ -38,10 +38,11 @@
         loading-text=""
         hide-default-footer
         :checkbox-color="$color1"
+        @click:row="onRow"
       >
         <template v-slot:item.domain="{ item }">
           <v-btn
-            :to="`/bucket/domain/${item.domain}`"
+            :to="getPath(item)"
             :color="item.valid ? 'success' : 'error'"
             rounded
             text
@@ -227,6 +228,13 @@ export default {
     this.checkNew();
   },
   methods: {
+    getPath(item) {
+      return `/bucket/domain/${item.domain}`;
+    },
+    onRow(it) {
+      const url = this.getPath(it);
+      this.$router.push(url);
+    },
     checkNew() {
       const { bucket } = this.$route.query;
       if (bucket && this.s3) {
