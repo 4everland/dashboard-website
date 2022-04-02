@@ -70,7 +70,7 @@
             </e-tooltip>
           </p>
         </div>
-        <v-btn color="primary" small to="/pricing">Change Plan</v-btn>
+        <v-btn color="primary" small to="/plan">Change Plan</v-btn>
       </div>
     </v-card>
 
