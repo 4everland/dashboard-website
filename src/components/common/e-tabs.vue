@@ -1,5 +1,5 @@
 <template>
-  <div v-if="asMobile">
+  <div v-if="asMobile && vertical">
     <v-expansion-panels v-model="curIdx">
       <v-expansion-panel v-for="(it, i) in list" :key="i">
         <v-expansion-panel-header>

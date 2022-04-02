@@ -228,7 +228,7 @@ export default {
           this.$toast("Connected Git Repository successfully");
         }
       } catch (error) {
-        //
+        console.log(error);
       }
       this.savingConnect = false;
       this.$loading.close();
@@ -238,7 +238,10 @@ export default {
       this.branches = [];
       try {
         const { data } = await this.$http2.get(
-          `/project/branch/${this.info.id}`
+          `/project/branch/${this.info.id}`,
+          {
+            noTip: 1,
+          }
         );
         // console.log(data)
         const branches = [...(data.other || [])];

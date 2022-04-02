@@ -203,7 +203,10 @@ export default {
         const {
           data: { scripts },
         } = await this.$http2.get(
-          "/project/detect-framework/" + this.info.repo.id
+          "/project/detect-framework/" + this.info.repo.id,
+          {
+            noTip: 1,
+          }
         );
         if (scripts) {
           this.scripts = JSON.parse(scripts);
