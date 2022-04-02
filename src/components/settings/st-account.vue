@@ -40,6 +40,7 @@ export default {
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
+      connectAddr: (s) => s.connectAddr,
     }),
     list() {
       const info = this.userInfo;
@@ -75,6 +76,12 @@ export default {
     query() {
       this.checkQuery();
     },
+    connectAddr(val) {
+      if (this.binding == 2 && val) {
+        this.binding = null;
+        this.onVcode(2, val);
+      }
+    },
   },
   mounted() {
     this.onGithubCode();
@@ -102,15 +109,19 @@ export default {
       const { code } = this.$route.query;
       if (!code || code == localStorage.last_github_code) return;
       localStorage.last_github_code = code;
+    },
+    async onVcode(type, code) {
       try {
-        this.$loading("Binding Github");
-        const { data } = await this.$http.get(`/auth/vcode/${code}`, {
+        const item = this.list[type - 1];
+        this.$loading("Binding " + item.title);
+        this.$loading.close();
+        // const { data } =
+        await this.$http.get(`/auth/vcode/${code}`, {
           params: {
             _auth: 1,
-            type: 1,
+            type,
           },
         });
-        console.log(data);
         this.$setMsg({
           name: "updateUser",
         });
@@ -118,9 +129,15 @@ export default {
       } catch (error) {
         console.log(error);
       }
-      this.$loading.close();
     },
     async onBind(it) {
+      if (it.type == 2) {
+        this.binding = 2;
+        this.$setMsg({
+          name: "showMetaConnect",
+        });
+        return;
+      }
       if (it.type != 1) return this.$toast("todo");
       try {
         this.$loading();
