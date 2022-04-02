@@ -252,6 +252,10 @@ export default {
   },
   async mounted() {
     // await this.checkBind();
+    if (this.$route.query.from == "github-install") {
+      window.close();
+      return;
+    }
     this.getAccounts();
   },
   methods: {

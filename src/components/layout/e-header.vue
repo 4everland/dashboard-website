@@ -98,10 +98,10 @@ export default {
               icon: "m-docs",
               href: "https://docs.bucket.4everland.org/",
             },
-            {
-              label: "Community",
-              icon: "m-chat",
-            },
+            // {
+            //   label: "Community",
+            //   icon: "m-chat",
+            // },
             {
               label: "Bug Bounty",
               icon: "m-bug",

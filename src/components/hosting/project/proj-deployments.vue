@@ -3,8 +3,8 @@
     <div>
       <v-skeleton-loader v-if="!list" type="article" />
 
-      <div class="ta-c pd-20 gray fz-14" v-else-if="!list.length">
-        No Deployments
+      <div class="mt-12" v-else-if="!list.length">
+        <e-empty> No deployments </e-empty>
       </div>
 
       <div

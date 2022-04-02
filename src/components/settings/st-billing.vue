@@ -189,7 +189,7 @@ export default {
     },
   },
   created() {
-    if (!this.$inDev) this.getData();
+    this.getData();
   },
   methods: {
     async getList() {

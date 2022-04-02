@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div v-if="!list">
+    <div class="mt-12" v-if="noRepo">
+      <e-empty> No commits or not connected to github </e-empty>
+    </div>
+    <div v-else-if="!list">
       <v-skeleton-loader type="article" />
     </div>
     <div class="pr-6 pos-r" v-else>
@@ -57,6 +60,10 @@ export default {
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+    noRepo() {
+      const { id } = this.info.repo || {};
+      return !!id;
     },
   },
   data() {
