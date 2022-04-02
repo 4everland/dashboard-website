@@ -22,7 +22,7 @@
   <div class="billing2">
     <v-card outlined>
       <div class="card-head-1 d-flex al-end">
-        <h4>Hosting Usage</h4>
+        <div>Hosting Usage</div>
         <span class="ml-2 gray fz-12" v-if="info.indexStartTime"
           >{{ new Date(info.indexStartTime).format("date") }} to
           {{ new Date(info.indexEndTime).format("date") }}</span
@@ -75,17 +75,13 @@
     </v-card>
 
     <v-card outlined class="mt-5">
-      <div class="card-head-1">
-        <h4>Bucket Usage</h4>
-      </div>
+      <div class="card-head-1">Bucket Usage</div>
       <div class="bdt-1"></div>
       <st-billing-bucket />
     </v-card>
 
     <v-card outlined class="mt-5">
-      <div class="card-head-1">
-        <h4>Activity History</h4>
-      </div>
+      <div class="card-head-1">Activity History</div>
       <div class="bdt-1 pa-4">
         <v-data-table
           class="mt-4"
