@@ -38,22 +38,22 @@
     >
       <v-card class="pd-10">
         <v-card-title v-if="!alertInfo.hideTitle">
-          <v-icon v-show="!alertInfo.hideIcon" :color="iconColor" class="mr-2">
+          <!-- <v-icon v-show="!alertInfo.hideIcon" :color="iconColor" class="mr-2">
             {{ iconName }}
-          </v-icon>
-          {{
+          </v-icon> -->
+          <b>{{
             alertInfo.title
               ? alertInfo.title
               : alertInfo.showCancel
               ? "Confirm"
               : "Alert"
-          }}
+          }}</b>
         </v-card-title>
         <div v-else class="pd-15"></div>
 
         <v-card-text>
-          <div class="fz-16" v-html="alertInfo.content"></div>
-          <div class="mt-8" v-if="alertInfo.showInput">
+          <div class="fz-16 gray-6" v-html="alertInfo.content"></div>
+          <div class="mt-10" v-if="alertInfo.showInput">
             <v-form ref="form" lazy-validation @submit.native.prevent>
               <v-text-field
                 persistent-placeholder

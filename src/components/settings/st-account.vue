@@ -64,7 +64,7 @@ export default {
           desc: "Verify your email address to receive updates and notices for your account.",
           icon: "m-email",
           type: 3,
-          account: info.email,
+          // account: info.email,
         },
       ];
     },
@@ -138,13 +138,32 @@ export default {
         });
         return;
       }
-      if (it.type != 1) return this.$toast("todo");
+      // if (it.type != 1) return this.$toast("todo");
       try {
+        let apply = "";
+        if (it.type == 3) {
+          const { value } = await this.$prompt(
+            "Verify your email address to receive updates and notices for your account.",
+            "Verify Email",
+            {
+              confirmText: "Send",
+              inputAttrs: {
+                label: `Your email adress`,
+                rules: [
+                  (v) => this.$regMap.email.test(v) || "Invalid email adress.",
+                ],
+                required: true,
+              },
+            }
+          );
+          apply = value;
+        }
         this.$loading();
         const { data } = await this.$http.post(
           "/bind",
           {
             type: it.type,
+            apply,
           },
           {
             params: {
@@ -154,7 +173,21 @@ export default {
         );
         console.log(data);
         const url = data.applyR;
-        if (it.type == 1) {
+        if (it.type == 3) {
+          const { value } = await this.$prompt(
+            "A verify code has benn sended to your email address",
+            "Verify Email",
+            {
+              confirmText: "Verify",
+              inputAttrs: {
+                label: `Verify code`,
+                rules: [(v) => v.trim().length >= 4 || "Invalid code."],
+                required: true,
+              },
+            }
+          );
+          this.onVcode(3, value);
+        } else if (it.type == 1) {
           location.href = url;
         }
       } catch (error) {
