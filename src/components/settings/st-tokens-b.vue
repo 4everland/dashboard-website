@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-3">
     <h3>Bucket Auth Tokens</h3>
     <div class="gray fz-14">Use the API key for Storage SDK</div>
     <div class="mt-5">

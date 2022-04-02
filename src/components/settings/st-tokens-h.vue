@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div class="mt-3">
       <h3>Hosting Auth Tokens</h3>
       <div class="gray mt-1 fz-14">
         These tokens allow other apps to control your whole account. Be careful!
