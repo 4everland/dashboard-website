@@ -110,7 +110,7 @@
                 </div>
                 <div class="d-flex al-c bdt-1 pd-15 gray fz-15">
                   <v-icon>mdi-folder-plus-outline</v-icon>
-                  <a class="color-1 ml-1" href="#/new">Create New Project</a>
+                  <a class="color-1 ml-1" href="#/hosting/new">Create New Project</a>
                 </div>
               </template>
             </div>

@@ -132,6 +132,7 @@ export default {
         this.$router.replace(link);
       } catch (error) {
         console.log(error);
+        await this.$sleep(100)
         this.$confirm(error.message, "Network Error", {
           confirmText: "Retry",
         }).then(() => {
