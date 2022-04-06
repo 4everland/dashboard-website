@@ -32,7 +32,8 @@
 
 <script>
 import { mapState } from "vuex";
-
+import { providers } from "ethers";
+const MetaMask = new providers.Web3Provider(window.ethereum);
 export default {
   data() {
     return {};
@@ -80,7 +81,7 @@ export default {
     connectAddr(val) {
       if (this.binding == 2 && val) {
         this.binding = null;
-        this.onVcode(2, val);
+        this.verifyMetaMask();
       }
     },
   },
@@ -134,9 +135,13 @@ export default {
     async onBind(it) {
       if (it.type == 2) {
         this.binding = 2;
-        this.$setMsg({
-          name: "showMetaConnect",
-        });
+        if (!this.connectAddr) {
+          this.$setMsg({
+            name: "showMetaConnect",
+          });
+        } else {
+          this.verifyMetaMask();
+        }
         return;
       }
       // if (it.type != 1) return this.$toast("todo");
@@ -195,6 +200,32 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async exchangeCode() {
+      const { data } = await this.$http.get(`/web3code/${this.connectAddr}`, {
+        params: {
+          _auth: 1,
+        },
+      });
+      return data.nonce;
+    },
+    async sign(nonce) {
+      try {
+        const msg = nonce;
+        console.log("msg:" + msg);
+        const sig = await MetaMask.getSigner().signMessage(msg);
+        console.log(sig);
+        return sig;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async verifyMetaMask() {
+      const nonce = await this.exchangeCode();
+      console.log(nonce);
+      const sig = await this.sign(nonce);
+      console.log(sig);
+      this.onVcode(2, sig);
     },
   },
 };
