@@ -32,11 +32,30 @@
 
 <template>
   <div class="projects">
-    <div class="mb-5" v-if="!limit && list.length">
+    <div class="mb-5 d-flex al-c" v-if="!limit && list.length">
       <v-btn color="primary" rounded to="/hosting/new">
         <img src="img/svg/add1.svg" width="12" />
         <span class="ml-2">New Project</span>
       </v-btn>
+      <e-menu open-on-hover offset-y>
+        <v-btn slot="ref" outlined rounded min-width="100" class="ml-3">
+          <v-icon size="16">mdi-filter-menu-outline</v-icon>
+          <span class="ml-2">{{ sortType }}</span>
+        </v-btn>
+        <v-list dense>
+          <v-list-item-group v-model="sortIdx" color="primary">
+            <v-list-item
+              @click="onSort(txt)"
+              v-for="(txt, i) in ['All', 'Active']"
+              :key="i"
+            >
+              <v-list-item-title>
+                <span class="fz-15">{{ txt }}</span>
+              </v-list-item-title>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </e-menu>
     </div>
     <v-expansion-panels v-model="curIdx" multiple :disabled="limit > 0">
       <v-expansion-panel
@@ -208,6 +227,8 @@ export default {
       curPath: "",
       page: 1,
       pageSize: 5,
+      sortType: "All",
+      sortIdx: 0,
     };
   },
   watch: {
@@ -233,6 +254,10 @@ export default {
   },
   methods: {
     onStop() {},
+    onSort(type) {
+      this.sortType = type;
+      this.getList();
+    },
     async onDelete(it) {
       try {
         await this.onDelProj(it);
@@ -323,6 +348,7 @@ export default {
           params: {
             page: this.page - 1,
             size: this.pageSize,
+            sortType: this.sortType.toUpperCase(),
           },
         });
         this.list = list;
