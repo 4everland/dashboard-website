@@ -22,7 +22,11 @@
         <div class="d-flex al-c" v-if="repoName">
           <v-icon color="#4A96FA" size="32">mdi-github</v-icon>
           <div class="ml-5">
-            <h4 class="color-1">{{ info.repo.pathPre }}</h4>
+            <h4 class="color-1">
+              <a :href="info.repo.cloneUrl.replace('.git', '')" target="_blank">
+                {{ info.repo.pathPre }}
+              </a>
+            </h4>
             <div class="gray fz-13">
               Connected at <e-time :value="info.repo.updateAt"></e-time>
             </div>
@@ -221,7 +225,7 @@ export default {
           this.$loading();
         }
         this.savingConnect = true;
-        await this.$http[method](url);
+        await this.$http2[method](url);
         this.onUpdted();
         if (repoId) {
           this.keyword = "";
