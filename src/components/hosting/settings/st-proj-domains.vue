@@ -133,6 +133,7 @@
       </div>
     </div>
 
+    <st-proj-domains-sol />
     <st-proj-domains-ens />
   </div>
 </template>
