@@ -137,7 +137,7 @@ export default {
     background-color: transparent;
   }
   .v3-vertical {
-    min-height: 63vh;
+    height: 100%;
     .v-tab {
       text-align: left;
     }
