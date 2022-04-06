@@ -68,6 +68,11 @@ Vue.prototype.$openWindow = (url) => {
     );
 };
 
+const offset = new Date().getTimezoneOffset() * 60e3;
+Vue.prototype.$getUTC0 = (date) => {
+  return parseInt((date - offset) / 1e3);
+};
+
 Vue.prototype.$regMap = {
   email: /^.+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
   domain: /(\w+\.)+\w{2,10}/,
