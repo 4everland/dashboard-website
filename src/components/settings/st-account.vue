@@ -202,19 +202,24 @@ export default {
       }
     },
     async exchangeCode() {
-      const { data } = await this.$http.get(`/web3code/${this.connectAddr}`, {
-        params: {
-          _auth: 1,
+      const { data } = await this.$http.post(
+        `/bind`,
+        {
+          type: 2,
+          apply: this.connectAddr,
         },
-      });
-      return data.nonce;
+        {
+          params: {
+            _auth: 1,
+          },
+        }
+      );
+      return data.applyR;
     },
     async sign(nonce) {
       try {
         const msg = nonce;
-        console.log("msg:" + msg);
         const sig = await MetaMask.getSigner().signMessage(msg);
-        console.log(sig);
         return sig;
       } catch (e) {
         console.log(e);
@@ -222,10 +227,10 @@ export default {
     },
     async verifyMetaMask() {
       const nonce = await this.exchangeCode();
-      console.log(nonce);
       const sig = await this.sign(nonce);
-      console.log(sig);
-      this.onVcode(2, sig);
+      if (sig) {
+        this.onVcode(2, sig);
+      }
     },
   },
 };
