@@ -108,9 +108,9 @@
                 :to="`/hosting/build/${it.name}/${it.id}/${it.taskId}`"
                 >View Build Logs</v-btn
               >
-              <v-btn v-else color="error" small outlined rounded class="ml-3"
+              <!-- <v-btn v-else color="error" small outlined rounded class="ml-3"
                 >Delete</v-btn
-              >
+              > -->
             </div>
           </div>
         </v-expansion-panel-content>

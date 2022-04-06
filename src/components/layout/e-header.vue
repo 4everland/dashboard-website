@@ -96,7 +96,7 @@ export default {
             {
               label: "Documents",
               icon: "m-docs",
-              href: "https://docs.bucket.4everland.org/",
+              href: "https://4ever-docs.4everland.app/",
             },
             // {
             //   label: "Community",
@@ -107,10 +107,10 @@ export default {
               icon: "m-bug",
               to: "/bug-bounty",
             },
-            {
-              label: "Changelog",
-              icon: "m-log",
-            },
+            // {
+            //   label: "Changelog",
+            //   icon: "m-log",
+            // },
           ],
         },
       ];
