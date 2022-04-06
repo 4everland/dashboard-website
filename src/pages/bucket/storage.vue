@@ -148,7 +148,11 @@
         </v-list>
       </e-menu>
 
-      <div class="ml-auto" v-if="!inFile">
+      <div
+        :class="asMobile ? 'ml-5' : 'ml-auto'"
+        v-if="!inFile"
+        style="min-width: 150px"
+      >
         <v-text-field
           class="hide-msg bd-1"
           dense
