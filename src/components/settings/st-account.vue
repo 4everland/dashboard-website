@@ -44,13 +44,14 @@ export default {
     }),
     list() {
       const info = this.userInfo;
+      const github = info.github || {};
       return [
         {
           title: "Github",
           desc: "Get verified by connecting your github account.",
           icon: "m-github",
           type: 1,
-          account: (info.github || {}).name,
+          account: github.name || github.email,
         },
         {
           title: "MetaMask",
@@ -186,6 +187,7 @@ export default {
               },
             }
           );
+          await this.$sleep(100);
           this.onVcode(3, value);
         } else if (it.type == 1) {
           location.href = url;
