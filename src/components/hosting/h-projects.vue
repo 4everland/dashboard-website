@@ -39,7 +39,7 @@
       </v-btn>
       <e-menu open-on-hover offset-y>
         <v-btn slot="ref" outlined rounded min-width="100" class="ml-3">
-          <v-icon size="16">mdi-filter-menu-outline</v-icon>
+          <v-icon size="16">mdi-filter-outline</v-icon>
           <span class="ml-2">{{ sortType }}</span>
         </v-btn>
         <v-list dense>
