@@ -57,10 +57,9 @@
                 />
                 <div class="ml-5">
                   <h3>{{ it.name }}</h3>
-                  <div class="d-flex al-c mt-4">
+                  <div class="d-flex al-c mt-4" v-if="it.repo && it.repo.id">
                     <e-icon-link
                       class="mr-5 shrink-1"
-                      v-if="it.repo"
                       img="img/svg/hosting/m-github-1.svg"
                       :link="it.repo.cloneUrl.replace('.git', '')"
                     >
