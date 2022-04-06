@@ -147,6 +147,23 @@
           </v-list-item>
         </v-list>
       </e-menu>
+
+      <div
+        :class="asMobile ? 'ml-5' : 'ml-auto'"
+        v-if="!inFile"
+        style="min-width: 150px"
+      >
+        <v-text-field
+          class="hide-msg bd-1"
+          dense
+          rounded
+          solo
+          clearable
+          label="Search"
+          prepend-inner-icon="mdi-magnify"
+          v-model="searchKey"
+        ></v-text-field>
+      </div>
     </div>
     <div class="pa-2"></div>
 

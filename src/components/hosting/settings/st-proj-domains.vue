@@ -9,7 +9,7 @@
 </style>
 
 <template>
-  <div class="st-domains">
+  <div class="st-domains hide-msg">
     <div class="bd-1 mb-5">
       <h3>Domains</h3>
       <div class="gray fz-14">

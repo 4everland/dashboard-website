@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mb-5">
-      <v-btn color="primary" rounded @click="showPop = true">
+      <v-btn color="primary" rounded min-width="100" @click="showPop = true">
         <img src="img/svg/add1.svg" width="12" />
         <span class="ml-2">Add</span>
       </v-btn>
@@ -110,7 +110,9 @@
                 </div>
                 <div class="d-flex al-c bdt-1 pd-15 gray fz-15">
                   <v-icon>mdi-folder-plus-outline</v-icon>
-                  <a class="color-1 ml-1" href="#/hosting/new">Create New Project</a>
+                  <a class="color-1 ml-1" href="#/hosting/new"
+                    >Create New Project</a
+                  >
                 </div>
               </template>
             </div>

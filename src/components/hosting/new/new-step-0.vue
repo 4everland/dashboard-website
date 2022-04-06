@@ -249,6 +249,12 @@ export default {
     noticeMsg({ name }) {
       if (name == "check-agree") this.addNew();
     },
+    isBind(val) {
+      if (val)
+        this.$setMsg({
+          name: "updateUser",
+        });
+    },
   },
   async mounted() {
     // await this.checkBind();
@@ -392,6 +398,8 @@ export default {
           if (!this.chooseAccount) {
             this.chooseGithubId = data[0].githubId;
           }
+        } else {
+          this.isBind = false;
         }
         this.page = 1;
         this.getList();

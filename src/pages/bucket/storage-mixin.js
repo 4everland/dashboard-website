@@ -12,13 +12,13 @@ export default {
       folderList: [],
       selected: [],
       deleting: false,
+      searchKey: "",
     };
   },
   computed: {
     ...mapState({
       s3: (s) => s.s3,
       s3m: (s) => s.s3m,
-      searchKey: (s) => s.searchKey,
       navItems: (s) => s.navItems,
     }),
     path() {

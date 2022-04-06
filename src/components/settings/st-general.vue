@@ -11,11 +11,74 @@
         continue to act with caution.
       </div>
       <div class="mt-8">
-        <v-btn outlined rounded small>Delete Account</v-btn>
+        <v-btn outlined rounded small @click="onDelete">Delete Account</v-btn>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import { mapState } from "vuex";
+
+export default {
+  computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
+  },
+  methods: {
+    async onDelete() {
+      try {
+        let html =
+          "4everland will delete all of your projects, as well as all their deployments, domains, SSL certificates, activity, and all other resources belonging to your Personal Account.";
+        html +=
+          '<div class="bg-warning pd-10-20 fz-14 mt-3"><b>Warning</b>: This action is not reversible. Please be certain.</div>';
+        // const { username } = this.userInfo;
+        await this.$prompt(html, "Delete Personal Account", {
+          confirmText: "Delete",
+          confirmTextAttrs: {
+            color: "error",
+            text: false,
+          },
+          // inputAttrs: {
+          //   label: `Enter your name \`${username}\` to continue`,
+          //   rules: [
+          //     (v) => v == username || "The text you entered didn't match.",
+          //   ],
+          //   required: true,
+          // },
+          inputAttrs: {
+            label: `Type \`delete my account\` To verify`,
+            rules: [
+              (v) =>
+                v == "delete my account" ||
+                "The text you entered didn't match.",
+            ],
+            required: true,
+          },
+        });
+        this.$loading();
+        this.deleting = true;
+        // await this.$sleep(500)
+        await this.$http.delete("/accounts", {
+          params: {
+            _auth: 1,
+          },
+        });
+        localStorage.clear();
+        this.$loading.close();
+        this.$alert("Personal account deleted successfully").then(() => {
+          location.href = "index.html";
+        });
+      } catch (error) {
+        console.log(error);
+        this.$loading.close();
+      }
+      this.deleting = false;
+    },
+  },
+};
+</script>
 
 <style lang="scss">
 .st-general {

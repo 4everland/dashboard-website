@@ -19,16 +19,16 @@ export default {
   text-transform: capitalize;
   color: #7e8ea8;
   &.synced {
-    color: #28aa91;
+    color: #00bd9a;
   }
   &.syncing {
-    color: #0f8dff;
+    color: #34a9ff;
   }
   &.timeout {
-    color: #ff8843;
+    color: #f99536;
   }
   &.failure {
-    color: #ff5b60;
+    color: #ff6960;
   }
 }
 </style>
