@@ -1,7 +1,9 @@
 <template>
   <v-tooltip v-if="date" top>
     <template v-slot:activator="{ on, attrs }">
-      <span v-bind="attrs" v-on="on"> {{ pre }} {{ niceTime }} {{ sub }} </span>
+      <span v-bind="attrs" v-on="on" :class="spanClass">
+        {{ pre }} {{ niceTime }} {{ sub }}
+      </span>
     </template>
     <span>
       {{ fullTime }}
@@ -17,6 +19,7 @@ export default {
     format: String,
     pre: String,
     sub: String,
+    spanClass: String,
   },
   computed: {
     nowDate() {

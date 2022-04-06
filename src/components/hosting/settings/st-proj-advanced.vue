@@ -46,7 +46,10 @@
 
 <script>
 import { mapState } from "vuex";
+import mixin from "./st-proj-advanced-mix";
+
 export default {
+  mixins: [mixin],
   data() {
     return {
       directoryList: false,
@@ -78,31 +81,7 @@ export default {
   methods: {
     async onDelete() {
       try {
-        const { name } = this.info;
-        let html =
-          "4everland will delete all of your projects，along with all of its Deployments, Domains, SSL Certificates, and all other resources belonging to your project.";
-        html +=
-          '<div class="bg-warning pd-10-20 fz-14 mt-3"><b>Warning</b>: This action is not reversible.Please be certain</div>' +
-          `<div class="gray-6 fz-14 mt-5">Enter project name '${name}' to continue</div>`;
-
-        await this.$prompt(html, "Delete Project", {
-          confirmText: "Delete",
-          confirmTextAttrs: {
-            color: "error",
-            text: false,
-          },
-          inputAttrs: {
-            label: `Project Name`,
-            rules: [(v) => v == name || "The text you entered didn't match."],
-            required: true,
-          },
-        });
-        this.$loading();
-        await this.$http2.delete("/project/" + this.info.id);
-        this.$loading.close();
-        await this.$alert("Project deleted successfully", "Done", {
-          type: "success",
-        });
+        await this.onDelProj(this.info);
         this.$router.replace("/hosting/projects");
       } catch (error) {
         console.log(error);

@@ -47,7 +47,7 @@
       >
         <v-expansion-panel-header @click="onItem(it)">
           <v-row>
-            <v-col cols="8" md="4">
+            <v-col cols="12" md="5">
               <div class="d-flex al-c grow-0">
                 <img
                   :src="it.previewImage || 'img/bg/empty/project.png'"
@@ -55,18 +55,28 @@
                   width="60"
                   class="bdrs-8 bd-1"
                 />
-                <div class="ml-3">
+                <div class="ml-5">
                   <h3>{{ it.name }}</h3>
+                  <div class="d-flex al-c mt-4">
+                    <e-icon-link
+                      class="mr-5 shrink-1"
+                      v-if="it.repo"
+                      img="img/svg/hosting/m-github-1.svg"
+                      :link="it.repo.cloneUrl.replace('.git', '')"
+                    >
+                      <span class="ml-1 gray-6">{{
+                        `${it.repo.namespace}/${it.repo.name}`.cutStr(30)
+                      }}</span>
+                    </e-icon-link>
+                    <e-time span-class="gray-6">{{ it.repo.updateAt }}</e-time>
+                  </div>
                 </div>
               </div>
             </v-col>
-            <v-col cols="4" v-if="!asMobile" class="d-flex al-c f-center">
+            <v-col cols="4" md="2" class="d-flex al-c f-center">
               <h-status :val="it.state"></h-status>
             </v-col>
-            <v-col cols="4" :class="asMobile ? 'ta-c' : 'd-flex al-c'">
-              <div v-if="asMobile" class="mb-2">
-                <h-status :val="it.state"></h-status>
-              </div>
+            <v-col cols="8" md="5" class="d-flex al-c">
               <v-btn
                 :to="getDetailPath(it)"
                 @click.stop="onStop"
@@ -108,9 +118,15 @@
                 :to="`/hosting/build/${it.name}/${it.id}/${it.taskId}`"
                 >View Build Logs</v-btn
               >
-              <!-- <v-btn v-else color="error" small outlined rounded class="ml-3"
+              <v-btn
+                @click="onDelete(it)"
+                color="error"
+                small
+                outlined
+                rounded
+                class="ml-3"
                 >Delete</v-btn
-              > -->
+              >
             </div>
           </div>
         </v-expansion-panel-content>
@@ -159,8 +175,10 @@
 
 <script>
 import { mapState } from "vuex";
+import mixin from "./settings/st-proj-advanced-mix";
 
 export default {
+  mixins: [mixin],
   props: {
     limit: Number,
   },
@@ -215,6 +233,14 @@ export default {
   },
   methods: {
     onStop() {},
+    async onDelete(it) {
+      try {
+        await this.onDelProj(it);
+        this.getList();
+      } catch (error) {
+        console.log(error);
+      }
+    },
     getDetailPath(it) {
       return `/hosting/project/${it.name}/${it.id}`;
     },
