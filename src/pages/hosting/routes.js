@@ -76,7 +76,6 @@ export default [
     component: Domains,
     meta: {
       title: "Domains",
-      subTitle: "Manage the domains you can use within 4everland",
     },
   },
   {

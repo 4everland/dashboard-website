@@ -72,7 +72,7 @@
             <e-drawer-icon :it="it" :active="activeArr[i]"></e-drawer-icon>
             <v-list-item-content>
               <v-list-item-title>
-                <b>{{ it.label }}</b>
+                <b class="fz-16">{{ it.label }}</b>
               </v-list-item-title>
             </v-list-item-content>
           </template>
@@ -90,7 +90,9 @@
             :key="j"
           >
             <v-list-item-content>
-              <v-list-item-title v-text="sub.label"></v-list-item-title>
+              <v-list-item-title>
+                <span class="fz-14">{{ sub.label }}</span>
+              </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
@@ -109,7 +111,7 @@
           ></e-drawer-icon>
           <v-list-item-content>
             <v-list-item-title>
-              <b>{{ it.label }}</b>
+              <b class="fz-16">{{ it.label }}</b>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>

@@ -33,7 +33,7 @@
 export default {
   data() {
     return {
-      stepList: ["Import Repository", "Edit Configuration", "Start Deployment"],
+      stepList: ["Select Repository", "Edit Configuration", "Start Deployment"],
       curStep: 0,
       info: null,
     };
