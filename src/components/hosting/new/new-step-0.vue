@@ -142,23 +142,22 @@
               </div>
             </div>
           </template>
-          <div class="bg-f9 pa-5 pt-8 pb-8 mt-10" v-else>
-            <p class="fz-18 fw-b mb-10">Continuous Deployment</p>
-            <div class="gray fz-15 mt-3">
+          <div class="bg-f9 pa-5 pt-8 pb-8" v-else>
+            <p class="fz-18 fw-b mt-">Continuous Deployment</p>
+            <div class="pa-5"></div>
+            <div class="gray fz-15 mt-16">
               <p>
-                We use Deloyhooks to connect with your GitHub, and if we receive
-                push, we will automatically deploy updates.
+                We use Deloyhooks to connect with your Github, and if we receive
+                push, we will automatically deploy updates. Github binds your
+                Git account with your 4EVERLAND account by default.
               </p>
             </div>
-            <div class="mt-16 pt-3">
+            <div class="pa-9"></div>
+            <div class="mt-16 pb-1">
               <v-btn color="primary" @click="addNew" :loading="loading">
                 <v-icon size="20">mdi-github</v-icon>
                 <span class="ml-2">Connect with Github</span>
               </v-btn>
-            </div>
-            <div class="mt-4 gray fz-14">
-              GitHub binds your Git account with your 4EVERLAND account by
-              default.
             </div>
           </div>
         </div>
