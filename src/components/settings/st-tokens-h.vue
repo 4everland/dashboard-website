@@ -50,10 +50,10 @@
           />
         </div>
         <div class="mt-5 ta-c">
-          <v-btn small @click="popNew = false"> Cancel </v-btn>
+          <v-btn rounded outlined @click="popNew = false"> Cancel </v-btn>
           <v-btn
-            small
             color="primary"
+            rounded
             class="ml-5"
             :loading="adding"
             @click="onAdd"
@@ -82,7 +82,11 @@
           <v-icon size="16" class="ml-auto">mdi-content-copy</v-icon>
         </div>
         <div class="mt-8 ta-c">
-          <v-btn color="primary" @click="popCopy = false" :disabled="!copied"
+          <v-btn
+            color="primary"
+            rounded
+            @click="popCopy = false"
+            :disabled="!copied"
             >Done</v-btn
           >
         </div>

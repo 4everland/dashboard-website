@@ -52,7 +52,7 @@
         </v-alert>
 
         <div class="mt-6 ta-c">
-          <v-btn color="primary" @click="showPop = false">Done</v-btn>
+          <v-btn color="primary" rounded @click="showPop = false">Done</v-btn>
         </div>
       </div>
     </v-dialog>
