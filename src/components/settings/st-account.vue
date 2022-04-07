@@ -33,7 +33,11 @@
 <script>
 import { mapState } from "vuex";
 import { providers } from "ethers";
-const MetaMask = new providers.Web3Provider(window.ethereum);
+let MetaMask;
+try {
+  MetaMask = new providers.Web3Provider(window.ethereum);
+  // eslint-disable-next-line no-empty
+} catch (error) {}
 export default {
   data() {
     return {};
