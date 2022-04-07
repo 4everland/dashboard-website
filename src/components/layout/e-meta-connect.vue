@@ -97,9 +97,9 @@ export default {
   },
   created() {
     // this.getAddr();
-    // if (localStorage.isConnectMeta) {
-    //   this.onConnect();
-    // }
+    if (localStorage.isConnectMeta) {
+      this.onConnect();
+    }
   },
   methods: {
     async getAddr() {

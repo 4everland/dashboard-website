@@ -82,6 +82,7 @@
 
 <script>
 import { mapState } from "vuex";
+import abiData from "../../plugins/pay/tever-1155.json";
 
 export default {
   data() {
@@ -154,11 +155,11 @@ export default {
       }
       try {
         this.$loading();
-        const { data } = await this.$http.get(
-          "https://4ever-web.4everland.store/nft/tever-1155.json"
+        this.contractAddr = abiData.address;
+        const contract = new window.web3.eth.Contract(
+          abiData.abi,
+          abiData.address
         );
-        this.contractAddr = data.address;
-        const contract = new window.web3.eth.Contract(data.abi, data.address);
         const nftId = 0;
         let num = await contract.methods.balanceOf(this.connectAddr, 0).call();
         console.log("balance of #" + nftId, num);

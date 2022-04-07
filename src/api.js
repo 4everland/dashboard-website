@@ -35,9 +35,16 @@ const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
 export const http = Axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
 });
+const api2Url = process.env.VUE_APP_HOST_URL;
 export const http2 = Axios.create({
-  baseURL: process.env.VUE_APP_HOST_URL,
+  baseURL: api2Url,
 });
+
+Vue.prototype.$getImgSrc = function (src) {
+  if (!src) src = "img/bg/empty/project.png";
+  else if (!/^http/.test(src)) src = api2Url + src;
+  return src;
+};
 
 const RefreshPath = "/refresh";
 const RefreshLockKey = "refresh";
