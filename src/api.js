@@ -4,6 +4,7 @@ import AsyncLock from "async-lock";
 
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 Vue.prototype.$inDev = inDev;
+const isLocal = /localhost/.test(location.host);
 
 Vue.prototype.$arHashPre = "https://arweave.net/"; // https://ar.foreverland.xyz/
 Vue.prototype.$arVerifyPre = "https://viewblock.io/arweave/tx/"; // https://ar.foreverland.xyz/tx/
@@ -17,13 +18,19 @@ const authApi = inDev
 
 Vue.prototype.$endpoint = endpoint;
 
-let loginUrl = inDev
+const loginUrl = inDev
   ? "https://4ever-login-test.4everland.app"
   : "https://www.4everland.org/bucketlogin";
-if (/localhost/.test(location.host)) {
-  loginUrl = "#/login?test=1";
-}
-Vue.prototype.$loginUrl = loginUrl;
+
+const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
+  let url = loginUrl;
+  if (isLocal) {
+    url = "#/login?test=1";
+  } else if (localStorage.inviteCode) {
+    url += "/#/?invite=" + localStorage.inviteCode;
+  }
+  return url;
+});
 
 export const http = Axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
@@ -129,8 +136,8 @@ function goLogin() {
   delete localStorage.userInfo;
   if (location.hash != "#/login") {
     localStorage.loginTo = location.hash;
-    location.href = loginUrl;
-    console.log("logout", loginUrl);
+    location.href = getLoginUrl();
+    console.log("logout");
   }
 }
 

@@ -56,7 +56,7 @@ export default {
     onErr(error) {
       console.log(error);
       this.$alert(error.message).then(() => {
-        location.href = this.$loginUrl;
+        location.href = this.$getLoginUrl();
       });
     },
   },

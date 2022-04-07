@@ -11,8 +11,12 @@
 <script>
 export default {
   mounted() {
+    const { invite } = this.$route.query;
+    if (invite) {
+      localStorage.inviteCode = invite;
+    }
     if (!localStorage.token) {
-      location.href = this.$loginUrl;
+      location.href = this.$getLoginUrl();
     } else {
       this.$router.replace("/overview");
     }

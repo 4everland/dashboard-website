@@ -108,7 +108,7 @@ export default {
               to: "/bug-bounty",
             },
             {
-              label: "Changelog",
+              label: "Change Log",
               icon: "m-log",
               to: "/changelog",
             },
