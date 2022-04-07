@@ -7,6 +7,7 @@ import Plan from "./plan";
 import HostingRoutes from "./hosting/routes";
 import BucketRoutes from "./bucket/routes";
 import UserRoutes from "./user/routes";
+import MoreRoutes from "./more/routes";
 
 export default [
   {
@@ -31,7 +32,7 @@ export default [
   ...HostingRoutes,
   ...BucketRoutes,
   ...UserRoutes,
-
+  ...MoreRoutes,
   {
     path: "/plan",
     component: Plan,

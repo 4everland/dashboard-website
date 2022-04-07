@@ -189,7 +189,7 @@ export default {
     const { c } = this.$route.query;
     return {
       connecting: false,
-      minHeight: "64vh",
+      minHeight: "551px",
       cloneDir: c,
       isClone: false,
       list: null,

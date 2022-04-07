@@ -107,10 +107,11 @@ export default {
               icon: "m-bug",
               to: "/bug-bounty",
             },
-            // {
-            //   label: "Changelog",
-            //   icon: "m-log",
-            // },
+            {
+              label: "Changelog",
+              icon: "m-log",
+              to: "/changelog",
+            },
           ],
         },
       ];
