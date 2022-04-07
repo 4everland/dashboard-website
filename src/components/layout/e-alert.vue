@@ -1,6 +1,8 @@
 <template>
   <div>
     <v-snackbar
+      top
+      outlined
       :color="noticeInfo.color || 'primary'"
       timeout="2000"
       v-bind="noticeInfo.attrs"

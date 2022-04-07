@@ -624,9 +624,9 @@ export default {
           if (err) reject(err);
           else
             resolve([
-              {
-                Key: folderKey,
-              },
+              // {
+              //   Key: folderKey,
+              // },
               ...(data.Contents || []),
             ]);
         });
