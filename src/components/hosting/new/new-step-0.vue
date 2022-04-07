@@ -163,14 +163,14 @@
           </div>
         </div>
       </v-col>
-      <v-col cols="12" md="6" v-if="isBind">
+      <v-col cols="12" md="6">
         <div
           class="main-wrap"
           :style="{
             'min-height': minHeight,
           }"
         >
-          <new-step-0-tpl />
+          <new-step-0-tpl @item="onTplItem" />
         </div>
       </v-col>
     </v-row>
@@ -271,6 +271,16 @@ export default {
         this.timing = null;
       }
     },
+    onTplItem(it) {
+      if (!this.isBind) return this.addNew();
+      const src =
+        "https://github.com/4everland/project-templates/tree/main/examples/" +
+        it.slug;
+      const link = `/hosting/new?type=clone-flow&s=${encodeURIComponent(
+        src
+      )}&n=${it.name}`;
+      this.$navTo(link);
+    },
     onImport(it) {
       this.$emit("set-info", it);
       this.$router.push("/hosting/new?c=" + it.name);
@@ -298,30 +308,6 @@ export default {
         console.log(error);
       }
       this.connecting = false;
-    },
-    async onBind() {
-      const needCheck = await this.onCheck();
-      if (needCheck) return;
-      // const link = `/settings?tab=account_binding&type=1&redirect=${encodeURIComponent()}`;
-      try {
-        this.connecting = true;
-        const { data } = await this.$http.post(
-          "/bind",
-          {
-            type: 1,
-            entranceId: 3,
-          },
-          {
-            params: {
-              _auth: 1,
-            },
-          }
-        );
-        location.href = data.applyR;
-      } catch (error) {
-        console.log(error);
-        this.connecting = false;
-      }
     },
     async addNew() {
       if (this.isTouch && !this.popAccounts && this.accountList.length) {
