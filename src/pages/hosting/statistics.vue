@@ -83,8 +83,9 @@ export default {
             params,
           }
         );
-        this.list = data.content;
-        this.pageLen = Math.max(1, Math.ceil(data.totalElements / params.size));
+        this.list = data.content || [];
+        const total = data.totalElements || 0;
+        this.pageLen = Math.max(1, Math.ceil(total / params.size));
       } catch (error) {
         console.log(error);
       }
