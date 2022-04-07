@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="bd-1 pb-0">
+    <div class="bd-1">
       <h3>Project Name</h3>
       <div class="gray fz-14">
         Used to identify your Project in the Dashboard, 4everland CLI, and in
         the URL of your Deployments.
       </div>
-      <div class="mt-8 d-flex">
+      <div class="mt-8 d-flex hide-msg">
         <v-text-field outlined dense v-model="name"> </v-text-field>
         <v-btn
           color="primary"
@@ -97,7 +97,7 @@
       </div>
     </div>
 
-    <div class="bd-1 mt-5">
+    <div class="bd-1 mt-5 hide-msg">
       <h3>Root Directory</h3>
       <div class="gray fz-14">
         The directory within your project, in which your code is located. Leave
