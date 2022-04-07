@@ -211,12 +211,20 @@ export default {
           this.sucNum += 1;
           this.onUpdate();
         } catch (error) {
-          if (error) console.log("task", error);
-          if (error.name == "XMinioAdminBucketQuotaExceeded") {
-            setTimeout(() => {
-              this.$alert(error.message);
-            }, 20);
-            break;
+          if (error) {
+            console.log("task", error.name);
+            if (
+              error.name == "XMinioAdminBucketQuotaExceeded" ||
+              error.name == "MalformedXML"
+            ) {
+              let msg = error.message;
+              if (error.name == "MalformedXML")
+                msg = "Bucket quota exceeded or Malformed XML";
+              setTimeout(() => {
+                this.$alert(msg);
+              }, 20);
+              break;
+            }
           }
         }
         this.curIdx += 1;
