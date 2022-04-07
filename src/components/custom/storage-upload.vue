@@ -211,7 +211,13 @@ export default {
           this.sucNum += 1;
           this.onUpdate();
         } catch (error) {
-          if (error) console.log("task", error.message);
+          if (error) console.log("task", error);
+          if (error.name == "XMinioAdminBucketQuotaExceeded") {
+            setTimeout(() => {
+              this.$alert(error.message);
+            }, 20);
+            break;
+          }
         }
         this.curIdx += 1;
       }

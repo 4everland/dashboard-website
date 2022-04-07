@@ -20,7 +20,7 @@ Vue.prototype.$endpoint = endpoint;
 
 const loginUrl = inDev
   ? "https://4ever-login-test.4everland.app"
-  : "https://www.4everland.org/bucketlogin";
+  : "https://login.4everland.org";
 
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   let url = loginUrl;

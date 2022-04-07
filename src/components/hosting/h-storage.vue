@@ -147,8 +147,7 @@ export default {
         await this.$sleep();
         this.loading = false;
         this.showPop = false;
-        let html =
-          "In the Beta version, you can get a few free resources for depolyment .";
+        let html = "You can get some free resources for depolyment.";
         html +=
           '<ul class="mt-4"><li>100GB Bandwidth</li><li>4GB Storage</li><li>250 Build Minutes</li></ul>';
         this.$alert(html, "Welcome to 4EVERLAND HOSTING.", {

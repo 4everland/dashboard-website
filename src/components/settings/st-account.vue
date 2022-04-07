@@ -132,6 +132,7 @@ export default {
         this.$setMsg({
           name: "updateUser",
         });
+        this.$toast(item.title + " binded successfully!");
         this.onBindSuc();
       } catch (error) {
         console.log(error);
