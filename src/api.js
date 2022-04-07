@@ -27,7 +27,7 @@ const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   if (isLocal) {
     url = "#/login?test=1";
   } else if (localStorage.inviteCode) {
-    url += "/#/?invite=" + localStorage.inviteCode;
+    url += "/#/?inviteCode=" + localStorage.inviteCode;
   }
   return url;
 });
