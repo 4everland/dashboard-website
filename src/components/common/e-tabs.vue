@@ -76,13 +76,16 @@ export default {
       }
       const it = this.list[val];
       if (!it) return;
-      const query = { ...this.$route.query };
+      const query = {};
       const tabVal = it.text.replaceAll(" ", "_").toLowerCase();
       if (query[this.tabKey] == tabVal) return;
-      query[this.tabKey] = tabVal;
       if (!this.vertical) {
         delete query.sub;
+      } else {
+        const { tab } = this.$route.query;
+        if (tab) query.tab = tab;
       }
+      query[this.tabKey] = tabVal;
       this.$router.replace({
         query,
       });
