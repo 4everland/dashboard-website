@@ -111,6 +111,7 @@ export default {
       const { code } = this.$route.query;
       if (!code || code == localStorage.last_github_code) return;
       localStorage.last_github_code = code;
+      this.onVcode(1, code);
     },
     async onVcode(type, code) {
       try {
