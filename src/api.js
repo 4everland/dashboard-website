@@ -35,14 +35,14 @@ const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
 export const http = Axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
 });
-const api2Url = process.env.VUE_APP_HOST_URL;
+const hostingUrl = process.env.VUE_APP_HOST_URL;
 export const http2 = Axios.create({
-  baseURL: api2Url,
+  baseURL: hostingUrl,
 });
 
 Vue.prototype.$getImgSrc = function (src) {
   if (!src) src = "img/bg/empty/project.png";
-  else if (!/^http/.test(src)) src = api2Url + src;
+  else if (!/^http/.test(src)) src = hostingUrl + src;
   return src;
 };
 
@@ -51,7 +51,6 @@ const RefreshLockKey = "refresh";
 const lock = new AsyncLock({ timeout: 5000 });
 
 [http, http2].forEach((axios) => {
-  // const isHosting = i == 1;
   axios.interceptors.request.use(
     async (config) => {
       let token = "";
