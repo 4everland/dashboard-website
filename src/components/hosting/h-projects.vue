@@ -68,10 +68,12 @@
           <v-row>
             <v-col cols="12" md="5">
               <div class="d-flex al-c grow-0">
-                <img
+                <v-img
                   :src="$getImgSrc(it.previewImage)"
-                  height="60"
-                  width="60"
+                  lazy-src="img/bg/empty/project.png"
+                  max-height="60"
+                  max-width="60"
+                  :aspect-ratio="1"
                   class="bdrs-8 bd-1"
                 />
                 <div class="ml-5">

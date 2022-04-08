@@ -2,9 +2,8 @@
   <v-row class="bdrs-5 bg-f6" v-if="info">
     <v-col class="pa-5 h-flex space-btw" style="height: 174px">
       <e-kv2 :label="it.label" v-for="(it, i) in list" :key="i">
-        <div class="d-flex al-c">
+        <div class="d-flex al-c" v-if="it.domain">
           <a class="line-1" :href="`#${it.to}`">
-            <!-- <h-status :text="it.domain.cutStr(30)" :val="it.state"></h-status> -->
             {{ it.domain.cutStr(30) }}
           </a>
           <div class="ml-auto shrink-0">
