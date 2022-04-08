@@ -96,7 +96,7 @@ export default {
             {
               label: "Documents",
               icon: "m-docs",
-              href: "https://4ever-docs.4everland.app/",
+              href: "https://docs.4everland.org",
             },
             // {
             //   label: "Community",
