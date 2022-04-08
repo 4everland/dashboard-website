@@ -219,7 +219,7 @@ export default {
             ) {
               let msg = error.message;
               if (error.name == "MalformedXML")
-                msg = "Bucket quota exceeded or Malformed XML";
+                msg = "Bucket quota exceeded or Malformed XML.";
               setTimeout(() => {
                 this.$alert(msg);
               }, 20);
