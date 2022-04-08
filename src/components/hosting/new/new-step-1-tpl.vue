@@ -115,10 +115,11 @@ export default {
         const { data: accountList } = await this.$http2.get(
           "/user/git-namespaces"
         );
-        if (!accountList.length) throw new Error("No Github account");
+        const account = accountList.filter(it => it.ownerType == "User")[0]
+        if (!account) throw new Error("No Github account");
         const { data } = await this.$http2.get("/repo/refresh/list", {
           params: {
-            githubId: accountList[0].githubId,
+            githubId: account.githubId,
             page: 0,
             word: this.gitName,
           },

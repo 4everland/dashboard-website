@@ -52,12 +52,6 @@ Vue.prototype.$getFramework = (name) => {
   return obj;
 };
 
-Vue.prototype.$getImgSrc = function (src) {
-  if (!src) src = "img/bg/empty/project.png";
-  else if (!/^http/.test(src)) src = process.env.VUE_APP_HOST_URL + src;
-  return src;
-};
-
 Vue.prototype.$openWindow = (url) => {
   if ("ontouchstart" in window) location.href = url;
   else
