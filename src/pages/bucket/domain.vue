@@ -8,7 +8,7 @@
         <div class="pd-20 d-flex al-c flex-wrap">
           <div class="mr-auto">
             <h3 class="mr-auto">{{ domain }}</h3>
-            <div class="d-flex al-c mt-2">
+            <div class="d-flex al-c">
               <v-icon :color="info.success ? 'success' : 'error'" size="18">
                 mdi-{{ info.success ? "check-circle" : "information" }}
               </v-icon>
@@ -26,13 +26,14 @@
             <v-btn
               v-if="!info.success"
               small
+              icon
               class="mr-4"
               @click="getInfo"
               :loading="loading"
             >
               <v-icon>mdi-refresh</v-icon>
             </v-btn>
-            <v-btn small color="error" @click="onRemove" :loading="deleting">
+            <v-btn small outlined rounded @click="onRemove" :loading="deleting">
               Remove
             </v-btn>
           </div>
