@@ -257,6 +257,7 @@ export default {
     onStop() {},
     onSort(type) {
       this.sortType = type;
+      this.page = 1;
       this.getList();
     },
     async onDelete(it) {
