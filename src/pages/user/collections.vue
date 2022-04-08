@@ -155,10 +155,12 @@ export default {
       }
       try {
         this.$loading();
-        this.contractAddr = abiData.address;
+        this.contractAddr = this.$inDev
+          ? "0x260141A95188fc163d277Af5160d65F3e436F68c"
+          : "0x4d95aDfeDD17c3b604e8658CF26d137409C872F9";
         const contract = new window.web3.eth.Contract(
           abiData.abi,
-          abiData.address
+          this.contractAddr
         );
         const nftId = 0;
         let num = await contract.methods.balanceOf(this.connectAddr, 0).call();

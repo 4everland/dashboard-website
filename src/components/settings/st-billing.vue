@@ -78,6 +78,18 @@
       <div class="card-head-1 fw-b">Bucket Usage</div>
       <div class="bdt-1"></div>
       <st-billing-bucket />
+      <div class="bdt-1 pd-15-20 d-flex">
+        <v-btn
+          class="ml-auto"
+          color="primary"
+          rounded
+          small
+          href="https://docs.google.com/forms/d/e/1FAIpQLSdDHqjksxnHYR9PBMd2hzW9CjmfFwCvIgU0TocTA_L4xCa7jQ/viewform"
+          target="_blank"
+        >
+          Get more storage
+        </v-btn>
+      </div>
     </v-card>
 
     <v-card outlined class="mt-5">
