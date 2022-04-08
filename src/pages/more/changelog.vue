@@ -37,6 +37,21 @@ export default {
     return {
       list: [
         {
+          time: "2022-04-07",
+          img: "https://tever.4everland.store/2022-4-7.jpg",
+          con: `<h3>4EVERLAND new Dashboard is officially launched!</h3>
+          <ul>
+          <li>1.Redesign the official website's UI and merge Hosting & Bucket display page.</li>
+          <li>Add MetaMask login in Hosting and Bucket. </li>
+          <li>Keep the original GitHub login, but users can login with wallet after connecting a new wallet account.</li>
+          <li>Bucket and Hosting Docs are integrated into one.</li>
+          <li>Adjust the secondary modules.</li>
+          <li>Support: Docs, Bug Bounty, and Changelog
+Personal center: Setting, My Collections, My Referral, Report, and Disconnect</li>
+          <li>Optimize the Hosting project display style and adjust the deployment process.</li>
+          </ul>`,
+        },
+        {
           time: "2022-03-11",
           img: "https://docs-images.4everland.store/bucketchangelog.gif",
           con: `<h3>Add AR storage to 4EVERLAND Bucket</h3>
