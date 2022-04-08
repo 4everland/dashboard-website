@@ -79,7 +79,7 @@
               class="plan-item bd-1 bdrs-10"
               :class="{
                 active: i == value,
-                free: i < curComboIdx,
+                free: i == 0,
                 clickable: !getDisabled(it, i),
               }"
             >
@@ -215,7 +215,7 @@ export default {
   data() {
     return {
       coins: ["DAI", "USDC", "USDT"],
-      bucketList: ["11GB IPFS", "100MB AR Storage"],
+      bucketList: ["1GB IPFS", "100MB AR Storage"],
       planHeaders: [
         {
           text: "Bandwidth",
@@ -266,7 +266,7 @@ export default {
   },
   methods: {
     getDisabled(it, i) {
-      return i < this.curComboIdx || !it.id;
+      return !i || i < this.curComboIdx || (i == 3 && !it.id);
     },
     onPlan(it, i) {
       if (!this.getDisabled(it, i)) {

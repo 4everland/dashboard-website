@@ -562,7 +562,7 @@ export default {
       }
       this.selected = [];
       this.getList();
-      this.onUpdate();
+      // this.onUpdate();
     },
     async onUpdate(delay = 1000) {
       await this.$sleep(delay);

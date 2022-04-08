@@ -365,9 +365,10 @@ export default {
     },
     curComboIdx() {
       const { plan } = this.billInfo;
+      if (plan == "Pro") return 1;
       if (plan == "Business") return 2;
       if (plan == "Custom") return 3;
-      return 1;
+      return 0;
     },
     curPlan() {
       return this.planList[this.planIdx];
