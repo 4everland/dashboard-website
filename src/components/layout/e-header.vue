@@ -6,9 +6,9 @@
   background: #cac3e0;
   padding: 4px;
   border-radius: 100px;
-  transform: scale(1.4);
+  transform: scale(1.45);
   position: relative;
-  left: -10px;
+  left: -12px;
 }
 </style>
 <template>
@@ -33,7 +33,7 @@
           class="ml-4"
         >
           <div class="u-avatar" v-if="it.avatar">
-            <v-avatar size="22" class="bg-white">
+            <v-avatar size="22" class="bg-white d-b">
               <v-img :src="it.avatar"></v-img>
               <!-- <svg
                 v-if="pageLoaded"
