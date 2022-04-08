@@ -1,7 +1,9 @@
 <template>
   <div>
-    <div class="mt-12" v-if="noRepo">
-      <e-empty> No commits or not connected to github </e-empty>
+    <div class="mt-12" v-if="noRepo || (list && !list.length)">
+      <e-empty>
+        {{ noRepo ? "Unconnected to Github" : "No commits" }}
+      </e-empty>
     </div>
     <div v-else-if="!list">
       <v-skeleton-loader type="article" />
