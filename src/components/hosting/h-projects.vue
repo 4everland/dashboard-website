@@ -69,7 +69,7 @@
             <v-col cols="12" md="5">
               <div class="d-flex al-c grow-0">
                 <img
-                  :src="it.previewImage || 'img/bg/empty/project.png'"
+                  :src="$getImgSrc(it.previewImage)"
                   height="60"
                   width="60"
                   class="bdrs-8 bd-1"
