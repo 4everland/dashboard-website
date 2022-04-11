@@ -120,9 +120,14 @@
                 v-for="(row, j) in it.statisList"
                 :key="j"
               >
-                <div class="pa-3">
+                <e-link
+                  class="pa-3 d-b"
+                  :href="
+                    j < 2 ? `#/hosting/statistics/${it.name}/${it.id}` : ''
+                  "
+                >
                   <component :is="row.comp" :info="row.data" />
-                </div>
+                </e-link>
               </v-col>
               <!-- <v-col cols="4">
                 <rect-data :list="it.statis2" />
@@ -285,7 +290,7 @@ export default {
         data.name = it.name;
         const statisList = [
           {
-            comp: "rect-data",
+            comp: "e-grid-card",
             data: [
               {
                 title: "New Users",
@@ -306,7 +311,7 @@ export default {
             ],
           },
           {
-            comp: "rect-data",
+            comp: "e-grid-card",
             data: [
               {
                 title: "Bandwidth used",

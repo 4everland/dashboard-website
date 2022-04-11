@@ -60,7 +60,7 @@
           >
             {{ it.num || 0 }}</b
           >
-          <span class="ml-1 fz-13" v-if="it.unit">{{ it.unit }}</span>
+          <span class="ml-1 fz-13 gray" v-if="it.unit">{{ it.unit }}</span>
         </div>
       </div>
     </v-col>

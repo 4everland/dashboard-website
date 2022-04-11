@@ -1,5 +1,10 @@
 <template>
-  <a :href="link" target="_blank" class="u" v-if="href">
+  <a
+    :href="link"
+    :target="isHash ? '' : '_blank'"
+    :class="isHash ? '' : 'u'"
+    v-if="href"
+  >
     <slot></slot>
   </a>
   <div v-else>
@@ -13,8 +18,12 @@ export default {
     href: String,
   },
   computed: {
+    isHash() {
+      return /^#/.test(this.href);
+    },
     link() {
-      if (this.href && this.href.indexOf("//") == -1) return "//" + this.href;
+      if (this.href && this.href.indexOf("//") == -1 && !this.isHash)
+        return "//" + this.href;
       return this.href;
     },
   },
