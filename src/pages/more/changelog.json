@@ -1,0 +1,163 @@
+[{
+    "time": "2022-04-07",
+    "img": "https://4ever-web.4everland.store/img/log/2022-4-7.jpg",
+    "title": "4EVERLAND new Dashboard is officially launched!",
+    "lines": [
+      "Redesign the official website's UI and merge Hosting & Bucket display page.",
+      "Add MetaMask login in Hosting and Bucket. ",
+      "Keep the original GitHub login, but users can login with wallet after connecting a new wallet account.",
+      "Bucket and Hosting Docs are integrated into one.",
+      "Adjust the secondary modules.",
+      "Optimize the Hosting project display style and adjust the deployment process."
+    ]
+  },
+  {
+    "time": "2022-03-11",
+    "img": "https://docs-images.4everland.store/bucketchangelog.gif",
+    "title": "Add AR storage to 4EVERLAND Bucket",
+    "lines": [
+      "Added the function to automatically sync to AR when creating a Bucket",
+      "Add the AR synchronization function for a particular file.",
+      "Added AR History module.",
+      "Add AR-related fields to file info.",
+      "Modified the display style of the remaining storage."
+    ]
+  },
+  {
+    "time": "2022-01-10",
+    "img": "https://4ever-web.4everland.store/img/log/2022-1-10.png",
+    "title": "Added some new features",
+    "lines": ["Support ENS and IPNS"]
+  },
+  {
+    "time": "2022-01-07",
+    "img": "https://4ever-web.4everland.store/img/log/2022-1-7.png",
+    "title": "Improved some details of 4EVERLAND HOSTING",
+    "lines": [
+      "Optimized the custom pricing plan and its payment process ",
+      "Fixed some known issues"
+    ]
+  },
+  {
+    "time": "2021-12-10",
+    "img": "https://4ever-web.4everland.store/img/log/2021-12-10.gif",
+    "title": "We support the CLI now !",
+    "lines": [
+      "Hosting offers a command-line interface for the 4everland CLI, which enables you to deploy and manage projects with a set of commands. ",
+      "Please check the following link to access  <a href='https://docs.hosting.4everland.org/cli/' target='_blank'>Docs-Cli</a>"
+    ]
+  },
+  {
+    "time": "2021-12-06",
+    "img": "https://4ever-web.4everland.store/img/log/2021-12-06.jpeg",
+    "title": "We offered you pricing plans to subscribe.",
+    "lines": [
+      "Added pricing plan, you can subscribe it based on your specific needs.",
+      "Offered four different versions: free, pro, business, and custom.",
+      "Supported DAI, USDC, and USDT payment methods. "
+    ]
+  },
+  {
+    "time": "2021-12-06",
+    "img": "https://4ever-web.4everland.store/img/log/2021-12-06-2.jpeg",
+    "title": "Modified the billing model and bill display page.",
+    "lines": [
+      "Billing statistics are modified to the three dimensions of bandwidth, storage, and build minutes. Users before the HOSTING beta release will have access to 100M bandwidth and 40G storage until December 31, 2021.",
+      "Added payment record, you can view payment details.",
+      "Added status reminder function. "
+    ]
+  },
+  {
+    "time": "2021-12-06",
+    "img": "https://4ever-web.4everland.store/img/log/2021-12-06-3.jpeg",
+    "title": "Optimized statistics function.",
+    "lines": [
+      "Added the function to view new user retention rate by date filter.",
+      "Added statistics modules of total requests, request by source, and request by county.",
+      "The source statistics include: References, Browsers, Device types, Operating systems, Paths. "
+    ]
+  },
+  {
+    "time": "2021-10-25",
+    "img": "https://4ever-web.4everland.store/img/log/2021-10-25.jpeg",
+    "title": "Published new functions in 4EVERLAND-HOSTING.",
+    "lines": [
+      "Published new gateway ",
+      "Claim' button in First Landing page now available "
+    ]
+  },
+  {
+    "time": "2021-10-11",
+    "img": "https://4ever-web.4everland.store/img/log/2021-10-11.jpeg",
+    "title": "More details in 4EVERLAND HOSTING have improved.",
+    "lines": [
+      "Set the corresponding browser title according to the page route ",
+      "Added a prompt of A record or AAAA record conflict when adding a first-level domain name in the project settings"
+    ]
+  },
+  {
+    "time": "2021-9-27",
+    "img": "https://4ever-web.4everland.store/img/log/2021-9-27.jpeg",
+    "title": "Improvements on the statistics page and breadcrumb navigation is added.",
+    "lines": [
+      "Breadcrumb navigation added on project details and build page",
+      "Added refresh data button added on  the Statistics page ",
+      "Optimized UI of the statistics page, added different colour for retention rate"
+    ]
+  },
+  {
+    "time": "2021-9-13",
+    "img": "https://4ever-web.4everland.store/img/log/2021-9-13.jpeg",
+    "title": "Optimized the deployment process.",
+    "lines": [
+      "Optimized the construction process and added branch selection function",
+      "Optimized the build process and increased the Deploy Hooks option",
+      "Added commits history to the project details page, and specific commits can be selected for deployment"
+    ]
+  },
+  {
+    "time": "2021-9-6",
+    "img": "https://4ever-web.4everland.store/img/log/2021-9-6.jpeg",
+    "title": "Intercom is now up. Now you can speak to us in no time and also we have optimized couples details such as import Git repository etc.",
+    "lines": [
+      "Optimized the Build command, scroll down for the default scripts in package.json",
+      "Optimized Git repository search",
+      "Optimized Git Repo import process and support branch selection ",
+      "Set the Clone Flow page defaults to project name to the git name and added branch display",
+      "Integrated Intercom"
+    ]
+  },
+  {
+    "time": "2021-8-31",
+    "img": "https://4ever-web.4everland.store/img/log/2021-8-31.jpg",
+    "title": "We have done more functional support and detailed optimization for 4EVERLAND HOSTING, as follows:",
+    "lines": [
+      "Support multiple GitHub accounts login and also org Github accounts. ",
+      "Enable search on Github projects and display in pages.",
+      "Added project titles on the build page and with links direct to project details.",
+      "Added the 'go to last line' button to return the bottom of the build logs. (This button shows the number of new build logs while building).",
+      "Fixed no updates on output contents issue after rebuild.",
+      "Updated default background image and changelog icon.",
+      "Optimized line chart on the statistics page."
+    ]
+  },
+  {
+    "time": "2021-8-16",
+    "img": "https://www.4everland.org/imgs/blogs/Hosting_Launch.png",
+    "title": "4EVERLAND HOSTING is officially launched, you can deploy and host your website through 'HOSTING' with one click. The specific features are as follows.",
+    "lines": [
+      "Authorize login via github",
+      "Connect to a github repository",
+      "Select a framework or custom build command, output dir, root dir",
+      "Add environment variables",
+      "Execute the compilation, log view real-time build process",
+      "Access to the build project website",
+      "A new account to receive trial credits and view credit usage (40GB storage + unlimited flow)",
+      "Support for project templates, clone any github repository, support for subfolders",
+      "Access to any imported project to: check build history, statistics (PV/UV/retention), change compilation configuration, customize domain name, configure environment variables, configure webhooks, etc.",
+      "Support for viewing Docs documentation",
+      "Support for automated content risk identification and review services",
+      "Support for Feedback and reporting features"
+    ]
+  }
+]
