@@ -35,7 +35,13 @@
             The project will be deleted permanently including deployments and
             domains. You can't undo this action.
           </div>
-          <v-btn color="error" small class="ml-auto" @click="onDelete"
+          <v-btn
+            outlined
+            rounded
+            color="error"
+            small
+            class="ml-auto"
+            @click="onDelete"
             >Delete</v-btn
           >
         </div>

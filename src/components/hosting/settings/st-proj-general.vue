@@ -10,6 +10,7 @@
         <v-text-field outlined dense v-model="name"> </v-text-field>
         <v-btn
           color="primary"
+          rounded
           :loading="savingName"
           @click="onSaveName"
           :disabled="info.name == name || !name"
@@ -22,7 +23,7 @@
     </div>
 
     <div class="bd-1 mt-5">
-      <h3>Build & Development Settings</h3>
+      <h3>Build Configuration</h3>
       <div class="gray fz-14">
         When using a framework of a new project, it will be automatically
         detected. As a result, several project settings are automatically
@@ -68,7 +69,7 @@
             label="Install Command"
             placeholder="‘yarn install’ or ‘npm install’"
           ></v-text-field>
-          <e-tooltip bottom max-width="300">
+          <e-tooltip top max-width="300">
             <template #ref>
               <v-icon class="ml-2" size="16" :color="$color1">
                 mdi-help-circle-outline
@@ -87,10 +88,11 @@
 
         <div class="ta-r mt-3">
           <v-btn
+            color="primary"
+            rounded
             :disabled="!isCmdChange"
             :loading="savingCmd"
             @click="onSaveCmd"
-            color="primary"
             >Save</v-btn
           >
         </div>
@@ -108,6 +110,7 @@
         <v-text-field outlined dense v-model="rootDirectory"> </v-text-field>
         <v-btn
           color="primary"
+          rounded
           :disabled="rootDirectory == info.config.rootDirectory"
           :loading="savingRoot"
           @click="onSaveRoot"

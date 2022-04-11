@@ -12,16 +12,18 @@
         <v-btn
           v-if="!repoName && repoList"
           small
+          icon
           :loading="listing"
           @click="getRepoList"
           class="ml-auto"
-          >Refresh</v-btn
         >
+          <v-icon>mdi-refresh</v-icon>
+        </v-btn>
       </div>
-      <div class="mt-5 bd-1">
-        <div class="d-flex al-c" v-if="repoName">
+      <div class="mt-5 b-1">
+        <div class="d-flex al-c f-wrap" v-if="repoName">
           <v-icon color="#4A96FA" size="32">mdi-github</v-icon>
-          <div class="ml-5">
+          <div class="ml-5 mr-auto">
             <h4 class="color-1">
               <a :href="info.repo.cloneUrl.replace('.git', '')" target="_blank">
                 {{ info.repo.pathPre }}
@@ -30,35 +32,27 @@
             <div class="gray fz-13">
               Connected at <e-time :value="info.repo.updateAt"></e-time>
             </div>
-            <v-btn
-              class="mt-2"
-              @click="setConnect()"
-              :loading="savingConnect"
-              outlined
-              color="#888"
-              small
-              v-if="asMobile"
-            >
-              Disconnect
-            </v-btn>
           </div>
           <v-btn
-            class="ml-auto"
             @click="setConnect()"
             :loading="savingConnect"
             outlined
-            color="#888"
+            rounded
             small
-            v-if="!asMobile"
           >
             Disconnect
           </v-btn>
         </div>
         <template v-else>
           <div v-if="!repoList || !repoList.length">
-            <v-btn color="primary" :loading="listing" @click="getRepoList">
+            <v-btn
+              color="primary"
+              rounded
+              :loading="listing"
+              @click="getRepoList"
+            >
               <v-icon>mdi-github</v-icon>
-              <span>Connect Github</span>
+              <span class="ml-2">Connect Github</span>
             </v-btn>
           </div>
           <div v-else>
