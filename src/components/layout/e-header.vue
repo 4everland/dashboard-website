@@ -153,6 +153,12 @@ export default {
       return list;
     },
   },
+  watch: {
+    userInfo() {
+      window.jdenticon();
+    },
+  },
+  mounted() {},
   methods: {
     onMenu(it) {
       const { name } = it;
