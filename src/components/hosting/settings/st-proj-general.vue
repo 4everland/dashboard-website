@@ -6,7 +6,7 @@
         Used to identify your Project in the Dashboard, 4everland CLI, and in
         the URL of your Deployments.
       </div>
-      <div class="mt-8 d-flex hide-msg">
+      <div class="mt-5 d-flex hide-msg">
         <v-text-field outlined dense v-model="name"> </v-text-field>
         <v-btn
           color="primary"

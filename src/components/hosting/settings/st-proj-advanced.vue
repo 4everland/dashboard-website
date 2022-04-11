@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="hide-msg">
     <div class="bd-1">
       <h3>Directory Listing</h3>
       <div class="d-flex al-c">
@@ -7,7 +7,7 @@
           If no index file is present within a directory, the directory contents
           will be displayed.
         </div>
-        <div class="ml-auto hide-msg">
+        <div class="ml-auto">
           <v-switch v-model="directoryList"></v-switch>
         </div>
       </div>
