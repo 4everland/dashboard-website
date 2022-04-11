@@ -107,7 +107,11 @@
       </v-col>
     </v-row>
 
-    <build-overview-logs @info="info = $event" @state="state = $event" />
+    <build-overview-logs
+      v-show="info"
+      @info="info = $event"
+      @state="state = $event"
+    />
   </div>
 </template>
 

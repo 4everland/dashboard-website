@@ -4,7 +4,7 @@
       ref="con"
       class="ov-a"
       :style="{
-        'max-height': maxHeight,
+        height: height,
       }"
     >
       <div class="mb-2" v-for="(it, i) in list" :key="i">
@@ -35,7 +35,7 @@ export default {
   props: {
     taskId: String,
     list: Array,
-    maxHeight: {
+    height: {
       type: String,
       default: "140px",
     },
