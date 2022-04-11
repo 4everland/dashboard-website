@@ -41,7 +41,7 @@ export default {
           img: "https://tever.4everland.store/2022-4-7.jpg",
           con: `<h3>4EVERLAND new Dashboard is officially launched!</h3>
           <ul>
-          <li>1.Redesign the official website's UI and merge Hosting & Bucket display page.</li>
+          <li>Redesign the official website's UI and merge Hosting & Bucket display page.</li>
           <li>Add MetaMask login in Hosting and Bucket. </li>
           <li>Keep the original GitHub login, but users can login with wallet after connecting a new wallet account.</li>
           <li>Bucket and Hosting Docs are integrated into one.</li>
