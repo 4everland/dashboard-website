@@ -36,9 +36,8 @@
             <div class="mr-auto">
               <h3 class="mr-auto">
                 <a
-                  :href="`https://naming.bonfida.org/#/domain/${
-                    info.sns.split('.')[0]
-                  }`"
+                  :class="info.verify ? '' : 'disabled'"
+                  :href="`https://${info.sns.split('.')[0]}.4sol.xyz`"
                   target="_blank"
                   >{{ info.sns }}</a
                 >
@@ -175,14 +174,12 @@ export default {
     async verifyConfiguration() {
       this.$loading();
       this.resolveData = await getResolveData(this.info.sns);
-      console.log(this.resolveData);
-      console.log(this.info.content);
       if (this.resolveData && this.resolveData === this.info.content) {
         this.info.verify = true;
-        this.setInfo();
       } else {
         this.info.verify = false;
       }
+      this.setInfo();
       this.$loading.close();
     },
     async onRemove() {
@@ -257,3 +254,12 @@ export default {
   },
 };
 </script>
+<style scoped>
+a.disabled {
+  pointer-events: none;
+  color: #666;
+  filter: alpha(opacity=50);
+  -moz-opacity: 0.5;
+  opacity: 0.5;
+}
+</style>
