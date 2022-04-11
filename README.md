@@ -1,7 +1,7 @@
 # 4EVERLAND DASHBOARD
 
 Site: https://dashboard.4everland.org
-Docs: https://docs.dashboard.4everland.org
+Docs: https://docs.4everland.org
 
 ## Project setup
 
