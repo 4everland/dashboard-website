@@ -9,6 +9,7 @@
       <div class="mt-5 d-flex hide-msg">
         <v-text-field outlined dense v-model="name"> </v-text-field>
         <v-btn
+          min-width="100"
           color="primary"
           rounded
           :loading="savingName"
@@ -88,6 +89,7 @@
 
         <div class="ta-r mt-3">
           <v-btn
+            min-width="100"
             color="primary"
             rounded
             :disabled="!isCmdChange"
@@ -109,6 +111,7 @@
       <div class="mt-5 d-flex">
         <v-text-field outlined dense v-model="rootDirectory"> </v-text-field>
         <v-btn
+          min-width="100"
           color="primary"
           rounded
           :disabled="rootDirectory == info.config.rootDirectory"
