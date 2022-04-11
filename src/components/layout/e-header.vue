@@ -34,13 +34,12 @@
         >
           <div class="u-avatar" v-if="it.avatar">
             <v-avatar size="22" class="bg-white d-b">
-              <v-img :src="it.avatar"></v-img>
-              <!-- <svg
-                v-if="pageLoaded"
+              <!-- <v-img :src="it.avatar"></v-img> -->
+              <svg
                 width="80"
                 height="80"
                 :data-jdenticon-value="it.label"
-              ></svg> -->
+              ></svg>
             </v-avatar>
           </div>
           <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
