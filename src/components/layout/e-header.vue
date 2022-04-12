@@ -36,6 +36,7 @@
             <v-avatar size="22" class="bg-white d-b">
               <!-- <v-img :src="it.avatar"></v-img> -->
               <svg
+                style="display: block"
                 width="80"
                 height="80"
                 :data-jdenticon-value="it.label"
