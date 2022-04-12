@@ -58,7 +58,7 @@
           @success="$toast('Copied to clipboard !')"
         >
           <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
-          <img src="img/icon/copy1.svg" width="11" />
+          <img src="img/svg/copy.svg" width="11" />
         </v-btn>
       </template>
       <template v-slot:item.arweaveStatus="{ item }">
@@ -67,13 +67,9 @@
     </v-data-table>
 
     <div class="ta-c mt-8" v-if="!list.length">
-      <img
-        :src="`img/svg/common/empty${tableLoading ? 1 : 2}.svg`"
-        height="100"
-      />
-      <div class="mt-3 gray fz-15">
+      <e-empty :loading="tableLoading">
         {{ tableLoading ? `Loading files...` : `No files` }}
-      </div>
+      </e-empty>
     </div>
 
     <div

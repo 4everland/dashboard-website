@@ -4,6 +4,9 @@
   .v-navigation-drawer__border {
     display: none;
   }
+  .v-navigation-drawer__content {
+    overflow: scroll;
+  }
   .group-item {
     margin-bottom: 10px !important;
   }
@@ -175,6 +178,10 @@ export default {
             {
               label: "Statistics",
               to: "/hosting/statistics",
+            },
+            {
+              label: "First Landing",
+              to: "/hosting/first-landing",
             },
           ],
         },
