@@ -45,6 +45,7 @@
       padding: 10px;
       text-align: center;
       min-width: 20px;
+      border-bottom: 1px solid #efefef;
     }
     tr:nth-child(even) {
       background: #eee;
