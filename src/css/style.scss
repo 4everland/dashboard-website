@@ -6,16 +6,13 @@
 @import 'anim';
 
 $color1: #34A9FF;
-// @font-face {
-//   font-family: Poppins;
-//   src: url('/font/Poppins-Medium.ttf');
-// }
+
 body {
   box-sizing: border-box;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   .v-application {
-    font-family: Poppins, Arial,"PingFang SC",Roboto,"Helvetica Neue","Helvetica, Tahoma","PingFang SC-Light","Microsoft YaHei";
+    font-family: Arial,"PingFang SC",Roboto,"Helvetica Neue","Helvetica, Tahoma","PingFang SC-Light","Microsoft YaHei";
     .primary {
       background-color: $color1 !important;
       border-color: $color1 !important;
