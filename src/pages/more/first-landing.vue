@@ -66,18 +66,18 @@
     <div class="ta-r">
       <v-btn
         class="mr-5"
-        :color="myEthAddr != connectAddr ? 'error' : 'primary'"
         small
-        rounded
+        :color="myEthAddr != connectAddr ? 'error' : 'primary'"
         @click="setAddr"
       >
-        <v-icon size="16" class="mr-1">mdi-wallet</v-icon>
-        <span>{{ myEthAddr ? myEthAddr.cutStr(6, 4) : "Wallet Address" }}</span>
+        <v-icon size="16" class="mr-1" v-if="myEthAddr">mdi-wallet</v-icon>
+        <span>{{
+          myEthAddr ? myEthAddr.cutStr(6, 4) : "Submit Wallet Address"
+        }}</span>
       </v-btn>
       <v-btn
         color="primary"
         small
-        rounded
         href="https://www.4everland.org/firstlanding"
         target="_blank"
         >Rules</v-btn
