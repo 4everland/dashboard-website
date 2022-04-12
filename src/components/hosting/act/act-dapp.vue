@@ -42,7 +42,7 @@
         </tbody>
       </table>
       <div class="pt-15 pb-15 ta-c" v-if="!list.length">
-        <span class="fz-14 op-9">No Statistics</span>
+        <span class="fz-14 gray">No Statistics</span>
       </div>
     </div>
     <div class="mt-6" v-if="pageLen > 1">

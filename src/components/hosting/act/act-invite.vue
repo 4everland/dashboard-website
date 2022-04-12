@@ -85,13 +85,7 @@
         </tbody>
       </table>
       <div class="pt-15 pb-15 ta-c" v-if="!list.length">
-        <v-img
-          src="img/empty/act-invite.png"
-          height="60"
-          width="60"
-          class="d-ib"
-        />
-        <div class="op-5 fz-14 mt-8">No developer is invited</div>
+        <div class="gray fz-14 mt-5">No developers invited</div>
         <v-btn
           v-if="actStatus == 1"
           color="primary"

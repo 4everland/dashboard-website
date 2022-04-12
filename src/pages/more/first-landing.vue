@@ -27,17 +27,24 @@
     border: 1px solid #f9fbfc;
   }
   table {
-    background: #1e2226;
     border-spacing: 0;
     font-size: 15px;
+
     thead {
       background: #f9fbfc;
+      color: #7e8ea8;
+      font-size: 14px;
+      td {
+        padding: 15px 0;
+      }
     }
     tbody {
       font-size: 14px;
     }
     td {
       padding: 10px;
+      text-align: center;
+      min-width: 20px;
     }
     tr:nth-child(even) {
       background: #eee;
