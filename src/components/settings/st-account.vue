@@ -222,20 +222,17 @@ export default {
       );
       return data.applyR;
     },
-    async sign(nonce) {
-      try {
-        const msg = nonce;
-        const sig = await MetaMask.getSigner().signMessage(msg);
-        return sig;
-      } catch (e) {
-        console.log(e);
-      }
-    },
     async verifyMetaMask() {
-      const nonce = await this.exchangeCode();
-      const sig = await this.sign(nonce);
-      if (sig) {
-        this.onVcode(2, sig);
+      try {
+        this.$loading();
+        const nonce = await this.exchangeCode();
+        const sig = await MetaMask.getSigner().signMessage(nonce);
+        this.$loading.close();
+        if (sig) {
+          this.onVcode(2, sig);
+        }
+      } catch (error) {
+        this.$alert(error.message);
       }
     },
   },
