@@ -235,6 +235,7 @@ export default {
       pageSize: 5,
       sortType: "All",
       sortIdx: 0,
+      refreshAt: Date.now(),
     };
   },
   watch: {
@@ -248,9 +249,16 @@ export default {
     },
     inCurPath(val) {
       // console.log(this.curPath, val);
-      if (val && this.needRefresh) {
-        this.needRefresh = false;
-        this.getList();
+      if (val) {
+        const now = Date.now();
+        if (now - this.refreshAt > 10e3) {
+          this.needRefresh = true;
+        }
+        if (this.needRefresh) {
+          this.refreshAt = now;
+          this.getList();
+          this.needRefresh = false;
+        }
       }
     },
   },

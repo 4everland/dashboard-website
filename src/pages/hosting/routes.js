@@ -37,8 +37,9 @@ export default [
     path: "/project/:projName/:id",
     component: Project,
     meta: {
-      isTab: 1,
       title: `{projName}`,
+      noCache: 1,
+      isTab: 1,
       links: [
         {
           text: "Projects",
@@ -54,8 +55,9 @@ export default [
     path: "/build/:projName/:id/:taskId",
     component: Build,
     meta: {
-      isTab: 1,
       title: `{projName} - Build`,
+      noCache: 1,
+      isTab: 1,
       links: [
         {
           text: "Projects",
@@ -76,6 +78,7 @@ export default [
     component: Domains,
     meta: {
       title: "Domains",
+      noCache: 1,
     },
   },
   {
@@ -83,6 +86,7 @@ export default [
     component: Statistics,
     meta: {
       title: "Statistics",
+      noCache: 1,
     },
   },
   {

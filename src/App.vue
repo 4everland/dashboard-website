@@ -15,10 +15,14 @@
         <e-nav></e-nav>
         <div class="pa-5">
           <e-wrap :class="meta.wrapCls || (meta.isTab ? 'pa-0' : 'main-wrap')">
-            <router-view v-if="!meta.keepAlive"></router-view>
-            <keep-alive v-else>
+            <div v-show="meta.noCache">
               <router-view></router-view>
-            </keep-alive>
+            </div>
+            <div v-show="!meta.noCache">
+              <keep-alive>
+                <router-view></router-view>
+              </keep-alive>
+            </div>
           </e-wrap>
         </div>
       </v-main>
