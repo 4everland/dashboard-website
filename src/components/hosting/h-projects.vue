@@ -357,6 +357,7 @@ export default {
     },
     async getList() {
       try {
+        this.curIdx = [];
         if (this.list.length) this.$loading();
         else this.loading = true;
         const {
@@ -370,6 +371,7 @@ export default {
         });
         this.list = list;
         this.total = total;
+
         this.pageLen;
       } catch (error) {
         console.log(error);

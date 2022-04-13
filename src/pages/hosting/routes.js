@@ -94,6 +94,7 @@ export default [
     component: StatisDetail,
     meta: {
       title: "{projName} - Statistic",
+      noCache: 1,
       links: [
         {
           text: "Statistics",

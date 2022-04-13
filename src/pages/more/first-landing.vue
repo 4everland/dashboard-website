@@ -532,7 +532,7 @@ export default {
       if (this.noChange) {
         let tip = this.myEthAddr;
         if (!this.myEthAddr) {
-          tip = "Unable to set wallet adress after 21st October.";
+          tip = "Unable to set wallet adress after 21st October 2021.";
         } else if (this.errAccount) {
           tip = `Wallet address(${this.ethAddr.cutStr(
             6,
