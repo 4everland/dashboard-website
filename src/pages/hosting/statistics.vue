@@ -11,7 +11,7 @@
       @click:row="onRow"
     >
       <template v-slot:item.projectName="{ item }">
-        <v-btn text small rounded color="primary" :to="getPath(item)">
+        <v-btn text x-small rounded color="primary" :to="getPath(item)">
           <b>{{ item.projectName }}</b>
         </v-btn>
       </template>

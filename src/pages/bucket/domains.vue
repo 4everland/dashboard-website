@@ -46,7 +46,7 @@
             :color="item.valid ? 'success' : 'error'"
             rounded
             text
-            small
+            x-small
           >
             <b>{{ item.domain }}</b></v-btn
           >

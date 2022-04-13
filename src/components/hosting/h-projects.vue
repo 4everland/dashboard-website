@@ -39,14 +39,16 @@
       </v-btn>
       <e-menu open-on-hover offset-y>
         <v-btn slot="ref" outlined rounded min-width="100" class="ml-5">
-          <v-icon size="16">mdi-filter-outline</v-icon>
-          <span class="ml-2">{{ sortType }}</span>
+          <img src="img/svg/hosting/ic-sort.svg" width="12" />
+          <span class="ml-2">{{
+            sortType == "All" ? "Create Time" : "Last Update"
+          }}</span>
         </v-btn>
         <v-list dense>
           <v-list-item-group v-model="sortIdx" color="primary">
             <v-list-item
-              @click="onSort(txt)"
-              v-for="(txt, i) in ['All', 'Active']"
+              @click="onSort(i)"
+              v-for="(txt, i) in ['Create Time', 'Last Update']"
               :key="i"
             >
               <v-list-item-title>
@@ -268,8 +270,8 @@ export default {
   },
   methods: {
     onStop() {},
-    onSort(type) {
-      this.sortType = type;
+    onSort(i) {
+      this.sortType = i == 0 ? "All" : "Active";
       this.page = 1;
       this.getList();
     },

@@ -112,6 +112,9 @@ body {
     padding-top: 0;
   }
 }
+.v-btn.v-size--x-small {
+  font-size: 13px;
+}
 .v-data-table {
   tbody td {
     border-bottom: 1px solid #e3e6ec!important;
@@ -252,4 +255,7 @@ ul.ls-none {
 
 .v-data-table-header {
   background: #F9FBFC;
+  th {
+    font-size: 14px!important;
+  }
 }
