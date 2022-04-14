@@ -107,15 +107,6 @@
       <div class="pd-20 pl-0 pr-0">
         <div class="ml-5 mr-6 d-flex al-c">
           <h3>My Rewards</h3>
-          <!-- <v-btn
-            plain
-            color="white"
-            small
-            :loading="loading"
-            @click="onRefresh"
-          >
-            <v-icon>mdi-refresh</v-icon>
-          </v-btn> -->
         </div>
         <div class="ov-a mt-5 gray-3 ta-c">
           <div class="ml-5 nowrap d-flex">
@@ -213,6 +204,7 @@ export default {
       isFocus: (s) => s.isFocus,
       nowDate: (s) => s.nowDate,
       connectAddr: (s) => s.connectAddr,
+      netType: (s) => s.netType,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -278,14 +270,9 @@ export default {
     };
   },
   watch: {
-    isFocus(val) {
-      if (val) {
-        this.onRefresh();
-      }
-    },
     "$route.path"(val) {
       if (val == "/dashboard/first-landing") {
-        this.onRefresh();
+        // this.onRefresh();
       }
     },
     isClaimed(val) {
@@ -328,9 +315,10 @@ export default {
       }
     },
     async getClaimInfo() {
-      await this.checkNet();
-      if (!this.isNetOk) return;
+      console.log("get claim info");
       try {
+        await this.checkNet();
+        if (!this.isNetOk) return;
         this.$loading();
         const { data: info } = await this.$http2.get("/firstland/claim-info", {
           params: {
@@ -338,7 +326,6 @@ export default {
           },
           noTip: true,
         });
-        this.$loading.close();
         this.claimInfo = info;
         this.claimAmount = parseInt(info.amount / 1e18);
         if (window.ethContract) {
@@ -346,14 +333,16 @@ export default {
             .isClaimed(info.index)
             .call();
         }
+        this.$loading.close();
         return info;
       } catch (error) {
+        this.$loading.close();
         this.claimAmount = 0;
         throw error;
       }
     },
     async checkNet() {
-      if (!localStorage.isConnectMetaMask) {
+      if (!this.connectAddr) {
         this.$setState({
           noticeMsg: {
             name: "showWalletConnect",
@@ -361,17 +350,19 @@ export default {
         });
         return;
       }
-      const netType = await window.web3.eth.net.getNetworkType();
-      let msg = "";
-      if (this.$inDev) {
-        if (netType != "rinkeby") msg = "Dev: please connect to rinkeby";
-      } else {
-        if (netType != "main")
-          msg = "Wrong network, please connect to Ethereum mainnet";
+      this.isNetOk =
+        (this.$inDev && this.netType == "rinkeby") ||
+        (!this.$inDev && this.netType == "main");
+      if (!this.isNetOk) {
+        try {
+          await window.web3.currentProvider.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: this.$inDev ? "0x4" : "0x1" }],
+          });
+        } catch (error) {
+          console.log(error);
+        }
       }
-      this.netTip = msg;
-      // if (msg) this.$alert(msg);
-      this.isNetOk = !msg;
     },
     async onClaim() {
       // if (!this.ethAddr) {
@@ -394,7 +385,7 @@ export default {
         }
 
         await this.checkNet();
-        if (!this.isNetOk) throw new Error(this.netTip);
+        if (!this.isNetOk) return;
 
         let accounts = await window.web3.eth.getAccounts();
         const account = accounts[0] || "";
@@ -525,8 +516,12 @@ export default {
       return source.join(".");
     },
     async getAddr() {
-      const { data } = await this.$http2.get("/activity/ethAddress");
-      this.ethAddr = data;
+      try {
+        const { data } = await this.$http2.get("/activity/ethAddress");
+        this.ethAddr = data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     async setAddr() {
       if (this.noChange) {
@@ -574,19 +569,12 @@ export default {
         this.$loading.close();
         this.$toast(`${!this.ethAddr ? "Added" : "Updated"} successfully`);
         this.ethAddr = value;
-        this.getAddr();
+        await this.getAddr();
       } catch (error) {
         console.log(error);
         this.setAddr();
       }
-    },
-    async onRefresh() {
-      if (!this.isNetOk) {
-        this.getClaimInfo();
-      }
-      // await this.getList();
-      // this.$refs.dapp.getList();
-      // this.$refs.invite.getList();
+      this.$loading.close();
     },
     onClick(row) {
       let { type, link } = row;
@@ -640,13 +628,7 @@ export default {
           });
         }
         this.list = list;
-        // if (totalRewards && !this.connectAddr) {
-        //   this.$setState({
-        //     noticeMsg: {
-        //       name: "showWalletConnect",
-        //     },
-        //   });
-        // }
+
         await this.getAddr();
         this.getClaimInfo();
       } catch (error) {

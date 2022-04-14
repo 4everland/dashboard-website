@@ -40,7 +40,7 @@
 <script>
 import { mapState } from "vuex";
 import Web3 from "web3";
-// import actAbi from "../../plugins/pay/abi";
+import actAbi from "../../plugins/pay/abi";
 
 export default {
   data() {
@@ -68,10 +68,10 @@ export default {
       let connectAddr = "";
       if (val) {
         this.showPop = false;
-        // window.ethContract = new window.web3.eth.Contract(
-        //   actAbi.abi,
-        //   actAbi.address
-        // );
+        window.ethContract = new window.web3.eth.Contract(
+          actAbi.abi,
+          actAbi.address
+        );
         const accounts = await window.web3.eth.getAccounts();
         connectAddr = accounts[0];
         window.ethereum.on("chainChanged", (networkId) => {
