@@ -41,14 +41,14 @@
         <v-btn slot="ref" outlined rounded min-width="100" class="ml-5">
           <img src="img/svg/hosting/ic-sort.svg" width="12" />
           <span class="ml-2">{{
-            sortType == "All" ? "Create Time" : "Last Update"
+            sortType == "All" ? sortArr[0] : sortArr[1]
           }}</span>
         </v-btn>
         <v-list dense>
           <v-list-item-group v-model="sortIdx" color="primary">
             <v-list-item
               @click="onSort(i)"
-              v-for="(txt, i) in ['Create Time', 'Last Update']"
+              v-for="(txt, i) in sortArr"
               :key="i"
             >
               <v-list-item-title>
@@ -237,6 +237,7 @@ export default {
       pageSize: 5,
       sortType: "All",
       sortIdx: 0,
+      sortArr: ["Create Time", "Last Update"],
       refreshAt: Date.now(),
     };
   },
