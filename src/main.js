@@ -165,7 +165,7 @@ new Vue({
         sessionToken,
       });
       window.s3 = Vue.prototype.$s3 = s3;
-      console.log("s3", s3);
+      // console.log("s3", s3);
       // window.ss3 = Vue.prototype.$ss3 = new AWS.S3({
       //   endpoint,
       //   signatureVersion: "v2",
@@ -173,7 +173,7 @@ new Vue({
       //   accessKeyId: accessKey,
       //   secretAccessKey: secretKey,
       // });
-      console.log(s3m);
+      // console.log(s3m);
       this.$setState({
         s3,
         s3m,

@@ -193,7 +193,7 @@
 
 <script>
 import { mapState } from "vuex";
-import Web3 from "web3";
+import actAbi from "../../plugins/abi/act-abi";
 // import WalletConnectProvider from '@walletconnect/web3-provider';
 
 export default {
@@ -289,31 +289,6 @@ export default {
     this.getList();
   },
   methods: {
-    async connectMetaMask() {
-      if (window.ethereum) {
-        window.web3 = new Web3(window.ethereum);
-        // await window.ethereum.enable();
-        try {
-          await window.ethereum.request({ method: "eth_requestAccounts" });
-          return true;
-        } catch (error) {
-          this.$alert("Failed to connect wallet" + ": " + error.message);
-          return false;
-        }
-      } else if (window.web3) {
-        window.web3 = new Web3(window.web3.currentProvider);
-        return true;
-      } else {
-        this.$confirm("Metamask is not installed", {
-          confirnText: "Install",
-        }).then(() => {
-          window.open(
-            "https://chrome.google.com/webstore/detail/nkbihfbeogaeaoehlefnkodbefgpgknn"
-          );
-        });
-        return false;
-      }
-    },
     async getClaimInfo() {
       console.log("get claim info");
       try {
@@ -328,8 +303,8 @@ export default {
         });
         this.claimInfo = info;
         this.claimAmount = parseInt(info.amount / 1e18);
-        if (window.ethContract) {
-          this.isClaimed = await window.ethContract.methods
+        if (this.ethContract) {
+          this.isClaimed = await this.ethContract.methods
             .isClaimed(info.index)
             .call();
         }
@@ -362,28 +337,16 @@ export default {
         } catch (error) {
           console.log(error);
         }
+      } else if (!this.ethContract) {
+        this.ethContract = new window.web3.eth.Contract(
+          actAbi.abi,
+          actAbi.address
+        );
       }
     },
     async onClaim() {
-      // if (!this.ethAddr) {
-      //   this.setAddr();
-      //   return;
-      // }
-      //
       try {
         this.claimLoading = true;
-        if (!window.ethContract) {
-          const isOk = await this.connectMetaMask();
-          if (!isOk) return;
-          this.$setState({
-            noticeMsg: {
-              name: "walletConnect",
-            },
-          });
-          await this.$sleep(100);
-          // console.log(window.ethContract);
-        }
-
         await this.checkNet();
         if (!this.isNetOk) return;
 
@@ -410,12 +373,8 @@ export default {
         if (!info) {
           info = await this.getClaimInfo();
         }
-        // const info = actAbi.result.claims[this.ethAddr];
-        // if (!info || !info.tokenId) {
-        //   return this.$alert(`Your Wallet address is not in reward list.`);
-        // }
 
-        const { methods } = window.ethContract;
+        const { methods } = this.ethContract;
         if (this.isClaimed) {
           throw new Error("Your wallet address has been claimed.");
         }
@@ -629,7 +588,7 @@ export default {
         }
         this.list = list;
 
-        await this.getAddr();
+        this.getAddr();
         this.getClaimInfo();
       } catch (error) {
         console.log(error);
