@@ -123,6 +123,7 @@ export default {
         this.page = 0;
         this.finished = false;
         this.refreshing = true;
+        this.list = null;
       }
       try {
         const { data } = await this.$http2.get(`/repo/commits/${repo.id}`, {
