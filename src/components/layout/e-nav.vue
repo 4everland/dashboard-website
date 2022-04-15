@@ -63,7 +63,7 @@ export default {
         let to = isAr ? "/bucket/arweave" : "/bucket/storage/";
         items = [
           {
-            text: isAr ? "AR History" : "Files",
+            text: isAr ? "AR History" : "Buckets",
             to,
             exact: true,
           },

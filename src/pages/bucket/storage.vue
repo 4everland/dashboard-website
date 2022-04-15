@@ -94,12 +94,13 @@
         </v-btn>
       </div>
 
-      <e-menu offset-y open-on-hover>
+      <e-menu offset-y open-on-hover :disabled="!selected.length">
         <v-btn
           slot="ref"
           class="ml-5"
           outlined
-          v-show="!inFile && selected.length"
+          :disabled="!selected.length"
+          v-if="!inFile"
         >
           <!-- <v-icon>mdi-dots-vertical</v-icon> -->
           <span>Actions</span>
