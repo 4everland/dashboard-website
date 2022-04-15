@@ -74,7 +74,6 @@ export default {
       ev.preventDefault();
       // this.getFiles(ev.dataTransfer);
       const files = await this.scanFiles(ev.dataTransfer);
-      console.log(files);
       this.getFiles({ files });
     };
     document.onpaste = async (ev) => {
