@@ -110,10 +110,10 @@ export const getResolveData = async (domain) => {
   }
 };
 
-export const domainUpdate = async (domain, cid) => {
+export const domainUpdate = async (domain, ipns) => {
   const domainObj = await formatterDomainName(domain);
-  // ipfs={CID}
-  const input_data = Buffer.from(`ipfs=${cid}\0`);
+  // ipns={ipns}
+  const input_data = Buffer.from(`ipns=${ipns}\0`);
   let programContent = await splNameService.updateNameRegistryData(
     connection,
     domainObj.name,
