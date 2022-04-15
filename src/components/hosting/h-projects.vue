@@ -358,6 +358,9 @@ export default {
     },
     async getList() {
       try {
+        if (this.limit) {
+          this.sortType = "Active";
+        }
         this.curIdx = [];
         if (this.list.length) this.$loading();
         else this.loading = true;
