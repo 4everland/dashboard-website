@@ -22,6 +22,7 @@
         <input
           ref="file"
           multiple
+          webkitdirectory
           type="file"
           :accept="accept"
           class="pos-mask op-0 z--1"
@@ -69,9 +70,12 @@ export default {
   },
   mounted() {
     document.ondragover = (ev) => ev.preventDefault();
-    document.ondrop = (ev) => {
+    document.ondrop = async (ev) => {
       ev.preventDefault();
-      this.getFiles(ev.dataTransfer);
+      // this.getFiles(ev.dataTransfer);
+      const files = await this.scanFiles(ev);
+      console.log(files);
+      this.getFiles({ files });
     };
     document.onpaste = (ev) => {
       this.getFiles(ev.clipboardData);
@@ -84,6 +88,41 @@ export default {
     },
     onClick() {
       this.$refs.file.click();
+    },
+    async scanFiles(e) {
+      e.preventDefault();
+      const { items = [], files = [] } = e.dataTransfer;
+      const [item] = items;
+      if (!item || !item.webkitGetAsEntry) return files;
+      const entry = item.webkitGetAsEntry();
+      return entry.isFile ? files : this.getEntryDirectoryFiles(entry);
+    },
+    async getEntryDirectoryFiles(entry) {
+      let res = [];
+      var internalProces = (item, path, res) => {
+        if (item.isFile) {
+          return new Promise((resolve) => {
+            item.file((file) => {
+              file.path = path + file.name;
+              var newFile = new File([file], file.path, { type: file.type });
+              res.push(newFile);
+              resolve(res);
+            });
+          });
+        } else if (item.isDirectory) {
+          return new Promise((resolve, reject) => {
+            var dirReader = item.createReader();
+            dirReader.readEntries(async (entries) => {
+              for (let i = 0; i < entries.length; i++) {
+                await internalProces(entries[i], path + item.name + "/", res);
+              }
+              resolve(res);
+            }, reject);
+          });
+        }
+      };
+      await internalProces(entry, "", res);
+      return res;
     },
     getFiles(data) {
       if (this.disabled) return;
