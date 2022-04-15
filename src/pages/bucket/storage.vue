@@ -349,7 +349,7 @@
             @click.stop="onStop"
             :href="`https://${item.hash}.ipfs.dweb.link`"
           >
-            <span class="d-ib line-1" style="width: 80px">
+            <span class="d-ib" style="width: 80px">
               {{ item.hash.cutStr(5, 4) }}
             </span>
           </v-btn>
