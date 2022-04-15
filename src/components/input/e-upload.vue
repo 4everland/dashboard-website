@@ -19,10 +19,10 @@
             <v-icon size="60" color="#bbb">mdi-cloud-upload-outline</v-icon>
           </p>
         </div>
+        <!-- webkitdirectory -->
         <input
           ref="file"
           multiple
-          webkitdirectory
           type="file"
           :accept="accept"
           class="pos-mask op-0 z--1"
