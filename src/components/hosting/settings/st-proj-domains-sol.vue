@@ -237,7 +237,7 @@ export default {
             "Connected account is not the controller of the domain. "
           );
         }
-        const transaction = await domainUpdate(this.info.sns, this.info.cid);
+        const transaction = await domainUpdate(this.info.sns, this.info.ipns);
         console.log(transaction);
         const result = await sendTransaction(transaction);
         console.log(result);
