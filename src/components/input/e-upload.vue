@@ -73,12 +73,13 @@ export default {
     document.ondrop = async (ev) => {
       ev.preventDefault();
       // this.getFiles(ev.dataTransfer);
-      const files = await this.scanFiles(ev);
+      const files = await this.scanFiles(ev.dataTransfer);
       console.log(files);
       this.getFiles({ files });
     };
-    document.onpaste = (ev) => {
-      this.getFiles(ev.clipboardData);
+    document.onpaste = async (ev) => {
+      const files = await this.scanFiles(ev.clipboardData);
+      this.getFiles({ files });
     };
   },
   methods: {
@@ -90,11 +91,11 @@ export default {
       this.$refs.file.click();
     },
     async scanFiles(e) {
-      e.preventDefault();
-      const { items = [], files = [] } = e.dataTransfer;
+      const { items = [], files = [] } = e;
       const [item] = items;
       if (!item || !item.webkitGetAsEntry) return files;
       const entry = item.webkitGetAsEntry();
+      if (!entry) return files;
       return entry.isFile ? files : this.getEntryDirectoryFiles(entry);
     },
     async getEntryDirectoryFiles(entry) {

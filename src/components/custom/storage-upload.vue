@@ -137,7 +137,7 @@ export default {
     list() {
       return this.files.map((it, index) => {
         return {
-          name: (it.name || "").cutStr(10, 10),
+          name: (it.name || "").cutStr(20, 10),
           size: this.$utils.getFileSize(it.size),
           index,
           exist: this.tableList.filter((row) => row.name == it.name).length > 0,
