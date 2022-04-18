@@ -1,21 +1,30 @@
 <template>
-  <div class="pr-8">
+  <div class="m-auto" style="max-width: 780px">
     <v-skeleton-loader type="article" v-if="!list" />
     <v-timeline dense align-top v-else>
       <v-timeline-item small v-for="(it, i) in list" :key="i">
-        <v-img
-          :src="
-            /^http/.test(it.img)
-              ? it.img
-              : 'https://4ever-web.4everland.store/' + it.img
-          "
-          class="w100p mb-4 bdrs-10 bd-1"
-          contain
-          max-height="360"
-          min-height="300"
-          v-if="it.img"
-        />
-        <div class="color-1 fw-b">
+        <div class="pos-r bdrs-10 bd-1">
+          <video
+            v-if="it.video"
+            :src="it.video"
+            class="d-b m-auto w100p"
+            controls
+            style="max-height: 360px"
+          ></video>
+          <v-img
+            :src="
+              /^http/.test(it.img)
+                ? it.img
+                : 'https://4ever-web.4everland.store/' + it.img
+            "
+            class="w100p mb-4"
+            contain
+            max-height="360"
+            min-height="300"
+            v-else-if="it.img"
+          />
+        </div>
+        <div class="color-1 fw-b mt-2">
           {{ it.time.toDate().format("date") }}
         </div>
         <div class="mt-3 mb-5">
