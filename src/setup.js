@@ -83,9 +83,13 @@ Vue.prototype.$utils = {
   },
   getFileSize(byte, isObj = false) {
     const mb = Math.pow(1024, 2);
+    const gb = Math.pow(1024, 3);
     let num = byte;
     let unit = "B";
-    if (byte > mb) {
+    if (byte > gb) {
+      num = (byte / gb).toFixed(2);
+      unit = "GB";
+    } else if (byte > mb) {
       num = (byte / mb).toFixed(2);
       unit = "MB";
     } else if (byte > 1024 || (byte < 0.01 && isObj)) {

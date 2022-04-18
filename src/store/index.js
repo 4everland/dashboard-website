@@ -80,8 +80,8 @@ const store = new Vuex.Store({
       let arUsed = (arweaveUsedStorage * 1 + arweaveSyncingStorage * 1) / 1024;
       setState({
         usageInfo: {
-          ipfsTotal: parseInt(data.totalStorage / 1024),
-          ipfsUsed: (data.usedStorage / 1024).toFixed(2),
+          ipfsTotal: data.totalStorage * 1024,
+          ipfsUsed: data.usedStorage * 1024,
           arTotal: parseInt(arweaveTotalStorage / 1024),
           arUsed: arUsed.toFixed(2),
           arSyncing: (arweaveSyncingStorage / 1024).toFixed(2),

@@ -15,7 +15,7 @@
           <b class="fz-25">{{ it.used }}</b>
           <sub class="gray ml-1">{{ it.unit }}</sub>
         </v-progress-circular>
-        <div class="mt-3">{{ it.total }} {{ it.unit }}</div>
+        <div class="mt-3">{{ it.total }}</div>
       </v-col>
     </v-row>
   </div>
@@ -33,18 +33,19 @@ export default {
     }),
     usageList() {
       const info = this.info;
+      const usedObj = this.$utils.getFileSize(info.ipfsUsed, true);
       return [
         {
           title: "IPFS Storage",
-          total: info.ipfsTotal,
-          used: info.ipfsUsed,
+          total: this.$utils.getFileSize(info.ipfsTotal).replace(".00", ""),
+          used: usedObj.num.replace(".00", ""),
           value: parseInt((info.ipfsUsed * 100) / info.ipfsTotal),
-          unit: "MB",
+          unit: usedObj.unit,
           color: "primary",
         },
         {
           title: "AR Storage",
-          total: info.arTotal,
+          total: info.arTotal + "MB",
           used: info.arUsed,
           value: parseInt((info.arUsed * 100) / info.arTotal),
           unit: "MB",
