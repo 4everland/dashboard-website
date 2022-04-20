@@ -179,10 +179,10 @@ export default {
               label: "Statistics",
               to: "/hosting/statistics",
             },
-            {
-              label: "First Landing",
-              to: "/hosting/first-landing",
-            },
+            // {
+            //   label: "First Landing",
+            //   to: "/hosting/first-landing",
+            // },
           ],
         },
         {
