@@ -397,7 +397,7 @@
           :src="`img/svg/common/empty${tableLoading ? 1 : 2}.svg`"
           :height="tableLoading ? 100 : 130"
         />
-        <div class="mt-5 gray fz-15">
+        <div class="mt-5 gray fz-17">
           {{
             tableLoading
               ? `${inBucket ? "Loading buckets" : "Loading files"}...`
