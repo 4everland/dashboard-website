@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   props: {
     accept: {
@@ -60,7 +61,6 @@ export default {
       files: [],
     };
   },
-  computed: {},
   watch: {
     value(val) {
       if (!val || val.length == 0) {
@@ -82,6 +82,11 @@ export default {
     };
   },
   methods: {
+    ...mapActions([
+      "updateOriginFiles",
+      "updateUploadFiles",
+      "updateExecutionFiles",
+    ]),
     onInput(e) {
       console.log(e);
       this.getFiles(e.target);
@@ -129,9 +134,9 @@ export default {
       if (this.disabled) return;
       if (!data) return;
       const { files = [] } = data;
-      console.log(files);
+      // console.log(files);
       for (const file of files) {
-        console.log(file);
+        // console.log(file);
         if (this.limit && this.files.length >= this.limit) break;
         // if (!/image/.test(file.type)) continue;
         // if (!file.type) continue;
@@ -148,7 +153,10 @@ export default {
             );
           }).length > 0;
         if (isRepeat) continue;
-        this.files.push(file);
+        this.updateUploadFiles(file);
+        this.updateOriginFiles(file);
+
+        this.files.unshift(file);
       }
       if (this.files.length) {
         this.$setMsg({
@@ -159,6 +167,13 @@ export default {
     },
     emitInput() {
       this.$emit("input", this.files);
+      // this.updateOriginFiles(this.files);
+      this.files = [];
+    },
+    handleRemove(i) {
+      this.files.splice(i, 1);
+      this.updateOriginFiles(i);
+      this.updateUploadFiles(i);
     },
   },
 };

@@ -37,7 +37,10 @@ export default {
       return this.inStorage && !/\/$/.test(this.path);
     },
     inFolder() {
-      return this.inStorage && !this.inBucket && !this.inFile;
+      return this.inStorage && !this.inBucket && !this.inFile && !this.inUpload;
+    },
+    inUpload() {
+      return this.$route.query.action == "upload";
     },
     fileName() {
       const arr = this.path.split("/");

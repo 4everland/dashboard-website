@@ -8,14 +8,13 @@
   </div>
 
   <div v-else>
-    <storage-upload
+    <!-- <storage-upload
       ref="upload"
       :info="pathInfo"
       @uploaded="getList"
       :tableList="list"
-    ></storage-upload>
-
-    <div class="d-flex nowrap ov-a btn-wrap">
+    ></storage-upload> -->
+    <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
       <div v-show="inBucket">
         <v-btn color="primary" @click="addBucket">
           <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
@@ -77,7 +76,7 @@
         </template>
       </div>
       <div v-show="inFolder">
-        <v-btn color="primary" @click="$refs.upload.showPop = true">
+        <v-btn color="primary" @click="handleClickUpload">
           <!-- <v-icon size="15">mdi-cloud-upload</v-icon> -->
           <img src="img/svg/upload.svg" width="16" />
           <span class="ml-2">Upload</span>
@@ -293,6 +292,9 @@
         </div>
       </v-card>
     </div>
+    <div v-else-if="inUpload">
+      <bucket-upload :path="path" :info="pathInfo"></bucket-upload>
+    </div>
     <div v-else>
       <v-data-table
         class="hide-bdb"
@@ -425,7 +427,6 @@
 
 <script>
 import mixin from "./storage-mixin";
-
 export default {
   mixins: [mixin],
   data() {
@@ -653,6 +654,14 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    handleClickUpload() {
+      this.$router.push({
+        path: this.$route.path,
+        query: {
+          action: "upload",
+        },
+      });
     },
   },
 };
