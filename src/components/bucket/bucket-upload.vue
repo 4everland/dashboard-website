@@ -27,8 +27,8 @@
       <div class="current-dir px-2 mt-10" v-if="curDir == 'Current'">
         {{ path }}
       </div>
-      <div class="specified-dir d-flex align-center mt-10" v-else>
-        <div class="px-2 d-flex align-center">{{ path }}</div>
+      <div class="specified-dir d-flex align-center mt-7" v-else>
+        <div class="appoint-dir d-flex align-center">{{ path }}</div>
         <v-text-field
           class="hide-msg bd-1 specified-dir-input"
           dense
@@ -37,50 +37,85 @@
         ></v-text-field>
       </div>
     </div>
-
-    <div class="files-to-upload">
-      <div class="drag-area">
-        <input-upload v-model="files" ref="uploadInput"></input-upload>
+    <div class="files-upload-container">
+      <h3 class="title">Files to Upload</h3>
+      <!-- upload-area -->
+      <div class="files-to-upload">
+        <div class="upload-header d-flex justify-space-between align-center">
+          <div class="drag-area">
+            <input-upload v-model="files" ref="uploadInput"></input-upload>
+          </div>
+          <div class="upload-rules">
+            <h3>File naming conventions</h3>
+            <p>1. The file name must be UTF-8-encoded.</p>
+            <p>2. The file name is case-sensitive.</p>
+            <p>3. The file name must range from 1 to 1,023 bytes in length.</p>
+            <p>
+              4. The file name cannot start with a forward slash (/) or two
+              consecutive backslashes (\).
+            </p>
+          </div>
+        </div>
+        <div class="upload-tips">
+          Note: If the name of the file to upload is the same as that of an
+          existing file, the existing file is overwritten.
+          正在AR同步的文件将失败
+        </div>
+        <div class="upload-opreation">
+          <v-btn rounded color="primary">
+            <img src="img/svg/upload.svg" width="16" />
+            <span class="ml-2">Select Files</span>
+          </v-btn>
+          <v-btn rounded color="primary" class="ml-7">
+            <img src="img/svg/upload.svg" width="16" />
+            <span class="ml-2"> Select Folders</span>
+          </v-btn>
+        </div>
       </div>
-    </div>
 
-    <div class="table-container">
-      <v-data-table
-        :headers="headers"
-        :items="list"
-        class="elevation-1"
-        hide-default-footer
-      >
-        <template #item.action="{ item }">
-          <span
-            style="cursor: pointer"
-            @click="$refs.uploadInput.handleRemove(item.index)"
-            >Remove</span
-          >
-        </template>
-      </v-data-table>
-
-      <div class="table-footer d-flex align-center justify-space-between pt-6">
-        <div>
+      <!-- upload-list -->
+      <div class="table-container">
+        <div class="total-files-info">
           <span
             >Number of Files:
             {{ this.$store.state.upload.uploadFiles.length }}</span
           >
-          <span class="ml-10">Total Size: {{ totalSize }} </span>
+          <span class="ml-13">Total Size: {{ totalSize }} </span>
         </div>
-        <v-pagination
-          v-if="length > 1"
-          v-model="page"
-          :length="length"
-          @input="handleSkip"
-        ></v-pagination>
-      </div>
-      <div>
-        <v-btn @click="onConfirm">upload</v-btn>
-        <v-btn>cancel</v-btn>
-        {{ info }}
+        <v-data-table
+          :headers="headers"
+          :items="list"
+          class="elevation-1"
+          hide-default-footer
+        >
+          <template #item.action="{ item }">
+            <span
+              style="cursor: pointer"
+              @click="$refs.uploadInput.handleRemove(item.index)"
+              >Remove</span
+            >
+          </template>
+        </v-data-table>
+
+        <e-empty :loading="false">
+          {{ false ? `Loading files...` : `No folders or files` }}
+        </e-empty>
+        <div class="table-footer pt-6">
+          <v-pagination
+            v-if="length > 1"
+            v-model="page"
+            :length="length"
+            @input="handleSkip"
+          ></v-pagination>
+        </div>
+        <div>
+          <v-btn @click="onConfirm">upload</v-btn>
+          <v-btn>cancel</v-btn>
+          {{ info }}
+        </div>
       </div>
     </div>
+
     <navigation-drawers :drawer.sync="isDrawers"></navigation-drawers>
   </div>
 </template>
@@ -253,6 +288,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.v-application .elevation-1 {
+  box-shadow: none !important;
+}
 >>> .v-input {
   height: 50px;
   border: none;
@@ -279,9 +317,77 @@ export default {
   }
   .specified-dir {
     border: 1px solid #d0dae9;
-
+    .appoint-dir {
+      height: 25px;
+      line-height: 25px;
+      color: #0b0817;
+      font-size: 18px;
+      font-weight: 400;
+      padding: 0 21px 0 18px;
+      border-right: 1px solid #d0dae9;
+    }
     .specified-dir-input {
       border: none;
+    }
+  }
+}
+
+.files-upload-container {
+  padding: 30px;
+  margin-top: 30px;
+  background: #ffffff;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
+
+  .title {
+    margin-bottom: 13px;
+    font-size: 18px;
+    color: #0b0817;
+  }
+  .files-to-upload {
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 47px;
+    box-sizing: border-box;
+    background: #f8fafb;
+    border-radius: 10px;
+    border: 1px solid #d0dae9;
+
+    .upload-header {
+      .drag-area {
+        flex: 1;
+      }
+      .upload-rules {
+        margin-left: 17px;
+        width: 400px;
+        > p {
+          font-size: 15px;
+          font-weight: 500;
+          color: #6a778b;
+          line-height: 22px;
+        }
+      }
+    }
+
+    .upload-tips {
+      height: 40px;
+      padding: 0 10px;
+      margin-bottom: 15px;
+      line-height: 40px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #ff6960;
+      background: #fff2f2;
+      border-radius: 6px;
+    }
+  }
+
+  .table-container {
+    .total-files-info {
+      margin-bottom: 11px;
+      font-size: 16px;
+      font-weight: 400;
+      color: #6a778b;
+      line-height: 22px;
     }
   }
 }
