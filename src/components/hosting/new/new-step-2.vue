@@ -124,10 +124,18 @@ export default {
     goHome() {
       this.$router.replace("/hosting/projects");
     },
-    onCancel() {
-      this.$confirm("", "Are you sure to quit this deployment ?").then(() => {
-        this.goHome();
-      });
+    async onCancel() {
+      try {
+        let html = `Canceling this deployment will immediately stop the build, with no way to resume.<br><br>
+Are you sure you want to continue?`;
+        await this.$confirm(html, "Cancel Deployment");
+        this.$loading();
+        await this.$http2.post(`/project/${this.info.taskId}/cancel`);
+        await this.$alert("Cancelled successfully.");
+      } catch (error) {
+        //
+      }
+      this.goHome();
     },
     onInfo(obj) {
       this.info = obj;

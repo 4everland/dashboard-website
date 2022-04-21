@@ -239,7 +239,7 @@ export default {
           page: this.page - 1,
           size: 10,
         };
-        const { data } = await this.$http2.get("/activity/invites", {
+        const { data } = await this.$http2.get("/invite/list", {
           params,
         });
         // console.log(data);

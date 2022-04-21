@@ -320,7 +320,7 @@ export default {
       if (!this.connectAddr) {
         this.$setState({
           noticeMsg: {
-            name: "showWalletConnect",
+            name: "showMetaConnect",
           },
         });
         return;
@@ -346,12 +346,11 @@ export default {
     },
     async onClaim() {
       try {
-        this.claimLoading = true;
         await this.checkNet();
         if (!this.isNetOk) return;
+        this.claimLoading = true;
 
-        let accounts = await window.web3.eth.getAccounts();
-        const account = accounts[0] || "";
+        const account = this.connectAddr;
         if (!this.ethAddr) {
           if (account) this.ethAddr = account;
           else {
@@ -374,7 +373,6 @@ export default {
           info = await this.getClaimInfo();
         }
 
-        const { methods } = this.ethContract;
         if (this.isClaimed) {
           throw new Error("Your wallet address has been claimed.");
         }
@@ -388,7 +386,7 @@ export default {
             throw new Error("The Claim Transaction is running.");
           }
         }
-        await methods
+        await this.ethContract.methods
           .claim(
             info.index,
             this.ethAddr,
@@ -404,6 +402,7 @@ export default {
             (err, txid) => {
               if (err) {
                 this.$alert(err.message);
+                this.claimLoading = false;
                 return;
               }
               localStorage.claim_txid = txid;
