@@ -541,7 +541,12 @@ export default {
         msg = "Wrong network, please connect to Ethereum mainnet";
       }
       if (msg) {
-        this.$alert(msg);
+        this.$alert(msg).then(() => {
+          window.web3.currentProvider.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: this.$inDev ? "0x5" : "0x1" }],
+          });
+        });
       }
       return !msg;
     },
@@ -599,31 +604,37 @@ export default {
       this.$alert(e.message);
     },
     async getTokenList() {
-      let len = await this.payment.tokenLength();
-      len = len.toNumber();
-      const list = [];
-      for (let i = 0; i < len; i++) {
-        let address = await this.payment.tokens(i);
-        const erc = this.erc20(address);
-        const name = await erc.name();
-        const symbol = await erc.symbol();
-        let balance = await erc.balanceOf(this.connectAddr);
-        //
-        balance =
-          balance.div(
-            BigNumber.from((symbol == "DAI" ? 1e18 : 1e6).toString())
-          ) + "";
-        list.push({
-          index: i,
-          name,
-          symbol,
-          address,
-          balance,
-        });
+      try {
+        this.$loading();
+        let len = await this.payment.tokenLength();
+        len = len.toNumber();
+        const list = [];
+        for (let i = 0; i < len; i++) {
+          let address = await this.payment.tokens(i);
+          const erc = this.erc20(address);
+          const name = await erc.name();
+          const symbol = await erc.symbol();
+          let balance = await erc.balanceOf(this.connectAddr);
+          //
+          balance =
+            balance.div(
+              BigNumber.from((symbol == "DAI" ? 1e18 : 1e6).toString())
+            ) + "";
+          list.push({
+            index: i,
+            name,
+            symbol,
+            address,
+            balance,
+          });
+        }
+        console.log(list);
+        this.tokenList = list;
+        localStorage.pay_token_list = JSON.stringify(list);
+      } catch (error) {
+        if (error) this.$alert(error.message);
       }
-      console.log(list);
-      this.tokenList = list;
-      localStorage.pay_token_list = JSON.stringify(list);
+      this.$loading.close();
     },
   },
 };
