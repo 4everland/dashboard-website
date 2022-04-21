@@ -325,23 +325,37 @@ export default {
         });
         return;
       }
+      if (!this.netType) {
+        console.log("Unknown network");
+        return;
+      }
       this.isNetOk =
         (this.$inDev && this.netType == "rinkeby") ||
         (!this.$inDev && this.netType == "main");
       if (!this.isNetOk) {
         try {
+          const msg = this.$inDev
+            ? "Dev: please connect to rinkeby"
+            : "Wrong network, please connect to Ethereum mainnet";
+          await this.$alert(msg);
           await window.web3.currentProvider.request({
             method: "wallet_switchEthereumChain",
             params: [{ chainId: this.$inDev ? "0x4" : "0x1" }],
           });
         } catch (error) {
           console.log(error);
+          if (error) this.$alert(error.message);
         }
       } else if (!this.ethContract) {
-        this.ethContract = new window.web3.eth.Contract(
-          actAbi.abi,
-          actAbi.address
-        );
+        try {
+          this.ethContract = new window.web3.eth.Contract(
+            actAbi.abi,
+            actAbi.address
+          );
+        } catch (error) {
+          console.log(error);
+          if (error) this.$alert(error.message);
+        }
       }
     },
     async onClaim() {
