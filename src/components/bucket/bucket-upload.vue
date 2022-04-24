@@ -41,36 +41,7 @@
       <h3 class="title">Files to Upload</h3>
       <!-- upload-area -->
       <div class="files-to-upload">
-        <div class="upload-header d-flex justify-space-between align-center">
-          <div class="drag-area">
-            <input-upload v-model="files" ref="uploadInput"></input-upload>
-          </div>
-          <div class="upload-rules">
-            <h3>File naming conventions</h3>
-            <p>1. The file name must be UTF-8-encoded.</p>
-            <p>2. The file name is case-sensitive.</p>
-            <p>3. The file name must range from 1 to 1,023 bytes in length.</p>
-            <p>
-              4. The file name cannot start with a forward slash (/) or two
-              consecutive backslashes (\).
-            </p>
-          </div>
-        </div>
-        <div class="upload-tips">
-          Note: If the name of the file to upload is the same as that of an
-          existing file, the existing file is overwritten.
-          正在AR同步的文件将失败
-        </div>
-        <div class="upload-opreation">
-          <v-btn rounded color="primary">
-            <img src="img/svg/upload.svg" width="16" />
-            <span class="ml-2">Select Files</span>
-          </v-btn>
-          <v-btn rounded color="primary" class="ml-7">
-            <img src="img/svg/upload.svg" width="16" />
-            <span class="ml-2"> Select Folders</span>
-          </v-btn>
-        </div>
+        <input-upload v-model="files" ref="uploadInput"></input-upload>
       </div>
 
       <!-- upload-list -->
@@ -90,17 +61,19 @@
         >
           <template #item.action="{ item }">
             <span
-              style="cursor: pointer"
-              @click="$refs.uploadInput.handleRemove(item.index)"
+              style="cursor: pointer; color: #34a9ff"
+              @click="$refs.uploadInput.handleRemove(item.id)"
               >Remove</span
             >
           </template>
         </v-data-table>
 
-        <e-empty :loading="false">
-          {{ false ? `Loading files...` : `No folders or files` }}
-        </e-empty>
-        <div class="table-footer pt-6">
+        <template v-if="list.length == 0">
+          <e-empty :loading="false">
+            {{ false ? `Loading files...` : `No folders or files` }}
+          </e-empty>
+        </template>
+        <div class="table-footer py-8">
           <v-pagination
             v-if="length > 1"
             v-model="page"
@@ -108,15 +81,26 @@
             @input="handleSkip"
           ></v-pagination>
         </div>
-        <div>
-          <v-btn @click="onConfirm">upload</v-btn>
-          <v-btn>cancel</v-btn>
-          {{ info }}
+        <div
+          class="upload-opreation d-flex justify-center"
+          v-if="list.length !== 0"
+        >
+          <v-btn rounded color="primary" @click="onConfirm">
+            <span class="ml-2">upload</span>
+          </v-btn>
+          <v-btn rounded color="primary" class="ml-7">
+            <span class="ml-2">cancel</span>
+          </v-btn>
         </div>
+        {{ info }}
       </div>
     </div>
 
-    <navigation-drawers :drawer.sync="isDrawers"></navigation-drawers>
+    <navigation-drawers
+      :drawer.sync="isDrawers"
+      @handleCancelUpload="handleCancelUpload"
+      @handleRetryUpload="handleRetryUpload"
+    ></navigation-drawers>
   </div>
 </template>
 
@@ -136,6 +120,7 @@ export default {
       isDrawers: false,
       curDir: "Current",
       files: [],
+      sequence: [],
       headers: [
         {
           text: "Name",
@@ -149,8 +134,10 @@ export default {
         { text: "Action", value: "action", sortable: false, align: "center" },
       ],
       page: 1,
+      curTask: {},
     };
   },
+
   computed: {
     path() {
       const arr = this.$route.path.split("/");
@@ -162,11 +149,11 @@ export default {
     list() {
       return this.$store.state.upload.uploadFiles
         .slice((this.page - 1) * 10, this.page * 10)
-        .map((item, index) => {
+        .map((item) => {
           return {
             name: (item.name || "").cutStr(20, 10),
             size: this.$utils.getFileSize(item.size),
-            index,
+            id: item.id,
             type: item.type,
             status: "Ready for Upload",
             actions: "",
@@ -187,7 +174,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["UPDATE_PATH", "PUT_EXECUTION"]),
+    ...mapMutations(["UPDATE_PATH", "PUT_EXECUTION", "STOP_TASK"]),
     ...mapActions(["updateUploadFiles"]),
     handleSkip(item) {
       this.page = item;
@@ -195,7 +182,7 @@ export default {
     handleUpload() {
       this.isDrawers = true;
     },
-    createTask(file, i) {
+    createTask(file, id) {
       const { Bucket, Prefix } = this.info;
       const params = {
         Bucket,
@@ -210,27 +197,39 @@ export default {
             queueSize: 3,
             params,
           });
-          // this.curTask = task;
-          this.$store.dispatch("updateStatus", { progress: 0 + "%", i });
+          this.$store.dispatch("updateStatus", { progress: 0 + "%", id });
           task.on("httpUploadProgress", (e) => {
             let progress = ((e.loaded / e.total) * 100) | 0;
-            // console.log(e);
+            console.log(e, id);
+            if (progress == 100)
+              return this.$store.dispatch("updateStatus", {
+                progress: "Uploaded",
+                id,
+              });
+
             this.$store.dispatch("updateStatus", {
               progress: progress + "%",
-              i,
+              id,
             });
           });
           task
             .done()
             .then(() => {
-              this.$store.dispatch("updateStatus", { progress: "Uploaded", i });
+              // this.$store.dispatch("updateStatus", {
+              //   progress: "Uploaded",
+              //   id,
+              // });
               resolve();
             })
             .catch((err) => {
-              console.log(err, file.name);
+              console.log(err, id);
+              //  判断取消了 或者报错
+              this.STOP_TASK(id);
+
               resolve();
             });
           // resolve();
+          this.curTask[id] = task;
         } catch (error) {
           console.log(error);
           if (error) {
@@ -252,10 +251,10 @@ export default {
       });
     },
     async limitLoad(urls, handler, limit) {
-      const sequence = [].concat(urls);
+      let sequence = [].concat(urls);
       let promise = [];
       promise = sequence.splice(0, limit).map((url, index) => {
-        return handler(url, index).then(() => {
+        return handler(url, url.id).then(() => {
           return index;
         });
       });
@@ -264,7 +263,7 @@ export default {
       });
       for (let i = 0; i < sequence.length; i++) {
         p = p.then((res) => {
-          promise[res] = handler(sequence[i], i + limit).then(() => {
+          promise[res] = handler(sequence[i], sequence[i].id).then(() => {
             return res;
           });
           return Promise.race(promise).catch((error) => {
@@ -279,9 +278,22 @@ export default {
       await this.limitLoad(
         this.$store.state.upload.uploadFiles,
         this.createTask,
-        5
+        2
       );
       this.updateUploadFiles([]);
+    },
+    handleCancelUpload(id) {
+      if (this.curTask[id]) {
+        this.curTask[id].abort();
+        console.log("取消上传了");
+      } else {
+        this.STOP_TASK(id);
+      }
+    },
+    handleRetryUpload(id) {
+      console.log(id);
+      let file = this.$store.state.upload.originFiles.find((it) => it.id == id);
+      this.limitLoad([file], this.createTask, 2);
     },
   },
 };
@@ -290,11 +302,14 @@ export default {
 <style lang="scss" scoped>
 .v-application .elevation-1 {
   box-shadow: none !important;
+  color: #0b0817 !important;
 }
+
 >>> .v-input {
   height: 50px;
   border: none;
 }
+
 .choose-dir {
   width: 100%;
   padding: 30px;
@@ -342,43 +357,6 @@ export default {
     margin-bottom: 13px;
     font-size: 18px;
     color: #0b0817;
-  }
-  .files-to-upload {
-    width: 100%;
-    padding: 20px;
-    margin-bottom: 47px;
-    box-sizing: border-box;
-    background: #f8fafb;
-    border-radius: 10px;
-    border: 1px solid #d0dae9;
-
-    .upload-header {
-      .drag-area {
-        flex: 1;
-      }
-      .upload-rules {
-        margin-left: 17px;
-        width: 400px;
-        > p {
-          font-size: 15px;
-          font-weight: 500;
-          color: #6a778b;
-          line-height: 22px;
-        }
-      }
-    }
-
-    .upload-tips {
-      height: 40px;
-      padding: 0 10px;
-      margin-bottom: 15px;
-      line-height: 40px;
-      font-size: 14px;
-      font-weight: 400;
-      color: #ff6960;
-      background: #fff2f2;
-      border-radius: 6px;
-    }
   }
 
   .table-container {

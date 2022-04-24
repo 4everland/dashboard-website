@@ -81,6 +81,12 @@
           <img src="img/svg/upload.svg" width="16" />
           <span class="ml-2">Upload</span>
         </v-btn>
+        <v-btn class="ml-5" outlined @click="drawer = true">
+          <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
+          <img src="img/svg/add0.svg" width="12" />
+          <span class="ml-2">Parts</span>
+        </v-btn>
+
         <v-btn
           class="ml-5"
           outlined
@@ -91,6 +97,11 @@
           <img src="img/svg/add0.svg" width="12" />
           <span class="ml-2">New Folder</span>
         </v-btn>
+
+        <bucket-parts-list
+          :drawer.sync="drawer"
+          :pathInfo="pathInfo"
+        ></bucket-parts-list>
       </div>
 
       <e-menu offset-y open-on-hover :disabled="!selected.length">
@@ -292,10 +303,12 @@
         </div>
       </v-card>
     </div>
-    <div v-else-if="inUpload">
+
+    <div v-if="inUpload">
       <bucket-upload :path="path" :info="pathInfo"></bucket-upload>
     </div>
-    <div v-else>
+
+    <div class="main-wrap" v-else>
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -437,6 +450,7 @@ export default {
       domainsMap: {},
       finished: false,
       loadingMore: false,
+      drawer: false,
     };
   },
   computed: {

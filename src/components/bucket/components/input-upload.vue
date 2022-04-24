@@ -6,6 +6,43 @@
     border: 3px dashed #ddd;
   }
 }
+.files-to-upload {
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 47px;
+  box-sizing: border-box;
+  background: #f8fafb;
+  border-radius: 10px;
+  border: 1px solid #d0dae9;
+
+  .upload-header {
+    .drag-area {
+      flex: 1;
+    }
+    .upload-rules {
+      margin-left: 17px;
+      width: 400px;
+      > p {
+        font-size: 15px;
+        font-weight: 500;
+        color: #6a778b;
+        line-height: 22px;
+      }
+    }
+  }
+
+  .upload-tips {
+    height: 40px;
+    padding: 0 10px;
+    margin: 15px 0;
+    line-height: 40px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #ff6960;
+    background: #fff2f2;
+    border-radius: 6px;
+  }
+}
 </style>
 
 <template>
@@ -13,21 +50,48 @@
     <div class="e-upload">
       <slot></slot>
 
-      <div class="add-img pos-r bdrs-10" v-ripple>
-        <div class="ta-c">
+      <div class="upload-header d-flex justify-space-between align-center">
+        <div class="add-img pos-r bdrs-10 drag-area" v-ripple>
+          <div class="ta-c">
+            <p>
+              <v-icon size="60" color="#bbb">mdi-cloud-upload-outline</v-icon>
+            </p>
+          </div>
+          <!-- webkitdirectory -->
+          <input
+            ref="file"
+            :webkitdirectory="isUploadDir ? true : false"
+            multiple
+            type="file"
+            :accept="accept"
+            class="pos-mask op-0 z--1"
+            @input="onInput"
+          />
+        </div>
+
+        <div class="upload-rules">
+          <h3>File naming conventions</h3>
+          <p>1. The file name must be UTF-8-encoded.</p>
+          <p>2. The file name is case-sensitive.</p>
+          <p>3. The file name must range from 1 to 1,023 bytes in length.</p>
           <p>
-            <v-icon size="60" color="#bbb">mdi-cloud-upload-outline</v-icon>
+            4. The file name cannot start with a forward slash (/) or two
+            consecutive backslashes (\).
           </p>
         </div>
-        <!-- webkitdirectory -->
-        <input
-          ref="file"
-          multiple
-          type="file"
-          :accept="accept"
-          class="pos-mask op-0 z--1"
-          @input="onInput"
-        />
+      </div>
+
+      <div class="upload-tips">
+        Note: If the name of the file to upload is the same as that of an
+        existing file, the existing file is overwritten. 正在AR同步的文件将失败
+      </div>
+      <div class="upload-opreation">
+        <v-btn rounded color="primary">
+          <span class="ml-2" @click="onClick(false)">Select Files</span>
+        </v-btn>
+        <v-btn rounded color="primary" class="ml-7">
+          <span class="ml-2" @click="onClick(true)"> Select Folders</span>
+        </v-btn>
       </div>
       <slot name="hint"></slot>
       <!-- <p class="ta-c mt-5" v-if="!disabled">
@@ -59,6 +123,7 @@ export default {
   data() {
     return {
       files: [],
+      isUploadDir: false,
     };
   },
   watch: {
@@ -82,18 +147,18 @@ export default {
     };
   },
   methods: {
-    ...mapActions([
-      "updateOriginFiles",
-      "updateUploadFiles",
-      "updateExecutionFiles",
-    ]),
+    ...mapActions(["updateOriginFiles", "updateUploadFiles"]),
     onInput(e) {
       console.log(e);
       this.getFiles(e.target);
       this.$refs.file.value = null;
     },
-    onClick() {
-      this.$refs.file.click();
+    onClick(value) {
+      this.isUploadDir = value;
+      console.log(this.isUploadDir);
+      this.$nextTick(() => {
+        this.$refs.file.click();
+      });
     },
     async scanFiles(e) {
       const { items = [], files = [] } = e;
@@ -153,6 +218,8 @@ export default {
             );
           }).length > 0;
         if (isRepeat) continue;
+        file.id = this.genID(8);
+        console.log(file);
         this.updateUploadFiles(file);
         this.updateOriginFiles(file);
 
@@ -170,10 +237,19 @@ export default {
       // this.updateOriginFiles(this.files);
       this.files = [];
     },
-    handleRemove(i) {
-      this.files.splice(i, 1);
-      this.updateOriginFiles(i);
-      this.updateUploadFiles(i);
+    handleRemove(id) {
+      this.files.splice(
+        this.files.findIndex((item) => item.id == id),
+        1
+      );
+      this.updateOriginFiles(id);
+      this.updateUploadFiles(id);
+    },
+
+    genID(length) {
+      return Number(
+        Math.random().toString().substr(3, length) + Date.now()
+      ).toString(36);
     },
   },
 };

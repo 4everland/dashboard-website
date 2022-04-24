@@ -2,11 +2,11 @@
   <div class="ta-c">
     <img
       :src="img || `img/svg/common/empty${loading ? 1 : 2}.svg`"
-      :height="height || (loading ? 100 : 130)"
+      :height="height || (loading ? 140 : 200)"
     />
     <div class="mt-5">
       <p class="fw-b mb-3 fz-18" v-if="title">{{ title }}</p>
-      <p class="fz-17 gray">
+      <p class="fz-20 fw-b gray">
         <slot></slot>
       </p>
     </div>

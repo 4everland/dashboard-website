@@ -29,45 +29,41 @@ export default {
     UPDATE_ORIGIN_FILES(state, value) {
       // state.originFiles = value;
       console.log(typeof value);
-      if (typeof value == "number") {
-        state.originFiles.splice(value, 1);
+      if (typeof value == "string") {
+        let index = state.originFiles.findIndex((it) => it.id == value);
+        state.originFiles.splice(index, 1);
       } else {
         state.originFiles.unshift(value);
       }
     },
-    UPDATE_EXECUTION_FILES(state, value) {
-      // state.executionFiles = value.map((item, index) => {
-      //   return {
-      //     name: (item.name || "").cutStr(20, 10),
-      //     index,
-      //     path: state.path,
-      //     status: "Preparing",
-      //     actions: "",
-      //   };
-      // });
-
-      state.executionFiles.unshift({
-        name: (value.name || "").cutStr(20, 10),
-        // index,
-        path: state.path,
-        status: "Preparing",
-        actions: "",
-      });
-    },
+    // UPDATE_EXECUTION_FILES(state, value) {
+    //   state.executionFiles.unshift({
+    //     name: (value.name || "").cutStr(20, 10),
+    //     id: value.id,
+    //     path: state.path,
+    //     status: "Preparing",
+    //     actions: "",
+    //   });
+    // },
     UPDATE_UPLOAD_FILES(state, value) {
       if (value instanceof Array && value.length == 0)
         return (state.uploadFiles = []);
-      if (typeof value == "number") return state.uploadFiles.splice(value, 1);
+      if (typeof value == "string") {
+        let index = state.uploadFiles.findIndex((it) => it.id == value);
+
+        return state.uploadFiles.splice(index, 1);
+      }
       state.uploadFiles.unshift(value);
     },
-    UPDATE_STATUS(state, { progress, i }) {
+    UPDATE_STATUS(state, { progress, id }) {
+      let i = state.executionFiles.findIndex((it) => it.id == id);
       state.executionFiles[i].status = progress;
     },
     PUT_EXECUTION(state) {
-      let arr = state.uploadFiles.map((item, index) => {
+      let arr = state.uploadFiles.map((item) => {
         return {
           name: (item.name || "").cutStr(20, 10),
-          index,
+          id: item.id,
           path: state.path,
           status: "Preparing",
           actions: "",
@@ -75,6 +71,20 @@ export default {
       });
 
       state.executionFiles = [...arr, ...state.executionFiles];
+    },
+    CLEAR_RECORDS(state, id) {
+      state.executionFiles.splice(
+        state.executionFiles.findIndex((it) => it.id == id),
+        1
+      );
+      state.originFiles.splice(
+        state.originFiles.findIndex((it) => it.id == id),
+        1
+      );
+    },
+    STOP_TASK(state, id) {
+      let index = state.executionFiles.findIndex((it) => it.id == id);
+      state.executionFiles[index].status = "Stopped";
     },
   },
   actions: {
@@ -87,8 +97,8 @@ export default {
     updateUploadFiles({ commit }, payload) {
       commit("UPDATE_UPLOAD_FILES", payload);
     },
-    updateExecutionFiles({ commit }, payload) {
-      commit("UPDATE_EXECUTION_FILES", payload);
-    },
+    // updateExecutionFiles({ commit }, payload) {
+    //   commit("UPDATE_EXECUTION_FILES", payload);
+    // },
   },
 };
