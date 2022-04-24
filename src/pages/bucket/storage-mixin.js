@@ -515,6 +515,7 @@ export default {
       });
     },
     async onDelete(item) {
+      console.log(item);
       try {
         const arr = await this.getSelectedObjects(item);
         if (arr.length > 1000) {

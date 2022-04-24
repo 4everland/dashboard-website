@@ -75,36 +75,12 @@
             </li>
           </ul>
 
-          <!-- <v-tabs v-model="status" @change="handleChangeStatus">
-            <v-tabs-slider color="#FFF"></v-tabs-slider>
-            <v-tab>
-              <span>All</span>
-              <span>({{ all.length }})</span>
-            </v-tab>
-            <v-tab>
-              <span>Uploading</span>
-              <span>({{ uploading.length }})</span>
-            </v-tab>
-            <v-tab>
-              <span>Stop</span>
-              <span>({{ stopped.length }})</span>
-            </v-tab>
-            <v-tab>
-              <span>Uploaded</span>
-              <span>({{ uploaded.length }})</span>
-            </v-tab>
-            <v-tab>
-              <span>Upload Failed</span>
-              <span>({{ failed.length }})</span>
-            </v-tab>
-          </v-tabs> -->
           <div>
             <v-btn rounded color="primary" class="my-5">
               <span>Stop Uploading</span>
             </v-btn>
           </div>
 
-          <!-- <uploading-table :type="status"></uploading-table> -->
           <div class="table-container">
             <v-data-table
               :headers="headers"

@@ -30,6 +30,7 @@
       <div class="specified-dir d-flex align-center mt-7" v-else>
         <div class="appoint-dir d-flex align-center">{{ path }}</div>
         <v-text-field
+          v-model="specifiedDir"
           class="hide-msg bd-1 specified-dir-input"
           dense
           solo
@@ -135,6 +136,7 @@ export default {
       ],
       page: 1,
       curTask: {},
+      specifiedDir: "",
     };
   },
 
@@ -183,7 +185,8 @@ export default {
       this.isDrawers = true;
     },
     createTask(file, id) {
-      const { Bucket, Prefix } = this.info;
+      let { Bucket, Prefix } = this.info;
+      Prefix += this.specifiedDir;
       const params = {
         Bucket,
         Key: Prefix + file.name,
