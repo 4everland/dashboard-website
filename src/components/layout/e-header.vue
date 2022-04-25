@@ -159,7 +159,13 @@ export default {
       window.jdenticon();
     },
   },
-  mounted() {},
+  mounted() {
+    if (this.userInfo.uid) {
+      this.$nextTick(() => {
+        window.jdenticon();
+      });
+    }
+  },
   methods: {
     onMenu(it) {
       const { name } = it;
