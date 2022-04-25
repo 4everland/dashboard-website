@@ -1,6 +1,7 @@
 export default {
   state: {
     path: "",
+    specifiedPath: "",
     originFiles: [],
     uploadFiles: [],
     executionFiles: [],
@@ -26,8 +27,10 @@ export default {
     UPDATE_PATH(state, value) {
       state.path = value;
     },
+    UPDATE_SPECIFIED_PATH(state, value) {
+      state.specifiedPath = value;
+    },
     UPDATE_ORIGIN_FILES(state, value) {
-      // state.originFiles = value;
       console.log(typeof value);
       if (typeof value == "string") {
         let index = state.originFiles.findIndex((it) => it.id == value);
@@ -36,15 +39,6 @@ export default {
         state.originFiles.unshift(value);
       }
     },
-    // UPDATE_EXECUTION_FILES(state, value) {
-    //   state.executionFiles.unshift({
-    //     name: (value.name || "").cutStr(20, 10),
-    //     id: value.id,
-    //     path: state.path,
-    //     status: "Preparing",
-    //     actions: "",
-    //   });
-    // },
     UPDATE_UPLOAD_FILES(state, value) {
       if (value instanceof Array && value.length == 0)
         return (state.uploadFiles = []);
@@ -64,12 +58,11 @@ export default {
         return {
           name: (item.name || "").cutStr(20, 10),
           id: item.id,
-          path: state.path,
+          path: state.path + state.specifiedPath,
           status: "Preparing",
           actions: "",
         };
       });
-
       state.executionFiles = [...arr, ...state.executionFiles];
     },
     CLEAR_RECORDS(state, id) {
@@ -97,8 +90,5 @@ export default {
     updateUploadFiles({ commit }, payload) {
       commit("UPDATE_UPLOAD_FILES", payload);
     },
-    // updateExecutionFiles({ commit }, payload) {
-    //   commit("UPDATE_EXECUTION_FILES", payload);
-    // },
   },
 };

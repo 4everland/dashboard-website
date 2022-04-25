@@ -14,7 +14,7 @@
       </div>
       <!-- {{ pathInfo }} -->
       <div class="upload-opreation py-4">
-        <v-btn rounded color="#339CFE" outlined @click="handleAllRemove">
+        <v-btn rounded color="#339CFE" outlined @click="handleDeleteAll">
           <span class="ml-2">Delete All</span>
         </v-btn>
         <v-btn
@@ -98,10 +98,13 @@ export default {
       s3m: (s) => s.s3m,
     }),
     list() {
-      return this.partList.slice((this.page - 1) * 10, this.page * 10);
+      if (this.partList)
+        return this.partList.slice((this.page - 1) * 10, this.page * 10);
+      return [];
     },
     length() {
-      return Math.ceil(this.partList.length / 10);
+      if (this.partList) return Math.ceil(this.partList.length / 10);
+      return 0;
     },
   },
   methods: {
@@ -142,20 +145,30 @@ export default {
         );
       });
     },
-    handleAllRemove() {
-      const { Bucket } = this.pathInfo;
-      console.log(Bucket);
-      this.s3.abortMultipartUpload(
-        {
-          Bucket,
-          Key: "20MB的副本2.png",
-          UploadId: "2891t70vRxGRRxTijx48bmDuYqA",
-        },
-        (err, data) => {
-          if (err) throw new Error(err);
-          console.log(data);
-        }
-      );
+    handleDeleteAll() {
+      this.$loading();
+      let arr = [];
+      this.partList.forEach((it) => {
+        arr.push(this.deleteFn(it));
+      });
+      console.log(arr);
+      Promise.all(arr).then((res) => {
+        console.log(res);
+        this.getPartList();
+      });
+      // const { Bucket } = this.pathInfo;
+      // console.log(Bucket);
+      // this.s3.abortMultipartUpload(
+      //   {
+      //     Bucket,
+      //     Key: "20MB的副本2.png",
+      //     UploadId: "2891t70vRxGRRxTijx48bmDuYqA",
+      //   },
+      //   (err, data) => {
+      //     if (err) throw new Error(err);
+      //     console.log(data);
+      //   }
+      // );
     },
     handleDelete() {
       this.$loading();
@@ -167,7 +180,6 @@ export default {
       this.selected.forEach((it) => {
         arr.push(this.deleteFn(it));
       });
-      console.log(arr);
       Promise.all(arr).then(async (res) => {
         console.log(res);
         this.selected = [];

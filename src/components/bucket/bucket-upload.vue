@@ -8,7 +8,10 @@
         :color="curDir == 'Current' ? 'primary' : ''"
         rounded
         :outlined="curDir == 'Current' ? false : true"
-        @click="curDir = 'Current'"
+        @click="
+          curDir = 'Current';
+          specifiedDir = '';
+        "
       >
         <img src="img/svg/upload.svg" width="16" />
         <span class="ml-2">Current</span>
@@ -94,11 +97,14 @@
           </v-btn>
         </div>
         {{ info }}
+        {{ prefix }}
+        <!-- {{ $store.state.upload.specifiedPath }} -->
       </div>
     </div>
 
     <navigation-drawers
       :drawer.sync="isDrawers"
+      :prefix="prefix"
       @handleCancelUpload="handleCancelUpload"
       @handleRetryUpload="handleRetryUpload"
     ></navigation-drawers>
@@ -174,9 +180,18 @@ export default {
       );
       return this.$utils.getFileSize(totalSize);
     },
+    prefix() {
+      console.log(this.info.Prefix + this.$store.state.upload.specifiedPath);
+      return this.info.Prefix + this.$store.state.upload.specifiedPath;
+    },
   },
   methods: {
-    ...mapMutations(["UPDATE_PATH", "PUT_EXECUTION", "STOP_TASK"]),
+    ...mapMutations([
+      "UPDATE_PATH",
+      "UPDATE_SPECIFIED_PATH",
+      "PUT_EXECUTION",
+      "STOP_TASK",
+    ]),
     ...mapActions(["updateUploadFiles"]),
     handleSkip(item) {
       this.page = item;
@@ -186,10 +201,13 @@ export default {
     },
     createTask(file, id) {
       let { Bucket, Prefix } = this.info;
+
       Prefix += this.specifiedDir;
+      console.log(Prefix);
+
       const params = {
         Bucket,
-        Key: Prefix + file.name,
+        Key: this.prefix + file.name,
         Body: file,
         ContentType: file.type,
       };
@@ -266,6 +284,7 @@ export default {
       });
       for (let i = 0; i < sequence.length; i++) {
         p = p.then((res) => {
+          console.log(res);
           promise[res] = handler(sequence[i], sequence[i].id).then(() => {
             return res;
           });
@@ -275,14 +294,10 @@ export default {
         });
       }
     },
-    async onConfirm() {
+    onConfirm() {
       this.isDrawers = true;
       this.PUT_EXECUTION();
-      await this.limitLoad(
-        this.$store.state.upload.uploadFiles,
-        this.createTask,
-        2
-      );
+      this.limitLoad(this.$store.state.upload.uploadFiles, this.createTask, 2);
       this.updateUploadFiles([]);
     },
     handleCancelUpload(id) {
@@ -297,6 +312,11 @@ export default {
       console.log(id);
       let file = this.$store.state.upload.originFiles.find((it) => it.id == id);
       this.limitLoad([file], this.createTask, 2);
+    },
+  },
+  watch: {
+    specifiedDir(newVal) {
+      this.UPDATE_SPECIFIED_PATH(newVal);
     },
   },
 };

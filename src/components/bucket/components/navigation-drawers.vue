@@ -167,6 +167,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    prefix: {
+      type: String,
+      default: "",
+    },
   },
   data() {
     return {
