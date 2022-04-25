@@ -122,18 +122,11 @@ export default {
     },
   },
   watch: {
-    noticeMsg({ name }) {
-      if (name == "walletConntect") {
-        this.onInit();
-      }
-    },
-    walletTip(val) {
-      if (!val) {
-        this.onInit();
-      }
+    connectAddr(val) {
+      if (val) this.onInit();
     },
     "$route.path"(val) {
-      if (val == "/dashboard/collections") {
+      if (val == "/collections") {
         this.onInit();
       }
     },
