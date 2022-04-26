@@ -106,7 +106,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
 export default {
   props: {
     accept: {
@@ -147,7 +146,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["updateOriginFiles", "updateUploadFiles"]),
     onInput(e) {
       console.log(e);
       this.getFiles(e.target);
@@ -220,9 +218,6 @@ export default {
         if (isRepeat) continue;
         file.id = this.genID(8);
         console.log(file);
-        this.updateUploadFiles(file);
-        this.updateOriginFiles(file);
-
         this.files.unshift(file);
       }
       if (this.files.length) {
@@ -235,6 +230,9 @@ export default {
     emitInput() {
       this.$emit("input", this.files);
       // this.updateOriginFiles(this.files);
+      // this.files = [];
+    },
+    handleRmoveAll() {
       this.files = [];
     },
     handleRemove(id) {
@@ -242,8 +240,6 @@ export default {
         this.files.findIndex((item) => item.id == id),
         1
       );
-      this.updateOriginFiles(id);
-      this.updateUploadFiles(id);
     },
 
     genID(length) {

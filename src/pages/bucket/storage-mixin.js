@@ -626,13 +626,13 @@ export default {
         this.s3.listObjectsV2(params, (err, data) => {
           this.$loading.close();
           if (err) reject(err);
-          else
-            resolve([
-              // {
-              //   Key: folderKey,
-              // },
-              ...(data.Contents || []),
-            ]);
+          else console.log(data);
+          resolve([
+            // {
+            //   Key: folderKey,
+            // },
+            ...(data.Contents || []),
+          ]);
         });
       });
     },

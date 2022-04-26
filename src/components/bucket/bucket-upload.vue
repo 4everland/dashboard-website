@@ -51,10 +51,7 @@
       <!-- upload-list -->
       <div class="table-container">
         <div class="total-files-info">
-          <span
-            >Number of Files:
-            {{ this.$store.state.upload.uploadFiles.length }}</span
-          >
+          <span>Number of Files: {{ files.length }}</span>
           <span class="ml-13">Total Size: {{ totalSize }} </span>
         </div>
         <v-data-table
@@ -97,14 +94,14 @@
           </v-btn>
         </div>
         {{ info }}
-        {{ prefix }}
         <!-- {{ $store.state.upload.specifiedPath }} -->
       </div>
     </div>
 
     <navigation-drawers
       :drawer.sync="isDrawers"
-      :prefix="prefix"
+      :tasks="tasks"
+      @handleClearRecords="handleClearRecords"
       @handleCancelUpload="handleCancelUpload"
       @handleRetryUpload="handleRetryUpload"
     ></navigation-drawers>
@@ -112,9 +109,63 @@
 </template>
 
 <script>
-import { mapMutations, mapActions } from "vuex";
 import { Upload } from "@aws-sdk/lib-storage";
 
+class TaskWrapper {
+  id;
+  s3;
+  status;
+  param;
+  progress;
+  task;
+
+  constructor(s3, param, id, fileInfo) {
+    this.id = id;
+    this.s3 = s3;
+    this.status = 0; //waitingUpload
+    this.param = param;
+    this.fileInfo = fileInfo;
+  }
+  async startTask(cb) {
+    try {
+      this.task = new Upload({
+        client: this.s3,
+        queueSize: 3,
+        params: this.param,
+      });
+      this.task.on("httpUploadProgress", (e) => {
+        this.progress = ((e.loaded / e.total) * 100) | 0;
+      });
+      this.progress = 0;
+      this.status = 1; // uploading
+      await this.task.done();
+      this.status = 3; // success
+
+      console.log(this.id, this.status);
+    } catch (e) {
+      console.log(e.message);
+      if (e.message == "Upload aborted.") {
+        this.status = 2;
+      } else {
+        this.status = 4; // failed
+        console.log(this.id, this.status, e);
+      }
+    } finally {
+      cb();
+    }
+  }
+  async cancelTask() {
+    if (this.task) {
+      await this.task.abort();
+    }
+
+    this.status = 2; //cancel/stop
+    console.log(this.id, this.status);
+  }
+  resetStatus() {
+    this.status = 0;
+  }
+}
 export default {
   props: {
     info: {
@@ -127,7 +178,8 @@ export default {
       isDrawers: false,
       curDir: "Current",
       files: [],
-      sequence: [],
+      limit: 2,
+      tasks: [],
       headers: [
         {
           text: "Name",
@@ -141,21 +193,19 @@ export default {
         { text: "Action", value: "action", sortable: false, align: "center" },
       ],
       page: 1,
-      curTask: {},
       specifiedDir: "",
+      webkitRelativePath: "",
     };
   },
-
   computed: {
     path() {
       const arr = this.$route.path.split("/");
       const idx = arr.findIndex((item) => item == "storage");
       const path = "bucket://" + arr.slice(idx + 1, arr.length).join("/");
-      this.UPDATE_PATH(path);
       return path;
     },
     list() {
-      return this.$store.state.upload.uploadFiles
+      return this.files
         .slice((this.page - 1) * 10, this.page * 10)
         .map((item) => {
           return {
@@ -169,156 +219,139 @@ export default {
         });
     },
     length() {
-      return Math.ceil(this.$store.state.upload.uploadFiles.length / 10);
+      return Math.ceil(this.files.length / 10);
     },
     totalSize() {
-      const totalSize = this.$store.state.upload.uploadFiles.reduce(
-        (pre, current) => {
-          return pre + current.size;
-        },
-        0
-      );
+      const totalSize = this.files.reduce((pre, current) => {
+        return pre + current.size;
+      }, 0);
       return this.$utils.getFileSize(totalSize);
-    },
-    prefix() {
-      console.log(this.info.Prefix + this.$store.state.upload.specifiedPath);
-      return this.info.Prefix + this.$store.state.upload.specifiedPath;
     },
   },
   methods: {
-    ...mapMutations([
-      "UPDATE_PATH",
-      "UPDATE_SPECIFIED_PATH",
-      "PUT_EXECUTION",
-      "STOP_TASK",
-    ]),
-    ...mapActions(["updateUploadFiles"]),
     handleSkip(item) {
       this.page = item;
     },
-    handleUpload() {
-      this.isDrawers = true;
-    },
-    createTask(file, id) {
-      let { Bucket, Prefix } = this.info;
-
-      Prefix += this.specifiedDir;
-      console.log(Prefix);
-
-      const params = {
-        Bucket,
-        Key: this.prefix + file.name,
-        Body: file,
-        ContentType: file.type,
-      };
-      return new Promise((resolve) => {
-        try {
-          const task = new Upload({
-            client: this.$s3,
-            queueSize: 3,
-            params,
-          });
-          this.$store.dispatch("updateStatus", { progress: 0 + "%", id });
-          task.on("httpUploadProgress", (e) => {
-            let progress = ((e.loaded / e.total) * 100) | 0;
-            console.log(e, id);
-            if (progress == 100)
-              return this.$store.dispatch("updateStatus", {
-                progress: "Uploaded",
-                id,
-              });
-
-            this.$store.dispatch("updateStatus", {
-              progress: progress + "%",
-              id,
-            });
-          });
-          task
-            .done()
-            .then(() => {
-              // this.$store.dispatch("updateStatus", {
-              //   progress: "Uploaded",
-              //   id,
-              // });
-              resolve();
-            })
-            .catch((err) => {
-              console.log(err, id);
-              //  判断取消了 或者报错
-              this.STOP_TASK(id);
-
-              resolve();
-            });
-          // resolve();
-          this.curTask[id] = task;
-        } catch (error) {
-          console.log(error);
-          if (error) {
-            console.log("task", error.name);
-            if (
-              error.name == "XMinioAdminBucketQuotaExceeded" ||
-              error.name == "MalformedXML"
-            ) {
-              let msg = error.message;
-              if (error.name == "MalformedXML") msg = "Bucket quota exceeded";
-              setTimeout(() => {
-                this.$alert(msg);
-              }, 20);
-            }
-          }
-          console.log("error2");
-          // resolve(error);
+    async addTasks(files, limit) {
+      this.limit = limit;
+      const newTasks = files.map((file) => {
+        let webkitRelativePath = null;
+        let isWebkitRelativePath = file.webkitRelativePath.indexOf("/");
+        console.log(isWebkitRelativePath);
+        if (isWebkitRelativePath == -1) {
+          webkitRelativePath = "";
+        } else {
+          let arr = file.webkitRelativePath.split("/");
+          webkitRelativePath = arr.slice(0, arr.length - 1) + "/";
+          console.log(webkitRelativePath);
         }
+        return new TaskWrapper(
+          this.$s3,
+          {
+            Bucket: this.info.Bucket,
+            Key:
+              this.info.Prefix +
+              this.specifiedDir +
+              webkitRelativePath +
+              file.name,
+            Body: file,
+            ContentType: file.type,
+          },
+          file.id,
+          {
+            name: file.name,
+            path:
+              this.info.Bucket +
+              "/" +
+              this.info.Prefix +
+              this.specifiedDir +
+              webkitRelativePath,
+          }
+        );
       });
+      console.log(newTasks);
+      this.tasks = newTasks.concat(this.tasks);
     },
-    async limitLoad(urls, handler, limit) {
-      let sequence = [].concat(urls);
-      let promise = [];
-      promise = sequence.splice(0, limit).map((url, index) => {
-        return handler(url, url.id).then(() => {
-          return index;
-        });
+    // async limitLoad(urls, handler, limit) {
+    //   // this.taskCount = limit
+    //   // url.forEach(item=>{
+    //   //   if(Object.keys(this.curTask).length < limit){
+    //   //     handler(item)
+    //   //   }
+    //   // })
+    //   // let sequence = [].concat(urls);
+    //   // let promise = [];
+    //   // promise = sequence.splice(0, limit).map((url, index) => {
+    //   //   return handler(url, url.id).then(() => {
+    //   //     return index;
+    //   //   });
+    //   // });
+    //   // let p = Promise.race(promise).catch((error) => {
+    //   //   console.log(error);
+    //   // });
+    //   // for (let i = 0; i < sequence.length; i++) {
+    //   //   p = p.then((res) => {
+    //   //     console.log(res);
+    //   //     promise[res] = handler(sequence[i], sequence[i].id).then(() => {
+    //   //       return res;
+    //   //     });
+    //   //     return Promise.race(promise).catch((error) => {
+    //   //       console.log(error);
+    //   //     });
+    //   //   });
+    //   // }
+    // },
+    async processTask() {
+      let processing = this.tasks.filter((task) => {
+        return task.status == 1;
       });
-      let p = Promise.race(promise).catch((error) => {
-        console.log(error);
+      if (processing.length >= this.limit) {
+        return;
+      }
+      const idles = this.tasks.filter((task) => {
+        return task.status == 0;
       });
-      for (let i = 0; i < sequence.length; i++) {
-        p = p.then((res) => {
-          console.log(res);
-          promise[res] = handler(sequence[i], sequence[i].id).then(() => {
-            return res;
-          });
-          return Promise.race(promise).catch((error) => {
-            console.log(error);
-          });
+      if (idles.length == 0) {
+        return;
+      }
+      console.log("idles", idles);
+      const fill = this.limit - processing.length;
+      const min = idles.length <= fill ? idles.length : fill;
+      console.log("min", min);
+
+      for (let i = 0; i < min; i++) {
+        idles[i].startTask(() => {
+          this.processTask();
         });
       }
     },
     onConfirm() {
       this.isDrawers = true;
-      this.PUT_EXECUTION();
-      this.limitLoad(this.$store.state.upload.uploadFiles, this.createTask, 2);
-      this.updateUploadFiles([]);
+      this.addTasks(this.files, 2);
+      this.files = [];
+
+      this.$refs.uploadInput.handleRmoveAll();
+      this.processTask();
+      // setInterval(this.processTask, 5000);
     },
     handleCancelUpload(id) {
-      if (this.curTask[id]) {
-        this.curTask[id].abort();
-        console.log("取消上传了");
-      } else {
-        this.STOP_TASK(id);
-      }
+      let index = this.tasks.findIndex((item) => item.id == id);
+      this.tasks[index].cancelTask();
     },
     handleRetryUpload(id) {
-      console.log(id);
-      let file = this.$store.state.upload.originFiles.find((it) => it.id == id);
-      this.limitLoad([file], this.createTask, 2);
+      let index = this.tasks.findIndex((item) => item.id == id);
+      let arr = this.tasks.filter((item) => item.status == 0);
+      this.tasks[index].resetStatus();
+      if (!arr.length) {
+        this.processTask();
+      }
+    },
+    handleClearRecords(id) {
+      let index = this.tasks.findIndex((it) => it.id == id);
+      this.tasks.splice(index, 1);
     },
   },
-  watch: {
-    specifiedDir(newVal) {
-      this.UPDATE_SPECIFIED_PATH(newVal);
-    },
-  },
+  watch: {},
 };
 </script>
 

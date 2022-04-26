@@ -43,35 +43,35 @@
               :class="status == 0 ? 'active' : ''"
             >
               <span>All</span>
-              <span>({{ all.length }})</span>
+              <span>({{ allList }})</span>
             </li>
             <li
               class="status-tab"
               :class="status == 1 ? 'active' : ''"
               @click="status = 1"
             >
-              <span>Uploading</span> <span>({{ uploading.length }})</span>
+              <span>Uploading</span> <span>({{ uploadingList }})</span>
             </li>
             <li
               class="status-tab"
               @click="status = 2"
               :class="status == 2 ? 'active' : ''"
             >
-              <span>Stop</span> <span>({{ stopped.length }})</span>
+              <span>Stop</span> <span>({{ stoppedList }})</span>
             </li>
             <li
               class="status-tab"
               @click="status = 3"
               :class="status == 3 ? 'active' : ''"
             >
-              <span>Uploaded</span> <span>({{ uploaded.length }})</span>
+              <span>Uploaded</span> <span>({{ uploadedList }})</span>
             </li>
             <li
               class="status-tab"
               @click="status = 4"
               :class="status == 4 ? 'active' : ''"
             >
-              <span>Upload Failed</span> <span>({{ failed.length }})</span>
+              <span>Upload Failed</span> <span>({{ failedList }})</span>
             </li>
           </ul>
 
@@ -88,48 +88,47 @@
               class="elevation-1 task-table"
               hide-default-footer
             >
-              <template #item.name="{ item }">
-                <span class="name">{{ item.name }}</span>
+              <template #item.fileInfo[name]="{ item }">
+                <span class="name">{{ item.fileInfo.name.slice(0, 8) }}..</span>
               </template>
 
               <template #item.status="{ item }">
-                <span v-if="item.status == 'Uploaded'" style="color: #ff8843">{{
-                  item.status
-                }}</span>
-                <span
-                  v-else-if="item.status == 'Stopped'"
-                  style="color: #6a778b"
-                  >{{ item.status }}</span
+                <span v-show="item.status == 3" style="color: #ff8843"
+                  >Uploaded</span
                 >
-                <span v-else style="color: #34a9ff">{{ item.status }}</span>
+                <span v-show="item.status == 2" style="color: #6a778b"
+                  >Stopped</span
+                >
+                <span v-show="item.status == 4" style="color: #6a778b"
+                  >Upload Failed</span
+                >
+
+                <span v-show="item.status == 0" style="color: #6a778b"
+                  >Preparing</span
+                >
+                <span v-show="item.status == 1" style="color: #6a778b"
+                  >{{ item.progress }}%</span
+                >
               </template>
               <template #item.action="{ item }">
                 <span
                   class="opeartion"
-                  v-show="
-                    item.status == 'Upload Failed' || item.status == 'Stopped'
-                  "
+                  v-show="item.status == 4 || item.status == 2"
                   @click="handleRetryUpload(item.id)"
                   >Retry</span
                 >
 
                 <span
                   class="opeartion"
-                  v-show="
-                    item.status !== 'Uploaded' && item.status !== 'Stopped'
-                  "
+                  v-show="item.status !== 3 && item.status !== 2"
                   @click="handleCancelUpload(item.id)"
                   >Cancel</span
                 >
-                <span class="opeartion" v-show="item.status == 'Uploaded'"
-                  >Share</span
-                >
+                <span class="opeartion" v-show="item.status == 3">Share</span>
                 <span
                   class="opeartion"
                   v-show="
-                    item.status == 'Uploaded' ||
-                    item.status == 'Stopped' ||
-                    item.status == 'Upload Failed'
+                    item.status == 3 || item.status == 2 || item.status == 4
                   "
                   @click="handleClearRecords(item.id)"
                   >Clear Records</span
@@ -160,7 +159,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapMutations } from "vuex";
 export default {
   props: {
     drawer: {
@@ -170,6 +169,10 @@ export default {
     prefix: {
       type: String,
       default: "",
+    },
+    tasks: {
+      type: Array,
+      default: () => [],
     },
   },
   data() {
@@ -181,9 +184,14 @@ export default {
           text: "Name",
           align: "center",
           sortable: false,
-          value: "name",
+          value: "fileInfo[name]",
         },
-        { text: "Upload To", value: "path", sortable: false, align: "center" },
+        {
+          text: "Upload To",
+          value: "fileInfo[path]",
+          sortable: false,
+          align: "center",
+        },
         { text: "Status", value: "status", sortable: false, align: "center" },
         { text: "Action", value: "action", sortable: false, align: "center" },
       ],
@@ -192,15 +200,29 @@ export default {
   },
   created() {},
   computed: {
-    ...mapGetters(["all", "uploading", "stopped", "uploaded", "failed"]),
     list() {
-      return this.$store.state.upload.executionFiles.filter((it) => {
+      return this.tasks.filter((it) => {
         if (this.status == 0) return it;
-        if (this.status == 1) return /(Preparing)|%/.test(it.status);
-        if (this.status == 2) return it.status == "Stopped";
-        if (this.status == 3) return it.status == "Uploaded";
-        if (this.status == 4) return it.status == "Uploaded Failed";
+        if (this.status == 1) return it.status == 1;
+        if (this.status == 2) return it.status == 2;
+        if (this.status == 3) return it.status == 3;
+        if (this.status == 4) return it.status == 4;
       });
+    },
+    allList() {
+      return this.tasks.length;
+    },
+    uploadingList() {
+      return this.tasks.filter((it) => it.status == 1).length;
+    },
+    stoppedList() {
+      return this.tasks.filter((it) => it.status == 2).length;
+    },
+    uploadedList() {
+      return this.tasks.filter((it) => it.status == 3).length;
+    },
+    failedList() {
+      return this.tasks.filter((it) => it.status == 4).length;
     },
     length() {
       return Math.ceil(this.list.length / 10);
@@ -218,16 +240,9 @@ export default {
       this.page = item;
     },
     handleClearRecords(id) {
-      // let index = this.$store.state.upload.executionFiles.findIndex((i) => {
-      //   return i.id == id;
-      // });
-      this.CLEAR_RECORDS(id);
-      // console.log(i == "165 (13).jpg");
+      this.$emit("handleClearRecords", id);
     },
     handleCancelUpload(id) {
-      // let index = this.$store.state.upload.executionFiles.findIndex((i) => {
-      //   return i.name == name;
-      // });
       this.$emit("handleCancelUpload", id);
     },
     handleRetryUpload(id) {
