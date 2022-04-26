@@ -41,7 +41,7 @@
         <v-btn slot="ref" outlined rounded min-width="100" class="ml-5">
           <img src="img/svg/hosting/ic-sort.svg" width="12" />
           <span class="ml-2">{{
-            sortType == "All" ? sortArr[0] : sortArr[1]
+            sortType == "Active" ? sortArr[0] : sortArr[1]
           }}</span>
         </v-btn>
         <v-list dense>
@@ -235,9 +235,9 @@ export default {
       curPath: "",
       page: 1,
       pageSize: 5,
-      sortType: "All",
+      sortType: "Active", // "All",
       sortIdx: 0,
-      sortArr: ["Create Time", "Last Update"],
+      sortArr: ["Last Update", "Create Time"],
       refreshAt: Date.now(),
     };
   },
@@ -272,7 +272,7 @@ export default {
   methods: {
     onStop() {},
     onSort(i) {
-      this.sortType = i == 0 ? "All" : "Active";
+      this.sortType = i == 0 ? "Active" : "All";
       this.page = 1;
       this.getList();
     },
