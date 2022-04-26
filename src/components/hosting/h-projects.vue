@@ -4,7 +4,7 @@
   right: -16px;
 }
 .v-item--active .ic-expand {
-  transform: rotate(180deg);
+  transform: rotateX(180deg);
 }
 .projects {
   .v-expansion-panel {

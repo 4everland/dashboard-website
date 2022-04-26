@@ -8,8 +8,7 @@
       @input="onCloseTip"
     >
       <router-link to="/settings?tab=account_binding&type=3">
-        Please subscribe your email address to receive updates and notices for
-        your account.
+        Subscribe to stay up to date on the 4EVERLAND latest news and events.
       </router-link>
     </v-alert>
     <e-tabs :list="list" />
