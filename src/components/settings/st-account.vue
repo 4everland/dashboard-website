@@ -67,13 +67,13 @@ export default {
           type: 2,
           account: (info.wallet || {}).address,
         },
-        {
-          title: "Phantom",
-          desc: "Get verified by connecting your phantom account.",
-          icon: "m-phantom",
-          type: 4,
-          account: (info.solana || {}).address,
-        },
+        // {
+        //   title: "Phantom",
+        //   desc: "Get verified by connecting your phantom account.",
+        //   icon: "m-phantom",
+        //   type: 4,
+        //   account: (info.solana || {}).address,
+        // },
         {
           title: "Email",
           desc: "Verify your email address to receive updates and notices for your account.",
