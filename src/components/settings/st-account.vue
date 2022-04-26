@@ -134,7 +134,9 @@ export default {
     },
     async onVcode(type, code) {
       try {
-        const item = this.list[type - 1];
+        const item = this.list.find((el) => {
+          return el.type == type;
+        });
         this.$loading("Binding " + item.title);
         this.$loading.close();
         // const { data } =
