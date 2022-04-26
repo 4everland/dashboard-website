@@ -3,6 +3,9 @@
   position: relative;
   right: -16px;
 }
+.v-item--active .ic-expand {
+  transform: rotate(180deg);
+}
 .projects {
   .v-expansion-panel {
     &::before,
@@ -67,6 +70,14 @@
         @change="onOpen(it)"
       >
         <v-expansion-panel-header @click="onItem(it)">
+          <template v-slot:actions>
+            <!-- <v-icon color="primary"> $expand </v-icon> -->
+            <img
+              src="img/svg/hosting/ic-expand.svg"
+              height="20"
+              class="ic-expand trans-300"
+            />
+          </template>
           <v-row>
             <v-col cols="12" md="5">
               <div class="d-flex al-c grow-0">
