@@ -156,7 +156,9 @@ export default {
   },
   watch: {
     userInfo() {
-      window.jdenticon();
+      setTimeout(() => {
+        window.jdenticon();
+      }, 100);
     },
   },
   mounted() {
