@@ -182,7 +182,7 @@ export default {
         let apply = "";
         if (it.type == 3) {
           const { value } = await this.$prompt(
-            "Verify your email address to receive updates and notices for your account.",
+            "Verify your email to stay up to date on the 4EVERLAND latest news and events.",
             "Verify Email",
             {
               confirmText: "Send",
