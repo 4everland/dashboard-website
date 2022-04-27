@@ -178,8 +178,7 @@ export default {
         });
       }
       if (name == "logout") {
-        localStorage.token = "";
-        delete localStorage.userInfo;
+        localStorage.clear();
         location.href = "index.html";
       }
     },
