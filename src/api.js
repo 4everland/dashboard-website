@@ -138,8 +138,7 @@ const lock = new AsyncLock({ timeout: 5000 });
 });
 
 function goLogin() {
-  localStorage.token = "";
-  delete localStorage.userInfo;
+  localStorage.clear();
   if (location.hash != "#/login") {
     localStorage.loginTo = location.hash;
     location.href = getLoginUrl();
