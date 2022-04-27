@@ -1,6 +1,5 @@
 <template>
   <div class="uploder-container">
-    <span @click="isDrawers = true"> TaskList </span>
     <div class="choose-dir">
       <h3 class="choose-dir-title">Upload To</h3>
       <!-- Switch Current Dir -->
@@ -98,19 +97,20 @@
       </div>
     </div>
 
-    <navigation-drawers
+    <!-- <navigation-drawers
       :drawer.sync="isDrawers"
       :tasks="tasks"
       @handleClearRecords="handleClearRecords"
       @handleCancelUpload="handleCancelUpload"
       @handleRetryUpload="handleRetryUpload"
-    ></navigation-drawers>
+    ></navigation-drawers> -->
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 import { Upload } from "@aws-sdk/lib-storage";
-
+import { bus } from "../../main";
 class TaskWrapper {
   id;
   s3;
@@ -145,9 +145,10 @@ class TaskWrapper {
     } catch (e) {
       console.log(e.message);
       if (e.message == "Upload aborted.") {
-        this.status = 2;
+        this.status = 2; // cancel/ stop
       } else {
         this.status = 4; // failed
+        Vue.prototype.$alert("The storage space is full");
         console.log(this.id, this.status, e);
       }
     } finally {
@@ -158,7 +159,6 @@ class TaskWrapper {
     if (this.task) {
       await this.task.abort();
     }
-
     this.status = 2; //cancel/stop
     console.log(this.id, this.status);
   }
@@ -175,7 +175,6 @@ export default {
   },
   data() {
     return {
-      isDrawers: false,
       curDir: "Current",
       files: [],
       limit: 2,
@@ -197,12 +196,64 @@ export default {
       webkitRelativePath: "",
     };
   },
+  mounted() {
+    bus.$on("handleAllStopUploading", () => {
+      console.log(111);
+      this.tasks.forEach((item) => {
+        if (item.status == 0 || item.status == 1) {
+          item.cancelTask();
+        }
+      });
+    });
+    bus.$on("handleStartAll", () => {
+      console.log(111);
+      let arr = this.tasks.filter((item) => item.status == 0);
+      console.log(this.tasks);
+      this.tasks.forEach((item) => {
+        console.log(item);
+        if (item.status == 2 || item.status == 4) {
+          item.resetStatus();
+          if (!arr.length) {
+            this.processTask();
+          }
+        }
+      });
+    });
+    bus.$on("handleCancelUpload", (id) => {
+      console.log(this.task);
+      let index = this.tasks.findIndex((item) => item.id == id);
+      this.tasks[index].cancelTask();
+    });
+    bus.$on("handleRetryUpload", (id) => {
+      console.log(this.tasks);
+      let index = this.tasks.findIndex((item) => item.id == id);
+      let arr = this.tasks.filter((item) => item.status == 0);
+      this.tasks[index].resetStatus();
+      if (!arr.length) {
+        this.processTask();
+      }
+    });
+    bus.$on("handleClearRecords", (id) => {
+      let index = this.tasks.findIndex((it) => it.id == id);
+      this.tasks.splice(index, 1);
+    });
+
+    bus.$on("handleClearAllRecords", (status) => {
+      this.tasks = this.tasks.filter((it) => it.status !== status);
+      bus.$emit("taskData", this.tasks);
+    });
+  },
   computed: {
     path() {
       const arr = this.$route.path.split("/");
-      const idx = arr.findIndex((item) => item == "storage");
-      const path = "bucket://" + arr.slice(idx + 1, arr.length).join("/");
-      return path;
+      console.log(arr);
+      if (this.curDir == "Specified") {
+        return "bucket://" + this.info.Bucket + "/";
+      } else {
+        const idx = arr.findIndex((item) => item == "storage");
+        const path = "bucket://" + arr.slice(idx + 1, arr.length).join("/");
+        return path;
+      }
     },
     list() {
       return this.files
@@ -237,12 +288,12 @@ export default {
       const newTasks = files.map((file) => {
         let webkitRelativePath = null;
         let isWebkitRelativePath = file.webkitRelativePath.indexOf("/");
-        console.log(isWebkitRelativePath);
         if (isWebkitRelativePath == -1) {
           webkitRelativePath = "";
         } else {
           let arr = file.webkitRelativePath.split("/");
-          webkitRelativePath = arr.slice(0, arr.length - 1) + "/";
+          arr.pop();
+          webkitRelativePath = arr.join("/") + "/";
           console.log(webkitRelativePath);
         }
         return new TaskWrapper(
@@ -250,7 +301,7 @@ export default {
           {
             Bucket: this.info.Bucket,
             Key:
-              this.info.Prefix +
+              (this.curDir == "Specified" ? "" : this.info.Prefix) +
               this.specifiedDir +
               webkitRelativePath +
               file.name,
@@ -261,9 +312,10 @@ export default {
           {
             name: file.name,
             path:
+              "Bucket://" +
               this.info.Bucket +
               "/" +
-              this.info.Prefix +
+              (this.curDir == "Specified" ? "" : this.info.Prefix) +
               this.specifiedDir +
               webkitRelativePath,
           }
@@ -272,35 +324,6 @@ export default {
       console.log(newTasks);
       this.tasks = newTasks.concat(this.tasks);
     },
-    // async limitLoad(urls, handler, limit) {
-    //   // this.taskCount = limit
-    //   // url.forEach(item=>{
-    //   //   if(Object.keys(this.curTask).length < limit){
-    //   //     handler(item)
-    //   //   }
-    //   // })
-    //   // let sequence = [].concat(urls);
-    //   // let promise = [];
-    //   // promise = sequence.splice(0, limit).map((url, index) => {
-    //   //   return handler(url, url.id).then(() => {
-    //   //     return index;
-    //   //   });
-    //   // });
-    //   // let p = Promise.race(promise).catch((error) => {
-    //   //   console.log(error);
-    //   // });
-    //   // for (let i = 0; i < sequence.length; i++) {
-    //   //   p = p.then((res) => {
-    //   //     console.log(res);
-    //   //     promise[res] = handler(sequence[i], sequence[i].id).then(() => {
-    //   //       return res;
-    //   //     });
-    //   //     return Promise.race(promise).catch((error) => {
-    //   //       console.log(error);
-    //   //     });
-    //   //   });
-    //   // }
-    // },
     async processTask() {
       let processing = this.tasks.filter((task) => {
         return task.status == 1;
@@ -326,30 +349,29 @@ export default {
       }
     },
     onConfirm() {
-      this.isDrawers = true;
-      this.addTasks(this.files, 2);
+      this.addTasks(this.files, 10);
       this.files = [];
-
       this.$refs.uploadInput.handleRmoveAll();
       this.processTask();
+      bus.$emit("taskData", this.tasks);
       // setInterval(this.processTask, 5000);
     },
-    handleCancelUpload(id) {
-      let index = this.tasks.findIndex((item) => item.id == id);
-      this.tasks[index].cancelTask();
-    },
-    handleRetryUpload(id) {
-      let index = this.tasks.findIndex((item) => item.id == id);
-      let arr = this.tasks.filter((item) => item.status == 0);
-      this.tasks[index].resetStatus();
-      if (!arr.length) {
-        this.processTask();
-      }
-    },
-    handleClearRecords(id) {
-      let index = this.tasks.findIndex((it) => it.id == id);
-      this.tasks.splice(index, 1);
-    },
+    // handleCancelUpload(id) {
+    //   let index = this.tasks.findIndex((item) => item.id == id);
+    //   this.tasks[index].cancelTask();
+    // },
+    // handleRetryUpload(id) {
+    //   let index = this.tasks.findIndex((item) => item.id == id);
+    //   let arr = this.tasks.filter((item) => item.status == 0);
+    //   this.tasks[index].resetStatus();
+    //   if (!arr.length) {
+    //     this.processTask();
+    //   }
+    // },
+    // handleClearRecords(id) {
+    //   let index = this.tasks.findIndex((it) => it.id == id);
+    //   this.tasks.splice(index, 1);
+    // },
   },
   watch: {},
 };
@@ -385,6 +407,7 @@ export default {
     color: #0b0817;
     font-size: 18px;
     font-weight: 400;
+    word-wrap: break-word;
   }
   .specified-dir {
     border: 1px solid #d0dae9;

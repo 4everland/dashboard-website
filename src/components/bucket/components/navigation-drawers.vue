@@ -11,7 +11,7 @@
     >
       <div class="d-flex justify-space-between pr-6">
         <span class="fw-b fz-18">Task List</span>
-        <span class="fw-b" @click="$emit('update:drawer', false)">close</span>
+        <span class="fw-b" @click="drawer = false">close</span>
       </div>
       <div class="tips py-3">
         Tip：If you refresh or close the browser, the ongoing upload task is
@@ -39,7 +39,7 @@
           <ul class="status-tabs d-flex align-center">
             <li
               class="status-tab"
-              @click="status = 0"
+              @click="handleChangeStatusBar(0)"
               :class="status == 0 ? 'active' : ''"
             >
               <span>All</span>
@@ -48,27 +48,27 @@
             <li
               class="status-tab"
               :class="status == 1 ? 'active' : ''"
-              @click="status = 1"
+              @click="handleChangeStatusBar(1)"
             >
               <span>Uploading</span> <span>({{ uploadingList }})</span>
             </li>
             <li
               class="status-tab"
-              @click="status = 2"
+              @click="handleChangeStatusBar(2)"
               :class="status == 2 ? 'active' : ''"
             >
               <span>Stop</span> <span>({{ stoppedList }})</span>
             </li>
             <li
               class="status-tab"
-              @click="status = 3"
+              @click="handleChangeStatusBar(3)"
               :class="status == 3 ? 'active' : ''"
             >
               <span>Uploaded</span> <span>({{ uploadedList }})</span>
             </li>
             <li
               class="status-tab"
-              @click="status = 4"
+              @click="handleChangeStatusBar(4)"
               :class="status == 4 ? 'active' : ''"
             >
               <span>Upload Failed</span> <span>({{ failedList }})</span>
@@ -76,8 +76,34 @@
           </ul>
 
           <div>
-            <v-btn rounded color="primary" class="my-5">
+            <v-btn
+              rounded
+              color="primary"
+              class="my-5"
+              v-show="status == 0 || status == 1"
+              @click="handleAllStopUploading"
+            >
               <span>Stop Uploading</span>
+            </v-btn>
+
+            <v-btn
+              rounded
+              color="primary"
+              class="my-5 mr-5"
+              v-show="status == 2 || status == 4"
+              @click="handleStartAll"
+            >
+              <span>Start All</span>
+            </v-btn>
+            <v-btn
+              rounded
+              color="primary"
+              class="my-5"
+              outlined
+              v-show="status == 2 || status == 3 || status == 4"
+              @click="handleClearAllRecords"
+            >
+              <span>Clear All Records</span>
             </v-btn>
           </div>
 
@@ -88,10 +114,14 @@
               class="elevation-1 task-table"
               hide-default-footer
             >
+              <template #item.fileInfo[path]="{ item }">
+                <span style="word-break: break-all">{{
+                  item.fileInfo.path
+                }}</span>
+              </template>
               <template #item.fileInfo[name]="{ item }">
                 <span class="name">{{ item.fileInfo.name.slice(0, 8) }}..</span>
               </template>
-
               <template #item.status="{ item }">
                 <span v-show="item.status == 3" style="color: #ff8843"
                   >Uploaded</span
@@ -99,14 +129,13 @@
                 <span v-show="item.status == 2" style="color: #6a778b"
                   >Stopped</span
                 >
-                <span v-show="item.status == 4" style="color: #6a778b"
+                <span v-show="item.status == 4" style="color: #ff6960"
                   >Upload Failed</span
                 >
-
-                <span v-show="item.status == 0" style="color: #6a778b"
+                <span v-show="item.status == 0" style="color: #24bc96"
                   >Preparing</span
                 >
-                <span v-show="item.status == 1" style="color: #6a778b"
+                <span v-show="item.status == 1" style="color: #34a9ff"
                   >{{ item.progress }}%</span
                 >
               </template>
@@ -159,24 +188,19 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { bus } from "../../../main";
+
 export default {
   props: {
-    drawer: {
-      type: Boolean,
-      default: true,
-    },
     prefix: {
       type: String,
       default: "",
     },
-    tasks: {
-      type: Array,
-      default: () => [],
-    },
   },
   data() {
     return {
+      drawer: false,
+      tasks: [],
       status: 0,
       currentTab: 0,
       headers: [
@@ -191,19 +215,32 @@ export default {
           value: "fileInfo[path]",
           sortable: false,
           align: "center",
+          width: 200,
         },
         { text: "Status", value: "status", sortable: false, align: "center" },
-        { text: "Action", value: "action", sortable: false, align: "center" },
+        {
+          text: "Action",
+          value: "action",
+          sortable: false,
+          align: "center",
+          width: 300,
+        },
       ],
       page: 1,
     };
   },
   created() {},
+  mounted() {
+    bus.$on("taskData", (tasks) => {
+      this.drawer = true;
+      this.tasks = tasks;
+    });
+  },
   computed: {
     list() {
       return this.tasks.filter((it) => {
         if (this.status == 0) return it;
-        if (this.status == 1) return it.status == 1;
+        if (this.status == 1) return it.status == 1 || it.status == 0;
         if (this.status == 2) return it.status == 2;
         if (this.status == 3) return it.status == 3;
         if (this.status == 4) return it.status == 4;
@@ -213,7 +250,7 @@ export default {
       return this.tasks.length;
     },
     uploadingList() {
-      return this.tasks.filter((it) => it.status == 1).length;
+      return this.tasks.filter((it) => it.status == 1 || it.status == 0).length;
     },
     stoppedList() {
       return this.tasks.filter((it) => it.status == 2).length;
@@ -229,9 +266,9 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["CLEAR_RECORDS"]),
-    HandleChangeTab(value) {
-      this.currentTab = value;
+    handleChangeStatusBar(value) {
+      this.status = value;
+      this.page = 1;
     },
     handleChangeStatus(value) {
       this.status = value;
@@ -240,13 +277,22 @@ export default {
       this.page = item;
     },
     handleClearRecords(id) {
-      this.$emit("handleClearRecords", id);
+      bus.$emit("handleClearRecords", id);
     },
     handleCancelUpload(id) {
-      this.$emit("handleCancelUpload", id);
+      bus.$emit("handleCancelUpload", id);
     },
     handleRetryUpload(id) {
-      this.$emit("handleRetryUpload", id);
+      bus.$emit("handleRetryUpload", id);
+    },
+    handleAllStopUploading() {
+      bus.$emit("handleAllStopUploading");
+    },
+    handleStartAll() {
+      bus.$emit("handleStartAll");
+    },
+    handleClearAllRecords() {
+      bus.$emit("handleClearAllRecords", this.status);
     },
   },
 };

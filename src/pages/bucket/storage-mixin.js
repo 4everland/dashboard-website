@@ -506,6 +506,7 @@ export default {
           Quiet: false,
         },
       };
+      console.log(params);
       return new Promise((resolve, reject) => {
         this.s3.deleteObjects(params, (err, data) => {
           console.log(err, data);

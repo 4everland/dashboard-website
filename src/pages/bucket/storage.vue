@@ -14,6 +14,8 @@
       @uploaded="getList"
       :tableList="list"
     ></storage-upload> -->
+    <span @click="isDrawers = true"> TaskList </span>
+
     <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
       <div v-show="inBucket">
         <v-btn color="primary" @click="addBucket">
@@ -305,7 +307,11 @@
     </div>
 
     <div v-if="inUpload">
-      <bucket-upload :path="path" :info="pathInfo"></bucket-upload>
+      <bucket-upload
+        ref="bucketUpload"
+        :path="path"
+        :info="pathInfo"
+      ></bucket-upload>
     </div>
 
     <div class="main-wrap" v-else>
@@ -435,10 +441,68 @@
         loadingMore ? "Loading..." : "Load More"
       }}</span>
     </div>
+
+    <navigation-drawers></navigation-drawers>
+    <button @click="tesb">按钮</button>
+    {{ pathInfo }}
   </div>
 </template>
 
 <script>
+class DeleteTaskWrapper {
+  s3;
+  param;
+  id;
+  marker;
+  lastMarker;
+  deleteCount;
+  status;
+  curFiles;
+
+  constructor(s3, param, id) {
+    this.s3 = s3;
+    this.param = param;
+    this.id = id;
+  }
+  async startTasks() {
+    await this.s3.listObjectsV2(
+      {
+        Bucket: this.param.Bucket,
+        MaxKeys: 100,
+        Delimiter: "",
+        Prefix: this.param.Prefix,
+      },
+      (err, data) => {
+        if (err) {
+          console.log(err, "data");
+        } else {
+          console.log(data.Contents);
+          this.curFiles = data.Contents.map((it) => {
+            return { Key: it.Key };
+          });
+          console.log(this.curFiles);
+        }
+      }
+    );
+  }
+  startTasks() {
+    this.s3.deleteObjects(
+      {
+        Bucket: this.param.Bucket,
+        Delete: {
+          Objects: this.curFiles,
+          Quiet: false,
+        },
+      },
+      (err, data) => {
+        if (err) console.log(err, "err");
+        else console.log(data, "data");
+        this.deleteCount += 100;
+      }
+    );
+  }
+}
+
 import mixin from "./storage-mixin";
 export default {
   mixins: [mixin],
@@ -451,6 +515,8 @@ export default {
       finished: false,
       loadingMore: false,
       drawer: false,
+      isDrawers: false,
+      tasks: [],
     };
   },
   computed: {
@@ -543,6 +609,12 @@ export default {
     },
   },
   methods: {
+    async tesb() {
+      const task = new DeleteTaskWrapper(this.s3, this.pathInfo, 1);
+      await task.getList();
+      task.startTasks();
+    },
+
     onStop() {},
     onCopied() {
       this.$toast("Copied to clipboard !");
@@ -677,6 +749,25 @@ export default {
         },
       });
     },
+
+    // handleCancelUpload(id) {
+    //   let index = this.tasks.findIndex((item) => item.id == id);
+    //   this.tasks[index].cancelTask();
+    // },
+    // handleRetryUpload(id) {
+    //   let index = this.tasks.findIndex((item) => item.id == id);
+    //   let arr = this.tasks.filter((item) => item.status == 0);
+    //   this.tasks[index].resetStatus();
+    //   if (!arr.length) {
+    //     // this.processTask();
+
+    //     this.$refs.bucketUpload.processTask();
+    //   }
+    // },
+    // handleClearRecords(id) {
+    //   let index = this.tasks.findIndex((it) => it.id == id);
+    //   this.tasks.splice(index, 1);
+    // },
   },
 };
 </script>
