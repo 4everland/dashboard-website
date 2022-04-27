@@ -15,6 +15,7 @@
       :tableList="list"
     ></storage-upload> -->
     <span @click="isDrawers = true"> TaskList </span>
+    <button @click="test">测试删除</button>
 
     <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
       <div v-show="inBucket">
@@ -443,7 +444,7 @@
     </div>
 
     <navigation-drawers></navigation-drawers>
-    <button @click="tesb">按钮</button>
+    <button @click="tesb">删除</button>
     {{ pathInfo }}
   </div>
 </template>
@@ -464,6 +465,7 @@ class DeleteTaskWrapper {
     this.param = param;
     this.id = id;
   }
+
   async startTasks() {
     await this.s3.listObjectsV2(
       {
@@ -481,23 +483,22 @@ class DeleteTaskWrapper {
             return { Key: it.Key };
           });
           console.log(this.curFiles);
+
+          this.s3.deleteObjects(
+            {
+              Bucket: this.param.Bucket,
+              Delete: {
+                Objects: this.curFiles,
+                Quiet: false,
+              },
+            },
+            (err, data) => {
+              if (err) console.log(err, "err");
+              else console.log(data, "data");
+              this.deleteCount += data.Deleted.length;
+            }
+          );
         }
-      }
-    );
-  }
-  startTasks() {
-    this.s3.deleteObjects(
-      {
-        Bucket: this.param.Bucket,
-        Delete: {
-          Objects: this.curFiles,
-          Quiet: false,
-        },
-      },
-      (err, data) => {
-        if (err) console.log(err, "err");
-        else console.log(data, "data");
-        this.deleteCount += 100;
       }
     );
   }
@@ -516,7 +517,7 @@ export default {
       loadingMore: false,
       drawer: false,
       isDrawers: false,
-      tasks: [],
+      deleteFoldersTask: [],
     };
   },
   computed: {
@@ -609,10 +610,35 @@ export default {
     },
   },
   methods: {
-    async tesb() {
-      const task = new DeleteTaskWrapper(this.s3, this.pathInfo, 1);
-      await task.getList();
+    test() {
+      let arr = this.$route.path.split("/");
+      let index = arr.findIndex((it) => it == "storage");
+      const Prefix = arr.slice(index + 2).join("/");
+      console.log(Prefix);
+      const task = new DeleteTaskWrapper(
+        this.s3,
+        {
+          Bucket: this.pathInfo.Bucket,
+          Prefix: Prefix + this.selected[0].name + "/",
+        },
+        this.genID(10)
+      );
       task.startTasks();
+    },
+    async tesb() {
+      let arr = this.$route.path.split("/");
+      let index = arr.findIndex((it) => it == "storage");
+      const Prefix = arr.slice(index + 2).join("/");
+      console.log(Prefix);
+      let selected = this.selected;
+      selected.forEach((it) => {
+        const task = new DeleteTaskWrapper(
+          this.s3,
+          { Bucket: this.pathInfo.Bucket, Prefix: Prefix + it.name + "/" },
+          this.genID(10)
+        );
+        this.deleteFoldersTask.push(task);
+      });
     },
 
     onStop() {},
@@ -749,25 +775,11 @@ export default {
         },
       });
     },
-
-    // handleCancelUpload(id) {
-    //   let index = this.tasks.findIndex((item) => item.id == id);
-    //   this.tasks[index].cancelTask();
-    // },
-    // handleRetryUpload(id) {
-    //   let index = this.tasks.findIndex((item) => item.id == id);
-    //   let arr = this.tasks.filter((item) => item.status == 0);
-    //   this.tasks[index].resetStatus();
-    //   if (!arr.length) {
-    //     // this.processTask();
-
-    //     this.$refs.bucketUpload.processTask();
-    //   }
-    // },
-    // handleClearRecords(id) {
-    //   let index = this.tasks.findIndex((it) => it.id == id);
-    //   this.tasks.splice(index, 1);
-    // },
+    genID(length) {
+      return Number(
+        Math.random().toString().substr(3, length) + Date.now()
+      ).toString(36);
+    },
   },
 };
 </script>
