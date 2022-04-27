@@ -156,10 +156,18 @@ export default {
   },
   watch: {
     userInfo() {
-      window.jdenticon();
+      setTimeout(() => {
+        window.jdenticon();
+      }, 100);
     },
   },
-  mounted() {},
+  mounted() {
+    if (this.userInfo.uid) {
+      this.$nextTick(() => {
+        window.jdenticon();
+      });
+    }
+  },
   methods: {
     onMenu(it) {
       const { name } = it;
@@ -170,8 +178,7 @@ export default {
         });
       }
       if (name == "logout") {
-        localStorage.token = "";
-        delete localStorage.userInfo;
+        localStorage.clear();
         location.href = "index.html";
       }
     },

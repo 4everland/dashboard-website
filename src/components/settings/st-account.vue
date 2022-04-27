@@ -40,7 +40,9 @@ try {
 } catch (error) {}
 export default {
   data() {
-    return {};
+    return {
+      phantomAddr: "",
+    };
   },
   computed: {
     ...mapState({
@@ -66,6 +68,13 @@ export default {
           account: (info.wallet || {}).address,
         },
         {
+          title: "Phantom",
+          desc: "Get verified by connecting your phantom account.",
+          icon: "m-phantom",
+          type: 4,
+          account: (info.solana || {}).address,
+        },
+        {
           title: "Email",
           desc: "Verify your email address to receive updates and notices for your account.",
           icon: "m-email",
@@ -86,6 +95,12 @@ export default {
       if (this.binding == 2 && val) {
         this.binding = null;
         this.verifyMetaMask();
+      }
+    },
+    phantomAddr(val) {
+      if (this.binding == 4 && val) {
+        this.binding = null;
+        this.verifyPhantom();
       }
     },
   },
@@ -119,7 +134,9 @@ export default {
     },
     async onVcode(type, code) {
       try {
-        const item = this.list[type - 1];
+        const item = this.list.find((el) => {
+          return el.type == type;
+        });
         this.$loading("Binding " + item.title);
         this.$loading.close();
         // const { data } =
@@ -150,12 +167,22 @@ export default {
         }
         return;
       }
+      if (it.type == 4) {
+        this.binding = 4;
+        if (!this.phantomAddr) {
+          const publicKey = await this.connectPhantom();
+          this.phantomAddr = publicKey;
+        } else {
+          this.verifyMetaMask();
+        }
+        return;
+      }
       // if (it.type != 1) return this.$toast("todo");
       try {
         let apply = "";
         if (it.type == 3) {
           const { value } = await this.$prompt(
-            "Verify your email address to receive updates and notices for your account.",
+            "Verify your email to stay up to date on the 4EVERLAND latest news and events.",
             "Verify Email",
             {
               confirmText: "Send",
@@ -207,12 +234,16 @@ export default {
         console.log(error);
       }
     },
-    async exchangeCode() {
+    async exchangeCode(type) {
+      let apply = this.connectAddr;
+      if (type == 4) {
+        apply = this.phantomAddr;
+      }
       const { data } = await this.$http.post(
         `/bind`,
         {
-          type: 2,
-          apply: this.connectAddr,
+          type,
+          apply,
         },
         {
           params: {
@@ -225,11 +256,44 @@ export default {
     async verifyMetaMask() {
       try {
         this.$loading();
-        const nonce = await this.exchangeCode();
+        const nonce = await this.exchangeCode(2);
         const sig = await MetaMask.getSigner().signMessage(nonce);
         this.$loading.close();
         if (sig) {
           this.onVcode(2, sig);
+        }
+      } catch (error) {
+        this.$alert(error.message);
+      }
+    },
+    async connectPhantom() {
+      try {
+        const isPhantomInstalled = window.solana && window.solana.isPhantom;
+        if (!isPhantomInstalled) {
+          window.open("https://phantom.app/", "_blank");
+          return console.log("Please install Phantom to use this app.");
+        }
+        const resp = await window.solana.connect();
+        return resp.publicKey.toString();
+      } catch (err) {
+        // { code: 4001, message: 'User rejected the request.' }
+      }
+    },
+    async verifyPhantom() {
+      try {
+        this.$loading();
+        const nonce = await this.exchangeCode(4);
+        const encodedMessage = new TextEncoder().encode(nonce);
+        const signedMessage = await window.solana.request({
+          method: "signMessage",
+          params: {
+            message: encodedMessage,
+          },
+        });
+        const sig = signedMessage.signature;
+        this.$loading.close();
+        if (sig) {
+          this.onVcode(4, sig);
         }
       } catch (error) {
         this.$alert(error.message);

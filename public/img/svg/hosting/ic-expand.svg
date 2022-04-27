@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 7</title>
+    <defs>
+        <path d="M6.89429112,-1.94454365 L7.95495129,-0.883883476 L4.06554365,3.00445635 L7.95495129,6.89429112 L6.89429112,7.95495129 L3.00520382,4.06586399 L1.94454365,3.00520382 L6.89429112,-1.94454365 Z" id="path-1"></path>
+        <path d="M6.89429112,-8.94454365 L7.95495129,-7.88388348 L4.06554365,-3.99554365 L7.95495129,-0.105708883 L6.89429112,0.954951288 L3.00520382,-2.93413601 L1.94454365,-3.99479618 L6.89429112,-8.94454365 Z" id="path-3"></path>
+    </defs>
+    <g id="Projects" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-1361.000000, -360.000000)" id="编组-2">
+            <g transform="translate(290.000000, 311.000000)">
+                <g id="编组-7" transform="translate(1077.000000, 61.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="蒙版" fill="#0C0918" transform="translate(4.949747, 3.005204) rotate(-90.000000) translate(-4.949747, -3.005204) " xlink:href="#path-1"></use>
+                    <mask id="mask-4" fill="white">
+                        <use xlink:href="#path-3"></use>
+                    </mask>
+                    <use id="蒙版" fill="#0C0918" transform="translate(4.949747, -3.994796) rotate(-90.000000) translate(-4.949747, 3.994796) " xlink:href="#path-3"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

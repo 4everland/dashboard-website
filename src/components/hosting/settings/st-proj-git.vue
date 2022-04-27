@@ -71,17 +71,23 @@
             </div>
             <div v-else style="max-height: 60vh" class="ov-a">
               <div
-                class="pd-15 d-flex al-c"
+                class="pa-3 d-flex al-c"
                 :class="{
                   'bdt-1': i > 0,
                 }"
                 v-for="(it, i) in repoResList"
                 :key="i"
               >
-                <span class="fz-17 line-1">{{ it.name }}</span>
-                <!-- <span class="ml-3 mr-3 gray fz-13 shrink-0">
-                  {{ it.updateAt }}
-                </span> -->
+                <a
+                  :href="it.cloneUrl.replace('.git', '')"
+                  target="_blank"
+                  class="line-1 mr-5 fz-15 b u"
+                >
+                  {{ it.namespace }}/{{ it.name }}
+                </a>
+                <span class="ml-3 mr-3 shrink-0 gray fz-13">
+                  <e-time>{{ it.updateAt }}</e-time>
+                </span>
                 <v-btn
                   class="ml-auto"
                   color="primary"
@@ -162,7 +168,7 @@ export default {
     repoResList() {
       return this.repoList.filter((it) => {
         if (!this.keyword.trim()) return true;
-        return new RegExp(this.keyword, "i").test(it.name);
+        return new RegExp(this.keyword, "i").test(it.namespace + "/" + it.name);
       });
     },
   },

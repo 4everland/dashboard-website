@@ -122,6 +122,22 @@ export default [
     },
   },
   {
+    name: "Vite",
+    slug: "vite",
+    logo: "img/logos/vite.svg",
+    settings: {
+      installCommand: {
+        placeholder: "npm install",
+      },
+      buildCommand: {
+        placeholder: "npm run build",
+      },
+      outputDirectory: {
+        value: "dist",
+      },
+    },
+  },
+  {
     name: "Gatsby.js",
     slug: "gatsby",
     bg1: "#D7D3E8",
