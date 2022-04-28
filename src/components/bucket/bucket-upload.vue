@@ -75,6 +75,7 @@
         </template>
         <div class="table-footer py-8">
           <v-pagination
+            total-visible="10"
             v-if="length > 1"
             v-model="page"
             :length="length"
@@ -92,18 +93,8 @@
             <span class="ml-2">cancel</span>
           </v-btn>
         </div>
-        {{ info }}
-        <!-- {{ $store.state.upload.specifiedPath }} -->
       </div>
     </div>
-
-    <!-- <navigation-drawers
-      :drawer.sync="isDrawers"
-      :tasks="tasks"
-      @handleClearRecords="handleClearRecords"
-      @handleCancelUpload="handleCancelUpload"
-      @handleRetryUpload="handleRetryUpload"
-    ></navigation-drawers> -->
   </div>
 </template>
 
@@ -138,7 +129,8 @@ class TaskWrapper {
       });
       this.progress = 0;
       this.status = 1; // uploading
-      await this.task.done();
+      const result = await this.task.done();
+      console.log(result);
       this.status = 3; // success
 
       console.log(this.id, this.status);

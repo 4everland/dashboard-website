@@ -15,7 +15,7 @@
       :tableList="list"
     ></storage-upload> -->
     <span @click="$refs.navDrawers.drawer = true"> TaskList </span>
-    <button @click="test">测试删除</button>
+    <button @click="test">test delete</button>
 
     <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
       <div v-show="inBucket">
@@ -441,6 +441,8 @@
       :deleteFolder.sync="deleteFolder"
       :deleteFolderTasks="deleteFoldersTasks"
       @handlePasueDeleteFolder="handlePasueDeleteFolder"
+      @handleStartDeleteFolder="handleStartDeleteFolder"
+      @handleRemoveDeleteFolder="handleRemoveDeleteFolder"
     ></navigation-drawers>
     {{ pathInfo }}
   </div>
@@ -470,6 +472,7 @@ class DeleteTaskWrapper {
 
   async startTasks() {
     try {
+      if (this.status !== 0 && this.status !== 1) return;
       this.status = 1; // deleteing
       const listResult = await this.s3.listObjectsV2({
         Bucket: this.param.Bucket,
@@ -485,6 +488,7 @@ class DeleteTaskWrapper {
           return { Key: it.Key };
         });
       }
+
       if (this.curFiles.length && this.status == 1) {
         const deleteResult = await this.s3.deleteObjects({
           Bucket: this.param.Bucket,
@@ -497,8 +501,6 @@ class DeleteTaskWrapper {
         for (let i = 0; i < deleteResult.Deleted.length; i++) {
           this.deleteCount += 1;
           await Vue.prototype.$sleep(20);
-
-          // console.log("111111111111111");
         }
         this.startTasks();
       } else if (!this.curFiles.length) {
@@ -514,6 +516,9 @@ class DeleteTaskWrapper {
   }
   stopTasks() {
     this.status = 2; //stop
+  }
+  retryTasks() {
+    this.status = 0; // retry
   }
 }
 
@@ -829,6 +834,18 @@ export default {
     handlePasueDeleteFolder(id) {
       const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
       this.deleteFoldersTasks[index].stopTasks();
+    },
+    handleStartDeleteFolder(id) {
+      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
+      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
+      this.deleteFoldersTasks[index].retryTasks();
+      if (!arr.length) {
+        this.processDeleteFolderTask();
+      }
+    },
+    handleRemoveDeleteFolder(id) {
+      let index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
+      this.deleteFoldersTasks.splice(index, 1);
     },
   },
 };

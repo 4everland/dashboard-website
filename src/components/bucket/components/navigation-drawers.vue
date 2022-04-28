@@ -58,7 +58,7 @@
               @click="handleChangeStatusBar(2)"
               :class="status == 2 ? 'active' : ''"
             >
-              <span>Stop</span> <span>({{ stoppedList }})</span>
+              <span>Stopped</span> <span>({{ stoppedList }})</span>
             </li>
             <li
               class="status-tab"
@@ -82,6 +82,7 @@
               color="primary"
               class="my-5"
               v-show="status == 0 || status == 1"
+              :disabled="isUploadAllStop"
               @click="handleAllStopUploading"
             >
               <span>Stop Uploading</span>
@@ -93,6 +94,7 @@
               class="my-5 mr-5"
               v-show="status == 2 || status == 4"
               @click="handleStartAll"
+              :disabled="isUploadAllStart && !list.length"
             >
               <span>Start All</span>
             </v-btn>
@@ -103,6 +105,7 @@
               outlined
               v-show="status == 2 || status == 3 || status == 4"
               @click="handleClearAllRecords"
+              :disabled="!list.length"
             >
               <span>Clear All Records</span>
             </v-btn>
@@ -211,19 +214,37 @@
             hide-default-footer
           >
             <template #item.status="{ item }">
-              <span v-show="item.status == 3" class="complete">COMPLETE</span>
-              <span v-show="item.status == 2" class="pause">PAUSED</span>
-              <span v-show="item.status == 1" class="deleteing">DELETEING</span>
-              <span v-show="item.status == 0">WAITING</span>
+              <p v-if="item.status == 3" class="complete mb-0">COMPLETE</p>
+              <p v-if="item.status == 2" class="pause mb-0">PAUSED</p>
+              <p
+                v-if="item.status == 1"
+                class="deleteing d-flex align-center mb-0"
+              >
+                <v-progress-circular
+                  style="width: 20px"
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular>
+                <span class="ml-4">DELETEING</span>
+              </p>
+              <p v-if="item.status == 0" class="mb-0">WAITING</p>
             </template>
             <template #item.action="{ item }">
-              <span class="operation" @click="handleClick(item)">Start</span>
               <span
+                v-show="item.status == 2"
+                class="operation"
+                @click="handleStartDeleteFolder(item.id)"
+                >Start</span
+              >
+              <span
+                v-show="item.status == 1 || item.status == 0"
                 class="ml-5 operation"
                 @click="handlePasueDeleteFolder(item.id)"
                 >Pause</span
               >
-              <span class="ml-5 operation" @click="handleClick(item)"
+              <span
+                class="ml-5 operation"
+                @click="handleRemoveDeleteFolder(item.id)"
                 >Remove</span
               >
             </template>
@@ -343,9 +364,10 @@ export default {
       return this.tasks.filter((it) => {
         if (this.status == 0) return it;
         if (this.status == 1) return it.status == 1 || it.status == 0;
-        if (this.status == 2) return it.status == 2;
-        if (this.status == 3) return it.status == 3;
-        if (this.status == 4) return it.status == 4;
+        // if (this.status == 2) return it.status == 2;
+        // if (this.status == 3) return it.status == 3;
+        // if (this.status == 4) return it.status == 4;
+        return it.status == this.status;
       });
     },
     allList() {
@@ -372,6 +394,12 @@ export default {
     },
     deleteFolderLength() {
       return Math.ceil(this.deleteFolderList.length / 10);
+    },
+    isUploadAllStop() {
+      return !this.tasks.some((i) => i.status == 0 || i.status == 1);
+    },
+    isUploadAllStart() {
+      return !this.tasks.some((i) => i.status == 2);
     },
   },
   methods: {
@@ -410,6 +438,12 @@ export default {
     handlePasueDeleteFolder(id) {
       console.log(id);
       this.$emit("handlePasueDeleteFolder", id);
+    },
+    handleStartDeleteFolder(id) {
+      this.$emit("handleStartDeleteFolder", id);
+    },
+    handleRemoveDeleteFolder(id) {
+      this.$emit("handleRemoveDeleteFolder", id);
     },
   },
   watch: {
