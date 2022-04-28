@@ -22,6 +22,7 @@
             :title="it.title"
             :type="it.type"
             :reloadAt="reloadAt"
+            :showRatio="it.showRatio"
           ></statis-chart2>
         </v-col>
       </v-row>
@@ -66,6 +67,7 @@ export default {
           title: "Request by country",
           type: "IP",
           md: 12,
+          showRatio: true,
         },
       ],
     };
