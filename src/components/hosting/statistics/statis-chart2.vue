@@ -17,7 +17,13 @@
               :key="i"
             >
               <span class="line-1 gray-6 mr-3">{{ it.name }}</span>
-              <b class="ml-auto">{{ it.text }}</b>
+              <b class="ml-auto color-1">{{ it.text }}</b>
+              <div class="ml-2" style="width: 100px" v-if="showRatio">
+                <v-progress-linear
+                  :value="(it.value * 100) / totalVal"
+                  height="6"
+                ></v-progress-linear>
+              </div>
             </li>
           </ul>
           <v-btn
@@ -46,7 +52,7 @@
         <ul class="mt-3">
           <li class="fz-14 d-flex al-c mb-2" v-for="(it, i) in list" :key="i">
             <span class="line-1 gray-6 mr-3">{{ it.name }}</span>
-            <b class="ml-auto">{{ it.text }}</b>
+            <b class="ml-auto color-1">{{ it.text }}</b>
           </li>
         </ul>
         <div class="pa-3 ta-c" v-if="loading && showAll">
@@ -87,6 +93,7 @@ export default {
     reloadAt: null,
     lazy: Boolean,
     showDate: Boolean,
+    showRatio: Boolean,
   },
   computed: {
     worldMapJson() {
@@ -103,6 +110,7 @@ export default {
       hasMore: false,
       showAll: false,
       date: null,
+      totalVal: 100,
     };
   },
   watch: {
@@ -152,6 +160,7 @@ export default {
         const { data } = await this.$http2.get(this.api, {
           params,
         });
+        let total = 0;
         this.list = data.content.map((it) => {
           const obj = {
             name: it.sourceName.replace("https://", ""),
@@ -162,8 +171,10 @@ export default {
             obj.text = this.getSize(it.sourceSize);
             obj.value = (it.sourceSize / Math.pow(1024, 2)).toFixed(2);
           }
+          total += obj.value * 1;
           return obj;
         });
+        this.totalVal = total;
         if (size == 5) {
           this.hasMore = data.totalPages > 1;
         } else {
@@ -189,12 +200,18 @@ export default {
       let option;
       if (this.type == "IP") {
         if (!this.worldMapJson) {
-          const { data } = await Axios.get(
-            "https://4ever-web.4everland.store/config/world.json"
-          );
-          this.$setState({
-            worldMapJson: data,
-          });
+          this.loading = true;
+          try {
+            const { data } = await Axios.get(
+              "https://4ever-web.4everland.store/config/world.json"
+            );
+            this.$setState({
+              worldMapJson: data,
+            });
+          } catch (error) {
+            //
+          }
+          this.loading = false;
         }
         echarts.registerMap("world", this.worldMapJson, {});
         option = {
@@ -205,7 +222,7 @@ export default {
           },
           visualMap: {
             left: "bottom",
-            min: 0,
+            min: 10,
             max: 1000000,
             // text: ["High", "Low"],
             calculable: true,
@@ -216,6 +233,10 @@ export default {
               type: "map",
               roam: true,
               map: "world",
+              scaleLimit: {
+                min: 0.8,
+                max: 2,
+              },
               emphasis: {
                 label: {
                   show: true,
