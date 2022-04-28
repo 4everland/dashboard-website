@@ -373,7 +373,7 @@ export default {
         pre,
         "",
         Delimiter,
-        30,
+        100,
         after
       );
       stream.on("data", (data) => {
@@ -382,33 +382,32 @@ export default {
           return (b.prefix ? 1 : 0) - (a.prefix ? 1 : 0);
         });
         // console.log(data);
-        const list = data.objects
-          .map((it) => {
-            if (it.prefix)
-              return {
-                name: it.prefix.replace(Prefix, "").replace("/", ""),
-              };
-            const meta = it.metadata || {};
-            let arStatus = meta["X-Amz-Meta-Arweave-Status"];
-            if (!arStatus) {
-              arStatus = this.defArStatus;
-            }
+        const list = data.objects.map((it) => {
+          if (it.prefix)
             return {
-              Key: it.name,
-              name: it.name.replace(Prefix, ""),
-              updateAt: it.lastModified.format(),
-              size: this.$utils.getFileSize(it.size),
-              hash: this.$utils.getCidV1(it.etag),
-              isFile: true,
-              arStatus,
-              arHash: meta["X-Amz-Meta-Arweave-Hash"],
+              name: it.prefix.replace(Prefix, "").replace("/", ""),
             };
-          })
-          .filter((it) => {
-            return (
-              this.folderList.filter((row) => row.name == it.name).length == 0
-            );
-          });
+          const meta = it.metadata || {};
+          let arStatus = meta["X-Amz-Meta-Arweave-Status"];
+          if (!arStatus) {
+            arStatus = this.defArStatus;
+          }
+          return {
+            Key: it.name,
+            name: it.name.replace(Prefix, ""),
+            updateAt: it.lastModified.format(),
+            size: this.$utils.getFileSize(it.size),
+            hash: this.$utils.getCidV1(it.etag),
+            isFile: true,
+            arStatus,
+            arHash: meta["X-Amz-Meta-Arweave-Hash"],
+          };
+        });
+        // .filter((it) => {
+        //   return (
+        //     this.folderList.filter((row) => row.name == it.name).length == 0
+        //   );
+        // });
         if (this.loadingMore) {
           this.loadingMore = false;
           this.folderList = [...this.folderList, ...list];

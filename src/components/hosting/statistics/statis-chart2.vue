@@ -72,6 +72,7 @@
 </template>
 
 <script>
+import Axios from "axios";
 import * as echarts from "echarts";
 
 export default {
@@ -86,6 +87,11 @@ export default {
     reloadAt: null,
     lazy: Boolean,
     showDate: Boolean,
+  },
+  computed: {
+    worldMapJson() {
+      return this.$store.state.worldMapJson;
+    },
   },
   data() {
     return {
@@ -151,7 +157,11 @@ export default {
             name: it.sourceName.replace("https://", ""),
             value: it.sourceNum || it.sourceSize,
           };
-          obj.text = it.sourceSize ? this.getSize(it.sourceSize) : obj.value;
+          obj.text = obj.value;
+          if (it.sourceSize) {
+            obj.text = this.getSize(it.sourceSize);
+            obj.value = (it.sourceSize / Math.pow(1024, 2)).toFixed(2);
+          }
           return obj;
         });
         if (size == 5) {
@@ -171,38 +181,78 @@ export default {
         this.setData(this.items);
       });
     },
-    setData(data) {
-      const el = this.$refs.chart;
+    async setData(data) {
       if (!this.chart) {
+        const el = this.$refs.chart;
         this.chart = echarts.init(el);
       }
-      const option = {
-        tooltip: {
-          trigger: "item",
-        },
-        // legend: {
-        //   orient: "vertical",
-        //   left: "right",
-        //   formatter(name) {
-        //     return name.cutStr(5, 3);
-        //   },
-        // },
-        series: [
-          {
-            name: this.title,
-            type: "pie",
-            radius: ["40%", "60%"],
-            data, // [{name, value}]
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 0,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)",
+      let option;
+      if (this.type == "IP") {
+        if (!this.worldMapJson) {
+          const { data } = await Axios.get(
+            "https://4ever-web.4everland.store/config/world.json"
+          );
+          this.$setState({
+            worldMapJson: data,
+          });
+        }
+        echarts.registerMap("world", this.worldMapJson, {});
+        option = {
+          tooltip: {
+            trigger: "item",
+            showDelay: 0,
+            transitionDuration: 0.2,
+          },
+          visualMap: {
+            left: "bottom",
+            min: 0,
+            max: 1000000,
+            // text: ["High", "Low"],
+            calculable: true,
+          },
+          series: [
+            {
+              name: /flux/.test(this.api) ? "Data Transfer(MB)" : "Request",
+              type: "map",
+              roam: true,
+              map: "world",
+              emphasis: {
+                label: {
+                  show: true,
+                },
+              },
+              data,
+            },
+          ],
+        };
+      } else
+        option = {
+          tooltip: {
+            trigger: "item",
+          },
+          // legend: {
+          //   orient: "vertical",
+          //   left: "right",
+          //   formatter(name) {
+          //     return name.cutStr(5, 3);
+          //   },
+          // },
+          series: [
+            {
+              name: this.title,
+              type: "pie",
+              radius: ["40%", "60%"],
+              data, // [{name, value}]
+              emphasis: {
+                itemStyle: {
+                  shadowBlur: 0,
+                  shadowOffsetX: 0,
+                  shadowColor: "rgba(0, 0, 0, 0.5)",
+                },
               },
             },
-          },
-        ],
-      };
+          ],
+        };
       this.chart.setOption(option);
     },
   },

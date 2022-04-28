@@ -36,6 +36,7 @@ const store = new Vuex.Store({
     walletTip: "",
     buildInfo: {},
     projectInfo: {},
+    worldMapJson: null,
   },
   mutations: {
     [SET_DATA](state, data) {
