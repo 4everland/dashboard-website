@@ -209,10 +209,19 @@ export default {
           ],
         },
         {
-          label: "Plan",
+          label: "Usage",
           img: "m-plan",
-          to: "/plan",
-          active: false,
+          group: /^\/usage/i,
+          subs: [
+            {
+              label: "Plan",
+              to: "/usage/plan",
+            },
+            {
+              label: "Billing",
+              to: "/usage/billing",
+            },
+          ],
         },
       ];
     },
