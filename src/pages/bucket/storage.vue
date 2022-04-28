@@ -438,8 +438,9 @@
 
     <navigation-drawers
       ref="navDrawers"
-      :deleteFolder="deleteFolder"
+      :deleteFolder.sync="deleteFolder"
       :deleteFolderTasks="deleteFoldersTasks"
+      @handlePasueDeleteFolder="handlePasueDeleteFolder"
     ></navigation-drawers>
     {{ pathInfo }}
   </div>
@@ -504,6 +505,8 @@ class DeleteTaskWrapper {
         this.status = 3; // success
         this.that.selected = [];
         this.that.getList();
+      } else {
+        console.log("here");
       }
     } catch (error) {
       console.log(error);
@@ -635,7 +638,7 @@ export default {
             Bucket: this.pathInfo.Bucket,
             Prefix: Prefix + it.name + "/",
           },
-          this.genID
+          this.genID()
         );
       });
       this.deleteFoldersTasks = deleteFoldersTask.concat(
@@ -822,6 +825,10 @@ export default {
       return Number(
         Math.random().toString().substr(3, length) + Date.now()
       ).toString(36);
+    },
+    handlePasueDeleteFolder(id) {
+      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
+      this.deleteFoldersTasks[index].stopTasks();
     },
   },
 };

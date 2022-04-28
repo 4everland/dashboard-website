@@ -11,7 +11,7 @@
     >
       <div class="d-flex justify-space-between pr-6">
         <span class="fw-b fz-18">Task List</span>
-        <span class="fw-b" @click="drawer = false">close</span>
+        <span class="fw-b" @click="handleCloseTaskList">close</span>
       </div>
       <div class="tips py-3">
         Tip：If you refresh or close the browser, the ongoing upload task is
@@ -218,7 +218,9 @@
             </template>
             <template #item.action="{ item }">
               <span class="operation" @click="handleClick(item)">Start</span>
-              <span class="ml-5 operation" @click="handleClick(item)"
+              <span
+                class="ml-5 operation"
+                @click="handlePasueDeleteFolder(item.id)"
                 >Pause</span
               >
               <span class="ml-5 operation" @click="handleClick(item)"
@@ -373,6 +375,10 @@ export default {
     },
   },
   methods: {
+    handleCloseTaskList() {
+      this.drawer = false;
+      this.$emit("update:deleteFolder", false);
+    },
     handleChangeStatusBar(value) {
       this.status = value;
       this.page = 1;
@@ -401,9 +407,14 @@ export default {
     handleClearAllRecords() {
       bus.$emit("handleClearAllRecords", this.status);
     },
+    handlePasueDeleteFolder(id) {
+      console.log(id);
+      this.$emit("handlePasueDeleteFolder", id);
+    },
   },
   watch: {
     deleteFolder(newValue) {
+      console.log(newValue);
       if (newValue) {
         this.drawer = true;
         this.currentTab = 1;
