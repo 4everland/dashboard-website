@@ -52,6 +52,24 @@ export default {
     list() {
       const info = this.userInfo;
       const github = info.github || {};
+      const wArr = [];
+      const noWallet = !info.wallet && !info.solana;
+      if (info.wallet || noWallet)
+        wArr.push({
+          title: "MetaMask",
+          desc: "Get verified by connecting your metamask account.",
+          icon: "m-metamask",
+          type: 2,
+          account: (info.wallet || {}).address,
+        });
+      if (info.solana || noWallet)
+        wArr.push({
+          title: "Phantom",
+          desc: "Get verified by connecting your phantom account.",
+          icon: "m-phantom",
+          type: 4,
+          account: (info.solana || {}).address,
+        });
       return [
         {
           title: "Github",
@@ -60,20 +78,7 @@ export default {
           type: 1,
           account: github.name || github.email,
         },
-        {
-          title: "MetaMask",
-          desc: "Get verified by connecting your metamask account.",
-          icon: "m-metamask",
-          type: 2,
-          account: (info.wallet || {}).address,
-        },
-        {
-          title: "Phantom",
-          desc: "Get verified by connecting your phantom account.",
-          icon: "m-phantom",
-          type: 4,
-          account: (info.solana || {}).address,
-        },
+        ...wArr,
         {
           title: "Email",
           desc: "Verify your email address to receive updates and notices for your account.",
