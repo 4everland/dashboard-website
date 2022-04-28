@@ -14,7 +14,7 @@
       @uploaded="getList"
       :tableList="list"
     ></storage-upload> -->
-    <span @click="isDrawers = true"> TaskList </span>
+    <span @click="$refs.navDrawers.drawer = true"> TaskList </span>
     <button @click="test">测试删除</button>
 
     <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
@@ -443,14 +443,19 @@
       }}</span>
     </div>
 
-    <navigation-drawers></navigation-drawers>
-    <button @click="tesb">删除</button>
+    <navigation-drawers
+      ref="navDrawers"
+      :deleteFolder="deleteFolder"
+      :deleteFolderTasks="deleteFoldersTasks"
+    ></navigation-drawers>
     {{ pathInfo }}
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 class DeleteTaskWrapper {
+  that;
   s3;
   param;
   id;
@@ -460,47 +465,59 @@ class DeleteTaskWrapper {
   status;
   curFiles;
 
-  constructor(s3, param, id) {
+  constructor(that, s3, param, id) {
+    this.that = that;
     this.s3 = s3;
     this.param = param;
     this.id = id;
+    this.status = 0; // pre delete
+    this.deleteCount = 0;
   }
 
   async startTasks() {
-    await this.s3.listObjectsV2(
-      {
+    try {
+      this.status = 1; // deleteing
+      const listResult = await this.s3.listObjectsV2({
         Bucket: this.param.Bucket,
         MaxKeys: 100,
         Delimiter: "",
         Prefix: this.param.Prefix,
-      },
-      (err, data) => {
-        if (err) {
-          console.log(err, "data");
-        } else {
-          console.log(data.Contents);
-          this.curFiles = data.Contents.map((it) => {
-            return { Key: it.Key };
-          });
-          console.log(this.curFiles);
-
-          this.s3.deleteObjects(
-            {
-              Bucket: this.param.Bucket,
-              Delete: {
-                Objects: this.curFiles,
-                Quiet: false,
-              },
-            },
-            (err, data) => {
-              if (err) console.log(err, "err");
-              else console.log(data, "data");
-              this.deleteCount += data.Deleted.length;
-            }
-          );
-        }
+      });
+      console.log(listResult, "listResult");
+      if (!listResult.Contents) {
+        this.curFiles = [];
+      } else {
+        this.curFiles = listResult.Contents.map((it) => {
+          return { Key: it.Key };
+        });
       }
-    );
+      if (this.curFiles.length && this.status == 1) {
+        const deleteResult = await this.s3.deleteObjects({
+          Bucket: this.param.Bucket,
+          Delete: {
+            Objects: this.curFiles,
+            Quiet: false,
+          },
+        });
+        console.log(deleteResult);
+        for (let i = 0; i < deleteResult.Deleted.length; i++) {
+          this.deleteCount += 1;
+          await Vue.prototype.$sleep(20);
+
+          // console.log("111111111111111");
+        }
+        this.startTasks();
+      } else if (!this.curFiles.length) {
+        this.status = 3; // success
+        this.that.selected = [];
+        this.that.getList();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  stopTasks() {
+    this.status = 2; //stop
   }
 }
 
@@ -517,7 +534,9 @@ export default {
       loadingMore: false,
       drawer: false,
       isDrawers: false,
-      deleteFoldersTask: [],
+      deleteFolder: false,
+      deleteFoldersTasks: [],
+      deleteFolderLimit: 2,
     };
   },
   computed: {
@@ -610,35 +629,66 @@ export default {
     },
   },
   methods: {
-    test() {
+    addDeleteFolderTask(limit) {
+      this.deleteFolderLimit = limit;
       let arr = this.$route.path.split("/");
       let index = arr.findIndex((it) => it == "storage");
       const Prefix = arr.slice(index + 2).join("/");
-      console.log(Prefix);
-      const task = new DeleteTaskWrapper(
-        this.s3,
-        {
-          Bucket: this.pathInfo.Bucket,
-          Prefix: Prefix + this.selected[0].name + "/",
-        },
-        this.genID(10)
-      );
-      task.startTasks();
-    },
-    async tesb() {
-      let arr = this.$route.path.split("/");
-      let index = arr.findIndex((it) => it == "storage");
-      const Prefix = arr.slice(index + 2).join("/");
-      console.log(Prefix);
-      let selected = this.selected;
-      selected.forEach((it) => {
-        const task = new DeleteTaskWrapper(
+      const deleteFoldersTask = this.selected.map((it) => {
+        return new DeleteTaskWrapper(
+          this,
           this.s3,
-          { Bucket: this.pathInfo.Bucket, Prefix: Prefix + it.name + "/" },
-          this.genID(10)
+          {
+            Bucket: this.pathInfo.Bucket,
+            Prefix: Prefix + it.name + "/",
+          },
+          this.genID
         );
-        this.deleteFoldersTask.push(task);
       });
+      this.deleteFoldersTasks = deleteFoldersTask.concat(
+        this.deleteFoldersTasks
+      );
+    },
+    async startDeleteFolder(task) {
+      await task.startTasks();
+      this.processDeleteFolderTask();
+    },
+    async processDeleteFolderTask() {
+      let processing = this.deleteFoldersTasks.filter(
+        (item) => item.status == 1
+      );
+      console.log(processing);
+      if (processing.length >= this.limit) return;
+      const idles = this.deleteFoldersTasks.filter((item) => item.status == 0);
+      console.log(idles, "idles");
+      if (!idles.length) return;
+      const fill = this.deleteFolderLimit - processing.length;
+      console.log(fill);
+      const min = idles.length <= fill ? idles.length : fill;
+      console.log(min);
+      for (let i = 0; i < min; i++) {
+        console.log(222);
+        await this.startDeleteFolder(idles[i]);
+      }
+    },
+
+    test() {
+      this.deleteFolder = true;
+      this.addDeleteFolderTask(2);
+      this.processDeleteFolderTask();
+      // let arr = this.$route.path.split("/");
+      // let index = arr.findIndex((it) => it == "storage");
+      // const Prefix = arr.slice(index + 2).join("/");
+      // console.log(Prefix);
+      // const task = new DeleteTaskWrapper(
+      //   this.s3,
+      //   {
+      //     Bucket: this.pathInfo.Bucket,
+      //     Prefix: Prefix + this.selected[0].name + "/",
+      //   },
+      //   this.genID(10)
+      // );
+      // task.startTasks();
     },
 
     onStop() {},

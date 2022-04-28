@@ -35,6 +35,7 @@
           </div>
         </div>
 
+        <!-- Upload Task -->
         <div class="upload-task" v-show="currentTab == 0">
           <ul class="status-tabs d-flex align-center">
             <li
@@ -181,7 +182,64 @@
             </div>
           </div>
         </div>
-        <div v-show="currentTab == 1">232323</div>
+
+        <!-- Delete Folder -->
+        <div v-show="currentTab == 1" class="delete-folder-task">
+          <div class="tips">
+            If you refresh or close the page when the folder is being deleted,
+            the displayed number of deleted files may be inaccurate.
+          </div>
+          <div class="my-5">
+            <v-btn rounded color="primary"> Start All </v-btn>
+            <v-btn rounded color="primary" class="ml-5" outlined>
+              Pause All
+            </v-btn>
+            <v-btn rounded outlined color="primary" class="ml-5">
+              Removed
+            </v-btn>
+          </div>
+          <v-data-table
+            :headers="deleteFolderHeaders"
+            :items="
+              deleteFolderList.slice(
+                (this.deleteFolderPage - 1) * 10,
+                this.deleteFolderPage * 10
+              )
+            "
+            item-key="param[Prefix]"
+            class="elevation-1 task-table"
+            hide-default-footer
+          >
+            <template #item.status="{ item }">
+              <span v-show="item.status == 3" class="complete">COMPLETE</span>
+              <span v-show="item.status == 2" class="pause">PAUSED</span>
+              <span v-show="item.status == 1" class="deleteing">DELETEING</span>
+              <span v-show="item.status == 0">WAITING</span>
+            </template>
+            <template #item.action="{ item }">
+              <span class="operation" @click="handleClick(item)">Start</span>
+              <span class="ml-5 operation" @click="handleClick(item)"
+                >Pause</span
+              >
+              <span class="ml-5 operation" @click="handleClick(item)"
+                >Remove</span
+              >
+            </template>
+          </v-data-table>
+          <template v-if="deleteFolderLength == 0">
+            <e-empty :loading="false">
+              {{ false ? `Loading files...` : `No folders or files` }}
+            </e-empty>
+          </template>
+          <div class="table-footer d-flex align-center justify-center pt-6">
+            <v-pagination
+              v-if="deleteFolderLength > 1"
+              v-model="page"
+              :length="deleteFolderLength"
+              @input="handleSkip"
+            ></v-pagination>
+          </div>
+        </div>
       </div>
     </v-navigation-drawer>
   </div>
@@ -192,6 +250,14 @@ import { bus } from "../../../main";
 
 export default {
   props: {
+    deleteFolder: {
+      type: Boolean,
+      default: false,
+    },
+    deleteFolderTasks: {
+      type: Array,
+      default: () => {},
+    },
     prefix: {
       type: String,
       default: "",
@@ -199,7 +265,7 @@ export default {
   },
   data() {
     return {
-      drawer: false,
+      drawer: true,
       tasks: [],
       status: 0,
       currentTab: 0,
@@ -226,7 +292,41 @@ export default {
           width: 300,
         },
       ],
+      deleteFolderHeaders: [
+        {
+          text: "Folder Name",
+          align: "center",
+          sortable: false,
+          value: "param[Prefix]",
+        },
+        {
+          text: "Bucket",
+          align: "center",
+          sortable: false,
+          value: "param[Bucket]",
+        },
+        {
+          text: "Number of Deleted Files",
+          align: "center",
+          sortable: false,
+          value: "deleteCount",
+        },
+        {
+          text: "Status",
+          align: "center",
+          sortable: false,
+          value: "status",
+        },
+        {
+          text: "Action",
+          align: "center",
+          sortable: false,
+          value: "action",
+        },
+      ],
+
       page: 1,
+      deleteFolderPage: 1,
     };
   },
   created() {},
@@ -264,6 +364,13 @@ export default {
     length() {
       return Math.ceil(this.list.length / 10);
     },
+
+    deleteFolderList() {
+      return this.deleteFolderTasks;
+    },
+    deleteFolderLength() {
+      return Math.ceil(this.deleteFolderList.length / 10);
+    },
   },
   methods: {
     handleChangeStatusBar(value) {
@@ -293,6 +400,14 @@ export default {
     },
     handleClearAllRecords() {
       bus.$emit("handleClearAllRecords", this.status);
+    },
+  },
+  watch: {
+    deleteFolder(newValue) {
+      if (newValue) {
+        this.drawer = true;
+        this.currentTab = 1;
+      }
     },
   },
 };
@@ -387,6 +502,29 @@ export default {
           bottom: 0;
           transform: translateX(-50%);
         }
+      }
+    }
+    .delete-folder-task {
+      padding: 30px 0 0 25px;
+      box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
+      background: #fff;
+      .tips {
+        padding: 10px 35px;
+        color: #ff6960;
+        background: #fff2f2;
+        border-radius: 6px;
+      }
+      .operation {
+        color: #34a9ff;
+      }
+      .complete {
+        color: #00bd9a;
+      }
+      .pause {
+        color: #ff8843;
+      }
+      .deleteing {
+        color: #ff6960;
       }
     }
   }

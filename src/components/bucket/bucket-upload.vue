@@ -126,7 +126,7 @@ class TaskWrapper {
     this.param = param;
     this.fileInfo = fileInfo;
   }
-  async startTask(cb) {
+  async startTask() {
     try {
       this.task = new Upload({
         client: this.s3,
@@ -151,8 +151,6 @@ class TaskWrapper {
         Vue.prototype.$alert("The storage space is full");
         console.log(this.id, this.status, e);
       }
-    } finally {
-      cb();
     }
   }
   async cancelTask() {
@@ -324,6 +322,10 @@ export default {
       console.log(newTasks);
       this.tasks = newTasks.concat(this.tasks);
     },
+    async start(task) {
+      await task.startTask();
+      this.processTask();
+    },
     async processTask() {
       let processing = this.tasks.filter((task) => {
         return task.status == 1;
@@ -343,9 +345,7 @@ export default {
       console.log("min", min);
 
       for (let i = 0; i < min; i++) {
-        idles[i].startTask(() => {
-          this.processTask();
-        });
+        this.start(idles[i]);
       }
     },
     onConfirm() {

@@ -70,12 +70,14 @@ export default {
     },
     list() {
       let list = [];
+
       if (this.inBucket) {
         list = this.bucketList;
       } else if (this.inFolder) {
         list = this.folderList;
       }
       if (this.searchKey && !this.inFolder) {
+        console.log("inSerarchKey");
         list = list.filter((it) => {
           return new RegExp(this.searchKey).test(it.name);
         });
