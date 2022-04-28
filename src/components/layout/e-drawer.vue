@@ -214,8 +214,8 @@ export default {
           group: /^\/usage/i,
           subs: [
             {
-              label: "Plan",
-              to: "/usage/plan",
+              label: "Usage",
+              to: "/usage/info",
             },
             {
               label: "Billing",
