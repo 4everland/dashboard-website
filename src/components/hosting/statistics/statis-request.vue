@@ -14,7 +14,7 @@
     <div class="mt-10">
       <h4 class="mb-5">Requests by source</h4>
       <v-row>
-        <v-col cols="12" md="6" v-for="(it, i) in reqList" :key="i">
+        <v-col cols="12" :md="it.md || 6" v-for="(it, i) in reqList" :key="i">
           <statis-chart2
             :appId="appId"
             :show-date="it.date"
@@ -63,8 +63,9 @@ export default {
           date: true,
         },
         {
-          title: "IP From",
+          title: "Request by country",
           type: "IP",
+          md: 12,
         },
       ],
     };

@@ -377,7 +377,7 @@ export default {
           return (b.prefix ? 1 : 0) - (a.prefix ? 1 : 0);
         });
         // console.log(data);
-        const list = data.objects.map((it) => {
+        let list = data.objects.map((it) => {
           if (it.prefix)
             return {
               name: it.prefix.replace(Prefix, "").replace("/", ""),
@@ -398,18 +398,18 @@ export default {
             arHash: meta["X-Amz-Meta-Arweave-Hash"],
           };
         });
-        // .filter((it) => {
-        //   return (
-        //     this.folderList.filter((row) => row.name == it.name).length == 0
-        //   );
-        // });
         if (this.loadingMore) {
+          list = list.filter((it) => {
+            return (
+              this.folderList.filter((row) => row.name == it.name).length == 0
+            );
+          });
           this.loadingMore = false;
           this.folderList = [...this.folderList, ...list];
         } else {
           this.folderList = list;
         }
-        if (list.length < 10) this.finished = true;
+        if (list.length < 90) this.finished = true;
         // console.log(this.pathInfo, this.folderList);
       });
       stream.on("error", (err) => {

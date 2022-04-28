@@ -13,7 +13,7 @@
 
       <div class="mt-10">
         <v-row>
-          <v-col cols="12" md="6" v-for="(it, i) in reqList" :key="i">
+          <v-col cols="12" :md="it.md || 6" v-for="(it, i) in reqList" :key="i">
             <statis-chart2
               api="/request/flux/list"
               :show-date="it.date"
@@ -64,8 +64,9 @@ export default {
           date: true,
         },
         {
-          title: "IP From",
+          title: "Request by country",
           type: "IP",
+          md: 12,
         },
       ],
     };
