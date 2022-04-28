@@ -10,7 +10,13 @@
     </div>
     <div class="pos-r">
       <div class="d-flex pt-6">
-        <div ref="chart" style="height: 260px" class="flex-1 pa-2"></div>
+        <div
+          ref="chart"
+          :style="{
+            height: showRatio ? '480px' : '260px',
+          }"
+          class="flex-1 pa-2"
+        ></div>
         <div style="width: 40%">
           <ul class="mt-12">
             <li
@@ -147,7 +153,11 @@ export default {
       if (num > 1024) return (num / 1024).toFixed(2) + "KB";
       return num + "B";
     },
-    async getList(page = 1, size = 5) {
+    async getList(page = 1, size) {
+      const inMore = size > 0;
+      if (!size) {
+        size = this.showRatio ? 10 : 5;
+      }
       const params = {
         projectId: this.appId,
         sourceType: this.type,
@@ -177,7 +187,7 @@ export default {
           return obj;
         });
         this.totalVal = total;
-        if (size == 5) {
+        if (!inMore) {
           this.hasMore = data.totalPages > 1;
         } else {
           this.pageLen = data.totalPages;
