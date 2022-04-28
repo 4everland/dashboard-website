@@ -407,18 +407,11 @@
       </div>
     </div>
 
-    <div
-      v-if="inFolder && !finished"
-      class="pd-20 gray ta-c fz-16 mt-5"
-      :class="{
-        'hover-1': !loadingMore,
-      }"
-      @click="onLoadMore"
-      v-intersect="onLoadMore"
-    >
-      <span v-if="list.length">{{
+    <!-- v-intersect="onLoadMore" -->
+    <div v-if="inFolder && !finished" class="pd-20 gray ta-c fz-16 mt-5">
+      <v-btn outlined rounded v-if="list.length" @click="onLoadMore">{{
         loadingMore ? "Loading..." : "Load More"
-      }}</span>
+      }}</v-btn>
     </div>
   </div>
 </template>

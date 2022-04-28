@@ -368,7 +368,7 @@ export default {
         pre,
         "",
         Delimiter,
-        30,
+        100,
         after
       );
       stream.on("data", (data) => {
