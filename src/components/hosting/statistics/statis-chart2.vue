@@ -1,8 +1,10 @@
 <template>
-  <div class="pos-r">
-    <div class="pos-a top-0 z-1 w100p d-flex al-c">
-      <v-chip color="primary" small class="ml-5">{{ title }}</v-chip>
-      <div style="max-width: 350px" class="ml-auto">
+  <div class="pos-r bd-1 pa-3">
+    <div class="pos-a top-0 z-1">
+      <v-chip color="primary" small class="ml-2 mt-3">{{ title }}</v-chip>
+    </div>
+    <div class="pos-a right-0 top-o z-10">
+      <div style="max-width: 350px" class="mr-3">
         <e-date-pick v-model="date" v-if="showDate"></e-date-pick>
       </div>
     </div>
