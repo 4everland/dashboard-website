@@ -64,8 +64,11 @@ export default {
       this.$emit("input", val);
     },
     inputVal(val) {
-      if (val <= 0 || isNaN(val) || val > this.max || val % 100 == 0)
+      if (val <= 0 || isNaN(val) || val > this.max || val % this.step == 0)
         this.onInput();
+    },
+    value(val) {
+      this.val = val;
     },
   },
   methods: {
@@ -76,6 +79,7 @@ export default {
       const rest = val % this.step;
       if (rest) {
         val -= rest;
+        if (rest > this.step / 2) val += this.step;
       }
       this.val = val;
       this.inputVal = val;

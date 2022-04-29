@@ -5,6 +5,9 @@
   transition: all ease 300ms;
 }
 
+.tr-origin-0 {
+  transform-origin: 0 0;
+}
 .scale-9 {
   transform: scale(.9);
 }
