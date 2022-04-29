@@ -216,6 +216,7 @@ export default {
             {
               label: "Usage",
               to: "/usage/info",
+              matPath: /usage\/(more)/,
             },
             {
               label: "Billing",

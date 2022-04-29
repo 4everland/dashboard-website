@@ -22,6 +22,9 @@
         </div>
       </div>
     </div>
+    <div class="mt-5 ml-5">
+      <v-btn color="primary" to="/usage/more" rounded>Get more</v-btn>
+    </div>
   </div>
 </template>
 
