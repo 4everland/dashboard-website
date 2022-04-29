@@ -236,7 +236,6 @@ export default {
   computed: {
     path() {
       const arr = this.$route.path.split("/");
-      console.log(arr);
       if (this.curDir == "Specified") {
         return "bucket://" + this.info.Bucket + "/";
       } else {

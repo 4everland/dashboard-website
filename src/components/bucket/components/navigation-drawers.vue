@@ -11,7 +11,12 @@
     >
       <div class="d-flex justify-space-between pr-6">
         <span class="fw-b fz-18">Task List</span>
-        <span class="fw-b" @click="handleCloseTaskList">close</span>
+        <img
+          style="cursor: pointer"
+          @click="handleCloseTaskList"
+          src="../../../../public/img/svg/close_icon.svg"
+          alt=""
+        />
       </div>
       <div class="tips py-3">
         Tip：If you refresh or close the browser, the ongoing upload task is
@@ -178,6 +183,7 @@
             <div class="table-footer d-flex align-center justify-center pt-6">
               <v-pagination
                 v-if="length > 1"
+                total-visible="10"
                 v-model="page"
                 :length="length"
                 @input="handleSkip"
@@ -193,11 +199,36 @@
             the displayed number of deleted files may be inaccurate.
           </div>
           <div class="my-5">
-            <v-btn rounded color="primary"> Start All </v-btn>
-            <v-btn rounded color="primary" class="ml-5" outlined>
+            <v-btn
+              rounded
+              color="primary"
+              @click="handleDeleteFolderStartAll"
+              :disabled="!deleteFolderTasks.some((it) => it.status == 2)"
+            >
+              Start All
+            </v-btn>
+            <v-btn
+              rounded
+              color="primary"
+              class="ml-5"
+              outlined
+              @click="handleDeleteFolderPauseAll"
+              :disabled="
+                !deleteFolderTasks.some(
+                  (it) => it.status !== 2 && it.status !== 3
+                )
+              "
+            >
               Pause All
             </v-btn>
-            <v-btn rounded outlined color="primary" class="ml-5">
+            <v-btn
+              rounded
+              outlined
+              color="primary"
+              class="ml-5"
+              @click="handleDeleteFolderRemoveAll"
+              :disabled="!deleteFolderTasks.length"
+            >
               Removed
             </v-btn>
           </div>
@@ -214,11 +245,28 @@
             hide-default-footer
           >
             <template #item.status="{ item }">
-              <p v-if="item.status == 3" class="complete mb-0">COMPLETE</p>
-              <p v-if="item.status == 2" class="pause mb-0">PAUSED</p>
+              <p
+                v-if="item.status == 3"
+                class="complete delete-folder-status mb-0"
+              >
+                COMPLETE
+              </p>
+              <p
+                v-if="item.status == 2"
+                class="pause delete-folder-status mb-0"
+              >
+                PAUSED
+              </p>
               <p
                 v-if="item.status == 1"
-                class="deleteing d-flex align-center mb-0"
+                class="
+                  deleteing
+                  delete-folder-status
+                  d-flex
+                  align-center
+                  justify-center
+                  mb-0
+                "
               >
                 <v-progress-circular
                   style="width: 20px"
@@ -227,23 +275,25 @@
                 ></v-progress-circular>
                 <span class="ml-4">DELETEING</span>
               </p>
-              <p v-if="item.status == 0" class="mb-0">WAITING</p>
+              <p v-if="item.status == 0" class="mb-0 delete-folder-status">
+                <span class="ml-4">WAITING</span>
+              </p>
             </template>
             <template #item.action="{ item }">
               <span
                 v-show="item.status == 2"
-                class="operation"
+                class="px-3 opeartion"
                 @click="handleStartDeleteFolder(item.id)"
                 >Start</span
               >
               <span
                 v-show="item.status == 1 || item.status == 0"
-                class="ml-5 operation"
+                class="px-3 opeartion"
                 @click="handlePasueDeleteFolder(item.id)"
                 >Pause</span
               >
               <span
-                class="ml-5 operation"
+                class="px-3 opeartion"
                 @click="handleRemoveDeleteFolder(item.id)"
                 >Remove</span
               >
@@ -257,6 +307,7 @@
           <div class="table-footer d-flex align-center justify-center pt-6">
             <v-pagination
               v-if="deleteFolderLength > 1"
+              total-visible="10"
               v-model="page"
               :length="deleteFolderLength"
               @input="handleSkip"
@@ -339,6 +390,7 @@ export default {
           align: "center",
           sortable: false,
           value: "status",
+          width: 200,
         },
         {
           text: "Action",
@@ -444,6 +496,16 @@ export default {
     },
     handleRemoveDeleteFolder(id) {
       this.$emit("handleRemoveDeleteFolder", id);
+    },
+
+    handleDeleteFolderStartAll() {
+      this.$emit("handleDeleteFolderStartAll");
+    },
+    handleDeleteFolderPauseAll() {
+      this.$emit("handleDeleteFolderPauseAll");
+    },
+    handleDeleteFolderRemoveAll() {
+      this.$emit("handleDeleteFolderRemoveAll");
     },
   },
   watch: {
@@ -559,8 +621,9 @@ export default {
         background: #fff2f2;
         border-radius: 6px;
       }
-      .operation {
-        color: #34a9ff;
+      .delete-folder-status {
+        height: 40px;
+        line-height: 40px;
       }
       .complete {
         color: #00bd9a;

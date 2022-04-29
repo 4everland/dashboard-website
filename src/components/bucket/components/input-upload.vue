@@ -2,8 +2,14 @@
 .e-upload {
   margin: 20px 0 30px;
   .add-img {
-    padding: 60px 0;
+    padding: 20px 0;
     border: 3px dashed #ddd;
+
+    .description {
+      margin: 0 auto;
+      width: 402px;
+      color: #495667;
+    }
   }
 }
 .files-to-upload {
@@ -53,13 +59,15 @@
       <div class="upload-header d-flex justify-space-between align-center">
         <div class="add-img pos-r bdrs-10 drag-area" v-ripple>
           <div class="ta-c">
-            <p>
-              <v-icon size="60" color="#bbb">mdi-cloud-upload-outline</v-icon>
+            <img src="../../../../public/img/icon/bucket_upload.svg" alt="" />
+            <p class="description fw-b fz-20">
+              Drag and drop one or more files or folders here to select them.
             </p>
           </div>
           <!-- webkitdirectory -->
           <input
             ref="file"
+            style="visibility: hidden"
             :webkitdirectory="isUploadDir ? true : false"
             multiple
             type="file"
@@ -86,11 +94,11 @@
         existing file, the existing file is overwritten. 正在AR同步的文件将失败
       </div>
       <div class="upload-opreation">
-        <v-btn rounded color="primary">
-          <span class="ml-2" @click="onClick(false)">Select Files</span>
+        <v-btn rounded color="primary" @click="onClick(false)">
+          <span class="ml-2">Select Files</span>
         </v-btn>
-        <v-btn rounded color="primary" class="ml-7">
-          <span class="ml-2" @click="onClick(true)"> Select Folders</span>
+        <v-btn rounded color="primary" class="ml-7" @click="onClick(true)">
+          <span class="ml-2"> Select Folders</span>
         </v-btn>
       </div>
       <slot name="hint"></slot>

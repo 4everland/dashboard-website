@@ -14,7 +14,9 @@
       @uploaded="getList"
       :tableList="list"
     ></storage-upload> -->
-    <span @click="$refs.navDrawers.drawer = true"> TaskList </span>
+    <span @click="$refs.navDrawers.drawer = true" class="task-list">
+      TaskList
+    </span>
     <button @click="test">test delete</button>
 
     <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
@@ -443,8 +445,10 @@
       @handlePasueDeleteFolder="handlePasueDeleteFolder"
       @handleStartDeleteFolder="handleStartDeleteFolder"
       @handleRemoveDeleteFolder="handleRemoveDeleteFolder"
+      @handleDeleteFolderStartAll="handleDeleteFolderStartAll"
+      @handleDeleteFolderPauseAll="handleDeleteFolderPauseAll"
+      @handleDeleteFolderRemoveAll="handleDeleteFolderRemoveAll"
     ></navigation-drawers>
-    {{ pathInfo }}
   </div>
 </template>
 
@@ -622,6 +626,7 @@ export default {
   },
   watch: {
     path() {
+      console.log(111);
       if (!this.inStorage) return;
       this.selected = [];
       this.folderList = [];
@@ -669,7 +674,7 @@ export default {
       console.log(min);
       for (let i = 0; i < min; i++) {
         console.log(222);
-        await this.startDeleteFolder(idles[i]);
+        this.startDeleteFolder(idles[i]);
       }
     },
 
@@ -847,6 +852,30 @@ export default {
       let index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
       this.deleteFoldersTasks.splice(index, 1);
     },
+
+    handleDeleteFolderStartAll() {
+      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
+      this.deleteFoldersTasks.forEach((it) => {
+        it.retryTasks();
+      });
+      if (!arr.length) {
+        this.processDeleteFolderTask();
+      }
+    },
+    handleDeleteFolderPauseAll() {
+      this.deleteFoldersTasks.forEach((item) => item.stopTasks());
+    },
+    handleDeleteFolderRemoveAll() {
+      this.deleteFoldersTasks = [];
+    },
   },
 };
 </script>
+<style lang="scss" scoped>
+.task-list {
+  float: right;
+  color: #34a9ff;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>

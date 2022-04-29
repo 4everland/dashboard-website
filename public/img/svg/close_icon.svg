@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>close</title>
+    <defs>
+        <polygon id="path-1" points="10.8994949 2.89949494 10.8984949 8.89849494 16.8994949 8.89949494 16.8994949 10.8994949 10.8984949 10.8984949 10.8994949 16.8994949 8.89949494 16.8994949 8.89849494 10.8984949 2.89949494 10.8994949 2.89949494 8.89949494 8.89849494 8.89849494 8.89949494 2.89949494"></polygon>
+    </defs>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="close" transform="translate(10.000000, 10.000000) rotate(90.000000) translate(-10.000000, -10.000000) translate(0.100505, 0.100505)">
+            <g transform="translate(9.899495, 9.899495) rotate(180.000000) translate(-9.899495, -9.899495) translate(0.000000, 0.000000)" id="Colors/Background-Clipped">
+                <g transform="translate(0.000000, -0.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1" transform="translate(9.899495, 9.899495) rotate(-45.000000) translate(-9.899495, -9.899495) "></use>
+                    </mask>
+                    <use id="path-1" fill="#D8D8D8" transform="translate(9.899495, 9.899495) rotate(-45.000000) translate(-9.899495, -9.899495) " xlink:href="#path-1"></use>
+                    <g id="Colors/Background" mask="url(#mask-2)">
+                        <g transform="translate(-3.100505, -3.100505)" id="Color">
+                            <rect id="矩形" fill="#0B0817" fill-rule="nonzero" x="0" y="0" width="26" height="26"></rect>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
