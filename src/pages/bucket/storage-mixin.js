@@ -519,36 +519,26 @@ export default {
           console.log(err, data);
           if (err) reject(err);
           else resolve(data);
+          this.getList();
         });
       });
     },
     async onDelete(item) {
       console.log(item);
       try {
-        const arr = await this.getSelectedObjects(item);
-        if (arr.length > 1000) {
-          throw new Error("You can delete up to 1,000 files at a time.");
-        }
-        const suffix = arr.length > 1 ? "s" : "";
+        // const arr = await this.getSelectedObjects(item);
+        // if (arr.length > 1000) {
+        //   throw new Error("You can delete up to 1,000 files at a time.");
+        // }
+        // const suffix = arr.length > 1 ? "s" : "";
         const target = this.inBucket ? "bucket" : "file";
-        let html = `The following ${target}${suffix} will be permanently deleted. Are you sure you want to continue?`;
-        if (
-          this.inFolder &&
-          this.selected.filter((it) => it.arStatus != "desynced").length
-        ) {
-          const pre = arr.length == 1 ? "" : "files in AR";
-          html = `The following file${suffix} will be permanently deleted, but ${pre} can’t be deleted from the AR network, and your AR storage space will not increase. Would you like to continue?`;
-        }
-        html += `<ul class='mt-4 ov-a gray' style="max-height: 40vh">`;
-        for (const row of arr) {
-          html += "<li>" + row.name + "</li>";
-        }
-        html += "</ul>";
-        await this.$confirm(html, `Remove ${target}${suffix}`);
-        this.$loading();
+        // let html = `The following ${target}${suffix} will be permanently deleted. Are you sure you want to continue?`;
+        let html = `The following ${target}s will be permanently deleted. Are you sure you want to continue?`;
+
         if (this.inBucket) {
+          await this.$confirm(html, `Remove ${target}`);
           let errArr = [];
-          for (const row of arr) {
+          for (const row of this.selected) {
             try {
               await this.delBucket(row.name);
             } catch (error) {
@@ -560,14 +550,72 @@ export default {
               this.$alert(errArr.join("<br>"));
             }, 10);
         }
-        if (!this.inBucket) {
-          await this.delObjects(
-            arr.map((it) => {
-              return { Key: it.Key };
-            })
-          );
+        if (this.inFolder) {
+          let hasFile = this.selected.filter((it) => it.isFile);
+          let hasFolder = this.selected.filter((it) => !it.isFile);
+          if (hasFile.length && hasFolder.length) {
+            console.log("here");
+            //  file folder exsit
+            if (hasFile.filter((it) => it.arStatus != "desynced").length) {
+              html = `The following files will be permanently deleted, but files in AR can’t be deleted from the AR network, and your AR storage space will not increase. Would you like to continue?`;
+              await this.$confirm(html, `Remove ${target}`);
+            }
+            this.delObjects(
+              hasFile.map((it) => {
+                return { Key: it.Key };
+              })
+            );
+            this.deleteFolder = true;
+            this.addDeleteFolderTask(2);
+            this.processDeleteFolderTask();
+          } else if (hasFile.length && !hasFolder.length) {
+            // only file
+            if (hasFile.filter((it) => it.arStatus != "desynced").length) {
+              html = `The following files will be permanently deleted, but files in AR can’t be deleted from the AR network, and your AR storage space will not increase. Would you like to continue?`;
+              await this.$confirm(html, `Remove ${target}`);
+            }
+            this.delObjects(
+              hasFile.map((it) => {
+                return { Key: it.Key };
+              })
+            );
+          } else {
+            // only folder
+            this.deleteFolder = true;
+            this.addDeleteFolderTask(2);
+            this.processDeleteFolderTask();
+          }
         }
-        this.$loading.close();
+
+        // html += `<ul class='mt-4 ov-a gray' style="max-height: 40vh">`;
+        // for (const row of arr) {
+        //   html += "<li>" + row.name + "</li>";
+        // }
+        // html += "</ul>";
+        // await this.$confirm(html, `Remove ${target}${suffix}`);
+        // this.$loading();
+        // if (this.inBucket) {
+        //   let errArr = [];
+        //   for (const row of arr) {
+        //     try {
+        //       await this.delBucket(row.name);
+        //     } catch (error) {
+        //       errArr.push(`${row.name}: ${error.message}`);
+        //     }
+        //   }
+        //   if (errArr.length)
+        //     setTimeout(() => {
+        //       this.$alert(errArr.join("<br>"));
+        //     }, 10);
+        // }
+        // if (!this.inBucket) {
+        //   await this.delObjects(
+        //     arr.map((it) => {
+        //       return { Key: it.Key };
+        //     })
+        //   );
+        // }
+        // this.$loading.close();
       } catch (err) {
         if (err) this.onErr(err);
         else return;
@@ -597,31 +645,31 @@ export default {
       const url = this.getPath(it);
       this.$router.push(url);
     },
-    async getSelectedObjects(item) {
-      const items = item ? [item] : this.selected;
-      if (this.inBucket) return items;
-      let arr = [];
-      const { Prefix } = this.pathInfo;
-      for (const it of items) {
-        if (it.isFile) arr.push(it);
-        else {
-          const objArr = await this.getSubObjects(it.name);
-          if (objArr.length >= 900)
-            throw new Error(
-              `Plenty of files are found in folder【${it.name}】 and can only be deleted under the folder.`
-            );
-          arr = arr.concat(
-            objArr.map((sub) => {
-              return {
-                Key: sub.Key,
-                name: sub.Key.replace(Prefix, ""),
-              };
-            })
-          );
-        }
-      }
-      return arr;
-    },
+    // async getSelectedObjects(item) {
+    //   const items = item ? [item] : this.selected;
+    //   if (this.inBucket) return items;
+    //   let arr = [];
+    //   const { Prefix } = this.pathInfo;
+    //   for (const it of items) {
+    //     if (it.isFile) arr.push(it);
+    //     else {
+    //       const objArr = await this.getSubObjects(it.name);
+    //       if (objArr.length >= 900)
+    //         throw new Error(
+    //           `Plenty of files are found in folder【${it.name}】 and can only be deleted under the folder.`
+    //         );
+    //       arr = arr.concat(
+    //         objArr.map((sub) => {
+    //           return {
+    //             Key: sub.Key,
+    //             name: sub.Key.replace(Prefix, ""),
+    //           };
+    //         })
+    //       );
+    //     }
+    //   }
+    //   return arr;
+    // },
     async getSubObjects(folder) {
       const { Bucket, Prefix } = this.pathInfo;
       const folderKey = Prefix + folder + "/";

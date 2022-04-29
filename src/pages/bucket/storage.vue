@@ -8,6 +8,8 @@
   </div>
 
   <div v-else>
+    {{ inBucket }}
+    {{ inFolder }}
     <!-- <storage-upload
       ref="upload"
       :info="pathInfo"
@@ -626,31 +628,40 @@ export default {
   },
   watch: {
     path() {
-      console.log(111);
+      this.onRouteChange();
+    },
+    "$route.query"(_, oldVal) {
+      if (oldVal.action == "upload") {
+        this.onRouteChange();
+      }
+    },
+  },
+  methods: {
+    onRouteChange() {
       if (!this.inStorage) return;
       this.selected = [];
       this.folderList = [];
       this.getList();
       this.checkNew();
     },
-  },
-  methods: {
     addDeleteFolderTask(limit) {
       this.deleteFolderLimit = limit;
       let arr = this.$route.path.split("/");
       let index = arr.findIndex((it) => it == "storage");
       const Prefix = arr.slice(index + 2).join("/");
-      const deleteFoldersTask = this.selected.map((it) => {
-        return new DeleteTaskWrapper(
-          this,
-          this.s3,
-          {
-            Bucket: this.pathInfo.Bucket,
-            Prefix: Prefix + it.name + "/",
-          },
-          this.genID()
-        );
-      });
+      const deleteFoldersTask = this.selected
+        .filter((it) => !it.isFile)
+        .map((it) => {
+          return new DeleteTaskWrapper(
+            this,
+            this.s3,
+            {
+              Bucket: this.pathInfo.Bucket,
+              Prefix: Prefix + it.name + "/",
+            },
+            this.genID()
+          );
+        });
       this.deleteFoldersTasks = deleteFoldersTask.concat(
         this.deleteFoldersTasks
       );
@@ -677,26 +688,11 @@ export default {
         this.startDeleteFolder(idles[i]);
       }
     },
-
     test() {
       this.deleteFolder = true;
       this.addDeleteFolderTask(2);
       this.processDeleteFolderTask();
-      // let arr = this.$route.path.split("/");
-      // let index = arr.findIndex((it) => it == "storage");
-      // const Prefix = arr.slice(index + 2).join("/");
-      // console.log(Prefix);
-      // const task = new DeleteTaskWrapper(
-      //   this.s3,
-      //   {
-      //     Bucket: this.pathInfo.Bucket,
-      //     Prefix: Prefix + this.selected[0].name + "/",
-      //   },
-      //   this.genID(10)
-      // );
-      // task.startTasks();
     },
-
     onStop() {},
     onCopied() {
       this.$toast("Copied to clipboard !");
