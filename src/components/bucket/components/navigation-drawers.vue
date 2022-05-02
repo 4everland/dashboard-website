@@ -195,8 +195,16 @@
         <!-- Delete Folder -->
         <div v-show="currentTab == 1" class="delete-folder-task">
           <div class="tips">
-            If you refresh or close the page when the folder is being deleted,
-            the displayed number of deleted files may be inaccurate.
+            <img
+              class="icon"
+              src="img/icon/bucketUpload/ic-warning.svg"
+              alt=""
+            />
+            <span class="ml-2"
+              >If you refresh or close the page when the folder is being
+              deleted, the displayed number of deleted files may be
+              inaccurate.</span
+            >
           </div>
           <div class="my-5">
             <v-btn
@@ -557,6 +565,7 @@ export default {
   box-sizing: border-box;
   border-radius: 20px 0 0 20px;
   height: 100vh !important;
+  overflow: auto;
   .tips {
     color: #6a778b;
     font-size: 14px;
@@ -616,10 +625,13 @@ export default {
       box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
       background: #fff;
       .tips {
-        padding: 10px 35px;
+        padding: 10px;
         color: #ff6960;
         background: #fff2f2;
         border-radius: 6px;
+        .icon {
+          vertical-align: sub;
+        }
       }
       .delete-folder-status {
         height: 40px;

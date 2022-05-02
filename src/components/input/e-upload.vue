@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
 .e-upload {
   margin: 20px 0 30px;
   .add-img {

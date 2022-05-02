@@ -12,7 +12,14 @@
           specifiedDir = '';
         "
       >
-        <img src="img/svg/upload.svg" width="16" />
+        <img
+          :src="
+            curDir == 'Current'
+              ? 'img/icon/bucketUpload/ic-current-active.svg'
+              : 'img/icon/bucketUpload/ic-current.svg'
+          "
+          width="16"
+        />
         <span class="ml-2">Current</span>
       </v-btn>
       <v-btn
@@ -22,7 +29,14 @@
         class="ml-7"
         @click="curDir = 'Specified'"
       >
-        <img src="img/svg/upload.svg" width="16" />
+        <img
+          :src="
+            curDir == 'Specified'
+              ? 'img/icon/bucketUpload/ic-specified.svg'
+              : 'img/icon/bucketUpload/ic-specified-active.svg'
+          "
+          width="16"
+        />
         <span class="ml-2">Specified</span>
       </v-btn>
 

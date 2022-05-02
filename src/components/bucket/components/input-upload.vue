@@ -1,10 +1,9 @@
-<style lang="scss">
+<style scoped lang="scss">
 .e-upload {
   margin: 20px 0 30px;
   .add-img {
-    padding: 20px 0;
+    padding: 20px 10px;
     border: 3px dashed #ddd;
-
     .description {
       margin: 0 auto;
       width: 402px;
@@ -29,6 +28,7 @@
       margin-left: 17px;
       width: 400px;
       > p {
+        margin-top: 8px;
         font-size: 15px;
         font-weight: 500;
         color: #6a778b;
@@ -38,10 +38,8 @@
   }
 
   .upload-tips {
-    height: 40px;
-    padding: 0 10px;
+    padding: 10px 10px;
     margin: 15px 0;
-    line-height: 40px;
     font-size: 14px;
     font-weight: 400;
     color: #ff6960;
@@ -89,9 +87,12 @@
         </div>
       </div>
 
-      <div class="upload-tips">
-        Note: If the name of the file to upload is the same as that of an
-        existing file, the existing file is overwritten. 正在AR同步的文件将失败
+      <div class="upload-tips d-flex align-center">
+        <img src="img/icon/bucketUpload/ic-warning.svg" alt="" />
+        <span class="ml-2"
+          >Note: If the name of the file to upload is the same as that of an
+          existing file, the existing file is overwritten.
+        </span>
       </div>
       <div class="upload-opreation">
         <v-btn rounded color="primary" @click="onClick(false)">
