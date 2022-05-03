@@ -649,19 +649,34 @@ export default {
       let arr = this.$route.path.split("/");
       let index = arr.findIndex((it) => it == "storage");
       const Prefix = arr.slice(index + 2).join("/");
-      const deleteFoldersTask = this.selected
-        .filter((it) => !it.isFile)
-        .map((it) => {
-          return new DeleteTaskWrapper(
-            this,
-            this.s3,
-            {
-              Bucket: this.pathInfo.Bucket,
-              Prefix: Prefix + it.name + "/",
-            },
-            this.genID()
-          );
+      const deleteFoldersArr = this.selected.filter((it) => {
+        const currentFolderName = Prefix + it.name + "/";
+        let isExist = this.deleteFoldersTasks.findIndex((item) => {
+          return item.param.Prefix == currentFolderName;
         });
+        console.log(isExist);
+        if (isExist !== -1) {
+          let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
+          this.deleteFoldersTasks[isExist].retryTasks();
+
+          if (!arr.length) {
+            this.processDeleteFolderTask();
+          }
+        }
+        return !it.isFile && isExist == -1;
+      });
+
+      const deleteFoldersTask = deleteFoldersArr.map((it) => {
+        return new DeleteTaskWrapper(
+          this,
+          this.s3,
+          {
+            Bucket: this.pathInfo.Bucket,
+            Prefix: Prefix + it.name + "/",
+          },
+          this.genID()
+        );
+      });
       this.deleteFoldersTasks = deleteFoldersTask.concat(
         this.deleteFoldersTasks
       );
@@ -841,6 +856,7 @@ export default {
       let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
       this.deleteFoldersTasks[index].retryTasks();
       if (!arr.length) {
+        console.log("here");
         this.processDeleteFolderTask();
       }
     },
@@ -859,7 +875,10 @@ export default {
       }
     },
     handleDeleteFolderPauseAll() {
-      this.deleteFoldersTasks.forEach((item) => item.stopTasks());
+      this.deleteFoldersTasks.forEach((item) => {
+        if (item.status == 3) return;
+        item.stopTasks();
+      });
     },
     handleDeleteFolderRemoveAll() {
       this.deleteFoldersTasks = [];

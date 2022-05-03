@@ -47,9 +47,11 @@
         <div class="appoint-dir d-flex align-center">{{ path }}</div>
         <v-text-field
           v-model="specifiedDir"
-          class="hide-msg bd-1 specified-dir-input"
-          dense
-          solo
+          class="bd-1 specified-dir-input"
+          :rules="[rules.required, rules.counter]"
+          clearable
+          counter
+          maxlength="20"
           height="50"
         ></v-text-field>
       </div>
@@ -198,6 +200,10 @@ export default {
       page: 1,
       specifiedDir: "",
       webkitRelativePath: "",
+      rules: {
+        required: (value) => !!value || "Required.",
+        counter: (value) => value.length <= 20 || "Max 20 characters",
+      },
     };
   },
   mounted() {
@@ -426,6 +432,7 @@ export default {
       border-right: 1px solid #d0dae9;
     }
     .specified-dir-input {
+      padding: 0 20px;
       border: none;
     }
   }
