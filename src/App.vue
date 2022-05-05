@@ -14,7 +14,9 @@
       <v-main>
         <e-nav></e-nav>
         <div class="pa-5">
-          <e-wrap :class="meta.wrapCls || (meta.isTab ? 'pa-0' : 'main-wrap')">
+          <e-wrap
+            :class="meta.wrapCls || (meta.isTab ? 'pa-0' : 'main-wrap mb-12')"
+          >
             <keep-alive>
               <router-view></router-view>
             </keep-alive>
@@ -32,7 +34,7 @@
       class="pos-f z-10"
       href="https://discord.com/invite/Cun2VpsdjF"
       target="_blank"
-      style="right: 20px; bottom: 20px"
+      style="right: 20px; bottom: 8px"
     >
       <img src="img/svg/common/m-discord.svg" width="42" />
     </a>
