@@ -228,6 +228,9 @@ ul.ls-none {
   .v-text-field__details {
     display: none;
   }
+  &.v-input {
+    padding-top: 0;
+  }
 }
 
 .btn-wrap {

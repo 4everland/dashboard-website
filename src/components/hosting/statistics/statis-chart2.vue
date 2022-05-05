@@ -1,14 +1,22 @@
 <template>
-  <div class="pos-r">
-    <div class="pos-a top-0 z-1 w100p d-flex al-c">
-      <v-chip color="primary" small class="ml-5">{{ title }}</v-chip>
-      <div style="max-width: 350px" class="ml-auto">
+  <div class="pos-r bd-1 pa-3">
+    <div class="pos-a top-0 z-1">
+      <v-chip color="primary" small class="ml-2 mt-3">{{ title }}</v-chip>
+    </div>
+    <div class="pos-a right-0 top-o z-10">
+      <div style="max-width: 350px" class="mr-3">
         <e-date-pick v-model="date" v-if="showDate"></e-date-pick>
       </div>
     </div>
     <div class="pos-r">
       <div class="d-flex pt-6">
-        <div ref="chart" style="height: 260px" class="flex-1 pa-2"></div>
+        <div
+          ref="chart"
+          :style="{
+            height: showRatio ? '480px' : '260px',
+          }"
+          class="flex-1 pa-2"
+        ></div>
         <div style="width: 40%">
           <ul class="mt-12">
             <li
@@ -145,7 +153,11 @@ export default {
       if (num > 1024) return (num / 1024).toFixed(2) + "KB";
       return num + "B";
     },
-    async getList(page = 1, size = 5) {
+    async getList(page = 1, size) {
+      const inMore = size > 0;
+      if (!size) {
+        size = this.showRatio ? 10 : 5;
+      }
       const params = {
         projectId: this.appId,
         sourceType: this.type,
@@ -175,7 +187,7 @@ export default {
           return obj;
         });
         this.totalVal = total;
-        if (size == 5) {
+        if (!inMore) {
           this.hasMore = data.totalPages > 1;
         } else {
           this.pageLen = data.totalPages;
