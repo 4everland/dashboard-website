@@ -6,7 +6,9 @@ import BugBounty from "./bug-bounty";
 export default [
   {
     path: "/settings",
-    component: Settings,
+    components: {
+      noCache: Settings,
+    },
     meta: {
       title: "Settings",
       isTab: 1,
