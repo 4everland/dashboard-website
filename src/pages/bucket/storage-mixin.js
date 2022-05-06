@@ -355,7 +355,7 @@ export default {
         await this.getBuckets();
       }
       this.tableLoading = true;
-      const { Bucket, Prefix, Delimiter } = this.pathInfo;
+      let { Bucket, Prefix, Delimiter } = this.pathInfo;
       let after = "";
       if (this.loadingMore) {
         const last = this.list[this.list.length - 1];
@@ -635,6 +635,7 @@ export default {
     },
     getViewUrl(item) {
       const { Prefix } = this.pathInfo;
+      console.log(this.bucketInfo.originList[0]);
       let url = this.bucketInfo.originList[0] + "/" + Prefix + item.name;
       return url.encode();
     },

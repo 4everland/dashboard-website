@@ -10,11 +10,22 @@
     >
       <div class="d-flex justify-space-between pr-6">
         <span class="fw-b fz-18">Parts</span>
-        <span class="fw-b" @click="$emit('update:drawer', false)">close</span>
+        <img
+          style="cursor: pointer"
+          @click="$emit('update:drawer', false)"
+          src="/img/svg/close_icon.svg"
+          alt=""
+        />
       </div>
       <!-- {{ pathInfo }} -->
       <div class="upload-opreation py-4">
-        <v-btn rounded color="#339CFE" outlined @click="handleDeleteAll">
+        <v-btn
+          rounded
+          color="#339CFE"
+          outlined
+          @click="handleDeleteAll"
+          :disabled="!partList.length"
+        >
           <span class="ml-2">Delete All</span>
         </v-btn>
         <v-btn
@@ -23,6 +34,7 @@
           outlined
           class="ml-7"
           @click="handleDelete"
+          :disabled="!selected.length"
         >
           <span class="ml-2">Delete</span>
         </v-btn>
@@ -32,12 +44,17 @@
         :headers="headers"
         :items="list"
         show-select
+        :checkbox-color="$color1"
         item-key="UploadId"
-        class="elevation-1"
+        class="elevation-1 part-list-table"
         hide-default-footer
       >
         <template #item.Key="{ item }">
-          <span style="color: #339cfe">{{ item.Key }}</span>
+          <div class="key-name">
+            <span>
+              {{ item.Key }}
+            </span>
+          </div>
         </template>
       </v-data-table>
 
@@ -78,9 +95,10 @@ export default {
           align: "center",
           sortable: false,
           value: "Key",
+          width: 400,
         },
         {
-          text: "Upload Id",
+          text: "Upload ID",
           value: "UploadId",
           sortable: false,
           align: "center",
@@ -119,7 +137,7 @@ export default {
             throw new Error(err);
           }
           console.log(data);
-          this.partList = data.Uploads;
+          this.partList = data.Uploads ?? [];
           this.loading = false;
           this.$loading.close();
         }
@@ -156,19 +174,6 @@ export default {
         console.log(res);
         this.getPartList();
       });
-      // const { Bucket } = this.pathInfo;
-      // console.log(Bucket);
-      // this.s3.abortMultipartUpload(
-      //   {
-      //     Bucket,
-      //     Key: "20MB的副本2.png",
-      //     UploadId: "2891t70vRxGRRxTijx48bmDuYqA",
-      //   },
-      //   (err, data) => {
-      //     if (err) throw new Error(err);
-      //     console.log(data);
-      //   }
-      // );
     },
     handleDelete() {
       this.$loading();
@@ -212,7 +217,14 @@ export default {
   box-sizing: border-box;
   border-radius: 20px 0 0 20px;
   height: 100vh !important;
+  .key-name {
+    color: #339cfe;
+    width: 400px;
+    word-break: break-all;
+    white-space: pre-wrap;
+  }
 }
+
 .v-tab {
   font-size: 14px;
   font-weight: 400;

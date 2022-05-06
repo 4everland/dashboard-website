@@ -129,7 +129,9 @@
                 }}</span>
               </template>
               <template #item.fileInfo[name]="{ item }">
-                <span class="name">{{ item.fileInfo.name.slice(0, 8) }}..</span>
+                <span class="name">{{
+                  item.fileInfo.name.cutStr(20, 10)
+                }}</span>
               </template>
               <template #item.status="{ item }">
                 <span v-show="item.status == 3" style="color: #ff8843"
@@ -138,9 +140,21 @@
                 <span v-show="item.status == 2" style="color: #6a778b"
                   >Stopped</span
                 >
-                <span v-show="item.status == 4" style="color: #ff6960"
-                  >Upload Failed</span
-                >
+                <span
+                  v-show="item.status == 4"
+                  style="color: #ff6960; height: 100%"
+                  >Upload Failed
+                  <e-tooltip right>
+                    <v-icon
+                      slot="ref"
+                      color="#FF6960"
+                      size="18"
+                      class="pa-1 d-ib ml-2"
+                      >mdi-alert-circle-outline</v-icon
+                    >
+                    <span>{{ item.failedMessage }}</span>
+                  </e-tooltip>
+                </span>
                 <span v-show="item.status == 0" style="color: #24bc96"
                   >Preparing</span
                 >
@@ -158,7 +172,9 @@
 
                 <span
                   class="opeartion"
-                  v-show="item.status !== 3 && item.status !== 2"
+                  v-show="
+                    item.status !== 3 && item.status !== 2 && item.status !== 4
+                  "
                   @click="handleCancelUpload(item.id)"
                   >Cancel</span
                 >
@@ -347,7 +363,7 @@ export default {
   },
   data() {
     return {
-      drawer: true,
+      drawer: false,
       tasks: [],
       status: 0,
       currentTab: 0,
@@ -416,6 +432,8 @@ export default {
   mounted() {
     bus.$on("taskData", (tasks) => {
       this.drawer = true;
+      this.currentTab = 0;
+      this.status = 0;
       this.tasks = tasks;
     });
   },
@@ -522,6 +540,14 @@ export default {
       if (newValue) {
         this.drawer = true;
         this.currentTab = 1;
+      }
+    },
+    uploadingList(value) {
+      if (this.status == 1) {
+        let maxPage = Math.ceil(value / 10);
+        if (this.page > maxPage) {
+          this.page = maxPage;
+        }
       }
     },
   },

@@ -8,8 +8,7 @@
   </div>
 
   <div v-else>
-    {{ inBucket }}
-    {{ inFolder }}
+    inBucket:{{ inBucket }} inFolder: {{ inFolder }}
     <!-- <storage-upload
       ref="upload"
       :info="pathInfo"
@@ -19,7 +18,6 @@
     <span @click="$refs.navDrawers.drawer = true" class="task-list">
       TaskList
     </span>
-    <button @click="test">test delete</button>
 
     <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
       <div v-show="inBucket">
@@ -314,12 +312,12 @@
     <div v-if="inUpload">
       <bucket-upload
         ref="bucketUpload"
-        :path="path"
         :info="pathInfo"
+        :baseUrl="bucketInfo.originList[0]"
       ></bucket-upload>
     </div>
 
-    <div class="main-wrap" v-else>
+    <div class="main-wrap" v-if="!inFile && !inUpload">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -702,11 +700,6 @@ export default {
         console.log(222);
         this.startDeleteFolder(idles[i]);
       }
-    },
-    test() {
-      this.deleteFolder = true;
-      this.addDeleteFolderTask(2);
-      this.processDeleteFolderTask();
     },
     onStop() {},
     onCopied() {

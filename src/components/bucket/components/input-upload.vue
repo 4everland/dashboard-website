@@ -226,7 +226,7 @@ export default {
           }).length > 0;
         if (isRepeat) continue;
         file.id = this.genID(8);
-        console.log(file);
+        // console.log(file);
         this.files.unshift(file);
       }
       if (this.files.length) {

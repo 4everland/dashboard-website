@@ -105,7 +105,7 @@
           <v-btn rounded color="primary" @click="onConfirm">
             <span class="ml-2">upload</span>
           </v-btn>
-          <v-btn rounded color="primary" class="ml-7">
+          <v-btn rounded color="primary" class="ml-7" @click="onCancel">
             <span class="ml-2">cancel</span>
           </v-btn>
         </div>
@@ -125,13 +125,17 @@ class TaskWrapper {
   param;
   progress;
   task;
-
-  constructor(s3, param, id, fileInfo) {
+  failedMessage;
+  url;
+  baseUrl;
+  constructor(s3, param, id, fileInfo, url) {
+    console.log(url);
     this.id = id;
     this.s3 = s3;
     this.status = 0; //waitingUpload
     this.param = param;
     this.fileInfo = fileInfo;
+    this.url = url;
   }
   async startTask() {
     try {
@@ -146,18 +150,19 @@ class TaskWrapper {
       this.progress = 0;
       this.status = 1; // uploading
       const result = await this.task.done();
-      console.log(result);
+      // console.log(result);
       this.status = 3; // success
-
-      console.log(this.id, this.status);
+      // console.log(this.id, this.status);
     } catch (e) {
+      console.log(e);
       console.log(e.message);
       if (e.message == "Upload aborted.") {
         this.status = 2; // cancel/ stop
       } else {
         this.status = 4; // failed
-        Vue.prototype.$alert("The storage space is full");
-        console.log(this.id, this.status, e);
+        Vue.prototype.$alert(e.message);
+        this.failedMessage = e.message;
+        // console.log(this.id, this.status, e);
       }
     }
   }
@@ -166,7 +171,7 @@ class TaskWrapper {
       await this.task.abort();
     }
     this.status = 2; //cancel/stop
-    console.log(this.id, this.status);
+    // console.log(this.id, this.status);
   }
   resetStatus() {
     this.status = 0;
@@ -177,6 +182,10 @@ export default {
     info: {
       type: Object,
       default: () => {},
+    },
+    baseUrl: {
+      type: String,
+      default: "",
     },
   },
   data() {
@@ -208,7 +217,6 @@ export default {
   },
   mounted() {
     bus.$on("handleAllStopUploading", () => {
-      console.log(111);
       this.tasks.forEach((item) => {
         if (item.status == 0 || item.status == 1) {
           item.cancelTask();
@@ -327,10 +335,16 @@ export default {
               (this.curDir == "Specified" ? "" : this.info.Prefix) +
               this.specifiedDir +
               webkitRelativePath,
-          }
+          },
+          this.baseUrl +
+            "/" +
+            (this.curDir == "Specified" ? "" : this.info.Prefix) +
+            this.specifiedDir +
+            webkitRelativePath +
+            file.name
         );
       });
-      console.log(newTasks);
+      // console.log(newTasks);
       this.tasks = newTasks.concat(this.tasks);
     },
     async start(task) {
@@ -350,10 +364,10 @@ export default {
       if (idles.length == 0) {
         return;
       }
-      console.log("idles", idles);
+      // console.log("idles", idles);
       const fill = this.limit - processing.length;
       const min = idles.length <= fill ? idles.length : fill;
-      console.log("min", min);
+      // console.log("min", min);
 
       for (let i = 0; i < min; i++) {
         this.start(idles[i]);
@@ -366,6 +380,9 @@ export default {
       this.processTask();
       bus.$emit("taskData", this.tasks);
       // setInterval(this.processTask, 5000);
+    },
+    onCancel() {
+      this.$router.go(-1);
     },
     // handleCancelUpload(id) {
     //   let index = this.tasks.findIndex((item) => item.id == id);
