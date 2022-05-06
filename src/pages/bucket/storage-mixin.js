@@ -120,6 +120,7 @@ export default {
       this.getList();
     },
   },
+
   mounted() {
     this.getList();
     this.checkNew();
@@ -148,12 +149,14 @@ export default {
       }
       return this.$alert(msg);
     },
-    getList() {
+    async getList() {
       if (!this.s3) return;
       this.selected = [];
-      if (this.inBucket) {
-        this.getBuckets();
-      } else if (this.inFile) {
+      if (this.inBucket || !this.bucketList.length) {
+        await this.getBuckets();
+      }
+
+      if (this.inFile) {
         this.headObject();
       } else if (this.inFolder) {
         this.getObjects();
@@ -315,9 +318,6 @@ export default {
       });
     },
     async headObject() {
-      if (!this.bucketList.length) {
-        await this.getBuckets();
-      }
       this.fileLoading = true;
       this.fileInfo = null;
       this.s3.headObject(this.pathInfo, (err, data) => {
@@ -351,9 +351,6 @@ export default {
       this.getObjects();
     },
     async getObjects() {
-      if (!this.bucketList.length) {
-        await this.getBuckets();
-      }
       this.tableLoading = true;
       let { Bucket, Prefix, Delimiter } = this.pathInfo;
       let after = "";

@@ -163,30 +163,39 @@
                 >
               </template>
               <template #item.action="{ item }">
-                <span
+                <p
                   class="opeartion"
                   v-show="item.status == 4 || item.status == 2"
                   @click="handleRetryUpload(item.id)"
-                  >Retry</span
                 >
-
-                <span
+                  Retry
+                </p>
+                <p
                   class="opeartion"
                   v-show="
                     item.status !== 3 && item.status !== 2 && item.status !== 4
                   "
                   @click="handleCancelUpload(item.id)"
-                  >Cancel</span
                 >
-                <span class="opeartion" v-show="item.status == 3">Share</span>
-                <span
+                  Cancel
+                </p>
+                <p
+                  class="opeartion"
+                  v-show="item.status == 3"
+                  v-clipboard="item.url"
+                  @success="$toast('Copied to clipboard !')"
+                >
+                  Share
+                </p>
+                <p
                   class="opeartion"
                   v-show="
                     item.status == 3 || item.status == 2 || item.status == 4
                   "
                   @click="handleClearRecords(item.id)"
-                  >Clear Records</span
                 >
+                  Clear Records
+                </p>
 
                 <!-- <span style="cursor: pointer">Cancel</span> -->
               </template>
@@ -414,7 +423,6 @@ export default {
           align: "center",
           sortable: false,
           value: "status",
-          width: 200,
         },
         {
           text: "Action",

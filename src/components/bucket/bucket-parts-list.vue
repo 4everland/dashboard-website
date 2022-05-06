@@ -154,6 +154,7 @@ export default {
           },
           (err, data) => {
             if (err) {
+              console.log(err);
               reject(err);
             } else {
               resolve(data);
@@ -170,26 +171,32 @@ export default {
         arr.push(this.deleteFn(it));
       });
       console.log(arr);
-      Promise.all(arr).then((res) => {
-        console.log(res);
-        this.getPartList();
-      });
+      Promise.all(arr)
+        .then((res) => {
+          console.log(res);
+          this.getPartList();
+        })
+        .catch((err) => {
+          console.log(err, "err");
+          this.$alert(err.message);
+        });
     },
     handleDelete() {
       this.$loading();
-      // const { Bucket } = this.pathInfo;
-      if (this.selected.length == 0) {
-        return console.log("you selected parts is empty");
-      }
       let arr = [];
       this.selected.forEach((it) => {
         arr.push(this.deleteFn(it));
       });
-      Promise.all(arr).then(async (res) => {
-        console.log(res);
-        this.selected = [];
-        this.getPartList();
-      });
+      Promise.all(arr)
+        .then((res) => {
+          console.log(res);
+          this.selected = [];
+          this.getPartList();
+        })
+        .catch((err) => {
+          console.log(err, "err");
+          this.$alert(err.message);
+        });
     },
     handleSkip(value) {
       this.page = value;

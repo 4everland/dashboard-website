@@ -8,16 +8,15 @@
   </div>
 
   <div v-else>
-    inBucket:{{ inBucket }} inFolder: {{ inFolder }}
     <!-- <storage-upload
       ref="upload"
       :info="pathInfo"
       @uploaded="getList"
       :tableList="list"
     ></storage-upload> -->
-    <span @click="$refs.navDrawers.drawer = true" class="task-list">
+    <div @click="$refs.navDrawers.drawer = true" class="task-list">
       TaskList
-    </span>
+    </div>
 
     <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
       <div v-show="inBucket">
@@ -313,6 +312,7 @@
       <bucket-upload
         ref="bucketUpload"
         :info="pathInfo"
+        :isAr="bucketInfo.isAr"
         :baseUrl="bucketInfo.originList[0]"
       ></bucket-upload>
     </div>

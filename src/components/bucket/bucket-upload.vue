@@ -48,11 +48,10 @@
         <v-text-field
           v-model="specifiedDir"
           class="bd-1 specified-dir-input"
-          :rules="[rules.required, rules.counter]"
+          :rules="[rules.required, rules.counter, rules.validate]"
           clearable
           counter
-          maxlength="20"
-          height="50"
+          maxlength="200"
         ></v-text-field>
       </div>
     </div>
@@ -75,6 +74,11 @@
           class="elevation-1"
           hide-default-footer
         >
+          <template #item.type="{ item }">
+            <span>
+              {{ item.type ? item.type : "--" }}
+            </span>
+          </template>
           <template #item.action="{ item }">
             <span
               style="cursor: pointer; color: #34a9ff"
@@ -127,7 +131,6 @@ class TaskWrapper {
   task;
   failedMessage;
   url;
-  baseUrl;
   constructor(s3, param, id, fileInfo, url) {
     console.log(url);
     this.id = id;
@@ -187,6 +190,10 @@ export default {
       type: String,
       default: "",
     },
+    isAr: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -210,10 +217,25 @@ export default {
       specifiedDir: "",
       webkitRelativePath: "",
       rules: {
-        required: (value) => !!value || "Required.",
-        counter: (value) => value.length <= 20 || "Max 20 characters",
+        required: (value) => !!(value || "").trim() || "Required.",
+        counter: (value) => value.length <= 200 || "Max 200 characters",
+        validate: (value) => {
+          if (/^(?![\\\/])[a-z\d-_/]+(?<![\\\/])$/.test(value)) {
+            if (value.indexOf("//") != -1) {
+              return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-)";
+            }
+            return true;
+          } else {
+            return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-)";
+          }
+        },
       },
     };
+  },
+  async created() {
+    console.log(this.$store.state);
+    await this.$store.dispatch("getUsageInfo");
+    console.log(this.$store.state.usageInfo);
   },
   mounted() {
     bus.$on("handleAllStopUploading", () => {
@@ -293,6 +315,27 @@ export default {
       const totalSize = this.files.reduce((pre, current) => {
         return pre + current.size;
       }, 0);
+      if (this.isAr) {
+        let arResidue =
+          this.$store.state.usageInfo.arTotal * 1024 -
+          this.$store.state.usageInfo.arUsed * 1024;
+        if (totalSize > arResidue) {
+          this.files = [];
+          return this.$alert(
+            "Insufficient storage space is available to upload the file."
+          );
+        }
+      }
+      if (
+        totalSize >
+        this.$store.state.usageInfo.ipfsTotal -
+          this.$store.state.usageInfo.ipfsUsed
+      ) {
+        this.files = [];
+        return this.$alert(
+          "Insufficient storage space is available to upload the file."
+        );
+      }
       return this.$utils.getFileSize(totalSize);
     },
   },
@@ -311,15 +354,15 @@ export default {
           let arr = file.webkitRelativePath.split("/");
           arr.pop();
           webkitRelativePath = arr.join("/") + "/";
-          console.log(webkitRelativePath);
         }
         return new TaskWrapper(
           this.$s3,
           {
             Bucket: this.info.Bucket,
             Key:
-              (this.curDir == "Specified" ? "" : this.info.Prefix) +
-              this.specifiedDir +
+              (this.curDir == "Specified"
+                ? this.specifiedDir + "/"
+                : this.info.Prefix) +
               webkitRelativePath +
               file.name,
             Body: file,
@@ -384,38 +427,18 @@ export default {
     onCancel() {
       this.$router.go(-1);
     },
-    // handleCancelUpload(id) {
-    //   let index = this.tasks.findIndex((item) => item.id == id);
-    //   this.tasks[index].cancelTask();
-    // },
-    // handleRetryUpload(id) {
-    //   let index = this.tasks.findIndex((item) => item.id == id);
-    //   let arr = this.tasks.filter((item) => item.status == 0);
-    //   this.tasks[index].resetStatus();
-    //   if (!arr.length) {
-    //     this.processTask();
-    //   }
-    // },
-    // handleClearRecords(id) {
-    //   let index = this.tasks.findIndex((it) => it.id == id);
-    //   this.tasks.splice(index, 1);
-    // },
   },
-  watch: {},
 };
 </script>
-
 <style lang="scss" scoped>
 .v-application .elevation-1 {
   box-shadow: none !important;
   color: #0b0817 !important;
 }
-
 >>> .v-input {
   height: 50px;
   border: none;
 }
-
 .choose-dir {
   width: 100%;
   padding: 30px;
