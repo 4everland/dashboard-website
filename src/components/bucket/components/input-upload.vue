@@ -52,10 +52,10 @@
 <template>
   <div>
     <div class="e-upload">
-      <slot></slot>
+      <!-- <slot></slot> -->
 
       <div class="upload-header d-flex justify-space-between align-center">
-        <div class="add-img pos-r bdrs-10 drag-area" v-ripple>
+        <div class="add-img pos-r bdrs-10 drag-area">
           <div class="ta-c">
             <img src="../../../../public/img/icon/bucket_upload.svg" alt="" />
             <p class="description fw-b fz-20">

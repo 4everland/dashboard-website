@@ -122,6 +122,7 @@
               :items="list.slice((this.page - 1) * 10, this.page * 10)"
               class="elevation-1 task-table"
               hide-default-footer
+              item-key="param[Key]"
             >
               <template #item.fileInfo[path]="{ item }">
                 <span style="word-break: break-all">{{
@@ -308,7 +309,21 @@
                 ></v-progress-circular>
                 <span class="ml-4">DELETEING</span>
               </p>
-              <p v-if="item.status == 0" class="mb-0 delete-folder-status">
+              <p
+                v-if="item.status == 0"
+                class="
+                  mb-0
+                  d-flex
+                  align-center
+                  justify-center
+                  delete-folder-status
+                "
+              >
+                <v-progress-circular
+                  style="width: 20px"
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular>
                 <span class="ml-4">WAITING</span>
               </p>
             </template>
@@ -343,7 +358,7 @@
               total-visible="10"
               v-model="page"
               :length="deleteFolderLength"
-              @input="handleSkip"
+              @input="handleDeleteSkip"
             ></v-pagination>
           </div>
         </div>
@@ -406,6 +421,7 @@ export default {
           align: "center",
           sortable: false,
           value: "param[Prefix]",
+          width: 200,
         },
         {
           text: "Bucket",
@@ -424,12 +440,14 @@ export default {
           align: "center",
           sortable: false,
           value: "status",
+          width: 200,
         },
         {
           text: "Action",
           align: "center",
           sortable: false,
           value: "action",
+          width: 200,
         },
       ],
       page: 1,
@@ -443,7 +461,7 @@ export default {
       this.drawer = true;
       this.currentTab = 0;
       this.status = 0;
-      this.tasks = tasks;
+      this.tasks = this.tasks.concat(tasks);
     });
   },
   computed: {
@@ -503,6 +521,9 @@ export default {
     },
     handleSkip(item) {
       this.page = item;
+    },
+    handleDeleteSkip(item) {
+      this.deleteFolderPage = item;
     },
     handleClearRecords(id) {
       let index = this.tasks.findIndex((it) => it.id == id);

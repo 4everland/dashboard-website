@@ -477,6 +477,7 @@ class DeleteTaskWrapper {
   async startTasks() {
     try {
       if (this.status !== 0 && this.status !== 1) return;
+
       this.status = 1; // deleteing
       const listResult = await this.s3.listObjectsV2({
         Bucket: this.param.Bucket,
@@ -484,7 +485,6 @@ class DeleteTaskWrapper {
         Delimiter: "",
         Prefix: this.param.Prefix,
       });
-      // console.log(listResult, "listResult");
       if (!listResult.Contents) {
         this.curFiles = [];
       } else {
@@ -512,6 +512,7 @@ class DeleteTaskWrapper {
         this.that.selected = [];
         this.that.getList();
       } else {
+        console.log("here");
       }
     } catch (error) {
       console.log(error);
@@ -686,14 +687,13 @@ export default {
         (item) => item.status == 1
       );
       // console.log(processing);
-      if (processing.length >= this.limit) return;
+      if (processing.length >= this.deleteFolderLimit) return;
       const idles = this.deleteFoldersTasks.filter((item) => item.status == 0);
       // console.log(idles, "idles");
       if (!idles.length) return;
       const fill = this.deleteFolderLimit - processing.length;
       // console.log(fill);
       const min = idles.length <= fill ? idles.length : fill;
-      // console.log(min);
       for (let i = 0; i < min; i++) {
         this.startDeleteFolder(idles[i]);
       }
@@ -857,6 +857,7 @@ export default {
     handleDeleteFolderStartAll() {
       let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
       this.deleteFoldersTasks.forEach((it) => {
+        if (it.status !== 2) return;
         it.retryTasks();
       });
       if (!arr.length) {
