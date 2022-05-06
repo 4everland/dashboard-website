@@ -484,7 +484,7 @@ class DeleteTaskWrapper {
         Delimiter: "",
         Prefix: this.param.Prefix,
       });
-      console.log(listResult, "listResult");
+      // console.log(listResult, "listResult");
       if (!listResult.Contents) {
         this.curFiles = [];
       } else {
@@ -501,7 +501,7 @@ class DeleteTaskWrapper {
             Quiet: false,
           },
         });
-        console.log(deleteResult);
+        // console.log(deleteResult);
         for (let i = 0; i < deleteResult.Deleted.length; i++) {
           this.deleteCount += 1;
           await Vue.prototype.$sleep(20);
@@ -512,7 +512,6 @@ class DeleteTaskWrapper {
         this.that.selected = [];
         this.that.getList();
       } else {
-        console.log("here");
       }
     } catch (error) {
       console.log(error);
@@ -652,7 +651,6 @@ export default {
         let isExist = this.deleteFoldersTasks.findIndex((item) => {
           return item.param.Prefix == currentFolderName;
         });
-        console.log(isExist);
         if (isExist !== -1) {
           let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
           this.deleteFoldersTasks[isExist].retryTasks();
@@ -687,17 +685,16 @@ export default {
       let processing = this.deleteFoldersTasks.filter(
         (item) => item.status == 1
       );
-      console.log(processing);
+      // console.log(processing);
       if (processing.length >= this.limit) return;
       const idles = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      console.log(idles, "idles");
+      // console.log(idles, "idles");
       if (!idles.length) return;
       const fill = this.deleteFolderLimit - processing.length;
-      console.log(fill);
+      // console.log(fill);
       const min = idles.length <= fill ? idles.length : fill;
-      console.log(min);
+      // console.log(min);
       for (let i = 0; i < min; i++) {
-        console.log(222);
         this.startDeleteFolder(idles[i]);
       }
     },
@@ -849,7 +846,6 @@ export default {
       let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
       this.deleteFoldersTasks[index].retryTasks();
       if (!arr.length) {
-        console.log("here");
         this.processDeleteFolderTask();
       }
     },

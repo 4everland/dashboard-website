@@ -382,6 +382,7 @@ export default {
           align: "center",
           sortable: false,
           value: "fileInfo[name]",
+          width: 200,
         },
         {
           text: "Upload To",
@@ -396,7 +397,7 @@ export default {
           value: "action",
           sortable: false,
           align: "center",
-          width: 300,
+          width: 200,
         },
       ],
       deleteFolderHeaders: [
@@ -431,9 +432,9 @@ export default {
           value: "action",
         },
       ],
-
       page: 1,
       deleteFolderPage: 1,
+      limit: 10,
     };
   },
   created() {},
@@ -504,25 +505,46 @@ export default {
       this.page = item;
     },
     handleClearRecords(id) {
-      bus.$emit("handleClearRecords", id);
+      let index = this.tasks.findIndex((it) => it.id == id);
+      this.tasks.splice(index, 1);
     },
     handleCancelUpload(id) {
-      bus.$emit("handleCancelUpload", id);
+      let index = this.tasks.findIndex((item) => item.id == id);
+      this.tasks[index].cancelTask();
     },
     handleRetryUpload(id) {
-      bus.$emit("handleRetryUpload", id);
+      let index = this.tasks.findIndex((item) => item.id == id);
+      let arr = this.tasks.filter((item) => item.status == 0);
+      this.tasks[index].resetStatus();
+      if (!arr.length) {
+        this.processTask();
+      }
     },
     handleAllStopUploading() {
-      bus.$emit("handleAllStopUploading");
+      this.tasks.forEach((item) => {
+        if (item.status == 0 || item.status == 1) {
+          item.cancelTask();
+        }
+      });
     },
     handleStartAll() {
-      bus.$emit("handleStartAll");
+      let arr = this.tasks.filter((item) => item.status == 0);
+      this.tasks.forEach((item) => {
+        if (item.status == 2 || item.status == 4) {
+          item.resetStatus();
+          if (!arr.length) {
+            this.processTask();
+          }
+        }
+      });
+      // bus.$emit("handleStartAll");
     },
     handleClearAllRecords() {
-      bus.$emit("handleClearAllRecords", this.status);
+      // bus.$emit("handleClearAllRecords", this.status);
+
+      this.tasks = this.tasks.filter((it) => it.status !== this.status);
     },
     handlePasueDeleteFolder(id) {
-      console.log(id);
       this.$emit("handlePasueDeleteFolder", id);
     },
     handleStartDeleteFolder(id) {
@@ -541,10 +563,32 @@ export default {
     handleDeleteFolderRemoveAll() {
       this.$emit("handleDeleteFolderRemoveAll");
     },
+    async start(task) {
+      await task.startTask();
+      this.processTask();
+    },
+    async processTask() {
+      let processing = this.tasks.filter((task) => {
+        return task.status == 1;
+      });
+      if (processing.length >= this.limit) {
+        return;
+      }
+      const idles = this.tasks.filter((task) => {
+        return task.status == 0;
+      });
+      if (idles.length == 0) {
+        return;
+      }
+      const fill = this.limit - processing.length;
+      const min = idles.length <= fill ? idles.length : fill;
+      for (let i = 0; i < min; i++) {
+        this.start(idles[i]);
+      }
+    },
   },
   watch: {
     deleteFolder(newValue) {
-      console.log(newValue);
       if (newValue) {
         this.drawer = true;
         this.currentTab = 1;
@@ -563,8 +607,10 @@ export default {
 </script>
 <style >
 .task-table td {
-  padding: 20px 0 !important;
+  padding: 20px !important;
   font-size: 16px !important;
+  word-break: break-all;
+  white-space: pre-wrap;
 }
 </style>
 <style lang="scss" scoped>

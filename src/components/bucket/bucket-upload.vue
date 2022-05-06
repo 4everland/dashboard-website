@@ -132,7 +132,6 @@ class TaskWrapper {
   failedMessage;
   url;
   constructor(s3, param, id, fileInfo, url) {
-    console.log(url);
     this.id = id;
     this.s3 = s3;
     this.status = 0; //waitingUpload
@@ -152,20 +151,17 @@ class TaskWrapper {
       });
       this.progress = 0;
       this.status = 1; // uploading
-      const result = await this.task.done();
-      // console.log(result);
+      await this.task.done();
       this.status = 3; // success
-      // console.log(this.id, this.status);
     } catch (e) {
-      console.log(e);
-      console.log(e.message);
+      // console.log(e);
+      // console.log(e.message);
       if (e.message == "Upload aborted.") {
         this.status = 2; // cancel/ stop
       } else {
         this.status = 4; // failed
         Vue.prototype.$alert(e.message);
         this.failedMessage = e.message;
-        // console.log(this.id, this.status, e);
       }
     }
   }
@@ -174,7 +170,6 @@ class TaskWrapper {
       await this.task.abort();
     }
     this.status = 2; //cancel/stop
-    // console.log(this.id, this.status);
   }
   resetStatus() {
     this.status = 0;
@@ -233,55 +228,7 @@ export default {
     };
   },
   async created() {
-    console.log(this.$store.state);
     await this.$store.dispatch("getUsageInfo");
-    console.log(this.$store.state.usageInfo);
-  },
-  mounted() {
-    bus.$on("handleAllStopUploading", () => {
-      this.tasks.forEach((item) => {
-        if (item.status == 0 || item.status == 1) {
-          item.cancelTask();
-        }
-      });
-    });
-    bus.$on("handleStartAll", () => {
-      console.log(111);
-      let arr = this.tasks.filter((item) => item.status == 0);
-      console.log(this.tasks);
-      this.tasks.forEach((item) => {
-        console.log(item);
-        if (item.status == 2 || item.status == 4) {
-          item.resetStatus();
-          if (!arr.length) {
-            this.processTask();
-          }
-        }
-      });
-    });
-    bus.$on("handleCancelUpload", (id) => {
-      console.log(this.task);
-      let index = this.tasks.findIndex((item) => item.id == id);
-      this.tasks[index].cancelTask();
-    });
-    bus.$on("handleRetryUpload", (id) => {
-      console.log(this.tasks);
-      let index = this.tasks.findIndex((item) => item.id == id);
-      let arr = this.tasks.filter((item) => item.status == 0);
-      this.tasks[index].resetStatus();
-      if (!arr.length) {
-        this.processTask();
-      }
-    });
-    bus.$on("handleClearRecords", (id) => {
-      let index = this.tasks.findIndex((it) => it.id == id);
-      this.tasks.splice(index, 1);
-    });
-
-    bus.$on("handleClearAllRecords", (status) => {
-      this.tasks = this.tasks.filter((it) => it.status !== status);
-      bus.$emit("taskData", this.tasks);
-    });
   },
   computed: {
     path() {
@@ -317,13 +264,14 @@ export default {
       }, 0);
       if (this.isAr) {
         let arResidue =
-          this.$store.state.usageInfo.arTotal * 1024 -
-          this.$store.state.usageInfo.arUsed * 1024;
+          this.$store.state.usageInfo.arTotal * 1024 * 1024 -
+          this.$store.state.usageInfo.arUsed * 1024 * 1024;
         if (totalSize > arResidue) {
           this.files = [];
-          return this.$alert(
+          this.$alert(
             "Insufficient storage space is available to upload the file."
           );
+          return 0;
         }
       }
       if (
@@ -332,9 +280,10 @@ export default {
           this.$store.state.usageInfo.ipfsUsed
       ) {
         this.files = [];
-        return this.$alert(
+        this.$alert(
           "Insufficient storage space is available to upload the file."
         );
+        return 0;
       }
       return this.$utils.getFileSize(totalSize);
     },
@@ -461,6 +410,7 @@ export default {
     word-wrap: break-word;
   }
   .specified-dir {
+    padding-right: 20px;
     border: 1px solid #d0dae9;
     .appoint-dir {
       height: 25px;
@@ -469,10 +419,10 @@ export default {
       font-size: 18px;
       font-weight: 400;
       padding: 0 21px 0 18px;
+      margin-right: 20px;
       border-right: 1px solid #d0dae9;
     }
     .specified-dir-input {
-      padding: 0 20px;
       border: none;
     }
   }
