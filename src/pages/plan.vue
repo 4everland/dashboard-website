@@ -478,7 +478,7 @@ export default {
       await this.$alert(this.billPeriod, "Payment Submmited", {
         type: "success",
       });
-      this.$router.push("/dashboard/settings?tab=1");
+      this.$router.push("/settings?tab=billing");
     },
     async onPay() {
       let msg = "";
