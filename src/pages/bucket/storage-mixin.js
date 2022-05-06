@@ -521,7 +521,6 @@ export default {
       });
     },
     async onDelete(item) {
-      console.log(item);
       try {
         // const arr = await this.getSelectedObjects(item);
         // if (arr.length > 1000) {
@@ -551,7 +550,6 @@ export default {
           let hasFile = this.selected.filter((it) => it.isFile);
           let hasFolder = this.selected.filter((it) => !it.isFile);
           if (hasFile.length && hasFolder.length) {
-            console.log("here");
             //  file folder exsit
             if (hasFile.filter((it) => it.arStatus != "desynced").length) {
               html = `The following files will be permanently deleted, but files in AR can’t be deleted from the AR network, and your AR storage space will not increase. Would you like to continue?`;
@@ -583,36 +581,6 @@ export default {
             this.processDeleteFolderTask();
           }
         }
-
-        // html += `<ul class='mt-4 ov-a gray' style="max-height: 40vh">`;
-        // for (const row of arr) {
-        //   html += "<li>" + row.name + "</li>";
-        // }
-        // html += "</ul>";
-        // await this.$confirm(html, `Remove ${target}${suffix}`);
-        // this.$loading();
-        // if (this.inBucket) {
-        //   let errArr = [];
-        //   for (const row of arr) {
-        //     try {
-        //       await this.delBucket(row.name);
-        //     } catch (error) {
-        //       errArr.push(`${row.name}: ${error.message}`);
-        //     }
-        //   }
-        //   if (errArr.length)
-        //     setTimeout(() => {
-        //       this.$alert(errArr.join("<br>"));
-        //     }, 10);
-        // }
-        // if (!this.inBucket) {
-        //   await this.delObjects(
-        //     arr.map((it) => {
-        //       return { Key: it.Key };
-        //     })
-        //   );
-        // }
-        // this.$loading.close();
       } catch (err) {
         if (err) this.onErr(err);
         else return;

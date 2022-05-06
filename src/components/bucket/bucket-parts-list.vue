@@ -208,6 +208,9 @@ export default {
         this.getPartList();
       }
     },
+    length(value) {
+      this.page = value;
+    },
   },
 };
 </script>

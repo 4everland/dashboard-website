@@ -877,7 +877,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .task-list {
-  float: right;
+  text-align: right;
   color: #34a9ff;
   font-size: 16px;
   cursor: pointer;

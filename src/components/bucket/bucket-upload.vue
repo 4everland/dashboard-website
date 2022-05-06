@@ -46,6 +46,7 @@
       <div class="specified-dir d-flex align-center mt-7" v-else>
         <div class="appoint-dir d-flex align-center">{{ path }}</div>
         <v-text-field
+          ref="specifiedRef"
           v-model="specifiedDir"
           class="bd-1 specified-dir-input"
           :rules="[rules.required, rules.counter, rules.validate]"
@@ -53,6 +54,12 @@
           counter
           maxlength="200"
         ></v-text-field>
+        <e-tooltip right>
+          <v-icon slot="ref" size="24" class="pa-1 d-ib ml-2"
+            >mdi-alert-circle-outline</v-icon
+          >
+          <span>12222</span>
+        </e-tooltip>
       </div>
     </div>
     <div class="files-upload-container">
@@ -366,12 +373,22 @@ export default {
       }
     },
     onConfirm() {
-      this.addTasks(this.files, 10);
-      this.files = [];
-      this.$refs.uploadInput.handleRmoveAll();
-      this.processTask();
-      bus.$emit("taskData", this.tasks);
-      // setInterval(this.processTask, 5000);
+      if (this.curDir == "Specified") {
+        let isValidate = this.$refs.specifiedRef.validate(true);
+        if (isValidate) {
+          this.addTasks(this.files, 10);
+          this.files = [];
+          this.$refs.uploadInput.handleRmoveAll();
+          this.processTask();
+          bus.$emit("taskData", this.tasks);
+        }
+      } else {
+        this.addTasks(this.files, 10);
+        this.files = [];
+        this.$refs.uploadInput.handleRmoveAll();
+        this.processTask();
+        bus.$emit("taskData", this.tasks);
+      }
     },
     onCancel() {
       this.$router.go(-1);
@@ -385,7 +402,6 @@ export default {
   color: #0b0817 !important;
 }
 >>> .v-input {
-  height: 50px;
   border: none;
 }
 .choose-dir {
