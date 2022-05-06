@@ -9,10 +9,10 @@
         >Recharge</v-btn
       >
       <v-btn outlined rounded class="ml-4">Withdraw</v-btn>
-      <div class="ml-auto al-c">
+      <a class="ml-auto al-c" href="#/usage/billing/deduction">
         <img src="img/svg/billing/usage-list.svg" width="14" />
         <span class="ml-2 fz-14">Deduction details</span>
-      </div>
+      </a>
     </div>
 
     <div class="mt-6">

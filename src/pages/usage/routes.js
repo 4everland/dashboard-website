@@ -2,6 +2,7 @@ import Info from "./info";
 import Billing from "./billing";
 import More from "./more";
 import Detail from "./detail";
+import Deduction from "./deduction";
 
 export default [
   {
@@ -53,6 +54,23 @@ export default [
         },
         {
           text: `Details`,
+        },
+      ],
+    },
+  },
+  {
+    path: "/usage/billing/deduction",
+    component: Deduction,
+    meta: {
+      title: "Deduction details",
+      group: "Usage",
+      links: [
+        {
+          text: "Billing",
+          to: "/usage/billing",
+        },
+        {
+          text: `Deduction details`,
         },
       ],
     },

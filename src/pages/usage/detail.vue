@@ -69,6 +69,8 @@ export default {
           type: "Build Minutes",
           amount: 100,
           pay: 18,
+          unit: "Min",
+          time: "Until used up",
         },
       ],
     };

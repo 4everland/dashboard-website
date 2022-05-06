@@ -7,7 +7,7 @@
       }"
       >{{ label }}</label
     >
-    <div class="ml-3">
+    <div class="ml-3 flex-1">
       <slot></slot>
     </div>
   </div>
