@@ -210,7 +210,7 @@ export default {
         },
         {
           label: "Usage",
-          img: "m-plan",
+          img: "m-usage",
           group: /^\/usage/i,
           subs: [
             {
