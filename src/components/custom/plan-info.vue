@@ -172,7 +172,7 @@
                   <b>Full Feature List</b>
                 </td>
                 <td v-for="(it, i) in planList" :key="i">
-                  <h3>{{ it.title }}</h3>
+                  <h3 class="mb-1">{{ it.title }}</h3>
                   <plan-info-cell class="fz-12" :value="it.price" />
                 </td>
               </tr>
