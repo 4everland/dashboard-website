@@ -1,6 +1,7 @@
 import Info from "./info";
 import Billing from "./billing";
 import More from "./more";
+import Detail from "./detail";
 
 export default [
   {
@@ -31,6 +32,29 @@ export default [
     component: Billing,
     meta: {
       title: "Billing",
+      group: "Usage",
+      links: [
+        {
+          text: "Billing",
+        },
+      ],
+    },
+  },
+  {
+    path: "/usage/billing/detail",
+    component: Detail,
+    meta: {
+      title: "Billing Details",
+      group: "Usage",
+      links: [
+        {
+          text: "Billing",
+          to: "/usage/billing",
+        },
+        {
+          text: `Details`,
+        },
+      ],
     },
   },
 ];

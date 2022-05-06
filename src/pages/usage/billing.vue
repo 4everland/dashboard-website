@@ -18,8 +18,10 @@
     <div class="mt-6">
       <v-data-table
         :headers="headers"
+        :items="list"
         hide-default-footer
         disable-pagination
+        @click:row="onItem"
       ></v-data-table>
     </div>
 
@@ -83,7 +85,7 @@
 export default {
   data() {
     return {
-      showRecharge: !false,
+      showRecharge: false,
       headers: [
         {
           text: "Hash",
@@ -106,7 +108,21 @@ export default {
           value: "status",
         },
       ],
+      list: [
+        {
+          hash: "test",
+          content: "test cc",
+          amount: 18.5,
+          time: "2022",
+          status: "success",
+        },
+      ],
     };
+  },
+  methods: {
+    onItem(row) {
+      this.$navTo(`/usage/billing/detail?hash=` + row.hash);
+    },
   },
 };
 </script>
