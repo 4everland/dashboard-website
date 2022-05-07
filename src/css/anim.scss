@@ -17,6 +17,9 @@
 .rotate-90 {
   transform: rotate(90deg);
 }
+.rotate-180 {
+  transform: rotate(180deg);
+}
 
 .anim-shine {
   animation: anim_shine 0.6s linear 3;

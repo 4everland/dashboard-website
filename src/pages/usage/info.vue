@@ -23,13 +23,13 @@
     <div class="main-wrap auto pa-3">
       <div class="d-flex mt-8 mb-8 lh-1" v-for="(it, i) in list" :key="i">
         <div class="label ta-r fz-15 mr-1 pos-r">
-          <span>{{ it.label }}:</span>
           <e-tooltip top v-if="it.tip">
-            <v-icon :color="$color2" size="18" slot="ref"
+            <v-icon color="#999" size="18" slot="ref" class="mr-1"
               >mdi-alert-circle</v-icon
             >
             <span>{{ it.tip }}</span>
           </e-tooltip>
+          <span>{{ it.label }}:</span>
         </div>
         <div style="width: 50%">
           <div class="ml-2">
