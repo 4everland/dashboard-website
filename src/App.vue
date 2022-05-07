@@ -18,9 +18,9 @@
             :class="meta.wrapCls || (meta.isTab ? 'pa-0' : 'main-wrap mb-12')"
           >
             <keep-alive>
-              <router-view></router-view>
+              <router-view name="cache"></router-view>
             </keep-alive>
-            <router-view name="noCache"></router-view>
+            <router-view></router-view>
           </e-wrap>
         </div>
       </v-main>

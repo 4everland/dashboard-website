@@ -6,9 +6,7 @@ import BugBounty from "./bug-bounty";
 export default [
   {
     path: "/settings",
-    components: {
-      noCache: Settings,
-    },
+    component: Settings,
     meta: {
       title: "Settings",
       isTab: 1,
@@ -25,14 +23,18 @@ export default [
   },
   {
     path: "/collections",
-    component: Collections,
+    components: {
+      cache: Collections,
+    },
     meta: {
       title: "My Collection",
     },
   },
   {
     path: "/bug-bounty",
-    component: BugBounty,
+    components: {
+      cache: BugBounty,
+    },
     meta: {
       title: "Bug Bounty",
     },
