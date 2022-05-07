@@ -18,7 +18,7 @@
       TaskList
     </div>
 
-    <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
+    <div class="d-flex nowrap ov-a btn-wrap mt-5" v-if="!inUpload">
       <div v-show="inBucket">
         <v-btn color="primary" @click="addBucket">
           <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
@@ -453,6 +453,7 @@
 </template>
 
 <script>
+// import { DeleteTaskWrapper } from "../../components/bucket/task";
 import Vue from "vue";
 class DeleteTaskWrapper {
   that;
@@ -479,6 +480,8 @@ class DeleteTaskWrapper {
       if (this.status !== 0 && this.status !== 1) return;
 
       this.status = 1; // deleteing
+
+      console.log(this.param.Prefix, this.param.Bucket);
       const listResult = await this.s3.listObjectsV2({
         Bucket: this.param.Bucket,
         MaxKeys: 100,
@@ -506,7 +509,7 @@ class DeleteTaskWrapper {
           this.deleteCount += 1;
           await Vue.prototype.$sleep(20);
         }
-        this.startTasks();
+        await this.startTasks();
       } else if (!this.curFiles.length) {
         this.status = 3; // success
         this.that.selected = [];
@@ -662,6 +665,7 @@ export default {
         }
         return !it.isFile && isExist == -1;
       });
+      console.log(deleteFoldersArr);
 
       const deleteFoldersTask = deleteFoldersArr.map((it) => {
         return new DeleteTaskWrapper(
@@ -686,13 +690,13 @@ export default {
       let processing = this.deleteFoldersTasks.filter(
         (item) => item.status == 1
       );
-      // console.log(processing);
+      console.log(processing);
       if (processing.length >= this.deleteFolderLimit) return;
       const idles = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      // console.log(idles, "idles");
+      console.log(idles, "idles");
       if (!idles.length) return;
       const fill = this.deleteFolderLimit - processing.length;
-      // console.log(fill);
+      console.log(fill);
       const min = idles.length <= fill ? idles.length : fill;
       for (let i = 0; i < min; i++) {
         this.startDeleteFolder(idles[i]);

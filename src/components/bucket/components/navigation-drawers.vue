@@ -19,7 +19,7 @@
         />
       </div>
       <div class="tips py-3">
-        Tip：If you refresh or close the browser, the ongoing upload task is
+        Tips：If you refresh or close the browser, the ongoing upload task is
         canceled and all upload records are cleared.
       </div>
       <div class="task-content">
@@ -145,7 +145,7 @@
                   v-show="item.status == 4"
                   style="color: #ff6960; height: 100%"
                   >Upload Failed
-                  <e-tooltip right>
+                  <!-- <e-tooltip right>
                     <v-icon
                       slot="ref"
                       color="#FF6960"
@@ -154,7 +154,7 @@
                       >mdi-alert-circle-outline</v-icon
                     >
                     <span>{{ item.failedMessage }}</span>
-                  </e-tooltip>
+                  </e-tooltip> -->
                 </span>
                 <span v-show="item.status == 0" style="color: #24bc96"
                   >Preparing</span
@@ -221,11 +221,9 @@
         <!-- Delete Folder -->
         <div v-show="currentTab == 1" class="delete-folder-task">
           <div class="tips">
-            <img
-              class="icon"
-              src="img/icon/bucketUpload/ic-warning.svg"
-              alt=""
-            />
+            <v-icon slot="ref" size="22" color="#ff6d24" class="pa-1 d-ib ml-2"
+              >mdi-alert-circle-outline</v-icon
+            >
             <span class="ml-2"
               >If you refresh or close the page when the folder is being
               deleted, the displayed number of deleted files may be
@@ -460,8 +458,8 @@ export default {
     bus.$on("taskData", (tasks) => {
       this.drawer = true;
       this.currentTab = 0;
-      this.status = 0;
-      this.tasks = this.tasks.concat(tasks);
+      // this.status = 0;
+      this.tasks = tasks;
     });
   },
   computed: {
@@ -469,9 +467,6 @@ export default {
       return this.tasks.filter((it) => {
         if (this.status == 0) return it;
         if (this.status == 1) return it.status == 1 || it.status == 0;
-        // if (this.status == 2) return it.status == 2;
-        // if (this.status == 3) return it.status == 3;
-        // if (this.status == 4) return it.status == 4;
         return it.status == this.status;
       });
     },
@@ -526,8 +521,10 @@ export default {
       this.deleteFolderPage = item;
     },
     handleClearRecords(id) {
-      let index = this.tasks.findIndex((it) => it.id == id);
-      this.tasks.splice(index, 1);
+      bus.$emit("handleClearRecords", id);
+
+      // let index = this.tasks.findIndex((it) => it.id == id);
+      // this.tasks.splice(index, 1);
     },
     handleCancelUpload(id) {
       let index = this.tasks.findIndex((item) => item.id == id);
@@ -561,9 +558,9 @@ export default {
       // bus.$emit("handleStartAll");
     },
     handleClearAllRecords() {
-      // bus.$emit("handleClearAllRecords", this.status);
+      bus.$emit("handleClearAllRecords", this.status);
 
-      this.tasks = this.tasks.filter((it) => it.status !== this.status);
+      // this.tasks = this.tasks.filter((it) => it.status !== this.status);
     },
     handlePasueDeleteFolder(id) {
       this.$emit("handlePasueDeleteFolder", id);
@@ -727,8 +724,8 @@ export default {
       background: #fff;
       .tips {
         padding: 10px;
-        color: #ff6960;
-        background: #fff2f2;
+        color: #ff6d24;
+        background: #ffeee4;
         border-radius: 6px;
         .icon {
           vertical-align: sub;

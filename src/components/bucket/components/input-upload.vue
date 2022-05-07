@@ -42,8 +42,8 @@
     margin: 15px 0;
     font-size: 14px;
     font-weight: 400;
-    color: #ff6960;
-    background: #fff2f2;
+    color: #ff6d24;
+    background: #ffeee4;
     border-radius: 6px;
   }
 }
@@ -88,9 +88,11 @@
       </div>
 
       <div class="upload-tips d-flex align-center">
-        <img src="img/icon/bucketUpload/ic-warning.svg" alt="" />
+        <v-icon slot="ref" size="22" color="#ff6d24" class="pa-1 d-ib ml-2"
+          >mdi-alert-circle-outline</v-icon
+        >
         <span class="ml-2"
-          >Note: If the name of the file to upload is the same as that of an
+          >Tips: If the name of the file to upload is the same as that of an
           existing file, the existing file is overwritten.
         </span>
       </div>
@@ -102,7 +104,7 @@
           <span class="ml-2"> Select Folders</span>
         </v-btn>
       </div>
-      <slot name="hint"></slot>
+      <!-- <slot name="hint"></slot> -->
       <!-- <p class="ta-c mt-5" v-if="!disabled">
         <v-btn text @click="onClick">
           <span class="gray">
@@ -149,20 +151,18 @@ export default {
       const files = await this.scanFiles(ev.dataTransfer);
       this.getFiles({ files });
     };
-    document.onpaste = async (ev) => {
-      const files = await this.scanFiles(ev.clipboardData);
-      this.getFiles({ files });
-    };
+    // document.onpaste = async (ev) => {
+    //   const files = await this.scanFiles(ev.clipboardData);
+    //   this.getFiles({ files });
+    // };
   },
   methods: {
     onInput(e) {
-      console.log(e);
       this.getFiles(e.target);
       this.$refs.file.value = null;
     },
     onClick(value) {
       this.isUploadDir = value;
-      console.log(this.isUploadDir);
       this.$nextTick(() => {
         this.$refs.file.click();
       });
@@ -207,15 +207,24 @@ export default {
       if (!data) return;
       const { files = [] } = data;
       // console.log(files);
+      let arr = Array.from(files);
+      console.log(arr);
+      const isEmoji =
+        arr.filter((it) => {
+          return it.webkitRelativePath == ""
+            ? this.isEmojiCharacter(it.name)
+            : this.isEmojiCharacter(it.webkitRelativePath);
+        }).length > 0;
+      // console.log(isEmoji);
+      if (isEmoji)
+        return this.$alert(
+          "The file name or folder name cannot contain emojis."
+        );
       for (const file of files) {
         // console.log(file);
         if (this.limit && this.files.length >= this.limit) break;
         // if (!/image/.test(file.type)) continue;
         // if (!file.type) continue;
-        if (file.size > Math.pow(1024, 2) * 300) {
-          this.$toast(`${file.name} is too larg (over 300MB)`);
-          continue;
-        }
         const isRepeat =
           this.files.filter((it) => {
             return (
@@ -237,9 +246,20 @@ export default {
       this.emitInput();
     },
     emitInput() {
+      // console.log(this.files);
+      // const isEmoji = this.files.findIndex((item) => {
+      //   if (item.webkitRelativePath == "") {
+      //     return this.isEmojiCharacter(item.name);
+      //   } else {
+      //     return this.isEmojiCharacter(item.webkitRelativePath);
+      //   }
+      // });
+      // console.log(isEmoji);
+      // if (isEmoji !== -1) {
+      //   this.files = [];
+      //   return this.$alert("The folder name cannot contain emojis.");
+      // }
       this.$emit("input", this.files);
-      // this.updateOriginFiles(this.files);
-      // this.files = [];
     },
     handleRmoveAll() {
       this.files = [];
@@ -255,6 +275,47 @@ export default {
       return Number(
         Math.random().toString().substr(3, length) + Date.now()
       ).toString(36);
+    },
+
+    isEmojiCharacter(substring) {
+      for (var i = 0; i < substring.length; i++) {
+        var hs = substring.charCodeAt(i);
+        if (0xd800 <= hs && hs <= 0xdbff) {
+          if (substring.length > 1) {
+            var ls = substring.charCodeAt(i + 1);
+            var uc = (hs - 0xd800) * 0x400 + (ls - 0xdc00) + 0x10000;
+            if (0x1d000 <= uc && uc <= 0x1f77f) {
+              return true;
+            }
+          }
+        } else if (substring.length > 1) {
+          var ls = substring.charCodeAt(i + 1);
+          if (ls == 0x20e3) {
+            return true;
+          }
+        } else {
+          if (0x2100 <= hs && hs <= 0x27ff) {
+            return true;
+          } else if (0x2b05 <= hs && hs <= 0x2b07) {
+            return true;
+          } else if (0x2934 <= hs && hs <= 0x2935) {
+            return true;
+          } else if (0x3297 <= hs && hs <= 0x3299) {
+            return true;
+          } else if (
+            hs == 0xa9 ||
+            hs == 0xae ||
+            hs == 0x303d ||
+            hs == 0x3030 ||
+            hs == 0x2b55 ||
+            hs == 0x2b1c ||
+            hs == 0x2b1b ||
+            hs == 0x2b50
+          ) {
+            return true;
+          }
+        }
+      }
     },
   },
 };

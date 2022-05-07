@@ -49,16 +49,30 @@
           ref="specifiedRef"
           v-model="specifiedDir"
           class="bd-1 specified-dir-input"
-          :rules="[rules.required, rules.counter, rules.validate]"
+          :rules="[rules.counter, rules.validate]"
           clearable
           counter
           maxlength="200"
         ></v-text-field>
-        <e-tooltip right>
+        <e-tooltip right bottom max-width="500">
           <v-icon slot="ref" size="24" class="pa-1 d-ib ml-2"
             >mdi-alert-circle-outline</v-icon
           >
-          <span>12222</span>
+          <p>
+            1.A folder name can contain only UTF-8 characters and cannot contain
+            emojis.
+          </p>
+          <p>
+            2.Forward slashes (/) are used in a folder name to indicate the path
+            of the folder. You can create a subfolder by specifying a folder
+            name that includes multiple forward slashes. A folder name cannot
+            start with a forward slash (/) or consecutive backslashes (\). A
+            folder name cannot contain consecutive forward slashes (/).
+          </p>
+          <p>
+            3.The name of a subfolder cannot contain consecutive periods (..).
+          </p>
+          <p>4.A folder name must be 1 to 200 characters in length.</p>
         </e-tooltip>
       </div>
     </div>
@@ -126,9 +140,9 @@
 </template>
 
 <script>
-import Vue from "vue";
 import { Upload } from "@aws-sdk/lib-storage";
 import { bus } from "../../main";
+// import { TaskWrapper } from "./task";
 class TaskWrapper {
   id;
   s3;
@@ -154,20 +168,22 @@ class TaskWrapper {
         params: this.param,
       });
       this.task.on("httpUploadProgress", (e) => {
+        console.log("httpUploadProgress", e);
         this.progress = ((e.loaded / e.total) * 100) | 0;
       });
       this.progress = 0;
       this.status = 1; // uploading
+
       await this.task.done();
       this.status = 3; // success
     } catch (e) {
-      // console.log(e);
+      console.log(111, e);
       // console.log(e.message);
       if (e.message == "Upload aborted.") {
         this.status = 2; // cancel/ stop
       } else {
         this.status = 4; // failed
-        Vue.prototype.$alert(e.message);
+        // Vue.prototype.$alert(e.message);
         this.failedMessage = e.message;
       }
     }
@@ -219,23 +235,48 @@ export default {
       specifiedDir: "",
       webkitRelativePath: "",
       rules: {
-        required: (value) => !!(value || "").trim() || "Required.",
-        counter: (value) => value.length <= 200 || "Max 200 characters",
+        counter: (value) => {
+          if (value == null) {
+            value = "";
+          }
+          return value.length <= 200 || "Max 200 characters";
+        },
         validate: (value) => {
+          if (value == null || value == "") return true;
           if (/^(?![\\\/])[a-z\d-_/]+(?<![\\\/])$/.test(value)) {
             if (value.indexOf("//") != -1) {
               return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-)";
             }
+            let foldersCountMax = value.split("/");
+            if (foldersCountMax.length > 18) {
+              return "can not > 18";
+            }
+            let folderNameMax = foldersCountMax.some((it) => it.length > 60);
+            if (folderNameMax) {
+              return "can not > 60";
+            }
+
             return true;
           } else {
             return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-)";
           }
         },
       },
+      isStorageFull: false,
     };
   },
   async created() {
     await this.$store.dispatch("getUsageInfo");
+
+    bus.$on("handleClearRecords", (id) => {
+      let index = this.tasks.findIndex((it) => it.id == id);
+      this.tasks.splice(index, 1);
+      bus.$emit("taskData", this.tasks);
+    });
+    bus.$on("handleClearAllRecords", (status) => {
+      this.tasks = this.tasks.filter((it) => it.status !== status);
+      bus.$emit("taskData", this.tasks);
+    });
   },
   computed: {
     path() {
@@ -274,24 +315,22 @@ export default {
           this.$store.state.usageInfo.arTotal * 1024 * 1024 -
           this.$store.state.usageInfo.arUsed * 1024 * 1024;
         if (totalSize > arResidue) {
-          this.files = [];
-          this.$alert(
-            "Insufficient storage space is available to upload the file."
-          );
-          return 0;
+          this.isStorageFull = true;
+        } else {
+          this.isStorageFull = false;
+        }
+      } else {
+        if (
+          totalSize >
+          this.$store.state.usageInfo.ipfsTotal -
+            this.$store.state.usageInfo.ipfsUsed
+        ) {
+          this.isStorageFull = true;
+        } else {
+          this.isStorageFull = false;
         }
       }
-      if (
-        totalSize >
-        this.$store.state.usageInfo.ipfsTotal -
-          this.$store.state.usageInfo.ipfsUsed
-      ) {
-        this.files = [];
-        this.$alert(
-          "Insufficient storage space is available to upload the file."
-        );
-        return 0;
-      }
+
       return this.$utils.getFileSize(totalSize);
     },
   },
@@ -373,6 +412,11 @@ export default {
       }
     },
     onConfirm() {
+      if (this.isStorageFull)
+        return this.$alert(
+          "Insufficient storage space is available to upload the file."
+        );
+      this.page = 1;
       if (this.curDir == "Specified") {
         let isValidate = this.$refs.specifiedRef.validate(true);
         if (isValidate) {
@@ -381,6 +425,7 @@ export default {
           this.$refs.uploadInput.handleRmoveAll();
           this.processTask();
           bus.$emit("taskData", this.tasks);
+          this.tasks = [];
         }
       } else {
         this.addTasks(this.files, 10);
@@ -388,10 +433,23 @@ export default {
         this.$refs.uploadInput.handleRmoveAll();
         this.processTask();
         bus.$emit("taskData", this.tasks);
+        // this.tasks = [];
       }
     },
     onCancel() {
       this.$router.go(-1);
+    },
+  },
+  watch: {
+    length(value) {
+      if (this.page > value) {
+        this.page = value;
+      }
+    },
+    files(newVal, oldVal) {
+      if (oldVal.length == 0 && newVal.length) {
+        this.page = 1;
+      }
     },
   },
 };
