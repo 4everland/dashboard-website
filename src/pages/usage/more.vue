@@ -2,6 +2,7 @@
 .usage-more {
   label {
     width: 100px;
+    margin-top: 6px;
   }
 }
 </style>
@@ -9,26 +10,39 @@
 <template>
   <div class="usage-more">
     <div
-      class="bd-1 mb-5 bdrs-10 d-flex al-c"
+      class="mb-5 bdrs-10 d-flex lh-1"
+      :class="form[it.key] > 0 ? 'bd-1 bg-hover-f8a' : 'bd-1n'"
       style="padding: 32px 40px"
       v-for="(it, i) in list"
       :key="i"
     >
       <label class="fz-15 ta-r mr-3">{{ it.label }}:</label>
-      <usage-input v-model="form[it.key]" :min="0" :max="10000" :step="100" />
-      <span class="ml-3 fz-14">{{ it.unit }}</span>
-      <div class="ml-5">
-        <v-btn
-          @click="$set(form, it.key, txt)"
-          class="mr-3 scale-9 tr-origin-0 op-7"
-          outlined
-          rounded
-          color="primary"
-          x-small
-          v-for="txt in [200, 500, 1000]"
-          :key="txt"
-          >{{ txt }}</v-btn
-        >
+      <div>
+        <div class="al-c">
+          <usage-input
+            v-model="form[it.key]"
+            :min="0"
+            :max="10000"
+            :step="100"
+          />
+          <span class="ml-3 fz-14">{{ it.unit }}</span>
+          <div class="ml-5">
+            <v-btn
+              @click="$set(form, it.key, txt)"
+              class="mr-3 scale-9 tr-origin-0 op-7"
+              outlined
+              rounded
+              color="primary"
+              x-small
+              v-for="txt in [200, 500, 1000]"
+              :key="txt"
+              >{{ txt }}</v-btn
+            >
+          </div>
+        </div>
+        <div class="" v-if="it.key == 'ipfs'">
+          <ipfs-time />
+        </div>
       </div>
     </div>
     <div class="mt-8 d-flex pt-4 bdt-1">
@@ -134,7 +148,7 @@ export default {
   data() {
     const form = {};
     list.forEach((it) => {
-      form[it.key] = 100;
+      form[it.key] = 0;
     });
     return {
       form,

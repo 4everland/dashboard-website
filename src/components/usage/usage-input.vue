@@ -1,7 +1,8 @@
 <style lang="scss">
 .usage-input {
+  padding: 2px;
   .v-btn--fab {
-    $size: 25px;
+    $size: 20px;
     width: $size;
     height: $size;
   }
@@ -19,6 +20,7 @@
       x-small
       color="primary"
       fab
+      depressed
       :disabled="val <= min"
       @click="val -= step"
     >
@@ -36,6 +38,7 @@
       x-small
       color="primary"
       fab
+      depressed
       :disabled="val >= max"
       @click="val += step"
     >

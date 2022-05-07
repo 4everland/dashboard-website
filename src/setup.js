@@ -9,6 +9,7 @@ import frameworks from "./plugins/config/frameworks";
 Vue.use(VueClipboards);
 
 Vue.prototype.$color1 = "#34A9FF";
+Vue.prototype.$color2 = "#ff6960";
 
 Vue.prototype.$onLoginData = (data) => {
   console.log(data);

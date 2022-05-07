@@ -57,6 +57,9 @@ export default {
 <style lang="scss">
 .main-wrap {
   min-height: 77vh;
+  &.auto {
+    min-height: auto;
+  }
   background: #fff;
   box-shadow: 0 0 6px rgb(205 205 205 / 50%);
   h3 {

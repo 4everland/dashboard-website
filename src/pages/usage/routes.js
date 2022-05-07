@@ -10,6 +10,7 @@ export default [
     component: Info,
     meta: {
       title: "Usage",
+      isTab: 1,
     },
   },
   {
