@@ -77,7 +77,9 @@
 
         <div class="upload-rules">
           <h3>File naming conventions</h3>
-          <p>1. The file name must be UTF-8-encoded.</p>
+          <p>
+            1. The file name must be UTF-8-encoded and cannot contain emojis.
+          </p>
           <p>2. The file name is case-sensitive.</p>
           <p>3. The file name must range from 1 to 1,023 bytes in length.</p>
           <p>
