@@ -521,6 +521,11 @@ export default {
       });
     },
     async onDelete(item) {
+      let selected = this.selected;
+      if (item && item.length) {
+        console.log(item);
+        selected = item;
+      }
       try {
         // const arr = await this.getSelectedObjects(item);
         // if (arr.length > 1000) {
@@ -534,7 +539,7 @@ export default {
         if (this.inBucket) {
           await this.$confirm(html, `Remove ${target}`);
           let errArr = [];
-          for (const row of this.selected) {
+          for (const row of selected) {
             try {
               await this.delBucket(row.name);
             } catch (error) {
@@ -547,8 +552,8 @@ export default {
             }, 10);
         }
         if (this.inFolder) {
-          let hasFile = this.selected.filter((it) => it.isFile);
-          let hasFolder = this.selected.filter((it) => !it.isFile);
+          let hasFile = selected.filter((it) => it.isFile);
+          let hasFolder = selected.filter((it) => !it.isFile);
           if (hasFile.length && hasFolder.length) {
             //  file folder exsit
             if (hasFile.filter((it) => it.arStatus != "desynced").length) {

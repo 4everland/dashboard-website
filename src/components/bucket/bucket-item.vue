@@ -2,7 +2,7 @@
   <div class="bucket-item-container">
     <div>
       <v-tabs
-        :class="vertical ? 'v3-vertical bdr-1' : 'v3-horizon'"
+        class="v3-horizon file-tab"
         color="black"
         v-model="curIdx"
         :height="55"
@@ -209,6 +209,80 @@
 </template>
 
 <script>
+import Vue from "vue";
+class DeleteTaskWrapper {
+  that;
+  s3;
+  param;
+  id;
+  marker;
+  lastMarker;
+  deleteCount;
+  status;
+  curFiles;
+
+  constructor(that, s3, param, id) {
+    this.that = that;
+    this.s3 = s3;
+    this.param = param;
+    this.id = id;
+    this.status = 0; // pre delete
+    this.deleteCount = 0;
+  }
+
+  async startTasks() {
+    try {
+      if (this.status !== 0 && this.status !== 1) return;
+
+      this.status = 1; // deleteing
+
+      console.log(this.param.Prefix, this.param.Bucket);
+      const listResult = await this.s3.listObjectsV2({
+        Bucket: this.param.Bucket,
+        MaxKeys: 100,
+        Delimiter: "",
+        Prefix: this.param.Prefix,
+      });
+      if (!listResult.Contents) {
+        this.curFiles = [];
+      } else {
+        this.curFiles = listResult.Contents.map((it) => {
+          return { Key: it.Key };
+        });
+      }
+
+      if (this.curFiles.length && this.status == 1) {
+        const deleteResult = await this.s3.deleteObjects({
+          Bucket: this.param.Bucket,
+          Delete: {
+            Objects: this.curFiles,
+            Quiet: false,
+          },
+        });
+        // console.log(deleteResult);
+        for (let i = 0; i < deleteResult.Deleted.length; i++) {
+          this.deleteCount += 1;
+          await Vue.prototype.$sleep(20);
+        }
+        await this.startTasks();
+      } else if (!this.curFiles.length) {
+        this.status = 3; // success
+        this.that.selected = [];
+        this.that.getList();
+      } else {
+        console.log("here");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  stopTasks() {
+    this.status = 2; //stop
+  }
+  retryTasks() {
+    this.status = 0; // retry
+  }
+}
 export default {
   props: {
     list: {
@@ -283,7 +357,8 @@ export default {
       this.$emit("addFolder");
     },
     onDelete() {
-      this.$emit("onDelete");
+      this.tableLoading = true;
+      this.$emit("onDelete", this.selected);
     },
   },
   watch: {
@@ -294,6 +369,11 @@ export default {
 };
 </script>
 
+<style >
+.file-tab .v-slide-group__content {
+  background: #f8fafb;
+}
+</style>
 <style lang="scss" scoped>
 .bucket-item-container {
   background: #fff;
@@ -312,8 +392,10 @@ export default {
     padding-left: 2px;
   }
   .v-tab {
+    width: 157px;
     background: #f7fafb;
-    font-weight: bold;
+    font-size: 18px;
+    letter-spacing: 0;
   }
   .v-tab--active {
     background: #fff;
