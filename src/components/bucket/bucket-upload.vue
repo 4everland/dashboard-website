@@ -111,7 +111,7 @@
 
         <template v-if="list.length == 0">
           <e-empty :loading="false">
-            {{ false ? `Loading files...` : `No folders or files` }}
+            {{ false ? `Loading files...` : `No files` }}
           </e-empty>
         </template>
         <div class="table-footer py-8">
@@ -360,8 +360,8 @@ export default {
             "/" +
             (this.curDir == "Specified" ? "" : this.info.Prefix) +
             this.specifiedDir +
-            webkitRelativePath +
             (this.curDir == "Specified" ? "/" : "") +
+            webkitRelativePath +
             file.name
         );
       });

@@ -6,7 +6,7 @@
     />
     <div class="mt-5">
       <p class="fw-b mb-3 fz-18" v-if="title">{{ title }}</p>
-      <p class="fz-20 fw-b gray">
+      <p class="fz-14 gray">
         <slot></slot>
       </p>
     </div>

@@ -95,11 +95,6 @@
           <img src="img/svg/upload.svg" width="16" />
           <span class="ml-2">Upload</span>
         </v-btn>
-        <v-btn class="ml-5" outlined @click="drawer = true">
-          <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
-          <img src="img/svg/add0.svg" width="12" />
-          <span class="ml-2">Parts</span>
-        </v-btn>
 
         <v-btn
           class="ml-5"
@@ -111,7 +106,11 @@
           <img src="img/svg/add0.svg" width="12" />
           <span class="ml-2">New Folder</span>
         </v-btn>
-
+        <v-btn class="ml-5" outlined @click="drawer = true">
+          <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
+          <img src="img/svg/parts_icon.svg" width="12" />
+          <span class="ml-2">Parts</span>
+        </v-btn>
         <bucket-parts-list
           :drawer.sync="drawer"
           :pathInfo="pathInfo"

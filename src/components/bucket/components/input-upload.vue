@@ -1,7 +1,20 @@
 <style scoped lang="scss">
+.mask {
+  z-index: 0;
+  // pointer-events: none;
+  position: absolute;
+  opacity: 0.4;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: #ffff;
+  pointer-events: none;
+}
 .e-upload {
   margin: 20px 0 30px;
   .add-img {
+    position: relative;
     padding: 20px 10px;
     border: 3px dashed #ddd;
     .description {
@@ -115,6 +128,7 @@
         </v-btn>
       </p> -->
     </div>
+    <div class="mask" v-show="isDraging" ref="dragArea"></div>
   </div>
 </template>
 
@@ -136,6 +150,7 @@ export default {
     return {
       files: [],
       isUploadDir: false,
+      isDraging: false,
     };
   },
   watch: {
@@ -146,8 +161,24 @@ export default {
     },
   },
   mounted() {
-    document.ondragover = (ev) => ev.preventDefault();
+    this.$refs.dragArea.ondragenter = () => {
+      this.isDraging = true;
+      console.log(111);
+    };
+    this.$refs.dragArea.ondragleave = () => {
+      this.isDraging = false;
+    };
+    document.ondragenter = () => {
+      this.isDraging = true;
+    };
+    // document.ondragleave = () => {
+    //   this.isDraging = false;
+    // };
+    document.ondragover = (ev) => {
+      ev.preventDefault();
+    };
     document.ondrop = async (ev) => {
+      this.isDraging = false;
       ev.preventDefault();
       // this.getFiles(ev.dataTransfer);
       const files = await this.scanFiles(ev.dataTransfer);

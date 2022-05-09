@@ -219,7 +219,7 @@
             </v-data-table>
             <template v-if="length == 0">
               <e-empty :loading="false">
-                {{ false ? `Loading files...` : `No folders or files` }}
+                {{ false ? `Loading files...` : `No files` }}
               </e-empty>
             </template>
             <div class="table-footer d-flex align-center justify-center pt-6">
@@ -353,7 +353,7 @@
           </v-data-table>
           <template v-if="deleteFolderLength == 0">
             <e-empty :loading="false">
-              {{ false ? `Loading files...` : `No folders or files` }}
+              {{ false ? `Loading files...` : `No folders` }}
             </e-empty>
           </template>
           <div class="table-footer d-flex align-center justify-center pt-6">
@@ -637,7 +637,7 @@ export default {
 <style >
 .task-table td {
   padding: 20px !important;
-  font-size: 16px !important;
+  font-size: 15px !important;
   word-break: break-all;
   white-space: pre-wrap;
 }
@@ -656,7 +656,7 @@ export default {
 .opeartion {
   position: relative;
   color: #34a9ff;
-  font-size: 16px;
+  font-size: 14px;
   padding: 0 5px;
   cursor: pointer;
 }
@@ -744,7 +744,7 @@ export default {
       }
     }
     .upload-task {
-      padding: 30px 0 0 25px;
+      padding: 15px 0 0 25px;
       box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
       background: #fff;
       .status-tabs {
@@ -776,7 +776,7 @@ export default {
       }
     }
     .delete-folder-task {
-      padding: 30px 0 0 25px;
+      padding: 15px 0 0 25px;
       box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
       background: #fff;
       .delete-folder-status {
