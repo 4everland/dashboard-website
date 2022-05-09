@@ -182,7 +182,7 @@
         ></v-text-field>
       </div>
     </div>
-    <div class="pa-2"></div>
+    <div class="pa-2" v-if="!inFolder"></div>
 
     <div v-if="inFile" class="mt-4">
       <v-card outlined>
