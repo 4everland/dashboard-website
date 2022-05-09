@@ -1,7 +1,7 @@
 <style lang="scss">
 .usage-more {
-  label {
-    width: 100px;
+  .label {
+    min-width: 100px;
     margin-top: 6px;
   }
 }
@@ -16,8 +16,8 @@
       v-for="(it, i) in list"
       :key="i"
     >
-      <label class="fz-15 ta-r mr-3">{{ it.label }}:</label>
-      <div>
+      <label class="label fz-15 ta-r mr-3">{{ it.label }}:</label>
+      <div class="flex-1" style="max-width: 700px">
         <div class="al-c">
           <usage-input
             v-model="form[it.key]"
