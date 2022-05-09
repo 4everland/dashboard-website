@@ -93,9 +93,9 @@
         <v-icon slot="ref" size="22" color="#ff6d24" class="pa-1 d-ib ml-2"
           >mdi-alert-circle-outline</v-icon
         >
-        <span class="ml-2"
-          >Tips: If the name of the file to upload is the same as that of an
-          existing file, the existing file is overwritten.
+        <span class="ml-2">
+          If the name of the file to upload is the same as that of an existing
+          file, the existing file is overwritten.
         </span>
       </div>
       <div class="upload-opreation">
@@ -210,7 +210,6 @@ export default {
       const { files = [] } = data;
       // console.log(files);
       let arr = Array.from(files);
-      console.log(arr);
       const isEmoji =
         arr.filter((it) => {
           return it.webkitRelativePath == ""

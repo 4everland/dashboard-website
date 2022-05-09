@@ -15,8 +15,15 @@
       :tableList="list"
     ></storage-upload> -->
     <div @click="$refs.navDrawers.drawer = true" class="task-list">
-      <span v-if="taskStatus">Uploading...</span>
-      <span v-else>TaskList</span>
+      <div v-if="taskIsUploading" class="d-flex align-center">
+        <v-progress-circular
+          style="width: 20px"
+          indeterminate
+          color="#ff6d24"
+        ></v-progress-circular>
+        <span class="ml-4" style="color: #ff6d24">Uploading...</span>
+      </div>
+      <div v-else>TaskList</div>
     </div>
 
     <div class="d-flex nowrap ov-a btn-wrap mt-5" v-if="!inUpload">
@@ -440,7 +447,7 @@
 
     <navigation-drawers
       ref="navDrawers"
-      @taskStatus="taskStatus"
+      @isUploading="isUploading"
       :deleteFolder.sync="deleteFolder"
       :deleteFolderTasks="deleteFoldersTasks"
       @handlePasueDeleteFolder="handlePasueDeleteFolder"
@@ -546,6 +553,7 @@ export default {
       deleteFolder: false,
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
+      taskIsUploading: false,
     };
   },
   computed: {
@@ -626,9 +634,6 @@ export default {
     },
     fileUrl() {
       return this.fileUrls[0] || "";
-    },
-    taskStatus(value) {
-      return value;
     },
   },
   watch: {
@@ -881,6 +886,9 @@ export default {
     },
     handleDeleteFolderRemoveAll() {
       this.deleteFoldersTasks = [];
+    },
+    isUploading(value) {
+      this.taskIsUploading = value;
     },
   },
 };

@@ -448,7 +448,7 @@ export default {
         data.list.forEach((row) => {
           const item = list.filter((it) => it.name == row.bucket)[0];
           if (!item) {
-            console.log(row.bucket, "no bucket");
+            // console.log(row.bucket, "no bucket");
             return;
           }
           const ar = row.arweave || {};

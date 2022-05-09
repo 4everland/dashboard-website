@@ -18,10 +18,14 @@
           alt=""
         />
       </div>
-      <div class="tips py-3">
-        Tips：Refreshing or closing the browser will cancel ongoing upload
-        tasks, clear all uplpad records, and incorrectly display the number of
-        deleted files in the delete task.
+      <div class="tips py-1 my-3">
+        <v-icon slot="ref" size="22" color="#ff6d24" class="pa-1 d-ib ml-2"
+          >mdi-alert-circle-outline</v-icon
+        >
+        <span class="ml-2"
+          >Refreshing or closing the browser will cancel ongoing tasks, clear
+          records, and display deleted tasks incorrectly.</span
+        >
       </div>
       <div class="task-content">
         <div class="d-flex task-list-tabs">
@@ -232,16 +236,6 @@
 
         <!-- Delete Folder -->
         <div v-show="currentTab == 1" class="delete-folder-task">
-          <div class="tips">
-            <v-icon slot="ref" size="22" color="#ff6d24" class="pa-1 d-ib ml-2"
-              >mdi-alert-circle-outline</v-icon
-            >
-            <span class="ml-2"
-              >If you refresh or close the page when the folder is being
-              deleted, the displayed number of deleted files may be
-              inaccurate.</span
-            >
-          </div>
           <div class="my-5">
             <v-btn
               rounded
@@ -470,7 +464,7 @@ export default {
     bus.$on("taskData", (tasks) => {
       this.drawer = true;
       this.currentTab = 0;
-      // this.status = 0;
+      this.status = 0;
       this.tasks = tasks;
     });
   },
@@ -632,9 +626,10 @@ export default {
         }
       }
     },
-    drawer(newVal, oldVal) {
-      let allReady = this.tasks.some((it) => it.status == 1 || it.status == 0);
-      this.$emit("taskStatus", allReady);
+    drawer(newVal) {
+      let isUploading =
+        this.tasks.filter((it) => it.status == 1 || it.status == 0).length > 0;
+      this.$emit("isUploading", isUploading);
     },
   },
 };
@@ -686,6 +681,12 @@ export default {
   .tips {
     color: #6a778b;
     font-size: 14px;
+    color: #ff6d24;
+    background: #ffeee4;
+    border-radius: 6px;
+    .icon {
+      vertical-align: sub;
+    }
   }
   .task-content {
     background: #f8fafb;
@@ -766,15 +767,6 @@ export default {
       padding: 30px 0 0 25px;
       box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
       background: #fff;
-      .tips {
-        padding: 10px;
-        color: #ff6d24;
-        background: #ffeee4;
-        border-radius: 6px;
-        .icon {
-          vertical-align: sub;
-        }
-      }
       .delete-folder-status {
         height: 40px;
         line-height: 40px;
