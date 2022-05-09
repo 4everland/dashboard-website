@@ -411,7 +411,6 @@
           <sync-state :val="item.arStatus" v-if="item.isFile"></sync-state>
         </template>
       </v-data-table>
-
       <div
         class="ta-c"
         :class="tableLoading ? 'mt-10' : 'mt-15'"
@@ -430,7 +429,17 @@
         </div>
       </div>
     </div>
-
+    <div v-if="inFolder">
+      <bucket-item
+        :list="list"
+        :pathInfo="pathInfo"
+        :bucketInfo="bucketInfo"
+        :folderLen="folderLen"
+        @addFolder="addFolder"
+        @getViewUrl="getViewUrl"
+        @onDelete="onDelete"
+      ></bucket-item>
+    </div>
     <!-- v-intersect="onLoadMore" -->
     <div v-if="inFolder && !finished" class="pd-20 gray ta-c fz-16 mt-5">
       <v-btn outlined rounded v-if="list.length" @click="onLoadMore">{{

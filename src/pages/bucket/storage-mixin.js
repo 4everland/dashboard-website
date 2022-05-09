@@ -599,8 +599,8 @@ export default {
       return this.path + item.name + (item.isFile ? "" : "/");
     },
     getViewUrl(item) {
+      console.log(item);
       const { Prefix } = this.pathInfo;
-      console.log(this.bucketInfo.originList[0]);
       let url = this.bucketInfo.originList[0] + "/" + Prefix + item.name;
       return url.encode();
     },
