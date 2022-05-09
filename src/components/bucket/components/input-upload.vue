@@ -151,6 +151,7 @@ export default {
       ev.preventDefault();
       // this.getFiles(ev.dataTransfer);
       const files = await this.scanFiles(ev.dataTransfer);
+      // console.log(files, "fles");
       this.getFiles({ files });
     };
     // document.onpaste = async (ev) => {
@@ -171,13 +172,16 @@ export default {
     },
     async scanFiles(e) {
       const { items = [], files = [] } = e;
+      // console.log(items, files);
       const [item] = items;
+      // console.log(item);
       if (!item || !item.webkitGetAsEntry) return files;
       const entry = item.webkitGetAsEntry();
       if (!entry) return files;
       return entry.isFile ? files : this.getEntryDirectoryFiles(entry);
     },
     async getEntryDirectoryFiles(entry) {
+      // console.log(111, entry);
       let res = [];
       var internalProces = (item, path, res) => {
         if (item.isFile) {
@@ -193,11 +197,13 @@ export default {
           return new Promise((resolve, reject) => {
             var dirReader = item.createReader();
             dirReader.readEntries(async (entries) => {
+              // console.log(entries, "entries");
               for (let i = 0; i < entries.length; i++) {
                 await internalProces(entries[i], path + item.name + "/", res);
               }
               resolve(res);
             }, reject);
+            // console.log(dirReader, "dirReader");
           });
         }
       };

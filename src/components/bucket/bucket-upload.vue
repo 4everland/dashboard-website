@@ -361,6 +361,7 @@ export default {
             (this.curDir == "Specified" ? "" : this.info.Prefix) +
             this.specifiedDir +
             webkitRelativePath +
+            (this.curDir == "Specified" ? "/" : "") +
             file.name
         );
       });
