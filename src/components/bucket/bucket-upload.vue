@@ -168,7 +168,6 @@ class TaskWrapper {
         params: this.param,
       });
       this.task.on("httpUploadProgress", (e) => {
-        console.log("httpUploadProgress", e);
         this.progress = ((e.loaded / e.total) * 100) | 0;
       });
       this.progress = 0;
@@ -177,8 +176,7 @@ class TaskWrapper {
       await this.task.done();
       this.status = 3; // success
     } catch (e) {
-      console.log(111, e);
-      // console.log(e.message);
+      console.log(e.message);
       if (e.message == "Upload aborted.") {
         this.status = 2; // cancel/ stop
       } else {
@@ -409,7 +407,7 @@ export default {
           this.$refs.uploadInput.handleRmoveAll();
           this.processTask();
           bus.$emit("taskData", this.tasks);
-          this.tasks = [];
+          // this.tasks = [];
         }
       } else {
         this.addTasks(this.files, 10);

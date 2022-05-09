@@ -15,7 +15,8 @@
       :tableList="list"
     ></storage-upload> -->
     <div @click="$refs.navDrawers.drawer = true" class="task-list">
-      TaskList
+      <span v-if="taskStatus">Uploading...</span>
+      <span v-else>TaskList</span>
     </div>
 
     <div class="d-flex nowrap ov-a btn-wrap mt-5" v-if="!inUpload">
@@ -439,6 +440,7 @@
 
     <navigation-drawers
       ref="navDrawers"
+      @taskStatus="taskStatus"
       :deleteFolder.sync="deleteFolder"
       :deleteFolderTasks="deleteFoldersTasks"
       @handlePasueDeleteFolder="handlePasueDeleteFolder"
@@ -624,6 +626,9 @@ export default {
     },
     fileUrl() {
       return this.fileUrls[0] || "";
+    },
+    taskStatus(value) {
+      return value;
     },
   },
   watch: {
@@ -840,6 +845,7 @@ export default {
         Math.random().toString().substr(3, length) + Date.now()
       ).toString(36);
     },
+
     handlePasueDeleteFolder(id) {
       const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
       this.deleteFoldersTasks[index].stopTasks();

@@ -19,8 +19,9 @@
         />
       </div>
       <div class="tips py-3">
-        Tips：If you refresh or close the browser, the ongoing upload task is
-        canceled and all upload records are cleared.
+        Tips：Refreshing or closing the browser will cancel ongoing upload
+        tasks, clear all uplpad records, and incorrectly display the number of
+        deleted files in the delete task.
       </div>
       <div class="task-content">
         <div class="d-flex task-list-tabs">
@@ -630,6 +631,10 @@ export default {
           this.page = maxPage;
         }
       }
+    },
+    drawer(newVal, oldVal) {
+      let allReady = this.tasks.some((it) => it.status == 1 || it.status == 0);
+      this.$emit("taskStatus", allReady);
     },
   },
 };
