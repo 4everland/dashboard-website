@@ -208,10 +208,6 @@ export default {
       type: String,
       default: "",
     },
-    isAr: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -245,20 +241,20 @@ export default {
           if (value == null || value == "") return true;
           if (/^(?![\\\/])[a-z\d-_/]+(?<![\\\/])$/.test(value)) {
             if (value.indexOf("//") != -1) {
-              return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-)";
+              return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).";
             }
             let foldersCountMax = value.split("/");
             if (foldersCountMax.length > 18) {
-              return "can not > 18";
+              return "You can create up to 18 folders.";
             }
             let folderNameMax = foldersCountMax.some((it) => it.length > 60);
             if (folderNameMax) {
-              return "can not > 60";
+              return "The maximum folder name length is 60 characters.";
             }
 
             return true;
           } else {
-            return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-)";
+            return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).";
           }
         },
       },
@@ -310,27 +306,15 @@ export default {
       const totalSize = this.files.reduce((pre, current) => {
         return pre + current.size;
       }, 0);
-      if (this.isAr) {
-        let arResidue =
-          this.$store.state.usageInfo.arTotal * 1024 * 1024 -
-          this.$store.state.usageInfo.arUsed * 1024 * 1024;
-        if (totalSize > arResidue) {
-          this.isStorageFull = true;
-        } else {
-          this.isStorageFull = false;
-        }
+      if (
+        totalSize >
+        this.$store.state.usageInfo.ipfsTotal -
+          this.$store.state.usageInfo.ipfsUsed
+      ) {
+        this.isStorageFull = true;
       } else {
-        if (
-          totalSize >
-          this.$store.state.usageInfo.ipfsTotal -
-            this.$store.state.usageInfo.ipfsUsed
-        ) {
-          this.isStorageFull = true;
-        } else {
-          this.isStorageFull = false;
-        }
+        this.isStorageFull = false;
       }
-
       return this.$utils.getFileSize(totalSize);
     },
   },
