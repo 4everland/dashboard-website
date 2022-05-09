@@ -5,7 +5,7 @@
         :class="vertical ? 'v3-vertical bdr-1' : 'v3-horizon'"
         color="black"
         v-model="curIdx"
-        :height="vertical ? null : 44"
+        :height="55"
         hide-slider
         :vertical="vertical"
       >
