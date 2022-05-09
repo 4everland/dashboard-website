@@ -79,14 +79,12 @@
           </e-menu>
         </template>
       </div>
-      <div v-show="inFolder">
+      <!-- <div v-show="inFolder">
         <v-btn color="primary" @click="handleClickUpload">
-          <!-- <v-icon size="15">mdi-cloud-upload</v-icon> -->
           <img src="img/svg/upload.svg" width="16" />
           <span class="ml-2">Upload</span>
         </v-btn>
         <v-btn class="ml-5" outlined @click="drawer = true">
-          <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
           <img src="img/svg/add0.svg" width="12" />
           <span class="ml-2">Parts</span>
         </v-btn>
@@ -97,7 +95,6 @@
           :disabled="folderLen >= 20"
           @click="addFolder"
         >
-          <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
           <img src="img/svg/add0.svg" width="12" />
           <span class="ml-2">New Folder</span>
         </v-btn>
@@ -106,9 +103,14 @@
           :drawer.sync="drawer"
           :pathInfo="pathInfo"
         ></bucket-parts-list>
-      </div>
+      </div> -->
 
-      <e-menu offset-y open-on-hover :disabled="!selected.length">
+      <e-menu
+        offset-y
+        open-on-hover
+        :disabled="!selected.length"
+        v-if="!inFolder"
+      >
         <v-btn
           slot="ref"
           class="ml-5"
@@ -165,7 +167,7 @@
 
       <div
         :class="asMobile ? 'ml-5' : 'ml-auto'"
-        v-if="!inFile"
+        v-if="!inFile && !inFolder"
         style="min-width: 150px"
       >
         <v-text-field

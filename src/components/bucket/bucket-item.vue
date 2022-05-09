@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bucket-item-container">
     <div>
       <v-tabs
         :class="vertical ? 'v3-vertical bdr-1' : 'v3-horizon'"
@@ -295,6 +295,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.bucket-item-container {
+  background: #fff;
+
+  .file-container {
+    padding: 0 30px;
+    .operation-tab {
+      padding: 26px 0;
+    }
+  }
+}
+
 .v3-horizon {
   .v-slide-group__content {
     padding-top: 4px;
