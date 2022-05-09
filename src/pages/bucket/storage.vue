@@ -561,7 +561,7 @@ export default {
             rules: [
               (v) => !!(v || "").trim() || "Invalid",
               (v) =>
-                /^[a-z\d-_]+$/.test(v) ||
+                /^[a-z\d-_\u4E00-\u9FA5]+$/.test(v) ||
                 "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).",
             ],
             required: true,
