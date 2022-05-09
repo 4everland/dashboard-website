@@ -654,10 +654,22 @@ export default {
   color: #34a9ff;
 }
 .opeartion {
+  position: relative;
   color: #34a9ff;
   font-size: 16px;
   padding: 0 5px;
   cursor: pointer;
+}
+.opeartion:hover::after {
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  transform: translateX(-50%);
+  content: "";
+  // display: block;
+  width: 40px;
+  height: 2px;
+  background: #34a9ff;
 }
 .v-tab {
   font-size: 14px;

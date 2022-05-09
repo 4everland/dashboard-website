@@ -21,9 +21,11 @@
           indeterminate
           color="#ff6d24"
         ></v-progress-circular>
-        <span class="ml-4" style="color: #ff6d24">Uploading...</span>
+        <span class="ml-4 uploading-status" style="color: #ff6d24"
+          >Uploading...</span
+        >
       </div>
-      <div v-else>TaskList</div>
+      <div v-else class="status">TaskList</div>
     </div>
 
     <div class="d-flex nowrap ov-a btn-wrap mt-5" v-if="!inUpload">
@@ -902,5 +904,34 @@ export default {
   color: #34a9ff;
   font-size: 16px;
   cursor: pointer;
+  .uploading-status {
+    color: #ff6d24;
+  }
+  .status,
+  .uploading-status {
+    position: relative;
+  }
+
+  .status:hover::after {
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    transform: translateX(-50%);
+    content: "";
+    // display: block;
+    width: 40px;
+    height: 2px;
+    background: #34a9ff;
+  }
+  .uploading-status:hover::after {
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    transform: translateX(-50%);
+    content: "";
+    width: 40px;
+    height: 2px;
+    background: #ff6d24;
+  }
 }
 </style>

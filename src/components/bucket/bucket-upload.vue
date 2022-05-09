@@ -237,7 +237,7 @@ export default {
         },
         validate: (value) => {
           if (value == null || value == "") return true;
-          if (/^(?![\\\/])[a-z\d-_/]+(?<![\\\/])$/.test(value)) {
+          if (/^(?![\\\/])[a-z\d-_/\u4E00-\u9FA5]+(?<![\\\/])$/.test(value)) {
             if (value.indexOf("//") != -1) {
               return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).";
             }
