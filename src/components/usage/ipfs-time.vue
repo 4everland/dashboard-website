@@ -42,6 +42,9 @@
               <span class="ml-2 fz-14">GB</span>
             </div>
           </div>
+          <div class="ml-11 mt-2 gray" v-if="showLimit">
+            (The usage time of additional resources will be from now until 2022)
+          </div>
           <div class="al-c mt-4" style="min-height: 30px">
             <v-switch
               label="Extend effective time"
@@ -61,6 +64,10 @@
               ></v-select>
               <span class="ml-2">Month</span>
             </div>
+          </div>
+          <div class="ml-11 mt-2 gray" v-if="showExtend">
+            (The increased service time will include the xxGB memory purchased
+            before and the xxGB memory purchased this time)
           </div>
         </e-expand-btn>
       </div>
