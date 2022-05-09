@@ -317,7 +317,7 @@
       ></bucket-upload>
     </div>
 
-    <div class="main-wrap" v-if="!inFile && !inUpload">
+    <div class="main-wrap" v-if="!inFile && !inUpload && !inFolder">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
