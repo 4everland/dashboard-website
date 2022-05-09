@@ -24,7 +24,7 @@
       </div>
       <div class="task-content">
         <div class="d-flex task-list-tabs">
-          <div
+          <!-- <div
             class="px-10 py-5"
             :class="currentTab == 0 ? 'active' : ''"
             @click="currentTab = 0"
@@ -37,7 +37,18 @@
             @click="currentTab = 1"
           >
             Delete Folder
-          </div>
+          </div> -->
+
+          <v-tabs
+            class="v3-horizon change-tab"
+            color="black"
+            v-model="currentTab"
+            :height="60"
+            hide-slider
+          >
+            <v-tab>Upload Task</v-tab>
+            <v-tab> Delete Folder</v-tab>
+          </v-tabs>
         </div>
 
         <!-- Upload Task -->
@@ -630,6 +641,9 @@ export default {
   word-break: break-all;
   white-space: pre-wrap;
 }
+.change-tab .v-slide-group__content {
+  background: #f8fafb;
+}
 </style>
 <style lang="scss" scoped>
 .v-application .elevation-1 {
@@ -672,6 +686,31 @@ export default {
     background: #f8fafb;
     border-radius: 8px 0 0 8px;
     padding: 18px 0 21px 19px;
+
+    .v3-horizon {
+      background: #f8fafb;
+      .v-tab {
+        background: #f7fafb;
+        font-weight: bold;
+        border-bottom: none;
+        font-size: 16px;
+        letter-spacing: 0;
+      }
+      .v-tab--active {
+        font-family: "PingFangSC-Regular, PingFang SC";
+        background: #fff;
+        color: #000;
+        font-weight: bold;
+        pointer-events: none;
+
+        &,
+        &:before {
+          border-radius: 12px;
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      }
+    }
     .task-list-tabs {
       > div {
         font-size: 18px;

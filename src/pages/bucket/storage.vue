@@ -312,7 +312,6 @@
       <bucket-upload
         ref="bucketUpload"
         :info="pathInfo"
-        :isAr="bucketInfo.isAr"
         :baseUrl="bucketInfo.originList[0]"
       ></bucket-upload>
     </div>
@@ -882,6 +881,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .task-list {
+  position: absolute;
+  right: 20px;
+  top: 25px;
   text-align: right;
   color: #34a9ff;
   font-size: 16px;

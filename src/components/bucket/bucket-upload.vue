@@ -208,10 +208,6 @@ export default {
       type: String,
       default: "",
     },
-    isAr: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -310,27 +306,15 @@ export default {
       const totalSize = this.files.reduce((pre, current) => {
         return pre + current.size;
       }, 0);
-      if (this.isAr) {
-        let arResidue =
-          this.$store.state.usageInfo.arTotal * 1024 * 1024 -
-          this.$store.state.usageInfo.arUsed * 1024 * 1024;
-        if (totalSize > arResidue) {
-          this.isStorageFull = true;
-        } else {
-          this.isStorageFull = false;
-        }
+      if (
+        totalSize >
+        this.$store.state.usageInfo.ipfsTotal -
+          this.$store.state.usageInfo.ipfsUsed
+      ) {
+        this.isStorageFull = true;
       } else {
-        if (
-          totalSize >
-          this.$store.state.usageInfo.ipfsTotal -
-            this.$store.state.usageInfo.ipfsUsed
-        ) {
-          this.isStorageFull = true;
-        } else {
-          this.isStorageFull = false;
-        }
+        this.isStorageFull = false;
       }
-
       return this.$utils.getFileSize(totalSize);
     },
   },
