@@ -5,12 +5,22 @@ import Domain from "./domain";
 
 export default [
   {
-    path: "/storage/*",
+    path: "/storage",
     component: Storage,
     meta: {
       title: "Storage",
       isTab: 1,
     },
+    children: [
+      {
+        path: "/bucket/*",
+        component: () => import("../../components/bucket/bucket-item.vue"),
+        meta: {
+          title: "Bucket",
+          isTab: 1,
+        },
+      },
+    ],
   },
   {
     path: "/arweave",

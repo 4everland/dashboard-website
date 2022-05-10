@@ -287,22 +287,22 @@ class DeleteTaskWrapper {
 export default {
   mixins: [mixin],
   props: {
-    list: {
-      type: Array,
-      default: () => [],
-    },
-    bucketInfo: {
-      type: Object,
-      default: () => {},
-    },
-    pathInfo: {
-      type: Object,
-      default: () => {},
-    },
-    folderLen: {
-      type: Number,
-      default: 0,
-    },
+    // list: {
+    //   type: Array,
+    //   default: () => [],
+    // },
+    // bucketInfo: {
+    //   type: Object,
+    //   default: () => {},
+    // },
+    // pathInfo: {
+    //   type: Object,
+    //   default: () => {},
+    // },
+    // folderLen: {
+    //   type: Number,
+    //   default: 0,
+    // },
   },
   data() {
     return {
@@ -330,20 +330,20 @@ export default {
     },
   },
   methods: {
-    onRow() {
-      console.log(1);
-    },
-    getViewUrl(item) {
-      const { Prefix } = this.pathInfo;
-      let url = this.bucketInfo.originList[0] + "/" + Prefix + item.name;
-      return url.encode();
-    },
-    onSyncAR() {
-      console.log(1);
-    },
-    onRename() {
-      console.log(1);
-    },
+    // onRow() {
+    //   console.log(1);
+    // },
+    // getViewUrl(item) {
+    //   const { Prefix } = this.pathInfo;
+    //   let url = this.bucketInfo.originList[0] + "/" + Prefix + item.name;
+    //   return url.encode();
+    // },
+    // onSyncAR() {
+    //   console.log(1);
+    // },
+    // onRename() {
+    //   console.log(1);
+    // },
     onCopied() {
       this.$toast("Copied to clipboard !");
     },
@@ -355,17 +355,26 @@ export default {
         },
       });
     },
-    addFolder() {
-      this.$emit("addFolder");
+    onRouteChange() {
+      this.selected = [];
+      this.folderList = [];
+      this.getList();
+      this.checkNew();
     },
-    onDelete() {
-      this.tableLoading = true;
-      this.$emit("onDelete", this.selected);
-    },
+    // addFolder() {
+    //   this.$emit("addFolder");
+    // },
+    // onDelete() {
+    //   this.tableLoading = true;
+    //   this.$emit("onDelete", this.selected);
+    // },
   },
   watch: {
     list() {
       this.tableLoading = false;
+    },
+    path() {
+      this.onRouteChange();
     },
   },
 };
