@@ -209,6 +209,7 @@
 </template>
 
 <script>
+import mixin from "../../pages/bucket/storage-mixin";
 import Vue from "vue";
 class DeleteTaskWrapper {
   that;
@@ -284,6 +285,7 @@ class DeleteTaskWrapper {
   }
 }
 export default {
+  mixins: [mixin],
   props: {
     list: {
       type: Array,
@@ -379,6 +381,7 @@ export default {
   background: #fff;
 
   .file-container {
+    min-height: 1000px;
     padding: 0 30px;
     .operation-tab {
       padding: 26px 0;
