@@ -128,10 +128,10 @@
           v-if="list.length !== 0"
         >
           <v-btn rounded color="primary" @click="onConfirm">
-            <span class="ml-2">upload</span>
+            <span class="ml-2">Upload</span>
           </v-btn>
           <v-btn rounded color="primary" class="ml-7" @click="onCancel">
-            <span class="ml-2">cancel</span>
+            <span class="ml-2">Cancel</span>
           </v-btn>
         </div>
       </div>

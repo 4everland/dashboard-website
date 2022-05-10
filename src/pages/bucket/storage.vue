@@ -109,10 +109,10 @@
         <v-btn class="ml-5" outlined @click="drawer = true">
           <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
           <img src="img/svg/parts_icon.svg" width="12" />
-          <span class="ml-2">Parts</span>
+          <span class="ml-2">Fragments</span>
         </v-btn>
         <bucket-parts-list
-          :drawer.sync="drawer"
+          v-model="drawer"
           :pathInfo="pathInfo"
         ></bucket-parts-list>
       </div>

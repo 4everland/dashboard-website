@@ -434,7 +434,7 @@ export default {
           value: "param[Bucket]",
         },
         {
-          text: "Number of Deleted Files",
+          text: "Deleted Files",
           align: "center",
           sortable: false,
           value: "deleteCount",

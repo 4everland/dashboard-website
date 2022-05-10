@@ -15,7 +15,7 @@
   margin: 20px 0 30px;
   .add-img {
     position: relative;
-    padding: 20px 10px;
+    padding: 30px 10px;
     border: 3px dashed #ddd;
     .description {
       margin: 0 auto;
@@ -64,7 +64,7 @@
 
 <template>
   <div>
-    <div class="e-upload">
+    <div class="e-upload" ref="eUpload">
       <!-- <slot></slot> -->
 
       <div class="upload-header d-flex justify-space-between align-center">
@@ -72,7 +72,7 @@
           <div class="ta-c">
             <img src="../../../../public/img/icon/bucket_upload.svg" alt="" />
             <p class="description fw-b fz-20">
-              Drag and drop one or more files or folders here to select them.
+              Drag and drop items here to select.
             </p>
           </div>
           <!-- webkitdirectory -->
@@ -107,8 +107,8 @@
           >mdi-alert-circle-outline</v-icon
         >
         <span class="ml-2">
-          If the name of the file to upload is the same as that of an existing
-          file, the existing file is overwritten.
+          Please note: If the uploaded file name already exists, the original
+          file will be overwritten.
         </span>
       </div>
       <div class="upload-opreation">
@@ -161,20 +161,22 @@ export default {
     },
   },
   mounted() {
-    this.$refs.dragArea.ondragenter = () => {
-      this.isDraging = true;
-      console.log(111);
-    };
-    this.$refs.dragArea.ondragleave = () => {
-      this.isDraging = false;
-    };
-    document.ondragenter = () => {
-      this.isDraging = true;
-    };
+    // document.ondragenter = () => {
+    //   console.log("enter");
+    //   this.isDraging = true;
+    // };
     // document.ondragleave = () => {
+    //   console.log("leave");
     //   this.isDraging = false;
     // };
+
     document.ondragover = (ev) => {
+      let index = ev.path.findIndex((it) => it == this.$refs.eUpload);
+      if (index != -1) {
+        this.isDraging = true;
+      } else {
+        this.isDraging = false;
+      }
       ev.preventDefault();
     };
     document.ondrop = async (ev) => {

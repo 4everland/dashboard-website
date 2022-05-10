@@ -3,7 +3,6 @@
     <v-navigation-drawer
       v-model="drawer"
       class="drawer-container ov-a"
-      stateless
       fixed
       right
       temporary
@@ -12,7 +11,7 @@
         <span class="fw-b fz-18">Parts</span>
         <img
           style="cursor: pointer"
-          @click="$emit('update:drawer', false)"
+          @click="drawer = false"
           src="/img/svg/close_icon.svg"
           alt=""
         />
@@ -78,9 +77,8 @@
 import { mapState } from "vuex";
 export default {
   props: {
-    drawer: {
+    value: {
       type: Boolean,
-      default: true,
     },
     pathInfo: {
       type: Object,
@@ -89,6 +87,7 @@ export default {
   },
   data() {
     return {
+      drawer: this.value,
       headers: [
         {
           text: "Name",
@@ -208,7 +207,11 @@ export default {
     },
   },
   watch: {
+    value(value) {
+      this.drawer = value;
+    },
     drawer(newValue) {
+      this.$emit("input", newValue);
       if (newValue == true) {
         this.getPartList();
       }
