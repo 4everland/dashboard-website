@@ -20,7 +20,7 @@
         background: #7e8ea8;
       }
     }
-    .v-icon {
+    .icon-1 {
       transform: rotate(180deg);
     }
   }
@@ -42,7 +42,7 @@
   >
     <v-btn class="trigger" color="#7E8EA8" outlined small @click="show = !show">
       <span>Change</span>
-      <v-icon>mdi-menu-down</v-icon>
+      <v-icon class="icon-1">mdi-menu-down</v-icon>
     </v-btn>
     <div class="pa-5 pos-r con" :class="show ? 'd-b' : 'd-n'">
       <slot></slot>
