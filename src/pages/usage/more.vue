@@ -109,14 +109,76 @@
           class="ml-5"
           min-width="120"
           :disabled="totalPrice <= 0"
+          @click="showOrder = true"
           >Preview</v-btn
         >
       </div>
     </div>
+
+    <v-dialog v-model="showOrder" max-width="500">
+      <e-dialog-close @click="showOrder = false" />
+      <div class="pa-4">
+        <h3>Order</h3>
+        <div class="mt-4 fz-14">
+          <div
+            class="bdrs-8 bd-1 bg-f8a mb-4 pa-4"
+            v-for="(it, i) in previewList"
+            :key="i"
+          >
+            <div class="al-c">
+              <div class="flex-1">
+                <div class="al-c">
+                  <span class="gray-7">Content:</span>
+                  <span class="ml-auto">{{ it.label }}</span>
+                </div>
+                <div class="al-c mt-1">
+                  <span class="gray-7">Amount:</span>
+                  <span class="ml-auto color-1"
+                    >{{ it.value }} {{ it.unit }}</span
+                  >
+                </div>
+                <div class="al-c mt-1">
+                  <span class="gray-7">Effective Time:</span>
+                  <span class="ml-auto">{{ it.until }}</span>
+                </div>
+              </div>
+              <div class="bg-white pa-4 ml-4 bdrs-5">
+                <div>Price:</div>
+                <div>
+                  <span class="red-1 fz-22">12.6</span>
+                  <span class="ml-2">USD</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pa-2">
+          <e-kv label="Network:">
+            <div class="al-c">
+              <img
+                :src="`img/svg/billing/ic-${payBy.toLowerCase()}.svg`"
+                height="24"
+                class="d-b"
+              />
+              <span class="ml-2">{{ payBy }}</span>
+            </div>
+            <p class="fz-12 mt-1 gray-7">
+              (Current polygon network , you can switch the network in the
+              wallet)
+            </p>
+          </e-kv>
+        </div>
+        <div class="pa-2 mt-4">
+          <v-btn color="primary" rounded block depressed>Approve</v-btn>
+          <v-btn outlined rounded block class="mt-4">Submit</v-btn>
+        </div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 const list = [
   {
     label: "Bandwidth",
@@ -153,9 +215,13 @@ export default {
     return {
       form,
       list,
+      showOrder: false,
     };
   },
   computed: {
+    ...mapState({
+      payBy: (s) => s.payBy,
+    }),
     previewList() {
       return this.list
         .map((it) => {
@@ -165,6 +231,7 @@ export default {
             value,
             price: (value * it.unitPrice) / 100,
             unit: it.unit,
+            until: "Until used up",
           };
         })
         .filter((it) => it.value > 0);

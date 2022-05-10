@@ -88,14 +88,13 @@ import { mapState } from "vuex";
 
 export default {
   data() {
-    return {
-      payBy: localStorage.payBy || "Polygon",
-    };
+    return {};
   },
   computed: {
     ...mapState({
       pageLoaded: (s) => s.pageLoaded,
       userInfo: (s) => s.userInfo,
+      payBy: (s) => s.payBy,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -209,8 +208,10 @@ export default {
   methods: {
     onMenu(it) {
       if (it.type == "pay") {
-        this.payBy = it.label;
-        localStorage.payBy = this.payBy;
+        this.$setState({
+          payBy: it.label,
+        });
+        localStorage.payBy = it.label;
       }
       if (it.noticeMsg) {
         console.log(it);
