@@ -461,10 +461,13 @@ export default {
   },
   created() {},
   mounted() {
-    bus.$on("taskData", (tasks) => {
+    bus.$on("taskData", (tasks, isTrue) => {
       this.drawer = true;
       this.currentTab = 0;
-      this.status = 0;
+      if (isTrue) {
+        this.status = 0;
+        this.page = 1;
+      }
       this.tasks = tasks;
     });
   },

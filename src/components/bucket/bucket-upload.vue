@@ -407,7 +407,7 @@ export default {
           this.files = [];
           this.$refs.uploadInput.handleRmoveAll();
           this.processTask();
-          bus.$emit("taskData", this.tasks);
+          bus.$emit("taskData", this.tasks, true);
           // this.tasks = [];
         }
       } else {
