@@ -564,12 +564,9 @@ export default {
           }
         }
       });
-      // bus.$emit("handleStartAll");
     },
     handleClearAllRecords() {
       bus.$emit("handleClearAllRecords", this.status);
-
-      // this.tasks = this.tasks.filter((it) => it.status !== this.status);
     },
     handlePasueDeleteFolder(id) {
       this.$emit("handlePasueDeleteFolder", id);
@@ -629,10 +626,14 @@ export default {
         }
       }
     },
-    drawer(newVal) {
-      let isUploading =
-        this.tasks.filter((it) => it.status == 1 || it.status == 0).length > 0;
-      this.$emit("isUploading", isUploading);
+    tasks: {
+      handler(newValue) {
+        let uploadingLength = newValue.filter(
+          (it) => it.status == 1 || it.status == 0
+        ).length;
+        this.$emit("uploadingLength", uploadingLength);
+      },
+      deep: true,
     },
   },
 };

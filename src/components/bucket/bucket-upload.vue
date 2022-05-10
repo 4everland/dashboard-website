@@ -1,81 +1,5 @@
 <template>
   <div class="uploder-container">
-    <div class="choose-dir">
-      <h3 class="choose-dir-title">Upload To</h3>
-      <!-- Switch Current Dir -->
-      <v-btn
-        :color="curDir == 'Current' ? 'primary' : ''"
-        rounded
-        :outlined="curDir == 'Current' ? false : true"
-        @click="
-          curDir = 'Current';
-          specifiedDir = '';
-        "
-      >
-        <img
-          :src="
-            curDir == 'Current'
-              ? 'img/icon/bucketUpload/ic-current-active.svg'
-              : 'img/icon/bucketUpload/ic-current.svg'
-          "
-          width="16"
-        />
-        <span class="ml-2">Current</span>
-      </v-btn>
-      <v-btn
-        :color="curDir == 'Specified' ? 'primary' : ''"
-        :outlined="curDir == 'Specified' ? false : true"
-        rounded
-        class="ml-7"
-        @click="curDir = 'Specified'"
-      >
-        <img
-          :src="
-            curDir == 'Specified'
-              ? 'img/icon/bucketUpload/ic-specified.svg'
-              : 'img/icon/bucketUpload/ic-specified-active.svg'
-          "
-          width="16"
-        />
-        <span class="ml-2">Specified</span>
-      </v-btn>
-
-      <div class="current-dir px-2 mt-10" v-if="curDir == 'Current'">
-        {{ path }}
-      </div>
-      <div class="specified-dir d-flex align-center mt-7" v-else>
-        <div class="appoint-dir d-flex align-center">{{ path }}</div>
-        <v-text-field
-          ref="specifiedRef"
-          v-model="specifiedDir"
-          class="bd-1 specified-dir-input"
-          :rules="[rules.counter, rules.validate]"
-          clearable
-          counter
-          maxlength="200"
-        ></v-text-field>
-        <e-tooltip right bottom max-width="500">
-          <v-icon slot="ref" size="24" class="pa-1 d-ib ml-2"
-            >mdi-alert-circle-outline</v-icon
-          >
-          <p>
-            1.A folder name can contain only UTF-8 characters and cannot contain
-            emojis.
-          </p>
-          <p>
-            2.Forward slashes (/) are used in a folder name to indicate the path
-            of the folder. You can create a subfolder by specifying a folder
-            name that includes multiple forward slashes. A folder name cannot
-            start with a forward slash (/) or consecutive backslashes (\). A
-            folder name cannot contain consecutive forward slashes (/).
-          </p>
-          <p>
-            3.The name of a subfolder cannot contain consecutive periods (..).
-          </p>
-          <p>4.A folder name must be 1 to 200 characters in length.</p>
-        </e-tooltip>
-      </div>
-    </div>
     <div class="files-upload-container">
       <h3 class="title">Files to Upload</h3>
       <!-- upload-area -->
@@ -85,10 +9,83 @@
 
       <!-- upload-list -->
       <div class="table-container">
-        <div class="total-files-info">
-          <span>Number of Files: {{ files.length }}</span>
-          <span class="ml-13">Total Size: {{ totalSize }} </span>
+        <div class="upload-info d-flex align-end">
+          <div class="choose-dir d-flex align-center flex-1">
+            <div class="mr-3">Upload to:</div>
+            <div
+              class="dir-container d-flex"
+              :class="[
+                curDir == 'Specified' ? 'choose-specified' : '',
+                isValidate ? '' : 'no-validate',
+              ]"
+            >
+              <div class="current-dir">
+                {{ curDir == "Specified" ? path.cutStr(15, 10) : path }}
+              </div>
+              <div class="specified-dir" v-if="curDir !== 'Current'">
+                <v-text-field
+                  ref="specifiedRef"
+                  v-model="specifiedDir"
+                  class="specified-dir-input"
+                  :rules="[rules.counter, rules.validate]"
+                  solo
+                  autofocus
+                  counter
+                  maxlength="200"
+                  clearable
+                ></v-text-field>
+              </div>
+              <e-tooltip
+                right
+                bottom
+                max-width="500"
+                class="tool-tip"
+                v-if="curDir !== 'Current'"
+              >
+                <v-icon
+                  slot="ref"
+                  size="20"
+                  class="pa-1 d-ib ml-2"
+                  style="line-height: inherit"
+                  >mdi-alert-circle-outline</v-icon
+                >
+                <p>
+                  1.A folder name can contain only UTF-8 characters and cannot
+                  contain emojis.
+                </p>
+                <p>
+                  2.Forward slashes (/) are used in a folder name to indicate
+                  the path of the folder. You can create a subfolder by
+                  specifying a folder name that includes multiple forward
+                  slashes. A folder name cannot start with a forward slash (/)
+                  or consecutive backslashes (\). A folder name cannot contain
+                  consecutive forward slashes (/).
+                </p>
+                <p>
+                  3.The name of a subfolder cannot contain consecutive periods
+                  (..).
+                </p>
+                <p>4.A folder name must be 1 to 200 characters in length.</p>
+              </e-tooltip>
+            </div>
+            <div class="switch-btn">
+              <span
+                v-if="curDir !== 'Current'"
+                @click="
+                  curDir = 'Current';
+                  specifiedDir = '';
+                "
+                >Current</span
+              >
+              <span v-else @click="curDir = 'Specified'">Specified</span>
+            </div>
+          </div>
+          <div class="total-files-info shrink-0 ml-4">
+            <span>{{ files.length }} Files</span>
+            <span class="ml-4">{{ totalSize }} </span>
+          </div>
         </div>
+
         <v-data-table
           :headers="headers"
           :items="list"
@@ -127,7 +124,12 @@
           class="upload-opreation d-flex justify-center"
           v-if="list.length !== 0"
         >
-          <v-btn rounded color="primary" @click="onConfirm">
+          <v-btn
+            rounded
+            color="primary"
+            @click="onConfirm"
+            :disabled="!isValidate"
+          >
             <span class="ml-2">Upload</span>
           </v-btn>
           <v-btn rounded color="primary" class="ml-7" @click="onCancel">
@@ -235,26 +237,7 @@ export default {
           }
           return value.length <= 200 || "Max 200 characters";
         },
-        validate: (value) => {
-          if (value == null || value == "") return true;
-          if (/^(?![\\\/])[a-z\d-_/\u4E00-\u9FA5]+(?<![\\\/])$/.test(value)) {
-            if (value.indexOf("//") != -1) {
-              return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).";
-            }
-            let foldersCountMax = value.split("/");
-            if (foldersCountMax.length > 18) {
-              return "You can create up to 18 folders.";
-            }
-            let folderNameMax = foldersCountMax.some((it) => it.length > 60);
-            if (folderNameMax) {
-              return "The maximum folder name length is 60 characters.";
-            }
-
-            return true;
-          } else {
-            return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).";
-          }
-        },
+        validate: this.validate,
       },
       isStorageFull: false,
     };
@@ -315,8 +298,31 @@ export default {
       }
       return this.$utils.getFileSize(totalSize);
     },
+    isValidate() {
+      return typeof this.validate(this.specifiedDir) == "string" ? false : true;
+    },
   },
   methods: {
+    validate(value) {
+      if (value == null || value == "") return true;
+      if (/^(?![\\\/])[a-z\d-_/\u4E00-\u9FA5]+(?<![\\\/])$/.test(value)) {
+        if (value.indexOf("//") != -1) {
+          return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).";
+        }
+        let foldersCountMax = value.split("/");
+        if (foldersCountMax.length > 18) {
+          return "You can create up to 18 folders.";
+        }
+        let folderNameMax = foldersCountMax.some((it) => it.length > 60);
+        if (folderNameMax) {
+          return "The maximum folder name length is 60 characters.";
+        }
+
+        return true;
+      } else {
+        return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).";
+      }
+    },
     handleSkip(item) {
       this.page = item;
     },
@@ -337,7 +343,7 @@ export default {
           {
             Bucket: this.info.Bucket,
             Key:
-              (this.curDir == "Specified"
+              (this.curDir == "Specified" && this.specifiedDir != ""
                 ? this.specifiedDir + "/"
                 : this.info.Prefix) +
               webkitRelativePath +
@@ -437,50 +443,87 @@ export default {
   },
 };
 </script>
+<style>
+.specified-dir-input .v-input__control .v-input__slot {
+  width: 320px !important;
+  box-shadow: none !important;
+  font-size: 14px !important;
+  margin-right: 30px;
+}
+.specified-dir-input .v-input__control input {
+  color: #6a778b !important;
+}
+
+.specified-dir-input .v-input__control .v-counter {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+}
+
+.specified-dir-input .v-input__control .v-messages {
+  position: absolute;
+  left: 0;
+  bottom: -20px;
+  width: 600px !important;
+}
+.tool-tip + span {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  line-height: 48px !important;
+}
+</style>
 <style lang="scss" scoped>
 .v-application .elevation-1 {
   box-shadow: none !important;
   color: #0b0817 !important;
 }
->>> .v-input {
-  border: none;
-}
-.choose-dir {
-  width: 100%;
-  padding: 30px;
-  height: 240px;
-  box-sizing: border-box;
-  background: #ffffff;
-  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
-  .choose-dir-title {
-    font-size: 18px;
-    color: #0b0817;
-    line-height: 20px;
-    margin-bottom: 30px;
-  }
-  .current-dir {
-    height: 25px;
-    line-height: 25px;
-    color: #0b0817;
-    font-size: 18px;
-    font-weight: 400;
-    word-wrap: break-word;
-  }
-  .specified-dir {
-    padding-right: 20px;
-    border: 1px solid #d0dae9;
-    .appoint-dir {
-      height: 25px;
-      line-height: 25px;
-      color: #0b0817;
-      font-size: 18px;
-      font-weight: 400;
-      padding: 0 21px 0 18px;
-      margin-right: 20px;
-      border-right: 1px solid #d0dae9;
+
+.upload-info {
+  padding: 20px 0;
+  .choose-dir {
+    .dir-container {
+      position: relative;
+      width: 600px;
+      height: 50px;
+      padding-right: 40px;
+      line-height: 50px;
+      border-radius: 6px;
+      border: 1px solid #d0dae9;
+      background: #f8fafb;
+      .current-dir {
+        position: relative;
+        padding: 0 10px;
+        font-size: 14px;
+        color: #79838e;
+      }
     }
-    .specified-dir-input {
-      border: none;
+
+    .choose-specified.dir-container {
+      background: #fff;
+      .current-dir::after {
+        content: "";
+        display: block;
+        height: 20px;
+        width: 1px;
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #d0dae9;
+      }
+    }
+    .no-validate.dir-container {
+      border-color: red;
+    }
+    .switch-btn {
+      font-size: 16px;
+      color: #34a9ff;
+      cursor: pointer;
+      padding: 0 30px;
     }
   }
 }
@@ -499,8 +542,9 @@ export default {
 
   .table-container {
     .total-files-info {
-      margin-bottom: 11px;
-      font-size: 16px;
+      margin-left: 10px;
+      text-align: right;
+      font-size: 14px;
       font-weight: 400;
       color: #6a778b;
       line-height: 22px;

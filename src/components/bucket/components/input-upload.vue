@@ -1,18 +1,23 @@
 <style scoped lang="scss">
 .mask {
-  z-index: 0;
-  // pointer-events: none;
-  position: absolute;
+  z-index: 999;
+  position: fixed;
   opacity: 0.4;
   top: 0;
   right: 0;
   left: 0;
   bottom: 0;
-  background: #ffff;
+  padding: 20px;
+  border: 3px dashed black;
+  border-radius: 20px;
+  background: #ccc;
   pointer-events: none;
 }
 .e-upload {
-  margin: 20px 0 30px;
+  padding: 20px;
+  background: #f8fafb;
+  border-radius: 10px;
+  border: 1px solid #d0dae9;
   .add-img {
     position: relative;
     padding: 30px 10px;

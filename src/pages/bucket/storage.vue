@@ -8,24 +8,11 @@
   </div>
 
   <div v-else>
-    <!-- <storage-upload
-      ref="upload"
-      :info="pathInfo"
-      @uploaded="getList"
-      :tableList="list"
-    ></storage-upload> -->
     <div @click="$refs.navDrawers.drawer = true" class="task-list">
-      <div v-if="taskIsUploading" class="d-flex align-center">
-        <v-progress-circular
-          style="width: 20px"
-          indeterminate
-          color="#ff6d24"
-        ></v-progress-circular>
-        <span class="ml-4 uploading-status" style="color: #ff6d24"
-          >Uploading...</span
-        >
-      </div>
-      <div v-else class="status">TaskList</div>
+      <span class="task-count" v-show="uploadingTaskLength != 0">{{
+        uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
+      }}</span>
+      <img src="img/svg/common/task-list.svg" alt="" width="54" />
     </div>
 
     <div class="d-flex nowrap ov-a btn-wrap mt-5" v-if="!inUpload">
@@ -448,7 +435,7 @@
 
     <navigation-drawers
       ref="navDrawers"
-      @isUploading="isUploading"
+      @uploadingLength="uploadingLength"
       :deleteFolder.sync="deleteFolder"
       :deleteFolderTasks="deleteFoldersTasks"
       @handlePasueDeleteFolder="handlePasueDeleteFolder"
@@ -487,9 +474,7 @@ class DeleteTaskWrapper {
   async startTasks() {
     try {
       if (this.status !== 0 && this.status !== 1) return;
-
       this.status = 1; // deleteing
-
       console.log(this.param.Prefix, this.param.Bucket);
       const listResult = await this.s3.listObjectsV2({
         Bucket: this.param.Bucket,
@@ -504,7 +489,6 @@ class DeleteTaskWrapper {
           return { Key: it.Key };
         });
       }
-
       if (this.curFiles.length && this.status == 1) {
         const deleteResult = await this.s3.deleteObjects({
           Bucket: this.param.Bucket,
@@ -554,7 +538,7 @@ export default {
       deleteFolder: false,
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
-      taskIsUploading: false,
+      uploadingTaskLength: 0,
     };
   },
   computed: {
@@ -851,7 +835,9 @@ export default {
         Math.random().toString().substr(3, length) + Date.now()
       ).toString(36);
     },
-
+    uploadingLength(value) {
+      this.uploadingTaskLength = value;
+    },
     handlePasueDeleteFolder(id) {
       const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
       this.deleteFoldersTasks[index].stopTasks();
@@ -896,41 +882,24 @@ export default {
 </script>
 <style lang="scss" scoped>
 .task-list {
-  position: absolute;
+  position: fixed;
+  bottom: 80px;
   right: 20px;
-  top: 25px;
-  text-align: right;
   color: #34a9ff;
   font-size: 16px;
   cursor: pointer;
-  .uploading-status {
-    color: #ff6d24;
-  }
-  .status,
-  .uploading-status {
-    position: relative;
-  }
-
-  .status:hover::after {
+  .task-count {
     position: absolute;
-    left: 50%;
-    bottom: -5px;
-    transform: translateX(-50%);
-    content: "";
-    // display: block;
-    width: 40px;
-    height: 2px;
-    background: #34a9ff;
-  }
-  .uploading-status:hover::after {
-    position: absolute;
-    left: 50%;
-    bottom: -5px;
-    transform: translateX(-50%);
-    content: "";
-    width: 40px;
-    height: 2px;
-    background: #ff6d24;
+    right: -2px;
+    top: -2px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    text-align: center;
+    color: #fff;
+    background: #ff6960;
+    border-radius: 50%;
+    transform: scale(0.7);
   }
 }
 </style>

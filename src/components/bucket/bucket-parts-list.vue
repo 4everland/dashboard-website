@@ -8,7 +8,7 @@
       temporary
     >
       <div class="d-flex justify-space-between pr-6">
-        <span class="fw-b fz-18">Parts</span>
+        <span class="fw-b fz-18">Fragments</span>
         <img
           style="cursor: pointer"
           @click="drawer = false"
@@ -232,6 +232,7 @@ export default {
   box-sizing: border-box;
   border-radius: 20px 0 0 20px;
   height: 100vh !important;
+  overflow: auto;
   .key-name {
     color: #339cfe;
     width: 400px;

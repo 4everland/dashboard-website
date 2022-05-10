@@ -34,7 +34,7 @@
       target="_blank"
       style="right: 20px; bottom: 20px"
     >
-      <img src="img/svg/common/m-discord.svg" width="42" />
+      <img src="img/svg/common/m-discord.svg" width="54" />
     </a>
   </v-app>
 </template>
