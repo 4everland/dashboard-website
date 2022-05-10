@@ -14,9 +14,9 @@
       @uploaded="getList"
       :tableList="list"
     ></storage-upload> -->
-    <div @click="$refs.navDrawers.drawer = true" class="task-list">
+    <!-- <div @click="$refs.navDrawers.drawer = true" class="task-list">
       TaskList
-    </div>
+    </div> -->
 
     <div class="d-flex nowrap ov-a btn-wrap mt-5" v-if="!inUpload">
       <div v-show="inBucket">
@@ -448,7 +448,7 @@
       }}</v-btn>
     </div>
 
-    <navigation-drawers
+    <!-- <navigation-drawers
       ref="navDrawers"
       :deleteFolder.sync="deleteFolder"
       :deleteFolderTasks="deleteFoldersTasks"
@@ -458,7 +458,7 @@
       @handleDeleteFolderStartAll="handleDeleteFolderStartAll"
       @handleDeleteFolderPauseAll="handleDeleteFolderPauseAll"
       @handleDeleteFolderRemoveAll="handleDeleteFolderRemoveAll"
-    ></navigation-drawers>
+    ></navigation-drawers> -->
   </div>
 </template>
 
@@ -547,11 +547,9 @@ export default {
       popUpload: false,
       fileLoading: true,
       fileInfo: null,
-      domainsMap: {},
       finished: false,
       loadingMore: false,
       drawer: false,
-      isDrawers: false,
       deleteFolder: false,
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
@@ -641,89 +639,66 @@ export default {
       this.getList();
       this.checkNew();
     },
-    addDeleteFolderTask(limit) {
-      this.deleteFolderLimit = limit;
-      let arr = this.$route.path.split("/");
-      let index = arr.findIndex((it) => it == "storage");
-      const Prefix = arr.slice(index + 2).join("/");
-      const deleteFoldersArr = this.selected.filter((it) => {
-        const currentFolderName = Prefix + it.name + "/";
-        let isExist = this.deleteFoldersTasks.findIndex((item) => {
-          return item.param.Prefix == currentFolderName;
-        });
-        if (isExist !== -1) {
-          let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-          this.deleteFoldersTasks[isExist].retryTasks();
+    // addDeleteFolderTask(limit) {
+    //   this.deleteFolderLimit = limit;
+    //   let arr = this.$route.path.split("/");
+    //   let index = arr.findIndex((it) => it == "storage");
+    //   const Prefix = arr.slice(index + 2).join("/");
+    //   const deleteFoldersArr = this.selected.filter((it) => {
+    //     const currentFolderName = Prefix + it.name + "/";
+    //     let isExist = this.deleteFoldersTasks.findIndex((item) => {
+    //       return item.param.Prefix == currentFolderName;
+    //     });
+    //     if (isExist !== -1) {
+    //       let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
+    //       this.deleteFoldersTasks[isExist].retryTasks();
 
-          if (!arr.length) {
-            this.processDeleteFolderTask();
-          }
-        }
-        return !it.isFile && isExist == -1;
-      });
-      console.log(deleteFoldersArr);
+    //       if (!arr.length) {
+    //         this.processDeleteFolderTask();
+    //       }
+    //     }
+    //     return !it.isFile && isExist == -1;
+    //   });
+    //   console.log(deleteFoldersArr);
 
-      const deleteFoldersTask = deleteFoldersArr.map((it) => {
-        return new DeleteTaskWrapper(
-          this,
-          this.s3,
-          {
-            Bucket: this.pathInfo.Bucket,
-            Prefix: Prefix + it.name + "/",
-          },
-          this.genID()
-        );
-      });
-      this.deleteFoldersTasks = deleteFoldersTask.concat(
-        this.deleteFoldersTasks
-      );
-    },
-    async startDeleteFolder(task) {
-      await task.startTasks();
-      this.processDeleteFolderTask();
-    },
-    async processDeleteFolderTask() {
-      let processing = this.deleteFoldersTasks.filter(
-        (item) => item.status == 1
-      );
-      console.log(processing);
-      if (processing.length >= this.deleteFolderLimit) return;
-      const idles = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      console.log(idles, "idles");
-      if (!idles.length) return;
-      const fill = this.deleteFolderLimit - processing.length;
-      console.log(fill);
-      const min = idles.length <= fill ? idles.length : fill;
-      for (let i = 0; i < min; i++) {
-        this.startDeleteFolder(idles[i]);
-      }
-    },
+    //   const deleteFoldersTask = deleteFoldersArr.map((it) => {
+    //     return new DeleteTaskWrapper(
+    //       this,
+    //       this.s3,
+    //       {
+    //         Bucket: this.pathInfo.Bucket,
+    //         Prefix: Prefix + it.name + "/",
+    //       },
+    //       this.genID()
+    //     );
+    //   });
+    //   this.deleteFoldersTasks = deleteFoldersTask.concat(
+    //     this.deleteFoldersTasks
+    //   );
+    // },
+    // async startDeleteFolder(task) {
+    //   await task.startTasks();
+    //   this.processDeleteFolderTask();
+    // },
+    // async processDeleteFolderTask() {
+    //   let processing = this.deleteFoldersTasks.filter(
+    //     (item) => item.status == 1
+    //   );
+    //   console.log(processing);
+    //   if (processing.length >= this.deleteFolderLimit) return;
+    //   const idles = this.deleteFoldersTasks.filter((item) => item.status == 0);
+    //   console.log(idles, "idles");
+    //   if (!idles.length) return;
+    //   const fill = this.deleteFolderLimit - processing.length;
+    //   console.log(fill);
+    //   const min = idles.length <= fill ? idles.length : fill;
+    //   for (let i = 0; i < min; i++) {
+    //     this.startDeleteFolder(idles[i]);
+    //   }
+    // },
     onStop() {},
     onCopied() {
       this.$toast("Copied to clipboard !");
-    },
-    async onDomain(bucketName, isOpen) {
-      if (!isOpen || this.loadingDomains) return;
-      try {
-        this.loadingDomains = true;
-        const { data } = await this.$http.get("/domains", {
-          params: { bucketName },
-        });
-        this.$set(
-          this.domainsMap,
-          bucketName,
-          data.list.map((it) => {
-            return {
-              name: it.domain,
-              valid: it.valid,
-              to: "/domain/" + it.domain,
-            };
-          })
-        );
-      } catch (error) {
-        //
-      }
-      this.loadingDomains = false;
     },
 
     async addBucket() {
@@ -785,47 +760,47 @@ export default {
         },
       });
     },
-    genID(length) {
-      return Number(
-        Math.random().toString().substr(3, length) + Date.now()
-      ).toString(36);
-    },
-    handlePasueDeleteFolder(id) {
-      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-      this.deleteFoldersTasks[index].stopTasks();
-    },
-    handleStartDeleteFolder(id) {
-      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      this.deleteFoldersTasks[index].retryTasks();
-      if (!arr.length) {
-        this.processDeleteFolderTask();
-      }
-    },
-    handleRemoveDeleteFolder(id) {
-      let index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-      this.deleteFoldersTasks.splice(index, 1);
-    },
+    // genID(length) {
+    //   return Number(
+    //     Math.random().toString().substr(3, length) + Date.now()
+    //   ).toString(36);
+    // },
+    // handlePasueDeleteFolder(id) {
+    //   const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
+    //   this.deleteFoldersTasks[index].stopTasks();
+    // },
+    // handleStartDeleteFolder(id) {
+    //   const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
+    //   let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
+    //   this.deleteFoldersTasks[index].retryTasks();
+    //   if (!arr.length) {
+    //     this.processDeleteFolderTask();
+    //   }
+    // },
+    // handleRemoveDeleteFolder(id) {
+    //   let index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
+    //   this.deleteFoldersTasks.splice(index, 1);
+    // },
 
-    handleDeleteFolderStartAll() {
-      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      this.deleteFoldersTasks.forEach((it) => {
-        if (it.status !== 2) return;
-        it.retryTasks();
-      });
-      if (!arr.length) {
-        this.processDeleteFolderTask();
-      }
-    },
-    handleDeleteFolderPauseAll() {
-      this.deleteFoldersTasks.forEach((item) => {
-        if (item.status == 3) return;
-        item.stopTasks();
-      });
-    },
-    handleDeleteFolderRemoveAll() {
-      this.deleteFoldersTasks = [];
-    },
+    // handleDeleteFolderStartAll() {
+    //   let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
+    //   this.deleteFoldersTasks.forEach((it) => {
+    //     if (it.status !== 2) return;
+    //     it.retryTasks();
+    //   });
+    //   if (!arr.length) {
+    //     this.processDeleteFolderTask();
+    //   }
+    // },
+    // handleDeleteFolderPauseAll() {
+    //   this.deleteFoldersTasks.forEach((item) => {
+    //     if (item.status == 3) return;
+    //     item.stopTasks();
+    //   });
+    // },
+    // handleDeleteFolderRemoveAll() {
+    //   this.deleteFoldersTasks = [];
+    // },
   },
 };
 </script>

@@ -13,6 +13,7 @@ export default {
       selected: [],
       deleting: false,
       searchKey: "",
+      domainsMap: {},
     };
   },
   computed: {
@@ -406,6 +407,29 @@ export default {
         };
       });
       this.onDomain(this.pathInfo.Bucket, true);
+    },
+    async onDomain(bucketName, isOpen) {
+      if (!isOpen || this.loadingDomains) return;
+      try {
+        this.loadingDomains = true;
+        const { data } = await this.$http.get("/domains", {
+          params: { bucketName },
+        });
+        this.$set(
+          this.domainsMap,
+          bucketName,
+          data.list.map((it) => {
+            return {
+              name: it.domain,
+              valid: it.valid,
+              to: "/domain/" + it.domain,
+            };
+          })
+        );
+      } catch (error) {
+        //
+      }
+      this.loadingDomains = false;
     },
     onLoadMore() {
       if (this.tableLoading) return;

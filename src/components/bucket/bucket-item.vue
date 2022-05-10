@@ -1,5 +1,8 @@
 <template>
   <div class="bucket-item-container">
+    <div @click="$refs.navDrawers.drawer = true" class="task-list">
+      TaskList
+    </div>
     <div>
       <v-tabs
         class="v3-horizon file-tab"
@@ -205,6 +208,18 @@
         </div>
       </div>
     </div>
+
+    <navigation-drawers
+      ref="navDrawers"
+      :deleteFolder.sync="deleteFolder"
+      :deleteFolderTasks="deleteFoldersTasks"
+      @handlePasueDeleteFolder="handlePasueDeleteFolder"
+      @handleStartDeleteFolder="handleStartDeleteFolder"
+      @handleRemoveDeleteFolder="handleRemoveDeleteFolder"
+      @handleDeleteFolderStartAll="handleDeleteFolderStartAll"
+      @handleDeleteFolderPauseAll="handleDeleteFolderPauseAll"
+      @handleDeleteFolderRemoveAll="handleDeleteFolderRemoveAll"
+    ></navigation-drawers>
   </div>
 </template>
 
@@ -286,24 +301,6 @@ class DeleteTaskWrapper {
 }
 export default {
   mixins: [mixin],
-  props: {
-    // list: {
-    //   type: Array,
-    //   default: () => [],
-    // },
-    // bucketInfo: {
-    //   type: Object,
-    //   default: () => {},
-    // },
-    // pathInfo: {
-    //   type: Object,
-    //   default: () => {},
-    // },
-    // folderLen: {
-    //   type: Number,
-    //   default: 0,
-    // },
-  },
   data() {
     return {
       searchKey: "",
@@ -319,6 +316,10 @@ export default {
         { text: "AR Status", value: "arStatus" },
       ],
       selected: [],
+      drawer: false,
+      deleteFolder: false,
+      deleteFoldersTasks: [],
+      deleteFolderLimit: 2,
     };
   },
   computed: {
@@ -329,21 +330,12 @@ export default {
       return null;
     },
   },
+
   methods: {
-    // onRow() {
-    //   console.log(1);
-    // },
-    // getViewUrl(item) {
-    //   const { Prefix } = this.pathInfo;
-    //   let url = this.bucketInfo.originList[0] + "/" + Prefix + item.name;
-    //   return url.encode();
-    // },
-    // onSyncAR() {
-    //   console.log(1);
-    // },
-    // onRename() {
-    //   console.log(1);
-    // },
+    async getList() {
+      this.tableLoading = true;
+      this.getObjects();
+    },
     onCopied() {
       this.$toast("Copied to clipboard !");
     },
@@ -361,18 +353,106 @@ export default {
       this.getList();
       this.checkNew();
     },
-    // addFolder() {
-    //   this.$emit("addFolder");
-    // },
-    // onDelete() {
-    //   this.tableLoading = true;
-    //   this.$emit("onDelete", this.selected);
-    // },
+    addDeleteFolderTask(limit) {
+      this.deleteFolderLimit = limit;
+      let arr = this.$route.path.split("/");
+      let index = arr.findIndex((it) => it == "storage");
+      const Prefix = arr.slice(index + 2).join("/");
+      const deleteFoldersArr = this.selected.filter((it) => {
+        const currentFolderName = Prefix + it.name + "/";
+        let isExist = this.deleteFoldersTasks.findIndex((item) => {
+          return item.param.Prefix == currentFolderName;
+        });
+        if (isExist !== -1) {
+          let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
+          this.deleteFoldersTasks[isExist].retryTasks();
+
+          if (!arr.length) {
+            this.processDeleteFolderTask();
+          }
+        }
+        return !it.isFile && isExist == -1;
+      });
+      console.log(deleteFoldersArr);
+
+      const deleteFoldersTask = deleteFoldersArr.map((it) => {
+        return new DeleteTaskWrapper(
+          this,
+          this.s3,
+          {
+            Bucket: this.pathInfo.Bucket,
+            Prefix: Prefix + it.name + "/",
+          },
+          this.genID()
+        );
+      });
+      this.deleteFoldersTasks = deleteFoldersTask.concat(
+        this.deleteFoldersTasks
+      );
+    },
+    async startDeleteFolder(task) {
+      await task.startTasks();
+      this.processDeleteFolderTask();
+    },
+    async processDeleteFolderTask() {
+      let processing = this.deleteFoldersTasks.filter(
+        (item) => item.status == 1
+      );
+      console.log(processing);
+      if (processing.length >= this.deleteFolderLimit) return;
+      const idles = this.deleteFoldersTasks.filter((item) => item.status == 0);
+      console.log(idles, "idles");
+      if (!idles.length) return;
+      const fill = this.deleteFolderLimit - processing.length;
+      console.log(fill);
+      const min = idles.length <= fill ? idles.length : fill;
+      for (let i = 0; i < min; i++) {
+        this.startDeleteFolder(idles[i]);
+      }
+    },
+    genID(length) {
+      return Number(
+        Math.random().toString().substr(3, length) + Date.now()
+      ).toString(36);
+    },
+    handlePasueDeleteFolder(id) {
+      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
+      this.deleteFoldersTasks[index].stopTasks();
+    },
+    handleStartDeleteFolder(id) {
+      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
+      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
+      this.deleteFoldersTasks[index].retryTasks();
+      if (!arr.length) {
+        this.processDeleteFolderTask();
+      }
+    },
+    handleRemoveDeleteFolder(id) {
+      let index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
+      this.deleteFoldersTasks.splice(index, 1);
+    },
+
+    handleDeleteFolderStartAll() {
+      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
+      this.deleteFoldersTasks.forEach((it) => {
+        if (it.status !== 2) return;
+        it.retryTasks();
+      });
+      if (!arr.length) {
+        this.processDeleteFolderTask();
+      }
+    },
+    handleDeleteFolderPauseAll() {
+      this.deleteFoldersTasks.forEach((item) => {
+        if (item.status == 3) return;
+        item.stopTasks();
+      });
+    },
+    handleDeleteFolderRemoveAll() {
+      this.deleteFoldersTasks = [];
+    },
   },
   watch: {
-    list() {
-      this.tableLoading = false;
-    },
     path() {
       this.onRouteChange();
     },
