@@ -110,6 +110,9 @@ export default {
       loading: false,
     };
   },
+  created() {
+    this.page = 1;
+  },
   computed: {
     ...mapState({
       s3: (s) => s.s3,
@@ -133,10 +136,10 @@ export default {
         { Bucket, Prefix, MaxUploads: 500 },
         (err, data) => {
           if (err) {
-            console.log(err);
+            // console.log(err);
             throw new Error(err);
           }
-          console.log(data);
+          // console.log(data);
           this.partList = data.Uploads ?? [];
           this.loading = false;
           this.$loading.close();
@@ -173,11 +176,12 @@ export default {
       console.log(arr);
       Promise.all(arr)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
+          this.page = 1;
           this.getPartList();
         })
         .catch((err) => {
-          console.log(err, "err");
+          // console.log(err, "err");
           this.$alert(err.message);
         });
     },
@@ -189,12 +193,13 @@ export default {
       });
       Promise.all(arr)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           this.selected = [];
+          this.page = 1;
           this.getPartList();
         })
         .catch((err) => {
-          console.log(err, "err");
+          // console.log(err, "err");
           this.$alert(err.message);
         });
     },
@@ -207,9 +212,6 @@ export default {
       if (newValue == true) {
         this.getPartList();
       }
-    },
-    length(value) {
-      this.page = value;
     },
   },
 };
