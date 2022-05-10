@@ -520,7 +520,7 @@ export default {
         });
       });
     },
-    async onDelete(item) {
+    async onDelete() {
       try {
         // const arr = await this.getSelectedObjects(item);
         // if (arr.length > 1000) {

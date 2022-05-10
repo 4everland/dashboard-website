@@ -530,7 +530,6 @@ export default {
 
 .files-upload-container {
   padding: 30px;
-  margin-top: 30px;
   background: #ffffff;
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
 
