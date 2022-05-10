@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
 .e-upload {
   margin: 20px 0 30px;
   .add-img {
@@ -13,7 +13,7 @@
     <div class="e-upload">
       <slot></slot>
 
-      <div class="add-img pos-r bdrs-10" v-ripple v-show="files.length == 0">
+      <div class="add-img pos-r bdrs-10" v-ripple>
         <div class="ta-c">
           <p>
             <v-icon size="60" color="#bbb">mdi-cloud-upload-outline</v-icon>
@@ -83,6 +83,7 @@ export default {
   },
   methods: {
     onInput(e) {
+      console.log(e);
       this.getFiles(e.target);
       this.$refs.file.value = null;
     },
@@ -128,8 +129,9 @@ export default {
       if (this.disabled) return;
       if (!data) return;
       const { files = [] } = data;
+      console.log(files);
       for (const file of files) {
-        // console.log(file);
+        console.log(file);
         if (this.limit && this.files.length >= this.limit) break;
         // if (!/image/.test(file.type)) continue;
         // if (!file.type) continue;

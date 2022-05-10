@@ -8,14 +8,14 @@
   </div>
 
   <div v-else>
-    <storage-upload
-      ref="upload"
-      :info="pathInfo"
-      @uploaded="getList"
-      :tableList="list"
-    ></storage-upload>
+    <div @click="$refs.navDrawers.drawer = true" class="task-list">
+      <span class="task-count" v-show="uploadingTaskLength != 0">{{
+        uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
+      }}</span>
+      <img src="img/svg/common/task-list.svg" alt="" width="54" />
+    </div>
 
-    <div class="d-flex nowrap ov-a btn-wrap">
+    <div class="d-flex nowrap ov-a btn-wrap mt-5" v-if="!inUpload">
       <div v-show="inBucket">
         <v-btn color="primary" @click="addBucket">
           <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
@@ -77,11 +77,12 @@
         </template>
       </div>
       <div v-show="inFolder">
-        <v-btn color="primary" @click="$refs.upload.showPop = true">
+        <v-btn color="primary" @click="handleClickUpload">
           <!-- <v-icon size="15">mdi-cloud-upload</v-icon> -->
           <img src="img/svg/upload.svg" width="16" />
           <span class="ml-2">Upload</span>
         </v-btn>
+
         <v-btn
           class="ml-5"
           outlined
@@ -92,6 +93,15 @@
           <img src="img/svg/add0.svg" width="12" />
           <span class="ml-2">New Folder</span>
         </v-btn>
+        <v-btn class="ml-5" outlined @click="drawer = true">
+          <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
+          <img src="img/svg/parts_icon.svg" width="12" />
+          <span class="ml-2">Fragments</span>
+        </v-btn>
+        <bucket-parts-list
+          v-model="drawer"
+          :pathInfo="pathInfo"
+        ></bucket-parts-list>
       </div>
 
       <e-menu offset-y open-on-hover :disabled="!selected.length">
@@ -293,7 +303,16 @@
         </div>
       </v-card>
     </div>
-    <div v-else>
+
+    <div v-if="inUpload">
+      <bucket-upload
+        ref="bucketUpload"
+        :info="pathInfo"
+        :baseUrl="bucketInfo.originList[0]"
+      ></bucket-upload>
+    </div>
+
+    <div class="main-wrap" v-if="!inFile && !inUpload">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -413,12 +432,97 @@
         loadingMore ? "Loading..." : "Load More"
       }}</v-btn>
     </div>
+
+    <navigation-drawers
+      ref="navDrawers"
+      @uploadingLength="uploadingLength"
+      :deleteFolder.sync="deleteFolder"
+      :deleteFolderTasks="deleteFoldersTasks"
+      @handlePasueDeleteFolder="handlePasueDeleteFolder"
+      @handleStartDeleteFolder="handleStartDeleteFolder"
+      @handleRemoveDeleteFolder="handleRemoveDeleteFolder"
+      @handleDeleteFolderStartAll="handleDeleteFolderStartAll"
+      @handleDeleteFolderPauseAll="handleDeleteFolderPauseAll"
+      @handleDeleteFolderRemoveAll="handleDeleteFolderRemoveAll"
+    ></navigation-drawers>
   </div>
 </template>
 
 <script>
-import mixin from "./storage-mixin";
+// import { DeleteTaskWrapper } from "../../components/bucket/task";
+import Vue from "vue";
+class DeleteTaskWrapper {
+  that;
+  s3;
+  param;
+  id;
+  marker;
+  lastMarker;
+  deleteCount;
+  status;
+  curFiles;
 
+  constructor(that, s3, param, id) {
+    this.that = that;
+    this.s3 = s3;
+    this.param = param;
+    this.id = id;
+    this.status = 0; // pre delete
+    this.deleteCount = 0;
+  }
+
+  async startTasks() {
+    try {
+      if (this.status !== 0 && this.status !== 1) return;
+      this.status = 1; // deleteing
+      console.log(this.param.Prefix, this.param.Bucket);
+      const listResult = await this.s3.listObjectsV2({
+        Bucket: this.param.Bucket,
+        MaxKeys: 100,
+        Delimiter: "",
+        Prefix: this.param.Prefix,
+      });
+      if (!listResult.Contents) {
+        this.curFiles = [];
+      } else {
+        this.curFiles = listResult.Contents.map((it) => {
+          return { Key: it.Key };
+        });
+      }
+      if (this.curFiles.length && this.status == 1) {
+        const deleteResult = await this.s3.deleteObjects({
+          Bucket: this.param.Bucket,
+          Delete: {
+            Objects: this.curFiles,
+            Quiet: false,
+          },
+        });
+        // console.log(deleteResult);
+        for (let i = 0; i < deleteResult.Deleted.length; i++) {
+          this.deleteCount += 1;
+          await Vue.prototype.$sleep(20);
+        }
+        await this.startTasks();
+      } else if (!this.curFiles.length) {
+        this.status = 3; // success
+        this.that.selected = [];
+        this.that.getList();
+      } else {
+        console.log("here");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  stopTasks() {
+    this.status = 2; //stop
+  }
+  retryTasks() {
+    this.status = 0; // retry
+  }
+}
+
+import mixin from "./storage-mixin";
 export default {
   mixins: [mixin],
   data() {
@@ -429,6 +533,12 @@ export default {
       domainsMap: {},
       finished: false,
       loadingMore: false,
+      drawer: false,
+      isDrawers: false,
+      deleteFolder: false,
+      deleteFoldersTasks: [],
+      deleteFolderLimit: 2,
+      uploadingTaskLength: 0,
     };
   },
   computed: {
@@ -513,14 +623,79 @@ export default {
   },
   watch: {
     path() {
+      this.onRouteChange();
+    },
+    "$route.query"(_, oldVal) {
+      if (oldVal.action == "upload") {
+        this.onRouteChange();
+      }
+    },
+  },
+  methods: {
+    onRouteChange() {
       if (!this.inStorage) return;
       this.selected = [];
       this.folderList = [];
       this.getList();
       this.checkNew();
     },
-  },
-  methods: {
+    addDeleteFolderTask(limit) {
+      this.deleteFolderLimit = limit;
+      let arr = this.$route.path.split("/");
+      let index = arr.findIndex((it) => it == "storage");
+      const Prefix = arr.slice(index + 2).join("/");
+      const deleteFoldersArr = this.selected.filter((it) => {
+        const currentFolderName = Prefix + it.name + "/";
+        let isExist = this.deleteFoldersTasks.findIndex((item) => {
+          return item.param.Prefix == currentFolderName;
+        });
+        if (isExist !== -1) {
+          let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
+          this.deleteFoldersTasks[isExist].retryTasks();
+
+          if (!arr.length) {
+            this.processDeleteFolderTask();
+          }
+        }
+        return !it.isFile && isExist == -1;
+      });
+      console.log(deleteFoldersArr);
+
+      const deleteFoldersTask = deleteFoldersArr.map((it) => {
+        return new DeleteTaskWrapper(
+          this,
+          this.s3,
+          {
+            Bucket: this.pathInfo.Bucket,
+            Prefix: Prefix + it.name + "/",
+          },
+          this.genID()
+        );
+      });
+      this.deleteFoldersTasks = deleteFoldersTask.concat(
+        this.deleteFoldersTasks
+      );
+    },
+    async startDeleteFolder(task) {
+      await task.startTasks();
+      this.processDeleteFolderTask();
+    },
+    async processDeleteFolderTask() {
+      let processing = this.deleteFoldersTasks.filter(
+        (item) => item.status == 1
+      );
+      console.log(processing);
+      if (processing.length >= this.deleteFolderLimit) return;
+      const idles = this.deleteFoldersTasks.filter((item) => item.status == 0);
+      console.log(idles, "idles");
+      if (!idles.length) return;
+      const fill = this.deleteFolderLimit - processing.length;
+      console.log(fill);
+      const min = idles.length <= fill ? idles.length : fill;
+      for (let i = 0; i < min; i++) {
+        this.startDeleteFolder(idles[i]);
+      }
+    },
     onStop() {},
     onCopied() {
       this.$toast("Copied to clipboard !");
@@ -647,6 +822,84 @@ export default {
         console.log(error);
       }
     },
+    handleClickUpload() {
+      this.$router.push({
+        path: this.$route.path,
+        query: {
+          action: "upload",
+        },
+      });
+    },
+    genID(length) {
+      return Number(
+        Math.random().toString().substr(3, length) + Date.now()
+      ).toString(36);
+    },
+    uploadingLength(value) {
+      this.uploadingTaskLength = value;
+    },
+    handlePasueDeleteFolder(id) {
+      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
+      this.deleteFoldersTasks[index].stopTasks();
+    },
+    handleStartDeleteFolder(id) {
+      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
+      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
+      this.deleteFoldersTasks[index].retryTasks();
+      if (!arr.length) {
+        this.processDeleteFolderTask();
+      }
+    },
+    handleRemoveDeleteFolder(id) {
+      let index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
+      this.deleteFoldersTasks.splice(index, 1);
+    },
+
+    handleDeleteFolderStartAll() {
+      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
+      this.deleteFoldersTasks.forEach((it) => {
+        if (it.status !== 2) return;
+        it.retryTasks();
+      });
+      if (!arr.length) {
+        this.processDeleteFolderTask();
+      }
+    },
+    handleDeleteFolderPauseAll() {
+      this.deleteFoldersTasks.forEach((item) => {
+        if (item.status == 3) return;
+        item.stopTasks();
+      });
+    },
+    handleDeleteFolderRemoveAll() {
+      this.deleteFoldersTasks = [];
+    },
+    isUploading(value) {
+      this.taskIsUploading = value;
+    },
   },
 };
 </script>
+<style lang="scss" scoped>
+.task-list {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  color: #34a9ff;
+  font-size: 16px;
+  cursor: pointer;
+  .task-count {
+    position: absolute;
+    right: -2px;
+    top: -2px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    text-align: center;
+    color: #fff;
+    background: #ff6960;
+    border-radius: 50%;
+    transform: scale(0.7);
+  }
+}
+</style>

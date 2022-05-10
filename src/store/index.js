@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import upload from "./upload";
 import { http, http2 } from "../api";
 
 Vue.use(Vuex);
@@ -90,6 +91,9 @@ const store = new Vuex.Store({
         },
       });
     },
+  },
+  modules: {
+    upload,
   },
 });
 
