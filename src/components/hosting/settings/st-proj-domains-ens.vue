@@ -189,9 +189,7 @@ export default {
     checkNet() {
       if (!this.netType) return false;
       let msg = "";
-      if (this.$inDev) {
-        // if (this.netType != "goerli") msg = "Dev: please connect to goerli";
-      } else if (this.netType != "main") {
+      if (this.netType != "main") {
         msg = "Wrong network, please connect to Ethereum mainnet";
       }
       if (msg) {
@@ -207,10 +205,6 @@ export default {
       });
     },
     async onAdd() {
-      if (!this.checkNet() || !this.connectAddr) {
-        this.showConnect();
-        return;
-      }
       if (!reg.test(this.domain)) {
         return this.$alert("Invalid ETH Domain");
       }
@@ -272,6 +266,13 @@ export default {
       }
     },
     async setContentHash() {
+      if (!this.connectAddr) {
+        this.showConnect();
+        return;
+      }
+      if (!this.checkNet()) {
+        return false;
+      }
       if (this.owner !== this.connectAddr) {
         return this.$alert(
           "Connected account is not the controller of the domain. "
