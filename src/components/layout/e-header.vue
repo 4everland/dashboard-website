@@ -32,6 +32,13 @@
           }"
           class="ml-4"
         >
+          <img
+            v-if="it.img"
+            :src="it.img"
+            :width="it.width"
+            :height="it.height"
+            class="mr-2"
+          />
           <div class="u-avatar" v-if="it.avatar">
             <v-avatar size="22" class="bg-white d-b">
               <!-- <v-img :src="it.avatar"></v-img> -->
@@ -45,6 +52,7 @@
           </div>
           <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
           <img
+            v-if="!it.noSuffix"
             :src="`img/svg/header/ic-down-${it.color || 'def'}.svg`"
             width="10"
             class="ml-2"
@@ -62,8 +70,9 @@
             @click="onMenu(sub)"
           >
             <img
-              :src="`img/svg/header/${sub.icon}.svg`"
-              width="12"
+              :src="sub.img || `img/svg/header/${sub.icon}.svg`"
+              :width="sub.width || 12"
+              :height="sub.height"
               class="mr-2"
             />
             <span class="gray-6">{{ sub.label }}</span>
@@ -78,6 +87,11 @@
 import { mapState } from "vuex";
 
 export default {
+  data() {
+    return {
+      payBy: localStorage.payBy || "Polygon",
+    };
+  },
   computed: {
     ...mapState({
       pageLoaded: (s) => s.pageLoaded,
@@ -115,6 +129,30 @@ export default {
           ],
         },
       ];
+
+      const paySubs = [
+        {
+          label: "Polygon",
+          img: "img/svg/billing/ic-polygon-0.svg",
+          width: 18,
+          height: 18,
+          type: "pay",
+        },
+        {
+          label: "Ethereum",
+          img: "img/svg/billing/ic-ethereum.svg",
+          width: 18,
+          height: 18,
+          type: "pay",
+        },
+      ];
+      const defPay =
+        paySubs.filter((it) => it.label == this.payBy)[0] || paySubs[0];
+      list.push({
+        ...defPay,
+        noSuffix: true,
+        subs: paySubs,
+      });
 
       list.push({
         label: (info.username || "unkown").cutStr(6, 4),
@@ -170,14 +208,17 @@ export default {
   },
   methods: {
     onMenu(it) {
-      const { name } = it;
+      if (it.type == "pay") {
+        this.payBy = it.label;
+        localStorage.payBy = this.payBy;
+      }
       if (it.noticeMsg) {
         console.log(it);
         this.$setMsg({
           ...it.noticeMsg,
         });
       }
-      if (name == "logout") {
+      if (it.name == "logout") {
         localStorage.clear();
         location.href = "index.html";
       }
