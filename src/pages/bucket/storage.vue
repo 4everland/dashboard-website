@@ -646,8 +646,12 @@ export default {
       const Prefix = arr.slice(index + 2).join("/");
       const deleteFoldersArr = this.selected.filter((it) => {
         const currentFolderName = Prefix + it.name + "/";
+        const currentBucketName = this.pathInfo.Bucket;
         let isExist = this.deleteFoldersTasks.findIndex((item) => {
-          return item.param.Prefix == currentFolderName;
+          return (
+            item.param.Prefix == currentFolderName &&
+            item.param.Bucket == currentBucketName
+          );
         });
         if (isExist !== -1) {
           let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
