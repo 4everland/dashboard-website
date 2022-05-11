@@ -138,7 +138,7 @@
               :items="list.slice((this.page - 1) * 10, this.page * 10)"
               class="elevation-1 task-table"
               hide-default-footer
-              item-key="param[Key]"
+              item-key="id"
             >
               <template #item.fileInfo[path]="{ item }">
                 <span style="word-break: break-all">{{
@@ -461,14 +461,18 @@ export default {
   },
   created() {},
   mounted() {
-    bus.$on("taskData", (tasks, isTrue) => {
+    bus.$on("taskData", (tasks, isTrue, isFirst) => {
       this.drawer = true;
       this.currentTab = 0;
       if (isTrue) {
         this.status = 0;
         this.page = 1;
       }
-      this.tasks = tasks;
+      if (isFirst) {
+        this.tasks = tasks.concat(this.tasks);
+      } else {
+        this.tasks = tasks;
+      }
     });
   },
   computed: {

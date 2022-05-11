@@ -8,5 +8,4 @@ module.exports = {
     port: 8082,
     open: true,
   },
-  lintOnSave: false,
 };

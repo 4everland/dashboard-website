@@ -110,6 +110,7 @@ export default {
     };
   },
   created() {
+    this.getPartList();
     this.page = 1;
   },
   computed: {
@@ -174,7 +175,7 @@ export default {
       });
       console.log(arr);
       Promise.all(arr)
-        .then((res) => {
+        .then(() => {
           // console.log(res);
           this.page = 1;
           this.getPartList();
@@ -191,7 +192,7 @@ export default {
         arr.push(this.deleteFn(it));
       });
       Promise.all(arr)
-        .then((res) => {
+        .then(() => {
           // console.log(res);
           this.selected = [];
           this.page = 1;

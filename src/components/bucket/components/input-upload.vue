@@ -164,6 +164,9 @@ export default {
         this.files = [];
       }
     },
+    files() {
+      window.scrollTo(0, 10000);
+    },
   },
   mounted() {
     // document.ondragenter = () => {
