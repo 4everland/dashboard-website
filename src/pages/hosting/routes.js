@@ -40,7 +40,6 @@ export default [
     },
     meta: {
       title: `{projName}`,
-      noCache: 1,
       isTab: 1,
       links: [
         {
@@ -60,7 +59,6 @@ export default [
     },
     meta: {
       title: `{projName} - Build`,
-      noCache: 1,
       isTab: 1,
       links: [
         {

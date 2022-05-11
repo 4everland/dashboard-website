@@ -71,7 +71,7 @@ export default {
         if (isAr) to += "/";
         const arr = this.path.replace(to, "").split("/");
         for (const i in arr) {
-          const text = arr[i];
+          const text = decodeURIComponent(arr[i]);
           if (!text) break;
           to += text + (arr[i + 1] == "" ? "" : "/");
           if (isAr && i < arr.length - 1) {

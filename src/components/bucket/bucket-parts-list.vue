@@ -3,16 +3,15 @@
     <v-navigation-drawer
       v-model="drawer"
       class="drawer-container ov-a"
-      stateless
       fixed
       right
       temporary
     >
       <div class="d-flex justify-space-between pr-6">
-        <span class="fw-b fz-18">Parts</span>
+        <span class="fw-b fz-18">Fragments</span>
         <img
           style="cursor: pointer"
-          @click="$emit('update:drawer', false)"
+          @click="drawer = false"
           src="/img/svg/close_icon.svg"
           alt=""
         />
@@ -60,7 +59,7 @@
 
       <template v-if="length == 0">
         <e-empty :loading="loading">
-          {{ loading ? `Loading files...` : `No folders or files` }}
+          {{ loading ? `Loading Fragments...` : `No Fragments` }}
         </e-empty>
       </template>
       <v-pagination
@@ -78,9 +77,8 @@
 import { mapState } from "vuex";
 export default {
   props: {
-    drawer: {
+    value: {
       type: Boolean,
-      default: true,
     },
     pathInfo: {
       type: Object,
@@ -89,6 +87,7 @@ export default {
   },
   data() {
     return {
+      drawer: this.value,
       headers: [
         {
           text: "Name",
@@ -109,6 +108,10 @@ export default {
       page: 1,
       loading: false,
     };
+  },
+  created() {
+    this.getPartList();
+    this.page = 1;
   },
   computed: {
     ...mapState({
@@ -133,10 +136,10 @@ export default {
         { Bucket, Prefix, MaxUploads: 500 },
         (err, data) => {
           if (err) {
-            console.log(err);
+            // console.log(err);
             throw new Error(err);
           }
-          console.log(data);
+          // console.log(data);
           this.partList = data.Uploads ?? [];
           this.loading = false;
           this.$loading.close();
@@ -172,12 +175,14 @@ export default {
       });
       console.log(arr);
       Promise.all(arr)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          // console.log(res);
+          this.page = 1;
           this.getPartList();
+          this.selected = [];
         })
         .catch((err) => {
-          console.log(err, "err");
+          // console.log(err, "err");
           this.$alert(err.message);
         });
     },
@@ -188,13 +193,14 @@ export default {
         arr.push(this.deleteFn(it));
       });
       Promise.all(arr)
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          // console.log(res);
           this.selected = [];
+          this.page = 1;
           this.getPartList();
         })
         .catch((err) => {
-          console.log(err, "err");
+          // console.log(err, "err");
           this.$alert(err.message);
         });
     },
@@ -203,13 +209,14 @@ export default {
     },
   },
   watch: {
+    value(value) {
+      this.drawer = value;
+    },
     drawer(newValue) {
+      this.$emit("input", newValue);
       if (newValue == true) {
         this.getPartList();
       }
-    },
-    length(value) {
-      this.page = value;
     },
   },
 };
@@ -227,6 +234,7 @@ export default {
   box-sizing: border-box;
   border-radius: 20px 0 0 20px;
   height: 100vh !important;
+  overflow: auto;
   .key-name {
     color: #339cfe;
     width: 400px;

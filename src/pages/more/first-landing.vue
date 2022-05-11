@@ -65,12 +65,12 @@
       <v-btn
         class="mr-5"
         small
-        :color="myEthAddr != connectAddr ? 'error' : 'primary'"
+        :color="errAccount ? 'error' : 'primary'"
         @click="setAddr"
       >
-        <v-icon size="16" class="mr-1" v-if="myEthAddr">mdi-wallet</v-icon>
+        <v-icon size="16" class="mr-1" v-if="ethAddr">mdi-wallet</v-icon>
         <span>{{
-          myEthAddr ? myEthAddr.cutStr(6, 4) : "Submit Wallet Address"
+          ethAddr ? ethAddr.cutStr(6, 4) : "Submit Wallet Address"
         }}</span>
       </v-btn>
       <v-btn
@@ -215,6 +215,10 @@ export default {
     claimBtnTxt() {
       return this.isClaimed ? "Claimed" : "Claim Now";
     },
+    errAccount() {
+      if (!this.ethAddr) return false;
+      return this.connectAddr.toLowerCase() != this.ethAddr.toLowerCase();
+    },
   },
   data() {
     return {
@@ -261,7 +265,6 @@ export default {
       ],
       ethAddr: "",
       claimLoading: false,
-      errAccount: false,
       isClaimed: !!localStorage.is_claimed3,
       claimAmount: 0,
       isNetOk: false,
@@ -364,14 +367,9 @@ export default {
         if (!this.isNetOk) return;
         this.claimLoading = true;
 
-        const account = this.connectAddr;
         if (!this.ethAddr) {
-          if (account) this.ethAddr = account;
-          else {
-            throw new Error("No Wallet Address");
-          }
+          throw new Error("No Wallet Address Submitted");
         } else {
-          this.errAccount = account.toLowerCase() != this.ethAddr.toLowerCase();
           if (this.errAccount) {
             throw new Error(
               `Wallet address(${this.ethAddr.cutStr(
@@ -498,7 +496,7 @@ export default {
     async setAddr() {
       if (this.noChange) {
         let tip = this.myEthAddr;
-        if (!this.myEthAddr) {
+        if (!this.ethAddr) {
           tip = "Unable to set wallet adress after 21st October 2021.";
         } else if (this.errAccount) {
           tip = `Wallet address(${this.ethAddr.cutStr(

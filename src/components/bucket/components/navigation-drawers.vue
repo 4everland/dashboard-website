@@ -18,9 +18,14 @@
           alt=""
         />
       </div>
-      <div class="tips py-3">
-        Tips：If you refresh or close the browser, the ongoing upload task is
-        canceled and all upload records are cleared.
+      <div class="tips py-1 my-3">
+        <v-icon slot="ref" size="22" color="#ff6d24" class="pa-1 d-ib ml-2"
+          >mdi-alert-circle-outline</v-icon
+        >
+        <span class="ml-2"
+          >Refreshing or closing the browser will cancel ongoing tasks, clear
+          records, and display deleted tasks incorrectly.</span
+        >
       </div>
       <div class="task-content">
         <div class="d-flex task-list-tabs">
@@ -133,7 +138,7 @@
               :items="list.slice((this.page - 1) * 10, this.page * 10)"
               class="elevation-1 task-table"
               hide-default-footer
-              item-key="param[Key]"
+              item-key="id"
             >
               <template #item.fileInfo[path]="{ item }">
                 <span style="word-break: break-all">{{
@@ -214,7 +219,7 @@
             </v-data-table>
             <template v-if="length == 0">
               <e-empty :loading="false">
-                {{ false ? `Loading files...` : `No folders or files` }}
+                {{ false ? `Loading files...` : `No files` }}
               </e-empty>
             </template>
             <div class="table-footer d-flex align-center justify-center pt-6">
@@ -231,16 +236,6 @@
 
         <!-- Delete Folder -->
         <div v-show="currentTab == 1" class="delete-folder-task">
-          <div class="tips">
-            <v-icon slot="ref" size="22" color="#ff6d24" class="pa-1 d-ib ml-2"
-              >mdi-alert-circle-outline</v-icon
-            >
-            <span class="ml-2"
-              >If you refresh or close the page when the folder is being
-              deleted, the displayed number of deleted files may be
-              inaccurate.</span
-            >
-          </div>
           <div class="my-5">
             <v-btn
               rounded
@@ -358,7 +353,7 @@
           </v-data-table>
           <template v-if="deleteFolderLength == 0">
             <e-empty :loading="false">
-              {{ false ? `Loading files...` : `No folders or files` }}
+              {{ false ? `Loading files...` : `No folders` }}
             </e-empty>
           </template>
           <div class="table-footer d-flex align-center justify-center pt-6">
@@ -439,7 +434,7 @@ export default {
           value: "param[Bucket]",
         },
         {
-          text: "Number of Deleted Files",
+          text: "Deleted Files",
           align: "center",
           sortable: false,
           value: "deleteCount",
@@ -466,11 +461,27 @@ export default {
   },
   created() {},
   mounted() {
-    bus.$on("taskData", (tasks) => {
+    bus.$on("taskData", (tasks, isTrue) => {
       this.drawer = true;
       this.currentTab = 0;
-      // this.status = 0;
-      this.tasks = tasks;
+      if (isTrue) {
+        this.status = 0;
+        this.page = 1;
+      }
+      if (this.tasks.length) {
+        let noExistTasks = [];
+        tasks.forEach((item) => {
+          let index = this.tasks.findIndex((it) => {
+            return it.id == item.id;
+          });
+          if (index == -1) {
+            noExistTasks.push(item);
+          }
+        });
+        this.tasks = noExistTasks.concat(this.tasks);
+      } else {
+        this.tasks = tasks;
+      }
     });
   },
   computed: {
@@ -532,10 +543,10 @@ export default {
       this.deleteFolderPage = item;
     },
     handleClearRecords(id) {
-      bus.$emit("handleClearRecords", id);
+      let index = this.tasks.findIndex((it) => it.id == id);
+      this.tasks.splice(index, 1);
 
-      // let index = this.tasks.findIndex((it) => it.id == id);
-      // this.tasks.splice(index, 1);
+      bus.$emit("handleClearRecords", id);
     },
     handleCancelUpload(id) {
       let index = this.tasks.findIndex((item) => item.id == id);
@@ -566,12 +577,10 @@ export default {
           }
         }
       });
-      // bus.$emit("handleStartAll");
     },
     handleClearAllRecords() {
+      this.tasks = this.tasks.filter((it) => it.status !== this.status);
       bus.$emit("handleClearAllRecords", this.status);
-
-      // this.tasks = this.tasks.filter((it) => it.status !== this.status);
     },
     handlePasueDeleteFolder(id) {
       this.$emit("handlePasueDeleteFolder", id);
@@ -631,13 +640,22 @@ export default {
         }
       }
     },
+    tasks: {
+      handler(newValue) {
+        let uploadingLength = newValue.filter(
+          (it) => it.status == 1 || it.status == 0
+        ).length;
+        this.$emit("uploadingLength", uploadingLength);
+      },
+      deep: true,
+    },
   },
 };
 </script>
 <style >
 .task-table td {
   padding: 20px !important;
-  font-size: 16px !important;
+  font-size: 15px !important;
   word-break: break-all;
   white-space: pre-wrap;
 }
@@ -654,10 +672,22 @@ export default {
   color: #34a9ff;
 }
 .opeartion {
+  position: relative;
   color: #34a9ff;
-  font-size: 16px;
+  font-size: 14px;
   padding: 0 5px;
   cursor: pointer;
+}
+.opeartion:hover::after {
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  transform: translateX(-50%);
+  content: "";
+  // display: block;
+  width: 40px;
+  height: 2px;
+  background: #34a9ff;
 }
 .v-tab {
   font-size: 14px;
@@ -681,6 +711,12 @@ export default {
   .tips {
     color: #6a778b;
     font-size: 14px;
+    color: #ff6d24;
+    background: #ffeee4;
+    border-radius: 6px;
+    .icon {
+      vertical-align: sub;
+    }
   }
   .task-content {
     background: #f8fafb;
@@ -726,7 +762,7 @@ export default {
       }
     }
     .upload-task {
-      padding: 30px 0 0 25px;
+      padding: 15px 0 0 25px;
       box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
       background: #fff;
       .status-tabs {
@@ -758,18 +794,9 @@ export default {
       }
     }
     .delete-folder-task {
-      padding: 30px 0 0 25px;
+      padding: 15px 0 0 25px;
       box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
       background: #fff;
-      .tips {
-        padding: 10px;
-        color: #ff6d24;
-        background: #ffeee4;
-        border-radius: 6px;
-        .icon {
-          vertical-align: sub;
-        }
-      }
       .delete-folder-status {
         height: 40px;
         line-height: 40px;

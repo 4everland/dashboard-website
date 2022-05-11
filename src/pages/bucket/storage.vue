@@ -98,9 +98,13 @@
           <img src="img/svg/add0.svg" width="12" />
           <span class="ml-2">New Folder</span>
         </v-btn>
-
+        <v-btn class="ml-5" outlined @click="drawer = true">
+          <v-icon size="15">mdi-folder-plus-outline</v-icon>
+          <img src="img/svg/parts_icon.svg" width="12" />
+          <span class="ml-2">Fragments</span>
+        </v-btn>
         <bucket-parts-list
-          :drawer.sync="drawer"
+          v-model="drawer"
           :pathInfo="pathInfo"
         ></bucket-parts-list>
       </div> -->
@@ -450,6 +454,7 @@
 
     <!-- <navigation-drawers
       ref="navDrawers"
+      @uploadingLength="uploadingLength"
       :deleteFolder.sync="deleteFolder"
       :deleteFolderTasks="deleteFoldersTasks"
       @handlePasueDeleteFolder="handlePasueDeleteFolder"
@@ -464,80 +469,77 @@
 
 <script>
 // import { DeleteTaskWrapper } from "../../components/bucket/task";
-import Vue from "vue";
-class DeleteTaskWrapper {
-  that;
-  s3;
-  param;
-  id;
-  marker;
-  lastMarker;
-  deleteCount;
-  status;
-  curFiles;
+// import Vue from "vue";
+// class DeleteTaskWrapper {
+//   that;
+//   s3;
+//   param;
+//   id;
+//   marker;
+//   lastMarker;
+//   deleteCount;
+//   status;
+//   curFiles;
 
-  constructor(that, s3, param, id) {
-    this.that = that;
-    this.s3 = s3;
-    this.param = param;
-    this.id = id;
-    this.status = 0; // pre delete
-    this.deleteCount = 0;
-  }
+//   constructor(that, s3, param, id) {
+//     this.that = that;
+//     this.s3 = s3;
+//     this.param = param;
+//     this.id = id;
+//     this.status = 0; // pre delete
+//     this.deleteCount = 0;
+//   }
 
-  async startTasks() {
-    try {
-      if (this.status !== 0 && this.status !== 1) return;
-
-      this.status = 1; // deleteing
-
-      console.log(this.param.Prefix, this.param.Bucket);
-      const listResult = await this.s3.listObjectsV2({
-        Bucket: this.param.Bucket,
-        MaxKeys: 100,
-        Delimiter: "",
-        Prefix: this.param.Prefix,
-      });
-      if (!listResult.Contents) {
-        this.curFiles = [];
-      } else {
-        this.curFiles = listResult.Contents.map((it) => {
-          return { Key: it.Key };
-        });
-      }
-
-      if (this.curFiles.length && this.status == 1) {
-        const deleteResult = await this.s3.deleteObjects({
-          Bucket: this.param.Bucket,
-          Delete: {
-            Objects: this.curFiles,
-            Quiet: false,
-          },
-        });
-        // console.log(deleteResult);
-        for (let i = 0; i < deleteResult.Deleted.length; i++) {
-          this.deleteCount += 1;
-          await Vue.prototype.$sleep(20);
-        }
-        await this.startTasks();
-      } else if (!this.curFiles.length) {
-        this.status = 3; // success
-        this.that.selected = [];
-        this.that.getList();
-      } else {
-        console.log("here");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  stopTasks() {
-    this.status = 2; //stop
-  }
-  retryTasks() {
-    this.status = 0; // retry
-  }
-}
+//   async startTasks() {
+//     try {
+//       if (this.status !== 0 && this.status !== 1) return;
+//       this.status = 1; // deleteing
+//       // console.log(this.param.Prefix, this.param.Bucket);
+//       const listResult = await this.s3.listObjectsV2({
+//         Bucket: this.param.Bucket,
+//         MaxKeys: 100,
+//         Delimiter: "",
+//         Prefix: this.param.Prefix,
+//       });
+//       if (!listResult.Contents) {
+//         this.curFiles = [];
+//       } else {
+//         this.curFiles = listResult.Contents.map((it) => {
+//           return { Key: it.Key };
+//         });
+//       }
+//       if (this.curFiles.length && this.status == 1) {
+//         const deleteResult = await this.s3.deleteObjects({
+//           Bucket: this.param.Bucket,
+//           Delete: {
+//             Objects: this.curFiles,
+//             Quiet: false,
+//           },
+//         });
+//         // console.log(deleteResult);
+//         for (let i = 0; i < deleteResult.Deleted.length; i++) {
+//           this.deleteCount += 1;
+//           await Vue.prototype.$sleep(20);
+//         }
+//         await this.startTasks();
+//       } else if (!this.curFiles.length) {
+//         this.status = 3; // success
+//         this.that.selected = [];
+//         this.that.getList();
+//       } else {
+//         console.log("here");
+//       }
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   }
+//   stopTasks() {
+//     this.status = 2; //stop
+//   }
+//   retryTasks() {
+//     this.status = 0; // retry
+//   }
+// }
 
 import mixin from "./storage-mixin";
 export default {
@@ -553,6 +555,7 @@ export default {
       deleteFolder: false,
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
+      uploadingTaskLength: 0,
     };
   },
   computed: {
@@ -700,7 +703,6 @@ export default {
     onCopied() {
       this.$toast("Copied to clipboard !");
     },
-
     async addBucket() {
       try {
         const msg1 = "Bucket names must be between 3 and 48 characters long.";
@@ -765,6 +767,9 @@ export default {
     //     Math.random().toString().substr(3, length) + Date.now()
     //   ).toString(36);
     // },
+    // uploadingLength(value) {
+    //   this.uploadingTaskLength = value;
+    // },
     // handlePasueDeleteFolder(id) {
     //   const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
     //   this.deleteFoldersTasks[index].stopTasks();
@@ -801,17 +806,32 @@ export default {
     // handleDeleteFolderRemoveAll() {
     //   this.deleteFoldersTasks = [];
     // },
+    // isUploading(value) {
+    //   this.taskIsUploading = value;
+    // },
   },
 };
 </script>
 <style lang="scss" scoped>
 .task-list {
-  position: absolute;
+  position: fixed;
+  bottom: 80px;
   right: 20px;
-  top: 25px;
-  text-align: right;
   color: #34a9ff;
   font-size: 16px;
   cursor: pointer;
+  .task-count {
+    position: absolute;
+    right: -2px;
+    top: -2px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+    text-align: center;
+    color: #fff;
+    background: #ff6960;
+    border-radius: 50%;
+    transform: scale(0.7);
+  }
 }
 </style>

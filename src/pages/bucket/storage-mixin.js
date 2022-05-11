@@ -534,7 +534,7 @@ export default {
         data.list.forEach((row) => {
           const item = list.filter((it) => it.name == row.bucket)[0];
           if (!item) {
-            console.log(row.bucket, "no bucket");
+            // console.log(row.bucket, "no bucket");
             return;
           }
           const ar = row.arweave || {};
@@ -606,12 +606,7 @@ export default {
         });
       });
     },
-    async onDelete(item) {
-      let selected = this.selected;
-      if (item && item.length) {
-        console.log(item);
-        selected = item;
-      }
+    async onDelete() {
       try {
         // const arr = await this.getSelectedObjects(item);
         // if (arr.length > 1000) {
@@ -625,7 +620,7 @@ export default {
         if (this.inBucket) {
           await this.$confirm(html, `Remove ${target}`);
           let errArr = [];
-          for (const row of selected) {
+          for (const row of this.selected) {
             try {
               await this.delBucket(row.name);
             } catch (error) {
@@ -638,8 +633,8 @@ export default {
             }, 10);
         }
         if (this.inFolder) {
-          let hasFile = selected.filter((it) => it.isFile);
-          let hasFolder = selected.filter((it) => !it.isFile);
+          let hasFile = this.selected.filter((it) => it.isFile);
+          let hasFolder = this.selected.filter((it) => !it.isFile);
           if (hasFile.length && hasFolder.length) {
             //  file folder exsit
             if (hasFile.filter((it) => it.arStatus != "desynced").length) {

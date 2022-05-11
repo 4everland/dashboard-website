@@ -1,8 +1,26 @@
 <style scoped lang="scss">
+.mask {
+  z-index: 999;
+  position: fixed;
+  opacity: 0.4;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  padding: 20px;
+  border: 3px dashed black;
+  border-radius: 20px;
+  background: #ccc;
+  pointer-events: none;
+}
 .e-upload {
-  margin: 20px 0 30px;
+  padding: 20px;
+  background: #f8fafb;
+  border-radius: 10px;
+  border: 1px solid #d0dae9;
   .add-img {
-    padding: 20px 10px;
+    position: relative;
+    padding: 30px 10px;
     border: 3px dashed #ddd;
     .description {
       margin: 0 auto;
@@ -51,7 +69,7 @@
 
 <template>
   <div>
-    <div class="e-upload">
+    <div class="e-upload" ref="eUpload">
       <!-- <slot></slot> -->
 
       <div class="upload-header d-flex justify-space-between align-center">
@@ -59,7 +77,7 @@
           <div class="ta-c">
             <img src="../../../../public/img/icon/bucket_upload.svg" alt="" />
             <p class="description fw-b fz-20">
-              Drag and drop one or more files or folders here to select them.
+              Drag and drop items here to select.
             </p>
           </div>
           <!-- webkitdirectory -->
@@ -93,17 +111,17 @@
         <v-icon slot="ref" size="22" color="#ff6d24" class="pa-1 d-ib ml-2"
           >mdi-alert-circle-outline</v-icon
         >
-        <span class="ml-2"
-          >Tips: If the name of the file to upload is the same as that of an
-          existing file, the existing file is overwritten.
+        <span class="ml-2">
+          Please note: If the uploaded file name already exists, the original
+          file will be overwritten.
         </span>
       </div>
       <div class="upload-opreation">
         <v-btn rounded color="primary" @click="onClick(false)">
-          <span class="ml-2">Select Files</span>
+          <span>Select Files</span>
         </v-btn>
         <v-btn rounded color="primary" class="ml-7" @click="onClick(true)">
-          <span class="ml-2"> Select Folders</span>
+          <span> Select Folders</span>
         </v-btn>
       </div>
       <!-- <slot name="hint"></slot> -->
@@ -115,6 +133,7 @@
         </v-btn>
       </p> -->
     </div>
+    <div class="mask" v-show="isDraging" ref="dragArea"></div>
   </div>
 </template>
 
@@ -136,6 +155,7 @@ export default {
     return {
       files: [],
       isUploadDir: false,
+      isDraging: false,
     };
   },
   watch: {
@@ -144,13 +164,37 @@ export default {
         this.files = [];
       }
     },
+    files() {
+      this.$nextTick(() => {
+        window.scrollTo(0, 10000);
+      });
+    },
   },
   mounted() {
-    document.ondragover = (ev) => ev.preventDefault();
+    // document.ondragenter = () => {
+    //   console.log("enter");
+    //   this.isDraging = true;
+    // };
+    // document.ondragleave = () => {
+    //   console.log("leave");
+    //   this.isDraging = false;
+    // };
+
+    document.ondragover = (ev) => {
+      let index = ev.path.findIndex((it) => it == this.$refs.eUpload);
+      if (index != -1) {
+        this.isDraging = true;
+      } else {
+        this.isDraging = false;
+      }
+      ev.preventDefault();
+    };
     document.ondrop = async (ev) => {
+      this.isDraging = false;
       ev.preventDefault();
       // this.getFiles(ev.dataTransfer);
       const files = await this.scanFiles(ev.dataTransfer);
+      // console.log(files, "fles");
       this.getFiles({ files });
     };
     // document.onpaste = async (ev) => {
@@ -171,13 +215,16 @@ export default {
     },
     async scanFiles(e) {
       const { items = [], files = [] } = e;
+      // console.log(items, files);
       const [item] = items;
+      // console.log(item);
       if (!item || !item.webkitGetAsEntry) return files;
       const entry = item.webkitGetAsEntry();
       if (!entry) return files;
       return entry.isFile ? files : this.getEntryDirectoryFiles(entry);
     },
     async getEntryDirectoryFiles(entry) {
+      // console.log(111, entry);
       let res = [];
       var internalProces = (item, path, res) => {
         if (item.isFile) {
@@ -193,11 +240,13 @@ export default {
           return new Promise((resolve, reject) => {
             var dirReader = item.createReader();
             dirReader.readEntries(async (entries) => {
+              // console.log(entries, "entries");
               for (let i = 0; i < entries.length; i++) {
                 await internalProces(entries[i], path + item.name + "/", res);
               }
               resolve(res);
             }, reject);
+            // console.log(dirReader, "dirReader");
           });
         }
       };
@@ -210,7 +259,6 @@ export default {
       const { files = [] } = data;
       // console.log(files);
       let arr = Array.from(files);
-      console.log(arr);
       const isEmoji =
         arr.filter((it) => {
           return it.webkitRelativePath == ""
@@ -284,14 +332,14 @@ export default {
         var hs = substring.charCodeAt(i);
         if (0xd800 <= hs && hs <= 0xdbff) {
           if (substring.length > 1) {
-            var ls = substring.charCodeAt(i + 1);
+            let ls = substring.charCodeAt(i + 1);
             var uc = (hs - 0xd800) * 0x400 + (ls - 0xdc00) + 0x10000;
             if (0x1d000 <= uc && uc <= 0x1f77f) {
               return true;
             }
           }
         } else if (substring.length > 1) {
-          var ls = substring.charCodeAt(i + 1);
+          let ls = substring.charCodeAt(i + 1);
           if (ls == 0x20e3) {
             return true;
           }

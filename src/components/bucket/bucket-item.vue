@@ -1,7 +1,14 @@
 <template>
   <div class="bucket-item-container">
-    <div @click="$refs.navDrawers.drawer = true" class="task-list">
+    <!-- <div @click="$refs.navDrawers.drawer = true" class="task-list">
       TaskList
+    </div> -->
+
+    <div @click="$refs.navDrawers.drawer = true" class="task-list">
+      <span class="task-count" v-show="uploadingTaskLength != 0">{{
+        uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
+      }}</span>
+      <img src="img/svg/common/task-list.svg" alt="" width="54" />
     </div>
     <div>
       <v-tabs
@@ -20,14 +27,12 @@
     <div class="file-container">
       <div class="operation-tab d-flex">
         <v-btn color="primary" rounded @click="handleClickUpload">
-          <!-- <v-icon size="15">mdi-cloud-upload</v-icon> -->
           <img src="img/svg/upload.svg" width="16" />
-          <span class="ml-2">Upload</span>
+          <span>Upload</span>
         </v-btn>
         <v-btn class="ml-5" rounded outlined @click="drawer = true">
-          <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
-          <img src="img/svg/add0.svg" width="12" />
-          <span class="ml-2">Parts</span>
+          <img src="img/svg/parts_icon.svg" width="12" />
+          <span>Fragments</span>
         </v-btn>
 
         <v-btn
@@ -103,7 +108,7 @@
           ></v-text-field>
         </div>
         <bucket-parts-list
-          :drawer.sync="drawer"
+          v-model="drawer"
           :pathInfo="pathInfo"
         ></bucket-parts-list>
       </div>
@@ -213,6 +218,7 @@
       ref="navDrawers"
       :deleteFolder.sync="deleteFolder"
       :deleteFolderTasks="deleteFoldersTasks"
+      @uploadingLength="uploadingLength"
       @handlePasueDeleteFolder="handlePasueDeleteFolder"
       @handleStartDeleteFolder="handleStartDeleteFolder"
       @handleRemoveDeleteFolder="handleRemoveDeleteFolder"
@@ -316,10 +322,10 @@ export default {
         { text: "AR Status", value: "arStatus" },
       ],
       selected: [],
-      drawer: false,
       deleteFolder: false,
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
+      uploadingTaskLength: 0,
     };
   },
   computed: {
@@ -360,8 +366,12 @@ export default {
       const Prefix = arr.slice(index + 2).join("/");
       const deleteFoldersArr = this.selected.filter((it) => {
         const currentFolderName = Prefix + it.name + "/";
+        const currentBucketName = this.pathInfo.Bucket;
         let isExist = this.deleteFoldersTasks.findIndex((item) => {
-          return item.param.Prefix == currentFolderName;
+          return (
+            item.param.Prefix == currentFolderName &&
+            item.param.Bucket == currentBucketName
+          );
         });
         if (isExist !== -1) {
           let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
@@ -373,7 +383,7 @@ export default {
         }
         return !it.isFile && isExist == -1;
       });
-      console.log(deleteFoldersArr);
+      // console.log(deleteFoldersArr);
 
       const deleteFoldersTask = deleteFoldersArr.map((it) => {
         return new DeleteTaskWrapper(
@@ -398,13 +408,13 @@ export default {
       let processing = this.deleteFoldersTasks.filter(
         (item) => item.status == 1
       );
-      console.log(processing);
+      // console.log(processing);
       if (processing.length >= this.deleteFolderLimit) return;
       const idles = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      console.log(idles, "idles");
+      // console.log(idles, "idles");
       if (!idles.length) return;
       const fill = this.deleteFolderLimit - processing.length;
-      console.log(fill);
+      // console.log(fill);
       const min = idles.length <= fill ? idles.length : fill;
       for (let i = 0; i < min; i++) {
         this.startDeleteFolder(idles[i]);
@@ -414,6 +424,9 @@ export default {
       return Number(
         Math.random().toString().substr(3, length) + Date.now()
       ).toString(36);
+    },
+    uploadingLength(value) {
+      this.uploadingTaskLength = value;
     },
     handlePasueDeleteFolder(id) {
       const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
@@ -451,6 +464,9 @@ export default {
     handleDeleteFolderRemoveAll() {
       this.deleteFoldersTasks = [];
     },
+    isUploading(value) {
+      this.taskIsUploading = value;
+    },
   },
   watch: {
     path() {
@@ -468,7 +484,27 @@ export default {
 <style lang="scss" scoped>
 .bucket-item-container {
   background: #fff;
-
+  .task-list {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    color: #34a9ff;
+    font-size: 16px;
+    cursor: pointer;
+    .task-count {
+      position: absolute;
+      right: -2px;
+      top: -2px;
+      width: 30px;
+      height: 30px;
+      font-size: 20px;
+      text-align: center;
+      color: #fff;
+      background: #ff6960;
+      border-radius: 50%;
+      transform: scale(0.7);
+    }
+  }
   .file-container {
     min-height: 1000px;
     padding: 0 30px;
