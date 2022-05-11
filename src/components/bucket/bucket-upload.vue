@@ -247,7 +247,6 @@ export default {
         validate: this.validate,
       },
       isStorageFull: false,
-      firstEnterUpload: true,
     };
   },
   async created() {
@@ -412,16 +411,15 @@ export default {
           this.files = [];
           this.$refs.uploadInput.handleRmoveAll();
           this.processTask();
-          bus.$emit("taskData", this.tasks, true, this.firstEnterUpload);
+          bus.$emit("taskData", this.tasks, true);
         }
       } else {
         this.addTasks(this.files, 10);
         this.files = [];
         this.$refs.uploadInput.handleRmoveAll();
         this.processTask();
-        bus.$emit("taskData", this.tasks, true, this.firstEnterUpload);
+        bus.$emit("taskData", this.tasks, true);
       }
-      this.firstEnterUpload = false;
     },
     onCancel() {
       this.$router.go(-1);

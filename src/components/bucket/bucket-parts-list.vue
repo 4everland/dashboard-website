@@ -179,6 +179,7 @@ export default {
           // console.log(res);
           this.page = 1;
           this.getPartList();
+          this.selected = [];
         })
         .catch((err) => {
           // console.log(err, "err");

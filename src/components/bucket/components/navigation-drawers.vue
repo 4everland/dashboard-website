@@ -461,15 +461,24 @@ export default {
   },
   created() {},
   mounted() {
-    bus.$on("taskData", (tasks, isTrue, isFirst) => {
+    bus.$on("taskData", (tasks, isTrue) => {
       this.drawer = true;
       this.currentTab = 0;
       if (isTrue) {
         this.status = 0;
         this.page = 1;
       }
-      if (isFirst) {
-        this.tasks = tasks.concat(this.tasks);
+      if (this.tasks.length) {
+        let noExistTasks = [];
+        tasks.forEach((item) => {
+          let index = this.tasks.findIndex((it) => {
+            return it.id == item.id;
+          });
+          if (index == -1) {
+            noExistTasks.push(item);
+          }
+        });
+        this.tasks = noExistTasks.concat(this.tasks);
       } else {
         this.tasks = tasks;
       }
@@ -535,9 +544,6 @@ export default {
     },
     handleClearRecords(id) {
       bus.$emit("handleClearRecords", id);
-
-      // let index = this.tasks.findIndex((it) => it.id == id);
-      // this.tasks.splice(index, 1);
     },
     handleCancelUpload(id) {
       let index = this.tasks.findIndex((item) => item.id == id);
