@@ -118,10 +118,10 @@
       </div>
       <div class="upload-opreation">
         <v-btn rounded color="primary" @click="onClick(false)">
-          <span class="ml-2">Select Files</span>
+          <span>Select Files</span>
         </v-btn>
         <v-btn rounded color="primary" class="ml-7" @click="onClick(true)">
-          <span class="ml-2"> Select Folders</span>
+          <span> Select Folders</span>
         </v-btn>
       </div>
       <!-- <slot name="hint"></slot> -->
@@ -165,7 +165,9 @@ export default {
       }
     },
     files() {
-      window.scrollTo(0, 10000);
+      this.$nextTick(() => {
+        window.scrollTo(0, 10000);
+      });
     },
   },
   mounted() {
