@@ -13,14 +13,21 @@
           <div class="choose-dir d-flex align-center flex-1">
             <div class="mr-3">Upload to:</div>
             <div
+              class="dir-container current-dir-all"
+              v-if="curDir == 'Current'"
+            >
+              {{ path }}
+            </div>
+            <div
               class="dir-container d-flex"
               :class="[
                 curDir == 'Specified' ? 'choose-specified' : '',
                 isValidate ? '' : 'no-validate',
               ]"
+              v-else
             >
               <div class="current-dir">
-                {{ curDir == "Specified" ? path.cutStr(15, 10) : path }}
+                {{ path.cutStr(10, 10) }}
               </div>
               <div class="specified-dir" v-if="curDir !== 'Current'">
                 <v-text-field
@@ -130,10 +137,10 @@
             @click="onConfirm"
             :disabled="!isValidate"
           >
-            <span class="ml-2">Upload</span>
+            <span>Upload</span>
           </v-btn>
-          <v-btn rounded color="primary" class="ml-7" @click="onCancel">
-            <span class="ml-2">Cancel</span>
+          <v-btn rounded outlined class="ml-7" @click="onCancel">
+            <span>Cancel</span>
           </v-btn>
         </div>
       </div>
@@ -284,19 +291,10 @@ export default {
       return Math.ceil(this.files.length / 10);
     },
     totalSize() {
-      const totalSize = this.files.reduce((pre, current) => {
+      const totalSizeVal = this.files.reduce((pre, current) => {
         return pre + current.size;
       }, 0);
-      if (
-        totalSize >
-        this.$store.state.usageInfo.ipfsTotal -
-          this.$store.state.usageInfo.ipfsUsed
-      ) {
-        this.isStorageFull = true;
-      } else {
-        this.isStorageFull = false;
-      }
-      return this.$utils.getFileSize(totalSize);
+      return this.$utils.getFileSize(totalSizeVal);
     },
     isValidate() {
       return typeof this.validate(this.specifiedDir) == "string" ? false : true;
@@ -305,7 +303,7 @@ export default {
   methods: {
     validate(value) {
       if (value == null || value == "") return true;
-      if (/^(?![\\\/])[a-z\d-_/\u4E00-\u9FA5]+(?<![\\\/])$/.test(value)) {
+      if (/^(?![/])[a-z\d-_/\u4E00-\u9FA5]+(?<![/])$/.test(value)) {
         if (value.indexOf("//") != -1) {
           return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).";
         }
@@ -414,15 +412,13 @@ export default {
           this.$refs.uploadInput.handleRmoveAll();
           this.processTask();
           bus.$emit("taskData", this.tasks, true);
-          // this.tasks = [];
         }
       } else {
         this.addTasks(this.files, 10);
         this.files = [];
         this.$refs.uploadInput.handleRmoveAll();
         this.processTask();
-        bus.$emit("taskData", this.tasks);
-        // this.tasks = [];
+        bus.$emit("taskData", this.tasks, true);
       }
     },
     onCancel() {
@@ -439,16 +435,28 @@ export default {
       if (oldVal.length == 0 && newVal.length) {
         this.page = 1;
       }
+
+      const totalSizeVal = newVal.reduce((pre, current) => {
+        return pre + current.size;
+      }, 0);
+      if (
+        totalSizeVal >
+        this.$store.state.usageInfo.ipfsTotal -
+          this.$store.state.usageInfo.ipfsUsed
+      ) {
+        this.isStorageFull = true;
+      } else {
+        this.isStorageFull = false;
+      }
     },
   },
 };
 </script>
 <style>
 .specified-dir-input .v-input__control .v-input__slot {
-  width: 320px !important;
+  width: 340px !important;
   box-shadow: none !important;
   font-size: 14px !important;
-  margin-right: 30px;
 }
 .specified-dir-input .v-input__control input {
   color: #6a778b !important;
@@ -485,23 +493,31 @@ export default {
 .upload-info {
   padding: 20px 0;
   .choose-dir {
+    .current-dir-all {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     .dir-container {
       position: relative;
       width: 600px;
       height: 50px;
-      padding-right: 40px;
+      padding: 0 20px;
       line-height: 50px;
+      color: #79838e;
+      font-size: 14px;
       border-radius: 6px;
       border: 1px solid #d0dae9;
       background: #f8fafb;
       .current-dir {
+        width: 160px;
+        padding-right: 10px;
         position: relative;
-        padding: 0 10px;
         font-size: 14px;
         color: #79838e;
+        white-space: nowrap;
       }
     }
-
     .choose-specified.dir-container {
       background: #fff;
       .current-dir::after {
@@ -530,7 +546,6 @@ export default {
 
 .files-upload-container {
   padding: 30px;
-  margin-top: 30px;
   background: #ffffff;
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
 

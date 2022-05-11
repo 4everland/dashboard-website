@@ -138,7 +138,7 @@
               :items="list.slice((this.page - 1) * 10, this.page * 10)"
               class="elevation-1 task-table"
               hide-default-footer
-              item-key="param[Key]"
+              item-key="id"
             >
               <template #item.fileInfo[path]="{ item }">
                 <span style="word-break: break-all">{{
@@ -468,7 +468,20 @@ export default {
         this.status = 0;
         this.page = 1;
       }
-      this.tasks = tasks;
+      if (this.tasks.length) {
+        let noExistTasks = [];
+        tasks.forEach((item) => {
+          let index = this.tasks.findIndex((it) => {
+            return it.id == item.id;
+          });
+          if (index == -1) {
+            noExistTasks.push(item);
+          }
+        });
+        this.tasks = noExistTasks.concat(this.tasks);
+      } else {
+        this.tasks = tasks;
+      }
     });
   },
   computed: {
@@ -531,9 +544,6 @@ export default {
     },
     handleClearRecords(id) {
       bus.$emit("handleClearRecords", id);
-
-      // let index = this.tasks.findIndex((it) => it.id == id);
-      // this.tasks.splice(index, 1);
     },
     handleCancelUpload(id) {
       let index = this.tasks.findIndex((item) => item.id == id);
