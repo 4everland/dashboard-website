@@ -59,7 +59,7 @@
 
       <template v-if="length == 0">
         <e-empty :loading="loading">
-          {{ loading ? `Loading files...` : `No folders or files` }}
+          {{ loading ? `Loading Fragments...` : `No Fragments` }}
         </e-empty>
       </template>
       <v-pagination
