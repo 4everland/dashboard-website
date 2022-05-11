@@ -55,54 +55,7 @@
           ></b>
         </span>
         <span class="mt-1 gray-6 ml-2 fz-14">USD</span>
-        <e-menu open-on-hover1 offset-y top>
-          <v-icon slot="ref" color="#ed7266" size="20" class="pa-2"
-            >mdi-help-circle</v-icon
-          >
-          <div class="pa-3 bg-white lh-11" style="width: 330px">
-            <div
-              class="bd-1 bg-f8a pa-3 bdrs-5 fz-14 mb-2"
-              v-for="(it, i) in previewList"
-              :key="i"
-            >
-              <div class="bdb-1 pb-3 mb-3">
-                <div class="al-c mb-1">
-                  <span class="gray-7">Content</span>
-                  <span class="ml-auto">{{ it.label }}</span>
-                </div>
-                <div class="al-c mb-1">
-                  <span class="gray-7">Amount</span>
-                  <span class="ml-auto color-1"
-                    >{{ it.value }}{{ it.unit }}</span
-                  >
-                </div>
-                <div class="al-c">
-                  <span class="gray-7">Effective Time</span>
-                  <span class="ml-auto">{{ it.until || "Until used up" }}</span>
-                </div>
-              </div>
-              <div class="d-flex">
-                <div class="ml-auto">
-                  <span>Price:</span>
-                  <b class="red-1 fz-16 ml-1">{{ it.price }}</b>
-                  <span class="fz-12 ml-1">USD</span>
-                </div>
-              </div>
-            </div>
-            <div class="fz-12 lh-12">
-              <p class="mb-3">
-                <b class="red-1">*</b>
-                <span class="gray-7 ml-2">Charge Standard</span>
-              </p>
-              <p v-for="(it, i) in list" :key="i">
-                <label class="gray d-ib ta-r mr-2" style="min-width: 90px"
-                  >{{ it.label }}:</label
-                >
-                <span> {{ it.unitPrice }}U / 100 {{ it.unit }} </span>
-              </p>
-            </div>
-          </div>
-        </e-menu>
+        <usage-preview :previewList="previewList" :list="list" />
         <v-btn
           color="primary"
           rounded
@@ -117,68 +70,12 @@
 
     <v-dialog v-model="showOrder" max-width="500">
       <e-dialog-close @click="showOrder = false" />
-      <div class="pa-4">
-        <h3>Order</h3>
-        <div class="mt-4 fz-14">
-          <div
-            class="bdrs-8 bd-1 bg-f8a mb-4 pa-4"
-            v-for="(it, i) in previewList"
-            :key="i"
-          >
-            <div class="al-c">
-              <div class="flex-1">
-                <div class="al-c">
-                  <span class="gray-7">Content:</span>
-                  <span class="ml-auto">{{ it.label }}</span>
-                </div>
-                <div class="al-c mt-1">
-                  <span class="gray-7">Amount:</span>
-                  <span class="ml-auto color-1"
-                    >{{ it.value }} {{ it.unit }}</span
-                  >
-                </div>
-                <div class="al-c mt-1">
-                  <span class="gray-7">Effective Time:</span>
-                  <span class="ml-auto">{{ it.until }}</span>
-                </div>
-              </div>
-              <div class="bg-white pa-4 ml-4 bdrs-5">
-                <div>Price:</div>
-                <div>
-                  <span class="red-1 fz-22">12.6</span>
-                  <span class="ml-2">USD</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="pa-2">
-          <e-kv label="Network:">
-            <div class="al-c">
-              <img
-                :src="`img/svg/billing/ic-${payBy.toLowerCase()}.svg`"
-                height="24"
-                class="d-b"
-              />
-              <span class="ml-2">{{ payBy }}</span>
-            </div>
-            <p class="fz-12 mt-1 gray-7">
-              (Current polygon network , you can switch the network in the
-              wallet)
-            </p>
-          </e-kv>
-        </div>
-        <div class="pa-2 mt-4">
-          <v-btn color="primary" rounded block depressed>Approve</v-btn>
-          <v-btn outlined rounded block class="mt-4">Submit</v-btn>
-        </div>
-      </div>
+      <usage-order :list="previewList" :total="totalPrice" />
     </v-dialog>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
 const list = [
   {
     label: "Bandwidth",
@@ -219,9 +116,6 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      payBy: (s) => s.payBy,
-    }),
     previewList() {
       return this.list
         .map((it) => {

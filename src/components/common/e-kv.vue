@@ -1,7 +1,13 @@
 <template>
-  <div class="d-flex fz-14">
+  <div
+    class="d-flex fz-14"
+    :class="{
+      'al-c': center,
+    }"
+  >
     <label
       class="gray shrink-0"
+      :class="labelClass"
       :style="{
         'min-width': minWidth,
       }"
@@ -17,6 +23,8 @@
 export default {
   props: {
     label: String,
+    labelClass: null,
+    center: Boolean,
     minWidth: {
       type: String,
       default: "100px",
