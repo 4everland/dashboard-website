@@ -15,7 +15,7 @@
       <img src="img/svg/common/task-list.svg" alt="" width="54" />
     </div>
 
-    <div class="d-flex nowrap ov-a btn-wrap mt-5" v-if="!inUpload">
+    <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
       <div v-show="inBucket">
         <v-btn color="primary" @click="addBucket">
           <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
