@@ -58,11 +58,12 @@ export default {
   watch: {
     noticeMsg({ name }) {
       if (name == "showMetaConnect") {
-        this.showPop = true;
+        if (localStorage.isConnectMeta) {
+          this.onConnect();
+        } else this.showPop = true;
       }
     },
     async isConnect(val) {
-      localStorage.isConnectMeta = val ? "1" : "";
       // this.onConnect();
       let connectAddr = "";
       if (val) {
@@ -92,9 +93,6 @@ export default {
   },
   created() {
     // this.getAddr();
-    if (localStorage.isConnectMeta) {
-      this.onConnect();
-    }
   },
   methods: {
     async getAddr() {
@@ -106,23 +104,16 @@ export default {
         const isOk = await this.connectMetaMask();
         this.isConnect = isOk;
         if (!isOk) this.showPop = true;
+        else localStorage.isConnectMeta = "1";
       } else {
         this.isConnect = false;
       }
     },
     async checkNet() {
       const netType = await window.web3.eth.net.getNetworkType();
-      let msg = "";
-      if (this.$inDev) {
-        if (netType != "rinkeby") msg = "Dev: please connect to rinkeby";
-      } else {
-        if (netType != "main")
-          msg = "Wrong network, please connect to Ethereum mainnet";
-      }
-      console.log("netType", netType, msg);
+      // console.log(netType);
       this.$setState({
         netType,
-        walletTip: msg,
       });
     },
     async connectMetaMask() {
