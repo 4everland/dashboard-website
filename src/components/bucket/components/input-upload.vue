@@ -330,14 +330,14 @@ export default {
         var hs = substring.charCodeAt(i);
         if (0xd800 <= hs && hs <= 0xdbff) {
           if (substring.length > 1) {
-            var ls = substring.charCodeAt(i + 1);
+            let ls = substring.charCodeAt(i + 1);
             var uc = (hs - 0xd800) * 0x400 + (ls - 0xdc00) + 0x10000;
             if (0x1d000 <= uc && uc <= 0x1f77f) {
               return true;
             }
           }
         } else if (substring.length > 1) {
-          var ls = substring.charCodeAt(i + 1);
+          let ls = substring.charCodeAt(i + 1);
           if (ls == 0x20e3) {
             return true;
           }
