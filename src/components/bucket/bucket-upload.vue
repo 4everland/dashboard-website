@@ -87,7 +87,7 @@
               <span v-else @click="curDir = 'Specified'">Specified</span>
             </div>
           </div>
-          <div class="total-files-info shrink-0 ml-4">
+          <div class="total-files-info shrink-0 ml-4" v-show="files.length">
             <span>{{ files.length }} Files</span>
             <span class="ml-4">{{ totalSize }} </span>
           </div>
