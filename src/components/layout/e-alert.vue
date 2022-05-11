@@ -168,7 +168,10 @@ export default {
     },
     showAlert(val) {
       if (val) this.isComplete = false;
-      else if (!this.isComplete) this.hideAlert(0);
+      else if (!this.isComplete) {
+        const res = this.alertInfo.type == "alert" ? 1 : 0;
+        this.hideAlert(res);
+      }
     },
   },
   created() {
@@ -213,6 +216,7 @@ export default {
 
     Vue.prototype.$alert = (content, title, opts = {}) => {
       return showModal({
+        type: "alert",
         title,
         content,
         ...opts,
@@ -220,6 +224,7 @@ export default {
     };
     Vue.prototype.$confirm = (content, title, opts = {}) => {
       return showModal({
+        type: "confirm",
         title,
         content,
         showCancel: true,
@@ -228,6 +233,7 @@ export default {
     };
     Vue.prototype.$prompt = (content, title, opts = {}) => {
       return showModal({
+        type: "prompt",
         title,
         content,
         showCancel: true,

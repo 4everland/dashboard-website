@@ -37,16 +37,6 @@
         </div>
       </v-dialog>
 
-      <v-alert
-        border="bottom"
-        colored-border
-        type="error"
-        elevation="2"
-        v-if="walletTip"
-      >
-        {{ walletTip }}
-      </v-alert>
-
       <div class="ta-c pa-10" v-if="!list.length">
         <e-empty title="No NFTs to display">
           <div>Please follow us for future limited NFT</div>
@@ -98,7 +88,7 @@ export default {
     ...mapState({
       noticeMsg: (s) => s.noticeMsg,
       connectAddr: (s) => s.connectAddr,
-      walletTip: (s) => s.walletTip,
+      netType: (s) => s.netType,
     }),
     introList() {
       return [
@@ -125,13 +115,16 @@ export default {
     connectAddr(val) {
       if (val) this.onInit();
     },
+    netType(val) {
+      if (val) this.onInit();
+    },
     "$route.path"(val) {
       if (val == "/collections") {
         this.onInit();
       }
     },
   },
-  created() {
+  mounted() {
     this.onInit();
   },
   methods: {
@@ -141,9 +134,25 @@ export default {
       });
     },
     async onInit() {
-      if (!this.connectAddr) {
+      if (!this.connectAddr || !this.netType) {
         this.showConnect();
         this.list = [];
+        return;
+      }
+      let msg = "";
+      console.log(this.connectAddr, this.netType);
+      if (this.$inDev) {
+        if (this.netType != "goerli") msg = "Dev: please connect to goerli";
+      } else if (this.netType != "main") {
+        msg = "Wrong network, please connect to Ethereum mainnet";
+      }
+      if (msg) {
+        this.$alert(msg).then(() => {
+          window.web3.currentProvider.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: this.$inDev ? "0x5" : "0x1" }],
+          });
+        });
         return;
       }
       try {

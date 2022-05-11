@@ -1,4 +1,29 @@
 [{
+    "time": "2022-05-11",
+    "img": "https://4ever-web.4everland.store/img/log/2022-5-11.png",
+    "title": "Added some new features",
+    "lines": [
+      "Support fragment management.",
+      "Support folder upload.",
+      "Optimize uploading process, add pause, cancel, and delete features.",
+      "Add scanning feature to archive the files to be uploaded.",
+      "Add upload list to manage the uploading process.",
+      "Add delete list to manage the deleted process."
+    ]
+  },
+  {
+    "time": "2022-04-18",
+    "img": "https://4ever-web.4everland.store/img/log/2022-4-18.png",
+    "video": "https://4ever-web.4everland.store/video/2022-4-18.mp4",
+    "title": "Added some new features",
+    "lines": [
+      "Support SNS domain.",
+      "You can access 4sol.xyz after the domain name bound successfully",
+      "Provide exclusive SNS gateway.",
+      "Support IPNS."
+    ]
+  },
+  {
     "time": "2022-04-07",
     "img": "https://4ever-web.4everland.store/img/log/2022-4-7.jpg",
     "title": "4EVERLAND new Dashboard is officially launched!",
@@ -27,7 +52,9 @@
     "time": "2022-01-10",
     "img": "https://4ever-web.4everland.store/img/log/2022-1-10.png",
     "title": "Added some new features",
-    "lines": ["Support ENS and IPNS"]
+    "lines": [
+      "Support ENS and IPNS"
+    ]
   },
   {
     "time": "2022-01-07",
