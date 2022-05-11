@@ -543,6 +543,9 @@ export default {
       this.deleteFolderPage = item;
     },
     handleClearRecords(id) {
+      let index = this.tasks.findIndex((it) => it.id == id);
+      this.tasks.splice(index, 1);
+
       bus.$emit("handleClearRecords", id);
     },
     handleCancelUpload(id) {
@@ -576,6 +579,7 @@ export default {
       });
     },
     handleClearAllRecords() {
+      this.tasks = this.tasks.filter((it) => it.status !== this.status);
       bus.$emit("handleClearAllRecords", this.status);
     },
     handlePasueDeleteFolder(id) {
