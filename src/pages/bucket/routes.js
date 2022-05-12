@@ -9,6 +9,7 @@ export default [
     component: Storage,
     meta: {
       title: "Storage",
+      isTab: 1,
     },
   },
   {
