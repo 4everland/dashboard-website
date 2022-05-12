@@ -86,7 +86,7 @@
             </v-list>
           </e-menu>
           <!-- Selected Files -->
-          <div class="selected-content d-flex align-center">
+          <div class="selected-content d-flex al-c ml-auto">
             <span class="selected-title">Selected:</span>
             <span class="selected-count">{{ selected.length }}/100</span>
           </div>
@@ -516,7 +516,6 @@ export default {
     .operation-tab {
       padding: 6px 0 26px 0;
       .selected-content {
-        font-size: 18px;
         color: #6c7789;
         .selected-count {
           color: #0b0817;
