@@ -1,9 +1,9 @@
 <template>
-  <div class="container">
-    <e-tabs v-show="inFolder" :list="list" noRouter />
-    <div v-if="!inFolder">
-      <storage></storage>
-    </div>
+  <div>
+    <keep-alive>
+      <e-tabs v-if="inFolder" :list="list" noRouter />
+    </keep-alive>
+    <storage v-if="!inFolder" />
   </div>
 </template>
 
