@@ -1,26 +1,17 @@
-import Storage from "./storage";
+import Store from "./store";
+import Buckets from "./buckets";
 import ARHistory from "./ar-history";
 import Domains from "./domains";
 import Domain from "./domain";
 
 export default [
   {
-    path: "/storage",
-    component: Storage,
+    path: "/storage/*",
+    component: Buckets,
     meta: {
       title: "Storage",
       isTab: 1,
     },
-    children: [
-      {
-        path: "/bucket/*",
-        component: () => import("../../components/bucket/bucket-item.vue"),
-        meta: {
-          title: "Bucket",
-          isTab: 1,
-        },
-      },
-    ],
   },
   {
     path: "/arweave",
@@ -31,7 +22,7 @@ export default [
   },
   {
     path: "/arweave/*",
-    component: Storage,
+    component: Store,
     meta: {
       title: "File - AR History",
     },

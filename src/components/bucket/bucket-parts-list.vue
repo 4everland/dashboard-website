@@ -132,6 +132,7 @@ export default {
     getPartList() {
       this.loading = true;
       const { Bucket, Prefix } = this.pathInfo;
+      if (!this.s3) return;
       this.s3.listMultipartUploads(
         { Bucket, Prefix, MaxUploads: 500 },
         (err, data) => {

@@ -14,6 +14,7 @@ export default {
       deleting: false,
       searchKey: "",
       domainsMap: {},
+      inUpload: false,
     };
   },
   computed: {
@@ -39,9 +40,6 @@ export default {
     },
     inFolder() {
       return this.inStorage && !this.inBucket && !this.inFile && !this.inUpload;
-    },
-    inUpload() {
-      return this.$route.query.action == "upload";
     },
     fileName() {
       const arr = this.path.split("/");
@@ -104,7 +102,9 @@ export default {
     defArStatus() {
       if (this.fromHistory) return "syncing";
       const { Bucket } = this.pathInfo;
-      const curBucket = this.bucketList.filter((it) => it.name == Bucket)[0];
+      const curBucket = this.bucketList.filter((it) => {
+        return it.name == Bucket;
+      })[0];
       if (curBucket) {
         return curBucket.isAr ? "syncing" : "desynced";
       }
@@ -685,7 +685,6 @@ export default {
       return this.path + item.name + (item.isFile ? "" : "/");
     },
     getViewUrl(item) {
-      console.log(item);
       const { Prefix } = this.pathInfo;
       let url = this.bucketInfo.originList[0] + "/" + Prefix + item.name;
       return url.encode();
@@ -695,6 +694,7 @@ export default {
     },
     onRow(it) {
       const url = this.getPath(it);
+      console.log(url);
       this.$router.push(url);
     },
     // async getSelectedObjects(item) {
