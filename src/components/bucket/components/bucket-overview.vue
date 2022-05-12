@@ -51,7 +51,28 @@
     </div>
     <div class="basic-settings">
       <h3>Basic Settings</h3>
-      <div class="basic-settings-content"></div>
+      <div class="basic-settings-content">
+        <div class="basic-settings-item">
+          <span class="item-title">Created At</span>
+          <span class="item-data">Mar 21, 2022, 14:55</span>
+        </div>
+        <div class="basic-settings-item">
+          <span class="item-title">Sync to AR</span>
+          <span class="item-data">ON</span>
+        </div>
+        <div class="basic-settings-item">
+          <span class="item-title">Custom Domain</span>
+          <span class="item-data">Mar 21, 2022, 14:55</span>
+        </div>
+        <div class="basic-settings-item">
+          <span class="item-title">Storage Class</span>
+          <span class="item-data">IPFS</span>
+        </div>
+        <div class="basic-settings-item">
+          <span class="item-title">Access Control List (ACL)</span>
+          <span class="item-data">Mar 21, 2022, 14:55</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -128,6 +149,27 @@ export default {
         width: 1px;
         height: 29px;
         background: #d0dae9;
+      }
+    }
+  }
+
+  .basic-settings {
+    .basic-settings-content {
+      display: flex;
+      flex-wrap: wrap;
+      .basic-settings-item {
+        width: 50%;
+        padding: 20px 0;
+        color: #0b0817;
+        font-size: 16px;
+        .item-title {
+          display: inline-block;
+          width: 200px;
+          color: #6c7789;
+        }
+        .item-data {
+          margin-left: 34px;
+        }
       }
     }
   }
