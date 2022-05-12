@@ -58,6 +58,7 @@ export default {
       type: String,
       default: "200px",
     },
+    noRouter: Boolean,
   },
   data() {
     const tabKey = this.vertical ? "sub" : "tab";
@@ -74,6 +75,7 @@ export default {
       if (!this.activeIdxList.includes(val)) {
         this.activeIdxList.push(val);
       }
+      if (this.noRouter) return;
       const it = this.list[val];
       if (!it) return;
       const query = { ...this.$route.query };
