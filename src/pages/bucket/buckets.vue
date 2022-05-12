@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <e-tabs v-if="inFolder" :list="list" />
+    <e-tabs v-if="inFolder" :list="list" noRouter />
     <div v-else>
       <storage></storage>
     </div>
