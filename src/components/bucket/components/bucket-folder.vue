@@ -8,20 +8,6 @@
         }}</span>
         <img src="img/svg/common/task-list.svg" alt="" width="54" />
       </div>
-      <!-- Switch Tab -->
-      <!-- <div>
-        <v-tabs
-          class="v3-horizon file-tab"
-          color="black"
-          v-model="curIdx"
-          hide-slider
-          :vertical="vertical"
-        >
-          <v-tab>Overview</v-tab>
-          <v-tab>File</v-tab>
-          <v-tab>Statict</v-tab>
-        </v-tabs>
-      </div> -->
       <div class="file-container">
         <!-- Operation Tab -->
         <div class="operation-tab d-flex">
@@ -234,6 +220,7 @@
         ref="bucketUpload"
         :info="pathInfo"
         :baseUrl="bucketInfo.originList[0]"
+        @handleBackFolder="inUpload = false"
       ></bucket-upload>
     </div>
     <!-- Upload/Delete Folders Component -->
@@ -369,12 +356,6 @@ export default {
       this.$toast("Copied to clipboard !");
     },
     handleClickUpload() {
-      // this.$router.push({
-      //   path: this.$route.path,
-      //   query: {
-      //     action: "upload",
-      //   },
-      // });
       this.inUpload = true;
     },
     onRouteChange() {
@@ -532,11 +513,8 @@ export default {
   .file-container {
     position: relative;
     min-height: 1000px;
-    // margin-left: 10px;
-    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
-    padding: 0 30px;
     .operation-tab {
-      padding: 26px 0;
+      padding: 6px 0 26px 0;
       .selected-content {
         font-size: 18px;
         color: #6c7789;

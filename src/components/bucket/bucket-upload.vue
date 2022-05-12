@@ -1,6 +1,7 @@
 <template>
   <div class="uploder-container">
     <div class="files-upload-container">
+      <div @click="handleBackFolder">back</div>
       <h3 class="title">Files to Upload</h3>
       <!-- upload-area -->
       <div class="files-to-upload">
@@ -325,6 +326,9 @@ export default {
     handleSkip(item) {
       this.page = item;
     },
+    handleBackFolder() {
+      this.$emit("handleBackFolder");
+    },
     async addTasks(files, limit) {
       this.limit = limit;
       const newTasks = files.map((file) => {
@@ -546,9 +550,7 @@ export default {
 }
 
 .files-upload-container {
-  padding: 30px;
   background: #ffffff;
-  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
 
   .title {
     margin-bottom: 13px;

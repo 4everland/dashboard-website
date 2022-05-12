@@ -15,9 +15,6 @@ export default {
         {
           text: "Overview",
           comp: "bucket-overview",
-          props: {
-            limit: 5,
-          },
         },
         {
           text: "Files",
