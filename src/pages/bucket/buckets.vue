@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <e-tabs v-if="inFolder" :list="list" noRouter />
-    <div v-else>
+    <e-tabs v-show="inFolder" :list="list" noRouter />
+    <div v-if="!inFolder">
       <storage></storage>
     </div>
   </div>
