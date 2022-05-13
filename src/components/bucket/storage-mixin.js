@@ -158,6 +158,8 @@ export default {
         this.$confirm(msg, "Network Error", {
           confirmText: "Retry",
         }).then(() => {
+          console.log("onError.....");
+
           this.getList();
         });
         return;
@@ -386,7 +388,7 @@ export default {
       this.s3.headObject(this.pathInfo, (err, data) => {
         this.fileLoading = false;
         if (err) return this.onErr(err);
-        // console.log(data);
+        console.log(data);
         const meta = data.Metadata;
         let arStatus = meta["arweave-status"];
         if (!arStatus) {
@@ -602,7 +604,6 @@ export default {
           console.log(err, data);
           if (err) reject(err);
           else resolve(data);
-          this.getList();
         });
       });
     },
@@ -641,11 +642,12 @@ export default {
               html = `The following files will be permanently deleted, but files in AR can’t be deleted from the AR network, and your AR storage space will not increase. Would you like to continue?`;
               await this.$confirm(html, `Remove ${target}`);
             }
-            this.delObjects(
+            await this.delObjects(
               hasFile.map((it) => {
                 return { Key: it.Key };
               })
             );
+            this.getList();
             this.deleteFolder = true;
             this.addDeleteFolderTask(2);
             this.processDeleteFolderTask();
@@ -655,11 +657,12 @@ export default {
               html = `The following files will be permanently deleted, but files in AR can’t be deleted from the AR network, and your AR storage space will not increase. Would you like to continue?`;
               await this.$confirm(html, `Remove ${target}`);
             }
-            this.delObjects(
+            await this.delObjects(
               hasFile.map((it) => {
                 return { Key: it.Key };
               })
             );
+            this.getList();
           } else {
             // only folder
             this.deleteFolder = true;
@@ -694,7 +697,6 @@ export default {
     },
     onRow(it) {
       const url = this.getPath(it);
-      console.log(url);
       this.$router.push(url);
     },
     // async getSelectedObjects(item) {

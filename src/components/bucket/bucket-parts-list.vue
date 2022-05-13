@@ -110,7 +110,6 @@ export default {
     };
   },
   created() {
-    this.getPartList();
     this.page = 1;
   },
   computed: {

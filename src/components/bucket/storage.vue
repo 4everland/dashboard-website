@@ -519,11 +519,6 @@ export default {
     path() {
       this.onRouteChange();
     },
-    "$route.query"(_, oldVal) {
-      if (oldVal.action == "upload") {
-        this.onRouteChange();
-      }
-    },
   },
   methods: {
     onRouteChange() {
@@ -533,63 +528,6 @@ export default {
       this.getList();
       this.checkNew();
     },
-    // addDeleteFolderTask(limit) {
-    //   this.deleteFolderLimit = limit;
-    //   let arr = this.$route.path.split("/");
-    //   let index = arr.findIndex((it) => it == "storage");
-    //   const Prefix = arr.slice(index + 2).join("/");
-    //   const deleteFoldersArr = this.selected.filter((it) => {
-    //     const currentFolderName = Prefix + it.name + "/";
-    //     let isExist = this.deleteFoldersTasks.findIndex((item) => {
-    //       return item.param.Prefix == currentFolderName;
-    //     });
-    //     if (isExist !== -1) {
-    //       let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-    //       this.deleteFoldersTasks[isExist].retryTasks();
-
-    //       if (!arr.length) {
-    //         this.processDeleteFolderTask();
-    //       }
-    //     }
-    //     return !it.isFile && isExist == -1;
-    //   });
-    //   console.log(deleteFoldersArr);
-
-    //   const deleteFoldersTask = deleteFoldersArr.map((it) => {
-    //     return new DeleteTaskWrapper(
-    //       this,
-    //       this.s3,
-    //       {
-    //         Bucket: this.pathInfo.Bucket,
-    //         Prefix: Prefix + it.name + "/",
-    //       },
-    //       this.genID()
-    //     );
-    //   });
-    //   this.deleteFoldersTasks = deleteFoldersTask.concat(
-    //     this.deleteFoldersTasks
-    //   );
-    // },
-    // async startDeleteFolder(task) {
-    //   await task.startTasks();
-    //   this.processDeleteFolderTask();
-    // },
-    // async processDeleteFolderTask() {
-    //   let processing = this.deleteFoldersTasks.filter(
-    //     (item) => item.status == 1
-    //   );
-    //   console.log(processing);
-    //   if (processing.length >= this.deleteFolderLimit) return;
-    //   const idles = this.deleteFoldersTasks.filter((item) => item.status == 0);
-    //   console.log(idles, "idles");
-    //   if (!idles.length) return;
-    //   const fill = this.deleteFolderLimit - processing.length;
-    //   console.log(fill);
-    //   const min = idles.length <= fill ? idles.length : fill;
-    //   for (let i = 0; i < min; i++) {
-    //     this.startDeleteFolder(idles[i]);
-    //   }
-    // },
     onStop() {},
     onCopied() {
       this.$toast("Copied to clipboard !");

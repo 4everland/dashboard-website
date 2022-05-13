@@ -1,219 +1,211 @@
 <template>
   <div class="bucket-item-container">
-    <div v-if="inFolder">
-      <!-- Task List -->
-      <div @click="$refs.navDrawers.drawer = true" class="task-list">
-        <span class="task-count" v-show="uploadingTaskLength != 0">{{
-          uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
-        }}</span>
-        <img src="img/svg/common/task-list.svg" alt="" width="54" />
-      </div>
-      <div class="file-container">
-        <!-- Operation Tab -->
-        <div class="operation-tab d-flex">
-          <!-- Upload Btn -->
-          <v-btn color="primary" rounded @click="handleClickUpload">
-            <img src="img/svg/upload.svg" width="16" />
-            <span class="ml-2">Upload</span>
-          </v-btn>
+    <!-- Task List -->
+    <div @click="$refs.navDrawers.drawer = true" class="task-list">
+      <span class="task-count" v-show="uploadingTaskLength != 0">{{
+        uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
+      }}</span>
+      <img src="img/svg/common/task-list.svg" alt="" width="54" />
+    </div>
+    <div class="file-container" v-if="inFolder">
+      <!-- Operation Tab -->
+      <div class="operation-tab d-flex">
+        <!-- Upload Btn -->
+        <v-btn color="primary" rounded @click="handleClickUpload">
+          <img src="img/svg/upload.svg" width="16" />
+          <span class="ml-2">Upload</span>
+        </v-btn>
 
-          <!-- Create New Folder  -->
+        <!-- Create New Folder  -->
+        <v-btn
+          class="ml-5"
+          rounded
+          outlined
+          :disabled="folderLen >= 20"
+          @click="addFolder"
+        >
+          <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
+          <img src="img/svg/add0.svg" width="12" />
+          <span class="ml-2">New Folder</span>
+        </v-btn>
+        <!-- Fragments Btn -->
+        <v-btn class="ml-5" rounded outlined @click="drawer = true">
+          <img src="img/svg/parts_icon.svg" width="12" />
+          <span class="ml-2">Fragments</span>
+        </v-btn>
+        <e-menu offset-y open-on-hover :disabled="!selected.length">
           <v-btn
+            slot="ref"
             class="ml-5"
             rounded
             outlined
-            :disabled="folderLen >= 20"
-            @click="addFolder"
+            :disabled="!selected.length"
           >
-            <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
-            <img src="img/svg/add0.svg" width="12" />
-            <span class="ml-2">New Folder</span>
+            <!-- <v-icon>mdi-dots-vertical</v-icon> -->
+            <span>Actions</span>
+            <v-icon size="18">mdi-chevron-down</v-icon>
           </v-btn>
-          <!-- Fragments Btn -->
-          <v-btn class="ml-5" rounded outlined @click="drawer = true">
-            <img src="img/svg/parts_icon.svg" width="12" />
-            <span class="ml-2">Fragments</span>
-          </v-btn>
-          <e-menu offset-y open-on-hover :disabled="!selected.length">
-            <v-btn
-              slot="ref"
-              class="ml-5"
-              rounded
-              outlined
-              :disabled="!selected.length"
-            >
-              <!-- <v-icon>mdi-dots-vertical</v-icon> -->
-              <span>Actions</span>
-              <v-icon size="18">mdi-chevron-down</v-icon>
-            </v-btn>
-            <v-list dense>
-              <template v-if="selected.length == 1">
-                <!-- <v-list-item :to="getPath(selected[0])"> Open </v-list-item> -->
-                <template v-if="selected[0].isFile">
-                  <v-list-item :href="getViewUrl(selected[0])" target="_blank">
-                    <img
-                      src="img/icon/ic-download.svg"
-                      width="15"
-                      class="mr-2"
-                    />
-                    <span class="gray-7">Download</span>
-                  </v-list-item>
-                  <v-list-item
-                    link
-                    v-clipboard="getViewUrl(selected[0])"
-                    @success="onCopied"
-                  >
-                    <img src="img/icon/ic-copy.svg" width="14" class="mr-2" />
-                    <span class="gray-7">Copy Path</span>
-                  </v-list-item>
-                  <v-list-item link @click="onRename(selected[0].name)">
-                    <img src="img/icon/ic-rename.svg" width="14" class="mr-2" />
-                    <span class="gray-7">Rename</span>
-                  </v-list-item>
-                  <v-list-item
-                    link
-                    @click="onSyncAR(selected[0].name)"
-                    v-if="!bucketInfo.isAr && selectArStatus != 'synced'"
-                  >
-                    <img src="img/icon/ic-ar.svg" width="14" class="mr-2" />
-                    <span class="gray-7">Sync to AR</span>
-                  </v-list-item>
-                </template>
+          <v-list dense>
+            <template v-if="selected.length == 1">
+              <!-- <v-list-item :to="getPath(selected[0])"> Open </v-list-item> -->
+              <template v-if="selected[0].isFile">
+                <v-list-item :href="getViewUrl(selected[0])" target="_blank">
+                  <img src="img/icon/ic-download.svg" width="15" class="mr-2" />
+                  <span class="gray-7">Download</span>
+                </v-list-item>
+                <v-list-item
+                  link
+                  v-clipboard="getViewUrl(selected[0])"
+                  @success="onCopied"
+                >
+                  <img src="img/icon/ic-copy.svg" width="14" class="mr-2" />
+                  <span class="gray-7">Copy Path</span>
+                </v-list-item>
+                <v-list-item link @click="onRename(selected[0].name)">
+                  <img src="img/icon/ic-rename.svg" width="14" class="mr-2" />
+                  <span class="gray-7">Rename</span>
+                </v-list-item>
+                <v-list-item
+                  link
+                  @click="onSyncAR(selected[0].name)"
+                  v-if="!bucketInfo.isAr && selectArStatus != 'synced'"
+                >
+                  <img src="img/icon/ic-ar.svg" width="14" class="mr-2" />
+                  <span class="gray-7">Sync to AR</span>
+                </v-list-item>
               </template>
-              <v-list-item link @click="onDelete()">
-                <img src="img/icon/ic-delete.svg" width="14" class="mr-2" />
-                <span class="red-2">Delete</span>
-              </v-list-item>
-            </v-list>
-          </e-menu>
-          <!-- Selected Files -->
-          <div class="selected-content d-flex al-c ml-auto">
-            <span class="selected-title mr-2">Selected:</span>
-            <span class="selected-count" style="letter-spacing: 4px"
-              >{{ selected.length }}/{{ list.length }}</span
-            >
-          </div>
-          <!-- Search-Input -->
-          <div class="ml-5" style="min-width: 150px">
-            <v-text-field
-              class="hide-msg bd-1"
-              dense
-              rounded
-              solo
-              clearable
-              label="Search"
-              prepend-inner-icon="mdi-magnify"
-              v-model="searchKey"
-            ></v-text-field>
-          </div>
-          <bucket-parts-list
-            v-model="drawer"
-            :pathInfo="pathInfo"
-          ></bucket-parts-list>
+            </template>
+            <v-list-item link @click="onDelete()">
+              <img src="img/icon/ic-delete.svg" width="14" class="mr-2" />
+              <span class="red-2">Delete</span>
+            </v-list-item>
+          </v-list>
+        </e-menu>
+        <!-- Selected Files -->
+        <div class="selected-content d-flex al-c ml-auto">
+          <span class="selected-title mr-2">Selected:</span>
+          <span class="selected-count" style="letter-spacing: 4px"
+            >{{ selected.length }}/{{ list.length }}</span
+          >
         </div>
-        <!-- Files Table -->
-        <v-data-table
-          class="hide-bdb"
-          :headers="headers"
-          :items="list"
-          :loading="tableLoading"
-          v-model="selected"
-          :show-select="list.length > 0"
-          item-key="name"
-          no-data-text=""
-          loading-text=""
-          :checkbox-color="$color1"
-          hide-default-footer
-          disable-pagination
-          @click:row="onRow"
-        >
-          <template v-slot:item.name="{ item }">
-            <v-btn color="#000" rounded text x-small @click.stop="onRow(item)">
-              <v-icon v-if="!item.isFile" size="18" class="mr-2"
-                >mdi-folder</v-icon
-              >
-              <b>{{ item.name.cutStr(10, 10) }}</b></v-btn
+        <!-- Search-Input -->
+        <div class="ml-5" style="min-width: 150px">
+          <v-text-field
+            class="hide-msg bd-1"
+            dense
+            rounded
+            solo
+            clearable
+            label="Search"
+            prepend-inner-icon="mdi-magnify"
+            v-model="searchKey"
+          ></v-text-field>
+        </div>
+        <bucket-parts-list
+          v-model="drawer"
+          :pathInfo="pathInfo"
+        ></bucket-parts-list>
+      </div>
+      <!-- Files Table -->
+      <v-data-table
+        class="hide-bdb"
+        :headers="headers"
+        :items="list"
+        :loading="tableLoading"
+        v-model="selected"
+        :show-select="list.length > 0"
+        item-key="name"
+        no-data-text=""
+        loading-text=""
+        :checkbox-color="$color1"
+        hide-default-footer
+        disable-pagination
+        @click:row="onRow"
+      >
+        <template v-slot:item.name="{ item }">
+          <v-btn color="#000" rounded text x-small @click.stop="onRow(item)">
+            <v-icon v-if="!item.isFile" size="18" class="mr-2"
+              >mdi-folder</v-icon
             >
-            <v-btn
-              icon
-              small
-              color="primary"
-              v-if="item.isFile && bucketInfo.originList.length"
-              @click.stop="onStop"
-              :href="getViewUrl(item)"
-              target="_blank"
-            >
-              <img src="img/svg/view.svg" width="14" />
-            </v-btn>
-          </template>
-          <template v-slot:item.domain="{ item }">
-            <div v-if="item.domainInfo">
-              <span>{{ item.domainInfo.domain.cutStr(10, 20) }}</span>
-            </div>
-          </template>
-          <template v-slot:item.hash="{ item }">
-            <v-btn
-              rounded
-              color="primary"
-              x-small
-              text
-              target="_blank"
-              v-if="item.hash"
-              @click.stop="onStop"
-              :href="`https://${item.hash}.ipfs.dweb.link`"
-            >
-              <span class="d-ib" style="width: 80px">
-                {{ item.hash.cutStr(5, 4) }}
-              </span>
-            </v-btn>
-            <v-btn
-              v-if="item.hash"
-              icon
-              small
-              @click.stop="onStop"
-              v-clipboard="item.hash"
-              @success="$toast('Copied to clipboard !')"
-            >
-              <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
-              <img src="img/svg/copy.svg" width="12" />
-            </v-btn>
-          </template>
-          <template v-slot:item.arAct="{ item }">
-            <div class="hide-msg d-flex al-c">
-              <v-switch
-                v-model="item.isAr"
-                dense
-                :loading="item.arLoading"
-                :disabled="item.arLoading || item.arCancel"
-                @click.stop.prevent="onSyncBucket(item)"
-              ></v-switch>
-              <e-tooltip top v-if="item.arCancel && !tableLoading">
-                <v-btn slot="ref" plain x-small @click.stop="getList">
-                  <v-icon>mdi-refresh</v-icon>
-                </v-btn>
-                <span>Closing. Click to refresh.</span>
-              </e-tooltip>
-            </div>
-          </template>
-          <template v-slot:item.arStatus="{ item }">
-            <sync-state :val="item.arStatus"></sync-state>
-          </template>
-        </v-data-table>
-        <!-- Loading Img -->
-        <div
-          class="ta-c"
-          :class="tableLoading ? 'mt-10' : 'mt-15'"
-          v-if="!list.length"
-        >
-          <img
-            :src="`img/svg/common/empty${tableLoading ? 1 : 2}.svg`"
-            :height="tableLoading ? 100 : 130"
-          />
-          <div class="mt-5 gray fz-17">
-            {{
-              tableLoading ? "Loading files..." : "No folders or files found"
-            }}
+            <b>{{ item.name.cutStr(10, 10) }}</b></v-btn
+          >
+          <v-btn
+            icon
+            small
+            color="primary"
+            v-if="item.isFile && bucketInfo.originList.length"
+            @click.stop="onStop"
+            :href="getViewUrl(item)"
+            target="_blank"
+          >
+            <img src="img/svg/view.svg" width="14" />
+          </v-btn>
+        </template>
+        <template v-slot:item.domain="{ item }">
+          <div v-if="item.domainInfo">
+            <span>{{ item.domainInfo.domain.cutStr(10, 20) }}</span>
           </div>
+        </template>
+        <template v-slot:item.hash="{ item }">
+          <v-btn
+            rounded
+            color="primary"
+            x-small
+            text
+            target="_blank"
+            v-if="item.hash"
+            @click.stop="onStop"
+            :href="`https://${item.hash}.ipfs.dweb.link`"
+          >
+            <span class="d-ib" style="width: 80px">
+              {{ item.hash.cutStr(5, 4) }}
+            </span>
+          </v-btn>
+          <v-btn
+            v-if="item.hash"
+            icon
+            small
+            @click.stop="onStop"
+            v-clipboard="item.hash"
+            @success="$toast('Copied to clipboard !')"
+          >
+            <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
+            <img src="img/svg/copy.svg" width="12" />
+          </v-btn>
+        </template>
+        <template v-slot:item.arAct="{ item }">
+          <div class="hide-msg d-flex al-c">
+            <v-switch
+              v-model="item.isAr"
+              dense
+              :loading="item.arLoading"
+              :disabled="item.arLoading || item.arCancel"
+              @click.stop.prevent="onSyncBucket(item)"
+            ></v-switch>
+            <e-tooltip top v-if="item.arCancel && !tableLoading">
+              <v-btn slot="ref" plain x-small @click.stop="getList">
+                <v-icon>mdi-refresh</v-icon>
+              </v-btn>
+              <span>Closing. Click to refresh.</span>
+            </e-tooltip>
+          </div>
+        </template>
+        <template v-slot:item.arStatus="{ item }">
+          <sync-state :val="item.arStatus"></sync-state>
+        </template>
+      </v-data-table>
+      <!-- Loading Img -->
+      <div
+        class="ta-c"
+        :class="tableLoading ? 'mt-10' : 'mt-15'"
+        v-if="!list.length"
+      >
+        <img
+          :src="`img/svg/common/empty${tableLoading ? 1 : 2}.svg`"
+          :height="tableLoading ? 100 : 130"
+        />
+        <div class="mt-5 gray fz-17">
+          {{ tableLoading ? "Loading files..." : "No folders or files found" }}
         </div>
       </div>
     </div>
@@ -223,7 +215,7 @@
         ref="bucketUpload"
         :info="pathInfo"
         :baseUrl="bucketInfo.originList[0]"
-        @handleBackFolder="inUpload = false"
+        @handleBackFolder="handleBackFolder"
       ></bucket-upload>
     </div>
     <!-- Upload/Delete Folders Component -->
@@ -351,10 +343,6 @@ export default {
   },
 
   methods: {
-    // async getList() {
-    //   this.tableLoading = true;
-    //   this.getObjects();
-    // },
     onCopied() {
       this.$toast("Copied to clipboard !");
     },
@@ -362,6 +350,7 @@ export default {
       this.inUpload = true;
     },
     onRouteChange() {
+      if (!this.inStorage || this.inFile) return;
       this.selected = [];
       this.folderList = [];
       this.getList();
@@ -471,6 +460,11 @@ export default {
     },
     handleDeleteFolderRemoveAll() {
       this.deleteFoldersTasks = [];
+    },
+    handleBackFolder() {
+      this.inUpload = false;
+      console.log("handleBackFolder");
+      this.getList();
     },
     isUploading(value) {
       this.taskIsUploading = value;
