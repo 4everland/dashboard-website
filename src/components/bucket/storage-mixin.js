@@ -642,15 +642,16 @@ export default {
               html = `The following files will be permanently deleted, but files in AR can’t be deleted from the AR network, and your AR storage space will not increase. Would you like to continue?`;
               await this.$confirm(html, `Remove ${target}`);
             }
+
+            this.deleteFolder = true;
+            this.addDeleteFolderTask(2);
+            this.processDeleteFolderTask();
             await this.delObjects(
               hasFile.map((it) => {
                 return { Key: it.Key };
               })
             );
             this.getList();
-            this.deleteFolder = true;
-            this.addDeleteFolderTask(2);
-            this.processDeleteFolderTask();
           } else if (hasFile.length && !hasFolder.length) {
             // only file
             if (hasFile.filter((it) => it.arStatus != "desynced").length) {
