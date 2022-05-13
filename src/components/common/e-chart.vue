@@ -1,5 +1,10 @@
 <template>
-  <div ref="chart"></div>
+  <div
+    ref="chart"
+    :style="{
+      height,
+    }"
+  ></div>
 </template>
 
 <script>
@@ -8,11 +13,18 @@ import * as echarts from "echarts";
 export default {
   props: {
     option: Array,
+    height: {
+      type: String,
+      default: "300px",
+    },
   },
   watch: {
     option() {
       this.setData();
     },
+  },
+  mounted() {
+    this.setData();
   },
   methods: {
     setData() {
