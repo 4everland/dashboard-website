@@ -2,6 +2,7 @@
   <div
     ref="chart"
     :style="{
+      width,
       height,
     }"
   ></div>
@@ -12,7 +13,11 @@ import * as echarts from "echarts";
 
 export default {
   props: {
-    option: Array,
+    option: null,
+    width: {
+      type: String,
+      default: "100%",
+    },
     height: {
       type: String,
       default: "300px",
@@ -24,7 +29,9 @@ export default {
     },
   },
   mounted() {
-    this.setData();
+    this.$nextTick(() => {
+      this.setData();
+    });
   },
   methods: {
     setData() {
