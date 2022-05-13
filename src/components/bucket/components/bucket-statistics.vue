@@ -40,4 +40,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.statistics-container {
+  .tips {
+    padding: 10px 0;
+    font-size: 14px;
+    color: #ff6960;
+    line-height: 20px;
+    background: #fff2f2;
+    border-radius: 6px;
+  }
+}
 </style>

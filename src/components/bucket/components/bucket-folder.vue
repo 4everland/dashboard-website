@@ -491,6 +491,7 @@ export default {
   background: #fff;
   .task-list {
     position: fixed;
+    z-index: 999;
     bottom: 80px;
     right: 20px;
     color: #34a9ff;
