@@ -15,7 +15,7 @@
       <img src="img/svg/common/task-list.svg" alt="" width="54" />
     </div>
 
-    <div class="d-flex nowrap ov-a btn-wrap mt-5" v-if="!inUpload">
+    <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
       <div v-show="inBucket">
         <v-btn color="primary" @click="addBucket">
           <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
@@ -646,8 +646,12 @@ export default {
       const Prefix = arr.slice(index + 2).join("/");
       const deleteFoldersArr = this.selected.filter((it) => {
         const currentFolderName = Prefix + it.name + "/";
+        const currentBucketName = this.pathInfo.Bucket;
         let isExist = this.deleteFoldersTasks.findIndex((item) => {
-          return item.param.Prefix == currentFolderName;
+          return (
+            item.param.Prefix == currentFolderName &&
+            item.param.Bucket == currentBucketName
+          );
         });
         if (isExist !== -1) {
           let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);

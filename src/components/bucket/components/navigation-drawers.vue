@@ -544,8 +544,9 @@ export default {
     },
     handleClearRecords(id) {
       let index = this.tasks.findIndex((it) => it.id == id);
-      this.tasks.splice(index, 1);
-
+      if (index !== -1) {
+        this.tasks.splice(index, 1);
+      }
       bus.$emit("handleClearRecords", id);
     },
     handleCancelUpload(id) {
