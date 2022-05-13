@@ -60,18 +60,18 @@ export default {
           _auth: 1,
         },
       });
-      console.log(data);
       if (data.res) {
         this.githubName = data.github.name;
         this.showDialog = true;
       }
     },
     async bind() {
+      let walletAddress = JSON.parse(localStorage.userInfo).wallet.address;
       const { data } = await this.$http.post(
         "/bind",
         {
           type: 1,
-          apply: localStorage.userInfo.username,
+          apply: walletAddress,
         },
         {
           params: {
