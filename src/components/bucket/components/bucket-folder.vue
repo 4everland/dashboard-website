@@ -87,8 +87,10 @@
           </e-menu>
           <!-- Selected Files -->
           <div class="selected-content d-flex al-c ml-auto">
-            <span class="selected-title">Selected:</span>
-            <span class="selected-count">{{ selected.length }}/100</span>
+            <span class="selected-title mr-2">Selected:</span>
+            <span class="selected-count" style="letter-spacing: 4px"
+              >{{ selected.length }}/{{ list.length }}</span
+            >
           </div>
           <!-- Search-Input -->
           <div class="ml-5" style="min-width: 150px">
