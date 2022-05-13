@@ -2,35 +2,20 @@
   <div class="overview-container">
     <div class="basic-statistics">
       <h3>Basic Statistics</h3>
-      <div
-        class="
-          basic-statistics-content
-          d-flex
-          align-center
-          justify-space-around
-        "
-      >
-        <div class="basic-statistics-item first-item">
-          <span class="item-title">Storage Usage</span>
-          <span class="item-data">87.92</span>
-        </div>
-        <div class="basic-statistics-item">
-          <span class="item-title">Past 30 days of traf</span>
-          <span class="item-data">87.92 B</span>
-        </div>
-        <div class="basic-statistics-item">
-          <span class="item-title">Past 30 days of visi</span>
-          <span class="item-data">3,213</span>
-        </div>
-        <div class="basic-statistics-item">
-          <span class="item-title">Files</span>
-          <span class="item-data">1,674</span>
-        </div>
-        <div class="basic-statistics-item">
-          <span class="item-title">Parts</span>
-          <span class="item-data">0</span>
-        </div>
-      </div>
+      <v-row class="basic-statistics-content">
+        <v-col
+          v-for="item in basicStatisticsData"
+          :key="item.name"
+          xl=""
+          lg=""
+          md=""
+          cols="auto"
+          class="basic-statistics-item"
+        >
+          <span class="item-title">{{ item.name }}</span>
+          <span class="item-data">{{ item.data }}</span>
+        </v-col>
+      </v-row>
     </div>
     <div class="domain-names">
       <h3>Domain Names</h3>
@@ -51,28 +36,73 @@
     </div>
     <div class="basic-settings">
       <h3>Basic Settings</h3>
-      <div class="basic-settings-content">
-        <div class="basic-settings-item">
+      <v-row class="basic-settings-content">
+        <v-col
+          lg="6"
+          xl="6"
+          md="6"
+          sm="12"
+          cols="12"
+          class="basic-settings-item"
+        >
           <span class="item-title">Created At</span>
           <span class="item-data">Mar 21, 2022, 14:55</span>
-        </div>
-        <div class="basic-settings-item">
+        </v-col>
+        <v-col
+          lg="6"
+          xl="6"
+          md="6"
+          sm="12"
+          cols="12"
+          class="basic-settings-item"
+        >
           <span class="item-title">Sync to AR</span>
           <span class="item-data">ON</span>
-        </div>
-        <div class="basic-settings-item">
+        </v-col>
+        <v-col
+          lg="6"
+          xl="6"
+          md="6"
+          sm="12"
+          cols="12"
+          class="basic-settings-item"
+        >
           <span class="item-title">Custom Domain</span>
-          <span class="item-data">Mar 21, 2022, 14:55</span>
-        </div>
-        <div class="basic-settings-item">
+          <span class="item-data mr-2">hahahha.link</span>
+          <e-menu offset-y offset-x open-on-hover>
+            <v-btn slot="ref" color="warning" elevation="0" x-small rounded
+              >+1</v-btn
+            >
+            <div class="bg-white pd-10 fz-14">
+              <p>2323</p>
+              <p>2323</p>
+              <p>2323</p>
+            </div>
+          </e-menu>
+        </v-col>
+        <v-col
+          lg="6"
+          xl="6"
+          md="6"
+          sm="12"
+          cols="12"
+          class="basic-settings-item"
+        >
           <span class="item-title">Storage Class</span>
           <span class="item-data">IPFS</span>
-        </div>
-        <div class="basic-settings-item">
+        </v-col>
+        <v-col
+          lg="6"
+          xl="6"
+          md="6"
+          sm="12"
+          cols="12"
+          class="basic-settings-item"
+        >
           <span class="item-title">Access Control List (ACL)</span>
           <span class="item-data">Mar 21, 2022, 14:55</span>
-        </div>
-      </div>
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>
@@ -81,7 +111,7 @@
 export default {
   data() {
     return {
-      tableLoading: true,
+      tableLoading: false,
       headers: [
         { text: "Type", value: "type" },
         { text: "Bucket Domain Name", value: "name" },
@@ -101,6 +131,13 @@ export default {
           isHttps: "Supported",
           isGlobalNetwork: "Supported",
         },
+      ],
+      basicStatisticsData: [
+        { name: "Storage Usage", data: "87.92" },
+        { name: "Past 30 days of traf", data: "87.92 B" },
+        { name: "Past 30 days of visi", data: "87.92" },
+        { name: "Files", data: "87.92" },
+        { name: "Parts", data: "87.92" },
       ],
     };
   },
@@ -125,7 +162,6 @@ export default {
         position: relative;
         display: flex;
         flex-direction: column;
-        width: 20%;
         padding-left: 20px;
         font-size: 14px;
         color: #6c7789;
@@ -139,7 +175,7 @@ export default {
           line-height: 35px;
         }
       }
-      .basic-statistics-item:not(.first-item)::before {
+      .basic-statistics-item::before {
         content: "";
         display: block;
         position: absolute;
@@ -150,21 +186,22 @@ export default {
         height: 29px;
         background: #d0dae9;
       }
+      .basic-statistics-item:first-of-type::before {
+        display: none;
+      }
     }
   }
 
   .basic-settings {
     .basic-settings-content {
-      display: flex;
-      flex-wrap: wrap;
       .basic-settings-item {
-        width: 50%;
+        // width: 50%;
         padding: 20px 0;
         color: #0b0817;
-        font-size: 16px;
+        font-size: 14px;
         .item-title {
           display: inline-block;
-          width: 200px;
+          // width: 200px;
           color: #6c7789;
         }
         .item-data {
