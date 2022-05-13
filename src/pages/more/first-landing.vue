@@ -62,17 +62,30 @@
       {{ netTip }}
     </v-alert>
     <div class="ta-r">
-      <v-btn
-        class="mr-5"
-        small
-        :color="errAccount ? 'error' : 'primary'"
-        @click="setAddr"
-      >
-        <v-icon size="16" class="mr-1" v-if="ethAddr">mdi-wallet</v-icon>
-        <span>{{
-          ethAddr ? ethAddr.cutStr(6, 4) : "Submit Wallet Address"
-        }}</span>
-      </v-btn>
+      <e-menu open-on-hover offset-y>
+        <v-btn
+          slot="ref"
+          class="mr-5"
+          small
+          :color="errAccount ? 'error' : 'primary'"
+          @click="setAddr"
+        >
+          <v-icon size="16" class="mr-1" v-if="ethAddr">mdi-wallet</v-icon>
+          <span>{{ ethAddr ? ethAddr.cutStr(6, 4) : "Wallet Address" }}</span>
+        </v-btn>
+        <v-list dense>
+          <v-list-item
+            link
+            @click="ethAddr = it.address"
+            v-for="(it, i) in walletList"
+            :key="i"
+          >
+            <span :class="{ 'color-1': it.address == ethAddr }">{{
+              it.address.cutStr(6, 4)
+            }}</span>
+          </v-list-item>
+        </v-list>
+      </e-menu>
       <v-btn
         color="primary"
         small
@@ -270,6 +283,7 @@ export default {
       isNetOk: false,
       netTip: "",
       noChange: true,
+      walletList: [],
     };
   },
   watch: {
@@ -284,14 +298,37 @@ export default {
         this.addSymbol();
       }
     },
-    connectAddr(val) {
-      if (val) this.getClaimInfo();
+    // connectAddr(val) {
+    //   if (val) this.getClaimInfo();
+    // },
+    ethAddr() {
+      this.getList();
     },
   },
   created() {
-    this.getList();
+    this.getAddr();
   },
   methods: {
+    async getAddr0() {
+      try {
+        const { data } = await this.$http2.get("/activity/ethAddress");
+        this.ethAddr = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getAddr() {
+      try {
+        const { data } = await this.$http2.get("/activity/ethAddress/list");
+        console.log(data);
+        this.walletList = data;
+        if (data.length) {
+          this.ethAddr = data[0].address;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getClaimInfo() {
       console.log("get claim info");
       try {
@@ -485,14 +522,6 @@ export default {
       );
       return source.join(".");
     },
-    async getAddr() {
-      try {
-        const { data } = await this.$http2.get("/activity/ethAddress");
-        this.ethAddr = data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async setAddr() {
       if (this.noChange) {
         let tip = this.myEthAddr;
@@ -563,13 +592,11 @@ export default {
     async getList() {
       try {
         this.loading = true;
-        // const { data: status } = await this.$http2.get("/activity/status");
-        // this.$setState({
-        //   actStatus: status,
-        // });
+        const params = {};
+        if (this.ethAddr) params.address = this.ethAddr;
         let {
-          data: { myRewards: rows, poolD2E: rest, totalRewards },
-        } = await this.$http2.get("/activity/rewards");
+          data: { myRewards: rows = [], poolD2E: rest, totalRewards },
+        } = await this.$http2.get("/activity/rewards", { params });
         const list = [];
         this.claimAmount = totalRewards;
         for (const row of rows) {
@@ -598,8 +625,6 @@ export default {
           });
         }
         this.list = list;
-
-        this.getAddr();
         this.getClaimInfo();
       } catch (error) {
         console.log(error);
