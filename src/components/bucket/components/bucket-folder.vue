@@ -14,13 +14,9 @@
           <!-- Upload Btn -->
           <v-btn color="primary" rounded @click="handleClickUpload">
             <img src="img/svg/upload.svg" width="16" />
-            <span>Upload</span>
+            <span class="ml-2">Upload</span>
           </v-btn>
-          <!-- Fragments Btn -->
-          <v-btn class="ml-5" rounded outlined @click="drawer = true">
-            <img src="img/svg/parts_icon.svg" width="12" />
-            <span>Fragments</span>
-          </v-btn>
+
           <!-- Create New Folder  -->
           <v-btn
             class="ml-5"
@@ -32,6 +28,11 @@
             <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
             <img src="img/svg/add0.svg" width="12" />
             <span class="ml-2">New Folder</span>
+          </v-btn>
+          <!-- Fragments Btn -->
+          <v-btn class="ml-5" rounded outlined @click="drawer = true">
+            <img src="img/svg/parts_icon.svg" width="12" />
+            <span class="ml-2">Fragments</span>
           </v-btn>
           <e-menu offset-y open-on-hover :disabled="!selected.length">
             <v-btn
