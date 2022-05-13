@@ -12,7 +12,7 @@ import * as echarts from "echarts";
 
 export default {
   props: {
-    option: Array,
+    option: null,
     height: {
       type: String,
       default: "300px",
