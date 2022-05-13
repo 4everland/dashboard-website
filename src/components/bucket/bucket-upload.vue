@@ -1,8 +1,12 @@
 <template>
   <div class="uploder-container">
     <div class="files-upload-container">
-      <div @click="handleBackFolder">back</div>
-      <h3 class="title">Files to Upload</h3>
+      <div class="al-c mb-4">
+        <v-btn icon @click="handleBackFolder">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
+        <h3 class="title ml-2">Files to Upload</h3>
+      </div>
       <!-- upload-area -->
       <div class="files-to-upload">
         <input-upload v-model="files" ref="uploadInput"></input-upload>
@@ -553,7 +557,7 @@ export default {
   background: #ffffff;
 
   .title {
-    margin-bottom: 13px;
+    margin-bottom: 0;
     font-size: 18px;
     color: #0b0817;
   }
