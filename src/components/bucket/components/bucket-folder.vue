@@ -141,11 +141,11 @@
             <img src="img/svg/view.svg" width="14" />
           </v-btn>
         </template>
-        <template v-slot:item.domain="{ item }">
+        <!-- <template v-slot:item.domain="{ item }">
           <div v-if="item.domainInfo">
             <span>{{ item.domainInfo.domain.cutStr(10, 20) }}</span>
           </div>
-        </template>
+        </template> -->
         <template v-slot:item.hash="{ item }">
           <v-btn
             rounded

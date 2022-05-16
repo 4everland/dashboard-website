@@ -70,35 +70,6 @@
           </e-menu>
         </template>
       </div>
-      <!-- <div v-show="inFolder">
-        <v-btn color="primary" @click="handleClickUpload">
-          <img src="img/svg/upload.svg" width="16" />
-          <span class="ml-2">Upload</span>
-        </v-btn>
-        <v-btn class="ml-5" outlined @click="drawer = true">
-          <img src="img/svg/add0.svg" width="12" />
-          <span class="ml-2">Parts</span>
-        </v-btn>
-
-        <v-btn
-          class="ml-5"
-          outlined
-          :disabled="folderLen >= 20"
-          @click="addFolder"
-        >
-          <img src="img/svg/add0.svg" width="12" />
-          <span class="ml-2">New Folder</span>
-        </v-btn>
-        <v-btn class="ml-5" outlined @click="drawer = true">
-          <v-icon size="15">mdi-folder-plus-outline</v-icon>
-          <img src="img/svg/parts_icon.svg" width="12" />
-          <span class="ml-2">Fragments</span>
-        </v-btn>
-        <bucket-parts-list
-          v-model="drawer"
-          :pathInfo="pathInfo"
-        ></bucket-parts-list>
-      </div> -->
 
       <e-menu
         offset-y
@@ -159,9 +130,9 @@
           </v-list-item>
         </v-list>
       </e-menu>
-
+      <nav-item unit="Objects" class="ml-auto">{{ list.length }}</nav-item>
       <div
-        :class="asMobile ? 'ml-5' : 'ml-auto'"
+        :class="asMobile ? 'ml-5' : 'ml-16'"
         v-if="!inFile && !inFolder"
         style="min-width: 150px"
       >
@@ -401,6 +372,20 @@
         <template v-slot:item.arStatus="{ item }">
           <sync-state :val="item.arStatus" v-if="item.isFile"></sync-state>
         </template>
+
+        <template v-slot:item.visits>
+          <v-sparkline
+            :gradient="['#4BA6FF', '#9FDCFF']"
+            :line-width="2"
+            :padding="8"
+            :smooth="false"
+            :value="[
+              0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0, 1, 3, 2, 5, 3, 1,
+              10, 2, 5, 6, 7, 4, 2, 10, 0,
+            ]"
+            auto-draw
+          ></v-sparkline>
+        </template>
       </v-data-table>
       <div
         class="ta-c"
@@ -420,8 +405,6 @@
         </div>
       </div>
     </div>
-    <!-- Bucket-item -->
-
     <!-- v-intersect="onLoadMore" -->
     <div v-if="inFolder && !finished" class="pd-20 gray ta-c fz-16 mt-5">
       <v-btn outlined rounded v-if="list.length" @click="onLoadMore">{{
@@ -460,6 +443,7 @@ export default {
           { text: "Domain", value: "defDomain" },
           { text: "CreateAt", value: "createAt" },
           { text: "Sync to AR", value: "arAct" },
+          { text: "Past 30 days of visits", value: "visits" },
         ];
       return [
         { text: "Name", value: "name" },

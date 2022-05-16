@@ -466,7 +466,7 @@ export default {
         data.objects.sort((a, b) => {
           return (b.prefix ? 1 : 0) - (a.prefix ? 1 : 0);
         });
-        // console.log(data);
+        console.log(data, 111);
         let list = data.objects.map((it) => {
           if (it.prefix)
             return {
