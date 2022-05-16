@@ -14,7 +14,7 @@
           {{ githubName }}
         </div>
         <div class="text-center">
-          <v-btn rounded color="#fff" class="mr-8" @click="showDialog = false"
+          <v-btn rounded color="#fff" class="mr-8" @click="createNew"
             >Create new</v-btn
           >
           <v-btn rounded color="#34A9FF" class="white--text" @click="bind"
@@ -64,6 +64,14 @@ export default {
         this.githubName = data.github.name;
         this.showDialog = true;
       }
+    },
+    async createNew() {
+      await this.$http.get("/flc/done", {
+        params: {
+          _auth: 1,
+        },
+      });
+      this.showDialog = false;
     },
     async bind() {
       let walletAddress = JSON.parse(localStorage.userInfo).wallet.address;
