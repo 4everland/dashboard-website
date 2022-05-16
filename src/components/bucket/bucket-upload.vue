@@ -362,13 +362,15 @@ export default {
               this.specifiedDir +
               webkitRelativePath,
           },
-          this.baseUrl +
-            "/" +
-            (this.curDir == "Specified" ? "" : this.info.Prefix) +
-            this.specifiedDir +
-            (this.curDir == "Specified" ? "/" : "") +
-            webkitRelativePath +
-            file.name
+          encodeURI(
+            this.baseUrl +
+              "/" +
+              (this.curDir == "Specified" ? "" : this.info.Prefix) +
+              this.specifiedDir +
+              (this.curDir == "Specified" ? "/" : "") +
+              webkitRelativePath +
+              file.name
+          )
         );
       });
       // console.log(newTasks);
