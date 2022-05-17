@@ -52,27 +52,34 @@
 </style>
 <template>
   <div class="act-wrap1">
-    <v-alert
-      border="bottom"
-      colored-border
-      type="error"
-      elevation="2"
-      v-if="netTip"
-    >
-      {{ netTip }}
-    </v-alert>
     <div class="ta-r">
-      <v-btn
-        class="mr-5"
-        small
-        :color="errAccount ? 'error' : 'primary'"
-        @click="setAddr"
-      >
-        <v-icon size="16" class="mr-1" v-if="ethAddr">mdi-wallet</v-icon>
-        <span>{{
-          ethAddr ? ethAddr.cutStr(6, 4) : "Submit Wallet Address"
-        }}</span>
-      </v-btn>
+      <e-menu open-on-hover offset-y :disabled="walletList.length <= 1">
+        <v-btn
+          slot="ref"
+          class="mr-5"
+          small
+          :color="errAccount ? 'error' : 'primary'"
+          @click="setAddr"
+        >
+          <v-icon size="16" class="mr-1" v-if="ethAddr">mdi-wallet</v-icon>
+          <span>{{ ethAddr ? ethAddr.cutStr(6, 4) : "Wallet Address" }}</span>
+          <v-icon size="16" class="ml-1" v-if="walletList.length > 1"
+            >mdi-chevron-down</v-icon
+          >
+        </v-btn>
+        <v-list dense>
+          <v-list-item
+            link
+            @click="ethAddr = it.address"
+            v-for="(it, i) in walletList"
+            :key="i"
+          >
+            <span :class="{ 'color-1': it.address == ethAddr }">{{
+              it.address.cutStr(6, 4)
+            }}</span>
+          </v-list-item>
+        </v-list>
+      </e-menu>
       <v-btn
         color="primary"
         small
@@ -109,7 +116,7 @@
           <h3>My Rewards</h3>
         </div>
         <div class="ov-a mt-5 gray-3 ta-c">
-          <div class="ml-5 nowrap d-flex">
+          <div class="ml-5 nowrap d-flex" v-if="list.length">
             <div
               class="
                 bg-white
@@ -161,6 +168,11 @@
               </div>
             </div>
           </div>
+          <div v-else class="ta-c gray-7">
+            Event ended. No records found for this wallet address({{
+              ethAddr.cutStr(6, 4)
+            }})
+          </div>
         </div>
         <div class="ta-c mt-10">
           <v-btn
@@ -185,9 +197,10 @@
       </div>
     </div>
 
-    <act-dapp ref="dapp" :tip="list[4].tip" />
-
-    <act-invite ref="invite" :tip="list[3].tip" />
+    <div v-if="!loading">
+      <act-dapp ref="dapp" :tip="(list[4] || {}).tip" />
+      <act-invite ref="invite" :tip="(list[3] || {}).tip" />
+    </div>
   </div>
 </template>
 
@@ -209,15 +222,12 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-    myEthAddr() {
-      return this.ethAddr || this.connectAddr;
-    },
     claimBtnTxt() {
       return this.isClaimed ? "Claimed" : "Claim Now";
     },
     errAccount() {
       if (!this.ethAddr) return false;
-      return this.connectAddr.toLowerCase() != this.ethAddr.toLowerCase();
+      return this.connectAddr != this.ethAddr;
     },
   },
   data() {
@@ -268,8 +278,8 @@ export default {
       isClaimed: !!localStorage.is_claimed3,
       claimAmount: 0,
       isNetOk: false,
-      netTip: "",
       noChange: true,
+      walletList: [],
     };
   },
   watch: {
@@ -284,14 +294,36 @@ export default {
         this.addSymbol();
       }
     },
-    connectAddr(val) {
-      if (val) this.getClaimInfo();
+    // connectAddr(val) {
+    //   if (val) this.getClaimInfo();
+    // },
+    ethAddr() {
+      this.getList();
     },
   },
   created() {
-    this.getList();
+    this.getAddr();
   },
   methods: {
+    async getAddr0() {
+      try {
+        const { data } = await this.$http2.get("/activity/ethAddress");
+        this.ethAddr = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getAddr() {
+      try {
+        const { data } = await this.$http2.get("/activity/ethAddress/list");
+        this.walletList = data;
+        if (data.length) {
+          this.ethAddr = data[0].address;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getClaimInfo() {
       console.log("get claim info");
       try {
@@ -300,7 +332,7 @@ export default {
         this.$loading();
         const { data: info } = await this.$http2.get("/firstland/claim-info", {
           params: {
-            addr: this.myEthAddr,
+            addr: this.ethAddr,
           },
           noTip: true,
         });
@@ -485,24 +517,14 @@ export default {
       );
       return source.join(".");
     },
-    async getAddr() {
-      try {
-        const { data } = await this.$http2.get("/activity/ethAddress");
-        this.ethAddr = data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async setAddr() {
       if (this.noChange) {
-        let tip = this.myEthAddr;
+        let tip = this.ethAddr;
         if (!this.ethAddr) {
-          tip = "Unable to set wallet adress after 21st October 2021.";
+          tip = "Disabled to set wallet adress after 21st October 2021.";
         } else if (this.errAccount) {
-          tip = `Wallet address(${this.ethAddr.cutStr(
-            6,
-            4
-          )}) is not connected in MetaMask.`;
+          this.checkNet();
+          return;
         }
         return this.$alert(tip, "Wallet Address");
       }
@@ -561,17 +583,17 @@ export default {
       }
     },
     async getList() {
+      if (!this.ethAddr) return;
       try {
         this.loading = true;
-        // const { data: status } = await this.$http2.get("/activity/status");
-        // this.$setState({
-        //   actStatus: status,
-        // });
+        const params = {
+          address: this.ethAddr,
+        };
         let {
-          data: { myRewards: rows, poolD2E: rest, totalRewards },
-        } = await this.$http2.get("/activity/rewards");
-        const list = [];
+          data: { myRewards: rows = [], poolD2E: rest, totalRewards },
+        } = await this.$http2.get("/activity/rewards", { params });
         this.claimAmount = totalRewards;
+        const list = [];
         for (const row of rows) {
           delete row.title;
           const item = this.list.filter((it) => it.type == row.type)[0];
@@ -598,8 +620,6 @@ export default {
           });
         }
         this.list = list;
-
-        this.getAddr();
         this.getClaimInfo();
       } catch (error) {
         console.log(error);
