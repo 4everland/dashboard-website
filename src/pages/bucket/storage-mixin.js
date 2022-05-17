@@ -600,7 +600,7 @@ export default {
     },
     getViewUrl(item) {
       const { Prefix } = this.pathInfo;
-      console.log(this.bucketInfo.originList[0]);
+      // console.log(this.bucketInfo.originList[0]);
       let url = this.bucketInfo.originList[0] + "/" + Prefix + item.name;
       return url.encode();
     },
@@ -609,7 +609,7 @@ export default {
     },
     onRow(it) {
       const url = this.getPath(it);
-      this.$router.push(url);
+      this.$router.push(encodeURI(url));
     },
     // async getSelectedObjects(item) {
     //   const items = item ? [item] : this.selected;
