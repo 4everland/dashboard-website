@@ -57,7 +57,6 @@ export default {
     async getInfo() {
       const { code } = this.$route.query;
       if (code) {
-        localStorage.last_github_code = code;
         return;
       }
       const { data } = await this.$http.get("/flc", {
