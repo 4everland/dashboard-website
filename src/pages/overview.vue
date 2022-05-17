@@ -12,11 +12,15 @@
       </router-link>
     </v-alert>
     <e-tabs :list="list" />
+    <new-user-tips />
   </div>
 </template>
 
 <script>
+import newUserTips from "@/components/overview/s-newUserTips.vue";
+
 export default {
+  components: { newUserTips },
   computed: {
     userInfo() {
       return this.$store.state.userInfo;

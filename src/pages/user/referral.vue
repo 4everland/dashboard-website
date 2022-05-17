@@ -131,7 +131,7 @@
               <div class="pos-r" ref="imgWrap">
                 <img
                   @load="isBgLoad = true"
-                  src="img/bg/user/refer-share.jpg"
+                  src="img/bg/user/refer-share.png"
                   style="width: 220px"
                   class="ev-n"
                 />
