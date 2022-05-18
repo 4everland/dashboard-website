@@ -14,25 +14,16 @@
           {{ githubName }}
         </div>
         <div class="text-center">
-          <v-btn rounded color="#fff" class="mr-8" @click="createNew"
+          <v-btn outlined rounded width="120" class="mr-8" @click="createNew"
             >Create new</v-btn
           >
-          <v-btn rounded color="#34A9FF" class="white--text" @click="bind"
+          <v-btn
+            rounded
+            width="120"
+            color="#34A9FF"
+            class="white--text"
+            @click="bind"
             >Bind</v-btn
-          >
-        </div>
-      </div>
-      <div></div>
-    </v-dialog>
-    <v-dialog v-model="showSuccess" max-width="680" persistent>
-      <div class="pa-10">
-        <div class="mb-6 text-body1">
-          Successfully bound your account, please login again.
-        </div>
-
-        <div class="text-center">
-          <v-btn rounded color="#34A9FF" class="white--text" @click="logout"
-            >OK</v-btn
           >
         </div>
       </div>
@@ -45,7 +36,6 @@ export default {
   data() {
     return {
       showDialog: false,
-      showSuccess: false,
       githubName: "",
     };
   },
@@ -98,7 +88,7 @@ export default {
     async checkBind() {
       const { code } = this.$route.query;
       if (!code || code == localStorage.last_github_code) return;
-      // localStorage.last_github_code = code;
+      localStorage.last_github_code = code;
       try {
         await this.$http.get(`/auth/vcode/${code}`, {
           params: {
@@ -108,7 +98,11 @@ export default {
           noTip: true,
         });
         localStorage.token = "";
-        this.showSuccess = true;
+        this.$alert(
+          " Successfully bound your account, please login again."
+        ).then(() => {
+          this.logout();
+        });
       } catch (error) {
         if (error.code == 5110) {
           this.$alert("Account verification failed").then(() => {
