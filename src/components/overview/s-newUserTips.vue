@@ -100,19 +100,17 @@ export default {
       if (!code || code == localStorage.last_github_code) return;
       // localStorage.last_github_code = code;
       try {
-        const data = await this.$http.get(`/auth/vcode/${code}`, {
+        await this.$http.get(`/auth/vcode/${code}`, {
           params: {
             _auth: 1,
             type: 1,
           },
           noTip: true,
         });
-        console.log(data);
-
         localStorage.token = "";
         this.showSuccess = true;
       } catch (error) {
-        if (error.code == 421) {
+        if (error.code == 5110) {
           this.$alert("Account verification failed").then(() => {
             var url = window.location.href;
             if (url.indexOf("?") != -1) {
