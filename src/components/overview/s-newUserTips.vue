@@ -97,15 +97,26 @@ export default {
     },
     async checkBind() {
       const { code } = this.$route.query;
+      console.log(this.$route.query);
       if (!code || code == localStorage.last_github_code) return;
       localStorage.last_github_code = code;
       try {
-        await this.$http.get(`/auth/vcode/${code}`, {
+        const data = await this.$http.get(`/auth/vcode/${code}`, {
           params: {
             _auth: 1,
             type: 1,
           },
         });
+        if (data.code == 5110) {
+          this.$alert("Account verification failed").then(() => {
+            var url = window.location.href;
+            if (url.indexOf("?") != -1) {
+              url = url.split("?")[0];
+              window.history.pushState({}, 0, url);
+            }
+          });
+          return;
+        }
         localStorage.token = "";
         this.showSuccess = true;
       } catch (error) {
