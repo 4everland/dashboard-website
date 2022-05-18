@@ -104,6 +104,7 @@ export default {
           this.logout();
         });
       } catch (error) {
+        console.log(error);
         if (error.code == 5110) {
           this.$alert("Account verification failed").then(() => {
             var url = window.location.href;
