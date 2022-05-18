@@ -15,6 +15,11 @@ export default {
       searchKey: "",
       domainsMap: {},
       inUpload: false,
+      hasMore: false,
+      curPage: 0,
+      preContinuationToken: "",
+      continuationTokenArr: [],
+      nextContinuationToken: "",
     };
   },
   computed: {
@@ -435,20 +440,43 @@ export default {
     },
     onLoadMore() {
       if (this.tableLoading) return;
-      this.loadingMore = true;
-      this.getObjects();
+      this.selected = [];
+      this.$loading();
+      this.curPage++;
+      this.getObjects("next");
     },
-    async getObjects() {
+    onLoadPre() {
+      if (this.tableLoading) return;
+      this.selected = [];
+      this.preContinuationToken = this.continuationTokenArr[this.curPage - 1];
+      this.curPage--;
+      this.$loading();
+      this.getObjects("pre");
+    },
+    async getObjects(direction) {
       this.tableLoading = true;
       let { Bucket, Prefix, Delimiter } = this.pathInfo;
-      let after = "";
-      if (this.loadingMore) {
-        const last = this.list[this.list.length - 1];
-        if (last) after = last.Key;
-        else this.loadingMore = false;
-      } else {
-        this.finished = false;
+      let continuationToken;
+      switch (direction) {
+        case "pre":
+          continuationToken = this.preContinuationToken;
+          break;
+        case "next":
+          continuationToken = this.nextContinuationToken;
+          break;
+        default:
+          continuationToken = "";
+          this.curPage = 0;
+          this.continuationTokenArr = [];
+          this.preContinuationToken = "";
+          this.nextContinuationToken = "";
+          break;
       }
+
+      // let continuationToken =
+      //   direction == "pre"
+      //     ? this.preContinuationToken
+      //     : this.nextContinuationToken;
       let pre = Prefix;
       if (this.searchKey) {
         pre += this.searchKey;
@@ -456,17 +484,23 @@ export default {
       const stream = this.s3m.extensions.listObjectsV2WithMetadataQuery(
         Bucket,
         pre,
-        "",
+        continuationToken,
         Delimiter,
         100,
-        after
+        ""
       );
       stream.on("data", (data) => {
         this.tableLoading = false;
         data.objects.sort((a, b) => {
           return (b.prefix ? 1 : 0) - (a.prefix ? 1 : 0);
         });
-        console.log(data, 111);
+        // console.log(data, 111);
+
+        this.hasMore = data.isTruncated;
+        if (this.hasMore && direction != "pre") {
+          this.continuationTokenArr.push(this.nextContinuationToken);
+          this.nextContinuationToken = data.nextContinuationToken;
+        }
         let list = data.objects.map((it) => {
           if (it.prefix)
             return {
@@ -488,19 +522,9 @@ export default {
             arHash: meta["X-Amz-Meta-Arweave-Hash"],
           };
         });
-        if (this.loadingMore) {
-          list = list.filter((it) => {
-            return (
-              this.folderList.filter((row) => row.name == it.name).length == 0
-            );
-          });
-          this.loadingMore = false;
-          this.folderList = [...this.folderList, ...list];
-        } else {
-          this.folderList = list;
-        }
-        if (list.length < 90) this.finished = true;
-        // console.log(this.pathInfo, this.folderList);
+        this.folderList = list;
+        window.scrollTo(0, 0);
+        this.$loading.close();
       });
       stream.on("error", (err) => {
         this.tableLoading = false;
@@ -651,7 +675,7 @@ export default {
                 return { Key: it.Key };
               })
             );
-            this.getList();
+            // this.getList();
           } else if (hasFile.length && !hasFolder.length) {
             // only file
             if (hasFile.filter((it) => it.arStatus != "desynced").length) {
@@ -663,7 +687,7 @@ export default {
                 return { Key: it.Key };
               })
             );
-            this.getList();
+            // this.getList();
           } else {
             // only folder
             this.deleteFolder = true;

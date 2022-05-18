@@ -141,6 +141,15 @@ export default {
       ],
     };
   },
+  created() {
+    // this.getData();
+  },
+  methods: {
+    async getData() {
+      const result = await this.$http.get("/bi/charts/line");
+      console.log(result);
+    },
+  },
 };
 </script>
 

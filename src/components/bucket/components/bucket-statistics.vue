@@ -1,14 +1,24 @@
 <template>
-  <div class="hide-msg">
-    <v-alert class="mb-5" text type="error" dense>
-      If you refresh or close the page when the folder is being deleted, the
-      displayed number of deleted files may be inaccurate.
+  <div class="hide-msg" v-if="active">
+    <v-alert class="mb-5 fz-14" text type="error" dense>
+      The data on this page is not updated in real time. These statistics are
+      for reference only.
     </v-alert>
 
     <v-card outlined>
       <div class="card-head-1">
+        <e-date-range v-model="range1" @dates="handleChangeDate" />
+      </div>
+      <div class="chart-title">Bucket</div>
+      <e-chart height="400px" :option="option1"></e-chart>
+    </v-card>
+    <v-card outlined class="mt-8">
+      <div class="card-head-1">
         <e-date-range v-model="range1" />
       </div>
+      <div class="chart-title">Traffic Usage</div>
+      <e-chart height="400px" :option="option1"></e-chart>
+      <div class="chart-title">Requests</div>
       <e-chart height="400px" :option="option1"></e-chart>
     </v-card>
   </div>
@@ -16,6 +26,14 @@
 
 <script>
 export default {
+  props: {
+    active: Boolean,
+  },
+  watch: {
+    active(newVal) {
+      console.log(newVal);
+    },
+  },
   data() {
     return {
       range1: [],
@@ -27,27 +45,68 @@ export default {
         yAxis: {
           type: "value",
         },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "none",
+          },
+          formatter: (params) => {
+            console.log(params);
+            return `<div class="pa-2" style="width: 200px">
+              <div style="color:#0B0817; height:44px;line-height:44px">Mar 11 2022 03:00</div>
+              <div>
+                <div class="d-flex justify-space-between" style="height:30px">
+                  <span style="color: #0B0817;font-size:16px">IPFS:</span>
+                  <span>91.12MB</span>
+                </div>
+                 <div  class="d-flex justify-space-between" style="height:30px">
+                  <span style="color: #0B0817;font-size:16px">AR:</span>
+                  <span>91.12MB</span>
+                </div>
+              </div>
+            </div>`;
+          },
+        },
         series: [
           {
             data: [150, 230, 224, 218, 135, 147, 260],
             type: "line",
+            symbolSize: 8,
+            // lineStyle: {
+            //   color: "#34A9FF",
+            //   width: 2,
+            // },
+            itemStyle: {
+              color: "#34A9FF",
+            },
           },
         ],
+        grid: {
+          top: "5%",
+          left: "2%",
+          right: "2%",
+          bottom: "3%",
+          containLabel: true,
+        },
       },
     };
+  },
+  methods: {
+    handleChangeDate(val) {
+      console.log(val);
+      this.range1 = val;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.statistics-container {
-  .tips {
-    padding: 10px 0;
-    font-size: 14px;
-    color: #ff6960;
-    line-height: 20px;
-    background: #fff2f2;
-    border-radius: 6px;
-  }
+.chart-title {
+  margin: 34px 0 14px 21px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #0b0817;
 }
 </style>

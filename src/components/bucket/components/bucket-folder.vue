@@ -82,14 +82,22 @@
           </v-list>
         </e-menu>
         <!-- Selected Files -->
-        <div class="selected-content d-flex al-c ml-auto">
-          <span class="selected-title mr-2">Selected:</span>
-          <span class="selected-count" style="letter-spacing: 4px"
-            >{{ selected.length }}/{{ list.length }}</span
-          >
+        <div
+          class="selected-content d-flex al-c ml-auto"
+          v-if="selected.length"
+        >
+          <div class="selected-title mr-2">Selected:</div>
+          <div>
+            <span class="selected-count"> {{ selected.length }}</span>
+            <span class="mx-1">/</span>
+            <span>{{ list.length }}</span>
+          </div>
         </div>
         <!-- Search-Input -->
-        <div class="ml-5" style="min-width: 150px">
+        <div
+          :class="selected.length ? 'ml-5' : 'ml-auto'"
+          style="min-width: 150px"
+        >
           <v-text-field
             class="hide-msg bd-1"
             dense
@@ -207,6 +215,28 @@
         <div class="mt-5 gray fz-17">
           {{ tableLoading ? "Loading files..." : "No folders or files found" }}
         </div>
+      </div>
+
+      <div class="pd-20 gray ta-c fz-16 mt-5" v-if="list.length">
+        <!-- <v-btn outlined rounded v-if="list.length" @click="onLoadMore">{{
+          loadingMore ? "Loading..." : "Load More"
+        }}</v-btn> -->
+        <v-btn
+          :disabled="curPage == 0"
+          outlined
+          rounded
+          @click="onLoadPre"
+          class="mr-5"
+          >Previous</v-btn
+        >
+        <v-btn
+          min-width="100"
+          outlined
+          rounded
+          :disabled="!hasMore"
+          @click="onLoadMore"
+          >Next</v-btn
+        >
       </div>
     </div>
     <!-- Upload Component -->
@@ -351,10 +381,10 @@ export default {
     },
     onRouteChange() {
       if (!this.inStorage || this.inFile) return;
-      this.selected = [];
-      this.folderList = [];
-      this.getList();
-      this.checkNew();
+      // this.selected = [];
+      // this.folderList = [];
+      // this.getList();
+      // this.checkNew();
     },
     addDeleteFolderTask(limit) {
       this.deleteFolderLimit = limit;
@@ -472,6 +502,7 @@ export default {
   },
   watch: {
     path() {
+      console.log("routerChange");
       this.onRouteChange();
     },
   },
@@ -514,9 +545,12 @@ export default {
     .operation-tab {
       padding: 6px 0 26px 0;
       .selected-content {
-        color: #6c7789;
+        color: #0b0817;
+        .selected-title {
+          color: #6c7789;
+        }
         .selected-count {
-          color: #0b0817;
+          color: #1e8e3e;
         }
       }
     }

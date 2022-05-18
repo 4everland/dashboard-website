@@ -405,7 +405,6 @@
         </div>
       </div>
     </div>
-    <!-- v-intersect="onLoadMore" -->
     <div v-if="inFolder && !finished" class="pd-20 gray ta-c fz-16 mt-5">
       <v-btn outlined rounded v-if="list.length" @click="onLoadMore">{{
         loadingMore ? "Loading..." : "Load More"
@@ -423,8 +422,7 @@ export default {
       popUpload: false,
       fileLoading: true,
       fileInfo: null,
-      finished: false,
-      loadingMore: false,
+
       drawer: false,
       deleteFolder: false,
       deleteFoldersTasks: [],
