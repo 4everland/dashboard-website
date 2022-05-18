@@ -105,6 +105,7 @@ export default {
           params: {
             _auth: 1,
             type: 1,
+            noTip: true,
           },
         });
         if (data.code == 5110) {
