@@ -104,6 +104,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { BigNumber } from "ethers";
 
 export default {
   props: {
