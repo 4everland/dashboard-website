@@ -381,10 +381,10 @@ export default {
     },
     onRouteChange() {
       if (!this.inStorage || this.inFile) return;
-      // this.selected = [];
-      // this.folderList = [];
-      // this.getList();
-      // this.checkNew();
+      this.selected = [];
+      this.folderList = [];
+      this.getList();
+      this.checkNew();
     },
     addDeleteFolderTask(limit) {
       this.deleteFolderLimit = limit;

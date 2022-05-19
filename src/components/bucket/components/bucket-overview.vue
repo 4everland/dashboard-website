@@ -3,17 +3,27 @@
     <div class="basic-statistics">
       <h3>Basic Statistics</h3>
       <v-row class="basic-statistics-content">
+        <v-col v-if="!basicStatisticsData.length">
+          <v-skeleton-loader type="article"></v-skeleton-loader>
+        </v-col>
+
         <v-col
           v-for="item in basicStatisticsData"
           :key="item.name"
-          xl=""
-          lg=""
-          md=""
-          cols="auto"
+          sm
+          cols
           class="basic-statistics-item"
         >
-          <span class="item-title">{{ item.name }}</span>
-          <span class="item-data">{{ item.data }}</span>
+          <div class="item-title">{{ item.name }}</div>
+          <div class="item-data">
+            <span>{{
+              typeof item.value == "object" ? item.value.num : item.value
+            }}</span>
+            <span v-if="item.value != 'object'" class="item-unit ml-2 fz-14">{{
+              item.value.unit
+            }}</span>
+          </div>
+          <!-- <span class="item-data">{{ typeof item.value == 'Object' ? item.value. : }}</span> -->
         </v-col>
       </v-row>
     </div>
@@ -37,36 +47,15 @@
     <div class="basic-settings">
       <h3>Basic Settings</h3>
       <v-row class="basic-settings-content">
-        <v-col
-          lg="6"
-          xl="6"
-          md="6"
-          sm="12"
-          cols="12"
-          class="basic-settings-item"
-        >
+        <v-col md="6" sm="12" cols="12" class="basic-settings-item">
           <span class="item-title">Created At</span>
           <span class="item-data">Mar 21, 2022, 14:55</span>
         </v-col>
-        <v-col
-          lg="6"
-          xl="6"
-          md="6"
-          sm="12"
-          cols="12"
-          class="basic-settings-item"
-        >
+        <v-col md="6" cols="12" class="basic-settings-item">
           <span class="item-title">Sync to AR</span>
           <span class="item-data">ON</span>
         </v-col>
-        <v-col
-          lg="6"
-          xl="6"
-          md="6"
-          sm="12"
-          cols="12"
-          class="basic-settings-item"
-        >
+        <v-col md="6" cols="12" class="basic-settings-item">
           <span class="item-title">Custom Domain</span>
           <span class="item-data mr-2">hahahha.link</span>
           <e-menu offset-y offset-x open-on-hover>
@@ -80,25 +69,11 @@
             </div>
           </e-menu>
         </v-col>
-        <v-col
-          lg="6"
-          xl="6"
-          md="6"
-          sm="12"
-          cols="12"
-          class="basic-settings-item"
-        >
+        <v-col md="6" cols="12" class="basic-settings-item">
           <span class="item-title">Storage Class</span>
           <span class="item-data">IPFS</span>
         </v-col>
-        <v-col
-          lg="6"
-          xl="6"
-          md="6"
-          sm="12"
-          cols="12"
-          class="basic-settings-item"
-        >
+        <v-col md="6" cols="12" class="basic-settings-item">
           <span class="item-title">Access Control List (ACL)</span>
           <span class="item-data">Mar 21, 2022, 14:55</span>
         </v-col>
@@ -109,9 +84,11 @@
 
 <script>
 export default {
+  props: {
+    active: Boolean,
+  },
   data() {
     return {
-      tableLoading: false,
       headers: [
         { text: "Type", value: "type" },
         { text: "Bucket Domain Name", value: "name" },
@@ -132,28 +109,115 @@ export default {
           isGlobalNetwork: "Supported",
         },
       ],
-      basicStatisticsData: [
-        { name: "Storage Usage", data: "87.92" },
-        { name: "Past 30 days of traf", data: "87.92 B" },
-        { name: "Past 30 days of visi", data: "87.92" },
-        { name: "Files", data: "87.92" },
-        { name: "Parts", data: "87.92" },
-      ],
+
+      bucketName: "",
+      basicStatisticsData: [],
+      tableLoading: true,
     };
   },
   created() {
-    // this.getData();
+    console.log(this.$route.path.split("/")[3]);
+    this.bucketName = this.$route.path.split("/")[3];
+    this.getData();
   },
   methods: {
-    async getData() {
-      const result = await this.$http.get("/bi/charts/line");
-      console.log(result);
+    getData() {
+      this.getBasicStatisticsData();
+      this.getDomainData();
+      this.getExtraData();
+    },
+    async getBasicStatisticsData() {
+      try {
+        const { data } = await this.$http.get(
+          `/bi/overview/${this.bucketName}`
+        );
+        for (const item in data) {
+          switch (item) {
+            case "storageUsage":
+              console.log(this.basicStatisticsData);
+              this.basicStatisticsData.push({
+                name: "Storage Usage",
+                value: this.$utils.getFileSize(data[item], true),
+              });
+              break;
+            case "trafficPast30d":
+              this.basicStatisticsData.push({
+                name: "Past 30 days of traffic",
+                value: this.$utils.getFileSize(data[item], true),
+              });
+              break;
+            case "visitsPast30d":
+              this.basicStatisticsData.push({
+                name: "Past 30 days of visits",
+                value: data[item],
+              });
+              break;
+            case "files":
+              this.basicStatisticsData.push({
+                name: "Files",
+                value: data[item],
+              });
+              break;
+            default:
+              this.basicStatisticsData.push({
+                name: "Parts",
+                value: data[item],
+              });
+              break;
+          }
+        }
+      } catch (error) {
+        console.log(error, "err");
+      }
+    },
+    async getDomainData() {
+      try {
+        const { data } = await this.$http({
+          url: "/domains",
+          methods: "get",
+          params: {
+            name: this.bucketName,
+            displaySysAssign: 1,
+          },
+        });
+        this.tableLoading = false;
+        this.domainList = data;
+        console.log(data, "domainData-0-----");
+      } catch (err) {
+        console.log(err, "err");
+      }
+    },
+    async getExtraData() {
+      try {
+        const { data } = await this.$http({
+          url: "/buckets/extra",
+          methods: "get",
+          params: {
+            name: this.bucketName,
+          },
+        });
+        console.log(data, "extraData-0-----");
+      } catch (err) {
+        console.log(err, "err");
+      }
+    },
+  },
+  watch: {
+    active(value) {
+      if (value) {
+        this.tableLoading = true;
+        this.basicStatisticsData = {};
+        this.getData();
+      }
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.row {
+  margin: 0;
+}
 .overview-container {
   .basic-statistics,
   .domain-names,
@@ -162,6 +226,7 @@ export default {
     margin-bottom: 30px;
     border-radius: 10px;
     border: 1px solid #d0dae9;
+    box-sizing: border-box;
   }
   .basic-statistics {
     background: #f8fafb;
@@ -182,6 +247,9 @@ export default {
           color: #ff8833;
           font-size: 30px;
           line-height: 35px;
+          .item-unit {
+            color: #0b0817;
+          }
         }
       }
       .basic-statistics-item::before {
@@ -203,6 +271,7 @@ export default {
 
   .basic-settings {
     .basic-settings-content {
+      margin: 0;
       .basic-settings-item {
         // width: 50%;
         padding: 20px 0;

@@ -43,6 +43,10 @@ const MON_T = 30 * 86400 * 1000;
 export default {
   props: {
     val: String,
+    dayType: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -111,10 +115,11 @@ export default {
       return isOk;
     },
     onInput(val) {
-      if (val == "24h") {
+      if (val == "24h" && !this.dayType) {
         this.$emit("dates", val);
         return;
       }
+
       const mat = /^(\d+)(\D)$/.exec(val);
       let start, end;
       if (mat) {

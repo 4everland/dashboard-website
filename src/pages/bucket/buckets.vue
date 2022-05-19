@@ -1,6 +1,6 @@
 <template>
   <div>
-    <keep-alive>
+    <keep-alive v-if="inFolder || inFile">
       <e-tabs v-if="inFolder" :list="list" noRouter />
     </keep-alive>
     <storage v-if="!inFolder" />
@@ -33,6 +33,9 @@ export default {
     },
     inFolder() {
       return this.path !== "/bucket/storage/" && /\/$/.test(this.path);
+    },
+    inFile() {
+      return !/\/$/.test(this.path);
     },
   },
 };
