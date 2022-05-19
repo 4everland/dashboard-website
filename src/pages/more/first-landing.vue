@@ -53,33 +53,18 @@
 <template>
   <div class="act-wrap1">
     <div class="ta-r">
-      <e-menu open-on-hover offset-y :disabled="walletList.length <= 1">
-        <v-btn
-          slot="ref"
-          class="mr-5"
-          small
-          :color="errAccount ? 'error' : 'primary'"
-          @click="setAddr"
+      <v-btn
+        class="mr-5"
+        small
+        :color="errAccount ? 'error' : 'primary'"
+        @click="setAddr"
+      >
+        <v-icon size="16" class="mr-1">mdi-wallet</v-icon>
+        <span>{{ ethAddr ? ethAddr.cutStr(6, 4) : "Connect Wallet" }}</span>
+        <v-icon size="16" class="ml-1" v-if="walletList.length > 1"
+          >mdi-chevron-down</v-icon
         >
-          <v-icon size="16" class="mr-1" v-if="ethAddr">mdi-wallet</v-icon>
-          <span>{{ ethAddr ? ethAddr.cutStr(6, 4) : "Wallet Address" }}</span>
-          <v-icon size="16" class="ml-1" v-if="walletList.length > 1"
-            >mdi-chevron-down</v-icon
-          >
-        </v-btn>
-        <v-list dense>
-          <v-list-item
-            link
-            @click="ethAddr = it.address"
-            v-for="(it, i) in walletList"
-            :key="i"
-          >
-            <span :class="{ 'color-1': it.address == ethAddr }">{{
-              it.address.cutStr(6, 4)
-            }}</span>
-          </v-list-item>
-        </v-list>
-      </e-menu>
+      </v-btn>
       <v-btn
         color="primary"
         small
@@ -294,15 +279,15 @@ export default {
         this.addSymbol();
       }
     },
-    // connectAddr(val) {
-    //   if (val) this.getClaimInfo();
-    // },
+    connectAddr(val) {
+      this.ethAddr = val;
+    },
     ethAddr() {
       this.getList();
     },
   },
   created() {
-    this.getAddr();
+    this.getList();
   },
   methods: {
     async getAddr0() {
@@ -313,7 +298,7 @@ export default {
         console.log(error);
       }
     },
-    async getAddr() {
+    async getAddr1() {
       try {
         const { data } = await this.$http2.get("/activity/ethAddress/list");
         this.walletList = data;
@@ -518,55 +503,11 @@ export default {
       return source.join(".");
     },
     async setAddr() {
-      if (this.noChange) {
-        let tip = this.ethAddr;
-        if (!this.ethAddr) {
-          tip = "Disabled to set wallet adress after 21st October 2021.";
-        } else if (this.errAccount) {
-          this.checkNet();
-          return;
-        }
-        return this.$alert(tip, "Wallet Address");
-      }
-      const tip =
-        "Submit your ETH Address, rewards available at the end of the 4EVERLAND FirstLanding.";
-      let value = "";
-      try {
-        const data = await this.$prompt(tip, "Prompt", {
-          hideTitle: true,
-          defaultValue: this.ethAddr,
-          inputAttrs: {
-            label: "Wallet Adress",
-            require: true,
-            placeholder: "Enter your wallet address",
-            rules: [
-              (v) =>
-                this.$regMap.eth.test(v) ||
-                "Please enter correct eth wallet address.",
-            ],
-            required: true,
-          },
-        });
-        value = data.value;
-      } catch (error) {
+      if (!this.ethAddr || this.errAccount) {
+        this.checkNet();
         return;
       }
-      if (value == this.ethAddr) {
-        return;
-      }
-      try {
-        console.log(value);
-        this.$loading();
-        await this.$http2.put(`/activity/bind/eth/${value}`);
-        this.$loading.close();
-        this.$toast(`${!this.ethAddr ? "Added" : "Updated"} successfully`);
-        this.ethAddr = value;
-        await this.getAddr();
-      } catch (error) {
-        console.log(error);
-        this.setAddr();
-      }
-      this.$loading.close();
+      this.$alert(this.ethAddr, "Wallet Address");
     },
     onClick(row) {
       let { type, link } = row;
@@ -583,12 +524,13 @@ export default {
       }
     },
     async getList() {
-      if (!this.ethAddr) return;
+      // if (!this.ethAddr) return;
       try {
         this.loading = true;
-        const params = {
-          address: this.ethAddr,
-        };
+        const params = {};
+        if (this.ethAddr) {
+          params.address = this.ethAddr;
+        }
         let {
           data: { myRewards: rows = [], poolD2E: rest, totalRewards },
         } = await this.$http2.get("/activity/rewards", { params });
