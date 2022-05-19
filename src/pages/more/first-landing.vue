@@ -212,7 +212,7 @@ export default {
     },
     errAccount() {
       if (!this.ethAddr) return false;
-      return this.connectAddr != this.ethAddr;
+      return this.connectAddr.toLowerCase() != this.ethAddr.toLowerCase();
     },
   },
   data() {
