@@ -119,7 +119,15 @@ export default {
         this.$emit("dates", val);
         return;
       }
-
+      if (val == "24h" && this.dayType) {
+        const data = new Date().getToday();
+        let end = data * 1;
+        let start = end - 24 * 60 * 60 * 1000;
+        return this.$emit("dates", [
+          parseInt(start / 1e3),
+          parseInt(end / 1e3),
+        ]);
+      }
       const mat = /^(\d+)(\D)$/.exec(val);
       let start, end;
       if (mat) {

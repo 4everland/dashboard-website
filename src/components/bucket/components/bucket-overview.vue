@@ -116,7 +116,7 @@ export default {
     };
   },
   created() {
-    console.log(this.$route.path.split("/")[3]);
+    // console.log(this.$route.path.split("/")[3]);
     this.bucketName = this.$route.path.split("/")[3];
     this.getData();
   },
@@ -134,7 +134,7 @@ export default {
         for (const item in data) {
           switch (item) {
             case "storageUsage":
-              console.log(this.basicStatisticsData);
+              // console.log(this.basicStatisticsData);
               this.basicStatisticsData.push({
                 name: "Storage Usage",
                 value: this.$utils.getFileSize(data[item], true),
@@ -182,7 +182,7 @@ export default {
         });
         this.tableLoading = false;
         this.domainList = data;
-        console.log(data, "domainData-0-----");
+        // console.log(data, "domainData-0-----");
       } catch (err) {
         console.log(err, "err");
       }
@@ -196,7 +196,7 @@ export default {
             name: this.bucketName,
           },
         });
-        console.log(data, "extraData-0-----");
+        // console.log(data, "extraData-0-----");
       } catch (err) {
         console.log(err, "err");
       }
@@ -206,7 +206,7 @@ export default {
     active(value) {
       if (value) {
         this.tableLoading = true;
-        this.basicStatisticsData = {};
+        this.basicStatisticsData = [];
         this.getData();
       }
     },

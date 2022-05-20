@@ -17,14 +17,15 @@
         <e-date-range val="24h" dayType @dates="handleChangeOtherDate" />
       </div>
       <div class="chart-title">Traffic Usage</div>
-      <e-chart height="400px" :option="basicOption"></e-chart>
+      <e-chart height="400px" :option="trafficOption"></e-chart>
       <div class="chart-title">Requests</div>
-      <e-chart height="400px" :option="basicOption"></e-chart>
+      <e-chart height="400px" :option="requestsOption"></e-chart>
     </v-card>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   props: {
     active: Boolean,
@@ -36,13 +37,27 @@ export default {
   },
   data() {
     return {
-      basicOption: {
+      trafficOption: {
         xAxis: {
+          boundaryGap: false,
           type: "category",
           data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        },
-        yAxis: {
-          type: "value",
+          axisLabel: {
+            formatter: (value) => {
+              let date = new Date(Number(value));
+              if (this.overDateOverDay) {
+                return date.getMonth() + 1 + "-" + date.getDate();
+              }
+
+              return (
+                date.getHours() +
+                ":" +
+                (date.getMinutes() > 9
+                  ? date.getMinutes()
+                  : "0" + date.getMinutes())
+              );
+            },
+          },
         },
         tooltip: {
           trigger: "axis",
@@ -51,18 +66,18 @@ export default {
           },
           formatter: (params) => {
             // console.log(params);
-            return `<div class="pa-2" style="width: 200px">
-              <div style="color:#0B0817; height:44px;line-height:44px">Mar 11 2022 03:00</div>
-              <div>
-                <div class="d-flex justify-space-between" style="height:30px">
-                  <span style="color: #0B0817;font-size:16px">IPFS:</span>
-                  <span>91.12MB</span>
+            return `<div class="py-1 px-6" style="width: 200px">
+              <div style="color:#0B0817; height:44px;line-height:44px">${new Date(
+                Number(params[0].axisValue)
+              ).format()}</div>
+             <div  style="height:30px">
+                  <span class=" fz-16" style="color: #34A9FF">${
+                    this.$utils.getFileSize(params[0].value, true).num
+                  }</span>
+                  <span class="ml-1">${
+                    this.$utils.getFileSize(params[0].value, true).unit
+                  }</span>
                 </div>
-                 <div  class="d-flex justify-space-between" style="height:30px">
-                  <span style="color: #0B0817;font-size:16px">AR:</span>
-                  <span>91.12MB</span>
-                </div>
-              </div>
             </div>`;
           },
         },
@@ -71,30 +86,88 @@ export default {
             data: [150, 230, 224, 218, 135, 147, 260],
             type: "line",
             symbolSize: 8,
-            // lineStyle: {
-            //   color: "#34A9FF",
-            //   width: 2,
-            // },
             itemStyle: {
               color: "#34A9FF",
             },
           },
         ],
-        grid: {
-          top: "5%",
-          left: "2%",
-          right: "2%",
-          bottom: "3%",
-          containLabel: true,
+      },
+      requestsOption: {
+        xAxis: {
+          boundaryGap: false,
+          type: "category",
+          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          axisLabel: {
+            formatter: (value) => {
+              let date = new Date(Number(value));
+              if (this.overDateOverDay) {
+                return date.getMonth() + 1 + "-" + date.getDate();
+              }
+
+              return (
+                date.getHours() +
+                ":" +
+                (date.getMinutes() > 9
+                  ? date.getMinutes()
+                  : "0" + date.getMinutes())
+              );
+            },
+          },
         },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "none",
+          },
+          formatter: (params) => {
+            // console.log(params);
+            return `<div class="py-1 px-6" style="width: 200px">
+              <div style="color:#0B0817; height:44px;line-height:44px">${new Date(
+                Number(params[0].axisValue)
+              ).format()}</div>
+             <div  style="height:30px">
+                  <span class=" fz-16" style="color: #34A9FF">${
+                    this.$utils.getFileSize(params[0].value, true).num
+                  }</span>
+                  <span class="ml-1">${
+                    this.$utils.getFileSize(params[0].value, true).unit
+                  }</span>
+                </div>
+            </div>`;
+          },
+        },
+        series: [
+          {
+            data: [150, 230, 224, 218, 135, 147, 260],
+            type: "line",
+            symbolSize: 8,
+            itemStyle: {
+              color: "#34A9FF",
+            },
+          },
+        ],
       },
       bucketOption: {
         xAxis: {
+          boundaryGap: false,
           type: "category",
           data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-        },
-        yAxis: {
-          type: "value",
+          axisLabel: {
+            formatter: (value) => {
+              let date = new Date(Number(value));
+              if (this.bucketDateOverDay) {
+                return date.getMonth() + 1 + "-" + date.getDate();
+              }
+
+              return (
+                date.getHours() +
+                ":" +
+                (date.getMinutes() > 9
+                  ? date.getMinutes()
+                  : "0" + date.getMinutes())
+              );
+            },
+          },
         },
         tooltip: {
           trigger: "axis",
@@ -102,25 +175,30 @@ export default {
             type: "none",
           },
           formatter: (params) => {
-            // console.log(params);
-            return `<div class="pa-2" style="width: 200px">
-              <div style="color:#0B0817; height:44px;line-height:44px">Mar 11 2022 03:00</div>
-              <div>
-                <div class="d-flex justify-space-between" style="height:30px">
-                  <span style="color: #0B0817;font-size:16px">IPFS:</span>
-                  <span>91.12MB</span>
-                </div>
-                 <div  class="d-flex justify-space-between" style="height:30px">
-                  <span style="color: #0B0817;font-size:16px">AR:</span>
-                  <span>91.12MB</span>
-                </div>
-              </div>
-            </div>`;
+            let html = `<div class="py-1 px-6" style="width: 200px"><div style="color:#0B0817; height:44px;line-height:44px">${new Date(
+              Number(params[0].axisValue)
+            ).format()}</div><div>`;
+            params.forEach((item) => {
+              html += `<div class="d-flex justify-space-between" style="height:30px">
+                  <span style="color: #0B0817;font-size:16px">${
+                    item.seriesName
+                  }</span>
+                  <span class="ml-auto fz-16" style="color: #34A9FF">${
+                    this.$utils.getFileSize(item.value, true).num
+                  }</span>
+                  <span class="ml-2">${
+                    this.$utils.getFileSize(item.value, true).unit
+                  }</span>
+                </div>`;
+            });
+            html += "</div></div></div>";
+            return html;
           },
         },
         series: [
           {
-            data: [150, 230, 224, 218, 135, 147, 260],
+            name: "IPFS",
+            data: [],
             type: "line",
             symbolSize: 8,
             itemStyle: {
@@ -128,23 +206,19 @@ export default {
             },
           },
           {
+            name: "AR",
             type: "line",
             symbolSize: 8,
             itemStyle: {
               color: "#34A9FF",
             },
-            data: [150, 232, 201, 154, 190, 330, 410],
+            data: [],
           },
         ],
-        grid: {
-          top: "5%",
-          left: "2%",
-          right: "2%",
-          bottom: "3%",
-          containLabel: true,
-        },
       },
       bucket: "",
+      bucketDateOverDay: false,
+      overDateOverDay: false,
     };
   },
   created() {
@@ -152,27 +226,65 @@ export default {
   },
   methods: {
     handleChangeBucketDate(val) {
-      this.getChartData(val, "STORAGE_LINE");
+      this.getChartData(val, "STORAGE_LINE").then((res) => {
+        // console.log(res, "res");
+        if (val[1] - val[0] > 86400) {
+          this.bucketDateOverDay = true;
+        } else {
+          this.bucketDateOverDay = false;
+        }
+        this.bucketOption.xAxis.data = res.subsections;
+        this.bucketOption.series.forEach((it) => {
+          res.collections.forEach((item) => {
+            if (it.name == item.name) {
+              it.data = item.raws.map((i) => i);
+            }
+          });
+        });
+      });
     },
     handleChangeOtherDate(val) {
-      this.getChartData(val, "TRAFFIC_USAGE_LINE");
-      this.getChartData(val, "REQUESTS_LINE");
+      if (val[1] - val[0] > 86400) {
+        this.overDateOverDay = true;
+      } else {
+        this.overDateOverDay = false;
+      }
+      this.getChartData(val, "TRAFFIC_USAGE_LINE").then((res) => {
+        // console.log(res, "res");
+
+        this.trafficOption.xAxis.data = res.subsections;
+        this.trafficOption.series[0].data = res.collections[0].raws;
+      });
+      this.getChartData(val, "REQUESTS_LINE").then((res) => {
+        this.requestsOption.xAxis.data = res.subsections;
+        this.requestsOption.series[0].data = res.collections[0].raws;
+      });
     },
     async getChartData(timeArr, type) {
       try {
-        const { data } = await this.$http({
-          url: "/bi/charts/line",
+        const { data } = await axios({
+          url: "http://192.168.0.23:8080/bi/charts/line",
           methods: "get",
           params: {
-            startAt: timeArr[1],
-            endAt: timeArr[0],
+            startAt: timeArr[0] * 1000,
+            endAt: timeArr[1] * 1000,
             type,
             bucket: this.bucket,
           },
+          headers: {
+            Authorization: "Bearer " + 123456,
+          },
         });
-        console.log(data, 11111111);
-      } catch (error) {
-        console.log(error);
+        // data.subsections = data.subsections.map((it) => {
+        //   let date = new Date(it);
+        //   if (timeArr[1] - timeArr[0] > 86400) {
+        //     return date.getMonth() + 1 + "-" + date.getDate();
+        //   }
+        //   return date.getHours() + ":" + "0" + date.getMinutes();
+        // });
+        return data;
+      } catch (e) {
+        console.log(e);
       }
     },
   },

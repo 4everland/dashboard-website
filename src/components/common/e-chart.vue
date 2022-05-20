@@ -16,35 +16,7 @@ export default {
     option: {
       type: Object,
       default: () => {
-        return {
-          xAxis: {
-            type: "category",
-            data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-          },
-          yAxis: {
-            type: "value",
-          },
-          tooltip: {
-            trigger: "axis",
-            axisPointer: {
-              type: "none",
-            },
-          },
-          series: [
-            {
-              data: [150, 230, 224, 218, 135, 147, 260],
-              type: "line",
-              symbolSize: 8,
-              // lineStyle: {
-              //   color: "#34A9FF",
-              //   width: 2,
-              // },
-              itemStyle: {
-                color: "#34A9FF",
-              },
-            },
-          ],
-        };
+        return {};
       },
     },
     width: {
@@ -56,9 +28,50 @@ export default {
       default: "300px",
     },
   },
+  data() {
+    return {
+      basicOption: {
+        xAxis: {
+          boundaryGap: false,
+          type: "category",
+          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        },
+        yAxis: {
+          type: "value",
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "none",
+          },
+        },
+        series: [
+          {
+            data: [150, 230, 224, 218, 135, 147, 260],
+            type: "line",
+            symbolSize: 8,
+            itemStyle: {
+              color: "#34A9FF",
+            },
+          },
+        ],
+        grid: {
+          top: "5%",
+          left: "2%",
+          right: "2%",
+          bottom: "3%",
+          containLabel: true,
+        },
+      },
+    };
+  },
   watch: {
-    option() {
-      this.setData();
+    option: {
+      handler(data) {
+        Object.assign(this.basicOption, data);
+        this.setEchartsOption();
+      },
+      deep: true,
     },
   },
   mounted() {
@@ -80,7 +93,7 @@ export default {
       //   this.chart = echarts.init(this.$refs.chart);
 
       // }
-      this.chart.setOption(this.option);
+      this.chart.setOption(this.basicOption);
     },
   },
 };
