@@ -1,3 +1,18 @@
+<style lang="scss">
+.plat-item {
+  padding: 14px 12px;
+  background: #eef0f4;
+  cursor: pointer;
+  &:hover {
+    background: #eee;
+  }
+  &.active {
+    background: #59a8f8;
+    color: #fff;
+  }
+}
+</style>
+
 <template>
   <div v-if="info" class="hide-msg">
     <div class="main-wrap">
@@ -15,6 +30,26 @@
           {{ form.currentBranch }}
         </e-icon-link>
       </div>
+    </div>
+    <div class="main-wrap mt-5">
+      <h3>Hosting Platform</h3>
+      <v-row>
+        <v-col
+          v-for="(it, i) in platList"
+          :key="i"
+          @click="form.plat = it.name"
+        >
+          <div
+            class="d-flex al-c bdrs-3 plat-item"
+            :class="{
+              active: form.plat == it.name,
+            }"
+          >
+            <img :src="'img/svg/hosting/' + it.icon" height="30" />
+            <div class="ml-2 fw-b fz-16">{{ it.label }}</div>
+          </div>
+        </v-col>
+      </v-row>
     </div>
     <div class="main-wrap mt-5">
       <h3>Basic Configuration</h3>
@@ -193,11 +228,29 @@ export default {
         outputDirectory: "",
         hookSwitch: true,
         env: [],
+        plat: "ipfs",
       },
       buildCommandHint: "",
       scripts: null,
       rootDirList: [],
       branchList: [],
+      platList: [
+        {
+          label: "IPFS",
+          name: "ipfs",
+          icon: "h-ipfs.svg",
+        },
+        {
+          label: "Internet Computer",
+          name: "ic",
+          icon: "h-ic.svg",
+        },
+        {
+          label: "Arweave",
+          name: "ar",
+          icon: "h-ar.svg",
+        },
+      ],
     };
   },
   watch: {
