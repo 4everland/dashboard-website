@@ -79,7 +79,7 @@
             />
           </template>
           <v-row>
-            <v-col cols="12" md="5">
+            <v-col cols="12" md="6">
               <div class="d-flex al-c grow-0">
                 <v-img
                   :src="$getImgSrc(it.previewImage)"
@@ -90,30 +90,43 @@
                   class="bdrs-8 bd-1"
                 />
                 <div class="ml-5">
-                  <h3>{{ it.name }}</h3>
+                  <div class="d-flex al-c">
+                    <h3 style="min-width: 150px">{{ it.name }}</h3>
+                    <img
+                      class="ml-5"
+                      src="img/svg/hosting/h-ipfs.svg"
+                      height="20"
+                    />
+                    <span class="ml-1 fz-14">IPFS</span>
+                  </div>
                   <div class="d-flex al-c mt-4" v-if="it.repo && it.repo.id">
                     <e-icon-link
-                      class="mr-5 shrink-1"
-                      img="img/svg/hosting/m-github-1.svg"
-                      :link="it.repo.cloneUrl.replace('.git', '')"
+                      class="mr-6"
+                      img="img/svg/hosting/m-branch.svg"
+                      :link="
+                        it.repo.cloneUrl.replace(
+                          '.git',
+                          '/tree/' + it.repo.defaultBranch
+                        )
+                      "
                     >
-                      <span class="ml-1 gray-6">{{
-                        `${it.repo.namespace}/${it.repo.name}`.cutStr(30)
-                      }}</span>
+                      {{ it.repo.defaultBranch }}
                     </e-icon-link>
-                    <e-time span-class="gray-6">{{ it.repo.updateAt }}</e-time>
                   </div>
                 </div>
               </div>
             </v-col>
-            <v-col cols="4" md="2" class="d-flex al-c f-center">
-              <h-status :val="it.state"></h-status>
-            </v-col>
-            <v-col cols="8" md="5" class="d-flex al-c">
+            <v-col cols="12" md="6" class="d-flex al-c">
+              <h-status :val="it.state" class="ml-auto mr-8"></h-status>
+              <div class="mr-6">
+                <e-time span-class="gray-6 fz-14">{{
+                  it.repo.updateAt
+                }}</e-time>
+              </div>
               <v-btn
                 :to="getDetailPath(it)"
                 @click.stop="onStop"
-                class="ml-auto mr-2"
+                class="mr-3"
                 color="primary"
                 rounded
                 small
@@ -146,25 +159,38 @@
                 <rect-data :list="it.statis2" />
               </v-col> -->
             </v-row>
-            <div class="mt-5 ta-r">
-              <v-btn
-                v-if="it.taskId"
-                color="primary"
-                small
-                rounded
-                outlined
-                :to="`/hosting/build/${it.name}/${it.id}/${it.taskId}`"
-                >View Build Logs</v-btn
-              >
-              <v-btn
-                @click="onDelete(it)"
-                color="error"
-                small
-                outlined
-                rounded
-                class="ml-3"
-                >Delete</v-btn
-              >
+            <div class="mt-5 d-flex al-c f-wrap">
+              <div class="d-flex">
+                <e-icon-link
+                  class="mr-5 shrink-1"
+                  img="img/svg/hosting/m-github.svg"
+                  :link="it.repo.cloneUrl.replace('.git', '')"
+                >
+                  <span class="ml-1 gray-6">{{
+                    `${it.repo.namespace}/${it.repo.name}`.cutStr(30)
+                  }}</span>
+                </e-icon-link>
+                <e-time span-class="gray-6">{{ it.repo.updateAt }}</e-time>
+              </div>
+
+              <div class="d-flex al-c ml-auto">
+                <v-btn icon :to="getDetailPath(it, '?tab=settings')">
+                  <img src="img/svg/hosting/ic-setting.svg" width="16" />
+                </v-btn>
+                <v-btn icon class="ml-3" @click="onDelete(it)">
+                  <img src="img/svg/hosting/ic-delete.svg" width="16" />
+                </v-btn>
+                <v-btn
+                  v-if="it.taskId"
+                  color="primary"
+                  class="ml-6"
+                  small
+                  rounded
+                  outlined
+                  :to="`/hosting/build/${it.name}/${it.id}/${it.taskId}`"
+                  >View Build Logs</v-btn
+                >
+              </div>
             </div>
           </div>
         </v-expansion-panel-content>
@@ -295,8 +321,8 @@ export default {
         console.log(error);
       }
     },
-    getDetailPath(it) {
-      return `/hosting/project/${it.name}/${it.id}`;
+    getDetailPath(it, query = "") {
+      return `/hosting/project/${it.name}/${it.id}` + query;
     },
     onItem(it) {
       if (!this.limit) return;
