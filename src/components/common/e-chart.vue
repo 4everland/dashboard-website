@@ -1,11 +1,14 @@
 <template>
-  <div
-    ref="chart"
-    :style="{
-      width,
-      height,
-    }"
-  ></div>
+  <div class="echart-item">
+    <div
+      ref="chart"
+      :style="{
+        width,
+        height,
+      }"
+    ></div>
+    <div class="no-data" v-show="noData">No data available</div>
+  </div>
 </template>
 
 <script>
@@ -47,7 +50,7 @@ export default {
         },
         series: [
           {
-            data: [150, 230, 224, 218, 135, 147, 260],
+            data: [0, 0, 0, 0, 0, 0, 0],
             type: "line",
             symbolSize: 8,
             itemStyle: {
@@ -63,13 +66,27 @@ export default {
           containLabel: true,
         },
       },
+      noData: true,
     };
   },
   watch: {
     option: {
       handler(data) {
-        Object.assign(this.basicOption, data);
-        this.setEchartsOption();
+        console.log(data);
+        let basicOption = JSON.parse(JSON.stringify(this.basicOption));
+        if (data.xAxis.data.length) {
+          this.noData = false;
+          Object.assign(basicOption, data);
+          this.$nextTick(() => {
+            this.setEchartsOption(basicOption);
+          });
+        } else {
+          this.noData = true;
+          // console.log(this.basicOption, 111);
+          this.$nextTick(() => {
+            this.setEchartsOption(this.basicOption);
+          });
+        }
       },
       deep: true,
     },
@@ -85,16 +102,26 @@ export default {
       window.addEventListener("resize", () => {
         this.chart.resize();
       });
-      this.setEchartsOption();
+      this.setEchartsOption(this.basicOption);
     },
-    setEchartsOption() {
-      // if (!this.option) return;
-      // if (!this.chart) {
-      //   this.chart = echarts.init(this.$refs.chart);
-
-      // }
-      this.chart.setOption(this.basicOption);
+    setEchartsOption(finalOption) {
+      this.chart.clear();
+      this.chart.setOption(finalOption);
     },
   },
 };
 </script>
+<style lang="scss" scoped>
+.echart-item {
+  position: relative;
+  .no-data {
+    z-index: 999;
+    position: absolute;
+    padding: 50px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+  }
+}
+</style>

@@ -130,7 +130,9 @@
           </v-list-item>
         </v-list>
       </e-menu>
-      <nav-item unit="Objects" class="ml-auto">{{ list.length }}</nav-item>
+      <nav-item unit="Objects" class="ml-auto" v-if="inBucket">{{
+        list.length
+      }}</nav-item>
       <div
         :class="asMobile ? 'ml-5' : 'ml-16'"
         v-if="!inFile && !inFolder"
@@ -372,17 +374,16 @@
         <template v-slot:item.arStatus="{ item }">
           <sync-state :val="item.arStatus" v-if="item.isFile"></sync-state>
         </template>
-
-        <template v-slot:item.visits>
+        <template v-slot:item.arUsedStorage="{ item }">
+          <span>{{ item.isAr ? item.arUsedStorage : "--" }}</span>
+        </template>
+        <template v-slot:item.visitChartData="{ item }">
           <v-sparkline
             :gradient="['#4BA6FF', '#9FDCFF']"
             :line-width="2"
             :padding="8"
             :smooth="false"
-            :value="[
-              0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0, 1, 3, 2, 5, 3, 1,
-              10, 2, 5, 6, 7, 4, 2, 10, 0,
-            ]"
+            :value="item.visitChartData"
             auto-draw
           ></v-sparkline>
         </template>
@@ -438,10 +439,11 @@ export default {
       if (this.inBucket)
         return [
           { text: "Bucket Name", value: "name" },
-          { text: "Domain", value: "defDomain" },
-          { text: "CreateAt", value: "createAt" },
+          { text: "Capacity", value: "usedStorage" },
+          { text: "AR Capacity", value: "arUsedStorage" },
+          { text: "Past 30 days of traffic", value: "traffic" },
           { text: "Sync to AR", value: "arAct" },
-          { text: "Past 30 days of visits", value: "visits" },
+          { text: "Past 30 days of visits", value: "visitChartData" },
         ];
       return [
         { text: "Name", value: "name" },

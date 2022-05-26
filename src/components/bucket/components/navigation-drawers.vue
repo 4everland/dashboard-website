@@ -662,6 +662,7 @@ export default {
 }
 .change-tab .v-slide-group__content {
   background: #f8fafb;
+  padding: 0 !important;
 }
 </style>
 <style lang="scss" scoped>

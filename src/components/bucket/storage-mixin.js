@@ -118,6 +118,7 @@ export default {
     bucketInfo() {
       const { Bucket } = this.pathInfo;
       const item = this.bucketList.filter((it) => it.name == Bucket)[0];
+      console.log(item, "item-------");
       let list = (this.domainsMap[Bucket] || [])
         .filter((it) => it.valid)
         .map((it) => it.name);
@@ -567,7 +568,11 @@ export default {
           Object.assign(item, {
             isAr: row.arweave ? ar.sync : row.arweaveSync,
             arCancel: ar.status == "cancel",
-            defDomain: row.domain.domain,
+            traffic: this.$utils.getFileSize(row.monthTraffic),
+            usedStorage: this.$utils.getFileSize(row.usedStorage),
+            arUsedStorage: this.$utils.getFileSize(row.arweave.usedStorage),
+            visitChartData: row.monthVisit.map((item) => Number(item)),
+            defDomain: row.domain,
           });
         });
         // console.log(list);
@@ -722,7 +727,7 @@ export default {
     },
     onRow(it) {
       const url = this.getPath(it);
-      this.$router.push(url);
+      this.$router.push(encodeURI(url));
     },
     // async getSelectedObjects(item) {
     //   const items = item ? [item] : this.selected;
