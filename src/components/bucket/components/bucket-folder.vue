@@ -347,7 +347,6 @@ export default {
       searchKey: "",
       drawer: false,
       tableLoading: true,
-      curIdx: 1,
       vertical: false,
       headers: [
         { text: "Name", value: "name" },
