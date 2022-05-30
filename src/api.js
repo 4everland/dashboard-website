@@ -130,8 +130,15 @@ const lock = new AsyncLock({ timeout: 5000 });
         config = {},
       } = error.response || {};
       console.log(error, status, statusText);
-      let msg = data.message || error.message;
-      handleMsg(status, data.code, msg, config);
+      if (status == 205) {
+        console.log(data);
+        localStorage.authData = JSON.stringify(data.data.authData);
+        localStorage.token = data.data.authData.accessToken;
+        window.location.reload();
+      } else {
+        let msg = data.message || error.message;
+        handleMsg(status, data.code, msg, config);
+      }
       error.code = data.code;
       return Promise.reject(error);
     }
