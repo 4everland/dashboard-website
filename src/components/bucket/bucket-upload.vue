@@ -1,7 +1,12 @@
 <template>
   <div class="uploder-container">
     <div class="files-upload-container">
-      <h3 class="title">Files to Upload</h3>
+      <div class="al-c mb-4">
+        <v-btn icon @click="handleBackFolder">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
+        <h3 class="title ml-2">Files to Upload</h3>
+      </div>
       <!-- upload-area -->
       <div class="files-to-upload">
         <input-upload v-model="files" ref="uploadInput"></input-upload>
@@ -151,6 +156,7 @@
 <script>
 import { Upload } from "@aws-sdk/lib-storage";
 import { bus } from "../../main";
+
 // import { TaskWrapper } from "./task";
 class TaskWrapper {
   id;
@@ -179,11 +185,13 @@ class TaskWrapper {
       this.task.on("httpUploadProgress", (e) => {
         this.progress = ((e.loaded / e.total) * 100) | 0;
       });
+
       this.progress = 0;
       this.status = 1; // uploading
-
       await this.task.done();
       this.status = 3; // success
+
+      //---------------------
     } catch (e) {
       console.log(e.message);
       if (e.message == "Upload aborted.") {
@@ -251,7 +259,6 @@ export default {
   },
   async created() {
     await this.$store.dispatch("getUsageInfo");
-
     bus.$on("handleClearRecords", (id) => {
       let index = this.tasks.findIndex((it) => it.id == id);
       if (index !== -1) {
@@ -325,6 +332,9 @@ export default {
     },
     handleSkip(item) {
       this.page = item;
+    },
+    handleBackFolder() {
+      this.$emit("handleBackFolder");
     },
     async addTasks(files, limit) {
       this.limit = limit;
@@ -549,12 +559,10 @@ export default {
 }
 
 .files-upload-container {
-  padding: 30px;
   background: #ffffff;
-  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
 
   .title {
-    margin-bottom: 13px;
+    margin-bottom: 0;
     font-size: 18px;
     color: #0b0817;
   }
