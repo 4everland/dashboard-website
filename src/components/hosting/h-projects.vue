@@ -170,7 +170,9 @@
                     `${it.repo.namespace}/${it.repo.name}`.cutStr(30)
                   }}</span>
                 </e-icon-link>
-                <e-time span-class="gray-6">{{ it.repo.updateAt }}</e-time>
+                <e-time span-class="gray-6 fz-14">{{
+                  it.repo.updateAt
+                }}</e-time>
               </div>
 
               <div class="d-flex al-c ml-auto">
