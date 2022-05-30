@@ -1,7 +1,7 @@
 <template>
   <div class="bucket-item-container">
     <!-- Task List -->
-    <div @click="$refs.navDrawers.drawer = true" class="task-list">
+    <div @click.stop="$refs.navDrawers.drawer = true" class="task-list">
       <span class="task-count" v-show="uploadingTaskLength != 0">{{
         uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
       }}</span>
@@ -493,7 +493,6 @@ export default {
     },
     handleBackFolder() {
       this.inUpload = false;
-      console.log("handleBackFolder");
       this.getList();
     },
     isUploading(value) {
@@ -502,7 +501,6 @@ export default {
   },
   watch: {
     path() {
-      console.log("routerChange");
       this.onRouteChange();
     },
   },

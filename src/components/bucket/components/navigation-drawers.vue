@@ -4,7 +4,6 @@
       v-model="drawer"
       width="900"
       class="drawer-container ov-a"
-      stateless
       fixed
       right
       temporary

@@ -156,6 +156,7 @@
 <script>
 import { Upload } from "@aws-sdk/lib-storage";
 import { bus } from "../../main";
+
 // import { TaskWrapper } from "./task";
 class TaskWrapper {
   id;
@@ -184,11 +185,13 @@ class TaskWrapper {
       this.task.on("httpUploadProgress", (e) => {
         this.progress = ((e.loaded / e.total) * 100) | 0;
       });
+
       this.progress = 0;
       this.status = 1; // uploading
-
       await this.task.done();
       this.status = 3; // success
+
+      //---------------------
     } catch (e) {
       console.log(e.message);
       if (e.message == "Upload aborted.") {

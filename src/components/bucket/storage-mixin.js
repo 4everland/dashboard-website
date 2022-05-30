@@ -118,7 +118,7 @@ export default {
     bucketInfo() {
       const { Bucket } = this.pathInfo;
       const item = this.bucketList.filter((it) => it.name == Bucket)[0];
-      console.log(item, "item-------");
+      // console.log(item, "item-------");
       let list = (this.domainsMap[Bucket] || [])
         .filter((it) => it.valid)
         .map((it) => it.name);
@@ -365,7 +365,7 @@ export default {
     },
     renameObject(srcKey, Key) {
       const { Bucket } = this.pathInfo;
-      console.log(srcKey, Key);
+      // console.log(srcKey, Key);
       return new Promise((resolve, reject) => {
         this.s3.copyObject(
           {
@@ -394,7 +394,7 @@ export default {
       this.s3.headObject(this.pathInfo, (err, data) => {
         this.fileLoading = false;
         if (err) return this.onErr(err);
-        console.log(data);
+        // console.log(data);
         const meta = data.Metadata;
         let arStatus = meta["arweave-status"];
         if (!arStatus) {
@@ -637,14 +637,9 @@ export default {
       });
     },
     async onDelete() {
+      // this.tableLoading = true;
       try {
-        // const arr = await this.getSelectedObjects(item);
-        // if (arr.length > 1000) {
-        //   throw new Error("You can delete up to 1,000 files at a time.");
-        // }
-        // const suffix = arr.length > 1 ? "s" : "";
         const target = this.inBucket ? "bucket" : "file";
-        // let html = `The following ${target}${suffix} will be permanently deleted. Are you sure you want to continue?`;
         let html = `The following ${target}s will be permanently deleted. Are you sure you want to continue?`;
 
         if (this.inBucket) {

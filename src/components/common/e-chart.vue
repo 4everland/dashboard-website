@@ -115,7 +115,7 @@ export default {
 .echart-item {
   position: relative;
   .no-data {
-    z-index: 999;
+    z-index: 10;
     position: absolute;
     padding: 50px;
     left: 50%;
