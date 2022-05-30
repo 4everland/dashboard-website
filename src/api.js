@@ -135,6 +135,7 @@ const lock = new AsyncLock({ timeout: 5000 });
         const jsonData = JSON.parse(data.data);
         localStorage.authData = JSON.stringify(jsonData);
         localStorage.token = jsonData.accessToken;
+        localStorage.stsData1 = "";
         window.location.reload();
       } else {
         let msg = data.message || error.message;
