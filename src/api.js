@@ -130,7 +130,7 @@ const lock = new AsyncLock({ timeout: 5000 });
         config = {},
       } = error.response || {};
       console.log(error, status, statusText);
-      if (status == 205) {
+      if (status == 409) {
         console.log(data);
         localStorage.authData = JSON.stringify(data.data.authData);
         localStorage.token = data.data.authData.accessToken;
