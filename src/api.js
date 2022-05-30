@@ -132,8 +132,9 @@ const lock = new AsyncLock({ timeout: 5000 });
       console.log(error, status, statusText);
       if (status == 409) {
         console.log(data);
-        localStorage.authData = JSON.stringify(data.data.authData);
-        localStorage.token = data.data.authData.accessToken;
+        const jsonData = JSON.parse(data.data);
+        localStorage.authData = JSON.stringify(jsonData);
+        localStorage.token = jsonData.accessToken;
         window.location.reload();
       } else {
         let msg = data.message || error.message;
