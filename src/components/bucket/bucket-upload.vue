@@ -156,7 +156,7 @@
 <script>
 import { Upload } from "@aws-sdk/lib-storage";
 import { bus } from "../../main";
-
+import Vue from "vue";
 // import { TaskWrapper } from "./task";
 class TaskWrapper {
   id;
@@ -183,6 +183,7 @@ class TaskWrapper {
         params: this.param,
       });
       this.task.on("httpUploadProgress", (e) => {
+        // let progress = (e.loaded / e.total) * 100 - this.progress;
         this.progress = ((e.loaded / e.total) * 100) | 0;
       });
 
