@@ -37,7 +37,7 @@ export default {
         xAxis: {
           boundaryGap: false,
           type: "category",
-          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          data: ["", "", "", "", "", "", ""],
         },
         yAxis: {
           type: "value",
@@ -115,7 +115,7 @@ export default {
 .echart-item {
   position: relative;
   .no-data {
-    z-index: 10;
+    z-index: 1;
     position: absolute;
     padding: 50px;
     left: 50%;

@@ -221,7 +221,7 @@
                 {{ false ? `Loading files...` : `No files` }}
               </e-empty>
             </template>
-            <div class="table-footer d-flex align-center justify-center pt-6">
+            <div class="table-footer d-flex align-center justify-center py-6">
               <v-pagination
                 v-if="length > 1"
                 total-visible="10"
@@ -355,7 +355,7 @@
               {{ false ? `Loading files...` : `No folders` }}
             </e-empty>
           </template>
-          <div class="table-footer d-flex align-center justify-center pt-6">
+          <div class="table-footer d-flex align-center justify-center py-6">
             <v-pagination
               v-if="deleteFolderLength > 1"
               total-visible="10"
@@ -654,6 +654,8 @@ export default {
 </script>
 <style >
 .task-table td {
+  height: 110px !important;
+  box-sizing: border-box;
   padding: 20px !important;
   font-size: 15px !important;
   word-break: break-all;

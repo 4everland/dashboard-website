@@ -7,7 +7,12 @@
     <!-- IPFS && AR chart -->
     <v-card outlined>
       <div class="card-head-1">
-        <e-date-range val="24h" dayType @dates="handleChangeBucketDate" />
+        <e-date-range
+          class="data-range"
+          val="24h"
+          dayType
+          @dates="handleChangeBucketDate"
+        />
       </div>
       <bucket-chart
         name="IPFS"
@@ -25,7 +30,12 @@
     <!-- Traffic && Request chart -->
     <v-card outlined class="mt-8">
       <div class="card-head-1">
-        <e-date-range val="24h" dayType @dates="handleChangeOtherDate" />
+        <e-date-range
+          class="data-range"
+          val="24h"
+          dayType
+          @dates="handleChangeOtherDate"
+        />
       </div>
       <bucket-chart
         name="Traffic Usage"
@@ -44,7 +54,6 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
   props: {
     active: Boolean,
@@ -130,17 +139,14 @@ export default {
     },
     async getChartData(timeArr, type) {
       try {
-        const { data } = await axios({
-          url: "http://192.168.0.23:8080/bi/charts/line",
+        const { data } = this.$http({
+          url: " /bi/charts/line",
           methods: "get",
           params: {
             startAt: timeArr[0] * 1000,
             endAt: timeArr[1] * 1000,
             type,
             bucket: this.bucket,
-          },
-          headers: {
-            Authorization: "Bearer " + 123456,
           },
         });
         return data;
@@ -151,7 +157,11 @@ export default {
   },
 };
 </script>
-
+<style >
+.data-range .v-input {
+  margin: 0 !important;
+}
+</style>
 <style lang="scss" scoped>
 .chart-title {
   margin: 34px 0 14px 21px;

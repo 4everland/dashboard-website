@@ -637,8 +637,9 @@ export default {
       });
     },
     async onDelete() {
-      // this.tableLoading = true;
       try {
+        this.tableLoading = true;
+
         const target = this.inBucket ? "bucket" : "file";
         let html = `The following ${target}s will be permanently deleted. Are you sure you want to continue?`;
 
