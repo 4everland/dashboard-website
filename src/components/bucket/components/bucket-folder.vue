@@ -513,6 +513,9 @@ export default {
 .file-tab .v-slide-group__content {
   background: #f8fafb;
 }
+.v-data-table__mobile-row svg {
+  width: 150px;
+}
 </style>
 <style lang="scss" scoped>
 .bucket-item-container {
