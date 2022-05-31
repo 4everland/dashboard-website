@@ -217,7 +217,10 @@
         </div>
       </div>
 
-      <div class="pd-20 gray ta-c fz-16 mt-5" v-if="list.length">
+      <div
+        class="pd-20 gray ta-c fz-16 mt-5"
+        v-show="list.length == 100 || curPage !== 0"
+      >
         <!-- <v-btn outlined rounded v-if="list.length" @click="onLoadMore">{{
           loadingMore ? "Loading..." : "Load More"
         }}</v-btn> -->

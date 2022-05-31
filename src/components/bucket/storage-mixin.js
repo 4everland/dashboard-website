@@ -17,9 +17,7 @@ export default {
       inUpload: false,
       hasMore: false,
       curPage: 0,
-      preContinuationToken: "",
-      continuationTokenArr: [],
-      nextContinuationToken: "",
+      continuationTokenArr: [""],
     };
   },
   computed: {
@@ -449,7 +447,6 @@ export default {
     onLoadPre() {
       if (this.tableLoading) return;
       this.selected = [];
-      this.preContinuationToken = this.continuationTokenArr[this.curPage - 1];
       this.curPage--;
       this.$loading();
       this.getObjects("pre");
@@ -457,27 +454,7 @@ export default {
     async getObjects(direction) {
       this.tableLoading = true;
       let { Bucket, Prefix, Delimiter } = this.pathInfo;
-      let continuationToken;
-      switch (direction) {
-        case "pre":
-          continuationToken = this.preContinuationToken;
-          break;
-        case "next":
-          continuationToken = this.nextContinuationToken;
-          break;
-        default:
-          continuationToken = "";
-          this.curPage = 0;
-          this.continuationTokenArr = [];
-          this.preContinuationToken = "";
-          this.nextContinuationToken = "";
-          break;
-      }
-
-      // let continuationToken =
-      //   direction == "pre"
-      //     ? this.preContinuationToken
-      //     : this.nextContinuationToken;
+      let continuationToken = this.continuationTokenArr[this.curPage];
       let pre = Prefix;
       if (this.searchKey) {
         pre += this.searchKey;
@@ -495,13 +472,16 @@ export default {
         data.objects.sort((a, b) => {
           return (b.prefix ? 1 : 0) - (a.prefix ? 1 : 0);
         });
-        // console.log(data, 111);
-
         this.hasMore = data.isTruncated;
-        if (this.hasMore && direction != "pre") {
-          this.continuationTokenArr.push(this.nextContinuationToken);
-          this.nextContinuationToken = data.nextContinuationToken;
+        let isExist = this.continuationTokenArr.includes(
+          data.nextContinuationToken
+        );
+        if (this.hasMore && direction !== "pre" && !isExist) {
+          this.continuationTokenArr.push(data.nextContinuationToken);
         }
+        // if (direction == undefined) {
+        //   this.continuationTokenArr = [""];
+        // }
         let list = data.objects.map((it) => {
           if (it.prefix)
             return {
@@ -639,7 +619,8 @@ export default {
     async onDelete() {
       try {
         this.tableLoading = true;
-
+        this.curPage = 0;
+        this.continuationTokenArr = [""];
         const target = this.inBucket ? "bucket" : "file";
         let html = `The following ${target}s will be permanently deleted. Are you sure you want to continue?`;
 
