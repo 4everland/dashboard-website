@@ -97,13 +97,11 @@ export default {
           },
           noTip: true,
         });
-        localStorage.token = "";
-        this.$alert(
-          " Successfully bound your account, please login again."
-        ).then(() => {
-          this.logout();
+        this.$alert(" Successfully bound your account.").then(() => {
+          window.location.reload();
         });
       } catch (error) {
+        console.log(error);
         if (error.code == 5110) {
           this.$alert("Account verification failed").then(() => {
             var url = window.location.href;
