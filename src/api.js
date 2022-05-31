@@ -136,7 +136,9 @@ const lock = new AsyncLock({ timeout: 5000 });
         localStorage.authData = JSON.stringify(jsonData);
         localStorage.token = jsonData.accessToken;
         localStorage.stsData1 = "";
-        window.location.reload();
+        Vue.prototype.$alert(" Successfully bound your account.").then(() => {
+          window.location.reload();
+        });
       } else {
         let msg = data.message || error.message;
         handleMsg(status, data.code, msg, config);
