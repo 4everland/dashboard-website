@@ -383,6 +383,8 @@ export default {
     },
     onRouteChange() {
       if (!this.inStorage || this.inFile) return;
+      this.curPage = 0;
+      this.continuationTokenArr = [""];
       this.selected = [];
       this.folderList = [];
       this.getList();
