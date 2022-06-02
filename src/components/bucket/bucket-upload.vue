@@ -24,7 +24,7 @@
               flex-1
             "
           >
-            <div class="mr-3 label">Upload to:</div>
+            <div class="mr-3 label text-center">Upload to:</div>
             <div
               class="dir-container current-dir-all flex-1"
               v-if="curDir == 'Current'"
@@ -88,7 +88,7 @@
                 <p>4.A folder name must be 1 to 200 characters in length.</p>
               </e-tooltip>
             </div>
-            <div class="switch-btn">
+            <div class="switch-btn mt-3 mt-sm-0">
               <span
                 v-if="curDir !== 'Current'"
                 @click="
@@ -321,7 +321,8 @@ export default {
   methods: {
     validate(value) {
       if (value == null || value == "") return true;
-      let reg = new RegExp("^(?![/])[a-z\\d-_/\\u4E00-\\u9FA5]+(?<![/])$");
+
+      let reg = new RegExp("^[a-z\\d-_/\\u4E00-\\u9FA5]+$");
       if (reg.test(value)) {
         if (value.indexOf("//") != -1) {
           return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).";
@@ -333,6 +334,9 @@ export default {
         let folderNameMax = foldersCountMax.some((it) => it.length > 60);
         if (folderNameMax) {
           return "The maximum folder name length is 60 characters.";
+        }
+        if (value.indexOf("/", value.length - 1) != -1 || value[0] == "/") {
+          return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).";
         }
 
         return true;
@@ -520,7 +524,7 @@ export default {
   padding: 20px 0;
   .choose-dir {
     .label {
-      width: 100px;
+      min-width: 100px;
     }
     .current-dir-all {
       white-space: nowrap;
