@@ -24,7 +24,7 @@
               flex-1
             "
           >
-            <div class="mr-3">Upload to:</div>
+            <div class="mr-3 label">Upload to:</div>
             <div
               class="dir-container current-dir-all flex-1"
               v-if="curDir == 'Current'"
@@ -321,7 +321,8 @@ export default {
   methods: {
     validate(value) {
       if (value == null || value == "") return true;
-      if (/^(?![/])[a-z\d-_/\u4E00-\u9FA5]+(?<![/])$/.test(value)) {
+      let reg = new RegExp("^(?![/])[a-z\\d-_/\\u4E00-\\u9FA5]+(?<![/])$");
+      if (reg.test(value)) {
         if (value.indexOf("//") != -1) {
           return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).";
         }
@@ -516,8 +517,11 @@ export default {
 }
 
 .upload-info {
-  // padding: 20px 0;
+  padding: 20px 0;
   .choose-dir {
+    .label {
+      width: 100px;
+    }
     .current-dir-all {
       white-space: nowrap;
       overflow: hidden;
