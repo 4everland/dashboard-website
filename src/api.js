@@ -139,6 +139,7 @@ const lock = new AsyncLock({ timeout: 5000 });
 });
 
 function goLogin() {
+  console.log(1111);
   localStorage.clear();
   if (location.hash != "#/login") {
     localStorage.loginTo = location.hash;

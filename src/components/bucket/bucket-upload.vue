@@ -5,7 +5,7 @@
         <v-btn icon @click="handleBackFolder">
           <v-icon>mdi-arrow-left</v-icon>
         </v-btn>
-        <h3 class="title ml-2">Files to Upload</h3>
+        <h3 class="title ma-0 ml-2">Files to Upload</h3>
       </div>
       <!-- upload-area -->
       <div class="files-to-upload">
@@ -14,17 +14,25 @@
 
       <!-- upload-list -->
       <div class="table-container">
-        <div class="upload-info d-flex align-end">
-          <div class="choose-dir d-flex align-center flex-1">
+        <div class="upload-info d-flex flex-column flex-md-row align-md-end">
+          <div
+            class="
+              choose-dir
+              flex-column flex-sm-row
+              d-flex
+              align-center
+              flex-1
+            "
+          >
             <div class="mr-3">Upload to:</div>
             <div
-              class="dir-container current-dir-all"
+              class="dir-container current-dir-all flex-1"
               v-if="curDir == 'Current'"
             >
               {{ path }}
             </div>
             <div
-              class="dir-container d-flex"
+              class="dir-container d-flex flex-sm-grow-1"
               :class="[
                 curDir == 'Specified' ? 'choose-specified' : '',
                 isValidate ? '' : 'no-validate',
@@ -34,7 +42,7 @@
               <div class="current-dir">
                 {{ path.cutStr(10, 10) }}
               </div>
-              <div class="specified-dir" v-if="curDir !== 'Current'">
+              <div class="specified-dir flex-1" v-if="curDir !== 'Current'">
                 <v-text-field
                   ref="specifiedRef"
                   v-model="specifiedDir"
@@ -466,8 +474,12 @@ export default {
 };
 </script>
 <style>
+/* .specified-dir-input .v-text-field__details {
+  min-height: 0;
+  margin-bottom: 0;
+} */
 .specified-dir-input .v-input__control .v-input__slot {
-  width: 340px !important;
+  /* width: 340px !important; */
   box-shadow: none !important;
   font-size: 14px !important;
 }
@@ -477,7 +489,7 @@ export default {
 
 .specified-dir-input .v-input__control .v-counter {
   position: absolute;
-  right: 30px;
+  right: 35px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 14px;
@@ -486,8 +498,8 @@ export default {
 .specified-dir-input .v-input__control .v-messages {
   position: absolute;
   left: 0;
-  bottom: -20px;
-  width: 600px !important;
+  bottom: -30px;
+  width: 100%;
 }
 .tool-tip + span {
   position: absolute;
@@ -504,7 +516,7 @@ export default {
 }
 
 .upload-info {
-  padding: 20px 0;
+  // padding: 20px 0;
   .choose-dir {
     .current-dir-all {
       white-space: nowrap;
@@ -512,10 +524,14 @@ export default {
       text-overflow: ellipsis;
     }
     .dir-container {
+      width: 100%;
       position: relative;
-      width: 600px;
+      // width: 600px;
       height: 50px;
-      padding: 0 20px;
+      // padding: 0 20px;
+      margin: 20px 0;
+      padding-left: 20px;
+      padding-right: 80px;
       line-height: 50px;
       color: #79838e;
       font-size: 14px;
@@ -523,7 +539,6 @@ export default {
       border: 1px solid #d0dae9;
       background: #f8fafb;
       .current-dir {
-        width: 160px;
         padding-right: 10px;
         position: relative;
         font-size: 14px;

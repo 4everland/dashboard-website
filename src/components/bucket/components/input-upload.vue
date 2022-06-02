@@ -20,11 +20,11 @@
   border: 1px solid #d0dae9;
   .add-img {
     position: relative;
+    width: 100%;
     padding: 30px 10px;
     border: 3px dashed #ddd;
     .description {
       margin: 0 auto;
-      width: 402px;
       color: #495667;
     }
   }
@@ -45,6 +45,9 @@
     .upload-rules {
       margin-left: 17px;
       width: 400px;
+      h3 {
+        margin: 20px 0;
+      }
       > p {
         margin-top: 8px;
         font-size: 15px;
@@ -72,7 +75,7 @@
     <div class="e-upload" ref="eUpload">
       <!-- <slot></slot> -->
 
-      <div class="upload-header d-flex justify-space-between align-center">
+      <div class="upload-header al-c justify-space-between flex-wrap">
         <div class="add-img pos-r bdrs-10 drag-area">
           <div class="ta-c">
             <img src="../../../../public/img/icon/bucket_upload.svg" alt="" />
@@ -116,22 +119,26 @@
           file will be overwritten.
         </span>
       </div>
-      <div class="upload-opreation">
-        <v-btn rounded color="primary" @click="onClick(false)">
+      <div
+        class="
+          upload-opreation
+          d-flex
+          flex-wrap flex-column flex-sm-row
+          justify-center justify-sm-start
+        "
+      >
+        <v-btn
+          rounded
+          color="primary"
+          class="mr-sm-7 my-2"
+          @click="onClick(false)"
+        >
           <span>Select Files</span>
         </v-btn>
-        <v-btn rounded color="primary" class="ml-7" @click="onClick(true)">
+        <v-btn rounded color="primary" class="my-2" @click="onClick(true)">
           <span> Select Folders</span>
         </v-btn>
       </div>
-      <!-- <slot name="hint"></slot> -->
-      <!-- <p class="ta-c mt-5" v-if="!disabled">
-        <v-btn text @click="onClick">
-          <span class="gray">
-            Drag, Paste or <span class="color-1">Click to upload files</span>
-          </span>
-        </v-btn>
-      </p> -->
     </div>
     <div class="mask" v-show="isDraging" ref="dragArea"></div>
   </div>

@@ -11,12 +11,13 @@
         <v-col
           v-for="item in basicStatisticsData"
           :key="item.name"
-          sm
-          cols
+          sm="4"
+          md
+          cols="6"
           class="basic-statistics-item"
         >
-          <div class="item-title">{{ item.name }}</div>
-          <div class="item-data">
+          <div class="item-title text-center text-md-left">{{ item.name }}</div>
+          <div class="item-data text-center text-md-left">
             <span>{{
               typeof item.value == "object" ? item.value.num : item.value
             }}</span>
@@ -68,59 +69,52 @@
         v-if="JSON.stringify(extraData) == '{}'"
         class="basic-settings-content"
       >
-        <v-col
-          md="6"
-          sm="12"
-          cols="12"
-          class="basic-settings-item"
-          v-for="i in 4"
-          :key="i"
-        >
+        <v-col sm="6" cols class="basic-settings-item" v-for="i in 4" :key="i">
           <v-skeleton-loader type="sentences" class="pr-8"></v-skeleton-loader>
         </v-col>
       </v-row>
 
       <v-row class="basic-settings-content" v-else>
-        <v-col md="6" cols="12" class="basic-settings-item">
-          <span class="item-title">Created At</span>
-          <span class="item-data">{{ extraData.createdAt }}</span>
+        <v-col sm="6" cols class="basic-settings-item">
+          <e-kv label="Created At" min-width="120px" labelColor="#6c7789">{{
+            extraData.createdAt
+          }}</e-kv>
         </v-col>
-        <v-col md="6" cols="12" class="basic-settings-item">
-          <span class="item-title">Sync to AR</span>
-          <span class="item-data">{{
-            extraData.arweave.sync ? "ON" : "OFF"
-          }}</span>
-        </v-col>
-        <v-col md="6" cols="12" class="basic-settings-item">
-          <span class="item-title">Custom Domain</span>
-          <span class="item-data mr-2">{{
-            customDomainList.length ? customDomainList[0].domain : "--"
-          }}</span>
-          <e-menu
-            offset-y
-            offset-x
-            open-on-hover
-            v-if="customDomainList.length > 1"
-          >
-            <v-btn slot="ref" color="warning" elevation="0" x-small rounded
-              >+{{ customDomainList.length - 1 }}</v-btn
+        <v-col sm="6" cols class="basic-settings-item">
+          <e-kv label="Sync to AR" min-width="120px" labelColor="#6c7789">
+            <span
+              :class="extraData.arweave.sync ? 'synced-ar' : 'no-synced-ar'"
+              >{{ extraData.arweave.sync ? "ON" : "OFF" }}</span
             >
-            <v-list rounded>
-              <template v-for="(item, index) in customDomainList.slice(1)">
-                <v-list-item :key="item.bucketName" class="fz-14">
-                  {{ item.domain }}</v-list-item
-                >
-                <v-divider
-                  :key="item.bucketName"
-                  v-if="index != customDomainList.length - 2"
-                ></v-divider>
-              </template>
-            </v-list>
-          </e-menu>
+          </e-kv>
         </v-col>
-        <v-col md="6" cols="12" class="basic-settings-item">
-          <span class="item-title">Storage Class</span>
-          <span class="item-data">{{ extraData.storageClass }}</span>
+        <v-col sm="6" cols class="basic-settings-item">
+          <e-kv label="Custom Domain" min-width="120px" labelColor="#6c7789">
+            <h-domain
+              class="item-data mr-2"
+              :val="customDomainList.length ? customDomainList[0].domain : '--'"
+            />
+
+            <e-menu offset-y open-on-hover v-if="customDomainList.length > 1">
+              <v-btn slot="ref" color="warning" elevation="0" x-small rounded
+                >+{{ customDomainList.length - 1 }}</v-btn
+              >
+              <div class="bg-white pd-10 fz-14">
+                <div
+                  class="pd-5"
+                  v-for="(row, j) in customDomainList.slice(1)"
+                  :key="j"
+                >
+                  <h-domain :val="customDomainList[1 + j].domain" />
+                </div>
+              </div>
+            </e-menu>
+          </e-kv>
+        </v-col>
+        <v-col sm="6" class="basic-settings-item">
+          <e-kv label="Storage Class" min-width="120px" labelColor="#6c7789">{{
+            extraData.storageClass
+          }}</e-kv>
         </v-col>
       </v-row>
     </div>
@@ -135,10 +129,14 @@ export default {
   data() {
     return {
       headers: [
-        { text: "Type", value: "systemAllo" },
-        { text: "Bucket Domain Name", value: "domain" },
-        { text: "HTTPS", value: "isHttps" },
-        { text: "Global Edge Network", value: "globalEdgeNetwork" },
+        { text: "Type", value: "systemAllo", sortable: false },
+        { text: "Bucket Domain Name", value: "domain", sortable: false },
+        { text: "HTTPS", value: "isHttps", sortable: false },
+        {
+          text: "Global Edge Network",
+          value: "globalEdgeNetwork",
+          sortable: false,
+        },
       ],
       domainList: [],
       customDomainList: [],
@@ -322,13 +320,8 @@ export default {
         padding: 20px 0;
         color: #0b0817;
         font-size: 14px;
-        .item-title {
-          display: inline-block;
-          // width: 200px;
-          color: #6c7789;
-        }
-        .item-data {
-          margin-left: 34px;
+        .synced-ar {
+          color: #3195ff;
         }
       }
     }
