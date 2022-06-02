@@ -140,7 +140,7 @@ export default {
     async getChartData(timeArr, type) {
       try {
         const { data } = this.$http({
-          url: " /bi/charts/line",
+          url: "/bi/charts/line",
           methods: "get",
           params: {
             startAt: timeArr[0] * 1000,
