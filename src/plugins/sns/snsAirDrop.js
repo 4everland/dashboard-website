@@ -66,7 +66,7 @@ async function checkBlock(array) {
     checkBlock(Array);
   } else {
     if (length != 0) {
-      theSlotBefore = array[0].signature;
+      theSlotBefore = array[length - 1].signature;
     }
     await taskReport(theSlotBefore, theSlotAfter);
   }
