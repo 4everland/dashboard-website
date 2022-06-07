@@ -59,11 +59,16 @@ async function checkBlock(array) {
       theSlotBefore = array[beforeIndex].signature;
     }
     await taskReport(theSlotBefore, theSlotAfter);
-  } else {
+  } else if (length == 1000) {
     const signature = array[length - 1].signature;
     theSlotBefore = signature;
     const Array = await getSignaturesForAddress(signature);
     checkBlock(Array);
+  } else {
+    if (length != 0) {
+      theSlotBefore = array[0].signature;
+    }
+    await taskReport(theSlotBefore, theSlotAfter);
   }
 }
 
