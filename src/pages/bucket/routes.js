@@ -17,6 +17,7 @@ export default [
     component: ARHistory,
     meta: {
       title: "AR History",
+      isTab: 1,
     },
   },
   {
@@ -24,6 +25,7 @@ export default [
     component: Storage,
     meta: {
       title: "File - AR History",
+      isTab: 1,
     },
   },
   {
@@ -31,6 +33,7 @@ export default [
     component: Domains,
     meta: {
       title: "Domains",
+      isTab: 1,
     },
   },
   {
@@ -47,6 +50,7 @@ export default [
           text: "{name}",
         },
       ],
+      isTab: 1,
     },
   },
 ].map((it) => {
