@@ -69,7 +69,7 @@ export default {
       if (val) {
         this.showPop = false;
         const accounts = await window.web3.eth.getAccounts();
-        connectAddr = accounts[0];
+        connectAddr = accounts[0] || "";
         window.ethereum.on("chainChanged", (networkId) => {
           console.log("chainChanged", networkId);
           location.reload();
