@@ -131,13 +131,21 @@
         @click:row="onRow"
       >
         <template v-slot:item.name="{ item }">
-          <v-btn color="#000" rounded text x-small @click.stop="onRow(item)">
+          <v-btn
+            color="#000"
+            class="e-btn-text"
+            rounded
+            text
+            x-small
+            @click.stop="onRow(item)"
+          >
             <v-icon v-if="!item.isFile" size="18" class="mr-2"
               >mdi-folder</v-icon
             >
             <b>{{ item.name.cutStr(10, 10) }}</b></v-btn
           >
           <v-btn
+            class="e-btn-text"
             icon
             small
             color="primary"
@@ -146,7 +154,7 @@
             :href="getViewUrl(item)"
             target="_blank"
           >
-            <img src="img/svg/view.svg" width="14" />
+            <img src="img/svg/view.svg" width="14" class="ml-2" />
           </v-btn>
         </template>
         <!-- <template v-slot:item.domain="{ item }">
@@ -156,6 +164,7 @@
         </template> -->
         <template v-slot:item.hash="{ item }">
           <v-btn
+            class="e-btn-text item-hash"
             rounded
             color="primary"
             x-small
@@ -171,6 +180,7 @@
           </v-btn>
           <v-btn
             v-if="item.hash"
+            class="e-btn-text"
             icon
             small
             @click.stop="onStop"
@@ -178,7 +188,7 @@
             @success="$toast('Copied to clipboard !')"
           >
             <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
-            <img src="img/svg/copy.svg" width="12" />
+            <img src="img/svg/copy.svg" width="12" class="ml-2" />
           </v-btn>
         </template>
         <template v-slot:item.arAct="{ item }">
@@ -521,6 +531,23 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.e-btn-text {
+  padding: 0 !important;
+  font-weight: normal !important;
+  font-size: 14px !important;
+}
+.e-btn-text b {
+  font-weight: 500 !important;
+}
+.e-btn-text::before {
+  background: transparent !important;
+}
+.item-hash {
+  transition: all 0.1s ease-in;
+}
+.item-hash:hover {
+  opacity: 0.8;
+}
 .bucket-item-container {
   background: #fff;
   .task-list {
