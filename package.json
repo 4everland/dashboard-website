@@ -11,6 +11,7 @@
     "format": "vue-cli-service lint --format"
   },
   "dependencies": {
+    "4everland-contracts": "^0.1.4",
     "@aws-sdk/client-s3": "^3.45.0",
     "@aws-sdk/lib-storage": "^3.45.0",
     "@solana/spl-name-service": "^0.1.3",
