@@ -47,12 +47,11 @@
           </v-btn>
         </template>
       </v-data-table>
-    </div>
-
-    <div class="mt-8" v-if="!list.length">
-      <e-empty :loading="loading">
-        {{ loading ? "Loading domains..." : "No domains" }}
-      </e-empty>
+      <div class="mt-8" v-if="!list.length">
+        <e-empty :loading="loading">
+          {{ loading ? "Loading domains..." : "No domains" }}
+        </e-empty>
+      </div>
     </div>
 
     <div class="mt-6" v-if="pageLen > 1">
