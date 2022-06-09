@@ -94,12 +94,25 @@
                     <h3 style="min-width: 150px">{{ it.name }}</h3>
                     <img
                       class="ml-5"
-                      src="img/svg/hosting/h-ipfs.svg"
+                      :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
                       height="20"
                     />
-                    <span class="ml-1 fz-14">IPFS</span>
+                    <span class="ml-1 fz-14">{{ it.platform }}</span>
+                    <a
+                      class="u ml-2 fz-12 gray"
+                      :href="getHashLink(it)"
+                      target="_blank"
+                      @click.stop="onStop"
+                      v-if="it.canister"
+                    >
+                      {{ it.canister.cutStr(6, 6) }}
+                    </a>
                   </div>
-                  <div class="d-flex al-c mt-4" v-if="it.repo && it.repo.id">
+                  <div
+                    class="d-flex al-c mt-4"
+                    v-if="it.repo && it.repo.id"
+                    @click.stop="onStop"
+                  >
                     <e-icon-link
                       class="mr-6"
                       img="img/svg/hosting/m-branch.svg"
@@ -112,6 +125,7 @@
                     >
                       {{ it.repo.defaultBranch }}
                     </e-icon-link>
+                    <e-commit :info="it.commit" class="fz-14"></e-commit>
                   </div>
                 </div>
               </div>
@@ -119,9 +133,7 @@
             <v-col cols="12" md="6" class="d-flex al-c">
               <h-status :val="it.state" class="ml-auto mr-8"></h-status>
               <div class="mr-6">
-                <e-time span-class="gray-6 fz-14">{{
-                  it.repo.updateAt
-                }}</e-time>
+                <e-time span-class="gray-6 fz-14">{{ it.buildAt }}</e-time>
               </div>
               <v-btn
                 :to="getDetailPath(it)"
@@ -310,6 +322,11 @@ export default {
   },
   methods: {
     onStop() {},
+    getHashLink(it) {
+      const { platform, canister: hash } = it;
+      if (platform == "IC") return `https://${hash}.raw.ic0.app/`;
+      return this.$utils.getCidLink(hash);
+    },
     onSort(i) {
       this.sortType = i == 0 ? "Active" : "All";
       this.page = 1;
