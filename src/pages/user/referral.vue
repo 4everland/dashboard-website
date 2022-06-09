@@ -1,6 +1,6 @@
 <style lang="scss">
 .refer-header {
-  background: #2b0c74 url(https://4ever-web.4everland.store/bg/referral-bg1.png)
+  background: #2b0c74 url(https://static1.4everland.org/bg/referral-bg1.png)
     no-repeat;
   background-size: 100%;
   // .wrap-1 {
@@ -39,7 +39,7 @@
   <div class="page-refer">
     <div class="pos-r">
       <img
-        src="https://4ever-web.4everland.store/bg/referral-bg1.png"
+        src="https://static1.4everland.org/bg/referral-bg1.png"
         class="d-b w100p"
       />
       <div class="x-center" style="bottom: 20px">
