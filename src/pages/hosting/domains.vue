@@ -103,10 +103,10 @@
 
                       <img
                         class="ml-3"
-                        src="img/svg/hosting/h-ipfs.svg"
+                        :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
                         height="20"
                       />
-                      <span class="ml-1 fz-14">IPFS</span>
+                      <span class="ml-1 fz-14">{{ it.platform }}</span>
 
                       <!-- @click="onSelect(it)" -->
                       <v-btn
@@ -249,8 +249,12 @@ export default {
     },
     async getProjects() {
       try {
-        const { data } = await this.$http2.get("/project");
-        this.projects = data;
+        const { data } = await this.$http2.get("/project/v3/list", {
+          params: {
+            size: 100,
+          },
+        });
+        this.projects = data.list;
       } catch (error) {
         this.$confirm(error.message, "Error", {
           confirmText: "Retry",

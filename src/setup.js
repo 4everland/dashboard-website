@@ -113,8 +113,9 @@ Vue.prototype.$utils = {
     }
     return cid;
   },
-  getCidLink(cid) {
+  getCidLink(cid, plat) {
     if (!cid) return "";
+    if (plat == "IC") return `https://${cid}.raw.ic0.app/`;
     return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
   },
 };

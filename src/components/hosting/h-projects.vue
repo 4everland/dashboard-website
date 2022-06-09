@@ -100,12 +100,12 @@
                     <span class="ml-1 fz-14">{{ it.platform }}</span>
                     <a
                       class="u ml-2 fz-12 gray"
-                      :href="getHashLink(it)"
+                      :href="$utils.getCidLink(it.hash, it.platform)"
                       target="_blank"
                       @click.stop="onStop"
-                      v-if="it.canister"
+                      v-if="it.hash"
                     >
-                      {{ it.canister.cutStr(6, 6) }}
+                      {{ it.hash.cutStr(6, 6) }}
                     </a>
                   </div>
                   <div
@@ -322,11 +322,6 @@ export default {
   },
   methods: {
     onStop() {},
-    getHashLink(it) {
-      const { platform, canister: hash } = it;
-      if (platform == "IC") return `https://${hash}.raw.ic0.app/`;
-      return this.$utils.getCidLink(hash);
-    },
     onSort(i) {
       this.sortType = i == 0 ? "Active" : "All";
       this.page = 1;

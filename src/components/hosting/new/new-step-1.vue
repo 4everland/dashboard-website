@@ -35,14 +35,15 @@
       <h3>Hosting Platform</h3>
       <v-row>
         <v-col
+          cols="4"
           v-for="(it, i) in platList"
           :key="i"
-          @click="form.plat = it.name"
+          @click="form.platform = it.name"
         >
           <div
             class="d-flex al-c bdrs-3 plat-item"
             :class="{
-              active: form.plat == it.name,
+              active: form.platform == it.name,
             }"
           >
             <img :src="'img/svg/hosting/' + it.icon" height="30" />
@@ -228,7 +229,7 @@ export default {
         outputDirectory: "",
         hookSwitch: true,
         env: [],
-        plat: "ipfs",
+        platform: "IPFS",
       },
       buildCommandHint: "",
       scripts: null,
@@ -237,19 +238,19 @@ export default {
       platList: [
         {
           label: "IPFS",
-          name: "ipfs",
+          name: "IPFS",
           icon: "h-ipfs.svg",
         },
         {
           label: "Internet Computer",
-          name: "ic",
+          name: "IC",
           icon: "h-ic.svg",
         },
-        {
-          label: "Arweave",
-          name: "ar",
-          icon: "h-ar.svg",
-        },
+        // {
+        //   label: "Arweave",
+        //   name: "AR",
+        //   icon: "h-ar.svg",
+        // },
       ],
     };
   },
