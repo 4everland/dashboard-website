@@ -892,6 +892,11 @@ export default {
 <style lang="scss" scoped>
 .e-btn-text {
   padding: 0 !important;
+  font-weight: normal !important;
+  font-size: 14px !important;
+}
+.e-btn-text b {
+  font-weight: 500 !important;
 }
 .e-btn-text::before {
   background: transparent !important;

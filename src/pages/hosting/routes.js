@@ -82,6 +82,7 @@ export default [
     },
     meta: {
       title: "Domains",
+      isTab: 1,
     },
   },
   {
@@ -91,6 +92,7 @@ export default [
     },
     meta: {
       title: "Statistics",
+      isTab: 1,
     },
   },
   {
