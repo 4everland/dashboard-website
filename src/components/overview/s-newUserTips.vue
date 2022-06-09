@@ -14,25 +14,16 @@
           {{ githubName }}
         </div>
         <div class="text-center">
-          <v-btn rounded color="#fff" class="mr-8" @click="createNew"
+          <v-btn outlined rounded width="120" class="mr-8" @click="createNew"
             >Create new</v-btn
           >
-          <v-btn rounded color="#34A9FF" class="white--text" @click="bind"
+          <v-btn
+            rounded
+            width="120"
+            color="#34A9FF"
+            class="white--text"
+            @click="bind"
             >Bind</v-btn
-          >
-        </div>
-      </div>
-      <div></div>
-    </v-dialog>
-    <v-dialog v-model="showSuccess" max-width="680" persistent>
-      <div class="pa-10">
-        <div class="mb-6 text-body1">
-          Successfully bound your account, please login again.
-        </div>
-
-        <div class="text-center">
-          <v-btn rounded color="#34A9FF" class="white--text" @click="logout"
-            >OK</v-btn
           >
         </div>
       </div>
@@ -45,7 +36,6 @@ export default {
   data() {
     return {
       showDialog: false,
-      showSuccess: false,
       githubName: "",
     };
   },
@@ -54,9 +44,9 @@ export default {
     this.checkBind();
   },
   methods: {
-    async getInfo() {
+    async getInfo(flag) {
       const { code } = this.$route.query;
-      if (code) {
+      if (code && !flag) {
         return;
       }
       const { data } = await this.$http.get("/flc", {
@@ -105,11 +95,24 @@ export default {
             _auth: 1,
             type: 1,
           },
+          noTip: true,
         });
-        localStorage.token = "";
-        this.showSuccess = true;
+        this.$alert(" Successfully bound your account.").then(() => {
+          window.location.reload();
+        });
       } catch (error) {
         console.log(error);
+        if (error.code == 5110) {
+          this.$alert("Account verification failed").then(() => {
+            var url = window.location.href;
+            if (url.indexOf("?") != -1) {
+              url = url.split("?")[0];
+              window.history.pushState({}, 0, url);
+            }
+            this.getInfo(true);
+          });
+          return;
+        }
       }
     },
     logout() {

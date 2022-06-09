@@ -25,7 +25,7 @@
         <span class="ml-2">Delete</span>
       </v-btn>
     </div>
-    <div class="mt-4">
+    <div class="mt-4 main-wrap">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -42,6 +42,7 @@
       >
         <template v-slot:item.domain="{ item }">
           <v-btn
+            class="e-btn-text"
             :to="getPath(item)"
             :color="item.valid ? 'success' : 'error'"
             rounded
@@ -329,3 +330,16 @@ export default {
   },
 };
 </script>
+<style lang="scss" >
+.e-btn-text {
+  padding: 0 !important;
+  font-weight: normal !important;
+  font-size: 14px !important;
+}
+.e-btn-text b {
+  font-weight: 500 !important;
+}
+.e-btn-text::before {
+  background: transparent !important;
+}
+</style>

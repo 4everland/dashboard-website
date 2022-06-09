@@ -130,8 +130,19 @@ const lock = new AsyncLock({ timeout: 5000 });
         config = {},
       } = error.response || {};
       console.log(error, status, statusText);
-      let msg = data.message || error.message;
-      handleMsg(status, data.code, msg, config);
+      if (status == 409) {
+        console.log(data);
+        const jsonData = JSON.parse(data.data);
+        localStorage.authData = JSON.stringify(jsonData);
+        localStorage.token = jsonData.accessToken;
+        localStorage.stsData1 = "";
+        Vue.prototype.$alert(" Successfully bound your account.").then(() => {
+          window.location.reload();
+        });
+      } else {
+        let msg = data.message || error.message;
+        handleMsg(status, data.code, msg, config);
+      }
       error.code = data.code;
       return Promise.reject(error);
     }

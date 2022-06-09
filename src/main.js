@@ -109,7 +109,7 @@ new Vue({
             data,
           },
         });
-        console.log(name, data);
+        // console.log(name, data);
       });
     },
     async getUesrInfo() {

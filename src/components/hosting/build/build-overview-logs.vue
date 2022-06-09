@@ -16,14 +16,21 @@
     </e-toggle-card>
     <e-toggle-card
       class="mt-5"
-      title="Syncing to IPFS"
+      :title="'Syncing to ' + info.platform"
       :value="getOpen(1)"
       :icon="getIcon(1)"
     >
-      <e-kv label="IPFS Hash" v-if="info && info.cid">{{ info.cid }}</e-kv>
+      <e-kv label="IPFS Hash" v-if="info && info.hash">
+        <a
+          :href="$utils.getCidLink(info.hash, info.platform)"
+          target="_blank"
+          >{{ info.hash }}</a
+        >
+      </e-kv>
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
     <e-toggle-card
+      v-if="info.platform == 'IPFS'"
       class="mt-5"
       title="Assigning Domains"
       :value="getOpen(2)"
@@ -116,7 +123,7 @@ export default {
           `/project/task/object/${this.taskId}`
         );
         const info = data.task;
-        const { cid, state = "" } = info;
+        const { hash, state = "" } = info;
         this.state = state.toLowerCase();
         this.isDone = this.state == "success";
         info.isFail = /fail|timeout|error|cancel/.test(this.state);
@@ -126,7 +133,7 @@ export default {
         if (this.isDone) {
           this.curIdx = 2;
           this.$store.dispatch("getProjectInfo", this.info.projectId);
-        } else if (cid) {
+        } else if (hash) {
           this.curIdx = 2;
         }
       } catch (error) {
