@@ -18,8 +18,7 @@
   width: 300px;
 }
 .act-wrap1 {
-  background: url(https://4ever-web.4everland.store/bg/act/act-bg1.jpg)
-    no-repeat;
+  background: url(https://static1.4everland.org/bg/act/act-bg1.jpg) no-repeat;
   background-size: 100%;
   margin: -20px;
   padding: 20px;
@@ -75,7 +74,7 @@
     </div>
     <div class="ta-c">
       <img
-        src="https://4ever-web.4everland.store/bg/act/act-title1.png"
+        src="https://static1.4everland.org/bg/act/act-title1.png"
         :style="{
           height: asMobile ? '100px' : '250px',
         }"
@@ -89,7 +88,7 @@
 
     <div class="pos-r">
       <img
-        src="https://4ever-web.4everland.store/bg/act/act-gift.png"
+        src="https://static1.4everland.org/bg/act/act-gift.png"
         class="pos-a z-1 act-gift1"
         :style="asMobile ? 'width: 240px;top:-100px;' : ''"
       />
@@ -443,7 +442,7 @@ export default {
         this.isClaimed = true;
         this.addSymbol();
         await this.$alert(
-          '<div class="mt-5 ta-c"><img src="https://4ever-web.4everland.store/bg/party.gif" style="height: 200px;" /></div>',
+          '<div class="mt-5 ta-c"><img src="https://static1.4everland.org/bg/party.gif" style="height: 200px;" /></div>',
           "Claim successfully!",
           {
             type: "success",

@@ -97,11 +97,8 @@ export default {
           },
           noTip: true,
         });
-        localStorage.token = "";
-        this.$alert(
-          " Successfully bound your account, please login again."
-        ).then(() => {
-          this.logout();
+        this.$alert(" Successfully bound your account.").then(() => {
+          window.location.reload();
         });
       } catch (error) {
         console.log(error);

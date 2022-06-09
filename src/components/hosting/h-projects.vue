@@ -199,7 +199,7 @@
       </v-expansion-panel>
     </v-expansion-panels>
 
-    <div class="mt-6" v-if="pageLen && !limit">
+    <div class="mt-6" v-if="pageLen > 1 && !limit">
       <v-pagination
         @input="onPage"
         v-model="page"
@@ -414,8 +414,10 @@ export default {
         });
         this.list = list;
         this.total = total;
-
-        this.pageLen;
+        if (this.page > 1 && !list.length) {
+          this.page = 1;
+          this.getList();
+        }
       } catch (error) {
         console.log(error);
       }

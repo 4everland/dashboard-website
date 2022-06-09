@@ -6,7 +6,7 @@
         <!-- lazy-src="img/bg/empty/project.png" -->
         <img
           class="bdrs-5"
-          src="https://4ever-web.4everland.store/bg/party.gif"
+          src="https://static1.4everland.org/bg/party.gif"
           aspect-ratio="1"
           width="220"
         />
