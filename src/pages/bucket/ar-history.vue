@@ -66,26 +66,25 @@
           <sync-state :val="item.arweaveStatus"></sync-state>
         </template>
       </v-data-table>
-    </div>
+      <div class="ta-c mt-8" v-if="!list.length">
+        <e-empty :loading="tableLoading">
+          {{ tableLoading ? `Loading files...` : `No files` }}
+        </e-empty>
+      </div>
 
-    <div class="ta-c mt-8" v-if="!list.length">
-      <e-empty :loading="tableLoading">
-        {{ tableLoading ? `Loading files...` : `No files` }}
-      </e-empty>
-    </div>
-
-    <div
-      v-if="!finished"
-      class="pd-20 gray ta-c fz-16 mt-5"
-      :class="{
-        'hover-1': !loadingMore,
-      }"
-      @click="onLoadMore"
-      v-intersect="onLoadMore"
-    >
-      <span v-if="list.length" v-show="!tableLoading">
-        {{ loadingMore ? "Loading..." : "Load More" }}
-      </span>
+      <div
+        v-if="!finished"
+        class="pd-20 gray ta-c fz-16 mt-5"
+        :class="{
+          'hover-1': !loadingMore,
+        }"
+        @click="onLoadMore"
+        v-intersect="onLoadMore"
+      >
+        <span v-if="list.length" v-show="!tableLoading">
+          {{ loadingMore ? "Loading..." : "Load More" }}
+        </span>
+      </div>
     </div>
   </div>
 </template>
