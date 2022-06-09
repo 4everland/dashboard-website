@@ -6,7 +6,7 @@
   &.open {
     .trigger {
       border-bottom-color: #fff;
-      z-index: 10;
+      z-index: 1;
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
       position: relative;
