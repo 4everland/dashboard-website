@@ -1,4 +1,5 @@
-import Storage from "./storage";
+import Store from "./store";
+import Buckets from "./buckets";
 import ARHistory from "./ar-history";
 import Domains from "./domains";
 import Domain from "./domain";
@@ -6,7 +7,7 @@ import Domain from "./domain";
 export default [
   {
     path: "/storage/*",
-    component: Storage,
+    component: Buckets,
     meta: {
       title: "Storage",
       isTab: 1,
@@ -22,7 +23,7 @@ export default [
   },
   {
     path: "/arweave/*",
-    component: Storage,
+    component: Store,
     meta: {
       title: "File - AR History",
       isTab: 1,

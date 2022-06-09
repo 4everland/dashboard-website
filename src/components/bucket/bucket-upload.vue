@@ -1,7 +1,12 @@
 <template>
   <div class="uploder-container">
     <div class="files-upload-container">
-      <h3 class="title">Files to Upload</h3>
+      <div class="al-c mb-4">
+        <v-btn icon @click="handleBackFolder">
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
+        <h3 class="title ma-0 ml-2">Files to Upload</h3>
+      </div>
       <!-- upload-area -->
       <div class="files-to-upload">
         <input-upload v-model="files" ref="uploadInput"></input-upload>
@@ -9,17 +14,25 @@
 
       <!-- upload-list -->
       <div class="table-container">
-        <div class="upload-info d-flex align-end">
-          <div class="choose-dir d-flex align-center flex-1">
-            <div class="mr-3">Upload to:</div>
+        <div class="upload-info d-flex flex-column flex-md-row align-md-end">
+          <div
+            class="
+              choose-dir
+              flex-column flex-sm-row
+              d-flex
+              align-center
+              flex-1
+            "
+          >
+            <div class="mr-3 label">Upload to:</div>
             <div
-              class="dir-container current-dir-all"
+              class="dir-container current-dir-all flex-1"
               v-if="curDir == 'Current'"
             >
               {{ path }}
             </div>
             <div
-              class="dir-container d-flex"
+              class="dir-container d-flex flex-sm-grow-1"
               :class="[
                 curDir == 'Specified' ? 'choose-specified' : '',
                 isValidate ? '' : 'no-validate',
@@ -29,7 +42,7 @@
               <div class="current-dir">
                 {{ path.cutStr(10, 10) }}
               </div>
-              <div class="specified-dir" v-if="curDir !== 'Current'">
+              <div class="specified-dir flex-1" v-if="curDir !== 'Current'">
                 <v-text-field
                   ref="specifiedRef"
                   v-model="specifiedDir"
@@ -151,6 +164,7 @@
 <script>
 import { Upload } from "@aws-sdk/lib-storage";
 import { bus } from "../../main";
+import Vue from "vue";
 // import { TaskWrapper } from "./task";
 class TaskWrapper {
   id;
@@ -177,13 +191,16 @@ class TaskWrapper {
         params: this.param,
       });
       this.task.on("httpUploadProgress", (e) => {
+        // let progress = (e.loaded / e.total) * 100 - this.progress;
         this.progress = ((e.loaded / e.total) * 100) | 0;
       });
+
       this.progress = 0;
       this.status = 1; // uploading
-
       await this.task.done();
       this.status = 3; // success
+
+      //---------------------
     } catch (e) {
       console.log(e.message);
       if (e.message == "Upload aborted.") {
@@ -251,7 +268,6 @@ export default {
   },
   async created() {
     await this.$store.dispatch("getUsageInfo");
-
     bus.$on("handleClearRecords", (id) => {
       let index = this.tasks.findIndex((it) => it.id == id);
       if (index !== -1) {
@@ -305,7 +321,8 @@ export default {
   methods: {
     validate(value) {
       if (value == null || value == "") return true;
-      if (/^(?![/])[a-z\d-_/\u4E00-\u9FA5]+(?<![/])$/.test(value)) {
+      let reg = new RegExp("^(?![/])[a-z\\d-_/\\u4E00-\\u9FA5]+(?<![/])$");
+      if (reg.test(value)) {
         if (value.indexOf("//") != -1) {
           return "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).";
         }
@@ -325,6 +342,9 @@ export default {
     },
     handleSkip(item) {
       this.page = item;
+    },
+    handleBackFolder() {
+      this.$emit("handleBackFolder");
     },
     async addTasks(files, limit) {
       this.limit = limit;
@@ -457,8 +477,12 @@ export default {
 };
 </script>
 <style>
+/* .specified-dir-input .v-text-field__details {
+  min-height: 0;
+  margin-bottom: 0;
+} */
 .specified-dir-input .v-input__control .v-input__slot {
-  width: 340px !important;
+  /* width: 340px !important; */
   box-shadow: none !important;
   font-size: 14px !important;
 }
@@ -468,7 +492,7 @@ export default {
 
 .specified-dir-input .v-input__control .v-counter {
   position: absolute;
-  right: 30px;
+  right: 35px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 14px;
@@ -477,8 +501,8 @@ export default {
 .specified-dir-input .v-input__control .v-messages {
   position: absolute;
   left: 0;
-  bottom: -20px;
-  width: 600px !important;
+  bottom: -30px;
+  width: 100%;
 }
 .tool-tip + span {
   position: absolute;
@@ -497,16 +521,23 @@ export default {
 .upload-info {
   padding: 20px 0;
   .choose-dir {
+    .label {
+      width: 100px;
+    }
     .current-dir-all {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .dir-container {
+      width: 100%;
       position: relative;
-      width: 600px;
+      // width: 600px;
       height: 50px;
-      padding: 0 20px;
+      // padding: 0 20px;
+      margin: 20px 0;
+      padding-left: 20px;
+      padding-right: 80px;
       line-height: 50px;
       color: #79838e;
       font-size: 14px;
@@ -514,7 +545,6 @@ export default {
       border: 1px solid #d0dae9;
       background: #f8fafb;
       .current-dir {
-        width: 160px;
         padding-right: 10px;
         position: relative;
         font-size: 14px;
@@ -549,12 +579,10 @@ export default {
 }
 
 .files-upload-container {
-  padding: 30px;
   background: #ffffff;
-  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
 
   .title {
-    margin-bottom: 13px;
+    margin-bottom: 0;
     font-size: 18px;
     color: #0b0817;
   }

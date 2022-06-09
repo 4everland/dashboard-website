@@ -92,8 +92,8 @@ Vue.prototype.$utils = {
     } else if (byte > mb) {
       num = (byte / mb).toFixed(2);
       unit = "MB";
-    } else if (byte > 1024 || (byte < 0.01 && isObj)) {
-      num = (byte / 1024).toFixed(2);
+    } else if (byte > 1024 || byte < 0.01) {
+      num = byte > 0 ? (byte / 1024).toFixed(2) : 0;
       unit = "KB";
     } else if (byte > 0) {
       num = parseInt(byte);
