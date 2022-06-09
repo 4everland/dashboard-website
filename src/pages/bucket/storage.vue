@@ -378,7 +378,7 @@
           </v-btn>
           <v-btn
             v-if="item.hash"
-            class="e-btn-text"
+            class="e-btn-text ml-2"
             icon
             small
             @click.stop="onStop"
@@ -386,7 +386,7 @@
             @success="$toast('Copied to clipboard !')"
           >
             <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
-            <img src="img/svg/copy.svg" width="12" class="ml-2" />
+            <img src="img/svg/copy.svg" width="12" />
           </v-btn>
         </template>
         <template v-slot:item.arAct="{ item }">
