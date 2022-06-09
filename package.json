@@ -7,7 +7,7 @@
     "d": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build:dev": "vue-cli-service build --mode development",
-    "p": "vue-cli-service build && 4ever-hosting deploy",
+    "p": "npm run build:dev && 4ever-hosting deploy",
     "lint": "vue-cli-service lint",
     "format": "vue-cli-service lint --format"
   },
