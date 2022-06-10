@@ -132,7 +132,7 @@
             </v-col>
             <v-col cols="12" md="6" class="d-flex al-c">
               <h-status :val="it.state" class="ml-auto mr-8"></h-status>
-              <div class="mr-6">
+              <div class="mr-6 ta-r" style="min-width: 70px">
                 <e-time span-class="gray-6 fz-14">{{ it.buildAt }}</e-time>
               </div>
               <v-btn
