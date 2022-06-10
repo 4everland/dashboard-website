@@ -11,79 +11,80 @@
     </div>
 
     <!-- :show-select="list.length > 0" -->
-    <v-data-table
-      class="hide-bdb"
-      :headers="headers"
-      :items="list"
-      :loading="tableLoading"
-      v-model="selected"
-      item-key="id"
-      no-data-text=""
-      loading-text=""
-      checkbox-color="#0F8DFF"
-      hide-default-footer
-      disable-pagination
-      @click:row="onRow"
-    >
-      <template v-slot:item.name="{ item }">
-        <span>{{ item.name.cutStr(20, 10) }}</span>
-        <e-tooltip right v-if="item.isDeleted">
-          <v-icon slot="ref" color="#333" size="18" class="pa-1 d-ib ml-2"
-            >mdi-alert-circle-outline</v-icon
+    <div class="main-wrap">
+      <v-data-table
+        class="hide-bdb"
+        :headers="headers"
+        :items="list"
+        :loading="tableLoading"
+        v-model="selected"
+        item-key="id"
+        no-data-text=""
+        loading-text=""
+        checkbox-color="#0F8DFF"
+        hide-default-footer
+        disable-pagination
+        @click:row="onRow"
+      >
+        <template v-slot:item.name="{ item }">
+          <span>{{ item.name.cutStr(20, 10) }}</span>
+          <e-tooltip right v-if="item.isDeleted">
+            <v-icon slot="ref" color="#333" size="18" class="pa-1 d-ib ml-2"
+              >mdi-alert-circle-outline</v-icon
+            >
+            <span>Deleted in Bucket</span>
+          </e-tooltip>
+        </template>
+        <template v-slot:item.arweaveHash="{ item }">
+          <v-btn
+            color="primary"
+            rounded
+            x-small
+            text
+            target="_blank"
+            v-if="item.arweaveHash"
+            @click.stop="onStop"
+            :href="$arHashPre + item.arweaveHash"
           >
-          <span>Deleted in Bucket</span>
-        </e-tooltip>
-      </template>
-      <template v-slot:item.arweaveHash="{ item }">
-        <v-btn
-          color="primary"
-          rounded
-          x-small
-          text
-          target="_blank"
-          v-if="item.arweaveHash"
-          @click.stop="onStop"
-          :href="$arHashPre + item.arweaveHash"
-        >
-          <span class="d-ib line-1" style="width: 160px">
-            {{ item.arweaveHash }}
-          </span>
-        </v-btn>
-        <v-btn
-          v-if="item.arweaveHash"
-          icon
-          small
-          @click.stop="onStop"
-          v-clipboard="item.arweaveHash"
-          @success="$toast('Copied to clipboard !')"
-        >
-          <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
-          <img src="img/svg/copy.svg" width="11" />
-        </v-btn>
-      </template>
-      <template v-slot:item.arweaveStatus="{ item }">
-        <sync-state :val="item.arweaveStatus"></sync-state>
-      </template>
-    </v-data-table>
+            <span class="d-ib line-1" style="width: 160px">
+              {{ item.arweaveHash }}
+            </span>
+          </v-btn>
+          <v-btn
+            v-if="item.arweaveHash"
+            icon
+            small
+            @click.stop="onStop"
+            v-clipboard="item.arweaveHash"
+            @success="$toast('Copied to clipboard !')"
+          >
+            <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
+            <img src="img/svg/copy.svg" width="11" />
+          </v-btn>
+        </template>
+        <template v-slot:item.arweaveStatus="{ item }">
+          <sync-state :val="item.arweaveStatus"></sync-state>
+        </template>
+      </v-data-table>
+      <div class="ta-c mt-8" v-if="!list.length">
+        <e-empty :loading="tableLoading">
+          {{ tableLoading ? `Loading files...` : `No files` }}
+        </e-empty>
+      </div>
 
-    <div class="ta-c mt-8" v-if="!list.length">
-      <e-empty :loading="tableLoading">
-        {{ tableLoading ? `Loading files...` : `No files` }}
-      </e-empty>
-    </div>
-
-    <div
-      v-if="!finished"
-      class="pd-20 gray ta-c fz-16 mt-5"
-      :class="{
-        'hover-1': !loadingMore,
-      }"
-      @click="onLoadMore"
-      v-intersect="onLoadMore"
-    >
-      <span v-if="list.length" v-show="!tableLoading">
-        {{ loadingMore ? "Loading..." : "Load More" }}
-      </span>
+      <div
+        v-if="!finished"
+        class="pd-20 gray ta-c fz-16 mt-5"
+        :class="{
+          'hover-1': !loadingMore,
+        }"
+        @click="onLoadMore"
+        v-intersect="onLoadMore"
+      >
+        <span v-if="list.length" v-show="!tableLoading">
+          {{ loadingMore ? "Loading..." : "Load More" }}
+        </span>
+      </div>
     </div>
   </div>
 </template>

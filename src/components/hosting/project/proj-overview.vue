@@ -55,9 +55,12 @@
             <e-commit :info="info.commits" class="fz-14 ml-3"></e-commit>
           </div>
         </e-kv2>
-        <e-kv2 class="ml-auto" label="IPFS" style="min-width: 120px">
-          <e-link class="fz-14" :href="$utils.getCidLink(info.cid)">
-            {{ info.cid ? "Verify on IPFS" : "Pending" }}
+        <e-kv2 class="ml-auto" :label="info.platform" style="min-width: 120px">
+          <e-link
+            class="fz-14"
+            :href="$utils.getCidLink(info.hash, info.platform)"
+          >
+            {{ info.hash ? "Verify on " + info.platform : "Pending" }}
           </e-link>
         </e-kv2>
       </div>

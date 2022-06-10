@@ -164,7 +164,7 @@
 <script>
 import { Upload } from "@aws-sdk/lib-storage";
 import { bus } from "../../main";
-import Vue from "vue";
+// import Vue from "vue";
 // import { TaskWrapper } from "./task";
 class TaskWrapper {
   id;
