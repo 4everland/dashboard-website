@@ -91,7 +91,7 @@
                 />
                 <div class="ml-5">
                   <div class="d-flex al-c">
-                    <h3 style="min-width: 150px">{{ it.name }}</h3>
+                    <h3 style="min-width: 150px" class="mb-0">{{ it.name }}</h3>
                     <img
                       class="ml-5"
                       :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
