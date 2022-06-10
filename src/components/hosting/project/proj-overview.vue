@@ -19,7 +19,14 @@
         </a>
       </e-kv2>
 
-      <e-kv2 label="Domains" class="mt-8" v-if="info.domains">
+      <e-kv2
+        label="Domains"
+        class="mt-8"
+        v-if="info.domains"
+        :class="{
+          'op-0 ev-n': info.platform != 'IPFS',
+        }"
+      >
         <div class="d-flex al-c">
           <h-domain class="mr-6" :val="info.domains[0].domain" />
           <e-menu v-if="info.domains.length > 1" offset-y open-on-hover>

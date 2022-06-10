@@ -37,7 +37,13 @@
           </v-col>
         </v-row>
 
-        <e-kv2 label="Domain" class="mt-7">
+        <e-kv2
+          label="Domain"
+          class="mt-7"
+          :class="{
+            'op-0 ev-n': info.platform != 'IPFS',
+          }"
+        >
           <e-link :href="info.domain">
             {{ info.domain }}
           </e-link>

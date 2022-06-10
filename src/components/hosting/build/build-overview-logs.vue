@@ -136,7 +136,7 @@ export default {
           this.curIdx = isIpfs ? 2 : 1;
           this.$store.dispatch("getProjectInfo", this.info.projectId);
         } else if (hash) {
-          this.curIdx = isIpfs ? 1 : 0;
+          this.curIdx = 1;
         }
       } catch (error) {
         console.log(error);
