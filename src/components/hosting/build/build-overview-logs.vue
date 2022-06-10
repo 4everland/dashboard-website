@@ -31,7 +31,7 @@
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
     <e-toggle-card
-      v-if="info.platform == 'IPFS'"
+      v-if="info && info.platform == 'IPFS'"
       class="mt-5"
       title="Assigning Domains"
       :value="getOpen(2)"
@@ -124,6 +124,7 @@ export default {
           `/project/task/object/${this.taskId}`
         );
         const info = data.task;
+        info.hash = data.hash;
         const { hash, state = "", platform } = info;
         const isIpfs = platform == "IPFS";
         this.state = state.toLowerCase();
@@ -135,7 +136,7 @@ export default {
         if (this.isDone) {
           this.curIdx = isIpfs ? 2 : 1;
           this.$store.dispatch("getProjectInfo", this.info.projectId);
-        } else if (hash) {
+        } else if (hash || this.state == "syncing") {
           this.curIdx = 1;
         }
       } catch (error) {

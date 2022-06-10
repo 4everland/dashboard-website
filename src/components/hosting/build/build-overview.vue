@@ -67,7 +67,7 @@
               class="fz-14"
               :href="$utils.getCidLink(info.hash, info.platform)"
             >
-              {{ "Verify on " + info.hash }}
+              {{ "Verify on " + info.platform }}
             </e-link>
             <span v-else class="fz-14">Pending</span>
           </e-kv2>
