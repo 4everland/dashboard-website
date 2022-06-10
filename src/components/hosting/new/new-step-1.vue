@@ -300,6 +300,7 @@ export default {
         rootDirectory: srcDir,
         framework: frameWorkAdvice,
         env: envList,
+        platform: "IPFS",
       });
       this.branchList = defaultBranch ? [defaultBranch] : [];
       this.dirList = [];
