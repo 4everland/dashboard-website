@@ -63,7 +63,7 @@
             >
               {{ "Verify on " + info.hash }}
             </e-link>
-            <span v-else>Pending</span>
+            <span v-else class="fz-14">Pending</span>
           </e-kv2>
         </div>
       </v-col>

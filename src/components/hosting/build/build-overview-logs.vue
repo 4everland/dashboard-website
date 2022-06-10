@@ -15,6 +15,7 @@
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
     <e-toggle-card
+      v-if="info"
       class="mt-5"
       :title="'Syncing to ' + info.platform"
       :value="getOpen(1)"
@@ -123,7 +124,8 @@ export default {
           `/project/task/object/${this.taskId}`
         );
         const info = data.task;
-        const { hash, state = "" } = info;
+        const { hash, state = "", platform } = info;
+        const isIpfs = platform == "IPFS";
         this.state = state.toLowerCase();
         this.isDone = this.state == "success";
         info.isFail = /fail|timeout|error|cancel/.test(this.state);
@@ -131,10 +133,10 @@ export default {
         this.$emit("info", info);
         this.logs = data.log;
         if (this.isDone) {
-          this.curIdx = 2;
+          this.curIdx = isIpfs ? 2 : 1;
           this.$store.dispatch("getProjectInfo", this.info.projectId);
         } else if (hash) {
-          this.curIdx = 2;
+          this.curIdx = isIpfs ? 1 : 0;
         }
       } catch (error) {
         console.log(error);
