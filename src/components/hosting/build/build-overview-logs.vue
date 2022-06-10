@@ -124,7 +124,7 @@ export default {
           `/project/task/object/${this.taskId}`
         );
         const info = data.task;
-        info.hash = data.hash;
+        if (data.hash) info.hash = data.hash;
         const { hash, state = "", platform } = info;
         const isIpfs = platform == "IPFS";
         this.state = state.toLowerCase();
