@@ -77,7 +77,7 @@
 
 <script>
 import { mapState } from "vuex";
-// import { BigNumber, providers, utils } from "ethers";
+import { providers } from "ethers"; //BigNumber, utils
 import srccontracts from "../../plugins/pay/contracts/src-chain-contracts";
 import dstcontracts from "../../plugins/pay/contracts/dst-chain-contracts";
 import client from "../../plugins/pay/contracts/SGNClient";
@@ -119,6 +119,7 @@ export default {
       form,
       list,
       showOrder: false,
+      payAddr: "0xF1658C608708172655A8e70a1624c29F956Ee63D",
     };
   },
   computed: {
@@ -167,9 +168,16 @@ export default {
         name: "showMetaConnect",
       });
     },
-    onConnect() {
-      console.log(srccontracts, dstcontracts, client);
-      console.log(this.netType, this.chainId);
+    async onConnect() {
+      console.log(this.chainId, client);
+      const provider = new providers.Web3Provider(window.ethereum);
+      if (this.chainId != 5) {
+        srccontracts.setProvider(provider);
+        console.log(srccontracts);
+      } else {
+        dstcontracts.setProvider(provider);
+        console.log(dstcontracts);
+      }
     },
   },
 };
