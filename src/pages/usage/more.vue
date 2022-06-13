@@ -76,6 +76,12 @@
 </template>
 
 <script>
+// import { BigNumber, providers, utils } from "ethers";
+import srccontracts from "../../plugins/pay/contracts/src-chain-contracts";
+import dstcontracts from "../../plugins/pay/contracts/dst-chain-contracts";
+import client from "../../plugins/pay/contracts/SGNClient";
+console.log(srccontracts, dstcontracts, client);
+
 const list = [
   {
     label: "Bandwidth",
