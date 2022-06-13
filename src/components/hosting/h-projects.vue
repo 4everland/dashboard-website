@@ -83,6 +83,7 @@
               <div class="d-flex al-c grow-0">
                 <v-img
                   :src="$getImgSrc(it.previewImage)"
+                  @click.stop="$navTo(getDetailPath(it))"
                   lazy-src="img/bg/empty/project.png"
                   max-height="60"
                   max-width="60"
@@ -91,7 +92,13 @@
                 />
                 <div class="ml-5">
                   <div class="d-flex al-c">
-                    <h3 style="min-width: 150px" class="mb-0">{{ it.name }}</h3>
+                    <h3
+                      @click.stop="$navTo(getDetailPath(it))"
+                      style="min-width: 150px"
+                      class="mb-0 hover-1"
+                    >
+                      {{ it.name }}
+                    </h3>
                     <img
                       class="ml-5"
                       :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
