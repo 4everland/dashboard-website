@@ -70,6 +70,7 @@ export default {
         this.showPop = false;
         const accounts = await window.web3.eth.getAccounts();
         connectAddr = accounts[0];
+        await this.checkNet();
         window.ethereum.on("chainChanged", (networkId) => {
           console.log("chainChanged", networkId);
           location.reload();
@@ -78,7 +79,6 @@ export default {
           console.log("accountsChanged", accounts);
           location.reload();
         });
-        this.checkNet();
       }
       this.$setState({
         noticeMsg: {
@@ -111,9 +111,11 @@ export default {
     },
     async checkNet() {
       const netType = await window.web3.eth.net.getNetworkType();
+      const chainId = await window.web3.eth.net.getId();
       // console.log(netType);
       this.$setState({
         netType,
+        chainId,
       });
     },
     async connectMetaMask() {

@@ -76,11 +76,11 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 // import { BigNumber, providers, utils } from "ethers";
 import srccontracts from "../../plugins/pay/contracts/src-chain-contracts";
 import dstcontracts from "../../plugins/pay/contracts/dst-chain-contracts";
 import client from "../../plugins/pay/contracts/SGNClient";
-console.log(srccontracts, dstcontracts, client);
 
 const list = [
   {
@@ -122,6 +122,11 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      connectAddr: (s) => s.connectAddr,
+      netType: (s) => s.netType,
+      chainId: (s) => s.chainId,
+    }),
     previewList() {
       return this.list
         .map((it) => {
@@ -142,6 +147,29 @@ export default {
           return a + b.price;
         }, 0)
         .toFixed(2);
+    },
+  },
+  watch: {
+    connectAddr(val) {
+      if (val) this.onConnect();
+    },
+  },
+  mounted() {
+    if (this.connectAddr) {
+      this.onConnect();
+    } else {
+      this.showConnect();
+    }
+  },
+  methods: {
+    showConnect() {
+      this.$setMsg({
+        name: "showMetaConnect",
+      });
+    },
+    onConnect() {
+      console.log(srccontracts, dstcontracts, client);
+      console.log(this.netType, this.chainId);
     },
   },
 };
