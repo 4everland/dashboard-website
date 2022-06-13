@@ -21,7 +21,7 @@
       :value="getOpen(1)"
       :icon="getIcon(1)"
     >
-      <e-kv label="IPFS Hash" v-if="info && info.hash">
+      <e-kv :label="`${info.platform} Hash`" v-if="info && info.hash">
         <a
           :href="$utils.getCidLink(info.hash, info.platform)"
           target="_blank"
