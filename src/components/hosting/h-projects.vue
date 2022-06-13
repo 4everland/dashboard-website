@@ -108,12 +108,9 @@
                       {{ it.hash.cutStr(6, 6) }}
                     </a>
                   </div>
-                  <div
-                    class="d-flex al-c mt-4"
-                    v-if="it.repo && it.repo.id"
-                    @click.stop="onStop"
-                  >
+                  <div class="d-flex al-c mt-4" v-if="it.repo && it.repo.id">
                     <e-icon-link
+                      @click.native.stop="onStop"
                       class="mr-6"
                       img="img/svg/hosting/m-branch.svg"
                       :link="
@@ -125,7 +122,11 @@
                     >
                       {{ it.repo.defaultBranch }}
                     </e-icon-link>
-                    <e-commit :info="it.commit" class="fz-14"></e-commit>
+                    <e-commit
+                      @click.native.stop="onStop"
+                      :info="it.commit"
+                      class="fz-14"
+                    ></e-commit>
                   </div>
                 </div>
               </div>
