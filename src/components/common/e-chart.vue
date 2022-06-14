@@ -72,7 +72,7 @@ export default {
   watch: {
     option: {
       handler(data) {
-        console.log(data);
+        // console.log(data);
         let basicOption = JSON.parse(JSON.stringify(this.basicOption));
         if (data.xAxis.data.length) {
           this.noData = false;
