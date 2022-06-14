@@ -161,7 +161,7 @@ export default {
         this.deleting = true;
         await this.$http.delete("/domains/" + domain);
         // await this.getInfo();
-        this.$router.push("/domain");
+        this.$router.push("/bucket/domains");
         await this.$sleep(200);
         this.$toast(domain + " Removed successfully");
       } catch (error) {

@@ -9,7 +9,10 @@ import StatisDetail from "./statistics-detail";
 export default [
   {
     path: "/new",
-    component: New,
+    // component: New,
+    components: {
+      noCache: New,
+    },
     meta: {
       title: "New Project",
       subTitle: "3 easy steps to get your projects live",
