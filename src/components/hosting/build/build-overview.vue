@@ -37,7 +37,13 @@
           </v-col>
         </v-row>
 
-        <e-kv2 label="Domain" class="mt-7">
+        <e-kv2
+          label="Domain"
+          class="mt-7"
+          :class="{
+            'op-0 ev-n': info.platform != 'IPFS',
+          }"
+        >
           <e-link :href="info.domain">
             {{ info.domain }}
           </e-link>
@@ -61,7 +67,7 @@
               class="fz-14"
               :href="$utils.getCidLink(info.hash, info.platform)"
             >
-              {{ "Verify on " + info.hash }}
+              {{ "Verify on " + info.platform }}
             </e-link>
             <span v-else class="fz-14">Pending</span>
           </e-kv2>
