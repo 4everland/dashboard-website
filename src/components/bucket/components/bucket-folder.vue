@@ -11,12 +11,11 @@
       <!-- Operation Tab -->
       <div class="operation-tab d-flex">
         <!-- Upload Btn -->
-        <v-btn color="primary" rounded @click="handleClickUpload">
-          <img src="img/svg/upload.svg" width="16" />
-          <span class="ml-2">Upload</span>
-        </v-btn>
-
-        <!-- Create New Folder  -->
+        <bucket-upload
+          ref="bucketUpload"
+          :info="pathInfo"
+          :baseUrl="bucketInfo.originList[0]"
+        ></bucket-upload>
         <v-btn
           class="ml-5"
           rounded
@@ -252,15 +251,6 @@
         >
       </div>
     </div>
-    <!-- Upload Component -->
-    <div v-if="inUpload">
-      <bucket-upload
-        ref="bucketUpload"
-        :info="pathInfo"
-        :baseUrl="bucketInfo.originList[0]"
-        @handleBackFolder="handleBackFolder"
-      ></bucket-upload>
-    </div>
     <!-- Upload/Delete Folders Component -->
     <navigation-drawers
       ref="navDrawers"
@@ -374,6 +364,7 @@ export default {
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
       uploadingTaskLength: 0,
+      isUploadDir: false,
     };
   },
   computed: {
@@ -388,9 +379,6 @@ export default {
   methods: {
     onCopied() {
       this.$toast("Copied to clipboard !");
-    },
-    handleClickUpload() {
-      this.inUpload = true;
     },
     onRouteChange() {
       if (!this.inStorage || this.inFile) return;
@@ -505,10 +493,6 @@ export default {
     },
     handleDeleteFolderRemoveAll() {
       this.deleteFoldersTasks = [];
-    },
-    handleBackFolder() {
-      this.inUpload = false;
-      this.getList();
     },
     isUploading(value) {
       this.taskIsUploading = value;

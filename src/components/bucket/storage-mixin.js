@@ -14,7 +14,6 @@ export default {
       deleting: false,
       searchKey: "",
       domainsMap: {},
-      inUpload: false,
       hasMore: false,
       curPage: 0,
       continuationTokenArr: [""],
@@ -42,7 +41,7 @@ export default {
       return this.inStorage && !/\/$/.test(this.path);
     },
     inFolder() {
-      return this.inStorage && !this.inBucket && !this.inFile && !this.inUpload;
+      return this.inStorage && !this.inBucket && !this.inFile;
     },
     fileName() {
       const arr = this.path.split("/");
