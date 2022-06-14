@@ -375,7 +375,7 @@
           <sync-state :val="item.arStatus" v-if="item.isFile"></sync-state>
         </template>
         <template v-slot:item.arUsedStorage="{ item }">
-          <span>{{ item.isAr ? item.arUsedStorage : "--" }}</span>
+          <span>{{ item.arUsedStorage }}</span>
         </template>
         <template v-slot:item.visitChartData="{ item }">
           <v-sparkline
