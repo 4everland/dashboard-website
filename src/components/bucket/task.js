@@ -82,7 +82,7 @@ export class DeleteTaskWrapper {
 
       this.status = 1; // deleteing
 
-      console.log(this.param.Prefix, this.param.Bucket);
+      // console.log(this.param.Prefix, this.param.Bucket);
       const listResult = await this.s3.listObjectsV2({
         Bucket: this.param.Bucket,
         MaxKeys: 100,

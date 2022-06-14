@@ -32,54 +32,59 @@
           <img src="img/svg/parts_icon.svg" width="12" />
           <span class="ml-2">Fragments</span>
         </v-btn>
-        <e-menu offset-y open-on-hover :disabled="!selected.length">
-          <v-btn
-            slot="ref"
-            class="ml-5"
-            rounded
-            outlined
+        <div class="ml-5">
+          <e-menu
+            offset-y
+            open-on-hover
+            nudge-bottom="11"
             :disabled="!selected.length"
           >
-            <!-- <v-icon>mdi-dots-vertical</v-icon> -->
-            <span>Actions</span>
-            <v-icon size="18">mdi-chevron-down</v-icon>
-          </v-btn>
-          <v-list dense>
-            <template v-if="selected.length == 1">
-              <!-- <v-list-item :to="getPath(selected[0])"> Open </v-list-item> -->
-              <template v-if="selected[0].isFile">
-                <v-list-item :href="getViewUrl(selected[0])" target="_blank">
-                  <img src="img/icon/ic-download.svg" width="15" class="mr-2" />
-                  <span class="gray-7">Download</span>
-                </v-list-item>
-                <v-list-item
-                  link
-                  v-clipboard="getViewUrl(selected[0])"
-                  @success="onCopied"
-                >
-                  <img src="img/icon/ic-copy.svg" width="14" class="mr-2" />
-                  <span class="gray-7">Copy Path</span>
-                </v-list-item>
-                <v-list-item link @click="onRename(selected[0].name)">
-                  <img src="img/icon/ic-rename.svg" width="14" class="mr-2" />
-                  <span class="gray-7">Rename</span>
-                </v-list-item>
-                <v-list-item
-                  link
-                  @click="onSyncAR(selected[0].name)"
-                  v-if="!bucketInfo.isAr && selectArStatus != 'synced'"
-                >
-                  <img src="img/icon/ic-ar.svg" width="14" class="mr-2" />
-                  <span class="gray-7">Sync to AR</span>
-                </v-list-item>
+            <v-btn slot="ref" rounded outlined :disabled="!selected.length">
+              <!-- <v-icon>mdi-dots-vertical</v-icon> -->
+              <span>Actions</span>
+              <v-icon size="18">mdi-chevron-down</v-icon>
+            </v-btn>
+            <v-list dense>
+              <template v-if="selected.length == 1">
+                <!-- <v-list-item :to="getPath(selected[0])"> Open </v-list-item> -->
+                <template v-if="selected[0].isFile">
+                  <v-list-item :href="getViewUrl(selected[0])" target="_blank">
+                    <img
+                      src="img/icon/ic-download.svg"
+                      width="15"
+                      class="mr-2"
+                    />
+                    <span class="gray-7">Download</span>
+                  </v-list-item>
+                  <v-list-item
+                    link
+                    v-clipboard="getViewUrl(selected[0])"
+                    @success="onCopied"
+                  >
+                    <img src="img/icon/ic-copy.svg" width="14" class="mr-2" />
+                    <span class="gray-7">Copy Path</span>
+                  </v-list-item>
+                  <v-list-item link @click="onRename(selected[0].name)">
+                    <img src="img/icon/ic-rename.svg" width="14" class="mr-2" />
+                    <span class="gray-7">Rename</span>
+                  </v-list-item>
+                  <v-list-item
+                    link
+                    @click="onSyncAR(selected[0].name)"
+                    v-if="!bucketInfo.isAr && selectArStatus != 'synced'"
+                  >
+                    <img src="img/icon/ic-ar.svg" width="14" class="mr-2" />
+                    <span class="gray-7">Sync to AR</span>
+                  </v-list-item>
+                </template>
               </template>
-            </template>
-            <v-list-item link @click="onDelete()">
-              <img src="img/icon/ic-delete.svg" width="14" class="mr-2" />
-              <span class="red-2">Delete</span>
-            </v-list-item>
-          </v-list>
-        </e-menu>
+              <v-list-item link @click="onDelete()">
+                <img src="img/icon/ic-delete.svg" width="14" class="mr-2" />
+                <span class="red-2">Delete</span>
+              </v-list-item>
+            </v-list>
+          </e-menu>
+        </div>
         <!-- Selected Files -->
         <div
           class="selected-content d-flex al-c ml-auto"
@@ -501,6 +506,11 @@ export default {
   watch: {
     path() {
       this.onRouteChange();
+    },
+    uploadingTaskLength(value) {
+      if (value == 0) {
+        this.getList();
+      }
     },
   },
 };

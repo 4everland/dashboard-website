@@ -606,10 +606,10 @@ export default {
           Quiet: false,
         },
       };
-      console.log(params);
+      // console.log(params);
       return new Promise((resolve, reject) => {
         this.s3.deleteObjects(params, (err, data) => {
-          console.log(err, data);
+          // console.log(err, data);
           if (err) reject(err);
           else resolve(data);
         });

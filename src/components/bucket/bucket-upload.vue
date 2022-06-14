@@ -1,6 +1,6 @@
 <template>
   <div class="uploder-container">
-    <e-menu offset-y open-on-hover>
+    <e-menu offset-y open-on-hover nudge-bottom="11">
       <v-btn slot="ref" rounded color="primary">
         <img src="img/svg/upload.svg" width="16" />
         <span class="ml-2">Upload</span>
@@ -37,7 +37,6 @@ export default {
   },
   data() {
     return {
-      curDir: "Current",
       files: [],
       limit: 2,
       tasks: [],
@@ -53,8 +52,6 @@ export default {
         { text: "Status", value: "status", sortable: false, align: "center" },
         { text: "Action", value: "action", sortable: false, align: "center" },
       ],
-      page: 1,
-      specifiedDir: "",
       webkitRelativePath: "",
       rules: {
         counter: (value) => {
@@ -85,13 +82,9 @@ export default {
   computed: {
     path() {
       const arr = this.$route.path.split("/");
-      if (this.curDir == "Specified") {
-        return "bucket://" + this.info.Bucket + "/";
-      } else {
-        const idx = arr.findIndex((item) => item == "storage");
-        const path = "bucket://" + arr.slice(idx + 1, arr.length).join("/");
-        return path;
-      }
+      const idx = arr.findIndex((item) => item == "storage");
+      const path = "bucket://" + arr.slice(idx + 1, arr.length).join("/");
+      return path;
     },
     list() {
       return this.files
@@ -140,12 +133,7 @@ export default {
           this.$s3,
           {
             Bucket: this.info.Bucket,
-            Key:
-              (this.curDir == "Specified" && this.specifiedDir != ""
-                ? this.specifiedDir + "/"
-                : this.info.Prefix) +
-              webkitRelativePath +
-              file.name,
+            Key: this.info.Prefix + webkitRelativePath + file.name,
             Body: file,
             ContentType: file.type,
           },
@@ -156,20 +144,12 @@ export default {
               "Bucket://" +
               this.info.Bucket +
               "/" +
-              (this.curDir == "Specified" ? "" : this.info.Prefix) +
-              this.specifiedDir +
+              this.info.Prefix +
               webkitRelativePath,
           },
-          this.baseUrl +
-            "/" +
-            (this.curDir == "Specified" ? "" : this.info.Prefix) +
-            this.specifiedDir +
-            (this.curDir == "Specified" ? "/" : "") +
-            webkitRelativePath +
-            file.name
+          this.baseUrl + "/" + this.info.Prefix + webkitRelativePath + file.name
         );
       });
-      // console.log(newTasks);
       this.tasks = newTasks.concat(this.tasks);
     },
     async start(task) {
@@ -189,11 +169,8 @@ export default {
       if (idles.length == 0) {
         return;
       }
-      // console.log("idles", idles);
       const fill = this.limit - processing.length;
       const min = idles.length <= fill ? idles.length : fill;
-      // console.log("min", min);
-
       for (let i = 0; i < min; i++) {
         this.start(idles[i]);
       }
