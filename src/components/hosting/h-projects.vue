@@ -94,10 +94,12 @@
                   <div class="d-flex al-c">
                     <h3
                       @click.stop="$navTo(getDetailPath(it))"
-                      style="min-width: 150px"
+                      :style="{
+                        'min-width': asMobile ? '100px' : '160px',
+                      }"
                       class="mb-0 hover-1"
                     >
-                      {{ it.name }}
+                      {{ it.name.cutStr(asMobile ? 6 : 10, asMobile ? 4 : 6) }}
                     </h3>
                     <img
                       class="ml-5"
@@ -112,7 +114,7 @@
                       @click.stop="onStop"
                       v-if="it.hash"
                     >
-                      {{ it.hash.cutStr(6, 6) }}
+                      {{ it.hash.cutStr(asMobile ? 2 : 6, 6) }}
                     </a>
                   </div>
                   <div class="d-flex al-c mt-4" v-if="it.repo && it.repo.id">
