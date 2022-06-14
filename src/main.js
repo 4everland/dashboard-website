@@ -43,7 +43,7 @@ new Vue({
   },
   mounted() {
     this.onInit();
-    isSolana();
+    // isSolana();
   },
   watch: {
     "$route.path"() {
