@@ -137,7 +137,7 @@ export default {
           this.curIdx = isIpfs ? 2 : 1;
           this.$store.dispatch("getProjectInfo", this.info.projectId);
         } else if (hash || this.state == "syncing") {
-          this.curIdx = 1;
+          this.curIdx = isIpfs ? 2 : 1;
         }
       } catch (error) {
         console.log(error);
