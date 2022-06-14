@@ -158,6 +158,7 @@ export default {
       this.getExtraData();
     },
     async getBasicStatisticsData() {
+      this.basicStatisticsData = [];
       try {
         const { data } = await this.$http.get(
           `/bi/overview/${this.bucketName}`
