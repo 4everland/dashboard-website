@@ -21,7 +21,7 @@
       :value="getOpen(1)"
       :icon="getIcon(1)"
     >
-      <e-kv :label="`${info.platform} Hash`" v-if="info && info.hash">
+      <e-kv :label="`${info.platform} Hash:`" v-if="info && info.hash">
         <a
           :href="$utils.getCidLink(info.hash, info.platform)"
           target="_blank"
@@ -137,7 +137,7 @@ export default {
           this.curIdx = isIpfs ? 2 : 1;
           this.$store.dispatch("getProjectInfo", this.info.projectId);
         } else if (hash || this.state == "syncing") {
-          this.curIdx = 1;
+          this.curIdx = isIpfs ? 2 : 1;
         }
       } catch (error) {
         console.log(error);
