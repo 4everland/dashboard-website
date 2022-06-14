@@ -162,7 +162,6 @@
 </template>
 
 <script>
-// import { Upload } from "@aws-sdk/lib-storage";
 import { bus } from "../../main";
 // import Vue from "vue";
 import { TaskWrapper } from "./task.js";
@@ -386,15 +385,13 @@ export default {
               this.specifiedDir +
               webkitRelativePath,
           },
-          encodeURI(
-            this.baseUrl +
-              "/" +
-              (this.curDir == "Specified" ? "" : this.info.Prefix) +
-              this.specifiedDir +
-              (this.curDir == "Specified" ? "/" : "") +
-              webkitRelativePath +
-              file.name
-          )
+          this.baseUrl +
+            "/" +
+            (this.curDir == "Specified" ? "" : this.info.Prefix) +
+            this.specifiedDir +
+            (this.curDir == "Specified" ? "/" : "") +
+            webkitRelativePath +
+            file.name
         );
       });
       // console.log(newTasks);
