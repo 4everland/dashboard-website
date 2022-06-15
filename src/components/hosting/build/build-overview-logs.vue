@@ -32,7 +32,14 @@
           >{{ info.hash }}</a
         >
       </e-kv>
-      <div class="fz-14 gray" v-else>Pending</div>
+      <div class="fz-14 gray" v-else>
+        <div v-if="inNew && info && info.platform == 'IC'">
+          Syncing to IC may take more time to complete,
+          <a href="#/hosting/projects">click here</a> for other operations
+          without waiting.
+        </div>
+        <span v-else>Pending</span>
+      </div>
     </e-toggle-card>
     <e-toggle-card
       v-if="info && info.platform == 'IPFS'"
@@ -46,7 +53,9 @@
           <h-domain :val="it" class="fz-14"></h-domain>
         </p>
       </div>
-      <div v-else class="fz-14 gray">Pending</div>
+      <div v-else class="fz-14 gray">
+        <span>Pending</span>
+      </div>
     </e-toggle-card>
   </div>
 </template>
@@ -55,6 +64,9 @@
 import { mapState } from "vuex";
 
 export default {
+  props: {
+    inNew: Boolean,
+  },
   data() {
     return {
       curIdx: 0,
