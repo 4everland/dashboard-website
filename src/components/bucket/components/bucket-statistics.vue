@@ -58,11 +58,11 @@ export default {
   props: {
     active: Boolean,
   },
-  watch: {
-    active(newVal) {
-      console.log(newVal);
-    },
-  },
+  // watch: {
+  //   active(newVal) {
+  //     console.log(newVal);
+  //   },
+  // },
   data() {
     return {
       bucket: "",
@@ -92,14 +92,14 @@ export default {
   methods: {
     handleChangeBucketDate(val) {
       this.getChartData(val, "STORAGE_LINE").then((res) => {
-        console.log(res, "res");
+        // console.log(res, "res");
         if (val[1] - val[0] > 86400) {
           this.bucketDateOverDay = true;
         } else {
           this.bucketDateOverDay = false;
         }
 
-        if (res.subsections.length) {
+        if (res) {
           this.ipfsData.xAxis = res.subsections;
           this.ipfsData.yAxis = res.collections[0].raws;
           this.arData.xAxis = res.subsections;
@@ -119,7 +119,7 @@ export default {
         this.overDateOverDay = false;
       }
       this.getChartData(val, "TRAFFIC_USAGE_LINE").then((res) => {
-        if (res.subsections.length) {
+        if (res) {
           this.trafficData.xAxis = res.subsections;
           this.trafficData.yAxis = res.collections[0].raws;
         } else {
@@ -128,7 +128,7 @@ export default {
         }
       });
       this.getChartData(val, "REQUESTS_LINE").then((res) => {
-        if (res.subsections.length) {
+        if (res) {
           this.requestData.xAxis = res.subsections;
           this.requestData.yAxis = res.collections[0].raws;
         } else {
