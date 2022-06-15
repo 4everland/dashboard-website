@@ -141,7 +141,11 @@
               </div>
             </v-col>
             <v-col cols="12" md="6" class="d-flex al-c">
-              <h-status :val="it.state" class="ml-auto mr-8"></h-status>
+              <h-status
+                :val="it.state"
+                class="ml-auto mr-8"
+                @click.native.stop="onStatus(it)"
+              ></h-status>
               <div class="mr-6 ta-r" style="min-width: 70px">
                 <e-time span-class="gray-6 fz-14">{{ it.buildAt }}</e-time>
               </div>
@@ -211,7 +215,7 @@
                   small
                   rounded
                   outlined
-                  :to="`/hosting/build/${it.name}/${it.id}/${it.taskId}`"
+                  :to="getBuildPath(it)"
                   >View Build Logs</v-btn
                 >
               </div>
@@ -348,10 +352,24 @@ export default {
     getDetailPath(it, query = "") {
       return `/hosting/project/${it.name}/${it.id}` + query;
     },
+    getBuildPath(it) {
+      return `/hosting/build/${it.name}/${it.id}/${it.taskId}`;
+    },
     onItem(it) {
       if (!this.limit) return;
       const path = this.getDetailPath(it);
       this.$router.push(path);
+    },
+    async onStatus(it) {
+      this.$loading();
+      try {
+        await this.onOpen(it);
+        const path = this.getBuildPath(it);
+        this.$router.push(path);
+      } catch (error) {
+        //
+      }
+      this.$loading.close();
     },
     async onOpen(it) {
       if (it.loading || it.statisList) return;
