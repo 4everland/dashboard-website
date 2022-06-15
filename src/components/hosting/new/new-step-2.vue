@@ -75,7 +75,7 @@
           </div>
         </template>
       </div>
-      <build-overview-logs @done="isDone = true" @info="onInfo" />
+      <build-overview-logs in-new @done="isDone = true" @info="onInfo" />
     </div>
 
     <div class="ta-r mt-4" v-if="!isDone">
