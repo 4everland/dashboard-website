@@ -73,7 +73,9 @@
           <span class="red-1">（Insufficient balance）</span>
         </div>
         <div class="mt-4 pa-3">
-          <v-btn color="primary" rounded block depressed>Approve</v-btn>
+          <v-btn color="primary" rounded block depressed @click="recharge"
+            >Approve</v-btn
+          >
           <v-btn class="mt-5" outlined rounded block>Confirm</v-btn>
         </div>
       </div>
@@ -82,6 +84,7 @@
 </template>
 
 <script>
+import dstcontracts from "@/plugins/pay/contracts/dst-chain-contracts";
 export default {
   data() {
     return {
@@ -117,11 +120,120 @@ export default {
           status: "success",
         },
       ],
+      provider: this.$store.state.userInfo.uid,
+      uuid: Buffer.alloc(32, 6),
+      core: null,
     };
   },
+  created() {},
   methods: {
     onItem(row) {
       this.$navTo(`/usage/billing/detail?hash=` + row.hash);
+    },
+
+    async recharge() {
+      console.log(1);
+      const from = this.$store.state.userInfo.uid;
+      if (!from) {
+        return;
+      }
+      console.log(this.provider);
+      const isProvider = await dstcontracts.ProviderRegistry.isProvider(
+        this.provider
+      );
+
+      console.log("isProvider", isProvider);
+      // Recharge
+      // address provider,
+      // uint64 nonce,
+      // address owner,
+      // bytes32 account,
+      // uint256 amount
+      // Recharge(address provider,account,uint256 amount)
+      const name = "FundPool";
+      const version = "V1";
+      const chainId = await dstcontracts.signer.getChainId();
+      const verifyingContract = dstcontracts.FundPool.address;
+      const amount = BigNumber.from((100e6).toString());
+      const rechargeSig = await dstcontracts.signer._signTypedData(
+        {
+          name,
+          version,
+          chainId,
+          verifyingContract,
+        },
+        {
+          Recharge: [
+            { name: "provider", type: "address" },
+            { name: "account", type: "bytes32" },
+            { name: "amount", type: "uint256" },
+          ],
+        },
+        {
+          provider: this.provider,
+          account: this.uuid,
+          amount,
+        }
+      );
+      console.log("rechargeSig", rechargeSig);
+      const doaminTypeHash = utils.keccak256(
+        Buffer.from(
+          "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
+        )
+      );
+      const domainStructHash = utils.keccak256(
+        utils.defaultAbiCoder.encode(
+          ["bytes32", "bytes32", "bytes32", "uint256", "address"],
+          [
+            doaminTypeHash,
+            utils.keccak256(Buffer.from(name)),
+            utils.keccak256(Buffer.from(version)),
+            chainId,
+            verifyingContract,
+          ]
+        )
+      );
+      const messageTypes =
+        "Recharge(address provider,bytes32 account,uint256 amount)";
+      const messageTypeHash = utils.keccak256(Buffer.from(messageTypes));
+      const messageStructHash = utils.keccak256(
+        utils.defaultAbiCoder.encode(
+          ["bytes32", "address", "bytes32", "uint256"],
+          [messageTypeHash, this.provider, this.uuid, amount]
+        )
+      );
+      const hash = utils.keccak256(
+        Buffer.concat([
+          Buffer.from("1901", "hex"),
+          Buffer.from(domainStructHash.substring(2), "hex"),
+          Buffer.from(messageStructHash.substring(2), "hex"),
+        ])
+      );
+      console.log("hash", hash);
+      const cHash = await dstcontracts.FundPool.hashTypedDataV4ForRecharge(
+        this.provider,
+        this.uuid,
+        amount
+      );
+      console.log("hashTypedDataV4ForRecharge", cHash);
+      const sig = rechargeSig;
+      const address = utils.recoverAddress(hash, sig);
+      console.log("rechargeSig", rechargeSig, "recoverAddress", address);
+
+      const data = dstcontracts.FundPool.interface.encodeFunctionData(
+        "recharge",
+        [this.provider, this.uuid, amount, sig]
+      );
+      const receipt = await dstcontracts.sendTransaction({
+        to: dstcontracts.FundPool.address,
+        data,
+      });
+      console.log("receipt", receipt);
+      const balance = await dstcontracts.FundPool.balanceOf(
+        this.provider,
+        this.uuid
+      );
+      console.log("balance", balance.toString());
     },
   },
 };
