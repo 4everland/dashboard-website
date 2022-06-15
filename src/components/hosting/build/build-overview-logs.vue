@@ -33,10 +33,11 @@
         >
       </e-kv>
       <div class="fz-14 gray" v-else>
-        <div v-if="inNew && info && info.platform == 'IC'">
+        <div v-if="isSyncErr" class="red-1">Syncing failed</div>
+        <div v-else-if="inNew && info && info.platform == 'IC'">
           Syncing to IC may take more time to complete,
-          <a href="#/hosting/projects">click here</a> for other operations
-          without waiting.
+          <a href="#/hosting/projects" class="u">click here</a> for other
+          operations without waiting.
         </div>
         <span v-else>Pending</span>
       </div>
@@ -102,6 +103,9 @@ export default {
     isFail() {
       return this.info && this.info.isFail;
     },
+    isSyncErr() {
+      return /fail/i.test(this.info.syncState);
+    },
   },
   watch: {
     taskId() {
@@ -152,6 +156,8 @@ export default {
         if (this.isDone) {
           this.curIdx = isIpfs ? 2 : 1;
           this.$store.dispatch("getProjectInfo", this.info.projectId);
+        } else if (this.isSyncErr) {
+          this.curIdx = 1;
         } else if (hash || this.state == "syncing") {
           this.curIdx = isIpfs ? 2 : 1;
         }
@@ -164,7 +170,11 @@ export default {
     },
     getIcon(i) {
       if (!this.info) return "";
-      if (i == 0 && this.isFail) return "fail";
+      if (i == 0) {
+        if (this.isSyncErr) return "checked";
+        if (this.isFail) return "fail";
+      }
+      if (this.isSyncErr && i == 1) return "fail";
       if (this.isFail) return "pending";
       if (i < this.curIdx || this.isDone) return "checked";
       return i == this.curIdx ? "loading" : "pending";
