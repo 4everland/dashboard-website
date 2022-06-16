@@ -83,7 +83,7 @@
         </div>
       </div>
       <div v-else>
-        <div class="bd-1 bdrs-5 ov-a" style="max-height: 355px">
+        <div class="bd-1 bdrs-5 ov-a" style="max-height: 355px; padding: 0">
           <div v-for="(it, i) in list" :key="it.id">
             <div class="pd-20 d-flex al-c">
               <!-- <v-icon class="mr-5">mdi-wallet</v-icon> -->
