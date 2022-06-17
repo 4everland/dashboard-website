@@ -1,7 +1,7 @@
 import Settings from "./settings";
-import Collections from "./collections";
-import Referral from "./referral";
-import BugBounty from "./bug-bounty";
+// import Collections from "./collections";
+// import Referral from "./referral";
+// import BugBounty from "./bug-bounty";
 
 export default [
   {
@@ -16,7 +16,9 @@ export default [
   },
   {
     path: "/referral",
-    component: Referral,
+    // component: Referral,
+    component: () => import("./referral"),
+
     meta: {
       title: "My Referral",
       hideNav: 1,
@@ -25,14 +27,18 @@ export default [
   },
   {
     path: "/collections",
-    component: Collections,
+    // component: Collections,
+    component: () => import("./collections"),
+
     meta: {
       title: "My Collection",
     },
   },
   {
     path: "/bug-bounty",
-    component: BugBounty,
+    // component: BugBounty,
+    component: () => import("./bug-bounty"),
+
     meta: {
       title: "Bug Bounty",
     },
