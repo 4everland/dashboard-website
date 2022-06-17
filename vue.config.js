@@ -7,5 +7,6 @@ module.exports = {
     host: "0.0.0.0",
     port: 8082,
     open: true,
+    productionSourceMap: false,
   },
 };
