@@ -1,8 +1,8 @@
-import Home from "./home";
+// import Home from "./home";
 import Login from "./login";
 
-import Overview from "./overview";
-import Plan from "./plan";
+// import Overview from "./overview";
+// import Plan from "./plan";
 
 import HostingRoutes from "./hosting/routes";
 import BucketRoutes from "./bucket/routes";
@@ -12,7 +12,8 @@ import MoreRoutes from "./more/routes";
 export default [
   {
     path: "/",
-    component: Home,
+    // component: Home,
+    component: () => import("./home"),
   },
   {
     path: "/login",
@@ -23,7 +24,8 @@ export default [
   },
   {
     path: "/overview",
-    component: Overview,
+    // component: Overview,
+    component: () => import("./overview"),
     meta: {
       title: "Overview",
       isTab: true,
@@ -35,7 +37,8 @@ export default [
   ...MoreRoutes,
   {
     path: "/plan",
-    component: Plan,
+    // component: Plan,
+    component: () => import("./plan"),
     meta: {
       title: "Plan",
       wrapCls: "main-wrap pa-0",
