@@ -6,8 +6,10 @@
     "serve": "vue-cli-service serve",
     "d": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:prod": "vue-cli-service build --mode production",
     "build:dev": "vue-cli-service build --mode development",
-    "p": "vue-cli-service build && 4ever-hosting deploy",
+    "build:alpha": "vue-cli-service build --mode alpha",
+    "p": "vue-cli-service build:alpha && 4ever-hosting deploy",
     "lint": "vue-cli-service lint",
     "format": "vue-cli-service lint --format"
   },
