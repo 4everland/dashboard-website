@@ -1,5 +1,5 @@
 import New from "./new";
-import Projects from "./projects";
+// import Projects from "./projects";
 import Project from "./project";
 import Build from "./build";
 import Domains from "./domains";
@@ -30,7 +30,8 @@ export default [
   },
   {
     path: "/projects",
-    component: Projects,
+    // component: Projects,
+    component: () => import("./projects"),
     meta: {
       title: "Projects",
       isTab: 1,
