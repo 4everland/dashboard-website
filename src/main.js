@@ -8,7 +8,7 @@ import "./setup";
 import { endpoint } from "./api";
 // import AWS from "aws-sdk";
 import { S3 } from "@aws-sdk/client-s3";
-import { isSolana } from "@/plugins/sns/snsAirDrop.js";
+// import { isSolana } from "@/plugins/sns/snsAirDrop.js";
 export const bus = new Vue();
 Vue.config.productionTip = false;
 const Minio = require("minio-s");
