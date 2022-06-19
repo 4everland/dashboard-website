@@ -9,16 +9,6 @@
             repository.
           </div>
         </div>
-        <v-btn
-          v-if="!repoName && repoList"
-          small
-          icon
-          :loading="listing"
-          @click="getRepoList"
-          class="ml-auto"
-        >
-          <v-icon>mdi-refresh</v-icon>
-        </v-btn>
       </div>
       <div class="mt-5 b-1">
         <div class="d-flex al-c f-wrap" v-if="repoName">
@@ -44,60 +34,14 @@
           </v-btn>
         </div>
         <template v-else>
-          <div v-if="!repoList || !repoList.length">
-            <v-btn
-              color="primary"
-              rounded
-              :loading="listing"
-              @click="getRepoList"
-            >
+          <div v-if="!showConnect">
+            <v-btn color="primary" rounded @click="showConnect = true">
               <v-icon>mdi-github</v-icon>
               <span class="ml-2">Connect Github</span>
             </v-btn>
           </div>
           <div v-else>
-            <div class="d-flex al-c bdb-1" v-if="repoList.length">
-              <v-icon class="ml-4">mdi-magnify</v-icon>
-              <input
-                type="text"
-                v-model="keyword"
-                placeholder="Search"
-                class="flex-1 pd-10"
-                style="height: 54px; outline: none"
-              />
-            </div>
-            <div class="ta-c pd-20" v-if="!repoResList.length">
-              No Result Found
-            </div>
-            <div v-else style="max-height: 60vh" class="ov-a">
-              <div
-                class="pa-3 d-flex al-c"
-                :class="{
-                  'bdt-1': i > 0,
-                }"
-                v-for="(it, i) in repoResList"
-                :key="i"
-              >
-                <a
-                  :href="it.cloneUrl.replace('.git', '')"
-                  target="_blank"
-                  class="line-1 mr-5 fz-15 b u"
-                >
-                  {{ it.namespace }}/{{ it.name }}
-                </a>
-                <span class="ml-3 mr-3 shrink-0 gray fz-13">
-                  <e-time>{{ it.updateAt }}</e-time>
-                </span>
-                <v-btn
-                  class="ml-auto"
-                  color="primary"
-                  small
-                  @click="onConnect(it)"
-                >
-                  Connect
-                </v-btn>
-              </div>
-            </div>
+            <new-step-0-git @select="onConnect" in-setting />
           </div>
         </template>
       </div>
@@ -149,8 +93,7 @@ export default {
       currentBranch: "",
       branches: [],
       savingBranch: false,
-      listing: false,
-      repoList: null,
+      showConnect: false,
       keyword: "",
     };
   },
@@ -190,22 +133,6 @@ export default {
   methods: {
     onConnect(it) {
       this.setConnect(it.id);
-    },
-    async getRepoList() {
-      try {
-        this.listing = true;
-        const { data } = await this.$http2.get("/repo/list");
-        if (!data.length) {
-          this.isAddClick = true;
-          this.$openWindow(
-            "https://github.com/apps/foreverlandxyz/installations/new"
-          );
-        }
-        this.repoList = data;
-      } catch (error) {
-        //
-      }
-      this.listing = false;
     },
     onUpdted() {
       this.$setState({
@@ -266,6 +193,7 @@ export default {
         });
         this.onUpdted();
         this.$toast("Updated Production Branch successfully.");
+        this.showConnect = false;
       } catch (error) {
         //
       }

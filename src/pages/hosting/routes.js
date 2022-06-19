@@ -9,7 +9,10 @@ import StatisDetail from "./statistics-detail";
 export default [
   {
     path: "/new",
-    component: New,
+    // component: New,
+    components: {
+      noCache: New,
+    },
     meta: {
       title: "New Project",
       subTitle: "3 easy steps to get your projects live",
@@ -78,6 +81,7 @@ export default [
     component: Domains,
     meta: {
       title: "Domains",
+      isTab: 1,
     },
   },
   {
@@ -85,6 +89,7 @@ export default [
     component: Statistics,
     meta: {
       title: "Statistics",
+      isTab: 1,
     },
   },
   {
