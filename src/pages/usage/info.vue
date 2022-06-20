@@ -81,11 +81,20 @@ export default {
         },
         {
           label: "Storage IPFS",
+          ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
+          desc: `（Free 4 GB a year, ${
+            getSize(info.purchasedIpfsStorage) || "0G"
+          } purchased，${
+            getSize(info.usedIpfsStorage) || "0GB"
+          } used，${new Date(info.ipfsStorageExpired).format()}）`,
         },
         {
           label: "Storage AR",
           tip: "AR is permanent storage.",
-          // color: "#6acbff",
+          desc: `（Free 100MB，${
+            getSize(info.purchasedArStorage) || "0GB"
+          } purchased）`,
+          ...this.getPerc(info.usedArStorage, info.arStorage),
         },
         {
           label: "Build Minutes",
