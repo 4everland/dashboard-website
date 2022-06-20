@@ -36,7 +36,7 @@
             <div class="m-progress">
               <v-progress-linear
                 :color="it.color || 'primary'"
-                :value="30"
+                :value="it.perc || 0"
                 height="14"
                 rounded
               ></v-progress-linear>
@@ -46,7 +46,7 @@
             </p>
           </div>
         </div>
-        <div class="color-1 fz-13 ml-2">30/100 {{ it.unit || "GB" }}</div>
+        <div class="color-1 fz-13 ml-2">{{ it.percTxt || "/" }}</div>
         <span class="gray ml-2 fz-13">{{ it.rechargeTip }}</span>
       </div>
     </div>
@@ -61,10 +61,23 @@
 export default {
   data() {
     return {
-      list: [
+      info: {},
+    };
+  },
+  computed: {
+    list() {
+      const info = this.info;
+      const getSize = this.$utils.getFileSize;
+      return [
         {
           label: "Bandwidth",
-          desc: "（Free 100GB per month,  0 GB purchased）",
+          desc: `（Free ${getSize(info.freeBandwidth) || "100GB"} per month,  ${
+            getSize(info.purchasedBandwidth) || "0GB"
+          } purchased）`,
+          ...this.getPerc(
+            info.usedFreeBandwidth + info.usedPurchasedBandwidth,
+            info.freeBandwidth + info.purchasedBandwidth
+          ),
         },
         {
           label: "Storage IPFS",
@@ -76,21 +89,52 @@ export default {
         },
         {
           label: "Build Minutes",
-          desc: "（Free 250Minutes  per month,  0 GB purchased）",
-          unit: "Minutes",
-          rechargeTip: "（ Recharge used 50MB）",
+          desc: `（Free ${info.freeBuildMinutes || 250}Minutes  per month,  ${
+            info.purchasedBuildMinutes
+          }Minutes purchased）`,
+          ...this.getPerc(
+            info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes,
+            info.freeBuildMinutes + info.purchasedBuildMinutes,
+            "Minutes"
+          ),
+          // rechargeTip: "（ Recharge used 50MB）",
         },
-      ],
-    };
+      ];
+    },
   },
   mounted() {
     // this.getInfo()
   },
   methods: {
+    getPerc(used, total, unit = "GB") {
+      const getSize = this.$utils.getFileSize;
+      if (!total)
+        return {
+          perc: 0,
+          percTxt: "0/",
+          unit: "GB",
+        };
+      let percTxt = "";
+      if (unit == "GB") {
+        const usedObj = getSize(used, true);
+        const totalObj = getSize(total, true);
+        let childUnit = "";
+        if (usedObj.unit != totalObj.unit) childUnit = usedObj.unit;
+        percTxt = `${usedObj.num} ${childUnit} / ${totalObj.num} ${totalObj.unit}`;
+      } else {
+        percTxt = `${used} / ${total} ${unit}`;
+      }
+      return {
+        perc: Math.round((used * 100) / total),
+        percTxt,
+        unit,
+      };
+    },
     async getInfo() {
       try {
         const { data } = await this.$http2.get(`/usage/{guid}`);
         console.log(data);
+        this.info = data;
       } catch (error) {
         console.log(error);
       }

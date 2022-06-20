@@ -83,6 +83,9 @@ Vue.prototype.$utils = {
     return str.substring(0, len);
   },
   getFileSize(byte, isObj = false) {
+    if (!byte && byte !== 0 && !isObj) {
+      return byte;
+    }
     const mb = Math.pow(1024, 2);
     const gb = Math.pow(1024, 3);
     let num = byte;
