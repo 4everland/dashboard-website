@@ -83,5 +83,18 @@ export default {
       ],
     };
   },
+  mounted() {
+    // this.getInfo()
+  },
+  methods: {
+    async getInfo() {
+      try {
+        const { data } = await this.$http2.get(`/usage/{guid}`);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
 };
 </script>
