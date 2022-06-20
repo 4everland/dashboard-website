@@ -8,6 +8,7 @@ export default {
   data() {
     return {
       payAddr: "0xF1658C608708172655A8e70a1624c29F956Ee63D",
+      curContract: null,
     };
   },
   computed: {
@@ -61,15 +62,18 @@ export default {
           return;
         }
         const provider = new providers.Web3Provider(window.ethereum);
-        if (this.chainId != 5) {
-          srccontracts.setProvider(provider);
-          console.log(srccontracts);
-        } else {
+        if (this.isPolygon) {
           dstcontracts.setProvider(provider);
-          console.log(dstcontracts);
+          this.curContract = dstcontracts;
+        } else {
+          srccontracts.setProvider(provider);
+          this.curContract = srccontracts;
         }
+        console.log(this.payBy, this.curContract);
       } catch (error) {
-        this.$alert(error.message);
+        this.$alert(error.message).then(() => {
+          this.$router.push("/usage/info");
+        });
       }
     },
   },
