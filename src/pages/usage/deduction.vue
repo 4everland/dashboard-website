@@ -7,6 +7,14 @@
       disable-pagination
     >
     </v-data-table>
+
+    <e-pagi
+      class="pa-5"
+      @input="getList"
+      v-model="page"
+      :limit="10"
+      :total="total"
+    />
   </div>
 </template>
 
@@ -33,7 +41,30 @@ export default {
         },
       ],
       list: [],
+      total: 0,
+      page: 1,
     };
+  },
+  mounted() {
+    this.getList();
+  },
+  methods: {
+    async getList() {
+      try {
+        const { data } = await this.$http.get("/bill/consume/list", {
+          params: {
+            page: this.page,
+            size: 10,
+          },
+        });
+        this.list = data.rows.map((it) => {
+          return it;
+        });
+        this.total = data.count;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

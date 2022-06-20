@@ -3,7 +3,7 @@
     <div class="al-c ov-a pb-1">
       <v-icon color="#6e7787" size="18" class="mr-2">mdi-alert-circle</v-icon>
       <span class="gray-7 mr-3">Total balance:</span>
-      <b class="fz-20 red-1">700</b>
+      <b class="fz-20 red-1">{{ balance }}</b>
       <span class="gray-6 fz-12 ml-2 mt-1">USDC</span>
       <v-btn color="primary" rounded class="ml-8" @click="showRecharge = true"
         >Recharge</v-btn
@@ -23,6 +23,14 @@
         disable-pagination
         @click:row="onItem"
       ></v-data-table>
+
+      <e-pagi
+        class="pa-5"
+        @input="getList"
+        v-model="page"
+        :limit="10"
+        :total="total"
+      />
     </div>
 
     <v-dialog v-model="showRecharge" max-width="500">
@@ -48,7 +56,7 @@
         </div>
         <div class="mt-4 al-c gray-7">
           <span class="ml-2">Total Balance:</span>
-          <b class="fz-20 red-1 mr-1 ml-2">0</b>
+          <b class="fz-20 red-1 mr-1 ml-2">{{ balance }}</b>
           <span class="fz-13 mt-1">USD</span>
           <span class="ml-auto">
             Wallet Banace: 200 <span class="fz-13">USDC</span>
@@ -84,7 +92,6 @@
 </template>
 
 <script>
-import dstcontracts from "@/plugins/pay/contracts/dst-chain-contracts";
 export default {
   data() {
     return {
@@ -96,7 +103,7 @@ export default {
         },
         {
           text: "Content",
-          value: "content",
+          value: "contentJson",
         },
         {
           text: "Amount",
@@ -111,129 +118,44 @@ export default {
           value: "status",
         },
       ],
-      list: [
-        {
-          hash: "test",
-          content: "test cc",
-          amount: 18.5,
-          time: "2022",
-          status: "success",
-        },
-      ],
-      provider: this.$store.state.userInfo.uid,
-      uuid: Buffer.alloc(32, 6),
-      core: null,
+      list: [],
+      total: 0,
+      page: 1,
+      balance: 0,
     };
   },
-  created() {},
+  mounted() {
+    this.getBalance();
+    this.getList();
+  },
   methods: {
+    async getBalance() {
+      try {
+        const { data } = await this.$http.get("/account/balance");
+        this.balance = data;
+      } catch (error) {
+        //
+      }
+    },
+    async getList() {
+      try {
+        const { data } = await this.$http.get("bill/list", {
+          params: {
+            page: this.page,
+            size: 10,
+          },
+        });
+        this.list = data.rows.map((it) => {
+          it.time = new Date(it.paymentTime).format();
+          return it;
+        });
+        this.total = data.count;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     onItem(row) {
       this.$navTo(`/usage/billing/detail?hash=` + row.hash);
-    },
-
-    async recharge() {
-      console.log(1);
-      const from = this.$store.state.userInfo.uid;
-      if (!from) {
-        return;
-      }
-      console.log(this.provider);
-      const isProvider = await dstcontracts.ProviderRegistry.isProvider(
-        this.provider
-      );
-
-      console.log("isProvider", isProvider);
-      // Recharge
-      // address provider,
-      // uint64 nonce,
-      // address owner,
-      // bytes32 account,
-      // uint256 amount
-      // Recharge(address provider,account,uint256 amount)
-      const name = "FundPool";
-      const version = "V1";
-      const chainId = await dstcontracts.signer.getChainId();
-      const verifyingContract = dstcontracts.FundPool.address;
-      const amount = BigNumber.from((100e6).toString());
-      const rechargeSig = await dstcontracts.signer._signTypedData(
-        {
-          name,
-          version,
-          chainId,
-          verifyingContract,
-        },
-        {
-          Recharge: [
-            { name: "provider", type: "address" },
-            { name: "account", type: "bytes32" },
-            { name: "amount", type: "uint256" },
-          ],
-        },
-        {
-          provider: this.provider,
-          account: this.uuid,
-          amount,
-        }
-      );
-      console.log("rechargeSig", rechargeSig);
-      const doaminTypeHash = utils.keccak256(
-        Buffer.from(
-          "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
-        )
-      );
-      const domainStructHash = utils.keccak256(
-        utils.defaultAbiCoder.encode(
-          ["bytes32", "bytes32", "bytes32", "uint256", "address"],
-          [
-            doaminTypeHash,
-            utils.keccak256(Buffer.from(name)),
-            utils.keccak256(Buffer.from(version)),
-            chainId,
-            verifyingContract,
-          ]
-        )
-      );
-      const messageTypes =
-        "Recharge(address provider,bytes32 account,uint256 amount)";
-      const messageTypeHash = utils.keccak256(Buffer.from(messageTypes));
-      const messageStructHash = utils.keccak256(
-        utils.defaultAbiCoder.encode(
-          ["bytes32", "address", "bytes32", "uint256"],
-          [messageTypeHash, this.provider, this.uuid, amount]
-        )
-      );
-      const hash = utils.keccak256(
-        Buffer.concat([
-          Buffer.from("1901", "hex"),
-          Buffer.from(domainStructHash.substring(2), "hex"),
-          Buffer.from(messageStructHash.substring(2), "hex"),
-        ])
-      );
-      console.log("hash", hash);
-      const cHash = await dstcontracts.FundPool.hashTypedDataV4ForRecharge(
-        this.provider,
-        this.uuid,
-        amount
-      );
-      console.log("hashTypedDataV4ForRecharge", cHash);
-      const sig = rechargeSig;
-      const address = utils.recoverAddress(hash, sig);
-      console.log("rechargeSig", rechargeSig, "recoverAddress", address);
-
-      const data = dstcontracts.FundPool.interface.encodeFunctionData(
-        "recharge",
-        [this.provider, this.uuid, amount, sig]
-      );
-      const receipt = await dstcontracts.sendTransaction({
-        to: dstcontracts.FundPool.address,
-        data,
-      });
-      console.log("receipt", receipt);
-      const balance = await dstcontracts.FundPool.balanceOf(
-        this.provider,
-        this.uuid
-      );
-      console.log("balance", balance.toString());
     },
   },
 };

@@ -112,7 +112,7 @@ export default {
     },
   },
   mounted() {
-    // this.getInfo()
+    this.getInfo();
   },
   methods: {
     getPerc(used, total, unit = "GB") {
@@ -141,7 +141,7 @@ export default {
     },
     async getInfo() {
       try {
-        const { data } = await this.$http2.get(`/usage/{guid}`);
+        const { data } = await this.$http2.get(`/usage`);
         console.log(data);
         this.info = data;
       } catch (error) {
