@@ -45,8 +45,8 @@
         </div>
       </div>
     </div>
-    <div class="mt-8 d-flex pt-4 bdt-1">
-      <div class="ml-auto bg-f8a bdrs-8 pa-3 pl-5 pr-5 d-flex al-c">
+    <div class="mt-8 d-flex pt-4 bdt-1 bg-white pos-s btm-0">
+      <div class="ml-auto mr-8 bg-f8a bdrs-8 pa-3 pl-5 pr-5 d-flex al-c">
         <span class="fz-18">Total:</span>
         <span class="red-1 ml-2 lh-1">
           <b
@@ -62,7 +62,7 @@
           class="ml-5"
           min-width="120"
           :disabled="totalPrice <= 0"
-          @click="showOrder = true"
+          @click="onPreview"
           >Preview</v-btn
         >
       </div>
@@ -76,11 +76,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { providers } from "ethers"; //BigNumber, utils
-import srccontracts from "../../plugins/pay/contracts/src-chain-contracts";
-import dstcontracts from "../../plugins/pay/contracts/dst-chain-contracts";
-import client from "../../plugins/pay/contracts/SGNClient";
+import mixin from "./mixin";
 
 const list = [
   {
@@ -110,6 +106,7 @@ const list = [
   },
 ];
 export default {
+  mixins: [mixin],
   data() {
     const form = {};
     list.forEach((it) => {
@@ -119,15 +116,9 @@ export default {
       form,
       list,
       showOrder: false,
-      payAddr: "0xF1658C608708172655A8e70a1624c29F956Ee63D",
     };
   },
   computed: {
-    ...mapState({
-      connectAddr: (s) => s.connectAddr,
-      netType: (s) => s.netType,
-      chainId: (s) => s.chainId,
-    }),
     previewList() {
       return this.list
         .map((it) => {
@@ -150,34 +141,13 @@ export default {
         .toFixed(2);
     },
   },
-  watch: {
-    connectAddr(val) {
-      if (val) this.onConnect();
-    },
-  },
-  mounted() {
-    if (this.connectAddr) {
-      this.onConnect();
-    } else {
-      this.showConnect();
-    }
-  },
   methods: {
-    showConnect() {
-      this.$setMsg({
-        name: "showMetaConnect",
-      });
-    },
-    async onConnect() {
-      console.log(this.chainId, client);
-      const provider = new providers.Web3Provider(window.ethereum);
-      if (this.chainId != 5) {
-        srccontracts.setProvider(provider);
-        console.log(srccontracts);
-      } else {
-        dstcontracts.setProvider(provider);
-        console.log(dstcontracts);
+    onPreview() {
+      if (!this.connectAddr) {
+        this.showConnect();
+        return;
       }
+      this.showOrder = true;
     },
   },
 };

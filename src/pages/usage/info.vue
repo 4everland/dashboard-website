@@ -81,12 +81,12 @@ export default {
         },
         {
           label: "Storage IPFS",
-          ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
           desc: `（Free 4 GB a year, ${
             getSize(info.purchasedIpfsStorage) || "0G"
           } purchased，${
             getSize(info.usedIpfsStorage) || "0GB"
-          } used，${new Date(info.ipfsStorageExpired).format()}）`,
+          } used，${new Date(info.ipfsStorageExpired || 0).format()}）`,
+          ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
         },
         {
           label: "Storage AR",
@@ -99,7 +99,7 @@ export default {
         {
           label: "Build Minutes",
           desc: `（Free ${info.freeBuildMinutes || 250}Minutes  per month,  ${
-            info.purchasedBuildMinutes
+            info.purchasedBuildMinutes || 0
           }Minutes purchased）`,
           ...this.getPerc(
             info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes,
