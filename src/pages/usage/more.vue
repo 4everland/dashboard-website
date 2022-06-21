@@ -80,9 +80,11 @@
           depressed
           @click="onApprove"
           :disabled="isApproved"
-          >Approve</v-btn
+          >{{ isApproved ? "Approved" : "Approve" }}</v-btn
         >
-        <v-btn outlined rounded block class="mt-4">Submit</v-btn>
+        <v-btn outlined rounded block class="mt-4" @click="onSubmit"
+          >Submit</v-btn
+        >
       </usage-order>
     </v-dialog>
   </div>
@@ -216,8 +218,7 @@ export default {
         fee = this.formatToken(fee.length == 2 ? fee[0].add(fee[1]) : fee, 4);
         console.log(it.key, fee);
       } catch (error) {
-        console.log(error);
-        this.$alert(error.message);
+        this.onErr(error);
       }
       this.feeLoading = false;
     },
@@ -255,6 +256,34 @@ export default {
         return;
       }
       this.showOrder = true;
+    },
+    async onSubmit() {
+      try {
+        const form = this.feeForm;
+        const payloads = [];
+        for (const key in form) {
+          const val = key;
+          payloads.push({
+            resourceType: key,
+            values: key == ResourceType.IPFSStorage ? val : [val],
+          });
+        }
+        console.log(payloads);
+        const nonce = Math.floor(Date.now() / 1000);
+        this.$loading();
+        const tx = await this.curContract[this.chainKey].pay({
+          provider: this.providerAddr,
+          nonce,
+          account: this.uuid,
+          payloads,
+        });
+        console.log("tx", tx);
+        const receipt = await tx.wait(1);
+        console.log("receipt", receipt);
+        this.$loading.close();
+      } catch (error) {
+        this.onErr(error);
+      }
     },
   },
 };

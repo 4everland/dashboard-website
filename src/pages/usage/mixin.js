@@ -37,11 +37,12 @@ export default {
     usdcKey() {
       return this.isPolygon ? "MumbaiUSDC" : "GoerliUSDC";
     },
+    chainKey() {
+      return this.isPolygon ? "DstChainPayment" : "SrcChainPayment";
+    },
     payAddr() {
       if (!this.curContract) return "";
-      return this.curContract[
-        this.isPolygon ? "DstChainPayment" : "SrcChainPayment"
-      ].address;
+      return this.curContract[this.chainKey].address;
     },
   },
   watch: {
@@ -60,6 +61,10 @@ export default {
     }
   },
   methods: {
+    onErr(err) {
+      console.log(err);
+      this.$alert(err.message);
+    },
     async checkApprove() {
       try {
         console.log("check approve", this.connectAddr, this.payAddr);
@@ -71,8 +76,7 @@ export default {
         this.isApproved = !allowance.lt(minAllowance);
         console.log("isApproved", this.isApproved, allowance);
       } catch (error) {
-        console.log(error);
-        this.$alert(error.message);
+        this.onErr(error);
       }
     },
     async onApprove() {
@@ -88,8 +92,7 @@ export default {
         this.isApproved = true;
         this.$loading.close();
       } catch (error) {
-        console.log(error);
-        this.$alert(error.message);
+        this.onErr(error);
       }
     },
     formatToken(value, fixed = 2, decimals = 18) {
