@@ -53,39 +53,8 @@
         class="mt-2"
       >
         <div class="al-c">
-          <v-select
-            style="max-width: 120px"
-            v-model="tokenIdx"
-            :items="tokenList"
-            item-text="symbol"
-            item-value="index"
-            single-line
-            dense
-            :menu-props="{
-              offsetY: true,
-            }"
-          >
-            <template #prepend v-if="selectedToken.symbol">
-              <img
-                :src="`img/svg/settings/c-${selectedToken.symbol.toLowerCase()}.svg`"
-                width="24"
-                class="mr-1"
-              />
-            </template>
-            <template #item="{ item }">
-              <div class="d-flex al-c pt-2 pb-2">
-                <img
-                  :src="`img/svg/settings/c-${item.symbol.toLowerCase()}.svg`"
-                  style="width: 20px"
-                />
-                <div class="ml-2 lh-1 mr-3" style="min-width: 90px">
-                  <p class="fz-13">{{ item.symbol }}</p>
-                  <p class="gray fz-12 mt-1">{{ item.name }}</p>
-                </div>
-                <span class="fz-14 gray">{{ item.balance }}</span>
-              </div>
-            </template>
-          </v-select>
+          <img src="img/svg/settings/c-usdc.svg" width="24" class="mr-1" />
+          <span class="ml-2">USDC</span>
 
           <div class="ml-auto fz-14 gray-7">
             <span class="">Total price:</span>
@@ -104,7 +73,6 @@
 
 <script>
 import { mapState } from "vuex";
-import { BigNumber } from "ethers";
 
 export default {
   props: {
@@ -112,58 +80,14 @@ export default {
     total: null,
   },
   data() {
-    return {
-      tokenIdx: 0,
-      tokenList: JSON.parse(localStorage.pay_token_list || "[]"),
-    };
+    return {};
   },
   computed: {
     ...mapState({
       payBy: (s) => s.payBy,
     }),
-    selectedToken() {
-      return this.tokenList[this.tokenIdx] || {};
-    },
   },
-  mounted() {
-    this.getTokenList();
-  },
-  methods: {
-    async getTokenList() {
-      if (this.tokenList.length) return;
-      if (!this.payment) return;
-      try {
-        this.$loading();
-        let len = await this.payment.tokenLength();
-        len = len.toNumber();
-        const list = [];
-        for (let i = 0; i < len; i++) {
-          let address = await this.payment.tokens(i);
-          const erc = this.erc20(address);
-          const name = await erc.name();
-          const symbol = await erc.symbol();
-          let balance = await erc.balanceOf(this.connectAddr);
-          //
-          balance =
-            balance.div(
-              BigNumber.from((symbol == "DAI" ? 1e18 : 1e6).toString())
-            ) + "";
-          list.push({
-            index: i,
-            name,
-            symbol,
-            address,
-            balance,
-          });
-        }
-        console.log(list);
-        this.tokenList = list;
-        localStorage.pay_token_list = JSON.stringify(list);
-      } catch (error) {
-        if (error) this.$alert(error.message);
-      }
-      this.$loading.close();
-    },
-  },
+  mounted() {},
+  methods: {},
 };
 </script>

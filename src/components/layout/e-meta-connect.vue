@@ -65,30 +65,36 @@ export default {
     },
     async isConnect(val) {
       // this.onConnect();
-      let connectAddr = "";
-      if (val) {
-        this.showPop = false;
-        const accounts = await window.web3.eth.getAccounts();
-        connectAddr = accounts[0];
-        await this.checkNet();
-        window.ethereum.on("chainChanged", (networkId) => {
-          console.log("chainChanged", networkId);
-          location.reload();
-        });
-        window.ethereum.on("accountsChanged", (accounts) => {
-          console.log("accountsChanged", accounts);
-          location.reload();
-        });
-      }
-      this.$setState({
-        noticeMsg: {
-          name: "walletConnect",
-          data: {
-            isConnect: val,
+      try {
+        let connectAddr = "";
+        if (val) {
+          this.showPop = false;
+          const accounts = await window.web3.eth.getAccounts();
+          connectAddr = accounts[0];
+          await this.checkNet();
+          window.ethereum.on("chainChanged", (networkId) => {
+            console.log("chainChanged", networkId);
+            location.reload();
+          });
+          window.ethereum.on("accountsChanged", (accounts) => {
+            console.log("accountsChanged", accounts);
+            location.reload();
+          });
+        }
+        this.$setState({
+          noticeMsg: {
+            name: "walletConnect",
+            data: {
+              isConnect: val,
+            },
           },
-        },
-        connectAddr,
-      });
+          connectAddr,
+        });
+      } catch (error) {
+        console.log("get_wallet_account error", error.message);
+        this.isConnect = false;
+        this.showPop = true;
+      }
     },
   },
   created() {
@@ -100,13 +106,18 @@ export default {
       this.ethAddr = data;
     },
     async onConnect() {
-      if (!this.isConnect) {
-        const isOk = await this.connectMetaMask();
-        this.isConnect = isOk;
-        if (!isOk) this.showPop = true;
-        else localStorage.isConnectMeta = "1";
-      } else {
-        this.isConnect = false;
+      try {
+        if (!this.isConnect) {
+          const isOk = await this.connectMetaMask();
+          this.isConnect = isOk;
+          if (!isOk) this.showPop = true;
+          else localStorage.isConnectMeta = "1";
+        } else {
+          this.isConnect = false;
+        }
+      } catch (error) {
+        console.log("connect_wallet error", error);
+        this.showPop = true;
       }
     },
     async checkNet() {

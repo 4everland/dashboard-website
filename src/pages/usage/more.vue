@@ -21,6 +21,7 @@
         <div class="al-c">
           <usage-input
             v-model="form[it.key]"
+            @input="getPrice(it, $event)"
             :min="0"
             :max="10000"
             :step="100"
@@ -78,6 +79,13 @@
 <script>
 import mixin from "./mixin";
 
+const ResourceType = {
+  BuildingTime: 1,
+  Bandwidth: 2,
+  ARStorage: 3,
+  IPFSStorage: 4,
+};
+
 export default {
   mixins: [mixin],
   data() {
@@ -85,6 +93,7 @@ export default {
       priceInfo: {},
       usageInfo: {},
       form: {},
+      syncForm: {},
       showOrder: false,
     };
   },
@@ -94,28 +103,32 @@ export default {
       return [
         {
           label: "Bandwidth",
+          id: ResourceType.Bandwidth,
           desc: "（Need to enter an integer multiple of 100.）",
           key: "bandwidth",
           unit: "GB",
-          unitPrice: info.trafficPrice || 0,
+          unitPrice: info.trafficUnitPrice || 0,
         },
         {
           label: "Storage IPFS",
+          id: ResourceType.IPFSStorage,
           key: "ipfs",
           unit: "GB",
-          unitPrice: info.ipfsStoragePrice || 0,
+          unitPrice: info.ipfsStorageUnitPrice || 0,
         },
         {
           label: "Storage AR",
+          id: ResourceType.ARStorage,
           key: "ar",
           unit: "MB",
-          unitPrice: info.arStoragePrice || 0,
+          unitPrice: info.arStorageUnitPrice || 0,
         },
         {
           label: "Build Minutes",
+          id: ResourceType.BuildingTime,
           key: "buildMinutes",
           unit: "Minutes",
-          unitPrice: info.buildTimePrice || 0,
+          unitPrice: info.buildTimeUnitPrice || 0,
         },
       ];
     },
@@ -140,7 +153,7 @@ export default {
           // if()
           return a + price;
         }, 0)
-        .toFixed(6)
+        .toFixed(4)
         .replace(/0+$/, "")
         .replace(/\.$/, "");
     },
@@ -154,12 +167,51 @@ export default {
     this.getInfo();
   },
   methods: {
+    async getPrice(it, val) {
+      let fee = 0;
+      this.syncForm[it.id] = 0;
+      if (!val) return;
+      try {
+        if (!this.curContract) {
+          throw new Error("No Contract");
+        }
+        console.log("get price", it, val);
+        let base = Math.pow(1024, it.id == ResourceType.ARStorage ? 2 : 3);
+        if (it.id == ResourceType.BuildingTime) {
+          base = 60;
+        }
+        let amount = base * val;
+        if (it.id == ResourceType.IPFSStorage) {
+          fee = await srccontracts.DstChainPayment.ipfsAlloctionsFee(
+            this.payAddr,
+            this.uuid,
+            amount,
+            0
+          );
+        } else {
+          fee = await this.curContract.DstChainPayment.getValueOf(
+            this.payAddr,
+            it.id,
+            amount
+          );
+        }
+        fee = this.formatToken(fee, 4);
+        console.log(it.key, fee);
+        this.syncForm[it.id] = fee;
+      } catch (error) {
+        console.log(error);
+        this.$alert(error.message);
+      }
+    },
     async getInfo() {
       try {
         this.$loading();
         const { data } = await this.$http.get("$v3/common/resource/price");
         for (const key in data) {
-          data[key] = data[key] / 10e18;
+          let m = key == "buildTimeUnitPrice" ? 60 : Math.pow(1024, 3);
+          if (key == "arStorageUnitPrice") m = Math.pow(1024, 2);
+          if (/ipfs/i.test(key)) m *= 86400 * 30;
+          data[key] = (data[key] * m * 100) / 1e18;
         }
         console.log(data);
         this.priceInfo = data;

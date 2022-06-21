@@ -1,5 +1,5 @@
 import { mapState } from "vuex";
-import { providers } from "ethers"; //BigNumber, utils
+import { providers, BigNumber } from "ethers"; //, utils
 import srccontracts from "../../plugins/pay/contracts/src-chain-contracts";
 import dstcontracts from "../../plugins/pay/contracts/dst-chain-contracts";
 import client from "../../plugins/pay/contracts/SGNClient";
@@ -42,6 +42,12 @@ export default {
     }
   },
   methods: {
+    formatToken(value, fixed = 2, decimals = 18) {
+      const v = value.div(
+        BigNumber.from((10 ** (decimals - fixed)).toString())
+      );
+      return (v.toNumber() / 10 ** fixed).toFixed(fixed);
+    },
     showConnect() {
       this.$setMsg({
         name: "showMetaConnect",
