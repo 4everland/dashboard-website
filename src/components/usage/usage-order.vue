@@ -65,8 +65,7 @@
       </e-kv>
     </div>
     <div class="pa-2 mt-1">
-      <v-btn color="primary" rounded block depressed>Approve</v-btn>
-      <v-btn outlined rounded block class="mt-4">Submit</v-btn>
+      <slot></slot>
     </div>
   </div>
 </template>

@@ -9,9 +9,9 @@ const uint256Max = BigNumber.from("1").shl(256).sub(1);
 export default {
   data() {
     return {
-      payAddr: "0xF1658C608708172655A8e70a1624c29F956Ee63D",
       curContract: null,
       isApproved: false,
+      providerAddr: "0xF1658C608708172655A8e70a1624c29F956Ee63D",
     };
   },
   computed: {
@@ -34,6 +34,15 @@ export default {
       if (this.isPolygon) return this.$inDev ? 80001 : 137;
       return this.$inDev ? 5 : 1;
     },
+    usdcKey() {
+      return this.isPolygon ? "MumbaiUSDC" : "GoerliUSDC";
+    },
+    payAddr() {
+      if (!this.curContract) return "";
+      return this.curContract[
+        this.isPolygon ? "DstChainPayment" : "SrcChainPayment"
+      ].address;
+    },
   },
   watch: {
     connectAddr(val) {
@@ -51,15 +60,26 @@ export default {
     }
   },
   methods: {
+    async checkApprove() {
+      try {
+        console.log("check approve", this.connectAddr, this.payAddr);
+        const allowance = await this.curContract[this.usdcKey].allowance(
+          this.connectAddr,
+          this.payAddr
+        );
+        const minAllowance = uint256Max.shr(1);
+        this.isApproved = !allowance.lt(minAllowance);
+        console.log("isApproved", this.isApproved, allowance);
+      } catch (error) {
+        console.log(error);
+        this.$alert(error.message);
+      }
+    },
     async onApprove() {
       try {
         this.$loading("Approving");
-        const tx = await this.curContract[
-          this.isPolygon ? "MumbaiUSDC" : "GoerliUSDC"
-        ].approve(
-          this.curContract[
-            this.isPolygon ? "DstChainPayment" : "SrcChainPayment"
-          ].address,
+        const tx = await this.curContract[this.usdcKey].approve(
+          this.paymentAddr,
           uint256Max
         );
         console.log("tx", tx);
@@ -88,7 +108,7 @@ export default {
         const { data } = await this.$http.post(
           "$v3/common/sign/" + this.connectAddr
         );
-        console.log(data);
+        console.log("sign", data);
       } catch (error) {
         console.log(error);
       }
@@ -116,7 +136,8 @@ export default {
           this.curContract = srccontracts;
         }
         console.log(this.payBy, this.curContract);
-        this.getSign();
+        // this.getSign();
+        this.checkApprove();
       } catch (error) {
         this.$alert(error.message).then(() => {
           this.$router.push("/usage/info");

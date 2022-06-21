@@ -63,6 +63,7 @@
           class="ml-5"
           min-width="120"
           :disabled="totalPrice <= 0"
+          :loading="feeLoading"
           @click="onPreview"
           >Preview</v-btn
         >
@@ -71,7 +72,18 @@
 
     <v-dialog v-model="showOrder" max-width="500">
       <e-dialog-close @click="showOrder = false" />
-      <usage-order :list="previewList" :total="totalPrice" />
+      <usage-order :list="previewList" :total="totalPrice">
+        <v-btn
+          color="primary"
+          rounded
+          block
+          depressed
+          @click="onApprove"
+          :disabled="isApproved"
+          >Approve</v-btn
+        >
+        <v-btn outlined rounded block class="mt-4">Submit</v-btn>
+      </usage-order>
     </v-dialog>
   </div>
 </template>
@@ -93,8 +105,9 @@ export default {
       priceInfo: {},
       usageInfo: {},
       form: {},
-      feeForm: {},
       showOrder: false,
+      feeForm: {},
+      feeLoading: false,
     };
   },
   computed: {
@@ -183,9 +196,10 @@ export default {
           base = 60;
         }
         let amount = base * val;
+        this.feeLoading = true;
         if (it.id == ResourceType.IPFSStorage) {
           fee = await this.curContract.DstChainPayment.ipfsAlloctionsFee(
-            this.payAddr,
+            this.providerAddr,
             this.uuid,
             amount,
             86400 * 30 * this.form.ipfsMon
@@ -193,7 +207,7 @@ export default {
           fee = [fee[0], fee[1]];
         } else {
           fee = await this.curContract.DstChainPayment.getValueOf(
-            this.payAddr,
+            this.providerAddr,
             it.id,
             amount
           );
@@ -205,6 +219,7 @@ export default {
         console.log(error);
         this.$alert(error.message);
       }
+      this.feeLoading = false;
     },
     async getInfo() {
       try {
@@ -216,7 +231,6 @@ export default {
           if (/ipfs/i.test(key)) m *= 86400 * 30;
           data[key] = (data[key] * m * 100) / 1e18;
         }
-        console.log(data);
         this.priceInfo = data;
 
         const { data: usageInfo } = await this.$http.get(`$v3/usage`);
