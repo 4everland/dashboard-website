@@ -93,7 +93,7 @@ export default {
       priceInfo: {},
       usageInfo: {},
       form: {},
-      syncForm: {},
+      feeForm: {},
       showOrder: false,
     };
   },
@@ -135,7 +135,7 @@ export default {
     previewList() {
       return this.list
         .map((it) => {
-          const value = this.form[it.key];
+          const value = this.form[it.key] || 0;
           return {
             label: it.label,
             value,
@@ -159,7 +159,9 @@ export default {
     },
   },
   mounted() {
-    const form = {};
+    const form = {
+      ipfsMon: 1,
+    };
     this.list.forEach((it) => {
       form[it.key] = 0;
     });
@@ -169,7 +171,7 @@ export default {
   methods: {
     async getPrice(it, val) {
       let fee = 0;
-      this.syncForm[it.id] = 0;
+      this.feeForm[it.id] = 0;
       if (!val) return;
       try {
         if (!this.curContract) {
@@ -182,12 +184,13 @@ export default {
         }
         let amount = base * val;
         if (it.id == ResourceType.IPFSStorage) {
-          fee = await srccontracts.DstChainPayment.ipfsAlloctionsFee(
+          fee = await this.curContract.DstChainPayment.ipfsAlloctionsFee(
             this.payAddr,
             this.uuid,
             amount,
-            0
+            86400 * 30 * this.form.ipfsMon
           );
+          fee = [fee[0], fee[1]];
         } else {
           fee = await this.curContract.DstChainPayment.getValueOf(
             this.payAddr,
@@ -195,9 +198,9 @@ export default {
             amount
           );
         }
-        fee = this.formatToken(fee, 4);
+        this.feeForm[it.id] = fee; // for submit
+        fee = this.formatToken(fee.length == 2 ? fee[0].add(fee[1]) : fee, 4);
         console.log(it.key, fee);
-        this.syncForm[it.id] = fee;
       } catch (error) {
         console.log(error);
         this.$alert(error.message);

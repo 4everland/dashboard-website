@@ -4,11 +4,14 @@ import srccontracts from "../../plugins/pay/contracts/src-chain-contracts";
 import dstcontracts from "../../plugins/pay/contracts/dst-chain-contracts";
 import client from "../../plugins/pay/contracts/SGNClient";
 
+const uint256Max = BigNumber.from("1").shl(256).sub(1);
+
 export default {
   data() {
     return {
       payAddr: "0xF1658C608708172655A8e70a1624c29F956Ee63D",
       curContract: null,
+      isApproved: false,
     };
   },
   computed: {
@@ -17,7 +20,13 @@ export default {
       netType: (s) => s.netType,
       chainId: (s) => s.chainId,
       payBy: (s) => s.payBy,
+      userInfo: (s) => s.userInfo,
     }),
+    uuid() {
+      const { uid } = this.userInfo;
+      if (!uid) return;
+      return "0x" + uid.replace("0x", "").padStart(64, "0");
+    },
     isPolygon() {
       return this.payBy == "Polygon";
     },
@@ -42,6 +51,27 @@ export default {
     }
   },
   methods: {
+    async onApprove() {
+      try {
+        this.$loading("Approving");
+        const tx = await this.curContract[
+          this.isPolygon ? "MumbaiUSDC" : "GoerliUSDC"
+        ].approve(
+          this.curContract[
+            this.isPolygon ? "DstChainPayment" : "SrcChainPayment"
+          ].address,
+          uint256Max
+        );
+        console.log("tx", tx);
+        const receipt = await tx.wait();
+        console.log(receipt);
+        this.isApproved = true;
+        this.$loading.close();
+      } catch (error) {
+        console.log(error);
+        this.$alert(error.message);
+      }
+    },
     formatToken(value, fixed = 2, decimals = 18) {
       const v = value.div(
         BigNumber.from((10 ** (decimals - fixed)).toString())
