@@ -78,47 +78,46 @@
 <script>
 import mixin from "./mixin";
 
-const list = [
-  {
-    label: "Bandwidth",
-    desc: "（Need to enter an integer multiple of 100.）",
-    key: "bandwidth",
-    unit: "GB",
-    unitPrice: 12.6,
-  },
-  {
-    label: "Storage IPFS",
-    key: "ipfs",
-    unit: "GB",
-    unitPrice: 12,
-  },
-  {
-    label: "Storage AR",
-    key: "ar",
-    unit: "MB",
-    unitPrice: 10,
-  },
-  {
-    label: "Build Minutes",
-    key: "buildMinutes",
-    unit: "Minutes",
-    unitPrice: 12.6,
-  },
-];
 export default {
   mixins: [mixin],
   data() {
-    const form = {};
-    list.forEach((it) => {
-      form[it.key] = 0;
-    });
     return {
-      form,
-      list,
+      info: {},
+      form: {},
       showOrder: false,
     };
   },
   computed: {
+    list() {
+      const info = this.info;
+      return [
+        {
+          label: "Bandwidth",
+          desc: "（Need to enter an integer multiple of 100.）",
+          key: "bandwidth",
+          unit: "GB",
+          unitPrice: info.trafficPrice || 0,
+        },
+        {
+          label: "Storage IPFS",
+          key: "ipfs",
+          unit: "GB",
+          unitPrice: info.ipfsStoragePrice || 0,
+        },
+        {
+          label: "Storage AR",
+          key: "ar",
+          unit: "MB",
+          unitPrice: info.arStoragePrice || 0,
+        },
+        {
+          label: "Build Minutes",
+          key: "buildMinutes",
+          unit: "Minutes",
+          unitPrice: info.buildTimePrice || 0,
+        },
+      ];
+    },
     previewList() {
       return this.list
         .map((it) => {
@@ -141,7 +140,27 @@ export default {
         .toFixed(2);
     },
   },
+  mounted() {
+    const form = {};
+    this.list.forEach((it) => {
+      form[it.key] = 0;
+    });
+    this.form = form;
+    this.getInfo();
+  },
   methods: {
+    async getInfo() {
+      try {
+        const { data } = await this.$http.get("$v3/common/resource/price");
+        console.log(data);
+        for (const key in data) {
+          if (/\./.test(data[key])) data[key] = (data[key] * 1).toFixed(6);
+        }
+        this.info = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     onPreview() {
       if (!this.connectAddr) {
         this.showConnect();

@@ -15,6 +15,9 @@ export const endpoint = inDev
 const authApi = inDev
   ? "https://auth.foreverland.xyz"
   : "https://oauth.4everland.org";
+const v3Api = inDev
+  ? "http://settlement.foreverland.xyz"
+  : "https://settlement.4everland.org";
 
 Vue.prototype.$endpoint = endpoint;
 
@@ -96,6 +99,7 @@ const lock = new AsyncLock({ timeout: 5000 });
       if (token && config.url != RefreshPath) {
         config.headers.common["Authorization"] = token;
       }
+      config.url = config.url.replace("$v3", v3Api);
       return config;
     },
     (error) => {

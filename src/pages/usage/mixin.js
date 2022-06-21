@@ -47,6 +47,16 @@ export default {
         name: "showMetaConnect",
       });
     },
+    async getSign() {
+      try {
+        const { data } = await this.$http.post(
+          "$v3/common/sign/" + this.connectAddr
+        );
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async onConnect() {
       console.log(this.chainId, client);
       try {
@@ -70,6 +80,7 @@ export default {
           this.curContract = srccontracts;
         }
         console.log(this.payBy, this.curContract);
+        this.getSign();
       } catch (error) {
         this.$alert(error.message).then(() => {
           this.$router.push("/usage/info");

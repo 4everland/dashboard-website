@@ -81,11 +81,13 @@ export default {
         },
         {
           label: "Storage IPFS",
-          desc: `（Free 4 GB a year, ${
-            getSize(info.purchasedIpfsStorage) || "0G"
-          } purchased，${
-            getSize(info.usedIpfsStorage) || "0GB"
-          } used，${new Date(info.ipfsStorageExpired || 0).format()}）`,
+          desc: info.ipfsStorage
+            ? `（Free 4 GB a year, ${
+                getSize(info.purchasedIpfsStorage) || "0G"
+              } purchased，${
+                getSize(info.usedIpfsStorage) || "0GB"
+              } used，${new Date(info.ipfsStorageExpired * 1000).format()}）`
+            : "",
           ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
         },
         {
@@ -120,7 +122,7 @@ export default {
       if (!total)
         return {
           perc: 0,
-          percTxt: "0/",
+          percTxt: "0",
           unit: "GB",
         };
       let percTxt = "";
@@ -141,7 +143,7 @@ export default {
     },
     async getInfo() {
       try {
-        const { data } = await this.$http2.get(`/usage`);
+        const { data } = await this.$http.get(`$v3/usage`);
         console.log(data);
         this.info = data;
       } catch (error) {

@@ -51,7 +51,7 @@ export default {
   methods: {
     async getList() {
       try {
-        const { data } = await this.$http.get("/bill/consume/list", {
+        const { data } = await this.$http.get("$v3/bill/consume/list", {
           params: {
             page: this.page,
             size: 10,

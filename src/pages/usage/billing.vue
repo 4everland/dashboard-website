@@ -81,7 +81,7 @@
           <span class="red-1">（Insufficient balance）</span>
         </div>
         <div class="mt-4 pa-3">
-          <v-btn color="primary" rounded block depressed @click="recharge"
+          <v-btn color="primary" rounded block depressed @click="onApprove"
             >Approve</v-btn
           >
           <v-btn class="mt-5" outlined rounded block>Confirm</v-btn>
@@ -131,7 +131,7 @@ export default {
   methods: {
     async getBalance() {
       try {
-        const { data } = await this.$http.get("/account/balance");
+        const { data } = await this.$http.get("$v3/account/balance");
         this.balance = data;
       } catch (error) {
         //
@@ -139,7 +139,7 @@ export default {
     },
     async getList() {
       try {
-        const { data } = await this.$http.get("bill/list", {
+        const { data } = await this.$http.get("$v3/bill/list", {
           params: {
             page: this.page,
             size: 10,
@@ -157,6 +157,7 @@ export default {
     onItem(row) {
       this.$navTo(`/usage/billing/detail?hash=` + row.hash);
     },
+    onApprove() {},
   },
 };
 </script>
