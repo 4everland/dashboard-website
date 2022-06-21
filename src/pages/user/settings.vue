@@ -9,10 +9,10 @@ export default {
   data() {
     return {
       list: [
-        {
-          text: "Billing",
-          comp: "st-billing",
-        },
+        // {
+        //   text: "Billing",
+        //   comp: "st-billing",
+        // },
         {
           text: "Account Binding",
           comp: "st-account",
