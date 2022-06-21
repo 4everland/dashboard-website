@@ -82,14 +82,15 @@ export default {
   mixins: [mixin],
   data() {
     return {
-      info: {},
+      priceInfo: {},
+      usageInfo: {},
       form: {},
       showOrder: false,
     };
   },
   computed: {
     list() {
-      const info = this.info;
+      const info = this.priceInfo;
       return [
         {
           label: "Bandwidth",
@@ -135,9 +136,13 @@ export default {
     totalPrice() {
       return this.previewList
         .reduce((a, b) => {
-          return a + b.price;
+          let price = b.price;
+          // if()
+          return a + price;
         }, 0)
-        .toFixed(2);
+        .toFixed(6)
+        .replace(/0+$/, "")
+        .replace(/\.$/, "");
     },
   },
   mounted() {
@@ -151,14 +156,28 @@ export default {
   methods: {
     async getInfo() {
       try {
+        this.$loading();
         const { data } = await this.$http.get("$v3/common/resource/price");
-        console.log(data);
         for (const key in data) {
-          if (/\./.test(data[key])) data[key] = (data[key] * 1).toFixed(6);
+          data[key] = data[key] / 10e18;
         }
-        this.info = data;
+        console.log(data);
+        this.priceInfo = data;
+
+        const { data: usageInfo } = await this.$http.get(`$v3/usage`);
+        this.usageInfo = usageInfo;
+        this.$loading.close();
       } catch (error) {
         console.log(error);
+        this.$confirm(error.message, {
+          confirmText: "Try Again",
+        })
+          .then(() => {
+            this.getInfo();
+          })
+          .catch(() => {
+            this.$router.push("/usage/info");
+          });
       }
     },
     onPreview() {
