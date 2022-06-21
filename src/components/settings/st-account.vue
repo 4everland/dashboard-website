@@ -33,6 +33,16 @@
 <script>
 import { mapState } from "vuex";
 import { providers } from "ethers";
+import * as fcl from "@onflow/fcl";
+fcl
+  .config()
+  .put("accessNode.api", process.env.VUE_APP_FLOW_API)
+  .put("app.detail.title", "4EVERLAND")
+  .put(
+    "app.detail.icon",
+    "https://eco.4everland.space/logo/4EVERLAND-logo3.png"
+  )
+  .put("discovery.wallet", process.env.VUE_APP_FLOW_DISCOVERY);
 let MetaMask;
 try {
   MetaMask = new providers.Web3Provider(window.ethereum);
@@ -42,6 +52,7 @@ export default {
   data() {
     return {
       phantomAddr: "",
+      flowAddr: "",
     };
   },
   computed: {
@@ -53,7 +64,7 @@ export default {
       const info = this.userInfo;
       const github = info.github || {};
       const wArr = [];
-      const noWallet = !info.wallet && !info.solana;
+      const noWallet = !info.wallet && !info.solana && !info.onFlow;
       if (info.wallet || noWallet)
         wArr.push({
           title: "MetaMask",
@@ -69,6 +80,14 @@ export default {
           icon: "m-phantom",
           type: 4,
           account: (info.solana || {}).address,
+        });
+      if (info.onFlow || noWallet)
+        wArr.push({
+          title: "Flow",
+          desc: "Get verified by connecting your flow account.",
+          icon: "m-flow",
+          type: 5,
+          account: (info.onFlow || {}).address,
         });
       return [
         {
@@ -108,6 +127,12 @@ export default {
         this.verifyPhantom();
       }
     },
+    flowAddr(val) {
+      if (this.binding == 5 && val) {
+        this.binding = null;
+        this.verifyFlow();
+      }
+    },
   },
   mounted() {
     this.onGithubCode();
@@ -137,19 +162,23 @@ export default {
       localStorage.last_github_code = code;
       this.onVcode(1, code);
     },
-    async onVcode(type, code) {
+    async onVcode(type, code, keyId) {
       try {
         const item = this.list.find((el) => {
           return el.type == type;
         });
         this.$loading("Binding " + item.title);
         this.$loading.close();
+        let params = {
+          _auth: 1,
+          type,
+        };
+        if (type == 5) {
+          params.keyId = keyId;
+        }
         // const { data } =
         await this.$http.get(`/auth/vcode/${code}`, {
-          params: {
-            _auth: 1,
-            type,
-          },
+          params,
         });
         this.$setMsg({
           name: "updateUser",
@@ -178,7 +207,17 @@ export default {
           const publicKey = await this.connectPhantom();
           this.phantomAddr = publicKey;
         } else {
-          this.verifyMetaMask();
+          this.verifyPhantom();
+        }
+        return;
+      }
+      if (it.type == 5) {
+        this.binding = 5;
+        if (!this.flowAddr) {
+          const currentUser = await this.connectFlow();
+          this.flowAddr = currentUser.addr;
+        } else {
+          this.verifyFlow();
         }
         return;
       }
@@ -244,6 +283,9 @@ export default {
       if (type == 4) {
         apply = this.phantomAddr;
       }
+      if (type == 5) {
+        apply = this.flowAddr;
+      }
       const { data } = await this.$http.post(
         `/bind`,
         {
@@ -299,6 +341,31 @@ export default {
         this.$loading.close();
         if (sig) {
           this.onVcode(4, sig);
+        }
+      } catch (error) {
+        this.$alert(error.message);
+      }
+    },
+    async connectFlow() {
+      fcl.unauthenticate();
+      try {
+        await fcl.authenticate();
+        return fcl.currentUser.snapshot();
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async verifyFlow() {
+      try {
+        this.$loading();
+        const nonce = await this.exchangeCode(5);
+        const MSG = Buffer.from(nonce).toString("hex");
+        const signUserMessage = await fcl.currentUser.signUserMessage(MSG);
+        const sig = signUserMessage[0].signature;
+        const keyId = signUserMessage[0].keyId;
+        this.$loading.close();
+        if (sig) {
+          this.onVcode(5, sig, keyId);
         }
       } catch (error) {
         this.$alert(error.message);
