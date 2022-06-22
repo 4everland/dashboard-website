@@ -299,7 +299,6 @@
       >
         <template v-slot:item.name="{ item }">
           <v-btn
-            class="e-btn-text"
             :color="inBucket ? 'primary' : '#000'"
             rounded
             text
@@ -312,7 +311,6 @@
             <b>{{ item.name.cutStr(10, 10) }}</b></v-btn
           >
           <v-btn
-            class="e-btn-text"
             icon
             small
             color="primary"
@@ -321,7 +319,7 @@
             :href="getViewUrl(item)"
             target="_blank"
           >
-            <img src="img/svg/view.svg" width="14" class="ml-2" />
+            <img src="img/svg/view.svg" width="14" />
           </v-btn>
         </template>
         <template v-slot:item.domain="{ item }">
@@ -331,7 +329,6 @@
         </template>
         <template v-slot:item.hash="{ item }">
           <v-btn
-            class="e-btn-text item-hash"
             rounded
             color="primary"
             x-small
@@ -347,7 +344,6 @@
           </v-btn>
           <v-btn
             v-if="item.hash"
-            class="e-btn-text ml-2"
             icon
             small
             @click.stop="onStop"
@@ -582,25 +578,7 @@ export default {
   },
 };
 </script>
-
 <style lang="scss" scoped>
-.e-btn-text {
-  padding: 0 !important;
-  font-weight: normal !important;
-  font-size: 14px !important;
-}
-.e-btn-text b {
-  font-weight: 500 !important;
-}
-.e-btn-text::before {
-  background: transparent !important;
-}
-.item-hash {
-  transition: all 0.1s ease-in;
-}
-.item-hash:hover {
-  opacity: 0.8;
-}
 .task-list {
   position: fixed;
   bottom: 80px;
