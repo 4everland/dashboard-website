@@ -262,7 +262,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getUsageInfo"]),
+    // ...mapActions(["getUsageInfo"]),
     validate(value) {
       if (value == null || value == "") return true;
 
@@ -369,7 +369,7 @@ export default {
       }
     },
     async onConfirm() {
-      await this.getUsageInfo();
+      // await this.getUsageInfo();
       if (this.isStorageFull)
         return this.$alert(
           "Insufficient storage space is available to upload the file."
@@ -407,18 +407,18 @@ export default {
         this.page = 1;
       }
 
-      const totalSizeVal = newVal.reduce((pre, current) => {
-        return pre + current.size;
-      }, 0);
-      if (
-        totalSizeVal >
-        this.$store.state.usageInfo.ipfsTotal -
-          this.$store.state.usageInfo.ipfsUsed
-      ) {
-        this.isStorageFull = true;
-      } else {
-        this.isStorageFull = false;
-      }
+      // const totalSizeVal = newVal.reduce((pre, current) => {
+      //   return pre + current.size;
+      // }, 0);
+      // if (
+      //   totalSizeVal >
+      //   this.$store.state.usageInfo.ipfsTotal -
+      //     this.$store.state.usageInfo.ipfsUsed
+      // ) {
+      //   this.isStorageFull = true;
+      // } else {
+      //   this.isStorageFull = false;
+      // }
     },
   },
 };
