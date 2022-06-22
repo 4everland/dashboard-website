@@ -143,9 +143,11 @@ export default {
     },
     async getInfo() {
       try {
+        this.$loading();
         const { data } = await this.$http.get(`$v3/usage`);
         console.log(data);
         this.info = data;
+        this.$loading.close();
       } catch (error) {
         console.log(error);
       }

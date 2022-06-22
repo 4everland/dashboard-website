@@ -79,10 +79,16 @@
           block
           depressed
           @click="onApprove"
-          :disabled="isApproved"
+          v-if="!isApproved"
           >{{ isApproved ? "Approved" : "Approve" }}</v-btn
         >
-        <v-btn outlined rounded block class="mt-4" @click="onSubmit"
+        <v-btn
+          v-else
+          color="primary"
+          rounded
+          block
+          class="mt-4"
+          @click="onSubmit"
           >Submit</v-btn
         >
       </usage-order>
@@ -190,7 +196,8 @@ export default {
       if (!val) return;
       try {
         if (!this.curContract) {
-          throw new Error("No Contract");
+          this.showConnect();
+          return;
         }
         console.log("get price", it, val);
         let base = Math.pow(1024, it.id == ResourceType.ARStorage ? 2 : 3);
@@ -261,22 +268,55 @@ export default {
       try {
         const form = this.feeForm;
         const payloads = [];
+        let totalFee = null;
         for (const key in form) {
-          const val = key;
+          const val = form[key];
+          if (!val) continue;
+          const values = key == ResourceType.IPFSStorage ? val : [val];
+          for (const fee of values) {
+            totalFee = totalFee ? totalFee.add(fee) : fee;
+            console.log(key, totalFee);
+          }
           payloads.push({
             resourceType: key,
-            values: key == ResourceType.IPFSStorage ? val : [val],
+            values,
           });
         }
+        if (!totalFee) {
+          throw new Error("No Fee");
+        }
+
         console.log(payloads);
-        const nonce = Math.floor(Date.now() / 1000);
         this.$loading();
-        const tx = await this.curContract[this.chainKey].pay({
-          provider: this.providerAddr,
-          nonce,
-          account: this.uuid,
-          payloads,
-        });
+        await this.checkAccount();
+        const nonce = Math.floor(Date.now() / 1000);
+        const params = [this.providerAddr, nonce, this.uuid, payloads];
+        if (!this.isPolygon) {
+          totalFee = totalFee.div(1e12);
+          console.log("totalFee", totalFee.toString());
+          const response = await this.client.estimate(
+            this.connectAddr,
+            totalFee.toString()
+          );
+          const maxSlippage = response.getMaxSlippage();
+          console.log("response", response.toObject(), maxSlippage);
+          const feeMsg = await this.curContract[this.chainKey].calcFee(
+            ...params
+          );
+          console.log("feeMsg", feeMsg.toString());
+          params.push(maxSlippage);
+          params.push({
+            value: feeMsg,
+          });
+        }
+        console.log("pay", params, this.curContract[this.chainKey]);
+        let target = this.curContract[this.chainKey];
+        let tx;
+        if (this.isPolygon) {
+          tx = await target.pay(params);
+        } else {
+          tx = await target.pay(...params);
+        }
         console.log("tx", tx);
         const receipt = await tx.wait(1);
         console.log("receipt", receipt);

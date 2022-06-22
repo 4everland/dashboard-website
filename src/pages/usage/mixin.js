@@ -12,6 +12,7 @@ export default {
       curContract: null,
       isApproved: false,
       providerAddr: "0xF1658C608708172655A8e70a1624c29F956Ee63D",
+      client,
     };
   },
   computed: {
@@ -65,6 +66,16 @@ export default {
       console.log(err);
       this.$alert(err.message);
     },
+    async checkAccount() {
+      const uuidRegistered =
+        await this.curContract.ProviderController.accountExists(
+          this.providerAddr,
+          this.uuid
+        );
+      if (!uuidRegistered) {
+        throw "Account Not Registered";
+      }
+    },
     async checkApprove() {
       try {
         console.log("check approve", this.connectAddr, this.payAddr);
@@ -117,7 +128,7 @@ export default {
       }
     },
     async onConnect() {
-      console.log(this.chainId, client);
+      console.log(this.chainId);
       try {
         if (this.chainId != this.payChainId) {
           const dev = this.$inDev
