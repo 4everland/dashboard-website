@@ -442,8 +442,8 @@ export default {
           { text: "Capacity", value: "usedStorage" },
           { text: "AR Capacity", value: "arUsedStorage" },
           { text: "Past 30 days of traffic", value: "traffic" },
-          { text: "Sync to AR", value: "arAct" },
           { text: "Past 30 days of visits", value: "visitChartData" },
+          { text: "Sync to AR", value: "arAct" },
         ];
       return [
         { text: "Name", value: "name" },
