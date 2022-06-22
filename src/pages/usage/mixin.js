@@ -24,9 +24,7 @@ export default {
       userInfo: (s) => s.userInfo,
     }),
     uuid() {
-      const { uid } = this.userInfo;
-      if (!uid) return;
-      return "0x" + uid.replace("0x", "").padStart(64, "0");
+      return this.userInfo.euid;
     },
     isPolygon() {
       return this.payBy == "Polygon";
@@ -73,7 +71,7 @@ export default {
           this.uuid
         );
       if (!uuidRegistered) {
-        throw "Account Not Registered";
+        throw new Error("Account Not Registered");
       }
     },
     async checkApprove() {

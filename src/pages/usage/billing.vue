@@ -23,7 +23,11 @@
         hide-default-footer
         disable-pagination
         @click:row="onItem"
-      ></v-data-table>
+      >
+        <template v-slot:item.hash="{ item }">
+          <span>{{ item.hash.cutStr(10, 10) }}</span>
+        </template>
+      </v-data-table>
 
       <div class="mt-8" v-if="!list.length">
         <e-empty :loading="loading">
@@ -110,7 +114,7 @@ export default {
         },
         {
           text: "Content",
-          value: "contentJson",
+          value: "contentType",
         },
         {
           text: "Amount",
@@ -155,7 +159,8 @@ export default {
           },
         });
         this.list = data.rows.map((it) => {
-          it.time = new Date(it.paymentTime).format();
+          it.time = new Date(it.paymentTime * 1e3).format();
+          it.amount = it.amount.value;
           return it;
         });
         this.total = data.count;
