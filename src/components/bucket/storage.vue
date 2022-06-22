@@ -302,6 +302,7 @@
             :color="inBucket ? 'primary' : '#000'"
             rounded
             text
+            class="e-btn-text"
             x-small
             @click.stop="onRow(item)"
           >
@@ -579,6 +580,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.e-btn-text {
+  padding: 0 !important;
+  font-weight: normal !important;
+  font-size: 14px !important;
+}
+.e-btn-text b {
+  font-weight: 500 !important;
+}
+.e-btn-text::before {
+  background: transparent !important;
+}
 .task-list {
   position: fixed;
   bottom: 80px;
