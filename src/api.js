@@ -16,7 +16,7 @@ const authApi = inDev
   ? "https://auth.foreverland.xyz"
   : "https://oauth.4everland.org";
 const v3Api = inDev
-  ? "http://settlement.foreverland.xyz"
+  ? "https://settlement.foreverland.xyz"
   : "https://settlement.4everland.org";
 
 Vue.prototype.$endpoint = endpoint;

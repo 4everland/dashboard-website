@@ -72,6 +72,7 @@ const store = new Vuex.Store({
       return data;
     },
     async getUsageInfo() {
+      if (true) return;
       const { data } = await http.get("$v3/usage");
       const {
         arweaveUsedStorage = 0,
