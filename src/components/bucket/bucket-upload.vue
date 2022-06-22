@@ -162,66 +162,9 @@
 </template>
 
 <script>
-// import { Upload } from "@aws-sdk/lib-storage";
 import { bus } from "../../main";
-// import Vue from "vue";
 import { TaskWrapper } from "./task.js";
-// class TaskWrapper {
-//   id;
-//   s3;
-//   status;
-//   param;
-//   progress;
-//   task;
-//   failedMessage;
-//   url;
-//   constructor(s3, param, id, fileInfo, url) {
-//     this.id = id;
-//     this.s3 = s3;
-//     this.status = 0; //waitingUpload
-//     this.param = param;
-//     this.fileInfo = fileInfo;
-//     this.url = url;
-//   }
-//   async startTask() {
-//     try {
-//       this.task = new Upload({
-//         client: this.s3,
-//         queueSize: 3,
-//         params: this.param,
-//       });
-//       this.task.on("httpUploadProgress", (e) => {
-//         // let progress = (e.loaded / e.total) * 100 - this.progress;
-//         this.progress = ((e.loaded / e.total) * 100) | 0;
-//       });
-
-//       this.progress = 0;
-//       this.status = 1; // uploading
-//       await this.task.done();
-//       this.status = 3; // success
-
-//       //---------------------
-//     } catch (e) {
-//       console.log(e.message);
-//       if (e.message == "Upload aborted.") {
-//         this.status = 2; // cancel/ stop
-//       } else {
-//         this.status = 4; // failed
-//         // Vue.prototype.$alert(e.message);
-//         this.failedMessage = e.message;
-//       }
-//     }
-//   }
-//   async cancelTask() {
-//     if (this.task) {
-//       await this.task.abort();
-//     }
-//     this.status = 2; //cancel/stop
-//   }
-//   resetStatus() {
-//     this.status = 0;
-//   }
-// }
+import { mapActions } from "vuex";
 export default {
   props: {
     info: {
@@ -267,7 +210,7 @@ export default {
     };
   },
   async created() {
-    await this.$store.dispatch("getUsageInfo");
+    // await this.$store.dispatch("getUsageInfo");
     bus.$on("handleClearRecords", (id) => {
       let index = this.tasks.findIndex((it) => it.id == id);
       if (index !== -1) {
@@ -319,6 +262,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(["getUsageInfo"]),
     validate(value) {
       if (value == null || value == "") return true;
 
@@ -424,7 +368,8 @@ export default {
         this.start(idles[i]);
       }
     },
-    onConfirm() {
+    async onConfirm() {
+      await this.getUsageInfo();
       if (this.isStorageFull)
         return this.$alert(
           "Insufficient storage space is available to upload the file."
