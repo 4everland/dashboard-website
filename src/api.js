@@ -4,7 +4,7 @@ import AsyncLock from "async-lock";
 
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 Vue.prototype.$inDev = inDev;
-const isLocal = /localhost|(192.168.0.103)/.test(location.host);
+// const isLocal = /localhost/.test(location.host);
 
 Vue.prototype.$arHashPre = "https://arweave.net/"; // https://ar.foreverland.xyz/
 Vue.prototype.$arVerifyPre = "https://viewblock.io/arweave/tx/"; // https://ar.foreverland.xyz/tx/
@@ -16,7 +16,7 @@ const authApi = inDev
   ? "https://auth.foreverland.xyz"
   : "https://oauth.4everland.org";
 const v3Api = inDev
-  ? "http://settlement.foreverland.xyz"
+  ? "https://settlement.foreverland.xyz"
   : "https://settlement.4everland.org";
 
 Vue.prototype.$endpoint = endpoint;
@@ -27,9 +27,10 @@ const loginUrl = inDev
 
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   let url = loginUrl;
-  if (isLocal) {
-    console.log(111);
-    url = "#/login?test=1";
+  if (!/(dashboard|hb)\./i.test(location.host)) {
+    url =
+      "https://hb.4everland.app/#/?redirectTo=" +
+      encodeURIComponent(location.origin);
   } else if (localStorage.inviteCode) {
     url += "/#/?inviteCode=" + localStorage.inviteCode;
   }
