@@ -19,10 +19,17 @@
       <v-data-table
         :headers="headers"
         :items="list"
+        :loading="loading"
         hide-default-footer
         disable-pagination
         @click:row="onItem"
       ></v-data-table>
+
+      <div class="mt-8" v-if="!list.length">
+        <e-empty :loading="loading">
+          {{ loading ? "Loading billing..." : "No billings" }}
+        </e-empty>
+      </div>
 
       <e-pagi
         class="pa-5"
@@ -118,6 +125,7 @@ export default {
           value: "status",
         },
       ],
+      loading: false,
       list: [],
       total: 0,
       page: 1,
@@ -139,6 +147,7 @@ export default {
     },
     async getList() {
       try {
+        this.loading = true;
         const { data } = await this.$http.get("$v3/bill/list", {
           params: {
             page: this.page,
@@ -153,6 +162,7 @@ export default {
       } catch (error) {
         console.log(error);
       }
+      this.loading = false;
     },
     onItem(row) {
       this.$navTo(`/usage/billing/detail?hash=` + row.hash);

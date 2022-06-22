@@ -8,6 +8,12 @@
     >
     </v-data-table>
 
+    <div class="mt-8" v-if="!list.length">
+      <e-empty :loading="loading">
+        {{ loading ? "Loading details..." : "No details" }}
+      </e-empty>
+    </div>
+
     <e-pagi
       class="pa-5"
       @input="getList"
@@ -40,6 +46,7 @@ export default {
           value: "status",
         },
       ],
+      loading: false,
       list: [],
       total: 0,
       page: 1,
@@ -51,6 +58,7 @@ export default {
   methods: {
     async getList() {
       try {
+        this.loading = true;
         const { data } = await this.$http.get("$v3/bill/consume/list", {
           params: {
             page: this.page,
@@ -64,6 +72,7 @@ export default {
       } catch (error) {
         console.log(error);
       }
+      this.loading = false;
     },
   },
 };

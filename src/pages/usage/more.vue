@@ -321,6 +321,8 @@ export default {
         const receipt = await tx.wait(1);
         console.log("receipt", receipt);
         this.$loading.close();
+        this.showOrder = false;
+        this.$router.replace("/usage/billing");
       } catch (error) {
         this.onErr(error);
       }
