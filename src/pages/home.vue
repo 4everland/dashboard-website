@@ -26,10 +26,18 @@ export default {
     } else {
       const toUrl = localStorage.redirectTo;
       if (toUrl) {
-        localStorage.redirectTo = "";
-        location.href =
-          toUrl + "/#/?token=" + encodeURIComponent(localStorage.token);
-      } else this.$router.replace("/overview");
+        setTimeout(() => {
+          localStorage.redirectTo = "";
+          location.href =
+            toUrl + "/#/?token=" + encodeURIComponent(localStorage.token);
+        }, 2e3);
+      } else {
+        this.$router.replace("/overview");
+        if (token)
+          setTimeout(() => {
+            location.reload();
+          }, 1e3);
+      }
     }
   },
 };
