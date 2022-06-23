@@ -74,7 +74,11 @@
       </div>
     </div>
 
-    <v-dialog v-model="showOrder" max-width="500">
+    <v-dialog
+      v-model="showOrder"
+      :persistent="paying || approving"
+      max-width="500"
+    >
       <e-dialog-close @click="showOrder = false" />
       <usage-order :list="previewList" :total="totalPrice">
         <v-btn
@@ -83,17 +87,19 @@
           block
           depressed
           @click="onApprove"
-          v-if="!isApproved"
+          :disabled="isApproved"
+          :loading="approving"
           >{{ isApproved ? "Approved" : "Approve" }}</v-btn
         >
         <v-btn
-          v-else
+          :disabled="!isApproved"
+          :loading="paying"
           color="primary"
           rounded
           block
           class="mt-4"
           @click="onSubmit"
-          >Submit</v-btn
+          >Pay</v-btn
         >
       </usage-order>
     </v-dialog>
@@ -121,6 +127,7 @@ export default {
       showOrder: false,
       feeForm: {},
       feeLoading: false,
+      paying: false,
     };
   },
   computed: {
@@ -337,7 +344,7 @@ export default {
         }
 
         console.log(payloads);
-        this.$loading();
+        this.paying = true;
         await this.checkAccount();
         const nonce = Math.floor(Date.now() / 1000);
         const params = [this.providerAddr, nonce, this.uuid, payloads];
@@ -370,12 +377,13 @@ export default {
         console.log("tx", tx);
         const receipt = await tx.wait(1);
         console.log("receipt", receipt);
-        this.$loading.close();
         this.showOrder = false;
+        this.$toast("Purchased successfully");
         this.$router.replace("/usage/billing");
       } catch (error) {
         this.onErr(error);
       }
+      this.paying = false;
     },
   },
 };
