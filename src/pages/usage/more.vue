@@ -288,12 +288,10 @@ export default {
 
         console.log(payloads);
         this.$loading();
-
+        await this.checkAccount();
         const nonce = Math.floor(Date.now() / 1000);
         const params = [this.providerAddr, nonce, this.uuid, payloads];
-        if (this.isPolygon) {
-          await this.checkAccount();
-        } else {
+        if (!this.isPolygon) {
           totalFee = totalFee.div(1e12);
           console.log("totalFee", totalFee.toString());
           const response = await this.client.estimate(
