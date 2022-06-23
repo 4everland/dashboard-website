@@ -31,7 +31,13 @@ export default {
           location.href =
             toUrl + "/#/?token=" + encodeURIComponent(localStorage.token);
         }, 2e3);
-      } else this.$router.replace("/overview");
+      } else {
+        this.$router.replace("/overview");
+        if (token)
+          setTimeout(() => {
+            location.reload();
+          }, 1e3);
+      }
     }
   },
 };
