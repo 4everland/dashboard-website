@@ -91,7 +91,6 @@ export default {
     },
     async onApprove() {
       try {
-        this.$loading("Approving");
         this.approving = false;
         const tx = await this.curContract[this.usdcKey].approve(
           this.paymentAddr,
@@ -101,7 +100,6 @@ export default {
         const receipt = await tx.wait();
         console.log(receipt);
         this.isApproved = true;
-        this.$loading.close();
       } catch (error) {
         this.onErr(error);
       }
