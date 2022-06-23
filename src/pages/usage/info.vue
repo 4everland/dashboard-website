@@ -83,7 +83,7 @@ export default {
           label: "Storage IPFS",
           desc: info.ipfsStorage
             ? `（Free 4 GB a year, ${
-                getSize(info.purchasedIpfsStorage) || "0G"
+                getSize(info.ipfsStorage - info.ipfsDefaultStorage) || "0G"
               } purchased，${
                 getSize(info.usedIpfsStorage) || "0GB"
               } used，${new Date(info.ipfsStorageExpired * 1000).format()}）`
@@ -94,7 +94,7 @@ export default {
           label: "Storage AR",
           tip: "AR is permanent storage.",
           desc: `（Free 100MB，${
-            getSize(info.purchasedArStorage) || "0GB"
+            getSize(info.arStorage - info.arDefaultStorage) || "0GB"
           } purchased）`,
           ...this.getPerc(info.usedArStorage, info.arStorage),
         },
