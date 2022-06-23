@@ -11,7 +11,8 @@ export default {
     return {
       curContract: null,
       isApproved: false,
-      providerAddr: "0xF1658C608708172655A8e70a1624c29F956Ee63D",
+      approving: false,
+      providerAddr: "0xdec55a51ac7c77f505eff03bee9ddff9edb1ead6",
       client,
     };
   },
@@ -90,7 +91,7 @@ export default {
     },
     async onApprove() {
       try {
-        this.$loading("Approving");
+        this.approving = false;
         const tx = await this.curContract[this.usdcKey].approve(
           this.paymentAddr,
           uint256Max
@@ -99,10 +100,10 @@ export default {
         const receipt = await tx.wait();
         console.log(receipt);
         this.isApproved = true;
-        this.$loading.close();
       } catch (error) {
         this.onErr(error);
       }
+      this.approving = false;
     },
     formatToken(value, fixed = 2, decimals = 18) {
       const v = value.div(

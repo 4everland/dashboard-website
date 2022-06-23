@@ -18,10 +18,10 @@
     >
       <label class="label fz-15 ta-r mr-3">{{ it.label }}:</label>
       <div class="flex-1" style="max-width: 700px">
-        <div class="al-c">
+        <div class="al-c" v-if="!(it.key == 'ipfs' && !ipfsExpired)">
           <usage-input
             v-model="form[it.key]"
-            @input="getPrice(it, $event)"
+            @input="getPrice(it.id, $event)"
             :min="0"
             :max="10000"
             :step="100"
@@ -42,7 +42,11 @@
           </div>
         </div>
         <div class="" v-if="it.key == 'ipfs'">
-          <ipfs-time />
+          <ipfs-time
+            :usage="usageInfo"
+            :expired="ipfsExpired"
+            @input="onIpfsChange"
+          />
         </div>
       </div>
     </div>
@@ -70,7 +74,11 @@
       </div>
     </div>
 
-    <v-dialog v-model="showOrder" max-width="500">
+    <v-dialog
+      v-model="showOrder"
+      :persistent="paying || approving"
+      max-width="500"
+    >
       <e-dialog-close @click="showOrder = false" />
       <usage-order :list="previewList" :total="totalPrice">
         <v-btn
@@ -79,17 +87,19 @@
           block
           depressed
           @click="onApprove"
-          v-if="!isApproved"
+          :disabled="isApproved"
+          :loading="approving"
           >{{ isApproved ? "Approved" : "Approve" }}</v-btn
         >
         <v-btn
-          v-else
+          :disabled="!isApproved"
+          :loading="paying"
           color="primary"
           rounded
           block
           class="mt-4"
           @click="onSubmit"
-          >Submit</v-btn
+          >Pay</v-btn
         >
       </usage-order>
     </v-dialog>
@@ -113,9 +123,11 @@ export default {
       priceInfo: {},
       usageInfo: {},
       form: {},
+      ipfsMon: 1,
       showOrder: false,
       feeForm: {},
       feeLoading: false,
+      paying: false,
     };
   },
   computed: {
@@ -154,35 +166,54 @@ export default {
       ];
     },
     previewList() {
+      const ipfsFee = this.feeForm[ResourceType.IPFSStorage];
+      console.log(this.form, ipfsFee);
       return this.list
         .map((it) => {
           const value = this.form[it.key] || 0;
+          let price = (value * it.unitPrice) / 100;
+          let until = "used up";
+          if (it.key == "ipfs") {
+            if (!this.ipfsExpired) price = this.getFee(ipfsFee);
+            else price *= this.ipfsMon;
+            console.log("ipfs preview", value, price);
+            if (price) {
+              let start = this.usageInfo.ipfsStorageExpired;
+              start = start ? start * 1e3 : Date.now();
+              until = new Date(start + this.ipfsMon * 30 * 86400 * 1e3).format(
+                "date"
+              );
+            }
+          }
           return {
             label: it.label,
+            key: it.key,
             value,
-            price: (value * it.unitPrice) / 100,
+            price,
             unit: it.unit,
-            until: "Until used up",
+            until: "Until " + until,
           };
         })
-        .filter((it) => it.value > 0);
+        .filter((it) => {
+          return it.price > 0;
+        });
     },
     totalPrice() {
       return this.previewList
         .reduce((a, b) => {
           let price = b.price;
-          // if()
           return a + price;
         }, 0)
         .toFixed(4)
         .replace(/0+$/, "")
         .replace(/\.$/, "");
     },
+    ipfsExpired() {
+      return this.usageInfo.ipfsExpired;
+    },
   },
   mounted() {
-    const form = {
-      ipfsMon: 1,
-    };
+    const form = {};
     this.list.forEach((it) => {
       form[it.key] = 0;
     });
@@ -190,44 +221,70 @@ export default {
     this.getInfo();
   },
   methods: {
-    async getPrice(it, val) {
+    onIpfsChange(obj) {
+      console.log("ipfs", obj);
+      this.ipfsMon = obj.month;
+      if (this.ipfsExpired) {
+        this.getPrice(ResourceType.IPFSStorage, this.form.ipfs);
+        return;
+      }
+      Object.assign(this.form, {
+        ipfs: obj.stor,
+      });
+      this.getPrice(ResourceType.IPFSStorage, obj);
+    },
+    async getPrice(resId, val) {
+      if (!this.curContract) {
+        this.showConnect();
+        return;
+      }
       let fee = 0;
-      this.feeForm[it.id] = 0;
+      this.feeForm[resId] = 0;
       if (!val) return;
       try {
-        if (!this.curContract) {
-          this.showConnect();
-          return;
+        console.log("get price", resId, val);
+        if (typeof val == "object") {
+          this.ipfsMon = val.month;
+          val = val.stor;
         }
-        console.log("get price", it, val);
-        let base = Math.pow(1024, it.id == ResourceType.ARStorage ? 2 : 3);
-        if (it.id == ResourceType.BuildingTime) {
+        let base = Math.pow(1024, resId == ResourceType.ARStorage ? 2 : 3);
+        if (resId == ResourceType.BuildingTime) {
           base = 60;
         }
         let amount = base * val;
         this.feeLoading = true;
-        if (it.id == ResourceType.IPFSStorage) {
+        if (resId == ResourceType.IPFSStorage) {
+          if (!amount && !this.ipfsMon) return (this.feeLoading = false);
           fee = await this.curContract.DstChainPayment.ipfsAlloctionsFee(
             this.providerAddr,
             this.uuid,
             amount,
-            86400 * 30 * this.form.ipfsMon
+            86400 * 30 * this.ipfsMon
           );
           fee = [fee[0], fee[1]];
         } else {
           fee = await this.curContract.DstChainPayment.getValueOf(
             this.providerAddr,
-            it.id,
+            resId,
             amount
           );
         }
-        this.feeForm[it.id] = fee; // for submit
-        fee = this.formatToken(fee.length == 2 ? fee[0].add(fee[1]) : fee, 4);
-        console.log(it.key, fee);
+        this.feeForm = {
+          ...this.feeForm,
+          [resId]: fee,
+        };
+        fee = this.getFee(fee);
+        console.log(resId, fee);
       } catch (error) {
         this.onErr(error);
       }
       this.feeLoading = false;
+    },
+    getFee(fee) {
+      if (!fee) return 0;
+      return (
+        this.formatToken(fee.length == 2 ? fee[0].add(fee[1]) : fee, 4) * 1
+      );
     },
     async getInfo() {
       try {
@@ -287,7 +344,7 @@ export default {
         }
 
         console.log(payloads);
-        this.$loading();
+        this.paying = true;
         await this.checkAccount();
         const nonce = Math.floor(Date.now() / 1000);
         const params = [this.providerAddr, nonce, this.uuid, payloads];
@@ -320,12 +377,13 @@ export default {
         console.log("tx", tx);
         const receipt = await tx.wait(1);
         console.log("receipt", receipt);
-        this.$loading.close();
         this.showOrder = false;
+        this.$toast("Purchased successfully");
         this.$router.replace("/usage/billing");
       } catch (error) {
         this.onErr(error);
       }
+      this.paying = false;
     },
   },
 };

@@ -9,7 +9,7 @@ export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";
 export const MumbaiRouter = "0x44DDDef9c1fA0Ed35f64f98062E505a968AaBa9C";
 export const MumbaiGovernance = "0xB35F070CC9E3503DCc7AED42E4ECbaA023975382";
 export const MumbaiProviderController =
-  "0xaFfFa7490DDA355be427e17F124D7b235BE231bf";
+  "0x362bccbb29f5C104567754a1e1608F983fDD4853";
 export const MumbaiProviderRegistry =
   "0x5b54537A1891A6730F734eF1a67C011CaE5dE31c";
 export const MumbaiResourcePriceAdaptor =

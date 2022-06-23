@@ -121,9 +121,10 @@ export default {
       }
     },
     async checkNet() {
+      console.log("get wallet net...");
       const netType = await window.web3.eth.net.getNetworkType();
       const chainId = await window.web3.eth.net.getId();
-      // console.log(netType);
+      console.log(netType);
       this.$setState({
         netType,
         chainId,

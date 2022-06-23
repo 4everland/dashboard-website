@@ -27,7 +27,8 @@ export default {
       const toUrl = localStorage.redirectTo;
       if (toUrl) {
         localStorage.redirectTo = "";
-        location.href = toUrl + "/#/?token=" + localStorage.token;
+        location.href =
+          toUrl + "/#/?token=" + encodeURIComponent(localStorage.token);
       } else this.$router.replace("/overview");
     }
   },

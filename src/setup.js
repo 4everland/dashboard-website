@@ -90,18 +90,19 @@ Vue.prototype.$utils = {
     const gb = Math.pow(1024, 3);
     let num = byte;
     let unit = "B";
-    if (byte > gb) {
+    if (byte >= gb) {
       num = (byte / gb).toFixed(2);
       unit = "GB";
-    } else if (byte > mb) {
+    } else if (byte >= mb) {
       num = (byte / mb).toFixed(2);
       unit = "MB";
-    } else if (byte > 1024 || (byte < 0.01 && isObj)) {
+    } else if (byte >= 1024 || (byte < 0.01 && isObj)) {
       num = (byte / 1024).toFixed(2);
       unit = "KB";
     } else if (byte > 0) {
       num = parseInt(byte);
     }
+    if (num) num = num.replace(".00", "");
     if (isObj)
       return {
         num,

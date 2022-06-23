@@ -10,6 +10,7 @@ import {
   BandwidthController__factory,
   BuildingTimeController__factory,
   IPFSStorageController__factory,
+  ProviderController__factory,
 } from "4everland-contracts";
 // import { Bridge__factory } from "./sgn/contract/typechain";
 import {
@@ -23,6 +24,7 @@ import {
   MumbaiBuildingTimeController,
   MumbaiIPFSStorageController,
 } from "./contracts-addr";
+import { MumbaiProviderController } from "./addr-dev";
 
 class SrcChainContracts extends Contracts {
   dstProvider = null;
@@ -31,7 +33,7 @@ class SrcChainContracts extends Contracts {
     super();
     // mumbai rpc
     this.dstProvider = new providers.JsonRpcProvider(
-      "https://matic-mumbai.chainstacklabs.com"
+      "https://polygon-mumbai.g.alchemy.com/v2/MGcgBRN-uuuG6x1qaI-xchQMpebh_aN6"
     );
   }
 
@@ -49,6 +51,13 @@ class SrcChainContracts extends Contracts {
 
   get SrcChainPayment() {
     return SrcChainPayment__factory.connect(GoerliSrcChainPayment, this.signer);
+  }
+
+  get ProviderController() {
+    return ProviderController__factory.connect(
+      MumbaiProviderController,
+      this.dstProvider
+    );
   }
 
   get ResourcePriceAdaptor() {
