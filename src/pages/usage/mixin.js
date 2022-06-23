@@ -11,7 +11,7 @@ export default {
     return {
       curContract: null,
       isApproved: false,
-      providerAddr: "0xF1658C608708172655A8e70a1624c29F956Ee63D",
+      providerAddr: "0xdec55a51ac7c77f505eff03bee9ddff9edb1ead6",
       client,
     };
   },
