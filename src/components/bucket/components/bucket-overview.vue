@@ -215,7 +215,7 @@ export default {
         data.list.forEach((item) => {
           item.isHttps =
             item.systemAlloc ||
-            item.certificateExpiredAt > new Date().getTime();
+            Number(item.certificateExpiredAt) > new Date().getTime() / 1000;
         });
         this.tableLoading = false;
         this.domainList = data.list;
