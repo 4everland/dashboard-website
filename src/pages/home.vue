@@ -26,9 +26,11 @@ export default {
     } else {
       const toUrl = localStorage.redirectTo;
       if (toUrl) {
-        localStorage.redirectTo = "";
-        location.href =
-          toUrl + "/#/?token=" + encodeURIComponent(localStorage.token);
+        setTimeout(() => {
+          localStorage.redirectTo = "";
+          location.href =
+            toUrl + "/#/?token=" + encodeURIComponent(localStorage.token);
+        }, 2e3);
       } else this.$router.replace("/overview");
     }
   },
