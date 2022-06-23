@@ -25,7 +25,9 @@
         @click:row="onItem"
       >
         <template v-slot:item.hash="{ item }">
-          <span>{{ item.hash.cutStr(10, 10) }}</span>
+          <v-btn x-small color="primary" text>
+            <span>{{ item.hash.cutStr(6, 6) }}</span>
+          </v-btn>
         </template>
       </v-data-table>
 
@@ -160,7 +162,7 @@ export default {
         });
         this.list = data.rows.map((it) => {
           it.time = new Date(it.paymentTime * 1e3).format();
-          it.amount = it.amount.value;
+          it.amount = it.usdt + " USD";
           return it;
         });
         this.total = data.count;

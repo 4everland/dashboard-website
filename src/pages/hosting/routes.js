@@ -5,14 +5,12 @@ import Build from "./build";
 import Domains from "./domains";
 import Statistics from "./statistics";
 import StatisDetail from "./statistics-detail";
+console.log(New);
 
 export default [
   {
     path: "/new",
-    // component: New,
-    components: {
-      noCache: New,
-    },
+    component: New,
     meta: {
       title: "New Project",
       subTitle: "3 easy steps to get your projects live",
