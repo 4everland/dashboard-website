@@ -3,6 +3,7 @@ import { providers, BigNumber } from "ethers"; //, utils
 import srccontracts from "../../plugins/pay/contracts/src-chain-contracts";
 import dstcontracts from "../../plugins/pay/contracts/dst-chain-contracts";
 import client from "../../plugins/pay/contracts/SGNClient";
+import { MumbaiFundPool } from "../../plugins/pay/contracts/addr-dev";
 
 const uint256Max = BigNumber.from("1").shl(256).sub(1);
 
@@ -67,11 +68,9 @@ export default {
     },
     async getWalletBalance() {
       this.$loading();
-      this.walletBalance = await this.curContract.FundPool.balanceOf(
-        this.providerAddr,
-        this.uuid
-      );
-      console.log(this.walletBalance.toString());
+      const num = await this.curContract.MumbaiUSDC.balanceOf(this.connectAddr);
+      this.walletBalance = (num / 1e6).toFixed(2);
+      console.log(this.walletBalance);
       this.$loading.close();
     },
     async checkAccount() {
@@ -84,12 +83,12 @@ export default {
         throw new Error("Account Not Registered");
       }
     },
-    async checkApprove() {
+    async checkApprove(isBuy) {
       try {
-        console.log("check approve", this.connectAddr, this.payAddr);
+        console.log("check approve");
         const allowance = await this.curContract[this.usdcKey].allowance(
           this.connectAddr,
-          this.payAddr
+          isBuy ? this.payAddr : MumbaiFundPool
         );
         const minAllowance = uint256Max.shr(1);
         this.isApproved = !allowance.lt(minAllowance);
@@ -98,11 +97,11 @@ export default {
         this.onErr(error);
       }
     },
-    async onApprove() {
+    async onApprove(isBuy) {
       try {
-        this.approving = false;
+        this.approving = true;
         const tx = await this.curContract[this.usdcKey].approve(
-          this.paymentAddr,
+          isBuy ? this.paymentAddr : MumbaiFundPool,
           uint256Max
         );
         console.log("tx", tx);
@@ -166,7 +165,7 @@ export default {
         }
         console.log(this.payBy, this.curContract);
         // this.getSign();
-        this.checkApprove();
+        this.checkApprove(this.isBuy);
       } catch (error) {
         this.$alert(error.message).then(() => {
           this.$router.push("/usage/info");

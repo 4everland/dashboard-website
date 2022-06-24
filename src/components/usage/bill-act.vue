@@ -57,13 +57,14 @@
             <span class="ml-2 fz-14">Polygon</span>
           </div>
           <input
+            v-model="formNum"
             type="tel"
             class="input-1 flex- shrink-1 fz-18 pa-2 pl-4"
             style="width: auto"
           />
           <img src="img/svg/settings/c-usdc.svg" height="24" />
           <span class="ml-2 mr-2 fz-14">USDC</span>
-          <v-btn color="primary" small class="mr-2">MAX</v-btn>
+          <v-btn color="primary" small class="mr-2" @click="onMax">MAX</v-btn>
         </div>
         <div class="fz-14 mt-2 ml-2 gray-7">
           <span v-if="isRecharge">* Recharge at least 100 USDC</span>
@@ -75,11 +76,12 @@
           <v-btn
             color="primary"
             :disabled="isApproved"
+            :loading="approving"
             v-if="isRecharge"
             rounded
             block
             depressed
-            @click="onApprove"
+            @click="onApprove()"
             >Approve</v-btn
           >
           <v-btn
@@ -107,6 +109,7 @@ export default {
       balance: 0,
       showPop: false,
       isRecharge: true,
+      formNum: "",
     };
   },
   computed: {
@@ -120,14 +123,62 @@ export default {
   methods: {
     async onRecharge() {
       try {
-        //
+        let num = this.formNum;
+        num *= 1e6;
+        console.log("num", num);
+        this.$loading();
+        let balance = await this.curContract.FundPool.balanceOf(
+          this.providerAddr,
+          this.uuid
+        );
+        console.log("balance1", balance.toString());
+        const tx = await this.curContract.FundPool.recharge(
+          this.providerAddr,
+          this.uuid,
+          num
+        );
+        const receipt = await tx.wait();
+        console.log("receipt", receipt);
+        balance = await this.curContract.FundPool.balanceOf(
+          this.providerAddr,
+          this.uuid
+        );
+        console.log("balance2", balance.toString());
+        this.$loading.close();
       } catch (error) {
         this.onErr(error);
       }
     },
     async onWithdraw() {
       try {
-        //
+        let num = this.formNum;
+        this.$loading();
+        const { data } = await this.$http.post("$v3/bill/generate/order", {
+          amount: num,
+        });
+        console.log(data);
+        const {
+          billSign,
+          timeoutTimestamp: timeout,
+          billEncode: bills,
+          orderId,
+        } = data;
+        const params = [
+          this.providerAddr,
+          this.uuid,
+          bills,
+          timeout,
+          orderId,
+          billSign,
+          this.connectAddr,
+          num * 1e6,
+        ];
+        console.log(params);
+        const tx = await this.curContract.FundPool.withdraw(...params);
+        console.log("tx", tx);
+        const receipt = await tx.wait();
+        console.log("receipt", receipt);
+        this.$loading.close();
       } catch (error) {
         this.onErr(error);
       }
@@ -185,6 +236,7 @@ export default {
         }
         await this.getWalletBalance();
         await this.signWallet();
+        this.formNum = "";
         this.showPop = true;
       } catch (error) {
         this.onErr(error);
@@ -196,6 +248,13 @@ export default {
         this.balance = data;
       } catch (error) {
         //
+      }
+    },
+    onMax() {
+      if (this.isRecharge) {
+        this.formNum = this.walletBalance;
+      } else {
+        this.formNum = this.balance;
       }
     },
   },

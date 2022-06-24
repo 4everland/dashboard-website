@@ -14,7 +14,7 @@ export const MumbaiProviderRegistry =
   "0x5b54537A1891A6730F734eF1a67C011CaE5dE31c";
 export const MumbaiResourcePriceAdaptor =
   "0xDcd3Fcd24C149d54043529C6eeD5FB767bC60c8d";
-export const MumbaiFundPool = "0x81c1349b225Ef79d96d07A4d536504Ac54486727";
+export const MumbaiFundPool = "0xA4acD0f8Dc34A5405C89fCbE8d8bc7D56F0C893C";
 export const MumbaiBilling = "0xBE7f93b3A20f0BA5A7056963c93Ae0310075C2ae";
 export const MumbaiARStorageController =
   "0x4B95195455376a71c5490aa2660616C0D486d767";
