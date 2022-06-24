@@ -59,6 +59,7 @@ export default {
       default: "200px",
     },
     noRouter: Boolean,
+    ignorePath: Boolean,
   },
   data() {
     const tabKey = this.vertical ? "sub" : "tab";
@@ -71,7 +72,7 @@ export default {
   },
   watch: {
     curIdx(val) {
-      if (this.path != this.initPath) return;
+      if (this.path != this.initPath && !this.ignorePath) return;
       if (!this.activeIdxList.includes(val)) {
         this.activeIdxList.push(val);
       }
