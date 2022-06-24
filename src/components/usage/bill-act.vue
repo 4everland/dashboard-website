@@ -48,7 +48,7 @@
           <b class="fz-20 red-1 mr-1 ml-2">{{ balance }}</b>
           <span class="fz-13 mt-1">USD</span>
           <span class="ml-auto">
-            Wallet Banace: 200 <span class="fz-13">USDC</span>
+            Wallet Banace: {{ walletBalance }} <span class="fz-13">USDC</span>
           </span>
         </div>
         <div class="bd-1 mt-3 al-c bdrs-5">
@@ -88,6 +88,7 @@
             class="mt-5"
             rounded
             block
+            @click="onConfirm"
             >Confirm</v-btn
           >
         </div>
@@ -117,8 +118,26 @@ export default {
     this.getBalance();
   },
   methods: {
+    async onRecharge() {
+      try {
+        //
+      } catch (error) {
+        this.onErr(error);
+      }
+    },
+    async onWithdraw() {
+      try {
+        //
+      } catch (error) {
+        this.onErr(error);
+      }
+    },
+    onConfirm() {
+      if (this.isRecharge) this.onRecharge();
+      else this.onWithdraw();
+    },
     async signWallet() {
-      this.$loading();
+      this.$loading("Check Wallet...");
       const walletExists =
         await this.curContract.ProviderController.walletExists(
           this.providerAddr,
@@ -129,6 +148,7 @@ export default {
         const { data: sign } = await this.$http.post(
           "$v3/common/sign/" + this.connectAddr
         );
+        console.log(sign);
         const tx = await this.curContract.ProviderController.initWallet(
           this.providerAddr,
           this.uuid,
@@ -163,6 +183,7 @@ export default {
           this.showConnect();
           return;
         }
+        await this.getWalletBalance();
         await this.signWallet();
         this.showPop = true;
       } catch (error) {

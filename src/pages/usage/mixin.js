@@ -14,6 +14,7 @@ export default {
       approving: false,
       providerAddr: "0xdec55a51ac7c77f505eff03bee9ddff9edb1ead6",
       client,
+      walletBalance: 0,
     };
   },
   computed: {
@@ -65,7 +66,13 @@ export default {
       return this.$alert(err.message);
     },
     async getWalletBalance() {
-      return this.curContract.FundPool.balanceOf(this.providerAddr, this.uuid);
+      this.$loading();
+      this.walletBalance = await this.curContract.FundPool.balanceOf(
+        this.providerAddr,
+        this.uuid
+      );
+      console.log(this.walletBalance.toString());
+      this.$loading.close();
     },
     async checkAccount() {
       const uuidRegistered =
