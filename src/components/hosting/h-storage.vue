@@ -167,7 +167,7 @@ export default {
     },
     async checkStorage() {
       console.log("check stoarge");
-      // if (Date.now) return (this.showPop = true);
+      if (Date.now) return;
       const skey = "got_storage_" + localStorage.token.substr(-5);
       if (localStorage[skey]) {
         return;
