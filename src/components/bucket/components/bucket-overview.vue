@@ -157,6 +157,7 @@ export default {
       this.getDomainData();
       this.getExtraData();
     },
+    // get basicStatistics Data
     async getBasicStatisticsData() {
       this.basicStatisticsData = [];
       try {
