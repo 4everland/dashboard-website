@@ -124,10 +124,13 @@ export default {
       console.log("get wallet net...");
       const netType = await window.web3.eth.net.getNetworkType();
       const chainId = await window.web3.eth.net.getId();
+      // const payBy = [5, 1].includes(this.chainId) ? "Ethereum" : "Polygon";
+      // localStorage.payBy = payBy;
       console.log(netType);
       this.$setState({
         netType,
         chainId,
+        // payBy,
       });
     },
     async connectMetaMask() {

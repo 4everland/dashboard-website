@@ -31,8 +31,7 @@ export default {
       return this.payBy == "Polygon";
     },
     payChainId() {
-      if (this.isPolygon) return this.$inDev ? 80001 : 137;
-      return this.$inDev ? 5 : 1;
+      return this.getChainId(this.isPolygon);
     },
     usdcKey() {
       return this.isPolygon ? "MumbaiUSDC" : "GoerliUSDC";
@@ -63,7 +62,10 @@ export default {
   methods: {
     onErr(err) {
       console.log(err);
-      this.$alert(err.message);
+      return this.$alert(err.message);
+    },
+    async getWalletBalance() {
+      return this.curContract.FundPool.balanceOf(this.providerAddr, this.uuid);
     },
     async checkAccount() {
       const uuidRegistered =
@@ -126,6 +128,16 @@ export default {
         console.log(error);
       }
     },
+    getChainId(isPolygon) {
+      if (isPolygon) return this.$inDev ? 80001 : 137;
+      return this.$inDev ? 5 : 1;
+    },
+    switchNet(id) {
+      return window.web3.currentProvider.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0x" + id.toString(16) }],
+      });
+    },
     async onConnect() {
       console.log(this.chainId);
       try {
@@ -134,10 +146,7 @@ export default {
             ? `(dev-${this.Polygon ? "Mumbai" : "Goerli"})`
             : "";
           await this.$alert(`Please switch to ${this.payBy}${dev} Network`);
-          await window.web3.currentProvider.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x" + this.payChainId.toString(16) }],
-          });
+          await this.switchNet(this.payChainId);
           return;
         }
         const provider = new providers.Web3Provider(window.ethereum);
