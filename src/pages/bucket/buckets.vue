@@ -1,7 +1,7 @@
 <template>
   <div>
     <keep-alive v-if="inFolder || inFile">
-      <e-tabs v-if="inFolder" :list="list" :defTab="1" noRouter />
+      <e-tabs v-if="inFolder" :list="list" :defTab="1" noRouter ignorePath />
     </keep-alive>
     <storage v-if="!inFolder" />
   </div>
