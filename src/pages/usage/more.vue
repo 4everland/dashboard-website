@@ -86,7 +86,7 @@
           rounded
           block
           depressed
-          @click="onApprove"
+          @click="onApprove(true)"
           :disabled="isApproved"
           :loading="approving"
           >{{ isApproved ? "Approved" : "Approve" }}</v-btn
@@ -120,6 +120,7 @@ export default {
   mixins: [mixin],
   data() {
     return {
+      isBuy: true,
       priceInfo: {},
       usageInfo: {},
       form: {},

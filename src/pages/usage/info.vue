@@ -68,6 +68,7 @@ export default {
     list() {
       const info = this.info;
       const getSize = this.$utils.getFileSize;
+
       return [
         {
           label: "Bandwidth",
@@ -78,6 +79,7 @@ export default {
             info.usedFreeBandwidth + info.usedPurchasedBandwidth,
             info.freeBandwidth + info.purchasedBandwidth
           ),
+          rechargeTip: this.getTip(info.usedPurchasedBandwidth),
         },
         {
           label: "Storage IPFS",
@@ -89,6 +91,7 @@ export default {
               } used，${new Date(info.ipfsStorageExpired * 1000).format()}）`
             : "",
           ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
+          rechargeTip: this.getTip(info.usedPurchasedBandwidth),
         },
         {
           label: "Storage AR",
@@ -117,6 +120,12 @@ export default {
     this.getInfo();
   },
   methods: {
+    getTip(val) {
+      if (val) {
+        return `(Recharge used ${this.$utils.getFileSize(val)})`;
+      }
+      return "";
+    },
     getPerc(used, total, unit = "GB") {
       const getSize = this.$utils.getFileSize;
       if (!total)

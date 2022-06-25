@@ -3,6 +3,7 @@ import { providers, BigNumber } from "ethers"; //, utils
 import srccontracts from "../../plugins/pay/contracts/src-chain-contracts";
 import dstcontracts from "../../plugins/pay/contracts/dst-chain-contracts";
 import client from "../../plugins/pay/contracts/SGNClient";
+import { MumbaiFundPool } from "../../plugins/pay/contracts/addr-dev";
 
 const uint256Max = BigNumber.from("1").shl(256).sub(1);
 
@@ -14,6 +15,7 @@ export default {
       approving: false,
       providerAddr: "0xdec55a51ac7c77f505eff03bee9ddff9edb1ead6",
       client,
+      walletBalance: 0,
     };
   },
   computed: {
@@ -31,8 +33,7 @@ export default {
       return this.payBy == "Polygon";
     },
     payChainId() {
-      if (this.isPolygon) return this.$inDev ? 80001 : 137;
-      return this.$inDev ? 5 : 1;
+      return this.getChainId(this.isPolygon);
     },
     usdcKey() {
       return this.isPolygon ? "MumbaiUSDC" : "GoerliUSDC";
@@ -63,7 +64,14 @@ export default {
   methods: {
     onErr(err) {
       console.log(err);
-      this.$alert(err.message);
+      return this.$alert(err.message);
+    },
+    async getWalletBalance() {
+      this.$loading();
+      const num = await this.curContract.MumbaiUSDC.balanceOf(this.connectAddr);
+      this.walletBalance = (num / 1e6).toFixed(2);
+      console.log(this.walletBalance);
+      this.$loading.close();
     },
     async checkAccount() {
       const uuidRegistered =
@@ -75,12 +83,12 @@ export default {
         throw new Error("Account Not Registered");
       }
     },
-    async checkApprove() {
+    async checkApprove(isBuy) {
       try {
-        console.log("check approve", this.connectAddr, this.payAddr);
+        console.log("check approve");
         const allowance = await this.curContract[this.usdcKey].allowance(
           this.connectAddr,
-          this.payAddr
+          isBuy ? this.payAddr : MumbaiFundPool
         );
         const minAllowance = uint256Max.shr(1);
         this.isApproved = !allowance.lt(minAllowance);
@@ -89,11 +97,11 @@ export default {
         this.onErr(error);
       }
     },
-    async onApprove() {
+    async onApprove(isBuy) {
       try {
-        this.approving = false;
+        this.approving = true;
         const tx = await this.curContract[this.usdcKey].approve(
-          this.paymentAddr,
+          isBuy ? this.paymentAddr : MumbaiFundPool,
           uint256Max
         );
         console.log("tx", tx);
@@ -126,6 +134,16 @@ export default {
         console.log(error);
       }
     },
+    getChainId(isPolygon) {
+      if (isPolygon) return this.$inDev ? 80001 : 137;
+      return this.$inDev ? 5 : 1;
+    },
+    switchNet(id) {
+      return window.web3.currentProvider.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0x" + id.toString(16) }],
+      });
+    },
     async onConnect() {
       console.log(this.chainId);
       try {
@@ -134,10 +152,7 @@ export default {
             ? `(dev-${this.Polygon ? "Mumbai" : "Goerli"})`
             : "";
           await this.$alert(`Please switch to ${this.payBy}${dev} Network`);
-          await window.web3.currentProvider.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x" + this.payChainId.toString(16) }],
-          });
+          await this.switchNet(this.payChainId);
           return;
         }
         const provider = new providers.Web3Provider(window.ethereum);
@@ -150,7 +165,7 @@ export default {
         }
         console.log(this.payBy, this.curContract);
         // this.getSign();
-        this.checkApprove();
+        this.checkApprove(this.isBuy);
       } catch (error) {
         this.$alert(error.message).then(() => {
           this.$router.push("/usage/info");

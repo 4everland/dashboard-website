@@ -9,7 +9,8 @@
         <div class="pd-20">
           <div class="gray fz-15">
             After connecting to your wallet, you'll be able to make changes in
-            custom settings. Please select the Ethereum Mainnet network.
+            custom settings. Please select the
+            {{ payBy == "Polygon" ? payBy : "Ethereum Mainnet" }} network.
           </div>
           <div class="mt-5 d-flex al-c">
             <img src="img/svg/settings/m-metamask.svg" style="height: 25px" />
@@ -53,6 +54,7 @@ export default {
     ...mapState({
       noticeMsg: (s) => s.noticeMsg,
       connectAddr: (s) => s.connectAddr,
+      payBy: (s) => s.payBy,
     }),
   },
   watch: {
@@ -124,10 +126,13 @@ export default {
       console.log("get wallet net...");
       const netType = await window.web3.eth.net.getNetworkType();
       const chainId = await window.web3.eth.net.getId();
+      // const payBy = [5, 1].includes(this.chainId) ? "Ethereum" : "Polygon";
+      // localStorage.payBy = payBy;
       console.log(netType);
       this.$setState({
         netType,
         chainId,
+        // payBy,
       });
     },
     async connectMetaMask() {
