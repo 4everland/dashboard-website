@@ -92,7 +92,7 @@ export default {
       this.loading = false;
     },
     onItem(row) {
-      this.$navTo(`/usage/billing/detail?hash=` + row.hash);
+      this.$navTo(`/usage/billing/detail?id=` + row.id);
     },
   },
 };

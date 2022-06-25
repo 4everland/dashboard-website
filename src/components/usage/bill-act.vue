@@ -143,79 +143,77 @@ export default {
   },
   methods: {
     async onRecharge() {
-      try {
-        let num = this.formNum;
-        num *= 1e6;
-        console.log("num", num);
-        this.$loading();
-        let balance = await this.curContract.FundPool.balanceOf(
-          this.providerAddr,
-          this.uuid
-        );
-        console.log("balance1", balance.toString());
-        const tx = await this.curContract.FundPool.recharge(
-          this.providerAddr,
-          this.uuid,
-          num
-        );
-        const receipt = await tx.wait();
-        console.log("receipt", receipt);
-        balance = await this.curContract.FundPool.balanceOf(
-          this.providerAddr,
-          this.uuid
-        );
-        console.log("balance2", balance.toString());
-        this.$loading.close();
-      } catch (error) {
-        this.onErr(error);
-      }
+      let num = this.formNum;
+      num *= 1e6;
+      console.log("num", num);
+      this.$loading();
+      let balance = await this.curContract.FundPool.balanceOf(
+        this.providerAddr,
+        this.uuid
+      );
+      console.log("balance1", balance.toString());
+      const tx = await this.curContract.FundPool.recharge(
+        this.providerAddr,
+        this.uuid,
+        num
+      );
+      const receipt = await tx.wait();
+      console.log("receipt", receipt);
+      balance = await this.curContract.FundPool.balanceOf(
+        this.providerAddr,
+        this.uuid
+      );
+      console.log("balance2", balance.toString());
+      this.$loading.close();
     },
     async onWithdraw() {
-      try {
-        let num = this.formNum;
-        this.$loading();
-        const { data } = await this.$http.post("$v3/bill/generate/order", {
-          amount: num,
-        });
-        console.log(data);
-        const {
-          billSign,
-          timeoutTimestamp: timeout,
-          billEncode: bills,
-          orderId,
-        } = data;
-        const params = [
-          this.providerAddr,
-          this.uuid,
-          bills,
-          timeout,
-          orderId,
-          billSign,
-          this.connectAddr,
-          num * 1e6,
-        ];
-        console.log(params);
-        const tx = await this.curContract.FundPool.withdraw(...params);
-        console.log("tx", tx);
-        const receipt = await tx.wait();
-        console.log("receipt", receipt);
-        this.$loading.close();
-      } catch (error) {
-        this.onErr(error);
-      }
+      let num = this.formNum;
+      this.$loading();
+      const { data } = await this.$http.post("$v3/bill/generate/order", {
+        amount: num,
+      });
+      console.log(data);
+      const {
+        billSign,
+        timeoutTimestamp: timeout,
+        billEncode: bills,
+        orderId,
+      } = data;
+      const params = [
+        this.providerAddr,
+        this.uuid,
+        bills,
+        timeout,
+        orderId,
+        billSign,
+        this.connectAddr,
+        num * 1e6,
+      ];
+      console.log(params);
+      const tx = await this.curContract.FundPool.withdraw(...params);
+      console.log("tx", tx);
+      const receipt = await tx.wait();
+      console.log("receipt", receipt);
+      this.$loading.close();
     },
     async onConfirm() {
       if (!this.formNum) {
         return this.$toast("Insufficient balance");
       }
-      if (this.isRecharge) {
-        await this.onRecharge();
-      } else {
-        await this.onWithdraw();
+      try {
+        if (this.isRecharge) {
+          await this.onRecharge();
+          this.$toast("Recharge successfully");
+        } else {
+          await this.onWithdraw();
+          this.$toast("Withdraw successfully");
+        }
+        this.showPop = false;
+        this.getBalance();
+        this.$emit("update");
+      } catch (error) {
+        this.onErr(error);
       }
-      this.showPop = false;
-      this.getBalance();
-      this.$emit("update");
     },
     async signWallet() {
       this.$loading("Check Wallet...");
@@ -278,7 +276,7 @@ export default {
     async getBalance() {
       try {
         const { data } = await this.$http.get("$v3/account/balance");
-        this.balance = data;
+        this.balance = data.balance;
         // if (this.$inDev) this.balance = 10;
       } catch (error) {
         //
