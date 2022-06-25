@@ -102,7 +102,7 @@ Vue.prototype.$utils = {
     } else if (byte > 0) {
       num = parseInt(byte);
     }
-    if (num) num = num.replace(".00", "");
+    if (num) num = (num + "").replace(".00", "");
     if (isObj)
       return {
         num,

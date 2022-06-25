@@ -74,11 +74,13 @@ export default {
       this.$loading.close();
     },
     async checkAccount() {
+      console.log("check account...");
       const uuidRegistered =
         await this.curContract.ProviderController.accountExists(
           this.providerAddr,
           this.uuid
         );
+      console.log("account uuidRegistered", uuidRegistered);
       if (!uuidRegistered) {
         throw new Error("Account Not Registered");
       }
@@ -100,8 +102,10 @@ export default {
     async onApprove(isBuy) {
       try {
         this.approving = true;
+        const addr = isBuy ? this.payAddr : MumbaiFundPool;
+        console.log("approve", addr, this.usdcKey);
         const tx = await this.curContract[this.usdcKey].approve(
-          isBuy ? this.paymentAddr : MumbaiFundPool,
+          addr,
           uint256Max
         );
         console.log("tx", tx);
