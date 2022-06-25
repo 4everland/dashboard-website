@@ -82,7 +82,6 @@ export default {
             info.usedFreeBandwidth + info.usedPurchasedBandwidth,
             info.freeBandwidth + info.purchasedBandwidth
           ),
-          rechargeTip: this.getTip(info.usedPurchasedBandwidth),
         },
         {
           label: "Storage IPFS",
@@ -94,7 +93,6 @@ export default {
               } used，${new Date(info.ipfsStorageExpired * 1000).format()}）`
             : "",
           ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
-          rechargeTip: this.getTip(info.usedPurchasedBandwidth),
         },
         {
           label: "Storage AR",
@@ -116,7 +114,6 @@ export default {
             info.freeBuildMinutes + info.purchasedBuildMinutes,
             "Minutes"
           ),
-          // rechargeTip: "（ Recharge used 50MB）",
         },
       ];
     },
@@ -125,12 +122,6 @@ export default {
     this.getInfo();
   },
   methods: {
-    getTip(val) {
-      if (val) {
-        return `(Recharge used ${this.$utils.getFileSize(val)})`;
-      }
-      return "";
-    },
     getPerc(used, total, unit = "GB") {
       const getSize = this.$utils.getFileSize;
       if (!total)
@@ -149,10 +140,15 @@ export default {
       } else {
         percTxt = `${used} / ${total} ${unit}`;
       }
+      let tip = "";
+      if (used > total) {
+        tip = `(Recharge used ${getSize(used - total)})`;
+      }
       return {
         perc: Math.round((used * 100) / total),
         percTxt,
         unit,
+        rechargeTip: tip,
       };
     },
     async getInfo() {
