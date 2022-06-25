@@ -6,8 +6,8 @@
           >mdi-alert-circle</v-icon
         >
         <span
-          >We will settle accounts in a timely manner, there may be some
-          delays.</span
+          >We will settle the account in time, there may be a slight
+          delay.</span
         >
       </e-tooltip>
       <span class="gray-7 mr-3">Total balance:</span>
@@ -23,7 +23,11 @@
       </a>
     </div>
 
-    <v-dialog v-model="showPop" max-width="500">
+    <v-dialog
+      :persistent="approving || posting"
+      v-model="showPop"
+      max-width="500"
+    >
       <e-dialog-close @click="showPop = false" />
       <div class="pa-4 pos-r">
         <h3>{{ title }}</h3>
@@ -69,6 +73,7 @@
             @blur="onNumBlur"
             type="tel"
             class="input-1 flex- shrink-1 fz-18 pa-2 pl-4"
+            :placeholder="isRecharge ? 'minimum 10' : ''"
             style="width: auto"
           />
           <img src="img/svg/settings/c-usdc.svg" height="24" />
@@ -76,7 +81,7 @@
           <v-btn color="primary" small class="mr-2" @click="onMax">MAX</v-btn>
         </div>
         <div class="fz-14 mt-2 ml-2 gray-7">
-          <span v-if="isRecharge">* Recharge at least 100 USDC</span>
+          <!-- <span v-if="isRecharge"></span> -->
           <span
             class="red-1"
             v-if="
@@ -100,6 +105,7 @@
           <v-btn
             color="primary"
             :disabled="!isApproved"
+            :loading="posting"
             class="mt-5"
             rounded
             block
@@ -123,6 +129,7 @@ export default {
       showPop: false,
       isRecharge: true,
       formNum: "",
+      posting: false,
     };
   },
   computed: {
@@ -154,7 +161,6 @@ export default {
       let num = this.formNum;
       num *= 1e6;
       console.log("num", num);
-      this.$loading();
       let balance = await this.curContract.FundPool.balanceOf(
         this.providerAddr,
         this.uuid
@@ -172,11 +178,9 @@ export default {
         this.uuid
       );
       console.log("balance2", balance.toString());
-      this.$loading.close();
     },
     async onWithdraw() {
       let num = this.formNum;
-      this.$loading();
       const { data } = await this.$http.post("$v3/bill/generate/order", {
         amount: num,
       });
@@ -202,13 +206,19 @@ export default {
       console.log("tx", tx);
       const receipt = await tx.wait();
       console.log("receipt", receipt);
-      this.$loading.close();
     },
     async onConfirm() {
       if (!(this.formNum > 0)) {
-        return this.$toast("Insufficient balance");
+        return this.$alert("Insufficient balance");
+      }
+      if (this.isRecharge) {
+        if (this.formNum < 10)
+          return this.$alert(
+            "The minimum recharge amount cannot be less than $20."
+          );
       }
       try {
+        this.posting = true;
         if (this.isRecharge) {
           await this.onRecharge();
           this.$toast("Recharge successfully");
@@ -222,6 +232,7 @@ export default {
       } catch (error) {
         this.onErr(error);
       }
+      this.posting = false;
     },
     async signWallet() {
       this.$loading("Check Wallet...");
@@ -251,8 +262,8 @@ export default {
     async onShow(type) {
       this.isRecharge = type == 1;
       if (!this.isPolygon) {
-        let html = `Currently, ${this.title} are only supported on the Polygon network.`;
-        html += "<p>Are you sure to switch to polygon network?</p>";
+        let html = `Currently, deposits and withdrawals are only supported on the polygon network. `;
+        html += "<p>Would you like to switch to the polygon network?</p>";
         try {
           await this.$confirm(html, this.title, {
             confirmText: "Switch Network",

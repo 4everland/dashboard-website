@@ -16,12 +16,12 @@
     </div>
     <div v-else class="mt-2 fz-14">
       <p>
-        <e-kv label="Current:">
+        <e-kv label="Current capacity:">
           <span class="color-1">{{ curStor }}</span>
         </e-kv>
       </p>
       <p class="mt-3">
-        <e-kv label="Effective Time:">
+        <e-kv label="Service duration:">
           <span
             >{{ formatTime(usage.ipfsStorageStart) }} -
             {{ formatTime(usage.ipfsStorageExpired) }}</span
@@ -32,7 +32,7 @@
         <e-expand-btn>
           <div class="al-c" style="min-height: 30px">
             <div style="min-width: ">
-              <v-switch label="Add Limit" v-model="moreStor"></v-switch>
+              <v-switch label="Add the capacity" v-model="moreStor"></v-switch>
             </div>
             <div class="al-c" v-if="moreStor">
               <span class="ml-1 mr-4">:</span>
@@ -51,7 +51,7 @@
           </div>
           <div class="al-c mt-4" style="min-height: 30px">
             <v-switch
-              label="Extend effective time"
+              label="Extend service duration"
               v-model="moreMon"
             ></v-switch>
             <div class="al-c" v-if="moreMon">

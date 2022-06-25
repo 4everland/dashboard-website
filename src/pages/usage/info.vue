@@ -52,7 +52,7 @@
     </div>
 
     <div class="mt-5 ml-5 ta-r">
-      <v-btn color="primary" to="/usage/more" rounded>Get more >></v-btn>
+      <v-btn color="primary" to="/usage/more" rounded>Buy more >></v-btn>
     </div>
   </div>
 </template>
@@ -72,7 +72,10 @@ export default {
       return [
         {
           label: "Bandwidth",
-          desc: `（Free ${getSize(info.freeBandwidth) || "100GB"} per month,  ${
+          // Free resources 100GB per month, of which 5GB used, 0GB purchased
+          desc: `（Free resources ${
+            getSize(info.freeBandwidth) || "100GB"
+          } per month, ${
             getSize(info.purchasedBandwidth) || "0GB"
           } purchased）`,
           ...this.getPerc(
@@ -84,7 +87,7 @@ export default {
         {
           label: "Storage IPFS",
           desc: info.ipfsStorage
-            ? `（Free 4 GB a year, ${
+            ? `（Free resources 4 GB a year, ${
                 getSize(info.ipfsStorage - info.ipfsDefaultStorage) || "0G"
               } purchased，${
                 getSize(info.usedIpfsStorage) || "0GB"
@@ -95,7 +98,7 @@ export default {
         },
         {
           label: "Storage AR",
-          tip: "AR is permanent storage.",
+          tip: "Arweave is a permanent storage service.",
           desc: `（Free 100MB，${
             getSize(info.arStorage - info.arDefaultStorage) || "0GB"
           } purchased）`,
@@ -103,7 +106,9 @@ export default {
         },
         {
           label: "Build Minutes",
-          desc: `（Free ${info.freeBuildMinutes || 250}Minutes  per month,  ${
+          desc: `（Free resources ${
+            info.freeBuildMinutes || 250
+          }Minutes per month,  ${
             info.purchasedBuildMinutes || 0
           }Minutes purchased）`,
           ...this.getPerc(
