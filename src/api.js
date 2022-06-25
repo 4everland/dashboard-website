@@ -50,6 +50,12 @@ Vue.prototype.$getImgSrc = function (src) {
   else if (!/^http/.test(src)) src = hostingUrl + src;
   return src;
 };
+Vue.prototype.$getPolygonUrl = (hash) => {
+  const pre = inDev
+    ? "https://mumbai.polygonscan.com/tx/"
+    : "https://polygonscan.com/tx/";
+  return pre + hash;
+};
 
 const RefreshPath = "/refresh";
 const RefreshLockKey = "refresh";

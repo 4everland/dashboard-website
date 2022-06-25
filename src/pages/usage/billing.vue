@@ -12,7 +12,14 @@
         @click:row="onItem"
       >
         <template v-slot:item.hash="{ item }">
-          <v-btn x-small color="primary" text @click.stop="onStop">
+          <v-btn
+            x-small
+            color="primary"
+            :href="$getPolygonUrl(item.hash)"
+            target="_blank"
+            text
+            @click.stop="onStop"
+          >
             <span>{{ item.hash.cutStr(6, 6) }}</span>
           </v-btn>
         </template>

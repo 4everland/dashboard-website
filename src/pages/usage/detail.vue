@@ -2,7 +2,10 @@
   <div>
     <v-card outlined>
       <div class="card-head-1">Details</div>
-      <div class="pa-4">
+      <div class="pa-4" v-if="!info">
+        <v-skeleton-loader type="article" />
+      </div>
+      <div class="pa-4" v-else>
         <e-kv label="Content">
           <p>{{ info.contentType }}</p>
           <v-data-table
@@ -15,7 +18,7 @@
           >
             <template v-slot:item.amount="{ item }">
               <span>{{ item.amount }}</span>
-              <span class="gray-7 ml-1">{{ item.unit || "GB" }}</span>
+              <span class="gray-7 ml-1">{{ item.unit || "" }}</span>
             </template>
             <template v-slot:item.pay="{ item }">
               <span>{{ item.pay }}</span>
@@ -37,9 +40,12 @@
           <span>{{ info.time }}</span>
         </e-kv>
         <e-kv class="mt-4" label="Hash">
-          <a class="color-1 fz-14" target="_blank" href="/">{{
-            info.hash.cutStr(6, 6)
-          }}</a>
+          <a
+            class="color-1 fz-14"
+            target="_blank"
+            :href="$getPolygonUrl(info.hash)"
+            >{{ (info.hash || "").cutStr(6, 6) }}</a
+          >
         </e-kv>
       </div>
     </v-card>
@@ -47,16 +53,18 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
   computed: {
-    ...mapState({
-      noticeMsg: (s) => s.noticeMsg,
-    }),
     list() {
+      const nameMap = {
+        BUILD_TIME: "Build Minutes",
+        TRAFFIC: "Bandwidth",
+        AR_STORAGE: "Storage AR",
+        IPFS_STORAGE: "Storage IPFS",
+      };
       const list = JSON.parse(this.info.contentJson || "[]");
       return list.map((it) => {
+        it.name = nameMap[it.type] || "Unknown";
         if (it.cost) it.pay = (it.cost * 1).toFixed(2);
         it.time = "Until used up";
         if (it.effectiveTime) {
@@ -65,6 +73,8 @@ export default {
         if (/build/i.test(it.type)) {
           it.amount = parseInt(it.amount / 60);
           it.unit = "Min";
+        } else if (/ipfs/i.test(it.type) && it.amount == "0") {
+          it.amount = "Extend Time";
         } else {
           const obj = this.$utils.getFileSize(it.amount, true);
           it.amount = obj.num;
@@ -80,7 +90,7 @@ export default {
       headers: [
         {
           text: "Type",
-          value: "type",
+          value: "name",
         },
         {
           text: "Amount",
@@ -95,16 +105,8 @@ export default {
           value: "time",
         },
       ],
-      info: {},
+      info: null,
     };
-  },
-  watch: {
-    noticeMsg(obj) {
-      if (obj.name == "billRow") {
-        this.info = obj.data;
-        console.log(this.info);
-      }
-    },
   },
   mounted() {
     this.getInfo();
@@ -113,13 +115,11 @@ export default {
     async getInfo() {
       try {
         const { id } = this.$route.query;
-        this.$loading();
         const { data } = await this.$http.get("$v3/bill/capital/detail/" + id);
         console.log(data);
-        data.time = new Date(data.paymentTime * 1000).format("date");
+        data.time = new Date(data.paymentTime * 1000).format();
         data.usdt = data.usdt.toFixed(2);
         this.info = data;
-        this.$loading.close();
       } catch (error) {
         console.log(error);
       }

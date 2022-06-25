@@ -1,7 +1,15 @@
 <template>
   <div>
     <div class="al-c ov-a pb-1">
-      <v-icon color="#6e7787" size="18" class="mr-2">mdi-alert-circle</v-icon>
+      <e-tooltip top>
+        <v-icon color="#6e7787" size="18" slot="ref" class="mr-2"
+          >mdi-alert-circle</v-icon
+        >
+        <span
+          >We will settle accounts in a timely manner, there may be some
+          delays.</span
+        >
+      </e-tooltip>
       <span class="gray-7 mr-3">Total balance:</span>
       <b class="fz-20 red-1">{{ balance }}</b>
       <span class="gray-6 fz-12 ml-2 mt-1">USDC</span>
@@ -58,6 +66,7 @@
           </div>
           <input
             v-model="formNum"
+            @blur="onNumBlur"
             type="tel"
             class="input-1 flex- shrink-1 fz-18 pa-2 pl-4"
             style="width: auto"
@@ -127,21 +136,20 @@ export default {
       return this.balance;
     },
   },
-  watch: {
-    formNum(val) {
+  mounted() {
+    this.getBalance();
+  },
+  methods: {
+    onNumBlur() {
+      const val = this.formNum;
       let num = Math.min(this.maxNum, Math.max(0, val));
-      if (!num) num = "";
+      if (!num) num = "0";
       if (val > 0 && !this.maxNum) {
         num = "";
         this.$toast("Insufficient balance");
       }
       if (num != val) this.formNum = num;
     },
-  },
-  mounted() {
-    this.getBalance();
-  },
-  methods: {
     async onRecharge() {
       let num = this.formNum;
       num *= 1e6;
@@ -197,7 +205,7 @@ export default {
       this.$loading.close();
     },
     async onConfirm() {
-      if (!this.formNum) {
+      if (!(this.formNum > 0)) {
         return this.$toast("Insufficient balance");
       }
       try {
