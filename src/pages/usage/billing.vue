@@ -1,6 +1,6 @@
 <template>
   <div>
-    <bill-act />
+    <bill-act @update="getList" />
 
     <div class="mt-6">
       <v-data-table

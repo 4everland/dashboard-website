@@ -78,6 +78,7 @@ export default {
             info.usedFreeBandwidth + info.usedPurchasedBandwidth,
             info.freeBandwidth + info.purchasedBandwidth
           ),
+          // ...this.getTip(info.usedPurchasedBandwidth)
         },
         {
           label: "Storage IPFS",

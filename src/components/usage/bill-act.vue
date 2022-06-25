@@ -68,7 +68,11 @@
         </div>
         <div class="fz-14 mt-2 ml-2 gray-7">
           <span v-if="isRecharge">* Recharge at least 100 USDC</span>
-          <span class="red-1" v-if="balance == 0"
+          <span
+            class="red-1"
+            v-if="
+              (isRecharge && walletBalance < 100) || (!isRecharge && !balance)
+            "
             >（Insufficient balance）</span
           >
         </div>
@@ -115,6 +119,23 @@ export default {
   computed: {
     title() {
       return this.isRecharge ? "Recharge" : "Withdraw";
+    },
+    maxNum() {
+      if (this.isRecharge) {
+        return this.walletBalance;
+      }
+      return this.balance;
+    },
+  },
+  watch: {
+    formNum(val) {
+      let num = Math.min(this.maxNum, Math.max(0, val));
+      if (!num) num = "";
+      if (val > 0 && !this.maxNum) {
+        num = "";
+        this.$toast("Insufficient balance");
+      }
+      if (num != val) this.formNum = num;
     },
   },
   mounted() {
@@ -183,9 +204,18 @@ export default {
         this.onErr(error);
       }
     },
-    onConfirm() {
-      if (this.isRecharge) this.onRecharge();
-      else this.onWithdraw();
+    async onConfirm() {
+      if (!this.formNum) {
+        return this.$toast("Insufficient balance");
+      }
+      if (this.isRecharge) {
+        await this.onRecharge();
+      } else {
+        await this.onWithdraw();
+      }
+      this.showPop = false;
+      this.getBalance();
+      this.$emit("update");
     },
     async signWallet() {
       this.$loading("Check Wallet...");
@@ -235,7 +265,10 @@ export default {
           return;
         }
         await this.getWalletBalance();
-        await this.signWallet();
+        if (!this.walletSigned) {
+          await this.signWallet();
+          this.walletSigned = true;
+        }
         this.formNum = "";
         this.showPop = true;
       } catch (error) {
@@ -246,16 +279,17 @@ export default {
       try {
         const { data } = await this.$http.get("$v3/account/balance");
         this.balance = data;
+        // if (this.$inDev) this.balance = 10;
       } catch (error) {
         //
       }
     },
     onMax() {
-      if (this.isRecharge) {
-        this.formNum = this.walletBalance;
-      } else {
-        this.formNum = this.balance;
+      let num = this.maxNum;
+      if (num == 0) {
+        return this.$toast("Insufficient balance");
       }
+      this.formNum = num;
     },
   },
 };
