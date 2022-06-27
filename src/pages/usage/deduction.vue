@@ -50,7 +50,7 @@ export default {
         },
         {
           text: "Cost",
-          value: "pay",
+          value: "cost",
         },
         {
           text: "Payment Time",
@@ -81,14 +81,14 @@ export default {
           },
         });
         this.list = data.rows.map((it) => {
-          const row = this.$utils.getPurchase(it.resourceType, it.amount);
+          const row = this.$utils.getPurchase(it.resourceType, it.data);
           Object.assign(it, row);
           if (it.paymentTime) {
             it.time = new Date(it.paymentTime * 1e3).format();
           } else {
             it.time = "-";
           }
-          it.pay = it.usdt.toFixed(4) + "USD";
+          it.cost = it.usdt.toFixed(4) + "USD";
           it.status = it.status ? "Success" : "Unpaid";
           return it;
         });

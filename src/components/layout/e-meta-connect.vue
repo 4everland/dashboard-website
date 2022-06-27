@@ -10,7 +10,7 @@
           <div class="gray fz-15">
             After connecting to your wallet, you'll be able to make changes in
             custom settings. Please select the
-            {{ payBy == "Polygon" ? payBy : "Ethereum Mainnet" }} network.
+            {{ payBy }} network.
           </div>
           <div class="mt-5 d-flex al-c">
             <img src="img/svg/settings/m-metamask.svg" style="height: 25px" />
