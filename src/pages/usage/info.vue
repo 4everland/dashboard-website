@@ -135,7 +135,9 @@ export default {
             info.purchasedBuildMinutes || 0
           } Minutes purchased`,
           ...this.getPerc(
-            info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes,
+            parseInt(
+              info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes
+            ),
             info.freeBuildMinutes + info.purchasedBuildMinutes,
             "Minutes"
           ),
