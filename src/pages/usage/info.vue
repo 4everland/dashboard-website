@@ -171,8 +171,11 @@ export default {
         percTxt = `${used} / ${total} ${unit}`;
       }
       let tip = "";
-      if (used > total) {
-        tip = `(Recharge used ${getSize(used - total)})`;
+      let over = used - total;
+      if (over > 0) {
+        if (unit == "GB") over = getSize(over);
+        else over += " " + unit;
+        tip = `(Recharge used ${over})`;
       }
       let perc = Math.round((used * 100) / total);
       perc = Math.max(perc > 0 ? 0.8 : 0.4, perc);
