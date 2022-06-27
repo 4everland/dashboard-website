@@ -14,11 +14,9 @@ export default {
     },
     xAxisData: {
       type: Array,
-      default: () => [1, 2, 3, 4],
     },
     yAxisData: {
       type: Array,
-      default: () => [1, 2, 3, 4],
     },
     overDay: {
       type: Boolean,
@@ -50,6 +48,22 @@ export default {
         },
         yAxis: {
           type: "value",
+          axisLabel: {
+            formatter: (value) => {
+              const gb = Math.pow(1024, 3);
+              const mb = Math.pow(1024, 2);
+              const kb = 1024;
+              if (value > gb) {
+                return (value / gb).toFixed(2) + "GB";
+              } else if (value > mb) {
+                return (value / mb).toFixed(2) + "MB";
+              } else if (value > kb) {
+                return (value / kb).toFixed(2) + "KB";
+              } else {
+                return value + "B";
+              }
+            },
+          },
         },
         tooltip: {
           trigger: "axis",
