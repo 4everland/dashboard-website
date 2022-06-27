@@ -30,7 +30,7 @@
       >
         <div class="label ta-r fz-15 mr-1 pos-r">
           <e-tooltip top v-if="it.tip">
-            <v-icon color="#999" size="18" slot="ref" class="mr-1"
+            <v-icon color="#999" size="16" slot="ref" class="mr-1"
               >mdi-alert-circle</v-icon
             >
             <span>{{ it.tip }}</span>
@@ -40,12 +40,16 @@
         <div style="width: 50%">
           <div class="ml-2">
             <div class="m-progress">
-              <v-progress-linear
-                :color="it.color || 'primary'"
-                :value="it.perc || 0"
-                height="14"
-                rounded
-              ></v-progress-linear>
+              <e-tooltip top>
+                <v-progress-linear
+                  slot="ref"
+                  :color="it.color || 'primary'"
+                  :value="it.perc || 0"
+                  height="14"
+                  rounded
+                ></v-progress-linear>
+                <span>{{ it.usedTxt }} used</span>
+              </e-tooltip>
             </div>
             <p class="mt-2 fz-12 gray lh-15">
               <span>{{ it.desc }}</span>
@@ -80,7 +84,7 @@ export default {
     list() {
       const info = this.info;
       const getSize = this.$utils.getFileSize;
-
+      info.purchasedBuildMinutes = parseInt(info.purchasedBuildMinutes);
       return [
         {
           label: "Bandwidth",
@@ -145,13 +149,16 @@ export default {
           unit: "GB",
         };
       let percTxt = "";
+      let usedTxt = "";
       if (unit == "GB") {
         const usedObj = getSize(used, true);
         const totalObj = getSize(total, true);
+        usedTxt = usedObj.num + " " + usedObj.unit;
         let childUnit = "";
         if (usedObj.unit != totalObj.unit) childUnit = usedObj.unit;
         percTxt = `${usedObj.num} ${childUnit} / ${totalObj.num} ${totalObj.unit}`;
       } else {
+        usedTxt = used + " Minutes";
         percTxt = `${used} / ${total} ${unit}`;
       }
       let tip = "";
@@ -159,10 +166,11 @@ export default {
         tip = `(Recharge used ${getSize(used - total)})`;
       }
       let perc = Math.round((used * 100) / total);
-      perc = Math.max(1, perc);
+      perc = Math.max(perc > 0 ? 0.8 : 0.4, perc);
       return {
         perc,
         percTxt,
+        usedTxt,
         unit,
         rechargeTip: tip,
       };
