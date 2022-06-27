@@ -92,19 +92,18 @@ export default {
   methods: {
     handleChangeBucketDate(val) {
       this.getChartData(val, "STORAGE_LINE").then((res) => {
-        // console.log(res, "res");
         if (val[1] - val[0] > 86400) {
           this.bucketDateOverDay = true;
         } else {
           this.bucketDateOverDay = false;
         }
-
-        if (res) {
+        if (res.subsections.length) {
           this.ipfsData.xAxis = res.subsections;
           this.ipfsData.yAxis = res.collections[0].raws;
           this.arData.xAxis = res.subsections;
           this.arData.yAxis = res.collections[1].raws;
         } else {
+          console.log(222);
           this.ipfsData.xAxis = [];
           this.ipfsData.yAxis = [];
           this.arData.xAxis = [];
@@ -119,7 +118,7 @@ export default {
         this.overDateOverDay = false;
       }
       this.getChartData(val, "TRAFFIC_USAGE_LINE").then((res) => {
-        if (res) {
+        if (res.subsections.length) {
           this.trafficData.xAxis = res.subsections;
           this.trafficData.yAxis = res.collections[0].raws;
         } else {
@@ -128,7 +127,7 @@ export default {
         }
       });
       this.getChartData(val, "REQUESTS_LINE").then((res) => {
-        if (res) {
+        if (res.subsections.length) {
           this.requestData.xAxis = res.subsections;
           this.requestData.yAxis = res.collections[0].raws;
         } else {
@@ -138,8 +137,9 @@ export default {
       });
     },
     async getChartData(timeArr, type) {
+      this.$loading();
       try {
-        const { data } = this.$http({
+        const { data } = await this.$http({
           url: "/bi/charts/line",
           methods: "get",
           params: {
@@ -149,6 +149,7 @@ export default {
             bucket: this.bucket,
           },
         });
+        this.$loading.close();
         return data;
       } catch (e) {
         console.log(e);
