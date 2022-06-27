@@ -151,6 +151,7 @@ export default {
       const val = this.formNum;
       let num = Math.min(this.maxNum, Math.max(0, val));
       if (!num) num = "0";
+      else num = this.$utils.cutFixed(num, 4);
       if (val > 0 && !this.maxNum) {
         num = "";
         this.$toast("Insufficient balance");
@@ -299,7 +300,7 @@ export default {
     async getBalance() {
       try {
         const { data } = await this.$http.get("$v3/account/balance");
-        this.balance = data.balance.toFixed(2);
+        this.balance = this.$utils.cutFixed(data.balance, 2);
         // if (this.$inDev) this.balance = 10;
       } catch (error) {
         //

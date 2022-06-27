@@ -122,6 +122,12 @@ Vue.prototype.$utils = {
     if (!cid) return "";
     return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
   },
+  cutFixed(num, keep = 2) {
+    const str = num + "";
+    let i = str.indexOf(".");
+    if (i == -1) return num;
+    return str.substring(0, i + keep + 1) * 1;
+  },
   getPurchase(type, amount) {
     const nameMap = {
       BUILD_TIME: "Build Minutes",

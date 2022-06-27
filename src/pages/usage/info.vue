@@ -150,8 +150,10 @@ export default {
       if (used > total) {
         tip = `(Recharge used ${getSize(used - total)})`;
       }
+      let perc = Math.round((used * 100) / total);
+      perc = Math.max(1, perc);
       return {
-        perc: Math.round((used * 100) / total),
+        perc,
         percTxt,
         unit,
         rechargeTip: tip,

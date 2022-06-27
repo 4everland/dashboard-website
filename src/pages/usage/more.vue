@@ -353,25 +353,30 @@ export default {
           }
           console.log("totalFee", totalFee.toString());
           // const chainId = this.curContract[this.chainKey].provider.getChainId();
-          console.log("chainId", this.chainId);
-          // const response = await this.client.estimate(
-          //   this.connectAddr,
-          //   totalFee.toString(),
-          //   this.chainId,
-          //   this.$inDev ? 80001 : 137
-          // );
           const minSend = await this.curContract.Bridge.minSend(
             this.curContract.GoerliUSDC.address
           );
           console.log("minSend", minSend.toString());
-          // const maxSlippage = response.getMaxSlippage();
-          // console.log("response", response.toObject(), maxSlippage);
-          console.log("calcFee", params, this.curContract[this.chainKey]);
+          if (totalFee.lt(minSend)) {
+            throw new Error(
+              "Minimun " + minSend.div(this.chainId == 56 ? 1e18 : 1e6) + " USD"
+            );
+          }
+          const response = await this.client.estimate(
+            this.connectAddr,
+            totalFee.toString(),
+            this.chainId,
+            this.$inDev ? 80001 : 137
+          );
+          console.log("response", response.toObject());
+          const maxSlippage = response.getMaxSlippage();
+          console.log("maxSlippage", maxSlippage);
+          console.log("calcFee", params);
           const feeMsg = await this.curContract[this.chainKey].calcFee(
             ...params
           );
           console.log("feeMsg", feeMsg.toString());
-          params.push(20000);
+          params.push(maxSlippage);
           params.push({
             value: feeMsg,
           });
