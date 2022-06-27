@@ -10,8 +10,8 @@
 <template>
   <div class="usage-more">
     <div
-      class="mb-5 bdrs-10 d-flex lh-1"
-      :class="form[it.key] > 0 ? 'bd-1 bg-hover-f8a' : 'bd-1n'"
+      class="mb-5 bdrs-10 d-flex lh-1 bg-hover-f8a"
+      :class="form[it.key] > 0 ? 'bd-1 ' : 'bd-1n'"
       style="padding: 32px 40px"
       v-for="(it, i) in list"
       :key="i"

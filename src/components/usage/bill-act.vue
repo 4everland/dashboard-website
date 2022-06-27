@@ -100,7 +100,7 @@
             block
             depressed
             @click="onApprove()"
-            >Approve</v-btn
+            >{{ isApproved ? "Approved" : "Approve" }}</v-btn
           >
           <v-btn
             color="primary"
