@@ -56,31 +56,15 @@
 export default {
   computed: {
     list() {
-      const nameMap = {
-        BUILD_TIME: "Build Minutes",
-        TRAFFIC: "Bandwidth",
-        AR_STORAGE: "Storage AR",
-        IPFS_STORAGE: "Storage IPFS",
-      };
       const list = JSON.parse(this.info.contentJson || "[]");
       return list.map((it) => {
-        it.name = nameMap[it.type] || "Unknown";
         if (it.cost) it.pay = (it.cost * 1).toFixed(2);
         it.time = "Until used up";
         if (it.effectiveTime) {
           it.time = "Until " + new Date(it.effectiveTime * 1000).format("date");
         }
-        if (/build/i.test(it.type)) {
-          it.amount = parseInt(it.amount / 60);
-          it.unit = "Min";
-        } else if (/ipfs/i.test(it.type) && it.amount == "0") {
-          it.amount = "Extend Time";
-        } else {
-          const obj = this.$utils.getFileSize(it.amount, true);
-          it.amount = obj.num;
-          it.unit = obj.unit;
-        }
-
+        const row = this.$utils.getPurchase(it.type, it.amount);
+        Object.assign(it, row);
         return it;
       });
     },
@@ -97,7 +81,7 @@ export default {
           value: "amount",
         },
         {
-          text: "Pay",
+          text: "Cost",
           value: "pay",
         },
         {

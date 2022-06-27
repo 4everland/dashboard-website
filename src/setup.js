@@ -122,4 +122,28 @@ Vue.prototype.$utils = {
     if (!cid) return "";
     return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
   },
+  getPurchase(type, amount) {
+    const nameMap = {
+      BUILD_TIME: "Build Minutes",
+      TRAFFIC: "Bandwidth",
+      AR_STORAGE: "Storage AR",
+      IPFS_STORAGE: "Storage IPFS",
+    };
+    const it = {
+      type,
+      name: nameMap[type] || "Unknown",
+      amount,
+    };
+    if (/build/i.test(it.type)) {
+      it.amount = parseInt(it.amount / 60);
+      it.unit = "Min";
+    } else if (/ipfs/i.test(it.type) && it.amount == "0") {
+      it.amount = "Extend Time";
+    } else {
+      const obj = this.getFileSize(it.amount, true);
+      it.amount = obj.num;
+      it.unit = obj.unit;
+    }
+    return it;
+  },
 };

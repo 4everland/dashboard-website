@@ -23,6 +23,13 @@
             <span>{{ item.hash.cutStr(6, 6) }}</span>
           </v-btn>
         </template>
+        <template v-slot:item.cost="{ item }">
+          <span>{{ item.cost }}</span>
+          <span class="gray-7 ml-1">USD</span>
+        </template>
+        <template v-slot:item.status="{ item }">
+          <h-status :val="item.status" />
+        </template>
       </v-data-table>
 
       <div class="mt-8" v-if="!list.length">
@@ -56,8 +63,8 @@ export default {
           value: "contentType",
         },
         {
-          text: "Amount",
-          value: "amount",
+          text: "Cost",
+          value: "cost",
         },
         {
           text: "Payment Time",
@@ -90,7 +97,7 @@ export default {
         });
         this.list = data.rows.map((it) => {
           it.time = new Date(it.paymentTime * 1e3).format();
-          it.amount = it.usdt.toFixed(2) + " USD";
+          it.cost = it.usdt.toFixed(2);
           return it;
         });
         this.total = data.count;

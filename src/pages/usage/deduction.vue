@@ -6,6 +6,17 @@
       hide-default-footer
       disable-pagination
     >
+      <template v-slot:item.amount="{ item }">
+        <span>{{ item.amount }}</span>
+        <span class="gray-7 ml-1">{{ item.unit || "" }}</span>
+      </template>
+      <template v-slot:item.pay="{ item }">
+        <span>{{ item.pay }}</span>
+        <span class="gray-7 ml-1">USD</span>
+      </template>
+      <template v-slot:item.status="{ item }">
+        <h-status :val="item.status" />
+      </template>
     </v-data-table>
 
     <div class="mt-8" v-if="!list.length">
@@ -31,11 +42,15 @@ export default {
       headers: [
         {
           text: "Content",
-          value: "content",
+          value: "name",
         },
         {
           text: "Amount",
           value: "amount",
+        },
+        {
+          text: "Cost",
+          value: "pay",
         },
         {
           text: "Payment Time",
@@ -66,6 +81,15 @@ export default {
           },
         });
         this.list = data.rows.map((it) => {
+          const row = this.$utils.getPurchase(it.resourceType, it.amount);
+          Object.assign(it, row);
+          if (it.paymentTime) {
+            it.time = new Date(it.paymentTime * 1e3).format();
+          } else {
+            it.time = "-";
+          }
+          it.pay = it.usdt.toFixed(4) + "USD";
+          it.status = it.status ? "Success" : "Unpaid";
           return it;
         });
         this.total = data.count;

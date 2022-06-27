@@ -59,7 +59,7 @@
           <span class="ml-2">Total Balance:</span>
           <b class="fz-20 red-1 mr-1 ml-2">{{ balance }}</b>
           <span class="fz-13 mt-1">USD</span>
-          <span class="ml-auto">
+          <span class="ml-auto" v-if="isRecharge">
             Wallet Banace: {{ walletBalance }} <span class="fz-13">USDC</span>
           </span>
         </div>
@@ -295,7 +295,7 @@ export default {
     async getBalance() {
       try {
         const { data } = await this.$http.get("$v3/account/balance");
-        this.balance = data.balance;
+        this.balance = data.balance.toFixed(2);
         // if (this.$inDev) this.balance = 10;
       } catch (error) {
         //
