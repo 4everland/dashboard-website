@@ -1,7 +1,7 @@
 <template>
   <div>
-    <e-menu open-on-hover1 offset-y top>
-      <v-icon slot="ref" color="#ed7266" size="20" class="pa-2"
+    <e-menu open-on-hover offset-y top>
+      <v-icon slot="ref" color="#ed7266" size="16" class="ml-2"
         >mdi-help-circle</v-icon
       >
       <div class="pa-3 bg-white lh-11" style="width: 330px">
@@ -27,7 +27,7 @@
           <div class="d-flex">
             <div class="ml-auto">
               <span>Price:</span>
-              <b class="red-1 fz-16 ml-1">{{ it.price.toFixed(4) }}</b>
+              <b class="red-1 fz-16 ml-1">{{ it.price.toFixed(2) }}</b>
               <span class="fz-12 ml-1">USD</span>
             </div>
           </div>
@@ -41,7 +41,7 @@
             <label class="gray d-ib ta-r mr-2" style="min-width: 90px"
               >{{ it.label }}:</label
             >
-            <span> {{ it.unitPrice }}U / 100 {{ it.unit }} </span>
+            <span> {{ it.unitPrice.toFixed(2) }} U / 100 {{ it.unit }} </span>
           </p>
         </div>
       </div>

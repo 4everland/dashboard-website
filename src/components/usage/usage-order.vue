@@ -25,7 +25,7 @@
           <div class="bg-white pa-4 ml-4 bdrs-5">
             <div>Price:</div>
             <div>
-              <span class="red-1 fz-22">{{ it.price.toFixed(4) }}</span>
+              <span class="red-1 fz-22">{{ it.price.toFixed(2) }}</span>
               <span class="ml-2">USD</span>
             </div>
           </div>
@@ -36,7 +36,9 @@
       <e-kv label="Network:" min-width="70px" label-class="gray-7 mt-1">
         <div class="al-c">
           <img
-            :src="`img/svg/billing/ic-${payBy.toLowerCase()}.svg`"
+            :src="`img/svg/billing/ic-${payBy.toLowerCase()}.${
+              payBy == 'BSC' ? 'png' : 'svg'
+            }`"
             height="24"
             class="d-b"
           />

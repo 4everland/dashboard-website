@@ -1,8 +1,14 @@
-// src chain
+// src chain eth
 export const GoerliUSDC = "0xCbE56b00d173A26a5978cE90Db2E33622fD95A28";
 export const GoerliBridge = "0x358234B325EF9eA8115291A8b81b7d33A2Fa762D";
 export const GoerliSrcChainPayment =
   "0x293b579B8da5538EaDD70B811E4eC2C3C6Ac0f05";
+
+// src chain bsc
+export const ChapelUSDC = "0x855fC87f7F14Db747ef27603b02bAe579ba947B6";
+export const ChapelBridge = "0xf89354F314faF344Abd754924438bA798E306DF2";
+export const ChapelSrcChainPayment =
+  "0xde15Bd142D0BFa2e9E423B3473e027E0Cc6C10bC";
 
 // dst chain
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";

@@ -147,7 +147,7 @@ export default {
           label: "Storage IPFS",
           id: ResourceType.IPFSStorage,
           key: "ipfs",
-          unit: "GB",
+          unit: "GB / Mon",
           unitPrice: info.ipfsStorageUnitPrice || 0,
         },
         {
@@ -161,7 +161,7 @@ export default {
           label: "Build Minutes",
           id: ResourceType.BuildingTime,
           key: "buildMinutes",
-          unit: "Minutes",
+          unit: "Min",
           unitPrice: info.buildTimeUnitPrice || 0,
         },
       ];
@@ -205,7 +205,7 @@ export default {
           let price = b.price;
           return a + price;
         }, 0)
-        .toFixed(4)
+        .toFixed(2)
         .replace(/0+$/, "")
         .replace(/\.$/, "");
     },
@@ -350,19 +350,30 @@ export default {
         const nonce = Math.floor(Date.now() / 1000);
         const params = [this.providerAddr, nonce, this.uuid, payloads];
         if (!this.isPolygon) {
-          totalFee = totalFee.div(1e12);
+          if (this.chainId != 56) {
+            totalFee = totalFee.div(1e12);
+          }
           console.log("totalFee", totalFee.toString());
-          const response = await this.client.estimate(
-            this.connectAddr,
-            totalFee.toString()
+          // const chainId = this.curContract[this.chainKey].provider.getChainId();
+          console.log("chainId", this.chainId);
+          // const response = await this.client.estimate(
+          //   this.connectAddr,
+          //   totalFee.toString(),
+          //   this.chainId,
+          //   this.$inDev ? 80001 : 137
+          // );
+          const minSend = await this.curContract.Bridge.minSend(
+            this.curContract.GoerliUSDC.address
           );
-          const maxSlippage = response.getMaxSlippage();
-          console.log("response", response.toObject(), maxSlippage);
+          console.log("minSend", minSend.toString());
+          // const maxSlippage = response.getMaxSlippage();
+          // console.log("response", response.toObject(), maxSlippage);
+          console.log("calcFee", params, this.curContract[this.chainKey]);
           const feeMsg = await this.curContract[this.chainKey].calcFee(
             ...params
           );
           console.log("feeMsg", feeMsg.toString());
-          params.push(maxSlippage);
+          params.push(20000);
           params.push({
             value: feeMsg,
           });

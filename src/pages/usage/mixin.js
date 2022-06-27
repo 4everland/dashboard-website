@@ -1,7 +1,8 @@
 import { mapState } from "vuex";
 import { providers, BigNumber } from "ethers"; //, utils
-import srccontracts from "../../plugins/pay/contracts/src-chain-contracts";
-import dstcontracts from "../../plugins/pay/contracts/dst-chain-contracts";
+import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
+import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
+import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
 import client from "../../plugins/pay/contracts/SGNClient";
 import { MumbaiFundPool } from "../../plugins/pay/contracts/addr-dev";
 
@@ -32,8 +33,11 @@ export default {
     isPolygon() {
       return this.payBy == "Polygon";
     },
+    isBSC() {
+      return this.payBy == "BSC";
+    },
     payChainId() {
-      return this.getChainId(this.isPolygon);
+      return this.getChainId(this.payBy);
     },
     usdcKey() {
       return this.isPolygon ? "MumbaiUSDC" : "GoerliUSDC";
@@ -138,8 +142,9 @@ export default {
         console.log(error);
       }
     },
-    getChainId(isPolygon) {
-      if (isPolygon) return this.$inDev ? 80001 : 137;
+    getChainId(type) {
+      if (type == "Polygon") return this.$inDev ? 80001 : 137;
+      if (type == "BSC") return this.$inDev ? 97 : 56;
       return this.$inDev ? 5 : 1;
     },
     switchNet(id) {
@@ -152,20 +157,26 @@ export default {
       console.log(this.chainId);
       try {
         if (this.chainId != this.payChainId) {
-          const dev = this.$inDev
-            ? `(dev-${this.Polygon ? "Mumbai" : "Goerli"})`
-            : "";
+          let dev = "";
+          if (this.$inDev) {
+            dev = this.isPolygon ? "Mumbai" : "Goerli";
+            if (this.isBSC) dev = "Chapel";
+            dev = `(dev - ${dev})`;
+          }
           await this.$alert(`Please switch to ${this.payBy}${dev} Network`);
           await this.switchNet(this.payChainId);
           return;
         }
         const provider = new providers.Web3Provider(window.ethereum);
         if (this.isPolygon) {
-          dstcontracts.setProvider(provider);
-          this.curContract = dstcontracts;
+          polygonContract.setProvider(provider);
+          this.curContract = polygonContract;
+        } else if (this.isBSC) {
+          bscContract.setProvider(provider);
+          this.curContract = bscContract;
         } else {
-          srccontracts.setProvider(provider);
-          this.curContract = srccontracts;
+          ethContract.setProvider(provider);
+          this.curContract = ethContract;
         }
         console.log(this.payBy, this.curContract);
         // this.getSign();

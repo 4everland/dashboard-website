@@ -14,9 +14,9 @@ import {
 } from "4everland-contracts";
 import { Bridge__factory } from "./sgn/contract/typechain";
 import {
-  // GoerliBridge,
-  GoerliUSDC,
-  GoerliSrcChainPayment,
+  ChapelSrcChainPayment,
+  ChapelUSDC,
+  MumbaiProviderController,
   MumbaiDstChainPayment,
   MumbaiResourcePriceAdaptor,
   MumbaiARStorageController,
@@ -24,7 +24,7 @@ import {
   MumbaiBuildingTimeController,
   MumbaiIPFSStorageController,
 } from "./contracts-addr";
-import { MumbaiProviderController } from "./addr-dev";
+import { ChapelBridge } from "./addr-dev";
 
 class SrcChainContracts extends Contracts {
   dstProvider = null;
@@ -38,7 +38,7 @@ class SrcChainContracts extends Contracts {
   }
 
   get GoerliUSDC() {
-    return IERC20__factory.connect(GoerliUSDC, this.signer);
+    return IERC20__factory.connect(ChapelUSDC, this.signer);
   }
 
   IERC20(addr) {
@@ -46,11 +46,11 @@ class SrcChainContracts extends Contracts {
   }
 
   get Bridge() {
-    return Bridge__factory.connect(GoerliBridge, this.signer);
+    return Bridge__factory.connect(ChapelBridge, this.signer);
   }
 
   get SrcChainPayment() {
-    return SrcChainPayment__factory.connect(GoerliSrcChainPayment, this.signer);
+    return SrcChainPayment__factory.connect(ChapelSrcChainPayment, this.signer);
   }
 
   get ProviderController() {

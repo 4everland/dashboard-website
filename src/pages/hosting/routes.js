@@ -5,7 +5,6 @@ import Build from "./build";
 import Domains from "./domains";
 import Statistics from "./statistics";
 import StatisDetail from "./statistics-detail";
-console.log(New);
 
 export default [
   {
