@@ -452,7 +452,10 @@ export default {
             sortType: this.sortType.toUpperCase(),
           },
         });
-        this.list = list;
+        this.list = list.map((it) => {
+          if (!it.platform) it.platform = "IPFS";
+          return it;
+        });
         this.total = total;
         if (this.page > 1 && !list.length) {
           this.page = 1;
