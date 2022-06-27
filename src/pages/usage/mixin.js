@@ -66,9 +66,15 @@ export default {
     }
   },
   methods: {
-    onErr(err) {
-      console.log(err);
-      return this.$alert(err.message);
+    onErr(err, retry) {
+      if (!err) return console.log("---- err ");
+      let msg = err.message;
+      if (retry) {
+        return this.$confirm(msg, "Network Error", {
+          confirmText: "Retry",
+        });
+      }
+      return this.$alert(msg);
     },
     async getWalletBalance() {
       this.$loading();

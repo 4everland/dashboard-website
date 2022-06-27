@@ -230,7 +230,10 @@ export default {
       Object.assign(this.form, {
         ipfs: obj.stor,
       });
-      this.getPrice(ResourceType.IPFSStorage, obj);
+      this.getPrice(
+        ResourceType.IPFSStorage,
+        !obj.stor && !obj.month ? 0 : obj
+      );
     },
     async getPrice(resId, val) {
       if (!this.curContract) {
@@ -238,8 +241,10 @@ export default {
         return;
       }
       let fee = 0;
-      this.feeForm[resId] = 0;
-      if (!val) return;
+      if (!val) {
+        this.feeForm[resId] = 0;
+        return;
+      }
       try {
         console.log("get price", resId);
         if (typeof val == "object") {
@@ -275,7 +280,13 @@ export default {
         fee = this.getFee(fee);
         console.log("price", fee);
       } catch (error) {
-        this.onErr(error);
+        this.onErr(error, true)
+          .then(() => {
+            this.getPrice(resId, val);
+          })
+          .catch(() => {
+            this.$router.replace("/usage/info");
+          });
       }
       this.feeLoading = false;
     },

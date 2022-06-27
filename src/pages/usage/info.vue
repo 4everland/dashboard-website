@@ -19,8 +19,15 @@
 </style>
 
 <template>
-  <div class="usage-info">
-    <div class="main-wrap pa-3" style="min-height: 240px">
+  <div class="usage-info pos-r">
+    <a
+      href="#/usage/billing"
+      class="pos-a pa-1 right-0 mr-3"
+      style="top: -45px"
+    >
+      <img src="img/svg/billing/list.svg" width="18" />
+    </a>
+    <div class="main-wrap pa-3 pl-7" style="min-height: 240px">
       <v-skeleton-loader type="article" v-if="!info" />
       <div
         v-else
@@ -100,7 +107,7 @@ export default {
         {
           label: "Storage IPFS",
           desc: info.ipfsStorage
-            ? `Free resources 4 GB a year, ${
+            ? `Free resources ${getSize(info.ipfsDefaultStorage)} a year, ${
                 getSize(info.ipfsStorage - info.ipfsDefaultStorage) || "0G"
               } purchased，${
                 getSize(info.usedIpfsStorage) || "0GB"
@@ -115,7 +122,7 @@ export default {
         {
           label: "Storage AR",
           tip: "Arweave is a permanent storage service.",
-          desc: `Free 100MB，${
+          desc: `Free resources ${getSize(info.arDefaultStorage)}, ${
             getSize(info.arStorage - info.arDefaultStorage) || "0GB"
           } purchased`,
           ...this.getPerc(info.usedArStorage, info.arStorage),
@@ -124,9 +131,9 @@ export default {
           label: "Build Minutes",
           desc: `Free resources ${
             info.freeBuildMinutes || 250
-          }Minutes per month,  ${
+          } Minutes per month,  ${
             info.purchasedBuildMinutes || 0
-          }Minutes purchased`,
+          } Minutes purchased`,
           ...this.getPerc(
             info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes,
             info.freeBuildMinutes + info.purchasedBuildMinutes,
