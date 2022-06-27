@@ -1,9 +1,19 @@
 <template>
   <div class="hide-msg" v-if="active">
-    <v-alert class="mb-5 fz-14" text type="error" dense>
+    <!-- <v-alert class="mb-5 fz-14" text type="info" dense>
       The data on this page is not updated in real time. These statistics are
       for reference only.
-    </v-alert>
+    </v-alert> -->
+
+    <div class="tips pa-2 mb-5 al-c">
+      <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"
+        >mdi-alert-circle-outline</v-icon
+      >
+      <span
+        >Refreshing or closing the browser will cancel ongoing tasks, clear
+        records, and display deleted tasks incorrectly.</span
+      >
+    </div>
     <!-- IPFS && AR chart -->
     <v-card outlined>
       <div class="card-head-1">
@@ -58,11 +68,6 @@ export default {
   props: {
     active: Boolean,
   },
-  // watch: {
-  //   active(newVal) {
-  //     console.log(newVal);
-  //   },
-  // },
   data() {
     return {
       bucket: "",
@@ -86,6 +91,7 @@ export default {
       overDateOverDay: false,
     };
   },
+
   created() {
     this.bucket = this.$route.path.split("/")[3];
   },
@@ -103,7 +109,6 @@ export default {
           this.arData.xAxis = res.subsections;
           this.arData.yAxis = res.collections[1].raws;
         } else {
-          console.log(222);
           this.ipfsData.xAxis = [];
           this.ipfsData.yAxis = [];
           this.arData.xAxis = [];
@@ -117,7 +122,6 @@ export default {
       } else {
         this.overDateOverDay = false;
       }
-
       this.getChartData(val, "TRAFFIC_USAGE_LINE").then((res) => {
         if (res.subsections.length) {
           this.trafficData.xAxis = res.subsections;
@@ -150,10 +154,53 @@ export default {
             bucket: this.bucket,
           },
         });
-        this.$loading.close();
         return data;
       } catch (e) {
         console.log(e);
+      }
+    },
+  },
+  watch: {
+    active(val) {
+      if (val) {
+        this.ipfsData.xAxis = [];
+        this.ipfsData.yAxis = [];
+        this.arData.xAxis = [];
+        this.arData.yAxis = [];
+        this.trafficData.xAxis = [];
+        this.trafficData.yAxis = [];
+        this.requestData.xAxis = [];
+        this.requestData.yAxis = [];
+      }
+    },
+    "trafficData.xAxis"() {
+      if (
+        this.trafficData.xAxis.length &&
+        this.requestData.xAxis.length &&
+        this.ipfsData.xAxis.length
+      ) {
+        this.$loading.close();
+        console.log("cjifa");
+      }
+    },
+    "requestData.xAxis"() {
+      console.log(this.ipfsData.xAxis);
+      if (
+        this.trafficData.xAxis.length &&
+        this.requestData.xAxis.length &&
+        this.ipfsData.xAxis.length
+      ) {
+        this.$loading.close();
+        console.log("cjifa");
+      }
+    },
+    "ipfsData.xAxis"() {
+      if (
+        this.trafficData.xAxis.length &&
+        this.requestData.xAxis.length &&
+        this.ipfsData.xAxis.length
+      ) {
+        this.$loading.close();
       }
     },
   },
@@ -172,5 +219,15 @@ export default {
   font-size: 18px;
   font-weight: bold;
   color: #0b0817;
+}
+.tips {
+  color: #6a778b;
+  font-size: 14px;
+  color: #ff6d24;
+  background: #ffeee4;
+  border-radius: 6px;
+  .icon {
+    vertical-align: sub;
+  }
 }
 </style>
