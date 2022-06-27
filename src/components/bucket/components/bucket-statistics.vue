@@ -117,6 +117,7 @@ export default {
       } else {
         this.overDateOverDay = false;
       }
+
       this.getChartData(val, "TRAFFIC_USAGE_LINE").then((res) => {
         if (res.subsections.length) {
           this.trafficData.xAxis = res.subsections;
