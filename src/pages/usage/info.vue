@@ -47,8 +47,14 @@
                 rounded
               ></v-progress-linear>
             </div>
-            <p class="mt-3 fz-12 gray">
-              {{ it.desc }}
+            <p class="mt-2 fz-12 gray lh-15">
+              <span>{{ it.desc }}</span>
+              <e-tooltip top v-if="it.descTip">
+                <v-icon :color="$color1" size="14" slot="ref" class="ml-1"
+                  >mdi-alert-circle</v-icon
+                >
+                <span>{{ it.descTip }}</span>
+              </e-tooltip>
             </p>
           </div>
         </div>
@@ -79,11 +85,9 @@ export default {
         {
           label: "Bandwidth",
           // Free resources 100GB per month, of which 5GB used, 0GB purchased
-          desc: `（Free resources ${
+          desc: `Free resources ${
             getSize(info.freeBandwidth) || "100GB"
-          } per month, ${
-            getSize(info.purchasedBandwidth) || "0GB"
-          } purchased）`,
+          } per month, ${getSize(info.purchasedBandwidth) || "0GB"} purchased`,
           ...this.getPerc(
             info.usedFreeBandwidth + info.usedPurchasedBandwidth,
             info.freeBandwidth + info.purchasedBandwidth
@@ -92,29 +96,33 @@ export default {
         {
           label: "Storage IPFS",
           desc: info.ipfsStorage
-            ? `（Free resources 4 GB a year, ${
+            ? `Free resources 4 GB a year, ${
                 getSize(info.ipfsStorage - info.ipfsDefaultStorage) || "0G"
               } purchased，${
                 getSize(info.usedIpfsStorage) || "0GB"
-              } used，${new Date(info.ipfsStorageExpired * 1000).format()}）`
+              } used，${new Date(info.ipfsStorageStart * 1e3).format(
+                "date"
+              )} - ${new Date(info.ipfsStorageExpired * 1000).format("date")}`
             : "",
           ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
+          descTip:
+            "When the service expires, we will keep the stored content for up to 7 days",
         },
         {
           label: "Storage AR",
           tip: "Arweave is a permanent storage service.",
-          desc: `（Free 100MB，${
+          desc: `Free 100MB，${
             getSize(info.arStorage - info.arDefaultStorage) || "0GB"
-          } purchased）`,
+          } purchased`,
           ...this.getPerc(info.usedArStorage, info.arStorage),
         },
         {
           label: "Build Minutes",
-          desc: `（Free resources ${
+          desc: `Free resources ${
             info.freeBuildMinutes || 250
           }Minutes per month,  ${
             info.purchasedBuildMinutes || 0
-          }Minutes purchased）`,
+          }Minutes purchased`,
           ...this.getPerc(
             info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes,
             info.freeBuildMinutes + info.purchasedBuildMinutes,
