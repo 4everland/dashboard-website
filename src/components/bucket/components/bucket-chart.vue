@@ -1,7 +1,15 @@
 <template>
   <div>
     <div class="chart-title">{{ name }}</div>
-    <e-chart height="400px" :option="option"></e-chart>
+    <div class="pos-r">
+      <e-chart height="400px" :option="option"></e-chart>
+      <v-progress-circular
+        v-show="!option.xAxis.data"
+        class="pos-center"
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
+    </div>
   </div>
 </template>
 
@@ -53,11 +61,11 @@ export default {
               const gb = Math.pow(1024, 3);
               const mb = Math.pow(1024, 2);
               const kb = 1024;
-              if (value > gb) {
+              if (value > gb * 10) {
                 return (value / gb).toFixed(2) + "GB";
-              } else if (value > mb) {
+              } else if (value > mb * 10) {
                 return (value / mb).toFixed(2) + "MB";
-              } else if (value > kb) {
+              } else if (value > kb * 10) {
                 return (value / kb).toFixed(2) + "KB";
               } else {
                 return value + "B";
@@ -108,11 +116,9 @@ export default {
   },
   watch: {
     xAxisData(data) {
-      // console.log(data);
       this.option.xAxis.data = data;
     },
     yAxisData(data) {
-      // console.log(data);
       this.option.series[0].data = data;
     },
   },

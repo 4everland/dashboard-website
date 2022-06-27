@@ -16,8 +16,8 @@
         alt=""
       />
     </div>
-    <div class="tips py-2 px-4 my-3">
-      <v-icon slot="ref" size="22" color="#ff6d24" class="pa-1 d-ib ml-2"
+    <div class="tips pa-2 px-4 my-3 al-c">
+      <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"
         >mdi-alert-circle-outline</v-icon
       >
       <span
