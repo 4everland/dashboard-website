@@ -20,8 +20,14 @@
 
 <template>
   <div class="usage-info">
-    <div class="main-wrap auto pa-3">
-      <div class="d-flex mt-8 mb-8 lh-1" v-for="(it, i) in list" :key="i">
+    <div class="main-wrap pa-3" style="min-height: 240px">
+      <v-skeleton-loader type="article" v-if="!info" />
+      <div
+        v-else
+        class="d-flex mt-8 mb-8 lh-1"
+        v-for="(it, i) in list"
+        :key="i"
+      >
         <div class="label ta-r fz-15 mr-1 pos-r">
           <e-tooltip top v-if="it.tip">
             <v-icon color="#999" size="18" slot="ref" class="mr-1"
@@ -61,7 +67,7 @@
 export default {
   data() {
     return {
-      info: {},
+      info: null,
     };
   },
   computed: {
@@ -153,11 +159,9 @@ export default {
     },
     async getInfo() {
       try {
-        this.$loading();
         const { data } = await this.$http.get(`$v3/usage`);
         console.log(data);
         this.info = data;
-        this.$loading.close();
       } catch (error) {
         console.log(error);
       }

@@ -185,6 +185,10 @@ export default {
         amount: num,
       });
       console.log(data);
+      await this.getBalance();
+      if (num > this.balance) {
+        throw new Error("Insufficient balance");
+      }
       const {
         billSign,
         timeoutTimestamp: timeout,

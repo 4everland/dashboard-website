@@ -168,7 +168,6 @@ export default {
     },
     previewList() {
       const ipfsFee = this.feeForm[ResourceType.IPFSStorage];
-      console.log(this.form, ipfsFee);
       return this.list
         .map((it) => {
           const value = this.form[it.key] || 0;
@@ -177,7 +176,7 @@ export default {
           if (it.key == "ipfs") {
             if (!this.ipfsExpired) price = this.getFee(ipfsFee);
             else price *= this.ipfsMon;
-            console.log("ipfs preview", value, price);
+            // console.log("ipfs preview", value, price);
             if (price) {
               let start = this.usageInfo.ipfsStorageExpired;
               start = start ? start * 1e3 : Date.now();
@@ -206,8 +205,7 @@ export default {
           return a + price;
         }, 0)
         .toFixed(2)
-        .replace(/0+$/, "")
-        .replace(/\.$/, "");
+        .replace(".00", "");
     },
     ipfsExpired() {
       return this.usageInfo.ipfsExpired;
@@ -243,7 +241,7 @@ export default {
       this.feeForm[resId] = 0;
       if (!val) return;
       try {
-        console.log("get price", resId, val);
+        console.log("get price", resId);
         if (typeof val == "object") {
           this.ipfsMon = val.month;
           val = val.stor;
@@ -275,7 +273,7 @@ export default {
           [resId]: fee,
         };
         fee = this.getFee(fee);
-        console.log(resId, fee);
+        console.log("price", fee);
       } catch (error) {
         this.onErr(error);
       }
