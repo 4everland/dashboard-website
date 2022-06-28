@@ -119,6 +119,7 @@ export default {
         this.showPending = !!lastHash && this.page == 1;
         const list = data.rows;
         this.list = list.map((it) => {
+          if (it.contentType == "Purchased") it.contentType = "Purchase";
           if (this.showPending && lastHash.contentType == it.contentType) {
             const diff = Math.abs(it.paymentTime - lastHash.paymentTime);
             const mt15 = Date.now() - lastHash.paymentTime * 1e3 > 15 * 60e3;
