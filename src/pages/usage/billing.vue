@@ -4,7 +4,10 @@
 
     <div class="mt-6">
       <div class="mb-4" v-if="showPending">
-        <span>A {{ lastHash.contentType }} Transaction is pending at</span>
+        <span
+          >A {{ lastHash.contentType }} ({{ lastHash.usdt }} USD) Transaction is
+          pending at</span
+        >
         <e-time>{{ lastHash.paymentTime * 1e3 }}</e-time>
         <v-btn
           outlined
@@ -121,9 +124,15 @@ export default {
         this.list = list.map((it) => {
           if (it.contentType == "Purchased") it.contentType = "Purchase";
           if (this.showPending && lastHash.contentType == it.contentType) {
-            const diff = Math.abs(it.paymentTime - lastHash.paymentTime);
-            const mt15 = Date.now() - lastHash.paymentTime * 1e3 > 15 * 60e3;
-            if (diff < 120 || mt15) this.showPending = false;
+            const timeDiff = Math.abs(it.paymentTime - lastHash.paymentTime);
+            const priceDiff = Math.abs(lastHash.usdt - it.usdt * 1);
+            const mt1h = Date.now() - lastHash.paymentTime * 1e3 > 3600e3;
+            if (
+              timeDiff < 120 ||
+              (priceDiff < 0.1 && timeDiff < 15 * 60) ||
+              mt1h
+            )
+              this.showPending = false;
           }
           it.time = new Date(it.paymentTime * 1e3).format();
           it.cost = this.$utils.cutFixed(it.usdt);
