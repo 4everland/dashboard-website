@@ -190,7 +190,6 @@ export default {
     async getInfo() {
       try {
         const { data } = await this.$http.get(`$v3/usage`);
-        console.log(data);
         this.info = data;
       } catch (error) {
         console.log(error);

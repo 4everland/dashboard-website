@@ -160,7 +160,6 @@ export default {
       });
     },
     async onConnect() {
-      console.log(this.chainId);
       try {
         if (this.chainId != this.payChainId) {
           let dev = "";

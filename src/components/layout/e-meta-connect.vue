@@ -122,17 +122,22 @@ export default {
         this.showPop = true;
       }
     },
+    getPayBy(id) {
+      if ([5, 1].includes(id)) return "Ethereum";
+      if ([97, 56].includes(id)) return "BSC";
+      return "Polygon";
+    },
     async checkNet() {
       console.log("get wallet net...");
       const netType = await window.web3.eth.net.getNetworkType();
       const chainId = await window.web3.eth.net.getId();
-      // const payBy = [5, 1].includes(this.chainId) ? "Ethereum" : "Polygon";
-      // localStorage.payBy = payBy;
-      console.log(netType);
+      const payBy = this.getPayBy(chainId);
+      localStorage.payBy = payBy;
+      console.log(netType, chainId, payBy);
       this.$setState({
         netType,
         chainId,
-        // payBy,
+        payBy,
       });
     },
     async connectMetaMask() {
