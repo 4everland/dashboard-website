@@ -1,28 +1,36 @@
-// src chain
-export const GoerliUSDC = "";
-export const GoerliBridge = "";
-export const GoerliSrcChainPayment = "";
+// src chain eth
+export const GoerliUSDC = "0xCbE56b00d173A26a5978cE90Db2E33622fD95A28";
+export const GoerliBridge = "0x358234B325EF9eA8115291A8b81b7d33A2Fa762D";
+export const GoerliSrcChainPayment =
+  "0x293b579B8da5538EaDD70B811E4eC2C3C6Ac0f05";
+
+// src chain bsc
+export const ChapelUSDC = "0x855fC87f7F14Db747ef27603b02bAe579ba947B6";
+export const ChapelBridge = "0xf89354F314faF344Abd754924438bA798E306DF2";
+export const ChapelSrcChainPayment =
+  "0xde15Bd142D0BFa2e9E423B3473e027E0Cc6C10bC";
 
 // dst chain
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";
 export const MumbaiRouter = "0x44DDDef9c1fA0Ed35f64f98062E505a968AaBa9C";
 export const MumbaiGovernance = "0xB35F070CC9E3503DCc7AED42E4ECbaA023975382";
+
 export const MumbaiProviderController =
-  "0xaFfFa7490DDA355be427e17F124D7b235BE231bf";
+  "0x60849aFC60da8686a33e54D7fAfeff7804BF63E2";
 export const MumbaiProviderRegistry =
-  "0x5b54537A1891A6730F734eF1a67C011CaE5dE31c";
+  "0xBE315C9c13c4D12f4E4e12Ec11aC5123d4E540B7";
 export const MumbaiResourcePriceAdaptor =
-  "0xDcd3Fcd24C149d54043529C6eeD5FB767bC60c8d";
-export const MumbaiFundPool = "0x81c1349b225Ef79d96d07A4d536504Ac54486727";
-export const MumbaiBilling = "0xBE7f93b3A20f0BA5A7056963c93Ae0310075C2ae";
+  "0x598a237eb2c0efe381C3b6a22e36220C2e2C74b6";
+export const MumbaiFundPool = "0xEBFEc6F5aE63F10F6721Dd10ebe37a1d3a0a5207";
+export const MumbaiBilling = "0xB0325cC6A056B36cf211b9c8CDE32Aff035efa5F";
 export const MumbaiARStorageController =
-  "0x4B95195455376a71c5490aa2660616C0D486d767";
+  "0xEeEDEF4aDe21065FE254C7cc4a684f4D7E706419";
 export const MumbaiBandwidthController =
-  "0xF4A52D4113C8F8854Ec77D7738800f3f7482C8C7";
+  "0x19f240DD39FEF12D139a4E0Ae81f44945c06092f";
 export const MumbaiBuildingTimeController =
-  "0x39c92C7481401b1D089E5618C6ab241AB47E3853";
+  "0x2C08a9287A7B37c4fB6e154b3602C930381d5666";
 export const MumbaiIPFSStorageController =
-  "0x9dcdA90709d6a71f9dD22fd03aD7CC092987928A";
+  "0xAcdcA934E9D4dAA07E4B092fb8395DD872c3221C";
 export const MumbaiDstChainPayment =
-  "0xA6b4734a1C510a1aBce3883C376B2fad6750037f";
-export const MumbaiUSDC = "0x6De33698e9e9b787e09d3Bd7771ef63557E148bb";
+  "0x62955f5BF3813aA4ABAC25799dF646C23522a5e9";
+export const MumbaiUSDC = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
