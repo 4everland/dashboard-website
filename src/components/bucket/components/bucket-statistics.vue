@@ -98,7 +98,7 @@ export default {
   methods: {
     handleChangeBucketDate(val) {
       this.getChartData(val, "STORAGE_LINE").then((res) => {
-        if (val[1] - val[0] > 86400) {
+        if (val[1] - val[0] > 86400000) {
           this.bucketDateOverDay = true;
         } else {
           this.bucketDateOverDay = false;
@@ -117,7 +117,7 @@ export default {
       });
     },
     handleChangeOtherDate(val) {
-      if (val[1] - val[0] > 86400) {
+      if (val[1] - val[0] > 86400000) {
         this.overDateOverDay = true;
       } else {
         this.overDateOverDay = false;
