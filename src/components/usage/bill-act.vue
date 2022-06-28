@@ -160,7 +160,6 @@ export default {
     },
     async onRecharge() {
       let num = this.formNum;
-      num *= 1e6;
       console.log("num", num);
       let balance = await this.curContract.FundPool.balanceOf(
         this.providerAddr,
@@ -170,10 +169,11 @@ export default {
       const tx = await this.curContract.FundPool.recharge(
         this.providerAddr,
         this.uuid,
-        num
+        num * 1e6
       );
       const receipt = await tx.wait();
       console.log("receipt", receipt);
+      this.addHash(tx, num, "Recharge");
       balance = await this.curContract.FundPool.balanceOf(
         this.providerAddr,
         this.uuid
@@ -210,6 +210,7 @@ export default {
       const tx = await this.curContract.FundPool.withdraw(...params);
       console.log("tx", tx);
       const receipt = await tx.wait();
+      this.addHash(tx, num, "Withdraw");
       console.log("receipt", receipt);
     },
     async onConfirm() {

@@ -14,7 +14,7 @@ import {
 } from "4everland-contracts";
 import { Bridge__factory } from "./sgn/contract/typechain";
 import {
-  // GoerliBridge,
+  GoerliBridge,
   GoerliUSDC,
   GoerliSrcChainPayment,
   MumbaiDstChainPayment,

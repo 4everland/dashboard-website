@@ -402,6 +402,7 @@ export default {
         }
         console.log("tx", tx);
         const receipt = await tx.wait(1);
+        this.addHash(tx, this.totalPrice);
         console.log("receipt", receipt);
         this.showOrder = false;
         this.$toast("Purchased successfully");

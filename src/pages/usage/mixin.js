@@ -159,6 +159,19 @@ export default {
         params: [{ chainId: "0x" + id.toString(16) }],
       });
     },
+    addHash(tx, usdt, contentType = "Purchased") {
+      const storKey = "payHash";
+      let hashArr = JSON.parse(localStorage[storKey] || "[]");
+      hashArr.push({
+        hash: typeof tx == "string" ? tx : tx.blockHash,
+        contentType,
+        network: this.payBy,
+        paymentTime: parseInt(Date.now() / 1e3),
+        usdt,
+        status: "Pending",
+      });
+      localStorage[storKey] = JSON.stringify(hashArr);
+    },
     async onConnect() {
       try {
         if (this.chainId != this.payChainId) {
