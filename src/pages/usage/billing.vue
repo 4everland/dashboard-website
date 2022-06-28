@@ -3,14 +3,15 @@
     <bill-act ref="act" @update="getList" />
 
     <div class="mt-6">
-      <div class="mb-4" v-if="showPending">
+      <div class="mb-4 fz-14 gray-6" v-if="showPending">
+        <span class="d-ib mr-2 ml-1">•</span>
         <span
-          >A {{ lastHash.contentType }} ({{ lastHash.usdt }} USD) Transaction is
+          >A {{ lastHash.contentType }} ({{ lastHash.usdt }} USD) transaction is
           pending at</span
         >
         <e-time>{{ lastHash.paymentTime * 1e3 }}</e-time>
-        <v-btn small icon v-if="!loading" @click="onRefresh" class="ml-1">
-          <v-icon>mdi-refresh</v-icon>
+        <v-btn small icon :loading="loading" @click="onRefresh" class="ml-1">
+          <v-icon :color="$color1" size="20">mdi-refresh</v-icon>
         </v-btn>
       </div>
       <v-data-table
