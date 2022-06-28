@@ -66,11 +66,11 @@ export default {
               const gb = Math.pow(1024, 3);
               const mb = Math.pow(1024, 2);
               const kb = 1024;
-              if (value > gb * 10) {
+              if (value > gb) {
                 return (value / gb).toFixed(2) + "GB";
-              } else if (value > mb * 10) {
+              } else if (value > mb) {
                 return (value / mb).toFixed(2) + "MB";
-              } else if (value > kb * 10) {
+              } else if (value > kb) {
                 return (value / kb).toFixed(2) + "KB";
               } else {
                 return value + "B";
