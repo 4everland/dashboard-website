@@ -88,7 +88,7 @@ export default {
           } else {
             it.time = "-";
           }
-          it.cost = this.$utils.cutFixed(Math.max(0.0001, it.usdt));
+          it.cost = this.$utils.cutFixed(Math.max(0.0001, it.usdt), 4);
           it.status = it.status ? "Success" : "Unpaid";
           return it;
         });

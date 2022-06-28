@@ -1,8 +1,21 @@
 <template>
   <div>
-    <bill-act @update="getList" />
+    <bill-act ref="act" @update="getList" />
 
     <div class="mt-6">
+      <div class="mb-4" v-if="showPending">
+        <span>A {{ lastHash.contentType }} Transaction is pending at</span>
+        <e-time>{{ lastHash.paymentTime * 1e3 }}</e-time>
+        <v-btn
+          outlined
+          small
+          rounded
+          :loading="loading"
+          @click="onRefresh"
+          class="ml-3"
+          >Refresh</v-btn
+        >
+      </div>
       <v-data-table
         :headers="headers"
         :items="list"
@@ -79,6 +92,8 @@ export default {
       list: [],
       total: 0,
       page: 1,
+      showPending: false,
+      lastHash: null,
     };
   },
   mounted() {
@@ -86,6 +101,10 @@ export default {
   },
   methods: {
     onStop() {},
+    async onRefresh() {
+      await this.getList();
+      this.$refs.act.getBalance();
+    },
     async getList() {
       try {
         this.loading = true;
@@ -95,8 +114,16 @@ export default {
             size: 10,
           },
         });
+        const lastHash = JSON.parse(localStorage.lastHash || "null");
+        this.lastHash = lastHash;
+        this.showPending = !!lastHash && this.page == 1;
         const list = data.rows;
         this.list = list.map((it) => {
+          if (this.showPending && lastHash.contentType == it.contentType) {
+            const diff = Math.abs(it.paymentTime - lastHash.paymentTime);
+            const mt15 = Date.now() - lastHash.paymentTime * 1e3 > 15 * 60e3;
+            if (diff < 120 || mt15) this.showPending = false;
+          }
           it.time = new Date(it.paymentTime * 1e3).format();
           it.cost = this.$utils.cutFixed(it.usdt);
           return it;

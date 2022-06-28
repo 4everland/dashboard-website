@@ -58,7 +58,7 @@ export default {
     list() {
       const list = JSON.parse(this.info.contentJson || "[]");
       return list.map((it) => {
-        if (it.cost) it.pay = (it.cost * 1).toFixed(2);
+        if (it.cost) it.pay = this.$utils.cutFixed(it.cost);
         it.time = "Until used up";
         if (it.effectiveTime) {
           it.time = "Until " + new Date(it.effectiveTime * 1000).format("date");
@@ -102,7 +102,7 @@ export default {
         const { data } = await this.$http.get("$v3/bill/capital/detail/" + id);
         console.log(data);
         data.time = new Date(data.paymentTime * 1000).format();
-        data.usdt = data.usdt.toFixed(2);
+        data.usdt = this.$utils.cutFixed(data.usdt);
         this.info = data;
       } catch (error) {
         console.log(error);
