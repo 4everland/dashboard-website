@@ -1,16 +1,16 @@
 // src chain eth
 export const GoerliRpc =
   "https://polygon-mainnet.g.alchemy.com/v2/UJioezEnb9Qv80RVewO37AlE7gwy2aPL";
-export const GoerliUSDC = "0xCbE56b00d173A26a5978cE90Db2E33622fD95A28";
-export const GoerliBridge = "0x358234B325EF9eA8115291A8b81b7d33A2Fa762D";
+export const GoerliUSDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+export const GoerliBridge = "0x5427FEFA711Eff984124bFBB1AB6fbf5E3DA1820";
 export const GoerliSrcChainPayment =
-  "0x293b579B8da5538EaDD70B811E4eC2C3C6Ac0f05";
+  "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
 
 // src chain bsc
-export const ChapelUSDC = "0x855fC87f7F14Db747ef27603b02bAe579ba947B6";
-export const ChapelBridge = "0xf89354F314faF344Abd754924438bA798E306DF2";
+export const ChapelUSDC = "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d";
+export const ChapelBridge = "0xdd90E5E87A2081Dcf0391920868eBc2FFB81a1aF";
 export const ChapelSrcChainPayment =
-  "0xde15Bd142D0BFa2e9E423B3473e027E0Cc6C10bC";
+  "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
 
 // dst chain
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";
