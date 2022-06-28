@@ -148,15 +148,15 @@ export default {
           url: "/bi/charts/line",
           methods: "get",
           params: {
-            startAt: timeArr[0] * 1000,
-            endAt: timeArr[1] * 1000,
+            startAt: timeArr[0],
+            endAt: timeArr[1],
             type,
             bucket: this.bucket,
           },
         });
         return data;
       } catch (e) {
-        console.log(e);
+        console.log(e, "err");
       }
     },
   },
@@ -180,18 +180,15 @@ export default {
         this.ipfsData.xAxis.length
       ) {
         this.$loading.close();
-        console.log("cjifa");
       }
     },
     "requestData.xAxis"() {
-      console.log(this.ipfsData.xAxis);
       if (
         this.trafficData.xAxis.length &&
         this.requestData.xAxis.length &&
         this.ipfsData.xAxis.length
       ) {
         this.$loading.close();
-        console.log("cjifa");
       }
     },
     "ipfsData.xAxis"() {
