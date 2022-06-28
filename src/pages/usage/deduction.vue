@@ -10,8 +10,8 @@
         <span>{{ item.amount }}</span>
         <span class="gray-7 ml-1">{{ item.unit || "" }}</span>
       </template>
-      <template v-slot:item.pay="{ item }">
-        <span>{{ item.pay }}</span>
+      <template v-slot:item.cost="{ item }">
+        <span>{{ item.cost }}</span>
         <span class="gray-7 ml-1">USD</span>
       </template>
       <template v-slot:item.status="{ item }">
@@ -88,7 +88,7 @@ export default {
           } else {
             it.time = "-";
           }
-          it.cost = it.usdt.toFixed(4) + "USD";
+          it.cost = this.$utils.cutFixed(Math.max(0.0001, it.usdt));
           it.status = it.status ? "Success" : "Unpaid";
           return it;
         });

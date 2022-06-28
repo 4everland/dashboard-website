@@ -104,7 +104,7 @@
           >
           <v-btn
             color="primary"
-            :disabled="!isApproved"
+            :disabled="isRecharge && !isApproved"
             :loading="posting"
             class="mt-5"
             rounded
@@ -220,7 +220,7 @@ export default {
       if (this.isRecharge) {
         if (this.formNum < 10)
           return this.$alert(
-            "The minimum recharge amount cannot be less than $20."
+            "The minimum recharge amount cannot be less than $10."
           );
       }
       try {

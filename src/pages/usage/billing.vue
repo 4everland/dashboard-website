@@ -96,19 +96,9 @@ export default {
           },
         });
         const list = data.rows;
-        const storList = JSON.parse(localStorage.payHash || "[]");
-        // console.log(storList);
-        const newStorList = [];
-        for (const row of storList) {
-          if (list.filter((it) => it.hash == row.hash).length == 0) {
-            list.unshift(row);
-            newStorList.push(row);
-          }
-        }
-        localStorage.payHash = JSON.stringify(newStorList);
         this.list = list.map((it) => {
           it.time = new Date(it.paymentTime * 1e3).format();
-          it.cost = it.usdt.toFixed(2);
+          it.cost = this.$utils.cutFixed(it.usdt);
           return it;
         });
         this.total = data.count;
