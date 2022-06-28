@@ -6,10 +6,13 @@
       <div class="mb-4 fz-14 gray-6" v-if="showPending">
         <span class="d-ib mr-2 ml-1">•</span>
         <span
+          >Confirming the transaction, please be patient for a few minutes</span
+        >
+        <!-- <span
           >A {{ lastHash.contentType }} ({{ lastHash.usdt }} USD) transaction is
           pending at</span
         >
-        <e-time>{{ lastHash.paymentTime * 1e3 }}</e-time>
+        <e-time>{{ lastHash.paymentTime * 1e3 }}</e-time> -->
         <v-btn small icon :loading="loading" @click="onRefresh" class="ml-1">
           <v-icon :color="$color1" size="20">mdi-refresh</v-icon>
         </v-btn>
@@ -130,10 +133,7 @@ export default {
               this.showPending = false;
           }
           it.time = new Date(it.paymentTime * 1e3).format();
-          it.cost =
-            it.usdt < 0.01
-              ? Math.max(0.0001, it.usdt)
-              : this.$utils.cutFixed(it.usdt);
+          it.cost = this.$utils.getCost(it.usdt);
           return it;
         });
         this.total = data.count;

@@ -27,7 +27,7 @@
           </v-data-table>
         </e-kv>
         <e-kv class="mt-4" label="Amount">
-          <span>{{ info.usdt }}</span>
+          <span>{{ info.cost }}</span>
           <span class="gray-7 ml-2">USD</span>
         </e-kv>
         <e-kv class="mt-4" label="Network">
@@ -58,8 +58,7 @@ export default {
     list() {
       const list = JSON.parse(this.info.contentJson || "[]");
       return list.map((it) => {
-        if (it.cost)
-          it.cost = this.$utils.cutFixed(Math.max(0.0001, it.cost), 4);
+        it.cost = this.$utils.getCost(it.cost);
         it.time = "Until used up";
         if (it.effectiveTime) {
           it.time = "Until " + new Date(it.effectiveTime * 1000).format("date");
@@ -103,10 +102,7 @@ export default {
         const { data } = await this.$http.get("$v3/bill/capital/detail/" + id);
         console.log(data);
         data.time = new Date(data.paymentTime * 1000).format();
-        data.usdt =
-          data.usdt < 0.01
-            ? Math.max(0.0001, data.usdt)
-            : this.$utils.cutFixed(data.usdt);
+        data.cost = this.$utils.getCost(data.usdt);
         this.info = data;
       } catch (error) {
         console.log(error);
