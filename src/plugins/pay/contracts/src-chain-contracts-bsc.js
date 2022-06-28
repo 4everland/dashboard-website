@@ -33,7 +33,9 @@ class SrcChainContracts extends Contracts {
     super();
     // mumbai rpc
     this.dstProvider = new providers.JsonRpcProvider(
-      "https://polygon-mumbai.g.alchemy.com/v2/MGcgBRN-uuuG6x1qaI-xchQMpebh_aN6"
+      !/xyz/.test(process.env.VUE_APP_BASE_URL)
+        ? "https://polygon-mainnet.g.alchemy.com/v2/UJioezEnb9Qv80RVewO37AlE7gwy2aPL"
+        : "https://polygon-mumbai.g.alchemy.com/v2/MGcgBRN-uuuG6x1qaI-xchQMpebh_aN6"
     );
   }
 
