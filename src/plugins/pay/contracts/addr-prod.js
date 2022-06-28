@@ -1,4 +1,6 @@
 // src chain eth
+export const GoerliRpc =
+  "https://polygon-mainnet.g.alchemy.com/v2/UJioezEnb9Qv80RVewO37AlE7gwy2aPL";
 export const GoerliUSDC = "0xCbE56b00d173A26a5978cE90Db2E33622fD95A28";
 export const GoerliBridge = "0x358234B325EF9eA8115291A8b81b7d33A2Fa762D";
 export const GoerliSrcChainPayment =

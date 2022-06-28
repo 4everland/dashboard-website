@@ -14,8 +14,10 @@ import {
 } from "4everland-contracts";
 import { Bridge__factory } from "./sgn/contract/typechain";
 import {
+  GoerliRpc,
   GoerliBridge,
   GoerliUSDC,
+  MumbaiProviderController,
   GoerliSrcChainPayment,
   MumbaiDstChainPayment,
   MumbaiResourcePriceAdaptor,
@@ -24,7 +26,6 @@ import {
   MumbaiBuildingTimeController,
   MumbaiIPFSStorageController,
 } from "./contracts-addr";
-import { MumbaiProviderController } from "./addr-dev";
 
 class SrcChainContracts extends Contracts {
   dstProvider = null;
@@ -32,11 +33,7 @@ class SrcChainContracts extends Contracts {
   constructor() {
     super();
     // mumbai rpc
-    this.dstProvider = new providers.JsonRpcProvider(
-      !/xyz/.test(process.env.VUE_APP_BASE_URL)
-        ? "https://polygon-mainnet.g.alchemy.com/v2/UJioezEnb9Qv80RVewO37AlE7gwy2aPL"
-        : "https://polygon-mumbai.g.alchemy.com/v2/MGcgBRN-uuuG6x1qaI-xchQMpebh_aN6"
-    );
+    this.dstProvider = new providers.JsonRpcProvider(GoerliRpc);
   }
 
   get GoerliUSDC() {
