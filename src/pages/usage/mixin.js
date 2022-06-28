@@ -14,7 +14,7 @@ export default {
       curContract: null,
       isApproved: false,
       approving: false,
-      providerAddr: "0xdec55a51ac7c77f505eff03bee9ddff9edb1ead6",
+
       client,
       walletBalance: 0,
     };
@@ -27,6 +27,11 @@ export default {
       payBy: (s) => s.payBy,
       userInfo: (s) => s.userInfo,
     }),
+    providerAddr() {
+      return this.$inDev
+        ? "0xdec55a51ac7c77f505eff03bee9ddff9edb1ead6"
+        : "0x53b10A60F28c1F35025D9dC0773339638c540a67";
+    },
     uuid() {
       return this.userInfo.euid;
     },
