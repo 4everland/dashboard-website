@@ -156,7 +156,7 @@ export default {
         });
         return data;
       } catch (e) {
-        console.log(e);
+        console.log(e, "err");
       }
     },
   },
