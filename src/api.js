@@ -28,7 +28,7 @@ const loginUrl = inDev
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   let url = loginUrl;
   if (!/(dashboard|hb)\./i.test(location.host)) {
-    url +=
+    url =
       "https://hb.4everland.app/#/?redirectTo=" +
       encodeURIComponent(location.origin);
   } else if (localStorage.inviteCode) {
