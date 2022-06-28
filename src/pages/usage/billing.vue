@@ -9,15 +9,9 @@
           pending at</span
         >
         <e-time>{{ lastHash.paymentTime * 1e3 }}</e-time>
-        <v-btn
-          outlined
-          small
-          rounded
-          :loading="loading"
-          @click="onRefresh"
-          class="ml-3"
-          >Refresh</v-btn
-        >
+        <v-btn small icon v-if="!loading" @click="onRefresh" class="ml-1">
+          <v-icon>mdi-refresh</v-icon>
+        </v-btn>
       </div>
       <v-data-table
         :headers="headers"
@@ -135,7 +129,10 @@ export default {
               this.showPending = false;
           }
           it.time = new Date(it.paymentTime * 1e3).format();
-          it.cost = this.$utils.cutFixed(it.usdt);
+          it.cost =
+            it.usdt < 0.01
+              ? Math.max(0.0001, it.usdt)
+              : this.$utils.cutFixed(it.usdt);
           return it;
         });
         this.total = data.count;

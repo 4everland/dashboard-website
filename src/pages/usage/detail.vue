@@ -20,8 +20,8 @@
               <span>{{ item.amount }}</span>
               <span class="gray-7 ml-1">{{ item.unit || "" }}</span>
             </template>
-            <template v-slot:item.pay="{ item }">
-              <span>{{ item.pay }}</span>
+            <template v-slot:item.cost="{ item }">
+              <span>{{ item.cost }}</span>
               <span class="gray-7 ml-1">USD</span>
             </template>
           </v-data-table>
@@ -58,12 +58,13 @@ export default {
     list() {
       const list = JSON.parse(this.info.contentJson || "[]");
       return list.map((it) => {
-        if (it.cost) it.pay = this.$utils.cutFixed(it.cost);
+        if (it.cost)
+          it.cost = this.$utils.cutFixed(Math.max(0.0001, it.cost), 4);
         it.time = "Until used up";
         if (it.effectiveTime) {
           it.time = "Until " + new Date(it.effectiveTime * 1000).format("date");
         }
-        const row = this.$utils.getPurchase(it.type, it.amount);
+        const row = this.$utils.getPurchase(it.type, it.overuse || it.amount);
         Object.assign(it, row);
         return it;
       });
@@ -82,7 +83,7 @@ export default {
         },
         {
           text: "Cost",
-          value: "pay",
+          value: "cost",
         },
         {
           text: "Effective Time",
@@ -102,7 +103,10 @@ export default {
         const { data } = await this.$http.get("$v3/bill/capital/detail/" + id);
         console.log(data);
         data.time = new Date(data.paymentTime * 1000).format();
-        data.usdt = this.$utils.cutFixed(data.usdt);
+        data.usdt =
+          data.usdt < 0.01
+            ? Math.max(0.0001, data.usdt)
+            : this.$utils.cutFixed(data.usdt);
         this.info = data;
       } catch (error) {
         console.log(error);
