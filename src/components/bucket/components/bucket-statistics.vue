@@ -55,6 +55,7 @@
       ></bucket-chart>
       <bucket-chart
         name="Requests"
+        dataType
         :overDay="overDateOverDay"
         :xAxisData="requestData.xAxis"
         :yAxisData="requestData.yAxis"
