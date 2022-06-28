@@ -12,7 +12,7 @@
       </e-tooltip>
       <span class="gray-7 mr-3">Total balance:</span>
       <b class="fz-20 red-1">{{ balance }}</b>
-      <span class="gray-6 fz-12 ml-2 mt-1">USDC</span>
+      <span class="gray-6 fz-12 ml-2 mt-1">USD</span>
       <v-btn color="primary" rounded class="ml-8" @click="onShow(1)"
         >Recharge</v-btn
       >
@@ -60,7 +60,7 @@
           <b class="fz-20 red-1 mr-1 ml-2">{{ balance }}</b>
           <span class="fz-13 mt-1">USD</span>
           <span class="ml-auto" v-if="isRecharge">
-            Wallet Banace: {{ walletBalance }} <span class="fz-13">USDC</span>
+            Wallet Banace: {{ walletBalance }} <span class="fz-13">USD</span>
           </span>
         </div>
         <div class="bd-1 mt-3 al-c bdrs-5">
