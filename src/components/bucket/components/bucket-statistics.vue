@@ -180,18 +180,15 @@ export default {
         this.ipfsData.xAxis.length
       ) {
         this.$loading.close();
-        console.log("cjifa");
       }
     },
     "requestData.xAxis"() {
-      console.log(this.ipfsData.xAxis);
       if (
         this.trafficData.xAxis.length &&
         this.requestData.xAxis.length &&
         this.ipfsData.xAxis.length
       ) {
         this.$loading.close();
-        console.log("cjifa");
       }
     },
     "ipfsData.xAxis"() {
