@@ -4,7 +4,10 @@ import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
 import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
 import client from "../../plugins/pay/contracts/SGNClient";
-import { MumbaiFundPool } from "../../plugins/pay/contracts/addr-dev";
+import {
+  MumbaiFundPool,
+  providerAddr,
+} from "../../plugins/pay/contracts/contracts-addr";
 
 const uint256Max = BigNumber.from("1").shl(256).sub(1);
 
@@ -14,7 +17,7 @@ export default {
       curContract: null,
       isApproved: false,
       approving: false,
-
+      providerAddr,
       client,
       walletBalance: 0,
     };
@@ -27,11 +30,6 @@ export default {
       payBy: (s) => s.payBy,
       userInfo: (s) => s.userInfo,
     }),
-    providerAddr() {
-      return this.$inDev
-        ? "0xdec55a51ac7c77f505eff03bee9ddff9edb1ead6"
-        : "0x53b10A60F28c1F35025D9dC0773339638c540a67";
-    },
     uuid() {
       return this.userInfo.euid;
     },

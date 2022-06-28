@@ -1,3 +1,5 @@
+export const providerAddr = "0xdec55a51ac7c77f505eff03bee9ddff9edb1ead6";
+
 // src chain eth
 export const GoerliRpc =
   "https://polygon-mumbai.g.alchemy.com/v2/MGcgBRN-uuuG6x1qaI-xchQMpebh_aN6";
