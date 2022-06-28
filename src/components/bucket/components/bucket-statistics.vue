@@ -148,8 +148,8 @@ export default {
           url: "/bi/charts/line",
           methods: "get",
           params: {
-            startAt: timeArr[0] * 1000,
-            endAt: timeArr[1] * 1000,
+            startAt: timeArr[0],
+            endAt: timeArr[1],
             type,
             bucket: this.bucket,
           },
