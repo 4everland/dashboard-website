@@ -98,12 +98,13 @@ export default {
   },
   methods: {
     handleChangeBucketDate(val) {
+      console.log(val);
+      if (val[1] - val[0] > 86400000) {
+        this.bucketDateOverDay = true;
+      } else {
+        this.bucketDateOverDay = false;
+      }
       this.getChartData(val, "STORAGE_LINE").then((res) => {
-        if (val[1] - val[0] > 86400000) {
-          this.bucketDateOverDay = true;
-        } else {
-          this.bucketDateOverDay = false;
-        }
         if (res.subsections.length) {
           this.ipfsData.xAxis = res.subsections;
           this.ipfsData.yAxis = res.collections[0].raws;
