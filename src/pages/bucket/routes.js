@@ -18,6 +18,7 @@ export default [
     component: ARHistory,
     meta: {
       title: "AR History",
+      isTab: 1,
     },
   },
   {

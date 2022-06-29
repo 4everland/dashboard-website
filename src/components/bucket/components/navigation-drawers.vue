@@ -357,10 +357,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    deleteFolderTasks: {
-      type: Array,
-      default: () => {},
-    },
     prefix: {
       type: String,
       default: "",
@@ -370,6 +366,7 @@ export default {
     return {
       drawer: false,
       tasks: [],
+      deleteFolderTasks: [],
       status: 0,
       currentTab: 0,
       headers: [
@@ -434,9 +431,9 @@ export default {
       page: 1,
       deleteFolderPage: 1,
       limit: 10,
+      deleteFolderLimit: 2,
     };
   },
-  created() {},
   mounted() {
     bus.$on("taskData", (tasks, isTrue) => {
       this.drawer = true;
@@ -458,6 +455,32 @@ export default {
         this.tasks = noExistTasks.concat(this.tasks);
       } else {
         this.tasks = tasks;
+      }
+    });
+    bus.$on("deleteFolderTasks", (deleteFolderTasks) => {
+      this.drawer = true;
+      this.currentTab = 1;
+
+      if (this.deleteFolderTasks) {
+        let noExistDeleteTasks = [];
+        deleteFolderTasks.forEach((item) => {
+          let index = this.deleteFolderTasks.findIndex((it) => {
+            return it.id == item.id;
+          });
+          if (index == -1) {
+            noExistDeleteTasks.push(item);
+          }
+        });
+        this.deleteFolderTasks = noExistDeleteTasks.concat(
+          this.deleteFolderTasks
+        );
+      } else {
+        this.deleteFolderTasks = deleteFolderTasks;
+      }
+    });
+    bus.$on("originDeleteFolderTasks", () => {
+      if (this.deleteFolderTasks.length) {
+        bus.$emit("getOriginDeleteFolderTasks", this.deleteFolderTasks);
       }
     });
   },
@@ -561,23 +584,44 @@ export default {
       bus.$emit("handleClearAllRecords", this.status);
     },
     handlePasueDeleteFolder(id) {
-      this.$emit("handlePasueDeleteFolder", id);
+      const index = this.deleteFolderTasks.findIndex((it) => it.id == id);
+      this.deleteFolderTasks[index].stopTasks();
     },
     handleStartDeleteFolder(id) {
-      this.$emit("handleStartDeleteFolder", id);
+      const index = this.deleteFolderTasks.findIndex((it) => it.id == id);
+      let arr = this.deleteFolderTasks.filter((item) => item.status == 0);
+      this.deleteFolderTasks[index].retryTasks();
+      console.log(arr, this.deleteFolderTasks);
+      if (!arr.length) {
+        this.processDeleteFolderTask();
+      }
     },
     handleRemoveDeleteFolder(id) {
-      this.$emit("handleRemoveDeleteFolder", id);
+      console.log(this.deleteFolderTasks);
+      let index = this.deleteFolderTasks.findIndex((it) => it.id == id);
+      this.deleteFolderTasks.splice(index, 1);
+      bus.$emit("handleRemoveDeleteFolder", this.deleteFolderTasks);
     },
 
     handleDeleteFolderStartAll() {
-      this.$emit("handleDeleteFolderStartAll");
+      let arr = this.deleteFolderTasks.filter((item) => item.status == 0);
+      this.deleteFolderTasks.forEach((it) => {
+        if (it.status !== 2) return;
+        it.retryTasks();
+      });
+      if (!arr.length) {
+        this.processDeleteFolderTask();
+      }
     },
     handleDeleteFolderPauseAll() {
-      this.$emit("handleDeleteFolderPauseAll");
+      this.deleteFolderTasks.forEach((item) => {
+        if (item.status == 3) return;
+        item.stopTasks();
+      });
     },
     handleDeleteFolderRemoveAll() {
-      this.$emit("handleDeleteFolderRemoveAll");
+      this.deleteFolderTasks = [];
+      bus.$emit("handleDeleteFolderRemoveAll");
     },
     async start(task) {
       await task.startTask();
@@ -602,6 +646,28 @@ export default {
         this.start(idles[i]);
       }
     },
+
+    async startDeleteFolder(task) {
+      await task.startTasks();
+      this.processDeleteFolderTask();
+    },
+    async processDeleteFolderTask() {
+      let processing = this.deleteFolderTasks.filter(
+        (item) => item.status == 1
+      );
+      if (processing.length >= this.deleteFolderLimit) return;
+      const idles = this.deleteFolderTasks.filter((item) => item.status == 0);
+      if (!idles.length) return;
+      const fill = this.deleteFolderLimit - processing.length;
+      // console.log(fill);
+      const min = idles.length <= fill ? idles.length : fill;
+      for (let i = 0; i < min; i++) {
+        this.startDeleteFolder(idles[i]);
+      }
+    },
+  },
+  beforeDestroy() {
+    this.handleAllStopUploading();
   },
   watch: {
     deleteFolder(newValue) {

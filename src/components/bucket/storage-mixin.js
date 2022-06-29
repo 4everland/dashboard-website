@@ -656,7 +656,6 @@ export default {
                 return { Key: it.Key };
               })
             );
-            // this.getList();
           } else if (hasFile.length && !hasFolder.length) {
             // only file
             if (hasFile.filter((it) => it.arStatus != "desynced").length) {

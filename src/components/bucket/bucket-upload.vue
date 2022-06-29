@@ -167,10 +167,11 @@ export default {
         return task.status == 0;
       });
       if (idles.length == 0) {
-        return;
+        // return bus.$emit("getList");
       }
       const fill = this.limit - processing.length;
       const min = idles.length <= fill ? idles.length : fill;
+
       for (let i = 0; i < min; i++) {
         this.start(idles[i]);
       }
