@@ -84,7 +84,7 @@
           <span
             class="red-1"
             v-if="
-              (isRecharge && walletBalance < 10) || (!isRecharge && !balance)
+              (isRecharge && walletBalance < 1) || (!isRecharge && !balance)
             "
             >（Insufficient balance）</span
           >
