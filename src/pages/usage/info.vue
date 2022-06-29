@@ -70,6 +70,18 @@
           </div>
         </div>
         <div class="color-1 fz-13 ml-2">{{ it.percTxt || "/" }}</div>
+        <e-tooltip top v-if="it.perc > 80">
+          <img
+            src="img/svg/billing/alert.svg"
+            class="ml-2 mr-2"
+            width="13"
+            slot="ref"
+          />
+          <div>
+            The available amount is less than 20%, please purchase resources or
+            recharge the balance.
+          </div>
+        </e-tooltip>
         <span class="gray ml-2 fz-13">{{ it.rechargeTip }}</span>
       </div>
     </div>

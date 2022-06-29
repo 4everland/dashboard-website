@@ -76,7 +76,7 @@ export default {
       }
       const { address } = this.userInfo.wallet || {};
       if (!address) {
-        if (this.userInfo.solana) {
+        if (this.userInfo.solana || this.userInfo.onFlow) {
           this.$alert("Currently this feature only supports metamask wallet");
         } else {
           this.$confirm(
