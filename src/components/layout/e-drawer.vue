@@ -209,18 +209,18 @@ export default {
           ],
         },
         {
-          label: "Usage",
+          label: "Billing",
           img: "m-usage",
-          group: /^\/usage/i,
+          group: /^\/billing/i,
           subs: [
             {
               label: "Usage",
-              to: "/usage/info",
+              to: "/billing/usage",
               matPath: /usage\/(more)/,
             },
             {
-              label: "Billing",
-              to: "/usage/billing",
+              label: "Bills",
+              to: "/billing/bills",
             },
           ],
         },

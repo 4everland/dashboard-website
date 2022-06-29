@@ -21,7 +21,7 @@
 <template>
   <div class="usage-info pos-r">
     <a
-      href="#/usage/billing"
+      href="#/billing/bills"
       class="pos-a pa-1 right-0 mr-3"
       style="top: -45px"
     >
