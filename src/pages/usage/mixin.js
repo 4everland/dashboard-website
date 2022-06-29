@@ -202,7 +202,7 @@ export default {
         this.checkApprove(this.isBuy);
       } catch (error) {
         this.$alert(error.message).then(() => {
-          this.$router.push("/usage/info");
+          this.$router.push("/billing/usage");
         });
       }
     },

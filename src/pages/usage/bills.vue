@@ -143,7 +143,7 @@ export default {
       this.loading = false;
     },
     onItem(row) {
-      this.$navTo(`/usage/billing/detail?id=` + row.id);
+      this.$navTo(`/billing/bills/detail?id=` + row.id);
     },
   },
 };

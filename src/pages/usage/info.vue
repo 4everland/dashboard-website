@@ -75,7 +75,9 @@
     </div>
 
     <div class="mt-5 ml-5 ta-r">
-      <v-btn color="primary" to="/usage/more" rounded>Buy more >></v-btn>
+      <v-btn color="primary" to="/billing/usage/more" rounded
+        >Buy more >></v-btn
+      >
     </div>
   </div>
 </template>

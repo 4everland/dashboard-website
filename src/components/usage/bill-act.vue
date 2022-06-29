@@ -17,7 +17,7 @@
         >Recharge</v-btn
       >
       <v-btn outlined rounded class="ml-4" @click="onShow(2)">Withdraw</v-btn>
-      <a class="ml-auto al-c" href="#/usage/billing/deduction">
+      <a class="ml-auto al-c" href="#/billing/deduction">
         <img src="img/svg/billing/usage-list.svg" width="14" />
         <span class="ml-2 fz-14">Deduction details</span>
       </a>

@@ -9,6 +9,7 @@ export default [
     path: "/billing/usage",
     component: Info,
     meta: {
+      group: "Billing",
       title: "Usage",
       isTab: 1,
     },
@@ -17,11 +18,11 @@ export default [
     path: "/billing/usage/more",
     component: More,
     meta: {
-      group: "Usage",
+      group: "Billing",
       links: [
         {
-          text: "Info",
-          to: "/usage/info",
+          text: "Usage",
+          to: "/billing/usage",
         },
         {
           text: `Buy more`,
@@ -34,12 +35,7 @@ export default [
     component: Bills,
     meta: {
       title: "Bills",
-      group: "Usage",
-      links: [
-        {
-          text: "Bills",
-        },
-      ],
+      group: "Billing",
     },
   },
   {
@@ -47,11 +43,11 @@ export default [
     component: Detail,
     meta: {
       title: "Billing Details",
-      group: "Usage",
+      group: "Billing",
       links: [
         {
-          text: "Billing",
-          to: "/usage/billing",
+          text: "Bills",
+          to: "/billing/usage",
         },
         {
           text: `Details`,
@@ -64,10 +60,10 @@ export default [
     component: Deduction,
     meta: {
       title: "Deduction details",
-      group: "Usage",
+      group: "Billing",
       links: [
         {
-          text: "Billing",
+          text: "Bills",
           to: "/billing/bills",
         },
         {

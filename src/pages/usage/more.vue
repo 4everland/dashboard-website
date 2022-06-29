@@ -341,7 +341,7 @@ export default {
             this.getPrice(resId, val);
           })
           .catch(() => {
-            this.$router.replace("/usage/info");
+            this.$router.replace("/billing/usage");
           });
       }
       this.feeLoading = false;
@@ -376,7 +376,7 @@ export default {
             this.getInfo();
           })
           .catch(() => {
-            this.$router.push("/usage/info");
+            this.$router.push("/billing/usage");
           });
       }
     },
@@ -486,7 +486,7 @@ export default {
         console.log("receipt", receipt);
         this.showOrder = false;
         this.$toast("Purchased successfully");
-        this.$router.replace("/usage/billing");
+        this.$router.replace("/billing/usage");
       } catch (error) {
         this.onErr(error);
       }
