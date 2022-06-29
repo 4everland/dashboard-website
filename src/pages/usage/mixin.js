@@ -101,7 +101,8 @@ export default {
       return isChanged;
     },
     onErr(err, retry) {
-      if (!err) return console.log("---- err ");
+      if (!err) return console.log("---- err null");
+      console.log(err);
       let msg = err.message;
       if (retry) {
         return this.$confirm(msg, "Network Error", {
@@ -131,10 +132,11 @@ export default {
     },
     async checkApprove(isBuy) {
       try {
-        console.log("check approve", this.connectAddr);
+        const addr = isBuy ? this.payAddr : MumbaiFundPool;
+        console.log("check approve", this.connectAddr, addr);
         const allowance = await this.curContract[this.usdcKey].allowance(
           this.connectAddr,
-          isBuy ? this.payAddr : MumbaiFundPool
+          addr
         );
         const minAllowance = uint256Max.shr(1);
         this.isApproved = !allowance.lt(minAllowance);
