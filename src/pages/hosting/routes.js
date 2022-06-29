@@ -27,13 +27,7 @@ export default [
   },
   {
     path: "/projects",
-<<<<<<< HEAD
     component: () => import("./projects"),
-=======
-    components: {
-      cache: Projects,
-    },
->>>>>>> price
     meta: {
       title: "Projects",
       isTab: 1,
