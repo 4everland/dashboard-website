@@ -1,4 +1,5 @@
 export const providerAddr = "0xdec55a51ac7c77f505eff03bee9ddff9edb1ead6";
+export const clientRpc = "https://cbridge-v2-test.celer.network";
 
 // src chain eth
 export const GoerliRpc =

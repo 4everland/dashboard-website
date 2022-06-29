@@ -1,7 +1,12 @@
 <template>
   <div class="pa-4">
     <h3>Order</h3>
-    <div class="mt-4 fz-14 ov-a" style="max-height: 300px">
+    <div
+      class="mt-4 fz-14 ov-a"
+      :style="{
+        'max-height': payBy == 'Polygon' ? '300px' : '160px',
+      }"
+    >
       <div
         class="bdrs-8 bd-1 bg-f8a mb-4 pa-4"
         v-for="(it, i) in list"

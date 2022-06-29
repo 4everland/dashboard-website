@@ -24,7 +24,7 @@ export default [
           to: "/usage/info",
         },
         {
-          text: `Get more`,
+          text: `Buy more`,
         },
       ],
     },

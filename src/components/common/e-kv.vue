@@ -5,6 +5,7 @@
       'al-c': center,
     }"
   >
+    <slot name="pre"></slot>
     <label
       class="gray shrink-0"
       :class="labelClass"

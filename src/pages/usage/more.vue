@@ -50,27 +50,32 @@
         </div>
       </div>
     </div>
-    <div class="mt-8 d-flex pt-4 bdt-1 bg-white pos-s btm-0">
-      <div class="ml-auto mr-8 bg-f8a bdrs-8 pa-3 pl-5 pr-5 d-flex al-c">
-        <span class="fz-18">Total:</span>
-        <span class="red-1 ml-2 lh-1">
-          <b
-            class="fz-20"
-            v-html="totalPrice.replace(/\.(\d+)/, `<b class='fz-15'>.$1</b>`)"
-          ></b>
-        </span>
-        <span class="mt-1 gray-6 ml-2 fz-14">USD</span>
-        <usage-preview :previewList="previewList" :list="list" />
-        <v-btn
-          color="primary"
-          rounded
-          class="ml-5"
-          min-width="120"
-          :disabled="totalPrice <= 0"
-          :loading="feeLoading"
-          @click="onPreview"
-          >Preview</v-btn
-        >
+    <div class="mt-8 pt-4 bdt-1 bg-white pos-s btm-0">
+      <div class="d-flex">
+        <div class="ml-auto mr-8 bg-f8a bdrs-8 pa-3 pl-5 pr-5 d-flex al-c">
+          <span class="fz-18">Total:</span>
+          <span class="red-1 ml-2 lh-1">
+            <b
+              class="fz-20"
+              v-html="totalPrice.replace(/\.(\d+)/, `<b class='fz-15'>.$1</b>`)"
+            ></b>
+          </span>
+          <span class="mt-1 gray-6 ml-2 fz-14">USD</span>
+          <usage-preview :previewList="previewList" :list="list" />
+          <v-btn
+            color="primary"
+            rounded
+            class="ml-5"
+            min-width="120"
+            :disabled="totalPrice <= minSend"
+            :loading="feeLoading"
+            @click="onPreview"
+            >Preview</v-btn
+          >
+        </div>
+      </div>
+      <div class="ta-r fz-14 gray mr-10" v-if="minSend > 1">
+        Each transaction cannot be less than {{ minSend }} USD
       </div>
     </div>
 
@@ -81,6 +86,53 @@
     >
       <e-dialog-close @click="showOrder = false" />
       <usage-order :list="previewList" :total="totalPrice">
+        <template v-if="!isPolygon">
+          <template v-if="ethFeeInfo">
+            <div class="bdt-1 pt-2 pb-2 lh-2">
+              <e-kv label="Message Fee" min-width="50px">
+                <e-tooltip top>
+                  <v-icon color="#999" size="14" slot="ref" class="mr-1"
+                    >mdi-alert-circle-outline</v-icon
+                  >
+                  <div>
+                    This fee is used to pay for the gas cost of sending messages
+                    on the target chain.
+                  </div>
+                </e-tooltip>
+                <span class="fl-r"
+                  >{{ ethFeeInfo.msgFee }} {{ ethFeeInfo.unit }}</span
+                >
+              </e-kv>
+              <e-kv label="Slippage Fee">
+                <span class="fl-r">{{ ethFeeInfo.slipFee }} USDC</span>
+              </e-kv>
+              <e-kv label="Estimated Time of Arrival">
+                <span class="fl-r">5-20 minutes</span>
+              </e-kv>
+            </div>
+            <div class="bdt-1 pt-2 mb-5 gray fz-14 ta-r lh-15">
+              <e-tooltip top>
+                <v-icon
+                  color="#999"
+                  size="14"
+                  slot="ref"
+                  class="mr-1 pos-r"
+                  style="top: -1px"
+                  >mdi-alert-circle-outline</v-icon
+                >
+                <div>
+                  This amount is estimated based on the current bridge rate and
+                  fees.
+                </div>
+              </e-tooltip>
+              <span
+                >Minimun Tokens amount on Arrival:
+                <b class="red-1">{{ ethFeeInfo.arrival }}</b> USD</span
+              >
+            </div>
+          </template>
+          <v-skeleton-loader type="article" v-else />
+        </template>
         <v-btn
           color="primary"
           rounded
@@ -98,7 +150,7 @@
           rounded
           block
           class="mt-4"
-          @click="onSubmit"
+          @click="onSubmit()"
           >Pay</v-btn
         >
       </usage-order>
@@ -129,6 +181,7 @@ export default {
       feeForm: {},
       feeLoading: false,
       paying: false,
+      ethFeeInfo: null,
     };
   },
   computed: {
@@ -165,6 +218,9 @@ export default {
           unitPrice: info.buildTimeUnitPrice || 0,
         },
       ];
+    },
+    minSend() {
+      return this.isPolygon ? 0.01 : 20;
     },
     previewList() {
       const ipfsFee = this.feeForm[ResourceType.IPFSStorage];
@@ -330,8 +386,9 @@ export default {
         return;
       }
       this.showOrder = true;
+      if (!this.isPolygon) this.onSubmit(true);
     },
-    async onSubmit() {
+    async onSubmit(isPreview) {
       try {
         const form = this.feeForm;
         const payloads = [];
@@ -352,13 +409,16 @@ export default {
         if (!totalFee) {
           throw new Error("No Fee");
         }
-
+        this.ethFeeInfo = null;
         console.log(payloads);
         this.paying = true;
         await this.checkAccount();
         const nonce = Math.floor(Date.now() / 1000);
         const params = [this.providerAddr, nonce, this.uuid, payloads];
         if (!this.isPolygon) {
+          if (isPreview) {
+            this.paying = false;
+          }
           if (this.chainId != 56) {
             totalFee = totalFee.div(1e12);
           }
@@ -368,18 +428,19 @@ export default {
             this.curContract.GoerliUSDC.address
           );
           console.log("minSend", minSend.toString());
-          if (totalFee.lt(minSend)) {
-            throw new Error(
-              "Minimun " + minSend.div(this.chainId == 56 ? 1e18 : 1e6) + " USD"
-            );
-          }
+          // if (totalFee.lt(minSend)) {
+          //   throw new Error(
+          //     "Minimun " + minSend.div(this.chainId == 56 ? 1e18 : 1e6) + " USD"
+          //   );
+          // }
           const response = await this.client.estimate(
             this.connectAddr,
             totalFee.toString(),
             this.chainId,
             this.$inDev ? 80001 : 137
           );
-          console.log("response", response.toObject());
+          const resObj = response.toObject();
+          console.log("response", resObj);
           const maxSlippage = response.getMaxSlippage();
           console.log("maxSlippage", maxSlippage);
           console.log("calcFee", params);
@@ -391,6 +452,18 @@ export default {
           params.push({
             value: feeMsg,
           });
+          this.ethFeeInfo = {
+            msgFee: this.$utils.cutFixed(feeMsg.toString() / 1e18, 4),
+            slipFee: this.$utils.cutFixed(
+              (maxSlippage / 1e6) * this.totalPrice,
+              4
+            ),
+            arrival: this.$utils.cutFixed(resObj.estimatedReceiveAmt / 1e6, 4),
+            unit: this.isBSC ? "BNB" : "ETH",
+          };
+          if (isPreview) {
+            return;
+          }
         }
         console.log("pay", params, this.curContract[this.chainKey]);
         let target = this.curContract[this.chainKey];
