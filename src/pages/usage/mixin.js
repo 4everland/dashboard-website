@@ -131,7 +131,7 @@ export default {
     },
     async checkApprove(isBuy) {
       try {
-        console.log("check approve");
+        console.log("check approve", this.connectAddr);
         const allowance = await this.curContract[this.usdcKey].allowance(
           this.connectAddr,
           isBuy ? this.payAddr : MumbaiFundPool
