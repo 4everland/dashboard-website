@@ -144,7 +144,7 @@ Vue.prototype.$utils = {
       it.amount = parseInt(it.amount / 60);
       it.unit = "Min";
     } else if (/ipfs/i.test(it.type) && it.amount == "0") {
-      it.amount = "Extend Time";
+      it.amount = "Extend Duration";
     } else {
       const obj = this.getFileSize(it.amount, true);
       it.amount = obj.num;

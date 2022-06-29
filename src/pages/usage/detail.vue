@@ -46,6 +46,17 @@
             :href="$getPolygonUrl(info.hash)"
             >{{ (info.hash || "").cutStr(6, 6) }}</a
           >
+          <v-btn
+            v-if="info.hash"
+            class="ml-2 pos-r"
+            style="top: -1px"
+            icon
+            x-small
+            v-clipboard="info.hash"
+            @success="$toast('Copied to clipboard !')"
+          >
+            <img src="img/svg/copy.svg" width="11" />
+          </v-btn>
         </e-kv>
       </div>
     </v-card>
