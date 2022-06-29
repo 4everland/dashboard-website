@@ -222,7 +222,7 @@ export default {
         return this.$toast(`${this.title} amount required`);
       }
       if (this.isRecharge) {
-        if (this.formNum < 10)
+        if (this.formNum < 1)
           return this.$alert(
             "The minimum recharge amount cannot be less than $1."
           );
