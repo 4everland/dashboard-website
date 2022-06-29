@@ -74,8 +74,20 @@ export default {
         this.showConnect();
         return true;
       }
-      const isChanged =
-        this.connectAddr != (this.userInfo.wallet || {}).address;
+      const { address } = this.userInfo.wallet || {};
+      if (!address) {
+        this.$confirm(
+          "This function requires a linked wallet",
+          "Wallet Binding",
+          {
+            // confirmText: 'Connnect',
+          }
+        ).then(() => {
+          this.$router.push("/settings?tab=account_binding");
+        });
+        return true;
+      }
+      const isChanged = this.connectAddr.toLowerCase() != address.toLowerCase();
       if (isChanged) {
         const msg =
           "It is detected that the wallet account has been changed, whether to switch the account?";
@@ -193,6 +205,7 @@ export default {
       localStorage.lastHash = JSON.stringify(obj);
     },
     async onConnect() {
+      this.walletChanged();
       try {
         if (this.chainId != this.payChainId) {
           let dev = "";
