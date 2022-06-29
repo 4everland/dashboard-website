@@ -278,6 +278,9 @@ import mixin from "../storage-mixin";
 import { DeleteTaskWrapper } from "../task.js";
 export default {
   mixins: [mixin],
+  props: {
+    active: Boolean,
+  },
   data() {
     return {
       searchKey: "",
@@ -436,6 +439,11 @@ export default {
     },
     uploadingTaskLength(value) {
       if (value == 0) {
+        this.getList();
+      }
+    },
+    active(val) {
+      if (val) {
         this.getList();
       }
     },
