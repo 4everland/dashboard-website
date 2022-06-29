@@ -8,7 +8,8 @@
 </style>
 
 <template>
-  <div class="usage-more">
+  <v-skeleton-loader type="article" v-if="!usageInfo" />
+  <div v-else class="usage-more">
     <div
       class="mb-5 bdrs-10 d-flex lh-1 bg-hover-f8a"
       :class="form[it.key] > 0 ? 'bd-1 ' : 'bd-1n'"
@@ -174,7 +175,7 @@ export default {
     return {
       isBuy: true,
       priceInfo: {},
-      usageInfo: {},
+      usageInfo: null,
       form: {},
       ipfsMon: 1,
       showOrder: false,
@@ -354,7 +355,6 @@ export default {
     },
     async getInfo() {
       try {
-        this.$loading();
         const { data } = await this.$http.get("$v3/common/resource/price");
         for (const key in data) {
           let m = key == "buildTimeUnitPrice" ? 60 : Math.pow(1024, 3);
@@ -366,7 +366,6 @@ export default {
 
         const { data: usageInfo } = await this.$http.get(`$v3/usage`);
         this.usageInfo = usageInfo;
-        this.$loading.close();
       } catch (error) {
         console.log(error);
         this.$confirm(error.message, {
