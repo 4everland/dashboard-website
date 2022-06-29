@@ -380,13 +380,20 @@ export default {
           });
       }
     },
-    onPreview() {
+    async onPreview() {
       if (!this.connectAddr) {
         this.showConnect();
         return;
       }
-      this.showOrder = true;
-      if (!this.isPolygon) this.onSubmit(true);
+      try {
+        this.$loading();
+        await this.checkAccount();
+        this.$loading.close();
+        this.showOrder = true;
+        if (!this.isPolygon) this.onSubmit(true);
+      } catch (error) {
+        this.onErr(error);
+      }
     },
     async onSubmit(isPreview) {
       try {

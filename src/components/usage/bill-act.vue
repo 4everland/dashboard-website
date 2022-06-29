@@ -70,9 +70,9 @@
           </div>
           <input
             v-model="formNum"
+            @blur="onBlur"
             type="tel"
             class="input-1 flex- shrink-1 fz-18 pa-2 pl-4"
-            :placeholder="isRecharge ? 'minimum 10' : ''"
             style="width: auto"
           />
           <img src="img/svg/settings/c-usdc.svg" height="24" />
@@ -145,10 +145,10 @@ export default {
   },
   watch: {
     formNum(val) {
-      val = val * 1;
-      if (isNaN(val)) return (this.formNum = "");
       if (!val) return;
-      let num = Math.min(this.maxNum, Math.max(0, val));
+      let num = val * 1;
+      if (isNaN(num)) return (this.formNum = "");
+      num = Math.min(this.maxNum, Math.max(0, num));
       num = this.$utils.cutFixed(num, 4);
       if (num != val) this.formNum = num;
     },
@@ -157,6 +157,10 @@ export default {
     this.getBalance();
   },
   methods: {
+    onBlur() {
+      const val = this.formNum;
+      if (val) this.formNum = val * 1;
+    },
     async onRecharge() {
       let num = this.formNum;
       console.log("num", num);
@@ -214,10 +218,13 @@ export default {
       console.log("receipt", receipt);
     },
     async onConfirm() {
+      if (this.formNum === "") {
+        return this.$toast(`${this.title} amount required`);
+      }
       if (this.isRecharge) {
         if (this.formNum < 10)
           return this.$alert(
-            "The minimum recharge amount cannot be less than $10."
+            "The minimum recharge amount cannot be less than $1."
           );
       }
       try {
@@ -264,6 +271,9 @@ export default {
     },
     async onShow(type) {
       this.isRecharge = type == 1;
+      if (!this.isRecharge) {
+        if (this.maxNum == 0) return this.$alert(tip1);
+      }
       if (!this.isPolygon) {
         let html = `Currently, deposits and withdrawals are only supported on the polygon network. `;
         html += "<p>Would you like to switch to the polygon network?</p>";
