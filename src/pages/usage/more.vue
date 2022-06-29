@@ -481,7 +481,7 @@ export default {
         console.log("receipt", receipt);
         this.showOrder = false;
         this.$toast("Purchased successfully");
-        this.$router.replace("/billing/usage");
+        this.$router.replace("/billing/bills");
       } catch (error) {
         this.onErr(error);
       }
