@@ -4,6 +4,7 @@
       class="gray shrink-0"
       :style="{
         'min-width': minWidth,
+        color: labelColor,
       }"
       >{{ label }}</label
     >
@@ -20,6 +21,9 @@ export default {
     minWidth: {
       type: String,
       default: "100px",
+    },
+    labelColor: {
+      type: String,
     },
   },
 };

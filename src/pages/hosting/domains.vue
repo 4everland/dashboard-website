@@ -36,10 +36,10 @@
       >
         <template v-slot:item.domain="{ item }">
           <v-btn
-            class="e-btn-text"
             text
             x-small
             rounded
+            class="e-btn-text"
             :color="item.valid ? 'success' : 'error'"
             :to="getPath(item)"
           >
@@ -52,17 +52,17 @@
           {{ loading ? "Loading domains..." : "No domains" }}
         </e-empty>
       </div>
-    </div>
 
-    <div class="mt-6" v-if="pageLen > 1">
-      <v-pagination
-        @input="onPage"
-        v-model="page"
-        :length="pageLen"
-        prev-icon="mdi-menu-left"
-        next-icon="mdi-menu-right"
-        :total-visible="7"
-      ></v-pagination>
+      <div class="mt-6" v-if="pageLen > 1">
+        <v-pagination
+          @input="onPage"
+          v-model="page"
+          :length="pageLen"
+          prev-icon="mdi-menu-left"
+          next-icon="mdi-menu-right"
+          :total-visible="7"
+        ></v-pagination>
+      </div>
     </div>
 
     <v-dialog v-model="showPop" max-width="600">

@@ -43,6 +43,10 @@ const MON_T = 30 * 86400 * 1000;
 export default {
   props: {
     val: String,
+    dayType: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -111,26 +115,45 @@ export default {
       return isOk;
     },
     onInput(val) {
-      if (val == "24h") {
+      const offset = now.getTimezoneOffset() * 60e3;
+
+      if (val == "24h" && !this.dayType) {
         this.$emit("dates", val);
         return;
+      }
+      if (val == "24h" && this.dayType) {
+        const data = new Date().getTime();
+        let end = data * 1;
+        let start = end - 24 * 60 * 60 * 1000;
+        return this.$emit("dates", [start, end]);
       }
       const mat = /^(\d+)(\D)$/.exec(val);
       let start, end;
       if (mat) {
         let num = mat[1];
-        const date = new Date().getToday();
+        const date = this.dayType
+          ? new Date().getTime()
+          : new Date().getToday();
         end = date * 1;
-        start = date.getNextDay(-num) * 1;
+        start = this.dayType
+          ? end - (num - 1) * 24 * 3600 * 1e3
+          : date.getNextDay(-num) * 1;
       } else {
-        const arr = val.split(",");
+        let arr = val.split(",");
+        if (arr[0] > arr[1]) {
+          arr = arr.reverse();
+        }
+
         start = arr[0].toDate() * 1;
         end = arr[1].toDate().getDayEnd() * 1;
       }
-      const offset = now.getTimezoneOffset() * 60e3;
       end -= offset;
       start -= offset;
-      this.$emit("dates", [parseInt(start / 1e3), parseInt(end / 1e3)]);
+      let arr = this.dayType
+        ? [start, end]
+        : [parseInt(start / 1e3), parseInt(end / 1e3)];
+
+      this.$emit("dates", arr);
     },
     onCancel() {
       this.showPop = false;

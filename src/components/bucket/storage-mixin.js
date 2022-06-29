@@ -13,6 +13,10 @@ export default {
       selected: [],
       deleting: false,
       searchKey: "",
+      domainsMap: {},
+      hasMore: false,
+      curPage: 0,
+      continuationTokenArr: [""],
     };
   },
   computed: {
@@ -37,10 +41,7 @@ export default {
       return this.inStorage && !/\/$/.test(this.path);
     },
     inFolder() {
-      return this.inStorage && !this.inBucket && !this.inFile && !this.inUpload;
-    },
-    inUpload() {
-      return this.$route.query.action == "upload";
+      return this.inStorage && !this.inBucket && !this.inFile;
     },
     fileName() {
       const arr = this.path.split("/");
@@ -103,11 +104,28 @@ export default {
     defArStatus() {
       if (this.fromHistory) return "syncing";
       const { Bucket } = this.pathInfo;
-      const curBucket = this.bucketList.filter((it) => it.name == Bucket)[0];
+      const curBucket = this.bucketList.filter((it) => {
+        return it.name == Bucket;
+      })[0];
       if (curBucket) {
         return curBucket.isAr ? "syncing" : "desynced";
       }
       return "unknown";
+    },
+    bucketInfo() {
+      const { Bucket } = this.pathInfo;
+      const item = this.bucketList.filter((it) => it.name == Bucket)[0];
+      // console.log(item, "item-------");
+      let list = (this.domainsMap[Bucket] || [])
+        .filter((it) => it.valid)
+        .map((it) => it.name);
+      if (item && !list.includes(item.defDomain)) list.push(item.defDomain);
+      return {
+        ...item,
+        originList: list.map((domain) => {
+          return (this.$inDev ? "http:" : "https:") + "//" + domain;
+        }),
+      };
     },
   },
   watch: {
@@ -143,6 +161,8 @@ export default {
         this.$confirm(msg, "Network Error", {
           confirmText: "Retry",
         }).then(() => {
+          console.log("onError.....");
+
           this.getList();
         });
         return;
@@ -292,9 +312,57 @@ export default {
         if (error) this.onErr(error);
       }
     },
+    async addFolder() {
+      try {
+        const { value: name } = await this.$prompt("", "New Folder", {
+          icon: "mdi-folder-plus",
+          hideIcon: true,
+          inputAttrs: {
+            label: "Folder Name",
+            counter: true,
+            maxlength: 60,
+            trim: true,
+            rules: [
+              (v) => !!(v || "").trim() || "Invalid",
+              (v) =>
+                /^[a-z\d-_]+$/.test(v) ||
+                "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).",
+            ],
+            required: true,
+          },
+        });
+        // this.$router.push(this.path + name + "/");
+        const { Prefix } = this.pathInfo;
+        this.tableLoading = true;
+        await this.putObject(Prefix + name + "/");
+        await this.getList();
+        await this.$sleep(200);
+        this.$toast(`${name} created successfully`);
+      } catch (error) {
+        console.log(error);
+      }
+      this.tableLoading = false;
+    },
+    async putObject(Key) {
+      const { Bucket } = this.pathInfo;
+      return new Promise((resolve, reject) => {
+        this.s3.putObject(
+          {
+            Bucket,
+            Key,
+          },
+          (err, data) => {
+            if (err) {
+              this.onErr(err);
+              reject(err);
+            } else resolve(data);
+          }
+        );
+      });
+    },
     renameObject(srcKey, Key) {
       const { Bucket } = this.pathInfo;
-      console.log(srcKey, Key);
+      // console.log(srcKey, Key);
       return new Promise((resolve, reject) => {
         this.s3.copyObject(
           {
@@ -345,22 +413,47 @@ export default {
       });
       this.onDomain(this.pathInfo.Bucket, true);
     },
+    async onDomain(bucketName, isOpen) {
+      if (!isOpen || this.loadingDomains) return;
+      try {
+        this.loadingDomains = true;
+        const { data } = await this.$http.get("/domains", {
+          params: { bucketName },
+        });
+        this.$set(
+          this.domainsMap,
+          bucketName,
+          data.list.map((it) => {
+            return {
+              name: it.domain,
+              valid: it.valid,
+              to: "/domain/" + it.domain,
+            };
+          })
+        );
+      } catch (error) {
+        //
+      }
+      this.loadingDomains = false;
+    },
     onLoadMore() {
       if (this.tableLoading) return;
-      this.loadingMore = true;
-      this.getObjects();
+      this.selected = [];
+      this.$loading();
+      this.curPage++;
+      this.getObjects("next");
     },
-    async getObjects() {
+    onLoadPre() {
+      if (this.tableLoading) return;
+      this.selected = [];
+      this.curPage--;
+      this.$loading();
+      this.getObjects("pre");
+    },
+    async getObjects(direction) {
       this.tableLoading = true;
       let { Bucket, Prefix, Delimiter } = this.pathInfo;
-      let after = "";
-      if (this.loadingMore) {
-        const last = this.list[this.list.length - 1];
-        if (last) after = last.Key;
-        else this.loadingMore = false;
-      } else {
-        this.finished = false;
-      }
+      let continuationToken = this.continuationTokenArr[this.curPage];
       let pre = Prefix;
       if (this.searchKey) {
         pre += this.searchKey;
@@ -368,17 +461,26 @@ export default {
       const stream = this.s3m.extensions.listObjectsV2WithMetadataQuery(
         Bucket,
         pre,
-        "",
+        continuationToken,
         Delimiter,
         100,
-        after
+        ""
       );
       stream.on("data", (data) => {
         this.tableLoading = false;
         data.objects.sort((a, b) => {
           return (b.prefix ? 1 : 0) - (a.prefix ? 1 : 0);
         });
-        // console.log(data);
+        this.hasMore = data.isTruncated;
+        let isExist = this.continuationTokenArr.includes(
+          data.nextContinuationToken
+        );
+        if (this.hasMore && direction !== "pre" && !isExist) {
+          this.continuationTokenArr.push(data.nextContinuationToken);
+        }
+        // if (direction == undefined) {
+        //   this.continuationTokenArr = [""];
+        // }
         let list = data.objects.map((it) => {
           if (it.prefix)
             return {
@@ -400,19 +502,9 @@ export default {
             arHash: meta["X-Amz-Meta-Arweave-Hash"],
           };
         });
-        if (this.loadingMore) {
-          list = list.filter((it) => {
-            return (
-              this.folderList.filter((row) => row.name == it.name).length == 0
-            );
-          });
-          this.loadingMore = false;
-          this.folderList = [...this.folderList, ...list];
-        } else {
-          this.folderList = list;
-        }
-        if (list.length < 90) this.finished = true;
-        // console.log(this.pathInfo, this.folderList);
+        this.folderList = list;
+        window.scrollTo(0, 0);
+        this.$loading.close();
       });
       stream.on("error", (err) => {
         this.tableLoading = false;
@@ -455,7 +547,11 @@ export default {
           Object.assign(item, {
             isAr: row.arweave ? ar.sync : row.arweaveSync,
             arCancel: ar.status == "cancel",
-            defDomain: row.domain.domain,
+            traffic: this.$utils.getFileSize(row.monthTraffic),
+            usedStorage: this.$utils.getFileSize(row.usedStorage),
+            arUsedStorage: this.$utils.getFileSize(row.arweave.usedStorage),
+            visitChartData: row.monthVisit.map((item) => Number(item)),
+            defDomain: row.domain,
           });
         });
         // console.log(list);
@@ -510,25 +606,21 @@ export default {
           Quiet: false,
         },
       };
-      console.log(params);
+      // console.log(params);
       return new Promise((resolve, reject) => {
         this.s3.deleteObjects(params, (err, data) => {
-          console.log(err, data);
+          // console.log(err, data);
           if (err) reject(err);
           else resolve(data);
-          this.getList();
         });
       });
     },
     async onDelete() {
       try {
-        // const arr = await this.getSelectedObjects(item);
-        // if (arr.length > 1000) {
-        //   throw new Error("You can delete up to 1,000 files at a time.");
-        // }
-        // const suffix = arr.length > 1 ? "s" : "";
+        this.tableLoading = true;
+        this.curPage = 0;
+        this.continuationTokenArr = [""];
         const target = this.inBucket ? "bucket" : "file";
-        // let html = `The following ${target}${suffix} will be permanently deleted. Are you sure you want to continue?`;
         let html = `The following ${target}s will be permanently deleted. Are you sure you want to continue?`;
 
         if (this.inBucket) {
@@ -555,25 +647,27 @@ export default {
               html = `The following files will be permanently deleted, but files in AR can’t be deleted from the AR network, and your AR storage space will not increase. Would you like to continue?`;
               await this.$confirm(html, `Remove ${target}`);
             }
-            this.delObjects(
+
+            this.deleteFolder = true;
+            this.addDeleteFolderTask(2);
+            this.processDeleteFolderTask();
+            await this.delObjects(
               hasFile.map((it) => {
                 return { Key: it.Key };
               })
             );
-            this.deleteFolder = true;
-            this.addDeleteFolderTask(2);
-            this.processDeleteFolderTask();
           } else if (hasFile.length && !hasFolder.length) {
             // only file
             if (hasFile.filter((it) => it.arStatus != "desynced").length) {
               html = `The following files will be permanently deleted, but files in AR can’t be deleted from the AR network, and your AR storage space will not increase. Would you like to continue?`;
               await this.$confirm(html, `Remove ${target}`);
             }
-            this.delObjects(
+            await this.delObjects(
               hasFile.map((it) => {
                 return { Key: it.Key };
               })
             );
+            // this.getList();
           } else {
             // only folder
             this.deleteFolder = true;
@@ -600,7 +694,6 @@ export default {
     },
     getViewUrl(item) {
       const { Prefix } = this.pathInfo;
-      // console.log(this.bucketInfo.originList[0]);
       let url = this.bucketInfo.originList[0] + "/" + Prefix + item.name;
       return url.encode();
     },

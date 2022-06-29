@@ -8,14 +8,8 @@
   </div>
 
   <div v-else>
-    <div @click="$refs.navDrawers.drawer = true" class="task-list">
-      <span class="task-count" v-show="uploadingTaskLength != 0">{{
-        uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
-      }}</span>
-      <img src="img/svg/common/task-list.svg" alt="" width="54" />
-    </div>
-
-    <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
+    <!-- Operation tab -->
+    <div class="d-flex nowrap ov-a btn-wrap">
       <div v-show="inBucket">
         <v-btn color="primary" @click="addBucket">
           <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
@@ -76,35 +70,13 @@
           </e-menu>
         </template>
       </div>
-      <div v-show="inFolder">
-        <v-btn color="primary" @click="handleClickUpload">
-          <!-- <v-icon size="15">mdi-cloud-upload</v-icon> -->
-          <img src="img/svg/upload.svg" width="16" />
-          <span class="ml-2">Upload</span>
-        </v-btn>
 
-        <v-btn
-          class="ml-5"
-          outlined
-          :disabled="folderLen >= 20"
-          @click="addFolder"
-        >
-          <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
-          <img src="img/svg/add0.svg" width="12" />
-          <span class="ml-2">New Folder</span>
-        </v-btn>
-        <v-btn class="ml-5" outlined @click="drawer = true">
-          <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
-          <img src="img/svg/parts_icon.svg" width="12" />
-          <span class="ml-2">Fragments</span>
-        </v-btn>
-        <bucket-parts-list
-          v-model="drawer"
-          :pathInfo="pathInfo"
-        ></bucket-parts-list>
-      </div>
-
-      <e-menu offset-y open-on-hover :disabled="!selected.length">
+      <e-menu
+        offset-y
+        open-on-hover
+        :disabled="!selected.length"
+        v-if="!inFolder"
+      >
         <v-btn
           slot="ref"
           class="ml-5"
@@ -158,10 +130,12 @@
           </v-list-item>
         </v-list>
       </e-menu>
-
+      <nav-item unit="Objects" class="ml-auto" v-if="inBucket">{{
+        list.length
+      }}</nav-item>
       <div
-        :class="asMobile ? 'ml-5' : 'ml-auto'"
-        v-if="!inFile"
+        :class="asMobile ? 'ml-5' : 'ml-16'"
+        v-if="!inFile && !inFolder"
         style="min-width: 150px"
       >
         <v-text-field
@@ -176,8 +150,11 @@
         ></v-text-field>
       </div>
     </div>
-    <div class="pa-2" v-if="!inUpload"></div>
 
+    <!-- padding layout -->
+    <div class="pa-2" v-if="!inFolder"></div>
+
+    <!-- File Info -->
     <div v-if="inFile" class="mt-4">
       <v-card outlined>
         <div class="card-head-1">
@@ -303,16 +280,8 @@
         </div>
       </v-card>
     </div>
-
-    <div v-if="inUpload">
-      <bucket-upload
-        ref="bucketUpload"
-        :info="pathInfo"
-        :baseUrl="bucketInfo.originList[0]"
-      ></bucket-upload>
-    </div>
-
-    <div class="main-wrap" v-if="!inFile && !inUpload">
+    <!-- Bucket List -->
+    <div class="main-wrap" v-if="!inFile && !inFolder">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -409,8 +378,20 @@
         <template v-slot:item.arStatus="{ item }">
           <sync-state :val="item.arStatus" v-if="item.isFile"></sync-state>
         </template>
+        <template v-slot:item.arUsedStorage="{ item }">
+          <span>{{ item.arUsedStorage }}</span>
+        </template>
+        <template v-slot:item.visitChartData="{ item }">
+          <v-sparkline
+            :gradient="['#4BA6FF', '#9FDCFF']"
+            :line-width="2"
+            :padding="8"
+            :smooth="false"
+            :value="item.visitChartData"
+            auto-draw
+          ></v-sparkline>
+        </template>
       </v-data-table>
-
       <div
         class="ta-c"
         :class="tableLoading ? 'mt-10' : 'mt-15'"
@@ -429,103 +410,15 @@
         </div>
       </div>
     </div>
-
-    <!-- v-intersect="onLoadMore" -->
     <div v-if="inFolder && !finished" class="pd-20 gray ta-c fz-16 mt-5">
       <v-btn outlined rounded v-if="list.length" @click="onLoadMore">{{
         loadingMore ? "Loading..." : "Load More"
       }}</v-btn>
     </div>
-
-    <navigation-drawers
-      ref="navDrawers"
-      @uploadingLength="uploadingLength"
-      :deleteFolder.sync="deleteFolder"
-      :deleteFolderTasks="deleteFoldersTasks"
-      @handlePasueDeleteFolder="handlePasueDeleteFolder"
-      @handleStartDeleteFolder="handleStartDeleteFolder"
-      @handleRemoveDeleteFolder="handleRemoveDeleteFolder"
-      @handleDeleteFolderStartAll="handleDeleteFolderStartAll"
-      @handleDeleteFolderPauseAll="handleDeleteFolderPauseAll"
-      @handleDeleteFolderRemoveAll="handleDeleteFolderRemoveAll"
-    ></navigation-drawers>
   </div>
 </template>
 
 <script>
-// import { DeleteTaskWrapper } from "../../components/bucket/task";
-import Vue from "vue";
-class DeleteTaskWrapper {
-  that;
-  s3;
-  param;
-  id;
-  marker;
-  lastMarker;
-  deleteCount;
-  status;
-  curFiles;
-
-  constructor(that, s3, param, id) {
-    this.that = that;
-    this.s3 = s3;
-    this.param = param;
-    this.id = id;
-    this.status = 0; // pre delete
-    this.deleteCount = 0;
-  }
-
-  async startTasks() {
-    try {
-      if (this.status !== 0 && this.status !== 1) return;
-      this.status = 1; // deleteing
-      // console.log(this.param.Prefix, this.param.Bucket);
-      const listResult = await this.s3.listObjectsV2({
-        Bucket: this.param.Bucket,
-        MaxKeys: 100,
-        Delimiter: "",
-        Prefix: this.param.Prefix,
-      });
-      if (!listResult.Contents) {
-        this.curFiles = [];
-      } else {
-        this.curFiles = listResult.Contents.map((it) => {
-          return { Key: it.Key };
-        });
-      }
-      if (this.curFiles.length && this.status == 1) {
-        const deleteResult = await this.s3.deleteObjects({
-          Bucket: this.param.Bucket,
-          Delete: {
-            Objects: this.curFiles,
-            Quiet: false,
-          },
-        });
-        // console.log(deleteResult);
-        for (let i = 0; i < deleteResult.Deleted.length; i++) {
-          this.deleteCount += 1;
-          await Vue.prototype.$sleep(20);
-        }
-        await this.startTasks();
-      } else if (!this.curFiles.length) {
-        this.status = 3; // success
-        this.that.selected = [];
-        this.that.getList();
-      } else {
-        console.log("here");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  stopTasks() {
-    this.status = 2; //stop
-  }
-  retryTasks() {
-    this.status = 0; // retry
-  }
-}
-
 import mixin from "./storage-mixin";
 export default {
   mixins: [mixin],
@@ -534,11 +427,8 @@ export default {
       popUpload: false,
       fileLoading: true,
       fileInfo: null,
-      domainsMap: {},
-      finished: false,
-      loadingMore: false,
+
       drawer: false,
-      isDrawers: false,
       deleteFolder: false,
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
@@ -553,8 +443,10 @@ export default {
       if (this.inBucket)
         return [
           { text: "Bucket Name", value: "name" },
-          { text: "Domain", value: "defDomain" },
-          { text: "CreateAt", value: "createAt" },
+          { text: "Storage Usage", value: "usedStorage" },
+          { text: "AR Storage Usage", value: "arUsedStorage" },
+          { text: "Traffic within 30 Days", value: "traffic" },
+          { text: "Visits within 30 Days", value: "visitChartData" },
           { text: "Sync to AR", value: "arAct" },
         ];
       return [
@@ -598,20 +490,6 @@ export default {
         },
       ];
     },
-    bucketInfo() {
-      const { Bucket } = this.pathInfo;
-      const item = this.bucketList.filter((it) => it.name == Bucket)[0];
-      let list = (this.domainsMap[Bucket] || [])
-        .filter((it) => it.valid)
-        .map((it) => it.name);
-      if (item && !list.includes(item.defDomain)) list.push(item.defDomain);
-      return {
-        ...item,
-        originList: list.map((domain) => {
-          return (this.$inDev ? "http:" : "https:") + "//" + domain;
-        }),
-      };
-    },
     fileUrls() {
       if (!this.fileInfo || !this.inFile) return [];
       const { Key } = this.pathInfo;
@@ -629,11 +507,6 @@ export default {
     path() {
       this.onRouteChange();
     },
-    "$route.query"(_, oldVal) {
-      if (oldVal.action == "upload") {
-        this.onRouteChange();
-      }
-    },
   },
   methods: {
     onRouteChange() {
@@ -643,141 +516,9 @@ export default {
       this.getList();
       this.checkNew();
     },
-    addDeleteFolderTask(limit) {
-      this.deleteFolderLimit = limit;
-      let arr = this.$route.path.split("/");
-      let index = arr.findIndex((it) => it == "storage");
-      const Prefix = arr.slice(index + 2).join("/");
-      const deleteFoldersArr = this.selected.filter((it) => {
-        const currentFolderName = Prefix + it.name + "/";
-        const currentBucketName = this.pathInfo.Bucket;
-        let isExist = this.deleteFoldersTasks.findIndex((item) => {
-          return (
-            item.param.Prefix == currentFolderName &&
-            item.param.Bucket == currentBucketName
-          );
-        });
-        if (isExist !== -1) {
-          let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-          this.deleteFoldersTasks[isExist].retryTasks();
-
-          if (!arr.length) {
-            this.processDeleteFolderTask();
-          }
-        }
-        return !it.isFile && isExist == -1;
-      });
-      // console.log(deleteFoldersArr);
-
-      const deleteFoldersTask = deleteFoldersArr.map((it) => {
-        return new DeleteTaskWrapper(
-          this,
-          this.s3,
-          {
-            Bucket: this.pathInfo.Bucket,
-            Prefix: Prefix + it.name + "/",
-          },
-          this.genID()
-        );
-      });
-      this.deleteFoldersTasks = deleteFoldersTask.concat(
-        this.deleteFoldersTasks
-      );
-    },
-    async startDeleteFolder(task) {
-      await task.startTasks();
-      this.processDeleteFolderTask();
-    },
-    async processDeleteFolderTask() {
-      let processing = this.deleteFoldersTasks.filter(
-        (item) => item.status == 1
-      );
-      // console.log(processing);
-      if (processing.length >= this.deleteFolderLimit) return;
-      const idles = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      // console.log(idles, "idles");
-      if (!idles.length) return;
-      const fill = this.deleteFolderLimit - processing.length;
-      // console.log(fill);
-      const min = idles.length <= fill ? idles.length : fill;
-      for (let i = 0; i < min; i++) {
-        this.startDeleteFolder(idles[i]);
-      }
-    },
     onStop() {},
     onCopied() {
       this.$toast("Copied to clipboard !");
-    },
-    async onDomain(bucketName, isOpen) {
-      if (!isOpen || this.loadingDomains) return;
-      try {
-        this.loadingDomains = true;
-        const { data } = await this.$http.get("/domains", {
-          params: { bucketName },
-        });
-        this.$set(
-          this.domainsMap,
-          bucketName,
-          data.list.map((it) => {
-            return {
-              name: it.domain,
-              valid: it.valid,
-              to: "/domain/" + it.domain,
-            };
-          })
-        );
-      } catch (error) {
-        //
-      }
-      this.loadingDomains = false;
-    },
-    async addFolder() {
-      try {
-        const { value: name } = await this.$prompt("", "New Folder", {
-          icon: "mdi-folder-plus",
-          hideIcon: true,
-          inputAttrs: {
-            label: "Folder Name",
-            counter: true,
-            maxlength: 60,
-            trim: true,
-            rules: [
-              (v) => !!(v || "").trim() || "Invalid",
-              (v) =>
-                /^[a-z\d-_\u4E00-\u9FA5]+$/.test(v) ||
-                "Folder names can consist only of lowercase letters, numbers, underscode (_), and hyphens (-).",
-            ],
-            required: true,
-          },
-        });
-        // this.$router.push(this.path + name + "/");
-        const { Prefix } = this.pathInfo;
-        this.tableLoading = true;
-        await this.putObject(Prefix + name + "/");
-        await this.getList();
-        await this.$sleep(200);
-        this.$toast(`${name} created successfully`);
-      } catch (error) {
-        console.log(error);
-      }
-      this.tableLoading = false;
-    },
-    async putObject(Key) {
-      const { Bucket } = this.pathInfo;
-      return new Promise((resolve, reject) => {
-        this.s3.putObject(
-          {
-            Bucket,
-            Key,
-          },
-          (err, data) => {
-            if (err) {
-              this.onErr(err);
-              reject(err);
-            } else resolve(data);
-          }
-        );
-      });
     },
     async addBucket() {
       try {
@@ -838,53 +579,6 @@ export default {
         },
       });
     },
-    genID(length) {
-      return Number(
-        Math.random().toString().substr(3, length) + Date.now()
-      ).toString(36);
-    },
-    uploadingLength(value) {
-      this.uploadingTaskLength = value;
-    },
-    handlePasueDeleteFolder(id) {
-      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-      this.deleteFoldersTasks[index].stopTasks();
-    },
-    handleStartDeleteFolder(id) {
-      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      this.deleteFoldersTasks[index].retryTasks();
-      if (!arr.length) {
-        this.processDeleteFolderTask();
-      }
-    },
-    handleRemoveDeleteFolder(id) {
-      let index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-      this.deleteFoldersTasks.splice(index, 1);
-    },
-
-    handleDeleteFolderStartAll() {
-      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      this.deleteFoldersTasks.forEach((it) => {
-        if (it.status !== 2) return;
-        it.retryTasks();
-      });
-      if (!arr.length) {
-        this.processDeleteFolderTask();
-      }
-    },
-    handleDeleteFolderPauseAll() {
-      this.deleteFoldersTasks.forEach((item) => {
-        if (item.status == 3) return;
-        item.stopTasks();
-      });
-    },
-    handleDeleteFolderRemoveAll() {
-      this.deleteFoldersTasks = [];
-    },
-    isUploading(value) {
-      this.taskIsUploading = value;
-    },
   },
 };
 </script>
@@ -900,12 +594,6 @@ export default {
 }
 .e-btn-text::before {
   background: transparent !important;
-}
-.item-hash {
-  transition: all 0.1s ease-in;
-}
-.item-hash:hover {
-  opacity: 0.8;
 }
 .task-list {
   position: fixed;

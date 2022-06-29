@@ -25,20 +25,23 @@ export class TaskWrapper {
         params: this.param,
       });
       this.task.on("httpUploadProgress", (e) => {
+        // let progress = (e.loaded / e.total) * 100 - this.progress;
         this.progress = ((e.loaded / e.total) * 100) | 0;
       });
+
       this.progress = 0;
       this.status = 1; // uploading
       await this.task.done();
       this.status = 3; // success
+
+      //---------------------
     } catch (e) {
-      // console.log(e);
-      // console.log(e.message);
+      console.log(e.message);
       if (e.message == "Upload aborted.") {
         this.status = 2; // cancel/ stop
       } else {
         this.status = 4; // failed
-        Vue.prototype.$alert(e.message);
+        // Vue.prototype.$alert(e.message);
         this.failedMessage = e.message;
       }
     }
@@ -53,7 +56,6 @@ export class TaskWrapper {
     this.status = 0;
   }
 }
-
 export class DeleteTaskWrapper {
   that;
   s3;
@@ -80,7 +82,7 @@ export class DeleteTaskWrapper {
 
       this.status = 1; // deleteing
 
-      console.log(this.param.Prefix, this.param.Bucket);
+      // console.log(this.param.Prefix, this.param.Bucket);
       const listResult = await this.s3.listObjectsV2({
         Bucket: this.param.Bucket,
         MaxKeys: 100,

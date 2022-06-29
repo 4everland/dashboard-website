@@ -4,6 +4,7 @@
       text
       type="info"
       dismissible
+      dense
       v-if="userInfo.email && !noTip"
       @input="onCloseTip"
     >
