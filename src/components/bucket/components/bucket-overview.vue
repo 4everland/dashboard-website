@@ -91,10 +91,11 @@
         <v-col sm="6" cols class="basic-settings-item">
           <e-kv label="Custom Domain" min-width="120px" labelColor="#6c7789">
             <h-domain
+              v-if="customDomainList.length"
               class="item-data mr-2"
               :val="customDomainList.length ? customDomainList[0].domain : '--'"
             />
-
+            <span v-if="!customDomainList.length">--</span>
             <e-menu offset-y open-on-hover v-if="customDomainList.length > 1">
               <v-btn slot="ref" color="warning" elevation="0" x-small rounded
                 >+{{ customDomainList.length - 1 }}</v-btn

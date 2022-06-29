@@ -13,14 +13,12 @@
     <storage v-if="!inFolder" />
 
     <!-- Upload/Delete Folders Component -->
-    <navigation-drawers
-      ref="navDrawers"
-      @uploadingLength="uploadingLength"
-    ></navigation-drawers>
+    <navigation-drawers ref="navDrawers"></navigation-drawers>
   </div>
 </template>
 
 <script>
+import { bus } from "../../main";
 export default {
   data() {
     return {
@@ -52,10 +50,10 @@ export default {
       return !/\/$/.test(this.path);
     },
   },
-  methods: {
-    uploadingLength(value) {
-      this.uploadingTaskLength = value;
-    },
+  created() {
+    bus.$on("uploadingLength", (uploadingLength) => {
+      this.uploadingTaskLength = uploadingLength;
+    });
   },
 };
 </script>

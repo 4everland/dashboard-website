@@ -255,7 +255,6 @@
 
 <script>
 import { bus } from "../../../main";
-
 import mixin from "../storage-mixin";
 import { DeleteTaskWrapper } from "../task.js";
 export default {
@@ -284,6 +283,11 @@ export default {
     };
   },
   async created() {
+    bus.$on("uploadingLength", (uploadingLength) => {
+      if (uploadingLength == 0) {
+        this.getList();
+      }
+    });
     bus.$on("handleDeleteFolderRemoveAll", () => {
       this.deleteFoldersTasks = [];
       bus.$emit("deleteFolderTasks", this.deleteFoldersTasks);
@@ -387,48 +391,6 @@ export default {
       return Number(
         Math.random().toString().substr(3, length) + Date.now()
       ).toString(36);
-    },
-    uploadingLength(value) {
-      this.uploadingTaskLength = value;
-    },
-    // handlePasueDeleteFolder(id) {
-    //   const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-    //   this.deleteFoldersTasks[index].stopTasks();
-    // },
-    // handleStartDeleteFolder(id) {
-    //   const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-    //   let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-    //   this.deleteFoldersTasks[index].retryTasks();
-    //   if (!arr.length) {
-    //     this.processDeleteFolderTask();
-    //   }
-    // },
-    // handleRemoveDeleteFolder(id) {
-    //   let index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-    //   this.deleteFoldersTasks.splice(index, 1);
-    // },
-
-    // handleDeleteFolderStartAll() {
-    //   let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-    //   this.deleteFoldersTasks.forEach((it) => {
-    //     if (it.status !== 2) return;
-    //     it.retryTasks();
-    //   });
-    //   if (!arr.length) {
-    //     this.processDeleteFolderTask();
-    //   }
-    // },
-    // handleDeleteFolderPauseAll() {
-    //   this.deleteFoldersTasks.forEach((item) => {
-    //     if (item.status == 3) return;
-    //     item.stopTasks();
-    //   });
-    // },
-    // handleDeleteFolderRemoveAll() {
-    //   this.deleteFoldersTasks = [];
-    // },
-    isUploading(value) {
-      this.taskIsUploading = value;
     },
   },
   watch: {

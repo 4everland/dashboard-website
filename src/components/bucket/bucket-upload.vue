@@ -166,9 +166,7 @@ export default {
       const idles = this.tasks.filter((task) => {
         return task.status == 0;
       });
-      if (idles.length == 0) {
-        // return bus.$emit("getList");
-      }
+      if (idles.length == 0) return;
       const fill = this.limit - processing.length;
       const min = idles.length <= fill ? idles.length : fill;
 
@@ -194,7 +192,6 @@ export default {
     async overStorage() {
       try {
         const { data } = await this.$http.get("$v3/usage");
-        console.log(data);
         const { ipfsStorage, usedIpfsStorage } = data;
         return ipfsStorage - usedIpfsStorage;
       } catch (err) {
@@ -214,7 +211,6 @@ export default {
       }
       if (newVal.length) {
         const residue = await this.overStorage();
-        console.log(residue);
         const totalSizeVal = newVal.reduce((pre, current) => {
           return pre + current.size;
         }, 0);

@@ -689,7 +689,7 @@ export default {
         let uploadingLength = newValue.filter(
           (it) => it.status == 1 || it.status == 0
         ).length;
-        this.$emit("uploadingLength", uploadingLength);
+        bus.$emit("uploadingLength", uploadingLength);
       },
       deep: true,
     },
