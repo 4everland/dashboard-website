@@ -12,12 +12,12 @@
     >
       <template v-slot:item.projectName="{ item }">
         <v-btn
-          class="e-btn-text"
           text
           x-small
           rounded
           color="primary"
           :to="getPath(item)"
+          class="e-btn-text"
         >
           <b>{{ item.projectName }}</b>
         </v-btn>

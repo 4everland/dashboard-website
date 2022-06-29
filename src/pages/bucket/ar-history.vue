@@ -90,8 +90,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
   data() {
     return {
@@ -109,12 +107,10 @@ export default {
       finished: false,
       loadingMore: false,
       cursor: 0,
+      usageInfo: {},
     };
   },
   computed: {
-    ...mapState({
-      usageInfo: (s) => s.usageInfo,
-    }),
     path() {
       return this.$route.path;
     },
@@ -134,6 +130,10 @@ export default {
         this.getList();
       }
     },
+  },
+  created() {
+    console.log(1111);
+    this.getStorage();
   },
   mounted() {
     this.getList();
@@ -183,6 +183,16 @@ export default {
       this.$setMsg({
         name: "updateUsage",
       });
+    },
+    async getStorage() {
+      try {
+        const { data } = await this.$http("/user/resource/usage");
+        const { arweaveUsedStorage = 0, arweaveSyncingStorage = 0 } = data;
+        this.usageInfo.arSyncing = (arweaveSyncingStorage / 1024).toFixed(2);
+        this.usageInfo.arSynced = (arweaveUsedStorage / 1024).toFixed(2);
+      } catch (error) {
+        console.log(error, "error");
+      }
     },
     onRow(it) {
       // console.log(it);

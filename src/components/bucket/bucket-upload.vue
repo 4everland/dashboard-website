@@ -8,11 +8,11 @@
       </v-btn>
       <v-list dense>
         <v-list-item link @click="$refs.uploadInput.onClick(false)">
-          <img src="img/icon/ic-download.svg" width="14" class="mr-2" />
+          <!-- <img src="img/icon/ic-download.svg" width="14" class="mr-2" /> -->
           <span class="gray-7">Selected File</span>
         </v-list-item>
         <v-list-item link @click="$refs.uploadInput.onClick(true)">
-          <img src="img/icon/ic-download.svg" width="14" class="mr-2" />
+          <!-- <img src="img/icon/ic-download.svg" width="14" class="mr-2" /> -->
           <span class="gray-7">Selected Folder</span>
         </v-list-item>
       </v-list>
@@ -166,11 +166,10 @@ export default {
       const idles = this.tasks.filter((task) => {
         return task.status == 0;
       });
-      if (idles.length == 0) {
-        return;
-      }
+      if (idles.length == 0) return;
       const fill = this.limit - processing.length;
       const min = idles.length <= fill ? idles.length : fill;
+
       for (let i = 0; i < min; i++) {
         this.start(idles[i]);
       }
@@ -193,7 +192,6 @@ export default {
     async overStorage() {
       try {
         const { data } = await this.$http.get("$v3/usage");
-        console.log(data);
         const { ipfsStorage, usedIpfsStorage } = data;
         return ipfsStorage - usedIpfsStorage;
       } catch (err) {
@@ -213,7 +211,6 @@ export default {
       }
       if (newVal.length) {
         const residue = await this.overStorage();
-        console.log(residue);
         const totalSizeVal = newVal.reduce((pre, current) => {
           return pre + current.size;
         }, 0);

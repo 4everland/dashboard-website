@@ -1,12 +1,5 @@
 <template>
   <div class="bucket-item-container">
-    <!-- Task List -->
-    <div @click.stop="$refs.navDrawers.drawer = true" class="task-list">
-      <span class="task-count" v-show="uploadingTaskLength != 0">{{
-        uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
-      }}</span>
-      <img src="img/svg/common/task-list.svg" alt="" width="54" />
-    </div>
     <div class="file-container" v-if="inFolder">
       <!-- Operation Tab -->
       <div class="operation-tab d-flex">
@@ -257,27 +250,18 @@
         >
       </div>
     </div>
-    <!-- Upload/Delete Folders Component -->
-    <navigation-drawers
-      ref="navDrawers"
-      :deleteFolder.sync="deleteFolder"
-      :deleteFolderTasks="deleteFoldersTasks"
-      @uploadingLength="uploadingLength"
-      @handlePasueDeleteFolder="handlePasueDeleteFolder"
-      @handleStartDeleteFolder="handleStartDeleteFolder"
-      @handleRemoveDeleteFolder="handleRemoveDeleteFolder"
-      @handleDeleteFolderStartAll="handleDeleteFolderStartAll"
-      @handleDeleteFolderPauseAll="handleDeleteFolderPauseAll"
-      @handleDeleteFolderRemoveAll="handleDeleteFolderRemoveAll"
-    ></navigation-drawers>
   </div>
 </template>
 
 <script>
+import { bus } from "../../../main";
 import mixin from "../storage-mixin";
 import { DeleteTaskWrapper } from "../task.js";
 export default {
   mixins: [mixin],
+  props: {
+    active: Boolean,
+  },
   data() {
     return {
       searchKey: "",
@@ -295,9 +279,29 @@ export default {
       deleteFolder: false,
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
-      uploadingTaskLength: 0,
       isUploadDir: false,
     };
+  },
+  async created() {
+    bus.$on("uploadingLength", (uploadingLength) => {
+      if (uploadingLength == 0) {
+        this.getList();
+      }
+    });
+    bus.$on("handleDeleteFolderRemoveAll", () => {
+      this.deleteFoldersTasks = [];
+      bus.$emit("deleteFolderTasks", this.deleteFoldersTasks);
+    });
+
+    bus.$on("handleRemoveDeleteFolder", (deleteFoldersTasks) => {
+      bus.$emit("deleteFolderTasks", deleteFoldersTasks);
+    });
+    bus.$on("getList", () => this.getList());
+    bus.$on("getOriginDeleteFolderTasks", (originDeleteFolderTasks) => {
+      this.deleteFoldersTasks = originDeleteFolderTasks;
+    });
+
+    bus.$emit("originDeleteFolderTasks");
   },
   computed: {
     selectArStatus() {
@@ -363,6 +367,7 @@ export default {
       );
     },
     async startDeleteFolder(task) {
+      bus.$emit("deleteFolderTasks", this.deleteFoldersTasks);
       await task.startTasks();
       this.processDeleteFolderTask();
     },
@@ -387,55 +392,13 @@ export default {
         Math.random().toString().substr(3, length) + Date.now()
       ).toString(36);
     },
-    uploadingLength(value) {
-      this.uploadingTaskLength = value;
-    },
-    handlePasueDeleteFolder(id) {
-      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-      this.deleteFoldersTasks[index].stopTasks();
-    },
-    handleStartDeleteFolder(id) {
-      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      this.deleteFoldersTasks[index].retryTasks();
-      if (!arr.length) {
-        this.processDeleteFolderTask();
-      }
-    },
-    handleRemoveDeleteFolder(id) {
-      let index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-      this.deleteFoldersTasks.splice(index, 1);
-    },
-
-    handleDeleteFolderStartAll() {
-      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      this.deleteFoldersTasks.forEach((it) => {
-        if (it.status !== 2) return;
-        it.retryTasks();
-      });
-      if (!arr.length) {
-        this.processDeleteFolderTask();
-      }
-    },
-    handleDeleteFolderPauseAll() {
-      this.deleteFoldersTasks.forEach((item) => {
-        if (item.status == 3) return;
-        item.stopTasks();
-      });
-    },
-    handleDeleteFolderRemoveAll() {
-      this.deleteFoldersTasks = [];
-    },
-    isUploading(value) {
-      this.taskIsUploading = value;
-    },
   },
   watch: {
     path() {
       this.onRouteChange();
     },
-    uploadingTaskLength(value) {
-      if (value == 0) {
+    active(val) {
+      if (val) {
         this.getList();
       }
     },
@@ -450,8 +413,6 @@ export default {
 .v-data-table__mobile-row svg {
   width: 150px;
 }
-</style>
-<style lang="scss" scoped>
 .e-btn-text {
   padding: 0 !important;
   font-weight: normal !important;
@@ -463,6 +424,8 @@ export default {
 .e-btn-text::before {
   background: transparent !important;
 }
+</style>
+<style lang="scss" scoped>
 .item-hash {
   transition: all 0.1s ease-in;
 }
@@ -471,28 +434,7 @@ export default {
 }
 .bucket-item-container {
   background: #fff;
-  .task-list {
-    position: fixed;
-    z-index: 999;
-    bottom: 80px;
-    right: 20px;
-    color: #34a9ff;
-    font-size: 16px;
-    cursor: pointer;
-    .task-count {
-      position: absolute;
-      right: -2px;
-      top: -2px;
-      width: 30px;
-      height: 30px;
-      font-size: 20px;
-      text-align: center;
-      color: #fff;
-      background: #ff6960;
-      border-radius: 50%;
-      transform: scale(0.7);
-    }
-  }
+
   .file-container {
     position: relative;
     min-height: 1000px;
