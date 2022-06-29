@@ -125,8 +125,6 @@ export default {
         const data = new Date().getTime();
         let end = data * 1;
         let start = end - 24 * 60 * 60 * 1000;
-        end -= offset;
-        start -= offset;
         return this.$emit("dates", [start, end]);
       }
       const mat = /^(\d+)(\D)$/.exec(val);
@@ -138,21 +136,24 @@ export default {
           : new Date().getToday();
         end = date * 1;
         start = this.dayType
-          ? end - num * 24 * 3600 * 1e3
+          ? end - (num - 1) * 24 * 3600 * 1e3
           : date.getNextDay(-num) * 1;
       } else {
-        const arr = val.split(",");
+        let arr = val.split(",");
+        if (arr[0] > arr[1]) {
+          arr = arr.reverse();
+        }
+
         start = arr[0].toDate() * 1;
         end = arr[1].toDate().getDayEnd() * 1;
       }
       end -= offset;
       start -= offset;
-      this.$emit(
-        "dates",
-        this.dayType
-          ? [start, end]
-          : [parseInt(start / 1e3), parseInt(end / 1e3)]
-      );
+      let arr = this.dayType
+        ? [start, end]
+        : [parseInt(start / 1e3), parseInt(end / 1e3)];
+
+      this.$emit("dates", arr);
     },
     onCancel() {
       this.showPop = false;

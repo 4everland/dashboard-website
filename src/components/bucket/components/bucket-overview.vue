@@ -176,13 +176,13 @@ export default {
               break;
             case "trafficPast30d":
               this.basicStatisticsData.push({
-                name: "Past 30 days of traffic",
+                name: "Traffic within 30 Days",
                 value: this.$utils.getFileSize(data[item], true),
               });
               break;
             case "visitsPast30d":
               this.basicStatisticsData.push({
-                name: "Past 30 days of visits",
+                name: "Visits within 30 Days",
                 value: data[item],
               });
               break;

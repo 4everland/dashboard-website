@@ -440,10 +440,10 @@ export default {
       if (this.inBucket)
         return [
           { text: "Bucket Name", value: "name" },
-          { text: "Capacity", value: "usedStorage" },
-          { text: "AR Capacity", value: "arUsedStorage" },
-          { text: "Past 30 days of traffic", value: "traffic" },
-          { text: "Past 30 days of visits", value: "visitChartData" },
+          { text: "Storage Usage", value: "usedStorage" },
+          { text: "AR Storage Usage", value: "arUsedStorage" },
+          { text: "Traffic within 30 Days", value: "traffic" },
+          { text: "Visits within 30 Days", value: "visitChartData" },
           { text: "Sync to AR", value: "arAct" },
         ];
       return [

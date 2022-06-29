@@ -56,6 +56,7 @@ export default {
                   : "0" + date.getMinutes())
               );
             },
+            interval: 0,
           },
         },
         yAxis: {
