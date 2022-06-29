@@ -177,7 +177,7 @@ export default {
         else over += " " + unit;
         tip = `(Recharge used ${over})`;
       }
-      let perc = Math.round((used * 100) / total);
+      let perc = (used * 100) / total;
       perc = Math.max(perc > 0 ? 0.8 : 0.4, perc);
       return {
         perc,
