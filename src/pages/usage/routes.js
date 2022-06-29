@@ -47,7 +47,7 @@ export default [
       links: [
         {
           text: "Bills",
-          to: "/billing/usage",
+          to: "/billing/bills",
         },
         {
           text: `Details`,
