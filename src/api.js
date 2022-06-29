@@ -17,7 +17,7 @@ const authApi = inDev
   : "https://oauth.4everland.org";
 const v3Api = inDev
   ? "https://settlement.foreverland.xyz"
-  : "https://settlement.4everland.org";
+  : "https://pay.4everland.org";
 
 Vue.prototype.$endpoint = endpoint;
 
@@ -49,6 +49,12 @@ Vue.prototype.$getImgSrc = function (src) {
   if (!src) src = "img/bg/empty/project.png";
   else if (!/^http/.test(src)) src = hostingUrl + src;
   return src;
+};
+Vue.prototype.$getPolygonUrl = (hash) => {
+  const pre = inDev
+    ? "https://mumbai.polygonscan.com/tx/"
+    : "https://polygonscan.com/tx/";
+  return pre + hash;
 };
 
 const RefreshPath = "/refresh";

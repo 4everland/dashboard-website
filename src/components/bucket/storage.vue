@@ -9,7 +9,7 @@
 
   <div v-else>
     <!-- Operation tab -->
-    <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
+    <div class="d-flex nowrap ov-a btn-wrap">
       <div v-show="inBucket">
         <v-btn color="primary" @click="addBucket">
           <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
@@ -281,7 +281,7 @@
       </v-card>
     </div>
     <!-- Bucket List -->
-    <div class="main-wrap" v-if="!inFile && !inUpload && !inFolder">
+    <div class="main-wrap" v-if="!inFile && !inFolder">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
