@@ -66,7 +66,6 @@ export default {
     };
   },
   async created() {
-    // await this.$store.dispatch("getUsageInfo");
     bus.$on("handleClearRecords", (id) => {
       let index = this.tasks.findIndex((it) => it.id == id);
       if (index !== -1) {
