@@ -189,6 +189,16 @@ export default {
     onCancel() {
       this.$router.go(-1);
     },
+    async overStorage() {
+      try {
+        const { data } = await this.$http.get("$v3/usage");
+        console.log(data);
+        const { ipfsStorage, usedIpfsStorage } = data;
+        return ipfsStorage - usedIpfsStorage;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
   watch: {
     length(value) {
@@ -196,23 +206,22 @@ export default {
         this.page = value;
       }
     },
-    files(newVal, oldVal) {
+    async files(newVal, oldVal) {
       if (oldVal.length == 0 && newVal.length) {
         this.page = 1;
       }
-      const totalSizeVal = newVal.reduce((pre, current) => {
-        return pre + current.size;
-      }, 0);
-      if (
-        totalSizeVal >
-        this.$store.state.usageInfo.ipfsTotal -
-          this.$store.state.usageInfo.ipfsUsed
-      ) {
-        this.isStorageFull = true;
-      } else {
-        this.isStorageFull = false;
-      }
       if (newVal.length) {
+        const residue = await this.overStorage();
+        console.log(residue);
+        const totalSizeVal = newVal.reduce((pre, current) => {
+          return pre + current.size;
+        }, 0);
+
+        if (totalSizeVal > residue) {
+          this.isStorageFull = true;
+        } else {
+          this.isStorageFull = false;
+        }
         this.onConfirm();
       }
     },

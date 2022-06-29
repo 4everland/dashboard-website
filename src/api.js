@@ -4,7 +4,7 @@ import AsyncLock from "async-lock";
 
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 Vue.prototype.$inDev = inDev;
-const isLocal = /localhost|(192.168.0.103)/.test(location.host);
+// const isLocal = /localhost/.test(location.host);
 
 Vue.prototype.$arHashPre = "https://arweave.net/"; // https://ar.foreverland.xyz/
 Vue.prototype.$arVerifyPre = "https://viewblock.io/arweave/tx/"; // https://ar.foreverland.xyz/tx/
@@ -15,6 +15,9 @@ export const endpoint = inDev
 const authApi = inDev
   ? "https://auth.foreverland.xyz"
   : "https://oauth.4everland.org";
+const v3Api = inDev
+  ? "https://settlement.foreverland.xyz"
+  : "https://pay.4everland.org";
 
 Vue.prototype.$endpoint = endpoint;
 
@@ -24,9 +27,10 @@ const loginUrl = inDev
 
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   let url = loginUrl;
-  if (isLocal) {
-    console.log(111);
-    url = "#/login?test=1";
+  if (!/(dashboard|hb)\./i.test(location.host)) {
+    url =
+      "https://hb.4everland.app/#/?redirectTo=" +
+      encodeURIComponent(location.origin);
   } else if (localStorage.inviteCode) {
     url += "/#/?inviteCode=" + localStorage.inviteCode;
   }
@@ -45,6 +49,12 @@ Vue.prototype.$getImgSrc = function (src) {
   if (!src) src = "img/bg/empty/project.png";
   else if (!/^http/.test(src)) src = hostingUrl + src;
   return src;
+};
+Vue.prototype.$getPolygonUrl = (hash) => {
+  const pre = inDev
+    ? "https://mumbai.polygonscan.com/tx/"
+    : "https://polygonscan.com/tx/";
+  return pre + hash;
 };
 
 const RefreshPath = "/refresh";
@@ -96,6 +106,7 @@ const lock = new AsyncLock({ timeout: 5000 });
       if (token && config.url != RefreshPath) {
         config.headers.common["Authorization"] = token;
       }
+      config.url = config.url.replace("$v3", v3Api);
       return config;
     },
     (error) => {
@@ -130,8 +141,19 @@ const lock = new AsyncLock({ timeout: 5000 });
         config = {},
       } = error.response || {};
       console.log(error, status, statusText);
-      let msg = data.message || error.message;
-      handleMsg(status, data.code, msg, config);
+      if (status == 409) {
+        console.log(data);
+        const jsonData = JSON.parse(data.data);
+        localStorage.authData = JSON.stringify(jsonData);
+        localStorage.token = jsonData.accessToken;
+        localStorage.stsData1 = "";
+        Vue.prototype.$alert(" Successfully bound your account.").then(() => {
+          window.location.reload();
+        });
+      } else {
+        let msg = data.message || error.message;
+        handleMsg(status, data.code, msg, config);
+      }
       error.code = data.code;
       return Promise.reject(error);
     }
@@ -139,7 +161,6 @@ const lock = new AsyncLock({ timeout: 5000 });
 });
 
 function goLogin() {
-  console.log(1111);
   localStorage.clear();
   if (location.hash != "#/login") {
     localStorage.loginTo = location.hash;
