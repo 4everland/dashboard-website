@@ -18,6 +18,7 @@ export default [
     path: "/billing/usage/more",
     component: More,
     meta: {
+      title: "Buy more",
       group: "Billing",
       links: [
         {
@@ -42,7 +43,7 @@ export default [
     path: "/billing/bills/detail",
     component: Detail,
     meta: {
-      title: "Billing Details",
+      title: "Details",
       group: "Billing",
       links: [
         {

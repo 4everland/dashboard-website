@@ -145,9 +145,10 @@ export default {
   },
   watch: {
     formNum(val) {
+      val += "";
       if (!val) return;
       let num = val * 1;
-      if (isNaN(num)) return (this.formNum = "");
+      if (!val.trim() || isNaN(num)) return (this.formNum = "");
       num = Math.min(this.maxNum, Math.max(0, num));
       num = this.$utils.cutFixed(num, 4);
       if (num != val) this.formNum = num;

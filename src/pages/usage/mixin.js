@@ -104,6 +104,9 @@ export default {
       if (!err) return console.log("---- err null");
       console.log(err);
       let msg = err.message;
+      if (/exceeds balance/i.test(msg)) {
+        msg = "Insufficient balance";
+      }
       if (retry) {
         return this.$confirm(msg, "Network Error", {
           confirmText: "Retry",
