@@ -76,15 +76,19 @@ export default {
       }
       const { address } = this.userInfo.wallet || {};
       if (!address) {
-        this.$confirm(
-          "This function requires a linked wallet",
-          "Wallet Binding",
-          {
-            // confirmText: 'Connnect',
-          }
-        ).then(() => {
-          this.$router.push("/settings?tab=account_binding");
-        });
+        if (this.userInfo.solana) {
+          this.$alert("Currently this feature only supports metamask wallet");
+        } else {
+          this.$confirm(
+            "This function requires a linked wallet",
+            "Wallet Binding",
+            {
+              // confirmText: 'Connnect',
+            }
+          ).then(() => {
+            this.$router.push("/settings?tab=account_binding");
+          });
+        }
         return true;
       }
       const isChanged = this.connectAddr.toLowerCase() != address.toLowerCase();
