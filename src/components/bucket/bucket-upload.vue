@@ -66,7 +66,7 @@ export default {
     };
   },
   async created() {
-    await this.$store.dispatch("getUsageInfo");
+    // await this.$store.dispatch("getUsageInfo");
     bus.$on("handleClearRecords", (id) => {
       let index = this.tasks.findIndex((it) => it.id == id);
       if (index !== -1) {
@@ -175,7 +175,8 @@ export default {
         this.start(idles[i]);
       }
     },
-    onConfirm() {
+    async onConfirm() {
+      // await this.getUsageInfo();
       if (this.isStorageFull)
         return this.$alert(
           "Insufficient storage space is available to upload the file."

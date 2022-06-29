@@ -157,7 +157,9 @@ export default {
       this.getDomainData();
       this.getExtraData();
     },
+    // get basicStatistics Data
     async getBasicStatisticsData() {
+      this.basicStatisticsData = [];
       try {
         const { data } = await this.$http.get(
           `/bi/overview/${this.bucketName}`
@@ -214,7 +216,7 @@ export default {
         data.list.forEach((item) => {
           item.isHttps =
             item.systemAlloc ||
-            item.certificateExpiredAt > new Date().getTime();
+            Number(item.certificateExpiredAt) > new Date().getTime() / 1000;
         });
         this.tableLoading = false;
         this.domainList = data.list;

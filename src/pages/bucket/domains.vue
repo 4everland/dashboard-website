@@ -233,7 +233,7 @@ export default {
     },
     onRow(it) {
       const url = this.getPath(it);
-      this.$router.push(url);
+      this.$router.push(url).catch(() => {});
     },
     checkNew() {
       const { bucket } = this.$route.query;

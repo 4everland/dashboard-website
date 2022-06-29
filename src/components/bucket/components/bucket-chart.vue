@@ -1,7 +1,15 @@
 <template>
   <div>
     <div class="chart-title">{{ name }}</div>
-    <e-chart height="400px" :option="option"></e-chart>
+    <div class="pos-r">
+      <e-chart height="400px" :option="option"></e-chart>
+      <v-progress-circular
+        v-show="!option.xAxis.data"
+        class="pos-center"
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
+    </div>
   </div>
 </template>
 
@@ -14,15 +22,17 @@ export default {
     },
     xAxisData: {
       type: Array,
-      default: () => [1, 2, 3, 4],
     },
     yAxisData: {
       type: Array,
-      default: () => [1, 2, 3, 4],
     },
     overDay: {
       type: Boolean,
       required: true,
+    },
+    dataType: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -50,6 +60,23 @@ export default {
         },
         yAxis: {
           type: "value",
+          axisLabel: {
+            formatter: (value) => {
+              if (this.dataType) return value;
+              const gb = Math.pow(1024, 3);
+              const mb = Math.pow(1024, 2);
+              const kb = 1024;
+              if (value > gb) {
+                return (value / gb).toFixed(2) + "GB";
+              } else if (value > mb) {
+                return (value / mb).toFixed(2) + "MB";
+              } else if (value > kb) {
+                return (value / kb).toFixed(2) + "KB";
+              } else {
+                return value + "B";
+              }
+            },
+          },
         },
         tooltip: {
           trigger: "axis",
@@ -66,7 +93,9 @@ export default {
                     this.$utils.getFileSize(params[0].value, true).num
                   }</span>
                   <span class="ml-1">${
-                    this.$utils.getFileSize(params[0].value, true).unit
+                    this.dataType
+                      ? ""
+                      : this.$utils.getFileSize(params[0].value, true).unit
                   }</span>
                 </div>
             </div>`;
@@ -94,11 +123,9 @@ export default {
   },
   watch: {
     xAxisData(data) {
-      // console.log(data);
       this.option.xAxis.data = data;
     },
     yAxisData(data) {
-      // console.log(data);
       this.option.series[0].data = data;
     },
   },

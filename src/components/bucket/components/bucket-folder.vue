@@ -168,6 +168,7 @@
         </template> -->
         <template v-slot:item.hash="{ item }">
           <v-btn
+            style="width: 80px"
             class="e-btn-text item-hash"
             rounded
             color="primary"
@@ -178,13 +179,13 @@
             @click.stop="onStop"
             :href="`https://${item.hash}.ipfs.dweb.link`"
           >
-            <span class="d-ib" style="width: 80px">
+            <span class="d-ib">
               {{ item.hash.cutStr(5, 4) }}
             </span>
           </v-btn>
           <v-btn
             v-if="item.hash"
-            class="e-btn-text"
+            class="e-btn-text ml-2"
             icon
             small
             @click.stop="onStop"
@@ -192,7 +193,7 @@
             @success="$toast('Copied to clipboard !')"
           >
             <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
-            <img src="img/svg/copy.svg" width="12" class="ml-2" />
+            <img src="img/svg/copy.svg" width="12" />
           </v-btn>
         </template>
         <template v-slot:item.arAct="{ item }">
@@ -274,81 +275,7 @@
 
 <script>
 import mixin from "../storage-mixin";
-// import Vue from "vue";
 import { DeleteTaskWrapper } from "../task.js";
-// class DeleteTaskWrapper {
-//   that;
-//   s3;
-//   param;
-//   id;
-//   marker;
-//   lastMarker;
-//   deleteCount;
-//   status;
-//   curFiles;
-
-//   constructor(that, s3, param, id) {
-//     this.that = that;
-//     this.s3 = s3;
-//     this.param = param;
-//     this.id = id;
-//     this.status = 0; // pre delete
-//     this.deleteCount = 0;
-//   }
-
-//   async startTasks() {
-//     try {
-//       if (this.status !== 0 && this.status !== 1) return;
-
-//       this.status = 1; // deleteing
-
-//       console.log(this.param.Prefix, this.param.Bucket);
-//       const listResult = await this.s3.listObjectsV2({
-//         Bucket: this.param.Bucket,
-//         MaxKeys: 100,
-//         Delimiter: "",
-//         Prefix: this.param.Prefix,
-//       });
-//       if (!listResult.Contents) {
-//         this.curFiles = [];
-//       } else {
-//         this.curFiles = listResult.Contents.map((it) => {
-//           return { Key: it.Key };
-//         });
-//       }
-
-//       if (this.curFiles.length && this.status == 1) {
-//         const deleteResult = await this.s3.deleteObjects({
-//           Bucket: this.param.Bucket,
-//           Delete: {
-//             Objects: this.curFiles,
-//             Quiet: false,
-//           },
-//         });
-//         // console.log(deleteResult);
-//         for (let i = 0; i < deleteResult.Deleted.length; i++) {
-//           this.deleteCount += 1;
-//           await Vue.prototype.$sleep(20);
-//         }
-//         await this.startTasks();
-//       } else if (!this.curFiles.length) {
-//         this.status = 3; // success
-//         this.that.selected = [];
-//         this.that.getList();
-//       } else {
-//         console.log("here");
-//       }
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-//   stopTasks() {
-//     this.status = 2; //stop
-//   }
-//   retryTasks() {
-//     this.status = 0; // retry
-//   }
-// }
 export default {
   mixins: [mixin],
   data() {

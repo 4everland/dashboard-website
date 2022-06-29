@@ -37,7 +37,7 @@ export default {
         xAxis: {
           boundaryGap: false,
           type: "category",
-          data: ["", "", "", "", "", "", ""],
+          // data: ["", "", "", "", "", "", ""],
         },
         yAxis: {
           type: "value",
@@ -50,7 +50,7 @@ export default {
         },
         series: [
           {
-            data: [0, 0, 0, 0, 0, 0, 0],
+            // data: [0, 0, 0, 0, 0, 0, 0],
             type: "line",
             symbolSize: 8,
             itemStyle: {
@@ -72,7 +72,6 @@ export default {
   watch: {
     option: {
       handler(data) {
-        console.log(data);
         let basicOption = JSON.parse(JSON.stringify(this.basicOption));
         if (data.xAxis.data.length) {
           this.noData = false;
@@ -82,7 +81,6 @@ export default {
           });
         } else {
           this.noData = true;
-          // console.log(this.basicOption, 111);
           this.$nextTick(() => {
             this.setEchartsOption(this.basicOption);
           });

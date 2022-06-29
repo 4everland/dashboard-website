@@ -302,6 +302,7 @@
             :color="inBucket ? 'primary' : '#000'"
             rounded
             text
+            class="e-btn-text"
             x-small
             @click.stop="onRow(item)"
           >
@@ -375,7 +376,7 @@
           <sync-state :val="item.arStatus" v-if="item.isFile"></sync-state>
         </template>
         <template v-slot:item.arUsedStorage="{ item }">
-          <span>{{ item.isAr ? item.arUsedStorage : "--" }}</span>
+          <span>{{ item.arUsedStorage }}</span>
         </template>
         <template v-slot:item.visitChartData="{ item }">
           <v-sparkline
@@ -442,8 +443,8 @@ export default {
           { text: "Capacity", value: "usedStorage" },
           { text: "AR Capacity", value: "arUsedStorage" },
           { text: "Past 30 days of traffic", value: "traffic" },
-          { text: "Sync to AR", value: "arAct" },
           { text: "Past 30 days of visits", value: "visitChartData" },
+          { text: "Sync to AR", value: "arAct" },
         ];
       return [
         { text: "Name", value: "name" },
@@ -579,6 +580,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.e-btn-text {
+  padding: 0 !important;
+  font-weight: normal !important;
+  font-size: 14px !important;
+}
+.e-btn-text b {
+  font-weight: 500 !important;
+}
+.e-btn-text::before {
+  background: transparent !important;
+}
 .task-list {
   position: fixed;
   bottom: 80px;
