@@ -137,24 +137,20 @@ export default {
           height: 18,
           type: "pay",
         },
-        ...(this.$inDev
-          ? [
-              {
-                label: "Ethereum",
-                img: "img/svg/billing/ic-ethereum.svg",
-                width: 18,
-                height: 18,
-                type: "pay",
-              },
-              {
-                label: "BSC",
-                img: "img/svg/billing/ic-bsc.png",
-                width: 18,
-                height: 18,
-                type: "pay",
-              },
-            ]
-          : []),
+        {
+          label: "Ethereum",
+          img: "img/svg/billing/ic-ethereum.svg",
+          width: 18,
+          height: 18,
+          type: "pay",
+        },
+        {
+          label: "BSC",
+          img: "img/svg/billing/ic-bsc.png",
+          width: 18,
+          height: 18,
+          type: "pay",
+        },
       ];
       const defPay =
         paySubs.filter((it) => it.label == this.payBy)[0] || paySubs[0];

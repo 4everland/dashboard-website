@@ -196,11 +196,63 @@ export default {
       if (type == "BSC") return this.$inDev ? 97 : 56;
       return this.$inDev ? 5 : 1;
     },
-    switchNet(id) {
-      return window.web3.currentProvider.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x" + id.toString(16) }],
-      });
+    async addChain(id) {
+      if (this.payBy == "Ethereum") return;
+      try {
+        const params = this.isPolygon
+          ? [
+              {
+                chainId: id,
+                chainName: "Polygon Mainnet",
+                rpcUrls: ["https://polygon-rpc.com"],
+                nativeCurrency: {
+                  name: "Polygon Coin",
+                  symbol: "MATIC",
+                  decimals: 18,
+                },
+                blockExplorerUrls: ["https://polygonscan.com"],
+              },
+            ]
+          : [
+              {
+                chainId: id,
+                chainName: "BSC Mainnet",
+                rpcUrls: ["https://bsc-dataseed1.binance.org"],
+                nativeCurrency: {
+                  name: "Binance Coin",
+                  symbol: "BNB",
+                  decimals: 18,
+                },
+                blockExplorerUrls: ["https://bscscan.com"],
+              },
+            ];
+        await window.ethereum.request(
+          {
+            method: "wallet_addEthereumChain",
+            params,
+          },
+          this.connectAddr
+        );
+      } catch (addError) {
+        console.log("res", addError);
+      }
+    },
+    async switchNet(id) {
+      try {
+        const chainId = "0x" + id.toString(16);
+        await this.addChain(chainId);
+        const res = window.web3.currentProvider.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId }],
+        });
+        if (res && res.error) {
+          this.addChain(chainId);
+        }
+      } catch (error) {
+        if (error.code === 4902) {
+          this.addChain(chainId);
+        }
+      }
     },
     addHash(tx, usdt, contentType = "Purchase") {
       const obj = {

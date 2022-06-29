@@ -123,10 +123,8 @@ export default {
       }
     },
     getPayBy(id) {
-      if (this.$inDev) {
-        if ([5, 1].includes(id)) return "Ethereum";
-        if ([97, 56].includes(id)) return "BSC";
-      }
+      if ([5, 1].includes(id)) return "Ethereum";
+      if ([97, 56].includes(id)) return "BSC";
       return "Polygon";
     },
     async checkNet() {
