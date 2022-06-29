@@ -59,7 +59,7 @@
           />
         </v-btn>
 
-        <v-list dense>
+        <v-list dense v-if="it.subs">
           <v-list-item
             v-for="(sub, j) in it.subs"
             :key="j"
@@ -137,27 +137,31 @@ export default {
           height: 18,
           type: "pay",
         },
-        {
-          label: "Ethereum",
-          img: "img/svg/billing/ic-ethereum.svg",
-          width: 18,
-          height: 18,
-          type: "pay",
-        },
-        {
-          label: "BSC",
-          img: "img/svg/billing/ic-bsc.png",
-          width: 18,
-          height: 18,
-          type: "pay",
-        },
+        ...(this.$inDev
+          ? [
+              {
+                label: "Ethereum",
+                img: "img/svg/billing/ic-ethereum.svg",
+                width: 18,
+                height: 18,
+                type: "pay",
+              },
+              {
+                label: "BSC",
+                img: "img/svg/billing/ic-bsc.png",
+                width: 18,
+                height: 18,
+                type: "pay",
+              },
+            ]
+          : []),
       ];
       const defPay =
         paySubs.filter((it) => it.label == this.payBy)[0] || paySubs[0];
       list.push({
         ...defPay,
         noSuffix: true,
-        subs: paySubs,
+        subs: paySubs.length > 1 ? paySubs : null,
       });
 
       list.push({
