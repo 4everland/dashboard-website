@@ -381,10 +381,7 @@ export default {
       }
     },
     async onPreview() {
-      if (!this.connectAddr) {
-        this.showConnect();
-        return;
-      }
+      if (this.walletChanged()) return;
       try {
         this.$loading();
         await this.checkAccount();
@@ -419,7 +416,6 @@ export default {
         this.ethFeeInfo = null;
         console.log(payloads);
         this.paying = true;
-        await this.checkAccount();
         const nonce = Math.floor(Date.now() / 1000);
         const params = [this.providerAddr, nonce, this.uuid, payloads];
         if (!this.isPolygon) {

@@ -229,6 +229,7 @@ export default {
       }
       try {
         this.posting = true;
+        await this.checkAccount();
         if (this.isRecharge) {
           await this.onRecharge();
           this.$toast("Recharge successfully");
@@ -270,6 +271,9 @@ export default {
       this.$loading.close();
     },
     async onShow(type) {
+      if (this.walletChanged()) {
+        return;
+      }
       this.isRecharge = type == 1;
       if (!this.isRecharge) {
         if (this.maxNum == 0) return this.$alert(tip1);
@@ -290,10 +294,6 @@ export default {
         return;
       }
       try {
-        if (!this.connectAddr) {
-          this.showConnect();
-          return;
-        }
         await this.getWalletBalance();
         if (!this.walletSigned) {
           await this.signWallet();

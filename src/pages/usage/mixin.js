@@ -69,6 +69,25 @@ export default {
     }
   },
   methods: {
+    walletChanged() {
+      if (!this.connectAddr) {
+        this.showConnect();
+        return true;
+      }
+      const isChanged =
+        this.connectAddr != (this.userInfo.wallet || {}).address;
+      if (isChanged) {
+        const msg =
+          "It is detected that the wallet account has been changed, whether to switch the account?";
+        this.$confirm(msg, "Wallet Changed", {
+          confirmText: "Switch Account",
+        }).then(() => {
+          localStorage.clear();
+          location.href = "index.html";
+        });
+      }
+      return isChanged;
+    },
     onErr(err, retry) {
       if (!err) return console.log("---- err ");
       let msg = err.message;
