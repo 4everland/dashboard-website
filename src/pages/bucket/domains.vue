@@ -25,7 +25,7 @@
         <span class="ml-2">Delete</span>
       </v-btn>
     </div>
-    <div class="mt-4">
+    <div class="mt-4 main-wrap">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -44,6 +44,7 @@
           <v-btn
             :to="getPath(item)"
             :color="item.valid ? 'success' : 'error'"
+            class="e-btn-text"
             rounded
             text
             x-small

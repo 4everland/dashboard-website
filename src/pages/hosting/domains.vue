@@ -20,47 +20,50 @@
       </v-btn>
     </div>
 
-    <v-data-table
-      v-model="selected"
-      :loading="loading"
-      :show-select="list.length > 0"
-      item-key="domainId"
-      :headers="headers"
-      :items="list"
-      no-data-text=""
-      loading-text=""
-      hide-default-footer
-      :checkbox-color="$color1"
-      @click:row="onRow"
-    >
-      <template v-slot:item.domain="{ item }">
-        <v-btn
-          text
-          x-small
-          rounded
-          :color="item.valid ? 'success' : 'error'"
-          :to="getPath(item)"
-        >
-          <b>{{ item.domain }}</b>
-        </v-btn>
-      </template>
-    </v-data-table>
+    <div class="main-wrap">
+      <v-data-table
+        v-model="selected"
+        :loading="loading"
+        :show-select="list.length > 0"
+        item-key="domainId"
+        :headers="headers"
+        :items="list"
+        no-data-text=""
+        loading-text=""
+        hide-default-footer
+        :checkbox-color="$color1"
+        @click:row="onRow"
+      >
+        <template v-slot:item.domain="{ item }">
+          <v-btn
+            text
+            x-small
+            rounded
+            class="e-btn-text"
+            :color="item.valid ? 'success' : 'error'"
+            :to="getPath(item)"
+          >
+            <b>{{ item.domain }}</b>
+          </v-btn>
+        </template>
+      </v-data-table>
 
-    <div class="mt-8" v-if="!list.length">
-      <e-empty :loading="loading">
-        {{ loading ? "Loading domains..." : "No domains" }}
-      </e-empty>
-    </div>
+      <div class="mt-8" v-if="!list.length">
+        <e-empty :loading="loading">
+          {{ loading ? "Loading domains..." : "No domains" }}
+        </e-empty>
+      </div>
 
-    <div class="mt-6" v-if="pageLen > 1">
-      <v-pagination
-        @input="onPage"
-        v-model="page"
-        :length="pageLen"
-        prev-icon="mdi-menu-left"
-        next-icon="mdi-menu-right"
-        :total-visible="7"
-      ></v-pagination>
+      <div class="mt-6" v-if="pageLen > 1">
+        <v-pagination
+          @input="onPage"
+          v-model="page"
+          :length="pageLen"
+          prev-icon="mdi-menu-left"
+          next-icon="mdi-menu-right"
+          :total-visible="7"
+        ></v-pagination>
+      </div>
     </div>
 
     <v-dialog v-model="showPop" max-width="600">

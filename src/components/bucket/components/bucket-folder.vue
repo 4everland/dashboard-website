@@ -451,8 +451,6 @@ export default {
 .v-data-table__mobile-row svg {
   width: 150px;
 }
-</style>
-<style lang="scss" scoped>
 .e-btn-text {
   padding: 0 !important;
   font-weight: normal !important;
@@ -464,6 +462,8 @@ export default {
 .e-btn-text::before {
   background: transparent !important;
 }
+</style>
+<style lang="scss" scoped>
 .item-hash {
   transition: all 0.1s ease-in;
 }
