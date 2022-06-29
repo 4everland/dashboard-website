@@ -70,7 +70,6 @@
           </div>
           <input
             v-model="formNum"
-            @blur="onNumBlur"
             type="tel"
             class="input-1 flex- shrink-1 fz-18 pa-2 pl-4"
             :placeholder="isRecharge ? 'minimum 10' : ''"
@@ -85,7 +84,7 @@
           <span
             class="red-1"
             v-if="
-              (isRecharge && walletBalance < 100) || (!isRecharge && !balance)
+              (isRecharge && walletBalance < 10) || (!isRecharge && !balance)
             "
             >（Insufficient balance）</span
           >
@@ -120,6 +119,7 @@
 
 <script>
 import mixin from "../../pages/usage/mixin";
+const tip1 = "Insufficient balance";
 
 export default {
   mixins: [mixin],
@@ -143,21 +143,20 @@ export default {
       return this.balance;
     },
   },
+  watch: {
+    formNum(val) {
+      val = val * 1;
+      if (isNaN(val)) return (this.formNum = "");
+      if (!val) return;
+      let num = Math.min(this.maxNum, Math.max(0, val));
+      num = this.$utils.cutFixed(num, 4);
+      if (num != val) this.formNum = num;
+    },
+  },
   mounted() {
     this.getBalance();
   },
   methods: {
-    onNumBlur() {
-      const val = this.formNum;
-      let num = Math.min(this.maxNum, Math.max(0, val));
-      if (!num) num = "0";
-      else num = this.$utils.cutFixed(num, 4);
-      if (val > 0 && !this.maxNum) {
-        num = "";
-        this.$toast("Insufficient balance");
-      }
-      if (num != val) this.formNum = num;
-    },
     async onRecharge() {
       let num = this.formNum;
       console.log("num", num);
@@ -182,13 +181,14 @@ export default {
     },
     async onWithdraw() {
       let num = this.formNum;
+      if (this.maxNum == 0) throw new Error(tip1);
       const { data } = await this.$http.post("$v3/bill/generate/order", {
         amount: num,
       });
       console.log(data);
       await this.getBalance();
       if (num > this.balance) {
-        throw new Error("Insufficient balance");
+        throw new Error(tip1);
       }
       const {
         billSign,
@@ -214,9 +214,6 @@ export default {
       console.log("receipt", receipt);
     },
     async onConfirm() {
-      if (!(this.formNum > 0)) {
-        return this.$alert("Insufficient balance");
-      }
       if (this.isRecharge) {
         if (this.formNum < 10)
           return this.$alert(
@@ -310,7 +307,7 @@ export default {
     onMax() {
       let num = this.maxNum;
       if (num == 0) {
-        return this.$toast("Insufficient balance");
+        return this.$toast(tip1);
       }
       this.formNum = num;
     },
