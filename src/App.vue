@@ -14,11 +14,13 @@
       <v-main>
         <e-nav></e-nav>
         <div class="pa-5">
-          <e-wrap :class="meta.wrapCls || (meta.isTab ? 'pa-0' : 'main-wrap')">
+          <e-wrap
+            :class="meta.wrapCls || (meta.isTab ? 'pa-0' : 'main-wrap mb-12')"
+          >
             <keep-alive>
-              <router-view></router-view>
+              <router-view name="cache"></router-view>
             </keep-alive>
-            <router-view name="noCache"></router-view>
+            <router-view></router-view>
           </e-wrap>
         </div>
       </v-main>
@@ -32,7 +34,7 @@
       class="pos-f z-10"
       href="https://discord.com/invite/Cun2VpsdjF"
       target="_blank"
-      style="right: 20px; bottom: 20px"
+      style="right: 20px; bottom: 8px"
     >
       <img src="img/svg/common/m-discord.svg" width="54" />
     </a>
@@ -55,6 +57,9 @@ export default {
 <style lang="scss">
 .main-wrap {
   min-height: 77vh;
+  &.auto {
+    min-height: auto;
+  }
   background: #fff;
   box-shadow: 0 0 6px rgb(205 205 205 / 50%);
   h3 {

@@ -100,7 +100,7 @@
           <v-btn
             class="ml-6"
             rounded
-            width="90"
+            min-width="90"
             v-bind="{
               color: 'primary',
               ...alertInfo.confirmTextAttrs,

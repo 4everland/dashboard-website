@@ -80,10 +80,11 @@ export default {
           items.push({
             text,
             to,
-            exact: i < arr.length - 1,
+            // exact: i < arr.length - 1,
+            exact: true,
+            disabled: i == arr.length - 1,
           });
         }
-        return items;
       } else if (group && title) {
         items.push({
           text: title,

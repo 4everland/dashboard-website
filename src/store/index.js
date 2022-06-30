@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import upload from "./upload";
-import { http, http2 } from "../api";
+import { http2 } from "../api";
 
 Vue.use(Vuex);
 
@@ -36,6 +36,7 @@ const store = new Vuex.Store({
     buildInfo: {},
     projectInfo: {},
     worldMapJson: null,
+    payBy: localStorage.payBy || "Polygon",
   },
   mutations: {
     [SET_DATA](state, data) {
@@ -70,25 +71,6 @@ const store = new Vuex.Store({
       const { data } = await http2.get("/project/" + id);
       commit("setProject", data);
       return data;
-    },
-    async getUsageInfo() {
-      const { data } = await http.get("/user/resource/usage");
-      const {
-        arweaveUsedStorage = 0,
-        arweaveSyncingStorage = 0,
-        arweaveTotalStorage = 0,
-      } = data;
-      let arUsed = (arweaveUsedStorage * 1 + arweaveSyncingStorage * 1) / 1024;
-      setState({
-        usageInfo: {
-          ipfsTotal: data.totalStorage * 1024,
-          ipfsUsed: data.usedStorage * 1024,
-          arTotal: parseInt(arweaveTotalStorage / 1024),
-          arUsed: arUsed.toFixed(2),
-          arSyncing: (arweaveSyncingStorage / 1024).toFixed(2),
-          arSynced: (arweaveUsedStorage / 1024).toFixed(2),
-        },
-      });
     },
   },
   modules: {

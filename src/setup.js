@@ -9,6 +9,7 @@ import frameworks from "./plugins/config/frameworks";
 Vue.use(VueClipboards);
 
 Vue.prototype.$color1 = "#34A9FF";
+Vue.prototype.$color2 = "#ff6960";
 
 Vue.prototype.$onLoginData = (data) => {
   console.log(data);
@@ -82,22 +83,26 @@ Vue.prototype.$utils = {
     return str.substring(0, len);
   },
   getFileSize(byte, isObj = false) {
+    if (!byte && byte !== 0 && !isObj) {
+      return byte;
+    }
     const mb = Math.pow(1024, 2);
     const gb = Math.pow(1024, 3);
     let num = byte;
     let unit = "B";
-    if (byte > gb) {
+    if (byte >= gb) {
       num = (byte / gb).toFixed(2);
       unit = "GB";
-    } else if (byte > mb) {
+    } else if (byte >= mb) {
       num = (byte / mb).toFixed(2);
       unit = "MB";
-    } else if (byte > 1024 || (byte < 0.01 && isObj)) {
+    } else if (byte >= 1024 || (byte < 0.01 && isObj)) {
       num = (byte / 1024).toFixed(2);
       unit = "KB";
     } else if (byte > 0) {
       num = parseInt(byte);
     }
+    if (num) num = (num + "").replace(".00", "");
     if (isObj)
       return {
         num,
@@ -116,5 +121,39 @@ Vue.prototype.$utils = {
   getCidLink(cid) {
     if (!cid) return "";
     return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
+  },
+  cutFixed(num, keep = 2) {
+    const str = num + "";
+    let i = str.indexOf(".");
+    if (i == -1) return num;
+    return str.substring(0, i + keep + 1) * 1;
+  },
+  getPurchase(type, amount) {
+    const nameMap = {
+      BUILD_TIME: "Build Minutes",
+      TRAFFIC: "Bandwidth",
+      AR_STORAGE: "Storage AR",
+      IPFS_STORAGE: "Storage IPFS",
+    };
+    const it = {
+      type,
+      name: nameMap[type] || "Unknown",
+      amount,
+    };
+    if (/build/i.test(it.type)) {
+      it.amount = parseInt(it.amount / 60);
+      it.unit = "Min";
+    } else if (/ipfs/i.test(it.type) && it.amount == "0") {
+      it.amount = "Extend Duration";
+    } else {
+      const obj = this.getFileSize(it.amount, true);
+      it.amount = obj.num;
+      it.unit = obj.unit;
+    }
+    return it;
+  },
+  getCost(usdt) {
+    if (usdt < 0.0001) return "<0.0001";
+    return this.cutFixed(usdt, usdt < 0.01 ? 4 : 2);
   },
 };

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="28px" viewBox="0 0 16 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ICON_ETH2</title>
+    <g id="Usage--" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="net" transform="translate(-1025.000000, -131.000000)" fill-rule="nonzero">
+            <g id="g-7" transform="translate(1004.000000, 68.000000)">
+                <g id="ICON_ETH2" transform="translate(21.000000, 63.000000)">
+                    <polygon id="path" fill="#8891AE" points="8 0 8 11.429893 0 14"></polygon>
+                    <polygon id="path" fill="#5F658C" points="8 0 8 11.429893 16 14"></polygon>
+                    <polygon id="path" fill="#868BB1" points="8 28 8 19.7330097 0 15"></polygon>
+                    <polygon id="path" fill="#5E648D" points="8 28 8 19.7330097 16 15"></polygon>
+                    <polygon id="path" fill="#61668D" points="0 13.8892308 8 10 8 18"></polygon>
+                    <polygon id="path" fill="#404871" points="16 13.8892308 8 10 8 18"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

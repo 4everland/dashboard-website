@@ -87,6 +87,10 @@ body {
 .bg-1 {
   background: $color1;
 }
+.input-1 {
+  outline: none;
+  border: none;
+}
 
 .v-main {
   background: #F9FBFC;
@@ -147,6 +151,9 @@ body {
 
 .fl-r { float: right;}
 
+.bd-1n {
+  border: 1px solid #0000;
+}
 $bdcolor: #E6E8EB;
 .bd-1 {
   border: 1px solid $bdcolor;
