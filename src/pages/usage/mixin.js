@@ -69,32 +69,37 @@ export default {
     }
   },
   methods: {
-    walletChanged() {
+    walletChanged(isInit) {
       if (!this.connectAddr) {
         this.showConnect();
         return true;
       }
-      const { address } = this.userInfo.wallet || {};
-      if (!address) {
-        if (this.userInfo.solana || this.userInfo.onFlow) {
-          this.$alert("Currently this feature only supports metamask wallet");
-        } else {
-          this.$confirm(
-            "This function requires a linked wallet",
-            "Wallet Binding",
-            {
-              // confirmText: 'Connnect',
-            }
-          ).then(() => {
-            this.$router.push("/settings?tab=account_binding");
-          });
+      const { address = "" } = this.userInfo.wallet || {};
+      if (!isInit) {
+        if (!address) {
+          if (this.userInfo.solana || this.userInfo.onFlow) {
+            this.$alert(
+              "Currently this feature only supports MetaMask wallet."
+            );
+          } else {
+            this.$confirm(
+              "This function requires MetaMask wallet binding.",
+              "Wallet Binding",
+              {
+                // confirmText: 'Connnect',
+              }
+            ).then(() => {
+              this.$router.push("/settings?tab=account_binding");
+            });
+          }
+          return true;
         }
-        return true;
       }
-      const isChanged = this.connectAddr.toLowerCase() != address.toLowerCase();
+      const isChanged =
+        address && this.connectAddr.toLowerCase() != address.toLowerCase();
       if (isChanged) {
         const msg =
-          "It is detected that the wallet account has been changed, whether to switch the account?";
+          "The wallet account has been changed, switch 4EVERLAND account now?";
         this.$confirm(msg, "Wallet Changed", {
           confirmText: "Switch Account",
         }).then(() => {
@@ -266,7 +271,7 @@ export default {
       localStorage.lastHash = JSON.stringify(obj);
     },
     async onConnect() {
-      this.walletChanged();
+      this.walletChanged(true);
       try {
         if (this.chainId != this.payChainId) {
           let dev = "";

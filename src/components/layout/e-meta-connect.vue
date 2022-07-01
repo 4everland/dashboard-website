@@ -147,6 +147,7 @@ export default {
             payBy,
           });
         } catch (error) {
+          this.$alert(error.message);
           err = error;
         }
       }
