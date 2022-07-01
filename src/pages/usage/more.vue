@@ -198,14 +198,14 @@ export default {
           unitPrice: info.trafficUnitPrice || 0,
         },
         {
-          label: "Storage IPFS",
+          label: "IPFS",
           id: ResourceType.IPFSStorage,
           key: "ipfs",
           unit: "GB / Mon",
           unitPrice: info.ipfsStorageUnitPrice || 0,
         },
         {
-          label: "Storage AR",
+          label: "Arweave",
           id: ResourceType.ARStorage,
           key: "ar",
           unit: "MB",
