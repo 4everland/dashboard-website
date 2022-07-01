@@ -258,7 +258,7 @@ export default {
         }
       } catch (error) {
         if (error.code === 4902) {
-          this.addChain(chainId);
+          this.switchNet(id);
         }
       }
     },
