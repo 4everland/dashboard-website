@@ -16,9 +16,7 @@ export default [
   },
   {
     path: "/arweave",
-    // component: ARHistory,
     component: () => import("./ar-history"),
-
     meta: {
       title: "AR History",
       isTab: 1,
