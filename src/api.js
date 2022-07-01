@@ -28,9 +28,11 @@ const loginUrl = inDev
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   let url = loginUrl;
   if (!/(dashboard|hb)\./i.test(location.host)) {
-    url =
-      "https://hb.4everland.app/#/?redirectTo=" +
-      encodeURIComponent(location.origin);
+    url = inDev
+      ? "https://hb.4everland.app"
+      : "https://dashboard.4everland.org" +
+        "/#/?redirectTo=" +
+        encodeURIComponent(location.origin);
   } else if (localStorage.inviteCode) {
     url += "/#/?inviteCode=" + localStorage.inviteCode;
   }

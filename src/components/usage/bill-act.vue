@@ -280,8 +280,8 @@ export default {
         if (this.maxNum == 0) return this.$alert(tip1);
       }
       if (!this.isPolygon) {
-        let html = `Currently, deposits and withdrawals are only supported on the polygon network. `;
-        html += "<p>Would you like to switch to the polygon network?</p>";
+        let html = `Currently, deposits and withdrawals are only supported on the Polygon network. `;
+        html += "<p>Would you like to switch to the Polygon network?</p>";
         try {
           await this.$confirm(html, this.title, {
             confirmText: "Switch Network",
