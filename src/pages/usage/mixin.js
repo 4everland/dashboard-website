@@ -209,7 +209,10 @@ export default {
               {
                 chainId: id,
                 chainName: "Polygon Mainnet",
-                rpcUrls: ["https://polygon-rpc.com"],
+                rpcUrls: [
+                  "https://polygon-mainnet.infura.io/v3/939c76fc756341f389051729d8a2f13a",
+                  // "https://polygon-rpc.com",
+                ],
                 nativeCurrency: {
                   name: "Polygon Coin",
                   symbol: "MATIC",
