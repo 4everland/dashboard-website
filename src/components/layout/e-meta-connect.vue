@@ -132,6 +132,7 @@ export default {
       let err = null;
       let times = 0;
       let chainId = null;
+      this.$loading("Connect Wallet...");
       while (times < 3 && !chainId) {
         try {
           console.log("get wallet net...", times);
@@ -146,12 +147,13 @@ export default {
             chainId,
             payBy,
           });
+          this.$loading.close();
         } catch (error) {
-          this.$alert(error.message);
           err = error;
         }
       }
       if (!chainId && err) {
+        this.$alert(error.message);
         console.log(err.message, "check net err");
         throw err;
       }
