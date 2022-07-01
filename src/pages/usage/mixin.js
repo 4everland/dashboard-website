@@ -203,36 +203,37 @@ export default {
     },
     async addChain(chainId, id) {
       if (id == 1 || this.$inDev) return;
-      const params = this.isPolygon
-        ? [
-            {
-              chainId,
-              chainName: "Polygon Mainnet",
-              rpcUrls: [
-                "https://polygon-mainnet.infura.io/v3/939c76fc756341f389051729d8a2f13a",
-                // "https://polygon-rpc.com",
-              ],
-              nativeCurrency: {
-                name: "Polygon Coin",
-                symbol: "MATIC",
-                decimals: 18,
+      const params =
+        id == 137
+          ? [
+              {
+                chainId,
+                chainName: "Polygon Mainnet",
+                rpcUrls: [
+                  "https://polygon-mainnet.infura.io/v3/939c76fc756341f389051729d8a2f13a",
+                  // "https://polygon-rpc.com",
+                ],
+                nativeCurrency: {
+                  name: "Polygon Coin",
+                  symbol: "MATIC",
+                  decimals: 18,
+                },
+                blockExplorerUrls: ["https://polygonscan.com"],
               },
-              blockExplorerUrls: ["https://polygonscan.com"],
-            },
-          ]
-        : [
-            {
-              chainId,
-              chainName: "BSC Mainnet",
-              rpcUrls: ["https://bsc-dataseed1.binance.org"],
-              nativeCurrency: {
-                name: "Binance Coin",
-                symbol: "BNB",
-                decimals: 18,
+            ]
+          : [
+              {
+                chainId,
+                chainName: "BSC Mainnet",
+                rpcUrls: ["https://bsc-dataseed1.binance.org"],
+                nativeCurrency: {
+                  name: "Binance Coin",
+                  symbol: "BNB",
+                  decimals: 18,
+                },
+                blockExplorerUrls: ["https://bscscan.com"],
               },
-              blockExplorerUrls: ["https://bscscan.com"],
-            },
-          ];
+            ];
       await window.ethereum.request(
         {
           method: "wallet_addEthereumChain",
