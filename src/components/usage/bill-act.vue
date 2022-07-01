@@ -247,7 +247,7 @@ export default {
       this.posting = false;
     },
     async signWallet() {
-      this.$loading("Check Wallet...");
+      this.$loading("Bind Wallet...");
       const walletExists =
         await this.curContract.ProviderController.walletExists(
           this.providerAddr,
