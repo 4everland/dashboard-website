@@ -1,146 +1,17 @@
-<style scoped lang="scss">
-.mask {
-  z-index: 999;
-  position: fixed;
-  opacity: 0.4;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  padding: 20px;
-  border: 3px dashed black;
-  border-radius: 20px;
-  background: #ccc;
-  pointer-events: none;
-}
-.e-upload {
-  padding: 20px;
-  background: #f8fafb;
-  border-radius: 10px;
-  border: 1px solid #d0dae9;
-  .add-img {
-    position: relative;
-    width: 100%;
-    padding: 30px 10px;
-    border: 3px dashed #ddd;
-    .description {
-      margin: 0 auto;
-      color: #495667;
-    }
-  }
-}
-.files-to-upload {
-  width: 100%;
-  padding: 20px;
-  margin-bottom: 47px;
-  box-sizing: border-box;
-  background: #f8fafb;
-  border-radius: 10px;
-  border: 1px solid #d0dae9;
-
-  .upload-header {
-    .drag-area {
-      flex: 1;
-    }
-    .upload-rules {
-      margin-left: 17px;
-      width: 400px;
-      h3 {
-        margin: 20px 0;
-      }
-      > p {
-        margin-top: 8px;
-        font-size: 15px;
-        font-weight: 500;
-        color: #6a778b;
-        line-height: 22px;
-      }
-    }
-  }
-
-  .upload-tips {
-    padding: 10px 10px;
-    margin: 15px 0;
-    font-size: 14px;
-    font-weight: 400;
-    color: #ff6d24;
-    background: #ffeee4;
-    border-radius: 6px;
-  }
-}
-</style>
-
 <template>
   <div>
-    <div class="e-upload" ref="eUpload">
-      <!-- <slot></slot> -->
-
-      <div class="upload-header al-c justify-space-between flex-wrap">
-        <div class="add-img pos-r bdrs-10 drag-area">
-          <div class="ta-c">
-            <img src="../../../../public/img/icon/bucket_upload.svg" alt="" />
-            <p class="description fw-b fz-20">
-              Drag and drop items here to select.
-            </p>
-          </div>
-          <!-- webkitdirectory -->
-          <input
-            ref="file"
-            style="visibility: hidden"
-            :webkitdirectory="isUploadDir ? true : false"
-            multiple
-            type="file"
-            :accept="accept"
-            class="pos-mask op-0 z--1"
-            @input="onInput"
-          />
-        </div>
-
-        <div class="upload-rules">
-          <h3>File naming conventions</h3>
-          <p>
-            1. The file name must be UTF-8-encoded and cannot contain emojis.
-          </p>
-          <p>2. The file name is case-sensitive.</p>
-          <p>3. The file name must range from 1 to 1,023 bytes in length.</p>
-          <p>
-            4. The file name cannot start with a forward slash (/) or two
-            consecutive backslashes (\).
-          </p>
-        </div>
-      </div>
-
-      <div class="upload-tips d-flex align-center">
-        <v-icon slot="ref" size="22" color="#ff6d24" class="pa-1 d-ib ml-2"
-          >mdi-alert-circle-outline</v-icon
-        >
-        <span class="ml-2">
-          Please note: If the uploaded file name already exists, the original
-          file will be overwritten.
-        </span>
-      </div>
-      <div
-        class="
-          upload-opreation
-          d-flex
-          flex-wrap flex-column flex-sm-row
-          justify-center justify-sm-start
-        "
-      >
-        <v-btn
-          rounded
-          color="primary"
-          class="mr-sm-7 my-2"
-          @click="onClick(false)"
-        >
-          <span>Select Files</span>
-        </v-btn>
-        <v-btn rounded color="primary" class="my-2" @click="onClick(true)">
-          <span> Select Folders</span>
-        </v-btn>
-      </div>
+    <div ref="eUpload">
+      <input
+        ref="file"
+        style="visibility: hidden"
+        :webkitdirectory="isUploadDir"
+        multiple
+        type="file"
+        :accept="accept"
+        class="pos-mask op-0 z--1"
+        @input="onInput"
+      />
     </div>
-    <div class="mask" v-show="isDraging" ref="dragArea"></div>
   </div>
 </template>
 
@@ -162,7 +33,6 @@ export default {
     return {
       files: [],
       isUploadDir: false,
-      isDraging: false,
     };
   },
   watch: {
@@ -171,43 +41,6 @@ export default {
         this.files = [];
       }
     },
-    files() {
-      this.$nextTick(() => {
-        window.scrollTo(0, 10000);
-      });
-    },
-  },
-  mounted() {
-    // document.ondragenter = () => {
-    //   console.log("enter");
-    //   this.isDraging = true;
-    // };
-    // document.ondragleave = () => {
-    //   console.log("leave");
-    //   this.isDraging = false;
-    // };
-
-    document.ondragover = (ev) => {
-      let index = ev.path.findIndex((it) => it == this.$refs.eUpload);
-      if (index != -1) {
-        this.isDraging = true;
-      } else {
-        this.isDraging = false;
-      }
-      ev.preventDefault();
-    };
-    document.ondrop = async (ev) => {
-      this.isDraging = false;
-      ev.preventDefault();
-      // this.getFiles(ev.dataTransfer);
-      const files = await this.scanFiles(ev.dataTransfer);
-      // console.log(files, "fles");
-      this.getFiles({ files });
-    };
-    // document.onpaste = async (ev) => {
-    //   const files = await this.scanFiles(ev.clipboardData);
-    //   this.getFiles({ files });
-    // };
   },
   methods: {
     onInput(e) {

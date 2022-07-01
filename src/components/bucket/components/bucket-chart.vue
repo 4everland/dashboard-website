@@ -30,6 +30,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    dataType: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -52,20 +56,22 @@ export default {
                   : "0" + date.getMinutes())
               );
             },
+            interval: 0,
           },
         },
         yAxis: {
           type: "value",
           axisLabel: {
             formatter: (value) => {
+              if (this.dataType) return value;
               const gb = Math.pow(1024, 3);
               const mb = Math.pow(1024, 2);
               const kb = 1024;
-              if (value > gb * 10) {
+              if (value > gb) {
                 return (value / gb).toFixed(2) + "GB";
-              } else if (value > mb * 10) {
+              } else if (value > mb) {
                 return (value / mb).toFixed(2) + "MB";
-              } else if (value > kb * 10) {
+              } else if (value > kb) {
                 return (value / kb).toFixed(2) + "KB";
               } else {
                 return value + "B";
@@ -88,7 +94,9 @@ export default {
                     this.$utils.getFileSize(params[0].value, true).num
                   }</span>
                   <span class="ml-1">${
-                    this.$utils.getFileSize(params[0].value, true).unit
+                    this.dataType
+                      ? ""
+                      : this.$utils.getFileSize(params[0].value, true).unit
                   }</span>
                 </div>
             </div>`;

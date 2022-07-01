@@ -1,5 +1,5 @@
-import Changelog from "./changelog";
-import FirstLanding from "./first-landing";
+// import Changelog from "./changelog";
+// import FirstLanding from "./first-landing";
 
 export default [
   {

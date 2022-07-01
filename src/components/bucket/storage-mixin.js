@@ -14,7 +14,6 @@ export default {
       deleting: false,
       searchKey: "",
       domainsMap: {},
-      inUpload: false,
       hasMore: false,
       curPage: 0,
       continuationTokenArr: [""],
@@ -42,7 +41,7 @@ export default {
       return this.inStorage && !/\/$/.test(this.path);
     },
     inFolder() {
-      return this.inStorage && !this.inBucket && !this.inFile && !this.inUpload;
+      return this.inStorage && !this.inBucket && !this.inFile;
     },
     fileName() {
       const arr = this.path.split("/");
@@ -607,10 +606,10 @@ export default {
           Quiet: false,
         },
       };
-      console.log(params);
+      // console.log(params);
       return new Promise((resolve, reject) => {
         this.s3.deleteObjects(params, (err, data) => {
-          console.log(err, data);
+          // console.log(err, data);
           if (err) reject(err);
           else resolve(data);
         });
@@ -657,7 +656,6 @@ export default {
                 return { Key: it.Key };
               })
             );
-            // this.getList();
           } else if (hasFile.length && !hasFolder.length) {
             // only file
             if (hasFile.filter((it) => it.arStatus != "desynced").length) {

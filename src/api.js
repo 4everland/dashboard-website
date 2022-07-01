@@ -17,7 +17,7 @@ const authApi = inDev
   : "https://oauth.4everland.org";
 const v3Api = inDev
   ? "https://settlement.foreverland.xyz"
-  : "https://settlement.4everland.org";
+  : "https://pay.4everland.org";
 
 Vue.prototype.$endpoint = endpoint;
 
@@ -28,9 +28,11 @@ const loginUrl = inDev
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   let url = loginUrl;
   if (!/(dashboard|hb)\./i.test(location.host)) {
-    url +=
-      "https://hb.4everland.app/#/?redirectTo=" +
-      encodeURIComponent(location.origin);
+    url = inDev
+      ? "https://hb.4everland.app"
+      : "https://dashboard.4everland.org" +
+        "/#/?redirectTo=" +
+        encodeURIComponent(location.origin);
   } else if (localStorage.inviteCode) {
     url += "/#/?inviteCode=" + localStorage.inviteCode;
   }
@@ -49,6 +51,12 @@ Vue.prototype.$getImgSrc = function (src) {
   if (!src) src = "img/bg/empty/project.png";
   else if (!/^http/.test(src)) src = hostingUrl + src;
   return src;
+};
+Vue.prototype.$getPolygonUrl = (hash) => {
+  const pre = inDev
+    ? "https://mumbai.polygonscan.com/tx/"
+    : "https://polygonscan.com/tx/";
+  return pre + hash;
 };
 
 const RefreshPath = "/refresh";

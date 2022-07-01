@@ -6,9 +6,7 @@ import Settings from "./settings";
 export default [
   {
     path: "/settings",
-    components: {
-      noCache: Settings,
-    },
+    component: Settings,
     meta: {
       title: "Settings",
       isTab: 1,

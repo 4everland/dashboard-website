@@ -68,8 +68,6 @@ new Vue({
     noticeMsg({ name }) {
       if (name == "updateUser") {
         this.getUesrInfo();
-      } else if (name == "updateUsage") {
-        this.$store.dispatch("getUsageInfo");
       }
     },
   },

@@ -51,6 +51,7 @@ export default [
 
     meta: {
       title: "{name}",
+      isTab: 1,
       links: [
         {
           text: "Domains",

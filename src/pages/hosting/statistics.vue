@@ -12,12 +12,12 @@
     >
       <template v-slot:item.projectName="{ item }">
         <v-btn
-          class="e-btn-text"
           text
           x-small
           rounded
           color="primary"
           :to="getPath(item)"
+          class="e-btn-text"
         >
           <b>{{ item.projectName }}</b>
         </v-btn>
@@ -30,16 +30,7 @@
       </e-empty>
     </div>
 
-    <div class="mt-6" v-if="pageLen > 1">
-      <v-pagination
-        @input="onPage"
-        v-model="page"
-        :length="pageLen"
-        prev-icon="mdi-menu-left"
-        next-icon="mdi-menu-right"
-        :total-visible="7"
-      ></v-pagination>
-    </div>
+    <e-pagi class="pa-5" @input="onPage" v-model="page" :length="pageLen" />
   </div>
 </template>
 

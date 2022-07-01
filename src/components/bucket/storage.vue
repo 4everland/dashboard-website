@@ -9,7 +9,7 @@
 
   <div v-else>
     <!-- Operation tab -->
-    <div class="d-flex nowrap ov-a btn-wrap" v-if="!inUpload">
+    <div class="d-flex nowrap ov-a btn-wrap">
       <div v-show="inBucket">
         <v-btn color="primary" @click="addBucket">
           <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
@@ -281,7 +281,7 @@
       </v-card>
     </div>
     <!-- Bucket List -->
-    <div class="main-wrap" v-if="!inFile && !inUpload && !inFolder">
+    <div class="main-wrap" v-if="!inFile && !inFolder">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -302,7 +302,6 @@
             :color="inBucket ? 'primary' : '#000'"
             rounded
             text
-            class="e-btn-text"
             x-small
             @click.stop="onRow(item)"
           >
@@ -440,10 +439,10 @@ export default {
       if (this.inBucket)
         return [
           { text: "Bucket Name", value: "name" },
-          { text: "Capacity", value: "usedStorage" },
-          { text: "AR Capacity", value: "arUsedStorage" },
-          { text: "Past 30 days of traffic", value: "traffic" },
-          { text: "Past 30 days of visits", value: "visitChartData" },
+          { text: "Storage Usage", value: "usedStorage" },
+          { text: "AR Storage Usage", value: "arUsedStorage" },
+          { text: "Traffic within 30 Days", value: "traffic" },
+          { text: "Visits within 30 Days", value: "visitChartData" },
           { text: "Sync to AR", value: "arAct" },
         ];
       return [

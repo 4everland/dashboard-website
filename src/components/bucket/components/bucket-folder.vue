@@ -1,22 +1,14 @@
 <template>
   <div class="bucket-item-container">
-    <!-- Task List -->
-    <div @click.stop="$refs.navDrawers.drawer = true" class="task-list">
-      <span class="task-count" v-show="uploadingTaskLength != 0">{{
-        uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
-      }}</span>
-      <img src="img/svg/common/task-list.svg" alt="" width="54" />
-    </div>
     <div class="file-container" v-if="inFolder">
       <!-- Operation Tab -->
       <div class="operation-tab d-flex">
         <!-- Upload Btn -->
-        <v-btn color="primary" rounded @click="handleClickUpload">
-          <img src="img/svg/upload.svg" width="16" />
-          <span class="ml-2">Upload</span>
-        </v-btn>
-
-        <!-- Create New Folder  -->
+        <bucket-upload
+          ref="bucketUpload"
+          :info="pathInfo"
+          :baseUrl="bucketInfo.originList[0]"
+        ></bucket-upload>
         <v-btn
           class="ml-5"
           rounded
@@ -33,54 +25,59 @@
           <img src="img/svg/parts_icon.svg" width="12" />
           <span class="ml-2">Fragments</span>
         </v-btn>
-        <e-menu offset-y open-on-hover :disabled="!selected.length">
-          <v-btn
-            slot="ref"
-            class="ml-5"
-            rounded
-            outlined
+        <div class="ml-5">
+          <e-menu
+            offset-y
+            open-on-hover
+            nudge-bottom="11"
             :disabled="!selected.length"
           >
-            <!-- <v-icon>mdi-dots-vertical</v-icon> -->
-            <span>Actions</span>
-            <v-icon size="18">mdi-chevron-down</v-icon>
-          </v-btn>
-          <v-list dense>
-            <template v-if="selected.length == 1">
-              <!-- <v-list-item :to="getPath(selected[0])"> Open </v-list-item> -->
-              <template v-if="selected[0].isFile">
-                <v-list-item :href="getViewUrl(selected[0])" target="_blank">
-                  <img src="img/icon/ic-download.svg" width="15" class="mr-2" />
-                  <span class="gray-7">Download</span>
-                </v-list-item>
-                <v-list-item
-                  link
-                  v-clipboard="getViewUrl(selected[0])"
-                  @success="onCopied"
-                >
-                  <img src="img/icon/ic-copy.svg" width="14" class="mr-2" />
-                  <span class="gray-7">Copy Path</span>
-                </v-list-item>
-                <v-list-item link @click="onRename(selected[0].name)">
-                  <img src="img/icon/ic-rename.svg" width="14" class="mr-2" />
-                  <span class="gray-7">Rename</span>
-                </v-list-item>
-                <v-list-item
-                  link
-                  @click="onSyncAR(selected[0].name)"
-                  v-if="!bucketInfo.isAr && selectArStatus != 'synced'"
-                >
-                  <img src="img/icon/ic-ar.svg" width="14" class="mr-2" />
-                  <span class="gray-7">Sync to AR</span>
-                </v-list-item>
+            <v-btn slot="ref" rounded outlined :disabled="!selected.length">
+              <!-- <v-icon>mdi-dots-vertical</v-icon> -->
+              <span>Actions</span>
+              <v-icon size="18">mdi-chevron-down</v-icon>
+            </v-btn>
+            <v-list dense>
+              <template v-if="selected.length == 1">
+                <!-- <v-list-item :to="getPath(selected[0])"> Open </v-list-item> -->
+                <template v-if="selected[0].isFile">
+                  <v-list-item :href="getViewUrl(selected[0])" target="_blank">
+                    <img
+                      src="img/icon/ic-download.svg"
+                      width="15"
+                      class="mr-2"
+                    />
+                    <span class="gray-7">Download</span>
+                  </v-list-item>
+                  <v-list-item
+                    link
+                    v-clipboard="getViewUrl(selected[0])"
+                    @success="onCopied"
+                  >
+                    <img src="img/icon/ic-copy.svg" width="14" class="mr-2" />
+                    <span class="gray-7">Copy Path</span>
+                  </v-list-item>
+                  <v-list-item link @click="onRename(selected[0].name)">
+                    <img src="img/icon/ic-rename.svg" width="14" class="mr-2" />
+                    <span class="gray-7">Rename</span>
+                  </v-list-item>
+                  <v-list-item
+                    link
+                    @click="onSyncAR(selected[0].name)"
+                    v-if="!bucketInfo.isAr && selectArStatus != 'synced'"
+                  >
+                    <img src="img/icon/ic-ar.svg" width="14" class="mr-2" />
+                    <span class="gray-7">Sync to AR</span>
+                  </v-list-item>
+                </template>
               </template>
-            </template>
-            <v-list-item link @click="onDelete()">
-              <img src="img/icon/ic-delete.svg" width="14" class="mr-2" />
-              <span class="red-2">Delete</span>
-            </v-list-item>
-          </v-list>
-        </e-menu>
+              <v-list-item link @click="onDelete()">
+                <img src="img/icon/ic-delete.svg" width="14" class="mr-2" />
+                <span class="red-2">Delete</span>
+              </v-list-item>
+            </v-list>
+          </e-menu>
+        </div>
         <!-- Selected Files -->
         <div
           class="selected-content d-flex al-c ml-auto"
@@ -253,36 +250,18 @@
         >
       </div>
     </div>
-    <!-- Upload Component -->
-    <div v-if="inUpload">
-      <bucket-upload
-        ref="bucketUpload"
-        :info="pathInfo"
-        :baseUrl="bucketInfo.originList[0]"
-        @handleBackFolder="handleBackFolder"
-      ></bucket-upload>
-    </div>
-    <!-- Upload/Delete Folders Component -->
-    <navigation-drawers
-      ref="navDrawers"
-      :deleteFolder.sync="deleteFolder"
-      :deleteFolderTasks="deleteFoldersTasks"
-      @uploadingLength="uploadingLength"
-      @handlePasueDeleteFolder="handlePasueDeleteFolder"
-      @handleStartDeleteFolder="handleStartDeleteFolder"
-      @handleRemoveDeleteFolder="handleRemoveDeleteFolder"
-      @handleDeleteFolderStartAll="handleDeleteFolderStartAll"
-      @handleDeleteFolderPauseAll="handleDeleteFolderPauseAll"
-      @handleDeleteFolderRemoveAll="handleDeleteFolderRemoveAll"
-    ></navigation-drawers>
   </div>
 </template>
 
 <script>
+import { bus } from "../../../main";
 import mixin from "../storage-mixin";
 import { DeleteTaskWrapper } from "../task.js";
 export default {
   mixins: [mixin],
+  props: {
+    active: Boolean,
+  },
   data() {
     return {
       searchKey: "",
@@ -300,8 +279,29 @@ export default {
       deleteFolder: false,
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
-      uploadingTaskLength: 0,
+      isUploadDir: false,
     };
+  },
+  async created() {
+    bus.$on("uploadingLength", (uploadingLength) => {
+      if (uploadingLength == 0) {
+        this.getList();
+      }
+    });
+    bus.$on("handleDeleteFolderRemoveAll", () => {
+      this.deleteFoldersTasks = [];
+      bus.$emit("deleteFolderTasks", this.deleteFoldersTasks);
+    });
+
+    bus.$on("handleRemoveDeleteFolder", (deleteFoldersTasks) => {
+      bus.$emit("deleteFolderTasks", deleteFoldersTasks);
+    });
+    bus.$on("getList", () => this.getList());
+    bus.$on("getOriginDeleteFolderTasks", (originDeleteFolderTasks) => {
+      this.deleteFoldersTasks = originDeleteFolderTasks;
+    });
+
+    bus.$emit("originDeleteFolderTasks");
   },
   computed: {
     selectArStatus() {
@@ -315,9 +315,6 @@ export default {
   methods: {
     onCopied() {
       this.$toast("Copied to clipboard !");
-    },
-    handleClickUpload() {
-      this.inUpload = true;
     },
     onRouteChange() {
       if (!this.inStorage || this.inFile) return;
@@ -370,6 +367,7 @@ export default {
       );
     },
     async startDeleteFolder(task) {
+      bus.$emit("deleteFolderTasks", this.deleteFoldersTasks);
       await task.startTasks();
       this.processDeleteFolderTask();
     },
@@ -394,56 +392,15 @@ export default {
         Math.random().toString().substr(3, length) + Date.now()
       ).toString(36);
     },
-    uploadingLength(value) {
-      this.uploadingTaskLength = value;
-    },
-    handlePasueDeleteFolder(id) {
-      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-      this.deleteFoldersTasks[index].stopTasks();
-    },
-    handleStartDeleteFolder(id) {
-      const index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      this.deleteFoldersTasks[index].retryTasks();
-      if (!arr.length) {
-        this.processDeleteFolderTask();
-      }
-    },
-    handleRemoveDeleteFolder(id) {
-      let index = this.deleteFoldersTasks.findIndex((it) => it.id == id);
-      this.deleteFoldersTasks.splice(index, 1);
-    },
-
-    handleDeleteFolderStartAll() {
-      let arr = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      this.deleteFoldersTasks.forEach((it) => {
-        if (it.status !== 2) return;
-        it.retryTasks();
-      });
-      if (!arr.length) {
-        this.processDeleteFolderTask();
-      }
-    },
-    handleDeleteFolderPauseAll() {
-      this.deleteFoldersTasks.forEach((item) => {
-        if (item.status == 3) return;
-        item.stopTasks();
-      });
-    },
-    handleDeleteFolderRemoveAll() {
-      this.deleteFoldersTasks = [];
-    },
-    handleBackFolder() {
-      this.inUpload = false;
-      this.getList();
-    },
-    isUploading(value) {
-      this.taskIsUploading = value;
-    },
   },
   watch: {
     path() {
       this.onRouteChange();
+    },
+    active(val) {
+      if (val) {
+        this.getList();
+      }
     },
   },
 };
@@ -456,8 +413,6 @@ export default {
 .v-data-table__mobile-row svg {
   width: 150px;
 }
-</style>
-<style lang="scss" scoped>
 .e-btn-text {
   padding: 0 !important;
   font-weight: normal !important;
@@ -469,6 +424,8 @@ export default {
 .e-btn-text::before {
   background: transparent !important;
 }
+</style>
+<style lang="scss" scoped>
 .item-hash {
   transition: all 0.1s ease-in;
 }
@@ -477,28 +434,7 @@ export default {
 }
 .bucket-item-container {
   background: #fff;
-  .task-list {
-    position: fixed;
-    z-index: 999;
-    bottom: 80px;
-    right: 20px;
-    color: #34a9ff;
-    font-size: 16px;
-    cursor: pointer;
-    .task-count {
-      position: absolute;
-      right: -2px;
-      top: -2px;
-      width: 30px;
-      height: 30px;
-      font-size: 20px;
-      text-align: center;
-      color: #fff;
-      background: #ff6960;
-      border-radius: 50%;
-      transform: scale(0.7);
-    }
-  }
+
   .file-container {
     position: relative;
     min-height: 1000px;

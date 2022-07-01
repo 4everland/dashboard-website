@@ -10,8 +10,8 @@
         >mdi-alert-circle-outline</v-icon
       >
       <span
-        >Refreshing or closing the browser will cancel ongoing tasks, clear
-        records, and display deleted tasks incorrectly.</span
+        >The data on this page is not updated in real time. These statistics are
+        for reference only.</span
       >
     </div>
     <!-- IPFS && AR chart -->
@@ -55,6 +55,7 @@
       ></bucket-chart>
       <bucket-chart
         name="Requests"
+        dataType
         :overDay="overDateOverDay"
         :xAxisData="requestData.xAxis"
         :yAxisData="requestData.yAxis"
@@ -97,12 +98,12 @@ export default {
   },
   methods: {
     handleChangeBucketDate(val) {
+      if (val[1] - val[0] > 86400000) {
+        this.bucketDateOverDay = true;
+      } else {
+        this.bucketDateOverDay = false;
+      }
       this.getChartData(val, "STORAGE_LINE").then((res) => {
-        if (val[1] - val[0] > 86400) {
-          this.bucketDateOverDay = true;
-        } else {
-          this.bucketDateOverDay = false;
-        }
         if (res.subsections.length) {
           this.ipfsData.xAxis = res.subsections;
           this.ipfsData.yAxis = res.collections[0].raws;
@@ -117,7 +118,7 @@ export default {
       });
     },
     handleChangeOtherDate(val) {
-      if (val[1] - val[0] > 86400) {
+      if (val[1] - val[0] > 86400000) {
         this.overDateOverDay = true;
       } else {
         this.overDateOverDay = false;
@@ -148,15 +149,15 @@ export default {
           url: "/bi/charts/line",
           methods: "get",
           params: {
-            startAt: timeArr[0] * 1000,
-            endAt: timeArr[1] * 1000,
+            startAt: timeArr[0],
+            endAt: timeArr[1],
             type,
             bucket: this.bucket,
           },
         });
         return data;
       } catch (e) {
-        console.log(e);
+        console.log(e, "err");
       }
     },
   },
@@ -180,18 +181,15 @@ export default {
         this.ipfsData.xAxis.length
       ) {
         this.$loading.close();
-        console.log("cjifa");
       }
     },
     "requestData.xAxis"() {
-      console.log(this.ipfsData.xAxis);
       if (
         this.trafficData.xAxis.length &&
         this.requestData.xAxis.length &&
         this.ipfsData.xAxis.length
       ) {
         this.$loading.close();
-        console.log("cjifa");
       }
     },
     "ipfsData.xAxis"() {
