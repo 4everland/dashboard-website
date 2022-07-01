@@ -296,7 +296,7 @@ export default {
       }
       try {
         await this.getWalletBalance();
-        if (!this.walletSigned) {
+        if (!this.walletSigned && !this.isRecharge) {
           await this.signWallet();
           this.walletSigned = true;
         }

@@ -55,6 +55,7 @@ export default {
       noticeMsg: (s) => s.noticeMsg,
       connectAddr: (s) => s.connectAddr,
       payBy: (s) => s.payBy,
+      chainId: (s) => s.chainId,
     }),
   },
   watch: {
@@ -128,17 +129,31 @@ export default {
       return "Polygon";
     },
     async checkNet() {
-      console.log("get wallet net...");
-      const netType = await window.web3.eth.net.getNetworkType();
-      const chainId = await window.web3.eth.net.getId();
-      const payBy = this.getPayBy(chainId);
-      localStorage.payBy = payBy;
-      console.log(netType, chainId, payBy);
-      this.$setState({
-        netType,
-        chainId,
-        payBy,
-      });
+      let err = null;
+      let times = 0;
+      let chainId = null;
+      while (times < 3 && !chainId) {
+        try {
+          console.log("get wallet net...", times);
+          times += 1;
+          const netType = await window.web3.eth.net.getNetworkType();
+          chainId = await window.web3.eth.net.getId();
+          const payBy = this.getPayBy(chainId);
+          localStorage.payBy = payBy;
+          console.log(netType, chainId, payBy);
+          this.$setState({
+            netType,
+            chainId,
+            payBy,
+          });
+        } catch (error) {
+          err = error;
+        }
+      }
+      if (!chainId && err) {
+        console.log(err.message, "check net err");
+        throw err;
+      }
     },
     async connectMetaMask() {
       if (window.ethereum) {
