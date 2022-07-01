@@ -201,62 +201,59 @@ export default {
       if (type == "BSC") return this.$inDev ? 97 : 56;
       return this.$inDev ? 5 : 1;
     },
-    async addChain(id) {
-      if (this.payBy == "Ethereum") return;
-      try {
-        const params = this.isPolygon
-          ? [
-              {
-                chainId: id,
-                chainName: "Polygon Mainnet",
-                rpcUrls: [
-                  "https://polygon-mainnet.infura.io/v3/939c76fc756341f389051729d8a2f13a",
-                  // "https://polygon-rpc.com",
-                ],
-                nativeCurrency: {
-                  name: "Polygon Coin",
-                  symbol: "MATIC",
-                  decimals: 18,
-                },
-                blockExplorerUrls: ["https://polygonscan.com"],
+    async addChain(chainId, id) {
+      if (id == 1 || this.$inDev) return;
+      const params = this.isPolygon
+        ? [
+            {
+              chainId,
+              chainName: "Polygon Mainnet",
+              rpcUrls: [
+                "https://polygon-mainnet.infura.io/v3/939c76fc756341f389051729d8a2f13a",
+                // "https://polygon-rpc.com",
+              ],
+              nativeCurrency: {
+                name: "Polygon Coin",
+                symbol: "MATIC",
+                decimals: 18,
               },
-            ]
-          : [
-              {
-                chainId: id,
-                chainName: "BSC Mainnet",
-                rpcUrls: ["https://bsc-dataseed1.binance.org"],
-                nativeCurrency: {
-                  name: "Binance Coin",
-                  symbol: "BNB",
-                  decimals: 18,
-                },
-                blockExplorerUrls: ["https://bscscan.com"],
+              blockExplorerUrls: ["https://polygonscan.com"],
+            },
+          ]
+        : [
+            {
+              chainId,
+              chainName: "BSC Mainnet",
+              rpcUrls: ["https://bsc-dataseed1.binance.org"],
+              nativeCurrency: {
+                name: "Binance Coin",
+                symbol: "BNB",
+                decimals: 18,
               },
-            ];
-        await window.ethereum.request(
-          {
-            method: "wallet_addEthereumChain",
-            params,
-          },
-          this.connectAddr
-        );
-      } catch (addError) {
-        console.log("res", addError);
-      }
+              blockExplorerUrls: ["https://bscscan.com"],
+            },
+          ];
+      await window.ethereum.request(
+        {
+          method: "wallet_addEthereumChain",
+          params,
+        },
+        this.connectAddr
+      );
     },
     async switchNet(id) {
       try {
         const chainId = "0x" + id.toString(16);
-        await this.addChain(chainId);
-        const res = window.web3.currentProvider.request({
+        await this.addChain(chainId, id);
+        const res = await window.web3.currentProvider.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
         if (res && res.error) {
-          this.addChain(chainId);
+          this.addChain(chainId, id);
         }
       } catch (error) {
+        this.onErr(error);
         if (error.code === 4902) {
           this.switchNet(id);
         }
