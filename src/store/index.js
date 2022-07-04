@@ -33,6 +33,7 @@ const store = new Vuex.Store({
     // hosting
     connectAddr: "",
     netType: "",
+    chainId: 0,
     buildInfo: {},
     projectInfo: {},
     worldMapJson: null,

@@ -69,32 +69,37 @@ export default {
     }
   },
   methods: {
-    walletChanged() {
+    walletChanged(isInit) {
       if (!this.connectAddr) {
         this.showConnect();
         return true;
       }
-      const { address } = this.userInfo.wallet || {};
-      if (!address) {
-        if (this.userInfo.solana || this.userInfo.onFlow) {
-          this.$alert("Currently this feature only supports metamask wallet");
-        } else {
-          this.$confirm(
-            "This function requires a linked wallet",
-            "Wallet Binding",
-            {
-              // confirmText: 'Connnect',
-            }
-          ).then(() => {
-            this.$router.push("/settings?tab=account_binding");
-          });
+      const { address = "" } = this.userInfo.wallet || {};
+      if (!isInit) {
+        if (!address) {
+          if (this.userInfo.solana || this.userInfo.onFlow) {
+            this.$alert(
+              "Currently this feature only supports MetaMask wallet."
+            );
+          } else {
+            this.$confirm(
+              "This function requires MetaMask wallet binding.",
+              "Wallet Binding",
+              {
+                // confirmText: 'Connnect',
+              }
+            ).then(() => {
+              this.$router.push("/settings?tab=account_binding");
+            });
+          }
+          return true;
         }
-        return true;
       }
-      const isChanged = this.connectAddr.toLowerCase() != address.toLowerCase();
+      const isChanged =
+        address && this.connectAddr.toLowerCase() != address.toLowerCase();
       if (isChanged) {
         const msg =
-          "It is detected that the wallet account has been changed, whether to switch the account?";
+          "The wallet account has been changed, switch 4EVERLAND account now?";
         this.$confirm(msg, "Wallet Changed", {
           confirmText: "Switch Account",
         }).then(() => {
@@ -196,15 +201,18 @@ export default {
       if (type == "BSC") return this.$inDev ? 97 : 56;
       return this.$inDev ? 5 : 1;
     },
-    async addChain(id) {
-      if (this.payBy == "Ethereum") return;
-      try {
-        const params = this.isPolygon
+    async addChain(chainId, id) {
+      if (id == 1 || this.$inDev) return;
+      const params =
+        id == 137
           ? [
               {
-                chainId: id,
+                chainId,
                 chainName: "Polygon Mainnet",
-                rpcUrls: ["https://polygon-rpc.com"],
+                rpcUrls: [
+                  "https://polygon-mainnet.infura.io/v3/939c76fc756341f389051729d8a2f13a",
+                  // "https://polygon-rpc.com",
+                ],
                 nativeCurrency: {
                   name: "Polygon Coin",
                   symbol: "MATIC",
@@ -215,7 +223,7 @@ export default {
             ]
           : [
               {
-                chainId: id,
+                chainId,
                 chainName: "BSC Mainnet",
                 rpcUrls: ["https://bsc-dataseed1.binance.org"],
                 nativeCurrency: {
@@ -226,31 +234,29 @@ export default {
                 blockExplorerUrls: ["https://bscscan.com"],
               },
             ];
-        await window.ethereum.request(
-          {
-            method: "wallet_addEthereumChain",
-            params,
-          },
-          this.connectAddr
-        );
-      } catch (addError) {
-        console.log("res", addError);
-      }
+      await window.ethereum.request(
+        {
+          method: "wallet_addEthereumChain",
+          params,
+        },
+        this.connectAddr
+      );
     },
     async switchNet(id) {
       try {
         const chainId = "0x" + id.toString(16);
-        await this.addChain(chainId);
-        const res = window.web3.currentProvider.request({
+        await this.addChain(chainId, id);
+        const res = await window.web3.currentProvider.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
         if (res && res.error) {
-          this.addChain(chainId);
+          this.addChain(chainId, id);
         }
       } catch (error) {
+        this.onErr(error);
         if (error.code === 4902) {
-          this.addChain(chainId);
+          this.switchNet(id);
         }
       }
     },
@@ -266,7 +272,7 @@ export default {
       localStorage.lastHash = JSON.stringify(obj);
     },
     async onConnect() {
-      this.walletChanged();
+      this.walletChanged(true);
       try {
         if (this.chainId != this.payChainId) {
           let dev = "";

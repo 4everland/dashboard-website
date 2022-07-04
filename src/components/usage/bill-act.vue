@@ -247,7 +247,7 @@ export default {
       this.posting = false;
     },
     async signWallet() {
-      this.$loading("Check Wallet...");
+      this.$loading("Bind Wallet...");
       const walletExists =
         await this.curContract.ProviderController.walletExists(
           this.providerAddr,
@@ -275,13 +275,14 @@ export default {
       if (this.walletChanged()) {
         return;
       }
+      console.log("bills wallet", this.connectAddr);
       this.isRecharge = type == 1;
       if (!this.isRecharge) {
         if (this.maxNum == 0) return this.$alert(tip1);
       }
       if (!this.isPolygon) {
-        let html = `Currently, deposits and withdrawals are only supported on the polygon network. `;
-        html += "<p>Would you like to switch to the polygon network?</p>";
+        let html = `Currently, deposits and withdrawals are only supported on the Polygon network. `;
+        html += "<p>Would you like to switch to the Polygon network?</p>";
         try {
           await this.$confirm(html, this.title, {
             confirmText: "Switch Network",
@@ -294,9 +295,12 @@ export default {
         }
         return;
       }
+      if (!this.curContract) {
+        return this.showConnect();
+      }
       try {
         await this.getWalletBalance();
-        if (!this.walletSigned) {
+        if (!this.walletSigned && !this.isRecharge) {
           await this.signWallet();
           this.walletSigned = true;
         }
