@@ -68,7 +68,7 @@ export default {
         await this.$store.dispatch("getProjectInfo", this.id);
         // console.log(this.info);
       } catch (error) {
-        this.$confirm(error.message, "", {
+        this.$confirm(error.message, "Network Error", {
           confirmText: "Retry",
         }).then(() => {
           this.getInfo();

@@ -30,16 +30,7 @@
       </e-empty>
     </div>
 
-    <div class="mt-6" v-if="pageLen > 1">
-      <v-pagination
-        @input="onPage"
-        v-model="page"
-        :length="pageLen"
-        prev-icon="mdi-menu-left"
-        next-icon="mdi-menu-right"
-        :total-visible="7"
-      ></v-pagination>
-    </div>
+    <e-pagi class="pa-5" @input="onPage" v-model="page" :length="pageLen" />
   </div>
 </template>
 

@@ -302,7 +302,6 @@
             :color="inBucket ? 'primary' : '#000'"
             rounded
             text
-            class="e-btn-text"
             x-small
             @click.stop="onRow(item)"
           >

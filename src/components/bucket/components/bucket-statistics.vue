@@ -10,8 +10,8 @@
         >mdi-alert-circle-outline</v-icon
       >
       <span
-        >Refreshing or closing the browser will cancel ongoing tasks, clear
-        records, and display deleted tasks incorrectly.</span
+        >The data on this page is not updated in real time. These statistics are
+        for reference only.</span
       >
     </div>
     <!-- IPFS && AR chart -->
@@ -98,7 +98,6 @@ export default {
   },
   methods: {
     handleChangeBucketDate(val) {
-      console.log(val);
       if (val[1] - val[0] > 86400000) {
         this.bucketDateOverDay = true;
       } else {

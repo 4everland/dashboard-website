@@ -35,9 +35,7 @@ export default [
   },
   {
     path: "/project/:projName/:id",
-    components: {
-      noCache: Project,
-    },
+    component: Project,
     meta: {
       title: `{projName}`,
       isTab: 1,
@@ -54,9 +52,7 @@ export default [
   },
   {
     path: "/build/:projName/:id/:taskId",
-    components: {
-      noCache: Build,
-    },
+    component: Build,
     meta: {
       title: `{projName} - Build`,
       isTab: 1,
@@ -77,9 +73,7 @@ export default [
   },
   {
     path: "/domains",
-    components: {
-      noCache: Domains,
-    },
+    component: Domains,
     meta: {
       title: "Domains",
       isTab: 1,
@@ -87,9 +81,7 @@ export default [
   },
   {
     path: "/statistics",
-    components: {
-      noCache: Statistics,
-    },
+    component: Statistics,
     meta: {
       title: "Statistics",
       isTab: 1,
@@ -97,9 +89,7 @@ export default [
   },
   {
     path: "/statistics/:projName/:id",
-    components: {
-      noCache: StatisDetail,
-    },
+    component: StatisDetail,
     meta: {
       title: "{projName} - Statistic",
       links: [

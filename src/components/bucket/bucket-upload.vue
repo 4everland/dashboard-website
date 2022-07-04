@@ -24,6 +24,7 @@
 <script>
 import { bus } from "../../main";
 import { TaskWrapper } from "./task.js";
+// import { mapActions } from "vuex";
 export default {
   props: {
     info: {
@@ -66,7 +67,6 @@ export default {
     };
   },
   async created() {
-    // await this.$store.dispatch("getUsageInfo");
     bus.$on("handleClearRecords", (id) => {
       let index = this.tasks.findIndex((it) => it.id == id);
       if (index !== -1) {
