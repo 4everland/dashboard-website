@@ -303,6 +303,7 @@
             rounded
             text
             x-small
+            class="e-btn-text"
             @click.stop="onRow(item)"
           >
             <v-icon v-if="inFolder && !item.isFile" size="18" class="mr-2"
