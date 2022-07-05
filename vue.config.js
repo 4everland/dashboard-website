@@ -1,5 +1,6 @@
 const path = require("path");
-
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
@@ -14,54 +15,49 @@ module.exports = {
     open: true,
   },
   lintOnSave: false,
+  chainWebpack: (config) => {
+    config.externals({
+      vue: "Vue",
+      echarts: "echarts",
+      "@ethereumjs/common": "ethers",
+      axios: "axios",
+      "vue-router": "VueRouter",
+      vuex: "Vuex",
+      html2canvas: "html2canvas",
+    });
+    config.plugins.delete("preload");
+    config.plugins.delete("prefetch");
+  },
   configureWebpack: {
+    plugins: [new BundleAnalyzerPlugin()],
     optimization: {
       splitChunks: {
         chunks: "all",
-        // maxSize: 1024 * 1024,
+        maxSize: 4e5,
+        minSize: 3e5,
         // minChunks: 10,
-        // maxAsyncRequests: 30,
-        // maxInitialRequests: 30,
+        maxAsyncRequests: 30,
+        maxInitialRequests: 30,
         // enforceSizeThreshold: 50000,
-        // cacheGroups: {
-        //   defaultVendors: {
-        //     test: /[\\/]node_modules[\\/]/,
-        //     priority: -10,
-        //     reuseExistingChunk: true,
-        //   },
-        //   default: {
-        //     minChunks: 2,
-        //     priority: -20,
-        //     reuseExistingChunk: true,
-        //   },
-        // },
         cacheGroups: {
-          libs: {
-            name: "chunk-libs",
-            test: /[\\/]node_modules[\\/]/,
-            priority: 10,
-            chunks: "initial", // only package third parties that are initially dependent
-          },
-          vuetify: {
-            name: "chunk-vuetify", // split vuetify into a single package
-            priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-            test: /[\\/]node_modules[\\/]_?vuetify(.*)/, // in order to adapt to cnpm
-          },
-          minio: {
-            name: "chunk-minio", // split vuetify into a single package
-            priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-            test: /[\\/]node_modules[\\/]_?minio(.*)/, // in order to adapt to cnpm
+          ensdomains: {
+            name: "chunk-ensdomains", // split vuetify into a single package
+            priority: 10, // the weight needs to be larger than libs and app or it will be packaged into libs or app
+            test: /[\\/]node_modules[\\/]_?(@ensdomains|@solana)(.*)/, // in order to adapt to cnpm
           },
           aws: {
-            name: "chunk-s3", // split vuetify into a single package
-            priority: 20, // the weight needs to be larger than libs and app or it will be packaged into libs or app
+            name: "chunk-aws", // split vuetify into a single package
+            priority: 10, // the weight needs to be larger than libs and app or it will be packaged into libs or app
             test: /[\\/]node_modules[\\/]_?@aws(.*)/, // in order to adapt to cnpm
           },
-          commons: {
-            name: "chunk-commons",
-            test: resolve("src/components"), // can customize your rules
-            minChunks: 3, //  minimum common number
-            priority: 5,
+          // vuetify: {
+          //   name: "chunk-vuetify", // split vuetify into a single package
+          //   priority: -10, // the weight needs to be larger than libs and app or it will be packaged into libs or app
+          //   test: /[\\/]node_modules[\\/]_?vuetify(.*)/, // in order to adapt to cnpm
+          // },
+          defaultVendors: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -20,
             reuseExistingChunk: true,
           },
         },
