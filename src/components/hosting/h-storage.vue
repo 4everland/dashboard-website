@@ -139,17 +139,17 @@ export default {
     async addStorage() {
       try {
         this.loading = true;
-        await this.$http2.post("/bill/pay", {
-          storage: 40,
-          amount: 50,
-          pay: 0,
-        });
-        await this.$sleep();
+        // await this.$http2.post("/bill/pay", {
+        //   storage: 40,
+        //   amount: 50,
+        //   pay: 0,
+        // });
+        await this.$sleep(500);
         this.loading = false;
         this.showPop = false;
         let html = "You can get some free resources for depolyment.";
         html +=
-          '<ul class="mt-4"><li>100GB Bandwidth</li><li>4GB Storage</li><li>250 Build Minutes</li></ul>';
+          '<ul class="mt-4"><li>100GB Bandwidth</li><li>5GB Storage</li><li>250 Build Minutes</li></ul>';
         this.$alert(html, "Welcome to 4EVERLAND HOSTING.", {
           type: "success",
         }).then(() => {
@@ -168,18 +168,16 @@ export default {
     async checkStorage() {
       console.log("check stoarge");
       if (Date.now) return;
-      const skey = "got_storage_" + localStorage.token.substr(-5);
+      const skey = "got_storage1_" + localStorage.token.substr(-5);
       if (localStorage[skey]) {
         return;
       }
       try {
         this.$loading();
-        const { data } = await this.$http2.get("/bill/history");
-        this.$loading.close();
-        if (data.content.length) {
-          localStorage[skey] = 1;
-          return;
-        }
+        await this.$sleep(600);
+        // const { data } = await this.$http2.get("/bill/history");
+        // this.$loading.close();
+        localStorage[skey] = 1;
         this.showPop = true;
         return true;
       } catch (error) {
