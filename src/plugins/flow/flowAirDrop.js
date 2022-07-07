@@ -1,8 +1,12 @@
 import store from "@/store";
-import { taskRequest, taskReport } from "./api";
+import { taskRequest } from "./api";
 
-async function isSolana() {
+async function isAirDrop() {
   const data = await taskRequest();
+  console.log(data.syncEvents);
+  if (data.syncEvents[0]) {
+    Vue.prototype.$Dialog.getFlowAirDrop();
+  }
 }
 
-export { isSolana };
+export { isAirDrop };

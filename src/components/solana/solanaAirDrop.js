@@ -4,7 +4,6 @@ export default {
     const solanaAirDropInstance = Vue.extend(solanaAirDrop);
     let solanaAirDropInit;
     const initInstance = () => {
-      // 实例化vue实例
       solanaAirDropInit = new solanaAirDropInstance();
       let solanaAirDropEl = solanaAirDropInit.$mount().$el;
       document.body.appendChild(solanaAirDropEl);
