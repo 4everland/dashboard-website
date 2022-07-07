@@ -38,7 +38,7 @@ export default {
   .solana-con {
     width: 450px;
     height: 657px;
-    background-image: url("/img/bg/flow/bg.svg");
+    background-image: url("/img/bg/flow/bg.png");
     background-size: contain;
     background-color: transparent;
     position: absolute;
