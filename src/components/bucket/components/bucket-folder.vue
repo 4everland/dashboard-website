@@ -154,40 +154,38 @@
             <img src="img/svg/view.svg" width="14" class="ml-2" />
           </v-btn>
         </template>
-        <!-- <template v-slot:item.domain="{ item }">
-          <div v-if="item.domainInfo">
-            <span>{{ item.domainInfo.domain.cutStr(10, 20) }}</span>
-          </div>
-        </template> -->
         <template v-slot:item.hash="{ item }">
-          <v-btn
-            style="width: 80px"
-            class="e-btn-text item-hash"
-            rounded
-            color="primary"
-            x-small
-            text
-            target="_blank"
-            v-if="item.hash"
-            @click.stop="onStop"
-            :href="`https://${item.hash}.ipfs.dweb.link`"
-          >
-            <span class="d-ib">
-              {{ item.hash.cutStr(5, 4) }}
-            </span>
-          </v-btn>
-          <v-btn
-            v-if="item.hash"
-            class="e-btn-text ml-2"
-            icon
-            small
-            @click.stop="onStop"
-            v-clipboard="item.hash"
-            @success="$toast('Copied to clipboard !')"
-          >
-            <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
-            <img src="img/svg/copy.svg" width="12" />
-          </v-btn>
+          <div v-if="item.hash !== '--'">
+            <v-btn
+              style="width: 80px"
+              class="e-btn-text item-hash"
+              rounded
+              color="primary"
+              x-small
+              text
+              target="_blank"
+              v-if="item.hash"
+              @click.stop="onStop"
+              :href="`https://${item.hash}.ipfs.dweb.link`"
+            >
+              <span class="d-ib">
+                {{ item.hash.cutStr(5, 4) }}
+              </span>
+            </v-btn>
+            <v-btn
+              v-if="item.hash"
+              class="e-btn-text ml-2"
+              icon
+              small
+              @click.stop="onStop"
+              v-clipboard="item.hash"
+              @success="$toast('Copied to clipboard !')"
+            >
+              <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
+              <img src="img/svg/copy.svg" width="12" />
+            </v-btn>
+          </div>
+          <span v-else>--</span>
         </template>
         <template v-slot:item.arAct="{ item }">
           <div class="hide-msg d-flex al-c">
