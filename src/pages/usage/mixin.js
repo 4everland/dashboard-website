@@ -126,7 +126,7 @@ export default {
     async getWalletBalance() {
       this.$loading();
       const num = await this.curContract.MumbaiUSDC.balanceOf(this.connectAddr);
-      this.walletBalance = (num / 1e6).toFixed(2);
+      this.walletBalance = this.$utils.cutFixed(num / 1e6, 6);
       console.log(this.walletBalance);
       this.$loading.close();
     },
