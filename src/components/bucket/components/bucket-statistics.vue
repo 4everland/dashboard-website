@@ -10,7 +10,7 @@
         >mdi-alert-circle-outline</v-icon
       >
       <span
-        >The data on this page is not updated in real time. These statistics are
+        >The data on this page is not updated in real time.These statistics are
         for reference only.</span
       >
     </div>

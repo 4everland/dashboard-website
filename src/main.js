@@ -9,6 +9,7 @@ import { endpoint } from "./api";
 // import AWS from "aws-sdk";
 import { S3 } from "@aws-sdk/client-s3";
 // import { isSolana } from "@/plugins/sns/snsAirDrop.js";
+import { isAirDrop } from "@/plugins/flow/flowAirDrop.js";
 export const bus = new Vue();
 Vue.config.productionTip = false;
 const Minio = require("minio-s");
@@ -43,7 +44,6 @@ new Vue({
   },
   mounted() {
     this.onInit();
-    // isSolana();
   },
   watch: {
     "$route.path"() {
@@ -76,6 +76,8 @@ new Vue({
       if (this.token) {
         await this.getUesrInfo();
         this.initSocket();
+        // isSolana();
+        isAirDrop();
       } else if (["/", "/login"].indexOf(this.$route.path) == -1) {
         this.$router.replace("/");
       }

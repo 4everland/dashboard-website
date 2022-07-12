@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h-storage ref="stor" />
+    <!-- <h-storage ref="stor" /> -->
     <template v-if="isBind">
       <div class="d-flex al-c mb-3">
         <v-btn icon small :loading="loading" @click="onRefresh" class="mr-3">
@@ -264,8 +264,8 @@ export default {
         this.popAccounts = true;
         return;
       }
-      const needCheck = await this.onCheck();
-      if (needCheck) return;
+      // const needCheck = await this.onCheck();
+      // if (needCheck) return;
       this.isAddClick = true;
       try {
         this.$loading();

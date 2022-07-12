@@ -247,7 +247,7 @@ export default {
       this.posting = false;
     },
     async signWallet() {
-      this.$loading("Check Wallet...");
+      this.$loading("Bind Wallet...");
       const walletExists =
         await this.curContract.ProviderController.walletExists(
           this.providerAddr,
@@ -275,6 +275,7 @@ export default {
       if (this.walletChanged()) {
         return;
       }
+      console.log("bills wallet", this.connectAddr);
       this.isRecharge = type == 1;
       if (!this.isRecharge) {
         if (this.maxNum == 0) return this.$alert(tip1);
@@ -293,6 +294,9 @@ export default {
           //
         }
         return;
+      }
+      if (!this.curContract) {
+        return this.showConnect();
       }
       try {
         await this.getWalletBalance();

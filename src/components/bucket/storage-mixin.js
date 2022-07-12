@@ -482,9 +482,14 @@ export default {
         //   this.continuationTokenArr = [""];
         // }
         let list = data.objects.map((it) => {
+          console.log(data);
           if (it.prefix)
             return {
               name: it.prefix.replace(Prefix, "").replace("/", ""),
+              size: "--",
+              hash: "--",
+              updateAt: "--",
+              arStatus: "--",
             };
           const meta = it.metadata || {};
           let arStatus = meta["X-Amz-Meta-Arweave-Status"];

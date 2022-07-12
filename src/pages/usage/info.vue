@@ -112,31 +112,31 @@ export default {
           // Free resources 100GB per month, of which 5GB used, 0GB purchased
           desc: `Free resources ${
             getSize(info.freeBandwidth) || "100GB"
-          } per month, ${getSize(info.purchasedBandwidth) || "0GB"} purchased`,
+          } per month, ${getSize(info.purchasedBandwidth) || "0GB"} purchased.`,
           ...this.getPerc(
             info.usedFreeBandwidth + info.usedPurchasedBandwidth,
             info.freeBandwidth + info.purchasedBandwidth
           ),
         },
         {
-          label: "Storage IPFS",
+          label: "IPFS",
           desc: info.ipfsStorage
             ? `Free resources ${getSize(info.ipfsDefaultStorage)} a year, ${
                 getSize(info.ipfsStorage - info.ipfsDefaultStorage) || "0G"
               } purchased，${new Date(info.ipfsStorageStart * 1e3).format(
                 "date"
-              )} - ${new Date(info.ipfsStorageExpired * 1000).format("date")}`
+              )} - ${new Date(info.ipfsStorageExpired * 1000).format("date")}.`
             : "",
           ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
           descTip:
-            "When the service expires, we will keep the stored content for up to 7 days",
+            "When the service expires, we will keep the stored content for up to 7 days.",
         },
         {
-          label: "Storage AR",
+          label: "Arweave",
           tip: "Arweave is a permanent storage service.",
           desc: `Free resources ${getSize(info.arDefaultStorage)}, ${
             getSize(info.arStorage - info.arDefaultStorage) || "0GB"
-          } purchased`,
+          } purchased.`,
           ...this.getPerc(info.usedArStorage, info.arStorage),
         },
         {
@@ -145,7 +145,7 @@ export default {
             info.freeBuildMinutes || 250
           } Minutes per month,  ${
             info.purchasedBuildMinutes || 0
-          } Minutes purchased`,
+          } Minutes purchased.`,
           ...this.getPerc(
             parseInt(
               info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes
