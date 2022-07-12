@@ -74,7 +74,7 @@ export default {
         if (it.effectiveTime) {
           it.time = "Until " + new Date(it.effectiveTime * 1000).format("date");
         }
-        const row = this.$utils.getPurchase(it.type, it.data);
+        const row = this.$utils.getPurchase(it.type, it.overuse || it.amount);
         Object.assign(it, row);
         return it;
       });
