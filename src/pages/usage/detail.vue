@@ -74,7 +74,11 @@ export default {
         if (it.effectiveTime) {
           it.time = "Until " + new Date(it.effectiveTime * 1000).format("date");
         }
-        const row = this.$utils.getPurchase(it.type, it.overuse || it.amount);
+        let amount = it.overuse || it.amount;
+        if (/ipfs/i.test(it.type)) {
+          amount /= 3600;
+        }
+        const row = this.$utils.getPurchase(it.type, amount);
         Object.assign(it, row);
         return it;
       });
