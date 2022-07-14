@@ -438,8 +438,8 @@ export default {
           const { data } = await this.$http2.post(
             "/api/celer/estimate/amount",
             {
-              src_chain_id: 1, // this.chainId,
-              dst_chain_id: 137, //this.$inDev ? 80001 :
+              src_chain_id: this.$inDev ? 1 : this.chainId,
+              dst_chain_id: 137,
               token_symbol: "USDC",
               amount: totalFee.toString(),
               addr: this.connectAddr,
