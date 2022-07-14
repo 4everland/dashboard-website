@@ -3,18 +3,19 @@
     <div class="bd-1">
       <h3>Rewrite</h3>
       <div class="gray mt-1 fz-14">
-        If the URL association file doesn't exist, it will be redirected to the
-        specified target location.
+        If the URL doesn't exist, it will be redirected to the specified target
+        location.
       </div>
       <div class="mt-5 d-flex hide-msg">
-        <v-text-field outlined dense v-model="rewrite"> </v-text-field>
+        <v-text-field placeholder="index.html" outlined dense v-model="rewrite">
+        </v-text-field>
         <v-btn
           min-width="100"
           color="primary"
           rounded
           :loading="savingRewrite"
           @click="onSaveRewrite"
-          :disabled="info.rewrite == rewrite || !rewrite"
+          :disabled="info.rewrite == rewrite"
           class="ml-4"
           style="margin-top: 2px"
         >
@@ -112,8 +113,11 @@ export default {
   methods: {
     async onSaveRewrite() {
       try {
+        if (/\s/.test(this.rewrite)) {
+          return this.$toast("Spaces are not allowed.");
+        }
         await this.$confirm(
-          `You will change the redirect parameter to "${this.rewrite}".`
+          `You will change the redirect location to "${this.rewrite}".`
         );
         this.savingRewrite = true;
         await this.saveProject({
