@@ -313,7 +313,7 @@ export default {
     async getBalance() {
       try {
         const { data } = await this.$http.get("$v3/account/balance");
-        this.balance = this.$utils.cutFixed(data.balance, 2);
+        this.balance = this.$utils.cutFixed(data.balance, 4);
         // if (this.$inDev) this.balance = 10;
       } catch (error) {
         //
