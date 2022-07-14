@@ -435,15 +435,20 @@ export default {
           //     "Minimun " + minSend.div(this.chainId == 56 ? 1e18 : 1e6) + " USD"
           //   );
           // }
-          const response = await this.client.estimate(
-            this.connectAddr,
-            totalFee.toString(),
-            this.chainId,
-            this.$inDev ? 80001 : 137
+          const { data } = await this.$http2.post(
+            "/api/celer/estimate/amount",
+            {
+              src_chain_id: 1, // this.chainId,
+              dst_chain_id: 137, //this.$inDev ? 80001 :
+              token_symbol: "USDC",
+              amount: totalFee.toString(),
+              addr: this.connectAddr,
+              slippage_tolerance: 3000,
+            }
           );
-          const resObj = response.toObject();
-          console.log("response", resObj);
-          const maxSlippage = response.getMaxSlippage();
+          if (data.err) throw new Error(data.err.msg);
+          console.log(data);
+          const maxSlippage = data.max_slippage;
           console.log("maxSlippage", maxSlippage);
           console.log("calcFee", params);
           const feeMsg = await this.curContract[this.chainKey].calcFee(
@@ -460,7 +465,7 @@ export default {
               (maxSlippage / 1e6) * this.totalPrice,
               4
             ),
-            arrival: this.$utils.cutFixed(resObj.estimatedReceiveAmt / 1e6, 4),
+            arrival: this.$utils.cutFixed(data.estimated_receive_amt / 1e6, 4),
             unit: this.isBSC ? "BNB" : "ETH",
           };
           if (isPreview) {

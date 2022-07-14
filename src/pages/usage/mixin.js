@@ -3,7 +3,7 @@ import { providers, BigNumber } from "ethers"; //, utils
 import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
 import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
-import client from "../../plugins/pay/contracts/SGNClient";
+// import client from "../../plugins/pay/contracts/SGNClient";
 import {
   MumbaiFundPool,
   providerAddr,
@@ -18,7 +18,7 @@ export default {
       isApproved: false,
       approving: false,
       providerAddr,
-      client,
+      // client,
       walletBalance: 0,
     };
   },
@@ -126,7 +126,7 @@ export default {
     async getWalletBalance() {
       this.$loading();
       const num = await this.curContract.MumbaiUSDC.balanceOf(this.connectAddr);
-      this.walletBalance = this.$utils.cutFixed(num / 1e6, 6);
+      this.walletBalance = this.$utils.cutFixed(num / 1e6, 4);
       console.log(this.walletBalance);
       this.$loading.close();
     },
