@@ -1,6 +1,28 @@
 <template>
   <div class="hide-msg">
     <div class="bd-1">
+      <h3>Rewrite</h3>
+      <div class="gray mt-1 fz-14">
+        If the URL association file doesn't exist, it will be redirected to the
+        specified target location.
+      </div>
+      <div class="mt-5 d-flex hide-msg">
+        <v-text-field outlined dense v-model="rewrite"> </v-text-field>
+        <v-btn
+          min-width="100"
+          color="primary"
+          rounded
+          :loading="savingRewrite"
+          @click="onSaveRewrite"
+          :disabled="info.rewrite == rewrite || !rewrite"
+          class="ml-4"
+          style="margin-top: 2px"
+        >
+          Save
+        </v-btn>
+      </div>
+    </div>
+    <div class="bd-1 mt-5">
       <h3>Directory Listing</h3>
       <div class="d-flex al-c">
         <div class="gray mt-1 fz-14">
@@ -60,6 +82,8 @@ export default {
     return {
       directoryList: false,
       isStatis: true,
+      rewrite: "",
+      savingRewrite: false,
     };
   },
   computed: {
@@ -83,8 +107,24 @@ export default {
   },
   created() {
     this.directoryList = this.info.config.directoryList;
+    this.rewrite = this.info.rewrite;
   },
   methods: {
+    async onSaveRewrite() {
+      try {
+        await this.$confirm(
+          `You will change the redirect parameter to "${this.rewrite}".`
+        );
+        this.savingRewrite = true;
+        await this.saveProject({
+          rewrite: this.rewrite,
+        });
+        this.$toast("Saved successfully");
+      } catch (error) {
+        //
+      }
+      this.savingRewrite = false;
+    },
     async onDelete() {
       try {
         await this.onDelProj(this.info);
@@ -94,7 +134,12 @@ export default {
       }
     },
     async saveProject(body) {
-      return this.$http2.put("/project/config/" + this.info.id, body);
+      await this.$http2.put("/project/config/" + this.info.id, body);
+      this.$setState({
+        noticeMsg: {
+          name: "updateProject",
+        },
+      });
     },
   },
 };
