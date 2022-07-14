@@ -186,7 +186,7 @@ export default {
           total += obj.value * 1;
           return obj;
         });
-        this.totalVal = total;
+        if (page == 1) this.totalVal = total;
         if (!inMore) {
           this.hasMore = data.totalPages > 1;
         } else {
