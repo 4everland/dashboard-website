@@ -94,7 +94,7 @@
       </div>
     </div>
     <div
-      v-if="list && !finished"
+      v-if="!limit && list && !finished"
       class="pd-20 gray ta-c fz-18 mt-5"
       :class="{
         'hover-1': !loading,
@@ -111,6 +111,9 @@
 import { mapState } from "vuex";
 
 export default {
+  props: {
+    limit: Number,
+  },
   computed: {
     ...mapState({
       info: (s) => s.projectInfo,
@@ -213,7 +216,7 @@ export default {
         }
         const params = {
           page: this.page,
-          size: 10,
+          size: this.limit || 10,
         };
         const { data } = await this.$http2.get(
           `/project/task/${this.id}/list`,
