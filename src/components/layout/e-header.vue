@@ -22,11 +22,20 @@
     </a>
     <v-spacer></v-spacer>
     <template>
-      <e-menu offset-y open-on-hover v-for="(it, i) in menus" :key="i">
+      <e-menu
+        offset-y
+        open-on-hover
+        :disabled="!it.subs"
+        v-for="(it, i) in menus"
+        :key="i"
+      >
         <v-btn
           slot="ref"
           text
           rounded
+          :href="it.href"
+          :to="it.to"
+          :target="it.href ? '_blank' : ''"
           :style="{
             background: it.btnBg,
           }"
@@ -52,7 +61,7 @@
           </div>
           <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
           <img
-            v-if="!it.noSuffix"
+            v-if="it.subs && !it.noSuffix"
             :src="`img/svg/header/ic-down-${it.color || 'def'}.svg`"
             width="10"
             class="ml-2"
@@ -104,28 +113,14 @@ export default {
       if (!info.uid) return [];
       let list = [
         {
-          label: "Support",
-          subs: [
-            {
-              label: "Documents",
-              icon: "m-docs",
-              href: "https://docs.4everland.org",
-            },
-            // {
-            //   label: "Community",
-            //   icon: "m-chat",
-            // },
-            {
-              label: "Bug Bounty",
-              icon: "m-bug",
-              to: "/bug-bounty",
-            },
-            {
-              label: "Change Log",
-              icon: "m-log",
-              to: "/changelog",
-            },
-          ],
+          label: "Docs",
+          icon: "m-docs",
+          href: "https://docs.4everland.org",
+        },
+        {
+          label: "Change Log",
+          icon: "m-log",
+          to: "/changelog",
         },
       ];
 
@@ -182,7 +177,7 @@ export default {
             to: "/referral",
           },
           {
-            label: "Report",
+            label: "Feedback",
             icon: "m-report",
             noticeMsg: {
               name: "feedback",

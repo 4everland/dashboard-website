@@ -12,6 +12,15 @@
         label="Email"
         placeholder="Your email"
       />
+      <v-select
+        label="Type"
+        prepend-icon="mdi-label"
+        class="mt-2"
+        outlined
+        persistent-placeholder
+        v-model="form.feedbackType"
+        :items="typeList"
+      />
       <v-text-field
         v-if="form.feedbackType == 'BUG'"
         prepend-icon="mdi-wallet"
@@ -66,6 +75,7 @@ export default {
     return {
       showPop: false,
       title: "Feedback",
+      typeList: ["BUG", "FEEDBACK"],
       form: {
         email: "",
         ethAddress: "",
