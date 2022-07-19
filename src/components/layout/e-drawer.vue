@@ -33,7 +33,7 @@
     }
   }
   .v-list-item--active {
-    color: #34a9ff;
+    color: #775da6;
     background: none;
     &.sub::before {
       opacity: 0;

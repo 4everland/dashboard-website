@@ -14,7 +14,7 @@
                     <use id="mask" fill="#231916" xlink:href="#path-1"></use>
                     <g id="group" mask="url(#mask-2)">
                         <g transform="translate(-0.000000, 0.000000)" id="Colors/Background">
-                            <rect id="Color" fill="#34A9FF" x="0" y="0" width="26" height="26"></rect>
+                            <rect id="Color" fill="#775DA6" x="0" y="0" width="26" height="26"></rect>
                         </g>
                     </g>
                 </g>

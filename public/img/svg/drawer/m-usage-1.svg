@@ -13,7 +13,7 @@
                 <use id="mask" fill="#000000" fill-rule="nonzero" xlink:href="#path-1"></use>
                 <g id="g" mask="url(#mask-2)">
                     <g transform="translate(-1.000000, -2.000000)" id="Colors/Background">
-                        <rect id="Color" fill="#34A9FF" x="0" y="0" width="26" height="26"></rect>
+                        <rect id="Color" fill="#775DA6" x="0" y="0" width="26" height="26"></rect>
                     </g>
                 </g>
             </g>

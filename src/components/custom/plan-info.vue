@@ -50,7 +50,7 @@
       background: #f1f6fb;
     }
     &.active {
-      background: #34a9ff url(/img/icon/pricing-check.svg) right bottom
+      background: #775da6 url(/img/icon/pricing-check.svg) right bottom
         no-repeat;
       background-size: 30px;
       color: #fff;

@@ -20,7 +20,7 @@
           <v-btn
             rounded
             width="120"
-            color="#34A9FF"
+            color="#775DA6"
             class="white--text"
             @click="bind"
             >Bind</v-btn

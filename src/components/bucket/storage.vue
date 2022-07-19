@@ -599,7 +599,7 @@ export default {
   position: fixed;
   bottom: 80px;
   right: 20px;
-  color: #34a9ff;
+  color: #775da6;
   font-size: 16px;
   cursor: pointer;
   .task-count {
