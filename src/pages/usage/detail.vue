@@ -75,7 +75,7 @@ export default {
           it.time = "Until " + new Date(it.effectiveTime * 1000).format("date");
         }
         let amount = it.overuse || it.amount;
-        if (/ipfs/i.test(it.type)) {
+        if (/ipfs/i.test(it.type) && it.contentType == "Deductions") {
           amount /= 3600;
         }
         const row = this.$utils.getPurchase(it.type, amount);
