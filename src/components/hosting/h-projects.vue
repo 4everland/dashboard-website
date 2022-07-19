@@ -386,6 +386,9 @@ export default {
         });
         this.list = list;
         this.total = total;
+        if (!total) {
+          this.$router.replace("/hosting/new");
+        }
         if (this.page > 1 && !list.length) {
           this.page = 1;
           this.getList();
