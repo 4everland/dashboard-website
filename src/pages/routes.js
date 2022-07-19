@@ -28,6 +28,7 @@ export default [
     meta: {
       title: "Overview",
       isTab: true,
+      subTitle: "Welcome back to 4EVERLAND dashboard",
     },
   },
   ...HostingRoutes,

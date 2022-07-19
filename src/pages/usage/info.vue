@@ -190,7 +190,7 @@ export default {
         tip = `(Recharge used ${over})`;
       }
       let perc = (used * 100) / total;
-      perc = Math.max(perc > 0 ? 0.8 : 0.4, perc);
+      perc = Math.max(perc > 0 ? 0.5 : 0.2, perc);
       return {
         perc,
         percTxt,
