@@ -11,9 +11,9 @@
     </defs>
     <g id="Upload" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Upload-1" transform="translate(-1350.000000, -1610.000000)">
-            <g id="编组-5" transform="translate(1350.000000, 1552.000000)">
+            <g id="g-5" transform="translate(1350.000000, 1552.000000)">
                 <g id="discord(1)" transform="translate(0.000000, 58.000000)">
-                    <g id="椭圆形">
+                    <g id="orect">
                         <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
                         <use fill="#775DA6" fill-rule="evenodd" xlink:href="#path-1"></use>
                     </g>

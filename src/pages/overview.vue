@@ -1,3 +1,9 @@
+<style lang="scss">
+.ov-wrap-1 {
+  padding: 30px 15px;
+}
+</style>
+
 <template>
   <div>
     <!-- <v-alert
@@ -16,14 +22,42 @@
     <!-- {{ usageList }} -->
     <v-row>
       <v-col v-for="(it, i) in usageList" :key="i">
-        <v-card class="pa-3">
-          <div class="d-flex al-end lh-1">
-            <h2>{{ it.num }}</h2>
-            <span class="gray">
-              {{ it.unitTxt }}
-            </span>
+        <v-card style="min-width: 120px">
+          <div class="pa-1" v-if="it.loading">
+            <v-skeleton-loader type="article" />
           </div>
-          <p>{{ it.label }}</p>
+          <div class="ov-wrap-1 pos-r" v-else>
+            <img
+              v-if="it.icon"
+              :src="`img/svg/overview/${it.icon}`"
+              :style="it.iconStyle || 'width: 24px'"
+              class="pos-a top-0 right-0 mt-3 mr-3"
+            />
+            <div class="d-flex al-end lh-1">
+              <span class="purple-1 fz-22">{{ it.num }}</span>
+              <span class="fz-12 ml-2">
+                {{ it.unitTxt }}
+              </span>
+            </div>
+            <p class="mt-3 fz-14 gray-8">{{ it.label }}</p>
+            <div class="mt-3 al-c fz-14 gray">
+              <template v-if="it.isBalance">
+                <span>Purchsed: </span>
+                <u class="link ml-2">0</u>
+                <span class="ml-auto">Finished: </span>
+                <u class="link ml-2">0</u>
+              </template>
+              <template v-else>
+                <v-progress-linear
+                  :color="it.color || 'primary'"
+                  :value="it.perc || 0"
+                  height="6"
+                  rounded
+                ></v-progress-linear>
+                <span class="ml-3 fz-14"> {{ it.perc }}% </span>
+              </template>
+            </div>
+          </div>
         </v-card>
       </v-col>
     </v-row>
@@ -50,14 +84,19 @@ export default {
       return [
         {
           label: "IPFS",
+          icon: "ipfs.svg",
           ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
         },
         {
           label: "Arweave",
+          icon: "ar.svg",
+          color: "#F9837C",
           ...this.getPerc(info.usedArStorage, info.arStorage),
         },
         {
           label: "Bandwidth",
+          icon: "bandwidth.svg",
+          color: "#70B6C1",
           ...this.getPerc(
             info.usedFreeBandwidth + info.usedPurchasedBandwidth,
             info.freeBandwidth + info.purchasedBandwidth
@@ -65,6 +104,8 @@ export default {
         },
         {
           label: "Build Minutes",
+          icon: "buildtime.svg",
+          color: "#F3CC5C",
           ...this.getPerc(
             parseInt(
               info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes
@@ -75,6 +116,8 @@ export default {
         },
         {
           num: "0.00",
+          isBalance: true,
+          loading: !info.ipfsStorage,
           unitTxt: "USDC",
           label: "Balance",
         },
@@ -105,7 +148,7 @@ export default {
         unitTxt = `Min/${total.toFixed(0)}Min`;
       }
       let perc = (used * 100) / total;
-      perc = Math.max(perc > 0 ? 0.5 : 0, perc);
+      if (perc > 0) perc = Math.max(0.01, perc.toFixed(2));
       return {
         perc,
         num,
