@@ -1,6 +1,7 @@
 <template>
   <a v-if="info && href" :href="href" target="_blank" class="b u">
-    {{ (info.hash || info.sha).substr(0, 6) }} — {{ info.message }}
+    {{ (info.hash || info.sha).substr(0, 6) }} —
+    {{ (info.message || "").cutStr(60, 20) }}
   </a>
 </template>
 
