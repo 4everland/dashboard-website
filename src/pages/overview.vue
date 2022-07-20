@@ -5,7 +5,7 @@
 </style>
 
 <template>
-  <div>
+  <div class="pos-r">
     <!-- <v-alert
       text
       type="info"
@@ -20,6 +20,16 @@
     </v-alert> -->
     <!-- <e-tabs :list="list" /> -->
     <!-- {{ usageList }} -->
+    <div class="pos-a right-0" style="top: -50px">
+      <v-btn color="primary" class="bdrs-10" to="/bucket/storage/?new=bucket">
+        <span class="fz-18">+</span>
+        <span class="ml-1"> New Bucket </span>
+      </v-btn>
+      <v-btn color="primary" class="bdrs-10 ml-5" to="/hosting/new">
+        <span class="fz-18">+</span>
+        <span class="ml-1"> New Project </span>
+      </v-btn>
+    </div>
     <v-row>
       <v-col v-for="(it, i) in usageList" :key="i">
         <v-card style="min-width: 120px">
@@ -76,6 +86,7 @@ export default {
   data() {
     return {
       usageInfo: {},
+      balance: 0,
     };
   },
   computed: {
@@ -115,7 +126,7 @@ export default {
           ),
         },
         {
-          num: "0.00",
+          num: this.balance,
           isBalance: true,
           loading: !info.ipfsStorage,
           unitTxt: "USDC",
@@ -159,9 +170,14 @@ export default {
       try {
         const { data } = await this.$http.get(`$v3/usage`);
         this.usageInfo = data;
+        await this.getBalance();
       } catch (error) {
         console.log(error);
       }
+    },
+    async getBalance() {
+      const { data } = await this.$http.get("$v3/account/balance");
+      this.balance = this.$utils.cutFixed(data.balance, 4);
     },
     onCloseTip() {
       localStorage.noEmailTip = "1";
