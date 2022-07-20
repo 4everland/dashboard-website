@@ -2,7 +2,6 @@ import Home from "./home";
 import Login from "./login";
 
 import Overview from "./overview";
-import Plan from "./plan";
 
 import HostingRoutes from "./hosting/routes";
 import BucketRoutes from "./bucket/routes";
@@ -36,12 +35,4 @@ export default [
   ...UserRoutes,
   ...MoreRoutes,
   ...UsageRoutes,
-  {
-    path: "/plan",
-    component: Plan,
-    meta: {
-      title: "Plan",
-      wrapCls: "main-wrap pa-0",
-    },
-  },
 ];
