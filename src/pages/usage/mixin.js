@@ -202,42 +202,63 @@ export default {
       return this.$inDev ? 5 : 1;
     },
     async addChain(chainId, id) {
-      if (id == 1 || this.$inDev) return;
-      const params =
-        id == 137
-          ? [
-              {
-                chainId,
-                chainName: "Polygon Mainnet",
-                rpcUrls: [
-                  "https://polygon-mainnet.infura.io/v3/939c76fc756341f389051729d8a2f13a",
-                  // "https://polygon-rpc.com",
-                ],
-                nativeCurrency: {
-                  name: "Polygon Coin",
-                  symbol: "MATIC",
-                  decimals: 18,
-                },
-                blockExplorerUrls: ["https://polygonscan.com"],
-              },
-            ]
-          : [
-              {
-                chainId,
-                chainName: "BSC Mainnet",
-                rpcUrls: ["https://bsc-dataseed1.binance.org"],
-                nativeCurrency: {
-                  name: "Binance Coin",
-                  symbol: "BNB",
-                  decimals: 18,
-                },
-                blockExplorerUrls: ["https://bscscan.com"],
-              },
-            ];
+      if (id <= 5) return;
+      let params = {
+        137: {
+          chainId,
+          chainName: "Polygon Mainnet",
+          rpcUrls: [
+            "https://polygon-mainnet.infura.io/v3/939c76fc756341f389051729d8a2f13a",
+            // "https://polygon-rpc.com",
+          ],
+          nativeCurrency: {
+            name: "Polygon Coin",
+            symbol: "MATIC",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://polygonscan.com"],
+        },
+        56: {
+          chainId,
+          chainName: "BSC Mainnet",
+          rpcUrls: ["https://bsc-dataseed1.binance.org"],
+          nativeCurrency: {
+            name: "Binance Coin",
+            symbol: "BNB",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://bscscan.com"],
+        },
+        80001: {
+          chainId,
+          chainName: "polygon mumbai",
+          rpcUrls: [
+            "https://polygon-mumbai.g.alchemy.com/v2/MGcgBRN-uuuG6x1qaI-xchQMpebh_aN6",
+          ],
+          nativeCurrency: {
+            name: "matic Coin",
+            symbol: "matic",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        97: {
+          chainId,
+          chainName: "BSC Chapel",
+          rpcUrls: ["https://data-seed-prebsc-2-s1.binance.org:8545/"],
+          nativeCurrency: {
+            name: "BNB Coin",
+            symbol: "BNB",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+      }[id];
+      if (!params) return;
       await window.ethereum.request(
         {
           method: "wallet_addEthereumChain",
-          params,
+          params: [params],
         },
         this.connectAddr
       );
@@ -251,13 +272,14 @@ export default {
           params: [{ chainId }],
         });
         if (res && res.error) {
-          this.addChain(chainId, id);
+          throw new Error(res.error);
         }
       } catch (error) {
-        this.onErr(error);
-        if (error.code === 4902) {
-          this.switchNet(id);
-        }
+        this.onErr(error).then(() => {
+          if (error.code === 4902) {
+            this.switchNet(id);
+          }
+        });
       }
     },
     addHash(tx, usdt, contentType = "Purchase") {
