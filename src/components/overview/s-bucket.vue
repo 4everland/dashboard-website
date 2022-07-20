@@ -14,7 +14,7 @@
       @click:row="onItem"
     >
       <template v-slot:item.name="{ item }">
-        <v-btn x-small text color="primary" rounded>
+        <v-btn x-small text color="primary" rounded class="e-btn-text">
           <b>{{ item.name }}</b>
         </v-btn>
       </template>
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import mixin from "../../pages/bucket/storage-mixin";
+import mixin from "../bucket/storage-mixin";
 
 export default {
   mixins: [mixin],

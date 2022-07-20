@@ -4,14 +4,18 @@ import FirstLanding from "./first-landing";
 export default [
   {
     path: "/changelog",
-    component: Changelog,
+    components: {
+      cache: Changelog,
+    },
     meta: {
       title: "Change Log",
     },
   },
   {
     path: "/hosting/first-landing",
-    component: FirstLanding,
+    components: {
+      cache: FirstLanding,
+    },
     meta: {
       title: "First Landing",
       hideNav: 1,
