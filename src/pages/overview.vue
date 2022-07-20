@@ -6,21 +6,7 @@
 
 <template>
   <div class="pos-r">
-    <!-- <v-alert
-      text
-      type="info"
-      dismissible
-      dense
-      v-if="userInfo.email && !noTip"
-      @input="onCloseTip"
-    >
-      <router-link to="/settings?tab=account_binding&type=3">
-        Subscribe to stay up to date on the 4EVERLAND latest news and events.
-      </router-link>
-    </v-alert> -->
-    <!-- <e-tabs :list="list" /> -->
-    <!-- {{ usageList }} -->
-    <div class="pos-a right-0" style="top: -50px">
+    <div :class="asMobile ? 'ta-r mb-5' : 'pos-a right-0'" style="top: -50px">
       <v-btn color="primary" class="bdrs-10" to="/bucket/storage/?new=bucket">
         <span class="fz-18">+</span>
         <span class="ml-1"> New Bucket </span>
@@ -78,11 +64,6 @@
 
 <script>
 export default {
-  computed: {
-    userInfo() {
-      return this.$store.state.userInfo;
-    },
-  },
   data() {
     return {
       usageInfo: {},
@@ -90,6 +71,12 @@ export default {
     };
   },
   computed: {
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
+    userInfo() {
+      return this.$store.state.userInfo;
+    },
     usageList() {
       const info = this.usageInfo;
       return [
