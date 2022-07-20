@@ -24,7 +24,13 @@ export default {
     list() {
       const { name, id } = this.info;
       const getObj = (key) => {
-        const it = this.info[key] || {};
+        let it = this.info[key] || {};
+        if (key == "production" && !it.taskId) {
+          it = {
+            ...this.info.latest,
+            domain: it.domain,
+          };
+        }
         return {
           label: key.capitalize(),
           to: `/hosting/build/${name}/${id}/${it.taskId}`,
