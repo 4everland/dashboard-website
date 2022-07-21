@@ -2,14 +2,6 @@
 #e-header {
   box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 15%) !important;
 }
-.u-avatar {
-  background: #cac3e0;
-  padding: 4px;
-  border-radius: 100px;
-  transform: scale(1.45);
-  position: relative;
-  left: -12px;
-}
 </style>
 <template>
   <v-app-bar id="e-header" app clipped-left height="60" color="#fff">
@@ -32,14 +24,11 @@
         <v-btn
           slot="ref"
           text
-          rounded
           :href="it.href"
           :to="it.to"
           :target="it.href ? '_blank' : ''"
-          :style="{
-            background: it.btnBg,
-          }"
-          class="ml-4"
+          :style="it.btnStyle"
+          class="ml-4 bdrs-10"
         >
           <img
             v-if="it.img"
@@ -48,7 +37,8 @@
             :height="it.height"
             class="mr-2"
           />
-          <div class="u-avatar" v-if="it.avatar">
+          <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
+          <div class="u-avatar bg-1 bdrs-100 ml-2" v-if="it.avatar">
             <v-avatar size="22" class="bg-white d-b">
               <!-- <v-img :src="it.avatar"></v-img> -->
               <svg
@@ -59,9 +49,8 @@
               ></svg>
             </v-avatar>
           </div>
-          <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
           <img
-            v-if="it.subs && !it.noSuffix"
+            v-else-if="it.subs && !it.noSuffix"
             :src="`img/svg/header/ic-down-${it.color || 'def'}.svg`"
             width="10"
             class="ml-2"
@@ -158,8 +147,7 @@ export default {
       list.push({
         label: (info.username || "unkown").cutStr(6, 4),
         avatar: info.avatar || "img/bg/user/def-avatar.png",
-        color: "white",
-        btnBg: "#CAC3E0",
+        btnStyle: "border: 1px solid #775DA6",
         subs: [
           {
             label: "Settings",
