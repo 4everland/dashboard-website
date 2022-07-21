@@ -15,7 +15,7 @@
     <div class="d-flex pos-r">
       <ul class="pl-0 shrink-0">
         <li
-          class="mt-2 mb-2 pos-r hover-1"
+          class="mt-4 lh-12 pos-r hover-1"
           @click="curIdx = i"
           :class="{
             'color-1': curIdx == i,
@@ -24,12 +24,7 @@
           :key="i"
         >
           <p>{{ it.totalUv }}</p>
-          <p
-            class="fz-12"
-            :class="{
-              'color-1': curIdx == i,
-            }"
-          >
+          <p class="fz-12 mt-1" :class="curIdx == i ? 'color-1' : 'gray'">
             {{ it.projectName.cutStr(10, 6) }}
           </p>
           <img
