@@ -128,7 +128,7 @@
         is not supported now)
       </div>
     </div>
-    <div class="ta-r mt-4">
+    <div class="ta-c mt-4">
       <v-btn color="primary" rounded @click="onDeploy" min-width="100"
         >Deploy</v-btn
       >
@@ -144,7 +144,7 @@
   </div>
   <div v-else-if="isTpl">
     <new-step-1-tpl :query="query" @git-repo="repoInfo = $event" />
-    <div class="ta-r mt-4">
+    <div class="ta-c mt-4">
       <v-btn
         rounded
         outlined

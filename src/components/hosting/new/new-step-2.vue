@@ -78,7 +78,7 @@
       <build-overview-logs @done="isDone = true" @info="onInfo" />
     </div>
 
-    <div class="ta-r mt-4" v-if="!isDone">
+    <div class="ta-c mt-4" v-if="!isDone">
       <v-btn rounded outlined @click="onCancel">Cancel</v-btn>
     </div>
   </div>

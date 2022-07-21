@@ -3,23 +3,40 @@
     <div class="al-c">
       <img src="img/svg/overview/uv.svg" width="16" />
       <b class="ml-2 fz-16">Hosting UV</b>
-      <div class="ml-auto pa-1 hover-1">
+      <div class="ml-auto pa-1 hover-1 z-10">
         <img src="img/svg/overview/exchange.svg" width="18" />
       </div>
     </div>
-    <div class="d-flex">
+    <v-skeleton-loader
+      v-if="!projList.length"
+      type="article"
+    ></v-skeleton-loader>
+    <div class="d-flex pos-r">
       <ul class="pl-0 shrink-0">
         <li
-          class="mt-2 mb-2"
+          class="mt-2 mb-2 pos-r hover-1"
           @click="curIdx = i"
           :class="{
-            'color-1 fw-b': curIdx == i,
+            'color-1': curIdx == i,
           }"
           v-for="(it, i) in projList"
           :key="i"
         >
           <p>{{ it.totalUv }}</p>
-          <p class="gray fz-12">{{ it.projectName }}</p>
+          <p
+            class="fz-12"
+            :class="{
+              'color-1': curIdx == i,
+            }"
+          >
+            {{ it.projectName.cutStr(10, 6) }}
+          </p>
+          <img
+            src="img/svg/overview/arrow.svg"
+            class="pos-a"
+            style="bottom: -5px; width: 115%"
+            v-if="curIdx == i"
+          />
         </li>
       </ul>
       <div class="pos-r flex-1 pr-10">
@@ -118,10 +135,10 @@ export default {
             type: "line",
             symbol: "none",
             areaStyle: {
-              color: "rgba(52, 169, 255, 0.2)",
+              color: "#E8E2F4",
             },
             itemStyle: {
-              color: "rgba(52, 169, 255, 0.2)",
+              color: "#836CAE",
             },
           },
         ],

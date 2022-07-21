@@ -167,14 +167,14 @@ export default {
             to: "/settings",
           },
           {
-            label: "My Collection",
-            icon: "m-collect",
-            to: "/collections",
-          },
-          {
-            label: "My Referral",
+            label: "Referral",
             icon: "m-refer",
             to: "/referral",
+          },
+          {
+            label: "Collection",
+            icon: "m-collect",
+            to: "/collections",
           },
           {
             label: "Feedback",
