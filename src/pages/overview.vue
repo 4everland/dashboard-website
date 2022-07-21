@@ -1,6 +1,6 @@
 <style lang="scss">
 .ov-wrap-1 {
-  padding: 30px 15px;
+  padding: 30px 20px;
 }
 </style>
 

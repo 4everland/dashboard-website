@@ -3,15 +3,7 @@
     <v-row>
       <v-col cols="12" md="6">
         <v-card>
-          <div class="ov-wrap-1">
-            <div class="al-c">
-              <img src="img/svg/overview/uv.svg" width="16" />
-              <b class="ml-2 fz-16">Hosting UV</b>
-              <div class="ml-auto pa-1 hover-1">
-                <img src="img/svg/overview/exchange.svg" width="18" />
-              </div>
-            </div>
-          </div>
+          <v3-uv />
         </v-card>
       </v-col>
       <v-col cols="12" md="6">
@@ -44,24 +36,3 @@
     </v-card>
   </div>
 </template>
-
-<script>
-export default {
-  data() {
-    return {};
-  },
-  mounted() {
-    this.getProjList();
-  },
-  methods: {
-    async getProjList() {
-      try {
-        const { data } = await this.$http2.get("/favourite/analytics/uv");
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
-};
-</script>
