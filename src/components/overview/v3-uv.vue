@@ -8,6 +8,7 @@
       </div>
     </div>
     <v-skeleton-loader
+      class="mt-15 mb-15"
       v-if="!projList.length"
       type="article"
     ></v-skeleton-loader>

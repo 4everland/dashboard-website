@@ -8,16 +8,7 @@
       </v-col>
       <v-col cols="12" md="6">
         <v-card>
-          <div class="ov-wrap-1">
-            <div class="al-c">
-              <img src="img/svg/overview/pie.svg" width="16" />
-              <b class="ml-2 fz-16">Bucket Storage</b>
-              <e-radio-btn
-                class="ml-auto"
-                :options="['IPFS', 'AR']"
-              ></e-radio-btn>
-            </div>
-          </div>
+          <v3-stor />
         </v-card>
       </v-col>
     </v-row>
