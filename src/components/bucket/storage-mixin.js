@@ -482,7 +482,6 @@ export default {
         //   this.continuationTokenArr = [""];
         // }
         let list = data.objects.map((it) => {
-          console.log(data);
           if (it.prefix)
             return {
               name: it.prefix.replace(Prefix, "").replace("/", ""),
