@@ -208,7 +208,7 @@ export default {
           chainId,
           chainName: "Polygon Mainnet",
           rpcUrls: [
-            "https://polygon-mainnet.infura.io/v3/939c76fc756341f389051729d8a2f13a",
+            "https://rpc-mainnet.matic.quiknode.pro",
             // "https://polygon-rpc.com",
           ],
           nativeCurrency: {
@@ -232,9 +232,7 @@ export default {
         80001: {
           chainId,
           chainName: "polygon mumbai",
-          rpcUrls: [
-            "https://polygon-mumbai.g.alchemy.com/v2/MGcgBRN-uuuG6x1qaI-xchQMpebh_aN6",
-          ],
+          rpcUrls: ["https://polygontestapi.terminet.io/rpc"],
           nativeCurrency: {
             name: "matic Coin",
             symbol: "matic",
