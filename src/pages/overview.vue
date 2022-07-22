@@ -19,7 +19,7 @@
 
     <v3-usage />
 
-    <div class="mt-5">
+    <div class="mt-3">
       <v-row>
         <v-col cols="12" md="6">
           <v-card>
