@@ -232,9 +232,7 @@ export default {
         80001: {
           chainId,
           chainName: "polygon mumbai",
-          rpcUrls: [
-            "https://polygon-mumbai.g.alchemy.com/v2/MGcgBRN-uuuG6x1qaI-xchQMpebh_aN6",
-          ],
+          rpcUrls: ["https://polygontestapi.terminet.io/rpc"],
           nativeCurrency: {
             name: "matic Coin",
             symbol: "matic",
