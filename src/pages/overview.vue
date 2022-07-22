@@ -40,3 +40,13 @@
     <new-user-tips />
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
+  },
+};
+</script>

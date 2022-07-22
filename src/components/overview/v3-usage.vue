@@ -51,9 +51,6 @@ export default {
     };
   },
   computed: {
-    asMobile() {
-      return this.$vuetify.breakpoint.smAndDown;
-    },
     usageList() {
       const info = this.usageInfo;
       return [

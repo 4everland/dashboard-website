@@ -91,7 +91,6 @@ export default {
       list.sort((a, b) => {
         return a.time - b.time;
       });
-      console.log(list);
       for (const it of list) {
         const fmt = "HH:mm";
         xArr.push(it.time.format(fmt));
