@@ -146,6 +146,7 @@ export default {
       try {
         const addr = isBuy ? this.payAddr : MumbaiFundPool;
         console.log("check approve", this.connectAddr, addr);
+        if (!this.connectAddr) return console.log("no connectAddr");
         const allowance = await this.curContract[this.usdcKey].allowance(
           this.connectAddr,
           addr
@@ -154,6 +155,7 @@ export default {
         this.isApproved = !allowance.lt(minAllowance);
         console.log("isApproved", this.isApproved, allowance);
       } catch (error) {
+        console.log("check approve error");
         this.onErr(error);
       }
     },
@@ -171,6 +173,7 @@ export default {
         console.log(receipt);
         this.isApproved = true;
       } catch (error) {
+        console.log("on approve error");
         this.onErr(error);
       }
       this.approving = false;
@@ -185,16 +188,6 @@ export default {
       this.$setMsg({
         name: "showMetaConnect",
       });
-    },
-    async getSign() {
-      try {
-        const { data } = await this.$http.post(
-          "$v3/common/sign/" + this.connectAddr
-        );
-        console.log("sign", data);
-      } catch (error) {
-        console.log(error);
-      }
     },
     getChainId(type) {
       if (type == "Polygon") return this.$inDev ? 80001 : 137;
@@ -273,6 +266,7 @@ export default {
           throw new Error(res.error);
         }
       } catch (error) {
+        console.log("switch net error");
         this.onErr(error).then(() => {
           if (error.code === 4902) {
             this.switchNet(id);
@@ -320,6 +314,7 @@ export default {
         // this.getSign();
         this.checkApprove(this.isBuy);
       } catch (error) {
+        console.log("on connect error");
         this.$alert(error.message).then(() => {
           this.$router.push("/billing/usage");
         });
