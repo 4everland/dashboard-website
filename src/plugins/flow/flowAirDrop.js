@@ -3,9 +3,9 @@ import { taskRequest } from "./api";
 
 async function isAirDrop() {
   const data = await taskRequest();
-  console.log(data.syncEvents);
   if (data.syncEvents[0]) {
-    Vue.prototype.$Dialog.getFlowAirDrop();
+    const Obj = JSON.parse(data.syncEvents[0].params);
+    Vue.prototype.$Dialog.getFlowAirDrop(Obj.image);
   }
 }
 
