@@ -108,26 +108,23 @@ export default {
           it.value = it.request;
           return it;
         });
-        this.loading = false;
-        await this.$sleep(10);
-        await this.setChart(this.list);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async setChart(data) {
-      if (!this.worldMapJson) {
-        try {
+        if (!this.worldMapJson) {
           const { data } = await Axios.get(
             "https://static1.4everland.org/config/world.json"
           );
           this.$setState({
             worldMapJson: data,
           });
-        } catch (error) {
-          //
         }
+        this.loading = false;
+        this.$nextTick(() => {
+          this.setChart(this.list);
+        });
+      } catch (error) {
+        console.log(error);
       }
+    },
+    setChart(data) {
       if (!this.chart) {
         const el = this.$refs.chart;
         this.chart = window.echarts.init(el);
