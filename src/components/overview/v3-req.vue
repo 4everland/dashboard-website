@@ -47,7 +47,8 @@ export default {
   methods: {
     async getData() {
       try {
-        const { data } = this.$http2.get("/favourite/analytics/request/flux");
+        // const { data } = await this.$http2.get("/favourite/analytics/request/flux");
+        const { data } = await this.$http.get("/bi/charts/map");
         console.log(data);
       } catch (error) {
         console.log(error);
