@@ -15,15 +15,35 @@
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
     <e-toggle-card
+      v-if="info"
       class="mt-5"
-      title="Syncing to IPFS"
+      :title="'Syncing to ' + info.platform"
       :value="getOpen(1)"
       :icon="getIcon(1)"
     >
-      <e-kv label="IPFS Hash" v-if="info && info.cid">{{ info.cid }}</e-kv>
-      <div class="fz-14 gray" v-else>Pending</div>
+      <e-kv
+        min-width="70px"
+        :label="`${info.platform} Hash:`"
+        v-if="info && info.hash"
+      >
+        <a
+          :href="$utils.getCidLink(info.hash, info.platform)"
+          target="_blank"
+          >{{ info.hash }}</a
+        >
+      </e-kv>
+      <div class="fz-14 gray" v-else>
+        <div v-if="isSyncErr" class="red-1">Syncing failed</div>
+        <div v-else-if="inNew && info && info.platform == 'IC'">
+          Syncing to IC may take more time to complete,
+          <a href="#/hosting/projects" class="u">click here</a> for other
+          operations without waiting.
+        </div>
+        <span v-else>Pending</span>
+      </div>
     </e-toggle-card>
     <e-toggle-card
+      v-if="info && info.platform == 'IPFS'"
       class="mt-5"
       title="Assigning Domains"
       :value="getOpen(2)"
@@ -34,7 +54,9 @@
           <h-domain :val="it" class="fz-14"></h-domain>
         </p>
       </div>
-      <div v-else class="fz-14 gray">Pending</div>
+      <div v-else class="fz-14 gray">
+        <span>Pending</span>
+      </div>
     </e-toggle-card>
   </div>
 </template>
@@ -43,6 +65,9 @@
 import { mapState } from "vuex";
 
 export default {
+  props: {
+    inNew: Boolean,
+  },
   data() {
     return {
       curIdx: 0,
@@ -77,6 +102,9 @@ export default {
     },
     isFail() {
       return this.info && this.info.isFail;
+    },
+    isSyncErr() {
+      return /fail/i.test(this.info.syncState);
     },
   },
   watch: {
@@ -116,7 +144,9 @@ export default {
           `/project/task/object/${this.taskId}`
         );
         const info = data.task;
-        const { cid, state = "" } = info;
+        if (data.hash) info.hash = data.hash;
+        const { hash, state = "", platform } = info;
+        const isIpfs = platform == "IPFS";
         this.state = state.toLowerCase();
         this.isDone = this.state == "success";
         info.isFail = /fail|timeout|error|cancel/.test(this.state);
@@ -124,10 +154,12 @@ export default {
         this.$emit("info", info);
         this.logs = data.log;
         if (this.isDone) {
-          this.curIdx = 2;
+          this.curIdx = isIpfs ? 2 : 1;
           this.$store.dispatch("getProjectInfo", this.info.projectId);
-        } else if (cid) {
-          this.curIdx = 2;
+        } else if (this.isSyncErr) {
+          this.curIdx = 1;
+        } else if (hash || this.state == "syncing") {
+          this.curIdx = isIpfs ? 2 : 1;
         }
       } catch (error) {
         console.log(error);
@@ -138,7 +170,11 @@ export default {
     },
     getIcon(i) {
       if (!this.info) return "";
-      if (i == 0 && this.isFail) return "fail";
+      if (i == 0) {
+        if (this.isSyncErr) return "checked";
+        if (this.isFail) return "fail";
+      }
+      if (this.isSyncErr && i == 1) return "fail";
       if (this.isFail) return "pending";
       if (i < this.curIdx || this.isDone) return "checked";
       return i == this.curIdx ? "loading" : "pending";

@@ -61,7 +61,7 @@
       <div class="d-flex al-c gray fz-15" v-if="info">
         <template v-if="info.isFail">
           <img src="img/svg/common/ic-error.svg" width="18" />
-          <span class="ml-3">{{ errMsg || "Build failed" }}</span>
+          <span class="ml-3">{{ failMsg }}</span>
         </template>
         <template v-else-if="!isDone">
           <v-progress-circular
@@ -75,7 +75,7 @@
           </div>
         </template>
       </div>
-      <build-overview-logs @done="isDone = true" @info="onInfo" />
+      <build-overview-logs in-new @done="isDone = true" @info="onInfo" />
     </div>
 
     <div class="ta-c mt-4" v-if="!isDone">
@@ -93,6 +93,13 @@ export default {
       showPop: false,
       errMsg: "",
     };
+  },
+  computed: {
+    failMsg() {
+      if (this.info && /fail/i.test(this.info.syncState))
+        return "Syncing failed";
+      return this.errMsg || "Build failed";
+    },
   },
   watch: {
     isDone(val) {

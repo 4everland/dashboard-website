@@ -73,48 +73,60 @@
             <div class="gray fz-14 mt-1">
               Select a project to add your domains to:
             </div>
-            <div class="bd-1 mt-6">
+            <div class="mt-6">
               <div v-if="!projects">
                 <v-skeleton-loader type="article" />
               </div>
               <template v-else>
-                <div class="d-flex al-c bdb-1">
-                  <v-icon class="ml-4">mdi-magnify</v-icon>
-                  <input
-                    type="text"
+                <div>
+                  <v-text-field
+                    class="hide-msg bd-1"
+                    dense
+                    rounded
+                    solo
+                    clearable
+                    label="Search"
+                    prepend-inner-icon="mdi-magnify"
                     v-model="keyword"
-                    placeholder="Search For Projects"
-                    class="flex-1 pd-10"
-                    style="height: 54px; outline: none"
-                  />
+                  ></v-text-field>
                 </div>
-                <div class="ov-a" style="max-height: 40vh">
-                  <div
-                    class="d-flex al-c pd-15"
-                    :class="{
-                      'bdt-1': i > 0,
-                    }"
-                    v-for="(it, i) in projList"
-                    :key="i"
-                  >
-                    <v-icon>mdi-folder-outline</v-icon>
-                    <span class="ml-2">{{ it.name }}</span>
 
-                    <!-- @click="onSelect(it)" -->
-                    <v-btn
-                      small
-                      color="primary"
-                      class="ml-auto"
-                      :to="`/hosting/project/${it.name}/${it.id}?tab=settings&sub=domains`"
-                      >Select</v-btn
+                <div class="bg-f6 pa-2 mt-5">
+                  <div class="ov-a" style="max-height: 40vh">
+                    <div
+                      class="d-flex al-c pa-3 mt-1"
+                      v-for="(it, i) in projList"
+                      :key="i"
                     >
+                      <v-icon size="16">mdi-folder-outline</v-icon>
+                      <b class="ml-2" style="min-width: 140px">{{ it.name }}</b>
+
+                      <img
+                        class="ml-3"
+                        :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
+                        height="20"
+                      />
+                      <span class="ml-1 fz-14">{{ it.platform }}</span>
+
+                      <!-- @click="onSelect(it)" -->
+                      <v-btn
+                        small
+                        rounded
+                        color="primary"
+                        class="ml-auto"
+                        :to="`/hosting/project/${it.name}/${it.id}?tab=settings&sub=domains`"
+                        :disabled="it.platform != 'IPFS'"
+                        >Select</v-btn
+                      >
+                    </div>
                   </div>
-                </div>
-                <div class="d-flex al-c bdt-1 pd-15 gray fz-15">
-                  <v-icon>mdi-folder-plus-outline</v-icon>
-                  <a class="color-1 ml-1" href="#/hosting/new"
-                    >Create New Project</a
+                  <a
+                    href="#/hosting/new"
+                    class="d-flex al-c f-center mt-3 pa-3 gray fz-15"
                   >
+                    <img src="img/svg/add2.svg" width="12" />
+                    <span class="color-1 ml-2">Create New Project</span>
+                  </a>
                 </div>
               </template>
             </div>
@@ -238,8 +250,12 @@ export default {
     },
     async getProjects() {
       try {
-        const { data } = await this.$http2.get("/project");
-        this.projects = data;
+        const { data } = await this.$http2.get("/project/v3/list", {
+          params: {
+            size: 100,
+          },
+        });
+        this.projects = data.list;
       } catch (error) {
         this.$confirm(error.message, "Error", {
           confirmText: "Retry",

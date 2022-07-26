@@ -20,12 +20,25 @@
           </a>
         </e-kv2>
 
-        <e-kv2 label="Domains" class="mt-8" v-if="info.domains">
-          <div class="d-flex al-c">
-            <h-domain class="mr-6" :val="info.domains[0].domain" />
-            <e-menu v-if="info.domains.length > 1" offset-y open-on-hover>
-              <v-btn slot="ref" color="warning" elevation="0" x-small rounded
-                >+{{ info.domains.length - 1 }}</v-btn
+      <e-kv2
+        label="Domains"
+        class="mt-8"
+        v-if="info.domains"
+        :class="{
+          'op-0 ev-n': info.platform != 'IPFS',
+        }"
+      >
+        <div class="d-flex al-c">
+          <h-domain class="mr-6" :val="info.domains[0].domain" />
+          <e-menu v-if="info.domains.length > 1" offset-y open-on-hover>
+            <v-btn slot="ref" color="warning" elevation="0" x-small rounded
+              >+{{ info.domains.length - 1 }}</v-btn
+            >
+            <div class="bg-white pd-10 fz-14">
+              <div
+                class="pd-5"
+                v-for="(row, j) in info.domains.slice(1)"
+                :key="j"
               >
               <div class="bg-white pd-10 fz-14">
                 <div
@@ -36,39 +49,22 @@
                   <h-domain :val="info.domains[1 + j].domain" />
                 </div>
               </div>
+              </div>
+            </div>
             </e-menu>
           </div>
         </e-kv2>
-
-        <div class="mt-7 d-flex">
-          <e-kv2 label="State">
-            <h-status :val="info.state"></h-status>
-          </e-kv2>
-          <e-kv2 class="ml-auto" label="Created" style="min-width: 120px">
-            <e-time>{{ info.repo.updateAt }}</e-time>
-          </e-kv2>
-        </div>
-
-        <div class="mt-7 d-flex">
-          <e-kv2 label="Branch">
-            <div class="d-flex al-c f-wrap">
-              <h-branch :info="info" class="fz-15" />
-              <e-commit :info="info.commits" class="fz-14 ml-3"></e-commit>
-            </div>
-          </e-kv2>
-          <e-kv2 class="ml-auto" label="IPFS" style="min-width: 120px">
-            <e-link class="fz-14" :href="$utils.getCidLink(info.cid)">
-              {{ info.cid ? "Verify on IPFS" : "Pending" }}
-            </e-link>
-          </e-kv2>
-        </div>
-      </v-col>
-    </v-row>
-    <div class="mt-8">
-      <h4 class="mb-5">Preview Deployments</h4>
-      <proj-deployments :limit="5" />
-    </div>
-  </div>
+        <e-kv2 class="ml-auto" :label="info.platform" style="min-width: 120px">
+          <e-link
+            class="fz-14"
+            :href="$utils.getCidLink(info.hash, info.platform)"
+          >
+            {{ info.hash ? "Verify on " + info.platform : "Pending" }}
+          </e-link>
+        </e-kv2>
+      </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
