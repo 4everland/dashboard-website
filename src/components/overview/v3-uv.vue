@@ -3,7 +3,7 @@
     <div class="al-c">
       <img src="img/svg/overview/uv.svg" width="16" />
       <b class="ml-2 fz-16">Hosting UV</b>
-      <div class="ml-auto pa-1 hover-1 z-10">
+      <div class="ml-auto pa-1 hover-1 z-1">
         <img src="img/svg/overview/exchange.svg" width="18" />
       </div>
     </div>

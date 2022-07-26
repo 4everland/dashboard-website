@@ -1,31 +1,56 @@
+<style lang="scss">
+.v3-req {
+  table {
+    border-spacing: 0;
+    thead {
+      background: #f2f2f2;
+    }
+    td {
+      padding: 5px;
+      border-bottom: 1px solid #eee;
+    }
+  }
+}
+</style>
 <template>
-  <div class="ov-wrap-1">
+  <div class="ov-wrap-1 v3-req">
     <div class="al-c">
       <img src="img/svg/overview/earth.svg" width="16" />
       <b class="ml-2 fz-16">Requests by country</b>
       <e-radio-btn
         class="ml-auto"
-        :options="['Hosting', 'Bucket']"
+        :options="typeList"
+        v-model="typeIdx"
       ></e-radio-btn>
     </div>
     <v-row class="mt-4">
       <v-col cols="12" md="7">
-        <div ref="chart" style="height: 300px"></div>
+        <v-skeleton-loader
+          class="mt-10 mb-10"
+          v-if="loading"
+          type="article"
+        ></v-skeleton-loader>
+        <div v-show="!loading" ref="chart" style="height: 300px"></div>
       </v-col>
       <v-col cols="12" md="5">
-        <table class="w100p">
-          <thead class="bg-gray-a">
+        <v-skeleton-loader
+          class="mt-10 mb-10"
+          v-if="loading"
+          type="article"
+        ></v-skeleton-loader>
+        <table class="w100p fz-13" v-else>
+          <thead class="gray">
             <tr>
-              <td>State</td>
+              <td>Country/Region</td>
               <td>Requests</td>
               <td>Bandwidth</td>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>China</td>
-              <td>15</td>
-              <td>1.2MB</td>
+            <tr v-for="(it, i) in list" :key="i">
+              <td class="gray">{{ it.name }}</td>
+              <td>{{ it.request }}</td>
+              <td>{{ it.band }}</td>
             </tr>
           </tbody>
         </table>
@@ -35,10 +60,25 @@
 </template>
 
 <script>
+import Axios from "axios";
+
 export default {
   computed: {
     worldMapJson() {
       return this.$store.state.worldMapJson;
+    },
+  },
+  data() {
+    return {
+      typeList: ["Hosting", "Bucket"],
+      typeIdx: 0,
+      list: [],
+      loading: false,
+    };
+  },
+  watch: {
+    typeIdx() {
+      this.getData();
     },
   },
   mounted() {
@@ -47,16 +87,36 @@ export default {
   methods: {
     async getData() {
       try {
-        // const { data } = await this.$http2.get("/favourite/analytics/request/flux");
-        const { data } = await this.$http.get("/bi/charts/map");
-        console.log(data);
+        let res;
+        this.loading = true;
+        const isH = this.typeIdx == 0;
+        if (isH)
+          res = await this.$http2.get("/favourite/analytics/request/flux");
+        else res = await this.$http.get("/bi/charts/map");
+        const { data } = res;
+        const list = !isH
+          ? data.collections
+          : data.totalRequestVo.map((it) => {
+              return {
+                name: it.area,
+                request: it.request,
+                bandWidth: it.flux,
+              };
+            });
+        this.list = list.map((it) => {
+          it.band = this.$utils.getFileSize(it.bandWidth);
+          it.value = it.request;
+          return it;
+        });
+        this.loading = false;
+        await this.$sleep(10);
+        await this.setChart(this.list);
       } catch (error) {
         console.log(error);
       }
     },
-    async setChart() {
+    async setChart(data) {
       if (!this.worldMapJson) {
-        this.loading = true;
         try {
           const { data } = await Axios.get(
             "https://static1.4everland.org/config/world.json"
@@ -67,7 +127,6 @@ export default {
         } catch (error) {
           //
         }
-        this.loading = false;
       }
       if (!this.chart) {
         const el = this.$refs.chart;
@@ -89,13 +148,13 @@ export default {
         },
         series: [
           {
-            name: /flux/.test(this.api) ? "Data Transfer(MB)" : "Request",
+            name: "Request",
             type: "map",
             roam: true,
             map: "world",
             scaleLimit: {
-              min: 0.8,
-              max: 2,
+              min: 1,
+              max: 1.5,
             },
             emphasis: {
               label: {

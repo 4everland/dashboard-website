@@ -19,7 +19,7 @@
       <div class="pos-r flex-1 pr-10 mt-5" style="height: 260px">
         <div
           class="pos-a left-0 h100p"
-          style="top: -30px; bottom: -20px; right: 50px"
+          style="top: -10px; bottom: -20px; right: 20px"
           ref="chart"
         ></div>
       </div>
