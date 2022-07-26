@@ -140,7 +140,11 @@ export default {
   },
 
   mounted() {
-    this.getList();
+    if (this.inFile && this.$route.query.ipfsHash) {
+      this.getList(this.$route.query.ipfsHash);
+    } else {
+      this.getList();
+    }
     this.checkNew();
   },
   methods: {
@@ -169,7 +173,7 @@ export default {
       }
       return this.$alert(msg);
     },
-    async getList() {
+    async getList(arg) {
       if (!this.s3) return;
       this.selected = [];
       if (this.inBucket || !this.bucketList.length) {
@@ -177,7 +181,7 @@ export default {
       }
 
       if (this.inFile) {
-        this.headObject();
+        this.headObject(arg);
       } else if (this.inFolder) {
         this.getObjects();
       }
@@ -221,7 +225,6 @@ export default {
         "</ul>";
       const fn = (data) => {
         if (data.form1.noShow) localStorage[skey] = 1;
-        console.log(data);
       };
       return this.$confirm(html, "Sync to AR", {
         comp1: "no-show-form",
@@ -235,11 +238,11 @@ export default {
           throw new Error();
         });
     },
-    async onSyncAR(name, method = "post") {
+    async onSyncAR(name, method = "post", ipfsHash) {
       console.log(name);
       if (this.selectArStatus == "syncing") {
         this.$alert("The file is being synced").then(() => {
-          this.getList();
+          this.getList(ipfsHash);
         });
         return;
       }
@@ -257,12 +260,13 @@ export default {
           bucket: Bucket,
           key: this.getFileKey(name),
         });
-        this.getList();
+        this.getList(ipfsHash);
         this.$setMsg({
           name: "updateUsage",
         });
       } catch (error) {
         //
+        this.getList(ipfsHash);
       }
       this.$loading.close();
     },
@@ -385,10 +389,10 @@ export default {
         );
       });
     },
-    async headObject() {
+    async headObject(arg) {
       this.fileLoading = true;
       this.fileInfo = null;
-      this.s3.headObject(this.pathInfo, (err, data) => {
+      this.s3.headObject({ ...this.pathInfo, IfMatch: arg }, (err, data) => {
         this.fileLoading = false;
         if (err) return this.onErr(err);
         // console.log(data);
@@ -707,33 +711,13 @@ export default {
     },
     onRow(it) {
       const url = this.getPath(it);
-      this.$router.push(encodeURI(url));
+      this.$router.push({
+        path: encodeURI(url),
+        query: {
+          ipfsHash: it.hash,
+        },
+      });
     },
-    // async getSelectedObjects(item) {
-    //   const items = item ? [item] : this.selected;
-    //   if (this.inBucket) return items;
-    //   let arr = [];
-    //   const { Prefix } = this.pathInfo;
-    //   for (const it of items) {
-    //     if (it.isFile) arr.push(it);
-    //     else {
-    //       const objArr = await this.getSubObjects(it.name);
-    //       if (objArr.length >= 900)
-    //         throw new Error(
-    //           `Plenty of files are found in folder【${it.name}】 and can only be deleted under the folder.`
-    //         );
-    //       arr = arr.concat(
-    //         objArr.map((sub) => {
-    //           return {
-    //             Key: sub.Key,
-    //             name: sub.Key.replace(Prefix, ""),
-    //           };
-    //         })
-    //       );
-    //     }
-    //   }
-    //   return arr;
-    // },
     async getSubObjects(folder) {
       const { Bucket, Prefix } = this.pathInfo;
       const folderKey = Prefix + folder + "/";
