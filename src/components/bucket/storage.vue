@@ -169,6 +169,7 @@
           <div v-else-if="!fileInfo">
             <span class="gray">Not Found</span>
           </div>
+
           <ul class="ls-none" v-else>
             <li
               class="mt-2 mb-2 fz-14 d-flex"
@@ -224,11 +225,12 @@
                     slot="ref"
                     text
                     x-small
-                    @click.stop="headObject"
+                    @click.stop="headObject(null)"
                     v-if="fileArStatus == 'syncing'"
                   >
                     <v-icon>mdi-refresh</v-icon>
                   </v-btn>
+
                   <div
                     class="d-flex al-c f-wrap ml-2 fz-13"
                     v-if="['failure', 'timeout'].includes(fileArStatus)"
@@ -246,7 +248,7 @@
                       small
                       text
                       color="primary"
-                      @click="onSyncAR(fileName)"
+                      @click="onSyncAR(fileName, 'post', fileInfo.hash)"
                       >Retry</v-btn
                     >
                   </div>
@@ -502,6 +504,7 @@ export default {
   },
   watch: {
     path() {
+      console.log(11111);
       this.onRouteChange();
     },
   },

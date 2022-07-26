@@ -143,8 +143,8 @@ const lock = new AsyncLock({ timeout: 5000 });
       } = error.response || {};
       console.log(error, status, statusText);
       if (status == 409) {
-        console.log(data);
         setTimeout(() => {
+          console.log(data);
           if (typeof data.data == "string") {
             const jsonData = JSON.parse(data.data);
             localStorage.authData = JSON.stringify(jsonData);
@@ -156,9 +156,7 @@ const lock = new AsyncLock({ timeout: 5000 });
                 window.location.reload();
               });
           } else {
-            Vue.prototype.$alert(data.message).then(() => {
-              window.location.reload();
-            });
+            Vue.prototype.$alert(data.message);
           }
         }, 10);
       } else {
