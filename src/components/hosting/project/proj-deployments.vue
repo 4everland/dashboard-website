@@ -197,7 +197,21 @@ export default {
         this.$toast("Copied to clipboard !");
       } else if (name == "deploy") {
         this.onDeploy(it);
+      } else if (name == "rollback") {
+        this.onRollback(it);
       }
+    },
+    async onRollback(it) {
+      try {
+        await this.$confirm("tip", "Rollback to production");
+        this.$loading();
+        await this.$http2.put("/project/task/rollback/" + it.taskId);
+        this.$toast("Rollback successfully");
+        this.getList();
+      } catch (error) {
+        //
+      }
+      this.$loading.close();
     },
     async onDeploy(it) {
       try {
