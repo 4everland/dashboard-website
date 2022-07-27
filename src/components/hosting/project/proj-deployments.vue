@@ -193,7 +193,7 @@ export default {
         console.log(error, "deploy");
         if (error.code == 10014)
           this.$router.push(
-            `/hosint/project/${this.info.name}/${this.info.id}?tab=settings&sub=git`
+            `/hosting/project/${this.info.name}/${this.info.id}?tab=settings&sub=git`
           );
       }
       this.$loading.close();
