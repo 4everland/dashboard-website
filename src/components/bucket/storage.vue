@@ -224,7 +224,7 @@
                     slot="ref"
                     text
                     x-small
-                    @click.stop="headObject"
+                    @click.stop="headObject(null)"
                     v-if="fileArStatus == 'syncing'"
                   >
                     <v-icon>mdi-refresh</v-icon>
@@ -246,7 +246,7 @@
                       small
                       text
                       color="primary"
-                      @click="onSyncAR(fileName)"
+                      @click="onSyncAR(fileName, 'post', fileInfo.hash)"
                       >Retry</v-btn
                     >
                   </div>

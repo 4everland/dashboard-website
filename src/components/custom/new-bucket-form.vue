@@ -1,7 +1,7 @@
 <template>
   <div class="mt-6">
     <div class="d-flex al-c hide-msg">
-      <p class="black-6 fz-14 mr-auto">Arweave</p>
+      <p class="black-6 fz-14 mr-auto">Sync to Ar</p>
       <v-switch v-model="isAr"></v-switch>
     </div>
     <div class="tip-wrap mt-5" v-show="isAr">
