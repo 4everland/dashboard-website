@@ -203,7 +203,13 @@ export default {
     },
     async onRollback(it) {
       try {
-        await this.$confirm("tip", "Rollback to production");
+        let html =
+          "The rollback will point to the latest domain without redeploying and will not consume any resources.";
+        html +=
+          '<div class="mt-3 op-7 fz-14">We recommend that you disable the deploy hook feature in order to prevent project updates from automatically being triggered by the Github updates.</div>';
+        await this.$confirm(html, "Rollback to production", {
+          confirmText: "Rollback",
+        });
         this.$loading();
         await this.$http2.put("/project/task/rollback/" + it.taskId);
         this.$toast("Rollback successfully");
