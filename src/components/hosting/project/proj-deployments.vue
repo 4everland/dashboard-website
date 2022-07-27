@@ -111,6 +111,9 @@
 import { mapState } from "vuex";
 
 export default {
+  props: {
+    active: Boolean,
+  },
   computed: {
     ...mapState({
       info: (s) => s.projectInfo,
@@ -150,7 +153,13 @@ export default {
       page: 0,
       finished: false,
       loading: false,
+      refreshing: false,
     };
+  },
+  watch: {
+    active(val) {
+      if (val) this.getList();
+    },
   },
   mounted() {
     this.getList();
@@ -199,7 +208,7 @@ export default {
       this.$loading.close();
     },
     onLoad() {
-      if (this.loading) return;
+      if (this.loading || this.refreshing || this.finished) return;
       this.loading = true;
       this.getList();
     },
@@ -209,7 +218,9 @@ export default {
           this.page += 1;
         } else {
           this.page = 0;
+          this.refreshing = true;
           this.finished = false;
+          this.list = null;
         }
         const params = {
           page: this.page,
@@ -232,6 +243,7 @@ export default {
         console.log(error);
       }
       this.loading = false;
+      this.refreshing = false;
     },
   },
 };

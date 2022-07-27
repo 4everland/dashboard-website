@@ -55,6 +55,9 @@
 import { mapState } from "vuex";
 
 export default {
+  props: {
+    active: Boolean,
+  },
   computed: {
     ...mapState({
       info: (s) => s.projectInfo,
@@ -83,6 +86,9 @@ export default {
     info() {
       this.getList();
     },
+    active(val) {
+      if (val) this.getList();
+    },
   },
   mounted() {
     this.getList();
@@ -110,7 +116,7 @@ export default {
       }
     },
     onLoad() {
-      if (this.loading) return;
+      if (this.loading || this.refreshing) return;
       this.loading = true;
       this.getList();
     },
