@@ -79,7 +79,7 @@
                 link
                 v-clipboard="opt.name == 'copy' ? it.domain || '' : ''"
                 @click="onOpt(opt, it)"
-                v-for="(opt, i) in optList"
+                v-for="(opt, i) in getOptList(it)"
                 v-show="getShow(opt, it)"
                 :key="i"
               >
@@ -127,12 +127,32 @@ export default {
     const { id } = this.$route.params;
     return {
       id,
-      optList: [
+      list: null,
+      page: 0,
+      finished: false,
+      loading: false,
+    };
+  },
+  mounted() {
+    this.getList();
+  },
+  methods: {
+    getOptList(it) {
+      let arr = [
         {
           text: "Redeploy",
           name: "deploy",
           icon: "send",
         },
+      ];
+      if (it.canRollback)
+        arr.push({
+          text: "Rollback",
+          name: "rollback",
+          icon: "arrow-u-left-top",
+        });
+      return [
+        ...arr,
         {
           text: "Inspect Deployment",
           link: "/hosting/build/{projName}/{id}/{taskId}",
@@ -148,17 +168,8 @@ export default {
           name: "copy",
           icon: "link-variant",
         },
-      ],
-      list: null,
-      page: 0,
-      finished: false,
-      loading: false,
-    };
-  },
-  mounted() {
-    this.getList();
-  },
-  methods: {
+      ];
+    },
     getShow(opt, it) {
       if (it.cli && opt.name == "deploy") return false;
       return true;
@@ -196,7 +207,7 @@ export default {
         console.log(error, "deploy");
         if (error.code == 10014)
           this.$router.push(
-            `/hosint/project/${this.info.name}/${this.info.id}?tab=settings&sub=git`
+            `/hosting/project/${this.info.name}/${this.info.id}?tab=settings&sub=git`
           );
       }
       this.$loading.close();
@@ -229,7 +240,14 @@ export default {
         if (this.loading) {
           this.list = [...this.list, ...rows];
         } else {
-          this.list = rows;
+          this.isFirst = false;
+          this.list = rows.map((it) => {
+            if (it.state == "SUCCESS") {
+              if (!this.isFirst) this.isFirst = true;
+              else it.canRollback = true;
+            }
+            return it;
+          });
         }
       } catch (error) {
         console.log(error);
