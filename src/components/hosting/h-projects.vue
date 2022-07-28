@@ -79,7 +79,7 @@
             />
           </template>
           <v-row>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="4">
               <div class="d-flex al-c grow-0">
                 <v-img
                   :src="$getImgSrc(it.previewImage)"
@@ -90,7 +90,7 @@
                   :aspect-ratio="1"
                   class="bdrs-8 bd-1"
                 />
-                <div class="ml-5">
+                <div class="ml-5 flex-1">
                   <div class="d-flex al-c">
                     <h3
                       @click.stop="$navTo(getDetailPath(it))"
@@ -101,8 +101,15 @@
                     >
                       {{ it.name.cutStr(asMobile ? 6 : 10, asMobile ? 4 : 6) }}
                     </h3>
+                    <div class="ml-auto" v-if="asMobile">
+                      <h-status
+                        :val="it.state"
+                        @click.native.stop="onStatus(it)"
+                      ></h-status>
+                    </div>
+                  </div>
+                  <div class="al-c mt-4">
                     <img
-                      class="ml-5"
                       :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
                       height="20"
                     />
@@ -117,36 +124,39 @@
                       {{ it.hash.cutStr(asMobile ? 2 : 6, 6) }}
                     </a>
                   </div>
-                  <div class="d-flex al-c mt-4" v-if="it.repo && it.repo.id">
-                    <e-icon-link
-                      @click.native.stop="onStop"
-                      class="mr-6"
-                      img="img/svg/hosting/m-branch.svg"
-                      :link="
-                        it.repo.cloneUrl.replace(
-                          '.git',
-                          '/tree/' + it.repo.defaultBranch
-                        )
-                      "
-                    >
-                      {{ it.repo.defaultBranch }}
-                    </e-icon-link>
-                    <e-commit
-                      @click.native.stop="onStop"
-                      :info="it.commit"
-                      class="fz-14"
-                    ></e-commit>
-                  </div>
                 </div>
               </div>
             </v-col>
-            <v-col cols="12" md="6" class="d-flex al-c">
-              <h-status
-                :val="it.state"
-                class="ml-auto mr-8"
-                @click.native.stop="onStatus(it)"
-              ></h-status>
-              <div class="mr-6 ta-r" style="min-width: 70px">
+            <v-col cols="12" md="4">
+              <div class="ta-c mb-4 mt-2" v-if="!asMobile">
+                <h-status
+                  :val="it.state"
+                  @click.native.stop="onStatus(it)"
+                ></h-status>
+              </div>
+              <div class="d-flex al-c" v-if="it.repo && it.repo.id">
+                <e-icon-link
+                  @click.native.stop="onStop"
+                  class="mr-6"
+                  img="img/svg/hosting/m-branch.svg"
+                  :link="
+                    it.repo.cloneUrl.replace(
+                      '.git',
+                      '/tree/' + it.repo.defaultBranch
+                    )
+                  "
+                >
+                  {{ it.repo.defaultBranch }}
+                </e-icon-link>
+                <e-commit
+                  @click.native.stop="onStop"
+                  :info="it.commit"
+                  class="fz-14"
+                ></e-commit>
+              </div>
+            </v-col>
+            <v-col cols="12" md="4" class="d-flex al-c">
+              <div class="ml-auto mr-6 ta-r" style="min-width: 70px">
                 <e-time span-class="gray-6 fz-14">{{ it.buildAt }}</e-time>
               </div>
               <v-btn
