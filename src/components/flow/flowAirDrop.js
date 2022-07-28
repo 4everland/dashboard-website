@@ -9,11 +9,11 @@ export default {
       document.body.appendChild(flowAirDropEl);
     };
     Vue.prototype.$Dialog = {
-      getFlowAirDrop() {
+      getFlowAirDrop(img) {
         if (!flowAirDropInit) {
           initInstance();
         }
-        flowAirDropInit.getFlowAirDrop();
+        flowAirDropInit.getFlowAirDrop(img);
       },
     };
   },

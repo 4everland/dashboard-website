@@ -337,6 +337,7 @@ export default {
         fee = this.getFee(fee);
         console.log("price", fee);
       } catch (error) {
+        console.log("get price error");
         this.onErr(error, true)
           .then(() => {
             this.getPrice(resId, val);
@@ -367,7 +368,6 @@ export default {
         const { data: usageInfo } = await this.$http.get(`$v3/usage`);
         this.usageInfo = usageInfo;
       } catch (error) {
-        console.log(error);
         this.$confirm(error.message, {
           confirmText: "Try Again",
         })
@@ -388,6 +388,7 @@ export default {
         this.showOrder = true;
         if (!this.isPolygon) this.onSubmit(true);
       } catch (error) {
+        console.log("preview error");
         this.onErr(error);
       }
     },
@@ -488,6 +489,7 @@ export default {
         this.$toast("Purchased successfully");
         this.$router.replace("/billing/bills");
       } catch (error) {
+        console.log("pay submit error");
         this.onErr(error);
       }
       this.paying = false;

@@ -31,6 +31,29 @@
         </e-icon-link>
       </div>
     </div>
+
+    <!-- <div class="main-wrap mt-5">
+      <h3>Hosting Platform</h3>
+      <v-row>
+        <v-col
+          cols="4"
+          v-for="(it, i) in platList"
+          :key="i"
+          @click="form.platform = it.name"
+        >
+          <div
+            class="d-flex al-c bdrs-3 plat-item"
+            :class="{
+              active: form.platform == it.name,
+            }"
+          >
+            <img :src="'img/svg/hosting/' + it.icon" height="30" />
+            <div class="ml-2 fw-b fz-16">{{ it.label }}</div>
+          </div>
+        </v-col>
+      </v-row>
+    </div> -->
+
     <div class="main-wrap mt-5">
       <h3>Hosting Platform</h3>
       <v-row>
@@ -164,7 +187,7 @@
         is not supported now)
       </div>
     </div>
-    <div class="ta-r mt-4">
+    <div class="ta-c mt-4">
       <v-btn color="primary" rounded @click="onDeploy" min-width="100"
         >Deploy</v-btn
       >
@@ -180,7 +203,7 @@
   </div>
   <div v-else-if="isTpl">
     <new-step-1-tpl :query="query" @git-repo="repoInfo = $event" />
-    <div class="ta-r mt-4">
+    <div class="ta-c mt-4">
       <v-btn
         rounded
         outlined

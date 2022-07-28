@@ -22,7 +22,7 @@ export default {
     color: #00bd9a;
   }
   &.syncing {
-    color: #34a9ff;
+    color: #775da6;
   }
   &.timeout {
     color: #f99536;

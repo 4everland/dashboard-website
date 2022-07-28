@@ -250,7 +250,7 @@ export default {
   border-bottom: 1px solid #d0dae9;
 }
 .v-tab.v-tab--active {
-  color: #34a9ff;
+  color: #775da6;
 }
 .v-tab.v-tab--active span:nth-of-type(1) {
   font-size: 20px;

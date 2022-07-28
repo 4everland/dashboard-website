@@ -1,6 +1,11 @@
 <template>
   <div v-show="dialogFormVisible" id="solanaBox">
-    <div class="solana-con">
+    <div
+      class="solana-con"
+      :style="{
+        backgroundImage: `url(${popupImage})`,
+      }"
+    >
       <div class="btn-box">
         <v-btn class="solana-ok" color="#2DABFF" rounded @click="cancel"
           >OK</v-btn
@@ -14,10 +19,12 @@ export default {
   data() {
     return {
       dialogFormVisible: false,
+      popupImage: "",
     };
   },
   methods: {
-    getFlowAirDrop() {
+    getFlowAirDrop(img) {
+      this.popupImage = img;
       this.dialogFormVisible = true;
     },
     cancel() {
@@ -38,7 +45,7 @@ export default {
   .solana-con {
     width: 450px;
     height: 657px;
-    background-image: url("/img/bg/flow/bg.png");
+    // background-image: url("/img/bg/flow/bg.png");
     background-size: contain;
     background-color: transparent;
     position: absolute;

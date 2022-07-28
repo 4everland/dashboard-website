@@ -1,23 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>icon/overview</title>
-    <defs>
-        <path d="M18.5,6 L13.5,6 C13.225,6 13,5.775 13,5.5 C13,5.225 13.225,5 13.5,5 L18.5,5 C18.775,5 19,5.225 19,5.5 C19,5.775 18.775,6 18.5,6 L18.5,6 Z M18.5,8.5 L13.5,8.5 C13.225,8.5 13,8.275 13,8 C13,7.725 13.225,7.5 13.5,7.5 L18.5,7.5 C18.775,7.5 19,7.725 19,8 C19,8.275 18.775,8.5 18.5,8.5 L18.5,8.5 Z M18.5,11 L13.5,11 C13.225,11 13,10.775 13,10.5 C13,10.225 13.225,10 13.5,10 L18.5,10 C18.775,10 19,10.225 19,10.5 C19,10.775 18.775,11 18.5,11 L18.5,11 Z M7,12 C4.791,12 3,10.209 3,8 C3,5.791 4.791,4 7,4 L7,8 L11,8 C11,10.209 9.209,12 7,12 L7,12 Z M7.997,4.141 C9.396,4.504 10.496,5.599 10.858,7 L7.997,7 L7.997,4.141 Z M20.804,0.031 C20.704,0.016 20.604,0 20.5,0 L1.5,0 C1.396,0 1.296,0.016 1.196,0.031 C0.514,0.171 0,0.775 0,1.5 L0,14.5 C0,15.225 0.514,15.829 1.196,15.969 C1.296,15.984 1.396,16 1.5,16 L10,16 L10,20 L4,20 C3.45,20 3,20.45 3,21 C3,21.55 3.45,22 4,22 L18,22 C18.55,22 19,21.55 19,21 C19,20.45 18.55,20 18,20 L12,20 L12,16 L20.5,16 C20.604,16 20.704,15.984 20.804,15.969 C21.486,15.829 22,15.225 22,14.5 L22,1.5 C22,0.775 21.486,0.171 20.804,0.031 L20.804,0.031 Z" id="path-1"></path>
-    </defs>
-    <g id="控件" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="List/Item/2" transform="translate(-42.000000, -29.000000)">
-            <g id="group" transform="translate(40.000000, 27.000000)">
-                <g id="Colors/Background" transform="translate(2.000000, 2.000000)">
-                    <mask id="mask-2" fill="white">
-                        <use xlink:href="#path-1"></use>
-                    </mask>
-                    <use id="mask" fill="#231916" xlink:href="#path-1"></use>
-                    <g id="group" mask="url(#mask-2)">
-                        <g transform="translate(-2.000000, -2.000000)" id="Colors/Background">
-                            <rect id="Color" fill="#34A9FF" x="0" y="0" width="26" height="26"></rect>
-                        </g>
-                    </g>
-                </g>
+<svg width="20px" height="21px" viewBox="0 0 20 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>shape结合</title>
+    <g id="Overview" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-45.000000, -98.000000)" fill="#7C59AB" id="g-4">
+            <g transform="translate(0.000000, -1.000000)">
+                <path d="M45,99 L54,99 L54,105 L45,105 L45,99 Z M45,108 L54,108 L54,120 L45,120 L45,108 Z M65,120 L56,120 L56,114 L65,114 L65,120 Z M65,111 L56,111 L56,99 L65,99 L65,111 Z" id="shape结合"></path>
             </g>
         </g>
     </g>

@@ -54,7 +54,7 @@ export default {
             type: "line",
             symbolSize: 8,
             itemStyle: {
-              color: "#34A9FF",
+              color: "#775DA6",
             },
           },
         ],

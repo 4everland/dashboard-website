@@ -148,7 +148,7 @@ export default {
       text-align: left;
     }
     .v-tab--active {
-      color: #34a9ff;
+      color: #775da6;
       &::after {
         position: absolute;
         content: "";
@@ -157,7 +157,7 @@ export default {
         transform: translateY(-50%);
         height: 20px;
         width: 3px;
-        background: #34a9ff;
+        background: #775da6;
         border-radius: 1px;
       }
     }

@@ -156,7 +156,7 @@
               <span v-show="item.status == 0" style="color: #24bc96"
                 >Preparing</span
               >
-              <span v-show="item.status == 1" style="color: #34a9ff"
+              <span v-show="item.status == 1" style="color: #775da6"
                 >{{ item.progress }}%</span
               >
             </template>
@@ -723,11 +723,11 @@ export default {
   color: #0b0817 !important;
 }
 .name {
-  color: #34a9ff;
+  color: #775da6;
 }
 .opeartion {
   position: relative;
-  color: #34a9ff;
+  color: #775da6;
   font-size: 14px;
   padding: 0 5px;
   cursor: pointer;
@@ -741,7 +741,7 @@ export default {
   // display: block;
   width: 40px;
   height: 2px;
-  background: #34a9ff;
+  background: #775da6;
 }
 .v-tab {
   font-size: 14px;
@@ -750,7 +750,7 @@ export default {
   border-bottom: 1px solid #d0dae9;
 }
 .v-tab.v-tab--active {
-  color: #34a9ff;
+  color: #775da6;
 }
 .v-tab.v-tab--active span:nth-of-type(1) {
   font-size: 20px;
@@ -829,7 +829,7 @@ export default {
         }
         .active {
           position: relative;
-          color: #34a9ff;
+          color: #775da6;
         }
         .active span:nth-of-type(1) {
           font-size: 16px;
@@ -840,7 +840,7 @@ export default {
           position: absolute;
           height: 2px;
           width: 30px;
-          background: #34a9ff;
+          background: #775da6;
           left: 50%;
           bottom: 0;
           transform: translateX(-50%);

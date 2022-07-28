@@ -171,10 +171,10 @@ export default {
             type: "line",
             symbol: "none",
             areaStyle: {
-              color: "rgba(52, 169, 255, 0.2)",
+              color: "#E8E2F4",
             },
             itemStyle: {
-              color: "rgba(52, 169, 255, 0.2)",
+              color: "#836CAE",
             },
           },
         ],

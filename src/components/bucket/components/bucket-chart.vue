@@ -90,7 +90,7 @@ export default {
                 Number(params[0].axisValue)
               ).format()}</div>
              <div  style="height:30px">
-                  <span class=" fz-16" style="color: #34A9FF">${
+                  <span class=" fz-16" style="color: #775DA6">${
                     this.$utils.getFileSize(params[0].value, true).num
                   }</span>
                   <span class="ml-1">${
@@ -108,7 +108,7 @@ export default {
             type: "line",
             symbolSize: 8,
             itemStyle: {
-              color: "#34A9FF",
+              color: "#775DA6",
             },
           },
         ],
