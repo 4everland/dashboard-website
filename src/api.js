@@ -8,6 +8,7 @@ Vue.prototype.$inDev = inDev;
 
 Vue.prototype.$arHashPre = "https://arweave.net/"; // https://ar.foreverland.xyz/
 Vue.prototype.$arVerifyPre = "https://viewblock.io/arweave/tx/"; // https://ar.foreverland.xyz/tx/
+Vue.prototype.$axios = axios;
 
 export const endpoint = inDev
   ? "https://s3gw.foreverland.xyz"
