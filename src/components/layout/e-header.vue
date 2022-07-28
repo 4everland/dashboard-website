@@ -1,7 +1,7 @@
 <style lang="scss">
 #e-header {
   box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 15%) !important;
-  z-index: 1000;
+  z-index: 110;
 }
 </style>
 <template>
