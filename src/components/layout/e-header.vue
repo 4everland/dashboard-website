@@ -29,7 +29,7 @@
           :to="it.to"
           :target="it.href ? '_blank' : ''"
           :style="it.btnStyle"
-          class="ml-4 bdrs-10"
+          class="ml-4"
         >
           <img
             v-if="it.img"
@@ -38,8 +38,7 @@
             :height="it.height"
             class="mr-2"
           />
-          <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
-          <div class="u-avatar bg-1 bdrs-100 ml-2" v-if="it.avatar">
+          <div class="u-avatar bg-1 bdrs-100 mr-2" v-if="it.avatar">
             <v-avatar size="22" class="bg-white d-b">
               <!-- <v-img :src="it.avatar"></v-img> -->
               <svg
@@ -50,8 +49,9 @@
               ></svg>
             </v-avatar>
           </div>
+          <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
           <img
-            v-else-if="it.subs && !it.noSuffix"
+            v-if="it.subs && !it.noSuffix"
             :src="`img/svg/header/ic-down-${it.color || 'def'}.svg`"
             width="10"
             class="ml-2"
@@ -149,6 +149,7 @@ export default {
         label: (info.username || "unkown").cutStr(6, 4),
         avatar: info.avatar || "img/bg/user/def-avatar.png",
         btnStyle: "border: 1px solid #775DA6",
+        noSuffix: true,
         subs: [
           {
             label: "Settings",
