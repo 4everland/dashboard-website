@@ -166,6 +166,11 @@ export default {
             to: "/collections",
           },
           {
+            label: "Activity Log",
+            icon: "m-collect",
+            to: "/activity-log",
+          },
+          {
             label: "Feedback",
             icon: "m-report",
             noticeMsg: {

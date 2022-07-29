@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col v-for="(it, i) in usageList" :key="i">
+    <v-col @click="onClick(it)" v-for="(it, i) in usageList" :key="i">
       <v-card style="min-width: 120px">
         <div class="pa-1" v-if="it.loading">
           <v-skeleton-loader type="article" />
@@ -101,6 +101,9 @@ export default {
     this.getUsageInfo();
   },
   methods: {
+    onClick(it) {
+      if (it.isBalance) this.$navTo("/billing/usage");
+    },
     getPerc(used, total, unit = "GB") {
       if (!total) {
         return {
