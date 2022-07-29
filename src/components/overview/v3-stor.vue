@@ -16,12 +16,16 @@
       v-if="loading"
     ></v-skeleton-loader>
     <div class="d-flex" v-else>
-      <div class="pos-r flex-1 pr-10 mt-5" style="height: 260px">
+      <div class="pos-r flex-1 mt-5" style="height: 260px">
         <div
           class="pos-a left-0 h100p"
-          style="top: -10px; bottom: -20px; right: 20px"
+          style="top: -10px; bottom: -20px; right: 0px"
           ref="chart"
         ></div>
+        <div class="pos-center ta-c" style="top: 47%">
+          <p class="gray fz-14">Total</p>
+          <p class="fw-b">{{ totalSize }}</p>
+        </div>
       </div>
       <div class="mt-10 fz-14" style="width: 200px">
         <div class="al-c mt-3" v-for="(it, i) in list" :key="i">
@@ -32,9 +36,9 @@
             }"
           ></span>
           <span class="gray">{{ it.name.cutStr(5, 5) }}</span>
-          <span class="ml-auto">
+          <b class="ml-auto">
             {{ it.size }}
-          </span>
+          </b>
         </div>
       </div>
     </div>
@@ -49,7 +53,8 @@ export default {
       typeIdx: 0,
       loading: false,
       list: [],
-      colors: ["3B478E", "5D68A6", "707DC1", "8290DB", "919FED"],
+      colors: ["3B478E", "5D68A6", "707DC1", "8290DB", "919FED", "B7C2FE"],
+      totalSize: 0,
     };
   },
   watch: {
@@ -72,7 +77,9 @@ export default {
         });
         console.log(data);
         this.loading = false;
+        let total = 0;
         this.list = data.collections.map((it, i) => {
+          total += it.value;
           it.size = this.$utils.getFileSize(it.value);
           it.itemStyle = {
             color: "#" + this.colors[i],
@@ -80,6 +87,7 @@ export default {
           };
           return it;
         });
+        this.totalSize = this.$utils.getFileSize(total);
         this.$nextTick(() => {
           this.setChart();
         });
