@@ -48,6 +48,8 @@ export default {
 <style lang="scss">
 .main-wrap {
   min-height: 77vh;
+  padding: 26px 32px;
+  border-radius: 10px;
   &.auto {
     min-height: auto;
   }
