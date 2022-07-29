@@ -23,7 +23,7 @@
           v-for="(it, i) in uvList"
           :key="i"
         >
-          <p>{{ it.totalUv }}</p>
+          <p class="fw-b">{{ it.totalUv }}</p>
           <p class="fz-12 mt-1" :class="curIdx == i ? 'color-1' : 'gray'">
             {{ it.projectName.cutStr(10, 6) }}
           </p>

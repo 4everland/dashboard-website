@@ -32,9 +32,9 @@
             }"
           ></span>
           <span class="gray">{{ it.name.cutStr(5, 5) }}</span>
-          <span class="ml-auto">
+          <b class="ml-auto">
             {{ it.size }}
-          </span>
+          </b>
         </div>
       </div>
     </div>
@@ -49,7 +49,7 @@ export default {
       typeIdx: 0,
       loading: false,
       list: [],
-      colors: ["3B478E", "5D68A6", "707DC1", "8290DB", "919FED"],
+      colors: ["3B478E", "5D68A6", "707DC1", "8290DB", "919FED", "B7C2FE"],
     };
   },
   watch: {
