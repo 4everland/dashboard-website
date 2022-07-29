@@ -60,7 +60,7 @@
     </div>
 
     <div class="pa-5"></div>
-    <v-list rounded dense>
+    <v-list dense>
       <template v-for="(it, i) in list">
         <v-list-group
           class="group-item"

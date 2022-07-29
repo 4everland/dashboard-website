@@ -36,12 +36,12 @@
 <template>
   <div class="projects">
     <div class="mb-5 d-flex al-c" v-if="!limit && list.length">
-      <v-btn color="primary" rounded to="/hosting/new">
+      <v-btn color="primary" to="/hosting/new">
         <img src="img/svg/add1.svg" width="12" />
         <span class="ml-2">New Project</span>
       </v-btn>
       <e-menu open-on-hover offset-y>
-        <v-btn slot="ref" outlined rounded min-width="100" class="ml-5">
+        <v-btn slot="ref" outlined min-width="100" class="ml-5">
           <img src="img/svg/hosting/ic-sort.svg" width="12" />
           <span class="ml-2">{{
             sortType == "Active" ? sortArr[0] : sortArr[1]
@@ -164,7 +164,6 @@
                 @click.stop="onStop"
                 class="mr-3"
                 color="primary"
-                rounded
                 small
                 >View Detail</v-btn
               >
@@ -223,7 +222,6 @@
                   color="primary"
                   class="ml-6"
                   small
-                  rounded
                   outlined
                   :to="getBuildPath(it)"
                   >View Build Logs</v-btn
@@ -261,15 +259,11 @@
           }}
         </e-empty>
         <div class="mt-10" v-if="!loading">
-          <v-btn color="primary" rounded to="/hosting/new"
-            >Create a New Project</v-btn
-          >
+          <v-btn color="primary" to="/hosting/new">Create a New Project</v-btn>
         </div>
       </div>
       <div class="mt-8" v-else-if="limit">
-        <v-btn color="primary" rounded outlined to="/hosting/projects"
-          >View More</v-btn
-        >
+        <v-btn color="primary" outlined to="/hosting/projects">View More</v-btn>
       </div>
     </div>
   </div>

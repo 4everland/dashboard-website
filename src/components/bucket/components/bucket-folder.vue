@@ -11,7 +11,6 @@
         ></bucket-upload>
         <v-btn
           class="ml-5"
-          rounded
           outlined
           :disabled="folderLen >= 20"
           @click="addFolder"
@@ -21,7 +20,7 @@
           <span class="ml-2">New Folder</span>
         </v-btn>
         <!-- Fragments Btn -->
-        <v-btn class="ml-5" rounded outlined @click="drawer = true">
+        <v-btn class="ml-5" outlined @click="drawer = true">
           <img src="img/svg/parts_icon.svg" width="12" />
           <span class="ml-2">Fragments</span>
         </v-btn>
@@ -32,7 +31,7 @@
             nudge-bottom="11"
             :disabled="!selected.length"
           >
-            <v-btn slot="ref" rounded outlined :disabled="!selected.length">
+            <v-btn slot="ref" outlined :disabled="!selected.length">
               <!-- <v-icon>mdi-dots-vertical</v-icon> -->
               <span>Actions</span>
               <v-icon size="18">mdi-chevron-down</v-icon>
@@ -98,7 +97,6 @@
           <v-text-field
             class="hide-msg bd-1"
             dense
-            rounded
             solo
             clearable
             label="Search"
@@ -131,7 +129,6 @@
           <v-btn
             color="#000"
             class="e-btn-text"
-            rounded
             text
             x-small
             @click.stop="onRow(item)"
@@ -159,7 +156,6 @@
             <v-btn
               style="width: 80px"
               class="e-btn-text item-hash"
-              rounded
               color="primary"
               x-small
               text
@@ -227,23 +223,13 @@
         class="pd-20 gray ta-c fz-16 mt-5"
         v-show="list.length == 100 || curPage !== 0"
       >
-        <!-- <v-btn outlined rounded v-if="list.length" @click="onLoadMore">{{
+        <!-- <v-btn outlined  v-if="list.length" @click="onLoadMore">{{
           loadingMore ? "Loading..." : "Load More"
         }}</v-btn> -->
-        <v-btn
-          :disabled="curPage == 0"
-          outlined
-          rounded
-          @click="onLoadPre"
-          class="mr-5"
+        <v-btn :disabled="curPage == 0" outlined @click="onLoadPre" class="mr-5"
           >Previous</v-btn
         >
-        <v-btn
-          min-width="100"
-          outlined
-          rounded
-          :disabled="!hasMore"
-          @click="onLoadMore"
+        <v-btn min-width="100" outlined :disabled="!hasMore" @click="onLoadMore"
           >Next</v-btn
         >
       </div>

@@ -53,7 +53,6 @@
                   :color="it.color || 'primary'"
                   :value="it.perc || 0"
                   height="14"
-                  rounded
                 ></v-progress-linear>
                 <span>{{ it.usedTxt }} used</span>
               </e-tooltip>
@@ -87,9 +86,7 @@
     </div>
 
     <div class="mt-5 ml-5 ta-r">
-      <v-btn color="primary" to="/billing/usage/more" rounded
-        >Buy more >></v-btn
-      >
+      <v-btn color="primary" to="/billing/usage/more">Buy more >></v-btn>
     </div>
   </div>
 </template>

@@ -33,7 +33,6 @@
               @click="$set(form, it.key, txt)"
               class="mr-3 scale-9 tr-origin-0 op-7"
               outlined
-              rounded
               color="primary"
               x-small
               v-for="txt in [200, 500, 1000]"
@@ -65,7 +64,6 @@
           <usage-preview :previewList="previewList" :list="list" />
           <v-btn
             color="primary"
-            rounded
             class="ml-5"
             min-width="120"
             :disabled="totalPrice <= minSend"
@@ -136,7 +134,6 @@
         </template>
         <v-btn
           color="primary"
-          rounded
           block
           depressed
           @click="onApprove(true)"
@@ -148,7 +145,6 @@
           :disabled="!isApproved"
           :loading="paying"
           color="primary"
-          rounded
           block
           class="mt-4"
           @click="onSubmit()"

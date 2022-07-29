@@ -45,15 +45,8 @@
       <e-upload-img v-model="files" />
 
       <div class="ta-c mt-5">
-        <v-btn outlined rounded width="90" @click="showPop = false"
-          >Cancel</v-btn
-        >
-        <v-btn
-          class="ml-6"
-          color="primary"
-          rounded
-          :loading="loading"
-          @click="onSubmit"
+        <v-btn outlined width="90" @click="showPop = false">Cancel</v-btn>
+        <v-btn class="ml-6" color="primary" :loading="loading" @click="onSubmit"
           >Submit</v-btn
         >
       </div>

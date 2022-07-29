@@ -38,7 +38,6 @@
         <template v-slot:item.arweaveHash="{ item }">
           <v-btn
             color="primary"
-            rounded
             x-small
             text
             target="_blank"

@@ -14,7 +14,6 @@
         <v-btn
           text
           x-small
-          rounded
           color="primary"
           :to="getPath(item)"
           class="e-btn-text"

@@ -47,10 +47,10 @@
           <span class="pd-10 gray fz-16 mr-auto line-1 shrink-1">
             {{ shareUrl }}
           </span>
-          <v-btn small rounded class="mr-2" color="primary" @click="onCopy">
+          <v-btn small class="mr-2" color="primary" @click="onCopy">
             <b class="white-0">Copy</b>
           </v-btn>
-          <v-btn plain rounded color="primary" @click="onInvite">
+          <v-btn plain color="primary" @click="onInvite">
             <b>Share</b>
           </v-btn>
         </div>

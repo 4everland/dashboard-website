@@ -13,10 +13,8 @@
       <span class="gray-7 mr-3">Total balance:</span>
       <b class="fz-20 red-1">{{ balance }}</b>
       <span class="gray-6 fz-12 ml-2 mt-1">USD</span>
-      <v-btn color="primary" rounded class="ml-8" @click="onShow(1)"
-        >Recharge</v-btn
-      >
-      <v-btn outlined rounded class="ml-4" @click="onShow(2)">Withdraw</v-btn>
+      <v-btn color="primary" class="ml-8" @click="onShow(1)">Recharge</v-btn>
+      <v-btn outlined class="ml-4" @click="onShow(2)">Withdraw</v-btn>
       <a class="ml-auto al-c" href="#/billing/deduction">
         <img src="img/svg/billing/usage-list.svg" width="14" />
         <span class="ml-2 fz-14">Deduction details</span>
@@ -95,7 +93,6 @@
             :disabled="isApproved"
             :loading="approving"
             v-if="isRecharge"
-            rounded
             block
             depressed
             @click="onApprove()"
@@ -106,7 +103,6 @@
             :disabled="isRecharge && !isApproved"
             :loading="posting"
             class="mt-5"
-            rounded
             block
             @click="onConfirm"
             >Confirm</v-btn

@@ -70,7 +70,7 @@
             </e-tooltip>
           </p>
         </div>
-        <v-btn color="primary" rounded small to="/plan">Change Plan</v-btn>
+        <v-btn color="primary" small to="/plan">Change Plan</v-btn>
       </div>
     </v-card>
 
@@ -82,7 +82,6 @@
         <v-btn
           class="ml-auto"
           color="primary"
-          rounded
           small
           href="https://docs.google.com/forms/d/e/1FAIpQLSdDHqjksxnHYR9PBMd2hzW9CjmfFwCvIgU0TocTA_L4xCa7jQ/viewform"
           target="_blank"

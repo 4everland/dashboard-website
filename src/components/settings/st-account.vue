@@ -14,7 +14,6 @@
             <v-btn
               color="primary"
               :disabled="!!it.account"
-              rounded
               small
               min-width="75"
               @click="onBind(it)"

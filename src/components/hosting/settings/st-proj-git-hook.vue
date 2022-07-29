@@ -8,18 +8,11 @@
       </div> -->
 
       <div class="mt-5">
-        <v-btn
-          small
-          rounded
-          color="primary"
-          @click="showPop = true"
-          min-width="70"
-        >
+        <v-btn small color="primary" @click="showPop = true" min-width="70">
           Add
         </v-btn>
         <v-btn
           small
-          rounded
           outlined
           class="ml-5"
           @click="onDelete"
@@ -66,14 +59,8 @@
           </v-select>
         </div>
         <div class="mt-5 ta-c">
-          <v-btn rounded outlined @click="showPop = false"> Cancel </v-btn>
-          <v-btn
-            rounded
-            color="primary"
-            class="ml-5"
-            :loading="adding"
-            @click="onAdd"
-          >
+          <v-btn outlined @click="showPop = false"> Cancel </v-btn>
+          <v-btn color="primary" class="ml-5" :loading="adding" @click="onAdd">
             Add
           </v-btn>
         </div>

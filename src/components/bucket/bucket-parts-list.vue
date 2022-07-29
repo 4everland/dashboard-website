@@ -19,7 +19,6 @@
       <!-- {{ pathInfo }} -->
       <div class="upload-opreation py-4">
         <v-btn
-          rounded
           color="#339CFE"
           outlined
           @click="handleDeleteAll"
@@ -28,7 +27,6 @@
           <span class="ml-2">Delete All</span>
         </v-btn>
         <v-btn
-          rounded
           color="#339CFE"
           outlined
           class="ml-7"

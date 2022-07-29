@@ -97,7 +97,7 @@
             />
             <span v-if="!customDomainList.length">--</span>
             <e-menu offset-y open-on-hover v-if="customDomainList.length > 1">
-              <v-btn slot="ref" color="warning" elevation="0" x-small rounded
+              <v-btn slot="ref" color="warning" elevation="0" x-small
                 >+{{ customDomainList.length - 1 }}</v-btn
               >
               <div class="bg-white pd-10 fz-14">

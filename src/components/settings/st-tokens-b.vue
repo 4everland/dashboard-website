@@ -3,7 +3,7 @@
     <h3>Bucket Auth Tokens</h3>
     <div class="gray fz-14">Use the API key for Storage SDK</div>
     <div class="mt-5">
-      <v-btn small rounded color="primary" @click="onAdd" :loading="adding"
+      <v-btn small color="primary" @click="onAdd" :loading="adding"
         >Generate</v-btn
       >
     </div>
@@ -52,7 +52,7 @@
         </v-alert>
 
         <div class="mt-6 ta-c">
-          <v-btn color="primary" rounded @click="showPop = false">Done</v-btn>
+          <v-btn color="primary" @click="showPop = false">Done</v-btn>
         </div>
       </div>
     </v-dialog>

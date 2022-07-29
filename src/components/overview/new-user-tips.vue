@@ -14,15 +14,10 @@
           {{ githubName }}
         </div>
         <div class="text-center">
-          <v-btn outlined rounded width="120" class="mr-8" @click="createNew"
+          <v-btn outlined width="120" class="mr-8" @click="createNew"
             >Create new</v-btn
           >
-          <v-btn
-            rounded
-            width="120"
-            color="#775DA6"
-            class="white--text"
-            @click="bind"
+          <v-btn width="120" color="#775DA6" class="white--text" @click="bind"
             >Bind</v-btn
           >
         </div>

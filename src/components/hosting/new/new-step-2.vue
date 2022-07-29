@@ -60,7 +60,6 @@
           <v-btn
             :to="`/hosting/project/${info.buildConfig.name}/${info.buildConfig.projectId}`"
             @click="showPop = false"
-            rounded
             color="primary"
             min-width="130"
             class="mr-5"
@@ -71,7 +70,6 @@
             :href="'//' + info.domain"
             target="_blank"
             outlined
-            rounded
             width="120"
           >
             <span>Visit</span>
@@ -107,7 +105,7 @@
     </div>
 
     <div class="ta-c mt-4" v-if="!isDone">
-      <v-btn rounded outlined @click="onCancel">Cancel</v-btn>
+      <v-btn outlined @click="onCancel">Cancel</v-btn>
     </div>
   </div>
 </template>

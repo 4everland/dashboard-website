@@ -167,15 +167,8 @@
       </div>
     </div>
     <div class="ta-c mt-4">
-      <v-btn color="primary" rounded @click="onDeploy" min-width="100"
-        >Deploy</v-btn
-      >
-      <v-btn
-        rounded
-        outlined
-        class="ml-6"
-        min-width="100"
-        @click="$emit('back')"
+      <v-btn color="primary" @click="onDeploy" min-width="100">Deploy</v-btn>
+      <v-btn outlined class="ml-6" min-width="100" @click="$emit('back')"
         >Back</v-btn
       >
     </div>
@@ -183,12 +176,7 @@
   <div v-else-if="isTpl">
     <new-step-1-tpl :query="query" @git-repo="repoInfo = $event" />
     <div class="ta-c mt-4">
-      <v-btn
-        rounded
-        outlined
-        class="ml-6"
-        min-width="100"
-        @click="$emit('back')"
+      <v-btn outlined class="ml-6" min-width="100" @click="$emit('back')"
         >Back</v-btn
       >
     </div>

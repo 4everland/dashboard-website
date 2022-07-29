@@ -90,7 +90,6 @@
           <v-spacer></v-spacer>
           <v-btn
             outlined
-            rounded
             width="90"
             v-if="alertInfo.showCancel"
             @click="hideAlert(0)"
@@ -99,7 +98,6 @@
           </v-btn>
           <v-btn
             class="ml-6"
-            rounded
             min-width="90"
             v-bind="{
               color: 'primary',

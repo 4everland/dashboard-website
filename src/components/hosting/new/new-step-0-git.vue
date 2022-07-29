@@ -9,7 +9,6 @@
         <v-menu offset-y :open-on-hover="!isTouch" v-model="popAccounts">
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-              rounded
               color="primary"
               class="mr-3"
               @click="addNew"

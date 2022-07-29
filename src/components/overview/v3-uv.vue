@@ -100,12 +100,9 @@
           </div>
         </div>
         <div class="ta-c mt-4">
-          <v-btn outlined rounded width="90" @click="showSelect = false"
-            >Cancel</v-btn
-          >
+          <v-btn outlined width="90" @click="showSelect = false">Cancel</v-btn>
           <v-btn
             color="primary"
-            rounded
             width="90"
             class="ml-6"
             :loading="saving"

@@ -33,7 +33,7 @@
             >
               <v-icon>mdi-refresh</v-icon>
             </v-btn>
-            <v-btn small outlined rounded @click="onRemove" :loading="deleting">
+            <v-btn small outlined @click="onRemove" :loading="deleting">
               Remove
             </v-btn>
           </div>

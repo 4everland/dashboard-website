@@ -22,7 +22,7 @@
       </v-col>
       <v-col cols="6" md="4">
         <h4 class="op-0">Hide</h4>
-        <v-btn color="primary" rounded @click="onAdd">Add</v-btn>
+        <v-btn color="primary" @click="onAdd">Add</v-btn>
       </v-col>
     </v-row>
 

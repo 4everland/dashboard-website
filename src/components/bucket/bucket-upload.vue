@@ -1,7 +1,7 @@
 <template>
   <div class="uploder-container">
     <e-menu offset-y open-on-hover nudge-bottom="11">
-      <v-btn slot="ref" rounded color="primary">
+      <v-btn slot="ref" color="primary">
         <img src="img/svg/upload.svg" width="16" />
         <span class="ml-2">Upload</span>
         <v-icon size="18">mdi-chevron-down</v-icon>

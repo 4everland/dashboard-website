@@ -2,9 +2,7 @@
   <div v-show="dialogFormVisible" id="solanaBox">
     <div class="solana-con">
       <div class="btn-box">
-        <v-btn class="solana-ok" color="#2DABFF" rounded @click="cancel"
-          >OK</v-btn
-        >
+        <v-btn class="solana-ok" color="#2DABFF" @click="cancel">OK</v-btn>
       </div>
     </div>
   </div>

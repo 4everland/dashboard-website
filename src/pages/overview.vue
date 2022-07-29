@@ -7,11 +7,11 @@
 <template>
   <div class="pos-r">
     <div :class="asMobile ? 'ta-r mb-5' : 'pos-a right-0'" style="top: -50px">
-      <v-btn color="primary" class="bdrs-10" to="/bucket/storage/?new=bucket">
+      <v-btn color="primary" to="/bucket/storage/?new=bucket">
         <span class="fz-18">+</span>
         <span class="ml-1"> New Bucket </span>
       </v-btn>
-      <v-btn color="primary" class="bdrs-10 ml-5" to="/hosting/new">
+      <v-btn color="primary" class="ml-5" to="/hosting/new">
         <span class="fz-18">+</span>
         <span class="ml-1"> New Project </span>
       </v-btn>

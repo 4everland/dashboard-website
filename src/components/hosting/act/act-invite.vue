@@ -89,7 +89,6 @@
         <v-btn
           v-if="actStatus == 1"
           color="primary"
-          rounded
           :loading="!code"
           class="pl-6 pr-6 mt-5"
           @click="onInvite"

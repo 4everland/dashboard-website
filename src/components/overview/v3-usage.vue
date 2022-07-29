@@ -31,7 +31,6 @@
                 :color="it.color || 'primary'"
                 :value="it.perc || 0"
                 height="6"
-                rounded
               ></v-progress-linear>
               <span class="ml-3 fz-14"> {{ it.perc }}% </span>
             </template>

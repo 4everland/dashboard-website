@@ -82,7 +82,6 @@
 
         <div>
           <v-btn
-            rounded
             color="primary"
             class="my-5"
             v-show="status == 0 || status == 1"
@@ -93,7 +92,6 @@
           </v-btn>
 
           <v-btn
-            rounded
             color="primary"
             class="my-5 mr-5"
             v-show="status == 2 || status == 4"
@@ -103,7 +101,6 @@
             <span>Start All</span>
           </v-btn>
           <v-btn
-            rounded
             color="primary"
             class="my-5"
             outlined
@@ -219,7 +216,6 @@
       <div v-show="currentTab == 1" class="delete-folder-task">
         <div class="my-5">
           <v-btn
-            rounded
             color="primary"
             @click="handleDeleteFolderStartAll"
             :disabled="!deleteFolderTasks.some((it) => it.status == 2)"
@@ -227,7 +223,6 @@
             Start All
           </v-btn>
           <v-btn
-            rounded
             color="primary"
             class="ml-5"
             outlined
@@ -241,7 +236,6 @@
             Pause All
           </v-btn>
           <v-btn
-            rounded
             outlined
             color="primary"
             class="ml-5"

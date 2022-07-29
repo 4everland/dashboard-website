@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="mb-5">
-      <v-btn color="primary" rounded min-width="100" @click="showPop = true">
+      <v-btn color="primary" min-width="100" @click="showPop = true">
         <img src="img/svg/add1.svg" width="12" />
         <span class="ml-2">Add</span>
       </v-btn>
@@ -10,7 +10,6 @@
         @click="onDelete"
         :loading="deleting"
         outlined
-        rounded
         class="ml-5"
         min-width="36"
         v-show="selected.length"
@@ -38,7 +37,6 @@
           <v-btn
             text
             x-small
-            rounded
             class="e-btn-text"
             :color="item.valid ? 'success' : 'error'"
             :to="getPath(item)"
@@ -82,7 +80,6 @@
                   <v-text-field
                     class="hide-msg bd-1"
                     dense
-                    rounded
                     solo
                     clearable
                     label="Search"
@@ -111,7 +108,6 @@
                       <!-- @click="onSelect(it)" -->
                       <v-btn
                         small
-                        rounded
                         color="primary"
                         class="ml-auto"
                         :to="`/hosting/project/${it.name}/${it.id}?tab=settings&sub=domains`"
@@ -150,9 +146,8 @@
         </v-window>
 
         <div class="ta-c mt-8">
-          <v-btn @click="showPop = false" outlined rounded>Cancel</v-btn>
+          <v-btn @click="showPop = false" outlined>Cancel</v-btn>
           <v-btn
-            rounded
             color="primary"
             class="ml-6"
             v-if="curStep > 0"

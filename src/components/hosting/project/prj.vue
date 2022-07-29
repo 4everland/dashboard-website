@@ -30,7 +30,7 @@
         <div class="d-flex al-c">
           <h-domain class="mr-6" :val="info.domains[0].domain" />
           <e-menu v-if="info.domains.length > 1" offset-y open-on-hover>
-            <v-btn slot="ref" color="warning" elevation="0" x-small rounded
+            <v-btn slot="ref" color="warning" elevation="0" x-small
               >+{{ info.domains.length - 1 }}</v-btn
             >
             <div class="bg-white pd-10 fz-14">

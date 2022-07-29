@@ -141,8 +141,8 @@
         <v-text-field
           class="hide-msg bd-1"
           dense
-          rounded
           solo
+          rounded
           clearable
           label="Search"
           prepend-inner-icon="mdi-magnify"
@@ -180,7 +180,6 @@
               >
               <div v-if="it.name == 'ipfs'">
                 <v-btn
-                  rounded
                   text
                   small
                   target="_blank"
@@ -195,7 +194,6 @@
               <div v-else-if="it.name == 'arHash'" class="d-flex al-c f-wrap">
                 <template v-if="fileArStatus == 'synced' && fileInfo.arHash">
                   <v-btn
-                    rounded
                     text
                     small
                     target="_blank"
@@ -255,7 +253,6 @@
               <div v-else-if="it.name == 'url'">
                 <p v-for="(link, j) in it.value" :key="j">
                   <v-btn
-                    rounded
                     text
                     small
                     color="primary"
@@ -301,7 +298,6 @@
           <v-btn
             class="e-btn-text"
             :color="inBucket ? 'primary' : '#000'"
-            rounded
             text
             x-small
             @click.stop="onRow(item)"
@@ -332,7 +328,6 @@
         <template v-slot:item.hash="{ item }">
           <v-btn
             class="e-btn-text item-hash"
-            rounded
             color="primary"
             x-small
             text
@@ -411,7 +406,7 @@
       </div>
     </div>
     <div v-if="inFolder && !finished" class="pd-20 gray ta-c fz-16 mt-5">
-      <v-btn outlined rounded v-if="list.length" @click="onLoadMore">{{
+      <v-btn outlined v-if="list.length" @click="onLoadMore">{{
         loadingMore ? "Loading..." : "Load More"
       }}</v-btn>
     </div>
