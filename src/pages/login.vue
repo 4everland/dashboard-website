@@ -158,6 +158,7 @@ export default {
         }
         if (data.code === 200 && data.data.stoken) {
           // location.href = `${BUCKET_HOST}/login?stoken=${data.data.stoken}`;
+          const stoken = data.data.stoken;
         }
       } catch (error) {
         console.log(error);
@@ -187,7 +188,7 @@ export default {
       if (!nonce) {
         return;
       }
-      SignMetaMask(accounts, nonce, this.inviteCode);
+      const stoken = await SignMetaMask(accounts, nonce, this.inviteCode);
     },
     async phantomConnect() {
       const publicKey = await ConnectPhantom();
@@ -198,7 +199,7 @@ export default {
       if (!nonce) {
         return;
       }
-      SignPhantom(publicKey, nonce, this.inviteCode);
+      const stoken = await SignPhantom(publicKey, nonce, this.inviteCode);
     },
     async flowConnect() {
       fcl.unauthenticate();
@@ -211,7 +212,7 @@ export default {
       if (!nonce) {
         return;
       }
-      SignFlow(currentUser.addr, nonce, this.inviteCode);
+      const stoken = await SignFlow(currentUser.addr, nonce, this.inviteCode);
     },
     async signMessage() {
       const MSG = Buffer.from("FOO").toString("hex");

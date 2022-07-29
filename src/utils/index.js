@@ -59,6 +59,7 @@ export const SignMetaMask = async (accounts, nonce, inviteCode) => {
     };
     const stoken = await Web3Login(accounts, data);
     // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
+    return stoken;
   } catch (e) {
     console.log(e);
   }
@@ -95,8 +96,10 @@ export const SignPhantom = async (accounts, nonce, inviteCode) => {
     };
     const stoken = await Web3Login(accounts, data);
     // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
+    return stoken;
   } catch (e) {
     console.log(e);
+    return e;
   }
 };
 
@@ -106,6 +109,7 @@ export const ConnectFlow = async () => {
     return fcl.currentUser.snapshot();
   } catch (err) {
     console.log(err);
+    return e;
   }
 };
 
@@ -127,7 +131,9 @@ export const SignFlow = async (accounts, nonce, inviteCode) => {
     };
     const stoken = await Web3Login(accounts, data);
     // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
+    return stoken;
   } catch (e) {
     console.log(e);
+    return e;
   }
 };
