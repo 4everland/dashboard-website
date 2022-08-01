@@ -111,14 +111,14 @@ export default {
         console.log(obj);
         it.desc =
           (/add/i.test(act) ? "added" : "deleted") +
-          " Domain " +
+          " domain " +
           (obj.domain || obj.domains[0]);
       } else if (act == "HOSTING_REDEPLOY_PROJECT") {
-        it.desc = "redeployed Project " + obj.projectName;
+        it.desc = "redeployed project " + obj.projectName;
       } else if (act == "HOSTING_DELETE_PROJECT") {
-        it.desc = "deleted Project " + obj.projectName;
+        it.desc = "deleted project " + obj.projectName;
       } else if (act == "HOSTING_CREATE_PROJECT") {
-        it.desc = "created Project " + obj.projectName;
+        it.desc = "created project " + obj.projectName;
       } else if (act == "HOSTING_GENERATE_CLI_TOKEN") {
         it.desc = "generated Auth Token";
         it.path = "Settings";
