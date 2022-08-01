@@ -18,7 +18,7 @@
         <span class="ml-2">Delete</span>
       </v-btn>
     </div>
-
+    <e-tabs :list="tabList" />
     <div class="main-wrap">
       <v-data-table
         v-model="selected"
@@ -175,6 +175,20 @@ export default {
         { text: "CreateAt", value: "createTime" },
       ],
       list: [],
+      tabList: [
+        {
+          text: "Domains",
+          comp: "build-overview",
+        },
+        {
+          text: "ENS",
+          comp: "build-overview",
+        },
+        {
+          text: "SNS",
+          comp: "build-overview",
+        },
+      ],
       page: 1,
       pageLen: 1,
       total: 0,

@@ -159,6 +159,7 @@ export default {
         if (data.code === 200 && data.data.stoken) {
           // location.href = `${BUCKET_HOST}/login?stoken=${data.data.stoken}`;
           const stoken = data.data.stoken;
+          console.log(stoken);
         }
       } catch (error) {
         console.log(error);
@@ -189,6 +190,10 @@ export default {
         return;
       }
       const stoken = await SignMetaMask(accounts, nonce, this.inviteCode);
+      console.log(stoken);
+      if (stoken) {
+        this.ssoLogin(stoken);
+      }
     },
     async phantomConnect() {
       const publicKey = await ConnectPhantom();
@@ -200,6 +205,10 @@ export default {
         return;
       }
       const stoken = await SignPhantom(publicKey, nonce, this.inviteCode);
+      console.log(stoken);
+      if (stoken) {
+        this.ssoLogin(stoken);
+      }
     },
     async flowConnect() {
       fcl.unauthenticate();
@@ -213,6 +222,10 @@ export default {
         return;
       }
       const stoken = await SignFlow(currentUser.addr, nonce, this.inviteCode);
+      console.log(stoken);
+      if (stoken) {
+        this.ssoLogin(stoken);
+      }
     },
     async signMessage() {
       const MSG = Buffer.from("FOO").toString("hex");
@@ -220,6 +233,18 @@ export default {
         return await fcl.currentUser.signUserMessage(MSG);
       } catch (error) {
         console.log(error);
+      }
+    },
+    async ssoLogin(stoken) {
+      try {
+        const { data } = await this.$http.post(`/st/${stoken}`, null, {
+          params: {
+            _auth: 1,
+          },
+        });
+        this.$onLoginData(data);
+      } catch (error) {
+        this.onErr(error);
       }
     },
   },

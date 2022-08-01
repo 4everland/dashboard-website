@@ -27,14 +27,10 @@ const loginUrl = inDev
   : "https://login.4everland.org";
 
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
-  let url = loginUrl;
-  if (!/(dashboard|hb)\./i.test(location.host)) {
-    url =
-      (inDev ? "https://hb.4everland.app" : "https://dashboard.4everland.org") +
-      "/#/?redirectTo=" +
-      encodeURIComponent(location.origin);
-  } else if (localStorage.inviteCode) {
-    url += "/#/?inviteCode=" + localStorage.inviteCode;
+  console.log(location);
+  let url = "#/login";
+  if (localStorage.inviteCode) {
+    url += "?inviteCode=" + localStorage.inviteCode;
   }
   return url;
 });
@@ -176,7 +172,8 @@ function goLogin() {
   localStorage.clear();
   if (location.hash != "#/login") {
     localStorage.loginTo = location.hash;
-    location.href = getLoginUrl();
+    Vue.$router.push(getLoginUrl());
+    // location.href = getLoginUrl();
     console.log("logout");
   }
 }
