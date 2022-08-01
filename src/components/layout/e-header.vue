@@ -1,14 +1,7 @@
 <style lang="scss">
 #e-header {
   box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 15%) !important;
-}
-.u-avatar {
-  background: #cac3e0;
-  padding: 4px;
-  border-radius: 100px;
-  transform: scale(1.45);
-  position: relative;
-  left: -12px;
+  z-index: 110;
 }
 </style>
 <template>
@@ -22,14 +15,20 @@
     </a>
     <v-spacer></v-spacer>
     <template>
-      <e-menu offset-y open-on-hover v-for="(it, i) in menus" :key="i">
+      <e-menu
+        offset-y
+        open-on-hover
+        :disabled="!it.subs"
+        v-for="(it, i) in menus"
+        :key="i"
+      >
         <v-btn
           slot="ref"
           text
-          rounded
-          :style="{
-            background: it.btnBg,
-          }"
+          :href="it.href"
+          :to="it.to"
+          :target="it.href ? '_blank' : ''"
+          :style="it.btnStyle"
           class="ml-4"
         >
           <img
@@ -39,7 +38,7 @@
             :height="it.height"
             class="mr-2"
           />
-          <div class="u-avatar" v-if="it.avatar">
+          <div class="u-avatar bg-1 bdrs-100 mr-2" v-if="it.avatar">
             <v-avatar size="22" class="bg-white d-b">
               <!-- <v-img :src="it.avatar"></v-img> -->
               <svg
@@ -52,7 +51,7 @@
           </div>
           <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
           <img
-            v-if="!it.noSuffix"
+            v-if="it.subs && !it.noSuffix"
             :src="`img/svg/header/ic-down-${it.color || 'def'}.svg`"
             width="10"
             class="ml-2"
@@ -104,28 +103,14 @@ export default {
       if (!info.uid) return [];
       let list = [
         {
-          label: "Support",
-          subs: [
-            {
-              label: "Documents",
-              icon: "m-docs",
-              href: "https://docs.4everland.org",
-            },
-            // {
-            //   label: "Community",
-            //   icon: "m-chat",
-            // },
-            {
-              label: "Bug Bounty",
-              icon: "m-bug",
-              to: "/bug-bounty",
-            },
-            {
-              label: "Change Log",
-              icon: "m-log",
-              to: "/changelog",
-            },
-          ],
+          label: "Docs",
+          icon: "m-docs",
+          href: "https://docs.4everland.org",
+        },
+        {
+          label: "Change Log",
+          icon: "m-log",
+          to: "/changelog",
         },
       ];
 
@@ -163,8 +148,8 @@ export default {
       list.push({
         label: (info.username || "unkown").cutStr(6, 4),
         avatar: info.avatar || "img/bg/user/def-avatar.png",
-        color: "white",
-        btnBg: "#CAC3E0",
+        btnStyle: "border: 1px solid #775DA6",
+        noSuffix: true,
         subs: [
           {
             label: "Settings",
@@ -172,17 +157,22 @@ export default {
             to: "/settings",
           },
           {
-            label: "My Collection",
-            icon: "m-collect",
-            to: "/collections",
-          },
-          {
-            label: "My Referral",
+            label: "Referral",
             icon: "m-refer",
             to: "/referral",
           },
           {
-            label: "Report",
+            label: "Collection",
+            icon: "m-collect",
+            to: "/collections",
+          },
+          {
+            label: "Activity Log",
+            icon: "m-collect",
+            to: "/activity-log",
+          },
+          {
+            label: "Feedback",
             icon: "m-report",
             noticeMsg: {
               name: "feedback",

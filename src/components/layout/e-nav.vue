@@ -39,6 +39,10 @@ export default {
     },
     title() {
       let { title = "", group } = this.meta;
+      if (title == "Overview") {
+        const info = this.$store.state.userInfo;
+        if (info.username) return "Hi " + info.username.cutStr(6, 4);
+      }
       return group || title;
     },
     navItems() {

@@ -29,15 +29,6 @@
     <e-alert />
     <e-feedback />
     <e-meta-connect />
-
-    <a
-      class="pos-f z-10"
-      href="https://discord.com/invite/Cun2VpsdjF"
-      target="_blank"
-      style="right: 20px; bottom: 8px"
-    >
-      <img src="img/svg/common/m-discord.svg" width="54" />
-    </a>
   </v-app>
 </template>
 
@@ -57,6 +48,8 @@ export default {
 <style lang="scss">
 .main-wrap {
   min-height: 77vh;
+  padding: 26px 32px;
+  border-radius: 10px;
   &.auto {
     min-height: auto;
   }

@@ -19,7 +19,6 @@
       <!-- {{ pathInfo }} -->
       <div class="upload-opreation py-4">
         <v-btn
-          rounded
           color="#339CFE"
           outlined
           @click="handleDeleteAll"
@@ -28,7 +27,6 @@
           <span class="ml-2">Delete All</span>
         </v-btn>
         <v-btn
-          rounded
           color="#339CFE"
           outlined
           class="ml-7"
@@ -250,7 +248,7 @@ export default {
   border-bottom: 1px solid #d0dae9;
 }
 .v-tab.v-tab--active {
-  color: #34a9ff;
+  color: #775da6;
 }
 .v-tab.v-tab--active span:nth-of-type(1) {
   font-size: 20px;

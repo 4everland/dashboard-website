@@ -15,7 +15,6 @@
           >
           </v-text-field>
           <v-btn
-            rounded
             min-width="100"
             @click="onAdd"
             :disabled="!domain"
@@ -98,7 +97,6 @@
               <span>{{ owner.cutStr(6, 4) }}</span>
             </div>
             <v-btn
-              rounded
               @click="setContentHash"
               color="primary"
               class="ml-4"

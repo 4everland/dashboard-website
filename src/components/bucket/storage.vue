@@ -10,13 +10,6 @@
   <div v-else>
     <!-- Operation tab -->
     <div class="d-flex nowrap ov-a btn-wrap">
-      <div v-show="inBucket">
-        <v-btn color="primary" @click="addBucket">
-          <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
-          <img src="img/svg/add1.svg" width="12" />
-          <span class="ml-2">New Bucket</span>
-        </v-btn>
-      </div>
       <div v-show="inFile">
         <v-btn
           color="primary"
@@ -130,18 +123,16 @@
           </v-list-item>
         </v-list>
       </e-menu>
-      <nav-item unit="Objects" class="ml-auto" v-if="inBucket">{{
-        list.length
-      }}</nav-item>
+
       <div
-        :class="asMobile ? 'ml-5' : 'ml-16'"
+        class="ml-auto"
+        :class="asMobile ? 'ml-5' : 'ml-auto'"
         v-if="!inFile && !inFolder"
         style="min-width: 150px"
       >
         <v-text-field
           class="hide-msg bd-1"
           dense
-          rounded
           solo
           clearable
           label="Search"
@@ -149,6 +140,19 @@
           v-model="searchKey"
         ></v-text-field>
       </div>
+      <div v-show="inBucket" class="ml-5">
+        <v-btn color="primary" @click="addBucket">
+          <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
+          <img src="img/svg/add1.svg" width="12" />
+          <span class="ml-2">New Bucket</span>
+        </v-btn>
+      </div>
+    </div>
+
+    <div class="d-flex mt-6">
+      <nav-item unit="Objects" class="ml-auto" v-if="inBucket">{{
+        list.length
+      }}</nav-item>
     </div>
 
     <!-- padding layout -->
@@ -180,7 +184,6 @@
               >
               <div v-if="it.name == 'ipfs'">
                 <v-btn
-                  rounded
                   text
                   small
                   target="_blank"
@@ -195,7 +198,6 @@
               <div v-else-if="it.name == 'arHash'" class="d-flex al-c f-wrap">
                 <template v-if="fileArStatus == 'synced' && fileInfo.arHash">
                   <v-btn
-                    rounded
                     text
                     small
                     target="_blank"
@@ -255,7 +257,6 @@
               <div v-else-if="it.name == 'url'">
                 <p v-for="(link, j) in it.value" :key="j">
                   <v-btn
-                    rounded
                     text
                     small
                     color="primary"
@@ -281,7 +282,7 @@
       </v-card>
     </div>
     <!-- Bucket List -->
-    <div class="main-wrap" v-if="!inFile && !inFolder">
+    <div class="main-wrap bucket-wrap" v-if="!inFile && !inFolder">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -301,7 +302,6 @@
           <v-btn
             class="e-btn-text"
             :color="inBucket ? 'primary' : '#000'"
-            rounded
             text
             x-small
             @click.stop="onRow(item)"
@@ -332,7 +332,6 @@
         <template v-slot:item.hash="{ item }">
           <v-btn
             class="e-btn-text item-hash"
-            rounded
             color="primary"
             x-small
             text
@@ -383,7 +382,7 @@
         </template>
         <template v-slot:item.visitChartData="{ item }">
           <v-sparkline
-            :gradient="['#4BA6FF', '#9FDCFF']"
+            :gradient="['#3023AE', '#C86DD7']"
             :line-width="2"
             :padding="8"
             :smooth="false"
@@ -409,9 +408,14 @@
           }}
         </div>
       </div>
+      <operation-bar
+        :selected="selected.length"
+        @handleClearSelected="selected = []"
+        @handleDeleteSelected="onDelete()"
+      ></operation-bar>
     </div>
     <div v-if="inFolder && !finished" class="pd-20 gray ta-c fz-16 mt-5">
-      <v-btn outlined rounded v-if="list.length" @click="onLoadMore">{{
+      <v-btn outlined v-if="list.length" @click="onLoadMore">{{
         loadingMore ? "Loading..." : "Load More"
       }}</v-btn>
     </div>
@@ -427,7 +431,6 @@ export default {
       popUpload: false,
       fileLoading: true,
       fileInfo: null,
-
       drawer: false,
       deleteFolder: false,
       deleteFoldersTasks: [],
@@ -595,11 +598,14 @@ export default {
 .e-btn-text::before {
   background: transparent !important;
 }
+.bucket-wrap {
+  position: relative;
+}
 .task-list {
   position: fixed;
   bottom: 80px;
   right: 20px;
-  color: #34a9ff;
+  color: #775da6;
   font-size: 16px;
   cursor: pointer;
   .task-count {

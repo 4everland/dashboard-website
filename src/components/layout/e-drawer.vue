@@ -33,7 +33,7 @@
     }
   }
   .v-list-item--active {
-    color: #34a9ff;
+    color: #775da6;
     background: none;
     &.sub::before {
       opacity: 0;
@@ -60,7 +60,7 @@
     </div>
 
     <div class="pa-5"></div>
-    <v-list rounded dense>
+    <v-list dense>
       <template v-for="(it, i) in list">
         <v-list-group
           class="group-item"
@@ -121,8 +121,22 @@
       </template>
     </v-list>
 
-    <div class="pos-a mini-arrow" @click="mini = !mini">
+    <!-- <div class="pos-a mini-arrow" @click="mini = !mini">
       <img src="img/svg/drawer/mini-arrow.svg" class="icon d-b" />
+    </div> -->
+    <div class="pos-a btm-0 left-0 w100p mb-4 al-c pa-3">
+      <a
+        class="flex-1 ta-c"
+        :href="it.url"
+        target="_blank"
+        v-for="(it, i) in mLinks"
+        :key="i"
+      >
+        <img
+          :src="`img/svg/drawer/social/${it.label.toLocaleLowerCase()}.svg`"
+          width="24"
+        />
+      </a>
     </div>
   </v-navigation-drawer>
 </template>
@@ -135,6 +149,28 @@ const initFilePath = "/bucket/storage/";
 export default {
   data() {
     return {
+      mLinks: [
+        {
+          url: "https://twitter.com/4everland_org",
+          label: "Twitter",
+        },
+        {
+          url: "https://discord.com/invite/4everland",
+          label: "Discord",
+        },
+        {
+          url: "https://t.me/org_4everland",
+          label: "Telegram",
+        },
+        {
+          url: "https://4everland.medium.com/",
+          label: "Medium",
+        },
+        {
+          url: "https://github.com/4everland",
+          label: "Github",
+        },
+      ],
       isShow: this.asMobile,
       mini: false,
       activeArr: [],
@@ -179,10 +215,10 @@ export default {
               label: "Statistics",
               to: "/hosting/statistics",
             },
-            {
-              label: "First Landing",
-              to: "/hosting/first-landing",
-            },
+            // {
+            //   label: "First Landing",
+            //   to: "/hosting/first-landing",
+            // },
           ],
         },
         {

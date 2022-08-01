@@ -37,7 +37,13 @@
           </v-col>
         </v-row>
 
-        <e-kv2 label="Domain" class="mt-7">
+        <e-kv2
+          label="Domain"
+          class="mt-7"
+          :class="{
+            'op-0 ev-n': info.platform != 'IPFS',
+          }"
+        >
           <e-link :href="info.domain">
             {{ info.domain }}
           </e-link>
@@ -52,13 +58,18 @@
           </e-kv2>
           <e-kv2
             class="ml-auto"
-            label="IPFS"
+            :label="info.platform"
             style="min-width: 120px"
-            v-if="info.cid"
+            v-if="info.platform"
           >
-            <e-link class="fz-14" :href="$utils.getCidLink(info.cid)">
-              {{ info.cid ? "Verify on IPFS" : "Pending" }}
+            <e-link
+              v-if="info.hash"
+              class="fz-14"
+              :href="$utils.getCidLink(info.hash, info.platform)"
+            >
+              {{ "Verify on " + info.platform }}
             </e-link>
+            <span v-else class="fz-14">Pending</span>
           </e-kv2>
         </div>
       </v-col>

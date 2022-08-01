@@ -36,12 +36,12 @@
 <template>
   <div class="projects">
     <div class="mb-5 d-flex al-c" v-if="!limit && list.length">
-      <v-btn color="primary" rounded to="/hosting/new">
+      <v-btn color="primary" to="/hosting/new">
         <img src="img/svg/add1.svg" width="12" />
         <span class="ml-2">New Project</span>
       </v-btn>
       <e-menu open-on-hover offset-y>
-        <v-btn slot="ref" outlined rounded min-width="100" class="ml-5">
+        <v-btn slot="ref" outlined min-width="100" class="ml-5">
           <img src="img/svg/hosting/ic-sort.svg" width="12" />
           <span class="ml-2">{{
             sortType == "Active" ? sortArr[0] : sortArr[1]
@@ -79,43 +79,91 @@
             />
           </template>
           <v-row>
-            <v-col cols="12" md="5">
+            <v-col cols="12" md="4">
               <div class="d-flex al-c grow-0">
                 <v-img
                   :src="$getImgSrc(it.previewImage)"
+                  @click.stop="$navTo(getDetailPath(it))"
                   lazy-src="img/bg/empty/project.png"
                   max-height="60"
                   max-width="60"
                   :aspect-ratio="1"
                   class="bdrs-8 bd-1"
                 />
-                <div class="ml-5">
-                  <h3>{{ it.name }}</h3>
-                  <div class="d-flex al-c mt-4" v-if="it.repo && it.repo.id">
-                    <e-icon-link
-                      class="mr-5 shrink-1"
-                      img="img/svg/hosting/m-github-1.svg"
-                      :link="it.repo.cloneUrl.replace('.git', '')"
+                <div class="ml-5 flex-1">
+                  <div class="d-flex al-c">
+                    <h3
+                      @click.stop="$navTo(getDetailPath(it))"
+                      :style="{
+                        'min-width': asMobile ? '100px' : '160px',
+                      }"
+                      class="mb-0 hover-1"
                     >
-                      <span class="ml-1 gray-6">{{
-                        `${it.repo.namespace}/${it.repo.name}`.cutStr(30)
-                      }}</span>
-                    </e-icon-link>
-                    <e-time span-class="gray-6">{{ it.repo.updateAt }}</e-time>
+                      {{ it.name.cutStr(asMobile ? 6 : 10, asMobile ? 4 : 6) }}
+                    </h3>
+                    <div class="ml-auto" v-if="asMobile">
+                      <h-status
+                        :val="it.state"
+                        @click.native.stop="onStatus(it)"
+                      ></h-status>
+                    </div>
+                  </div>
+                  <div class="al-c mt-4">
+                    <img
+                      :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
+                      height="20"
+                    />
+                    <span class="ml-1 fz-14">{{ it.platform }}</span>
+                    <a
+                      class="u ml-2 fz-12 gray"
+                      :href="$utils.getCidLink(it.hash, it.platform)"
+                      target="_blank"
+                      @click.stop="onStop"
+                      v-if="it.hash"
+                    >
+                      {{ it.hash.cutStr(asMobile ? 2 : 6, 6) }}
+                    </a>
                   </div>
                 </div>
               </div>
             </v-col>
-            <v-col cols="4" md="2" class="d-flex al-c f-center">
-              <h-status :val="it.state"></h-status>
+            <v-col cols="12" md="4">
+              <div class="ta-c mb-4 mt-2" v-if="!asMobile">
+                <h-status
+                  :val="it.state"
+                  @click.native.stop="onStatus(it)"
+                ></h-status>
+              </div>
+              <div class="d-flex al-c" v-if="it.repo && it.repo.id">
+                <e-icon-link
+                  @click.native.stop="onStop"
+                  class="mr-6"
+                  img="img/svg/hosting/m-branch.svg"
+                  :link="
+                    it.repo.cloneUrl.replace(
+                      '.git',
+                      '/tree/' + it.repo.defaultBranch
+                    )
+                  "
+                >
+                  {{ it.repo.defaultBranch }}
+                </e-icon-link>
+                <e-commit
+                  @click.native.stop="onStop"
+                  :info="it.commit"
+                  class="fz-14"
+                ></e-commit>
+              </div>
             </v-col>
-            <v-col cols="8" md="5" class="d-flex al-c">
+            <v-col cols="12" md="4" class="d-flex al-c">
+              <div class="ml-auto mr-6 ta-r" style="min-width: 70px">
+                <e-time span-class="gray-6 fz-14">{{ it.buildAt }}</e-time>
+              </div>
               <v-btn
                 :to="getDetailPath(it)"
                 @click.stop="onStop"
-                class="ml-auto mr-2"
+                class="mr-3"
                 color="primary"
-                rounded
                 small
                 >View Detail</v-btn
               >
@@ -146,25 +194,39 @@
                 <rect-data :list="it.statis2" />
               </v-col> -->
             </v-row>
-            <div class="mt-5 ta-r">
-              <v-btn
-                v-if="it.taskId"
-                color="primary"
-                small
-                rounded
-                outlined
-                :to="`/hosting/build/${it.name}/${it.id}/${it.taskId}`"
-                >View Build Logs</v-btn
-              >
-              <v-btn
-                @click="onDelete(it)"
-                color="error"
-                small
-                outlined
-                rounded
-                class="ml-3"
-                >Delete</v-btn
-              >
+            <div class="mt-5 d-flex al-c f-wrap">
+              <div class="d-flex">
+                <e-icon-link
+                  class="mr-5 shrink-1"
+                  img="img/svg/hosting/m-github.svg"
+                  :link="it.repo.cloneUrl.replace('.git', '')"
+                >
+                  <span class="ml-1 gray-6">{{
+                    `${it.repo.namespace}/${it.repo.name}`.cutStr(30)
+                  }}</span>
+                </e-icon-link>
+                <e-time span-class="gray-6 fz-14">{{
+                  it.repo.updateAt
+                }}</e-time>
+              </div>
+
+              <div class="d-flex al-c ml-auto">
+                <v-btn icon :to="getDetailPath(it, '?tab=settings')">
+                  <img src="img/svg/hosting/ic-setting.svg" width="16" />
+                </v-btn>
+                <v-btn icon class="ml-3" @click="onDelete(it)">
+                  <img src="img/svg/hosting/ic-delete.svg" width="16" />
+                </v-btn>
+                <v-btn
+                  v-if="it.taskId"
+                  color="primary"
+                  class="ml-6"
+                  small
+                  outlined
+                  :to="getBuildPath(it)"
+                  >View Build Logs</v-btn
+                >
+              </div>
             </div>
           </div>
         </v-expansion-panel-content>
@@ -197,15 +259,11 @@
           }}
         </e-empty>
         <div class="mt-10" v-if="!loading">
-          <v-btn color="primary" rounded to="/hosting/new"
-            >Create a New Project</v-btn
-          >
+          <v-btn color="primary" to="/hosting/new">Create a New Project</v-btn>
         </div>
       </div>
       <div class="mt-8" v-else-if="limit">
-        <v-btn color="primary" rounded outlined to="/hosting/projects"
-          >View More</v-btn
-        >
+        <v-btn color="primary" outlined to="/hosting/projects">View More</v-btn>
       </div>
     </div>
   </div>
@@ -295,13 +353,27 @@ export default {
         console.log(error);
       }
     },
-    getDetailPath(it) {
-      return `/hosting/project/${it.name}/${it.id}`;
+    getDetailPath(it, query = "") {
+      return `/hosting/project/${it.name}/${it.id}` + query;
+    },
+    getBuildPath(it) {
+      return `/hosting/build/${it.name}/${it.id}/${it.taskId}`;
     },
     onItem(it) {
       if (!this.limit) return;
       const path = this.getDetailPath(it);
       this.$router.push(path);
+    },
+    async onStatus(it) {
+      this.$loading();
+      try {
+        await this.onOpen(it);
+        const path = this.getBuildPath(it);
+        this.$router.push(path);
+      } catch (error) {
+        //
+      }
+      this.$loading.close();
     },
     async onOpen(it) {
       if (it.loading || it.statisList) return;
@@ -384,8 +456,14 @@ export default {
             sortType: this.sortType.toUpperCase(),
           },
         });
-        this.list = list;
+        this.list = list.map((it) => {
+          if (!it.platform) it.platform = "IPFS";
+          return it;
+        });
         this.total = total;
+        if (!total) {
+          this.$router.replace("/hosting/new");
+        }
         if (this.page > 1 && !list.length) {
           this.page = 1;
           this.getList();

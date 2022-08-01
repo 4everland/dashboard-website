@@ -79,7 +79,7 @@
                 link
                 v-clipboard="opt.name == 'copy' ? it.domain || '' : ''"
                 @click="onOpt(opt, it)"
-                v-for="(opt, i) in optList"
+                v-for="(opt, i) in getOptList(it)"
                 v-show="getShow(opt, it)"
                 :key="i"
               >
@@ -94,7 +94,7 @@
       </div>
     </div>
     <div
-      v-if="list && !finished"
+      v-if="!limit && list && !finished"
       class="pd-20 gray ta-c fz-18 mt-5"
       :class="{
         'hover-1': !loading,
@@ -112,6 +112,7 @@ import { mapState } from "vuex";
 
 export default {
   props: {
+    limit: Number,
     active: Boolean,
   },
   computed: {
@@ -127,12 +128,41 @@ export default {
     const { id } = this.$route.params;
     return {
       id,
-      optList: [
+      list: null,
+      page: 0,
+      finished: false,
+      loading: false,
+      refreshing: false,
+    };
+  },
+  mounted() {
+    this.getList();
+  },
+  watch: {
+    active(val) {
+      if (val) this.getList();
+    },
+  },
+  mounted() {
+    this.getList();
+  },
+  methods: {
+    getOptList(it) {
+      let arr = [
         {
           text: "Redeploy",
           name: "deploy",
           icon: "send",
         },
+      ];
+      if (it.canRollback)
+        arr.push({
+          text: "Rollback",
+          name: "rollback",
+          icon: "arrow-u-left-top",
+        });
+      return [
+        ...arr,
         {
           text: "Inspect Deployment",
           link: "/hosting/build/{projName}/{id}/{taskId}",
@@ -148,23 +178,8 @@ export default {
           name: "copy",
           icon: "link-variant",
         },
-      ],
-      list: null,
-      page: 0,
-      finished: false,
-      loading: false,
-      refreshing: false,
-    };
-  },
-  watch: {
-    active(val) {
-      if (val) this.getList();
+      ];
     },
-  },
-  mounted() {
-    this.getList();
-  },
-  methods: {
     getShow(opt, it) {
       if (it.cli && opt.name == "deploy") return false;
       return true;
@@ -182,7 +197,27 @@ export default {
         this.$toast("Copied to clipboard !");
       } else if (name == "deploy") {
         this.onDeploy(it);
+      } else if (name == "rollback") {
+        this.onRollback(it);
       }
+    },
+    async onRollback(it) {
+      try {
+        let html =
+          "The rollback will point to the latest domain without redeploying and will not consume any resources.";
+        html +=
+          '<div class="mt-3 op-7 fz-14">We recommend that you disable the deploy hook feature in order to prevent project updates from automatically being triggered by the Github updates.</div>';
+        await this.$confirm(html, "Rollback to production", {
+          confirmText: "Rollback",
+        });
+        this.$loading();
+        await this.$http2.put("/project/task/rollback/" + it.taskId);
+        this.$toast("Rollback successfully");
+        this.getList();
+      } catch (error) {
+        //
+      }
+      this.$loading.close();
     },
     async onDeploy(it) {
       try {
@@ -224,7 +259,7 @@ export default {
         }
         const params = {
           page: this.page,
-          size: 10,
+          size: this.limit || 10,
         };
         const { data } = await this.$http2.get(
           `/project/task/${this.id}/list`,
@@ -237,7 +272,14 @@ export default {
         if (this.loading) {
           this.list = [...this.list, ...rows];
         } else {
-          this.list = rows;
+          this.isFirst = false;
+          this.list = rows.map((it) => {
+            if (it.state == "SUCCESS") {
+              if (!this.isFirst) this.isFirst = true;
+              else it.canRollback = true;
+            }
+            return it;
+          });
         }
       } catch (error) {
         console.log(error);

@@ -41,7 +41,6 @@
             <v-btn
               class="ml-5"
               color="primary"
-              rounded
               :loading="creating"
               @click="onCreate"
               >Create</v-btn
@@ -115,7 +114,7 @@ export default {
         const { data: accountList } = await this.$http2.get(
           "/user/git-namespaces"
         );
-        const account = accountList.filter(it => it.ownerType == "User")[0]
+        const account = accountList.filter((it) => it.ownerType == "User")[0];
         if (!account) throw new Error("No Github account");
         const { data } = await this.$http2.get("/repo/refresh/list", {
           params: {
@@ -133,7 +132,7 @@ export default {
         this.$router.replace(link);
       } catch (error) {
         console.log(error);
-        await this.$sleep(100)
+        await this.$sleep(100);
         this.$confirm(error.message, "Network Error", {
           confirmText: "Retry",
         }).then(() => {

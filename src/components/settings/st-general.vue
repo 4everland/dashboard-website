@@ -11,7 +11,7 @@
         continue to act with caution.
       </div>
       <div class="mt-8">
-        <v-btn outlined rounded small @click="onDelete">Delete Account</v-btn>
+        <v-btn outlined small @click="onDelete">Delete Account</v-btn>
       </div>
     </div>
   </div>

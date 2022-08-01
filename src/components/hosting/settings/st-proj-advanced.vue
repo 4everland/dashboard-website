@@ -12,7 +12,6 @@
         <v-btn
           min-width="100"
           color="primary"
-          rounded
           :loading="savingRewrite"
           @click="onSaveRewrite"
           :disabled="info.rewrite == rewrite"
@@ -58,13 +57,7 @@
             The project will be deleted permanently including deployments and
             domains. You can't undo this action.
           </div>
-          <v-btn
-            outlined
-            rounded
-            color="error"
-            small
-            class="ml-auto"
-            @click="onDelete"
+          <v-btn outlined color="error" small class="ml-auto" @click="onDelete"
             >Delete</v-btn
           >
         </div>

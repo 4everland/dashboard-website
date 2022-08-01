@@ -23,19 +23,13 @@
               Connected at <e-time :value="info.repo.updateAt"></e-time>
             </div>
           </div>
-          <v-btn
-            @click="setConnect()"
-            :loading="savingConnect"
-            outlined
-            rounded
-            small
-          >
+          <v-btn @click="setConnect()" :loading="savingConnect" outlined small>
             Disconnect
           </v-btn>
         </div>
         <template v-else>
           <div v-if="!showConnect">
-            <v-btn color="primary" rounded @click="showConnect = true">
+            <v-btn color="primary" @click="showConnect = true">
               <v-icon>mdi-github</v-icon>
               <span class="ml-2">Connect Github</span>
             </v-btn>
@@ -69,7 +63,6 @@
               :loading="savingBranch"
               @click="setBranch"
               color="primary"
-              rounded
               min-width="100"
               class="ml-5"
               >Save</v-btn

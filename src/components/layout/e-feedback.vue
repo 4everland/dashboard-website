@@ -12,6 +12,15 @@
         label="Email"
         placeholder="Your email"
       />
+      <v-select
+        label="Type"
+        prepend-icon="mdi-label"
+        class="mt-2"
+        outlined
+        persistent-placeholder
+        v-model="form.feedbackType"
+        :items="typeList"
+      />
       <v-text-field
         v-if="form.feedbackType == 'BUG'"
         prepend-icon="mdi-wallet"
@@ -36,15 +45,8 @@
       <e-upload-img v-model="files" />
 
       <div class="ta-c mt-5">
-        <v-btn outlined rounded width="90" @click="showPop = false"
-          >Cancel</v-btn
-        >
-        <v-btn
-          class="ml-6"
-          color="primary"
-          rounded
-          :loading="loading"
-          @click="onSubmit"
+        <v-btn outlined width="90" @click="showPop = false">Cancel</v-btn>
+        <v-btn class="ml-6" color="primary" :loading="loading" @click="onSubmit"
           >Submit</v-btn
         >
       </div>
@@ -66,6 +68,7 @@ export default {
     return {
       showPop: false,
       title: "Feedback",
+      typeList: ["BUG", "FEEDBACK"],
       form: {
         email: "",
         ethAddress: "",

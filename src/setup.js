@@ -8,7 +8,7 @@ import frameworks from "./plugins/config/frameworks";
 
 Vue.use(VueClipboards);
 
-Vue.prototype.$color1 = "#34A9FF";
+Vue.prototype.$color1 = "#775DA6";
 Vue.prototype.$color2 = "#ff6960";
 
 Vue.prototype.$onLoginData = (data) => {
@@ -118,8 +118,9 @@ Vue.prototype.$utils = {
     }
     return cid;
   },
-  getCidLink(cid) {
+  getCidLink(cid, plat) {
     if (!cid) return "";
+    if (plat == "IC") return `https://${cid}.raw.ic0.app/`;
     return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
   },
   cutFixed(num, keep = 2) {
@@ -144,7 +145,7 @@ Vue.prototype.$utils = {
       it.amount = parseInt(it.amount / 60);
       it.unit = "Min";
     } else if (/ipfs/i.test(it.type) && it.amount == "0") {
-      it.amount = "Extend Duration";
+      it.amount = "Duration Extension";
     } else {
       const obj = this.getFileSize(it.amount, true);
       it.amount = obj.num;

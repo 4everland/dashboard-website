@@ -1,3 +1,18 @@
+<style lang="scss">
+.plat-item {
+  padding: 14px 12px;
+  background: #eef0f4;
+  cursor: pointer;
+  &:hover {
+    background: #eee;
+  }
+  &.active {
+    background: #59a8f8;
+    color: #fff;
+  }
+}
+</style>
+
 <template>
   <div v-if="info" class="hide-msg">
     <div class="main-wrap">
@@ -16,6 +31,29 @@
         </e-icon-link>
       </div>
     </div>
+
+    <!-- <div class="main-wrap mt-5">
+      <h3>Hosting Platform</h3>
+      <v-row>
+        <v-col
+          cols="4"
+          v-for="(it, i) in platList"
+          :key="i"
+          @click="form.platform = it.name"
+        >
+          <div
+            class="d-flex al-c bdrs-3 plat-item"
+            :class="{
+              active: form.platform == it.name,
+            }"
+          >
+            <img :src="'img/svg/hosting/' + it.icon" height="30" />
+            <div class="ml-2 fw-b fz-16">{{ it.label }}</div>
+          </div>
+        </v-col>
+      </v-row>
+    </div> -->
+
     <div class="main-wrap mt-5">
       <h3>Basic Configuration</h3>
       <v-row>
@@ -128,29 +166,17 @@
         is not supported now)
       </div>
     </div>
-    <div class="ta-r mt-4">
-      <v-btn color="primary" rounded @click="onDeploy" min-width="100"
-        >Deploy</v-btn
-      >
-      <v-btn
-        rounded
-        outlined
-        class="ml-6"
-        min-width="100"
-        @click="$emit('back')"
+    <div class="ta-c mt-4">
+      <v-btn color="primary" @click="onDeploy" min-width="100">Deploy</v-btn>
+      <v-btn outlined class="ml-6" min-width="100" @click="$emit('back')"
         >Back</v-btn
       >
     </div>
   </div>
   <div v-else-if="isTpl">
     <new-step-1-tpl :query="query" @git-repo="repoInfo = $event" />
-    <div class="ta-r mt-4">
-      <v-btn
-        rounded
-        outlined
-        class="ml-6"
-        min-width="100"
-        @click="$emit('back')"
+    <div class="ta-c mt-4">
+      <v-btn outlined class="ml-6" min-width="100" @click="$emit('back')"
         >Back</v-btn
       >
     </div>
@@ -193,11 +219,29 @@ export default {
         outputDirectory: "",
         hookSwitch: true,
         env: [],
+        platform: "IPFS",
       },
       buildCommandHint: "",
       scripts: null,
       rootDirList: [],
       branchList: [],
+      platList: [
+        {
+          label: "IPFS",
+          name: "IPFS",
+          icon: "h-ipfs.svg",
+        },
+        {
+          label: "Internet Computer",
+          name: "IC",
+          icon: "h-ic.svg",
+        },
+        // {
+        //   label: "Arweave",
+        //   name: "AR",
+        //   icon: "h-ar.svg",
+        // },
+      ],
     };
   },
   watch: {
@@ -246,6 +290,7 @@ export default {
         rootDirectory: srcDir,
         framework: frameWorkAdvice,
         env: envList,
+        platform: "IPFS",
       });
       this.branchList = defaultBranch ? [defaultBranch] : [];
       this.dirList = [];

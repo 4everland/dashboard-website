@@ -2,8 +2,16 @@ import Settings from "./settings";
 import Collections from "./collections";
 import Referral from "./referral";
 import BugBounty from "./bug-bounty";
+import ActLog from "./activity-log";
 
 export default [
+  {
+    path: "/activity-log",
+    component: ActLog,
+    meta: {
+      title: "Activity Log",
+    },
+  },
   {
     path: "/settings",
     component: Settings,

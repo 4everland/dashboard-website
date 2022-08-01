@@ -11,7 +11,6 @@
         <v-btn
           min-width="100"
           color="primary"
-          rounded
           :loading="savingName"
           @click="onSaveName"
           :disabled="info.name == name || !name"
@@ -91,7 +90,6 @@
           <v-btn
             min-width="100"
             color="primary"
-            rounded
             :disabled="!isCmdChange"
             :loading="savingCmd"
             @click="onSaveCmd"
@@ -113,7 +111,6 @@
         <v-btn
           min-width="100"
           color="primary"
-          rounded
           :disabled="rootDirectory == info.config.rootDirectory"
           :loading="savingRoot"
           @click="onSaveRoot"

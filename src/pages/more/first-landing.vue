@@ -163,7 +163,6 @@
             :disabled="claimAmount == 0 || isClaimed"
             @click="onClaim"
             :loading="claimLoading"
-            rounded
             color="primary"
           >
             <span class="white-0 d-ib pl-3 pr-3"

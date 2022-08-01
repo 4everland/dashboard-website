@@ -45,7 +45,6 @@
             class="e-btn-text"
             :to="getPath(item)"
             :color="item.valid ? 'success' : 'error'"
-            rounded
             text
             x-small
           >
@@ -55,7 +54,7 @@
         <!-- <template v-slot:item.bucketName="{ item }">
           <v-btn
             color="primary"
-            rounded
+            
             text
             small
             :to="`/storage/${item.bucketName}/`"
@@ -108,7 +107,6 @@
                     <span class="ml-2 fz-15">{{ it.name }}</span>
                     <v-btn
                       small
-                      rounded
                       color="primary"
                       class="ml-auto"
                       @click="onSelect(it)"
@@ -151,12 +149,9 @@
         </v-window>
 
         <div class="ta-c mt-8">
-          <v-btn outlined rounded width="90" @click="showPop = false"
-            >Cancel</v-btn
-          >
+          <v-btn outlined width="90" @click="showPop = false">Cancel</v-btn>
           <v-btn
             color="primary"
-            rounded
             width="90"
             class="ml-6"
             v-if="curStep > 0"

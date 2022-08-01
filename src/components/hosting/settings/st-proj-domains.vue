@@ -27,7 +27,6 @@
         >
         </v-text-field>
         <v-btn
-          rounded
           min-width="100"
           @click="onAdd"
           :disabled="!domain"
@@ -70,13 +69,7 @@
             >
               <v-icon>mdi-refresh</v-icon>
             </v-btn>
-            <v-btn
-              small
-              rounded
-              outlined
-              @click="onRemove(it)"
-              :loading="it.removing"
-            >
+            <v-btn small outlined @click="onRemove(it)" :loading="it.removing">
               Remove
             </v-btn>
           </div>

@@ -14,7 +14,7 @@
       @click:row="onItem"
     >
       <template v-slot:item.name="{ item }">
-        <v-btn x-small text color="primary" rounded class="e-btn-text">
+        <v-btn x-small text color="primary" class="e-btn-text">
           <b>{{ item.name }}</b>
         </v-btn>
       </template>
@@ -32,15 +32,13 @@
           }}
         </e-empty>
         <div class="mt-10" v-if="!tableLoading">
-          <v-btn color="primary" rounded :to="bucketPath + '?new=bucket'"
+          <v-btn color="primary" :to="bucketPath + '?new=bucket'"
             >Create a New Bucket</v-btn
           >
         </div>
       </template>
       <div v-else>
-        <v-btn color="primary" rounded outlined :to="bucketPath"
-          >View More</v-btn
-        >
+        <v-btn color="primary" outlined :to="bucketPath">View More</v-btn>
       </div>
     </div>
   </div>
