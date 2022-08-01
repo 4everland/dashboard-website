@@ -10,13 +10,6 @@
   <div v-else>
     <!-- Operation tab -->
     <div class="d-flex nowrap ov-a btn-wrap">
-      <div v-show="inBucket">
-        <v-btn color="primary" @click="addBucket">
-          <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
-          <img src="img/svg/add1.svg" width="12" />
-          <span class="ml-2">New Bucket</span>
-        </v-btn>
-      </div>
       <div v-show="inFile">
         <v-btn
           color="primary"
@@ -130,11 +123,10 @@
           </v-list-item>
         </v-list>
       </e-menu>
-      <nav-item unit="Objects" class="ml-auto" v-if="inBucket">{{
-        list.length
-      }}</nav-item>
+
       <div
-        :class="asMobile ? 'ml-5' : 'ml-16'"
+        class="ml-auto"
+        :class="asMobile ? 'ml-5' : 'ml-auto'"
         v-if="!inFile && !inFolder"
         style="min-width: 150px"
       >
@@ -142,13 +134,25 @@
           class="hide-msg bd-1"
           dense
           solo
-          rounded
           clearable
           label="Search"
           prepend-inner-icon="mdi-magnify"
           v-model="searchKey"
         ></v-text-field>
       </div>
+      <div v-show="inBucket" class="ml-5">
+        <v-btn color="primary" @click="addBucket">
+          <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
+          <img src="img/svg/add1.svg" width="12" />
+          <span class="ml-2">New Bucket</span>
+        </v-btn>
+      </div>
+    </div>
+
+    <div class="d-flex mt-6">
+      <nav-item unit="Objects" class="ml-auto" v-if="inBucket">{{
+        list.length
+      }}</nav-item>
     </div>
 
     <!-- padding layout -->
@@ -278,7 +282,7 @@
       </v-card>
     </div>
     <!-- Bucket List -->
-    <div class="main-wrap" v-if="!inFile && !inFolder">
+    <div class="main-wrap bucket-wrap" v-if="!inFile && !inFolder">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -378,7 +382,7 @@
         </template>
         <template v-slot:item.visitChartData="{ item }">
           <v-sparkline
-            :gradient="['#4BA6FF', '#9FDCFF']"
+            :gradient="['#3023AE', '#C86DD7']"
             :line-width="2"
             :padding="8"
             :smooth="false"
@@ -404,6 +408,11 @@
           }}
         </div>
       </div>
+      <operation-bar
+        :selected="selected.length"
+        @handleClearSelected="selected = []"
+        @handleDeleteSelected="onDelete()"
+      ></operation-bar>
     </div>
     <div v-if="inFolder && !finished" class="pd-20 gray ta-c fz-16 mt-5">
       <v-btn outlined v-if="list.length" @click="onLoadMore">{{
@@ -422,7 +431,6 @@ export default {
       popUpload: false,
       fileLoading: true,
       fileInfo: null,
-
       drawer: false,
       deleteFolder: false,
       deleteFoldersTasks: [],
@@ -589,6 +597,9 @@ export default {
 }
 .e-btn-text::before {
   background: transparent !important;
+}
+.bucket-wrap {
+  position: relative;
 }
 .task-list {
   position: fixed;
