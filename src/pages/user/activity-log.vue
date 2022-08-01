@@ -120,9 +120,24 @@ export default {
       } else if (act == "HOSTING_CREATE_PROJECT") {
         it.desc = "created project " + obj.projectName;
       } else if (act == "HOSTING_GENERATE_CLI_TOKEN") {
-        it.desc = "generated Auth Token";
+        it.desc = "generated Hosting Auth Token";
         it.path = "Settings";
         it.link = "/settings?tab=auth_tokens";
+      } else if (act == "BUCKET_GENERATE_ACCESS_KEY") {
+        it.desc = "generated Bucket Auth Token";
+        it.path = "Settings";
+        it.link = "/settings?tab=auth_tokens&sub=bucket_auth_tokens";
+      } else if (act == "BUCKET_DELETE") {
+        it.desc = "deleted bucket " + obj.bucket;
+      } else if (act == "BUCKET_CREATE") {
+        it.desc = "created bucket " + obj.bucket;
+      } else if (act == "BUCKET_ADD_DOMAIN") {
+        it.desc = "added domain " + obj.domain;
+      } else if (act == "BUCKET_DELETE_DOMAIN") {
+        it.desc = "deleted domain " + obj.map((it) => it.domain).join(", ");
+      } else {
+        console.log(act, it);
+        it.desc = act;
       }
       if (!it.path) {
         if (/^bill/i.test(act) || act == "OAUTH_FIRST_LOGIN") {
@@ -136,6 +151,9 @@ export default {
           const id = obj.projectId || obj.projectIds[0];
           it.path = "Hosting " + name;
           it.link = `/hosting/project/${name}/${id}`;
+        } else if (/bucket/i.test(act)) {
+          it.path = "Bucket";
+          it.link = "/bucket/storage/";
         }
       }
     },
