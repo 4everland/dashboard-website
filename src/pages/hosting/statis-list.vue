@@ -32,7 +32,11 @@
     <v-skeleton-loader v-if="!list" type="article"></v-skeleton-loader>
     <e-empty v-else-if="!list.length" class="pt-10">No Projects</e-empty>
     <div v-else>
-      <div class="al-c pa-4 pb-2 bdb-1 gray-6 fw-b fz-14" v-if="!asMobile">
+      <div
+        class="al-c pa-4 pb-2 bdb-1 gray-6 fw-b fz-14 pos-s bg-white z-10"
+        style="top: 60px"
+        v-if="!asMobile"
+      >
         <span>Project</span>
         <table class="right-con ml-auto">
           <tr>
