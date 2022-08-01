@@ -3,7 +3,7 @@ import Projects from "./projects";
 import Project from "./project";
 import Build from "./build";
 import Domains from "./domains";
-import Statistics from "./statistics";
+import Statistics from "./statis-list";
 import StatisDetail from "./statistics-detail";
 
 export default [
@@ -84,7 +84,6 @@ export default [
     component: Statistics,
     meta: {
       title: "Statistics",
-      isTab: 1,
     },
   },
   {

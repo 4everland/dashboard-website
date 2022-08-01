@@ -8,7 +8,7 @@
       </div>
 
       <div
-        class="pd-20 bd-1 bdrs-3 mb-4"
+        class="pd-20 bd-1 bdrs-10 mb-4 bg-white"
         :class="{
           'd-flex al-c flex-wrap': !asMobile,
         }"

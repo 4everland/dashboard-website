@@ -25,7 +25,7 @@
         color="black"
         v-model="curIdx"
         :height="vertical ? null : 44"
-        hide-slider
+        :hide-slider="vertical"
         :vertical="vertical"
       >
         <v-tab v-for="(it, i) in list" :key="i">
@@ -33,7 +33,7 @@
         </v-tab>
       </v-tabs>
     </div>
-    <div class="" :class="vertical ? 'flex-1 ml-5' : 'main-wrap pa-5 bg-white'">
+    <div class="" :class="vertical ? 'flex-1 ml-5' : 'mt-5'">
       <component
         :is="it.comp"
         v-bind="it.props"
@@ -142,6 +142,9 @@ export default {
   .theme--light.v-tabs > .v-tabs-bar {
     background-color: transparent;
   }
+  .v-tabs-slider {
+    background: #775da6;
+  }
   .v3-vertical {
     height: 100%;
     .v-tab {
@@ -161,28 +164,6 @@ export default {
         border-radius: 1px;
       }
     }
-  }
-  .v3-horizon {
-    .v-slide-group__content {
-      padding-top: 4px;
-      padding-left: 2px;
-    }
-    .v-tab--active {
-      background: #fff;
-      box-shadow: 0 0 4px rgb(205 205 205 / 50%);
-      font-weight: bold;
-      pointer-events: none;
-      &,
-      &:before {
-        border-radius: 12px;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-      }
-    }
-  }
-  .main-wrap {
-    margin-left: 2px;
-    min-height: 70vh;
   }
 }
 </style>

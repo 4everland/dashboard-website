@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <!-- <div class="main-wrap mt-5">
+    <div class="main-wrap mt-5" v-if="$inDev">
       <h3>Hosting Platform</h3>
       <v-row>
         <v-col
@@ -52,7 +52,7 @@
           </div>
         </v-col>
       </v-row>
-    </div> -->
+    </div>
 
     <div class="main-wrap mt-5">
       <h3>Basic Configuration</h3>
