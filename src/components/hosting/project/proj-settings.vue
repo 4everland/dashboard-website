@@ -8,7 +8,7 @@
 </style>
 
 <template>
-  <div>
+  <div class="main-wrap">
     <v-skeleton-loader type="article" v-if="!info.id" />
     <e-tabs
       v-else
