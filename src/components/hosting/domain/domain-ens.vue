@@ -1,25 +1,6 @@
 <template>
   <div>
-    <div class="mb-5">
-      <e-right-opt-wrap>
-        <v-btn color="primary" min-width="100" @click="showPop = true">
-          <img src="img/svg/add1.svg" width="12" />
-          <span class="ml-2">Add</span>
-        </v-btn>
-        <v-btn
-          @click="onDelete"
-          :loading="deleting"
-          outlined
-          class="ml-5"
-          min-width="36"
-        >
-          <img src="img/svg/delete.svg" width="12" />
-          <span class="ml-2">Delete</span>
-        </v-btn>
-      </e-right-opt-wrap>
-    </div>
-    <e-tabs :list="tabList" @chooseItem="chooseDelete" />
-    <!-- <div class="main-wrap">
+    <div class="main-wrap">
       <v-data-table
         v-model="selected"
         :loading="loading"
@@ -61,104 +42,7 @@
           :total-visible="7"
         ></v-pagination>
       </div>
-    </div> -->
-
-    <v-dialog v-model="showPop" max-width="600">
-      <div class="pd-30">
-        <h2 class="fz-20">Add Domain</h2>
-        <v-window v-model="curStep">
-          <v-window-item :value="0">
-            <div class="gray fz-14 mt-1">
-              Select a project to add your domains to:
-            </div>
-            <div class="mt-6">
-              <div v-if="!projects">
-                <v-skeleton-loader type="article" />
-              </div>
-              <template v-else>
-                <div>
-                  <v-text-field
-                    class="hide-msg bd-1"
-                    dense
-                    solo
-                    clearable
-                    label="Search"
-                    prepend-inner-icon="mdi-magnify"
-                    v-model="keyword"
-                  ></v-text-field>
-                </div>
-
-                <div class="bg-f6 pa-2 mt-5">
-                  <div class="ov-a" style="max-height: 40vh">
-                    <div
-                      class="d-flex al-c pa-3 mt-1"
-                      v-for="(it, i) in projList"
-                      :key="i"
-                    >
-                      <v-icon size="16">mdi-folder-outline</v-icon>
-                      <b class="ml-2" style="min-width: 140px">{{ it.name }}</b>
-
-                      <img
-                        class="ml-3"
-                        :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
-                        height="20"
-                      />
-                      <span class="ml-1 fz-14">{{ it.platform }}</span>
-
-                      <!-- @click="onSelect(it)" -->
-                      <v-btn
-                        small
-                        color="primary"
-                        class="ml-auto"
-                        :to="`/hosting/project/${it.name}/${it.id}?tab=settings&sub=domains`"
-                        :disabled="it.platform != 'IPFS'"
-                        >Select</v-btn
-                      >
-                    </div>
-                  </div>
-                  <a
-                    href="#/hosting/new"
-                    class="d-flex al-c f-center mt-3 pa-3 gray fz-15"
-                  >
-                    <img src="img/svg/add2.svg" width="12" />
-                    <span class="color-1 ml-2">Create New Project</span>
-                  </a>
-                </div>
-              </template>
-            </div>
-          </v-window-item>
-          <v-window-item :value="1">
-            <div class="mt-5">
-              <p><b>Project</b>：{{ chooseProj.name }}</p>
-              <p class="gray">Enter The Domain</p>
-            </div>
-            <div class="mt-5">
-              <v-text-field
-                dense
-                outlined
-                autofocus
-                v-model.trim="domain"
-                placeholder="mywebsite.com"
-                @keyup.enter="onAdd"
-              />
-            </div>
-          </v-window-item>
-        </v-window>
-
-        <div class="ta-c mt-8">
-          <v-btn @click="showPop = false" outlined>Cancel</v-btn>
-          <v-btn
-            color="primary"
-            class="ml-6"
-            v-if="curStep > 0"
-            :loading="adding"
-            @click="onAdd"
-          >
-            Add
-          </v-btn>
-        </div>
-      </div>
-    </v-dialog>
+    </div>
   </div>
 </template>
 
@@ -167,28 +51,18 @@ export default {
   data() {
     return {
       headers: [
-        { text: "Domain", value: "domain" },
+        { text: "Domain", value: "value" },
         {
-          text: "Nameservers",
-          value: "nameServers",
+          text: "Project Name",
+          value: "projectName",
+        },
+        {
+          text: "Content",
+          value: "content",
         },
         { text: "CreateAt", value: "createTime" },
       ],
       list: [],
-      tabList: [
-        {
-          text: "Domains",
-          comp: "domain-domains",
-        },
-        {
-          text: "ENS",
-          comp: "domain-ens",
-        },
-        {
-          text: "SNS",
-          comp: "domain-sns",
-        },
-      ],
       page: 1,
       pageLen: 1,
       total: 0,
@@ -312,10 +186,10 @@ export default {
           page: this.page - 1,
           size: 10,
         };
-        const { data } = await this.$http2.get("/domain/list", {
+        const { data } = await this.$http2.get("/project/ens/list", {
           params,
         });
-        this.list = data.content.map((it) => {
+        this.list = data.list.map((it) => {
           it.createTime = new Date(it.createAt * 1e3).format();
           return it;
         });
@@ -327,9 +201,6 @@ export default {
         console.log(error);
       }
       this.loading = false;
-    },
-    chooseDelete(val) {
-      console.log(val);
     },
   },
 };
