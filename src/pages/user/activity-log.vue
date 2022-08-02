@@ -106,7 +106,7 @@ export default {
         it.desc = "welcome to 4EVERLAND";
         it.path = "Overview";
         it.link = "/overview";
-      } else if (act == "OAUTH_BIND_GITHUB;") {
+      } else if (act == "OAUTH_BIND_GITHUB") {
         it.desc = "binded Github";
         it.path = "Settings";
         it.link = "/settings";

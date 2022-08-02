@@ -33,7 +33,9 @@
               >
                 {{ it.cid.cutStr(4, 4) }}
               </a>
-              <span v-else class="ml-1 fz-13">{{ it.platform }}</span>
+              <span v-else class="ml-2 fz-13 d-ib" style="min-width: 76px">{{
+                it.platform
+              }}</span>
               <div class="fz-14 ml-5" @click.stop="onStop">
                 <h-branch :info="it" />
               </div>

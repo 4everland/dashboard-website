@@ -118,7 +118,6 @@
                         :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
                         height="20"
                       />
-                      <span class="ml-1 fz-14">{{ it.platform }}</span>
                       <a
                         class="u ml-2 fz-12 gray"
                         :href="$utils.getCidLink(it.hash, it.platform)"
@@ -128,6 +127,7 @@
                       >
                         {{ it.hash.cutStr(4, 4) }}
                       </a>
+                      <span v-else class="ml-1 fz-14">{{ it.platform }}</span>
                     </div>
                   </div>
                 </div>
