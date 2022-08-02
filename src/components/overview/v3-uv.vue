@@ -98,17 +98,6 @@
                 width="16"
               />
             </div>
-            <div
-              v-if="projList && !finished"
-              class="pd-20 gray ta-c fz-18 mt-5"
-              :class="{
-                'hover-1': !projLoading,
-              }"
-              @click="onLoad"
-              v-intersect="onLoad"
-            >
-              {{ projLoading ? "Loading..." : "Load More" }}
-            </div>
           </div>
         </div>
         <div class="ta-c mt-4">
@@ -139,8 +128,6 @@ export default {
       curIdx: 0,
       showSelect: false,
       saving: false,
-      projLoading: false,
-      finished: false,
     };
   },
   computed: {
@@ -190,31 +177,11 @@ export default {
       }
       this.saving = false;
     },
-    onLoad() {
-      if (this.projLoading || this.finished) return;
-      this.projLoading = true;
-      this.getProjList();
-    },
     async getProjList() {
       try {
-        if (!this.projLoading) {
-          this.page = 0;
-          this.projList = null;
-        } else {
-          this.page += 1;
-        }
-        const params = {
-          size: 10,
-          page: this.page,
-        };
-        const { data } = await this.$http2.get(
-          "/analytics/user/v3/project/page/list",
-          {
-            params,
-          }
-        );
-        const list = data.content;
-        if (this.page == 0) {
+        this.projList = null;
+        const { data: list } = await this.$http2.get("/project/simple");
+        if (list.length) {
           let { data: arr } = await this.$http2.get(
             "/favourite/analytics/list"
           );
@@ -222,16 +189,10 @@ export default {
           if (!arr.length) arr = list.slice(0, 5);
           this.projChecked = arr.map((it) => it.projectId);
         }
-        this.finished = list.length < params.size;
-        if (this.projLoading) {
-          this.projList = this.projList.concat(list);
-        } else {
-          this.projList = list;
-        }
+        this.projList = list;
       } catch (error) {
         console.log(error);
       }
-      this.projLoading = false;
     },
     async getUvList() {
       try {
