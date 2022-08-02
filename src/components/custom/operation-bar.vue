@@ -1,5 +1,8 @@
 <template>
-  <div class="operation-bar">
+  <div
+    class="operation-bar"
+    :style="appDrawer ? 'width:100%' : 'width:calc(100% - 256px)'"
+  >
     <!-- <button @click="isShow = !isShow">button</button> -->
     <Transition name="operation" appear>
       <div v-show="isShow" class="content">
@@ -10,6 +13,7 @@
         ></v-checkbox>
         <v-btn
           outlined
+          tile
           @click="$emit('handleAddDomain')"
           v-show="selected <= 1 && inBucket"
         >
@@ -22,6 +26,7 @@
 
         <v-btn
           outlined
+          tile
           class="ml-4"
           @click="$emit('download')"
           v-show="selected <= 1 && inFile"
@@ -30,6 +35,7 @@
         </v-btn>
         <v-btn
           outlined
+          tile
           class="ml-4"
           v-show="selected <= 1 && inFile"
           v-clipboard="clipboardVal"
@@ -37,15 +43,9 @@
         >
           <span class="gray-2">Copy Path</span>
         </v-btn>
-        <!-- <v-list-item
-                    link
-                    v-clipboard="getViewUrl(selected[0])"
-                    @success="onCopied"
-                  >
-                   
-                  </v-list-item> -->
         <v-btn
           outlined
+          tile
           class="ml-4"
           v-show="selected <= 1 && inFile"
           @click="$emit('onRename')"
@@ -54,15 +54,22 @@
         </v-btn>
         <v-btn
           outlined
+          tile
           class="ml-4"
           v-show="selected <= 1 && inFile && isNotAr"
           @click="$emit('onSyncAR')"
         >
           <span class="gray-2">Sync to AR</span>
         </v-btn>
-        <v-btn outlined class="ml-4" @click="$emit('handleDeleteSelected')">
+        <v-btn
+          tile
+          style="border-color: #6c7789"
+          outlined
+          class="ml-4"
+          @click="$emit('handleDeleteSelected')"
+        >
           <!-- <img src="img/icon/ic-delete.svg" width="14" class="mr-2" /> -->
-          <span class="gray-2">Delete</span>
+          <span class="gray">Delete</span>
         </v-btn>
       </div>
     </Transition>
@@ -94,6 +101,11 @@ export default {
     clipboardVal: {
       type: String,
       default: "",
+    },
+  },
+  computed: {
+    appDrawer() {
+      return this.$vuetify.application.framework.breakpoint.mobile;
     },
   },
   methods: {
@@ -137,15 +149,14 @@ export default {
 
 .operation-bar {
   position: fixed;
-  padding: 0 32px;
-  width: 1200px;
+  // width: calc(100% - 256px);
   right: 0;
-  bottom: 50px;
+  bottom: 0;
   .content {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    height: 70px;
-    background: #f7f9fb;
+    background: rgba(255, 255, 255, 0.7);
     .check-box {
       padding: 0 16px;
     }

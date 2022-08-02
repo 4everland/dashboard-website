@@ -1,5 +1,5 @@
 <template>
-  <div class="bucket-item-container">
+  <div class="bucket-item-container bg-white">
     <div class="file-container" v-if="inFolder">
       <!-- Operation Tab -->
       <div class="operation-tab d-flex">
@@ -24,72 +24,9 @@
           <img src="img/svg/parts_icon.svg" width="12" />
           <span class="ml-2">Fragments</span>
         </v-btn>
-        <!-- <div class="ml-5">
-          <e-menu
-            offset-y
-            open-on-hover
-            nudge-bottom="11"
-            :disabled="!selected.length"
-          >
-            <v-btn slot="ref" outlined :disabled="!selected.length">
-              <span>Actions</span>
-              <v-icon size="18">mdi-chevron-down</v-icon>
-            </v-btn>
-            <v-list dense>
-              <template v-if="selected.length == 1">
-                <template v-if="selected[0].isFile">
-                  <v-list-item :href="getViewUrl(selected[0])" target="_blank">
-                    <img
-                      src="img/icon/ic-download.svg"
-                      width="15"
-                      class="mr-2"
-                    />
-                    <span class="gray-7">Download</span>
-                  </v-list-item>
-                  <v-list-item
-                    link
-                    v-clipboard="getViewUrl(selected[0])"
-                    @success="onCopied"
-                  >
-                    <img src="img/icon/ic-copy.svg" width="14" class="mr-2" />
-                    <span class="gray-7">Copy Path</span>
-                  </v-list-item>
-                  <v-list-item link @click="onRename(selected[0].name)">
-                    <img src="img/icon/ic-rename.svg" width="14" class="mr-2" />
-                    <span class="gray-7">Rename</span>
-                  </v-list-item>
-                  <v-list-item
-                    link
-                    @click="onSyncAR(selected[0].name)"
-                    v-if="!bucketInfo.isAr && selectArStatus != 'synced'"
-                  >
-                    <img src="img/icon/ic-ar.svg" width="14" class="mr-2" />
-                    <span class="gray-7">Sync to AR</span>
-                  </v-list-item>
-                </template>
-              </template>
-              <v-list-item link @click="onDelete()">
-                <img src="img/icon/ic-delete.svg" width="14" class="mr-2" />
-                <span class="red-2">Delete</span>
-              </v-list-item>
-            </v-list>
-          </e-menu>
-        </div> -->
-        <!-- Selected Files -->
-        <div
-          class="selected-content d-flex al-c ml-auto"
-          v-if="selected.length"
-        >
-          <div class="selected-title mr-2">Selected:</div>
-          <div>
-            <span class="selected-count"> {{ selected.length }}</span>
-            <span class="mx-1">/</span>
-            <span>{{ list.length }}</span>
-          </div>
-        </div>
         <!-- Search-Input -->
         <div
-          :class="selected.length ? 'ml-5' : 'ml-auto'"
+          :class="selected.length ? 'ml-auto' : 'ml-auto'"
           style="min-width: 150px"
         >
           <v-text-field
@@ -107,13 +44,35 @@
           :pathInfo="pathInfo"
         ></bucket-parts-list>
       </div>
-
-      <div style="text-align: right" @click="fileInfoDrawer = true">open</div>
+      <!-- file-header -->
+      <div class="d-flex justify-end pt-4">
+        <div
+          class="file-head d-flex align-center pl-5"
+          :class="fileInfoDrawer ? 'justify-space-between' : 'justify-end'"
+          style="float: right"
+        >
+          <div v-show="fileInfoDrawer">
+            {{
+              selected.length > 1
+                ? `Select ${selected.length} files`
+                : "File Info"
+            }}
+          </div>
+          <div
+            @click="fileInfoDrawer = !fileInfoDrawer"
+            class="fz-12 d-flex align-center pack-up"
+          >
+            <img src="img/svg/bucketFileInfo/right-arrow.svg" width="12" />
+            <span class="ml-2">{{ fileInfoDrawer ? "Pack up" : "Open" }}</span>
+          </div>
+        </div>
+      </div>
       <div class="d-flex">
-        <div class="flex-1">
+        <div class="table-data flex-1">
           <!-- Files Table -->
           <v-data-table
             class="hide-bdb"
+            fixed-header
             :headers="headers"
             :items="list"
             :loading="tableLoading"
@@ -324,6 +283,11 @@ export default {
       return null;
     },
   },
+  mounted() {
+    window.addEventListener("resize", () => {
+      console.log(this.$vuetify.application.framework.breakpoint.mobile);
+    });
+  },
 
   methods: {
     onCopied() {
@@ -449,13 +413,18 @@ export default {
   opacity: 0.8;
 }
 .bucket-item-container {
+  padding: 18px 13px 33px 32px;
+  border-radius: 10px;
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
   background: #fff;
   overflow: hidden;
   .file-container {
     position: relative;
-    min-height: 1000px;
+    // min-height: 1000px;
+    .file-head {
+      width: 25%;
+    }
     .operation-tab {
-      padding: 6px 0 26px 0;
       .selected-content {
         color: #0b0817;
         .selected-title {
@@ -465,6 +434,9 @@ export default {
           color: #1e8e3e;
         }
       }
+    }
+    .table-data {
+      position: relative;
     }
   }
 }
