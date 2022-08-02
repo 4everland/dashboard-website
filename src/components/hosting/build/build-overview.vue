@@ -1,122 +1,130 @@
 <template>
   <div>
-    <v-skeleton-loader type="article" v-if="!info" />
-    <v-row v-else class="mb-5">
-      <v-col cols="12" md="3">
-        <e-link :href="info.domain">
-          <v-img
-            class="bd-1 bdrs-5 w100p"
-            :src="$getImgSrc(info.screenshotPath)"
-            lazy-src="img/bg/empty/project.png"
-            aspect-ratio="1"
-            max-height="230"
-          ></v-img>
-        </e-link>
-      </v-col>
-      <v-col cols="12" md="6">
-        <v-row class="pt-1">
-          <v-col>
-            <e-kv2 label="Status">
-              <h-status :val="state"></h-status>
-            </e-kv2>
-          </v-col>
-          <v-col>
-            <e-kv2 label="Environment"> Production </e-kv2>
-          </v-col>
-          <v-col>
-            <e-kv2 label="Duration">
-              <e-time :endAt="info.endAt || nowDate">{{
-                info.createAt
-              }}</e-time>
-            </e-kv2>
-          </v-col>
-          <v-col>
-            <e-kv2 label="Created">
-              <e-time>{{ info.createAt }}</e-time>
-            </e-kv2>
-          </v-col>
-        </v-row>
-
-        <e-kv2
-          label="Domain"
-          class="mt-7"
-          :class="{
-            'op-0 ev-n': info.platform != 'IPFS',
-          }"
-        >
+    <div class="main-wrap auto">
+      <v-skeleton-loader type="article" v-if="!info" />
+      <v-row v-else class="mb-5">
+        <v-col cols="12" md="3">
           <e-link :href="info.domain">
-            {{ info.domain }}
+            <v-img
+              class="bd-1 bdrs-5 w100p"
+              :src="$getImgSrc(info.screenshotPath)"
+              lazy-src="img/bg/empty/project.png"
+              aspect-ratio="1"
+              max-height="230"
+            ></v-img>
           </e-link>
-        </e-kv2>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-row class="pt-1">
+            <v-col>
+              <e-kv2 label="Status">
+                <h-status :val="state"></h-status>
+              </e-kv2>
+            </v-col>
+            <v-col>
+              <e-kv2 label="Environment"> Production </e-kv2>
+            </v-col>
+            <v-col>
+              <e-kv2 label="Duration">
+                <e-time :endAt="info.endAt || nowDate">{{
+                  info.createAt
+                }}</e-time>
+              </e-kv2>
+            </v-col>
+            <v-col>
+              <e-kv2 label="Created">
+                <e-time>{{ info.createAt }}</e-time>
+              </e-kv2>
+            </v-col>
+          </v-row>
 
-        <div class="mt-7 d-flex">
-          <e-kv2 label="Branch">
-            <div class="d-flex al-c f-wrap">
-              <h-branch :info="info" class="fz-15" />
-              <e-commit :info="info.commits" class="fz-14 ml-3"></e-commit>
-            </div>
-          </e-kv2>
           <e-kv2
-            class="ml-auto"
-            :label="info.platform"
-            style="min-width: 120px"
-            v-if="info.platform"
+            label="Domain"
+            class="mt-7"
+            :class="{
+              'op-0 ev-n': info.platform != 'IPFS',
+            }"
           >
-            <e-link
-              v-if="info.hash"
-              class="fz-14"
-              :href="$utils.getCidLink(info.hash, info.platform)"
-            >
-              {{ "Verify on " + info.platform }}
+            <e-link :href="info.domain">
+              {{ info.domain }}
             </e-link>
-            <span v-else class="fz-14">Pending</span>
           </e-kv2>
-        </div>
-      </v-col>
-      <v-col cols="12" md="3">
-        <div class="d-flex">
-          <e-menu>
-            <v-btn slot="ref" text icon>
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-            <v-list>
-              <v-list-item
-                link
-                v-clipboard="
-                  opt.name == 'copy' ? 'https://' + info.domain || '' : ''
-                "
-                @click="onOpt(opt)"
-                v-for="(opt, i) in optList"
-                :key="i"
+
+          <div class="mt-7 d-flex">
+            <e-kv2 label="Branch">
+              <div class="d-flex al-c f-wrap">
+                <h-branch :info="info" class="fz-15" />
+                <e-commit :info="info.commits" class="fz-14 ml-3"></e-commit>
+              </div>
+            </e-kv2>
+            <e-kv2
+              class="ml-auto"
+              :label="info.platform"
+              style="min-width: 120px"
+              v-if="info.platform"
+            >
+              <e-link
+                v-if="info.hash"
+                class="fz-14"
+                :href="$utils.getCidLink(info.hash, info.platform)"
               >
-                <v-list-item-title :class="opt.cls">
-                  <v-icon size="16" :color="opt.iconColor"
-                    >mdi-{{ opt.icon }}</v-icon
-                  >
-                  <span class="fz-15 ml-2">{{ opt.text }}</span>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </e-menu>
-          <div class="flex-1 ml-5 pr-4">
-            <div v-if="!info.cli" class="mb-5">
-              <v-btn color="error" block :loading="deploying" @click="onBtn1">
-                {{ btn1Txt }}
+                {{ "Verify on " + info.platform }}
+              </e-link>
+              <span v-else class="fz-14">Pending</span>
+            </e-kv2>
+          </div>
+        </v-col>
+        <v-col cols="12" md="3">
+          <div class="d-flex">
+            <e-menu left offset-x>
+              <v-btn slot="ref" text icon>
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+              <v-list>
+                <v-list-item
+                  link
+                  v-clipboard="
+                    opt.name == 'copy' ? 'https://' + info.domain || '' : ''
+                  "
+                  @click="onOpt(opt)"
+                  v-for="(opt, i) in optList"
+                  :key="i"
+                >
+                  <v-list-item-title :class="opt.cls">
+                    <v-icon size="16" :color="opt.iconColor"
+                      >mdi-{{ opt.icon }}</v-icon
+                    >
+                    <span class="fz-15 ml-2">{{ opt.text }}</span>
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </e-menu>
+            <div class="flex-1 ml-5 pr-4">
+              <div v-if="!info.cli" class="mb-5">
+                <v-btn
+                  color="error"
+                  outlined
+                  block
+                  :loading="deploying"
+                  @click="onBtn1"
+                >
+                  {{ btn1Txt }}
+                </v-btn>
+              </div>
+              <v-btn
+                block
+                :disabled="!isSuccess || !visitUrl"
+                color="primary"
+                :href="visitUrl"
+                target="_blank"
+              >
+                Visit
               </v-btn>
             </div>
-            <v-btn
-              block
-              :disabled="!isSuccess || !visitUrl"
-              color="primary"
-              :href="visitUrl"
-              target="_blank"
-            >
-              Visit
-            </v-btn>
           </div>
-        </div>
-      </v-col>
-    </v-row>
+        </v-col>
+      </v-row>
+    </div>
 
     <build-overview-logs
       v-show="info"
