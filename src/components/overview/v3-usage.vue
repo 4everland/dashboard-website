@@ -19,12 +19,12 @@
             </span>
           </div>
           <p class="mt-3 fz-14 gray-8">{{ it.label }}</p>
-          <div class="mt-3 al-c fz-14 gray">
+          <div class="mt-3 al-c fz-13 gray">
             <template v-if="it.isBalance">
-              <span>Purchsed: </span>
-              <u class="link ml-2">0</u>
-              <span class="ml-auto">Finished: </span>
-              <u class="link ml-2">0</u>
+              <span>Airdropped</span>
+              <b class="link ml-1">{{ accoutInfo.freeOrder || 0 }}</b>
+              <span class="ml-auto">Purchased</span>
+              <b class="link ml-1">{{ accoutInfo.paidOrder || 0 }}</b>
             </template>
             <template v-else>
               <v-progress-linear
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       usageInfo: {},
-      balance: 0,
+      accoutInfo: {},
     };
   },
   computed: {
@@ -86,11 +86,11 @@ export default {
           ),
         },
         {
-          num: this.balance,
+          num: this.accoutInfo.balance,
           isBalance: true,
-          loading: !info.ipfsStorage,
+          loading: !this.accoutInfo.loaded,
           unitTxt: "USDC",
-          label: "Balance",
+          label: "Recharge Balance",
         },
       ];
     },
@@ -101,7 +101,7 @@ export default {
   },
   methods: {
     onClick(it) {
-      if (it.isBalance) this.$navTo("/billing/usage");
+      if (it.isBalance) this.$navTo("/billing/bills");
     },
     getPerc(used, total, unit = "GB") {
       if (!total) {
@@ -139,8 +139,15 @@ export default {
       }
     },
     async getBalance() {
-      const { data } = await this.$http.get("$v3/account/balance");
-      this.balance = this.$utils.cutFixed(data.balance, 4);
+      const { data } = await this.$http.get("$v3/account/order");
+      const {
+        data: { balance },
+      } = await this.$http.get("$v3/account/balance");
+      this.accoutInfo = {
+        ...data,
+        balance: this.$utils.cutFixed(balance, 4),
+        loaded: true,
+      };
     },
   },
 };
