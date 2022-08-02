@@ -107,7 +107,7 @@
             width="90"
             class="ml-6"
             :loading="saving"
-            :disabled="disabled"
+            :disabled="disabled || !projChecked.length"
             @click="onSave"
           >
             Save
@@ -180,14 +180,18 @@ export default {
     async getProjList() {
       try {
         this.projList = null;
-        const { data: list } = await this.$http2.get("/project/simple");
+        let { data: list } = await this.$http2.get("/project/simple");
         if (list.length) {
           let { data: arr } = await this.$http2.get(
             "/favourite/analytics/list"
           );
 
           if (!arr.length) arr = list.slice(0, 5);
-          this.projChecked = arr.map((it) => it.projectId);
+          this.projChecked = arr
+            .map((it) => it.projectId)
+            .filter((id) => {
+              return list.find((it) => it.projectId == id);
+            });
         }
         this.projList = list;
       } catch (error) {
@@ -198,7 +202,10 @@ export default {
       try {
         this.uvList = null;
         this.chart = null;
-        const { data } = await this.$http2.get("/favourite/analytics/uv");
+        let { data } = await this.$http2.get("/favourite/analytics/uv");
+        data.sort((a, b) => {
+          return a.totalUv > b.totalUv ? -1 : 1;
+        });
         this.uvList = data;
       } catch (error) {
         console.log(error);
