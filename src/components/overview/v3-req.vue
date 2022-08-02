@@ -51,7 +51,7 @@
           </thead>
           <tbody>
             <tr v-for="(it, i) in list" :key="i">
-              <td class="gray">{{ it.name }}</td>
+              <td class="gray-89 fw-b">{{ it.name }}</td>
               <td class="fw-b">{{ it.request }}</td>
               <td class="fw-b">{{ it.band }}</td>
             </tr>
