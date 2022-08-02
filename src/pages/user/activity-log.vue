@@ -1,8 +1,8 @@
 <template>
   <div class="pos-r">
     <e-right-opt-wrap fix style="top: -20px">
-      <e-menu offset-y>
-        <v-btn slot="ref" outlined>
+      <e-menu offset-y open-on-hover>
+        <v-btn slot="ref" outlined color="#6C7789">
           <span class="ml-2">{{ date }}</span>
           <v-icon>mdi-chevron-down</v-icon>
         </v-btn>
