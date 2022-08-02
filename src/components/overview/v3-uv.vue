@@ -213,7 +213,7 @@ export default {
             params,
           }
         );
-        const list = []; //data.content;
+        const list = data.content;
         if (this.page == 0) {
           let { data: arr } = await this.$http2.get(
             "/favourite/analytics/list"
@@ -238,7 +238,7 @@ export default {
         this.uvList = null;
         this.chart = null;
         const { data } = await this.$http2.get("/favourite/analytics/uv");
-        this.uvList = []; // data;
+        this.uvList = data;
       } catch (error) {
         console.log(error);
       }
