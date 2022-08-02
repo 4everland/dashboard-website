@@ -8,89 +8,89 @@
       </div>
 
       <div
-        class="pd-20 bd-1 bdrs-10 mb-4 bg-white"
-        :class="{
-          'd-flex al-c flex-wrap': !asMobile,
-        }"
+        class="pd-20 bd-1 bdrs-10 mb-4 bg-white bg-hover-f9"
         v-for="it in list"
+        @click="onClick(it)"
         :key="it.taskId"
       >
-        <div
-          class="d-flex"
-          :style="
-            asMobile
-              ? 'margin-bottom: 10px;'
-              : 'width: 300px; margin-right: 30px;'
-          "
-        >
-          <div class="flex-1">
-            <a
-              :href="`#/hosting/build/${it.buildConfig.name}/${id}/${it.taskId}`"
-              class="b"
-              >{{ it.buildConfig.name }}</a
-            >
-            <div class="gray mt-1 fz-13">
-              Production
-              <!-- (Current) -->
+        <v-row class="d-flex">
+          <v-col cols="12" md="9">
+            <div>
+              <a class="b fw-b fz-18">{{ it.buildConfig.name }}</a>
             </div>
-          </div>
-          <div
-            class="ml-5"
-            style="width: 80px"
-            :class="{
-              'ta-r': asMobile,
-            }"
-          >
-            <h-status :val="it.state" />
-            <div class="mt-1">
-              <e-time :endAt="it.endAt">{{ it.createAt }}</e-time>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex al-c flex-1">
-          <div class="flex-1 mr-5 shrink-1" v-if="it.commits">
-            <div
-              class="line-1"
-              :style="{
-                'max-width': asMobile ? '220px' : '300px',
-              }"
-            >
-              <e-commit :info="it.commits"></e-commit>
-            </div>
-            <div class="fz-14 mt-1">
-              <h-branch :info="it" />
-            </div>
-          </div>
-          <span class="ml-auto"></span>
-          <span class="gray fz-13 shrink-0" v-show="!asMobile">
-            <e-time
-              :value="it.createAt"
-              :sub1="'by ' + userInfo.username"
-            ></e-time>
-          </span>
-          <v-menu>
-            <template v-slot:activator="{ attrs, on }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                link
-                v-clipboard="opt.name == 'copy' ? it.domain || '' : ''"
-                @click="onOpt(opt, it)"
-                v-for="(opt, i) in getOptList(it)"
-                v-show="getShow(opt, it)"
-                :key="i"
+            <div class="al-c mt-2">
+              <span class="mr-5 fz-14" v-if="!asMobile">Production</span>
+              <img
+                :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
+                height="20"
+              />
+              <a
+                class="u ml-2 fz-13"
+                :href="$utils.getCidLink(it.cid, it.platform)"
+                target="_blank"
+                @click.stop="onStop"
+                v-if="it.cid"
               >
-                <v-list-item-title>
-                  <v-icon size="16">mdi-{{ opt.icon }}</v-icon>
-                  <span class="fz-15 ml-2">{{ opt.text }}</span>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </div>
+                {{ it.cid.cutStr(4, 4) }}
+              </a>
+              <span v-else class="ml-2 fz-13 d-ib" style="min-width: 76px">{{
+                it.platform
+              }}</span>
+              <div class="fz-14 ml-5" @click.stop="onStop">
+                <h-branch :info="it" />
+              </div>
+              <div class="flex-1 ml-5 shrink-1 fz-13" v-if="it.commits">
+                <div
+                  :style="{
+                    'max-width': asMobile ? '220px' : '300px',
+                  }"
+                >
+                  <e-commit
+                    :info="it.commits"
+                    @click.native.stop="onStop"
+                  ></e-commit>
+                </div>
+              </div>
+            </div>
+          </v-col>
+          <v-col cols="12" md="3">
+            <d class="al-c">
+              <div class="mr-auto ta-c">
+                <h-status :val="it.state" />
+                <div>
+                  <e-time :endAt="it.endAt" spanClass="fz-13 gray">{{
+                    it.createAt
+                  }}</e-time>
+                </div>
+              </div>
+              <span class="gray fz-13 shrink-0 mr-6">
+                <e-time :value="it.createAt"></e-time>
+              </span>
+              <v-menu left offset-x>
+                <template v-slot:activator="{ attrs, on }">
+                  <v-btn icon v-bind="attrs" v-on="on">
+                    <v-icon size="22">mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    link
+                    v-clipboard="opt.name == 'copy' ? it.domain || '' : ''"
+                    @click="onOpt(opt, it)"
+                    v-for="(opt, i) in getOptList(it)"
+                    v-show="getShow(opt, it)"
+                    :key="i"
+                  >
+                    <v-list-item-title>
+                      <!-- <v-icon size="16">mdi-{{ opt.icon }}</v-icon> -->
+                      <span class="fz-15 ml-2">{{ opt.text }}</span>
+                    </v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </d>
+          </v-col>
+        </v-row>
       </div>
     </div>
     <div
@@ -147,6 +147,12 @@ export default {
     this.getList();
   },
   methods: {
+    onStop() {},
+    onClick(it) {
+      this.$navTo(
+        `/hosting/build/${it.buildConfig.name}/${this.id}/${it.taskId}`
+      );
+    },
     getOptList(it) {
       let arr = [
         {
@@ -256,6 +262,7 @@ export default {
           this.refreshing = true;
           this.finished = false;
           this.list = null;
+          this.isFirst = false;
         }
         const params = {
           page: this.page,
@@ -267,19 +274,18 @@ export default {
             params,
           }
         );
-        const rows = data.content;
+        const rows = data.content.map((it) => {
+          if (it.state == "SUCCESS") {
+            if (!this.isFirst) this.isFirst = true;
+            else it.canRollback = true;
+          }
+          return it;
+        });
         this.finished = rows.length < params.size;
         if (this.loading) {
           this.list = [...this.list, ...rows];
         } else {
-          this.isFirst = false;
-          this.list = rows.map((it) => {
-            if (it.state == "SUCCESS") {
-              if (!this.isFirst) this.isFirst = true;
-              else it.canRollback = true;
-            }
-            return it;
-          });
+          this.list = rows;
         }
       } catch (error) {
         console.log(error);

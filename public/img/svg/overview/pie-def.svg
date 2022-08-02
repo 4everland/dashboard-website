@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="243px" height="223px" viewBox="0 0 243 223" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>grp 24</title>
+    <g id="Overview" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Overview-无数据" transform="translate(-994.000000, -489.000000)">
+            <g id="grp-7" transform="translate(852.000000, 374.000000)">
+                <g id="grp-24" transform="translate(142.996952, 116.000000)">
+                    <g id="chart">
+                        <g id="graph" transform="translate(120.501524, 110.498765) rotate(-90.000000) translate(-120.501524, -110.498765) translate(10.002759, -10.002759)" stroke="#FFFFFF">
+                            <ellipse id="4" fill="#919FED" cx="111.532585" cy="131.582334" rx="109.464945" ry="109.420714"></ellipse>
+                            <path d="M111.389062,131.477233 L111.389062,22.0565194 C50.9332428,22.0565194 1.92411769,71.0458417 1.92411769,131.477233 C1.92411769,191.908625 50.9332428,240.897947 111.389062,240.897947 C171.844882,240.897947 220.854007,191.908625 220.854007,131.477233 L111.389062,131.477233 Z" id="3" fill="#3B478E"></path>
+                            <path d="M185.994513,50.5934975 C166.62804,33.0992534 140.994563,22.452062 112.882188,22.4522602 C88.4541544,22.4524324 65.897726,30.4920054 47.6983305,44.0775264 L112.881416,132.107293 L185.994513,50.5934975 Z" id="2" fill="#8290DB" transform="translate(116.846422, 77.279777) rotate(1.000000) translate(-116.846422, -77.279777) "></path>
+                            <path d="M156.435386,55.3816506 C137.06788,37.8821157 111.435313,27.229184 83.3260631,27.2242653 C58.9007444,27.2199913 36.3482871,35.2562701 18.1533882,48.8398498 L83.3452574,136.890366 L156.435386,55.3816506 Z" id="2" fill="#707DC1" transform="translate(87.294387, 82.057315) rotate(-30.000000) translate(-87.294387, -82.057315) "></path>
+                            <path d="M57.774668,36.5834664 C24.4342949,55.336726 1.92411769,90.9665591 1.92411769,131.835009 C1.92411769,161.263604 13.5960196,187.975888 32.5788222,207.626552 L111.623463,131.83501 L57.774668,36.5834664 Z" id="1" fill="#5D68A6"></path>
+                        </g>
+                        <g id="number" transform="translate(59.136466, 38.305605)" fill="#FFFFFF">
+                            <ellipse id="椭圆形" cx="71.9076988" cy="72.1296418" rx="71.9076988" ry="72.1296418"></ellipse>
+                        </g>
+                    </g>
+                    <text id="No-Data-Available" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" fill="#0B0817">
+                        <tspan x="109.601048" y="105">No Data </tspan>
+                        <tspan x="107.759048" y="122">Available</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

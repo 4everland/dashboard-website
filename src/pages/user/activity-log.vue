@@ -1,10 +1,15 @@
 <template>
   <div class="pos-r">
-    <v-date-picker
-      v-model="date"
-      :allowed-dates="isAllow"
-      :class="asMobile ? 'w100p' : 'pos-a top-0 right-0'"
-    ></v-date-picker>
+    <e-right-opt-wrap fix style="top: -20px">
+      <e-menu offset-y open-on-hover>
+        <v-btn slot="ref" outlined color="#6C7789">
+          <span class="ml-2">{{ date }}</span>
+          <v-icon>mdi-chevron-down</v-icon>
+        </v-btn>
+        <v-date-picker v-model="date" :allowed-dates="isAllow"></v-date-picker>
+      </e-menu>
+    </e-right-opt-wrap>
+
     <v-skeleton-loader
       v-if="!list"
       type="article"
@@ -31,8 +36,10 @@
           <div class="gray mt-1 fz-12">
             <span>{{ new Date(it.operateAt * 1e3).format() }}</span>
             <template v-if="it.path">
-              <span class="ml-2">at</span>
-              <a class="ml-2" :href="'#' + it.link">{{ it.path }}</a>
+              <span class="ml-2">in</span>
+              <a class="ml-2" :href="'#' + it.link">
+                <u class="gray">{{ it.path }}</u>
+              </a>
             </template>
           </div>
         </div>
@@ -90,11 +97,19 @@ export default {
       }
       const utils = this.$utils;
       if (act == "OAUTH_REGISTER_DRIP") {
-        it.desc = "started 4EVERLAND Tour";
+        it.desc = "got airdrop resources for new users";
         it.path = "Overview";
         it.link = "/overview";
+      } else if (act == "OAUTH_EXCLUSIVE_DRIP") {
+        it.desc = `got a exclusive ${obj.name} resources`;
       } else if (act == "OAUTH_FIRST_LOGIN") {
-        it.desc = "got airdrop resources for new users";
+        it.desc = "welcome to 4EVERLAND";
+        it.path = "Overview";
+        it.link = "/overview";
+      } else if (act == "OAUTH_BIND_GITHUB") {
+        it.desc = "binded Github";
+        it.path = "Settings";
+        it.link = "/settings";
       } else if (act == "BILL_RECHARGE") {
         it.desc = `deposited ${utils.cutFixed(obj.amount, 4)} USDC`;
       } else if (act == "BILL_WITHDRAW") {
@@ -117,6 +132,8 @@ export default {
         it.desc = "redeployed project " + obj.projectName;
       } else if (act == "HOSTING_DELETE_PROJECT") {
         it.desc = "deleted project " + obj.projectName;
+        it.path = "Hosting";
+        it.link = "/hosting/projects";
       } else if (act == "HOSTING_CREATE_PROJECT") {
         it.desc = "created project " + obj.projectName;
       } else if (act == "HOSTING_GENERATE_CLI_TOKEN") {
@@ -140,7 +157,7 @@ export default {
         it.desc = act;
       }
       if (!it.path) {
-        if (/^bill/i.test(act) || act == "OAUTH_FIRST_LOGIN") {
+        if (/^bill/i.test(act) || act == "OAUTH_EXCLUSIVE_DRIP") {
           it.path = "Billing";
           it.link = "/billing/bills";
         } else if (/^hosting.*project$/i.test(act) && obj.projectName) {

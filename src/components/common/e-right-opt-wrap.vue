@@ -1,6 +1,9 @@
 <template>
   <div class="pos-r">
-    <div :class="asMobile ? 'ta-r mb-5' : 'pos-a right-0'" style="top: -50px">
+    <div
+      :class="!asMobile || fix ? 'pos-a right-0' : 'ta-r mb-5'"
+      style="top: -50px"
+    >
       <slot></slot>
     </div>
   </div>
@@ -8,6 +11,9 @@
 
 <script>
 export default {
+  props: {
+    fix: Boolean,
+  },
   computed: {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;

@@ -38,17 +38,20 @@
           v-if="loading"
           type="article"
         ></v-skeleton-loader>
+        <div v-else-if="!list.length">
+          <img src="img/svg/overview/map-def.svg" class="w100p ev-n" />
+        </div>
         <table class="w100p fz-13" v-else>
           <thead class="gray">
             <tr>
-              <td>Country/Region</td>
+              <td></td>
               <td>Requests</td>
               <td>Bandwidth</td>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(it, i) in list" :key="i">
-              <td class="gray">{{ it.name }}</td>
+              <td class="gray-89 fw-b">{{ it.name }}</td>
               <td class="fw-b">{{ it.request }}</td>
               <td class="fw-b">{{ it.band }}</td>
             </tr>

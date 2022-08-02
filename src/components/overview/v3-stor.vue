@@ -15,8 +15,11 @@
       type="article"
       v-if="loading"
     ></v-skeleton-loader>
+    <div class="ta-c pt-14 pb-10" v-else-if="!list.length">
+      <img src="img/svg/overview/pie-def.svg" height="194" />
+    </div>
     <div class="d-flex" v-else>
-      <div class="pos-r flex-1 mt-5" style="height: 260px">
+      <div class="pos-r flex-1 mt-5" style="height: 276px">
         <div
           class="pos-a left-0 h100p"
           style="top: -10px; bottom: -20px; right: 0px"

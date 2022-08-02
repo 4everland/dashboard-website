@@ -7,11 +7,20 @@
         <img src="img/svg/overview/exchange.svg" width="18" />
       </div>
     </div>
+
     <v-skeleton-loader
       class="mt-15 mb-15"
       v-if="!uvList"
       type="article"
     ></v-skeleton-loader>
+    <div class="pos-r mt-5 pt-2" v-else-if="!uvList.length">
+      <div class="pos-center bg-f1 pa-2 fz-14 lh-1">No Data Available</div>
+      <img
+        src="img/svg/overview/uv-def.svg"
+        class="w100p ev-n op-8"
+        style="max-height: 260px"
+      />
+    </div>
     <div v-else class="d-flex pos-r">
       <ul class="pl-0 shrink-0 mr-5" style="min-width: 110px">
         <li
@@ -25,7 +34,7 @@
         >
           <p class="fw-b">{{ it.totalUv }}</p>
           <p class="fz-12 mt-1" :class="curIdx == i ? 'color-1' : 'gray'">
-            {{ it.projectName.cutStr(10, 6) }}
+            {{ (it.projectName || "").cutStr(10, 6) }}
           </p>
           <img
             src="img/svg/overview/arrow.svg"
@@ -35,7 +44,7 @@
           />
         </li>
       </ul>
-      <div class="pos-r flex-1 pr-10" style="min-height: 280px">
+      <div class="pos-r flex-1 pr-10" style="min-height: 295px">
         <div>
           <div
             class="pos-a left-0"
@@ -50,7 +59,7 @@
       <div class="pa-5">
         <div class="d-flex">
           <h2 class="fz-20">Select to Present</h2>
-          <span class="ml-auto fz-14 gray pa-1 mr-1"
+          <span v-if="!disabled" class="ml-auto fz-14 gray pa-1 mr-1"
             >{{ projChecked.length }}/5</span
           >
         </div>
@@ -62,6 +71,9 @@
             v-if="!projList"
             type="article"
           ></v-skeleton-loader>
+          <e-empty v-else-if="!projList.length" class="pt-6"
+            >No Projects</e-empty
+          >
           <div
             v-else
             class="bd-1 bdc-d0 bg-f9 pa-2 bdrs-5 mt-2 ov-a"
@@ -86,17 +98,6 @@
                 width="16"
               />
             </div>
-            <div
-              v-if="projList && !finished"
-              class="pd-20 gray ta-c fz-18 mt-5"
-              :class="{
-                'hover-1': !projLoading,
-              }"
-              @click="onLoad"
-              v-intersect="onLoad"
-            >
-              {{ projLoading ? "Loading..." : "Load More" }}
-            </div>
           </div>
         </div>
         <div class="ta-c mt-4">
@@ -106,6 +107,7 @@
             width="90"
             class="ml-6"
             :loading="saving"
+            :disabled="disabled || !projChecked.length"
             @click="onSave"
           >
             Save
@@ -126,14 +128,15 @@ export default {
       curIdx: 0,
       showSelect: false,
       saving: false,
-      projLoading: false,
-      finished: false,
     };
   },
   computed: {
     curProj() {
       if (!this.uvList) return null;
       return this.uvList[this.curIdx];
+    },
+    disabled() {
+      return !(this.projList || []).length;
     },
   },
   watch: {
@@ -174,52 +177,35 @@ export default {
       }
       this.saving = false;
     },
-    onLoad() {
-      if (this.projLoading || this.finished) return;
-      this.projLoading = true;
-      this.getProjList();
-    },
     async getProjList() {
       try {
-        if (!this.projLoading) {
-          this.page = 0;
-          this.projList = null;
-        } else {
-          this.page += 1;
-        }
-        const params = {
-          size: 10,
-          page: this.page,
-        };
-        const { data } = await this.$http2.get(
-          "/analytics/user/v3/project/page/list",
-          {
-            params,
-          }
-        );
-        if (this.page == 0) {
+        this.projList = null;
+        let { data: list } = await this.$http2.get("/project/simple");
+        if (list.length) {
           let { data: arr } = await this.$http2.get(
             "/favourite/analytics/list"
           );
-          if (!arr.length) arr = data.slice(0, 5);
-          this.projChecked = arr.map((it) => it.projectId);
+
+          if (!arr.length) arr = list.slice(0, 5);
+          this.projChecked = arr
+            .map((it) => it.projectId)
+            .filter((id) => {
+              return list.find((it) => it.projectId == id);
+            });
         }
-        this.finished = data.length < params.size;
-        if (this.projLoading) {
-          this.projList = this.projList.concat(data);
-        } else {
-          this.projList = data;
-        }
+        this.projList = list;
       } catch (error) {
         console.log(error);
       }
-      this.projLoading = false;
     },
     async getUvList() {
       try {
         this.uvList = null;
         this.chart = null;
-        const { data } = await this.$http2.get("/favourite/analytics/uv");
+        let { data } = await this.$http2.get("/favourite/analytics/uv");
+        data.sort((a, b) => {
+          return a.totalUv > b.totalUv ? -1 : 1;
+        });
         this.uvList = data;
       } catch (error) {
         console.log(error);

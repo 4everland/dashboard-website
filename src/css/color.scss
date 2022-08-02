@@ -2,6 +2,7 @@
 .gray-3 { color: #333; }
 .gray-6 { color: #6c7789; }
 .gray-8 { color: #888; }
+.gray-89 { color: #898989; }
 .gray { color: #9AA5B4; }
 .gray-a { color: #aaa; }
 .gray-b { color: #bbb; }
@@ -39,6 +40,12 @@
   line-height: 1;
   &:hover {
     background: #F8FAFB;
+  }
+}
+.bg-hover-f9 {
+  cursor: pointer;
+  &:hover {
+    background: #fdfdfd;
   }
 }
 

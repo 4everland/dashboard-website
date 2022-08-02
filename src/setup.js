@@ -96,7 +96,7 @@ Vue.prototype.$utils = {
     } else if (byte >= mb) {
       num = (byte / mb).toFixed(2);
       unit = "MB";
-    } else if (byte >= 1024 || (byte < 0.01 && isObj)) {
+    } else if (byte >= 1024 || byte < 0.01) {
       num = (byte / 1024).toFixed(2);
       unit = "KB";
     } else if (byte > 0) {
@@ -133,8 +133,8 @@ Vue.prototype.$utils = {
     const nameMap = {
       BUILD_TIME: "Build Minutes",
       TRAFFIC: "Bandwidth",
-      AR_STORAGE: "Arweave",
-      IPFS_STORAGE: "IPFS",
+      AR_STORAGE: "Arweave Storage",
+      IPFS_STORAGE: "IPFS Storage",
     };
     const it = {
       type,

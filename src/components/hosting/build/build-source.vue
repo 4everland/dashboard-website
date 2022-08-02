@@ -1,56 +1,58 @@
 <template>
-  <div class="pa-8 ta-c" v-if="isEmpty">
-    <e-empty> No Output </e-empty>
+  <div class="main-wrap">
+    <div class="pa-8 ta-c" v-if="isEmpty">
+      <e-empty> No Output </e-empty>
+    </div>
+    <v-row v-else>
+      <v-col cols="12" md="5">
+        <v-skeleton-loader type="article" v-if="initLoading" />
+        <v-treeview
+          v-else
+          :load-children="getFiles"
+          @update:active="onActive"
+          activatable
+          hoverable
+          open-on-click
+          dense
+          :items="dirList"
+        >
+          <template v-slot:prepend="{ item, open }">
+            <v-icon v-if="item.type == 'dir'">
+              {{ open ? "mdi-folder-open" : "mdi-folder" }}
+            </v-icon>
+            <v-icon v-else>
+              {{ files[item.ftype] || "mdi-file" }}
+            </v-icon>
+          </template>
+        </v-treeview>
+      </v-col>
+      <v-col cols="12" md="7" v-if="fileName">
+        <v-skeleton-loader type="article" v-if="loading" />
+        <div class="ta-c" v-else-if="isMedia">
+          <img
+            v-if="isImg"
+            :src="result"
+            :alt="fileName"
+            style="max-width: 100%"
+          />
+          <audio v-else-if="isAudio" :src="result"></audio>
+          <video v-else :src="result" class="w100p" controls></video>
+        </div>
+        <div class="ta-c pd-20" v-else-if="isLarge">
+          <v-btn :href="result" target="_blank">
+            <v-icon>mdi-file-export-outline</v-icon>
+            <span>{{ fileName }}</span>
+          </v-btn>
+        </div>
+        <div v-else class="fz-14 lh-2 ov-a" style="max-height: 80vh">
+          {{ result }}
+        </div>
+        <div class="ta-c mt-3 gray fz-14">
+          {{ sizeInfo }}
+        </div>
+      </v-col>
+    </v-row>
   </div>
-  <v-row v-else>
-    <v-col cols="12" md="5">
-      <v-skeleton-loader type="article" v-if="initLoading" />
-      <v-treeview
-        v-else
-        :load-children="getFiles"
-        @update:active="onActive"
-        activatable
-        hoverable
-        open-on-click
-        dense
-        :items="dirList"
-      >
-        <template v-slot:prepend="{ item, open }">
-          <v-icon v-if="item.type == 'dir'">
-            {{ open ? "mdi-folder-open" : "mdi-folder" }}
-          </v-icon>
-          <v-icon v-else>
-            {{ files[item.ftype] || "mdi-file" }}
-          </v-icon>
-        </template>
-      </v-treeview>
-    </v-col>
-    <v-col cols="12" md="7" v-if="fileName">
-      <v-skeleton-loader type="article" v-if="loading" />
-      <div class="ta-c" v-else-if="isMedia">
-        <img
-          v-if="isImg"
-          :src="result"
-          :alt="fileName"
-          style="max-width: 100%"
-        />
-        <audio v-else-if="isAudio" :src="result"></audio>
-        <video v-else :src="result" class="w100p" controls></video>
-      </div>
-      <div class="ta-c pd-20" v-else-if="isLarge">
-        <v-btn :href="result" target="_blank">
-          <v-icon>mdi-file-export-outline</v-icon>
-          <span>{{ fileName }}</span>
-        </v-btn>
-      </div>
-      <div v-else class="fz-14 lh-2 ov-a" style="max-height: 80vh">
-        {{ result }}
-      </div>
-      <div class="ta-c mt-3 gray fz-14">
-        {{ sizeInfo }}
-      </div>
-    </v-col>
-  </v-row>
 </template>
 
 <script>
