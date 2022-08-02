@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-wrap">
     <e-tabs :list="list" vertical />
   </div>
 </template>

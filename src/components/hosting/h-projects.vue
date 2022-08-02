@@ -35,17 +35,14 @@
 
 <template>
   <div class="projects">
-    <div class="mb-5 d-flex al-c" v-if="!limit && list.length">
-      <v-btn color="primary" to="/hosting/new">
-        <img src="img/svg/add1.svg" width="12" />
-        <span class="ml-2">New Project</span>
-      </v-btn>
+    <e-right-opt-wrap>
       <e-menu open-on-hover offset-y>
-        <v-btn slot="ref" outlined min-width="100" class="ml-5">
-          <img src="img/svg/hosting/ic-sort.svg" width="12" />
+        <v-btn slot="ref" outlined min-width="100">
+          <!-- <img src="img/svg/hosting/ic-sort.svg" width="12" /> -->
           <span class="ml-2">{{
             sortType == "Active" ? sortArr[0] : sortArr[1]
           }}</span>
+          <v-icon>mdi-chevron-down</v-icon>
         </v-btn>
         <v-list dense>
           <v-list-item-group v-model="sortIdx" color="primary">
@@ -61,177 +58,186 @@
           </v-list-item-group>
         </v-list>
       </e-menu>
-    </div>
-    <v-expansion-panels v-model="curIdx" multiple :disabled="limit > 0">
-      <v-expansion-panel
-        class="mb-3"
-        v-for="it in list.slice(0, limit)"
-        :key="it.id"
-        @change="onOpen(it)"
-      >
-        <v-expansion-panel-header @click="onItem(it)">
-          <template v-slot:actions>
-            <!-- <v-icon color="primary"> $expand </v-icon> -->
-            <img
-              src="img/svg/hosting/ic-expand.svg"
-              height="20"
-              class="ic-expand trans-300"
-            />
-          </template>
-          <v-row>
-            <v-col cols="12" md="4">
-              <div class="d-flex al-c grow-0">
-                <v-img
-                  :src="$getImgSrc(it.previewImage)"
-                  @click.stop="$navTo(getDetailPath(it))"
-                  lazy-src="img/bg/empty/project.png"
-                  max-height="60"
-                  max-width="60"
-                  :aspect-ratio="1"
-                  class="bdrs-8 bd-1"
-                />
-                <div class="ml-5 flex-1">
-                  <div class="d-flex al-c">
-                    <h3
-                      @click.stop="$navTo(getDetailPath(it))"
-                      :style="{
-                        'min-width': asMobile ? '100px' : '160px',
-                      }"
-                      class="mb-0 hover-1"
-                    >
-                      {{ it.name.cutStr(asMobile ? 6 : 10, asMobile ? 4 : 6) }}
-                    </h3>
-                    <div class="ml-auto" v-if="asMobile">
-                      <h-status
-                        :val="it.state"
-                        @click.native.stop="onStatus(it)"
-                      ></h-status>
+      <v-btn class="ml-5" color="primary" to="/hosting/new">
+        <img src="img/svg/add1.svg" width="12" />
+        <span class="ml-2">New Project</span>
+      </v-btn>
+    </e-right-opt-wrap>
+
+    <div class="pt-4">
+      <v-expansion-panels v-model="curIdx" multiple>
+        <v-expansion-panel
+          class="mb-3"
+          v-for="it in list.slice(0, limit)"
+          :key="it.id"
+          @change="onOpen(it)"
+        >
+          <v-expansion-panel-header @click="onItem(it)">
+            <template v-slot:actions>
+              <!-- <v-icon color="primary"> $expand </v-icon> -->
+              <img
+                src="img/svg/hosting/ic-expand.svg"
+                height="20"
+                class="ic-expand trans-300"
+              />
+            </template>
+            <v-row>
+              <v-col cols="12" md="4">
+                <div class="d-flex al-c grow-0">
+                  <v-img
+                    :src="$getImgSrc(it.previewImage)"
+                    @click.stop="$navTo(getDetailPath(it))"
+                    lazy-src="img/bg/empty/project.png"
+                    max-height="60"
+                    max-width="60"
+                    :aspect-ratio="1"
+                    class="bdrs-8 bd-1"
+                  />
+                  <div class="ml-5 flex-1">
+                    <div class="d-flex al-c">
+                      <h3
+                        @click.stop="$navTo(getDetailPath(it))"
+                        :style="{
+                          'min-width': asMobile ? '100px' : '160px',
+                        }"
+                        class="mb-0 hover-1"
+                      >
+                        {{
+                          it.name.cutStr(asMobile ? 6 : 10, asMobile ? 4 : 6)
+                        }}
+                      </h3>
+                      <div class="ml-auto" v-if="asMobile">
+                        <h-status
+                          :val="it.state"
+                          @click.native.stop="onStatus(it)"
+                        ></h-status>
+                      </div>
+                    </div>
+                    <div class="al-c mt-4">
+                      <img
+                        :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
+                        height="20"
+                      />
+                      <span class="ml-1 fz-14">{{ it.platform }}</span>
+                      <a
+                        class="u ml-2 fz-12 gray"
+                        :href="$utils.getCidLink(it.hash, it.platform)"
+                        target="_blank"
+                        @click.stop="onStop"
+                        v-if="it.hash"
+                      >
+                        {{ it.hash.cutStr(asMobile ? 2 : 6, 6) }}
+                      </a>
                     </div>
                   </div>
-                  <div class="al-c mt-4">
-                    <img
-                      :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
-                      height="20"
-                    />
-                    <span class="ml-1 fz-14">{{ it.platform }}</span>
-                    <a
-                      class="u ml-2 fz-12 gray"
-                      :href="$utils.getCidLink(it.hash, it.platform)"
-                      target="_blank"
-                      @click.stop="onStop"
-                      v-if="it.hash"
-                    >
-                      {{ it.hash.cutStr(asMobile ? 2 : 6, 6) }}
-                    </a>
-                  </div>
                 </div>
-              </div>
-            </v-col>
-            <v-col cols="12" md="4">
-              <div class="ta-c mb-4 mt-2" v-if="!asMobile">
-                <h-status
-                  :val="it.state"
-                  @click.native.stop="onStatus(it)"
-                ></h-status>
-              </div>
-              <div class="d-flex al-c" v-if="it.repo && it.repo.id">
-                <e-icon-link
-                  @click.native.stop="onStop"
-                  class="mr-6"
-                  img="img/svg/hosting/m-branch.svg"
-                  :link="
-                    it.repo.cloneUrl.replace(
-                      '.git',
-                      '/tree/' + it.repo.defaultBranch
-                    )
-                  "
-                >
-                  {{ it.repo.defaultBranch }}
-                </e-icon-link>
-                <e-commit
-                  @click.native.stop="onStop"
-                  :info="it.commit"
-                  class="fz-14"
-                ></e-commit>
-              </div>
-            </v-col>
-            <v-col cols="12" md="4" class="d-flex al-c">
-              <div class="ml-auto mr-6 ta-r" style="min-width: 70px">
-                <e-time span-class="gray-6 fz-14">{{ it.buildAt }}</e-time>
-              </div>
-              <v-btn
-                :to="getDetailPath(it)"
-                @click.stop="onStop"
-                class="mr-3"
-                color="primary"
-                small
-                >View Detail</v-btn
-              >
-            </v-col>
-          </v-row>
-        </v-expansion-panel-header>
-        <v-expansion-panel-content>
-          <v-skeleton-loader type="article" v-if="!it.statisList" />
-          <div class="mt-2" v-else>
-            <v-row class="statis-row">
-              <v-col
-                cols="12"
-                md="6"
-                lg="4"
-                v-for="(row, j) in it.statisList"
-                :key="j"
-              >
-                <e-link
-                  class="pa-3 d-b"
-                  :href="
-                    j < 2 ? `#/hosting/statistics/${it.name}/${it.id}` : ''
-                  "
-                >
-                  <component :is="row.comp" :info="row.data" />
-                </e-link>
               </v-col>
-              <!-- <v-col cols="4">
+              <v-col cols="12" md="4">
+                <div class="ta-c mb-4 mt-2" v-if="!asMobile">
+                  <h-status
+                    :val="it.state"
+                    @click.native.stop="onStatus(it)"
+                  ></h-status>
+                </div>
+                <div class="d-flex al-c" v-if="it.repo && it.repo.id">
+                  <e-icon-link
+                    @click.native.stop="onStop"
+                    class="mr-6"
+                    img="img/svg/hosting/m-branch.svg"
+                    :link="
+                      it.repo.cloneUrl.replace(
+                        '.git',
+                        '/tree/' + it.repo.defaultBranch
+                      )
+                    "
+                  >
+                    {{ it.repo.defaultBranch }}
+                  </e-icon-link>
+                  <e-commit
+                    @click.native.stop="onStop"
+                    :info="it.commit"
+                    class="fz-14"
+                  ></e-commit>
+                </div>
+              </v-col>
+              <v-col cols="12" md="4" class="d-flex al-c">
+                <div class="ml-auto mr-6 ta-r" style="min-width: 70px">
+                  <e-time span-class="gray-6 fz-14">{{ it.buildAt }}</e-time>
+                </div>
+                <v-btn
+                  :to="getDetailPath(it)"
+                  @click.stop="onStop"
+                  class="mr-3"
+                  color="primary"
+                  small
+                  >View Detail</v-btn
+                >
+              </v-col>
+            </v-row>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-skeleton-loader type="article" v-if="!it.statisList" />
+            <div class="mt-2" v-else>
+              <v-row class="statis-row">
+                <v-col
+                  cols="12"
+                  md="6"
+                  lg="4"
+                  v-for="(row, j) in it.statisList"
+                  :key="j"
+                >
+                  <e-link
+                    class="pa-3 d-b"
+                    :href="
+                      j < 2 ? `#/hosting/statistics/${it.name}/${it.id}` : ''
+                    "
+                  >
+                    <component :is="row.comp" :info="row.data" />
+                  </e-link>
+                </v-col>
+                <!-- <v-col cols="4">
                 <rect-data :list="it.statis2" />
               </v-col> -->
-            </v-row>
-            <div class="mt-5 d-flex al-c f-wrap">
-              <div class="d-flex">
-                <e-icon-link
-                  class="mr-5 shrink-1"
-                  img="img/svg/hosting/m-github.svg"
-                  :link="it.repo.cloneUrl.replace('.git', '')"
-                >
-                  <span class="ml-1 gray-6">{{
-                    `${it.repo.namespace}/${it.repo.name}`.cutStr(30)
-                  }}</span>
-                </e-icon-link>
-                <e-time span-class="gray-6 fz-14">{{
-                  it.repo.updateAt
-                }}</e-time>
-              </div>
+              </v-row>
+              <div class="mt-5 d-flex al-c f-wrap">
+                <div class="d-flex">
+                  <e-icon-link
+                    class="mr-5 shrink-1"
+                    img="img/svg/hosting/m-github.svg"
+                    :link="it.repo.cloneUrl.replace('.git', '')"
+                  >
+                    <span class="ml-1 gray-6">{{
+                      `${it.repo.namespace}/${it.repo.name}`.cutStr(30)
+                    }}</span>
+                  </e-icon-link>
+                  <e-time span-class="gray-6 fz-14">{{
+                    it.repo.updateAt
+                  }}</e-time>
+                </div>
 
-              <div class="d-flex al-c ml-auto">
-                <v-btn icon :to="getDetailPath(it, '?tab=settings')">
-                  <img src="img/svg/hosting/ic-setting.svg" width="16" />
-                </v-btn>
-                <v-btn icon class="ml-3" @click="onDelete(it)">
-                  <img src="img/svg/hosting/ic-delete.svg" width="16" />
-                </v-btn>
-                <v-btn
-                  v-if="it.taskId"
-                  color="primary"
-                  class="ml-6"
-                  small
-                  outlined
-                  :to="getBuildPath(it)"
-                  >View Build Logs</v-btn
-                >
+                <div class="d-flex al-c ml-auto">
+                  <v-btn icon :to="getDetailPath(it, '?tab=settings')">
+                    <img src="img/svg/hosting/ic-setting.svg" width="16" />
+                  </v-btn>
+                  <v-btn icon class="ml-3" @click="onDelete(it)">
+                    <img src="img/svg/hosting/ic-delete.svg" width="16" />
+                  </v-btn>
+                  <v-btn
+                    v-if="it.taskId"
+                    color="primary"
+                    class="ml-6"
+                    small
+                    outlined
+                    :to="getBuildPath(it)"
+                    >View Build Logs</v-btn
+                  >
+                </div>
               </div>
             </div>
-          </div>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-expansion-panels>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </div>
 
     <div class="mt-6" v-if="pageLen > 1 && !limit">
       <v-pagination

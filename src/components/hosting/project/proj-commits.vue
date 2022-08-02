@@ -1,14 +1,15 @@
 <template>
-  <div>
-    <div class="mt-12" v-if="noRepo || (list && !list.length)">
+  <div v-if="!list && !noRepo">
+    <v-skeleton-loader type="article" />
+  </div>
+  <div v-else class="main-wrap">
+    <div class="mt-12" v-if="noRepo || !list.length">
       <e-empty>
         {{ noRepo ? "Unconnected to Github" : "No commits" }}
       </e-empty>
     </div>
-    <div v-else-if="!list">
-      <v-skeleton-loader type="article" />
-    </div>
-    <div class="pr-6 pos-r" v-else>
+
+    <div class="pr-6 pos-r">
       <v-timeline dense align-top>
         <v-timeline-item small v-for="(it, i) in list" :key="i">
           <div class="color-1 fw-b">{{ it.date }}</div>

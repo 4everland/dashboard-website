@@ -168,7 +168,7 @@ export default {
           },
           {
             label: "Activity Log",
-            icon: "m-collect",
+            icon: "m-actlog",
             to: "/activity-log",
           },
           {
