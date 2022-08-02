@@ -44,7 +44,7 @@
           />
         </li>
       </ul>
-      <div class="pos-r flex-1 pr-10" style="min-height: 280px">
+      <div class="pos-r flex-1 pr-10" style="min-height: 295px">
         <div>
           <div
             class="pos-a left-0"
