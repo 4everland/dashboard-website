@@ -1,10 +1,15 @@
 <template>
   <div class="pos-r">
-    <v-date-picker
-      v-model="date"
-      :allowed-dates="isAllow"
-      :class="asMobile ? 'w100p' : 'pos-a top-0 right-0'"
-    ></v-date-picker>
+    <e-right-opt-wrap fix style="top: -20px">
+      <e-menu offset-y>
+        <v-btn slot="ref" outlined>
+          <span class="ml-2">{{ date }}</span>
+          <v-icon>mdi-chevron-down</v-icon>
+        </v-btn>
+        <v-date-picker v-model="date" :allowed-dates="isAllow"></v-date-picker>
+      </e-menu>
+    </e-right-opt-wrap>
+
     <v-skeleton-loader
       v-if="!list"
       type="article"
