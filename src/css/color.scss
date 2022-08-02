@@ -42,6 +42,12 @@
     background: #F8FAFB;
   }
 }
+.bg-hover-f9 {
+  cursor: pointer;
+  &:hover {
+    background: #fdfdfd;
+  }
+}
 
 .red-1, .fail-1 { color: #ff6960; }
 .warn-1 { color: #f99536; }

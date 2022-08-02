@@ -126,7 +126,7 @@
                         @click.stop="onStop"
                         v-if="it.hash"
                       >
-                        {{ it.hash.cutStr(asMobile ? 2 : 6, 6) }}
+                        {{ it.hash.cutStr(4, 4) }}
                       </a>
                     </div>
                   </div>
