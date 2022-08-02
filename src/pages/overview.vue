@@ -5,8 +5,8 @@
 </style>
 
 <template>
-  <div class="pos-r">
-    <div :class="asMobile ? 'ta-r mb-5' : 'pos-a right-0'" style="top: -50px">
+  <div>
+    <e-right-opt-wrap>
       <v-btn color="primary" to="/bucket/storage/?new=bucket">
         <span class="fz-18">+</span>
         <span class="ml-1"> New Bucket </span>
@@ -15,7 +15,7 @@
         <span class="fz-18">+</span>
         <span class="ml-1"> New Project </span>
       </v-btn>
-    </div>
+    </e-right-opt-wrap>
 
     <v3-usage />
 
@@ -40,13 +40,3 @@
     <new-user-tips />
   </div>
 </template>
-
-<script>
-export default {
-  computed: {
-    asMobile() {
-      return this.$vuetify.breakpoint.smAndDown;
-    },
-  },
-};
-</script>
