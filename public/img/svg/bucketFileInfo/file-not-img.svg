@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="225px" height="127px" viewBox="0 0 225 127" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>编组 3</title>
+    <title>group 3</title>
     <g id="Bucket-Bucket-List" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="选择非图片文件" transform="translate(-1170.000000, -349.000000)">
-            <g id="编组-3" transform="translate(1170.000000, 349.000000)">
+            <g id="group-3" transform="translate(1170.000000, 349.000000)">
                 <rect id="矩形" fill="#F7F9FB" x="0" y="0" width="225" height="127" rx="6"></rect>
                 <g id="文件类型-Word" transform="translate(89.000000, 37.000000)" fill-rule="nonzero">
                     <path d="M31.0867018,0 L8.27943761,0 C3.70650264,0 0,3.74475497 0,8.36356226 L0,44.6364377 C0,49.2558368 3.70708846,53 8.27943761,53 L36.7205624,53 C41.2934974,53 45,49.255245 45,44.6364377 L45,14.0540749 C45,12.1704537 44.2595196,10.364355 42.9408319,9.03286029 L36.0574107,2.07949889 C34.7389953,0.747986649 32.9510133,0 31.0867018,0 Z" id="路径" fill="#53B7F4"></path>

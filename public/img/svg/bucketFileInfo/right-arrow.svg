@@ -6,13 +6,13 @@
     </defs>
     <g id="Bucket-Bucket-List" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="选择非图片文件" transform="translate(-1355.000000, -319.000000)">
-            <g id="编组" transform="translate(1350.000000, 313.500000)">
+            <g id="group" transform="translate(1350.000000, 313.500000)">
                 <g id="icon/right" transform="translate(11.000000, 11.000000) scale(-1, 1) translate(-11.000000, -11.000000) ">
                     <mask id="mask-2" fill="white">
                         <use xlink:href="#path-1"></use>
                     </mask>
                     <use id="蒙版" fill="#D8D8D8" transform="translate(12.444544, 10.949747) rotate(-360.000000) translate(-12.444544, -10.949747) " xlink:href="#path-1"></use>
-                    <g id="编组" mask="url(#mask-2)" fill="#617083">
+                    <g id="group" mask="url(#mask-2)" fill="#617083">
                         <g id="Colors/Background">
                             <rect id="Color" x="0" y="0" width="22" height="22"></rect>
                         </g>
