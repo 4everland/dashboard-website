@@ -133,8 +133,8 @@ Vue.prototype.$utils = {
     const nameMap = {
       BUILD_TIME: "Build Minutes",
       TRAFFIC: "Bandwidth",
-      AR_STORAGE: "Arweave",
-      IPFS_STORAGE: "IPFS",
+      AR_STORAGE: "Arweave Storage",
+      IPFS_STORAGE: "IPFS Storage",
     };
     const it = {
       type,

@@ -132,6 +132,8 @@ export default {
         it.desc = "redeployed project " + obj.projectName;
       } else if (act == "HOSTING_DELETE_PROJECT") {
         it.desc = "deleted project " + obj.projectName;
+        it.path = "Hosting";
+        it.link = "/hosting/projects";
       } else if (act == "HOSTING_CREATE_PROJECT") {
         it.desc = "created project " + obj.projectName;
       } else if (act == "HOSTING_GENERATE_CLI_TOKEN") {
