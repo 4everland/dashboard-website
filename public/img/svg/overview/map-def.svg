@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="480px" height="333px" viewBox="0 0 480 333" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 10</title>
+    <g id="Overview" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Overview-无数据" transform="translate(-913.000000, -867.000000)">
+            <g id="编组-11" transform="translate(308.000000, 815.000000)">
+                <g id="编组-10" transform="translate(605.000000, 52.000000)">
+                    <g id="编组-26" transform="translate(0.000000, 31.000000)" stroke="#F2F2F2" stroke-linecap="square">
+                        <line x1="0.5" y1="0.5" x2="478.5" y2="0.5" id="直线-34"></line>
+                        <line x1="0.5" y1="31.5" x2="478.5" y2="31.5" id="直线-34"></line>
+                        <line x1="0.5" y1="61.5" x2="478.5" y2="61.5" id="直线-34"></line>
+                        <line x1="0.5" y1="91.5" x2="478.5" y2="91.5" id="直线-34"></line>
+                        <line x1="0.5" y1="121.5" x2="478.5" y2="121.5" id="直线-34"></line>
+                        <line x1="0.5" y1="151.5" x2="478.5" y2="151.5" id="直线-34"></line>
+                        <line x1="0.5" y1="181.5" x2="478.5" y2="181.5" id="直线-34"></line>
+                        <line x1="0.5" y1="211.5" x2="478.5" y2="211.5" id="直线-34"></line>
+                        <line x1="0.5" y1="241.5" x2="478.5" y2="241.5" id="直线-34"></line>
+                        <line x1="0.5" y1="271.5" x2="478.5" y2="271.5" id="直线-34"></line>
+                        <line x1="0.5" y1="301.5" x2="478.5" y2="301.5" id="直线-34"></line>
+                    </g>
+                    <text id="Unites-states-China" font-family="Helvetica" font-size="14" font-weight="normal" line-spacing="30" fill="#898989">
+                        <tspan x="14" y="46">Unites states</tspan>
+                        <tspan x="14" y="76">China</tspan>
+                        <tspan x="14" y="106">Hong Kong</tspan>
+                        <tspan x="14" y="136">Japan</tspan>
+                        <tspan x="14" y="166">Netherlands</tspan>
+                        <tspan x="14" y="196">Canada</tspan>
+                        <tspan x="14" y="226">Singapore</tspan>
+                        <tspan x="14" y="256">Malaysia</tspan>
+                        <tspan x="14" y="286">Korea,South</tspan>
+                        <tspan x="14" y="316">india</tspan>
+                    </text>
+                    <rect id="矩形" fill="#F1F2F5" x="210" y="158" width="128" height="29" rx="2"></rect>
+                    <text id="No-Data-Available" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" fill="#0B0817">
+                        <tspan x="224" y="177">No Data Available</tspan>
+                    </text>
+                    <rect id="矩形" fill="#F2F2F2" x="0" y="0" width="480" height="31"></rect>
+                    <text id="Requests" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" fill="#898989">
+                        <tspan x="222" y="20">Requests</tspan>
+                    </text>
+                    <text id="Bandwidth" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" fill="#898989">
+                        <tspan x="405" y="20">Bandwidth</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -38,10 +38,13 @@
           v-if="loading"
           type="article"
         ></v-skeleton-loader>
+        <div v-else-if="!list.length">
+          <img src="img/svg/overview/map-def.svg" class="w100p ev-n" />
+        </div>
         <table class="w100p fz-13" v-else>
           <thead class="gray">
             <tr>
-              <td>Country/Region</td>
+              <td></td>
               <td>Requests</td>
               <td>Bandwidth</td>
             </tr>
