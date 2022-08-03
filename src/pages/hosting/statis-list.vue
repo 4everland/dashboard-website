@@ -9,14 +9,8 @@
   }
 }
 .proj-item {
-  .right-con {
-    background: #f7f9fb;
-  }
   &:nth-child(2n) {
     background: #f7f9fb;
-    .right-con {
-      background: #fff;
-    }
   }
   cursor: pointer;
   &:hover {

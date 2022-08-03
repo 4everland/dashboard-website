@@ -7,7 +7,7 @@
   >
     <slot name="pre"></slot>
     <label
-      class="gray shrink-0"
+      class="gray-6 shrink-0"
       :class="labelClass"
       :style="{
         'min-width': minWidth,
