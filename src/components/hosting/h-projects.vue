@@ -304,6 +304,9 @@ export default {
     };
   },
   watch: {
+    curIdx() {
+      console.log(this.curIdx);
+    },
     buildInfo({ data }) {
       if (data.state != this.lastState) {
         console.log(data.taskId, data.state);
@@ -452,6 +455,11 @@ export default {
         this.total = total;
         if (!total) {
           this.$router.replace("/hosting/new");
+        }
+        if (list.length) {
+          setTimeout(() => {
+            this.curIdx = [0];
+          }, 10);
         }
         if (this.page > 1 && !list.length) {
           this.page = 1;
