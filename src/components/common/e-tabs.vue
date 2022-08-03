@@ -28,7 +28,11 @@
         :hide-slider="vertical"
         :vertical="vertical"
       >
-        <v-tab v-for="(it, i) in list" :key="i">
+        <v-tab
+          v-for="(it, i) in list"
+          :key="i"
+          :class="{ 'fw-b': curIdx == i }"
+        >
           {{ it.text }}
         </v-tab>
       </v-tabs>

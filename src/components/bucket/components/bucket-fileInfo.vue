@@ -3,7 +3,7 @@
     <div class="nav" v-show="fileInfoDrawer">
       <div class="single-file" v-if="selected.length == 1">
         <v-img
-          class="my-4"
+          class="my-4 bdrs-4"
           height="127"
           max-height="127"
           max-width="100%"
@@ -19,38 +19,36 @@
           type="article"
         ></v-skeleton-loader>
         <ul class="ls-none" v-show="singleFile && !fileLoading">
-          <p class="fz-16 fw-b">{{ selected[0].name }}</p>
-
+          <p class="fz-16 fw-b file-name">{{ selected[0].name }}</p>
           <template v-for="(it, i) in fileInfoList">
-            <li class="mt-2 mb-2 fz-12 d-flex" :key="i">
+            <li class="mt-2 mb-2 fz-12 d-flex align-center" :key="i">
               <span class="d-ib pa-1" style="min-width: 85px"
                 >{{ it.label }}:</span
               >
-              <div v-if="it.name == 'ipfs'">
-                <v-btn
-                  text
-                  small
+              <div v-if="it.name == 'ipfs'" class="pa-1 ml-2">
+                <a
+                  class="link"
                   target="_blank"
                   :href="`https://${it.value}.ipfs.dweb.link`"
+                  >{{ it.value.cutStr(5, 5) }}</a
                 >
-                  {{ it.value.cutStr(5, 5) }}
-                </v-btn>
                 <v-btn icon small v-clipboard="it.value" @success="onCopied">
                   <v-icon size="15" class="ml-auto">mdi-content-copy</v-icon>
                 </v-btn>
               </div>
-              <div v-else-if="it.name == 'arHash'" class="d-flex al-c f-wrap">
+              <div
+                v-else-if="it.name == 'arHash'"
+                class="d-flex al-c f-wrap pa-1 ml-2"
+              >
                 <template
                   v-if="fileInfo.arStatus == 'synced' && fileInfo.arHash"
                 >
-                  <v-btn
-                    text
-                    small
+                  <a
+                    class="link"
                     target="_blank"
                     :href="$arHashPre + fileInfo.arHash"
+                    >{{ it.value.cutStr(5, 5) }}</a
                   >
-                    {{ it.value.cutStr(5, 5) }}
-                  </v-btn>
                   <v-btn
                     icon
                     small
@@ -117,9 +115,12 @@
           </template>
         </ul>
         <div v-show="singleDir && !fileLoading">
-          <div class="fz-16 fw-b">
+          <div class="fz-16 fw-b d-flex">
             <v-icon size="18">mdi-folder</v-icon>
-            {{ selected[0].name }}
+
+            <span class="ml-3 dir-name">
+              {{ selected[0].name }}
+            </span>
           </div>
 
           <p class="dir-file-name fz-12" v-for="(it, i) in dirFileArr" :key="i">
@@ -398,8 +399,14 @@ export default {
     top: 50%;
     transform: translate(-50%, -50%);
   }
-  .pack-up {
-    cursor: pointer;
+  .link {
+    color: #0b0817;
+  }
+  .dir-name,
+  .file-name {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .dir-file-name {
     color: #6c7789;

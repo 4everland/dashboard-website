@@ -16,7 +16,7 @@
 
     <v-dialog
       v-model="showLoading"
-      max-width="260px"
+      max-width="500px"
       :persistent="alertInfo.persistent"
     >
       <v-card>
@@ -35,7 +35,8 @@
 
     <v-dialog
       v-model="showAlert"
-      max-width="500"
+      max-width="600"
+      width="600"
       :persistent="alertInfo.persistent"
     >
       <v-card class="pd-10">
@@ -88,17 +89,9 @@
         </v-card-text>
         <v-card-actions class="pb-3 ta-c">
           <v-spacer></v-spacer>
+
           <v-btn
-            outlined
-            width="90"
-            v-if="alertInfo.showCancel"
-            @click="hideAlert(0)"
-          >
-            {{ alertInfo.cancelText || "Cancel" }}
-          </v-btn>
-          <v-btn
-            class="ml-6"
-            min-width="90"
+            min-width="180"
             v-bind="{
               color: 'primary',
               ...alertInfo.confirmTextAttrs,
@@ -107,6 +100,15 @@
             @click="hideAlert(1)"
           >
             {{ alertInfo.confirmText || "OK" }}
+          </v-btn>
+          <v-btn
+            outlined
+            width="180"
+            class="ml-6"
+            v-if="alertInfo.showCancel"
+            @click="hideAlert(0)"
+          >
+            {{ alertInfo.cancelText || "Cancel" }}
           </v-btn>
           <v-btn
             class="ml-4"

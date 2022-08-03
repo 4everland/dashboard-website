@@ -100,7 +100,7 @@
                 >
                 <b>{{ item.name.cutStr(5, 5) }}</b></v-btn
               >
-              <v-btn
+              <!-- <v-btn
                 class="e-btn-text"
                 icon
                 small
@@ -111,11 +111,11 @@
                 target="_blank"
               >
                 <img src="img/svg/view.svg" width="14" class="ml-2" />
-              </v-btn>
+              </v-btn> -->
             </template>
             <template v-slot:item.hash="{ item }">
-              <div v-if="item.hash !== '--'">
-                <v-btn
+              <div class="d-flex align-center" v-if="item.hash !== '--'">
+                <!-- <v-btn
                   style="width: 80px"
                   class="e-btn-text item-hash"
                   color="primary"
@@ -129,7 +129,17 @@
                   <span class="d-ib">
                     {{ item.hash.cutStr(5, 4) }}
                   </span>
-                </v-btn>
+                </v-btn> -->
+
+                <a
+                  :href="`https://${item.hash}.ipfs.dweb.link`"
+                  class="hash-link"
+                  style="color: #0b0817"
+                  target="_blank"
+                  v-if="item.hash"
+                  @click.stop="onStop"
+                  >{{ item.hash.cutStr(5, 4) }}</a
+                >
                 <v-btn
                   v-if="item.hash"
                   class="e-btn-text ml-2"
@@ -241,8 +251,8 @@ export default {
       vertical: false,
       headers: [
         { text: "Name", value: "name" },
-        { text: "Size", value: "size" },
         { text: "IPFS Hash", value: "hash" },
+        { text: "Size", value: "size" },
         { text: "Last Modified", value: "updateAt" },
         // { text: "AR Status", value: "arStatus" },
       ],
@@ -406,11 +416,9 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.item-hash {
-  transition: all 0.1s ease-in;
-}
-.item-hash:hover {
-  opacity: 0.8;
+.hash-link {
+  display: block;
+  color: #0b0817;
 }
 .bucket-item-container {
   padding: 18px 13px 33px 32px;
@@ -423,6 +431,9 @@ export default {
     // min-height: 1000px;
     .file-head {
       width: 25%;
+      .pack-up {
+        cursor: pointer;
+      }
     }
     .operation-tab {
       .selected-content {
