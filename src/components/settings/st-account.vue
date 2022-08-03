@@ -169,14 +169,13 @@ export default {
         this.$loading("Binding " + item.title);
         this.$loading.close();
         let params = {
-          _auth: 1,
           type,
         };
         if (type == 5) {
           params.keyId = keyId;
         }
         // const { data } =
-        await this.$http.get(`/auth/vcode/${code}`, {
+        await this.$http.get(`$auth/auth/vcode/${code}`, {
           params,
         });
         this.$setMsg({
@@ -241,18 +240,10 @@ export default {
           apply = value;
         }
         this.$loading();
-        const { data } = await this.$http.post(
-          "/bind",
-          {
-            type: it.type,
-            apply,
-          },
-          {
-            params: {
-              _auth: 1,
-            },
-          }
-        );
+        const { data } = await this.$http.post("$auth/bind", {
+          type: it.type,
+          apply,
+        });
         console.log(data);
         const url = data.applyR;
         if (it.type == 3) {
@@ -285,18 +276,10 @@ export default {
       if (type == 5) {
         apply = this.flowAddr;
       }
-      const { data } = await this.$http.post(
-        `/bind`,
-        {
-          type,
-          apply,
-        },
-        {
-          params: {
-            _auth: 1,
-          },
-        }
-      );
+      const { data } = await this.$http.post(`$auth/bind`, {
+        type,
+        apply,
+      });
       return data.applyR;
     },
     async verifyMetaMask() {

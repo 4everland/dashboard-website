@@ -244,9 +244,8 @@ export default {
       localStorage.last_github_code = code;
       try {
         this.connecting = true;
-        await this.$http.get(`/auth/vcode/${code}`, {
+        await this.$http.get(`$auth/auth/vcode/${code}`, {
           params: {
-            _auth: 1,
             type: 1,
           },
         });
