@@ -1,16 +1,17 @@
 <template>
-  <v-row class="bdrs-5 bg-f6" v-if="info">
-    <v-col class="pa-5 h-flex space-btw" style="height: 174px">
-      <e-kv2 :label="it.label" v-for="(it, i) in list" :key="i">
+  <v-row v-if="info">
+    <v-col v-for="(it, i) in list" :key="i">
+      <div class="bg-f8 bdrs-8 pa-4 pl-6 pr-6">
         <div class="d-flex al-c" v-if="it.domain">
+          <span class="gray-6 fz-14 mr-5">{{ it.label }}</span>
           <a class="line-1" :href="`#${it.to}`">
             {{ it.domain.cutStr(30) }}
           </a>
           <div class="ml-auto shrink-0">
-            <e-time>{{ it.updateAt }}</e-time>
+            <e-time span-class="gray fz-14">{{ it.updateAt }}</e-time>
           </div>
         </div>
-      </e-kv2>
+      </div>
     </v-col>
   </v-row>
 </template>
