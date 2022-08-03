@@ -12,6 +12,7 @@ import { S3 } from "@aws-sdk/client-s3";
 import { isAirDrop } from "@/plugins/flow/flowAirDrop.js";
 export const bus = new Vue();
 Vue.config.productionTip = false;
+
 const Minio = require("minio-s");
 
 router.beforeEach((to, _, next) => {
