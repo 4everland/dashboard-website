@@ -56,10 +56,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 const now = new Date();
 
 export default {
   computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
@@ -189,7 +193,7 @@ export default {
         });
         this.total = data.total;
         const list = data.list.map((it) => {
-          it.label = it.guid.cutStr(6, 4);
+          it.label = (this.userInfo.username || it.guid).cutStr(6, 4);
           this.getDesc(it);
           return it;
         });
