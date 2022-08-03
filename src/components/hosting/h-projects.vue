@@ -178,27 +178,14 @@
           <v-expansion-panel-content>
             <v-skeleton-loader type="article" v-if="!it.statisList" />
             <div class="mt-2" v-else>
-              <v-row class="statis-row">
-                <v-col
-                  cols="12"
-                  md="6"
-                  lg="4"
-                  v-for="(row, j) in it.statisList"
-                  :key="j"
-                >
-                  <e-link
-                    class="pa-3 d-b"
-                    :href="
-                      j < 2 ? `#/hosting/statistics/${it.name}/${it.id}` : ''
-                    "
-                  >
-                    <component :is="row.comp" :info="row.data" />
-                  </e-link>
-                </v-col>
-                <!-- <v-col cols="4">
-                <rect-data :list="it.statis2" />
-              </v-col> -->
-              </v-row>
+              <e-link
+                class="d-b mb-5"
+                v-for="(row, j) in it.statisList"
+                :key="j"
+                :href="j == 0 ? `#/hosting/statistics/${it.name}/${it.id}` : ''"
+              >
+                <component :is="row.comp" :info="row.data" />
+              </e-link>
               <div class="mt-5 d-flex al-c f-wrap">
                 <div class="d-flex">
                   <e-icon-link
@@ -391,42 +378,37 @@ export default {
         data.name = it.name;
         const statisList = [
           {
-            comp: "e-grid-card",
+            comp: "h-proj-statis",
             data: [
-              {
-                title: "New Users",
-                num: data.newUsers,
-              },
-              {
-                title: "Total Users",
-                num: data.totalUsers,
-              },
-              {
-                title: "Total UV",
-                num: data.totalUV,
-              },
-              {
-                title: "Total PV",
-                num: data.totalPV,
-              },
-            ],
-          },
-          {
-            comp: "e-grid-card",
-            data: [
-              {
-                title: "Bandwidth used",
-                ...this.$utils.getFileSize(data.usedBandwidth, 1),
-              },
-              {
-                title: "Build Minutes used",
-                unit: "Minutes",
-                num: data.usedBuildMinutes.toFixed(2),
-              },
-              {
-                title: "Storage used",
-                ...this.$utils.getFileSize(data.usedStorage, 1),
-              },
+              [
+                {
+                  title: "New Users",
+                  num: data.newUsers,
+                },
+                {
+                  title: "Unique Visitor",
+                  num: data.totalUV,
+                },
+                {
+                  title: "Page Views",
+                  num: data.totalPV,
+                },
+              ],
+              [
+                {
+                  title: "Bandwidth used",
+                  ...this.$utils.getFileSize(data.usedBandwidth, 1),
+                },
+                {
+                  title: "Build Minutes used",
+                  unit: "Minutes",
+                  num: data.usedBuildMinutes.toFixed(2),
+                },
+                {
+                  title: "Storage used",
+                  ...this.$utils.getFileSize(data.usedStorage, 1),
+                },
+              ],
             ],
           },
           {

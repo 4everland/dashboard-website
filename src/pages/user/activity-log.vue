@@ -107,7 +107,7 @@ export default {
         it.path = "Overview";
         it.link = "/overview";
       } else if (act == "OAUTH_BIND_GITHUB") {
-        it.desc = "binded Github";
+        it.desc = "connected Github account";
         it.path = "Settings";
         it.link = "/settings";
       } else if (act == "BILL_RECHARGE") {
