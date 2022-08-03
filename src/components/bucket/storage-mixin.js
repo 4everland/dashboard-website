@@ -392,6 +392,7 @@ export default {
     async headObject(arg) {
       this.fileLoading = true;
       this.fileInfo = null;
+      console.log(this.pathInfo);
       this.s3.headObject({ ...this.pathInfo, IfMatch: arg }, (err, data) => {
         this.fileLoading = false;
         if (err) return this.onErr(err);
@@ -486,7 +487,7 @@ export default {
         //   this.continuationTokenArr = [""];
         // }
         let list = data.objects.map((it) => {
-          console.log(data);
+          // console.log(data);
           if (it.prefix)
             return {
               name: it.prefix.replace(Prefix, "").replace("/", ""),

@@ -410,8 +410,12 @@
       </div>
       <operation-bar
         :selected="selected.length"
+        :inBucket="true"
         @handleClearSelected="selected = []"
         @handleDeleteSelected="onDelete()"
+        @handleAddDomain="
+          $router.push(`/bucket/domains?bucket=${selected[0].name}`)
+        "
       ></operation-bar>
     </div>
     <div v-if="inFolder && !finished" class="pd-20 gray ta-c fz-16 mt-5">
@@ -499,6 +503,7 @@ export default {
       const list = this.bucketInfo.originList.map((origin) => {
         return origin + "/" + Key;
       });
+      console.log(list);
       if (!list.length) list.push(this.fileInfo.url);
       return list;
     },

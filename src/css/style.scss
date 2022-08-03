@@ -278,8 +278,11 @@ ul.ls-none {
 }
 
 .v-data-table-header {
-  background: #F9FBFC;
+  // background: #F9FBFC;
   th {
     font-size: 14px!important;
   }
+}
+.tr{
+  background: red;
 }

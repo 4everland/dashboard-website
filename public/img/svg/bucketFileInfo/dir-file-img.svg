@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="225px" height="127px" viewBox="0 0 225 127" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>group 3</title>
+    <g id="Bucket-Bucket-List" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="选择文件夹" transform="translate(-1170.000000, -349.000000)">
+            <g id="group-3" transform="translate(1170.000000, 349.000000)">
+                <rect id="矩形" fill="#F7F9FB" x="0" y="0" width="225" height="127" rx="6"></rect>
+                <g id="文件夹(2)" transform="translate(79.000000, 36.000000)" fill-rule="nonzero">
+                    <path d="M63.0934132,53 L2.90658679,53 C1.29915789,53 0,51.829429 0,50.381117 L0,7.618883 C0,6.17057098 1.29915789,5 2.90658679,5 L63.0934132,5 C64.7008421,5 66,6.17057098 66,7.618883 L66,50.381117 C66,51.8228393 64.6935252,53 63.0934132,53 Z" id="路径" fill="#FFE9B4"></path>
+                    <path d="M33,18 L0,18 L0,2.95275 C0,1.319775 1.29918121,0 2.90658389,0 L25.4912819,0 C26.7758456,0 27.9061141,0.85005 28.2731007,2.1027 L33,18 Z" id="路径" fill="#FFB02C"></path>
+                    <path d="M63.0934132,53 L2.90658679,53 C1.29915789,53 0,51.6822487 0,50.0517751 L0,11.9482249 C0,10.3177513 1.29915789,9 2.90658679,9 L63.0934132,9 C64.7008421,9 66,10.3177513 66,11.9482249 L66,50.0517751 C66,51.674753 64.6935252,53 63.0934132,53 Z" id="路径" fill="#FFCA28"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

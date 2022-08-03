@@ -24,15 +24,15 @@ export default {
     return {
       list: [
         {
-          text: "Overview",
+          text: "User Analysis",
           comp: "bucket-overview",
         },
         {
-          text: "Files",
+          text: "Request",
           comp: "bucket-folder",
         },
         {
-          text: "Statistics",
+          text: "Data Transfer",
           comp: "bucket-statistics",
         },
       ],

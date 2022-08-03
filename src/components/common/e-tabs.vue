@@ -138,6 +138,9 @@ export default {
 </script>
 
 <style lang="scss">
+.v-slide-group__content {
+  border-bottom: 1px solid #d0dae9;
+}
 .e-settings {
   .theme--light.v-tabs > .v-tabs-bar {
     background-color: transparent;
