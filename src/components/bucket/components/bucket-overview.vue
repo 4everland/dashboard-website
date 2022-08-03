@@ -1,6 +1,6 @@
 <template>
   <div class="overview-container">
-    <div class="basic-statistics">
+    <div class="basic-statistics bg-white">
       <h3>Basic Statistics</h3>
       <v-row class="basic-statistics-content">
         <template v-if="!basicStatisticsData.length">
@@ -28,7 +28,7 @@
         </v-col>
       </v-row>
     </div>
-    <div class="domain-names">
+    <div class="domain-names bg-white">
       <h3>Domain Names</h3>
       <div>
         <v-data-table
@@ -63,7 +63,7 @@
         </template>
       </div>
     </div>
-    <div class="basic-settings">
+    <div class="basic-settings bg-white">
       <h3>Basic Settings</h3>
       <v-row
         v-if="JSON.stringify(extraData) == '{}'"
