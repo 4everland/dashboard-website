@@ -9,143 +9,86 @@
 
   <div v-else>
     <!-- Operation tab -->
-    <div class="d-flex nowrap ov-a btn-wrap">
-      <div v-show="inFile">
-        <v-btn
-          color="primary"
-          :href="fileUrl"
-          target="_blank"
-          :loading="!fileInfo"
-          :download="fileName"
-        >
-          <img src="img/icon/download.svg" width="16" />
-          <span class="ml-2">Download</span>
-        </v-btn>
-
-        <template v-if="fileInfo">
+    <e-right-opt-wrap>
+      <div class="d-flex nowrap ov-a btn-wrap">
+        <div v-show="inFile">
           <v-btn
-            class="ml-5"
-            outlined
-            @click="onSyncAR(fileName)"
-            :disabled="
-              fileInfo && ['desynced', 'synced'].indexOf(fileArStatus) == -1
-            "
-            :color="fileArStatus == 'synced' ? 'success' : ''"
+            color="primary"
+            :href="fileUrl"
+            target="_blank"
+            :loading="!fileInfo"
+            :download="fileName"
           >
-            <img src="img/icon/ic-ar-sync.svg" width="16" />
-            <span class="ml-2">
-              <span v-if="fileArStatus == 'synced'">Verify on AR</span>
-              <span v-else>Sync to AR</span>
-            </span>
+            <img src="img/icon/download.svg" width="16" />
+            <span class="ml-2">Download</span>
           </v-btn>
-          <e-menu offset-y open-on-hover v-if="!fromHistory">
-            <v-btn slot="ref" class="ml-5" icon>
-              <v-icon>mdi-dots-vertical</v-icon>
+
+          <template v-if="fileInfo">
+            <v-btn
+              class="ml-5"
+              outlined
+              @click="onSyncAR(fileName)"
+              :disabled="
+                fileInfo && ['desynced', 'synced'].indexOf(fileArStatus) == -1
+              "
+              :color="fileArStatus == 'synced' ? 'success' : ''"
+            >
+              <img src="img/icon/ic-ar-sync.svg" width="16" />
+              <span class="ml-2">
+                <span v-if="fileArStatus == 'synced'">Verify on AR</span>
+                <span v-else>Sync to AR</span>
+              </span>
             </v-btn>
-            <v-list dense>
-              <v-list-item
-                link
-                v-clipboard="fileUrl.encode()"
-                @success="$toast('Copied to clipboard !')"
-              >
-                <img src="img/icon/copy.svg" width="14" class="mr-2" />
-                <span class="gray-7">Copy Path</span>
-              </v-list-item>
-              <v-list-item link @click="onRename(fileName)">
-                <img src="img/icon/ic-rename.svg" width="14" class="mr-2" />
-                <span class="gray-7">Rename</span>
-              </v-list-item>
-              <v-list-item link @click="onDelFile">
-                <img src="img/icon/ic-delete.svg" width="14" class="mr-2" />
-                <span class="red-2">Delete</span>
-              </v-list-item>
-            </v-list>
-          </e-menu>
-        </template>
-      </div>
-
-      <!-- <e-menu
-        offset-y
-        open-on-hover
-        :disabled="!selected.length"
-        v-if="!inFolder"
-      >
-        <v-btn
-          slot="ref"
-          class="ml-5"
-          outlined
-          :disabled="!selected.length"
-          v-if="!inFile"
-        >
-          <span>Actions</span>
-          <v-icon size="18">mdi-chevron-down</v-icon>
-        </v-btn>
-        <v-list dense>
-          <template v-if="selected.length == 1">
-            <template v-if="selected[0].isFile">
-              <v-list-item :href="getViewUrl(selected[0])" target="_blank">
-                <img src="img/icon/ic-download.svg" width="15" class="mr-2" />
-                <span class="gray-7">Download</span>
-              </v-list-item>
-              <v-list-item
-                link
-                v-clipboard="getViewUrl(selected[0])"
-                @success="onCopied"
-              >
-                <img src="img/icon/ic-copy.svg" width="14" class="mr-2" />
-                <span class="gray-7">Copy Path</span>
-              </v-list-item>
-              <v-list-item link @click="onRename(selected[0].name)">
-                <img src="img/icon/ic-rename.svg" width="14" class="mr-2" />
-                <span class="gray-7">Rename</span>
-              </v-list-item>
-              <v-list-item
-                link
-                @click="onSyncAR(selected[0].name)"
-                v-if="!bucketInfo.isAr && selectArStatus != 'synced'"
-              >
-                <img src="img/icon/ic-ar.svg" width="14" class="mr-2" />
-                <span class="gray-7">Sync to AR</span>
-              </v-list-item>
-            </template>
-            <template v-else-if="inBucket">
-              <v-list-item :to="`/bucket/domains?bucket=${selected[0].name}`">
-                <img src="img/icon/ic-domain.svg" width="14" class="mr-2" />
-                <span class="gray-7">Add Domain</span>
-              </v-list-item>
-            </template>
+            <e-menu offset-y open-on-hover v-if="!fromHistory">
+              <v-btn slot="ref" class="ml-5" icon>
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+              <v-list dense>
+                <v-list-item
+                  link
+                  v-clipboard="fileUrl.encode()"
+                  @success="$toast('Copied to clipboard !')"
+                >
+                  <img src="img/icon/copy.svg" width="14" class="mr-2" />
+                  <span class="gray-7">Copy Path</span>
+                </v-list-item>
+                <v-list-item link @click="onRename(fileName)">
+                  <img src="img/icon/ic-rename.svg" width="14" class="mr-2" />
+                  <span class="gray-7">Rename</span>
+                </v-list-item>
+                <v-list-item link @click="onDelFile">
+                  <img src="img/icon/ic-delete.svg" width="14" class="mr-2" />
+                  <span class="red-2">Delete</span>
+                </v-list-item>
+              </v-list>
+            </e-menu>
           </template>
-          <v-list-item link @click="onDelete()">
-            <img src="img/icon/ic-delete.svg" width="14" class="mr-2" />
-            <span class="red-2">Delete</span>
-          </v-list-item>
-        </v-list>
-      </e-menu> -->
-
-      <div
-        class="ml-auto"
-        :class="asMobile ? 'ml-5' : 'ml-auto'"
-        v-if="!inFile && !inFolder"
-        style="min-width: 150px"
-      >
-        <v-text-field
-          class="hide-msg bd-1"
-          dense
-          solo
-          clearable
-          label="Search"
-          prepend-inner-icon="mdi-magnify"
-          v-model="searchKey"
-        ></v-text-field>
+        </div>
+        <div
+          class="ml-auto"
+          :class="asMobile ? 'ml-5' : 'ml-auto'"
+          v-if="!inFile && !inFolder"
+          style="min-width: 150px"
+        >
+          <v-text-field
+            class="hide-msg bd-1"
+            dense
+            solo
+            clearable
+            label="Search"
+            prepend-inner-icon="mdi-magnify"
+            v-model="searchKey"
+          ></v-text-field>
+        </div>
+        <div v-show="inBucket" class="ml-5">
+          <v-btn color="primary" @click="addBucket">
+            <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
+            <img src="img/svg/add1.svg" width="12" />
+            <span class="ml-2">New Bucket</span>
+          </v-btn>
+        </div>
       </div>
-      <div v-show="inBucket" class="ml-5">
-        <v-btn color="primary" @click="addBucket">
-          <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
-          <img src="img/svg/add1.svg" width="12" />
-          <span class="ml-2">New Bucket</span>
-        </v-btn>
-      </div>
-    </div>
+    </e-right-opt-wrap>
 
     <div class="d-flex mt-6">
       <nav-item unit="Objects" class="ml-auto" v-if="inBucket">{{
