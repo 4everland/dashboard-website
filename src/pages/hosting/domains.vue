@@ -1,24 +1,22 @@
 <template>
   <div>
-    <div class="mb-5">
-      <e-right-opt-wrap>
-        <v-btn color="primary" min-width="100" @click="showPop = true">
-          <img src="img/svg/add1.svg" width="12" />
-          <span class="ml-2">Add</span>
-        </v-btn>
-        <v-btn
-          @click="onDelete"
-          :loading="deleting"
-          outlined
-          v-show="selected.length > 0"
-          class="ml-5"
-          min-width="36"
-        >
-          <img src="img/svg/delete.svg" width="12" />
-          <span class="ml-2">Delete</span>
-        </v-btn>
-      </e-right-opt-wrap>
-    </div>
+    <e-right-opt-wrap>
+      <v-btn color="primary" min-width="100" @click="showPop = true">
+        <img src="img/svg/add1.svg" width="12" />
+        <span class="ml-2">Add</span>
+      </v-btn>
+      <v-btn
+        @click="onDelete"
+        :loading="deleting"
+        outlined
+        v-show="selected.length > 0"
+        class="ml-5"
+        min-width="36"
+      >
+        <img src="img/svg/delete.svg" width="12" />
+        <span class="ml-2">Delete</span>
+      </v-btn>
+    </e-right-opt-wrap>
     <e-tabs ref="domain-tabs" :list="tabList" />
     <v-dialog v-model="showPop" max-width="600">
       <div class="pd-30">
