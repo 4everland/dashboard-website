@@ -64,7 +64,7 @@
         </template>
       </div>
 
-      <e-menu
+      <!-- <e-menu
         offset-y
         open-on-hover
         :disabled="!selected.length"
@@ -77,13 +77,11 @@
           :disabled="!selected.length"
           v-if="!inFile"
         >
-          <!-- <v-icon>mdi-dots-vertical</v-icon> -->
           <span>Actions</span>
           <v-icon size="18">mdi-chevron-down</v-icon>
         </v-btn>
         <v-list dense>
           <template v-if="selected.length == 1">
-            <!-- <v-list-item :to="getPath(selected[0])"> Open </v-list-item> -->
             <template v-if="selected[0].isFile">
               <v-list-item :href="getViewUrl(selected[0])" target="_blank">
                 <img src="img/icon/ic-download.svg" width="15" class="mr-2" />
@@ -122,7 +120,7 @@
             <span class="red-2">Delete</span>
           </v-list-item>
         </v-list>
-      </e-menu>
+      </e-menu> -->
 
       <div
         class="ml-auto"
