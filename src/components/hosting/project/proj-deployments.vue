@@ -8,7 +8,7 @@
       </div>
 
       <div
-        class="pd-20 bd-1 bdrs-10 mb-4 bg-white bg-hover-f9"
+        class="main-wrap auto mb-4 bg-hover-f9"
         v-for="it in list"
         @click="onClick(it)"
         :key="it.taskId"
@@ -16,7 +16,7 @@
         <v-row class="d-flex">
           <v-col cols="12" md="9">
             <div>
-              <a class="b fw-b fz-18">{{ it.buildConfig.name }}</a>
+              <a class="b fw-b fz-18">{{ it.domain }}</a>
             </div>
             <div class="al-c mt-2">
               <span class="mr-5 fz-14" v-if="!asMobile">Production</span>
@@ -54,11 +54,11 @@
             </div>
           </v-col>
           <v-col cols="12" md="3">
-            <d class="al-c">
+            <div class="al-c mt-2">
               <div class="mr-auto ta-c">
                 <h-status :val="it.state" />
                 <div>
-                  <e-time :endAt="it.endAt" spanClass="fz-13 gray">{{
+                  <e-time :endAt="it.endAt || nowDate" spanClass="fz-13 gray">{{
                     it.createAt
                   }}</e-time>
                 </div>
@@ -88,7 +88,7 @@
                   </v-list-item>
                 </v-list>
               </v-menu>
-            </d>
+            </div>
           </v-col>
         </v-row>
       </div>
@@ -119,6 +119,7 @@ export default {
     ...mapState({
       info: (s) => s.projectInfo,
       userInfo: (s) => s.userInfo,
+      nowDate: (s) => s.nowDate,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -133,14 +134,20 @@ export default {
       finished: false,
       loading: false,
       refreshing: false,
+      lastState: null,
     };
-  },
-  mounted() {
-    this.getList();
   },
   watch: {
     active(val) {
-      if (val) this.getList();
+      if (val) {
+        this.list = null;
+        this.getList();
+      }
+    },
+    info() {
+      if (this.info.id == this.id) {
+        this.getList();
+      }
     },
   },
   mounted() {
@@ -218,8 +225,9 @@ export default {
         });
         this.$loading();
         await this.$http2.put("/project/task/rollback/" + it.taskId);
+        this.list = null;
+        await this.$store.dispatch("getProjectInfo", this.id);
         this.$toast("Rollback successfully");
-        this.getList();
       } catch (error) {
         //
       }
@@ -261,7 +269,6 @@ export default {
           this.page = 0;
           this.refreshing = true;
           this.finished = false;
-          this.list = null;
           this.isFirst = false;
         }
         const params = {

@@ -54,7 +54,7 @@ export default {
     min-height: auto;
   }
   background: #fff;
-  box-shadow: 0 0 6px rgb(205 205 205 / 50%);
+  box-shadow: 0 1px 3px rgb(205 205 205 / 50%);
   h3 {
     margin-bottom: 20px;
     font-size: 20px;
