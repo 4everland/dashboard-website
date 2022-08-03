@@ -2,7 +2,10 @@
   <div class="pos-r">
     <div
       :class="!asMobile || fix ? 'pos-a right-0' : 'ta-r mb-5'"
-      style="top: -50px"
+      :style="{
+        top: (top || -50) + 'px',
+        ...customStyle,
+      }"
     >
       <slot></slot>
     </div>
@@ -13,6 +16,8 @@
 export default {
   props: {
     fix: Boolean,
+    top: Number,
+    customStyle: Object,
   },
   computed: {
     asMobile() {
