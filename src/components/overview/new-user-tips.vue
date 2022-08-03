@@ -46,38 +46,22 @@ export default {
       if (code && !flag) {
         return;
       }
-      const { data } = await this.$http.get("/flc", {
-        params: {
-          _auth: 1,
-        },
-      });
+      const { data } = await this.$http.get("$auth/flc");
       if (data.res) {
         this.githubName = data.github.name;
         this.showDialog = true;
       }
     },
     async createNew() {
-      await this.$http.get("/flc/done", {
-        params: {
-          _auth: 1,
-        },
-      });
+      await this.$http.get("$auth/flc/done");
       this.showDialog = false;
     },
     async bind() {
       let walletAddress = JSON.parse(localStorage.userInfo).wallet.address;
-      const { data } = await this.$http.post(
-        "/bind",
-        {
-          type: 1,
-          apply: walletAddress,
-        },
-        {
-          params: {
-            _auth: 1,
-          },
-        }
-      );
+      const { data } = await this.$http.post("$auth/bind", {
+        type: 1,
+        apply: walletAddress,
+      });
       if (data.applyR) {
         location.href = data.applyR;
       }
@@ -87,9 +71,8 @@ export default {
       if (!code || code == localStorage.last_github_code) return;
       localStorage.last_github_code = code;
       try {
-        await this.$http.get(`/auth/vcode/${code}`, {
+        await this.$http.get(`$auth/auth/vcode/${code}`, {
           params: {
-            _auth: 1,
             type: 1,
           },
           noTip: true,

@@ -60,11 +60,7 @@ export default {
         this.$loading();
         this.deleting = true;
         // await this.$sleep(500)
-        await this.$http.delete("/accounts", {
-          params: {
-            _auth: 1,
-          },
-        });
+        await this.$http.delete("$auth/accounts");
         localStorage.clear();
         this.$loading.close();
         this.$alert("Personal account deleted successfully").then(() => {
