@@ -88,7 +88,7 @@ import {
   SignPhantom,
   ConnectFlow,
   SignFlow,
-} from "@/utils/index.js";
+} from "./login.js";
 const authApi = process.env.VUE_APP_AUTH_URL;
 const BUCKET_HOST = process.env.VUE_APP_BUCKET_HOST;
 export default {
@@ -150,9 +150,17 @@ export default {
     },
     async getAuth(code) {
       try {
-        const { data } = await this.$axios.post(`${authApi}/auth/${code}`, {
-          inviteCode: this.inviteCode,
-        });
+        const { data } = await this.$http.post(
+          `/auth/${code}`,
+          {
+            inviteCode: this.inviteCode,
+          },
+          {
+            params: {
+              _auth: 1,
+            },
+          }
+        );
         if (data.code === 430) {
           this.gitOverlay = true;
         }

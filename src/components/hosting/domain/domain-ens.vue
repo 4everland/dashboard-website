@@ -5,7 +5,7 @@
         v-model="selected"
         :loading="loading"
         :show-select="list.length > 0"
-        item-key="domainId"
+        item-key="projectId"
         :headers="headers"
         :items="list"
         no-data-text=""
@@ -14,15 +14,28 @@
         :checkbox-color="$color1"
         @click:row="onRow"
       >
-        <template v-slot:item.domain="{ item }">
+        <template v-slot:item.value="{ item }">
           <v-btn
             text
             x-small
             class="e-btn-text"
-            :color="item.valid ? 'success' : 'error'"
+            :color="item.state ? 'success' : 'error'"
             :to="getPath(item)"
           >
-            <b>{{ item.domain }}</b>
+            <b>{{ item.value }}</b>
+          </v-btn>
+        </template>
+        <template v-slot:item.content="{ item }">
+          {{ item.content.cutStr(6, 4) }}
+          <v-btn icon>
+            <v-icon
+              small
+              color="#999"
+              @click.stop
+              v-clipboard="item.content"
+              @success="$toast('Copied to clipboard !')"
+              >mdi-content-copy</v-icon
+            >
           </v-btn>
         </template>
       </v-data-table>
@@ -51,7 +64,7 @@ export default {
   data() {
     return {
       headers: [
-        { text: "Domain", value: "value" },
+        { text: "ENS", value: "value" },
         {
           text: "Project Name",
           value: "projectName",
@@ -68,7 +81,6 @@ export default {
       total: 0,
       selected: [],
       loading: false,
-      showPop: false,
       curStep: 0,
       chooseProj: {},
       projects: null,
@@ -79,6 +91,9 @@ export default {
     };
   },
   computed: {
+    noticeMsg() {
+      return this.$store.state.noticeMsg;
+    },
     projList() {
       return this.projects.filter((it) => {
         if (!this.keyword.trim()) return true;
@@ -87,14 +102,17 @@ export default {
     },
   },
   watch: {
-    showPop(val) {
-      if (val) {
-        this.curStep = 0;
-        if (!this.projects) this.getProjects();
-      }
-    },
     selected(val) {
       console.log(val);
+      this.$setMsg({
+        name: "domains-selected",
+        data: { type: "ens", val },
+      });
+    },
+    noticeMsg({ name, data }) {
+      if (name == "domains-delete" && data.type == "ens") {
+        this.getList();
+      }
     },
   },
   mounted() {
@@ -109,72 +127,6 @@ export default {
     onRow(it) {
       const url = this.getPath(it);
       this.$router.push(url);
-    },
-    async onDelete() {
-      try {
-        let html = `The following domains will be permanently deleted along with associated <b>aliases</b> and <b>certs</b>. If the domain is used as Staging Domain it will be <b>cleared</b>. Are you sure you want to continue?`;
-        html += '<div class="pd-10"></div>';
-        const now = new Date();
-        for (const it of this.selected) {
-          const time = new Date(it.createAt * 1e3).toNiceTime(now);
-          html += `<div class="mt-2 fz-14">${it.domain} <span class="fl-r gray">added ${time}</span></div>`;
-        }
-        await this.$confirm(html, "Delete Domains");
-        const ids = this.selected.map((it) => it.domainId).join(",");
-        this.deleting = true;
-        await this.$http2.delete("/domain/" + ids);
-        await this.getList();
-        this.$toast(this.selected.length + " domain(s) deleted successfully");
-        this.selected = [];
-      } catch (error) {
-        //
-      }
-      this.deleting = false;
-    },
-    async getProjects() {
-      try {
-        const { data } = await this.$http2.get("/project/v3/list", {
-          params: {
-            size: 100,
-          },
-        });
-        this.projects = data.list;
-      } catch (error) {
-        this.$confirm(error.message, "Error", {
-          confirmText: "Retry",
-        }).then(() => {
-          this.getProjects();
-        });
-      }
-    },
-    onSelect(it) {
-      this.chooseProj = it;
-      this.curStep = 1;
-    },
-    async onAdd() {
-      try {
-        if (!this.$regMap.domain.test(this.domain)) {
-          return this.$alert(
-            `The specified value “${this.domain}” is not a fully qualified domain name.`
-          );
-        }
-        this.adding = true;
-        const projectId = this.chooseProj.id;
-        await this.$http2.post("/domain", {
-          domain: this.domain,
-          projectId,
-        });
-        this.domain = "";
-        this.$toast("Added successfully");
-        this.showPop = false;
-        this.$router.push(
-          `/project/${this.chooseProj.name}/${projectId}/settings?tab=1`
-        );
-        // this.getList();
-      } catch (error) {
-        console.log(error);
-      }
-      this.adding = false;
     },
     onPage() {
       this.getList();
@@ -201,6 +153,9 @@ export default {
         console.log(error);
       }
       this.loading = false;
+    },
+    copyIpns(ipns) {
+      console.log(ipns);
     },
   },
 };
