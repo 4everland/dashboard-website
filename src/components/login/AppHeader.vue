@@ -1,6 +1,13 @@
 <template>
   <div>
-    <v-app-bar fixed app color="#FAFAFA" height="100">
+    <v-app-bar
+      fixed
+      app
+      elevate-on-scroll
+      :elevation="4"
+      color="#fff"
+      height="100"
+    >
       <v-container class="d-flex align-center">
         <v-btn
           text
@@ -27,6 +34,7 @@
               :href="item.href"
               :target="item.target"
               :ripple="false"
+              color="#495667"
               v-bind="attrs"
               v-on="on"
             >
@@ -122,8 +130,8 @@ export default {
       showDrawer: false,
       links: [
         {
-          text: "Blog",
-          href: "https://4everland.org/blog",
+          text: "Blogs",
+          href: "https://medium.com/4everland",
           target: "_blank",
         },
         {
@@ -133,7 +141,7 @@ export default {
         },
         {
           text: "Community",
-          href: "https://discord.com/channels/852482727164117022/902425111947268106",
+          href: "https://discord.com/invite/4everland",
           target: "_blank",
         },
       ],
