@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="27px" height="25px" viewBox="0 0 27 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>编组 6</title>
+    <g id="Hosting-Create" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Deploy" transform="translate(-1339.000000, -443.000000)">
+            <g id="编组-3" transform="translate(290.000000, 293.000000)">
+                <g id="编组-5" transform="translate(28.000000, 139.000000)">
+                    <g id="编组-6" transform="translate(1022.000000, 11.000000)">
+                        <rect id="矩形" stroke="#D0DAE9" x="0" y="1" width="23" height="23" rx="6"></rect>
+                        <g id="对勾" transform="translate(3.000000, 0.000000)" fill="#00BD9A" fill-rule="nonzero">
+                            <path d="M22.4135,0 C15.4215,4.3221321 10.35,9.77983778 8.0615,12.5144844 L2.4725,8.09965238 L0,10.1042874 L9.6485,20 C11.3045,15.7126304 16.5715,7.33487833 23,1.37891078 L22.4135,0" id="路径"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

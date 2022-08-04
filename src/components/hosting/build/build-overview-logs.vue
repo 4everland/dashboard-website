@@ -6,8 +6,8 @@
       :value="getOpen(0)"
       :icon="getIcon(0)"
     >
-      <template #time v-if="isFail">
-        <div class="fz-14 gray" v-if="info">
+      <template #time v-if="info && info.endAt">
+        <div class="fz-14 gray">
           <e-time :endAt="info.endAt">{{ info.createAt }}</e-time>
         </div>
       </template>
