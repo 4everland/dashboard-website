@@ -53,8 +53,16 @@ export default {
       headers: [
         { text: "Domain", value: "domain" },
         {
-          text: "Nameservers",
-          value: "nameServers",
+          text: "Project Name",
+          value: "projectName",
+        },
+        {
+          text: "Type",
+          value: "projectName",
+        },
+        {
+          text: "Value",
+          value: "projectName",
         },
         { text: "CreateAt", value: "createTime" },
       ],
