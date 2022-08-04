@@ -751,10 +751,11 @@ export default {
 }
 .drawer-container {
   padding: 24px 0 24px 24px;
-  bottom: 0;
+  // bottom: 0;
+  top: 60px !important;
   box-sizing: border-box;
   border-radius: 20px 0 0 20px;
-  height: 100vh !important;
+  height: calc(100vh - 60px) !important;
   overflow: auto;
   .tips {
     color: #6a778b;

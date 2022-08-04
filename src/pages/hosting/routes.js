@@ -91,6 +91,7 @@ export default [
     component: StatisDetail,
     meta: {
       title: "{projName} - Statistic",
+      isTab: 1,
       links: [
         {
           text: "Statistics",
