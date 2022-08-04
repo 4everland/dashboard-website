@@ -25,6 +25,22 @@
             <b>{{ item.domain }}</b>
           </v-btn>
         </template>
+        <template v-slot:item.type="{ item }">
+          {{ isA(item.domain) ? "A" : "CNAME" }}
+        </template>
+        <template v-slot:item.value="{ item }">
+          {{ isA(item.domain) ? item.ip : item.cname }}
+          <v-btn icon>
+            <v-icon
+              small
+              color="#999"
+              @click.stop
+              v-clipboard="isA(item.domain) ? item.ip : item.cname"
+              @success="$toast('Copied to clipboard !')"
+              >mdi-content-copy</v-icon
+            >
+          </v-btn>
+        </template>
       </v-data-table>
       <div class="mt-8" v-if="!list.length">
         <e-empty :loading="loading">
@@ -53,8 +69,16 @@ export default {
       headers: [
         { text: "Domain", value: "domain" },
         {
-          text: "Nameservers",
-          value: "nameServers",
+          text: "Project Name",
+          value: "projectName",
+        },
+        {
+          text: "Type",
+          value: "type",
+        },
+        {
+          text: "Value",
+          value: "value",
         },
         { text: "CreateAt", value: "createTime" },
       ],
@@ -135,6 +159,13 @@ export default {
         console.log(error);
       }
       this.loading = false;
+    },
+    isA(domain) {
+      const arr = domain.split(".");
+      arr.pop();
+      arr.pop();
+      let isA = !arr.length;
+      return isA;
     },
   },
 };
