@@ -110,7 +110,7 @@ export default {
   },
   data() {
     return {
-      showPop: true,
+      showPop: false,
       title: "Feedback",
       typeList: ["BUG", "FEEDBACK"],
       form: {

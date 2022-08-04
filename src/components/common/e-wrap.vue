@@ -1,6 +1,6 @@
 <template>
   <div :class="wrapCls || 'wrap-1'">
-    <div :class="conCls || 'con-1'">
+    <div :class="conCls || ''">
       <slot></slot>
     </div>
   </div>

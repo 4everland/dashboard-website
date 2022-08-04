@@ -1,17 +1,41 @@
 <template>
   <div>
     <div class="d-flex al-c mb-2">
-      <div class="d-flex ml-auto shrink-0">
-        <nav-item icon="ic-sync" unit="MB">{{ usageInfo.arSyncing }}</nav-item>
-        <nav-item icon="ic-synced" unit="MB" class="ml-7">{{
-          usageInfo.arSynced
-        }}</nav-item>
-        <nav-item unit="Objects" class="ml-7">{{ total }}</nav-item>
-      </div>
+      <e-right-opt-wrap style="width: 100%">
+        <v-row class="d-flex">
+          <v-col md="4" style="max-width: 230px">
+            <v-select
+              dense
+              solo
+              :items="items"
+              v-model="state"
+              @change="getList"
+            />
+          </v-col>
+          <v-col md="8">
+            <v-text-field
+              prepend-inner-icon="mdi-magnify"
+              solo
+              dense
+              placeholder="Search"
+              v-model="searchKey"
+            />
+          </v-col>
+        </v-row>
+        <div class="d-flex ml-auto shrink-0 justify-end">
+          <nav-item icon="ic-sync" unit="MB">{{
+            usageInfo.arSyncing
+          }}</nav-item>
+          <nav-item icon="ic-synced" unit="MB" class="ml-7">{{
+            usageInfo.arSynced
+          }}</nav-item>
+          <nav-item unit="Objects" class="ml-7">{{ total }}</nav-item>
+        </div>
+      </e-right-opt-wrap>
     </div>
 
     <!-- :show-select="list.length > 0" -->
-    <div class="main-wrap">
+    <div class="main-wrap mt-14">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -107,6 +131,15 @@ export default {
       loadingMore: false,
       cursor: 0,
       usageInfo: {},
+      state: "",
+      searchKey: "",
+      items: [
+        { text: "All", value: "" },
+        { text: "Syncing", value: "syncing" },
+        { text: "Synced", value: "synced" },
+        { text: "Time Out", value: "timeout" },
+        { text: "Failure", value: "failure" },
+      ],
     };
   },
   computed: {
@@ -131,7 +164,6 @@ export default {
     },
   },
   created() {
-    console.log(1111);
     this.getStorage();
   },
   mounted() {
@@ -156,6 +188,7 @@ export default {
         const { data } = await this.$http.get("/arweave/objects", {
           params: {
             cursor: this.cursor,
+            state: this.state,
           },
         });
         this.next = Math.max(1, data.page.next);
