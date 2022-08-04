@@ -9,7 +9,7 @@
 
   <div v-else>
     <!-- Operation tab -->
-    <e-right-opt-wrap>
+    <e-right-opt-wrap :top="-55">
       <div class="d-flex nowrap ov-a btn-wrap">
         <div v-show="inFile">
           <v-btn
@@ -88,16 +88,15 @@
           </v-btn>
         </div>
       </div>
+      <div class="d-flex mt-2">
+        <nav-item unit="Objects" class="ml-auto" v-if="inBucket">{{
+          list.length
+        }}</nav-item>
+      </div>
     </e-right-opt-wrap>
 
-    <div class="d-flex mt-6">
-      <nav-item unit="Objects" class="ml-auto" v-if="inBucket">{{
-        list.length
-      }}</nav-item>
-    </div>
-
     <!-- padding layout -->
-    <div class="pa-2" v-if="!inFolder"></div>
+    <div class="pa-4" v-if="!inFolder"></div>
 
     <!-- File Info -->
     <div v-if="inFile" class="mt-4">

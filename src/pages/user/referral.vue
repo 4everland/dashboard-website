@@ -260,32 +260,6 @@ export default {
     shareUrl() {
       return location.origin + "/#/?invite=" + this.code;
     },
-    statisList() {
-      const {
-        bindDomain,
-        deployToday,
-        deployTotal,
-        invitesToday,
-        invitesTotal,
-      } = this.statisData;
-      return [
-        {
-          label: "Total Referrals",
-          value: invitesTotal,
-          badge: invitesToday,
-        },
-        {
-          label: "Total Deployments",
-          value: deployTotal,
-          badge: deployToday,
-        },
-        {
-          label: "Added Domains",
-          value: bindDomain,
-          // badge: 1,
-        },
-      ];
-    },
     pageLen() {
       return Math.ceil(this.total / 10);
     },
@@ -293,7 +267,6 @@ export default {
   data() {
     return {
       frameSrc: "",
-      statisData: JSON.parse(localStorage.referrals_data || "{}"),
       code: null,
       list: [],
       page: 1,
@@ -410,27 +383,18 @@ export default {
     async getCode() {
       this.code = this.userInfo.inviteCode;
       if (this.code) return;
-      const { data } = await this.$http2.get("/invite/code");
+      const { data } = await this.$http2.get("$auth/invitation/code/");
       this.code = data;
-    },
-    async getData() {
-      const { data } = await this.$http2.get("/invite/day/analytics");
-      this.statisData = data;
-      localStorage.referrals_data = JSON.stringify(data);
     },
 
     async getOverview() {
       try {
         const dateStamp = new Date(new Date().toLocaleDateString()).getTime();
-
-        console.log();
         const { data } = await this.$http.get("$auth/invitation/overview", {
           params: { startAt: dateStamp },
         });
         this.overviewData = data;
-      } catch (error) {
-        console.log(error, "overview");
-      }
+      } catch (error) {}
     },
 
     async getList() {
@@ -443,7 +407,6 @@ export default {
         this.total = data.total;
       } catch (error) {
         //
-        console.log(error);
       }
       this.loading = false;
     },
@@ -459,22 +422,20 @@ export default {
       switch (platForm) {
         case "Twitter":
           window.open(
-            `https://twitter.com/intent/tweet?text=shareText&url=${encodeURIComponent(
+            `https://twitter.com/intent/tweet?text=Come join @4everland_org and explore infinite possibilities with products designed for sophisticated and dynamic&url=${encodeURIComponent(
               this.shareUrl
-            )}`
+            )}  &hashtags=Tech,IPFS,decentralized,Storage`
           );
           break;
         case "Discord":
           this.openFrame("discord://", "Discord");
           break;
         case "Telegram":
-          this.openFrame("tr://", "Telegram");
+          this.openFrame("tg://", "Telegram");
           break;
         case "FaceBook":
           window.open(
-            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-              this.shareUrl
-            )}`
+            `https://www.facebook.com/sharer/sharer.php?u=${location.origin}/index.html/#/?invite=${this.code}`
           );
           break;
         default:
