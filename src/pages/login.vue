@@ -88,7 +88,7 @@ import {
   SignPhantom,
   ConnectFlow,
   SignFlow,
-} from "./login.js";
+} from "@/utils/login";
 const authApi = process.env.VUE_APP_AUTH_URL;
 const BUCKET_HOST = process.env.VUE_APP_BUCKET_HOST;
 export default {
@@ -121,6 +121,9 @@ export default {
     };
   },
   created() {
+    if (localStorage.token) {
+      this.$router.replace("/home");
+    }
     const code = this.$route.query.code;
     const inviteCode = this.$route.query.inviteCode;
     if (inviteCode) {
@@ -167,7 +170,9 @@ export default {
         if (data.code === 200 && data.data.stoken) {
           // location.href = `${BUCKET_HOST}/login?stoken=${data.data.stoken}`;
           const stoken = data.data.stoken;
-          console.log(stoken);
+          if (stoken) {
+            this.ssoLogin(stoken);
+          }
         }
       } catch (error) {
         console.log(error);
