@@ -11,7 +11,7 @@
       :dates="dates"
     ></statis-chart>
 
-    <div class="mt-10">
+    <div class="mt-15">
       <h4 class="mb-5">Requests by source</h4>
       <v-row>
         <v-col cols="12" :md="it.md || 6" v-for="(it, i) in reqList" :key="i">

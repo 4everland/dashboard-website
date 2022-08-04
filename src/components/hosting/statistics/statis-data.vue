@@ -11,7 +11,7 @@
         type="DATA_TRANSFER"
       ></statis-chart>
 
-      <div class="mt-10">
+      <div class="mt-15">
         <v-row>
           <v-col cols="12" :md="it.md || 6" v-for="(it, i) in reqList" :key="i">
             <statis-chart2
