@@ -125,6 +125,7 @@ export default {
       adding: false,
       info: null,
       verify: false,
+      ensIpns: "",
       owner: "",
     };
   },
@@ -163,6 +164,7 @@ export default {
         const { id } = this.$route.params;
         let body = {
           ens: this.domain,
+          content: this.ensIpns,
         };
         const { data } = await this.$http2.put("/project/ipns/" + id, body);
         this.info = data;
