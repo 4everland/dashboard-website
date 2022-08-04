@@ -231,6 +231,7 @@
           :selected="selected"
           :fileInfoDrawer.sync="fileInfoDrawer"
           :bucketInfo="bucketInfo"
+          @onSyncAR="onSyncAR"
         ></bucket-fileInfo>
       </div>
     </div>

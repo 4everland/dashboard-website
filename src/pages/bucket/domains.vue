@@ -7,25 +7,29 @@
     ></v-skeleton-loader>
   </div>
   <div v-else>
-    <div class="btn-wrap">
-      <v-btn color="primary" @click="showPop = true">
-        <!-- <v-icon size="16">mdi-plus-circle-outline</v-icon> -->
-        <img src="img/svg/add1.svg" width="12" />
-        <span class="ml-2">Add</span>
-      </v-btn>
-      <v-btn
-        @click="onDelete"
-        :loading="deleting"
-        outlined
-        class="ml-5"
-        min-width="36"
-        v-show="selected.length"
-      >
-        <img src="img/svg/delete.svg" width="12" />
-        <span class="ml-2">Delete</span>
-      </v-btn>
-    </div>
-    <div class="mt-4 main-wrap">
+    <e-right-opt-wrap :top="-70">
+      <div class="btn-wrap d-flex justify-end">
+        <v-btn color="primary" @click="showPop = true" width="120">
+          <!-- <v-icon size="16">mdi-plus-circle-outline</v-icon> -->
+          <img src="img/svg/add1.svg" width="12" />
+          <span class="ml-2">Add</span>
+        </v-btn>
+        <v-btn
+          @click="onDelete"
+          :loading="deleting"
+          outlined
+          class="ml-5"
+          min-width="36"
+          v-show="selected.length"
+          width="120"
+        >
+          <img src="img/svg/delete.svg" width="12" />
+          <span class="ml-2">Delete</span>
+        </v-btn>
+      </div>
+    </e-right-opt-wrap>
+
+    <div class="main-wrap">
       <v-data-table
         class="hide-bdb"
         :headers="headers"

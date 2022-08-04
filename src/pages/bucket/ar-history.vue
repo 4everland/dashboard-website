@@ -5,6 +5,7 @@
         <v-row class="d-flex">
           <v-col md="4" style="max-width: 230px">
             <v-select
+              class="hide-msg bd-1"
               dense
               solo
               :items="items"
@@ -14,15 +15,17 @@
           </v-col>
           <v-col md="8">
             <v-text-field
+              class="hide-msg bd-1"
               prepend-inner-icon="mdi-magnify"
               solo
               dense
               placeholder="Search"
               v-model="searchKey"
+              @keydown.enter="getList"
             />
           </v-col>
         </v-row>
-        <div class="d-flex ml-auto shrink-0 justify-end">
+        <div class="d-flex ml-auto shrink-0 justify-end mt-4">
           <nav-item icon="ic-sync" unit="MB">{{
             usageInfo.arSyncing
           }}</nav-item>
@@ -189,6 +192,7 @@ export default {
           params: {
             cursor: this.cursor,
             state: this.state,
+            key: this.searchKey,
           },
         });
         this.next = Math.max(1, data.page.next);

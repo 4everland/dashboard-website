@@ -18,16 +18,10 @@
       </div>
       <!-- {{ pathInfo }} -->
       <div class="upload-opreation py-4">
-        <v-btn
-          color="#339CFE"
-          outlined
-          @click="handleDeleteAll"
-          :disabled="!partList.length"
-        >
+        <v-btn outlined @click="handleDeleteAll" :disabled="!partList.length">
           <span class="ml-2">Delete All</span>
         </v-btn>
         <v-btn
-          color="#339CFE"
           outlined
           class="ml-7"
           @click="handleDelete"
@@ -228,13 +222,12 @@ export default {
 .drawer-container {
   width: 50vw !important;
   padding: 24px 0 24px 24px;
-  bottom: 0;
+  top: 60px !important;
   box-sizing: border-box;
   border-radius: 20px 0 0 20px;
-  height: 100vh !important;
+  height: calc(100vh - 60px) !important;
   overflow: auto;
   .key-name {
-    color: #339cfe;
     width: 400px;
     word-break: break-all;
     white-space: pre-wrap;

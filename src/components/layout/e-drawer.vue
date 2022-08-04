@@ -36,12 +36,16 @@
   .v-list-item--active {
     color: #775da6;
     background: none;
+
     &.sub::before {
       opacity: 0;
     }
     &.v-list-group__header::before {
       opacity: 0.12 !important;
     }
+  }
+  .active-item {
+    background: #eeebf4;
   }
 }
 </style>
@@ -61,7 +65,7 @@
     </div>
 
     <div class="pa-5"></div>
-    <v-list dense>
+    <v-list flat dense>
       <template v-for="(it, i) in list">
         <v-list-group
           class="group-item"
@@ -84,6 +88,7 @@
           <v-list-item
             :ref="i + '-' + j"
             class="sub"
+            active-class="active-item"
             :class="{
               'v-list-item--active': sub.matPath && sub.matPath.test(path),
             }"
