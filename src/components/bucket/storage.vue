@@ -349,7 +349,7 @@
         </div>
       </div>
       <operation-bar
-        :selected="selected.length"
+        :selected="selected"
         :inBucket="true"
         @handleClearSelected="selected = []"
         @handleDeleteSelected="onDelete()"
