@@ -23,6 +23,20 @@
             :to="getPath(item)"
           >
             <b>{{ item.value }}</b>
+            <v-tooltip bottom v-if="!item.state">
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  class="ml-2"
+                  small
+                  color="#6C7789"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  mdi-alert-circle
+                </v-icon>
+              </template>
+              <span>Invalid Configuration</span>
+            </v-tooltip>
           </v-btn>
         </template>
         <template v-slot:item.content="{ item }">
