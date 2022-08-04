@@ -304,9 +304,6 @@ export default {
     };
   },
   watch: {
-    curIdx() {
-      console.log(this.curIdx);
-    },
     buildInfo({ data }) {
       if (data.state != this.lastState) {
         console.log(data.taskId, data.state);
@@ -373,6 +370,7 @@ export default {
       this.$loading.close();
     },
     async onOpen(it) {
+      console.log(it);
       if (it.loading || it.statisList) return;
       try {
         it.loading = true;
@@ -459,6 +457,7 @@ export default {
         if (list.length) {
           setTimeout(() => {
             this.curIdx = [0];
+            this.onOpen(list[0]);
           }, 10);
         }
         if (this.page > 1 && !list.length) {
