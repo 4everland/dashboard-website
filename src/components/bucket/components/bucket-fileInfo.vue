@@ -15,7 +15,7 @@
         <ul class="ls-none" v-show="singleFile && !fileLoading">
           <p class="fz-16 fw-b file-name">{{ selected[0].name }}</p>
           <template v-for="(it, i) in fileInfoList">
-            <li class="mt-2 mb-2 fz-12 d-flex align-center" :key="i">
+            <li class="mt-2 mb-2 fz-12 d-flex align-start" :key="i">
               <span class="d-ib pa-1" style="min-width: 85px"
                 >{{ it.label }}:</span
               >
@@ -78,7 +78,10 @@
                       fileInfo.arFailReason
                     }}</span>
                     <template v-if="!isAr">
-                      <v-btn small text @click="onSyncAR(fileName, 'put')"
+                      <v-btn
+                        small
+                        text
+                        @click="$emit('onSyncAR', selected[0].name, 'put')"
                         >Cancel</v-btn
                       >
                       <span>or</span>
@@ -87,7 +90,14 @@
                       small
                       text
                       color="primary"
-                      @click="onSyncAR(fileName, 'post', fileInfo.hash)"
+                      @click="
+                        $emit(
+                          'onSyncAR',
+                          selected[0].name,
+                          'post',
+                          fileInfo.hash
+                        )
+                      "
                       >Retry</v-btn
                     >
                   </div>
