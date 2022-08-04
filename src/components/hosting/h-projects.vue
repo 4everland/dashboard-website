@@ -370,6 +370,7 @@ export default {
       this.$loading.close();
     },
     async onOpen(it) {
+      console.log(it);
       if (it.loading || it.statisList) return;
       try {
         it.loading = true;
@@ -452,6 +453,12 @@ export default {
         this.total = total;
         if (!total) {
           this.$router.replace("/hosting/new");
+        }
+        if (list.length) {
+          setTimeout(() => {
+            this.curIdx = [0];
+            this.onOpen(list[0]);
+          }, 10);
         }
         if (this.page > 1 && !list.length) {
           this.page = 1;

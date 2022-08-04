@@ -1,5 +1,5 @@
 import Home from "./home";
-import Login from "./login";
+import Login from "./login.vue";
 
 import Overview from "./overview";
 

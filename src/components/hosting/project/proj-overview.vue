@@ -50,12 +50,22 @@
 
           <div class="mt-9 d-flex">
             <e-kv :label="info.platform" style="min-width: 120px">
-              <e-link
-                class="fz-14"
-                :href="$utils.getCidLink(info.hash, info.platform)"
-              >
-                {{ info.hash ? info.hash.cutStr(4, 4) : "Pending" }}
-              </e-link>
+              <div class="al-c">
+                <e-link
+                  class="fz-14"
+                  :href="$utils.getCidLink(info.hash, info.platform)"
+                >
+                  {{ info.hash ? info.hash.cutStr(4, 4) : "Pending" }}
+                </e-link>
+                <img
+                  v-if="info.hash"
+                  src="img/svg/copy.svg"
+                  width="12"
+                  class="ml-3 hover-1"
+                  @success="$toast('Copied to clipboard !')"
+                  v-clipboard="info.hash"
+                />
+              </div>
             </e-kv>
           </div>
 

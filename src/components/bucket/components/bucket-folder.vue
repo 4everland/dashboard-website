@@ -44,7 +44,7 @@
           :pathInfo="pathInfo"
         ></bucket-parts-list>
       </div>
-      <!-- file-header -->
+      <!-- File-header -->
       <div class="d-flex justify-end pt-4">
         <div
           class="file-head d-flex align-center pl-5"
@@ -62,7 +62,11 @@
             @click="fileInfoDrawer = !fileInfoDrawer"
             class="fz-12 d-flex align-center pack-up"
           >
-            <img src="img/svg/bucketFileInfo/right-arrow.svg" width="12" />
+            <img
+              :style="fileInfoDrawer ? '' : 'transform: rotate(180deg)'"
+              src="img/svg/bucketFileInfo/right-arrow.svg"
+              width="12"
+            />
             <span class="ml-2">{{ fileInfoDrawer ? "Pack up" : "Open" }}</span>
           </div>
         </div>
@@ -81,7 +85,7 @@
             item-key="name"
             no-data-text=""
             loading-text=""
-            :checkbox-color="$color1"
+            checkbox-color="#34A9FF"
             hide-default-footer
             disable-pagination
             @click:row="onRow"
@@ -149,7 +153,6 @@
                   v-clipboard="item.hash"
                   @success="$toast('Copied to clipboard !')"
                 >
-                  <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
                   <img src="img/svg/copy.svg" width="12" />
                 </v-btn>
               </div>
@@ -293,12 +296,6 @@ export default {
       return null;
     },
   },
-  mounted() {
-    window.addEventListener("resize", () => {
-      console.log(this.$vuetify.application.framework.breakpoint.mobile);
-    });
-  },
-
   methods: {
     onCopied() {
       this.$toast("Copied to clipboard !");
@@ -312,6 +309,7 @@ export default {
       this.getList();
       this.checkNew();
     },
+    onStop() {},
     addDeleteFolderTask(limit) {
       this.deleteFolderLimit = limit;
       let arr = this.$route.path.split("/");

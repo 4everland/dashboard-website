@@ -2,13 +2,7 @@
   <Transition name="file" appear>
     <div class="nav" v-show="fileInfoDrawer">
       <div class="single-file" v-if="selected.length == 1">
-        <v-img
-          class="my-4 bdrs-4"
-          height="127"
-          max-height="127"
-          max-width="100%"
-          :src="thumbnail"
-        >
+        <v-img class="my-4 bdrs-4" height="127" :src="thumbnail">
           <template #placeholder>
             <img src="/img/svg/bucketFileInfo/default-file-img.svg" alt="" />
           </template>
@@ -33,7 +27,8 @@
                   >{{ it.value.cutStr(5, 5) }}</a
                 >
                 <v-btn icon small v-clipboard="it.value" @success="onCopied">
-                  <v-icon size="15" class="ml-auto">mdi-content-copy</v-icon>
+                  <!-- <v-icon size="15" class="ml-auto">mdi-content-copy</v-icon> -->
+                  <img src="img/svg/copy.svg" width="12" />
                 </v-btn>
               </div>
               <div
@@ -55,7 +50,7 @@
                     v-clipboard="fileInfo.arHash"
                     @success="onCopied"
                   >
-                    <v-icon size="15" class="ml-auto">mdi-content-copy</v-icon>
+                    <img src="img/svg/copy.svg" width="12" />
                   </v-btn>
                 </template>
                 <template v-else>
@@ -243,7 +238,6 @@ export default {
         .map((origin) => {
           return origin + "/" + Key;
         });
-      // console.log(list);
       if (!list.length) list.push(this.fileInfo.url);
       return list;
     },
@@ -265,7 +259,6 @@ export default {
         (err, data) => {
           this.fileLoading = false;
           if (err) console.log(err);
-          console.log(data);
           const meta = data.Metadata;
           let arStatus = meta["arweave-status"]
             ? meta["arweave-status"]
@@ -298,7 +291,6 @@ export default {
       this.fileLoading = true;
       this.dirFileArr = [];
       let { Bucket, Prefix, Delimiter } = this.pathInfo;
-      console.log(Bucket, Prefix, Delimiter);
       // bucketName, prefix, continuationToken, delimiter, maxKeys, startAfter
       const stream = this.s3m.extensions.listObjectsV2WithMetadataQuery(
         Bucket,
@@ -310,9 +302,7 @@ export default {
       );
       stream.on("data", (data) => {
         this.fileLoading = false;
-        console.log(data.objects);
         this.dirFileArr = data.objects;
-        console.log(this.dirFileArr, "dirFile");
       });
     },
     handleEnterFolder() {
@@ -335,9 +325,6 @@ export default {
           .map((domain) => {
             return (this.$inDev ? "http:" : "https:") + "//" + domain.domain;
           });
-
-        console.log(this.domains);
-        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -353,11 +340,8 @@ export default {
             this.thumbnail = "/img/svg/bucketFileInfo/dir-file-img.svg";
             this.getObjects();
           }
-          console.log(selectedArr);
         } else if (selectedArr.length == 0) {
-          console.log(">1");
           this.fileInfo = null;
-          // this.file
           this.dirFileArr = [];
         } else {
           console.log(">1");
@@ -370,6 +354,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.v-btn {
+  padding: 0;
+}
 .file-enter-active,
 .file-leave-active {
   transition: all 0.5s ease;

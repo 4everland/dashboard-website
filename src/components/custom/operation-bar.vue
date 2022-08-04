@@ -10,6 +10,7 @@
           v-model="checked"
           @change="handleChangeCheck"
           class="check-box"
+          color="#34A9FF"
         ></v-checkbox>
         <v-btn
           outlined

@@ -42,7 +42,6 @@ const hostingUrl = process.env.VUE_APP_HOST_URL;
 export const http2 = Axios.create({
   baseURL: hostingUrl,
 });
-
 Vue.prototype.$getImgSrc = function (src) {
   if (!src) src = "img/bg/empty/project.png";
   else if (!/^http/.test(src)) src = hostingUrl + src;
@@ -99,12 +98,16 @@ const lock = new AsyncLock({ timeout: 5000 });
       if (params._auth && !/^http/.test(config.url)) {
         config.url = authApi + config.url;
         delete params._auth;
+      }
+      config.url = config.url.replace("$v3", v3Api).replace("$auth", authApi);
+
+      if (config.url.includes(authApi)) {
         token = "Bearer " + token;
       }
       if (token && config.url != RefreshPath) {
         config.headers.common["Authorization"] = token;
       }
-      config.url = config.url.replace("$v3", v3Api);
+
       return config;
     },
     (error) => {

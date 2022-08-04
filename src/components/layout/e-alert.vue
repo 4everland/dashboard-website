@@ -16,7 +16,7 @@
 
     <v-dialog
       v-model="showLoading"
-      max-width="500px"
+      max-width="280px"
       :persistent="alertInfo.persistent"
     >
       <v-card>
