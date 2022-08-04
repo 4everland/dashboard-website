@@ -39,15 +39,15 @@
       margin-left: 12px;
     }
     .share-link {
-      width: 300px;
+      flex: 1;
       padding: 9px 16px;
       color: #0b0817;
       line-height: 22px;
       border-radius: 2px;
       border: 1px solid #889ab3;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      // overflow: hidden;
+      // text-overflow: ellipsis;
+      // white-space: nowrap;
     }
     .share-btn {
       min-width: 155px;
@@ -101,7 +101,7 @@
       padding: 10px;
     }
     tr:nth-child(even) {
-      background: #e8f0fa;
+      background: #f9fbfc;
     }
   }
 }
@@ -109,53 +109,58 @@
 
 <template>
   <div class="page-refer">
-    <div class="referral-header al-c">
-      <div class="overview">
-        <h3 class="title pb-7">Overview</h3>
-        <ul class="d-flex overview-list">
-          <li class="overview-item">
-            <span>Total Referrals</span>
-            <span class="num">{{ overviewData.total }}</span>
-          </li>
-          <li class="overview-item">
-            <span>Today Referrals</span>
-            <span class="num">{{ overviewData.today }}</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Share Link -->
-      <div class="referral-link flex-1 ml-5">
-        <div
-          class="
-            referral-link-header
-            d-flex
-            align-center
-            justify-space-between
-            mb-11
-          "
-        >
-          <h3 class="title">Referrals Link</h3>
-          <ul class="al-c">
-            <li v-for="it in mLinks" :key="it.label" class="share-icon">
-              <img
-                :src="`img/svg/drawer/social/${it.label.toLocaleLowerCase()}.svg`"
-                width="30"
-                @click="sharePlatForm(it.label)"
-              />
+    <iframe :src="frameSrc" frameborder="0" class="d-n"></iframe>
+    <v-row class="referral-header al-c">
+      <v-col>
+        <div class="overview">
+          <h3 class="title pb-7">Overview</h3>
+          <ul class="d-flex overview-list">
+            <li class="overview-item">
+              <span>Total Referrals</span>
+              <span class="num">{{ overviewData.total }}</span>
+            </li>
+            <li class="overview-item">
+              <span>Today Referrals</span>
+              <span class="num">{{ overviewData.today }}</span>
             </li>
           </ul>
         </div>
-
-        <div class="share-content al-c">
-          <div class="share-link">
-            {{ shareUrl }}
+      </v-col>
+      <v-col>
+        <div class="referral-link flex-1">
+          <div
+            class="
+              referral-link-header
+              d-flex
+              align-center
+              justify-space-between
+              mb-11
+            "
+          >
+            <h3 class="title">Referrals Link</h3>
+            <ul class="al-c">
+              <li v-for="it in mLinks" :key="it.label" class="share-icon">
+                <img
+                  :src="`img/svg/drawer/social/${it.label.toLocaleLowerCase()}.svg`"
+                  width="30"
+                  @click="sharePlatForm(it.label)"
+                />
+              </li>
+            </ul>
           </div>
-          <div class="share-btn" @click="onInvite">invite Friend</div>
-        </div>
-      </div>
-    </div>
 
+          <div class="share-content al-c">
+            <div class="share-link line-1">
+              {{ shareUrl }}
+
+              <img src="/img/icon/copy.svg" alt="" width="14" />
+            </div>
+            <div class="share-btn" @click="onInvite">invite Friend</div>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+    <!-- referral table -->
     <div class="main-wrap mt-5">
       <div class="d-flex al-c">
         <span>Referrals details</span>
@@ -201,6 +206,7 @@
       </div>
     </div>
 
+    <!-- share Img -->
     <v-dialog v-model="popInvite" max-width="450" v-if="code">
       <e-dialog-close @click="popInvite = false" />
       <div class="pd-30 mt-2">
@@ -249,43 +255,18 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
       isTouch: (s) => s.isTouch,
+      isFocus: (s) => s.isFocus,
     }),
     shareUrl() {
       return location.origin + "/#/?invite=" + this.code;
     },
-    statisList() {
-      const {
-        bindDomain,
-        deployToday,
-        deployTotal,
-        invitesToday,
-        invitesTotal,
-      } = this.statisData;
-      return [
-        {
-          label: "Total Referrals",
-          value: invitesTotal,
-          badge: invitesToday,
-        },
-        {
-          label: "Total Deployments",
-          value: deployTotal,
-          badge: deployToday,
-        },
-        {
-          label: "Added Domains",
-          value: bindDomain,
-          // badge: 1,
-        },
-      ];
-    },
     pageLen() {
-      return Math.floor(this.total / 10);
+      return Math.ceil(this.total / 10);
     },
   },
   data() {
     return {
-      statisData: JSON.parse(localStorage.referrals_data || "{}"),
+      frameSrc: "",
       code: null,
       list: [],
       page: 1,
@@ -343,7 +324,8 @@ export default {
     },
   },
   methods: {
-    onPage() {
+    onPage(curPage) {
+      this.page = curPage;
       this.getList();
     },
     async onCopy() {
@@ -401,27 +383,18 @@ export default {
     async getCode() {
       this.code = this.userInfo.inviteCode;
       if (this.code) return;
-      const { data } = await this.$http2.get("/invite/code");
+      const { data } = await this.$http2.get("$auth/invitation/code/");
       this.code = data;
-    },
-    async getData() {
-      const { data } = await this.$http2.get("/invite/day/analytics");
-      this.statisData = data;
-      localStorage.referrals_data = JSON.stringify(data);
     },
 
     async getOverview() {
       try {
         const dateStamp = new Date(new Date().toLocaleDateString()).getTime();
-
-        console.log();
         const { data } = await this.$http.get("$auth/invitation/overview", {
           params: { startAt: dateStamp },
         });
         this.overviewData = data;
-      } catch (error) {
-        console.log(error, "overview");
-      }
+      } catch (error) {}
     },
 
     async getList() {
@@ -432,30 +405,37 @@ export default {
         console.log(data);
         this.list = data.list;
         this.total = data.total;
-        // this.list = [...data.page];
-        this.pageLen = Math.max(1, Math.ceil(data.total / params.size));
       } catch (error) {
         //
-        console.log(error);
       }
       this.loading = false;
+    },
+    openFrame(src, name) {
+      this.frameSrc = src;
+      setTimeout(() => {
+        this.frameSrc = "";
+        console.log(this.isFocus);
+        if (this.isFocus) this.$toast(name + "not installed");
+      }, 300);
     },
     sharePlatForm(platForm) {
       switch (platForm) {
         case "Twitter":
           window.open(
-            `https://twitter.com/intent/tweet?text=shareText&url=${this.shareUrl}`
+            `https://twitter.com/intent/tweet?text=Come join @4everland_org and explore infinite possibilities with products designed for sophisticated and dynamic&url=${encodeURIComponent(
+              this.shareUrl
+            )}  &hashtags=Tech,IPFS,decentralized,Storage`
           );
           break;
         case "Discord":
-          window.open("discord://");
+          this.openFrame("discord://", "Discord");
           break;
         case "Telegram":
-          window.open("tg://");
+          this.openFrame("tg://", "Telegram");
           break;
         case "FaceBook":
           window.open(
-            `https://www.facebook.com/sharer/sharer.php?u=${this.shareUrl}`
+            `https://www.facebook.com/sharer/sharer.php?u=${location.origin}/index.html/#/?invite=${this.code}`
           );
           break;
         default:

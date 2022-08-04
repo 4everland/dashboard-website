@@ -712,11 +712,9 @@ export default {
     },
     onRow(it) {
       const url = this.getPath(it);
+      if (it.isFile) return;
       this.$router.push({
         path: encodeURI(url),
-        query: {
-          ipfsHash: it.hash,
-        },
       });
     },
     async getSubObjects(folder) {

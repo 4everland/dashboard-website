@@ -312,6 +312,7 @@ export default {
       this.getList();
       this.checkNew();
     },
+    onStop() {},
     addDeleteFolderTask(limit) {
       this.deleteFolderLimit = limit;
       let arr = this.$route.path.split("/");
