@@ -16,8 +16,9 @@
           <div class="gray fz-14">
             {{ it.title }}
           </div>
-          <div class="color-1 mt-1 fw-b fz-20">
-            {{ it.num }}
+          <div class="color-1 mt-1">
+            <span class="fw-b fz-20">{{ it.num }}</span>
+            <span class="fz-13 ml-2">{{ it.unit }}</span>
           </div>
         </div>
       </v-col>

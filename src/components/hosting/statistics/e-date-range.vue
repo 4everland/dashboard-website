@@ -1,20 +1,24 @@
 <template>
-  <div class="d-flex al-c">
-    <v-icon class="ml-auto mr-2">mdi-calendar-month-outline</v-icon>
-    <v-select
-      style="max-width: 260px"
-      class="mt-3"
-      v-model="date"
-      :items="dateList"
-      item-text="text"
-      item-value="value"
-      single-line
-      dense
-      :menu-props="{
-        offsetY: true,
-      }"
-    >
-    </v-select>
+  <div>
+    <div class="al-c">
+      <!-- <v-icon class="ml-auto mr-2">mdi-calendar-month-outline</v-icon> -->
+      <div class="ml-auto">
+        <v-select
+          style="max-width: 280px"
+          outlined
+          v-model="date"
+          :items="dateList"
+          item-text="text"
+          item-value="value"
+          single-line
+          dense
+          :menu-props="{
+            offsetY: true,
+          }"
+        >
+        </v-select>
+      </div>
+    </div>
 
     <v-dialog v-model="showPop" max-width="500">
       <v-date-picker

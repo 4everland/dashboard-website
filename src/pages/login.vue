@@ -21,7 +21,7 @@
             <div class="wallet-box">
               <div
                 class="wallet-item"
-                v-for="item in walletItem"
+                v-for="(item, index) in walletItem"
                 :key="item.name"
                 v-ripple="{ class: `info--text` }"
                 @click="connect(item.name)"
@@ -29,7 +29,14 @@
                 <div class="wallet-item-name">
                   <span class="name">{{ item.name }}</span>
                 </div>
-                <img :src="item.icon" alt="" />
+                <div class="d-flex align-center">
+                  <span
+                    class="item-name"
+                    :class="{ 'item-name-pop': index == 0 }"
+                    >{{ item.btnText }}</span
+                  >
+                  <img :src="item.icon" alt="" />
+                </div>
 
                 <!-- <v-btn
                   :elevation="0"
@@ -88,7 +95,7 @@ import {
   SignPhantom,
   ConnectFlow,
   SignFlow,
-} from "./login.js";
+} from "@/utils/login";
 const authApi = process.env.VUE_APP_AUTH_URL;
 const BUCKET_HOST = process.env.VUE_APP_BUCKET_HOST;
 export default {
@@ -121,6 +128,9 @@ export default {
     };
   },
   created() {
+    if (localStorage.token) {
+      this.$router.replace("/home");
+    }
     const code = this.$route.query.code;
     const inviteCode = this.$route.query.inviteCode;
     if (inviteCode) {
@@ -133,6 +143,7 @@ export default {
   mounted() {},
   methods: {
     async onLogin() {
+      this.$loading();
       try {
         const params = {
           platform: "github",
@@ -149,8 +160,9 @@ export default {
       }
     },
     async getAuth(code) {
+      this.$loading();
       try {
-        const { data } = await this.$http.post(
+        const res = await this.$http.post(
           `/auth/${code}`,
           {
             inviteCode: this.inviteCode,
@@ -161,13 +173,15 @@ export default {
             },
           }
         );
-        if (data.code === 430) {
+        if (res.code === 430) {
           this.gitOverlay = true;
         }
-        if (data.code === 200 && data.data.stoken) {
+        if (res.code === 200 && res.data.stoken) {
           // location.href = `${BUCKET_HOST}/login?stoken=${data.data.stoken}`;
-          const stoken = data.data.stoken;
-          console.log(stoken);
+          const stoken = res.data.stoken;
+          if (stoken) {
+            this.ssoLogin(stoken);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -198,7 +212,6 @@ export default {
         return;
       }
       const stoken = await SignMetaMask(accounts, nonce, this.inviteCode);
-      console.log(stoken);
       if (stoken) {
         this.ssoLogin(stoken);
       }
@@ -213,7 +226,6 @@ export default {
         return;
       }
       const stoken = await SignPhantom(publicKey, nonce, this.inviteCode);
-      console.log(stoken);
       if (stoken) {
         this.ssoLogin(stoken);
       }
@@ -230,7 +242,6 @@ export default {
         return;
       }
       const stoken = await SignFlow(currentUser.addr, nonce, this.inviteCode);
-      console.log(stoken);
       if (stoken) {
         this.ssoLogin(stoken);
       }
@@ -244,6 +255,7 @@ export default {
       }
     },
     async ssoLogin(stoken) {
+      this.$loading();
       try {
         const { data } = await this.$http.post(`/st/${stoken}`, null, {
           params: {
@@ -253,6 +265,8 @@ export default {
         this.$onLoginData(data);
       } catch (error) {
         this.onErr(error);
+      } finally {
+        this.$loading.close();
       }
     },
   },
@@ -260,6 +274,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .home {
+  background-color: #fff;
+  height: 100%;
   .wallet {
     width: 100%;
     max-width: 430px;
@@ -291,6 +307,22 @@ export default {
           font-family: Arial-BoldMT, Arial;
           font-weight: normal;
           color: #495667;
+        }
+        .item-name {
+          width: 60px;
+          height: 22px;
+          line-height: 22px;
+          display: inline-block;
+          background-color: #dfdbe7;
+          color: #847f8e;
+          border-radius: 2px;
+          font-size: 12px;
+          text-align: center;
+          margin-right: 16px;
+        }
+        .item-name-pop {
+          background-color: #775da6;
+          color: #fff;
         }
         .start-btn {
           color: #3eadff;
