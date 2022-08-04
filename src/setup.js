@@ -120,6 +120,7 @@ Vue.prototype.$utils = {
   },
   getCidLink(cid, plat) {
     if (!cid) return "";
+    if (plat == "IPNS") return `https://${cid}.ipns.4everland.io/`;
     if (plat == "IC") return `https://${cid}.raw.ic0.app/`;
     return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
   },
