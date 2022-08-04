@@ -63,13 +63,21 @@
               style="min-width: 120px"
               v-if="info.platform"
             >
-              <e-link
-                v-if="info.hash"
-                class="fz-14"
-                :href="$utils.getCidLink(info.hash, info.platform)"
-              >
-                {{ "Verify on " + info.platform }}
-              </e-link>
+              <div class="al-c" v-if="info.hash">
+                <e-link
+                  class="fz-14"
+                  :href="$utils.getCidLink(info.hash, info.platform)"
+                >
+                  <span>{{ info.hash.cutStr(4, 4) }}</span>
+                </e-link>
+                <img
+                  src="img/svg/copy.svg"
+                  width="12"
+                  class="ml-3 hover-1"
+                  @success="$toast('Copied to clipboard !')"
+                  v-clipboard="info.hash"
+                />
+              </div>
               <span v-else class="fz-14">Pending</span>
             </e-kv2>
           </div>
