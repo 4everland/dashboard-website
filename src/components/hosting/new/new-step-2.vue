@@ -1,12 +1,12 @@
 <template>
   <div>
-    <v-dialog v-if="info" v-model="showPop" max-width="650">
-      <div class="pa-5">
+    <v-dialog v-if="info" v-model="showPop" max-width="720">
+      <div class="pa-6">
         <h3 class="fz-20">Congratulations!</h3>
         <div class="gray fz-14 mt-1">
           Your project has been successfully deployed.
         </div>
-        <div class="pa-5 d-flex al-c">
+        <div class="pa-3 pl-0 d-flex al-c">
           <!--  -->
           <v-img
             class="bdrs-5"
@@ -14,7 +14,7 @@
             :src="$getImgSrc(info.screenshotPath)"
             lazy-src="img/bg/empty/project.png"
             aspect-ratio="1"
-            max-width="220"
+            max-width="180"
           />
           <div class="ml-5 flex-1">
             <div class="fz-14 mt-5">
