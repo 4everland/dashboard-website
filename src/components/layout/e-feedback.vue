@@ -1,53 +1,97 @@
 <template>
   <v-dialog eager v-model="showPop" max-width="650">
-    <div class="pa-6">
-      <h3 class="mb-8">{{ title }}</h3>
+    <div class="px-15 py-8">
+      <h3 class="mb-8" style="font-size: 30px">{{ title }}</h3>
+      <!-- prepend-icon="mdi-email" -->
+      <div>
+        <p class="al-c">
+          <v-icon>mdi-email</v-icon>
+          <span class="ops-item ml-2">Email</span>
+        </p>
+        <v-text-field
+          class="mt-2 feed-input"
+          solo
+          dense
+          filled
+          persistent-placeholder
+          v-model.trim="form.email"
+          label="Email"
+          placeholder="Your email"
+        />
+      </div>
+      <div>
+        <p class="al-c">
+          <v-icon>mdi-label</v-icon>
+          <span class="ops-item ml-2">Type</span>
+        </p>
+        <v-select
+          label="Type"
+          class="mt-2 feed-input"
+          dense
+          filled
+          solo
+          persistent-placeholder
+          v-model="form.feedbackType"
+          :items="typeList"
+        />
+      </div>
 
-      <v-text-field
-        prepend-icon="mdi-email"
-        class="mt-2"
-        outlined
-        persistent-placeholder
-        v-model.trim="form.email"
-        label="Email"
-        placeholder="Your email"
-      />
-      <v-select
-        label="Type"
-        prepend-icon="mdi-label"
-        class="mt-2"
-        outlined
-        persistent-placeholder
-        v-model="form.feedbackType"
-        :items="typeList"
-      />
-      <v-text-field
-        v-if="form.feedbackType == 'BUG'"
-        prepend-icon="mdi-wallet"
-        class="mt-1 mb-4"
-        outlined
-        persistent-placeholder
-        v-model.trim="form.ethAddress"
-        label="Wallet Address"
-        placeholder="Your wallet address"
-        hint="Please enter your eth wallet address otherwise may not receive rewards"
-        persistent-hint
-      />
-      <v-textarea
-        prepend-icon="mdi-note-text-outline"
-        outlined
-        persistent-placeholder
-        v-model="form.description"
-        rows="3"
-        label="Description"
-        :placeholder="descHint"
-      />
+      <div v-if="form.feedbackType == 'BUG'">
+        <p class="al-c">
+          <v-icon>mdi-wallet</v-icon>
+          <span class="ops-item ml-2">Wallet Address</span>
+        </p>
+        <v-text-field
+          class="mt-1 mb-4 feed-input"
+          dense
+          filled
+          solo
+          persistent-placeholder
+          v-model.trim="form.ethAddress"
+          label="Wallet Address"
+          placeholder="Your wallet address"
+          hint="Please enter your eth wallet address otherwise may not receive rewards"
+          persistent-hint
+        />
+      </div>
+      <div>
+        <p class="al-c">
+          <v-icon>mdi-label</v-icon>
+          <span class="ops-item ml-2">Description</span>
+        </p>
+        <!-- <v-textarea
+          filled
+          solo
+          persistent-placeholder
+          v-model="form.description"
+          rows="3"
+          label="Description"
+        /> -->
+
+        <v-text-field
+          class="mt-2 feed-input"
+          solo
+          dense
+          filled
+          persistent-placeholder
+          v-model="form.description"
+          label="Description"
+          :placeholder="descHint"
+        />
+      </div>
       <e-upload-img v-model="files" />
 
       <div class="ta-c mt-5">
-        <v-btn outlined width="90" @click="showPop = false">Cancel</v-btn>
-        <v-btn class="ml-6" color="primary" :loading="loading" @click="onSubmit"
-          >Submit</v-btn
+        <v-btn
+          color="primary"
+          tile
+          width="120"
+          :loading="loading"
+          @click="onSubmit"
+          >Reback</v-btn
+        >
+        <v-btn class="ml-6" tile outlined width="120" @click="showPop = false"
+          >Cancel</v-btn
         >
       </div>
     </div>
@@ -66,7 +110,7 @@ export default {
   },
   data() {
     return {
-      showPop: false,
+      showPop: true,
       title: "Feedback",
       typeList: ["BUG", "FEEDBACK"],
       form: {
@@ -146,3 +190,15 @@ export default {
   },
 };
 </script>
+<style >
+.ops-item {
+  color: #6c7789;
+}
+.feed-input .v-input__slot {
+  background: #f7f7f7 !important;
+  border-radius: 2px;
+  box-shadow: none !important;
+}
+</style>
+<style lang="scss" scoped>
+</style>

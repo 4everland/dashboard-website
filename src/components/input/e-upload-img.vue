@@ -28,8 +28,11 @@
 </style>
 
 <template>
-  <div class="d-flex al-start">
-    <v-icon class="mr-2 mt-5">mdi-image</v-icon>
+  <div class="">
+    <p class="al-c">
+      <v-icon>mdi-image</v-icon>
+      <span class="ml-2" style="color: #6c7789">Screenshot</span>
+    </p>
     <div>
       <div class="d-flex flex-wrap e-upload-img">
         <div class="bd-1 item pd-10 pos-r" v-for="(it, i) in imgList" :key="i">
