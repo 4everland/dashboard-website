@@ -67,13 +67,48 @@
                 />
               </div>
             </e-kv>
+            <e-kv class="ml-auto" label="IPNS" min-width="90px">
+              <e-tooltip top slot="sub">
+                <v-icon slot="ref" color="#666" size="14" class="pa-1"
+                  >mdi-help-circle-outline</v-icon
+                >
+                <span
+                  >IPFS exclusive gateway is recommended for access since the
+                  IPNS broadcast mechanism may cause a 404 error.
+                </span>
+              </e-tooltip>
+
+              <div class="al-c" v-if="info.ipns">
+                <e-link
+                  class="fz-14"
+                  :href="$utils.getCidLink(info.ipns, 'IPNS')"
+                >
+                  {{ info.ipns.cutStr(4, 4) }}
+                </e-link>
+                <img
+                  src="img/svg/copy.svg"
+                  width="12"
+                  class="ml-3 hover-1"
+                  @success="$toast('Copied to clipboard !')"
+                  v-clipboard="info.ipns"
+                />
+              </div>
+              <v-btn
+                v-else
+                x-small
+                color="primary"
+                :loading="loadingIpns"
+                @click="getIpns"
+                >Get IPNS</v-btn
+              >
+            </e-kv>
           </div>
 
           <div class="mt-9 d-flex">
             <e-kv label="State">
               <h-status :val="info.state"></h-status>
             </e-kv>
-            <e-kv class="ml-auto" label="Created" style="min-width: 120px">
+            <e-kv class="ml-auto" label="Created" style="min-width: 195px">
               <e-time>{{ info.repo.updateAt }}</e-time>
             </e-kv>
           </div>
@@ -108,6 +143,25 @@ export default {
     buildPath() {
       const { name, id, taskId } = this.info;
       return `/hosting/build/${name}/${id}/${taskId}`;
+    },
+  },
+  data() {
+    return {
+      loadingIpns: false,
+    };
+  },
+  methods: {
+    async getIpns() {
+      try {
+        this.loadingIpns = true;
+        await this.$http2.put("/project/ipns/sns/" + this.info.id, {
+          cid: this.info.hash,
+        });
+        await this.$store.dispatch("getProjectInfo", this.info.id);
+      } catch (error) {
+        //
+      }
+      this.loadingIpns = false;
     },
   },
 };

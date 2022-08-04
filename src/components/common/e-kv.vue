@@ -13,8 +13,10 @@
         'min-width': minWidth,
         color: labelColor,
       }"
-      >{{ label }}</label
     >
+      <span>{{ label }}</span>
+      <slot name="sub"></slot>
+    </label>
     <div class="ml-3 flex-1">
       <slot></slot>
     </div>

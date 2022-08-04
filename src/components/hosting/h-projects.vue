@@ -388,11 +388,11 @@ export default {
                 },
                 {
                   title: "Unique Visitor",
-                  num: data.totalUV,
+                  num: data.uv, // data.totalUV,
                 },
                 {
                   title: "Page Views",
-                  num: data.totalPV,
+                  num: data.pv, // data.totalPV,
                 },
               ],
               [
