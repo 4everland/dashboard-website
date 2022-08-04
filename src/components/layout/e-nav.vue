@@ -1,14 +1,16 @@
 <template>
   <div class="ml-5 mt-5" v-if="!meta.hideNav">
     <div class="d-flex al-c">
-      <div class="d-flex al-c" @click="onMenu">
-        <v-btn icon v-if="asMobile">
+      <div class="d-flex al-c">
+        <v-btn icon v-if="asMobile" @click="onMenu">
           <v-icon>mdi-menu</v-icon>
         </v-btn>
-        <b class="mr-3" :class="asMobile ? 'fz-18' : 'fz-25'">{{ title }}</b>
+        <b class="mr-3" :class="asMobile ? 'fz-18' : 'fz-25'" v-if="title">{{
+          title
+        }}</b>
       </div>
       <template v-if="navItems.length">
-        <v-icon size="20" color="#aaa">mdi-chevron-right</v-icon>
+        <v-icon size="20" color="#aaa" v-if="title">mdi-chevron-right</v-icon>
         <v-breadcrumbs :items="navItems" class="pa-0 ml-3">
           <template v-slot:divider>
             <v-icon size="20" color="#aaa">mdi-chevron-right</v-icon>
@@ -43,6 +45,7 @@ export default {
         const info = this.$store.state.userInfo;
         if (info.username) return "Hi " + info.username.cutStr(6, 4);
       }
+      if (/^\{/.test(title)) title = "";
       return group || title;
     },
     navItems() {

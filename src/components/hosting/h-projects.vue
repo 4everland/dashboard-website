@@ -107,10 +107,8 @@
                         }}
                       </h3>
                       <div class="ml-auto" v-if="asMobile">
-                        <h-status
-                          :val="it.state"
-                          @click.native.stop="onStatus(it)"
-                        ></h-status>
+                        <!-- @click.native.stop="onStatus(it)" -->
+                        <h-status :val="it.state"></h-status>
                       </div>
                     </div>
                     <div class="al-c mt-4">
@@ -134,10 +132,8 @@
               </v-col>
               <v-col cols="12" md="4">
                 <div class="ta-c mb-4 mt-2" v-if="!asMobile">
-                  <h-status
-                    :val="it.state"
-                    @click.native.stop="onStatus(it)"
-                  ></h-status>
+                  <!-- @click.native.stop="onStatus(it)" -->
+                  <h-status :val="it.state"></h-status>
                 </div>
                 <div class="d-flex al-c" v-if="it.repo && it.repo.id">
                   <e-icon-link

@@ -6,8 +6,12 @@
         <e-date-pick v-model="date" v-if="showDate"></e-date-pick>
       </div>
     </div>
-    <div class="pos-r">
-      <div ref="chart" style="height: 200px"></div>
+    <div class="pos-r" style="height: 220px">
+      <div
+        ref="chart"
+        class="pos-a left-0 w100p"
+        style="top: -10px; height: 280px"
+      ></div>
       <div class="pos-center z-10" v-if="loading">
         <v-progress-circular
           :size="40"
@@ -151,9 +155,9 @@ export default {
         yAxis: {
           type: "value",
           minInterval: 1,
-          splitLine: {
-            show: false,
-          },
+          // splitLine: {
+          //   show: false,
+          // },
         },
         tooltip: {
           trigger: "axis",
