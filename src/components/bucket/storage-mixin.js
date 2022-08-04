@@ -712,6 +712,12 @@ export default {
     },
     onRow(it) {
       const url = this.getPath(it);
+      if (this.selected.includes(it)) {
+        const i = this.selected.findIndex((item) => item == it);
+        this.selected.splice(i, 1);
+      } else {
+        this.selected.push(it);
+      }
       if (it.isFile) return;
       this.$router.push({
         path: encodeURI(url),

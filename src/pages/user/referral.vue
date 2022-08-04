@@ -11,12 +11,9 @@
     margin: 0;
   }
   .overview {
-    // width: 435px;
-    min-width: 335px;
     box-sizing: border-box;
     font-size: 16px;
     color: #889ab3;
-
     .overview-list {
       width: 100%;
       .overview-item {
@@ -38,24 +35,25 @@
     .share-icon + .share-icon {
       margin-left: 12px;
     }
-    .share-link {
+    .share-input {
       flex: 1;
       padding: 9px 16px;
       color: #0b0817;
       line-height: 22px;
       border-radius: 2px;
       border: 1px solid #889ab3;
-      // overflow: hidden;
-      // text-overflow: ellipsis;
-      // white-space: nowrap;
+    }
+    .share-link {
+      color: #0b0817;
+      line-height: 22px;
     }
     .share-btn {
       min-width: 155px;
-      padding: 9px 16px;
+      height: 48px;
+      line-height: 48px;
       margin-left: 10px;
       color: #ffffff;
       text-align: center;
-      line-height: 22px;
       border: 1px solid #889ab3;
       background: #775da6;
       border-radius: 2px;
@@ -111,7 +109,7 @@
   <div class="page-refer">
     <iframe :src="frameSrc" frameborder="0" class="d-n"></iframe>
     <v-row class="referral-header al-c">
-      <v-col>
+      <v-col md="5">
         <div class="overview">
           <h3 class="title pb-7">Overview</h3>
           <ul class="d-flex overview-list">
@@ -126,7 +124,7 @@
           </ul>
         </div>
       </v-col>
-      <v-col>
+      <v-col md="7">
         <div class="referral-link flex-1">
           <div
             class="
@@ -150,12 +148,19 @@
           </div>
 
           <div class="share-content al-c">
-            <div class="share-link line-1">
-              {{ shareUrl }}
+            <div class="share-input al-c line-1">
+              <div class="pr-5 share-link line-1">{{ shareUrl }}</div>
 
-              <img src="/img/icon/copy.svg" alt="" width="14" />
+              <v-btn
+                icon
+                small
+                v-clipboard="shareUrl"
+                @success="$toast('Copied to clipboard !')"
+              >
+                <img src="img/svg/copy.svg" width="12" />
+              </v-btn>
             </div>
-            <div class="share-btn" @click="onInvite">invite Friend</div>
+            <div class="share-btn" @click="onInvite">Invite Friend</div>
           </div>
         </div>
       </v-col>
@@ -402,7 +407,6 @@ export default {
         await this.getOverview();
         this.loading = true;
         const { data } = await this.$http2.get(`$auth/invitation/${this.page}`);
-        console.log(data);
         this.list = data.list;
         this.total = data.total;
       } catch (error) {
