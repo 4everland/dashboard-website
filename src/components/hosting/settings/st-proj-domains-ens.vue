@@ -155,7 +155,6 @@ export default {
           this.domain = data.ens;
           this.owner = await this.verifyOwner();
           this.ensIpns = await this.getEnsIpns(this.info.ens);
-          console.log(ensIpns);
           if (this.ensIpns && this.ensIpns === this.info.ipns) {
             this.verify = true;
           } else {
@@ -164,7 +163,7 @@ export default {
         }
         await this.setInfo();
       } catch (error) {
-        //
+        console.log(error);
       }
     },
     async setInfo() {
