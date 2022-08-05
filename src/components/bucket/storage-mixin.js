@@ -78,7 +78,6 @@ export default {
         list = this.folderList;
       }
       if (this.searchKey && !this.inFolder) {
-        console.log("inSerarchKey");
         list = list.filter((it) => {
           return new RegExp(this.searchKey).test(it.name);
         });
@@ -115,7 +114,6 @@ export default {
     bucketInfo() {
       const { Bucket } = this.pathInfo;
       const item = this.bucketList.filter((it) => it.name == Bucket)[0];
-      // console.log(item, "item-------");
       let list = (this.domainsMap[Bucket] || [])
         .filter((it) => it.valid)
         .map((it) => it.name);
@@ -239,7 +237,6 @@ export default {
         });
     },
     async onSyncAR(name, method = "post", ipfsHash) {
-      console.log(name);
       if (this.selectArStatus == "syncing") {
         this.$alert("The file is being synced").then(() => {
           this.getList(ipfsHash);
@@ -524,37 +521,32 @@ export default {
       //   // console.log(data, Prefix);
       // });
     },
-    listBuckets() {
-      return new Promise((resolve, reject) => {
-        this.s3.listBuckets({}, (err, data) => {
-          if (err) {
-            this.onErr(err);
-            reject(err);
-          }
-          const list = data.Buckets.map((it) => {
-            return {
-              name: it.Name,
-              createAt: it.CreationDate.format(),
-            };
-          });
-          resolve(list);
-        });
-      });
-    },
+    // listBuckets() {
+    //   return new Promise((resolve, reject) => {
+    //     this.s3.listBuckets({}, (err, data) => {
+    //       if (err) {
+    //         this.onErr(err);
+    //         reject(err);
+    //       }
+    //       const list = data.Buckets.map((it) => {
+    //         return {
+    //           name: it.Name,
+    //           createAt: it.CreationDate.format(),
+    //         };
+    //       });
+    //       resolve(list);
+    //     });
+    //   });
+    // },
     async getBuckets() {
       this.tableLoading = true;
       try {
-        const list = await this.listBuckets();
         const { data } = await this.$http.get("/buckets/extra");
-        // console.log(data);
-        data.list.forEach((row) => {
-          const item = list.filter((it) => it.name == row.bucket)[0];
-          if (!item) {
-            // console.log(row.bucket, "no bucket");
-            return;
-          }
+        const dataList = data.list.map((row) => {
           const ar = row.arweave || {};
-          Object.assign(item, {
+          return {
+            name: row.bucket,
+            // createAt: new Date().format(row.createdAt),
             isAr: row.arweave ? ar.sync : row.arweaveSync,
             arCancel: ar.status == "cancel",
             traffic: this.$utils.getFileSize(row.monthTraffic),
@@ -562,10 +554,9 @@ export default {
             arUsedStorage: this.$utils.getFileSize(row.arweave.usedStorage),
             visitChartData: row.monthVisit.map((item) => Number(item)),
             defDomain: row.domain,
-          });
+          };
         });
-        // console.log(list);
-        this.bucketList = list;
+        this.bucketList = dataList;
       } catch (error) {
         console.log(error);
       }

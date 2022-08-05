@@ -438,7 +438,9 @@ export default {
           break;
         case "FaceBook":
           window.open(
-            `https://www.facebook.com/sharer/sharer.php?u=${location.origin}/index.html/#/?invite=${this.code}`
+            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+              location.origin + "/index.html/#/?invite=" + this.code
+            )}`
           );
           break;
         default:
