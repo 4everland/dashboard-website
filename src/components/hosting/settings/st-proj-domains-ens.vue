@@ -69,7 +69,7 @@
                       <span>Copy IPNS</span>
                     </v-list-item>
                     <v-list-item
-                      v-if="!info.verify"
+                      v-if="!verify"
                       link
                       @click="verifyConfiguration"
                     >
@@ -84,7 +84,7 @@
             </div>
           </div>
         </div>
-        <div v-if="!info.verify">
+        <div v-if="!verify">
           <v-divider></v-divider>
           <div class="gray mt-1 fz-14">
             Set the content hash of your ENS domain and we will automatically
@@ -135,8 +135,15 @@ export default {
       connectAddr: (s) => s.connectAddr,
     }),
   },
-
-  created() {
+  watch: {
+    connectAddr(val) {
+      if (val) {
+        this.setContentHash();
+      }
+    },
+  },
+  created() {},
+  mounted() {
     this.getInfo();
   },
   methods: {
@@ -155,8 +162,9 @@ export default {
             this.verify = false;
           }
         }
+        await this.setInfo();
       } catch (error) {
-        //
+        console.log(error);
       }
     },
     async setInfo() {
@@ -217,7 +225,8 @@ export default {
           this.domain
         }. Is that you?`
       ).then(async () => {
-        this.setInfo();
+        this.ensIpns = await this.getEnsIpns(this.domain);
+        await this.setInfo();
       });
       // this.verify();
     },
@@ -241,7 +250,7 @@ export default {
       } else {
         this.verify = false;
       }
-      this.setInfo();
+      await this.setInfo();
       this.$loading.close();
     },
     async getEnsIpns() {

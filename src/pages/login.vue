@@ -131,6 +131,8 @@ export default {
     if (localStorage.token) {
       this.$router.replace("/home");
     }
+  },
+  mounted() {
     const code = this.$route.query.code;
     const inviteCode = this.$route.query.inviteCode;
     if (inviteCode) {
@@ -140,7 +142,6 @@ export default {
       this.getAuth(code);
     }
   },
-  mounted() {},
   methods: {
     async onLogin() {
       this.$loading();

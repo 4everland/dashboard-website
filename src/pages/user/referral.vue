@@ -127,13 +127,7 @@
       <v-col md="7">
         <div class="referral-link flex-1">
           <div
-            class="
-              referral-link-header
-              d-flex
-              align-center
-              justify-space-between
-              mb-11
-            "
+            class="referral-link-header d-flex align-center justify-space-between mb-11"
           >
             <h3 class="title">Referrals Link</h3>
             <ul class="al-c">
@@ -294,7 +288,7 @@ export default {
           label: "Telegram",
         },
         {
-          url: "https://discord.com/invite/4everland",
+          url: "http://discord.gg/4everland",
           label: "Discord",
         },
         {

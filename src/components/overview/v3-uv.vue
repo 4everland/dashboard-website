@@ -10,7 +10,7 @@
 
     <v-skeleton-loader
       class="mt-15 mb-15"
-      v-if="!uvList"
+      v-if="!uvList || loading"
       type="article"
     ></v-skeleton-loader>
     <div class="pos-r mt-5 pt-2" v-else-if="!uvList.length">
@@ -51,6 +51,9 @@
             style="top: -30px; bottom: -20px; right: -20px; height: 350px"
             ref="chart"
           ></div>
+          <div class="pos-center bg-f1 pa-2 fz-14 lh-1" v-if="!dayTotal">
+            No Data Available
+          </div>
         </div>
       </div>
     </div>
@@ -119,6 +122,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -128,9 +133,14 @@ export default {
       curIdx: 0,
       showSelect: false,
       saving: false,
+      dayTotal: 0,
+      loading: false,
     };
   },
   computed: {
+    ...mapState({
+      clientWidth: (s) => s.clientWidth,
+    }),
     curProj() {
       if (!this.uvList) return null;
       return this.uvList[this.curIdx];
@@ -140,10 +150,21 @@ export default {
     },
   },
   watch: {
+    clientWidth() {
+      this.loading = true;
+      clearTimeout(this.resizeTiming);
+      this.resizeTiming = setTimeout(() => {
+        this.loading = false;
+        this.chart = null;
+        setTimeout(() => {
+          this.setChart();
+        }, 200);
+      }, 200);
+    },
     curProj(val) {
       if (val) {
         this.$nextTick(() => {
-          this.setChart(val.uv);
+          this.setChart();
         });
       }
     },
@@ -155,6 +176,11 @@ export default {
     this.getUvList();
   },
   methods: {
+    setData() {
+      this.$nextTick(() => {
+        this.setChart();
+      });
+    },
     getChecked(it) {
       return this.projChecked.includes(it.projectId);
     },
@@ -211,15 +237,20 @@ export default {
         console.log(error);
       }
     },
-    setChart(data) {
+    setChart() {
+      if (!this.curProj) return;
       const list = [];
       const xArr = [];
       const yArr = [];
+      this.dayTotal = 0;
+      const data = this.curProj.uv;
       for (const key in data) {
+        const num = (data[key] || 0) * 1;
         list.push({
           time: new Date(key * 1e3),
-          num: data[key],
+          num,
         });
+        this.dayTotal += num;
       }
       list.sort((a, b) => {
         return a.time - b.time;
@@ -239,6 +270,7 @@ export default {
           type: "category",
           boundaryGap: false,
           data: xArr,
+          min: 6,
         },
         yAxis: {
           type: "value",

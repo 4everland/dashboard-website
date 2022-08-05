@@ -13,15 +13,13 @@ Vue.prototype.$color2 = "#ff6960";
 
 Vue.prototype.$onLoginData = (data) => {
   console.log(data);
-  localStorage.clear();
   localStorage.authData = JSON.stringify(data);
   const token = data.accessToken;
   localStorage.token = token;
   localStorage.refreshAt = Date.now();
   let hash = "";
   if (localStorage.loginTo) {
-    const storKey = "got_storage_" + token.substr(-5);
-    if (localStorage[storKey]) hash = localStorage.loginTo;
+    hash = localStorage.loginTo;
     localStorage.loginTo = "";
   }
   location.href = "index.html" + hash;
