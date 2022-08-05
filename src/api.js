@@ -175,8 +175,7 @@ function goLogin() {
   localStorage.clear();
   if (location.hash != "#/login") {
     localStorage.loginTo = location.hash;
-    Vue.$router.push(getLoginUrl());
-    // location.href = getLoginUrl();
+    location.href = getLoginUrl();
     console.log("logout");
   }
 }

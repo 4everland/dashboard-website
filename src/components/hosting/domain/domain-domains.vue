@@ -89,10 +89,12 @@ export default {
         {
           text: "Type",
           value: "type",
+          sortable: false,
         },
         {
           text: "Value",
           value: "value",
+          sortable: false,
         },
         { text: "CreateAt", value: "createTime" },
       ],
