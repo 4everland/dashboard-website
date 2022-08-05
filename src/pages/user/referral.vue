@@ -418,8 +418,7 @@ export default {
       this.frameSrc = src;
       setTimeout(() => {
         this.frameSrc = "";
-        console.log(this.isFocus);
-        if (this.isFocus) this.$toast(name + "not installed");
+        if (this.isFocus) this.$toast(name + " not installed");
       }, 300);
     },
     sharePlatForm(platForm) {
