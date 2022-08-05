@@ -39,7 +39,7 @@
     </div>
 
     <!-- :show-select="list.length > 0" -->
-    <div class="main-wrap mt-14">
+    <div class="main-wrap mt-10">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
