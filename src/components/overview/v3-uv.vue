@@ -51,6 +51,9 @@
             style="top: -30px; bottom: -20px; right: -20px; height: 350px"
             ref="chart"
           ></div>
+          <div class="pos-center bg-f1 pa-2 fz-14 lh-1" v-if="!dayTotal">
+            No Data Available
+          </div>
         </div>
       </div>
     </div>
@@ -128,6 +131,7 @@ export default {
       curIdx: 0,
       showSelect: false,
       saving: false,
+      dayTotal: 0,
     };
   },
   computed: {
@@ -215,11 +219,14 @@ export default {
       const list = [];
       const xArr = [];
       const yArr = [];
+      this.dayTotal = 0;
       for (const key in data) {
+        const num = (data[key] || 0) * 1;
         list.push({
           time: new Date(key * 1e3),
-          num: data[key],
+          num,
         });
+        this.dayTotal += num;
       }
       list.sort((a, b) => {
         return a.time - b.time;
@@ -239,6 +246,7 @@ export default {
           type: "category",
           boundaryGap: false,
           data: xArr,
+          min: 6,
         },
         yAxis: {
           type: "value",
