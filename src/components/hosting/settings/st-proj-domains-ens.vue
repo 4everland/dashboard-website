@@ -135,7 +135,13 @@ export default {
       connectAddr: (s) => s.connectAddr,
     }),
   },
-
+  watch: {
+    connectAddr(val) {
+      if (val) {
+        this.setContentHash();
+      }
+    },
+  },
   created() {
     this.getInfo();
   },
@@ -217,6 +223,7 @@ export default {
           this.domain
         }. Is that you?`
       ).then(async () => {
+        this.ensIpns = await this.getEnsIpns(this.domain);
         this.setInfo();
       });
       // this.verify();

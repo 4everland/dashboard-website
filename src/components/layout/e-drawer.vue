@@ -161,7 +161,7 @@ export default {
           label: "Twitter",
         },
         {
-          url: "https://discord.com/invite/4everland",
+          url: "http://discord.gg/4everland",
           label: "Discord",
         },
         {
