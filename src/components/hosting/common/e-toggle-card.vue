@@ -18,7 +18,7 @@
         </span>
         <div v-if="icon && icon != 'fail'" class="ml-2 d-flex">
           <img
-            src="img/svg/common/ic-checked.svg"
+            src="img/svg/common/ic-checked1.svg"
             height="15"
             class="d-b"
             v-if="icon == 'checked'"

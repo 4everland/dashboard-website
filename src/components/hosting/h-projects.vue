@@ -337,7 +337,7 @@ export default {
     async onDelete(it) {
       try {
         await this.onDelProj(it);
-        this.page = 1;
+        if (this.list.length == 1) this.page = 1;
         this.getList();
       } catch (error) {
         console.log(error);

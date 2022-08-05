@@ -5,13 +5,15 @@
         <v-btn icon v-if="asMobile" @click="onMenu">
           <v-icon>mdi-menu</v-icon>
         </v-btn>
-        <b class="mr-3" :class="asMobile ? 'fz-18' : 'fz-25'" v-if="title">{{
-          title
-        }}</b>
+        <e-link :href="firstItem.href" v-if="firstItem">
+          <b class="mr-3" :class="asMobile ? 'fz-18' : 'fz-25'">{{
+            firstItem.text
+          }}</b>
+        </e-link>
       </div>
-      <template v-if="navItems.length">
-        <v-icon size="20" color="#aaa" v-if="title">mdi-chevron-right</v-icon>
-        <v-breadcrumbs :items="navItems" class="pa-0 ml-3">
+      <template v-if="breadItems.length">
+        <v-icon size="20" color="#aaa">mdi-chevron-right</v-icon>
+        <v-breadcrumbs :items="breadItems" class="pa-0 ml-3">
           <template v-slot:divider>
             <v-icon size="20" color="#aaa">mdi-chevron-right</v-icon>
           </template>
@@ -38,15 +40,6 @@ export default {
     },
     meta() {
       return this.$route.meta || {};
-    },
-    title() {
-      let { title = "", group } = this.meta;
-      if (title == "Overview") {
-        const info = this.$store.state.userInfo;
-        if (info.username) return "Hi " + info.username.cutStr(6, 4);
-      }
-      if (/^\{/.test(title)) title = "";
-      return group || title;
     },
     navItems() {
       const { params } = this.$route;
@@ -99,6 +92,27 @@ export default {
         });
       }
       return items;
+    },
+    firstItem() {
+      let { title = "" } = this.meta;
+      if (title == "Overview") {
+        const info = this.$store.state.userInfo;
+        if (info.username) title = "Hi " + info.username.cutStr(6, 4);
+      } else if (this.navItems.length) {
+        title = "";
+      }
+      if (title)
+        return {
+          text: title,
+        };
+      if (this.navItems.length) {
+        const item = { ...this.navItems[0] };
+        item.href = this.breadItems.length ? "#" + item.to : "";
+        return item;
+      }
+    },
+    breadItems() {
+      return this.navItems.slice(1);
     },
   },
   watch: {

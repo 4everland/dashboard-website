@@ -1,5 +1,5 @@
 <template>
-  <div class="bucket-item-container bg-white">
+  <div class="bucket-item-container bg-white" style="min-height: 800px">
     <div class="file-container" v-if="inFolder">
       <!-- Operation Tab -->
       <div class="operation-tab d-flex">
@@ -75,6 +75,7 @@
         <div class="table-data flex-1">
           <!-- Files Table -->
           <v-data-table
+            v-show="list.length"
             class="hide-bdb"
             fixed-header
             :headers="headers"
@@ -104,37 +105,9 @@
                 >
                 <b>{{ item.name.cutStr(5, 5) }}</b></v-btn
               >
-              <!-- <v-btn
-                class="e-btn-text"
-                icon
-                small
-                color="primary"
-                v-if="item.isFile && bucketInfo.originList.length"
-                @click.stop="onStop"
-                :href="getViewUrl(item)"
-                target="_blank"
-              >
-                <img src="img/svg/view.svg" width="14" class="ml-2" />
-              </v-btn> -->
             </template>
             <template v-slot:item.hash="{ item }">
               <div class="d-flex align-center" v-if="item.hash !== '--'">
-                <!-- <v-btn
-                  style="width: 80px"
-                  class="e-btn-text item-hash"
-                  color="primary"
-                  x-small
-                  text
-                  target="_blank"
-                  v-if="item.hash"
-                  @click.stop="onStop"
-                  :href="`https://${item.hash}.ipfs.dweb.link`"
-                >
-                  <span class="d-ib">
-                    {{ item.hash.cutStr(5, 4) }}
-                  </span>
-                </v-btn> -->
-
                 <a
                   :href="`https://${item.hash}.ipfs.dweb.link`"
                   class="hash-link"
@@ -175,9 +148,6 @@
                 </e-tooltip>
               </div>
             </template>
-            <!-- <template v-slot:item.arStatus="{ item }">
-          <sync-state :val="item.arStatus"></sync-state>
-        </template> -->
           </v-data-table>
           <!-- Loading Img -->
           <div
@@ -215,7 +185,7 @@
             >
           </div>
           <operation-bar
-            :selected="selected.length"
+            :selected="selected"
             :inFile="true"
             :isNotAr="!bucketInfo.isAr && selectArStatus != 'synced'"
             :clipboardVal="selected.length ? getViewUrl(selected[0]) : ''"
@@ -417,6 +387,7 @@ export default {
 <style lang="scss" scoped>
 .hash-link {
   display: block;
+  min-width: 80px;
   color: #0b0817;
 }
 .bucket-item-container {

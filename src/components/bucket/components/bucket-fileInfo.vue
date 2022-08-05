@@ -2,9 +2,20 @@
   <Transition name="file" appear>
     <div class="nav" v-show="fileInfoDrawer">
       <div class="single-file" v-if="selected.length == 1">
-        <v-img class="my-4 bdrs-4" height="127" :src="thumbnail">
+        <v-img
+          class="my-4 bdrs-4"
+          min-width="100%"
+          min-height="127"
+          contain
+          :src="thumbnail"
+        >
           <template #placeholder>
-            <img src="/img/svg/bucketFileInfo/default-file-img.svg" alt="" />
+            <img
+              width="100%"
+              height="127"
+              src="/img/svg/bucketFileInfo/default-file-img.svg"
+              alt=""
+            />
           </template>
         </v-img>
 
@@ -78,26 +89,10 @@
                       fileInfo.arFailReason
                     }}</span>
                     <template v-if="!isAr">
-                      <v-btn
-                        small
-                        text
-                        @click="$emit('onSyncAR', selected[0].name, 'put')"
-                        >Cancel</v-btn
-                      >
+                      <v-btn small text @click="onSyncAR('put')">Cancel</v-btn>
                       <span>or</span>
                     </template>
-                    <v-btn
-                      small
-                      text
-                      color="primary"
-                      @click="
-                        $emit(
-                          'onSyncAR',
-                          selected[0].name,
-                          'post',
-                          fileInfo.hash
-                        )
-                      "
+                    <v-btn small text color="primary" @click="onSyncAR('post')"
                       >Retry</v-btn
                     >
                   </div>
@@ -314,6 +309,19 @@ export default {
         this.fileLoading = false;
         this.dirFileArr = data.objects;
       });
+    },
+    async onSyncAR(method = "post") {
+      try {
+        const { Bucket, Key } = this.pathInfo;
+        await this.$http[method]("/arweave/object", {
+          bucket: Bucket,
+          key: Key,
+        });
+        await this.headObject();
+      } catch (error) {
+        //
+        console.log(error);
+      }
     },
     handleEnterFolder() {
       const path = decodeURIComponent(this.$route.path);
