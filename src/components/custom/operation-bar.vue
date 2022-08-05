@@ -16,7 +16,7 @@
           outlined
           tile
           @click="$emit('handleAddDomain')"
-          v-show="selected <= 1 && inBucket"
+          v-show="selected.length <= 1 && inBucket"
         >
           <!-- <img src="img/icon/ic-domain.svg" width="14" class="mr-2" /> -->
           <span>Add Domain</span>
@@ -30,7 +30,7 @@
           tile
           class="ml-4"
           @click="$emit('download')"
-          v-show="selected <= 1 && inFile"
+          v-show="selected.length <= 1 && inFile && isFile"
         >
           <span class="gray-2">Download</span>
         </v-btn>
@@ -38,7 +38,7 @@
           outlined
           tile
           class="ml-4"
-          v-show="selected <= 1 && inFile"
+          v-show="selected.length <= 1 && inFile && isFile"
           v-clipboard="clipboardVal"
           @success="onCopied"
         >
@@ -48,7 +48,7 @@
           outlined
           tile
           class="ml-4"
-          v-show="selected <= 1 && inFile"
+          v-show="selected.length <= 1 && inFile && isFile"
           @click="$emit('onRename')"
         >
           <span class="gray-2">Rename</span>
@@ -57,7 +57,7 @@
           outlined
           tile
           class="ml-4"
-          v-show="selected <= 1 && inFile && isNotAr"
+          v-show="selected.length <= 1 && inFile && isNotAr && isFile"
           @click="$emit('onSyncAR')"
         >
           <span class="gray-2">Sync to AR</span>
@@ -86,7 +86,7 @@ export default {
     };
   },
   props: {
-    selected: Number,
+    selected: Array,
     inBucket: {
       type: Boolean,
       default: false,
@@ -108,6 +108,10 @@ export default {
     appDrawer() {
       return this.$vuetify.application.framework.breakpoint.mobile;
     },
+    isFile() {
+      if (this.selected.length && this.selected[0].isFile) return true;
+      return false;
+    },
   },
   methods: {
     onCopied() {
@@ -122,11 +126,15 @@ export default {
     },
   },
   watch: {
-    selected(length) {
-      if (length) {
-        return (this.isShow = this.checked = true);
-      }
-      this.isShow = false;
+    selected: {
+      handler(arr) {
+        const length = arr.length;
+        if (length) {
+          return (this.isShow = this.checked = true);
+        }
+        this.isShow = false;
+      },
+      deep: true,
     },
   },
 };
@@ -157,7 +165,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255);
     .check-box {
       padding: 0 16px;
     }

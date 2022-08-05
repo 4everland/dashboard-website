@@ -112,12 +112,12 @@ export default {
     return {
       showPop: false,
       title: "Feedback",
-      typeList: ["BUG", "FEEDBACK"],
+      typeList: ["BUG", "PAY", "OPINION", "OTHER"],
       form: {
         email: "",
         ethAddress: "",
         description: "",
-        feedbackType: "FEEDBACK",
+        feedbackType: "",
       },
       files: [],
       fileList: [],
@@ -130,7 +130,7 @@ export default {
       if (name == "feedback" && !this.showPop) {
         this.showPop = true;
         this.title = data ? data.label : "Feedback";
-        let type = "FEEDBACK";
+        let type = "BUG";
         let hint = "Your feedback";
         if (/bug/i.test(this.title)) {
           type = "BUG";

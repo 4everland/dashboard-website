@@ -215,7 +215,7 @@
             >
           </div>
           <operation-bar
-            :selected="selected.length"
+            :selected="selected"
             :inFile="true"
             :isNotAr="!bucketInfo.isAr && selectArStatus != 'synced'"
             :clipboardVal="selected.length ? getViewUrl(selected[0]) : ''"

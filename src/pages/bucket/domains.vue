@@ -7,7 +7,7 @@
     ></v-skeleton-loader>
   </div>
   <div v-else>
-    <e-right-opt-wrap :top="-70">
+    <e-right-opt-wrap :top="-55">
       <div class="btn-wrap d-flex justify-end">
         <v-btn color="primary" @click="showPop = true" width="120">
           <!-- <v-icon size="16">mdi-plus-circle-outline</v-icon> -->

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex al-c mb-2">
-      <e-right-opt-wrap style="width: 100%">
+      <e-right-opt-wrap style="width: 100%" :top="-60">
         <v-row class="d-flex">
           <v-col md="4" style="max-width: 230px">
             <v-select
@@ -21,6 +21,7 @@
               dense
               placeholder="Search"
               v-model="searchKey"
+              @input="handleInput"
               @keydown.enter="getList"
             />
           </v-col>
@@ -32,7 +33,7 @@
           <nav-item icon="ic-synced" unit="MB" class="ml-7">{{
             usageInfo.arSynced
           }}</nav-item>
-          <nav-item unit="Objects" class="ml-7">{{ total }}</nav-item>
+          <!-- <nav-item unit="Objects" class="ml-7">{{ total }}</nav-item> -->
         </div>
       </e-right-opt-wrap>
     </div>
@@ -116,6 +117,20 @@
 </template>
 
 <script>
+function debounce(func, delay = 300, immediate = false) {
+  let timer = null;
+  return function () {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    if (immediate && !timer) {
+      func.apply(this, arguments);
+    }
+    timer = setTimeout(() => {
+      func.apply(this, arguments);
+    }, delay);
+  };
+}
 export default {
   data() {
     return {
@@ -133,7 +148,10 @@ export default {
       finished: false,
       loadingMore: false,
       cursor: 0,
-      usageInfo: {},
+      usageInfo: {
+        arSyncing: 0,
+        arSynced: 0,
+      },
       state: "",
       searchKey: "",
       items: [
@@ -223,6 +241,7 @@ export default {
     async getStorage() {
       try {
         const { data } = await this.$http("/user/resource/usage");
+        console.log(data);
         const { arweaveUsedStorage = 0, arweaveSyncingStorage = 0 } = data;
         this.usageInfo.arSyncing = (arweaveSyncingStorage / 1024).toFixed(2);
         this.usageInfo.arSynced = (arweaveUsedStorage / 1024).toFixed(2);
@@ -230,6 +249,9 @@ export default {
         console.log(error, "error");
       }
     },
+    handleInput: debounce(function () {
+      this.getList();
+    }),
     onRow(it) {
       // console.log(it);
       if (it.isDeleted) return this.$toast("The file was deleted in Bucket.");

@@ -260,13 +260,13 @@ export default {
           bucket: Bucket,
           key: this.getFileKey(name),
         });
-        this.getList(ipfsHash);
+        // this.getList(ipfsHash);
         this.$setMsg({
           name: "updateUsage",
         });
       } catch (error) {
         //
-        this.getList(ipfsHash);
+        // this.getList(ipfsHash);
       }
       this.$loading.close();
     },
