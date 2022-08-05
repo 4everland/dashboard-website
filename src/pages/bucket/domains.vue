@@ -54,6 +54,13 @@
           >
             <b>{{ item.domain }}</b></v-btn
           >
+
+          <e-tooltip bottom v-if="!item.valid">
+            <v-icon slot="ref" size="18" class="pa-1 d-ib ml-2"
+              >mdi-alert-circle-outline</v-icon
+            >
+            <span>Invalid Configuration</span>
+          </e-tooltip>
         </template>
         <!-- <template v-slot:item.bucketName="{ item }">
           <v-btn

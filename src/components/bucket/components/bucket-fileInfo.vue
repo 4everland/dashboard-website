@@ -4,12 +4,18 @@
       <div class="single-file" v-if="selected.length == 1">
         <v-img
           class="my-4 bdrs-4"
-          width="100%"
+          min-width="100%"
           min-height="127"
+          contain
           :src="thumbnail"
         >
           <template #placeholder>
-            <img src="/img/svg/bucketFileInfo/default-file-img.svg" alt="" />
+            <img
+              width="100%"
+              height="127"
+              src="/img/svg/bucketFileInfo/default-file-img.svg"
+              alt=""
+            />
           </template>
         </v-img>
 

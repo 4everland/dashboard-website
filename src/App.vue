@@ -13,7 +13,7 @@
       <e-drawer />
       <v-main>
         <e-nav></e-nav>
-        <div class="pa-5">
+        <div class="pa-5" style="height: calc(100% - 37.5px)">
           <e-wrap
             :class="meta.wrapCls || (meta.isTab ? 'pa-0' : 'main-wrap mb-12')"
           >
