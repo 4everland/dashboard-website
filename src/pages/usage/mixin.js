@@ -113,6 +113,12 @@ export default {
       if (!err) return console.log("---- err null");
       console.log(err);
       let msg = err.message;
+      if (/repriced/i.test(msg) && /replaced/i.test(msg)) {
+        return this.$toast("Transaction was replaced.");
+      }
+      if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
+        msg = "IPFS Storage Expired, extending service duration is required.";
+      }
       if (/exceeds balance/i.test(msg)) {
         msg = "Insufficient balance";
       }
