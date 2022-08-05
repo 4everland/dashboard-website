@@ -49,7 +49,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
+  computed: {
+    ...mapState({
+      clientWidth: (s) => s.clientWidth,
+    }),
+  },
   data() {
     return {
       typeList: ["IPFS", "AR"],
@@ -63,6 +70,16 @@ export default {
   watch: {
     typeIdx() {
       this.getData();
+    },
+    clientWidth() {
+      this.loading = Date.now();
+      clearTimeout(this.resizeTiming);
+      this.resizeTiming = setTimeout(() => {
+        this.loading = false;
+        setTimeout(() => {
+          this.setChart();
+        }, 200);
+      }, 200);
     },
   },
   mounted() {
@@ -91,14 +108,18 @@ export default {
           return it;
         });
         this.totalSize = this.$utils.getFileSize(total);
-        this.$nextTick(() => {
-          this.setChart();
-        });
+        this.setData();
       } catch (error) {
         console.log(error);
       }
     },
+    setData() {
+      this.$nextTick(() => {
+        this.setChart();
+      });
+    },
     setChart() {
+      console.log(222);
       const el = this.$refs.chart;
       this.chart = window.echarts.init(el);
       const option = {

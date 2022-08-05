@@ -10,7 +10,7 @@
 
     <v-skeleton-loader
       class="mt-15 mb-15"
-      v-if="!uvList"
+      v-if="!uvList || loading"
       type="article"
     ></v-skeleton-loader>
     <div class="pos-r mt-5 pt-2" v-else-if="!uvList.length">
@@ -122,6 +122,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -132,9 +134,13 @@ export default {
       showSelect: false,
       saving: false,
       dayTotal: 0,
+      loading: false,
     };
   },
   computed: {
+    ...mapState({
+      clientWidth: (s) => s.clientWidth,
+    }),
     curProj() {
       if (!this.uvList) return null;
       return this.uvList[this.curIdx];
@@ -144,10 +150,21 @@ export default {
     },
   },
   watch: {
+    clientWidth() {
+      this.loading = true;
+      clearTimeout(this.resizeTiming);
+      this.resizeTiming = setTimeout(() => {
+        this.loading = false;
+        this.chart = null;
+        setTimeout(() => {
+          this.setChart();
+        }, 200);
+      }, 200);
+    },
     curProj(val) {
       if (val) {
         this.$nextTick(() => {
-          this.setChart(val.uv);
+          this.setChart();
         });
       }
     },
@@ -159,6 +176,11 @@ export default {
     this.getUvList();
   },
   methods: {
+    setData() {
+      this.$nextTick(() => {
+        this.setChart();
+      });
+    },
     getChecked(it) {
       return this.projChecked.includes(it.projectId);
     },
@@ -215,11 +237,13 @@ export default {
         console.log(error);
       }
     },
-    setChart(data) {
+    setChart() {
+      if (!this.curProj) return;
       const list = [];
       const xArr = [];
       const yArr = [];
       this.dayTotal = 0;
+      const data = this.curProj.uv;
       for (const key in data) {
         const num = (data[key] || 0) * 1;
         list.push({
