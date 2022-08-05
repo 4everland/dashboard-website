@@ -173,8 +173,13 @@ export default {
           it.path = "Hosting " + name;
           it.link = `/hosting/project/${name}/${id}`;
         } else if (/bucket/i.test(act)) {
-          it.path = "Bucket";
-          it.link = "/bucket/storage/";
+          if (/domain/i.test(act)) {
+            it.path = "Bucket Domains";
+            it.link = "/bucket/domains";
+          } else {
+            it.path = "Bucket";
+            it.link = "/bucket/storage/";
+          }
         }
       }
     },

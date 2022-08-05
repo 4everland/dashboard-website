@@ -54,7 +54,7 @@ export default {
       const info = this.usageInfo;
       return [
         {
-          label: "IPFS",
+          label: "IPFS Storage",
           icon: "ipfs.svg",
           ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
         },
