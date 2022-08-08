@@ -11,12 +11,9 @@
 <script>
 export default {
   mounted() {
-    const { invite, redirectTo, token } = this.$route.query;
+    const { invite, token } = this.$route.query;
     if (invite) {
       localStorage.inviteCode = invite;
-    }
-    if (redirectTo) {
-      localStorage.redirectTo = redirectTo;
     }
     if (token) {
       localStorage.token = token;
@@ -24,20 +21,11 @@ export default {
     if (!localStorage.token) {
       location.href = this.$getLoginUrl();
     } else {
-      const toUrl = localStorage.redirectTo;
-      if (toUrl) {
+      this.$router.replace("/overview");
+      if (token)
         setTimeout(() => {
-          localStorage.redirectTo = "";
-          location.href =
-            toUrl + "/#/?token=" + encodeURIComponent(localStorage.token);
-        }, 2e3);
-      } else {
-        this.$router.replace("/overview");
-        if (token)
-          setTimeout(() => {
-            location.reload();
-          }, 1e3);
-      }
+          location.reload();
+        }, 1e3);
     }
   },
 };

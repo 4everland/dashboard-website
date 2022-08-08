@@ -79,6 +79,7 @@ export default {
       typeIdx: 0,
       list: [],
       loading: false,
+      noData: false,
       noList: [
         { name: "United States" },
         { name: "China" },

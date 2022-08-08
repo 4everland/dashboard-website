@@ -263,7 +263,7 @@ export default {
       isFocus: (s) => s.isFocus,
     }),
     shareUrl() {
-      return location.origin + "/#/?invite=" + this.code;
+      return location.origin + "/?invite=" + this.code;
     },
     pageLen() {
       return Math.ceil(this.total / 10);
@@ -439,7 +439,7 @@ export default {
         case "FaceBook":
           window.open(
             `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-              location.origin + "/index.html/#/?invite=" + this.code
+              location.origin + "/index.html/?invite=" + this.code
             )}`
           );
           break;

@@ -178,7 +178,7 @@
                 class="d-b mb-5"
                 v-for="(row, j) in it.statisList"
                 :key="j"
-                :href="j == 0 ? `#/hosting/statistics/${it.name}/${it.id}` : ''"
+                :href="j == 0 ? `/hosting/statistics/${it.name}/${it.id}` : ''"
               >
                 <component :is="row.comp" :info="row.data" />
               </e-link>

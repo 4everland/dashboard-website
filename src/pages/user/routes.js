@@ -7,7 +7,9 @@ import ActLog from "./activity-log";
 export default [
   {
     path: "/activity-log",
-    component: ActLog,
+    components: {
+      cache: ActLog,
+    },
     meta: {
       title: "Activity Log",
     },

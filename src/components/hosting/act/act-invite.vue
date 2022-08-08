@@ -129,7 +129,7 @@ export default {
       isTouch: (s) => s.isTouch,
     }),
     shareUrl() {
-      return location.origin + "/#/?invite=" + this.code;
+      return location.origin + "/?invite=" + this.code;
     },
   },
   data() {

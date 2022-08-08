@@ -828,6 +828,6 @@ export default [
     },
   },
 ].map((it) => {
-  it.logo = "/" + it.logo;
+  it.logo = "https://static1.4everland.org" + it.logo;
   return it;
 });
