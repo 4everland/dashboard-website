@@ -39,12 +39,7 @@
                 to="/billing/usage/more"
                 >Subscribe</v-btn
               >
-              <v-btn
-                outlined
-                small
-                class="pl-2 pr-2"
-                :class="asMobile ? 'ml-4' : 'ml-auto'"
-                to="/billing/bills"
+              <v-btn outlined small class="pl-2 pr-2 ml-4" to="/billing/bills"
                 >Deposit</v-btn
               >
               <!-- <span>Airdropped</span>
