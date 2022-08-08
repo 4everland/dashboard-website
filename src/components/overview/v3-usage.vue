@@ -1,7 +1,12 @@
 <template>
   <v-row>
     <v-col @click="onClick(it)" v-for="(it, i) in usageList" :key="i">
-      <v-card style="min-width: 120px">
+      <v-card
+        style="min-width: 120px"
+        :class="{
+          'hover-1': it.isBalance,
+        }"
+      >
         <div class="pa-1" v-if="it.loading">
           <v-skeleton-loader type="article" />
         </div>
