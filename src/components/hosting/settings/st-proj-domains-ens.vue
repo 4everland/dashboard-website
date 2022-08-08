@@ -129,9 +129,7 @@ export default {
   },
   computed: {
     ...mapState({
-      netType: (s) => s.netType,
       connectAddr: (s) => s.connectAddr,
-      chainId: (s) => s.chainId,
     }),
   },
   watch: {
@@ -194,9 +192,10 @@ export default {
       this.$loading.close();
     },
     checkNet() {
-      if (!this.netType) return false;
+      const chainId = window.ethereum.chainId;
+      if (!chainId) return false;
       let msg = "";
-      if (this.netType != "main") {
+      if (chainId != "0x1") {
         msg = "Wrong network, please connect to Ethereum mainnet";
       }
       if (msg) {
