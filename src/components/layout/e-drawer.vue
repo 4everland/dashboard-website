@@ -6,7 +6,7 @@
     display: none;
   }
   .v-navigation-drawer__content {
-    overflow: scroll;
+    overflow: auto;
   }
   .group-item {
     margin-bottom: 10px !important;
