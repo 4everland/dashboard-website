@@ -3,15 +3,24 @@
     <div class="nav" v-show="fileInfoDrawer">
       <div class="single-file" v-if="selected.length == 1">
         <v-img
-          v-show="thumbnail"
+          v-show="!notImg"
           class="my-4 bdrs-4"
           min-width="100%"
           height="200"
           contain
           :src="thumbnail"
         >
+          <template #placeholder>
+            <div class="default-img al-c justify-center" v-show="!thumbnail">
+              <img
+                class="default-img-content"
+                src="/img/svg/bucketFileInfo/img_icon.svg"
+                alt=""
+              />
+            </div>
+          </template>
         </v-img>
-        <div class="default-img al-c justify-center" v-show="!thumbnail">
+        <div class="default-img al-c justify-center" v-show="notImg">
           <img class="default-img-content" :src="fileTypeImg" alt="" />
         </div>
         <v-skeleton-loader
@@ -134,7 +143,7 @@
           Select a file/folder to view details
         </p>
       </div>
-      <div class="multifile" v-else>
+      <!-- <div class="multifile" v-else>
         <v-img
           class="my-4"
           height="127"
@@ -143,6 +152,14 @@
           src="/img/svg/bucketFileInfo/dir-file-img.svg"
         >
         </v-img>
+      </div> -->
+
+      <div v-else class="default-img al-c justify-center" v-show="notImg">
+        <img
+          class="default-img-content"
+          src="/img/svg/bucketFileInfo/folder_icon.svg"
+          alt=""
+        />
       </div>
     </div>
   </Transition>
@@ -165,6 +182,7 @@ export default {
       thumbnail: null,
       dirFileArr: [],
       domains: [],
+      isLoading: true,
     };
   },
   computed: {
@@ -227,9 +245,6 @@ export default {
     },
     fileUrls() {
       const { Key } = this.pathInfo;
-      // const list = this.domains.map((it) => {
-      //   return it.domain + "/" + Key;
-      // });
       const list = this.bucketInfo.originList
         .concat(this.domains)
         .map((origin) => {
@@ -305,7 +320,6 @@ export default {
       );
       this.getDomain();
     },
-
     async getObjects() {
       this.fileLoading = true;
       this.dirFileArr = [];

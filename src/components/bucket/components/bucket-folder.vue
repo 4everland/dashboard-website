@@ -52,11 +52,13 @@
           style="float: right"
         >
           <div v-show="fileInfoDrawer">
-            {{
-              selected.length > 1
-                ? `Select ${selected.length} files`
-                : "File Info"
-            }}
+            <span v-if="selected.length > 1"
+              >Select {{ selected.length }} files</span
+            >
+            <span v-if="selected.length == 1"
+              >{{ selected[0].isFile ? "File" : "Folder" }} Info</span
+            >
+            <span v-if="selected.length == 0">Flie Info</span>
           </div>
           <div
             @click="fileInfoDrawer = !fileInfoDrawer"
