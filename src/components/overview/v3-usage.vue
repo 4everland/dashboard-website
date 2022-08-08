@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col v-for="(it, i) in usageList" :key="i">
+    <v-col style="min-width: 200px" v-for="(it, i) in usageList" :key="i">
       <v-card style="min-width: 120px">
         <div class="pa-1" v-if="it.loading">
           <v-skeleton-loader type="article" />
@@ -42,7 +42,8 @@
               <v-btn
                 outlined
                 small
-                class="ml-auto pl-2 pr-2"
+                class="pl-2 pr-2"
+                :class="asMobile ? 'ml-4' : 'ml-auto'"
                 to="/billing/bills"
                 >Deposit</v-btn
               >
@@ -75,6 +76,9 @@ export default {
     };
   },
   computed: {
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
     usageList() {
       const info = this.usageInfo;
       return [
