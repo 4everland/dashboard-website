@@ -151,6 +151,10 @@ export default {
         this.info = data;
         if (data.ens != "") {
           this.domain = data.ens;
+          const chainId = window.ethereum.chainId;
+          if (chainId != "0x1") {
+            return;
+          }
           this.owner = await this.verifyOwner();
           this.ensIpns = await this.getEnsIpns(this.info.ens);
           if (this.ensIpns && this.ensIpns === this.info.ipns) {
@@ -246,10 +250,14 @@ export default {
       }
     },
     async verifyConfiguration() {
-      this.$loading();
-      if (!this.checkNet()) {
+      if (!this.connectAddr) {
+        this.showConnect();
         return;
       }
+      if (!this.checkNet()) {
+        return false;
+      }
+      this.$loading();
       this.ensIpns = await this.getEnsIpns(this.info.ens);
       if (this.ensIpns && this.ensIpns === this.info.ipns) {
         this.verify = true;
