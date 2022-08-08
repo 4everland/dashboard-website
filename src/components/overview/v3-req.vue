@@ -38,25 +38,27 @@
           v-if="loading"
           type="article"
         ></v-skeleton-loader>
-        <div v-else-if="!list.length">
-          <img src="img/svg/overview/map-def.svg" class="w100p ev-n" />
+        <div class="pos-r" v-else>
+          <div class="pos-center bg-f1 pa-2 fz-14 lh-1 ml-5 mt-2" v-if="noData">
+            No Data Available
+          </div>
+          <table class="w100p fz-13">
+            <thead class="gray">
+              <tr>
+                <td></td>
+                <td>Requests</td>
+                <td>Bandwidth</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(it, i) in list" :key="i">
+                <td class="gray-89 fw-b">{{ it.name }}</td>
+                <td class="fw-b">{{ it.request }}</td>
+                <td class="fw-b">{{ it.band }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <table class="w100p fz-13" v-else>
-          <thead class="gray">
-            <tr>
-              <td></td>
-              <td>Requests</td>
-              <td>Bandwidth</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(it, i) in list" :key="i">
-              <td class="gray-89 fw-b">{{ it.name }}</td>
-              <td class="fw-b">{{ it.request }}</td>
-              <td class="fw-b">{{ it.band }}</td>
-            </tr>
-          </tbody>
-        </table>
       </v-col>
     </v-row>
   </div>
@@ -77,6 +79,20 @@ export default {
       typeIdx: 0,
       list: [],
       loading: false,
+      noList: [
+        { name: "United States" },
+        { name: "China" },
+        { name: "Japan" },
+        { name: "India" },
+        { name: "Canada" },
+        { name: "Russia" },
+        { name: "Mexico" },
+        { name: "Australia" },
+        { name: "Malaysia" },
+        { name: "France" },
+        { name: "Singapore" },
+        { name: "South Korea" },
+      ],
     };
   },
   watch: {
@@ -111,6 +127,13 @@ export default {
           it.value = it.request;
           return it;
         });
+        this.noData = !this.list.length;
+        if (this.noData) {
+          this.list = this.noList.map((it) => {
+            it.value = "";
+            return it;
+          });
+        }
         if (!this.worldMapJson) {
           const { data } = await Axios.get(
             "https://static1.4everland.org/config/world.json"
