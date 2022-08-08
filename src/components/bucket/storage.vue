@@ -19,7 +19,7 @@
             :loading="!fileInfo"
             :download="fileName"
           >
-            <img src="img/icon/download.svg" width="16" />
+            <img src="/img/icon/download.svg" width="16" />
             <span class="ml-2">Download</span>
           </v-btn>
 
@@ -33,7 +33,7 @@
               "
               :color="fileArStatus == 'synced' ? 'success' : ''"
             >
-              <img src="img/icon/ic-ar-sync.svg" width="16" />
+              <img src="/img/icon/ic-ar-sync.svg" width="16" />
               <span class="ml-2">
                 <span v-if="fileArStatus == 'synced'">Verify on AR</span>
                 <span v-else>Sync to AR</span>
@@ -49,15 +49,15 @@
                   v-clipboard="fileUrl.encode()"
                   @success="$toast('Copied to clipboard !')"
                 >
-                  <img src="img/icon/copy.svg" width="14" class="mr-2" />
+                  <img src="/img/icon/copy.svg" width="14" class="mr-2" />
                   <span class="gray-7">Copy Path</span>
                 </v-list-item>
                 <v-list-item link @click="onRename(fileName)">
-                  <img src="img/icon/ic-rename.svg" width="14" class="mr-2" />
+                  <img src="/img/icon/ic-rename.svg" width="14" class="mr-2" />
                   <span class="gray-7">Rename</span>
                 </v-list-item>
                 <v-list-item link @click="onDelFile">
-                  <img src="img/icon/ic-delete.svg" width="14" class="mr-2" />
+                  <img src="/img/icon/ic-delete.svg" width="14" class="mr-2" />
                   <span class="red-2">Delete</span>
                 </v-list-item>
               </v-list>
@@ -83,7 +83,7 @@
         <div v-show="inBucket" class="ml-5">
           <v-btn color="primary" @click="addBucket">
             <!-- <v-icon size="15">mdi-folder-multiple-plus</v-icon> -->
-            <img src="img/svg/add1.svg" width="12" />
+            <img src="/img/svg/add1.svg" width="12" />
             <span class="ml-2">New Bucket</span>
           </v-btn>
         </div>
@@ -261,7 +261,7 @@
             :href="getViewUrl(item)"
             target="_blank"
           >
-            <img src="img/svg/view.svg" width="14" class="ml-2" />
+            <img src="/img/svg/view.svg" width="14" class="ml-2" />
           </v-btn>
         </template>
         <template v-slot:item.domain="{ item }">
@@ -294,7 +294,7 @@
             @success="$toast('Copied to clipboard !')"
           >
             <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
-            <img src="img/svg/copy.svg" width="12" />
+            <img src="/img/svg/copy.svg" width="12" />
           </v-btn>
         </template>
         <template v-slot:item.arAct="{ item }">
@@ -337,7 +337,7 @@
         v-if="!list.length"
       >
         <img
-          :src="`img/svg/common/empty${tableLoading ? 1 : 2}.svg`"
+          :src="`/img/svg/common/empty${tableLoading ? 1 : 2}.svg`"
           :height="tableLoading ? 100 : 130"
         />
         <div class="mt-5 gray fz-17">

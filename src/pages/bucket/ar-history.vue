@@ -85,7 +85,7 @@
             @success="$toast('Copied to clipboard !')"
           >
             <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
-            <img src="img/svg/copy.svg" width="11" />
+            <img src="/img/svg/copy.svg" width="11" />
           </v-btn>
         </template>
         <template v-slot:item.arweaveStatus="{ item }">

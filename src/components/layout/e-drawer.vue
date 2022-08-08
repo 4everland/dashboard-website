@@ -60,7 +60,7 @@
   >
     <div>
       <a href="/" class="mt-8 d-b" v-if="asMobile">
-        <img :src="`img/svg/logo.svg`" height="26" class="d-b m-auto" />
+        <img :src="`/img/svg/logo.svg`" height="26" class="d-b m-auto" />
       </a>
     </div>
 
@@ -128,7 +128,7 @@
     </v-list>
 
     <!-- <div class="pos-a mini-arrow" @click="mini = !mini">
-      <img src="img/svg/drawer/mini-arrow.svg" class="icon d-b" />
+      <img src="/img/svg/drawer/mini-arrow.svg" class="icon d-b" />
     </div> -->
     <div class="pos-a btm-0 left-0 w100p mb-4 al-c pa-3">
       <a
@@ -139,7 +139,7 @@
         :key="i"
       >
         <img
-          :src="`img/svg/drawer/social/${it.label.toLocaleLowerCase()}.svg`"
+          :src="`/img/svg/drawer/social/${it.label.toLocaleLowerCase()}.svg`"
           width="24"
         />
       </a>

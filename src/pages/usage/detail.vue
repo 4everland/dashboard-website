@@ -55,7 +55,7 @@
             v-clipboard="info.hash"
             @success="$toast('Copied to clipboard !')"
           >
-            <img src="img/svg/copy.svg" width="11" />
+            <img src="/img/svg/copy.svg" width="11" />
           </v-btn>
         </e-kv>
       </div>

@@ -18,7 +18,7 @@
           @click="$emit('handleAddDomain')"
           v-show="selected.length <= 1 && inBucket"
         >
-          <!-- <img src="img/icon/ic-domain.svg" width="14" class="mr-2" /> -->
+          <!-- <img src="/img/icon/ic-domain.svg" width="14" class="mr-2" /> -->
           <span>Add Domain</span>
         </v-btn>
 
@@ -69,7 +69,7 @@
           class="ml-4"
           @click="$emit('handleDeleteSelected')"
         >
-          <!-- <img src="img/icon/ic-delete.svg" width="14" class="mr-2" /> -->
+          <!-- <img src="/img/icon/ic-delete.svg" width="14" class="mr-2" /> -->
           <span class="gray">Delete</span>
         </v-btn>
       </div>

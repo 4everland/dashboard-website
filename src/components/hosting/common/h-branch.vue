@@ -1,7 +1,7 @@
 <template>
   <div class="al-c">
     <!-- <v-icon size="18" :color="$color1">{{ icon }}</v-icon> -->
-    <img src="img/svg/hosting/m-branch.svg" width="16" />
+    <img src="/img/svg/hosting/m-branch.svg" width="16" />
     <a
       v-if="href"
       :href="href"

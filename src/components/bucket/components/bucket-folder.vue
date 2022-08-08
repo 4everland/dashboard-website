@@ -16,12 +16,12 @@
           @click="addFolder"
         >
           <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
-          <img src="img/svg/add0.svg" width="12" />
+          <img src="/img/svg/add0.svg" width="12" />
           <span class="ml-2">New Folder</span>
         </v-btn>
         <!-- Fragments Btn -->
         <v-btn class="ml-5" outlined @click="drawer = true">
-          <img src="img/svg/parts_icon.svg" width="12" />
+          <img src="/img/svg/parts_icon.svg" width="12" />
           <span class="ml-2">Fragments</span>
         </v-btn>
         <!-- Search-Input -->
@@ -64,7 +64,7 @@
           >
             <img
               :style="fileInfoDrawer ? '' : 'transform: rotate(180deg)'"
-              src="img/svg/bucketFileInfo/right-arrow.svg"
+              src="/img/svg/bucketFileInfo/right-arrow.svg"
               width="12"
             />
             <span class="ml-2">{{ fileInfoDrawer ? "Pack up" : "Open" }}</span>
@@ -126,7 +126,7 @@
                   v-clipboard="item.hash"
                   @success="$toast('Copied to clipboard !')"
                 >
-                  <img src="img/svg/copy.svg" width="12" />
+                  <img src="/img/svg/copy.svg" width="12" />
                 </v-btn>
               </div>
               <span v-else>--</span>
@@ -156,7 +156,7 @@
             v-if="!list.length"
           >
             <img
-              :src="`img/svg/common/empty${tableLoading ? 1 : 2}.svg`"
+              :src="`/img/svg/common/empty${tableLoading ? 1 : 2}.svg`"
               :height="tableLoading ? 100 : 130"
             />
             <div class="mt-5 gray fz-17">

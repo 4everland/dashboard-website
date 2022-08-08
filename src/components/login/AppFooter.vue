@@ -184,11 +184,11 @@ export default {
               href: "https://4everland.org/grants",
               target: "_blank",
             },
-            {
-              name: "Bug Bounty",
-              href: "https://hosting.4everland.org/#/bug-bounty",
-              target: "_blank",
-            },
+            // {
+            //   name: "Bug Bounty",
+            //   href: "https://hosting.4everland.org/#/bug-bounty",
+            //   target: "_blank",
+            // },
             {
               name: "FAQ",
               href: "https://4everland.org/hosting/#faq",

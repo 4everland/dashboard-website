@@ -27,6 +27,7 @@
         v-if="info && info.hash"
       >
         <a
+          class="u"
           :href="$utils.getCidLink(info.hash, info.platform)"
           target="_blank"
           >{{ info.hash }}</a
@@ -36,7 +37,7 @@
         <div v-if="isSyncErr" class="red-1">Syncing failed</div>
         <div v-else-if="inNew && info && info.platform == 'IC'">
           Syncing to IC may take more time to complete,
-          <a href="#/hosting/projects" class="u">click here</a> for other
+          <e-link href="/hosting/projects">click here</e-link> for other
           operations without waiting.
         </div>
         <span v-else>Pending</span>

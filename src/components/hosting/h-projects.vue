@@ -38,7 +38,7 @@
     <e-right-opt-wrap>
       <e-menu open-on-hover offset-y>
         <v-btn slot="ref" outlined min-width="100">
-          <!-- <img src="img/svg/hosting/ic-sort.svg" width="12" /> -->
+          <!-- <img src="/img/svg/hosting/ic-sort.svg" width="12" /> -->
           <span class="ml-2">{{
             sortType == "Active" ? sortArr[0] : sortArr[1]
           }}</span>
@@ -59,7 +59,7 @@
         </v-list>
       </e-menu>
       <v-btn class="ml-5" color="primary" to="/hosting/new">
-        <img src="img/svg/add1.svg" width="12" />
+        <img src="/img/svg/add1.svg" width="12" />
         <span class="ml-2">New Project</span>
       </v-btn>
     </e-right-opt-wrap>
@@ -76,7 +76,7 @@
             <template v-slot:actions>
               <!-- <v-icon color="primary"> $expand </v-icon> -->
               <img
-                src="img/svg/hosting/ic-expand.svg"
+                src="/img/svg/hosting/ic-expand.svg"
                 height="20"
                 class="ic-expand trans-300"
               />
@@ -87,7 +87,7 @@
                   <v-img
                     :src="$getImgSrc(it.previewImage)"
                     @click.stop="$navTo(getDetailPath(it))"
-                    lazy-src="img/bg/empty/project.png"
+                    lazy-src="/img/bg/empty/project.png"
                     max-height="60"
                     max-width="60"
                     :aspect-ratio="1"
@@ -113,7 +113,7 @@
                     </div>
                     <div class="al-c mt-4">
                       <img
-                        :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
+                        :src="`/img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
                         height="20"
                       />
                       <a
@@ -139,7 +139,7 @@
                   <e-icon-link
                     @click.native.stop="onStop"
                     class="mr-6"
-                    img="img/svg/hosting/m-branch.svg"
+                    img="/img/svg/hosting/m-branch.svg"
                     :link="
                       it.repo.cloneUrl.replace(
                         '.git',
@@ -186,7 +186,7 @@
                 <div class="d-flex">
                   <e-icon-link
                     class="mr-5 shrink-1"
-                    img="img/svg/hosting/m-github.svg"
+                    img="/img/svg/hosting/m-github.svg"
                     :link="it.repo.cloneUrl.replace('.git', '')"
                   >
                     <span class="ml-1 gray-6">{{
@@ -200,10 +200,10 @@
 
                 <div class="d-flex al-c ml-auto">
                   <v-btn icon :to="getDetailPath(it, '?tab=settings')">
-                    <img src="img/svg/hosting/ic-setting.svg" width="16" />
+                    <img src="/img/svg/hosting/ic-setting.svg" width="16" />
                   </v-btn>
                   <v-btn icon class="ml-3" @click="onDelete(it)">
-                    <img src="img/svg/hosting/ic-delete.svg" width="16" />
+                    <img src="/img/svg/hosting/ic-delete.svg" width="16" />
                   </v-btn>
                   <v-btn
                     v-if="it.taskId"

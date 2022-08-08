@@ -11,7 +11,7 @@
       <div class="btn-wrap d-flex justify-end">
         <v-btn color="primary" @click="showPop = true" width="120">
           <!-- <v-icon size="16">mdi-plus-circle-outline</v-icon> -->
-          <img src="img/svg/add1.svg" width="12" />
+          <img src="/img/svg/add1.svg" width="12" />
           <span class="ml-2">Add</span>
         </v-btn>
         <v-btn
@@ -23,7 +23,7 @@
           v-show="selected.length"
           width="120"
         >
-          <img src="img/svg/delete.svg" width="12" />
+          <img src="/img/svg/delete.svg" width="12" />
           <span class="ml-2">Delete</span>
         </v-btn>
       </div>

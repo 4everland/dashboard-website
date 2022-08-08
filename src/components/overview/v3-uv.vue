@@ -1,10 +1,10 @@
 <template>
   <div class="ov-wrap-1">
     <div class="al-c">
-      <img src="img/svg/overview/uv.svg" width="16" />
+      <img src="/img/svg/overview/uv.svg" width="16" />
       <b class="ml-2 fz-16">Hosting UV</b>
       <div class="ml-auto pa-1 hover-1 z-1" @click="showSelect = true">
-        <img src="img/svg/overview/exchange.svg" width="18" />
+        <img src="/img/svg/overview/exchange.svg" width="18" />
       </div>
     </div>
 
@@ -16,7 +16,7 @@
     <div class="pos-r mt-5 pt-2" v-else-if="!uvList.length">
       <div class="pos-center bg-f1 pa-2 fz-14 lh-1">No Data Available</div>
       <img
-        src="img/svg/overview/uv-def.svg"
+        src="/img/svg/overview/uv-def.svg"
         class="w100p ev-n op-8"
         style="max-height: 260px"
       />
@@ -37,7 +37,7 @@
             {{ (it.projectName || "").cutStr(10, 6) }}
           </p>
           <img
-            src="img/svg/overview/arrow.svg"
+            src="/img/svg/overview/arrow.svg"
             class="pos-a"
             style="bottom: -5px; width: 115%"
             v-if="curIdx == i"
@@ -91,11 +91,11 @@
               v-for="(it, i) in projList"
               :key="i"
             >
-              <img src="img/svg/overview/uv-dir.svg" width="14" />
+              <img src="/img/svg/overview/uv-dir.svg" width="14" />
               <span class="fz-14 ml-3">{{ it.projectName }}</span>
               <img
                 class="ml-auto"
-                :src="`img/svg/overview/uv-${
+                :src="`/img/svg/overview/uv-${
                   getChecked(it) ? 'checked' : 'uncheck'
                 }.svg`"
                 width="16"

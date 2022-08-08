@@ -43,7 +43,7 @@ export const http2 = Axios.create({
   baseURL: hostingUrl,
 });
 Vue.prototype.$getImgSrc = function (src) {
-  if (!src) src = "img/bg/empty/project.png";
+  if (!src) src = "/img/bg/empty/project.png";
   else if (!/^http/.test(src)) src = hostingUrl + src;
   return src;
 };

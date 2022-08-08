@@ -21,7 +21,7 @@
             <div class="al-c mt-2">
               <span class="mr-5 fz-14" v-if="!asMobile">Production</span>
               <img
-                :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
+                :src="`/img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
                 height="20"
               />
               <a

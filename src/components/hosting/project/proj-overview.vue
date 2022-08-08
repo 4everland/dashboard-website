@@ -8,7 +8,7 @@
             <v-img
               class="bd-1 bdrs-5 w100p"
               :src="$getImgSrc(info.screenshot)"
-              lazy-src="img/bg/empty/project.png"
+              lazy-src="/img/bg/empty/project.png"
               aspect-ratio="1"
               max-height="270"
             ></v-img>
@@ -16,9 +16,9 @@
         </v-col>
         <v-col cols="12" md="6">
           <e-kv label="Deployment" class="mt-2">
-            <a :href="'#' + buildPath">
+            <e-link :href="buildPath">
               {{ info.domain }}
-            </a>
+            </e-link>
           </e-kv>
 
           <e-kv
@@ -59,7 +59,7 @@
                 </e-link>
                 <img
                   v-if="info.hash"
-                  src="img/svg/copy.svg"
+                  src="/img/svg/copy.svg"
                   width="12"
                   class="ml-3 hover-1"
                   @success="$toast('Copied to clipboard !')"
@@ -86,7 +86,7 @@
                   {{ info.ipns.cutStr(4, 4) }}
                 </e-link>
                 <img
-                  src="img/svg/copy.svg"
+                  src="/img/svg/copy.svg"
                   width="12"
                   class="ml-3 hover-1"
                   @success="$toast('Copied to clipboard !')"

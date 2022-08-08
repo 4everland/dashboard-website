@@ -5,7 +5,7 @@
       <span class="task-count" v-show="uploadingTaskLength != 0">{{
         uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
       }}</span>
-      <img src="img/svg/common/task-list.svg" alt="" width="54" />
+      <img src="/img/svg/common/task-list.svg" alt="" width="54" />
     </div>
     <keep-alive v-if="inFolder || inFile">
       <e-tabs v-if="inFolder" :list="list" :defTab="1" noRouter ignorePath />

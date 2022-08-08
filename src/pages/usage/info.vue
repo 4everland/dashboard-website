@@ -20,13 +20,13 @@
 
 <template>
   <div class="usage-info pos-r">
-    <a
-      href="#/billing/bills"
+    <e-link
+      href="/billing/bills"
       class="pos-a pa-1 right-0 mr-3"
       style="top: -45px"
     >
-      <img src="img/svg/billing/list.svg" width="18" />
-    </a>
+      <img src="/img/svg/billing/list.svg" width="18" />
+    </e-link>
     <div class="main-wrap pa-3 pl-7" style="min-height: 240px">
       <v-skeleton-loader type="article" v-if="!info" />
       <div
@@ -71,7 +71,7 @@
         <div class="color-1 fz-13 ml-2">{{ it.percTxt || "/" }}</div>
         <e-tooltip top v-if="it.perc > 80">
           <img
-            src="img/svg/billing/alert.svg"
+            src="/img/svg/billing/alert.svg"
             class="ml-2 mr-2"
             width="13"
             slot="ref"

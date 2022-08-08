@@ -1,12 +1,10 @@
 <template>
-  <a
-    :href="link"
-    :target="isHash ? '' : '_blank'"
-    :class="isHash ? '' : 'u'"
-    v-if="href"
-  >
+  <a :href="link" target="_blank" class="u" v-if="isLink">
     <slot></slot>
   </a>
+  <router-link v-else-if="to" :to="to" class="link">
+    <slot></slot>
+  </router-link>
   <div v-else>
     <slot></slot>
   </div>
@@ -18,13 +16,21 @@ export default {
     href: String,
   },
   computed: {
-    isHash() {
-      return /^#/.test(this.href);
+    isLink() {
+      return (this.href || "").includes("//");
     },
     link() {
-      if (this.href && this.href.indexOf("//") == -1 && !this.isHash)
-        return "//" + this.href;
-      return this.href;
+      return this.isLink ? this.href : "";
+    },
+    to() {
+      let to = this.isLink ? "" : (this.href || "").replace("#", "");
+      if (to && !/^\//.test(to)) to = "/" + to;
+      return to;
+    },
+  },
+  methods: {
+    onClick() {
+      this.$router.push(this.to);
     },
   },
 };

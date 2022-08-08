@@ -127,13 +127,19 @@
       <v-col md="7">
         <div class="referral-link flex-1">
           <div
-            class="referral-link-header d-flex align-center justify-space-between mb-11"
+            class="
+              referral-link-header
+              d-flex
+              align-center
+              justify-space-between
+              mb-11
+            "
           >
             <h3 class="title">Referrals Link</h3>
             <ul class="al-c">
               <li v-for="it in mLinks" :key="it.label" class="share-icon">
                 <img
-                  :src="`img/svg/drawer/social/${it.label.toLocaleLowerCase()}.svg`"
+                  :src="`/img/svg/drawer/social/${it.label.toLocaleLowerCase()}.svg`"
                   width="30"
                   @click="sharePlatForm(it.label)"
                 />
@@ -151,7 +157,7 @@
                 v-clipboard="shareUrl"
                 @success="$toast('Copied to clipboard !')"
               >
-                <img src="img/svg/copy.svg" width="12" />
+                <img src="/img/svg/copy.svg" width="12" />
               </v-btn>
             </div>
             <div class="share-btn" @click="onInvite">Invite Friend</div>
@@ -215,7 +221,7 @@
               <div class="pos-r" ref="imgWrap">
                 <img
                   @load="isBgLoad = true"
-                  src="img/bg/user/refer-share.png"
+                  src="/img/bg/user/refer-share.png"
                   style="width: 220px"
                   class="ev-n"
                 />
