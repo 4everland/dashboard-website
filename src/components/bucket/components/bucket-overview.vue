@@ -298,20 +298,20 @@ export default {
           }
         }
       }
-      .basic-statistics-item::before {
-        content: "";
-        display: block;
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 1px;
-        height: 29px;
-        background: #d0dae9;
-      }
-      .basic-statistics-item:first-of-type::before {
-        display: none;
-      }
+      // .basic-statistics-item::before {
+      //   content: "";
+      //   display: block;
+      //   position: absolute;
+      //   left: 0;
+      //   top: 50%;
+      //   transform: translateY(-50%);
+      //   width: 1px;
+      //   height: 29px;
+      //   background: #d0dae9;
+      // }
+      // .basic-statistics-item:first-of-type::before {
+      //   display: none;
+      // }
     }
   }
 

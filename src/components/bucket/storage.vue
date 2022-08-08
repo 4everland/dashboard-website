@@ -88,15 +88,15 @@
           </v-btn>
         </div>
       </div>
-      <div class="d-flex mt-2">
+      <!-- <div class="d-flex mt-2">
         <nav-item unit="Objects" class="ml-auto" v-if="inBucket">{{
           list.length
-        }}</nav-item>
-      </div>
+        }}</nav-item> -->
+      <!-- </div> -->
     </e-right-opt-wrap>
 
     <!-- padding layout -->
-    <div class="pa-4" v-if="inBucket"></div>
+    <div class="pa-1" v-if="inBucket"></div>
 
     <!-- File Info -->
     <div v-if="inFile" class="mt-4">
