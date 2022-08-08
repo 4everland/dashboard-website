@@ -255,7 +255,7 @@ export default {
           ],
         },
         {
-          label: "Billing",
+          label: "Resources",
           img: "m-usage",
           group: /^\/billing/i,
           subs: [

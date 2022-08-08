@@ -85,8 +85,8 @@
       </div>
     </div>
 
-    <div class="mt-5 ml-5 ta-r">
-      <v-btn color="primary" to="/billing/usage/more">Buy more >></v-btn>
+    <div class="mt-8 ta-c">
+      <v-btn color="primary" to="/billing/usage/more">Subscribe</v-btn>
     </div>
   </div>
 </template>

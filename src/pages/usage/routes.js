@@ -18,7 +18,7 @@ export default [
     path: "/billing/usage/more",
     component: More,
     meta: {
-      title: "Buy more",
+      title: "Subscribe",
       group: "Billing",
       links: [
         {
@@ -26,7 +26,7 @@ export default [
           to: "/billing/usage",
         },
         {
-          text: `Buy more`,
+          text: `Subscribe`,
         },
       ],
     },
