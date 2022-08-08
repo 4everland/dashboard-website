@@ -142,16 +142,22 @@ export default {
 </script>
 
 <style lang="scss">
-.v-slide-group__content {
-  border-bottom: 1px solid #d0dae9;
-}
 .e-settings {
+  .v3-horizon {
+    .v-slide-group__content {
+      border-bottom: 1px solid #d0dae9;
+    }
+    .v-tab {
+      min-width: 110px;
+    }
+  }
   .theme--light.v-tabs > .v-tabs-bar {
     background-color: transparent;
   }
   .v-tabs-slider {
     background: #775da6;
   }
+
   .v3-vertical {
     height: 100%;
     .v-tab {
