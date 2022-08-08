@@ -100,7 +100,7 @@
           >
             <v-list-item-content>
               <v-list-item-title>
-                <span class="fz-14">{{ sub.label }}</span>
+                <span class="fz-14"> {{ sub.label }}</span>
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -233,11 +233,15 @@ export default {
           active: false,
           group: /^\/bucket/i,
           subs: [
+            // {
+            //   label: "Buckets",
+            //   to: this.path.includes(initFilePath)
+            //     ? initFilePath
+            //     : this.filesPath,
+            // },
             {
               label: "Buckets",
-              to: this.path.includes(initFilePath)
-                ? initFilePath
-                : this.filesPath,
+              to: "/bucket/storage/",
             },
             {
               label: "AR History",

@@ -26,20 +26,19 @@
             />
           </v-col>
         </v-row>
-        <div class="d-flex ml-auto shrink-0 justify-end mt-4">
+        <div class="d-flex ml-auto shrink-0 justify-end mt-2">
           <nav-item icon="ic-sync" unit="MB">{{
             usageInfo.arSyncing
           }}</nav-item>
           <nav-item icon="ic-synced" unit="MB" class="ml-7">{{
             usageInfo.arSynced
           }}</nav-item>
-          <!-- <nav-item unit="Objects" class="ml-7">{{ total }}</nav-item> -->
         </div>
       </e-right-opt-wrap>
     </div>
 
     <!-- :show-select="list.length > 0" -->
-    <div class="main-wrap mt-10">
+    <div class="main-wrap mt-4">
       <v-data-table
         class="hide-bdb"
         :headers="headers"

@@ -142,7 +142,8 @@ export default {
       }
     },
   },
-  created() {
+  created() {},
+  mounted() {
     this.getInfo();
   },
   methods: {

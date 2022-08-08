@@ -17,18 +17,18 @@ export default {
 <style lang="scss">
 .sync-state {
   text-transform: capitalize;
-  color: #7e8ea8;
+  color: #fff;
   &.synced {
-    color: #00bd9a;
+    background: #00bd9a;
   }
   &.syncing {
-    color: #34a9ff;
+    background: #34a9ff;
   }
   &.timeout {
-    color: #f99536;
+    background: #f99536;
   }
   &.failure {
-    color: #ff6960;
+    background: #ff6960;
   }
 }
 </style>

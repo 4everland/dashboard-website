@@ -3,22 +3,17 @@
     <div class="nav" v-show="fileInfoDrawer">
       <div class="single-file" v-if="selected.length == 1">
         <v-img
+          v-show="thumbnail"
           class="my-4 bdrs-4"
           min-width="100%"
-          min-height="127"
+          height="200"
           contain
           :src="thumbnail"
         >
-          <template #placeholder>
-            <img
-              width="100%"
-              height="127"
-              src="/img/svg/bucketFileInfo/default-file-img.svg"
-              alt=""
-            />
-          </template>
         </v-img>
-
+        <div class="default-img al-c justify-center" v-show="!thumbnail">
+          <img class="default-img-content" :src="fileTypeImg" alt="" />
+        </div>
         <v-skeleton-loader
           v-show="fileLoading"
           type="article"
@@ -65,16 +60,15 @@
                   </v-btn>
                 </template>
                 <template v-else>
-                  <v-btn small text disabled>
-                    <sync-state
-                      :val="fileInfo.arStatus"
-                      style="border: 1px solid; padding: 3px 8px"
-                      class="bdrs-3"
-                    ></sync-state>
-                  </v-btn>
+                  <sync-state
+                    :val="fileInfo.arStatus"
+                    style="border: 1px solid; padding: 3px 8px"
+                    class="bdrs-3"
+                  ></sync-state>
                   <v-btn
                     slot="ref"
                     text
+                    color="#999999"
                     x-small
                     @click.stop="headObject"
                     v-if="fileInfo.arStatus == 'syncing'"
@@ -131,7 +125,6 @@
           </p>
         </div>
       </div>
-
       <div
         v-else-if="selected.length == 0"
         style="height: 100%"
@@ -253,6 +246,30 @@ export default {
       const reg = /.(png|jpg|gif|jpeg|webp)$/;
       return !reg.test(this.fileUrl);
     },
+    fileTypeImg() {
+      const ImgReg = /.(png|jpg|gif|jpeg|webp)$/;
+      const excelReg = /.(xls|xlsx)$/;
+      const pdfReg = /.pdf$/;
+      const ziplReg = /.(RAR|ZIP|ARJ|Z|LZH|JAR)$/;
+      const musicReg =
+        /.(WAVE|CD|AIFF|MP3|MPEG4|MIDI|WMA|RealAudio|VQF|OggVorbis|AMR|APE|FLAC|AAC)$/;
+      const videoReg = /.(avi|wmv|mpg|mpeg|mov|rm|ram|swf|flv|mp4)$/;
+      if (ImgReg.test(this.fileUrl)) {
+        return "/img/svg/bucketFileInfo/img_icon.svg";
+      } else if (excelReg.test(this.fileUrl)) {
+        return "/img/svg/bucketFileInfo/excel.svg";
+      } else if (pdfReg.test(this.fileUrl)) {
+        return "/img/svg/bucketFileInfo/pdf_icon.svg";
+      } else if (ziplReg.test(this.fileUrl)) {
+        return "/img/svg/bucketFileInfo/zip_icon.svg";
+      } else if (musicReg.test(this.fileUrl)) {
+        return "/img/svg/bucketFileInfo/music_icon.svg";
+      } else if (videoReg.test(this.fileUrl)) {
+        return "/img/svg/bucketFileInfo/video_icon.svg";
+      } else {
+        return "/img/svg/bucketFileInfo/unknow_icon.svg";
+      }
+    },
   },
   methods: {
     async headObject() {
@@ -284,9 +301,7 @@ export default {
               " "
             ),
           };
-          this.thumbnail = this.notImg
-            ? "/img/svg/bucketFileInfo/file-not-img.svg"
-            : this.fileUrl;
+          this.thumbnail = this.fileUrl;
         }
       );
       this.getDomain();
@@ -398,6 +413,15 @@ export default {
   // padding: 0 16px;
   padding-left: 20px;
   border-left: 1px solid #d7dfeb;
+  .default-img {
+    width: 100%;
+    height: 200px;
+    background: #f7f9fb;
+    border-radius: 6px;
+    .default-img-content {
+      width: 20%;
+    }
+  }
   .no-file {
     position: absolute;
     left: 50%;

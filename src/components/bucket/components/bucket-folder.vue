@@ -1,5 +1,5 @@
 <template>
-  <div class="bucket-item-container bg-white" style="min-height: 800px">
+  <div class="bucket-item-container bg-white">
     <div class="file-container" v-if="inFolder">
       <!-- Operation Tab -->
       <div class="operation-tab d-flex">
@@ -71,7 +71,7 @@
           </div>
         </div>
       </div>
-      <div class="d-flex">
+      <div class="d-flex" style="height: 100%; min-height: 700px">
         <div class="table-data flex-1">
           <!-- Files Table -->
           <v-data-table
@@ -90,7 +90,7 @@
             hide-default-footer
             disable-pagination
             @click:row="onRow"
-            height="600"
+            height="700"
           >
             <template v-slot:item.name="{ item }">
               <v-btn
@@ -151,7 +151,7 @@
           </v-data-table>
           <!-- Loading Img -->
           <div
-            class="ta-c"
+            class="ta-c loading-img"
             :class="tableLoading ? 'mt-10' : 'mt-15'"
             v-if="!list.length"
           >
@@ -418,6 +418,12 @@ export default {
     }
     .table-data {
       position: relative;
+      .loading-img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
     }
   }
 }

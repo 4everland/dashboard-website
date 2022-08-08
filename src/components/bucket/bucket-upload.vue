@@ -209,6 +209,7 @@ export default {
         this.page = 1;
       }
       if (newVal.length) {
+        this.$loading();
         const residue = await this.overStorage();
         const totalSizeVal = newVal.reduce((pre, current) => {
           return pre + current.size;
@@ -219,6 +220,7 @@ export default {
         } else {
           this.isStorageFull = false;
         }
+        this.$loading.close();
         this.onConfirm();
       }
     },
