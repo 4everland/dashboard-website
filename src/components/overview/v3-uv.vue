@@ -48,7 +48,7 @@
         </ul>
       </div>
       <div class="flex-1">
-        <div class="gray fz-12 mt-3 ml-6">Last 24h</div>
+        <div class="gray fz-12 mt-3 ml-6 ta-c">Last 24h</div>
         <div class="pos-r" style="min-height: 295px">
           <div>
             <div

@@ -117,7 +117,7 @@ Vue.prototype.$utils = {
     if (!cid) return "";
     if (plat == "IPNS") return `https://${cid}.ipns.4everland.io/`;
     if (plat == "IC") return `https://${cid}.raw.ic0.app/`;
-    return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
+    return `https://${this.getCidV1(cid)}.ipfs.4everland.io`; //.ipfs.dweb.link
   },
   cutFixed(num, keep = 2) {
     const str = num + "";
