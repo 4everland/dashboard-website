@@ -7,7 +7,12 @@
         location.
       </div>
       <div class="mt-5 d-flex hide-msg">
-        <v-text-field placeholder="index.html" outlined dense v-model="rewrite">
+        <v-text-field
+          placeholder="`index.html` for history mode"
+          outlined
+          dense
+          v-model="rewrite"
+        >
         </v-text-field>
         <v-btn
           min-width="100"
