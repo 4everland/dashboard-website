@@ -130,13 +130,11 @@ export default {
         this.loading = true;
         if (!this.dns.ip) {
           const { data } = await this.$http.get("/domains/resolve");
-          console.log(data);
           this.dns = data;
         }
         const { data: info } = await this.$http.get(
           `/domains/${this.domain}/verify`
         );
-        console.log(info);
         const arr = this.domain.split(".");
         arr.pop();
         arr.pop();

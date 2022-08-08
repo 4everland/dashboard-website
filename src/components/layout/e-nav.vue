@@ -107,7 +107,6 @@ export default {
         };
       if (this.navItems.length) {
         const item = { ...this.navItems[0] };
-        console.log(item.to);
         item.href = this.breadItems.length ? item.to : "";
         return item;
       }
