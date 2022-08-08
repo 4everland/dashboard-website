@@ -62,7 +62,6 @@
                 <template v-else>
                   <sync-state
                     :val="fileInfo.arStatus"
-                    style="border: 1px solid; padding: 3px 8px"
                     class="bdrs-3"
                   ></sync-state>
                   <v-btn

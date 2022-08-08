@@ -127,7 +127,13 @@
       <v-col md="7">
         <div class="referral-link flex-1">
           <div
-            class="referral-link-header d-flex align-center justify-space-between mb-11"
+            class="
+              referral-link-header
+              d-flex
+              align-center
+              justify-space-between
+              mb-11
+            "
           >
             <h3 class="title">Referrals Link</h3>
             <ul class="al-c">
@@ -418,11 +424,14 @@ export default {
     sharePlatForm(platForm) {
       switch (platForm) {
         case "Twitter":
-          window.open(
-            `https://twitter.com/intent/tweet?text=Come join @4everland_org and explore infinite possibilities with products designed for sophisticated and dynamic&url=${encodeURIComponent(
-              this.shareUrl
-            )}  &hashtags=Tech,IPFS,decentralized,Storage`
-          );
+          // window.open(
+          //   `https://twitter.com/intent/tweet?text=Come join @4everland_org and explore infinite possibilities with products designed for sophisticated and dynamic&url=${encodeURIComponent(
+          //     this.shareUrl
+          //   )}  &hashtags=Tech,IPFS,decentralized,Storage`
+          // );
+
+          window.open(`https://twitter.com/intent/tweet?text=Come join @4everland_org and explore infinite possibilities with products designed for sophisticated and dynamic &hashtags=Web3 experience! &hashtags=Tech,IPFS,decentralized,Storage
+          ${encodeURIComponent(this.shareUrl)}`);
           break;
         case "Discord":
           this.openFrame("discord://", "Discord");
@@ -433,7 +442,7 @@ export default {
         case "FaceBook":
           window.open(
             `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-              location.origin + "/index.html/#/?invite=" + this.code
+              "https://hb.4everland.app/#/?invite=" + this.code
             )}`
           );
           break;

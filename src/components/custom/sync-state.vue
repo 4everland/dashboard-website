@@ -18,6 +18,15 @@ export default {
 .sync-state {
   text-transform: capitalize;
   color: #fff;
+  font-size: 12px;
+  padding: 5px 20px;
+  border: none;
+
+  border-radius: 5px;
+  &.desynced {
+    background: #e6e8eb;
+    color: #6c7789;
+  }
   &.synced {
     background: #00bd9a;
   }
