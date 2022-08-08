@@ -67,6 +67,9 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    path() {
+      return this.$route.path;
+    },
   },
   data() {
     return {
@@ -78,12 +81,18 @@ export default {
     };
   },
   watch: {
+    path() {
+      if (this.path == this.initPath) {
+        this.getList();
+      }
+    },
     date() {
       this.page = 1;
       this.getList();
     },
   },
   mounted() {
+    this.initPath = this.path;
     this.getList();
   },
   methods: {
