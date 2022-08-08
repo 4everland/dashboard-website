@@ -108,7 +108,9 @@ export default {
           return it;
         });
         this.totalSize = this.$utils.getFileSize(total);
-        this.setData();
+        if (total) {
+          this.setData();
+        }
       } catch (error) {
         console.log(error);
       }
