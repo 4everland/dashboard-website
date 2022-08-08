@@ -13,12 +13,14 @@
       <span class="gray-7 mr-3">Total balance:</span>
       <b class="fz-20 red-1">{{ balance }}</b>
       <span class="gray-6 fz-12 ml-2 mt-1">USD</span>
-      <v-btn color="primary" class="ml-8" @click="onShow(1)">Recharge</v-btn>
+      <v-btn min-width="103" color="primary" class="ml-8" @click="onShow(1)"
+        >Deposit</v-btn
+      >
       <v-btn outlined class="ml-4" @click="onShow(2)">Withdraw</v-btn>
-      <v-btn plain class="ml-auto" to="/billing/deduction">
-        <img src="/img/svg/billing/usage-list.svg" width="14" />
+      <e-link class="ml-auto" href="/billing/deduction">
+        <!-- <img src="/img/svg/billing/usage-list.svg" width="14" /> -->
         <span class="ml-2 fz-14">Deduction details</span>
-      </v-btn>
+      </e-link>
     </div>
 
     <v-dialog
@@ -34,7 +36,7 @@
           <div class="ml-2">
             <p class="fz-15">
               <template v-if="isRecharge">
-                Recharge will lock your funds. <br />
+                Deposit will lock your funds. <br />
                 When the account resource over used, the excess quantities will
                 be deducted. <br />
                 You can withdraw your balance at any time.
@@ -48,7 +50,7 @@
                 * Currently, racharge are only supported on the Polygon network.
               </p>
               <p class="mt-2" v-if="isRecharge">
-                * Only supports USDC recharge.
+                * Only supports USDC deposit.
               </p>
             </div>
           </div>
@@ -130,7 +132,7 @@ export default {
   },
   computed: {
     title() {
-      return this.isRecharge ? "Recharge" : "Withdraw";
+      return this.isRecharge ? "Deposit" : "Withdraw";
     },
     maxNum() {
       if (this.isRecharge) {

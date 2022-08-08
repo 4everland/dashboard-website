@@ -129,9 +129,7 @@ export default {
   },
   computed: {
     ...mapState({
-      netType: (s) => s.netType,
       connectAddr: (s) => s.connectAddr,
-      chainId: (s) => s.chainId,
     }),
   },
   watch: {
@@ -153,6 +151,10 @@ export default {
         this.info = data;
         if (data.ens != "") {
           this.domain = data.ens;
+          const chainId = window.ethereum.chainId;
+          if (chainId != "0x1") {
+            return;
+          }
           this.owner = await this.verifyOwner();
           this.ensIpns = await this.getEnsIpns(this.info.ens);
           if (this.ensIpns && this.ensIpns === this.info.ipns) {
@@ -194,9 +196,10 @@ export default {
       this.$loading.close();
     },
     checkNet() {
-      if (!this.netType) return false;
+      const chainId = window.ethereum.chainId;
+      if (!chainId) return false;
       let msg = "";
-      if (this.netType != "main") {
+      if (chainId != "0x1") {
         msg = "Wrong network, please connect to Ethereum mainnet";
       }
       if (msg) {
@@ -247,10 +250,14 @@ export default {
       }
     },
     async verifyConfiguration() {
-      this.$loading();
-      if (!this.checkNet()) {
+      if (!this.connectAddr) {
+        this.showConnect();
         return;
       }
+      if (!this.checkNet()) {
+        return false;
+      }
+      this.$loading();
       this.ensIpns = await this.getEnsIpns(this.info.ens);
       if (this.ensIpns && this.ensIpns === this.info.ipns) {
         this.verify = true;

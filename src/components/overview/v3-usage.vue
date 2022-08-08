@@ -1,11 +1,17 @@
 <template>
   <v-row>
-    <v-col @click="onClick(it)" v-for="(it, i) in usageList" :key="i">
+    <v-col style="min-width: 200px" v-for="(it, i) in usageList" :key="i">
       <v-card style="min-width: 120px">
         <div class="pa-1" v-if="it.loading">
           <v-skeleton-loader type="article" />
         </div>
-        <div class="ov-wrap-1 pos-r" v-else>
+        <div
+          class="ov-wrap-1 pos-r"
+          :class="{
+            'pb-6': it.isBalance,
+          }"
+          v-else
+        >
           <img
             v-if="it.icon"
             :src="`/img/svg/overview/${it.icon}`"
@@ -19,12 +25,27 @@
             </span>
           </div>
           <p class="mt-3 fz-14 gray-8">{{ it.label }}</p>
-          <div class="mt-3 al-c fz-13 gray">
+          <div
+            class="al-c fz-13 gray"
+            :style="{
+              marginTop: it.isBalance ? '11px' : '12px',
+            }"
+          >
             <template v-if="it.isBalance">
-              <span>Airdropped</span>
+              <v-btn
+                color="primary"
+                small
+                class="pl-2 pr-2"
+                to="/billing/usage/more"
+                >Subscribe</v-btn
+              >
+              <v-btn outlined small class="pl-2 pr-2 ml-4" to="/billing/bills"
+                >Deposit</v-btn
+              >
+              <!-- <span>Airdropped</span>
               <b class="link ml-1">{{ accoutInfo.freeOrder || 0 }}</b>
               <span class="ml-auto">Purchased</span>
-              <b class="link ml-1">{{ accoutInfo.paidOrder || 0 }}</b>
+              <b class="link ml-1">{{ accoutInfo.paidOrder || 0 }}</b> -->
             </template>
             <template v-else>
               <v-progress-linear
@@ -50,6 +71,9 @@ export default {
     };
   },
   computed: {
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
     usageList() {
       const info = this.usageInfo;
       return [
@@ -90,7 +114,7 @@ export default {
           isBalance: true,
           loading: !this.accoutInfo.loaded,
           unitTxt: "USDC",
-          label: "Recharge Balance",
+          label: "Balance",
         },
       ];
     },
@@ -116,10 +140,10 @@ export default {
         const usedObj = getSize(used, true);
         const totalObj = getSize(total, true);
         num = usedObj.num;
-        unitTxt = `${usedObj.unit}/${totalObj.num}${totalObj.unit}`;
+        unitTxt = `${usedObj.unit} / ${totalObj.num}${totalObj.unit}`;
       } else {
         num = used;
-        unitTxt = `Min/${total.toFixed(0)}Min`;
+        unitTxt = `Min / ${total.toFixed(0)}Min`;
       }
       let perc = (used * 100) / total;
       if (perc > 0) perc = Math.max(0.01, perc.toFixed(2));
@@ -139,12 +163,12 @@ export default {
       }
     },
     async getBalance() {
-      const { data } = await this.$http.get("$v3/account/order");
+      // const { data } = await this.$http.get("$v3/account/order");
       const {
         data: { balance },
       } = await this.$http.get("$v3/account/balance");
       this.accoutInfo = {
-        ...data,
+        // ...data,
         balance: this.$utils.cutFixed(balance, 4),
         loaded: true,
       };

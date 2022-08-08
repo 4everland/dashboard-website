@@ -86,7 +86,7 @@
           href="https://docs.google.com/forms/d/e/1FAIpQLSdDHqjksxnHYR9PBMd2hzW9CjmfFwCvIgU0TocTA_L4xCa7jQ/viewform"
           target="_blank"
         >
-          Buy more storage
+          Subscribe storage
         </v-btn>
       </div>
     </v-card>
