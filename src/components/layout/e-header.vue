@@ -8,7 +8,7 @@
   <v-app-bar id="e-header" app clipped-left height="60" color="#fff">
     <a href="/">
       <img
-        :src="`img/svg/logo${asMobile ? '-m' : ''}.svg`"
+        :src="`/img/svg/logo${asMobile ? '-m' : ''}.svg`"
         height="30"
         class="d-b"
       />
@@ -52,7 +52,7 @@
           <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
           <img
             v-if="it.subs && !it.noSuffix"
-            :src="`img/svg/header/ic-down-${it.color || 'def'}.svg`"
+            :src="`/img/svg/header/ic-down-${it.color || 'def'}.svg`"
             width="10"
             class="ml-2"
           />
@@ -69,7 +69,7 @@
             @click="onMenu(sub)"
           >
             <img
-              :src="sub.img || `img/svg/header/${sub.icon}.svg`"
+              :src="sub.img || `/img/svg/header/${sub.icon}.svg`"
               :width="sub.width || 12"
               :height="sub.height"
               class="mr-2"
@@ -118,21 +118,21 @@ export default {
         const paySubs = [
           {
             label: "Polygon",
-            img: "img/svg/billing/ic-polygon-0.svg",
+            img: "/img/svg/billing/ic-polygon-0.svg",
             width: 18,
             height: 18,
             type: "pay",
           },
           {
             label: "Ethereum",
-            img: "img/svg/billing/ic-ethereum.svg",
+            img: "/img/svg/billing/ic-ethereum.svg",
             width: 18,
             height: 18,
             type: "pay",
           },
           {
             label: "BSC",
-            img: "img/svg/billing/ic-bsc.png",
+            img: "/img/svg/billing/ic-bsc.png",
             width: 18,
             height: 18,
             type: "pay",
@@ -149,7 +149,7 @@ export default {
 
       list.push({
         label: (info.username || "unkown").cutStr(6, 4),
-        avatar: info.avatar || "img/bg/user/def-avatar.png",
+        avatar: info.avatar || "/img/bg/user/def-avatar.png",
         btnStyle: "border: 1px solid #775DA6",
         noSuffix: true,
         subs: [

@@ -6,7 +6,7 @@
         <v-img
           class="bd-1 bdrs-5 w100p"
           :src="$getImgSrc(info.screenshot)"
-          lazy-src="img/bg/empty/project.png"
+          lazy-src="/img/bg/empty/project.png"
           aspect-ratio="1"
           max-height="320"
         ></v-img>

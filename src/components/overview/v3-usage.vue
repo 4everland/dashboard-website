@@ -8,7 +8,7 @@
         <div class="ov-wrap-1 pos-r" v-else>
           <img
             v-if="it.icon"
-            :src="`img/svg/overview/${it.icon}`"
+            :src="`/img/svg/overview/${it.icon}`"
             :style="it.iconStyle || 'width: 24px'"
             class="pos-a top-0 right-0 mt-3 mr-3"
           />

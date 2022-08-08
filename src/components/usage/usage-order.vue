@@ -41,7 +41,7 @@
       <e-kv label="Network:" min-width="70px" label-class="gray-7 mt-1">
         <div class="al-c">
           <img
-            :src="`img/svg/billing/ic-${payBy.toLowerCase()}.${
+            :src="`/img/svg/billing/ic-${payBy.toLowerCase()}.${
               payBy == 'BSC' ? 'png' : 'svg'
             }`"
             height="24"
@@ -60,7 +60,7 @@
         class="mt-2"
       >
         <div class="al-c">
-          <img src="img/svg/settings/c-usdc.svg" width="24" class="mr-1" />
+          <img src="/img/svg/settings/c-usdc.svg" width="24" class="mr-1" />
           <span class="ml-2">USDC</span>
 
           <div class="ml-auto fz-14 gray-7">

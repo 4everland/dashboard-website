@@ -1,7 +1,7 @@
 <template>
   <div class="ta-c pt-10 pb-10 st-general">
     <div class="del-wrap d-ib bdrs-8">
-      <img src="img/svg/settings/account-del.svg" class="d-b" width="150" />
+      <img src="/img/svg/settings/account-del.svg" class="d-b" width="150" />
     </div>
     <div class="mt-3">
       <h3>Delete Personal Account</h3>

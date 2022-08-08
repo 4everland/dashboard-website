@@ -15,10 +15,10 @@
       <span class="gray-6 fz-12 ml-2 mt-1">USD</span>
       <v-btn color="primary" class="ml-8" @click="onShow(1)">Recharge</v-btn>
       <v-btn outlined class="ml-4" @click="onShow(2)">Withdraw</v-btn>
-      <a class="ml-auto al-c" href="#/billing/deduction">
-        <img src="img/svg/billing/usage-list.svg" width="14" />
+      <v-btn plain class="ml-auto" to="/billing/deduction">
+        <img src="/img/svg/billing/usage-list.svg" width="14" />
         <span class="ml-2 fz-14">Deduction details</span>
-      </a>
+      </v-btn>
     </div>
 
     <v-dialog
@@ -63,7 +63,7 @@
         </div>
         <div class="bd-1 mt-3 al-c bdrs-5">
           <div class="al-c bdr-1 pr-4 pl-2">
-            <img src="img/svg/billing/ic-polygon.svg" width="26" />
+            <img src="/img/svg/billing/ic-polygon.svg" width="26" />
             <span class="ml-2 fz-14">Polygon</span>
           </div>
           <input
@@ -73,7 +73,7 @@
             class="input-1 flex- shrink-1 fz-18 pa-2 pl-4"
             style="width: auto"
           />
-          <img src="img/svg/settings/c-usdc.svg" height="24" />
+          <img src="/img/svg/settings/c-usdc.svg" height="24" />
           <span class="ml-2 mr-2 fz-14">USDC</span>
           <v-btn color="primary" small class="mr-2" @click="onMax">MAX</v-btn>
         </div>

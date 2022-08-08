@@ -1,7 +1,7 @@
 <template>
   <div class="ov-wrap-1">
     <div class="al-c">
-      <img src="img/svg/overview/pie.svg" width="16" />
+      <img src="/img/svg/overview/pie.svg" width="16" />
       <b class="ml-2 fz-16">Bucket Storage</b>
       <e-radio-btn
         class="ml-auto z-100"
@@ -16,7 +16,7 @@
       v-if="loading"
     ></v-skeleton-loader>
     <div class="ta-c pt-14 pb-10" v-else-if="!list.length">
-      <img src="img/svg/overview/pie-def.svg" height="194" />
+      <img src="/img/svg/overview/pie-def.svg" height="194" />
     </div>
     <div class="d-flex" v-else>
       <div class="pos-r flex-1 mt-5" style="height: 276px">

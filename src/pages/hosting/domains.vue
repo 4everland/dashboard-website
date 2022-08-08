@@ -2,7 +2,7 @@
   <div>
     <e-right-opt-wrap>
       <v-btn color="primary" min-width="100" @click="showPop = true">
-        <img src="img/svg/add1.svg" width="12" />
+        <img src="/img/svg/add1.svg" width="12" />
         <span class="ml-2">Add</span>
       </v-btn>
       <v-btn
@@ -13,7 +13,7 @@
         class="ml-5"
         min-width="36"
       >
-        <img src="img/svg/delete.svg" width="12" />
+        <img src="/img/svg/delete.svg" width="12" />
         <span class="ml-2">Delete</span>
       </v-btn>
     </e-right-opt-wrap>
@@ -55,7 +55,7 @@
 
                       <img
                         class="ml-3"
-                        :src="`img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
+                        :src="`/img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
                         height="20"
                       />
                       <span class="ml-1 fz-14">{{ it.platform }}</span>
@@ -71,13 +71,12 @@
                       >
                     </div>
                   </div>
-                  <a
-                    href="#/hosting/new"
-                    class="d-flex al-c f-center mt-3 pa-3 gray fz-15"
-                  >
-                    <img src="img/svg/add2.svg" width="12" />
-                    <span class="color-1 ml-2">Create New Project</span>
-                  </a>
+                  <div class="ta-c mt-5">
+                    <v-btn plain to="/hosting/new">
+                      <img src="/img/svg/add2.svg" width="12" />
+                      <span class="link ml-2">Create New Project</span>
+                    </v-btn>
+                  </div>
                 </div>
               </template>
             </div>

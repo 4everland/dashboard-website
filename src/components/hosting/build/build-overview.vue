@@ -8,7 +8,7 @@
             <v-img
               class="bd-1 bdrs-5 w100p"
               :src="$getImgSrc(info.screenshotPath)"
-              lazy-src="img/bg/empty/project.png"
+              lazy-src="/img/bg/empty/project.png"
               aspect-ratio="1"
               max-height="230"
             ></v-img>
@@ -45,7 +45,7 @@
               'op-0 ev-n': info.platform != 'IPFS',
             }"
           >
-            <e-link :href="info.domain">
+            <e-link :href="'//' + info.domain">
               {{ info.domain }}
             </e-link>
           </e-kv2>
@@ -71,7 +71,7 @@
                   <span>{{ info.hash.cutStr(4, 4) }}</span>
                 </e-link>
                 <img
-                  src="img/svg/copy.svg"
+                  src="/img/svg/copy.svg"
                   width="12"
                   class="ml-3 hover-1"
                   @success="$toast('Copied to clipboard !')"

@@ -104,7 +104,7 @@
           <template v-slot:item.pay="{ item }">
             <div class="d-flex al-c">
               <img
-                :src="`img/svg/settings/c-${item.token.toLowerCase()}.svg`"
+                :src="`/img/svg/settings/c-${item.token.toLowerCase()}.svg`"
                 height="20"
               />
               <span class="ml-2">{{ item.pay }} {{ item.token }}</span>

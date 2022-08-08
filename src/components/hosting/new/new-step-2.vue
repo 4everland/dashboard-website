@@ -12,7 +12,7 @@
             class="bdrs-5"
             src1="https://static1.4everland.org/bg/party.gif"
             :src="$getImgSrc(info.screenshotPath)"
-            lazy-src="img/bg/empty/project.png"
+            lazy-src="/img/bg/empty/project.png"
             aspect-ratio="1"
             max-width="180"
           />
@@ -73,7 +73,11 @@
             width="120"
           >
             <span>Visit</span>
-            <img src="img/svg/hosting/share-open.svg" width="14" class="ml-2" />
+            <img
+              src="/img/svg/hosting/share-open.svg"
+              width="14"
+              class="ml-2"
+            />
           </v-btn>
         </div>
       </div>
@@ -86,7 +90,7 @@
 
       <div class="d-flex al-c gray fz-15" v-if="info">
         <template v-if="info.isFail">
-          <img src="img/svg/common/ic-error.svg" width="18" />
+          <img src="/img/svg/common/ic-error.svg" width="18" />
           <span class="ml-3">{{ failMsg }}</span>
         </template>
         <template v-else-if="!isDone">

@@ -19,12 +19,12 @@
       <h3>Github Repository</h3>
       <!-- <div class="gray fz-14">Import project from github repository.</div> -->
       <div class="d-flex al-c">
-        <e-icon-link img="img/svg/hosting/m-github.svg" :link="info.cloneUrl">
+        <e-icon-link img="/img/svg/hosting/m-github.svg" :link="info.cloneUrl">
           {{ info.namespace }}/{{ info.name }}
         </e-icon-link>
         <e-icon-link
           class="ml-6"
-          img="img/svg/hosting/m-branch.svg"
+          img="/img/svg/hosting/m-branch.svg"
           :link="info.cloneUrl.replace('.git', '/tree/' + form.currentBranch)"
         >
           {{ form.currentBranch }}

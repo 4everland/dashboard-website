@@ -5,7 +5,7 @@ export default [
     bg1: "#B4CBE5",
     solution: "Deploy on the platform made for Next.js.",
     demo: "https://nextjs.examples.4everland.org",
-    logo: "img/logos/next.svg",
+    logo: "/img/logos/next.svg",
     tagline:
       "Next.js makes you productive with React instantly — whether you want to build static or dynamic sites.",
     description: "A Next.js app and a Serverless Function API.",
@@ -43,7 +43,7 @@ export default [
     name: "Svelte",
     slug: "svelte",
     demo: "https://svelte.examples.4everland.org",
-    logo: "img/logos/svelte.svg",
+    logo: "/img/logos/svelte.svg",
     tagline:
       "Svelte lets you write high performance reactive apps with significantly less boilerplate. ",
     description:
@@ -70,7 +70,7 @@ export default [
     bg1: "#ADD5DA",
     solution: "Deploying a Static Nuxt.js App with 4everland",
     demo: "https://nuxtjs.examples.4everland.org",
-    logo: "img/logos/nuxt.svg",
+    logo: "/img/logos/nuxt.svg",
     tagline:
       "Nuxt.js is the web comprehensive framework that lets you dream big with Vue.js.",
     description: "A Nuxt.js app, bootstrapped with create-nuxt-app.",
@@ -99,7 +99,7 @@ export default [
     solution:
       "The Progressive JavaScript Framework. Approachable. Versatile. Performant.",
     demo: "https://vue.examples.4everland.org",
-    logo: "img/logos/vue.svg",
+    logo: "/img/logos/vue.svg",
     tagline:
       "Vue.js is a versatile JavaScript framework that is as approachable as it is performant.",
     description: "A Vue.js app, created with the Vue CLI.",
@@ -124,7 +124,7 @@ export default [
   {
     name: "Vite",
     slug: "vite",
-    logo: "img/logos/vite.svg",
+    logo: "/img/logos/vite.svg",
     settings: {
       installCommand: {
         placeholder: "npm install",
@@ -143,7 +143,7 @@ export default [
     bg1: "#D7D3E8",
     solution: "Deploy Gatsby to be fast in every way that matters.",
     demo: "https://gatsby.examples.4everland.org",
-    logo: "img/logos/gatsby.svg",
+    logo: "/img/logos/gatsby.svg",
     tagline:
       "Gatsby helps developers build blazing fast websites and apps with React.",
     description:
@@ -174,7 +174,7 @@ export default [
     solution:
       "Deploy an enterprise-class application on a world-class platform.",
     demo: "https://angular.examples.4everland.org",
-    logo: "img/logos/angular.svg",
+    logo: "/img/logos/angular.svg",
     tagline:
       "Angular is a TypeScript-based cross-platform framework from Google.",
     description: "An Angular app, created with the Angular CLI.",
@@ -199,7 +199,7 @@ export default [
     name: "Ember.js",
     slug: "ember",
     demo: "https://ember.examples.4everland.org",
-    logo: "img/logos/ember.svg",
+    logo: "/img/logos/ember.svg",
     tagline:
       "Ember.js helps webapp developers be more productive out of the box.",
     description: "An Ember app, created with the Ember CLI.",
@@ -224,7 +224,7 @@ export default [
     name: "Hexo",
     slug: "hexo",
     demo: "https://hexo.examples.4everland.org",
-    logo: "img/logos/hexo.svg",
+    logo: "/img/logos/hexo.svg",
     tagline:
       "Hexo is a fast, simple \u0026 powerful blog framework powered by Node.js.",
     description: "A Hexo site, created with the Hexo CLI.",
@@ -249,7 +249,7 @@ export default [
     name: "Eleventy",
     slug: "eleventy",
     demo: "https://eleventy.examples.4everland.org",
-    logo: "img/logos/eleventy.svg",
+    logo: "/img/logos/eleventy.svg",
     tagline:
       "11ty is a simpler static site generator written in JavaScript, created to be an alternative to Jekyll.",
     description: "An Eleventy site, created with npm init.",
@@ -275,7 +275,7 @@ export default [
     name: "Hugo",
     slug: "hugo",
     demo: "https://hugo.examples.4everland.org",
-    logo: "img/logos/hugo.svg",
+    logo: "/img/logos/hugo.svg",
     tagline:
       "Hugo is the world’s fastest framework for building websites, written in Go.",
     description: "A Hugo site, created with the Hugo CLI.",
@@ -301,7 +301,7 @@ export default [
     name: "Blitz.js",
     slug: "blitzjs",
     demo: "https://blitzjs.examples.4everland.org",
-    logo: "img/logos/blitz.svg",
+    logo: "/img/logos/blitz.svg",
     tagline: "Blitz.js: The Fullstack React Framework",
     description:
       "A brand new Blitz.js app - the result of running `npx blitz new`.",
@@ -330,7 +330,7 @@ export default [
     name: "Docusaurus 2",
     slug: "docusaurus-2",
     demo: "https://docusaurus-2.examples.4everland.org",
-    logo: "img/logos/docusaurus.svg",
+    logo: "/img/logos/docusaurus.svg",
     tagline:
       "Docusaurus makes it easy to maintain Open Source documentation websites.",
     description:
@@ -356,7 +356,7 @@ export default [
     name: "Docusaurus 1",
     slug: "docusaurus",
     demo: "https://docusaurus.examples.4everland.org",
-    logo: "img/logos/docusaurus.svg",
+    logo: "/img/logos/docusaurus.svg",
     tagline:
       "Docusaurus makes it easy to maintain Open Source documentation websites.",
     description:
@@ -382,7 +382,7 @@ export default [
     name: "Preact",
     slug: "preact",
     demo: "https://preact.examples.4everland.org",
-    logo: "img/logos/preact.svg",
+    logo: "/img/logos/preact.svg",
     tagline:
       "Preact is a fast 3kB alternative to React with the same modern API.",
     description: "A Preact app, created with the Preact CLI.",
@@ -407,7 +407,7 @@ export default [
     name: "Dojo",
     slug: "dojo",
     demo: "https://dojo.examples.4everland.org",
-    logo: "img/logos/dojo.png",
+    logo: "/img/logos/dojo.png",
     tagline: "Dojo is a modern progressive, TypeScript first framework.",
     description:
       "A Dojo app, created with the Dojo CLI's cli-create-app command.",
@@ -432,7 +432,7 @@ export default [
     name: "Scully",
     slug: "scully",
     demo: "https://scully.examples.4everland.org",
-    logo: "img/logos/scullyio-logo.png",
+    logo: "/img/logos/scullyio-logo.png",
     tagline: "Scully is a static site generator for Angular.",
     description: "The Static Site Generator for Angular apps.",
     website: "https://github.com/scullyio/scully",
@@ -456,7 +456,7 @@ export default [
     name: "Ionic Angular",
     slug: "ionic-angular",
     demo: "https://ionic-angular.examples.4everland.org",
-    logo: "img/logos/ionic.svg",
+    logo: "/img/logos/ionic.svg",
     tagline:
       "Ionic Angular allows you to build mobile PWAs with Angular and the Ionic Framework.",
     description: "An Ionic Angular site, created with the Ionic CLI.",
@@ -480,7 +480,7 @@ export default [
     name: "Polymer",
     slug: "polymer",
     demo: "https://polymer.examples.4everland.org",
-    logo: "img/logos/polymer.svg",
+    logo: "/img/logos/polymer.svg",
     tagline:
       "Polymer is an open-source webapps library from Google, for building using Web Components.",
     description: "A Polymer app, created with the Polymer CLI.",
@@ -505,7 +505,7 @@ export default [
     name: "Ionic React",
     slug: "ionic-react",
     demo: "https://ionic-react.examples.4everland.org",
-    logo: "img/logos/ionic.svg",
+    logo: "/img/logos/ionic.svg",
     tagline:
       "Ionic React allows you to build mobile PWAs with React and the Ionic Framework.",
     description: "An Ionic React site, created with the Ionic CLI.",
@@ -531,7 +531,7 @@ export default [
     bg1: "#c6f3ff",
     solution: "Deploy React apps on the platform its community loves.",
     demo: "https://react-functions.examples.4everland.org",
-    logo: "img/logos/react.svg",
+    logo: "/img/logos/react.svg",
     tagline: "Create React App allows you to get going with React in no time.",
     description:
       "A React app, bootstrapped with create-react-app, and a Serverless Function API.",
@@ -556,7 +556,7 @@ export default [
     name: "Gridsome",
     slug: "gridsome",
     demo: "https://gridsome.examples.4everland.org",
-    logo: "img/logos/gridsome.svg",
+    logo: "/img/logos/gridsome.svg",
     tagline:
       "Gridsome is a Vue.js-powered framework for building websites \u0026 apps that are fast by default.",
     description: "A Gridsome app, created with the Gridsome CLI.",
@@ -581,7 +581,7 @@ export default [
     name: "UmiJS",
     slug: "umijs",
     demo: "https://umijs.examples.4everland.org",
-    logo: "img/logos/umi.svg",
+    logo: "/img/logos/umi.svg",
     tagline:
       "UmiJS is an extensible enterprise-level React application framework.",
     description: "An UmiJS app, created using the Umi CLI.",
@@ -606,7 +606,7 @@ export default [
     name: "Sapper",
     slug: "sapper",
     demo: "https://sapper.examples.4everland.org",
-    logo: "img/logos/svelte.svg",
+    logo: "/img/logos/svelte.svg",
     tagline:
       "Sapper is a framework for building high-performance universal web apps with Svelte.",
     description: "A Sapper app, using the Sapper template.",
@@ -631,7 +631,7 @@ export default [
     name: "Saber",
     slug: "saber",
     demo: "https://saber.examples.4everland.org",
-    logo: "img/logos/saber.svg",
+    logo: "/img/logos/saber.svg",
     tagline:
       "Saber is a framework for building static sites in Vue.js that supports data from any source.",
     description: "A Saber site, created with npm init.",
@@ -656,7 +656,7 @@ export default [
     name: "Stencil",
     slug: "stencil",
     demo: "https://stencil.examples.4everland.org",
-    logo: "img/logos/stencil.svg",
+    logo: "/img/logos/stencil.svg",
     tagline:
       "Stencil is a powerful toolchain for building Progressive Web Apps and Design Systems.",
     description: "A Stencil site, created with the Stencil CLI.",
@@ -681,7 +681,7 @@ export default [
     name: "RedwoodJS",
     slug: "redwoodjs",
     demo: "https://redwoodjs.examples.4everland.org",
-    logo: "img/logos/redwoodjs.svg",
+    logo: "/img/logos/redwoodjs.svg",
     tagline: "RedwoodJS is a full-stack framework for the Jamstack.",
     description: "A RedwoodJS app, bootstraped with create-redwood-app.",
     website: "https://redwoodjs.com",
@@ -711,7 +711,7 @@ export default [
     name: "Jekyll",
     slug: "jekyll",
     demo: "https://jekyll.examples.4everland.org",
-    logo: "img/logos/jekyll.svg",
+    logo: "/img/logos/jekyll.svg",
     tagline:
       "Jekyll makes it super easy to transform your plain text into static websites and blogs.",
     description: "A Jekyll site, created with the Jekyll CLI.",
@@ -737,7 +737,7 @@ export default [
     name: "Brunch",
     slug: "brunch",
     demo: "https://brunch.examples.4everland.org",
-    logo: "img/logos/brunch.svg",
+    logo: "/img/logos/brunch.svg",
     tagline:
       "Brunch is a fast and simple webapp build tool with seamless incremental compilation for rapid development.",
     description: "A Brunch app, created with the Brunch CLI.",
@@ -762,7 +762,7 @@ export default [
     name: "Middleman",
     slug: "middleman",
     demo: "https://middleman.examples.4everland.org",
-    logo: "img/logos/middleman.svg",
+    logo: "/img/logos/middleman.svg",
     tagline:
       "Middleman is a static site generator that uses all the shortcuts and tools in modern web development.",
     description: "A Middleman app, created with the Middleman CLI.",
@@ -788,7 +788,7 @@ export default [
     name: "Zola",
     slug: "zola",
     demo: "https://zola.examples.4everland.org",
-    logo: "img/logos/zola.png",
+    logo: "/img/logos/zola.png",
     tagline: "Everything you need to make a static site engine in one binary.",
     description: 'A Zola app, created with the "Getting Started" tutorial.',
     website: "https://www.getzola.org",
@@ -812,7 +812,7 @@ export default [
   {
     name: "Other",
     slug: null,
-    logo: "img/logos/github.png",
+    logo: "/img/logos/github.png",
     description: "No framework or a unoptimized framework.",
     settings: {
       installCommand: {
@@ -828,6 +828,6 @@ export default [
     },
   },
 ].map((it) => {
-  it.logo = "/" + it.logo;
+  it.logo = "https://static1.4everland.org" + it.logo;
   return it;
 });

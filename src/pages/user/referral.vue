@@ -139,7 +139,7 @@
             <ul class="al-c">
               <li v-for="it in mLinks" :key="it.label" class="share-icon">
                 <img
-                  :src="`img/svg/drawer/social/${it.label.toLocaleLowerCase()}.svg`"
+                  :src="`/img/svg/drawer/social/${it.label.toLocaleLowerCase()}.svg`"
                   width="30"
                   @click="sharePlatForm(it.label)"
                 />
@@ -157,7 +157,7 @@
                 v-clipboard="shareUrl"
                 @success="$toast('Copied to clipboard !')"
               >
-                <img src="img/svg/copy.svg" width="12" />
+                <img src="/img/svg/copy.svg" width="12" />
               </v-btn>
             </div>
             <div class="share-btn" @click="onInvite">Invite Friend</div>
@@ -221,7 +221,7 @@
               <div class="pos-r" ref="imgWrap">
                 <img
                   @load="isBgLoad = true"
-                  src="img/bg/user/refer-share.png"
+                  src="/img/bg/user/refer-share.png"
                   style="width: 220px"
                   class="ev-n"
                 />
@@ -263,7 +263,7 @@ export default {
       isFocus: (s) => s.isFocus,
     }),
     shareUrl() {
-      return location.origin + "/#/?invite=" + this.code;
+      return location.origin + "/?invite=" + this.code;
     },
     pageLen() {
       return Math.ceil(this.total / 10);
@@ -442,7 +442,7 @@ export default {
         case "FaceBook":
           window.open(
             `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-              "https://hb.4everland.app/#/?invite=" + this.code
+              location.origin + "/?invite=" + this.code
             )}`
           );
           break;

@@ -37,9 +37,9 @@
             <span>{{ new Date(it.operateAt * 1e3).format() }}</span>
             <template v-if="it.path">
               <span class="ml-2">in</span>
-              <a class="ml-2" :href="'#' + it.link">
+              <e-link class="ml-2" :href="it.link">
                 <u class="gray">{{ it.path }}</u>
-              </a>
+              </e-link>
             </template>
           </div>
         </div>

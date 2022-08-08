@@ -13,7 +13,7 @@
             {{ payBy }} network.
           </div>
           <div class="mt-5 d-flex al-c">
-            <img src="img/svg/settings/m-metamask.svg" style="height: 25px" />
+            <img src="/img/svg/settings/m-metamask.svg" style="height: 25px" />
             <b class="ml-4">MetaMask</b>
             <span class="gray fz-13 ml-5">{{ connectAddr.cutStr(4, 4) }}</span>
             <v-btn
@@ -32,7 +32,7 @@
       :class="{ 'filter-gray': !isConnect }"
       class="bdrs-3 ml-5 hover-1"
     >
-      <v-img src="img/icon/u-wallet.svg" width="22"></v-img>
+      <v-img src="/img/icon/u-wallet.svg" width="22"></v-img>
     </div> -->
   </div>
 </template>

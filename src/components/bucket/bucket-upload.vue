@@ -2,17 +2,17 @@
   <div class="uploder-container">
     <e-menu offset-y open-on-hover nudge-bottom="11">
       <v-btn slot="ref" color="primary">
-        <img src="img/svg/upload.svg" width="16" />
+        <img src="/img/svg/upload.svg" width="16" />
         <span class="ml-2">Upload</span>
         <v-icon size="18">mdi-chevron-down</v-icon>
       </v-btn>
       <v-list dense>
         <v-list-item link @click="$refs.uploadInput.onClick(false)">
-          <!-- <img src="img/icon/ic-download.svg" width="14" class="mr-2" /> -->
+          <!-- <img src="/img/icon/ic-download.svg" width="14" class="mr-2" /> -->
           <span class="gray-7">Selected File</span>
         </v-list-item>
         <v-list-item link @click="$refs.uploadInput.onClick(true)">
-          <!-- <img src="img/icon/ic-download.svg" width="14" class="mr-2" /> -->
+          <!-- <img src="/img/icon/ic-download.svg" width="14" class="mr-2" /> -->
           <span class="gray-7">Selected Folder</span>
         </v-list-item>
       </v-list>

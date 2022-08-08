@@ -22,13 +22,9 @@ const v3Api = inDev
 
 Vue.prototype.$endpoint = endpoint;
 
-const loginUrl = inDev
-  ? "https://4ever-login-test.4everland.app"
-  : "https://login.4everland.org";
-
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
-  console.log(location);
-  let url = "#/login";
+  // console.log(location);
+  let url = "/login";
   if (localStorage.inviteCode) {
     url += "?inviteCode=" + localStorage.inviteCode;
   }
@@ -43,7 +39,7 @@ export const http2 = Axios.create({
   baseURL: hostingUrl,
 });
 Vue.prototype.$getImgSrc = function (src) {
-  if (!src) src = "img/bg/empty/project.png";
+  if (!src) src = "/img/bg/empty/project.png";
   else if (!/^http/.test(src)) src = hostingUrl + src;
   return src;
 };
@@ -173,8 +169,8 @@ const lock = new AsyncLock({ timeout: 5000 });
 
 function goLogin() {
   localStorage.clear();
-  if (location.hash != "#/login") {
-    localStorage.loginTo = location.hash;
+  if (location.pathname != "/login") {
+    localStorage.loginTo = location.pathname;
     location.href = getLoginUrl();
     console.log("logout");
   }

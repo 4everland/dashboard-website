@@ -1,7 +1,7 @@
 <template>
   <div class="ta-c">
     <img
-      :src="img || `img/svg/common/empty${loading ? 1 : 2}.svg`"
+      :src="img || `/img/svg/common/empty${loading ? 1 : 2}.svg`"
       :height="height || (loading ? 140 : 180)"
     />
     <div class="mt-5">

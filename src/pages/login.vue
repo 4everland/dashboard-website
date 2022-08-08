@@ -258,11 +258,7 @@ export default {
     async ssoLogin(stoken) {
       this.$loading();
       try {
-        const { data } = await this.$http.post(`/st/${stoken}`, null, {
-          params: {
-            _auth: 1,
-          },
-        });
+        const { data } = await this.$http.post(`$auth/st/${stoken}`);
         this.$onLoginData(data);
       } catch (error) {
         this.onErr(error);

@@ -10,12 +10,12 @@
       <v-skeleton-loader type="article" v-if="loading" />
       <div class="mt-5" v-else>
         <div class="d-flex al-c">
-          <e-icon-link img="img/svg/hosting/m-github.svg" :link="info.url">
+          <e-icon-link img="/img/svg/hosting/m-github.svg" :link="info.url">
             {{ info.namespace }}/{{ info.name }}
           </e-icon-link>
           <e-icon-link
             class="ml-6"
-            img="img/svg/hosting/m-branch.svg"
+            img="/img/svg/hosting/m-branch.svg"
             :link="info.url + '/tree/' + info.defaultBranch"
           >
             {{ info.defaultBranch }}
@@ -23,7 +23,7 @@
           <e-icon-link
             height="15px"
             class="ml-6"
-            img="img/svg/hosting/m-folder.svg"
+            img="/img/svg/hosting/m-folder.svg"
             :link="info.url + '/tree/' + info.defaultBranch + info.dir"
           >
             {{ info.dir }}

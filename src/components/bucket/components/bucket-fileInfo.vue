@@ -34,7 +34,7 @@
                 >
                 <v-btn icon small v-clipboard="it.value" @success="onCopied">
                   <!-- <v-icon size="15" class="ml-auto">mdi-content-copy</v-icon> -->
-                  <img src="img/svg/copy.svg" width="12" />
+                  <img src="/img/svg/copy.svg" width="12" />
                 </v-btn>
               </div>
               <div
@@ -56,7 +56,7 @@
                     v-clipboard="fileInfo.arHash"
                     @success="onCopied"
                   >
-                    <img src="img/svg/copy.svg" width="12" />
+                    <img src="/img/svg/copy.svg" width="12" />
                   </v-btn>
                 </template>
                 <template v-else>
@@ -129,7 +129,7 @@
         style="height: 100%"
         class="d-flex flex-column justify-center align-center"
       >
-        <img width="80%" src="img/svg/common/empty2.svg" />
+        <img width="80%" src="/img/svg/common/empty2.svg" />
         <p class="fz-12 mt-4" style="color: #6c7789">
           Select a file/folder to view details
         </p>

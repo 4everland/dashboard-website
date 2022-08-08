@@ -107,7 +107,8 @@ export default {
         };
       if (this.navItems.length) {
         const item = { ...this.navItems[0] };
-        item.href = this.breadItems.length ? "#" + item.to : "";
+        console.log(item.to);
+        item.href = this.breadItems.length ? item.to : "";
         return item;
       }
     },

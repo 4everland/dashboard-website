@@ -52,7 +52,7 @@
             'mb-4': asMobile,
           }"
           :src="$getImgSrc(it.screenshot)"
-          lazy-src="img/bg/empty/project.png"
+          lazy-src="/img/bg/empty/project.png"
           max-height="60"
           max-width="60"
           :aspect-ratio="1"
