@@ -220,7 +220,7 @@ export default {
       }
       if (it.name == "logout") {
         localStorage.clear();
-        location.href = "index.html";
+        location.href = location.origin;
       }
     },
   },
