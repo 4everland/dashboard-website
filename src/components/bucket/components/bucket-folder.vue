@@ -363,6 +363,14 @@ export default {
         this.getList();
       }
     },
+    selected: {
+      handler(val) {
+        if (val.length) {
+          this.fileInfoDrawer = true;
+        }
+      },
+      deep: true,
+    },
   },
 };
 </script>
