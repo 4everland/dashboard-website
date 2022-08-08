@@ -108,7 +108,7 @@ export default {
           href: "https://docs.4everland.org",
         },
         {
-          label: "Change Log",
+          label: "Changelog",
           icon: "m-log",
           to: "/changelog",
         },

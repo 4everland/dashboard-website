@@ -189,13 +189,16 @@ export default {
           this.$loading();
         }
         const api = this.$inDev ? "https://log.foreverland.xyz" : "";
-        const { data } = await this.$http2.get(api + "/action/logs", {
-          params: {
-            time: 3600 * 12 + this.date.toDate() / 1e3,
-            size: 10,
-            page: this.page - 1,
-          },
-        });
+        const { data } = await this.$http2.get(
+          api + "/user/activity/action/logs",
+          {
+            params: {
+              time: 3600 * 12 + this.date.toDate() / 1e3,
+              size: 10,
+              page: this.page - 1,
+            },
+          }
+        );
         this.total = data.total;
         const list = data.list.map((it) => {
           it.label = (this.userInfo.username || it.guid).cutStr(6, 4);

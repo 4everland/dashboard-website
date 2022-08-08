@@ -1,5 +1,5 @@
 <template>
-  <div class="ov-wrap-1">
+  <div class="ov-wrap-1 pb-0" style="min-height: 400px">
     <div class="al-c">
       <img src="/img/svg/overview/uv.svg" width="16" />
       <b class="ml-2 fz-16">Hosting UV</b>
@@ -22,37 +22,43 @@
       />
     </div>
     <div v-else class="d-flex pos-r">
-      <ul class="pl-0 shrink-0 mr-5" style="min-width: 110px">
-        <li
-          class="mt-4 lh-12 pos-r hover-1"
-          @click="curIdx = i"
-          :class="{
-            'color-1': curIdx == i,
-          }"
-          v-for="(it, i) in uvList"
-          :key="i"
-        >
-          <p class="fw-b">{{ it.totalUv }}</p>
-          <p class="fz-12 mt-1" :class="curIdx == i ? 'color-1' : 'gray'">
-            {{ (it.projectName || "").cutStr(10, 6) }}
-          </p>
-          <img
-            src="/img/svg/overview/arrow.svg"
-            class="pos-a"
-            style="bottom: -5px; width: 115%"
-            v-if="curIdx == i"
-          />
-        </li>
-      </ul>
-      <div class="pos-r flex-1 pr-10" style="min-height: 295px">
-        <div>
-          <div
-            class="pos-a left-0"
-            style="top: -30px; bottom: -20px; right: -20px; height: 350px"
-            ref="chart"
-          ></div>
-          <div class="pos-center bg-f1 pa-2 fz-14 lh-1" v-if="!dayTotal">
-            No Data Available
+      <div class="shrink-0 mr-5" style="min-width: 110px">
+        <div class="gray fz-12 mt-3">Total</div>
+        <ul class="pl-0">
+          <li
+            class="mt-4 lh-12 pos-r hover-1"
+            @click="curIdx = i"
+            :class="{
+              'color-1': curIdx == i,
+            }"
+            v-for="(it, i) in uvList"
+            :key="i"
+          >
+            <p class="fw-b">{{ it.totalUv }}</p>
+            <p class="fz-12 mt-1" :class="curIdx == i ? 'color-1' : 'gray'">
+              {{ (it.projectName || "").cutStr(10, 6) }}
+            </p>
+            <img
+              src="/img/svg/overview/arrow.svg"
+              class="pos-a"
+              style="bottom: -5px; width: 115%"
+              v-if="curIdx == i"
+            />
+          </li>
+        </ul>
+      </div>
+      <div class="flex-1">
+        <div class="gray fz-12 mt-3 ml-6 ta-c">Last 24h</div>
+        <div class="pos-r" style="min-height: 295px">
+          <div>
+            <div
+              class="pos-a left-0"
+              style="top: -35px; bottom: -20px; right: -30px; height: 360px"
+              ref="chart"
+            ></div>
+            <div class="pos-center ml-4 bg-f1 pa-2 fz-14 lh-1" v-if="!dayTotal">
+              No Data Available
+            </div>
           </div>
         </div>
       </div>

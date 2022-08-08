@@ -8,7 +8,7 @@ export default [
       cache: Changelog,
     },
     meta: {
-      title: "Change Log",
+      title: "Changelog",
     },
   },
   {

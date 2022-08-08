@@ -2,7 +2,7 @@
   <div>
     <div class="main-wrap auto">
       <v-skeleton-loader type="article" v-if="!info" />
-      <v-row v-else class="mb-5">
+      <v-row v-else>
         <v-col cols="12" md="3">
           <e-link :href="info.domain">
             <v-img
