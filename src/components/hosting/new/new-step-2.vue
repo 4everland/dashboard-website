@@ -23,10 +23,10 @@
                 <span class="gray-6">Let more people know your DWeb.</span>
                 <a
                   class="ml-3"
-                  :href="
-                    'https://twitter.com/share?url=' +
-                    encodeURI('https://dashboard.4everland.org')
-                  "
+                  :href="`https://twitter.com/intent/tweet?text=${encodeURI(
+                    `I've deployed a wonderful Dapp through @4everland_org Hosting, which helps developers quickly build, publish, and manage Dwebs. Come and experience it!  
+  Click here to access: https://${info.domain}`
+                  )}&hashtags=Web3,Tech,decentralized,IPFS`"
                   target="_blank"
                   >Share</a
                 >
