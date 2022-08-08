@@ -1,5 +1,5 @@
 <template>
-  <div class="ov-wrap-1">
+  <div class="ov-wrap-1" style="min-height: 400px">
     <div class="al-c">
       <img src="/img/svg/overview/pie.svg" width="16" />
       <b class="ml-2 fz-16">Bucket Storage</b>
