@@ -202,6 +202,7 @@ export default {
         this.saving = true;
         await this.$http2.put("/favourite/analytics", this.projChecked);
         this.$toast("Saved successfully.");
+        this.curIdx = 0;
         this.showSelect = false;
         this.getUvList();
       } catch (error) {
