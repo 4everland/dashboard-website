@@ -34,11 +34,9 @@
           <div class="d-flex al-c flex-wrap">
             <div class="mr-auto">
               <h3 class="mr-auto">
-                <a
-                  :href="`https://app.ens.domains/name/${info.ens}/details`"
-                  target="_blank"
-                  >{{ info.ens }}</a
-                >
+                <a :href="`https://${info.ens}.link`" target="_blank">{{
+                  info.ens
+                }}</a>
               </h3>
               <div class="d-flex al-c mt-2">
                 <v-icon :color="verify ? 'success' : 'error'" size="18">
@@ -133,6 +131,7 @@ export default {
     ...mapState({
       netType: (s) => s.netType,
       connectAddr: (s) => s.connectAddr,
+      chainId: (s) => s.chainId,
     }),
   },
   watch: {
@@ -201,7 +200,9 @@ export default {
         msg = "Wrong network, please connect to Ethereum mainnet";
       }
       if (msg) {
-        this.$alert(msg);
+        this.$alert(msg).then(() => {
+          this.switchNet(1);
+        });
       }
       return !msg;
     },
@@ -231,6 +232,9 @@ export default {
       // this.verify();
     },
     async verifyOwner() {
+      if (!this.checkNet()) {
+        return "";
+      }
       try {
         this.$loading();
         this.node = namehash(this.domain);
@@ -244,6 +248,9 @@ export default {
     },
     async verifyConfiguration() {
       this.$loading();
+      if (!this.checkNet()) {
+        return;
+      }
       this.ensIpns = await this.getEnsIpns(this.info.ens);
       if (this.ensIpns && this.ensIpns === this.info.ipns) {
         this.verify = true;
@@ -254,6 +261,9 @@ export default {
       this.$loading.close();
     },
     async getEnsIpns() {
+      if (!this.checkNet()) {
+        return;
+      }
       try {
         this.$loading();
         this.node = namehash(this.domain);
@@ -316,6 +326,26 @@ export default {
     onErr(e) {
       console.log(e);
       if (e) this.$alert(e.message);
+    },
+    async switchNet(id) {
+      try {
+        const chainId = "0x" + id.toString(16);
+        // await this.addChain(chainId, id);
+        const res = await window.web3.currentProvider.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId }],
+        });
+        if (res && res.error) {
+          throw new Error(res.error);
+        }
+      } catch (error) {
+        console.log("switch net error");
+        // this.onErr(error).then(() => {
+        //   if (error.code === 4902) {
+        //     this.switchNet(id);
+        //   }
+        // });
+      }
     },
   },
 };

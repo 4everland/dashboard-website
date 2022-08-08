@@ -111,7 +111,7 @@
             <template v-slot:item.hash="{ item }">
               <div class="d-flex align-center" v-if="item.hash !== '--'">
                 <a
-                  :href="`https://${item.hash}.ipfs.dweb.link`"
+                  :href="$utils.getCidLink(item.hash)"
                   class="hash-link"
                   style="color: #0b0817"
                   target="_blank"

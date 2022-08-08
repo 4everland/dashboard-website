@@ -96,7 +96,7 @@
     </e-right-opt-wrap>
 
     <!-- padding layout -->
-    <div class="pa-4" v-if="!inFolder"></div>
+    <div class="pa-4" v-if="inBucket"></div>
 
     <!-- File Info -->
     <div v-if="inFile" class="mt-4">
@@ -127,7 +127,7 @@
                   text
                   small
                   target="_blank"
-                  :href="`https://${it.value}.ipfs.dweb.link`"
+                  :href="$utils.getCidLink(it.value)"
                 >
                   {{ it.value }}
                 </v-btn>
@@ -278,7 +278,7 @@
             target="_blank"
             v-if="item.hash"
             @click.stop="onStop"
-            :href="`https://${item.hash}.ipfs.dweb.link`"
+            :href="$utils.getCidLink(item.hash)"
           >
             <span class="d-ib" style="width: 80px">
               {{ item.hash.cutStr(5, 4) }}

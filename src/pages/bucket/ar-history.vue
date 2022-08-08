@@ -38,7 +38,7 @@
     </div>
 
     <!-- :show-select="list.length > 0" -->
-    <div class="main-wrap mt-4">
+    <div class="main-wrap mt-6">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -63,19 +63,17 @@
           </e-tooltip>
         </template>
         <template v-slot:item.arweaveHash="{ item }">
-          <v-btn
-            color="primary"
-            x-small
-            text
-            target="_blank"
+          <e-link
+            class="d-ib fz-13"
+            style="width: 85px"
             v-if="item.arweaveHash"
-            @click.stop="onStop"
+            @click.native.stop="onStop"
             :href="$arHashPre + item.arweaveHash"
           >
-            <span class="d-ib line-1" style="width: 160px">
-              {{ item.arweaveHash }}
+            <span>
+              {{ item.arweaveHash.cutStr(4, 4) }}
             </span>
-          </v-btn>
+          </e-link>
           <v-btn
             v-if="item.arweaveHash"
             icon

@@ -38,7 +38,7 @@
                 <a
                   class="link"
                   target="_blank"
-                  :href="`https://${it.value}.ipfs.dweb.link`"
+                  :href="$utils.getCidLink(it.value)"
                   >{{ it.value.cutStr(5, 5) }}</a
                 >
                 <v-btn icon small v-clipboard="it.value" @success="onCopied">
