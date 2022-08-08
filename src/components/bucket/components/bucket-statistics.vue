@@ -16,14 +16,15 @@
     </div>
     <!-- IPFS && AR chart -->
     <v-card outlined>
-      <div class="card-head-1">
-        <e-date-range
-          class="data-range"
-          val="24h"
-          dayType
-          @dates="handleChangeBucketDate"
-        />
-      </div>
+      <!-- <div class="card-head-1" style="background: #fff">
+       
+      </div> -->
+      <e-date-range
+        class="data-range"
+        val="24h"
+        dayType
+        @dates="handleChangeBucketDate"
+      />
       <bucket-chart
         name="IPFS"
         :overDay="bucketDateOverDay"
@@ -39,14 +40,12 @@
     </v-card>
     <!-- Traffic && Request chart -->
     <v-card outlined class="mt-8">
-      <div class="card-head-1">
-        <e-date-range
-          class="data-range"
-          val="24h"
-          dayType
-          @dates="handleChangeOtherDate"
-        />
-      </div>
+      <e-date-range
+        class="data-range"
+        val="24h"
+        dayType
+        @dates="handleChangeOtherDate"
+      />
       <bucket-chart
         name="Traffic Usage"
         :overDay="overDateOverDay"
@@ -210,6 +209,11 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.data-range {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
 .chart-title {
   margin: 34px 0 14px 21px;
   height: 20px;
