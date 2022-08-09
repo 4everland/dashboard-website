@@ -121,7 +121,6 @@ export default {
       });
     },
     setChart() {
-      console.log(222);
       const el = this.$refs.chart;
       this.chart = window.echarts.init(el);
       const option = {

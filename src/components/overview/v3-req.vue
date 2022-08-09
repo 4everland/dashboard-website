@@ -123,11 +123,13 @@ export default {
                 bandWidth: it.flux,
               };
             });
-        this.list = list.map((it) => {
-          it.band = this.$utils.getFileSize(it.bandWidth);
-          it.value = it.request;
-          return it;
-        });
+        this.list = list
+          .filter((it) => !!it)
+          .map((it) => {
+            it.band = this.$utils.getFileSize(it.bandWidth || 0);
+            it.value = it.request;
+            return it;
+          });
         this.noData = !this.list.length;
         if (this.noData) {
           this.list = this.noList.map((it) => {
