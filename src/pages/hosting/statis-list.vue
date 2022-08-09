@@ -69,17 +69,23 @@
             <td>PV</td>
           </tr>
           <tr>
+            <td class="gray-6">Yesterday</td>
+            <td>{{ it.yesterdayNewUser }}</td>
+            <td>{{ it.yesterdayUv }}</td>
+            <td>{{ it.yesterdayPv }}</td>
+          </tr>
+          <tr>
             <td class="gray-6">Today</td>
             <td>{{ it.todayNewUser }}</td>
             <td>{{ it.todayUv }}</td>
             <td>{{ it.todayPv }}</td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td class="gray-6">Total</td>
             <td>{{ it.totalNewUser }}</td>
             <td>{{ it.totalUv }}</td>
             <td>{{ it.totalPv }}</td>
-          </tr>
+          </tr> -->
         </table>
       </div>
     </div>

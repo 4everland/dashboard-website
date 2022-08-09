@@ -202,6 +202,7 @@ export default {
         this.saving = true;
         await this.$http2.put("/favourite/analytics", this.projChecked);
         this.$toast("Saved successfully.");
+        this.curIdx = 0;
         this.showSelect = false;
         this.getUvList();
       } catch (error) {
@@ -236,7 +237,7 @@ export default {
         this.chart = null;
         let { data } = await this.$http2.get("/favourite/analytics/uv");
         data.sort((a, b) => {
-          return a.totalUv > b.totalUv ? -1 : 1;
+          return a.totalUv - b.totalUv > 0 ? -1 : 1;
         });
         this.uvList = data;
       } catch (error) {

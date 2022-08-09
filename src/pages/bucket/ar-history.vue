@@ -66,12 +66,11 @@
           <e-link
             class="d-ib fz-13"
             style="width: 85px"
-            v-if="item.arweaveHash"
             @click.native.stop="onStop"
-            :href="$arHashPre + item.arweaveHash"
+            :href="item.arweaveHash ? $arHashPre + item.arweaveHash : ''"
           >
             <span>
-              {{ item.arweaveHash.cutStr(4, 4) }}
+              {{ item.arweaveHash ? item.arweaveHash.cutStr(4, 4) : "--" }}
             </span>
           </e-link>
           <v-btn

@@ -132,8 +132,8 @@
               d-flex
               align-center
               justify-space-between
-              mb-11
             "
+            style="margin-bottom: 34px"
           >
             <h3 class="title">Referrals Link</h3>
             <ul class="al-c">
@@ -276,7 +276,7 @@ export default {
       list: [],
       page: 1,
       total: 0,
-      loading: false,
+      loading: true,
       popInvite: false,
       sharePre:
         "I am participating in 4EVERLAND  First Landing event. Deploying projects to win your share of 50 million 4EVER, come and join here: ",

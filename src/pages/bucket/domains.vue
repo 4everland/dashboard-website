@@ -56,7 +56,7 @@
           >
 
           <e-tooltip bottom v-if="!item.valid">
-            <v-icon slot="ref" size="18" class="pa-1 d-ib ml-2"
+            <v-icon slot="ref" size="16" class="pa-1 d-ib ml-2"
               >mdi-alert-circle</v-icon
             >
             <span>Invalid Configuration</span>

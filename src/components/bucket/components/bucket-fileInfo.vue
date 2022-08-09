@@ -1,6 +1,6 @@
 <template>
   <Transition name="file" appear>
-    <div class="nav" v-show="fileInfoDrawer">
+    <div class="nav mt-3" v-show="fileInfoDrawer">
       <div class="single-file" v-if="selected.length == 1">
         <v-img
           v-show="!notImg"
@@ -27,7 +27,7 @@
           v-show="fileLoading"
           type="article"
         ></v-skeleton-loader>
-        <ul class="ls-none" v-show="singleFile && !fileLoading">
+        <ul class="ls-none mt-3" v-show="singleFile && !fileLoading">
           <p class="fz-16 fw-b file-name">{{ selected[0].name }}</p>
           <template v-for="(it, i) in fileInfoList">
             <li class="mt-2 mb-2 fz-12 d-flex align-start" :key="i">
@@ -116,7 +116,7 @@
             </li>
           </template>
         </ul>
-        <div v-show="singleDir && !fileLoading">
+        <div class="mt-3" v-show="singleDir && !fileLoading">
           <div class="fz-16 fw-b d-flex">
             <v-icon size="18">mdi-folder</v-icon>
 
@@ -201,7 +201,10 @@ export default {
     pathInfo() {
       const path = decodeURIComponent(this.$route.path);
       const arr = path.split("/").slice(3);
-      const Key = arr.slice(1).join("/") + this.selected[0].name;
+      let Key = "";
+      if (this.selected.length) {
+        Key = arr.slice(1).join("/") + this.selected[0].name;
+      }
       const Bucket = arr[0];
       if (this.singleFile)
         return {
@@ -268,10 +271,13 @@ export default {
       const musicReg =
         /.(WAVE|CD|AIFF|MP3|MPEG4|MIDI|WMA|RealAudio|VQF|OggVorbis|AMR|APE|FLAC|AAC)$/;
       const videoReg = /.(avi|wmv|mpg|mpeg|mov|rm|ram|swf|flv|mp4)$/;
+      const wordReg = /.(doc|docx)$/;
       if (ImgReg.test(this.fileUrl)) {
         return "/img/svg/bucketFileInfo/img_icon.svg";
       } else if (excelReg.test(this.fileUrl)) {
-        return "/img/svg/bucketFileInfo/excel.svg";
+        return "/img/svg/bucketFileInfo/excel_icon.svg";
+      } else if (wordReg.test(this.fileUrl)) {
+        return "/img/svg/bucketFileInfo/word_icon.svg";
       } else if (pdfReg.test(this.fileUrl)) {
         return "/img/svg/bucketFileInfo/pdf_icon.svg";
       } else if (ziplReg.test(this.fileUrl)) {
@@ -280,6 +286,8 @@ export default {
         return "/img/svg/bucketFileInfo/music_icon.svg";
       } else if (videoReg.test(this.fileUrl)) {
         return "/img/svg/bucketFileInfo/video_icon.svg";
+      } else if (!this.selected[0].isFile) {
+        return "/img/svg/bucketFileInfo/folder_icon.svg";
       } else {
         return "/img/svg/bucketFileInfo/unknow_icon.svg";
       }
@@ -324,7 +332,6 @@ export default {
       this.fileLoading = true;
       this.dirFileArr = [];
       let { Bucket, Prefix, Delimiter } = this.pathInfo;
-      // bucketName, prefix, continuationToken, delimiter, maxKeys, startAfter
       const stream = this.s3m.extensions.listObjectsV2WithMetadataQuery(
         Bucket,
         Prefix,
