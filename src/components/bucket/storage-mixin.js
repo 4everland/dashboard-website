@@ -457,7 +457,7 @@ export default {
         ""
       );
       stream.on("data", (data) => {
-        console.log(data, "data");
+        // console.log(data, "data");
         this.tableLoading = false;
         data.objects.sort((a, b) => {
           return (b.prefix ? 1 : 0) - (a.prefix ? 1 : 0);

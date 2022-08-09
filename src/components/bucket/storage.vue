@@ -443,7 +443,7 @@ export default {
       const list = this.bucketInfo.originList.map((origin) => {
         return origin + "/" + Key;
       });
-      console.log(list);
+      // console.log(list);
       if (!list.length) list.push(this.fileInfo.url);
       return list;
     },
