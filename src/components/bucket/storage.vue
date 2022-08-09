@@ -188,7 +188,7 @@
                       small
                       text
                       color="primary"
-                      @click="onSyncAR(fileName, 'post', fileInfo.hash)"
+                      @click="onSyncAR(fileName, 'post')"
                       >Retry</v-btn
                     >
                   </div>
@@ -443,7 +443,7 @@ export default {
       const list = this.bucketInfo.originList.map((origin) => {
         return origin + "/" + Key;
       });
-      console.log(list);
+      // console.log(list);
       if (!list.length) list.push(this.fileInfo.url);
       return list;
     },
