@@ -36,21 +36,23 @@
               <span v-else class="ml-2 fz-13 d-ib" style="min-width: 76px">{{
                 it.platform
               }}</span>
-              <div class="fz-14 ml-5" @click.stop="onStop">
-                <h-branch :info="it" />
-              </div>
-              <div class="flex-1 ml-5 shrink-1 fz-13" v-if="it.commits">
-                <div
-                  :style="{
-                    'max-width': asMobile ? '220px' : '300px',
-                  }"
-                >
-                  <e-commit
-                    :info="it.commits"
-                    @click.native.stop="onStop"
-                  ></e-commit>
+              <template v-if="it.commits">
+                <div class="fz-14 ml-5" @click.stop="onStop">
+                  <h-branch :info="it" />
                 </div>
-              </div>
+                <div class="flex-1 ml-5 shrink-1 fz-13">
+                  <div
+                    :style="{
+                      'max-width': asMobile ? '220px' : '300px',
+                    }"
+                  >
+                    <e-commit
+                      :info="it.commits"
+                      @click.native.stop="onStop"
+                    ></e-commit>
+                  </div>
+                </div>
+              </template>
             </div>
           </v-col>
           <v-col cols="12" md="3">

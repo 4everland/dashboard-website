@@ -3,12 +3,12 @@
     <div class="bd-1">
       <h3>Rewrite</h3>
       <div class="gray mt-1 fz-14">
-        If a URL doesn't exist, it will be redirected to the specified target.
+        If a URL doesn't exist, it will be redirected to the specified target
         location.
       </div>
       <div class="mt-5 d-flex hide-msg">
         <v-text-field
-          placeholder="`index.html` for history mode"
+          placeholder="set `index.html` for history mode"
           outlined
           dense
           v-model="rewrite"
