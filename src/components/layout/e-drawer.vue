@@ -130,7 +130,7 @@
     <!-- <div class="pos-a mini-arrow" @click="mini = !mini">
       <img src="/img/svg/drawer/mini-arrow.svg" class="icon d-b" />
     </div> -->
-    <div class="pos-a btm-0 left-0 w100p mb-4 al-c pa-3">
+    <div class="pos-a btm-0 left-0 w100p mb-4 al-c pa-3 bg-white">
       <a
         class="flex-1 ta-c"
         :href="it.url"
@@ -144,6 +144,7 @@
         />
       </a>
     </div>
+    <div style="height: 80px"></div>
   </v-navigation-drawer>
 </template>
 
