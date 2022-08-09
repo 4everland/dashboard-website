@@ -188,7 +188,7 @@
                       small
                       text
                       color="primary"
-                      @click="onSyncAR(fileName, 'post', fileInfo.hash)"
+                      @click="onSyncAR(fileName, 'post')"
                       >Retry</v-btn
                     >
                   </div>

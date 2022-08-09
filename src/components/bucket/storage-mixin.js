@@ -138,11 +138,7 @@ export default {
   },
 
   mounted() {
-    if (this.inFile && this.$route.query.ipfsHash) {
-      this.getList(this.$route.query.ipfsHash);
-    } else {
-      this.getList();
-    }
+    this.getList();
     this.checkNew();
   },
   methods: {
@@ -171,7 +167,7 @@ export default {
       }
       return this.$alert(msg);
     },
-    async getList(arg) {
+    async getList() {
       if (!this.s3) return;
       this.selected = [];
       if (this.inBucket || !this.bucketList.length) {
@@ -179,7 +175,7 @@ export default {
       }
 
       if (this.inFile) {
-        this.headObject(arg);
+        this.headObject();
       } else if (this.inFolder) {
         this.getObjects();
       }
@@ -196,9 +192,7 @@ export default {
         }
         this.$set(it, "arLoading", true);
         const { data } = await this.syncBucket(it.name, it.isAr);
-        console.log(data);
         await this.$sleep(500);
-        console.log(it, it.isAr);
         // throw new Error("test err");
       } catch (error) {
         console.log(error);
@@ -236,10 +230,10 @@ export default {
           throw new Error();
         });
     },
-    async onSyncAR(name, method = "post", ipfsHash) {
+    async onSyncAR(name, method = "post") {
       if (this.selectArStatus == "syncing") {
         this.$alert("The file is being synced").then(() => {
-          this.getList(ipfsHash);
+          this.getList();
         });
         return;
       }
@@ -257,13 +251,11 @@ export default {
           bucket: Bucket,
           key: this.getFileKey(name),
         });
-        // this.getList(ipfsHash);
         this.$setMsg({
           name: "updateUsage",
         });
       } catch (error) {
         //
-        // this.getList(ipfsHash);
       }
       this.$loading.close();
     },
@@ -275,7 +267,6 @@ export default {
       try {
         const { Prefix, Key } = this.pathInfo;
         let srcKey = this.inFile ? Key : Prefix + srcName;
-        console.log(this.pathInfo);
         const { value: name } = await this.$prompt("", "Rename " + srcName, {
           hideIcon: true,
           defaultValue: srcName,
@@ -363,7 +354,6 @@ export default {
     },
     renameObject(srcKey, Key) {
       const { Bucket } = this.pathInfo;
-      // console.log(srcKey, Key);
       return new Promise((resolve, reject) => {
         this.s3.copyObject(
           {
@@ -389,11 +379,9 @@ export default {
     async headObject(arg) {
       this.fileLoading = true;
       this.fileInfo = null;
-      console.log(this.pathInfo);
       this.s3.headObject({ ...this.pathInfo, IfMatch: arg }, (err, data) => {
         this.fileLoading = false;
         if (err) return this.onErr(err);
-        // console.log(data);
         const meta = data.Metadata;
         let arStatus = meta["arweave-status"];
         if (!arStatus) {
@@ -469,6 +457,7 @@ export default {
         ""
       );
       stream.on("data", (data) => {
+        console.log(data, "data");
         this.tableLoading = false;
         data.objects.sort((a, b) => {
           return (b.prefix ? 1 : 0) - (a.prefix ? 1 : 0);
@@ -607,10 +596,8 @@ export default {
           Quiet: false,
         },
       };
-      // console.log(params);
       return new Promise((resolve, reject) => {
         this.s3.deleteObjects(params, (err, data) => {
-          // console.log(err, data);
           if (err) reject(err);
           else resolve(data);
         });
@@ -622,10 +609,15 @@ export default {
         this.curPage = 0;
         this.continuationTokenArr = [""];
         const target = this.inBucket ? "bucket" : "file";
-        let html = `The following ${target}s will be permanently deleted. Are you sure you want to continue?`;
+        let html = `The following ${target}${
+          this.selected.length > 1 ? "s" : ""
+        } will be permanently deleted. Are you sure you want to continue?`;
 
         if (this.inBucket) {
-          await this.$confirm(html, `Remove ${target}`);
+          await this.$confirm(
+            html,
+            `Remove ${target}${this.selected.length > 1 ? "s" : ""}`
+          );
           let errArr = [];
           for (const row of this.selected) {
             try {
@@ -644,11 +636,17 @@ export default {
           let hasFolder = this.selected.filter((it) => !it.isFile);
           if (hasFile.length && hasFolder.length) {
             //  file folder exsit
-            if (hasFile.filter((it) => it.arStatus != "desynced").length) {
+            if (
+              this.selected.filter(
+                (it) => it.isFile && it.arStatus != "desynced"
+              ).length
+            ) {
               html = `The following files will be permanently deleted, but files in AR can’t be deleted from the AR network, and your AR storage space will not increase. Would you like to continue?`;
-              await this.$confirm(html, `Remove ${target}`);
             }
-
+            await this.$confirm(
+              html,
+              `Remove ${target}${this.selected.length > 1 ? "s" : ""}`
+            );
             this.deleteFolder = true;
             this.addDeleteFolderTask(2);
             this.processDeleteFolderTask();
@@ -659,16 +657,23 @@ export default {
             );
           } else if (hasFile.length && !hasFolder.length) {
             // only file
-            if (hasFile.filter((it) => it.arStatus != "desynced").length) {
+            if (
+              this.selected.filter(
+                (it) => it.isFile && it.arStatus != "desynced"
+              ).length
+            ) {
               html = `The following files will be permanently deleted, but files in AR can’t be deleted from the AR network, and your AR storage space will not increase. Would you like to continue?`;
-              await this.$confirm(html, `Remove ${target}`);
             }
+            await this.$confirm(
+              html,
+              `Remove ${target}${this.selected.length > 1 ? "s" : ""}`
+            );
+
             await this.delObjects(
               hasFile.map((it) => {
                 return { Key: it.Key };
               })
             );
-            // this.getList();
           } else {
             // only folder
             this.deleteFolder = true;
