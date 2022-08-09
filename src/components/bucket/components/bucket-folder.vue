@@ -193,12 +193,13 @@
             :clipboardVal="selected.length ? getViewUrl(selected[0]) : ''"
             @download="handleDownload"
             @onRename="onRename(selected[0].name)"
-            @onSyncAR="onSyncAR(selected[0].name)"
+            @onSyncAR="handleSyncAr(selected[0].name)"
             @handleClearSelected="selected = []"
             @handleDeleteSelected="onDelete()"
           ></operation-bar>
         </div>
         <bucket-fileInfo
+          ref="fileInfo"
           :isAr="bucketInfo.isAr"
           :selected="selected"
           :fileInfoDrawer.sync="fileInfoDrawer"
@@ -352,6 +353,10 @@ export default {
     },
     handleDownload() {
       window.open(this.getViewUrl(this.selected[0]));
+    },
+    async handleSyncAr(name) {
+      await this.onSyncAR(name);
+      this.$refs.fileInfo.headObject();
     },
   },
   watch: {

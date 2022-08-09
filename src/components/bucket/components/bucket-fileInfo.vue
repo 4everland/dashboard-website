@@ -134,25 +134,12 @@
         </div>
       </div>
       <div
+        class="no-file ta-c loading-img mt-15"
         v-else-if="selected.length == 0"
-        style="height: 100%"
-        class="d-flex flex-column justify-center align-center"
       >
-        <img width="80%" src="/img/svg/common/empty2.svg" />
-        <p class="fz-12 mt-4" style="color: #6c7789">
-          Select a file/folder to view details
-        </p>
+        <img :src="`/img/svg/common/empty2.svg`" :height="130" />
+        <div class="mt-5 gray fz-17">Select a file/folder to view details</div>
       </div>
-      <!-- <div class="multifile" v-else>
-        <v-img
-          class="my-4"
-          height="127"
-          max-height="127"
-          max-width="100%"
-          src="/img/svg/bucketFileInfo/dir-file-img.svg"
-        >
-        </v-img>
-      </div> -->
 
       <div v-else class="default-img al-c justify-center" v-show="notImg">
         <img
@@ -397,7 +384,6 @@ export default {
           this.fileInfo = null;
           this.dirFileArr = [];
         } else {
-          console.log(">1");
         }
       },
       deep: true,
