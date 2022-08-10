@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import upload from "./upload";
 import { http2 } from "../api";
 
 Vue.use(Vuex);
@@ -73,9 +72,6 @@ const store = new Vuex.Store({
       commit("setProject", data);
       return data;
     },
-  },
-  modules: {
-    upload,
   },
 });
 
