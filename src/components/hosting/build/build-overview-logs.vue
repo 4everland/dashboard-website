@@ -44,7 +44,7 @@
       </div>
     </e-toggle-card>
     <e-toggle-card
-      v-if="info && info.platform == 'IPFS'"
+      v-if="info"
       class="mt-5"
       title="Assigning Domains"
       :value="getOpen(2)"

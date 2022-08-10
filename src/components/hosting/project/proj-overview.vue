@@ -20,15 +20,7 @@
               {{ info.domain }}
             </e-link>
           </e-kv>
-
-          <e-kv
-            label="Domains"
-            class="mt-9"
-            v-if="info.domains"
-            :class="{
-              'op-0 ev-n': info.platform != 'IPFS',
-            }"
-          >
+          <e-kv label="Domains" class="mt-9" v-if="info.domains">
             <div class="d-flex al-c">
               <h-domain class="mr-6" :val="info.domains[0].domain" />
               <e-menu v-if="info.domains.length > 1" offset-y open-on-hover>
@@ -48,7 +40,7 @@
             </div>
           </e-kv>
 
-          <div class="mt-9 d-flex">
+          <div class="mt-9 d-flex" v-if="info.platform == 'IPFS'">
             <e-kv :label="info.platform" style="min-width: 120px">
               <div class="al-c">
                 <e-link

@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div class="main-wrap mt-5" v-if="$inDev">
+    <div class="main-wrap mt-5">
       <h3>Hosting Platform</h3>
       <v-row>
         <v-col
@@ -47,7 +47,7 @@
               active: form.platform == it.name,
             }"
           >
-            <img :src="'img/svg/hosting/' + it.icon" height="30" />
+            <img :src="'/img/svg/hosting/' + it.icon" height="30" />
             <div class="ml-2 fw-b fz-16">{{ it.label }}</div>
           </div>
         </v-col>
