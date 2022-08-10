@@ -99,6 +99,7 @@ export default {
         this.loading = false;
         let total = 0;
         this.list = data.collections.map((it, i) => {
+          if (it.value < 0.01 || !it.value) it.value = 0.01;
           total += it.value;
           it.size = this.$utils.getFileSize(it.value);
           it.itemStyle = {
