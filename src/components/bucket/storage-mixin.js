@@ -457,7 +457,6 @@ export default {
         ""
       );
       stream.on("data", (data) => {
-        // console.log(data, "data");
         this.tableLoading = false;
         data.objects.sort((a, b) => {
           return (b.prefix ? 1 : 0) - (a.prefix ? 1 : 0);
@@ -469,11 +468,7 @@ export default {
         if (this.hasMore && direction !== "pre" && !isExist) {
           this.continuationTokenArr.push(data.nextContinuationToken);
         }
-        // if (direction == undefined) {
-        //   this.continuationTokenArr = [""];
-        // }
         let list = data.objects.map((it) => {
-          // console.log(data);
           if (it.prefix)
             return {
               name: it.prefix.replace(Prefix, "").replace("/", ""),
@@ -506,9 +501,6 @@ export default {
         this.tableLoading = false;
         if (err) return this.onErr(err);
       });
-      // this.s3.listObjectsV2(this.pathInfo, (err, data) => {
-      //   // console.log(data, Prefix);
-      // });
     },
     // listBuckets() {
     //   return new Promise((resolve, reject) => {
