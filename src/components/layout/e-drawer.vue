@@ -256,7 +256,14 @@ export default {
           ],
         },
         {
-          label: "Resources",
+          label: "Resource",
+          img: "m-usage",
+          to: "/resource",
+          active: false,
+          group: /^\/resource/i,
+        },
+        {
+          label: "Bills",
           img: "m-usage",
           group: /^\/billing/i,
           subs: [
