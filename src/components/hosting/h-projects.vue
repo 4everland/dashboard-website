@@ -152,7 +152,7 @@
                   <e-commit
                     @click.native.stop="onStop"
                     :info="it.commit"
-                    class="fz-14"
+                    class="line-1"
                   ></e-commit>
                 </div>
               </v-col>
