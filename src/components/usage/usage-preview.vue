@@ -1,7 +1,7 @@
 <template>
   <div>
     <e-menu open-on-hover offset-y top>
-      <v-icon slot="ref" color="#ed7266" size="16" class="ml-2"
+      <v-icon slot="ref" color="#999" size="14" class="ml-2"
         >mdi-help-circle</v-icon
       >
       <div class="pa-3 bg-white lh-11" style="width: 330px">

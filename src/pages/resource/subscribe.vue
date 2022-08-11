@@ -9,7 +9,7 @@
 <template>
   <div>
     <div class="pos-s z-1" style="top: 60px">
-      <v-tabs v-model="tabIdx" class="bdrs-5 shadow-2 e-tabs-2">
+      <v-tabs v-model="tabIdx" class="bdrs-6 shadow-2 e-tabs-2">
         <v-tab v-for="(it, i) in list" :key="i">{{ it.label }}</v-tab>
       </v-tabs>
     </div>
@@ -21,7 +21,7 @@
         </div>
       </div>
     </v-card>
-    <div class="pa-3 gray fz-14">
+    <div class="pa-3 mt-3 gray fz-14">
       <p>Tips：</p>
       <p>
         1. Please Note: The price calculator provides a reference price, but the
@@ -34,9 +34,13 @@
         0.01USD.
       </p>
     </div>
-    <div class="mt-5 pos-s btm-0" style="background: #fff5eb">
+    <div
+      class="mt-2 pos-s btm-0 pa-4 bdrs-6 shadow-2"
+      style="background: #fff5eb"
+    >
       <div class="al-c">
-        <span>Configuration costs</span>
+        <span class="fz-14 gray-6">Configuration costs</span>
+        <usage-preview :previewList="previewList" :list="list" />
       </div>
     </div>
   </div>
@@ -58,8 +62,9 @@ export default {
     return {
       tabIdx: 0,
       priceInfo: {},
-      usageInfo: null,
+      usageInfo: {},
       form: {},
+      feeForm: {},
     };
   },
   computed: {
@@ -182,6 +187,12 @@ export default {
             this.$router.push("/resource");
           });
       }
+    },
+    getFee(fee) {
+      if (!fee) return 0;
+      return (
+        this.formatToken(fee.length == 2 ? fee[0].add(fee[1]) : fee, 4) * 1
+      );
     },
   },
 };

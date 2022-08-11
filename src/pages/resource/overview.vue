@@ -16,7 +16,7 @@
               <span class="gray-5">Available Credit</span>
               <e-tooltip top>
                 <v-icon slot="ref" color="#999" size="14" class="ml-2"
-                  >mdi-alert-circle</v-icon
+                  >mdi-help-circle</v-icon
                 >
                 <span
                   >Query results and actual results may differ due to
