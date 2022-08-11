@@ -15,7 +15,7 @@
       type="article"
       v-if="loading"
     ></v-skeleton-loader>
-    <div class="ta-c pt-14 pb-10" v-else-if="!list.length">
+    <div class="ta-c pt-14 pb-10" v-else-if="!totalSize">
       <img src="/img/svg/overview/pie-def.svg" height="194" />
     </div>
     <div class="d-flex" v-else>
@@ -99,7 +99,6 @@ export default {
         this.loading = false;
         let total = 0;
         this.list = data.collections.map((it, i) => {
-          if (it.value < 0.01 || !it.value) it.value = 0.01;
           total += it.value;
           it.size = this.$utils.getFileSize(it.value);
           it.itemStyle = {
