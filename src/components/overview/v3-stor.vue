@@ -27,7 +27,7 @@
         ></div>
         <div class="pos-center ta-c" style="top: 47%">
           <p class="gray fz-14">Total</p>
-          <p class="fw-b">{{ totalSize }}</p>
+          <p class="fw-b">{{ $utils.getFileSize(totalSize) }}</p>
         </div>
       </div>
       <div class="mt-10 fz-14" style="width: 200px">
@@ -107,7 +107,7 @@ export default {
           };
           return it;
         });
-        this.totalSize = this.$utils.getFileSize(total);
+        this.totalSize = total;
         if (total) {
           this.setData();
         }
