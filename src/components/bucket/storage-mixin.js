@@ -502,32 +502,36 @@ export default {
         if (err) return this.onErr(err);
       });
     },
-    // listBuckets() {
-    //   return new Promise((resolve, reject) => {
-    //     this.s3.listBuckets({}, (err, data) => {
-    //       if (err) {
-    //         this.onErr(err);
-    //         reject(err);
-    //       }
-    //       const list = data.Buckets.map((it) => {
-    //         return {
-    //           name: it.Name,
-    //           createAt: it.CreationDate.format(),
-    //         };
-    //       });
-    //       resolve(list);
-    //     });
-    //   });
-    // },
+    listBuckets() {
+      return new Promise((resolve, reject) => {
+        this.s3.listBuckets({}, (err, data) => {
+          if (err) {
+            this.onErr(err);
+            reject(err);
+          }
+          const list = data.Buckets.map((it) => {
+            return {
+              name: it.Name,
+              createAt: it.CreationDate.format(),
+            };
+          });
+          resolve(list);
+        });
+      });
+    },
     async getBuckets() {
       this.tableLoading = true;
       try {
+        const list = await this.listBuckets();
         const { data } = await this.$http.get("/buckets/extra");
-        const dataList = data.list.map((row) => {
+        data.list.forEach((row) => {
+          const item = list.filter((it) => it.name == row.bucket)[0];
+          if (!item) {
+            // console.log(row.bucket, "no bucket");
+            return;
+          }
           const ar = row.arweave || {};
-          return {
-            name: row.bucket,
-            // createAt: new Date().format(row.createdAt),
+          Object.assign(item, {
             isAr: row.arweave ? ar.sync : row.arweaveSync,
             arCancel: ar.status == "cancel",
             traffic: this.$utils.getFileSize(row.monthTraffic),
@@ -535,9 +539,9 @@ export default {
             arUsedStorage: this.$utils.getFileSize(row.arweave.usedStorage),
             visitChartData: row.monthVisit.map((item) => Number(item)),
             defDomain: row.domain,
-          };
+          });
         });
-        this.bucketList = dataList;
+        this.bucketList = list;
       } catch (error) {
         console.log(error);
       }
