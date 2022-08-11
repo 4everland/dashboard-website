@@ -1,5 +1,6 @@
 import Overview from "./overview";
 import Subscribe from "./subscribe";
+import Order from "./order";
 
 export default [
   {
@@ -23,6 +24,26 @@ export default [
         },
         {
           text: `Subscribe`,
+        },
+      ],
+    },
+  },
+  {
+    path: "/resource/subscribe/order",
+    component: Order,
+    meta: {
+      title: "Subscribe",
+      links: [
+        {
+          text: "Resource",
+          to: "/resource",
+        },
+        {
+          text: `Subscribe`,
+          to: "/resource/subscribe",
+        },
+        {
+          text: "Order",
         },
       ],
     },

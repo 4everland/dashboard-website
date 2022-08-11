@@ -114,39 +114,6 @@ export default {
         },
       ];
 
-      if (/billing\/(usage\/more|bills)/.test(this.$route.path)) {
-        const paySubs = [
-          {
-            label: "Polygon",
-            img: "/img/svg/billing/ic-polygon-0.svg",
-            width: 18,
-            height: 18,
-            type: "pay",
-          },
-          {
-            label: "Ethereum",
-            img: "/img/svg/billing/ic-ethereum.svg",
-            width: 18,
-            height: 18,
-            type: "pay",
-          },
-          {
-            label: "BSC",
-            img: "/img/svg/billing/ic-bsc.png",
-            width: 18,
-            height: 18,
-            type: "pay",
-          },
-        ];
-        const defPay =
-          paySubs.filter((it) => it.label == this.payBy)[0] || paySubs[0];
-        list.push({
-          ...defPay,
-          noSuffix: true,
-          subs: paySubs.length > 1 ? paySubs : null,
-        });
-      }
-
       list.push({
         label: (info.username || "unkown").cutStr(6, 4),
         avatar: info.avatar || "/img/bg/user/def-avatar.png",
@@ -206,12 +173,6 @@ export default {
   },
   methods: {
     onMenu(it) {
-      if (it.type == "pay") {
-        this.$setState({
-          payBy: it.label,
-        });
-        localStorage.payBy = it.label;
-      }
       if (it.noticeMsg) {
         console.log(it);
         this.$setMsg({

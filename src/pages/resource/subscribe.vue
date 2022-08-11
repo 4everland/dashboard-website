@@ -35,12 +35,21 @@
       </p>
     </div>
     <div
-      class="mt-2 pos-s btm-0 pa-4 bdrs-6 shadow-2"
+      class="mt-2 pos-s btm-0 pa-3 bdrs-6 shadow-2"
       style="background: #fff5eb"
     >
       <div class="al-c">
         <span class="fz-14 gray-6">Configuration costs</span>
         <usage-preview :previewList="previewList" :list="list" />
+        <b class="red-1 fz-25 ml-3">{{ totalPrice }}</b>
+        <span class="gray-6 ml-2 fz-15">USD</span>
+        <v-btn
+          color="error"
+          depressed
+          class="ml-auto"
+          to="/resource/subscribe/order"
+          >Confirm</v-btn
+        >
       </div>
     </div>
   </div>

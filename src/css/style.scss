@@ -176,6 +176,9 @@ $bdcolor: #E6E8EB;
 .bdc-d0 {
   border-color: #D0DAE9;
 }
+.bdc-c1 {
+  border-color: $color1;
+}
 .bdt-1 {
   border-top: 1px solid $bdcolor;
 }
@@ -241,7 +244,7 @@ $bdcolor: #E6E8EB;
     border-right: none;
   }
   td {
-    padding: 5px;
+    padding: 12px;
     border-left: none;
     border-top: none;
   }
