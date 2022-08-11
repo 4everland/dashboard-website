@@ -1,8 +1,44 @@
+<style lang="scss">
+.e-tabs-2 {
+  .v-tabs-slider-wrapper {
+    padding: 0 15px;
+  }
+}
+</style>
+
 <template>
   <div>
-    <v-tabs v-model="tabIdx">
-      <v-tab v-for="(it, i) in list" :key="i">{{ it.label }}</v-tab>
-    </v-tabs>
+    <div class="pos-s z-1" style="top: 60px">
+      <v-tabs v-model="tabIdx" class="bdrs-5 shadow-2 e-tabs-2">
+        <v-tab v-for="(it, i) in list" :key="i">{{ it.label }}</v-tab>
+      </v-tabs>
+    </div>
+    <v-card class="mt-5 shadow-2" v-for="(it, i) in list" :key="i">
+      <div class="pa-5">
+        <div class="al-c">
+          <img :src="`/img/svg/overview/${it.icon}`" width="16" />
+          <span class="ml-3 fz-15">{{ it.label }}</span>
+        </div>
+      </div>
+    </v-card>
+    <div class="pa-3 gray fz-14">
+      <p>Tips：</p>
+      <p>
+        1. Please Note: The price calculator provides a reference price, but the
+        specific deduction depends on the order result.
+      </p>
+      <p>
+        2. In pay-per-use billing mode, the amount shown in the price calculator
+        is rounded to two decimal places if any, and the third place is rounded
+        off. If the rounded amount is less than 0.01USD, it will be displayed as
+        0.01USD.
+      </p>
+    </div>
+    <div class="mt-5 pos-s btm-0" style="background: #fff5eb">
+      <div class="al-c">
+        <span>Configuration costs</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -17,7 +53,7 @@ const ResourceType = {
 };
 
 export default {
-  mixins: [mixin],
+  // mixins: [mixin],
   data() {
     return {
       tabIdx: 0,
@@ -32,6 +68,7 @@ export default {
       return [
         {
           label: "Bandwidth",
+          icon: "bandwidth.svg",
           id: ResourceType.Bandwidth,
           desc: "（Need to enter an integer multiple of 100.）",
           key: "bandwidth",
@@ -40,6 +77,7 @@ export default {
         },
         {
           label: "IPFS",
+          icon: "ipfs.svg",
           id: ResourceType.IPFSStorage,
           key: "ipfs",
           unit: "GB / Mon",
@@ -47,6 +85,7 @@ export default {
         },
         {
           label: "Arweave",
+          icon: "ar.svg",
           id: ResourceType.ARStorage,
           key: "ar",
           unit: "MB",
@@ -54,6 +93,7 @@ export default {
         },
         {
           label: "Build Minutes",
+          icon: "buildtime.svg",
           id: ResourceType.BuildingTime,
           key: "buildMinutes",
           unit: "Min",
