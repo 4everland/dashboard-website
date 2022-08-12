@@ -30,7 +30,7 @@
         <ul class="ls-none mt-3" v-show="singleFile && !fileLoading">
           <p class="fz-16 fw-b file-name">{{ selected[0].name }}</p>
           <template v-for="(it, i) in fileInfoList">
-            <li class="mt-2 mb-2 fz-12 d-flex align-start" :key="i">
+            <li class="mt-2 mb-2 fz-12 d-flex align-center" :key="i">
               <span class="d-ib pa-1" style="min-width: 85px"
                 >{{ it.label }}:</span
               >
@@ -455,5 +455,8 @@ export default {
 }
 .file-link {
   display: block;
+}
+.ls-none > li:last-of-type {
+  align-items: flex-start !important;
 }
 </style>
