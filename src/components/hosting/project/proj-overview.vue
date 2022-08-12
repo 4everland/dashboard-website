@@ -40,7 +40,7 @@
             </div>
           </e-kv>
 
-          <div class="mt-9 d-flex" v-if="info.platform == 'IPFS'">
+          <div class="mt-9 d-flex">
             <e-kv :label="info.platform" style="min-width: 120px">
               <div class="al-c">
                 <e-link

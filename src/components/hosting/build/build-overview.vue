@@ -38,13 +38,7 @@
             </v-col>
           </v-row>
 
-          <e-kv2
-            label="Domain"
-            class="mt-7"
-            :class="{
-              'op-0 ev-n': info.platform != 'IPFS',
-            }"
-          >
+          <e-kv2 label="Domain" class="mt-7">
             <e-link :href="'//' + info.domain">
               {{ info.domain }}
             </e-link>
@@ -61,7 +55,9 @@
               class="ml-auto"
               :label="info.platform"
               style="min-width: 120px"
-              v-if="info.platform"
+              v-if="
+                info.platform && (projInfo.latest || {}).taskId == info.taskId
+              "
             >
               <div class="al-c" v-if="info.hash">
                 <e-link
@@ -170,6 +166,7 @@ export default {
   computed: {
     ...mapState({
       nowDate: (s) => s.nowDate,
+      projInfo: (s) => s.projectInfo,
     }),
     isSuccess() {
       return this.state == "success";

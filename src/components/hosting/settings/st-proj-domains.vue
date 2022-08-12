@@ -125,9 +125,8 @@
         </div>
       </div>
     </div>
-
-    <st-proj-domains-sol />
-    <st-proj-domains-ens />
+    <st-proj-domains-sol v-if="info.platform == 'IPFS'" />
+    <st-proj-domains-ens v-if="info.platform == 'IPFS'" />
   </div>
 </template>
 

@@ -66,7 +66,6 @@
                         color="primary"
                         class="ml-auto"
                         :to="`/hosting/project/${it.name}/${it.id}?tab=settings&sub=domains`"
-                        :disabled="it.platform != 'IPFS'"
                         >Select</v-btn
                       >
                     </div>

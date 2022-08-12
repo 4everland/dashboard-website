@@ -28,21 +28,25 @@ export default {
     ...mapState({
       info: (s) => s.projectInfo,
       list() {
-        const domains =
-          this.info.platform == "IPFS"
-            ? [
-                {
-                  comp: "st-proj-domains",
-                  text: "Domains",
-                },
-              ]
-            : [];
+        // const domains =
+        //   this.info.platform == "IPFS"
+        //     ? [
+        //         {
+        //           comp: "st-proj-domains",
+        //           text: "Domains",
+        //         },
+        //       ]
+        //     : [];
         return [
           {
             comp: "st-proj-general",
             text: "General",
           },
-          ...domains,
+          // ...domains,
+          {
+            comp: "st-proj-domains",
+            text: "Domains",
+          },
           {
             comp: "st-proj-git",
             text: "Git",

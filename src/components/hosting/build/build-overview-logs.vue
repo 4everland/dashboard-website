@@ -15,7 +15,7 @@
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
     <e-toggle-card
-      v-if="info"
+      v-if="info.platform && (projInfo.latest || {}).taskId == info.taskId"
       class="mt-5"
       :title="'Syncing to ' + info.platform"
       :value="getOpen(1)"
@@ -129,9 +129,9 @@ export default {
     isDone(val) {
       this.$emit("done", val);
     },
-    state(val) {
+    state(val, oldVal) {
       this.$emit("state", val);
-      this.getInfo();
+      if (oldVal) this.getInfo();
     },
   },
   mounted() {

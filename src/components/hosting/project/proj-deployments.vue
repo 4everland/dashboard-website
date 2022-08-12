@@ -29,11 +29,24 @@
                 :href="$utils.getCidLink(it.cid, it.platform)"
                 target="_blank"
                 @click.stop="onStop"
-                v-if="it.cid"
+                style="min-width: 100px"
+                v-if="it.cid && it.state == 'SUCCESS'"
               >
                 {{ it.cid.cutStr(4, 4) }}
               </a>
-              <span v-else class="ml-2 fz-13 d-ib" style="min-width: 76px">{{
+              <span
+                class="ml-2 fz-13 d-ib"
+                v-else-if="it.state == 'FAILURE'"
+                style="min-width: 100px"
+                >Not synchronized</span
+              >
+              <span
+                class="ml-2 fz-13 d-ib"
+                v-else-if="it.state == 'SYNCING'"
+                style="min-width: 100px"
+                >Syncing</span
+              >
+              <span v-else class="ml-2 fz-13 d-ib" style="min-width: 100px">{{
                 it.platform
               }}</span>
               <template v-if="it.commits">

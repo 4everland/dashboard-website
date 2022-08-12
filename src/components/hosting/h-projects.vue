@@ -121,10 +121,16 @@
                         :href="$utils.getCidLink(it.hash, it.platform)"
                         target="_blank"
                         @click.stop="onStop"
-                        v-if="it.hash"
+                        v-if="it.hash && it.state == 'SUCCESS'"
                       >
                         {{ it.hash.cutStr(4, 4) }}
                       </a>
+                      <span v-else-if="it.state == 'FAILURE'" class="ml-1 fz-14"
+                        >Not synchronized</span
+                      >
+                      <span v-else-if="it.state == 'SYNCING'" class="ml-1 fz-14"
+                        >Syncing</span
+                      >
                       <span v-else class="ml-1 fz-14">{{ it.platform }}</span>
                     </div>
                   </div>
