@@ -12,6 +12,7 @@ const store = new Vuex.Store({
     pageLoaded: false,
     ...getWH(),
     isTouch: "ontouchstart" in window,
+    scrollTop: 0,
     isFocus: true,
     appInfo: {
       title: "",
@@ -119,6 +120,12 @@ window.onload = () => {
   // console.log("onload", window.jdenticon);
   setState({
     pageLoaded: true,
+  });
+};
+
+window.onscroll = () => {
+  setState({
+    scrollTop: window.scrollY,
   });
 };
 

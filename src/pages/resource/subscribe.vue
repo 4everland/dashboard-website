@@ -8,54 +8,71 @@
 
 <template>
   <div>
-    <div class="pos-s z-1" style="top: 60px">
-      <v-tabs v-model="tabIdx" class="bdrs-6 shadow-2 e-tabs-2">
-        <v-tab v-for="(it, i) in list" :key="i">{{ it.label }}</v-tab>
-      </v-tabs>
-    </div>
-    <v-card class="mt-5 shadow-2" v-for="(it, i) in list" :key="i">
-      <div class="pa-5">
+    <v-skeleton-loader type="article" v-if="!usageInfo" />
+    <template v-else>
+      <div class="pos-s z-1" style="top: 60px">
+        <v-tabs v-model="tabIdx" class="bdrs-6 shadow-2 e-tabs-2">
+          <v-tab @click="onTab" v-for="(it, i) in list" :key="i">{{
+            it.label
+          }}</v-tab>
+        </v-tabs>
+      </div>
+      <v-card
+        class="mt-5 shadow-2"
+        :ref="'card' + i"
+        v-for="(it, i) in list"
+        :key="i"
+      >
+        <div class="pa-5">
+          <div class="al-c">
+            <img :src="`/img/svg/overview/${it.icon}`" width="16" />
+            <span class="ml-3 fz-15">{{ it.label }}</span>
+          </div>
+          <div class="mt-6">
+            <e-kv :label="it.label">
+              {{ it.percTxt }}
+            </e-kv>
+          </div>
+        </div>
+      </v-card>
+      <div class="pa-3 mt-3 gray fz-14">
+        <p>Tips：</p>
+        <p>
+          1. Please Note: The price calculator provides a reference price, but
+          the specific deduction depends on the order result.
+        </p>
+        <p>
+          2. In pay-per-use billing mode, the amount shown in the price
+          calculator is rounded to two decimal places if any, and the third
+          place is rounded off. If the rounded amount is less than 0.01USD, it
+          will be displayed as 0.01USD.
+        </p>
+      </div>
+      <div style="height: 40vh"></div>
+      <div
+        class="mt-2 pos-s btm-0 pa-3 bdrs-6 shadow-2"
+        style="background: #fff5eb"
+      >
         <div class="al-c">
-          <img :src="`/img/svg/overview/${it.icon}`" width="16" />
-          <span class="ml-3 fz-15">{{ it.label }}</span>
+          <span class="fz-14 gray-6">Configuration costs</span>
+          <usage-preview :previewList="previewList" :list="list" />
+          <b class="red-1 fz-25 ml-3">{{ totalPrice }}</b>
+          <span class="gray-6 ml-2 fz-15">USD</span>
+          <v-btn
+            color="error"
+            depressed
+            class="ml-auto"
+            to="/resource/subscribe/order"
+            >Confirm</v-btn
+          >
         </div>
       </div>
-    </v-card>
-    <div class="pa-3 mt-3 gray fz-14">
-      <p>Tips：</p>
-      <p>
-        1. Please Note: The price calculator provides a reference price, but the
-        specific deduction depends on the order result.
-      </p>
-      <p>
-        2. In pay-per-use billing mode, the amount shown in the price calculator
-        is rounded to two decimal places if any, and the third place is rounded
-        off. If the rounded amount is less than 0.01USD, it will be displayed as
-        0.01USD.
-      </p>
-    </div>
-    <div
-      class="mt-2 pos-s btm-0 pa-3 bdrs-6 shadow-2"
-      style="background: #fff5eb"
-    >
-      <div class="al-c">
-        <span class="fz-14 gray-6">Configuration costs</span>
-        <usage-preview :previewList="previewList" :list="list" />
-        <b class="red-1 fz-25 ml-3">{{ totalPrice }}</b>
-        <span class="gray-6 ml-2 fz-15">USD</span>
-        <v-btn
-          color="error"
-          depressed
-          class="ml-auto"
-          to="/resource/subscribe/order"
-          >Confirm</v-btn
-        >
-      </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import mixin from "./mixin";
 
 const ResourceType = {
@@ -71,31 +88,41 @@ export default {
     return {
       tabIdx: 0,
       priceInfo: {},
-      usageInfo: {},
+      usageInfo: null,
       form: {},
       feeForm: {},
+      scrollMap: [],
     };
   },
   computed: {
+    ...mapState({
+      scrollTop: (s) => s.scrollTop,
+    }),
     list() {
-      const info = this.priceInfo;
+      const price = this.priceInfo;
+      const info = this.usageInfo;
+      if (!info) return [];
       return [
         {
           label: "Bandwidth",
           icon: "bandwidth.svg",
           id: ResourceType.Bandwidth,
-          desc: "（Need to enter an integer multiple of 100.）",
           key: "bandwidth",
           unit: "GB",
-          unitPrice: info.trafficUnitPrice || 0,
+          unitPrice: price.trafficUnitPrice || 0,
+          ...this.getPerc(
+            info.usedFreeBandwidth + info.usedPurchasedBandwidth,
+            info.freeBandwidth + info.purchasedBandwidth
+          ),
         },
         {
-          label: "IPFS",
+          label: "IPFS Storage",
           icon: "ipfs.svg",
           id: ResourceType.IPFSStorage,
           key: "ipfs",
           unit: "GB / Mon",
-          unitPrice: info.ipfsStorageUnitPrice || 0,
+          unitPrice: price.ipfsStorageUnitPrice || 0,
+          ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
         },
         {
           label: "Arweave",
@@ -103,7 +130,8 @@ export default {
           id: ResourceType.ARStorage,
           key: "ar",
           unit: "MB",
-          unitPrice: info.arStorageUnitPrice || 0,
+          unitPrice: price.arStorageUnitPrice || 0,
+          ...this.getPerc(info.usedArStorage, info.arStorage),
         },
         {
           label: "Build Minutes",
@@ -111,7 +139,14 @@ export default {
           id: ResourceType.BuildingTime,
           key: "buildMinutes",
           unit: "Min",
-          unitPrice: info.buildTimeUnitPrice || 0,
+          unitPrice: price.buildTimeUnitPrice || 0,
+          ...this.getPerc(
+            parseInt(
+              info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes
+            ),
+            info.freeBuildMinutes + info.purchasedBuildMinutes,
+            "Minutes"
+          ),
         },
       ];
     },
@@ -163,6 +198,16 @@ export default {
       return this.usageInfo.ipfsExpired;
     },
   },
+  watch: {
+    scrollTop(val) {
+      let toIdx = 0;
+      for (const i in this.scrollMap) {
+        const top = this.scrollMap[i];
+        if (val >= top) toIdx = i;
+      }
+      this.tabIdx = toIdx * 1;
+    },
+  },
   mounted() {
     const form = {};
     this.list.forEach((it) => {
@@ -172,6 +217,41 @@ export default {
     this.getInfo();
   },
   methods: {
+    onTab() {
+      this.$nextTick(() => {
+        const top = this.scrollMap[this.tabIdx] || 0;
+        window.scrollTo(0, top);
+      });
+    },
+    getPerc(used, total, unit = "GB") {
+      const getSize = this.$utils.getFileSize;
+      let percTxt = "";
+      if (unit == "GB") {
+        const usedObj = getSize(used, true);
+        const totalObj = getSize(total, true);
+        let childUnit = "";
+        if (usedObj.unit != totalObj.unit) childUnit = usedObj.unit;
+        percTxt = `${usedObj.num} ${childUnit} / ${totalObj.num} ${totalObj.unit}`;
+      } else {
+        percTxt = `${used} / ${total} Min`;
+      }
+      let perc = (used * 100) / total;
+      perc = this.$utils.cutFixed(perc, 2);
+      return {
+        perc,
+        percTxt,
+      };
+    },
+    getCardTop() {
+      this.$nextTick(() => {
+        const arr = [];
+        for (const i in this.list) {
+          const el = this.$refs["card" + i][0].$el;
+          arr[i] = el.offsetTop - 60;
+        }
+        this.scrollMap = arr;
+      });
+    },
     async getInfo() {
       try {
         const { data } = await this.$http.get("$v3/common/resource/price");
@@ -185,6 +265,7 @@ export default {
 
         const { data: usageInfo } = await this.$http.get(`$v3/usage`);
         this.usageInfo = usageInfo;
+        this.getCardTop();
       } catch (error) {
         this.$confirm(error.message, {
           confirmText: "Try Again",
