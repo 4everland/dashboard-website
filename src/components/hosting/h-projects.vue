@@ -144,7 +144,7 @@
                 <div class="d-flex al-c" v-if="it.repo && it.repo.id">
                   <e-icon-link
                     @click.native.stop="onStop"
-                    class="mr-6"
+                    class="mr-6 shrink-0"
                     img="/img/svg/hosting/m-branch.svg"
                     :link="
                       it.repo.cloneUrl.replace(
