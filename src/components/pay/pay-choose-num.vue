@@ -1,9 +1,9 @@
 <template>
   <div class="al-c">
     <v-btn
-      @click="curIdx = i"
+      @click="curIdx = i == curIdx ? -1 : i"
       :outlined="i != curIdx"
-      :color="i == curIdx ? 'primary' : ''"
+      :color="i == curIdx ? 'primary' : '#6c7789'"
       depressed
       class="mr-5"
       small
@@ -12,6 +12,31 @@
     >
       {{ it.text }}
     </v-btn>
+    <input
+      v-model="inputVal"
+      type="tel"
+      class="bd-1 pa-1 pl-2 bdrs-2 fz-14 mr-2"
+      :class="{
+        'bdc-c1': inputVal > 0,
+      }"
+      style="width: 70px"
+    />
+    <e-menu offset-y v-if="unitList.length">
+      <v-btn plain small color="#000" class="al-c" slot="ref">
+        <span>{{ unitItem.text }}</span>
+        <v-icon>mdi-menu-down</v-icon>
+      </v-btn>
+      <v-list dense>
+        <v-list-item-group v-model="unitIdx">
+          <v-list-item link v-for="(it, i) in unitList" :key="i">
+            <span class="fz-14">{{ it.text }}</span>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </e-menu>
+    <span v-else>
+      {{ unit }}
+    </span>
   </div>
 </template>
 
@@ -23,8 +48,8 @@ export default {
   },
   computed: {
     list() {
-      return this.options.map((num) => {
-        if (this.unit == "Min")
+      return (this.options || []).map((num) => {
+        if (this.unit != "GB")
           return {
             num,
             text: num + " " + this.unit,
@@ -35,11 +60,64 @@ export default {
         };
       });
     },
+    unitItem() {
+      return this.unitList[this.unitIdx] || {};
+    },
+    unitList() {
+      if (this.unit == "GB") {
+        return [
+          {
+            text: "MB",
+            value: Math.pow(1024, 2),
+          },
+          {
+            text: "GB",
+            value: Math.pow(1024, 3),
+          },
+          {
+            text: "TB",
+            value: Math.pow(1024, 4),
+          },
+        ];
+      }
+      if (this.unit == "Mon") {
+        const mon = 30 * 86400;
+        return [
+          {
+            text: "Mon",
+            value: mon,
+          },
+          {
+            text: "Year",
+            value: mon * 12,
+          },
+        ];
+      }
+      return [];
+    },
   },
   data() {
     return {
-      curIdx: 0,
+      curIdx: -1,
+      inputVal: "",
+      unitIdx: 0,
     };
+  },
+  created() {
+    // console.log(this.options, this.curIdx);
+  },
+  watch: {
+    inputVal(val) {
+      if (val > 0) {
+        this.inputVal = val * 1;
+        this.curIdx = -1;
+      } else {
+        this.inputVal = "";
+      }
+    },
+    curIdx(val) {
+      if (val > -1) this.inputVal = "";
+    },
   },
 };
 </script>

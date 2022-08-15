@@ -29,19 +29,42 @@
             <span class="ml-3 fz-15">{{ it.label }}</span>
           </div>
           <div class="mt-6 al-c">
-            <e-kv class="flex-1" :label="it.label">
+            <e-kv class="flex-1" :label="it.label + ':'">
               {{ it.percTxt }}
             </e-kv>
             <e-kv class="flex-1" label="Expiration date" v-if="it.expireTime">
               {{ new Date(it.expireTime * 1e3).format() }}
             </e-kv>
           </div>
-          <div class="mt-6">
-            <e-kv label="Pick Plan" center>
+          <div class="mt-6 al-c" v-if="it.key == 'ipfs'">
+            <e-radio-btn
+              :options="['Expansion', 'Renewal']"
+              v-model="ipfsIdx"
+            ></e-radio-btn>
+            <span class="ml-4 gray-7 fz-14">
+              {{
+                ipfsIdx == 0
+                  ? "Expand storage capacity without changing the expiration date. "
+                  : "Extend expiration date without changing the storage capacity."
+              }}
+            </span>
+          </div>
+          <div class="mt-6" v-show="it.key == 'ipfs' && ipfsIdx == 1">
+            <e-kv label="Pick plan:" center>
+              <pay-choose-num :options="it.monOpts" unit="Mon"></pay-choose-num>
+            </e-kv>
+          </div>
+          <div class="mt-6" v-show="it.key != 'ipfs' || ipfsIdx == 0">
+            <e-kv label="Pick plan:" center>
               <pay-choose-num
                 :options="it.opts"
                 :unit="it.unit"
               ></pay-choose-num>
+            </e-kv>
+          </div>
+          <div class="mt-6">
+            <e-kv label="Selected:" center>
+              <span class="color-1 fz-18"> 0 </span>
             </e-kv>
           </div>
         </div>
@@ -103,6 +126,7 @@ export default {
       priceInfo: {},
       usageInfo: null,
       form: {},
+      ipfsIdx: 0,
       feeForm: {},
       scrollMap: [],
     };
@@ -135,7 +159,8 @@ export default {
           id: ResourceType.IPFSStorage,
           key: "ipfs",
           opts: [100 * Mb, 200 * Mb, 300 * Mb],
-          unit: "GB / Mon",
+          monOpts: [1, 3, 6],
+          unit: "GB",
           unitPrice: price.ipfsStorageUnitPrice || 0,
           expireTime: info.ipfsStorageExpired,
           ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
@@ -146,7 +171,7 @@ export default {
           id: ResourceType.ARStorage,
           key: "ar",
           opts: [100 * Gb, 200 * Gb, 300 * Gb],
-          unit: "MB",
+          unit: "GB",
           unitPrice: price.arStorageUnitPrice || 0,
           ...this.getPerc(info.usedArStorage, info.arStorage),
         },

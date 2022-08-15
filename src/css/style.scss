@@ -35,6 +35,9 @@ body {
       }
     }
   }
+  input {
+    outline: none;
+  }
   .v-dialog {
     background: #fff;
     flex-grow: 1;
