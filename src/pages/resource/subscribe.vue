@@ -28,9 +28,20 @@
             <img :src="`/img/svg/overview/${it.icon}`" width="16" />
             <span class="ml-3 fz-15">{{ it.label }}</span>
           </div>
-          <div class="mt-6">
-            <e-kv :label="it.label">
+          <div class="mt-6 al-c">
+            <e-kv class="flex-1" :label="it.label">
               {{ it.percTxt }}
+            </e-kv>
+            <e-kv class="flex-1" label="Expiration date" v-if="it.expireTime">
+              {{ new Date(it.expireTime * 1e3).format() }}
+            </e-kv>
+          </div>
+          <div class="mt-6">
+            <e-kv label="Pick Plan" center>
+              <pay-choose-num
+                :options="it.opts"
+                :unit="it.unit"
+              ></pay-choose-num>
             </e-kv>
           </div>
         </div>
@@ -48,7 +59,7 @@
           will be displayed as 0.01USD.
         </p>
       </div>
-      <div style="height: 40vh"></div>
+      <div style="height: 50vh"></div>
       <div
         class="mt-2 pos-s btm-0 pa-3 bdrs-6 shadow-2"
         style="background: #fff5eb"
@@ -74,6 +85,8 @@
 <script>
 import { mapState } from "vuex";
 import mixin from "./mixin";
+const Mb = Math.pow(1024, 2);
+const Gb = Math.pow(1024, 3);
 
 const ResourceType = {
   BuildingTime: 1,
@@ -108,6 +121,7 @@ export default {
           icon: "bandwidth.svg",
           id: ResourceType.Bandwidth,
           key: "bandwidth",
+          opts: [500 * Gb, 1000 * Gb, 2 * 1024 * Gb],
           unit: "GB",
           unitPrice: price.trafficUnitPrice || 0,
           ...this.getPerc(
@@ -120,8 +134,10 @@ export default {
           icon: "ipfs.svg",
           id: ResourceType.IPFSStorage,
           key: "ipfs",
+          opts: [100 * Mb, 200 * Mb, 300 * Mb],
           unit: "GB / Mon",
           unitPrice: price.ipfsStorageUnitPrice || 0,
+          expireTime: info.ipfsStorageExpired,
           ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
         },
         {
@@ -129,6 +145,7 @@ export default {
           icon: "ar.svg",
           id: ResourceType.ARStorage,
           key: "ar",
+          opts: [100 * Gb, 200 * Gb, 300 * Gb],
           unit: "MB",
           unitPrice: price.arStorageUnitPrice || 0,
           ...this.getPerc(info.usedArStorage, info.arStorage),
@@ -138,6 +155,7 @@ export default {
           icon: "buildtime.svg",
           id: ResourceType.BuildingTime,
           key: "buildMinutes",
+          opts: [500, 1000, 1500],
           unit: "Min",
           unitPrice: price.buildTimeUnitPrice || 0,
           ...this.getPerc(
@@ -266,6 +284,11 @@ export default {
         const { data: usageInfo } = await this.$http.get(`$v3/usage`);
         this.usageInfo = usageInfo;
         this.getCardTop();
+        const { i } = this.$route.query;
+        if (i > -1) {
+          this.tabIdx = i * 1;
+          this.onTab();
+        }
       } catch (error) {
         this.$confirm(error.message, {
           confirmText: "Try Again",

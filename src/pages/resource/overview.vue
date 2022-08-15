@@ -80,7 +80,7 @@
               <p>{{ it.percTxt }}</p>
             </div>
             <div>
-              <e-link href="/billing/usage/more">Subscribe</e-link>
+              <e-link :href="'/resource/subscribe?i=' + i">Subscribe</e-link>
             </div>
           </v-col>
         </v-row>
@@ -116,7 +116,7 @@ export default {
           ),
         },
         {
-          label: "IPFS",
+          label: "IPFS Storage",
           desc: info.ipfsStorage
             ? `Free resources ${getSize(info.ipfsDefaultStorage)} a year, ${
                 getSize(info.ipfsStorage - info.ipfsDefaultStorage) || "0G"
