@@ -24,13 +24,19 @@
                 </span>
               </e-tooltip>
             </div>
-            <div class="mt-4 d-flex al-end lh-1">
+            <div class="mt-6 d-flex al-end lh-1">
               <span class="fz-30">{{ balance }}</span>
               <span class="gray-6 ml-3">USD</span>
             </div>
-            <div class="mt-4 al-c">
+            <div class="mt-6 al-c">
               <v-btn color="primary" to="/resource/subscribe">Subscribe</v-btn>
               <v-btn color="primary" outlined class="ml-4">Deposit</v-btn>
+            </div>
+
+            <div class="mt-9 al-c hide-msg">
+              <e-kv label="Auto-deduction:">
+                <v-switch v-model="isAuto"></v-switch>
+              </e-kv>
             </div>
           </div>
         </v-card>
@@ -95,6 +101,7 @@ export default {
     return {
       info: null,
       balance: 0,
+      isAuto: true,
     };
   },
   computed: {
