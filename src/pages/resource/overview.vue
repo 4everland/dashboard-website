@@ -10,47 +10,10 @@
   <div>
     <v-row>
       <v-col cols="12" md="7">
-        <v-card>
-          <div class="pa-5">
-            <div class="al-c">
-              <span class="gray-5">Available Credit</span>
-              <e-tooltip top>
-                <v-icon slot="ref" color="#999" size="14" class="ml-2"
-                  >mdi-help-circle</v-icon
-                >
-                <span
-                  >Query results and actual results may differ due to
-                  synchronization delay issue on the chain network.
-                </span>
-              </e-tooltip>
-            </div>
-            <div class="mt-6 d-flex al-end lh-1">
-              <span class="fz-30">{{ balance }}</span>
-              <span class="gray-6 ml-3">USD</span>
-            </div>
-            <div class="mt-6 al-c">
-              <v-btn color="primary" to="/resource/subscribe">Subscribe</v-btn>
-              <v-btn color="primary" outlined class="ml-4">Deposit</v-btn>
-            </div>
-
-            <div class="mt-9 al-c hide-msg">
-              <e-kv label="Auto-deduction:">
-                <v-switch v-model="isAuto"></v-switch>
-              </e-kv>
-            </div>
-          </div>
-        </v-card>
+        <pay-act />
       </v-col>
       <v-col cols="12" md="5">
-        <v-card>
-          <div class="pa-5">
-            <div class="al-c">
-              <span class="gray-5">Balance Allocation</span>
-              <span class="gray ml-auto fz-14">More</span>
-              <v-icon>mdi-chevron-right</v-icon>
-            </div>
-          </div>
-        </v-card>
+        <pay-balance />
       </v-col>
     </v-row>
     <v-card class="mt-5">
@@ -100,8 +63,6 @@ export default {
   data() {
     return {
       info: null,
-      balance: 0,
-      isAuto: true,
     };
   },
   computed: {
@@ -113,6 +74,7 @@ export default {
       return [
         {
           label: "Bandwidth",
+          name: "TRAFFIC",
           // Free resources 100GB per month, of which 5GB used, 0GB purchased
           desc: `Free resources ${
             getSize(info.freeBandwidth) || "100GB"
@@ -124,6 +86,7 @@ export default {
         },
         {
           label: "IPFS Storage",
+          name: "IPFS_STORAGE",
           desc: info.ipfsStorage
             ? `Free resources ${getSize(info.ipfsDefaultStorage)} a year, ${
                 getSize(info.ipfsStorage - info.ipfsDefaultStorage) || "0G"
@@ -137,6 +100,7 @@ export default {
         },
         {
           label: "Arweave",
+          name: "AR_STORAGE",
           tip: "Arweave is a permanent storage service.",
           desc: `Free resources ${getSize(info.arDefaultStorage)}, ${
             getSize(info.arStorage - info.arDefaultStorage) || "0GB"
@@ -145,6 +109,7 @@ export default {
         },
         {
           label: "Build Minutes",
+          name: "BUILD_TIME",
           desc: `Free resources ${
             info.freeBuildMinutes || 250
           } Minutes per month,  ${

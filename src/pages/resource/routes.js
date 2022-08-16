@@ -1,6 +1,7 @@
 import Overview from "./overview";
 import Subscribe from "./subscribe";
 import Order from "./order";
+import Balance from "./balance";
 
 export default [
   {
@@ -9,6 +10,22 @@ export default [
     meta: {
       title: "Resource",
       isTab: 1,
+    },
+  },
+  {
+    path: "/resource/balance",
+    component: Balance,
+    meta: {
+      title: "Balance Allocation",
+      links: [
+        {
+          text: "Resource",
+          to: "/resource",
+        },
+        {
+          text: `Balance  Allocation`,
+        },
+      ],
     },
   },
   {

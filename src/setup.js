@@ -132,7 +132,7 @@ Vue.prototype.$utils = {
     if (i == -1) return num;
     return str.substring(0, i + keep + 1) * 1;
   },
-  getPurchase(type, amount) {
+  getPurchase(type, amount = 0) {
     const nameMap = {
       BUILD_TIME: "Build Minutes",
       TRAFFIC: "Bandwidth",
