@@ -18,16 +18,10 @@
     <e-empty v-else-if="!list.length" class="pt-10">No Logs</e-empty>
     <template v-else>
       <div class="al-c mb-5" v-for="it in list" :key="it.id">
-        <div class="bdrs-100 bd-1">
-          <v-avatar size="34" class="bg-white d-b bd-">
-            <svg
-              style="display: block"
-              width="80"
-              height="80"
-              :data-jdenticon-value="it.label"
-            ></svg>
-          </v-avatar>
-        </div>
+        <!-- <div class="bdrs-100 bd-1">
+        </div> -->
+        <e-avatar :diameter="34" :address="it.addr"></e-avatar>
+
         <div class="ml-4 fz-14">
           <div>
             <span>{{ it.label }}</span>
@@ -210,7 +204,9 @@ export default {
         );
         this.total = data.total;
         const list = data.list.map((it) => {
-          it.label = (this.userInfo.username || it.guid).cutStr(6, 4);
+          it.addr = this.userInfo.username || it.guid;
+          it.label = it.addr.cutStr(6, 4);
+
           this.getDesc(it);
           return it;
         });
