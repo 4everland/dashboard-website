@@ -97,11 +97,24 @@ export default {
     },
   },
   mounted() {
+    this.getBalance();
     this.getAutoList();
   },
   methods: {
+    async getBalance() {
+      const {
+        data: { balance },
+      } = await this.$http.get("$v3/account/balance");
+      this.balance = this.$utils.cutFixed(balance, 4);
+    },
     async onConfirmAuto() {
       try {
+        const allClose = !this.autoList.find((it) => it.isOn);
+        if (allClose) {
+          await this.$confirm(
+            `If you disable the auto-deduction feature of your wallet balance then your product will be out of service when the limit of purchased resources has been reached.`
+          );
+        }
         this.$loading();
         const body = this.autoList.map((it) => {
           return {
