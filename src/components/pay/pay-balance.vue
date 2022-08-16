@@ -7,7 +7,7 @@
         <v-icon>mdi-chevron-right</v-icon>
       </div>
     </div>
-    <div style="height: 186px" class="pos-r ov-h">
+    <div style="height: 190px" class="pos-r ov-h">
       <v-skeleton-loader
         class="pt-4"
         type="article"
@@ -19,8 +19,8 @@
       <div
         v-else
         ref="chart"
-        class="pos-a left-0 btm-0 right-0"
-        style="top: -20px"
+        class="pos-a left-0 right-0"
+        style="top: -20px; bottom: 10px"
       ></div>
     </div>
   </v-card>

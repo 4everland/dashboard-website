@@ -13,25 +13,34 @@
           </span>
         </e-tooltip>
       </div>
-      <div class="mt-7 d-flex al-end lh-1">
-        <span class="fz-30">{{ balance }}</span>
-        <span class="gray-6 ml-3">USD</span>
-      </div>
-      <div class="mt-6 al-c">
-        <v-btn color="primary" to="/resource/subscribe">Subscribe</v-btn>
-        <v-btn color="primary" outlined class="ml-4">Deposit</v-btn>
+      <div style="height: 190px">
+        <v-skeleton-loader
+          class="pt-4"
+          type="article"
+          v-if="!autoList.length || balance === null"
+        ></v-skeleton-loader>
+        <div class="pt-7" v-else>
+          <div class="d-flex al-end lh-1">
+            <span class="fz-30">{{ balance }}</span>
+            <span class="gray-6 ml-3">USD</span>
+          </div>
+          <div class="mt-6 al-c">
+            <v-btn color="primary" to="/resource/subscribe">Subscribe</v-btn>
+            <v-btn color="primary" outlined class="ml-4">Deposit</v-btn>
 
-        <v-btn plain class="ml-6"> Withdraw </v-btn>
-        <span class="gray">|</span>
-        <v-btn plain> Billing Details </v-btn>
-      </div>
-      <div class="mt-9 pb-2 al-c hide-msg">
-        <e-kv label="Auto-deduction:">
-          <v-switch
-            v-model="isAuto"
-            @click.native.stop="getAutoList(true)"
-          ></v-switch>
-        </e-kv>
+            <v-btn plain class="ml-6"> Withdraw </v-btn>
+            <span class="gray">|</span>
+            <v-btn plain> Billing Details </v-btn>
+          </div>
+          <div class="mt-9 pb-2 al-c hide-msg">
+            <e-kv label="Auto-deduction:">
+              <v-switch
+                v-model="isAuto"
+                @click.native.stop="getAutoList(true)"
+              ></v-switch>
+            </e-kv>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -79,12 +88,12 @@
 export default {
   data() {
     return {
-      balance: 0,
+      balance: null,
       showAutoPop: false,
       autoMap: {},
       autoList: [],
       isAuto: true,
-      autoLoading: false,
+      autoLoading: true,
     };
   },
   computed: {
