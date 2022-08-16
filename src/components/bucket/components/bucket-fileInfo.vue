@@ -310,6 +310,9 @@ export default {
               " "
             ),
           };
+          // console.log(this.selected[0]);
+          this.$emit("update:selected", [{ ...this.selected[0], arStatus }]);
+          this.$emit("getFileInfo", this.fileInfo);
           this.thumbnail = this.fileUrl;
         }
       );
@@ -372,7 +375,13 @@ export default {
   },
   watch: {
     selected: {
-      handler(selectedArr) {
+      handler(selectedArr, oldSelectedArr) {
+        if (
+          selectedArr.length &&
+          oldSelectedArr.length &&
+          oldSelectedArr[0].hash == selectedArr[0].hash
+        )
+          return;
         if (selectedArr.length == 1) {
           if (selectedArr[0].isFile) {
             this.headObject();
@@ -380,10 +389,9 @@ export default {
             this.thumbnail = "/img/svg/bucketFileInfo/dir-file-img.svg";
             this.getObjects();
           }
-        } else if (selectedArr.length == 0) {
+        } else {
           this.fileInfo = null;
           this.dirFileArr = [];
-        } else {
         }
       },
       deep: true,

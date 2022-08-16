@@ -65,6 +65,7 @@
                         small
                         color="primary"
                         class="ml-auto"
+                        :disabled="it.platform == 'IC' && !icAddDomain"
                         :to="`/hosting/project/${it.name}/${it.id}?tab=settings&sub=domains`"
                         >Select</v-btn
                       >
@@ -155,6 +156,7 @@ export default {
       domain: "",
       deleting: false,
       keyword: "",
+      icAddDomain: true,
     };
   },
   computed: {
@@ -182,6 +184,13 @@ export default {
       if (name == "domains-selected") {
         this.selected = data.val;
         this.type = data.type;
+      }
+    },
+    "$route.query"(newVal) {
+      if (newVal == "domains") {
+        this.icAddDomain = true;
+      } else {
+        this.icAddDomain = false;
       }
     },
   },

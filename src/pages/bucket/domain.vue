@@ -129,7 +129,11 @@ export default {
       try {
         this.loading = true;
         if (!this.dns.ip) {
-          const { data } = await this.$http.get("/domains/resolve");
+          const { data } = await this.$http.get("/domains/resolve", {
+            params: {
+              domain: this.domain,
+            },
+          });
           this.dns = data;
         }
         const { data: info } = await this.$http.get(

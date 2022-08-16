@@ -47,7 +47,7 @@
                 >Syncing</span
               >
               <span v-else class="ml-2 fz-13 d-ib" style="min-width: 100px">{{
-                it.platform
+                it.platform == "IC" ? "Internet Computer" : it.platform
               }}</span>
               <template v-if="it.commits">
                 <div class="fz-14 ml-5" @click.stop="onStop">
@@ -171,9 +171,10 @@ export default {
   methods: {
     onStop() {},
     onClick(it) {
-      this.$navTo(
-        `/hosting/build/${it.buildConfig.name}/${this.id}/${it.taskId}`
-      );
+      let link = `/hosting/build/${it.buildConfig.name}/${this.id}/${it.taskId}`;
+
+      if (it.isFirst) link += "?prod=1";
+      this.$navTo(link);
     },
     getOptList(it) {
       let arr = [
@@ -183,7 +184,7 @@ export default {
           icon: "send",
         },
       ];
-      if (it.canRollback)
+      if (it.canRollback && it.platform != "IC")
         arr.push({
           text: "Rollback",
           name: "rollback",
@@ -298,8 +299,10 @@ export default {
         );
         const rows = data.content.map((it) => {
           if (it.state == "SUCCESS") {
-            if (!this.isFirst) this.isFirst = true;
-            else it.canRollback = true;
+            if (!this.isFirst) {
+              this.isFirst = true;
+              it.isFirst = true;
+            } else it.canRollback = true;
           }
           return it;
         });

@@ -32,9 +32,12 @@ export default {
             domain: it.domain,
           };
         }
+        let to = `/hosting/build/${name}/${id}/${it.taskId}`;
+        if (key == "production") to += "?prod=1";
+
         return {
           label: key.capitalize(),
-          to: `/hosting/build/${name}/${id}/${it.taskId}`,
+          to,
           ...it,
         };
       };

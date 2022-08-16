@@ -57,10 +57,11 @@
           outlined
           tile
           class="ml-4"
-          v-show="selected.length <= 1 && inFile && isNotAr && isFile"
+          v-show="selected.length <= 1 && inFile && isFile"
           @click="$emit('onSyncAR')"
         >
-          <span class="gray-2">Sync to AR</span>
+          <span v-if="isNotAr" class="gray-2">Sync to AR</span>
+          <span v-else class="gray-2">Verify on Ar</span>
         </v-btn>
         <v-btn
           tile

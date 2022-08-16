@@ -74,7 +74,9 @@
                   v-clipboard="info.hash"
                 />
               </div>
-              <span v-else class="fz-14">Pending</span>
+              <span v-else class="fz-14">{{
+                state == "failure" ? " Not synchronized " : state
+              }}</span>
             </e-kv2>
           </div>
         </v-col>

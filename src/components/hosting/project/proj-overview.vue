@@ -47,7 +47,7 @@
                   class="fz-14"
                   :href="$utils.getCidLink(info.hash, info.platform)"
                 >
-                  {{ info.hash ? info.hash.cutStr(4, 4) : "Pending" }}
+                  {{ info.hash ? info.hash.cutStr(4, 4) : "Not synchronized" }}
                 </e-link>
                 <img
                   v-if="info.hash"
@@ -59,7 +59,12 @@
                 />
               </div>
             </e-kv>
-            <e-kv class="ml-auto" label="IPNS" min-width="90px">
+            <e-kv
+              class="ml-auto"
+              label="IPNS"
+              min-width="90px"
+              v-if="info.platform != 'IC'"
+            >
               <e-tooltip top slot="sub">
                 <v-icon slot="ref" color="#666" size="14" class="pa-1"
                   >mdi-help-circle-outline</v-icon

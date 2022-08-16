@@ -62,9 +62,12 @@ export default {
     },
     fileArStatus() {
       if (this.inFile) {
+        console.log("inFile");
+
         return this.fileInfo.arStatus;
       }
       if (this.inFolder) {
+        console.log("inFolder");
         return this.selectArStatus;
       }
       return null;
@@ -237,12 +240,24 @@ export default {
         });
         return;
       }
+
       if (this.fileArStatus == "synced") {
         window.open(this.$arVerifyPre + this.fileInfo.arHash);
         return;
       }
+      // if (this.selected.length && this.selected[0].arStatus == "syncing") {
+      //   this.$alert("The file is being synced").then(() => {
+      //     this.getList();
+      //   });
+      //   return;
+      // }
+      // if (this.selected.length && this.selected[0].arStatus == "synced") {
+      //   window.open(this.$arVerifyPre + this.fileInfo.arHash);
+      //   return;
+      // }
+
       try {
-        if (this.fileArStatus == "desynced") {
+        if (this.selected[0].arStatus == "desynced") {
           await this.beforeArSync();
         }
         const { Bucket } = this.pathInfo;

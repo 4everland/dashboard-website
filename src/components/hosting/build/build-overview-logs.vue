@@ -15,7 +15,7 @@
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
     <e-toggle-card
-      v-if="info.platform && (projInfo.latest || {}).taskId == info.taskId"
+      v-if="showHash"
       class="mt-5"
       :title="'Syncing to ' + info.platform"
       :value="getOpen(1)"
@@ -34,17 +34,19 @@
         >
       </e-kv>
       <div class="fz-14 gray" v-else>
-        <div v-if="isSyncErr" class="red-1">Syncing failed</div>
+        <div v-if="isSyncErr" class="red-1">Not synchronized</div>
         <div v-else-if="inNew && info && info.platform == 'IC'">
           Syncing to IC may take more time to complete,
           <e-link href="/hosting/projects">click here</e-link> for other
           operations without waiting.
         </div>
-        <span v-else>Pending</span>
+        <span v-else>
+          <h-status :val="state"></h-status>
+        </span>
       </div>
     </e-toggle-card>
     <e-toggle-card
-      v-if="info"
+      v-if="showHash"
       class="mt-5"
       title="Assigning Domains"
       :value="getOpen(2)"
@@ -73,7 +75,9 @@ export default {
     return {
       curIdx: 0,
       logs: [],
-      info: null,
+      info: {
+        platform: null,
+      },
       isDone: false,
       state: "",
     };
@@ -105,7 +109,17 @@ export default {
       return this.info && this.info.isFail;
     },
     isSyncErr() {
-      return /fail/i.test(this.info.syncState);
+      return (
+        /fail/i.test(this.info.syncState) || this.info.state == "CANCELLED"
+      );
+    },
+    showHash() {
+      return (
+        this.info.platform &&
+        ((this.projInfo.latest || {}).taskId == this.info.taskId ||
+          /ing$/.test(this.state) ||
+          this.$route.query.prod)
+      );
     },
   },
   watch: {

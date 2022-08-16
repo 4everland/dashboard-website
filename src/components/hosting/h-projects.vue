@@ -131,7 +131,9 @@
                       <span v-else-if="it.state == 'SYNCING'" class="ml-1 fz-14"
                         >Syncing</span
                       >
-                      <span v-else class="ml-1 fz-14">{{ it.platform }}</span>
+                      <span v-else class="ml-1 fz-14">{{
+                        it.platform == "IC" ? "Internet Computer" : it.platform
+                      }}</span>
                     </div>
                   </div>
                 </div>
@@ -459,6 +461,7 @@ export default {
         if (list.length) {
           setTimeout(() => {
             this.curIdx = [0];
+            console.log(list[0]);
             this.onOpen(list[0]);
           }, 10);
         }
