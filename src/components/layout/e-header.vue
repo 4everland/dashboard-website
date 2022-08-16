@@ -38,17 +38,10 @@
             :height="it.height"
             class="mr-2"
           />
-          <div class="u-avatar bg-1 bdrs-100 mr-2" v-if="it.avatar">
-            <v-avatar size="22" class="bg-white d-b">
-              <!-- <v-img :src="it.avatar"></v-img> -->
-              <svg
-                style="display: block"
-                width="80"
-                height="80"
-                :data-jdenticon-value="it.label"
-              ></svg>
-            </v-avatar>
+          <div class="u-avatar bdrs-100 mr-2" v-if="it.avatar">
+            <e-avatar :address="it.addr" :diameter="22"></e-avatar>
           </div>
+
           <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
           <img
             v-if="it.subs && !it.noSuffix"
@@ -148,6 +141,7 @@ export default {
       }
 
       list.push({
+        addr: info.username || "unkown",
         label: (info.username || "unkown").cutStr(6, 4),
         avatar: info.avatar || "/img/bg/user/def-avatar.png",
         btnStyle: "border: 1px solid #775DA6",
