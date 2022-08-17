@@ -2,6 +2,8 @@ import Overview from "./overview";
 import Subscribe from "./subscribe";
 import Order from "./order";
 import Balance from "./balance";
+import Withdraw from "./withdraw";
+import PriceDocs from "./price-docs";
 
 export default [
   {
@@ -10,6 +12,42 @@ export default [
     meta: {
       title: "Resource",
       isTab: 1,
+    },
+  },
+  {
+    path: "/resource/price-docs",
+    component: PriceDocs,
+    meta: {
+      title: "Price Docs",
+      links: [
+        {
+          text: "Resource",
+          to: "/resource",
+        },
+        {
+          text: "Subscribe",
+          to: "/resource/subscribe",
+        },
+        {
+          text: `Price Docs`,
+        },
+      ],
+    },
+  },
+  {
+    path: "/resource/withdraw",
+    component: Withdraw,
+    meta: {
+      title: "Withdraw",
+      links: [
+        {
+          text: "Resource",
+          to: "/resource",
+        },
+        {
+          text: `Withdraw`,
+        },
+      ],
     },
   },
   {
@@ -30,7 +68,9 @@ export default [
   },
   {
     path: "/resource/subscribe",
-    component: Subscribe,
+    components: {
+      cache: Subscribe,
+    },
     meta: {
       title: "Subscribe",
       isTab: 1,

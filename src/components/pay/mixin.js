@@ -20,6 +20,7 @@ export default {
       providerAddr,
       // client,
       walletBalance: 0,
+      balance: null,
     };
   },
   computed: {
@@ -62,11 +63,11 @@ export default {
     },
   },
   mounted() {
-    if (this.connectAddr) {
-      this.onConnect();
-    } else {
-      this.showConnect();
-    }
+    // if (this.connectAddr) {
+    //   this.onConnect();
+    // } else {
+    //   this.showConnect();
+    // }
   },
   methods: {
     walletChanged(isInit) {
@@ -129,11 +130,17 @@ export default {
       }
       return this.$alert(msg);
     },
+    async getBalance() {
+      const {
+        data: { balance },
+      } = await this.$http.get("$v3/account/balance");
+      this.balance = this.$utils.cutFixed(balance, 4);
+    },
     async getWalletBalance() {
       this.$loading();
       const num = await this.curContract.MumbaiUSDC.balanceOf(this.connectAddr);
       this.walletBalance = this.$utils.cutFixed(num / 1e6, 4);
-      console.log(this.walletBalance);
+      // console.log(this.walletBalance);
       this.$loading.close();
     },
     async checkAccount() {

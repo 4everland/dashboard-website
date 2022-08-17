@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div class="gray-5 fz-16">Network</div>
-    <div class="d-flex mt-4">
+    <div class="d-flex">
       <div
         @click="onSelect(it.label)"
         class="bd-1 al-c pa-3 pl-7 pr-7 mr-5 bdrs-2 cursor-p"

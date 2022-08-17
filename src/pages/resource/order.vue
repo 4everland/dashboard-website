@@ -31,10 +31,9 @@
       </table>
     </div>
 
-    <div class="mt-6">
+    <e-kv2 class="mt-6" label="Network">
       <pay-network />
-      <!-- <pay-network :allow="['Polygon']" /> -->
-    </div>
+    </e-kv2>
 
     <div class="mt-8 gray fz-14">
       To complete the transaction with ETH and BSC payments, the platform will

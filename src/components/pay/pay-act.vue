@@ -28,9 +28,9 @@
             <v-btn color="primary" to="/resource/subscribe">Subscribe</v-btn>
             <v-btn color="primary" outlined class="ml-4">Deposit</v-btn>
 
-            <v-btn plain class="ml-6"> Withdraw </v-btn>
+            <v-btn plain class="ml-6" to="/resource/withdraw"> Withdraw </v-btn>
             <span class="gray">|</span>
-            <v-btn plain> Billing Details </v-btn>
+            <v-btn plain to="/resource/billing"> Billing Details </v-btn>
           </div>
           <div class="mt-9 pb-2 al-c hide-msg">
             <e-kv label="Auto-deduction:">
@@ -85,10 +85,12 @@
 </template>
 
 <script>
+import mixin from "./mixin";
+
 export default {
+  mixins: [mixin],
   data() {
     return {
-      balance: null,
       showAutoPop: false,
       autoMap: {},
       autoList: [],
@@ -110,12 +112,6 @@ export default {
     this.getAutoList();
   },
   methods: {
-    async getBalance() {
-      const {
-        data: { balance },
-      } = await this.$http.get("$v3/account/balance");
-      this.balance = this.$utils.cutFixed(balance, 4);
-    },
     async onConfirmAuto() {
       try {
         const allClose = !this.autoList.find((it) => it.isOn);
