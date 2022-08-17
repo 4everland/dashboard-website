@@ -8,6 +8,9 @@
 
 <template>
   <div>
+    <e-right-opt-wrap>
+      <v-btn to="/resource/price-docs" outlined small>Price Docs</v-btn>
+    </e-right-opt-wrap>
     <v-skeleton-loader type="article" v-if="!usageInfo" />
     <template v-else>
       <div class="pos-s z-1" style="top: 60px">
@@ -107,7 +110,6 @@
 
 <script>
 import { mapState } from "vuex";
-import mixin from "./mixin";
 const Mb = Math.pow(1024, 2);
 const Gb = Math.pow(1024, 3);
 
