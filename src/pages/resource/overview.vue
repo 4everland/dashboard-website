@@ -18,8 +18,10 @@
     </v-row>
     <v-card class="mt-5">
       <div class="pa-5">
-        <div class="al-c">
+        <div class="al-c hover-1" @click="$navTo('/resource/allocation')">
           <span class="gray-5">Resource Allocation</span>
+          <span class="gray fz-14 ml-auto">More</span>
+          <v-icon>mdi-chevron-right</v-icon>
         </div>
         <div class="pa-5" v-if="!info">
           <v-skeleton-loader type="article"></v-skeleton-loader>

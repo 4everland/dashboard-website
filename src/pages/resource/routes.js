@@ -4,6 +4,7 @@ import Order from "./order";
 import Balance from "./balance";
 import Withdraw from "./withdraw";
 import PriceDocs from "./price-docs";
+import ResAllocation from "./res-allocation";
 
 export default [
   {
@@ -51,6 +52,22 @@ export default [
     },
   },
   {
+    path: "/resource/allocation",
+    component: ResAllocation,
+    meta: {
+      title: "Resource Allocation",
+      links: [
+        {
+          text: "Resource",
+          to: "/resource",
+        },
+        {
+          text: `Resource Allocation`,
+        },
+      ],
+    },
+  },
+  {
     path: "/resource/balance",
     component: Balance,
     meta: {
@@ -61,7 +78,7 @@ export default [
           to: "/resource",
         },
         {
-          text: `Balance  Allocation`,
+          text: `Balance Allocation`,
         },
       ],
     },
