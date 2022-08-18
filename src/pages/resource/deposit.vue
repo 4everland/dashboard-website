@@ -58,8 +58,42 @@ export default {
     },
   },
   methods: {
-    onSubmit() {
-      console.log("33");
+    async onSubmit() {
+      let num = this.amount;
+      if (num === "") {
+        return this.$toast(`Deposit amount required`);
+      }
+      if (num < 1) {
+        return this.$alert(
+          "The minimum deposit amount cannot be less than $1."
+        );
+      }
+      console.log("num", num);
+      try {
+        await this.checkAccount();
+        let balance = await this.curContract.FundPool.balanceOf(
+          this.providerAddr,
+          this.uuid
+        );
+        console.log("balance1", balance.toString());
+        const tx = await this.curContract.FundPool.recharge(
+          this.providerAddr,
+          this.uuid,
+          num * 1e6
+        );
+        const receipt = await tx.wait();
+        console.log("receipt", receipt);
+        this.addHash(tx, num, "Deposit");
+        balance = await this.curContract.FundPool.balanceOf(
+          this.providerAddr,
+          this.uuid
+        );
+        console.log("balance2", balance.toString());
+        await this.$alert("Deposit successfully");
+        this.$navTo("/resource");
+      } catch (error) {
+        this.onErr(error);
+      }
     },
   },
 };

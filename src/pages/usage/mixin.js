@@ -136,6 +136,16 @@ export default {
       console.log(this.walletBalance);
       this.$loading.close();
     },
+    async switchPolygon() {
+      let html = `Currently, deposits and withdrawals are only supported on the Polygon network. `;
+      html += "<p>Would you like to switch to the Polygon network?</p>";
+      await this.$confirm(html, this.title, {
+        confirmText: "Switch Network",
+      });
+      const payBy = (localStorage.payBy = "Polygon");
+      const id = this.getChainId(payBy);
+      await this.switchNet(id);
+    },
     async checkAccount() {
       console.log("check account...");
       const uuidRegistered =

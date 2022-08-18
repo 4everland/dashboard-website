@@ -17,7 +17,12 @@
       </div>
     </e-kv2>
     <e-kv2 class="mt-7" label="Address">
-      <v-text-field outlined dense style="max-width: 500px"></v-text-field>
+      <v-text-field
+        v-model="address"
+        outlined
+        dense
+        style="max-width: 500px"
+      ></v-text-field>
     </e-kv2>
     <e-kv2 class="mt-7" label="Network">
       <pay-network :allow="['Polygon']" />
@@ -48,12 +53,20 @@ export default {
   data() {
     return {
       amount: "",
+      address: "",
     };
   },
   mounted() {
     this.getBalance();
+    if (this.connectAddr) this.address = this.connectAddr;
   },
   watch: {
+    connectAddr(val) {
+      if (!this.address) this.address = val;
+    },
+    address(val) {
+      console.log(val);
+    },
     amount(val) {
       if (val > 0) {
         if (val > this.balance) this.amount = this.balance;
@@ -62,8 +75,73 @@ export default {
     },
   },
   methods: {
-    onSubmit() {
-      console.log("33");
+    async onSubmit() {
+      let num = this.amount;
+      if (num === "") {
+        return this.$toast(`Withdraw amount required`);
+      }
+      try {
+        if (!this.isPolygon) {
+          return this.switchPolygon();
+        }
+        if (!this.curContract) {
+          this.showConnect();
+          return;
+        }
+        // if (this.maxNum == 0) throw new Error(tip1);
+        this.$loading();
+        const { data } = await this.$http.post("$v3/bill/generate/order", {
+          amount: num,
+        });
+        console.log(data);
+        const {
+          billSign,
+          timeoutTimestamp: timeout,
+          billEncode: bills,
+          orderId,
+        } = data;
+        const params = [
+          this.providerAddr,
+          this.uuid,
+          bills,
+          timeout,
+          orderId,
+          billSign,
+          this.connectAddr,
+          num * 1e6,
+        ];
+        console.log(params);
+        await this.onWithdraw(params);
+        this.$loading.close();
+        await this.$alert("Withdraw successfully");
+        this.$navTo("/resource");
+      } catch (error) {
+        this.onErr(error);
+      }
+    },
+    async onWithdraw(params) {
+      const walletExists =
+        await this.curContract.ProviderController.walletExists(
+          this.providerAddr,
+          this.uuid
+        );
+      console.log("walletExists", walletExists);
+      let tx;
+      if (!walletExists) {
+        const { data: sign } = await this.$http.post(
+          "$v3/common/sign/" + this.connectAddr
+        );
+        console.log(sign);
+        params.splice(2, 0, sign);
+        tx = await this.curContract.FundPool.initWalletAndWithdraw(...params);
+      } else {
+        console.log("signed");
+        tx = await this.curContract.FundPool.withdraw(...params);
+      }
+      console.log("tx", tx);
+      const receipt = await tx.wait();
+      this.addHash(tx, "Withdraw");
+      console.log("receipt", receipt);
     },
   },
 };
