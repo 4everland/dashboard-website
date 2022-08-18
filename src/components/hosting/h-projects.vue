@@ -230,17 +230,6 @@
       </v-expansion-panels>
     </div>
 
-    <div class="mt-6" v-if="pageLen > 1 && !limit">
-      <v-pagination
-        @input="onPage"
-        v-model="page"
-        :length="pageLen"
-        prev-icon="mdi-menu-left"
-        next-icon="mdi-menu-right"
-        :total-visible="7"
-      ></v-pagination>
-    </div>
-
     <div class="ta-c">
       <div :class="!limit ? 'main-wrap' : ''" class="pb-15" v-if="!list.length">
         <div
@@ -262,6 +251,16 @@
       <div class="mt-8" v-else-if="limit">
         <v-btn color="primary" outlined to="/hosting/projects">View More</v-btn>
       </div>
+    </div>
+    <div class="mt-6" v-if="pageLen > 1">
+      <v-pagination
+        @input="onPage"
+        v-model="page"
+        :length="pageLen"
+        prev-icon="mdi-menu-left"
+        next-icon="mdi-menu-right"
+        :total-visible="7"
+      ></v-pagination>
     </div>
   </div>
 </template>
@@ -310,29 +309,33 @@ export default {
   watch: {
     buildInfo({ data }) {
       if (data.state != this.lastState) {
-        console.log(data.taskId, data.state);
+        // console.log(data.taskId, data.state);
         this.lastState = data.state;
         if (this.inCurPath) this.getList();
         else this.needRefresh = true;
       }
     },
-    inCurPath(val) {
-      // console.log(this.curPath, val);
-      if (val) {
-        const now = Date.now();
-        if (now - this.refreshAt > 10e3) {
-          this.needRefresh = true;
-        }
-        if (this.needRefresh) {
-          this.refreshAt = now;
-          this.getList();
-          this.needRefresh = false;
-        }
-      }
-    },
+    // inCurPath(val) {
+    //   // console.log(this.curPath, val);
+    //   if (val) {
+    //     const now = Date.now();
+    //     if (now - this.refreshAt > 10e3) {
+    //       this.needRefresh = true;
+    //     }
+    //     if (this.needRefresh) {
+    //       this.refreshAt = now;
+    //       this.getList();
+    //       this.needRefresh = false;
+    //     }
+    //   }
+    // },
+  },
+
+  activated() {
+    this.getList();
   },
   mounted() {
-    this.getList();
+    // this.getList();
     this.curPath = this.path;
   },
   methods: {
@@ -374,12 +377,10 @@ export default {
       this.$loading.close();
     },
     async onOpen(it) {
-      console.log(it);
       if (it.loading || it.statisList) return;
       try {
         it.loading = true;
         const { data } = await this.$http2.get("/project/v3/detail/" + it.id);
-        console.log(data);
         data.name = it.name;
         const statisList = [
           {
@@ -434,6 +435,7 @@ export default {
       this.getList();
     },
     async getList() {
+      this.list = [];
       try {
         if (this.limit) {
           this.sortType = "Active";
@@ -461,7 +463,6 @@ export default {
         if (list.length) {
           setTimeout(() => {
             this.curIdx = [0];
-            console.log(list[0]);
             this.onOpen(list[0]);
           }, 10);
         }

@@ -187,7 +187,7 @@ export default {
       }
     },
     "$route.query"(newVal) {
-      if (newVal == "domains") {
+      if (newVal.tab == "domains") {
         this.icAddDomain = true;
       } else {
         this.icAddDomain = false;

@@ -69,6 +69,12 @@ const store = new Vuex.Store({
   actions: {
     async getProjectInfo({ commit }, id) {
       const { data } = await http2.get("/project/" + id);
+      if (data.platform == "IC") {
+        let index = data.domains.findIndex((it) =>
+          /foreverland\.xyz$/.test(it.domain)
+        );
+        data.domains.splice(index, 1);
+      }
       commit("setProject", data);
       return data;
     },

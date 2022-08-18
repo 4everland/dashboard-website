@@ -38,7 +38,16 @@
             </v-col>
           </v-row>
 
-          <e-kv2 label="Domain" class="mt-7">
+          <e-kv2
+            label="Domain"
+            class="mt-7"
+            :class="
+              info.platform == 'IPFS' ||
+              (projInfo.latest || {}).taskId == info.taskId
+                ? ''
+                : 'op-0'
+            "
+          >
             <e-link :href="'//' + info.domain">
               {{ info.domain }}
             </e-link>
@@ -74,9 +83,13 @@
                   v-clipboard="info.hash"
                 />
               </div>
-              <span v-else class="fz-14">{{
+              <!-- <span v-else class="fz-14">{{
                 state == "failure" ? " Not synchronized " : state
-              }}</span>
+              }}</span> -->
+              <h-status
+                v-else
+                :val="state == 'failure' ? 'Not synchronized' : state"
+              ></h-status>
             </e-kv2>
           </div>
         </v-col>

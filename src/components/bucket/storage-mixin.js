@@ -235,9 +235,7 @@ export default {
     },
     async onSyncAR(name, method = "post") {
       if (this.selectArStatus == "syncing") {
-        this.$alert("The file is being synced").then(() => {
-          this.getList();
-        });
+        this.$alert("The file is being synced");
         return;
       }
 
@@ -245,17 +243,6 @@ export default {
         window.open(this.$arVerifyPre + this.fileInfo.arHash);
         return;
       }
-      // if (this.selected.length && this.selected[0].arStatus == "syncing") {
-      //   this.$alert("The file is being synced").then(() => {
-      //     this.getList();
-      //   });
-      //   return;
-      // }
-      // if (this.selected.length && this.selected[0].arStatus == "synced") {
-      //   window.open(this.$arVerifyPre + this.fileInfo.arHash);
-      //   return;
-      // }
-
       try {
         if (this.selected[0].arStatus == "desynced") {
           await this.beforeArSync();

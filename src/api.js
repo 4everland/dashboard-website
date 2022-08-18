@@ -153,6 +153,7 @@ const lock = new AsyncLock({ timeout: 5000 });
               });
           } else {
             Vue.prototype.$alert(data.message).then(() => {
+              if (data.code == "OBJECT_ALREADY_EXIST") return;
               window.location.reload();
             });
           }

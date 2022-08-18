@@ -26,13 +26,22 @@
               />
               <a
                 class="u ml-2 fz-13"
-                :href="$utils.getCidLink(it.cid, it.platform)"
+                :href="
+                  $utils.getCidLink(
+                    it.platform == 'IPFS' ? it.cid : it.canister,
+                    it.platform
+                  )
+                "
                 target="_blank"
                 @click.stop="onStop"
                 style="min-width: 100px"
                 v-if="it.cid && it.state == 'SUCCESS'"
               >
-                {{ it.cid.cutStr(4, 4) }}
+                {{
+                  it.platform == "IPFS"
+                    ? it.cid.cutStr(4, 4)
+                    : it.canister.cutStr(4, 4)
+                }}
               </a>
               <span
                 class="ml-2 fz-13 d-ib"
@@ -282,6 +291,7 @@ export default {
         if (this.loading) {
           this.page += 1;
         } else {
+          if (this.refreshing) return;
           this.page = 0;
           this.refreshing = true;
           this.finished = false;
@@ -309,6 +319,7 @@ export default {
         this.finished = rows.length < params.size;
         if (this.loading) {
           this.list = [...this.list, ...rows];
+          console.log(list, "list");
         } else {
           this.list = rows;
         }

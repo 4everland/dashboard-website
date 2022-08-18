@@ -135,9 +135,10 @@
       </div>
       <div
         class="no-file ta-c loading-img mt-15"
+        style="width: 90%"
         v-else-if="selected.length == 0"
       >
-        <img :src="`/img/svg/common/empty2.svg`" :height="130" />
+        <img :src="`/img/svg/common/empty2.svg`" style="width: 100%" />
         <div class="mt-5 gray fz-17">Select a file/folder to view details</div>
       </div>
 
@@ -310,8 +311,9 @@ export default {
               " "
             ),
           };
-          // console.log(this.selected[0]);
-          this.$emit("update:selected", [{ ...this.selected[0], arStatus }]);
+          if (this.selected.length) {
+            this.$emit("update:selected", [{ ...this.selected[0], arStatus }]);
+          }
           this.$emit("getFileInfo", this.fileInfo);
           this.thumbnail = this.fileUrl;
         }
@@ -454,6 +456,7 @@ export default {
   .dir-file-name {
     color: #6c7789;
     line-height: 28px;
+    word-break: break-all;
   }
   .enter-folder {
     cursor: pointer;
