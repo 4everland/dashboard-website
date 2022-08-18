@@ -49,6 +49,15 @@
         </div>
       </div>
     </div>
+
+    <div class="main-wrap mt-5">
+      <h3>Hosting Platform</h3>
+
+      <div class="gray fz-14">
+        We offer IPFS and IC hosting options for your website, please select
+        one.
+      </div>
+    </div>
     <div class="main-wrap mt-5">
       <h3>Basic Configuration</h3>
       <div class="gray fz-14">
@@ -76,6 +85,19 @@ export default {
       creating: false,
       name: "",
       isPrivate: true,
+      platList: [
+        {
+          label: "IPFS",
+          name: "IPFS",
+          icon: "h-ipfs.svg",
+        },
+        {
+          label: "Internet Computer",
+          name: "IC",
+          icon: "h-ic.svg",
+        },
+      ],
+      platform: "IPFS",
     };
   },
   watch: {

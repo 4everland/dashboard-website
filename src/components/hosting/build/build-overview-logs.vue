@@ -35,7 +35,7 @@
       </e-kv>
       <div class="fz-14 gray" v-else>
         <div v-if="isSyncErr" class="red-1">Not synchronized</div>
-        <div v-else-if="inNew && info && info.platform == 'IC'">
+        <div v-else-if="info && info.platform == 'IC'">
           Syncing to IC may take more time to complete,
           <e-link href="/hosting/projects">click here</e-link> for other
           operations without waiting.
@@ -117,7 +117,7 @@ export default {
       return (
         this.info.platform &&
         ((this.projInfo.latest || {}).taskId == this.info.taskId ||
-          /ing$/.test(this.state) ||
+          // /ing$/.test(this.state) ||
           this.$route.query.prod)
       );
     },

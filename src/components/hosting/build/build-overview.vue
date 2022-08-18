@@ -83,9 +83,6 @@
                   v-clipboard="info.hash"
                 />
               </div>
-              <!-- <span v-else class="fz-14">{{
-                state == "failure" ? " Not synchronized " : state
-              }}</span> -->
               <h-status
                 v-else
                 :val="state == 'failure' ? 'Not synchronized' : state"
@@ -199,6 +196,10 @@ export default {
       return "";
     },
   },
+  async created() {
+    const { id } = this.$route.params;
+    await this.$store.dispatch("getProjectInfo", id);
+  },
   methods: {
     onOpt(opt) {
       let { name } = opt;
@@ -222,6 +223,7 @@ export default {
           confirmText: "Redeploy",
         });
         this.deploying = true;
+        await this.$store.dispatch("getProjectInfo", id);
 
         const { data } = await this.$http2.post(
           `/project/${this.info.taskId}/redeploy`

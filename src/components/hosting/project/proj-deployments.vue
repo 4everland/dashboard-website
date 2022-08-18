@@ -174,7 +174,9 @@ export default {
       }
     },
   },
-  mounted() {
+  async created() {
+    const { id } = this.$route.params;
+    await this.$store.dispatch("getProjectInfo", id);
     this.getList();
   },
   methods: {
@@ -266,6 +268,8 @@ export default {
           confirmText: "Redeploy",
         });
         this.$loading();
+        const { id } = this.$route.params;
+        await this.$store.dispatch("getProjectInfo", id);
         const { data } = await this.$http2.post(
           `/project/${it.taskId}/redeploy`
         );
