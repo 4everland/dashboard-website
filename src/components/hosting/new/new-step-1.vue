@@ -55,15 +55,18 @@
             <img :src="'/img/svg/hosting/' + it.icon" height="30" />
             <div class="ml-2 fw-b fz-16 pos-r">
               <span> {{ it.label }}</span>
-
-              <img
-                class="beta-icon"
-                v-if="it.name == 'IC'"
-                src="/img/svg/hosting/h-beta.svg"
-                height="20"
-                alt=""
-              />
             </div>
+            <img
+              class="ml-auto"
+              v-if="it.name == 'IC'"
+              :src="
+                form.platform == it.name
+                  ? '/img/svg/hosting/h-beta.svg'
+                  : '/img/svg/hosting/h-beta-active.svg'
+              "
+              height="20"
+              alt=""
+            />
           </div>
         </v-col>
       </v-row>
