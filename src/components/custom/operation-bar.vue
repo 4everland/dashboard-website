@@ -61,7 +61,7 @@
           @click="$emit('onSyncAR')"
         >
           <span v-if="isNotAr" class="gray-2">Sync to AR</span>
-          <span v-else class="gray-2">Verify on Ar</span>
+          <span v-else class="gray-2">Verify on AR</span>
         </v-btn>
         <v-btn
           tile
