@@ -201,10 +201,11 @@
         <bucket-fileInfo
           ref="fileInfo"
           :isAr="bucketInfo.isAr"
-          :selected="selected"
+          :selected.sync="selected"
           :fileInfoDrawer.sync="fileInfoDrawer"
           :bucketInfo="bucketInfo"
           @onSyncAR="onSyncAR"
+          @getFileInfo="getFileInfo"
         ></bucket-fileInfo>
       </div>
     </div>
@@ -239,6 +240,7 @@ export default {
       deleteFolderLimit: 2,
       isUploadDir: false,
       fileInfoDrawer: true,
+      fileInfo: null,
     };
   },
   async created() {
@@ -262,14 +264,14 @@ export default {
 
     bus.$emit("originDeleteFolderTasks");
   },
-  computed: {
-    selectArStatus() {
-      if (this.selected.length == 1) {
-        return this.selected[0].arStatus;
-      }
-      return null;
-    },
-  },
+  // computed: {
+  //   selectArStatus() {
+  //     if (this.selected.length == 1) {
+  //       return this.selected[0].arStatus;
+  //     }
+  //     return null;
+  //   },
+  // },
   methods: {
     onCopied() {
       this.$toast("Copied to clipboard !");
@@ -357,6 +359,9 @@ export default {
     async handleSyncAr(name) {
       await this.onSyncAR(name);
       this.$refs.fileInfo.headObject();
+    },
+    getFileInfo(fileInfo) {
+      this.fileInfo = fileInfo;
     },
   },
   watch: {

@@ -121,11 +121,19 @@
                         :href="$utils.getCidLink(it.hash, it.platform)"
                         target="_blank"
                         @click.stop="onStop"
-                        v-if="it.hash"
+                        v-if="it.hash && it.state == 'SUCCESS'"
                       >
                         {{ it.hash.cutStr(4, 4) }}
                       </a>
-                      <span v-else class="ml-1 fz-14">{{ it.platform }}</span>
+                      <span v-else-if="it.state == 'FAILURE'" class="ml-1 fz-14"
+                        >Not synchronized</span
+                      >
+                      <span v-else-if="it.state == 'SYNCING'" class="ml-1 fz-14"
+                        >Syncing</span
+                      >
+                      <span v-else class="ml-1 fz-14">{{
+                        it.platform == "IC" ? "Internet Computer" : it.platform
+                      }}</span>
                     </div>
                   </div>
                 </div>
@@ -222,17 +230,6 @@
       </v-expansion-panels>
     </div>
 
-    <div class="mt-6" v-if="pageLen > 1 && !limit">
-      <v-pagination
-        @input="onPage"
-        v-model="page"
-        :length="pageLen"
-        prev-icon="mdi-menu-left"
-        next-icon="mdi-menu-right"
-        :total-visible="7"
-      ></v-pagination>
-    </div>
-
     <div class="ta-c">
       <div :class="!limit ? 'main-wrap' : ''" class="pb-15" v-if="!list.length">
         <div
@@ -254,6 +251,16 @@
       <div class="mt-8" v-else-if="limit">
         <v-btn color="primary" outlined to="/hosting/projects">View More</v-btn>
       </div>
+    </div>
+    <div class="mt-6" v-if="pageLen > 1">
+      <v-pagination
+        @input="onPage"
+        v-model="page"
+        :length="pageLen"
+        prev-icon="mdi-menu-left"
+        next-icon="mdi-menu-right"
+        :total-visible="7"
+      ></v-pagination>
     </div>
   </div>
 </template>
@@ -302,29 +309,33 @@ export default {
   watch: {
     buildInfo({ data }) {
       if (data.state != this.lastState) {
-        console.log(data.taskId, data.state);
+        // console.log(data.taskId, data.state);
         this.lastState = data.state;
         if (this.inCurPath) this.getList();
         else this.needRefresh = true;
       }
     },
-    inCurPath(val) {
-      // console.log(this.curPath, val);
-      if (val) {
-        const now = Date.now();
-        if (now - this.refreshAt > 10e3) {
-          this.needRefresh = true;
-        }
-        if (this.needRefresh) {
-          this.refreshAt = now;
-          this.getList();
-          this.needRefresh = false;
-        }
-      }
-    },
+    // inCurPath(val) {
+    //   // console.log(this.curPath, val);
+    //   if (val) {
+    //     const now = Date.now();
+    //     if (now - this.refreshAt > 10e3) {
+    //       this.needRefresh = true;
+    //     }
+    //     if (this.needRefresh) {
+    //       this.refreshAt = now;
+    //       this.getList();
+    //       this.needRefresh = false;
+    //     }
+    //   }
+    // },
+  },
+
+  activated() {
+    this.getList();
   },
   mounted() {
-    this.getList();
+    // this.getList();
     this.curPath = this.path;
   },
   methods: {
@@ -366,12 +377,10 @@ export default {
       this.$loading.close();
     },
     async onOpen(it) {
-      console.log(it);
       if (it.loading || it.statisList) return;
       try {
         it.loading = true;
         const { data } = await this.$http2.get("/project/v3/detail/" + it.id);
-        console.log(data);
         data.name = it.name;
         const statisList = [
           {
@@ -426,6 +435,7 @@ export default {
       this.getList();
     },
     async getList() {
+      this.list = [];
       try {
         if (this.limit) {
           this.sortType = "Active";

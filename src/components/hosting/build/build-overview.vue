@@ -41,9 +41,12 @@
           <e-kv2
             label="Domain"
             class="mt-7"
-            :class="{
-              'op-0 ev-n': info.platform != 'IPFS',
-            }"
+            :class="
+              info.platform == 'IPFS' ||
+              (projInfo.latest || {}).taskId == info.taskId
+                ? ''
+                : 'op-0'
+            "
           >
             <e-link :href="'//' + info.domain">
               {{ info.domain }}
@@ -61,7 +64,9 @@
               class="ml-auto"
               :label="info.platform"
               style="min-width: 120px"
-              v-if="info.platform"
+              v-if="
+                info.platform && (projInfo.latest || {}).taskId == info.taskId
+              "
             >
               <div class="al-c" v-if="info.hash">
                 <e-link
@@ -78,7 +83,10 @@
                   v-clipboard="info.hash"
                 />
               </div>
-              <span v-else class="fz-14">Pending</span>
+              <h-status
+                v-else
+                :val="state == 'failure' ? 'Not synchronized' : state"
+              ></h-status>
             </e-kv2>
           </div>
         </v-col>
@@ -170,6 +178,7 @@ export default {
   computed: {
     ...mapState({
       nowDate: (s) => s.nowDate,
+      projInfo: (s) => s.projectInfo,
     }),
     isSuccess() {
       return this.state == "success";
@@ -186,6 +195,10 @@ export default {
       if (domain) return "//" + domain;
       return "";
     },
+  },
+  async created() {
+    const { id } = this.$route.params;
+    await this.$store.dispatch("getProjectInfo", id);
   },
   methods: {
     onOpt(opt) {
@@ -210,6 +223,7 @@ export default {
           confirmText: "Redeploy",
         });
         this.deploying = true;
+        await this.$store.dispatch("getProjectInfo", id);
 
         const { data } = await this.$http2.post(
           `/project/${this.info.taskId}/redeploy`

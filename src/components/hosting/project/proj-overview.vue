@@ -20,28 +20,20 @@
               {{ info.domain }}
             </e-link>
           </e-kv>
-
-          <e-kv
-            label="Domains"
-            class="mt-9"
-            v-if="info.domains"
-            :class="{
-              'op-0 ev-n': info.platform != 'IPFS',
-            }"
-          >
+          <e-kv label="Domains" class="mt-9" v-if="info.domains">
             <div class="d-flex al-c">
-              <h-domain class="mr-6" :val="info.domains[0].domain" />
-              <e-menu v-if="info.domains.length > 1" offset-y open-on-hover>
+              <h-domain class="mr-6" :val="domains[0]" />
+              <e-menu v-if="domains.length > 1" offset-y open-on-hover>
                 <v-btn slot="ref" color="error" rounded elevation="0" x-small
-                  >+{{ info.domains.length - 1 }}</v-btn
+                  >+{{ domains.length - 1 }}</v-btn
                 >
                 <div class="bg-white pd-10 fz-14">
                   <div
                     class="pd-5"
-                    v-for="(row, j) in info.domains.slice(1)"
+                    v-for="(row, j) in domains.slice(1)"
                     :key="j"
                   >
-                    <h-domain :val="info.domains[1 + j].domain" />
+                    <h-domain :val="row" />
                   </div>
                 </div>
               </e-menu>
@@ -54,9 +46,13 @@
                 <e-link
                   class="fz-14"
                   :href="$utils.getCidLink(info.hash, info.platform)"
+                  v-if="info.hash"
                 >
-                  {{ info.hash ? info.hash.cutStr(4, 4) : "Pending" }}
+                  {{ info.hash.cutStr(4, 4) }}
+                  <!-- {{ info.hash ? info.hash.cutStr(4, 4) : "Not synchronized" }} -->
                 </e-link>
+                <!-- <span>{{info.state}}</span> -->
+                <h-status v-if="!info.hash" :val="info.state"></h-status>
                 <img
                   v-if="info.hash"
                   src="/img/svg/copy.svg"
@@ -67,7 +63,12 @@
                 />
               </div>
             </e-kv>
-            <e-kv class="ml-auto" label="IPNS" min-width="90px">
+            <e-kv
+              class="ml-auto"
+              label="IPNS"
+              min-width="90px"
+              v-if="info.platform != 'IC'"
+            >
               <e-tooltip top slot="sub">
                 <v-icon slot="ref" color="#666" size="14" class="pa-1"
                   >mdi-help-circle-outline</v-icon
@@ -143,6 +144,13 @@ export default {
     buildPath() {
       const { name, id, taskId } = this.info;
       return `/hosting/build/${name}/${id}/${taskId}`;
+    },
+    domains() {
+      if (!this.info) return;
+      let arr = this.info.domains.map((it) => it.domain);
+      if (arr.includes(this.info.domain)) return arr;
+      arr.push(this.info.domain);
+      return arr;
     },
   },
   data() {

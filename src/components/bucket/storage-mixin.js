@@ -62,9 +62,12 @@ export default {
     },
     fileArStatus() {
       if (this.inFile) {
+        console.log("inFile");
+
         return this.fileInfo.arStatus;
       }
       if (this.inFolder) {
+        console.log("inFolder");
         return this.selectArStatus;
       }
       return null;
@@ -232,17 +235,16 @@ export default {
     },
     async onSyncAR(name, method = "post") {
       if (this.selectArStatus == "syncing") {
-        this.$alert("The file is being synced").then(() => {
-          this.getList();
-        });
+        this.$alert("The file is being synced");
         return;
       }
+
       if (this.fileArStatus == "synced") {
         window.open(this.$arVerifyPre + this.fileInfo.arHash);
         return;
       }
       try {
-        if (this.fileArStatus == "desynced") {
+        if (this.selected[0].arStatus == "desynced") {
           await this.beforeArSync();
         }
         const { Bucket } = this.pathInfo;

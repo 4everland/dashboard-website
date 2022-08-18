@@ -56,7 +56,7 @@
                 </tr>
                 <tr v-for="(row, j) in info.conflicts" :key="j">
                   <td>{{ row.type }}</td>
-                  <td>@</td>
+                  <td>{{ info.pre }}</td>
                   <td class="wb-all">{{ row.value }}</td>
                 </tr>
               </table>
@@ -78,7 +78,7 @@
                 <td>{{ info.pre }}</td>
                 <td>
                   <p
-                    class="hover-1 wb-all"
+                    class="hover-1 wb-all mb-0"
                     v-clipboard="info.isA ? dns.ip : dns.cname"
                     @success="$toast('Copied to clipboard !')"
                   >
@@ -129,7 +129,11 @@ export default {
       try {
         this.loading = true;
         if (!this.dns.ip) {
-          const { data } = await this.$http.get("/domains/resolve");
+          const { data } = await this.$http.get("/domains/resolve", {
+            params: {
+              domain: this.domain,
+            },
+          });
           this.dns = data;
         }
         const { data: info } = await this.$http.get(

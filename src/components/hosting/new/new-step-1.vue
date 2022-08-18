@@ -7,9 +7,14 @@
     background: #eee;
   }
   &.active {
-    background: #59a8f8;
+    background: #634695;
     color: #fff;
   }
+}
+.beta-icon {
+  position: absolute;
+  right: -55px;
+  top: -7px;
 }
 </style>
 
@@ -32,7 +37,7 @@
       </div>
     </div>
 
-    <div class="main-wrap mt-5" v-if="$inDev">
+    <div class="main-wrap mt-5">
       <h3>Hosting Platform</h3>
       <v-row>
         <v-col
@@ -47,8 +52,21 @@
               active: form.platform == it.name,
             }"
           >
-            <img :src="'img/svg/hosting/' + it.icon" height="30" />
-            <div class="ml-2 fw-b fz-16">{{ it.label }}</div>
+            <img :src="'/img/svg/hosting/' + it.icon" height="30" />
+            <div class="ml-2 fw-b fz-16 pos-r">
+              <span> {{ it.label }}</span>
+            </div>
+            <img
+              class="ml-auto"
+              v-if="it.name == 'IC'"
+              :src="
+                form.platform == it.name
+                  ? '/img/svg/hosting/h-beta.svg'
+                  : '/img/svg/hosting/h-beta-active.svg'
+              "
+              height="20"
+              alt=""
+            />
           </div>
         </v-col>
       </v-row>
@@ -310,14 +328,16 @@ export default {
       if (!body.outputDirectory && body.framework == "vue") {
         body.outputDirectory = "dist";
       }
-      console.log(body);
+      // console.log(body);
       try {
         this.$loading();
         const { data } = await this.$http2.post("/project", body);
         const {
           data: { taskId },
         } = await this.$http2.post(`/project/${data.projectId}/build`);
-        this.$router.replace("/hosting/new?taskId=" + taskId);
+        this.$router.replace(
+          `/hosting/new?id=${data.projectId}&taskId=${taskId}`
+        );
         this.$emit("next");
       } catch (error) {
         console.log(error);

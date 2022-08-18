@@ -135,9 +135,10 @@
       </div>
       <div
         class="no-file ta-c loading-img mt-15"
+        style="width: 90%"
         v-else-if="selected.length == 0"
       >
-        <img :src="`/img/svg/common/empty2.svg`" :height="130" />
+        <img :src="`/img/svg/common/empty2.svg`" style="width: 100%" />
         <div class="mt-5 gray fz-17">Select a file/folder to view details</div>
       </div>
 
@@ -310,6 +311,10 @@ export default {
               " "
             ),
           };
+          if (this.selected.length) {
+            this.$emit("update:selected", [{ ...this.selected[0], arStatus }]);
+          }
+          this.$emit("getFileInfo", this.fileInfo);
           this.thumbnail = this.fileUrl;
         }
       );
@@ -372,7 +377,13 @@ export default {
   },
   watch: {
     selected: {
-      handler(selectedArr) {
+      handler(selectedArr, oldSelectedArr) {
+        if (
+          selectedArr.length &&
+          oldSelectedArr.length &&
+          oldSelectedArr[0].hash == selectedArr[0].hash
+        )
+          return;
         if (selectedArr.length == 1) {
           if (selectedArr[0].isFile) {
             this.headObject();
@@ -380,10 +391,9 @@ export default {
             this.thumbnail = "/img/svg/bucketFileInfo/dir-file-img.svg";
             this.getObjects();
           }
-        } else if (selectedArr.length == 0) {
+        } else {
           this.fileInfo = null;
           this.dirFileArr = [];
-        } else {
         }
       },
       deep: true,
@@ -446,6 +456,7 @@ export default {
   .dir-file-name {
     color: #6c7789;
     line-height: 28px;
+    word-break: break-all;
   }
   .enter-folder {
     cursor: pointer;

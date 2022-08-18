@@ -111,7 +111,7 @@
                 <td>{{ it.pre }}</td>
                 <td>
                   <p
-                    class="hover-1 wb-all color-1 fw-b"
+                    class="hover-1 wb-all color-1 fw-b mb-0"
                     v-clipboard="it.isA ? dns.ip : dns.cname"
                     @success="$toast('Copied to clipboard !')"
                   >
@@ -125,9 +125,8 @@
         </div>
       </div>
     </div>
-
-    <st-proj-domains-sol />
-    <st-proj-domains-ens />
+    <st-proj-domains-sol v-if="info.platform == 'IPFS'" />
+    <st-proj-domains-ens v-if="info.platform == 'IPFS'" />
   </div>
 </template>
 

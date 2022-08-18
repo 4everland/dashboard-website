@@ -131,6 +131,11 @@ export default {
       return this.errMsg || "Build failed";
     },
   },
+  async created() {
+    const { id } = this.$route.query;
+    console.log(id);
+    await this.$store.dispatch("getProjectInfo", id);
+  },
   watch: {
     isDone(val) {
       if (val)

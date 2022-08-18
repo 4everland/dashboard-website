@@ -26,15 +26,37 @@
               />
               <a
                 class="u ml-2 fz-13"
-                :href="$utils.getCidLink(it.cid, it.platform)"
+                :href="
+                  $utils.getCidLink(
+                    it.platform == 'IPFS' ? it.cid : it.canister,
+                    it.platform
+                  )
+                "
                 target="_blank"
                 @click.stop="onStop"
-                v-if="it.cid"
+                style="min-width: 100px"
+                v-if="it.cid && it.state == 'SUCCESS'"
               >
-                {{ it.cid.cutStr(4, 4) }}
+                {{
+                  it.platform == "IPFS"
+                    ? it.cid.cutStr(4, 4)
+                    : it.canister.cutStr(4, 4)
+                }}
               </a>
-              <span v-else class="ml-2 fz-13 d-ib" style="min-width: 76px">{{
-                it.platform
+              <span
+                class="ml-2 fz-13 d-ib"
+                v-else-if="it.state == 'FAILURE'"
+                style="min-width: 100px"
+                >Not synchronized</span
+              >
+              <span
+                class="ml-2 fz-13 d-ib"
+                v-else-if="it.state == 'SYNCING'"
+                style="min-width: 100px"
+                >Syncing</span
+              >
+              <span v-else class="ml-2 fz-13 d-ib" style="min-width: 100px">{{
+                it.platform == "IC" ? "Internet Computer" : it.platform
               }}</span>
               <template v-if="it.commits">
                 <div class="fz-14 ml-5" @click.stop="onStop">
@@ -152,15 +174,18 @@ export default {
       }
     },
   },
-  mounted() {
+  async created() {
+    const { id } = this.$route.params;
+    await this.$store.dispatch("getProjectInfo", id);
     this.getList();
   },
   methods: {
     onStop() {},
     onClick(it) {
-      this.$navTo(
-        `/hosting/build/${it.buildConfig.name}/${this.id}/${it.taskId}`
-      );
+      let link = `/hosting/build/${it.buildConfig.name}/${this.id}/${it.taskId}`;
+
+      if (it.isFirst) link += "?prod=1";
+      this.$navTo(link);
     },
     getOptList(it) {
       let arr = [
@@ -170,7 +195,7 @@ export default {
           icon: "send",
         },
       ];
-      if (it.canRollback)
+      if (it.canRollback && it.platform != "IC")
         arr.push({
           text: "Rollback",
           name: "rollback",
@@ -243,6 +268,8 @@ export default {
           confirmText: "Redeploy",
         });
         this.$loading();
+        const { id } = this.$route.params;
+        await this.$store.dispatch("getProjectInfo", id);
         const { data } = await this.$http2.post(
           `/project/${it.taskId}/redeploy`
         );
@@ -268,6 +295,7 @@ export default {
         if (this.loading) {
           this.page += 1;
         } else {
+          if (this.refreshing) return;
           this.page = 0;
           this.refreshing = true;
           this.finished = false;
@@ -285,14 +313,17 @@ export default {
         );
         const rows = data.content.map((it) => {
           if (it.state == "SUCCESS") {
-            if (!this.isFirst) this.isFirst = true;
-            else it.canRollback = true;
+            if (!this.isFirst) {
+              this.isFirst = true;
+              it.isFirst = true;
+            } else it.canRollback = true;
           }
           return it;
         });
         this.finished = rows.length < params.size;
         if (this.loading) {
           this.list = [...this.list, ...rows];
+          console.log(list, "list");
         } else {
           this.list = rows;
         }

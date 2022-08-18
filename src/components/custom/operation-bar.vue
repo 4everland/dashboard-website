@@ -30,7 +30,7 @@
           tile
           class="ml-4"
           @click="$emit('download')"
-          v-show="selected.length <= 1 && inFile && isFile"
+          v-show="selected.length == 1 && inFile && isFile"
         >
           <span class="gray-2">Download</span>
         </v-btn>
@@ -38,7 +38,7 @@
           outlined
           tile
           class="ml-4"
-          v-show="selected.length <= 1 && inFile && isFile"
+          v-show="selected.length == 1 && inFile && isFile"
           v-clipboard="clipboardVal"
           @success="onCopied"
         >
@@ -48,7 +48,7 @@
           outlined
           tile
           class="ml-4"
-          v-show="selected.length <= 1 && inFile && isFile"
+          v-show="selected.length == 1 && inFile && isFile"
           @click="$emit('onRename')"
         >
           <span class="gray-2">Rename</span>
@@ -57,16 +57,18 @@
           outlined
           tile
           class="ml-4"
-          v-show="selected.length <= 1 && inFile && isNotAr && isFile"
+          v-show="selected.length == 1 && inFile && isFile"
           @click="$emit('onSyncAR')"
         >
-          <span class="gray-2">Sync to AR</span>
+          <span v-if="isNotAr" class="gray-2">Sync to AR</span>
+          <span v-else class="gray-2">Verify on AR</span>
         </v-btn>
         <v-btn
           tile
           style="border-color: #6c7789"
           outlined
           class="ml-4"
+          v-show="selected.length >= 1"
           @click="$emit('handleDeleteSelected')"
         >
           <!-- <img src="/img/icon/ic-delete.svg" width="14" class="mr-2" /> -->
