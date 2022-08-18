@@ -115,10 +115,11 @@ export default {
     },
     showHash() {
       return (
-        this.info.platform &&
-        ((this.projInfo.latest || {}).taskId == this.info.taskId ||
-          // /ing$/.test(this.state) ||
-          this.$route.query.prod)
+        (this.info.platform &&
+          ((this.projInfo.latest || {}).taskId == this.info.taskId ||
+            // /ing$/.test(this.state) ||
+            this.$route.query.prod)) ||
+        this.info.platform == "IPFS"
       );
     },
   },
