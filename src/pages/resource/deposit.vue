@@ -4,30 +4,27 @@
       <span class="fz-18">{{ balance === null ? "--" : balance }}</span>
       <span class="gray-6 fz-13 ml-1">USD</span>
     </e-kv>
-    <e-kv2 class="mt-7" label="Withdraw Account">
+    <e-kv2 class="mt-7" label="Deposit Account">
       <div class="d-ib bd-1 bdc-c1 bdrs-2">
         <input
           class="pa-2"
           v-model="amount"
           type="number"
-          :max="balance"
           style="width: 240px"
         />
         <span class="fz-14 ml-1 mr-2">USD</span>
       </div>
     </e-kv2>
-    <e-kv2 class="mt-7" label="Address">
-      <v-text-field outlined dense style="max-width: 500px"></v-text-field>
-    </e-kv2>
     <e-kv2 class="mt-7" label="Network">
       <pay-network :allow="['Polygon']" />
     </e-kv2>
+
     <div class="mt-8 fz-14 gray">
       <p>Tips:</p>
       <p class="mt-2">
-        When the withdrawal is confirmed, the system will automatically settle
-        the gas fee. The exact withdrawal amount is determined based on the
-        actual result.
+        When free or purchased resources are consumed, the cost of any overused
+        resources will be deducted from your wallet balance. Therefore, it is
+        recommended that you deposit in advance to prevent service suspension.
       </p>
     </div>
 
@@ -56,8 +53,7 @@ export default {
   watch: {
     amount(val) {
       if (val > 0) {
-        if (val > this.balance) this.amount = this.balance;
-        else if (val % 0.01 > 0) this.amount = this.$utils.cutFixed(val, 4);
+        if (val % 0.01 > 0) this.amount = this.$utils.cutFixed(val, 4);
       } else this.amount = "";
     },
   },

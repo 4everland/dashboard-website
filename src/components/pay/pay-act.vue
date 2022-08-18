@@ -26,7 +26,9 @@
           </div>
           <div class="mt-6 al-c">
             <v-btn color="primary" to="/resource/subscribe">Subscribe</v-btn>
-            <v-btn color="primary" outlined class="ml-4">Deposit</v-btn>
+            <v-btn color="primary" outlined class="ml-4" to="/resource/deposit"
+              >Deposit</v-btn
+            >
 
             <v-btn plain class="ml-6" to="/resource/withdraw"> Withdraw </v-btn>
             <span class="gray">|</span>

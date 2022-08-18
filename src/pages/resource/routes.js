@@ -3,6 +3,7 @@ import Subscribe from "./subscribe";
 import Order from "./order";
 import Balance from "./balance";
 import Withdraw from "./withdraw";
+import Deposit from "./deposit";
 import PriceDocs from "./price-docs";
 import ResAllocation from "./res-allocation";
 
@@ -31,6 +32,22 @@ export default [
         },
         {
           text: `Price Docs`,
+        },
+      ],
+    },
+  },
+  {
+    path: "/resource/deposit",
+    component: Deposit,
+    meta: {
+      title: "Deposit",
+      links: [
+        {
+          text: "Resource",
+          to: "/resource",
+        },
+        {
+          text: `Deposit`,
         },
       ],
     },
