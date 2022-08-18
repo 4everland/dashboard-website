@@ -236,6 +236,15 @@ $bdcolor: #E6E8EB;
   &.c-failure, &.c-error { color: #E43D3D; }
 }
 
+.e-progress-1 {
+  &.v-progress-linear {
+    background: #F0F3F4;
+  }
+  .v-progress-linear__background {
+    display: none;
+  }
+}
+
 .e-table-1 {
   width: 100%;
   border-spacing: 0;

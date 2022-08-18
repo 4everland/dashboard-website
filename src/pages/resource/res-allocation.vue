@@ -28,7 +28,7 @@
         <span>{{ curType.desc }} </span>
       </e-tooltip>
       <v-progress-linear
-        class="bdrs-10"
+        class="bdrs-10 e-progress-1"
         style="width: 120px"
         :color="curType.color || 'primary'"
         :value="curType.perc || 0"
