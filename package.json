@@ -32,6 +32,7 @@
     "google-protobuf": "^3.20.1",
     "grpc-web": "^1.3.1",
     "html2canvas": "^1.4.1",
+    "jazzicon": "^1.5.0",
     "minio-s": "^7.0.27.1",
     "multiformats": "^9.5.8",
     "qrcode": "^1.5.0",
