@@ -63,11 +63,11 @@ export default {
     },
   },
   mounted() {
-    // if (this.connectAddr) {
-    //   this.onConnect();
-    // } else {
-    //   this.showConnect();
-    // }
+    if (this.connectAddr) {
+      this.onConnect();
+    } else {
+      this.showConnect();
+    }
   },
   methods: {
     walletChanged(isInit) {
@@ -113,7 +113,11 @@ export default {
     onErr(err, retry) {
       if (!err) return console.log("---- err null");
       console.log(err);
+      const { data } = err;
       let msg = err.message;
+      if (data) {
+        msg = data.message || msg;
+      }
       if (/repriced/i.test(msg) && /replaced/i.test(msg)) {
         return this.$toast("Transaction was replaced.");
       }
@@ -174,7 +178,8 @@ export default {
     },
     async onApprove(isBuy) {
       try {
-        this.approving = true;
+        this.$loading("Approving");
+        // this.approving = true;
         const addr = isBuy ? this.payAddr : MumbaiFundPool;
         console.log("approve", addr, this.usdcKey);
         const tx = await this.curContract[this.usdcKey].approve(
@@ -185,6 +190,7 @@ export default {
         const receipt = await tx.wait();
         console.log(receipt);
         this.isApproved = true;
+        this.$toast("Approved successfully");
       } catch (error) {
         console.log("on approve error");
         this.onErr(error);
@@ -299,7 +305,7 @@ export default {
       localStorage.lastHash = JSON.stringify(obj);
     },
     async onConnect() {
-      this.walletChanged(true);
+      // this.walletChanged(true);
       try {
         if (this.chainId != this.payChainId) {
           let dev = "";
@@ -325,7 +331,7 @@ export default {
         }
         console.log(this.payBy, this.curContract);
         // this.getSign();
-        this.checkApprove(this.isBuy);
+        this.checkApprove(this.isSubscribe);
       } catch (error) {
         console.log("on connect error");
         this.$alert(error.message).then(() => {

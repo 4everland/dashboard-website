@@ -4,7 +4,7 @@
       <span class="fz-18">{{ balance === null ? "--" : balance }}</span>
       <span class="gray-6 fz-13 ml-1">USD</span>
     </e-kv>
-    <e-kv2 class="mt-7" label="Withdraw Account">
+    <e-kv2 class="mt-7" label="Withdraw Amount">
       <div class="d-ib bd-1 bdc-c1 bdrs-2">
         <input
           class="pa-2"
@@ -18,7 +18,7 @@
     </e-kv2>
     <e-kv2 class="mt-7" label="Address">
       <v-text-field
-        v-model="address"
+        v-model.trim="address"
         outlined
         dense
         style="max-width: 500px"
@@ -39,7 +39,7 @@
     <div style="height: 10vh"></div>
     <pay-confirm
       :price="amount || 0"
-      text="Deposit"
+      text="Withdraw"
       @submit="onSubmit"
     ></pay-confirm>
   </div>
@@ -58,11 +58,14 @@ export default {
   },
   mounted() {
     this.getBalance();
-    if (this.connectAddr) this.address = this.connectAddr;
+    this.setAddr();
   },
   watch: {
-    connectAddr(val) {
-      if (!this.address) this.address = val;
+    userInfo() {
+      this.setAddr();
+    },
+    connectAddr() {
+      this.setAddr();
     },
     address(val) {
       console.log(val);
@@ -73,18 +76,38 @@ export default {
         else if (val % 0.01 > 0) this.amount = this.$utils.cutFixed(val, 4);
       } else this.amount = "";
     },
+    curContract(val) {
+      console.log(val);
+      if (val && this.needSubmit) {
+        this.onSubmit();
+        this.needSubmit = false;
+      }
+    },
   },
   methods: {
+    setAddr() {
+      const { wallet } = this.userInfo;
+      if (wallet) this.address = wallet.address;
+      else if (this.connectAddr) this.address = this.connectAddr;
+    },
     async onSubmit() {
       let num = this.amount;
+      const addr = (this.address = this.address.trim());
+      let msg = "";
       if (num === "") {
-        return this.$toast(`Withdraw amount required`);
+        msg = "Withdraw amount required";
+      } else if (!addr) {
+        msg = "Withdraw address required";
+      } else if (!/^0x[0-9a-f]{40}$/i.test(addr)) {
+        msg = "Withdraw address not correct";
       }
+      if (msg) return this.$alert(msg);
       try {
         if (!this.isPolygon) {
           return this.switchPolygon();
         }
         if (!this.curContract) {
+          this.needSubmit = true;
           this.showConnect();
           return;
         }
@@ -107,7 +130,7 @@ export default {
           timeout,
           orderId,
           billSign,
-          this.connectAddr,
+          addr,
           num * 1e6,
         ];
         console.log(params);

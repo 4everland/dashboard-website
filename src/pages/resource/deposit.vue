@@ -4,7 +4,7 @@
       <span class="fz-18">{{ balance === null ? "--" : balance }}</span>
       <span class="gray-6 fz-13 ml-1">USD</span>
     </e-kv>
-    <e-kv2 class="mt-7" label="Deposit Account">
+    <e-kv2 class="mt-7" label="Deposit Amount">
       <div class="d-ib bd-1 bdc-c1 bdrs-2">
         <input
           class="pa-2"
@@ -20,7 +20,7 @@
     </e-kv2>
 
     <div class="mt-8 fz-14 gray">
-      <p>Tips:</p>
+      <p @click="isApproved = !isApproved">Tips:</p>
       <p class="mt-2">
         When free or purchased resources are consumed, the cost of any overused
         resources will be deducted from your wallet balance. Therefore, it is
@@ -31,7 +31,8 @@
     <div style="height: 10vh"></div>
     <pay-confirm
       :price="amount || 0"
-      text="Deposit"
+      :text="isApproved ? 'Deposit' : 'Approve'"
+      :loading="approving"
       @submit="onSubmit"
     ></pay-confirm>
   </div>
@@ -56,20 +57,38 @@ export default {
         if (val % 0.01 > 0) this.amount = this.$utils.cutFixed(val, 4);
       } else this.amount = "";
     },
+    curContract(val) {
+      if (val && this.needSubmit) {
+        this.onSubmit();
+        this.needSubmit = false;
+      }
+    },
   },
   methods: {
     async onSubmit() {
       let num = this.amount;
+      let msg = "";
       if (num === "") {
-        return this.$toast(`Deposit amount required`);
+        msg = "Deposit amount required";
+      } else if (num < 1) {
+        msg = "The minimum deposit amount cannot be less than $1.";
       }
-      if (num < 1) {
-        return this.$alert(
-          "The minimum deposit amount cannot be less than $1."
-        );
+      if (msg) {
+        return this.$alert(msg);
       }
-      console.log("num", num);
       try {
+        if (!this.isPolygon) {
+          return this.switchPolygon();
+        }
+        if (!this.curContract) {
+          this.needSubmit = true;
+          this.showConnect();
+          return;
+        }
+        if (!this.isApproved) {
+          return this.onApprove();
+        }
+        this.$loading();
         await this.checkAccount();
         let balance = await this.curContract.FundPool.balanceOf(
           this.providerAddr,
@@ -89,6 +108,7 @@ export default {
           this.uuid
         );
         console.log("balance2", balance.toString());
+        this.$loading.close();
         await this.$alert("Deposit successfully");
         this.$navTo("/resource");
       } catch (error) {

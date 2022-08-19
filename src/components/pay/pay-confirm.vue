@@ -13,6 +13,7 @@
         depressed
         class="ml-auto"
         :to="to"
+        :loading="loading"
         @click="$emit('submit')"
         >{{ text }}</v-btn
       >
@@ -33,6 +34,7 @@ export default {
       default: "Confirm",
     },
     to: String,
+    loading: Boolean,
   },
 };
 </script>
