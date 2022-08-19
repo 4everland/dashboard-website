@@ -4,6 +4,8 @@ import Order from "./order";
 import Balance from "./balance";
 import Withdraw from "./withdraw";
 import Deposit from "./deposit";
+import Bills from "./bills";
+import BillDetail from "./bill-detail";
 import PriceDocs from "./price-docs";
 import ResAllocation from "./res-allocation";
 
@@ -32,6 +34,42 @@ export default [
         },
         {
           text: `Price Docs`,
+        },
+      ],
+    },
+  },
+  {
+    path: "/resource/bill-detail",
+    component: BillDetail,
+    meta: {
+      title: "Expenditure Details",
+      links: [
+        {
+          text: "Resource",
+          to: "/resource",
+        },
+        {
+          text: "Transaction History",
+          to: "/resource/bills",
+        },
+        {
+          text: `Expenditure Details`,
+        },
+      ],
+    },
+  },
+  {
+    path: "/resource/bills",
+    component: Bills,
+    meta: {
+      title: "Transaction History",
+      links: [
+        {
+          text: "Resource",
+          to: "/resource",
+        },
+        {
+          text: `Transaction History`,
         },
       ],
     },

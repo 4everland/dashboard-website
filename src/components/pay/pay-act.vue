@@ -30,9 +30,13 @@
               >Deposit</v-btn
             >
 
-            <v-btn plain class="ml-6" to="/resource/withdraw"> Withdraw </v-btn>
+            <v-btn plain color="#444" class="ml-6" to="/resource/withdraw">
+              Withdraw
+            </v-btn>
             <span class="gray">|</span>
-            <v-btn plain to="/resource/billing"> Billing Details </v-btn>
+            <v-btn plain color="#444" to="/resource/bills">
+              Billing Details
+            </v-btn>
           </div>
           <div class="mt-9 pb-2 al-c hide-msg">
             <e-kv label="Auto-deduction:">
