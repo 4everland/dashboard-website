@@ -299,6 +299,9 @@ export default {
         this.priceInfo = data;
 
         const { data: usageInfo } = await this.$http.get(`$v3/usage`);
+        usageInfo.purchasedBuildMinutes = parseInt(
+          usageInfo.purchasedBuildMinutes
+        );
         this.usageInfo = usageInfo;
         this.getCardTop();
         const { i } = this.$route.query;
