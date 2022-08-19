@@ -62,16 +62,10 @@ export default {
       try {
         let { data } = await this.$http.get("$v3/bill/distributed");
         // console.log(data);
-        data = [
-          {
-            resourceType: "TRAFFIC",
-            usdt: 1,
-          },
-        ];
         this.list = data.map((it, i) => {
           const obj = this.$utils.getPurchase(it.resourceType); //, it.amount
           it.name = obj.name;
-          it.value = it.usdt;
+          it.value = it.usdt.toFixed(4);
           it.itemStyle = {
             color: "#" + this.colors[i],
             borderColor: "#fff",
