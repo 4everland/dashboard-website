@@ -262,22 +262,6 @@ export default {
           active: false,
           group: /^\/resource/i,
         },
-        {
-          label: "Bills",
-          img: "m-usage",
-          group: /^\/billing/i,
-          subs: [
-            {
-              label: "Usage",
-              to: "/billing/usage",
-              matPath: /usage\/(more)/,
-            },
-            {
-              label: "Bills",
-              to: "/billing/bills",
-            },
-          ],
-        },
       ];
     },
   },
