@@ -41,24 +41,24 @@ export default {
     return {
       headers: [
         {
-          text: "Content",
+          text: "Resource",
           value: "name",
         },
         {
-          text: "Amount",
+          text: "Specification",
           value: "amount",
         },
         {
-          text: "Cost",
+          text: "Amount",
           value: "cost",
-        },
-        {
-          text: "Payment Time",
-          value: "time",
         },
         {
           text: "Status",
           value: "status",
+        },
+        {
+          text: "Time",
+          value: "time",
         },
       ],
       loading: false,

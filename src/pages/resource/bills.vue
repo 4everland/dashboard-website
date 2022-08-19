@@ -8,6 +8,16 @@
       ></e-radio-btn>
     </div>
 
+    <div class="mb-4 fz-14 gray-6" v-if="typeIdx == 0 && showPending">
+      <span class="d-ib mr-2 ml-1">•</span>
+      <span
+        >Confirming the transaction, please be patient for a few minutes</span
+      >
+      <v-btn small icon :loading="loading" @click="onRefresh" class="ml-1">
+        <v-icon :color="$color1" size="20">mdi-refresh</v-icon>
+      </v-btn>
+    </div>
+
     <v-data-table
       :headers="headers"
       :items="list"
@@ -55,6 +65,7 @@ export default {
       list: [],
       total: 0,
       page: 1,
+      showPending: false,
     };
   },
   computed: {
