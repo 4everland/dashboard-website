@@ -1,13 +1,13 @@
 import Overview from "./overview";
-import Subscribe from "./subscribe";
-import Order from "./order";
-import Balance from "./balance";
-import Withdraw from "./withdraw";
-import Deposit from "./deposit";
+import Subscribe from "./act-subscribe";
+import Withdraw from "./act-withdraw";
+import Deposit from "./act-deposit";
 import Bills from "./bills";
 import BillDetail from "./bill-detail";
 import PriceDocs from "./price-docs";
-import ResAllocation from "./res-allocation";
+import Order from "./order";
+import AllocRes from "./alloc-res";
+import AllocBalance from "./alloc-balance";
 
 export default [
   {
@@ -108,7 +108,7 @@ export default [
   },
   {
     path: "/resource/allocation",
-    component: ResAllocation,
+    component: AllocRes,
     meta: {
       title: "Resource Allocation",
       links: [
@@ -123,8 +123,8 @@ export default [
     },
   },
   {
-    path: "/resource/balance",
-    component: Balance,
+    path: "/resource/balance-alloc",
+    component: AllocBalance,
     meta: {
       title: "Balance Allocation",
       links: [

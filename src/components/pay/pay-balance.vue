@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <div class="pa-5">
-      <div class="al-c hover-1" @click="$navTo('resource/balance')">
+      <div class="al-c hover-1" @click="$navTo('resource/balance-alloc')">
         <span class="gray-5">Balance Allocation</span>
         <span class="gray ml-auto fz-14">More</span>
         <v-icon>mdi-chevron-right</v-icon>
