@@ -189,10 +189,10 @@ export default {
         amount: num,
       });
       console.log(data);
-      await this.getBalance();
-      if (num > this.balance) {
-        throw new Error(tip1);
-      }
+      // await this.getBalance();
+      // if (num > this.balance) {
+      //   throw new Error(tip1);
+      // }
       const {
         billSign,
         timeoutTimestamp: timeout,
