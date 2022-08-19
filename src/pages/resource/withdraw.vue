@@ -136,7 +136,7 @@ export default {
         console.log(params);
         await this.onWithdraw(params);
         this.$loading.close();
-        await this.$alert("Withdraw successfully");
+        await this.$alert("Your withdrawal was successful.");
         this.$navTo("/resource");
       } catch (error) {
         this.onErr(error);

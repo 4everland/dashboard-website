@@ -109,7 +109,7 @@ export default {
         );
         console.log("balance2", balance.toString());
         this.$loading.close();
-        await this.$alert("Deposit successfully");
+        await this.$alert("Your deposit was successful.");
         this.$navTo("/resource");
       } catch (error) {
         this.onErr(error);
