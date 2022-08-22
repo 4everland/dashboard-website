@@ -146,6 +146,22 @@ export default {
           ),
         },
         {
+          label: "Build Minutes",
+          icon: "buildtime.svg",
+          id: ResourceType.BuildingTime,
+          key: "buildMinutes",
+          opts: [500, 1000, 1500],
+          unit: "Min",
+          unitPrice: price.buildTimeUnitPrice || 0,
+          ...this.getPerc(
+            parseInt(
+              info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes
+            ),
+            info.freeBuildMinutes + info.purchasedBuildMinutes,
+            "Minutes"
+          ),
+        },
+        {
           label: "IPFS Storage",
           icon: "ipfs.svg",
           id: ResourceType.IPFSStorage,
@@ -166,22 +182,6 @@ export default {
           unit: "GB",
           unitPrice: price.arStorageUnitPrice || 0,
           ...this.getPerc(info.usedArStorage, info.arStorage),
-        },
-        {
-          label: "Build Minutes",
-          icon: "buildtime.svg",
-          id: ResourceType.BuildingTime,
-          key: "buildMinutes",
-          opts: [500, 1000, 1500],
-          unit: "Min",
-          unitPrice: price.buildTimeUnitPrice || 0,
-          ...this.getPerc(
-            parseInt(
-              info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes
-            ),
-            info.freeBuildMinutes + info.purchasedBuildMinutes,
-            "Minutes"
-          ),
         },
       ];
     },

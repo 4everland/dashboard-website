@@ -91,10 +91,7 @@
 </template>
 
 <script>
-import mixin from "./mixin";
-
 export default {
-  mixins: [mixin],
   data() {
     return {
       showAutoPop: false,
@@ -102,6 +99,7 @@ export default {
       autoList: [],
       isAuto: true,
       autoLoading: true,
+      balance: null,
     };
   },
   computed: {
@@ -118,6 +116,12 @@ export default {
     this.getAutoList();
   },
   methods: {
+    async getBalance() {
+      const {
+        data: { balance },
+      } = await this.$http.get("$v3/account/balance");
+      this.balance = this.$utils.cutFixed(balance, 4);
+    },
     async onConfirmAuto() {
       try {
         const allClose = !this.autoList.find((it) => it.isOn);

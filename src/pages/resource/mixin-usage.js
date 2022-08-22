@@ -20,6 +20,16 @@ export default {
           ...this.getPercBy("band"),
         },
         {
+          label: "Build Minutes",
+          name: "BUILD_TIME",
+          desc: `Free resources ${
+            info.freeBuildMinutes || 250
+          } Minutes per month,  ${
+            info.purchasedBuildMinutes || 0
+          } Minutes purchased.`,
+          ...this.getPercBy("time"),
+        },
+        {
           label: "IPFS Storage",
           name: "IPFS_STORAGE",
           desc: info.ipfsStorage
@@ -41,16 +51,6 @@ export default {
             getSize(info.arStorage - info.arDefaultStorage) || "0GB"
           } purchased.`,
           ...this.getPercBy("ar"),
-        },
-        {
-          label: "Build Minutes",
-          name: "BUILD_TIME",
-          desc: `Free resources ${
-            info.freeBuildMinutes || 250
-          } Minutes per month,  ${
-            info.purchasedBuildMinutes || 0
-          } Minutes purchased.`,
-          ...this.getPercBy("time"),
         },
       ];
     },
@@ -95,8 +95,8 @@ export default {
         const usedObj = getSize(used, true);
         const totalObj = getSize(total, true);
         usedTxt = usedObj.num + " " + usedObj.unit;
-        let childUnit = "";
-        if (usedObj.unit != totalObj.unit) childUnit = usedObj.unit;
+        let childUnit = usedObj.unit;
+        // if (usedObj.unit == totalObj.unit) childUnit = "";
         percTxt = `${usedObj.num} ${childUnit} / ${totalObj.num} ${totalObj.unit}`;
       } else {
         usedTxt = used + " Minutes";

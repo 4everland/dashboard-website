@@ -39,7 +39,6 @@ export default {
     return {
       list: null,
       resizing: false,
-      colors: ["3B478E", "5D68A6", "707DC1", "8290DB", "919FED", "B7C2FE"],
     };
   },
   watch: {
@@ -67,7 +66,6 @@ export default {
           it.name = obj.name;
           it.value = it.usdt.toFixed(4);
           it.itemStyle = {
-            color: "#" + this.colors[i],
             borderColor: "#fff",
           };
           return it;
