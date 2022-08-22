@@ -137,7 +137,9 @@ export default {
           console.log("get wallet net...", times);
           times += 1;
           const netType = await window.web3.eth.net.getNetworkType();
+          console.log(netType);
           chainId = await window.web3.eth.net.getId();
+          console.log(chainId);
           const payBy = this.getPayBy(chainId);
           localStorage.payBy = payBy;
           console.log(netType, chainId, payBy);

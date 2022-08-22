@@ -61,6 +61,12 @@ export default {
       });
     },
     unitItem() {
+      if (this.unit == "Min") {
+        return {
+          value: 60,
+          text: "Min",
+        };
+      }
       return this.unitList[this.unitIdx] || {};
     },
     unitList() {
@@ -109,14 +115,43 @@ export default {
   watch: {
     inputVal(val) {
       if (val > 0) {
-        this.inputVal = val * 1;
+        let max = 1024;
+        if (this.unit == "Min") max = 10000;
+        else if (this.unit == "Mon") max = 12;
+        this.inputVal = Math.min(val * 1, max);
         this.curIdx = -1;
       } else {
         this.inputVal = "";
       }
+      this.onInput();
     },
     curIdx(val) {
       if (val > -1) this.inputVal = "";
+      this.onInput();
+    },
+    unitItem() {
+      this.onInput();
+    },
+  },
+  methods: {
+    onInput() {
+      let val = 0;
+      let text = "None";
+      if (this.curIdx > -1) {
+        const item = this.list[this.curIdx];
+        val = item.num;
+        if (this.unit == "Min") val *= 60;
+        else if (this.unit == "Mon") val *= 30 * 86400;
+        text = item.text;
+      } else if (this.inputVal > 0) {
+        text = this.inputVal + " " + this.unitItem.text;
+        val = this.inputVal * this.unitItem.value;
+      }
+      console.log(text, val);
+      this.$emit("input", {
+        val,
+        text,
+      });
     },
   },
 };

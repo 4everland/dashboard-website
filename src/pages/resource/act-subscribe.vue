@@ -90,7 +90,8 @@
       <pay-confirm
         label="Configuration costs"
         :price="totalPrice"
-        to="/resource/subscribe/order"
+        @submit="onSubmit"
+        :loading="feeLoading"
       >
         <usage-preview :previewList="previewList" :list="list" />
       </pay-confirm>
@@ -99,6 +100,7 @@
 </template>
 
 <script>
+import mixin from "@/components/pay/mixin";
 import { mapState } from "vuex";
 const Mb = Math.pow(1024, 2);
 const Gb = Math.pow(1024, 3);
@@ -111,7 +113,7 @@ const ResourceType = {
 };
 
 export default {
-  // mixins: [mixin],
+  mixins: [mixin],
   data() {
     return {
       tabIdx: 0,
@@ -120,6 +122,7 @@ export default {
       form: {},
       ipfsIdx: 0,
       feeForm: {},
+      feeLoading: false,
       scrollMap: [],
     };
   },
@@ -252,6 +255,9 @@ export default {
     this.getInfo();
   },
   methods: {
+    onSubmit() {
+      this.$navTo("/resource/subscribe/order");
+    },
     onTab() {
       this.$nextTick(() => {
         const top = this.scrollMap[this.tabIdx] || 0;
@@ -320,6 +326,62 @@ export default {
             this.$router.push("/resource");
           });
       }
+    },
+    async getPrice(resId, val) {
+      if (!this.curContract) {
+        this.showConnect();
+        return;
+      }
+      let fee = 0;
+      if (!val) {
+        this.feeForm[resId] = 0;
+        return;
+      }
+      try {
+        console.log("get price", resId);
+        if (typeof val == "object") {
+          this.ipfsMon = val.month;
+          val = val.stor;
+        }
+        // let base = Math.pow(1024, resId == ResourceType.ARStorage ? 2 : 3);
+        // if (resId == ResourceType.BuildingTime) {
+        //   base = 60;
+        // }
+        let amount = val; // base *
+        this.feeLoading = true;
+        if (resId == ResourceType.IPFSStorage) {
+          if (!amount && !this.ipfsMon) return (this.feeLoading = false);
+          fee = await this.curContract.DstChainPayment.ipfsAlloctionsFee(
+            this.providerAddr,
+            this.uuid,
+            amount,
+            86400 * 30 * this.ipfsMon
+          );
+          fee = [fee[0], fee[1]];
+        } else {
+          fee = await this.curContract.DstChainPayment.getValueOf(
+            this.providerAddr,
+            resId,
+            amount
+          );
+        }
+        this.feeForm = {
+          ...this.feeForm,
+          [resId]: fee,
+        };
+        fee = this.getFee(fee);
+        console.log("price", fee);
+      } catch (error) {
+        console.log("get price error");
+        this.onErr(error, true)
+          .then(() => {
+            this.getPrice(resId, val);
+          })
+          .catch(() => {
+            this.$router.replace("/resource");
+          });
+      }
+      this.feeLoading = false;
     },
     getFee(fee) {
       if (!fee) return 0;

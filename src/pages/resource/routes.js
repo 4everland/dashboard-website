@@ -140,7 +140,9 @@ export default [
   },
   {
     path: "/resource/subscribe",
-    component: Subscribe,
+    components: {
+      cache: Subscribe,
+    },
     meta: {
       title: "Subscribe",
       isTab: 1,
