@@ -56,7 +56,7 @@
                 >Syncing</span
               >
               <span v-else class="ml-2 fz-13 d-ib" style="min-width: 100px">{{
-                it.platform == "IC" ? "Internet Computer" : it.platform
+                getPlatformName(it)
               }}</span>
               <template v-if="it.commits">
                 <div class="fz-14 ml-5" @click.stop="onStop">
@@ -332,6 +332,11 @@ export default {
       }
       this.loading = false;
       this.refreshing = false;
+    },
+    getPlatformName(it) {
+      if (it.platform == "IPFS") return it.platform;
+      if (it.platform == "IC") return "Internet Computer";
+      if (it.platform == "AR") return "Arweave";
     },
   },
 };

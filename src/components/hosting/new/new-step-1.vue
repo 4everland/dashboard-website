@@ -254,11 +254,11 @@ export default {
           name: "IC",
           icon: "h-ic.svg",
         },
-        // {
-        //   label: "Arweave",
-        //   name: "AR",
-        //   icon: "h-ar.svg",
-        // },
+        {
+          label: "Arweave",
+          name: "AR",
+          icon: "h-ar.svg",
+        },
       ],
     };
   },

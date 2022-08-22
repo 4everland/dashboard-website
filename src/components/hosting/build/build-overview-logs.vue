@@ -40,6 +40,11 @@
           <e-link href="/hosting/projects">click here</e-link> for other
           operations without waiting.
         </div>
+        <div v-else-if="info && info.platform == 'AR'">
+          Syncing to AR may take more time to complete,
+          <e-link href="/hosting/projects">click here</e-link> for other
+          operations without waiting.
+        </div>
         <span v-else>
           <h-status :val="state"></h-status>
         </span>
@@ -117,9 +122,9 @@ export default {
       return (
         (this.info.platform &&
           ((this.projInfo.latest || {}).taskId == this.info.taskId ||
-            // /ing$/.test(this.state) ||
             this.$route.query.prod)) ||
-        this.info.platform == "IPFS"
+        this.info.platform == "IPFS" ||
+        this.info.platform == "AR"
       );
     },
   },

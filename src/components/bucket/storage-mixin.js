@@ -719,6 +719,7 @@ export default {
       }
 
       if (it.isFile) return;
+
       this.$router.push({
         path: encodeURI(url),
       });

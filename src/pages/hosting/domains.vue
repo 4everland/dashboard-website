@@ -65,7 +65,7 @@
                         small
                         color="primary"
                         class="ml-auto"
-                        :disabled="it.platform == 'IC' && !icAddDomain"
+                        :disabled="!supportDomain(it.platform)"
                         :to="`/hosting/project/${it.name}/${it.id}?tab=settings&sub=domains`"
                         >Select</v-btn
                       >
@@ -156,7 +156,6 @@ export default {
       domain: "",
       deleting: false,
       keyword: "",
-      icAddDomain: true,
     };
   },
   computed: {
@@ -168,6 +167,18 @@ export default {
         if (!this.keyword.trim()) return true;
         return new RegExp(this.keyword, "i").test(it.name);
       });
+    },
+    supportDomain() {
+      return function (platform) {
+        let tab = this.$route.query.tab;
+        if (!tab) {
+          tab = "domains";
+        }
+        if (platform == "IPFS") return true;
+        if ((platform == "IC" || platform == "AR") && tab == "domains")
+          return true;
+        return false;
+      };
     },
   },
   watch: {
@@ -184,13 +195,6 @@ export default {
       if (name == "domains-selected") {
         this.selected = data.val;
         this.type = data.type;
-      }
-    },
-    "$route.query"(newVal) {
-      if (newVal.tab == "domains") {
-        this.icAddDomain = true;
-      } else {
-        this.icAddDomain = false;
       }
     },
   },

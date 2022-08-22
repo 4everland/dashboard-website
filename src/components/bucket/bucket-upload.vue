@@ -11,6 +11,7 @@
           <!-- <img src="/img/icon/ic-download.svg" width="14" class="mr-2" /> -->
           <span class="gray-7">Selected File</span>
         </v-list-item>
+
         <v-list-item link @click="$refs.uploadInput.onClick(true)">
           <!-- <img src="/img/icon/ic-download.svg" width="14" class="mr-2" /> -->
           <span class="gray-7">Selected Folder</span>
@@ -23,6 +24,7 @@
 
 <script>
 import { bus } from "../../main";
+import { mapState } from "vuex";
 import { TaskWrapper } from "./task.js";
 export default {
   props: {
@@ -79,6 +81,9 @@ export default {
     });
   },
   computed: {
+    ...mapState({
+      curBucketInfo: (s) => s.curBucketInfo,
+    }),
     path() {
       const arr = this.$route.path.split("/");
       const idx = arr.findIndex((item) => item == "storage");
@@ -174,11 +179,12 @@ export default {
       }
     },
     async onConfirm() {
-      // await this.getUsageInfo();
-      if (this.isStorageFull)
-        return this.$alert(
-          "Insufficient storage space is available to upload the file."
-        );
+      // console.log(this.curBucketInfo.arweave.sync);
+      // if (this.isStorageFull)
+      //   return this.$alert(
+      //     "Insufficient storage space is available to upload the file."
+      //   );
+
       this.addTasks(this.files, 10);
       this.files = [];
       this.$refs.uploadInput.handleRmoveAll();
@@ -190,9 +196,17 @@ export default {
     },
     async overStorage() {
       try {
-        const { data } = await this.$http.get("$v3/usage");
-        const { ipfsStorage, usedIpfsStorage } = data;
-        return ipfsStorage - usedIpfsStorage;
+        let isCurBucketAr = this.curBucketInfo.arweave.sync;
+        let arStorageByte = null;
+        const { data } = await this.$http.get("$v3/usage/ipfs");
+        // const { ipfsStorage, usedIpfsStorage } = data;
+        // return ipfsStorage - usedIpfsStorage;
+        let ipfsStorageByte = data.storageByte;
+        if (isCurBucketAr) {
+          const { data } = await this.$http.get("$v3/usage/ar");
+          arStorageByte = data.storageByte;
+        }
+        return { ipfsStorageByte, arStorageByte };
       } catch (err) {
         console.log(err);
       }
@@ -210,16 +224,24 @@ export default {
       }
       if (newVal.length) {
         this.$loading();
-        const residue = await this.overStorage();
+        const { ipfsStorageByte, arStorageByte } = await this.overStorage();
         const totalSizeVal = newVal.reduce((pre, current) => {
           return pre + current.size;
         }, 0);
-
-        if (totalSizeVal > residue) {
-          this.isStorageFull = true;
+        if (!arStorageByte) {
+          if (totalSizeVal > ipfsStorageByte) {
+            this.isStorageFull = true;
+          } else {
+            this.isStorageFull = false;
+          }
         } else {
-          this.isStorageFull = false;
+          if (totalSizeVal > ipfsStorageByte || totalSizeVal > arStorageByte) {
+            this.isStorageFull = true;
+          } else {
+            this.isStorageFull = false;
+          }
         }
+
         this.$loading.close();
         this.onConfirm();
       }
