@@ -40,7 +40,7 @@
               label="Current Expiration date:"
               v-if="it.expireTime"
             >
-              {{ new Date(it.expireTime * 1e3).format() }}
+              {{ new Date(it.expireTime * 1e3).format("date") }}
             </e-kv>
           </div>
           <div class="mt-6 al-c" v-if="it.key == 'ipfs'">
@@ -58,7 +58,11 @@
           </div>
           <div class="mt-6" v-show="it.key == 'ipfs' && ipfsIdx == 1">
             <e-kv label="Pick plan:" center>
-              <pay-choose-num :options="it.monOpts" unit="Mon"></pay-choose-num>
+              <pay-choose-num
+                :options="it.monOpts"
+                unit="Mon"
+                @input="onIpfsTime"
+              ></pay-choose-num>
             </e-kv>
           </div>
           <div class="mt-6" v-show="it.key != 'ipfs' || ipfsIdx == 0">
@@ -79,7 +83,7 @@
               class="flex-1"
               v-if="it.key == 'ipfs'"
             >
-              {{ new Date(it.expireTime * 1e3).format() }}
+              {{ new Date(it.expireTime * 1e3).format("date") }}
             </e-kv>
           </div>
         </div>
@@ -137,6 +141,7 @@ export default {
       chooseMap: {},
       feeLoading: false,
       scrollMap: [],
+      ipfsTime: 0,
     };
   },
   computed: {
@@ -222,14 +227,11 @@ export default {
           let price = val * it.unitPrice;
           let until = "used up";
           if (it.key == "ipfs") {
-            if (!this.ipfsExpired) price = this.getFee(ipfsFee);
-            else price *= this.ipfsMon;
+            price = this.getFee(ipfsFee);
             if (price) {
               let start = this.usageInfo.ipfsStorageExpired;
               start = start ? start * 1e3 : Date.now();
-              until = new Date(start + this.ipfsMon * 30 * 86400 * 1e3).format(
-                "date"
-              );
+              until = new Date(start + this.ipfsTime * 1e3).format("date");
             }
           }
           return {
@@ -277,6 +279,10 @@ export default {
     this.getInfo();
   },
   methods: {
+    onIpfsTime(e) {
+      this.ipfsTime = e.val;
+      this.getPrice(ResourceType.IPFSStorage, this.form.ipfs);
+    },
     onChooseNum(e, it) {
       this.chooseMap = {
         ...this.chooseMap,
@@ -328,7 +334,7 @@ export default {
           let m = key == "buildTimeUnitPrice" ? 60 : Math.pow(1024, 3);
           if (key == "arStorageUnitPrice") m = Math.pow(1024, 2);
           if (/ipfs/i.test(key)) m *= 86400 * 30;
-          data[key] = data[key] / 1e18; // * m
+          data[key] = data[key] / 1e18;
           data[key + "Per"] = (data[key] * m * 100).toFixed(2);
         }
         this.priceInfo = data;
@@ -368,10 +374,6 @@ export default {
       }
       try {
         console.log("get price", resId);
-        if (typeof val == "object") {
-          this.ipfsMon = val.month;
-          val = val.stor;
-        }
         // let base = Math.pow(1024, resId == ResourceType.ARStorage ? 2 : 3);
         // if (resId == ResourceType.BuildingTime) {
         //   base = 60;
@@ -379,12 +381,13 @@ export default {
         let amount = val; // base *
         this.feeLoading = true;
         if (resId == ResourceType.IPFSStorage) {
-          if (!amount && !this.ipfsMon) return (this.feeLoading = false);
+          // console.log("ipfs", amount, this.ipfsTime);
+          if (!amount && !this.ipfsTime) return (this.feeLoading = false);
           fee = await this.curContract.DstChainPayment.ipfsAlloctionsFee(
             this.providerAddr,
             this.uuid,
             amount,
-            86400 * 30 * this.ipfsMon
+            this.ipfsTime
           );
           fee = [fee[0], fee[1]];
         } else {
