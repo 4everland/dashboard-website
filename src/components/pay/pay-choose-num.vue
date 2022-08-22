@@ -111,6 +111,7 @@ export default {
   },
   created() {
     // console.log(this.options, this.curIdx);
+    if (this.unit == "GB") this.unitIdx = 1;
   },
   watch: {
     inputVal(val) {
@@ -136,7 +137,7 @@ export default {
   methods: {
     onInput() {
       let val = 0;
-      let text = "None";
+      let text = "";
       if (this.curIdx > -1) {
         const item = this.list[this.curIdx];
         val = item.num;
@@ -147,7 +148,6 @@ export default {
         text = this.inputVal + " " + this.unitItem.text;
         val = this.inputVal * this.unitItem.value;
       }
-      console.log(text, val);
       this.$emit("input", {
         val,
         text,

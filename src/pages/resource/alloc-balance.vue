@@ -74,7 +74,7 @@ export default {
     async getList() {
       try {
         this.loading = true;
-        const { data } = await this.$http.get("$v3/bill/consume/list", {
+        const { data } = await this.$http.get("$v3/bill/v3/consume/list", {
           params: {
             page: this.page,
             size: 10,

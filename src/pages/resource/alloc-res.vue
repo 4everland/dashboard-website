@@ -96,7 +96,7 @@ export default {
       if (name == "time") platIdx = 0;
       else if (name == "ar") platIdx = 1;
       const list = platIdx == 0 ? this.list0 : this.list1;
-      const key = this.typeMap[name][this.platIdx == 0 ? "k0" : "k1"];
+      const key = this.typeMap[name][platIdx == 0 ? "k0" : "k1"];
       Array.sortArrayBy(list, key, true);
       let first = -1;
       return list.map((it) => {
@@ -129,10 +129,10 @@ export default {
           "/project/resource/consume?type=BANDWIDTH"
         );
         this.list0 = data;
-        // const {
-        //   data: { list },
-        // } = await this.$http.get("/bi/usages");
-        // this.list1 = list;
+        const {
+          data: { list },
+        } = await this.$http.get("/bi/usages");
+        this.list1 = list;
       } catch (error) {
         //
       }

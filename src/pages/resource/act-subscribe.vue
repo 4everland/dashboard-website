@@ -35,7 +35,11 @@
             <e-kv class="flex-1" :label="it.label + ':'">
               {{ it.percTxt }}
             </e-kv>
-            <e-kv class="flex-1" label="Expiration date" v-if="it.expireTime">
+            <e-kv
+              class="flex-1"
+              label="Current Expiration date:"
+              v-if="it.expireTime"
+            >
               {{ new Date(it.expireTime * 1e3).format() }}
             </e-kv>
           </div>
@@ -60,14 +64,22 @@
           <div class="mt-6" v-show="it.key != 'ipfs' || ipfsIdx == 0">
             <e-kv label="Pick plan:" center>
               <pay-choose-num
+                @input="onChooseNum($event, it)"
                 :options="it.opts"
                 :unit="it.unit"
               ></pay-choose-num>
             </e-kv>
           </div>
-          <div class="mt-6">
-            <e-kv label="Selected:" center>
-              <span class="color-1 fz-18"> 0 </span>
+          <div class="mt-6 al-c">
+            <e-kv label="Selected:" center class="flex-1">
+              <span class="color-1 fz-18"> {{ it.selected || "/" }} </span>
+            </e-kv>
+            <e-kv
+              label="Expiration date:"
+              class="flex-1"
+              v-if="it.key == 'ipfs'"
+            >
+              {{ new Date(it.expireTime * 1e3).format() }}
             </e-kv>
           </div>
         </div>
@@ -122,6 +134,7 @@ export default {
       form: {},
       ipfsIdx: 0,
       feeForm: {},
+      chooseMap: {},
       feeLoading: false,
       scrollMap: [],
     };
@@ -134,15 +147,18 @@ export default {
       const price = this.priceInfo;
       const info = this.usageInfo;
       if (!info) return [];
+      const chooseMap = this.chooseMap;
       return [
         {
           label: "Bandwidth",
           icon: "bandwidth.svg",
           id: ResourceType.Bandwidth,
           key: "bandwidth",
-          opts: [500 * Gb, 1000 * Gb, 2 * 1024 * Gb],
+          opts: [100 * Gb, 200 * Gb, 300 * Gb],
           unit: "GB",
+          selected: chooseMap["bandwidth"],
           unitPrice: price.trafficUnitPrice || 0,
+          unitPricePer: price.trafficUnitPricePer + " / 100GB",
           ...this.getPerc(
             info.usedFreeBandwidth + info.usedPurchasedBandwidth,
             info.freeBandwidth + info.purchasedBandwidth
@@ -155,7 +171,9 @@ export default {
           key: "buildMinutes",
           opts: [500, 1000, 1500],
           unit: "Min",
+          selected: chooseMap["buildMinutes"],
           unitPrice: price.buildTimeUnitPrice || 0,
+          unitPricePer: price.buildTimeUnitPricePer + " / 100Min",
           ...this.getPerc(
             parseInt(
               info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes
@@ -169,10 +187,12 @@ export default {
           icon: "ipfs.svg",
           id: ResourceType.IPFSStorage,
           key: "ipfs",
-          opts: [100 * Mb, 200 * Mb, 300 * Mb],
+          opts: [10 * Gb, 20 * Gb, 30 * Gb],
           monOpts: [1, 3, 6],
           unit: "GB",
+          selected: chooseMap["ipfs"],
           unitPrice: price.ipfsStorageUnitPrice || 0,
+          unitPricePer: price.ipfsStorageUnitPricePer + " / 100GB / Mon",
           expireTime: info.ipfsStorageExpired,
           ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
         },
@@ -181,9 +201,11 @@ export default {
           icon: "ar.svg",
           id: ResourceType.ARStorage,
           key: "ar",
-          opts: [100 * Gb, 200 * Gb, 300 * Gb],
+          opts: [100 * Mb, 200 * Mb, 300 * Mb],
           unit: "GB",
+          selected: chooseMap["ar"],
           unitPrice: price.arStorageUnitPrice || 0,
+          unitPricePer: price.arStorageUnitPricePer + " / 100MB",
           ...this.getPerc(info.usedArStorage, info.arStorage),
         },
       ];
@@ -192,16 +214,16 @@ export default {
       return this.isPolygon ? 0.01 : 20;
     },
     previewList() {
+      // console.log(this.feeForm);
       const ipfsFee = this.feeForm[ResourceType.IPFSStorage];
       return this.list
         .map((it) => {
-          const value = this.form[it.key] || 0;
-          let price = (value * it.unitPrice) / 100;
+          const val = this.form[it.key] || 0;
+          let price = val * it.unitPrice;
           let until = "used up";
           if (it.key == "ipfs") {
             if (!this.ipfsExpired) price = this.getFee(ipfsFee);
             else price *= this.ipfsMon;
-            // console.log("ipfs preview", value, price);
             if (price) {
               let start = this.usageInfo.ipfsStorageExpired;
               start = start ? start * 1e3 : Date.now();
@@ -213,7 +235,7 @@ export default {
           return {
             label: it.label,
             key: it.key,
-            value,
+            value: this.chooseMap[it.key],
             price,
             unit: it.unit,
             until: "Until " + until,
@@ -255,6 +277,14 @@ export default {
     this.getInfo();
   },
   methods: {
+    onChooseNum(e, it) {
+      this.chooseMap = {
+        ...this.chooseMap,
+        [it.key]: e.text,
+      };
+      this.form[it.key] = e.val;
+      this.getPrice(it.id, e.val);
+    },
     onSubmit() {
       this.$navTo("/resource/subscribe/order");
     },
@@ -270,11 +300,9 @@ export default {
       if (unit == "GB") {
         const usedObj = getSize(used, true);
         const totalObj = getSize(total, true);
-        let childUnit = "";
-        if (usedObj.unit != totalObj.unit) childUnit = usedObj.unit;
-        percTxt = `${usedObj.num} ${childUnit} / ${totalObj.num} ${totalObj.unit}`;
+        percTxt = `${usedObj.num} ${usedObj.unit} / ${totalObj.num} ${totalObj.unit}`;
       } else {
-        percTxt = `${used} / ${total} Min`;
+        percTxt = `${used} Min / ${total} Min`;
       }
       let perc = (used * 100) / total;
       perc = this.$utils.cutFixed(perc, 2);
@@ -300,7 +328,8 @@ export default {
           let m = key == "buildTimeUnitPrice" ? 60 : Math.pow(1024, 3);
           if (key == "arStorageUnitPrice") m = Math.pow(1024, 2);
           if (/ipfs/i.test(key)) m *= 86400 * 30;
-          data[key] = (data[key] * m * 100) / 1e18;
+          data[key] = data[key] / 1e18; // * m
+          data[key + "Per"] = (data[key] * m * 100).toFixed(2);
         }
         this.priceInfo = data;
 

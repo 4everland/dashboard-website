@@ -99,8 +99,8 @@ export default {
         // if (usedObj.unit == totalObj.unit) childUnit = "";
         percTxt = `${usedObj.num} ${childUnit} / ${totalObj.num} ${totalObj.unit}`;
       } else {
-        usedTxt = used + " Minutes";
-        percTxt = `${used} / ${total} ${unit}`;
+        usedTxt = used + " Min";
+        percTxt = `${used} Min / ${total} Min`;
       }
       let tip = "";
       let over = used - total;

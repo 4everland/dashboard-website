@@ -17,7 +17,7 @@
             </div>
             <div class="al-c mb-1">
               <span class="gray-7">Amount</span>
-              <span class="ml-auto color-1">{{ it.value }}{{ it.unit }}</span>
+              <span class="ml-auto color-1">{{ it.value }}</span>
             </div>
             <div class="al-c">
               <span class="gray-7">Effective Time</span>
@@ -41,7 +41,7 @@
             <label class="gray d-ib ta-r mr-2" style="min-width: 90px"
               >{{ it.label }}:</label
             >
-            <span> {{ it.unitPrice.toFixed(2) }} U / 100 {{ it.unit }} </span>
+            <span> {{ it.unitPricePer }} </span>
           </p>
         </div>
       </div>
