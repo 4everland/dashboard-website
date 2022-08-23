@@ -81,7 +81,7 @@
             <e-kv
               label="Expiration date:"
               class="flex-1"
-              v-if="it.key == 'ipfs'"
+              v-if="it.key == 'ipfs' && ipfsTime"
             >
               {{
                 new Date(it.expireTime * 1e3 + ipfsTime * 1e3).format("date")
