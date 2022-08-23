@@ -179,12 +179,10 @@ export default {
       }
     },
     async onConfirm() {
-      // console.log(this.curBucketInfo.arweave.sync);
-      // if (this.isStorageFull)
-      //   return this.$alert(
-      //     "Insufficient storage space is available to upload the file."
-      //   );
-
+      if (this.isStorageFull)
+        return this.$alert(
+          "Insufficient storage space is available to upload the file."
+        );
       this.addTasks(this.files, 10);
       this.files = [];
       this.$refs.uploadInput.handleRmoveAll();
@@ -199,8 +197,6 @@ export default {
         let isCurBucketAr = this.curBucketInfo.arweave.sync;
         let arStorageByte = null;
         const { data } = await this.$http.get("$v3/usage/ipfs");
-        // const { ipfsStorage, usedIpfsStorage } = data;
-        // return ipfsStorage - usedIpfsStorage;
         let ipfsStorageByte = data.storageByte;
         if (isCurBucketAr) {
           const { data } = await this.$http.get("$v3/usage/ar");
