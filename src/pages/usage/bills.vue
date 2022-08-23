@@ -26,7 +26,7 @@
         @click:row="onItem"
       >
         <template v-slot:item.hash="{ item }">
-          <e-link :href="$getPolygonUrl(item.hash)" @click.stop="onStop">
+          <e-link :href="$getTxLink(item.hash)" @click.stop="onStop">
             <span>{{ item.hash.cutStr(6, 6) }}</span>
           </e-link>
         </template>

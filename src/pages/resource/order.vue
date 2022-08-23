@@ -54,6 +54,7 @@
 <script>
 import mixin from "@/components/pay/mixin";
 import { mapState } from "vuex";
+import { BigNumber } from "@ethersproject/bignumber";
 
 export default {
   mixins: [mixin],
@@ -83,12 +84,13 @@ export default {
         const payloads = [];
         let totalFee = null;
         for (const key in form) {
-          const val = form[key];
+          let val = form[key];
           if (!val) continue;
-          const values = key == 4 ? val : [val];
+          const values = Array.isArray(val)
+            ? val.map((it) => BigNumber.from(it))
+            : [BigNumber.from(val)];
           for (const fee of values) {
             totalFee = totalFee ? totalFee.add(fee) : fee;
-            // console.log(key, totalFee);
           }
           payloads.push({
             resourceType: key,

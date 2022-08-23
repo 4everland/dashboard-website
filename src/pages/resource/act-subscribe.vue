@@ -120,6 +120,7 @@
 <script>
 import mixin from "@/components/pay/mixin";
 import { mapState } from "vuex";
+import { BigNumber } from "@ethersproject/bignumber";
 const Mb = Math.pow(1024, 2);
 const Gb = Math.pow(1024, 3);
 
@@ -297,10 +298,16 @@ export default {
       if (this.totalPrice < 0.01) {
         return this.$alert(`Configuration costs cannot be less than 0.01 USD.`);
       }
+      const form = {};
+      for (const key in this.feeForm) {
+        const val = this.feeForm[key];
+        if (!val) continue;
+        form[key] = Array.isArray(val) ? val.map((it) => it._hex) : val._hex;
+      }
       const orderInfo = {
         totalPrice: this.totalPrice,
         list: this.previewList,
-        feeForm: this.feeForm,
+        feeForm: form,
       };
       localStorage.orderInfo = JSON.stringify(orderInfo);
       this.$setState({

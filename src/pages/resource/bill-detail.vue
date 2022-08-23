@@ -43,7 +43,7 @@
           <a
             class="color-1 fz-14"
             target="_blank"
-            :href="$getPolygonUrl(info.hash)"
+            :href="$getTxLink(info.hash)"
             >{{ (info.hash || "").cutStr(6, 6) }}</a
           >
           <v-btn

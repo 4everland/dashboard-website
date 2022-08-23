@@ -27,8 +27,25 @@
       @click:row="onItem"
     >
       <template v-slot:item.hash="{ item }">
-        <e-link :href="$getPolygonUrl(item.hash)" @click.stop="onStop">
+        <e-link :href="$getTxLink(item.hash)" @click.stop="onStop">
           <span>{{ item.hash.cutStr(6, 6) }}</span>
+        </e-link>
+      </template>
+      <template v-slot:item.startChainHash="{ item }">
+        <e-link
+          :href="$getTxLink(item.startChainHash, item.startChain)"
+          @click.stop="onStop"
+        >
+          <span>{{ item.startChainHash.cutStr(6, 6) }}</span>
+        </e-link>
+      </template>
+      <template v-slot:item.endChainHash="{ item }">
+        <e-link
+          v-if="item.endChainHash"
+          :href="$getTxLink(item.endChainHash, item.endChain)"
+          @click.stop="onStop"
+        >
+          <span>{{ item.endChainHash.cutStr(6, 6) }}</span>
         </e-link>
       </template>
       <template v-slot:item.cost="{ item }">
@@ -73,6 +90,10 @@ export default {
       return this.typeIdx == 0
         ? [
             {
+              text: "#",
+              value: "seq",
+            },
+            {
               text: "Hash",
               value: "hash",
             },
@@ -98,6 +119,10 @@ export default {
             },
           ]
         : [
+            {
+              text: "#",
+              value: "seq",
+            },
             {
               text: "Type",
               value: "contentType",
@@ -126,6 +151,10 @@ export default {
               text: "CreateAt",
               value: "time",
             },
+            {
+              text: "State",
+              value: "status",
+            },
           ];
     },
   },
@@ -148,7 +177,8 @@ export default {
     async getList() {
       try {
         this.loading = true;
-        const url = this.typeIdx == 0 ? "/bill/list" : "/bill/cross/chain/list";
+        const isPolygon = this.typeIdx == 0;
+        const url = isPolygon ? "/bill/list" : "/bill/cross/chain/list";
         const { data } = await this.$http.get("$v3" + url, {
           params: {
             page: this.page,
@@ -159,8 +189,9 @@ export default {
         this.lastHash = lastHash;
         this.showPending = !!lastHash && this.page == 1;
         const list = data.rows;
-        this.list = list.map((it) => {
-          let time = this.typeIdx == 0 ? it.paymentTime : it.createdAt;
+        this.list = list.map((it, i) => {
+          it.seq = i + 1;
+          let time = isPolygon ? it.paymentTime : it.createdAt;
           it.network = "Polygon";
           if (this.showPending && lastHash.contentType == it.contentType) {
             const timeDiff = Math.abs(time - lastHash.paymentTime);
@@ -174,9 +205,12 @@ export default {
               this.showPending = false;
           }
           it.time = new Date(time * 1e3).format();
-          it.cost = this.$utils.getCost(
-            this.typeIdx == 0 ? it.usdt : it.amount
-          );
+          it.cost = this.$utils.getCost(it.usdt);
+          if (!isPolygon) {
+            it.endChain = this.getChainType(it.endChain);
+            it.startChain = this.getChainType(it.startChain);
+            it.status = it.states;
+          }
           return it;
         });
         this.total = data.count;
@@ -186,7 +220,13 @@ export default {
       this.loading = false;
     },
     onItem(row) {
-      this.$navTo(`/resource/bill-detail?id=` + row.id);
+      if (this.typeIdx == 0) this.$navTo(`/resource/bill-detail?id=` + row.id);
+    },
+    getChainType(id) {
+      id *= 1;
+      if ([137, 80001].includes(id)) return "Polygon";
+      if ([56, 97].includes(id)) return "BSC";
+      return "Mainnet";
     },
   },
 };
