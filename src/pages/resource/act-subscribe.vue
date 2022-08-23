@@ -155,6 +155,10 @@ export default {
       const info = this.usageInfo;
       if (!info) return [];
       const chooseMap = this.chooseMap;
+      let ipfsVal = chooseMap["ipfs"] || "";
+      if (chooseMap.ipfsRenewal) {
+        ipfsVal += (ipfsVal ? " , " : "") + chooseMap.ipfsRenewal;
+      }
       return [
         {
           label: "Bandwidth",
@@ -197,9 +201,7 @@ export default {
           opts: [10 * Gb, 20 * Gb, 30 * Gb],
           monOpts: [1, 3, 6],
           unit: "GB",
-          selected: `${chooseMap["ipfs"] || ""} ${
-            chooseMap.ipfsRenewal || ""
-          }`.trim(),
+          selected: ipfsVal,
           unitPrice: price.ipfsStorageUnitPrice || 0,
           unitPricePer: price.ipfsStorageUnitPricePer + " / 100GB / Mon",
           expireTime: info.ipfsStorageExpired,

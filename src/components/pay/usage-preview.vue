@@ -19,7 +19,6 @@
           </div>
           <div class="d-flex">
             <div class="ml-auto">
-              <span>Price:</span>
               <b class="red-1 fz-16 ml-1">{{ $utils.cutFixed(it.price, 4) }}</b>
               <span class="fz-12 ml-1">USD</span>
             </div>
