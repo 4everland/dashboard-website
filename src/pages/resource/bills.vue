@@ -144,7 +144,6 @@ export default {
     onStop() {},
     async onRefresh() {
       await this.getList();
-      this.$refs.act.getBalance();
     },
     async getList() {
       try {

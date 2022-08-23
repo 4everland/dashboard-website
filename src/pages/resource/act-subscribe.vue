@@ -83,7 +83,9 @@
               class="flex-1"
               v-if="it.key == 'ipfs'"
             >
-              {{ new Date(it.expireTime * 1e3).format("date") }}
+              {{
+                new Date(it.expireTime * 1e3 + ipfsTime * 1e3).format("date")
+              }}
             </e-kv>
           </div>
         </div>
@@ -215,7 +217,7 @@ export default {
         },
       ];
     },
-    minSend() {
+    minPrice() {
       return this.isPolygon ? 0.01 : 20;
     },
     previewList() {
@@ -292,6 +294,18 @@ export default {
       this.getPrice(it.id, e.val);
     },
     onSubmit() {
+      if (this.totalPrice < 0.01) {
+        return this.$alert(`Configuration costs cannot be less than 0.01 USD.`);
+      }
+      const orderInfo = {
+        totalPrice: this.totalPrice,
+        list: this.previewList,
+        feeForm: this.feeForm,
+      };
+      localStorage.orderInfo = JSON.stringify(orderInfo);
+      this.$setState({
+        orderInfo,
+      });
       this.$navTo("/resource/subscribe/order");
     },
     onTab() {
@@ -345,7 +359,8 @@ export default {
         );
         this.usageInfo = usageInfo;
         this.getCardTop();
-        const { i } = this.$route.query;
+        const { i, t } = this.$route.query;
+        this.ipfsIdx = t == 1 ? 1 : 0;
         if (i > -1) {
           this.tabIdx = i * 1;
           this.onTab();
@@ -363,26 +378,21 @@ export default {
       }
     },
     async getPrice(resId, val) {
+      console.log("get price", resId);
       if (!this.curContract) {
         this.showConnect();
         return;
       }
       let fee = 0;
-      if (!val) {
+      if (!val && (resId != ResourceType.IPFSStorage || !this.ipfsTime)) {
         this.feeForm[resId] = 0;
         return;
       }
       try {
-        console.log("get price", resId);
-        // let base = Math.pow(1024, resId == ResourceType.ARStorage ? 2 : 3);
-        // if (resId == ResourceType.BuildingTime) {
-        //   base = 60;
-        // }
-        let amount = val; // base *
+        let amount = val;
         this.feeLoading = true;
         if (resId == ResourceType.IPFSStorage) {
           // console.log("ipfs", amount, this.ipfsTime);
-          if (!amount && !this.ipfsTime) return (this.feeLoading = false);
           fee = await this.curContract.DstChainPayment.ipfsAlloctionsFee(
             this.providerAddr,
             this.uuid,

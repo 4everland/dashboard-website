@@ -53,11 +53,27 @@
             >
               <span class="fz-17 gray-3">{{ it.perc }}%</span>
             </v-progress-circular>
-            <div class="mt-3 gray fz-13" style="min-height: 40px">
+            <div class="mt-3 gray-6 fz-14 mb-1">
               <p>{{ it.percTxt }}</p>
             </div>
+            <div
+              class="mb-2 fz-12 gray"
+              :class="{
+                'op-0': !it.expired,
+              }"
+            >
+              {{ it.expired || "0" }}
+            </div>
             <div>
-              <e-link :href="'/resource/subscribe?i=' + i">Subscribe</e-link>
+              <e-link :href="'/resource/subscribe?i=' + i">{{
+                it.expired ? "Expansion" : "Subscribe"
+              }}</e-link>
+              <e-link
+                :href="'/resource/subscribe?t=1&i=' + i"
+                v-if="it.expired"
+                class="ml-3"
+                >Renewal</e-link
+              >
             </div>
           </v-col>
         </v-row>

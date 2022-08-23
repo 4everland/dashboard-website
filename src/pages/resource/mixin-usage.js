@@ -32,12 +32,13 @@ export default {
         {
           label: "IPFS Storage",
           name: "IPFS_STORAGE",
+          expired: `${new Date(info.ipfsStorageStart * 1e3).format(
+            "date"
+          )} - ${new Date(info.ipfsStorageExpired * 1000).format("date")}`,
           desc: info.ipfsStorage
             ? `Free resources ${getSize(info.ipfsDefaultStorage)} a year, ${
                 getSize(info.ipfsStorage - info.ipfsDefaultStorage) || "0G"
-              } purchased，${new Date(info.ipfsStorageStart * 1e3).format(
-                "date"
-              )} - ${new Date(info.ipfsStorageExpired * 1000).format("date")}.`
+              } purchased.`
             : "",
           ...this.getPercBy("ipfs"),
           descTip:

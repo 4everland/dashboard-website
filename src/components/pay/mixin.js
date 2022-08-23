@@ -195,7 +195,7 @@ export default {
         console.log("on approve error");
         this.onErr(error);
       }
-      this.approving = false;
+      this.$loading.close();
     },
     formatToken(value, fixed = 2, decimals = 18) {
       const v = value.div(
