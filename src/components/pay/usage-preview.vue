@@ -12,22 +12,15 @@
         >
           <div class="bdb-1 pb-3 mb-3">
             <div class="al-c mb-1">
-              <span class="gray-7">Content</span>
-              <span class="ml-auto">{{ it.label }}</span>
-            </div>
-            <div class="al-c mb-1">
-              <span class="gray-7">Amount</span>
-              <span class="ml-auto color-1">{{ it.value }}</span>
-            </div>
-            <div class="al-c">
-              <span class="gray-7">Effective Time</span>
-              <span class="ml-auto">{{ it.until || "Until used up" }}</span>
+              <span class="gray-7">{{ it.type }}</span>
+              <span class="ml-auto"> {{ it.label }}</span>
+              <span class="ml-2 color-1">{{ it.value }}</span>
             </div>
           </div>
           <div class="d-flex">
             <div class="ml-auto">
               <span>Price:</span>
-              <b class="red-1 fz-16 ml-1">{{ it.price.toFixed(2) }}</b>
+              <b class="red-1 fz-16 ml-1">{{ $utils.cutFixed(it.price, 4) }}</b>
               <span class="fz-12 ml-1">USD</span>
             </div>
           </div>

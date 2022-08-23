@@ -20,7 +20,7 @@
         <tbody v-if="list">
           <tr v-for="(it, i) in list" :key="i">
             <td>{{ i + 1 }}</td>
-            <td>Purchase</td>
+            <td>{{ it.type }}</td>
             <td>{{ it.label }}</td>
             <td>{{ it.value }}</td>
             <td>{{ $utils.cutFixed(it.price, 4) }} USD</td>

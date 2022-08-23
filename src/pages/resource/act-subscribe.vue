@@ -120,7 +120,6 @@
 <script>
 import mixin from "@/components/pay/mixin";
 import { mapState } from "vuex";
-import { BigNumber } from "@ethersproject/bignumber";
 const Mb = Math.pow(1024, 2);
 const Gb = Math.pow(1024, 3);
 
@@ -198,7 +197,9 @@ export default {
           opts: [10 * Gb, 20 * Gb, 30 * Gb],
           monOpts: [1, 3, 6],
           unit: "GB",
-          selected: chooseMap["ipfs"],
+          selected: `${chooseMap["ipfs"] || ""} ${
+            chooseMap.ipfsRenewal || ""
+          }`.trim(),
           unitPrice: price.ipfsStorageUnitPrice || 0,
           unitPricePer: price.ipfsStorageUnitPricePer + " / 100GB / Mon",
           expireTime: info.ipfsStorageExpired,
@@ -223,32 +224,39 @@ export default {
     },
     previewList() {
       // console.log(this.feeForm);
-      const ipfsFee = this.feeForm[ResourceType.IPFSStorage];
-      return this.list
-        .map((it) => {
-          const val = this.form[it.key] || 0;
-          let price = val * it.unitPrice;
-          let until = "used up";
-          if (it.key == "ipfs") {
-            price = this.getFee(ipfsFee);
-            if (price) {
-              let start = this.usageInfo.ipfsStorageExpired;
-              start = start ? start * 1e3 : Date.now();
-              until = new Date(start + this.ipfsTime * 1e3).format("date");
-            }
+      const list = [];
+      for (const id in this.feeForm) {
+        const isIpfs = id == ResourceType.IPFSStorage;
+        const fee = this.feeForm[id];
+        const item = this.list.find((it) => it.id == id);
+        const num = this.form[item.key] || 0;
+        let price = num * item.unitPrice;
+        if (fee) price = this.getFee(fee);
+        if (!price) continue;
+        const row = {
+          type: isIpfs ? "Expansion" : "Purchase",
+          label: item.label,
+          value: this.chooseMap[item.key],
+          price,
+        };
+        let renewPrice = 0;
+        if (isIpfs) {
+          renewPrice = this.getFee(fee[1]);
+          if (renewPrice) {
+            row.price -= renewPrice;
           }
-          return {
-            label: it.label,
-            key: it.key,
-            value: this.chooseMap[it.key],
-            price,
-            unit: it.unit,
-            until: "Until " + until,
-          };
-        })
-        .filter((it) => {
-          return it.price > 0;
-        });
+        }
+        if (row.price) list.push(row);
+        if (renewPrice) {
+          list.push({
+            ...row,
+            type: "Renewal",
+            value: this.chooseMap.ipfsRenewal,
+            price: renewPrice,
+          });
+        }
+      }
+      return list;
     },
     totalPrice() {
       return this.previewList
@@ -282,15 +290,19 @@ export default {
     this.getInfo();
   },
   methods: {
+    setChooseMap(key, val) {
+      this.chooseMap = {
+        ...this.chooseMap,
+        [key]: val,
+      };
+    },
     onIpfsTime(e) {
+      this.setChooseMap("ipfsRenewal", e.text);
       this.ipfsTime = e.val;
       this.getPrice(ResourceType.IPFSStorage, this.form.ipfs);
     },
     onChooseNum(e, it) {
-      this.chooseMap = {
-        ...this.chooseMap,
-        [it.key]: e.text,
-      };
+      this.setChooseMap(it.key, e.text);
       this.form[it.key] = e.val;
       this.getPrice(it.id, e.val);
     },
