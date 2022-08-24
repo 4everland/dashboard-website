@@ -13,7 +13,7 @@
     </e-right-opt-wrap>
     <v-skeleton-loader type="article" v-if="!usageInfo" />
     <template v-else>
-      <div class="pos-s z-1" style="top: 60px">
+      <div class="pos-s z-1" style="top: 60px" v-show="!noTabs">
         <v-tabs v-model="tabIdx" class="bdrs-6 shadow-2 e-tabs-2">
           <v-tab @click="onTab" v-for="(it, i) in list" :key="i">{{
             it.label
@@ -34,6 +34,9 @@
           <div class="mt-6 al-c">
             <e-kv class="flex-1" :label="it.label + ':'">
               {{ it.percTxt }}
+              <span v-if="it.freeTxt" class="gray fz-12 ml-2"
+                >(Including free {{ it.freeTxt }})</span
+              >
             </e-kv>
             <e-kv
               class="flex-1"
@@ -76,7 +79,7 @@
           </div>
           <div class="mt-6 al-c">
             <e-kv label="Selected:" center class="flex-1">
-              <span class="color-1 fz-18"> {{ it.selected || "/" }} </span>
+              <span class="color-1 fz-18"> {{ it.selected || "-" }} </span>
             </e-kv>
             <e-kv
               label="Expiration date:"
@@ -103,7 +106,7 @@
           will be displayed as 0.01USD.
         </p>
       </div>
-      <div style="height: 50vh"></div>
+      <div style="height: 50vh" v-if="!noTabs"></div>
 
       <pay-confirm
         label="Configuration costs"
@@ -148,6 +151,7 @@ export default {
   },
   computed: {
     ...mapState({
+      noTabs: (s) => s.clientHeight > 1300,
       scrollTop: (s) => s.scrollTop,
     }),
     list() {
@@ -172,7 +176,9 @@ export default {
           unitPricePer: price.trafficUnitPricePer + " / 100GB",
           ...this.getPerc(
             info.usedFreeBandwidth + info.usedPurchasedBandwidth,
-            info.freeBandwidth + info.purchasedBandwidth
+            info.freeBandwidth + info.purchasedBandwidth,
+            "GB",
+            info.freeBandwidth
           ),
         },
         {
@@ -190,7 +196,8 @@ export default {
               info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes
             ),
             info.freeBuildMinutes + info.purchasedBuildMinutes,
-            "Minutes"
+            "Minutes",
+            info.freeBuildMinutes
           ),
         },
         {
@@ -205,7 +212,12 @@ export default {
           unitPrice: price.ipfsStorageUnitPrice || 0,
           unitPricePer: price.ipfsStorageUnitPricePer + " / 100GB / Mon",
           expireTime: info.ipfsStorageExpired,
-          ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
+          ...this.getPerc(
+            info.usedIpfsStorage,
+            info.ipfsStorage,
+            "GB",
+            info.ipfsDefaultStorage
+          ),
         },
         {
           label: "Arweave",
@@ -217,7 +229,12 @@ export default {
           selected: chooseMap["ar"],
           unitPrice: price.arStorageUnitPrice || 0,
           unitPricePer: price.arStorageUnitPricePer + " / 100MB",
-          ...this.getPerc(info.usedArStorage, info.arStorage),
+          ...this.getPerc(
+            info.usedArStorage,
+            info.arStorage,
+            "GB",
+            info.arDefaultStorage
+          ),
         },
       ];
     },
@@ -333,21 +350,26 @@ export default {
         window.scrollTo(0, top);
       });
     },
-    getPerc(used, total, unit = "GB") {
+    getPerc(used, total, unit = "GB", free = 0) {
       const getSize = this.$utils.getFileSize;
       let percTxt = "";
+      let freeTxt = "";
+      if (total == free) free = 0;
       if (unit == "GB") {
         const usedObj = getSize(used, true);
         const totalObj = getSize(total, true);
         percTxt = `${usedObj.num} ${usedObj.unit} / ${totalObj.num} ${totalObj.unit}`;
+        if (free) freeTxt = getSize(free);
       } else {
         percTxt = `${used} Min / ${total} Min`;
+        if (free) freeTxt = free + " Min";
       }
       let perc = (used * 100) / total;
       perc = this.$utils.cutFixed(perc, 2);
       return {
         perc,
         percTxt,
+        freeTxt,
       };
     },
     getCardTop() {

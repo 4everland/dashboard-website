@@ -97,7 +97,18 @@
         </tr>
         <tr>
           <td>12 months+</td>
-          <td>Settlement method</td>
+          <td>
+            Settlement method
+            <e-tooltip top>
+              <v-icon slot="ref" color="#999" size="14" class="ml-2"
+                >mdi-alert-circle</v-icon
+              >
+              <div>
+                Cost of storage duration=Storage*duration*43/10 to the 18th
+                power
+              </div>
+            </e-tooltip>
+          </td>
         </tr>
         <tr>
           <td rowspan="2">Arweave</td>

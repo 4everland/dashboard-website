@@ -14,7 +14,16 @@
         v-if="!list || resizing"
       ></v-skeleton-loader>
       <div class="ta-c pt-4" v-else-if="!list.length">
-        <img src="/img/svg/overview/pie-def.svg" height="150" />
+        <!-- <img src="/img/svg/overview/pie-def.svg" height="150" /> -->
+        <v-progress-circular
+          class="circular-0"
+          :size="130"
+          :width="20"
+          :value="100"
+          color="#e6e9ea"
+        >
+          <span class="fz-12 gray">No Data</span>
+        </v-progress-circular>
       </div>
       <div
         v-else
