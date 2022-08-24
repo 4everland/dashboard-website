@@ -251,7 +251,7 @@ export default {
       id *= 1;
       if ([137, 80001].includes(id)) return "Polygon";
       if ([56, 97].includes(id)) return "BSC";
-      return "Mainnet";
+      return "Ethereum";
     },
   },
 };
