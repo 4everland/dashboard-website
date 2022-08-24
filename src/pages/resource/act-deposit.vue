@@ -80,6 +80,10 @@ export default {
   },
   methods: {
     async onMax() {
+      if (!this.curContract) {
+        this.showConnect();
+        return;
+      }
       await this.getWalletBalance();
       if (!this.walletBalance) this.$alert("Insufficient balance");
       else this.amount = this.walletBalance;

@@ -17,7 +17,7 @@
           text
           small
           @click="amount = balance"
-          v-if="balance || curAmount < balance"
+          v-if="balance && curAmount < balance"
           >Max</v-btn
         >
         <span class="fz-14 ml-1 mr-2">USDC</span>
