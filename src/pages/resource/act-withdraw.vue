@@ -2,7 +2,7 @@
   <div class="hide-msg">
     <e-kv label="Account Balance" min-width="120px" center>
       <span class="fz-18">{{ balance === null ? "--" : balance }}</span>
-      <span class="gray-6 fz-13 ml-1">USD</span>
+      <span class="gray-6 fz-13 ml-1">USDC</span>
     </e-kv>
     <e-kv2 class="mt-7" label="Withdraw Amount">
       <div class="d-ib bd-1 bdc-c1 bdrs-2">
@@ -13,7 +13,7 @@
           :max="balance"
           style="width: 240px"
         />
-        <span class="fz-14 ml-1 mr-2">USD</span>
+        <span class="fz-14 ml-1 mr-2">USDC</span>
       </div>
     </e-kv2>
     <e-kv2 class="mt-7" label="Address">

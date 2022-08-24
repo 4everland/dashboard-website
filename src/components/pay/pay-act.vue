@@ -22,7 +22,7 @@
         <div class="pt-7" v-else>
           <div class="d-flex al-end lh-1">
             <span class="fz-30">{{ balance }}</span>
-            <span class="gray-6 ml-3">USD</span>
+            <span class="gray-6 ml-3">USDC</span>
           </div>
           <div class="mt-6 al-c">
             <v-btn color="primary" to="/resource/subscribe">Subscribe</v-btn>

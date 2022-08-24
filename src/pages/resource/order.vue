@@ -4,7 +4,7 @@
       <span class="gray-6 fz-14">Pending order</span>
       <!-- <span class="ml-auto">Total:</span> -->
       <!-- <span class="fz-16 color-1 ml-2 mr-1">{{ totalPrice }}</span>
-      <span class="gray">USD</span> -->
+      <span class="gray">USDC</span> -->
     </div>
     <div class="ov-a">
       <table class="w100p e-table-1 mt-4 fz-14">
@@ -23,7 +23,7 @@
             <td>{{ it.type }}</td>
             <td>{{ it.label }}</td>
             <td>{{ it.value }}</td>
-            <td>{{ $utils.cutFixed(it.price, 4) }} USD</td>
+            <td>{{ $utils.cutFixed(it.price, 4) }} USDC</td>
           </tr>
         </tbody>
       </table>

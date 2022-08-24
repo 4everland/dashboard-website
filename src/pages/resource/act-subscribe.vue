@@ -102,8 +102,8 @@
         <p>
           2. In pay-per-use billing mode, the amount shown in the price
           calculator is rounded to two decimal places if any, and the third
-          place is rounded off. If the rounded amount is less than 0.01USD, it
-          will be displayed as 0.01USD.
+          place is rounded off. If the rounded amount is less than 0.01USDC, it
+          will be displayed as 0.01USDC.
         </p>
       </div>
       <div style="height: 50vh" v-if="!noTabs"></div>
@@ -325,7 +325,9 @@ export default {
     },
     onSubmit() {
       if (this.totalPrice < 0.01) {
-        return this.$alert(`Configuration costs cannot be less than 0.01 USD.`);
+        return this.$alert(
+          `Configuration costs cannot be less than 0.01 USDC.`
+        );
       }
       const form = {};
       for (const key in this.feeForm) {

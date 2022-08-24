@@ -55,7 +55,7 @@
       </template>
       <template v-slot:item.cost="{ item }">
         <span>{{ item.cost }}</span>
-        <span class="gray-7 ml-1">USD</span>
+        <span class="gray-7 ml-1">USDC</span>
       </template>
       <template v-slot:item.status="{ item }">
         <h-status :val="item.status" />

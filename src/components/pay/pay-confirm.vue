@@ -7,7 +7,7 @@
       <span class="fz-14 gray-6">{{ label }}:</span>
       <slot></slot>
       <b class="red-1 fz-25 ml-3">{{ price }}</b>
-      <span class="gray-6 ml-2 fz-15">USD</span>
+      <span class="gray-6 ml-2 fz-15">USDC</span>
       <v-btn
         color="error"
         depressed
