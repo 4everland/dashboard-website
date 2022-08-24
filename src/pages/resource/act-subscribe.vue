@@ -41,11 +41,7 @@
                 >(Including free {{ it.freeTxt }})</span
               >
             </e-kv>
-            <e-kv
-              class="flex-1"
-              label="Current Expiration date:"
-              v-if="it.expireTime"
-            >
+            <e-kv class="flex-1" label="Expiration date:" v-if="it.expireTime">
               {{ new Date(it.expireTime * 1e3).format("date") }}
             </e-kv>
           </div>
@@ -66,7 +62,7 @@
             <e-kv label="Pick plan:" center>
               <pay-choose-num
                 :options="it.monOpts"
-                unit="Mon"
+                unit="Mth"
                 @input="onIpfsTime"
               ></pay-choose-num>
             </e-kv>
@@ -177,7 +173,7 @@ export default {
           unit: "GB",
           selected: chooseMap["bandwidth"],
           unitPrice: price.trafficUnitPrice || 0,
-          unitPricePer: price.trafficUnitPricePer + " / 100GB",
+          unitPricePer: price.trafficUnitPricePer + "U / 100GB",
           ...this.getPerc(
             info.usedFreeBandwidth + info.usedPurchasedBandwidth,
             info.freeBandwidth + info.purchasedBandwidth,
@@ -194,7 +190,7 @@ export default {
           unit: "Min",
           selected: chooseMap["buildMinutes"],
           unitPrice: price.buildTimeUnitPrice || 0,
-          unitPricePer: price.buildTimeUnitPricePer + " / 100Min",
+          unitPricePer: price.buildTimeUnitPricePer + "U / 100Min",
           ...this.getPerc(
             parseInt(
               info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes
@@ -214,7 +210,7 @@ export default {
           unit: "GB",
           selected: ipfsVal,
           unitPrice: price.ipfsStorageUnitPrice || 0,
-          unitPricePer: price.ipfsStorageUnitPricePer + " / 100GB / Mon",
+          unitPricePer: price.ipfsStorageUnitPricePer + "U / 100GB / Mth",
           expireTime: info.ipfsStorageExpired,
           ...this.getPerc(
             info.usedIpfsStorage,
@@ -232,7 +228,7 @@ export default {
           unit: "GB",
           selected: chooseMap["ar"],
           unitPrice: price.arStorageUnitPrice || 0,
-          unitPricePer: price.arStorageUnitPricePer + " / 100MB",
+          unitPricePer: price.arStorageUnitPricePer + "U / 100MB",
           ...this.getPerc(
             info.usedArStorage,
             info.arStorage,
@@ -396,7 +392,7 @@ export default {
           if (key == "arStorageUnitPrice") m = Math.pow(1024, 2);
           if (/ipfs/i.test(key)) m *= 86400 * 30;
           data[key] = data[key] / 1e18;
-          data[key + "Per"] = (data[key] * m * 100).toFixed(2);
+          data[key + "Per"] = this.$utils.cutFixed(data[key] * m * 100, 4);
         }
         this.priceInfo = data;
 

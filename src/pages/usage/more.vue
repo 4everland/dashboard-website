@@ -197,7 +197,7 @@ export default {
           label: "IPFS",
           id: ResourceType.IPFSStorage,
           key: "ipfs",
-          unit: "GB / Mon",
+          unit: "GB / Mth",
           unitPrice: info.ipfsStorageUnitPrice || 0,
         },
         {

@@ -6,12 +6,15 @@
     </e-kv>
     <e-kv2 class="mt-7" label="Deposit Amount">
       <div class="d-ib bd-1 bdc-c1 bdrs-2">
-        <input
-          class="pa-2"
-          v-model="amount"
-          type="number"
-          style="width: 240px"
-        />
+        <input class="pa-2" v-model="amount" type="text" style="width: 240px" />
+        <!-- <span class="pa-2 fz-14 fw-b color-1">Max</span> -->
+        <v-btn
+          text
+          small
+          @click="onMax"
+          v-if="!walletBalance || curAmount < walletBalance"
+          >Max</v-btn
+        >
         <span class="fz-14 ml-1 mr-2">USDC</span>
       </div>
     </e-kv2>
@@ -30,7 +33,7 @@
 
     <div style="height: 10vh"></div>
     <pay-confirm
-      :price="amount || 0"
+      :price="curAmount"
       :text="isApproved ? 'Deposit' : 'Approve'"
       :loading="approving"
       @submit="onSubmit"
@@ -48,14 +51,25 @@ export default {
       amount: "",
     };
   },
+  computed: {
+    curAmount() {
+      return this.$utils.cutFixed(this.amount || 0, 4);
+    },
+  },
   mounted() {
     this.getBalance();
   },
   watch: {
     amount(val) {
+      // console.log(val);
       if (val > 0) {
-        if (val % 0.01 > 0) this.amount = this.$utils.cutFixed(val, 4);
-      } else this.amount = "";
+        if (this.walletBalance && val > this.walletBalance) {
+          this.amount = this.walletBalance;
+        }
+        if (/\.\d/.test(val)) this.amount = this.$utils.cutFixed(val, 4);
+      } else {
+        this.amount = parseInt(val) || "";
+      }
     },
     curContract(val) {
       if (val && this.needSubmit) {
@@ -65,8 +79,13 @@ export default {
     },
   },
   methods: {
+    async onMax() {
+      await this.getWalletBalance();
+      if (!this.walletBalance) this.$alert("Insufficient balance");
+      else this.amount = this.walletBalance;
+    },
     async onSubmit() {
-      let num = this.amount;
+      let num = this.curAmount;
       let msg = "";
       if (num === "") {
         msg = "Deposit amount required";

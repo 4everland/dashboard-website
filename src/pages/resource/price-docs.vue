@@ -11,7 +11,7 @@
     <h3>Billing Methods</h3>
     <div>
       4EVERLAND's service billing includes network bandwidth, build minutes,
-      IPFS storage, IPFS storage minutes, and Arweave storage. You will receive
+      IPFS storage, IPFS storage duration, and Arweave storage. You will receive
       separate invoices for some services based on your usage. The system
       currently supports two payment methods, one for purchasing resources
       directly and one for depositing wallet balance. The system will give
@@ -68,7 +68,7 @@
         </tr>
         <tr>
           <td>100GB+</td>
-          <td>12.60U</td>
+          <td>8.5U / 100G</td>
         </tr>
         <tr>
           <td rowspan="2">Build Minutes</td>
@@ -78,17 +78,39 @@
         </tr>
         <tr>
           <td>250Min+</td>
-          <td>0.32U</td>
+          <td>2U / 100Min</td>
         </tr>
         <tr>
-          <td rowspan="4">IPFS</td>
+          <td rowspan="4">
+            IPFS
+            <e-menu open-on-hover>
+              <v-icon slot="ref" color="#999" size="14" class="ml-2"
+                >mdi-alert-circle</v-icon
+              >
+              <div class="pa-5 fz-14 gray bg-white" style="max-width: 500px">
+                <p>IIPFS supports capacity expansion and renewal.</p>
+                <p>
+                  1. Capacity expansion refers to the "expansion" of purchased
+                  storage. The expansion will not change the storage expiration
+                  time, and the newly added storage will be superimposed on the
+                  old one.
+                </p>
+                <p>
+                  2. Renewal refers to the "renewal" of the purchased storage.
+                  The storage will remain the same after renewal, and the
+                  storage expiration time will be extended from the original
+                  expiration time to the number of years selected in the order.
+                </p>
+              </div>
+            </e-menu>
+          </td>
           <td rowspan="2">Storage</td>
           <td>0-5GB</td>
           <td>Free / 1 year</td>
         </tr>
         <tr>
           <td>5GB+</td>
-          <td>11.97U</td>
+          <td>2U / 100G / Mth</td>
         </tr>
         <tr>
           <td rowspan="2">Storage duration</td>
@@ -118,24 +140,9 @@
         </tr>
         <tr>
           <td>100MB+</td>
-          <td>0.98U</td>
+          <td>0.31U</td>
         </tr>
       </tbody>
     </table>
-
-    <div class="mt-8 fz-14 gray">
-      <p>IIPFS supports capacity expansion and renewal.</p>
-      <p>
-        1. Capacity expansion refers to the "expansion" of purchased storage.
-        The expansion will not change the storage expiration time, and the newly
-        added storage will be superimposed on the old one.
-      </p>
-      <p>
-        2. Renewal refers to the "renewal" of the purchased storage. The storage
-        will remain the same after renewal, and the storage expiration time will
-        be extended from the original expiration time to the number of years
-        selected in the order.
-      </p>
-    </div>
   </div>
 </template>

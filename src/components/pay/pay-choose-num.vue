@@ -86,11 +86,11 @@ export default {
           },
         ];
       }
-      if (this.unit == "Mon") {
+      if (this.unit == "Mth") {
         const mon = 30 * 86400;
         return [
           {
-            text: "Mon",
+            text: "Mth",
             value: mon,
           },
           {
@@ -118,7 +118,7 @@ export default {
       if (val > 0) {
         let max = 1024;
         if (this.unit == "Min") max = 10000;
-        else if (this.unit == "Mon") max = 12;
+        else if (this.unit == "Mth") max = 12;
         this.inputVal = Math.min(val * 1, max);
         this.curIdx = -1;
       } else {
@@ -142,7 +142,7 @@ export default {
         const item = this.list[this.curIdx];
         val = item.num;
         if (this.unit == "Min") val *= 60;
-        else if (this.unit == "Mon") val *= 30 * 86400;
+        else if (this.unit == "Mth") val *= 30 * 86400;
         text = item.text;
       } else if (this.inputVal > 0) {
         text = this.inputVal + " " + this.unitItem.text;

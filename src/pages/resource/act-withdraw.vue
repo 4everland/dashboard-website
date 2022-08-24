@@ -9,10 +9,17 @@
         <input
           class="pa-2"
           v-model="amount"
-          type="number"
+          type="text"
           :max="balance"
           style="width: 240px"
         />
+        <v-btn
+          text
+          small
+          @click="amount = balance"
+          v-if="balance || curAmount < balance"
+          >Max</v-btn
+        >
         <span class="fz-14 ml-1 mr-2">USDC</span>
       </div>
     </e-kv2>
@@ -38,7 +45,7 @@
 
     <div style="height: 10vh"></div>
     <pay-confirm
-      :price="amount || 0"
+      :price="curAmount"
       text="Withdraw"
       @submit="onSubmit"
     ></pay-confirm>
@@ -55,6 +62,11 @@ export default {
       amount: "",
       address: "",
     };
+  },
+  computed: {
+    curAmount() {
+      return this.$utils.cutFixed(this.amount || 0, 4);
+    },
   },
   mounted() {
     this.getBalance();
@@ -73,8 +85,10 @@ export default {
     amount(val) {
       if (val > 0) {
         if (val > this.balance) this.amount = this.balance;
-        else if (val % 0.01 > 0) this.amount = this.$utils.cutFixed(val, 4);
-      } else this.amount = "";
+        if (/\.\d/.test(val)) this.amount = this.$utils.cutFixed(val, 4);
+      } else {
+        this.amount = parseInt(val) || "";
+      }
     },
     curContract(val) {
       console.log(val);
@@ -91,7 +105,7 @@ export default {
       else if (this.connectAddr) this.address = this.connectAddr;
     },
     async onSubmit() {
-      let num = this.amount;
+      let num = this.curAmount;
       const addr = (this.address = this.address.trim());
       let msg = "";
       if (num === "") {
