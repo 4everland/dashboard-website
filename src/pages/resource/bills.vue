@@ -202,6 +202,7 @@ export default {
         const list = data.rows;
         this.list = list.map((it, i) => {
           if (it.contentType == "Recharge") it.contentType = "Deposit";
+          if (it.contentType == "Airdrop") it.contentType = "Giveaway";
           if (["Deposit", "Withdraw"].includes(it.contentType)) {
             it.resource = it.contentType + " Account";
           } else if (it.contentType == "Purchase") {

@@ -2,7 +2,7 @@
   <v-card>
     <div class="pa-5">
       <div class="al-c">
-        <span class="gray-5">Available Credit</span>
+        <span class="gray-5">Balance</span>
         <e-tooltip top>
           <v-icon slot="ref" color="#999" size="14" class="ml-2"
             >mdi-help-circle</v-icon
