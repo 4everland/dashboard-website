@@ -21,7 +21,10 @@
         </v-tabs>
       </div>
       <v-card
-        class="mt-5 shadow-2"
+        class="mt-5 shadow-2 trans-200 shadow-23"
+        :class="{
+          'shadow-3': i == chooseIdx,
+        }"
         :ref="'card' + i"
         v-for="(it, i) in list"
         :key="i"
@@ -138,6 +141,7 @@ export default {
   data() {
     return {
       tabIdx: 0,
+      chooseIdx: -1,
       priceInfo: {},
       usageInfo: null,
       form: {},
@@ -292,7 +296,7 @@ export default {
     scrollTop(val) {
       let toIdx = 0;
       for (const i in this.scrollMap) {
-        const top = this.scrollMap[i];
+        const top = this.scrollMap[i] - 50;
         if (val >= top) toIdx = i;
       }
       this.tabIdx = toIdx * 1;
@@ -407,6 +411,10 @@ export default {
         if (i > -1) {
           this.tabIdx = i * 1;
           this.onTab();
+          this.chooseIdx = this.tabIdx;
+          setTimeout(() => {
+            this.chooseIdx = -1;
+          }, 500);
         }
       } catch (error) {
         this.$confirm(error.message, {

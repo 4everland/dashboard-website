@@ -153,7 +153,13 @@ ul, li {
   box-shadow: 0 1px 2px #f0f0f0;
 }
 .shadow-2 {
-  box-shadow: 0 1px 4px rgba(0,0,0,0.11)!important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.11) !important;
+}
+.shadow-3, .shadow-23:hover {
+  box-shadow: 0 1px 6px rgb(0,0,0,0.2) !important;
+}
+.shadow-3 {
+  background: #fef6f6 !important;
 }
 .bg-white-op, .bg-white.pos-s {
   background: rgba(255, 255, 255, 0.92);
