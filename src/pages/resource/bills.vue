@@ -54,8 +54,10 @@
         </e-link>
       </template>
       <template v-slot:item.cost="{ item }">
-        <span>{{ item.cost }}</span>
-        <span class="gray-7 ml-1">USDC</span>
+        <div v-if="item.usdt > 0">
+          <span>{{ item.cost }}</span>
+          <span class="gray-7 ml-1">USDC</span>
+        </div>
       </template>
       <template v-slot:item.status="{ item }">
         <h-status :val="item.status" />
