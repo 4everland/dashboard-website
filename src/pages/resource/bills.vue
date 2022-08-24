@@ -27,12 +27,17 @@
       @click:row="onItem"
     >
       <template v-slot:item.hash="{ item }">
-        <e-link :href="$getTxLink(item.hash)" @click.stop="onStop">
+        <e-link
+          v-if="item.hash"
+          :href="$getTxLink(item.hash)"
+          @click.stop="onStop"
+        >
           <span>{{ item.hash.cutStr(6, 6) }}</span>
         </e-link>
       </template>
       <template v-slot:item.startChainHash="{ item }">
         <e-link
+          v-if="item.startChainHash"
           :href="$getTxLink(item.startChainHash, item.startChain)"
           @click.stop="onStop"
         >
@@ -100,6 +105,10 @@ export default {
             {
               text: "Type",
               value: "contentType",
+            },
+            {
+              text: "Resource",
+              value: "resource",
             },
             {
               text: "Network",
@@ -190,6 +199,22 @@ export default {
         this.showPending = !!lastHash && this.page == 1;
         const list = data.rows;
         this.list = list.map((it, i) => {
+          if (it.contentType == "Recharge") it.contentType = "Deposit";
+          if (["Deposit", "Withdraw"].includes(it.contentType)) {
+            it.resource = it.contentType + " Account";
+          } else if (it.contentType == "Purchase") {
+            const arr = JSON.parse(it.contentJson);
+            it.resource = arr
+              .map((it) => {
+                let amount = it.overuse || it.amount;
+                if (/ipfs/i.test(it.type) && it.contentType == "Deductions") {
+                  amount /= 3600;
+                }
+                const row = this.$utils.getPurchase(it.type, amount);
+                return `${row.name} ${row.amount}${row.unit}`;
+              })
+              .join(", ");
+          }
           it.seq = i + 1;
           let time = isPolygon ? it.paymentTime : it.createdAt;
           it.network = "Polygon";

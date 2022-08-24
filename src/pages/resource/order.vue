@@ -109,9 +109,11 @@ export default {
             totalFee = totalFee.div(1e12);
           }
           console.log("totalFee", totalFee.toString());
-          const feeMsg = await this.curContract[this.chainKey].calcFeeV2(
-            ...params
-          );
+          const target = this.curContract[this.chainKey];
+          if (!target) {
+            return this.onConnect();
+          }
+          const feeMsg = await target.calcFeeV2(...params);
           // console.log("feeMsg", feeMsg.toString());
           // params.push(maxSlippage);
           params.push({

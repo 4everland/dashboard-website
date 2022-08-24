@@ -85,17 +85,18 @@ export default {
           this.showConnect();
           return;
         }
+        const target = this.curContract.FundPool;
+        if (!target) {
+          return this.onConnect();
+        }
         if (!this.isApproved) {
           return this.onApprove();
         }
         this.$loading();
         await this.checkAccount();
-        let balance = await this.curContract.FundPool.balanceOf(
-          this.providerAddr,
-          this.uuid
-        );
+        let balance = await target.balanceOf(this.providerAddr, this.uuid);
         console.log("balance1", balance.toString());
-        const tx = await this.curContract.FundPool.recharge(
+        const tx = await target.recharge(
           this.providerAddr,
           this.uuid,
           num * 1e6
@@ -103,14 +104,11 @@ export default {
         const receipt = await tx.wait();
         console.log("receipt", receipt);
         this.addHash(tx, num, "Deposit");
-        balance = await this.curContract.FundPool.balanceOf(
-          this.providerAddr,
-          this.uuid
-        );
+        balance = await target.balanceOf(this.providerAddr, this.uuid);
         console.log("balance2", balance.toString());
         this.$loading.close();
         await this.$alert("Your deposit was successful.");
-        this.$navTo("/resource");
+        this.$navTo("/resource/bills");
       } catch (error) {
         this.onErr(error);
       }

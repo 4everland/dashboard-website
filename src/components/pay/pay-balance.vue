@@ -87,7 +87,7 @@ export default {
         tooltip: {
           trigger: "item",
           formatter: ({ data }) => {
-            return `${data.name}: <b>${data.value}U</b>`;
+            return `${data.name}`; //: <b>${data.value}U</b>
           },
         },
         series: [

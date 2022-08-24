@@ -261,13 +261,11 @@ export default {
       return list;
     },
     totalPrice() {
-      return this.previewList
-        .reduce((a, b) => {
-          let price = b.price;
-          return a + price;
-        }, 0)
-        .toFixed(2)
-        .replace(".00", "");
+      let price = this.previewList.reduce((a, b) => {
+        let price = b.price;
+        return a + price;
+      }, 0);
+      return this.$utils.cutFixed(price, 4);
     },
     ipfsExpired() {
       return this.usageInfo.ipfsExpired;

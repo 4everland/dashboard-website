@@ -156,8 +156,9 @@ Vue.prototype.$utils = {
     }
     return it;
   },
-  getCost(usdt) {
+  getCost(usdt, len = 4) {
     if (usdt < 0.0001) return "<0.0001";
-    return this.cutFixed(usdt, usdt < 0.01 ? 4 : 2);
+    if (!len) len = usdt < 0.01 ? 4 : 2;
+    return this.cutFixed(usdt, len);
   },
 };
