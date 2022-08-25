@@ -135,7 +135,6 @@ export default {
   },
   computed: {
     ...mapState({
-      netType: (s) => s.netType,
       connectAddr: (s) => s.connectAddr,
     }),
   },
