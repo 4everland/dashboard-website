@@ -244,7 +244,7 @@ export default {
         return;
       }
       try {
-        if (this.selected[0].arStatus == "desynced") {
+        if (this.selected.length && this.selected[0].arStatus == "desynced") {
           await this.beforeArSync();
         }
         const { Bucket } = this.pathInfo;
@@ -253,9 +253,13 @@ export default {
           bucket: Bucket,
           key: this.getFileKey(name),
         });
+
         this.$setMsg({
           name: "updateUsage",
         });
+        if (this.inFile) {
+          this.headObject();
+        }
       } catch (error) {
         //
       }
