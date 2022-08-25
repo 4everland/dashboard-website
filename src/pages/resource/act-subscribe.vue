@@ -41,8 +41,14 @@
                 >(Including free {{ it.freeTxt }})</span
               >
             </e-kv>
-            <e-kv class="flex-1" label="Expiration date:" v-if="it.expireTime">
-              {{ new Date(it.expireTime * 1e3).format("date") }}
+            <e-kv
+              class="flex-1"
+              :label="(it.expireLabel || 'Expiration date') + ':'"
+            >
+              <span v-if="it.expireTime">{{
+                new Date(it.expireTime * 1e3).format("date")
+              }}</span>
+              <span v-else>Permanent </span>
             </e-kv>
           </div>
           <div class="mt-6 al-c" v-if="it.key == 'ipfs'">
@@ -87,10 +93,11 @@
             </e-kv>
             <e-kv
               label="Expiration date:"
+              center
               class="flex-1"
               v-if="it.key == 'ipfs' && ipfsTime"
             >
-              <span class="color-1">
+              <span class="color-1 fz-18">
                 {{
                   new Date(it.expireTime * 1e3 + ipfsTime * 1e3).format("date")
                 }}
@@ -181,6 +188,8 @@ export default {
           selected: chooseMap["bandwidth"],
           unitPrice: price.trafficUnitPrice || 0,
           unitPricePer: price.trafficUnitPricePer + "U / 100GB",
+          expireTime: info.freeBandwidthExpired,
+          expireLabel: "Free expiration date",
           ...this.getPerc(
             info.usedFreeBandwidth + info.usedPurchasedBandwidth,
             info.freeBandwidth + info.purchasedBandwidth,
@@ -199,6 +208,8 @@ export default {
           selected: chooseMap["buildMinutes"],
           unitPrice: price.buildTimeUnitPrice || 0,
           unitPricePer: price.buildTimeUnitPricePer + "U / 100Min",
+          expireTime: info.freeBuildMinutesExpired,
+          expireLabel: "Free expiration date",
           ...this.getPerc(
             parseInt(
               info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes
@@ -370,17 +381,17 @@ export default {
       let selectTxt = "";
       if (total == free) free = 0;
       if (unit == "GB") {
-        const usedObj = getSize(used, true);
-        const totalObj = getSize(total, true);
-        percTxt = `${usedObj.num} ${usedObj.unit} / ${totalObj.num} ${totalObj.unit}`;
+        used = getSize(used);
+        const totalObj = getSize(total);
+        percTxt = `${used} / ${totalObj}`;
         if (free) freeTxt = getSize(free);
-        if (buy) selectTxt = getSize(buy) + " / " + getSize(buy + total);
+        if (buy) selectTxt = used + " / " + getSize(buy + total);
       } else {
         percTxt = `${used} Min / ${total} Min`;
         if (free) freeTxt = free + " Min";
         if (buy) {
           buy = parseInt(buy / 60);
-          selectTxt = `${buy} Min / ${buy + total} Min`;
+          selectTxt = `${used} Min / ${buy + total} Min`;
         }
       }
       let perc = (used * 100) / total;
