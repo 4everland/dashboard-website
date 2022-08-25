@@ -42,8 +42,15 @@
                   >mdi-alert-circle</v-icon
                 >
                 <div>
-                  Including free {{ it.freeTxt }}. {{ it.expireLabel }}:
-                  {{ new Date(it.expireTime * 1e3).format("date") }}
+                  <div>Including free {{ it.freeTxt }}.</div>
+                  <div>
+                    {{ it.expireLabel }}:
+                    {{
+                      it.expireTime
+                        ? new Date(it.expireTime * 1e3).format("date")
+                        : "Permanent"
+                    }}.
+                  </div>
                 </div>
               </e-tooltip>
               <span v-else-if="it.freeTxt" class="gray fz-12 ml-2"
@@ -58,7 +65,6 @@
               <span v-if="it.expireTime">{{
                 new Date(it.expireTime * 1e3).format("date")
               }}</span>
-              <span v-else>Permanent </span>
             </e-kv>
           </div>
           <div class="mt-6 al-c" v-if="it.key == 'ipfs'">
@@ -264,6 +270,7 @@ export default {
           selected: chooseMap["ar"],
           unitPrice: price.arStorageUnitPrice || 0,
           unitPricePer: price.arStorageUnitPricePer + "U / 100MB",
+          expireLabel: "Expiration date",
           ...this.getPerc(
             info.usedArStorage,
             info.arStorage,

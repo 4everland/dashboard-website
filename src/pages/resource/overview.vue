@@ -64,7 +64,7 @@
             >
               {{ it.expired || "0" }}
             </div>
-            <div>
+            <div class="fz-15">
               <e-link :href="'/resource/subscribe?i=' + i">{{
                 it.expired ? "Expansion" : "Purchase"
               }}</e-link>
