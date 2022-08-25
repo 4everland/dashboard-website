@@ -148,14 +148,14 @@ Vue.prototype.$utils = {
       it.amount = parseInt(it.amount / 60);
       it.unit = "Min";
     } else if (/ipfs/i.test(it.type) && it.amount == "0") {
-      it.amount = "Duration Extension";
+      it.amount = "renewal";
     } else {
       const obj = this.getFileSize(it.amount, true);
       it.amount = obj.num;
       it.unit = obj.unit;
     }
     if (time) {
-      it.until = "Until " + new Date(time * 1e3).format("date");
+      it.until = "until " + new Date(time * 1e3).format("date");
     }
     return it;
   },
