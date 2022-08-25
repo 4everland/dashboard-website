@@ -1,65 +1,70 @@
 <template>
   <div>
-    <v-card outlined>
-      <div class="card-head-1">Details</div>
-      <div class="pa-4" v-if="!info">
-        <v-skeleton-loader type="article" />
-      </div>
-      <div class="pa-4" v-else>
-        <e-kv label="Content">
-          <p>{{ info.contentType }}</p>
-          <v-data-table
-            class="mt-4 mb-6"
-            v-if="list.length"
-            :headers="headers"
-            :items="list"
-            hide-default-footer
-            disable-pagination
-          >
-            <template v-slot:item.amount="{ item }">
-              <span>{{ item.amount }}</span>
-              <span class="gray-7 ml-1">{{ item.unit || "" }}</span>
-            </template>
-            <template v-slot:item.cost="{ item }">
-              <span>{{ item.cost }}</span>
-              <span class="gray-7 ml-1">USDC</span>
-            </template>
-          </v-data-table>
+    <h3>Details</h3>
+    <div v-if="!info">
+      <v-skeleton-loader type="article" />
+    </div>
+    <div v-else>
+      <div class="d-flex">
+        <e-kv label="Type">
+          <span>{{ info.contentType }}</span>
         </e-kv>
-        <e-kv class="mt-4" label="Amount">
-          <span>{{ info.cost }}</span>
-          <span class="gray-7 ml-2">USDC</span>
-        </e-kv>
-        <e-kv class="mt-4" label="Network">
-          <span>Polygon</span>
-        </e-kv>
-        <e-kv class="mt-4" label="Status">
-          <span>{{ info.status }}</span>
-        </e-kv>
-        <e-kv class="mt-4" label="Time">
+        <e-kv class="ml-15 pl-12" label="Time">
           <span>{{ info.time }}</span>
         </e-kv>
-        <e-kv class="mt-4" label="Hash">
-          <a
-            class="color-1 fz-14"
-            target="_blank"
-            :href="$getTxLink(info.hash)"
-            >{{ (info.hash || "").cutStr(6, 6) }}</a
-          >
-          <v-btn
-            v-if="info.hash"
-            class="ml-2 pos-r"
-            style="top: -1px"
-            icon
-            x-small
-            v-clipboard="info.hash"
-            @success="$toast('Copied to clipboard !')"
-          >
-            <img src="/img/svg/copy.svg" width="11" />
-          </v-btn>
-        </e-kv>
       </div>
-    </v-card>
+      <e-kv class="mt-6" label="Network">
+        <span>Polygon</span>
+      </e-kv>
+      <e-kv class="mt-6" label="Hash">
+        <a
+          class="color-1 fz-14"
+          target="_blank"
+          :href="$getTxLink(info.hash)"
+          >{{ (info.hash || "").cutStr(6, 6) }}</a
+        >
+        <v-btn
+          v-if="info.hash"
+          class="ml-2 pos-r"
+          style="top: -1px"
+          icon
+          x-small
+          v-clipboard="info.hash"
+          @success="$toast('Copied to clipboard !')"
+        >
+          <img src="/img/svg/copy.svg" width="11" />
+        </v-btn>
+      </e-kv>
+      <e-kv class="mt-6" label="Amount">
+        <span>{{ info.cost }}</span>
+        <span class="gray-7 ml-2">USDC</span>
+      </e-kv>
+      <e-kv class="mt-6 e-table-head-1" label="Resource">
+        <div v-if="info.resource">
+          {{ info.resource }}
+        </div>
+        <v-data-table
+          class="mb-6"
+          v-if="list.length"
+          :headers="headers"
+          :items="list"
+          hide-default-footer
+          disable-pagination
+        >
+          <template v-slot:item.amount="{ item }">
+            <span>{{ item.amount }}</span>
+            <span class="gray-7 ml-1">{{ item.unit || "" }}</span>
+          </template>
+          <template v-slot:item.cost="{ item }">
+            <span>{{ item.cost }}</span>
+            <span class="gray-7 ml-1">USDC</span>
+          </template>
+        </v-data-table>
+      </e-kv>
+      <e-kv class="mt-6" label="Status">
+        <span>{{ info.status }}</span>
+      </e-kv>
+    </div>
   </div>
 </template>
 
@@ -92,11 +97,11 @@ export default {
           value: "name",
         },
         {
-          text: "Amount",
+          text: "Specification",
           value: "amount",
         },
         {
-          text: "Cost",
+          text: "Amount",
           value: "cost",
         },
         {
@@ -111,6 +116,13 @@ export default {
     this.getInfo();
   },
   methods: {
+    setData(it) {
+      if (it.contentType == "Recharge") it.contentType = "Deposit";
+      if (it.contentType == "Airdrop") it.contentType = "Giveaway";
+      if (["Deposit", "Withdraw"].includes(it.contentType)) {
+        it.resource = it.contentType + " Account";
+      }
+    },
     async getInfo() {
       try {
         const { id } = this.$route.query;
@@ -118,6 +130,7 @@ export default {
         console.log(data);
         data.time = new Date(data.paymentTime * 1000).format();
         data.cost = this.$utils.getCost(data.usdt);
+        this.setData(data);
         this.info = data;
       } catch (error) {
         console.log(error);

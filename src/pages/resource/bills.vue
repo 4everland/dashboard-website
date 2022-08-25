@@ -59,6 +59,11 @@
           <span class="gray-7 ml-1">USDC</span>
         </div>
       </template>
+      <template v-slot:item.resource="{ item }">
+        <div class="gray-5 fz-13" style="width: 140px">
+          {{ item.resource }}
+        </div>
+      </template>
       <template v-slot:item.status="{ item }">
         <h-status :val="item.status" />
       </template>

@@ -303,9 +303,13 @@ ul.ls-none {
 }
 
 .v-data-table-header {
-  // background: #F9FBFC;
   th {
     font-size: 14px!important;
+  }
+}
+.e-table-head-1 {
+  .v-data-table-header {
+    background: #F9FBFC;
   }
 }
 .tr{
