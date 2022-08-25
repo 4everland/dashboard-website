@@ -75,7 +75,7 @@ export default {
       const list = JSON.parse(this.info.contentJson || "[]");
       return list.map((it) => {
         it.cost = this.$utils.getCost(it.cost);
-        it.time = "Until used up";
+        it.time = "Permanent";
         if (it.effectiveTime) {
           it.time = "Until " + new Date(it.effectiveTime * 1000).format("date");
         }

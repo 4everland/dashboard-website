@@ -60,7 +60,7 @@
         </div>
       </template>
       <template v-slot:item.resource="{ item }">
-        <div class="gray-5 fz-13" style="max-width: 140px">
+        <div class="gray-5 fz-13 line-2" style="max-width: 140px">
           {{ item.resource }}
         </div>
       </template>
@@ -218,8 +218,14 @@ export default {
                 if (/ipfs/i.test(it.type) && it.contentType == "Deductions") {
                   amount /= 3600;
                 }
-                const row = this.$utils.getPurchase(it.type, amount);
-                return `${row.name} ${row.amount}${row.unit}`;
+                const row = this.$utils.getPurchase(
+                  it.type,
+                  amount,
+                  it.effectiveTime
+                );
+                return `${row.name} ${row.amount}${row.unit || ""} ${
+                  row.until || ""
+                }`;
               })
               .join(", ");
           }

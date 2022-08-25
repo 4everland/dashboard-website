@@ -15,7 +15,7 @@
     <input
       v-model="inputVal"
       type="tel"
-      class="bd-1 pa-1 pl-2 bdrs-2 fz-14 mr-2"
+      class="bd-1 bdc-c pa-1 pl-2 bdrs-2 fz-14 mr-2"
       :class="{
         'bdc-c1': inputVal > 0,
       }"

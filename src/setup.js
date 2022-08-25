@@ -132,7 +132,7 @@ Vue.prototype.$utils = {
     if (i == -1) return num;
     return str.substring(0, i + keep + 1) * 1;
   },
-  getPurchase(type, amount = 0) {
+  getPurchase(type, amount = 0, time) {
     const nameMap = {
       BUILD_TIME: "Build Minutes",
       TRAFFIC: "Bandwidth",
@@ -153,6 +153,9 @@ Vue.prototype.$utils = {
       const obj = this.getFileSize(it.amount, true);
       it.amount = obj.num;
       it.unit = obj.unit;
+    }
+    if (time) {
+      it.until = "Until " + new Date(time * 1e3).format("date");
     }
     return it;
   },

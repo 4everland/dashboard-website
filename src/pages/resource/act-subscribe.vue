@@ -50,13 +50,18 @@
               :options="['Expansion', 'Renewal']"
               v-model="ipfsIdx"
             ></e-radio-btn>
-            <span class="ml-4 gray-7 fz-14">
-              {{
-                ipfsIdx == 0
-                  ? "Expand storage capacity without changing the expiration date. "
-                  : "Extend expiration date without changing the storage capacity."
-              }}
-            </span>
+            <e-tooltip top>
+              <v-icon slot="ref" color="#999" size="14" class="ml-3"
+                >mdi-help-circle</v-icon
+              >
+              <div>
+                {{
+                  ipfsIdx == 0
+                    ? "Expand storage capacity without changing the expiration date. "
+                    : "Extend expiration date without changing the storage capacity."
+                }}
+              </div>
+            </e-tooltip>
           </div>
           <div class="mt-6" v-show="it.key == 'ipfs' && ipfsIdx == 1">
             <e-kv label="Pick plan:" center>
@@ -78,16 +83,18 @@
           </div>
           <div class="mt-6 al-c">
             <e-kv label="Selected:" center class="flex-1">
-              <span class="color-1 fz-18"> {{ it.selected || "-" }} </span>
+              <span class="color-1 fz-18"> {{ it.selectTxt || "-" }} </span>
             </e-kv>
             <e-kv
               label="Expiration date:"
               class="flex-1"
               v-if="it.key == 'ipfs' && ipfsTime"
             >
-              {{
-                new Date(it.expireTime * 1e3 + ipfsTime * 1e3).format("date")
-              }}
+              <span class="color-1">
+                {{
+                  new Date(it.expireTime * 1e3 + ipfsTime * 1e3).format("date")
+                }}
+              </span>
             </e-kv>
           </div>
         </div>
@@ -178,7 +185,8 @@ export default {
             info.usedFreeBandwidth + info.usedPurchasedBandwidth,
             info.freeBandwidth + info.purchasedBandwidth,
             "GB",
-            info.freeBandwidth
+            info.freeBandwidth,
+            this.form.bandwidth
           ),
         },
         {
@@ -197,7 +205,8 @@ export default {
             ),
             info.freeBuildMinutes + info.purchasedBuildMinutes,
             "Minutes",
-            info.freeBuildMinutes
+            info.freeBuildMinutes,
+            this.form.buildMinutes
           ),
         },
         {
@@ -216,7 +225,8 @@ export default {
             info.usedIpfsStorage,
             info.ipfsStorage,
             "GB",
-            info.ipfsDefaultStorage
+            info.ipfsDefaultStorage,
+            this.form.ipfs
           ),
         },
         {
@@ -233,7 +243,8 @@ export default {
             info.usedArStorage,
             info.arStorage,
             "GB",
-            info.arDefaultStorage
+            info.arDefaultStorage,
+            this.form.ar
           ),
         },
       ];
@@ -352,19 +363,25 @@ export default {
         window.scrollTo(0, top);
       });
     },
-    getPerc(used, total, unit = "GB", free = 0) {
+    getPerc(used, total, unit = "GB", free = 0, buy) {
       const getSize = this.$utils.getFileSize;
       let percTxt = "";
       let freeTxt = "";
+      let selectTxt = "";
       if (total == free) free = 0;
       if (unit == "GB") {
         const usedObj = getSize(used, true);
         const totalObj = getSize(total, true);
         percTxt = `${usedObj.num} ${usedObj.unit} / ${totalObj.num} ${totalObj.unit}`;
         if (free) freeTxt = getSize(free);
+        if (buy) selectTxt = getSize(buy) + " / " + getSize(buy + total);
       } else {
         percTxt = `${used} Min / ${total} Min`;
         if (free) freeTxt = free + " Min";
+        if (buy) {
+          buy = parseInt(buy / 60);
+          selectTxt = `${buy} Min / ${buy + total} Min`;
+        }
       }
       let perc = (used * 100) / total;
       perc = this.$utils.cutFixed(perc, 2);
@@ -372,6 +389,7 @@ export default {
         perc,
         percTxt,
         freeTxt,
+        selectTxt,
       };
     },
     getCardTop() {
