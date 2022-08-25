@@ -225,7 +225,7 @@ export default {
           icon: "ipfs.svg",
           id: ResourceType.IPFSStorage,
           key: "ipfs",
-          opts: [10 * Gb, 20 * Gb, 30 * Gb],
+          opts: [100 * Gb, 200 * Gb, 300 * Gb],
           monOpts: [1, 3, 6],
           unit: "GB",
           selected: ipfsVal,

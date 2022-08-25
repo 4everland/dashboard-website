@@ -21,7 +21,7 @@
       }"
       style="width: 70px"
     />
-    <e-menu offset-y v-if="unitList.length">
+    <e-menu offset-y open-on-hover v-if="unitList.length">
       <v-btn plain small color="#000" class="al-c" slot="ref">
         <span>{{ unitItem.text }}</span>
         <v-icon>mdi-menu-down</v-icon>
