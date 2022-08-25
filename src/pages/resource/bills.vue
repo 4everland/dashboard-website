@@ -60,7 +60,7 @@
         </div>
       </template>
       <template v-slot:item.resource="{ item }">
-        <div class="gray-5 fz-13" style="width: 140px">
+        <div class="gray-5 fz-13" style="max-width: 140px">
           {{ item.resource }}
         </div>
       </template>
@@ -253,7 +253,8 @@ export default {
       this.loading = false;
     },
     onItem(row) {
-      if (this.typeIdx == 0) this.$navTo(`/resource/bill-detail?id=` + row.id);
+      let sub = this.typeIdx == 0 ? "" : "-cross";
+      this.$navTo(`/resource/bill-detail${sub}?id=` + row.id);
     },
     getChainType(id) {
       id *= 1;

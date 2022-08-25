@@ -4,6 +4,7 @@ import Withdraw from "./act-withdraw";
 import Deposit from "./act-deposit";
 import Bills from "./bills";
 import BillDetail from "./bill-detail";
+import BillDetail2 from "./bill-detail2";
 import PriceDocs from "./price-docs";
 import Order from "./order";
 import AllocRes from "./alloc-res";
@@ -34,6 +35,26 @@ export default [
         },
         {
           text: `Price Docs`,
+        },
+      ],
+    },
+  },
+  {
+    path: "/resource/bill-detail-cross",
+    component: BillDetail2,
+    meta: {
+      title: "Expenditure Details",
+      links: [
+        {
+          text: "Resource",
+          to: "/resource",
+        },
+        {
+          text: "Transaction History",
+          to: "/resource/bills",
+        },
+        {
+          text: `Expenditure Details`,
         },
       ],
     },

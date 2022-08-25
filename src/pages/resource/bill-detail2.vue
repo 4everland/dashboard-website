@@ -13,31 +13,57 @@
           <span>{{ info.time }}</span>
         </e-kv>
       </div>
-      <e-kv class="mt-6" label="Network">
-        <span>Polygon</span>
-      </e-kv>
-      <e-kv class="mt-6" label="Hash">
-        <a
-          class="color-1 fz-14"
-          target="_blank"
-          :href="$getTxLink(info.hash)"
-          >{{ (info.hash || "").cutStr(6, 6) }}</a
-        >
-        <v-btn
-          v-if="info.hash"
-          class="ml-2 pos-r"
-          style="top: -1px"
-          icon
-          x-small
-          v-clipboard="info.hash"
-          @success="$toast('Copied to clipboard !')"
-        >
-          <img src="/img/svg/copy.svg" width="11" />
-        </v-btn>
-      </e-kv>
+      <div class="d-flex mt-6">
+        <e-kv class="flex-1" label="From">
+          <span>{{ info.startChain }}</span>
+        </e-kv>
+        <e-kv class="flex-2 ml-2" label="Hash" v-if="info.startChainHash">
+          <a
+            class="color-1 fz-14"
+            target="_blank"
+            :href="$getTxLink(info.startChainHash, info.startChain)"
+            >{{ (info.startChainHash || "").cutStr(6, 6) }}</a
+          >
+          <v-btn
+            class="ml-2 pos-r"
+            style="top: -1px"
+            icon
+            x-small
+            v-clipboard="info.startChainHash"
+            @success="$toast('Copied to clipboard !')"
+          >
+            <img src="/img/svg/copy.svg" width="11" />
+          </v-btn>
+        </e-kv>
+      </div>
+
+      <div class="d-flex mt-6">
+        <e-kv class="flex-1" label="To">
+          <span>{{ info.endChain }}</span>
+        </e-kv>
+        <e-kv class="flex-2 ml-2" label="Hash" v-if="info.endChainHash">
+          <a
+            class="color-1 fz-14"
+            target="_blank"
+            :href="$getTxLink(info.endChainHash, info.endChain)"
+            >{{ (info.endChainHash || "").cutStr(6, 6) }}</a
+          >
+          <v-btn
+            class="ml-2 pos-r"
+            style="top: -1px"
+            icon
+            x-small
+            v-clipboard="info.endChainHash"
+            @success="$toast('Copied to clipboard !')"
+          >
+            <img src="/img/svg/copy.svg" width="11" />
+          </v-btn>
+        </e-kv>
+      </div>
+
       <e-kv class="mt-6" label="Amount">
         <span>{{ info.cost }}</span>
-        <span class="gray-7 ml-2">USDC</span>
+        <span v-if="info.cost" class="gray-7 ml-2">USDC</span>
       </e-kv>
       <e-kv class="mt-6 e-table-head-1" label="Resource">
         <div v-if="info.resource">
@@ -122,19 +148,31 @@ export default {
       if (["Deposit", "Withdraw"].includes(it.contentType)) {
         it.resource = it.contentType + " Account";
       }
+      it.endChain = this.getChainType(it.endChain);
+      it.startChain = this.getChainType(it.startChain);
+      it.status = it.states;
     },
     async getInfo() {
       try {
         const { id } = this.$route.query;
-        const { data } = await this.$http.get("$v3/bill/capital/detail/" + id);
+        const { data } = await this.$http.get(
+          "$v3/bill/cross/chain/capital/detail/" + id
+        );
         console.log(data);
-        data.time = new Date(data.paymentTime * 1000).format();
-        data.cost = this.$utils.getCost(data.usdt);
+        data.time = new Date(data.createdAt * 1000).format();
+        if (!data.usdt && data.amount) data.usdt = data.amount.value / 1e18;
+        data.cost = !data.usdt ? "" : this.$utils.getCost(data.usdt);
         this.setData(data);
         this.info = data;
       } catch (error) {
         console.log(error);
       }
+    },
+    getChainType(id) {
+      id *= 1;
+      if ([137, 80001].includes(id)) return "Polygon";
+      if ([56, 97].includes(id)) return "BSC";
+      return "Ethereum";
     },
   },
 };
