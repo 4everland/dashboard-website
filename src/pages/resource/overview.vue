@@ -66,7 +66,7 @@
             </div>
             <div>
               <e-link :href="'/resource/subscribe?i=' + i">{{
-                it.expired ? "Expansion" : "Subscribe"
+                it.expired ? "Expansion" : "Purchase"
               }}</e-link>
               <e-link
                 :href="'/resource/subscribe?t=1&i=' + i"

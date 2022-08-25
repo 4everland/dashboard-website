@@ -1,11 +1,11 @@
 import Overview from "./overview";
-import Subscribe from "./act-subscribe";
+import Purchase from "./act-subscribe";
 import Withdraw from "./act-withdraw";
 import Deposit from "./act-deposit";
 import Bills from "./bills";
 import BillDetail from "./bill-detail";
 import BillDetail2 from "./bill-detail2";
-import PriceDocs from "./price-docs";
+import PriceDocs from "./pricing";
 import Order from "./order";
 import AllocRes from "./alloc-res";
 import AllocBalance from "./alloc-balance";
@@ -20,21 +20,21 @@ export default [
     },
   },
   {
-    path: "/resource/price-docs",
+    path: "/resource/pricing",
     component: PriceDocs,
     meta: {
-      title: "Price Docs",
+      title: "Pricing",
       links: [
         {
           text: "Resource",
           to: "/resource",
         },
         {
-          text: "Subscribe",
+          text: "Purchase",
           to: "/resource/subscribe",
         },
         {
-          text: `Price Docs`,
+          text: `Pricing`,
         },
       ],
     },
@@ -161,9 +161,9 @@ export default [
   },
   {
     path: "/resource/subscribe",
-    component: Subscribe,
+    component: Purchase,
     meta: {
-      title: "Subscribe",
+      title: "Purchase",
       isTab: 1,
       links: [
         {
@@ -171,7 +171,7 @@ export default [
           to: "/resource",
         },
         {
-          text: `Subscribe`,
+          text: `Purchase`,
         },
       ],
     },
@@ -180,14 +180,14 @@ export default [
     path: "/resource/subscribe/order",
     component: Order,
     meta: {
-      title: "Subscribe",
+      title: "Purchase",
       links: [
         {
           text: "Resource",
           to: "/resource",
         },
         {
-          text: `Subscribe`,
+          text: `Purchase`,
           to: "/resource/subscribe",
         },
         {

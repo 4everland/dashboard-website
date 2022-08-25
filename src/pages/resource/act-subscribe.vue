@@ -9,7 +9,7 @@
 <template>
   <div>
     <e-right-opt-wrap>
-      <v-btn to="/resource/price-docs" outlined small>Price Docs</v-btn>
+      <v-btn to="/resource/pricing" outlined small>Pricing</v-btn>
     </e-right-opt-wrap>
     <v-skeleton-loader type="article" v-if="!usageInfo" />
     <template v-else>
@@ -35,15 +35,25 @@
             <span class="ml-3 fz-15">{{ it.label }}</span>
           </div>
           <div class="mt-6 al-c">
-            <e-kv class="flex-1" :label="it.label + ':'">
-              {{ it.percTxt }}
-              <span v-if="it.freeTxt" class="gray fz-12 ml-2"
+            <e-kv class="flex-1" valueClass="al-c" :label="it.label + ':'">
+              <span>{{ it.percTxt }}</span>
+              <e-tooltip top v-if="it.expireLabel">
+                <v-icon slot="ref" color="#999" size="13" class="ml-2"
+                  >mdi-alert-circle</v-icon
+                >
+                <div>
+                  Including free {{ it.freeTxt }}. {{ it.expireLabel }}:
+                  {{ new Date(it.expireTime * 1e3).format("date") }}
+                </div>
+              </e-tooltip>
+              <span v-else-if="it.freeTxt" class="gray fz-12 ml-2"
                 >(Including free {{ it.freeTxt }})</span
               >
             </e-kv>
             <e-kv
+              v-if="!it.expireLabel"
               class="flex-1"
-              :label="(it.expireLabel || 'Expiration date') + ':'"
+              label="Expiration date:"
             >
               <span v-if="it.expireTime">{{
                 new Date(it.expireTime * 1e3).format("date")
@@ -88,18 +98,22 @@
             </e-kv>
           </div>
           <div class="mt-6 al-c">
-            <e-kv label="Selected:" center class="flex-1">
+            <e-kv label="Picked:" center class="flex-1">
               <span class="color-1 fz-18"> {{ it.selectTxt || "-" }} </span>
             </e-kv>
             <e-kv
               label="Expiration date:"
               center
               class="flex-1"
-              v-if="it.key == 'ipfs' && ipfsTime"
+              v-if="it.key == 'ipfs'"
             >
               <span class="color-1 fz-18">
                 {{
-                  new Date(it.expireTime * 1e3 + ipfsTime * 1e3).format("date")
+                  !form.ipfs && !ipfsTime
+                    ? "-"
+                    : new Date(it.expireTime * 1e3 + ipfsTime * 1e3).format(
+                        "date"
+                      )
                 }}
               </span>
             </e-kv>
@@ -379,7 +393,7 @@ export default {
       let percTxt = "";
       let freeTxt = "";
       let selectTxt = "";
-      if (total == free) free = 0;
+      // if (total == free) free = 0;
       if (unit == "GB") {
         used = getSize(used);
         const totalObj = getSize(total);

@@ -25,7 +25,7 @@
             <span class="gray-6 ml-3">USDC</span>
           </div>
           <div class="mt-6 al-c">
-            <v-btn color="primary" to="/resource/subscribe">Subscribe</v-btn>
+            <v-btn color="primary" to="/resource/subscribe">Purchase</v-btn>
             <v-btn color="primary" outlined class="ml-4" to="/resource/deposit"
               >Deposit</v-btn
             >

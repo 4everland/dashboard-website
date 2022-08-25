@@ -17,7 +17,7 @@
       <span>{{ label }}</span>
       <slot name="sub"></slot>
     </label>
-    <div class="ml-3 flex-1">
+    <div class="ml-3 flex-1" :class="valueClass">
       <slot></slot>
     </div>
   </div>
@@ -28,6 +28,7 @@ export default {
   props: {
     label: String,
     labelClass: null,
+    valueClass: null,
     center: Boolean,
     minWidth: {
       type: String,

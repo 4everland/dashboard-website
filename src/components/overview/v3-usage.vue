@@ -37,7 +37,7 @@
                 small
                 class="pl-2 pr-2"
                 to="/resource/subscribe"
-                >Subscribe</v-btn
+                >Purchase</v-btn
               >
               <v-btn
                 outlined

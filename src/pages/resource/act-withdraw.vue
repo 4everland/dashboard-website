@@ -108,7 +108,7 @@ export default {
       let num = this.curAmount;
       const addr = (this.address = this.address.trim());
       let msg = "";
-      if (num === "") {
+      if (!num) {
         msg = "Withdraw amount required";
       } else if (!addr) {
         msg = "Withdraw address required";
