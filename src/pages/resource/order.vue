@@ -77,6 +77,10 @@ export default {
   methods: {
     async onSubmit(isPreview) {
       try {
+        const target = this.curContract[this.chainKey];
+        if (!target) {
+          return this.onConnect();
+        }
         if (!this.isApproved) {
           return this.onApprove(true);
         }
@@ -109,10 +113,6 @@ export default {
             totalFee = totalFee.div(1e12);
           }
           console.log("totalFee", totalFee.toString());
-          const target = this.curContract[this.chainKey];
-          if (!target) {
-            return this.onConnect();
-          }
           const feeMsg = await target.calcFeeV2(...params);
           // console.log("feeMsg", feeMsg.toString());
           // params.push(maxSlippage);
@@ -129,7 +129,6 @@ export default {
           }
         }
         console.log("pay", params, this.curContract[this.chainKey]);
-        let target = this.curContract[this.chainKey];
         let tx = await target.payV2(...params);
         console.log("tx", tx);
         const receipt = await tx.wait(1);
