@@ -12,7 +12,7 @@ module.exports = {
   lintOnSave: false,
   chainWebpack: (config) => {
     config.externals({
-      // vue: "Vue",
+      vue: "Vue",
       echarts: "echarts",
       "@ethereumjs/common": "ethers",
       axios: "axios",
