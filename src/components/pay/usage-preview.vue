@@ -33,7 +33,7 @@
             <label class="gray d-ib ta-r mr-2" style="min-width: 90px"
               >{{ it.label }}:</label
             >
-            <span> {{ it.unitPricePer }} </span>
+            <span> ${{ it.unitPricePer }} </span>
           </p>
         </div>
       </div>

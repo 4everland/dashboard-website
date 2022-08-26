@@ -68,7 +68,7 @@
         </tr>
         <tr>
           <td>100GB+</td>
-          <td>8.5U / 100G</td>
+          <td>$8.5 / 100G</td>
         </tr>
         <tr>
           <td rowspan="2">Build Minutes</td>
@@ -78,7 +78,7 @@
         </tr>
         <tr>
           <td>250Min+</td>
-          <td>2U / 100Min</td>
+          <td>$2 / 100Min</td>
         </tr>
         <tr>
           <td rowspan="4">
@@ -110,7 +110,7 @@
         </tr>
         <tr>
           <td>5GB+</td>
-          <td>2U / 100G / Mth</td>
+          <td>$2 / 100G / Mth</td>
         </tr>
         <tr>
           <td rowspan="2">Storage duration</td>
@@ -140,7 +140,7 @@
         </tr>
         <tr>
           <td>100MB+</td>
-          <td>0.31U</td>
+          <td>$0.31</td>
         </tr>
       </tbody>
     </table>

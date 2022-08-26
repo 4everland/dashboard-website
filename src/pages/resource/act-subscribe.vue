@@ -207,7 +207,7 @@ export default {
           unit: "GB",
           selected: chooseMap["bandwidth"],
           unitPrice: price.trafficUnitPrice || 0,
-          unitPricePer: price.trafficUnitPricePer + "U / 100GB",
+          unitPricePer: price.trafficUnitPricePer + " / 100GB",
           expireTime: info.freeBandwidthExpired,
           expireLabel: "Free expiration date",
           ...this.getPerc(
@@ -227,7 +227,7 @@ export default {
           unit: "Min",
           selected: chooseMap["buildMinutes"],
           unitPrice: price.buildTimeUnitPrice || 0,
-          unitPricePer: price.buildTimeUnitPricePer + "U / 100Min",
+          unitPricePer: price.buildTimeUnitPricePer + " / 100Min",
           expireTime: info.freeBuildMinutesExpired,
           expireLabel: "Free expiration date",
           ...this.getPerc(
@@ -250,7 +250,7 @@ export default {
           unit: "GB",
           selected: ipfsVal,
           unitPrice: price.ipfsStorageUnitPrice || 0,
-          unitPricePer: price.ipfsStorageUnitPricePer + "U / 100GB / Mth",
+          unitPricePer: price.ipfsStorageUnitPricePer + " / 100GB / Mth",
           expireTime: info.ipfsStorageExpired,
           ...this.getPerc(
             info.usedIpfsStorage,
@@ -269,7 +269,7 @@ export default {
           unit: "GB",
           selected: chooseMap["ar"],
           unitPrice: price.arStorageUnitPrice || 0,
-          unitPricePer: price.arStorageUnitPricePer + "U / 100MB",
+          unitPricePer: price.arStorageUnitPricePer + " / 100MB",
           expireLabel: "Expiration date",
           ...this.getPerc(
             info.usedArStorage,
