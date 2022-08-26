@@ -213,6 +213,10 @@
 </template>
 
 <script>
+import BucketUpload from "@/views/bucket/bucket-upload";
+import BucketPartsList from "@/views/bucket/bucket-parts-list";
+import BucketFileInfo from "@/views/bucket/components/bucket-fileInfo";
+
 import { bus } from "../../../main";
 import mixin from "../storage-mixin";
 import { DeleteTaskWrapper } from "../task.js";
@@ -381,6 +385,11 @@ export default {
       },
       deep: true,
     },
+  },
+  components: {
+    BucketUpload,
+    BucketPartsList,
+    BucketFileInfo,
   },
 };
 </script>

@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import mixin from "../bucket/storage-mixin";
+import mixin from "@/views/bucket/storage-mixin";
 
 export default {
   mixins: [mixin],

@@ -1,13 +1,13 @@
-import Info from "./info";
-import Bills from "./bills";
-import More from "./more";
-import Detail from "./detail";
-import Deduction from "./deduction";
+// import Info from "./info";
+// import Bills from "./bills";
+// import More from "./more";
+// import Detail from "./detail";
+// import Deduction from "./deduction";
 
 export default [
   {
     path: "/billing/usage",
-    component: Info,
+    component: () => import("./info"),
     meta: {
       group: "Billing",
       title: "Usage",
@@ -16,7 +16,8 @@ export default [
   },
   {
     path: "/billing/usage/more",
-    component: More,
+    component: () => import("./more"),
+
     meta: {
       title: "Subscribe",
       group: "Billing",
@@ -33,7 +34,8 @@ export default [
   },
   {
     path: "/billing/bills",
-    component: Bills,
+    component: () => import("./bills"),
+
     meta: {
       title: "Bills",
       group: "Billing",
@@ -41,7 +43,8 @@ export default [
   },
   {
     path: "/billing/bills/detail",
-    component: Detail,
+    component: () => import("./detail"),
+
     meta: {
       title: "Details",
       group: "Billing",
@@ -58,7 +61,8 @@ export default [
   },
   {
     path: "/billing/deduction",
-    component: Deduction,
+    component: () => import("./deduction"),
+
     meta: {
       title: "Deduction details",
       group: "Billing",

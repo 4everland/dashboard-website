@@ -1,11 +1,11 @@
-import Changelog from "./changelog";
-import FirstLanding from "./first-landing";
+// import Changelog from "./changelog";
+// import FirstLanding from "./first-landing";
 
 export default [
   {
     path: "/changelog",
     components: {
-      cache: Changelog,
+      cache: () => import("./changelog"),
     },
     meta: {
       title: "Changelog",
@@ -14,7 +14,7 @@ export default [
   {
     path: "/hosting/first-landing",
     components: {
-      cache: FirstLanding,
+      cache: () => import("./first-landing"),
     },
     meta: {
       title: "First Landing",

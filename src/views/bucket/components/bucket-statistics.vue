@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import BucketChart from "@/views/bucket/components/bucket-chart";
+
 export default {
   props: {
     active: Boolean,
@@ -200,6 +202,9 @@ export default {
         this.$loading.close();
       }
     },
+  },
+  components: {
+    BucketChart,
   },
 };
 </script>

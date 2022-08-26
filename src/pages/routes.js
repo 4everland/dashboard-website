@@ -1,5 +1,5 @@
-import Home from "./home";
-import Login from "./login.vue";
+// import Home from "./home";
+// import Login from "./login.vue";
 
 import Overview from "./overview";
 
@@ -13,18 +13,19 @@ import ResRoutes from "./resource/routes";
 export default [
   {
     path: "/",
-    component: Home,
+    component: () => import("./home"),
   },
   {
     path: "/login",
-    component: Login,
+    component: () => import("./login"),
+
     meta: {
       noLogin: true,
     },
   },
   {
     path: "/overview",
-    component: Overview,
+    component: () => import("./overview"),
     meta: {
       title: "Overview",
       isTab: true,

@@ -138,6 +138,13 @@ export default {
       return curIdx;
     },
   },
+  components: {
+    // Bucket
+    BucketFolder: () => import("@/views/bucket/components/bucket-folder"),
+    BucketOverview: () => import("@/views/bucket/components/bucket-overview"),
+    BucketStatistics: () =>
+      import("@/views/bucket/components/bucket-statistics"),
+  },
 };
 </script>
 
