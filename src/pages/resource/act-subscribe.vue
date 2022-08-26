@@ -88,8 +88,8 @@
           <div class="mt-6" v-show="it.key == 'ipfs' && ipfsIdx == 1">
             <e-kv label="Pick plan:" center>
               <pay-choose-num
-                :options="it.monOpts"
-                unit="Mth"
+                :options="it.dayOpts"
+                unit="Day"
                 @input="onIpfsTime"
               ></pay-choose-num>
             </e-kv>
@@ -246,7 +246,7 @@ export default {
           id: ResourceType.IPFSStorage,
           key: "ipfs",
           opts: [100 * Gb, 200 * Gb, 300 * Gb],
-          monOpts: [1, 3, 6],
+          dayOpts: [30, 90, 180],
           unit: "GB",
           selected: ipfsVal,
           unitPrice: price.ipfsStorageUnitPrice || 0,
