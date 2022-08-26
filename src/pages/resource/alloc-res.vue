@@ -99,23 +99,27 @@ export default {
       const key = this.typeMap[name][platIdx == 0 ? "k0" : "k1"];
       Array.sortArrayBy(list, key, true);
       let first = -1;
-      return list.map((it) => {
-        let val = it[key] || 0;
-        let perc = 0;
-        if (first == -1) {
-          first = val;
-          perc = val ? 1 : 0;
-        } else {
-          perc = val ? val / first : 0;
-        }
-        if (name == "time") val += " Min";
-        else val = this.$utils.getFileSize(val);
-        return {
-          label: it.bucketName || it.projectName,
-          val,
-          perc,
-        };
-      });
+      return list
+        .map((it) => {
+          let val = it[key] || 0;
+          const value = val;
+          let perc = 0;
+          if (first == -1) {
+            first = val;
+            perc = val ? 1 : 0;
+          } else {
+            perc = val ? val / first : 0;
+          }
+          if (name == "time") val += " Min";
+          else val = this.$utils.getFileSize(val);
+          return {
+            label: it.bucketName || it.projectName,
+            val,
+            value,
+            perc,
+          };
+        })
+        .filter((it) => it.value > 0);
     },
   },
   mounted() {
