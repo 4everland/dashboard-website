@@ -34,7 +34,7 @@
               <span class="d-ib pa-1" style="min-width: 85px"
                 >{{ it.label }}:</span
               >
-              <div v-if="it.name == 'ipfs'" class="pa-1 ml-2">
+              <div v-if="it.name == 'ipfs'" class="pa-1 ml-2 al-c">
                 <a
                   class="link"
                   target="_blank"
@@ -42,7 +42,6 @@
                   >{{ it.value.cutStr(5, 5) }}</a
                 >
                 <v-btn icon small v-clipboard="it.value" @success="onCopied">
-                  <!-- <v-icon size="15" class="ml-auto">mdi-content-copy</v-icon> -->
                   <img src="/img/svg/copy.svg" width="12" />
                 </v-btn>
               </div>
@@ -101,17 +100,21 @@
                 </template>
               </div>
               <div v-else-if="it.name == 'url'">
-                <a
-                  v-for="(link, j) in it.value"
-                  class="pa-1 ml-2 file-link"
-                  style="word-break: break-all"
-                  :key="j"
-                  :href="link"
-                  target="_blank"
-                >
-                  {{ link }}
-                </a>
+                <div v-for="(link, j) in it.value" :key="j" class="al-c">
+                  <a
+                    :href="link"
+                    class="pa-1 ml-2 file-link"
+                    target="_blank"
+                    style="word-break: break-all"
+                  >
+                    {{ link }}</a
+                  >
+                  <v-btn icon small v-clipboard="link" @success="onCopied">
+                    <img src="/img/svg/copy.svg" width="12" />
+                  </v-btn>
+                </div>
               </div>
+
               <span v-else class="pa-1 ml-2">{{ it.value }}</span>
             </li>
           </template>
