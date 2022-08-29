@@ -286,6 +286,7 @@ export default {
     },
   },
   mounted() {
+    sessionStorage.loginTo = location.pathname;
     this.getList();
   },
   methods: {
