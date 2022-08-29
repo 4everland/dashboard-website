@@ -13,13 +13,12 @@ export default [
   },
   {
     path: "/hosting/first-landing",
-    components: {
-      cache: FirstLanding,
-    },
+    component: FirstLanding,
     meta: {
       title: "First Landing",
       hideNav: 1,
       isTab: 1,
+      noLogin: 1,
     },
   },
 ];
