@@ -12,7 +12,7 @@ export default [
     },
   },
   {
-    path: "/hosting/first-landing",
+    path: "/first-landing",
     component: FirstLanding,
     meta: {
       title: "First Landing",
