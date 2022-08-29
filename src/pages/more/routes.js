@@ -21,4 +21,8 @@ export default [
       noLogin: 1,
     },
   },
+  {
+    path: "/hosting/first-landing",
+    redirect: "/first-landing",
+  },
 ];

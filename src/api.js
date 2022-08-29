@@ -185,7 +185,7 @@ function goLogin() {
 }
 
 async function handleMsg(status, code, msg, config) {
-  console.log(code, msg);
+  console.log(status, code, msg);
   if (!msg && typeof code == "string") {
     msg = code;
   }

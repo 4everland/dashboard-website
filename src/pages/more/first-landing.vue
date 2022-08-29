@@ -64,13 +64,13 @@
           >mdi-chevron-down</v-icon
         >
       </v-btn>
-      <v-btn
+      <!-- <v-btn
         color="primary"
         small
         href="https://www.4everland.org/firstlanding"
         target="_blank"
         >Rules</v-btn
-      >
+      > -->
     </div>
     <div class="ta-c">
       <img
@@ -272,11 +272,6 @@ export default {
     };
   },
   watch: {
-    "$route.path"(val) {
-      if (val == "/dashboard/first-landing") {
-        // this.onRefresh();
-      }
-    },
     isClaimed(val) {
       localStorage.is_claimed3 = val ? "1" : "";
       if (val && !localStorage.tever_symbol2) {
@@ -290,29 +285,10 @@ export default {
       this.getList();
     },
   },
-  created() {
+  mounted() {
     this.getList();
   },
   methods: {
-    async getAddr0() {
-      try {
-        const { data } = await this.$http2.get("/activity/ethAddress");
-        this.ethAddr = data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getAddr1() {
-      try {
-        const { data } = await this.$http2.get("/activity/ethAddress/list");
-        this.walletList = data;
-        if (data.length) {
-          this.ethAddr = data[0].address;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async getClaimInfo() {
       console.log("get claim info");
       try {
