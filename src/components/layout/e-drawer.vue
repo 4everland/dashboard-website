@@ -288,10 +288,6 @@ export default {
       if (this.list[i].group.test(this.path)) return;
       this.$refs[i + "-0"][0].$el.click();
     },
-    onLogout() {
-      localStorage.clear();
-      location.href = "index.html";
-    },
   },
 };
 </script>

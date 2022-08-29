@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import HStatus from "@/views/hosting/common/h-status";
 export default {
   data() {
     return {
@@ -98,6 +99,9 @@ export default {
       }
       this.loading = false;
     },
+  },
+  components: {
+    HStatus,
   },
 };
 </script>

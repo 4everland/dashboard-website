@@ -88,8 +88,8 @@
           <div class="mt-6" v-show="it.key == 'ipfs' && ipfsIdx == 1">
             <e-kv label="Pick plan:" center>
               <pay-choose-num
-                :options="it.monOpts"
-                unit="Mth"
+                :options="it.dayOpts"
+                unit="Day"
                 @input="onIpfsTime"
               ></pay-choose-num>
             </e-kv>
@@ -154,7 +154,10 @@
 </template>
 
 <script>
-import mixin from "@/components/pay/mixin";
+import PayChooseNum from "@/views/pay/pay-choose-num";
+import PayConfirm from "@/views/pay/pay-confirm";
+import UsagePreview from "@/views/pay/usage-preview";
+import mixin from "@/views/pay/mixin";
 import { mapState } from "vuex";
 const Mb = Math.pow(1024, 2);
 const Gb = Math.pow(1024, 3);
@@ -246,7 +249,7 @@ export default {
           id: ResourceType.IPFSStorage,
           key: "ipfs",
           opts: [100 * Gb, 200 * Gb, 300 * Gb],
-          monOpts: [1, 3, 6],
+          dayOpts: [30, 90, 180],
           unit: "GB",
           selected: ipfsVal,
           unitPrice: price.ipfsStorageUnitPrice || 0,
@@ -528,6 +531,11 @@ export default {
         this.formatToken(fee.length == 2 ? fee[0].add(fee[1]) : fee, 4) * 1
       );
     },
+  },
+  components: {
+    PayChooseNum,
+    PayConfirm,
+    UsagePreview,
   },
 };
 </script>

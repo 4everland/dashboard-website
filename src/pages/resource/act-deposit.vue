@@ -42,7 +42,9 @@
 </template>
 
 <script>
-import mixin from "@/components/pay/mixin";
+import PayNetwork from "@/views/pay/pay-network";
+import PayConfirm from "@/views/pay/pay-confirm";
+import mixin from "@/views/pay/mixin";
 
 export default {
   mixins: [mixin],
@@ -136,6 +138,10 @@ export default {
         this.onErr(error);
       }
     },
+  },
+  components: {
+    PayNetwork,
+    PayConfirm,
   },
 };
 </script>

@@ -12,14 +12,17 @@ export default [
     },
   },
   {
-    path: "/hosting/first-landing",
-    components: {
-      cache: () => import("./first-landing"),
-    },
+    path: "/first-landing",
+    component: () => import("./first-landing"),
     meta: {
       title: "First Landing",
       hideNav: 1,
       isTab: 1,
+      noLogin: 1,
     },
+  },
+  {
+    path: "/hosting/first-landing",
+    redirect: "/first-landing",
   },
 ];

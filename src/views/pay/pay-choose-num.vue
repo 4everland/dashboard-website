@@ -61,6 +61,12 @@ export default {
       });
     },
     unitItem() {
+      if (this.unit == "Day") {
+        return {
+          value: 86400,
+          text: "Day",
+        };
+      }
       if (this.unit == "Min") {
         return {
           value: 60,
@@ -118,6 +124,7 @@ export default {
       if (val > 0) {
         let max = 1024;
         if (this.unit == "Min") max = 10000;
+        else if (this.unit == "Day") max = 1000;
         else if (this.unit == "Mth") max = 12;
         this.inputVal = Math.min(val * 1, max);
         this.curIdx = -1;
@@ -143,6 +150,7 @@ export default {
         val = item.num;
         if (this.unit == "Min") val *= 60;
         else if (this.unit == "Mth") val *= 30 * 86400;
+        else if (this.unit == "Day") val *= 86400;
         text = item.text;
       } else if (this.inputVal > 0) {
         text = this.inputVal + " " + this.unitItem.text;

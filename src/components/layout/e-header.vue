@@ -175,7 +175,7 @@ export default {
       }
       if (it.name == "logout") {
         localStorage.clear();
-        location.href = location.origin;
+        location.href = this.$getLoginUrl();
       }
     },
   },

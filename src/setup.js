@@ -17,7 +17,7 @@ Vue.prototype.$onLoginData = (data) => {
   const token = data.accessToken;
   localStorage.token = token;
   localStorage.refreshAt = Date.now();
-  let loginTo = localStorage.loginTo || "/";
+  let loginTo = sessionStorage.loginTo || localStorage.loginTo || "/";
   localStorage.loginTo = "";
   location.href = loginTo;
 };

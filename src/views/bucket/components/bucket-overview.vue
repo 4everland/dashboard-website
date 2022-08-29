@@ -123,6 +123,7 @@
 </template>
 
 <script>
+import HDomain from "@/views/hosting/common/h-domain";
 export default {
   props: {
     active: Boolean,
@@ -260,6 +261,9 @@ export default {
         this.getData();
       }
     },
+  },
+  components: {
+    HDomain,
   },
 };
 </script>

@@ -169,6 +169,9 @@ export default {
     StAccount: () => import("@/views/settings/st-account"),
     StTokens: () => import("@/views/settings/st-tokens"),
     StGeneral: () => import("@/views/settings/st-general"),
+    // Settings-Page-AuthTokens
+    StTokensH: () => import("@/views/settings/st-tokens-h"),
+    StTokensB: () => import("@/views/settings/st-tokens-b"),
   },
 };
 </script>
