@@ -99,5 +99,11 @@ export default {
       }
     },
   },
+  components: {
+    // Hosting-Statistics
+    StatisAnalysis: () => import("@/views/hosting/statistics/statis-analysis"),
+    StatisRequest: () => import("@/views/hosting/statistics/statis-request"),
+    StatisData: () => import("@/views/hosting/statistics/statis-data"),
+  },
 };
 </script>

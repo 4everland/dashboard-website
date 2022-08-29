@@ -1,13 +1,12 @@
 // import Home from "./home";
 // import Login from "./login.vue";
 
-import Overview from "./overview";
+// import Overview from "./overview";
 
 import HostingRoutes from "./hosting/routes";
 import BucketRoutes from "./bucket/routes";
 import UserRoutes from "./user/routes";
 import MoreRoutes from "./more/routes";
-import UsageRoutes from "./usage/routes";
 import ResRoutes from "./resource/routes";
 
 export default [
@@ -36,6 +35,5 @@ export default [
   ...BucketRoutes,
   ...UserRoutes,
   ...MoreRoutes,
-  ...UsageRoutes,
   ...ResRoutes,
 ];
