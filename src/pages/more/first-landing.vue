@@ -206,7 +206,7 @@ export default {
       isFocus: (s) => s.isFocus,
       nowDate: (s) => s.nowDate,
       connectAddr: (s) => s.connectAddr,
-      netType: (s) => s.netType,
+      chainId: (s) => s.chainId,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -326,13 +326,13 @@ export default {
         });
         return;
       }
-      if (!this.netType) {
+      if (!this.chainId) {
         console.log("Unknown network");
         return;
       }
       this.isNetOk =
-        (this.$inDev && this.netType == "rinkeby") ||
-        (!this.$inDev && this.netType == "main");
+        (this.$inDev && this.chainId == 4) ||
+        (!this.$inDev && this.chainId == 1);
       if (!this.isNetOk) {
         try {
           const msg = this.$inDev

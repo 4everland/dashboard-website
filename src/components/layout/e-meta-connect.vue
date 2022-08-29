@@ -9,8 +9,7 @@
         <div class="pd-20">
           <div class="gray fz-15">
             After connecting to your wallet, you'll be able to make changes in
-            custom settings. Please select the
-            {{ payBy }} network.
+            custom settings.
           </div>
           <div class="mt-5 d-flex al-c">
             <img src="/img/svg/settings/m-metamask.svg" style="height: 25px" />
@@ -45,7 +44,6 @@ export default {
   data() {
     return {
       showPop: false,
-      ethAddr: "",
       isConnect: false,
     };
   },
@@ -60,9 +58,7 @@ export default {
   watch: {
     noticeMsg({ name }) {
       if (name == "showMetaConnect") {
-        if (localStorage.isConnectMeta) {
-          this.onConnect();
-        } else this.showPop = true;
+        this.onConnect();
       }
     },
     async isConnect(val) {
@@ -103,10 +99,6 @@ export default {
     // this.getAddr();
   },
   methods: {
-    async getAddr() {
-      const { data } = await this.$http2.get("/activity/ethAddress");
-      this.ethAddr = data;
-    },
     async onConnect() {
       try {
         if (!this.isConnect) {
