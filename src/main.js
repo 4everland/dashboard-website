@@ -9,7 +9,8 @@ import { endpoint } from "./api";
 // import AWS from "aws-sdk";
 import { S3 } from "@aws-sdk/client-s3";
 // import { isSolana } from "@/plugins/sns/snsAirDrop.js";
-import { isAirDrop } from "@/plugins/flow/flowAirDrop.js";
+// import { isAirDrop } from "@/plugins/flow/flowAirDrop.js";
+import { isAirDrop } from "@/plugins/airDrop/index.js";
 export const bus = new Vue();
 Vue.config.productionTip = false;
 
