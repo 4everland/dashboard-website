@@ -20,6 +20,7 @@ export default {
       providerAddr,
       // client,
       walletBalance: 0,
+      balance: null,
     };
   },
   computed: {
@@ -112,7 +113,11 @@ export default {
     onErr(err, retry) {
       if (!err) return console.log("---- err null");
       console.log(err);
+      const { data } = err;
       let msg = err.message;
+      if (data) {
+        msg = data.message || msg;
+      }
       if (/repriced/i.test(msg) && /replaced/i.test(msg)) {
         return this.$toast("Transaction was replaced.");
       }
@@ -129,22 +134,18 @@ export default {
       }
       return this.$alert(msg);
     },
+    async getBalance() {
+      const {
+        data: { balance },
+      } = await this.$http.get("$v3/account/balance");
+      this.balance = this.$utils.cutFixed(balance, 4);
+    },
     async getWalletBalance() {
       this.$loading();
       const num = await this.curContract.MumbaiUSDC.balanceOf(this.connectAddr);
       this.walletBalance = this.$utils.cutFixed(num / 1e6, 4);
-      console.log(this.walletBalance);
+      // console.log(this.walletBalance);
       this.$loading.close();
-    },
-    async switchPolygon() {
-      let html = `Currently, deposits and withdrawals are only supported on the Polygon network. `;
-      html += "<p>Would you like to switch to the Polygon network?</p>";
-      await this.$confirm(html, this.title, {
-        confirmText: "Switch Network",
-      });
-      const payBy = (localStorage.payBy = "Polygon");
-      const id = this.getChainId(payBy);
-      await this.switchNet(id);
     },
     async checkAccount() {
       console.log("check account...");
@@ -177,7 +178,8 @@ export default {
     },
     async onApprove(isBuy) {
       try {
-        this.approving = true;
+        this.$loading("Approving");
+        // this.approving = true;
         const addr = isBuy ? this.payAddr : MumbaiFundPool;
         console.log("approve", addr, this.usdcKey);
         const tx = await this.curContract[this.usdcKey].approve(
@@ -188,11 +190,12 @@ export default {
         const receipt = await tx.wait();
         console.log(receipt);
         this.isApproved = true;
+        this.$toast("Approved successfully");
       } catch (error) {
         console.log("on approve error");
         this.onErr(error);
       }
-      this.approving = false;
+      this.$loading.close();
     },
     formatToken(value, fixed = 2, decimals = 18) {
       const v = value.div(
@@ -301,8 +304,18 @@ export default {
       };
       localStorage.lastHash = JSON.stringify(obj);
     },
+    async switchPolygon() {
+      let html = `Currently, deposits and withdrawals are only supported on the Polygon network. `;
+      html += "<p>Would you like to switch to the Polygon network?</p>";
+      await this.$confirm(html, this.title, {
+        confirmText: "Switch Network",
+      });
+      const payBy = (localStorage.payBy = "Polygon");
+      const id = this.getChainId(payBy);
+      await this.switchNet(id);
+    },
     async onConnect() {
-      this.walletChanged(true);
+      // this.walletChanged(true);
       try {
         if (this.chainId != this.payChainId) {
           let dev = "";
@@ -328,7 +341,7 @@ export default {
         }
         console.log(this.payBy, this.curContract);
         // this.getSign();
-        this.checkApprove(this.isBuy);
+        this.checkApprove(this.isSubscribe);
       } catch (error) {
         console.log("on connect error");
         this.$alert(error.message).then(() => {

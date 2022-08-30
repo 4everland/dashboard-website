@@ -60,7 +60,7 @@
               v-html="totalPrice.replace(/\.(\d+)/, `<b class='fz-15'>.$1</b>`)"
             ></b>
           </span>
-          <span class="mt-1 gray-6 ml-2 fz-14">USD</span>
+          <span class="mt-1 gray-6 ml-2 fz-14">USDC</span>
           <usage-preview :previewList="previewList" :list="list" />
           <v-btn
             color="primary"
@@ -74,7 +74,7 @@
         </div>
       </div>
       <div class="ta-r fz-14 gray mr-10" v-if="minSend > 1">
-        Each transaction cannot be less than {{ minSend }} USD
+        Each transaction cannot be less than {{ minSend }} USDC
       </div>
     </div>
 
@@ -126,7 +126,7 @@
               </e-tooltip>
               <span
                 >Minimun Tokens amount on Arrival:
-                <b class="red-1">{{ ethFeeInfo.arrival }}</b> USD</span
+                <b class="red-1">{{ ethFeeInfo.arrival }}</b> USDC</span
               >
             </div>
           </template>
@@ -197,7 +197,7 @@ export default {
           label: "IPFS",
           id: ResourceType.IPFSStorage,
           key: "ipfs",
-          unit: "GB / Mon",
+          unit: "GB / Mth",
           unitPrice: info.ipfsStorageUnitPrice || 0,
         },
         {
@@ -429,7 +429,7 @@ export default {
           console.log("minSend", minSend.toString());
           // if (totalFee.lt(minSend)) {
           //   throw new Error(
-          //     "Minimun " + minSend.div(this.chainId == 56 ? 1e18 : 1e6) + " USD"
+          //     "Minimun " + minSend.div(this.chainId == 56 ? 1e18 : 1e6) + " USDC"
           //   );
           // }
           const { data } = await this.$http2.post(

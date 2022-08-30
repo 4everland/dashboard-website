@@ -120,7 +120,9 @@ if (!String.prototype.replaceAll) {
 
 Array.sortArrayBy = function (arr, key, isDesc) {
   arr.sort((a, b) => {
-    return (isDesc ? -1 : 1) * (a[key] - b[key]);
+    const va = a[key] || 0;
+    const vb = b[key] || 0;
+    return (isDesc ? -1 : 1) * (va - vb);
   });
   return arr;
 };

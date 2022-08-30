@@ -12,6 +12,7 @@ const store = new Vuex.Store({
     pageLoaded: false,
     ...getWH(),
     isTouch: "ontouchstart" in window,
+    scrollTop: 0,
     isFocus: true,
     appInfo: {
       title: "",
@@ -37,6 +38,7 @@ const store = new Vuex.Store({
     projectInfo: {},
     worldMapJson: null,
     payBy: localStorage.payBy || "Polygon",
+    orderInfo: JSON.parse(localStorage.orderInfo || "{}"),
   },
   mutations: {
     [SET_DATA](state, data) {
@@ -125,6 +127,12 @@ window.onload = () => {
   // console.log("onload", window.jdenticon);
   setState({
     pageLoaded: true,
+  });
+};
+
+window.onscroll = () => {
+  setState({
+    scrollTop: window.scrollY,
   });
 };
 

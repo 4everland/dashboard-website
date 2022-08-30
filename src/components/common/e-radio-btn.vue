@@ -3,7 +3,9 @@
     <div
       @click="curIdx = i"
       class="pa-1 fz-14 ta-c cursor-p"
-      style="min-width: 70px"
+      :style="{
+        'min-width': minWidth,
+      }"
       :class="{
         'bg-1': i == curIdx,
       }"
@@ -20,6 +22,10 @@ export default {
   props: {
     options: Array,
     value: Number,
+    minWidth: {
+      type: String,
+      default: "70px",
+    },
   },
   computed: {
     list() {

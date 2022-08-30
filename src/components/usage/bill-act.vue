@@ -12,7 +12,7 @@
       </e-tooltip>
       <span class="gray-7 mr-3">Total balance:</span>
       <b class="fz-20 red-1">{{ balance }}</b>
-      <span class="gray-6 fz-12 ml-2 mt-1">USD</span>
+      <span class="gray-6 fz-12 ml-2 mt-1">USDC</span>
       <v-btn min-width="103" color="primary" class="ml-8" @click="onShow(1)"
         >Deposit</v-btn
       >
@@ -58,9 +58,9 @@
         <div class="mt-4 al-c gray-7">
           <span class="ml-2">Total Balance:</span>
           <b class="fz-20 red-1 mr-1 ml-2">{{ balance }}</b>
-          <span class="fz-13 mt-1">USD</span>
+          <span class="fz-13 mt-1">USDC</span>
           <span class="ml-auto" v-if="isRecharge">
-            Wallet Banace: {{ walletBalance }} <span class="fz-13">USD</span>
+            Wallet Banace: {{ walletBalance }} <span class="fz-13">USDC</span>
           </span>
         </div>
         <div class="bd-1 mt-3 al-c bdrs-5">
@@ -199,6 +199,7 @@ export default {
         billEncode: bills,
         orderId,
       } = data;
+
       const params = [
         this.providerAddr,
         this.uuid,
@@ -210,11 +211,7 @@ export default {
         num * 1e6,
       ];
       console.log(params);
-      const tx = await this.curContract.FundPool.withdraw(...params);
-      console.log("tx", tx);
-      const receipt = await tx.wait();
-      this.addHash(tx, num, "Withdraw");
-      console.log("receipt", receipt);
+      await this.walletWithdraw(params);
     },
     async onConfirm() {
       if (this.formNum === "") {
@@ -244,30 +241,29 @@ export default {
       }
       this.posting = false;
     },
-    async signWallet() {
-      this.$loading("Bind Wallet...");
+    async walletWithdraw(params) {
       const walletExists =
         await this.curContract.ProviderController.walletExists(
           this.providerAddr,
           this.uuid
         );
       console.log("walletExists", walletExists);
+      let tx;
       if (!walletExists) {
         const { data: sign } = await this.$http.post(
           "$v3/common/sign/" + this.connectAddr
         );
         console.log(sign);
-        const tx = await this.curContract.ProviderController.initWallet(
-          this.providerAddr,
-          this.uuid,
-          this.connectAddr,
-          sign
-        );
-        console.log("tx", tx);
-        const receipt = await tx.wait();
-        console.log("receipt", receipt);
+        params.splice(2, 0, sign);
+        tx = await this.curContract.FundPool.initWalletAndWithdraw(...params);
+      } else {
+        console.log("signed");
+        tx = await this.curContract.FundPool.withdraw(...params);
       }
-      this.$loading.close();
+      console.log("tx", tx);
+      const receipt = await tx.wait();
+      this.addHash(tx, "Withdraw");
+      console.log("receipt", receipt);
     },
     async onShow(type) {
       if (this.walletChanged()) {
@@ -298,10 +294,6 @@ export default {
       }
       try {
         await this.getWalletBalance();
-        if (!this.walletSigned && !this.isRecharge) {
-          await this.signWallet();
-          this.walletSigned = true;
-        }
         this.formNum = "";
         this.showPop = true;
       } catch (error) {

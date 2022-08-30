@@ -1,7 +1,7 @@
 <template>
   <div>
     <e-menu open-on-hover offset-y top>
-      <v-icon slot="ref" color="#ed7266" size="16" class="ml-2"
+      <v-icon slot="ref" color="#999" size="14" class="ml-2"
         >mdi-help-circle</v-icon
       >
       <div class="pa-3 bg-white lh-11" style="width: 330px">
@@ -12,23 +12,15 @@
         >
           <div class="bdb-1 pb-3 mb-3">
             <div class="al-c mb-1">
-              <span class="gray-7">Content</span>
-              <span class="ml-auto">{{ it.label }}</span>
-            </div>
-            <div class="al-c mb-1">
-              <span class="gray-7">Amount</span>
-              <span class="ml-auto color-1">{{ it.value }}{{ it.unit }}</span>
-            </div>
-            <div class="al-c">
-              <span class="gray-7">Effective Time</span>
-              <span class="ml-auto">{{ it.until || "Until used up" }}</span>
+              <span class="gray-7">{{ it.type }}</span>
+              <span class="ml-auto"> {{ it.label }}</span>
+              <span class="ml-2 color-1">{{ it.value }}</span>
             </div>
           </div>
           <div class="d-flex">
             <div class="ml-auto">
-              <span>Price:</span>
-              <b class="red-1 fz-16 ml-1">{{ it.price.toFixed(2) }}</b>
-              <span class="fz-12 ml-1">USD</span>
+              <b class="red-1 fz-16 ml-1">{{ $utils.cutFixed(it.price, 4) }}</b>
+              <span class="fz-12 ml-1">USDC</span>
             </div>
           </div>
         </div>
@@ -41,7 +33,7 @@
             <label class="gray d-ib ta-r mr-2" style="min-width: 90px"
               >{{ it.label }}:</label
             >
-            <span> {{ it.unitPrice.toFixed(2) }} U / 100 {{ it.unit }} </span>
+            <span> ${{ it.unitPricePer }} </span>
           </p>
         </div>
       </div>

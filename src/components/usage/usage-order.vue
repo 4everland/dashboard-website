@@ -31,7 +31,7 @@
             <div>Price:</div>
             <div>
               <span class="red-1 fz-22">{{ it.price.toFixed(2) }}</span>
-              <span class="ml-2">USD</span>
+              <span class="ml-2">USDC</span>
             </div>
           </div>
         </div>
@@ -66,7 +66,7 @@
           <div class="ml-auto fz-14 gray-7">
             <span class="">Total price:</span>
             <span class="red-1 fz-20 ml-2">{{ total }}</span>
-            <span class="ml-1">USD</span>
+            <span class="ml-1">USDC</span>
           </div>
         </div>
       </e-kv>

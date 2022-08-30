@@ -49,7 +49,7 @@
               ? alertInfo.title
               : alertInfo.showCancel
               ? "Confirm"
-              : "Alert"
+              : "Tip"
           }}</b>
         </v-card-title>
         <div v-else class="pd-15"></div>

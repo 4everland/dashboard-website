@@ -9,7 +9,7 @@
           >Confirming the transaction, please be patient for a few minutes</span
         >
         <!-- <span
-          >A {{ lastHash.contentType }} ({{ lastHash.usdt }} USD) transaction is
+          >A {{ lastHash.contentType }} ({{ lastHash.usdt }} USDC) transaction is
           pending at</span
         >
         <e-time>{{ lastHash.paymentTime * 1e3 }}</e-time> -->
@@ -26,13 +26,13 @@
         @click:row="onItem"
       >
         <template v-slot:item.hash="{ item }">
-          <e-link :href="$getPolygonUrl(item.hash)" @click.stop="onStop">
+          <e-link :href="$getTxLink(item.hash)" @click.stop="onStop">
             <span>{{ item.hash.cutStr(6, 6) }}</span>
           </e-link>
         </template>
         <template v-slot:item.cost="{ item }">
           <span>{{ item.cost }}</span>
-          <span class="gray-7 ml-1">USD</span>
+          <span class="gray-7 ml-1">USDC</span>
         </template>
         <template v-slot:item.status="{ item }">
           <h-status :val="item.status" />
