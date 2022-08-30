@@ -26,22 +26,21 @@
               />
               <a
                 class="u ml-2 fz-13"
-                :href="
-                  $utils.getCidLink(
-                    it.platform == 'IPFS' ? it.cid : it.canister,
-                    it.platform
-                  )
-                "
+                :href="projectLink(it)"
                 target="_blank"
                 @click.stop="onStop"
                 style="min-width: 100px"
                 v-if="it.cid && it.state == 'SUCCESS'"
               >
-                {{
-                  it.platform == "IPFS"
-                    ? it.cid.cutStr(4, 4)
-                    : it.canister.cutStr(4, 4)
-                }}
+                <span v-if="it.platform == 'IPFS'">
+                  {{ it.cid.cutStr(4, 4) }}
+                </span>
+                <span v-if="it.platform == 'IC'">
+                  {{ it.canister.cutStr(4, 4) }}
+                </span>
+                <span v-if="it.platform == 'AR'">{{
+                  it.arHash.cutStr(4, 4)
+                }}</span>
               </a>
               <span
                 class="ml-2 fz-13 d-ib"
@@ -56,7 +55,7 @@
                 >Syncing</span
               >
               <span v-else class="ml-2 fz-13 d-ib" style="min-width: 100px">{{
-                it.platform == "IC" ? "Internet Computer" : it.platform
+                getPlatformName(it)
               }}</span>
               <template v-if="it.commits">
                 <div class="fz-14 ml-5" @click.stop="onStop">
@@ -150,6 +149,19 @@ export default {
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+    projectLink(it) {
+      return function (it) {
+        let link = null;
+        if (it.platform == "IPFS") {
+          link = it.cid;
+        } else if (it.platform == "IC") {
+          link = it.canister;
+        } else {
+          link = it.arHash;
+        }
+        return this.$utils.getCidLink(link, it.platform);
+      };
     },
   },
   data() {
@@ -335,6 +347,11 @@ export default {
       }
       this.loading = false;
       this.refreshing = false;
+    },
+    getPlatformName(it) {
+      if (it.platform == "IPFS") return it.platform;
+      if (it.platform == "IC") return "Internet Computer";
+      if (it.platform == "AR") return "Arweave";
     },
   },
   components: {

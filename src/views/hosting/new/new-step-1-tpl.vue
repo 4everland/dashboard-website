@@ -54,8 +54,8 @@
       <h3>Hosting Platform</h3>
 
       <div class="gray fz-14">
-        We offer IPFS and IC hosting options for your website, please select
-        one.
+        We offer IPFS, Arweave and IC hosting options for your website, please
+        select one.
       </div>
     </div>
     <div class="main-wrap mt-5">

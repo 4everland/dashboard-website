@@ -49,9 +49,7 @@
                   v-if="info.hash"
                 >
                   {{ info.hash.cutStr(4, 4) }}
-                  <!-- {{ info.hash ? info.hash.cutStr(4, 4) : "Not synchronized" }} -->
                 </e-link>
-                <!-- <span>{{info.state}}</span> -->
                 <h-status v-if="!info.hash" :val="info.state"></h-status>
                 <img
                   v-if="info.hash"
@@ -63,12 +61,7 @@
                 />
               </div>
             </e-kv>
-            <e-kv
-              class="ml-auto"
-              label="IPNS"
-              min-width="90px"
-              v-if="info.platform != 'IC'"
-            >
+            <e-kv class="ml-auto" label="IPNS" min-width="90px" v-if="showIpns">
               <e-tooltip top slot="sub">
                 <v-icon slot="ref" color="#666" size="14" class="pa-1"
                   >mdi-help-circle-outline</v-icon
@@ -157,6 +150,9 @@ export default {
       if (arr.includes(this.info.domain)) return arr;
       arr.push(this.info.domain);
       return arr;
+    },
+    showIpns() {
+      return this.info.platform != "IC" && this.info.platform != "AR";
     },
   },
   data() {

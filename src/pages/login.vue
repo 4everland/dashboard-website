@@ -129,7 +129,7 @@ export default {
   },
   created() {
     if (localStorage.token) {
-      this.$router.replace("/home");
+      this.$router.replace("/");
     }
   },
   mounted() {
