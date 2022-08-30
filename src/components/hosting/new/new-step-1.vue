@@ -69,6 +69,9 @@
             />
           </div>
         </v-col>
+        <v-col v-if="form.platform == 'AR'">
+          Warning: Ar Project Not Supported Absolute Path
+        </v-col>
       </v-row>
     </div>
 
