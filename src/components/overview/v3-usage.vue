@@ -36,10 +36,14 @@
                 color="primary"
                 small
                 class="pl-2 pr-2"
-                to="/billing/usage/more"
-                >Subscribe</v-btn
+                to="/resource/subscribe"
+                >Purchase</v-btn
               >
-              <v-btn outlined small class="pl-2 pr-2 ml-4" to="/billing/bills"
+              <v-btn
+                outlined
+                small
+                class="pl-2 pr-2 ml-4"
+                to="/resource/deposit"
                 >Deposit</v-btn
               >
               <!-- <span>Airdropped</span>

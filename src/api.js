@@ -43,10 +43,17 @@ Vue.prototype.$getImgSrc = function (src) {
   else if (!/^http/.test(src)) src = hostingUrl + src;
   return src;
 };
-Vue.prototype.$getPolygonUrl = (hash) => {
-  const pre = inDev
-    ? "https://mumbai.polygonscan.com/tx/"
-    : "https://polygonscan.com/tx/";
+Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
+  let pre = inDev
+    ? "https://goerli.etherscan.io/tx/"
+    : "https://etherscan.io/tx/";
+  if (net == "BSC") {
+    pre = inDev ? "https://testnet.bscscan.com/tx/" : "https://bscscan.com/tx/";
+  } else if (net == "Polygon") {
+    pre = inDev
+      ? "https://mumbai.polygonscan.com/tx/"
+      : "https://polygonscan.com/tx/";
+  }
   return pre + hash;
 };
 
@@ -178,7 +185,7 @@ function goLogin() {
 }
 
 async function handleMsg(status, code, msg, config) {
-  console.log(code, msg);
+  console.log(status, code, msg);
   if (!msg && typeof code == "string") {
     msg = code;
   }

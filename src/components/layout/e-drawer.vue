@@ -256,20 +256,11 @@ export default {
           ],
         },
         {
-          label: "Resources",
+          label: "Resource",
           img: "m-usage",
-          group: /^\/billing/i,
-          subs: [
-            {
-              label: "Usage",
-              to: "/billing/usage",
-              matPath: /usage\/(more)/,
-            },
-            {
-              label: "Bills",
-              to: "/billing/bills",
-            },
-          ],
+          to: "/resource",
+          active: false,
+          group: /^\/resource/i,
         },
       ];
     },
@@ -296,10 +287,6 @@ export default {
       if (!open) return;
       if (this.list[i].group.test(this.path)) return;
       this.$refs[i + "-0"][0].$el.click();
-    },
-    onLogout() {
-      localStorage.clear();
-      location.href = "index.html";
     },
   },
 };

@@ -51,7 +51,7 @@
 </style>
 <template>
   <div class="act-wrap1">
-    <div class="ta-r">
+    <div class="ta-r pa-5">
       <v-btn
         class="mr-5"
         small
@@ -64,13 +64,13 @@
           >mdi-chevron-down</v-icon
         >
       </v-btn>
-      <v-btn
+      <!-- <v-btn
         color="primary"
         small
         href="https://www.4everland.org/firstlanding"
         target="_blank"
         >Rules</v-btn
-      >
+      > -->
     </div>
     <div class="ta-c">
       <img
@@ -94,95 +94,101 @@
       />
       <!-- <act-countdown></act-countdown> -->
     </div>
-    <div class="act-p1 bdrs-5 pos-r bg-white">
-      <div class="pd-20 pl-0 pr-0">
-        <div class="ml-5 mr-6 d-flex al-c">
-          <h3>My Rewards</h3>
-        </div>
-        <div class="ov-a mt-5 gray-3 ta-c">
-          <div class="ml-5 nowrap d-flex" v-if="list.length">
-            <div
-              class="
-                bg-white
-                bdrs-5
-                bd-1
-                pt-5
-                pb-5
-                d-ib
-                reward-item
-                mr-6
-                flex-1
-              "
-              :class="{
-                done: it.done,
-              }"
-              v-for="it in list"
-              :key="it.type"
-              v-show="!it.hide || it.done"
-            >
-              <div v-if="it.loaded">
-                <p class="fw-b">
-                  {{ numberComma(it.reward) }}
-                  <span class="fz-12">4EVER</span>
-                </p>
-                <div class="gray fz-12 mt-1 d-flex al-c flex-center">
-                  <span>{{ it.title }}</span>
-                  <e-tooltip right max-width="300" v-if="it.tip">
-                    <v-icon slot="ref" color="#999" size="14" class="pa-1 d-ib"
-                      >mdi-help-circle-outline</v-icon
+    <div class="pa-5">
+      <div class="act-p1 bdrs-5 pos-r bg-white">
+        <div class="pd-20 pl-0 pr-0">
+          <div class="ml-5 mr-6 d-flex al-c">
+            <h3>My Rewards</h3>
+          </div>
+          <div class="ov-a mt-5 gray-3 ta-c">
+            <div class="ml-5 nowrap d-flex" v-if="list.length">
+              <div
+                class="
+                  bg-white
+                  bdrs-5
+                  bd-1
+                  pt-5
+                  pb-5
+                  d-ib
+                  reward-item
+                  mr-6
+                  flex-1
+                "
+                :class="{
+                  done: it.done,
+                }"
+                v-for="it in list"
+                :key="it.type"
+                v-show="!it.hide || it.done"
+              >
+                <div v-if="it.loaded">
+                  <p class="fw-b">
+                    {{ numberComma(it.reward) }}
+                    <span class="fz-12">4EVER</span>
+                  </p>
+                  <div class="gray fz-12 mt-1 d-flex al-c flex-center">
+                    <span>{{ it.title }}</span>
+                    <e-tooltip right max-width="300" v-if="it.tip">
+                      <v-icon
+                        slot="ref"
+                        color="#999"
+                        size="14"
+                        class="pa-1 d-ib"
+                        >mdi-help-circle-outline</v-icon
+                      >
+                      <span v-html="it.tip"></span>
+                    </e-tooltip>
+                  </div>
+                  <div class="mt-8">
+                    <v-btn
+                      @click="onClick(it)"
+                      color="primary"
+                      small
+                      :disabled="it.disabled"
+                      v-if="it.btnTxt"
+                      >{{ it.btnTxt }}</v-btn
                     >
-                    <span v-html="it.tip"></span>
-                  </e-tooltip>
+                  </div>
                 </div>
-                <div class="mt-8">
-                  <v-btn
-                    @click="onClick(it)"
-                    color="primary"
-                    small
-                    :disabled="it.disabled"
-                    v-if="it.btnTxt"
-                    >{{ it.btnTxt }}</v-btn
-                  >
+                <div v-else>
+                  <v-skeleton-loader
+                    type="card-heading, list-item-two-line"
+                  ></v-skeleton-loader>
                 </div>
-              </div>
-              <div v-else>
-                <v-skeleton-loader
-                  type="card-heading, list-item-two-line"
-                ></v-skeleton-loader>
               </div>
             </div>
+            <div v-else class="ta-c gray-7">
+              Event ended. No records found for this wallet address({{
+                ethAddr.cutStr(6, 4)
+              }})
+            </div>
           </div>
-          <div v-else class="ta-c gray-7">
-            Event ended. No records found for this wallet address({{
-              ethAddr.cutStr(6, 4)
-            }})
+          <div class="ta-c mt-10">
+            <v-btn
+              :disabled="claimAmount == 0 || isClaimed"
+              @click="onClaim"
+              :loading="claimLoading"
+              color="primary"
+            >
+              <span class="white-0 d-ib pl-3 pr-3"
+                >{{ claimBtnTxt }} :
+                {{ numberComma(claimAmount) }}
+                <span class="fz-12">4EVER</span></span
+              >
+            </v-btn>
+            <!-- <div class="mt-3">
+              <v-btn small plain color="white" @click="setAddr"
+                >Wallet Address</v-btn
+              >
+            </div> -->
           </div>
-        </div>
-        <div class="ta-c mt-10">
-          <v-btn
-            :disabled="claimAmount == 0 || isClaimed"
-            @click="onClaim"
-            :loading="claimLoading"
-            color="primary"
-          >
-            <span class="white-0 d-ib pl-3 pr-3"
-              >{{ claimBtnTxt }} :
-              {{ numberComma(claimAmount) }}
-              <span class="fz-12">4EVER</span></span
-            >
-          </v-btn>
-          <!-- <div class="mt-3">
-            <v-btn small plain color="white" @click="setAddr"
-              >Wallet Address</v-btn
-            >
-          </div> -->
         </div>
       </div>
-    </div>
 
-    <div v-if="!loading">
-      <act-dapp ref="dapp" :tip="(list[4] || {}).tip" />
-      <act-invite ref="invite" :tip="(list[3] || {}).tip" />
+      <div v-if="!loading">
+        <act-dapp ref="dapp" :tip="(list[4] || {}).tip" />
+        <act-invite ref="invite" :tip="(list[3] || {}).tip" />
+      </div>
     </div>
   </div>
 </template>
@@ -200,7 +206,7 @@ export default {
       isFocus: (s) => s.isFocus,
       nowDate: (s) => s.nowDate,
       connectAddr: (s) => s.connectAddr,
-      netType: (s) => s.netType,
+      chainId: (s) => s.chainId,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -266,11 +272,6 @@ export default {
     };
   },
   watch: {
-    "$route.path"(val) {
-      if (val == "/dashboard/first-landing") {
-        // this.onRefresh();
-      }
-    },
     isClaimed(val) {
       localStorage.is_claimed3 = val ? "1" : "";
       if (val && !localStorage.tever_symbol2) {
@@ -284,29 +285,11 @@ export default {
       this.getList();
     },
   },
-  created() {
+  mounted() {
+    sessionStorage.loginTo = location.pathname;
     this.getList();
   },
   methods: {
-    async getAddr0() {
-      try {
-        const { data } = await this.$http2.get("/activity/ethAddress");
-        this.ethAddr = data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getAddr1() {
-      try {
-        const { data } = await this.$http2.get("/activity/ethAddress/list");
-        this.walletList = data;
-        if (data.length) {
-          this.ethAddr = data[0].address;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async getClaimInfo() {
       console.log("get claim info");
       try {
@@ -343,13 +326,13 @@ export default {
         });
         return;
       }
-      if (!this.netType) {
+      if (!this.chainId) {
         console.log("Unknown network");
         return;
       }
       this.isNetOk =
-        (this.$inDev && this.netType == "rinkeby") ||
-        (!this.$inDev && this.netType == "main");
+        (this.$inDev && this.chainId == 4) ||
+        (!this.$inDev && this.chainId == 1);
       if (!this.isNetOk) {
         try {
           const msg = this.$inDev

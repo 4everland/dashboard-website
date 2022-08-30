@@ -237,6 +237,10 @@ export default {
           },
         });
         // console.log(data.list[0], "extraData-0-----");
+        this.$setState({
+          curBucketInfo: data.list[0],
+        });
+
         data.list[0].createdAt = new Date(
           Number(data.list[0].createdAt * 1000)
         ).format();

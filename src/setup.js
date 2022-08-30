@@ -17,7 +17,7 @@ Vue.prototype.$onLoginData = (data) => {
   const token = data.accessToken;
   localStorage.token = token;
   localStorage.refreshAt = Date.now();
-  let loginTo = localStorage.loginTo || "/";
+  let loginTo = sessionStorage.loginTo || localStorage.loginTo || "/";
   localStorage.loginTo = "";
   location.href = loginTo;
 };
@@ -77,25 +77,32 @@ Vue.prototype.$utils = {
     }
     return str.substring(0, len);
   },
-  getFileSize(byte, isObj = false) {
+  getFileSize(byte, isObj = false, fix = 2) {
     if (!byte && byte !== 0 && !isObj) {
       return byte;
     }
     const mb = Math.pow(1024, 2);
     const gb = Math.pow(1024, 3);
+    const tb = Math.pow(1024, 4);
     let num = byte;
     let unit = "B";
-    if (byte >= gb) {
-      num = (byte / gb).toFixed(2);
+    if (byte >= tb) {
+      num = byte / tb;
+      unit = "TB";
+    } else if (byte >= gb) {
+      num = byte / gb;
       unit = "GB";
     } else if (byte >= mb) {
-      num = (byte / mb).toFixed(2);
+      num = byte / mb;
       unit = "MB";
     } else if (byte >= 1024 || byte < 0.01) {
-      num = (byte / 1024).toFixed(2);
+      num = byte / 1024;
       unit = "KB";
     } else if (byte > 0) {
       num = parseInt(byte);
+    }
+    if (unit != "B") {
+      num = num.toFixed(fix);
     }
     if (num) num = (num + "").replace(".00", "");
     if (isObj)
@@ -125,7 +132,7 @@ Vue.prototype.$utils = {
     if (i == -1) return num;
     return str.substring(0, i + keep + 1) * 1;
   },
-  getPurchase(type, amount) {
+  getPurchase(type, amount = 0, time) {
     const nameMap = {
       BUILD_TIME: "Build Minutes",
       TRAFFIC: "Bandwidth",
@@ -141,16 +148,20 @@ Vue.prototype.$utils = {
       it.amount = parseInt(it.amount / 60);
       it.unit = "Min";
     } else if (/ipfs/i.test(it.type) && it.amount == "0") {
-      it.amount = "Duration Extension";
+      it.amount = "renewal";
     } else {
       const obj = this.getFileSize(it.amount, true);
       it.amount = obj.num;
       it.unit = obj.unit;
     }
+    if (time) {
+      it.until = "until " + new Date(time * 1e3).format("date");
+    }
     return it;
   },
-  getCost(usdt) {
+  getCost(usdt, len = 4) {
     if (usdt < 0.0001) return "<0.0001";
-    return this.cutFixed(usdt, usdt < 0.01 ? 4 : 2);
+    if (!len) len = usdt < 0.01 ? 4 : 2;
+    return this.cutFixed(usdt, len);
   },
 };

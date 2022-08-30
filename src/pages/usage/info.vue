@@ -118,7 +118,7 @@ export default {
         {
           label: "IPFS",
           desc: info.ipfsStorage
-            ? `Free resources ${getSize(info.ipfsDefaultStorage)} a year, ${
+            ? `Free resources ${getSize(info.ipfsDefaultStorage)} 12 months, ${
                 getSize(info.ipfsStorage - info.ipfsDefaultStorage) || "0G"
               } purchased，${new Date(info.ipfsStorageStart * 1e3).format(
                 "date"

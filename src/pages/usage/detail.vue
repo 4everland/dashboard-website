@@ -22,13 +22,13 @@
             </template>
             <template v-slot:item.cost="{ item }">
               <span>{{ item.cost }}</span>
-              <span class="gray-7 ml-1">USD</span>
+              <span class="gray-7 ml-1">USDC</span>
             </template>
           </v-data-table>
         </e-kv>
         <e-kv class="mt-4" label="Amount">
           <span>{{ info.cost }}</span>
-          <span class="gray-7 ml-2">USD</span>
+          <span class="gray-7 ml-2">USDC</span>
         </e-kv>
         <e-kv class="mt-4" label="Network">
           <span>Polygon</span>
@@ -43,7 +43,7 @@
           <a
             class="color-1 fz-14"
             target="_blank"
-            :href="$getPolygonUrl(info.hash)"
+            :href="$getTxLink(info.hash)"
             >{{ (info.hash || "").cutStr(6, 6) }}</a
           >
           <v-btn
