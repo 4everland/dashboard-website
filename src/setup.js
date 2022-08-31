@@ -112,6 +112,27 @@ Vue.prototype.$utils = {
       };
     return num + " " + unit;
   },
+  getNumCount(number, isObj = false, fix = 2) {
+    let num = number;
+    let unit = "";
+    if (typeof number !== "number") {
+      num = parseInt(number);
+    }
+    const k = Math.pow(10, 3);
+    if (num >= k) {
+      num = num / k;
+      unit = "K";
+    }
+    if (/\./.test(num)) {
+      num = num.toFixed(fix);
+    }
+    if (isObj)
+      return {
+        num,
+        unit,
+      };
+    return num + " " + unit;
+  },
   getCidV1(cid) {
     if (!cid) return "";
     cid = cid.replace(/"/g, "");

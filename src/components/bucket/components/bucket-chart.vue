@@ -91,11 +91,13 @@ export default {
               ).format()}</div>
              <div  style="height:30px">
                   <span class=" fz-16" style="color: #775DA6">${
-                    this.$utils.getFileSize(params[0].value, true).num
+                    this.dataType
+                      ? this.$utils.getNumCount(params[0].value, true).num
+                      : this.$utils.getFileSize(params[0].value, true).num
                   }</span>
                   <span class="ml-1">${
                     this.dataType
-                      ? ""
+                      ? this.$utils.getNumCount(params[0].value, true).unit
                       : this.$utils.getFileSize(params[0].value, true).unit
                   }</span>
                 </div>

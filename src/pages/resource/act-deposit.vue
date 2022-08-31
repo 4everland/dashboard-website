@@ -62,7 +62,7 @@ export default {
   watch: {
     amount(val) {
       // console.log(val);
-      if (val > 0) {
+      if (val >= 0) {
         if (this.walletBalance && val > this.walletBalance) {
           this.amount = this.walletBalance;
         }
@@ -93,8 +93,8 @@ export default {
       let msg = "";
       if (num === "") {
         msg = "Deposit amount required";
-      } else if (num < 1) {
-        msg = "The minimum deposit amount cannot be less than $1.";
+      } else if (num < 0.1) {
+        msg = "The minimum deposit amount cannot be less than $0.1.";
       }
       if (msg) {
         return this.$alert(msg);
