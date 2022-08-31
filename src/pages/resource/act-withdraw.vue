@@ -83,9 +83,10 @@ export default {
       console.log(val);
     },
     amount(val) {
-      if (val > 0) {
+      if (val >= 0) {
         if (val > this.balance) this.amount = this.balance;
-        if (/\.\d/.test(val)) this.amount = this.$utils.cutFixed(val, 4);
+        if (/\.\d/.test(val) && val > 0)
+          this.amount = this.$utils.cutFixed(val, 4);
       } else {
         this.amount = parseInt(val) || "";
       }
@@ -110,6 +111,8 @@ export default {
       let msg = "";
       if (!num) {
         msg = "Withdraw amount required";
+      } else if (num < 0.1) {
+        msg = "The minimum withdraw amount cannot be less than $0.1.";
       } else if (!addr) {
         msg = "Withdraw address required";
       } else if (!/^0x[0-9a-f]{40}$/i.test(addr)) {
