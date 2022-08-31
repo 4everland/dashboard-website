@@ -1,12 +1,12 @@
 <template>
   <div v-show="dialogFormVisible" id="Airdrop">
-    <div class="airdrop-con box_36 flex-col">
-      <div class="block_30 flex-col">
+    <div
+      class="airdrop-con flex-col"
+      :class="airDropData.type == 1 ? 'box_active' : ''"
+    >
+      <div class="flex-col">
         <span class="text_67">FREE RESOURCE ALERT</span>
-        <div
-          class="block_31 flex-row"
-          :class="airDropData.type == 1 ? 'justify-start' : 'justify-between'"
-        >
+        <div class="block_31 justify-between flex-row">
           <template v-for="(item, index) in items">
             <div class="group_27 flex-col" v-if="item.value" :key="index">
               <div class="text-wrapper_17 flex-col justify-between">
@@ -37,10 +37,7 @@
           <div>{{ airDropData.extra }}</div>
           Enjoy your time at 4EVERLAND!</span
         >
-        <div
-          class="block_32 flex-row"
-          :class="airDropData.canShare ? 'justify-between' : 'justify-center'"
-        >
+        <div class="block_32 justify-center flex-row">
           <div class="text-wrapper_21 flex-col" @click="cancel">
             <span class="text_77">OK</span>
           </div>
@@ -119,16 +116,36 @@ export default {
       if (data.traffic != 0) {
         this.items[3].value = this.conver(data.traffic);
       }
+      this.stop();
       this.dialogFormVisible = true;
     },
     cancel() {
+      this.move();
       this.dialogFormVisible = false;
+    },
+    stop() {
+      let mo = function (e) {
+        e.preventDefault();
+      };
+      document.body.style.overflow = "hidden";
+      document.body.style.height = "100vh";
+      document.addEventListener("touchmove", mo, false);
+    },
+    move() {
+      let mo = function (e) {
+        e.preventDefault();
+      };
+      document.body.style.overflow = "";
+      document.body.style.height = "";
+      document.removeEventListener("touchmove", mo, false);
     },
     share() {
       this.$http.post("$auth/events/airdrop/share");
-      window.open(`https://twitter.com/intent/tweet?text=💠The &hashtags=Web3 product journey has begun for me at @4everland_org, and I have received free resources to help me along the way.
-      🚀The best way to explore Web3 is to experience its products. Join us today and start your Web3 journey.
-      ✅${encodeURIComponent(this.shareUrl)}`);
+      window.open(
+        `https://twitter.com/intent/tweet?text=💠The &hashtags=Web3 product journey has begun for me at @4everland_org, and I have received free resources to help me along the way.🚀The best way to explore Web3 is to experience its products. Join us today and start your Web3 journey.✅${encodeURIComponent(
+          this.shareUrl
+        )}`
+      );
       this.cancel();
     },
     async getCode() {
@@ -170,6 +187,8 @@ export default {
   z-index: 99999999;
   background-color: rgba(33, 33, 33, 0.45);
   .airdrop-con {
+    max-width: 920px;
+    max-height: 480px;
     background-color: #fff;
     position: absolute;
     left: 0;
@@ -177,184 +196,168 @@ export default {
     top: -60px;
     bottom: 0;
     margin: auto;
+    padding: 22px 40px 35px 40px;
+    border-radius: 10px;
   }
-}
-.flex-row {
-  display: flex;
-}
-.justify-between {
-  justify-content: space-between;
-}
-.justify-start {
-  justify-content: flex-start;
-}
-.justify-center {
-  justify-content: center;
-}
-.box_36 {
-  width: 920px;
-  height: 470px;
-  border-radius: 10px;
-  position: relative;
-  opacity: 1;
-}
-
-.block_30 {
-  width: 840px;
-  height: 397px;
-  margin: 22px 0 0 40px;
-}
-
-.text_67 {
-  width: 348px;
-  height: 36px;
-  display: inline-block;
-  overflow-wrap: break-word;
-  color: rgba(11, 8, 23, 1);
-  font-size: 30px;
-  font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
-  white-space: nowrap;
-  line-height: 36px;
-  text-align: left;
-}
-
-.block_31 {
-  width: 840px;
-  height: 110px;
-  margin-top: 51px;
-}
-
-.group_27 {
-  height: 110px;
-  border-radius: 10px;
-  border: 1px solid rgba(208, 218, 233, 1);
-  background-color: rgba(249, 251, 252, 1);
-  width: 195px;
-  position: relative;
-  .icon {
-    width: 40px;
-    position: absolute;
-    left: 28px;
-    top: -20px;
+  .flex-row {
+    display: flex;
   }
-}
-
-.text-wrapper_17 {
-  width: 88px;
-  height: 53px;
-  margin: 38px 0 0 28px;
-}
-
-.text_68 {
-  width: 86px;
-  height: 16px;
-  display: inline-block;
-  overflow-wrap: break-word;
-  color: rgba(137, 137, 137, 1);
-  font-size: 14px;
-  font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
-  white-space: nowrap;
-  line-height: 14px;
-  text-align: left;
-  margin-left: 2px;
-}
-
-.text_69 {
-  width: 34px;
-  height: 29px;
-  display: inline-block;
-  overflow-wrap: break-word;
-  color: rgba(16, 13, 88, 1);
-  font-size: 24px;
-  font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
-  white-space: nowrap;
-  line-height: 29px;
-  text-align: left;
-  margin-top: 8px;
-}
-.partner {
-  display: flex;
-  align-items: center;
-  span {
-    color: #0b0817;
-    font-size: 18px;
-    margin: 0 28px;
+  .justify-between {
+    justify-content: space-between;
   }
-  img {
+  .justify-start {
+    justify-content: flex-start;
+  }
+  .justify-center {
+    justify-content: center;
+  }
+  .box_active {
+    max-width: 600px;
+  }
+
+  .text_67 {
+    display: inline-block;
+    overflow-wrap: break-word;
+    color: rgba(11, 8, 23, 1);
+    font-size: 30px;
+    font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
+    white-space: nowrap;
+    line-height: 36px;
+    text-align: left;
+  }
+
+  .block_31 {
+    // width: 840px;
+    height: 110px;
+    margin-top: 51px;
+  }
+
+  .group_27 {
     width: 195px;
     height: 110px;
     border-radius: 10px;
+    border: 1px solid rgba(208, 218, 233, 1);
+    background-color: rgba(249, 251, 252, 1);
+    position: relative;
+    .icon {
+      width: 40px;
+      position: absolute;
+      left: 28px;
+      top: -20px;
+    }
   }
-}
-.paragraph_9 {
-  width: 818px;
-  height: 104px;
-  display: inline-block;
-  overflow-wrap: break-word;
-  color: rgba(108, 119, 137, 1);
-  font-size: 14px;
-  font-family: ArialMT;
-  line-height: 26px;
-  text-align: left;
-  margin: 28px 0 0 6px;
-}
 
-.block_32 {
-  width: 420px;
-  height: 40px;
-  margin: 28px 0 0 210px;
-}
+  .text-wrapper_17 {
+    margin: 38px 0 0 28px;
+  }
 
-.text-wrapper_21 {
-  height: 40px;
-  border-radius: 2px;
-  border: 1px solid rgba(119, 93, 166, 1);
-  background-color: rgba(255, 255, 255, 1);
-  width: 200px;
-  cursor: pointer;
-}
+  .text_68 {
+    display: block;
+    overflow-wrap: break-word;
+    color: rgba(137, 137, 137, 1);
+    font-size: 14px;
+    font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
+    white-space: nowrap;
+    line-height: 14px;
+    text-align: left;
+    margin-left: 2px;
+  }
 
-.text_77 {
-  width: 27px;
-  height: 25px;
-  display: inline-block;
-  overflow-wrap: break-word;
-  color: rgba(119, 93, 166, 1);
-  font-size: 18px;
-  white-space: nowrap;
-  line-height: 25px;
-  text-align: left;
-  margin: 7px 0 0 87px;
-}
+  .text_69 {
+    display: block;
+    overflow-wrap: break-word;
+    color: rgba(16, 13, 88, 1);
+    font-size: 24px;
+    font-family: Helvetica, "Microsoft YaHei", Arial, sans-serif;
+    white-space: nowrap;
+    line-height: 29px;
+    text-align: left;
+    margin-top: 8px;
+  }
+  .partner {
+    display: flex;
+    align-items: center;
+    span {
+      color: #0b0817;
+      font-size: 18px;
+      margin: 0 28px;
+    }
+    img {
+      width: 195px;
+      height: 110px;
+      border-radius: 10px;
+    }
+  }
+  .paragraph_9 {
+    width: 100%;
+    height: 104px;
+    display: inline-block;
+    overflow-wrap: break-word;
+    color: rgba(108, 119, 137, 1);
+    font-size: 14px;
+    font-family: ArialMT;
+    line-height: 26px;
+    text-align: left;
+    margin-top: 28px;
+  }
 
-.box_38 {
-  height: 40px;
-  border-radius: 2px;
-  background-color: rgba(119, 93, 166, 1);
-  width: 200px;
-  cursor: pointer;
-}
+  .block_32 {
+    max-width: 100%;
+    margin-top: 28px;
+  }
 
-.block_33 {
-  width: 86px;
-  height: 23px;
-  margin: 9px 0 0 60px;
-}
+  .text-wrapper_21 {
+    height: 40px;
+    border-radius: 2px;
+    border: 1px solid rgba(119, 93, 166, 1);
+    background-color: rgba(255, 255, 255, 1);
+    width: 200px;
+    cursor: pointer;
+  }
 
-.label_6 {
-  width: 28px;
-  height: 23px;
-}
+  .text_77 {
+    width: 27px;
+    height: 25px;
+    display: inline-block;
+    overflow-wrap: break-word;
+    color: rgba(119, 93, 166, 1);
+    font-size: 18px;
+    white-space: nowrap;
+    line-height: 25px;
+    text-align: left;
+    margin: 7px 0 0 87px;
+  }
 
-.text_78 {
-  width: 49px;
-  height: 22px;
-  display: inline-block;
-  overflow-wrap: break-word;
-  color: rgba(255, 255, 255, 1);
-  font-size: 16px;
-  white-space: nowrap;
-  line-height: 22px;
-  text-align: left;
+  .box_38 {
+    height: 40px;
+    border-radius: 2px;
+    background-color: rgba(119, 93, 166, 1);
+    width: 200px;
+    cursor: pointer;
+    margin-left: 20px;
+  }
+
+  .block_33 {
+    width: 86px;
+    height: 23px;
+    margin: 9px 0 0 60px;
+  }
+
+  .label_6 {
+    width: 28px;
+    height: 23px;
+  }
+
+  .text_78 {
+    width: 49px;
+    height: 22px;
+    display: inline-block;
+    overflow-wrap: break-word;
+    color: rgba(255, 255, 255, 1);
+    font-size: 16px;
+    white-space: nowrap;
+    line-height: 22px;
+    text-align: left;
+  }
 }
 </style>
