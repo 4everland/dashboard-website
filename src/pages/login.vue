@@ -59,8 +59,8 @@
     <v-dialog v-model="gitOverlay" width="500">
       <div class="connect-box pa-14">
         <div class="text-caption grey--text text--darken-2 mb-7">
-          New Github accounts will no longer be supported, please connect your
-          wallet to login instead.
+          Github has been disabled for new users, please login with your wallet
+          instead.
         </div>
         <v-btn
           class="start-btn text-subtitle-1 font-weight-black px-10 white--text"
