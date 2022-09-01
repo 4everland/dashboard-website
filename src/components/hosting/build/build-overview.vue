@@ -38,16 +38,7 @@
             </v-col>
           </v-row>
 
-          <e-kv2
-            label="Domain"
-            class="mt-7"
-            :class="
-              info.platform == 'IPFS' ||
-              (projInfo.latest || {}).taskId == info.taskId
-                ? ''
-                : 'op-0'
-            "
-          >
+          <e-kv2 label="Domain" class="mt-7" :class="showLabel ? '' : 'op-0'">
             <e-link :href="'//' + info.domain">
               {{ info.domain }}
             </e-link>
@@ -64,9 +55,7 @@
               class="ml-auto"
               :label="info.platform"
               style="min-width: 120px"
-              v-if="
-                info.platform && (projInfo.latest || {}).taskId == info.taskId
-              "
+              v-if="showLabel"
             >
               <div class="al-c" v-if="info.hash">
                 <e-link
@@ -194,6 +183,13 @@ export default {
       const { domain } = this.info;
       if (domain) return "//" + domain;
       return "";
+    },
+    showLabel() {
+      return (
+        this.info.platform == "IPFS" ||
+        this.info.platform == "AR" ||
+        (this.projInfo.latest || {}).taskId == this.info.taskId
+      );
     },
   },
   async created() {

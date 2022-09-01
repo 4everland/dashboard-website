@@ -12,13 +12,15 @@ module.exports = {
   lintOnSave: false,
   chainWebpack: (config) => {
     config.externals({
-      // vue: "Vue",
+      vue: "Vue",
       echarts: "echarts",
       "@ethereumjs/common": "ethers",
       axios: "axios",
       "vue-router": "VueRouter",
       vuex: "Vuex",
       html2canvas: "html2canvas",
+      vuetify: "Vuetify",
+      "vuetify/lib/framework": "Vuetify",
     });
     config.plugins.delete("preload");
     config.plugins.delete("prefetch");
@@ -27,8 +29,8 @@ module.exports = {
     optimization: {
       splitChunks: {
         chunks: "all",
-        maxSize: 4e5,
-        minSize: 3e5,
+        // maxSize: 4e5,
+        // minSize: 3e5,
         // minChunks: 10,
         maxAsyncRequests: 30,
         maxInitialRequests: 30,

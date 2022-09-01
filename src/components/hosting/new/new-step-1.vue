@@ -69,6 +69,12 @@
             />
           </div>
         </v-col>
+        <v-col v-if="form.platform == 'AR'">
+          <div class="gray fz-14">
+            Tips: All assets in Arweave are linked using relative paths due to
+            its features.
+          </div>
+        </v-col>
       </v-row>
     </div>
 
@@ -254,11 +260,11 @@ export default {
           name: "IC",
           icon: "h-ic.svg",
         },
-        // {
-        //   label: "Arweave",
-        //   name: "AR",
-        //   icon: "h-ar.svg",
-        // },
+        {
+          label: "Arweave",
+          name: "AR",
+          icon: "h-ar.svg",
+        },
       ],
     };
   },

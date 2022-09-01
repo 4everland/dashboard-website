@@ -222,7 +222,6 @@ export default {
         this.tableLoading = false;
         this.domainList = data.list;
         this.customDomainList = data.list.filter((it) => !it.systemAlloc);
-        // console.log(data, "domainData-0-----");
       } catch (err) {
         console.log(err, "err");
       }
@@ -236,7 +235,6 @@ export default {
             name: this.bucketName,
           },
         });
-        // console.log(data.list[0], "extraData-0-----");
         this.$setState({
           curBucketInfo: data.list[0],
         });
