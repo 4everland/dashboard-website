@@ -59,7 +59,6 @@
         <div class="mt-5 ta-c">
           <v-btn
             :to="`/hosting/project/${info.buildConfig.name}/${info.buildConfig.projectId}`"
-            @click="showPop = false"
             color="primary"
             min-width="130"
             class="mr-5"
