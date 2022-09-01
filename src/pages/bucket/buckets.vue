@@ -18,15 +18,8 @@
 </template>
 
 <script>
-import Vue from "vue";
 import Storage from "@/views/bucket/storage";
 import NavigationDrawers from "@/views/bucket/components/navigation-drawers";
-// import BucketFolder from "@/views/bucket/components/bucket-folder";
-
-// Vue.component("bucket-folder", BucketFolder);
-// Vue.component("bucket-folder", BucketFolder);
-// Vue.component("bucket-folder", BucketFolder);
-
 import { bus } from "../../main";
 export default {
   data() {
