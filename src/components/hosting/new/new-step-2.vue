@@ -22,7 +22,7 @@
               <div class="fz-13">
                 <span class="gray-6">Let more people know your DWeb.</span>
                 <a
-                  class="ml-3"
+                  class="ml-3 u"
                   :href="`https://twitter.com/intent/tweet?text=${encodeURI(
                     `I've deployed a wonderful Dapp through @4everland_org Hosting, which helps developers quickly build, publish, and manage Dwebs. Come and experience it!  
   Click here to access: https://${info.domain}`
@@ -38,7 +38,7 @@
                   eye-catching!</span
                 >
                 <a
-                  class="ml-3"
+                  class="ml-3 u"
                   href="https://docs.google.com/forms/d/e/1FAIpQLSeLHwlNcFieeHhoyYJiKDydeZJShhwlerWE9ZsdNrdbgQgLCg/viewform"
                   target="_blank"
                   >Apply</a
@@ -49,6 +49,7 @@
                 We also offer CLI deployment methods. Click here to
                 <a
                   href="https://docs.hosting.4everland.org/cli/"
+                  class="u"
                   target="_blank"
                   >learn more</a
                 >.
