@@ -70,7 +70,10 @@
           </div>
         </v-col>
         <v-col v-if="form.platform == 'AR'">
-          Warning: Ar Project Not Supported Absolute Path
+          <div class="gray fz-14">
+            Tips: All assets in Arweave are linked using relative paths due to
+            its features.
+          </div>
         </v-col>
       </v-row>
     </div>

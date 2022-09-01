@@ -6,7 +6,8 @@ export default {
         "4everland will delete all of your projects, along with all of its Deployments, Domains, SSL Certificates, and all other resources belonging to your project.";
 
       if (it.platform == "AR") {
-        html = "this is ar project";
+        html =
+          "Deleting the project will remove it from your Hosting project list, but it will remain on Arweave's decentralized network permanently.";
       }
       html +=
         '<div class="bg-warning pd-10-20 fz-14 mt-3"><b>Warning</b>: This action is not reversible.Please be certain</div>' +
