@@ -1,6 +1,5 @@
 // import buckets from "./buckets";
 // import arHistory from "./ar-history";
-// import store from "./store";
 // import domains from "./domains";
 // import domain from "./domain";
 
@@ -8,7 +7,6 @@ export default [
   {
     path: "/storage/*",
     // component: buckets,
-
     component: () => import("./buckets"),
     meta: {
       title: "Storage",
@@ -19,7 +17,6 @@ export default [
     path: "/arweave",
     // component: arHistory,
     component: () => import("./ar-history"),
-
     meta: {
       title: "AR History",
       isTab: 1,
@@ -27,9 +24,8 @@ export default [
   },
   {
     path: "/arweave/*",
-    // component: store,
-    component: () => import("./store"),
-
+    // component: buckets,
+    component: () => import("./buckets"),
     meta: {
       title: "File - AR History",
       isTab: 1,
@@ -39,7 +35,6 @@ export default [
     path: "/domains",
     // component: domains,
     component: () => import("./domains"),
-
     meta: {
       title: "Domains",
       isTab: 1,

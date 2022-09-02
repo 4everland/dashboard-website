@@ -343,7 +343,7 @@
 </template>
 
 <script>
-import { bus } from "../../../main";
+import { bus } from "../../../utils/bus";
 
 export default {
   props: {

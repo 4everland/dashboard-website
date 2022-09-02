@@ -24,7 +24,7 @@
 
 <script>
 import InputUpload from "@/views/bucket/components/input-upload";
-import { bus } from "../../main";
+import { bus } from "../../utils/bus";
 import { mapState } from "vuex";
 import { TaskWrapper } from "./task.js";
 export default {

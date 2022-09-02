@@ -217,7 +217,7 @@ import BucketUpload from "@/views/bucket/bucket-upload";
 import BucketPartsList from "@/views/bucket/bucket-parts-list";
 import BucketFileInfo from "@/views/bucket/components/bucket-fileInfo";
 
-import { bus } from "../../../main";
+import { bus } from "../../../utils/bus";
 import mixin from "../storage-mixin";
 import { DeleteTaskWrapper } from "../task.js";
 export default {
