@@ -149,7 +149,7 @@
                     class="mr-6 shrink-0"
                     img="/img/svg/hosting/m-branch.svg"
                     :link="
-                      it.repo.cloneUrl.replace(
+                      (it.repo.cloneUrl || '').replace(
                         '.git',
                         '/tree/' + it.repo.defaultBranch
                       )
@@ -195,7 +195,7 @@
                   <e-icon-link
                     class="mr-5 shrink-1"
                     img="/img/svg/hosting/m-github.svg"
-                    :link="it.repo.cloneUrl.replace('.git', '')"
+                    :link="(it.repo.cloneUrl || '').replace('.git', '')"
                   >
                     <span class="ml-1 gray-6">{{
                       `${it.repo.namespace}/${it.repo.name}`.cutStr(30)
