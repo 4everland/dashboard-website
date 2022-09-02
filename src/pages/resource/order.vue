@@ -52,7 +52,9 @@
 </template>
 
 <script>
-import mixin from "@/components/pay/mixin";
+import PayNetwork from "@/views/pay/pay-network";
+import PayConfirm from "@/views/pay/pay-confirm";
+import mixin from "@/views/pay/mixin";
 import { mapState } from "vuex";
 import { BigNumber } from "@ethersproject/bignumber";
 
@@ -143,6 +145,10 @@ export default {
         this.onErr(error);
       }
     },
+  },
+  components: {
+    PayNetwork,
+    PayConfirm,
   },
 };
 </script>

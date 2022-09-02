@@ -138,6 +138,41 @@ export default {
       return curIdx;
     },
   },
+  components: {
+    // Bucket
+    BucketFolder: () => import("@/views/bucket/components/bucket-folder"),
+    BucketOverview: () => import("@/views/bucket/components/bucket-overview"),
+    BucketStatistics: () =>
+      import("@/views/bucket/components/bucket-statistics"),
+    // Projects
+    ProjOverview: () => import("@/views/hosting/project/proj-overview"),
+    ProjDeployments: () => import("@/views/hosting/project/proj-deployments"),
+    ProjCommits: () => import("@/views/hosting/project/proj-commits"),
+    ProjSettings: () => import("@/views/hosting/project/proj-settings"),
+    // Projects-Settings
+    StProjGeneral: () => import("@/views/hosting/settings/st-proj-general"),
+    StProjDomains: () => import("@/views/hosting/settings/st-proj-domains"),
+    StProjGit: () => import("@/views/hosting/settings/st-proj-git"),
+    StProjEnv: () => import("@/views/hosting/settings/st-proj-env"),
+    StProjAdvanced: () => import("@/views/hosting/settings/st-proj-advanced"),
+
+    // Hosting-Domain
+    DomainDomains: () => import("@/views/hosting/domain/domain-domains"),
+    DomainEns: () => import("@/views/hosting/domain/domain-ens"),
+    DomainSns: () => import("@/views/hosting/domain/domain-sns"),
+
+    // Build-Overview/Build-Source
+    BuildOverview: () => import("@/views/hosting/build/build-overview"),
+    BuildSource: () => import("@/views/hosting/build/build-source"),
+
+    // Settings-Page
+    StAccount: () => import("@/views/settings/st-account"),
+    StTokens: () => import("@/views/settings/st-tokens"),
+    StGeneral: () => import("@/views/settings/st-general"),
+    // Settings-Page-AuthTokens
+    StTokensH: () => import("@/views/settings/st-tokens-h"),
+    StTokensB: () => import("@/views/settings/st-tokens-b"),
+  },
 };
 </script>
 

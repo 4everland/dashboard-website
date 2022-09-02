@@ -1,15 +1,16 @@
-import New from "./new";
-import Projects from "./projects";
-import Project from "./project";
-import Build from "./build";
-import Domains from "./domains";
-import Statistics from "./statis-list";
-import StatisDetail from "./statistics-detail";
+// import New from "./new";
+// import Projects from "./projects";
+// import Project from "./project";
+// import Build from "./build";
+// import Domains from "./domains";
+// import Statistics from "./statis-list";
+// import StatisDetail from "./statistics-detail";
 
 export default [
   {
     path: "/new",
-    component: New,
+    // component: New,
+    component: () => import("./new"),
     meta: {
       title: "New Project",
       subTitle: "3 easy steps to get your projects live",
@@ -28,7 +29,7 @@ export default [
   {
     path: "/projects",
     components: {
-      cache: Projects,
+      cache: () => import("./projects"),
     },
     meta: {
       title: "Projects",
@@ -37,7 +38,9 @@ export default [
   },
   {
     path: "/project/:projName/:id",
-    component: Project,
+    // component: Project,
+    component: () => import("./project"),
+
     meta: {
       title: `{projName}`,
       isTab: 1,
@@ -54,7 +57,9 @@ export default [
   },
   {
     path: "/build/:projName/:id/:taskId",
-    component: Build,
+    // component: Build,
+    component: () => import("./build"),
+
     meta: {
       title: `{projName} - Build`,
       isTab: 1,
@@ -75,7 +80,9 @@ export default [
   },
   {
     path: "/domains",
-    component: Domains,
+    // component: Domains,
+    component: () => import("./domains"),
+
     meta: {
       title: "Domains",
       isTab: 1,
@@ -83,14 +90,18 @@ export default [
   },
   {
     path: "/statistics",
-    component: Statistics,
+    // component: Statistics,
+    component: () => import("./statis-list"),
+
     meta: {
       title: "Statistics",
     },
   },
   {
     path: "/statistics/:projName/:id",
-    component: StatisDetail,
+    // component: StatisDetail,
+    component: () => import("./statistics-detail"),
+
     meta: {
       title: "{projName} - Statistic",
       isTab: 1,

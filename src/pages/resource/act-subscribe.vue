@@ -154,7 +154,10 @@
 </template>
 
 <script>
-import mixin from "@/components/pay/mixin";
+import PayChooseNum from "@/views/pay/pay-choose-num";
+import PayConfirm from "@/views/pay/pay-confirm";
+import UsagePreview from "@/views/pay/usage-preview";
+import mixin from "@/views/pay/mixin";
 import { mapState } from "vuex";
 const Mb = Math.pow(1024, 2);
 const Gb = Math.pow(1024, 3);
@@ -528,6 +531,11 @@ export default {
         this.formatToken(fee.length == 2 ? fee[0].add(fee[1]) : fee, 4) * 1
       );
     },
+  },
+  components: {
+    PayChooseNum,
+    PayConfirm,
+    UsagePreview,
   },
 };
 </script>

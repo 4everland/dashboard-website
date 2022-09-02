@@ -86,6 +86,7 @@
 </template>
 
 <script>
+import HStatus from "@/views/hosting/common/h-status";
 export default {
   data() {
     return {
@@ -268,6 +269,9 @@ export default {
       if ([56, 97].includes(id)) return "BSC";
       return "Ethereum";
     },
+  },
+  components: {
+    HStatus,
   },
 };
 </script>

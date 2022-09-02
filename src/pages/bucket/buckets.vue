@@ -1,7 +1,11 @@
 <template>
   <div>
     <!-- Task List -->
-    <div @click.stop="$refs.navDrawers.drawer = true" class="task-list">
+    <div
+      @click.stop="$refs.navDrawers.drawer = true"
+      class="task-list"
+      v-if="!inFile"
+    >
       <span class="task-count" v-show="uploadingTaskLength != 0">{{
         uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
       }}</span>
@@ -13,13 +17,17 @@
     <storage v-if="!inFolder" />
 
     <!-- Upload/Delete Folders Component -->
-    <navigation-drawers ref="navDrawers"></navigation-drawers>
+    <navigation-drawers v-if="!inFile" ref="navDrawers"></navigation-drawers>
   </div>
 </template>
 
 <script>
-import { bus } from "../../main";
+import Storage from "@/views/bucket/storage";
+import NavigationDrawers from "@/views/bucket/components/navigation-drawers";
+import { bus } from "../../utils/bus";
+import initS3 from "./initS3";
 export default {
+  mixins: [initS3],
   data() {
     return {
       list: [
@@ -51,9 +59,15 @@ export default {
     },
   },
   created() {
+    if (this.$s3) return;
+    this.initS3();
     bus.$on("uploadingLength", (uploadingLength) => {
       this.uploadingTaskLength = uploadingLength;
     });
+  },
+  components: {
+    Storage,
+    NavigationDrawers,
   },
 };
 </script>

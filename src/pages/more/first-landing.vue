@@ -550,5 +550,9 @@ export default {
       this.loading = false;
     },
   },
+  components: {
+    ActDapp: () => import("@/views/hosting/act/act-dapp"),
+    ActInvite: () => import("@/views/hosting/act/act-invite"),
+  },
 };
 </script>

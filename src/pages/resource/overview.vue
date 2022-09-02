@@ -83,6 +83,8 @@
 </template>
 
 <script>
+import PayAct from "@/views/pay/pay-act";
+import PayBalance from "@/views/pay/pay-balance";
 import mixin from "./mixin-usage";
 
 export default {
@@ -91,5 +93,9 @@ export default {
     this.getUsage();
   },
   methods: {},
+  components: {
+    PayAct,
+    PayBalance,
+  },
 };
 </script>

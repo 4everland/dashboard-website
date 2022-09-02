@@ -1,19 +1,19 @@
-import Overview from "./overview";
-import Purchase from "./act-subscribe";
-import Withdraw from "./act-withdraw";
-import Deposit from "./act-deposit";
-import Bills from "./bills";
-import BillDetail from "./bill-detail";
-import BillDetail2 from "./bill-detail2";
-import PriceDocs from "./pricing";
-import Order from "./order";
-import AllocRes from "./alloc-res";
-import AllocBalance from "./alloc-balance";
+// // import Overview from "./overview";
+// import Purchase from "./act-subscribe";
+// // import Withdraw from "./act-withdraw";
+// // import Deposit from "./act-deposit";
+// // import Bills from "./bills";
+// // import BillDetail from "./bill-detail";
+// // import BillDetail2 from "./bill-detail2";
+// // import PriceDocs from "./pricing";
+// import Order from "./order";
+// // import AllocRes from "./alloc-res";
+// // import AllocBalance from "./alloc-balance";
 
 export default [
   {
     path: "/resource",
-    component: Overview,
+    component: () => import("./overview"),
     meta: {
       title: "Resource",
       isTab: 1,
@@ -21,7 +21,8 @@ export default [
   },
   {
     path: "/resource/pricing",
-    component: PriceDocs,
+    component: () => import("./pricing"),
+
     meta: {
       title: "Pricing",
       links: [
@@ -41,7 +42,8 @@ export default [
   },
   {
     path: "/resource/bill-detail-cross",
-    component: BillDetail2,
+    component: () => import("./bill-detail2"),
+
     meta: {
       title: "Expenditure Details",
       links: [
@@ -61,7 +63,8 @@ export default [
   },
   {
     path: "/resource/bill-detail",
-    component: BillDetail,
+    component: () => import("./bill-detail"),
+
     meta: {
       title: "Expenditure Details",
       links: [
@@ -81,7 +84,7 @@ export default [
   },
   {
     path: "/resource/bills",
-    component: Bills,
+    component: () => import("./bills"),
     meta: {
       title: "Transaction History",
       links: [
@@ -97,7 +100,8 @@ export default [
   },
   {
     path: "/resource/deposit",
-    component: Deposit,
+    component: () => import("./act-deposit"),
+
     meta: {
       title: "Deposit",
       links: [
@@ -113,7 +117,7 @@ export default [
   },
   {
     path: "/resource/withdraw",
-    component: Withdraw,
+    component: () => import("./act-withdraw"),
     meta: {
       title: "Withdraw",
       links: [
@@ -129,7 +133,8 @@ export default [
   },
   {
     path: "/resource/allocation",
-    component: AllocRes,
+    component: () => import("./alloc-res"),
+
     meta: {
       title: "Resource Allocation",
       links: [
@@ -145,7 +150,8 @@ export default [
   },
   {
     path: "/resource/balance-alloc",
-    component: AllocBalance,
+    component: () => import("./alloc-balance"),
+
     meta: {
       title: "Balance Allocation",
       links: [
@@ -161,7 +167,8 @@ export default [
   },
   {
     path: "/resource/subscribe",
-    component: Purchase,
+    component: () => import("./act-subscribe"),
+
     meta: {
       title: "Purchase",
       isTab: 1,
@@ -178,7 +185,8 @@ export default [
   },
   {
     path: "/resource/subscribe/order",
-    component: Order,
+    component: () => import("./order"),
+
     meta: {
       title: "Purchase",
       links: [

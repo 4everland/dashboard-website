@@ -37,20 +37,15 @@ module.exports = {
         // enforceSizeThreshold: 50000,
         cacheGroups: {
           ensdomains: {
-            name: "chunk-ensdomains", // split vuetify into a single package
+            name: "chunk-ensdomains",
             priority: 10, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-            test: /[\\/]node_modules[\\/]_?(@ensdomains|@solana)(.*)/, // in order to adapt to cnpm
+            test: /[\\/]node_modules[\\/]_?(@ensdomains|@solana)(.*)/,
           },
           aws: {
-            name: "chunk-aws", // split vuetify into a single package
-            priority: 10, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-            test: /[\\/]node_modules[\\/]_?@aws(.*)/, // in order to adapt to cnpm
+            name: "chunk-aws",
+            priority: 10,
+            test: /[\\/]node_modules[\\/]_?@aws(.*)/,
           },
-          // vuetify: {
-          //   name: "chunk-vuetify", // split vuetify into a single package
-          //   priority: -10, // the weight needs to be larger than libs and app or it will be packaged into libs or app
-          //   test: /[\\/]node_modules[\\/]_?vuetify(.*)/, // in order to adapt to cnpm
-          // },
           defaultVendors: {
             test: /[\\/]node_modules[\\/]/,
             priority: -20,
