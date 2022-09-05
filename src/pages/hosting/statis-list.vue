@@ -24,7 +24,6 @@
 <template>
   <div>
     <v-skeleton-loader v-if="!list" type="article"></v-skeleton-loader>
-    <e-empty v-else-if="!list.length" class="pt-10">No Projects</e-empty>
     <div v-else>
       <div
         class="al-c pa-4 pb-2 bdb-1 gray-6 fw-b fz-14 pos-s bg-white z-10"
@@ -41,7 +40,11 @@
           </tr>
         </table>
       </div>
+      <div class="mt-8" v-if="!list.length">
+        <e-empty class="pt-10">No Projects</e-empty>
+      </div>
       <div
+        v-else
         @click="onClick(it)"
         class="al-c pa-4 proj-item f-wrap"
         v-for="(it, i) in list"
