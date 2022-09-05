@@ -191,7 +191,7 @@
                 <component :is="row.comp" :info="row.data" />
               </e-link>
               <div class="mt-5 d-flex al-c f-wrap">
-                <div class="d-flex">
+                <div class="d-flex" v-if="it.repo && it.repo.name">
                   <e-icon-link
                     class="mr-5 shrink-1"
                     img="/img/svg/hosting/m-github.svg"

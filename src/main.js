@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import store from "./store";
+import store, { setState } from "./store";
 import { mapState } from "vuex";
 import vuetify from "./plugins/vuetify";
 import "./setup";
@@ -21,7 +21,15 @@ router.beforeEach((to, _, next) => {
     }
   } else title = name;
   document.title = title;
+  setState({
+    showProgress: true,
+  });
   next();
+});
+router.afterEach(() => {
+  setState({
+    showProgress: false,
+  });
 });
 
 new Vue({

@@ -39,6 +39,7 @@ const store = new Vuex.Store({
     worldMapJson: null,
     payBy: localStorage.payBy || "Polygon",
     orderInfo: JSON.parse(localStorage.orderInfo || "{}"),
+    showProgress: false,
   },
   mutations: {
     [SET_DATA](state, data) {
