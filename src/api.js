@@ -178,7 +178,7 @@ const lock = new AsyncLock({ timeout: 5000 });
 function goLogin() {
   localStorage.clear();
   if (location.pathname != "/login") {
-    localStorage.loginTo = location.pathname;
+    localStorage.loginTo = location.pathname + location.search;
     location.href = getLoginUrl();
     console.log("logout");
   }
