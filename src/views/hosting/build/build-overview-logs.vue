@@ -11,7 +11,7 @@
           <e-time :endAt="info.endAt">{{ info.createAt }}</e-time>
         </div>
       </template>
-      <build-log v-if="info" :list="logs" />
+      <build-log v-if="info" :list="logs" :errMsg="errMsg" />
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
     <e-toggle-card
@@ -88,6 +88,7 @@ export default {
       },
       isDone: false,
       state: "",
+      errMsg: "",
     };
   },
   computed: {
@@ -169,6 +170,7 @@ export default {
         );
         const info = data.task;
         if (data.hash) info.hash = data.hash;
+        this.errMsg = data.errorMessage || "";
         const { hash, state = "", platform } = info;
         const isIpfs = platform == "IPFS";
         this.state = state.toLowerCase();

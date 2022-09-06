@@ -12,6 +12,11 @@
           <span class="wb-all">{{ it.content }}</span>
         </e-kv>
       </div>
+      <div v-if="errMsg">
+        <e-kv>
+          <span class="red-1">{{ errMsg }}</span>
+        </e-kv>
+      </div>
     </div>
     <div class="pos-a btm-0 right-0 z-10 pa-2" v-if="!isBtm">
       <v-chip
@@ -39,6 +44,7 @@ export default {
       type: String,
       default: "140px",
     },
+    errMsg: String,
   },
   data() {
     return {
