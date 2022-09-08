@@ -62,7 +62,8 @@ new Vue({
         setTimeout(() => {
           const stsData = JSON.parse(localStorage.stsData1 || "null");
           if (stsData && stsData.expiredAt - Date.now() / 1e3 < 600) {
-            location.reload();
+            // location.reload();
+            console.log("sts data", stsData);
           }
         }, 1e3);
       }
