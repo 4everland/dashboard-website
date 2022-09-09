@@ -3,7 +3,11 @@
     <div class="control-content">
       <div class="control-header al-c">
         <slot name="header"> </slot>
-        <slot name="control" :handle-click="handleClick" :isShow="isShowBody">
+        <slot
+          name="control"
+          :handle-click="handleClick"
+          :isShowBody="isShowBody"
+        >
           <button @click="handleClick">click</button>
         </slot>
         <slot></slot>
@@ -17,9 +21,15 @@
 
 <script>
 export default {
+  props: {
+    length: {
+      type: Number,
+      default: 4,
+    },
+  },
   data() {
     return {
-      isShowBody: false,
+      isShowBody: true,
       height: 0,
     };
   },
@@ -31,7 +41,7 @@ export default {
       "this.isShowBody",
       (newVal) => {
         if (newVal) {
-          this.$refs.content.style.height = 360 + "px";
+          this.$refs.content.style.height = this.length * 60 + "px";
         } else {
           this.$refs.content.style.height = 0 + "px";
         }
@@ -45,10 +55,15 @@ export default {
     handleClick() {
       this.isShowBody = !this.isShowBody;
       if (this.isShowBody) {
-        this.$refs.content.style.height = 360 + "px";
+        this.$refs.content.style.height = this.length * 60 + "px";
       } else {
         this.$refs.content.style.height = 0 + "px";
       }
+    },
+  },
+  watch: {
+    length(newVal) {
+      this.$refs.content.style.height = newVal * 60 + "px";
     },
   },
 };
@@ -56,19 +71,14 @@ export default {
 
 <style lang="scss" scoped>
 .upload-control-container {
-  z-index: 999;
   width: 400px;
   padding: 0 10px;
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgb(0 0 0 / 4%), 0 8px 28px rgb(0 0 0 / 6%),
     0 12px 48px rgb(0 0 0 / 4%);
   border-radius: 4px;
   box-shadow: border-box;
   background: #fff;
-
   .control-content {
     .control-header {
       height: 60px;

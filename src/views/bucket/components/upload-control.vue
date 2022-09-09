@@ -1,25 +1,29 @@
 <template>
   <div v-show="isShow">
-    <e-expansion-panel>
+    <e-expansion-panel :length="tasks.length > 6 ? 6 : tasks.length">
       <template #header>
         <div class="control-header al-c">
-          <v-icon size="20" color="success">mdi-check-circle</v-icon>
-          <span class="ml-2" v-if="allUploaded || allFailed"
-            >File Upload {{ allUploaded ? "Success" : "Failed" }} ({{
+          <div v-if="allUploaded || allFailed">
+            <v-icon size="20" color="success">mdi-check-circle</v-icon>
+            File Upload {{ allUploaded ? "Success" : "Failed" }} ({{
               uploadedFiles
-            }}/{{ allFiles }})</span
-          >
-          <span class="ml-2" v-if="warning">
-            {{ uploadedFiles }}Files Uploaded {{ failedFiles }} Files Failed
-          </span>
-          <span class="ml-2" v-if="isUploading || hasPause">
+            }}/{{ allFiles }})
+          </div>
+          <div v-if="warning">
+            <v-icon size="20" color="warning">mdi-alert-circle</v-icon>
+            {{ uploadedFiles }} Files Uploaded {{ failedFiles }} Files Failed
+          </div>
+          <div v-if="isUploading || hasPause">
+            <v-icon size="20" :color="isUploading ? 'blue' : 'grey'">
+              mdi-arrow-up-bold-circle-outline</v-icon
+            >
             Uploading.... ({{ uploadedFiles }}/{{ allFiles }})
-          </span>
+          </div>
         </div>
       </template>
-      <template #control="{ handleClick, isShow }">
+      <template #control="{ handleClick, isShowBody }">
         <v-icon size="20" class="ml-2" @click="handleClick">{{
-          isShow ? "mdi-chevron-up" : "mdi-chevron-down"
+          isShowBody ? "mdi-chevron-down" : "mdi-chevron-up"
         }}</v-icon>
       </template>
       <div class="ml-auto">
@@ -42,7 +46,7 @@
       </div>
       <template #content>
         <ul class="control-content" ref="controlContent">
-          <li v-for="item in tasks" :key="item.id">
+          <li class="file-item" v-for="item in tasks" :key="item.id">
             <div class="file al-c">
               <img
                 width="24"
@@ -58,7 +62,11 @@
                   >/<span class="total-size">{{
                     $utils.getFileSize(item.fileSize)
                   }}</span>
-                  <span class="status ml-2">{{ status(item.status) }} </span>
+                  <span
+                    class="status ml-2"
+                    :style="{ color: status(item.status).color }"
+                    >{{ status(item.status).status }}
+                  </span>
                 </div>
               </div>
               <div class="file-control ml-auto">
@@ -104,26 +112,51 @@ import { bus } from "../../../utils/bus";
 export default {
   data() {
     return {
-      isShow: true,
+      isShow: false,
       tasks: [],
       limit: 10,
+      distance: null,
+      list: [],
+      min_height: 0,
+      total_height: 0,
+      runList: [],
+      cache_screens: 1,
+      maxNum: 0,
     };
   },
   computed: {
     status() {
       return function (status) {
         if (status == 0) {
-          return "Preparing";
+          return {
+            color: "#24bc96",
+            status: "Preparing",
+          };
         } else if (status == 1) {
-          return "Uploading";
+          return {
+            color: "#775da6",
+            status: "Uploading",
+          };
         } else if (status == 2) {
-          return "Stopped";
+          return {
+            color: "#6a778b",
+            status: "Stopped",
+          };
         } else if (status == 3) {
-          return "Uploaded";
+          return {
+            color: "#ff8843",
+            status: "Uploaded",
+          };
         } else if (status == 4) {
-          return "Upload Failed";
+          return {
+            color: "#ff6960",
+            status: "Upload Failed",
+          };
         } else {
-          return "Undefined";
+          return {
+            color: "#24bc96",
+            status: "Undefined",
+          };
         }
       };
     },
@@ -167,6 +200,7 @@ export default {
   },
   mounted() {
     bus.$on("taskData", (tasks, isTrue) => {
+      this.isShow = true;
       if (this.tasks.length) {
         let noExistTasks = [];
         tasks.forEach((item) => {
@@ -184,14 +218,13 @@ export default {
     });
   },
   methods: {
-    handleCancelUpload(id) {
+    async handleCancelUpload(id) {
       let index = this.tasks.findIndex((item) => item.id == id);
-      this.tasks[index].cancelTask();
+      await this.tasks[index].cancelTask();
     },
     async handleClearRecords(id) {
       let index = this.tasks.findIndex((it) => it.id == id);
       await this.tasks[index].cancelTask();
-      console.log(111);
       if (index !== -1) {
         this.tasks.splice(index, 1);
       }
@@ -264,10 +297,15 @@ export default {
 .control-header {
   font-size: 14px;
 }
+
 .control-content {
   list-style: none;
   margin: 0;
   padding: 0;
+  .file-item {
+    height: 60px;
+    box-sizing: border-box;
+  }
   overflow: scroll;
   .file {
     padding: 5px 0;

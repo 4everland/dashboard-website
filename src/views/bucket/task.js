@@ -85,13 +85,10 @@ export class DeleteTaskWrapper {
   async startTasks() {
     try {
       if (this.status !== 0 && this.status !== 1) return;
-
       this.status = 1; // deleteing
-
-      // console.log(this.param.Prefix, this.param.Bucket);
       const listResult = await this.s3.listObjectsV2({
         Bucket: this.param.Bucket,
-        MaxKeys: 100,
+        MaxKeys: 2,
         Delimiter: "",
         Prefix: this.param.Prefix,
       });
@@ -125,6 +122,7 @@ export class DeleteTaskWrapper {
         console.log("here");
       }
     } catch (error) {
+      this.status = 4;
       console.log(error);
     }
   }
