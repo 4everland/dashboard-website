@@ -253,6 +253,10 @@ export default {
               to: "/bucket/domains",
               matPath: /bucket\/domain/,
             },
+            {
+              label: "Access Keys",
+              to: "/bucket/access",
+            },
           ],
         },
         {

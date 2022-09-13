@@ -290,6 +290,17 @@ export default {
       }
     },
   },
+  watch: {
+    tasks: {
+      handler(newValue) {
+        let uploadingLength = newValue.filter(
+          (it) => it.status == 1 || it.status == 0
+        ).length;
+        bus.$emit("uploadingLength", uploadingLength);
+      },
+      deep: true,
+    },
+  },
 };
 </script>
 

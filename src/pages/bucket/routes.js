@@ -44,7 +44,6 @@ export default [
     path: "/domain/:name",
     // component: domain,
     component: () => import("./domain"),
-
     meta: {
       title: "{name}",
       isTab: 1,
@@ -57,6 +56,14 @@ export default [
           text: "{name}",
         },
       ],
+      isTab: 1,
+    },
+  },
+  {
+    path: "/access",
+    component: () => import("./accessKeys"),
+    meta: {
+      title: "Access-Keys",
       isTab: 1,
     },
   },

@@ -13,7 +13,7 @@
     <storage v-if="!inFolder" />
 
     <!-- Upload/Delete Folders Component -->
-    <navigation-drawers v-if="!inFile" ref="navDrawers"></navigation-drawers>
+    <!-- <navigation-drawers v-if="!inFile" ref="navDrawers"></navigation-drawers> -->
 
     <div class="control">
       <upload-control v-if="!inFile" ref="uploadControl"></upload-control>
@@ -28,7 +28,7 @@
 
 <script>
 import Storage from "@/views/bucket/storage";
-import NavigationDrawers from "@/views/bucket/components/navigation-drawers";
+// import NavigationDrawers from "@/views/bucket/components/navigation-drawers";
 import UploadControl from "@/views/bucket/components/upload-control";
 import DeleteControl from "@/views/bucket/components/delete-control";
 import { bus } from "../../utils/bus";
@@ -74,14 +74,14 @@ export default {
   },
   methods: {
     handleOpen() {
-      this.$refs.navDrawers.drawer = true;
+      // this.$refs.navDrawers.drawer = true;
       this.$refs.uploadControl.isShow = true;
       this.$refs.deleteControl.isShow = true;
     },
   },
   components: {
     Storage,
-    NavigationDrawers,
+    // NavigationDrawers,
     UploadControl,
     DeleteControl,
   },
