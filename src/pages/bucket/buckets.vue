@@ -12,7 +12,14 @@
       <img src="/img/svg/common/task-list.svg" alt="" width="54" />
     </div>
     <keep-alive v-if="inFolder || inFile">
-      <e-tabs v-if="inFolder" :list="list" :defTab="1" noRouter ignorePath />
+      <e-tabs
+        v-if="inFolder"
+        :list="list"
+        :defTab="3"
+        bucket
+        noRouter
+        ignorePath
+      />
     </keep-alive>
     <storage v-if="!inFolder" />
 
@@ -40,6 +47,10 @@ export default {
           comp: "bucket-folder",
         },
         {
+          text: "Snapshots",
+          comp: "bucket-snapshots",
+        },
+        {
           text: "Statistics",
           comp: "bucket-statistics",
         },
@@ -50,6 +61,11 @@ export default {
   computed: {
     path() {
       return this.$route.path;
+    },
+    basicPath() {
+      return this.path.split("/").length <= 5
+        ? this.path
+        : this.path.split("/").splice(0, 4).join("/");
     },
     inFolder() {
       return this.path !== "/bucket/storage/" && /\/$/.test(this.path);

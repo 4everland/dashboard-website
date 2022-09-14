@@ -710,6 +710,7 @@ export default {
     },
     onRow(it) {
       const url = this.getPath(it);
+      console.log(url);
       if (this.selected.length > 1) {
         if (this.selected.includes(it)) {
           const i = this.selected.findIndex((item) => item == it);
@@ -723,9 +724,9 @@ export default {
       }
 
       if (it.isFile) return;
-
+      let urls = this.path + it.name + (it.isFile ? "" : "/") + location.search;
       this.$router.push({
-        path: encodeURI(url),
+        path: encodeURI(urls),
       });
     },
     async getSubObjects(folder) {

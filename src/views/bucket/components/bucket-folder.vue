@@ -268,14 +268,12 @@ export default {
 
     bus.$emit("originDeleteFolderTasks");
   },
-  // computed: {
-  //   selectArStatus() {
-  //     if (this.selected.length == 1) {
-  //       return this.selected[0].arStatus;
-  //     }
-  //     return null;
-  //   },
-  // },
+  activated() {
+    this.$router.push({
+      path: "/bucket/storage/dsdsdsds/",
+      query: { tab: "files" },
+    });
+  },
   methods: {
     onCopied() {
       this.$toast("Copied to clipboard !");
@@ -371,11 +369,6 @@ export default {
   watch: {
     path() {
       this.onRouteChange();
-    },
-    active(val) {
-      if (val) {
-        this.getList();
-      }
     },
     selected: {
       handler(val) {

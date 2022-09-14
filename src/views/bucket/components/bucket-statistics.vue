@@ -1,5 +1,5 @@
 <template>
-  <div class="hide-msg" v-if="active">
+  <div class="hide-msg">
     <!-- <v-alert class="mb-5 fz-14" text type="info" dense>
       The data on this page is not updated in real time. These statistics are
       for reference only.
@@ -164,16 +164,24 @@ export default {
   },
   watch: {
     active(val) {
-      if (val) {
-        this.ipfsData.xAxis = [];
-        this.ipfsData.yAxis = [];
-        this.arData.xAxis = [];
-        this.arData.yAxis = [];
-        this.trafficData.xAxis = [];
-        this.trafficData.yAxis = [];
-        this.requestData.xAxis = [];
-        this.requestData.yAxis = [];
-      }
+      // if (val) {
+      //   this.ipfsData.xAxis = [];
+      //   this.ipfsData.yAxis = [];
+      //   this.arData.xAxis = [];
+      //   this.arData.yAxis = [];
+      //   this.trafficData.xAxis = [];
+      //   this.trafficData.yAxis = [];
+      //   this.requestData.xAxis = [];
+      //   this.requestData.yAxis = [];
+      // }
+      this.ipfsData.xAxis = [];
+      this.ipfsData.yAxis = [];
+      this.arData.xAxis = [];
+      this.arData.yAxis = [];
+      this.trafficData.xAxis = [];
+      this.trafficData.yAxis = [];
+      this.requestData.xAxis = [];
+      this.requestData.yAxis = [];
     },
     "trafficData.xAxis"() {
       if (
