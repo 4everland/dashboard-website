@@ -1,11 +1,7 @@
 <template>
   <div>
     <!-- Task List -->
-    <div
-      @click.stop="$refs.navDrawers.drawer = true"
-      class="task-list"
-      v-if="!inFile"
-    >
+    <div @click.stop="handleOpen" class="task-list" v-if="!inFile">
       <span class="task-count" v-show="uploadingTaskLength != 0">{{
         uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
       }}</span>
@@ -24,13 +20,24 @@
     <storage v-if="!inFolder" />
 
     <!-- Upload/Delete Folders Component -->
-    <navigation-drawers v-if="!inFile" ref="navDrawers"></navigation-drawers>
+    <!-- <navigation-drawers v-if="!inFile" ref="navDrawers"></navigation-drawers> -->
+
+    <div class="control">
+      <upload-control v-if="!inFile" ref="uploadControl"></upload-control>
+      <delete-control
+        v-if="!inFile"
+        ref="deleteControl"
+        class="mt-4"
+      ></delete-control>
+    </div>
   </div>
 </template>
 
 <script>
 import Storage from "@/views/bucket/storage";
-import NavigationDrawers from "@/views/bucket/components/navigation-drawers";
+// import NavigationDrawers from "@/views/bucket/components/navigation-drawers";
+import UploadControl from "@/views/bucket/components/upload-control";
+import DeleteControl from "@/views/bucket/components/delete-control";
 import { bus } from "../../utils/bus";
 import initS3 from "./initS3";
 export default {
@@ -76,9 +83,18 @@ export default {
       this.uploadingTaskLength = uploadingLength;
     });
   },
+  methods: {
+    handleOpen() {
+      // this.$refs.navDrawers.drawer = true;
+      this.$refs.uploadControl.isShow = true;
+      this.$refs.deleteControl.isShow = true;
+    },
+  },
   components: {
     Storage,
-    NavigationDrawers,
+    // NavigationDrawers,
+    UploadControl,
+    DeleteControl,
   },
 };
 </script>
@@ -105,5 +121,11 @@ export default {
     border-radius: 50%;
     transform: scale(0.7);
   }
+}
+.control {
+  z-index: 999;
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
 }
 </style>

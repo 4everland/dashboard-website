@@ -9,6 +9,7 @@ export class TaskWrapper {
   task;
   failedMessage;
   url;
+  fileSize;
   constructor(s3, param, id, fileInfo, url) {
     this.id = id;
     this.s3 = s3;
@@ -16,6 +17,8 @@ export class TaskWrapper {
     this.param = param;
     this.fileInfo = fileInfo;
     this.url = url;
+    this.uploadFileSize = 0;
+    this.fileSize = 0;
   }
   async startTask() {
     try {
@@ -24,9 +27,11 @@ export class TaskWrapper {
         queueSize: 3,
         params: this.param,
       });
+      this.fileSize = this.task.totalBytes;
       this.task.on("httpUploadProgress", (e) => {
         // let progress = (e.loaded / e.total) * 100 - this.progress;
         this.progress = ((e.loaded / e.total) * 100) | 0;
+        this.uploadFileSize = (this.fileSize * this.progress) / 100;
       });
 
       this.progress = 0;
@@ -50,6 +55,7 @@ export class TaskWrapper {
     if (this.task) {
       await this.task.abort();
     }
+    console.log("abort");
     this.status = 2; //cancel/stop
   }
   resetStatus() {
@@ -79,13 +85,10 @@ export class DeleteTaskWrapper {
   async startTasks() {
     try {
       if (this.status !== 0 && this.status !== 1) return;
-
       this.status = 1; // deleteing
-
-      // console.log(this.param.Prefix, this.param.Bucket);
       const listResult = await this.s3.listObjectsV2({
         Bucket: this.param.Bucket,
-        MaxKeys: 100,
+        MaxKeys: 2,
         Delimiter: "",
         Prefix: this.param.Prefix,
       });
@@ -119,6 +122,7 @@ export class DeleteTaskWrapper {
         console.log("here");
       }
     } catch (error) {
+      this.status = 4;
       console.log(error);
     }
   }
