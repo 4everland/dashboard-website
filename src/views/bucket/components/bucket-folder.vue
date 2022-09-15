@@ -245,6 +245,7 @@ export default {
       isUploadDir: false,
       fileInfoDrawer: true,
       fileInfo: null,
+      curPath: "",
     };
   },
   async created() {
@@ -269,10 +270,17 @@ export default {
     bus.$emit("originDeleteFolderTasks");
   },
   activated() {
+    // let basicPath
+    if (!this.curPath) {
+      this.curPath = this.$route.path.split("/").slice(0, 4).join("/") + "/";
+    }
     this.$router.push({
-      path: "/bucket/storage/dsdsdsds/",
+      path: this.curPath,
       query: { tab: "files" },
     });
+  },
+  deactivated() {
+    this.curPath = this.$route.path;
   },
   methods: {
     onCopied() {

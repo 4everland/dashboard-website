@@ -15,7 +15,7 @@
       <e-tabs
         v-if="inFolder"
         :list="list"
-        :defTab="3"
+        :defTab="1"
         bucket
         noRouter
         ignorePath
@@ -61,11 +61,6 @@ export default {
   computed: {
     path() {
       return this.$route.path;
-    },
-    basicPath() {
-      return this.path.split("/").length <= 5
-        ? this.path
-        : this.path.split("/").splice(0, 4).join("/");
     },
     inFolder() {
       return this.path !== "/bucket/storage/" && /\/$/.test(this.path);

@@ -75,13 +75,20 @@ export default {
         },
       ],
       searchKey: "",
+      curPath: "",
     };
   },
   activated() {
+    if (!this.curPath) {
+      this.curPath = this.$route.path.split("/").slice(0, 4).join("/") + "/";
+    }
     this.$router.push({
-      path: "/bucket/storage/dsdsdsds/",
+      path: this.curPath,
       query: { tab: "snapshots" },
     });
+  },
+  deactivated() {
+    this.curPath = this.$route.path;
   },
   methods: {
     onRow(item) {
