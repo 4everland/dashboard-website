@@ -2,11 +2,30 @@ import { S3 } from "@aws-sdk/client-s3";
 const Minio = require("minio-s");
 import { endpoint } from "../../api";
 import Vue from "vue";
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
       s3Timing: null,
     };
+  },
+  computed: {
+    ...mapState({
+      isFocus: (s) => s.isFocus,
+    }),
+  },
+  watch: {
+    isFocus(val) {
+      if (val) {
+        setTimeout(() => {
+          const stsData = JSON.parse(localStorage.stsData1 || "null");
+          if (stsData && stsData.expiredAt - Date.now() / 1e3 < 600) {
+            location.reload();
+          }
+        }, 1e3);
+      }
+    },
   },
   methods: {
     async initS3() {
