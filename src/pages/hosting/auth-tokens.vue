@@ -1,36 +1,32 @@
 <template>
   <div>
-    <div class="mt-3">
-      <h3>Hosting Auth Tokens</h3>
-      <div class="gray mt-1 fz-14">
-        These tokens allow other apps to control your whole account. Be careful!
-      </div>
-
-      <div class="mt-5">
-        <v-btn small color="primary" @click="clickAdd"> Create </v-btn>
-        <v-btn
-          small
-          outlined
-          class="ml-5"
-          @click="onDelete"
-          :loading="deleting"
-          v-if="selected.length > 0"
-        >
-          Delete
-        </v-btn>
-      </div>
-
-      <div class="mt-5">
-        <v-data-table
-          v-model="selected"
-          :loading="loading"
-          :show-select="list.length > 0"
-          item-key="id"
-          :headers="headers"
-          :items="list"
-          hide-default-footer
-        ></v-data-table>
-      </div>
+    <e-right-opt-wrap :top="-65">
+      <v-btn width="120" color="primary" @click="clickAdd">
+        <img src="/img/svg/add1.svg" width="12" />
+        <span class="ml-2">Create</span>
+      </v-btn>
+      <v-btn
+        outlined
+        width="120"
+        class="ml-5"
+        @click="onDelete"
+        :loading="deleting"
+        v-if="selected.length > 0"
+      >
+        <img src="/img/svg/delete.svg" width="12" />
+        <span class="ml-2">Delete</span>
+      </v-btn>
+    </e-right-opt-wrap>
+    <div class="main-wrap">
+      <v-data-table
+        v-model="selected"
+        :loading="loading"
+        :show-select="list.length > 0"
+        item-key="id"
+        :headers="headers"
+        :items="list"
+        hide-default-footer
+      ></v-data-table>
     </div>
 
     <v-dialog v-model="popNew" max-width="500">

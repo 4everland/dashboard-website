@@ -222,10 +222,10 @@ export default {
               label: "Statistics",
               to: "/hosting/statistics",
             },
-            // {
-            //   label: "First Landing",
-            //   to: "/hosting/first-landing",
-            // },
+            {
+              label: "Auth Tokens",
+              to: "/hosting/auth-tokens",
+            },
           ],
         },
         {

@@ -9,17 +9,9 @@ export default {
   data() {
     return {
       list: [
-        // {
-        //   text: "Billing",
-        //   comp: "st-billing",
-        // },
         {
           text: "Account Binding",
           comp: "st-account",
-        },
-        {
-          text: "Auth Tokens",
-          comp: "st-tokens",
         },
         {
           text: "General",
