@@ -78,6 +78,7 @@
 
 <script>
 import StProjGitHook from "@/views/hosting/settings/st-proj-git-hook";
+import NewStep0Git from "@/views/hosting/new/new-step-0-git";
 import { mapState } from "vuex";
 
 export default {
@@ -196,6 +197,7 @@ export default {
   },
   components: {
     StProjGitHook,
+    NewStep0Git,
   },
 };
 </script>
