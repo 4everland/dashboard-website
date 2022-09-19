@@ -14,8 +14,6 @@
       <h3>Domains</h3>
       <div class="gray fz-14">
         These domains are assigned to your Production Deployments.
-        <!-- Optionally, a different Git branch or a redirection to another domain can be configured
-      for each one. -->
       </div>
       <div class="mt-5 d-flex">
         <v-text-field
@@ -97,10 +95,10 @@
           </div>
         </template>
         <template v-else>
-          <div class="d-flex al-c flex-wrap">
+          <div class="al-c flex-wrap">
             <div class="mr-auto">
               <div class="mr-auto fz-20 lh-1">{{ it.domain }}</div>
-              <div class="d-flex al-c mt-3">
+              <div class="al-c mt-3">
                 <v-icon :color="it.valid ? 'success' : 'error'" size="18">
                   mdi-{{ it.valid ? "check-circle" : "information" }}
                 </v-icon>
@@ -112,6 +110,14 @@
                     it.valid ? "Valid Configuration" : "Invalid Configuration"
                   }}
                 </span>
+                <template v-if="it.redirectName && it.valid">
+                  <v-icon color="success" size="18" class="ml-15"
+                    >mdi-check-circle</v-icon
+                  >
+                  <span class="ml-1 fz-13"
+                    >Redirect to {{ it.redirectName }}</span
+                  >
+                </template>
               </div>
             </div>
             <div class="mt-2">
@@ -187,16 +193,7 @@
         </template>
       </div>
     </div>
-    <!-- <v-dialog v-model="showType" max-width="500">
-      <div class="pa-7">
-        <h2>Add Domain</h2>
 
-        <div class="mt-8 ta-c">
-          <v-btn color="primary" width="90">Add</v-btn>
-          <v-btn outlined class="ml-5" width="90">Cancel</v-btn>
-        </div>
-      </div>
-    </v-dialog> -->
     <st-proj-domains-sol v-if="info.platform == 'IPFS'" />
     <st-proj-domains-ens v-if="info.platform == 'IPFS'" />
   </div>
@@ -245,7 +242,7 @@ export default {
   watch: {
     isFocus(val) {
       if (val && this.isCurPath) {
-        this.setRefresh();
+        // this.setRefresh();
       }
     },
   },
@@ -261,6 +258,10 @@ export default {
             `/domain/redirect/${it.domainId}`
           );
           this.selectRedirect = data.selectRedirect;
+          this.rediectForm = {
+            redirectTo: data.redirect || it.redirect || null,
+            code: data.code || 301,
+          };
           console.log(data);
         }
         this.$set(it, "isEdit", val);
@@ -276,10 +277,11 @@ export default {
           `/domain/redirect/${it.domainId}`,
           this.rediectForm
         );
+        await this.getList();
       } catch (error) {
         //
       }
-      this.$set(it, "saving", false);
+      // this.$set(it, "saving", false);
     },
     getRedirectItems(it) {
       let arr = [
