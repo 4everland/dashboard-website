@@ -1,12 +1,5 @@
 <template>
   <div>
-    <!-- Task List -->
-    <div @click.stop="handleOpen" class="task-list" v-if="!inFile">
-      <span class="task-count" v-show="uploadingTaskLength != 0">{{
-        uploadingTaskLength > 99 ? "99+" : uploadingTaskLength
-      }}</span>
-      <img src="/img/svg/common/task-list.svg" alt="" width="54" />
-    </div>
     <keep-alive v-if="inFolder || inFile">
       <e-tabs
         v-if="inFolder"
@@ -62,7 +55,6 @@ export default {
           comp: "bucket-statistics",
         },
       ],
-      uploadingTaskLength: false,
     };
   },
   computed: {
@@ -79,17 +71,8 @@ export default {
   created() {
     if (this.$s3) return;
     this.initS3();
-    bus.$on("uploadingLength", (uploadingLength) => {
-      this.uploadingTaskLength = uploadingLength;
-    });
   },
-  methods: {
-    handleOpen() {
-      // this.$refs.navDrawers.drawer = true;
-      this.$refs.uploadControl.isShow = true;
-      this.$refs.deleteControl.isShow = true;
-    },
-  },
+  methods: {},
   components: {
     Storage,
     // NavigationDrawers,
@@ -100,30 +83,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.task-list {
-  position: fixed;
-  z-index: 999;
-  bottom: 80px;
-  right: 20px;
-  color: #775da6;
-  font-size: 16px;
-  cursor: pointer;
-  .task-count {
-    position: absolute;
-    right: -2px;
-    top: -2px;
-    width: 30px;
-    height: 30px;
-    font-size: 20px;
-    text-align: center;
-    color: #fff;
-    background: #ff6960;
-    border-radius: 50%;
-    transform: scale(0.7);
-  }
-}
 .control {
-  z-index: 999;
+  z-index: 99;
   position: fixed;
   right: 24px;
   bottom: 24px;

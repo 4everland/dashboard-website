@@ -62,12 +62,9 @@ export default {
     },
     fileArStatus() {
       if (this.inFile) {
-        console.log("inFile");
-
         return this.fileInfo.arStatus;
       }
       if (this.inFolder) {
-        console.log("inFolder");
         return this.selectArStatus;
       }
       return null;
@@ -710,7 +707,6 @@ export default {
     },
     onRow(it) {
       const url = this.getPath(it);
-      console.log(url);
       if (this.selected.length > 1) {
         if (this.selected.includes(it)) {
           const i = this.selected.findIndex((item) => item == it);

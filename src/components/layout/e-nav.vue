@@ -61,6 +61,7 @@ export default {
       else if (/^\/bucket\/(arweave|storage)/.test(this.path)) {
         const isAr = /^\/bucket\/arweave/.test(this.path);
         let to = isAr ? "/bucket/arweave" : "/bucket/storage/";
+        let query = this.$route.query;
         items = [
           {
             text: isAr ? "AR History" : "Buckets",
@@ -79,7 +80,10 @@ export default {
           }
           items.push({
             text,
-            to,
+            to: {
+              path: to,
+              query,
+            },
             // exact: i < arr.length - 1,
             exact: true,
             disabled: i == arr.length - 1,

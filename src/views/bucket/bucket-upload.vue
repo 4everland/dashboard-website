@@ -16,16 +16,73 @@
           <!-- <img src="/img/icon/ic-download.svg" width="14" class="mr-2" /> -->
           <span class="gray-7">Selected Folder</span>
         </v-list-item>
+
+        <v-list-item link @click="isPinCidDialog = true">
+          <!-- <img src="/img/icon/ic-download.svg" width="14" class="mr-2" /> -->
+          <span class="gray-7">Selected CID</span>
+        </v-list-item>
       </v-list>
     </e-menu>
     <input-upload v-model="files" ref="uploadInput"></input-upload>
+
+    <v-dialog v-model="isPinCidDialog" max-width="600">
+      <div class="pa-6">
+        <h2>Pin By CID</h2>
+        <div class="mt-7 fz-14 pl-6">
+          This function allows you to pin content to 4EVERLAND bucket using an
+          IPFS Content Identifier. (CID)
+        </div>
+        <div class="gray tips mt-3 fz-12 pl-6">
+          The IPFS network is large and it may take some time for our IPFS nodes
+          to locate and fetch your content.
+        </div>
+        <div class="mt-5 pl-6">
+          <v-form ref="form" v-model="valid">
+            <div>
+              <span class="ops-item fz-14">IPFS CID</span>
+              <v-text-field
+                persistent-placeholder
+                dense
+                v-model="form.cid"
+                autocomplte="off"
+                :rules="cidRules"
+              />
+            </div>
+            <div>
+              <span class="ops-item fz-14">Name For Pin</span>
+              <v-text-field
+                dense
+                persistent-placeholder
+                v-model="form.name"
+                autocomplte="off"
+                :rules="nameRules"
+                :counter="30"
+              />
+            </div>
+          </v-form>
+        </div>
+        <div class="mt-5 pl-6 ta-c">
+          <v-btn width="180" outlined @click="isPinCidDialog = false">
+            Cancel
+          </v-btn>
+          <v-btn
+            color="primary"
+            width="180"
+            class="ml-5"
+            :disabled="!valid"
+            @click="handleSubmit"
+          >
+            Search and Pin
+          </v-btn>
+        </div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import InputUpload from "@/views/bucket/components/input-upload";
 import { bus } from "../../utils/bus";
-import { mapState } from "vuex";
 import { TaskWrapper } from "./task.js";
 export default {
   props: {
@@ -66,6 +123,17 @@ export default {
         validate: this.validate,
       },
       isStorageFull: false,
+      isPinCidDialog: false,
+      valid: false,
+      form: {
+        cid: null,
+        name: null,
+      },
+      nameRules: [
+        (v) => !!v || "ipfs is required",
+        (v) => (v && v.length > 30 ? "more than 30 chars!" : true),
+      ],
+      cidRules: [],
     };
   },
   async created() {
@@ -82,9 +150,6 @@ export default {
     });
   },
   computed: {
-    ...mapState({
-      curBucketInfo: (s) => s.curBucketInfo,
-    }),
     path() {
       const arr = this.$route.path.split("/");
       const idx = arr.findIndex((item) => item == "storage");
@@ -193,9 +258,18 @@ export default {
     onCancel() {
       this.$router.go(-1);
     },
+
     async overStorage() {
       try {
-        let isCurBucketAr = this.curBucketInfo.arweave.sync;
+        const result = await this.$http({
+          url: "/buckets/extra",
+          methods: "get",
+          params: {
+            name: this.info.Bucket,
+          },
+        });
+        let curBucketInfo = result.data.list[0];
+        let isCurBucketAr = curBucketInfo.arweave.sync;
         let arStorageByte = null;
         const { data } = await this.$http.get("$v3/usage/ipfs");
         let ipfsStorageByte = data.storageByte;
@@ -207,6 +281,12 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+
+    handleSubmit() {
+      let valid = this.$refs.form.validate();
+      if (!valid) return;
+      //.......
     },
   },
   watch: {
@@ -242,6 +322,9 @@ export default {
         this.$loading.close();
         this.onConfirm();
       }
+    },
+    isPinCidDialog(newVal) {
+      if (!newVal) return this.$refs.form.reset();
     },
   },
   components: {

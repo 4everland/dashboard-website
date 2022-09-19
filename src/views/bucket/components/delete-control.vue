@@ -5,8 +5,27 @@
     >
       <template #header>
         <div class="control-header al-c">
-          <v-icon size="20" color="success">mdi-check-circle</v-icon>
-          <span class="ml-2">Deleting...({{ compeleteFiles }})</span>
+          <div v-if="hasDeleteing || hasPause">
+            <img
+              width="15"
+              class="mr-3 dustbin-icon"
+              src="/img/svg/bucket/dustbin-icon.svg"
+              alt=""
+            />
+            <span class="ml-2">Deleteing ({{ compeleteFiles }})</span>
+          </div>
+          <div v-if="allCompelete || allFailedStatus">
+            <v-icon size="20" :color="allCompelete ? '#00BD9A' : 'red'">{{
+              allCompelete
+                ? "mdi-check-circle-outline"
+                : " mdi-close-circle-outline"
+            }}</v-icon>
+            <span class="ml-2"
+              >Deleted {{ allCompelete ? "Successfully" : "Failed" }} ({{
+                compeleteFiles
+              }})</span
+            >
+          </div>
         </div>
       </template>
       <template #control="{ handleClick, isShowBody }">
@@ -43,23 +62,16 @@
             v-for="item in deleteFolderTasks"
             :key="item.id"
           >
-            <div class="file al-c">
-              <img
-                width="24"
-                src="/img/svg/bucketFileInfo/word_icon.svg"
-                alt=""
-              />
-              <div class="file-info ml-3">
+            <div class="file mx-7 al-c">
+              <div class="file-info">
                 <div class="file-name">
                   {{ item.param.Bucket }}/{{ item.param.Prefix }}
                 </div>
                 <div>
                   <span>Deleted</span>
                   <span class="ml-2">{{ item.deleteCount }}</span>
+                  <span class="ml-5"> {{ status(item.status) }}</span>
                 </div>
-              </div>
-              <div class="ml-3" :style="{ color: status(item.status).color }">
-                {{ status(item.status).status }}
               </div>
               <div class="file-control ml-auto">
                 <v-icon
@@ -86,13 +98,6 @@
                 >
               </div>
             </div>
-            <v-progress-linear
-              v-show="!(item.status == 2 || item.status == 4)"
-              :indeterminate="!item.status == 3"
-              color="green"
-              height="2"
-              :value="item.status == 3 ? 100 : 0"
-            ></v-progress-linear>
           </li>
         </ul>
       </template>
@@ -140,40 +145,19 @@ export default {
     status() {
       return function (status) {
         if (status == 0) {
-          return {
-            color: "#24bc96",
-            status: "Waiting",
-          };
+          return "Waiting";
         } else if (status == 1) {
-          return {
-            color: "#775da6",
-            status: "Deleteing",
-          };
+          return "Deleteing";
         } else if (status == 2) {
-          return {
-            color: "#6a778b",
-            status: "Paused",
-          };
+          return "Suspended";
         } else if (status == 3) {
-          return {
-            color: "#ff8843",
-            status: "Compelete",
-          };
+          return "Delete completed";
         } else if (status == 4) {
-          return {
-            color: "#ff6960",
-            status: "Failed",
-          };
+          return "Failed";
         } else {
-          return {
-            color: "#24bc96",
-            status: "Undefined",
-          };
+          return "Undefined";
         }
       };
-    },
-    compeleteTasks() {
-      return this.deleteFolderTasks.filter((it) => it.status == 3);
     },
     compeleteFiles() {
       let count = 0;
@@ -209,11 +193,13 @@ export default {
     allFailedStatus() {
       return this.deleteFolderTasks.every((it) => it.status == 4);
     },
-
     hasDeleteing() {
       return this.deleteFolderTasks.some(
         (it) => it.status == 1 || it.status == 0
       );
+    },
+    hasPause() {
+      return this.deleteFolderTasks.some((it) => it.status == 2);
     },
   },
   methods: {
@@ -288,8 +274,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
 .control-header {
   font-size: 14px;
+  .dustbin-icon {
+    animation: float 1s ease infinite;
+  }
 }
 
 .control-content {
@@ -297,7 +297,8 @@ export default {
   margin: 0;
   padding: 0;
   .file-item {
-    height: 60px;
+    height: 50px;
+    margin-bottom: 10px;
     box-sizing: border-box;
   }
   overflow: scroll;

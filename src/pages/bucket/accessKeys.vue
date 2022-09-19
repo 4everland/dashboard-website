@@ -14,6 +14,7 @@
       </div>
     </e-right-opt-wrap>
     <div class="main-wrap">
+      <div>Use the API key for Storage SDK</div>
       <div class="mt-5">
         <v-data-table
           :headers="headers"
@@ -31,24 +32,20 @@
 
       <v-dialog v-model="showDialog" max-width="500">
         <div class="pd-30" v-if="!isGenerate">
-          <div>
-            <h3>Generate Access Key</h3>
-            <div class="gray fz-14">Set a Name</div>
-          </div>
+          <h2>Generate Access Key</h2>
+          <div class="gray fz-14">Set a Name</div>
           <v-text-field
-            class="my-5"
-            dense
+            class="mt-5"
             v-model="keyName"
             :counter="30"
             :rules="rules"
+            placeholder="Set a name for you Access Key"
             @update:error="handleError"
           ></v-text-field>
-          <div class="d-flex justify-center">
-            <v-btn color="primary" width="120" @click="showDialog = false">
-              <span class="ml-2">Cancel</span>
-            </v-btn>
-            <v-btn color="primary" width="120" class="ml-5">
-              <span class="ml-2" @click="handleGenerate">Create</span>
+          <div class="mt-5 ta-c">
+            <v-btn outlined @click="showDialog = false"> Cancel </v-btn>
+            <v-btn color="primary" class="ml-5" @click="handleGenerate">
+              Create
             </v-btn>
           </div>
         </div>

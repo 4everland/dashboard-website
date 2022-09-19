@@ -116,6 +116,13 @@ export default [
       ],
     },
   },
+  {
+    path: "/authtokens",
+    component: () => import("./authTokens"),
+    meta: {
+      title: "Auth Tokens",
+    },
+  },
 ].map((it) => {
   it.path = "/hosting" + it.path;
   it.meta.group = "Hosting";

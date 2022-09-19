@@ -1,7 +1,7 @@
 <template>
   <div class="upload-control-container">
     <div class="control-content">
-      <div class="control-header al-c">
+      <div class="control-header al-c px-7">
         <slot name="header"> </slot>
         <slot
           name="control"
@@ -72,12 +72,10 @@ export default {
 <style lang="scss" scoped>
 .upload-control-container {
   width: 400px;
-  padding: 0 10px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgb(0 0 0 / 4%), 0 8px 28px rgb(0 0 0 / 6%),
     0 12px 48px rgb(0 0 0 / 4%);
-  border-radius: 4px;
-  box-shadow: border-box;
+  border-radius: 10px;
   background: #fff;
   .control-content {
     .control-header {

@@ -348,15 +348,32 @@
           }}
         </div>
       </div>
-      <operation-bar
-        :selected="selected"
-        :inBucket="true"
-        @handleClearSelected="selected = []"
-        @handleDeleteSelected="onDelete()"
-        @handleAddDomain="
-          $router.push(`/bucket/domains?bucket=${selected[0].name}`)
-        "
-      ></operation-bar>
+      <operation-bar ref="operationBar">
+        <v-checkbox
+          v-model="checked"
+          @change="handleChangeCheck"
+          class="px-4"
+          color="#34A9FF"
+        ></v-checkbox>
+        <v-btn
+          outlined
+          @click="$router.push(`/bucket/domains?bucket=${selected[0].name}`)"
+          v-show="selected.length <= 1"
+        >
+          <!-- <img src="/img/icon/ic-domain.svg" width="14" class="mr-2" /> -->
+          <span>Add Domain</span>
+        </v-btn>
+        <v-btn
+          style="border-color: #6c7789"
+          outlined
+          class="ml-4"
+          v-show="selected.length >= 1"
+          @click="onDelete"
+        >
+          <!-- <img src="/img/icon/ic-delete.svg" width="14" class="mr-2" /> -->
+          <span class="gray">Delete</span>
+        </v-btn>
+      </operation-bar>
     </div>
     <div v-if="inFolder && !finished" class="pd-20 gray ta-c fz-16 mt-5">
       <v-btn outlined v-if="list.length" @click="onLoadMore">{{
@@ -380,6 +397,7 @@ export default {
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
       uploadingTaskLength: 0,
+      checked: false,
     };
   },
   computed: {
@@ -526,6 +544,19 @@ export default {
           action: "upload",
         },
       });
+    },
+    handleChangeCheck(val) {
+      if (!val) return (this.selected = []);
+    },
+  },
+  watch: {
+    selected: {
+      handler(arr) {
+        if (arr.length)
+          return (this.$refs.operationBar.isShow = this.checked = true);
+        this.$refs.operationBar.isShow = this.checked = false;
+      },
+      deep: true,
     },
   },
 };

@@ -226,6 +226,10 @@ export default {
             //   label: "First Landing",
             //   to: "/hosting/first-landing",
             // },
+            {
+              label: "Auth Tokens",
+              to: "/hosting/authtokens",
+            },
           ],
         },
         {

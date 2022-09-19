@@ -4,20 +4,35 @@
       <template #header>
         <div class="control-header al-c">
           <div v-if="allUploaded || allFailed">
-            <v-icon size="20" color="success">mdi-check-circle</v-icon>
-            File Upload {{ allUploaded ? "Success" : "Failed" }} ({{
+            <v-icon
+              class="mr-1"
+              size="20"
+              :color="allUploaded ? '#00BD9A' : 'red'"
+            >
+              {{
+                allUploaded
+                  ? "mdi-check-circle-outline"
+                  : " mdi-close-circle-outline"
+              }}
+            </v-icon>
+            Uploaded {{ allUploaded ? "Successfully" : "Failed" }} ({{
               uploadedFiles
             }}/{{ allFiles }})
           </div>
           <div v-if="warning">
-            <v-icon size="20" color="warning">mdi-alert-circle</v-icon>
+            <v-icon size="20" class="mr-1" color="warning"
+              >mdi-alert-circle</v-icon
+            >
             {{ uploadedFiles }} Files Uploaded {{ failedFiles }} Files Failed
           </div>
-          <div v-if="isUploading || hasPause">
-            <v-icon size="20" :color="isUploading ? 'blue' : 'grey'">
-              mdi-arrow-up-bold-circle-outline</v-icon
-            >
-            Uploading.... ({{ uploadedFiles }}/{{ allFiles }})
+          <div v-if="isUploading || hasPause" class="al-c">
+            <img
+              width="15"
+              class="mr-3 upload-icon"
+              src="/img/svg/bucket/upload-icon.svg"
+              alt=""
+            />
+            Uploading ({{ uploadedFiles }}/{{ allFiles }})
           </div>
         </div>
       </template>
@@ -46,14 +61,13 @@
       </div>
       <template #content>
         <ul class="control-content" ref="controlContent">
-          <li class="file-item" v-for="item in tasks" :key="item.id">
-            <div class="file al-c">
-              <img
-                width="24"
-                src="/img/svg/bucketFileInfo/word_icon.svg"
-                alt=""
-              />
-              <div class="file-info ml-3">
+          <li class="file-item pos-r" v-for="item in tasks" :key="item.id">
+            <div
+              class="progress-bg"
+              :style="{ width: item.progress + '%' }"
+            ></div>
+            <div class="file al-c mx-7">
+              <div class="file-info">
                 <div class="file-name">{{ item.fileInfo.name }}</div>
                 <div>
                   <span class="complete-size">{{
@@ -62,44 +76,42 @@
                   >/<span class="total-size">{{
                     $utils.getFileSize(item.fileSize)
                   }}</span>
-                  <span
-                    class="status ml-2"
-                    :style="{ color: status(item.status).color }"
-                    >{{ status(item.status).status }}
-                  </span>
+                  <span class="status ml-2">{{ status(item.status) }} </span>
                 </div>
               </div>
               <div class="file-control ml-auto">
                 <v-icon
-                  size="22"
-                  v-if="item.status != 3"
-                  @click="
-                    item.status == 2 || item.status == 4
-                      ? handleRetryUpload(item.id)
-                      : handleCancelUpload(item.id)
-                  "
-                  >{{
-                    item.status == 2 || item.status == 4
-                      ? "mdi-play-outline"
-                      : "mdi-pause"
-                  }}</v-icon
-                >
-                <v-icon
-                  v-if="item.status != 3"
+                  v-if="item.status == 3"
+                  class="ml-auto"
                   size="20"
-                  class="ml-2"
-                  @click="handleClearRecords(item.id)"
-                  >mdi-close</v-icon
+                  color="#5EB1FF"
+                  >mdi-check-circle-outline</v-icon
                 >
+                <div v-else>
+                  <v-icon
+                    size="22"
+                    v-if="item.status != 3"
+                    @click="
+                      item.status == 2 || item.status == 4
+                        ? handleRetryUpload(item.id)
+                        : handleCancelUpload(item.id)
+                    "
+                    >{{
+                      item.status == 2 || item.status == 4
+                        ? "mdi-play-outline"
+                        : "mdi-pause"
+                    }}</v-icon
+                  >
+                  <v-icon
+                    v-if="item.status != 3"
+                    size="20"
+                    class="ml-2"
+                    @click="handleClearRecords(item.id)"
+                    >mdi-close</v-icon
+                  >
+                </div>
               </div>
             </div>
-            <v-progress-linear
-              v-show="!(item.status == 2 || item.status == 4)"
-              :indeterminate="!item.progress"
-              color="green"
-              height="2"
-              :value="item.progress"
-            ></v-progress-linear>
           </li>
         </ul>
       </template>
@@ -118,45 +130,23 @@ export default {
       distance: null,
       list: [],
       min_height: 0,
-      total_height: 0,
-      runList: [],
-      cache_screens: 1,
-      maxNum: 0,
     };
   },
   computed: {
     status() {
       return function (status) {
         if (status == 0) {
-          return {
-            color: "#24bc96",
-            status: "Preparing",
-          };
+          return "Preparing";
         } else if (status == 1) {
-          return {
-            color: "#775da6",
-            status: "Uploading",
-          };
+          return "Uploading";
         } else if (status == 2) {
-          return {
-            color: "#6a778b",
-            status: "Stopped",
-          };
+          return "Suspended";
         } else if (status == 3) {
-          return {
-            color: "#ff8843",
-            status: "Uploaded",
-          };
+          return "";
         } else if (status == 4) {
-          return {
-            color: "#ff6960",
-            status: "Upload Failed",
-          };
+          return "Upload Failed";
         } else {
-          return {
-            color: "#24bc96",
-            status: "Undefined",
-          };
+          return "Undefined";
         }
       };
     },
@@ -305,8 +295,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
 .control-header {
   font-size: 14px;
+  color: #0b0817;
+  .upload-icon {
+    animation: float 1s ease infinite;
+  }
 }
 
 .control-content {
@@ -314,11 +319,32 @@ export default {
   margin: 0;
   padding: 0;
   .file-item {
-    height: 60px;
+    height: 50px;
+    margin-bottom: 10px;
     box-sizing: border-box;
+
+    .progress-bg {
+      position: absolute;
+      width: 0;
+      height: 100%;
+      background: #e0f2ff;
+      transition: 1s all ease;
+    }
+    .progress-bg::after {
+      content: "";
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: #5eb1ff;
+    }
   }
   overflow: scroll;
   .file {
+    position: relative;
+    z-index: 2;
     padding: 5px 0;
     .file-info {
       font-size: 12px;
@@ -332,13 +358,6 @@ export default {
         white-space: nowrap;
       }
     }
-    .file-control {
-      opacity: 0;
-      transition: all 0.5s ease;
-    }
-  }
-  .file:hover .file-control {
-    opacity: 1;
   }
 }
 </style>

@@ -1,8 +1,13 @@
 <template>
   <div class="main-wrap">
     <div class="al-c justify-space-between">
-      <div>this is description.......</div>
-
+      <div class="fz-12 gray al-c">
+        <v-icon size="12" color="#6C7789">mdi-alert-circle</v-icon>
+        <span class="ml-1"
+          >The publish will fail if the file in the folder is changed after the
+          snapshot, deleting the snapshot will automatically unpin it!</span
+        >
+      </div>
       <div class="ml-auto" style="min-width: 150px">
         <v-text-field
           class="hide-msg bd-1"
@@ -16,10 +21,10 @@
       </div>
     </div>
     <v-data-table
-      class="mt-5"
+      class="mt-5 data-table"
       :headers="header"
       :items="list"
-      item-key="hash"
+      item-key="id"
       hide-default-footer
       disable-pagination
       height="700"
@@ -37,14 +42,21 @@
         >
       </template>
       <template #item.action="{ item }">
-        <v-btn color="primary">Publish</v-btn>
-        <v-btn color="primary">Delete</v-btn>
+        <span
+          class="action-btn"
+          style="color: #775da6"
+          @click="handlePublish(item.id)"
+          >Publish</span
+        >
+        <span class="action-btn ml-2" @click="handleDelete(item.id)"
+          >Delete</span
+        >
       </template>
     </v-data-table>
 
-    <div class="pd-20 gray ta-c fz-16 mt-5">
+    <div class="pd-20 gray ta-c fz-16 mt-5" v-show="list.length">
       <v-btn outlined class="mr-5">Previous</v-btn>
-      <v-btn min-width="100" outlined>Next</v-btn>
+      <v-btn min-width="100" outlined :disabled="!hasNext">Next</v-btn>
     </div>
   </div>
 </template>
@@ -72,32 +84,63 @@ export default {
           status: "Published",
           createAt: "2022-1-2 10:31:33",
           isFile: false,
+          id: 23434,
         },
       ],
       searchKey: "",
-      curPath: "",
+      cursor: 0,
+      prefix: "",
+      hasNext: false,
     };
   },
   activated() {
-    if (!this.curPath) {
-      this.curPath = this.$route.path.split("/").slice(0, 4).join("/") + "/";
-    }
-    this.$router.push({
-      path: this.curPath,
-      query: { tab: "snapshots" },
-    });
+    this.$router
+      .push({
+        path: this.$route.path.split("/").slice(0, 4).join("/") + "/",
+        query: { tab: "snapshots" },
+      })
+      .catch((err) => err);
   },
-  deactivated() {
-    this.curPath = this.$route.path;
+  created() {
+    this.getList();
   },
   methods: {
     onRow(item) {
       if (item.isFile) return;
       this.$router.push(this.$route.path + item.name + "/" + location.search);
     },
+    async getList() {
+      try {
+        let payload = { cursor: this.cursor, prefix: this.prefix };
+        const { data, page } = await this.$http.get("/snapshots", payload);
+        this.list = data;
+        this.cursor = page.next;
+        this.hasNext = page.hasNext;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async handlePublish(id) {
+      try {
+        await this.$http.post(`/snapshots/${id}`);
+      } catch (err) {
+        console.log(error);
+      }
+    },
+    async handleDelete(id) {
+      try {
+        await this.$http.delete(`/snapshots/${id}`);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.action-btn {
+  color: #6c7789;
+  cursor: pointer;
+}
 </style>
