@@ -291,7 +291,9 @@ export default {
         },
       ];
       if (this.selectRedirect) {
-        arr = arr.concat(this.list.filter((p) => p.domain != it.domain));
+        arr = arr.concat(
+          this.list.filter((p) => p.domain != it.domain && !p.redirect)
+        );
       }
       return arr;
     },
