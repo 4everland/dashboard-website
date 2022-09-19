@@ -31,15 +31,15 @@ export default {
       return [
         {
           value: 0,
-          label: `Add <b>www.${this.domain}</b> and redirect ${this.domain} to it`,
+          label: `Add <span class="color-1">www.${this.domain}</span> and redirect <span class="color-1">${this.domain}</span> to it`,
         },
         {
           value: 1,
-          label: `Add ${this.domain} and redirect www.${this.domain} to it`,
+          label: `Add <span class="color-1">${this.domain}</span> and redirect <span class="color-1">www.${this.domain}</span> to it`,
         },
         {
           value: 2,
-          label: `Add ${this.domain}`,
+          label: `Add <span class="color-1">${this.domain}</span>`,
         },
       ];
     },
