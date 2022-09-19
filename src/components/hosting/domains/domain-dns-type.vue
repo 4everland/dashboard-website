@@ -2,12 +2,16 @@
   <div>
     <v-radio-group v-model="type" mandatory>
       <v-radio
-        class="mb-3"
+        class="mb-4"
         v-for="(it, i) in options"
         :key="i"
         :label="it.label"
         :value="it.value"
-      ></v-radio>
+      >
+        <template v-slot:label>
+          <div class="fz-15" v-html="it.label"></div>
+        </template>
+      </v-radio>
     </v-radio-group>
   </div>
 </template>
@@ -27,7 +31,7 @@ export default {
       return [
         {
           value: 0,
-          label: `Add www.${this.domain} and redirect ${this.domain} to it`,
+          label: `Add <b>www.${this.domain}</b> and redirect ${this.domain} to it`,
         },
         {
           value: 1,
