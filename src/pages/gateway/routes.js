@@ -9,5 +9,8 @@ export default [
   {
     path: "/gateway/ipns",
     component: () => import("./ipns"),
+    meta: {
+      title: "IPNS Manager",
+    },
   },
 ];

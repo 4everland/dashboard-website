@@ -16,7 +16,6 @@
 export default {
   props: {
     info: Object,
-    branches: Array,
   },
   data() {
     const form = {

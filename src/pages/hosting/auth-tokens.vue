@@ -1,9 +1,9 @@
 <template>
   <div>
     <e-right-opt-wrap :top="-65">
-      <v-btn width="120" color="primary" @click="clickAdd">
-        <img src="/img/svg/add1.svg" width="12" />
-        <span class="ml-2">Create</span>
+      <v-btn color="primary" @click="clickAdd">
+        <span class="fz-18">+</span>
+        <span class="ml-1">Create</span>
       </v-btn>
       <v-btn
         outlined
