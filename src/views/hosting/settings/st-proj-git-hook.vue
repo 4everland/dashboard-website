@@ -1,71 +1,14 @@
 <template>
   <div class="bd-1 mt-5">
     <div>
-      <h3>Deploy Hooks</h3>
-      <!-- <div class="gray mt-1 fz-14">
+      <h3>Git Web Hooks</h3>
+      <div class="gray mt-1 fz-14">
         Deploy hooks are unique URLs that allow you to trigger a deployment of a
-        given branch. This project does not have any deploy hooks.
-      </div> -->
-
-      <div class="mt-5">
-        <v-btn small color="primary" @click="showPop = true" min-width="70">
-          Add
-        </v-btn>
-        <v-btn
-          small
-          outlined
-          class="ml-5"
-          @click="onDelete"
-          :loading="deleting"
-          v-if="selected.length > 0"
-        >
-          Delete
-        </v-btn>
+        given branch.
       </div>
 
-      <div class="mt-3">
-        <v-data-table
-          v-model="selected"
-          :loading="loading"
-          :show-select="list.length > 0"
-          item-key="name"
-          :headers="headers"
-          :items="list"
-          hide-default-footer
-        ></v-data-table>
-      </div>
+      <div class="d-flex"></div>
     </div>
-
-    <v-dialog v-model="showPop" max-width="500">
-      <div class="pd-20">
-        <h3>Add Hook</h3>
-        <div class="mt-5">
-          <v-text-field
-            persistent-placeholder
-            v-model="form.name"
-            label="Name"
-            placeholder="My Hook Name"
-          />
-          <!-- <v-text-field persistent-placeholder v-model="form.branch"
-          label="Branch"
-          placeholder="main"/> -->
-          <v-select
-            v-model="form.branch"
-            :items="branches"
-            placeholder="main"
-            persistent-placeholder
-            label="Branch"
-          >
-          </v-select>
-        </div>
-        <div class="mt-5 ta-c">
-          <v-btn outlined @click="showPop = false"> Cancel </v-btn>
-          <v-btn color="primary" class="ml-5" :loading="adding" @click="onAdd">
-            Add
-          </v-btn>
-        </div>
-      </div>
-    </v-dialog>
   </div>
 </template>
 

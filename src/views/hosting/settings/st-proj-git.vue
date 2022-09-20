@@ -52,21 +52,26 @@
             to a different branch here.
           </div>
           <div class="mt-3 d-flex al-c">
-            <v-select
-              v-model="currentBranch"
-              :items="branches"
-              label="Select Branch"
-            >
-            </v-select>
-            <v-btn
-              :disabled="currentBranch == info.config.currentBranch"
-              :loading="savingBranch"
-              @click="setBranch"
-              color="primary"
-              min-width="100"
-              class="ml-5"
-              >Save</v-btn
-            >
+            <div style="min-width: 100px">
+              <div class="gray fz-12 mb-3">Branch</div>
+              <div>{{ currentBranch }}</div>
+              <!-- <v-select
+                v-model="currentBranch"
+                :items="branches"
+                label="Branch"
+                readonly
+              >
+              </v-select> -->
+            </div>
+            <div class="flex-1 hide-msg ml-4">
+              <div class="gray fz-12 mb-3">Deploy Hook</div>
+              <v-switch
+                @change="setHook"
+                v-model="hookSwitch"
+                dense
+                :loading="savingHook"
+              ></v-switch>
+            </div>
           </div>
         </div>
       </div>
@@ -87,9 +92,10 @@ export default {
       savingConnect: false,
       currentBranch: "",
       branches: [],
-      savingBranch: false,
+      savingHook: false,
       showConnect: false,
       keyword: "",
+      hookSwitch: true,
     };
   },
   computed: {
@@ -111,9 +117,6 @@ export default {
     },
   },
   watch: {
-    info() {
-      this.getBranch();
-    },
     isFocus(val) {
       if (val && this.isAddClick) {
         this.isAddClick = false;
@@ -123,17 +126,16 @@ export default {
   },
   mounted() {
     this.currentBranch = this.info.config.currentBranch;
-    this.getBranch();
+    this.hookSwitch = this.info.config.hookSwitch;
+    console.log(this.info);
   },
   methods: {
     onConnect(it) {
       this.setConnect(it.id);
     },
     onUpdted() {
-      this.$setState({
-        noticeMsg: {
-          name: "updateProject",
-        },
+      this.$setMsg({
+        name: "updateProject",
       });
     },
     async setConnect(repoId) {
@@ -159,40 +161,22 @@ export default {
       this.savingConnect = false;
       this.$loading.close();
     },
-    async getBranch() {
-      if (!this.repoName) return;
-      this.branches = [];
-      try {
-        const { data } = await this.$http2.get(
-          `/project/branch/${this.info.id}`,
-          {
-            noTip: 1,
-          }
-        );
-        // console.log(data)
-        const branches = [...(data.other || [])];
-        if (data.current) branches.unshift(data.current);
-        else data.current = branches[0];
-        this.branches = branches;
-        this.currentBranch = data.current;
-        console.log(this.branches, this.currentBranch);
-      } catch (error) {
-        console.log(error);
-      }
+    async saveProject(body) {
+      await this.$http2.put("/project/config/" + this.info.id, body);
+      this.onUpdted();
     },
-    async setBranch() {
+    async setHook() {
       try {
-        this.savingBranch = true;
-        await this.$http2.put("/project/branch/git/" + this.info.id, {
-          name: this.currentBranch,
+        this.savingHook = true;
+        await this.saveProject({
+          hookSwitch: this.hookSwitch,
         });
-        this.onUpdted();
-        this.$toast("Updated Production Branch successfully.");
+        this.$toast("Updated Web Hook successfully.");
         this.showConnect = false;
       } catch (error) {
         //
       }
-      this.savingBranch = false;
+      this.savingHook = false;
     },
   },
   components: {
