@@ -260,6 +260,21 @@ export default {
           ],
         },
         {
+          label: "Gateway",
+          img: "m-gateway",
+          group: /^\/gateway/i,
+          subs: [
+            {
+              label: "Gateways",
+              to: "/gateway/list",
+            },
+            {
+              label: "IPNS Manager",
+              to: "/gateway/ipns",
+            },
+          ],
+        },
+        {
           label: "Resource",
           img: "m-usage",
           to: "/resource",
