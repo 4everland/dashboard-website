@@ -21,7 +21,7 @@
           </div>
           <div v-if="warning">
             <v-icon size="20" class="mr-1" color="warning"
-              >mdi-alert-circle</v-icon
+              >mdi-alert-circle-outline</v-icon
             >
             {{ uploadedFiles }} Files Uploaded {{ failedFiles }} Files Failed
           </div>
@@ -42,22 +42,56 @@
         }}</v-icon>
       </template>
       <div class="ml-auto">
-        <v-icon size="22" v-if="isUploading" @click="handleAllStopUploading">
-          mdi-pause</v-icon
-        >
-        <v-icon size="22" v-if="isPause" @click="handleStartAll">
-          mdi-play-outline</v-icon
-        >
-        <v-icon
-          size="22"
-          v-if="warning || allFailed"
-          @click="handleFailedRetry"
-        >
-          mdi-reload</v-icon
-        >
-        <v-icon size="20" class="ml-2" @click="isShow = false"
-          >mdi-close</v-icon
-        >
+        <v-tooltip top v-if="isUploading">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              size="22"
+              v-bind="attrs"
+              v-on="on"
+              @click="handleAllStopUploading"
+            >
+              mdi-pause</v-icon
+            >
+          </template>
+          <span>Suspend all</span>
+        </v-tooltip>
+
+        <v-tooltip top v-if="isPause">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon size="22" v-bind="attrs" v-on="on" @click="handleStartAll">
+              mdi-play-outline</v-icon
+            >
+          </template>
+          <span>Continue all </span>
+        </v-tooltip>
+
+        <v-tooltip top v-if="warning || allFailed">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              size="22"
+              v-bind="attrs"
+              v-on="on"
+              @click="handleFailedRetry"
+            >
+              mdi-reload</v-icon
+            >
+          </template>
+          <span>Retry all</span>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              size="20"
+              class="ml-2"
+              v-bind="attrs"
+              v-on="on"
+              @click="handleCancelAll"
+              >mdi-close</v-icon
+            >
+          </template>
+          <span>Cancel all</span>
+        </v-tooltip>
       </div>
       <template #content>
         <ul class="control-content" ref="controlContent">
@@ -228,12 +262,17 @@ export default {
         this.processTask();
       }
     },
-    handleAllStopUploading() {
+    async handleAllStopUploading() {
       this.tasks.forEach((item) => {
         if (item.status == 0 || item.status == 1) {
           item.cancelTask();
         }
       });
+    },
+    async handleCancelAll() {
+      await this.handleAllStopUploading();
+      this.tasks = [];
+      // this.isShow = false;
     },
     handleStartAll() {
       let arr = this.tasks.filter((item) => item.status == 0);
@@ -346,6 +385,8 @@ export default {
     position: relative;
     z-index: 2;
     padding: 5px 0;
+    height: 100%;
+    box-sizing: border-box;
     .file-info {
       font-size: 12px;
       color: #999;

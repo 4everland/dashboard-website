@@ -5,16 +5,16 @@
     >
       <template #header>
         <div class="control-header al-c">
-          <div v-if="hasDeleteing || hasPause">
+          <div v-if="hasDeleteing || hasPause" class="al-c">
             <img
-              width="15"
-              class="mr-3 dustbin-icon"
+              width="17"
+              class="dustbin-icon"
               src="/img/svg/bucket/dustbin-icon.svg"
               alt=""
             />
-            <span class="ml-2">Deleteing ({{ compeleteFiles }})</span>
+            <span class="ml-3">Deleteing ({{ compeleteFiles }})</span>
           </div>
-          <div v-if="allCompelete || allFailedStatus">
+          <div v-else-if="allCompelete || allFailedStatus" class="al-c">
             <v-icon size="20" :color="allCompelete ? '#00BD9A' : 'red'">{{
               allCompelete
                 ? "mdi-check-circle-outline"
@@ -24,6 +24,12 @@
               >Deleted {{ allCompelete ? "Successfully" : "Failed" }} ({{
                 compeleteFiles
               }})</span
+            >
+          </div>
+          <div v-else class="al-c">
+            <v-icon size="20" color="warning">mdi-alert-circle-outline</v-icon>
+            <span class="ml-2"
+              >Deleted ({{ compeleteFiles }}), Other delete failed</span
             >
           </div>
         </div>
@@ -67,10 +73,12 @@
                 <div class="file-name">
                   {{ item.param.Bucket }}/{{ item.param.Prefix }}
                 </div>
-                <div>
-                  <span>Deleted</span>
-                  <span class="ml-2">{{ item.deleteCount }}</span>
-                  <span class="ml-5"> {{ status(item.status) }}</span>
+                <div class="al-c">
+                  <div style="min-width: 100px">
+                    <span>Deleted</span>
+                    <span class="ml-2">{{ item.deleteCount }}</span>
+                  </div>
+                  <div class="ml-5">{{ status(item.status) }}</div>
                 </div>
               </div>
               <div class="file-control ml-auto">

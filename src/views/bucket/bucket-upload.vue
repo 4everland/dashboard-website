@@ -46,6 +46,7 @@
                 v-model="form.cid"
                 autocomplte="off"
                 :rules="cidRules"
+                :disabled="pinCidLoading"
               />
             </div>
             <div>
@@ -57,6 +58,7 @@
                 autocomplte="off"
                 :rules="nameRules"
                 :counter="30"
+                :disabled="pinCidLoading"
               />
             </div>
           </v-form>
@@ -71,6 +73,7 @@
             class="ml-5"
             :disabled="!valid"
             @click="handleSubmit"
+            :loading="pinCidLoading"
           >
             Search and Pin
           </v-btn>
@@ -81,9 +84,13 @@
 </template>
 
 <script>
+import Vue from "vue";
 import InputUpload from "@/views/bucket/components/input-upload";
+import { mapState } from "vuex";
 import { bus } from "../../utils/bus";
-import { TaskWrapper } from "./task.js";
+import { TaskWrapper, PinCidTaskWrapper } from "./task.js";
+import { Upload } from "@aws-sdk/lib-storage";
+
 export default {
   props: {
     info: {
@@ -124,16 +131,20 @@ export default {
       },
       isStorageFull: false,
       isPinCidDialog: false,
+      pinCidLoading: false,
       valid: false,
       form: {
         cid: null,
         name: null,
       },
       nameRules: [
-        (v) => !!v || "ipfs is required",
+        (v) => !!v || "name is required",
         (v) => (v && v.length > 30 ? "more than 30 chars!" : true),
       ],
-      cidRules: [],
+      cidRules: [
+        (v) => !!v || "cid is required",
+        (v) => (/^[A-Za-z0-9]*$/.test(v) ? true : "no supported"),
+      ],
     };
   },
   async created() {
@@ -150,6 +161,9 @@ export default {
     });
   },
   computed: {
+    ...mapState({
+      s3: (s) => s.s3,
+    }),
     path() {
       const arr = this.$route.path.split("/");
       const idx = arr.findIndex((item) => item == "storage");
@@ -258,7 +272,6 @@ export default {
     onCancel() {
       this.$router.go(-1);
     },
-
     async overStorage() {
       try {
         const result = await this.$http({
@@ -282,11 +295,46 @@ export default {
         console.log(err);
       }
     },
-
-    handleSubmit() {
+    async handleSubmit() {
       let valid = this.$refs.form.validate();
       if (!valid) return;
       //.......
+      // this.pinCidLoading = true;
+      const form = JSON.parse(JSON.stringify(this.form));
+      const pinTask = new PinCidTaskWrapper(form, this.s3, this.info);
+      pinTask.pin();
+
+      bus.$emit("pinTask", pinTask);
+      this.isPinCidDialog = false;
+      // try {
+      //   const { data } = await this.$axios({
+      //     method: "get",
+      //     url: `https://${this.form.cid}.ipfs.dweb.link/`,
+      //     // url: `https://${this.form.cid}.ipfs.4everland.xyz/`,
+      //     responseType: "blob",
+      //   });
+
+      //   // bus.$emit('pinCidList')
+
+      //   const task = new Upload({
+      //     client: this.s3,
+      //     queueSize: 3,
+      //     params: {
+      //       Bucket: this.info.Bucket,
+      //       Key: this.info.Prefix + this.form.name,
+      //       Body: data,
+      //       ContentType: data.type,
+      //     },
+      //   });
+      //   await task.done();
+      //   this.$toast("Successfully queued IPFS CID for pinning");
+      //   bus.$emit("getList");
+      // } catch (error) {
+      //   console.log(error.message);
+      //   Vue.prototype.$alert(error.message);
+      // }
+      // this.pinCidLoading = false;
+      // this.isPinCidDialog = false;
     },
   },
   watch: {
@@ -296,6 +344,7 @@ export default {
       }
     },
     async files(newVal, oldVal) {
+      console.log(newVal);
       if (oldVal.length == 0 && newVal.length) {
         this.page = 1;
       }
