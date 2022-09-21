@@ -97,7 +97,7 @@ export default {
       try {
         this.deleting = true;
         await this.$http2.delete(
-          `/project/config/${this.info.id}/git/hooks/${it.name}`
+          `/project/config/${it.id}/git/hooks/${it.name}`
         );
         this.$toast("Deleted successfully");
       } catch (error) {

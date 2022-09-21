@@ -23,10 +23,7 @@
     </div>
     <div v-else>
       <e-right-opt-wrap :top="-74">
-        <v-btn color="primary">
-          <span class="fz-18">+</span>
-          <span class="ml-1">Generate</span>
-        </v-btn>
+        <ipns-generate />
       </e-right-opt-wrap>
       <v-data-table
         :loading="loading"
@@ -40,7 +37,12 @@
 </template>
 
 <script>
+import IpnsGenerate from "@/views/gateway/ipns-generate";
+
 export default {
+  components: {
+    IpnsGenerate,
+  },
   data() {
     return {
       balance: null,
