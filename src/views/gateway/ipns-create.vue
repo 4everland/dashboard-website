@@ -8,7 +8,7 @@
 
 <template>
   <div>
-    <v-btn color="primary" @click="showPop = true">
+    <v-btn color="primary" @click="onShow">
       <span class="fz-18">+</span>
       <span class="ml-1">Create</span>
     </v-btn>
@@ -39,10 +39,17 @@
             <a href="https://docs.4everland.org/">Click to learn more.</a>
           </div>
         </div>
+        <template v-else>
+          <div class="gray fz-13 mt-1">
+            {{ options[type].label }}
+          </div>
+        </template>
 
         <div class="ta-c mt-5">
           <v-btn outlined width="100" @click="showPop = false">Cancel</v-btn>
-          <v-btn color="primary" class="ml-6" width="100">Next</v-btn>
+          <v-btn color="primary" class="ml-6" width="100" @click="onNext">{{
+            stepIdx == 0 ? "Next" : "Create"
+          }}</v-btn>
         </div>
       </div>
     </v-dialog>
@@ -69,6 +76,18 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    onShow() {
+      this.stepIdx = 0;
+      this.type = 0;
+      this.showPop = true;
+    },
+    onNext() {
+      if (this.stepIdx == 0) {
+        this.stepIdx = 1;
+      }
+    },
   },
 };
 </script>
