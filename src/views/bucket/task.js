@@ -145,34 +145,53 @@ export class PinCidTaskWrapper {
     this.progress = 0;
     this.abortAxiosFn = null;
     this.task = null;
+    this.abortAxiosFnArr = [];
   }
-  async getFile() {
-    // try {
-    //   const { data } = await Vue.prototype.$axios({
-    //     method: "get",
-    //     url: `https://${this.form.cid}.ipfs.dweb.link/`,
-    //     // url: `https://${this.form.cid}.ipfs.4everland.xyz/`,
-    //     responseType: "blob",
-    //     cancelToken: new Vue.prototype.$axios.CancelToken((c) => {
-    //       this.abortAxiosFn = c;
-    //     }),
+  async generateGatewayPromise() {
+    const gatewayList = [
+      "https://ipfs.io/ipfs/",
+      "https://ipfs.telos.miami/ipfs/",
+      "https://gateway.ipfs.io/ipfs/",
+    ];
+    const promiseList = gatewayList.map((it) => {
+      return Vue.prototype.$axios({
+        method: "head",
+        url: `${it}${this.form.cid}`,
+        responseType: "blob",
+        cancelToken: new Vue.prototype.$axios.CancelToken((c) => {
+          // this.abortAxiosFn = c;
+          // this.abortAxiosFnArr.push(c);
+        }),
+      });
+    });
+    // console.log(promiseList);
+    // return Promise.any(promiseList)
+    //   .then((res) => {
+    //     console.log(res);
+    //     const data = res.data;
+    //     this.file = data;
+    //     this.status = 1; // searching  // pinning
+    //     this.progress = 50;
+    //     // this.abortAxiosFn();
+    //     this.abortAxiosFnArr.forEach((it) => it());
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
     //   });
-    //   this.file = data;
-    //   this.status = 1; // searching  // pinning
-    //   this.progress = 50;
-    // } catch (error) {
-    //   console.log(error.message.status, error);
-    //   if (error.message.status == 2) {
-    //     console.log("123");
-    //     this.status = 2;
-    //   } else {
-    //     console.log(444);
-    //     this.status = 4; // searching failed   // pin failed
-    //   }
-    // }
+
+    const { data } = await Promise.any(promiseList);
+    console.log(data);
+    this.file = data;
+    this.status = 1; // searching  // pinning
+    this.progress = 50;
+    // this.abortAxiosFnArr.forEach((it) => it());
+  }
+
+  async getFile() {
     const { data } = await Vue.prototype.$axios({
       method: "get",
-      url: `https://${this.form.cid}.ipfs.dweb.link/`,
+      // url: `https://${this.form.cid}.ipfs.dweb.link/`,
+      url: `https://ipfs.io/ipfs/${this.form.cid}`,
       // url: `https://${this.form.cid}.ipfs.4everland.xyz/`,
       responseType: "blob",
       cancelToken: new Vue.prototype.$axios.CancelToken((c) => {
@@ -184,20 +203,6 @@ export class PinCidTaskWrapper {
     this.progress = 50;
   }
   async uploadToBucket() {
-    // try {
-
-    // } catch (error) {
-    //   console.log("upload catch error");
-    //   console.log(error);
-    //   if (error.message == "Upload aborted." || error.message.status == 2) {
-    //     console.log("zheli");
-    //     this.status = 2; // cancel/ stop
-    //   } else {
-    //     console.log("nali");
-    //     this.status = 4; // upload failed // pin failed
-    //   }
-    // }
-
     this.task = new Upload({
       client: this.s3,
       queueSize: 3,
@@ -216,7 +221,8 @@ export class PinCidTaskWrapper {
   async pin() {
     try {
       this.status = 1;
-      await this.getFile();
+      await this.generateGatewayPromise();
+      // await this.getFile();
       await this.uploadToBucket();
     } catch (error) {
       console.log(error);
@@ -228,17 +234,28 @@ export class PinCidTaskWrapper {
     }
   }
   async abortPin() {
-    try {
-      if (this.progress < 50) {
-        await this.abortAxiosFn({ status: 2 });
-      } else {
-        if (this.task) {
-          await this.task.abort();
-        }
+    // try {
+    //   if (this.progress < 50) {
+    //     // await this.abortAxiosFn({ status: 2 });
+    //     this.abortAxiosFnArr.forEach(async (it) => await it({ status: 2 }));
+    //   } else {
+    //     if (this.task) {
+    //       await this.task.abort();
+    //     }
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    //   this.status = 2; // upload cancel
+    // }
+    if (this.progress < 50) {
+      await this.abortAxiosFn({ status: 2 });
+      // this.abortAxiosFnArr.forEach(async (it) => await it({ status: 2 }));
+    } else {
+      if (this.task) {
+        await this.task.abort();
       }
-    } catch (error) {
-      console.log(error);
-      this.status = 2; // upload cancel
     }
+    this.status = 2;
+    // throw new Error("1233444");
   }
 }

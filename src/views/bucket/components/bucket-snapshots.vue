@@ -1,8 +1,8 @@
 <template>
   <div class="main-wrap">
     <div class="al-c justify-space-between">
-      <div class="fz-12 gray al-c">
-        <v-icon size="12" color="#6C7789">mdi-alert-circle</v-icon>
+      <div class="fz-14 gray">
+        <v-icon size="14" color="#6C7789">mdi-alert-circle</v-icon>
         <span class="ml-1"
           >The publish will fail if the file in the folder is changed after the
           snapshot, deleting the snapshot will automatically unpin it!</span

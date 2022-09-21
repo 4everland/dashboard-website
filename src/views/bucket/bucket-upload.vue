@@ -138,12 +138,14 @@ export default {
         name: null,
       },
       nameRules: [
-        (v) => !!v || "name is required",
+        (v) => !!(v || "").trim() || "Invalid",
+        (v) => !/\//.test(v) || "/ is not allowed.",
         (v) => (v && v.length > 30 ? "more than 30 chars!" : true),
       ],
       cidRules: [
-        (v) => !!v || "cid is required",
-        (v) => (/^[A-Za-z0-9]*$/.test(v) ? true : "no supported"),
+        (v) => !!(v || "").trim() || "Invalid CID",
+        (v) =>
+          /^([A-Za-z0-9]{46}|[A-Za-z0-9]{59})$/.test(v) ? true : "Invalid CID",
       ],
     };
   },

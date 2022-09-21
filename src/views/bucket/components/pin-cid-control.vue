@@ -158,15 +158,14 @@ export default {
     },
   },
   watch: {
-    pinCidList: {
-      handler(list) {
-        if (list.every((it) => it.status == 3)) return bus.$emit("getList");
-
-        if (list.some((it) => it.status != 2 && it.status != 1))
-          return bus.$emit("getList");
-      },
-      deep: true,
-    },
+    // pinCidList: {
+    //   handler(list) {
+    //     if (list.every((it) => it.status == 3)) return bus.$emit("getList");
+    //     if (list.some((it) => it.status != 2 && it.status != 1))
+    //       return bus.$emit("getList");
+    //   },
+    //   deep: true,
+    // },
   },
 };
 </script>
