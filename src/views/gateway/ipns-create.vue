@@ -15,7 +15,7 @@
     <v-dialog v-model="showPop" max-width="600">
       <div class="pa-6 pt-5">
         <h3>Create IPNS</h3>
-        <div class="pa-5">
+        <div class="pa-5" v-if="stepIdx == 0">
           <v-radio-group v-model="type" mandatory class="radio-al-start">
             <v-radio
               class="mb-4"
@@ -42,7 +42,7 @@
 
         <div class="ta-c mt-5">
           <v-btn outlined width="100" @click="showPop = false">Cancel</v-btn>
-          <v-btn color="primary" class="ml-6" width="100">Add</v-btn>
+          <v-btn color="primary" class="ml-6" width="100">Next</v-btn>
         </div>
       </div>
     </v-dialog>
@@ -55,6 +55,7 @@ export default {
     return {
       showPop: false,
       type: 0,
+      stepIdx: 0,
       options: [
         {
           label: "Generate an IPNS with CID.",
