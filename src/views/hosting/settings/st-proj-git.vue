@@ -51,9 +51,9 @@
             Deployment instead of the usual Preview Deployment. You can switch
             to a different branch here.
           </div>
-          <div class="mt-3 d-flex al-c">
+          <div class="mt-5 d-flex al-c">
             <div style="min-width: 100px">
-              <div class="gray fz-12 mb-3">Branch</div>
+              <div class="gray-6 fz-14 mb-2">Branch</div>
               <div>{{ currentBranch }}</div>
               <!-- <v-select
                 v-model="currentBranch"
@@ -64,7 +64,7 @@
               </v-select> -->
             </div>
             <div class="flex-1 hide-msg ml-4">
-              <div class="gray fz-12 mb-3">Deploy Hook</div>
+              <div class="gray-6 fz-14 mb-2">Deploy Hook</div>
               <v-switch
                 @change="setHook"
                 v-model="hookSwitch"
@@ -76,7 +76,8 @@
         </div>
       </div>
 
-      <st-proj-git-hook :info="info" :branches="branches" />
+      <st-proj-git-hook :info="info" :branch="currentBranch" />
+      <!-- :branches="branches" -->
     </template>
   </div>
 </template>
@@ -126,7 +127,7 @@ export default {
   },
   mounted() {
     this.currentBranch = this.info.config.currentBranch;
-    this.hookSwitch = this.info.config.hookSwitch;
+    this.hookSwitch = this.info.config.gitHook;
     console.log(this.info);
   },
   methods: {
