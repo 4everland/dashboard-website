@@ -43,10 +43,9 @@
           This project does not have any deploy hooks.
         </div>
         <div class="gray-6 mt-4 mb-3 fz-14">Create Hook</div>
-        <div class="al-c">
+        <div class="al-c hide-msg">
           <div style="width: 300px">
             <v-text-field
-              class="hide-msg"
               outlined
               dense
               solo
@@ -55,7 +54,15 @@
             ></v-text-field>
           </div>
           <span class="color-1 ml-5 mr-5">on</span>
-          <span>{{ branch }}</span>
+          <!-- <span>{{ branch }}</span> -->
+          <div style="width: 200px">
+            <v-text-field
+              v-model="branch"
+              disabled
+              outlined
+              dense
+            ></v-text-field>
+          </div>
           <v-btn color="primary" class="ml-10" :loading="adding" @click="onAdd"
             >Create Hook</v-btn
           >
