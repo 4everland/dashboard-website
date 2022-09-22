@@ -153,7 +153,7 @@ export class PinCidTaskWrapper {
       "https://ipfs.io/ipfs/",
       "https://ipfs.telos.miami/ipfs/",
       "https://gateway.ipfs.io/ipfs/",
-      "https://via0.com/ipfs/",
+      // "https://via0.com/ipfs/",
       "https://cloudflare-ipfs.com/ipfs/",
       "https://cf-ipfs.com/ipfs/",
       "https://dweb.link/ipfs/",
