@@ -29,7 +29,7 @@
           <div v-else class="al-c">
             <v-icon size="20" color="warning">mdi-alert-circle-outline</v-icon>
             <span class="ml-2"
-              >Deleted ({{ compeleteFiles }}), Other delete failed</span
+              >Deleted ({{ compeleteFiles }}), some failed</span
             >
           </div>
         </div>
@@ -57,7 +57,7 @@
         <v-icon size="20" v-if="showAllRetry" @click="handleRetryFailed">
           mdi-reload</v-icon
         >
-        <v-icon size="20" class="ml-2" @click="isShow = false"
+        <v-icon size="20" class="ml-2" @click="handleAllClose"
           >mdi-close</v-icon
         >
       </div>
@@ -270,12 +270,17 @@ export default {
         });
       }
     },
-
     handleRemoveDeleteFolder(id) {
-      console.log(this.deleteFolderTasks);
       let index = this.deleteFolderTasks.findIndex((it) => it.id == id);
+      this.handlePasueDeleteFolder(id);
       this.deleteFolderTasks.splice(index, 1);
       bus.$emit("handleRemoveDeleteFolder", this.deleteFolderTasks);
+    },
+    handleAllClose() {
+      this.handleDeleteFolderPauseAll();
+      this.deleteFolderTasks = [];
+      bus.$emit("handleDeleteFolderRemoveAll");
+      this.isShow = false;
     },
   },
 };

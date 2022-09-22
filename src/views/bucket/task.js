@@ -145,53 +145,37 @@ export class PinCidTaskWrapper {
     this.progress = 0;
     this.abortAxiosFn = null;
     this.task = null;
-    this.abortAxiosFnArr = [];
+    this.theFastGateWay = "https://ipfs.io/ipfs/";
+    this.userCancel = false;
   }
   async generateGatewayPromise() {
     const gatewayList = [
       "https://ipfs.io/ipfs/",
       "https://ipfs.telos.miami/ipfs/",
       "https://gateway.ipfs.io/ipfs/",
+      "https://via0.com/ipfs/",
+      "https://cloudflare-ipfs.com/ipfs/",
+      "https://cf-ipfs.com/ipfs/",
+      "https://dweb.link/ipfs/",
     ];
     const promiseList = gatewayList.map((it) => {
       return Vue.prototype.$axios({
         method: "head",
         url: `${it}${this.form.cid}`,
         responseType: "blob",
-        cancelToken: new Vue.prototype.$axios.CancelToken((c) => {
-          // this.abortAxiosFn = c;
-          // this.abortAxiosFnArr.push(c);
-        }),
+        // timeout: 10000,
       });
     });
-    // console.log(promiseList);
-    // return Promise.any(promiseList)
-    //   .then((res) => {
-    //     console.log(res);
-    //     const data = res.data;
-    //     this.file = data;
-    //     this.status = 1; // searching  // pinning
-    //     this.progress = 50;
-    //     // this.abortAxiosFn();
-    //     this.abortAxiosFnArr.forEach((it) => it());
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
-    const { data } = await Promise.any(promiseList);
-    console.log(data);
-    this.file = data;
-    this.status = 1; // searching  // pinning
-    this.progress = 50;
-    // this.abortAxiosFnArr.forEach((it) => it());
+    const data = await Promise.any(promiseList);
+    if (this.userCancel) throw new Error("Upload aborted.");
+    this.theFastGateWay = data.config.url.replace(this.form.cid, "");
   }
 
   async getFile() {
     const { data } = await Vue.prototype.$axios({
       method: "get",
       // url: `https://${this.form.cid}.ipfs.dweb.link/`,
-      url: `https://ipfs.io/ipfs/${this.form.cid}`,
+      url: `${this.theFastGateWay}${this.form.cid}`,
       // url: `https://${this.form.cid}.ipfs.4everland.xyz/`,
       responseType: "blob",
       cancelToken: new Vue.prototype.$axios.CancelToken((c) => {
@@ -219,14 +203,23 @@ export class PinCidTaskWrapper {
   }
 
   async pin() {
+    if (this.userCancel) throw new Error("Upload aborted.");
+    await this.getFile();
+    await this.uploadToBucket();
+  }
+
+  async aleadyPin() {
     try {
+      this.userCancel = false;
       this.status = 1;
       await this.generateGatewayPromise();
-      // await this.getFile();
-      await this.uploadToBucket();
+      await this.pin();
     } catch (error) {
-      console.log(error);
-      if (error.message == "Upload aborted." || error.message.status == 2) {
+      if (
+        this.userCancel ||
+        error.message == "Upload aborted." ||
+        error.message.status == 2
+      ) {
         this.status = 2;
       } else {
         this.status = 4;
@@ -234,28 +227,21 @@ export class PinCidTaskWrapper {
     }
   }
   async abortPin() {
-    // try {
-    //   if (this.progress < 50) {
-    //     // await this.abortAxiosFn({ status: 2 });
-    //     this.abortAxiosFnArr.forEach(async (it) => await it({ status: 2 }));
-    //   } else {
-    //     if (this.task) {
-    //       await this.task.abort();
-    //     }
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   this.status = 2; // upload cancel
-    // }
-    if (this.progress < 50) {
-      await this.abortAxiosFn({ status: 2 });
-      // this.abortAxiosFnArr.forEach(async (it) => await it({ status: 2 }));
-    } else {
-      if (this.task) {
-        await this.task.abort();
+    try {
+      this.userCancel = true;
+      if (this.progress < 50) {
+        if (this.abortAxiosFn) {
+          await this.abortAxiosFn({ status: 2 });
+        }
+        throw new Error("errrrrrrr");
+      } else {
+        if (this.task) {
+          await this.task.abort();
+        }
       }
+    } catch (error) {
+      this.status = 2;
     }
     this.status = 2;
-    // throw new Error("1233444");
   }
 }

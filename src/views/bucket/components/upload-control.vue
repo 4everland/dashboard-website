@@ -272,7 +272,7 @@ export default {
     async handleCancelAll() {
       await this.handleAllStopUploading();
       this.tasks = [];
-      // this.isShow = false;
+      this.isShow = false;
     },
     handleStartAll() {
       let arr = this.tasks.filter((item) => item.status == 0);

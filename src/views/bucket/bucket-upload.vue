@@ -304,7 +304,7 @@ export default {
       // this.pinCidLoading = true;
       const form = JSON.parse(JSON.stringify(this.form));
       const pinTask = new PinCidTaskWrapper(form, this.s3, this.info);
-      pinTask.pin();
+      pinTask.aleadyPin();
 
       bus.$emit("pinTask", pinTask);
       this.isPinCidDialog = false;
@@ -346,7 +346,6 @@ export default {
       }
     },
     async files(newVal, oldVal) {
-      console.log(newVal);
       if (oldVal.length == 0 && newVal.length) {
         this.page = 1;
       }

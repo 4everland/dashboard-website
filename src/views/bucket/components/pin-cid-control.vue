@@ -2,7 +2,35 @@
   <div v-show="isShow">
     <e-expansion-panel :length="pinCidList.length > 6 ? 6 : pinCidList.length">
       <template #header>
-        <div class="control-header al-c">PIN CID CONTENT</div>
+        <div class="control-header al-c">
+          <div v-if="hasPinning || hasPause" class="al-c">
+            <img
+              width="15"
+              class="mr-3 pid-icon"
+              src="/img/svg/bucket/upload-icon.svg"
+              alt=""
+            />
+            <span>Pinning ({{ PinnedCount }})</span>
+          </div>
+          <div v-else-if="allPinned || allFailed" class="al-c">
+            <v-icon size="20" :color="allPinned ? '#00BD9A' : 'red'">{{
+              allPinned
+                ? "mdi-check-circle-outline"
+                : " mdi-close-circle-outline"
+            }}</v-icon>
+            <span class="ml-2"
+              >Pin {{ allPinned ? "Successfully" : "Failed" }} ({{
+                allPinned ? PinnedCount : FailedCount
+              }})</span
+            >
+          </div>
+          <div v-else class="al-c">
+            <v-icon size="20" color="warning">mdi-alert-circle-outline</v-icon>
+            <span class="ml-2"
+              >Pinned ({{ PinnedCount }}), Pin failed ({{ PinnedCount }})</span
+            >
+          </div>
+        </div>
       </template>
       <template #control="{ handleClick, isShowBody }">
         <v-icon size="20" class="ml-2" @click="handleClick">{{
@@ -39,14 +67,14 @@
               :style="{ width: item.progress + '%' }"
             ></div>
             <div class="file al-c mx-7">
-              <div class="file-info">
-                <span class="fz-14 gray">
-                  {{ item.form.name.cutStr(5, 5) }}</span
-                >
-                <span class="fz-14 gray ml-2">
+              <div class="file-info d-flex flex-column justify-center">
+                <span class="fz-14"> {{ item.form.name.cutStr(5, 5) }}</span>
+                <span class="fz-14 gray mt-2">
                   {{ item.form.cid.cutStr(5, 5) }}</span
                 >
-                <span class="fz-14 gray ml-2">{{ status(item.status) }}</span>
+              </div>
+              <div class="fz-14 gray">
+                {{ status(item.status) }}
               </div>
 
               <div class="file-control ml-auto">
@@ -72,7 +100,11 @@
                 >
                   mdi-reload</v-icon
                 >
-                <v-icon size="20" class="ml-2" @click="handleCancel(item.id)"
+                <v-icon
+                  size="20"
+                  class="ml-2"
+                  v-if="item.status != 3"
+                  @click="handleCancel(item.id)"
                   >mdi-close</v-icon
                 >
               </div>
@@ -116,6 +148,18 @@ export default {
     hasFailed() {
       return this.pinCidList.some((it) => it.status == 4);
     },
+    allPinned() {
+      return this.pinCidList.every((it) => it.status == 3);
+    },
+    allFailed() {
+      return this.pinCidList.every((it) => it.status == 4);
+    },
+    PinnedCount() {
+      return this.pinCidList.filter((it) => it.status == 3).length;
+    },
+    FailedCount() {
+      return this.pinCidList.filter((it) => it.status == 4).length;
+    },
   },
   mounted() {
     bus.$on("pinTask", (task) => {
@@ -133,39 +177,43 @@ export default {
       this.pinCidList.splice(index, 1);
     },
     handleStart(id) {
-      this.pinCidList.find((it) => it.id == id).pin();
+      this.pinCidList.find((it) => it.id == id).aleadyPin();
     },
     handleAllStop() {
-      this.pinCidList.forEach((it) => it.abortPin());
+      this.pinCidList.forEach((it) => {
+        if (it.status == 1) {
+          it.abortPin();
+        }
+      });
     },
     handleAllStart() {
       this.pinCidList.forEach((it) => {
         if (it.status != 3) {
-          it.pin();
+          it.aleadyPin();
         }
       });
     },
     handleAllReload() {
       this.pinCidList.forEach((it) => {
         if (it.status == 4) {
-          it.pin();
+          it.aleadyPin();
         }
       });
     },
     handleAllClose() {
       this.pinCidList.forEach(async (it) => await it.abortPin());
       this.pinCidList = [];
+      this.isShow = false;
     },
   },
   watch: {
-    // pinCidList: {
-    //   handler(list) {
-    //     if (list.every((it) => it.status == 3)) return bus.$emit("getList");
-    //     if (list.some((it) => it.status != 2 && it.status != 1))
-    //       return bus.$emit("getList");
-    //   },
-    //   deep: true,
-    // },
+    pinCidList: {
+      handler(list) {
+        const pinCidLength = list.filter((it) => it.status == 1).length;
+        bus.$emit("uploadingLength", pinCidLength);
+      },
+      deep: true,
+    },
   },
 };
 </script>
@@ -184,7 +232,7 @@ export default {
 }
 .control-header {
   font-size: 14px;
-  .dustbin-icon {
+  .pid-icon {
     animation: float 1s ease infinite;
   }
 }
@@ -224,16 +272,16 @@ export default {
     font-size: 14px;
     box-sizing: border-box;
     .file-info {
+      width: 150px;
       font-size: 12px;
       color: #999;
-      .file-name {
-        width: 150px;
-        color: #000;
-        font-size: 14px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-      }
+      // .file-name {
+      //   color: #000;
+      //   font-size: 14px;
+      //   text-overflow: ellipsis;
+      //   overflow: hidden;
+      //   white-space: nowrap;
+      // }
     }
     .file-control {
       opacity: 0;
