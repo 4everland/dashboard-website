@@ -1,6 +1,6 @@
 <template>
   <div>
-    <e-right-opt-wrap :top="-55">
+    <e-right-opt-wrap :top="-65">
       <div class="btn-wrap d-flex justify-end">
         <v-btn color="primary" width="120" @click="handleGenerate">
           <!-- <v-icon size="16">mdi-plus-circle-outline</v-icon> -->
@@ -9,7 +9,7 @@
         </v-btn>
       </div>
     </e-right-opt-wrap>
-    <div class="fz-14 gray pl-1 mb-4">Use the API key for Storage SDK</div>
+    <!-- <div class="fz-14 gray pl-1 mb-4">Use the API key for Storage SDK</div> -->
 
     <div class="main-wrap">
       <div class="mt-5">

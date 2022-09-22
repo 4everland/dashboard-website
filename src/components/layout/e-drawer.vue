@@ -222,13 +222,9 @@ export default {
               label: "Statistics",
               to: "/hosting/statistics",
             },
-            // {
-            //   label: "First Landing",
-            //   to: "/hosting/first-landing",
-            // },
             {
               label: "Auth Tokens",
-              to: "/hosting/authtokens",
+              to: "/hosting/auth-tokens",
             },
           ],
         },
@@ -259,7 +255,22 @@ export default {
             },
             {
               label: "Access Keys",
-              to: "/bucket/access",
+              to: "/bucket/access-keys",
+            },
+          ],
+        },
+        {
+          label: "Gateway",
+          img: "m-gateway",
+          group: /^\/gateway/i,
+          subs: [
+            {
+              label: "Gateways",
+              to: "/gateway/list",
+            },
+            {
+              label: "IPNS Manager",
+              to: "/gateway/ipns",
             },
           ],
         },

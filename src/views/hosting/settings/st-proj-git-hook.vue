@@ -1,71 +1,67 @@
 <template>
   <div class="bd-1 mt-5">
     <div>
-      <h3>Deploy Hooks</h3>
-      <!-- <div class="gray mt-1 fz-14">
+      <h3>Git Web Hooks</h3>
+      <div class="gray mt-1 fz-14">
         Deploy hooks are unique URLs that allow you to trigger a deployment of a
-        given branch. This project does not have any deploy hooks.
-      </div> -->
-
-      <div class="mt-5">
-        <v-btn small color="primary" @click="showPop = true" min-width="70">
-          Add
-        </v-btn>
-        <v-btn
-          small
-          outlined
-          class="ml-5"
-          @click="onDelete"
-          :loading="deleting"
-          v-if="selected.length > 0"
-        >
-          Delete
-        </v-btn>
+        given branch.
       </div>
 
-      <div class="mt-3">
-        <v-data-table
-          v-model="selected"
-          :loading="loading"
-          :show-select="list.length > 0"
-          item-key="name"
-          :headers="headers"
-          :items="list"
-          hide-default-footer
-        ></v-data-table>
-      </div>
-    </div>
-
-    <v-dialog v-model="showPop" max-width="500">
-      <div class="pd-20">
-        <h3>Add Hook</h3>
-        <div class="mt-5">
-          <v-text-field
-            persistent-placeholder
-            v-model="form.name"
-            label="Name"
-            placeholder="My Hook Name"
-          />
-          <!-- <v-text-field persistent-placeholder v-model="form.branch"
-          label="Branch"
-          placeholder="main"/> -->
-          <v-select
-            v-model="form.branch"
-            :items="branches"
-            placeholder="main"
-            persistent-placeholder
-            label="Branch"
+      <v-skeleton-loader type="article" v-if="loading"></v-skeleton-loader>
+      <template v-else-if="list.length">
+        <div class="bd-1 pa-3 al-c mt-4" v-for="it in list" :key="it.id">
+          <div>
+            <div>
+              <span>{{ it.name }}</span>
+              <span class="color-1 ml-4 mr-4">on</span>
+              <span>{{ it.branch }}</span>
+            </div>
+            <div class="mt-1 gray fz-13">
+              {{ it.url }}
+            </div>
+          </div>
+          <v-btn
+            color="primary"
+            class="ml-auto"
+            small
+            v-clipboard="it.url"
+            @success="$toast('Copied to clipboard !')"
+            >Copy</v-btn
           >
-          </v-select>
+          <v-btn
+            outlined
+            small
+            class="ml-3"
+            @click="onDelete(it)"
+            :loading="deleting"
+            >Delete</v-btn
+          >
         </div>
-        <div class="mt-5 ta-c">
-          <v-btn outlined @click="showPop = false"> Cancel </v-btn>
-          <v-btn color="primary" class="ml-5" :loading="adding" @click="onAdd">
-            Add
-          </v-btn>
+      </template>
+      <template v-else>
+        <div class="mt-3 fz-14">
+          This project does not have any deploy hooks.
         </div>
-      </div>
-    </v-dialog>
+        <div class="gray-6 mt-4 mb-3 fz-14">Create Hook</div>
+        <div class="al-c">
+          <div style="width: 300px">
+            <v-text-field
+              class="hide-msg"
+              outlined
+              dense
+              solo
+              placeholder="Name"
+              v-model="form.name"
+            ></v-text-field>
+          </div>
+          <span class="color-1 ml-5 mr-5">on</span>
+          <span>{{ branch }}</span>
+          <v-btn color="primary" class="ml-10" :loading="adding" @click="onAdd"
+            >Create Hook</v-btn
+          >
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -73,7 +69,7 @@
 export default {
   props: {
     info: Object,
-    branches: Array,
+    branch: String,
   },
   data() {
     const form = {
@@ -89,10 +85,6 @@ export default {
       initForm: {
         ...form,
       },
-      headers: [
-        { text: "Name", value: "name" },
-        { text: "Branch", value: "branch" },
-      ],
       showPop: false,
       deleting: false,
     };
@@ -101,19 +93,16 @@ export default {
     this.getList();
   },
   methods: {
-    async onDelete() {
+    async onDelete(it) {
       try {
         this.deleting = true;
-        for (const row of this.selected) {
-          await this.$http2.delete(
-            `/project/config/${this.info.id}/git/hooks/${row.name}`
-          );
-        }
+        await this.$http2.delete(
+          `/project/config/${it.id}/git/hooks/${it.name}`
+        );
         this.$toast("Deleted successfully");
       } catch (error) {
         //
       }
-      this.selected = [];
       this.deleting = false;
       this.getList();
     },
@@ -123,9 +112,7 @@ export default {
         if (!body.name) {
           return this.$toast("Invalid Name");
         }
-        if (!body.branch) {
-          return this.$toast("Invalid Branch");
-        }
+        body.branch = this.branch;
         this.adding = true;
         await this.$http2.post(
           `/project/config/${this.info.id}/git/hooks`,

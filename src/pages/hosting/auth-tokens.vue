@@ -1,29 +1,23 @@
 <template>
   <div>
-    <e-right-opt-wrap :top="-100">
-      <div class="btn-wrap d-flex justify-end">
-        <v-btn color="primary" width="120" @click="clickAdd">
-          <img src="/img/svg/add1.svg" width="12" />
-          <span class="ml-2">Generate</span>
-        </v-btn>
-        <v-btn
-          outlined
-          class="ml-5"
-          min-width="36"
-          width="120"
-          @click="onDelete"
-          :loading="deleting"
-          v-if="selected.length > 0"
-        >
-          <img src="/img/svg/delete.svg" width="12" />
-          <span class="ml-2">Delete</span>
-        </v-btn>
-      </div>
+    <e-right-opt-wrap :top="-65">
+      <v-btn color="primary" @click="clickAdd">
+        <span class="fz-18">+</span>
+        <span class="ml-1">Create</span>
+      </v-btn>
+      <v-btn
+        outlined
+        width="120"
+        class="ml-5"
+        @click="onDelete"
+        :loading="deleting"
+        v-if="selected.length > 0"
+      >
+        <img src="/img/svg/delete.svg" width="12" />
+        <span class="ml-2">Delete</span>
+      </v-btn>
     </e-right-opt-wrap>
-    <div>
-      These tokens allow other apps to control your whole account. Be careful!
-    </div>
-    <div class="mt-5">
+    <div class="main-wrap">
       <v-data-table
         v-model="selected"
         :loading="loading"
@@ -34,6 +28,7 @@
         hide-default-footer
       ></v-data-table>
     </div>
+
     <v-dialog v-model="popNew" max-width="500">
       <div class="pd-30">
         <h2>Create Token</h2>

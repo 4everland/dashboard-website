@@ -83,6 +83,7 @@
           <component
             :is="alertInfo.comp1"
             v-if="alertInfo.comp1"
+            v-bind="alertInfo.comp1Props"
             :form="alertInfo.form1"
             @input="onForm1"
           ></component>
@@ -263,6 +264,7 @@ export default {
   },
   methods: {
     onForm1(form) {
+      console.log(form);
       this.form1 = form;
     },
     async hideAlert(isOk) {

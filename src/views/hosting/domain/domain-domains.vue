@@ -39,17 +39,14 @@
             </v-tooltip>
           </v-btn>
         </template>
-        <template v-slot:item.type="{ item }">
-          {{ isA(item.domain) ? "A" : "CNAME" }}
-        </template>
         <template v-slot:item.value="{ item }">
-          {{ isA(item.domain) ? item.ip : item.cname }}
-          <v-btn icon>
+          {{ item.value }}
+          <v-btn x-small icon>
             <v-icon
               small
               color="#999"
               @click.stop
-              v-clipboard="isA(item.domain) ? item.ip : item.cname"
+              v-clipboard="item.value"
               @success="$toast('Copied to clipboard !')"
               >mdi-content-copy</v-icon
             >

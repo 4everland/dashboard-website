@@ -8,6 +8,16 @@
 
 export default [
   {
+    path: "/auth-tokens",
+    component: () => import("./auth-tokens"),
+    meta: {
+      title: "Auth Tokens",
+      isTab: 1,
+      subTitle:
+        "These tokens allow other apps to control your whole account. Be careful!",
+    },
+  },
+  {
     path: "/new",
     // component: New,
     component: () => import("./new"),
@@ -114,13 +124,6 @@ export default [
           text: "{projName}",
         },
       ],
-    },
-  },
-  {
-    path: "/authtokens",
-    component: () => import("./authTokens"),
-    meta: {
-      title: "Auth Tokens",
     },
   },
 ].map((it) => {
