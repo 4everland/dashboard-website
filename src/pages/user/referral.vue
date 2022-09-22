@@ -430,8 +430,16 @@ export default {
           //   )}  &hashtags=Tech,IPFS,decentralized,Storage`
           // );
 
-          window.open(`https://twitter.com/intent/tweet?text=Come join @4everland_org and explore infinite possibilities with products designed for sophisticated and dynamic &hashtags=Web3 experience! &hashtags=Tech,IPFS,decentralized,Storage
-          ${encodeURIComponent(this.shareUrl)}`);
+          // window.open(`https://twitter.com/intent/tweet?text=The &hashtags=Web3 product journey has begun for me at @4everland_org, and I have received free resources to help me along the way.
+          // The best way to explore Web3 is to experience its products. Join us today and start your Web3 journey.
+          // ✅${encodeURIComponent(this.shareUrl)}
+          // &hashtags=IPFS,Arweave,Dfinity
+          // `);
+
+          window.open(`https://twitter.com/intent/tweet?text=The %23Web3 product journey has begun for me at @4everland_org, and I have received free resources to help me along the way.%0A%0AThe best way to explore Web3 is to experience its products. Join us today and start your Web3 journey.%0A%0A✅${encodeURIComponent(
+            this.shareUrl
+          )}%0A&hashtags=IPFS,Arweave,Dfinity
+          `);
           break;
         case "Discord":
           this.openFrame("discord://", "Discord");
