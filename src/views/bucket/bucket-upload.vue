@@ -308,35 +308,6 @@ export default {
 
       bus.$emit("pinTask", pinTask);
       this.isPinCidDialog = false;
-      // try {
-      //   const { data } = await this.$axios({
-      //     method: "get",
-      //     url: `https://${this.form.cid}.ipfs.dweb.link/`,
-      //     // url: `https://${this.form.cid}.ipfs.4everland.xyz/`,
-      //     responseType: "blob",
-      //   });
-
-      //   // bus.$emit('pinCidList')
-
-      //   const task = new Upload({
-      //     client: this.s3,
-      //     queueSize: 3,
-      //     params: {
-      //       Bucket: this.info.Bucket,
-      //       Key: this.info.Prefix + this.form.name,
-      //       Body: data,
-      //       ContentType: data.type,
-      //     },
-      //   });
-      //   await task.done();
-      //   this.$toast("Successfully queued IPFS CID for pinning");
-      //   bus.$emit("getList");
-      // } catch (error) {
-      //   console.log(error.message);
-      //   Vue.prototype.$alert(error.message);
-      // }
-      // this.pinCidLoading = false;
-      // this.isPinCidDialog = false;
     },
   },
   watch: {
