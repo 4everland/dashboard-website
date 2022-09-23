@@ -262,7 +262,10 @@ export default {
             redirectTo: data.redirect || it.redirect || null,
             code: data.code || 301,
           };
-          console.log(data);
+          // console.log(data);
+          for (const row of this.list) {
+            if (row.isEdit) this.$set(row, "isEdit", false);
+          }
         }
         this.$set(it, "isEdit", val);
       } catch (error) {
@@ -338,6 +341,9 @@ export default {
     async onAdd() {
       try {
         if (!this.domain) return;
+        if ((this.list || []).length >= 20) {
+          return this.$alert("You can add 20 domains at maximum.");
+        }
         if (!this.$regMap.domain.test(this.domain)) {
           return this.$alert(
             `The specified value "${this.domain}” is not a fully qualified domain name.`
