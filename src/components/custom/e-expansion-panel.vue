@@ -80,7 +80,6 @@ export default {
   .control-content {
     .control-header {
       height: 60px;
-      background: #fff;
     }
     .control-body {
       background: #fff;

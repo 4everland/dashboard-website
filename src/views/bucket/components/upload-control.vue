@@ -3,7 +3,7 @@
     <e-expansion-panel :length="tasks.length > 6 ? 6 : tasks.length">
       <template #header>
         <div class="control-header al-c">
-          <div v-if="allUploaded || allFailed">
+          <div v-if="allUploaded || allFailed" class="control-header-content">
             <v-icon
               class="mr-1"
               size="20"
@@ -19,13 +19,16 @@
               uploadedFiles
             }}/{{ allFiles }})
           </div>
-          <div v-if="warning">
+          <div v-if="warning" class="control-header-content">
             <v-icon size="20" class="mr-1" color="warning"
               >mdi-alert-circle-outline</v-icon
             >
             {{ uploadedFiles }} Files Uploaded {{ failedFiles }} Files Failed
           </div>
-          <div v-if="isUploading || hasPause" class="al-c">
+          <div
+            v-if="isUploading || hasPause"
+            class="al-c control-header-content"
+          >
             <img
               width="15"
               class="mr-3 upload-icon"
@@ -90,7 +93,7 @@
               >mdi-close</v-icon
             >
           </template>
-          <span>Cancel all</span>
+          <span>{{ allUploaded ? "Close" : "Cancel all" }} </span>
         </v-tooltip>
       </div>
       <template #content>
@@ -122,7 +125,7 @@
                   >mdi-check-circle-outline</v-icon
                 >
                 <div v-else>
-                  <v-icon
+                  <!-- <v-icon
                     size="22"
                     v-if="item.status != 3"
                     @click="
@@ -135,6 +138,29 @@
                         ? "mdi-play-outline"
                         : "mdi-pause"
                     }}</v-icon
+                  > -->
+                  <v-icon
+                    size="20"
+                    class="ml-2"
+                    v-if="item.status == 1 || item.status == 0"
+                    @click="handleCancelUpload(item.id)"
+                    >mdi-pause</v-icon
+                  >
+                  <v-icon
+                    size="20"
+                    class="ml-2"
+                    v-if="item.status == 2"
+                    @click="handleRetryUpload(item.id)"
+                    >mdi-play-outline</v-icon
+                  >
+
+                  <v-icon
+                    size="22"
+                    class="ml-2"
+                    v-if="item.status == 4"
+                    @click="handleRetryUpload(item.id)"
+                  >
+                    mdi-reload</v-icon
                   >
                   <v-icon
                     v-if="item.status != 3"
@@ -220,6 +246,15 @@ export default {
       if (hasUploading) return false;
       if (this.failedFiles > 0) return true;
       return false;
+    },
+    headerBg() {
+      if (this.allUploaded) {
+        return "#E7F9EA";
+      }
+      if (this.allFailed || this.warning) {
+        return "#FEFAEC";
+      }
+      return "#fff";
     },
   },
   mounted() {
@@ -350,6 +385,9 @@ export default {
   color: #0b0817;
   .upload-icon {
     animation: float 1s ease infinite;
+  }
+  .control-header-content {
+    transition: all 1s ease;
   }
 }
 

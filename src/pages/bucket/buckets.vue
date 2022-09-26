@@ -87,6 +87,6 @@ export default {
   z-index: 2;
   position: fixed;
   right: 24px;
-  bottom: 24px;
+  bottom: 75px;
 }
 </style>

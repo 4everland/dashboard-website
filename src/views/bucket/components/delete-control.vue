@@ -5,14 +5,14 @@
     >
       <template #header>
         <div class="control-header al-c">
-          <div v-if="hasDeleteing || hasPause" class="al-c">
+          <div v-if="hasDeleting || hasPause" class="al-c">
             <img
               width="17"
               class="dustbin-icon"
               src="/img/svg/bucket/dustbin-icon.svg"
               alt=""
             />
-            <span class="ml-3">Deleteing ({{ compeleteFiles }})</span>
+            <span class="ml-3">Deleting ({{ compeleteFiles }})</span>
           </div>
           <div v-else-if="allCompelete || allFailedStatus" class="al-c">
             <v-icon size="20" :color="allCompelete ? '#00BD9A' : 'red'">{{
@@ -155,7 +155,7 @@ export default {
         if (status == 0) {
           return "Waiting";
         } else if (status == 1) {
-          return "Deleteing";
+          return "Deleting";
         } else if (status == 2) {
           return "Suspended";
         } else if (status == 3) {
@@ -201,7 +201,7 @@ export default {
     allFailedStatus() {
       return this.deleteFolderTasks.every((it) => it.status == 4);
     },
-    hasDeleteing() {
+    hasDeleting() {
       return this.deleteFolderTasks.some(
         (it) => it.status == 1 || it.status == 0
       );

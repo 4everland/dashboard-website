@@ -10,7 +10,7 @@
               src="/img/svg/bucket/upload-icon.svg"
               alt=""
             />
-            <span>Pinning ({{ PinnedCount }})</span>
+            <span>Pinning ({{ PinningCount }})</span>
           </div>
           <div v-else-if="allPinned || allFailed" class="al-c">
             <v-icon size="20" :color="allPinned ? '#00BD9A' : 'red'">{{
@@ -27,7 +27,7 @@
           <div v-else class="al-c">
             <v-icon size="20" color="warning">mdi-alert-circle-outline</v-icon>
             <span class="ml-2"
-              >Pinned ({{ PinnedCount }}), Pin failed ({{ PinnedCount }})</span
+              >Pinned ({{ PinnedCount }}), Pin failed ({{ FailedCount }})</span
             >
           </div>
         </div>
@@ -38,26 +38,65 @@
         }}</v-icon>
       </template>
       <div class="ml-auto">
-        <v-icon size="22" v-if="hasPinning" @click="handleAllStop">
+        <!-- <v-icon size="22" v-if="hasPinning" @click="handleAllStop">
           mdi-pause</v-icon
-        >
-        <v-icon
+        > -->
+        <v-tooltip top v-if="hasPinning">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon size="22" v-bind="attrs" v-on="on" @click="handleAllStop">
+              mdi-pause</v-icon
+            >
+          </template>
+          <span>Suspend all</span>
+        </v-tooltip>
+        <!-- <v-icon
           size="22"
           v-if="hasPause && !hasPinning"
           @click="handleAllStart"
         >
           mdi-play-outline</v-icon
-        >
-        <v-icon
+        > -->
+
+        <v-tooltip top v-if="hasPause && !hasPinning">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon size="22" v-bind="attrs" v-on="on" @click="handleAllStart">
+              mdi-play-outline</v-icon
+            >
+          </template>
+          <span>Continue all </span>
+        </v-tooltip>
+        <!-- <v-icon
           size="20"
           v-if="hasFailed && !hasPinning && !hasPause"
           @click="handleAllReload"
         >
           mdi-reload</v-icon
-        >
-        <v-icon size="20" class="ml-2" @click="handleAllClose"
+        > -->
+
+        <v-tooltip top v-if="hasFailed && !hasPinning && !hasPause">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon size="20" v-bind="attrs" v-on="on" @click="handleAllReload">
+              mdi-reload</v-icon
+            >
+          </template>
+          <span>Retry all</span>
+        </v-tooltip>
+        <!-- <v-icon size="20" class="ml-2" @click="handleAllClose"
           >mdi-close</v-icon
-        >
+        > -->
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              size="20"
+              class="ml-2"
+              v-bind="attrs"
+              v-on="on"
+              @click="handleAllClose"
+              >mdi-close</v-icon
+            >
+          </template>
+          <span>{{ allPinned ? "Close" : "Cancel all" }} </span>
+        </v-tooltip>
       </div>
       <template #content>
         <ul class="control-content" ref="controlContent">
@@ -67,9 +106,9 @@
               :style="{ width: item.progress + '%' }"
             ></div>
             <div class="file al-c mx-7">
-              <div class="file-info d-flex flex-column justify-center">
+              <div class="file-info d-flex flex-column justify-space-between">
                 <span class="fz-14"> {{ item.form.name.cutStr(5, 5) }}</span>
-                <span class="fz-14 gray mt-2">
+                <span class="fz-14 gray">
                   {{ item.form.cid.cutStr(5, 5) }}</span
                 >
               </div>
@@ -154,11 +193,17 @@ export default {
     allFailed() {
       return this.pinCidList.every((it) => it.status == 4);
     },
+    PinningCount() {
+      return this.pinCidList.filter((it) => it.status == 1).length;
+    },
     PinnedCount() {
       return this.pinCidList.filter((it) => it.status == 3).length;
     },
     FailedCount() {
       return this.pinCidList.filter((it) => it.status == 4).length;
+    },
+    watchPinCidList() {
+      return JSON.parse(JSON.stringify(this.pinCidList));
     },
   },
   mounted() {
@@ -186,7 +231,7 @@ export default {
         }
       });
     },
-    handleAllStart() {
+    async handleAllStart() {
       this.pinCidList.forEach((it) => {
         if (it.status != 3) {
           it.aleadyPin();
@@ -200,17 +245,34 @@ export default {
         }
       });
     },
-    handleAllClose() {
-      this.pinCidList.forEach(async (it) => await it.abortPin());
+    async handleAllClose() {
+      // this.pinCidList.forEach(async (it) => await it.abortPin());
+      // this.pinCidList = [];
+
+      const list = this.pinCidList.map((it) => {
+        return (async () => {
+          console.log(it);
+          if (it.status != 3) {
+            await it.abortPin();
+          }
+        })();
+      });
+      // console.log(list);
+      await Promise.all(list);
+      // console.log(results, "result");
+      // console.log(this.pinCidList);
       this.pinCidList = [];
       this.isShow = false;
     },
   },
   watch: {
-    pinCidList: {
-      handler(list) {
-        const pinCidLength = list.filter((it) => it.status == 1).length;
-        bus.$emit("uploadingLength", pinCidLength);
+    watchPinCidList: {
+      handler(list, oldList) {
+        const pinCidLength = list.filter((it) => it.status == 3).length;
+        const oldPinCidLength = oldList.filter((it) => it.status == 3).length;
+        if (pinCidLength > oldPinCidLength) {
+          bus.$emit("getList");
+        }
       },
       deep: true,
     },
@@ -272,7 +334,7 @@ export default {
     font-size: 14px;
     box-sizing: border-box;
     .file-info {
-      width: 150px;
+      width: 200px;
       font-size: 12px;
       color: #999;
       // .file-name {

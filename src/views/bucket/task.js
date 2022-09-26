@@ -38,7 +38,6 @@ export class TaskWrapper {
       this.status = 1; // uploading
       await this.task.done();
       this.status = 3; // success
-
       //---------------------
     } catch (e) {
       console.log(e.message);
@@ -85,7 +84,7 @@ export class DeleteTaskWrapper {
   async startTasks() {
     try {
       if (this.status !== 0 && this.status !== 1) return;
-      this.status = 1; // deleteing
+      this.status = 1; // deleting
       const listResult = await this.s3.listObjectsV2({
         Bucket: this.param.Bucket,
         MaxKeys: 2,
@@ -148,6 +147,30 @@ export class PinCidTaskWrapper {
     this.theFastGateWay = "https://ipfs.io/ipfs/";
     this.userCancel = false;
   }
+
+  async overStorage() {
+    try {
+      const result = await Vue.prototype.$http({
+        url: "/buckets/extra",
+        methods: "get",
+        params: {
+          name: this.param.Bucket,
+        },
+      });
+      let curBucketInfo = result.data.list[0];
+      let isCurBucketAr = curBucketInfo.arweave.sync;
+      let arStorageByte = null;
+      const { data } = await Vue.prototype.$http.get("$v3/usage/ipfs");
+      let ipfsStorageByte = data.storageByte;
+      if (isCurBucketAr) {
+        const { data } = await Vue.prototype.$http.get("$v3/usage/ar");
+        arStorageByte = data.storageByte;
+      }
+      return { ipfsStorageByte, arStorageByte };
+    } catch (err) {
+      console.log(err);
+    }
+  }
   async generateGatewayPromise() {
     const gatewayList = [
       "https://ipfs.io/ipfs/",
@@ -163,10 +186,14 @@ export class PinCidTaskWrapper {
         method: "head",
         url: `${it}${this.form.cid}`,
         responseType: "blob",
-        // timeout: 10000,
       });
+      // .catch((err) => {
+      //   console.log(err);
+      // });
     });
     const data = await Promise.any(promiseList);
+    // console.log(data);
+    if (!data) throw new Error("Network Error");
     if (this.userCancel) throw new Error("Upload aborted.");
     this.theFastGateWay = data.config.url.replace(this.form.cid, "");
   }
@@ -183,9 +210,24 @@ export class PinCidTaskWrapper {
       }),
     });
     this.file = data;
+
+    const { ipfsStorageByte, arStorageByte } = await this.overStorage();
+    if (!arStorageByte) {
+      if (data.size > ipfsStorageByte)
+        throw Error(
+          "Insufficient storage space is available to upload the file."
+        );
+    } else {
+      if (data.size > ipfsStorageByte || data.size > arStorageByte)
+        throw Error(
+          "Insufficient storage space is available to upload the file."
+        );
+    }
+    // if(data.size)
     this.status = 1; // searching  // pinning
     this.progress = 50;
   }
+
   async uploadToBucket() {
     this.task = new Upload({
       client: this.s3,
@@ -203,8 +245,8 @@ export class PinCidTaskWrapper {
   }
 
   async pin() {
-    if (this.userCancel) throw new Error("Upload aborted.");
     await this.getFile();
+    if (this.userCancel) throw new Error("Upload aborted.");
     await this.uploadToBucket();
   }
 
@@ -213,6 +255,7 @@ export class PinCidTaskWrapper {
       this.userCancel = false;
       this.status = 1;
       await this.generateGatewayPromise();
+      if (this.userCancel) throw new Error("Upload aborted.");
       await this.pin();
     } catch (error) {
       if (
@@ -222,6 +265,7 @@ export class PinCidTaskWrapper {
       ) {
         this.status = 2;
       } else {
+        Vue.prototype.$alert(error.message);
         this.status = 4;
       }
     }
