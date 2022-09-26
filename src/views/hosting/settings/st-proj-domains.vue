@@ -60,7 +60,7 @@
             v-model="rediectForm.redirectTo"
             :menu-props="{ offsetY: true }"
           ></v-select>
-          <template v-if="selectRedirect">
+          <template v-if="selectRedirect && rediectForm.redirectTo">
             <h4 class="mt-5">Status Code</h4>
             <v-select
               dense
