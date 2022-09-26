@@ -1,6 +1,10 @@
 <template>
   <div v-show="isShow">
-    <e-expansion-panel :length="pinCidList.length > 6 ? 6 : pinCidList.length">
+    <e-expansion-panel
+      :length="pinCidList.length > 6 ? 6 : pinCidList.length"
+      @showBody="showBody"
+      ref="ePanel"
+    >
       <template #header>
         <div class="control-header al-c">
           <div v-if="hasPinning || hasPause" class="al-c">
@@ -211,8 +215,14 @@ export default {
       this.isShow = true;
       this.pinCidList.push(task);
     });
+    bus.$on("hiddenOtherBody", (arr) => {
+      arr.includes("pin") ? (this.$refs.ePanel.isShowBody = false) : null;
+    });
   },
   methods: {
+    showBody() {
+      bus.$emit("hiddenOtherBody", ["upload", "delete"]);
+    },
     handleStop(id) {
       this.pinCidList.find((it) => it.id == id).abortPin();
     },
@@ -275,6 +285,11 @@ export default {
         }
       },
       deep: true,
+    },
+    isShow(newVal) {
+      if (newVal) {
+        bus.$emit("hiddenOtherBody", ["upload", "delete"]);
+      }
     },
   },
 };

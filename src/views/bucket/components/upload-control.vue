@@ -1,6 +1,10 @@
 <template>
   <div v-show="isShow">
-    <e-expansion-panel :length="tasks.length > 6 ? 6 : tasks.length">
+    <e-expansion-panel
+      ref="ePanel"
+      :length="tasks.length > 6 ? 6 : tasks.length"
+      @showBody="showBody"
+    >
       <template #header>
         <div class="control-header al-c">
           <div v-if="allUploaded || allFailed" class="control-header-content">
@@ -258,6 +262,10 @@ export default {
     },
   },
   mounted() {
+    bus.$on("hiddenOtherBody", (arr) => {
+      arr.includes("upload") ? (this.$refs.ePanel.isShowBody = false) : null;
+    });
+
     bus.$on("taskData", (tasks, isTrue) => {
       this.isShow = true;
       if (this.tasks.length) {
@@ -277,6 +285,9 @@ export default {
     });
   },
   methods: {
+    showBody() {
+      bus.$emit("hiddenOtherBody", ["pin", "delete"]);
+    },
     async handleCancelUpload(id) {
       let index = this.tasks.findIndex((item) => item.id == id);
       await this.tasks[index].cancelTask();
@@ -363,6 +374,11 @@ export default {
         bus.$emit("uploadingLength", uploadingLength);
       },
       deep: true,
+    },
+    isShow(newVal) {
+      if (newVal) {
+        bus.$emit("hiddenOtherBody", ["pin", "delete"]);
+      }
     },
   },
 };

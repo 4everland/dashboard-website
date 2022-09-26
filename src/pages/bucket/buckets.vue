@@ -15,7 +15,14 @@
     <!-- Upload/Delete Folders Component -->
     <!-- <navigation-drawers v-if="!inFile" ref="navDrawers"></navigation-drawers> -->
 
-    <div class="control">
+    <div
+      class="control"
+      :style="{
+        transform: isShowOperationBar
+          ? 'translateY(-70px)'
+          : 'translateY(-24px)',
+      }"
+    >
       <pin-cid-control v-if="!inFile"></pin-cid-control>
       <upload-control v-if="!inFile" class="mt-4"></upload-control>
       <delete-control v-if="!inFile" class="mt-4"></delete-control>
@@ -30,7 +37,7 @@ import UploadControl from "@/views/bucket/components/upload-control";
 import DeleteControl from "@/views/bucket/components/delete-control";
 import PinCidControl from "@/views/bucket/components/pin-cid-control";
 
-// import { bus } from "../../utils/bus";
+import { bus } from "../../utils/bus";
 import initS3 from "./initS3";
 export default {
   mixins: [initS3],
@@ -54,6 +61,7 @@ export default {
           comp: "bucket-statistics",
         },
       ],
+      isShowOperationBar: false,
     };
   },
   computed: {
@@ -71,6 +79,11 @@ export default {
     if (this.$s3) return;
     this.initS3();
   },
+  mounted() {
+    bus.$on("showOperationBar", (val) => {
+      this.isShowOperationBar = val;
+    });
+  },
   methods: {},
   components: {
     Storage,
@@ -87,6 +100,7 @@ export default {
   z-index: 2;
   position: fixed;
   right: 24px;
-  bottom: 75px;
+  bottom: 0px;
+  transition: all 0.2s ease;
 }
 </style>

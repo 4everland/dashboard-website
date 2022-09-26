@@ -1,11 +1,13 @@
 <template>
   <div v-show="isShow">
     <e-expansion-panel
+      ref="ePanel"
       :length="deleteFolderTasks.length > 6 ? 6 : deleteFolderTasks.length"
+      @showBody="showBody"
     >
       <template #header>
         <div class="control-header al-c">
-          <div v-if="hasDeleting || hasPause" class="al-c">
+          <div v-if="hasDeleteing || hasPause" class="al-c">
             <img
               width="17"
               class="dustbin-icon"
@@ -148,6 +150,9 @@ export default {
         bus.$emit("getOriginDeleteFolderTasks", this.deleteFolderTasks);
       }
     });
+    bus.$on("hiddenOtherBody", (arr) => {
+      arr.includes("delete") ? (this.$refs.ePanel.isShowBody = false) : null;
+    });
   },
   computed: {
     status() {
@@ -201,7 +206,7 @@ export default {
     allFailedStatus() {
       return this.deleteFolderTasks.every((it) => it.status == 4);
     },
-    hasDeleting() {
+    hasDeleteing() {
       return this.deleteFolderTasks.some(
         (it) => it.status == 1 || it.status == 0
       );
@@ -211,6 +216,9 @@ export default {
     },
   },
   methods: {
+    showBody() {
+      bus.$emit("hiddenOtherBody", ["pin", "upload"]);
+    },
     handleStartDeleteFolder(id) {
       const index = this.deleteFolderTasks.findIndex((it) => it.id == id);
       let arr = this.deleteFolderTasks.filter((item) => item.status == 0);
@@ -281,6 +289,13 @@ export default {
       this.deleteFolderTasks = [];
       bus.$emit("handleDeleteFolderRemoveAll");
       this.isShow = false;
+    },
+  },
+  watch: {
+    isShow(newVal) {
+      if (newVal) {
+        bus.$emit("hiddenOtherBody", ["pin", "upload"]);
+      }
     },
   },
 };

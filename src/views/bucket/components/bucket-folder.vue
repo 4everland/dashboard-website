@@ -482,9 +482,11 @@ export default {
     selected: {
       handler(val) {
         if (val.length) {
+          bus.$emit("showOperationBar", true);
           this.fileInfoDrawer = true;
           this.$refs.operationBar.isShow = this.checked = true;
         } else {
+          bus.$emit("showOperationBar", false);
           this.$refs.operationBar.isShow = this.checked = false;
         }
       },

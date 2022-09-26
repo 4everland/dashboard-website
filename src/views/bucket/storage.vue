@@ -552,9 +552,13 @@ export default {
   watch: {
     selected: {
       handler(arr) {
-        if (arr.length)
-          return (this.$refs.operationBar.isShow = this.checked = true);
-        this.$refs.operationBar.isShow = this.checked = false;
+        if (arr.length) {
+          bus.$emit("showOperationBar", true);
+          this.$refs.operationBar.isShow = this.checked = true;
+        } else {
+          bus.$emit("showOperationBar", false);
+          this.$refs.operationBar.isShow = this.checked = false;
+        }
       },
       deep: true,
     },

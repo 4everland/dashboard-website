@@ -65,6 +65,20 @@ export default {
     length(newVal) {
       this.$refs.content.style.height = newVal * 60 + "px";
     },
+    isShowBody: {
+      handler(newVal) {
+        if (newVal) {
+          this.$emit("showBody");
+        }
+        if (!this.$refs.content) return;
+        if (newVal) {
+          this.$refs.content.style.height = this.length * 60 + "px";
+        } else {
+          this.$refs.content.style.height = 0 + "px";
+        }
+      },
+      immediate: true,
+    },
   },
 };
 </script>
