@@ -116,9 +116,15 @@ export default {
     async onAdd() {
       try {
         const body = { ...this.form };
+        body.name = body.name.trim().replace(/\s+/g, "_");
+        let msg = "";
         if (!body.name) {
-          return this.$toast("Invalid Name");
+          msg = "Invalid Name";
+        } else if (body.name.length > 30) {
+          msg =
+            "The name for your Deploy Hook cannot be longer than 30 characters.";
         }
+        if (msg) return this.$toast(msg);
         body.branch = this.branch;
         this.adding = true;
         await this.$http2.post(
