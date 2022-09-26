@@ -31,7 +31,27 @@
         :headers="headers"
         :items="list"
         hide-default-footer
-      ></v-data-table>
+      >
+        <template v-slot:item.act="{ item }">
+          <v-btn text color="primary" x-small @click="onEdit(item)">Edit</v-btn>
+          <v-btn text color="#999" x-small @click="onDelete(item)"
+            >Delete</v-btn
+          >
+        </template>
+      </v-data-table>
+
+      <div class="mt-8" v-if="!list.length">
+        <e-empty :loading="loading">
+          {{ loading ? "Loading..." : "No Data" }}
+        </e-empty>
+      </div>
+      <e-pagi
+        class="pa-5"
+        @input="getList"
+        v-model="page"
+        :limit="10"
+        :total="total"
+      />
     </div>
   </div>
 </template>
@@ -55,6 +75,8 @@ export default {
       ],
       list: [],
       loading: false,
+      page: 1,
+      total: 0,
     };
   },
   computed: {
@@ -62,10 +84,41 @@ export default {
       return this.balance < 10;
     },
   },
+  watch: {
+    isLock(val) {
+      if (!val) this.getList();
+    },
+  },
   mounted() {
     this.getBalance();
   },
   methods: {
+    onEdit(item) {
+      console.log(item);
+    },
+    onDelete(item) {
+      console.log(item);
+    },
+    async getList() {
+      try {
+        this.loading = true;
+        const params = {
+          page: this.page - 1,
+          size: 10,
+        };
+        const { data } = await this.$http2.get("/domain/list", {
+          params,
+        });
+        this.list = data.content.map((it) => {
+          it.created = new Date(it.createAt * 1e3).format();
+          return it;
+        });
+        this.total = data.numberOfElements;
+      } catch (error) {
+        console.log(error);
+      }
+      this.loading = false;
+    },
     async getBalance() {
       const {
         data: { balance },

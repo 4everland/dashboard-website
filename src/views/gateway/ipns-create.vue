@@ -43,6 +43,29 @@
           <div class="gray fz-13 mt-1">
             {{ options[type].label }}
           </div>
+          <div class="pa-5">
+            <v-text-field
+              persistent-placeholder
+              v-model="form.name"
+              label="Set a Name"
+              placeholder="Set a name for your IPNS"
+            ></v-text-field>
+            <v-text-field
+              persistent-placeholder
+              v-model="form.cid"
+              label="IPFS CID"
+              placeholder=""
+            ></v-text-field>
+
+            <v-select
+              v-model="form.period"
+              :items="periodOpts"
+              item-text="text"
+              item-value="value"
+              label="Refresh period"
+            >
+            </v-select>
+          </div>
         </template>
 
         <div class="ta-c mt-5">
@@ -57,6 +80,8 @@
 </template>
 
 <script>
+const Day = 86400;
+
 export default {
   data() {
     return {
@@ -75,6 +100,17 @@ export default {
           value: 1,
         },
       ],
+      periodOpts: [
+        { text: "24h", value: Day },
+        { text: "30d", value: Day * 30 },
+        { text: "90d", value: Day * 90 },
+        { text: "180d", value: Day * 180 },
+      ],
+      form: {
+        name: "",
+        period: Day,
+        cid: "",
+      },
     };
   },
   methods: {

@@ -51,10 +51,17 @@
             Deployment instead of the usual Preview Deployment. You can switch
             to a different branch here.
           </div>
-          <div class="mt-5 d-flex al-c">
-            <div style="min-width: 100px">
-              <div class="gray-6 fz-14 mb-2">Branch</div>
-              <div>{{ currentBranch }}</div>
+          <div class="mt-5 d-flex al-c hide-msg">
+            <div style="width: 30%">
+              <div class="gray-6 fz-14 mb-2">
+                <span>Branch</span>
+              </div>
+              <v-text-field
+                v-model="currentBranch"
+                disabled
+                outlined
+                dense
+              ></v-text-field>
               <!-- <v-select
                 v-model="currentBranch"
                 :items="branches"
@@ -63,8 +70,20 @@
               >
               </v-select> -->
             </div>
-            <div class="flex-1 hide-msg ml-4">
-              <div class="gray-6 fz-14 mb-2">Deploy Hook</div>
+            <div class="flex-1 hide-msg ml-8">
+              <div class="gray-6 fz-14 mb-4">
+                <span>Deploy Hook</span>
+                <e-tooltip top>
+                  <v-icon slot="ref" size="14" color="#999" class="ml-2"
+                    >mdi-alert-circle</v-icon
+                  >
+                  <span
+                    >Deloyhooks allow external services to be notified when
+                    certain events happen. When the specified events happen,
+                    we’ll update the deployment.</span
+                  >
+                </e-tooltip>
+              </div>
               <v-switch
                 @change="setHook"
                 v-model="hookSwitch"

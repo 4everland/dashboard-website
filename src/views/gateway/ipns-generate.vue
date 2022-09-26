@@ -1,3 +1,9 @@
+<style lang="scss">
+.check-all {
+  background: #e1e4e8 !important;
+}
+</style>
+
 <template>
   <div>
     <v-btn color="primary" @click="onShow">
@@ -44,6 +50,51 @@
                   including all or some projects or files.</span
                 >
               </e-tooltip>
+              <div class="ml-auto hide-msg" style="width: 160px">
+                <v-select
+                  dense
+                  outlined
+                  :items="useOptions"
+                  item-text="text"
+                  item-value="value"
+                  v-model="useIdx"
+                  :menu-props="{ offsetY: true }"
+                ></v-select>
+              </div>
+            </div>
+            <div class="mt-5" v-if="useIdx > 0">
+              <v-skeleton-loader
+                v-if="!useList"
+                type="article"
+              ></v-skeleton-loader>
+              <e-empty v-else-if="!useList.length" class="pt-6"
+                >No {{ useIdx == 1 ? "Projects" : "Buckets" }}</e-empty
+              >
+              <div
+                v-else
+                class="bd-1 bdc-d0 bg-f9 bdrs-5 mt-2 ov-a"
+                style="max-height: 236px"
+              >
+                <div
+                  @click="onCheck(it)"
+                  class="pa-2 pl-5 pr-5 al-c hover-c2"
+                  :class="{
+                    'check-all mb-1 pa-3 pos-s top-0 z-100': i == 0,
+                  }"
+                  v-for="(it, i) in useList"
+                  :key="i"
+                >
+                  <img src="/img/svg/overview/uv-dir.svg" width="14" />
+                  <span class="fz-14 ml-3">{{ it.name }}</span>
+                  <img
+                    class="ml-auto"
+                    :src="`/img/svg/overview/uv-${
+                      getChecked(it) ? 'checked' : 'uncheck'
+                    }.svg`"
+                    width="16"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </template>
@@ -68,9 +119,68 @@ export default {
       form: {
         isPrivate: true,
       },
+      hostingChecked: [],
+      bucketChecked: [],
+      useIdx: 0,
+      useOptions: [
+        { text: "All", value: 0 },
+        { text: "Hosting", value: 1 },
+        { text: "Bucket", value: 2 },
+      ],
+      useList: [],
+      checkAll: false,
     };
   },
+  watch: {
+    useIdx() {
+      this.getUseList();
+    },
+  },
   methods: {
+    async getUseList() {
+      try {
+        this.useList = null;
+        let list = [];
+        if (this.useIdx == 1) {
+          let { data } = await this.$http2.get("/project/simple");
+          list = data.map((it) => {
+            return {
+              name: it.projectName,
+              id: it.projectId,
+            };
+          });
+        }
+        list.unshift({
+          name: this.useIdx == 1 ? "All Projects" : "All Buckets",
+          id: 0,
+        });
+        this.useList = list;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    onCheck(it) {
+      if (it.id == 0) {
+        this.checkAll = !this.checkAll;
+        let checked = [];
+        if (this.checkAll) checked = this.useList.map((it) => it.id);
+        if (this.useIdx == 1) this.hostingChecked = checked;
+        else this.bucketChecked = checked;
+        return;
+      }
+      const arr = this.useIdx == 1 ? this.hostingChecked : this.bucketChecked;
+      const idx = arr.indexOf(it.id);
+      if (idx > -1) arr.splice(idx, 1);
+      else arr.push(it.id);
+      this.checkAll = arr.length == this.useList.length;
+    },
+    getChecked(it) {
+      if (it.id == 0) {
+        return this.checkAll;
+      }
+      const arr = this.useIdx == 1 ? this.hostingChecked : this.bucketChecked;
+      return arr.includes(it.id);
+    },
     onShow() {
       this.stepIdx = 0;
       this.showPop = true;
