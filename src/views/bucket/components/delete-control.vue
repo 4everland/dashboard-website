@@ -1,12 +1,39 @@
 <template>
   <div v-show="isShow">
     <e-expansion-panel
+      ref="ePanel"
       :length="deleteFolderTasks.length > 6 ? 6 : deleteFolderTasks.length"
+      @showBody="showBody"
     >
       <template #header>
         <div class="control-header al-c">
-          <v-icon size="20" color="success">mdi-check-circle</v-icon>
-          <span class="ml-2">Deleting...({{ compeleteFiles }})</span>
+          <div v-if="hasDeleteing || hasPause" class="al-c">
+            <img
+              width="17"
+              class="dustbin-icon"
+              src="/img/svg/bucket/dustbin-icon.svg"
+              alt=""
+            />
+            <span class="ml-3">Deleting ({{ compeleteFiles }})</span>
+          </div>
+          <div v-else-if="allCompelete || allFailedStatus" class="al-c">
+            <v-icon size="20" :color="allCompelete ? '#00BD9A' : 'red'">{{
+              allCompelete
+                ? "mdi-check-circle-outline"
+                : " mdi-close-circle-outline"
+            }}</v-icon>
+            <span class="ml-2"
+              >Deleted {{ allCompelete ? "Successfully" : "Failed" }} ({{
+                compeleteFiles
+              }})</span
+            >
+          </div>
+          <div v-else class="al-c">
+            <v-icon size="20" color="warning">mdi-alert-circle-outline</v-icon>
+            <span class="ml-2"
+              >Deleted ({{ compeleteFiles }}), some failed</span
+            >
+          </div>
         </div>
       </template>
       <template #control="{ handleClick, isShowBody }">
@@ -32,34 +59,29 @@
         <v-icon size="20" v-if="showAllRetry" @click="handleRetryFailed">
           mdi-reload</v-icon
         >
-        <v-icon size="20" class="ml-2" @click="isShow = false"
+        <v-icon size="20" class="ml-2" @click="handleAllClose"
           >mdi-close</v-icon
         >
       </div>
       <template #content>
-        <ul class="control-content" ref="controlContent">
+        <!-- <ul class="control-content" ref="controlContent">
           <li
             class="file-item"
             v-for="item in deleteFolderTasks"
             :key="item.id"
           >
-            <div class="file al-c">
-              <img
-                width="24"
-                src="/img/svg/bucketFileInfo/word_icon.svg"
-                alt=""
-              />
-              <div class="file-info ml-3">
+            <div class="file mx-7 al-c">
+              <div class="file-info">
                 <div class="file-name">
                   {{ item.param.Bucket }}/{{ item.param.Prefix }}
                 </div>
-                <div>
-                  <span>Deleted</span>
-                  <span class="ml-2">{{ item.deleteCount }}</span>
+                <div class="al-c">
+                  <div style="min-width: 100px">
+                    <span>Deleted</span>
+                    <span class="ml-2">{{ item.deleteCount }}</span>
+                  </div>
+                  <div class="ml-5">{{ status(item.status) }}</div>
                 </div>
-              </div>
-              <div class="ml-3" :style="{ color: status(item.status).color }">
-                {{ status(item.status).status }}
               </div>
               <div class="file-control ml-auto">
                 <v-icon
@@ -86,21 +108,63 @@
                 >
               </div>
             </div>
-            <v-progress-linear
-              v-show="!(item.status == 2 || item.status == 4)"
-              :indeterminate="!item.status == 3"
-              color="green"
-              height="2"
-              :value="item.status == 3 ? 100 : 0"
-            ></v-progress-linear>
           </li>
-        </ul>
+        </ul> -->
+        <RecycleScroller
+          class="scroller"
+          :items="deleteFolderTasks"
+          :item-size="60"
+          key-field="id"
+          v-slot="{ item }"
+        >
+          <div class="file-item">
+            <div class="file mx-7 al-c">
+              <div class="file-info">
+                <div class="file-name">
+                  {{ item.param.Bucket }}/{{ item.param.Prefix }}
+                </div>
+                <div class="al-c">
+                  <div style="min-width: 100px">
+                    <span>Deleted</span>
+                    <span class="ml-2">{{ item.deleteCount }}</span>
+                  </div>
+                  <div class="ml-5">{{ status(item.status) }}</div>
+                </div>
+              </div>
+              <div class="file-control ml-auto">
+                <v-icon
+                  size="22"
+                  v-if="item.status != 3"
+                  @click="
+                    item.status == 2 || item.status == 4
+                      ? handleStartDeleteFolder(item.id)
+                      : handlePasueDeleteFolder(item.id)
+                  "
+                >
+                  {{
+                    item.status == 2 || item.status == 4
+                      ? "mdi-play-outline"
+                      : "mdi-pause"
+                  }}
+                </v-icon>
+                <v-icon
+                  size="20"
+                  class="ml-2"
+                  v-if="item.status != 3"
+                  @click="handleRemoveDeleteFolder(item.id)"
+                  >mdi-close</v-icon
+                >
+              </div>
+            </div>
+          </div>
+        </RecycleScroller>
       </template>
     </e-expansion-panel>
   </div>
 </template>
 
 <script>
+import { RecycleScroller } from "vue-virtual-scroller";
 import { bus } from "../../../utils/bus";
 export default {
   data() {
@@ -135,45 +199,27 @@ export default {
         bus.$emit("getOriginDeleteFolderTasks", this.deleteFolderTasks);
       }
     });
+    bus.$on("hiddenOtherBody", (arr) => {
+      arr.includes("delete") ? (this.$refs.ePanel.isShowBody = false) : null;
+    });
   },
   computed: {
     status() {
       return function (status) {
         if (status == 0) {
-          return {
-            color: "#24bc96",
-            status: "Waiting",
-          };
+          return "Waiting";
         } else if (status == 1) {
-          return {
-            color: "#775da6",
-            status: "Deleteing",
-          };
+          return "Deleting";
         } else if (status == 2) {
-          return {
-            color: "#6a778b",
-            status: "Paused",
-          };
+          return "Suspended";
         } else if (status == 3) {
-          return {
-            color: "#ff8843",
-            status: "Compelete",
-          };
+          return "Delete completed";
         } else if (status == 4) {
-          return {
-            color: "#ff6960",
-            status: "Failed",
-          };
+          return "Failed";
         } else {
-          return {
-            color: "#24bc96",
-            status: "Undefined",
-          };
+          return "Undefined";
         }
       };
-    },
-    compeleteTasks() {
-      return this.deleteFolderTasks.filter((it) => it.status == 3);
     },
     compeleteFiles() {
       let count = 0;
@@ -209,14 +255,19 @@ export default {
     allFailedStatus() {
       return this.deleteFolderTasks.every((it) => it.status == 4);
     },
-
     hasDeleteing() {
       return this.deleteFolderTasks.some(
         (it) => it.status == 1 || it.status == 0
       );
     },
+    hasPause() {
+      return this.deleteFolderTasks.some((it) => it.status == 2);
+    },
   },
   methods: {
+    showBody() {
+      bus.$emit("hiddenOtherBody", ["pin", "upload"]);
+    },
     handleStartDeleteFolder(id) {
       const index = this.deleteFolderTasks.findIndex((it) => it.id == id);
       let arr = this.deleteFolderTasks.filter((item) => item.status == 0);
@@ -276,20 +327,53 @@ export default {
         });
       }
     },
-
     handleRemoveDeleteFolder(id) {
-      console.log(this.deleteFolderTasks);
       let index = this.deleteFolderTasks.findIndex((it) => it.id == id);
+      this.handlePasueDeleteFolder(id);
       this.deleteFolderTasks.splice(index, 1);
       bus.$emit("handleRemoveDeleteFolder", this.deleteFolderTasks);
+    },
+    handleAllClose() {
+      this.handleDeleteFolderPauseAll();
+      this.deleteFolderTasks = [];
+      bus.$emit("handleDeleteFolderRemoveAll");
+      this.isShow = false;
+    },
+  },
+  components: {
+    RecycleScroller,
+  },
+  watch: {
+    isShow(newVal) {
+      if (newVal) {
+        this.$refs.ePanel.isShowBody = true;
+        bus.$emit("hiddenOtherBody", ["pin", "upload"]);
+      }
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.scroller {
+  height: 100%;
+}
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
 .control-header {
   font-size: 14px;
+  .dustbin-icon {
+    animation: float 1s ease infinite;
+  }
 }
 
 .control-content {
@@ -297,7 +381,8 @@ export default {
   margin: 0;
   padding: 0;
   .file-item {
-    height: 60px;
+    height: 50px;
+    margin-bottom: 10px;
     box-sizing: border-box;
   }
   overflow: scroll;

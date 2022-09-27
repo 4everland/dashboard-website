@@ -255,7 +255,7 @@ export default {
             },
             {
               label: "Access Keys",
-              to: "/bucket/access",
+              to: "/bucket/access-keys",
             },
           ],
         },
