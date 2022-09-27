@@ -12,7 +12,7 @@
         </slot>
         <slot></slot>
       </div>
-      <div class="control-body" ref="content">
+      <div class="control-body" :style="{ height: height }">
         <slot name="content"></slot>
       </div>
     </div>
@@ -34,16 +34,13 @@ export default {
     };
   },
   mounted() {
-    this.$nextTick(() => {
-      this.height = this.$refs.content.offsetHeight;
-    });
     this.$watch(
       "this.isShowBody",
       (newVal) => {
         if (newVal) {
-          this.$refs.content.style.height = this.length * 60 + "px";
+          this.height = this.length * 60 + "px";
         } else {
-          this.$refs.content.style.height = 0 + "px";
+          this.height = 0;
         }
       },
       {
@@ -55,26 +52,23 @@ export default {
     handleClick() {
       this.isShowBody = !this.isShowBody;
       if (this.isShowBody) {
-        this.$refs.content.style.height = this.length * 60 + "px";
+        this.height = this.length * 60 + "px";
       } else {
-        this.$refs.content.style.height = 0 + "px";
+        this.height = 0;
       }
     },
   },
   watch: {
     length(newVal) {
-      this.$refs.content.style.height = newVal * 60 + "px";
+      this.height = newVal * 60 + "px";
     },
     isShowBody: {
       handler(newVal) {
         if (newVal) {
           this.$emit("showBody");
-        }
-        if (!this.$refs.content) return;
-        if (newVal) {
-          this.$refs.content.style.height = this.length * 60 + "px";
+          this.height = this.length * 60 + "px";
         } else {
-          this.$refs.content.style.height = 0 + "px";
+          this.height = 0;
         }
       },
       immediate: true,

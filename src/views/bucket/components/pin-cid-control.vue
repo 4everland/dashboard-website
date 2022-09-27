@@ -1,9 +1,9 @@
 <template>
   <div v-show="isShow">
     <e-expansion-panel
+      ref="ePanel"
       :length="pinCidList.length > 6 ? 6 : pinCidList.length"
       @showBody="showBody"
-      ref="ePanel"
     >
       <template #header>
         <div class="control-header al-c">
@@ -103,7 +103,7 @@
         </v-tooltip>
       </div>
       <template #content>
-        <ul class="control-content" ref="controlContent">
+        <!-- <ul class="control-content" ref="controlContent">
           <li class="file-item pos-r" v-for="item in pinCidList" :key="item.id">
             <div
               class="progress-bg"
@@ -153,13 +153,72 @@
               </div>
             </div>
           </li>
-        </ul>
+        </ul> -->
+
+        <RecycleScroller
+          class="scroller"
+          :items="pinCidList"
+          :item-size="60"
+          key-field="id"
+          v-slot="{ item }"
+        >
+          <div class="file-item pos-r">
+            <div
+              class="progress-bg"
+              :style="{ width: item.progress + '%' }"
+            ></div>
+            <div class="file al-c mx-7">
+              <div class="file-info d-flex flex-column justify-space-between">
+                <span class="fz-14"> {{ item.form.name.cutStr(5, 5) }}</span>
+                <span class="fz-14 gray">
+                  {{ item.form.cid.cutStr(5, 5) }}</span
+                >
+              </div>
+              <div class="fz-14 gray">
+                {{ status(item.status) }}
+              </div>
+
+              <div class="file-control ml-auto">
+                <v-icon
+                  size="20"
+                  class="ml-2"
+                  v-if="item.status == 1"
+                  @click="handleStop(item.id)"
+                  >mdi-pause</v-icon
+                >
+                <v-icon
+                  size="20"
+                  class="ml-2"
+                  v-if="item.status == 2"
+                  @click="handleStart(item.id)"
+                  >mdi-play-outline</v-icon
+                >
+                <v-icon
+                  size="22"
+                  class="ml-2"
+                  v-if="item.status == 4"
+                  @click="handleStart(item.id)"
+                >
+                  mdi-reload</v-icon
+                >
+                <v-icon
+                  size="20"
+                  class="ml-2"
+                  v-if="item.status != 3"
+                  @click="handleCancel(item.id)"
+                  >mdi-close</v-icon
+                >
+              </div>
+            </div>
+          </div>
+        </RecycleScroller>
       </template>
     </e-expansion-panel>
   </div>
 </template>
 
 <script>
+import { RecycleScroller } from "vue-virtual-scroller";
 import { bus } from "../../../utils/bus";
 export default {
   data() {
@@ -216,7 +275,9 @@ export default {
       this.pinCidList.push(task);
     });
     bus.$on("hiddenOtherBody", (arr) => {
-      arr.includes("pin") ? (this.$refs.ePanel.isShowBody = false) : null;
+      if (arr.includes("pin")) {
+        this.$refs.ePanel.isShowBody = false;
+      }
     });
   },
   methods: {
@@ -275,6 +336,9 @@ export default {
       this.isShow = false;
     },
   },
+  components: {
+    RecycleScroller,
+  },
   watch: {
     watchPinCidList: {
       handler(list, oldList) {
@@ -288,6 +352,7 @@ export default {
     },
     isShow(newVal) {
       if (newVal) {
+        this.$refs.ePanel.isShowBody = true;
         bus.$emit("hiddenOtherBody", ["upload", "delete"]);
       }
     },
@@ -296,6 +361,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.scroller {
+  height: 100%;
+}
 @keyframes float {
   0% {
     transform: translateY(0px);

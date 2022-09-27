@@ -64,7 +64,7 @@
         >
       </div>
       <template #content>
-        <ul class="control-content" ref="controlContent">
+        <!-- <ul class="control-content" ref="controlContent">
           <li
             class="file-item"
             v-for="item in deleteFolderTasks"
@@ -109,13 +109,62 @@
               </div>
             </div>
           </li>
-        </ul>
+        </ul> -->
+        <RecycleScroller
+          class="scroller"
+          :items="deleteFolderTasks"
+          :item-size="60"
+          key-field="id"
+          v-slot="{ item }"
+        >
+          <div class="file-item">
+            <div class="file mx-7 al-c">
+              <div class="file-info">
+                <div class="file-name">
+                  {{ item.param.Bucket }}/{{ item.param.Prefix }}
+                </div>
+                <div class="al-c">
+                  <div style="min-width: 100px">
+                    <span>Deleted</span>
+                    <span class="ml-2">{{ item.deleteCount }}</span>
+                  </div>
+                  <div class="ml-5">{{ status(item.status) }}</div>
+                </div>
+              </div>
+              <div class="file-control ml-auto">
+                <v-icon
+                  size="22"
+                  v-if="item.status != 3"
+                  @click="
+                    item.status == 2 || item.status == 4
+                      ? handleStartDeleteFolder(item.id)
+                      : handlePasueDeleteFolder(item.id)
+                  "
+                >
+                  {{
+                    item.status == 2 || item.status == 4
+                      ? "mdi-play-outline"
+                      : "mdi-pause"
+                  }}
+                </v-icon>
+                <v-icon
+                  size="20"
+                  class="ml-2"
+                  v-if="item.status != 3"
+                  @click="handleRemoveDeleteFolder(item.id)"
+                  >mdi-close</v-icon
+                >
+              </div>
+            </div>
+          </div>
+        </RecycleScroller>
       </template>
     </e-expansion-panel>
   </div>
 </template>
 
 <script>
+import { RecycleScroller } from "vue-virtual-scroller";
 import { bus } from "../../../utils/bus";
 export default {
   data() {
@@ -291,9 +340,13 @@ export default {
       this.isShow = false;
     },
   },
+  components: {
+    RecycleScroller,
+  },
   watch: {
     isShow(newVal) {
       if (newVal) {
+        this.$refs.ePanel.isShowBody = true;
         bus.$emit("hiddenOtherBody", ["pin", "upload"]);
       }
     },
@@ -302,6 +355,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.scroller {
+  height: 100%;
+}
 @keyframes float {
   0% {
     transform: translateY(0px);

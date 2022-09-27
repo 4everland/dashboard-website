@@ -101,7 +101,7 @@
         </v-tooltip>
       </div>
       <template #content>
-        <ul class="control-content" ref="controlContent">
+        <!-- <ul class="control-content" ref="controlContent">
           <li class="file-item pos-r" v-for="item in tasks" :key="item.id">
             <div
               class="progress-bg"
@@ -129,20 +129,6 @@
                   >mdi-check-circle-outline</v-icon
                 >
                 <div v-else>
-                  <!-- <v-icon
-                    size="22"
-                    v-if="item.status != 3"
-                    @click="
-                      item.status == 2 || item.status == 4
-                        ? handleRetryUpload(item.id)
-                        : handleCancelUpload(item.id)
-                    "
-                    >{{
-                      item.status == 2 || item.status == 4
-                        ? "mdi-play-outline"
-                        : "mdi-pause"
-                    }}</v-icon
-                  > -->
                   <v-icon
                     size="20"
                     class="ml-2"
@@ -177,7 +163,81 @@
               </div>
             </div>
           </li>
-        </ul>
+        </ul> -->
+
+        <RecycleScroller
+          class="scroller"
+          :items="tasks"
+          :item-size="60"
+          key-field="id"
+          v-slot="{ item }"
+        >
+          <!-- <div class="user">
+            {{ item.fileInfo.name }}
+          </div> -->
+
+          <div class="file-item pos-r">
+            <div
+              class="progress-bg"
+              :style="{ width: item.progress + '%' }"
+            ></div>
+            <div class="file al-c mx-7">
+              <div class="file-info">
+                <div class="file-name">{{ item.fileInfo.name }}</div>
+                <div>
+                  <span class="complete-size">{{
+                    $utils.getFileSize(item.uploadFileSize)
+                  }}</span
+                  >/<span class="total-size">{{
+                    $utils.getFileSize(item.fileSize)
+                  }}</span>
+                  <span class="status ml-2">{{ status(item.status) }} </span>
+                </div>
+              </div>
+              <div class="file-control ml-auto">
+                <v-icon
+                  v-if="item.status == 3"
+                  class="ml-auto"
+                  size="20"
+                  color="#5EB1FF"
+                  >mdi-check-circle-outline</v-icon
+                >
+                <div v-else>
+                  <v-icon
+                    size="20"
+                    class="ml-2"
+                    v-if="item.status == 1 || item.status == 0"
+                    @click="handleCancelUpload(item.id)"
+                    >mdi-pause</v-icon
+                  >
+                  <v-icon
+                    size="20"
+                    class="ml-2"
+                    v-if="item.status == 2"
+                    @click="handleRetryUpload(item.id)"
+                    >mdi-play-outline</v-icon
+                  >
+
+                  <v-icon
+                    size="22"
+                    class="ml-2"
+                    v-if="item.status == 4"
+                    @click="handleRetryUpload(item.id)"
+                  >
+                    mdi-reload</v-icon
+                  >
+                  <v-icon
+                    v-if="item.status != 3"
+                    size="20"
+                    class="ml-2"
+                    @click="handleClearRecords(item.id)"
+                    >mdi-close</v-icon
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </RecycleScroller>
       </template>
     </e-expansion-panel>
   </div>
@@ -185,6 +245,7 @@
 
 <script>
 import { bus } from "../../../utils/bus";
+import { RecycleScroller } from "vue-virtual-scroller";
 export default {
   data() {
     return {
@@ -365,6 +426,9 @@ export default {
       }
     },
   },
+  components: {
+    RecycleScroller,
+  },
   watch: {
     tasks: {
       handler(newValue) {
@@ -377,6 +441,7 @@ export default {
     },
     isShow(newVal) {
       if (newVal) {
+        this.$refs.ePanel.isShowBody = true;
         bus.$emit("hiddenOtherBody", ["pin", "delete"]);
       }
     },
@@ -385,6 +450,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.scroller {
+  height: 100%;
+}
+
 @keyframes float {
   0% {
     transform: translateY(0px);

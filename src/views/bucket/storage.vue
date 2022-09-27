@@ -384,6 +384,7 @@
 </template>
 
 <script>
+import { bus } from "../../utils/bus";
 import mixin from "./storage-mixin";
 export default {
   mixins: [mixin],
@@ -552,6 +553,7 @@ export default {
   watch: {
     selected: {
       handler(arr) {
+        if (!this.$refs.operationBar) return;
         if (arr.length) {
           bus.$emit("showOperationBar", true);
           this.$refs.operationBar.isShow = this.checked = true;
