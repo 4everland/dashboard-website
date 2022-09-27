@@ -50,21 +50,37 @@
               label="Set a Name"
               placeholder="Set a name for your IPNS"
             ></v-text-field>
-            <v-text-field
-              persistent-placeholder
-              v-model="form.cid"
-              label="IPFS CID"
-              placeholder=""
-            ></v-text-field>
-
-            <v-select
-              v-model="form.period"
-              :items="periodOpts"
-              item-text="text"
-              item-value="value"
-              label="Refresh period"
-            >
-            </v-select>
+            <template v-if="type == 0">
+              <v-text-field
+                persistent-placeholder
+                v-model="form.cid"
+                label="IPFS CID"
+                placeholder=""
+              ></v-text-field>
+              <v-select
+                v-model="form.period"
+                :items="periodOpts"
+                item-text="text"
+                item-value="value"
+                label="Refresh period"
+              >
+              </v-select>
+            </template>
+            <template v-else>
+              <div class="d-flex">
+                <v-text-field
+                  persistent-placeholder
+                  v-model="form.pkey"
+                  label="Upload private key and sign it"
+                  placeholder=""
+                ></v-text-field>
+                <v-btn color="primary" class="ml-5 mt-4" small>Decode</v-btn>
+              </div>
+            </template>
+            <div class="mt-5 fz-14">
+              <e-kv label="IPFS CID:">test123</e-kv>
+              <e-kv class="mt-3" label="Refresh period:">24h</e-kv>
+            </div>
           </div>
         </template>
 
@@ -81,6 +97,12 @@
 
 <script>
 const Day = 86400;
+const initForm = {
+  name: "",
+  period: Day,
+  cid: "",
+  pkey: "",
+};
 
 export default {
   data() {
@@ -107,9 +129,7 @@ export default {
         { text: "180d", value: Day * 180 },
       ],
       form: {
-        name: "",
-        period: Day,
-        cid: "",
+        ...initForm,
       },
     };
   },
@@ -117,6 +137,9 @@ export default {
     onShow() {
       this.stepIdx = 0;
       this.type = 0;
+      this.form = {
+        ...initForm,
+      };
       this.showPop = true;
     },
     onNext() {

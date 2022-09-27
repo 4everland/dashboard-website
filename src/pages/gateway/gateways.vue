@@ -96,8 +96,16 @@ export default {
     onEdit(item) {
       console.log(item);
     },
-    onDelete(item) {
+    async onDelete(item) {
       console.log(item);
+      try {
+        let tip =
+          "The following gateways will be deleted, Are you sure you want to continue?";
+        tip += `<p class="mt-4">${item.name}</p>`;
+        await this.$confirm(tip, "Delete Gateway");
+      } catch (error) {
+        //
+      }
     },
     async getList() {
       try {
@@ -111,6 +119,7 @@ export default {
         });
         this.list = data.content.map((it) => {
           it.created = new Date(it.createAt * 1e3).format();
+          it.name = it.createAt;
           return it;
         });
         this.total = data.numberOfElements;
