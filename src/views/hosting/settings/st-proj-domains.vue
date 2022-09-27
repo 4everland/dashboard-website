@@ -282,9 +282,8 @@ export default {
         );
         await this.getList();
       } catch (error) {
-        //
+        this.$set(it, "saving", false);
       }
-      // this.$set(it, "saving", false);
     },
     getRedirectItems(it) {
       let arr = [
