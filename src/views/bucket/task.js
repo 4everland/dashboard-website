@@ -72,9 +72,10 @@ export class DeleteTaskWrapper {
   status;
   curFiles;
 
-  constructor(that, s3, param, id) {
+  constructor(that, s3, param, id, s3m) {
     this.that = that;
     this.s3 = s3;
+    this.s3m = s3m;
     this.param = param;
     this.id = id;
     this.status = 0; // pre delete
@@ -85,30 +86,51 @@ export class DeleteTaskWrapper {
     try {
       if (this.status !== 0 && this.status !== 1) return;
       this.status = 1; // deleting
-      const listResult = await this.s3.listObjectsV2({
-        Bucket: this.param.Bucket,
-        MaxKeys: 2,
-        Delimiter: "",
-        Prefix: this.param.Prefix,
+      // const listResults = await this.s3.listObjectsV2({
+      //   Bucket: this.param.Bucket,
+      //   MaxKeys: 2,
+      //   Delimiter: "",
+      //   Prefix: this.param.Prefix,
+      // });
+      // console.log(listResults, "s3");
+      const listResultStream =
+        this.s3m.extensions.listObjectsV2WithMetadataQuery(
+          this.param.Bucket,
+          this.param.Prefix,
+          "",
+          "",
+          2,
+          ""
+        );
+      const listResult = await new Promise((resolve, reject) => {
+        listResultStream.on("data", resolve);
+        listResultStream.on("error", reject);
       });
-      if (!listResult.Contents) {
+      if (!listResult.objects) {
         this.curFiles = [];
       } else {
-        this.curFiles = listResult.Contents.map((it) => {
-          return { Key: it.Key };
+        this.curFiles = listResult.objects.map((it) => {
+          // return { Key: it.name };
+          return it.name;
         });
       }
-
       if (this.curFiles.length && this.status == 1) {
-        const deleteResult = await this.s3.deleteObjects({
-          Bucket: this.param.Bucket,
-          Delete: {
-            Objects: this.curFiles,
-            Quiet: false,
-          },
+        // const deleteResult = await this.s3.deleteObjects({
+        //   Bucket: this.param.Bucket,
+        //   Delete: {
+        //     Objects: this.curFiles,
+        //     Quiet: false,
+        //   },
+        // });
+
+        await new Promise((resolve, reject) => {
+          this.s3m.removeObjects(this.param.Bucket, this.curFiles, (err) => {
+            if (err) reject(err);
+            resolve();
+          });
         });
-        // console.log(deleteResult);
-        for (let i = 0; i < deleteResult.Deleted.length; i++) {
+
+        for (let i = 0; i < listResult.objects.length; i++) {
           this.deleteCount += 1;
           await Vue.prototype.$sleep(20);
         }

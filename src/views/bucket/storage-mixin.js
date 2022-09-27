@@ -573,11 +573,7 @@ export default {
         await this.$confirm(tip);
         const { Key } = this.pathInfo;
         this.$loading();
-        await this.delObjects([
-          {
-            Key,
-          },
-        ]);
+        await this.delObjects([Key]);
         const navItem = this.navItems[this.navItems.length - 2];
         this.$router.replace(navItem.to);
         this.$toast("Deleted successfully");
@@ -588,17 +584,20 @@ export default {
     },
     delObjects(Objects) {
       const { Bucket } = this.pathInfo;
-      const params = {
-        Bucket,
-        Delete: {
-          Objects,
-          Quiet: false,
-        },
-      };
+      // const params = {
+      //   Bucket,
+      //   Delete: {
+      //     Objects, // [{key: value}, {key: value2}]
+      //     Quiet: false,
+      //   },
+      // };
       return new Promise((resolve, reject) => {
-        this.s3.deleteObjects(params, (err, data) => {
+        // this.s3.deleteObjects(params, (err, data) => {
+        //   if (err) reject(err);
+        //   else resolve(data);
+        // });
+        this.s3m.removeObjects(Bucket, Objects, (err) => {
           if (err) reject(err);
-          else resolve(data);
         });
       });
     },
@@ -649,9 +648,10 @@ export default {
             this.deleteFolder = true;
             this.addDeleteFolderTask(2);
             this.processDeleteFolderTask();
+
             await this.delObjects(
               hasFile.map((it) => {
-                return { Key: it.Key };
+                return it.Key;
               })
             );
           } else if (hasFile.length && !hasFolder.length) {
@@ -667,10 +667,9 @@ export default {
               html,
               `Remove ${target}${this.selected.length > 1 ? "s" : ""}`
             );
-
             await this.delObjects(
               hasFile.map((it) => {
-                return { Key: it.Key };
+                return it.Key;
               })
             );
           } else {

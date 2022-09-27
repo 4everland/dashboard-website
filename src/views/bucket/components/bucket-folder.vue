@@ -298,6 +298,7 @@ import BucketUpload from "@/views/bucket/bucket-upload";
 import BucketPartsList from "@/views/bucket/bucket-parts-list";
 import BucketFileInfo from "@/views/bucket/components/bucket-fileInfo";
 
+import { mapState } from "vuex";
 import { bus } from "../../../utils/bus";
 import mixin from "../storage-mixin";
 import { DeleteTaskWrapper } from "../task.js";
@@ -360,6 +361,10 @@ export default {
       .catch((err) => err);
   },
   computed: {
+    ...mapState({
+      s3: (s) => s.s3,
+      s3m: (s) => s.s3m,
+    }),
     isFile() {
       if (this.selected.length && this.selected[0].isFile) return true;
       return false;
@@ -413,7 +418,8 @@ export default {
             Bucket: this.pathInfo.Bucket,
             Prefix: Prefix + it.name + "/",
           },
-          this.genID()
+          this.genID(),
+          this.s3m
         );
       });
       this.deleteFoldersTasks = deleteFoldersTask.concat(
