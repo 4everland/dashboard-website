@@ -349,18 +349,26 @@ export default {
           );
         }
         let type = 3;
-        if (this.domain.split(".").length == 2) {
+        let domain = this.domain;
+        let isWww = false;
+        if (domain.split(".").length == 3) {
+          domain = domain.replace(/^www\./, "");
+          if (domain != this.domain) isWww = true;
+        }
+        if (domain.split(".").length == 2) {
           const { form1 } = await this.$confirm("", "Add Domains", {
             comp1: "domain-dns-type",
             comp1Props: {
-              domain: this.domain,
+              domain,
+              isWww,
             },
           });
           type = form1.type || 0;
+          if (isWww && type == 2) domain = "www." + domain;
         }
         this.adding = true;
         await this.$http2.post("/domain", {
-          domain: this.domain,
+          domain,
           projectId: this.info.id,
           createType: type,
         });

@@ -20,6 +20,7 @@
 export default {
   props: {
     domain: String,
+    isWww: Boolean,
   },
   data() {
     return {
@@ -39,7 +40,9 @@ export default {
         },
         {
           value: 2,
-          label: `Add <span class="color-1">${this.domain}</span>`,
+          label: `Add <span class="color-1">${this.isWww ? "www." : ""}${
+            this.domain
+          }</span>`,
         },
       ];
     },
