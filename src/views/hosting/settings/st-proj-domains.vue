@@ -2,7 +2,7 @@
 .st-domains {
   table {
     td {
-      padding: 2px 10px;
+      padding: 5px 10px;
     }
   }
 }
@@ -164,7 +164,12 @@
             </template>
             <p class="gray mt-3 fz-14">
               <span v-if="it.conflicts.length">Afterwards,</span>
-              Set the following record on your DNS provider to continue:
+              Set the following record on your DNS provider to continue.
+              <span v-if="it.createType < 2 && it.domainName == it.domain"
+                >Before it takes effect, the
+                <b class="gray-3">www.{{ it.domain }}</b> domain will be
+                resolved to guarantee true ownership.</span
+              >
             </p>
             <div class="fz-14 mt-5">
               <table class="w100p">
@@ -173,16 +178,16 @@
                   <td>Name</td>
                   <td>Value</td>
                 </tr>
-                <tr class="fz-16">
-                  <td>{{ it.type }}</td>
-                  <td>{{ it.pre }}</td>
+                <tr class="fz-15" v-for="(row, j) in it.records" :key="j">
+                  <td>{{ row.type }}</td>
+                  <td>{{ row.name }}</td>
                   <td>
                     <p
                       class="hover-1 wb-all mb-0"
-                      v-clipboard="it.value"
+                      v-clipboard="row.value"
                       @success="$toast('Copied to clipboard !')"
                     >
-                      {{ it.value }}
+                      {{ row.value }}
                       <v-icon size="14" class="ml-1">mdi-content-copy</v-icon>
                     </p>
                   </td>
@@ -323,8 +328,22 @@ export default {
           const arr = it.domain.split(".");
           arr.pop();
           arr.pop();
-          it.isA = !arr.length;
-          it.pre = it.isA ? "@" : arr.join(".");
+          const isA = !arr.length;
+          it.pre = isA ? "@" : arr.join(".");
+          it.records = [
+            {
+              type: it.type,
+              name: it.pre,
+              value: it.value,
+            },
+          ];
+          if (isA && it.createType == 2) {
+            it.records.push({
+              type: "TXT",
+              name: "@",
+              value: it.txt,
+            });
+          }
           it.conflicts = it.conflicts || [];
           // it.valid = 1
           return it;
