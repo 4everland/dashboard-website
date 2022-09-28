@@ -1,67 +1,147 @@
 <template>
   <div class="main-wrap">
-    <div class="al-c justify-space-between">
-      <div class="fz-14 gray">
-        <v-icon size="14" color="#6C7789">mdi-alert-circle</v-icon>
-        <span class="ml-1"
-          >The publish will fail if the file in the folder is changed after the
-          snapshot, deleting the snapshot will automatically unpin it!</span
-        >
+    <div v-if="!childPath">
+      <div class="al-c justify-space-between">
+        <div class="fz-14 gray">
+          <v-icon size="14" color="#6C7789">mdi-alert-circle</v-icon>
+          <span class="ml-1"
+            >The publish will fail if the file in the folder is changed after
+            the snapshot, deleting the snapshot will automatically unpin
+            it!</span
+          >
+        </div>
+        <div class="ml-auto" style="min-width: 150px">
+          <v-text-field
+            class="hide-msg bd-1"
+            dense
+            solo
+            clearable
+            label="Search"
+            prepend-inner-icon="mdi-magnify"
+            v-model="prefix"
+            @input="handleInput"
+          ></v-text-field>
+        </div>
       </div>
-      <div class="ml-auto" style="min-width: 150px">
-        <v-text-field
-          class="hide-msg bd-1"
-          dense
-          solo
-          clearable
-          label="Search"
-          prepend-inner-icon="mdi-magnify"
-          v-model="searchKey"
-        ></v-text-field>
-      </div>
-    </div>
-    <v-data-table
-      class="mt-5 data-table"
-      :headers="header"
-      :items="list"
-      item-key="id"
-      hide-default-footer
-      disable-pagination
-      height="700"
-    >
-      <template v-slot:item.name="{ item }">
-        <v-btn
-          color="#000"
-          class="e-btn-text"
-          text
-          x-small
-          @click="onRow(item)"
-        >
-          <v-icon v-if="!item.isFile" size="18" class="mr-2">mdi-folder</v-icon>
-          <b>{{ item.name.cutStr(5, 5) }}</b></v-btn
-        >
-      </template>
-      <template #item.action="{ item }">
-        <span
-          class="action-btn"
-          style="color: #775da6"
-          @click="handlePublish(item.id)"
-          >Publish</span
-        >
-        <span class="action-btn ml-2" @click="handleDelete(item.id)"
-          >Delete</span
-        >
-      </template>
-    </v-data-table>
+      <v-data-table
+        class="mt-5 data-table"
+        :headers="header"
+        fixed-header
+        :items="list"
+        item-key="id"
+        no-data-text=""
+        loading-text=""
+        hide-default-footer
+        disable-pagination
+        :loading="tableLoading"
+      >
+        <template v-slot:item.prefix="{ item }">
+          <div @click="onRow(item)">
+            <v-icon size="18" class="mr-3">mdi-folder</v-icon>
+            <span class="snapshot-name">{{
+              item.prefix.replace("/", "")
+            }}</span>
+          </div>
+        </template>
 
-    <div class="pd-20 gray ta-c fz-16 mt-5" v-show="list.length">
-      <v-btn outlined class="mr-5">Previous</v-btn>
-      <v-btn min-width="100" outlined :disabled="!hasNext">Next</v-btn>
+        <template v-slot:item.cid="{ item }">
+          <span> {{ item.cid.cutStr(5, 5) }}</span>
+          <v-btn
+            v-if="item.cid"
+            class="e-btn-text ml-2"
+            icon
+            small
+            v-clipboard="item.cid"
+            @success="$toast('Copied to clipboard !')"
+          >
+            <img src="/img/svg/copy.svg" width="12" />
+          </v-btn>
+        </template>
+        <template v-slot:item.size="{ item }">
+          {{ $utils.getFileSize(item.size) }}
+        </template>
+        <template v-slot:item.status="{ item }">
+          <span class="status">
+            {{ transformStatus(item.status) }}
+          </span>
+        </template>
+        <template v-slot:item.createdAt="{ item }">
+          {{ new Date(item.createdAt * 1000).format() }}
+        </template>
+        <template #item.action="{ item }">
+          <!-- <span
+            class="action-btn"
+            style="color: #775da6"
+            @click="handlePublish(item)"
+            >Publish</span
+          >
+
+          <span
+            class="action-btn ml-4"
+            style="color: #775da6"
+            @click="handleDelete(item)"
+            >Delete</span
+          > -->
+
+          <v-btn
+            class="action-btn"
+            text
+            @click="handlePublish(item)"
+            color="#775da6"
+            :disabled="item.status == 'pin'"
+          >
+            Publish
+          </v-btn>
+          <v-btn
+            class="action-btn"
+            text
+            @click="handleDelete(item)"
+            color="#775da6"
+            :disabled="item.status == 'pinning'"
+          >
+            Delete
+          </v-btn>
+        </template>
+      </v-data-table>
+      <div
+        v-show="!list.length"
+        class="ta-c loading-img"
+        :class="tableLoading ? 'mt-10' : 'mt-15'"
+      >
+        <img
+          :src="`/img/svg/common/empty${tableLoading ? 1 : 2}.svg`"
+          :height="tableLoading ? 100 : 130"
+        />
+        <div class="mt-5 gray fz-17">
+          {{ tableLoading ? "Loading files..." : "No folders or files found" }}
+        </div>
+      </div>
+      <div class="pd-20 gray ta-c fz-16 mt-5 pagination" v-show="list.length">
+        <v-btn outlined class="mr-5">Previous</v-btn>
+        <v-btn min-width="100" outlined :disabled="!hasNext">Next</v-btn>
+      </div>
     </div>
+    <bucket-snapshots-detail v-else :snapshotId="snapshotId">
+    </bucket-snapshots-detail>
   </div>
 </template>
 
 <script>
+import bucketSnapshotsDetail from "./bucket-snapshots-detail.vue";
+function debounce(func, delay = 300, immediate = false) {
+  let timer = null;
+  return function () {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    if (immediate && !timer) {
+      func.apply(this, arguments);
+    }
+    timer = setTimeout(() => {
+      func.apply(this, arguments);
+    }, delay);
+  };
+}
 export default {
   props: {
     active: Boolean,
@@ -69,28 +149,20 @@ export default {
   data() {
     return {
       header: [
-        { text: "Name", value: "name" },
-        { text: "IPFS CID", value: "hash" },
+        { text: "Name", value: "prefix" },
+        { text: "IPFS CID", value: "cid" },
         { text: "Size", value: "size" },
         { text: "Publish", value: "status" },
-        { text: "Create", value: "createAt" },
+        { text: "Create", value: "createdAt" },
         { text: "Action", value: "action" },
       ],
-      list: [
-        {
-          name: "snapshots",
-          hash: "js323mzzjfvcalslfkjfdsasd",
-          size: "212KB",
-          status: "Published",
-          createAt: "2022-1-2 10:31:33",
-          isFile: false,
-          id: 23434,
-        },
-      ],
+      list: [],
       searchKey: "",
       cursor: 0,
       prefix: "",
       hasNext: false,
+      snapshotId: null,
+      tableLoading: false,
     };
   },
   activated() {
@@ -100,38 +172,103 @@ export default {
         query: { tab: "snapshots" },
       })
       .catch((err) => err);
+    this.getList();
   },
   created() {
     this.getList();
   },
+  computed: {
+    childPath() {
+      return this.$route.path.split("/").length > 5;
+    },
+    bucket() {
+      return this.$route.path.split("/")[3];
+    },
+    transformStatus() {
+      return (status) => {
+        if (status == "pinning") {
+          return "Publishing";
+        }
+        if (status == "unpin") {
+          return "Unpublished";
+        }
+        if (status == "pin") {
+          return "Published";
+        }
+        return status;
+      };
+    },
+  },
   methods: {
     onRow(item) {
-      if (item.isFile) return;
-      this.$router.push(this.$route.path + item.name + "/" + location.search);
+      this.snapshotId = item.id;
+      this.$router.push(this.$route.path + item.prefix + location.search);
     },
     async getList() {
+      this.tableLoading = true;
+      this.list = [];
       try {
-        let payload = { cursor: this.cursor, prefix: this.prefix };
-        const { data, page } = await this.$http.get("/snapshots", payload);
-        this.list = data;
-        this.cursor = page.next;
-        this.hasNext = page.hasNext;
+        let payload = {
+          cursor: this.cursor,
+          prefix: this.prefix,
+          bucket: this.bucket,
+        };
+        const { data } = await this.$http({
+          url: "/snapshots",
+          methods: "get",
+          params: payload,
+        });
+        console.log(data);
+        this.list = data.list;
+        this.hasNext = data.page.hasNext;
+        if (this.hasNext) {
+          this.cursor = data.page.next;
+        }
+        this.tableLoading = false;
       } catch (error) {
         console.log(error);
       }
     },
-    async handlePublish(id) {
+    async handlePublish(item) {
       try {
-        await this.$http.post(`/snapshots/${id}`);
-      } catch (err) {
+        await this.$confirm(
+          "Publishing your selected snapshot will consume some storage resources. Continue?",
+          "Pubulish Snapshot"
+        );
+        this.$toast("Joining publish queue");
+        this.$loading();
+        await this.$http.post(`/snapshots/${item.id}`);
+        this.$loading.close();
+        this.getList();
+      } catch (error) {
         console.log(error);
       }
     },
-    async handleDelete(id) {
+    async handleDelete(item) {
       try {
-        await this.$http.delete(`/snapshots/${id}`);
+        await this.$confirm(
+          "Since the selected Snapshot will be deleted, the published file will be unpinned. Continue?",
+          "Delete Snapshot"
+        );
+        this.$loading();
+        await this.$http.delete(`/snapshots/${item.id}`);
+        this.$loading.close();
+        this.getList();
       } catch (error) {
         console.log(error);
+      }
+    },
+    handleInput: debounce(function () {
+      this.getList();
+    }),
+  },
+  components: {
+    bucketSnapshotsDetail,
+  },
+  watch: {
+    childPath(val) {
+      if (!val) {
+        this.getList();
       }
     },
   },
@@ -140,7 +277,23 @@ export default {
 
 <style lang="scss" scoped>
 .action-btn {
-  color: #6c7789;
-  cursor: pointer;
+  padding: 0 !important;
+}
+
+.snapshot-name {
+  color: #0b0817;
+  font-family: "Arial-BoldMT", "Arial";
+}
+.status {
+  text-transform: capitalize;
+}
+.main-wrap {
+  position: relative;
+  .pagination {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 </style>

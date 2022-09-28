@@ -283,7 +283,7 @@
               @click="showSnapshotDialog = fasle"
               >Cancel</v-btn
             >
-            <v-btn width="180" color="primary" @click="handleConfirmSnapshot"
+            <v-btn width="180" color="primary" @click="confirmSnapshot"
               >Snapshot</v-btn
             >
           </div>
@@ -476,6 +476,8 @@ export default {
           prefix: this.selected[0].name + "/",
         };
         await this.$http.post("/snapshots", data);
+        this.showSnapshotDialog = false;
+        this.$alert("create snapshot success!");
       } catch (err) {
         console.log(err);
       }
@@ -525,9 +527,9 @@ export default {
 .e-btn-text::before {
   background: transparent !important;
 }
-.data-table tr:nth-of-type(odd) {
+/* .data-table tr:nth-of-type(odd) {
   background: #f7f9fb;
-}
+} */
 </style>
 <style lang="scss" scoped>
 .hash-link {

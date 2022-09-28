@@ -8,12 +8,23 @@
       <template #header>
         <div class="control-header al-c">
           <div v-if="hasPinning || hasPause" class="al-c">
-            <img
+            <!-- <img
               width="15"
               class="mr-3 pid-icon"
               src="/img/svg/bucket/upload-icon.svg"
               alt=""
             />
+
+            <v-icon>mdi-loading</v-icon> -->
+
+            <v-progress-circular
+              indeterminate
+              color="primary"
+              class="mr-3"
+              :size="15"
+              :width="2"
+            ></v-progress-circular>
+
             <span>Pinning ({{ PinningCount }})</span>
           </div>
           <div v-else-if="allPinned || allFailed" class="al-c">
@@ -364,24 +375,9 @@ export default {
 .scroller {
   height: 100%;
 }
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
 .control-header {
   font-size: 14px;
-  .pid-icon {
-    animation: float 1s ease infinite;
-  }
 }
-
 .control-content {
   list-style: none;
   margin: 0;

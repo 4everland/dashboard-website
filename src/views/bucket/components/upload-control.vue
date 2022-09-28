@@ -379,6 +379,7 @@ export default {
     async handleCancelAll() {
       await this.handleAllStopUploading();
       this.tasks = [];
+      bus.$emit("handleClearAllRecords");
       this.isShow = false;
     },
     handleStartAll() {
