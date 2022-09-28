@@ -6,6 +6,8 @@ import { mapState } from "vuex";
 import vuetify from "./plugins/vuetify";
 import "./setup";
 import { isAirDrop } from "@/plugins/flow/flowAirDrop.js";
+import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
+
 Vue.config.productionTip = false;
 
 router.beforeEach((to, _, next) => {

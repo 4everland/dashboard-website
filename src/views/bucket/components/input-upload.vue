@@ -105,7 +105,6 @@ export default {
             ? this.isEmojiCharacter(it.name)
             : this.isEmojiCharacter(it.webkitRelativePath);
         }).length > 0;
-      // console.log(isEmoji);
       if (isEmoji)
         return this.$alert(
           "The file name or folder name cannot contain emojis."
@@ -136,19 +135,6 @@ export default {
       this.emitInput();
     },
     emitInput() {
-      // console.log(this.files);
-      // const isEmoji = this.files.findIndex((item) => {
-      //   if (item.webkitRelativePath == "") {
-      //     return this.isEmojiCharacter(item.name);
-      //   } else {
-      //     return this.isEmojiCharacter(item.webkitRelativePath);
-      //   }
-      // });
-      // console.log(isEmoji);
-      // if (isEmoji !== -1) {
-      //   this.files = [];
-      //   return this.$alert("The folder name cannot contain emojis.");
-      // }
       this.$emit("input", this.files);
     },
     handleRmoveAll() {

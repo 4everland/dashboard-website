@@ -98,7 +98,7 @@
         </v-col>
         <v-col cols="6" md="4">
           <h4>Root Directory</h4>
-          <e-menu offset-y>
+          <e-menu offset-y offset-overflow>
             <v-text-field
               slot="ref"
               v-model="form.rootDirectory"

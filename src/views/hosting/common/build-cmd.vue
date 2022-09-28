@@ -1,34 +1,39 @@
 <template>
-  <div class="d-flex al-c">
-    <v-text-field
-      v-if="!options.length"
-      v-model="val"
-      :outlined="!label"
-      dense
-      :placeholder="placeholder"
-      :label="label"
-      persistent-placeholder
-    />
-    <v-select
-      v-else
-      v-model="val"
-      :outlined="!label"
-      dense
-      :menu-props="{ offsetY: true }"
-      :items="options"
-      item-text="text"
-      item-value="value"
-      :label="label"
-      persistent-placeholder
-    >
-      <template #item="{ item }">
-        <span>{{ item.key }}</span>
-        <span class="gray ml-1 mr-2" v-if="item.key">:</span>
-        <span class="gray fz-13 line-1" style="max-width: 320px">{{
-          item.script
-        }}</span>
-      </template>
-    </v-select>
+  <div>
+    <e-menu offset-y offset-overflow>
+      <v-text-field
+        slot="ref"
+        v-model="val"
+        :outlined="!label"
+        dense
+        :placeholder="placeholder"
+        :label="label"
+        persistent-placeholder
+      />
+      <div class="bg-white ov-a">
+        <v-list style="max-height: 260px">
+          <v-list-item
+            link
+            @click="onOpt(item)"
+            v-for="(item, i) in options"
+            :key="i"
+          >
+            <v-list-item-title :title="item.script">
+              <span
+                :class="{
+                  'color-1 fw-b': item.value == val,
+                }"
+                >{{ item.key }}</span
+              >
+              <span class="gray ml-1 mr-2" v-if="item.key">:</span>
+              <span class="gray fz-13 line-1">{{
+                (item.script || "").cutStr(60)
+              }}</span>
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </div>
+    </e-menu>
   </div>
 </template>
 
@@ -74,9 +79,14 @@ export default {
         key: "",
         text: "",
         value: "",
-        script: "empty",
+        script: "No command",
       });
       return res;
+    },
+  },
+  methods: {
+    onOpt(it) {
+      this.val = it.value;
     },
   },
 };

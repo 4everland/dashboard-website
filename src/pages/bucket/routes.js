@@ -60,11 +60,12 @@ export default [
     },
   },
   {
-    path: "/access",
+    path: "/access-keys",
     component: () => import("./accessKeys"),
     meta: {
       title: "Access-Keys",
       isTab: 1,
+      subTitle: "Use the API key for Storage SDK",
     },
   },
 ].map((it) => {

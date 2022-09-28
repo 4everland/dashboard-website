@@ -1,7 +1,7 @@
 <template>
   <div class="upload-control-container">
     <div class="control-content">
-      <div class="control-header al-c">
+      <div class="control-header al-c px-7">
         <slot name="header"> </slot>
         <slot
           name="control"
@@ -12,7 +12,7 @@
         </slot>
         <slot></slot>
       </div>
-      <div class="control-body" ref="content">
+      <div class="control-body" :style="{ height: height }">
         <slot name="content"></slot>
       </div>
     </div>
@@ -34,16 +34,13 @@ export default {
     };
   },
   mounted() {
-    this.$nextTick(() => {
-      this.height = this.$refs.content.offsetHeight;
-    });
     this.$watch(
       "this.isShowBody",
       (newVal) => {
         if (newVal) {
-          this.$refs.content.style.height = this.length * 60 + "px";
+          this.height = this.length * 60 + "px";
         } else {
-          this.$refs.content.style.height = 0 + "px";
+          this.height = 0;
         }
       },
       {
@@ -55,15 +52,26 @@ export default {
     handleClick() {
       this.isShowBody = !this.isShowBody;
       if (this.isShowBody) {
-        this.$refs.content.style.height = this.length * 60 + "px";
+        this.height = this.length * 60 + "px";
       } else {
-        this.$refs.content.style.height = 0 + "px";
+        this.height = 0;
       }
     },
   },
   watch: {
     length(newVal) {
-      this.$refs.content.style.height = newVal * 60 + "px";
+      this.height = newVal * 60 + "px";
+    },
+    isShowBody: {
+      handler(newVal) {
+        if (newVal) {
+          this.$emit("showBody");
+          this.height = this.length * 60 + "px";
+        } else {
+          this.height = 0;
+        }
+      },
+      immediate: true,
     },
   },
 };
@@ -72,17 +80,14 @@ export default {
 <style lang="scss" scoped>
 .upload-control-container {
   width: 400px;
-  padding: 0 10px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgb(0 0 0 / 4%), 0 8px 28px rgb(0 0 0 / 6%),
     0 12px 48px rgb(0 0 0 / 4%);
-  border-radius: 4px;
-  box-shadow: border-box;
+  border-radius: 10px;
   background: #fff;
   .control-content {
     .control-header {
       height: 60px;
-      background: #fff;
     }
     .control-body {
       background: #fff;
