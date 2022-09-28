@@ -8,13 +8,14 @@
       <template #header>
         <div class="control-header al-c">
           <div v-if="hasDeleteing || hasPause" class="al-c">
-            <img
-              width="17"
-              class="dustbin-icon"
-              src="/img/svg/bucket/dustbin-icon.svg"
-              alt=""
-            />
-            <span class="ml-3">Deleting ({{ compeleteFiles }})</span>
+            <v-progress-circular
+              indeterminate
+              color="primary"
+              class="mr-3"
+              :size="15"
+              :width="2"
+            ></v-progress-circular>
+            <span>Deleting ({{ compeleteFiles }})</span>
           </div>
           <div v-else-if="allCompelete || allFailedStatus" class="al-c">
             <v-icon size="20" :color="allCompelete ? '#00BD9A' : 'red'">{{
@@ -358,22 +359,8 @@ export default {
 .scroller {
   height: 100%;
 }
-@keyframes float {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
 .control-header {
   font-size: 14px;
-  .dustbin-icon {
-    animation: float 1s ease infinite;
-  }
 }
 
 .control-content {

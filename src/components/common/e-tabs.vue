@@ -21,6 +21,7 @@
   <div v-else class="e-settings" :class="vertical ? 'd-flex' : ''">
     <div>
       <v-tabs
+        class="tabs"
         :class="vertical ? 'v3-vertical bdr-1' : 'v3-horizon'"
         color="black"
         v-model="curIdx"
@@ -31,6 +32,7 @@
         <v-tab
           v-for="(it, i) in list"
           :key="i"
+          class="tab"
           :class="{ 'fw-b': curIdx == i }"
         >
           {{ it.text }}
@@ -185,6 +187,17 @@ export default {
 </script>
 
 <style lang="scss">
+// .tabs {
+//   font-family: "Arial-BoldMT", "Arial";
+// }
+.v-tab {
+  font-family: "Arial-MT";
+
+  letter-spacing: normal !important;
+}
+.v-tab--active {
+  font-family: "Arial-BoldMT", "Arial";
+}
 .e-settings {
   .v3-horizon {
     .v-slide-group__content {

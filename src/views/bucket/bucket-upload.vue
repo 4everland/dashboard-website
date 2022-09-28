@@ -157,8 +157,9 @@ export default {
       }
       bus.$emit("taskData", this.tasks);
     });
-    bus.$on("handleClearAllRecords", (status) => {
-      this.tasks = this.tasks.filter((it) => it.status !== status);
+    bus.$on("handleClearAllRecords", () => {
+      // this.tasks = this.tasks.filter((it) => it.status !== status);
+      this.tasks = [];
       bus.$emit("taskData", this.tasks);
     });
   },

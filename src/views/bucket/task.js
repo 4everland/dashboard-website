@@ -126,7 +126,7 @@ export class DeleteTaskWrapper {
         await new Promise((resolve, reject) => {
           this.s3m.removeObjects(this.param.Bucket, this.curFiles, (err) => {
             if (err) reject(err);
-            resolve();
+            else resolve();
           });
         });
 

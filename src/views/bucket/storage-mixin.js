@@ -598,6 +598,7 @@ export default {
         // });
         this.s3m.removeObjects(Bucket, Objects, (err) => {
           if (err) reject(err);
+          else resolve();
         });
       });
     },
