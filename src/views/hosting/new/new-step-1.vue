@@ -71,8 +71,8 @@
         </v-col>
         <v-col v-if="form.platform == 'AR'">
           <div class="gray fz-14">
-            Tips: All assets in Arweave are linked using relative paths due to
-            its features.
+            <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon> All assets
+            in Arweave are linked using relative paths due to its features.
           </div>
         </v-col>
       </v-row>
@@ -185,9 +185,12 @@
         </v-col>
       </v-row>
       <env-form class="mt-5" v-model="form.env" />
-      <div class="gray mt-5 fz-14">
-        Tips: 4EVERLAND HOSTING only serves static pages (Server-Side-Rendering
-        is not supported now)
+      <div class="gray mt-5 fz-14 al-c">
+        <v-icon size="14" class="mr-2">mdi-alert-circle</v-icon>
+        <span
+          >4EVERLAND HOSTING only serves static pages (Server-Side-Rendering is
+          not supported now)</span
+        >
       </div>
     </div>
     <div class="ta-c mt-4">

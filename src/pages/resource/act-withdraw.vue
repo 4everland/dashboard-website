@@ -35,8 +35,8 @@
       <pay-network :allow="['Polygon']" />
     </e-kv2>
     <div class="mt-8 fz-14 gray">
-      <p>Tips:</p>
       <p class="mt-2">
+        <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon>
         When the withdrawal is confirmed, the system will automatically settle
         the gas fee. The exact withdrawal amount is determined based on the
         actual result.

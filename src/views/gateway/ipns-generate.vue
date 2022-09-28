@@ -35,9 +35,9 @@
               <v-switch v-model="form.isPrivate" dense></v-switch>
             </div>
             <div class="mt-1 fz-13 gray">
-              Tips：Choose whether or not you want your gateway to be able to
-              pull content from the whole IPFS network or just content you have
-              pinned.
+              <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon>Choose
+              whether or not you want your gateway to be able to pull content
+              from the whole IPFS network or just content you have pinned.
             </div>
             <div class="mt-3 al-c">
               <span>Using this Gateway</span>
