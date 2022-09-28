@@ -164,7 +164,12 @@
             </template>
             <p class="gray mt-3 fz-14">
               <span v-if="it.conflicts.length">Afterwards,</span>
-              Set the following record on your DNS provider to continue:
+              Set the following record on your DNS provider to continue.
+              <span v-if="it.createType < 2 && it.domainName == it.domain"
+                >Before it takes effect, the
+                <b class="gray-3">www.{{ it.domain }}</b> domain will be
+                resolved to guarantee true ownership.</span
+              >
             </p>
             <div class="fz-14 mt-5">
               <table class="w100p">
