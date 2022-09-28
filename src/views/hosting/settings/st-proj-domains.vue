@@ -337,11 +337,11 @@ export default {
               value: it.value,
             },
           ];
-          if (isA && it.type == "TXT") {
+          if (isA && it.createType == 2) {
             it.records.push({
-              type: "A",
+              type: "TXT",
               name: "@",
-              value: it.ip,
+              value: it.txt,
             });
           }
           it.conflicts = it.conflicts || [];
