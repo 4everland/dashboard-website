@@ -2,7 +2,7 @@
 .st-domains {
   table {
     td {
-      padding: 2px 10px;
+      padding: 5px 10px;
     }
   }
 }
@@ -173,16 +173,16 @@
                   <td>Name</td>
                   <td>Value</td>
                 </tr>
-                <tr class="fz-16">
-                  <td>{{ it.type }}</td>
-                  <td>{{ it.pre }}</td>
+                <tr class="fz-15" v-for="(row, j) in it.records" :key="j">
+                  <td>{{ row.type }}</td>
+                  <td>{{ row.name }}</td>
                   <td>
                     <p
                       class="hover-1 wb-all mb-0"
-                      v-clipboard="it.value"
+                      v-clipboard="row.value"
                       @success="$toast('Copied to clipboard !')"
                     >
-                      {{ it.value }}
+                      {{ row.value }}
                       <v-icon size="14" class="ml-1">mdi-content-copy</v-icon>
                     </p>
                   </td>
@@ -323,8 +323,22 @@ export default {
           const arr = it.domain.split(".");
           arr.pop();
           arr.pop();
-          it.isA = !arr.length;
-          it.pre = it.isA ? "@" : arr.join(".");
+          const isA = !arr.length;
+          it.pre = isA ? "@" : arr.join(".");
+          it.records = [
+            {
+              type: it.type,
+              name: it.pre,
+              value: it.value,
+            },
+          ];
+          if (isA && it.type == "TXT") {
+            it.records.push({
+              type: "A",
+              name: "@",
+              value: it.ip,
+            });
+          }
           it.conflicts = it.conflicts || [];
           // it.valid = 1
           return it;
