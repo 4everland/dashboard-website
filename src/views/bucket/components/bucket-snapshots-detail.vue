@@ -23,13 +23,13 @@
     >
       <template v-slot:item.name="{ item }">
         <div class="file-name" v-if="/\/$/.test(item.name)">
-          <v-btn color="#000" text @click.stop="onRow(item)">
+          <v-btn color="#000" class="e-btn-text" text @click.stop="onRow(item)">
             <v-icon size="18" class="mr-2">mdi-folder</v-icon>
-            {{ item.name.replace("/", "") }}
+            {{ item.name.replace("/", "").cutStr(5, 5) }}
           </v-btn>
         </div>
         <div class="file-name" v-else>
-          <v-btn color="#000" text>
+          <v-btn color="#000" class="e-btn-text" text>
             {{ item.name.cutStr(5, 5) }}
           </v-btn>
         </div>
@@ -214,7 +214,7 @@ export default {
 <style lang="scss" scoped>
 .hash-link {
   display: block;
-  min-width: 80px;
+  min-width: 150px;
   color: #0b0817;
 }
 </style>

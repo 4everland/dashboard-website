@@ -37,19 +37,11 @@
         @click:row="onRow"
       >
         <template v-slot:item.prefix="{ item }">
-          <!-- <v-icon size="18" class="mr-3">mdi-folder</v-icon>
-          <span class="snapshot-name">{{ item.prefix.replace("/", "") }}</span> -->
-
-          <v-btn color="#000" text @click.stop="onRow(item)">
-            <!-- <v-icon v-if="!item.isFile" size="18" class="mr-2"
-                  >mdi-folder</v-icon
-                >
-                <b>{{ item.name.cutStr(5, 5) }}</b> -->
+          <v-btn color="#000" text class="e-btn-text" @click.stop="onRow(item)">
             <v-icon size="18" class="mr-3">mdi-folder</v-icon>
-            <span class="snapshot-name">{{ item.prefix }}</span>
+            <span class="snapshot-name">{{ item.prefix.cutStr(5, 4) }}</span>
           </v-btn>
         </template>
-
         <template v-slot:item.cid="{ item }">
           <div class="al-c">
             <a
@@ -216,8 +208,11 @@ export default {
   },
   methods: {
     onRow(item) {
+      // console.log( encodeURI(item.prefix));
+      // console.log(item.prefix.replace(/\//g, ":"));
+      const prefix = item.prefix.replace(/\//g, ":") + "/";
       this.snapshotId = item.id;
-      this.$router.push(this.$route.path + item.prefix + location.search);
+      this.$router.push(this.$route.path + prefix + location.search);
     },
     async getList() {
       this.tableLoading = true;

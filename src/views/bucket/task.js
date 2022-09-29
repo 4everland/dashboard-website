@@ -215,7 +215,6 @@ export class PinCidTaskWrapper {
       // });
     });
     const data = await Promise.any(promiseList);
-    // console.log(data);
     if (!data) throw new Error("Network Error");
     if (this.userCancel) throw new Error("Upload aborted.");
     this.theFastGateWay = data.config.url.replace(this.form.cid, "");
@@ -281,6 +280,7 @@ export class PinCidTaskWrapper {
       if (this.userCancel) throw new Error("Upload aborted.");
       await this.pin();
     } catch (error) {
+      console.log(error);
       if (
         this.userCancel ||
         error.message == "Upload aborted." ||
@@ -288,8 +288,9 @@ export class PinCidTaskWrapper {
       ) {
         this.status = 2;
       } else {
-        console.log(error.message);
-        Vue.prototype.$alert(error.message);
+        if (error.message != "All promises were rejected") {
+          Vue.prototype.$alert(error.message);
+        }
         this.status = 4;
       }
     }

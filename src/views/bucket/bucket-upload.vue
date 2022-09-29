@@ -50,7 +50,7 @@
               />
             </div>
             <div>
-              <span class="ops-item fz-14">Name For Pin</span>
+              <span class="ops-item fz-14">Set a Name</span>
               <v-text-field
                 dense
                 persistent-placeholder
