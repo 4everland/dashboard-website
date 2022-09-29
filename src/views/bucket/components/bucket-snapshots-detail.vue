@@ -23,28 +23,40 @@
     >
       <template v-slot:item.name="{ item }">
         <div class="file-name" v-if="/\/$/.test(item.name)">
-          <v-icon size="18" class="mr-2">mdi-folder</v-icon>
-          {{ item.name.replace("/", "") }}
+          <v-btn color="#000" text @click.stop="onRow(item)">
+            <v-icon size="18" class="mr-2">mdi-folder</v-icon>
+            {{ item.name.replace("/", "") }}
+          </v-btn>
         </div>
-
         <div class="file-name" v-else>
-          {{ item.name.cutStr(5, 5) }}
+          <v-btn color="#000" text>
+            {{ item.name.cutStr(5, 5) }}
+          </v-btn>
         </div>
       </template>
 
       <template v-slot:item.cid="{ item }">
-        <span>{{ item.cid.cutStr(8, 8) }}</span>
-        <v-btn
-          v-if="item.cid"
-          class="e-btn-text ml-2"
-          icon
-          small
-          @click.stop
-          v-clipboard="item.cid"
-          @success="$toast('Copied to clipboard !')"
-        >
-          <img src="/img/svg/copy.svg" width="12" />
-        </v-btn>
+        <div class="al-c">
+          <a
+            :href="$utils.getCidLink(item.cid)"
+            class="hash-link"
+            style="color: #0b0817"
+            target="_blank"
+            @click.stop
+            >{{ item.cid.cutStr(10, 8) }}</a
+          >
+          <v-btn
+            v-if="item.cid"
+            class="e-btn-text ml-2"
+            icon
+            small
+            @click.stop
+            v-clipboard="item.cid"
+            @success="$toast('Copied to clipboard !')"
+          >
+            <img src="/img/svg/copy.svg" width="12" />
+          </v-btn>
+        </div>
       </template>
       <template v-slot:item.size="{ item }">
         {{ $utils.getFileSize(item.size) }}
@@ -135,10 +147,13 @@ export default {
         // console.log(data);
         this.list = data.list;
         this.tableLoading = false;
-        this.matchPathCid.push({
-          cid: item.cid,
-          name: item.name.replace("/", ""),
-        });
+
+        if (this.matchPathCid.findIndex((it) => it.cid == item.cid) == -1) {
+          this.matchPathCid.push({
+            cid: item.cid,
+            name: item.name.replace("/", ""),
+          });
+        }
       } catch (error) {
         console.log(error);
       }
@@ -153,11 +168,7 @@ export default {
         let index = matchPath.includes(decodeURI(path))
           ? curRoute.length - 2
           : 0;
-        // console.log(curRoute);
         let matchRoute = this.matchPathCid[index];
-        // console.log(index, matchRoute);
-
-        // this.matchPathCid.splice(index + 1, this.matchPathCid.length - 1);
         if (matchRoute.cid) {
           this.onRow(
             {
@@ -171,10 +182,14 @@ export default {
           this.getInfo();
         }
       } else {
-        const matchPath = this.matchPathCid.map((it) => it.name).join("/");
+        const matchPath =
+          this.matchPathCid.map((it) => it.name).join("/") + "/";
+        console.log(matchPath, "=====", decodeURI(path));
         let index = matchPath.includes(decodeURI(path))
           ? curRoute.length - 2
           : null;
+
+        console.log(index);
         if (index == null) return;
         let matchRoute = this.matchPathCid[index];
 
@@ -197,7 +212,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.file-name {
-  font-family: "Arial-BoldMT", "Arial";
+.hash-link {
+  display: block;
+  min-width: 80px;
+  color: #0b0817;
 }
 </style>

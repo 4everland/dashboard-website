@@ -97,7 +97,6 @@ export default {
       if (this.disabled) return;
       if (!data) return;
       const { files = [] } = data;
-      console.log(files);
       let arr = Array.from(files);
 
       const isEmoji =
@@ -114,7 +113,6 @@ export default {
       for (const file of files) {
         // console.log(file);
         if (this.limit && this.files.length >= this.limit) break;
-        console.log(file);
         // if (!/image/.test(file.type)) continue;
         // if (!file.type) continue;
         const isRepeat =

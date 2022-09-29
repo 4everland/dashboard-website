@@ -176,63 +176,66 @@
             {{ item.fileInfo.name }}
           </div> -->
 
-          <div class="file-item pos-r">
-            <div
-              class="progress-bg"
-              :style="{ width: item.progress + '%' }"
-            ></div>
-            <div class="file al-c mx-7">
-              <div class="file-info">
-                <div class="file-name">{{ item.fileInfo.name }}</div>
-                <div>
-                  <span class="complete-size">{{
-                    $utils.getFileSize(item.uploadFileSize)
-                  }}</span
-                  >/<span class="total-size">{{
-                    $utils.getFileSize(item.fileSize)
-                  }}</span>
-                  <span class="status ml-2">{{ status(item.status) }} </span>
+          <div class="control-content">
+            <div class="file-item pos-r">
+              <div
+                class="progress-bg"
+                :style="{ width: item.progress + '%' }"
+              ></div>
+              <div class="file al-c mx-7">
+                <div class="file-info">
+                  <div></div>
+                  <div class="file-name">{{ item.fileInfo.name }}</div>
+                  <div>
+                    <span class="complete-size">{{
+                      $utils.getFileSize(item.uploadFileSize)
+                    }}</span
+                    >/<span class="total-size">{{
+                      $utils.getFileSize(item.fileSize)
+                    }}</span>
+                    <span class="status ml-2">{{ status(item.status) }} </span>
+                  </div>
                 </div>
-              </div>
-              <div class="file-control ml-auto">
-                <v-icon
-                  v-if="item.status == 3"
-                  class="ml-auto"
-                  size="20"
-                  color="#5EB1FF"
-                  >mdi-check-circle-outline</v-icon
-                >
-                <div v-else>
+                <div class="file-control ml-auto">
                   <v-icon
+                    v-if="item.status == 3"
+                    class="ml-auto"
                     size="20"
-                    class="ml-2"
-                    v-if="item.status == 1 || item.status == 0"
-                    @click="handleCancelUpload(item.id)"
-                    >mdi-pause</v-icon
+                    color="#5EB1FF"
+                    >mdi-check-circle-outline</v-icon
                   >
-                  <v-icon
-                    size="20"
-                    class="ml-2"
-                    v-if="item.status == 2"
-                    @click="handleRetryUpload(item.id)"
-                    >mdi-play-outline</v-icon
-                  >
+                  <div v-else>
+                    <v-icon
+                      size="20"
+                      class="ml-2"
+                      v-if="item.status == 1 || item.status == 0"
+                      @click="handleCancelUpload(item.id)"
+                      >mdi-pause</v-icon
+                    >
+                    <v-icon
+                      size="20"
+                      class="ml-2"
+                      v-if="item.status == 2"
+                      @click="handleRetryUpload(item.id)"
+                      >mdi-play-outline</v-icon
+                    >
 
-                  <v-icon
-                    size="22"
-                    class="ml-2"
-                    v-if="item.status == 4"
-                    @click="handleRetryUpload(item.id)"
-                  >
-                    mdi-reload</v-icon
-                  >
-                  <v-icon
-                    v-if="item.status != 3"
-                    size="20"
-                    class="ml-2"
-                    @click="handleClearRecords(item.id)"
-                    >mdi-close</v-icon
-                  >
+                    <v-icon
+                      size="22"
+                      class="ml-2"
+                      v-if="item.status == 4"
+                      @click="handleRetryUpload(item.id)"
+                    >
+                      mdi-reload</v-icon
+                    >
+                    <v-icon
+                      v-if="item.status != 3"
+                      size="20"
+                      class="ml-2"
+                      @click="handleClearRecords(item.id)"
+                      >mdi-close</v-icon
+                    >
+                  </div>
                 </div>
               </div>
             </div>

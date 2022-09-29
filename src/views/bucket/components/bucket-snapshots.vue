@@ -37,23 +37,43 @@
         @click:row="onRow"
       >
         <template v-slot:item.prefix="{ item }">
-          <v-icon size="18" class="mr-3">mdi-folder</v-icon>
-          <span class="snapshot-name">{{ item.prefix.replace("/", "") }}</span>
+          <!-- <v-icon size="18" class="mr-3">mdi-folder</v-icon>
+          <span class="snapshot-name">{{ item.prefix.replace("/", "") }}</span> -->
+
+          <v-btn color="#000" text @click.stop="onRow(item)">
+            <!-- <v-icon v-if="!item.isFile" size="18" class="mr-2"
+                  >mdi-folder</v-icon
+                >
+                <b>{{ item.name.cutStr(5, 5) }}</b> -->
+            <v-icon size="18" class="mr-3">mdi-folder</v-icon>
+            <span class="snapshot-name">{{
+              item.prefix.replace("/", "")
+            }}</span>
+          </v-btn>
         </template>
 
         <template v-slot:item.cid="{ item }">
-          <span> {{ item.cid.cutStr(5, 5) }}</span>
-          <v-btn
-            v-if="item.cid"
-            class="e-btn-text ml-2"
-            icon
-            small
-            @click.stop
-            v-clipboard="item.cid"
-            @success="$toast('Copied to clipboard !')"
-          >
-            <img src="/img/svg/copy.svg" width="12" />
-          </v-btn>
+          <div class="al-c">
+            <a
+              :href="$utils.getCidLink(item.cid)"
+              class="hash-link"
+              style="color: #0b0817"
+              target="_blank"
+              @click.stop
+              >{{ item.cid.cutStr(5, 4) }}</a
+            >
+            <v-btn
+              v-if="item.cid"
+              class="e-btn-text ml-2"
+              icon
+              small
+              @click.stop
+              v-clipboard="item.cid"
+              @success="$toast('Copied to clipboard !')"
+            >
+              <img src="/img/svg/copy.svg" width="12" />
+            </v-btn>
+          </div>
         </template>
         <template v-slot:item.size="{ item }">
           {{ $utils.getFileSize(item.size) }}
@@ -287,11 +307,15 @@ export default {
 .action-btn {
   padding: 0 !important;
 }
-
-.snapshot-name {
+.hash-link {
+  display: block;
+  min-width: 80px;
   color: #0b0817;
-  font-family: "Arial-BoldMT", "Arial";
 }
+
+// .snapshot-name {
+//   color: #0b0817;
+// }
 .status {
   text-transform: capitalize;
 }

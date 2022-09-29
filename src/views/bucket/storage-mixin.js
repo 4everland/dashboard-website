@@ -621,16 +621,6 @@ export default {
 
           for (const row of this.selected) {
             try {
-              // let params = {
-              //   cursor: 0,
-              //   prefix: '',
-              //   bucket: row.name,
-              // };
-              // const { data } = await this.$http({
-              //   url: "/snapshots",
-              //   methods: "get",
-              //   params: params,
-              // });
               await this.bucketEmpty(row);
               await this.delBucket(row.name);
             } catch (error) {

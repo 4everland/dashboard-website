@@ -19,6 +19,7 @@ export class TaskWrapper {
     this.url = url;
     this.uploadFileSize = 0;
     this.fileSize = 0;
+    this.progress = 0;
   }
   async startTask() {
     try {
@@ -29,8 +30,7 @@ export class TaskWrapper {
       });
       this.fileSize = this.task.totalBytes;
       this.task.on("httpUploadProgress", (e) => {
-        // let progress = (e.loaded / e.total) * 100 - this.progress;
-        this.progress = ((e.loaded / e.total) * 100) | 0;
+        this.progress = (e.loaded / e.total) * 100;
         this.uploadFileSize = (this.fileSize * this.progress) / 100;
       });
 
@@ -99,13 +99,14 @@ export class DeleteTaskWrapper {
           this.param.Prefix,
           "",
           "",
-          2,
+          100,
           ""
         );
       const listResult = await new Promise((resolve, reject) => {
         listResultStream.on("data", resolve);
         listResultStream.on("error", reject);
       });
+      console.log(listResult);
       if (!listResult.objects) {
         this.curFiles = [];
       } else {
@@ -287,6 +288,7 @@ export class PinCidTaskWrapper {
       ) {
         this.status = 2;
       } else {
+        console.log(error.message);
         Vue.prototype.$alert(error.message);
         this.status = 4;
       }
