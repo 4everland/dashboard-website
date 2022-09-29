@@ -97,19 +97,19 @@ export default {
       if (this.disabled) return;
       if (!data) return;
       const { files = [] } = data;
-      // console.log(files);
       let arr = Array.from(files);
+
       const isEmoji =
         arr.filter((it) => {
           return it.webkitRelativePath == ""
             ? this.isEmojiCharacter(it.name)
             : this.isEmojiCharacter(it.webkitRelativePath);
         }).length > 0;
-      // console.log(isEmoji);
       if (isEmoji)
         return this.$alert(
           "The file name or folder name cannot contain emojis."
         );
+
       for (const file of files) {
         // console.log(file);
         if (this.limit && this.files.length >= this.limit) break;
@@ -126,6 +126,9 @@ export default {
         if (isRepeat) continue;
         file.id = this.genID(8);
         // console.log(file);
+        // if (file.name !== ".DS_Store") {
+        //   this.files.unshift(file);
+        // }
         this.files.unshift(file);
       }
       if (this.files.length) {
@@ -136,19 +139,6 @@ export default {
       this.emitInput();
     },
     emitInput() {
-      // console.log(this.files);
-      // const isEmoji = this.files.findIndex((item) => {
-      //   if (item.webkitRelativePath == "") {
-      //     return this.isEmojiCharacter(item.name);
-      //   } else {
-      //     return this.isEmojiCharacter(item.webkitRelativePath);
-      //   }
-      // });
-      // console.log(isEmoji);
-      // if (isEmoji !== -1) {
-      //   this.files = [];
-      //   return this.$alert("The folder name cannot contain emojis.");
-      // }
       this.$emit("input", this.files);
     },
     handleRmoveAll() {

@@ -78,7 +78,7 @@
           <!-- Files Table -->
           <v-data-table
             v-show="list.length"
-            class="hide-bdb"
+            class="hide-bdb data-table"
             fixed-header
             :headers="headers"
             :items="list"
@@ -186,17 +186,74 @@
               >Next</v-btn
             >
           </div>
-          <operation-bar
-            :selected="selected"
-            :inFile="true"
-            :isNotAr="!bucketInfo.isAr && selectArStatus != 'synced'"
-            :clipboardVal="selected.length ? getViewUrl(selected[0]) : ''"
-            @download="handleDownload"
-            @onRename="onRename(selected[0].name)"
-            @onSyncAR="handleSyncAr(selected[0].name)"
-            @handleClearSelected="selected = []"
-            @handleDeleteSelected="onDelete()"
-          ></operation-bar>
+          <operation-bar ref="operationBar">
+            <v-checkbox
+              v-model="checked"
+              @change="handleChangeCheck"
+              class="px-4"
+              color="#34A9FF"
+            ></v-checkbox>
+            <v-btn
+              outlined
+              class="ml-4"
+              @click="handleDownload"
+              v-show="selected.length == 1 && isFile"
+            >
+              <span class="gray-2">Download</span>
+            </v-btn>
+            <v-btn
+              outlined
+              class="ml-4"
+              v-show="selected.length == 1 && isFile"
+              v-clipboard="selected.length ? getViewUrl(selected[0]) : ''"
+              @success="onCopied"
+            >
+              <span class="gray-2">Copy Path</span>
+            </v-btn>
+            <v-btn
+              outlined
+              class="ml-4"
+              v-show="selected.length == 1 && isFile"
+              @click="onRename(selected[0].name)"
+            >
+              <span class="gray-2">Rename</span>
+            </v-btn>
+            <v-btn
+              outlined
+              class="ml-4"
+              v-show="selected.length == 1 && isFile"
+              @click="handleSyncAr(selected[0].name)"
+            >
+              <span
+                v-if="!bucketInfo.isAr && selectArStatus != 'synced'"
+                class="gray-2"
+                >Sync to AR</span
+              >
+              <span v-else class="gray-2">Verify on AR</span>
+            </v-btn>
+
+            <v-btn
+              style="border-color: #6c7789"
+              outlined
+              class="ml-4"
+              v-show="selected.length == 1 && !isFile"
+              @click="handleSnapshot"
+            >
+              <span class="gray">Snapshot</span>
+            </v-btn>
+            <v-btn
+              style="border-color: #6c7789"
+              outlined
+              class="ml-4"
+              v-show="selected.length >= 1"
+              @click="onDelete()"
+            >
+              <span class="gray">Delete</span>
+            </v-btn>
+            <div class="ml-auto">
+              select: {{ selected.length }} / {{ list.length }}
+            </div>
+          </operation-bar>
         </div>
         <bucket-fileInfo
           ref="fileInfo"
@@ -209,6 +266,34 @@
         ></bucket-fileInfo>
       </div>
     </div>
+
+    <v-dialog v-model="showSnapshotDialog" max-width="600">
+      <div class="px-7 py-6">
+        <h2>Snapshot</h2>
+        <div class="pl-6 pt-7">
+          <div class="fz-14 gray">
+            The CID for your folder will be generated if you Snapshot a folder,
+            and you can publish it in the Snapshots list. Continue?
+          </div>
+          <div class="snapshot-action al-c justify-center">
+            <v-btn
+              outlined
+              width="180"
+              class="mr-8"
+              @click="showSnapshotDialog = fasle"
+              >Cancel</v-btn
+            >
+            <v-btn
+              width="180"
+              color="primary"
+              @click="confirmSnapshot"
+              :loading="this.generateSnapshotLoading"
+              >Snapshot</v-btn
+            >
+          </div>
+        </div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -217,6 +302,7 @@ import BucketUpload from "@/views/bucket/bucket-upload";
 import BucketPartsList from "@/views/bucket/bucket-parts-list";
 import BucketFileInfo from "@/views/bucket/components/bucket-fileInfo";
 
+import { mapState } from "vuex";
 import { bus } from "../../../utils/bus";
 import mixin from "../storage-mixin";
 import { DeleteTaskWrapper } from "../task.js";
@@ -233,7 +319,7 @@ export default {
       vertical: false,
       headers: [
         { text: "Name", value: "name" },
-        { text: "IPFS Hash", value: "hash" },
+        { text: "IPFS CID", value: "hash" },
         { text: "Size", value: "size" },
         { text: "Last Modified", value: "updateAt" },
         // { text: "AR Status", value: "arStatus" },
@@ -245,6 +331,9 @@ export default {
       isUploadDir: false,
       fileInfoDrawer: true,
       fileInfo: null,
+      checked: false,
+      showSnapshotDialog: false,
+      generateSnapshotLoading: false,
     };
   },
   async created() {
@@ -268,14 +357,24 @@ export default {
 
     bus.$emit("originDeleteFolderTasks");
   },
-  // computed: {
-  //   selectArStatus() {
-  //     if (this.selected.length == 1) {
-  //       return this.selected[0].arStatus;
-  //     }
-  //     return null;
-  //   },
-  // },
+  activated() {
+    this.$router
+      .push({
+        path: this.$route.path.split("/").slice(0, 4).join("/") + "/",
+        query: { tab: "files" },
+      })
+      .catch((err) => err);
+  },
+  computed: {
+    ...mapState({
+      s3: (s) => s.s3,
+      s3m: (s) => s.s3m,
+    }),
+    isFile() {
+      if (this.selected.length && this.selected[0].isFile) return true;
+      return false;
+    },
+  },
   methods: {
     onCopied() {
       this.$toast("Copied to clipboard !");
@@ -324,7 +423,8 @@ export default {
             Bucket: this.pathInfo.Bucket,
             Prefix: Prefix + it.name + "/",
           },
-          this.genID()
+          this.genID(),
+          this.s3m
         );
       });
       this.deleteFoldersTasks = deleteFoldersTask.concat(
@@ -367,20 +467,42 @@ export default {
     getFileInfo(fileInfo) {
       this.fileInfo = fileInfo;
     },
+    handleChangeCheck(val) {
+      if (!val) return (this.selected = []);
+    },
+    handleSnapshot() {
+      this.showSnapshotDialog = true;
+    },
+    async confirmSnapshot() {
+      try {
+        const data = {
+          bucket: this.pathInfo.Bucket,
+          prefix: this.selected[0].name + "/",
+        };
+        this.generateSnapshotLoading = true;
+        await this.$http.post("/snapshots", data);
+        this.generateSnapshotLoading = false;
+        this.showSnapshotDialog = false;
+        this.$toast("create snapshot success!");
+        this.selected = [];
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
   watch: {
     path() {
       this.onRouteChange();
     },
-    active(val) {
-      if (val) {
-        this.getList();
-      }
-    },
     selected: {
       handler(val) {
         if (val.length) {
+          bus.$emit("showOperationBar", true);
           this.fileInfoDrawer = true;
+          this.$refs.operationBar.isShow = this.checked = true;
+        } else {
+          bus.$emit("showOperationBar", false);
+          this.$refs.operationBar.isShow = this.checked = false;
         }
       },
       deep: true,
@@ -412,6 +534,9 @@ export default {
 .e-btn-text::before {
   background: transparent !important;
 }
+/* .data-table tr:nth-of-type(odd) {
+  background: #f7f9fb;
+} */
 </style>
 <style lang="scss" scoped>
 .hash-link {
@@ -478,5 +603,8 @@ export default {
       border-radius: 12px 12px 0 0;
     }
   }
+}
+.snapshot-action {
+  margin-top: 68px;
 }
 </style>

@@ -1,33 +1,32 @@
 <template>
-  <div class="mt-3">
-    <h3>Bucket Auth Tokens</h3>
-    <div class="gray fz-14">Use the API key for Storage SDK</div>
-    <div class="mt-5">
-      <v-btn small color="primary" @click="onAdd" :loading="adding"
-        >Generate</v-btn
-      >
-    </div>
-    <div class="mt-5">
-      <v-data-table
-        :headers="headers"
-        :items="list"
-        :loading="loading"
-        hide-default-footer
-      >
-        <template v-slot:item.option="{ item }">
-          <!-- <v-btn
-            icon
-            class="mr-2"
-            v-clipboard="item.key"
-            @success="$toast('Copied to clipboard !')"
-          >
-            <v-icon size="16">mdi-content-copy</v-icon>
-          </v-btn> -->
-          <v-btn color="error" icon @click="onDel(item)">
-            <v-icon size="18">mdi-trash-can-outline</v-icon></v-btn
-          >
-        </template>
-      </v-data-table>
+  <div>
+    <e-right-opt-wrap :top="-65">
+      <div class="btn-wrap d-flex justify-end">
+        <v-btn color="primary" width="120" @click="handleGenerate">
+          <!-- <v-icon size="16">mdi-plus-circle-outline</v-icon> -->
+          <img src="/img/svg/add1.svg" width="12" />
+          <span class="ml-2">Generate</span>
+        </v-btn>
+      </div>
+    </e-right-opt-wrap>
+    <!-- <div class="fz-14 gray pl-1 mb-4">Use the API key for Storage SDK</div> -->
+
+    <div class="main-wrap">
+      <div class="mt-5">
+        <v-data-table
+          :headers="headers"
+          :items="list"
+          item-key="ApiKey"
+          :loading="loading"
+          hide-default-footer
+        >
+          <template v-slot:item.action="{ item }">
+            <v-btn color="error" icon @click="onDel(item)">
+              <v-icon size="18">mdi-trash-can-outline</v-icon></v-btn
+            >
+          </template>
+        </v-data-table>
+      </div>
     </div>
 
     <v-dialog v-model="showPop" max-width="500" persistent>
@@ -69,16 +68,18 @@ export default {
           value: "key",
         },
         {
-          text: "",
-          value: "option",
+          text: "Action",
+          value: "action",
         },
       ],
       list: [],
       loading: false,
-      adding: false,
       newInfo: {},
       showPop: false,
     };
+  },
+  created() {
+    this.getList();
   },
   computed: {
     infoList() {
@@ -95,23 +96,18 @@ export default {
       ];
     },
   },
-  created() {
-    this.getList();
-  },
   methods: {
-    async onAdd() {
+    async handleGenerate() {
       if (this.list.length >= 10)
         return this.$alert("You can add 10 keys at maximum.");
       try {
-        this.adding = true;
         const { data } = await this.$http.post("/user/service-accounts");
         this.newInfo = data;
         this.showPop = true;
         this.getList();
       } catch (error) {
-        //
+        console.log(error);
       }
-      this.adding = false;
     },
     async getList() {
       try {
@@ -128,6 +124,7 @@ export default {
       this.loading = false;
     },
     async onDel(it) {
+      console.log(11);
       try {
         await this.$confirm(
           `The API Key(${it.key.cutStr(
@@ -147,3 +144,6 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+</style>

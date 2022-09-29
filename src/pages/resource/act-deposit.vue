@@ -23,8 +23,8 @@
     </e-kv2>
 
     <div class="mt-8 fz-14 gray">
-      <p @click="isApproved = !isApproved">Tips:</p>
       <p class="mt-2">
+        <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon>
         When free or purchased resources are consumed, the cost of any overused
         resources will be deducted from your wallet balance. Therefore, it is
         recommended that you deposit in advance to prevent service suspension.

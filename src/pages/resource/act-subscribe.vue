@@ -127,7 +127,9 @@
         </div>
       </v-card>
       <div class="pa-3 mt-3 gray fz-14">
-        <p>Tips：</p>
+        <p>
+          <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon>
+        </p>
         <p>
           1. Please Note: The price calculator provides a reference price, but
           the specific deduction depends on the order result.

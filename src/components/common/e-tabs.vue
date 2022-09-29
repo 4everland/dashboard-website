@@ -21,6 +21,7 @@
   <div v-else class="e-settings" :class="vertical ? 'd-flex' : ''">
     <div>
       <v-tabs
+        class="tabs"
         :class="vertical ? 'v3-vertical bdr-1' : 'v3-horizon'"
         color="black"
         v-model="curIdx"
@@ -31,6 +32,7 @@
         <v-tab
           v-for="(it, i) in list"
           :key="i"
+          class="tab"
           :class="{ 'fw-b': curIdx == i }"
         >
           {{ it.text }}
@@ -38,15 +40,24 @@
       </v-tabs>
     </div>
     <div class="" :class="vertical ? 'flex-1 ml-5' : 'mt-5'">
-      <component
-        :is="it.comp"
-        v-bind="it.props"
-        :info="info"
-        :active="curItem.comp == it.comp"
-        v-show="curItem.comp == it.comp"
-        v-for="(it, i) in activeList"
-        :key="i"
-      ></component>
+      <keep-alive v-if="bucket">
+        <component
+          :is="list[curIdx].comp"
+          v-bind="list[curIdx].props"
+          :info="info"
+        ></component>
+      </keep-alive>
+      <template v-else>
+        <component
+          :is="it.comp"
+          v-bind="it.props"
+          :info="info"
+          :active="curItem.comp == it.comp"
+          v-show="curItem.comp == it.comp"
+          v-for="(it, i) in activeList"
+          :key="i"
+        ></component>
+      </template>
     </div>
   </div>
 </template>
@@ -58,11 +69,13 @@ export default {
     info: Object,
     defTab: Number,
     vertical: Boolean,
+    bucket: Boolean,
     width: {
       type: String,
       default: "200px",
     },
     noRouter: Boolean,
+    bucket: Boolean,
     ignorePath: Boolean,
   },
   data() {
@@ -80,7 +93,7 @@ export default {
       if (!this.activeIdxList.includes(val)) {
         this.activeIdxList.push(val);
       }
-      if (this.noRouter) return;
+      // if (this.noRouter) return;
       const it = this.list[val];
       if (!it) return;
       const query = { ...this.$route.query };
@@ -142,6 +155,7 @@ export default {
     // Bucket
     BucketFolder: () => import("@/views/bucket/components/bucket-folder"),
     BucketOverview: () => import("@/views/bucket/components/bucket-overview"),
+    BucketSnapshots: () => import("@/views/bucket/components/bucket-snapshots"),
     BucketStatistics: () =>
       import("@/views/bucket/components/bucket-statistics"),
     // Projects
@@ -167,16 +181,23 @@ export default {
 
     // Settings-Page
     StAccount: () => import("@/views/settings/st-account"),
-    StTokens: () => import("@/views/settings/st-tokens"),
     StGeneral: () => import("@/views/settings/st-general"),
-    // Settings-Page-AuthTokens
-    StTokensH: () => import("@/views/settings/st-tokens-h"),
-    StTokensB: () => import("@/views/settings/st-tokens-b"),
   },
 };
 </script>
 
 <style lang="scss">
+// .tabs {
+//   font-family: "Arial-BoldMT", "Arial";
+// }
+.v-tab {
+  font-family: "Arial-MT";
+
+  letter-spacing: normal !important;
+}
+.v-tab--active {
+  font-family: "Arial-BoldMT", "Arial";
+}
 .e-settings {
   .v3-horizon {
     .v-slide-group__content {

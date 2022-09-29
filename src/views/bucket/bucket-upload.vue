@@ -16,17 +16,81 @@
           <!-- <img src="/img/icon/ic-download.svg" width="14" class="mr-2" /> -->
           <span class="gray-7">Selected Folder</span>
         </v-list-item>
+
+        <v-list-item link @click="isPinCidDialog = true">
+          <!-- <img src="/img/icon/ic-download.svg" width="14" class="mr-2" /> -->
+          <span class="gray-7">Selected CID</span>
+        </v-list-item>
       </v-list>
     </e-menu>
     <input-upload v-model="files" ref="uploadInput"></input-upload>
+
+    <v-dialog v-model="isPinCidDialog" max-width="600">
+      <div class="pa-6">
+        <h2>Pin By CID</h2>
+        <div class="mt-7 fz-14 pl-6">
+          This function allows you to pin content to 4EVERLAND bucket using an
+          IPFS Content Identifier. (CID)
+        </div>
+        <div class="gray tips mt-3 fz-12 pl-6">
+          The IPFS network is large and it may take some time for our IPFS nodes
+          to locate and fetch your content.
+        </div>
+        <div class="mt-5 pl-6">
+          <v-form ref="form" v-model="valid">
+            <div>
+              <span class="ops-item fz-14">IPFS CID</span>
+              <v-text-field
+                persistent-placeholder
+                dense
+                v-model="form.cid"
+                autocomplte="off"
+                :rules="cidRules"
+                :disabled="pinCidLoading"
+              />
+            </div>
+            <div>
+              <span class="ops-item fz-14">Name For Pin</span>
+              <v-text-field
+                dense
+                persistent-placeholder
+                v-model="form.name"
+                autocomplte="off"
+                :rules="nameRules"
+                :counter="30"
+                :disabled="pinCidLoading"
+              />
+            </div>
+          </v-form>
+        </div>
+        <div class="mt-5 pl-6 ta-c">
+          <v-btn width="180" outlined @click="isPinCidDialog = false">
+            Cancel
+          </v-btn>
+          <v-btn
+            color="primary"
+            width="180"
+            class="ml-5"
+            :disabled="!valid"
+            @click="handleSubmit"
+            :loading="pinCidLoading"
+          >
+            Search and Pin
+          </v-btn>
+        </div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 import InputUpload from "@/views/bucket/components/input-upload";
-import { bus } from "../../utils/bus";
 import { mapState } from "vuex";
-import { TaskWrapper } from "./task.js";
+import { bus } from "../../utils/bus";
+import { TaskWrapper, PinCidTaskWrapper } from "./task.js";
+import { Upload } from "@aws-sdk/lib-storage";
+
 export default {
   props: {
     info: {
@@ -66,6 +130,23 @@ export default {
         validate: this.validate,
       },
       isStorageFull: false,
+      isPinCidDialog: false,
+      pinCidLoading: false,
+      valid: false,
+      form: {
+        cid: null,
+        name: null,
+      },
+      nameRules: [
+        (v) => !!(v || "").trim() || "Invalid",
+        (v) => !/\//.test(v) || "/ is not allowed.",
+        (v) => (v && v.length > 30 ? "more than 30 chars!" : true),
+      ],
+      cidRules: [
+        (v) => !!(v || "").trim() || "Invalid CID",
+        (v) =>
+          /^([A-Za-z0-9]{46}|[A-Za-z0-9]{59})$/.test(v) ? true : "Invalid CID",
+      ],
     };
   },
   async created() {
@@ -76,14 +157,15 @@ export default {
       }
       bus.$emit("taskData", this.tasks);
     });
-    bus.$on("handleClearAllRecords", (status) => {
-      this.tasks = this.tasks.filter((it) => it.status !== status);
+    bus.$on("handleClearAllRecords", () => {
+      // this.tasks = this.tasks.filter((it) => it.status !== status);
+      this.tasks = [];
       bus.$emit("taskData", this.tasks);
     });
   },
   computed: {
     ...mapState({
-      curBucketInfo: (s) => s.curBucketInfo,
+      s3: (s) => s.s3,
     }),
     path() {
       const arr = this.$route.path.split("/");
@@ -195,7 +277,15 @@ export default {
     },
     async overStorage() {
       try {
-        let isCurBucketAr = this.curBucketInfo.arweave.sync;
+        const result = await this.$http({
+          url: "/buckets/extra",
+          methods: "get",
+          params: {
+            name: this.info.Bucket,
+          },
+        });
+        let curBucketInfo = result.data.list[0];
+        let isCurBucketAr = curBucketInfo.arweave.sync;
         let arStorageByte = null;
         const { data } = await this.$http.get("$v3/usage/ipfs");
         let ipfsStorageByte = data.storageByte;
@@ -207,6 +297,18 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    async handleSubmit() {
+      let valid = this.$refs.form.validate();
+      if (!valid) return;
+      //.......
+      // this.pinCidLoading = true;
+      const form = JSON.parse(JSON.stringify(this.form));
+      const pinTask = new PinCidTaskWrapper(form, this.s3, this.info);
+      pinTask.aleadyPin();
+
+      bus.$emit("pinTask", pinTask);
+      this.isPinCidDialog = false;
     },
   },
   watch: {
@@ -242,6 +344,9 @@ export default {
         this.$loading.close();
         this.onConfirm();
       }
+    },
+    isPinCidDialog(newVal) {
+      if (!newVal) return this.$refs.form.reset();
     },
   },
   components: {

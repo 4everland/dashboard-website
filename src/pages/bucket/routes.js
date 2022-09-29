@@ -44,7 +44,6 @@ export default [
     path: "/domain/:name",
     // component: domain,
     component: () => import("./domain"),
-
     meta: {
       title: "{name}",
       isTab: 1,
@@ -58,6 +57,15 @@ export default [
         },
       ],
       isTab: 1,
+    },
+  },
+  {
+    path: "/access-keys",
+    component: () => import("./accessKeys"),
+    meta: {
+      title: "Access-Keys",
+      isTab: 1,
+      subTitle: "Use the API key for Storage SDK",
     },
   },
 ].map((it) => {
