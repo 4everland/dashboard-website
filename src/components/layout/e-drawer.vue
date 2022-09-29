@@ -259,6 +259,7 @@ export default {
             },
           ],
         },
+        /*
         {
           label: "Gateway",
           img: "m-gateway",
@@ -274,6 +275,7 @@ export default {
             },
           ],
         },
+        */
         {
           label: "Resource",
           img: "m-usage",
