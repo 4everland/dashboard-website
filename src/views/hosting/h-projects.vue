@@ -143,7 +143,10 @@
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status :val="it.state"></h-status>
                 </div>
-                <div class="d-flex al-c" v-if="it.repo && it.repo.id">
+                <div
+                  class="d-flex al-c"
+                  v-if="it.repo && it.repo.id && it.currentBranch"
+                >
                   <e-icon-link
                     @click.native.stop="onStop"
                     class="mr-6 shrink-0"
@@ -151,11 +154,11 @@
                     :link="
                       (it.repo.cloneUrl || '').replace(
                         '.git',
-                        '/tree/' + it.repo.defaultBranch
+                        '/tree/' + it.currentBranch
                       )
                     "
                   >
-                    {{ it.repo.defaultBranch }}
+                    {{ it.currentBranch }}
                   </e-icon-link>
                   <e-commit
                     @click.native.stop="onStop"
