@@ -477,7 +477,7 @@ export default {
       try {
         const data = {
           bucket: this.pathInfo.Bucket,
-          prefix: this.selected[0].name + "/",
+          prefix: this.pathInfo.Prefix + this.selected[0].name + "/",
         };
         this.generateSnapshotLoading = true;
         await this.$http.post("/snapshots", data);
