@@ -46,9 +46,7 @@
                 >
                 <b>{{ item.name.cutStr(5, 5) }}</b> -->
             <v-icon size="18" class="mr-3">mdi-folder</v-icon>
-            <span class="snapshot-name">{{
-              item.prefix.replace("/", "")
-            }}</span>
+            <span class="snapshot-name">{{ item.prefix }}</span>
           </v-btn>
         </template>
 
