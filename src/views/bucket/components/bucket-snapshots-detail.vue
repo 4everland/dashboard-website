@@ -9,24 +9,20 @@
         label="Search"
         prepend-inner-icon="mdi-magnify"
         v-model="searchKey"
-        @input="handleInput"
       ></v-text-field>
     </div>
     <v-data-table
       class="mt-5 data-table"
       :headers="header"
-      :items="list"
+      :items="filterList"
       item-key="id"
       hide-default-footer
       disable-pagination
       :loading="tableLoading"
+      @click:row="onRow"
     >
       <template v-slot:item.name="{ item }">
-        <div
-          class="file-name"
-          v-if="/\/$/.test(item.name)"
-          @click="onRow(item)"
-        >
+        <div class="file-name" v-if="/\/$/.test(item.name)">
           <v-icon size="18" class="mr-2">mdi-folder</v-icon>
           {{ item.name.replace("/", "") }}
         </div>
@@ -37,12 +33,13 @@
       </template>
 
       <template v-slot:item.cid="{ item }">
-        <span>{{ item.cid.cutStr(5, 5) }}</span>
+        <span>{{ item.cid.cutStr(8, 8) }}</span>
         <v-btn
           v-if="item.cid"
           class="e-btn-text ml-2"
           icon
           small
+          @click.stop
           v-clipboard="item.cid"
           @success="$toast('Copied to clipboard !')"
         >
@@ -57,7 +54,7 @@
     <div
       class="ta-c loading-img"
       :class="tableLoading ? 'mt-10' : 'mt-15'"
-      v-if="!list.length"
+      v-if="!filterList.length"
     >
       <img
         :src="`/img/svg/common/empty${tableLoading ? 1 : 2}.svg`"
@@ -80,7 +77,7 @@ export default {
       header: [
         { text: "Name", value: "name" },
         { text: "IPFS CID", value: "cid" },
-        { text: "Size", value: "size" },
+        { text: "TSize", value: "size" },
       ],
       list: [],
       matchPathCid: [],
@@ -90,12 +87,21 @@ export default {
   },
   created() {
     if (this.snapshotId) {
-      console.log(111);
       this.getInfo();
       this.matchPathCid.push({
         cid: null,
+        name: this.$route.path.split("/")[4],
       });
     }
+  },
+  computed: {
+    filterList() {
+      if (this.searchKey == "" || this.searchKey == null) {
+        return this.list;
+      }
+      const reg = new RegExp(this.searchKey);
+      return this.list.filter((it) => reg.test(it.name));
+    },
   },
   methods: {
     async getInfo() {
@@ -105,7 +111,6 @@ export default {
         const { data } = await this.$http.get(
           `/snapshots/${this.snapshotId}/dag`
         );
-        // console.log(data);
         this.list = data.list;
         this.tableLoading = false;
       } catch (error) {
@@ -113,9 +118,13 @@ export default {
       }
     },
     async onRow(item) {
-      this.$router.push(this.$route.path + item.name + location.search);
+      if (!/\/$/.test(item.name)) return;
+      if (!item.noRoute) {
+        this.$router.push(this.$route.path + item.name + location.search);
+      }
       try {
         this.tableLoading = true;
+        this.list = [];
         const { data } = await this.$http({
           url: `/snapshots/${this.snapshotId}/dag`,
           method: "get",
@@ -134,24 +143,50 @@ export default {
         console.log(error);
       }
     },
-    handleInput() {},
   },
   watch: {
     "$route.path"(newVal, oldVal) {
       let curRoute = newVal.split("/").slice(4);
-      const lastRoute = curRoute[curRoute.length - 2];
+      let path = curRoute.join("/");
       if (newVal.length < oldVal.length) {
-        let matchRoute = this.matchPathCid.filter((it) => it.name == lastRoute);
-        let matchRouteIndex = this.matchPathCid.findIndex(
-          (it) => it.name == lastRoute
-        );
-        this.matchPathCid.splice(
-          matchRouteIndex + 1,
-          this.matchPathCid.length - 1
-        );
+        const matchPath = this.matchPathCid.map((it) => it.name).join("/");
+        let index = matchPath.includes(decodeURI(path))
+          ? curRoute.length - 2
+          : 0;
+        // console.log(curRoute);
+        let matchRoute = this.matchPathCid[index];
+        // console.log(index, matchRoute);
+
+        // this.matchPathCid.splice(index + 1, this.matchPathCid.length - 1);
         if (matchRoute.cid) {
-          console.log(1111);
-          this.onRow(matchRoute);
+          this.onRow(
+            {
+              name: matchRoute.name + "/",
+              cid: matchRoute.cid,
+              noRoute: true,
+            },
+            true
+          );
+        } else {
+          this.getInfo();
+        }
+      } else {
+        const matchPath = this.matchPathCid.map((it) => it.name).join("/");
+        let index = matchPath.includes(decodeURI(path))
+          ? curRoute.length - 2
+          : null;
+        if (index == null) return;
+        let matchRoute = this.matchPathCid[index];
+
+        if (matchRoute.cid) {
+          this.onRow(
+            {
+              name: matchRoute.name + "/",
+              cid: matchRoute.cid,
+              noRoute: true,
+            },
+            true
+          );
         } else {
           this.getInfo();
         }

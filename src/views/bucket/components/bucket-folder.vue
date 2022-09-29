@@ -283,7 +283,11 @@
               @click="showSnapshotDialog = fasle"
               >Cancel</v-btn
             >
-            <v-btn width="180" color="primary" @click="confirmSnapshot"
+            <v-btn
+              width="180"
+              color="primary"
+              @click="confirmSnapshot"
+              :loading="this.generateSnapshotLoading"
               >Snapshot</v-btn
             >
           </div>
@@ -315,7 +319,7 @@ export default {
       vertical: false,
       headers: [
         { text: "Name", value: "name" },
-        { text: "IPFS Hash", value: "hash" },
+        { text: "IPFS CID", value: "hash" },
         { text: "Size", value: "size" },
         { text: "Last Modified", value: "updateAt" },
         // { text: "AR Status", value: "arStatus" },
@@ -329,6 +333,7 @@ export default {
       fileInfo: null,
       checked: false,
       showSnapshotDialog: false,
+      generateSnapshotLoading: false,
     };
   },
   async created() {
@@ -468,16 +473,18 @@ export default {
     handleSnapshot() {
       this.showSnapshotDialog = true;
     },
-    handleConfirmSnapshot() {},
     async confirmSnapshot() {
       try {
         const data = {
           bucket: this.pathInfo.Bucket,
           prefix: this.selected[0].name + "/",
         };
+        this.generateSnapshotLoading = true;
         await this.$http.post("/snapshots", data);
+        this.generateSnapshotLoading = false;
         this.showSnapshotDialog = false;
-        this.$alert("create snapshot success!");
+        this.$toast("create snapshot success!");
+        this.selected = [];
       } catch (err) {
         console.log(err);
       }

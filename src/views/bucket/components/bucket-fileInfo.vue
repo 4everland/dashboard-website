@@ -221,7 +221,7 @@ export default {
           value: this.$utils.getFileSize(info.size),
         },
         {
-          label: "IPFS Hash",
+          label: "IPFS CID",
           name: "ipfs",
           value: info.hash,
         },

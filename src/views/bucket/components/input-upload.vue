@@ -97,8 +97,9 @@ export default {
       if (this.disabled) return;
       if (!data) return;
       const { files = [] } = data;
-      // console.log(files);
+      console.log(files);
       let arr = Array.from(files);
+
       const isEmoji =
         arr.filter((it) => {
           return it.webkitRelativePath == ""
@@ -109,9 +110,11 @@ export default {
         return this.$alert(
           "The file name or folder name cannot contain emojis."
         );
+
       for (const file of files) {
         // console.log(file);
         if (this.limit && this.files.length >= this.limit) break;
+        console.log(file);
         // if (!/image/.test(file.type)) continue;
         // if (!file.type) continue;
         const isRepeat =
@@ -125,6 +128,9 @@ export default {
         if (isRepeat) continue;
         file.id = this.genID(8);
         // console.log(file);
+        // if (file.name !== ".DS_Store") {
+        //   this.files.unshift(file);
+        // }
         this.files.unshift(file);
       }
       if (this.files.length) {

@@ -201,7 +201,10 @@ export default {
       }
     });
     bus.$on("hiddenOtherBody", (arr) => {
-      arr.includes("delete") ? (this.$refs.ePanel.isShowBody = false) : null;
+      // arr.includes("delete") ? (this.$refs.ePanel.isShowBody = false) : null;
+      if (arr.includes("delete") && this.$refs.ePanel) {
+        this.$refs.ePanel.isShowBody = false;
+      }
     });
   },
   computed: {

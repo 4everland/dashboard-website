@@ -324,7 +324,10 @@ export default {
   },
   mounted() {
     bus.$on("hiddenOtherBody", (arr) => {
-      arr.includes("upload") ? (this.$refs.ePanel.isShowBody = false) : null;
+      // arr.includes("upload") ? (this.$refs.ePanel.isShowBody = false) : null;
+      if (arr.includes("upload") && this.$refs.ePanel) {
+        this.$refs.ePanel.isShowBody = false;
+      }
     });
 
     bus.$on("taskData", (tasks, isTrue) => {

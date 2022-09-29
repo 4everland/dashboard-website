@@ -618,8 +618,20 @@ export default {
             `Remove ${target}${this.selected.length > 1 ? "s" : ""}`
           );
           let errArr = [];
+
           for (const row of this.selected) {
             try {
+              // let params = {
+              //   cursor: 0,
+              //   prefix: '',
+              //   bucket: row.name,
+              // };
+              // const { data } = await this.$http({
+              //   url: "/snapshots",
+              //   methods: "get",
+              //   params: params,
+              // });
+              await this.bucketEmpty(row);
               await this.delBucket(row.name);
             } catch (error) {
               errArr.push(`${row.name}: ${error.message}`);
@@ -746,6 +758,20 @@ export default {
           ]);
         });
       });
+    },
+    async bucketEmpty(row) {
+      let params = {
+        cursor: 0,
+        prefix: "",
+        bucket: row.name,
+      };
+      const { data } = await this.$http({
+        url: "/snapshots",
+        methods: "get",
+        params: params,
+      });
+      if (data.list.length)
+        throw new Error("The bucket you tried to delete is not empty");
     },
   },
 };

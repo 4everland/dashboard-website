@@ -34,14 +34,11 @@
         hide-default-footer
         disable-pagination
         :loading="tableLoading"
+        @click:row="onRow"
       >
         <template v-slot:item.prefix="{ item }">
-          <div @click="onRow(item)">
-            <v-icon size="18" class="mr-3">mdi-folder</v-icon>
-            <span class="snapshot-name">{{
-              item.prefix.replace("/", "")
-            }}</span>
-          </div>
+          <v-icon size="18" class="mr-3">mdi-folder</v-icon>
+          <span class="snapshot-name">{{ item.prefix.replace("/", "") }}</span>
         </template>
 
         <template v-slot:item.cid="{ item }">
@@ -51,6 +48,7 @@
             class="e-btn-text ml-2"
             icon
             small
+            @click.stop
             v-clipboard="item.cid"
             @success="$toast('Copied to clipboard !')"
           >
@@ -69,26 +67,13 @@
           {{ new Date(item.createdAt * 1000).format() }}
         </template>
         <template #item.action="{ item }">
-          <!-- <span
-            class="action-btn"
-            style="color: #775da6"
-            @click="handlePublish(item)"
-            >Publish</span
-          >
-
-          <span
-            class="action-btn ml-4"
-            style="color: #775da6"
-            @click="handleDelete(item)"
-            >Delete</span
-          > -->
-
           <v-btn
             class="action-btn"
             text
             @click="handlePublish(item)"
             color="#775da6"
-            :disabled="item.status == 'pin'"
+            @click.stop
+            :disabled="item.status == 'pin' || item.status == 'pinning'"
           >
             Publish
           </v-btn>
@@ -97,6 +82,7 @@
             text
             @click="handleDelete(item)"
             color="#775da6"
+            @click.stop
             :disabled="item.status == 'pinning'"
           >
             Delete
@@ -116,9 +102,19 @@
           {{ tableLoading ? "Loading files..." : "No folders or files found" }}
         </div>
       </div>
-      <div class="pd-20 gray ta-c fz-16 mt-5 pagination" v-show="list.length">
-        <v-btn outlined class="mr-5">Previous</v-btn>
-        <v-btn min-width="100" outlined :disabled="!hasNext">Next</v-btn>
+
+      <div
+        v-if="hasNext"
+        class="pd-20 gray ta-c fz-16 mt-5"
+        :class="{
+          'hover-1': !loadingMore,
+        }"
+        @click="onLoadMore"
+        v-intersect="onLoadMore"
+      >
+        <span v-if="list.length" v-show="!tableLoading">
+          {{ loadingMore ? "Loading..." : "Load More" }}
+        </span>
       </div>
     </div>
     <bucket-snapshots-detail v-else :snapshotId="snapshotId">
@@ -151,7 +147,7 @@ export default {
       header: [
         { text: "Name", value: "prefix" },
         { text: "IPFS CID", value: "cid" },
-        { text: "Size", value: "size" },
+        { text: "TSize", value: "size" },
         { text: "Publish", value: "status" },
         { text: "Create", value: "createdAt" },
         { text: "Action", value: "action" },
@@ -163,6 +159,7 @@ export default {
       hasNext: false,
       snapshotId: null,
       tableLoading: false,
+      loadingMore: false,
     };
   },
   activated() {
@@ -174,9 +171,9 @@ export default {
       .catch((err) => err);
     this.getList();
   },
-  created() {
-    this.getList();
-  },
+  // created() {
+  //   this.getList();
+  // },
   computed: {
     childPath() {
       return this.$route.path.split("/").length > 5;
@@ -206,10 +203,9 @@ export default {
     },
     async getList() {
       this.tableLoading = true;
-      this.list = [];
       try {
         let payload = {
-          cursor: this.cursor,
+          cursor: this.loadingMore ? this.cursor : 0,
           prefix: this.prefix,
           bucket: this.bucket,
         };
@@ -218,8 +214,15 @@ export default {
           methods: "get",
           params: payload,
         });
-        console.log(data);
-        this.list = data.list;
+
+        if (this.loadingMore) {
+          this.list = [...this.list, ...data.list.splice(1, data.list.length)];
+        } else {
+          this.list = [];
+          this.list = data.list;
+        }
+        this.loadingMore = false;
+        // this.list = data.list;
         this.hasNext = data.page.hasNext;
         if (this.hasNext) {
           this.cursor = data.page.next;
@@ -235,14 +238,14 @@ export default {
           "Publishing your selected snapshot will consume some storage resources. Continue?",
           "Pubulish Snapshot"
         );
-        this.$toast("Joining publish queue");
         this.$loading();
         await this.$http.post(`/snapshots/${item.id}`);
-        this.$loading.close();
+        this.$toast("Joining publish queue");
         this.getList();
       } catch (error) {
         console.log(error);
       }
+      this.$loading.close();
     },
     async handleDelete(item) {
       try {
@@ -261,6 +264,11 @@ export default {
     handleInput: debounce(function () {
       this.getList();
     }),
+    onLoadMore() {
+      if (this.tableLoading) return;
+      this.loadingMore = true;
+      this.getList();
+    },
   },
   components: {
     bucketSnapshotsDetail,

@@ -286,7 +286,7 @@ export default {
       this.pinCidList.push(task);
     });
     bus.$on("hiddenOtherBody", (arr) => {
-      if (arr.includes("pin")) {
+      if (arr.includes("pin") && this.$refs.ePanel) {
         this.$refs.ePanel.isShowBody = false;
       }
     });
