@@ -34,7 +34,7 @@
           width="100"
           color="primary"
           v-clipboard="info.id"
-          @success="$toast('Copied')"
+          @success="$toast('Copied to clipboard !')"
           style="margin-top: 2px"
           >Copy</v-btn
         >
