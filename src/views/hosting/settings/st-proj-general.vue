@@ -3,13 +3,13 @@
     <div class="bd-1">
       <h3>Project Name</h3>
       <div class="gray fz-14">
-        Used to identify your Project in the Dashboard, 4everland CLI, and in
-        the URL of your Deployments.
+        Used to identify your Project in the Dashboard, and in the URL of your
+        Deployments.
       </div>
       <div class="mt-5 d-flex hide-msg">
         <v-text-field outlined dense v-model="name"> </v-text-field>
         <v-btn
-          min-width="100"
+          width="100"
           color="primary"
           :loading="savingName"
           @click="onSaveName"
@@ -19,6 +19,25 @@
         >
           Save
         </v-btn>
+      </div>
+    </div>
+
+    <div class="bd-1 mt-5">
+      <h3>Project ID</h3>
+      <div class="gray fz-14">
+        Used when interacting with the 4EVERLAND API.
+      </div>
+      <div class="mt-5 d-flex hide-msg">
+        <v-text-field outlined dense disabled :value="info.id"> </v-text-field>
+        <v-btn
+          class="ml-4"
+          width="100"
+          color="primary"
+          v-clipboard="info.id"
+          @success="$toast('Copied')"
+          style="margin-top: 2px"
+          >Copy</v-btn
+        >
       </div>
     </div>
 
