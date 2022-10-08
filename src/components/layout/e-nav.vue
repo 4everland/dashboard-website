@@ -70,7 +70,8 @@ export default {
           },
         ];
         if (isAr) to += "/";
-        const arr = this.path.replace(to, "").split("/");
+        let arr = this.path.replace(to, "").split("/");
+        arr = arr.slice(0, -1);
         for (const i in arr) {
           const text = decodeURIComponent(arr[i]);
           if (!text) break;

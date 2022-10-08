@@ -1,5 +1,5 @@
 import { S3 } from "@aws-sdk/client-s3";
-const Minio = require("minio-s");
+const Minio = require("minio-s1");
 import { endpoint } from "../../api";
 import Vue from "vue";
 import { mapState } from "vuex";
