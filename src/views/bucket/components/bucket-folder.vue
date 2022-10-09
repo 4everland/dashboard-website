@@ -380,7 +380,8 @@ export default {
       this.$toast("Copied to clipboard !");
     },
     onRouteChange() {
-      if (!this.inStorage || this.inFile) return;
+      if (!this.inStorage || this.inFile || this.$route.query.tab != "files")
+        return;
       this.curPage = 0;
       this.continuationTokenArr = [""];
       this.selected = [];

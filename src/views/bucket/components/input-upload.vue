@@ -55,16 +55,13 @@ export default {
     },
     async scanFiles(e) {
       const { items = [], files = [] } = e;
-      // console.log(items, files);
       const [item] = items;
-      // console.log(item);
       if (!item || !item.webkitGetAsEntry) return files;
       const entry = item.webkitGetAsEntry();
       if (!entry) return files;
       return entry.isFile ? files : this.getEntryDirectoryFiles(entry);
     },
     async getEntryDirectoryFiles(entry) {
-      // console.log(111, entry);
       let res = [];
       var internalProces = (item, path, res) => {
         if (item.isFile) {
@@ -97,18 +94,18 @@ export default {
       if (this.disabled) return;
       if (!data) return;
       const { files = [] } = data;
-      let arr = Array.from(files);
+      // let arr = Array.from(files);
 
-      const isEmoji =
-        arr.filter((it) => {
-          return it.webkitRelativePath == ""
-            ? this.isEmojiCharacter(it.name)
-            : this.isEmojiCharacter(it.webkitRelativePath);
-        }).length > 0;
-      if (isEmoji)
-        return this.$alert(
-          "The file name or folder name cannot contain emojis."
-        );
+      // const isEmoji =
+      //   arr.filter((it) => {
+      //     return it.webkitRelativePath == ""
+      //       ? this.isEmojiCharacter(it.name)
+      //       : this.isEmojiCharacter(it.webkitRelativePath);
+      //   }).length > 0;
+      // if (isEmoji)
+      //   return this.$alert(
+      //     "The file name or folder name cannot contain emojis."
+      //   );
 
       for (const file of files) {
         // console.log(file);
