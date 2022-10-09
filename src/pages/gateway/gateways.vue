@@ -33,6 +33,9 @@
         hide-default-footer
       >
         <template v-slot:item.act="{ item }">
+          <v-btn text color="primary" x-small @click="onDomain(item)"
+            >Domain</v-btn
+          >
           <v-btn text color="primary" x-small @click="onEdit(item)">Edit</v-btn>
           <v-btn text color="#999" x-small @click="onDelete(item)"
             >Delete</v-btn
@@ -93,6 +96,9 @@ export default {
     this.getBalance();
   },
   methods: {
+    onDomain(item) {
+      console.log(item);
+    },
     onEdit(item) {
       console.log(item);
     },
