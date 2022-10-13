@@ -6,16 +6,37 @@
 
 <template>
   <div>
-    <e-right-opt-wrap>
-      <v-btn color="primary" to="/bucket/storage/?new=bucket">
-        <span class="fz-18">+</span>
-        <span class="ml-1"> New Bucket </span>
-      </v-btn>
-      <v-btn color="primary" class="ml-5" to="/hosting/new">
-        <span class="fz-18">+</span>
-        <span class="ml-1"> New Project </span>
-      </v-btn>
-    </e-right-opt-wrap>
+    <router-link to="/reward-hub">
+      <div class="pos-r mb-3 bdrs-10 ov-h">
+        <img
+          src="/img/bg/user/reward-hub-bg.png"
+          class="w100p img-cover d-b"
+          style="max-height: 210px"
+        />
+        <div
+          class="pos-center link-2 fz-30 fw-b ta-c w100p"
+          style="max-width: 400px"
+        >
+          Enjoy free resources in 4EVERLAND Reward Hub.
+        </div>
+      </div>
+    </router-link>
+    <div class="pos-r mb-5">
+      <div>
+        <h2>{{ uname }}</h2>
+        <div class="gray-8 fz-14 mt-1">Welcome back to 4EVERLAND dashboard</div>
+      </div>
+      <e-right-opt-wrap>
+        <v-btn color="primary" to="/bucket/storage/?new=bucket">
+          <span class="fz-18">+</span>
+          <span class="ml-1"> New Bucket </span>
+        </v-btn>
+        <v-btn color="primary" class="ml-5" to="/hosting/new">
+          <span class="fz-18">+</span>
+          <span class="ml-1"> New Project </span>
+        </v-btn>
+      </e-right-opt-wrap>
+    </div>
 
     <v3-usage />
 
@@ -40,3 +61,15 @@
     <new-user-tips />
   </div>
 </template>
+
+<script>
+export default {
+  computed: {
+    uname() {
+      const info = this.$store.state.userInfo;
+      if (info.username) return "Hi " + info.username.cutStr(6, 4);
+      return "Overview";
+    },
+  },
+};
+</script>

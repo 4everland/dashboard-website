@@ -44,7 +44,7 @@
               :src="it.img"
               :width="it.width"
               :height="it.height"
-              class="mr-2"
+              :class="it.imgCls"
             />
             <div class="u-avatar bdrs-100 mr-2" v-if="it.avatar">
               <e-avatar :address="it.addr" :diameter="22"></e-avatar>
@@ -104,6 +104,11 @@ export default {
       const info = this.userInfo;
       if (!info.uid) return [];
       let list = [
+        {
+          to: "/reward-hub",
+          img: "/img/svg/header/reward-gift.svg",
+          width: 20,
+        },
         {
           label: "Docs",
           icon: "m-docs",

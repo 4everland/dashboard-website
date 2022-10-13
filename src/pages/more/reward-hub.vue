@@ -1,11 +1,15 @@
 <template>
   <div>
-    <div class="bdrs-10 ov-h mb-4">
+    <div class="bdrs-10 ov-h mb-4 pos-r">
       <img
         src="/img/bg/user/reward-hub-bg.png"
         class="w100p img-cover d-b"
         style="max-height: 210px"
       />
+      <div class="pos-center link-2 fw-b ta-c w100p" style="max-width: 450px">
+        <h1 class="fz-40">Reward Hub</h1>
+        <div class="fz-18">Enjoy free resources in 4EVERLAND Reward Hub.</div>
+      </div>
     </div>
     <div class="main-wrap">
       <div class="al-c">
