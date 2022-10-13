@@ -115,7 +115,7 @@ export default {
           return this.$toast("Spaces are not allowed.");
         }
         await this.$confirm(
-          `You will change the redirect location to "${this.rewrite}".`
+          `You will change the redirect location to "${this.rewrite}" and the configuration takes effect after the project is redeployed.`
         );
         this.savingRewrite = true;
         await this.saveProject({
