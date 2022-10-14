@@ -27,11 +27,57 @@
       :items="list"
       hide-default-footer
     >
+      <template #item.access="{ item }">
+        <a
+          :href="$utils.getCidLink(item.access)"
+          class="hash-link"
+          style="color: #0b0817"
+          target="_blank"
+          v-if="item.access"
+          @click.stop
+          >{{ item.access.cutStr(5, 4) }}</a
+        >
+        <v-btn
+          v-if="item.access"
+          class="e-btn-text ml-2"
+          icon
+          small
+          @click.stop
+          v-clipboard="item.access"
+          @success="$toast('Copied to clipboard !')"
+        >
+          <img src="/img/svg/copy.svg" width="12" />
+        </v-btn>
+      </template>
+      <template #item.cid="{ item }">
+        <a
+          :href="$utils.getCidLink(item.cid)"
+          class="hash-link"
+          style="color: #0b0817"
+          target="_blank"
+          v-if="item.cid"
+          @click.stop
+          >{{ item.cid.cutStr(5, 4) }}</a
+        >
+        <v-btn
+          v-if="item.cid"
+          class="e-btn-text ml-2"
+          icon
+          small
+          @click.stop
+          v-clipboard="item.cid"
+          @success="$toast('Copied to clipboard !')"
+        >
+          <img src="/img/svg/copy.svg" width="12" />
+        </v-btn>
+      </template>
       <template v-slot:item.act="{ item }">
-        <v-btn text color="primary" x-small @click="onPublish(item)"
+        <v-btn class="action-btn" text color="primary" @click="onPublish(item)"
           >Publish</v-btn
         >
-        <v-btn text color="#999" x-small @click="onDelete(item)">Delete</v-btn>
+        <v-btn class="action-btn" text color="#999" @click="onDelete(item)"
+          >Delete</v-btn
+        >
       </template>
     </v-data-table>
 
@@ -47,26 +93,45 @@
       :limit="10"
       :total="total"
     />
+    <ipns-publish ref="ipnsPublish" @getList="getList" />
   </div>
 </template>
 
 <script>
 import IpnsCreate from "@/views/gateway/ipns-create";
-
+import IpnsPublish from "@/views/gateway/ipns-publish";
 export default {
   components: {
     IpnsCreate,
+    IpnsPublish,
   },
   data() {
     return {
       headers: [
         { text: "Name", value: "name" },
         { text: "Access", value: "access" },
-        { text: "Past 30 days  of Bandwidth", value: "bandwidth" },
+        { text: "IPFS CID Published", value: "cid" },
         { text: "Created", value: "created" },
         { text: "Action", value: "act" },
       ],
-      list: [],
+      list: [
+        {
+          name: "123",
+          access: "222",
+          cid: "bafkreiagia52kyfjcawgkzf6e76wycj6vdyf2hmafj4qrhq24aelin4pwy",
+          created: "1992-3-3",
+          ttl: 0,
+          id: 2,
+        },
+        {
+          name: "123",
+          access: "222",
+          cid: "bafkreiagia52kyfjcawgkzf6e76wycj6vdyf2hmafj4qrhq24aelin4pwy",
+          created: "1992-3-3",
+          ttl: 1,
+          id: 3,
+        },
+      ],
       loading: false,
       keyword: "",
       page: 1,
@@ -74,11 +139,12 @@ export default {
     };
   },
   mounted() {
-    this.getList();
+    // this.getList();
   },
   methods: {
     onPublish(item) {
       console.log(item);
+      this.$refs.ipnsPublish.show(item);
     },
     async onDelete(item) {
       console.log(item);
@@ -87,6 +153,8 @@ export default {
           "The following IPNS will be deleted, Are you sure you want to continue?";
         tip += `<p class="mt-4">${item.name}</p>`;
         await this.$confirm(tip, "Delete IPNS");
+        await this.$http2.delete(`/ipns/${item.key}`);
+        this.getList();
       } catch (error) {
         //
       }
@@ -115,3 +183,9 @@ export default {
   },
 };
 </script>
+<style lang="scss" scpoed>
+.action-btn {
+  padding: 0 !important;
+  letter-spacing: 0;
+}
+</style>

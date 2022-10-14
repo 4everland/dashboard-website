@@ -1,8 +1,22 @@
-<style lang="scss">
+<style lang="scss" scoped>
 .radio-al-start {
-  .v-radio {
-    align-items: flex-start;
-  }
+  align-items: flex-start !important;
+}
+.create-type {
+  color: #0b0817;
+}
+.private-title {
+  color: #6c7789;
+}
+.pkey-input {
+  background: #f4f6f8;
+  border-radius: 2px;
+}
+.pkey-input > input {
+  width: 100%;
+  height: 100%;
+  text-indent: 10px;
+  font-size: 14px;
 }
 </style>
 
@@ -14,11 +28,11 @@
     </v-btn>
     <v-dialog v-model="showPop" max-width="600">
       <div class="pa-6 pt-5">
-        <h3>Create IPNS</h3>
+        <h3 class="fz-30">Create IPNS</h3>
         <div class="pa-5" v-if="stepIdx == 0">
-          <v-radio-group v-model="type" mandatory class="radio-al-start">
+          <v-radio-group v-model="type" mandatory>
             <v-radio
-              class="mb-4"
+              class="mb-4 radio-al-start"
               v-for="(it, i) in options"
               :key="i"
               :label="it.label"
@@ -40,53 +54,85 @@
           </div>
         </div>
         <template v-else>
-          <div class="gray fz-13 mt-1">
+          <div class="gray fz-13 mt-1 create-type">
             {{ options[type].label }}
           </div>
-          <div class="pa-5">
-            <v-text-field
-              persistent-placeholder
-              v-model="form.name"
-              label="Set a Name"
-              placeholder="Set a name for your IPNS"
-            ></v-text-field>
-            <template v-if="type == 0">
+          <v-form ref="form" v-model="valid">
+            <div class="pa-5">
               <v-text-field
+                class="mt-4 name-input"
                 persistent-placeholder
-                v-model="form.cid"
-                label="IPFS CID"
-                placeholder=""
+                v-model="form.name"
+                label="Set a Name"
+                placeholder="Set a name for your IPNS"
+                counter="30"
+                :rules="[
+                  (val) => (/^[a-z0-9A-Z]+$/.test(val) ? true : 'Invalid name'),
+                  (v) =>
+                    v && v.length > 30
+                      ? 'The name for your Deploy Hook cannot be longer than 30 characters.'
+                      : true,
+                ]"
               ></v-text-field>
-              <v-select
-                v-model="form.period"
-                :items="periodOpts"
-                item-text="text"
-                item-value="value"
-                label="Refresh period"
-              >
-              </v-select>
-            </template>
-            <template v-else>
-              <div class="d-flex">
+              <template v-if="type == 0">
                 <v-text-field
+                  class="mt-4"
                   persistent-placeholder
-                  v-model="form.pkey"
-                  label="Upload private key and sign it"
+                  v-model="form.value"
+                  label="IPFS CID"
+                  :rules="[
+                    (v) =>
+                      /^(([A-Za-z0-9]{46}|[A-Za-z0-9]{59}))*$/.test(v)
+                        ? true
+                        : 'Invalid CID',
+                  ]"
                   placeholder=""
                 ></v-text-field>
-                <v-btn color="primary" class="ml-5 mt-4" small>Decode</v-btn>
-              </div>
-            </template>
-            <div class="mt-5 fz-14">
-              <e-kv label="IPFS CID:">test123</e-kv>
-              <e-kv class="mt-3" label="Refresh period:">24h</e-kv>
+                <v-select
+                  class="mt-4"
+                  v-model="form.ttf"
+                  :items="periodOpts"
+                  item-text="text"
+                  item-value="value"
+                  label="Refresh period"
+                >
+                </v-select>
+              </template>
+              <template v-else>
+                <v-text-field
+                  class="mt-4"
+                  persistent-placeholder
+                  v-model="form.key"
+                  label="YOU IPNS"
+                  placeholder="IPNS"
+                ></v-text-field>
+                <div class="d-flex al-c">
+                  <v-text-field
+                    class="mt-4"
+                    persistent-placeholder
+                    v-model="form.value"
+                    label="Upload private key and sign it"
+                    placeholder=""
+                  ></v-text-field>
+                  <v-btn color="primary" class="ml-4" @click="decodePrivateKey"
+                    >Decode</v-btn
+                  >
+                </div>
+                <decode-status v-if="showDecodeStatus" :status="decodeState" />
+                <div class="mt-5 fz-14">
+                  <e-kv label="IPFS CID:">{{ decodeData.cid }}</e-kv>
+                  <e-kv class="mt-3" label="Refresh period:">{{
+                    decodeData.period
+                  }}</e-kv>
+                </div>
+              </template>
             </div>
-          </div>
+          </v-form>
         </template>
 
         <div class="ta-c mt-5">
-          <v-btn outlined width="100" @click="showPop = false">Cancel</v-btn>
-          <v-btn color="primary" class="ml-6" width="100" @click="onNext">{{
+          <v-btn outlined width="180" @click="showPop = false">Cancel</v-btn>
+          <v-btn color="primary" class="ml-6" width="180" @click="onNext">{{
             stepIdx == 0 ? "Next" : "Create"
           }}</v-btn>
         </div>
@@ -96,14 +142,7 @@
 </template>
 
 <script>
-const Day = 86400;
-const initForm = {
-  name: "",
-  period: Day,
-  cid: "",
-  pkey: "",
-};
-
+import decodeStatus from "@/components/custom/decode-status";
 export default {
   data() {
     return {
@@ -123,30 +162,78 @@ export default {
         },
       ],
       periodOpts: [
-        { text: "24h", value: Day },
-        { text: "30d", value: Day * 30 },
-        { text: "90d", value: Day * 90 },
-        { text: "180d", value: Day * 180 },
+        { text: "24h", value: 1 },
+        { text: "30d", value: 2 },
+        { text: "90d", value: 3 },
+        { text: "180d", value: 4 },
       ],
       form: {
-        ...initForm,
+        name: "",
+        key: "",
+        value: "",
+        ttf: 1,
       },
+      decodeData: {
+        cid: "",
+        period: "",
+      },
+      valid: false,
+      decodeState: 1,
+      showDecodeStatus: false,
     };
   },
   methods: {
     onShow() {
       this.stepIdx = 0;
       this.type = 0;
-      this.form = {
-        ...initForm,
-      };
       this.showPop = true;
+    },
+    async decodePrivateKey() {
+      try {
+        this.showDecodeStatus = true;
+        this.decodeState = 1;
+        const { data } = await this.$http2.post("/ipns/unmarshal", {
+          key: this.form.key,
+          value: this.form.value,
+        });
+        console.log(data);
+        this.decodeState = 2;
+        this.decodeData.cid = data.value;
+        this.decodeData.period = data.ttl;
+      } catch (error) {
+        this.decodeState = 3;
+        console.log(error);
+      }
     },
     onNext() {
       if (this.stepIdx == 0) {
         this.stepIdx = 1;
+      } else {
+        let valid = this.$refs.form.validate();
+        if (!valid) return;
+        this.createIpns();
       }
     },
+    async createIpns() {
+      try {
+        if (this.type != 0) this.form.ttf = 0;
+        const { data } = await this.$http2.post("/ipns", this.form);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  watch: {
+    showPop(newVal) {
+      if (!newVal) {
+        this.$refs.form.reset();
+        this.form.ttf = 1;
+      }
+    },
+  },
+  components: {
+    decodeStatus,
   },
 };
 </script>

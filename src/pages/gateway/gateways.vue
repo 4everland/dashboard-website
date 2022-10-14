@@ -23,7 +23,7 @@
     </div>
     <div v-else>
       <e-right-opt-wrap :top="-74">
-        <ipns-generate />
+        <gateway-generate />
       </e-right-opt-wrap>
       <v-data-table
         :loading="loading"
@@ -33,11 +33,13 @@
         hide-default-footer
       >
         <template v-slot:item.act="{ item }">
-          <v-btn text color="primary" x-small @click="onDomain(item)"
+          <v-btn class="action-btn" text color="primary" @click="onDomain(item)"
             >Domain</v-btn
           >
-          <v-btn text color="primary" x-small @click="onEdit(item)">Edit</v-btn>
-          <v-btn text color="#999" x-small @click="onDelete(item)"
+          <v-btn class="action-btn" text color="primary" @click="onEdit(item)"
+            >Edit</v-btn
+          >
+          <v-btn class="action-btn" text color="#999" @click="onDelete(item)"
             >Delete</v-btn
           >
         </template>
@@ -56,15 +58,20 @@
         :total="total"
       />
     </div>
+    <gateway-domain ref="gatewayDomain" />
+    <gateway-edit ref="gatewayEdit" />
   </div>
 </template>
 
 <script>
-import IpnsGenerate from "@/views/gateway/ipns-generate";
-
+import GatewayGenerate from "@/views/gateway/gateway-generate";
+import GatewayDomain from "@/views/gateway/gateway-domain";
+import GatewayEdit from "@/views/gateway/gateway-edit";
 export default {
   components: {
-    IpnsGenerate,
+    GatewayGenerate,
+    GatewayDomain,
+    GatewayEdit,
   },
   data() {
     return {
@@ -76,7 +83,20 @@ export default {
         { text: "Created", value: "created" },
         { text: "Action", value: "act" },
       ],
-      list: [],
+      list: [
+        {
+          name: "loq.4everland.link",
+          access: "private",
+          bandwidth: 2222,
+          created: "2022-1-1",
+        },
+        {
+          name: "ylq.4everland.link",
+          access: "public",
+          bandwidth: 2222,
+          created: "2022-1-1",
+        },
+      ],
       loading: false,
       page: 1,
       total: 0,
@@ -84,7 +104,8 @@ export default {
   },
   computed: {
     isLock() {
-      return this.balance < 10;
+      // return this.balance < 10;
+      return false;
     },
   },
   watch: {
@@ -98,9 +119,11 @@ export default {
   methods: {
     onDomain(item) {
       console.log(item);
+      this.$refs.gatewayDomain.show(item);
     },
     onEdit(item) {
       console.log(item);
+      this.$refs.gatewayEdit.show(item);
     },
     async onDelete(item) {
       console.log(item);
@@ -143,3 +166,9 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.action-btn {
+  padding: 0 !important;
+  letter-spacing: 0;
+}
+</style>
