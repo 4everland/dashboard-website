@@ -40,3 +40,13 @@
     <new-user-tips />
   </div>
 </template>
+
+<script>
+import { isAirDrop } from "@/plugins/flow/flowAirDrop.js";
+
+export default {
+  mounted() {
+    isAirDrop();
+  },
+};
+</script>
