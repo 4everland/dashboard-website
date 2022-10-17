@@ -29,7 +29,14 @@
         hide-default-footer
       >
         <template v-slot:item.status="{ item }">
-          <v-btn color="primary" small @click="onAct(item)">To do</v-btn>
+          <v-btn
+            color="primary"
+            small
+            @click="onAct(item)"
+            depressed
+            width="80"
+            >{{ item.statusName || "To do" }}</v-btn
+          >
         </template>
       </v-data-table>
     </div>
@@ -53,16 +60,54 @@ export default {
           status: 1,
         },
         {
-          name: "Follow Twitter",
+          name: "Subscribe Newsletter",
           reward: "1GB IPFS for 12mon",
           status: 1,
+          type: "SUBSCRIBE_NEWSLETTER",
+          statusName: "To Do",
         },
       ],
     };
   },
+  mounted() {
+    // this.getList();
+  },
   methods: {
-    onAct(it) {
+    async onSubsribe(it) {
+      try {
+        const data = await this.$prompt(
+          "",
+          "Stay up to date on developer updates for the 4EVERLAND",
+          {
+            confirmText: "Subscribe",
+            inputAttrs: {
+              label: "Email",
+            },
+          }
+        );
+        console.log(data);
+        // await this.$http.post('')
+        this.$alert("Thank you for subscription.");
+      } catch (error) {
+        //
+      }
+    },
+    async onAct(it) {
       console.log(it);
+      if (it.type == "SUBSCRIBE_NEWSLETTER") {
+        this.onSubsribe();
+      }
+    },
+    async getList() {
+      try {
+        this.loading = true;
+        const { data } = await this.$http.get("$auth/rewardhub/activities");
+        console.log(data);
+        this.list = data.item;
+      } catch (error) {
+        //
+      }
+      this.loading = false;
     },
   },
 };
