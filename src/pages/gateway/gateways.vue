@@ -22,41 +22,58 @@
       </div>
     </div>
     <div v-else>
-      <e-right-opt-wrap :top="-74">
+      <e-right-opt-wrap :top="-55">
         <gateway-generate />
       </e-right-opt-wrap>
-      <v-data-table
-        :loading="loading"
-        item-key="id"
-        :headers="headers"
-        :items="list"
-        hide-default-footer
-      >
-        <template v-slot:item.act="{ item }">
-          <v-btn class="action-btn" text color="primary" @click="onDomain(item)"
-            >Domain</v-btn
-          >
-          <v-btn class="action-btn" text color="primary" @click="onEdit(item)"
-            >Edit</v-btn
-          >
-          <v-btn class="action-btn" text color="#999" @click="onDelete(item)"
-            >Delete</v-btn
-          >
-        </template>
-      </v-data-table>
 
-      <div class="mt-8" v-if="!list.length">
-        <e-empty :loading="loading">
-          {{ loading ? "Loading..." : "No Data" }}
-        </e-empty>
+      <div class="tips"></div>
+
+      <v-alert type="error" outlined color="orange" dense>
+        <div class="fz-12">
+          As the 4EVERLAND account balance is less than 100u, the gateway
+          service has been suspended. Once the balance is replenished, the
+          service will be automatically resumed.
+        </div></v-alert
+      >
+
+      <div class="main-wrap">
+        <v-data-table
+          :loading="loading"
+          item-key="id"
+          :headers="headers"
+          :items="list"
+          hide-default-footer
+        >
+          <template v-slot:item.act="{ item }">
+            <v-btn
+              class="action-btn"
+              text
+              color="primary"
+              @click="onDomain(item)"
+              >Domain</v-btn
+            >
+            <v-btn class="action-btn" text color="primary" @click="onEdit(item)"
+              >Edit</v-btn
+            >
+            <v-btn class="action-btn" text color="#999" @click="onDelete(item)"
+              >Delete</v-btn
+            >
+          </template>
+        </v-data-table>
+
+        <div class="mt-8" v-if="!list.length">
+          <e-empty :loading="loading">
+            {{ loading ? "Loading..." : "No Data" }}
+          </e-empty>
+        </div>
+        <e-pagi
+          class="pa-5"
+          @input="getList"
+          v-model="page"
+          :limit="10"
+          :total="total"
+        />
       </div>
-      <e-pagi
-        class="pa-5"
-        @input="getList"
-        v-model="page"
-        :limit="10"
-        :total="total"
-      />
     </div>
     <gateway-domain ref="gatewayDomain" />
     <gateway-edit ref="gatewayEdit" />
@@ -170,5 +187,8 @@ export default {
 .action-btn {
   padding: 0 !important;
   letter-spacing: 0;
+}
+.tips {
+  background: #ccc;
 }
 </style>

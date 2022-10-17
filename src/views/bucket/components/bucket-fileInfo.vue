@@ -33,7 +33,7 @@
             <li class="mt-2 mb-2 fz-12 d-flex align-center" :key="i">
               <div class="d-ib pa-1" style="min-width: 85px">
                 <span> {{ it.label }}</span>
-                <e-tooltip top slot="sub" v-if="it.name == 'arHash'">
+                <e-tooltip top v-if="it.name == 'arHash'">
                   <v-icon slot="ref" color="#666" size="14" class="pa-1"
                     >mdi-help-circle-outline</v-icon
                   >
