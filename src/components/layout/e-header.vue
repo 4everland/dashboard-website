@@ -102,7 +102,7 @@ export default {
     },
     menus() {
       const info = this.userInfo;
-      if (!info.uid) return [];
+
       let list = [
         {
           label: "Docs",
@@ -115,48 +115,48 @@ export default {
           to: "/changelog",
         },
       ];
-
-      list.push({
-        addr: info.username || "unkown",
-        label: (info.username || "unkown").cutStr(6, 4),
-        avatar: info.avatar || "/img/bg/user/def-avatar.png",
-        btnStyle: "border: 1px solid #775DA6",
-        noSuffix: true,
-        subs: [
-          {
-            label: "Settings",
-            icon: "m-settings",
-            to: "/settings",
-          },
-          {
-            label: "Referral",
-            icon: "m-refer",
-            to: "/referral",
-          },
-          {
-            label: "Collection",
-            icon: "m-collect",
-            to: "/collections",
-          },
-          {
-            label: "Activity Log",
-            icon: "m-actlog",
-            to: "/activity-log",
-          },
-          {
-            label: "Feedback",
-            icon: "m-report",
-            noticeMsg: {
-              name: "feedback",
+      if (info.uid)
+        list.push({
+          addr: info.username || "unkown",
+          label: (info.username || "unkown").cutStr(6, 4),
+          avatar: info.avatar || "/img/bg/user/def-avatar.png",
+          btnStyle: "border: 1px solid #775DA6",
+          noSuffix: true,
+          subs: [
+            {
+              label: "Settings",
+              icon: "m-settings",
+              to: "/settings",
             },
-          },
-          {
-            label: "Disconnect",
-            icon: "m-logout",
-            name: "logout",
-          },
-        ],
-      });
+            {
+              label: "Referral",
+              icon: "m-refer",
+              to: "/referral",
+            },
+            {
+              label: "Collection",
+              icon: "m-collect",
+              to: "/collections",
+            },
+            {
+              label: "Activity Log",
+              icon: "m-actlog",
+              to: "/activity-log",
+            },
+            {
+              label: "Feedback",
+              icon: "m-report",
+              noticeMsg: {
+                name: "feedback",
+              },
+            },
+            {
+              label: "Disconnect",
+              icon: "m-logout",
+              name: "logout",
+            },
+          ],
+        });
       return list;
     },
   },

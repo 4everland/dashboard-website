@@ -65,6 +65,11 @@ new Vue({
   },
   methods: {
     async onInit() {
+      if (location.href.includes("type=clone-flow")) {
+        this.$setState({
+          allowNoLogin: true,
+        });
+      }
       if (this.token) {
         await this.getUesrInfo();
         this.initSocket();

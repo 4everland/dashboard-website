@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Axios from "axios";
 import AsyncLock from "async-lock";
+import store from "./store";
 
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 Vue.prototype.$inDev = inDev;
@@ -193,7 +194,9 @@ async function handleMsg(status, code, msg, config) {
   const vue = Vue.prototype;
   await vue.$sleep(10);
   if (status == 401 || code == 401) {
-    goLogin();
+    if (!store.state.allowNoLogin) {
+      goLogin();
+    }
   } else if (msg == "Network Error") {
     vue
       .$confirm(

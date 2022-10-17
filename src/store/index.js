@@ -40,6 +40,7 @@ const store = new Vuex.Store({
     payBy: localStorage.payBy || "Polygon",
     orderInfo: JSON.parse(localStorage.orderInfo || "{}"),
     showProgress: false,
+    allowNoLogin: false,
   },
   mutations: {
     [SET_DATA](state, data) {

@@ -2,6 +2,7 @@
   <v-app
     :class="{
       mobile: asMobile,
+      'no-drawer': allowNoLogin,
     }"
   >
     <v-main v-if="meta.noLogin">
@@ -33,8 +34,13 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   computed: {
+    ...mapState({
+      allowNoLogin: (s) => s.allowNoLogin,
+    }),
     meta() {
       return this.$route.meta || {};
     },
