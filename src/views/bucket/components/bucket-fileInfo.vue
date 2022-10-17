@@ -31,9 +31,19 @@
           <p class="fz-16 fw-b file-name">{{ selected[0].name }}</p>
           <template v-for="(it, i) in fileInfoList">
             <li class="mt-2 mb-2 fz-12 d-flex align-center" :key="i">
-              <span class="d-ib pa-1" style="min-width: 85px"
-                >{{ it.label }}:</span
-              >
+              <div class="d-ib pa-1" style="min-width: 85px">
+                <span> {{ it.label }}</span>
+                <e-tooltip top v-if="it.name == 'arHash'">
+                  <v-icon slot="ref" color="#666" size="14" class="pa-1"
+                    >mdi-help-circle-outline</v-icon
+                  >
+                  <span
+                    >Access may be delayed for a short period of time, please
+                    try again later if you are unable to access.
+                  </span>
+                </e-tooltip>
+                :
+              </div>
               <div v-if="it.name == 'ipfs'" class="pa-1 ml-2 al-c">
                 <a
                   class="link"
