@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div class="mb-8 mt-5" v-if="allowNoLogin && !userInfo.uid">
+      <div class="m-auto" style="max-width: 500px">
+        <div class="ta-c mb-5 gray">Log in or sign up to clone and deploy.</div>
+        <login-wallet class="bg-white" mode="refresh" />
+      </div>
+    </div>
     <div class="main-wrap">
       <h3>Github Configuration</h3>
       <div class="gray fz-14" style="max-width: 600px">
@@ -7,7 +13,7 @@
         repository must be created. Every push to that Git repository will be
         deployed automatically.
       </div>
-      <v-skeleton-loader type="article" v-if="loading" />
+      <v-skeleton-loader type="article" v-if="loading" v-show="!allowNoLogin" />
       <div class="mt-5" v-else>
         <div class="d-flex al-c">
           <e-icon-link img="/img/svg/hosting/m-github.svg" :link="info.url">
@@ -74,10 +80,23 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import LoginWallet from "@/views/login/login-wallet.vue";
 import EIconLink from "@/views/hosting/common/e-icon-link";
+
 export default {
+  components: {
+    LoginWallet,
+    EIconLink,
+  },
   props: {
     query: Object,
+  },
+  computed: {
+    ...mapState({
+      allowNoLogin: (s) => s.allowNoLogin,
+      userInfo: (s) => s.userInfo,
+    }),
   },
   data() {
     return {
@@ -190,9 +209,6 @@ export default {
       }
       this.$loading.close();
     },
-  },
-  components: {
-    EIconLink,
   },
 };
 </script>

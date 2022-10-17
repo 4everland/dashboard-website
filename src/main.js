@@ -42,6 +42,7 @@ new Vue({
     ...mapState({
       token: (s) => s.token(),
       noticeMsg: (s) => s.noticeMsg,
+      allowNoLogin: (s) => s.allowNoLogin,
     }),
   },
   mounted() {
@@ -114,6 +115,7 @@ new Vue({
       localStorage.userInfo = JSON.stringify(data);
       this.$setState({
         userInfo: data,
+        // allowNoLogin: this.allowNoLogin && !data.github,
       });
     },
   },

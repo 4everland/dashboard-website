@@ -11,17 +11,6 @@ Vue.use(VueClipboards);
 Vue.prototype.$color1 = "#775DA6";
 Vue.prototype.$color2 = "#ff6960";
 
-Vue.prototype.$onLoginData = (data) => {
-  console.log(data);
-  localStorage.authData = JSON.stringify(data);
-  const token = data.accessToken;
-  localStorage.token = token;
-  localStorage.refreshAt = Date.now();
-  let loginTo = sessionStorage.loginTo || localStorage.loginTo || "/";
-  localStorage.loginTo = "";
-  location.href = loginTo;
-};
-
 Vue.prototype.$sleep = (msec = 300) => {
   return new Promise((resolve) => {
     setTimeout(() => {
