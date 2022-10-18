@@ -115,13 +115,21 @@ export default {
         this.validStatus = 2;
       }, 2000);
     },
+    resetDecodeStatus() {
+      this.showDecodeStatus = false;
+      this.validStatus = 1;
+    },
   },
   watch: {
     showPop(val) {
       if (!val) {
         this.subDomain = "";
-        this.showDecodeStatus = false;
-        this.validStatus = 1;
+        this.resetDecodeStatus();
+      }
+    },
+    subDomain(newVal, oldVal) {
+      if (newVal != oldVal) {
+        this.resetDecodeStatus();
       }
     },
   },

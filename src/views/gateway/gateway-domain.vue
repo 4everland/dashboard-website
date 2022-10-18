@@ -8,13 +8,6 @@
           <span class="tips-name">2gou.4everland.link.</span>
         </div>
         <div class="d-flex align-start">
-          <!-- <div
-            class="flex-1 mr-5 domain-input-container"
-            :class="valid ? '' : 'not-valid'"
-          >
-            <input type="text" v-model="domain" class="domain-input" />
-          </div> -->
-
           <v-text-field
             persistent-placeholder
             v-model="domain"
@@ -25,21 +18,18 @@
               (val) => ($regMap.domain.test(val) ? true : 'Invalid Domain'),
             ]"
           ></v-text-field>
-          <!-- <v-btn color="primary" class="ml-4" @click="decodePrivateKey"
-              >Decode</v-btn
-            > -->
-
           <v-btn color="primary" width="91" class="ml-4" @click="addDomain"
             >Add</v-btn
           >
         </div>
 
-        <div v-if="domainList.length" class="domain-list">
+        <v-skeleton-loader type="article" v-if="loading"></v-skeleton-loader>
+
+        <div v-else class="domain-list">
           <template v-for="item in domainList">
             <gateway-dns :ipns="curIpns" :item="item" :key="item.id" />
           </template>
         </div>
-        <v-skeleton-loader type="article" v-else></v-skeleton-loader>
         <div class="fz-12 gray mt-5">
           Once you've entered your DNS records, you may need to wait up to 24
           hours.
@@ -48,7 +38,6 @@
 
       <div class="ta-c mt-9">
         <v-btn outlined @click="showPop = false" width="180">Cancel</v-btn>
-        <v-btn color="primary" class="ml-6" width="180">Next</v-btn>
       </div>
     </div>
   </v-dialog>
@@ -72,8 +61,17 @@ export default {
       ],
       curIpns: {},
       valid: true,
+      loading: true,
     };
   },
+  computed: {
+    disabled() {
+      return $regMap.domain.test(this.domain);
+    },
+  },
+  // created() {
+  //   this.getList();
+  // },
   methods: {
     show(item) {
       this.showPop = true;
@@ -83,6 +81,19 @@ export default {
     addDomain() {
       if (!this.$regMap.domain.test(this.domain)) return;
       // do something request
+    },
+    async getList() {
+      console.log(1);
+      //do something request
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+      }, 1000);
+    },
+  },
+  watch: {
+    showPop(val) {
+      if (val) this.getList();
     },
   },
 };

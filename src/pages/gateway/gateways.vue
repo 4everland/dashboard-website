@@ -2,7 +2,7 @@
   <div>
     <v-skeleton-loader
       type="article"
-      v-if="balance === null"
+      v-if="balance === null || !isGetList"
     ></v-skeleton-loader>
     <div v-else-if="isLock">
       <div class="pa-3 mt-5 ta-c">
@@ -25,16 +25,16 @@
       <e-right-opt-wrap :top="-55">
         <gateway-generate />
       </e-right-opt-wrap>
-
-      <div class="tips"></div>
-
-      <v-alert type="error" outlined color="orange" dense>
-        <div class="fz-12">
-          As the 4EVERLAND account balance is less than 100u, the gateway
+      <div class="tips py-2 mr-3 mb-3 pr-5 al-c" v-show="isInsufficient">
+        <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"
+          >mdi-alert-circle-outline</v-icon
+        >
+        <span class="fz-13"
+          >As the 4EVERLAND account balance is less than 100u, the gateway
           service has been suspended. Once the balance is replenished, the
-          service will be automatically resumed.
-        </div></v-alert
-      >
+          service will be automatically resumed.</span
+        >
+      </div>
 
       <div class="main-wrap">
         <v-data-table
@@ -81,14 +81,14 @@
 </template>
 
 <script>
-import GatewayGenerate from "@/views/gateway/gateway-generate";
-import GatewayDomain from "@/views/gateway/gateway-domain";
-import GatewayEdit from "@/views/gateway/gateway-edit";
+// import GatewayGenerate from "@/views/gateway/gateway-generate";
+// import GatewayDomain from "@/views/gateway/gateway-domain";
+// import GatewayEdit from "@/views/gateway/gateway-edit";
 export default {
   components: {
-    GatewayGenerate,
-    GatewayDomain,
-    GatewayEdit,
+    GatewayGenerate: () => import("@/views/gateway/gateway-generate"),
+    GatewayDomain: () => import("@/views/gateway/gateway-domain"),
+    GatewayEdit: () => import("@/views/gateway/gateway-edit"),
   },
   data() {
     return {
@@ -101,37 +101,42 @@ export default {
         { text: "Action", value: "act" },
       ],
       list: [
-        {
-          name: "loq.4everland.link",
-          access: "private",
-          bandwidth: 2222,
-          created: "2022-1-1",
-        },
-        {
-          name: "ylq.4everland.link",
-          access: "public",
-          bandwidth: 2222,
-          created: "2022-1-1",
-        },
+        // {
+        //   name: "loq.4everland.link",
+        //   access: "private",
+        //   bandwidth: 2222,
+        //   created: "2022-1-1",
+        // },
+        // {
+        //   name: "ylq.4everland.link",
+        //   access: "public",
+        //   bandwidth: 2222,
+        //   created: "2022-1-1",
+        // },
       ],
       loading: false,
       page: 1,
       total: 0,
+      isGetList: false,
     };
   },
   computed: {
     isLock() {
-      // return this.balance < 10;
-      return false;
+      return this.balance < 1 && !this.list.length;
+      // return false;
+    },
+    isInsufficient() {
+      return this.balance < 1 && this.list.length;
     },
   },
   watch: {
-    isLock(val) {
-      if (!val) this.getList();
-    },
+    // isLock(val) {
+    //   if (!val) this.getList();
+    // },
   },
-  mounted() {
-    this.getBalance();
+  async mounted() {
+    await this.getBalance();
+    this.getList();
   },
   methods: {
     onDomain(item) {
@@ -173,6 +178,7 @@ export default {
         console.log(error);
       }
       this.loading = false;
+      this.isGetList = true;
     },
     async getBalance() {
       const {
@@ -189,6 +195,13 @@ export default {
   letter-spacing: 0;
 }
 .tips {
-  background: #ccc;
+  color: #6a778b;
+  font-size: 14px;
+  color: #ff6d24;
+  background: #ffeee4;
+  border-radius: 6px;
+  .icon {
+    vertical-align: sub;
+  }
 }
 </style>
