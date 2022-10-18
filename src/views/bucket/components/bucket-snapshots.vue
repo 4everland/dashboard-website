@@ -2,14 +2,17 @@
   <div class="main-wrap">
     <div v-if="!childPath">
       <div class="al-c justify-space-between">
-        <div class="fz-14 gray">
-          <v-icon size="14" color="#6C7789">mdi-alert-circle</v-icon>
-          <span class="ml-1"
+        <div class="tips py-2 mr-3 pr-5 al-c">
+          <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"
+            >mdi-alert-circle-outline</v-icon
+          >
+          <span class="fz-14"
             >The publish will fail if the file in the folder is changed after
             the snapshot, deleting the snapshot will automatically unpin
             it!</span
           >
         </div>
+
         <div class="ml-auto" style="min-width: 150px">
           <v-text-field
             class="hide-msg bd-1"
@@ -319,6 +322,16 @@ export default {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
+  }
+}
+.tips {
+  color: #6a778b;
+  font-size: 14px;
+  color: #ff6d24;
+  background: #ffeee4;
+  border-radius: 6px;
+  .icon {
+    vertical-align: sub;
   }
 }
 </style>
