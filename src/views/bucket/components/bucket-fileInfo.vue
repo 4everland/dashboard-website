@@ -357,7 +357,12 @@ export default {
       const path = decodeURIComponent(this.$route.path);
       const finalPath =
         path + this.selected[0].name + (this.selected[0].isFile ? "" : "/");
-      this.$router.push(finalPath);
+      this.$router.push({
+        path: finalPath,
+        query: {
+          tab: "files",
+        },
+      });
     },
     onCopied() {
       this.$toast("Copied to clipboard !");
