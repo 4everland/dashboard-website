@@ -154,26 +154,33 @@ export default {
           "The following gateways will be deleted, Are you sure you want to continue?";
         tip += `<p class="mt-4">${item.name}</p>`;
         await this.$confirm(tip, "Delete Gateway");
+        await this.$http2.delete(`/domain/gateway/${item.id}`);
+        const { data } = await this.$http.get(`/gateway/${item.name}`);
+        console.log(data);
       } catch (error) {
         //
+        console.log(error);
       }
     },
     async getList() {
       try {
         this.loading = true;
-        const params = {
-          page: this.page - 1,
-          size: 10,
-        };
-        const { data } = await this.$http2.get("/domain/list", {
-          params,
-        });
-        this.list = data.content.map((it) => {
-          it.created = new Date(it.createAt * 1e3).format();
-          it.name = it.createAt;
-          return it;
-        });
-        this.total = data.numberOfElements;
+        // const params = {
+        //   page: this.page - 1,
+        //   size: 10,
+        // };
+        // const { data } = await this.$http2.get("/domain/list", {
+        //   params,
+        // });
+        // this.list = data.content.map((it) => {
+        //   it.created = new Date(it.createAt * 1e3).format();
+        //   it.name = it.createAt;
+        //   return it;
+        // });
+        // this.total = data.numberOfElements;
+
+        const { data } = await this.$http.get("/gateways");
+        console.log(data);
       } catch (error) {
         console.log(error);
       }

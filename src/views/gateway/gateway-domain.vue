@@ -8,16 +8,18 @@
           <span class="tips-name">2gou.4everland.link.</span>
         </div>
         <div class="d-flex align-start">
-          <v-text-field
-            persistent-placeholder
-            v-model="domain"
-            outlined
-            dense
-            placeholder=""
-            :rules="[
-              (val) => ($regMap.domain.test(val) ? true : 'Invalid Domain'),
-            ]"
-          ></v-text-field>
+          <v-form ref="form" class="flex-1">
+            <v-text-field
+              persistent-placeholder
+              v-model="domain"
+              outlined
+              dense
+              placeholder=""
+              :rules="[
+                (val) => ($regMap.domain.test(val) ? true : 'Invalid Domain'),
+              ]"
+            ></v-text-field>
+          </v-form>
           <v-btn color="primary" width="91" class="ml-4" @click="addDomain"
             >Add</v-btn
           >
@@ -27,7 +29,12 @@
 
         <div v-else class="domain-list">
           <template v-for="item in domainList">
-            <gateway-dns :ipns="curIpns" :item="item" :key="item.id" />
+            <gateway-dns
+              :ipns="curIpns"
+              :item="item"
+              :key="item.id"
+              @getList="getList"
+            />
           </template>
         </div>
         <div class="fz-12 gray mt-5">
@@ -83,7 +90,6 @@ export default {
       // do something request
     },
     async getList() {
-      console.log(1);
       //do something request
       this.loading = true;
       setTimeout(() => {
@@ -93,7 +99,11 @@ export default {
   },
   watch: {
     showPop(val) {
-      if (val) this.getList();
+      if (val) {
+        this.getList();
+      } else {
+        this.$refs.form.reset();
+      }
     },
   },
 };

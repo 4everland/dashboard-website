@@ -47,6 +47,7 @@ export default {
   methods: {
     onRefresh() {
       this.refreshing = true;
+      // do something request single
       setTimeout(() => {
         this.refreshing = false;
       }, 2000);
@@ -58,7 +59,7 @@ export default {
                     After continuing, your gateway will no longer be accessible through this domain.`;
         await this.$confirm(tip, "Remove Domain from Gateway");
         // await this.$http2.delete(`/ipns/${item.key}`);
-        this.getList();
+        this.$emit("getList");
       } catch (error) {
         //
       }
@@ -70,7 +71,7 @@ export default {
 <style lang="scss" scoped>
 .dns-container {
   font-family: "AppleSystemUIFont";
-  padding: 30px 0 23px;
+  padding: 0px 0 23px;
   border-bottom: 1px solid #e6e8eb;
   .tips {
     padding: 15px 0;

@@ -16,7 +16,9 @@
       </div>
       <div class="ta-c mt-8">
         <v-btn outlined width="180" @click="showPop = false">Cancel</v-btn>
-        <v-btn color="primary" class="ml-6" width="180">Save</v-btn>
+        <v-btn color="primary" class="ml-6" width="180" @click="onSave"
+          >Save</v-btn
+        >
       </div>
     </div>
   </v-dialog>
@@ -36,6 +38,15 @@ export default {
     show(item) {
       this.curGateway = item;
       this.showPop = true;
+    },
+    async onSave() {
+      try {
+        await this.$http2.put("/domain/gateway/edit", {
+          scope: this.curGateway.isPrivate,
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

@@ -16,20 +16,23 @@
     <v-dialog v-model="showPop" max-width="600">
       <div class="pa-6 pt-5 gateway-generate-container">
         <h3 class="fz-30">Create Gateway</h3>
-        <div class="pa-5" v-if="stepIdx == 0">
+        <div class="pa-5" v-show="stepIdx == 0">
           <div class="fz-16 gray">Set a gateway name</div>
           <div class="mt-3 d-flex align-start">
-            <v-text-field
-              outlined
-              dense
-              v-model="subDomain"
-              placeholder="my company name"
-              suffix=".4everland.link"
-              :rules="[
-                (v) =>
-                  /^[a-z0-9A-Z]{0,43}$/.test(v) ? true : 'Invalid subdomain',
-              ]"
-            ></v-text-field>
+            <v-form ref="form" class="flex-1">
+              <v-text-field
+                outlined
+                dense
+                v-model="subDomain"
+                placeholder="my company name"
+                suffix=".4everland.link"
+                :rules="[
+                  (v) => !!v || 'Invalid subdomain',
+                  (v) =>
+                    /^[a-z0-9A-Z]{0,43}$/.test(v) ? true : 'Invalid subdomain',
+                ]"
+              ></v-text-field>
+            </v-form>
             <v-btn color="primary" class="ml-3" @click="checkoutGateway"
               >Checkout</v-btn
             >
@@ -40,7 +43,7 @@
             :statusText="statusText"
           />
         </div>
-        <template v-else>
+        <div v-show="stepIdx != 0">
           <div class="gray fz-13 mt-1">Gateway Access</div>
           <div class="pa-5">
             <div class="al-c hide-msg">
@@ -48,12 +51,15 @@
               <v-switch v-model="isPrivate" dense></v-switch>
             </div>
             <div class="mt-2 fz-13 gray">
-              <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon>Choose
-              whether or not you want your gateway to be able to pull content
-              from the whole IPFS network or just content you have pinned.
+              <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon>
+              <span
+                >Choose whether or not you want your gateway to be able to pull
+                content from the whole IPFS network or just content you have
+                pinned.</span
+              >
             </div>
           </div>
-        </template>
+        </div>
 
         <div class="ta-c mt-5">
           <v-btn outlined width="180" @click="showPop = false">Cancel</v-btn>
@@ -101,19 +107,41 @@ export default {
       this.stepIdx = 0;
       this.showPop = true;
     },
-    onNext() {
+    async onNext() {
       if (this.stepIdx == 0) {
         this.stepIdx = 1;
+      } else {
+        try {
+          const { data } = this.$http.put("/gateway", {
+            name: this.subDomain,
+            scope: this.isPrivate,
+          });
+          console.log(data);
+        } catch (error) {
+          console.log(error);
+        }
+        this.showPop = false;
       }
     },
-    checkoutGateway() {
-      if (!/^[a-z0-9A-Z]{0,43}$/.test(this.subDomain)) return;
-      this.showDecodeStatus = true;
-      this.validStatus = 1;
-      // request checkout gateway
-      setTimeout(() => {
+    async checkoutGateway() {
+      try {
+        if (!/^[a-z0-9A-Z]{0,43}$/.test(this.subDomain)) return;
+        this.showDecodeStatus = true;
+        this.validStatus = 1;
+        // request checkout gateway
+        // setTimeout(() => {
+        //   this.validStatus = 2;
+        // }, 2000);
+
+        const { data } = await this.$http.get(
+          `/gateway/check/${this.subDomain}`
+        );
+        console.log(data);
         this.validStatus = 2;
-      }, 2000);
+      } catch (error) {
+        console.log(error);
+        this.validStatus = 3;
+      }
     },
     resetDecodeStatus() {
       this.showDecodeStatus = false;
@@ -123,7 +151,7 @@ export default {
   watch: {
     showPop(val) {
       if (!val) {
-        this.subDomain = "";
+        this.$refs.form.reset();
         this.resetDecodeStatus();
       }
     },
