@@ -23,6 +23,7 @@
         </e-tooltip>
       </div>
       <v-data-table
+        class="strip"
         :loading="loading"
         :headers="headers"
         :items="list"
@@ -38,10 +39,17 @@
             width="80"
             :disabled="item.status == 'DONE'"
             :loading="item.loading"
-            >{{ item.statusName || "To do" }}</v-btn
           >
+            <span
+              :class="{
+                'white-0': item.status != 'DONE',
+              }"
+            >
+              {{ item.statusName || "To do" }}
+            </span>
+          </v-btn>
           <v-btn
-            v-if="['Follow', 'Verify'].includes(item.statusName)"
+            v-if="item.status == 'GOTO'"
             :loading="item.refreshing"
             icon
             class="ml-2"
@@ -78,9 +86,10 @@ export default {
   },
   watch: {
     isFocus(val) {
-      if (val && this.isOpenTab) {
-        this.isOpenTab = false;
-        this.getList();
+      if (val && this.openItem) {
+        this.onRefresh(this.openItem);
+        this.openItem = null;
+        // this.getList();
       }
     },
   },
@@ -95,19 +104,19 @@ export default {
   methods: {
     getBtnColor(it) {
       if (it.status == "CLAIM") return "#E21951";
-      if (it.statusName == "Follow") return "#20B1FF";
       if (it.statusName == "Verify") return "#FFB759";
+      if (it.status == "GOTO") return "#20B1FF";
       return "primary";
     },
     async onRefresh(it) {
       try {
         this.$set(it, "refreshing", true);
-        // const { data } = await this.$http.post(
-        //   `$auth/rewardhub/${it.id}/refresh`
-        // );
-        // Object.assign(it, data);
+        const { data } = await this.$http.post(
+          `$auth/rewardhub/${it.id}/refresh`
+        );
+        Object.assign(it, data);
         // if(data.status != it.status) this.getList()
-        await this.getList();
+        // await this.getList();
       } catch (error) {
         //
       }
@@ -148,14 +157,15 @@ export default {
         //
       }
     },
-    async onNext(info) {
+    async onNext(it, info) {
       const { nextStep: type, stepValue: val } = info;
       if (type == "OPEN_NEW_TAB") {
-        this.isOpenTab = true;
+        this.openItem = it;
         if (/^http/.test(val)) this.$openWindow(val);
         else this.$navTo(val);
       } else if (type == "SEND_REQUEST") {
-        await this.$http.get(val);
+        await this.$http.post("$auth" + val);
+        this.getList();
       } else if (type == "EMAIL_SUBSCRIPTION_VERIFICATION") {
         this.onSubsribe();
       }
@@ -170,7 +180,7 @@ export default {
         this.$set(it, "loading", true);
         const { data } = await this.$http.post(`$auth/rewardhub/${it.id}/next`);
         console.log(data);
-        this.onNext(data);
+        this.onNext(it, data);
       } catch (error) {
         //
       }
