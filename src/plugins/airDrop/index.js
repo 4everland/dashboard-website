@@ -3,10 +3,11 @@ import { airdropRequest } from "./api";
 import AirDrop from "@/components/airDrop/index.js";
 Vue.use(AirDrop);
 
-async function isAirDrop() {
+async function newUserDrop() {
   const data = await airdropRequest();
   if (data) {
     Vue.prototype.$Dialog.getAirDrop(data);
+    return true;
   }
   // const mockData = {
   //   type: 1,
@@ -18,5 +19,6 @@ async function isAirDrop() {
   //   buildTime: 0,
   // };
   // Vue.prototype.$Dialog.getAirDrop(mockData);
+  // return true;
 }
-export { isAirDrop };
+export { newUserDrop };

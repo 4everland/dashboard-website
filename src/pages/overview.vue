@@ -63,16 +63,36 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import { newUserDrop } from "@/plugins/airDrop/index.js";
+
 export default {
   computed: {
+    ...mapState({
+      noticeMsg: (s) => s.noticeMsg,
+    }),
     uname() {
       const info = this.$store.state.userInfo;
       if (info.username) return "Hi " + info.username.cutStr(6, 4);
       return "Overview";
     },
   },
-  mounted() {
-    this.checkReward();
+  watch: {
+    noticeMsg({ name }) {
+      if (name == "close-new-drop") {
+        this.checkReward();
+      }
+    },
+  },
+  async mounted() {
+    try {
+      const isPop = await newUserDrop();
+      if (!isPop) {
+        this.checkReward();
+      }
+    } catch (error) {
+      //
+    }
   },
   methods: {
     async checkReward() {
