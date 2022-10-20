@@ -71,5 +71,27 @@ export default {
       return "Overview";
     },
   },
+  mounted() {
+    this.checkReward();
+  },
+  methods: {
+    async checkReward() {
+      try {
+        const { data } = await this.$http.get("$auth/poster/rewardhub");
+        if (data)
+          this.$confirm(
+            `<div class="lh-2 fz-14">We are launching Reward Hub to offer you a better experience with products and services. All new users can get free resources (storage, bandwidth, etc.) by completing the following tasks, while users who have already completed the tasks and received the free giveaway resources can simply go to Reward Hub to claim the resources.Having fun while exploring 4EVERLAND! Please feel free to contact us in our communities if you have any questions. </div>`,
+            "Dear 4EVERLAND user",
+            {
+              confirmText: "View",
+            }
+          ).then(() => {
+            this.$navTo("/reward-hub");
+          });
+      } catch (error) {
+        //
+      }
+    },
+  },
 };
 </script>

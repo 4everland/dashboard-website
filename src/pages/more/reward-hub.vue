@@ -12,10 +12,10 @@
       </div>
     </div>
     <div class="main-wrap">
-      <div class="al-c">
+      <div class="al-c mb-3">
         <span class="fw-b mr-2">Ways for Reward</span>
         <e-tooltip top>
-          <v-icon slot="ref" color="#888" size="15">mdi-alert-circle</v-icon>
+          <v-icon slot="ref" color="#aaa" size="14">mdi-alert-circle</v-icon>
           <span
             >Getting free resources by completing the following tasks and
             resources are valid for one year after completion of tasks.</span
@@ -27,16 +27,29 @@
         :headers="headers"
         :items="list"
         hide-default-footer
+        disable-sort
       >
         <template v-slot:item.status="{ item }">
           <v-btn
-            color="primary"
+            :color="getBtnColor(item)"
             small
             @click="onAct(item)"
             depressed
             width="80"
+            :disabled="item.status == 'DONE'"
+            :loading="item.loading"
             >{{ item.statusName || "To do" }}</v-btn
           >
+          <v-btn
+            v-if="['Follow', 'Verify'].includes(item.statusName)"
+            :loading="item.refreshing"
+            icon
+            class="ml-2"
+            small
+            @click="onRefresh(item)"
+          >
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
         </template>
       </v-data-table>
     </div>
@@ -44,7 +57,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
+  computed: {
+    ...mapState({
+      isFocus: (s) => s.isFocus,
+    }),
+  },
   data() {
     return {
       headers: [
@@ -53,26 +73,53 @@ export default {
         { text: "STATUS", value: "status" },
       ],
       loading: false,
-      list: [
-        {
-          name: "Follow Twitter",
-          reward: "1GB IPFS for 12mon",
-          status: 1,
-        },
-        {
-          name: "Subscribe Newsletter",
-          reward: "1GB IPFS for 12mon",
-          status: 1,
-          type: "SUBSCRIBE_NEWSLETTER",
-          statusName: "To Do",
-        },
-      ],
+      list: [],
     };
   },
+  watch: {
+    isFocus(val) {
+      if (val && this.isOpenTab) {
+        this.isOpenTab = false;
+        this.getList();
+      }
+    },
+  },
   mounted() {
-    // this.getList();
+    const { from } = this.$route.query;
+    if (from) {
+      window.close();
+      return;
+    }
+    this.getList();
   },
   methods: {
+    getBtnColor(it) {
+      if (it.status == "CLAIM") return "#E21951";
+      if (it.statusName == "Follow") return "#20B1FF";
+      if (it.statusName == "Verify") return "#FFB759";
+      return "primary";
+    },
+    async onRefresh(it) {
+      try {
+        this.$set(it, "refreshing", true);
+        // const { data } = await this.$http.post(
+        //   `$auth/rewardhub/${it.id}/refresh`
+        // );
+        // Object.assign(it, data);
+        // if(data.status != it.status) this.getList()
+        await this.getList();
+      } catch (error) {
+        //
+      }
+      this.$set(it, "refreshing", false);
+    },
+    async onVerifyEmail(title = "Thank you for subscription") {
+      await this.$alert(
+        "For security reasons, please login to your mailbox and click the confirmation link to ensure that your mailbox is for your own use before subscribing.",
+        title
+      );
+      this.getList();
+    },
     async onSubsribe(it) {
       try {
         const data = await this.$prompt(
@@ -82,27 +129,59 @@ export default {
             confirmText: "Subscribe",
             inputAttrs: {
               label: "Email",
+              rules: [
+                (v) => this.$regMap.email.test(v) || "Invalid email adress.",
+              ],
+              required: true,
             },
           }
         );
         console.log(data);
-        // await this.$http.post('')
-        this.$alert("Thank you for subscription.");
+        this.$loading();
+        await this.$http.post("$auth/bind", {
+          type: 6,
+          apply: data.value,
+        });
+        this.$loading.close();
+        this.onVerifyEmail();
       } catch (error) {
         //
       }
     },
-    async onAct(it) {
-      console.log(it);
-      if (it.type == "SUBSCRIBE_NEWSLETTER") {
+    async onNext(info) {
+      const { nextStep: type, stepValue: val } = info;
+      if (type == "OPEN_NEW_TAB") {
+        this.isOpenTab = true;
+        if (/^http/.test(val)) this.$openWindow(val);
+        else this.$navTo(val);
+      } else if (type == "SEND_REQUEST") {
+        await this.$http.get(val);
+      } else if (type == "EMAIL_SUBSCRIPTION_VERIFICATION") {
         this.onSubsribe();
       }
+    },
+    async onAct(it) {
+      console.log(it);
+      if (it.type == "SUBSCRIBE_NEWSLETTER" && it.status == "GOTO") {
+        this.onVerifyEmail("Verify Email");
+        return;
+      }
+      try {
+        this.$set(it, "loading", true);
+        const { data } = await this.$http.post(`$auth/rewardhub/${it.id}/next`);
+        console.log(data);
+        this.onNext(data);
+      } catch (error) {
+        //
+      }
+      this.$set(it, "loading", false);
+      // if (it.type == "SUBSCRIBE_NEWSLETTER") {
+      // }
     },
     async getList() {
       try {
         this.loading = true;
         const { data } = await this.$http.get("$auth/rewardhub/activities");
-        console.log(data);
         this.list = data.item;
       } catch (error) {
         //
