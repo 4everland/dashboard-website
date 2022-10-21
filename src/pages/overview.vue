@@ -100,7 +100,7 @@ export default {
         const { data } = await this.$http.get("$auth/poster/rewardhub");
         if (data)
           this.$confirm(
-            `<p>Dear 4EVERLAND user,</p><div class="lh-2 fz-14 mt-5">We are launching Reward Hub to offer you a better experience with products and services. All new users can get free resources (storage, bandwidth, etc.) by completing the following tasks, while users who have already completed the tasks and received the free giveaway resources can simply go to Reward Hub to claim the resources.Having fun while exploring 4EVERLAND! Please feel free to contact us in our communities if you have any questions. </div>`,
+            `<p>Dear 4EVERLAND user,</p><div class="lh-2 fz-14 mt-5 mb-5">We are launching Reward Hub to offer you a better experience with products and services. All new users can get free resources (storage, bandwidth, etc.) by completing the following tasks, while users who have already completed the tasks and received the free giveaway resources can simply go to Reward Hub to claim the resources. <p class="mt-2">Having fun while exploring 4EVERLAND! Please feel free to contact us in our communities if you have any questions. </p></div>`,
             "",
             {
               confirmText: "View",
