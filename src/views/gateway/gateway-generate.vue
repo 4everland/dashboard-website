@@ -29,11 +29,17 @@
                 :rules="[
                   (v) => !!v || 'Invalid subdomain',
                   (v) =>
-                    /^[a-z0-9A-Z]{0,43}$/.test(v) ? true : 'Invalid subdomain',
+                    /^(?!-)[a-z0-9-_]{2,20}(?!<-)$/.test(v)
+                      ? true
+                      : 'Invalid subdomain',
                 ]"
               ></v-text-field>
             </v-form>
-            <v-btn color="primary" class="ml-3" @click="checkoutGateway"
+            <v-btn
+              color="primary"
+              class="ml-3"
+              @click="checkoutGateway"
+              :disabled="!subDomain"
               >Checkout</v-btn
             >
           </div>
@@ -68,6 +74,7 @@
             class="ml-6"
             width="180"
             @click="onNext"
+            :loading="createLoading"
             :disabled="stepIdx == 0 && validStatus != 2"
             >{{ stepIdx == 0 ? "Next" : "Create" }}</v-btn
           >
@@ -91,6 +98,7 @@ export default {
       validStatus: 1,
       showDecodeStatus: false,
       subDomain: "",
+      createLoading: false,
     };
   },
   computed: {
@@ -112,31 +120,36 @@ export default {
         this.stepIdx = 1;
       } else {
         try {
-          const { data } = this.$http.put("/gateway", {
-            name: this.subDomain,
-            scope: this.isPrivate,
-          });
-          console.log(data);
+          this.createLoading = true;
+          await this.$http.put(
+            "$gateway/gateway",
+            {
+              name: this.subDomain,
+              scope: this.isPrivate ? "private" : "public",
+            },
+            { noTip: 1 }
+          );
+          this.$emit("getList");
         } catch (error) {
           console.log(error);
+          if (error.code == "NAME_REACH_LIMIT") {
+            this.$alert("You reached your gateways count limit.");
+          }
         }
+        this.createLoading = false;
         this.showPop = false;
       }
     },
     async checkoutGateway() {
       try {
-        if (!/^[a-z0-9A-Z]{0,43}$/.test(this.subDomain)) return;
+        if (!/^(?!-)[a-z0-9-_]{2,20}(?!<-)$/.test(this.subDomain)) return;
         this.showDecodeStatus = true;
         this.validStatus = 1;
-        // request checkout gateway
-        // setTimeout(() => {
-        //   this.validStatus = 2;
-        // }, 2000);
-
         const { data } = await this.$http.get(
-          `/gateway/check/${this.subDomain}`
+          `$gateway/gateway/check/${this.subDomain}`
         );
         console.log(data);
+        if (data) return (this.validStatus = 3);
         this.validStatus = 2;
       } catch (error) {
         console.log(error);

@@ -47,6 +47,7 @@
           class="ml-6"
           width="100"
           @click="confirmPublish"
+          :loading="publishLoading"
           :disabled="curPublishData.ttl == 0 && decodeState != 2"
           >Publish</v-btn
         >
@@ -66,7 +67,7 @@ export default {
     return {
       form: {
         value: "",
-        key: "",
+        // key: "",
       },
       curPublishData: {},
       decodeData: {
@@ -77,23 +78,24 @@ export default {
       valid: false,
       decodeState: 1,
       showDecodeStatus: false,
+      publishLoading: false,
     };
   },
   methods: {
     show(item) {
       this.curPublishData = item;
       this.showPop = true;
-      if (item.cid && item.ttl != 0) {
-        this.form.value = item.cid;
+      if (item.value && item.ttl != 0) {
+        this.form.value = item.value;
       }
-      this.form.key = item.key;
+      // this.form.key = item.key;
     },
     async decodePrivateKey() {
       try {
         this.showDecodeStatus = true;
         this.decodeState = 1;
-        const { data } = await this.$http2.post("/ipns/unmarshal", {
-          key: this.form.key,
+        const { data } = await this.$http2.post("$ipns/ipns/unmarshal", {
+          key: this.curPublishData.key,
           value: this.form.value,
         });
         console.log(data);
@@ -106,20 +108,21 @@ export default {
       }
     },
     async confirmPublish() {
+      this.publishLoading = true;
       try {
         const valid = this.$refs.form.validate();
         if (!valid) return;
-        const { data } = await this.$http2.put(
-          `/ipns/${this.form.key}`,
+        await this.$http2.put(
+          `$ipns/ipns/${this.curPublishData.key}`,
           this.form
         );
-        console.log(data);
         this.$toast("Publish successfully！");
         this.$emit("getList");
       } catch (error) {
         console.log(error);
         this.$toast("Publish failure！");
       }
+      this.publishLoading = false;
       this.showPop = false;
     },
   },

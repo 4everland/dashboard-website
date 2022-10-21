@@ -23,7 +23,7 @@
     </div>
     <div v-else>
       <e-right-opt-wrap :top="-55">
-        <gateway-generate />
+        <gateway-generate @getList="getList" />
       </e-right-opt-wrap>
       <div class="tips py-2 mr-3 mb-3 pr-5 al-c" v-show="isInsufficient">
         <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"
@@ -44,7 +44,19 @@
           :items="list"
           hide-default-footer
         >
-          <template v-slot:item.act="{ item }">
+          <template #item.name="{ item }">
+            <span>{{ item.name }}.4everland.link</span>
+          </template>
+          <template #item.scope="{ item }">
+            <span style="text-transform: capitalize">{{ item.scope }}</span>
+          </template>
+          <template #item.bytes="{ item }">
+            <span>{{ $utils.getFileSize(item.bytes) }}</span>
+          </template>
+          <template #item.created_at="{ item }">
+            <span>{{ new Date(item.created_at * 1000).format() }}</span>
+          </template>
+          <template #item.act="{ item }">
             <v-btn
               class="action-btn"
               text
@@ -76,28 +88,28 @@
       </div>
     </div>
     <gateway-domain ref="gatewayDomain" />
-    <gateway-edit ref="gatewayEdit" />
+    <gateway-edit ref="gatewayEdit" @getList="getList" />
   </div>
 </template>
 
 <script>
-// import GatewayGenerate from "@/views/gateway/gateway-generate";
-// import GatewayDomain from "@/views/gateway/gateway-domain";
-// import GatewayEdit from "@/views/gateway/gateway-edit";
+import GatewayGenerate from "@/views/gateway/gateway-generate";
+import GatewayDomain from "@/views/gateway/gateway-domain";
+import GatewayEdit from "@/views/gateway/gateway-edit";
 export default {
   components: {
-    GatewayGenerate: () => import("@/views/gateway/gateway-generate"),
-    GatewayDomain: () => import("@/views/gateway/gateway-domain"),
-    GatewayEdit: () => import("@/views/gateway/gateway-edit"),
+    GatewayGenerate,
+    GatewayDomain,
+    GatewayEdit,
   },
   data() {
     return {
       balance: null,
       headers: [
         { text: "Name", value: "name" },
-        { text: "Access", value: "access" },
-        { text: "Past 30 days  of Bandwidth", value: "bandwidth" },
-        { text: "Created", value: "created" },
+        { text: "Access", value: "scope" },
+        { text: "Past 30 days  of Bandwidth", value: "bytes" },
+        { text: "Created", value: "created_at" },
         { text: "Action", value: "act" },
       ],
       list: [
@@ -129,58 +141,42 @@ export default {
       return this.balance < 1 && this.list.length;
     },
   },
-  watch: {
-    // isLock(val) {
-    //   if (!val) this.getList();
-    // },
-  },
   async mounted() {
     await this.getBalance();
     this.getList();
   },
   methods: {
     onDomain(item) {
-      console.log(item);
       this.$refs.gatewayDomain.show(item);
     },
     onEdit(item) {
-      console.log(item);
       this.$refs.gatewayEdit.show(item);
     },
     async onDelete(item) {
-      console.log(item);
       try {
         let tip =
           "The following gateways will be deleted, Are you sure you want to continue?";
-        tip += `<p class="mt-4">${item.name}</p>`;
+        tip += `<p class="mt-4">${item.name}.4everland.link</p>`;
         await this.$confirm(tip, "Delete Gateway");
-        await this.$http2.delete(`/domain/gateway/${item.id}`);
-        const { data } = await this.$http.get(`/gateway/${item.name}`);
-        console.log(data);
+        this.loading = true;
+        await this.$http.delete(`$gateway/gateway/${item.name}`, { noTip: 1 });
+        await this.getList();
       } catch (error) {
         //
-        console.log(error);
+        // console.log(error);
+        if (error.code == "EXISTS_DOMAIN_ERR") {
+          this.$alert(
+            "It is only possible to delete gateways after custom domains have been removed."
+          );
+        }
       }
+      this.loading = false;
     },
     async getList() {
       try {
         this.loading = true;
-        // const params = {
-        //   page: this.page - 1,
-        //   size: 10,
-        // };
-        // const { data } = await this.$http2.get("/domain/list", {
-        //   params,
-        // });
-        // this.list = data.content.map((it) => {
-        //   it.created = new Date(it.createAt * 1e3).format();
-        //   it.name = it.createAt;
-        //   return it;
-        // });
-        // this.total = data.numberOfElements;
-
-        const { data } = await this.$http.get("/gateways");
-        console.log(data);
+        const { data } = await this.$http.get("$gateway/gateway/");
+        this.list = data;
       } catch (error) {
         console.log(error);
       }

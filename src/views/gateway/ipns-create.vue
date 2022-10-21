@@ -67,11 +67,8 @@
                 placeholder="Set a name for your IPNS"
                 counter="30"
                 :rules="[
-                  (val) => (/^[a-z0-9A-Z]+$/.test(val) ? true : 'Invalid name'),
                   (v) =>
-                    v && v.length > 30
-                      ? 'The name for your Deploy Hook cannot be longer than 30 characters.'
-                      : true,
+                    /^[a-z0-9A-Z]{1,30}$/.test(v) && v ? true : 'Invalid name',
                 ]"
               ></v-text-field>
               <template v-if="type == 0">
@@ -82,7 +79,7 @@
                   label="IPFS CID"
                   :rules="[
                     (v) =>
-                      /^(([A-Za-z0-9]{46}|[A-Za-z0-9]{59}))*$/.test(v)
+                      /^[A-Za-z0-9]{46}|[A-Za-z0-9]{59}$/.test(v) || !v
                         ? true
                         : 'Invalid CID',
                   ]"
@@ -90,11 +87,11 @@
                 ></v-text-field>
                 <v-select
                   class="mt-4"
-                  v-model="form.ttf"
+                  v-model="form.ttl"
                   :items="periodOpts"
                   item-text="text"
                   item-value="value"
-                  label="Refresh period"
+                  label="Time to Live"
                 >
                 </v-select>
               </template>
@@ -103,7 +100,7 @@
                   class="mt-4"
                   persistent-placeholder
                   v-model="form.key"
-                  label="YOU IPNS"
+                  label="IPNS Key"
                   placeholder="IPNS"
                 ></v-text-field>
                 <div class="d-flex al-c">
@@ -112,7 +109,7 @@
                     persistent-placeholder
                     v-model="form.value"
                     label="Upload private key and sign it"
-                    placeholder=""
+                    placeholder="Upload base64 encoding"
                   ></v-text-field>
                   <v-btn color="primary" class="ml-4" @click="decodePrivateKey"
                     >Decode</v-btn
@@ -121,7 +118,7 @@
                 <decode-status v-if="showDecodeStatus" :status="decodeState" />
                 <div class="mt-5 fz-14">
                   <e-kv label="IPFS CID:">{{ decodeData.cid }}</e-kv>
-                  <e-kv class="mt-3" label="Refresh period:">{{
+                  <e-kv class="mt-3" label="Time To Live:">{{
                     decodeData.period
                   }}</e-kv>
                 </div>
@@ -132,9 +129,14 @@
 
         <div class="ta-c mt-5">
           <v-btn outlined width="180" @click="showPop = false">Cancel</v-btn>
-          <v-btn color="primary" class="ml-6" width="180" @click="onNext">{{
-            stepIdx == 0 ? "Next" : "Create"
-          }}</v-btn>
+          <v-btn
+            color="primary"
+            class="ml-6"
+            width="180"
+            @click="onNext"
+            :loading="createLoading"
+            >{{ stepIdx == 0 ? "Next" : "Create" }}</v-btn
+          >
         </div>
       </div>
     </v-dialog>
@@ -168,10 +170,10 @@ export default {
         { text: "180d", value: 4 },
       ],
       form: {
-        name: "",
+        name: null,
         key: "",
-        value: "",
-        ttf: 1,
+        value: null,
+        ttl: 1,
       },
       decodeData: {
         cid: "",
@@ -180,6 +182,7 @@ export default {
       valid: false,
       decodeState: 1,
       showDecodeStatus: false,
+      createLoading: false,
     };
   },
   methods: {
@@ -192,7 +195,7 @@ export default {
       try {
         this.showDecodeStatus = true;
         this.decodeState = 1;
-        const { data } = await this.$http2.post("/ipns/unmarshal", {
+        const { data } = await this.$http2.post("$ipns/ipns/unmarshal", {
           key: this.form.key,
           value: this.form.value,
         });
@@ -210,25 +213,33 @@ export default {
         this.stepIdx = 1;
       } else {
         let valid = this.$refs.form.validate();
+        console.log(valid);
         if (!valid) return;
         this.createIpns();
       }
     },
     async createIpns() {
       try {
-        if (this.type != 0) this.form.ttf = 0;
-        const { data } = await this.$http2.post("/ipns", this.form);
+        if (this.type != 0) {
+          this.form.ttl = 0;
+        }
+        this.createLoading = true;
+        const { data } = await this.$http2.post("$ipns/ipns", this.form);
         console.log(data);
       } catch (error) {
         console.log(error);
       }
+      this.createLoading = false;
+      this.showPop = false;
+      this.$refs.form.reset();
+      this.$emit("getList");
     },
   },
   watch: {
     showPop(newVal) {
       if (!newVal) {
         this.$refs.form.reset();
-        this.form.ttf = 1;
+        this.form.ttl = 1;
       }
     },
   },

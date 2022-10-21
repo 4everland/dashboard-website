@@ -19,7 +19,9 @@ const authApi = inDev
 const v3Api = inDev
   ? "https://settlement.foreverland.xyz"
   : "https://pay.4everland.org";
+const gateWayApi = inDev ? "https://gateway-api.foreverland.xyz" : "";
 
+const ipnsApi = inDev ? "https://ipns.foreverland.xyz" : "";
 Vue.prototype.$endpoint = endpoint;
 
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
@@ -102,7 +104,11 @@ const lock = new AsyncLock({ timeout: 5000 });
         config.url = authApi + config.url;
         delete params._auth;
       }
-      config.url = config.url.replace("$v3", v3Api).replace("$auth", authApi);
+      config.url = config.url
+        .replace("$v3", v3Api)
+        .replace("$auth", authApi)
+        .replace("$gateway", gateWayApi)
+        .replace("$ipns", ipnsApi);
 
       if (config.url.includes(authApi)) {
         token = "Bearer " + token;

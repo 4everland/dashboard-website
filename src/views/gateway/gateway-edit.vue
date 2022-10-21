@@ -3,10 +3,12 @@
     <div class="pa-6 pt-5 edit-container">
       <h3 class="fz-30">Edit Gateway</h3>
       <div class="px-5 pt-3">
-        <div class="gray fz-16 mb-3">Gateway Access</div>
+        <div class="gray fz-16 mb-3">
+          {{ curGateway.name }}.4everland.link Access
+        </div>
         <div class="al-c hide-msg">
           <span class="mr-auto">Private Gateway</span>
-          <v-switch v-model="curGateway.isPrivate" dense></v-switch>
+          <v-switch v-model="curGateway.scope" dense></v-switch>
         </div>
         <div class="mt-2 fz-13 gray">
           <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon>Choose whether
@@ -16,7 +18,12 @@
       </div>
       <div class="ta-c mt-8">
         <v-btn outlined width="180" @click="showPop = false">Cancel</v-btn>
-        <v-btn color="primary" class="ml-6" width="180" @click="onSave"
+        <v-btn
+          color="primary"
+          class="ml-6"
+          width="180"
+          @click="onSave"
+          :loading="saveLoading"
           >Save</v-btn
         >
       </div>
@@ -29,21 +36,27 @@ export default {
   data() {
     return {
       showPop: false,
-      curGateway: {
-        isPrivate: false,
-      },
+      curGateway: {},
+      saveLoading: false,
     };
   },
   methods: {
     show(item) {
-      this.curGateway = item;
+      this.curGateway = JSON.parse(JSON.stringify(item));
+      this.curGateway.scope = item.scope == "private" ? true : false;
+      console.log(this.curGateway);
       this.showPop = true;
     },
     async onSave() {
       try {
-        await this.$http2.put("/domain/gateway/edit", {
-          scope: this.curGateway.isPrivate,
+        this.saveLoading = true;
+        await this.$http2.put("$gateway/gateway", {
+          name: this.curGateway.name,
+          scope: this.curGateway.scope ? "private" : "public",
         });
+        this.saveLoading = false;
+        this.$emit("getList");
+        this.showPop = false;
       } catch (error) {
         console.log(error);
       }

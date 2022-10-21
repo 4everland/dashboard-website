@@ -2,11 +2,11 @@
   <div>
     <e-right-opt-wrap :top="-74">
       <div class="al-c">
-        <ipns-create />
-        <v-btn color="primary" class="ml-3">
+        <ipns-create @getList="getList" />
+        <!-- <v-btn color="primary" class="ml-3">
           <img src="/img/svg/gateway/auth.svg" width="12" />
           <span class="ml-1">Auth Token</span>
-        </v-btn>
+        </v-btn> -->
         <div class="ml-3">
           <v-text-field
             class="hide-msg bd-1"
@@ -16,6 +16,7 @@
             label="Search"
             prepend-inner-icon="mdi-magnify"
             v-model="keyword"
+            @input="getList"
           ></v-text-field>
         </div>
       </div>
@@ -27,49 +28,57 @@
       :items="list"
       hide-default-footer
     >
-      <template #item.access="{ item }">
-        <a
-          :href="$utils.getCidLink(item.access)"
+      <template #item.key="{ item }">
+        <!-- <a
+          :href="$utils.getCidLink(item.key)"
           class="hash-link"
           style="color: #0b0817"
           target="_blank"
-          v-if="item.access"
+          v-if="item.key"
           @click.stop
-          >{{ item.access.cutStr(5, 4) }}</a
-        >
+          >{{ item.key.cutStr(5, 8) }}</a
+        > -->
+        <span>{{ item.key.cutStr(5, 8) }}</span>
         <v-btn
-          v-if="item.access"
+          v-if="item.key"
           class="e-btn-text ml-2"
           icon
           small
           @click.stop
-          v-clipboard="item.access"
+          v-clipboard="item.key"
           @success="$toast('Copied to clipboard !')"
         >
           <img src="/img/svg/copy.svg" width="12" />
         </v-btn>
       </template>
-      <template #item.cid="{ item }">
-        <a
-          :href="$utils.getCidLink(item.cid)"
+      <template #item.value="{ item }">
+        <!-- <a
+          :href="$utils.getCidLink(item.value)"
           class="hash-link"
           style="color: #0b0817"
           target="_blank"
-          v-if="item.cid"
+          v-if="item.value"
           @click.stop
-          >{{ item.cid.cutStr(5, 4) }}</a
-        >
+          >{{ item.value.cutStr(5, 8) }}</a
+        > -->
+
+        <span>{{ item.value.cutStr(5, 8) }}</span>
         <v-btn
-          v-if="item.cid"
+          v-if="item.value"
           class="e-btn-text ml-2"
           icon
           small
           @click.stop
-          v-clipboard="item.cid"
+          v-clipboard="item.value"
           @success="$toast('Copied to clipboard !')"
         >
           <img src="/img/svg/copy.svg" width="12" />
         </v-btn>
+        <span v-else>--</span>
+      </template>
+
+      <template #item.createdAt="{ item }">
+        <span>{{ new Date(item.createdAt * 1000).format() }}</span>
       </template>
       <template v-slot:item.act="{ item }">
         <v-btn class="action-btn" text color="primary" @click="onPublish(item)"
@@ -109,37 +118,21 @@ export default {
     return {
       headers: [
         { text: "Name", value: "name" },
-        { text: "Access", value: "access" },
-        { text: "IPFS CID Published", value: "cid" },
-        { text: "Created", value: "created" },
+        { text: "IPNS", value: "key" },
+        { text: "IPFS CID Published", value: "value" },
+        { text: "Created", value: "createdAt" },
         { text: "Action", value: "act" },
       ],
-      list: [
-        {
-          name: "123",
-          access: "222",
-          cid: "bafkreiagia52kyfjcawgkzf6e76wycj6vdyf2hmafj4qrhq24aelin4pwy",
-          created: "1992-3-3",
-          ttl: 0,
-          id: 2,
-        },
-        {
-          name: "123",
-          access: "222",
-          cid: "bafkreiagia52kyfjcawgkzf6e76wycj6vdyf2hmafj4qrhq24aelin4pwy",
-          created: "1992-3-3",
-          ttl: 1,
-          id: 3,
-        },
-      ],
+      list: [],
       loading: false,
       keyword: "",
+      cursor: 0,
       page: 1,
       total: 0,
     };
   },
   mounted() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     onPublish(item) {
@@ -153,7 +146,7 @@ export default {
           "The following IPNS will be deleted, Are you sure you want to continue?";
         tip += `<p class="mt-4">${item.name}</p>`;
         await this.$confirm(tip, "Delete IPNS");
-        await this.$http2.delete(`/ipns/${item.key}`);
+        await this.$http2.delete(`$ipns/ipns/${item.key}`);
         this.getList();
       } catch (error) {
         //
@@ -161,20 +154,16 @@ export default {
     },
     async getList() {
       try {
-        this.loading = true;
-        const params = {
-          page: this.page - 1,
-          size: 10,
+        let params = {
+          cursor: this.cursor,
+          keyword: this.keyword,
         };
-        const { data } = await this.$http2.get("/domain/list", {
+        this.loading = true;
+        const { data } = await this.$http2.get("$ipns/ipns", {
           params,
         });
-        this.list = data.content.map((it) => {
-          it.created = new Date(it.createAt * 1e3).format();
-          it.name = it.createAt;
-          return it;
-        });
-        this.total = data.numberOfElements;
+        this.list = data.list;
+        console.log(data);
       } catch (error) {
         console.log(error);
       }

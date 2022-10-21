@@ -5,9 +5,9 @@
       <div class="pl-5">
         <div class="mb-4">
           <span class="tips">These domains are assigned to your gateway </span>
-          <span class="tips-name">2gou.4everland.link.</span>
+          <span class="tips-name">{{ curIpns.name }}.4everland.link.</span>
         </div>
-        <div class="d-flex align-start">
+        <div class="d-flex align-start" v-if="!domainList.length && !loading">
           <v-form ref="form" class="flex-1">
             <v-text-field
               persistent-placeholder
@@ -20,7 +20,12 @@
               ]"
             ></v-text-field>
           </v-form>
-          <v-btn color="primary" width="91" class="ml-4" @click="addDomain"
+          <v-btn
+            color="primary"
+            width="91"
+            class="ml-4"
+            @click="addDomain"
+            :loading="addLoading"
             >Add</v-btn
           >
         </div>
@@ -28,14 +33,15 @@
         <v-skeleton-loader type="article" v-if="loading"></v-skeleton-loader>
 
         <div v-else class="domain-list">
-          <template v-for="item in domainList">
-            <gateway-dns
-              :ipns="curIpns"
-              :item="item"
-              :key="item.id"
-              @getList="getList"
-            />
-          </template>
+          <!-- <template v-for="item in domainList"> -->
+          <gateway-dns
+            v-for="item in domainList"
+            :ipns="curIpns"
+            :item="item"
+            :key="item.id"
+            @getList="getList"
+          />
+          <!-- </template> -->
         </div>
         <div class="fz-12 gray mt-5">
           Once you've entered your DNS records, you may need to wait up to 24
@@ -60,15 +66,11 @@ export default {
     return {
       showPop: false,
       domain: "",
-      domainList: [
-        { id: 111, name: "solid.tpp" },
-        { id: 22, name: "solid.tpp" },
-        { id: 33, name: "solid.tpp" },
-        { id: 44, name: "solid.tpp" },
-      ],
+      domainList: [],
       curIpns: {},
       valid: true,
       loading: true,
+      addLoading: false,
     };
   },
   computed: {
@@ -76,25 +78,42 @@ export default {
       return $regMap.domain.test(this.domain);
     },
   },
-  // created() {
-  //   this.getList();
-  // },
   methods: {
     show(item) {
       this.showPop = true;
-      console.log(item);
-      this.curIpns = item;
+      this.curIpns = JSON.parse(JSON.stringify(item));
     },
-    addDomain() {
+    async addDomain() {
       if (!this.$regMap.domain.test(this.domain)) return;
-      // do something request
+      try {
+        this.addLoading = true;
+        await this.$http2.post("/domain/gateway/create", {
+          businessId: this.curIpns.name,
+          domain: this.domain,
+          createType: 3,
+        });
+        this.getList();
+      } catch (error) {
+        //
+      }
+      this.$refs.form.reset();
+      this.addLoading = false;
     },
     async getList() {
-      //do something request
       this.loading = true;
-      setTimeout(() => {
+      this.domainList = [];
+      const params = {
+        businessId: this.curIpns.name,
+      };
+      try {
+        const { data } = await this.$http2.get(`/domain/gateway/list`, {
+          params,
+        });
+        this.domainList = data.content;
         this.loading = false;
-      }, 1000);
+      } catch (error) {
+        //
+      }
     },
   },
   watch: {
@@ -102,7 +121,9 @@ export default {
       if (val) {
         this.getList();
       } else {
-        this.$refs.form.reset();
+        if (!this.domainList.length) {
+          this.$refs.form.reset();
+        }
       }
     },
   },
