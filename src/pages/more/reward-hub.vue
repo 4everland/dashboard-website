@@ -8,7 +8,7 @@
       />
       <div class="pos-center link-2 fw-b ta-c w100p" style="max-width: 450px">
         <h1 class="fz-40">Reward Hub</h1>
-        <div class="fz-18">Enjoy free resources in 4EVERLAND Reward Hub.</div>
+        <div class="fz-18">Explore, Earn, and Enjoy Free Resources</div>
       </div>
     </div>
     <div class="main-wrap">

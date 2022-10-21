@@ -14,10 +14,10 @@
           style="max-height: 210px"
         />
         <div
-          class="pos-center link-2 fz-30 fw-b ta-c w100p"
-          style="max-width: 400px"
+          class="pos-center link-2 fz-25 fw-b ta-c w100p"
+          style="max-width: 500px"
         >
-          Enjoy free resources in 4EVERLAND Reward Hub.
+          Explore, Earn, and Enjoy Free Resources
         </div>
       </div>
     </router-link>
