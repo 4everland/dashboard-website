@@ -17,7 +17,7 @@
           class="pos-center link-2 fz-25 fw-b ta-c w100p"
           style="max-width: 500px"
         >
-          Explore, Earn, and Enjoy Free Resources
+          Explore, Earn, and Enjoy Free Resources in 4EVERLAND Reward Hub
         </div>
       </div>
     </router-link>
@@ -98,12 +98,13 @@ export default {
     async checkReward() {
       try {
         const { data } = await this.$http.get("$auth/poster/rewardhub");
-        if (data)
+        if (!data)
           this.$confirm(
-            `<div class="lh-2 fz-14">We are launching Reward Hub to offer you a better experience with products and services. All new users can get free resources (storage, bandwidth, etc.) by completing the following tasks, while users who have already completed the tasks and received the free giveaway resources can simply go to Reward Hub to claim the resources.Having fun while exploring 4EVERLAND! Please feel free to contact us in our communities if you have any questions. </div>`,
-            "Dear 4EVERLAND user",
+            `<p>Dear 4EVERLAND user,</p><div class="lh-2 fz-14 mt-5">We are launching Reward Hub to offer you a better experience with products and services. All new users can get free resources (storage, bandwidth, etc.) by completing the following tasks, while users who have already completed the tasks and received the free giveaway resources can simply go to Reward Hub to claim the resources.Having fun while exploring 4EVERLAND! Please feel free to contact us in our communities if you have any questions. </div>`,
+            "",
             {
               confirmText: "View",
+              hideTitle: true,
             }
           ).then(() => {
             this.$navTo("/reward-hub");
