@@ -104,7 +104,7 @@ export default {
   methods: {
     getBtnColor(it) {
       if (it.status == "CLAIM") return "#E21951";
-      if (it.statusName == "Verify") return "#FFB759";
+      if (/verify/i.test(it.statusName)) return "#FFB759";
       if (it.status == "GOTO") return "#20B1FF";
       return "primary";
     },
