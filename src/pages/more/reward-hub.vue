@@ -165,6 +165,7 @@ export default {
         else this.$navTo(val);
       } else if (type == "SEND_REQUEST") {
         await this.$http.post("$auth" + val);
+        if (/claim/.test(val)) this.$toast("Claimed successfully.");
         this.getList();
       } else if (type == "EMAIL_SUBSCRIPTION_VERIFICATION") {
         this.onSubsribe();
