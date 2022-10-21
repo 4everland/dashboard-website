@@ -37,12 +37,12 @@
             @click="onAct(item)"
             depressed
             width="80"
-            :disabled="item.status == 'DONE'"
+            :disabled="item.isDone"
             :loading="item.loading"
           >
             <span
               :class="{
-                'white-0': item.status != 'DONE',
+                'white-0': !item.isDone,
               }"
             >
               {{ item.statusName || "To do" }}
@@ -192,7 +192,13 @@ export default {
       try {
         this.loading = true;
         const { data } = await this.$http.get("$auth/rewardhub/activities");
-        this.list = data.item;
+        this.list = data.item.map((it) => {
+          if (it.status == "DONE") {
+            it.isDone = true;
+            it.statusName = "Done";
+          }
+          return it;
+        });
       } catch (error) {
         //
       }
