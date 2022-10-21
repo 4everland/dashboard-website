@@ -23,7 +23,7 @@
         </e-tooltip>
       </div>
       <v-data-table
-        class="strip"
+        :class="{ strip: list.length }"
         :loading="loading"
         :headers="headers"
         :items="list"
