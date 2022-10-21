@@ -165,6 +165,10 @@ export default {
         else this.$navTo(val);
       } else if (type == "SEND_REQUEST") {
         await this.$http.post("$auth" + val);
+        if (/claim/.test(val)) {
+          await this.$alert("Claimed successfully.");
+          this.$navTo("/resource/bills");
+        }
         this.getList();
       } else if (type == "EMAIL_SUBSCRIPTION_VERIFICATION") {
         this.onSubsribe();
@@ -180,7 +184,7 @@ export default {
         this.$set(it, "loading", true);
         const { data } = await this.$http.post(`$auth/rewardhub/${it.id}/next`);
         console.log(data);
-        this.onNext(it, data);
+        await this.onNext(it, data);
       } catch (error) {
         //
       }
