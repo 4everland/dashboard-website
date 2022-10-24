@@ -44,7 +44,7 @@
           <!-- <v-icon v-show="!alertInfo.hideIcon" :color="iconColor" class="mr-2">
             {{ iconName }}
           </v-icon> -->
-          <b>{{
+          <b style="word-break: break-word">{{
             alertInfo.title
               ? alertInfo.title
               : alertInfo.showCancel
