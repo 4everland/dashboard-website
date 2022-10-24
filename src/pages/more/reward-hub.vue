@@ -49,7 +49,9 @@
             </span>
           </v-btn>
           <v-btn
-            v-if="item.status == 'GOTO'"
+            :class="{
+              hidden: !(item.status == 'GOTO' || item.refreshing),
+            }"
             :loading="item.refreshing"
             icon
             class="ml-2"
