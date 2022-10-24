@@ -121,10 +121,11 @@ export default {
       if (/repriced/i.test(msg) && /replaced/i.test(msg)) {
         return this.$toast("Transaction was replaced.");
       }
-      if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
+      if (/missing revert data/i.test(msg)) {
+        msg = "Network Error";
+      } else if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
         msg = "IPFS Storage Expired, extending service duration is required.";
-      }
-      if (/exceeds balance/i.test(msg)) {
+      } else if (/exceeds balance/i.test(msg)) {
         msg = "Insufficient balance";
       }
       if (retry) {

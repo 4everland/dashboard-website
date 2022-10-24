@@ -211,7 +211,8 @@ export default {
           if (it.contentType == "Airdrop") it.contentType = "Giveaway";
           if (["Deposit", "Withdraw"].includes(it.contentType)) {
             it.resource = it.contentType + " Account";
-          } else if (it.contentType == "Purchase") {
+          } else if (it.contentJson) {
+            //contentType == "Purchase"
             const arr = JSON.parse(it.contentJson);
             it.resource = arr
               .map((it) => {

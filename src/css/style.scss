@@ -55,6 +55,14 @@ body {
   }
   .theme--light.v-data-table {
     background: transparent;
+    &.strip {
+      thead {
+        font-weight: normal;
+      }
+      tbody tr:nth-child(2n+1) {
+        background-color: #F7F9FB;
+      }
+    }
   }
   .v-input--is-disabled:not(.v-input--is-readonly) {
     pointer-events: all;
