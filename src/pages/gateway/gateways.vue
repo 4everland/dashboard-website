@@ -78,13 +78,6 @@
             {{ loading ? "Loading..." : "No Data" }}
           </e-empty>
         </div>
-        <e-pagi
-          class="pa-5"
-          @input="getList"
-          v-model="page"
-          :limit="10"
-          :total="total"
-        />
       </div>
     </div>
     <gateway-domain ref="gatewayDomain" />
@@ -127,8 +120,6 @@ export default {
         // },
       ],
       loading: false,
-      page: 1,
-      total: 0,
       isGetList: false,
     };
   },

@@ -95,13 +95,6 @@
         {{ loading ? "Loading..." : "No Data" }}
       </e-empty>
     </div>
-    <e-pagi
-      class="pa-5"
-      @input="getList"
-      v-model="page"
-      :limit="10"
-      :total="total"
-    />
     <ipns-publish ref="ipnsPublish" @getList="getList" />
   </div>
 </template>
@@ -127,8 +120,6 @@ export default {
       loading: false,
       keyword: "",
       cursor: 0,
-      page: 1,
-      total: 0,
     };
   },
   mounted() {
