@@ -206,6 +206,18 @@ export default {
         await this.getGitInfo();
       } catch (error) {
         console.log(error);
+        if (error) this.addNew();
+      }
+      this.$loading.close();
+    },
+    async addNew() {
+      try {
+        this.$loading();
+        const { data } = await this.$http2.get("/githubapp/install");
+        this.$openWindow(data.installUrl);
+        // this.isAddClick = true;
+      } catch (error) {
+        //
       }
       this.$loading.close();
     },
