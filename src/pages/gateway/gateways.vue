@@ -125,11 +125,10 @@ export default {
   },
   computed: {
     isLock() {
-      return this.balance < 1 && !this.list.length;
-      // return false;
+      return this.balance < 100 && !this.list.length;
     },
     isInsufficient() {
-      return this.balance < 1 && this.list.length;
+      return this.balance < 100 && this.list.length;
     },
   },
   async mounted() {
