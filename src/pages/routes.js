@@ -28,6 +28,7 @@ export default [
     meta: {
       title: "Overview",
       isTab: true,
+      hideNav: 1,
       subTitle: "Welcome back to 4EVERLAND dashboard",
     },
   },

@@ -1,10 +1,5 @@
 <template>
   <div class="hide-msg">
-    <!-- <v-alert class="mb-5 fz-14" text type="info" dense>
-      The data on this page is not updated in real time. These statistics are
-      for reference only.
-    </v-alert> -->
-
     <div class="tips py-2 mb-5 al-c">
       <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"
         >mdi-alert-circle-outline</v-icon

@@ -122,6 +122,9 @@ export default {
     cancel() {
       this.move();
       this.dialogFormVisible = false;
+      this.$setMsg({
+        name: "close-new-drop",
+      });
     },
     stop() {
       let mo = function (e) {
@@ -166,7 +169,7 @@ export default {
       }
 
       let sizestr = size + "";
-      let len = sizestr.indexOf("\.");
+      let len = sizestr.indexOf(".");
       let dec = sizestr.substr(len + 1, 2);
       if (dec == "00") {
         //当小数点后为00时 去掉小数部分

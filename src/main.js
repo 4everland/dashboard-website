@@ -5,7 +5,6 @@ import store, { setState } from "./store";
 import { mapState } from "vuex";
 import vuetify from "./plugins/vuetify";
 import "./setup";
-import { isAirDrop } from "@/plugins/flow/flowAirDrop.js";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 
 Vue.config.productionTip = false;
@@ -70,7 +69,6 @@ new Vue({
         await this.getUesrInfo();
         this.initSocket();
         // isSolana();
-        isAirDrop();
       } else if (["/", "/login"].indexOf(this.$route.path) == -1) {
         this.$router.replace("/");
       }

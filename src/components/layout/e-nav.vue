@@ -100,10 +100,7 @@ export default {
     },
     firstItem() {
       let { title = "" } = this.meta;
-      if (title == "Overview") {
-        const info = this.$store.state.userInfo;
-        if (info.username) title = "Hi " + info.username.cutStr(6, 4);
-      } else if (this.navItems.length) {
+      if (this.navItems.length) {
         title = "";
       }
       if (title)

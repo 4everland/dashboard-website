@@ -130,6 +130,17 @@ export default {
       }
     },
     async onRow(item) {
+      const curRouteArr = this.$route.path.split("/");
+      const curRoute = curRouteArr.slice(4, curRouteArr.length - 1);
+      curRoute.push(item.name);
+      const curRoutePath = decodeURI(curRoute.join("/"));
+      if (this.matchPathCid.findIndex((it) => it.cid == item.cid) == -1) {
+        this.matchPathCid.push({
+          cid: item.cid,
+          name: curRoutePath,
+        });
+      }
+
       if (!/\/$/.test(item.name)) return;
       if (!item.noRoute) {
         this.$router.push(this.$route.path + item.name + location.search);
@@ -147,13 +158,6 @@ export default {
         // console.log(data);
         this.list = data.list;
         this.tableLoading = false;
-
-        if (this.matchPathCid.findIndex((it) => it.cid == item.cid) == -1) {
-          this.matchPathCid.push({
-            cid: item.cid,
-            name: item.name.replace("/", ""),
-          });
-        }
       } catch (error) {
         console.log(error);
       }
@@ -161,46 +165,27 @@ export default {
   },
   watch: {
     "$route.path"(newVal, oldVal) {
-      let curRoute = newVal.split("/").slice(4);
-      let path = curRoute.join("/");
+      // console.log(newVal, oldVal);
       newVal = decodeURI(newVal);
       oldVal = decodeURI(oldVal);
+      let curRoute = newVal.split("/").slice(4).join("/");
 
-      if (newVal.length < oldVal.length) {
-        const matchPath = this.matchPathCid.map((it) => it.name).join("/");
-        let index = matchPath.includes(decodeURI(path))
-          ? curRoute.length - 2
-          : 0;
-        let matchRoute = this.matchPathCid[index];
-        if (matchRoute.cid) {
-          this.onRow({
-            name: matchRoute.name + "/",
-            cid: matchRoute.cid,
-            noRoute: true,
-          });
-        } else {
-          this.getInfo();
-        }
+      const matchPathArr = this.matchPathCid.map((it) => it.name);
+      let index = matchPathArr.indexOf(curRoute);
+      let matchRoute;
+      if (index == -1) {
+        matchRoute = this.matchPathCid[0];
       } else {
-        // console.log(newVal, oldVal);
-        const matchPath =
-          this.matchPathCid.map((it) => it.name).join("/") + "/";
-        let index = matchPath.includes(decodeURI(path))
-          ? curRoute.length - 2
-          : null;
-
-        if (index == null) return;
-        let matchRoute = this.matchPathCid[index];
-        // console.log(matchRoute);
-        if (matchRoute.cid) {
-          this.onRow({
-            name: matchRoute.name + "/",
-            cid: matchRoute.cid,
-            noRoute: true,
-          });
-        } else {
-          this.getInfo();
-        }
+        matchRoute = this.matchPathCid[index];
+      }
+      if (matchRoute.cid) {
+        this.onRow({
+          name: matchRoute.name + "/",
+          cid: matchRoute.cid,
+          noRoute: true,
+        });
+      } else {
+        this.getInfo();
       }
     },
   },

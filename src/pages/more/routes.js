@@ -12,6 +12,15 @@ export default [
     },
   },
   {
+    path: "/reward-hub",
+    component: () => import("./reward-hub"),
+    meta: {
+      title: "Reward Hub",
+      isTab: 1,
+      hideNav: 1,
+    },
+  },
+  {
     path: "/first-landing",
     component: () => import("./first-landing"),
     meta: {
