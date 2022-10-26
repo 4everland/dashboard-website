@@ -205,12 +205,17 @@ export default {
         this.gitName = gitName;
         await this.getGitInfo();
       } catch (error) {
-        if (error.code == 10026) this.addNew();
+        if (error.code == 10026) {
+          setTimeout(() => {
+            this.addNew(error.message);
+          }, 100);
+        }
       }
       this.$loading.close();
     },
-    async addNew() {
+    async addNew(msg) {
       try {
+        await this.$alert(msg);
         this.$loading();
         const { data } = await this.$http2.get("/githubapp/install");
         this.$openWindow(data.installUrl);
