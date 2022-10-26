@@ -205,8 +205,7 @@ export default {
         this.gitName = gitName;
         await this.getGitInfo();
       } catch (error) {
-        console.log(error);
-        if (error) this.addNew();
+        if (error.code == 10026) this.addNew();
       }
       this.$loading.close();
     },
