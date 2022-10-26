@@ -23,7 +23,7 @@
     </div>
     <div v-else>
       <e-right-opt-wrap :top="-55">
-        <gateway-generate @getList="getList" />
+        <gateway-generate @getList="getList" :isInsufficient="isInsufficient" />
       </e-right-opt-wrap>
       <div class="tips py-2 mr-3 mb-3 pr-5 al-c" v-show="isInsufficient">
         <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"

@@ -50,16 +50,23 @@ export default {
     async onSave() {
       try {
         this.saveLoading = true;
-        await this.$http2.put("$gateway/gateway", {
-          name: this.curGateway.name,
-          scope: this.curGateway.scope ? "private" : "public",
-        });
-        this.saveLoading = false;
+        await this.$http2.put(
+          "$gateway/gateway",
+          {
+            name: this.curGateway.name,
+            scope: this.curGateway.scope ? "private" : "public",
+          },
+          { noTip: 1 }
+        );
         this.$emit("getList");
-        this.showPop = false;
       } catch (error) {
         console.log(error);
+        if (error.code == "EXISTS_PRIVATE_GATEWAY") {
+          this.$alert("You reached your private gateways count limit.");
+        }
       }
+      this.saveLoading = false;
+      this.showPop = false;
     },
   },
 };

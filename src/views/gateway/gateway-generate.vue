@@ -9,7 +9,7 @@
 
 <template>
   <div>
-    <v-btn color="primary" @click="onShow">
+    <v-btn color="primary" @click="onShow" :disabled="isInsufficient">
       <span class="fz-18">+</span>
       <span class="ml-1">Generate</span>
     </v-btn>
@@ -90,6 +90,9 @@ export default {
   components: {
     DecodeStatus,
   },
+  props: {
+    isInsufficient: Boolean,
+  },
   data() {
     return {
       showPop: false,
@@ -134,6 +137,9 @@ export default {
           console.log(error);
           if (error.code == "NAME_REACH_LIMIT") {
             this.$alert("You reached your gateways count limit.");
+          }
+          if (error.code == "EXISTS_PRIVATE_GATEWAY") {
+            this.$alert("You reached your private gateways count limit.");
           }
         }
         this.createLoading = false;

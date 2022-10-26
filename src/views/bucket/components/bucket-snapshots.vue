@@ -12,19 +12,6 @@
             it!</span
           >
         </div>
-        -->
-
-        <div class="tips py-2 mr-3 pr-5 al-c">
-          <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"
-            >mdi-alert-circle-outline</v-icon
-          >
-          <span class="fz-14"
-            >The publish will fail if the file in the folder is changed after
-            the snapshot, deleting the snapshot will automatically unpin
-            it!</span
-          >
-        </div>
-
         <div class="ml-auto" style="min-width: 150px">
           <v-text-field
             class="hide-msg bd-1"
