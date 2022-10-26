@@ -55,6 +55,9 @@ export default {
     },
   },
   mounted() {
+    this.$setState({
+      allowNoLogin: false,
+    });
     this.getInfo();
   },
   methods: {

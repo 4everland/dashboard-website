@@ -165,6 +165,9 @@ export default {
   },
   methods: {
     goHome() {
+      this.$setState({
+        allowNoLogin: false,
+      });
       this.$router.replace("/hosting/projects");
     },
     async onCancel() {
