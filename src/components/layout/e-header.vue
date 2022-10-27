@@ -105,11 +105,6 @@ export default {
 
       let list = [
         {
-          to: "/reward-hub",
-          img: "/img/svg/header/reward-gift.svg",
-          width: 20,
-        },
-        {
           label: "Docs",
           icon: "m-docs",
           href: "https://docs.4everland.org",
@@ -120,7 +115,12 @@ export default {
           to: "/changelog",
         },
       ];
-      if (info.uid)
+      if (info.uid) {
+        list.unshift({
+          to: "/reward-hub",
+          img: "/img/svg/header/reward-gift.svg",
+          width: 20,
+        });
         list.push({
           addr: info.username || "unkown",
           label: (info.username || "unkown").cutStr(6, 4),
@@ -162,6 +162,7 @@ export default {
             },
           ],
         });
+      }
       return list;
     },
   },
