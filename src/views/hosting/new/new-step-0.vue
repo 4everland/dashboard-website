@@ -49,8 +49,8 @@ export default {
   },
   methods: {
     onTplItem(it) {
-      const gitref = this.$refs.git;
-      if (!gitref.isBind) return gitref.addNew();
+      // const gitref = this.$refs.git;
+      // if (!gitref.isBind) return gitref.addNew();
       const src =
         "https://github.com/4everland/project-templates/tree/main/examples/" +
         it.slug;

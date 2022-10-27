@@ -7,5 +7,10 @@ export default {
   components: {
     HProjects,
   },
+  mounted() {
+    this.$setState({
+      allowNoLogin: false,
+    });
+  },
 };
 </script>

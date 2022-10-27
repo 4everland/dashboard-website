@@ -96,6 +96,19 @@ body {
     border-radius: 6px;
   }
 }
+.no-drawer {
+  .e-drawer {
+    display: none;
+  }
+  .v-main {
+    padding-left: 0!important;
+    .v-main__wrap {
+      max-width: 1100px;
+      margin: auto;
+    }
+  }
+}
+
 .color-1 {
   color: $color1;
 }

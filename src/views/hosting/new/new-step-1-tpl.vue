@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div class="mb-8 mt-5" v-if="allowNoLogin && !userInfo.uid">
+      <div class="m-auto" style="max-width: 500px">
+        <div class="ta-c mb-5 gray">Log in or sign up to clone and deploy.</div>
+        <login-wallet class="bg-white" mode="refresh" />
+      </div>
+    </div>
     <div class="main-wrap">
       <h3>Github Configuration</h3>
       <div class="gray fz-14" style="max-width: 600px">
@@ -7,7 +13,7 @@
         repository must be created. Every push to that Git repository will be
         deployed automatically.
       </div>
-      <v-skeleton-loader type="article" v-if="loading" />
+      <v-skeleton-loader type="article" v-if="loading" v-show="!allowNoLogin" />
       <div class="mt-5" v-else>
         <div class="d-flex al-c">
           <e-icon-link img="/img/svg/hosting/m-github.svg" :link="info.url">
@@ -43,7 +49,7 @@
               color="primary"
               :loading="creating"
               @click="onCreate"
-              >Create</v-btn
+              >{{ isBind ? "Create" : "Bind and Create" }}</v-btn
             >
           </div>
         </div>
@@ -74,10 +80,24 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import LoginWallet from "@/views/login/login-wallet.vue";
 import EIconLink from "@/views/hosting/common/e-icon-link";
+
 export default {
+  components: {
+    LoginWallet,
+    EIconLink,
+  },
   props: {
     query: Object,
+  },
+  computed: {
+    ...mapState({
+      allowNoLogin: (s) => s.allowNoLogin,
+      userInfo: (s) => s.userInfo,
+      isFocus: (s) => s.isFocus,
+    }),
   },
   data() {
     return {
@@ -99,17 +119,37 @@ export default {
         },
       ],
       platform: "IPFS",
+      isBind: true,
     };
   },
   watch: {
     query() {
       this.getInfo();
     },
+    async isFocus(val) {
+      if (val && this.isOpenInstall) {
+        this.isOpenInstall = false;
+        this.$loading();
+        await this.checkBind();
+        this.$loading.close();
+        if (this.isBind) this.onCreate();
+      }
+    },
   },
   mounted() {
     this.getInfo();
   },
   methods: {
+    async checkBind() {
+      try {
+        const { data } = await this.$http2.get("/user/git-namespaces", {
+          noTip: true,
+        });
+        this.isBind = !!data.length;
+      } catch (error) {
+        this.isBind = false;
+      }
+    },
     async getInfo() {
       const { s: url } = this.query;
       if (!url) return;
@@ -130,6 +170,9 @@ export default {
         console.log(error);
       }
       this.loading = false;
+      if (this.allowNoLogin) {
+        this.checkBind();
+      }
     },
     async getGitInfo() {
       try {
@@ -169,6 +212,10 @@ export default {
         if (!name) {
           return this.$toast("Invalid Name");
         }
+        if (!this.isBind) {
+          this.addNew();
+          return;
+        }
         this.$loading("Create Repo...");
         const { data: pushUrl } = await this.$http2.get("/repo/create/new", {
           params: {
@@ -186,13 +233,27 @@ export default {
         this.gitName = gitName;
         await this.getGitInfo();
       } catch (error) {
-        console.log(error);
+        if (error.code == 10026) {
+          setTimeout(() => {
+            this.$confirm("Please bind Github first").then(() => {
+              this.addNew();
+            });
+          }, 100);
+        }
       }
       this.$loading.close();
     },
-  },
-  components: {
-    EIconLink,
+    async addNew() {
+      try {
+        this.$loading();
+        const { data } = await this.$http2.get("/githubapp/install");
+        this.isOpenInstall = true;
+        this.$openWindow(data.installUrl);
+      } catch (error) {
+        //
+      }
+      this.$loading.close();
+    },
   },
 };
 </script>

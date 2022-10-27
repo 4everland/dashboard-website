@@ -42,6 +42,7 @@ new Vue({
     ...mapState({
       token: (s) => s.token(),
       noticeMsg: (s) => s.noticeMsg,
+      allowNoLogin: (s) => s.allowNoLogin,
     }),
   },
   mounted() {
@@ -65,10 +66,16 @@ new Vue({
   },
   methods: {
     async onInit() {
+      if (location.href.includes("type=clone-flow")) {
+        this.$setState({
+          allowNoLogin: true,
+        });
+      }
       if (this.token) {
         await this.getUesrInfo();
         this.initSocket();
         // isSolana();
+        isAirDrop();
       } else if (["/", "/login"].indexOf(this.$route.path) == -1) {
         this.$router.replace("/");
       }
@@ -110,6 +117,7 @@ new Vue({
       localStorage.userInfo = JSON.stringify(data);
       this.$setState({
         userInfo: data,
+        allowNoLogin: this.allowNoLogin && !data.github,
       });
     },
   },
