@@ -127,6 +127,9 @@ export default {
         msg = "IPFS Storage Expired, extending service duration is required.";
       } else if (/exceeds balance/i.test(msg)) {
         msg = "Insufficient balance";
+      } else if (msg.length > 100) {
+        const mat = /^(.+)\[/.exec(msg);
+        if (mat) msg = mat[1];
       }
       if (retry) {
         return this.$confirm(msg, "Network Error", {
