@@ -115,7 +115,7 @@ new Vue({
       localStorage.userInfo = JSON.stringify(data);
       this.$setState({
         userInfo: data,
-        // allowNoLogin: this.allowNoLogin && !data.github,
+        allowNoLogin: this.allowNoLogin && !data.github,
       });
     },
   },
