@@ -49,7 +49,7 @@
               color="primary"
               :loading="creating"
               @click="onCreate"
-              >Create</v-btn
+              >{{ isBind ? "Create" : "Bind and Create" }}</v-btn
             >
           </div>
         </div>
@@ -96,6 +96,7 @@ export default {
     ...mapState({
       allowNoLogin: (s) => s.allowNoLogin,
       userInfo: (s) => s.userInfo,
+      isFocus: (s) => s.isFocus,
     }),
   },
   data() {
@@ -118,17 +119,36 @@ export default {
         },
       ],
       platform: "IPFS",
+      isBind: true,
     };
   },
   watch: {
     query() {
       this.getInfo();
     },
+    async isFocus(val) {
+      if (val && this.isOpenInstall) {
+        this.isOpenInstall = false;
+        this.$loading();
+        await this.checkBind();
+        this.$loading.close();
+      }
+    },
   },
   mounted() {
     this.getInfo();
   },
   methods: {
+    async checkBind() {
+      try {
+        const { data } = await this.$http2.get("/user/git-namespaces", {
+          noTip: true,
+        });
+        this.isBind = !!data.length;
+      } catch (error) {
+        this.isBind = false;
+      }
+    },
     async getInfo() {
       const { s: url } = this.query;
       if (!url) return;
@@ -149,6 +169,9 @@ export default {
         console.log(error);
       }
       this.loading = false;
+      if (this.allowNoLogin) {
+        this.checkBind();
+      }
     },
     async getGitInfo() {
       try {
@@ -188,6 +211,10 @@ export default {
         if (!name) {
           return this.$toast("Invalid Name");
         }
+        if (!this.isBind) {
+          this.addNew();
+          return;
+        }
         this.$loading("Create Repo...");
         const { data: pushUrl } = await this.$http2.get("/repo/create/new", {
           params: {
@@ -207,19 +234,20 @@ export default {
       } catch (error) {
         if (error.code == 10026) {
           setTimeout(() => {
-            this.addNew(error.message);
+            this.$confirm("Please bind Github first").then(() => {
+              this.addNew();
+            });
           }, 100);
         }
       }
       this.$loading.close();
     },
-    async addNew(msg) {
+    async addNew() {
       try {
-        await this.$alert(msg);
         this.$loading();
         const { data } = await this.$http2.get("/githubapp/install");
+        this.isOpenInstall = true;
         this.$openWindow(data.installUrl);
-        // this.isAddClick = true;
       } catch (error) {
         //
       }
