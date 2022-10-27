@@ -74,8 +74,6 @@ new Vue({
       if (this.token) {
         await this.getUesrInfo();
         this.initSocket();
-        // isSolana();
-        isAirDrop();
       } else if (["/", "/login"].indexOf(this.$route.path) == -1) {
         this.$router.replace("/");
       }
