@@ -132,6 +132,7 @@ export default {
         this.$loading();
         await this.checkBind();
         this.$loading.close();
+        if (this.isBind) this.onCreate();
       }
     },
   },
