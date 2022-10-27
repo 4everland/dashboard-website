@@ -59,19 +59,21 @@
           </div>
           <v-form ref="form" v-model="valid">
             <div class="pa-5">
-              <v-text-field
-                class="mt-4 name-input"
-                persistent-placeholder
-                v-model="form.name"
-                label="Set a Name"
-                placeholder="Set a name for your IPNS"
-                counter="30"
-                :rules="[
-                  (v) =>
-                    /^[a-z0-9A-Z]{1,30}$/.test(v) && v ? true : 'Invalid name',
-                ]"
-              ></v-text-field>
               <template v-if="type == 0">
+                <v-text-field
+                  class="mt-4 name-input"
+                  persistent-placeholder
+                  v-model="form.name"
+                  label="Set a Name"
+                  placeholder="Set a name for your IPNS"
+                  counter="30"
+                  :rules="[
+                    (v) =>
+                      /^[a-z0-9A-Z]{1,30}$/.test(v) && v
+                        ? true
+                        : 'Invalid name',
+                  ]"
+                ></v-text-field>
                 <v-text-field
                   class="mt-4"
                   persistent-placeholder
@@ -95,7 +97,7 @@
                 >
                 </v-select>
               </template>
-              <template v-else>
+              <!-- <template v-else>
                 <v-text-field
                   class="mt-4"
                   persistent-placeholder
@@ -122,6 +124,38 @@
                     decodeData.period
                   }}</e-kv>
                 </div>
+              </template> -->
+
+              <template v-else>
+                <v-text-field
+                  class="mt-4"
+                  persistent-placeholder
+                  v-model="form.name"
+                  label="Decentration domain"
+                  placeholder="ENS or SNS"
+                ></v-text-field>
+                <v-text-field
+                  class="mt-4"
+                  persistent-placeholder
+                  v-model="form.value"
+                  label="IPFS CID"
+                  :rules="[
+                    (v) =>
+                      /^[A-Za-z0-9]{46}|[A-Za-z0-9]{59}$/.test(v) || !v
+                        ? true
+                        : 'Invalid CID',
+                  ]"
+                  placeholder=""
+                ></v-text-field>
+                <v-select
+                  class="mt-4"
+                  v-model="form.ttl"
+                  :items="periodOpts"
+                  item-text="text"
+                  item-value="value"
+                  label="Time to Live"
+                >
+                </v-select>
               </template>
             </div>
           </v-form>
@@ -171,7 +205,7 @@ export default {
       ],
       form: {
         name: null,
-        key: "",
+        key: null,
         value: null,
         ttl: 1,
       },
@@ -183,6 +217,7 @@ export default {
       decodeState: 1,
       showDecodeStatus: false,
       createLoading: false,
+      owner: null,
     };
   },
   methods: {
@@ -208,21 +243,21 @@ export default {
         console.log(error);
       }
     },
-    onNext() {
+    async onNext() {
       if (this.stepIdx == 0) {
         this.stepIdx = 1;
       } else {
         let valid = this.$refs.form.validate();
-        console.log(valid);
         if (!valid) return;
+
         this.createIpns();
       }
     },
     async createIpns() {
       try {
-        if (this.type != 0) {
-          this.form.ttl = 0;
-        }
+        // if (this.type != 0) {
+        //   this.form.ttl = 0;
+        // }
         this.createLoading = true;
         const { data } = await this.$http2.post("$ipns/ipns", this.form);
         console.log(data);
