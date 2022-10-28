@@ -21,6 +21,9 @@
         </div>
       </div>
     </e-right-opt-wrap>
+
+    {{ localEnsList() }}111
+    {{ isExpired() }}
     <v-data-table
       :loading="loading"
       item-key="id"
@@ -169,6 +172,15 @@ export default {
     this.getList();
   },
   methods: {
+    localEnsList() {
+      return localStorage.getItem("ens-list");
+    },
+    isExpired() {
+      return (
+        (this.localEnsList() ? false : true) ??
+        JSON.parse(localStorage.getItem("ens-list")).expire < Date.now()
+      );
+    },
     onPublish(item) {
       console.log(item);
       this.$refs.ipnsPublish.show(item);
@@ -188,6 +200,7 @@ export default {
     },
     async getList() {
       try {
+        this.initLocalEns();
         let params = {
           cursor: this.cursor,
           keyword: this.keyword,
@@ -204,17 +217,26 @@ export default {
             if (chainId != "0x1") {
               return;
             }
-            const ensIpns = await this.getEnsIpns(it.name);
-            console.log(ensIpns);
-            if (ensIpns && ensIpns === it.key) {
-              it.verify = true;
+            let ensArr = JSON.parse(this.localEnsList()).arr;
+            let index = ensArr.findIndex((item) => item.domain == it.name);
+            console.log(index);
+            if (index == -1 || this.isExpired()) {
+              if (this.isExpired()) {
+                localStorage.removeItem("ens-list");
+                this.initLocalEns();
+              }
+              const ensIpns = await this.getEnsIpns(it.name);
+              console.log(ensIpns);
+              if (ensIpns && ensIpns === it.key) {
+                it.verify = true;
+              } else {
+                it.verify = false;
+              }
+              this.setLocalEns(it, ensIpns);
+              console.log();
             } else {
-              it.verify = false;
+              it.verify = ensArr[index].verify;
             }
-          } else if (/.+\.sol$/.test(it.name)) {
-            it.isDomain = "sol";
-
-            // this.owner = await this.verifyOwnerSns(it.name);
           }
         }
         this.list = data.list;
@@ -224,9 +246,6 @@ export default {
       this.loading = false;
     },
     async setContentHash(item) {
-      // if(item.isDomain == 'eth')
-      // if(item.isDomain == 'sol')
-
       if (!this.connectAddr) {
         this.showConnect();
         return;
@@ -245,7 +264,7 @@ export default {
         );
       }
 
-      this.ensIpns = await this.getEnsIpns(item.name);
+      // this.ensIpns = await this.getEnsIpns(item.name);
       try {
         this.$loading();
         const signer = this.provider.getSigner();
@@ -266,6 +285,9 @@ export default {
         this.$loading(`Transaction(${tx.hash.cutStr(4, 3)}) pending`);
         const receipt = await tx.wait();
         console.log(receipt);
+
+        this.ensIpns = await this.getEnsIpns(item.name);
+        this.setLocalEns(item, this.ensIpns);
       } catch (error) {
         this.onErr(error);
       }
@@ -356,6 +378,26 @@ export default {
           name: "showMetaConnect",
         },
       });
+    },
+    initLocalEns() {
+      if (!this.localEnsList()) {
+        let ensObj = {
+          arr: [],
+          expire: Date.now() + 7 * 24 * 3600 * 1000,
+        };
+        localStorage.setItem("ens-list", JSON.stringify(ensObj));
+        console.log(localStorage.getItem("ens-list"));
+        console.log("11111");
+      }
+    },
+    setLocalEns(item, ipns) {
+      let ensObj = JSON.parse(this.localEnsList());
+      ensObj.arr.push({
+        domain: item.name,
+        ipns: item.key,
+        verify: item.key == ipns,
+      });
+      localStorage.setItem("ens-list", JSON.stringify(ensObj));
     },
   },
 };
