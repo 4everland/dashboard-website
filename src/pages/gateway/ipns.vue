@@ -21,9 +21,6 @@
         </div>
       </div>
     </e-right-opt-wrap>
-
-    {{ localEnsList() }}111
-    {{ isExpired() }}
     <v-data-table
       :loading="loading"
       item-key="id"
@@ -71,6 +68,16 @@
         <v-icon size="18" class="d-ib ml-2" v-if="item.isDomain && item.verify"
           >mdi-share-circle</v-icon
         >
+
+        <v-btn
+          class="ml-2 action-btn-reload"
+          text
+          v-if="item.isDomain"
+          :loading="verifyLoading"
+          @click="verifyConfigure(item)"
+        >
+          <v-icon size="18" color="black">mdi-refresh</v-icon>
+        </v-btn>
       </template>
       <template #item.key="{ item }">
         <span>{{ item.key.cutStr(5, 8) }}</span>
@@ -129,15 +136,6 @@ import { mapState } from "vuex";
 import { namehash } from "@ensdomains/ensjs";
 import { encode, decode } from "@ensdomains/content-hash";
 import { getProvider, getENSRegistry, getResolver } from "@/plugins/ens";
-
-// import {
-//   getOwner,
-//   getConnect,
-//   getResolveData,
-//   domainUpdate,
-//   sendTransaction,
-// } from "@/plugins/sns";
-
 import IpnsCreate from "@/views/gateway/ipns-create";
 import IpnsPublish from "@/views/gateway/ipns-publish";
 export default {
@@ -161,6 +159,7 @@ export default {
       provider: null,
       node: null,
       ensIpns: null,
+      verifyLoading: false,
     };
   },
   computed: {
@@ -176,17 +175,15 @@ export default {
       return localStorage.getItem("ens-list");
     },
     isExpired() {
-      return (
-        (this.localEnsList() ? false : true) ??
-        JSON.parse(localStorage.getItem("ens-list")).expire < Date.now()
-      );
+      if (this.localEnsList()) {
+        return JSON.parse(localStorage.getItem("ens-list")).expire < Date.now();
+      }
+      return false;
     },
     onPublish(item) {
-      console.log(item);
       this.$refs.ipnsPublish.show(item);
     },
     async onDelete(item) {
-      console.log(item);
       try {
         let tip =
           "The following IPNS will be deleted, Are you sure you want to continue?";
@@ -219,7 +216,6 @@ export default {
             }
             let ensArr = JSON.parse(this.localEnsList()).arr;
             let index = ensArr.findIndex((item) => item.domain == it.name);
-            console.log(index);
             if (index == -1 || this.isExpired()) {
               if (this.isExpired()) {
                 localStorage.removeItem("ens-list");
@@ -338,6 +334,28 @@ export default {
         console.log(error);
       }
     },
+    async verifyConfigure(item) {
+      try {
+        this.verifyLoading = true;
+        const ensIpns = await this.getEnsIpns(item.name);
+        let ensObj = JSON.parse(this.localEnsList());
+        let index = ensObj.arr.findIndex((it) => it.domain == item.name);
+        let listIndex = this.list.findIndex((it) => it.name == item.name);
+
+        // if (item.key == ensIpns) {
+        //   ensObj.arr[index].verify = true;
+        // } else {
+        //   ensObj.arr[index].verify = false;
+        // }
+
+        ensObj.arr[index].verify = true;
+        localStorage.setItem("ens-list", JSON.stringify(ensObj));
+        this.list[listIndex].verify = true;
+      } catch (error) {
+        console.log(error);
+      }
+      this.verifyLoading = false;
+    },
     checkNet() {
       const chainId = window.ethereum.chainId;
       if (!chainId) return false;
@@ -383,11 +401,9 @@ export default {
       if (!this.localEnsList()) {
         let ensObj = {
           arr: [],
-          expire: Date.now() + 7 * 24 * 3600 * 1000,
+          expire: Date.now() + 3 * 24 * 3600 * 1000,
         };
         localStorage.setItem("ens-list", JSON.stringify(ensObj));
-        console.log(localStorage.getItem("ens-list"));
-        console.log("11111");
       }
     },
     setLocalEns(item, ipns) {
@@ -406,5 +422,12 @@ export default {
 .action-btn {
   padding: 0 !important;
   letter-spacing: 0;
+}
+.action-btn-reload {
+  width: 18px !important;
+  min-width: 18px !important;
+}
+.action-btn-reload .v-btn__loader {
+  width: 18px;
 }
 </style>

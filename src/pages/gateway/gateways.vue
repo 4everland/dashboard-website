@@ -105,20 +105,7 @@ export default {
         { text: "Created", value: "created_at" },
         { text: "Action", value: "act" },
       ],
-      list: [
-        // {
-        //   name: "loq.4everland.link",
-        //   access: "private",
-        //   bandwidth: 2222,
-        //   created: "2022-1-1",
-        // },
-        // {
-        //   name: "ylq.4everland.link",
-        //   access: "public",
-        //   bandwidth: 2222,
-        //   created: "2022-1-1",
-        // },
-      ],
+      list: [],
       loading: false,
       isGetList: false,
     };
@@ -128,7 +115,7 @@ export default {
       return this.balance < 100 && !this.list.length;
     },
     isInsufficient() {
-      return this.balance < 100 && this.list.length;
+      return this.balance < 100 && (this.list.length ? true : false);
     },
   },
   async mounted() {
