@@ -259,7 +259,6 @@ export default {
             },
           ],
         },
-        /*
         {
           label: "Gateway",
           img: "m-gateway",
@@ -269,13 +268,12 @@ export default {
               label: "Gateways",
               to: "/gateway/list",
             },
-            {
-              label: "IPNS Manager",
-              to: "/gateway/ipns",
-            },
+            // {
+            //   label: "IPNS Manager",
+            //   to: "/gateway/ipns",
+            // },
           ],
         },
-        */
         {
           label: "Resource",
           img: "m-usage",

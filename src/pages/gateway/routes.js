@@ -4,6 +4,8 @@ export default [
     component: () => import("./gateways"),
     meta: {
       title: "Gateways",
+      // hideNav: 1,
+      isTab: 1,
     },
   },
   {
