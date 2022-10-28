@@ -39,14 +39,19 @@
           >mdi-alert-circle-outline</v-icon
         > -->
 
-        <!-- <e-tooltip top v-if="item.isDomain">
-          <v-icon slot="ref" color="#333" size="18" class="pa-1 d-ib ml-2"
+        <e-tooltip top v-if="item.isDomain && !item.verify">
+          <v-icon
+            slot="ref"
+            color="#333"
+            size="18"
+            class="pa-1 d-ib ml-2"
+            @click="setContentHash(item)"
             >mdi-alert-circle-outline</v-icon
           >
           <span>setContentHash</span>
-        </e-tooltip> -->
+        </e-tooltip>
 
-        <v-menu top open-on-hover offset-y v-if="item.isDomain && !item.verify">
+        <!-- <v-menu top open-on-hover offset-y v-if="item.isDomain && !item.verify">
           <template v-slot:activator="{ on, attrs }">
             <v-icon
               slot="ref"
@@ -63,7 +68,7 @@
               <span class="fz-14">Set content hash</span>
             </v-list-item>
           </v-list>
-        </v-menu>
+        </v-menu> -->
 
         <v-icon size="18" class="d-ib ml-2" v-if="item.isDomain && item.verify"
           >mdi-share-circle</v-icon
@@ -73,7 +78,7 @@
           class="ml-2 action-btn-reload"
           text
           v-if="item.isDomain"
-          :loading="verifyLoading"
+          :loading="item.verifyLoading"
           @click="verifyConfigure(item)"
         >
           <v-icon size="18" color="black">mdi-refresh</v-icon>
@@ -159,7 +164,6 @@ export default {
       provider: null,
       node: null,
       ensIpns: null,
-      verifyLoading: false,
     };
   },
   computed: {
@@ -209,6 +213,7 @@ export default {
 
         for (const it of data.list) {
           if (/.+\.eth$/.test(it.name)) {
+            it.verifyLoading = false;
             it.isDomain = "eth";
             const chainId = window.ethereum.chainId;
             if (chainId != "0x1") {
@@ -251,20 +256,28 @@ export default {
       }
       this.owner = await this.verifyOwner(item.name);
       console.log(this.owner);
-      await this.$confirm(
-        `${this.owner.cutStr(6, 4)} is the owner of ${item.name}. Is that you?`
-      );
-      if (this.owner !== this.connectAddr) {
-        return this.$alert(
-          "Connected account is not the controller of the domain. "
-        );
-      }
 
-      // this.ensIpns = await this.getEnsIpns(item.name);
+      const ensIpns = await this.getEnsIpns(item.name);
       try {
+        await this.$confirm(
+          `${this.owner.cutStr(6, 4)} is the owner of ${
+            item.name
+          }. Is that you?`,
+          null,
+          {
+            confirmText: "Yes",
+            cancelText: "No",
+          }
+        );
+        if (this.owner !== this.connectAddr) {
+          return this.$alert(
+            "Connected account is not the controller of the domain. "
+          );
+        }
         this.$loading();
         const signer = this.provider.getSigner();
         const ipnsHashEncoded = encode("ipns-ns", item.key);
+        console.log(ipnsHashEncoded);
         const data = getResolver(
           this.resolver,
           this.provider
@@ -336,25 +349,26 @@ export default {
     },
     async verifyConfigure(item) {
       try {
-        this.verifyLoading = true;
+        item.verifyLoading = true;
         const ensIpns = await this.getEnsIpns(item.name);
+        console.log(ensIpns);
         let ensObj = JSON.parse(this.localEnsList());
         let index = ensObj.arr.findIndex((it) => it.domain == item.name);
         let listIndex = this.list.findIndex((it) => it.name == item.name);
 
-        // if (item.key == ensIpns) {
-        //   ensObj.arr[index].verify = true;
-        // } else {
-        //   ensObj.arr[index].verify = false;
-        // }
+        if (item.key == ensIpns) {
+          ensObj.arr[index].verify = true;
+          this.list[listIndex].verify = true;
+        } else {
+          ensObj.arr[index].verify = false;
+          this.list[listIndex].verify = false;
+        }
 
-        ensObj.arr[index].verify = true;
         localStorage.setItem("ens-list", JSON.stringify(ensObj));
-        this.list[listIndex].verify = true;
       } catch (error) {
         console.log(error);
       }
-      this.verifyLoading = false;
+      item.verifyLoading = false;
     },
     checkNet() {
       const chainId = window.ethereum.chainId;
@@ -426,6 +440,7 @@ export default {
 .action-btn-reload {
   width: 18px !important;
   min-width: 18px !important;
+  padding: 0 !important;
 }
 .action-btn-reload .v-btn__loader {
   width: 18px;

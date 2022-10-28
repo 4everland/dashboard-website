@@ -4,6 +4,7 @@ export default [
     component: () => import("./gateways"),
     meta: {
       title: "Gateways",
+      icon: "/img/svg/hosting/h-beta-active.svg",
       // hideNav: 1,
       isTab: 1,
     },
