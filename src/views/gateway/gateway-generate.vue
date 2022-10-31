@@ -1,7 +1,4 @@
 <style lang="scss">
-.gateway-generate-container {
-  font-family: "AppleSystemUIFont";
-}
 .check-all {
   background: #e1e4e8 !important;
 }
@@ -19,33 +16,26 @@
     </v-btn>
     <v-dialog v-model="showPop" max-width="600">
       <div class="pa-6 pt-5 gateway-generate-container">
-        <h3 class="fz-30">Create Gateway</h3>
-        <div class="pa-5" v-show="stepIdx == 0">
-          <div class="fz-16 gray">Set a gateway name</div>
+        <h3 class="fz-20">Create IPFS Dedicated Gateway</h3>
+        <div class="pt-5" v-show="stepIdx == 0">
           <div class="mt-3 d-flex align-start">
             <v-form ref="form" class="flex-1">
               <v-text-field
-                outlined
                 dense
                 v-model="subDomain"
-                placeholder="my company name"
-                suffix=".4everland.link"
+                persistent-placeholder
+                label="gateway name"
                 :rules="[
                   (v) => !!v || 'Invalid subdomain',
                   (v) =>
-                    /^(?!-)[a-z0-9-_]{2,20}(?!<-)$/.test(v)
+                    /^(?!-)[a-z0-9-_]{6,20}(?!<-)$/.test(v)
                       ? true
-                      : 'Invalid subdomain',
+                      : 'The gateway name can only support numbers, letters, and has to 6-20 digits.',
                 ]"
+                @input="checkout"
               ></v-text-field>
             </v-form>
-            <v-btn
-              color="primary"
-              class="ml-3"
-              @click="checkoutGateway"
-              :disabled="!subDomain"
-              >Checkout</v-btn
-            >
+            <span class="ml-3 mt-2">.4everland.link</span>
           </div>
           <decode-status
             v-if="showDecodeStatus"
@@ -72,15 +62,16 @@
         </div>
 
         <div class="ta-c mt-5">
-          <v-btn outlined width="180" @click="showPop = false">Cancel</v-btn>
           <v-btn
             color="primary"
-            class="ml-6"
             width="180"
             @click="onNext"
             :loading="createLoading"
             :disabled="stepIdx == 0 && validStatus != 2"
             >{{ stepIdx == 0 ? "Next" : "Create" }}</v-btn
+          >
+          <v-btn class="ml-6" outlined width="180" @click="showPop = false"
+            >Cancel</v-btn
           >
         </div>
       </div>
@@ -90,6 +81,7 @@
 
 <script>
 import DecodeStatus from "@/components/custom/decode-status";
+import debounce from "@/plugins/debounce";
 export default {
   components: {
     DecodeStatus,
@@ -151,21 +143,28 @@ export default {
         this.showPop = false;
       }
     },
+
     async checkoutGateway() {
       try {
-        if (!/^(?!-)[a-z0-9-_]{2,20}(?!<-)$/.test(this.subDomain)) return;
+        // console.log(this.subDomain);
+        if (!this.$refs.form.validate()) return;
+        // if (!/^(?!-)[a-z0-9-_]{2,20}(?!<-)$/.test(this.subDomain)) return;
         this.showDecodeStatus = true;
         this.validStatus = 1;
         const { data } = await this.$http.get(
           `$gateway/gateway/check/${this.subDomain}`
         );
-        console.log(data);
+        // console.log(data);
         if (data) return (this.validStatus = 3);
         this.validStatus = 2;
       } catch (error) {
         console.log(error);
         this.validStatus = 3;
       }
+    },
+    checkout() {
+      if (!this.showPop) return;
+      debounce(this.checkoutGateway, 500);
     },
     resetDecodeStatus() {
       this.showDecodeStatus = false;
