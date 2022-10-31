@@ -10,6 +10,7 @@
             firstItem.text
           }}</b>
         </e-link>
+        <img :src="meta.icon" alt="" width="50" v-if="meta.icon" />
       </div>
       <template v-if="breadItems.length">
         <v-icon size="20" color="#aaa">mdi-chevron-right</v-icon>

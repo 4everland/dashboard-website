@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="showPop" max-width="600">
     <div class="pa-6 pt-5 edit-container">
-      <h3 class="fz-30">Edit Gateway</h3>
-      <div class="px-5 pt-3">
+      <h3 class="fz-20">Edit Gateway</h3>
+      <div class="pt-3">
         <div class="gray fz-16 mb-3">
           {{ curGateway.name }}.4everland.link Access
         </div>
@@ -17,14 +17,15 @@
         </div>
       </div>
       <div class="ta-c mt-8">
-        <v-btn outlined width="180" @click="showPop = false">Cancel</v-btn>
         <v-btn
           color="primary"
-          class="ml-6"
           width="180"
           @click="onSave"
           :loading="saveLoading"
           >Save</v-btn
+        >
+        <v-btn outlined width="180" class="ml-6" @click="showPop = false"
+          >Cancel</v-btn
         >
       </div>
     </div>
@@ -73,7 +74,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.edit-container {
-  font-family: "AppleSystemUIFont";
-}
 </style>

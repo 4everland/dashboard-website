@@ -23,7 +23,11 @@
     </div>
     <div v-else>
       <e-right-opt-wrap :top="-55">
-        <gateway-generate @getList="getList" :isInsufficient="isInsufficient" />
+        <gateway-generate
+          @getList="getList"
+          :isInsufficient="isInsufficient"
+          :listLength="list.length"
+        />
       </e-right-opt-wrap>
       <div class="tips py-2 mr-3 mb-3 pr-5 al-c" v-show="isInsufficient">
         <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"
@@ -48,7 +52,9 @@
             <span>{{ item.name }}.4everland.link</span>
           </template>
           <template #item.scope="{ item }">
-            <span style="text-transform: capitalize">{{ item.scope }}</span>
+            <span style="text-transform: capitalize">{{
+              gatewayType(item.scope)
+            }}</span>
           </template>
           <template #item.bytes="{ item }">
             <span>{{ $utils.getFileSize(item.bytes) }}</span>
@@ -57,7 +63,7 @@
             <span>{{ new Date(item.created_at * 1000).format() }}</span>
           </template>
           <template #item.act="{ item }">
-            <v-btn
+            <!-- <v-btn
               class="action-btn"
               text
               color="primary"
@@ -69,7 +75,11 @@
             >
             <v-btn class="action-btn" text color="#999" @click="onDelete(item)"
               >Delete</v-btn
-            >
+            > -->
+
+            <span class="action-btn" @click="onDomain(item)">Domain</span>
+            <span class="action-btn ml-3" @click="onEdit(item)">Edit</span>
+            <span class="action-btn ml-3" @click="onDelete(item)">Delete</span>
           </template>
         </v-data-table>
 
@@ -102,6 +112,7 @@ export default {
         { text: "Name", value: "name" },
         { text: "Access", value: "scope" },
         { text: "Past 30 days  of Bandwidth", value: "bytes" },
+        { text: "Type", value: "type" },
         { text: "Created", value: "created_at" },
         { text: "Action", value: "act" },
       ],
@@ -116,6 +127,11 @@ export default {
     },
     isInsufficient() {
       return this.balance < 100 && (this.list.length ? true : false);
+    },
+    gatewayType() {
+      return function (type) {
+        return type == "public" ? "Open" : "Restricted";
+      };
     },
   },
   async mounted() {
@@ -153,6 +169,7 @@ export default {
       try {
         this.loading = true;
         const { data } = await this.$http.get("$gateway/gateway/");
+        data.forEach((it) => (it.type = "IPFS"));
         this.list = data;
       } catch (error) {
         console.log(error);
@@ -170,9 +187,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+$color1: #775da6;
 .action-btn {
-  padding: 0 !important;
-  letter-spacing: 0;
+  cursor: pointer;
+  color: $color1;
 }
 .tips {
   color: #6a778b;

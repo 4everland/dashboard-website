@@ -20,7 +20,9 @@ const authApi = inDev
 const v3Api = inDev
   ? "https://settlement.foreverland.xyz"
   : "https://pay.4everland.org";
-const gateWayApi = inDev ? "https://gateway-api.foreverland.xyz" : "";
+const gateWayApi = inDev
+  ? "https://gateway-api.foreverland.xyz"
+  : "https://gateway-api.4everland.org";
 
 const ipnsApi = inDev ? "https://ipns.foreverland.xyz" : "";
 Vue.prototype.$endpoint = endpoint;

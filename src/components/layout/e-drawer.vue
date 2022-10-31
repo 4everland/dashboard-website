@@ -81,7 +81,15 @@
             <v-list-item-content>
               <v-list-item-title>
                 <b class="fz-16">{{ it.label }}</b>
+                <img
+                  v-if="it.suffixImg"
+                  class="ml-2"
+                  width="25"
+                  :src="it.suffixImg"
+                  alt=""
+                />
               </v-list-item-title>
+              <!--  -->
             </v-list-item-content>
           </template>
 
@@ -262,10 +270,11 @@ export default {
         {
           label: "Gateway",
           img: "m-gateway",
+          suffixImg: "/img/svg/hosting/h-beta-active.svg",
           group: /^\/gateway/i,
           subs: [
             {
-              label: "Gateways",
+              label: "Dedicated Gateway",
               to: "/gateway/list",
             },
             // {

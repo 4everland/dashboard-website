@@ -1,8 +1,8 @@
 <template>
   <v-dialog v-model="showPop" max-width="600">
     <div class="pa-6 pt-5 domain-content">
-      <h3 class="fz-30 mb-7">Add Domain</h3>
-      <div class="pl-5">
+      <h3 class="mb-3 fz-20">Add Domain</h3>
+      <div>
         <div class="mb-4">
           <span class="tips">These domains are assigned to your gateway </span>
           <span class="tips-name">{{ curIpns.name }}.4everland.link.</span>
@@ -12,7 +12,6 @@
             <v-text-field
               persistent-placeholder
               v-model="domain"
-              outlined
               dense
               placeholder=""
               :rules="[
@@ -20,14 +19,6 @@
               ]"
             ></v-text-field>
           </v-form>
-          <v-btn
-            color="primary"
-            width="91"
-            class="ml-4"
-            @click="addDomain"
-            :loading="addLoading"
-            >Add</v-btn
-          >
         </div>
 
         <v-skeleton-loader type="article" v-if="loading"></v-skeleton-loader>
@@ -50,7 +41,17 @@
       </div>
 
       <div class="ta-c mt-9">
-        <v-btn outlined @click="showPop = false" width="180">Cancel</v-btn>
+        <v-btn
+          color="primary"
+          width="180"
+          @click="addDomain"
+          :loading="addLoading"
+          :disabled="domainList.length || disabled"
+          >Add</v-btn
+        >
+        <v-btn outlined class="ml-4" @click="showPop = false" width="180"
+          >Cancel</v-btn
+        >
       </div>
     </div>
   </v-dialog>
@@ -75,7 +76,7 @@ export default {
   },
   computed: {
     disabled() {
-      return $regMap.domain.test(this.domain);
+      return !this.$regMap.domain.test(this.domain);
     },
   },
   methods: {
@@ -109,11 +110,24 @@ export default {
         const { data } = await this.$http2.get(`/domain/gateway/list`, {
           params,
         });
-        this.domainList = data.content;
-        this.loading = false;
+
+        if (data.content.length && !data.content[0].valid) {
+          for (const domain of data.content) {
+            await this.$http2.get(`/domain/verify/${domain.id}`);
+          }
+
+          const res = await this.$http2.get(`/domain/gateway/list`, {
+            params,
+          });
+          this.domainList = res.data.content;
+        } else {
+          this.domainList = data.content;
+        }
       } catch (error) {
         //
+        console.log(error);
       }
+      this.loading = false;
     },
   },
   watch: {
@@ -132,7 +146,6 @@ export default {
 
 <style lang="scss" scoped>
 .domain-content {
-  font-family: "AppleSystemUIFont";
   .tips {
     color: #6c7789;
   }

@@ -3,7 +3,13 @@
     <div class="mt-2 al-c justify-space-between">
       <div>{{ item.domain }}</div>
       <div>
-        <v-btn small icon class="mr-4" @click="onRefresh" :loading="refreshing">
+        <v-btn
+          small
+          icon
+          class="mr-4"
+          @click="onRefresh(item)"
+          :loading="refreshing"
+        >
           <v-icon>mdi-refresh</v-icon>
         </v-btn>
         <v-btn
@@ -76,13 +82,18 @@ export default {
     },
   },
   methods: {
-    async onRefresh() {
-      this.refreshing = true;
-      // do something request single
-      // console.log(this.$parent.$parent.$parent);
-      await this.$parent.$parent.$parent.getList();
-      this.refreshing = false;
+    async onRefresh(item) {
+      try {
+        this.refreshing = true;
+        await this.$http2.get(`/domain/verify/${item.id}`);
+        await this.$parent.$parent.$parent.getList();
+        this.refreshing = false;
+      } catch (error) {
+        console.log(error);
+        this.refreshing = false;
+      }
     },
+
     async onDelete() {
       try {
         let tip = `Would you like to remove the domain ${this.item.domain} from your gateway ${this.ipns.name}.4everland.link?
