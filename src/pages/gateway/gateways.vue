@@ -10,7 +10,7 @@
       </div>
       <div class="d-flex f-center">
         <div style="max-width: 550px">
-          As the 4EVERLAND account balance is less than 100u, the gateway
+          As the 4EVERLAND account balance is less than $100, the gateway
           service has been suspended. Once the balance is replenished, the
           service will be automatically resumed.
         </div>
@@ -34,7 +34,7 @@
           >mdi-alert-circle-outline</v-icon
         >
         <span class="fz-13"
-          >As the 4EVERLAND account balance is less than 100u, the gateway
+          >As the 4EVERLAND account balance is less than $100, the gateway
           service has been suspended. Once the balance is replenished, the
           service will be automatically resumed.</span
         >
