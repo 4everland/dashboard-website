@@ -145,9 +145,9 @@ export default {
     share() {
       this.$http.post("$auth/events/airdrop/share");
       window.open(
-        `https://twitter.com/intent/tweet?text=💠The &hashtags=Web3 product journey has begun for me at @4everland_org, and I have received free resources to help me along the way.🚀The best way to explore Web3 is to experience its products. Join us today and start your Web3 journey.✅${encodeURIComponent(
+        `https://twitter.com/intent/tweet?text=💠The %23Web3 product journey has begun for me at @4everland_org, and I have received free resources to help me along the way.🚀The best way to explore Web3 is to experience its products. Join us today and start your Web3 journey.✅${encodeURIComponent(
           this.shareUrl
-        )}`
+        )}&hashtags=IPFS,Arweave,Dfinity,Web3`
       );
       this.cancel();
     },

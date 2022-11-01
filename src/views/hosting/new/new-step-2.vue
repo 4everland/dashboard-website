@@ -26,7 +26,7 @@
                   :href="`https://twitter.com/intent/tweet?text=${encodeURI(
                     `I've deployed a wonderful Dapp through @4everland_org Hosting, which helps developers quickly build, publish, and manage Dwebs. Come and experience it!  
   Click here to access: https://${info.domain}`
-                  )}&hashtags=Web3,Tech,decentralized,IPFS`"
+                  )}&hashtags=IPFS,Arweave,Dfinity,Web3`"
                   target="_blank"
                   >Share</a
                 >
