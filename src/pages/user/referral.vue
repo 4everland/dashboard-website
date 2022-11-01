@@ -125,7 +125,8 @@
         </div>
       </v-col>
       <v-col md="7">
-        <div class="referral-link flex-1">
+        <v-skeleton-loader type="article" v-if="!code" />
+        <div v-else class="referral-link flex-1">
           <div
             class="
               referral-link-header
@@ -263,7 +264,7 @@ export default {
       isFocus: (s) => s.isFocus,
     }),
     shareUrl() {
-      return location.origin + "/?invite=" + this.code;
+      return location.origin + "?invite=" + this.code;
     },
     pageLen() {
       return Math.ceil(this.total / 10);
@@ -451,7 +452,7 @@ export default {
         case "FaceBook":
           window.open(
             `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-              location.origin + "/?invite=" + this.code
+              location.origin + "?invite=" + this.code
             )}`
           );
           break;

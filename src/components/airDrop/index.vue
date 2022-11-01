@@ -65,7 +65,7 @@
 export default {
   computed: {
     shareUrl() {
-      return location.origin + "/?invite=" + this.code;
+      return location.origin + "?invite=" + this.code;
     },
   },
   data() {
