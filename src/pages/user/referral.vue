@@ -125,7 +125,8 @@
         </div>
       </v-col>
       <v-col md="7">
-        <div class="referral-link flex-1">
+        <v-skeleton-loader type="article" v-if="!code" />
+        <div v-else class="referral-link flex-1">
           <div
             class="
               referral-link-header
@@ -263,7 +264,7 @@ export default {
       isFocus: (s) => s.isFocus,
     }),
     shareUrl() {
-      return location.origin + "/?invite=" + this.code;
+      return location.origin + "?invite=" + this.code;
     },
     pageLen() {
       return Math.ceil(this.total / 10);
@@ -436,10 +437,11 @@ export default {
           // &hashtags=IPFS,Arweave,Dfinity
           // `);
 
-          window.open(`https://twitter.com/intent/tweet?text=The %23Web3 product journey has begun for me at @4everland_org, and I have received free resources to help me along the way.%0A%0AThe best way to explore Web3 is to experience its products. Join us today and start your Web3 journey.%0A%0A✅${encodeURIComponent(
-            this.shareUrl
-          )}%0A&hashtags=IPFS,Arweave,Dfinity
-          `);
+          window.open(
+            `https://twitter.com/intent/tweet?text=The %23Web3 product journey has begun for me at @4everland_org, and I have received free resources to help me along the way.%0A%0AThe best way to explore Web3 is to experience its products. Join us today and start your Web3 journey.%0A%0A✅${encodeURIComponent(
+              this.shareUrl
+            )}%0A&hashtags=IPFS,Arweave,Dfinity`
+          );
           break;
         case "Discord":
           this.openFrame("discord://", "Discord");
@@ -450,7 +452,7 @@ export default {
         case "FaceBook":
           window.open(
             `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-              location.origin + "/?invite=" + this.code
+              location.origin + "?invite=" + this.code
             )}`
           );
           break;

@@ -54,9 +54,7 @@ export default {
       const src =
         "https://github.com/4everland/project-templates/tree/main/examples/" +
         it.slug;
-      const link = `/hosting/new?type=clone-flow&s=${encodeURIComponent(
-        src
-      )}&n=${it.name}`;
+      const link = `/hosting/new?type=clone-flow&s=${encodeURIComponent(src)}`;
       this.$navTo(link);
     },
     onImport(it) {

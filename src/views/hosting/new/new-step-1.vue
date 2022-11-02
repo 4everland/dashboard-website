@@ -41,7 +41,8 @@
       <h3>Hosting Platform</h3>
       <v-row>
         <v-col
-          cols="4"
+          cols="12"
+          md="4"
           v-for="(it, i) in platList"
           :key="i"
           @click="form.platform = it.name"
@@ -298,7 +299,8 @@ export default {
   },
   methods: {
     async onInit() {
-      const { c, e } = this.query;
+      let { c, e, env, root } = this.query;
+      if (env) e = env;
       if (!this.info || !c) return;
       const { id, name, defaultBranch = "", frameWorkAdvice = "" } = this.info;
       let envList = [];
@@ -320,7 +322,7 @@ export default {
         repoId: id,
         name,
         currentBranch: defaultBranch,
-        rootDirectory: srcDir,
+        rootDirectory: root || srcDir,
         framework: frameWorkAdvice,
         env: envList,
         platform: "IPFS",
@@ -363,7 +365,7 @@ export default {
       const item = this.$getFramework(val);
       const { buildCommand = {}, outputDirectory = {} } = item.settings || {};
       const obj = {
-        outputDirectory: outputDirectory.value || "./",
+        outputDirectory: outputDirectory.value || this.query.output || "./",
       };
       if (!this.scripts) {
         obj.buildCommand = buildCommand.value || "";
