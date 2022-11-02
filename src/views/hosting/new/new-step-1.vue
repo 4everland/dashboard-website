@@ -41,7 +41,8 @@
       <h3>Hosting Platform</h3>
       <v-row>
         <v-col
-          cols="4"
+          cols="12"
+          md="4"
           v-for="(it, i) in platList"
           :key="i"
           @click="form.platform = it.name"
