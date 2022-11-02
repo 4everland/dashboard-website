@@ -43,7 +43,12 @@
         <div class="mt-8" style="max-width: 600px">
           <h4>Project Name</h4>
           <div class="d-flex al-c hide-msg">
-            <v-text-field v-model.trim="name" outlined dense />
+            <v-text-field
+              v-model.trim="name"
+              outlined
+              dense
+              @keyup.enter="onCreate"
+            />
             <v-btn
               class="ml-5"
               color="primary"
@@ -137,6 +142,7 @@ export default {
     },
   },
   mounted() {
+    console.log(this.query);
     this.getInfo();
   },
   methods: {
@@ -192,9 +198,13 @@ export default {
         const item = data.repoList.filter((it) => it.name == this.gitName)[0];
         if (!item) throw new Error("Failed to fetch git repo");
         this.$emit("git-repo", item);
-        const { e } = this.query;
+        const query = this.query;
         let link = "/hosting/new?type=clone-flow&c=" + this.gitName;
-        if (e) link += `&e=${encodeURIComponent(e)}`;
+        for (const key in query) {
+          if (["type", "c", "s"].includes(key)) continue;
+          link += `&${key}=${encodeURIComponent(query[key])}`;
+        }
+        console.log(link);
         this.$router.replace(link);
       } catch (error) {
         console.log(error);

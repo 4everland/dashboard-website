@@ -298,7 +298,8 @@ export default {
   },
   methods: {
     async onInit() {
-      const { c, e } = this.query;
+      let { c, e, env, root } = this.query;
+      if (env) e = env;
       if (!this.info || !c) return;
       const { id, name, defaultBranch = "", frameWorkAdvice = "" } = this.info;
       let envList = [];
@@ -320,7 +321,7 @@ export default {
         repoId: id,
         name,
         currentBranch: defaultBranch,
-        rootDirectory: srcDir,
+        rootDirectory: root || srcDir,
         framework: frameWorkAdvice,
         env: envList,
         platform: "IPFS",
@@ -363,7 +364,7 @@ export default {
       const item = this.$getFramework(val);
       const { buildCommand = {}, outputDirectory = {} } = item.settings || {};
       const obj = {
-        outputDirectory: outputDirectory.value || "./",
+        outputDirectory: outputDirectory.value || this.query.output || "./",
       };
       if (!this.scripts) {
         obj.buildCommand = buildCommand.value || "";
