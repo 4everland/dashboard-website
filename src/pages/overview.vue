@@ -6,7 +6,23 @@
 
 <template>
   <div>
-    <v-carousel hide-delimiters height="180" class="bdrs-10 mb-4">
+    <v-carousel
+      hide-delimiter-background
+      :show-arrows="false"
+      height="180"
+      class="bdrs-10 mb-4"
+      cycle
+    >
+      <v-carousel-item
+        href="https://forms.gle/CrCVBoWFaA4V3RiB6"
+        target="_blank"
+      >
+        <img
+          src="https://4ever-web.4everland.store/img/banner/20221103-msp.jpg"
+          alt=""
+          class="w100p bdrs-10 d-b"
+        />
+      </v-carousel-item>
       <v-carousel-item to="/reward-hub">
         <div class="pos-r mb-3 ov-h">
           <img
@@ -21,16 +37,6 @@
             Explore, Earn, and Enjoy Free Resources in 4EVERLAND Reward Hub
           </div>
         </div>
-      </v-carousel-item>
-      <v-carousel-item
-        href="https://forms.gle/CrCVBoWFaA4V3RiB6"
-        target="_blank"
-      >
-        <img
-          src="https://4ever-web.4everland.store/img/banner/1103-msp.png"
-          alt=""
-          class="w100p bdrs-10 d-b"
-        />
       </v-carousel-item>
     </v-carousel>
 
