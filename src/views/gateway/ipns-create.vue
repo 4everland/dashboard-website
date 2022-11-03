@@ -26,10 +26,10 @@
       <span class="fz-18">+</span>
       <span class="ml-1">Create</span>
     </v-btn>
-    <v-dialog v-model="showPop" max-width="600">
+    <v-dialog v-model="showPop" max-width="600" persistent>
       <div class="pa-6 pt-5">
-        <h3 class="fz-30">Create IPNS</h3>
-        <div class="pa-5" v-if="stepIdx == 0">
+        <h3 class="fz-20">Create IPNS</h3>
+        <div class="pa-3" v-show="stepIdx == 0">
           <v-radio-group v-model="type" mandatory>
             <v-radio
               class="mb-4 radio-al-start"
@@ -53,7 +53,7 @@
             <a href="https://docs.4everland.org/">Click to learn more.</a>
           </div>
         </div>
-        <template v-else>
+        <div v-show="stepIdx !== 0">
           <div class="gray fz-13 mt-1 create-type">
             {{ options[type].label }}
           </div>
@@ -61,7 +61,6 @@
             <div class="pa-5">
               <template v-if="type == 0">
                 <v-text-field
-                  class="mt-4 name-input"
                   persistent-placeholder
                   v-model="form.name"
                   label="Set a Name"
@@ -75,91 +74,45 @@
                   ]"
                 ></v-text-field>
                 <v-text-field
-                  class="mt-4"
                   persistent-placeholder
                   v-model="form.value"
-                  label="IPFS CID"
-                  :rules="[
-                    (v) =>
-                      /^[A-Za-z0-9]{46}|[A-Za-z0-9]{59}$/.test(v) || !v
-                        ? true
-                        : 'Invalid CID',
-                  ]"
-                  placeholder=""
+                  label="IPFS Path"
                 ></v-text-field>
                 <v-select
-                  class="mt-4"
-                  v-model="form.ttl"
+                  v-model="form.lifetime"
                   :items="periodOpts"
                   item-text="text"
                   item-value="value"
-                  label="Time to Live"
+                  label="End of Life"
                 >
                 </v-select>
               </template>
-              <!-- <template v-else>
-                <v-text-field
-                  class="mt-4"
-                  persistent-placeholder
-                  v-model="form.key"
-                  label="IPNS Key"
-                  placeholder="IPNS"
-                ></v-text-field>
-                <div class="d-flex al-c">
-                  <v-text-field
-                    class="mt-4"
-                    persistent-placeholder
-                    v-model="form.value"
-                    label="Upload private key and sign it"
-                    placeholder="Upload base64 encoding"
-                  ></v-text-field>
-                  <v-btn color="primary" class="ml-4" @click="decodePrivateKey"
-                    >Decode</v-btn
-                  >
-                </div>
-                <decode-status v-if="showDecodeStatus" :status="decodeState" />
-                <div class="mt-5 fz-14">
-                  <e-kv label="IPFS CID:">{{ decodeData.cid }}</e-kv>
-                  <e-kv class="mt-3" label="Time To Live:">{{
-                    decodeData.period
-                  }}</e-kv>
-                </div>
-              </template> -->
-
               <template v-else>
                 <v-text-field
-                  class="mt-4"
                   persistent-placeholder
                   v-model="form.name"
                   label="Decentration domain"
-                  placeholder="ENS or SNS"
+                  :rules="[
+                    (v) => (/\.eth$/.test(v) && v ? true : 'Invalid name'),
+                  ]"
                 ></v-text-field>
                 <v-text-field
-                  class="mt-4"
                   persistent-placeholder
                   v-model="form.value"
-                  label="IPFS CID"
-                  :rules="[
-                    (v) =>
-                      /^[A-Za-z0-9]{46}|[A-Za-z0-9]{59}$/.test(v) || !v
-                        ? true
-                        : 'Invalid CID',
-                  ]"
-                  placeholder=""
+                  label="IPFS Path"
                 ></v-text-field>
                 <v-select
-                  class="mt-4"
-                  v-model="form.ttl"
+                  v-model="form.lifetime"
                   :items="periodOpts"
                   item-text="text"
                   item-value="value"
-                  label="Time to Live"
+                  label="End of Life"
                 >
                 </v-select>
               </template>
             </div>
           </v-form>
-        </template>
+        </div>
 
         <div class="ta-c mt-5">
           <v-btn outlined width="180" @click="showPop = false">Cancel</v-btn>
@@ -178,7 +131,6 @@
 </template>
 
 <script>
-import decodeStatus from "@/components/custom/decode-status";
 export default {
   data() {
     return {
@@ -187,37 +139,33 @@ export default {
       stepIdx: 0,
       options: [
         {
-          label: "Generate an IPNS with CID.",
-          tip: "We'll publish the CID and generate an IPNS.",
+          label: "Generate an IPNS with IPFS Path.",
+          tip: "We'll publish the IPFS Path and generate an IPNS.",
           value: 0,
         },
         {
-          label: "Generate an IPNS by uploading the private key and signing.",
-          tip: "Users can keep IPNS alive by periodically uploading the private key and signing it. ",
+          label: "Create IPNS via decentralised domain.",
+          tip: "Support for ENS authentication bindings.",
           value: 1,
         },
       ],
       periodOpts: [
         { text: "24h", value: 1 },
-        { text: "30d", value: 2 },
-        { text: "90d", value: 3 },
-        { text: "180d", value: 4 },
+        { text: "30d", value: 30 },
+        { text: "90d", value: 90 },
+        { text: "180d", value: 180 },
       ],
       form: {
         name: null,
-        key: null,
-        value: null,
-        ttl: 1,
+        value: "",
+        lifetime: 1,
       },
       decodeData: {
         cid: "",
         period: "",
       },
       valid: false,
-      decodeState: 1,
-      showDecodeStatus: false,
       createLoading: false,
-      owner: null,
     };
   },
   methods: {
@@ -225,23 +173,6 @@ export default {
       this.stepIdx = 0;
       this.type = 0;
       this.showPop = true;
-    },
-    async decodePrivateKey() {
-      try {
-        this.showDecodeStatus = true;
-        this.decodeState = 1;
-        const { data } = await this.$http2.post("$ipns/ipns/unmarshal", {
-          key: this.form.key,
-          value: this.form.value,
-        });
-        console.log(data);
-        this.decodeState = 2;
-        this.decodeData.cid = data.value;
-        this.decodeData.period = data.ttl;
-      } catch (error) {
-        this.decodeState = 3;
-        console.log(error);
-      }
     },
     async onNext() {
       if (this.stepIdx == 0) {
@@ -255,12 +186,8 @@ export default {
     },
     async createIpns() {
       try {
-        // if (this.type != 0) {
-        //   this.form.ttl = 0;
-        // }
         this.createLoading = true;
-        const { data } = await this.$http2.post("$ipns/ipns", this.form);
-        console.log(data);
+        await this.$http2.post("$ipns/names", this.form);
       } catch (error) {
         console.log(error);
       }
@@ -274,12 +201,15 @@ export default {
     showPop(newVal) {
       if (!newVal) {
         this.$refs.form.reset();
-        this.form.ttl = 1;
+        setTimeout(() => {
+          this.form = {
+            name: null,
+            value: "",
+            lifetime: 1,
+          };
+        }, 500);
       }
     },
-  },
-  components: {
-    decodeStatus,
   },
 };
 </script>

@@ -63,20 +63,6 @@
             <span>{{ new Date(item.created_at * 1000).format() }}</span>
           </template>
           <template #item.act="{ item }">
-            <!-- <v-btn
-              class="action-btn"
-              text
-              color="primary"
-              @click="onDomain(item)"
-              >Domain</v-btn
-            >
-            <v-btn class="action-btn" text color="primary" @click="onEdit(item)"
-              >Edit</v-btn
-            >
-            <v-btn class="action-btn" text color="#999" @click="onDelete(item)"
-              >Delete</v-btn
-            > -->
-
             <span class="action-btn" @click="onDomain(item)">Domain</span>
             <span class="action-btn ml-3" @click="onEdit(item)">Edit</span>
             <span class="action-btn ml-3" @click="onDelete(item)">Delete</span>

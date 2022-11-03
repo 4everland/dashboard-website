@@ -1,43 +1,23 @@
 <template>
   <v-dialog v-model="showPop" max-width="600">
     <div class="pa-6 pt-5">
-      <h3 class="fz-30">Publish Access</h3>
+      <h3 class="fz-20">Publish Access</h3>
       <v-form ref="form" v-model="valid" class="mt-4">
-        <template v-if="curPublishData.ttl != 0">
-          <v-text-field
-            persistent-placeholder
-            v-model="form.value"
-            label="IPFS CID"
-            placeholder=""
-            :rules="[(v) => !!(v || '').trim() || 'Invalid CID']"
-          ></v-text-field>
-        </template>
-        <template v-else>
-          <div class="d-flex al-c">
-            <v-text-field
-              class="mt-4"
-              persistent-placeholder
-              v-model="form.value"
-              label="Upload private key and sign it"
-              placeholder=""
-            ></v-text-field>
-            <v-btn color="primary" class="ml-4" @click="decodePrivateKey"
-              >Decode</v-btn
-            >
-          </div>
-          <decode-status
-            v-if="showDecodeStatus"
-            :status="decodeState"
-          ></decode-status>
-          <div class="mt-8 fz-14">
-            <e-kv label="IPFS CID:">{{
-              decodeData.cid ? decodeData.cid : "/"
-            }}</e-kv>
-            <e-kv class="mt-3" label="Refresh period:">{{
-              decodeData.period ? decodeData.period : "/"
-            }}</e-kv>
-          </div>
-        </template>
+        <v-text-field
+          persistent-placeholder
+          v-model="form.value"
+          label="IPFS Path"
+          placeholder=""
+          :rules="[(v) => !!(v || '').trim() || 'Invalid Path']"
+        ></v-text-field>
+        <v-select
+          v-model="form.lifetime"
+          :items="periodOpts"
+          item-text="text"
+          item-value="value"
+          label="End of Life"
+        >
+        </v-select>
       </v-form>
 
       <div class="ta-c mt-5">
@@ -48,7 +28,6 @@
           width="100"
           @click="confirmPublish"
           :loading="publishLoading"
-          :disabled="curPublishData.ttl == 0 && decodeState != 2"
           >Publish</v-btn
         >
       </div>
@@ -67,45 +46,27 @@ export default {
     return {
       form: {
         value: "",
-        // key: "",
+        lifetime: 1,
       },
       curPublishData: {},
-      decodeData: {
-        cid: "",
-        period: "",
-      },
       showPop: false,
       valid: false,
-      decodeState: 1,
-      showDecodeStatus: false,
       publishLoading: false,
+      periodOpts: [
+        { text: "24h", value: 1 },
+        { text: "30d", value: 30 },
+        { text: "90d", value: 90 },
+        { text: "180d", value: 180 },
+      ],
     };
   },
   methods: {
     show(item) {
+      console.log(item);
       this.curPublishData = item;
       this.showPop = true;
-      if (item.value && item.ttl != 0) {
-        this.form.value = item.value;
-      }
-      // this.form.key = item.key;
-    },
-    async decodePrivateKey() {
-      try {
-        this.showDecodeStatus = true;
-        this.decodeState = 1;
-        const { data } = await this.$http2.post("$ipns/ipns/unmarshal", {
-          key: this.curPublishData.key,
-          value: this.form.value,
-        });
-        console.log(data);
-        this.decodeState = 2;
-        this.decodeData.cid = data.value;
-        this.decodeData.period = data.ttl;
-      } catch (error) {
-        console.log(error);
-        this.decodeState = 3;
-      }
+      this.form.value = item.value;
+      this.form.lifetime = Number(item.lifetime);
     },
     async confirmPublish() {
       this.publishLoading = true;
@@ -113,14 +74,14 @@ export default {
         const valid = this.$refs.form.validate();
         if (!valid) return;
         await this.$http2.put(
-          `$ipns/ipns/${this.curPublishData.key}`,
+          `$ipns/names/${this.curPublishData.key}`,
           this.form
         );
         this.$toast("Publish successfully！");
         this.$emit("getList");
       } catch (error) {
         console.log(error);
-        this.$toast("Publish failure！");
+        this.$alert(error.message);
       }
       this.publishLoading = false;
       this.showPop = false;
@@ -129,8 +90,9 @@ export default {
   watch: {
     showPop(val) {
       if (!val) {
+        console.log(this.$refs.form);
+
         this.$refs.form.reset();
-        this.showDecodeStatus = false;
       }
     },
   },
