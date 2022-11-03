@@ -18,7 +18,7 @@
         target="_blank"
       >
         <img
-          src="https://4ever-web.4everland.store/img/banner/20221103-msp.jpg"
+          src="https://4ever-web.4everland.store/img/banner/20221103-115504.jpg"
           alt=""
           class="w100p bdrs-10 d-b"
         />
