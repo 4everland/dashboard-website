@@ -4,7 +4,7 @@
       <img
         src="/img/bg/user/reward-hub-bg.png"
         class="w100p img-cover d-b"
-        style="max-height: 210px"
+        style="max-height: 180px"
       />
       <div class="pos-center link-2 fw-b ta-c w100p" style="max-width: 450px">
         <h1 class="fz-40">Reward Hub</h1>

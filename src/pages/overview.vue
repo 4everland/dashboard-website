@@ -6,21 +6,34 @@
 
 <template>
   <div>
-    <router-link to="/reward-hub">
-      <div class="pos-r mb-3 bdrs-10 ov-h">
-        <img
-          src="/img/bg/user/reward-hub-bg.png"
-          class="w100p img-cover d-b"
-          style="max-height: 210px"
-        />
-        <div
-          class="pos-center link-2 fz-25 fw-b ta-c w100p"
-          style="max-width: 500px"
-        >
-          Explore, Earn, and Enjoy Free Resources in 4EVERLAND Reward Hub
+    <v-carousel hide-delimiters height="180" class="bdrs-10 mb-4">
+      <v-carousel-item to="/reward-hub">
+        <div class="pos-r mb-3 ov-h">
+          <img
+            src="/img/bg/user/reward-hub-bg.png"
+            class="w100p img-cover d-b"
+            style="max-height: 180px"
+          />
+          <div
+            class="pos-center link-2 fz-25 fw-b ta-c w100p"
+            style="max-width: 500px"
+          >
+            Explore, Earn, and Enjoy Free Resources in 4EVERLAND Reward Hub
+          </div>
         </div>
-      </div>
-    </router-link>
+      </v-carousel-item>
+      <v-carousel-item
+        href="https://forms.gle/CrCVBoWFaA4V3RiB6"
+        target="_blank"
+      >
+        <img
+          src="https://4ever-web.4everland.store/img/banner/1103-msp.png"
+          alt=""
+          class="w100p bdrs-10 d-b"
+        />
+      </v-carousel-item>
+    </v-carousel>
+
     <div class="pos-r mb-5">
       <div>
         <h2>{{ uname }}</h2>
