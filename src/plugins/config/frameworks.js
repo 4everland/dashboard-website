@@ -81,7 +81,8 @@ export default [
         placeholder: "`yarn install` or `npm install`",
       },
       buildCommand: {
-        placeholder: "`npm run build` or `nuxt generate`",
+        placeholder: "",
+        value: "npm run generate",
       },
       devCommand: {
         value: "nuxt",

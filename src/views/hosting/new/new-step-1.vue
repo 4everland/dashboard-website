@@ -326,6 +326,7 @@ export default {
         framework: frameWorkAdvice,
         env: envList,
         platform: "IPFS",
+        buildCommand: this.query.build || "",
       });
       this.branchList = defaultBranch ? [defaultBranch] : [];
       this.dirList = [];
@@ -365,10 +366,10 @@ export default {
       const item = this.$getFramework(val);
       const { buildCommand = {}, outputDirectory = {} } = item.settings || {};
       const obj = {
-        outputDirectory: outputDirectory.value || this.query.output || "./",
+        outputDirectory: this.query.output || outputDirectory.value || "./",
       };
-      if (!this.scripts) {
-        obj.buildCommand = buildCommand.value || "";
+      if (buildCommand.value) {
+        obj.buildCommand = this.query.build || buildCommand.value;
       }
       Object.assign(this.form, obj);
       this.buildCommandHint = buildCommand.placeholder || "";
@@ -392,7 +393,11 @@ export default {
         if (scripts) {
           this.scripts = JSON.parse(scripts);
           const { build } = this.scripts;
-          if (build && framework != "nextjs") {
+          if (
+            build &&
+            !this.query.build &&
+            ["nextjs", "nuxtjs"].indexOf(framework) == -1
+          ) {
             obj.buildCommand = "npm run build";
           }
         }
