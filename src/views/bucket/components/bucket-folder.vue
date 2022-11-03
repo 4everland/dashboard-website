@@ -105,7 +105,7 @@
                 <v-icon v-if="!item.isFile" size="18" class="mr-2"
                   >mdi-folder</v-icon
                 >
-                <b>{{ item.name.cutStr(5, 5) }}</b></v-btn
+                <b>{{ item.name.cutStr(15, 10) }}</b></v-btn
               >
             </template>
             <template v-slot:item.hash="{ item }">
