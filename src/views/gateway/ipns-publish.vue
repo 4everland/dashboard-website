@@ -1,54 +1,55 @@
 <template>
   <v-dialog v-model="showPop" max-width="600">
     <div class="pa-6 pt-5">
-      <h3 class="fz-30">Publish Access</h3>
+      <h3 class="fz-20">Publish Access</h3>
       <v-form ref="form" v-model="valid" class="mt-4">
-        <template v-if="curPublishData.ttl != 0">
+        <div class="mt-10">
           <v-text-field
+            class="post-input"
             persistent-placeholder
             v-model="form.value"
-            label="IPFS CID"
-            placeholder=""
-            :rules="[(v) => !!(v || '').trim() || 'Invalid CID']"
-          ></v-text-field>
-        </template>
-        <template v-else>
-          <div class="d-flex al-c">
-            <v-text-field
-              class="mt-4"
-              persistent-placeholder
-              v-model="form.value"
-              label="Upload private key and sign it"
-              placeholder=""
-            ></v-text-field>
-            <v-btn color="primary" class="ml-4" @click="decodePrivateKey"
-              >Decode</v-btn
-            >
-          </div>
-          <decode-status
-            v-if="showDecodeStatus"
-            :status="decodeState"
-          ></decode-status>
-          <div class="mt-8 fz-14">
-            <e-kv label="IPFS CID:">{{
-              decodeData.cid ? decodeData.cid : "/"
-            }}</e-kv>
-            <e-kv class="mt-3" label="Refresh period:">{{
-              decodeData.period ? decodeData.period : "/"
-            }}</e-kv>
-          </div>
-        </template>
+            :placeholder="
+              cidType == 1 ? 'Enter the IPFS CID' : 'Enter the IPNS'
+            "
+            :rules="[
+              (v) => {
+                return v ? true : 'Invalid Path';
+              },
+            ]"
+          >
+            <template #prepend>
+              <v-select
+                label="IPFS Path"
+                class="post-input"
+                v-model="cidType"
+                :items="cidTypeOpts"
+                item-text="text"
+                item-value="value"
+              >
+              </v-select>
+            </template>
+          </v-text-field>
+        </div>
+        <div class="mt-5">
+          <v-select
+            class="post-input mt-5"
+            v-model="form.lifetime"
+            :items="periodOpts"
+            item-text="text"
+            item-value="value"
+            label="End of Life"
+          >
+          </v-select>
+        </div>
       </v-form>
-
       <div class="ta-c mt-5">
-        <v-btn outlined width="100" @click="showPop = false">Cancel</v-btn>
+        <v-btn outlined width="100" @click="handleCancel">Cancel</v-btn>
         <v-btn
           color="primary"
           class="ml-6"
           width="100"
           @click="confirmPublish"
           :loading="publishLoading"
-          :disabled="curPublishData.ttl == 0 && decodeState != 2"
           >Publish</v-btn
         >
       </div>
@@ -57,72 +58,66 @@
 </template>
 
 <script>
-import decodeStatus from "@/components/custom/decode-status";
-
 export default {
-  components: {
-    decodeStatus,
-  },
   data() {
     return {
       form: {
         value: "",
-        // key: "",
+        lifetime: 1,
       },
       curPublishData: {},
-      decodeData: {
-        cid: "",
-        period: "",
-      },
       showPop: false,
       valid: false,
-      decodeState: 1,
-      showDecodeStatus: false,
       publishLoading: false,
+      periodOpts: [
+        { text: "24h", value: 1 },
+        { text: "30d", value: 30 },
+        { text: "90d", value: 90 },
+        { text: "180d", value: 180 },
+      ],
+      cidType: 1,
+      cidTypeOpts: [
+        { text: "IPFS", value: 1 },
+        { text: "IPNS", value: 2 },
+      ],
     };
   },
   methods: {
     show(item) {
       this.curPublishData = item;
       this.showPop = true;
-      if (item.value && item.ttl != 0) {
-        this.form.value = item.value;
+      if (item.value) {
+        if (/^\/ipfs\//.test(item.value)) {
+          this.cidType = 1;
+        } else {
+          this.cidType = 2;
+        }
+
+        this.form.value = item.value.replace(/^(\/ipfs\/)|(\/ipns\/)/, "");
       }
-      // this.form.key = item.key;
-    },
-    async decodePrivateKey() {
-      try {
-        this.showDecodeStatus = true;
-        this.decodeState = 1;
-        const { data } = await this.$http2.post("$ipns/ipns/unmarshal", {
-          key: this.curPublishData.key,
-          value: this.form.value,
-        });
-        console.log(data);
-        this.decodeState = 2;
-        this.decodeData.cid = data.value;
-        this.decodeData.period = data.ttl;
-      } catch (error) {
-        console.log(error);
-        this.decodeState = 3;
-      }
+      this.form.lifetime = Number(item.lifetime);
     },
     async confirmPublish() {
-      this.publishLoading = true;
+      // console.log(this.form.value);
       try {
         const valid = this.$refs.form.validate();
         if (!valid) return;
-        await this.$http2.put(
-          `$ipns/ipns/${this.curPublishData.key}`,
-          this.form
-        );
+        this.publishLoading = true;
+        await this.$http2.put(`$ipns/names/${this.curPublishData.key}`, {
+          value: (this.cidType == 1 ? "/ipfs/" : "/ipns/") + this.form.value,
+          lifetime: this.form.lifetime,
+        });
         this.$toast("Publish successfully！");
         this.$emit("getList");
       } catch (error) {
         console.log(error);
-        this.$toast("Publish failure！");
+        this.$alert(error.message);
       }
       this.publishLoading = false;
+      this.showPop = false;
+    },
+    handleCancel() {
+      this.$refs.form.reset();
       this.showPop = false;
     },
   },
@@ -130,12 +125,31 @@ export default {
     showPop(val) {
       if (!val) {
         this.$refs.form.reset();
-        this.showDecodeStatus = false;
+        setTimeout(() => {
+          this.cidType = 1;
+        }, 500);
+        this.publishLoading = false;
       }
     },
   },
 };
 </script>
 
+<style lang="scss">
+.post-input .v-input__prepend-outer {
+  margin: 0 !important;
+  margin-right: 5px !important;
+  width: 100px !important;
+}
+</style>
 <style lang="scss" scoped>
+.post-input {
+  font-size: 14px !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.post-input .v-input__prepend-outer::v-deep {
+  margin: 0 !important;
+}
 </style>

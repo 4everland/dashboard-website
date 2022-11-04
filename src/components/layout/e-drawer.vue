@@ -277,10 +277,14 @@ export default {
               label: "Dedicated Gateway",
               to: "/gateway/list",
             },
-            // {
-            //   label: "IPNS Manager",
-            //   to: "/gateway/ipns",
-            // },
+            {
+              label: "IPNS Manager",
+              to: "/gateway/ipns",
+            },
+            {
+              label: "Auth Token",
+              to: "/gateway/auth-token",
+            },
           ],
         },
         {

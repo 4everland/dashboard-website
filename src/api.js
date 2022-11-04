@@ -24,7 +24,9 @@ const gateWayApi = inDev
   ? "https://gateway-api.foreverland.xyz"
   : "https://gateway-api.4everland.org";
 
-const ipnsApi = inDev ? "https://ipns.foreverland.xyz" : "";
+const ipnsApi = inDev
+  ? "https://ipns.foreverland.xyz"
+  : "https://ipns-api.4everland.org";
 Vue.prototype.$endpoint = endpoint;
 
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
