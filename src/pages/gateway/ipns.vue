@@ -47,7 +47,7 @@
             @click="setContentHash(item)"
             >mdi-alert-circle-outline</v-icon
           >
-          <span>setContentHash</span>
+          <span>Set content hash</span>
         </e-tooltip>
         <v-btn
           class="ml-2 action-btn-reload"
@@ -60,7 +60,9 @@
         </v-btn>
       </template>
       <template #item.key="{ item }">
-        <span>{{ item.key.cutStr(5, 8) }}</span>
+        <span style="min-width: 120px; display: inline-block">{{
+          item.key.cutStr(5, 8)
+        }}</span>
         <v-btn
           v-if="item.key"
           class="e-btn-text ml-2"
@@ -74,19 +76,27 @@
         </v-btn>
       </template>
       <template #item.value="{ item }">
-        <span>{{ item.value.cutStr(5, 8) }}</span>
+        <span style="min-width: 120px; display: inline-block">{{
+          item.value
+            ? item.value.replace(/^(\/ipfs\/)|(\/ipns\/)/, "").cutStr(5, 8)
+            : "Nothing published"
+        }}</span>
         <v-btn
           v-if="item.value"
           class="e-btn-text ml-2"
           icon
           small
           @click.stop
-          v-clipboard="item.value"
+          v-clipboard="
+            () => {
+              return item.value.replace(/^(\/ipfs\/)|(\/ipns\/)/, '');
+            }
+          "
           @success="$toast('Copied to clipboard !')"
         >
           <img src="/img/svg/copy.svg" width="12" />
         </v-btn>
-        <span v-else>Nothing published</span>
+        <!-- <span v-else></span> -->
       </template>
 
       <template #item.createdAt="{ item }">
@@ -198,32 +208,32 @@ export default {
           params,
         });
 
-        for (const it of data.list) {
-          if (/.+\.eth$/.test(it.name)) {
-            it.verifyLoading = false;
-            it.isDomain = "eth";
-            // const chainId = window.ethereum.chainId;
-            // if (chainId != "0x1") {
-            //   return this.$alert("please switch eth");
-            // }
-            if (!this.checkNet()) return;
-            let ensArr = JSON.parse(this.localEnsList()).arr;
-            let index = ensArr.findIndex((item) => item.domain == it.name);
+        if (this.checkNet()) {
+          for (const it of data.list) {
+            if (/.+\.eth$/.test(it.name)) {
+              it.verifyLoading = false;
+              it.isDomain = "eth";
+              let ensArr = JSON.parse(this.localEnsList()).arr;
+              let index = ensArr.findIndex((item) => item.domain == it.name);
 
-            if (index == -1 || this.isExpired()) {
-              if (this.isExpired()) {
-                localStorage.removeItem("ens-list");
-                this.initLocalEns();
-              }
-              const ensIpns = await this.getEnsIpns(it.name);
-              if (ensIpns && ensIpns === it.key) {
-                it.verify = true;
+              if (index == -1 || this.isExpired()) {
+                if (this.isExpired()) {
+                  localStorage.removeItem("ens-list");
+                  this.initLocalEns();
+                }
+                const ensIpns = await this.getEnsIpns(it.name);
+
+                console.log(ensIpns, ensIpns == it.key, it);
+                if (ensIpns && ensIpns == it.key) {
+                  it.verify = true;
+                  console.log(it.verify);
+                } else {
+                  it.verify = false;
+                }
+                this.setLocalEns(it, ensIpns);
               } else {
-                it.verify = false;
+                it.verify = ensArr[index].verify;
               }
-              this.setLocalEns(it, ensIpns);
-            } else {
-              it.verify = ensArr[index].verify;
             }
           }
         }
@@ -232,7 +242,6 @@ export default {
         this.cursor = data.page.next;
         this.hasNext = data.page.hasNext;
         this.total = Number(data.page.total);
-        // this.matchLocalEns();
       } catch (error) {
         console.log(error);
       }
@@ -284,7 +293,7 @@ export default {
 
         this.ensIpns = await this.getEnsIpns(item.name);
         this.setLocalEns(item, this.ensIpns);
-        this.getList();
+        this.getList(1);
       } catch (error) {
         this.onErr(error);
       }
@@ -313,7 +322,6 @@ export default {
           this.$loading.close();
         } else {
           this.resolver = await registry.resolver(this.node);
-          console.log(this.resolver);
           let contentHash = await getResolver(
             this.resolver,
             this.provider
@@ -349,7 +357,6 @@ export default {
       try {
         item.verifyLoading = true;
         const ensIpns = await this.getEnsIpns(item.name);
-        // console.log(ensIpns);
         let ensObj = JSON.parse(this.localEnsList());
         let index = ensObj.arr.findIndex((it) => it.domain == item.name);
         let listIndex = this.list.findIndex((it) => it.name == item.name);
@@ -370,10 +377,10 @@ export default {
     },
     checkNet() {
       const chainId = window.ethereum.chainId;
-      // console.log(chainId);
       if (!chainId) return false;
       let msg = "";
-      if (chainId != "0x1" && chainId != "0x5") {
+      // if (chainId != "0x1" && chainId != "0x5") {
+      if (chainId != "0x1") {
         msg = "Wrong network, please connect to Ethereum mainnet";
       }
       if (msg) {
@@ -390,6 +397,7 @@ export default {
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
+        this.getList(1);
         if (res && res.error) {
           throw new Error(res.error);
         }
@@ -440,24 +448,10 @@ export default {
 
       localStorage.setItem("ens-list", JSON.stringify(ensObj));
     },
-    // matchLocalEns() {
-    //   let ensArr = JSON.parse(this.localEnsList()).arr;
-    //   let expire = JSON.parse(this.localEnsList()).expire;
-    //   let newArr = ensArr.filter((it) => {
-    //     return this.list.findIndex((item) => item.name == it.domain) == -1
-    //       ? false
-    //       : true;
-    //   });
-    //   let localEnsObj = {
-    //     arr: newArr,
-    //     expire,
-    //   };
-    //   localStorage.setItem("ens-list", JSON.stringify(localEnsObj));
-    // },
     handleSearch() {
-      this.cursor = 0;
-      this.hasNext = false;
-      debounce(this.getList(1));
+      debounce(() => {
+        this.getList(1);
+      });
     },
   },
   watch: {

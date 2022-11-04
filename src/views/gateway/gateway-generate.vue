@@ -47,7 +47,7 @@
           <div class="gray fz-13 mt-1">Gateway Access</div>
           <div class="pa-5">
             <div class="al-c hide-msg">
-              <span class="mr-auto">Private Gateway</span>
+              <span class="mr-auto">Restricted</span>
               <v-switch v-model="isPrivate" dense></v-switch>
             </div>
             <div class="mt-2 fz-13 gray">
