@@ -223,10 +223,8 @@ export default {
                 }
                 const ensIpns = await this.getEnsIpns(it.name);
 
-                console.log(ensIpns, ensIpns == it.key, it);
                 if (ensIpns && ensIpns == it.key) {
                   it.verify = true;
-                  console.log(it.verify);
                 } else {
                   it.verify = false;
                 }
@@ -313,7 +311,7 @@ export default {
         this.provider = getProvider();
         const registry = getENSRegistry(this.provider);
         this.owner = await registry.owner(this.node);
-        console.log("owner", this.owner);
+        // console.log("owner", this.owner);
         let isNotRegister = this.owner
           .substring(2)
           .split("")
