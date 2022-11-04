@@ -234,11 +234,16 @@ export default {
     async createIpns() {
       try {
         this.createLoading = true;
-        await this.$http2.post("$ipns/names", {
+
+        const form = {
           name: this.form.name,
           value: (this.cidType == 1 ? "/ipfs/" : "/ipns/") + this.form.value,
           lifetime: this.form.lifetime,
-        });
+        };
+        if (!this.form.value) {
+          form.value = "";
+        }
+        await this.$http2.post("$ipns/names", form);
       } catch (error) {
         console.log(error);
       }
