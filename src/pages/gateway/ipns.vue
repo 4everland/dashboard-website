@@ -320,7 +320,6 @@ export default {
           this.$loading.close();
         } else {
           this.resolver = await registry.resolver(this.node);
-          console.log(this.resolver);
           let contentHash = await getResolver(
             this.resolver,
             this.provider
@@ -359,7 +358,6 @@ export default {
       try {
         item.verifyLoading = true;
         const ensIpns = await this.getEnsIpns(item.name);
-        console.log(ensIpns);
         let ensObj = JSON.parse(this.localEnsList());
         let index = ensObj.arr.findIndex((it) => it.domain == item.name);
         let listIndex = this.list.findIndex((it) => it.name == item.name);
@@ -403,7 +401,6 @@ export default {
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
-        console.log(res);
         this.getList(1);
         if (res && res.error) {
           throw new Error(res.error);
