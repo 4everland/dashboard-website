@@ -208,30 +208,28 @@ export default {
           params,
         });
 
-        if (this.checkNet()) {
-          for (const it of data.list) {
-            if (/.+\.eth$/.test(it.name)) {
-              it.verifyLoading = false;
-              it.isDomain = "eth";
-              let ensArr = JSON.parse(this.localEnsList()).arr;
-              let index = ensArr.findIndex((item) => item.domain == it.name);
+        for (const it of data.list) {
+          if (/.+\.eth$/.test(it.name)) {
+            it.verifyLoading = false;
+            it.isDomain = "eth";
+            let ensArr = JSON.parse(this.localEnsList()).arr;
+            let index = ensArr.findIndex((item) => item.domain == it.name);
 
-              if (index == -1 || this.isExpired()) {
-                if (this.isExpired()) {
-                  localStorage.removeItem("ens-list");
-                  this.initLocalEns();
-                }
-                const ensIpns = await this.getEnsIpns(it.name);
-
-                if (ensIpns && ensIpns == it.key) {
-                  it.verify = true;
-                } else {
-                  it.verify = false;
-                }
-                this.setLocalEns(it, ensIpns);
-              } else {
-                it.verify = ensArr[index].verify;
+            if (index == -1 || this.isExpired()) {
+              if (this.isExpired()) {
+                localStorage.removeItem("ens-list");
+                this.initLocalEns();
               }
+              const ensIpns = await this.getEnsIpns(it.name);
+
+              if (ensIpns && ensIpns == it.key) {
+                it.verify = true;
+              } else {
+                it.verify = false;
+              }
+              this.setLocalEns(it, ensIpns);
+            } else {
+              it.verify = ensArr[index].verify;
             }
           }
         }
@@ -251,6 +249,8 @@ export default {
         return this.showConnect();
       }
       if (!this.checkNet()) return;
+      const verify = await this.verifyConfigure(item);
+      if (verify) return;
       this.owner = await this.verifyOwner(item.name);
       const ensIpns = await this.getEnsIpns(item.name);
       try {
@@ -302,9 +302,9 @@ export default {
       if (e) this.$alert(e.message);
     },
     async getEnsIpns(domain) {
-      if (!this.checkNet()) {
-        return;
-      }
+      const chainId = window.ethereum.chainId;
+      if (chainId !== "0x1") return undefined;
+
       try {
         this.$loading();
         this.node = namehash(domain);
@@ -320,6 +320,7 @@ export default {
           this.$loading.close();
         } else {
           this.resolver = await registry.resolver(this.node);
+          console.log(this.resolver);
           let contentHash = await getResolver(
             this.resolver,
             this.provider
@@ -352,9 +353,13 @@ export default {
       }
     },
     async verifyConfigure(item) {
+      if (!this.checkNet()) {
+        return;
+      }
       try {
         item.verifyLoading = true;
         const ensIpns = await this.getEnsIpns(item.name);
+        console.log(ensIpns);
         let ensObj = JSON.parse(this.localEnsList());
         let index = ensObj.arr.findIndex((it) => it.domain == item.name);
         let listIndex = this.list.findIndex((it) => it.name == item.name);
@@ -368,10 +373,13 @@ export default {
         }
 
         localStorage.setItem("ens-list", JSON.stringify(ensObj));
+        item.verifyLoading = false;
+        if (item.key == ensIpns) return true;
+        return false;
       } catch (error) {
         console.log(error);
+        item.verifyLoading = false;
       }
-      item.verifyLoading = false;
     },
     checkNet() {
       const chainId = window.ethereum.chainId;
@@ -395,6 +403,7 @@ export default {
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
+        console.log(res);
         this.getList(1);
         if (res && res.error) {
           throw new Error(res.error);
