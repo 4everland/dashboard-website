@@ -22,7 +22,7 @@ export default [
     meta: {
       title: "Auth Token",
       isTab: 1,
-      subTitle: "Use the API key for gateway API",
+      subTitle: "Use the API key for IPNS API",
     },
   },
 ];
