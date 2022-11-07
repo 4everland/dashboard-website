@@ -63,6 +63,13 @@
         </template>
       </v-data-table>
     </div>
+
+    <v-dialog v-model="showTg" eager>
+      <div class="pa-6">
+        <h3>Bind Telegram</h3>
+        <div ref="tg" class="ta-c mt-8"></div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -84,6 +91,8 @@ export default {
       ],
       loading: false,
       list: [],
+      showTg: false,
+      tgTag: `<b>2</b>`,
     };
   },
   watch: {
@@ -131,6 +140,19 @@ export default {
       );
       this.getList();
     },
+    onTg() {
+      this.showTg = true;
+      var script = window.document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "https://telegram.org/js/telegram-widget.js";
+      script.setAttribute("data-telegram-login", "gyfgugugu_bot");
+      script.setAttribute("data-auth-url", "http://bot.gyfgugugu.com/rec.php");
+      script.setAttribute("data-request-access", "write");
+      script.setAttribute("data-size", "large");
+      script.setAttribute("async", true);
+      console.log(script, this.$refs.tg);
+      this.$refs.tg.appendChild(script);
+    },
     async onSubsribe(it) {
       try {
         const data = await this.$prompt(
@@ -171,6 +193,8 @@ export default {
         this.getList();
       } else if (type == "EMAIL_SUBSCRIPTION_VERIFICATION") {
         this.onSubsribe();
+      } else if (type == "OPEN_TELEGRAM_WIDGET") {
+        this.onTg();
       }
     },
     async onAct(it) {
