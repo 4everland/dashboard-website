@@ -16,4 +16,13 @@ export default [
       title: "IPNS Manager",
     },
   },
+  {
+    path: "/gateway/auth-token",
+    component: () => import("./authToken"),
+    meta: {
+      title: "Auth Token",
+      isTab: 1,
+      subTitle: "Use the API key for IPNS API",
+    },
+  },
 ];
