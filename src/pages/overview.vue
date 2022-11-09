@@ -79,7 +79,7 @@ export default {
           href: "https://forms.gle/CrCVBoWFaA4V3RiB6",
         },
         {
-          img: "https://static1.4everland.org/img/banner/20221103-173710.jpg",
+          img: "https://static1.4everland.org/img/banner/20221109-160329.png",
           to: "/reward-hub",
         },
       ],
