@@ -80,6 +80,7 @@ export default {
   computed: {
     ...mapState({
       isFocus: (s) => s.isFocus,
+      userInfo: (s) => s.userInfo,
     }),
   },
   data() {
@@ -148,12 +149,12 @@ export default {
       script.setAttribute("data-telegram-login", "gyfgugugu_bot");
       script.setAttribute(
         "data-auth-url",
-        "https://auth.foreverland.xyz/telegram/callback"
+        `https://auth.foreverland.xyz/telegram/${this.userInfo.uid}/callback`
       );
       script.setAttribute("data-request-access", "write");
       script.setAttribute("data-size", "large");
       script.setAttribute("async", true);
-      console.log(script, this.$refs.tg);
+      // console.log(script, this.$refs.tg);
       this.$refs.tg.appendChild(script);
     },
     async onSubsribe(it) {
