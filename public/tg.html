@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html>
 
-<head></head>
+<head>
+  <style>
+    .hover-1:hover {
+      cursor: pointer;
+      opacity: .8;
+    }
+  </style>
+</head>
 
-<body>
+<body style="padding: 30px; text-align: center; margin-top: 80px;">
+  <div style="margin-bottom: 50px;">
+    <img src="img/svg/logo.svg" style="height: 30px">
+    <h1>4EVERLAND Reward Hub wants to access your Telegram account.</h1>
+  </div>
   <script type="text/javascript">
     function getParams(url) {
       if (!url) url = location.href;
@@ -22,6 +33,10 @@
     data-auth-url="https:\/\/auth.foreverland.xyz/telegram/${query.uid || 0}\/callback" data-request-access="write"><\/script>
   `)
   </script>
+  <div style="margin-top: 30px;">
+    <span class="hover-1" style="font-size: 14px; color: #34a9ff;" onclick="window.close()">Cancel</span>
+  </div>
+
 </body>
 
 </html>
