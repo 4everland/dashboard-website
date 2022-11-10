@@ -29,7 +29,7 @@
           :listLength="list.length"
         />
       </e-right-opt-wrap>
-      <div class="tips py-2 mr-3 mb-3 pr-5 al-c" v-show="isInsufficient">
+      <div class="tips py-2 mb-3 pr-5 al-c" v-show="isInsufficient">
         <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"
           >mdi-alert-circle-outline</v-icon
         >
@@ -109,7 +109,8 @@ export default {
   },
   computed: {
     isLock() {
-      return this.balance < 100 && !this.list.length;
+      // return this.balance < 100 && !this.list.length;
+      return false;
     },
     isInsufficient() {
       return this.balance < 100 && (this.list.length ? true : false);

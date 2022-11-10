@@ -1,13 +1,8 @@
 <template>
   <div>
-    <e-right-opt-wrap :top="-74">
-      <div class="al-c">
-        <ipns-create @getList="handleSearch" />
-        <!-- <v-btn color="primary" class="ml-3">
-          <img src="/img/svg/gateway/auth.svg" width="12" />
-          <span class="ml-1">Auth Token</span>
-        </v-btn> -->
-        <div class="ml-3">
+    <e-right-opt-wrap :top="-74" :customStyle="{ right: '-20px' }">
+      <div class="al-c ml-8">
+        <div>
           <v-text-field
             class="hide-msg bd-1"
             dense
@@ -19,6 +14,7 @@
             @input="handleSearch"
           ></v-text-field>
         </div>
+        <ipns-create class="ml-3" @getList="handleSearch" />
       </div>
     </e-right-opt-wrap>
     <v-data-table
