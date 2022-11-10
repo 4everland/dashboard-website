@@ -2,8 +2,11 @@
   <div>
     <e-right-opt-wrap :top="-65">
       <div class="btn-wrap d-flex justify-end">
-        <v-btn color="primary" width="120" @click="handleGenerate">
-          <!-- <v-icon size="16">mdi-plus-circle-outline</v-icon> -->
+        <v-btn color="primary" @click="handleGenerate">
+          <v-icon size="16" color="primay">mdi-key-outline</v-icon>
+          <span class="ml-2">Master Key</span>
+        </v-btn>
+        <v-btn class="ml-2" color="primary" width="120" @click="handleGenerate">
           <img src="/img/svg/add1.svg" width="12" />
           <span class="ml-2">Generate</span>
         </v-btn>
