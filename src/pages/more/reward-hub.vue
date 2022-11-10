@@ -2,14 +2,10 @@
   <div>
     <div class="bdrs-10 ov-h mb-4 pos-r">
       <img
-        src="/img/bg/user/reward-hub-bg.png"
+        src="https://static1.4everland.org/img/banner/20221109-160350.png"
         class="w100p img-cover d-b"
         style="max-height: 180px"
       />
-      <div class="pos-center link-2 fw-b ta-c w100p" style="max-width: 450px">
-        <h1 class="fz-40">Reward Hub</h1>
-        <div class="fz-18">Explore, Earn, and Enjoy Free Resources</div>
-      </div>
     </div>
     <div class="main-wrap">
       <div class="al-c mb-3">
