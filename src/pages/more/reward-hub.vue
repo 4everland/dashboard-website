@@ -63,13 +63,6 @@
         </template>
       </v-data-table>
     </div>
-
-    <v-dialog v-model="showTg" eager>
-      <div class="pa-6">
-        <h3>Bind Telegram</h3>
-        <div ref="tg" class="ta-c mt-8"></div>
-      </div>
-    </v-dialog>
   </div>
 </template>
 
@@ -142,20 +135,7 @@ export default {
       this.getList();
     },
     onTg() {
-      this.showTg = true;
-      var script = window.document.createElement("script");
-      script.type = "text/javascript";
-      script.src = "https://telegram.org/js/telegram-widget.js";
-      script.setAttribute("data-telegram-login", "gyfgugugu_bot");
-      script.setAttribute(
-        "data-auth-url",
-        `https://auth.foreverland.xyz/telegram/${this.userInfo.uid}/callback`
-      );
-      script.setAttribute("data-request-access", "write");
-      script.setAttribute("data-size", "large");
-      script.setAttribute("async", true);
-      // console.log(script, this.$refs.tg);
-      this.$refs.tg.appendChild(script);
+      this.$openWindow("./tg.html?uid=" + this.userInfo.uid);
     },
     async onSubsribe(it) {
       try {
