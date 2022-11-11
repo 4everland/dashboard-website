@@ -14,6 +14,7 @@ export default [
     component: () => import("./ipns"),
     meta: {
       title: "IPNS Manager",
+      // isTab: 1,
     },
   },
   {
