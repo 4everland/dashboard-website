@@ -62,24 +62,29 @@
     <v-dialog v-model="masterKeyShowPop" max-width="500" persistent>
       <div class="pd-30">
         <h3>Master Key</h3>
+
+        <div class="fz-14 mt-3 el-label-1">
+          Be sure to keep the unique master key for the Bucket safe. The master
+          key cannot be deleted, but it can be reset if it has been compromised.
+        </div>
         <div class="mt-6" v-for="(it, i) in masterKeyList" :key="i">
           <p>{{ it.label }}</p>
           <div
             class="pd-10 bd-1 bdrs-3 mt-3 d-flex al-c hover-1"
-            v-clipboard="it.value"
+            v-clipboard="() => it.value"
             @success="$toast(it.label + ' copied to clipboard !')"
           >
             <span class="el-label-1 fz-14">{{ it.value.cutStr(20, 10) }}</span>
             <v-icon size="16" class="ml-auto">mdi-content-copy</v-icon>
-            <!--  -->
+
             <v-btn
               class="ml-2 action-btn-reload"
               :loading="resetLoading"
               text
-              @click="handleResetMasterKey"
+              @click.stop="handleResetMasterKey"
               v-if="it.label == 'API Secret'"
             >
-              <v-icon size="18" color="black">mdi-refresh</v-icon>
+              <v-icon size="18" color="rgba(0,0,0,0.54)">mdi-refresh</v-icon>
             </v-btn>
           </div>
         </div>
