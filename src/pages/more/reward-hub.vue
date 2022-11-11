@@ -69,6 +69,7 @@ export default {
   computed: {
     ...mapState({
       isFocus: (s) => s.isFocus,
+      userInfo: (s) => s.userInfo,
     }),
   },
   data() {
@@ -80,6 +81,8 @@ export default {
       ],
       loading: false,
       list: [],
+      showTg: false,
+      tgTag: `<b>2</b>`,
     };
   },
   watch: {
@@ -127,6 +130,9 @@ export default {
       );
       this.getList();
     },
+    onTg() {
+      this.$openWindow("./tg.html?uid=" + this.userInfo.uid);
+    },
     async onSubsribe(it) {
       try {
         const data = await this.$prompt(
@@ -167,6 +173,8 @@ export default {
         this.getList();
       } else if (type == "EMAIL_SUBSCRIPTION_VERIFICATION") {
         this.onSubsribe();
+      } else if (type == "OPEN_TELEGRAM_WIDGET") {
+        this.onTg();
       }
     },
     async onAct(it) {
