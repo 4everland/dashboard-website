@@ -164,30 +164,31 @@ export default {
     },
   },
   watch: {
-    "$route.path"(newVal, oldVal) {
-      // console.log(newVal, oldVal);
-      newVal = decodeURI(newVal);
-      oldVal = decodeURI(oldVal);
-      let curRoute = newVal.split("/").slice(4).join("/");
-
-      const matchPathArr = this.matchPathCid.map((it) => it.name);
-      let index = matchPathArr.indexOf(curRoute);
-      let matchRoute;
-      if (index == -1) {
-        matchRoute = this.matchPathCid[0];
-      } else {
-        matchRoute = this.matchPathCid[index];
-      }
-      if (matchRoute.cid) {
-        this.onRow({
-          name: matchRoute.name + "/",
-          cid: matchRoute.cid,
-          noRoute: true,
-        });
-      } else {
-        this.getInfo();
-      }
-    },
+    // "$route.path"(newVal, oldVal) {
+    //   // console.log(newVal, oldVal);
+    //   console.log(this.$route.query.tab != "snapshots");
+    //   if (this.$route.query.tab != "snapshots") return;
+    //   newVal = decodeURI(newVal);
+    //   oldVal = decodeURI(oldVal);
+    //   let curRoute = newVal.split("/").slice(4).join("/");
+    //   const matchPathArr = this.matchPathCid.map((it) => it.name);
+    //   let index = matchPathArr.indexOf(curRoute);
+    //   let matchRoute;
+    //   if (index == -1) {
+    //     matchRoute = this.matchPathCid[0];
+    //   } else {
+    //     matchRoute = this.matchPathCid[index];
+    //   }
+    //   if (matchRoute.cid) {
+    //     this.onRow({
+    //       name: matchRoute.name + "/",
+    //       cid: matchRoute.cid,
+    //       noRoute: true,
+    //     });
+    //   } else {
+    //     this.getInfo();
+    //   }
+    // },
   },
 };
 </script>

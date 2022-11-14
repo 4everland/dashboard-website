@@ -36,16 +36,20 @@
         hide-default-footer
         disable-pagination
         :loading="tableLoading"
-        @click:row="onRow"
       >
         <template v-slot:item.prefix="{ item }">
-          <v-btn color="#000" text class="e-btn-text" @click.stop="onRow(item)">
+          <v-btn
+            color="#000"
+            text
+            class="e-btn-text action-btn"
+            @click.stop="onRow(item)"
+          >
             <v-icon size="18" class="mr-3">mdi-folder</v-icon>
             <span class="snapshot-name">{{ item.prefix.cutStr(5, 4) }}</span>
           </v-btn>
         </template>
         <template v-slot:item.cid="{ item }">
-          <div class="al-c">
+          <div class="al-c" v-if="item.cid">
             <a
               :href="$utils.getCidLink(item.cid)"
               class="hash-link"
@@ -55,7 +59,6 @@
               >{{ item.cid.cutStr(5, 4) }}</a
             >
             <v-btn
-              v-if="item.cid"
               class="e-btn-text ml-2"
               icon
               small
@@ -66,6 +69,7 @@
               <img src="/img/svg/copy.svg" width="12" />
             </v-btn>
           </div>
+          <div v-else>--</div>
         </template>
         <template v-slot:item.size="{ item }">
           {{ $utils.getFileSize(item.size) }}
@@ -85,12 +89,16 @@
             @click="handlePublish(item)"
             color="#775da6"
             @click.stop
-            :disabled="item.status == 'pin' || item.status == 'pinning'"
+            :disabled="
+              item.status == 'pin' ||
+              item.status == 'pinning' ||
+              item.status == 'generating'
+            "
           >
             Publish
           </v-btn>
           <v-btn
-            class="action-btn"
+            class="action-btn ml-2"
             text
             @click="handleDelete(item)"
             color="#775da6"
@@ -129,7 +137,10 @@
         </span>
       </div>
     </div>
-    <bucket-snapshots-detail v-else :snapshotId="snapshotId">
+    <bucket-snapshots-detail
+      v-if="childPath && inSnapshot"
+      :snapshotId="snapshotId"
+    >
     </bucket-snapshots-detail>
   </div>
 </template>
@@ -190,6 +201,9 @@ export default {
     childPath() {
       return this.$route.path.split("/").length > 5;
     },
+    inSnapshot() {
+      return this.$route.query.tab == "snapshots";
+    },
     bucket() {
       return this.$route.path.split("/")[3];
     },
@@ -210,8 +224,9 @@ export default {
   },
   methods: {
     onRow(item) {
-      // console.log( encodeURI(item.prefix));
-      // console.log(item.prefix.replace(/\//g, ":"));
+      if (item.status == "generating") {
+        return this.$alert("The folder is being generated.");
+      }
       const prefix = item.prefix.replace(/\//g, ":") + "/";
       this.snapshotId = item.id;
       this.$router.push(this.$route.path + prefix + location.search);
@@ -290,7 +305,7 @@ export default {
   },
   watch: {
     childPath(val) {
-      if (!val) {
+      if (!val && this.$route.query.tab == "snapshots") {
         this.getList();
       }
     },
@@ -301,6 +316,10 @@ export default {
 <style lang="scss" scoped>
 .action-btn {
   padding: 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  letter-spacing: 0 !important;
 }
 .hash-link {
   display: block;
