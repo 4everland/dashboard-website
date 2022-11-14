@@ -10,7 +10,7 @@
       hide-delimiter-background
       :interval="5000"
       :show-arrows="false"
-      :height="asMobile ? 100 : 180"
+      :height="asMobile ? 100 : 160"
       class="bdrs-10 mb-4"
       cycle
     >
