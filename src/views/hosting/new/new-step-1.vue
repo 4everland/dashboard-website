@@ -270,6 +270,7 @@ export default {
         hookSwitch: true,
         env: [],
         platform: "IPFS",
+        nodeVersion: "18",
       },
       buildCommandHint: "",
       scripts: null,
@@ -418,6 +419,13 @@ export default {
         );
         let { scripts, framework = null } = data;
 
+        const nodeVersion = "^14.3.0";
+        let majorVersion = nodeVersion.split(".")[0];
+        // majorVersion.replace(/^(\^|~|>)/, '')
+
+        // // const nodeReg = /^(\^|~|>)/
+        // if(nodeVersion.indexOf('^') > -1){
+        // }
         //  do something node version choose
         const obj = {
           framework,
