@@ -4,7 +4,7 @@
       <img
         src="https://static1.4everland.org/img/banner/20221109-160350.png"
         class="w100p img-cover d-b"
-        style="max-height: 180px"
+        style="max-height: 170px"
       />
     </div>
     <div class="main-wrap">
