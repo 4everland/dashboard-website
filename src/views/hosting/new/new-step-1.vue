@@ -170,6 +170,22 @@
         </v-col>
         <v-col cols="6" md="4">
           <h4>
+            <span>Node Version</span>
+          </h4>
+
+          <v-select
+            v-model="form.nodeVersion"
+            outlined
+            dense
+            :items="nodeVersionList"
+            item-text="name"
+            item-value="value"
+          >
+          </v-select>
+        </v-col>
+
+        <v-col cols="6" md="4">
+          <h4>
             <span>Deploy Hooks</span>
             <e-tooltip right max-width="300">
               <v-icon slot="ref" size="16" class="ml-2" :color="$color1">
@@ -274,6 +290,20 @@ export default {
           label: "Arweave",
           name: "AR",
           icon: "h-ar.svg",
+        },
+      ],
+      nodeVersionList: [
+        {
+          name: "18.x",
+          value: "18",
+        },
+        {
+          name: "16.x",
+          value: "16",
+        },
+        {
+          name: "14.x",
+          value: "14",
         },
       ],
     };
@@ -387,6 +417,8 @@ export default {
           { params }
         );
         let { scripts, framework = null } = data;
+
+        //  do something node version choose
         const obj = {
           framework,
         };
