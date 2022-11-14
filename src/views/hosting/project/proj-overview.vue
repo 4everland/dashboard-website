@@ -164,7 +164,7 @@ export default {
     async getIpns() {
       try {
         this.loadingIpns = true;
-        await this.$http2.put("/project/ipns/sns/" + this.info.id, {
+        await this.$http2.get("/project/ipns/" + this.info.id, {
           cid: this.info.hash,
         });
         await this.$store.dispatch("getProjectInfo", this.info.id);
