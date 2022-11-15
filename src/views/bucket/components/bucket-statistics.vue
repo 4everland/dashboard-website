@@ -62,6 +62,7 @@
 import BucketChart from "@/views/bucket/components/bucket-chart";
 import EDateRange from "@/views/hosting/statistics/e-date-range";
 export default {
+  name: "bucket-statistics",
   props: {
     active: Boolean,
   },

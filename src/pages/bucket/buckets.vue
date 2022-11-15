@@ -1,15 +1,15 @@
 <template>
   <div>
-    <keep-alive v-if="inFolder || inFile">
-      <e-tabs
-        v-if="inFolder"
-        :list="list"
-        :defTab="1"
-        bucket
-        noRouter
-        ignorePath
-      />
-    </keep-alive>
+    <!-- <keep-alive v-if="inFolder || inFile"> -->
+    <e-tabs
+      v-if="inFolder || inFile"
+      :list="list"
+      :defTab="1"
+      bucket
+      noRouter
+      ignorePath
+    />
+    <!-- </keep-alive> -->
     <storage v-if="!inFolder" />
 
     <!-- Upload/Delete Folders Component -->

@@ -40,8 +40,12 @@
       </v-tabs>
     </div>
     <div class="" :class="vertical ? 'flex-1 ml-5' : 'mt-5'">
-      <keep-alive v-if="bucket">
+      <keep-alive
+        v-if="bucket"
+        :include="['bucket-folder', 'bucket-overview', 'bucket-statistics']"
+      >
         <component
+          v-if="bucket"
           :is="list[curIdx].comp"
           v-bind="list[curIdx].props"
           :info="info"
@@ -75,7 +79,6 @@ export default {
       default: "200px",
     },
     noRouter: Boolean,
-    bucket: Boolean,
     ignorePath: Boolean,
   },
   data() {

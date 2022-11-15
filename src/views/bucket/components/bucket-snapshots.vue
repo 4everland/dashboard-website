@@ -137,10 +137,7 @@
         </span>
       </div>
     </div>
-    <bucket-snapshots-detail
-      v-if="childPath && inSnapshot"
-      :snapshotId="snapshotId"
-    >
+    <bucket-snapshots-detail v-else :snapshotId="snapshotId">
     </bucket-snapshots-detail>
   </div>
 </template>
@@ -185,7 +182,16 @@ export default {
       loadingMore: false,
     };
   },
-  activated() {
+  // activated() {
+  //   this.$router
+  //     .push({
+  //       path: this.$route.path.split("/").slice(0, 4).join("/") + "/",
+  //       query: { tab: "snapshots" },
+  //     })
+  //     .catch((err) => err);
+  //   this.getList();
+  // },
+  created() {
     this.$router
       .push({
         path: this.$route.path.split("/").slice(0, 4).join("/") + "/",
@@ -194,15 +200,9 @@ export default {
       .catch((err) => err);
     this.getList();
   },
-  // created() {
-  //   this.getList();
-  // },
   computed: {
     childPath() {
       return this.$route.path.split("/").length > 5;
-    },
-    inSnapshot() {
-      return this.$route.query.tab == "snapshots";
     },
     bucket() {
       return this.$route.path.split("/")[3];

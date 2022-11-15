@@ -306,6 +306,7 @@ import { bus } from "../../../utils/bus";
 import mixin from "../storage-mixin";
 import { DeleteTaskWrapper } from "../task.js";
 export default {
+  name: "bucket-folder",
   mixins: [mixin],
   props: {
     active: Boolean,
@@ -358,7 +359,7 @@ export default {
   },
   activated() {
     this.$router
-      .push({
+      .replace({
         path: this.$route.path.split("/").slice(0, 4).join("/") + "/",
         query: { tab: "files" },
       })
