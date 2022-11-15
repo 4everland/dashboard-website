@@ -233,13 +233,12 @@
             </v-btn>
 
             <v-btn
-              style="border-color: #6c7789"
               outlined
               class="ml-4"
               v-show="selected.length == 1 && !isFile"
               @click="handleSnapshot"
             >
-              <span class="gray">Snapshot</span>
+              <span class="gray-2">Snapshot</span>
             </v-btn>
             <v-btn
               style="border-color: #6c7789"
@@ -280,7 +279,7 @@
               outlined
               width="180"
               class="mr-8"
-              @click="showSnapshotDialog = fasle"
+              @click="showSnapshotDialog = false"
               >Cancel</v-btn
             >
             <v-btn

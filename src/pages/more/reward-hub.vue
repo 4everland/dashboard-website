@@ -2,14 +2,10 @@
   <div>
     <div class="bdrs-10 ov-h mb-4 pos-r">
       <img
-        src="/img/bg/user/reward-hub-bg.png"
+        src="https://static1.4everland.org/img/banner/20221109-160350.png"
         class="w100p img-cover d-b"
-        style="max-height: 180px"
+        style="max-height: 170px"
       />
-      <div class="pos-center link-2 fw-b ta-c w100p" style="max-width: 450px">
-        <h1 class="fz-40">Reward Hub</h1>
-        <div class="fz-18">Explore, Earn, and Enjoy Free Resources</div>
-      </div>
     </div>
     <div class="main-wrap">
       <div class="al-c mb-3">
@@ -73,6 +69,7 @@ export default {
   computed: {
     ...mapState({
       isFocus: (s) => s.isFocus,
+      userInfo: (s) => s.userInfo,
     }),
   },
   data() {
@@ -84,6 +81,8 @@ export default {
       ],
       loading: false,
       list: [],
+      showTg: false,
+      tgTag: `<b>2</b>`,
     };
   },
   watch: {
@@ -131,6 +130,9 @@ export default {
       );
       this.getList();
     },
+    onTg() {
+      this.$openWindow("./tg.html?uid=" + this.userInfo.uid);
+    },
     async onSubsribe(it) {
       try {
         const data = await this.$prompt(
@@ -171,6 +173,8 @@ export default {
         this.getList();
       } else if (type == "EMAIL_SUBSCRIPTION_VERIFICATION") {
         this.onSubsribe();
+      } else if (type == "OPEN_TELEGRAM_WIDGET") {
+        this.onTg();
       }
     },
     async onAct(it) {

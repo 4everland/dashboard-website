@@ -8,35 +8,20 @@
   <div>
     <v-carousel
       hide-delimiter-background
+      :interval="5000"
       :show-arrows="false"
-      height="180"
+      :height="asMobile ? 100 : 160"
       class="bdrs-10 mb-4"
       cycle
     >
       <v-carousel-item
-        href="https://forms.gle/CrCVBoWFaA4V3RiB6"
-        target="_blank"
+        v-for="(it, i) in banners"
+        :key="i"
+        :src="it.img"
+        :to="it.to"
+        :href="it.href"
+        :target="it.href ? '_blank' : null"
       >
-        <img
-          src="https://4ever-web.4everland.store/img/banner/20221103-115504.jpg"
-          alt=""
-          class="w100p bdrs-10 d-b"
-        />
-      </v-carousel-item>
-      <v-carousel-item to="/reward-hub">
-        <div class="pos-r mb-3 ov-h">
-          <img
-            src="/img/bg/user/reward-hub-bg.png"
-            class="w100p img-cover d-b"
-            style="max-height: 180px"
-          />
-          <div
-            class="pos-center link-2 fz-25 fw-b ta-c w100p"
-            style="max-width: 500px"
-          >
-            Explore, Earn, and Enjoy Free Resources in 4EVERLAND Reward Hub
-          </div>
-        </div>
       </v-carousel-item>
     </v-carousel>
 
@@ -86,10 +71,27 @@ import { mapState } from "vuex";
 import { newUserDrop } from "@/plugins/airDrop/index.js";
 
 export default {
+  data() {
+    return {
+      banners: [
+        {
+          img: "https://4ever-web.4everland.store/img/banner/20221103-115504.jpg",
+          href: "https://forms.gle/CrCVBoWFaA4V3RiB6",
+        },
+        {
+          img: "https://static1.4everland.org/img/banner/20221109-160329.png",
+          to: "/reward-hub",
+        },
+      ],
+    };
+  },
   computed: {
     ...mapState({
       noticeMsg: (s) => s.noticeMsg,
     }),
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
     uname() {
       const info = this.$store.state.userInfo;
       if (info.username) return "Hi " + info.username.cutStr(6, 4);
