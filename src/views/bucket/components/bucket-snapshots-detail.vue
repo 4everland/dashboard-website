@@ -95,6 +95,7 @@ export default {
       matchPathCid: [],
       tableLoading: false,
       searchKey: "",
+      userClick: false,
     };
   },
   created() {
@@ -130,6 +131,7 @@ export default {
       }
     },
     async onRow(item) {
+      this.userClick = true;
       const curRouteArr = this.$route.path.split("/");
       const curRoute = curRouteArr.slice(4, curRouteArr.length - 1);
       curRoute.push(item.name);
@@ -161,12 +163,11 @@ export default {
       } catch (error) {
         console.log(error);
       }
+      this.userClick = false;
     },
   },
   watch: {
     "$route.path"(newVal, oldVal) {
-      // console.log(newVal, oldVal);
-      console.log(this.$route.query.tab != "snapshots");
       if (this.$route.query.tab != "snapshots") return;
       newVal = decodeURI(newVal);
       oldVal = decodeURI(oldVal);
@@ -179,13 +180,14 @@ export default {
       } else {
         matchRoute = this.matchPathCid[index];
       }
-      if (matchRoute.cid) {
+      if (matchRoute.cid && !this.userClick) {
         this.onRow({
           name: matchRoute.name + "/",
           cid: matchRoute.cid,
           noRoute: true,
         });
-      } else {
+      }
+      if (!matchRoute.cid) {
         this.getInfo();
       }
     },
