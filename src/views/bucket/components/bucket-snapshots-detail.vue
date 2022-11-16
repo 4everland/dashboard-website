@@ -166,7 +166,6 @@ export default {
   watch: {
     "$route.path"(newVal, oldVal) {
       // console.log(newVal, oldVal);
-      console.log(this.$route.query.tab != "snapshots");
       if (this.$route.query.tab != "snapshots") return;
       newVal = decodeURI(newVal);
       oldVal = decodeURI(oldVal);
