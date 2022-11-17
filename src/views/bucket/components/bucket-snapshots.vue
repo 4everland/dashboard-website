@@ -78,6 +78,13 @@
           <span class="status">
             {{ transformStatus(item.status) }}
           </span>
+          <v-icon
+            size="18"
+            class="ml-2"
+            v-if="item.status == 'failure'"
+            @click="showDialog = true"
+            >mdi-alert-circle-outline</v-icon
+          >
         </template>
         <template v-slot:item.createdAt="{ item }">
           {{ new Date(item.createdAt * 1000).format() }}
@@ -139,6 +146,28 @@
     </div>
     <bucket-snapshots-detail v-else :snapshotId="snapshotId">
     </bucket-snapshots-detail>
+
+    <v-dialog v-model="showDialog" max-width="600">
+      <div class="pa-7">
+        <h3>Tips</h3>
+        <p class="mt-2" style="color: gray">
+          Feel free to contact us at discord if you failed to snapshot. We will
+          assign a team member to assist you.
+        </p>
+        <div class="al-c justify-center mt-6">
+          <v-btn outlined width="180" @click="showDialog = false">OK</v-btn>
+          <v-btn
+            color="primary"
+            class="ml-4"
+            width="180"
+            @click="handleJoinDiscord"
+          >
+            <img width="20" src="/img/logos/discord.svg" alt="" />
+            <span class="ml-2">Join</span>
+          </v-btn>
+        </div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -164,6 +193,7 @@ export default {
   },
   data() {
     return {
+      showDialog: false,
       header: [
         { text: "Name", value: "prefix" },
         { text: "IPFS CID", value: "cid" },
@@ -298,6 +328,10 @@ export default {
       if (this.tableLoading) return;
       this.loadingMore = true;
       this.getList();
+    },
+    handleJoinDiscord() {
+      window.open("https://discord.com/invite/Cun2VpsdjF");
+      this.showDialog = false;
     },
   },
   components: {
