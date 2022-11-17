@@ -168,7 +168,7 @@
             dense
           ></v-text-field>
         </v-col>
-        <v-col cols="6" md="4">
+        <!-- <v-col cols="6" md="4">
           <h4>
             <span>Node Version</span>
           </h4>
@@ -182,7 +182,7 @@
             item-value="value"
           >
           </v-select>
-        </v-col>
+        </v-col> -->
 
         <v-col cols="6" md="4">
           <h4>
@@ -270,6 +270,7 @@ export default {
         hookSwitch: true,
         env: [],
         platform: "IPFS",
+        // nodeVersion: "18",
       },
       buildCommandHint: "",
       scripts: null,
@@ -418,6 +419,13 @@ export default {
         );
         let { scripts, framework = null } = data;
 
+        // const nodeVersion = "^14.3.0";
+        // let majorVersion = nodeVersion.split(".")[0];
+        // majorVersion.replace(/^(\^|~|>)/, '')
+
+        // // const nodeReg = /^(\^|~|>)/
+        // if(nodeVersion.indexOf('^') > -1){
+        // }
         //  do something node version choose
         const obj = {
           framework,

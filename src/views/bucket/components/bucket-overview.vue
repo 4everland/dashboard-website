@@ -125,6 +125,7 @@
 <script>
 import HDomain from "@/views/hosting/common/h-domain";
 export default {
+  name: "bucket-overview",
   props: {
     active: Boolean,
   },

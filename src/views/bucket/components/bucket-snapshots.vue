@@ -36,16 +36,20 @@
         hide-default-footer
         disable-pagination
         :loading="tableLoading"
-        @click:row="onRow"
       >
         <template v-slot:item.prefix="{ item }">
-          <v-btn color="#000" text class="e-btn-text" @click.stop="onRow(item)">
+          <v-btn
+            color="#000"
+            text
+            class="e-btn-text action-btn"
+            @click.stop="onRow(item)"
+          >
             <v-icon size="18" class="mr-3">mdi-folder</v-icon>
             <span class="snapshot-name">{{ item.prefix.cutStr(5, 4) }}</span>
           </v-btn>
         </template>
         <template v-slot:item.cid="{ item }">
-          <div class="al-c">
+          <div class="al-c" v-if="item.cid">
             <a
               :href="$utils.getCidLink(item.cid)"
               class="hash-link"
@@ -55,7 +59,6 @@
               >{{ item.cid.cutStr(5, 4) }}</a
             >
             <v-btn
-              v-if="item.cid"
               class="e-btn-text ml-2"
               icon
               small
@@ -66,6 +69,7 @@
               <img src="/img/svg/copy.svg" width="12" />
             </v-btn>
           </div>
+          <div v-else>--</div>
         </template>
         <template v-slot:item.size="{ item }">
           {{ $utils.getFileSize(item.size) }}
@@ -74,6 +78,13 @@
           <span class="status">
             {{ transformStatus(item.status) }}
           </span>
+          <v-icon
+            size="18"
+            class="ml-2"
+            v-if="item.status == 'failure'"
+            @click="showDialog = true"
+            >mdi-alert-circle-outline</v-icon
+          >
         </template>
         <template v-slot:item.createdAt="{ item }">
           {{ new Date(item.createdAt * 1000).format() }}
@@ -85,12 +96,16 @@
             @click="handlePublish(item)"
             color="#775da6"
             @click.stop
-            :disabled="item.status == 'pin' || item.status == 'pinning'"
+            :disabled="
+              item.status == 'pin' ||
+              item.status == 'pinning' ||
+              item.status == 'generating'
+            "
           >
             Publish
           </v-btn>
           <v-btn
-            class="action-btn"
+            class="action-btn ml-2"
             text
             @click="handleDelete(item)"
             color="#775da6"
@@ -131,6 +146,28 @@
     </div>
     <bucket-snapshots-detail v-else :snapshotId="snapshotId">
     </bucket-snapshots-detail>
+
+    <v-dialog v-model="showDialog" max-width="600">
+      <div class="pa-7">
+        <h3>Tips</h3>
+        <p class="mt-2" style="color: gray">
+          Feel free to contact us at discord if you failed to snapshot. We will
+          assign a team member to assist you.
+        </p>
+        <div class="al-c justify-center mt-6">
+          <v-btn outlined width="180" @click="showDialog = false">OK</v-btn>
+          <v-btn
+            color="primary"
+            class="ml-4"
+            width="180"
+            @click="handleJoinDiscord"
+          >
+            <img width="20" src="/img/logos/discord.svg" alt="" />
+            <span class="ml-2">Join</span>
+          </v-btn>
+        </div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -156,6 +193,7 @@ export default {
   },
   data() {
     return {
+      showDialog: false,
       header: [
         { text: "Name", value: "prefix" },
         { text: "IPFS CID", value: "cid" },
@@ -174,7 +212,16 @@ export default {
       loadingMore: false,
     };
   },
-  activated() {
+  // activated() {
+  //   this.$router
+  //     .push({
+  //       path: this.$route.path.split("/").slice(0, 4).join("/") + "/",
+  //       query: { tab: "snapshots" },
+  //     })
+  //     .catch((err) => err);
+  //   this.getList();
+  // },
+  created() {
     this.$router
       .push({
         path: this.$route.path.split("/").slice(0, 4).join("/") + "/",
@@ -183,9 +230,6 @@ export default {
       .catch((err) => err);
     this.getList();
   },
-  // created() {
-  //   this.getList();
-  // },
   computed: {
     childPath() {
       return this.$route.path.split("/").length > 5;
@@ -210,8 +254,9 @@ export default {
   },
   methods: {
     onRow(item) {
-      // console.log( encodeURI(item.prefix));
-      // console.log(item.prefix.replace(/\//g, ":"));
+      if (item.status == "generating") {
+        return this.$alert("The folder is being generated.");
+      }
       const prefix = item.prefix.replace(/\//g, ":") + "/";
       this.snapshotId = item.id;
       this.$router.push(this.$route.path + prefix + location.search);
@@ -284,13 +329,17 @@ export default {
       this.loadingMore = true;
       this.getList();
     },
+    handleJoinDiscord() {
+      window.open("https://discord.com/invite/Cun2VpsdjF");
+      this.showDialog = false;
+    },
   },
   components: {
     bucketSnapshotsDetail,
   },
   watch: {
     childPath(val) {
-      if (!val) {
+      if (!val && this.$route.query.tab == "snapshots") {
         this.getList();
       }
     },
@@ -301,6 +350,10 @@ export default {
 <style lang="scss" scoped>
 .action-btn {
   padding: 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  letter-spacing: 0 !important;
 }
 .hash-link {
   display: block;
