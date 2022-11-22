@@ -4,7 +4,7 @@
       <v-skeleton-loader type="article" v-if="!info" />
       <v-row v-else>
         <v-col cols="12" md="3">
-          <e-link :href="info.domain">
+          <e-link :href="'//' + info.domain">
             <v-img
               class="bd-1 bdrs-5 w100p"
               :src="$getImgSrc(info.screenshotPath)"
