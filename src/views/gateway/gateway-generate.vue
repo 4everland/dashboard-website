@@ -25,6 +25,7 @@
                 v-model="subDomain"
                 persistent-placeholder
                 label="gateway name"
+                autofocus
                 :rules="[
                   (v) => !!v || 'Invalid subdomain',
                   (v) =>

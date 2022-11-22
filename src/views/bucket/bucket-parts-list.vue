@@ -33,6 +33,7 @@
       <v-data-table
         v-model="selected"
         :headers="headers"
+        :loading="loading"
         :items="list"
         show-select
         :checkbox-color="$color1"

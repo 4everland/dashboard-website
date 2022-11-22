@@ -7,6 +7,8 @@
           <v-text-field
             class="post-input"
             persistent-placeholder
+            dense
+            autofocus
             v-model="form.value"
             :placeholder="
               cidType == 1 ? 'Enter the IPFS CID' : 'Enter the IPNS'
@@ -21,6 +23,7 @@
               <v-select
                 label="IPFS Path"
                 class="post-input"
+                dense
                 v-model="cidType"
                 :items="cidTypeOpts"
                 item-text="text"
@@ -33,6 +36,7 @@
         <div class="mt-5">
           <v-select
             class="post-input mt-5"
+            dense
             v-model="form.lifetime"
             :items="periodOpts"
             item-text="text"

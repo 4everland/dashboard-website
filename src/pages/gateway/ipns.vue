@@ -111,9 +111,9 @@
     </div>
 
     <bottom-detector
-      :loadingMore="loading"
-      :noMore="list.length >= total"
-      @arriveBottom="getList"
+      :loadingMore="loadingMore"
+      :noMore="!hasNext"
+      @arriveBottom="onLoadMore"
     ></bottom-detector>
     <ipns-publish ref="ipnsPublish" @getList="getList(1)" />
   </div>
@@ -146,7 +146,8 @@ export default {
       loading: false,
       keyword: "",
       cursor: 0,
-      hasNext: false,
+      hasNext: true,
+      loadingMore: false,
       total: 0,
       provider: null,
       node: null,
@@ -238,6 +239,12 @@ export default {
         console.log(error);
       }
       this.loading = false;
+      this.loadingMore = false;
+    },
+    onLoadMore() {
+      if (this.loading) return;
+      this.loadingMore = true;
+      this.getList();
     },
     async setContentHash(item) {
       this.curItem = item;

@@ -41,6 +41,7 @@
     <div class="main-wrap mt-6">
       <v-data-table
         class="hide-bdb"
+        fixed-header
         :headers="headers"
         :items="list"
         :loading="tableLoading"
@@ -95,7 +96,7 @@
         </e-empty>
       </div>
 
-      <div
+      <!-- <div
         v-if="!finished"
         class="pd-20 gray ta-c fz-16 mt-5"
         :class="{
@@ -107,7 +108,13 @@
         <span v-if="list.length" v-show="!tableLoading">
           {{ loadingMore ? "Loading..." : "Load More" }}
         </span>
-      </div>
+      </div> -->
+
+      <bottom-detector
+        @arriveBottom="onLoadMore"
+        :loadingMore="loadingMore"
+        :noMore="finished"
+      ></bottom-detector>
     </div>
   </div>
 </template>

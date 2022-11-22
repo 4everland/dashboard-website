@@ -73,6 +73,7 @@ const store = new Vuex.Store({
   actions: {
     async getProjectInfo({ commit }, id) {
       const { data } = await http2.get("/project/" + id);
+      console.log(data.buildConfig.node, "----");
       if (data.platform == "IC") {
         let index = data.domains.findIndex((it) =>
           /foreverland\.xyz$/.test(it.domain)

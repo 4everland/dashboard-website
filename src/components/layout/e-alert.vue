@@ -8,10 +8,12 @@
       v-bind="noticeInfo.attrs"
       v-model="showSnackbar"
     >
-      {{ noticeInfo.content }}
-      <template #action>
+      <div class="snackbar-content">
+        {{ noticeInfo.content }}
+      </div>
+      <!-- <template #action>
         <v-btn text @click="showSnackbar = false"> close </v-btn>
-      </template>
+      </template> -->
     </v-snackbar>
 
     <v-dialog
@@ -292,3 +294,8 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.snackbar-content {
+  text-align: center;
+}
+</style>

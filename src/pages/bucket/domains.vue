@@ -55,9 +55,9 @@
             <b>{{ item.domain }}</b></v-btn
           >
 
-          <e-tooltip bottom v-if="!item.valid">
-            <v-icon slot="ref" size="16" class="pa-1 d-ib ml-2"
-              >mdi-alert-circle</v-icon
+          <e-tooltip right v-if="!item.valid">
+            <v-icon slot="ref" size="18" color="#333" class="pa-1 d-ib ml-2"
+              >mdi-alert-circle-outline</v-icon
             >
             <span>Invalid Configuration</span>
           </e-tooltip>

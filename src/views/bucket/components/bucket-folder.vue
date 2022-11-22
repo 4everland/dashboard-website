@@ -2,48 +2,52 @@
   <div class="bucket-item-container bg-white">
     <div class="file-container" v-if="inFolder">
       <!-- Operation Tab -->
-      <div class="operation-tab d-flex">
+      <v-row class="operation-tab">
         <!-- Upload Btn -->
-        <bucket-upload
-          ref="bucketUpload"
-          :info="pathInfo"
-          :baseUrl="bucketInfo.originList[0]"
-        ></bucket-upload>
-        <v-btn
-          class="ml-5"
-          outlined
-          :disabled="folderLen >= 20"
-          @click="addFolder"
-        >
-          <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
-          <img src="/img/svg/add0.svg" width="12" />
-          <span class="ml-2">New Folder</span>
-        </v-btn>
-        <!-- Fragments Btn -->
-        <v-btn class="ml-5" outlined @click="drawer = true">
-          <img src="/img/svg/parts_icon.svg" width="12" />
-          <span class="ml-2">Fragments</span>
-        </v-btn>
+        <v-col :md="9" class="d-flex">
+          <bucket-upload
+            ref="bucketUpload"
+            :info="pathInfo"
+            :baseUrl="bucketInfo.originList[0]"
+          ></bucket-upload>
+          <v-btn
+            class="ml-5"
+            outlined
+            :disabled="folderLen >= 20"
+            @click="addFolder"
+          >
+            <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
+            <img src="/img/svg/add0.svg" width="12" />
+            <span class="ml-2">New Folder</span>
+          </v-btn>
+          <!-- Fragments Btn -->
+          <v-btn class="ml-5" outlined @click="drawer = true">
+            <img src="/img/svg/parts_icon.svg" width="12" />
+            <span class="ml-2">Fragments</span>
+          </v-btn>
+          <bucket-parts-list
+            v-model="drawer"
+            :pathInfo="pathInfo"
+          ></bucket-parts-list>
+        </v-col>
         <!-- Search-Input -->
-        <div
-          :class="selected.length ? 'ml-auto' : 'ml-auto'"
-          style="min-width: 150px"
-        >
-          <v-text-field
-            class="hide-msg bd-1"
-            dense
-            solo
-            clearable
-            label="Search"
-            prepend-inner-icon="mdi-magnify"
-            v-model="searchKey"
-          ></v-text-field>
-        </div>
-        <bucket-parts-list
-          v-model="drawer"
-          :pathInfo="pathInfo"
-        ></bucket-parts-list>
-      </div>
+        <v-col :md="3" :cols="6">
+          <div
+            :class="selected.length ? 'ml-auto' : 'ml-auto'"
+            style="min-width: 150px"
+          >
+            <v-text-field
+              class="hide-msg bd-1"
+              dense
+              solo
+              clearable
+              label="Search"
+              prepend-inner-icon="mdi-magnify"
+              v-model="searchKey"
+            ></v-text-field>
+          </div>
+        </v-col>
+      </v-row>
       <!-- File-header -->
       <div class="d-flex justify-end pt-4">
         <div
@@ -80,6 +84,7 @@
             v-show="list.length"
             class="hide-bdb data-table"
             fixed-header
+            mobile-breakpoint="1000"
             :headers="headers"
             :items="list"
             :loading="tableLoading"
@@ -546,6 +551,7 @@ export default {
   color: #0b0817;
 }
 .bucket-item-container {
+  width: 100%;
   padding: 18px 13px 33px 32px;
   border-radius: 10px;
   box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
@@ -555,7 +561,7 @@ export default {
     position: relative;
     // min-height: 1000px;
     .file-head {
-      width: 25%;
+      width: 250px;
       .pack-up {
         cursor: pointer;
       }
@@ -573,6 +579,7 @@ export default {
     }
     .table-data {
       position: relative;
+      width: 200px;
       .loading-img {
         position: absolute;
         left: 50%;

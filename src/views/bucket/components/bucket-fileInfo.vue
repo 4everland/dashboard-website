@@ -443,8 +443,8 @@ export default {
 }
 .nav {
   position: relative;
-  width: 25%;
-  // padding: 0 16px;
+  width: 250px;
+  min-width: 250px;
   padding-left: 20px;
   border-left: 1px solid #d7dfeb;
   .default-img {
@@ -455,6 +455,9 @@ export default {
     .default-img-content {
       width: 20%;
     }
+  }
+  .single-file {
+    width: 100%;
   }
   .no-file {
     position: absolute;

@@ -42,7 +42,7 @@
     <div class="" :class="vertical ? 'flex-1 ml-5' : 'mt-5'">
       <keep-alive
         v-if="bucket"
-        :include="['bucket-folder', 'bucket-overview', 'bucket-statistics']"
+        :include="['bucket-overview', 'bucket-statistics']"
       >
         <component
           v-if="bucket"

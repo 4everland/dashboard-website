@@ -1,18 +1,20 @@
 <template>
   <div class="main-wrap">
     <div v-if="!childPath">
-      <div class="al-c justify-space-between">
-        <div class="tips py-2 mr-3 pr-5 al-c">
-          <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"
-            >mdi-alert-circle-outline</v-icon
-          >
-          <span class="fz-14"
-            >The publish will fail if the file in the folder is changed after
-            the snapshot, deleting the snapshot will automatically unpin
-            it!</span
-          >
-        </div>
-        <div class="ml-auto" style="min-width: 150px">
+      <v-row justify="space-between" align="center">
+        <v-col :md="10" :cols="12">
+          <div class="tips py-2 mr-3 pr-5 al-c">
+            <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"
+              >mdi-alert-circle-outline</v-icon
+            >
+            <span class="fz-14"
+              >The publish will fail if the file in the folder is changed after
+              the snapshot, deleting the snapshot will automatically unpin
+              it!</span
+            >
+          </div>
+        </v-col>
+        <v-col :md="2" :cols="4">
           <v-text-field
             class="hide-msg bd-1"
             dense
@@ -23,8 +25,8 @@
             v-model="prefix"
             @input="handleInput"
           ></v-text-field>
-        </div>
-      </div>
+        </v-col>
+      </v-row>
       <v-data-table
         class="mt-5 data-table"
         :headers="header"
@@ -130,7 +132,7 @@
         </div>
       </div>
 
-      <div
+      <!-- <div
         v-if="hasNext"
         class="pd-20 gray ta-c fz-16 mt-5"
         :class="{
@@ -142,7 +144,13 @@
         <span v-if="list.length" v-show="!tableLoading">
           {{ loadingMore ? "Loading..." : "Load More" }}
         </span>
-      </div>
+      </div> -->
+
+      <bottom-detector
+        @arriveBottom="onLoadMore"
+        :loadingMore="loadingMore"
+        :noMore="!hasNext"
+      ></bottom-detector>
     </div>
     <bucket-snapshots-detail v-else :snapshotId="snapshotId">
     </bucket-snapshots-detail>
@@ -206,7 +214,7 @@ export default {
       searchKey: "",
       cursor: 0,
       prefix: "",
-      hasNext: false,
+      hasNext: true,
       snapshotId: null,
       tableLoading: false,
       loadingMore: false,

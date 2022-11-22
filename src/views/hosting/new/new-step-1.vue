@@ -168,7 +168,7 @@
             dense
           ></v-text-field>
         </v-col>
-        <!-- <v-col cols="6" md="4">
+        <v-col cols="6" md="4">
           <h4>
             <span>Node Version</span>
           </h4>
@@ -182,7 +182,7 @@
             item-value="value"
           >
           </v-select>
-        </v-col> -->
+        </v-col>
 
         <v-col cols="6" md="4">
           <h4>
@@ -270,7 +270,7 @@ export default {
         hookSwitch: true,
         env: [],
         platform: "IPFS",
-        // nodeVersion: "18",
+        nodeVersion: "",
       },
       buildCommandHint: "",
       scripts: null,
@@ -296,15 +296,15 @@ export default {
       nodeVersionList: [
         {
           name: "18.x",
-          value: "18",
+          value: "LTS",
         },
         {
           name: "16.x",
-          value: "16",
+          value: "MAINTENANCE_1",
         },
         {
           name: "14.x",
-          value: "14",
+          value: "MAINTENANCE_2",
         },
       ],
     };
@@ -418,14 +418,28 @@ export default {
           { params }
         );
         let { scripts, framework = null } = data;
+        let engines = null;
+        if (data.engines) {
+          engines = JSON.parse(data.engines);
+          let node = this.matchNodeVersion(engines.node);
+          switch (node) {
+            case "14":
+              form.nodeVersion = "MAINTENANCE_2";
+              break;
+            case "16":
+              form.nodeVersion = "MAINTENANCE_1";
+              break;
+            case "18":
+              form.nodeVersion = "LTS";
+              break;
+            default:
+              form.nodeVersion = "MAINTENANCE_2";
+              break;
+          }
+        } else {
+          form.nodeVersion = "MAINTENANCE_2";
+        }
 
-        // const nodeVersion = "^14.3.0";
-        // let majorVersion = nodeVersion.split(".")[0];
-        // majorVersion.replace(/^(\^|~|>)/, '')
-
-        // // const nodeReg = /^(\^|~|>)/
-        // if(nodeVersion.indexOf('^') > -1){
-        // }
         //  do something node version choose
         const obj = {
           framework,
@@ -501,6 +515,48 @@ export default {
           },
         ];
       }
+    },
+    matchNodeVersion(nodeVersion) {
+      let nodeVersionList = [
+        {
+          name: "18.x",
+          value: "18",
+        },
+        {
+          name: "16.x",
+          value: "16",
+        },
+        {
+          name: "14.x",
+          value: "14",
+        },
+      ];
+      if (nodeVersion.indexOf("||") > 0) {
+        let versionList = nodeVersion.split("||");
+        versionList = versionList.map((it) => {
+          return this.getMajorVersion(it);
+        });
+        console.log(versionList);
+        for (const item of nodeVersionList) {
+          for (const it of versionList) {
+            if (item.value == it) {
+              return it;
+            }
+          }
+        }
+        return "14";
+      } else {
+        let match = this.getMajorVersion(nodeVersion);
+        let versionList = nodeVersionList.map((it) => it.value);
+        if (versionList.findIndex((it) => it == match) > -1) return match;
+        return "14";
+        // if (versionList.includes(match)) return match;
+      }
+    },
+    getMajorVersion(nodeVersion) {
+      let majorVersion = nodeVersion.split(".")[0];
+      let match = majorVersion.trim().replace(/\^|~|>|>=|<|<=|=/g, "");
+      return match;
     },
   },
   components: {

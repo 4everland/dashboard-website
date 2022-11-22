@@ -3,7 +3,7 @@
     <div class="pa-6 pt-5 domain-content">
       <h3 class="mb-3 fz-20">Add Domain</h3>
       <div>
-        <div class="mb-4">
+        <div class="mb-6">
           <span class="tips">These domains are assigned to your gateway </span>
           <span class="tips-name">{{ curIpns.name }}.4everland.link.</span>
         </div>
@@ -13,7 +13,8 @@
               persistent-placeholder
               v-model="domain"
               dense
-              placeholder=""
+              autofocus
+              label="Add domain"
               :rules="[
                 (val) => ($regMap.domain.test(val) ? true : 'Invalid Domain'),
               ]"
@@ -34,7 +35,7 @@
           />
           <!-- </template> -->
         </div>
-        <div class="fz-12 gray mt-5">
+        <div class="fz-12 gray mt-3">
           Once you've entered your DNS records, you may need to wait up to 24
           hours.
         </div>

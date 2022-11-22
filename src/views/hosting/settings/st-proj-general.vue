@@ -59,6 +59,15 @@
         >
         </v-select>
 
+        <v-select
+          v-model="form.nodeVersion"
+          :items="nodeVersionList"
+          item-text="name"
+          item-value="value"
+          label="Node Version"
+        >
+        </v-select>
+
         <div class="d-flex al-c">
           <build-cmd
             class="mt-2 flex-1"
@@ -183,6 +192,20 @@ export default {
       savingName: false,
       savingCmd: false,
       savingRoot: false,
+      nodeVersionList: [
+        {
+          name: "18.x",
+          value: "LTS",
+        },
+        {
+          name: "16.x",
+          value: "MAINTENANCE_1",
+        },
+        {
+          name: "14.x",
+          value: "MAINTENANCE_2",
+        },
+      ],
     };
   },
   watch: {
@@ -198,10 +221,24 @@ export default {
   methods: {
     setForm() {
       const { name, config } = this.info;
-      console.log(config);
+      switch (config.node) {
+        case 18:
+          config.nodeVersion = "LTS";
+          break;
+        case 16:
+          config.nodeVersion = "MAINTENANCE_1";
+          break;
+        case 14:
+          config.nodeVersion = "MAINTENANCE_2";
+          break;
+        default:
+          config.nodeVersion = "LTS";
+          break;
+      }
       this.name = name;
       const form = {
         framework: "",
+        nodeVersion: "",
         outputDirectory: "",
         buildCommand: "",
         installCommand: "",

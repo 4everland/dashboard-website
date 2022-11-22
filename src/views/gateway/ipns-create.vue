@@ -64,6 +64,7 @@
                   <v-text-field
                     class="post-input"
                     persistent-placeholder
+                    autofocus
                     v-model="form.name"
                     label="Set a Name"
                     placeholder="Set a name for your IPNS"
@@ -80,6 +81,7 @@
                   <v-text-field
                     class="post-input"
                     persistent-placeholder
+                    dense
                     v-model="form.value"
                     :placeholder="
                       cidType == 1 ? 'Enter the IPFS CID' : 'Enter the IPNS'
@@ -89,6 +91,7 @@
                       <v-select
                         label="IPFS Path"
                         class="post-input"
+                        dense
                         v-model="cidType"
                         :items="cidTypeOpts"
                         item-text="text"
@@ -103,6 +106,7 @@
                     class="post-input"
                     v-model="form.lifetime"
                     :items="periodOpts"
+                    dense
                     item-text="text"
                     item-value="value"
                     label="End of Life"
@@ -115,6 +119,8 @@
                   <v-text-field
                     class="post-input"
                     persistent-placeholder
+                    dense
+                    autofocus
                     v-model="form.name"
                     label="Decentration domain"
                     placeholder="Enter your ENS domain"
@@ -127,6 +133,7 @@
                   <v-text-field
                     class="post-input"
                     persistent-placeholder
+                    dense
                     v-model="form.value"
                     :placeholder="
                       cidType == 1 ? 'Enter the IPFS CID' : 'Enter the IPNS'
@@ -136,6 +143,7 @@
                       <v-select
                         label="IPFS Path"
                         class="post-input"
+                        dense
                         v-model="cidType"
                         :items="cidTypeOpts"
                         item-text="text"
@@ -148,6 +156,7 @@
                   <v-select
                     class="post-input"
                     v-model="form.lifetime"
+                    dense
                     :items="periodOpts"
                     item-text="text"
                     item-value="value"
