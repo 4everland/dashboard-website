@@ -31,7 +31,7 @@
       </p>
     </div>
 
-    <div style="height: 10vh"></div>
+    <div style="height: 30vh"></div>
     <pay-confirm
       :price="curAmount"
       :text="isApproved ? 'Deposit' : 'Approve'"
