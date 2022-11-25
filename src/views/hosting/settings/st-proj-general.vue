@@ -64,7 +64,7 @@
           :items="nodeVersionList"
           item-text="name"
           item-value="value"
-          label="Node Version"
+          label="Node.js Version"
         >
         </v-select>
 

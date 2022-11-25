@@ -170,12 +170,15 @@
         </v-col>
         <v-col cols="6" md="4">
           <h4>
-            <span>Node Version</span>
+            <span>Node.js Version</span>
           </h4>
 
           <v-select
             v-model="form.nodeVersion"
             outlined
+            class="show-msg"
+            :error="nodeVersionError"
+            :error-messages="nodeErrorMessage"
             dense
             :items="nodeVersionList"
             item-text="name"
@@ -211,7 +214,13 @@
       </div>
     </div>
     <div class="ta-c mt-4">
-      <v-btn color="primary" @click="onDeploy" min-width="100">Deploy</v-btn>
+      <v-btn
+        color="primary"
+        @click="onDeploy"
+        min-width="100"
+        :disabled="nodeVersionError"
+        >Deploy</v-btn
+      >
       <v-btn outlined class="ml-6" min-width="100" @click="$emit('back')"
         >Back</v-btn
       >
@@ -237,6 +246,7 @@ import EnvForm from "@/views/hosting/common/env-form";
 import frameworks from "../../../plugins/config/frameworks";
 
 const srcDir = "./";
+const semver = require("semver");
 
 export default {
   props: {
@@ -307,6 +317,8 @@ export default {
           value: "MAINTENANCE_2",
         },
       ],
+      nodeVersionError: false,
+      nodeErrorMessage: "",
     };
   },
   watch: {
@@ -421,7 +433,9 @@ export default {
         let engines = null;
         if (data.engines) {
           engines = JSON.parse(data.engines);
-          let node = this.matchNodeVersion(engines.node);
+          // let node = this.matchNodeVersion(engines.node);
+          let supportedNodeList = ["14.21.1", "16.18.1", "18.12.1"];
+          let node = this.matchNodeVersion(supportedNodeList, engines.node);
           switch (node) {
             case "14":
               form.nodeVersion = "MAINTENANCE_2";
@@ -434,6 +448,8 @@ export default {
               break;
             default:
               form.nodeVersion = "MAINTENANCE_2";
+              this.nodeVersionError = true;
+              this.nodeErrorMessage = `"node": "${engines.node}" does not match the version of Node.js that is supported!`;
               break;
           }
         } else {
@@ -516,47 +532,56 @@ export default {
         ];
       }
     },
-    matchNodeVersion(nodeVersion) {
-      let nodeVersionList = [
-        {
-          name: "18.x",
-          value: "18",
-        },
-        {
-          name: "16.x",
-          value: "16",
-        },
-        {
-          name: "14.x",
-          value: "14",
-        },
-      ];
-      if (nodeVersion.indexOf("||") > 0) {
-        let versionList = nodeVersion.split("||");
-        versionList = versionList.map((it) => {
-          return this.getMajorVersion(it);
-        });
-        console.log(versionList);
-        for (const item of nodeVersionList) {
-          for (const it of versionList) {
-            if (item.value == it) {
-              return it;
-            }
-          }
-        }
-        return "14";
-      } else {
-        let match = this.getMajorVersion(nodeVersion);
-        let versionList = nodeVersionList.map((it) => it.value);
-        if (versionList.findIndex((it) => it == match) > -1) return match;
-        return "14";
-        // if (versionList.includes(match)) return match;
+    // matchNodeVersion(nodeVersion) {
+    //   let nodeVersionList = [
+    //     {
+    //       name: "18.x",
+    //       value: "18",
+    //     },
+    //     {
+    //       name: "16.x",
+    //       value: "16",
+    //     },
+    //     {
+    //       name: "14.x",
+    //       value: "14",
+    //     },
+    //   ];
+    //   if (nodeVersion.indexOf("||") > 0) {
+    //     let versionList = nodeVersion.split("||");
+    //     versionList = versionList.map((it) => {
+    //       return this.getMajorVersion(it);
+    //     });
+    //     console.log(versionList);
+    //     for (const item of nodeVersionList) {
+    //       for (const it of versionList) {
+    //         if (item.value == it) {
+    //           return it;
+    //         }
+    //       }
+    //     }
+    //     return "14";
+    //   } else {
+    //     let match = this.getMajorVersion(nodeVersion);
+    //     let versionList = nodeVersionList.map((it) => it.value);
+    //     if (versionList.findIndex((it) => it == match) > -1) return match;
+    //     return "14";
+    //     // if (versionList.includes(match)) return match;
+    //   }
+    // },
+    // getMajorVersion(nodeVersion) {
+    //   let majorVersion = nodeVersion.split(".")[0];
+    //   let match = majorVersion.trim().replace(/\^|~|>|>=|<|<=|=/g, "");
+    //   return match;
+    // },
+
+    matchNodeVersion(supportedNodeList, userNodeVersion) {
+      for (const node of supportedNodeList) {
+        console.log(node, userNodeVersion);
+        console.log(semver.satisfies(node, userNodeVersion));
+        if (semver.satisfies(node, userNodeVersion)) return node.split(".")[0];
       }
-    },
-    getMajorVersion(nodeVersion) {
-      let majorVersion = nodeVersion.split(".")[0];
-      let match = majorVersion.trim().replace(/\^|~|>|>=|<|<=|=/g, "");
-      return match;
+      return undefined;
     },
   },
   components: {
@@ -569,3 +594,12 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.show-msg .v-text-field__details {
+  display: block !important;
+  padding-top: 10px !important;
+}
+.show-msg .v-messages {
+  display: block !important;
+}
+</style>
