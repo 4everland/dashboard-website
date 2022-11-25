@@ -183,16 +183,17 @@ export default {
       } else if (type == "OPEN_TELEGRAM_WIDGET") {
         this.onTg();
       } else if (type == "AIRDROP_FOR_NEW") {
-        //
         this.$alert(
           "Newly registered users will get 5GB IPFS storage, 100MB Arweave storage, 100GB bandwidth, and 250 build minutes. Come click on 'Claim' button to get your rewards."
         );
       } else if (type == "TWITTER_SHARE") {
-        //  share to twttier
         window.open(
           `https://twitter.com/intent/tweet?text=💠The %23Web3 product journey has begun for me at @4everland_org, and I have received free resources to help me along the way.🚀The best way to explore Web3 is to experience its products. Join us today and start your Web3 journey.✅${encodeURIComponent(
             this.shareUrl
           )}&hashtags=IPFS,Arweave,Dfinity`
+        );
+        this.$alert(
+          "You can get extra free 5GB IPFS storage by sharing Twitter."
         );
       }
     },
