@@ -71,6 +71,9 @@ export default {
       isFocus: (s) => s.isFocus,
       userInfo: (s) => s.userInfo,
     }),
+    shareUrl() {
+      return location.origin + "?invite=" + this.code;
+    },
   },
   data() {
     return {
@@ -83,6 +86,7 @@ export default {
       list: [],
       showTg: false,
       tgTag: `<b>2</b>`,
+      code: null,
     };
   },
   watch: {
@@ -93,6 +97,9 @@ export default {
         // this.getList();
       }
     },
+  },
+  created() {
+    this.getCode();
   },
   mounted() {
     const { from } = this.$route.query;
@@ -175,6 +182,18 @@ export default {
         this.onSubsribe();
       } else if (type == "OPEN_TELEGRAM_WIDGET") {
         this.onTg();
+      } else if (type == "AIRDROP_FOR_NEW") {
+        //
+        this.$alert(
+          "Newly registered users will get 5GB IPFS storage, 100MB Arweave storage, 100GB bandwidth, and 250 build minutes. Come click on 'Claim' button to get your rewards."
+        );
+      } else if (type == "TWITTER_SHARE") {
+        //  share to twttier
+        window.open(
+          `https://twitter.com/intent/tweet?text=💠The %23Web3 product journey has begun for me at @4everland_org, and I have received free resources to help me along the way.🚀The best way to explore Web3 is to experience its products. Join us today and start your Web3 journey.✅${encodeURIComponent(
+            this.shareUrl
+          )}&hashtags=IPFS,Arweave,Dfinity`
+        );
       }
     },
     async onAct(it) {
@@ -210,6 +229,11 @@ export default {
         //
       }
       this.loading = false;
+    },
+    async getCode() {
+      if (this.code) return;
+      const { data } = await this.$http2.get("$auth/invitation/code");
+      this.code = data;
     },
   },
 };
