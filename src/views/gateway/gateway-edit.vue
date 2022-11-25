@@ -7,7 +7,7 @@
           {{ curGateway.name }}.4everland.link Access
         </div>
         <div class="al-c hide-msg">
-          <span class="mr-auto">Private Gateway</span>
+          <span class="mr-auto">Restricted Gateway</span>
           <v-switch v-model="curGateway.scope" dense></v-switch>
         </div>
         <div class="mt-2 fz-13 gray">
