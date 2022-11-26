@@ -8,17 +8,73 @@
       />
     </div>
     <div class="main-wrap">
-      <div class="al-c mb-3">
-        <span class="fw-b mr-2">Ways for Reward</span>
+      <div class="al-c mb-10">
+        <span class="fw-b mr-2 fz-20">Ways for Reward</span>
         <e-tooltip top>
-          <v-icon slot="ref" color="#aaa" size="14">mdi-alert-circle</v-icon>
+          <v-icon slot="ref" color="#6C7789" size="16">mdi-alert-circle</v-icon>
           <span
             >Getting free resources by completing the following tasks and
             resources are valid for one year after completion of tasks.</span
           >
         </e-tooltip>
       </div>
-      <v-data-table
+      <v-row>
+        <template v-for="item in list">
+          <v-col :md="item.id == 10 ? '12' : '6'" cols="12" :key="item.id">
+            <div
+              class="reward-task al-c justify-space-between"
+              :class="item.id == 10 ? 'register-task' : ''"
+            >
+              <div>
+                <e-kv label="Task">
+                  <span>{{ item.name }}</span>
+                </e-kv>
+                <e-kv label="Reward" class="mt-4">
+                  {{ item.reward }}
+                </e-kv>
+              </div>
+              <div class="al-c justify-center">
+                <v-btn
+                  :color="getBtnColor(item)"
+                  @click="onAct(item)"
+                  depressed
+                  tile
+                  width="100"
+                  :disabled="item.isDone"
+                  :loading="item.loading"
+                >
+                  <span
+                    :class="{
+                      'white-0': !item.isDone,
+                    }"
+                  >
+                    {{ item.statusName || "To do" }}
+                  </span>
+                </v-btn>
+                <v-btn
+                  :class="{
+                    hidden: !(item.status == 'GOTO' || item.refreshing),
+                  }"
+                  :loading="item.refreshing"
+                  icon
+                  @click="onRefresh(item)"
+                >
+                  <v-icon>mdi-refresh</v-icon>
+                </v-btn>
+              </div>
+              <img
+                v-show="item.status == 'DONE'"
+                width="20"
+                class="check-status"
+                src="/img/svg/rewardHub/check.svg"
+                alt=""
+              />
+            </div>
+          </v-col>
+        </template>
+      </v-row>
+
+      <!-- <v-data-table
         :class="{ strip: list.length }"
         :loading="loading"
         :headers="headers"
@@ -57,7 +113,11 @@
             <v-icon>mdi-refresh</v-icon>
           </v-btn>
         </template>
-      </v-data-table>
+      </v-data-table> -->
+    </div>
+    <div class="resource-description">
+      Getting free resources by completing the following 7 tasks and resources
+      are valid for one year after completion of tasks.
     </div>
   </div>
 </template>
@@ -111,6 +171,7 @@ export default {
   },
   methods: {
     getBtnColor(it) {
+      console.log(it);
       if (it.status == "CLAIM") return "#E21951";
       if (/verify/i.test(it.statusName)) return "#FFB759";
       if (it.status == "GOTO") return "#20B1FF";
@@ -176,17 +237,19 @@ export default {
         else this.$navTo(val);
       } else if (type == "SEND_REQUEST") {
         await this.$http.post("$auth" + val);
-        this.$toast("Claimed successfully.");
+        if (it.id == 10) {
+          this.$alert(
+            "Newly registered users will get 5GB IPFS storage, 100MB Arweave storage, 100GB bandwidth, and 250 build minutes. Come click on 'Claim' button to get your rewards."
+          );
+        } else {
+          this.$toast("Claimed successfully.");
+        }
         this.getList();
       } else if (type == "EMAIL_SUBSCRIPTION_VERIFICATION") {
         this.onSubsribe();
       } else if (type == "OPEN_TELEGRAM_WIDGET") {
         this.onTg();
-      } else if (type == "AIRDROP_FOR_NEW") {
-        this.$alert(
-          "Newly registered users will get 5GB IPFS storage, 100MB Arweave storage, 100GB bandwidth, and 250 build minutes. Come click on 'Claim' button to get your rewards."
-        );
-      } else if (type == "TWITTER_SHARE") {
+      } else if (type == "SHARE_ON_TWITTER") {
         window.open(
           `https://twitter.com/intent/tweet?text=💠The %23Web3 product journey has begun for me at @4everland_org, and I have received free resources to help me along the way.🚀The best way to explore Web3 is to experience its products. Join us today and start your Web3 journey.✅${encodeURIComponent(
             this.shareUrl
@@ -194,7 +257,9 @@ export default {
         );
         this.$alert(
           "You can get extra free 5GB IPFS storage by sharing Twitter."
-        );
+        ).then(() => {
+          this.onRefresh(it);
+        });
       }
     },
     async onAct(it) {
@@ -239,3 +304,34 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.reward-task {
+  position: relative;
+  height: 116px;
+  padding: 15px 0 15px 30px;
+  box-sizing: border-box;
+  background: #ffffff;
+  box-shadow: 4px 4px 0px 0px #edf2fa;
+  border-radius: 10px;
+  border: 1px solid #d0dae9;
+  .check-status {
+    position: absolute;
+    top: 12px;
+    right: 11px;
+  }
+}
+.register-task {
+  border: 1px solid #775da6;
+
+  box-shadow: 2px 2px 0px 0px #775da6;
+}
+.resource-description {
+  padding: 28px 46px;
+  margin-top: 33px;
+  color: #6c7789;
+  line-height: 21px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgb(205 205 205 / 50%);
+}
+</style>
