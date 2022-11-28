@@ -168,7 +168,7 @@ export default {
       } else if (act == "IPNS_MANAGER_AUTH_TOKEN_GENERATE") {
         it.desc = "Generated an Auth Token";
       } else if (act == "IPNS_MANAGER_AUTH_TOKEN_DELETE") {
-        it.desc = "Generated an Auth Token";
+        it.desc = "Deleted an Auth Token";
       } else if (act == "BUCKET_SNAPSHOT") {
         it.desc = "Snapshotted a folder named " + obj.prefix.split("/")[0];
       } else if (act == "BUCKET_PUBLISH_SNAPSHOT") {
