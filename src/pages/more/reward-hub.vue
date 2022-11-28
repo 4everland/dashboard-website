@@ -18,7 +18,7 @@
           >
         </e-tooltip>
       </div>
-      <v-row>
+      <v-row v-if="list.length">
         <template v-for="item in list">
           <v-col :md="item.id == 10 ? '12' : '6'" cols="12" :key="item.id">
             <div
@@ -27,7 +27,8 @@
             >
               <div>
                 <e-kv label="Task">
-                  <span>{{ item.name }}</span>
+                  <img class="task-icon" width="18" :src="item.icon" alt="" />
+                  <span class="ml-3">{{ item.name }}</span>
                 </e-kv>
                 <e-kv label="Reward" class="mt-4">
                   {{ item.reward }}
@@ -73,6 +74,14 @@
           </v-col>
         </template>
       </v-row>
+      <v-row v-else>
+        <v-col v-for="i in 8" :key="i" :md="i == 1 ? '12' : '6'" cols="12">
+          <v-skeleton-loader
+            class="mt-10 mb-10"
+            type="article"
+          ></v-skeleton-loader>
+        </v-col>
+      </v-row>
 
       <!-- <v-data-table
         :class="{ strip: list.length }"
@@ -115,7 +124,7 @@
         </template>
       </v-data-table> -->
     </div>
-    <div class="resource-description">
+    <div class="resource-description fz-14">
       Getting free resources by completing the following 7 tasks and resources
       are valid for one year after completion of tasks.
     </div>
@@ -172,6 +181,7 @@ export default {
   methods: {
     getBtnColor(it) {
       console.log(it);
+      if (it.type == "AIRDROP_FOR_NEW") return "#E21951";
       if (it.status == "CLAIM") return "#E21951";
       if (/verify/i.test(it.statusName)) return "#FFB759";
       if (it.status == "GOTO") return "#20B1FF";
@@ -239,7 +249,7 @@ export default {
         await this.$http.post("$auth" + val);
         if (it.id == 10) {
           this.$alert(
-            "Newly registered users will get 5GB IPFS storage, 100MB Arweave storage, 100GB bandwidth, and 250 build minutes. Come click on 'Claim' button to get your rewards."
+            "Newly registered users will get 6GB IPFS storage, 100MB Arweave storage, 100GB bandwidth, and 250 build minutes. Come click on 'Claim' button to get your rewards."
           );
         } else {
           this.$toast("Claimed successfully.");
@@ -285,6 +295,45 @@ export default {
         this.loading = true;
         const { data } = await this.$http.get("$auth/rewardhub/activities");
         this.list = data.item.map((it) => {
+          switch (it.type) {
+            case "AIRDROP_FOR_NEW":
+              it.icon = "/img/svg/rewardHub/register_reward.svg";
+              break;
+            case "TWITTER_SHARE":
+              it.icon = "/img/svg/rewardHub/twitter.svg";
+
+              break;
+            case "JOIN_DISCORD":
+              it.icon = "/img/svg/rewardHub/discord.svg";
+
+              break;
+            case "JOIN_TELEGRAM":
+              it.icon = "/img/svg/rewardHub/telegram.svg";
+
+              break;
+            case "FOLLOW_TWITTER":
+              it.icon = "/img/svg/rewardHub/twitter.svg";
+
+              break;
+            case "SUBSCRIBE_NEWSLETTER":
+              it.icon = "/img/svg/rewardHub/subscribe.svg";
+
+              break;
+            case "DEPOSIT":
+              it.icon = "/img/svg/rewardHub/deposit.svg";
+
+              break;
+            case "REFERRAL_FRIENDS":
+              it.icon = "/img/svg/rewardHub/referral.svg";
+
+              break;
+            case "AIRDROP":
+              it.icon = "/img/svg/rewardHub/airdrop.svg";
+              break;
+            default:
+              it.icon = "/img/svg/rewardHub/register_reward.svg";
+              break;
+          }
           if (it.status == "DONE") {
             it.isDone = true;
             it.statusName = "Done";
@@ -314,15 +363,18 @@ export default {
   box-shadow: 4px 4px 0px 0px #edf2fa;
   border-radius: 10px;
   border: 1px solid #d0dae9;
+  transition: all 0.2s ease-in;
   .check-status {
     position: absolute;
     top: 12px;
     right: 11px;
   }
+  .task-icon {
+    vertical-align: middle;
+  }
 }
-.register-task {
+.reward-task:hover {
   border: 1px solid #775da6;
-
   box-shadow: 2px 2px 0px 0px #775da6;
 }
 .resource-description {

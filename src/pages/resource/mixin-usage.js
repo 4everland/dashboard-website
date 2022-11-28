@@ -32,7 +32,9 @@ export default {
         {
           label: "IPFS Storage",
           name: "IPFS_STORAGE",
-          expired: `${new Date(info.ipfsStorageExpired * 1000).format("date")}`,
+          expired: info.ipfsStorageExpired
+            ? `${new Date(info.ipfsStorageExpired * 1000).format("date")}`
+            : null,
           // ${new Date(info.ipfsStorageStart * 1e3).format("date")} -
           desc: info.ipfsStorage
             ? `Free resources ${getSize(info.ipfsDefaultStorage)} a year, ${

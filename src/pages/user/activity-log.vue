@@ -145,12 +145,12 @@ export default {
         it.desc = "created project " + obj.projectName;
       } else if (act == "HOSTING_GENERATE_CLI_TOKEN") {
         it.desc = "generated Hosting Auth Token";
-        it.path = "Settings";
-        it.link = "/settings?tab=auth_tokens";
+        it.path = "Hosting Auth Tokens";
+        it.link = "/hosting/auth-tokens";
       } else if (act == "BUCKET_GENERATE_ACCESS_KEY") {
         it.desc = "generated Bucket Auth Token";
-        it.path = "Settings";
-        it.link = "/settings?tab=auth_tokens&sub=bucket_auth_tokens";
+        it.path = "Bucket Access Keys";
+        it.link = "/bucket/access-keys";
       } else if (act == "BUCKET_DELETE") {
         it.desc = "deleted bucket " + obj.bucket;
       } else if (act == "BUCKET_CREATE") {
@@ -159,6 +159,30 @@ export default {
         it.desc = "added domain " + obj.domain;
       } else if (act == "BUCKET_DELETE_DOMAIN") {
         it.desc = "deleted domain " + obj.map((it) => it.domain).join(", ");
+      } else if (act == "IPNS_MANAGER_GENERATE") {
+        it.desc = "Generated an IPNS named " + obj.name;
+      } else if (act == "IPNS_MANAGER_PUBLISH") {
+        it.desc = "Published  an IPNS named " + obj.name;
+      } else if (act == "IPNS_MANAGER_DELETE") {
+        it.desc = "Deleted  an IPNS named " + obj.name;
+      } else if (act == "IPNS_MANAGER_AUTH_TOKEN_GENERATE") {
+        it.desc = "Generated an Auth Token";
+      } else if (act == "IPNS_MANAGER_AUTH_TOKEN_DELETE") {
+        it.desc = "Generated an Auth Token";
+      } else if (act == "BUCKET_SNAPSHOT") {
+        it.desc = "Snapshotted a folder named " + obj.prefix.split("/")[0];
+      } else if (act == "BUCKET_PUBLISH_SNAPSHOT") {
+        it.desc = "Published a snapshot named " + obj.prefix.split("/")[0];
+      } else if (act == "BUCKET_DELETE_SNAPSHOT") {
+        it.desc = "Deleted a snapshot named " + obj.prefix.split("/")[0];
+      } else if (act == "BUCKET_RESET_API_SECRET") {
+        it.desc = "Resetted an API Secret";
+        it.path = "Bucket Access Keys";
+        it.link = "/bucket/access-keys";
+      } else if (act == "GATEWAY_GENERATE") {
+        it.desc = `Generate a dedicated gateway named ${obj.name}.4everland.link`;
+      } else if (act == "GATEWAY_DELETE") {
+        it.desc = `Deleted a gateway named ${obj.name}.4everland.link`;
       } else {
         console.log(act, it);
         it.desc = act;
@@ -166,7 +190,7 @@ export default {
       if (!it.path) {
         if (/^bill/i.test(act) || act == "OAUTH_EXCLUSIVE_DRIP") {
           it.path = "Billing";
-          it.link = "/billing/bills";
+          it.link = "/resource/bills";
         } else if (/^hosting.*project$/i.test(act) && obj.projectName) {
           it.path = "Hosting " + obj.projectName;
           it.link = `/hosting/project/${obj.projectName}/${obj.projectId}`;
@@ -179,10 +203,24 @@ export default {
           if (/domain/i.test(act)) {
             it.path = "Bucket Domains";
             it.link = "/bucket/domains";
+          } else if (/snapshot/i.test(act)) {
+            it.path = obj.prefix.split("/")[0];
+            it.link = `/bucket/storage/${obj.bucket}/?tab=snapshots`;
           } else {
             it.path = "Bucket";
             it.link = "/bucket/storage/";
           }
+        } else if (/ipns_manager/i.test(act)) {
+          if (/ipns_manager_auth/i.test(act)) {
+            it.path = "Gateway Auth Token";
+            it.link = "/gateway/auth-token";
+          } else {
+            it.path = "Gateway IPNS Manager";
+            it.link = "/gateway/ipns";
+          }
+        } else if (/gateway/i.test(act)) {
+          it.path = "Gateway Dedicated Gateway";
+          it.link = "/gateway/list";
         }
       }
     },
