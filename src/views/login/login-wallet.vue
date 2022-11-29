@@ -91,7 +91,7 @@ export default {
         case "Phantom":
           this.phantomConnect();
           break;
-        case "Flow":
+        case "Lilico":
           this.flowConnect();
           break;
         default:
