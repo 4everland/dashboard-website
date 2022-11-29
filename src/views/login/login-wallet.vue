@@ -32,6 +32,7 @@ import {
   ConnectFlow,
   SignFlow,
 } from "@/utils/login";
+import * as fcl from "@onflow/fcl";
 
 export default {
   props: {
@@ -51,7 +52,7 @@ export default {
           btnText: "Solana",
         },
         {
-          name: "Flow",
+          name: "Lilico",
           icon: require("@/assets/imgs/flow.svg"),
           btnText: "Flow",
         },
@@ -90,7 +91,7 @@ export default {
         case "Phantom":
           this.phantomConnect();
           break;
-        case "Flow":
+        case "Lilico":
           this.flowConnect();
           break;
         default:
