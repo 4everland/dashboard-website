@@ -83,6 +83,8 @@ export default {
         if (/ipfs/i.test(it.type) && it.contentType == "Deductions") {
           amount /= 3600;
         }
+        console.log(amount);
+
         const row = this.$utils.getPurchase(it.type, amount);
         Object.assign(it, row);
         return it;
