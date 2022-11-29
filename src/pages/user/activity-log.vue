@@ -104,26 +104,26 @@ export default {
       }
       const utils = this.$utils;
       if (act == "OAUTH_REGISTER_DRIP") {
-        it.desc = "got airdrop resources for new users";
+        it.desc = "Got airdrop resources for new users";
         it.path = "Overview";
         it.link = "/overview";
       } else if (act == "OAUTH_EXCLUSIVE_DRIP") {
-        it.desc = `got a exclusive ${obj.name} resources`;
+        it.desc = `Got a exclusive ${obj.name} resources`;
       } else if (act == "OAUTH_FIRST_LOGIN") {
-        it.desc = "welcome to 4EVERLAND";
+        it.desc = "Welcome to 4EVERLAND";
         it.path = "Overview";
         it.link = "/overview";
       } else if (act == "OAUTH_BIND_GITHUB") {
-        it.desc = "connected Github account";
+        it.desc = "Connected Github account";
         it.path = "Settings";
         it.link = "/settings";
       } else if (act == "BILL_RECHARGE") {
-        it.desc = `deposited ${utils.cutFixed(obj.amount, 4)} USDC`;
+        it.desc = `Deposited ${utils.cutFixed(obj.amount, 4)} USDC`;
       } else if (act == "BILL_WITHDRAW") {
-        it.desc = `withdrew ${utils.cutFixed(obj.amount, 4)} USDC`;
+        it.desc = `Withdrew ${utils.cutFixed(obj.amount, 4)} USDC`;
       } else if (act == "BILL_PURCHASED") {
         const info = utils.getPurchase(obj.type, obj.incremental);
-        it.desc = `purchased ${info.amount} ${info.unit || "for"} ${info.name}`;
+        it.desc = `Purchased ${info.amount} ${info.unit || "for"} ${info.name}`;
         if (obj.time > 0)
           it.desc += ` until ${new Date(obj.time * 1e3).format("date")}`;
       } else if (
@@ -136,29 +136,29 @@ export default {
           " domain " +
           (obj.domain || obj.domains[0]);
       } else if (act == "HOSTING_REDEPLOY_PROJECT") {
-        it.desc = "redeployed project " + obj.projectName;
+        it.desc = "Redeployed project " + obj.projectName;
       } else if (act == "HOSTING_DELETE_PROJECT") {
-        it.desc = "deleted project " + obj.projectName;
+        it.desc = "Deleted project " + obj.projectName;
         it.path = "Hosting";
         it.link = "/hosting/projects";
       } else if (act == "HOSTING_CREATE_PROJECT") {
-        it.desc = "created project " + obj.projectName;
+        it.desc = "Created project " + obj.projectName;
       } else if (act == "HOSTING_GENERATE_CLI_TOKEN") {
-        it.desc = "generated Hosting Auth Token";
+        it.desc = "Generated Hosting Auth Token";
         it.path = "Hosting Auth Tokens";
         it.link = "/hosting/auth-tokens";
       } else if (act == "BUCKET_GENERATE_ACCESS_KEY") {
-        it.desc = "generated Bucket Auth Token";
+        it.desc = "Generated Bucket Auth Token";
         it.path = "Bucket Access Keys";
         it.link = "/bucket/access-keys";
       } else if (act == "BUCKET_DELETE") {
-        it.desc = "deleted bucket " + obj.bucket;
+        it.desc = "Deleted bucket " + obj.bucket;
       } else if (act == "BUCKET_CREATE") {
-        it.desc = "created bucket " + obj.bucket;
+        it.desc = "Created bucket " + obj.bucket;
       } else if (act == "BUCKET_ADD_DOMAIN") {
-        it.desc = "added domain " + obj.domain;
+        it.desc = "Added domain " + obj.domain;
       } else if (act == "BUCKET_DELETE_DOMAIN") {
-        it.desc = "deleted domain " + obj.map((it) => it.domain).join(", ");
+        it.desc = "Deleted domain " + obj.map((it) => it.domain).join(", ");
       } else if (act == "IPNS_MANAGER_GENERATE") {
         it.desc = "Generated an IPNS named " + obj.name;
       } else if (act == "IPNS_MANAGER_PUBLISH") {
@@ -170,11 +170,17 @@ export default {
       } else if (act == "IPNS_MANAGER_AUTH_TOKEN_DELETE") {
         it.desc = "Deleted an Auth Token";
       } else if (act == "BUCKET_SNAPSHOT") {
-        it.desc = "Snapshotted a folder named " + obj.prefix.split("/")[0];
+        it.desc =
+          "Snapshotted a folder named " +
+          obj.prefix.split("/")[obj.prefix.split("/").length - 2];
       } else if (act == "BUCKET_PUBLISH_SNAPSHOT") {
-        it.desc = "Published a snapshot named " + obj.prefix.split("/")[0];
+        it.desc =
+          "Published a snapshot named " +
+          obj.prefix.split("/")[obj.prefix.split("/").length - 2];
       } else if (act == "BUCKET_DELETE_SNAPSHOT") {
-        it.desc = "Deleted a snapshot named " + obj.prefix.split("/")[0];
+        it.desc =
+          "Deleted a snapshot named " +
+          obj.prefix.split("/")[obj.prefix.split("/").length - 2];
       } else if (act == "BUCKET_RESET_API_SECRET") {
         it.desc = "Resetted an API Secret";
         it.path = "Bucket Access Keys";
@@ -204,7 +210,7 @@ export default {
             it.path = "Bucket Domains";
             it.link = "/bucket/domains";
           } else if (/snapshot/i.test(act)) {
-            it.path = obj.prefix.split("/")[0];
+            it.path = "Bucket " + obj.bucket;
             it.link = `/bucket/storage/${obj.bucket}/?tab=snapshots`;
           } else {
             it.path = "Bucket";
