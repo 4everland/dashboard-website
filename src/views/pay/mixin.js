@@ -147,7 +147,9 @@ export default {
     },
     async getWalletBalance() {
       this.$loading();
-      const num = await this.curContract.MumbaiUSDC.balanceOf(this.connectAddr);
+      const num = await this.curContract[this.usdcKey].balanceOf(
+        this.connectAddr
+      );
       this.walletBalance = this.$utils.cutFixed(num / 1e6, 4);
       // console.log(this.walletBalance);
       this.$loading.close();
@@ -174,6 +176,7 @@ export default {
           this.connectAddr,
           addr
         );
+        console.log(allowance);
         const minAllowance = uint256Max.shr(1);
         this.isApproved = !allowance.lt(minAllowance);
         console.log("isApproved", this.isApproved, allowance);
