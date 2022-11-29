@@ -58,6 +58,17 @@ export default {
       if (!this.curContract) return "";
       return this.curContract[this.chainKey].address;
     },
+    rechargeAddr() {
+      let addrList = [
+        { addr: GoerliRecharge, chainIdArr: [1, 5] },
+        { addr: MumbaiFundPool, chainIdArr: [137, 80001] },
+        { addr: ChapelRecharge, chainIdArr: [56, 97] },
+      ];
+      const addrItem = addrList.find((it) =>
+        it.chainIdArr.includes(this.chainId)
+      );
+      return addrItem.addr;
+    },
   },
   watch: {
     connectAddr(val) {
@@ -174,7 +185,7 @@ export default {
     async checkApprove(isBuy) {
       console.log(isBuy);
       try {
-        const addr = isBuy ? this.payAddr : MumbaiFundPool;
+        const addr = isBuy ? this.payAddr : this.rechargeAddr;
         console.log("check approve", this.connectAddr, addr);
         if (!this.connectAddr) return console.log("no connectAddr");
         const allowance = await this.curContract[this.usdcKey].allowance(
@@ -194,7 +205,7 @@ export default {
       try {
         this.$loading("Approving");
         // this.approving = true;
-        const addr = isBuy ? this.payAddr : MumbaiFundPool;
+        const addr = isBuy ? this.payAddr : this.rechargeAddr;
         console.log("approve", addr, this.usdcKey);
         const tx = await this.curContract[this.usdcKey].approve(
           addr,
