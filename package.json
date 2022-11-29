@@ -14,7 +14,7 @@
     "format": "vue-cli-service lint --format"
   },
   "dependencies": {
-    "@4everland/service-contracts": "^0.2.0",
+    "@4everland/service-contracts": "^0.2.1",
     "@aws-sdk/client-s3": "^3.45.0",
     "@aws-sdk/lib-storage": "^3.45.0",
     "@mdi/js": "^7.0.96",

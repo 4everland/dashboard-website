@@ -40,6 +40,9 @@ export default {
     isBSC() {
       return this.payBy == "BSC";
     },
+    isEth() {
+      return this.payBy == "Ethereum";
+    },
     payChainId() {
       return this.getChainId(this.payBy);
     },
@@ -325,6 +328,11 @@ export default {
       const id = this.getChainId(payBy);
       await this.switchNet(id);
     },
+    async switchMatchNet(payBy) {
+      const id = this.getChainId(payBy);
+      await this.switchNet(id);
+    },
+
     async onConnect() {
       // this.walletChanged(true);
       console.log(this.payChainId);

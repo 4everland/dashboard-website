@@ -102,15 +102,24 @@ export default {
         return this.$alert(msg);
       }
       try {
-        if (!this.isPolygon) {
-          return this.switchPolygon();
-        }
+        // if (!this.isPolygon) {
+        //   return this.switchPolygon();
+        // }
+
         if (!this.curContract) {
           this.needSubmit = true;
           this.showConnect();
           return;
         }
-        const target = this.curContract.FundPool;
+
+        const target =
+          this.usdcKey == "MumbaiUSDC"
+            ? this.curContract.FundPool
+            : this.curContract.SrcChainRecharge;
+
+        const curAmountDecimals = this.curContract[this.usdcKey].decimals();
+        console.log(curAmountDecimals);
+        return false;
         if (!target) {
           return this.onConnect();
         }
@@ -121,10 +130,15 @@ export default {
         await this.checkAccount();
         let balance = await target.balanceOf(this.providerAddr, this.uuid);
         console.log("balance1", balance.toString());
+        // target.decimals()
+        const nonce = Date.now();
+        const maxSlippage = "";
         const tx = await target.recharge(
           this.providerAddr,
           this.uuid,
-          num * 1e6
+          num * 1e6,
+          this.usdcKey == "MumbaiUSDC" ? null : nonce,
+          this.usdcKey == "MumbaiUSDC" ? null : maxSlippage
         );
         const receipt = await tx.wait();
         console.log("receipt", receipt);
