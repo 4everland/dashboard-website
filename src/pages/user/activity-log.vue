@@ -148,7 +148,7 @@ export default {
         it.path = "Hosting Auth Tokens";
         it.link = "/hosting/auth-tokens";
       } else if (act == "BUCKET_GENERATE_ACCESS_KEY") {
-        it.desc = "Generated Bucket Access Keys";
+        it.desc = "Generated an Access Key";
         it.path = "Bucket Access Keys";
         it.link = "/bucket/access-keys";
       } else if (act == "BUCKET_DELETE") {
@@ -195,7 +195,7 @@ export default {
       }
       if (!it.path) {
         if (/^bill/i.test(act) || act == "OAUTH_EXCLUSIVE_DRIP") {
-          it.path = "Billing";
+          it.path = "Resource Transaction History";
           it.link = "/resource/bills";
         } else if (/^hosting.*project$/i.test(act) && obj.projectName) {
           it.path = "Hosting " + obj.projectName;
