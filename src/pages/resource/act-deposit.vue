@@ -45,7 +45,6 @@
 import PayNetwork from "@/views/pay/pay-network";
 import PayConfirm from "@/views/pay/pay-confirm";
 import mixin from "@/views/pay/mixin";
-import { BigNumber } from "@ethersproject/bignumber";
 
 export default {
   mixins: [mixin],
@@ -184,7 +183,7 @@ export default {
         if (data.err) {
           throw new Error(data.err.message);
         }
-        return data;
+        return data.max_slippage;
       } catch (error) {
         console.log(error);
       }
