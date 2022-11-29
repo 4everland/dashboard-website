@@ -6,6 +6,8 @@ import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
 // import client from "../../plugins/pay/contracts/SGNClient";
 import {
   MumbaiFundPool,
+  ChapelRecharge,
+  GoerliRecharge,
   providerAddr,
 } from "../../plugins/pay/contracts/contracts-addr";
 
