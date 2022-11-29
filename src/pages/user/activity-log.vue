@@ -103,7 +103,11 @@ export default {
         console.log(it, error.message);
       }
       const utils = this.$utils;
-      if (act == "OAUTH_EXCLUSIVE_DRIP") {
+      if (act == "OAUTH_REGISTER_DRIP") {
+        it.desc = "got airdrop resources for new users";
+        it.path = "Resource Transaction History";
+        it.link = "/resource/bills";
+      } else if (act == "OAUTH_EXCLUSIVE_DRIP") {
         it.desc = `Got a exclusive ${obj.name} resources`;
       } else if (act == "OAUTH_FIRST_LOGIN") {
         it.desc = "Welcome to 4EVERLAND";
