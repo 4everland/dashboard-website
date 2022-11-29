@@ -45,6 +45,7 @@
 import PayNetwork from "@/views/pay/pay-network";
 import PayConfirm from "@/views/pay/pay-confirm";
 import mixin from "@/views/pay/mixin";
+import { BigNumber } from "@ethersproject/bignumber";
 
 export default {
   mixins: [mixin],
@@ -117,9 +118,9 @@ export default {
             ? this.curContract.FundPool
             : this.curContract.SrcChainRecharge;
 
-        const curAmountDecimals = this.curContract[this.usdcKey].decimals();
+        let curAmountDecimals = await this.curContract[this.usdcKey].decimals();
         console.log(curAmountDecimals);
-        return false;
+        curAmountDecimals = parseInt(curAmountDecimals);
         if (!target) {
           return this.onConnect();
         }
@@ -136,7 +137,7 @@ export default {
         const tx = await target.recharge(
           this.providerAddr,
           this.uuid,
-          num * 1e6,
+          num * Math.pow(10, curAmountDecimals),
           this.usdcKey == "MumbaiUSDC" ? null : nonce,
           this.usdcKey == "MumbaiUSDC" ? null : maxSlippage
         );

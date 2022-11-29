@@ -11,7 +11,7 @@ import {
   BuildingTimeController__factory,
   IPFSStorageController__factory,
   ProviderController__factory,
-} from "4everland-contracts";
+} from "@4everland/service-contracts";
 import { Bridge__factory } from "./sgn/contract/typechain";
 import {
   GoerliRpc,
