@@ -165,6 +165,7 @@ export default {
       }
     },
     async checkApprove(isBuy) {
+      console.log(isBuy);
       try {
         const addr = isBuy ? this.payAddr : MumbaiFundPool;
         console.log("check approve", this.connectAddr, addr);
@@ -252,7 +253,7 @@ export default {
           rpcUrls: ["https://polygontestapi.terminet.io/rpc"],
           nativeCurrency: {
             name: "matic Coin",
-            symbol: "matic",
+            symbol: "MATIC",
             decimals: 18,
           },
           // blockExplorerUrls: [],
@@ -260,10 +261,10 @@ export default {
         97: {
           chainId,
           chainName: "BSC Chapel",
-          rpcUrls: ["https://data-seed-prebsc-2-s1.binance.org:8545/"],
+          rpcUrls: ["https://bsc-testnet.public.blastapi.io"],
           nativeCurrency: {
             name: "BNB Coin",
-            symbol: "BNB",
+            symbol: "tBNB",
             decimals: 18,
           },
           // blockExplorerUrls: [],
@@ -281,11 +282,13 @@ export default {
     async switchNet(id) {
       try {
         const chainId = "0x" + id.toString(16);
+        console.log(id, chainId);
         await this.addChain(chainId, id);
         const res = await window.web3.currentProvider.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
+        console.log(res);
         if (res && res.error) {
           throw new Error(res.error);
         }
