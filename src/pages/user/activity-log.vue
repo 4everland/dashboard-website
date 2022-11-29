@@ -104,7 +104,7 @@ export default {
       }
       const utils = this.$utils;
       if (act == "OAUTH_REGISTER_DRIP") {
-        it.desc = "got airdrop resources for new users";
+        it.desc = "Got airdrop resources for new users";
         it.path = "Resource Transaction History";
         it.link = "/resource/bills";
       } else if (act == "OAUTH_EXCLUSIVE_DRIP") {
