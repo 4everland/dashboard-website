@@ -148,7 +148,7 @@ export default {
         it.path = "Hosting Auth Tokens";
         it.link = "/hosting/auth-tokens";
       } else if (act == "BUCKET_GENERATE_ACCESS_KEY") {
-        it.desc = "Generated Bucket Auth Token";
+        it.desc = "Generated Bucket Access Keys";
         it.path = "Bucket Access Keys";
         it.link = "/bucket/access-keys";
       } else if (act == "BUCKET_DELETE") {
