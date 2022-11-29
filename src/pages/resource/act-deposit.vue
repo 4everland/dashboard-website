@@ -117,10 +117,12 @@ export default {
           this.usdcKey == "MumbaiUSDC"
             ? this.curContract.FundPool
             : this.curContract.SrcChainRecharge;
-
+        console.log(target);
         let curAmountDecimals = await this.curContract[this.usdcKey].decimals();
         console.log(curAmountDecimals);
         curAmountDecimals = parseInt(curAmountDecimals);
+        const nonce = Date.now();
+        const maxSlippage = this.getMaxSlippage(curAmountDecimals);
         if (!target) {
           return this.onConnect();
         }
@@ -129,28 +131,62 @@ export default {
         }
         this.$loading();
         await this.checkAccount();
-        let balance = await target.balanceOf(this.providerAddr, this.uuid);
-        console.log("balance1", balance.toString());
-        // target.decimals()
-        const nonce = Date.now();
-        const maxSlippage = "";
-        const tx = await target.recharge(
-          this.providerAddr,
-          this.uuid,
-          num * Math.pow(10, curAmountDecimals),
-          this.usdcKey == "MumbaiUSDC" ? null : nonce,
-          this.usdcKey == "MumbaiUSDC" ? null : maxSlippage
-        );
+        // let balance = await target.balanceOf(this.providerAddr, this.uuid);
+        // console.log("balance1", balance.toString());
+
+        // const tx = await target.recharge(
+        //   this.providerAddr,
+        //   this.uuid,
+        //   num * Math.pow(10, curAmountDecimals),
+        //   this.usdcKey == "MumbaiUSDC" ? null : nonce,
+        //   this.usdcKey == "MumbaiUSDC" ? null : maxSlippage
+        // );
+        let tx = null;
+        if (this.usdcKey == "MumbaiUSDC") {
+          tx = await target.recharge(
+            this.providerAddr,
+            this.uuid,
+            num * Math.pow(10, curAmountDecimals)
+          );
+        } else {
+          tx = await target.recharge(
+            this.providerAddr,
+            this.uuid,
+            num * Math.pow(10, curAmountDecimals),
+            nonce,
+            maxSlippage
+          );
+        }
+
         const receipt = await tx.wait();
         console.log("receipt", receipt);
         this.addHash(tx, num, "Deposit");
-        balance = await target.balanceOf(this.providerAddr, this.uuid);
-        console.log("balance2", balance.toString());
+        // balance = await target.balanceOf(this.providerAddr, this.uuid);
+        // console.log("balance2", balance.toString());
         this.$loading.close();
         await this.$alert("Your deposit was successful.");
         this.$navTo("/resource/bills");
       } catch (error) {
         this.onErr(error);
+      }
+    },
+    async getMaxSlippage(curAmountDecimals) {
+      try {
+        const { data } = await this.$http2.post("/api/celer/estimate/amount", {
+          src_chain_id: "1",
+          dst_chain_id: "137",
+          token_symbol: "USDC",
+          amount: this.curAmount * Math.pow(10, curAmountDecimals),
+          addr: this.connectAddr,
+          slippage_tolerance: 3000,
+        });
+        // console.log(data);
+        if (data.err) {
+          throw new Error(data.err.message);
+        }
+        return data;
+      } catch (error) {
+        console.log(error);
       }
     },
   },
