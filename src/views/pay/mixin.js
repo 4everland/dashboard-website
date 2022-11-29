@@ -59,6 +59,7 @@ export default {
       if (val) this.onConnect();
     },
     payChainId() {
+      console.log(111);
       this.onConnect();
     },
   },
@@ -320,6 +321,7 @@ export default {
     },
     async onConnect() {
       // this.walletChanged(true);
+      console.log(this.payChainId);
       try {
         if (this.chainId != this.payChainId) {
           let dev = "";

@@ -19,7 +19,7 @@
       </div>
     </e-kv2>
     <e-kv2 class="mt-7" label="Network">
-      <pay-network :allow="['Polygon']" />
+      <pay-network :allow="['Polygon', 'Ethereum', 'BSC']" />
     </e-kv2>
 
     <div class="mt-8 fz-14 gray">
