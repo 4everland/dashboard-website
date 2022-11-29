@@ -34,7 +34,7 @@
           <div class="d-flex al-c flex-wrap">
             <div class="mr-auto">
               <h3 class="mr-auto">
-                <a :href="`https://${info.ens}.link`" target="_blank">{{
+                <a :href="`https://${info.ens}.limo`" target="_blank">{{
                   info.ens
                 }}</a>
               </h3>
