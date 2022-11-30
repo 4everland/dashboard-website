@@ -135,8 +135,9 @@
 
 <script>
 import { mapState } from "vuex";
-
+import mixin from "./reward-hub-mixin";
 export default {
+  mixins: [mixin],
   computed: {
     ...mapState({
       isFocus: (s) => s.isFocus,
@@ -169,7 +170,7 @@ export default {
       }
     },
   },
-  created() {
+  async created() {
     this.getCode();
   },
   mounted() {
@@ -182,7 +183,7 @@ export default {
   },
   methods: {
     getBtnColor(it) {
-      console.log(it);
+      // console.log(it);
       if (it.type == "AIRDROP_FOR_NEW") return "#E21951";
       if (it.status == "CLAIM") return "#E21951";
       if (/verify/i.test(it.statusName)) return "#FFB759";
@@ -229,7 +230,7 @@ export default {
             },
           }
         );
-        console.log(data);
+        // console.log(data);
         this.$loading();
         await this.$http.post("$auth/bind", {
           type: 6,
