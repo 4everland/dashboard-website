@@ -148,12 +148,19 @@ export default {
             num * Math.pow(10, curAmountDecimals)
           );
         } else {
+          const fee = await target.calcFee(this.providerAddr, this.uuid);
+          const token = await target.token();
+          let minAmount = await this.curContract.Bridge.minSend(token);
+          minAmount = minAmount.div(1e6).toNumber();
+          console.log(minAmount);
+          return false;
           tx = await target.recharge(
             this.providerAddr,
             this.uuid,
             num * Math.pow(10, curAmountDecimals),
             nonce,
-            maxSlippage
+            maxSlippage,
+            { value: fee }
           );
         }
 
