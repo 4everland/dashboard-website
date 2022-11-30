@@ -30,16 +30,6 @@
                   <div class="al-c">
                     <img class="task-icon" width="18" :src="item.icon" alt="" />
                     <span class="ml-3">{{ item.name }}</span>
-                    <e-tooltip top v-if="item.id == 10">
-                      <v-icon slot="ref" color="#6C7789" size="16" class="ml-2"
-                        >mdi-alert-circle</v-icon
-                      >
-                      <span
-                        >Newly registered users will get 6GB IPFS storage, 100MB
-                        Arweave storage, 100GB bandwidth, and 250 build minutes.
-                        Come click on 'Claim' button to get your rewards.</span
-                      >
-                    </e-tooltip>
                   </div>
                 </e-kv>
                 <e-kv label="Reward" class="mt-4">
