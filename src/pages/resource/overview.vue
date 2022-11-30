@@ -8,6 +8,9 @@
 
 <template>
   <div>
+    <e-right-opt-wrap :top="-45">
+      <v-btn to="/resource/pricing" outlined small>Pricing</v-btn>
+    </e-right-opt-wrap>
     <v-row>
       <v-col cols="12" md="7">
         <pay-act />
@@ -36,12 +39,12 @@
           >
             <div class="al-c f-center mb-3">
               <span>{{ it.label }}</span>
-              <e-tooltip top>
+              <!-- <e-tooltip top>
                 <v-icon slot="ref" color="#999" size="14" class="ml-2"
                   >mdi-alert-circle</v-icon
                 >
                 <span>{{ it.desc }} </span>
-              </e-tooltip>
+              </e-tooltip> -->
             </div>
             <v-progress-circular
               class="circular-0"

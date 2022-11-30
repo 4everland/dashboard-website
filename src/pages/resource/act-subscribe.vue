@@ -8,9 +8,9 @@
 
 <template>
   <div>
-    <e-right-opt-wrap>
+    <!-- <e-right-opt-wrap>
       <v-btn to="/resource/pricing" outlined small>Pricing</v-btn>
-    </e-right-opt-wrap>
+    </e-right-opt-wrap> -->
     <v-skeleton-loader type="article" v-if="!usageInfo" />
     <template v-else>
       <div class="pos-s z-1" style="top: 60px" v-show="!noTabs">
