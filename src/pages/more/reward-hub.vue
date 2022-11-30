@@ -27,8 +27,20 @@
             >
               <div>
                 <e-kv label="Task">
-                  <img class="task-icon" width="18" :src="item.icon" alt="" />
-                  <span class="ml-3">{{ item.name }}</span>
+                  <div class="al-c">
+                    <img class="task-icon" width="18" :src="item.icon" alt="" />
+                    <span class="ml-3">{{ item.name }}</span>
+                    <e-tooltip top v-if="item.id == 10">
+                      <v-icon slot="ref" color="#6C7789" size="16" class="ml-2"
+                        >mdi-alert-circle</v-icon
+                      >
+                      <span
+                        >Newly registered users will get 6GB IPFS storage, 100MB
+                        Arweave storage, 100GB bandwidth, and 250 build minutes.
+                        Come click on 'Claim' button to get your rewards.</span
+                      >
+                    </e-tooltip>
+                  </div>
                 </e-kv>
                 <e-kv label="Reward" class="mt-4">
                   {{ item.reward }}
@@ -124,10 +136,10 @@
         </template>
       </v-data-table> -->
     </div>
-    <div class="resource-description fz-14">
+    <!-- <div class="resource-description fz-14">
       Getting free resources by completing the following 7 tasks and resources
       are valid for one year after completion of tasks.
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -247,13 +259,7 @@ export default {
         else this.$navTo(val);
       } else if (type == "SEND_REQUEST") {
         await this.$http.post("$auth" + val);
-        if (it.id == 10) {
-          this.$alert(
-            "Newly registered users will get 6GB IPFS storage, 100MB Arweave storage, 100GB bandwidth, and 250 build minutes. Come click on 'Claim' button to get your rewards."
-          );
-        } else {
-          this.$toast("Claimed successfully.");
-        }
+        this.$toast("Claimed successfully");
         this.getList();
       } else if (type == "EMAIL_SUBSCRIPTION_VERIFICATION") {
         this.onSubsribe();
@@ -265,11 +271,7 @@ export default {
             this.shareUrl
           )}&hashtags=IPFS,Arweave,Dfinity`
         );
-        this.$alert(
-          "You can get extra free 5GB IPFS storage by sharing Twitter."
-        ).then(() => {
-          this.onRefresh(it);
-        });
+        this.onRefresh(it);
       }
     },
     async onAct(it) {
@@ -376,14 +378,5 @@ export default {
 .reward-task:hover {
   border: 1px solid #775da6;
   box-shadow: 2px 2px 0px 0px #775da6;
-}
-.resource-description {
-  padding: 28px 46px;
-  margin-top: 33px;
-  color: #6c7789;
-  line-height: 21px;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 1px 3px rgb(205 205 205 / 50%);
 }
 </style>

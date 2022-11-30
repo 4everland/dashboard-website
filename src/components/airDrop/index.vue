@@ -5,10 +5,12 @@
         >mdi-close</v-icon
       >
       <div class="mb-6 text">
-        Thank you for registering with 4EVERLAND! You will get the free
-        resources package. and free airdrops of other resources that will also
-        be available to help you better experience 4EVERLAND products. Come to
-        Reward Hub to get it now!
+        {{
+          `Thank you for registering with 4EVERLAND!  You will get the free
+        resources package and free airdrops of other resources that will also be
+        available to help you better experience 4EVERLAND products. Come to
+        Reward Hub to get it now!`
+        }}
       </div>
       <v-row class="mt-2">
         <v-col :sm="6" :cols="12" v-for="item in items" :key="item.name">
