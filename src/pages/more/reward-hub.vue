@@ -142,6 +142,7 @@ export default {
     ...mapState({
       isFocus: (s) => s.isFocus,
       userInfo: (s) => s.userInfo,
+      chainId: (s) => s.chainId,
     }),
     shareUrl() {
       return location.origin + "?invite=" + this.code;
@@ -249,6 +250,13 @@ export default {
         if (/^http/.test(val)) this.$openWindow(val);
         else this.$navTo(val);
       } else if (type == "SEND_REQUEST") {
+        if (it.id == 10 && !this.isRegister) {
+          await this.registerForNew();
+          if (!this.isRegister)
+            return this.$alert(
+              "New user registration rewards are required for successful registration on the chain, please try later."
+            );
+        }
         await this.$http.post("$auth" + val);
         this.$toast("Claimed successfully");
         this.getList();
