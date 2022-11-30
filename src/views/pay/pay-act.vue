@@ -37,6 +37,8 @@
             <v-btn plain color="#444" to="/resource/bills">
               Billing Details
             </v-btn>
+            <span class="gray">|</span>
+            <v-btn plain color="#444"> Resource Airdrop </v-btn>
           </div>
           <div class="mt-9 pb-2 al-c hide-msg">
             <e-kv label="Auto-deduction:">
