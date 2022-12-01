@@ -29,8 +29,7 @@
             <v-btn color="primary" outlined class="ml-4" to="/resource/deposit"
               >Deposit</v-btn
             >
-
-            <v-btn plain color="#444" class="ml-6" to="/resource/withdraw">
+            <v-btn plain color="#444" class="ml-2" to="/resource/withdraw">
               Withdraw
             </v-btn>
             <span class="gray">|</span>
@@ -89,6 +88,61 @@
         </div>
       </div>
     </v-dialog>
+    <v-dialog max-width="600px" v-model="showVoucher">
+      <div class="pa-5">
+        <h3>Redeem Voucher</h3>
+
+        <div class="mt-8 pos-r">
+          <span class="label fz-14">Resource Voucher</span>
+          <v-text-field
+            class="post-input"
+            persistent-placeholder
+            autofocus
+            v-model="voucherCode"
+            placeholder="Enter the resource voucher code"
+          >
+          </v-text-field>
+          <span
+            class="fz-14 bg-hover-f9 commit"
+            :class="{ disabled: disabled }"
+            @click="handleCommit"
+          >
+            Commit
+          </span>
+          <decode-status
+            v-if="showDecode"
+            :statusText="statusText"
+            :status="validStatus"
+            class="mb-6"
+          >
+            <v-expansion-panels
+              class="mt-4"
+              flat
+              v-if="validStatus"
+              v-model="openPanels"
+            >
+              <v-expansion-panel>
+                <v-expansion-panel-content>
+                  <e-kv
+                    :label="item.label"
+                    v-for="item in validResult"
+                    :key="item.label"
+                    class="mt-3"
+                  >
+                    {{ item.value }}
+                  </e-kv>
+                </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </decode-status>
+
+          <div class="al-c justify-center mt-8">
+            <v-btn outlined width="180" tile>Cancel</v-btn>
+            <v-btn color="primary" width="180" class="ml-6" tile>Claim</v-btn>
+          </div>
+        </div>
+      </div>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -102,6 +156,31 @@ export default {
       isAuto: true,
       autoLoading: true,
       balance: null,
+      showVoucher: true,
+      voucherCode: "",
+      statusText: {
+        1: "Checking availability...",
+        2: "Available!",
+        3: "Unavailable！This voucher has expired.",
+      },
+      validStatus: 1,
+      openPanels: 1,
+      validResult: [
+        {
+          label: "Voucher Type",
+          value: "Resource Voucher",
+        },
+        {
+          label: "Expiry Date",
+          value: "2022-12-09",
+        },
+        {
+          label: "Voucher Amount",
+          value: "IPFS Storage 5GB until Nov 11 2022 , AR 100MB",
+        },
+      ],
+      disabled: false,
+      showDecode: false,
     };
   },
   computed: {
@@ -116,6 +195,9 @@ export default {
   mounted() {
     this.getBalance();
     this.getAutoList();
+    // setTimeout(() => {
+    //   this.validStatus = 2;
+    // }, 5000);
   },
   methods: {
     async getBalance() {
@@ -181,6 +263,68 @@ export default {
       }
       this.autoLoading = false;
     },
+    async handleCommit() {
+      // this.openPanels = 0;
+      if (this.disabled) return;
+      try {
+        this.showDecode = true;
+        this.disabled = true;
+        this.validStatus = 1;
+        const { data } = await this.$http.get(
+          `$resource/voucher/verify/${this.voucherCode}`,
+          {
+            noTip: 1,
+          }
+        );
+        this.disabled = false;
+        console.log(data);
+      } catch (error) {
+        this.validStatus = 3;
+        this.disabled = false;
+        console.log(error);
+      }
+    },
+  },
+  watch: {
+    validStatus(val) {
+      if (val == 2) {
+        this.openPanels = 0;
+      }
+    },
   },
 };
 </script>
+<style lang="scss">
+</style>
+<style lang="scss" scoped>
+.post-input ::v-deep .v-input__prepend-outer {
+  margin: 0 !important;
+  margin-right: 5px !important;
+  width: 100px !important;
+}
+.post-input {
+  font-size: 14px !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.post-input .v-input__prepend-outer::v-deep {
+  margin: 0 !important;
+}
+.commit {
+  position: absolute;
+  right: 0;
+  top: 35px;
+}
+.label {
+  display: block;
+  color: #6c7789;
+  margin-bottom: 10px;
+}
+::v-deep .v-expansion-panel-content__wrap {
+  padding: 0 !important;
+}
+.disabled {
+  color: gray;
+}
+</style>
