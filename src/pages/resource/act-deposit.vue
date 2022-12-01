@@ -19,7 +19,7 @@
       </div>
     </e-kv2>
     <e-kv2 class="mt-7" label="Network">
-      <pay-network :allow="['Polygon']" />
+      <pay-network :allow="['Polygon', 'Ethereum', 'BSC']" />
     </e-kv2>
 
     <div class="mt-8 fz-14 gray">
@@ -102,15 +102,26 @@ export default {
         return this.$alert(msg);
       }
       try {
-        if (!this.isPolygon) {
-          return this.switchPolygon();
-        }
+        // if (!this.isPolygon) {
+        //   return this.switchPolygon();
+        // }
+
         if (!this.curContract) {
           this.needSubmit = true;
           this.showConnect();
           return;
         }
-        const target = this.curContract.FundPool;
+
+        const target =
+          this.usdcKey == "MumbaiUSDC"
+            ? this.curContract.FundPool
+            : this.curContract.SrcChainRecharge;
+        console.log(target);
+        let curAmountDecimals = await this.curContract[this.usdcKey].decimals();
+        console.log(curAmountDecimals);
+        curAmountDecimals = parseInt(curAmountDecimals);
+        const nonce = Date.now();
+        const maxSlippage = this.getMaxSlippage(curAmountDecimals);
         if (!target) {
           return this.onConnect();
         }
@@ -119,23 +130,74 @@ export default {
         }
         this.$loading();
         await this.checkAccount();
-        let balance = await target.balanceOf(this.providerAddr, this.uuid);
-        console.log("balance1", balance.toString());
-        const tx = await target.recharge(
-          this.providerAddr,
-          this.uuid,
-          num * 1e6
-        );
+        // let balance = await target.balanceOf(this.providerAddr, this.uuid);
+        // console.log("balance1", balance.toString());
+
+        // const tx = await target.recharge(
+        //   this.providerAddr,
+        //   this.uuid,
+        //   num * Math.pow(10, curAmountDecimals),
+        //   this.usdcKey == "MumbaiUSDC" ? null : nonce,
+        //   this.usdcKey == "MumbaiUSDC" ? null : maxSlippage
+        // );
+        let tx = null;
+        if (this.usdcKey == "MumbaiUSDC") {
+          tx = await target.recharge(
+            this.providerAddr,
+            this.uuid,
+            num * Math.pow(10, curAmountDecimals)
+          );
+        } else {
+          const fee = await target.calcFee(this.providerAddr, this.uuid);
+          const token = await target.token();
+
+          let minAmount = await this.curContract.Bridge.minSend(token);
+          minAmount = minAmount.div(10 ** curAmountDecimals).toNumber();
+          console.log(curAmountDecimals);
+          console.log(minAmount);
+          if (num <= minAmount) {
+            this.$loading.close();
+            return this.$alert("you deposit need > minAount");
+          }
+          tx = await target.recharge(
+            this.providerAddr,
+            this.uuid,
+            num * Math.pow(10, curAmountDecimals),
+            nonce,
+            maxSlippage,
+            { value: fee }
+          );
+        }
+
         const receipt = await tx.wait();
         console.log("receipt", receipt);
         this.addHash(tx, num, "Deposit");
-        balance = await target.balanceOf(this.providerAddr, this.uuid);
-        console.log("balance2", balance.toString());
+        // balance = await target.balanceOf(this.providerAddr, this.uuid);
+        // console.log("balance2", balance.toString());
         this.$loading.close();
         await this.$alert("Your deposit was successful.");
         this.$navTo("/resource/bills");
       } catch (error) {
         this.onErr(error);
+      }
+    },
+    async getMaxSlippage(curAmountDecimals) {
+      try {
+        const { data } = await this.$http2.post("/api/celer/estimate/amount", {
+          src_chain_id: "1",
+          dst_chain_id: "137",
+          token_symbol: "USDC",
+          amount: this.curAmount * Math.pow(10, curAmountDecimals),
+          addr: this.connectAddr,
+          slippage_tolerance: 3000,
+        });
+        // console.log(data);
+        if (data.err) {
+          throw new Error(data.err.message);
+        }
+        return this.$inDev ? 40000 : data.max_slippage;
+      } catch (error) {
+        console.log(error);
       }
     },
   },

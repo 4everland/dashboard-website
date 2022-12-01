@@ -14,7 +14,7 @@ import {
   IPFSStorageController__factory,
   DstChainPayment__factory,
   SafeWallet__factory,
-} from "4everland-contracts";
+} from "@4everland/service-contracts";
 
 import {
   MumbaiRouter,

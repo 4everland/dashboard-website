@@ -11,7 +11,8 @@ import {
   BuildingTimeController__factory,
   IPFSStorageController__factory,
   ProviderController__factory,
-} from "4everland-contracts";
+  SrcChainRecharge__factory,
+} from "@4everland/service-contracts";
 import { Bridge__factory } from "./sgn/contract/typechain";
 import {
   GoerliRpc,
@@ -26,6 +27,8 @@ import {
   MumbaiBuildingTimeController,
   MumbaiIPFSStorageController,
 } from "./contracts-addr";
+
+import { ChapelRecharge } from "./addr-dev";
 
 class SrcChainContracts extends Contracts {
   dstProvider = null;
@@ -50,6 +53,9 @@ class SrcChainContracts extends Contracts {
 
   get SrcChainPayment() {
     return SrcChainPayment__factory.connect(ChapelSrcChainPayment, this.signer);
+  }
+  get SrcChainRecharge() {
+    return SrcChainRecharge__factory.connect(ChapelRecharge, this.signer);
   }
 
   get ProviderController() {
