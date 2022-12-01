@@ -75,7 +75,6 @@ export default {
       if (val) this.onConnect();
     },
     payChainId() {
-      console.log(111);
       this.onConnect();
     },
   },
@@ -172,6 +171,7 @@ export default {
     },
     async checkAccount() {
       console.log("check account...");
+      console.log(this.providerAddr, this.uuid);
       const uuidRegistered =
         await this.curContract.ProviderController.accountExists(
           this.providerAddr,
@@ -301,7 +301,6 @@ export default {
     async switchNet(id) {
       try {
         const chainId = "0x" + id.toString(16);
-        console.log(id, chainId);
         await this.addChain(chainId, id);
         const res = await window.web3.currentProvider.request({
           method: "wallet_switchEthereumChain",
@@ -348,7 +347,6 @@ export default {
 
     async onConnect() {
       // this.walletChanged(true);
-      console.log(this.payChainId);
       try {
         if (this.chainId != this.payChainId) {
           let dev = "";
@@ -372,7 +370,7 @@ export default {
           ethContract.setProvider(provider);
           this.curContract = ethContract;
         }
-        console.log(this.payBy, this.curContract);
+        // console.log(this.payBy, this.curContract);
         // this.getSign();
         this.checkApprove(this.isSubscribe);
       } catch (error) {
