@@ -293,14 +293,14 @@ export default {
           icon: "h-ipfs.svg",
         },
         {
-          label: "Internet Computer",
-          name: "IC",
-          icon: "h-ic.svg",
-        },
-        {
           label: "Arweave",
           name: "AR",
           icon: "h-ar.svg",
+        },
+        {
+          label: "Internet Computer",
+          name: "IC",
+          icon: "h-ic.svg",
         },
       ],
       nodeVersionList: [
