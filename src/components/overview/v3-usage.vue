@@ -132,7 +132,7 @@ export default {
       if (it.isBalance) this.$navTo("/billing/bills");
     },
     getPerc(used, total, unit = "GB") {
-      if (!total) {
+      if (typeof total != "number" || isNaN(total)) {
         return {
           loading: true,
         };
@@ -149,7 +149,7 @@ export default {
         num = used;
         unitTxt = `Min / ${total.toFixed(0)}Min`;
       }
-      let perc = (used * 100) / total;
+      let perc = total ? (used * 100) / total : 0;
       if (perc > 0) perc = Math.max(0.01, perc.toFixed(2));
       return {
         perc,

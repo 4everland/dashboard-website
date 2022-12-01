@@ -2,7 +2,7 @@ export const providerAddr = "0x53b10A60F28c1F35025D9dC0773339638c540a67";
 export const clientRpc = "https://cbridge-prod2.celer.network";
 
 // src chain eth
-export const GoerliRpc = "https://rpc-mainnet.matic.quiknode.pro";
+export const GoerliRpc = "https://rpc.ankr.com/polygon";
 export const GoerliUSDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
 export const GoerliBridge = "0x5427FEFA711Eff984124bFBB1AB6fbf5E3DA1820";
 export const GoerliSrcChainPayment =

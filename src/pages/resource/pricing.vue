@@ -39,7 +39,7 @@
         <tr>
           <td>100GB</td>
           <td>250Min</td>
-          <td>5GB</td>
+          <td>6GB</td>
           <td>100MB</td>
         </tr>
       </tbody>
@@ -105,11 +105,11 @@
             </e-menu>
           </td>
           <td rowspan="2">Storage</td>
-          <td>0-5GB</td>
+          <td>0-6GB</td>
           <td>Free / 1 year</td>
         </tr>
         <tr>
-          <td>5GB+</td>
+          <td>6GB+</td>
           <td>$2 / 100G / Mth</td>
         </tr>
         <tr>

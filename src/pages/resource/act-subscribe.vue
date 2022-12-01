@@ -8,9 +8,9 @@
 
 <template>
   <div>
-    <e-right-opt-wrap>
+    <!-- <e-right-opt-wrap>
       <v-btn to="/resource/pricing" outlined small>Pricing</v-btn>
-    </e-right-opt-wrap>
+    </e-right-opt-wrap> -->
     <v-skeleton-loader type="article" v-if="!usageInfo" />
     <template v-else>
       <div class="pos-s z-1" style="top: 60px" v-show="!noTabs">
@@ -37,7 +37,7 @@
           <div class="mt-6 al-c">
             <e-kv class="flex-1" valueClass="al-c" :label="it.label + ':'">
               <span>{{ it.percTxt }}</span>
-              <e-tooltip top v-if="it.expireLabel">
+              <!-- <e-tooltip top v-if="it.expireLabel">
                 <v-icon slot="ref" color="#999" size="13" class="ml-2"
                   >mdi-alert-circle</v-icon
                 >
@@ -55,7 +55,7 @@
               </e-tooltip>
               <span v-else-if="it.freeTxt" class="gray fz-12 ml-2"
                 >(Including free {{ it.freeTxt }})</span
-              >
+              > -->
             </e-kv>
             <e-kv
               v-if="!it.expireLabel"
