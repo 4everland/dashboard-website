@@ -31,10 +31,6 @@ export default [
           to: "/resource",
         },
         {
-          text: "Purchase",
-          to: "/resource/subscribe",
-        },
-        {
           text: `Pricing`,
         },
       ],

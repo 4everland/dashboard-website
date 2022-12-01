@@ -6,7 +6,9 @@ import { mapState } from "vuex";
 import vuetify from "./plugins/vuetify";
 import "./setup";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
+import { newUserDrop } from "@/plugins/airDrop/index.js";
 
+newUserDrop();
 Vue.config.productionTip = false;
 
 router.beforeEach((to, _, next) => {
