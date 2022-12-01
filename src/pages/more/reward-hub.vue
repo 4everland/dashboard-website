@@ -20,10 +20,14 @@
       </div>
       <v-row v-if="list.length">
         <template v-for="item in list">
-          <v-col :md="item.id == 10 ? '12' : '6'" cols="12" :key="item.id">
+          <v-col
+            :md="item.type == 'AIRDROP_FOR_NEW' ? '12' : '6'"
+            cols="12"
+            :key="item.id"
+          >
             <div
               class="reward-task al-c justify-space-between"
-              :class="item.id == 10 ? 'register-task' : ''"
+              :class="item.type == 'AIRDROP_FOR_NEW' ? 'register-task' : ''"
             >
               <div>
                 <e-kv label="Task">
@@ -250,13 +254,14 @@ export default {
         if (/^http/.test(val)) this.$openWindow(val);
         else this.$navTo(val);
       } else if (type == "SEND_REQUEST") {
-        if (it.id == 10 && !this.isRegister) {
+        if (it.type == "AIRDROP_FOR_NEW" && !this.isRegister) {
           await this.registerForNew();
           if (!this.isRegister)
             return this.$alert(
               "New user registration rewards are required for successful registration on the chain, please try later."
             );
         }
+
         await this.$http.post("$auth" + val);
         this.$toast("Claimed successfully");
         this.getList();
