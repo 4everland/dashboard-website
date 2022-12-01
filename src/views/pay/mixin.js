@@ -245,7 +245,7 @@ export default {
           chainId,
           chainName: "Polygon Mainnet",
           rpcUrls: [
-            "https://rpc-mainnet.matic.quiknode.pro",
+            "https://rpc.ankr.com/polygon",
             // "https://polygon-rpc.com",
           ],
           nativeCurrency: {
@@ -269,7 +269,7 @@ export default {
         80001: {
           chainId,
           chainName: "polygon mumbai",
-          rpcUrls: ["https://polygontestapi.terminet.io/rpc"],
+          rpcUrls: ["https://rpc.ankr.com/polygon_mumbai"],
           nativeCurrency: {
             name: "matic Coin",
             symbol: "MATIC",
@@ -364,9 +364,11 @@ export default {
           polygonContract.setProvider(provider);
           this.curContract = polygonContract;
         } else if (this.isBSC) {
+          console.log("bsccccc");
           bscContract.setProvider(provider);
           this.curContract = bscContract;
         } else {
+          console.log("ethhhhh");
           ethContract.setProvider(provider);
           this.curContract = ethContract;
         }
