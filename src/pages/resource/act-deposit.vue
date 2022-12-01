@@ -150,10 +150,15 @@ export default {
         } else {
           const fee = await target.calcFee(this.providerAddr, this.uuid);
           const token = await target.token();
+
           let minAmount = await this.curContract.Bridge.minSend(token);
-          minAmount = minAmount.div(1e6).toNumber();
+          minAmount = minAmount.div(10 ** curAmountDecimals).toNumber();
+          console.log(curAmountDecimals);
           console.log(minAmount);
-          return false;
+          if (num <= minAmount) {
+            this.$loading.close();
+            return this.$alert("you deposit need > minAount");
+          }
           tx = await target.recharge(
             this.providerAddr,
             this.uuid,
@@ -190,7 +195,7 @@ export default {
         if (data.err) {
           throw new Error(data.err.message);
         }
-        return data.max_slippage;
+        return this.$inDev ? 40000 : data.max_slippage;
       } catch (error) {
         console.log(error);
       }
