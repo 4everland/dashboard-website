@@ -7,7 +7,7 @@ export default {
   data() {
     return {
       curContract: null,
-      isRegister: false,
+      isRegister: true,
     };
   },
   computed: {
@@ -27,17 +27,23 @@ export default {
       console.log(addrItem);
       return addrItem.addr;
     },
-  },
-  watch: {
-    uuid() {
-      this.registerForNew();
+    registerOverThreeDays() {
+      return (
+        (new Date().getTime() - this.userInfo.createAt) / 1000 / 3600 / 24 > 3
+      );
     },
   },
-  created() {
-    this.registerForNew();
-  },
+  // watch: {
+  //   uuid() {
+  //     this.registerForNew();
+  //   },
+  // },
+  // created() {
+  //   this.registerForNew();
+  // },
   methods: {
     async registerForNew() {
+      if (this.registerOverThreeDays) return;
       if (!this.uuid) return;
       const provider = new providers.Web3Provider(window.ethereum);
       console.log(this.chainNet);
@@ -52,12 +58,16 @@ export default {
         ethContract.setProvider(provider);
         this.curContract = ethContract;
       }
-      this.isRegister = await this.curContract.ProviderController.accountExists(
-        providerAddr,
-        this.uuid
-      );
-
-      // console.log(this.isRegister);
+      try {
+        this.isRegister =
+          await this.curContract.ProviderController.accountExists(
+            providerAddr,
+            this.uuid
+          );
+      } catch (error) {
+        console.log(error);
+        this.isRegister = false;
+      }
     },
   },
 };
