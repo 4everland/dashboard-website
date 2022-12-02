@@ -115,6 +115,7 @@ export default {
           to: "/changelog",
         },
       ];
+
       if (info.uid) {
         list.unshift({
           to: "/reward-hub",
