@@ -301,45 +301,6 @@ export default {
         this.loading = true;
         const { data } = await this.$http.get("$auth/rewardhub/activities");
         this.list = data.item.map((it) => {
-          switch (it.type) {
-            case "AIRDROP_FOR_NEW":
-              it.icon = "/img/svg/rewardHub/register_reward.svg";
-              break;
-            case "TWITTER_SHARE":
-              it.icon = "/img/svg/rewardHub/twitter.svg";
-
-              break;
-            case "JOIN_DISCORD":
-              it.icon = "/img/svg/rewardHub/discord.svg";
-
-              break;
-            case "JOIN_TELEGRAM":
-              it.icon = "/img/svg/rewardHub/telegram.svg";
-
-              break;
-            case "FOLLOW_TWITTER":
-              it.icon = "/img/svg/rewardHub/twitter.svg";
-
-              break;
-            case "SUBSCRIBE_NEWSLETTER":
-              it.icon = "/img/svg/rewardHub/subscribe.svg";
-
-              break;
-            case "DEPOSIT":
-              it.icon = "/img/svg/rewardHub/deposit.svg";
-
-              break;
-            case "REFERRAL_FRIENDS":
-              it.icon = "/img/svg/rewardHub/referral.svg";
-
-              break;
-            case "AIRDROP":
-              it.icon = "/img/svg/rewardHub/airdrop.svg";
-              break;
-            default:
-              it.icon = "/img/svg/rewardHub/register_reward.svg";
-              break;
-          }
           if (it.status == "DONE") {
             it.isDone = true;
             it.statusName = "Done";
