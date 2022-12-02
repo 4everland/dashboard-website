@@ -254,11 +254,18 @@ export default {
         if (/^http/.test(val)) this.$openWindow(val);
         else this.$navTo(val);
       } else if (type == "SEND_REQUEST") {
-        if (it.type == "AIRDROP_FOR_NEW" && !this.isRegister) {
+        // if (it.type == "AIRDROP_FOR_NEW" && !this.isRegister) {
+        //   await this.registerForNew();
+        //   if (!this.isRegister)
+        //     return this.$alert(
+        //       "New user registration rewards are required for successful registration on the chain, please try later."
+        //     );
+        // }
+        if (!this.registerOverThreeDays) {
           await this.registerForNew();
           if (!this.isRegister)
             return this.$alert(
-              "New user registration rewards are required for successful registration on the chain, please try later."
+              "New user rewards are required for successful registration on the chain, please try later."
             );
         }
 
