@@ -77,6 +77,22 @@
       :loading="approving"
       @submit="onSubmit"
     >
+      <template #detail v-if="AmountofDeduction">
+        <div>
+          <span class="fz-14 gray-6 label">Gift Voucher:</span>
+          <b class="black fz-25 ml-3">-{{ AmountofDeduction }}</b>
+          <span class="gray-6 ml-2 fz-15">USDC</span>
+        </div>
+        <div>
+          <span class="fz-14 gray-6 label">Total:</span>
+          <b class="red-1 fz-25 ml-3">{{
+            totalPrice - AmountofDeduction >= 0
+              ? totalPrice - AmountofDeduction
+              : "0.00"
+          }}</b>
+          <span class="gray-6 ml-2 fz-15">USDC</span>
+        </div>
+      </template>
     </pay-confirm>
   </div>
 </template>
@@ -212,3 +228,10 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.label {
+  display: inline-block;
+  min-width: 130px;
+  text-align: right;
+}
+</style>

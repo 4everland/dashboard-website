@@ -323,8 +323,9 @@ export default {
     async handleClaim() {
       try {
         if (!this.voucherCode) return;
-        const { data } = await this.$http(
+        const { data } = await this.$http.post(
           `$resource/voucher/resource/claim/${this.voucherCode}`,
+          {},
           {
             noTip: 1,
           }
