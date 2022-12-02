@@ -38,7 +38,20 @@
       automatically cross-chain to Polygon. To prevent insufficient gas fees,
       maintaining a minimum payment amount of 20U is required.
     </div>
-
+    <h3 class="mt-10">Redeem a gift vouche</h3>
+    <v-row>
+      <v-col sm="6" cols="12" class="al-c">
+        <v-text-field
+          class="post-input hide-msg"
+          persistent-placeholder
+          outlined
+          dense
+          placeholder="Enter the voucher code"
+        >
+        </v-text-field>
+        <v-btn color="primary" class="ml-7" width="140" tile>Commit</v-btn>
+      </v-col>
+    </v-row>
     <div style="height: 20vh"></div>
     <pay-confirm
       label="Configuration costs"

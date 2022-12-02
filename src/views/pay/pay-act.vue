@@ -37,7 +37,9 @@
               Billing Details
             </v-btn>
             <span class="gray">|</span>
-            <v-btn plain color="#444"> Resource Airdrop </v-btn>
+            <v-btn plain color="#444" @click="showVoucher = true">
+              Resource Airdrop
+            </v-btn>
           </div>
           <div class="mt-9 pb-2 al-c hide-msg">
             <e-kv label="Auto-deduction:">
@@ -137,8 +139,18 @@
           </decode-status>
 
           <div class="al-c justify-center mt-8">
-            <v-btn outlined width="180" tile>Cancel</v-btn>
-            <v-btn color="primary" width="180" class="ml-6" tile>Claim</v-btn>
+            <v-btn outlined width="180" tile @click="showVoucher = false"
+              >Cancel</v-btn
+            >
+            <v-btn
+              color="primary"
+              width="180"
+              class="ml-6"
+              tile
+              :disabled="validStatus != 2"
+              @click="handleClaim"
+              >Claim</v-btn
+            >
           </div>
         </div>
       </div>
@@ -264,7 +276,8 @@ export default {
       this.autoLoading = false;
     },
     async handleCommit() {
-      // this.openPanels = 0;
+      this.openPanels = 1;
+
       if (this.disabled) return;
       try {
         this.showDecode = true;
@@ -277,10 +290,48 @@ export default {
           }
         );
         this.disabled = false;
+        if (data.voucherType == 0)
+          throw new Error(
+            "Unavailable! This is a resource voucher, please enter a  gift voucher code."
+          );
+        this.validStatus = 2;
+
+        let result = [
+          {
+            "Voucher Type": "Resource Voucher",
+          },
+        ];
+        for (const item in data) {
+          if (item == "expiredTime") {
+            result.push({
+              "Expiry Date": new Date(data[item]).format(),
+            });
+          } else if (item == "voucherType") {
+            result.push({
+              "Voucher Type": "Resource Voucher",
+            });
+          }
+        }
         console.log(data);
       } catch (error) {
         this.validStatus = 3;
         this.disabled = false;
+        console.log(error);
+        this.statusText[3] = error.message;
+      }
+    },
+    async handleClaim() {
+      try {
+        if (!this.voucherCode) return;
+        const { data } = await this.$http(
+          `$resource/voucher/resource/claim/${this.voucherCode}`,
+          {
+            noTip: 1,
+          }
+        );
+        console.log(data);
+        this.showVoucher = false;
+      } catch (error) {
         console.log(error);
       }
     },
@@ -289,6 +340,13 @@ export default {
     validStatus(val) {
       if (val == 2) {
         this.openPanels = 0;
+      }
+    },
+    showVoucher(val) {
+      if (!val) {
+        this.voucherCode = "";
+        this.validStatus = 1;
+        this.showDecode = false;
       }
     },
   },

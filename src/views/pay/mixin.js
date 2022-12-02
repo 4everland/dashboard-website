@@ -364,11 +364,9 @@ export default {
           polygonContract.setProvider(provider);
           this.curContract = polygonContract;
         } else if (this.isBSC) {
-          console.log("bsccccc");
           bscContract.setProvider(provider);
           this.curContract = bscContract;
         } else {
-          console.log("ethhhhh");
           ethContract.setProvider(provider);
           this.curContract = ethContract;
         }
