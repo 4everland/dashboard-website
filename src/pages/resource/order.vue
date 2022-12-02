@@ -40,16 +40,33 @@
     </div>
     <h3 class="mt-10">Redeem a gift vouche</h3>
     <v-row>
-      <v-col sm="6" cols="12" class="al-c">
-        <v-text-field
-          class="post-input hide-msg"
-          persistent-placeholder
-          outlined
-          dense
-          placeholder="Enter the voucher code"
+      <v-col sm="8" cols="12" class="d-flex al-start">
+        <div class="flex-1">
+          <v-text-field
+            class="post-input hide-msg"
+            persistent-placeholder
+            v-model="voucherCode"
+            outlined
+            dense
+            placeholder="Enter the voucher code"
+          >
+          </v-text-field>
+          <decode-status
+            v-if="showDecode"
+            :statusText="statusText"
+            :status="validStatus"
+            class="mt-3"
+          />
+        </div>
+        <v-btn
+          color="primary"
+          class="ml-7"
+          width="140"
+          :disabled="disabled"
+          tile
+          @click="handleCommit"
+          >Commit</v-btn
         >
-        </v-text-field>
-        <v-btn color="primary" class="ml-7" width="140" tile>Commit</v-btn>
       </v-col>
     </v-row>
     <div style="height: 20vh"></div>
@@ -76,6 +93,16 @@ export default {
   data() {
     return {
       isSubscribe: true,
+      voucherCode: "",
+      disabled: false,
+      showDecode: false,
+      statusText: {
+        1: "Checking availability...",
+        2: "Available!",
+        3: "Unavailable！This voucher has expired.",
+      },
+      validStatus: 1,
+      AmountofDeduction: 0,
     };
   },
   computed: {
@@ -156,6 +183,26 @@ export default {
       } catch (error) {
         console.log("pay submit error");
         this.onErr(error);
+      }
+    },
+    async handleCommit() {
+      try {
+        if (!this.voucherCode) return;
+        this.validStatus = 1;
+        this.showDecode = true;
+        const { data } = await this.$http(
+          `$resource/voucher/verify/${this.voucherCode}`,
+          {
+            noTip: 1,
+          }
+        );
+        console.log(data, JSON.parse(data.voucherLimit).USDC);
+        this.AmountofDeduction = JSON.parse(data.voucherLimit).USDC;
+        this.validStatus = 2;
+      } catch (error) {
+        //
+        console.log(error);
+        this.validStatus = 3;
       }
     },
   },
