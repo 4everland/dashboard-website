@@ -119,6 +119,8 @@ export default {
         list.unshift({
           to: "/reward-hub",
           img: "/img/svg/header/reward-gift.svg",
+          label: "Reward Hub",
+          imgCls: "mr-2",
           width: 20,
         });
         list.push({
