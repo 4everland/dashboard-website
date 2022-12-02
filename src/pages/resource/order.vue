@@ -80,12 +80,12 @@
       <template #detail v-if="AmountofDeduction">
         <div>
           <span class="fz-14 gray-6 label">Gift Voucher:</span>
-          <b class="black fz-25 ml-3">-{{ AmountofDeduction }}</b>
+          <b class="black-1 fz-25 ml-5">-{{ AmountofDeduction }}</b>
           <span class="gray-6 ml-2 fz-15">USDC</span>
         </div>
         <div>
           <span class="fz-14 gray-6 label">Total:</span>
-          <b class="red-1 fz-25 ml-3">{{
+          <b class="red-1 fz-25 ml-4">{{
             totalPrice - AmountofDeduction >= 0
               ? totalPrice - AmountofDeduction
               : "0.00"
@@ -119,6 +119,7 @@ export default {
       },
       validStatus: 1,
       AmountofDeduction: 0,
+      resourceResource: null,
     };
   },
   computed: {
@@ -165,13 +166,21 @@ export default {
         this.ethFeeInfo = null;
         console.log(payloads);
         this.$loading();
-        const params = [this.providerAddr, this.uuid, payloads];
+        let params = [this.providerAddr, this.uuid, payloads];
+        const nonce = this.resourceResource ? this.resourceResource.nonce : 0;
+        const amount = this.AmountofDeduction != 0 ? this.AmountofDeduction : 0;
+        const signature = this.resourceResource
+          ? this.resourceResource.sign
+          : "0x";
+        let resourceParams = [nonce, amount, signature];
+        params = params.concat(resourceParams);
         if (!this.isPolygon) {
           if (this.chainId != 56) {
             totalFee = totalFee.div(1e12);
           }
           console.log("totalFee", totalFee.toString());
-          const feeMsg = await target.calcFeeV2(...params);
+          console.log(params);
+          const feeMsg = await target.calcFee(...params);
           // console.log("feeMsg", feeMsg.toString());
           // params.push(maxSlippage);
           params.push({
@@ -186,8 +195,11 @@ export default {
             return;
           }
         }
+
         console.log("pay", params, this.curContract[this.chainKey]);
-        let tx = await target.payV2(...params);
+        // let tx = await target.payV2(...params);
+        let tx = await target.pay(...params);
+
         console.log("tx", tx);
         const receipt = await tx.wait(1);
         this.addHash(tx, this.totalPrice);
@@ -214,6 +226,7 @@ export default {
         );
         console.log(data, JSON.parse(data.voucherLimit).USDC);
         this.AmountofDeduction = JSON.parse(data.voucherLimit).USDC;
+        this.resourceResource = data;
         this.validStatus = 2;
       } catch (error) {
         //
