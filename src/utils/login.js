@@ -76,6 +76,7 @@ export const ConnectPhantom = async () => {
     return resp.publicKey.toString();
   } catch (err) {
     // { code: 4001, message: 'User rejected the request.' }
+    return false;
   }
 };
 
@@ -99,7 +100,7 @@ export const SignPhantom = async (accounts, nonce, inviteCode) => {
     return stoken;
   } catch (e) {
     console.log(e);
-    return e;
+    return false;
   }
 };
 
