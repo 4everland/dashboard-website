@@ -62,10 +62,20 @@
           color="primary"
           class="ml-7"
           width="140"
+          v-if="!AmountofDeduction"
           :disabled="disabled"
           tile
           @click="handleCommit"
           >Commit</v-btn
+        >
+        <v-btn
+          v-else
+          outlined
+          class="ml-7"
+          width="140"
+          tile
+          @click="handleCancelVoucher"
+          >Cancel</v-btn
         >
       </v-col>
     </v-row>
@@ -80,16 +90,16 @@
       <template #detail v-if="AmountofDeduction">
         <div>
           <span class="fz-14 gray-6 label">Gift Voucher:</span>
-          <b class="black-1 fz-25 ml-5">-{{ AmountofDeduction }}</b>
+          <span class="black-1 fz-25 ml-3">-{{ AmountofDeduction }}</span>
           <span class="gray-6 ml-2 fz-15">USDC</span>
         </div>
         <div>
           <span class="fz-14 gray-6 label">Total:</span>
-          <b class="red-1 fz-25 ml-4">{{
+          <span class="red-1 fz-25 ml-3">{{
             totalPrice - AmountofDeduction >= 0
               ? totalPrice - AmountofDeduction
               : "0.00"
-          }}</b>
+          }}</span>
           <span class="gray-6 ml-2 fz-15">USDC</span>
         </div>
       </template>
@@ -115,7 +125,7 @@ export default {
       statusText: {
         1: "Checking availability...",
         2: "Available!",
-        3: "Unavailable！This voucher has expired.",
+        3: "Unavailable！",
       },
       validStatus: 1,
       AmountofDeduction: 0,
@@ -168,7 +178,9 @@ export default {
         this.$loading();
         let params = [this.providerAddr, this.uuid, payloads];
         const nonce = this.resourceResource ? this.resourceResource.nonce : 0;
-        const amount = this.AmountofDeduction != 0 ? this.AmountofDeduction : 0;
+        const amount = this.resourceResource
+          ? this.resourceResource.voucherAmount
+          : 0;
         const signature = this.resourceResource
           ? this.resourceResource.sign
           : "0x";
@@ -179,10 +191,9 @@ export default {
             totalFee = totalFee.div(1e12);
           }
           console.log("totalFee", totalFee.toString());
-          console.log(params);
+          // console.log(params);
           const feeMsg = await target.calcFee(...params);
           // console.log("feeMsg", feeMsg.toString());
-          // params.push(maxSlippage);
           params.push({
             value: feeMsg,
           });
@@ -216,6 +227,7 @@ export default {
     async handleCommit() {
       try {
         if (!this.voucherCode) return;
+        this.disabled = true;
         this.validStatus = 1;
         this.showDecode = true;
         const { data } = await this.$http(
@@ -224,15 +236,25 @@ export default {
             noTip: 1,
           }
         );
-        console.log(data, JSON.parse(data.voucherLimit).USDC);
         this.AmountofDeduction = JSON.parse(data.voucherLimit).USDC;
         this.resourceResource = data;
         this.validStatus = 2;
+        this.statusText[2] = `Available! Expires: ${new Date(
+          data.expiredTime * 1000
+        ).format()}`;
       } catch (error) {
-        //
         console.log(error);
         this.validStatus = 3;
+        this.statusText[3] = error.message;
       }
+      this.disabled = false;
+    },
+    async handleCancelVoucher() {
+      this.showDecode = false;
+      this.validStatus = 1;
+      this.voucherCode = "";
+      this.AmountofDeduction = 0;
+      this.resourceResource = null;
     },
   },
   components: {

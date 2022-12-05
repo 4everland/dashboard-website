@@ -35,10 +35,16 @@
           <img src="/img/svg/copy.svg" width="11" />
         </v-btn>
       </e-kv>
-      <e-kv class="mt-6" label="Amount">
-        <span>{{ info.cost }}</span>
-        <span class="gray-7 ml-2">USDC</span>
-      </e-kv>
+      <div class="d-flex mt-6">
+        <e-kv class="flex-1" label="Amount">
+          <span>{{ info.cost }}</span>
+          <span class="gray-7 ml-2">USDC</span>
+        </e-kv>
+        <e-kv v-if="info.voucherInfo" class="flex-2 ml-2" label="Gift Voucher">
+          <span>{{ info.voucherInfo }}</span>
+          <span class="gray-7 ml-2">USDC</span>
+        </e-kv>
+      </div>
       <e-kv class="mt-6 e-table-head-1" label="Resource">
         <div v-if="info.resource">
           {{ info.resource }}
@@ -132,6 +138,10 @@ export default {
         console.log(data);
         data.time = new Date(data.paymentTime * 1000).format();
         data.cost = this.$utils.getCost(data.usdt);
+        data.voucherInfo * 1 > 0
+          ? (data.voucherInfo = (data.voucherInfo * 1).toFixed(2))
+          : (data.voucherInfo = null);
+        console.log(data);
         this.setData(data);
         this.info = data;
       } catch (error) {

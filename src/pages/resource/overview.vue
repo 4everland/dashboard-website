@@ -13,7 +13,7 @@
     </e-right-opt-wrap>
     <v-row>
       <v-col cols="12" md="7">
-        <pay-act />
+        <pay-act @getUsage="getUsage" />
       </v-col>
       <v-col cols="12" md="5">
         <pay-balance />

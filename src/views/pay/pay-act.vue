@@ -126,6 +126,7 @@
               <v-expansion-panel>
                 <v-expansion-panel-content>
                   <e-kv
+                    min-width="110px"
                     :label="item.label"
                     v-for="item in validResult"
                     :key="item.label"
@@ -149,6 +150,7 @@
               tile
               :disabled="validStatus != 2"
               @click="handleClaim"
+              :loading="claimLoading"
               >Claim</v-btn
             >
           </div>
@@ -168,7 +170,7 @@ export default {
       isAuto: true,
       autoLoading: true,
       balance: null,
-      showVoucher: true,
+      showVoucher: false,
       voucherCode: "",
       statusText: {
         1: "Checking availability...",
@@ -177,22 +179,10 @@ export default {
       },
       validStatus: 1,
       openPanels: 1,
-      validResult: [
-        {
-          label: "Voucher Type",
-          value: "Resource Voucher",
-        },
-        {
-          label: "Expiry Date",
-          value: "2022-12-09",
-        },
-        {
-          label: "Voucher Amount",
-          value: "IPFS Storage 5GB until Nov 11 2022 , AR 100MB",
-        },
-      ],
+      validResult: [],
       disabled: false,
       showDecode: false,
+      claimLoading: false,
     };
   },
   computed: {
@@ -279,6 +269,7 @@ export default {
       this.openPanels = 1;
 
       if (this.disabled) return;
+      if (!this.voucherCode) return;
       try {
         this.showDecode = true;
         this.disabled = true;
@@ -304,15 +295,28 @@ export default {
         for (const item in data) {
           if (item == "expiredTime") {
             result.push({
-              "Expiry Date": new Date(data[item]).format(),
+              label: "Expiry Date",
+              value: new Date(data[item] * 1000).format(),
             });
           } else if (item == "voucherType") {
             result.push({
-              "Voucher Type": "Resource Voucher",
+              label: "Voucher Type",
+              value: "Resource Voucher",
             });
           }
         }
-        console.log(data);
+        let voucherLimit = JSON.parse(data.voucherLimit);
+
+        // for (const key in voucherLimit) {
+        //   voucherAmount += key + " ";
+        //   voucherAmount += this.$utils.getFileSize(voucherLimit[key]) + ",";
+        // }
+        // console.log(voucherAmount);
+        result.push({
+          label: "Voucher Amount",
+          value: this.getResourceVoucher(voucherLimit),
+        });
+        this.validResult = result;
       } catch (error) {
         this.validStatus = 3;
         this.disabled = false;
@@ -323,6 +327,7 @@ export default {
     async handleClaim() {
       try {
         if (!this.voucherCode) return;
+        this.claimLoading = true;
         const { data } = await this.$http.post(
           `$resource/voucher/resource/claim/${this.voucherCode}`,
           {},
@@ -331,10 +336,58 @@ export default {
           }
         );
         console.log(data);
+        this.$emit("getUsage");
         this.showVoucher = false;
+        this.$toast("Claim Successfully");
       } catch (error) {
         console.log(error);
       }
+      this.claimLoading = false;
+    },
+    getResourceVoucher(voucherLimit) {
+      const type = [
+        "IPFS",
+        "IPFS_EFFECTIVE_TIME",
+        "Arweave",
+        "Bandwidth",
+        "Build Minutes",
+      ];
+      let resource = type.map((it) => {
+        let size = null;
+        if (it == "Build Minutes") {
+          size = voucherLimit[it] ? voucherLimit[it] / 60 + "Min" : 0;
+        } else if (it == "IPFS_EFFECTIVE_TIME") {
+          size = new Date(voucherLimit[it] * 1000).format();
+        } else {
+          size = voucherLimit[it]
+            ? this.$utils.getFileSize(voucherLimit[it], true).num +
+              this.$utils.getFileSize(voucherLimit[it], true).unit
+            : 0;
+        }
+        return {
+          resource: it,
+          size,
+        };
+      });
+      resource = resource.map((it) => {
+        if (it.resource == "IPFS_EFFECTIVE_TIME") {
+          return "until " + it.size;
+        }
+        return it.resource + " " + it.size;
+      });
+      return resource.join(", ");
+      // let VoucherResource = "";
+      // resource.forEach((it) => {
+      //   if (!it.size) return;
+      //   if (it.resource != "IPFS_EFFECTIVE_TIME") {
+      //     VoucherResource += it.resource + " ";
+      //   } else {
+      //     VoucherResource += "until ";
+      //   }
+      //   VoucherResource += it.size + " , ";
+      // });
+      // console.log(VoucherResource);
+      // return VoucherResource;
     },
   },
   watch: {
@@ -372,8 +425,9 @@ export default {
 }
 .commit {
   position: absolute;
-  right: 0;
+  right: 10px;
   top: 35px;
+  color: #775da6;
 }
 .label {
   display: block;

@@ -4,14 +4,16 @@
     style="background: #fff5eb"
   >
     <div class="al-c">
-      <div>
-        <div>
+      <div class="amount-content">
+        <div class="detail">
+          <slot name="detail"></slot>
+        </div>
+        <div class="al-c amount">
           <span class="fz-14 gray-6 label">{{ label }}:</span>
           <slot></slot>
-          <b class="red-1 fz-25 ml-3">{{ price }}</b>
+          <span class="fz-25 ml-3">{{ price }}</span>
           <span class="gray-6 ml-2 fz-15">USDC</span>
         </div>
-        <slot name="detail"></slot>
       </div>
       <v-btn
         color="error"
@@ -48,5 +50,15 @@ export default {
   display: inline-block;
   min-width: 130px;
   text-align: right;
+}
+.amount-content {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.amount {
+  color: #000;
+}
+.detail:empty + .amount {
+  color: #ff6960 !important;
 }
 </style>
