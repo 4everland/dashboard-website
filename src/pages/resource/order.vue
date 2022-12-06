@@ -232,7 +232,7 @@ export default {
         this.validStatus = 1;
         this.showDecode = true;
         const { data } = await this.$http(
-          `$resource/voucher/verify/${this.voucherCode}`,
+          `$resource/rewardhub/voucher/verify/${this.voucherCode}`,
           {
             noTip: 1,
           }

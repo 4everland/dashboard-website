@@ -275,7 +275,7 @@ export default {
         this.disabled = true;
         this.validStatus = 1;
         const { data } = await this.$http.get(
-          `$resource/voucher/verify/${this.voucherCode}`,
+          `$resource/rewardhub/voucher/verify/${this.voucherCode}`,
           {
             noTip: 1,
           }
@@ -321,7 +321,7 @@ export default {
         if (!this.voucherCode) return;
         this.claimLoading = true;
         const { data } = await this.$http.post(
-          `$resource/voucher/resource/claim/${this.voucherCode}`,
+          `$resource/rewardhub/voucher/resource/claim/${this.voucherCode}`,
           {},
           {
             noTip: 1,
