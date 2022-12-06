@@ -95,11 +95,7 @@
         </div>
         <div>
           <span class="fz-14 gray-6 label">Total:</span>
-          <span class="red-1 fz-25 ml-3">{{
-            totalPrice - AmountofDeduction >= 0
-              ? totalPrice - AmountofDeduction
-              : "0.00"
-          }}</span>
+          <span class="red-1 fz-25 ml-3">{{ finalPrice }}</span>
           <span class="gray-6 ml-2 fz-15">USDC</span>
         </div>
       </template>
@@ -138,6 +134,11 @@ export default {
       list: (s) => s.orderInfo.list,
       orderInfo: (s) => s.orderInfo,
     }),
+    finalPrice() {
+      return this.totalPrice - this.AmountofDeduction >= 0
+        ? this.$utils.cutFixed(this.totalPrice - this.AmountofDeduction, 4)
+        : "0.00";
+    },
   },
   created() {
     console.log(this.orderInfo);
