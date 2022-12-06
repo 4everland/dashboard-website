@@ -101,6 +101,7 @@
             persistent-placeholder
             autofocus
             v-model="voucherCode"
+            :disabled="disabled"
             placeholder="Enter the resource voucher code"
           >
           </v-text-field>

@@ -191,11 +191,11 @@ export default {
         it.desc = `Deleted a gateway named ${obj.name}.4everland.link`;
       } else if (act == "REWARD_HUB_USED_GIFT_VOUCHER") {
         it.desc = `Redeemed a Gift Voucher`;
-        it.path = "Bill";
+        it.path = "Resource Billing";
         it.link = "/resource/bills";
       } else if (act == "REWARD_HUB_USED_RESOURCE_VOUCHER") {
         it.desc = `Redeemed a Resource Voucher`;
-        it.path = "Bill";
+        it.path = "Resource Billing";
         it.link = "/resource/bills";
       } else {
         console.log(act, it);
