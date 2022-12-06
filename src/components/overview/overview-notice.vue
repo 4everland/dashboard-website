@@ -9,7 +9,11 @@
       cycle
       height="30"
     >
-      <v-carousel-item v-for="item in noticeList" :key="item.id">
+      <v-carousel-item
+        v-for="item in list"
+        :reverse-transition="true"
+        :key="item.id"
+      >
         <template>
           <div class="notice-content">
             <a class="fz-14 message" :href="item.url">{{ item.message }}</a>
@@ -32,6 +36,22 @@ export default {
   },
   created() {
     this.getList();
+  },
+  computed: {
+    list() {
+      let list = this.noticeList;
+      if (this.noticeList.length == 2) {
+        let transformList = this.noticeList.map((it) => {
+          return {
+            id: it.id + "-" + it.id,
+            message: it.message,
+            url: it.url,
+          };
+        });
+        list = list.concat(transformList);
+      }
+      return list;
+    },
   },
   methods: {
     async getList() {
