@@ -115,10 +115,13 @@ export default {
           to: "/changelog",
         },
       ];
+
       if (info.uid) {
         list.unshift({
           to: "/reward-hub",
           img: "/img/svg/header/reward-gift.svg",
+          label: "Reward Hub",
+          imgCls: "mr-2 mb-1",
           width: 20,
         });
         list.push({
