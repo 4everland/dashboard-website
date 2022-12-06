@@ -31,20 +31,9 @@ export const ConnectMetaMask = async () => {
     return;
   }
 
-  //   const isUnlocked = await window.ethereum._metamask.isUnlocked();
-  //   if (!isUnlocked) {
-  //     console.log("Metamask has been locked, please unlock it.");
-  //     return;
-  //   }
-
-  let accounts = await window.ethereum.request({
-    method: "eth_accounts",
+  const accounts = await window.ethereum.request({
+    method: "eth_requestAccounts",
   });
-  if (accounts.length === 0) {
-    accounts = await window.ethereum.request({
-      method: "eth_requestAccounts",
-    });
-  }
   return accounts;
 };
 
@@ -62,6 +51,40 @@ export const SignMetaMask = async (accounts, nonce, inviteCode) => {
     return stoken;
   } catch (e) {
     console.log(e);
+    return false;
+  }
+};
+
+export const ConnectOkx = async () => {
+  if (!window.okxwallet) {
+    window.open(
+      "https://chrome.google.com/webstore/detail/okx-wallet/mcohilncbfahbmgdjkbpemcciiolgcge",
+      "_blank"
+    );
+    return;
+  }
+
+  const accounts = await window.okxwallet.request({
+    method: "eth_requestAccounts",
+  });
+  return accounts;
+};
+
+export const SignOkx = async (accounts, nonce, inviteCode) => {
+  try {
+    const signature = await contracts.signer.signMessage(nonce);
+    const data = {
+      signature,
+      appName: "BUCKET",
+      inviteCode,
+      type: "ETH",
+    };
+    const stoken = await Web3Login(accounts, data);
+    // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
+    return stoken;
+  } catch (e) {
+    console.log(e);
+    return false;
   }
 };
 
@@ -76,6 +99,8 @@ export const ConnectPhantom = async () => {
     return resp.publicKey.toString();
   } catch (err) {
     // { code: 4001, message: 'User rejected the request.' }
+    console.log(err);
+    return false;
   }
 };
 
@@ -99,7 +124,7 @@ export const SignPhantom = async (accounts, nonce, inviteCode) => {
     return stoken;
   } catch (e) {
     console.log(e);
-    return e;
+    return false;
   }
 };
 
@@ -109,7 +134,7 @@ export const ConnectFlow = async () => {
     return fcl.currentUser.snapshot();
   } catch (err) {
     console.log(err);
-    return e;
+    return false;
   }
 };
 
@@ -134,6 +159,6 @@ export const SignFlow = async (accounts, nonce, inviteCode) => {
     return stoken;
   } catch (e) {
     console.log(e);
-    return e;
+    return false;
   }
 };

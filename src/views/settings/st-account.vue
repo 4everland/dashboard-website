@@ -98,6 +98,13 @@ export default {
         },
         ...wArr,
         {
+          title: "OKX",
+          desc: "Get verified by connecting your OKX account.",
+          icon: "m-okx",
+          type: 3,
+          account: info.email,
+        },
+        {
           title: "Email",
           desc: "Verify your email address to receive updates and notices for your account.",
           icon: "m-email",
