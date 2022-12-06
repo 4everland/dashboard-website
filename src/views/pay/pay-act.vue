@@ -289,29 +289,21 @@ export default {
 
         let result = [
           {
-            "Voucher Type": "Resource Voucher",
+            label: "Voucher Type",
+            value: "Resource Voucher",
           },
         ];
+
         for (const item in data) {
           if (item == "expiredTime") {
             result.push({
               label: "Expiry Date",
               value: new Date(data[item] * 1000).format(),
             });
-          } else if (item == "voucherType") {
-            result.push({
-              label: "Voucher Type",
-              value: "Resource Voucher",
-            });
           }
         }
         let voucherLimit = JSON.parse(data.voucherLimit);
 
-        // for (const key in voucherLimit) {
-        //   voucherAmount += key + " ";
-        //   voucherAmount += this.$utils.getFileSize(voucherLimit[key]) + ",";
-        // }
-        // console.log(voucherAmount);
         result.push({
           label: "Voucher Amount",
           value: this.getResourceVoucher(voucherLimit),
@@ -345,6 +337,8 @@ export default {
       this.claimLoading = false;
     },
     getResourceVoucher(voucherLimit) {
+      console.log(voucherLimit["IPFS_EFFECTIVE_TIME"]);
+      const ipfsExpire = voucherLimit["IPFS_EFFECTIVE_TIME"];
       const type = [
         "IPFS",
         "IPFS_EFFECTIVE_TIME",
@@ -352,42 +346,40 @@ export default {
         "Bandwidth",
         "Build Minutes",
       ];
-      let resource = type.map((it) => {
-        let size = null;
-        if (it == "Build Minutes") {
-          size = voucherLimit[it] ? voucherLimit[it] / 60 + "Min" : 0;
-        } else if (it == "IPFS_EFFECTIVE_TIME") {
-          size = new Date(voucherLimit[it] * 1000).format();
-        } else {
-          size = voucherLimit[it]
-            ? this.$utils.getFileSize(voucherLimit[it], true).num +
-              this.$utils.getFileSize(voucherLimit[it], true).unit
-            : 0;
-        }
-        return {
-          resource: it,
-          size,
-        };
-      });
+      let resource = type
+        .map((it) => {
+          let size = null;
+          if (it == "Build Minutes") {
+            size = voucherLimit[it] ? voucherLimit[it] / 60 + "Min" : 0;
+          } else if (it == "IPFS_EFFECTIVE_TIME") {
+            size = 0;
+          } else {
+            size = voucherLimit[it]
+              ? this.$utils.getFileSize(voucherLimit[it], true).num +
+                this.$utils.getFileSize(voucherLimit[it], true).unit
+              : 0;
+          }
+          return {
+            resource: it,
+            size,
+          };
+        })
+        .filter((it) => it.size != 0);
+      console.log(resource);
       resource = resource.map((it) => {
-        if (it.resource == "IPFS_EFFECTIVE_TIME") {
-          return "until " + it.size;
+        if (it.resource == "IPFS") {
+          return (
+            it.resource +
+            " " +
+            it.size +
+            (ipfsExpire ? " until " + new Date(ipfsExpire * 1000).format() : "")
+          );
         }
         return it.resource + " " + it.size;
       });
+      console.log(resource);
+
       return resource.join(", ");
-      // let VoucherResource = "";
-      // resource.forEach((it) => {
-      //   if (!it.size) return;
-      //   if (it.resource != "IPFS_EFFECTIVE_TIME") {
-      //     VoucherResource += it.resource + " ";
-      //   } else {
-      //     VoucherResource += "until ";
-      //   }
-      //   VoucherResource += it.size + " , ";
-      // });
-      // console.log(VoucherResource);
-      // return VoucherResource;
     },
   },
   watch: {
