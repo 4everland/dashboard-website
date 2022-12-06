@@ -1,11 +1,11 @@
 <template>
   <div class="notice-container al-c" v-if="noticeList.length">
-    <v-icon size="20" class="mr-4">mdi-bell</v-icon>
+    <img width="20" class="mr-4" src="/img/svg/overview/notice.svg" alt="" />
     <v-carousel
       :show-arrows="false"
       vertical
       hide-delimiters
-      :interval="2000"
+      :interval="5000"
       cycle
       height="30"
     >
@@ -17,7 +17,9 @@
         </template>
       </v-carousel-item>
     </v-carousel>
-    <v-icon size="20" @click="handleCloseNotice">mdi-close</v-icon>
+    <v-icon size="20" color="#ff994e" @click="handleCloseNotice"
+      >mdi-close</v-icon
+    >
   </div>
 </template>
 
@@ -62,14 +64,15 @@ export default {
   height: 50px;
   padding: 0 20px;
   border-radius: 10px;
-  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
-    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  background: #fff2e8;
+  // box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+  //   0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
 }
 .notice-content {
   height: 100%;
   line-height: 30px;
   .message {
-    color: #000;
+    color: #ff994e;
   }
 }
 </style>
