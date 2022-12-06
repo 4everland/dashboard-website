@@ -106,10 +106,13 @@
           </v-text-field>
           <span
             class="fz-14 bg-hover-f9 commit"
-            :class="{ disabled: disabled }"
+            v-if="!disabled"
             @click="handleCommit"
           >
             Commit
+          </span>
+          <span class="fz-14 bg-hover-f9 commit" v-else @click="handleCancel">
+            Cancel
           </span>
           <decode-status
             v-if="showDecode"
@@ -267,7 +270,6 @@ export default {
     },
     async handleCommit() {
       this.openPanels = 1;
-
       if (this.disabled) return;
       if (!this.voucherCode) return;
       try {
@@ -280,7 +282,6 @@ export default {
             noTip: 1,
           }
         );
-        this.disabled = false;
         if (data.voucherType == 0)
           throw new Error(
             "Unavailable! This is a resource voucher, please enter a  gift voucher code."
@@ -316,28 +317,33 @@ export default {
         this.statusText[3] = error.message;
       }
     },
+    handleCancel() {
+      this.voucherCode = "";
+      this.validStatus = 1;
+      this.showDecode = false;
+      this.disabled = false;
+    },
     async handleClaim() {
       try {
         if (!this.voucherCode) return;
         this.claimLoading = true;
-        const { data } = await this.$http.post(
+        await this.$http.post(
           `$resource/rewardhub/voucher/resource/claim/${this.voucherCode}`,
           {},
           {
             noTip: 1,
           }
         );
-        console.log(data);
         this.$emit("getUsage");
-        this.showVoucher = false;
         this.$toast("Claim Successfully");
       } catch (error) {
         console.log(error);
+        this.$alert(error.message);
       }
+      this.showVoucher = false;
       this.claimLoading = false;
     },
     getResourceVoucher(voucherLimit) {
-      console.log(voucherLimit["IPFS_EFFECTIVE_TIME"]);
       const ipfsExpire = voucherLimit["IPFS_EFFECTIVE_TIME"];
       const type = [
         "IPFS",
@@ -390,6 +396,7 @@ export default {
     },
     showVoucher(val) {
       if (!val) {
+        this.disabled = false;
         this.voucherCode = "";
         this.validStatus = 1;
         this.showDecode = false;

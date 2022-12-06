@@ -48,6 +48,7 @@
             v-model="voucherCode"
             outlined
             dense
+            :disabled="AmountofDeduction"
             placeholder="Enter the voucher code"
           >
           </v-text-field>

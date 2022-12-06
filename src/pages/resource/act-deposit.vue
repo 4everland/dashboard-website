@@ -157,7 +157,15 @@ export default {
           console.log(minAmount);
           if (num <= minAmount) {
             this.$loading.close();
-            return this.$alert("you deposit need > minAount");
+            let isEthOrBsc = "";
+            if (this.isEth) {
+              isEthOrBsc = "Eth";
+            } else if (this.isBSC) {
+              isEthOrBsc = "BSC";
+            }
+            return this.$alert(
+              `Your deposit amount cannot be less than ${minAmount} USDC due to the ${isEthOrBsc} network restrictions.`
+            );
           }
           tx = await target.recharge(
             this.providerAddr,
