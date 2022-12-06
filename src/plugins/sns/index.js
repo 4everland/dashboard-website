@@ -10,9 +10,10 @@ const SOL_TLD_AUTHORITY = new web3.PublicKey(
 );
 
 //'devnet' | 'testnet' | 'mainnet-beta';
-const rpc = "https://rpc.ankr.com/solana/";
-const main_net_rpc = web3.clusterApiUrl("mainnet-beta");
-console.log(rpc);
+const main_net_rpc =
+  "https://skilled-silent-snowflake.solana-mainnet.quiknode.pro/";
+// const main_net_rpc = web3.clusterApiUrl("mainnet-beta");
+console.log(main_net_rpc);
 const connection = new web3.Connection(main_net_rpc, "confirmed");
 let myWallet = web3.Keypair.fromSecretKey(
   bs58.decode(
