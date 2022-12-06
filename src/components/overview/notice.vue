@@ -1,20 +1,23 @@
 <template>
-  <div class="notice-container al-c">
-    <v-icon size="20" class="mr-2">mdi-bell</v-icon>
+  <div class="notice-container al-c" v-if="noticeList.length">
+    <v-icon size="20" class="mr-4">mdi-bell</v-icon>
     <v-carousel
       :show-arrows="false"
       vertical
       hide-delimiters
       :interval="2000"
       cycle
-      height="20"
+      height="30"
     >
-      <v-carousel-item v-for="(item, i) in items" :key="i">
+      <v-carousel-item v-for="item in noticeList" :key="item.id">
         <template>
-          <div class="notice-content">sssss</div>
+          <div class="notice-content">
+            <a class="fz-14 message" :href="item.url">{{ item.message }}</a>
+          </div>
         </template>
       </v-carousel-item>
     </v-carousel>
+    <v-icon size="20" @click="handleCloseNotice">mdi-close</v-icon>
   </div>
 </template>
 
@@ -22,20 +25,7 @@
 export default {
   data() {
     return {
-      items: [
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg",
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg",
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg",
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg",
-        },
-      ],
+      noticeList: [],
     };
   },
   created() {
@@ -44,12 +34,24 @@ export default {
   methods: {
     async getList() {
       try {
-        const { data } = await this.$http2.get("$auth/broadcast");
+        const { data } = await this.$http2.get("$auth/broadcast", { noTip: 1 });
         console.log(data);
+        const historyNoticeList = JSON.parse(localStorage.getItem("notice"));
+        this.noticeList = historyNoticeList
+          ? historyNoticeList.concat(data.list)
+          : data.list;
+        localStorage.setItem("notice", JSON.stringify(this.noticeList));
       } catch (error) {
         //
         console.log(error);
+        this.noticeList = JSON.parse(localStorage.getItem("notice"))
+          ? JSON.parse(localStorage.getItem("notice"))
+          : [];
       }
+    },
+    handleCloseNotice() {
+      this.noticeList = [];
+      localStorage.removeItem("notice");
     },
   },
 };
@@ -57,13 +59,17 @@ export default {
 
 <style lang="scss" scoped>
 .notice-container {
-  height: 40px;
+  height: 50px;
   padding: 0 20px;
   border-radius: 10px;
-  border: 1px solid rosybrown;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
 }
 .notice-content {
   height: 100%;
-  line-height: 20px;
+  line-height: 30px;
+  .message {
+    color: #000;
+  }
 }
 </style>
