@@ -1,6 +1,11 @@
 import axios from "axios";
 import contracts from "@/contracts";
 import * as fcl from "@onflow/fcl";
+
+import Vue from "vue";
+import noWallet from "@/components/noWallet/index.js";
+Vue.use(noWallet);
+
 fcl
   .config()
   .put("accessNode.api", process.env.VUE_APP_FLOW_API)
@@ -27,7 +32,8 @@ export const Web3Login = async (accounts, data) => {
 
 export const ConnectMetaMask = async () => {
   if (!window.ethereum) {
-    window.open("https://metamask.io/download.html", "_blank");
+    Vue.prototype.$Dialog.getnoWallet("metamask");
+    // window.open("https://metamask.io/download.html", "_blank");
     return;
   }
 
@@ -45,6 +51,7 @@ export const SignMetaMask = async (accounts, nonce, inviteCode) => {
       appName: "BUCKET",
       inviteCode,
       type: "ETH",
+      walletType: "METAMASK",
     };
     const stoken = await Web3Login(accounts, data);
     // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
@@ -57,10 +64,11 @@ export const SignMetaMask = async (accounts, nonce, inviteCode) => {
 
 export const ConnectOkx = async () => {
   if (!window.okxwallet) {
-    window.open(
-      "https://chrome.google.com/webstore/detail/okx-wallet/mcohilncbfahbmgdjkbpemcciiolgcge",
-      "_blank"
-    );
+    Vue.prototype.$Dialog.getnoWallet("okx");
+    // window.open(
+    //   "https://chrome.google.com/webstore/detail/okx-wallet/mcohilncbfahbmgdjkbpemcciiolgcge",
+    //   "_blank"
+    // );
     return;
   }
 
@@ -72,12 +80,16 @@ export const ConnectOkx = async () => {
 
 export const SignOkx = async (accounts, nonce, inviteCode) => {
   try {
-    const signature = await contracts.signer.signMessage(nonce);
+    const signature = await window.okxwallet.request({
+      method: "personal_sign",
+      params: [accounts, nonce],
+    });
     const data = {
       signature,
       appName: "BUCKET",
       inviteCode,
       type: "ETH",
+      walletType: "OKX",
     };
     const stoken = await Web3Login(accounts, data);
     // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
@@ -92,7 +104,8 @@ export const ConnectPhantom = async () => {
   try {
     const isPhantomInstalled = window.solana && window.solana.isPhantom;
     if (!isPhantomInstalled) {
-      window.open("https://phantom.app/", "_blank");
+      Vue.prototype.$Dialog.getnoWallet("phantom");
+      // window.open("https://phantom.app/", "_blank");
       return console.log("Please install Phantom to use this app.");
     }
     const resp = await window.solana.connect();
@@ -118,6 +131,7 @@ export const SignPhantom = async (accounts, nonce, inviteCode) => {
       appName: "BUCKET",
       inviteCode,
       type: "SOLANA",
+      walletType: "PHANTOM",
     };
     const stoken = await Web3Login(accounts, data);
     // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
@@ -153,6 +167,7 @@ export const SignFlow = async (accounts, nonce, inviteCode) => {
       appName: "BUCKET",
       inviteCode,
       type: "ONFLOW",
+      walletType: "ONFLOW",
     };
     const stoken = await Web3Login(accounts, data);
     // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;

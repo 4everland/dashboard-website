@@ -117,7 +117,7 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignMetaMask(accounts, nonce, this.inviteCode);
+      const stoken = await SignMetaMask(accounts[0], nonce, this.inviteCode);
       if (stoken) {
         this.ssoLogin(stoken);
       }
@@ -131,7 +131,7 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignOkx(accounts, nonce, this.inviteCode);
+      const stoken = await SignOkx(accounts[0], nonce, this.inviteCode);
       if (stoken) {
         this.ssoLogin(stoken);
       }

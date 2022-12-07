@@ -32,6 +32,7 @@
 <script>
 import { mapState } from "vuex";
 import { providers } from "ethers";
+import { ConnectOkx } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 fcl
   .config()
@@ -52,6 +53,7 @@ export default {
     return {
       phantomAddr: "",
       flowAddr: "",
+      okxAddr: "",
     };
   },
   computed: {
@@ -64,7 +66,7 @@ export default {
       const github = info.github || {};
       const wArr = [];
       const noWallet = !info.wallet && !info.solana && !info.onFlow;
-      if (info.wallet || noWallet)
+      if (info.wallet.walletType == "METAMASK" || noWallet)
         wArr.push({
           title: "MetaMask",
           desc: "Get verified by connecting your metamask account.",
@@ -72,7 +74,15 @@ export default {
           type: 2,
           account: (info.wallet || {}).address,
         });
-      if (info.solana || noWallet)
+      if (info.wallet.walletType == "OKX" || noWallet)
+        wArr.push({
+          title: "OKX",
+          desc: "Get verified by connecting your OKX account.",
+          icon: "m-okx",
+          type: 7,
+          account: (info.wallet || {}).address,
+        });
+      if (info.solana || info.wallet.walletType == "PHANTOM" || noWallet)
         wArr.push({
           title: "Phantom",
           desc: "Get verified by connecting your phantom account.",
@@ -80,7 +90,7 @@ export default {
           type: 4,
           account: (info.solana || {}).address,
         });
-      if (info.onFlow || noWallet)
+      if (info.onFlow || info.wallet.walletType == "ONFLOW" || noWallet)
         wArr.push({
           title: "Flow",
           desc: "Get verified by connecting your flow account.",
@@ -97,13 +107,6 @@ export default {
           account: github.name || github.email,
         },
         ...wArr,
-        {
-          title: "OKX",
-          desc: "Get verified by connecting your OKX account.",
-          icon: "m-okx",
-          type: 3,
-          account: info.email,
-        },
         {
           title: "Email",
           desc: "Verify your email address to receive updates and notices for your account.",
@@ -137,6 +140,12 @@ export default {
       if (this.binding == 5 && val) {
         this.binding = null;
         this.verifyFlow();
+      }
+    },
+    okxAddr(val) {
+      if (this.binding == 7 && val) {
+        this.binding = null;
+        this.verifyOkx();
       }
     },
   },
@@ -226,6 +235,16 @@ export default {
         }
         return;
       }
+      if (it.type == 7) {
+        this.binding = 7;
+        if (!this.okxAddr) {
+          const currentUser = await this.connectOkx();
+          this.okxAddr = currentUser;
+        } else {
+          this.verifyOkx();
+        }
+        return;
+      }
       // if (it.type != 1) return this.$toast("todo");
       try {
         let apply = "";
@@ -251,7 +270,6 @@ export default {
           type: it.type,
           apply,
         });
-        console.log(data);
         const url = data.applyR;
         if (it.type == 3) {
           const { value } = await this.$prompt(
@@ -282,6 +300,9 @@ export default {
       }
       if (type == 5) {
         apply = this.flowAddr;
+      }
+      if (type == 7) {
+        apply = this.okxAddr;
       }
       const { data } = await this.$http.post(`$auth/bind`, {
         type,
@@ -355,6 +376,28 @@ export default {
         this.$loading.close();
         if (sig) {
           this.onVcode(5, sig, keyId);
+        }
+      } catch (error) {
+        this.$alert(error.message);
+      }
+    },
+    async connectOkx() {
+      const accounts = await ConnectOkx();
+      const account = accounts[0];
+      return account;
+    },
+    async verifyOkx() {
+      try {
+        this.$loading();
+        const account = this.okxAddr;
+        const nonce = await this.exchangeCode(7);
+        const sig = await window.okxwallet.request({
+          method: "personal_sign",
+          params: [account, nonce],
+        });
+        this.$loading.close();
+        if (sig) {
+          this.onVcode(7, sig);
         }
       } catch (error) {
         this.$alert(error.message);
