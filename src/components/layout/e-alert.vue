@@ -8,15 +8,17 @@
       v-bind="noticeInfo.attrs"
       v-model="showSnackbar"
     >
-      {{ noticeInfo.content }}
-      <template #action>
+      <div class="snackbar-content">
+        {{ noticeInfo.content }}
+      </div>
+      <!-- <template #action>
         <v-btn text @click="showSnackbar = false"> close </v-btn>
-      </template>
+      </template> -->
     </v-snackbar>
 
     <v-dialog
       v-model="showLoading"
-      max-width="260px"
+      max-width="280px"
       :persistent="alertInfo.persistent"
     >
       <v-card>
@@ -35,7 +37,8 @@
 
     <v-dialog
       v-model="showAlert"
-      max-width="500"
+      max-width="600"
+      width="600"
       :persistent="alertInfo.persistent"
     >
       <v-card class="pd-10">
@@ -43,12 +46,12 @@
           <!-- <v-icon v-show="!alertInfo.hideIcon" :color="iconColor" class="mr-2">
             {{ iconName }}
           </v-icon> -->
-          <b>{{
+          <b style="word-break: break-word">{{
             alertInfo.title
               ? alertInfo.title
               : alertInfo.showCancel
               ? "Confirm"
-              : "Alert"
+              : "Tip"
           }}</b>
         </v-card-title>
         <div v-else class="pd-15"></div>
@@ -82,25 +85,16 @@
           <component
             :is="alertInfo.comp1"
             v-if="alertInfo.comp1"
+            v-bind="alertInfo.comp1Props"
             :form="alertInfo.form1"
             @input="onForm1"
           ></component>
         </v-card-text>
         <v-card-actions class="pb-3 ta-c">
           <v-spacer></v-spacer>
+
           <v-btn
-            outlined
-            rounded
-            width="90"
-            v-if="alertInfo.showCancel"
-            @click="hideAlert(0)"
-          >
-            {{ alertInfo.cancelText || "Cancel" }}
-          </v-btn>
-          <v-btn
-            class="ml-6"
-            rounded
-            min-width="90"
+            min-width="180"
             v-bind="{
               color: 'primary',
               ...alertInfo.confirmTextAttrs,
@@ -109,6 +103,15 @@
             @click="hideAlert(1)"
           >
             {{ alertInfo.confirmText || "OK" }}
+          </v-btn>
+          <v-btn
+            outlined
+            width="180"
+            class="ml-6"
+            v-if="alertInfo.showCancel"
+            @click="hideAlert(0)"
+          >
+            {{ alertInfo.cancelText || "Cancel" }}
           </v-btn>
           <v-btn
             class="ml-4"
@@ -263,6 +266,7 @@ export default {
   },
   methods: {
     onForm1(form) {
+      console.log(form);
       this.form1 = form;
     },
     async hideAlert(isOk) {
@@ -290,3 +294,8 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.snackbar-content {
+  text-align: center;
+}
+</style>

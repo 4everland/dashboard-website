@@ -8,24 +8,8 @@ import frameworks from "./plugins/config/frameworks";
 
 Vue.use(VueClipboards);
 
-Vue.prototype.$color1 = "#34A9FF";
+Vue.prototype.$color1 = "#775DA6";
 Vue.prototype.$color2 = "#ff6960";
-
-Vue.prototype.$onLoginData = (data) => {
-  console.log(data);
-  localStorage.clear();
-  localStorage.authData = JSON.stringify(data);
-  const token = data.accessToken;
-  localStorage.token = token;
-  localStorage.refreshAt = Date.now();
-  let hash = "";
-  if (localStorage.loginTo) {
-    const storKey = "got_storage_" + token.substr(-5);
-    if (localStorage[storKey]) hash = localStorage.loginTo;
-    localStorage.loginTo = "";
-  }
-  location.href = "index.html" + hash;
-};
 
 Vue.prototype.$sleep = (msec = 300) => {
   return new Promise((resolve) => {
@@ -82,27 +66,55 @@ Vue.prototype.$utils = {
     }
     return str.substring(0, len);
   },
-  getFileSize(byte, isObj = false) {
+  getFileSize(byte, isObj = false, fix = 2) {
     if (!byte && byte !== 0 && !isObj) {
       return byte;
     }
     const mb = Math.pow(1024, 2);
     const gb = Math.pow(1024, 3);
+    const tb = Math.pow(1024, 4);
     let num = byte;
     let unit = "B";
-    if (byte >= gb) {
-      num = (byte / gb).toFixed(2);
+    if (byte >= tb) {
+      num = byte / tb;
+      unit = "TB";
+    } else if (byte >= gb) {
+      num = byte / gb;
       unit = "GB";
     } else if (byte >= mb) {
-      num = (byte / mb).toFixed(2);
+      num = byte / mb;
       unit = "MB";
-    } else if (byte >= 1024 || (byte < 0.01 && isObj)) {
-      num = (byte / 1024).toFixed(2);
+    } else if (byte >= 1024 || byte < 0.01) {
+      num = byte / 1024;
       unit = "KB";
     } else if (byte > 0) {
       num = parseInt(byte);
     }
+    if (unit != "B") {
+      num = num.toFixed(fix);
+    }
     if (num) num = (num + "").replace(".00", "");
+    if (isObj)
+      return {
+        num,
+        unit,
+      };
+    return num + " " + unit;
+  },
+  getNumCount(number, isObj = false, fix = 2) {
+    let num = number;
+    let unit = "";
+    if (typeof number !== "number") {
+      num = parseInt(number);
+    }
+    const k = Math.pow(10, 3);
+    if (num >= k) {
+      num = num / k;
+      unit = "K";
+    }
+    if (/\./.test(num)) {
+      num = num.toFixed(fix);
+    }
     if (isObj)
       return {
         num,
@@ -118,9 +130,12 @@ Vue.prototype.$utils = {
     }
     return cid;
   },
-  getCidLink(cid) {
+  getCidLink(cid, plat) {
     if (!cid) return "";
-    return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
+    if (plat == "IPNS") return `https://${cid}.ipns.4everland.io/`;
+    if (plat == "IC") return `https://${cid}.raw.ic0.app/`;
+    if (plat == "AR") return `https://arweave.net/${cid}`;
+    return `https://${this.getCidV1(cid)}.ipfs.4everland.io`; // .ipfs.dweb.link
   },
   cutFixed(num, keep = 2) {
     const str = num + "";
@@ -128,12 +143,12 @@ Vue.prototype.$utils = {
     if (i == -1) return num;
     return str.substring(0, i + keep + 1) * 1;
   },
-  getPurchase(type, amount) {
+  getPurchase(type, amount = 0, time) {
     const nameMap = {
       BUILD_TIME: "Build Minutes",
       TRAFFIC: "Bandwidth",
-      AR_STORAGE: "Arweave",
-      IPFS_STORAGE: "IPFS",
+      AR_STORAGE: "Arweave Storage",
+      IPFS_STORAGE: "IPFS Storage",
     };
     const it = {
       type,
@@ -144,16 +159,20 @@ Vue.prototype.$utils = {
       it.amount = parseInt(it.amount / 60);
       it.unit = "Min";
     } else if (/ipfs/i.test(it.type) && it.amount == "0") {
-      it.amount = "Extend Duration";
+      it.amount = "renewal";
     } else {
       const obj = this.getFileSize(it.amount, true);
       it.amount = obj.num;
       it.unit = obj.unit;
     }
+    if (time) {
+      it.until = "until " + new Date(time * 1e3).format("date");
+    }
     return it;
   },
-  getCost(usdt) {
+  getCost(usdt, len = 4) {
     if (usdt < 0.0001) return "<0.0001";
-    return this.cutFixed(usdt, usdt < 0.01 ? 4 : 2);
+    if (!len) len = usdt < 0.01 ? 4 : 2;
+    return this.cutFixed(usdt, len);
   },
 };

@@ -9,16 +9,14 @@
         <div class="pd-20">
           <div class="gray fz-15">
             After connecting to your wallet, you'll be able to make changes in
-            custom settings. Please select the
-            {{ payBy }} network.
+            custom settings.
           </div>
           <div class="mt-5 d-flex al-c">
-            <img src="img/svg/settings/m-metamask.svg" style="height: 25px" />
+            <img src="/img/svg/settings/m-metamask.svg" style="height: 25px" />
             <b class="ml-4">MetaMask</b>
             <span class="gray fz-13 ml-5">{{ connectAddr.cutStr(4, 4) }}</span>
             <v-btn
               :color="isConnect ? '' : 'primary'"
-              rounded
               class="ml-auto"
               @click="onConnect"
               >{{ isConnect ? "Disconnect" : "Connect" }}</v-btn
@@ -33,7 +31,7 @@
       :class="{ 'filter-gray': !isConnect }"
       class="bdrs-3 ml-5 hover-1"
     >
-      <v-img src="img/icon/u-wallet.svg" width="22"></v-img>
+      <v-img src="/img/icon/u-wallet.svg" width="22"></v-img>
     </div> -->
   </div>
 </template>
@@ -46,7 +44,6 @@ export default {
   data() {
     return {
       showPop: false,
-      ethAddr: "",
       isConnect: false,
     };
   },
@@ -61,9 +58,7 @@ export default {
   watch: {
     noticeMsg({ name }) {
       if (name == "showMetaConnect") {
-        if (localStorage.isConnectMeta) {
-          this.onConnect();
-        } else this.showPop = true;
+        this.onConnect();
       }
     },
     async isConnect(val) {
@@ -104,10 +99,6 @@ export default {
     // this.getAddr();
   },
   methods: {
-    async getAddr() {
-      const { data } = await this.$http2.get("/activity/ethAddress");
-      this.ethAddr = data;
-    },
     async onConnect() {
       try {
         if (!this.isConnect) {
@@ -133,12 +124,20 @@ export default {
       let times = 0;
       let chainId = null;
       this.$loading("Connect Wallet...");
+      setTimeout(() => {
+        if (!chainId) {
+          this.$loading.close();
+          console.log("close loading for chainid");
+        }
+      }, 3000);
       while (times < 3 && !chainId) {
         try {
           console.log("get wallet net...", times);
           times += 1;
-          const netType = await window.web3.eth.net.getNetworkType();
           chainId = await window.web3.eth.net.getId();
+          let netType = "d"; //await window.web3.eth.net.getNetworkType();
+          if (chainId == 5) netType = "goerli";
+          else if (chainId == 1) netType = "main";
           const payBy = this.getPayBy(chainId);
           localStorage.payBy = payBy;
           console.log(netType, chainId, payBy);
@@ -150,6 +149,8 @@ export default {
           this.$loading.close();
         } catch (error) {
           err = error;
+          // console.log(err);
+          // break;
         }
       }
       if (!chainId && err) {

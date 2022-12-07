@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="page-login">
     <app-header />
     <v-container>
       <v-row class="mt-16">
@@ -18,28 +18,7 @@
             >
               Connect your wallet
             </div>
-            <div class="wallet-box">
-              <div
-                class="wallet-item"
-                v-for="item in walletItem"
-                :key="item.name"
-                v-ripple="{ class: `info--text` }"
-                @click="connect(item.name)"
-              >
-                <div class="wallet-item-name">
-                  <span class="name">{{ item.name }}</span>
-                </div>
-                <img :src="item.icon" alt="" />
-
-                <!-- <v-btn
-                  :elevation="0"
-                  class="start-btn text-subtitle-2"
-                  :color="index == 0 ? '#34A9FF' : '#eef7ff'"
-                  small
-                  >{{ item.btnText }}</v-btn
-                > -->
-              </div>
-            </div>
+            <login-wallet ref="wallet"></login-wallet>
             <!-- <div class="line"></div> -->
             <v-btn block :elevation="0" class="github-btn" @click="onLogin">
               <v-icon class="mr-4"> mdi-github </v-icon>
@@ -52,8 +31,8 @@
     <v-dialog v-model="gitOverlay" width="500">
       <div class="connect-box pa-14">
         <div class="text-caption grey--text text--darken-2 mb-7">
-          New Github accounts will no longer be supported, please connect your
-          wallet to login instead.
+          Github has been disabled for new users, please login with your wallet
+          instead.
         </div>
         <v-btn
           class="start-btn text-subtitle-1 font-weight-black px-10 white--text"
@@ -76,24 +55,17 @@
     </v-dialog>
   </div>
 </template>
+
 <script>
 import * as fcl from "@onflow/fcl";
-import AppHeader from "@/components/login/AppHeader.vue";
-import AppFooter from "@/components/login/AppFooter.vue";
-import {
-  ExchangeCode,
-  ConnectMetaMask,
-  SignMetaMask,
-  ConnectPhantom,
-  SignPhantom,
-  ConnectFlow,
-  SignFlow,
-} from "@/utils/index.js";
+import AppHeader from "@/views/login/AppHeader.vue";
+import AppFooter from "@/views/login/AppFooter.vue";
+import LoginWallet from "@/views/login/login-wallet.vue";
+
 const authApi = process.env.VUE_APP_AUTH_URL;
-const BUCKET_HOST = process.env.VUE_APP_BUCKET_HOST;
 export default {
   name: "Home",
-  components: { AppHeader, AppFooter },
+  components: { AppHeader, AppFooter, LoginWallet },
   data() {
     return {
       connectOverlay: false,
@@ -101,26 +73,14 @@ export default {
       lockOverlay: false,
       accounts: "",
       inviteCode: null,
-      walletItem: [
-        {
-          name: "MetaMask",
-          icon: require("@/assets/imgs/metamask.png"),
-          btnText: "Popular",
-        },
-        {
-          name: "Phantom",
-          icon: require("@/assets/imgs/phantom.png"),
-          btnText: "Solana",
-        },
-        {
-          name: "Flow",
-          icon: require("@/assets/imgs/flow.svg"),
-          btnText: "Flow",
-        },
-      ],
     };
   },
   created() {
+    if (localStorage.token) {
+      this.$router.replace("/");
+    }
+  },
+  mounted() {
     const code = this.$route.query.code;
     const inviteCode = this.$route.query.inviteCode;
     if (inviteCode) {
@@ -130,9 +90,9 @@ export default {
       this.getAuth(code);
     }
   },
-  mounted() {},
   methods: {
     async onLogin() {
+      this.$loading();
       try {
         const params = {
           platform: "github",
@@ -149,70 +109,33 @@ export default {
       }
     },
     async getAuth(code) {
+      this.$loading();
       try {
-        const { data } = await this.$axios.post(`${authApi}/auth/${code}`, {
-          inviteCode: this.inviteCode,
-        });
-        if (data.code === 430) {
+        const res = await this.$http.post(
+          `/auth/${code}`,
+          {
+            inviteCode: this.inviteCode,
+          },
+          {
+            params: {
+              _auth: 1,
+            },
+          }
+        );
+        if (res.code === 430) {
           this.gitOverlay = true;
         }
-        if (data.code === 200 && data.data.stoken) {
-          // location.href = `${BUCKET_HOST}/login?stoken=${data.data.stoken}`;
+        if (res.code === 200 && res.data.stoken) {
+          const stoken = res.data.stoken;
+          if (stoken) {
+            this.$refs.wallet.ssoLogin(stoken);
+          }
         }
       } catch (error) {
         console.log(error);
       }
     },
-    connect(name) {
-      switch (name) {
-        case "MetaMask":
-          this.metaMaskConnect();
-          break;
-        case "Phantom":
-          this.phantomConnect();
-          break;
-        case "Flow":
-          this.flowConnect();
-          break;
-        default:
-          break;
-      }
-    },
-    async metaMaskConnect() {
-      const accounts = await ConnectMetaMask();
-      if (!accounts) {
-        return;
-      }
-      const nonce = await ExchangeCode(accounts[0]);
-      if (!nonce) {
-        return;
-      }
-      SignMetaMask(accounts, nonce, this.inviteCode);
-    },
-    async phantomConnect() {
-      const publicKey = await ConnectPhantom();
-      if (!publicKey) {
-        return;
-      }
-      const nonce = await ExchangeCode(publicKey);
-      if (!nonce) {
-        return;
-      }
-      SignPhantom(publicKey, nonce, this.inviteCode);
-    },
-    async flowConnect() {
-      fcl.unauthenticate();
-      // anywhere on the page
-      const currentUser = await ConnectFlow();
-      if (!currentUser.addr) {
-        return;
-      }
-      const nonce = await ExchangeCode(currentUser.addr);
-      if (!nonce) {
-        return;
-      }
-      SignFlow(currentUser.addr, nonce, this.inviteCode);
-    },
+
     async signMessage() {
       const MSG = Buffer.from("FOO").toString("hex");
       try {
@@ -224,49 +147,16 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.home {
+
+<style lang="scss">
+.page-login {
+  background-color: #fff;
+  height: 100%;
   .wallet {
     width: 100%;
     max-width: 430px;
     margin: 0 auto;
-    .wallet-box {
-      box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      // padding: 0 30px;
-      .wallet-item {
-        height: 70px;
-        padding: 25px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-        border-bottom: 1px solid #e6e8eb;
-        &:last-child {
-          border-bottom: none;
-        }
-        &-name {
-          display: flex;
-          align-items: center;
-        }
-        img {
-          width: 24px;
-        }
-        .name {
-          font-size: 20px;
-          font-family: Arial-BoldMT, Arial;
-          font-weight: normal;
-          color: #495667;
-        }
-        .start-btn {
-          color: #3eadff;
-          border-radius: 6px;
-        }
-        &:first-child .start-btn {
-          color: #fff;
-        }
-      }
-    }
+
     .line {
       width: 112px;
       height: 1px;

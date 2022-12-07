@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import upload from "./upload";
 import { http2 } from "../api";
 
 Vue.use(Vuex);
@@ -13,6 +12,7 @@ const store = new Vuex.Store({
     pageLoaded: false,
     ...getWH(),
     isTouch: "ontouchstart" in window,
+    scrollTop: 0,
     isFocus: true,
     appInfo: {
       title: "",
@@ -38,6 +38,9 @@ const store = new Vuex.Store({
     projectInfo: {},
     worldMapJson: null,
     payBy: localStorage.payBy || "Polygon",
+    orderInfo: JSON.parse(localStorage.orderInfo || "{}"),
+    showProgress: false,
+    allowNoLogin: false,
   },
   mutations: {
     [SET_DATA](state, data) {
@@ -70,12 +73,16 @@ const store = new Vuex.Store({
   actions: {
     async getProjectInfo({ commit }, id) {
       const { data } = await http2.get("/project/" + id);
+      console.log(data.buildConfig.node, "----");
+      if (data.platform == "IC") {
+        let index = data.domains.findIndex((it) =>
+          /foreverland\.xyz$/.test(it.domain)
+        );
+        data.domains.splice(index, 1);
+      }
       commit("setProject", data);
       return data;
     },
-  },
-  modules: {
-    upload,
   },
 });
 
@@ -123,6 +130,12 @@ window.onload = () => {
   // console.log("onload", window.jdenticon);
   setState({
     pageLoaded: true,
+  });
+};
+
+window.onscroll = () => {
+  setState({
+    scrollTop: window.scrollY,
   });
 };
 

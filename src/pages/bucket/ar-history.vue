@@ -1,19 +1,47 @@
 <template>
   <div>
     <div class="d-flex al-c mb-2">
-      <div class="d-flex ml-auto shrink-0">
-        <nav-item icon="ic-sync" unit="MB">{{ usageInfo.arSyncing }}</nav-item>
-        <nav-item icon="ic-synced" unit="MB" class="ml-7">{{
-          usageInfo.arSynced
-        }}</nav-item>
-        <nav-item unit="Objects" class="ml-7">{{ total }}</nav-item>
-      </div>
+      <e-right-opt-wrap style="width: 100%" :top="-60">
+        <v-row class="d-flex">
+          <v-col md="4" style="max-width: 230px">
+            <v-select
+              class="hide-msg bd-1"
+              dense
+              solo
+              :items="items"
+              v-model="state"
+              @change="getList"
+            />
+          </v-col>
+          <v-col md="8">
+            <v-text-field
+              class="hide-msg bd-1"
+              prepend-inner-icon="mdi-magnify"
+              solo
+              dense
+              placeholder="Search"
+              v-model="searchKey"
+              @input="handleInput"
+              @keydown.enter="getList"
+            />
+          </v-col>
+        </v-row>
+        <div class="d-flex ml-auto shrink-0 justify-end mt-2">
+          <nav-item icon="ic-sync" unit="MB">{{
+            usageInfo.arSyncing
+          }}</nav-item>
+          <nav-item icon="ic-synced" unit="MB" class="ml-7">{{
+            usageInfo.arSynced
+          }}</nav-item>
+        </div>
+      </e-right-opt-wrap>
     </div>
 
     <!-- :show-select="list.length > 0" -->
-    <div class="main-wrap">
+    <div class="main-wrap mt-6">
       <v-data-table
         class="hide-bdb"
+        fixed-header
         :headers="headers"
         :items="list"
         :loading="tableLoading"
@@ -36,20 +64,16 @@
           </e-tooltip>
         </template>
         <template v-slot:item.arweaveHash="{ item }">
-          <v-btn
-            color="primary"
-            rounded
-            x-small
-            text
-            target="_blank"
-            v-if="item.arweaveHash"
-            @click.stop="onStop"
-            :href="$arHashPre + item.arweaveHash"
+          <e-link
+            class="d-ib fz-13"
+            style="width: 85px"
+            @click.native.stop="onStop"
+            :href="item.arweaveHash ? $arHashPre + item.arweaveHash : ''"
           >
-            <span class="d-ib line-1" style="width: 160px">
-              {{ item.arweaveHash }}
+            <span>
+              {{ item.arweaveHash ? item.arweaveHash.cutStr(4, 4) : "--" }}
             </span>
-          </v-btn>
+          </e-link>
           <v-btn
             v-if="item.arweaveHash"
             icon
@@ -59,7 +83,7 @@
             @success="$toast('Copied to clipboard !')"
           >
             <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
-            <img src="img/svg/copy.svg" width="11" />
+            <img src="/img/svg/copy.svg" width="11" />
           </v-btn>
         </template>
         <template v-slot:item.arweaveStatus="{ item }">
@@ -72,7 +96,7 @@
         </e-empty>
       </div>
 
-      <div
+      <!-- <div
         v-if="!finished"
         class="pd-20 gray ta-c fz-16 mt-5"
         :class="{
@@ -84,12 +108,32 @@
         <span v-if="list.length" v-show="!tableLoading">
           {{ loadingMore ? "Loading..." : "Load More" }}
         </span>
-      </div>
+      </div> -->
+
+      <bottom-detector
+        @arriveBottom="onLoadMore"
+        :loadingMore="loadingMore"
+        :noMore="finished"
+      ></bottom-detector>
     </div>
   </div>
 </template>
 
 <script>
+function debounce(func, delay = 300, immediate = false) {
+  let timer = null;
+  return function () {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    if (immediate && !timer) {
+      func.apply(this, arguments);
+    }
+    timer = setTimeout(() => {
+      func.apply(this, arguments);
+    }, delay);
+  };
+}
 export default {
   data() {
     return {
@@ -107,7 +151,19 @@ export default {
       finished: false,
       loadingMore: false,
       cursor: 0,
-      usageInfo: {},
+      usageInfo: {
+        arSyncing: 0,
+        arSynced: 0,
+      },
+      state: "",
+      searchKey: "",
+      items: [
+        { text: "All", value: "" },
+        { text: "Syncing", value: "syncing" },
+        { text: "Synced", value: "synced" },
+        { text: "Time Out", value: "timeout" },
+        { text: "Failure", value: "failure" },
+      ],
     };
   },
   computed: {
@@ -132,7 +188,6 @@ export default {
     },
   },
   created() {
-    console.log(1111);
     this.getStorage();
   },
   mounted() {
@@ -157,6 +212,8 @@ export default {
         const { data } = await this.$http.get("/arweave/objects", {
           params: {
             cursor: this.cursor,
+            state: this.state,
+            key: this.searchKey,
           },
         });
         this.next = Math.max(1, data.page.next);
@@ -187,6 +244,7 @@ export default {
     async getStorage() {
       try {
         const { data } = await this.$http("/user/resource/usage");
+        console.log(data);
         const { arweaveUsedStorage = 0, arweaveSyncingStorage = 0 } = data;
         this.usageInfo.arSyncing = (arweaveSyncingStorage / 1024).toFixed(2);
         this.usageInfo.arSynced = (arweaveUsedStorage / 1024).toFixed(2);
@@ -194,6 +252,9 @@ export default {
         console.log(error, "error");
       }
     },
+    handleInput: debounce(function () {
+      this.getList();
+    }),
     onRow(it) {
       // console.log(it);
       if (it.isDeleted) return this.$toast("The file was deleted in Bucket.");

@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Axios from "axios";
 import AsyncLock from "async-lock";
+import store from "./store";
 
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 Vue.prototype.$inDev = inDev;
@@ -19,22 +20,20 @@ const authApi = inDev
 const v3Api = inDev
   ? "https://settlement.foreverland.xyz"
   : "https://pay.4everland.org";
+const gateWayApi = inDev
+  ? "https://gateway-api.foreverland.xyz"
+  : "https://gateway-api.4everland.org";
 
+const ipnsApi = inDev
+  ? "https://ipns.foreverland.xyz"
+  : "https://ipns-api.4everland.org";
 Vue.prototype.$endpoint = endpoint;
 
-const loginUrl = inDev
-  ? "https://4ever-login-test.4everland.app"
-  : "https://login.4everland.org";
-
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
-  let url = loginUrl;
-  if (!/(dashboard|hb)\./i.test(location.host)) {
-    url =
-      (inDev ? "https://hb.4everland.app" : "https://dashboard.4everland.org") +
-      "/#/?redirectTo=" +
-      encodeURIComponent(location.origin);
-  } else if (localStorage.inviteCode) {
-    url += "/#/?inviteCode=" + localStorage.inviteCode;
+  // console.log(location);
+  let url = "/login";
+  if (localStorage.inviteCode) {
+    url += "?inviteCode=" + localStorage.inviteCode;
   }
   return url;
 });
@@ -46,16 +45,22 @@ const hostingUrl = process.env.VUE_APP_HOST_URL;
 export const http2 = Axios.create({
   baseURL: hostingUrl,
 });
-
 Vue.prototype.$getImgSrc = function (src) {
-  if (!src) src = "img/bg/empty/project.png";
+  if (!src) src = "/img/bg/empty/project.png";
   else if (!/^http/.test(src)) src = hostingUrl + src;
   return src;
 };
-Vue.prototype.$getPolygonUrl = (hash) => {
-  const pre = inDev
-    ? "https://mumbai.polygonscan.com/tx/"
-    : "https://polygonscan.com/tx/";
+Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
+  let pre = inDev
+    ? "https://goerli.etherscan.io/tx/"
+    : "https://etherscan.io/tx/";
+  if (net == "BSC") {
+    pre = inDev ? "https://testnet.bscscan.com/tx/" : "https://bscscan.com/tx/";
+  } else if (net == "Polygon") {
+    pre = inDev
+      ? "https://mumbai.polygonscan.com/tx/"
+      : "https://polygonscan.com/tx/";
+  }
   return pre + hash;
 };
 
@@ -103,12 +108,20 @@ const lock = new AsyncLock({ timeout: 5000 });
       if (params._auth && !/^http/.test(config.url)) {
         config.url = authApi + config.url;
         delete params._auth;
+      }
+      config.url = config.url
+        .replace("$v3", v3Api)
+        .replace("$auth", authApi)
+        .replace("$gateway", gateWayApi)
+        .replace("$ipns", ipnsApi);
+
+      if (config.url.includes(authApi)) {
         token = "Bearer " + token;
       }
       if (token && config.url != RefreshPath) {
         config.headers.common["Authorization"] = token;
       }
-      config.url = config.url.replace("$v3", v3Api);
+
       return config;
     },
     (error) => {
@@ -158,6 +171,7 @@ const lock = new AsyncLock({ timeout: 5000 });
               });
           } else {
             Vue.prototype.$alert(data.message).then(() => {
+              if (data.code == "OBJECT_ALREADY_EXIST") return;
               window.location.reload();
             });
           }
@@ -174,15 +188,15 @@ const lock = new AsyncLock({ timeout: 5000 });
 
 function goLogin() {
   localStorage.clear();
-  if (location.hash != "#/login") {
-    localStorage.loginTo = location.hash;
+  if (location.pathname != "/login") {
+    localStorage.loginTo = location.pathname + location.search;
     location.href = getLoginUrl();
     console.log("logout");
   }
 }
 
 async function handleMsg(status, code, msg, config) {
-  console.log(code, msg);
+  console.log(status, code, msg);
   if (!msg && typeof code == "string") {
     msg = code;
   }
@@ -190,7 +204,9 @@ async function handleMsg(status, code, msg, config) {
   const vue = Vue.prototype;
   await vue.$sleep(10);
   if (status == 401 || code == 401) {
-    goLogin();
+    if (!store.state.allowNoLogin) {
+      goLogin();
+    }
   } else if (msg == "Network Error") {
     vue
       .$confirm(

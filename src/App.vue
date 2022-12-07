@@ -2,6 +2,7 @@
   <v-app
     :class="{
       mobile: asMobile,
+      'no-drawer': allowNoLogin,
     }"
   >
     <v-main v-if="meta.noLogin">
@@ -13,7 +14,7 @@
       <e-drawer />
       <v-main>
         <e-nav></e-nav>
-        <div class="pa-5">
+        <div class="pa-5" style="height: calc(100% - 37.5px)">
           <e-wrap
             :class="meta.wrapCls || (meta.isTab ? 'pa-0' : 'main-wrap mb-12')"
           >
@@ -29,21 +30,17 @@
     <e-alert />
     <e-feedback />
     <e-meta-connect />
-
-    <a
-      class="pos-f z-10"
-      href="https://discord.com/invite/Cun2VpsdjF"
-      target="_blank"
-      style="right: 20px; bottom: 8px"
-    >
-      <img src="img/svg/common/m-discord.svg" width="54" />
-    </a>
   </v-app>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   computed: {
+    ...mapState({
+      allowNoLogin: (s) => s.allowNoLogin,
+    }),
     meta() {
       return this.$route.meta || {};
     },
@@ -57,11 +54,13 @@ export default {
 <style lang="scss">
 .main-wrap {
   min-height: 77vh;
+  padding: 26px 32px;
+  border-radius: 10px;
   &.auto {
     min-height: auto;
   }
   background: #fff;
-  box-shadow: 0 0 6px rgb(205 205 205 / 50%);
+  box-shadow: 0 1px 3px rgb(205 205 205 / 50%);
   h3 {
     margin-bottom: 20px;
     font-size: 20px;

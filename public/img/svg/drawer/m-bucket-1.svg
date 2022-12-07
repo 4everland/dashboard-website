@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>icon/overview</title>
-    <defs>
-        <path d="M25.001,16.0006 L25.001,18.9996 L13,25.0006 L1,18.9996 L1,16.0006 L4,17.5006 L7.001,18.9996 L13,22.0006 L19,18.9996 L22,17.5006 L25.001,16.0006 Z M25.001,12.0011 L25.001,15.0001 L13,21.0011 L1,15.0001 L1,12.0011 L4,13.5001 L13,18.0001 L22,13.5001 L25.001,12.0011 Z M25.001,8.0005 L25.001,10.9995 L13,17.0005 L1,10.9995 L1,8.0005 L4,9.5005 L7.001,10.9995 L13,14.0005 L19,10.9995 L22,9.5005 L25.001,8.0005 Z M15.2288,8.886 L18.2288,10.386 L12.9998,13 L7.7708,10.386 L10.7708,8.886 L12.9998,10 L15.2288,8.886 Z M19.7719,4.3861 L25.0009,7.0001 L19.7509,9.6251 L16.7509,8.1241 L18.9999,7.0001 L16.7719,5.8861 L19.7719,4.3861 Z M6.2293,4.3853 L9.2293,5.8863 L7.0003,7.0003 L9.2493,8.1243 L6.2503,9.6243 L1.0003,7.0003 L6.2293,4.3853 Z M13,1 L18.25,3.624 L15.249,5.125 L13,4.001 L10.751,5.125 L7.751,3.624 L13,1 Z" id="path-1"></path>
-    </defs>
-    <g id="page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Bucket" transform="translate(-41.000000, -329.000000)">
-            <g id="List/Item/1" transform="translate(0.000000, 301.000000)">
-                <g id="icon/overview" transform="translate(40.000000, 27.000000)">
-                    <mask id="mask-2" fill="white">
-                        <use xlink:href="#path-1"></use>
-                    </mask>
-                    <use id="mask" fill="#231916" xlink:href="#path-1"></use>
-                    <g id="group" mask="url(#mask-2)">
-                        <g transform="translate(-0.000000, 0.000000)" id="Colors/Background">
-                            <rect id="Color" fill="#34A9FF" x="0" y="0" width="26" height="26"></rect>
-                        </g>
-                    </g>
+<svg width="19px" height="19px" viewBox="0 0 19 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>st-fill</title>
+    <g id="Overview" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-45.000000, -207.000000)" fill="#775DA6" fill-rule="nonzero" id="g-4">
+            <g transform="translate(0.000000, -1.000000)">
+                <g id="st-fill" transform="translate(45.000000, 208.000000)">
+                    <path d="M15.8333333,19 L15.8333333,10.5555556 L3.16666667,10.5555556 L3.16666667,19 L1.05555556,19 C0.472588323,19 0,18.5274117 0,17.9444444 L0,1.05555556 C0,0.472588323 0.472588323,0 1.05555556,0 L14.7777778,0 L19,4.22222223 L19,17.9444444 C19,18.5274117 18.5274117,19 17.9444444,19 L15.8333333,19 L15.8333333,19 Z M13.7222222,19 L5.27777777,19 L5.27777777,12.6666667 L13.7222222,12.6666667 L13.7222222,19 Z" id="shape"></path>
                 </g>
             </g>
         </g>

@@ -18,7 +18,7 @@
         top: 0;
       }
     }
-    $color1: #34a9ff;
+    $color1: #775da6;
     &.active {
       background: $color1;
       color: #fff;

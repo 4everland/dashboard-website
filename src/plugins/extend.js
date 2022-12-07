@@ -101,7 +101,7 @@ String.prototype.capitalize = function () {
 };
 
 String.prototype.cutStr = function (pre = 100, trail = 0) {
-  if (this.length <= pre + trail) return this;
+  if (this.length <= pre + 3 + trail) return this;
   let txt = this.substr(0, pre) + "...";
   if (trail) txt += this.substr(-trail);
   return txt;
@@ -120,7 +120,9 @@ if (!String.prototype.replaceAll) {
 
 Array.sortArrayBy = function (arr, key, isDesc) {
   arr.sort((a, b) => {
-    return (isDesc ? -1 : 1) * (a[key] - b[key]);
+    const va = a[key] || 0;
+    const vb = b[key] || 0;
+    return (isDesc ? -1 : 1) * (va - vb);
   });
   return arr;
 };

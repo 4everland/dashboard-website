@@ -1,15 +1,20 @@
 <template>
   <div class="ml-5 mt-5" v-if="!meta.hideNav">
     <div class="d-flex al-c">
-      <div class="d-flex al-c" @click="onMenu">
-        <v-btn icon v-if="asMobile">
+      <div class="d-flex al-c">
+        <v-btn icon v-if="asMobile" @click="onMenu">
           <v-icon>mdi-menu</v-icon>
         </v-btn>
-        <b class="mr-3" :class="asMobile ? 'fz-18' : 'fz-25'">{{ title }}</b>
+        <e-link :href="firstItem.href" v-if="firstItem">
+          <b class="mr-3" :class="asMobile ? 'fz-18' : 'fz-25'">{{
+            firstItem.text
+          }}</b>
+        </e-link>
+        <img :src="meta.icon" alt="" width="50" v-if="meta.icon" />
       </div>
-      <template v-if="navItems.length">
+      <template v-if="breadItems.length">
         <v-icon size="20" color="#aaa">mdi-chevron-right</v-icon>
-        <v-breadcrumbs :items="navItems" class="pa-0 ml-3">
+        <v-breadcrumbs :items="breadItems" class="pa-0 ml-3">
           <template v-slot:divider>
             <v-icon size="20" color="#aaa">mdi-chevron-right</v-icon>
           </template>
@@ -37,10 +42,6 @@ export default {
     meta() {
       return this.$route.meta || {};
     },
-    title() {
-      let { title = "", group } = this.meta;
-      return group || title;
-    },
     navItems() {
       const { params } = this.$route;
       const { title, group, links } = this.meta;
@@ -61,6 +62,7 @@ export default {
       else if (/^\/bucket\/(arweave|storage)/.test(this.path)) {
         const isAr = /^\/bucket\/arweave/.test(this.path);
         let to = isAr ? "/bucket/arweave" : "/bucket/storage/";
+        let query = this.$route.query;
         items = [
           {
             text: isAr ? "AR History" : "Buckets",
@@ -69,7 +71,8 @@ export default {
           },
         ];
         if (isAr) to += "/";
-        const arr = this.path.replace(to, "").split("/");
+        let arr = this.path.replace(to, "").split("/");
+        arr = arr.slice(0, -1);
         for (const i in arr) {
           const text = decodeURIComponent(arr[i]);
           if (!text) break;
@@ -79,7 +82,10 @@ export default {
           }
           items.push({
             text,
-            to,
+            to: {
+              path: to,
+              query,
+            },
             // exact: i < arr.length - 1,
             exact: true,
             disabled: i == arr.length - 1,
@@ -92,6 +98,24 @@ export default {
         });
       }
       return items;
+    },
+    firstItem() {
+      let { title = "" } = this.meta;
+      if (this.navItems.length) {
+        title = "";
+      }
+      if (title)
+        return {
+          text: title,
+        };
+      if (this.navItems.length) {
+        const item = { ...this.navItems[0] };
+        item.href = this.breadItems.length ? item.to : "";
+        return item;
+      }
+    },
+    breadItems() {
+      return this.navItems.slice(1);
     },
   },
   watch: {

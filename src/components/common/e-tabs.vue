@@ -21,28 +21,47 @@
   <div v-else class="e-settings" :class="vertical ? 'd-flex' : ''">
     <div>
       <v-tabs
+        class="tabs"
         :class="vertical ? 'v3-vertical bdr-1' : 'v3-horizon'"
         color="black"
         v-model="curIdx"
         :height="vertical ? null : 44"
-        hide-slider
+        :hide-slider="vertical"
         :vertical="vertical"
       >
-        <v-tab v-for="(it, i) in list" :key="i">
+        <v-tab
+          v-for="(it, i) in list"
+          :key="i"
+          class="tab"
+          :class="{ 'fw-b': curIdx == i }"
+        >
           {{ it.text }}
         </v-tab>
       </v-tabs>
     </div>
-    <div class="" :class="vertical ? 'flex-1 ml-5' : 'main-wrap pa-5 bg-white'">
-      <component
-        :is="it.comp"
-        v-bind="it.props"
-        :info="info"
-        :active="curItem.comp == it.comp"
-        v-show="curItem.comp == it.comp"
-        v-for="(it, i) in activeList"
-        :key="i"
-      ></component>
+    <div class="" :class="vertical ? 'flex-1 ml-5' : 'mt-5'">
+      <keep-alive
+        v-if="bucket"
+        :include="['bucket-overview', 'bucket-statistics']"
+      >
+        <component
+          v-if="bucket"
+          :is="list[curIdx].comp"
+          v-bind="list[curIdx].props"
+          :info="info"
+        ></component>
+      </keep-alive>
+      <template v-else>
+        <component
+          :is="it.comp"
+          v-bind="it.props"
+          :info="info"
+          :active="curItem.comp == it.comp"
+          v-show="curItem.comp == it.comp"
+          v-for="(it, i) in activeList"
+          :key="i"
+        ></component>
+      </template>
     </div>
   </div>
 </template>
@@ -54,6 +73,7 @@ export default {
     info: Object,
     defTab: Number,
     vertical: Boolean,
+    bucket: Boolean,
     width: {
       type: String,
       default: "200px",
@@ -76,7 +96,7 @@ export default {
       if (!this.activeIdxList.includes(val)) {
         this.activeIdxList.push(val);
       }
-      if (this.noRouter) return;
+      // if (this.noRouter) return;
       const it = this.list[val];
       if (!it) return;
       const query = { ...this.$route.query };
@@ -134,21 +154,76 @@ export default {
       return curIdx;
     },
   },
+  components: {
+    // Bucket
+    BucketFolder: () => import("@/views/bucket/components/bucket-folder"),
+    BucketOverview: () => import("@/views/bucket/components/bucket-overview"),
+    BucketSnapshots: () => import("@/views/bucket/components/bucket-snapshots"),
+    BucketStatistics: () =>
+      import("@/views/bucket/components/bucket-statistics"),
+    // Projects
+    ProjOverview: () => import("@/views/hosting/project/proj-overview"),
+    ProjDeployments: () => import("@/views/hosting/project/proj-deployments"),
+    ProjCommits: () => import("@/views/hosting/project/proj-commits"),
+    ProjSettings: () => import("@/views/hosting/project/proj-settings"),
+    // Projects-Settings
+    StProjGeneral: () => import("@/views/hosting/settings/st-proj-general"),
+    StProjDomains: () => import("@/views/hosting/settings/st-proj-domains"),
+    StProjGit: () => import("@/views/hosting/settings/st-proj-git"),
+    StProjEnv: () => import("@/views/hosting/settings/st-proj-env"),
+    StProjAdvanced: () => import("@/views/hosting/settings/st-proj-advanced"),
+
+    // Hosting-Domain
+    DomainDomains: () => import("@/views/hosting/domain/domain-domains"),
+    DomainEns: () => import("@/views/hosting/domain/domain-ens"),
+    DomainSns: () => import("@/views/hosting/domain/domain-sns"),
+
+    // Build-Overview/Build-Source
+    BuildOverview: () => import("@/views/hosting/build/build-overview"),
+    BuildSource: () => import("@/views/hosting/build/build-source"),
+
+    // Settings-Page
+    StAccount: () => import("@/views/settings/st-account"),
+    StGeneral: () => import("@/views/settings/st-general"),
+  },
 };
 </script>
 
 <style lang="scss">
+// .tabs {
+//   font-family: "Arial-BoldMT", "Arial";
+// }
+.v-tab {
+  font-family: "Arial-MT";
+
+  letter-spacing: normal !important;
+}
+.v-tab--active {
+  font-family: "Arial-BoldMT", "Arial";
+}
 .e-settings {
+  .v3-horizon {
+    .v-slide-group__content {
+      border-bottom: 1px solid #d0dae9;
+    }
+    .v-tab {
+      min-width: 110px;
+    }
+  }
   .theme--light.v-tabs > .v-tabs-bar {
     background-color: transparent;
   }
+  .v-tabs-slider {
+    background: #775da6;
+  }
+
   .v3-vertical {
     height: 100%;
     .v-tab {
       text-align: left;
     }
     .v-tab--active {
-      color: #34a9ff;
+      color: #775da6;
       &::after {
         position: absolute;
         content: "";
@@ -157,32 +232,10 @@ export default {
         transform: translateY(-50%);
         height: 20px;
         width: 3px;
-        background: #34a9ff;
+        background: #775da6;
         border-radius: 1px;
       }
     }
-  }
-  .v3-horizon {
-    .v-slide-group__content {
-      padding-top: 4px;
-      padding-left: 2px;
-    }
-    .v-tab--active {
-      background: #fff;
-      box-shadow: 0 0 4px rgb(205 205 205 / 50%);
-      font-weight: bold;
-      pointer-events: none;
-      &,
-      &:before {
-        border-radius: 12px;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-      }
-    }
-  }
-  .main-wrap {
-    margin-left: 2px;
-    min-height: 70vh;
   }
 }
 </style>

@@ -7,15 +7,17 @@
   >
     <slot name="pre"></slot>
     <label
-      class="gray shrink-0"
+      class="gray-6 shrink-0"
       :class="labelClass"
       :style="{
         'min-width': minWidth,
         color: labelColor,
       }"
-      >{{ label }}</label
     >
-    <div class="ml-3 flex-1">
+      <span>{{ label }}</span>
+      <slot name="sub"></slot>
+    </label>
+    <div class="ml-3 flex-1" :class="valueClass">
       <slot></slot>
     </div>
   </div>
@@ -26,6 +28,7 @@ export default {
   props: {
     label: String,
     labelClass: null,
+    valueClass: null,
     center: Boolean,
     minWidth: {
       type: String,

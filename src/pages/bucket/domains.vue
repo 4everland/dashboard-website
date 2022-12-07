@@ -7,25 +7,29 @@
     ></v-skeleton-loader>
   </div>
   <div v-else>
-    <div class="btn-wrap">
-      <v-btn color="primary" @click="showPop = true">
-        <!-- <v-icon size="16">mdi-plus-circle-outline</v-icon> -->
-        <img src="img/svg/add1.svg" width="12" />
-        <span class="ml-2">Add</span>
-      </v-btn>
-      <v-btn
-        @click="onDelete"
-        :loading="deleting"
-        outlined
-        class="ml-5"
-        min-width="36"
-        v-show="selected.length"
-      >
-        <img src="img/svg/delete.svg" width="12" />
-        <span class="ml-2">Delete</span>
-      </v-btn>
-    </div>
-    <div class="mt-4 main-wrap">
+    <e-right-opt-wrap :top="-55">
+      <div class="btn-wrap d-flex justify-end">
+        <v-btn color="primary" @click="showPop = true" width="120">
+          <!-- <v-icon size="16">mdi-plus-circle-outline</v-icon> -->
+          <img src="/img/svg/add1.svg" width="12" />
+          <span class="ml-2">Add</span>
+        </v-btn>
+        <v-btn
+          @click="onDelete"
+          :loading="deleting"
+          outlined
+          class="ml-5"
+          min-width="36"
+          v-show="selected.length"
+          width="120"
+        >
+          <img src="/img/svg/delete.svg" width="12" />
+          <span class="ml-2">Delete</span>
+        </v-btn>
+      </div>
+    </e-right-opt-wrap>
+
+    <div class="main-wrap">
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -45,17 +49,23 @@
             class="e-btn-text"
             :to="getPath(item)"
             :color="item.valid ? 'success' : 'error'"
-            rounded
             text
             x-small
           >
             <b>{{ item.domain }}</b></v-btn
           >
+
+          <e-tooltip right v-if="!item.valid">
+            <v-icon slot="ref" size="18" color="#333" class="pa-1 d-ib ml-2"
+              >mdi-alert-circle-outline</v-icon
+            >
+            <span>Invalid Configuration</span>
+          </e-tooltip>
         </template>
         <!-- <template v-slot:item.bucketName="{ item }">
           <v-btn
             color="primary"
-            rounded
+            
             text
             small
             :to="`/storage/${item.bucketName}/`"
@@ -108,7 +118,6 @@
                     <span class="ml-2 fz-15">{{ it.name }}</span>
                     <v-btn
                       small
-                      rounded
                       color="primary"
                       class="ml-auto"
                       @click="onSelect(it)"
@@ -151,12 +160,9 @@
         </v-window>
 
         <div class="ta-c mt-8">
-          <v-btn outlined rounded width="90" @click="showPop = false"
-            >Cancel</v-btn
-          >
+          <v-btn outlined width="90" @click="showPop = false">Cancel</v-btn>
           <v-btn
             color="primary"
-            rounded
             width="90"
             class="ml-6"
             v-if="curStep > 0"
@@ -173,8 +179,9 @@
 
 <script>
 import { mapState } from "vuex";
-
+import initS3 from "./initS3";
 export default {
+  mixins: [initS3],
   computed: {
     ...mapState({
       s3: (s) => s.s3,
@@ -223,6 +230,10 @@ export default {
     s3() {
       this.checkNew();
     },
+  },
+  created() {
+    if (this.$s3) return;
+    this.initS3();
   },
   mounted() {
     this.getList();

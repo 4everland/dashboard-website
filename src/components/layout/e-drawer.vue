@@ -1,11 +1,12 @@
 <style lang="scss">
 .e-drawer {
   box-shadow: 5px 0px 30px 0px rgba(0, 0, 0, 0.1);
+  z-index: 999;
   .v-navigation-drawer__border {
     display: none;
   }
   .v-navigation-drawer__content {
-    overflow: scroll;
+    overflow: auto;
   }
   .group-item {
     margin-bottom: 10px !important;
@@ -33,14 +34,18 @@
     }
   }
   .v-list-item--active {
-    color: #34a9ff;
+    color: #775da6;
     background: none;
+
     &.sub::before {
       opacity: 0;
     }
     &.v-list-group__header::before {
       opacity: 0.12 !important;
     }
+  }
+  .active-item {
+    background: #eeebf4;
   }
 }
 </style>
@@ -55,12 +60,12 @@
   >
     <div>
       <a href="/" class="mt-8 d-b" v-if="asMobile">
-        <img :src="`img/svg/logo.svg`" height="26" class="d-b m-auto" />
+        <img :src="`/img/svg/logo.svg`" height="26" class="d-b m-auto" />
       </a>
     </div>
 
     <div class="pa-5"></div>
-    <v-list rounded dense>
+    <v-list flat dense>
       <template v-for="(it, i) in list">
         <v-list-group
           class="group-item"
@@ -76,13 +81,22 @@
             <v-list-item-content>
               <v-list-item-title>
                 <b class="fz-16">{{ it.label }}</b>
+                <img
+                  v-if="it.suffixImg"
+                  class="ml-2"
+                  width="25"
+                  :src="it.suffixImg"
+                  alt=""
+                />
               </v-list-item-title>
+              <!--  -->
             </v-list-item-content>
           </template>
 
           <v-list-item
             :ref="i + '-' + j"
             class="sub"
+            active-class="active-item"
             :class="{
               'v-list-item--active': sub.matPath && sub.matPath.test(path),
             }"
@@ -94,7 +108,7 @@
           >
             <v-list-item-content>
               <v-list-item-title>
-                <span class="fz-14">{{ sub.label }}</span>
+                <span class="fz-14"> {{ sub.label }}</span>
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -121,9 +135,24 @@
       </template>
     </v-list>
 
-    <div class="pos-a mini-arrow" @click="mini = !mini">
-      <img src="img/svg/drawer/mini-arrow.svg" class="icon d-b" />
+    <!-- <div class="pos-a mini-arrow" @click="mini = !mini">
+      <img src="/img/svg/drawer/mini-arrow.svg" class="icon d-b" />
+    </div> -->
+    <div class="pos-a btm-0 left-0 w100p mb-4 al-c pa-3 bg-white">
+      <a
+        class="flex-1 ta-c"
+        :href="it.url"
+        target="_blank"
+        v-for="(it, i) in mLinks"
+        :key="i"
+      >
+        <img
+          :src="`/img/svg/drawer/social/${it.label.toLocaleLowerCase()}.svg`"
+          width="24"
+        />
+      </a>
     </div>
+    <div style="height: 80px"></div>
   </v-navigation-drawer>
 </template>
 
@@ -135,6 +164,28 @@ const initFilePath = "/bucket/storage/";
 export default {
   data() {
     return {
+      mLinks: [
+        {
+          url: "https://twitter.com/4everland_org",
+          label: "Twitter",
+        },
+        {
+          url: "http://discord.gg/4everland",
+          label: "Discord",
+        },
+        {
+          url: "https://t.me/org_4everland",
+          label: "Telegram",
+        },
+        {
+          url: "https://4everland.medium.com/",
+          label: "Medium",
+        },
+        {
+          url: "https://github.com/4everland",
+          label: "Github",
+        },
+      ],
       isShow: this.asMobile,
       mini: false,
       activeArr: [],
@@ -180,8 +231,8 @@ export default {
               to: "/hosting/statistics",
             },
             {
-              label: "First Landing",
-              to: "/hosting/first-landing",
+              label: "Auth Tokens",
+              to: "/hosting/auth-tokens",
             },
           ],
         },
@@ -191,11 +242,15 @@ export default {
           active: false,
           group: /^\/bucket/i,
           subs: [
+            // {
+            //   label: "Buckets",
+            //   to: this.path.includes(initFilePath)
+            //     ? initFilePath
+            //     : this.filesPath,
+            // },
             {
               label: "Buckets",
-              to: this.path.includes(initFilePath)
-                ? initFilePath
-                : this.filesPath,
+              to: "/bucket/storage/",
             },
             {
               label: "AR History",
@@ -206,23 +261,38 @@ export default {
               to: "/bucket/domains",
               matPath: /bucket\/domain/,
             },
+            {
+              label: "Access Keys",
+              to: "/bucket/access-keys",
+            },
           ],
         },
         {
-          label: "Billing",
-          img: "m-usage",
-          group: /^\/billing/i,
+          label: "Gateway",
+          img: "m-gateway",
+          suffixImg: "/img/svg/hosting/h-beta-active.svg",
+          group: /^\/gateway/i,
           subs: [
             {
-              label: "Usage",
-              to: "/billing/usage",
-              matPath: /usage\/(more)/,
+              label: "Dedicated Gateway",
+              to: "/gateway/list",
             },
             {
-              label: "Bills",
-              to: "/billing/bills",
+              label: "IPNS Manager",
+              to: "/gateway/ipns",
+            },
+            {
+              label: "Auth Token",
+              to: "/gateway/auth-token",
             },
           ],
+        },
+        {
+          label: "Resource",
+          img: "m-usage",
+          to: "/resource",
+          active: false,
+          group: /^\/resource/i,
         },
       ];
     },
@@ -249,10 +319,6 @@ export default {
       if (!open) return;
       if (this.list[i].group.test(this.path)) return;
       this.$refs[i + "-0"][0].$el.click();
-    },
-    onLogout() {
-      localStorage.clear();
-      location.href = "index.html";
     },
   },
 };

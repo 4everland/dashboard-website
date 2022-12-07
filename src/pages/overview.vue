@@ -1,111 +1,140 @@
+<style lang="scss">
+.ov-wrap-1 {
+  padding: 30px 20px;
+}
+</style>
+
 <template>
   <div>
-    <v-alert
-      text
-      type="info"
-      dismissible
-      dense
-      v-if="userInfo.email && !noTip"
-      @input="onCloseTip"
+    <overview-notice class="mb-4" />
+    <v-carousel
+      hide-delimiter-background
+      :interval="5000"
+      :show-arrows="false"
+      :height="asMobile ? 100 : 160"
+      class="bdrs-10 mb-4"
+      cycle
     >
-      <router-link to="/settings?tab=account_binding&type=3">
-        Subscribe to stay up to date on the 4EVERLAND latest news and events.
-      </router-link>
-    </v-alert>
-    <e-tabs :list="list" />
+      <v-carousel-item
+        v-for="(it, i) in banners"
+        :key="i"
+        :src="it.img"
+        :to="it.to"
+        :href="it.href"
+        :target="it.href ? '_blank' : null"
+      >
+      </v-carousel-item>
+    </v-carousel>
+
+    <div class="pos-r mb-5">
+      <div>
+        <h2>{{ uname }}</h2>
+        <div class="gray-8 fz-14 mt-1">Welcome back to 4EVERLAND dashboard</div>
+      </div>
+      <e-right-opt-wrap>
+        <v-btn color="primary" to="/bucket/storage/?new=bucket">
+          <span class="fz-18">+</span>
+          <span class="ml-1"> New Bucket </span>
+        </v-btn>
+        <v-btn color="primary" class="ml-5" to="/hosting/new">
+          <span class="fz-18">+</span>
+          <span class="ml-1"> New Project </span>
+        </v-btn>
+      </e-right-opt-wrap>
+    </div>
+
+    <v3-usage />
+
+    <div class="mt-3">
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-card>
+            <v3-uv />
+          </v-card>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-card>
+            <v3-stor />
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <v-card class="mt-5">
+        <v3-req />
+      </v-card>
+    </div>
     <new-user-tips />
   </div>
 </template>
 
 <script>
-import newUserTips from "@/components/overview/s-newUserTips.vue";
-import Axios from "axios";
+import { mapState } from "vuex";
+// import { newUserDrop } from "@/plugins/airDrop/index.js";
+
 export default {
-  components: { newUserTips },
-  computed: {
-    userInfo() {
-      return this.$store.state.userInfo;
-    },
-  },
   data() {
     return {
-      list: [
+      banners: [
         {
-          text: "Hosting",
-          comp: "h-projects",
-          props: {
-            limit: 5,
-          },
+          img: "https://4ever-web.4everland.store/img/banner/20221103-115504.jpg",
+          href: "https://forms.gle/CrCVBoWFaA4V3RiB6",
         },
         {
-          text: "Bucket",
-          comp: "s-bucket",
+          img: "https://static1.4everland.org/img/banner/20221109-160329.png",
+          to: "/reward-hub",
         },
       ],
-      noTip: !!localStorage.noEmailTip,
-      signature: "",
     };
   },
-  created() {
-    // this.isSolana();
-  },
-  methods: {
-    onCloseTip() {
-      localStorage.noEmailTip = "1";
-      this.noTip = true;
+  computed: {
+    ...mapState({
+      noticeMsg: (s) => s.noticeMsg,
+    }),
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
     },
-    async isSolana() {
-      const isSolana = this.userInfo.solana;
-      if (isSolana) {
-        const Array = await this.getSignaturesForAddress();
-        this.checkBlock(Array);
-      }
-    },
-    async getSignaturesForAddress(signature) {
-      // const account = this.userInfo.solana.address;
-      // console.log(account);
-      let Param = {
-        limit: 1000,
-        commitment: "confirmed",
-      };
-      if (signature) {
-        Param.before = signature;
-      }
-      try {
-        const { data } = await Axios.post(process.env.VUE_APP_SOLANA_URL, {
-          jsonrpc: "2.0",
-          id: 1,
-          method: "getSignaturesForAddress",
-          params: ["Vote111111111111111111111111111111111111111", Param],
-        });
-        const array = data.result;
-        return array;
-      } catch (error) {
-        console.log(error);
-        setTimeout(async () => {
-          const signature = this.signature;
-          const Array = await this.getSignaturesForAddress(signature);
-          this.checkBlock(Array);
-        }, 11000);
-      }
-    },
-    async checkBlock(array) {
-      if (!array) {
-        return;
-      }
-      const length = array.length;
-      let flag = array.find((element) => {
-        return element.slot <= 135140758;
-      });
-      if (flag) {
-        console.log(flag);
-      } else {
-        const signature = array[length - 1].signature;
-        this.signature = signature;
-        const Array = await this.getSignaturesForAddress(signature);
-        this.checkBlock(Array);
-      }
+    uname() {
+      const info = this.$store.state.userInfo;
+      if (info.username) return "Hi " + info.username.cutStr(6, 4);
+      return "Overview";
     },
   },
+  // watch: {
+  //   noticeMsg({ name }) {
+  //     if (name == "close-new-drop") {
+  //       this.checkReward();
+  //     }
+  //   },
+  // },
+  // async mounted() {
+  //   try {
+  //     const isPop = await newUserDrop();
+  //     if (!isPop) {
+  //       this.checkReward();
+  //     }
+  //   } catch (error) {
+  //     //
+  //   }
+  // },
+  // methods: {
+  //   async checkReward() {
+  //     try {
+  //       const { data } = await this.$http.get("$auth/poster/rewardhub");
+  //       if (data)
+  //         this.$confirm(
+  //           `<p>Dear 4EVERLAND user,</p><div class="lh-2 fz-14 mt-5 mb-5">We are launching Reward Hub to offer you a better experience with products and services. All new users can get free resources (storage, bandwidth, etc.) by completing the following tasks, while users who have already completed the tasks and received the free giveaway resources can simply go to Reward Hub to claim the resources. <p class="mt-2">Having fun while exploring 4EVERLAND! Please feel free to contact us in our communities if you have any questions. </p></div>`,
+  //           "",
+  //           {
+  //             confirmText: "View",
+  //             hideTitle: true,
+  //           }
+  //         ).then(() => {
+  //           this.$navTo("/reward-hub");
+  //         });
+  //     } catch (error) {
+  //       //
+  //     }
+  //   },
+  // },
 };
 </script>

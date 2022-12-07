@@ -1,12 +1,23 @@
-import Settings from "./settings";
-import Collections from "./collections";
-import Referral from "./referral";
-import BugBounty from "./bug-bounty";
+// import Settings from "./settings";
+// import Collections from "./collections";
+// import Referral from "./referral";
+// import BugBounty from "./bug-bounty";
+// import ActLog from "./activity-log";
 
 export default [
   {
+    path: "/activity-log",
+    components: {
+      cache: () => import("./activity-log"),
+    },
+    meta: {
+      title: "Activity Log",
+    },
+  },
+  {
     path: "/settings",
-    component: Settings,
+    component: () => import("./settings"),
+
     meta: {
       title: "Settings",
       isTab: 1,
@@ -14,7 +25,8 @@ export default [
   },
   {
     path: "/referral",
-    component: Referral,
+    component: () => import("./referral"),
+
     meta: {
       title: "My Referral",
       hideNav: 1,
@@ -24,7 +36,7 @@ export default [
   {
     path: "/collections",
     components: {
-      cache: Collections,
+      cache: () => import("./collections"),
     },
     meta: {
       title: "My Collection",
@@ -33,7 +45,7 @@ export default [
   {
     path: "/bug-bounty",
     components: {
-      cache: BugBounty,
+      cache: () => import("./bug-bounty"),
     },
     meta: {
       title: "Bug Bounty",

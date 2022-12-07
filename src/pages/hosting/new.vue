@@ -30,6 +30,10 @@
 </template>
 
 <script>
+import NewStep0 from "@/views/hosting/new/new-step-0";
+import NewStep1 from "@/views/hosting/new/new-step-1";
+import NewStep2 from "@/views/hosting/new/new-step-2";
+
 export default {
   data() {
     return {
@@ -52,6 +56,7 @@ export default {
   methods: {
     onQuery() {
       const { taskId, type, s } = this.$route.query;
+      console.log(type, s);
       if (type == "clone-flow" && s) this.curStep = 1;
       else if (taskId) this.curStep = 2;
     },
@@ -59,6 +64,11 @@ export default {
       this.$router.back();
       this.curStep -= 1;
     },
+  },
+  components: {
+    NewStep0,
+    NewStep1,
+    NewStep2,
   },
 };
 </script>

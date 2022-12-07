@@ -17,18 +17,27 @@ export default {
 <style lang="scss">
 .sync-state {
   text-transform: capitalize;
-  color: #7e8ea8;
+  color: #fff;
+  font-size: 12px;
+  padding: 5px 20px;
+  border: none;
+
+  border-radius: 5px;
+  &.desynced {
+    background: #e6e8eb;
+    color: #6c7789;
+  }
   &.synced {
-    color: #00bd9a;
+    background: #00bd9a;
   }
   &.syncing {
-    color: #34a9ff;
+    background: #34a9ff;
   }
   &.timeout {
-    color: #f99536;
+    background: #f99536;
   }
   &.failure {
-    color: #ff6960;
+    background: #ff6960;
   }
 }
 </style>

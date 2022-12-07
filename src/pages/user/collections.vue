@@ -41,7 +41,7 @@
         <e-empty title="No NFTs to display">
           <div>Please follow us for future limited NFT</div>
           <div class="mt-6" v-if="!connectAddr">
-            <v-btn color="primary" small rounded @click="showConnect()"
+            <v-btn color="primary" small @click="showConnect()"
               >Connect Wallet</v-btn
             >
           </div>
