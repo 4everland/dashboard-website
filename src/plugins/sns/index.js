@@ -2,7 +2,6 @@
 const web3 = require("@solana/web3.js");
 // const splNameService = require("@solana/spl-name-service");
 const splNameService = require("@bonfida/spl-name-service");
-console.log("nameService", splNameService);
 const bs58 = require("bs58");
 
 const SOL_TLD_AUTHORITY = new web3.PublicKey(
@@ -13,13 +12,7 @@ const SOL_TLD_AUTHORITY = new web3.PublicKey(
 const main_net_rpc =
   "https://skilled-silent-snowflake.solana-mainnet.quiknode.pro/";
 // const main_net_rpc = web3.clusterApiUrl("mainnet-beta");
-console.log(main_net_rpc);
 const connection = new web3.Connection(main_net_rpc, "confirmed");
-let myWallet = web3.Keypair.fromSecretKey(
-  bs58.decode(
-    "sdEisbAvWXQv1dcydzMBUzKsfedK2iJYgEjRtcLHpn81zwaB7CH8F6bdcjafifummZHm6pSaHmsuTxB4po37mvr"
-  )
-);
 
 async function getDomainKey(domain) {
   let hostnameArray = domain.split(".");
@@ -49,6 +42,26 @@ async function getSubdomainKey(domain) {
 
 async function getContentFromAccount(connection, publicKey) {
   const nameAccount = await connection.getAccountInfo(publicKey, "processed");
+  if (!nameAccount) {
+    return null;
+  }
+  const data = nameAccount.data
+    .toString("ascii")
+    .slice(96)
+    .replace(/\0.*$/g, "");
+  return data;
+}
+
+async function getIPFSContentFromAccount(connection, domain) {
+  const domainObj = await formatterDomainName(domain);
+  console.log(domainObj);
+  const record = splNameService.Record.IPFS;
+  const { pubkey } = await splNameService.getDomainKey(
+    record + "." + domainObj.name,
+    true
+  );
+  const nameAccount = await connection.getAccountInfo(pubkey, "processed");
+
   if (!nameAccount) {
     return null;
   }
@@ -98,7 +111,8 @@ export const getOwner = async (domain) => {
       connection,
       domainKey
     );
-    return nameAccount.owner.toBase58();
+    console.log("nameAccount", nameAccount);
+    return nameAccount.registry.owner.toBase58();
   } catch (error) {
     return "";
   }
@@ -112,56 +126,65 @@ export const getResolveData = async (domain) => {
     accountKey = await getSubdomainKey(domain);
   }
   try {
-    const resolveData = await getContentFromAccount(connection, accountKey);
+    let resolveData = await getContentFromAccount(connection, accountKey);
+    if (!resolveData) {
+      resolveData = await getIPFSContentFromAccount(connection, domain);
+      resolveData = resolveData.replace("ipns://", "");
+    }
+    console.log("resolveData", resolveData);
     return resolveData;
   } catch (error) {
     return "";
   }
 };
 
-// export const domainUpdate = async (domain, ipns) => {
-//   const domainObj = await formatterDomainName(domain);
-//   // ipns={ipns}
-//   const input_data = Buffer.from(`ipns=${ipns}\0`);
-//   let programContent = await splNameService.updateNameRegistryData(
-//     connection,
-//     domainObj.name,
-//     0,
-//     input_data,
-//     null,
-//     domainObj.nameParent
-//   );
-//   const recentBlockhash = await connection.getRecentBlockhash();
-//   const resp = await window.solana.connect();
-//   let allocateTransaction = new web3.Transaction({
-//     recentBlockhash: recentBlockhash.blockhash,
-//     feePayer: resp.publicKey,
-//   });
-//   allocateTransaction.add(programContent);
-//   return allocateTransaction;
-// };
+export const domainUpdate = async (domain, ipns) => {
+  const domainObj = await formatterDomainName(domain);
+  // ipns={ipns}
+  const input_data = Buffer.from(`ipns=${ipns}\0`);
+  let programContent = await splNameService.updateNameRegistryData(
+    connection,
+    domainObj.name,
+    0,
+    input_data,
+    null,
+    domainObj.nameParent
+  );
+  const recentBlockhash = await connection.getRecentBlockhash();
+  const resp = await window.solana.connect();
+  let allocateTransaction = new web3.Transaction({
+    recentBlockhash: recentBlockhash.blockhash,
+    feePayer: resp.publicKey,
+  });
+  allocateTransaction.add(programContent);
+  return allocateTransaction;
+};
 
 export const sendTransaction = async (transaction) => {
+  console.log("transaction", transaction);
+
+  let test = transaction.instructions[0].data.toString();
+  console.log(test);
   const { signature } = await window.solana.signAndSendTransaction(transaction);
   const result = await connection.confirmTransaction(signature);
   return result;
 };
 
-export const domainUpdate = async (wallet, domain, value) => {
+export const ipfsRecordUpdate = async (domain, value) => {
+  console.log(value);
   let ixs = [];
-  // const wallet = getOwner();
-  // const wallet = myWallet;
-  console.log("wallet", wallet);
-  //const domain = "4everland"
+  const domainObj = await formatterDomainName(domain);
+  const wallet = await window.solana.connect();
   const record = splNameService.Record.IPFS;
-  const { pubkey: domainKey } = await splNameService.getDomainKey(domain);
+  const { pubkey: domainKey } = await splNameService.getDomainKey(
+    domainObj.name
+  );
   const { pubkey: recordKey } = await splNameService.getDomainKey(
-    record + "." + domain,
+    record + "." + domainObj.name,
     true
   );
 
   const recordAccInfo = await connection.getAccountInfo(recordKey);
-  console.log("recordAccInfo", recordAccInfo);
   if (!recordAccInfo?.data) {
     // The record does not exist so create it first
     const space = 2000;
@@ -185,24 +208,15 @@ export const domainUpdate = async (wallet, domain, value) => {
     splNameService.NAME_PROGRAM_ID,
     recordKey,
     new splNameService.Numberu32(0),
-    Buffer.from(value),
+    Buffer.from("ipns://" + value),
     wallet.publicKey
   );
 
   ixs.push(ix);
   const tx = new web3.Transaction();
-
+  const recentBlockhash = await connection.getLatestBlockhash();
   tx.feePayer = wallet.publicKey;
-  //const signers = [wallet]
+  tx.recentBlockhash = recentBlockhash.blockhash;
   tx.add(...ixs);
-
-  let result = await web3.sendAndConfirmTransaction(connection, tx, [wallet]);
-
-  console.log(`Updated record ${result}`);
+  return tx;
 };
-
-domainUpdate(
-  myWallet,
-  "4everland",
-  "ipns://k51qzi5uqu5dgwhj3ar0vo0hjv8skqstyxma7cx7fi6h76s38qsgeleru9zg9z"
-);

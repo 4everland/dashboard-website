@@ -119,8 +119,11 @@ import {
   getConnect,
   getResolveData,
   domainUpdate,
+  ipfsRecordUpdate,
   sendTransaction,
 } from "@/plugins/sns";
+
+// import "@/plugins/sns/soltest.js";
 const reg = /.+\.sol$/;
 
 export default {
@@ -171,6 +174,7 @@ export default {
     async verifyConfiguration() {
       this.$loading();
       this.resolveData = await getResolveData(this.info.sns);
+      console.log(this.resolveData === this.info.content);
       if (this.resolveData && this.resolveData === this.info.content) {
         this.info.verify = true;
       } else {
@@ -203,6 +207,7 @@ export default {
         return this.$alert("The domain name you entered is invalid.");
       }
       this.owner = await this.verifyOwner();
+      console.log(this.owner);
       if (!this.owner) {
         return this.$alert("Invalid SNS Domain");
       }
@@ -234,7 +239,10 @@ export default {
             "Connected account is not the controller of the domain. "
           );
         }
-        const transaction = await domainUpdate(this.info.sns, this.info.ipns);
+        const transaction = await ipfsRecordUpdate(
+          this.info.sns,
+          this.info.ipns
+        );
         console.log(transaction);
         const result = await sendTransaction(transaction);
         console.log(result);
