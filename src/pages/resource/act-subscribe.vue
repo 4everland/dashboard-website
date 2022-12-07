@@ -37,69 +37,23 @@
           <div class="mt-6 al-c">
             <e-kv class="flex-1" valueClass="al-c" :label="it.label + ':'">
               <span>{{ it.percTxt }}</span>
-              <!-- <e-tooltip top v-if="it.expireLabel">
-                <v-icon slot="ref" color="#999" size="13" class="ml-2"
-                  >mdi-alert-circle</v-icon
-                >
-                <div>
-                  <div>Including free {{ it.freeTxt }}.</div>
-                  <div>
-                    {{ it.expireLabel }}:
-                    {{
-                      it.expireTime
-                        ? new Date(it.expireTime * 1e3).format("date")
-                        : "Permanent"
-                    }}.
-                  </div>
-                </div>
-              </e-tooltip>
-              <span v-else-if="it.freeTxt" class="gray fz-12 ml-2"
-                >(Including free {{ it.freeTxt }})</span
-              > -->
-            </e-kv>
-            <e-kv
-              v-if="!it.expireLabel"
-              class="flex-1"
-              label="Expiration date:"
-            >
-              <span v-if="it.expireTime">{{
-                new Date(it.expireTime * 1e3).format("date")
-              }}</span>
             </e-kv>
           </div>
-          <div class="mt-6 al-c" v-if="it.key == 'ipfs'">
-            <e-radio-btn
-              :options="['Expansion', 'Renewal']"
-              v-model="ipfsIdx"
-            ></e-radio-btn>
-            <e-tooltip top>
-              <v-icon slot="ref" color="#999" size="14" class="ml-3"
-                >mdi-help-circle</v-icon
-              >
-              <div>
-                {{
-                  ipfsIdx == 0
-                    ? "Expand storage capacity without changing the expiration date. "
-                    : "Extend expiration date without changing the storage capacity."
-                }}
-              </div>
-            </e-tooltip>
-          </div>
-          <div class="mt-6" v-show="it.key == 'ipfs' && ipfsIdx == 1">
-            <e-kv label="Pick plan:" center>
-              <pay-choose-num
-                :options="it.dayOpts"
-                unit="Day"
-                @input="onIpfsTime"
-              ></pay-choose-num>
-            </e-kv>
-          </div>
-          <div class="mt-6" v-show="it.key != 'ipfs' || ipfsIdx == 0">
-            <e-kv label="Pick plan:" center>
+          <div class="mt-6">
+            <e-kv :label="it.key == 'ipfs' ? 'Storage:' : 'Pick plan:'" center>
               <pay-choose-num
                 @input="onChooseNum($event, it)"
                 :options="it.opts"
                 :unit="it.unit"
+              ></pay-choose-num>
+            </e-kv>
+          </div>
+          <div class="mt-6" v-show="it.key == 'ipfs'">
+            <e-kv label="Duration:" center>
+              <pay-choose-num
+                :options="it.dayOpts"
+                unit="Day"
+                @input="onIpfsTime"
               ></pay-choose-num>
             </e-kv>
           </div>
@@ -115,7 +69,7 @@
             >
               <span class="color-1 fz-18">
                 {{
-                  !form.ipfs && !ipfsTime
+                  !it.expireTime && !ipfsTime
                     ? "-"
                     : new Date(it.expireTime * 1e3 + ipfsTime * 1e3).format(
                         "date"
@@ -180,7 +134,6 @@ export default {
       priceInfo: {},
       usageInfo: null,
       form: {},
-      ipfsIdx: 0,
       feeForm: {},
       chooseMap: {},
       feeLoading: false,
@@ -296,12 +249,12 @@ export default {
         const isIpfs = id == ResourceType.IPFSStorage;
         const fee = this.feeForm[id];
         const item = this.list.find((it) => it.id == id);
-        const num = this.form[item.key] || 0;
-        let price = num * item.unitPrice;
+        // const num = this.form[item.key] || 0;
+        let price = 0; //num * item.unitPrice;
         if (fee) price = this.getFee(fee);
         if (!price) continue;
         const row = {
-          type: isIpfs ? "Expansion" : "Purchase",
+          type: "Purchase", // isIpfs ? "Expansion" :
           label: item.label,
           value: this.chooseMap[item.key],
           price,
@@ -310,18 +263,19 @@ export default {
         if (isIpfs) {
           renewPrice = this.getFee(fee[1]);
           if (renewPrice) {
-            row.price -= renewPrice;
+            // row.price -= renewPrice;
+            row.value += " " + this.chooseMap.ipfsRenewal;
           }
         }
         if (row.price) list.push(row);
-        if (renewPrice) {
-          list.push({
-            ...row,
-            type: "Renewal",
-            value: this.chooseMap.ipfsRenewal,
-            price: renewPrice,
-          });
-        }
+        // if (renewPrice) {
+        //   list.push({
+        //     ...row,
+        //     type: "Renewal",
+        //     value: this.chooseMap.ipfsRenewal,
+        //     price: renewPrice,
+        //   });
+        // }
       }
       return list;
     },
@@ -457,8 +411,7 @@ export default {
         );
         this.usageInfo = usageInfo;
         this.getCardTop();
-        const { i, t } = this.$route.query;
-        this.ipfsIdx = t == 1 ? 1 : 0;
+        const { i } = this.$route.query;
         if (i > -1) {
           this.tabIdx = i * 1;
           this.onTab();
@@ -489,6 +442,13 @@ export default {
       if (!val && (resId != ResourceType.IPFSStorage || !this.ipfsTime)) {
         this.feeForm[resId] = 0;
         return;
+      }
+      if (resId == ResourceType.IPFSStorage && this.ipfsExpired) {
+        if (!val || !this.ipfsTime) {
+          this.feeForm[resId] = 0;
+          return;
+        }
+        console.log(val, this.ipfsTime);
       }
       try {
         let amount = val;
