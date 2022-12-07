@@ -404,7 +404,6 @@ export default {
       background: #5eb1ff;
     }
   }
-  overflow: scroll;
   .file {
     position: relative;
     height: 100%;

@@ -375,7 +375,6 @@ export default {
     margin-bottom: 10px;
     box-sizing: border-box;
   }
-  overflow: scroll;
   .file {
     padding: 5px 0;
     font-size: 14px;
