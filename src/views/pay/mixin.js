@@ -31,6 +31,10 @@ export default {
       payBy: (s) => s.payBy,
       userInfo: (s) => s.userInfo,
     }),
+    walletObj() {
+      const { walletType } = this.userInfo.wallet || {};
+      return walletType == "OKX" ? window.okxwallet : window.ethereum;
+    },
     uuid() {
       return this.userInfo.euid;
     },
@@ -269,7 +273,7 @@ export default {
         },
       }[id];
       if (!params) return;
-      await window.ethereum.request(
+      await this.walletObj.request(
         {
           method: "wallet_addEthereumChain",
           params: [params],
@@ -332,7 +336,7 @@ export default {
           await this.switchNet(this.payChainId);
           return;
         }
-        const provider = new providers.Web3Provider(window.ethereum);
+        const provider = new providers.Web3Provider(this.walletObj);
         if (this.isPolygon) {
           polygonContract.setProvider(provider);
           this.curContract = polygonContract;
