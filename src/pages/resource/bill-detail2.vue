@@ -61,10 +61,16 @@
         </e-kv>
       </div>
 
-      <e-kv class="mt-6" label="Amount">
-        <span>{{ info.cost }}</span>
-        <span v-if="info.cost" class="gray-7 ml-2">USDC</span>
-      </e-kv>
+      <div class="d-flex mt-6">
+        <e-kv class="flex-1" label="Amount">
+          <span>{{ info.cost }}</span>
+          <span v-if="info.cost" class="gray-7 ml-2">USDC</span>
+        </e-kv>
+        <e-kv class="flex-2 ml-2" label="Gift Voucher" v-if="info.voucherInfo">
+          <span>{{ info.voucherInfo }}</span>
+          <span class="gray-7 ml-2">USDC</span>
+        </e-kv>
+      </div>
       <e-kv class="mt-6 e-table-head-1" label="Resource">
         <div v-if="info.resource">
           {{ info.resource }}
@@ -101,6 +107,7 @@ export default {
       const list = JSON.parse(this.info.contentJson || "[]");
       return list.map((it) => {
         it.cost = this.$utils.getCost(it.cost);
+        // it.voucherInfo = this.$utils.cutFixed(it.voucherInfo, 4);
         it.time = "Permanent";
         if (it.effectiveTime) {
           it.time = "Until " + new Date(it.effectiveTime * 1000).format("date");
@@ -162,6 +169,10 @@ export default {
         data.time = new Date(data.createdAt * 1000).format();
         if (!data.usdt && data.amount) data.usdt = data.amount.value / 1e18;
         data.cost = !data.usdt ? "" : this.$utils.getCost(data.usdt);
+        data.voucherInfo * 1 > 0
+          ? (data.voucherInfo = (data.voucherInfo * 1).toFixed(2))
+          : (data.voucherInfo = null);
+
         this.setData(data);
         this.info = data;
       } catch (error) {

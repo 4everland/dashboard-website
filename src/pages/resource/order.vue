@@ -38,7 +38,48 @@
       automatically cross-chain to Polygon. To prevent insufficient gas fees,
       maintaining a minimum payment amount of 20U is required.
     </div>
-
+    <h3 class="mt-10">Redeem a gift vouche</h3>
+    <v-row>
+      <v-col sm="8" cols="12" class="d-flex al-start">
+        <div class="flex-1">
+          <v-text-field
+            class="post-input hide-msg"
+            persistent-placeholder
+            v-model="voucherCode"
+            outlined
+            dense
+            :disabled="AmountofDeduction > 0"
+            placeholder="Enter the voucher code"
+          >
+          </v-text-field>
+          <decode-status
+            v-if="showDecode"
+            :statusText="statusText"
+            :status="validStatus"
+            class="mt-3"
+          />
+        </div>
+        <v-btn
+          color="primary"
+          class="ml-7"
+          width="140"
+          v-if="!AmountofDeduction"
+          :disabled="disabled"
+          tile
+          @click="handleCommit"
+          >Commit</v-btn
+        >
+        <v-btn
+          v-else
+          outlined
+          class="ml-7"
+          width="140"
+          tile
+          @click="handleCancelVoucher"
+          >Cancel</v-btn
+        >
+      </v-col>
+    </v-row>
     <div style="height: 20vh"></div>
     <pay-confirm
       label="Configuration costs"
@@ -47,6 +88,18 @@
       :loading="approving"
       @submit="onSubmit"
     >
+      <template #detail v-if="AmountofDeduction">
+        <div>
+          <span class="fz-14 gray-6 label">Gift Voucher:</span>
+          <span class="black-1 fz-25 ml-3">-{{ AmountofDeduction }}</span>
+          <span class="gray-6 ml-2 fz-15">USDC</span>
+        </div>
+        <div>
+          <span class="fz-14 gray-6 label">Total:</span>
+          <span class="red-1 fz-25 ml-3">{{ finalPrice }}</span>
+          <span class="gray-6 ml-2 fz-15">USDC</span>
+        </div>
+      </template>
     </pay-confirm>
   </div>
 </template>
@@ -63,6 +116,17 @@ export default {
   data() {
     return {
       isSubscribe: true,
+      voucherCode: "",
+      disabled: false,
+      showDecode: false,
+      statusText: {
+        1: "Checking availability...",
+        2: "Available!",
+        3: "Unavailable！",
+      },
+      validStatus: 1,
+      AmountofDeduction: 0,
+      resourceResource: null,
     };
   },
   computed: {
@@ -71,6 +135,11 @@ export default {
       list: (s) => s.orderInfo.list,
       orderInfo: (s) => s.orderInfo,
     }),
+    finalPrice() {
+      return this.totalPrice - this.AmountofDeduction >= 0
+        ? (this.totalPrice - this.AmountofDeduction).toFixed(4)
+        : "0.00";
+    },
   },
   created() {
     console.log(this.orderInfo);
@@ -109,15 +178,23 @@ export default {
         this.ethFeeInfo = null;
         console.log(payloads);
         this.$loading();
-        const params = [this.providerAddr, this.uuid, payloads];
+        let params = [this.providerAddr, this.uuid, payloads];
+        const nonce = this.resourceResource ? this.resourceResource.nonce : 0;
+        const amount = this.resourceResource
+          ? this.resourceResource.voucherAmount
+          : 0;
+        const signature = this.resourceResource
+          ? this.resourceResource.sign
+          : "0x";
+        let resourceParams = [nonce, amount, signature];
+        params = params.concat(resourceParams);
         if (!this.isPolygon) {
           if (this.chainId != 56) {
             totalFee = totalFee.div(1e12);
           }
           console.log("totalFee", totalFee.toString());
-          const feeMsg = await target.calcFeeV2(...params);
+          const feeMsg = await target.calcFee(...params);
           // console.log("feeMsg", feeMsg.toString());
-          // params.push(maxSlippage);
           params.push({
             value: feeMsg,
           });
@@ -130,20 +207,62 @@ export default {
             return;
           }
         }
+
         console.log("pay", params, this.curContract[this.chainKey]);
-        let tx = await target.payV2(...params);
+        // let tx = await target.payV2(...params);
+        let tx = await target.pay(...params);
+
         console.log("tx", tx);
         const receipt = await tx.wait(1);
         this.addHash(tx, this.totalPrice);
         console.log("receipt", receipt);
         this.$loading.close();
-        await this.$alert("Purchased successfully");
+        await this.$alert(
+          "Successful transaction! The resource release time is based on on-chain data."
+        );
         this.$router.replace("/resource/bills");
         localStorage.orderInfo = "";
       } catch (error) {
         console.log("pay submit error");
         this.onErr(error);
       }
+    },
+    async handleCommit() {
+      try {
+        if (!this.voucherCode) return;
+        this.disabled = true;
+        this.validStatus = 1;
+        this.showDecode = true;
+        const { data } = await this.$http(
+          `$resource/rewardhub/voucher/verify/${this.voucherCode}`,
+          {
+            noTip: 1,
+          }
+        );
+        this.AmountofDeduction = JSON.parse(data.voucherLimit).USDC;
+        if (data.voucherType == 1) {
+          throw new Error(
+            "Unavailable! This is a resource voucher, please enter a gift voucher code."
+          );
+        }
+        this.resourceResource = data;
+        this.validStatus = 2;
+        this.statusText[2] = `Available! Expires: ${new Date(
+          data.expiredTime * 1000
+        ).format("date")}`;
+      } catch (error) {
+        // console.log(error);
+        this.validStatus = 3;
+        this.statusText[3] = error.message;
+      }
+      this.disabled = false;
+    },
+    async handleCancelVoucher() {
+      this.showDecode = false;
+      this.validStatus = 1;
+      this.voucherCode = "";
+      this.AmountofDeduction = 0;
+      this.resourceResource = null;
     },
   },
   components: {
@@ -152,3 +271,10 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.label {
+  display: inline-block;
+  min-width: 130px;
+  text-align: right;
+}
+</style>

@@ -4,14 +4,16 @@ import Contracts from "./contracts";
 import {
   IERC20__factory,
   SrcChainPayment__factory,
-  DstChainPayment__factory,
+  SrcChainPaymentV2__factory,
+  DstChainPaymentV2__factory,
   ResourcePriceAdaptor__factory,
   ARStorageController__factory,
   BandwidthController__factory,
   BuildingTimeController__factory,
   IPFSStorageController__factory,
   ProviderController__factory,
-} from "4everland-contracts";
+  SrcChainRecharge__factory,
+} from "@4everland/service-contracts";
 import { Bridge__factory } from "./sgn/contract/typechain";
 import {
   GoerliRpc,
@@ -26,6 +28,8 @@ import {
   MumbaiBuildingTimeController,
   MumbaiIPFSStorageController,
 } from "./contracts-addr";
+
+import { ChapelRecharge } from "./addr-dev";
 
 class SrcChainContracts extends Contracts {
   dstProvider = null;
@@ -49,7 +53,13 @@ class SrcChainContracts extends Contracts {
   }
 
   get SrcChainPayment() {
-    return SrcChainPayment__factory.connect(ChapelSrcChainPayment, this.signer);
+    return SrcChainPaymentV2__factory.connect(
+      ChapelSrcChainPayment,
+      this.signer
+    );
+  }
+  get SrcChainRecharge() {
+    return SrcChainRecharge__factory.connect(ChapelRecharge, this.signer);
   }
 
   get ProviderController() {
@@ -67,7 +77,7 @@ class SrcChainContracts extends Contracts {
   }
 
   get DstChainPayment() {
-    return DstChainPayment__factory.connect(
+    return DstChainPaymentV2__factory.connect(
       MumbaiDstChainPayment,
       this.dstProvider
     );

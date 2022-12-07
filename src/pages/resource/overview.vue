@@ -13,7 +13,7 @@
     </e-right-opt-wrap>
     <v-row>
       <v-col cols="12" md="7">
-        <pay-act />
+        <pay-act @getUsage="getUsage" :usageInfo="usageInfo" />
       </v-col>
       <v-col cols="12" md="5">
         <pay-balance />
@@ -68,15 +68,13 @@
               {{ it.expired || "0" }}
             </div>
             <div class="fz-15">
-              <e-link :href="'/resource/subscribe?i=' + i">{{
-                it.expired ? "Expansion" : "Purchase"
-              }}</e-link>
-              <e-link
+              <e-link :href="'/resource/subscribe?i=' + i">Purchase</e-link>
+              <!-- <e-link
                 :href="'/resource/subscribe?t=1&i=' + i"
                 v-if="it.expired"
                 class="ml-3"
                 >Renewal</e-link
-              >
+              > -->
             </div>
           </v-col>
         </v-row>
