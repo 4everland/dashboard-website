@@ -285,7 +285,7 @@ export default {
         );
         if (data.voucherType == 0)
           throw new Error(
-            "Unavailable! This is a resource voucher, please enter a  gift voucher code."
+            "Unavailable! This is a  gift voucher, please enter a resource voucher code."
           );
         this.validStatus = 2;
 
@@ -300,7 +300,7 @@ export default {
           if (item == "expiredTime") {
             result.push({
               label: "Expiry Date",
-              value: new Date(data[item] * 1000).format(),
+              value: new Date(data[item] * 1000).format("date"),
             });
           }
         }
@@ -379,7 +379,9 @@ export default {
             it.resource +
             " " +
             it.size +
-            (ipfsExpire ? " until " + new Date(ipfsExpire * 1000).format() : "")
+            (ipfsExpire
+              ? " until " + new Date(ipfsExpire * 1000).format("date")
+              : "")
           );
         }
         return it.resource + " " + it.size;

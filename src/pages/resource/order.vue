@@ -137,7 +137,7 @@ export default {
     }),
     finalPrice() {
       return this.totalPrice - this.AmountofDeduction >= 0
-        ? this.$utils.cutFixed(this.totalPrice - this.AmountofDeduction, 4)
+        ? (this.totalPrice - this.AmountofDeduction).toFixed(4)
         : "0.00";
     },
   },
@@ -243,7 +243,7 @@ export default {
         this.validStatus = 2;
         this.statusText[2] = `Available! Expires: ${new Date(
           data.expiredTime * 1000
-        ).format()}`;
+        ).format("date")}`;
       } catch (error) {
         console.log(error);
         this.validStatus = 3;
