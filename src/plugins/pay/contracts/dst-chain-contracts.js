@@ -12,9 +12,10 @@ import {
   BandwidthController__factory,
   BuildingTimeController__factory,
   IPFSStorageController__factory,
-  DstChainPayment__factory,
+  // DstChainPayment__factory,
+  DstChainPaymentV2__factory,
   SafeWallet__factory,
-} from "4everland-contracts";
+} from "@4everland/service-contracts";
 
 import {
   MumbaiRouter,
@@ -80,7 +81,10 @@ class DstChainContracts extends Contracts {
   }
 
   get DstChainPayment() {
-    return DstChainPayment__factory.connect(MumbaiDstChainPayment, this.signer);
+    return DstChainPaymentV2__factory.connect(
+      MumbaiDstChainPayment,
+      this.signer
+    );
   }
 
   get ARStorageController() {

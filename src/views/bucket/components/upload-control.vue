@@ -510,7 +510,6 @@ export default {
       background: #5eb1ff;
     }
   }
-  overflow: scroll;
   .file {
     position: relative;
     z-index: 2;
