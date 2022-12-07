@@ -6,6 +6,7 @@
 
 <template>
   <div>
+    <overview-notice class="mb-4" />
     <v-carousel
       hide-delimiter-background
       :interval="5000"
