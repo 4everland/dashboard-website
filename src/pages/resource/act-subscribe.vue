@@ -68,13 +68,7 @@
               v-if="it.key == 'ipfs'"
             >
               <span class="color-1 fz-18">
-                {{
-                  !it.expireTime && !ipfsTime
-                    ? "-"
-                    : new Date(it.expireTime * 1e3 + ipfsTime * 1e3).format(
-                        "date"
-                      )
-                }}
+                {{ ipfsExpireDate }}
               </span>
             </e-kv>
           </div>
@@ -289,6 +283,13 @@ export default {
     ipfsExpired() {
       return this.usageInfo.ipfsExpired;
     },
+    ipfsExpireDate() {
+      if (this.ipfsExpired && !this.ipfsTime) return "-";
+      const baseTime = this.ipfsExpired
+        ? Date.now()
+        : this.usageInfo.ipfsStorageExpired * 1e3;
+      return new Date(baseTime + this.ipfsTime * 1e3).format("date");
+    },
   },
   watch: {
     scrollTop(val) {
@@ -326,6 +327,14 @@ export default {
       this.getPrice(it.id, e.val);
     },
     onSubmit() {
+      if (this.ipfsExpired) {
+        if (this.form.ipfs || this.ipfsTime) {
+          if (!this.form.ipfs || !this.ipfsTime)
+            return this.$alert(
+              "First time purchase of IPFS resources requires selection of storage  and duration."
+            );
+        }
+      }
       if (this.totalPrice < 0.01) {
         return this.$alert(
           `Configuration costs cannot be less than 0.01 USDC.`
