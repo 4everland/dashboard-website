@@ -48,7 +48,7 @@
             v-model="voucherCode"
             outlined
             dense
-            :disabled="AmountofDeduction"
+            :disabled="AmountofDeduction > 0"
             placeholder="Enter the voucher code"
           >
           </v-text-field>
@@ -218,7 +218,9 @@ export default {
         this.addHash(tx, this.totalPrice);
         console.log("receipt", receipt);
         this.$loading.close();
-        await this.$alert("Purchased successfully");
+        await this.$alert(
+          "Successful transaction! The resource release time is based on on-chain data."
+        );
         this.$router.replace("/resource/bills");
         localStorage.orderInfo = "";
       } catch (error) {
@@ -239,13 +241,18 @@ export default {
           }
         );
         this.AmountofDeduction = JSON.parse(data.voucherLimit).USDC;
+        if (data.voucherType == 1) {
+          throw new Error(
+            "Unavailable! This is a resource voucher, please enter a gift voucher code."
+          );
+        }
         this.resourceResource = data;
         this.validStatus = 2;
         this.statusText[2] = `Available! Expires: ${new Date(
           data.expiredTime * 1000
         ).format("date")}`;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         this.validStatus = 3;
         this.statusText[3] = error.message;
       }

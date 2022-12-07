@@ -183,7 +183,9 @@ export default {
         // balance = await target.balanceOf(this.providerAddr, this.uuid);
         // console.log("balance2", balance.toString());
         this.$loading.close();
-        await this.$alert("Your deposit was successful.");
+        await this.$alert(
+          "Successful transaction! The resource release time is based on on-chain data."
+        );
         this.$navTo("/resource/bills");
       } catch (error) {
         this.onErr(error);

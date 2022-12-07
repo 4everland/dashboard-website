@@ -37,7 +37,7 @@
               Billing Details
             </v-btn>
             <span class="gray">|</span>
-            <v-btn plain color="#444" @click="showVoucher = true">
+            <v-btn plain color="#444" @click="handleResourceAirDrop">
               Resource Airdrop
             </v-btn>
           </div>
@@ -189,6 +189,16 @@ export default {
       claimLoading: false,
     };
   },
+  props: {
+    usageInfo: {
+      type: Object,
+      default: () => {
+        return {
+          ipfsExpired: true,
+        };
+      },
+    },
+  },
   computed: {
     isChanged() {
       let res = false;
@@ -268,6 +278,22 @@ export default {
         console.log(error);
       }
       this.autoLoading = false;
+    },
+    async handleResourceAirDrop() {
+      if (this.usageInfo.ipfsExpired) {
+        return this.$confirm(
+          "There are currently no IPFS resources available to you. Please claim your new user reward at Reward Hub or purchase resources at Resource.",
+          "Tips",
+          {
+            confirmText: "Go Claim",
+            cancelText: "Cancel",
+          }
+        ).then(() => {
+          this.$router.push("/reward-hub");
+        });
+      } else {
+        this.showVoucher = true;
+      }
     },
     async handleCommit() {
       this.openPanels = 1;
