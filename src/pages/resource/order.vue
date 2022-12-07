@@ -193,7 +193,6 @@ export default {
             totalFee = totalFee.div(1e12);
           }
           console.log("totalFee", totalFee.toString());
-          // console.log(params);
           const feeMsg = await target.calcFee(...params);
           // console.log("feeMsg", feeMsg.toString());
           params.push({
