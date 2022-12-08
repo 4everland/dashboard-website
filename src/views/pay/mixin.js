@@ -130,7 +130,9 @@ export default {
       if (!err) return console.log("---- err null");
       console.log(err);
       const { data } = err;
+      console.log(data);
       let msg = err.message;
+      console.log(msg);
       if (data) {
         msg = data.message || msg;
       }
@@ -139,6 +141,8 @@ export default {
       }
       if (/missing revert data/i.test(msg)) {
         msg = "Network Error";
+      } else if (/transaction failed/i.test(msg)) {
+        msg = "Transaction Failed";
       } else if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
         msg = "IPFS Storage Expired, extending service duration is required.";
       } else if (/exceeds balance/i.test(msg)) {

@@ -220,10 +220,16 @@ export default {
         await this.$alert(
           "Successful transaction! The resource release time is based on on-chain data."
         );
-        this.$router.replace("/resource/bills");
+        this.$router.replace({
+          path: "/resource/bills",
+          query: {
+            typeIdx: this.isPolygon ? 0 : 1,
+          },
+        });
         localStorage.orderInfo = "";
       } catch (error) {
         console.log("pay submit error");
+        this.$loading.close();
         this.onErr(error);
       }
     },

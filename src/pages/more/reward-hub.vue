@@ -277,7 +277,7 @@ export default {
       } else if (type == "OPEN_TELEGRAM_WIDGET") {
         this.onTg();
       } else if (type == "SHARE_ON_TWITTER") {
-        window.open(`https://twitter.com/intent/tweet?text=${stepValue}`);
+        window.open(`https://twitter.com/intent/tweet?text=${val}`);
         this.onRefresh(it);
       }
     },
@@ -306,7 +306,7 @@ export default {
         this.list = data.item.map((it) => {
           if (it.status == "DONE") {
             it.isDone = true;
-            it.statusName = "Done";
+            // it.statusName = "Done";
           }
           return it;
         });

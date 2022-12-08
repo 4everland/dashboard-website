@@ -184,9 +184,15 @@ export default {
         // console.log("balance2", balance.toString());
         this.$loading.close();
         await this.$alert(
-          "Successful transaction! The resource release time is based on on-chain data."
+          "Successful transaction! The arrival time of the amount is subject to the transaction on-chain data."
         );
-        this.$navTo("/resource/bills");
+        // this.$navTo("/resource/bills/?typeIdx=1");
+        this.$router.replace({
+          path: "/resource/bills",
+          query: {
+            typeIdx: this.isPolygon ? 0 : 1,
+          },
+        });
       } catch (error) {
         this.onErr(error);
       }
