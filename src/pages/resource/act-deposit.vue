@@ -121,7 +121,9 @@ export default {
         console.log(curAmountDecimals);
         curAmountDecimals = parseInt(curAmountDecimals);
         const nonce = Date.now();
-        const maxSlippage = this.getMaxSlippage(curAmountDecimals);
+        const maxSlippage = this.isPolygon
+          ? ""
+          : this.getMaxSlippage(curAmountDecimals);
         if (!target) {
           return this.onConnect();
         }
@@ -200,7 +202,7 @@ export default {
     async getMaxSlippage(curAmountDecimals) {
       try {
         const { data } = await this.$http2.post("/api/celer/estimate/amount", {
-          src_chain_id: "1",
+          src_chain_id: this.isEth ? "1" : "56",
           dst_chain_id: "137",
           token_symbol: "USDC",
           amount: this.curAmount * Math.pow(10, curAmountDecimals),

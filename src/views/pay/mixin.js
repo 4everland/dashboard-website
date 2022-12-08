@@ -169,7 +169,13 @@ export default {
       const num = await this.curContract[this.usdcKey].balanceOf(
         this.connectAddr
       );
-      this.walletBalance = this.$utils.cutFixed(num / 1e6, 4);
+      // console.log(num.toNumber());
+      let curAmountDecimals = await this.curContract[this.usdcKey].decimals();
+      curAmountDecimals = curAmountDecimals.toNumber();
+      this.walletBalance = this.$utils.cutFixed(
+        num / 10 ** curAmountDecimals,
+        4
+      );
       // console.log(this.walletBalance);
       this.$loading.close();
     },
