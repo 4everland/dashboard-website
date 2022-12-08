@@ -27,6 +27,8 @@ import {
   ExchangeCode,
   ConnectMetaMask,
   SignMetaMask,
+  ConnectOkx,
+  SignOkx,
   ConnectPhantom,
   SignPhantom,
   ConnectFlow,
@@ -45,6 +47,11 @@ export default {
           name: "MetaMask",
           icon: require("@/assets/imgs/metamask.png"),
           btnText: "Popular",
+        },
+        {
+          name: "OKX",
+          icon: require("@/assets/imgs/okx.png"),
+          btnText: "OKX",
         },
         {
           name: "Phantom",
@@ -88,6 +95,9 @@ export default {
         case "MetaMask":
           this.metaMaskConnect();
           break;
+        case "OKX":
+          this.okxConnect();
+          break;
         case "Phantom":
           this.phantomConnect();
           break;
@@ -107,7 +117,21 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignMetaMask(accounts, nonce, this.inviteCode);
+      const stoken = await SignMetaMask(accounts[0], nonce, this.inviteCode);
+      if (stoken) {
+        this.ssoLogin(stoken);
+      }
+    },
+    async okxConnect() {
+      const accounts = await ConnectOkx();
+      if (!accounts) {
+        return;
+      }
+      const nonce = await ExchangeCode(accounts[0]);
+      if (!nonce) {
+        return;
+      }
+      const stoken = await SignOkx(accounts[0], nonce, this.inviteCode);
       if (stoken) {
         this.ssoLogin(stoken);
       }

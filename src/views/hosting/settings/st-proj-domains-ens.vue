@@ -130,7 +130,12 @@ export default {
   computed: {
     ...mapState({
       connectAddr: (s) => s.connectAddr,
+      userInfo: (s) => s.userInfo,
     }),
+    walletObj() {
+      const { walletType } = this.userInfo.wallet || {};
+      return walletType == "OKX" ? window.okxwallet : window.ethereum;
+    },
   },
   watch: {
     connectAddr(val) {
@@ -151,7 +156,7 @@ export default {
         this.info = data;
         if (data.ens != "") {
           this.domain = data.ens;
-          const chainId = window.ethereum.chainId;
+          const chainId = this.walletObj.chainId;
           if (chainId != "0x1") {
             return;
           }
@@ -196,7 +201,7 @@ export default {
       this.$loading.close();
     },
     checkNet() {
-      const chainId = window.ethereum.chainId;
+      const chainId = this.walletObj.chainId;
       if (!chainId) return false;
       let msg = "";
       if (chainId != "0x1") {
