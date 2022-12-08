@@ -95,5 +95,8 @@ export default {
       overflow: scroll;
     }
   }
+  .control-body::-webkit-scrollbar {
+    display: none;
+  }
 }
 </style>

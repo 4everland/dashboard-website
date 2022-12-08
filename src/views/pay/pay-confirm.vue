@@ -4,10 +4,17 @@
     style="background: #fff5eb"
   >
     <div class="al-c">
-      <span class="fz-14 gray-6">{{ label }}:</span>
-      <slot></slot>
-      <b class="red-1 fz-25 ml-3">{{ price }}</b>
-      <span class="gray-6 ml-2 fz-15">USDC</span>
+      <div class="amount-content">
+        <div class="detail">
+          <slot name="detail"></slot>
+        </div>
+        <div class="al-c amount">
+          <span class="fz-14 gray-6 label">{{ label }}:</span>
+          <slot></slot>
+          <span class="fz-25 ml-3">{{ price }}</span>
+          <span class="gray-6 ml-2 fz-15">USDC</span>
+        </div>
+      </div>
       <v-btn
         color="error"
         depressed
@@ -38,3 +45,20 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.label {
+  display: inline-block;
+  min-width: 130px;
+  text-align: right;
+}
+.amount-content {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.amount {
+  color: #000;
+}
+.detail:empty + .amount {
+  color: #ff6960 !important;
+}
+</style>

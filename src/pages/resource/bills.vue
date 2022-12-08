@@ -183,6 +183,10 @@ export default {
       this.getList();
     },
   },
+  created() {
+    const { typeIdx = 0 } = this.$route.query;
+    this.typeIdx = typeIdx * 1;
+  },
   mounted() {
     this.getList();
   },

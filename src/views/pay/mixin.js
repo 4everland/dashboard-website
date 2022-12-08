@@ -6,6 +6,8 @@ import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
 // import client from "../../plugins/pay/contracts/SGNClient";
 import {
   MumbaiFundPool,
+  ChapelRecharge,
+  GoerliRecharge,
   providerAddr,
 } from "../../plugins/pay/contracts/contracts-addr";
 
@@ -40,6 +42,9 @@ export default {
     isBSC() {
       return this.payBy == "BSC";
     },
+    isEth() {
+      return this.payBy == "Ethereum";
+    },
     payChainId() {
       return this.getChainId(this.payBy);
     },
@@ -52,6 +57,17 @@ export default {
     payAddr() {
       if (!this.curContract) return "";
       return this.curContract[this.chainKey].address;
+    },
+    rechargeAddr() {
+      let addrList = [
+        { addr: GoerliRecharge, chainIdArr: [1, 5] },
+        { addr: MumbaiFundPool, chainIdArr: [137, 80001] },
+        { addr: ChapelRecharge, chainIdArr: [56, 97] },
+      ];
+      const addrItem = addrList.find((it) =>
+        it.chainIdArr.includes(this.chainId)
+      );
+      return addrItem.addr;
     },
   },
   watch: {
@@ -114,7 +130,9 @@ export default {
       if (!err) return console.log("---- err null");
       console.log(err);
       const { data } = err;
+      console.log(data);
       let msg = err.message;
+      console.log(msg);
       if (data) {
         msg = data.message || msg;
       }
@@ -123,6 +141,8 @@ export default {
       }
       if (/missing revert data/i.test(msg)) {
         msg = "Network Error";
+      } else if (/transaction failed/i.test(msg)) {
+        msg = "Transaction Failed";
       } else if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
         msg = "IPFS Storage Expired, extending service duration is required.";
       } else if (/exceeds balance/i.test(msg)) {
@@ -146,13 +166,16 @@ export default {
     },
     async getWalletBalance() {
       this.$loading();
-      const num = await this.curContract.MumbaiUSDC.balanceOf(this.connectAddr);
+      const num = await this.curContract[this.usdcKey].balanceOf(
+        this.connectAddr
+      );
       this.walletBalance = this.$utils.cutFixed(num / 1e6, 4);
       // console.log(this.walletBalance);
       this.$loading.close();
     },
     async checkAccount() {
       console.log("check account...");
+      console.log(this.providerAddr, this.uuid);
       const uuidRegistered =
         await this.curContract.ProviderController.accountExists(
           this.providerAddr,
@@ -164,14 +187,16 @@ export default {
       }
     },
     async checkApprove(isBuy) {
+      console.log(isBuy);
       try {
-        const addr = isBuy ? this.payAddr : MumbaiFundPool;
+        const addr = isBuy ? this.payAddr : this.rechargeAddr;
         console.log("check approve", this.connectAddr, addr);
         if (!this.connectAddr) return console.log("no connectAddr");
         const allowance = await this.curContract[this.usdcKey].allowance(
           this.connectAddr,
           addr
         );
+        console.log(allowance);
         const minAllowance = uint256Max.shr(1);
         this.isApproved = !allowance.lt(minAllowance);
         console.log("isApproved", this.isApproved, allowance);
@@ -184,7 +209,7 @@ export default {
       try {
         this.$loading("Approving");
         // this.approving = true;
-        const addr = isBuy ? this.payAddr : MumbaiFundPool;
+        const addr = isBuy ? this.payAddr : this.rechargeAddr;
         console.log("approve", addr, this.usdcKey);
         const tx = await this.curContract[this.usdcKey].approve(
           addr,
@@ -224,7 +249,7 @@ export default {
           chainId,
           chainName: "Polygon Mainnet",
           rpcUrls: [
-            "https://rpc-mainnet.matic.quiknode.pro",
+            "https://rpc.ankr.com/polygon",
             // "https://polygon-rpc.com",
           ],
           nativeCurrency: {
@@ -248,10 +273,10 @@ export default {
         80001: {
           chainId,
           chainName: "polygon mumbai",
-          rpcUrls: ["https://polygontestapi.terminet.io/rpc"],
+          rpcUrls: ["https://rpc.ankr.com/polygon_mumbai"],
           nativeCurrency: {
             name: "matic Coin",
-            symbol: "matic",
+            symbol: "MATIC",
             decimals: 18,
           },
           // blockExplorerUrls: [],
@@ -259,10 +284,10 @@ export default {
         97: {
           chainId,
           chainName: "BSC Chapel",
-          rpcUrls: ["https://data-seed-prebsc-2-s1.binance.org:8545/"],
+          rpcUrls: ["https://bsc-testnet.public.blastapi.io"],
           nativeCurrency: {
             name: "BNB Coin",
-            symbol: "BNB",
+            symbol: "tBNB",
             decimals: 18,
           },
           // blockExplorerUrls: [],
@@ -285,6 +310,7 @@ export default {
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
+        console.log(res);
         if (res && res.error) {
           throw new Error(res.error);
         }
@@ -318,6 +344,11 @@ export default {
       const id = this.getChainId(payBy);
       await this.switchNet(id);
     },
+    async switchMatchNet(payBy) {
+      const id = this.getChainId(payBy);
+      await this.switchNet(id);
+    },
+
     async onConnect() {
       // this.walletChanged(true);
       try {
@@ -343,7 +374,7 @@ export default {
           ethContract.setProvider(provider);
           this.curContract = ethContract;
         }
-        console.log(this.payBy, this.curContract);
+        // console.log(this.payBy, this.curContract);
         // this.getSign();
         this.checkApprove(this.isSubscribe);
       } catch (error) {

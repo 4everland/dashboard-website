@@ -34,7 +34,7 @@
         </v-list-item-group>
       </v-list>
     </e-menu>
-    <span v-else>
+    <span class="ml-3 fz-13" v-else>
       {{ unit }}
     </span>
   </div>
