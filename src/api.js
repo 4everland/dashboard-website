@@ -28,7 +28,9 @@ const ipnsApi = inDev
   ? "https://ipns.foreverland.xyz"
   : "https://ipns-api.4everland.org";
 
-const resourceApi = inDev ? "https://rewardhub.foreverland.xyz" : "";
+const resourceApi = inDev
+  ? "https://rewardhub.foreverland.xyz"
+  : "https://api.4everland.org";
 Vue.prototype.$endpoint = endpoint;
 
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
