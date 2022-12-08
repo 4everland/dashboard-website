@@ -18,6 +18,7 @@ import {
   GoerliRpc,
   GoerliBridge,
   GoerliUSDC,
+  GoerliRecharge,
   MumbaiProviderController,
   GoerliSrcChainPayment,
   MumbaiDstChainPayment,
@@ -27,7 +28,6 @@ import {
   MumbaiBuildingTimeController,
   MumbaiIPFSStorageController,
 } from "./contracts-addr";
-import { GoerliRecharge } from "./addr-dev";
 
 class SrcChainContracts extends Contracts {
   dstProvider = null;

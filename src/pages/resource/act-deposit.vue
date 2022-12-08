@@ -45,6 +45,7 @@
 import PayNetwork from "@/views/pay/pay-network";
 import PayConfirm from "@/views/pay/pay-confirm";
 import mixin from "@/views/pay/mixin";
+import { BigNumber } from "@ethersproject/bignumber";
 
 export default {
   mixins: [mixin],
@@ -152,10 +153,11 @@ export default {
         } else {
           const fee = await target.calcFee(this.providerAddr, this.uuid);
           const token = await target.token();
-
           let minAmount = await this.curContract.Bridge.minSend(token);
-          minAmount = minAmount.div(10 ** curAmountDecimals).toNumber();
           console.log(curAmountDecimals);
+          // minAmount = minAmount.div(10 ** curAmountDecimals).toNumber();
+          minAmount = minAmount / 10 ** curAmountDecimals;
+
           console.log(minAmount);
           if (num <= minAmount) {
             this.$loading.close();
@@ -172,7 +174,7 @@ export default {
           tx = await target.recharge(
             this.providerAddr,
             this.uuid,
-            num * Math.pow(10, curAmountDecimals),
+            num * 10 ** curAmountDecimals + "",
             nonce,
             maxSlippage,
             { value: fee }
@@ -196,11 +198,15 @@ export default {
           },
         });
       } catch (error) {
+        console.log(error);
         this.onErr(error);
       }
     },
     async getMaxSlippage(curAmountDecimals) {
       try {
+        if (this.$inDev) {
+          return 40000;
+        }
         const { data } = await this.$http2.post("/api/celer/estimate/amount", {
           src_chain_id: this.isEth ? "1" : "56",
           dst_chain_id: "137",
@@ -210,12 +216,14 @@ export default {
           slippage_tolerance: 3000,
         });
         // console.log(data);
+        console.log(data);
+
         if (data.err) {
           throw new Error(data.err.message);
         }
-        return this.$inDev ? 40000 : data.max_slippage;
+        return data.max_slippage;
       } catch (error) {
-        console.log(error);
+        console.log(error, "======");
       }
     },
   },

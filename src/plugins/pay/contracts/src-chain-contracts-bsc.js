@@ -20,6 +20,7 @@ import {
   ChapelBridge,
   ChapelSrcChainPayment,
   ChapelUSDC,
+  ChapelRecharge,
   MumbaiProviderController,
   MumbaiDstChainPayment,
   MumbaiResourcePriceAdaptor,
@@ -29,7 +30,7 @@ import {
   MumbaiIPFSStorageController,
 } from "./contracts-addr";
 
-import { ChapelRecharge } from "./addr-dev";
+// import {  } from "./addr-dev";
 
 class SrcChainContracts extends Contracts {
   dstProvider = null;

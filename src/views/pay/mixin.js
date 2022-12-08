@@ -128,11 +128,11 @@ export default {
     },
     onErr(err, retry) {
       if (!err) return console.log("---- err null");
-      console.log(err);
+      // console.log(err);
       const { data } = err;
-      console.log(data);
+      // console.log(data);
       let msg = err.message;
-      console.log(msg);
+      // console.log(msg);
       if (data) {
         msg = data.message || msg;
       }
@@ -268,7 +268,7 @@ export default {
         56: {
           chainId,
           chainName: "BSC Mainnet",
-          rpcUrls: ["https://bsc-dataseed1.binance.org"],
+          rpcUrls: ["https://rpc.ankr.com/bsc"],
           nativeCurrency: {
             name: "Binance Coin",
             symbol: "BNB",
