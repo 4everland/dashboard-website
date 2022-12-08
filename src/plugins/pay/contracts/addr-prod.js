@@ -7,12 +7,14 @@ export const GoerliUSDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
 export const GoerliBridge = "0x5427FEFA711Eff984124bFBB1AB6fbf5E3DA1820";
 export const GoerliSrcChainPayment =
   "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
+export const GoerliRecharge = "0x81fd435639bb3aB23711c9C03f60a2167634025e";
 
 // src chain bsc
 export const ChapelUSDC = "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d";
 export const ChapelBridge = "0xdd90E5E87A2081Dcf0391920868eBc2FFB81a1aF";
 export const ChapelSrcChainPayment =
   "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
+export const ChapelRecharge = "0x6Eb2E3b63Df577401eE6f926fFD30580021FE222";
 
 // dst chain
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";
