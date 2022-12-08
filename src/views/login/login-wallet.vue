@@ -52,7 +52,7 @@ export default {
           btnText: "Solana",
         },
         {
-          name: "Lilico",
+          name: "Flow",
           icon: require("@/assets/imgs/flow.svg"),
           btnText: "Flow",
         },
