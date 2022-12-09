@@ -5,6 +5,7 @@ import VueClipboards from "vue-clipboards";
 import router from "./router";
 import { CID } from "multiformats/cid";
 import frameworks from "./plugins/config/frameworks";
+import * as clipboard from "clipboard-polyfill/text";
 
 Vue.use(VueClipboards);
 
@@ -17,6 +18,15 @@ Vue.prototype.$sleep = (msec = 300) => {
       resolve();
     }, msec);
   });
+};
+
+Vue.prototype.$copy = async (text, tip = "Copied to clipboard !") => {
+  try {
+    await clipboard.writeText(text);
+    Vue.prototype.$toast(tip);
+  } catch (error) {
+    Vue.prototype.$toast("Copied fail !");
+  }
 };
 
 Vue.prototype.$navTo = (url) => {
