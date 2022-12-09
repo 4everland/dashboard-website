@@ -25,13 +25,9 @@ export const ExchangeCode = async (accounts) => {
   return res.data.data.nonce;
 };
 
-export const Web3Login = async (accounts, body) => {
-  const res = await axios.post(`${authApi}/web3login/${accounts}`, body);
-  const { stoken } = res.data.data;
-  console.log(stoken);
-  const { data } = await axios.post(`${authApi}/st/${stoken}`);
-  Vue.prototype.$onLoginData(data);
-  return stoken;
+export const Web3Login = async (accounts, data) => {
+  const res = await axios.post(`${authApi}/web3login/${accounts}`, data);
+  return res.data.data.stoken;
 };
 
 export const ConnectMetaMask = async () => {
