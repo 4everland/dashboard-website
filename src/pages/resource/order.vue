@@ -38,7 +38,7 @@
       automatically cross-chain to Polygon. To prevent insufficient gas fees,
       maintaining a minimum payment amount of 20U is required.
     </div>
-    <h3 class="mt-10">Redeem a gift vouche</h3>
+    <h3 class="mt-10">Redeem a Credit</h3>
     <v-row>
       <v-col sm="8" cols="12" class="d-flex al-start">
         <div class="flex-1">
@@ -49,7 +49,7 @@
             outlined
             dense
             :disabled="AmountofDeduction > 0"
-            placeholder="Enter the voucher code"
+            placeholder="Enter the credit code"
           >
           </v-text-field>
           <decode-status
@@ -67,7 +67,7 @@
           :disabled="disabled"
           tile
           @click="handleCommit"
-          >Commit</v-btn
+          >Confirm</v-btn
         >
         <v-btn
           v-else
@@ -90,7 +90,7 @@
     >
       <template #detail v-if="AmountofDeduction">
         <div>
-          <span class="fz-14 gray-6 label">Gift Voucher:</span>
+          <span class="fz-14 gray-6 label">Credit:</span>
           <span class="black-1 fz-25 ml-3">-{{ AmountofDeduction }}</span>
           <span class="gray-6 ml-2 fz-15">USDC</span>
         </div>
@@ -248,7 +248,7 @@ export default {
         this.AmountofDeduction = JSON.parse(data.voucherLimit).USDC;
         if (data.voucherType == 1) {
           throw new Error(
-            "Unavailable! This is a resource voucher, please enter a gift voucher code."
+            "Unavailable! This is a resource voucher, please enter a credit code."
           );
         }
         this.resourceResource = data;

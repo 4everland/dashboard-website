@@ -40,7 +40,7 @@
           <span>{{ info.cost }}</span>
           <span class="gray-7 ml-2">USDC</span>
         </e-kv>
-        <e-kv v-if="info.voucherInfo" class="flex-2 ml-2" label="Gift Voucher">
+        <e-kv v-if="info.voucherInfo" class="flex-2 ml-2" label="Credit">
           <span>{{ info.voucherInfo }}</span>
           <span class="gray-7 ml-2">USDC</span>
         </e-kv>
