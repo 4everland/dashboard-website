@@ -38,7 +38,7 @@
             </v-btn>
             <span class="gray">|</span>
             <v-btn plain color="#444" @click="handleResourceAirDrop">
-              Resource Airdrop
+              Resource Vouchers
             </v-btn>
           </div>
           <div class="mt-9 pb-2 al-c hide-msg">
@@ -110,7 +110,7 @@
             v-if="!disabled"
             @click="handleCommit"
           >
-            Commit
+            Confirm
           </span>
           <span class="fz-14 bg-hover-f9 commit" v-else @click="handleCancel">
             Cancel
@@ -311,7 +311,7 @@ export default {
         );
         if (data.voucherType == 0)
           throw new Error(
-            "Unavailable! This is a  gift voucher, please enter a resource voucher code."
+            "Unavailable! This is a credit code, please enter a resource voucher code."
           );
         this.validStatus = 2;
 

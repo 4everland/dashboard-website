@@ -39,8 +39,7 @@
           class="mt-6"
           v-for="(it, i) in infoList"
           :key="i"
-          v-clipboard="it.value"
-          @success="$toast(it.label + ' copied to clipboard !')"
+          @click="$copy(it.value)"
         >
           <p>{{ it.label }}</p>
           <div class="pd-10 bd-1 bdrs-3 mt-3 d-flex al-c hover-1">
