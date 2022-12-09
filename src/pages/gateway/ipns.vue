@@ -158,7 +158,12 @@ export default {
   computed: {
     ...mapState({
       connectAddr: (s) => s.connectAddr,
+      userInfo: (s) => s.userInfo,
     }),
+    walletObj() {
+      const { walletType } = this.userInfo.wallet || {};
+      return walletType == "OKX" ? window.okxwallet : window.ethereum;
+    },
   },
   mounted() {
     this.getList();
@@ -305,7 +310,7 @@ export default {
       if (e) this.$alert(e.message);
     },
     async getEnsIpns(domain) {
-      const chainId = window.ethereum.chainId;
+      const chainId = this.walletObj.chainId;
       if (chainId !== "0x1") return undefined;
 
       try {
@@ -383,7 +388,7 @@ export default {
       }
     },
     checkNet() {
-      const chainId = window.ethereum.chainId;
+      const chainId = this.walletObj.chainId;
       if (!chainId) return false;
       let msg = "";
       // if (chainId != "0x1" && chainId != "0x5") {
