@@ -1,5 +1,6 @@
 <template>
   <div class="hide-msg">
+    <button @click="handleClick">test</button>
     <e-kv label="Account Balance" min-width="120px" center>
       <span class="fz-18">{{ balance === null ? "--" : balance }}</span>
       <span class="gray-6 fz-13 ml-1">USDC</span>
@@ -82,6 +83,9 @@ export default {
     },
   },
   methods: {
+    handleClick() {
+      console.log(BigNumber.from(20 ** 10));
+    },
     async onMax() {
       if (!this.curContract) {
         this.showConnect();
@@ -171,10 +175,11 @@ export default {
               `Your deposit amount cannot be less than ${minAmount} USDC due to the ${isEthOrBsc} network restrictions.`
             );
           }
+          const amount = BigNumber.from(num * 10 ** curAmountDecimals);
           tx = await target.recharge(
             this.providerAddr,
             this.uuid,
-            num * 10 ** curAmountDecimals + "",
+            amount,
             nonce,
             maxSlippage,
             { value: fee }
