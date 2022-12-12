@@ -195,8 +195,13 @@ export default {
           console.log("totalFee", totalFee.toString());
           const feeMsg = await target.calcFee(...params);
           // console.log("feeMsg", feeMsg.toString());
+          let gas = await target.estimateGas.pay(...params);
+          // console.log(gas);
+          let gasPrice = await this.curContract.provider.getGasPrice();
           params.push({
             value: feeMsg,
+            gasLimit: gas.mul(12).div(10),
+            gasPrice: gasPrice.mul(12).div(10),
           });
           this.ethFeeInfo = {
             msgFee: this.$utils.cutFixed(feeMsg.toString() / 1e18, 4),
@@ -211,7 +216,6 @@ export default {
         console.log("pay", params, this.curContract[this.chainKey]);
         // let tx = await target.payV2(...params);
         let tx = await target.pay(...params);
-
         console.log("tx", tx);
         const receipt = await tx.wait(1);
         this.addHash(tx, this.totalPrice);
