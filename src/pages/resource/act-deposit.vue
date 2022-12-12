@@ -1,6 +1,5 @@
 <template>
   <div class="hide-msg">
-    <button @click="handleClick">test</button>
     <e-kv label="Account Balance" min-width="120px" center>
       <span class="fz-18">{{ balance === null ? "--" : balance }}</span>
       <span class="gray-6 fz-13 ml-1">USDC</span>
@@ -83,9 +82,6 @@ export default {
     },
   },
   methods: {
-    handleClick() {
-      console.log(BigNumber.from(20 ** 10));
-    },
     async onMax() {
       if (!this.curContract) {
         this.showConnect();
