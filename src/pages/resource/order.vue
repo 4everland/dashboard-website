@@ -194,9 +194,9 @@ export default {
           }
           console.log("totalFee", totalFee.toString());
           const feeMsg = await target.calcFee(...params);
-          // console.log("feeMsg", feeMsg.toString());
-          let gas = await target.estimateGas.pay(...params);
-          // console.log(gas);
+          console.log("feeMsg", feeMsg.toString());
+          let gas = await target.estimateGas.pay(...params, { value: feeMsg });
+          console.log("gas", gas);
           let gasPrice = await this.curContract.provider.getGasPrice();
           params.push({
             value: feeMsg,
