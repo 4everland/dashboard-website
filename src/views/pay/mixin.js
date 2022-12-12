@@ -404,7 +404,7 @@ export default {
       } catch (error) {
         console.log("on connect error");
         this.$alert(error.message).then(() => {
-          this.$router.push("/billing/usage");
+          location.reload();
         });
       }
     },
