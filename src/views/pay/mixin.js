@@ -314,13 +314,17 @@ export default {
         },
       }[id];
       if (!params) return;
-      await this.walletObj.request(
-        {
-          method: "wallet_addEthereumChain",
-          params: [params],
-        },
-        this.connectAddr
-      );
+      try {
+        await this.walletObj.request(
+          {
+            method: "wallet_addEthereumChain",
+            params: [params],
+          },
+          this.connectAddr
+        );
+      } catch (error) {
+        console.log("add chain err", error);
+      }
     },
     async switchNet(id) {
       try {
