@@ -274,7 +274,7 @@ export default {
           rpcUrls: ["https://rpc.ankr.com/eth_goerli"],
           nativeCurrency: {
             name: "Goerli-ETH",
-            symbol: "Goerli-ETH",
+            symbol: "G-ETH",
             decimals: 18,
           },
           blockExplorerUrls: ["https://goerli.etherscan.io/"],
