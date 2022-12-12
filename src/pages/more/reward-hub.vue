@@ -88,52 +88,7 @@
           ></v-skeleton-loader>
         </v-col>
       </v-row>
-
-      <!-- <v-data-table
-        :class="{ strip: list.length }"
-        :loading="loading"
-        :headers="headers"
-        :items="list"
-        hide-default-footer
-        disable-sort
-      >
-        <template v-slot:item.status="{ item }">
-          <v-btn
-            :color="getBtnColor(item)"
-            small
-            @click="onAct(item)"
-            depressed
-            width="80"
-            :disabled="item.isDone"
-            :loading="item.loading"
-          >
-            <span
-              :class="{
-                'white-0': !item.isDone,
-              }"
-            >
-              {{ item.statusName || "To do" }}
-            </span>
-          </v-btn>
-          <v-btn
-            :class="{
-              hidden: !(item.status == 'GOTO' || item.refreshing),
-            }"
-            :loading="item.refreshing"
-            icon
-            class="ml-2"
-            small
-            @click="onRefresh(item)"
-          >
-            <v-icon>mdi-refresh</v-icon>
-          </v-btn>
-        </template>
-      </v-data-table> -->
     </div>
-    <!-- <div class="resource-description fz-14">
-      Getting free resources by completing the following 7 tasks and resources
-      are valid for one year after completion of tasks.
-    </div> -->
   </div>
 </template>
 
@@ -265,7 +220,7 @@ export default {
           await this.registerForNew();
           if (!this.isRegister)
             return this.$alert(
-              "New user rewards are required for successful registration on the chain, please try later."
+              "New user rewards are based on successful registration on the chain, please try again after five minutes."
             );
         }
 
