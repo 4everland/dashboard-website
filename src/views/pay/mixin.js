@@ -269,6 +269,17 @@ export default {
           },
           blockExplorerUrls: ["https://polygonscan.com"],
         },
+        5: {
+          chainId,
+          chainName: "Goerli Testnet",
+          rpcUrls: ["https://rpc.ankr.com/eth_goerli"],
+          nativeCurrency: {
+            name: "Goerli-ETH",
+            symbol: "Goerli-ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://goerli.etherscan.io/"],
+        },
         56: {
           chainId,
           chainName: "BSC Mainnet",
