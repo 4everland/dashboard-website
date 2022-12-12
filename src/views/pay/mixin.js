@@ -253,7 +253,6 @@ export default {
       return this.$inDev ? 5 : 1;
     },
     async addChain(chainId, id) {
-      if (id <= 5) return;
       let params = {
         137: {
           chainId,
@@ -275,7 +274,7 @@ export default {
           rpcUrls: ["https://rpc.ankr.com/eth_goerli"],
           nativeCurrency: {
             name: "Goerli-ETH",
-            symbol: "Goerli-ETH",
+            symbol: "G-ETH",
             decimals: 18,
           },
           blockExplorerUrls: ["https://goerli.etherscan.io/"],
