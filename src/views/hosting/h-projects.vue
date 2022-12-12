@@ -250,6 +250,9 @@
         <div class="mt-10" v-if="!loading">
           <v-btn color="primary" to="/hosting/new">Create a New Project</v-btn>
         </div>
+        <v-btn color="primary" to="/hosting/newByHash"
+          >Create a project by cid</v-btn
+        >
       </div>
       <div class="mt-8" v-else-if="limit">
         <v-btn color="primary" outlined to="/hosting/projects">View More</v-btn>
@@ -466,7 +469,7 @@ export default {
         });
         this.total = total;
         if (!total) {
-          this.$router.replace("/hosting/new");
+          // this.$router.replace("/hosting/new");
         }
         if (list.length) {
           setTimeout(() => {
