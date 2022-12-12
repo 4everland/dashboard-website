@@ -185,6 +185,11 @@ export default {
     // Settings-Page
     StAccount: () => import("@/views/settings/st-account"),
     StGeneral: () => import("@/views/settings/st-general"),
+
+    // Gateway-detail
+    GatewaySettings: () => import("@/views/gateway/gateway-settings"),
+    GatewayAllowlists: () => import("@/views/gateway/gateway-allowlists"),
+    GatewayDomains: () => import("@/views/gateway/gateway-domains"),
   },
 };
 </script>

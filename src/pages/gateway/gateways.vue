@@ -47,6 +47,7 @@
           :headers="headers"
           :items="list"
           hide-default-footer
+          @click:row="onRow"
         >
           <template #item.name="{ item }">
             <span>{{ item.name }}.4everland.link</span>
@@ -168,6 +169,10 @@ export default {
         data: { balance },
       } = await this.$http.get("$v3/account/balance");
       this.balance = balance;
+    },
+    onRow(row) {
+      console.log(row);
+      this.$router.push(`/gateway/list/${row.name}`);
     },
   },
 };
