@@ -220,7 +220,8 @@ export default {
           await this.registerForNew();
           if (!this.isRegister)
             return this.$alert(
-              "New user rewards are based on successful registration on the chain, please try again after five minutes."
+              "New user rewards are based on successful registration on the chain, please try again after five minutes.",
+              "Tips"
             );
         }
 
