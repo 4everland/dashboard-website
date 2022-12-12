@@ -253,7 +253,6 @@ export default {
       return this.$inDev ? 5 : 1;
     },
     async addChain(chainId, id) {
-      if (id <= 5) return;
       let params = {
         137: {
           chainId,
