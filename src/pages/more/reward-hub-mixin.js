@@ -33,6 +33,9 @@ export default {
       );
     },
   },
+  created() {
+    // this.test();
+  },
   // watch: {
   //   uuid() {
   //     this.registerForNew();
@@ -69,5 +72,32 @@ export default {
         this.isRegister = false;
       }
     },
+    // async test() {
+    //   const provider = new providers.Web3Provider(window.ethereum);
+    //   console.log(this.chainNet);
+    //   if (this.chainNet == "polygon") {
+    //     console.log("polygon");
+    //     polygonContract.setProvider(provider);
+    //     this.curContract = polygonContract;
+    //   } else if (this.chainNet == "BSC") {
+    //     bscContract.setProvider(provider);
+    //     this.curContract = bscContract;
+    //   } else {
+    //     ethContract.setProvider(provider);
+    //     this.curContract = ethContract;
+    //   }
+    //   try {
+    //     this.isRegister =
+    //       await this.curContract.ProviderController.accountExists(
+    //         providerAddr,
+    //         // this.uuid,
+    //         "0xed9f92beac84439abd7514d2aedd58fe00000000000000000000000000000010"
+    //       );
+    //     console.log(this.isRegister, "test");
+    //   } catch (error) {
+    //     console.log(error);
+    //     this.isRegister = false;
+    //   }
+    // },
   },
 };

@@ -13,7 +13,11 @@ export default [
     path: "/gateway/list/:name",
     component: () => import("@/views/gateway/gateway-detail"),
     meta: {
-      title: "Gateway Detail",
+      // title: "Gateway Detail",
+      links: [
+        { text: "Dedicated Gateway", to: "/gateway/list" },
+        { text: "{name}" },
+      ],
     },
   },
   {

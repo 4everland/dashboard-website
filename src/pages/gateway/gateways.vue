@@ -172,7 +172,7 @@ export default {
     },
     onRow(row) {
       console.log(row);
-      this.$router.push(`/gateway/list/${row.name}`);
+      this.$router.push(`/gateway/list/${row.name}?tab=settings`);
     },
   },
 };
