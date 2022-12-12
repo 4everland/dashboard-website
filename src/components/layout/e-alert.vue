@@ -171,10 +171,10 @@ export default {
     },
     showAlert(val) {
       if (val) this.isComplete = false;
-      else if (!this.isComplete) {
-        const res = this.alertInfo.type == "alert" ? 1 : 0;
-        this.hideAlert(res);
-      }
+      // else if (!this.isComplete) {
+      //   const res = this.alertInfo.type == "alert" ? 1 : 0;
+      //   this.hideAlert(res);
+      // }
     },
   },
   created() {

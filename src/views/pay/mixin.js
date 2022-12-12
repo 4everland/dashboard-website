@@ -334,17 +334,17 @@ export default {
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
-        console.log(res);
+        console.log("switch err 1", res);
         if (res && res.error) {
           throw new Error(res.error);
         }
       } catch (error) {
-        console.log("switch net error");
-        this.onErr(error).then(() => {
-          if (error.code === 4902) {
-            this.switchNet(id);
-          }
-        });
+        console.log("switch error 2", error);
+        if (error.code !== 4902) {
+          this.onErr(error).then(() => {
+            // this.switchNet(id);
+          });
+        }
       }
     },
     addHash(tx, usdt, contentType = "Purchase") {
@@ -383,7 +383,7 @@ export default {
             if (this.isBSC) dev = "Chapel";
             dev = `(dev - ${dev})`;
           }
-          await this.$alert(`Please switch to ${this.payBy}${dev} Network`);
+          // await this.$alert(`Please switch to ${this.payBy}${dev} Network`);
           await this.switchNet(this.payChainId);
           return;
         }
