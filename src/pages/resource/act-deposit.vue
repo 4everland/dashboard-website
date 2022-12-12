@@ -155,10 +155,11 @@ export default {
               `Your deposit amount cannot be less than ${minAmount} USDC due to the ${isEthOrBsc} network restrictions.`
             );
           }
+          const amount = BigNumber.from(num * 10 ** curAmountDecimals);
           tx = await target.recharge(
             this.providerAddr,
             this.uuid,
-            num * 10 ** curAmountDecimals + "",
+            amount,
             nonce,
             maxSlippage,
             { value: fee }
