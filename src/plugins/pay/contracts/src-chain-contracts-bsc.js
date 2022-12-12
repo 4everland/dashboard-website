@@ -3,7 +3,6 @@ import Contracts from "./contracts";
 
 import {
   IERC20__factory,
-  SrcChainPayment__factory,
   SrcChainPaymentV2__factory,
   DstChainPaymentV2__factory,
   ResourcePriceAdaptor__factory,

@@ -66,7 +66,7 @@ export default {
       const github = info.github || {};
       const wArr = [];
       const noWallet = !info.wallet && !info.solana && !info.onFlow;
-      if (info.wallet.walletType == "METAMASK" || noWallet)
+      if (info.wallet?.walletType == "METAMASK" || noWallet)
         wArr.push({
           title: "MetaMask",
           desc: "Get verified by connecting your metamask account.",
@@ -74,7 +74,7 @@ export default {
           type: 2,
           account: (info.wallet || {}).address,
         });
-      if (info.wallet.walletType == "OKX" || noWallet)
+      if (info.wallet?.walletType == "OKX" || noWallet)
         wArr.push({
           title: "OKX",
           desc: "Get verified by connecting your OKX account.",
@@ -82,7 +82,7 @@ export default {
           type: 7,
           account: (info.wallet || {}).address,
         });
-      if (info.solana || info.wallet.walletType == "PHANTOM" || noWallet)
+      if (info.solana || info.wallet?.walletType == "PHANTOM" || noWallet)
         wArr.push({
           title: "Phantom",
           desc: "Get verified by connecting your phantom account.",
@@ -90,7 +90,7 @@ export default {
           type: 4,
           account: (info.solana || {}).address,
         });
-      if (info.onFlow || info.wallet.walletType == "ONFLOW" || noWallet)
+      if (info.onFlow || info.wallet?.walletType == "ONFLOW" || noWallet)
         wArr.push({
           title: "Flow",
           desc: "Get verified by connecting your flow account.",

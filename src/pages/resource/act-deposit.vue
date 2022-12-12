@@ -107,16 +107,11 @@ export default {
         return this.$alert(msg);
       }
       try {
-        // if (!this.isPolygon) {
-        //   return this.switchPolygon();
-        // }
-
         if (!this.curContract) {
           this.needSubmit = true;
           this.showConnect();
           return;
         }
-
         const target =
           this.usdcKey == "MumbaiUSDC"
             ? this.curContract.FundPool
@@ -137,16 +132,6 @@ export default {
         }
         this.$loading();
         await this.checkAccount();
-        // let balance = await target.balanceOf(this.providerAddr, this.uuid);
-        // console.log("balance1", balance.toString());
-
-        // const tx = await target.recharge(
-        //   this.providerAddr,
-        //   this.uuid,
-        //   num * Math.pow(10, curAmountDecimals),
-        //   this.usdcKey == "MumbaiUSDC" ? null : nonce,
-        //   this.usdcKey == "MumbaiUSDC" ? null : maxSlippage
-        // );
         let tx = null;
         if (this.usdcKey == "MumbaiUSDC") {
           tx = await target.recharge(
@@ -159,7 +144,6 @@ export default {
           const token = await target.token();
           let minAmount = await this.curContract.Bridge.minSend(token);
           console.log(curAmountDecimals);
-          // minAmount = minAmount.div(10 ** curAmountDecimals).toNumber();
           minAmount = minAmount / 10 ** curAmountDecimals;
 
           console.log(minAmount);
@@ -189,13 +173,10 @@ export default {
         const receipt = await tx.wait();
         console.log("receipt", receipt);
         this.addHash(tx, num, "Deposit");
-        // balance = await target.balanceOf(this.providerAddr, this.uuid);
-        // console.log("balance2", balance.toString());
         this.$loading.close();
         await this.$alert(
           "Successful transaction! The arrival time of the amount is subject to the transaction on-chain data."
         );
-        // this.$navTo("/resource/bills/?typeIdx=1");
         this.$router.replace({
           path: "/resource/bills",
           query: {

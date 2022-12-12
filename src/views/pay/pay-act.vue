@@ -29,15 +29,25 @@
             <v-btn color="primary" outlined class="ml-4" to="/resource/deposit"
               >Deposit</v-btn
             >
-            <v-btn plain color="#444" class="ml-2" to="/resource/withdraw">
+            <v-btn
+              plain
+              color="#0B0817"
+              class="ml-2 operation"
+              to="/resource/withdraw"
+            >
               Withdraw
             </v-btn>
             <span class="gray">|</span>
-            <v-btn plain color="#444" to="/resource/bills">
+            <v-btn plain color="#0B0817" class="operation" to="/resource/bills">
               Billing Details
             </v-btn>
             <span class="gray">|</span>
-            <v-btn plain color="#444" @click="handleResourceAirDrop">
+            <v-btn
+              plain
+              color="#0B0817"
+              class="operation"
+              @click="handleResourceAirDrop"
+            >
               Resource Vouchers
             </v-btn>
           </div>
@@ -437,6 +447,10 @@ export default {
 <style lang="scss">
 </style>
 <style lang="scss" scoped>
+::v-deep .operation {
+  font-weight: bold;
+  letter-spacing: 0;
+}
 .post-input ::v-deep .v-input__prepend-outer {
   margin: 0 !important;
   margin-right: 5px !important;
