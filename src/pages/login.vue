@@ -2,7 +2,7 @@
   <div class="page-login">
     <app-header />
     <v-container>
-      <v-row class="mt-16">
+      <v-row class="mt-8">
         <v-col cols="12" class="ma-auto">
           <div
             class="text-center text-h3 font-bold font-weight-bold ma-16"
