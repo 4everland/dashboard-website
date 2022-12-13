@@ -200,7 +200,7 @@ export default {
           let gasPrice = await this.curContract.provider.getGasPrice();
           params.push({
             value: feeMsg,
-            gasLimit: gas.mul(12).div(10),
+            gasLimit: gas.mul(15).div(10),
             gasPrice: gasPrice.mul(12).div(10),
           });
           this.ethFeeInfo = {

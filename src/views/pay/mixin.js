@@ -221,10 +221,14 @@ export default {
         // this.approving = true;
         const addr = isBuy ? this.payAddr : this.rechargeAddr;
         console.log("approve", addr, this.usdcKey);
-        const tx = await this.curContract[this.usdcKey].approve(
-          addr,
-          uint256Max
-        );
+        const target = this.curContract[this.usdcKey];
+        let gas = await target.estimateGas.approve(addr, uint256Max);
+        console.log("gas", gas);
+        let gasPrice = await this.curContract.provider.getGasPrice();
+        const tx = await target.approve(addr, uint256Max, {
+          gasLimit: gas.mul(15).div(10),
+          gasPrice: gasPrice.mul(12).div(10),
+        });
         console.log("tx", tx);
         const receipt = await tx.wait();
         console.log(receipt);

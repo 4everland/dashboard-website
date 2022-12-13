@@ -156,13 +156,27 @@ export default {
             );
           }
           const amount = BigNumber.from(num * 10 ** curAmountDecimals);
-          tx = await target.recharge(
+          let gas = await target.estimateGas.recharge(
             this.providerAddr,
             this.uuid,
             amount,
             nonce,
             maxSlippage,
             { value: fee }
+          );
+          console.log("gas", gas);
+          let gasPrice = await this.curContract.provider.getGasPrice();
+          tx = await target.recharge(
+            this.providerAddr,
+            this.uuid,
+            amount,
+            nonce,
+            maxSlippage,
+            {
+              value: fee,
+              gasLimit: gas.mul(15).div(10),
+              gasPrice: gasPrice.mul(12).div(10),
+            }
           );
         }
 
