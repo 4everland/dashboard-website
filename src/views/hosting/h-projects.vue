@@ -33,6 +33,27 @@
 }
 </style>
 
+<style lang="scss" scoped>
+.deploy {
+  width: 250px;
+  height: 270px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.ipfs-deploy {
+  padding: 30px 30px;
+  color: #775da6;
+  background: #f3effa;
+}
+.template-deploy {
+  padding: 40px 30px;
+  margin-left: 100px;
+  color: #3296fa;
+  background: #e7eff6;
+}
+</style>
+
 <template>
   <div class="projects">
     <e-right-opt-wrap>
@@ -58,10 +79,28 @@
           </v-list-item-group>
         </v-list>
       </e-menu>
-      <v-btn class="ml-5" color="primary" to="/hosting/new">
+
+      <!-- <v-btn class="ml-5" color="primary" to="/hosting/new">
         <img src="/img/svg/add1.svg" width="12" />
         <span class="ml-2">New Project</span>
-      </v-btn>
+      </v-btn> -->
+      <span class="px-4"></span>
+      <e-menu open-on-hover offset-y>
+        <v-btn slot="ref" color="primary" dark>
+          <img src="/img/svg/add1.svg" width="12" />
+          <span class="ml-2">New Project</span>
+          <v-icon>mdi-chevron-down</v-icon>
+        </v-btn>
+        <v-list>
+          <v-list-item
+            v-for="(text, i) in projectTypeArr"
+            :key="i"
+            @click="onCreate(i)"
+          >
+            <v-list-item-title class="fz-15">{{ text }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </e-menu>
     </e-right-opt-wrap>
 
     <div class="pt-4">
@@ -120,7 +159,7 @@
                         class="u ml-2 fz-12 gray"
                         :href="$utils.getCidLink(it.hash, it.platform)"
                         target="_blank"
-                        @click.stop="onStop"
+                        @click.stop
                         v-if="it.hash && it.state == 'SUCCESS'"
                       >
                         {{ it.hash.cutStr(4, 4) }}
@@ -139,16 +178,16 @@
                 </div>
               </v-col>
               <v-col cols="12" md="4">
-                <div class="ta-c mb-4 mt-2" v-if="!asMobile">
+                <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
-                  <h-status :val="it.state"></h-status>
+                  <h-status class="fw-b" :val="it.state"></h-status>
                 </div>
                 <div
                   class="d-flex al-c"
                   v-if="it.repo && it.repo.id && it.currentBranch"
                 >
                   <e-icon-link
-                    @click.native.stop="onStop"
+                    @click.native.stop
                     class="mr-6 shrink-0"
                     img="/img/svg/hosting/m-branch.svg"
                     :link="
@@ -161,7 +200,7 @@
                     {{ it.currentBranch }}
                   </e-icon-link>
                   <e-commit
-                    @click.native.stop="onStop"
+                    @click.native.stop
                     :info="it.commit"
                     class="line-1"
                   ></e-commit>
@@ -173,7 +212,7 @@
                 </div>
                 <v-btn
                   :to="getDetailPath(it)"
-                  @click.stop="onStop"
+                  @click.stop
                   class="mr-3"
                   color="primary"
                   small
@@ -232,10 +271,18 @@
         </v-expansion-panel>
       </v-expansion-panels>
     </div>
-
+    <v-skeleton-loader
+      class="mt-10 mb-10"
+      v-if="loading"
+      type="article"
+    ></v-skeleton-loader>
     <div class="ta-c">
-      <div :class="!limit ? 'main-wrap' : ''" class="pb-15" v-if="!list.length">
-        <div
+      <div
+        :class="!limit ? 'main-wrap' : ''"
+        class="pb-15 al-c justify-center"
+        v-if="!list.length && !loading"
+      >
+        <!-- <div
           :style="{
             height: loading ? '80px' : '60px',
           }"
@@ -252,7 +299,39 @@
         </div>
         <v-btn color="primary" to="/hosting/newByHash"
           >Create a project by cid</v-btn
-        >
+        > -->
+        <div class="mt-10">
+          <img src="/img/svg/hosting/no-data.svg" width="180" alt="" />
+          <p class="mt-7 fz-18">No projects, yet！</p>
+          <div class="al-c mt-10">
+            <div
+              class="ipfs-deploy deploy"
+              @click="$router.push('/hosting/newByHash')"
+            >
+              <img
+                class="mb-1"
+                src="/img/svg/hosting/ipfs-deploy.svg"
+                alt=""
+                width="88"
+              />
+              <div class="fw-b">Create a project from a IPFS Path</div>
+            </div>
+            <div
+              class="template-deploy deploy"
+              @click="$router.push('/hosting/new')"
+            >
+              <img
+                class="mb-4"
+                src="/img/svg/hosting/template-deploy.svg"
+                alt=""
+                width="44"
+              />
+              <div class="fw-b">
+                Create a project from Template, or import a Git repository.
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="mt-8" v-else-if="limit">
         <v-btn color="primary" outlined to="/hosting/projects">View More</v-btn>
@@ -313,7 +392,9 @@ export default {
       pageSize: 5,
       sortType: "Active", // "All",
       sortIdx: 0,
+      newProjectIdx: 0,
       sortArr: ["Last Update", "Create Time"],
+      projectTypeArr: ["From git/ template", "From IPFS Path"],
       refreshAt: Date.now(),
     };
   },
@@ -350,7 +431,10 @@ export default {
     this.curPath = this.path;
   },
   methods: {
-    onStop() {},
+    onCreate(i) {
+      if (i == 0) return this.$router.push("/hosting/new");
+      this.$router.push("/hosting/newByHash");
+    },
     onSort(i) {
       this.sortType = i == 0 ? "Active" : "All";
       this.page = 1;

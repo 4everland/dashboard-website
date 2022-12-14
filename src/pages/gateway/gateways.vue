@@ -64,9 +64,11 @@
             <span>{{ new Date(item.created_at * 1000).format() }}</span>
           </template>
           <template #item.act="{ item }">
-            <span class="action-btn" @click="onDomain(item)">Domain</span>
-            <span class="action-btn ml-3" @click="onEdit(item)">Edit</span>
-            <span class="action-btn ml-3" @click="onDelete(item)">Delete</span>
+            <span class="action-btn" @click.stop="onDomain(item)">Domain</span>
+            <span class="action-btn ml-3" @click.stop="onEdit(item)">Edit</span>
+            <span class="action-btn ml-3" @click.stop="onDelete(item)"
+              >Delete</span
+            >
           </template>
         </v-data-table>
 

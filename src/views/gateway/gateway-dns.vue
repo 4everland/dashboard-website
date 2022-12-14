@@ -70,9 +70,7 @@ export default {
     item: {
       type: Object,
     },
-    ipns: {
-      type: Object,
-    },
+    name: String,
   },
   computed: {
     domainPre() {
@@ -96,7 +94,7 @@ export default {
 
     async onDelete() {
       try {
-        let tip = `Would you like to remove the domain ${this.item.domain} from your gateway ${this.ipns.name}.4everland.link?
+        let tip = `Would you like to remove the domain ${this.item.domain} from your gateway ${this.name}.4everland.link?
                     After continuing, your gateway will no longer be accessible through this domain.`;
         await this.$confirm(tip, "Remove Domain from Gateway");
         console.log(this.item);

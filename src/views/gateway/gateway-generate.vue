@@ -54,10 +54,9 @@
             <div class="mt-2 fz-13 gray">
               <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon>
               <span
-                >Choose whether or not you want your gateway to be able to pull
-                content from the whole IPFS network or just content you have
-                pinned.</span
-              >
+                >Tips: When enabled, this dedicated gateway will only be able to
+                access the IPFS files in the Bucket under the current account.
+              </span>
             </div>
           </div>
         </div>

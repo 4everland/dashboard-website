@@ -313,8 +313,9 @@ export default {
         this.node = namehash(domain);
         this.provider = getProvider();
         const registry = getENSRegistry(this.provider);
+        console.log(1);
         this.owner = await registry.owner(this.node);
-        // console.log("owner", this.owner);
+        console.log("owner", this.owner);
         let isNotRegister = this.owner
           .substring(2)
           .split("")

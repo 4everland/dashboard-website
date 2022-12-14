@@ -16,7 +16,7 @@ export default [
       // title: "Gateway Detail",
       links: [
         { text: "Dedicated Gateway", to: "/gateway/list" },
-        { text: "{name}" },
+        { text: "{name}.4everland.link" },
       ],
     },
   },
