@@ -175,10 +175,21 @@ export default {
         );
         console.log(sign);
         params.splice(2, 0, sign);
-        tx = await this.curContract.FundPool.initWalletAndWithdraw(...params);
+        const gasLimit =
+          await this.curContract.FundPool.estimateGas.initWalletAndWithdraw(
+            ...params
+          );
+        tx = await this.curContract.FundPool.initWalletAndWithdraw(...params, {
+          gasLimit: gasLimit.mul(15).div(10),
+        });
       } else {
         console.log("signed");
-        tx = await this.curContract.FundPool.withdraw(...params);
+        const gasLimit = await this.curContract.FundPool.estimateGas.withdraw(
+          ...params
+        );
+        tx = await this.curContract.FundPool.withdraw(...params, {
+          gasLimit: gasLimit.mul(15).div(10),
+        });
       }
       console.log("tx", tx);
       const receipt = await tx.wait();
