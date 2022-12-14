@@ -51,7 +51,7 @@ export default {
         {
           name: "OKX",
           icon: require("@/assets/imgs/okx.png"),
-          btnText: "OKC",
+          btnText: "Multi-Chain",
         },
         {
           name: "Phantom",
@@ -200,7 +200,7 @@ export default {
       color: #495667;
     }
     .item-name {
-      width: 60px;
+      width: 70px;
       height: 22px;
       line-height: 22px;
       display: inline-block;
