@@ -51,7 +51,7 @@ export default {
         {
           name: "OKX",
           icon: require("@/assets/imgs/okx.png"),
-          btnText: "OKX",
+          btnText: "OKC",
         },
         {
           name: "Phantom",
