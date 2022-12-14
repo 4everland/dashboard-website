@@ -14,13 +14,17 @@ export default {
     uuid() {
       return this.userInfo.euid;
     },
+    walletObj() {
+      const { walletType } = this.userInfo.wallet || {};
+      return walletType == "OKX" ? window.okxwallet : window.ethereum;
+    },
     chainNet() {
       let addrList = [
         { addr: "ETH", chainIdArr: [1, 5] },
         { addr: "Polygon", chainIdArr: [137, 80001] },
         { addr: "BSC", chainIdArr: [56, 97] },
       ];
-      let chainId = window.ethereum.chainId;
+      let chainId = this.walletObj.chainId;
       chainId = parseInt(chainId);
       console.log(chainId);
       const addrItem = addrList.find((it) => it.chainIdArr.includes(chainId));
@@ -45,7 +49,7 @@ export default {
     async registerForNew() {
       if (this.registerOverThreeDays) return;
       if (!this.uuid) return;
-      const provider = new providers.Web3Provider(window.ethereum);
+      const provider = new providers.Web3Provider(this.walletObj);
       console.log(this.chainNet);
       if (this.chainNet == "polygon") {
         console.log("polygon");
