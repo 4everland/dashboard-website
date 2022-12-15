@@ -49,7 +49,7 @@ export default {
           btnText: "Popular",
         },
         {
-          name: "OKX",
+          name: "OKX Wallet",
           icon: require("@/assets/imgs/okx.png"),
           btnText: "Multi-Chain",
         },
@@ -95,7 +95,7 @@ export default {
         case "MetaMask":
           this.metaMaskConnect();
           break;
-        case "OKX":
+        case "OKX Wallet":
           this.okxConnect();
           break;
         case "Phantom":
