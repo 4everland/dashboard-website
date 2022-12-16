@@ -3,23 +3,39 @@
     <div>
       <div class="d-flex justify-space-between al-c">
         <span class="mr-auto">User Agent</span>
-        <v-switch class="hide-msg" v-model="userAgent" dense></v-switch>
+        <v-switch class="hide-msg" v-model="isUserAgent" dense></v-switch>
       </div>
-      <div class="fz-14 tips mt-2" v-if="!userAgent">
+      <div class="fz-14 tips mt-2" v-if="!isUserAgent">
         To limit access to your application to specific user agents, add them to
         the USER AGENTS allowlist. When you enable User-Agent Allowlist, any API
         requests originating from other platforms are rejected.
       </div>
       <div v-else>
-        <div class="d-flex mt-5">
+        <div class="d-flex mt-3">
           <v-text-field
             class="post-input"
             persistent-placeholder
             outlined
             dense
+            ref="agentInput"
+            v-model="userAgent"
+            :counter="32"
+            :rules="[
+              (val) => {
+                return val.length > 32
+                  ? 'Must be less than 32 characters'
+                  : true;
+              },
+            ]"
             label=""
           ></v-text-field>
-          <v-btn class="ml-5" color="primary" width="120">Add</v-btn>
+          <v-btn
+            class="ml-8"
+            color="primary"
+            width="120"
+            @click="handleAddUserAgent"
+            >Add</v-btn
+          >
         </div>
         <div class="fz-14 tips">
           Tips: The USER AGENTS allowlist utilizes partial string matching. If
@@ -29,8 +45,10 @@
         <load-list :list="userAgentList">
           <template v-slot="{ item }">
             <div class="list-item al-c justify-space-between">
-              <span>{{ item.name }}</span>
-              <v-btn text color="primary">Remove</v-btn>
+              <span class="fz-14">{{ item }}</span>
+              <v-btn text color="primary" @click="handleRemoveUserAgent"
+                >Remove</v-btn
+              >
             </div>
           </template>
         </load-list>
@@ -39,9 +57,9 @@
     <div class="mt-15">
       <div class="d-flex justify-space-between al-c">
         <span class="mr-auto">Origins</span>
-        <v-switch class="hide-msg" v-model="origins" dense></v-switch>
+        <v-switch class="hide-msg" v-model="isOrigins" dense></v-switch>
       </div>
-      <div class="fz-14 tips mt-2" v-if="!origins">
+      <div class="fz-14 tips mt-2" v-if="!isOrigins">
         To limit access to your application to specific URLs, add them to the
         Origins allowlist. When you enable Origins Allowlist, any API requests
         originating from other platforms are rejected.
@@ -49,8 +67,13 @@
 
       <div v-else>
         <div class="al-c">
-          <span class="mr-5">Always allow access</span>
-          <v-radio-group v-model="radioGroup" row>
+          <span class="mr-5 fz-14">Always allow access</span>
+          <v-radio-group
+            v-model="radioGroup"
+            @change="handleChangeAllowAccess"
+            class="hide-msg assess-address"
+            row
+          >
             <v-radio
               v-for="n in allowAccess"
               :key="n.value"
@@ -59,33 +82,68 @@
             ></v-radio>
           </v-radio-group>
         </div>
-        <div class="d-flex mt-5">
+        <div class="d-flex mt-3" v-if="!isBulkOperation">
           <v-text-field
             class="post-input"
             persistent-placeholder
             outlined
+            v-model="origin"
             dense
+            ref="originInput"
+            :counter="64"
+            :rules="[
+              (val) => {
+                return this.$regMap.domain.test(val)
+                  ? true
+                  : 'Must be a top-level or second-level domain with less than 64 characters';
+              },
+              (val) => {
+                return val.length > 64
+                  ? 'Must be a domain name with less than 64 characters'
+                  : true;
+              },
+            ]"
             label=""
           ></v-text-field>
-          <v-btn class="ml-5" color="primary" width="120">Add</v-btn>
+          <v-btn
+            class="ml-8"
+            color="primary"
+            width="120"
+            @click="handleAddOrigins"
+            >Add</v-btn
+          >
         </div>
-        <div class="fz-14 tips">
+        <div class="fz-14 tips" v-if="!isBulkOperation">
           Tips: Origin allowlists support wildcard subdomain patterns.
         </div>
-        <load-list
-          :list="originsList"
-          @packUp="handleOriginPackUp"
-          @loadMore="handleOriginLoadMore"
-        >
-          <template v-slot="{ item }">
-            <div class="list-item al-c justify-space-between">
-              <span>{{ item.name }}</span>
-              <v-btn text color="primary" @click="handleRemove(item, 'origin')"
+        <load-list :list="originsList" v-if="!isBulkOperation">
+          <template v-slot="{ item, index }">
+            <div class="list-item al-c justify-space-between origin-item px-4">
+              <span class="fz-14">{{ item }}{{ index }}</span>
+              <v-btn text color="primary" @click="handleRemoveOrigin(item)"
                 >Remove</v-btn
               >
             </div>
           </template>
         </load-list>
+
+        <div v-if="isBulkOperation">
+          <v-textarea
+            outlined
+            name="input-7-4"
+            :value="bulkOrigins"
+          ></v-textarea>
+          <div class="al-c mt-4">
+            <span class="tips fz-14"
+              >Please use ';' to split URLs, click the SAVE button after
+              modification</span
+            >
+            <v-btn color="primary" width="120" @click="onBulkSave">Save</v-btn>
+          </div>
+        </div>
+        <span class="cursor-p" @click="handleBulkOperation"
+          >Bulk Operation</span
+        >
       </div>
     </div>
   </div>
@@ -93,38 +151,25 @@
 
 <script>
 export default {
+  props: {
+    info: {
+      type: Object,
+      default: () => {
+        return {
+          name: "",
+          scope: "",
+        };
+      },
+    },
+  },
   data() {
     return {
-      userAgent: false,
-      origins: false,
-      userAgentList: [
-        { id: 1, name: "Chorme" },
-        { id: 2, name: "Android" },
-        { id: 3, name: "Ios" },
-        { id: 4, name: "Mozilla" },
-      ],
-      originsList: [
-        { id: 1, name: "nice.4everland.app" },
-        { id: 2, name: "nice.4everland.app" },
-        { id: 3, name: "nice.4everland.app" },
-        { id: 4, name: "nice.4everland.app" },
-        { id: 5, name: "nice.4everland.app" },
-        { id: 6, name: "nice.4everland.app" },
-        { id: 7, name: "nice.4everland.app" },
-        { id: 8, name: "nice.4everland.app" },
-        { id: 9, name: "nice.4everland.app" },
-        { id: 10, name: "nice.4everland.app" },
-        { id: 11, name: "nice.4everland.app" },
-        { id: 12, name: "nice.4everland.app" },
-        { id: 13, name: "nice.4everland.app" },
-        { id: 14, name: "nice.4everland.app" },
-        { id: 15, name: "nice.4everland.app" },
-        { id: 16, name: "nice.4everland.app" },
-        { id: 17, name: "nice.4everland.app" },
-        { id: 18, name: "nice.4everland.app" },
-        { id: 19, name: "nice.4everland.app" },
-        { id: 20, name: "nice.4everland.app" },
-      ],
+      isUserAgent: false,
+      isOrigins: false,
+      userAgent: "",
+      origin: "",
+      userAgentList: [],
+      originsList: [],
       allowAccess: [
         {
           text: "Yes",
@@ -136,45 +181,197 @@ export default {
         },
       ],
       radioGroup: false,
+      isBulkOperation: false,
     };
   },
-  methods: {
-    handleOriginPackUp() {
-      this.originsList = [];
+  computed: {
+    bulkOrigins() {
+      return this.originsList.join(";");
     },
-    handleRemove(item, type) {
-      if (type == "origin") {
-        this.originsList = this.originsList.filter((it) => it.id != item.id);
-      } else {
-        this.userAgentList = this.userAgentList.filter(
-          (it) => it.id != item.id
+  },
+  created() {
+    this.initData();
+  },
+  methods: {
+    initData() {
+      this.isUserAgent = this.info.enableUserAgent;
+      this.isOrigins = this.info.enableOrigin;
+      this.userAgentList = this.info.userAgents;
+      this.originsList = this.info.origins;
+      this.radioGroup = this.info.allowBlankOrigin;
+    },
+    async handleAddUserAgent() {
+      try {
+        this.$loading();
+        const userAgents = JSON.parse(JSON.stringify(this.userAgentList));
+        userAgents.push(this.userAgent);
+        await this.$http.put(
+          `$gateway/gateway/${this.info.name}/useragent`,
+          {
+            userAgents,
+          },
+          {
+            noTip: 1,
+          }
         );
+        this.userAgent = "";
+        this.$emit("handleEvent");
+        this.$loading.close();
+      } catch (error) {
+        console.log(error);
+        if (
+          error.message ==
+          "ParamsError: origins or useragent exceed the limit error"
+        ) {
+          this.$alert(
+            "Maximum allowed is 20 user-agents. In case of capacity expansion, please contact us."
+          );
+        } else {
+          this.$alert(error.message);
+        }
       }
     },
-    handleOriginLoadMore() {
-      this.$loading();
-      setTimeout(() => {
-        let arr = [];
-        for (let i = 21; i < 41; i++) {
-          arr.push({
-            id: i,
-            name: "nice.4everland.app",
-          });
-        }
-        this.originsList = this.originsList.concat(arr);
+    async handleAddOrigins() {
+      try {
+        this.$loading();
+        const origins = JSON.parse(JSON.stringify(this.originsList));
+        origins.push(this.origin);
+        await this.$http.put(
+          `$gateway/gateway/${this.info.name}/origin`,
+          {
+            origins,
+            allowBlankOrigin: this.radioGroup,
+          },
+          {
+            noTip: 1,
+          }
+        );
+        this.origin = "";
+        this.$emit("handleEvent");
         this.$loading.close();
-      }, 2000);
+      } catch (error) {
+        //
+        if (
+          error.message ==
+          "ParamsError: origins or useragent exceed the limit error"
+        ) {
+          this.$alert(
+            "Maximum allowed is 100 domains. In case of capacity expansion, please contact us."
+          );
+        } else {
+          this.$alert(error.message);
+        }
+      }
+    },
+    async handleRemoveUserAgent(item) {
+      this.$loading();
+      const userAgents = JSON.parse(JSON.stringify(this.userAgentList));
+      let index = userAgents.findIndex((it) => it == item);
+      userAgents.splice(index, 1);
+      try {
+        await this.$http.put(`$gateway/gateway/${this.info.name}/useragent`, {
+          userAgents,
+        });
+        this.$emit("handleEvent");
+      } catch (error) {
+        //
+        console.log(error);
+      }
+      this.$loading.close();
+    },
+    async handleRemoveOrigin(item) {
+      this.$loading();
+      const origins = JSON.parse(JSON.stringify(this.originsList));
+      let index = origins.findIndex((it) => it == item);
+      origins.splice(index, 1);
+      try {
+        await this.$http.put(`$gateway/gateway/${this.info.name}/origin`, {
+          origins,
+          allowBlankOrigin: this.radioGroup,
+        });
+        this.$emit("handleEvent");
+      } catch (error) {
+        //
+        console.log(error);
+      }
+      this.$loading.close();
+    },
+    async openOrigin(val) {
+      try {
+        this.$loading();
+        await this.$http.put(`$gateway/gateway/${this.info.name}/origin`, {
+          origins: [],
+          allowBlankOrigin: val,
+        });
+        this.origin = "";
+        this.$emit("handleEvent");
+      } catch (error) {
+        //
+        console.log(error);
+      }
+      this.$loading.close();
+    },
+    async handleChangeAllowAccess() {
+      try {
+        this.$loading();
+        await this.$http.put(`$gateway/gateway/${this.info.name}/origin`, {
+          origins: this.originsList,
+          allowBlankOrigin: this.radioGroup,
+        });
+        this.origin = "";
+        this.$emit("handleEvent");
+      } catch (error) {
+        //
+        console.log(error);
+      }
+      this.$loading.close();
+    },
+    handleBulkOperation() {
+      this.isBulkOperation = true;
+    },
+    async onBulkSave() {
+      console.log(11);
+    },
+  },
+  watch: {
+    async isOrigins(val) {
+      if (this.info.enableOrigin == val) return;
+      this.openOrigin(val);
+    },
+    info() {
+      this.initData();
+    },
+    origin(val) {
+      if (!val) {
+        this.$refs.originInput.resetValidation();
+      }
+    },
+    userAgent(val) {
+      if (!val) {
+        this.$refs.agentInput.resetValidation();
+      }
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.gateway-allowlists {
+  transition: all 3s ease;
+}
+::v-deep .assess-address {
+  margin-top: 0;
+}
 .tips {
   color: #889ab3;
 }
 .list-item {
-  padding: 7px 0;
+  padding: 5px 0;
+  height: 50px;
+  box-sizing: border-box;
   border-bottom: 1px solid #d0dae9;
+}
+.origin-item {
+  background: #f7fafb;
 }
 </style>

@@ -56,6 +56,7 @@
           :is="it.comp"
           v-bind="it.props"
           :info="info"
+          @handleEvent="handleEvent"
           :active="curItem.comp == it.comp"
           v-show="curItem.comp == it.comp"
           v-for="(it, i) in activeList"
@@ -152,6 +153,10 @@ export default {
         });
       }
       return curIdx;
+    },
+    handleEvent(params) {
+      if (params) this.$emit("handleEvent", params);
+      this.$emit("handleEvent");
     },
   },
   components: {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <e-tabs :list="list" :info="info"></e-tabs>
+    <e-tabs :list="list" :info="info" @handleEvent="getList"></e-tabs>
   </div>
 </template>
 

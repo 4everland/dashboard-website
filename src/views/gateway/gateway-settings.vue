@@ -1,57 +1,64 @@
 <template>
   <div class="gateway-settings">
     <v-skeleton-loader v-if="loading" type="article"></v-skeleton-loader>
-    <div class="al-start d-flex hide-msg" v-else>
-      <div class="mr-auto h-flex">
-        <span>Restricted Gateway</span>
+    <div v-else>
+      <div class="al-start d-flex hide-msg">
+        <div class="mr-auto h-flex">
+          <span>Restricted Gateway</span>
+          <span class="fz-14 tips mt-2"
+            >Tips: When enabled, this dedicated gateway will only be able to
+            access the IPFS files in the Bucket under the current account.</span
+          >
+        </div>
+        <v-switch v-model="isPrivate" @change="onChange" dense></v-switch>
+      </div>
+
+      <div class="set-default-page mt-10">
+        <div class="al-c">
+          <span> Default Page for Gateway Domain</span>
+          <e-tooltip right>
+            <v-icon slot="ref" size="18" color="#333" class="pa-1 d-ib ml-2"
+              >mdi-alert-circle-outline</v-icon
+            >
+            <span
+              >Specifying a default page will make others access the contents
+              you specify directly in their browsers by entering your gateway
+              domain name.</span
+            >
+          </e-tooltip>
+        </div>
+
+        <v-row class="mt-4">
+          <v-col :sm="3" :cols="12"
+            ><v-select
+              class="post-input"
+              outlined
+              :items="items"
+              dense
+              v-model="seleted"
+            ></v-select
+          ></v-col>
+          <v-col :sm="9" :cols="12" class="d-flex al-start">
+            <v-text-field
+              class="post-input"
+              persistent-placeholder
+              v-model="defaultPage"
+              outlined
+              dense
+              label=""
+              :counter="100"
+              :rules="rules"
+            ></v-text-field>
+            <v-btn class="ml-8" width="120" color="primary" @click="onSave"
+              >Save</v-btn
+            >
+          </v-col>
+        </v-row>
         <span class="fz-14 tips mt-2"
           >Tips: When enabled, this dedicated gateway will only be able to
           access the IPFS files in the Bucket under the current account.</span
         >
       </div>
-      <v-switch v-model="isPrivate" @change="onSave" dense></v-switch>
-    </div>
-
-    <div class="set-default-page mt-10">
-      <div class="al-c">
-        <span> Default Page for Gateway Domain</span>
-        <e-tooltip right>
-          <v-icon slot="ref" size="18" color="#333" class="pa-1 d-ib ml-2"
-            >mdi-alert-circle-outline</v-icon
-          >
-          <span
-            >Specifying a default page will make others access the contents you
-            specify directly in their browsers by entering your gateway domain
-            name.</span
-          >
-        </e-tooltip>
-      </div>
-
-      <v-row class="mt-4">
-        <v-col :md="3" :cols="12"
-          ><v-select
-            class="post-input"
-            outlined
-            :items="items"
-            dense
-            v-model="seleted"
-          ></v-select
-        ></v-col>
-        <v-col :md="9" :cols="12" class="d-flex al-start">
-          <v-text-field
-            class="post-input"
-            persistent-placeholder
-            outlined
-            dense
-            label=""
-          ></v-text-field>
-          <v-btn class="ml-8" width="120" color="primary">Save</v-btn>
-        </v-col>
-      </v-row>
-      <span class="fz-14 tips mt-2"
-        >Tips: When enabled, this dedicated gateway will only be able to access
-        the IPFS files in the Bucket under the current account.</span
-      >
     </div>
   </div>
 </template>
@@ -74,15 +81,31 @@ export default {
       isPrivate: false,
       loading: true,
       gatewayName: null,
-      items: ["IPFS", "IPNS"],
+      items: ["IPFS", "URL"],
       seleted: "IPFS",
+      defaultPage: "",
+      rules: [
+        (val) => {
+          if (this.seleted == "URL") {
+            return /^http:\/\/|https:\/\//.test(val)
+              ? true
+              : "Must be start with http:// or https://";
+          }
+          return true;
+        },
+        (val) => {
+          return val.length > 100
+            ? "Must be a domain name with less than 100 characters"
+            : true;
+        },
+      ],
     };
   },
   created() {
     this.gatewayName = this.$route.params.name;
   },
   methods: {
-    async onSave() {
+    async onChange() {
       try {
         await this.$http2.put(
           "$gateway/gateway/",
@@ -92,6 +115,7 @@ export default {
           },
           { noTip: 1 }
         );
+        this.$emit("handleEvent");
       } catch (error) {
         console.log(error);
         if (error.code == "EXISTS_PRIVATE_GATEWAY") {
@@ -100,11 +124,31 @@ export default {
         }
       }
     },
+    async onSave() {
+      try {
+        if (this.seleted) {
+          this.defaultPage = /^ipfs:\/\//.test(this.defaultPage)
+            ? this.defaultPage
+            : "ipfs://" + this.defaultPage;
+        }
+        await this.$http2.put(`$gateway/gateway/${this.info.name}/index`, {
+          indexPage: this.defaultPage,
+        });
+        this.$emit("handleEvent");
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   watch: {
     info() {
       this.isPrivate = this.info.scope == "private" ? true : false;
+      this.defaultPage = this.info.indexPage;
+      this.seleted = /^ipfs:\/\//.test(this.info.indexPage) ? "IPFS" : "URL";
       this.loading = false;
+    },
+    seleted() {
+      this.defaultPage = this.defaultPage + " ";
     },
   },
 };
