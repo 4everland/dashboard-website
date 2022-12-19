@@ -46,7 +46,7 @@
         <div>
           <h3>Production Branch</h3>
           <div class="gray mt-1 fz-14">
-            By default,every commit pushed to the
+            By default, every commit pushed to the
             <span class="color-1">`main`</span> branch will trigger a Production
             Deployment instead of the usual Preview Deployment. You can switch
             to a different branch here.

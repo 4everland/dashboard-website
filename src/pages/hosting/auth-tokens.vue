@@ -109,7 +109,7 @@ export default {
   methods: {
     onCopied() {
       this.copied = true;
-      this.$toast("Copied to clipboard !");
+      this.$toast("Copied!");
     },
     clickAdd() {
       if (this.list.length >= 10)

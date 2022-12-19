@@ -155,13 +155,28 @@ export default {
               `Your deposit amount cannot be less than ${minAmount} USDC due to the ${isEthOrBsc} network restrictions.`
             );
           }
-          tx = await target.recharge(
+          const amount = BigNumber.from(num * 10 ** curAmountDecimals);
+          let gas = await target.estimateGas.recharge(
             this.providerAddr,
             this.uuid,
-            num * 10 ** curAmountDecimals + "",
+            amount,
             nonce,
             maxSlippage,
             { value: fee }
+          );
+          console.log("gas", gas);
+          let gasPrice = await this.curContract.provider.getGasPrice();
+          tx = await target.recharge(
+            this.providerAddr,
+            this.uuid,
+            amount,
+            nonce,
+            maxSlippage,
+            {
+              value: fee,
+              gasLimit: gas.mul(15).div(10),
+              gasPrice: gasPrice.mul(12).div(10),
+            }
           );
         }
 

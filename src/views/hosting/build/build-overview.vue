@@ -68,7 +68,7 @@
                   src="/img/svg/copy.svg"
                   width="12"
                   class="ml-3 hover-1"
-                  @success="$toast('Copied to clipboard !')"
+                  @success="$toast('Copied!')"
                   v-clipboard="info.hash"
                 />
               </div>
@@ -205,7 +205,7 @@ export default {
     onOpt(opt) {
       let { name } = opt;
       if (name == "copy") {
-        this.$toast("Copied to clipboard !");
+        this.$toast("Copied!");
       } else if (name == "delete") {
         this.onDelete();
       }

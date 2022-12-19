@@ -33,6 +33,10 @@ export default {
       payBy: (s) => s.payBy,
       userInfo: (s) => s.userInfo,
     }),
+    walletObj() {
+      const { walletType } = this.userInfo.wallet || {};
+      return walletType == "OKX" ? window.okxwallet : window.ethereum;
+    },
     uuid() {
       return this.userInfo.euid;
     },
@@ -217,10 +221,14 @@ export default {
         // this.approving = true;
         const addr = isBuy ? this.payAddr : this.rechargeAddr;
         console.log("approve", addr, this.usdcKey);
-        const tx = await this.curContract[this.usdcKey].approve(
-          addr,
-          uint256Max
-        );
+        const target = this.curContract[this.usdcKey];
+        let gas = await target.estimateGas.approve(addr, uint256Max);
+        console.log("gas", gas);
+        let gasPrice = await this.curContract.provider.getGasPrice();
+        const tx = await target.approve(addr, uint256Max, {
+          gasLimit: gas.mul(15).div(10),
+          gasPrice: gasPrice.mul(12).div(10),
+        });
         console.log("tx", tx);
         const receipt = await tx.wait();
         console.log(receipt);
@@ -249,7 +257,6 @@ export default {
       return this.$inDev ? 5 : 1;
     },
     async addChain(chainId, id) {
-      if (id <= 5) return;
       let params = {
         137: {
           chainId,
@@ -264,6 +271,17 @@ export default {
             decimals: 18,
           },
           blockExplorerUrls: ["https://polygonscan.com"],
+        },
+        5: {
+          chainId,
+          chainName: "Goerli Testnet",
+          rpcUrls: ["https://rpc.ankr.com/eth_goerli"],
+          nativeCurrency: {
+            name: "Goerli-ETH",
+            symbol: "G-ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://goerli.etherscan.io/"],
         },
         56: {
           chainId,
@@ -300,13 +318,17 @@ export default {
         },
       }[id];
       if (!params) return;
-      await window.ethereum.request(
-        {
-          method: "wallet_addEthereumChain",
-          params: [params],
-        },
-        this.connectAddr
-      );
+      try {
+        await this.walletObj.request(
+          {
+            method: "wallet_addEthereumChain",
+            params: [params],
+          },
+          this.connectAddr
+        );
+      } catch (error) {
+        console.log("add chain err", error);
+      }
     },
     async switchNet(id) {
       try {
@@ -316,17 +338,17 @@ export default {
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
-        console.log(res);
+        console.log("switch err 1", res);
         if (res && res.error) {
           throw new Error(res.error);
         }
       } catch (error) {
-        console.log("switch net error");
-        this.onErr(error).then(() => {
-          if (error.code === 4902) {
-            this.switchNet(id);
-          }
-        });
+        console.log("switch error 2", error);
+        if (error.code !== 4902) {
+          this.onErr(error).then(() => {
+            // this.switchNet(id);
+          });
+        }
       }
     },
     addHash(tx, usdt, contentType = "Purchase") {
@@ -365,11 +387,11 @@ export default {
             if (this.isBSC) dev = "Chapel";
             dev = `(dev - ${dev})`;
           }
-          await this.$alert(`Please switch to ${this.payBy}${dev} Network`);
+          // await this.$alert(`Please switch to ${this.payBy}${dev} Network`);
           await this.switchNet(this.payChainId);
           return;
         }
-        const provider = new providers.Web3Provider(window.ethereum);
+        const provider = new providers.Web3Provider(this.walletObj);
         if (this.isPolygon) {
           polygonContract.setProvider(provider);
           this.curContract = polygonContract;
@@ -386,7 +408,7 @@ export default {
       } catch (error) {
         console.log("on connect error");
         this.$alert(error.message).then(() => {
-          this.$router.push("/billing/usage");
+          location.reload();
         });
       }
     },

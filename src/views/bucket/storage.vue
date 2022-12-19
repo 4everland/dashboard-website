@@ -47,7 +47,7 @@
                 <v-list-item
                   link
                   v-clipboard="fileUrl.encode()"
-                  @success="$toast('Copied to clipboard !')"
+                  @success="$toast('Copied!')"
                 >
                   <img src="/img/icon/copy.svg" width="14" class="mr-2" />
                   <span class="gray-7">Copy Path</span>
@@ -291,7 +291,7 @@
             small
             @click.stop="onStop"
             v-clipboard="item.hash"
-            @success="$toast('Copied to clipboard !')"
+            @success="$toast('Copied!')"
           >
             <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
             <img src="/img/svg/copy.svg" width="12" />
@@ -485,7 +485,7 @@ export default {
     },
     onStop() {},
     onCopied() {
-      this.$toast("Copied to clipboard !");
+      this.$toast("Copied!");
     },
     async addBucket() {
       try {

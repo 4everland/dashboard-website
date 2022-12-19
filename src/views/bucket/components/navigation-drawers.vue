@@ -178,7 +178,7 @@
                 class="opeartion"
                 v-show="item.status == 3"
                 v-clipboard="item.url"
-                @success="$toast('Copied to clipboard !')"
+                @success="$toast('Copied!')"
               >
                 Share
               </p>

@@ -375,7 +375,7 @@ export default {
       });
     },
     onCopied() {
-      this.$toast("Copied to clipboard !");
+      this.$toast("Copied!");
     },
     async getDomain() {
       const { Bucket } = this.pathInfo;

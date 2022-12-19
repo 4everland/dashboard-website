@@ -249,7 +249,7 @@ export default {
         // console.log(link);
         this.$router.push(link);
       } else if (name == "copy") {
-        this.$toast("Copied to clipboard !");
+        this.$toast("Copied!");
       } else if (name == "deploy") {
         this.onDeploy(it);
       } else if (name == "rollback") {

@@ -20,7 +20,7 @@ Vue.prototype.$sleep = (msec = 300) => {
   });
 };
 
-Vue.prototype.$copy = async (text, tip = "Copied to clipboard !") => {
+Vue.prototype.$copy = async (text, tip = "Copied!") => {
   try {
     await clipboard.writeText(text);
     Vue.prototype.$toast(tip);
