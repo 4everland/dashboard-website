@@ -269,7 +269,7 @@ export default {
         await this.$confirm(html, `Delete Domain${suffix}`);
         const ids = this.selected.map((it) => it.domain).join(",");
         this.deleting = true;
-        await this.$http.delete("/domains/" + ids);
+        await this.$http.delete("/domain/bucket/" + ids);
         this.$toast(
           this.selected.length + ` domain${suffix} deleted successfully`
         );
@@ -310,7 +310,7 @@ export default {
           );
         }
         this.adding = true;
-        await this.$http.post("/domains", {
+        await this.$http.post("/domain/bucket", {
           domain: this.domain,
           bucketName: this.chooseBucket.name,
         });
@@ -328,7 +328,7 @@ export default {
       try {
         this.loading = true;
         this.selected = [];
-        const { data } = await this.$http.get("/domains");
+        const { data } = await this.$http.get("/domain/bucket/list");
         this.list = data.list.map((it) => {
           it.createAt = new Date(it.createdAt * 1e3).format();
           return it;
