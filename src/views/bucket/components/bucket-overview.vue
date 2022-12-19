@@ -209,7 +209,7 @@ export default {
     async getDomainData() {
       try {
         const { data } = await this.$http({
-          url: "/domain/bucket/list",
+          url: "$bucektDomain/domain/bucket/list",
           methods: "get",
           params: {
             bucketName: this.bucketName,

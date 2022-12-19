@@ -380,9 +380,12 @@ export default {
     async getDomain() {
       const { Bucket } = this.pathInfo;
       try {
-        const { data } = await this.$http.get("/domain/bucket/list", {
-          params: { bucketName: Bucket },
-        });
+        const { data } = await this.$http.get(
+          "$bucektDomain/domain/bucket/list",
+          {
+            params: { bucketName: Bucket },
+          }
+        );
         this.domains = data.list
           .filter((it) => it.valid)
           .map((domain) => {

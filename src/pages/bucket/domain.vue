@@ -129,15 +129,18 @@ export default {
       try {
         this.loading = true;
         if (!this.dns.ip) {
-          const { data } = await this.$http.get("/domain/bucket/resolve", {
-            params: {
-              domain: this.domain,
-            },
-          });
+          const { data } = await this.$http.get(
+            "$bucektDomain/domain/bucket/resolve",
+            {
+              params: {
+                domain: this.domain,
+              },
+            }
+          );
           this.dns = data;
         }
         const { data: info } = await this.$http.get(
-          `/domain/bucket/${this.domain}/verify`
+          `$bucektDomain/domain/bucket/${this.domain}/verify`
         );
         const arr = this.domain.split(".");
         arr.pop();
@@ -161,7 +164,7 @@ export default {
           confirmText: "Remove",
         });
         this.deleting = true;
-        await this.$http.delete("/domain/bucket/" + domain);
+        await this.$http.delete("$bucektDomain/domain/bucket/" + domain);
         // await this.getInfo();
         this.$router.push("/bucket/domains");
         await this.$sleep(200);
