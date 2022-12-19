@@ -6,9 +6,9 @@
         <v-switch class="hide-msg" v-model="isUserAgent" dense></v-switch>
       </div>
       <div class="fz-14 tips mt-2" v-if="!isUserAgent">
-        To limit access to your application to specific user agents, add them to
-        the USER AGENTS allowlist. When you enable User-Agent Allowlist, any API
-        requests originating from other platforms are rejected.
+        When user-agent is enabled, only API requests with the user-agent
+        parameter defined in Allowlist are allowed to use the dedicated gateway,
+        and all other API requests are rejected, according to Allowlist.
       </div>
       <div v-else>
         <div class="d-flex mt-3">
@@ -22,7 +22,7 @@
             :counter="32"
             :rules="[
               (val) => {
-                return val.length > 32
+                return val && val.length > 32
                   ? 'Must be less than 32 characters'
                   : true;
               },
@@ -42,11 +42,15 @@
           the allowlisted string is present in the request's full User-Agent, it
           is registered as a match.
         </div>
+        <div class="fz-14 mt-5 tips-warning" v-show="userAgentList.length == 0">
+          When this is enabled but no User-agent is added, it is regarded as
+          disabled.
+        </div>
         <load-list :list="userAgentList">
           <template v-slot="{ item }">
             <div class="list-item al-c justify-space-between">
               <span class="fz-14">{{ item }}</span>
-              <v-btn text color="primary" @click="handleRemoveUserAgent"
+              <v-btn text color="primary" @click="handleRemoveUserAgent(item)"
                 >Remove</v-btn
               >
             </div>
@@ -60,9 +64,9 @@
         <v-switch class="hide-msg" v-model="isOrigins" dense></v-switch>
       </div>
       <div class="fz-14 tips mt-2" v-if="!isOrigins">
-        To limit access to your application to specific URLs, add them to the
-        Origins allowlist. When you enable Origins Allowlist, any API requests
-        originating from other platforms are rejected.
+        When Origins is enabled, only API requests with the Origins parameter
+        defined in Allowlist are allowed to use the dedicated gateway, and all
+        other API requests are rejected, according to Allowlist.
       </div>
 
       <div v-else>
@@ -98,7 +102,7 @@
                   : 'Must be a top-level or second-level domain with less than 64 characters';
               },
               (val) => {
-                return val.length > 64
+                return val && val.length > 64
                   ? 'Must be a domain name with less than 64 characters'
                   : true;
               },
@@ -116,7 +120,11 @@
         <div class="fz-14 tips" v-if="!isBulkOperation">
           Tips: Origin allowlists support wildcard subdomain patterns.
         </div>
-        <load-list :list="originsList" v-if="!isBulkOperation">
+        <div class="fz-14 mt-4 tips-warning" v-if="originsList.length == 0">
+          Your current configuration only allows you to access the gateway via
+          the address bar.
+        </div>
+        <load-list class="mt-4" :list="originsList" v-if="!isBulkOperation">
           <template v-slot="{ item }">
             <div class="list-item al-c justify-space-between origin-item px-4">
               <span class="fz-14">{{ item }}</span>
@@ -206,6 +214,7 @@ export default {
     },
     async handleAddUserAgent() {
       try {
+        if (!this.$refs.agentInput.valid) return;
         this.$loading();
         const userAgents = JSON.parse(JSON.stringify(this.userAgentList));
         userAgents.push(this.userAgent);
@@ -237,6 +246,7 @@ export default {
     },
     async handleAddOrigins() {
       try {
+        if (!this.$refs.originInput.valid) return;
         this.$loading();
         const origins = JSON.parse(JSON.stringify(this.originsList));
         origins.push(this.origin);
@@ -269,9 +279,8 @@ export default {
     },
     async handleRemoveUserAgent(item) {
       this.$loading();
-      const userAgents = JSON.parse(JSON.stringify(this.userAgentList));
-      let index = userAgents.findIndex((it) => it == item);
-      userAgents.splice(index, 1);
+      let userAgents = JSON.parse(JSON.stringify(this.userAgentList));
+      userAgents = userAgents.filter((it) => it != item);
       try {
         await this.$http.put(`$gateway/gateway/${this.info.name}/useragent`, {
           userAgents,
@@ -285,9 +294,8 @@ export default {
     },
     async handleRemoveOrigin(item) {
       this.$loading();
-      const origins = JSON.parse(JSON.stringify(this.originsList));
-      let index = origins.findIndex((it) => it == item);
-      origins.splice(index, 1);
+      let origins = JSON.parse(JSON.stringify(this.originsList));
+      origins = origins.filter((it) => it != item);
       try {
         await this.$http.put(`$gateway/gateway/${this.info.name}/origin`, {
           origins,
@@ -357,11 +365,10 @@ export default {
   watch: {
     async isOrigins(val) {
       if (this.info.enableOrigin == val) return;
+      this.isBulkOperation = false;
       this.openOrigin(val);
     },
-    info(val) {
-      console.log(val);
-      console.log(this.info);
+    info() {
       this.initData();
     },
     origin(val) {
@@ -392,6 +399,9 @@ export default {
 }
 .tips {
   color: #889ab3;
+}
+.tips-warning {
+  color: #ff6b6b;
 }
 .list-item {
   padding: 5px 0;

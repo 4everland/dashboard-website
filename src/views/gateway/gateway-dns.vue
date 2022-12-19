@@ -84,7 +84,7 @@ export default {
       try {
         this.refreshing = true;
         await this.$http2.get(`/domain/verify/${item.id}`);
-        await this.$parent.$parent.$parent.getList();
+        await this.$parent.getList();
         this.refreshing = false;
       } catch (error) {
         console.log(error);

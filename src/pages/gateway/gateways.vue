@@ -64,11 +64,9 @@
             <span>{{ new Date(item.created_at * 1000).format() }}</span>
           </template>
           <template #item.act="{ item }">
-            <span class="action-btn" @click.stop="onDomain(item)">Domain</span>
-            <span class="action-btn ml-3" @click.stop="onEdit(item)">Edit</span>
-            <span class="action-btn ml-3" @click.stop="onDelete(item)"
-              >Delete</span
-            >
+            <!-- <span class="action-btn" @click.stop="onDomain(item)">Domain</span>
+            <span class="action-btn ml-3" @click.stop="onEdit(item)">Edit</span> -->
+            <span class="action-btn" @click.stop="onDelete(item)">Delete</span>
           </template>
         </v-data-table>
 
@@ -79,20 +77,20 @@
         </div>
       </div>
     </div>
-    <gateway-domain ref="gatewayDomain" />
-    <gateway-edit ref="gatewayEdit" @getList="getList" />
+    <!-- <gateway-domain ref="gatewayDomain" /> -->
+    <!-- <gateway-edit ref="gatewayEdit" @getList="getList" /> -->
   </div>
 </template>
 
 <script>
 import GatewayGenerate from "@/views/gateway/gateway-generate";
-import GatewayDomain from "@/views/gateway/gateway-domain";
-import GatewayEdit from "@/views/gateway/gateway-edit";
+// import GatewayDomain from "@/views/gateway/gateway-domain";
+// import GatewayEdit from "@/views/gateway/gateway-edit";
 export default {
   components: {
     GatewayGenerate,
-    GatewayDomain,
-    GatewayEdit,
+    // GatewayDomain,
+    // GatewayEdit,
   },
   data() {
     return {
@@ -128,12 +126,12 @@ export default {
     this.getList();
   },
   methods: {
-    onDomain(item) {
-      this.$refs.gatewayDomain.show(item);
-    },
-    onEdit(item) {
-      this.$refs.gatewayEdit.show(item);
-    },
+    // onDomain(item) {
+    //   this.$refs.gatewayDomain.show(item);
+    // },
+    // onEdit(item) {
+    //   this.$refs.gatewayEdit.show(item);
+    // },
     async onDelete(item) {
       try {
         let tip =

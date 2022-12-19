@@ -11,6 +11,7 @@
             persistent-placeholder
             v-model="domain"
             autofocus
+            ref="domainIpt"
             label="Add domain"
             :rules="[
               (val) => ($regMap.domain.test(val) ? true : 'Invalid Domain'),
@@ -66,6 +67,9 @@ export default {
       addLoading: false,
       gatewayName: "",
     };
+  },
+  props: {
+    active: Boolean,
   },
   computed: {
     disabled() {
@@ -136,6 +140,9 @@ export default {
           this.$refs.form.reset();
         }
       }
+    },
+    active() {
+      this.$refs.domainIpt.reset();
     },
   },
 };

@@ -3,11 +3,15 @@
     <v-skeleton-loader v-if="loading" type="article"></v-skeleton-loader>
     <div v-else>
       <div class="al-start d-flex hide-msg">
-        <div class="mr-auto h-flex">
+        <div class="mr-auto h-flex mt-3">
           <span>Restricted Gateway</span>
-          <span class="fz-14 tips mt-2"
+          <span v-if="isPrivate" class="fz-14 tips mt-2"
             >Tips: When enabled, this dedicated gateway will only be able to
-            access the IPFS files in the Bucket under the current account.</span
+            access the IPFS files under the current Bucket account.</span
+          >
+          <span class="fz-14 tips mt-2" v-else
+            >Tips: When disabled, all IPFS files are accessible through this
+            dedicated gateway.</span
           >
         </div>
         <v-switch v-model="isPrivate" @change="onChange" dense></v-switch>
@@ -34,6 +38,7 @@
               class="post-input"
               outlined
               :items="items"
+              @change="handleSelected"
               dense
               v-model="seleted"
             ></v-select
@@ -50,15 +55,19 @@
               :counter="100"
               :rules="rules"
             ></v-text-field>
-            <v-btn class="ml-8" width="120" color="primary" @click="onSave"
+            <v-btn
+              class="ml-8"
+              width="120"
+              color="primary"
+              @click="onSave"
+              :loading="saveLoading"
               >Save</v-btn
             >
           </v-col>
         </v-row>
         <span class="fz-14 tips mt-2"
-          >Tips: When enabled, this dedicated gateway will only be able to
-          access the IPFS files in the Bucket under the current account.</span
-        >
+          >Tips: When using IPFS, there may be slow loading or fetching.
+        </span>
       </div>
     </div>
   </div>
@@ -83,23 +92,26 @@ export default {
       loading: true,
       gatewayName: null,
       items: ["IPFS", "URL"],
-      seleted: "IPFS",
+      seleted: "URL",
       defaultPage: "",
       rules: [
         (val) => {
+          if (!val) return true;
           if (this.seleted == "URL") {
             return /^http:\/\/|https:\/\//.test(val)
               ? true
               : "Must be start with http:// or https://";
+          } else {
+            return /^ipfs:\/\//.test(val) ? true : "Must be start with ipfs://";
           }
-          return true;
         },
         (val) => {
-          return val.length > 100
+          return val && val.length > 100
             ? "Must be a domain name with less than 100 characters"
             : true;
         },
       ],
+      saveLoading: false,
     };
   },
   created() {
@@ -127,18 +139,27 @@ export default {
     },
     async onSave() {
       try {
-        if (this.seleted) {
-          this.defaultPage = /^ipfs:\/\//.test(this.defaultPage)
-            ? this.defaultPage
-            : "ipfs://" + this.defaultPage;
-        }
-        await this.$http2.put(`$gateway/gateway/${this.info.name}/index`, {
-          indexPage: this.defaultPage,
-        });
+        if (!this.$refs.defaultPageIpt.valid) return;
+        this.saveLoading = true;
+        await this.$http2.put(
+          `$gateway/gateway/${this.info.name}/index`,
+          {
+            indexPage: this.defaultPage,
+          },
+          {
+            noTip: 1,
+          }
+        );
         this.$emit("handleEvent");
+        this.$toast("Save Success!");
       } catch (error) {
         console.log(error);
+        this.$alert("Please enter a valid ipfs hash");
       }
+      this.saveLoading = false;
+    },
+    handleSelected() {
+      this.$refs.defaultPageIpt.reset();
     },
   },
   watch: {
@@ -146,14 +167,11 @@ export default {
       this.isPrivate = this.info.scope == "private" ? true : false;
       this.defaultPage = this.info.indexPage;
       if (this.info.indexPage == "") {
-        this.seleted = "IPFS";
+        this.seleted = "URL";
       } else {
         this.seleted = /^ipfs:\/\//.test(this.info.indexPage) ? "IPFS" : "URL";
       }
       this.loading = false;
-    },
-    seleted() {
-      this.$refs.defaultPageIpt.validate();
     },
   },
 };
