@@ -25,7 +25,7 @@
             class="ml-auto"
             small
             v-clipboard="it.url"
-            @success="$toast('Copied to clipboard !')"
+            @success="$toast('Copied!')"
             >Copy</v-btn
           >
           <v-btn

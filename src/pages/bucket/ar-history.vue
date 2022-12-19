@@ -80,7 +80,7 @@
             small
             @click.stop="onStop"
             v-clipboard="item.arweaveHash"
-            @success="$toast('Copied to clipboard !')"
+            @success="$toast('Copied!')"
           >
             <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
             <img src="/img/svg/copy.svg" width="11" />

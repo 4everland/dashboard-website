@@ -73,7 +73,7 @@
               src="/img/svg/bucketFileInfo/right-arrow.svg"
               width="12"
             />
-            <span class="ml-2">{{ fileInfoDrawer ? "Pack up" : "Open" }}</span>
+            <span class="ml-2">{{ fileInfoDrawer ? "Close" : "Open" }}</span>
           </div>
         </div>
       </div>
@@ -131,7 +131,7 @@
                   small
                   @click.stop="onStop"
                   v-clipboard="item.hash"
-                  @success="$toast('Copied to clipboard !')"
+                  @success="$toast('Copied!')"
                 >
                   <img src="/img/svg/copy.svg" width="12" />
                 </v-btn>
@@ -382,7 +382,7 @@ export default {
   },
   methods: {
     onCopied() {
-      this.$toast("Copied to clipboard !");
+      this.$toast("Copied!");
     },
     onRouteChange() {
       if (!this.inStorage || this.inFile || this.$route.query.tab != "files")

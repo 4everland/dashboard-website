@@ -66,7 +66,7 @@
           small
           @click.stop
           v-clipboard="item.key"
-          @success="$toast('Copied to clipboard !')"
+          @success="$toast('Copied!')"
         >
           <img src="/img/svg/copy.svg" width="12" />
         </v-btn>
@@ -88,7 +88,7 @@
               return item.value.replace(/^(\/ipfs\/)|(\/ipns\/)/, '');
             }
           "
-          @success="$toast('Copied to clipboard !')"
+          @success="$toast('Copied!')"
         >
           <img src="/img/svg/copy.svg" width="12" />
         </v-btn>

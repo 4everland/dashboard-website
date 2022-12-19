@@ -80,7 +80,7 @@
                   <p
                     class="hover-1 wb-all mb-0"
                     v-clipboard="info.isA ? dns.ip : dns.cname"
-                    @success="$toast('Copied to clipboard !')"
+                    @success="$toast('Copied!')"
                   >
                     {{ info.isA ? dns.ip : dns.cname }}
                     <v-icon size="14" class="ml-1">mdi-content-copy</v-icon>

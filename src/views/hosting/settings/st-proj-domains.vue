@@ -185,7 +185,7 @@
                     <p
                       class="hover-1 wb-all mb-0"
                       v-clipboard="row.value"
-                      @success="$toast('Copied to clipboard !')"
+                      @success="$toast('Copied!')"
                     >
                       {{ row.value }}
                       <v-icon size="14" class="ml-1">mdi-content-copy</v-icon>

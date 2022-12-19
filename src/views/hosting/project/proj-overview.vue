@@ -56,7 +56,7 @@
                   src="/img/svg/copy.svg"
                   width="12"
                   class="ml-3 hover-1"
-                  @success="$toast('Copied to clipboard !')"
+                  @success="$toast('Copied!')"
                   v-clipboard="info.hash"
                 />
               </div>
@@ -83,7 +83,7 @@
                   src="/img/svg/copy.svg"
                   width="12"
                   class="ml-3 hover-1"
-                  @success="$toast('Copied to clipboard !')"
+                  @success="$toast('Copied!')"
                   v-clipboard="info.ipns"
                 />
               </div>

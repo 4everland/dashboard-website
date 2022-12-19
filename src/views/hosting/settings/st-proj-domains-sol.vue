@@ -69,7 +69,7 @@
                     <v-list-item
                       link
                       v-clipboard="info.cid"
-                      @success="$toast('Copied to clipboard !')"
+                      @success="$toast('Copied!')"
                     >
                       <span>Copy CID</span>
                     </v-list-item>

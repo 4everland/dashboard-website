@@ -6,9 +6,9 @@
     <div class="mt-3">
       <h3>Delete Personal Account</h3>
       <div class="gray fz-14 mt-3 ta-l">
-        Permanently delete your Personal Account and all of its contents from
-        the 4everland platform. This action is not reversible, so please
-        continue to act with caution.
+        Permanently delete your Personal Account and all of its content from the
+        4EVERLAND platform. This action is not reversible, so please continue to
+        act with caution.
       </div>
       <div class="mt-8">
         <v-btn outlined small @click="onDelete">Delete Account</v-btn>
@@ -30,9 +30,9 @@ export default {
     async onDelete() {
       try {
         let html =
-          "4everland will delete all of your projects, as well as all their deployments, domains, SSL certificates, activity, and all other resources belonging to your Personal Account.";
+          "4EVERLAND will delete all of your projects, as well as all their deployments, domains, SSL certificates, activity, and all other resources belonging to your Personal Account.";
         html +=
-          '<div class="bg-warning pd-10-20 fz-14 mt-3"><b>Warning</b>: This action is not reversible. Please be certain.</div>';
+          '<div class="bg-warning pd-10-20 fz-14 mt-3"><b>Warning</b>: This action is not reversible. Please be cautious.</div>';
         // const { username } = this.userInfo;
         await this.$prompt(html, "Delete Personal Account", {
           confirmText: "Delete",
@@ -52,7 +52,7 @@ export default {
             rules: [
               (v) =>
                 v == "delete my account" ||
-                "The text you entered didn't match.",
+                "The text you entered doesn't match.",
             ],
             required: true,
           },

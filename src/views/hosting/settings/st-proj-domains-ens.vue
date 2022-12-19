@@ -62,7 +62,7 @@
                     <v-list-item
                       link
                       v-clipboard="info.ipns"
-                      @success="$toast('Copied to clipboard !')"
+                      @success="$toast('Copied!')"
                     >
                       <span>Copy IPNS</span>
                     </v-list-item>

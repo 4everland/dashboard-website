@@ -176,13 +176,13 @@ export default {
     async onCopy() {
       try {
         await clipboard.writeText(this.copyTxt);
-        this.$toast("Copied to clipboard !");
+        this.$toast("Copied!");
       } catch (error) {
         this.$toast("Copied fail");
       }
     },
     onCopied() {
-      this.$toast("Copied to clipboard !");
+      this.$toast("Copied!");
       this.popInvite = false;
     },
     onSaveImg() {

@@ -156,7 +156,7 @@
                 icon
                 small
                 v-clipboard="shareUrl"
-                @success="$toast('Copied to clipboard !')"
+                @success="$toast('Copied!')"
               >
                 <img src="/img/svg/copy.svg" width="12" />
               </v-btn>
@@ -181,7 +181,7 @@
               <tr>
                 <td>#</td>
                 <td>Account</td>
-                <td>CreatedAt</td>
+                <td>Created at</td>
               </tr>
             </thead>
             <tbody class="op-9">
@@ -337,13 +337,13 @@ export default {
     async onCopy() {
       try {
         await clipboard.writeText(this.shareUrl);
-        this.$toast("Copied to clipboard !");
+        this.$toast("Copied!");
       } catch (error) {
         this.$toast("Copied fail");
       }
     },
     onCopied() {
-      this.$toast("Copied to clipboard !");
+      this.$toast("Copied!");
       this.popInvite = false;
     },
     onSaveImg() {

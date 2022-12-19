@@ -30,7 +30,7 @@
             icon
             x-small
             v-clipboard="info.startChainHash"
-            @success="$toast('Copied to clipboard !')"
+            @success="$toast('Copied!')"
           >
             <img src="/img/svg/copy.svg" width="11" />
           </v-btn>
@@ -54,7 +54,7 @@
             icon
             x-small
             v-clipboard="info.endChainHash"
-            @success="$toast('Copied to clipboard !')"
+            @success="$toast('Copied!')"
           >
             <img src="/img/svg/copy.svg" width="11" />
           </v-btn>

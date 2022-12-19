@@ -47,7 +47,7 @@
               color="#999"
               @click.stop
               v-clipboard="item.content"
-              @success="$toast('Copied to clipboard !')"
+              @success="$toast('Copied!')"
               >mdi-content-copy</v-icon
             >
           </v-btn>

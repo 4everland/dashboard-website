@@ -71,7 +71,7 @@
           <div
             class="pd-10 bd-1 bdrs-3 mt-3 d-flex al-c hover-1"
             v-clipboard="() => it.value"
-            @success="$toast(it.label + ' copied to clipboard !')"
+            @success="$toast(it.label + ' Copied!')"
           >
             <span class="el-label-1 fz-14">{{ it.value.cutStr(20, 10) }}</span>
             <v-icon size="16" class="ml-auto">mdi-content-copy</v-icon>

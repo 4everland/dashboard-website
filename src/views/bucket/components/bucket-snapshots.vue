@@ -8,9 +8,9 @@
               >mdi-alert-circle-outline</v-icon
             >
             <span class="fz-14"
-              >The publish will fail if the file in the folder is changed after
-              the snapshot, deleting the snapshot will automatically unpin
-              it!</span
+              >The publishing process will fail if the file in the folder is
+              changed after the snapshot, deleting the snapshot will
+              automatically unpin it!</span
             >
           </div>
         </v-col>
@@ -66,7 +66,7 @@
               small
               @click.stop
               v-clipboard="item.cid"
-              @success="$toast('Copied to clipboard !')"
+              @success="$toast('Copied!')"
             >
               <img src="/img/svg/copy.svg" width="12" />
             </v-btn>
