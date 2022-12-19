@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul class="list" :style="{ height: height }">
-      <li v-for="(item, index) in list" :key="index">
+      <li v-for="(item, index) in list" :key="item">
         <slot :item="item" :index="index"></slot>
       </li>
     </ul>
@@ -43,7 +43,7 @@ export default {
   },
   data() {
     return {
-      height: this.size * 50 + "px",
+      height: this.list.length * 50 + "px",
       currentPage: 1,
     };
   },
@@ -57,6 +57,9 @@ export default {
     },
   },
   watch: {
+    list(val) {
+      this.height = val.length * 50 + "px";
+    },
     currentPage(val) {
       if (val == this.page) {
         this.height = this.list.length * 50 + "px";

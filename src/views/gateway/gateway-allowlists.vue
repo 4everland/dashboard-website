@@ -117,9 +117,9 @@
           Tips: Origin allowlists support wildcard subdomain patterns.
         </div>
         <load-list :list="originsList" v-if="!isBulkOperation">
-          <template v-slot="{ item, index }">
+          <template v-slot="{ item }">
             <div class="list-item al-c justify-space-between origin-item px-4">
-              <span class="fz-14">{{ item }}{{ index }}</span>
+              <span class="fz-14">{{ item }}</span>
               <v-btn text color="primary" @click="handleRemoveOrigin(item)"
                 >Remove</v-btn
               >
@@ -127,21 +127,28 @@
           </template>
         </load-list>
 
-        <div v-if="isBulkOperation">
+        <div v-if="isBulkOperation" class="mt-4">
           <v-textarea
             outlined
             name="input-7-4"
-            :value="bulkOrigins"
+            class="hide-msg"
+            height="300"
+            v-model="bulkOriginsStr"
+            :spellcheck="false"
           ></v-textarea>
           <div class="al-c mt-4">
-            <span class="tips fz-14"
+            <span class="tips fz-14 mr-auto"
               >Please use ';' to split URLs, click the SAVE button after
               modification</span
             >
             <v-btn color="primary" width="120" @click="onBulkSave">Save</v-btn>
           </div>
         </div>
-        <span class="cursor-p" @click="handleBulkOperation"
+        <span
+          v-show="!isBulkOperation"
+          class="cursor-p fz-14"
+          style="color: #775da6"
+          @click="handleBulkOperation"
           >Bulk Operation</span
         >
       </div>
@@ -182,13 +189,10 @@ export default {
       ],
       radioGroup: false,
       isBulkOperation: false,
+      bulkOriginsStr: [],
     };
   },
-  computed: {
-    bulkOrigins() {
-      return this.originsList.join(";");
-    },
-  },
+
   created() {
     this.initData();
   },
@@ -330,7 +334,24 @@ export default {
       this.isBulkOperation = true;
     },
     async onBulkSave() {
-      console.log(11);
+      let origins = this.bulkOriginsStr.split(";");
+      origins = origins.filter((it) => {
+        return it != "";
+      });
+      try {
+        this.$loading();
+        await this.$http.put(`$gateway/gateway/${this.info.name}/origin`, {
+          origins,
+          allowBlankOrigin: this.radioGroup,
+        });
+        this.origin = "";
+        this.$emit("handleEvent");
+      } catch (error) {
+        //
+        console.log(error);
+      }
+      this.$loading.close();
+      this.isBulkOperation = false;
     },
   },
   watch: {
@@ -338,7 +359,9 @@ export default {
       if (this.info.enableOrigin == val) return;
       this.openOrigin(val);
     },
-    info() {
+    info(val) {
+      console.log(val);
+      console.log(this.info);
       this.initData();
     },
     origin(val) {
@@ -349,6 +372,11 @@ export default {
     userAgent(val) {
       if (!val) {
         this.$refs.agentInput.resetValidation();
+      }
+    },
+    originsList(val) {
+      if (val) {
+        this.bulkOriginsStr = val.join(";");
       }
     },
   },

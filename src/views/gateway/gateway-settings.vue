@@ -41,6 +41,7 @@
           <v-col :sm="9" :cols="12" class="d-flex al-start">
             <v-text-field
               class="post-input"
+              ref="defaultPageIpt"
               persistent-placeholder
               v-model="defaultPage"
               outlined
@@ -144,11 +145,15 @@ export default {
     info() {
       this.isPrivate = this.info.scope == "private" ? true : false;
       this.defaultPage = this.info.indexPage;
-      this.seleted = /^ipfs:\/\//.test(this.info.indexPage) ? "IPFS" : "URL";
+      if (this.info.indexPage == "") {
+        this.seleted = "IPFS";
+      } else {
+        this.seleted = /^ipfs:\/\//.test(this.info.indexPage) ? "IPFS" : "URL";
+      }
       this.loading = false;
     },
     seleted() {
-      this.defaultPage = this.defaultPage + " ";
+      this.$refs.defaultPageIpt.validate();
     },
   },
 };
