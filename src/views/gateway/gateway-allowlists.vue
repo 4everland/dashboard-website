@@ -1,9 +1,14 @@
 <template>
   <div class="gateway-allowlists">
-    <div>
+    <!-- <div>
       <div class="d-flex justify-space-between al-c">
         <span class="mr-auto">User Agent</span>
-        <v-switch class="hide-msg" v-model="isUserAgent" dense></v-switch>
+        <v-switch
+          class="hide-msg"
+          @change="handleChangeUserAgent"
+          v-model="isUserAgent"
+          dense
+        ></v-switch>
       </div>
       <div class="fz-14 tips mt-2" v-if="!isUserAgent">
         When user-agent is enabled, only API requests with the user-agent
@@ -33,6 +38,7 @@
             class="ml-8"
             color="primary"
             width="120"
+            :disabled="userAgent == ''"
             @click="handleAddUserAgent"
             >Add</v-btn
           >
@@ -57,11 +63,16 @@
           </template>
         </load-list>
       </div>
-    </div>
-    <div class="mt-15">
+    </div> -->
+    <div>
       <div class="d-flex justify-space-between al-c">
         <span class="mr-auto">Origins</span>
-        <v-switch class="hide-msg" v-model="isOrigins" dense></v-switch>
+        <v-switch
+          class="hide-msg"
+          @change="handleChangeOrigins"
+          v-model="isOrigins"
+          dense
+        ></v-switch>
       </div>
       <div class="fz-14 tips mt-2" v-if="!isOrigins">
         When Origins is enabled, only API requests with the Origins parameter
@@ -70,8 +81,8 @@
       </div>
 
       <div v-else>
-        <div class="al-c">
-          <span class="mr-5 fz-14">Always allow access</span>
+        <!-- <div class="al-c">
+          <span class="mr-5 fz-14">Always allow access via address bar?</span>
           <v-radio-group
             v-model="radioGroup"
             @change="handleChangeAllowAccess"
@@ -85,7 +96,7 @@
               :value="n.value"
             ></v-radio>
           </v-radio-group>
-        </div>
+        </div> -->
         <div class="d-flex mt-3" v-if="!isBulkOperation">
           <v-text-field
             class="post-input"
@@ -97,9 +108,9 @@
             :counter="64"
             :rules="[
               (val) => {
-                return this.$regMap.domain.test(val)
+                return this.$regMap.secondLevelDomain.test(val) || !val
                   ? true
-                  : 'Must be a top-level or second-level domain with less than 64 characters';
+                  : 'Must be a top-level or second-level english domain with less than 64 characters';
               },
               (val) => {
                 return val && val.length > 64
@@ -113,6 +124,7 @@
             class="ml-8"
             color="primary"
             width="120"
+            :disabled="origin == ''"
             @click="handleAddOrigins"
             >Add</v-btn
           >
@@ -126,7 +138,7 @@
         </div>
         <load-list class="mt-4" :list="originsList" v-if="!isBulkOperation">
           <template v-slot="{ item }">
-            <div class="list-item al-c justify-space-between origin-item px-4">
+            <div class="list-item al-c justify-space-between">
               <span class="fz-14">{{ item }}</span>
               <v-btn text color="primary" @click="handleRemoveOrigin(item)"
                 >Remove</v-btn
@@ -139,9 +151,10 @@
           <v-textarea
             outlined
             name="input-7-4"
-            class="hide-msg"
             height="300"
             v-model="bulkOriginsStr"
+            ref="originArea"
+            :rules="textAreaRules"
             :spellcheck="false"
           ></v-textarea>
           <div class="al-c mt-4">
@@ -198,6 +211,21 @@ export default {
       radioGroup: false,
       isBulkOperation: false,
       bulkOriginsStr: [],
+      textAreaRules: [
+        (val) => {
+          const arr = val.split(";");
+          if (arr.length > 100) {
+            return "Maximum allowed is 100 URLs. In case of capacity expansion, please contact us.";
+          }
+          for (const it of arr) {
+            console.log(this.$regMap.secondLevelDomain.test(it));
+            if (!this.$regMap.secondLevelDomain.test(it) && it != "") {
+              return "Must be a top-level or second-level english domain";
+            }
+          }
+          return true;
+        },
+      ],
     };
   },
 
@@ -227,7 +255,7 @@ export default {
             noTip: 1,
           }
         );
-        this.userAgent = "";
+        this.$refs.agentInput.reset();
         this.$emit("handleEvent");
         this.$loading.close();
       } catch (error) {
@@ -260,7 +288,7 @@ export default {
             noTip: 1,
           }
         );
-        this.origin = "";
+        this.$refs.originInput.reset();
         this.$emit("handleEvent");
         this.$loading.close();
       } catch (error) {
@@ -269,9 +297,9 @@ export default {
           error.message ==
           "ParamsError: origins or useragent exceed the limit error"
         ) {
-          this.$alert(
-            "Maximum allowed is 100 domains. In case of capacity expansion, please contact us."
-          );
+          let html =
+            'Maximum allowed is 100 domains. In case of capacity expansion, please <a href="http://discord.gg/4everland" target="__blank">contact us</a> .';
+          this.$alert(html);
         } else {
           this.$alert(error.message);
         }
@@ -293,10 +321,21 @@ export default {
       this.$loading.close();
     },
     async handleRemoveOrigin(item) {
-      this.$loading();
       let origins = JSON.parse(JSON.stringify(this.originsList));
       origins = origins.filter((it) => it != item);
       try {
+        if (!this.radioGroup && this.originsList.length == 1) {
+          await this.$confirm(
+            "Empty origins while disabling gateway access from the address bar will disable the Origins Allowlists, Are you sure you want to disable the allowlist?",
+            "",
+            {
+              cancelText: "Cancel",
+              confirmText: "Disable",
+              persistent: true,
+            }
+          );
+        }
+        this.$loading();
         await this.$http.put(`$gateway/gateway/${this.info.name}/origin`, {
           origins,
           allowBlankOrigin: this.radioGroup,
@@ -308,29 +347,85 @@ export default {
       }
       this.$loading.close();
     },
-    async openOrigin(val) {
-      try {
-        this.$loading();
-        await this.$http.put(`$gateway/gateway/${this.info.name}/origin`, {
-          origins: [],
-          allowBlankOrigin: val,
-        });
-        this.origin = "";
-        this.$emit("handleEvent");
-      } catch (error) {
-        //
-        console.log(error);
+
+    async handleChangeUserAgent(val) {
+      if (!val && this.userAgentList.length) {
+        try {
+          await this.$confirm(
+            "Disabling it will clear your user-agents allowlisit configuration. Please confirm before proceeding.",
+            "",
+            {
+              cancelText: "Cancel",
+              confirmText: "Disiable",
+              persistent: true,
+            }
+          );
+          this.$loading();
+          await this.$http.put(`$gateway/gateway/${this.info.name}/useragent`, {
+            userAgents: [],
+          });
+          this.$emit("handleEvent");
+        } catch (error) {
+          this.isUserAgent = true;
+        }
+        this.$loading.close();
       }
-      this.$loading.close();
+      this.userAgent = "";
     },
-    async handleChangeAllowAccess() {
+    async handleChangeOrigins(val) {
+      if (!val && this.originsList.length) {
+        try {
+          await this.$confirm(
+            "Disabling it will clear your Origin allowlisit configuration. Please confirm before proceeding.",
+            "",
+            {
+              cancelText: "Cancel",
+              confirmText: "Disiable",
+              persistent: true,
+            }
+          );
+          this.$loading();
+          this.origin = "";
+          await this.$http.put(`$gateway/gateway/${this.info.name}/origin`, {
+            origins: [],
+            allowBlankOrigin: false,
+          });
+          this.$emit("handleEvent");
+        } catch (error) {
+          this.isOrigins = true;
+        }
+        this.$loading.close();
+      } else {
+        try {
+          this.$loading();
+          await this.$http.put(`$gateway/gateway/${this.info.name}/origin`, {
+            origins: [],
+            allowBlankOrigin: val,
+          });
+          this.origin = "";
+          this.$emit("handleEvent");
+        } catch (error) {
+          //
+          console.log(error);
+        }
+        this.$loading.close();
+      }
+      this.isBulkOperation = false;
+    },
+    async handleChangeAllowAccess(val) {
+      if (!val && this.originsList.length == 0)
+        return this.$alert(
+          "Please enter one URL below if you want to disable gateway access from the address bar."
+        ).then(() => {
+          this.radioGroup = true;
+        });
       try {
         this.$loading();
         await this.$http.put(`$gateway/gateway/${this.info.name}/origin`, {
           origins: this.originsList,
           allowBlankOrigin: this.radioGroup,
         });
-        this.origin = "";
+        this.$refs.originInput.reset();
         this.$emit("handleEvent");
       } catch (error) {
         //
@@ -347,44 +442,59 @@ export default {
         return it != "";
       });
       try {
+        if (!this.$refs.originArea.valid) return;
+        if (!this.radioGroup && this.bulkOriginsStr == "") {
+          await this.$confirm(
+            "Empty origins while disabling gateway access from the address bar will disable the Origins Allowlists, Are you sure you want to disable the allowlist?",
+            "",
+            {
+              cancelText: "Cancel",
+              confirmText: "Disable",
+              persistent: true,
+            }
+          );
+        }
         this.$loading();
-        await this.$http.put(`$gateway/gateway/${this.info.name}/origin`, {
-          origins,
-          allowBlankOrigin: this.radioGroup,
-        });
+        await this.$http.put(
+          `$gateway/gateway/${this.info.name}/origin`,
+          {
+            origins,
+            allowBlankOrigin: this.radioGroup,
+          },
+          {
+            noTip: 1,
+          }
+        );
         this.origin = "";
         this.$emit("handleEvent");
+        this.$loading.close();
       } catch (error) {
         //
-        console.log(error);
+        if (/^OriginError/.test(error.message)) {
+          this.$alert(
+            "Save failed. Please ensure that each entry is a top or second level domain english name with no more than 64 characters."
+          );
+        }
+        if (
+          error.message ==
+          "ParamsError: origins or useragent exceed the limit error"
+        ) {
+          let html =
+            'Maximum allowed is 100 domains. In case of capacity expansion, please <a href="http://discord.gg/4everland" target="__blank">contact us</a>.';
+          this.$alert(html);
+        } else {
+          this.$alert(error.message);
+        }
       }
-      this.$loading.close();
       this.isBulkOperation = false;
     },
   },
   watch: {
-    async isOrigins(val) {
-      if (this.info.enableOrigin == val) return;
-      this.isBulkOperation = false;
-      this.openOrigin(val);
-    },
     info() {
       this.initData();
     },
-    origin(val) {
-      if (!val) {
-        this.$refs.originInput.resetValidation();
-      }
-    },
-    userAgent(val) {
-      if (!val) {
-        this.$refs.agentInput.resetValidation();
-      }
-    },
-    originsList(val) {
-      if (val) {
-        this.bulkOriginsStr = val.join(";");
-      }
+    isBulkOperation() {
+      this.bulkOriginsStr = this.originsList.join(";");
     },
   },
 };
@@ -408,8 +518,5 @@ export default {
   height: 50px;
   box-sizing: border-box;
   border-bottom: 1px solid #d0dae9;
-}
-.origin-item {
-  background: #f7fafb;
 }
 </style>

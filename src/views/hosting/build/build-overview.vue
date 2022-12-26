@@ -44,7 +44,7 @@
             </e-link>
           </e-kv2>
 
-          <div class="mt-7 d-flex">
+          <div class="mt-7 d-flex" v-if="!hashDeploy(info.deployType)">
             <e-kv2 label="Branch">
               <div class="d-flex al-c f-wrap">
                 <h-branch :info="info" class="fz-15" />
@@ -78,6 +78,32 @@
               ></h-status>
             </e-kv2>
           </div>
+
+          <div class="mt-7 d-flex" v-else>
+            <e-kv2 label="IPNS" v-if="info.deployType == 'IPNS'"> </e-kv2>
+            <e-kv2 label="Base IPFS">
+              <div class="al-c" v-if="info.hash">
+                <e-link
+                  class="fz-14"
+                  :href="$utils.getCidLink(info.hash, info.platform)"
+                >
+                  <span>{{ info.hash.cutStr(4, 4) }}</span>
+                </e-link>
+                <img
+                  src="/img/svg/copy.svg"
+                  width="12"
+                  class="ml-3 hover-1"
+                  @success="$toast('Copied!')"
+                  v-clipboard="info.hash"
+                />
+              </div>
+              <h-status
+                v-else
+                :val="state == 'failure' ? 'Not synchronized' : state"
+              ></h-status>
+            </e-kv2>
+            <e-kv2 label="Base IPNS" v-if="info.deployType == 'IPNS'"></e-kv2>
+          </div>
         </v-col>
         <v-col cols="12" md="3">
           <div class="d-flex">
@@ -105,7 +131,10 @@
               </v-list>
             </e-menu>
             <div class="flex-1 ml-5 pr-4">
-              <div v-if="!info.cli" class="mb-5">
+              <div
+                v-if="!info.cli && !hashDeploy(info.deployType)"
+                class="mb-5"
+              >
                 <v-btn
                   color="error"
                   outlined
@@ -195,6 +224,11 @@ export default {
         this.info.platform == "AR" ||
         (this.projInfo.latest || {}).taskId == this.info.taskId
       );
+    },
+    hashDeploy() {
+      return function (type) {
+        return type == "CID" || type == "IPNS";
+      };
     },
   },
   async created() {

@@ -14,7 +14,7 @@
         :key="it.taskId"
       >
         <v-row class="d-flex">
-          <v-col cols="12" md="9">
+          <v-col cols="12" :md="hashDeploy(it.deployType) ? 5 : 9">
             <div>
               <a class="b fw-b fz-18">{{ it.domain }}</a>
             </div>
@@ -75,6 +75,13 @@
                 </div>
               </template>
             </div>
+          </v-col>
+          <v-col cols="12" md="4" class="al-c" v-if="hashDeploy(it.deployType)">
+            <div v-if="it.deployType == 'CID'">
+              <span class="d-ib deploy-origin-type fz-14">IPFS</span>
+              <span class="ml-3 fz-14">Deployment Through IPFS</span>
+            </div>
+            <div v-else></div>
           </v-col>
           <v-col cols="12" md="3">
             <div class="al-c mt-2">
@@ -163,6 +170,11 @@ export default {
         return this.$utils.getCidLink(link, it.platform);
       };
     },
+    hashDeploy() {
+      return function (type) {
+        return type == "CID" || type == "IPNS";
+      };
+    },
   },
   data() {
     const { id } = this.$route.params;
@@ -203,13 +215,14 @@ export default {
       this.$navTo(link);
     },
     getOptList(it) {
-      let arr = [
-        {
+      let arr = [];
+      if (it.deployType != "CID" && it.deployType != "IPNS") {
+        arr.push({
           text: "Redeploy",
           name: "deploy",
           icon: "send",
-        },
-      ];
+        });
+      }
       if (it.canRollback && it.platform != "IC")
         arr.push({
           text: "Rollback",
@@ -361,3 +374,11 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.deploy-origin-type {
+  padding: 3px 9px;
+  color: #fff;
+  background: #e4eaf3;
+  border-radius: 2px;
+}
+</style>

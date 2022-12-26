@@ -44,7 +44,7 @@
               v-clipboard="() => item.value"
               @success="$toast('Copied!')"
             >
-              {{ item.value.cutStr(6, 10) }}
+              {{ item.value }}
               <v-icon size="14" class="ml-1">mdi-content-copy</v-icon>
             </p>
           </td>

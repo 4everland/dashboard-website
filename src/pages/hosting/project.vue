@@ -1,6 +1,10 @@
 <template>
   <div>
-    <e-tabs :list="list" />
+    <v-skeleton-loader
+      v-if="!info.deployType"
+      type="article"
+    ></v-skeleton-loader>
+    <e-tabs v-else :list="list" />
   </div>
 </template>
 
@@ -51,6 +55,11 @@ export default {
       if (data.state != this.lastState && data.taskId == taskId) {
         this.lastState = data.state;
         this.getInfo();
+      }
+    },
+    info() {
+      if (this.info.deployType == "CID" || this.info.deployType == "IPNS") {
+        this.list = this.list.filter((it) => it.text != "Commits");
       }
     },
   },

@@ -11,13 +11,13 @@
           class="fz-14 cursor-p"
           v-if="list.length > 20"
           @click="handlePackUp"
-          >Pack Up</span
+          >Collapse</span
         >
         <span
           class="ml-6 fz-14 cursor-p"
           v-if="list.length > 20"
           @click="handleLoadMore"
-          >Load More</span
+          >Expand</span
         >
       </div>
     </slot>
@@ -43,7 +43,7 @@ export default {
   },
   data() {
     return {
-      height: this.list.length * 50 + "px",
+      height: 0,
       currentPage: 1,
     };
   },
@@ -57,14 +57,24 @@ export default {
     },
   },
   watch: {
-    list(val) {
-      this.height = val.length * 50 + "px";
+    currentPage: {
+      handler(val) {
+        if (
+          val == this.page &&
+          this.list.length - val * this.size <= this.size
+        ) {
+          this.height = this.list.length * 50 + "px";
+        } else if (this.page == 0) {
+          this.height = this.list.length * 50 + "px";
+        } else {
+          this.height = 50 * this.size * val + "px";
+        }
+      },
+      immediate: true,
     },
-    currentPage(val) {
-      if (val == this.page) {
-        this.height = this.list.length * 50 + "px";
-      } else {
-        this.height = 50 * this.size * val + "px";
+    list(val) {
+      if (val.length <= 20) {
+        this.height = val.length * 50 + "px";
       }
     },
   },

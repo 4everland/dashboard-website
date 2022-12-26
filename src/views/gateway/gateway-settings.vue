@@ -51,7 +51,7 @@
               v-model="defaultPage"
               outlined
               dense
-              label=""
+              :placeholder="label"
               :counter="100"
               :rules="rules"
             ></v-text-field>
@@ -111,6 +111,7 @@ export default {
             : true;
         },
       ],
+      label: "http:// or https://",
       saveLoading: false,
     };
   },
@@ -158,8 +159,14 @@ export default {
       }
       this.saveLoading = false;
     },
-    handleSelected() {
-      this.$refs.defaultPageIpt.reset();
+    handleSelected(value) {
+      console.log(value);
+      if (value == "IPFS") {
+        this.label = "ipfs://";
+      } else {
+        this.label = "http:// or https://";
+      }
+      this.$refs.defaultPageIpt.validate((val) => console.log(val));
     },
   },
   watch: {

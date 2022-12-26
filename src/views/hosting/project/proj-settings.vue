@@ -37,6 +37,20 @@ export default {
         //         },
         //       ]
         //     : [];
+
+        const domains =
+          this.info.deployType == "CID" || this.info.deployType == "IPNS"
+            ? []
+            : [
+                {
+                  comp: "st-proj-git",
+                  text: "Git",
+                },
+                {
+                  comp: "st-proj-env",
+                  text: "Environment Variable",
+                },
+              ];
         return [
           {
             comp: "st-proj-general",
@@ -47,14 +61,7 @@ export default {
             comp: "st-proj-domains",
             text: "Domains",
           },
-          {
-            comp: "st-proj-git",
-            text: "Git",
-          },
-          {
-            comp: "st-proj-env",
-            text: "Environment Variable",
-          },
+          ...domains,
           {
             comp: "st-proj-advanced",
             text: "Advanced",

@@ -22,6 +22,12 @@
         box-shadow: 0 1px 4px rgb(153 153 153 / 60%);
       }
     }
+    .deploy-origin-type {
+      padding: 3px 9px;
+      color: #fff;
+      background: #e4eaf3;
+      border-radius: 2px;
+    }
   }
 
   .theme--light.v-expansion-panels .v-expansion-panel--disabled {
@@ -177,7 +183,17 @@
                   </div>
                 </div>
               </v-col>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="4" v-if="hashDeploy(it.deployType)">
+                <div class="mb-4 mt-2" v-if="!asMobile">
+                  <!-- @click.native.stop="onStatus(it)" -->
+                  <h-status class="fw-b" :val="it.state"></h-status>
+                </div>
+                <div>
+                  <span class="d-ib deploy-origin-type fz-14">IPFS</span>
+                  <span class="ml-3 fz-14">Deployment Through IPFS</span>
+                </div>
+              </v-col>
+              <v-col cols="12" md="4" v-else>
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status class="fw-b" :val="it.state"></h-status>
@@ -206,6 +222,7 @@
                   ></e-commit>
                 </div>
               </v-col>
+
               <v-col cols="12" md="4" class="d-flex al-c">
                 <div class="ml-auto mr-6 ta-r" style="min-width: 70px">
                   <e-time span-class="gray-6 fz-14">{{ it.buildAt }}</e-time>
@@ -379,6 +396,11 @@ export default {
     },
     pageLen() {
       return Math.ceil(this.total / this.pageSize);
+    },
+    hashDeploy() {
+      return function (type) {
+        return type == "CID" || type == "IPNS";
+      };
     },
   },
   data() {

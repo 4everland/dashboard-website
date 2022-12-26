@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <div class="bd-1 mt-5">
+    <div class="bd-1 mt-5" v-if="!hashDeploy">
       <h3>Build Configuration</h3>
       <div class="gray fz-14">
         When using a framework of a new project, it will be automatically
@@ -127,7 +127,7 @@
       </div>
     </div>
 
-    <div class="bd-1 mt-5 hide-msg">
+    <div class="bd-1 mt-5 hide-msg" v-if="!hashDeploy">
       <h3>Root Directory</h3>
       <div class="gray fz-14">
         The directory within your project, in which your code is located. Leave
@@ -174,6 +174,9 @@ export default {
         if (this.form[key] != val) changed = true;
       }
       return changed;
+    },
+    hashDeploy() {
+      return this.info.deployType == "CID" || this.info.deployType == "IPNS";
     },
   },
   data() {
