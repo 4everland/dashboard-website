@@ -38,44 +38,49 @@
             </v-col>
           </v-row>
 
-          <e-kv2 label="Domain" class="mt-7" :class="showLabel ? '' : 'op-0'">
-            <e-link :href="'//' + info.domain">
-              {{ info.domain }}
-            </e-link>
+          <e-kv2
+            class="mt-7"
+            :label="info.platform"
+            style="min-width: 120px"
+            v-if="showLabel"
+          >
+            <div class="al-c" v-if="info.hash">
+              <e-link
+                class="fz-14"
+                :href="$utils.getCidLink(info.hash, info.platform)"
+              >
+                <span>{{ info.hash }}</span>
+              </e-link>
+              <img
+                src="/img/svg/copy.svg"
+                width="12"
+                class="ml-3 hover-1"
+                @success="$toast('Copied!')"
+                v-clipboard="info.hash"
+              />
+            </div>
+            <h-status
+              v-else
+              :val="state == 'failure' ? 'Not synchronized' : state"
+            ></h-status>
           </e-kv2>
 
-          <div class="mt-7 d-flex">
+          <div class="mt-7 d-flex" style="width: 130%">
             <e-kv2 label="Branch">
               <div class="d-flex al-c f-wrap">
                 <h-branch :info="info" class="fz-15" />
                 <e-commit :info="info.commits" class="fz-14 ml-3"></e-commit>
               </div>
             </e-kv2>
+
             <e-kv2
+              label="Domain"
               class="ml-auto"
-              :label="info.platform"
-              style="min-width: 120px"
-              v-if="showLabel"
+              :class="showLabel ? '' : 'op-0'"
             >
-              <div class="al-c" v-if="info.hash">
-                <e-link
-                  class="fz-14"
-                  :href="$utils.getCidLink(info.hash, info.platform)"
-                >
-                  <span>{{ info.hash.cutStr(4, 4) }}</span>
-                </e-link>
-                <img
-                  src="/img/svg/copy.svg"
-                  width="12"
-                  class="ml-3 hover-1"
-                  @success="$toast('Copied!')"
-                  v-clipboard="info.hash"
-                />
-              </div>
-              <h-status
-                v-else
-                :val="state == 'failure' ? 'Not synchronized' : state"
-              ></h-status>
+              <e-link :href="'//' + info.domain">
+                {{ info.domain }}
+              </e-link>
             </e-kv2>
           </div>
         </v-col>
