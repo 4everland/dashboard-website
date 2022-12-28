@@ -47,7 +47,6 @@
         <template v-slot:item.domain="{ item }">
           <v-btn
             class="e-btn-text"
-            :to="getPath(item)"
             :color="item.valid ? 'success' : 'error'"
             text
             x-small
