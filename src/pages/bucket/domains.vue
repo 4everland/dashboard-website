@@ -244,6 +244,7 @@ export default {
       return `/bucket/domain/${item.domain}`;
     },
     onRow(it) {
+      if (it.valid) return;
       const url = this.getPath(it);
       this.$router.push(url).catch(() => {});
     },
