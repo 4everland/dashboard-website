@@ -29,7 +29,7 @@ export default {
       console.log(chainId);
       const addrItem = addrList.find((it) => it.chainIdArr.includes(chainId));
       console.log(addrItem);
-      return addrItem.addr;
+      return addrItem ? addrItem.addr : undefined;
     },
     registerOverThreeDays() {
       return (
