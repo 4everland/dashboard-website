@@ -44,7 +44,7 @@
             <e-kv
               :label="info.platform"
               style="min-width: 120px"
-              v-if="!hashDeploy(info.deployType)"
+              v-if="!hashDeploy(info.deployType) || info.platform !== 'IPFS'"
             >
               <div class="al-c">
                 <e-link
@@ -117,19 +117,24 @@
               <div class="al-c">
                 <e-link
                   class="fz-14"
-                  :href="$utils.getCidLink(info.hash, info.platform)"
-                  v-if="info.hash"
+                  :href="
+                    $utils.getCidLink(
+                      transformIpfsPath(info.ipfsPath),
+                      info.platform
+                    )
+                  "
+                  v-if="info.ipfsPath"
                 >
-                  {{ info.hash.cutStr(4, 4) }}
+                  {{ transformIpfsPath(info.ipfsPath).cutStr(4, 4) }}
                 </e-link>
-                <h-status v-if="!info.hash" :val="info.state"></h-status>
+                <h-status v-if="!info.ipfsPath" :val="info.state"></h-status>
                 <img
-                  v-if="info.hash"
+                  v-if="info.ipfsPath"
                   src="/img/svg/copy.svg"
                   width="12"
                   class="ml-3 hover-1"
                   @success="$toast('Copied!')"
-                  v-clipboard="info.hash"
+                  v-clipboard="transformIpfsPath(info.ipfsPath)"
                 />
               </div>
             </e-kv>
@@ -185,6 +190,11 @@ export default {
     hashDeploy() {
       return function (type) {
         return type == "CID" || type == "IPNS";
+      };
+    },
+    transformIpfsPath() {
+      return function (val) {
+        return val.replace("/ipfs/", "").replace("/ipns/", "");
       };
     },
   },

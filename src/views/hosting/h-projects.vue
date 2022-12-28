@@ -186,7 +186,7 @@
               <v-col cols="12" md="4" v-if="hashDeploy(it.deployType)">
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
-                  <h-status class="fw-b" :val="it.state"></h-status>
+                  <h-status class="ta-c" :val="it.state"></h-status>
                 </div>
                 <div>
                   <span class="d-ib deploy-origin-type fz-14">IPFS</span>
@@ -196,7 +196,7 @@
               <v-col cols="12" md="4" v-else>
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
-                  <h-status class="fw-b" :val="it.state"></h-status>
+                  <h-status class="ta-c" :val="it.state"></h-status>
                 </div>
                 <div
                   class="d-flex al-c"
@@ -416,7 +416,7 @@ export default {
       sortIdx: 0,
       newProjectIdx: 0,
       sortArr: ["Last Update", "Create Time"],
-      projectTypeArr: ["From git/ template", "From IPFS Path"],
+      projectTypeArr: ["From Git / Template", "From IPFS Path"],
       refreshAt: Date.now(),
     };
   },

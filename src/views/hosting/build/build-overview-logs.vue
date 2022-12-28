@@ -5,7 +5,6 @@
       title="Building"
       :value="getOpen(0)"
       :icon="getIcon(0)"
-      v-if="!hashDeploy(info.deployType)"
     >
       <template #time v-if="info && info.endAt">
         <div class="fz-14 gray">

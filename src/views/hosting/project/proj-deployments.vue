@@ -14,7 +14,7 @@
         :key="it.taskId"
       >
         <v-row class="d-flex">
-          <v-col cols="12" :md="hashDeploy(it.deployType) ? 5 : 9">
+          <v-col cols="12" md="9">
             <div>
               <a class="b fw-b fz-18">{{ it.domain }}</a>
             </div>
@@ -74,15 +74,16 @@
                   </div>
                 </div>
               </template>
+              <template v-if="hashDeploy(it.deployType)">
+                <div v-if="it.deployType == 'CID'" class="ml-5">
+                  <span class="deploy-origin-type fz-14">IPFS</span>
+                  <span class="ml-3 fz-14">Deployment Through IPFS</span>
+                </div>
+                <div v-else></div>
+              </template>
             </div>
           </v-col>
-          <v-col cols="12" md="4" class="al-c" v-if="hashDeploy(it.deployType)">
-            <div v-if="it.deployType == 'CID'">
-              <span class="d-ib deploy-origin-type fz-14">IPFS</span>
-              <span class="ml-3 fz-14">Deployment Through IPFS</span>
-            </div>
-            <div v-else></div>
-          </v-col>
+
           <v-col cols="12" md="3">
             <div class="al-c mt-2">
               <div class="mr-auto ta-c">

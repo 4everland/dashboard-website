@@ -32,14 +32,31 @@
         <div class="gray-8 fz-14 mt-1">Welcome back to 4EVERLAND dashboard</div>
       </div>
       <e-right-opt-wrap>
-        <v-btn color="primary" to="/bucket/storage/?new=bucket">
+        <v-btn class="mr-5" color="primary" to="/bucket/storage/?new=bucket">
           <span class="fz-18">+</span>
           <span class="ml-1"> New Bucket </span>
         </v-btn>
-        <v-btn color="primary" class="ml-5" to="/hosting/new">
+        <!-- <v-btn color="primary" class="ml-5" to="/hosting/new">
           <span class="fz-18">+</span>
           <span class="ml-1"> New Project </span>
-        </v-btn>
+        </v-btn> -->
+
+        <e-menu open-on-hover offset-y>
+          <v-btn slot="ref" color="primary" dark>
+            <img src="/img/svg/add1.svg" width="12" />
+            <span class="ml-2">New Project</span>
+            <v-icon>mdi-chevron-down</v-icon>
+          </v-btn>
+          <v-list>
+            <v-list-item
+              v-for="(text, i) in projectTypeArr"
+              :key="i"
+              @click="onCreate(i)"
+            >
+              <v-list-item-title class="fz-15">{{ text }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </e-menu>
       </e-right-opt-wrap>
     </div>
 
@@ -84,6 +101,7 @@ export default {
           to: "/reward-hub",
         },
       ],
+      projectTypeArr: ["From Git / Template", "From IPFS Path"],
     };
   },
   computed: {
@@ -97,6 +115,12 @@ export default {
       const info = this.$store.state.userInfo;
       if (info.username) return "Hi " + info.username.cutStr(6, 4);
       return "Overview";
+    },
+  },
+  methods: {
+    onCreate(i) {
+      if (i == 0) return this.$router.push("/hosting/new");
+      this.$router.push("/hosting/newByHash");
     },
   },
   // watch: {

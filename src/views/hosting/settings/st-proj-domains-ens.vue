@@ -61,10 +61,12 @@
                   <v-list dense>
                     <v-list-item
                       link
-                      v-clipboard="info.ipns"
+                      v-clipboard="
+                        copyText == 'Copy IPNS' ? info.ipns : projectInfo.hash
+                      "
                       @success="$toast('Copied!')"
                     >
-                      <span>Copy IPNS</span>
+                      <span>{{ copyText }}</span>
                     </v-list-item>
                     <v-list-item
                       v-if="!verify"
@@ -95,7 +97,7 @@
               <span>{{ owner.cutStr(6, 4) }}</span>
             </div>
             <v-btn
-              @click="setContentHash"
+              @click="showDialog = true"
               color="primary"
               class="ml-4"
               style="margin-top: 2px"
@@ -106,6 +108,33 @@
         </div>
       </template>
     </div>
+
+    <v-dialog v-model="showDialog" max-width="600">
+      <div class="pa-5">
+        <h3>Add ENS</h3>
+
+        <v-radio-group v-model="bindContent">
+          <v-radio
+            class="bind-radio"
+            v-for="n in bindOpt"
+            :key="n.value"
+            :label="n.label"
+            :value="n.value"
+          ></v-radio>
+        </v-radio-group>
+        <div class="al-c justify-center mt-7">
+          <v-btn color="primary" width="120" @click="setContentHash">OK</v-btn>
+          <v-btn
+            color="primary"
+            outlined
+            class="ml-4"
+            width="120"
+            @click="showDialog = false"
+            >Cancel</v-btn
+          >
+        </div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -125,12 +154,28 @@ export default {
       verify: false,
       ensIpns: "",
       owner: "",
+      showDialog: false,
+      bindContent: "ipns",
+      copyText: "Copy IPNS",
+      bindOpt: [
+        // {
+        //   label:
+        //     "Bind the ENS to the IPNS (Base IPNS) used for project deployment",
+        //   value: "BaseIpns",
+        // },
+        {
+          label: "Bind the ENS to the IPNS generated in the IPNS Manager",
+          value: "ipns",
+        },
+        { label: "Bind ENS to the IPFS of the project", value: "BaseIpfs" },
+      ],
     };
   },
   computed: {
     ...mapState({
       connectAddr: (s) => s.connectAddr,
       userInfo: (s) => s.userInfo,
+      projectInfo: (s) => s.projectInfo,
     }),
     walletObj() {
       const { walletType } = this.userInfo.wallet || {};
@@ -156,13 +201,23 @@ export default {
         this.info = data;
         if (data.ens != "") {
           this.domain = data.ens;
-          const chainId = this.walletObj.chainId;
-          if (chainId != "0x1") {
-            return;
-          }
+          // const chainId = this.walletObj.chainId;
+          // if (chainId != "0x1") {
+          //   return;
+          // }
           this.owner = await this.verifyOwner();
           this.ensIpns = await this.getEnsIpns(this.info.ens);
-          if (this.ensIpns && this.ensIpns === this.info.ipns) {
+          if (this.ensIpns && this.ensIpns == this.info.ipns) {
+            this.copyText = "Copy IPNS";
+          } else {
+            this.copyText = "Copy IPFS";
+          }
+
+          if (
+            (this.ensIpns && this.ensIpns === this.info.ipns) ||
+            (this.ensIpns && this.ensIpns === this.projectInfo.hash)
+          ) {
+            console.log(this.info.ipns, "2222222====");
             this.verify = true;
           } else {
             this.verify = false;
@@ -194,6 +249,7 @@ export default {
         this.domain = "";
         this.$loading();
         await this.setInfo();
+        this.verify = false;
         this.$toast("Removed successfully");
       } catch (error) {
         //
@@ -236,13 +292,14 @@ export default {
       ).then(async () => {
         this.ensIpns = await this.getEnsIpns(this.domain);
         await this.setInfo();
+        await this.getInfo();
       });
       // this.verify();
     },
     async verifyOwner() {
-      if (!this.checkNet()) {
-        return "";
-      }
+      // if (!this.checkNet()) {
+      //   return "";
+      // }
       try {
         this.$loading();
         this.node = namehash(this.domain);
@@ -264,7 +321,10 @@ export default {
       }
       this.$loading();
       this.ensIpns = await this.getEnsIpns(this.info.ens);
-      if (this.ensIpns && this.ensIpns === this.info.ipns) {
+      if (
+        (this.ensIpns && this.ensIpns === this.info.ipns) ||
+        (this.ensIpns && this.ensIpns === this.projectInfo.hash)
+      ) {
         this.verify = true;
       } else {
         this.verify = false;
@@ -273,11 +333,12 @@ export default {
       this.$loading.close();
     },
     async getEnsIpns() {
-      if (!this.checkNet()) {
-        return;
-      }
+      // if (!this.checkNet()) {
+      //   return;
+      // }
       try {
         this.$loading();
+        console.log(this.domain);
         this.node = namehash(this.domain);
         this.provider = getProvider();
         const registry = getENSRegistry(this.provider);
@@ -290,6 +351,7 @@ export default {
         this.$loading.close();
         if (contentHash.substring(2)) {
           const res = decode(contentHash);
+          console.log(res);
           return res;
         }
       } catch (error) {
@@ -297,13 +359,14 @@ export default {
       }
     },
     async setContentHash() {
+      this.showDialog = false;
       if (!this.connectAddr) {
         this.showConnect();
         return;
       }
-      if (!this.checkNet()) {
-        return false;
-      }
+      // if (!this.checkNet()) {
+      //   return false;
+      // }
       if (this.owner !== this.connectAddr) {
         return this.$alert(
           "Connected account is not the controller of the domain. "
@@ -312,7 +375,13 @@ export default {
       try {
         this.$loading();
         const signer = this.provider.getSigner();
-        const ipnsHashEncoded = encode("ipns-ns", this.info.ipns);
+        let ipnsHashEncoded = "";
+        if (this.bindContent == "ipns") {
+          ipnsHashEncoded = encode("ipns-ns", this.info.ipns);
+        } else {
+          console.log("hear");
+          ipnsHashEncoded = encode("ipfs-ns", this.projectInfo.hash);
+        }
         const data = getResolver(
           this.resolver,
           this.provider
@@ -362,3 +431,9 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.bind-radio ::v-deep .v-label {
+  font-size: 14px;
+}
+</style>
