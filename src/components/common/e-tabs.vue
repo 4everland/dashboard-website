@@ -56,6 +56,7 @@
           :is="it.comp"
           v-bind="it.props"
           :info="info"
+          @handleEvent="handleEvent"
           :active="curItem.comp == it.comp"
           v-show="curItem.comp == it.comp"
           v-for="(it, i) in activeList"
@@ -153,6 +154,10 @@ export default {
       }
       return curIdx;
     },
+    handleEvent(params) {
+      if (params) this.$emit("handleEvent", params);
+      this.$emit("handleEvent");
+    },
   },
   components: {
     // Bucket
@@ -185,6 +190,11 @@ export default {
     // Settings-Page
     StAccount: () => import("@/views/settings/st-account"),
     StGeneral: () => import("@/views/settings/st-general"),
+
+    // Gateway-detail
+    GatewaySettings: () => import("@/views/gateway/gateway-settings"),
+    GatewayAllowlists: () => import("@/views/gateway/gateway-allowlists"),
+    GatewayDomains: () => import("@/views/gateway/gateway-domains"),
   },
 };
 </script>

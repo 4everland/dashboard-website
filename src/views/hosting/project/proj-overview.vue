@@ -40,8 +40,12 @@
             </div>
           </e-kv>
 
-          <div class="mt-9 d-flex">
-            <e-kv :label="info.platform" style="min-width: 120px">
+          <div class="mt-9 d-flex justify-space-between">
+            <e-kv
+              :label="info.platform"
+              style="min-width: 120px"
+              v-if="!hashDeploy(info.deployType) || info.platform !== 'IPFS'"
+            >
               <div class="al-c">
                 <e-link
                   class="fz-14"
@@ -61,7 +65,7 @@
                 />
               </div>
             </e-kv>
-            <e-kv class="ml-auto" label="IPNS" min-width="90px" v-if="showIpns">
+            <e-kv label="IPNS" min-width="90px" v-if="showIpns">
               <e-tooltip top slot="sub">
                 <v-icon slot="ref" color="#666" size="14" class="pa-1"
                   >mdi-help-circle-outline</v-icon
@@ -103,11 +107,40 @@
               <h-status :val="info.state"></h-status>
             </e-kv>
             <e-kv class="ml-auto" label="Created" style="min-width: 195px">
-              <e-time>{{ info.repo.updateAt }}</e-time>
+              <e-time>{{
+                hashDeploy(info.deployType) ? info.createAt : info.repo.updateAt
+              }}</e-time>
             </e-kv>
           </div>
-
-          <div class="mt-9 d-flex">
+          <div class="mt-9 d-flex" v-if="hashDeploy(info.deployType)">
+            <e-kv label="Base IPFS">
+              <div class="al-c">
+                <e-link
+                  class="fz-14"
+                  :href="
+                    $utils.getCidLink(
+                      transformIpfsPath(info.ipfsPath),
+                      info.platform
+                    )
+                  "
+                  v-if="info.ipfsPath"
+                >
+                  {{ transformIpfsPath(info.ipfsPath).cutStr(4, 4) }}
+                </e-link>
+                <h-status v-if="!info.ipfsPath" :val="info.state"></h-status>
+                <img
+                  v-if="info.ipfsPath"
+                  src="/img/svg/copy.svg"
+                  width="12"
+                  class="ml-3 hover-1"
+                  @success="$toast('Copied!')"
+                  v-clipboard="transformIpfsPath(info.ipfsPath)"
+                />
+              </div>
+            </e-kv>
+            <e-kv label="Base IPNS" v-if="info.deployType == 'IPNS'"></e-kv>
+          </div>
+          <div class="mt-9 d-flex" v-if="!hashDeploy(info.deployType)">
             <e-kv label="Branch">
               <div class="d-flex al-c f-wrap">
                 <h-branch :info="info" class="fz-15" />
@@ -153,6 +186,16 @@ export default {
     },
     showIpns() {
       return this.info.platform != "IC" && this.info.platform != "AR";
+    },
+    hashDeploy() {
+      return function (type) {
+        return type == "CID" || type == "IPNS";
+      };
+    },
+    transformIpfsPath() {
+      return function (val) {
+        return val.replace("/ipfs/", "").replace("/ipns/", "");
+      };
     },
   },
   data() {

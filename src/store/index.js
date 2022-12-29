@@ -89,7 +89,13 @@ const store = new Vuex.Store({
 export const setState = (Vue.prototype.$setState = (data) => {
   store.commit(SET_DATA, data);
 });
-Vue.prototype.$setMsg = (noticeMsg) => {
+Vue.prototype.$setMsg = (obj) => {
+  let noticeMsg = obj;
+  if (typeof obj == "string") {
+    noticeMsg = {
+      name: obj,
+    };
+  }
   setState({
     noticeMsg,
   });

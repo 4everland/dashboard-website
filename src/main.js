@@ -96,6 +96,7 @@ new Vue({
         console.log("socket connect");
       });
       this.socket.on("PROJECT_BUILD", ({ name, data }) => {
+        console.log(name, data);
         if (!name) return;
         if (name == "log") {
           data.state = "RUNNING";

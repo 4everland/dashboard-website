@@ -45,17 +45,53 @@
           </e-kv2>
 
           <div class="mt-7 d-flex">
-            <e-kv2 label="Branch">
+            <e-kv2 label="Branch" v-if="!hashDeploy(info.deployType)">
               <div class="d-flex al-c f-wrap">
                 <h-branch :info="info" class="fz-15" />
                 <e-commit :info="info.commits" class="fz-14 ml-3"></e-commit>
               </div>
             </e-kv2>
+
+            <div v-else>
+              <e-kv2 label="IPNS" v-if="info.deployType == 'IPNS'"> </e-kv2>
+              <e-kv2 label="Base IPFS">
+                <div class="al-c" v-if="projInfo.ipfsPath">
+                  <e-link
+                    class="fz-14"
+                    :href="
+                      $utils.getCidLink(
+                        transformIpfsPath(projInfo.ipfsPath),
+                        info.platform
+                      )
+                    "
+                  >
+                    <span>{{
+                      transformIpfsPath(projInfo.ipfsPath).cutStr(4, 4)
+                    }}</span>
+                  </e-link>
+                  <img
+                    src="/img/svg/copy.svg"
+                    width="12"
+                    class="ml-3 hover-1"
+                    @success="$toast('Copied!')"
+                    v-clipboard="transformIpfsPath(projInfo.ipfsPath)"
+                  />
+                </div>
+                <h-status
+                  v-else
+                  :val="state == 'failure' ? 'Not synchronized' : state"
+                ></h-status>
+              </e-kv2>
+              <e-kv2 label="Base IPNS" v-if="info.deployType == 'IPNS'"></e-kv2>
+            </div>
             <e-kv2
               class="ml-auto"
               :label="info.platform"
               style="min-width: 120px"
-              v-if="showLabel"
+              v-if="
+                (showLabel && info.platform !== 'IPFS') ||
+                (showLabel && !hashDeploy(info.deployType))
+              "
             >
               <div class="al-c" v-if="info.hash">
                 <e-link
@@ -105,7 +141,10 @@
               </v-list>
             </e-menu>
             <div class="flex-1 ml-5 pr-4">
-              <div v-if="!info.cli" class="mb-5">
+              <div
+                v-if="!info.cli && !hashDeploy(info.deployType)"
+                class="mb-5"
+              >
                 <v-btn
                   color="error"
                   outlined
@@ -195,6 +234,16 @@ export default {
         this.info.platform == "AR" ||
         (this.projInfo.latest || {}).taskId == this.info.taskId
       );
+    },
+    hashDeploy() {
+      return function (type) {
+        return type == "CID" || type == "IPNS";
+      };
+    },
+    transformIpfsPath() {
+      return function (val) {
+        return val.replace("/ipfs/", "").replace("/ipns/", "");
+      };
     },
   },
   async created() {

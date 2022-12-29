@@ -44,7 +44,7 @@
               v-clipboard="() => item.value"
               @success="$toast('Copied!')"
             >
-              {{ item.value.cutStr(6, 10) }}
+              {{ item.value }}
               <v-icon size="14" class="ml-1">mdi-content-copy</v-icon>
             </p>
           </td>
@@ -70,9 +70,7 @@ export default {
     item: {
       type: Object,
     },
-    ipns: {
-      type: Object,
-    },
+    name: String,
   },
   computed: {
     domainPre() {
@@ -86,7 +84,7 @@ export default {
       try {
         this.refreshing = true;
         await this.$http2.get(`/domain/verify/${item.id}`);
-        await this.$parent.$parent.$parent.getList();
+        await this.$parent.getList();
         this.refreshing = false;
       } catch (error) {
         console.log(error);
@@ -96,7 +94,7 @@ export default {
 
     async onDelete() {
       try {
-        let tip = `Would you like to remove the domain ${this.item.domain} from your gateway ${this.ipns.name}.4everland.link?
+        let tip = `Would you like to remove the domain ${this.item.domain} from your gateway ${this.name}.4everland.link?
                     After continuing, your gateway will no longer be accessible through this domain.`;
         await this.$confirm(tip, "Remove Domain from Gateway");
         console.log(this.item);

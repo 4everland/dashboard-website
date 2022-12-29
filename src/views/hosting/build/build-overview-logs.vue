@@ -131,6 +131,11 @@ export default {
         this.info.platform == "AR"
       );
     },
+    hashDeploy() {
+      return function (type) {
+        return type == "CID" || type == "IPNS";
+      };
+    },
   },
   watch: {
     taskId() {
@@ -178,7 +183,16 @@ export default {
         info.isFail = /fail|timeout|error|cancel/.test(this.state);
         this.info = info;
         this.$emit("info", info);
-        this.logs = data.log;
+        if (!data.log) {
+          const log = {
+            timestamp: info.endAt || info.createAt,
+          };
+          if (this.isFail) log.content = "deploy failed.";
+          else if (!this.isDone) log.content = "deploying...";
+          else log.content = "deploy site successfully: " + data.hash;
+          data.log = [log];
+        }
+        this.logs = data.log || [];
         if (this.isDone) {
           this.curIdx = isIpfs ? 2 : 1;
           this.$store.dispatch("getProjectInfo", this.info.projectId);

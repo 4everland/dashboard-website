@@ -1,12 +1,13 @@
 <template>
-  <v-menu v-bind="$attrs" v-on="$listeners">
+  <v-menu offset-y v-bind="$attrs" v-on="$listeners">
     <template v-slot:activator="{ on, attrs }">
-      <span v-bind="attrs" v-on="on" class="lh-1">
+      <span v-bind="attrs" v-on="on" class="">
         <slot name="ref"></slot>
       </span>
     </template>
-    <span>
+    <div>
       <slot></slot>
-    </span>
+    </div>
   </v-menu>
 </template>
+

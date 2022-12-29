@@ -47,6 +47,7 @@
           :headers="headers"
           :items="list"
           hide-default-footer
+          @click:row="onRow"
         >
           <template #item.name="{ item }">
             <span>{{ item.name }}.4everland.link</span>
@@ -63,9 +64,9 @@
             <span>{{ new Date(item.created_at * 1000).format() }}</span>
           </template>
           <template #item.act="{ item }">
-            <span class="action-btn" @click="onDomain(item)">Domain</span>
-            <span class="action-btn ml-3" @click="onEdit(item)">Edit</span>
-            <span class="action-btn ml-3" @click="onDelete(item)">Delete</span>
+            <!-- <span class="action-btn" @click.stop="onDomain(item)">Domain</span>
+            <span class="action-btn ml-3" @click.stop="onEdit(item)">Edit</span> -->
+            <span class="action-btn" @click.stop="onDelete(item)">Delete</span>
           </template>
         </v-data-table>
 
@@ -76,20 +77,20 @@
         </div>
       </div>
     </div>
-    <gateway-domain ref="gatewayDomain" />
-    <gateway-edit ref="gatewayEdit" @getList="getList" />
+    <!-- <gateway-domain ref="gatewayDomain" /> -->
+    <!-- <gateway-edit ref="gatewayEdit" @getList="getList" /> -->
   </div>
 </template>
 
 <script>
 import GatewayGenerate from "@/views/gateway/gateway-generate";
-import GatewayDomain from "@/views/gateway/gateway-domain";
-import GatewayEdit from "@/views/gateway/gateway-edit";
+// import GatewayDomain from "@/views/gateway/gateway-domain";
+// import GatewayEdit from "@/views/gateway/gateway-edit";
 export default {
   components: {
     GatewayGenerate,
-    GatewayDomain,
-    GatewayEdit,
+    // GatewayDomain,
+    // GatewayEdit,
   },
   data() {
     return {
@@ -125,12 +126,12 @@ export default {
     this.getList();
   },
   methods: {
-    onDomain(item) {
-      this.$refs.gatewayDomain.show(item);
-    },
-    onEdit(item) {
-      this.$refs.gatewayEdit.show(item);
-    },
+    // onDomain(item) {
+    //   this.$refs.gatewayDomain.show(item);
+    // },
+    // onEdit(item) {
+    //   this.$refs.gatewayEdit.show(item);
+    // },
     async onDelete(item) {
       try {
         let tip =
@@ -168,6 +169,10 @@ export default {
         data: { balance },
       } = await this.$http.get("$v3/account/balance");
       this.balance = balance;
+    },
+    onRow(row) {
+      console.log(row);
+      this.$router.push(`/gateway/list/${row.name}?tab=settings`);
     },
   },
 };

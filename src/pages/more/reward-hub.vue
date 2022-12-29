@@ -203,38 +203,42 @@ export default {
       }
     },
     async onNext(it, info) {
-      const { nextStep: type, stepValue: val } = info;
-      if (type == "OPEN_NEW_TAB") {
-        this.openItem = it;
-        if (/^http/.test(val)) this.$openWindow(val);
-        else this.$navTo(val);
-      } else if (type == "SEND_REQUEST") {
-        // if (it.type == "AIRDROP_FOR_NEW" && !this.isRegister) {
-        //   await this.registerForNew();
-        //   if (!this.isRegister)
-        //     return this.$alert(
-        //       "New user registration rewards are required for successful registration on the chain, please try later."
-        //     );
-        // }
-        if (!this.registerOverThreeDays) {
-          await this.registerForNew();
-          if (!this.isRegister)
-            return this.$alert(
-              "New user rewards are based on successful registration on the chain, please try again after five minutes.",
-              "Tips"
-            );
-        }
+      try {
+        const { nextStep: type, stepValue: val } = info;
+        if (type == "OPEN_NEW_TAB") {
+          this.openItem = it;
+          if (/^http/.test(val)) this.$openWindow(val);
+          else this.$navTo(val);
+        } else if (type == "SEND_REQUEST") {
+          // if (it.type == "AIRDROP_FOR_NEW" && !this.isRegister) {
+          //   await this.registerForNew();
+          //   if (!this.isRegister)
+          //     return this.$alert(
+          //       "New user registration rewards are required for successful registration on the chain, please try later."
+          //     );
+          // }
+          if (!this.registerOverThreeDays) {
+            await this.registerForNew();
+            if (!this.isRegister)
+              return this.$alert(
+                "New user rewards are based on successful registration on the chain, please try again after five minutes.",
+                "Tips"
+              );
+          }
 
-        await this.$http.post("$auth" + val);
-        this.$toast("Claimed successfully");
-        this.getList();
-      } else if (type == "EMAIL_SUBSCRIPTION_VERIFICATION") {
-        this.onSubsribe();
-      } else if (type == "OPEN_TELEGRAM_WIDGET") {
-        this.onTg();
-      } else if (type == "SHARE_ON_TWITTER") {
-        window.open(`https://twitter.com/intent/tweet?text=${val}`);
-        this.onRefresh(it);
+          await this.$http.post("$auth" + val);
+          this.$toast("Claimed successfully");
+          this.getList();
+        } else if (type == "EMAIL_SUBSCRIPTION_VERIFICATION") {
+          this.onSubsribe();
+        } else if (type == "OPEN_TELEGRAM_WIDGET") {
+          this.onTg();
+        } else if (type == "SHARE_ON_TWITTER") {
+          window.open(`https://twitter.com/intent/tweet?text=${val}`);
+          this.onRefresh(it);
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
     async onAct(it) {

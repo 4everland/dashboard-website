@@ -8,7 +8,7 @@
     </v-tabs>
     <div class="al-c mt-5">
       <span class="color-1" v-if="curType.name == 'time'"> Hosting </span>
-      <span class="color-1" v-else-if="curType.name == 'ar'">Bucket</span>
+      <!-- <span class="color-1" v-else-if="curType.name == 'ar'">Bucket</span> -->
       <e-radio-btn
         v-else
         :options="['Hosting', 'Bucket']"
@@ -37,6 +37,7 @@
     </div>
 
     <div class="mt-7">
+      <e-empty v-if="!dataList.length" class="pt-8"> No Data </e-empty>
       <div class="pos-r mb-4" v-for="(it, i) in dataList" :key="i">
         <div
           class="bdrs-2"
@@ -78,10 +79,12 @@ export default {
           k1: "storageUsage",
         },
         ar: {
+          k0: "usedStorage",
           k1: "arUsage",
         },
       },
       list0: [],
+      list0Ar: [],
       list1: [],
       loading: true,
     };
@@ -94,8 +97,11 @@ export default {
       let platIdx = this.platIdx;
       const { name } = this.curType;
       if (name == "time") platIdx = 0;
-      else if (name == "ar") platIdx = 1;
-      const list = platIdx == 0 ? this.list0 : this.list1;
+      // else if (name == "ar") platIdx = 1;
+      let list = platIdx == 0 ? this.list0 : this.list1;
+      if (platIdx == 0 && name == "ar") {
+        list = this.list0Ar;
+      }
       const key = this.typeMap[name][platIdx == 0 ? "k0" : "k1"];
       Array.sortArrayBy(list, key, true);
       let first = -1;
@@ -129,6 +135,10 @@ export default {
     async getData() {
       try {
         await this.getUsage();
+        const { data: hostingArData } = await this.$http2.get(
+          "/project/resource/consume?type=AR"
+        );
+        this.list0Ar = hostingArData;
         const { data } = await this.$http2.get(
           "/project/resource/consume?type=BANDWIDTH"
         );

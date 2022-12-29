@@ -37,6 +37,23 @@ export default [
     },
   },
   {
+    path: "/newByHash",
+    component: () => import("./newByHash"),
+    meta: {
+      title: "New Project",
+      isTab: 1,
+      links: [
+        {
+          text: "Projects",
+          to: "/hosting/projects",
+        },
+        {
+          text: "New Project",
+        },
+      ],
+    },
+  },
+  {
     path: "/projects",
     components: {
       cache: () => import("./projects"),
