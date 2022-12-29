@@ -46,7 +46,7 @@ export default {
             "When the service expires, we will keep the stored content for up to 7 days.",
         },
         {
-          label: "Arweave",
+          label: "Arweave Storage",
           name: "AR_STORAGE",
           tip: "Arweave is a permanent storage service.",
           desc: `Free resources ${getSize(info.arDefaultStorage)}, ${
