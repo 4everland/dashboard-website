@@ -213,7 +213,7 @@ export default {
           ),
         },
         {
-          label: "Arweave",
+          label: "Arweave Storage",
           icon: "ar.svg",
           id: ResourceType.ARStorage,
           key: "ar",
