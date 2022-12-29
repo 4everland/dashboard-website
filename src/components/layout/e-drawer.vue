@@ -7,6 +7,8 @@
   }
   .v-navigation-drawer__content {
     overflow: auto;
+    display: flex;
+    flex-direction: column;
   }
   .group-item {
     margin-bottom: 10px !important;
@@ -135,10 +137,14 @@
       </template>
     </v-list>
 
-    <!-- <div class="pos-a mini-arrow" @click="mini = !mini">
-      <img src="/img/svg/drawer/mini-arrow.svg" class="icon d-b" />
-    </div> -->
-    <div class="pos-a btm-0 left-0 w100p mb-4 al-c pa-3 bg-white">
+    <div class="mt-auto pos-r">
+      <div class="bg-f9 al-c ma-3 pa-1 hover-1">
+        <span class="mr-auto">0x3334...233</span>
+        <v-chip label small color="primary" class="ev-n">Individual</v-chip>
+        <img :src="`/img/svg/drawer/up-down.svg`" height="30" class="d-b" />
+      </div>
+    </div>
+    <div class="mb-3 al-c pa-3 bg-white">
       <a
         class="flex-1 ta-c"
         :href="it.url"
@@ -152,7 +158,6 @@
         />
       </a>
     </div>
-    <div style="height: 80px"></div>
   </v-navigation-drawer>
 </template>
 
