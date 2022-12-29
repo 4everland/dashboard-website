@@ -28,7 +28,12 @@
 
     <div class="pos-r mb-5">
       <div>
-        <h2>{{ uname }}</h2>
+        <div class="al-c">
+          <v-btn icon v-if="asMobile" @click="$setMsg('showDrawer')">
+            <v-icon>mdi-menu</v-icon>
+          </v-btn>
+          <h2>{{ uname }}</h2>
+        </div>
         <div class="gray-8 fz-14 mt-1">Welcome back to 4EVERLAND dashboard</div>
       </div>
       <e-right-opt-wrap>
