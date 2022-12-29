@@ -2,6 +2,7 @@
 .e-drawer {
   box-shadow: 5px 0px 30px 0px rgba(0, 0, 0, 0.1);
   z-index: 999;
+
   .v-navigation-drawer__border {
     display: none;
   }
@@ -9,6 +10,7 @@
     overflow: auto;
     display: flex;
     flex-direction: column;
+    overflow: visible;
   }
   .group-item {
     margin-bottom: 10px !important;
@@ -137,13 +139,8 @@
       </template>
     </v-list>
 
-    <div class="mt-auto pos-r">
-      <div class="bg-f9 al-c ma-3 pa-1 hover-1">
-        <span class="mr-auto">0x3334...233</span>
-        <v-chip label small color="primary" class="ev-n">Individual</v-chip>
-        <img :src="`/img/svg/drawer/up-down.svg`" height="30" class="d-b" />
-      </div>
-    </div>
+    <div class="mt-auto pa-3"></div>
+    <e-drawer-account></e-drawer-account>
     <div class="mb-3 al-c pa-3 bg-white">
       <a
         class="flex-1 ta-c"
