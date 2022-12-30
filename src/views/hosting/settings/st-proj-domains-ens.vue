@@ -212,6 +212,7 @@ export default {
           } else {
             this.copyText = "Copy IPFS";
           }
+          console.log(this.ensIpns, this.info, this.projectInfo.hash);
 
           if (
             (this.ensIpns && this.ensIpns === this.info.ipns) ||
