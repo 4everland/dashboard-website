@@ -1,13 +1,25 @@
 <template>
   <div class="pos-r">
     <e-right-opt-wrap fix style="top: -10px">
-      <e-menu offset-y open-on-hover>
-        <v-btn slot="ref" outlined color="#6C7789">
-          <span class="ml-2">{{ date }}</span>
-          <v-icon>mdi-chevron-down</v-icon>
-        </v-btn>
-        <v-date-picker v-model="date" :allowed-dates="isAllow"></v-date-picker>
-      </e-menu>
+      <div class="al-c">
+        <v-select
+          class="ipfs-input hide-msg mr-4"
+          outlined
+          :items="items"
+          dense
+          v-model="seleted"
+        ></v-select>
+        <e-menu offset-y open-on-hover>
+          <v-btn slot="ref" outlined color="#6C7789">
+            <span class="ml-2">{{ date }}</span>
+            <v-icon>mdi-chevron-down</v-icon>
+          </v-btn>
+          <v-date-picker
+            v-model="date"
+            :allowed-dates="isAllow"
+          ></v-date-picker>
+        </e-menu>
+      </div>
     </e-right-opt-wrap>
 
     <v-skeleton-loader
@@ -59,6 +71,8 @@ export default {
       page: 1,
       total: 0,
       start: "2022-7-27".toDate() * 1,
+      items: ["All", "Owner", "Member"],
+      seleted: "All",
     };
   },
   mounted() {
@@ -66,8 +80,18 @@ export default {
       this.list = [];
     }, 5000);
   },
+  methods: {
+    isAllow(val) {
+      const date = val.toDate();
+      return date < now && date > this.start;
+    },
+    getList() {},
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+::v-deep .ipfs-input {
+  width: 130px;
+}
 </style>

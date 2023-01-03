@@ -33,9 +33,9 @@
         class="cursor-p"
         @click="$refs.uploadInput.onClick(false)"
       >
-        <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John"
+        <img :src="avatarSrc" alt="John"
       /></v-avatar>
-      <input-upload v-model="files" ref="uploadInput"></input-upload>
+      <input-upload @input="onInput" ref="uploadInput"></input-upload>
     </div>
     <div class="mt-5 config-item al-c">
       <div style="width: 60%" class="mr-auto">
@@ -58,7 +58,8 @@ export default {
   data() {
     return {
       teamName: "",
-      files: [],
+      file: null,
+      avatarSrc: "https://cdn.vuetifyjs.com/images/john.jpg",
     };
   },
   methods: {
@@ -73,6 +74,23 @@ export default {
         //
         console.log(error);
       }
+    },
+    async getAvatarSrc(file) {
+      return new Promise((res, rej) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+          res(reader.result);
+        };
+        reader.onerror = function (error) {
+          rej(error);
+        };
+      });
+    },
+    async onInput(file) {
+      this.file = file[0];
+      const src = await this.getAvatarSrc(file[0]);
+      this.avatarSrc = src;
     },
   },
   components: {
