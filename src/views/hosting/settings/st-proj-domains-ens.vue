@@ -314,9 +314,9 @@ export default {
       // this.verify();
     },
     async verifyOwner() {
-      // if (!this.checkNet()) {
-      //   return "";
-      // }
+      if (!this.checkNet()) {
+        return "";
+      }
       try {
         this.$loading();
         this.node = namehash(this.domain);
@@ -353,9 +353,9 @@ export default {
       this.$loading.close();
     },
     async getEnsIpns() {
-      // if (!this.checkNet()) {
-      //   return;
-      // }
+      if (!this.checkNet()) {
+        return;
+      }
       try {
         this.$loading();
         this.node = namehash(this.domain);
@@ -383,9 +383,9 @@ export default {
         this.showConnect();
         return;
       }
-      // if (!this.checkNet()) {
-      //   return false;
-      // }
+      if (!this.checkNet()) {
+        return false;
+      }
       if (this.owner !== this.connectAddr) {
         return this.$alert(
           "Connected account is not the controller of the domain. "
