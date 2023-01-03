@@ -69,7 +69,7 @@ export default {
   },
   data() {
     return {
-      showAccount: !false,
+      showAccount: false,
     };
   },
   methods: {

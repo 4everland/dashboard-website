@@ -296,6 +296,25 @@ export default {
           active: false,
           group: /^\/resource/i,
         },
+        {
+          label: "Collaboration",
+          img: "m-hosting",
+          group: /^\/account/i,
+          subs: [
+            {
+              label: "Member Manager",
+              to: "/account/member",
+            },
+            {
+              label: "Account Configuration",
+              to: "/account/config",
+            },
+            {
+              label: "Operation Logs",
+              to: "/account/activity-log",
+            },
+          ],
+        },
       ];
     },
   },
