@@ -6,7 +6,7 @@
 
 export default [
   {
-    path: "/activity-log",
+    path: "/account/activity-log",
     components: {
       cache: () => import("./activity-log"),
     },

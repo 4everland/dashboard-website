@@ -149,7 +149,7 @@ export default {
             {
               label: "Activity Log",
               icon: "m-actlog",
-              to: "/activity-log",
+              to: "/account/activity-log",
             },
             {
               label: "Feedback",
