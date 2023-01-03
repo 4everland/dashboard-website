@@ -15,4 +15,12 @@ export default [
       isTab: 1,
     },
   },
+  {
+    path: "/account/operation-log",
+    component: () => import("./operation-log"),
+    meta: {
+      title: "Operation Log",
+      isTab: 1,
+    },
+  },
 ];
