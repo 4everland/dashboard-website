@@ -12,6 +12,7 @@ export default [
     component: () => import("./config"),
     meta: {
       title: "Account Configuration",
+      isTab: 1,
     },
   },
 ];
