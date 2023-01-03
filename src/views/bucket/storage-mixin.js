@@ -410,9 +410,12 @@ export default {
       if (!isOpen || this.loadingDomains) return;
       try {
         this.loadingDomains = true;
-        const { data } = await this.$http.get("/domains", {
-          params: { bucketName },
-        });
+        const { data } = await this.$http.get(
+          "$bucektDomain/domain/bucket/list",
+          {
+            params: { bucketName },
+          }
+        );
         this.$set(
           this.domainsMap,
           bucketName,

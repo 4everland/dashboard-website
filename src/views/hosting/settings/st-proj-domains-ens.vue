@@ -62,7 +62,7 @@
                     <v-list-item
                       link
                       v-clipboard="
-                        copyText == 'Copy IPNS' ? info.ipns : projectInfo.hash
+                        copyText == 'Copy IPNS' ? info.ipns : baseHash
                       "
                       @success="$toast('Copied!')"
                     >
@@ -141,7 +141,7 @@
 <script>
 import { mapState } from "vuex";
 import { namehash } from "@ensdomains/ensjs";
-import { encode, decode } from "@ensdomains/content-hash";
+import { encode, decode, helpers } from "@ensdomains/content-hash";
 import { getProvider, getENSRegistry, getResolver } from "@/plugins/ens";
 const reg = /.+\.eth$/;
 
@@ -181,6 +181,20 @@ export default {
       const { walletType } = this.userInfo.wallet || {};
       return walletType == "OKX" ? window.okxwallet : window.ethereum;
     },
+    baseHash() {
+      if (this.hashDeploy(this.projectInfo.deployType)) {
+        return this.projectInfo.ipfsPath
+          .replace("/ipfs/", "")
+          .replace("/ipns/", "");
+      } else {
+        return this.projectInfo.hash;
+      }
+    },
+    hashDeploy() {
+      return function (type) {
+        return type == "CID" || type == "IPNS";
+      };
+    },
   },
   watch: {
     connectAddr(val) {
@@ -212,12 +226,15 @@ export default {
           } else {
             this.copyText = "Copy IPFS";
           }
+          // console.log("ens info", this.ensIpns, this.baseHash);
 
+          const hash = /^Qm[a-zA-Z0-9]{44}/.test(this.baseHash)
+            ? helpers.cidV0ToV1Base32(this.baseHash)
+            : this.baseHash;
           if (
             (this.ensIpns && this.ensIpns === this.info.ipns) ||
-            (this.ensIpns && this.ensIpns === this.projectInfo.hash)
+            (this.ensIpns && this.ensIpns === hash)
           ) {
-            console.log(this.info.ipns, "2222222====");
             this.verify = true;
           } else {
             this.verify = false;
@@ -297,9 +314,9 @@ export default {
       // this.verify();
     },
     async verifyOwner() {
-      // if (!this.checkNet()) {
-      //   return "";
-      // }
+      if (!this.checkNet()) {
+        return "";
+      }
       try {
         this.$loading();
         this.node = namehash(this.domain);
@@ -321,9 +338,12 @@ export default {
       }
       this.$loading();
       this.ensIpns = await this.getEnsIpns(this.info.ens);
+      const hash = /^Qm[a-zA-Z0-9]{44}/.test(this.baseHash)
+        ? helpers.cidV0ToV1Base32(this.baseHash)
+        : this.baseHash;
       if (
         (this.ensIpns && this.ensIpns === this.info.ipns) ||
-        (this.ensIpns && this.ensIpns === this.projectInfo.hash)
+        (this.ensIpns && this.ensIpns === hash)
       ) {
         this.verify = true;
       } else {
@@ -333,12 +353,11 @@ export default {
       this.$loading.close();
     },
     async getEnsIpns() {
-      // if (!this.checkNet()) {
-      //   return;
-      // }
+      if (!this.checkNet()) {
+        return;
+      }
       try {
         this.$loading();
-        console.log(this.domain);
         this.node = namehash(this.domain);
         this.provider = getProvider();
         const registry = getENSRegistry(this.provider);
@@ -364,9 +383,9 @@ export default {
         this.showConnect();
         return;
       }
-      // if (!this.checkNet()) {
-      //   return false;
-      // }
+      if (!this.checkNet()) {
+        return false;
+      }
       if (this.owner !== this.connectAddr) {
         return this.$alert(
           "Connected account is not the controller of the domain. "
@@ -379,8 +398,8 @@ export default {
         if (this.bindContent == "ipns") {
           ipnsHashEncoded = encode("ipns-ns", this.info.ipns);
         } else {
-          console.log("hear");
-          ipnsHashEncoded = encode("ipfs-ns", this.projectInfo.hash);
+          ipnsHashEncoded = encode("ipfs-ns", this.baseHash);
+          // console.log("set content hash", ipnsHashEncoded, this.baseHash);
         }
         const data = getResolver(
           this.resolver,

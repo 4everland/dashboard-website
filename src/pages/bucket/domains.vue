@@ -47,7 +47,6 @@
         <template v-slot:item.domain="{ item }">
           <v-btn
             class="e-btn-text"
-            :to="getPath(item)"
             :color="item.valid ? 'success' : 'error'"
             text
             x-small
@@ -244,6 +243,7 @@ export default {
       return `/bucket/domain/${item.domain}`;
     },
     onRow(it) {
+      if (it.valid) return;
       const url = this.getPath(it);
       this.$router.push(url).catch(() => {});
     },
@@ -269,7 +269,7 @@ export default {
         await this.$confirm(html, `Delete Domain${suffix}`);
         const ids = this.selected.map((it) => it.domain).join(",");
         this.deleting = true;
-        await this.$http.delete("/domains/" + ids);
+        await this.$http.delete("$bucektDomain/domain/bucket/" + ids);
         this.$toast(
           this.selected.length + ` domain${suffix} deleted successfully`
         );
@@ -310,7 +310,7 @@ export default {
           );
         }
         this.adding = true;
-        await this.$http.post("/domains", {
+        await this.$http.post("$bucektDomain/domain/bucket", {
           domain: this.domain,
           bucketName: this.chooseBucket.name,
         });
@@ -328,7 +328,9 @@ export default {
       try {
         this.loading = true;
         this.selected = [];
-        const { data } = await this.$http.get("/domains");
+        const { data } = await this.$http.get(
+          "$bucektDomain/domain/bucket/list"
+        );
         this.list = data.list.map((it) => {
           it.createAt = new Date(it.createdAt * 1e3).format();
           return it;
