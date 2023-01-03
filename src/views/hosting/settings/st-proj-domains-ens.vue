@@ -97,7 +97,7 @@
               <span>{{ owner.cutStr(6, 4) }}</span>
             </div>
             <v-btn
-              @click="showDialog = true"
+              @click="onSetContentHash"
               color="primary"
               class="ml-4"
               style="margin-top: 2px"
@@ -182,7 +182,7 @@ export default {
       return walletType == "OKX" ? window.okxwallet : window.ethereum;
     },
     baseHash() {
-      if (this.hashDeploy(this.projectInfo.deployType)) {
+      if (this.hashDeploy) {
         return this.projectInfo.ipfsPath
           .replace("/ipfs/", "")
           .replace("/ipns/", "");
@@ -191,9 +191,10 @@ export default {
       }
     },
     hashDeploy() {
-      return function (type) {
-        return type == "CID" || type == "IPNS";
-      };
+      return (
+        this.projectInfo.deployType == "CID" ||
+        this.projectInfo.deployType == "IPNS"
+      );
     },
   },
   watch: {
@@ -314,9 +315,9 @@ export default {
       // this.verify();
     },
     async verifyOwner() {
-      if (!this.checkNet()) {
-        return "";
-      }
+      // if (!this.checkNet()) {
+      //   return "";
+      // }
       try {
         this.$loading();
         this.node = namehash(this.domain);
@@ -333,9 +334,9 @@ export default {
         this.showConnect();
         return;
       }
-      if (!this.checkNet()) {
-        return false;
-      }
+      // if (!this.checkNet()) {
+      //   return false;
+      // }
       this.$loading();
       this.ensIpns = await this.getEnsIpns(this.info.ens);
       const hash = /^Qm[a-zA-Z0-9]{44}/.test(this.baseHash)
@@ -353,9 +354,9 @@ export default {
       this.$loading.close();
     },
     async getEnsIpns() {
-      if (!this.checkNet()) {
-        return;
-      }
+      // if (!this.checkNet()) {
+      //   return;
+      // }
       try {
         this.$loading();
         this.node = namehash(this.domain);
@@ -377,15 +378,23 @@ export default {
         this.onErr(error);
       }
     },
+    onSetContentHash() {
+      if (this.hashDeploy) {
+        this.showDialog = true;
+      } else {
+        this.bindContent = "ipns";
+        this.setContentHash();
+      }
+    },
     async setContentHash() {
       this.showDialog = false;
       if (!this.connectAddr) {
         this.showConnect();
         return;
       }
-      if (!this.checkNet()) {
-        return false;
-      }
+      // if (!this.checkNet()) {
+      //   return false;
+      // }
       if (this.owner !== this.connectAddr) {
         return this.$alert(
           "Connected account is not the controller of the domain. "
