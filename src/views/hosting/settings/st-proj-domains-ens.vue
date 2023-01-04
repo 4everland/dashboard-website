@@ -216,10 +216,10 @@ export default {
         this.info = data;
         if (data.ens != "") {
           this.domain = data.ens;
-          // const chainId = this.walletObj.chainId;
-          // if (chainId != "0x1") {
-          //   return;
-          // }
+          const chainId = this.walletObj.chainId;
+          if (chainId != "0x1") {
+            return;
+          }
           this.owner = await this.verifyOwner();
           this.ensIpns = await this.getEnsIpns(this.info.ens);
           if (this.ensIpns && this.ensIpns == this.info.ipns) {
@@ -315,9 +315,9 @@ export default {
       // this.verify();
     },
     async verifyOwner() {
-      // if (!this.checkNet()) {
-      //   return "";
-      // }
+      if (!this.checkNet()) {
+        return "";
+      }
       try {
         this.$loading();
         this.node = namehash(this.domain);
@@ -334,9 +334,9 @@ export default {
         this.showConnect();
         return;
       }
-      // if (!this.checkNet()) {
-      //   return false;
-      // }
+      if (!this.checkNet()) {
+        return false;
+      }
       this.$loading();
       this.ensIpns = await this.getEnsIpns(this.info.ens);
       const hash = /^Qm[a-zA-Z0-9]{44}/.test(this.baseHash)
@@ -354,9 +354,9 @@ export default {
       this.$loading.close();
     },
     async getEnsIpns() {
-      // if (!this.checkNet()) {
-      //   return;
-      // }
+      if (!this.checkNet()) {
+        return;
+      }
       try {
         this.$loading();
         this.node = namehash(this.domain);
@@ -392,9 +392,9 @@ export default {
         this.showConnect();
         return;
       }
-      // if (!this.checkNet()) {
-      //   return false;
-      // }
+      if (!this.checkNet()) {
+        return false;
+      }
       if (this.owner !== this.connectAddr) {
         return this.$alert(
           "Connected account is not the controller of the domain. "
