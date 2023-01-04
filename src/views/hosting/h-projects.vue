@@ -62,7 +62,7 @@
 
 <template>
   <div class="projects">
-    <e-right-opt-wrap>
+    <e-right-opt-wrap v-if="list.length">
       <e-menu open-on-hover offset-y>
         <v-btn slot="ref" outlined min-width="100">
           <!-- <img src="/img/svg/hosting/ic-sort.svg" width="12" /> -->
@@ -318,8 +318,8 @@
           >Create a project by cid</v-btn
         > -->
         <div class="mt-10">
-          <img src="/img/svg/hosting/no-data.svg" width="180" alt="" />
-          <p class="mt-7 fz-18">No projects, yet！</p>
+          <!-- <img src="/img/svg/hosting/no-data.svg" width="180" alt="" />
+          <p class="mt-7 fz-18">No projects, yet！</p> -->
           <div class="al-c mt-10">
             <div
               class="ipfs-deploy deploy"

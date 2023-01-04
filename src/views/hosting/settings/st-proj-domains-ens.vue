@@ -97,7 +97,7 @@
               <span>{{ owner.cutStr(6, 4) }}</span>
             </div>
             <v-btn
-              @click="showDialog = true"
+              @click="onSetContentHash"
               color="primary"
               class="ml-4"
               style="margin-top: 2px"
@@ -182,7 +182,7 @@ export default {
       return walletType == "OKX" ? window.okxwallet : window.ethereum;
     },
     baseHash() {
-      if (this.hashDeploy(this.projectInfo.deployType)) {
+      if (this.hashDeploy) {
         return this.projectInfo.ipfsPath
           .replace("/ipfs/", "")
           .replace("/ipns/", "");
@@ -191,9 +191,10 @@ export default {
       }
     },
     hashDeploy() {
-      return function (type) {
-        return type == "CID" || type == "IPNS";
-      };
+      return (
+        this.projectInfo.deployType == "CID" ||
+        this.projectInfo.deployType == "IPNS"
+      );
     },
   },
   watch: {
@@ -215,10 +216,10 @@ export default {
         this.info = data;
         if (data.ens != "") {
           this.domain = data.ens;
-          // const chainId = this.walletObj.chainId;
-          // if (chainId != "0x1") {
-          //   return;
-          // }
+          const chainId = this.walletObj.chainId;
+          if (chainId != "0x1") {
+            return;
+          }
           this.owner = await this.verifyOwner();
           this.ensIpns = await this.getEnsIpns(this.info.ens);
           if (this.ensIpns && this.ensIpns == this.info.ipns) {
@@ -375,6 +376,14 @@ export default {
         }
       } catch (error) {
         this.onErr(error);
+      }
+    },
+    onSetContentHash() {
+      if (this.hashDeploy) {
+        this.showDialog = true;
+      } else {
+        this.bindContent = "ipns";
+        this.setContentHash();
       }
     },
     async setContentHash() {
