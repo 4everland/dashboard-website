@@ -33,6 +33,8 @@ import {
   SignPhantom,
   ConnectFlow,
   SignFlow,
+  ConnectPetra,
+  SignPetra,
 } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 
@@ -49,14 +51,19 @@ export default {
           btnText: "Popular",
         },
         {
-          name: "OKX Wallet",
-          icon: require("@/assets/imgs/okx.png"),
-          btnText: "Multi-Chain",
-        },
-        {
           name: "Phantom",
           icon: require("@/assets/imgs/phantom.png"),
           btnText: "Solana",
+        },
+        {
+          name: "Petra",
+          icon: require("@/assets/imgs/petra.svg"),
+          btnText: "Aptos",
+        },
+        {
+          name: "OKX Wallet",
+          icon: require("@/assets/imgs/okx.png"),
+          btnText: "Multi-Chain",
         },
         {
           name: "Flow",
@@ -103,6 +110,9 @@ export default {
           break;
         case "Flow":
           this.flowConnect();
+          break;
+        case "Petra":
+          this.petraConnect();
           break;
         default:
           break;
@@ -162,6 +172,20 @@ export default {
         return;
       }
       const stoken = await SignFlow(currentUser.addr, nonce, this.inviteCode);
+      if (stoken) {
+        this.ssoLogin(stoken);
+      }
+    },
+    async petraConnect() {
+      const account = await ConnectPetra();
+      if (!account) {
+        return;
+      }
+      const nonce = await ExchangeCode(account);
+      if (!nonce) {
+        return;
+      }
+      const stoken = await SignPetra(account, nonce, this.inviteCode);
       if (stoken) {
         this.ssoLogin(stoken);
       }
