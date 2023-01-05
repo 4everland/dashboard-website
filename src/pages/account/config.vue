@@ -92,6 +92,7 @@ export default {
       }
     },
     async getAvatarSrc(file) {
+      console.log(file);
       return new Promise((res, rej) => {
         let reader = new FileReader();
         reader.readAsDataURL(file);
