@@ -103,9 +103,7 @@
               <h-status :val="info.state"></h-status>
             </e-kv>
             <e-kv class="ml-auto" label="Created" style="min-width: 195px">
-              <e-time>{{
-                hashDeploy(info.deployType) ? info.createAt : info.repo.updateAt
-              }}</e-time>
+              <e-time>{{ info.createAt }}</e-time>
             </e-kv>
           </div>
           <div
