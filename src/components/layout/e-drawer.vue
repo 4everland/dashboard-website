@@ -311,7 +311,7 @@ export default {
             },
             {
               label: "Operation Logs",
-              to: "/account/activity-log",
+              to: "/account/operation-log",
             },
           ],
         },

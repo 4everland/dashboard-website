@@ -31,6 +31,10 @@ const ipnsApi = inDev
 const resourceApi = inDev
   ? "https://rewardhub.foreverland.xyz"
   : "https://api.4everland.org";
+
+const bucketDomainApi = inDev
+  ? "https://domain.foreverland.xyz"
+  : "https://api.4everland.org";
 Vue.prototype.$endpoint = endpoint;
 
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
@@ -118,7 +122,8 @@ const lock = new AsyncLock({ timeout: 5000 });
         .replace("$auth", authApi)
         .replace("$gateway", gateWayApi)
         .replace("$ipns", ipnsApi)
-        .replace("$resource", resourceApi);
+        .replace("$resource", resourceApi)
+        .replace("$bucektDomain", bucketDomainApi);
       if (config.url.includes(authApi)) {
         token = "Bearer " + token;
       }
