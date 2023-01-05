@@ -12,14 +12,14 @@
 </style>
 
 <template>
-  <div class="pos-r" v-click-outside="onOut">
+  <div class="pos-r" v-click-outside="onOut" v-if="teamInfo">
     <div
       class="bg-f9 al-c ma-3 pa-1 hover-1"
       @click="showAccount = !showAccount"
     >
-      <span class="mr-auto fz-14">{{ curUid.cutStr(6, 4) }}</span>
+      <span class="mr-auto fz-14">{{ teamInfo.name }}</span>
       <v-chip label small color="primary" class="ev-n">
-        {{ curUid == userInfo.uid ? "Individual" : "Collaboration" }}
+        {{ teamInfo.type == "INDIVIDUAL" ? "Individual" : "Collaboration" }}
       </v-chip>
       <img :src="`/img/svg/drawer/up-down.svg`" height="30" class="d-b" />
     </div>
@@ -27,10 +27,15 @@
       <div v-for="(row, i) in list" :key="i">
         <h3>{{ row.title }}</h3>
         <ul class="mt-2 ml-3">
-          <li class="al-c hover-1 mb-2" v-for="(it, j) in row.subs" :key="j">
-            <span>{{ it.cutStr(6, 4) }}</span>
+          <li
+            class="al-c hover-1 mb-2"
+            @click="setTeam(it)"
+            v-for="(it, j) in row.subs"
+            :key="j"
+          >
+            <span>{{ it.name }}</span>
             <v-icon
-              v-if="it == curUid"
+              v-if="it.teamId == teamInfo.teamId"
               color="success"
               size="18"
               class="ml-auto"
@@ -39,27 +44,38 @@
           </li>
         </ul>
       </div>
+      <e-link
+        href="/account/member"
+        class="al-c mt-6 hover-1"
+        @click.native="onOut"
+      >
+        <v-icon color="primary" size="18">mdi-plus-circle</v-icon>
+        <span class="color-1 ml-1">Collaboration invitation</span>
+      </e-link>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
+      teamList: (s) => s.teamList,
     }),
+    ...mapGetters(["teamInfo"]),
     list() {
+      const list = this.teamList;
       return [
         {
           title: "Individual account",
-          subs: [this.userInfo.uid],
+          subs: list.filter((it) => it.type == "INDIVIDUAL"),
         },
         {
           title: "Collaboration account",
-          subs: ["aaddssdd", "test1234"],
+          subs: list.filter((it) => it.type == "COLLABORATION"),
         },
       ];
     },
@@ -75,6 +91,11 @@ export default {
   methods: {
     onOut() {
       this.showAccount = false;
+    },
+    setTeam(it) {
+      this.$setState({
+        teamId: it.teamId,
+      });
     },
   },
 };

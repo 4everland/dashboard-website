@@ -3,7 +3,7 @@
     <div class="main-wrap auto">
       <h3>Add New</h3>
       <div class="gray fz-14 mt-2">
-        nvite account collaborators. The beta version can only invite up to
+        Invite account collaborators. The beta version can only invite up to
         three people and can only join three collaborative accounts.
         <a href="">Please get in touch with us for more information.</a>
       </div>

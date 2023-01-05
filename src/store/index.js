@@ -22,6 +22,8 @@ const store = new Vuex.Store({
     },
     loginSta: 0,
     userInfo: JSON.parse(localStorage.userInfo || "{}"),
+    teamList: JSON.parse(localStorage.teamList || "[]"),
+    teamId: localStorage.teamId || null,
     noticeMsg: {},
     alertInfo: {},
     navItems: [],
@@ -41,6 +43,11 @@ const store = new Vuex.Store({
     orderInfo: JSON.parse(localStorage.orderInfo || "{}"),
     showProgress: false,
     allowNoLogin: false,
+  },
+  getters: {
+    teamInfo(state) {
+      return state.teamList.find((it) => it.teamId == state.teamId);
+    },
   },
   mutations: {
     [SET_DATA](state, data) {
