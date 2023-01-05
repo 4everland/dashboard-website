@@ -184,20 +184,20 @@
                   </div>
                 </div>
               </v-col>
-              <v-col cols="12" md="4" v-if="hashDeploy(it.deployType)">
+              <v-col cols="9" md="4" v-if="hashDeploy(it.deployType)">
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
-                  <h-status class="ta-c" :val="it.state"></h-status>
+                  <h-status class="ta-l" :val="it.state"></h-status>
                 </div>
                 <div>
                   <span class="d-ib deploy-origin-type fz-14">IPFS</span>
                   <span class="ml-3 fz-14">Deployment Through IPFS</span>
                 </div>
               </v-col>
-              <v-col cols="12" md="4" v-else>
+              <v-col cols="9" md="4" v-else>
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
-                  <h-status class="ta-c" :val="it.state"></h-status>
+                  <h-status class="ta-l" :val="it.state"></h-status>
                 </div>
                 <div
                   class="d-flex al-c"
@@ -225,24 +225,19 @@
               </v-col>
 
               <v-col
-                cols="12"
+                cols="3"
                 md="2"
-                class="
-                  d-flex
-                  flex-column
-                  justify-space-between
-                  align-md-center align-end
-                "
+                class="d-flex flex-column align-md-center align-end"
               >
                 <v-btn
                   :to="getDetailPath(it)"
                   @click.stop
-                  class="mr-3"
+                  class="mr-md-3"
                   color="primary"
                   small
                   >View Detail</v-btn
                 >
-                <div class="ta-c" style="min-width: 70px">
+                <div class="ta-c mt-4" style="min-width: 70px">
                   <e-time span-class="gray-6 fz-14">{{ it.buildAt }}</e-time>
                 </div>
               </v-col>

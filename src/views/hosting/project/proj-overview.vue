@@ -124,7 +124,7 @@
                   "
                   v-if="info.ipfsPath"
                 >
-                  {{ transformIpfsPath(info.ipfsPath).cutStr(4, 4) }}
+                  {{ transformIpfsPath(info.ipfsPath) }}
                 </e-link>
                 <h-status v-if="!info.ipfsPath" :val="info.state"></h-status>
                 <img

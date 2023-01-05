@@ -67,7 +67,15 @@
               :val="state == 'failure' ? 'Not synchronized' : state"
             ></h-status>
           </e-kv2>
-
+          <e-kv2
+            label="Domain"
+            class="ml-auto mt-7"
+            :class="showLabel ? '' : 'op-0'"
+          >
+            <e-link :href="'//' + info.domain">
+              {{ info.domain }}
+            </e-link>
+          </e-kv2>
           <div class="mt-7 d-flex">
             <e-kv2 label="Branch" v-if="!hashDeploy(info.deployType)">
               <div class="d-flex al-c f-wrap">
@@ -107,15 +115,6 @@
               <e-kv2 label="Base IPNS" v-if="info.deployType == 'IPNS'"></e-kv2>
             </div>
           </div>
-          <e-kv2
-            label="Domain"
-            class="ml-auto mt-7"
-            :class="showLabel ? '' : 'op-0'"
-          >
-            <e-link :href="'//' + info.domain">
-              {{ info.domain }}
-            </e-link>
-          </e-kv2>
         </v-col>
         <v-col cols="12" md="3">
           <div class="d-flex">
