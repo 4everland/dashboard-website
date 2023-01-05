@@ -15,7 +15,14 @@
           label=""
           v-model="teamName"
         ></v-text-field>
-        <v-btn color="primary" width="120px" class="ml-5" tile>Save</v-btn>
+        <v-btn
+          color="primary"
+          width="120px"
+          class="ml-5"
+          tile
+          @click="handleSave"
+          >Save</v-btn
+        >
       </div>
     </div>
     <div class="mt-5 config-item al-c">
@@ -33,7 +40,7 @@
         class="cursor-p"
         @click="$refs.uploadInput.onClick(false)"
       >
-        <img :src="avatarSrc" alt="John"
+        <img :src="teamAvatar" alt="John"
       /></v-avatar>
       <input-upload @input="onInput" ref="uploadInput"></input-upload>
     </div>
@@ -53,14 +60,22 @@
 
 <script>
 import InputUpload from "@/views/bucket/components/input-upload";
-
+import { mapState } from "vuex";
 export default {
   data() {
     return {
       teamName: "",
       file: null,
-      avatarSrc: "https://cdn.vuetifyjs.com/images/john.jpg",
+      teamAvatar: "https://cdn.vuetifyjs.com/images/john.jpg",
     };
+  },
+  computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
+  },
+  mounted() {
+    // console.log(this.userInfo);
   },
   methods: {
     async handleDelete() {
@@ -70,6 +85,7 @@ export default {
           "Alert"
         );
         // do something
+        await this.$http.post("$auth/cooperation/exit");
       } catch (error) {
         //
         console.log(error);
@@ -90,7 +106,19 @@ export default {
     async onInput(file) {
       this.file = file[0];
       const src = await this.getAvatarSrc(file[0]);
-      this.avatarSrc = src;
+      this.teamAvatar = src;
+    },
+    async handleSave() {
+      try {
+        const data = {
+          teamName: this.teamName,
+        };
+        this.$loading();
+        await this.$http.put("$auth/cooperation/teams", data);
+        this.$loading.close();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   components: {
