@@ -15,11 +15,67 @@
           </e-link>
         </v-col>
         <v-col cols="12" md="6">
-          <e-kv label="Deployment" class="mt-2">
+          <e-kv :label="info.platform" style="min-width: 120px">
+            <div class="al-c">
+              <e-link
+                class="fz-14"
+                :href="$utils.getCidLink(info.hash, info.platform)"
+                v-if="info.hash"
+              >
+                <!-- {{ info.hash.cutStr(4, 4) }} -->
+                {{ info.hash }}
+              </e-link>
+              <h-status v-if="!info.hash" :val="info.state"></h-status>
+              <img
+                v-if="info.hash"
+                src="/img/svg/copy.svg"
+                width="12"
+                class="ml-3 hover-1"
+                @success="$toast('Copied!')"
+                v-clipboard="info.hash"
+              />
+            </div>
+          </e-kv>
+          <e-kv class="mt-9" label="IPNS" min-width="100px" v-if="showIpns">
+            <e-tooltip top slot="sub">
+              <v-icon slot="ref" color="#666" size="14" class="pa-1"
+                >mdi-help-circle-outline</v-icon
+              >
+              <span
+                >IPFS exclusive gateway is recommended for access since the IPNS
+                broadcast mechanism may cause a 404 error.
+              </span>
+            </e-tooltip>
+
+            <div class="al-c" v-if="info.ipns">
+              <e-link
+                class="fz-14"
+                :href="$utils.getCidLink(info.ipns, 'IPNS')"
+              >
+                {{ info.ipns }}
+              </e-link>
+              <img
+                src="/img/svg/copy.svg"
+                width="12"
+                class="ml-3 hover-1"
+                @success="$toast('Copied!')"
+                v-clipboard="info.ipns"
+              />
+            </div>
+            <v-btn
+              v-else
+              x-small
+              color="primary"
+              :loading="loadingIpns"
+              @click="getIpns"
+              >Get IPNS</v-btn
+            >
+          </e-kv>
+          <!-- <e-kv label="Deployment" class="mt-2">
             <e-link :href="buildPath">
               {{ info.domain }}
             </e-link>
-          </e-kv>
+          </e-kv> -->
           <e-kv label="Domains" class="mt-9" v-if="info.domains">
             <div class="d-flex al-c">
               <h-domain class="mr-6" :val="domains[0]" />
@@ -40,67 +96,7 @@
             </div>
           </e-kv>
 
-          <div class="mt-9 d-flex justify-space-between">
-            <e-kv
-              :label="info.platform"
-              style="min-width: 120px"
-              v-if="!hashDeploy(info.deployType) || info.platform !== 'IPFS'"
-            >
-              <div class="al-c">
-                <e-link
-                  class="fz-14"
-                  :href="$utils.getCidLink(info.hash, info.platform)"
-                  v-if="info.hash"
-                >
-                  {{ info.hash.cutStr(4, 4) }}
-                </e-link>
-                <h-status v-if="!info.hash" :val="info.state"></h-status>
-                <img
-                  v-if="info.hash"
-                  src="/img/svg/copy.svg"
-                  width="12"
-                  class="ml-3 hover-1"
-                  @success="$toast('Copied!')"
-                  v-clipboard="info.hash"
-                />
-              </div>
-            </e-kv>
-            <e-kv label="IPNS" min-width="90px" v-if="showIpns">
-              <e-tooltip top slot="sub">
-                <v-icon slot="ref" color="#666" size="14" class="pa-1"
-                  >mdi-help-circle-outline</v-icon
-                >
-                <span
-                  >IPFS exclusive gateway is recommended for access since the
-                  IPNS broadcast mechanism may cause a 404 error.
-                </span>
-              </e-tooltip>
-
-              <div class="al-c" v-if="info.ipns">
-                <e-link
-                  class="fz-14"
-                  :href="$utils.getCidLink(info.ipns, 'IPNS')"
-                >
-                  {{ info.ipns.cutStr(4, 4) }}
-                </e-link>
-                <img
-                  src="/img/svg/copy.svg"
-                  width="12"
-                  class="ml-3 hover-1"
-                  @success="$toast('Copied!')"
-                  v-clipboard="info.ipns"
-                />
-              </div>
-              <v-btn
-                v-else
-                x-small
-                color="primary"
-                :loading="loadingIpns"
-                @click="getIpns"
-                >Get IPNS</v-btn
-              >
-            </e-kv>
-          </div>
+          <!-- <div class="mt-9 d-flex justify-space-between"></div> -->
 
           <div class="mt-9 d-flex">
             <e-kv label="State">
@@ -112,7 +108,10 @@
               }}</e-time>
             </e-kv>
           </div>
-          <div class="mt-9 d-flex" v-if="hashDeploy(info.deployType)">
+          <div
+            class="mt-9 d-flex"
+            v-if="hashDeploy(info.deployType) && info.platform != 'IPFS'"
+          >
             <e-kv label="Base IPFS">
               <div class="al-c">
                 <e-link

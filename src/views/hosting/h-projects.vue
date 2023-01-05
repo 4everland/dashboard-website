@@ -62,7 +62,7 @@
 
 <template>
   <div class="projects">
-    <e-right-opt-wrap v-if="list.length">
+    <e-right-opt-wrap>
       <e-menu open-on-hover offset-y>
         <v-btn slot="ref" outlined min-width="100">
           <!-- <img src="/img/svg/hosting/ic-sort.svg" width="12" /> -->
@@ -127,7 +127,7 @@
               />
             </template>
             <v-row>
-              <v-col cols="12" md="4">
+              <v-col cols="12" md="6">
                 <div class="d-flex al-c grow-0">
                   <v-img
                     :src="$getImgSrc(it.previewImage)"
@@ -168,7 +168,8 @@
                         @click.stop
                         v-if="it.hash && it.state == 'SUCCESS'"
                       >
-                        {{ it.hash.cutStr(4, 4) }}
+                        <!-- {{ it.hash.cutStr(4, 4) }} -->
+                        {{ it.hash }}
                       </a>
                       <span v-else-if="it.state == 'FAILURE'" class="ml-1 fz-14"
                         >Not synchronized</span
@@ -223,10 +224,16 @@
                 </div>
               </v-col>
 
-              <v-col cols="12" md="4" class="d-flex al-c">
-                <div class="ml-auto mr-6 ta-r" style="min-width: 70px">
-                  <e-time span-class="gray-6 fz-14">{{ it.buildAt }}</e-time>
-                </div>
+              <v-col
+                cols="12"
+                md="2"
+                class="
+                  d-flex
+                  flex-column
+                  justify-space-between
+                  align-md-center align-end
+                "
+              >
                 <v-btn
                   :to="getDetailPath(it)"
                   @click.stop
@@ -235,6 +242,9 @@
                   small
                   >View Detail</v-btn
                 >
+                <div class="ta-c" style="min-width: 70px">
+                  <e-time span-class="gray-6 fz-14">{{ it.buildAt }}</e-time>
+                </div>
               </v-col>
             </v-row>
           </v-expansion-panel-header>
@@ -318,8 +328,8 @@
           >Create a project by cid</v-btn
         > -->
         <div class="mt-10">
-          <!-- <img src="/img/svg/hosting/no-data.svg" width="180" alt="" />
-          <p class="mt-7 fz-18">No projects, yet！</p> -->
+          <img src="/img/svg/hosting/no-data.svg" width="180" alt="" />
+          <p class="mt-7 fz-18">No projects, yet！</p>
           <div class="al-c mt-10">
             <div
               class="ipfs-deploy deploy"
