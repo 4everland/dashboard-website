@@ -19,6 +19,7 @@
             outlined
             dense
             label=""
+            placeholder="Enter the IPFS CID"
             v-model="form.ipfsPath"
             :rules="[
               (v) => !!(v || '').trim() || 'Invalid CID',
@@ -37,6 +38,7 @@
         class="mt-4"
         persistent-placeholder
         outlined
+        placeholder="Enter the project name"
         v-model="form.name"
         dense
         :rules="[(v) => !!(v || '').trim() || 'Please enter a project name']"
