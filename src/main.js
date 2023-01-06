@@ -7,6 +7,7 @@ import vuetify from "./plugins/vuetify";
 import "./setup";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 import { newUserDrop } from "@/plugins/airDrop/index.js";
+import { bus } from "@/utils/bus";
 newUserDrop();
 Vue.config.productionTip = false;
 
@@ -44,6 +45,7 @@ new Vue({
       token: (s) => s.token(),
       noticeMsg: (s) => s.noticeMsg,
       allowNoLogin: (s) => s.allowNoLogin,
+      userInfo: (s) => s.userInfo,
     }),
   },
   mounted() {
@@ -111,6 +113,40 @@ new Vue({
         });
         // console.log(name, data);
       });
+    },
+
+    async initBroadcast() {
+      try {
+        const { data } = await this.$http.get("$auth/ws-key");
+        if (data.key) {
+          this.broadcastKey = data.key;
+        } else {
+          this.broadcastKey = null;
+          throw new Error("broadcast socket disconnect");
+        }
+        const url = /xyz$/.test(process.env.VUE_APP_BASE_URL)
+          ? "auth.foreverland.xyz"
+          : "oauth.4everland.org";
+        this.broadcastSocket = window.io(url + `/${this.broadcastKey}`);
+        this.broadcastSocket.on("connect", () => {
+          console.log("broadcastSocket connect");
+        });
+        this.broadcastSocket.on("disconnect", (reason) => {
+          console.log(reason);
+          if (this.broadcastKey) {
+            this.broadcastSocket.connect();
+          }
+        });
+        this.broadcastSocket.on("BROADCAST", (broadcastMessage) => {
+          console.log(broadcastMessage);
+          const uid = this.userInfo.uid;
+          if (broadcastMessage.target == uid) {
+            bus.$emit("broadcastNotice");
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getUesrInfo() {
       const { data } = await this.$http.get("$auth/user");

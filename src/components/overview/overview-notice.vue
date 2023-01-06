@@ -5,7 +5,7 @@
       :show-arrows="false"
       vertical
       hide-delimiters
-      :interval="5000"
+      :interval="10000000"
       cycle
       height="30"
     >
@@ -14,9 +14,49 @@
         :reverse-transition="true"
         :key="item.id"
       >
-        <template>
+        <template v-if="item.type == 'NORMAL'">
           <div class="notice-content">
             <a class="fz-14 message" :href="item.url">{{ item.message }}</a>
+          </div>
+        </template>
+        <template v-if="item.type == 'COOPERATION_INVIATION'">
+          <div class="notice-content al-c">
+            <!-- <a class="fz-14 message" :href="item.url">{{ item.message }}</a> -->
+            <!-- COOPERATION_INVIATION -->
+            <div class="fz-14 message">{{ item.message }}</div>
+            <div class="ml-auto mr-3">
+              <v-btn
+                small
+                width="100"
+                light
+                color="#FF994E"
+                class="invitation-btn"
+                tile
+                @click="handleInvitation(item.id, true)"
+                >Join</v-btn
+              >
+              <v-btn
+                small
+                width="100"
+                class="ml-4"
+                color="#FF994E"
+                outlined
+                tile
+                @click="handleInvitation(item.id, false)"
+                >Reject</v-btn
+              >
+            </div>
+          </div>
+        </template>
+        <template v-if="item.type == 'REMOVED_BY_TEAM_MANAGER'">
+          <div class="notice-content">
+            <span class="fz-14 message">{{ item.message }}</span>
+          </div>
+        </template>
+        <template v-if="item.type == 'SWITCH_TO_MEMBER'">
+          <div class="notice-content">
+            <!-- <a class="fz-14 message" :href="item.url">{{ item.message }}</a> -->
+            SWITCH_TO_MEMBER
           </div>
         </template>
       </v-carousel-item>
@@ -28,14 +68,49 @@
 </template>
 
 <script>
+import { bus } from "@/utils/bus";
 export default {
   data() {
     return {
-      noticeList: [],
+      noticeList: [
+        // {
+        //   id: "0",
+        //   url: "baidu.com",
+        //   message: "normal message",
+        //   type: "NORMAL",
+        // },
+        // {
+        //   id: "1",
+        //   url: "baidu.com",
+        //   message: "normal message",
+        //   type: "NORMAL",
+        // },
+        {
+          id: "2",
+          url: "baidu.com",
+          message: "inviation message",
+          type: "COOPERATION_INVIATION",
+        },
+        {
+          id: "3",
+          url: "baidu.com",
+          message: "remove team message",
+          type: "REMOVED_BY_TEAM_MANAGER",
+        },
+        {
+          id: "4",
+          url: "baidu.com",
+          message: "switch merber message",
+          type: "SWITCH_TO_MEMBER",
+        },
+      ],
     };
   },
   created() {
-    this.getList();
+    // this.getList();
+    bus.$on("broadcastNotice", () => {
+      this.getList();
+    });
   },
   computed: {
     list() {
@@ -59,10 +134,15 @@ export default {
         const { data } = await this.$http2.get("$auth/broadcast", { noTip: 1 });
         console.log(data);
         const historyNoticeList = JSON.parse(localStorage.getItem("notice"));
+
         this.noticeList = historyNoticeList
           ? historyNoticeList.concat(data.list)
           : data.list;
-        localStorage.setItem("notice", JSON.stringify(this.noticeList));
+
+        const normalNoticeList = this.noticeList.filter(
+          (it) => it.type != "NORMAL" && it.type != "REMOVED_BY_TEAM_MANAGER"
+        );
+        localStorage.setItem("notice", JSON.stringify(normalNoticeList));
       } catch (error) {
         //
         console.log(error);
@@ -74,6 +154,30 @@ export default {
     handleCloseNotice() {
       this.noticeList = [];
       localStorage.removeItem("notice");
+    },
+    async handleInvitation(id, accept) {
+      try {
+        this.$loading();
+        const { data } = await this.$http.post(
+          `$auth/cooperation/invitations/${id}`,
+          {
+            accept,
+          }
+        );
+        this.$loading.close();
+
+        console.log(data);
+        let html = `You have successfully joined the following collaboration accounts
+        ${data.team.teamName}`;
+        await this.$alert(html, "Alert");
+        this.$setMsg({
+          firstJoinTeam: data.team.alert, // true or false
+        });
+        this.noticeList = this.noticeList.filter((it) => it.id != id);
+      } catch (error) {
+        this.$loading.close();
+        console.log(error);
+      }
     },
   },
 };
@@ -94,5 +198,8 @@ export default {
   .message {
     color: #ff994e;
   }
+}
+::v-deep .invitation-btn .v-btn__content {
+  color: #fff;
 }
 </style>

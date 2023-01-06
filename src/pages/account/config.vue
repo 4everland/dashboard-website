@@ -92,22 +92,24 @@ export default {
       }
     },
     async getAvatarSrc(file) {
-      console.log(file);
-      return new Promise((res, rej) => {
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-          res(reader.result);
-        };
-        reader.onerror = function (error) {
-          rej(error);
-        };
-      });
+      // console.log(file);
+      // return new Promise((res, rej) => {
+      //   let reader = new FileReader();
+      //   reader.readAsDataURL(file);
+      //   reader.onload = function () {
+      //     res(reader.result);
+      //   };
+      //   reader.onerror = function (error) {
+      //     rej(error);
+      //   };
+      // });
+      console.log(URL.createObjectURL(file));
+      this.teamAvatar = URL.createObjectURL(file);
     },
     async onInput(file) {
       this.file = file[0];
-      const src = await this.getAvatarSrc(file[0]);
-      this.teamAvatar = src;
+      this.getAvatarSrc(file[0]);
+      // this.teamAvatar = src;
     },
     async handleSave() {
       try {
