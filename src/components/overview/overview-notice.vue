@@ -171,7 +171,10 @@ export default {
         ${data.team.teamName}`;
         await this.$alert(html, "Alert");
         this.$setMsg({
-          firstJoinTeam: data.team.alert, // true or false
+          name: "joinTeam",
+          data: {
+            tip: data.team.alert, // true or false
+          },
         });
         this.noticeList = this.noticeList.filter((it) => it.id != id);
       } catch (error) {

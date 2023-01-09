@@ -44,7 +44,7 @@
       /></v-avatar>
       <input-upload @input="onInput" ref="uploadInput"></input-upload>
     </div>
-    <div class="mt-5 config-item al-c">
+    <div class="mt-5 config-item al-c" v-if="teamInfo.type != 'INDIVIDUAL'">
       <div style="width: 60%" class="mr-auto">
         <h3 class="fz-20">Exit collaboration</h3>
         <p class="fz-14 mb-6 mt-3 description">
@@ -60,7 +60,7 @@
 
 <script>
 import InputUpload from "@/views/bucket/components/input-upload";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -73,6 +73,7 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
     }),
+    ...mapGetters(["teamInfo"]),
   },
   mounted() {
     // console.log(this.userInfo);
