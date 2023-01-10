@@ -48,6 +48,12 @@ export default {
           tips: "A Flow Wallet lived in your Browser",
           link: "",
         },
+        petra: {
+          icon: require("@/assets/imgs/petra.svg"),
+          name: "Petra Aptos Wallet",
+          tips: "A crypto wallet on Aptos",
+          link: "https://petra.app/",
+        },
       },
     };
   },

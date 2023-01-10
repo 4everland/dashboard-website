@@ -67,7 +67,7 @@ Vue.prototype.$regMap = {
   domain: /(\w+\.)+\w{2,10}/,
   eth: /^(0x)?[0-9a-fA-F]{40}$/,
   secondLevelDomain:
-    /^(?=^.{3,255}$)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62}){1,2}$/,
+    /^(?=^.{3,255}$)([a-zA-Z0-9][-a-zA-Z0-9]{0,62}|\*)(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62}){1,2}$/,
 };
 
 Vue.prototype.$utils = {

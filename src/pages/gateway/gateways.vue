@@ -47,7 +47,6 @@
           :headers="headers"
           :items="list"
           hide-default-footer
-          @click:row="onRow"
         >
           <template #item.name="{ item }">
             <span>{{ item.name }}.4everland.link</span>
@@ -64,9 +63,10 @@
             <span>{{ new Date(item.created_at * 1000).format() }}</span>
           </template>
           <template #item.act="{ item }">
-            <!-- <span class="action-btn" @click.stop="onDomain(item)">Domain</span>
-            <span class="action-btn ml-3" @click.stop="onEdit(item)">Edit</span> -->
-            <span class="action-btn" @click.stop="onDelete(item)">Delete</span>
+            <span class="action-btn" @click.stop="onRow(item)">Edit</span>
+            <span class="action-btn ml-3" @click.stop="onDelete(item)"
+              >Delete</span
+            >
           </template>
         </v-data-table>
 
@@ -171,7 +171,6 @@ export default {
       this.balance = balance;
     },
     onRow(row) {
-      console.log(row);
       this.$router.push(`/gateway/list/${row.name}?tab=settings`);
     },
   },

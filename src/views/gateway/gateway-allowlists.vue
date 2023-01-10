@@ -131,6 +131,16 @@
         </div>
         <div class="fz-14 tips" v-if="!isBulkOperation">
           Tips: Origin allowlists support wildcard subdomain patterns.
+          <e-tooltip top>
+            <v-icon slot="ref" color="#889ab3" size="18" class="pa-1 d-ib"
+              >mdi-alert-circle-outline</v-icon
+            >
+            <span
+              >For example, allowlist entry *.example.com matches
+              your-app.example.com , our-app.example.com, and
+              their-app.example.com, etc.</span
+            >
+          </e-tooltip>
         </div>
         <div class="fz-14 mt-4 tips-warning" v-if="originsList.length == 0">
           Your current configuration only allows you to access the gateway via
