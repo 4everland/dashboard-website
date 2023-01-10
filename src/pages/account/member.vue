@@ -20,7 +20,14 @@
               dense
               style="max-width: 140px"
             ></v-select>
-            <v-text-field outlined dense class="ml-4"></v-text-field>
+            <v-text-field
+              :placeholder="
+                accBody.type == 'EMAIL' ? 'Email adress' : 'Wallet address'
+              "
+              outlined
+              dense
+              class="ml-4"
+            ></v-text-field>
           </div>
         </v-col>
         <v-col cols="12" md="5">
@@ -52,11 +59,19 @@
 
     <div class="main-wrap auto mt-5">
       <h3>Members</h3>
-      <v-data-table
-        :headers="headers"
-        hide-default-footer
-        :items="list"
-      ></v-data-table>
+      <v-data-table :headers="headers" hide-default-footer :items="list">
+        <template v-slot:item.act="{ item }">
+          <div v-if="item.role == 'Owner'">
+            <v-btn text color="primary" small>Disband</v-btn>
+          </div>
+          <div v-else>
+            <v-btn text color="primary" small>Disable</v-btn>
+            <v-btn text color="primary" small>Permission</v-btn>
+            <v-btn text color="primary" small>Remove</v-btn>
+            <v-btn text color="primary" small>Note</v-btn>
+          </div>
+        </template>
+      </v-data-table>
     </div>
   </div>
 </template>
@@ -94,6 +109,11 @@ export default {
           role: "Owner",
           status: "Valid",
         },
+        {
+          member: "0xdd...dddd",
+          role: "Member",
+          status: "Valid",
+        },
       ],
       headers: [
         {
@@ -111,6 +131,7 @@ export default {
         {
           text: "Action",
           value: "act",
+          width: "33%",
         },
       ],
     };
