@@ -8,12 +8,14 @@
         <a href="">Please get in touch with us for more information.</a>
       </div>
       <v-row class="mt-3">
-        <v-col md="6">
+        <v-col cols="12" md="7">
           <h4>Address</h4>
           <div class="al-c">
             <v-select
-              :items="['Email', 'Wallet']"
-              v-model="accType"
+              :items="typeItems"
+              item-text="text"
+              item-value="value"
+              v-model="accBody.type"
               outlined
               dense
               style="max-width: 140px"
@@ -21,8 +23,32 @@
             <v-text-field outlined dense class="ml-4"></v-text-field>
           </div>
         </v-col>
+        <v-col cols="12" md="5">
+          <h4>Permission</h4>
+          <div>
+            <v-text-field
+              outlined
+              dense
+              readonly
+              :value="getText(accBody.access)"
+              @click="onAccess(accBody.access)"
+            ></v-text-field>
+          </div>
+        </v-col>
       </v-row>
+      <div class="ta-r">
+        <v-btn color="primary" width="100px">Invite</v-btn>
+      </div>
     </div>
+
+    <v-dialog v-model="showPermission" max-width="700px" eager>
+      <account-permission
+        ref="permission"
+        v-model="curAccess"
+        @close="showPermission = false"
+        @save="onSaveAccess"
+      />
+    </v-dialog>
 
     <div class="main-wrap auto mt-5">
       <h3>Members</h3>
@@ -36,10 +62,32 @@
 </template>
 
 <script>
+import AccountPermission from "@/views/account/account-permission.vue";
+
 export default {
+  components: {
+    AccountPermission,
+  },
   data() {
     return {
-      accType: "Email",
+      showPermission: false,
+      curId: null,
+      curAccess: [],
+      accBody: {
+        type: "WALLET",
+        target: "",
+        access: [],
+      },
+      typeItems: [
+        {
+          text: "Wallet",
+          value: "WALLET",
+        },
+        {
+          text: "Email",
+          value: "EMAIL",
+        },
+      ],
       list: [
         {
           member: "0xdd...dddd",
@@ -66,6 +114,25 @@ export default {
         },
       ],
     };
+  },
+  methods: {
+    getText() {
+      const el = this.$refs.permission;
+      if (!el) return "";
+      return el.getText(this.accBody.access);
+    },
+    onSaveAccess() {
+      if (this.curId) {
+      } else {
+        this.accBody.access = [...this.curAccess];
+      }
+      this.showPermission = false;
+    },
+    onAccess(arr, id) {
+      this.curId = id;
+      this.curAccess = [...arr];
+      this.showPermission = true;
+    },
   },
 };
 </script>
