@@ -20,7 +20,6 @@ export default [
     component: () => import("./operation-log"),
     meta: {
       title: "Operation Log",
-      isTab: 1,
     },
   },
 ];

@@ -133,12 +133,20 @@ export default {
       try {
         const { data } = await this.$http2.get("$auth/broadcast", { noTip: 1 });
         console.log(data);
+
         const historyNoticeList = JSON.parse(localStorage.getItem("notice"));
 
         this.noticeList = historyNoticeList
           ? historyNoticeList.concat(data.list)
           : data.list;
-
+        let EmailJoinSuccess = this.noticeList.findIndex(
+          (it) => it.type == "SWITCH_TO_MEMBER"
+        );
+        if (EmailJoinSuccess != -1) {
+          this.$alert(
+            "You have successfully joined the following collaboration accounts"
+          );
+        }
         const normalNoticeList = this.noticeList.filter(
           (it) => it.type != "NORMAL" && it.type != "REMOVED_BY_TEAM_MANAGER"
         );
