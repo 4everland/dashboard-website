@@ -207,7 +207,9 @@ export default {
         const now = new Date();
         for (const it of this.selected) {
           const time = new Date(it.createAt * 1e3).toNiceTime(now);
-          html += `<div class="mt-2 fz-14">${it.domain} <span class="fl-r gray">added ${time}</span></div>`;
+          html += `<div class="mt-2 fz-14">${
+            it.domain || it.value
+          } <span class="fl-r gray">added ${time}</span></div>`;
         }
         await this.$confirm(html, "Delete Domains");
         this.deleting = true;
