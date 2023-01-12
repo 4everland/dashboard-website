@@ -71,7 +71,7 @@ export default {
           type: "GATEWAY",
           subs: [
             "Create the gateway",
-            "Manager the gateway",
+            "Manage the gateway",
             "IPNS Manager",
             "IPNS API Key",
           ],
