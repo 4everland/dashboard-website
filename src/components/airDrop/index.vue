@@ -62,9 +62,18 @@ export default {
   },
 
   methods: {
-    getAirDrop(data) {
-      // console.log(data);
-      this.showDialog = true;
+    async getAirDrop(data) {
+      try {
+        console.log("airdrop");
+        this.$setMsg({
+          name: "newUser",
+          data: {
+            tip: true,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
     handleClaim() {
       // console.log(this);
