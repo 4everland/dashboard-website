@@ -21,6 +21,7 @@
               style="max-width: 140px"
             ></v-select>
             <v-text-field
+              v-model="accBody.target"
               :placeholder="
                 accBody.type == 'EMAIL' ? 'Email adress' : 'Wallet address'
               "
@@ -34,6 +35,7 @@
           <h4>Permission</h4>
           <div>
             <v-text-field
+              placeholder="Select Permission"
               outlined
               dense
               readonly
@@ -44,7 +46,7 @@
         </v-col>
       </v-row>
       <div class="ta-r">
-        <v-btn color="primary" width="100px">Invite</v-btn>
+        <v-btn color="primary" width="100px" @click="addMember">Invite</v-btn>
       </div>
     </div>
 
@@ -65,9 +67,22 @@
             <v-btn text color="primary" small>Disband</v-btn>
           </div>
           <div v-else>
-            <v-btn text color="primary" small>Disable</v-btn>
-            <v-btn text color="primary" small>Permission</v-btn>
-            <v-btn text color="primary" small>Remove</v-btn>
+            <v-btn
+              text
+              color="primary"
+              small
+              @click="
+                onAct(item, item.status == 'DISABLED' ? 'ENABLE' : 'DISABLE')
+              "
+            >
+              {{ item.status == "DISABLED" ? "Enable" : "Disable" }}
+            </v-btn>
+            <v-btn text color="primary" small @click="onAct(item, 'access')"
+              >Permission</v-btn
+            >
+            <v-btn text color="primary" small @click="onAct(item, 'REMOVE')"
+              >Remove</v-btn
+            >
             <v-btn text color="primary" small>Note</v-btn>
           </div>
         </template>
@@ -105,20 +120,21 @@ export default {
       ],
       list: [
         {
-          member: "0xdd...dddd",
+          targetName: "0xdd...dddd",
           role: "Owner",
           status: "Valid",
         },
         {
-          member: "0xdd...dddd",
+          targetName: "0xdd...dddd",
           role: "Member",
           status: "Valid",
+          access: ["HOSTING"],
         },
       ],
       headers: [
         {
           text: "Member",
-          value: "member",
+          value: "targetName",
         },
         {
           text: "Role",
@@ -136,7 +152,62 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.getList();
+  },
   methods: {
+    async addMember() {
+      try {
+        const body = this.accBody;
+        let msg = "";
+        if (!body.target) msg = "Invalid Address";
+        else if (
+          body.type == "EMAIL" &&
+          !this.$regMap.email.test(body.target)
+        ) {
+          msg = "Invalid email address";
+        } else if (!body.access.length) {
+          msg = "No permission selected.";
+        }
+        if (msg) {
+          return this.$toast(msg);
+        }
+        this.$loading();
+        await this.$http.post("{auth}/cooperation/invitations", body);
+        this.$toast("Inviting member successfully.");
+        this.getList();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getList() {
+      if (Date) return;
+      try {
+        const { data } = await this.$http.get("{auth}/cooperation/invitations");
+        this.list = data.items;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async setMember(body) {
+      try {
+        this.$loading();
+        await this.$http.put("{auth}/cooperation/member", body);
+        this.getList();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    onAct(row, act) {
+      const body = {
+        invitationId: row.invitationId,
+      };
+      if (act == "access") {
+        this.onAccess(row.access, row.invitationId);
+      } else if (["DISABLE", "ENABLE", "REMOVE"].includes(act)) {
+        body.status = act;
+      }
+    },
     getText() {
       const el = this.$refs.permission;
       if (!el) return "";

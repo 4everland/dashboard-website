@@ -98,6 +98,11 @@ export default {
       ],
     };
   },
+  watch: {
+    value(val) {
+      this.val = val;
+    },
+  },
   methods: {
     getText(checked) {
       return this.list
