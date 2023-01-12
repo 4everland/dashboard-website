@@ -61,10 +61,23 @@
 
     <div class="main-wrap auto mt-5">
       <h3>Members</h3>
-      <v-data-table :headers="headers" hide-default-footer :items="list">
+      <v-data-table
+        :loading="listLoading"
+        :headers="headers"
+        hide-default-footer
+        :items="list"
+      >
         <template v-slot:item.act="{ item }">
           <div v-if="item.role == 'Owner'">
-            <v-btn text color="primary" small>Disband</v-btn>
+            <v-btn
+              text
+              color="primary"
+              small
+              @click="onDisband"
+              v-if="list.length > 1"
+              >Disband</v-btn
+            >
+            <span v-else>——</span>
           </div>
           <div v-else>
             <v-btn
@@ -77,13 +90,19 @@
             >
               {{ item.status == "DISABLED" ? "Enable" : "Disable" }}
             </v-btn>
-            <v-btn text color="primary" small @click="onAct(item, 'access')"
+            <v-btn
+              text
+              color="primary"
+              small
+              @click="onAccess(item.access, item.invitationId)"
               >Permission</v-btn
             >
             <v-btn text color="primary" small @click="onAct(item, 'REMOVE')"
               >Remove</v-btn
             >
-            <v-btn text color="primary" small>Note</v-btn>
+            <v-btn text color="primary" small @click="onAct(item, 'note')"
+              >Note</v-btn
+            >
           </div>
         </template>
       </v-data-table>
@@ -118,19 +137,9 @@ export default {
           value: "EMAIL",
         },
       ],
-      list: [
-        {
-          targetName: "0xdd...dddd",
-          role: "Owner",
-          status: "Valid",
-        },
-        {
-          targetName: "0xdd...dddd",
-          role: "Member",
-          status: "Valid",
-          access: ["HOSTING"],
-        },
-      ],
+      inTest: !false,
+      listLoading: false,
+      list: [],
       headers: [
         {
           text: "Member",
@@ -181,31 +190,79 @@ export default {
       }
     },
     async getList() {
-      if (Date) return;
       try {
-        const { data } = await this.$http.get("{auth}/cooperation/invitations");
-        this.list = data.items;
+        this.listLoading = true;
+        if (this.inTest) {
+          await this.$sleep(500);
+          this.list = [
+            {
+              targetName: "0xdd...dddd",
+              role: "Owner",
+              status: "Valid",
+            },
+            {
+              targetName: "0xdd...dddd",
+              invitationId: 1,
+              role: "Member",
+              status: "Valid",
+              access: ["HOSTING"],
+            },
+          ];
+        } else {
+          const { data } = await this.$http.get(
+            "{auth}/cooperation/invitations"
+          );
+          this.list = data.items;
+        }
       } catch (error) {
         console.log(error);
       }
+      this.listLoading = false;
     },
-    async setMember(body) {
+    async onDisband() {
       try {
+        await this.$confirm(
+          "All collaborative accounts, members, and operation records will be deleted. Please confirm before proceeding."
+        );
         this.$loading();
-        await this.$http.put("{auth}/cooperation/member", body);
+        for (const row of this.list) {
+          if (row.role == "Owner") continue;
+          await this.onAct(row, "REMOVE");
+        }
         this.getList();
       } catch (error) {
         console.log(error);
       }
     },
-    onAct(row, act) {
+    async onAct(row, act) {
       const body = {
         invitationId: row.invitationId,
       };
-      if (act == "access") {
-        this.onAccess(row.access, row.invitationId);
+      if (act == "note") {
+        const { value } = await this.$prompt("Enter note information", "Note");
+        body.note = value;
       } else if (["DISABLE", "ENABLE", "REMOVE"].includes(act)) {
+        let tip = "";
+        if (act == "REMOVE")
+          tip = `Are you sure to remove this member(${row.targetName}) ?`;
+        if (tip) await this.$confirm(tip);
         body.status = act;
+      }
+      this.setMember(body);
+    },
+    async setMember(body) {
+      console.log(body);
+      try {
+        this.$loading();
+        if (this.inTest) {
+          await this.$sleep(300);
+        } else {
+          await this.$http.put("{auth}/cooperation/member", body);
+        }
+        this.$loading.close();
+        this.getList();
+      } catch (error) {
+        console.log(error);
       }
     },
     getText() {
@@ -215,6 +272,10 @@ export default {
     },
     onSaveAccess() {
       if (this.curId) {
+        this.setMember({
+          invitationId: this.curId,
+          access: this.curAccess,
+        });
       } else {
         this.accBody.access = [...this.curAccess];
       }
