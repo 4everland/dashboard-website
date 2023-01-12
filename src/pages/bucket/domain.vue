@@ -17,7 +17,9 @@
                 :class="info.success ? 'color-suc' : 'red-1'"
               >
                 {{
-                  info.success ? "Valid Configuration" : "Invalid Configuration"
+                  info.success
+                    ? "Valid Configuration"
+                    : info.message || "Invalid Configuration"
                 }}
               </span>
             </div>
