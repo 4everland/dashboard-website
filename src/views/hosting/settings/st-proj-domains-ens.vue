@@ -296,6 +296,9 @@ export default {
       });
     },
     async onAdd() {
+      if (this.projectInfo.state != "SUCCESS") {
+        return this.$alert("task status must be SUCCESS");
+      }
       if (!reg.test(this.domain)) {
         return this.$alert("Invalid ETH Domain");
       }
