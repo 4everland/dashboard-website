@@ -62,13 +62,20 @@ export default {
   },
 
   methods: {
-    getAirDrop(data) {
-      // console.log(data);
-      this.showDialog = true;
+    async getAirDrop(data) {
+      try {
+        await this.$sleep(10);
+        this.$setMsg({
+          name: "newUser",
+          data: {
+            tip: true,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
     handleClaim() {
-      // console.log(this);
-      this.showDialog = false;
       router.push("/reward-hub");
     },
   },
