@@ -4,7 +4,7 @@
   bottom: 0;
   left: 98%;
   width: 240px;
-  min-height: 160px;
+  min-height: 120px;
   ul {
     padding: 0;
   }
@@ -24,7 +24,7 @@
       <img :src="`/img/svg/drawer/up-down.svg`" height="30" class="d-b" />
     </div>
     <div class="pos-a bg-white shadow-1 account-card pa-3" v-show="showAccount">
-      <div v-for="(row, i) in list" :key="i">
+      <div v-show="row.subs.length" v-for="(row, i) in list" :key="i">
         <h3>{{ row.title }}</h3>
         <ul class="mt-2 ml-3">
           <li
@@ -93,9 +93,16 @@ export default {
       this.showAccount = false;
     },
     setTeam(it) {
+      if (it.teamId != localStorage.teamId) {
+        setTimeout(() => {
+          location.href = "index.html";
+        }, 100);
+      }
+      localStorage.teamId = it.teamId;
       this.$setState({
         teamId: it.teamId,
       });
+      this.showAccount = false;
     },
   },
 };

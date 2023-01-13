@@ -106,6 +106,8 @@
           </div>
         </template>
       </v-data-table>
+
+      <e-empty v-if="!list.length" class="pt-6">No Invitations</e-empty>
     </div>
   </div>
 </template>
@@ -137,7 +139,6 @@ export default {
           value: "EMAIL",
         },
       ],
-      inTest: !false,
       listLoading: false,
       list: [],
       headers: [
@@ -182,7 +183,7 @@ export default {
           return this.$toast(msg);
         }
         this.$loading();
-        await this.$http.post("{auth}/cooperation/invitations", body);
+        await this.$http.post("$auth/cooperation/invitations", body);
         this.$toast("Inviting member successfully.");
         this.getList();
       } catch (error) {
@@ -192,28 +193,8 @@ export default {
     async getList() {
       try {
         this.listLoading = true;
-        if (this.inTest) {
-          await this.$sleep(500);
-          this.list = [
-            {
-              targetName: "0xdd...dddd",
-              role: "Owner",
-              status: "Valid",
-            },
-            {
-              targetName: "0xdd...dddd",
-              invitationId: 1,
-              role: "Member",
-              status: "Valid",
-              access: ["HOSTING"],
-            },
-          ];
-        } else {
-          const { data } = await this.$http.get(
-            "{auth}/cooperation/invitations"
-          );
-          this.list = data.items;
-        }
+        const { data } = await this.$http.get("$auth/cooperation/invitations");
+        this.list = data.items;
       } catch (error) {
         console.log(error);
       }
@@ -254,11 +235,7 @@ export default {
       console.log(body);
       try {
         this.$loading();
-        if (this.inTest) {
-          await this.$sleep(300);
-        } else {
-          await this.$http.put("{auth}/cooperation/member", body);
-        }
+        await this.$http.put("$auth/cooperation/member", body);
         this.$loading.close();
         this.getList();
       } catch (error) {

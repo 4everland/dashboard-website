@@ -159,29 +159,11 @@ new Vue({
       this.getTeamList();
     },
     async getTeamList() {
-      // let {
-      //   data: { items },
-      // } = await this.$http.get("$auth/cooperation/teams");
-      let items = [
-        {
-          teamId: "0x712b4daf0ab3761abadf80baeccba92bb120252d",
-          teamName: "",
-          teamAvatar: null,
-          token:
-            "e30=.eyJqdGkiOiJtV1lmRnM0S1cxMlkrL2N3dVBISVNpUGp5UUpjZ3ZlSVQxSi9RbFpNQThmTWxIaGJIalNJdEhtc0RBVTlwelVCa0ZjWnlXeEJKdjhDa3AvaUx5UURJa3FTQ253ZG9qVVRkYktBVTVKdEVkbz0ifQ==.ff0bcb467e0bd5ce23c2ea83c53160287e78177e0020cf36b30efecefac45ca2",
-          type: "INDIVIDUAL",
-        },
-        {
-          teamId: "2",
-          teamName: "long-team",
-          teamAvatar: null,
-          token:
-            "e30=.eyJqdGkiOiJtV1lmRnM0S1cxMlkrL2N3dVBISVNwZ2ZUNUE0L0xCYlk1Z1hwbmVEV0FxUlkwakgvYWg0QnpXWEdXb3prL0VUT0t1VzA5MGsrV3lsZ0c2c0ZrY3kvWC9CWERwUU9Ib0hhVjNBakJtWmlyND0ifQ==.cf5b4ffd438d3ae962a8fdffe4f2f4ca5d026f31bfcf2af3aaa356b72c0f8cf1",
-          type: "COLLABORATION",
-        },
-      ];
+      let {
+        data: { items },
+      } = await this.$http.get("$auth/cooperation/teams");
       items.forEach((it) => {
-        it.name = it.teamName || it.teamId.cutStr(6, 4);
+        it.name = (it.teamName || it.teamId).cutStr(6, 4);
       });
       let teamId = this.teamId;
       if (!items.find((it) => it.teamId == teamId)) {

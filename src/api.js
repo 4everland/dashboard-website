@@ -79,11 +79,14 @@ const lock = new AsyncLock({ timeout: 5000 });
 [http, http2].forEach((axios) => {
   axios.interceptors.request.use(
     async (config) => {
-      let token = "";
+      let token = localStorage.token;
+      const { teamInfo } = store.getters;
+      if (teamInfo) {
+        // token = teamInfo.token || token;
+      }
       if (config.url != RefreshPath) {
         await lock
           .acquire(RefreshLockKey, async () => {
-            token = localStorage.token;
             let { accessTokenExpireAt, refreshToken } = JSON.parse(
               localStorage.authData || "{}"
             );
@@ -98,18 +101,18 @@ const lock = new AsyncLock({ timeout: 5000 });
                     _auth: 1,
                   },
                   headers: {
-                    Authorization: "Bearer " + token,
+                    Authorization: "Bearer " + localStorage.token,
                   },
                 }
               );
               localStorage.authData = JSON.stringify(data);
-              token = data.accessToken;
-              localStorage.token = token;
+              localStorage.token = data.accessToken;
+              if (teamInfo && teamInfo.type == "INDIVIDUAL") {
+                token = localStorage.token;
+              }
             }
           })
           .then(() => {});
-      } else {
-        token = localStorage.token;
       }
 
       const params = (config.params = config.params || {});
