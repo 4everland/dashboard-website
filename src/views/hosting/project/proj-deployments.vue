@@ -16,7 +16,7 @@
         <v-row class="d-flex">
           <v-col cols="12" md="9">
             <div>
-              <a class="b fw-b fz-18">{{ it.domain }}</a>
+              <a class="b fw-b fz-18">{{ it.title }}</a>
             </div>
             <div class="al-c mt-2">
               <span class="mr-5 fz-14" v-if="!asMobile">{{ it.platform }}</span>
@@ -356,6 +356,7 @@ export default {
           }
         );
         const rows = data.content.map((it) => {
+          it.title = it.platform == "IC" ? it.taskId : it.domain;
           if (it.state == "SUCCESS") {
             if (!this.isFirst) {
               this.isFirst = true;
