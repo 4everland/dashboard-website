@@ -65,12 +65,14 @@
     </div>
 
     <div class="pa-5"></div>
-    <v-list flat dense>
+    <v-list flat dense ref="drawerList" id="drawerList">
       <template v-for="(it, i) in list">
         <v-list-group
           class="group-item"
+          :id="'group-' + i"
+          :ref="'group-' + i"
+          @input="Toggle(i, $event)"
           v-model="activeArr[i]"
-          @input="onToggle(i, $event)"
           :group="it.group"
           v-if="it.subs"
           :key="i"
@@ -158,7 +160,7 @@
 
 <script>
 import { mapState } from "vuex";
-
+import { bus } from "@/utils/bus";
 const initFilePath = "/bucket/storage/";
 
 export default {
@@ -190,6 +192,7 @@ export default {
       mini: false,
       activeArr: [],
       filesPath: initFilePath,
+      guideActived: false,
     };
   },
   computed: {
@@ -297,6 +300,17 @@ export default {
       ];
     },
   },
+  created() {
+    bus.$on("sidebar-item", (id) => {
+      if (this.$refs[id][0] && !this.$refs[id][0].isActive) {
+        this.$refs[id][0].click();
+      }
+      this.guideActived = true;
+    });
+    bus.$on("guide", () => {
+      this.guideActived = false;
+    });
+  },
   watch: {
     noticeMsg({ name }) {
       if (name == "showDrawer") {
@@ -315,6 +329,12 @@ export default {
     },
   },
   methods: {
+    Toggle(i, open) {
+      if (this.guideActived) {
+        return false;
+      }
+      return this.onToggle(i, open);
+    },
     onToggle(i, open) {
       if (!open) return;
       if (this.list[i].group.test(this.path)) return;
@@ -323,3 +343,102 @@ export default {
   },
 };
 </script>
+// <style lang="scss">
+// div#driver-highlighted-element-stage,
+// div#driver-page-overlay {
+//   background: transparent !important;
+//   outline: 5000px solid rgba(0, 0, 0, 0.75);
+//   z-index: 100013 !important;
+// }
+// .guide-class {
+//   max-width: 400px !important;
+//   .driver-next-btn {
+//     background: #634695 !important;
+//     border: none !important;
+//     text-shadow: none !important;
+//     border-radius: 0 !important;
+//     color: #fff !important;
+//     font-size: 14px !important;
+//     padding: 4px 20px !important;
+//   }
+//   .driver-prev-btn {
+//     display: none !important;
+//   }
+//   .driver-close-btn {
+//     padding: 3px !important;
+//     font-size: 14px !important;
+//     color: #889ab3 !important;
+//     background: #fff !important;
+//     border: none !important;
+//   }
+// }
+// .reward-guide-class {
+//   max-width: 600px !important;
+// }
+// .paging {
+//   position: absolute;
+//   left: 50px;
+//   bottom: 19px;
+//   font-size: 12px;
+//   color: #889ab3;
+// }
+// .description-content {
+//   color: #6c7789;
+//   line-height: 28px;
+// }
+// .airdrop-content {
+//   position: relative;
+//   padding: 10px;
+//   box-sizing: border-box;
+//   .text {
+//     margin-bottom: 10px;
+//     color: #0b0817;
+//     line-height: 36px;
+//   }
+//   .close-icon {
+//     position: absolute;
+//     top: 33px;
+//     right: 17px;
+//   }
+//   .resource-item {
+//     position: relative;
+//     padding: 5px 15px;
+//     height: 70px;
+//     color: #898989;
+//     box-sizing: border-box;
+//     background: #f9fbfc;
+//     box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
+//     border-radius: 10px;
+//     .resource-item-value {
+//       font-size: 18px;
+//       margin-left: 10px;
+//       color: #100d58;
+//     }
+//     .resource-text {
+//       margin-left: 16px;
+//     }
+//   }
+//   .resource-item::after {
+//     content: "";
+//     display: block;
+//     position: absolute;
+//     right: 15px;
+//     top: 10px;
+//     width: 18px;
+//     height: 18px;
+//     background: url("/img/airDrop/check.svg") no-repeat;
+//   }
+//   .claim-btn {
+//     display: block;
+//     width: 70%;
+//     margin: 20px auto;
+//     padding: 8px 5px;
+//     text-align: center;
+//     color: #fff;
+//     background: #634695;
+//     border-radius: 2px;
+//     text-decoration: none;
+//   }
+// }
+//
+</style>
