@@ -6,17 +6,9 @@ import { mapState } from "vuex";
 import vuetify from "./plugins/vuetify";
 import "./setup";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
-import { newUserDrop } from "@/plugins/airDrop/index.js";
-newUserDrop();
-// import Driver from "driver.js";
-// import "driver.js/dist/driver.min.css";
-// Vue.prototype.$driver = new Driver({
-//   className: "guide-class",
-//   nextBtnText: "Next",
-//   closeBtnText: "Skip",
-//   padding: 0,
-// });
-// Vue.config.productionTip = false;
+// import { newUserDrop } from "@/plugins/airDrop/index.js";
+// newUserDrop();
+
 router.beforeEach((to, _, next) => {
   let { title, group } = to.meta || {};
   const name = "4EVERLAND";
@@ -67,14 +59,8 @@ new Vue({
       }
     },
     noticeMsg({ name }) {
-      console.log(1111);
       if (name == "updateUser") {
         this.getUesrInfo();
-      }
-      console.log(name);
-      if (name == "newUser") {
-        console.log(111);
-        this.$router.push("/");
       }
     },
   },

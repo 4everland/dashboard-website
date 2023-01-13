@@ -1,5 +1,38 @@
 <template>
-  <div @click.stop="onGuide">guide11</div>
+  <div>
+    <v-dialog v-model="showDialog" max-width="800">
+      <div class="reward-hub-content">
+        <v-icon size="16" class="close-icon" @click="showDialog = false"
+          >mdi-close</v-icon
+        >
+        <div class="mb-6 text">
+          {{
+            `Thank you for registering with 4EVERLAND!  You will get the free
+        resources package and free airdrops of other resources that will also be
+        available to help you better experience 4EVERLAND products. Come to
+        Reward Hub to get it now!`
+          }}
+        </div>
+        <v-row class="mt-2">
+          <v-col :sm="6" :cols="12" v-for="item in items" :key="item.name">
+            <div class="resource-item al-c">
+              <img width="28" :src="item.icon" alt="" />
+              <span class="resource-item-value ml-2">{{ item.value }}</span>
+              <span class="ml-2 fz-12">{{ item.name }}</span>
+            </div>
+          </v-col>
+        </v-row>
+        <div class="d-flex justify-center mt-10">
+          <v-btn
+            color="primary"
+            min-width="200"
+            @click="$router.push('/reward-hub')"
+            >Claim</v-btn
+          >
+        </div>
+      </div>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -10,10 +43,14 @@ import "driver.js/dist/driver.min.css";
 export default {
   data() {
     return {
+      showDialog: false,
+
       driver: new Driver({
         className: "guide-class",
         nextBtnText: "Next",
         closeBtnText: "Skip",
+        doneBtnText: "Let's Start",
+        allowClose: false,
         padding: 0,
       }),
       steps: [
@@ -28,11 +65,11 @@ export default {
           },
           onNext: () => {
             this.driver.preventMove();
-            // this.$refs["group-1"][0].click();
             bus.$emit("sidebar-item", "group-1");
             setTimeout(() => {
               this.driver.refresh();
               this.driver.moveNext();
+              this.stepCount += 1;
             }, 250);
           },
         },
@@ -46,12 +83,12 @@ export default {
             position: "right",
           },
           onNext: () => {
-            // this.$refs["group-2"][0].click();
             bus.$emit("sidebar-item", "group-2");
             this.driver.preventMove();
             setTimeout(() => {
               this.driver.refresh();
               this.driver.moveNext();
+              this.stepCount += 1;
             }, 250);
           },
         },
@@ -65,12 +102,12 @@ export default {
             position: "right",
           },
           onNext: () => {
-            // this.$refs["group-3"][0].click();
             bus.$emit("sidebar-item", "group-3");
             this.driver.preventMove();
             setTimeout(() => {
               this.driver.refresh();
               this.driver.moveNext();
+              this.stepCount += 1;
             }, 250);
           },
         },
@@ -89,6 +126,7 @@ export default {
             setTimeout(() => {
               this.driver.refresh();
               this.driver.moveNext();
+              this.stepCount += 1;
             }, 250);
           },
         },
@@ -106,6 +144,7 @@ export default {
             setTimeout(() => {
               this.driver.refresh();
               this.driver.moveNext();
+              this.stepCount += 1;
             }, 250);
           },
         },
@@ -125,13 +164,39 @@ export default {
           <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/balance.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Recharge Balance</span>
           </div>
           </div>
-          <a class="claim-btn" href="/reward-hub">Let's start</a>
           `,
-            showButtons: false,
+            // showButtons: false,
+            nextBtnText: "Let's Start",
             position: "left",
+          },
+          onNext: () => {
+            this.$router.push("/reward-hub");
           },
         },
       ],
+      items: [
+        {
+          name: "IPFS Storage",
+          value: "25GB",
+          icon: require("/public/img/airDrop/ipfs.png"),
+        },
+        {
+          name: "Arweave Storage",
+          value: "100MB",
+          icon: require("/public/img/airDrop/ar.png"),
+        },
+        {
+          name: "Build Minutes",
+          value: "100",
+          icon: require("/public/img/airDrop/minutes.png"),
+        },
+        {
+          name: "Recharge Balance",
+          value: "100",
+          icon: require("/public/img/airDrop/balance.png"),
+        },
+      ],
+      stepCount: 0,
     };
   },
   computed: {
@@ -139,17 +204,14 @@ export default {
       noticeMsg: (s) => s.noticeMsg,
     }),
   },
-  mounted() {
-    this.driver.defineSteps(this.steps);
-    if (this.noticeMsg.data.tip) {
-      console.log(111);
-      this.onGuide();
-    }
-  },
   watch: {
     "driver.isActivated"(val) {
       if (!val) {
+        bus.$emit("guide");
         this.move();
+      }
+      if (this.stepCount != 5 && !val) {
+        this.showDialog = true;
       }
     },
   },
@@ -157,6 +219,10 @@ export default {
     onGuide() {
       this.driver.start();
       this.stop();
+    },
+    guide() {
+      this.driver.defineSteps(this.steps);
+      this.onGuide();
     },
     stop() {
       let mo = function (e) {
@@ -178,5 +244,154 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+div#driver-highlighted-element-stage,
+div#driver-page-overlay {
+  background: transparent !important;
+  outline: 5000px solid rgba(0, 0, 0, 0.75);
+  z-index: 100013 !important;
+}
+.guide-class {
+  max-width: 400px !important;
+  .driver-next-btn {
+    background: #634695 !important;
+    border: none !important;
+    text-shadow: none !important;
+    border-radius: 0 !important;
+    color: #fff !important;
+    font-size: 14px !important;
+    padding: 4px 20px !important;
+  }
+  .driver-prev-btn {
+    display: none !important;
+  }
+  .driver-close-btn {
+    padding: 3px !important;
+    font-size: 14px !important;
+    color: #889ab3 !important;
+    background: #fff !important;
+    border: none !important;
+  }
+}
+.reward-guide-class {
+  max-width: 600px !important;
+  .driver-navigation-btns {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin: 20px 0 !important;
+    .driver-next-btn {
+      width: 70% !important;
+      padding: 8px 5px !important;
+    }
+  }
+  .driver-close-btn {
+    display: none !important;
+  }
+}
+.paging {
+  position: absolute;
+  left: 50px;
+  bottom: 19px;
+  font-size: 12px;
+  color: #889ab3;
+}
+.description-content {
+  color: #6c7789;
+  line-height: 28px;
+}
+.airdrop-content {
+  position: relative;
+  padding: 10px;
+  box-sizing: border-box;
+  .text {
+    margin-bottom: 10px;
+    color: #0b0817;
+    line-height: 36px;
+  }
+  .close-icon {
+    position: absolute;
+    top: 33px;
+    right: 17px;
+  }
+  .resource-item {
+    position: relative;
+    padding: 5px 15px;
+    height: 70px;
+    color: #898989;
+    box-sizing: border-box;
+    background: #f9fbfc;
+    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
+    border-radius: 10px;
+    .resource-item-value {
+      font-size: 18px;
+      margin-left: 10px;
+      color: #100d58;
+    }
+    .resource-text {
+      margin-left: 16px;
+    }
+  }
+  .resource-item::after {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    width: 18px;
+    height: 18px;
+    background: url("/img/airDrop/check.svg") no-repeat;
+  }
+  .claim-btn {
+    display: block;
+    width: 70%;
+    margin: 20px auto;
+    padding: 8px 5px;
+    text-align: center;
+    color: #fff;
+    background: #634695;
+    border-radius: 2px;
+    text-decoration: none;
+  }
+}
+
+.reward-hub-content {
+  position: relative;
+  padding: 40px;
+  box-sizing: border-box;
+  .text {
+    color: #0b0817;
+    line-height: 36px;
+  }
+  .close-icon {
+    position: absolute;
+    top: 33px;
+    right: 17px;
+  }
+  .resource-item {
+    position: relative;
+    padding: 10px 20px;
+    height: 90px;
+    color: #898989;
+    box-sizing: border-box;
+    background: #f9fbfc;
+    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
+    border-radius: 10px;
+    .resource-item-value {
+      font-size: 20px;
+      color: #100d58;
+    }
+  }
+  .resource-item::after {
+    content: "";
+    display: block;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    width: 18px;
+    height: 18px;
+    background: url("/img/airDrop/check.svg") no-repeat;
+  }
+}
 </style>

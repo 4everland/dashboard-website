@@ -64,7 +64,7 @@ export default {
   methods: {
     async getAirDrop(data) {
       try {
-        console.log("airdrop");
+        await this.$sleep(10);
         this.$setMsg({
           name: "newUser",
           data: {
@@ -76,8 +76,6 @@ export default {
       }
     },
     handleClaim() {
-      // console.log(this);
-      this.showDialog = false;
       router.push("/reward-hub");
     },
   },

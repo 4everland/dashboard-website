@@ -13,6 +13,7 @@ async function newUserDrop() {
   //   Vue.prototype.$Dialog.getAirDrop(data);
   //   return true;
   // }
+
   const mockData = {
     type: 1,
     ipfs: 9999999,
@@ -22,7 +23,11 @@ async function newUserDrop() {
     traffic: 0,
     buildTime: 0,
   };
-  Vue.prototype.$Dialog.getAirDrop(mockData);
-  return true;
+  const test = localStorage.getItem("airdrop1");
+  if (mockData && !test) {
+    localStorage.setItem("airdrop1", true);
+    Vue.prototype.$Dialog.getAirDrop(mockData);
+    return true;
+  }
 }
 export { newUserDrop };

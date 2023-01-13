@@ -7,7 +7,6 @@
 <template>
   <div>
     <overview-notice class="mb-4" />
-    <e-guide></e-guide>
     <v-carousel
       hide-delimiter-background
       :interval="5000"
@@ -92,8 +91,6 @@
 
 <script>
 import { mapState } from "vuex";
-// import { newUserDrop } from "@/plugins/airDrop/index.js";
-
 export default {
   data() {
     return {
@@ -129,42 +126,5 @@ export default {
       this.$router.push("/hosting/newByHash");
     },
   },
-  // watch: {
-  //   noticeMsg({ name }) {
-  //     if (name == "close-new-drop") {
-  //       this.checkReward();
-  //     }
-  //   },
-  // },
-  // async mounted() {
-  //   try {
-  //     const isPop = await newUserDrop();
-  //     if (!isPop) {
-  //       this.checkReward();
-  //     }
-  //   } catch (error) {
-  //     //
-  //   }
-  // },
-  // methods: {
-  //   async checkReward() {
-  //     try {
-  //       const { data } = await this.$http.get("$auth/poster/rewardhub");
-  //       if (data)
-  //         this.$confirm(
-  //           `<p>Dear 4EVERLAND user,</p><div class="lh-2 fz-14 mt-5 mb-5">We are launching Reward Hub to offer you a better experience with products and services. All new users can get free resources (storage, bandwidth, etc.) by completing the following tasks, while users who have already completed the tasks and received the free giveaway resources can simply go to Reward Hub to claim the resources. <p class="mt-2">Having fun while exploring 4EVERLAND! Please feel free to contact us in our communities if you have any questions. </p></div>`,
-  //           "",
-  //           {
-  //             confirmText: "View",
-  //             hideTitle: true,
-  //           }
-  //         ).then(() => {
-  //           this.$navTo("/reward-hub");
-  //         });
-  //     } catch (error) {
-  //       //
-  //     }
-  //   },
-  // },
 };
 </script>
