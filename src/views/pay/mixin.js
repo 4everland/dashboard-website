@@ -254,6 +254,7 @@ export default {
     getChainId(type) {
       if (type == "Polygon") return this.$inDev ? 80001 : 137;
       if (type == "BSC") return this.$inDev ? 97 : 56;
+      if (type == "Arbitrum") return 42161;
       return this.$inDev ? 5 : 1;
     },
     async addChain(chainId, id) {
@@ -312,6 +313,17 @@ export default {
           nativeCurrency: {
             name: "BNB Coin",
             symbol: "tBNB",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        42161: {
+          chainId,
+          chainName: "Arbitrum One",
+          rpcUrls: ["https://rpc.ankr.com/arbitrum"],
+          nativeCurrency: {
+            name: "Arbitrum Coin",
+            symbol: "ETH",
             decimals: 18,
           },
           // blockExplorerUrls: [],
