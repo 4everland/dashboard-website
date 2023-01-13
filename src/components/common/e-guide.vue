@@ -131,7 +131,7 @@ export default {
           element: "#resourse-guide",
           popover: {
             title: "Resource",
-            description: `<div class="description-content">You can easily purchase resources and deposit your balance through other public chains such as Polygon, ETHereum, BSC, etc., and see clearly the balance of resources purchased and resources consumed.</div>
+            description: `<div class="description-content">You can easily purchase resources and deposit your balance through other public chains such as Polygon, Ethereum, BSC, etc., and see clearly the balance of resources purchased and resources consumed.</div>
             <span class="paging">(5/6)</span>
             </div>`,
             position: "left",
