@@ -3,6 +3,7 @@ import { providers, BigNumber } from "ethers"; //, utils
 import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
 import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
+import ArbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-arbitrum";
 // import client from "../../plugins/pay/contracts/SGNClient";
 import {
   MumbaiFundPool,
@@ -48,6 +49,9 @@ export default {
     },
     isEth() {
       return this.payBy == "Ethereum";
+    },
+    isArbitrum() {
+      return this.payBy == "Arbitrum";
     },
     payChainId() {
       return this.getChainId(this.payBy);
@@ -410,13 +414,18 @@ export default {
         } else if (this.isBSC) {
           bscContract.setProvider(provider);
           this.curContract = bscContract;
+        } else if (this.isArbitrum) {
+          ArbitrumContract.setProvider(provider);
+          this.curContract = ArbitrumContract;
         } else {
           ethContract.setProvider(provider);
           this.curContract = ethContract;
         }
         // console.log(this.payBy, this.curContract);
         // this.getSign();
-        this.checkApprove(this.isSubscribe);
+        if (this.needCheckApprove) {
+          this.checkApprove(this.isSubscribe);
+        }
       } catch (error) {
         console.log("on connect error");
         this.$alert(error.message).then(() => {

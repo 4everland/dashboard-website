@@ -127,6 +127,7 @@ export default {
       validStatus: 1,
       AmountofDeduction: 0,
       resourceResource: null,
+      needCheckApprove: true,
     };
   },
   computed: {
