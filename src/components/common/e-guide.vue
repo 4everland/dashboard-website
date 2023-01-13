@@ -23,10 +23,7 @@
           </v-col>
         </v-row>
         <div class="d-flex justify-center mt-10">
-          <v-btn
-            color="primary"
-            min-width="200"
-            @click="$router.push('/reward-hub')"
+          <v-btn color="primary" min-width="200" @click="handleClaim"
             >Claim</v-btn
           >
         </div>
@@ -239,6 +236,10 @@ export default {
       document.body.style.overflow = "";
       document.body.style.height = "";
       document.removeEventListener("touchmove", mo, false);
+    },
+    handleClaim() {
+      this.showDialog = false;
+      this.$router.push("/reward-hub");
     },
   },
 };
