@@ -44,7 +44,10 @@
       /></v-avatar>
       <input-upload @input="onInput" ref="uploadInput"></input-upload>
     </div>
-    <div class="mt-5 config-item al-c" v-if="teamInfo.type != 'INDIVIDUAL'">
+    <div
+      class="mt-5 config-item al-c"
+      v-if="teamInfo && teamInfo.type != 'INDIVIDUAL'"
+    >
       <div style="width: 60%" class="mr-auto">
         <h3 class="fz-20">Exit collaboration</h3>
         <p class="fz-14 mb-6 mt-3 description">
@@ -86,29 +89,29 @@ export default {
           "Alert"
         );
         // do something
+        this.$loading();
         await this.$http.post("$auth/cooperation/exit");
+        this.$loading.close();
+        this.$setState({
+          teamId: null,
+        });
+        location.href = "/overview";
       } catch (error) {
         //
         console.log(error);
       }
     },
     async getAvatarSrc(file) {
-      // console.log(file);
-      // return new Promise((res, rej) => {
-      //   let reader = new FileReader();
-      //   reader.readAsDataURL(file);
-      //   reader.onload = function () {
-      //     res(reader.result);
-      //   };
-      //   reader.onerror = function (error) {
-      //     rej(error);
-      //   };
-      // });
       console.log(URL.createObjectURL(file));
-      this.teamAvatar = URL.createObjectURL(file);
-      const formData = new FormData();
-      formData.append("file", file);
-      this.$http.post("$auth/media", formData);
+      try {
+        this.teamAvatar = URL.createObjectURL(file);
+        const formData = new FormData();
+        formData.append("file", file);
+        const { data } = await this.$http.post("$auth/media", formData);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
     },
     async onInput(file) {
       this.file = file[0];

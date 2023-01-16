@@ -7,7 +7,6 @@ import vuetify from "./plugins/vuetify";
 import "./setup";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 import { newUserDrop } from "@/plugins/airDrop/index.js";
-import { bus } from "@/utils/bus";
 newUserDrop();
 Vue.config.productionTip = false;
 
