@@ -144,11 +144,15 @@ export default {
       headers: [
         {
           text: "Member",
-          value: "targetName",
+          value: "name",
         },
         {
           text: "Role",
           value: "role",
+        },
+        {
+          text: "Note",
+          value: "note",
         },
         {
           text: "Status",
@@ -191,7 +195,8 @@ export default {
         await this.$http.post("$auth/cooperation/invitations", {
           invitation: body,
         });
-        this.$toast("Inviting member successfully.");
+        this.$loading.close();
+        this.accBody.target = "";
         this.getList();
       } catch (error) {
         console.log(error);
@@ -201,7 +206,11 @@ export default {
       try {
         this.listLoading = true;
         const { data } = await this.$http.get("$auth/cooperation/invitations");
-        this.list = data.items;
+        this.list = data.items.map((it) => {
+          it.name = it.targetName.cutStr(6, 4);
+          if (it.invitationStatus) it.status = it.invitationStatus;
+          return it;
+        });
       } catch (error) {
         console.log(error);
       }
