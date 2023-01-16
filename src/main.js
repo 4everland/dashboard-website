@@ -65,7 +65,7 @@ new Vue({
     noticeMsg({ name }) {
       if (name == "updateUser") {
         this.getUesrInfo();
-      } else if (name == "joinTeam") {
+      } else if (name == "joinTeam" || name == "updateTeam") {
         this.getTeamList();
       }
     },
