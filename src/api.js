@@ -82,7 +82,7 @@ const lock = new AsyncLock({ timeout: 5000 });
       let token = localStorage.token;
       const { teamInfo } = store.getters;
       if (teamInfo) {
-        // token = teamInfo.token || token;
+        token = teamInfo.token || token;
       }
       if (config.url != RefreshPath) {
         await lock
