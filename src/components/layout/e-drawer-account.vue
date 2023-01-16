@@ -24,34 +24,45 @@
       <img :src="`/img/svg/drawer/up-down.svg`" height="30" class="d-b" />
     </div>
     <div class="pos-a bg-white shadow-1 account-card pa-3" v-show="showAccount">
-      <div v-show="row.subs.length" v-for="(row, i) in list" :key="i">
-        <h3>{{ row.title }}</h3>
-        <ul class="mt-2 ml-3">
-          <li
-            class="al-c hover-1 mb-2"
-            @click="setTeam(it)"
-            v-for="(it, j) in row.subs"
-            :key="j"
-          >
-            <span>{{ it.name }}</span>
-            <v-icon
-              v-if="it.teamId == teamInfo.teamId"
-              color="success"
-              size="18"
-              class="ml-auto"
-              >mdi-check-circle</v-icon
-            >
-          </li>
-        </ul>
+      <div v-if="showTip">
+        <h3>Tip</h3>
+        <div class="pa-2 fz-14">
+          Personal and collaborative accounts can be switched here.
+        </div>
+        <div class="ta-r">
+          <v-btn small color="primary" @click="showTip = false">OK</v-btn>
+        </div>
       </div>
-      <e-link
-        href="/account/member"
-        class="al-c mt-6 hover-1"
-        @click.native="onOut"
-      >
-        <v-icon color="primary" size="18">mdi-plus-circle</v-icon>
-        <span class="color-1 ml-1">Collaboration invitation</span>
-      </e-link>
+      <template v-else>
+        <div v-show="row.subs.length" v-for="(row, i) in list" :key="i">
+          <h3>{{ row.title }}</h3>
+          <ul class="mt-2 ml-3">
+            <li
+              class="al-c hover-1 mb-2"
+              @click="setTeam(it)"
+              v-for="(it, j) in row.subs"
+              :key="j"
+            >
+              <span>{{ it.name }}</span>
+              <v-icon
+                v-if="it.teamId == teamInfo.teamId"
+                color="success"
+                size="18"
+                class="ml-auto"
+                >mdi-check-circle</v-icon
+              >
+            </li>
+          </ul>
+        </div>
+        <e-link
+          href="/account/member"
+          class="al-c mt-6 hover-1"
+          @click.native="onOut"
+        >
+          <v-icon color="primary" size="18">mdi-plus-circle</v-icon>
+          <span class="color-1 ml-1">Collaboration invitation</span>
+        </e-link>
+      </template>
     </div>
   </div>
 </template>
@@ -64,6 +75,7 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
       teamList: (s) => s.teamList,
+      noticeMsg: (s) => s.noticeMsg,
     }),
     ...mapGetters(["teamInfo"]),
     list() {
@@ -86,7 +98,16 @@ export default {
   data() {
     return {
       showAccount: false,
+      showTip: false,
     };
+  },
+  watch: {
+    noticeMsg({ name }) {
+      if (name == "joinTeam") {
+        this.showTip = true;
+        this.showAccount = true;
+      }
+    },
   },
   methods: {
     onOut() {

@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 // import { newUserDrop } from "@/plugins/airDrop/index.js";
 
 export default {
@@ -112,12 +112,15 @@ export default {
   computed: {
     ...mapState({
       noticeMsg: (s) => s.noticeMsg,
+      userInfo: (s) => s.userInfo,
     }),
+    ...mapGetters(["teamInfo"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
     uname() {
-      const info = this.$store.state.userInfo;
+      const info = this.userInfo;
+      if (this.teamInfo) return "Overview of " + this.teamInfo.name;
       if (info.username) return "Hi " + info.username.cutStr(6, 4);
       return "Overview";
     },
