@@ -104,8 +104,10 @@ export default {
   watch: {
     noticeMsg({ name }) {
       if (name == "joinTeam") {
-        this.showTip = true;
-        this.showAccount = true;
+        setTimeout(() => {
+          this.showTip = true;
+          this.showAccount = true;
+        }, 200);
       }
     },
   },
