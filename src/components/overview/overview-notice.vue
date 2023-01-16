@@ -85,29 +85,29 @@ export default {
         //   message: "normal message",
         //   type: "NORMAL",
         // },
-        {
-          id: "2",
-          url: "baidu.com",
-          message: "inviation message",
-          type: "COOPERATION_INVIATION",
-        },
-        {
-          id: "3",
-          url: "baidu.com",
-          message: "remove team message",
-          type: "REMOVED_BY_TEAM_MANAGER",
-        },
-        {
-          id: "4",
-          url: "baidu.com",
-          message: "switch merber message",
-          type: "SWITCH_TO_MEMBER",
-        },
+        // {
+        //   id: "2",
+        //   url: "baidu.com",
+        //   message: "inviation message",
+        //   type: "COOPERATION_INVIATION",
+        // },
+        // {
+        //   id: "3",
+        //   url: "baidu.com",
+        //   message: "remove team message",
+        //   type: "REMOVED_BY_TEAM_MANAGER",
+        // },
+        // {
+        //   id: "4",
+        //   url: "baidu.com",
+        //   message: "switch merber message",
+        //   type: "SWITCH_TO_MEMBER",
+        // },
       ],
     };
   },
   created() {
-    // this.getList();
+    this.getList();
     bus.$on("broadcastNotice", () => {
       this.getList();
     });

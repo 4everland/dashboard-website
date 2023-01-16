@@ -78,6 +78,7 @@ new Vue({
       if (this.token) {
         await this.getUesrInfo();
         this.initSocket();
+        // this.initBroadcast();
       } else if (["/", "/login"].indexOf(this.$route.path) == -1) {
         this.$router.replace("/");
       }
@@ -116,39 +117,46 @@ new Vue({
       });
     },
 
-    async initBroadcast() {
-      try {
-        const { data } = await this.$http.get("$auth/ws-key");
-        if (data.key) {
-          this.broadcastKey = data.key;
-        } else {
-          this.broadcastKey = null;
-          throw new Error("broadcast socket disconnect");
-        }
-        const url = /xyz$/.test(process.env.VUE_APP_BASE_URL)
-          ? "auth.foreverland.xyz"
-          : "oauth.4everland.org";
-        this.broadcastSocket = window.io(url + `/${this.broadcastKey}`);
-        this.broadcastSocket.on("connect", () => {
-          console.log("broadcastSocket connect");
-        });
-        this.broadcastSocket.on("disconnect", (reason) => {
-          console.log(reason);
-          if (this.broadcastKey) {
-            this.broadcastSocket.connect();
-          }
-        });
-        this.broadcastSocket.on("BROADCAST", (broadcastMessage) => {
-          console.log(broadcastMessage);
-          const uid = this.userInfo.uid;
-          if (broadcastMessage.target == uid) {
-            bus.$emit("broadcastNotice");
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async initBroadcast() {
+    //   console.log("initBroadcast");
+    //   try {
+    //     const { data } = await this.$http.get("$auth/ws-key");
+    //     console.log(data.key);
+    //     if (data.key) {
+    //       this.broadcastKey = data.key;
+    //     } else {
+    //       this.broadcastKey = null;
+    //       throw new Error("broadcast socket disconnect");
+    //     }
+    //     const url = /xyz$/.test(process.env.VUE_APP_BASE_URL)
+    //       ? `auth.foreverland.xyz`
+    //       : `oauth.4esverland.org`;
+    //     this.broadcastSocket = window.io(url, {
+    //       path: `/ws/${this.broadcastKey}`,
+    //       withCredentials: false,
+    //       transports: ["websocket", "polling"],
+    //     });
+    //     this.broadcastSocket.on("connect", () => {
+    //       console.log(11111);
+    //       console.log("broadcastSocket connect");
+    //     });
+    //     this.broadcastSocket.on("disconnect", (reason) => {
+    //       console.log(reason);
+    //       if (this.broadcastKey) {
+    //         this.broadcastSocket.connect();
+    //       }
+    //     });
+    //     this.broadcastSocket.on("message", (broadcastMessage) => {
+    //       console.log(broadcastMessage);
+    //       const uid = this.userInfo.uid;
+    //       if (broadcastMessage.target == uid) {
+    //         bus.$emit("broadcastNotice");
+    //       }
+    //     });
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
     async getUesrInfo() {
       const { data } = await this.$http.get("$auth/user");
       localStorage.userInfo = JSON.stringify(data);

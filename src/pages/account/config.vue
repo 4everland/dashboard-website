@@ -106,6 +106,9 @@ export default {
       // });
       console.log(URL.createObjectURL(file));
       this.teamAvatar = URL.createObjectURL(file);
+      const formData = new FormData();
+      formData.append("file", file);
+      this.$http.post("$auth/media", formData);
     },
     async onInput(file) {
       this.file = file[0];
