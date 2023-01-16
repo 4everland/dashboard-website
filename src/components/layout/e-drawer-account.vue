@@ -102,10 +102,15 @@ export default {
     };
   },
   watch: {
+    teamId(val) {
+      localStorage.teamId = val || "";
+    },
     noticeMsg({ name }) {
       if (name == "joinTeam") {
-        this.showTip = true;
-        this.showAccount = true;
+        setTimeout(() => {
+          this.showTip = true;
+          this.showAccount = true;
+        }, 200);
       }
     },
   },
@@ -119,7 +124,6 @@ export default {
           location.href = "/overview";
         }, 100);
       }
-      localStorage.teamId = it.teamId;
       this.$setState({
         teamId: it.teamId,
       });
