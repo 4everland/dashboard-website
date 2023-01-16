@@ -102,6 +102,9 @@ export default {
     };
   },
   watch: {
+    teamId(val) {
+      localStorage.teamId = val || "";
+    },
     noticeMsg({ name }) {
       if (name == "joinTeam") {
         setTimeout(() => {
@@ -121,7 +124,6 @@ export default {
           location.href = "/overview";
         }, 100);
       }
-      localStorage.teamId = it.teamId;
       this.$setState({
         teamId: it.teamId,
       });
