@@ -5,9 +5,9 @@
       :show-arrows="false"
       vertical
       hide-delimiters
-      :interval="10000000"
+      :interval="1000"
       cycle
-      height="30"
+      height="40"
     >
       <v-carousel-item
         v-for="item in list"
@@ -19,11 +19,11 @@
             <a class="fz-14 message" :href="item.url">{{ item.message }}</a>
           </div>
         </template>
-        <template v-if="item.type == 'COOPERATION_INVIATION'">
+        <template v-if="item.type == 'COOPERATION_INVITATION'">
           <div class="notice-content al-c">
             <!-- <a class="fz-14 message" :href="item.url">{{ item.message }}</a> -->
-            <!-- COOPERATION_INVIATION -->
-            <div class="fz-14 message">{{ item.message }}</div>
+            <!-- COOPERATION_INVITATION -->
+            <div class="fz-14 message flex-1">{{ item.message }}</div>
             <div class="ml-auto mr-3">
               <v-btn
                 small
@@ -89,7 +89,7 @@ export default {
         //   id: "2",
         //   url: "baidu.com",
         //   message: "inviation message",
-        //   type: "COOPERATION_INVIATION",
+        //   type: "COOPERATION_INVITATION",
         // },
         // {
         //   id: "3",
@@ -205,7 +205,6 @@ export default {
 }
 .notice-content {
   height: 100%;
-  line-height: 30px;
   .message {
     color: #ff994e;
   }
