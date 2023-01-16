@@ -68,7 +68,7 @@
         :items="list"
       >
         <template v-slot:item.act="{ item }">
-          <div v-if="item.role == 'Owner'">
+          <div v-if="item.role == 'OWNER'">
             <v-btn
               text
               color="primary"
@@ -162,6 +162,11 @@ export default {
       ],
     };
   },
+  watch: {
+    curAccess() {
+      console.log(this.curAccess);
+    },
+  },
   mounted() {
     this.getList();
   },
@@ -183,7 +188,9 @@ export default {
           return this.$toast(msg);
         }
         this.$loading();
-        await this.$http.post("$auth/cooperation/invitations", body);
+        await this.$http.post("$auth/cooperation/invitations", {
+          invitation: body,
+        });
         this.$toast("Inviting member successfully.");
         this.getList();
       } catch (error) {
@@ -207,7 +214,7 @@ export default {
         );
         this.$loading();
         for (const row of this.list) {
-          if (row.role == "Owner") continue;
+          if (row.role == "OWNER") continue;
           await this.onAct(row, "REMOVE");
         }
         this.getList();
