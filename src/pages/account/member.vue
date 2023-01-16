@@ -205,7 +205,10 @@ export default {
       try {
         this.listLoading = true;
         const { data } = await this.$http.get("$auth/cooperation/invitations");
-        this.list = data.items;
+        this.list = data.items.map((it) => {
+          if (it.invitationStatus) it.status = it.invitationStatus;
+          return it;
+        });
       } catch (error) {
         console.log(error);
       }
