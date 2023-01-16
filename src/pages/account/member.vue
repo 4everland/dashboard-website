@@ -151,6 +151,10 @@ export default {
           value: "role",
         },
         {
+          text: "Note",
+          value: "note",
+        },
+        {
           text: "Status",
           value: "status",
         },
