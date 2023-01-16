@@ -95,7 +95,7 @@ export default {
     setTeam(it) {
       if (it.teamId != localStorage.teamId) {
         setTimeout(() => {
-          location.href = "index.html";
+          location.href = "/overview";
         }, 100);
       }
       localStorage.teamId = it.teamId;
