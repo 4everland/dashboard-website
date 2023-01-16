@@ -298,7 +298,7 @@ export default {
         },
         {
           label: "Collaboration",
-          img: "m-hosting",
+          img: "m-team",
           group: /^\/account/i,
           subs: [
             {
