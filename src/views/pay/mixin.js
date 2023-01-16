@@ -324,7 +324,7 @@ export default {
         42161: {
           chainId,
           chainName: "Arbitrum One",
-          rpcUrls: ["https://rpc.ankr.com/arbitrum"],
+          rpcUrls: ["https://arb1.arbitrum.io/rpc"],
           nativeCurrency: {
             name: "Arbitrum Coin",
             symbol: "ETH",
