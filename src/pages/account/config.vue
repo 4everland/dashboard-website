@@ -72,16 +72,24 @@ export default {
       teamAvatar: "https://cdn.vuetifyjs.com/images/john.jpg",
     };
   },
+  watch: {
+    teamInfo() {
+      this.onTeamName();
+    },
+  },
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
     }),
     ...mapGetters(["teamInfo"]),
   },
-  mounted() {
-    // console.log(this.userInfo);
+  created() {
+    this.onTeamName();
   },
   methods: {
+    onTeamName() {
+      this.teamName = this.teamInfo.teamName;
+    },
     async handleDelete() {
       try {
         await this.$confirm(
@@ -107,16 +115,25 @@ export default {
         this.teamAvatar = URL.createObjectURL(file);
         const formData = new FormData();
         formData.append("file", file);
-        const { data } = await this.$http.post("$auth/media", formData);
+        const data = await this.$http.post("$auth/media", formData);
         console.log(data);
+        // this.teamAvatar = data.url
       } catch (error) {
         console.log(error);
       }
     },
     async onInput(file) {
-      this.file = file[0];
-      this.getAvatarSrc(file[0]);
-      // this.teamAvatar = src;
+      try {
+        this.file = file[0];
+        await this.getAvatarSrc(file[0]);
+        // this.teamAvatar = src;
+        // const data = { teamAvatar: this.teamAvatar };
+        // await this.$http.put("$auth/cooperation/teams", data);
+
+        // this.$setMsg({ name: "updateTeam" });
+      } catch (error) {
+        console.log(error);
+      }
     },
     async handleSave() {
       try {
@@ -125,6 +142,7 @@ export default {
         };
         this.$loading();
         await this.$http.put("$auth/cooperation/teams", data);
+        this.$setMsg({ name: "updateTeam" });
         this.$loading.close();
       } catch (error) {
         console.log(error);
