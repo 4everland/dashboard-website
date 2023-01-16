@@ -5,14 +5,14 @@
       :show-arrows="false"
       vertical
       hide-delimiters
-      :interval="1000"
+      :interval="2000"
       cycle
       height="40"
     >
       <v-carousel-item
         v-for="item in list"
         :reverse-transition="true"
-        :key="item.id"
+        :key="item.key || item.id"
       >
         <template v-if="item.type == 'NORMAL'">
           <div class="notice-content">
@@ -118,7 +118,8 @@ export default {
       if (this.noticeList.length == 2) {
         let transformList = this.noticeList.map((it) => {
           return {
-            id: it.id + "-" + it.id,
+            id: it.id,
+            key: it.id + "-",
             message: it.message,
             url: it.url,
           };
@@ -148,7 +149,7 @@ export default {
           );
         }
         const normalNoticeList = this.noticeList.filter(
-          (it) => it.type != "NORMAL" && it.type != "REMOVED_BY_TEAM_MANAGER"
+          (it) => it.type == "NORMAL" && it.type == "REMOVED_BY_TEAM_MANAGER"
         );
         localStorage.setItem("notice", JSON.stringify(normalNoticeList));
       } catch (error) {
