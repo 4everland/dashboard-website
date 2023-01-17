@@ -16,6 +16,13 @@ export const ChapelSrcChainPayment =
   "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
 export const ChapelRecharge = "0x6Eb2E3b63Df577401eE6f926fFD30580021FE222";
 
+// src chain arbitrum one
+export const ArbitrumUSDC = "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8";
+export const ArbitrumBridge = "0x1619DE6B6B20eD217a58d00f37B9d47C7663feca";
+export const ArbitrumSrcChainPayment =
+  "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
+export const ArbitrumRecharge = "";
+
 // dst chain
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";
 export const MumbaiRouter = "0x44DDDef9c1fA0Ed35f64f98062E505a968AaBa9C";

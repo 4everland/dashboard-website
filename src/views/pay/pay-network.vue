@@ -62,6 +62,10 @@ export default {
           label: "BSC",
           img: "/img/svg/billing/ic-bsc.png",
         },
+        {
+          label: "Arbitrum",
+          img: "/img/svg/billing/ic-arbitrum.png",
+        },
       ],
     };
   },

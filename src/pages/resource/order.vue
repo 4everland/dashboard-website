@@ -30,7 +30,13 @@
     </div>
 
     <e-kv2 class="mt-6" label="Network">
-      <pay-network />
+      <pay-network
+        :allow="
+          $inDev
+            ? ['Polygon', 'Ethereum', 'BSC']
+            : ['Polygon', 'Ethereum', 'BSC', 'Arbitrum']
+        "
+      />
     </e-kv2>
 
     <div class="mt-8 gray fz-14">
@@ -127,6 +133,7 @@ export default {
       validStatus: 1,
       AmountofDeduction: 0,
       resourceResource: null,
+      needCheckApprove: true,
     };
   },
   computed: {
@@ -193,6 +200,7 @@ export default {
             totalFee = totalFee.div(1e12);
           }
           console.log("totalFee", totalFee.toString());
+          console.log(params, "calcFee params");
           const feeMsg = await target.calcFee(...params);
           console.log("feeMsg", feeMsg.toString());
           let gas = await target.estimateGas.pay(...params, { value: feeMsg });
