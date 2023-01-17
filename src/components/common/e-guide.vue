@@ -24,7 +24,7 @@
         </v-row>
         <div class="d-flex justify-center mt-10">
           <v-btn color="primary" min-width="200" @click="handleClaim"
-            >Claim</v-btn
+            >Get now</v-btn
           >
         </div>
       </div>
