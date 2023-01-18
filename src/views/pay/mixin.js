@@ -153,7 +153,7 @@ export default {
         msg = "Transaction Failed";
       } else if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
         msg = "IPFS Storage Expired, extending service duration is required.";
-      } else if (/exceeds balance/i.test(msg)) {
+      } else if (/exceeds balance/i.test(msg) || msg == "overflow") {
         msg = "Insufficient balance";
       } else if (msg.length > 100) {
         const mat = /^(.+)\[/.exec(msg);
