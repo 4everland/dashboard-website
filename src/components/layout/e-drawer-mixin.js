@@ -77,7 +77,7 @@ const menuMap = {
     active: false,
     group: /^\/resource/i,
   },
-  TEAM: {
+  MEMBER: {
     label: "Collaboration",
     img: "m-team",
     group: /^\/account/i,
@@ -114,7 +114,7 @@ export default {
           active: false,
         },
       ];
-      const nameArr = ["HOSTING", "BUCKET", "GATEWAY", "RESOURCE", "TEAM"];
+      const nameArr = ["HOSTING", "BUCKET", "GATEWAY", "RESOURCE", "MEMBER"];
       for (const name of nameArr) {
         if (this.inAccess(name)) {
           list.push(menuMap[name]);
@@ -125,7 +125,7 @@ export default {
   },
   methods: {
     inAccess(name) {
-      if (name == "BUCKET" || name == "TEAM") return true;
+      if (name == "BUCKET") return true;
       const { type, access = [] } = this.teamInfo || {};
       if (type == "INDIVIDUAL") return true;
       return access.includes(name);
