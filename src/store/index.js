@@ -46,7 +46,10 @@ const store = new Vuex.Store({
   },
   getters: {
     teamInfo(state) {
-      return state.teamList.find((it) => it.teamId == state.teamId);
+      return (
+        state.teamList.find((it) => it.teamId == state.teamId) ||
+        state.teamList[0]
+      );
     },
   },
   mutations: {
