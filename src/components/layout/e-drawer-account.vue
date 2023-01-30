@@ -76,6 +76,7 @@ export default {
       userInfo: (s) => s.userInfo,
       teamList: (s) => s.teamList,
       noticeMsg: (s) => s.noticeMsg,
+      teamId: (s) => s.teamId,
     }),
     ...mapGetters(["teamInfo"]),
     list() {

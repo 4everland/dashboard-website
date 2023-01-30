@@ -224,14 +224,16 @@ export default {
         this.$loading();
         for (const row of this.list) {
           if (row.role == "OWNER") continue;
-          await this.onAct(row, "REMOVE");
+          await this.onAct(row, "REMOVE", {
+            noTip: true,
+          });
         }
         this.getList();
       } catch (error) {
         console.log(error);
       }
     },
-    async onAct(row, act) {
+    async onAct(row, act, opts = {}) {
       const body = {
         invitationId: row.invitationId,
       };
@@ -242,7 +244,7 @@ export default {
         let tip = "";
         if (act == "REMOVE")
           tip = `Are you sure to remove this member(${row.targetName}) ?`;
-        if (tip) await this.$confirm(tip);
+        if (tip && !opts.noTip) await this.$confirm(tip);
         body.status = act;
       }
       this.setMember(body);
