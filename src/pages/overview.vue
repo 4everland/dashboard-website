@@ -14,6 +14,7 @@
       :height="asMobile ? 100 : 160"
       class="bdrs-10 mb-4"
       cycle
+      hide-delimiters
     >
       <v-carousel-item
         v-for="(it, i) in banners"
@@ -95,10 +96,10 @@ export default {
   data() {
     return {
       banners: [
-        {
-          img: "https://4ever-web.4everland.store/img/banner/20221103-115504.jpg",
-          href: "https://forms.gle/CrCVBoWFaA4V3RiB6",
-        },
+        // {
+        //   img: "https://4ever-web.4everland.store/img/banner/20221103-115504.jpg",
+        //   href: "https://forms.gle/CrCVBoWFaA4V3RiB6",
+        // },
         {
           img: "https://static1.4everland.org/img/banner/20221109-160329.png",
           to: "/reward-hub",

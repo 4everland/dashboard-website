@@ -122,6 +122,7 @@ export default {
     getPayBy(id) {
       if ([5, 1].includes(id)) return "Ethereum";
       if ([97, 56].includes(id)) return "BSC";
+      if ([42161].includes(id)) return "Arbitrum";
       return "Polygon";
     },
     async checkNet() {
