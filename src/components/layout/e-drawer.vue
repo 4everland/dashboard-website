@@ -159,11 +159,11 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
+import mixin from "./e-drawer-mixin";
 const initFilePath = "/bucket/storage/";
 
 export default {
+  mixins: [mixin],
   data() {
     return {
       mLinks: [
@@ -195,127 +195,11 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      noticeMsg: (s) => s.noticeMsg,
-      userInfo: (s) => s.userInfo,
-      token: (s) => s.token(),
-    }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
     path() {
       return this.$route.path;
-    },
-    list() {
-      return [
-        {
-          label: "Overview",
-          img: "m-overview",
-          to: "/overview",
-          active: false,
-        },
-        {
-          label: "Hosting",
-          img: "m-hosting",
-          group: /^\/hosting/i,
-          subs: [
-            {
-              label: "Projects",
-              to: "/hosting/projects",
-              matPath: /hosting\/(new|project|build)/,
-            },
-            {
-              label: "Domains",
-              to: "/hosting/domains",
-            },
-            {
-              label: "Statistics",
-              to: "/hosting/statistics",
-            },
-            {
-              label: "Auth Tokens",
-              to: "/hosting/auth-tokens",
-            },
-          ],
-        },
-        {
-          label: "Bucket",
-          img: "m-bucket",
-          active: false,
-          group: /^\/bucket/i,
-          subs: [
-            // {
-            //   label: "Buckets",
-            //   to: this.path.includes(initFilePath)
-            //     ? initFilePath
-            //     : this.filesPath,
-            // },
-            {
-              label: "Buckets",
-              to: "/bucket/storage/",
-            },
-            {
-              label: "AR History",
-              to: "/bucket/arweave",
-            },
-            {
-              label: "Domains",
-              to: "/bucket/domains",
-              matPath: /bucket\/domain/,
-            },
-            {
-              label: "Access Keys",
-              to: "/bucket/access-keys",
-            },
-          ],
-        },
-        {
-          label: "Gateway",
-          img: "m-gateway",
-          suffixImg: "/img/svg/hosting/h-beta-active.svg",
-          group: /^\/gateway/i,
-          subs: [
-            {
-              label: "Dedicated Gateway",
-              to: "/gateway/list",
-            },
-            {
-              label: "IPNS Manager",
-              to: "/gateway/ipns",
-            },
-            {
-              label: "Auth Token",
-              to: "/gateway/auth-token",
-            },
-          ],
-        },
-        {
-          label: "Resource",
-          img: "m-usage",
-          to: "/resource",
-          active: false,
-          group: /^\/resource/i,
-        },
-        {
-          label: "Collaboration",
-          img: "m-team",
-          group: /^\/account/i,
-          subs: [
-            {
-              label: "Member Manager",
-              to: "/account/member",
-            },
-            {
-              label: "Account Configuration",
-              to: "/account/config",
-            },
-            {
-              label: "Operation Logs",
-              to: "/account/operation-log",
-            },
-          ],
-        },
-      ];
     },
   },
   watch: {
