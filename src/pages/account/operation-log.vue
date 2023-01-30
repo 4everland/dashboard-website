@@ -91,8 +91,9 @@ export default {
       ],
       seleted: "ALL",
       dType: [
-        { text: "current Day", value: "DAY_1" },
-        { text: "past 30 Day", value: "DAY_30" },
+        { text: "Past 24h", value: "DAY_1" },
+
+        { text: "Past 30Day", value: "DAY_30" },
       ],
       dTypeSelected: "DAY_1",
     };

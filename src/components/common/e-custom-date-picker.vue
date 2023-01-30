@@ -2,6 +2,7 @@
   <div>
     <v-select
       class="ipfs-input hide-msg mr-4"
+      style="width: 150px"
       outlined
       :items="dateList"
       dense
