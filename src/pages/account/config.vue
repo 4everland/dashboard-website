@@ -44,6 +44,7 @@
       /></v-avatar>
       <input-upload @input="onInput" ref="uploadInput"></input-upload>
     </div>
+    {{ teamInfo }}
     <div
       class="mt-5 config-item al-c"
       v-if="teamInfo && teamInfo.type != 'INDIVIDUAL'"
@@ -69,12 +70,13 @@ export default {
     return {
       teamName: "",
       file: null,
-      teamAvatar: "https://cdn.vuetifyjs.com/images/john.jpg",
+      teamAvatar: "",
+      // teamAvatar: "https://cdn.vuetifyjs.com/images/john.jpg",
     };
   },
   watch: {
     teamInfo() {
-      this.onTeamName();
+      this.initInfo();
     },
   },
   computed: {
@@ -84,11 +86,34 @@ export default {
     ...mapGetters(["teamInfo"]),
   },
   created() {
-    this.onTeamName();
+    this.initInfo();
   },
   methods: {
-    onTeamName() {
+    async initInfo() {
       this.teamName = this.teamInfo.teamName;
+      if (this.teamInfo.teamAvatar) {
+        const results = await this.$http.get(
+          `$auth/media/${this.teamInfo.teamAvatar}`,
+          {
+            responseType: "blob",
+          }
+        );
+        console.log(results.data);
+
+        // const url = window.URL.createObjectURL(results.data);
+        // console.log(url);
+        // var base64String = window.btoa(
+        //   new Uint8Array(results.data).reduce(
+        //     (data, byte) => data + String.fromCharCode(byte),
+        //     ""
+        //   )
+        // );
+        // console.log("data:image/jpg;base64," + base64String);
+        // this.teamAvatar = "data:image/jpg;base64," + base64String;
+        // this.teamAvatar = ''
+
+        // this.teamAvatar = url;
+      }
     },
     async handleDelete() {
       try {
@@ -115,12 +140,14 @@ export default {
         this.teamAvatar = URL.createObjectURL(file);
         const formData = new FormData();
         formData.append("file", file);
-        const data = await this.$http.post("$auth/media", formData);
-        console.log(data);
-        // this.teamAvatar = data.url
+        this.$loading();
+        console.log(formData.get("file"));
+        const { data } = await this.$http.post("$auth/media", formData);
+        await this.$http.put("$auth/cooperation/teams", { teamAvatar: data });
       } catch (error) {
         console.log(error);
       }
+      this.$loading.close();
     },
     async onInput(file) {
       try {
@@ -140,7 +167,9 @@ export default {
         const data = {
           teamName: this.teamName,
         };
+        if (this.teamName == this.teamInfo.teamName) return;
         this.$loading();
+
         await this.$http.put("$auth/cooperation/teams", data);
         this.$setMsg({ name: "updateTeam" });
         this.$loading.close();

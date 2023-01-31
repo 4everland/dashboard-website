@@ -24,7 +24,7 @@
             <!-- <a class="fz-14 message" :href="item.url">{{ item.message }}</a> -->
             <!-- COOPERATION_INVITATION -->
             <div class="fz-14 message flex-1">
-              {{ item.id }} {{ item.message }}
+              {{ item.message }}
             </div>
             <div class="ml-auto mr-3">
               <v-btn
@@ -123,6 +123,7 @@ export default {
             id: it.id,
             key: it.id + "-",
             message: it.message,
+            type: it.type,
             url: it.url,
           };
         });
