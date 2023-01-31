@@ -96,6 +96,17 @@ const menuMap = {
       },
     ],
   },
+  MEMBER_ME: {
+    label: "Collaboration",
+    img: "m-team",
+    group: /^\/account/i,
+    subs: [
+      {
+        label: "Account Configuration",
+        to: "/account/config",
+      },
+    ],
+  },
 };
 export default {
   computed: {
@@ -118,6 +129,8 @@ export default {
       for (const name of nameArr) {
         if (this.inAccess(name)) {
           list.push(menuMap[name]);
+        } else if (name == "MEMBER") {
+          list.push(menuMap.MEMBER_ME);
         }
       }
       return list;
@@ -125,7 +138,7 @@ export default {
   },
   methods: {
     inAccess(name) {
-      if (name == "BUCKET") return true;
+      if (name == "BUCKET") return false;
       const { type, access } = this.teamInfo || {};
       if (type == "INDIVIDUAL") return true;
       return (access || []).includes(name);
