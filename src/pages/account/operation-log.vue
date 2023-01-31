@@ -271,7 +271,7 @@ export default {
         );
         this.total = data.total;
         const list = data.list.map((it) => {
-          it.addr = it.guid || it.currentUid || it.memberName;
+          it.addr = it.memberName || it.currentUid || it.guid;
           it.label = it.addr.cutStr(6, 4);
           this.getDesc(it);
           return it;

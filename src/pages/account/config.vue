@@ -35,6 +35,7 @@
         </p>
       </div>
       <v-avatar
+        v-if="teamAvatar"
         color="primary"
         size="80"
         class="cursor-p"
@@ -42,9 +43,14 @@
       >
         <img :src="teamAvatar" alt="John"
       /></v-avatar>
+      <e-avatar
+        v-else
+        :address="teamInfo.teamId"
+        :diameter="80"
+        @click.native="$refs.uploadInput.onClick(false)"
+      ></e-avatar>
       <input-upload @input="onInput" ref="uploadInput"></input-upload>
     </div>
-    {{ teamInfo }}
     <div
       class="mt-5 config-item al-c"
       v-if="teamInfo && teamInfo.type != 'INDIVIDUAL'"
@@ -100,19 +106,10 @@ export default {
         );
         console.log(results.data);
 
-        // const url = window.URL.createObjectURL(results.data);
-        // console.log(url);
-        // var base64String = window.btoa(
-        //   new Uint8Array(results.data).reduce(
-        //     (data, byte) => data + String.fromCharCode(byte),
-        //     ""
-        //   )
-        // );
-        // console.log("data:image/jpg;base64," + base64String);
-        // this.teamAvatar = "data:image/jpg;base64," + base64String;
-        // this.teamAvatar = ''
+        const url = window.URL.createObjectURL(results.data);
+        console.log(url);
 
-        // this.teamAvatar = url;
+        this.teamAvatar = url;
       }
     },
     async handleDelete() {
@@ -136,6 +133,12 @@ export default {
     },
     async getAvatarSrc(file) {
       console.log(URL.createObjectURL(file));
+      file.arrayBuffer().then((arrayBuffer) => {
+        const blob = new Blob([new Uint8Array(arrayBuffer)], {
+          type: file.type,
+        });
+        console.log(blob);
+      });
       try {
         this.teamAvatar = URL.createObjectURL(file);
         const formData = new FormData();
