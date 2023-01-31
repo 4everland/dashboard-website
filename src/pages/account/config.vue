@@ -1,6 +1,6 @@
 <template>
   <div class="account-config-container">
-    <div class="config-item">
+    <div class="config-item" v-if="hasAccess">
       <h3 class="fz-20">Collaboration account name</h3>
       <p class="fz-14 mb-6 mt-3 description">
         The name of the collaboration account will be displayed when
@@ -25,7 +25,7 @@
         >
       </div>
     </div>
-    <div class="mt-5 config-item al-c">
+    <div class="mt-5 config-item al-c" v-if="hasAccess">
       <div style="width: 60%" class="mr-auto">
         <h3 class="fz-20">Collaboration account profile</h3>
         <p class="fz-14 mb-6 mt-3 description">
@@ -90,6 +90,12 @@ export default {
       userInfo: (s) => s.userInfo,
     }),
     ...mapGetters(["teamInfo"]),
+    hasAccess() {
+      if (this.teamInfo) {
+        return this.teamInfo.access.includes("MEMBER");
+      }
+      return false;
+    },
   },
   created() {
     this.initInfo();
