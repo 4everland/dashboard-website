@@ -126,9 +126,9 @@ export default {
   methods: {
     inAccess(name) {
       if (name == "BUCKET") return true;
-      const { type, access = [] } = this.teamInfo || {};
+      const { type, access } = this.teamInfo || {};
       if (type == "INDIVIDUAL") return true;
-      return access.includes(name);
+      return (access || []).includes(name);
     },
   },
 };
