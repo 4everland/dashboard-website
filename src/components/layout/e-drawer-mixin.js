@@ -138,9 +138,9 @@ export default {
   },
   methods: {
     inAccess(name) {
-      if (name == "BUCKET") return false;
       const { type, access } = this.teamInfo || {};
       if (type == "INDIVIDUAL") return true;
+      if (name == "BUCKET") return false;
       return (access || []).includes(name);
     },
   },
