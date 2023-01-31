@@ -77,7 +77,6 @@ export default {
       teamName: "",
       file: null,
       teamAvatar: "",
-      // teamAvatar: "https://cdn.vuetifyjs.com/images/john.jpg",
     };
   },
   watch: {
@@ -92,7 +91,10 @@ export default {
     ...mapGetters(["teamInfo"]),
     hasAccess() {
       if (this.teamInfo) {
-        return this.teamInfo.access.includes("MEMBER");
+        return (
+          this.teamInfo.access.includes("MEMBER") ||
+          this.teamInfo.type == "INDIVIDUAL"
+        );
       }
       return false;
     },
