@@ -79,6 +79,14 @@ export default {
       teamAvatar: "",
     };
   },
+  watch: {
+    teamInfo: {
+      handler() {
+        this.initInfo();
+      },
+      immediate: true,
+    },
+  },
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
@@ -94,21 +102,14 @@ export default {
       return false;
     },
   },
-  created() {
-    this.initInfo();
-  },
   methods: {
     async initInfo() {
+      console.log(this.teamInfo);
       this.teamName = this.teamInfo.teamName;
       if (this.teamInfo.teamAvatar) {
-        const results = await this.$http.get(
-          `$auth/media/${this.teamInfo.teamAvatar}`,
-          {
-            responseType: "blob",
-          }
-        );
-        const url = window.URL.createObjectURL(results.data);
-        this.teamAvatar = url;
+        this.teamAvatar = this.teamInfo.teamAvatar;
+      } else {
+        this.teamAvatar = "";
       }
     },
     async handleDelete() {
@@ -131,21 +132,14 @@ export default {
       }
     },
     async getAvatarSrc(file) {
-      console.log(URL.createObjectURL(file));
-      file.arrayBuffer().then((arrayBuffer) => {
-        const blob = new Blob([new Uint8Array(arrayBuffer)], {
-          type: file.type,
-        });
-        console.log(blob);
-      });
       try {
         this.teamAvatar = URL.createObjectURL(file);
         const formData = new FormData();
         formData.append("file", file);
         this.$loading();
-        console.log(formData.get("file"));
         const { data } = await this.$http.post("$auth/media", formData);
         await this.$http.put("$auth/cooperation/teams", { teamAvatar: data });
+        this.$setMsg("updateTeam");
       } catch (error) {
         console.log(error);
       }

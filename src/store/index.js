@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { http2 } from "../api";
+import { authApi, http2 } from "../api";
 
 Vue.use(Vuex);
 
@@ -46,10 +46,14 @@ const store = new Vuex.Store({
   },
   getters: {
     teamInfo(state) {
-      return (
+      const obj =
         state.teamList.find((it) => it.teamId == state.teamId) ||
-        state.teamList[0]
-      );
+        state.teamList[0];
+      const info = { ...obj };
+      if (info.teamAvatar) {
+        info.teamAvatar = authApi + "/media/" + info.teamAvatar;
+      }
+      return info;
     },
   },
   mutations: {

@@ -14,7 +14,7 @@ Vue.prototype.$axios = axios;
 export const endpoint = inDev
   ? "https://s3gw.foreverland.xyz"
   : "https://endpoint.4everland.co";
-const authApi = inDev
+export const authApi = inDev
   ? "https://auth.foreverland.xyz"
   : "https://oauth.4everland.org";
 const v3Api = inDev
