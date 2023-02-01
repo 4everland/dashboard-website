@@ -329,11 +329,13 @@ export default {
     },
     async onUnbind(it) {
       const type = it.type;
-      const { data } = await this.$http.post(`$auth/unbind`, {
+      const data = await this.$http.post(`$auth/unbind`, {
         type,
       });
-      console.log(data);
-      this.$toast("Disconnect" + item.title + " successfully");
+      if (data.code == 200) {
+        this.$toast("Disconnect " + it.account + " successfully");
+        this.$setMsg("updateUser");
+      }
     },
     async onDisconnect(it) {
       const info = this.userInfo;
