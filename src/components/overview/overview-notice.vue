@@ -146,6 +146,7 @@ export default {
         let EmailJoinSuccess = this.noticeList.findIndex(
           (it) => it.type == "SWITCH_TO_MEMBER"
         );
+        console.log(EmailJoinSuccess);
         if (EmailJoinSuccess != -1) {
           this.$alert(
             "You have successfully joined the following collaboration accounts"
