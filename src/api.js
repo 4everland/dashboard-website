@@ -72,16 +72,20 @@ Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
   return pre + hash;
 };
 
+const mainTokenRequestUrl = ["/user/activity/action/logs"];
 const RefreshPath = "/refresh";
 const RefreshLockKey = "refresh";
 const lock = new AsyncLock({ timeout: 5000 });
-
 [http, http2].forEach((axios) => {
   axios.interceptors.request.use(
     async (config) => {
+      const matchUrlArr = mainTokenRequestUrl.filter((it) => {
+        const mainTokenReg = new RegExp(it, "g");
+        return mainTokenReg.test(config.url);
+      });
       let token = localStorage.token;
       const { teamInfo } = store.getters;
-      if (teamInfo) {
+      if (teamInfo && !matchUrlArr.length) {
         token = teamInfo.token || token;
       }
       if (config.url != RefreshPath) {
