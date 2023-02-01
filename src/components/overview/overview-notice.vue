@@ -55,12 +55,12 @@
             <span class="fz-14 message">{{ item.message }}</span>
           </div>
         </template>
-        <template v-if="item.type == 'SWITCH_TO_MEMBER'">
+        <!-- <template v-if="item.type == 'SWITCH_TO_MEMBER'">
           <div class="notice-content">
-            <!-- <a class="fz-14 message" :href="item.url">{{ item.message }}</a> -->
+            <a class="fz-14 message" :href="item.url">{{ item.message }}</a>
             SWITCH_TO_MEMBER
           </div>
-        </template>
+        </template> -->
       </v-carousel-item>
     </v-carousel>
     <v-icon size="20" color="#ff994e" @click="handleCloseNotice"
