@@ -79,11 +79,6 @@ export default {
       teamAvatar: "",
     };
   },
-  watch: {
-    teamInfo() {
-      this.initInfo();
-    },
-  },
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
@@ -112,11 +107,7 @@ export default {
             responseType: "blob",
           }
         );
-        console.log(results.data);
-
         const url = window.URL.createObjectURL(results.data);
-        console.log(url);
-
         this.teamAvatar = url;
       }
     },
