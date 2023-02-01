@@ -93,7 +93,7 @@ export default {
     }),
     ...mapGetters(["teamInfo"]),
     hasAccess() {
-      if (this.teamInfo) {
+      if (this.teamInfo.type) {
         return (
           this.teamInfo.access.includes("MEMBER") ||
           this.teamInfo.type == "INDIVIDUAL"
