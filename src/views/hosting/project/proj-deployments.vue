@@ -16,10 +16,10 @@
         <v-row class="d-flex">
           <v-col cols="12" md="9">
             <div>
-              <a class="b fw-b fz-18">{{ it.domain }}</a>
+              <a class="b fw-b fz-18">{{ it.title }}</a>
             </div>
             <div class="al-c mt-2">
-              <span class="mr-5 fz-14" v-if="!asMobile">Production</span>
+              <span class="mr-5 fz-14" v-if="!asMobile">{{ it.platform }}</span>
               <img
                 :src="`/img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
                 height="20"
@@ -33,14 +33,17 @@
                 v-if="it.cid && it.state == 'SUCCESS'"
               >
                 <span v-if="it.platform == 'IPFS'">
-                  {{ it.cid.cutStr(4, 4) }}
+                  <!-- {{ it.cid.cutStr(4, 4) }} -->
+                  {{ it.cid }}
                 </span>
                 <span v-if="it.platform == 'IC'">
-                  {{ it.canister.cutStr(4, 4) }}
+                  <!-- {{ it.canister.cutStr(4, 4) }} -->
+                  {{ it.canister }}
                 </span>
-                <span v-if="it.platform == 'AR'">{{
-                  it.arHash.cutStr(4, 4)
-                }}</span>
+                <span v-if="it.platform == 'AR'">
+                  <!-- {{ it.arHash.cutStr(4, 4) }} -->
+                  {{ it.arHash }}
+                </span>
               </a>
               <span
                 class="ml-2 fz-13 d-ib"
@@ -57,7 +60,7 @@
               <span v-else class="ml-2 fz-13 d-ib" style="min-width: 100px">{{
                 getPlatformName(it)
               }}</span>
-              <template v-if="it.commits">
+              <!-- <template v-if="it.commits">
                 <div class="fz-14 ml-5" @click.stop="onStop">
                   <h-branch :info="it" />
                 </div>
@@ -73,14 +76,14 @@
                     ></e-commit>
                   </div>
                 </div>
-              </template>
-              <template v-if="hashDeploy(it.deployType)">
+              </template> -->
+              <!-- <template v-if="hashDeploy(it.deployType)">
                 <div v-if="it.deployType == 'CID'" class="ml-5">
                   <span class="deploy-origin-type fz-14">IPFS</span>
                   <span class="ml-3 fz-14">Deployment Through IPFS</span>
                 </div>
                 <div v-else></div>
-              </template>
+              </template> -->
             </div>
           </v-col>
 
@@ -217,7 +220,10 @@ export default {
     },
     getOptList(it) {
       let arr = [];
-      if (it.deployType != "CID" && it.deployType != "IPNS") {
+      if (
+        (it.deployType != "CID" && it.deployType != "IPNS") ||
+        it.state == "FAILURE"
+      ) {
         arr.push({
           text: "Redeploy",
           name: "deploy",
@@ -290,6 +296,7 @@ export default {
       this.$loading.close();
     },
     async onDeploy(it) {
+      console.log(it);
       try {
         let html =
           "You are about to create a new Deployment with the same source code as your current Deployment, but with the newest configuration from your Project Settings.";
@@ -299,12 +306,20 @@ export default {
         this.$loading();
         const { id } = this.$route.params;
         await this.$store.dispatch("getProjectInfo", id);
-        const { data } = await this.$http2.post(
-          `/project/${it.taskId}/redeploy`
-        );
-        this.$router.replace(
-          `/hosting/build/${it.buildConfig.name}/${this.id}/${data.taskId}`
-        );
+
+        if (it.deployType == "CID" || it.deployType == "IPNS") {
+          await this.$http2.post(
+            `/project/task/cid/${it.projectId}/deploy/create`
+          );
+          this.$router.replace("/hosting/projects");
+        } else {
+          const { data } = await this.$http2.post(
+            `/project/${it.taskId}/redeploy`
+          );
+          this.$router.replace(
+            `/hosting/build/${it.buildConfig.name}/${this.id}/${data.taskId}`
+          );
+        }
       } catch (error) {
         console.log(error, "deploy");
         if (error.code == 10014)
@@ -341,6 +356,7 @@ export default {
           }
         );
         const rows = data.content.map((it) => {
+          it.title = it.platform == "IC" ? it.taskId : it.domain;
           if (it.state == "SUCCESS") {
             if (!this.isFirst) {
               this.isFirst = true;

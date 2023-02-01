@@ -14,6 +14,7 @@
       :height="asMobile ? 100 : 160"
       class="bdrs-10 mb-4"
       cycle
+      hide-delimiters
     >
       <v-carousel-item
         v-for="(it, i) in banners"
@@ -97,10 +98,10 @@ export default {
   data() {
     return {
       banners: [
-        {
-          img: "https://4ever-web.4everland.store/img/banner/20221103-115504.jpg",
-          href: "https://forms.gle/CrCVBoWFaA4V3RiB6",
-        },
+        // {
+        //   img: "https://4ever-web.4everland.store/img/banner/20221103-115504.jpg",
+        //   href: "https://forms.gle/CrCVBoWFaA4V3RiB6",
+        // },
         {
           img: "https://static1.4everland.org/img/banner/20221109-160329.png",
           to: "/reward-hub",
@@ -131,42 +132,5 @@ export default {
       this.$router.push("/hosting/newByHash");
     },
   },
-  // watch: {
-  //   noticeMsg({ name }) {
-  //     if (name == "close-new-drop") {
-  //       this.checkReward();
-  //     }
-  //   },
-  // },
-  // async mounted() {
-  //   try {
-  //     const isPop = await newUserDrop();
-  //     if (!isPop) {
-  //       this.checkReward();
-  //     }
-  //   } catch (error) {
-  //     //
-  //   }
-  // },
-  // methods: {
-  //   async checkReward() {
-  //     try {
-  //       const { data } = await this.$http.get("$auth/poster/rewardhub");
-  //       if (data)
-  //         this.$confirm(
-  //           `<p>Dear 4EVERLAND user,</p><div class="lh-2 fz-14 mt-5 mb-5">We are launching Reward Hub to offer you a better experience with products and services. All new users can get free resources (storage, bandwidth, etc.) by completing the following tasks, while users who have already completed the tasks and received the free giveaway resources can simply go to Reward Hub to claim the resources. <p class="mt-2">Having fun while exploring 4EVERLAND! Please feel free to contact us in our communities if you have any questions. </p></div>`,
-  //           "",
-  //           {
-  //             confirmText: "View",
-  //             hideTitle: true,
-  //           }
-  //         ).then(() => {
-  //           this.$navTo("/reward-hub");
-  //         });
-  //     } catch (error) {
-  //       //
-  //     }
-  //   },
-  // },
 };
 </script>

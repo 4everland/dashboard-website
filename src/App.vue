@@ -24,6 +24,7 @@
             <router-view></router-view>
           </e-wrap>
         </div>
+        <e-guide ref="guide" />
       </v-main>
     </template>
 
@@ -35,8 +36,14 @@
 
 <script>
 import { mapState } from "vuex";
-
+import { airdropRequest } from "@/plugins/airDrop/api";
 export default {
+  data() {
+    return {
+      loadedCount: 0,
+      newUserData: null,
+    };
+  },
   computed: {
     ...mapState({
       allowNoLogin: (s) => s.allowNoLogin,
@@ -46,6 +53,52 @@ export default {
     },
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+    showGuide() {
+      return !this.$vuetify.breakpoint.mdAndDown;
+    },
+  },
+
+  async mounted() {
+    const token = localStorage.token;
+    if (!token) return;
+    await this.getNewUser();
+    if (this.newUserData && this.showGuide) {
+      if (this.$route.path != "/overview" && this.$route.path != "/") {
+        this.$router.replace("/");
+      }
+      setTimeout(() => {
+        this.$refs.guide.guide();
+      }, 2000);
+    }
+
+    // const guide = localStorage.getItem("guide");
+    // console.log(this.$route.path);
+    // // if (this.showGuide && !guide) {
+    // if (this.showGuide) {
+    //   if (
+    //     this.$route.path != "/" &&
+    //     this.$route.path != "/overview" &&
+    //     this.$route.path != "/login"
+    //   ) {
+    //     this.$router.replace("/");
+    //   }
+    //   setTimeout(() => {
+    //     this.$refs.guide.guide();
+    //     localStorage.setItem("guide", true);
+    //   }, 2000);
+    // }
+  },
+  methods: {
+    async getNewUser() {
+      try {
+        const data = await airdropRequest();
+        if (data) {
+          this.newUserData = data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

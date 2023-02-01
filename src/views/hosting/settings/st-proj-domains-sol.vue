@@ -139,6 +139,7 @@ export default {
   computed: {
     ...mapState({
       connectAddr: (s) => s.connectAddr,
+      projectInfo: (s) => s.projectInfo,
     }),
   },
   created() {
@@ -199,6 +200,9 @@ export default {
     },
 
     async onAdd() {
+      if (this.projectInfo.state != "SUCCESS") {
+        return this.$alert("task status must be SUCCESS");
+      }
       let hostnameArray = this.domain.split(".");
       if (!reg.test(this.domain)) {
         return this.$alert("The domain name you entered is invalid.");

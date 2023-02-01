@@ -69,12 +69,14 @@
     </div>
 
     <div class="pa-5"></div>
-    <v-list flat dense>
+    <v-list flat dense ref="drawerList" id="drawerList">
       <template v-for="(it, i) in list">
         <v-list-group
           class="group-item"
+          :id="'group-' + i"
+          :ref="'group-' + i"
+          @input="Toggle(i, $event)"
           v-model="activeArr[i]"
-          @input="onToggle(i, $event)"
           :group="it.group"
           v-if="it.subs"
           :key="i"
@@ -160,6 +162,7 @@
 
 <script>
 import mixin from "./e-drawer-mixin";
+import { bus } from "@/utils/bus";
 const initFilePath = "/bucket/storage/";
 
 export default {
@@ -192,6 +195,7 @@ export default {
       mini: false,
       activeArr: [],
       filesPath: initFilePath,
+      guideActived: false,
     };
   },
   computed: {
@@ -201,6 +205,17 @@ export default {
     path() {
       return this.$route.path;
     },
+  },
+  created() {
+    bus.$on("sidebar-item", (id) => {
+      if (this.$refs[id][0] && !this.$refs[id][0].isActive) {
+        this.$refs[id][0].click();
+      }
+      this.guideActived = true;
+    });
+    bus.$on("guide", () => {
+      this.guideActived = false;
+    });
   },
   watch: {
     noticeMsg({ name }) {
@@ -220,6 +235,12 @@ export default {
     },
   },
   methods: {
+    Toggle(i, open) {
+      if (this.guideActived) {
+        return false;
+      }
+      return this.onToggle(i, open);
+    },
     onToggle(i, open) {
       if (!open) return;
       if (this.list[i].group.test(this.path)) return;

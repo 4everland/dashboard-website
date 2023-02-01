@@ -3,6 +3,7 @@ import { providers, BigNumber } from "ethers"; //, utils
 import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
 import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
+import ArbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-arbitrum";
 // import client from "../../plugins/pay/contracts/SGNClient";
 import {
   MumbaiFundPool,
@@ -48,6 +49,9 @@ export default {
     },
     isEth() {
       return this.payBy == "Ethereum";
+    },
+    isArbitrum() {
+      return this.payBy == "Arbitrum";
     },
     payChainId() {
       return this.getChainId(this.payBy);
@@ -149,7 +153,7 @@ export default {
         msg = "Transaction Failed";
       } else if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
         msg = "IPFS Storage Expired, extending service duration is required.";
-      } else if (/exceeds balance/i.test(msg)) {
+      } else if (/exceeds balance/i.test(msg) || msg == "overflow") {
         msg = "Insufficient balance";
       } else if (msg.length > 100) {
         const mat = /^(.+)\[/.exec(msg);
@@ -254,6 +258,7 @@ export default {
     getChainId(type) {
       if (type == "Polygon") return this.$inDev ? 80001 : 137;
       if (type == "BSC") return this.$inDev ? 97 : 56;
+      if (type == "Arbitrum") return 42161;
       return this.$inDev ? 5 : 1;
     },
     async addChain(chainId, id) {
@@ -312,6 +317,17 @@ export default {
           nativeCurrency: {
             name: "BNB Coin",
             symbol: "tBNB",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        42161: {
+          chainId,
+          chainName: "Arbitrum One",
+          rpcUrls: ["https://arb1.arbitrum.io/rpc"],
+          nativeCurrency: {
+            name: "Arbitrum Coin",
+            symbol: "ETH",
             decimals: 18,
           },
           // blockExplorerUrls: [],
@@ -398,13 +414,18 @@ export default {
         } else if (this.isBSC) {
           bscContract.setProvider(provider);
           this.curContract = bscContract;
+        } else if (this.isArbitrum) {
+          ArbitrumContract.setProvider(provider);
+          this.curContract = ArbitrumContract;
         } else {
           ethContract.setProvider(provider);
           this.curContract = ethContract;
         }
         // console.log(this.payBy, this.curContract);
         // this.getSign();
-        this.checkApprove(this.isSubscribe);
+        if (this.needCheckApprove) {
+          this.checkApprove(this.isSubscribe);
+        }
       } catch (error) {
         console.log("on connect error");
         this.$alert(error.message).then(() => {

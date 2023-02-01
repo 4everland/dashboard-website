@@ -12,6 +12,15 @@
           </div>
           <div class="mt-3 d-flex al-c">
             <v-btn
+              v-if="it.type == 1 && it.account"
+              color="primary"
+              small
+              min-width="75"
+              @click="onDisconnect(it)"
+              >Disconnect</v-btn
+            >
+            <v-btn
+              v-else
               color="primary"
               :disabled="!!it.account"
               small
@@ -32,7 +41,7 @@
 <script>
 import { mapState } from "vuex";
 import { providers } from "ethers";
-import { ConnectOkx } from "@/utils/login";
+import { ConnectOkx, ConnectPetra } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 fcl
   .config()
@@ -54,6 +63,7 @@ export default {
       phantomAddr: "",
       flowAddr: "",
       okxAddr: "",
+      petraAddr: "",
     };
   },
   computed: {
@@ -74,14 +84,6 @@ export default {
           type: 2,
           account: (info.wallet || {}).address,
         });
-      if (info.wallet?.walletType == "OKX" || noWallet)
-        wArr.push({
-          title: "OKX",
-          desc: "Get verified by connecting your OKX account.",
-          icon: "m-okx",
-          type: 7,
-          account: (info.wallet || {}).address,
-        });
       if (info.solana || info.wallet?.walletType == "PHANTOM" || noWallet)
         wArr.push({
           title: "Phantom",
@@ -89,6 +91,22 @@ export default {
           icon: "m-phantom",
           type: 4,
           account: (info.solana || {}).address,
+        });
+      if (info.wallet?.walletType == "PETRA" || noWallet)
+        wArr.push({
+          title: "Petra",
+          desc: "Get verified by connecting your Petra account.",
+          icon: "m-petra",
+          type: 8,
+          account: (info.wallet || {}).address,
+        });
+      if (info.wallet?.walletType == "OKX" || noWallet)
+        wArr.push({
+          title: "OKX",
+          desc: "Get verified by connecting your OKX account.",
+          icon: "m-okx",
+          type: 7,
+          account: (info.wallet || {}).address,
         });
       if (info.onFlow || info.wallet?.walletType == "ONFLOW" || noWallet)
         wArr.push({
@@ -146,6 +164,12 @@ export default {
       if (this.binding == 7 && val) {
         this.binding = null;
         this.verifyOkx();
+      }
+    },
+    petraAddr(val) {
+      if (this.binding == 8 && val) {
+        this.binding = null;
+        this.verifyPetra();
       }
     },
   },
@@ -245,6 +269,16 @@ export default {
         }
         return;
       }
+      if (it.type == 8) {
+        this.binding = 8;
+        if (!this.petraAddr) {
+          const currentUser = await this.connectPetra();
+          this.petraAddr = currentUser;
+        } else {
+          this.verifyPetra();
+        }
+        return;
+      }
       // if (it.type != 1) return this.$toast("todo");
       try {
         let apply = "";
@@ -293,6 +327,33 @@ export default {
         console.log(error);
       }
     },
+    async onUnbind(it) {
+      const type = it.type;
+      const { data } = await this.$http.post(`$auth/unbind`, {
+        type,
+      });
+      console.log(data);
+      this.$toast("Disconnect" + item.title + " successfully");
+    },
+    async onDisconnect(it) {
+      const info = this.userInfo;
+      if (info.wallet) {
+        this.$confirm(
+          "You are about to unbind a GitHub account. After then, the projects in Hosting will no longer be updated and maintained, and you won't be able to access the dashboard via GitHub. Please confirm before proceeding.",
+          "Disconnect Github",
+          {
+            confirmText: "OK",
+          }
+        ).then(() => {
+          this.onUnbind(it);
+        });
+      } else {
+        this.$alert(
+          "Failed to unbind a GitHub account, please try again after binding any wallet address.",
+          "Alert"
+        );
+      }
+    },
     async exchangeCode(type) {
       let apply = this.connectAddr;
       if (type == 4) {
@@ -304,6 +365,10 @@ export default {
       if (type == 7) {
         apply = this.okxAddr;
       }
+      if (type == 8) {
+        apply = this.petraAddr;
+      }
+
       const { data } = await this.$http.post(`$auth/bind`, {
         type,
         apply,
@@ -398,6 +463,27 @@ export default {
         this.$loading.close();
         if (sig) {
           this.onVcode(7, sig);
+        }
+      } catch (error) {
+        this.$alert(error.message);
+      }
+    },
+    async connectPetra() {
+      const account = await ConnectPetra();
+      return account;
+    },
+    async verifyPetra() {
+      try {
+        this.$loading();
+        const nonce = await this.exchangeCode(8);
+        const { signature } = await window.aptos.signMessage({
+          nonce,
+          message: nonce,
+        });
+        const sig = signature;
+        this.$loading.close();
+        if (sig) {
+          this.onVcode(8, sig);
         }
       } catch (error) {
         this.$alert(error.message);

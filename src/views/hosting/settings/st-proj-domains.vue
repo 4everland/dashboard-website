@@ -107,7 +107,9 @@
                   :class="it.valid ? 'color-suc' : 'red-1'"
                 >
                   {{
-                    it.valid ? "Valid Configuration" : "Invalid Configuration"
+                    it.valid
+                      ? "Valid Configuration"
+                      : it.errMsg || "Invalid Configuration"
                   }}
                 </span>
                 <template v-if="it.redirectName && it.valid">
@@ -438,6 +440,7 @@ export default {
         if (!data.success && data.conflicts) {
           this.$set(it, "conflicts", data.conflicts);
         }
+        this.$set(it, "errMsg", data.message);
       } catch (error) {
         //
       }

@@ -38,6 +38,7 @@
             :target="it.href ? '_blank' : ''"
             :style="it.btnStyle"
             class="ml-4"
+            :id="it.to == '/reward-hub' ? 'reward-guide' : null"
           >
             <img
               v-if="it.img"
@@ -86,7 +87,6 @@
 
 <script>
 import { mapState } from "vuex";
-
 export default {
   data() {
     return {};

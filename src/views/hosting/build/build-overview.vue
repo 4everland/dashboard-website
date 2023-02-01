@@ -38,12 +38,44 @@
             </v-col>
           </v-row>
 
-          <e-kv2 label="Domain" class="mt-7" :class="showLabel ? '' : 'op-0'">
+          <e-kv2
+            class="mt-7"
+            :label="info.platform"
+            style="min-width: 120px"
+            v-if="
+              (showLabel && info.platform !== 'IPFS') ||
+              (showLabel && !hashDeploy(info.deployType))
+            "
+          >
+            <div class="al-c" v-if="info.hash">
+              <e-link
+                class="fz-14"
+                :href="$utils.getCidLink(info.hash, info.platform)"
+              >
+                <span>{{ info.hash }}</span>
+              </e-link>
+              <img
+                src="/img/svg/copy.svg"
+                width="12"
+                class="ml-3 hover-1"
+                @success="$toast('Copied!')"
+                v-clipboard="info.hash"
+              />
+            </div>
+            <h-status
+              v-else
+              :val="state == 'failure' ? 'Not synchronized' : state"
+            ></h-status>
+          </e-kv2>
+          <e-kv2
+            label="Domain"
+            class="ml-auto mt-7"
+            :class="showLabel ? '' : 'op-0'"
+          >
             <e-link :href="'//' + info.domain">
               {{ info.domain }}
             </e-link>
           </e-kv2>
-
           <div class="mt-7 d-flex">
             <e-kv2 label="Branch" v-if="!hashDeploy(info.deployType)">
               <div class="d-flex al-c f-wrap">
@@ -65,9 +97,7 @@
                       )
                     "
                   >
-                    <span>{{
-                      transformIpfsPath(projInfo.ipfsPath).cutStr(4, 4)
-                    }}</span>
+                    <span>{{ transformIpfsPath(projInfo.ipfsPath) }}</span>
                   </e-link>
                   <img
                     src="/img/svg/copy.svg"
@@ -84,35 +114,6 @@
               </e-kv2>
               <e-kv2 label="Base IPNS" v-if="info.deployType == 'IPNS'"></e-kv2>
             </div>
-            <e-kv2
-              class="ml-auto"
-              :label="info.platform"
-              style="min-width: 120px"
-              v-if="
-                (showLabel && info.platform !== 'IPFS') ||
-                (showLabel && !hashDeploy(info.deployType))
-              "
-            >
-              <div class="al-c" v-if="info.hash">
-                <e-link
-                  class="fz-14"
-                  :href="$utils.getCidLink(info.hash, info.platform)"
-                >
-                  <span>{{ info.hash.cutStr(4, 4) }}</span>
-                </e-link>
-                <img
-                  src="/img/svg/copy.svg"
-                  width="12"
-                  class="ml-3 hover-1"
-                  @success="$toast('Copied!')"
-                  v-clipboard="info.hash"
-                />
-              </div>
-              <h-status
-                v-else
-                :val="state == 'failure' ? 'Not synchronized' : state"
-              ></h-status>
-            </e-kv2>
           </div>
         </v-col>
         <v-col cols="12" md="3">
@@ -142,7 +143,10 @@
             </e-menu>
             <div class="flex-1 ml-5 pr-4">
               <div
-                v-if="!info.cli && !hashDeploy(info.deployType)"
+                v-if="
+                  (!info.cli && !hashDeploy(info.deployType)) ||
+                  (!info.cli && info.state == 'FAILURE')
+                "
                 class="mb-5"
               >
                 <v-btn
@@ -275,10 +279,18 @@ export default {
         this.deploying = true;
         await this.$store.dispatch("getProjectInfo", id);
 
-        const { data } = await this.$http2.post(
-          `/project/${this.info.taskId}/redeploy`
-        );
-        this.$router.replace(`/hosting/build/${projName}/${id}/${data.taskId}`);
+        if (this.info.deployType == "CID" || this.info.deployType == "IPNS") {
+          await this.$http2.post(`/project/task/cid/${id}/deploy/create`);
+          this.$router.replace("/hosting/projects");
+        } else {
+          const { data } = await this.$http2.post(
+            `/project/${this.info.taskId}/redeploy`
+          );
+          this.$router.replace(
+            `/hosting/build/${projName}/${id}/${data.taskId}`
+          );
+        }
+
         setTimeout(() => {
           location.reload();
         }, 800);

@@ -52,6 +52,7 @@ export default {
   data() {
     return {
       amount: "",
+      needCheckApprove: true,
     };
   },
   computed: {

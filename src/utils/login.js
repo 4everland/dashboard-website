@@ -177,3 +177,38 @@ export const SignFlow = async (accounts, nonce, inviteCode) => {
     return false;
   }
 };
+
+export const ConnectPetra = async () => {
+  if (!window.aptos) {
+    Vue.prototype.$Dialog.getnoWallet("petra");
+    return;
+  }
+
+  try {
+    const { address } = await window.aptos.connect();
+    return address;
+  } catch (error) {
+    // { code: 4001, message: "User rejected the request."}
+  }
+};
+
+export const SignPetra = async (account, nonce, inviteCode) => {
+  try {
+    const { signature } = await window.aptos.signMessage({
+      nonce,
+      message: nonce,
+    });
+    const data = {
+      signature,
+      appName: "BUCKET",
+      inviteCode,
+      type: "NACL",
+      walletType: "PETRA",
+    };
+    const stoken = await Web3Login(account, data);
+    return stoken;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};

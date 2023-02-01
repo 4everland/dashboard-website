@@ -1,67 +1,69 @@
 <template>
   <v-row>
     <v-col style="min-width: 200px" v-for="(it, i) in usageList" :key="i">
-      <v-card style="min-width: 120px">
-        <div class="pa-1" v-if="it.loading">
-          <v-skeleton-loader type="article" />
-        </div>
-        <div
-          class="ov-wrap-1 pos-r"
-          :class="{
-            'pb-6': it.isBalance,
-          }"
-          v-else
-        >
-          <img
-            v-if="it.icon"
-            :src="`/img/svg/overview/${it.icon}`"
-            :style="it.iconStyle || 'width: 24px'"
-            class="pos-a top-0 right-0 mt-3 mr-3"
-          />
-          <div class="d-flex al-end lh-1">
-            <span class="purple-1 fz-22">{{ it.num }}</span>
-            <span class="fz-12 ml-2">
-              {{ it.unitTxt }}
-            </span>
+      <div :id="it.isBalance ? 'resourse-guide' : null">
+        <v-card style="min-width: 120px">
+          <div class="pa-1" v-if="it.loading">
+            <v-skeleton-loader type="article" />
           </div>
-          <p class="mt-3 fz-14 gray-8">{{ it.label }}</p>
           <div
-            class="al-c fz-13 gray"
-            :style="{
-              marginTop: it.isBalance ? '11px' : '12px',
+            class="ov-wrap-1 pos-r"
+            :class="{
+              'pb-6': it.isBalance,
             }"
+            v-else
           >
-            <template v-if="it.isBalance">
-              <v-btn
-                color="primary"
-                small
-                class="pl-2 pr-2"
-                to="/resource/subscribe"
-                >Purchase</v-btn
-              >
-              <v-btn
-                outlined
-                small
-                class="pl-2 pr-2 ml-4"
-                to="/resource/deposit"
-                >Deposit</v-btn
-              >
-              <!-- <span>Airdropped</span>
+            <img
+              v-if="it.icon"
+              :src="`/img/svg/overview/${it.icon}`"
+              :style="it.iconStyle || 'width: 24px'"
+              class="pos-a top-0 right-0 mt-3 mr-3"
+            />
+            <div class="d-flex al-end lh-1">
+              <span class="purple-1 fz-22">{{ it.num }}</span>
+              <span class="fz-12 ml-2">
+                {{ it.unitTxt }}
+              </span>
+            </div>
+            <p class="mt-3 fz-14 gray-8">{{ it.label }}</p>
+            <div
+              class="al-c fz-13 gray"
+              :style="{
+                marginTop: it.isBalance ? '11px' : '12px',
+              }"
+            >
+              <template v-if="it.isBalance">
+                <v-btn
+                  color="primary"
+                  small
+                  class="pl-2 pr-2"
+                  to="/resource/subscribe"
+                  >Purchase</v-btn
+                >
+                <v-btn
+                  outlined
+                  small
+                  class="pl-2 pr-2 ml-4"
+                  to="/resource/deposit"
+                  >Deposit</v-btn
+                >
+                <!-- <span>Airdropped</span>
               <b class="link ml-1">{{ accoutInfo.freeOrder || 0 }}</b>
               <span class="ml-auto">Purchased</span>
               <b class="link ml-1">{{ accoutInfo.paidOrder || 0 }}</b> -->
-            </template>
-            <template v-else>
-              <v-progress-linear
-                :color="it.color || 'primary'"
-                :value="it.perc || 0"
-                height="6"
-              ></v-progress-linear>
-              <span class="ml-3 fz-14"> {{ it.perc }}% </span>
-            </template>
+              </template>
+              <template v-else>
+                <v-progress-linear
+                  :color="it.color || 'primary'"
+                  :value="it.perc || 0"
+                  height="6"
+                ></v-progress-linear>
+                <span class="ml-3 fz-14"> {{ it.perc }}% </span>
+              </template>
+            </div>
           </div>
-        </div>
-      </v-card>
+        </v-card>
+      </div>
     </v-col>
   </v-row>
 </template>
