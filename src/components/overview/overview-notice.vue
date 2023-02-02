@@ -106,6 +106,7 @@ export default {
         //   type: "SWITCH_TO_MEMBER",
         // },
       ],
+      alert: false,
     };
   },
   created() {
@@ -136,10 +137,7 @@ export default {
     async getList() {
       try {
         const { data } = await this.$http2.get("$auth/broadcast", { noTip: 1 });
-        console.log(data);
-
         const historyNoticeList = JSON.parse(localStorage.getItem("notice"));
-
         this.noticeList = historyNoticeList
           ? historyNoticeList.concat(data.list)
           : data.list;
@@ -148,9 +146,15 @@ export default {
         );
         console.log(EmailJoinSuccess);
         if (EmailJoinSuccess != -1) {
-          this.$alert(
+          await this.$alert(
             "You have successfully joined the following collaboration accounts"
           );
+          this.$setMsg({
+            name: "joinTeam",
+            data: {
+              tip: this.alert, // true or false
+            },
+          });
         }
         const normalNoticeList = this.noticeList.filter(
           (it) => it.type == "NORMAL" && it.type == "REMOVED_BY_TEAM_MANAGER"
@@ -177,18 +181,9 @@ export default {
             accept,
           }
         );
+        this.alert = data.team.alert;
+        await this.getList();
         this.$loading.close();
-
-        console.log(data);
-        let html = `You have successfully joined the following collaboration accounts
-        ${data.team.teamName}`;
-        await this.$alert(html, "Alert");
-        this.$setMsg({
-          name: "joinTeam",
-          data: {
-            tip: data.team.alert, // true or false
-          },
-        });
         this.noticeList = this.noticeList.filter((it) => it.id != id);
       } catch (error) {
         this.$loading.close();

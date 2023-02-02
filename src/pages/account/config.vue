@@ -20,6 +20,7 @@
           width="120px"
           class="ml-5"
           tile
+          :disabled="!teamName"
           @click="handleSave"
           >Save</v-btn
         >
