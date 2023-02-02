@@ -252,7 +252,7 @@ export default {
       const list = this.bucketInfo.originList
         .concat(this.domains)
         .map((origin) => {
-          return origin + "/" + escape(Key);
+          return encodeURI(origin + "/" + Key);
         });
       if (!list.length) list.push(this.fileInfo.url);
       return list;
