@@ -84,7 +84,7 @@ const menuMap = {
         to: "/account/config",
       },
     ];
-    if (target != "me") {
+    if (target != "only") {
       subs.unshift({
         label: "Member Manager",
         to: "/account/member",
@@ -102,32 +102,6 @@ const menuMap = {
       group: /^\/account/i,
       subs,
     };
-  },
-  MEMBER_ALL: {
-    label: "Collaboration",
-    img: "m-team",
-    group: /^\/account/i,
-    subs: [
-      {
-        label: "Member Manager",
-        to: "/account/member",
-      },
-      {
-        label: "Account Configuration",
-        to: "/account/config",
-      },
-    ],
-  },
-  MEMBER_ME: {
-    label: "Collaboration",
-    img: "m-team",
-    group: /^\/account/i,
-    subs: [
-      {
-        label: "Account Configuration",
-        to: "/account/config",
-      },
-    ],
   },
 };
 export default {
@@ -159,7 +133,7 @@ export default {
           }
           list.push(item);
         } else if (name == "MEMBER") {
-          list.push(item("me"));
+          list.push(item("only"));
         }
       }
       return list;
