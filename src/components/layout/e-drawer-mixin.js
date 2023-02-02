@@ -113,7 +113,7 @@ export default {
     }),
     ...mapGetters(["teamInfo"]),
     list() {
-      const { type } = this.teamInfo || {};
+      const { type, status } = this.teamInfo;
       const list = [
         {
           label: "Overview",
@@ -131,6 +131,12 @@ export default {
             if (type == "COLLABORATION") target = "invite";
             item = item(target);
           }
+          // item = { ...item };
+          // if (status == "DISABLED") {
+          //   (item.subs || []).forEach((it) => {
+          //     it.to = it;
+          //   });
+          // }
           list.push(item);
         } else if (name == "MEMBER") {
           list.push(item("only"));
@@ -141,9 +147,8 @@ export default {
   },
   methods: {
     inAccess(name) {
-      const { access, isOwner, status } = this.teamInfo;
+      const { access, isOwner } = this.teamInfo;
       if (isOwner) return true;
-      if (status == "DISABLED") return false;
       if (name == "BUCKET") return false;
       return (access || []).includes(name);
     },

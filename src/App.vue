@@ -15,7 +15,9 @@
       <v-main>
         <e-nav></e-nav>
         <div class="pa-5" style="height: calc(100% - 37.5px)">
+          <e-no-access v-if="isDisabled"></e-no-access>
           <e-wrap
+            v-else
             :class="meta.wrapCls || (meta.isTab ? 'pa-0' : 'main-wrap mb-12')"
           >
             <keep-alive>
@@ -35,7 +37,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import { airdropRequest } from "@/plugins/airDrop/api";
 export default {
   data() {
@@ -48,6 +50,7 @@ export default {
     ...mapState({
       allowNoLogin: (s) => s.allowNoLogin,
     }),
+    ...mapGetters(["teamInfo"]),
     meta() {
       return this.$route.meta || {};
     },
@@ -56,6 +59,12 @@ export default {
     },
     showGuide() {
       return !this.$vuetify.breakpoint.mdAndDown;
+    },
+    isDisabled() {
+      return (
+        this.teamInfo.status == "DISABLED" &&
+        !["/account/config"].includes(this.$route.path)
+      );
     },
   },
 
