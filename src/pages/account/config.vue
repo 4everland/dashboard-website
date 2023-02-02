@@ -52,10 +52,7 @@
       ></e-avatar>
       <input-upload @input="onInput" ref="uploadInput"></input-upload>
     </div>
-    <div
-      class="mt-5 config-item al-c"
-      v-if="teamInfo && teamInfo.type != 'INDIVIDUAL'"
-    >
+    <div class="mt-5 config-item al-c" v-if="teamInfo.isMember">
       <div style="width: 60%" class="mr-auto">
         <h3 class="fz-20">Exit collaboration</h3>
         <p class="fz-14 mb-6 mt-3 description">

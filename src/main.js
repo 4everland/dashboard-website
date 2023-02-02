@@ -172,6 +172,8 @@ new Vue({
       } = await this.$http.get("$auth/cooperation/teams");
       items.forEach((it) => {
         it.name = (it.teamName || it.teamId).cutStr(6, 4);
+        it.isOwner = it.type == "INDIVIDUAL";
+        it.isMember = it.type == "COLLABORATION";
       });
       let teamId = this.teamId;
       if (!items.find((it) => it.teamId == teamId)) {

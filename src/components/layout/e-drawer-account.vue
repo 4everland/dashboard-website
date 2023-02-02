@@ -19,7 +19,7 @@
     >
       <span class="mr-auto fz-14">{{ teamInfo.name }}</span>
       <v-chip label small color="primary" class="ev-n">
-        {{ teamInfo.type == "INDIVIDUAL" ? "Individual" : "Collaboration" }}
+        {{ teamInfo.isOwner ? "Individual" : "Collaboration" }}
       </v-chip>
       <img :src="`/img/svg/drawer/up-down.svg`" height="30" class="d-b" />
     </div>
@@ -84,11 +84,11 @@ export default {
       return [
         {
           title: "Individual account",
-          subs: list.filter((it) => it.type == "INDIVIDUAL"),
+          subs: list.filter((it) => it.isOwner),
         },
         {
           title: "Collaboration account",
-          subs: list.filter((it) => it.type == "COLLABORATION"),
+          subs: list.filter((it) => it.isMember),
         },
       ];
     },

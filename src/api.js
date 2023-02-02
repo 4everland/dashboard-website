@@ -114,7 +114,7 @@ const lock = new AsyncLock({ timeout: 5000 });
               );
               localStorage.authData = JSON.stringify(data);
               localStorage.token = data.accessToken;
-              if (teamInfo && teamInfo.type == "INDIVIDUAL") {
+              if (teamInfo.isOwner) {
                 token = localStorage.token;
               }
             }

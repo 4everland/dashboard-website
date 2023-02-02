@@ -141,8 +141,8 @@ export default {
   },
   methods: {
     inAccess(name) {
-      const { type, access } = this.teamInfo || {};
-      if (type == "INDIVIDUAL") return true;
+      const { access, isOwner } = this.teamInfo;
+      if (isOwner) return true;
       if (name == "BUCKET") return false;
       return (access || []).includes(name);
     },
