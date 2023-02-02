@@ -77,24 +77,31 @@ const menuMap = {
     active: false,
     group: /^\/resource/i,
   },
-  MEMBER: {
-    label: "Collaboration",
-    img: "m-team",
-    group: /^\/account/i,
-    subs: [
-      {
-        label: "Member Manager",
-        to: "/account/member",
-      },
+  MEMBER(target) {
+    const subs = [
       {
         label: "Account Configuration",
         to: "/account/config",
       },
-      {
+    ];
+    if (target != "me") {
+      subs.unshift({
+        label: "Member Manager",
+        to: "/account/member",
+      });
+    }
+    if (target == "all") {
+      subs.push({
         label: "Operation Logs",
         to: "/account/operation-log",
-      },
-    ],
+      });
+    }
+    return {
+      label: "Collaboration",
+      img: "m-team",
+      group: /^\/account/i,
+      subs,
+    };
   },
   MEMBER_ALL: {
     label: "Collaboration",
@@ -133,7 +140,6 @@ export default {
     ...mapGetters(["teamInfo"]),
     list() {
       const { type } = this.teamInfo || {};
-
       const list = [
         {
           label: "Overview",
@@ -144,14 +150,16 @@ export default {
       ];
       const nameArr = ["HOSTING", "BUCKET", "GATEWAY", "RESOURCE", "MEMBER"];
       for (const name of nameArr) {
+        let item = menuMap[name];
         if (this.inAccess(name)) {
-          if (name == "MEMBER" && type == "COLLABORATION") {
-            list.push(menuMap.MEMBER_ALL);
-          } else {
-            list.push(menuMap[name]);
+          let target = "all";
+          if (name == "MEMBER") {
+            if (type == "COLLABORATION") target = "invite";
+            item = item(target);
           }
+          list.push(item);
         } else if (name == "MEMBER") {
-          list.push(menuMap.MEMBER_ME);
+          list.push(item("me"));
         }
       }
       return list;
