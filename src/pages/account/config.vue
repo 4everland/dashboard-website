@@ -102,7 +102,6 @@ export default {
   },
   methods: {
     async initInfo() {
-      console.log(this.teamInfo);
       this.teamName = this.teamInfo.teamName;
       if (this.teamInfo.teamAvatar) {
         this.teamAvatar = this.teamInfo.teamAvatar;
@@ -138,6 +137,7 @@ export default {
         const { data } = await this.$http.post("$auth/media", formData);
         await this.$http.put("$auth/cooperation/teams", { teamAvatar: data });
         this.$setMsg("updateTeam");
+        await this.$toast("Save successfully");
       } catch (error) {
         console.log(error);
       }
@@ -147,11 +147,6 @@ export default {
       try {
         this.file = file[0];
         await this.getAvatarSrc(file[0]);
-        // this.teamAvatar = src;
-        // const data = { teamAvatar: this.teamAvatar };
-        // await this.$http.put("$auth/cooperation/teams", data);
-
-        // this.$setMsg({ name: "updateTeam" });
       } catch (error) {
         console.log(error);
       }
@@ -167,6 +162,7 @@ export default {
         await this.$http.put("$auth/cooperation/teams", data);
         this.$setMsg({ name: "updateTeam" });
         this.$loading.close();
+        await this.$toast("Save successfully");
       } catch (error) {
         console.log(error);
       }

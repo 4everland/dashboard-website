@@ -184,7 +184,7 @@ export default {
             inputAttrs: {
               label: "Email",
               rules: [
-                (v) => this.$regMap.email.test(v) || "Invalid email adress.",
+                (v) => this.$regMap.email.test(v) || "Invalid email address.",
               ],
               required: true,
             },

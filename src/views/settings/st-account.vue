@@ -289,9 +289,9 @@ export default {
             {
               confirmText: "Send",
               inputAttrs: {
-                label: `Your email adress`,
+                label: `Your email address`,
                 rules: [
-                  (v) => this.$regMap.email.test(v) || "Invalid email adress.",
+                  (v) => this.$regMap.email.test(v) || "Invalid email address.",
                 ],
                 required: true,
               },

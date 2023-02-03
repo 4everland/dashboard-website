@@ -23,7 +23,7 @@
             <v-text-field
               v-model="accBody.target"
               :placeholder="
-                accBody.type == 'EMAIL' ? 'Email adress' : 'Wallet address'
+                accBody.type == 'EMAIL' ? 'Email address' : 'Wallet address'
               "
               outlined
               dense
