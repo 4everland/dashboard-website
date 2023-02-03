@@ -94,6 +94,7 @@
               text
               color="primary"
               small
+              :disabled="item.status == 'PENDDING'"
               @click="onAccess(item.access, item.invitationId)"
               >Permission</v-btn
             >
