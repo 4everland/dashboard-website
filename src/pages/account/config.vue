@@ -91,7 +91,7 @@ export default {
     }),
     ...mapGetters(["teamInfo"]),
     hasAccess() {
-      if (this.teamInfo.type) {
+      if (this.teamInfo.type && this.teamInfo.status !== "DISABLED") {
         return (
           this.teamInfo.access.includes("MEMBER") ||
           this.teamInfo.type == "INDIVIDUAL"
