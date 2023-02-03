@@ -182,9 +182,7 @@ export default {
         const body = this.accBody;
         let msg = "";
         if (!body.target) msg = "Invalid Address";
-        else if (body.type == "WALLET" && !this.$regMap.eth.test(body.target)) {
-          msg = "Invalid wallet address";
-        } else if (
+        else if (
           body.type == "EMAIL" &&
           !this.$regMap.email.test(body.target)
         ) {
