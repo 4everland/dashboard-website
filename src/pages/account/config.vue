@@ -158,7 +158,6 @@ export default {
         };
         if (this.teamName == this.teamInfo.teamName) return;
         this.$loading();
-
         await this.$http.put("$auth/cooperation/teams", data);
         this.$setMsg({ name: "updateTeam" });
         this.$loading.close();
