@@ -152,11 +152,11 @@ export default {
           text: "Role",
           value: "role",
         },
-        {
-          text: "Note",
-          value: "note",
-          width: "20%",
-        },
+        // {
+        //   text: "Note",
+        //   value: "note",
+        //   width: "20%",
+        // },
         {
           text: "Status",
           value: "status",
@@ -242,6 +242,7 @@ export default {
       };
       if (act == "note") {
         const { value } = await this.$prompt("Enter note information", "Note", {
+          defaultValue: row.note,
           inputAttrs: {
             counter: true,
             maxlength: 100,
