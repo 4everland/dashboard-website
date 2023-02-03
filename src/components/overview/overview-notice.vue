@@ -144,17 +144,13 @@ export default {
         let EmailJoinSuccess = this.noticeList.findIndex(
           (it) => it.type == "SWITCH_TO_MEMBER"
         );
-        console.log(EmailJoinSuccess);
         if (EmailJoinSuccess != -1) {
           await this.$alert(
             "You have successfully joined the following collaboration accounts"
           );
-          this.$setMsg({
-            name: "joinTeam",
-            data: {
-              tip: this.alert, // true or false
-            },
-          });
+          if (this.alert) {
+            this.$setMsg("joinTeam");
+          }
         }
         const normalNoticeList = this.noticeList.filter(
           (it) => it.type == "NORMAL" && it.type == "REMOVED_BY_TEAM_MANAGER"
