@@ -153,6 +153,7 @@ export default {
         {
           text: "Note",
           value: "note",
+          width: "20%",
         },
         {
           text: "Status",
@@ -180,7 +181,9 @@ export default {
         const body = this.accBody;
         let msg = "";
         if (!body.target) msg = "Invalid Address";
-        else if (
+        else if (body.type == "WALLET" && !this.$regMap.eth.test(body.target)) {
+          msg = "Invalid wallet address";
+        } else if (
           body.type == "EMAIL" &&
           !this.$regMap.email.test(body.target)
         ) {
@@ -238,7 +241,14 @@ export default {
         invitationId: row.invitationId,
       };
       if (act == "note") {
-        const { value } = await this.$prompt("Enter note information", "Note");
+        const { value } = await this.$prompt("Enter note information", "Note", {
+          inputAttrs: {
+            counter: true,
+            maxlength: 100,
+            trim: true,
+            required: true,
+          },
+        });
         body.note = value;
       } else if (["DISABLE", "ENABLE", "REMOVE"].includes(act)) {
         let tip = "";
