@@ -9,7 +9,9 @@ export default [
   },
   {
     path: "/account/config",
-    component: () => import("./config"),
+    components: {
+      cache: () => import("./config"),
+    },
     meta: {
       title: "Account Configuration",
       isTab: 1,
