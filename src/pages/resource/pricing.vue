@@ -39,8 +39,8 @@
         <tr>
           <td>100GB</td>
           <td>250Min</td>
-          <td>6GB</td>
-          <td>100MB</td>
+          <td>6GB ~ 25GB</td>
+          <td>100MB ~ 200MB</td>
         </tr>
       </tbody>
     </table>
