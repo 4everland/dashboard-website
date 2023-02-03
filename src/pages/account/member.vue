@@ -150,7 +150,7 @@ export default {
         },
         {
           text: "Role",
-          value: "role",
+          value: "roleTxt",
         },
         // {
         //   text: "Note",
@@ -159,7 +159,7 @@ export default {
         // },
         {
           text: "Status",
-          value: "status",
+          value: "staTxt",
         },
         {
           text: "Action",
@@ -205,6 +205,9 @@ export default {
         console.log(error);
       }
     },
+    capTxt(txt) {
+      return (txt || "").toLowerCase().capitalize();
+    },
     async getList() {
       try {
         this.listLoading = true;
@@ -212,6 +215,8 @@ export default {
         this.list = data.items.map((it) => {
           it.name = it.targetName.cutStr(6, 4);
           if (it.invitationStatus) it.status = it.invitationStatus;
+          it.roleTxt = this.capTxt(it.role);
+          it.staTxt = this.capTxt(it.status);
           return it;
         });
       } catch (error) {
