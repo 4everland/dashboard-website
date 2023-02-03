@@ -121,7 +121,7 @@ export default {
     },
     uname() {
       const info = this.userInfo;
-      if (this.teamInfo) return "Overview of " + this.teamInfo.name;
+      if (this.teamInfo.name) return "Overview of " + this.teamInfo.name;
       if (info.username) return "Hi " + info.username.cutStr(6, 4);
       return "Overview";
     },
