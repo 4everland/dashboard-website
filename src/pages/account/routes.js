@@ -13,7 +13,7 @@ export default [
       cache: () => import("./config"),
     },
     meta: {
-      title: "Account Configuration",
+      title: "Collaborative account configuration",
       isTab: 1,
     },
   },
@@ -21,7 +21,7 @@ export default [
     path: "/account/operation-log",
     component: () => import("./operation-log"),
     meta: {
-      title: "Operation Log",
+      title: "Operation log of collaborative account",
     },
   },
 ];

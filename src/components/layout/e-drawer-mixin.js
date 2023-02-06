@@ -92,7 +92,7 @@ const menuMap = {
     }
     if (target == "all") {
       subs.push({
-        label: "Operation Logs",
+        label: "Operation Log",
         to: "/account/operation-log",
       });
     }
