@@ -3,7 +3,7 @@ export default [
     path: "/account/member",
     component: () => import("./member"),
     meta: {
-      title: "Member Manager",
+      title: "Member Management",
       isTab: 1,
     },
   },

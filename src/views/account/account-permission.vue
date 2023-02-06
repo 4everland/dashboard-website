@@ -30,7 +30,8 @@
     </div>
     <div class="el-label-1 fz-14 m-auto" style="max-width: 500px">
       Based on the corresponding permissions, the Hosting and Gateway functions
-      are viewable or not viewable at all.
+      are viewable or not viewable at all. Hosting and Bucket functions'
+      viewability is based on the corresponding permissions.
     </div>
     <div class="ta-c mt-5">
       <v-btn
@@ -60,9 +61,9 @@ export default {
           type: "HOSTING",
           subs: [
             "GitHub repository",
-            "Project manager",
+            "Project management",
             "Project deployment",
-            "Project deployment",
+            "CDN management",
             "Auth Tokens",
           ],
         },
@@ -72,8 +73,8 @@ export default {
           subs: [
             "Create the gateway",
             "Manage the gateway",
-            "IPNS Manager",
-            "IPNS API Key",
+            // "IPNS Manager",
+            // "IPNS API Key",
           ],
         },
         {
@@ -87,11 +88,11 @@ export default {
           ],
         },
         {
-          title: "Member Manager",
+          title: "Member Management",
           type: "MEMBER",
           subs: [
             "Collaboration invitation",
-            "Member manager",
+            "Member Management",
             "Account configuration",
           ],
         },

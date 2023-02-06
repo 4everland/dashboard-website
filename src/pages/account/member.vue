@@ -9,7 +9,7 @@
       </div>
       <v-row class="mt-3">
         <v-col cols="12" md="7">
-          <h4>Address</h4>
+          <h4>Account Address</h4>
           <div class="al-c">
             <v-select
               :items="typeItems"
@@ -35,7 +35,7 @@
           <h4>Permission</h4>
           <div>
             <v-text-field
-              placeholder="Select Permission"
+              placeholder="Permission configuration"
               outlined
               dense
               readonly
@@ -189,10 +189,12 @@ export default {
         ) {
           msg = "Invalid email address";
         } else if (!body.access.length) {
-          msg = "No permission selected.";
+          msg =
+            "Permissions are not configured, unable to invite, please configure and retry.";
         }
         if (msg) {
-          return this.$toast(msg);
+          this.$toast(msg);
+          return;
         }
         this.$loading();
         await this.$http.post("$auth/cooperation/invitations", {
@@ -206,6 +208,7 @@ export default {
       }
     },
     capTxt(txt) {
+      if (/pending/i.test(txt)) return "Pending verification";
       return (txt || "").toLowerCase().capitalize();
     },
     async getList() {

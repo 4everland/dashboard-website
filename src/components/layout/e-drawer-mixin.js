@@ -86,7 +86,7 @@ const menuMap = {
     ];
     if (target != "only") {
       subs.unshift({
-        label: "Member Manager",
+        label: "Member Management",
         to: "/account/member",
       });
     }
