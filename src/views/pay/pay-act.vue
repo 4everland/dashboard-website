@@ -25,8 +25,14 @@
             <span class="gray-6 ml-3">USDC</span>
           </div>
           <div class="mt-6 al-c">
-            <v-btn color="primary" to="/resource/subscribe">Purchase</v-btn>
-            <v-btn color="primary" outlined class="ml-4" to="/resource/deposit"
+            <v-btn color="primary" @click="onAct('/resource/subscribe')"
+              >Purchase</v-btn
+            >
+            <v-btn
+              color="primary"
+              outlined
+              class="ml-4"
+              @click="onAct('/resource/deposit')"
               >Deposit</v-btn
             >
             <v-btn
@@ -34,6 +40,7 @@
               color="#0B0817"
               class="ml-2 operation"
               to="/resource/withdraw"
+              :disabled="teamInfo.isMember"
             >
               Withdraw
             </v-btn>
@@ -175,6 +182,8 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -210,6 +219,10 @@ export default {
     },
   },
   computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
+    ...mapGetters(["teamInfo"]),
     isChanged() {
       let res = false;
       for (const it of this.autoList) {
@@ -226,6 +239,14 @@ export default {
     // }, 5000);
   },
   methods: {
+    onAct(to) {
+      if (this.teamInfo.isMember && !this.userInfo.wallet) {
+        return this.$alert(
+          "The Owner account is not bound to a wallet and is not available for use at this time. Please try again after binding a wallet."
+        );
+      }
+      this.$router.push(to);
+    },
     async getBalance() {
       const {
         data: { balance },
