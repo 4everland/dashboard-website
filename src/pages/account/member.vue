@@ -202,6 +202,7 @@ export default {
         });
         this.$loading.close();
         this.accBody.target = "";
+        this.accBody.access = [];
         this.getList();
       } catch (error) {
         console.log(error);
