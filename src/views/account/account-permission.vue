@@ -73,8 +73,8 @@ export default {
           subs: [
             "Create the gateway",
             "Manage the gateway",
-            // "IPNS Manager",
-            // "IPNS API Key",
+            "IPNS management",
+            "IPNS API Key",
           ],
         },
         {

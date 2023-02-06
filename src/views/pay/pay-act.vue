@@ -240,7 +240,7 @@ export default {
   },
   methods: {
     onAct(to) {
-      if (this.teamInfo.isMember && !this.userInfo.wallet) {
+      if (this.teamInfo.isMember && !this.teamInfo.teamOwnerWallet) {
         return this.$alert(
           "The Owner account is not bound to a wallet and is not available for use at this time. Please try again after binding a wallet."
         );
