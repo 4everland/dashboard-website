@@ -56,7 +56,6 @@ export default [
           text: "{name}",
         },
       ],
-      isTab: 1,
     },
   },
   {
@@ -66,6 +65,14 @@ export default [
       title: "Access-Keys",
       isTab: 1,
       subTitle: "Use the API key for Storage SDK",
+    },
+  },
+  {
+    path: "/pinning-service",
+    component: () => import("./pinning-service"),
+    meta: {
+      title: "Pinning-Service",
+      // isTab: 1,
     },
   },
 ].map((it) => {

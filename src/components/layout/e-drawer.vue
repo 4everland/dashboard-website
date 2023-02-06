@@ -256,6 +256,10 @@ export default {
               to: "/bucket/storage/",
             },
             {
+              label: "Pinning Service",
+              to: "/bucket/pinning-service",
+            },
+            {
               label: "AR History",
               to: "/bucket/arweave",
             },
