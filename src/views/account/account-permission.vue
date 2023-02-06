@@ -35,7 +35,7 @@
     <div class="ta-c mt-5">
       <v-btn
         color="primary"
-        :disabled="!val.length"
+        :disabled="saveDisabled"
         width="150px"
         @click="$emit('save')"
         class="mr-5"
@@ -97,6 +97,11 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    saveDisabled() {
+      return this.list.filter((it) => this.val.includes(it.type)).length == 0;
+    },
   },
   watch: {
     value(val) {
