@@ -2,13 +2,7 @@
   <div v-if="isRender">
     <e-date-range class="mb-3" val="24h" @dates="onDates"></e-date-range>
     <v-row v-if="dates">
-      <v-col
-        class="mb-10"
-        cols="12"
-        md="6"
-        v-for="(it, i) in chartList"
-        :key="i"
-      >
+      <v-col class="mb-10" cols="12" v-for="(it, i) in chartList" :key="i">
         <statis-chart
           :reloadAt="reloadAt"
           :appId="appId"
@@ -19,9 +13,9 @@
       </v-col>
     </v-row>
 
-    <h4 class="mb-2">Retention Rate</h4>
-    <v-skeleton-loader type="article" v-if="tableLoading"></v-skeleton-loader>
-    <statis-table :list="tableList" v-else></statis-table>
+    <!-- <h4 class="mb-2">Retention Rate</h4>
+    <v-skeleton-loader type="article" v-if="tableLoading"></v-skeleton-loader> -->
+    <!-- <statis-table :list="tableList" v-else></statis-table> -->
   </div>
 </template>
 
@@ -40,11 +34,11 @@ export default {
     return {
       dates: null,
       chartList: [
-        {
-          title: "Total Users",
-          type: "TOTAL_USERS",
-        },
-        { title: "New Users", type: "NEW_USERS" },
+        // {
+        //   title: "Total Users",
+        //   type: "TOTAL_USERS",
+        // },
+        // { title: "New Users", type: "NEW_USERS" },
         {
           title: "Unique Visitor",
           type: "UNIQUE_VISITOR",

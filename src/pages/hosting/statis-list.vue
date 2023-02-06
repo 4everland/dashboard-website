@@ -34,7 +34,7 @@
         <table class="right-con ml-auto">
           <tr>
             <td></td>
-            <td>New Users</td>
+            <!-- <td>New Users</td> -->
             <td>Unique Visitors</td>
             <td>Page Views</td>
           </tr>
@@ -67,19 +67,19 @@
         <table class="right-con fz-14 ml-auto">
           <tr v-if="asMobile">
             <td></td>
-            <td>New Users</td>
+            <!-- <td>New Users</td> -->
             <td>UV</td>
             <td>PV</td>
           </tr>
           <tr>
             <td class="gray-6">Yesterday</td>
-            <td>{{ it.yesterdayNewUser }}</td>
+            <!-- <td>{{ it.yesterdayNewUser }}</td> -->
             <td>{{ it.yesterdayUv }}</td>
             <td>{{ it.yesterdayPv }}</td>
           </tr>
           <tr>
             <td class="gray-6">Today</td>
-            <td>{{ it.todayNewUser }}</td>
+            <!-- <td>{{ it.todayNewUser }}</td> -->
             <td>{{ it.todayUv }}</td>
             <td>{{ it.todayPv }}</td>
           </tr>
