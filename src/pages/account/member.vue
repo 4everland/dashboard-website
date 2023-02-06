@@ -258,9 +258,16 @@ export default {
         body.note = value;
       } else if (["DISABLE", "ENABLE", "REMOVE"].includes(act)) {
         let tip = "";
-        if (act == "REMOVE")
-          tip = `Are you sure to remove this member(${row.targetName}) ?`;
-        if (tip && !opts.noTip) await this.$confirm(tip);
+        if (act == "DISABLE")
+          tip =
+            "Disable or remove the collaboration permission for the following users?";
+        else if (act == "REMOVE")
+          tip = `Remove the following users from the collaboration account？`;
+        if (tip && !opts.noTip) {
+          tip +=
+            '<p class="mt-5 warn-1">' + row.targetName.cutStr(6, 4) + "</p>";
+          await this.$confirm(tip);
+        }
         body.status = act;
       }
       this.setMember(body);
