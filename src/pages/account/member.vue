@@ -236,10 +236,13 @@ export default {
         this.$loading();
         for (const row of this.list) {
           if (row.role == "OWNER") continue;
-          await this.onAct(row, "REMOVE", {
-            noTip: true,
+          await this.saveMember({
+            invitationId: row.invitationId,
+            disband: true,
+            status: "REMOVE",
           });
         }
+        this.$loading.close();
         this.getList();
       } catch (error) {
         console.log(error);
@@ -248,6 +251,7 @@ export default {
     async onAct(row, act, opts = {}) {
       const body = {
         invitationId: row.invitationId,
+        ...opts.body,
       };
       if (act == "note") {
         const { value } = await this.$prompt("Enter note information", "Note", {
@@ -276,11 +280,14 @@ export default {
       }
       this.setMember(body);
     },
+    saveMember(body) {
+      return this.$http.put("$auth/cooperation/member", body);
+    },
     async setMember(body) {
       console.log(body);
       try {
         this.$loading();
-        await this.$http.put("$auth/cooperation/member", body);
+        await this.saveMember(body);
         this.$loading.close();
         this.getList();
       } catch (error) {
