@@ -28,6 +28,10 @@ export default {
     },
     value: Array,
     disabled: Boolean,
+    supportReapt: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -112,15 +116,18 @@ export default {
         if (this.limit && this.files.length >= this.limit) break;
         // if (!/image/.test(file.type)) continue;
         // if (!file.type) continue;
-        const isRepeat =
-          this.files.filter((it) => {
-            return (
-              it.name == file.name &&
-              it.size == file.size &&
-              it.lastModified == file.lastModified
-            );
-          }).length > 0;
-        if (isRepeat) continue;
+        if (!this.supportReapt) {
+          const isRepeat =
+            this.files.filter((it) => {
+              return (
+                it.name == file.name &&
+                it.size == file.size &&
+                it.lastModified == file.lastModified
+              );
+            }).length > 0;
+          if (isRepeat) continue;
+        }
+
         file.id = this.genID(8);
         // console.log(file);
         // if (file.name !== ".DS_Store") {

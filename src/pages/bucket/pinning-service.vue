@@ -12,6 +12,7 @@
             solo
             :items="items"
             v-model="state"
+            @change="handleChange"
           />
         </v-col>
         <v-col :md="5">
@@ -28,6 +29,7 @@
       </v-row>
     </e-right-opt-wrap>
     <div>
+      <pinning-service-upload></pinning-service-upload>
       <v-data-table
         class="hide-bdb"
         :headers="headers"
@@ -40,6 +42,9 @@
       >
         <template v-slot:item.name="{ item }">
           <span>{{ item.name.cutStr(20, 10) }}</span>
+        </template>
+        <template v-slot:item.hash="{ item }">
+          <span>{{ item.hash.cutStr(20, 10) }}</span>
         </template>
         <template #item.action="{ item }">
           <v-btn color="primary" text @click="handleDelete(item)">delete</v-btn>
@@ -66,7 +71,6 @@
         </div>
         <div class="mt-6 ta-c">
           <v-btn color="primary" @click="resetAccessToken">Reset</v-btn>
-
           <v-btn color="primary" @click="showPop = false">Done</v-btn>
         </div>
       </div>
@@ -75,7 +79,11 @@
 </template>
 
 <script>
+import PinningServiceUpload from "@/views/bucket/components/pinning-service-upload.vue";
 export default {
+  components: {
+    PinningServiceUpload,
+  },
   data() {
     return {
       state: 1,
@@ -96,7 +104,7 @@ export default {
         { text: "IPFS CID", value: "hash" },
         { text: "Last Modified", value: "updateAt" },
         { text: "Pin Status", value: "status" },
-        { text: "Action", value: "action" },
+        { text: "Action", value: "action", align: "center" },
       ],
       list: [
         {
@@ -130,8 +138,9 @@ export default {
       ],
     };
   },
-  created() {
-    // this.getList()
+  async created() {
+    // await this.getAccessToken()
+    // await this.getList()
   },
   methods: {
     handleInput() {
@@ -139,14 +148,23 @@ export default {
     },
     async getList() {
       try {
-        //do something
+        const { data } = await this.$http.get("$pinning-service/pins", {
+          headers: {
+            Authorization: "Bearer " + this.accessToken,
+          },
+        });
+        console.log(data);
       } catch (error) {
         console.log(error);
       }
     },
-    async handleDelete() {
+    async handleDelete(item) {
       try {
-        //do something
+        await this.$http.delete(`$pinning-service/pins/${item.requestId}`, {
+          headers: {
+            Authorization: "Bearer " + this.accessToken,
+          },
+        });
       } catch (error) {
         console.log(error);
       }
@@ -170,6 +188,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async handleChange(val) {
+      console.log(val);
     },
   },
 };

@@ -95,25 +95,74 @@
             </v-list-item-content>
           </template>
 
-          <v-list-item
-            :ref="i + '-' + j"
-            class="sub"
-            active-class="active-item"
-            :class="{
-              'v-list-item--active': sub.matPath && sub.matPath.test(path),
-            }"
-            :to="sub.to"
-            :href="sub.href"
-            :target="sub.href ? '_blank' : ''"
-            v-for="(sub, j) in it.subs"
-            :key="j"
-          >
-            <v-list-item-content>
-              <v-list-item-title>
-                <span class="fz-14"> {{ sub.label }}</span>
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+          <template v-for="(sub, j) in it.subs">
+            <v-list-group
+              v-if="sub.subs"
+              :ref="i + '-' + j"
+              @input="Toggle(j, $event)"
+              :key="j"
+              sub-group
+              no-action
+              :value="true"
+            >
+              <template v-slot:activator>
+                <div class="ml-2"></div>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <b class="fz-14 fw-n">{{ sub.label }}</b>
+                    <img
+                      v-if="sub.suffixImg"
+                      class="ml-2"
+                      width="25"
+                      :src="sub.suffixImg"
+                      alt=""
+                    />
+                  </v-list-item-title>
+                  <!--  -->
+                </v-list-item-content>
+              </template>
+              <v-list-item
+                :ref="i + '-' + j + '-' + k"
+                class="sub"
+                active-class="active-item"
+                :class="{
+                  'v-list-item--active':
+                    secondSub.matPath && secondSub.matPath.test(path),
+                }"
+                :to="secondSub.to"
+                :href="secondSub.href"
+                :target="secondSub.href ? '_blank' : ''"
+                v-for="(secondSub, k) in sub.subs"
+                :key="k"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <span class="fz-14">{{ secondSub.label }}</span>
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+
+            <v-list-item
+              v-else
+              :ref="i + '-' + j"
+              class="sub"
+              active-class="active-item"
+              :class="{
+                'v-list-item--active': sub.matPath && sub.matPath.test(path),
+              }"
+              :to="sub.to"
+              :href="sub.href"
+              :target="sub.href ? '_blank' : ''"
+              :key="j"
+            >
+              <v-list-item-content>
+                <v-list-item-title>
+                  <span class="fz-14"> {{ sub.label }}</span>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
         </v-list-group>
 
         <v-list-item
@@ -240,37 +289,39 @@ export default {
           ],
         },
         {
-          label: "Bucket",
+          label: "Storage",
           img: "m-bucket",
           active: false,
           group: /^\/bucket/i,
           subs: [
-            // {
-            //   label: "Buckets",
-            //   to: this.path.includes(initFilePath)
-            //     ? initFilePath
-            //     : this.filesPath,
-            // },
             {
               label: "Buckets",
-              to: "/bucket/storage/",
+              active: false,
+              group:
+                /^(\/bucket\/storage|\/bucket\/arweave|\/bucket\/domains)/i,
+              subs: [
+                {
+                  label: "Buckets(s3)",
+                  to: "/bucket/storage/",
+                },
+                {
+                  label: "AR History",
+                  to: "/bucket/arweave",
+                },
+                {
+                  label: "Domains",
+                  to: "/bucket/domains",
+                  matPath: /bucket\/domain/,
+                },
+                {
+                  label: "Access Keys",
+                  to: "/bucket/access-keys",
+                },
+              ],
             },
             {
               label: "Pinning Service",
               to: "/bucket/pinning-service",
-            },
-            {
-              label: "AR History",
-              to: "/bucket/arweave",
-            },
-            {
-              label: "Domains",
-              to: "/bucket/domains",
-              matPath: /bucket\/domain/,
-            },
-            {
-              label: "Access Keys",
-              to: "/bucket/access-keys",
             },
           ],
         },
@@ -334,6 +385,7 @@ export default {
   },
   methods: {
     Toggle(i, open) {
+      console.log(i, open);
       if (this.guideActived) {
         return false;
       }
@@ -342,7 +394,15 @@ export default {
     onToggle(i, open) {
       if (!open) return;
       if (this.list[i].group.test(this.path)) return;
-      this.$refs[i + "-0"][0].$el.click();
+      if (i == 2) {
+        setTimeout(() => {
+          this.$refs["2-0"][0].$children[0].$el.click();
+          this.$refs["2-0"][0].$children[1].$el.click();
+        }, 300);
+        // this.$refs["2-0"][0].$children[0].click();
+      } else {
+        this.$refs[i + "-0"][0].$el.click();
+      }
     },
   },
 };
