@@ -197,6 +197,34 @@ export default {
         it.desc = `Redeemed a Resource Voucher`;
         it.path = "Resource Billing";
         it.link = "/resource/bills";
+      } else if (act == "OAUTH_UPDATE_TEAM_NAME") {
+        if (obj.type == "name") {
+          it.desc = `Changed the name of the collaboration account to ${obj.name}`;
+        } else {
+          it.desc = "Changed the picture of the collaboration account";
+        }
+        it.path = "Account Configuration";
+        it.link = "/account/config";
+      } else if (act == "OAUTH_EXIT_TEAM") {
+        it.desc = `Logging out of the collaborative account`;
+        it.path = "Member Management";
+        it.link = "/account/member";
+      } else if (act == "OAUTH_DISABLE_MEMBER") {
+        it.desc = `Disabled collaboration permissions for ${obj.name}`;
+        it.path = "Member Management";
+        it.link = "/account/member";
+      } else if (act == "OAUTH_UPDATE_MEMBER_ACCESS") {
+        it.desc = `Changed collaboration permissions for ${obj.name}`;
+        it.path = "Member Management";
+        it.link = "/account/member";
+      } else if (act == "OAUTH_ENABLE_MEMBER") {
+        it.desc = `Unblocked collaboration permissions for ${obj.name}`;
+        it.path = "Member Management";
+        it.link = "/account/member";
+      } else if (act == "OAUTH_REMOVE_MEMBER") {
+        it.desc = `Removed collaboration permissions for ${obj.name}`;
+        it.path = "Member Management";
+        it.link = "/account/member";
       } else {
         console.log(act, it);
         it.desc = act;

@@ -21,7 +21,6 @@
         </template>
         <template v-if="item.type == 'COOPERATION_INVITATION'">
           <div class="notice-content al-c">
-            <!-- <a class="fz-14 message" :href="item.url">{{ item.message }}</a> -->
             <!-- COOPERATION_INVITATION -->
             <div class="fz-14 message flex-1">
               {{ item.message }}
@@ -51,7 +50,7 @@
           </div>
         </template>
         <template v-if="item.type == 'REMOVED_BY_TEAM_MANAGER'">
-          <div class="notice-content">
+          <div class="notice-content al-c">
             <span class="fz-14 message">{{ item.message }}</span>
           </div>
         </template>
@@ -150,6 +149,8 @@ export default {
           );
           if (this.alert) {
             this.$setMsg("joinTeam");
+          } else {
+            this.$setMsg("updateTeam");
           }
         }
         const normalNoticeList = this.noticeList.filter(

@@ -66,13 +66,13 @@ export default {
       return this.$route.path;
     },
     pagiList() {
-      console.log(this.list);
       const list = JSON.parse(JSON.stringify(this.list));
       if (this.list.length) {
-        return list.splice(
+        const curPageList = list.splice(
           (this.page - 1) * this.limit,
-          this.page * this.limit
+          this.limit
         );
+        return curPageList;
       }
       return [];
     },
@@ -116,6 +116,7 @@ export default {
       try {
         obj = JSON.parse(it.message || "{}");
       } catch (error) {
+        // obj = it.message;
         console.log(it, error.message);
       }
       const utils = this.$utils;
@@ -213,6 +214,38 @@ export default {
         it.desc = `Redeemed a Resource Voucher`;
         it.path = "Resource Billing";
         it.link = "/resource/bills";
+      } else if (act == "OAUTH_UPDATE_TEAM_NAME") {
+        if (obj.type == "name") {
+          it.desc = `Changed the name of the collaboration account to ${obj.name}`;
+        } else {
+          it.desc = "Changed the picture of the collaboration account";
+        }
+        it.path = "Account Configuration";
+        it.link = "/account/config";
+      } else if (act == "OAUTH_EXIT_TEAM") {
+        it.desc = `Logging out of the collaborative account`;
+        it.path = "Member Management";
+        it.link = "/account/member";
+      } else if (act == "OAUTH_DISABLE_MEMBER") {
+        it.desc = `Disabled collaboration permissions for ${obj.name}`;
+        it.path = "Member Management";
+        it.link = "/account/member";
+      } else if (act == "OAUTH_UPDATE_MEMBER_ACCESS") {
+        it.desc = `Changed collaboration permissions for ${obj.name}`;
+        it.path = "Member Management";
+        it.link = "/account/member";
+      } else if (act == "OAUTH_ENABLE_MEMBER") {
+        it.desc = `Unblocked collaboration permissions for ${obj.name}`;
+        it.path = "Member Management";
+        it.link = "/account/member";
+      } else if (act == "OAUTH_REMOVE_MEMBER") {
+        it.desc = `Removed collaboration permissions for ${obj.name}`;
+        it.path = "Member Management";
+        it.link = "/account/member";
+      } else if (act == "REWARD_HUB_USED_RESOURCE_VOUCHER") {
+        it.desc = `Redeemed a Resource Voucher`;
+        it.path = "Resource Billing";
+        it.link = "/resource/bills";
       } else {
         console.log(act, it);
         it.desc = act;
@@ -271,7 +304,12 @@ export default {
         );
         this.total = data.total;
         const list = data.list.map((it) => {
-          it.addr = it.memberName || it.currentUid || it.guid;
+          if (!it.memberName && !it.currentUid) {
+            it.addr = this.userInfo.username;
+          } else {
+            it.addr = it.memberName || it.currentUid;
+          }
+
           it.label = it.addr.cutStr(6, 4);
           this.getDesc(it);
           return it;
