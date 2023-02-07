@@ -215,7 +215,11 @@ export default {
         it.path = "Resource Billing";
         it.link = "/resource/bills";
       } else if (act == "OAUTH_UPDATE_TEAM_NAME") {
-        it.desc = `Changed the name of the collaboration account to ${obj.name}`;
+        if (obj.type == "name") {
+          it.desc = `Changed the name of the collaboration account to ${obj.name}`;
+        } else {
+          it.desc = "Changed the picture of the collaboration account";
+        }
         it.path = "Account Configuration";
         it.link = "/account/config";
       } else if (act == "OAUTH_EXIT_TEAM") {
