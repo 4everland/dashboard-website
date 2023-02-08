@@ -32,7 +32,12 @@
                 marginTop: it.isBalance ? '11px' : '12px',
               }"
             >
-              <template v-if="it.isBalance">
+              <div
+                v-if="it.isBalance"
+                :class="{
+                  hidden: teamInfo.isMember,
+                }"
+              >
                 <v-btn
                   color="primary"
                   small
@@ -51,7 +56,7 @@
               <b class="link ml-1">{{ accoutInfo.freeOrder || 0 }}</b>
               <span class="ml-auto">Purchased</span>
               <b class="link ml-1">{{ accoutInfo.paidOrder || 0 }}</b> -->
-              </template>
+              </div>
               <template v-else>
                 <v-progress-linear
                   :color="it.color || 'primary'"
@@ -69,6 +74,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -77,6 +83,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["teamInfo"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },

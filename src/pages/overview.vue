@@ -6,26 +6,28 @@
 
 <template>
   <div>
-    <overview-notice class="mb-4" />
-    <v-carousel
-      hide-delimiter-background
-      :interval="5000"
-      :show-arrows="false"
-      :height="asMobile ? 100 : 160"
-      class="bdrs-10 mb-4"
-      cycle
-      hide-delimiters
-    >
-      <v-carousel-item
-        v-for="(it, i) in banners"
-        :key="i"
-        :src="it.img"
-        :to="it.to"
-        :href="it.href"
-        :target="it.href ? '_blank' : null"
+    <div v-if="!teamInfo.isMember">
+      <overview-notice class="mb-4" />
+      <v-carousel
+        hide-delimiter-background
+        :interval="5000"
+        :show-arrows="false"
+        :height="asMobile ? 100 : 160"
+        class="bdrs-10 mb-4"
+        cycle
+        hide-delimiters
       >
-      </v-carousel-item>
-    </v-carousel>
+        <v-carousel-item
+          v-for="(it, i) in banners"
+          :key="i"
+          :src="it.img"
+          :to="it.to"
+          :href="it.href"
+          :target="it.href ? '_blank' : null"
+        >
+        </v-carousel-item>
+      </v-carousel>
+    </div>
 
     <div class="pos-r mb-5">
       <div>
@@ -37,7 +39,7 @@
         </div>
         <div class="gray-8 fz-14 mt-1">Welcome back to 4EVERLAND dashboard</div>
       </div>
-      <e-right-opt-wrap>
+      <e-right-opt-wrap v-if="!teamInfo.isMember">
         <v-btn class="mr-5" color="primary" to="/bucket/storage/?new=bucket">
           <span class="fz-18">+</span>
           <span class="ml-1"> New Bucket </span>
