@@ -238,13 +238,10 @@ async function handleMsg(status, code, msg, config) {
       .then(() => {
         location.reload();
       });
-  } else if (msg && !config.noTip) {
+  } else if (msg && msg != "Request aborted" && !config.noTip) {
     vue.$alert(msg).then(() => {
       if (status == 403) {
         location.href = "/";
-      }
-      if (msg == "Request aborted") {
-        location.reload();
       }
     });
   }
