@@ -351,7 +351,11 @@ export default {
         );
         const list = data.list
           .map((it) => {
-            it.addr = it.guid || it.currentUid || it.memberName;
+            if (!it.memberName && !it.currentUid) {
+              it.addr = this.userInfo.username;
+            } else {
+              it.addr = it.memberName || it.currentUid;
+            }
             it.label = it.addr.cutStr(6, 4);
             this.getDesc(it);
             return it;
