@@ -37,8 +37,8 @@ export default [
     },
   },
   {
-    path: "/newByHash",
-    component: () => import("./newByHash"),
+    path: "/new-by-hash",
+    component: () => import("./new-by-hash"),
     meta: {
       title: "New Project",
       isTab: 1,

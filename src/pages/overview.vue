@@ -124,7 +124,7 @@ export default {
   methods: {
     onCreate(i) {
       if (i == 0) return this.$router.push("/hosting/new");
-      this.$router.push("/hosting/newByHash");
+      this.$router.push("/hosting/new-by-hash");
     },
   },
 };

@@ -328,7 +328,7 @@
           <div class="al-c mt-10">
             <div
               class="ipfs-deploy deploy"
-              @click="$router.push('/hosting/newByHash')"
+              @click="$router.push('/hosting/new-by-hash')"
             >
               <img
                 class="mb-1"
@@ -460,7 +460,7 @@ export default {
   methods: {
     onCreate(i) {
       if (i == 0) return this.$router.push("/hosting/new");
-      this.$router.push("/hosting/newByHash");
+      this.$router.push("/hosting/new-by-hash");
     },
     onSort(i) {
       this.sortType = i == 0 ? "Active" : "All";

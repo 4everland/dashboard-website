@@ -148,6 +148,59 @@
         >
       </div>
     </div>
+
+    <div class="bd-1 mt-5" v-if="ipnsDeploy">
+      <div>Automatic IPNS Redeployment</div>
+
+      <div class="d-flex al-c mt-3">
+        <span class="mr-auto fz-14">
+          Always allow 4EVERLAND to regularly check the IPNS for updated CID
+          files and redeploy the project if it has been updated.</span
+        >
+        <v-switch
+          class="hide-msg mt-0"
+          v-model="isAutoDeploy"
+          @change="onChangeIpnsAutoDeploy"
+        ></v-switch>
+      </div>
+      <div class="tips fz-14 mt-4 gray">
+        Tips: Automatic IPNS Redeployment will also consume your storage,
+        bindwidth, and build minutes. Alternatively, you can update the CID
+        manually after the project is created, since the network may not monitor
+        every update.
+      </div>
+    </div>
+
+    <div class="bd-1 mt-5" v-if="ipnsDeploy">
+      <div v-if="isDeploying">
+        <div>Manual IPNS Redeployment</div>
+        <div class="d-flex al-c mt-3">
+          <span class="mr-auto fz-14">
+            Click the button on the right, the system will re-fetch the CID
+            corresponding to the current IPNS and redeploy it if there is an
+            update.</span
+          >
+          <v-btn
+            color="primary"
+            outlined
+            :loading="isDeploying"
+            @click="onDeployNow"
+            >Deploy now</v-btn
+          >
+        </div>
+      </div>
+
+      <div v-else class="mt-4 fz-14">
+        <div style="color: #31ca77">Getting Cid...</div>
+        <div style="color: #775da6">
+          <span>CID: {{ ipnsDeployInfo.ipnsResolve }}</span>
+          <span class="ml-5"
+            >Last updated:
+            {{ new Date(ipnsDeployInfo.updateAt).format() }}</span
+          >
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -159,6 +212,9 @@ import { mapState } from "vuex";
 import frameworks from "../../../plugins/config/frameworks.js";
 
 export default {
+  props: {
+    active: Boolean,
+  },
   computed: {
     ...mapState({
       info: (s) => s.projectInfo,
@@ -177,6 +233,9 @@ export default {
     },
     hashDeploy() {
       return this.info.deployType == "CID" || this.info.deployType == "IPNS";
+    },
+    ipnsDeploy() {
+      return this.info.deployType == "IPNS";
     },
   },
   data() {
@@ -209,11 +268,24 @@ export default {
           value: "MAINTENANCE_2",
         },
       ],
+      isAutoDeploy: false,
+      isDeploying: false,
+      timer: null,
+      ipnsDeployInfo: {},
     };
   },
   watch: {
     info() {
       this.setForm();
+    },
+    active(val) {
+      console.log(val);
+      if (val && this.ipnsDeploy) {
+        this.pollDeployStatus();
+      }
+      if (!val && this.ipnsDeploy) {
+        clearInterval(this.timer);
+      }
     },
   },
   mounted() {
@@ -331,6 +403,44 @@ export default {
       this.buildCommandHint = buildCommand.placeholder || "";
       this.outputDirHint =
         outputDirectory.placeholder || "`dist` if it exists, or `.`";
+    },
+    async onChangeIpnsAutoDeploy() {
+      try {
+        await this.saveProject({
+          ipnsButton: this.isAutoDeploy,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async onDeployNow() {
+      try {
+        const { data } = await this.$http2.post(
+          `/project/task/ipns/${this.info.id}/resolve`
+        );
+        this.isDeploying = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    pollDeployStatus() {
+      this.timer = setInterval(() => {
+        this.getDeployStatus();
+      }, 10000);
+    },
+    async getDeployStatus() {
+      try {
+        const { data } = await this.$http2.get(
+          `/project/${this.info.id}/ipns/button/status`
+        );
+        this.isDeploying = data.ipnsButton;
+        if (!data.ipnsButton) {
+          this.ipnsDeployInfo = data;
+          clearInterval(this.timer);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   components: {

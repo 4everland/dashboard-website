@@ -14,6 +14,15 @@
           ></v-select
         ></v-col>
         <v-col :sm="10" :cols="12" class="d-flex al-start">
+          <!-- :rules="[
+              (v) => !!(v || '').trim() || 'Invalid CID',
+              (v) =>
+                /^((\/ipfs\/)?([A-Za-z0-9]{46}|[A-Za-z0-9]{59})$)|(\/ipns\/)?/.test(
+                  v
+                )
+                  ? true
+                  : 'Invalid CID',
+            ]" -->
           <v-text-field
             persistent-placeholder
             outlined
@@ -21,15 +30,6 @@
             label=""
             placeholder="Enter the IPFS CID"
             v-model="form.ipfsPath"
-            :rules="[
-              (v) => !!(v || '').trim() || 'Invalid CID',
-              (v) =>
-                /^((\/ipfs\/)?|(\/ipns\/))([A-Za-z0-9]{46}|[A-Za-z0-9]{59})$/.test(
-                  v
-                )
-                  ? true
-                  : 'Invalid CID',
-            ]"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -82,20 +82,23 @@
           </div>
         </v-col>
       </v-row>
-      <!-- <div class="mt-6">IPNS Automatic Deployment</div> -->
-      <!-- <div class="d-flex al-start mt-3">
-        <span class="mr-auto fz-14">
-          Always allow 4EVERLAND to regularly check the IPNS for updated CID
-          files and redeploy the project if it has been updated.</span
-        >
-        <v-switch class="hide-msg" v-model="isAutoDeploy"></v-switch>
+
+      <div v-if="seleted == 'IPNS'">
+        <div class="mt-10">IPNS Automatic Deployment</div>
+        <div class="d-flex al-c mt-3">
+          <span class="mr-auto fz-14">
+            Always allow 4EVERLAND to regularly check the IPNS for updated CID
+            files and redeploy the project if it has been updated.</span
+          >
+          <v-switch class="hide-msg mt-0" v-model="form.ipnsAuto"></v-switch>
+        </div>
+        <div class="tips fz-14 mt-4">
+          Tips: Automatic IPNS Redeployment will also consume your storage,
+          bindwidth, and build minutes. Alternatively, you can update the CID
+          manually after the project is created, since the network may not
+          monitor every update.
+        </div>
       </div>
-      <div class="tips fz-14 mt-2">
-        Tips: Automatic IPNS Redeployment will also consume your storage,
-        bindwidth, and build minutes. Alternatively, you can update the CID
-        manually after the project is created, since the network may not monitor
-        every update.
-      </div> -->
 
       <div class="d-flex justify-end mt-7">
         <v-btn color="primary" width="120" @click="onDeploy">Deploy</v-btn>
@@ -108,7 +111,7 @@
 export default {
   data() {
     return {
-      items: ["IPFS"],
+      items: ["IPFS", "IPNS"],
       seleted: "IPFS",
       platList: [
         {
@@ -132,8 +135,8 @@ export default {
         name: "",
         ipfsPath: "",
         deployType: "CID",
+        ipnsAuto: false,
       },
-      isAutoDeploy: false,
     };
   },
   computed: {
