@@ -32,7 +32,7 @@
         <p class="fz-14 mb-6 mt-3 description">
           The profile picture of the collaboration account will be displayed
           when collaborating with several users. Click on the profile picture to
-          change.
+          change. File types supported: JPG, JPEG, PNG, WEBP. Max size: 280K
         </p>
       </div>
       <v-avatar
@@ -50,7 +50,13 @@
         :diameter="80"
         @click.native="$refs.uploadInput.onClick(false)"
       ></e-avatar>
-      <input-upload @input="onInput" ref="uploadInput"></input-upload>
+      <input-upload
+        @input="onInput"
+        accept="image/jpg, image/jpeg, image/png, image/webp"
+        ref="uploadInput"
+        :limitSize="29 * 1e4"
+        @onLimitSize="onLimitSize"
+      ></input-upload>
     </div>
     <div class="mt-5 config-item al-c" v-if="teamInfo.isMember">
       <div style="width: 60%" class="mr-auto">
@@ -165,6 +171,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    onLimitSize() {
+      this.$alert("The size of the uploaded image cannot exceed 280K!");
     },
   },
   components: {
