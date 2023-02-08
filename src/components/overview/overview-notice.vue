@@ -54,12 +54,6 @@
             <span class="fz-14 message">{{ item.message }}</span>
           </div>
         </template>
-        <!-- <template v-if="item.type == 'SWITCH_TO_MEMBER'">
-          <div class="notice-content">
-            <a class="fz-14 message" :href="item.url">{{ item.message }}</a>
-            SWITCH_TO_MEMBER
-          </div>
-        </template> -->
       </v-carousel-item>
     </v-carousel>
     <v-icon size="20" color="#ff994e" @click="handleCloseNotice"
@@ -73,38 +67,7 @@ import { bus } from "@/utils/bus";
 export default {
   data() {
     return {
-      noticeList: [
-        // {
-        //   id: "0",
-        //   url: "baidu.com",
-        //   message: "normal message",
-        //   type: "NORMAL",
-        // },
-        // {
-        //   id: "1",
-        //   url: "baidu.com",
-        //   message: "normal message",
-        //   type: "NORMAL",
-        // },
-        // {
-        //   id: "2",
-        //   url: "baidu.com",
-        //   message: "inviation message",
-        //   type: "COOPERATION_INVITATION",
-        // },
-        // {
-        //   id: "3",
-        //   url: "baidu.com",
-        //   message: "remove team message",
-        //   type: "REMOVED_BY_TEAM_MANAGER",
-        // },
-        // {
-        //   id: "4",
-        //   url: "baidu.com",
-        //   message: "switch merber message",
-        //   type: "SWITCH_TO_MEMBER",
-        // },
-      ],
+      noticeList: [],
       alert: false,
     };
   },
@@ -129,7 +92,7 @@ export default {
         });
         list = list.concat(transformList);
       }
-      return list;
+      return list.filter((it) => it.type != "SWITCH_TO_MEMBER");
     },
   },
   methods: {
@@ -147,6 +110,7 @@ export default {
           await this.$alert(
             "You have successfully joined the following collaboration accounts"
           );
+
           if (this.alert) {
             this.$setMsg("joinTeam");
           } else {
