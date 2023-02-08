@@ -87,7 +87,7 @@
               @click="
                 onAct(item, item.status == 'DISABLED' ? 'ENABLE' : 'DISABLE')
               "
-              :disabled="item.status == 'PENDING'"
+              :disabled="item.status == 'PENDING' || item.status == 'REJECT'"
             >
               {{ item.status == "DISABLED" ? "Enable" : "Disable" }}
             </v-btn>
@@ -95,7 +95,7 @@
               text
               color="primary"
               small
-              :disabled="item.status == 'PENDING'"
+              :disabled="item.status == 'PENDING' || item.status == 'REJECT'"
               @click="onAccess(item.access, item.invitationId)"
               >Permission</v-btn
             >
