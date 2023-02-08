@@ -172,7 +172,7 @@
     </div>
 
     <div class="bd-1 mt-5" v-if="ipnsDeploy">
-      <div v-if="isDeploying">
+      <div>
         <div>Manual IPNS Redeployment</div>
         <div class="d-flex al-c mt-3">
           <span class="mr-auto fz-14">
@@ -190,9 +190,9 @@
         </div>
       </div>
 
-      <div v-else class="mt-4 fz-14">
-        <div style="color: #31ca77">Getting Cid...</div>
-        <div style="color: #775da6">
+      <div v-if="!isDeploying" class="mt-4 fz-14">
+        <div style="color: #31ca77" v-if="isDeploying">Getting Cid...</div>
+        <div style="color: #775da6" v-else>
           <span>CID: {{ ipnsDeployInfo.ipnsResolve }}</span>
           <span class="ml-5"
             >Last updated:
@@ -279,7 +279,7 @@ export default {
       this.setForm();
     },
     active(val) {
-      console.log(val);
+      console.log(val, this.ipnsDeploy);
       if (val && this.ipnsDeploy) {
         this.pollDeployStatus();
       }
@@ -311,6 +311,7 @@ export default {
           break;
       }
       this.name = name;
+      this.isDeploying = this.info.ipnsAuto;
       const form = {
         framework: "",
         nodeVersion: "",
@@ -407,7 +408,7 @@ export default {
     async onChangeIpnsAutoDeploy() {
       try {
         await this.saveProject({
-          ipnsButton: this.isAutoDeploy,
+          ipnsAuto: this.isAutoDeploy,
         });
       } catch (error) {
         console.log(error);
@@ -433,8 +434,8 @@ export default {
         const { data } = await this.$http2.get(
           `/project/${this.info.id}/ipns/button/status`
         );
-        this.isDeploying = data.ipnsButton;
-        if (!data.ipnsButton) {
+        this.isDeploying = data.ipnsAuto;
+        if (!data.ipnsAuto) {
           this.ipnsDeployInfo = data;
           clearInterval(this.timer);
         }

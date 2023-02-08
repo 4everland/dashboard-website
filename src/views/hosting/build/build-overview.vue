@@ -85,8 +85,7 @@
             </e-kv2>
 
             <div v-else>
-              <e-kv2 label="IPNS" v-if="info.deployType == 'IPNS'"> </e-kv2>
-              <e-kv2 label="Base IPFS">
+              <e-kv2 label="Base IPFS" v-if="info.deployType == 'IPFS'">
                 <div class="al-c" v-if="projInfo.ipfsPath">
                   <e-link
                     class="fz-14"
@@ -112,7 +111,79 @@
                   :val="state == 'failure' ? 'Not synchronized' : state"
                 ></h-status>
               </e-kv2>
-              <e-kv2 label="Base IPNS" v-if="info.deployType == 'IPNS'"></e-kv2>
+              <e-kv2 label="IPNS" v-if="info.deployType == 'IPNS'">
+                <div class="al-c" v-if="projInfo.ipns">
+                  <e-link
+                    class="fz-14"
+                    :href="$utils.getCidLink(projInfo.ipns, 'IPNS')"
+                  >
+                    {{ projInfo.ipns }}
+                  </e-link>
+                  <img
+                    src="/img/svg/copy.svg"
+                    width="12"
+                    class="ml-3 hover-1"
+                    @success="$toast('Copied!')"
+                    v-clipboard="projInfo.ipns"
+                  />
+                </div>
+                <h-status
+                  v-else
+                  :val="state == 'failure' ? 'Not synchronized' : state"
+                ></h-status>
+              </e-kv2>
+              <e-kv2 label="Base IPFS" v-if="info.deployType == 'IPNS'">
+                <div class="al-c" v-if="projInfo.cid">
+                  <e-link
+                    class="fz-14"
+                    :href="
+                      $utils.getCidLink(
+                        transformIpfsPath(projInfo.cid),
+                        projInfo.platform
+                      )
+                    "
+                  >
+                    <span>{{ transformIpfsPath(projInfo.cid) }}</span>
+                  </e-link>
+                  <img
+                    src="/img/svg/copy.svg"
+                    width="12"
+                    class="ml-3 hover-1"
+                    @success="$toast('Copied!')"
+                    v-clipboard="transformIpfsPath(projInfo.cid)"
+                  />
+                </div>
+                <h-status
+                  v-else
+                  :val="state == 'failure' ? 'Not synchronized' : state"
+                ></h-status>
+              </e-kv2>
+              <e-kv2 label="Base IPNS" v-if="info.deployType == 'IPNS'">
+                <div class="al-c" v-if="projInfo.ipfsPath">
+                  <e-link
+                    class="fz-14"
+                    :href="
+                      $utils.getCidLink(
+                        transformIpfsPath(projInfo.ipfsPath),
+                        info.platform
+                      )
+                    "
+                  >
+                    <span>{{ transformIpfsPath(projInfo.ipfsPath) }}</span>
+                  </e-link>
+                  <img
+                    src="/img/svg/copy.svg"
+                    width="12"
+                    class="ml-3 hover-1"
+                    @success="$toast('Copied!')"
+                    v-clipboard="transformIpfsPath(projInfo.ipfsPath)"
+                  />
+                </div>
+                <h-status
+                  v-else
+                  :val="state == 'failure' ? 'Not synchronized' : state"
+                ></h-status>
+              </e-kv2>
             </div>
           </div>
         </v-col>
@@ -187,7 +258,7 @@ import BuildOverviewLogs from "@/views/hosting/build/build-overview-logs";
 import HStatus from "@/views/hosting/common/h-status";
 import HBranch from "@/views/hosting/common/h-branch";
 import ECommit from "@/views/hosting/common/e-commit";
-
+import MsgLine from "@/views/hosting/common/msg-line";
 import { mapState } from "vuex";
 
 export default {
@@ -340,6 +411,7 @@ Are you sure you want to continue?
     HStatus,
     HBranch,
     ECommit,
+    MsgLine,
   },
 };
 </script>

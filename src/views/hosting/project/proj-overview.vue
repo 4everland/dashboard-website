@@ -106,11 +106,8 @@
               <e-time>{{ info.createAt }}</e-time>
             </e-kv>
           </div>
-          <div
-            class="mt-9 d-flex"
-            v-if="hashDeploy(info.deployType) && info.platform != 'IPFS'"
-          >
-            <e-kv label="Base IPFS">
+          <div class="mt-9 d-flex" v-if="hashDeploy(info.deployType)">
+            <e-kv label="Base IPFS" v-if="info.platform != 'IPFS'">
               <div class="al-c">
                 <e-link
                   class="fz-14"
@@ -135,7 +132,28 @@
                 />
               </div>
             </e-kv>
-            <e-kv label="Base IPNS" v-if="info.deployType == 'IPNS'"></e-kv>
+            <e-kv label="Base IPNS" v-if="info.deployType == 'IPNS'">
+              <div class="al-c">
+                <e-link
+                  class="fz-14"
+                  :href="
+                    $utils.getCidLink(transformIpfsPath(info.ipfsPath), 'IPNS')
+                  "
+                  v-if="info.ipfsPath"
+                >
+                  {{ transformIpfsPath(info.ipfsPath) }}
+                </e-link>
+                <h-status v-if="!info.ipfsPath" :val="info.state"></h-status>
+                <img
+                  v-if="info.ipfsPath"
+                  src="/img/svg/copy.svg"
+                  width="12"
+                  class="ml-3 hover-1"
+                  @success="$toast('Copied!')"
+                  v-clipboard="transformIpfsPath(info.ipfsPath)"
+                />
+              </div>
+            </e-kv>
           </div>
           <div class="mt-9 d-flex" v-if="!hashDeploy(info.deployType)">
             <e-kv label="Branch">
