@@ -297,12 +297,12 @@ export default {
         }
         body.status = act;
       }
-      this.setMember(body);
+      this.setMember(body, row);
     },
     saveMember(body) {
       return this.$http.put("$auth/cooperation/member", body);
     },
-    async setMember(body) {
+    async setMember(body, row) {
       console.log(body);
       try {
         this.$loading();
@@ -311,6 +311,9 @@ export default {
         this.getList();
       } catch (error) {
         console.log(error);
+      }
+      if (body.status == "REMOVE" && row && this.isMemberMe(row)) {
+        location.href = "/";
       }
     },
     getText() {
