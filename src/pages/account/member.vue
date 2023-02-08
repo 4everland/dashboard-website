@@ -73,6 +73,7 @@
               text
               color="primary"
               small
+              :disabled="teamInfo.isMember"
               @click="onDisband"
               v-if="list.length > 1"
               >Disband</v-btn
@@ -87,7 +88,11 @@
               @click="
                 onAct(item, item.status == 'DISABLED' ? 'ENABLE' : 'DISABLE')
               "
-              :disabled="item.status == 'PENDING' || item.status == 'REJECT'"
+              :disabled="
+                item.status == 'PENDING' ||
+                item.status == 'REJECT' ||
+                isMemberMe(item)
+              "
             >
               {{ item.status == "DISABLED" ? "Enable" : "Disable" }}
             </v-btn>
@@ -95,7 +100,11 @@
               text
               color="primary"
               small
-              :disabled="item.status == 'PENDING' || item.status == 'REJECT'"
+              :disabled="
+                item.status == 'PENDING' ||
+                item.status == 'REJECT' ||
+                isMemberMe(item)
+              "
               @click="onAccess(item.access, item.invitationId)"
               >Permission</v-btn
             >
@@ -116,10 +125,17 @@
 
 <script>
 import AccountPermission from "@/views/account/account-permission.vue";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   components: {
     AccountPermission,
+  },
+  computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
+    ...mapGetters(["teamInfo"]),
   },
   data() {
     return {
@@ -178,6 +194,9 @@ export default {
     this.getList();
   },
   methods: {
+    isMemberMe(item) {
+      return this.teamInfo.isMember && item.uid == this.userInfo.uid;
+    },
     async addMember() {
       try {
         const body = this.accBody;

@@ -135,6 +135,7 @@ new Vue({
         it.name = (it.teamName || it.teamId).cutStr(6, 4);
         it.isOwner = it.type == "INDIVIDUAL";
         it.isMember = it.type == "COLLABORATION";
+        // it.isMe = it.teamOwnerEuid == this.userInfo.euid;
       });
       let teamId = this.teamId;
       if (!items.find((it) => it.teamId == teamId)) {
