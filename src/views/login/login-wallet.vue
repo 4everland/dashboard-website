@@ -10,6 +10,15 @@
       >
         <div class="wallet-item-name">
           <span class="name">{{ item.name }}</span>
+          <e-tooltip top v-if="item.name == 'OKX Wallet'">
+            <v-icon slot="ref" color="red" size="18" class="ml-4">
+              mdi-flag</v-icon
+            >
+            <span
+              >Get 30GB of free IPFS storage when you first log in with OKX
+              Wallet</span
+            >
+          </e-tooltip>
         </div>
         <div class="d-flex align-center">
           <span class="item-name" :class="{ 'item-name-pop': index == 0 }">{{
