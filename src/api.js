@@ -240,7 +240,7 @@ async function handleMsg(status, code, msg, config) {
       });
   } else if (msg && !config.noTip) {
     vue.$alert(msg).then(() => {
-      if (msg == "Request aborted") {
+      if (msg == "Request aborted" || status == 403) {
         location.reload();
       }
     });
