@@ -122,8 +122,6 @@ export default {
         );
         localStorage.setItem("notice", JSON.stringify(normalNoticeList));
       } catch (error) {
-        //
-        console.log(error);
         this.noticeList = JSON.parse(localStorage.getItem("notice"))
           ? JSON.parse(localStorage.getItem("notice"))
           : [];
