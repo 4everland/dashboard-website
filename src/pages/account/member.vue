@@ -5,7 +5,9 @@
       <div class="gray fz-14 mt-2">
         Invite account collaborators. The beta version can only invite up to
         three people and can only join three collaborative accounts.
-        <a href="">Please get in touch with us for more information.</a>
+        <a href="https://discord.gg/4everland" target="_blank"
+          >Please get in touch with us for more information.</a
+        >
       </div>
       <v-row class="mt-3">
         <v-col cols="12" md="7">
