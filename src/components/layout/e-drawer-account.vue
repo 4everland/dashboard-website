@@ -43,7 +43,12 @@
               v-for="(it, j) in row.subs"
               :key="j"
             >
-              <span>{{ it.name }}</span>
+              <e-team-avatar
+                :src="it.teamAvatar"
+                :uid="it.teamId"
+                :size="22"
+              ></e-team-avatar>
+              <span class="ml-2">{{ it.name }}</span>
               <v-icon
                 v-if="it.teamId == teamInfo.teamId"
                 color="success"
