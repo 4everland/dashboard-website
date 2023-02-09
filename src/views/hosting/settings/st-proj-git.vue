@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="mt-5 b-1">
-        <div class="d-flex al-c f-wrap" v-if="repoName">
+        <div class="d-flex al-c f-wrap" v-if="repoName && isOwnerGitProj">
           <v-icon color="#4A96FA" size="32">mdi-github</v-icon>
           <div class="ml-5 mr-auto">
             <h4 class="color-1">
@@ -134,6 +134,9 @@ export default {
         if (!this.keyword.trim()) return true;
         return new RegExp(this.keyword, "i").test(it.namespace + "/" + it.name);
       });
+    },
+    isOwnerGitProj() {
+      return this.info.ownerGithub;
     },
   },
   watch: {

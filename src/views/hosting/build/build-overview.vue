@@ -142,13 +142,7 @@
               </v-list>
             </e-menu>
             <div class="flex-1 ml-5 pr-4">
-              <div
-                v-if="
-                  (!info.cli && !hashDeploy(info.deployType)) ||
-                  (!info.cli && info.state == 'FAILURE')
-                "
-                class="mb-5"
-              >
+              <div v-if="showBtn1Txt" class="mb-5">
                 <v-btn
                   color="error"
                   outlined
@@ -227,6 +221,13 @@ export default {
       if (this.showCancel) return "Cancel";
       return "Redeploy";
     },
+    showBtn1Txt() {
+      if (this.info.cli) return false;
+      if (!this.isOwnerGitProj) return false;
+      return (
+        !this.hashDeploy(this.info.deployType) || this.info.state == "FAILURE"
+      );
+    },
     visitUrl() {
       const { domain } = this.info;
       if (domain) return "//" + domain;
@@ -248,6 +249,9 @@ export default {
       return function (val) {
         return val.replace("/ipfs/", "").replace("/ipns/", "");
       };
+    },
+    isOwnerGitProj() {
+      return this.info.ownerGithub;
     },
   },
   async created() {

@@ -179,6 +179,9 @@ export default {
         return type == "CID" || type == "IPNS";
       };
     },
+    isOwnerGitProj() {
+      return this.info.ownerGithub;
+    },
   },
   data() {
     const { id } = this.$route.params;
@@ -221,8 +224,8 @@ export default {
     getOptList(it) {
       let arr = [];
       if (
-        (it.deployType != "CID" && it.deployType != "IPNS") ||
-        it.state == "FAILURE"
+        (!this.hashDeploy(it.deployType) || it.state == "FAILURE") &&
+        this.isOwnerGitProj
       ) {
         arr.push({
           text: "Redeploy",
