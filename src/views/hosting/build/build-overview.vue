@@ -222,6 +222,7 @@ export default {
       return "Redeploy";
     },
     showBtn1Txt() {
+      console.log(this.isDeprecated);
       if (this.info.cli) return false;
       if (this.isDeprecated) return false;
       return (
@@ -251,7 +252,7 @@ export default {
       };
     },
     isDeprecated() {
-      return this.info.deprecated;
+      return this.projInfo.deprecated;
     },
   },
   async created() {
