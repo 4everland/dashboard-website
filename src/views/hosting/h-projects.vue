@@ -199,28 +199,35 @@
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status class="ta-l" :val="it.state"></h-status>
                 </div>
-                <div
-                  class="d-flex al-c"
-                  v-if="it.repo && it.repo.id && it.currentBranch"
-                >
-                  <e-icon-link
-                    @click.native.stop
-                    class="mr-6 shrink-0"
-                    img="/img/svg/hosting/m-branch.svg"
-                    :link="
-                      (it.repo.cloneUrl || '').replace(
-                        '.git',
-                        '/tree/' + it.currentBranch
-                      )
-                    "
+                <div v-if="!it.deprecated">
+                  <div
+                    class="d-flex al-c"
+                    v-if="it.repo && it.repo.id && it.currentBranch"
                   >
-                    {{ it.currentBranch }}
-                  </e-icon-link>
-                  <e-commit
-                    @click.native.stop
-                    :info="it.commit"
-                    class="line-1"
-                  ></e-commit>
+                    <e-icon-link
+                      @click.native.stop
+                      class="mr-6 shrink-0"
+                      img="/img/svg/hosting/m-branch.svg"
+                      :link="
+                        (it.repo.cloneUrl || '').replace(
+                          '.git',
+                          '/tree/' + it.currentBranch
+                        )
+                      "
+                    >
+                      {{ it.currentBranch }}
+                    </e-icon-link>
+                    <e-commit
+                      @click.native.stop
+                      :info="it.commit"
+                      class="line-1"
+                    ></e-commit>
+                  </div>
+                </div>
+                <div v-else>
+                  <span class="d-ib deploy-origin-type fz-14"
+                    >No Git Repository connected</span
+                  >
                 </div>
               </v-col>
 
