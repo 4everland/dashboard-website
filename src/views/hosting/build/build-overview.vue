@@ -111,6 +111,13 @@
                   :val="state == 'failure' ? 'Not synchronized' : state"
                 ></h-status>
               </e-kv2>
+
+              <msg-line
+                v-if="info.deployType == 'IPFS'"
+                label="Base IPFS"
+                :content="projInfo.ipfsPath"
+                :state="state"
+              ></msg-line>
               <e-kv2 label="IPNS" v-if="info.deployType == 'IPNS'">
                 <div class="al-c" v-if="projInfo.ipns">
                   <e-link
