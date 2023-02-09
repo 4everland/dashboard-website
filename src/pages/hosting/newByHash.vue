@@ -3,7 +3,7 @@
     <v-form ref="form">
       <div>IPFS Path</div>
       <v-row class="mt-3">
-        <v-col :sm="2" :cols="12" class="py-0"
+        <v-col :sm="2" :cols="12"
           ><v-select
             class="ipfs-input hide-msg"
             outlined
@@ -13,7 +13,7 @@
             v-model="seleted"
           ></v-select
         ></v-col>
-        <v-col :sm="10" :cols="12" class="d-flex al-start py-0">
+        <v-col :sm="10" :cols="12" class="d-flex al-start">
           <v-text-field
             persistent-placeholder
             outlined
@@ -32,13 +32,6 @@
             ]"
           ></v-text-field>
         </v-col>
-
-        <v-col class="mt-0 pt-0"
-          ><div class="gray fz-14">
-            Tip: Deployment will fail if the content matching the CID is not a
-            web page.
-          </div></v-col
-        >
       </v-row>
 
       <div class="mt-5">The Project Name</div>
