@@ -12,7 +12,7 @@
 </style>
 
 <template>
-  <div class="pos-r" v-click-outside="onOut" v-if="teamInfo">
+  <div id="team-guide" class="pos-r" v-click-outside="onOut" v-if="teamInfo">
     <div
       class="bg-f9 al-c ma-3 pa-1 hover-1"
       @click="showAccount = !showAccount"
