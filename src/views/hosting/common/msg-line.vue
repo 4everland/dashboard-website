@@ -41,11 +41,17 @@ export default {
       type: String,
       required: true,
     },
+    cutStr: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     transformIpfsPath() {
       return function (val) {
-        return val.replace("/ipfs/", "").replace("/ipns/", "");
+        const str = val.replace("/ipfs/", "").replace("/ipns/", "");
+        if (this.cutStr) return str.cutStr(20, 10);
+        return str;
       };
     },
   },
