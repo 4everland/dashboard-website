@@ -35,21 +35,13 @@
           change. File types supported: JPG, JPEG, PNG, WEBP. Max size: 280K
         </p>
       </div>
-      <v-avatar
-        v-if="teamAvatar"
-        color="primary"
-        size="80"
+      <e-team-avatar
         class="cursor-p"
+        :src="teamAvatar"
+        :uid="teamInfo.teamId"
         @click="$refs.uploadInput.onClick(false)"
-      >
-        <img :src="teamAvatar" alt="John"
-      /></v-avatar>
-      <e-avatar
-        v-else
-        :address="teamInfo.teamId"
-        :diameter="80"
-        @click.native="$refs.uploadInput.onClick(false)"
-      ></e-avatar>
+      ></e-team-avatar>
+
       <input-upload
         @input="onInput"
         accept="image/jpg, image/jpeg, image/png, image/webp"

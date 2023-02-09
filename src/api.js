@@ -36,6 +36,7 @@ const bucketDomainApi = inDev
   ? "https://domain.foreverland.xyz"
   : "https://api.4everland.org";
 Vue.prototype.$endpoint = endpoint;
+Vue.prototype.$authApi = authApi;
 
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   // console.log(location);
