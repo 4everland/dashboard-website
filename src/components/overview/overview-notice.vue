@@ -107,12 +107,13 @@ export default {
           (it) => it.type == "SWITCH_TO_MEMBER"
         );
         if (EmailJoinSuccess != -1) {
-          this.$alert(
-            "You have successfully joined the following collaboration accounts"
-          );
           this.noticeList = this.noticeList.filter(
             (it) => it.type != "SWITCH_TO_MEMBER"
           );
+          await this.$alert(
+            "You have successfully joined the following collaboration accounts"
+          );
+
           if (this.alert) {
             this.$setMsg("joinTeam");
           } else {
@@ -147,8 +148,8 @@ export default {
         this.$loading.close();
         this.noticeList = this.noticeList.filter((it) => it.id != id);
       } catch (error) {
+        await this.getList();
         this.$loading.close();
-        console.log(error);
       }
     },
   },
