@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="mt-5 b-1">
-        <div class="d-flex al-c f-wrap" v-if="repoName && isOwnerGitProj">
+        <div class="d-flex al-c f-wrap" v-if="repoName && !isDeprecated">
           <v-icon color="#4A96FA" size="32">mdi-github</v-icon>
           <div class="ml-5 mr-auto">
             <h4 class="color-1">
@@ -29,9 +29,9 @@
         </div>
         <template v-else>
           <div v-if="!showConnect">
-            <v-btn color="primary" @click="showConnect = true">
+            <v-btn color="primary" @click="showConnect = true" disabled>
               <v-icon>mdi-github</v-icon>
-              <span class="ml-2">Connect Github</span>
+              <span class="ml-2">No Git Repository connected</span>
             </v-btn>
           </div>
           <div v-else>
@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <template v-if="repoName">
+    <template v-if="repoName && !isDeprecated">
       <div class="bd-1 mt-5">
         <div>
           <h3>Production Branch</h3>
@@ -135,8 +135,8 @@ export default {
         return new RegExp(this.keyword, "i").test(it.namespace + "/" + it.name);
       });
     },
-    isOwnerGitProj() {
-      return this.info.ownerGithub;
+    isDeprecated() {
+      return this.info.deprecated;
     },
   },
   watch: {

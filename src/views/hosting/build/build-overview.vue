@@ -223,7 +223,7 @@ export default {
     },
     showBtn1Txt() {
       if (this.info.cli) return false;
-      if (!this.isOwnerGitProj) return false;
+      if (this.isDeprecated) return false;
       return (
         !this.hashDeploy(this.info.deployType) || this.info.state == "FAILURE"
       );
@@ -250,8 +250,8 @@ export default {
         return val.replace("/ipfs/", "").replace("/ipns/", "");
       };
     },
-    isOwnerGitProj() {
-      return this.info.ownerGithub;
+    isDeprecated() {
+      return this.info.deprecated;
     },
   },
   async created() {
