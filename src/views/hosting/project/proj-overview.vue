@@ -106,7 +106,9 @@
               <e-time>{{ info.createAt }}</e-time>
             </e-kv>
           </div>
-          <div class="mt-9 d-flex" v-if="hashDeploy(info.deployType)">
+          <div class="mt-9" v-if="hashDeploy(info.deployType)">
+            <!-- <msg-line label="Base IPFS" :content="info.ipfsPath" :state="info.state"></msg-line> -->
+
             <e-kv label="Base IPFS" v-if="info.platform != 'IPFS'">
               <div class="al-c">
                 <e-link
@@ -132,7 +134,11 @@
                 />
               </div>
             </e-kv>
-            <e-kv label="Base IPNS" v-if="info.deployType == 'IPNS'">
+            <e-kv
+              label="Base IPNS"
+              class="mt-8"
+              v-if="info.deployType == 'IPNS'"
+            >
               <div class="al-c">
                 <e-link
                   class="fz-14"
