@@ -115,10 +115,7 @@
                 <e-link
                   class="fz-14"
                   :href="
-                    $utils.getCidLink(
-                      transformIpfsPath(info.ipfsPath),
-                      info.platform
-                    )
+                    $utils.getCidLink(transformIpfsPath(info.ipfsPath), 'IPFS')
                   "
                   v-if="info.ipfsPath"
                 >

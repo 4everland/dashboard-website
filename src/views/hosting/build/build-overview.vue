@@ -93,7 +93,7 @@
                     :href="
                       $utils.getCidLink(
                         transformIpfsPath(projInfo.ipfsPath),
-                        info.platform
+                        'IPFS'
                       )
                     "
                   >
