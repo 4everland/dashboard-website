@@ -107,9 +107,14 @@
             </e-kv>
           </div>
           <div class="mt-9" v-if="hashDeploy(info.deployType)">
-            <!-- <msg-line label="Base IPFS" :content="info.ipfsPath" :state="info.state"></msg-line> -->
+            <msg-line
+              label="Base IPFS"
+              :content="info.ipfsPath"
+              :state="info.state"
+              v-if="info.platform != 'IPFS' && info.deployType != 'IPNS'"
+            ></msg-line>
 
-            <e-kv label="Base IPFS" v-if="info.platform != 'IPFS'">
+            <!-- <e-kv label="Base IPFS" v-if="info.platform != 'IPFS'">
               <div class="al-c">
                 <e-link
                   class="fz-14"
@@ -133,7 +138,8 @@
                   v-clipboard="transformIpfsPath(info.ipfsPath)"
                 />
               </div>
-            </e-kv>
+            </e-kv> -->
+            <!-- <msg-line label="Base IPFS" :content="info.cid" :state="info.state"  v-if="info.platform != 'IPFS' && info.deployType != 'IPNS'"></msg-line> -->
             <e-kv
               label="Base IPNS"
               class="mt-8"
