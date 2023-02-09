@@ -92,7 +92,7 @@ export default {
         });
         list = list.concat(transformList);
       }
-      return list.filter((it) => it.type != "SWITCH_TO_MEMBER");
+      return list;
     },
   },
   methods: {
@@ -107,10 +107,12 @@ export default {
           (it) => it.type == "SWITCH_TO_MEMBER"
         );
         if (EmailJoinSuccess != -1) {
-          await this.$alert(
+          this.$alert(
             "You have successfully joined the following collaboration accounts"
           );
-
+          this.noticeList = this.noticeList.filter(
+            (it) => it.type != "SWITCH_TO_MEMBER"
+          );
           if (this.alert) {
             this.$setMsg("joinTeam");
           } else {
