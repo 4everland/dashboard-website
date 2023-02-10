@@ -515,35 +515,56 @@ export default {
           {
             comp: "h-proj-statis",
             data: [
-              [
-                {
-                  title: "New Users",
-                  num: data.newUsers,
-                },
-                {
-                  title: "Unique Visitor",
-                  num: data.uv, // data.totalUV,
-                },
-                {
-                  title: "Page Views",
-                  num: data.pv, // data.totalPV,
-                },
-              ],
-              [
-                {
-                  title: "Bandwidth used",
-                  ...this.$utils.getFileSize(data.usedBandwidth, 1),
-                },
-                {
-                  title: "Build Minutes used",
-                  unit: "Minutes",
-                  num: data.usedBuildMinutes.toFixed(2),
-                },
-                {
-                  title: "Storage used",
-                  ...this.$utils.getFileSize(data.usedStorage, 1),
-                },
-              ],
+              // [
+              //   {
+              //     title: "New Users",
+              //     num: data.newUsers,
+              //   },
+              //   {
+              //     title: "Unique Visitor",
+              //     num: data.uv, // data.totalUV,
+              //   },
+              //   {
+              //     title: "Page Views",
+              //     num: data.pv, // data.totalPV,
+              //   },
+              // ],
+              // [
+              //   {
+              //     title: "Bandwidth used",
+              //     ...this.$utils.getFileSize(data.usedBandwidth, 1),
+              //   },
+              //   {
+              //     title: "Build Minutes used",
+              //     unit: "Minutes",
+              //     num: data.usedBuildMinutes.toFixed(2),
+              //   },
+              //   {
+              //     title: "Storage used",
+              //     ...this.$utils.getFileSize(data.usedStorage, 1),
+              //   },
+              // ],
+              {
+                title: "Unique Visitor",
+                num: data.uv, // data.totalUV,
+              },
+              {
+                title: "Page Views",
+                num: data.pv, // data.totalPV,
+              },
+              {
+                title: "Bandwidth used",
+                ...this.$utils.getFileSize(data.usedBandwidth, 1),
+              },
+              {
+                title: "Build Minutes used",
+                unit: "Minutes",
+                num: data.usedBuildMinutes.toFixed(2),
+              },
+              {
+                title: "Storage used",
+                ...this.$utils.getFileSize(data.usedStorage, 1),
+              },
             ],
           },
           {
