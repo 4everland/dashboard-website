@@ -32,7 +32,7 @@
         <p class="fz-14 mb-6 mt-3 description">
           The profile picture of the collaboration account will be displayed
           when collaborating with several users. Click on the profile picture to
-          change. File types supported: JPG, JPEG, PNG, WEBP. Max size: 280K
+          change. File types supported: JPG, JPEG, PNG, WEBP. Max size: 280KB
         </p>
       </div>
       <e-team-avatar
@@ -165,7 +165,7 @@ export default {
       }
     },
     onLimitSize() {
-      this.$alert("The size of the uploaded image cannot exceed 280K!");
+      this.$alert("The size of the uploaded image cannot exceed 280KB!");
     },
   },
   components: {

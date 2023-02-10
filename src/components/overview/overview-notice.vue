@@ -144,12 +144,11 @@ export default {
           }
         );
         this.alert = data.team.alert;
-        await this.getList();
+        this.getList();
         this.$loading.close();
-        this.noticeList = this.noticeList.filter((it) => it.id != id);
+        // this.noticeList = this.noticeList.filter((it) => it.id != id);
       } catch (error) {
-        await this.getList();
-        this.$loading.close();
+        this.getList();
       }
     },
   },
