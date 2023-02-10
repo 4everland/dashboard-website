@@ -1,4 +1,4 @@
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import { providers, BigNumber } from "ethers"; //, utils
 import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
@@ -34,11 +34,13 @@ export default {
       payBy: (s) => s.payBy,
       userInfo: (s) => s.userInfo,
     }),
+    ...mapGetters(["teamInfo"]),
     walletObj() {
       const { walletType } = this.userInfo.wallet || {};
       return walletType == "OKX" ? window.okxwallet : window.ethereum;
     },
     uuid() {
+      if (this.teamInfo.isMember) return this.teamInfo.teamOwnerEuid;
       return this.userInfo.euid;
     },
     isPolygon() {

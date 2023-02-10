@@ -15,7 +15,12 @@
           service will be automatically resumed.
         </div>
       </div>
-      <div class="ta-c mt-8">
+      <div
+        class="ta-c mt-8"
+        :class="{
+          hidden: teamInfo.isMember,
+        }"
+      >
         <v-btn color="primary" width="120" to="/resource/deposit"
           >Deposit</v-btn
         >
@@ -84,13 +89,10 @@
 
 <script>
 import GatewayGenerate from "@/views/gateway/gateway-generate";
-// import GatewayDomain from "@/views/gateway/gateway-domain";
-// import GatewayEdit from "@/views/gateway/gateway-edit";
+import { mapGetters } from "vuex";
 export default {
   components: {
     GatewayGenerate,
-    // GatewayDomain,
-    // GatewayEdit,
   },
   data() {
     return {
@@ -109,6 +111,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["teamInfo"]),
     isLock() {
       return this.balance < 100 && !this.list.length;
     },

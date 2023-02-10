@@ -57,38 +57,39 @@
         <div v-else class="pd-15"></div>
 
         <v-card-text>
-          <div class="fz-16 gray-6" v-html="alertInfo.content"></div>
-          <div class="mt-10" v-if="alertInfo.showInput">
-            <v-form ref="form" lazy-validation @submit.native.prevent>
-              <v-text-field
-                persistent-placeholder
-                v-model.trim="inputVal"
-                autofocus
-                dense
-                autocomplete="off"
-                v-bind="alertInfo.inputAttrs"
-                @keyup.enter="hideAlert(1)"
-              ></v-text-field>
-              <v-text-field
-                persistent-placeholder
-                class="mt-8"
-                v-if="alertInfo.input2Attrs"
-                v-model="inputVal2"
-                dense
-                autocomplete="off"
-                v-bind="alertInfo.input2Attrs"
-                @keyup.enter="hideAlert(1)"
-              ></v-text-field>
-            </v-form>
+          <div class="pa-5">
+            <div class="fz-16 gray-6" v-html="alertInfo.content"></div>
+            <div class="mt-10" v-if="alertInfo.showInput">
+              <v-form ref="form" lazy-validation @submit.native.prevent>
+                <v-text-field
+                  persistent-placeholder
+                  v-model.trim="inputVal"
+                  autofocus
+                  dense
+                  autocomplete="off"
+                  v-bind="alertInfo.inputAttrs"
+                  @keyup.enter="hideAlert(1)"
+                ></v-text-field>
+                <v-text-field
+                  persistent-placeholder
+                  class="mt-8"
+                  v-if="alertInfo.input2Attrs"
+                  v-model="inputVal2"
+                  dense
+                  autocomplete="off"
+                  v-bind="alertInfo.input2Attrs"
+                  @keyup.enter="hideAlert(1)"
+                ></v-text-field>
+              </v-form>
+            </div>
+            <component
+              :is="alertInfo.comp1"
+              v-if="alertInfo.comp1"
+              v-bind="alertInfo.comp1Props"
+              :form="alertInfo.form1"
+              @input="onForm1"
+            ></component>
           </div>
-
-          <component
-            :is="alertInfo.comp1"
-            v-if="alertInfo.comp1"
-            v-bind="alertInfo.comp1Props"
-            :form="alertInfo.form1"
-            @input="onForm1"
-          ></component>
         </v-card-text>
         <v-card-actions class="pb-3 ta-c">
           <v-spacer></v-spacer>

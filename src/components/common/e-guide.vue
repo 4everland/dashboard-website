@@ -56,7 +56,7 @@ export default {
           popover: {
             title: "Menu bar",
             description: `<div class="description-content">In the 4EVERLAND world, you can experience project deployment services from 4EVER-Hosting, permanent storage services from 4EVER-Bucket, dedicated gateway and network resource services, as well as Dahboard's quick start operations and visualisation of project statistics.</div>
-            <span class="paging">(1/6)</span>
+            <span class="paging">(1/7)</span>
             </div>`,
             position: "right",
           },
@@ -75,7 +75,7 @@ export default {
           popover: {
             title: "Hosting",
             description: `<div class="description-content">You can quickly host websites and applications on IPFS, Arweave or Dfinity via Git, Template or IPFS Path, review the UV, PV and other statistics of the hosted project.</div>
-            <span class="paging">(2/6)</span>
+            <span class="paging">(2/7)</span>
             </div>`,
             position: "right",
           },
@@ -94,7 +94,7 @@ export default {
           popover: {
             title: "Bucket",
             description: `<div class="description-content">Use 4EVER-Bucket for faster file uploads and permanent file storage on IPFS and Arweave, observe storage capacity, traffic statistics, file access, etc.</div>
-            <span class="paging">(3/6)</span>
+            <span class="paging">(3/7)</span>
             </div>`,
             position: "right",
           },
@@ -113,9 +113,28 @@ export default {
           popover: {
             title: "Gateway",
             description: `<div class="description-content">In addition, within the Gataway service, 4EVERLAND offers a customised IPFS dedicated gateway with global acceleration, providing IPNS creation, publishing, keep-alive and other management functions to better help you improve access performance.</div>
-            <span class="paging">(4/6)</span>
+            <span class="paging">(4/7)</span>
             </div>`,
             position: "right",
+          },
+          onNext: () => {
+            bus.$emit("guide");
+            this.driver.preventMove();
+            setTimeout(() => {
+              this.driver.refresh();
+              this.driver.moveNext();
+              this.stepCount += 1;
+            }, 250);
+          },
+        },
+        {
+          element: "#team-guide",
+          popover: {
+            title: "Tips",
+            description: `<div class="description-content">Personal and collaborative accounts can be switched here.</div>
+            <span class="paging">(5/7)</span>
+            </div>`,
+            position: "top",
           },
           onNext: () => {
             bus.$emit("guide");
@@ -132,7 +151,7 @@ export default {
           popover: {
             title: "Resource",
             description: `<div class="description-content">You can easily purchase resources and deposit your balance through other public chains such as Polygon, Ethereum, BSC, etc., and see clearly the balance of resources purchased and resources consumed.</div>
-            <span class="paging">(5/6)</span>
+            <span class="paging">(6/7)</span>
             </div>`,
             position: "left",
           },

@@ -1,13 +1,22 @@
 <template>
   <div class="pos-r">
-    <e-right-opt-wrap fix style="top: -20px">
-      <e-menu offset-y open-on-hover>
-        <v-btn slot="ref" outlined color="#6C7789">
-          <span class="ml-2">{{ date }}</span>
-          <v-icon>mdi-chevron-down</v-icon>
-        </v-btn>
-        <v-date-picker v-model="date" :allowed-dates="isAllow"></v-date-picker>
-      </e-menu>
+    <e-right-opt-wrap fix style="top: -30px">
+      <div class="al-c">
+        <v-select
+          class="ipfs-input hide-msg mr-4"
+          outlined
+          :items="items"
+          dense
+          @change="fTypeChange"
+          v-model="seleted"
+        ></v-select>
+
+        <e-custom-date-picker
+          @date="handleDate"
+          :items="dType"
+          selected="DAY_1"
+        ></e-custom-date-picker>
+      </div>
     </e-right-opt-wrap>
 
     <v-skeleton-loader
@@ -17,7 +26,7 @@
     ></v-skeleton-loader>
     <e-empty v-else-if="!list.length" class="pt-10">No Logs</e-empty>
     <template v-else>
-      <div class="al-c mb-5" v-for="it in list" :key="it.id">
+      <div class="al-c mb-5" v-for="it in pagiList" :key="it.id">
         <!-- <div class="bdrs-100 bd-1">
         </div> -->
         <e-avatar :diameter="34" :address="it.addr"></e-avatar>
@@ -39,20 +48,12 @@
         </div>
       </div>
     </template>
-    <e-pagi
-      class="pa-5"
-      @input="getList"
-      v-model="page"
-      :limit="10"
-      :total="total"
-    />
+    <e-pagi class="pa-5" v-model="page" :limit="limit" :total="total" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-const now = new Date();
-
 export default {
   computed: {
     ...mapState({
@@ -64,14 +65,37 @@ export default {
     path() {
       return this.$route.path;
     },
+    pagiList() {
+      const list = JSON.parse(JSON.stringify(this.list));
+      if (this.list.length) {
+        const curPageList = list.splice(
+          (this.page - 1) * this.limit,
+          this.limit
+        );
+        return curPageList;
+      }
+      return [];
+    },
   },
   data() {
     return {
       list: null,
-      date: now.format("yy-MM-dd"),
       page: 1,
       total: 0,
+      limit: 10,
       start: "2022-7-27".toDate() * 1,
+      items: [
+        { text: "All", value: "ALL" },
+        { text: "Owner", value: "OWNER" },
+        { text: "Member", value: "MEMBER" },
+      ],
+      seleted: "ALL",
+      dType: [
+        { text: "Past 24h", value: "DAY_1" },
+
+        { text: "Past 30Day", value: "DAY_30" },
+      ],
+      dTypeSelected: "DAY_1",
     };
   },
   watch: {
@@ -80,26 +104,19 @@ export default {
         this.getList();
       }
     },
-    date() {
-      this.page = 1;
-      this.getList();
-    },
   },
   mounted() {
     this.initPath = this.path;
     this.getList();
   },
   methods: {
-    isAllow(val) {
-      const date = val.toDate();
-      return date < now && date > this.start;
-    },
     getDesc(it) {
       const act = it.action;
       let obj = {};
       try {
         obj = JSON.parse(it.message || "{}");
       } catch (error) {
+        // obj = it.message;
         console.log(it, error.message);
       }
       const utils = this.$utils;
@@ -225,6 +242,10 @@ export default {
         it.desc = `Removed collaboration permissions for ${obj.name}`;
         it.path = "Member Management";
         it.link = "/account/member";
+      } else if (act == "REWARD_HUB_USED_RESOURCE_VOUCHER") {
+        it.desc = `Redeemed a Resource Voucher`;
+        it.path = "Resource Billing";
+        it.link = "/resource/bills";
       } else {
         console.log(act, it);
         it.desc = act;
@@ -273,20 +294,23 @@ export default {
         }
         const api = this.$inDev ? "https://log.foreverland.xyz" : "";
         const { data } = await this.$http2.get(
-          api + "/user/activity/action/logs",
+          api + "/user/activity/team/action/logs",
           {
             params: {
-              time: 3600 * 12 + this.date.toDate() / 1e3,
-              size: 10,
-              page: this.page - 1,
+              fType: this.seleted,
+              dType: this.dTypeSelected,
             },
           }
         );
         this.total = data.total;
         const list = data.list.map((it) => {
-          it.addr = this.userInfo.username || it.guid;
-          it.label = it.addr.cutStr(6, 4);
+          if (!it.memberName && !it.currentUid) {
+            it.addr = this.userInfo.username;
+          } else {
+            it.addr = it.memberName || it.currentUid;
+          }
 
+          it.label = it.addr.cutStr(6, 4);
           this.getDesc(it);
           return it;
         });
@@ -299,6 +323,65 @@ export default {
       }
       this.$loading.close();
     },
+    fTypeChange() {
+      this.page = 1;
+      if (typeof this.dTypeSelected == "number") {
+        this.handleDate(this.dTypeSelected);
+      } else {
+        this.getList();
+      }
+    },
+    async handleDate(val) {
+      this.dTypeSelected = val;
+      this.page = 1;
+      if (typeof val == "string") return this.getList();
+      try {
+        if (this.list) {
+          this.$loading();
+        }
+        const api = this.$inDev ? "https://log.foreverland.xyz" : "";
+        const { data } = await this.$http2.get(
+          api + "/user/activity/team/action/logs",
+          {
+            params: {
+              fType: this.seleted,
+              dType: "DAY_30",
+            },
+          }
+        );
+        const list = data.list
+          .map((it) => {
+            if (!it.memberName && !it.currentUid) {
+              it.addr = this.userInfo.username;
+            } else {
+              it.addr = it.memberName || it.currentUid;
+            }
+            it.label = it.addr.cutStr(6, 4);
+            this.getDesc(it);
+            return it;
+          })
+          .filter((it) => {
+            return (
+              it.operateAt * 1000 > val &&
+              it.operateAt * 1000 <= val + 864 * 1e5
+            );
+          });
+        this.total = list.length;
+        this.list = list;
+        setTimeout(() => {
+          window.jdenticon();
+        }, 100);
+      } catch (error) {
+        console.log(error);
+      }
+      this.$loading.close();
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+::v-deep .ipfs-input {
+  width: 130px;
+}
+</style>
