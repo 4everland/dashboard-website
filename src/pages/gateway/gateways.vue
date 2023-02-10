@@ -18,7 +18,8 @@
       <div
         class="ta-c mt-8"
         :class="{
-          hidden: teamInfo.isMember,
+          hidden:
+            teamInfo.isMember && teamInfo.access?.indexOf('RESOURCE') == -1,
         }"
       >
         <v-btn color="primary" width="120" to="/resource/deposit"
