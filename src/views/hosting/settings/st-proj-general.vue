@@ -434,11 +434,11 @@ export default {
     },
     async onDeployNow() {
       try {
-        const { data } = await this.$http2.post(
+        const data = await this.$http2.post(
           `/project/task/ipns/${this.info.id}/resolve`
         );
         console.log(data);
-        this.isDeploying = data;
+        // this.isDeploying = data;
         this.pollDeployStatus();
       } catch (error) {
         console.log(error);
