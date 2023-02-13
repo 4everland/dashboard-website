@@ -314,3 +314,44 @@ export class PinCidTaskWrapper {
     this.status = 2;
   }
 }
+export class PinningServiceTaskWrapper {
+  static id = 0;
+  constructor(params, accessToken) {
+    this.id = PinningServiceTaskWrapper.id++;
+    this.status = 0;
+    this.params = params;
+    this.accessToken = accessToken;
+    this.abortAxiosFn = null;
+  }
+  async addPin() {
+    try {
+      this.status = 1;
+      const { data } = await Vue.prototype.$axios({
+        method: "POST",
+        url: "$pinning-service/pins",
+        data: this.params,
+        headers: {
+          Authorization: "Bearer " + this.accessToken,
+        },
+        cancelToken: new Vue.prototype.$axios.CancelToken((c) => {
+          this.abortAxiosFn = c;
+        }),
+      });
+      console.log(data);
+      this.status = 3;
+    } catch (error) {
+      console.log(error);
+      this.status = 4;
+    }
+  }
+  async abortPin() {
+    try {
+      if (this.abortAxiosFn) {
+        await this.abortAxiosFn({ status: 2 });
+        this.status = 2;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
