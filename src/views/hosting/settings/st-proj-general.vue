@@ -194,16 +194,9 @@
       <div class="mt-4 fz-14">
         <div style="color: #31ca77" v-if="isDeploying">Getting Cid...</div>
         <div style="color: #775da6" v-else>
-          <span
-            >CID: {{ latestDeployInfo.ipnsResolve.cutStr(20, 10) ?? "/" }}</span
-          >
+          <span>CID: {{ latestDeployInfo.ipnsResolve }}</span>
           <span class="ml-5"
-            >Last updated:
-            {{
-              latestDeployInfo.updateAt
-                ? new Date(latestDeployInfo.updateAt).format()
-                : "/"
-            }}</span
+            >Last updated: {{ latestDeployInfo.updateAt }}</span
           >
         </div>
       </div>
@@ -246,8 +239,10 @@ export default {
     },
     latestDeployInfo() {
       let obj = {};
-      obj.ipnsResolve = this.ipnsDeployInfo.ipnsResolve ?? this.info.latest.cid;
-      obj.updateAt = this.ipnsDeployInfo.updateAt ?? this.info.latest.createAt;
+      let ipnsResolve = this.ipnsDeployInfo.ipnsResolve ?? this.info.latest.cid;
+      let updateAt = this.ipnsDeployInfo.updateAt ?? this.info.latest.createAt;
+      obj.ipnsResolve = ipnsResolve ? ipnsResolve.cutStr(20, 10) : "/";
+      obj.updateAt = updateAt ? new Date(updateAt).format() : "/";
       return obj;
     },
   },
