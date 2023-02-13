@@ -224,6 +224,7 @@ export default {
             )
         );
         this.tasks = tasks;
+        this.processTask();
       } catch (error) {
         console.log(error);
       }
