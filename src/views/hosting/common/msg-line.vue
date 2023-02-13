@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import HStatus from "./h-status.vue";
 export default {
   props: {
     label: {
@@ -54,6 +55,9 @@ export default {
         return str;
       };
     },
+  },
+  components: {
+    HStatus,
   },
 };
 </script>

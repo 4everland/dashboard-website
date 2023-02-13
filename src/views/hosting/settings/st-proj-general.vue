@@ -191,7 +191,7 @@
         </div>
       </div>
 
-      <div v-if="!isDeploying" class="mt-4 fz-14">
+      <div class="mt-4 fz-14">
         <div style="color: #31ca77" v-if="isDeploying">Getting Cid...</div>
         <div style="color: #775da6" v-else>
           <span
@@ -433,15 +433,16 @@ export default {
       }
     },
     async onDeployNow() {
+      this.isDeploying = true;
       try {
-        const data = await this.$http2.post(
+        const { data } = await this.$http2.post(
           `/project/task/ipns/${this.info.id}/resolve`
         );
-        console.log(data);
-        // this.isDeploying = data;
+        this.isDeploying = data;
         this.pollDeployStatus();
       } catch (error) {
         console.log(error);
+        this.isDeploying = false;
       }
     },
     pollDeployStatus() {
