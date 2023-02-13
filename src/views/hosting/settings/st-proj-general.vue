@@ -192,7 +192,7 @@
       </div>
 
       <div class="mt-4 fz-14">
-        <div style="color: #31ca77" v-if="isDeploying">Getting Cid...</div>
+        <div style="color: #31ca77" v-if="isDeploying">Getting CID...</div>
         <div style="color: #775da6" v-else>
           <span>CID: {{ latestDeployInfo.ipnsResolve }}</span>
           <span class="ml-5"

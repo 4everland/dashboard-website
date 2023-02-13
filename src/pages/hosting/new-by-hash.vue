@@ -19,11 +19,13 @@
             outlined
             dense
             label=""
-            placeholder="Enter the IPFS CID"
+            :placeholder="
+              seleted == 'IPFS' ? 'Enter the IPFS CID' : 'Enter the IPNS'
+            "
             v-model="form.ipfsPath"
             :rules="[
-              (v) => !!(v || '').trim() || 'Invalid CID',
-              (v) => (/^[a-zA-Z0-9]+$/.test(v) ? true : 'Invalid CID'),
+              (v) => !!(v || '').trim() || 'Invalid IPFS path',
+              (v) => (/^[a-zA-Z0-9]+$/.test(v) ? true : 'Invalid IPFS path'),
             ]"
           ></v-text-field>
         </v-col>
