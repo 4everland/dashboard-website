@@ -17,11 +17,13 @@
           <!-- :rules="[
               (v) => !!(v || '').trim() || 'Invalid CID',
               (v) =>
-                /^((\/ipfs\/)?([A-Za-z0-9]{46}|[A-Za-z0-9]{59})$)|(\/ipns\/)?/.test(
+                /^((\/ipfs\/)?([A-Za-z0-9]{46}|[A-Za-z0-9]{59})$)/.test(
                   v
                 )
                   ? true
                   : 'Invalid CID',
+              (v)=> 
+              /\/ipns\/?/.test
             ]" -->
           <v-text-field
             persistent-placeholder

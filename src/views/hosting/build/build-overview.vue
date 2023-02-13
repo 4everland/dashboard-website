@@ -10,7 +10,7 @@
               :src="$getImgSrc(info.screenshotPath)"
               lazy-src="/img/bg/empty/project.png"
               aspect-ratio="1"
-              max-height="230"
+              height="100%"
             ></v-img>
           </e-link>
         </v-col>
@@ -91,16 +91,16 @@
                 :content="projInfo.ipfsPath"
                 :state="state"
               ></msg-line>
-
               <msg-line
-                v-if="info.deployType == 'IPNS'"
+                class="mb-5"
+                v-if="info.deployType == 'IPNS' && info.platform == 'IPFS'"
                 label="IPNS"
                 :content="projInfo.ipns"
                 :state="state"
                 platForm="IPNS"
               ></msg-line>
 
-              <v-row class="mt-5">
+              <v-row>
                 <v-col :md="6" :cols="12">
                   <msg-line
                     v-if="info.deployType == 'IPNS'"
