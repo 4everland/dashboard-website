@@ -106,7 +106,9 @@
             ></v-textarea>
             <div class="d-flex justify-center al-c mt-8">
               <v-btn outlined @click="showMultipleDialog = false">Cancel</v-btn>
-              <v-btn color="primary" class="ml-10">Search and Pin</v-btn>
+              <v-btn color="primary" class="ml-10" @click="handleMultipleUpload"
+                >Search and Pin</v-btn
+              >
             </div>
           </v-form>
         </div>
@@ -159,6 +161,7 @@
 </template>
 
 <script>
+import { PinningServiceTaskWrapper } from "../task";
 import InputUpload from "@/views/bucket/components/input-upload";
 export default {
   data() {
@@ -180,6 +183,9 @@ export default {
       readerFileList: [],
       loading: false,
       viewInvalid: false,
+      accessToken: "",
+      processLimit: 10,
+      tasks: [],
     };
   },
   computed: {
@@ -208,7 +214,33 @@ export default {
     },
   },
   methods: {
-    handleMultipleUpload() {},
+    async handleMultipleUpload() {
+      try {
+        const tasks = this.readerFileSuccessList.map(
+          (it) =>
+            new PinningServiceTaskWrapper(
+              { cid: it.cid, ...mutipleForm },
+              this.accessToken
+            )
+        );
+        this.tasks = tasks;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async startTask(task) {
+      await task.addPin();
+      this.processTask();
+    },
+    processTask() {
+      const processing = this.tasks.filter((it) => it.status == 1);
+      if (processing >= this.processLimit) return;
+      const idles = this.tasks.filter((it) => it.status == 0);
+      const min = idles > this.processLimit ? this.processLimit : idles;
+      for (let i = 0; i < min; i++) {
+        this.startTask(idles[i]);
+      }
+    },
     getFileContent(file) {
       return new Promise((resolve, reject) => {
         try {
