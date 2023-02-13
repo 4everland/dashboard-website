@@ -181,6 +181,7 @@
             update.</span
           >
           <v-btn
+            class="ml-3"
             color="primary"
             outlined
             :loading="isDeploying"
@@ -193,10 +194,16 @@
       <div v-if="!isDeploying" class="mt-4 fz-14">
         <div style="color: #31ca77" v-if="isDeploying">Getting Cid...</div>
         <div style="color: #775da6" v-else>
-          <span>CID: {{ ipnsDeployInfo.ipnsResolve }}</span>
+          <span
+            >CID: {{ latestDeployInfo.ipnsResolve.cutStr(20, 10) ?? "/" }}</span
+          >
           <span class="ml-5"
             >Last updated:
-            {{ new Date(ipnsDeployInfo.updateAt).format() }}</span
+            {{
+              latestDeployInfo.updateAt
+                ? new Date(latestDeployInfo.updateAt).format()
+                : "/"
+            }}</span
           >
         </div>
       </div>
@@ -236,6 +243,12 @@ export default {
     },
     ipnsDeploy() {
       return this.info.deployType == "IPNS";
+    },
+    latestDeployInfo() {
+      let obj = {};
+      obj.ipnsResolve = this.ipnsDeployInfo.ipnsResolve ?? this.info.latest.cid;
+      obj.updateAt = this.ipnsDeployInfo.updateAt ?? this.info.latest.createAt;
+      return obj;
     },
   },
   data() {
@@ -311,7 +324,7 @@ export default {
           break;
       }
       this.name = name;
-      this.isDeploying = this.info.ipnsAuto;
+      this.isAutoDeploy = this.info.ipnsAuto;
       const form = {
         framework: "",
         nodeVersion: "",
@@ -410,6 +423,11 @@ export default {
         await this.saveProject({
           ipnsAuto: this.isAutoDeploy,
         });
+        this.$setState({
+          noticeMsg: {
+            name: "updateProject",
+          },
+        });
       } catch (error) {
         console.log(error);
       }
@@ -419,7 +437,9 @@ export default {
         const { data } = await this.$http2.post(
           `/project/task/ipns/${this.info.id}/resolve`
         );
+        console.log(data);
         this.isDeploying = data;
+        this.pollDeployStatus();
       } catch (error) {
         console.log(error);
       }
@@ -427,7 +447,7 @@ export default {
     pollDeployStatus() {
       this.timer = setInterval(() => {
         this.getDeployStatus();
-      }, 10000);
+      }, 3000);
     },
     async getDeployStatus() {
       try {
