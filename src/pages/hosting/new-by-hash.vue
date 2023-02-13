@@ -14,17 +14,6 @@
           ></v-select
         ></v-col>
         <v-col :sm="10" :cols="12" class="d-flex al-start">
-          <!-- :rules="[
-              (v) => !!(v || '').trim() || 'Invalid CID',
-              (v) =>
-                /^((\/ipfs\/)?([A-Za-z0-9]{46}|[A-Za-z0-9]{59})$)/.test(
-                  v
-                )
-                  ? true
-                  : 'Invalid CID',
-              (v)=> 
-              /\/ipns\/?/.test
-            ]" -->
           <v-text-field
             persistent-placeholder
             outlined
@@ -32,6 +21,10 @@
             label=""
             placeholder="Enter the IPFS CID"
             v-model="form.ipfsPath"
+            :rules="[
+              (v) => !!(v || '').trim() || 'Invalid CID',
+              (v) => (/^[a-zA-Z0-9]+$/.test(v) ? true : 'Invalid CID'),
+            ]"
           ></v-text-field>
         </v-col>
       </v-row>
