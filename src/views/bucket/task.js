@@ -326,6 +326,7 @@ export class PinningServiceTaskWrapper {
   async addPin() {
     try {
       this.status = 1;
+      console.log(11);
       const { data } = await Vue.prototype.$axios({
         method: "POST",
         url: "$pinning-service/pins",

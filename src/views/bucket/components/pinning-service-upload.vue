@@ -39,16 +39,25 @@
             persistent-placeholder
             label="IPFS CID"
             v-model="form.cid"
+            :rules="[
+              (v) => !!(v || '').trim() || 'Invalid CID',
+              (v) =>
+                /^([A-Za-z0-9]{46}|[A-Za-z0-9]{59})$/.test(v)
+                  ? true
+                  : 'Invalid CID',
+            ]"
           ></v-text-field>
-          <v-text-field
+          <v-textarea
             persistent-placeholder
+            name="input-7-1"
             label="Origins"
             v-model="form.origins"
-          ></v-text-field>
-
+          ></v-textarea>
           <div class="d-flex justify-center al-c mt-8">
             <v-btn outlined @click="showDialog = false">Cancel</v-btn>
-            <v-btn color="primary" class="ml-10">Search and Pin</v-btn>
+            <v-btn color="primary" class="ml-10" @click="handleUpload"
+              >Search and Pin</v-btn
+            >
           </div>
         </v-form>
       </div>
@@ -172,6 +181,7 @@ export default {
       form: {
         name: "",
         cid: "",
+        origins: "",
       },
       mutipleForm: {
         name: "",
@@ -214,20 +224,28 @@ export default {
     },
   },
   methods: {
-    async handleMultipleUpload() {
-      try {
-        const tasks = this.readerFileSuccessList.map(
-          (it) =>
-            new PinningServiceTaskWrapper(
-              { cid: it.cid, ...mutipleForm },
-              this.accessToken
-            )
-        );
-        this.tasks = tasks;
-        this.processTask();
-      } catch (error) {
-        console.log(error);
-      }
+    handleUpload() {
+      const valid = this.$refs.form.validate();
+      if (!valid) return;
+      let form = { ...this.form };
+      form.origins = form.origins.split("\n");
+      let task = new PinningServiceTaskWrapper(form, this.accessToken);
+      this.tasks.push(task);
+      // this.processTask();
+      this.showDialog = false;
+    },
+    handleMultipleUpload() {
+      let mutipleForm = { ...this.mutipleForm };
+      mutipleForm.origins = mutipleForm.origins.split("\n");
+      const tasks = this.readerFileSuccessList.map(
+        (it) =>
+          new PinningServiceTaskWrapper(
+            { cid: it.cid, ...mutipleForm },
+            this.accessToken
+          )
+      );
+      this.tasks = this.tasks.concat(tasks);
+      this.processTask();
     },
     async startTask(task) {
       await task.addPin();
@@ -235,7 +253,7 @@ export default {
     },
     processTask() {
       const processing = this.tasks.filter((it) => it.status == 1);
-      if (processing >= this.processLimit) return;
+      if (processing.length >= this.processLimit) return;
       const idles = this.tasks.filter((it) => it.status == 0);
       const min = idles > this.processLimit ? this.processLimit : idles;
       for (let i = 0; i < min; i++) {
