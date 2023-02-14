@@ -1,7 +1,7 @@
 <template>
   <div class="account-config-container">
     <div class="config-item" v-if="hasAccess">
-      <h3 class="fz-20">The name of the collaboration account</h3>
+      <h3 class="fz-20">Collaboration account name</h3>
       <p class="fz-14 mb-6 mt-3 description">
         The name of the collaboration account will be displayed when
         collaborating with several users.
@@ -28,7 +28,7 @@
     </div>
     <div class="mt-5 config-item al-c" v-if="hasAccess">
       <div style="width: 60%" class="mr-auto">
-        <h3 class="fz-20">The profile picture of the collaboration account</h3>
+        <h3 class="fz-20">Collaboration account profile</h3>
         <p class="fz-14 mb-6 mt-3 description">
           The profile picture of the collaboration account will be displayed
           when collaborating with several users. Click on the profile picture to
@@ -59,7 +59,7 @@
           collaboration account will no longer be displayed.
         </p>
       </div>
-      <v-btn color="primary" outlined tile @click="handleDelete">Delete</v-btn>
+      <v-btn color="primary" outlined tile @click="handleDelete">Exit</v-btn>
     </div>
   </div>
 </template>
