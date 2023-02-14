@@ -75,14 +75,17 @@
         </div>
       </div>
     </v-dialog>
+    <pinning-service-control></pinning-service-control>
   </div>
 </template>
 
 <script>
 import PinningServiceUpload from "@/views/bucket/components/pinning-service-upload.vue";
+import PinningServiceControl from "@/views/bucket/components/pinning-service-control.vue";
 export default {
   components: {
     PinningServiceUpload,
+    PinningServiceControl,
   },
   data() {
     return {

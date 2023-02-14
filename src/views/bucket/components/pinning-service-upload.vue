@@ -175,7 +175,7 @@ import InputUpload from "@/views/bucket/components/input-upload";
 export default {
   data() {
     return {
-      showDialog: true,
+      showDialog: false,
       showFileView: false,
       showMultipleDialog: false,
       form: {
@@ -231,7 +231,7 @@ export default {
       form.origins = form.origins.split("\n");
       let task = new PinningServiceTaskWrapper(form, this.accessToken);
       this.tasks.push(task);
-      // this.processTask();
+      this.processTask();
       this.showDialog = false;
     },
     handleMultipleUpload() {
