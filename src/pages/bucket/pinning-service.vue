@@ -12,7 +12,7 @@
             solo
             :items="items"
             v-model="state"
-            @change="handleChange"
+            @change="getList"
           />
         </v-col>
         <v-col :md="5">
@@ -28,33 +28,73 @@
         </v-col>
       </v-row>
     </e-right-opt-wrap>
-    <div>
-      <pinning-service-upload></pinning-service-upload>
+    <div class="pos-r">
+      <pinning-service-upload
+        class="mb-7"
+        :accessToken="accessToken"
+        @getList="getList"
+      ></pinning-service-upload>
       <v-data-table
         class="hide-bdb"
         :headers="headers"
         :items="list"
         :loading="tableLoading"
-        item-key="id"
+        show-select
+        v-model="seletedRecords"
+        item-key="requestid"
+        checkbox-color="#34A9FF"
         no-data-text=""
         loading-text=""
         hide-default-footer
       >
         <template v-slot:item.name="{ item }">
-          <span>{{ item.name.cutStr(20, 10) }}</span>
+          <span>{{ item.pin.name }}</span>
         </template>
         <template v-slot:item.hash="{ item }">
-          <span>{{ item.hash.cutStr(20, 10) }}</span>
+          <span>{{ item.pin.cid.cutStr(20, 10) }}</span>
         </template>
-        <template #item.action="{ item }">
-          <v-btn color="primary" text @click="handleDelete(item)">delete</v-btn>
+        <template v-slot:item.status="{ item }">
+          <span class="pinning-status">{{ item.status }}</span>
         </template>
       </v-data-table>
+      <div class="pd-20 gray ta-c fz-16 mt-5" v-if="list.length">
+        <v-btn
+          outlined
+          class="mr-5"
+          @click="handlePrevious"
+          :disabled="disabledPrevious"
+          >Previous</v-btn
+        >
+        <v-btn
+          min-width="100"
+          outlined
+          @click="handleNext"
+          :disabled="disabledNext"
+          >Next</v-btn
+        >
+      </div>
       <div class="ta-c mt-8" v-if="!list.length">
         <e-empty :loading="tableLoading">
           {{ tableLoading ? `Loading files...` : `No files` }}
         </e-empty>
       </div>
+
+      <operation-bar ref="operationBar">
+        <v-checkbox
+          v-model="checked"
+          @change="handleChangeCheck"
+          class="px-4"
+          color="#34A9FF"
+        ></v-checkbox>
+        <v-btn
+          style="border-color: #6c7789"
+          outlined
+          class="ml-4"
+          @click="handleDelete()"
+        >
+          <span class="gray">Delete</span>
+        </v-btn>
+      </operation-bar>
     </div>
 
     <v-dialog v-model="showPop" max-width="500" persistent>
@@ -75,13 +115,29 @@
         </div>
       </div>
     </v-dialog>
+
     <pinning-service-control></pinning-service-control>
   </div>
 </template>
 
 <script>
+import { bus } from "../../utils/bus";
 import PinningServiceUpload from "@/views/bucket/components/pinning-service-upload.vue";
 import PinningServiceControl from "@/views/bucket/components/pinning-service-control.vue";
+function debounce(func, delay = 300, immediate = false) {
+  let timer = null;
+  return function () {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    if (immediate && !timer) {
+      func.apply(this, arguments);
+    }
+    timer = setTimeout(() => {
+      func.apply(this, arguments);
+    }, delay);
+  };
+}
 export default {
   components: {
     PinningServiceUpload,
@@ -89,13 +145,13 @@ export default {
   },
   data() {
     return {
-      state: 1,
+      state: "queued,pinned,pinning,failed",
       items: [
-        { text: "All", value: 1 },
-        { text: "Queued", value: 2 },
-        { text: "Pinned", value: 3 },
-        { text: "Pinning", value: 4 },
-        { text: "Failed", value: 5 },
+        { text: "All", value: "queued,pinned,pinning,failed" },
+        { text: "Queued", value: "queued" },
+        { text: "Pinned", value: "pinned" },
+        { text: "Pinning", value: "pinning" },
+        { text: "Failed", value: "failed" },
       ],
       searchKey: "",
       showPop: false,
@@ -105,65 +161,85 @@ export default {
         { text: "Name", value: "name" },
         { text: "Size", value: "size" },
         { text: "IPFS CID", value: "hash" },
-        { text: "Last Modified", value: "updateAt" },
+        { text: "Last Modified", value: "created" },
         { text: "Pin Status", value: "status" },
-        { text: "Action", value: "action", align: "center" },
       ],
-      list: [
-        {
-          name: "img1.png",
-          size: 111000,
-          hash: "bafybeiciv6dit3s2ij5n3vlwnthsqmbauhkveotvnhmnulozvqbbo7f6ea",
-          updateAt: "2022-1-1",
-          status: 1,
-        },
-        {
-          name: "img1.png",
-          size: 111000,
-          hash: "bafybeiciv6dit3s2ij5n3vlwnthsqmb2uhkveotvnhmnulozvqbbo7f6ea",
-          updateAt: "2022-1-1",
-          status: 1,
-        },
-        {
-          name: "img1.png",
-          size: 111000,
-          hash: "bafybeiciv6dit3s2ij5n3vlwnthsqmbauhk3eotvnhmnulozvqbbo7f6ea",
-          updateAt: "2022-1-1",
-          status: 1,
-        },
-        {
-          name: "img1.png",
-          size: 111000,
-          hash: "bafybeiciv6dit3s2ij5n3vlwnthsqmbauh4veotvnhmnulozvqbbo7f6ea",
-          updateAt: "2022-1-1",
-          status: 1,
-        },
-      ],
+      list: [],
+      seletedRecords: [],
+      total: 0,
+      curPage: 1,
+      limit: 10,
+      checked: false,
     };
   },
+  computed: {
+    disabledNext() {
+      return this.total - this.curPage * this.limit <= 0;
+    },
+    disabledPrevious() {
+      return this.curPage == 1;
+    },
+  },
+  watch: {
+    seletedRecords: {
+      handler(val) {
+        if (val.length) {
+          bus.$emit("showOperationBar", true);
+          this.fileInfoDrawer = true;
+          this.$refs.operationBar.isShow = this.checked = true;
+        } else {
+          bus.$emit("showOperationBar", false);
+          this.$refs.operationBar.isShow = this.checked = false;
+        }
+      },
+      deep: true,
+    },
+  },
   async created() {
-    // await this.getAccessToken()
-    // await this.getList()
+    await this.getAccessToken();
+    await this.getList();
   },
   methods: {
-    handleInput() {
-      console.log(1);
-    },
-    async getList() {
+    handleInput: debounce(function () {
+      this.getList();
+    }),
+    async getList(params = {}) {
       try {
-        const { data } = await this.$http.get("$pinning-service/pins", {
+        this.tableLoading = true;
+        const { data } = await this.$http.get("$pinningService/pins", {
+          params: {
+            status: this.state,
+            name: this.searchKey,
+            limit: this.limit,
+            ...params,
+          },
           headers: {
             Authorization: "Bearer " + this.accessToken,
           },
         });
-        console.log(data);
+        if (Object.keys(params).length == 0) {
+          this.total = data.count;
+          this.curPage = 1;
+        }
+        this.list = data.results;
       } catch (error) {
         console.log(error);
       }
+      this.tableLoading = false;
+    },
+    handleNext() {
+      this.curPage++;
+      const lastRecord = this.list[this.limit - 1];
+      this.getList({ before: lastRecord.created });
+    },
+    handlePrevious() {
+      this.curPage--;
+      const firstRecord = this.list[0];
+      this.getList({ after: firstRecord.created });
     },
     async handleDelete(item) {
       try {
-        await this.$http.delete(`$pinning-service/pins/${item.requestId}`, {
+        await this.$http.delete(`$pinningService/pins/${item.requestId}`, {
           headers: {
             Authorization: "Bearer " + this.accessToken,
           },
@@ -172,7 +248,11 @@ export default {
         console.log(error);
       }
     },
+    handleChangeCheck(val) {
+      if (!val) return (this.seletedRecords = []);
+    },
     async getAccessToken() {
+      this.tableLoading = true;
       try {
         const { data } = await this.$http.get(
           "/user/ipfs-pinning-service/token"
@@ -192,12 +272,12 @@ export default {
         console.log(error);
       }
     },
-    async handleChange(val) {
-      console.log(val);
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.pinning-status {
+  text-transform: capitalize;
+}
 </style>

@@ -35,6 +35,10 @@ const resourceApi = inDev
 const bucketDomainApi = inDev
   ? "https://domain.foreverland.xyz"
   : "https://api.4everland.org";
+
+export const pinningServiceApi = inDev
+  ? "https://pinning.foreverland.xyz"
+  : "https://pinning.foreverland.xyz";
 Vue.prototype.$endpoint = endpoint;
 
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
@@ -123,7 +127,8 @@ const lock = new AsyncLock({ timeout: 5000 });
         .replace("$gateway", gateWayApi)
         .replace("$ipns", ipnsApi)
         .replace("$resource", resourceApi)
-        .replace("$bucektDomain", bucketDomainApi);
+        .replace("$bucektDomain", bucketDomainApi)
+        .replace("$pinningService", pinningServiceApi);
       if (config.url.includes(authApi)) {
         token = "Bearer " + token;
       }

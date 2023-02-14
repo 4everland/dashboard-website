@@ -173,6 +173,9 @@
 import { PinningServiceTaskWrapper } from "../task";
 import InputUpload from "@/views/bucket/components/input-upload";
 export default {
+  props: {
+    accessToken: String,
+  },
   data() {
     return {
       showDialog: false,
@@ -193,7 +196,6 @@ export default {
       readerFileList: [],
       loading: false,
       viewInvalid: false,
-      accessToken: "",
       processLimit: 10,
       tasks: [],
     };
@@ -211,10 +213,13 @@ export default {
       }
       return this.readerFileList;
     },
+    compeleted() {
+      return !this.tasks.some((it) => it.status != 3);
+    },
   },
+
   watch: {
     files(val) {
-      console.log(val);
       this.file = val[0];
     },
     async file(val) {
@@ -222,13 +227,20 @@ export default {
       const result = await this.getFileContent(val);
       this.parseContentCid(result);
     },
+    compeleted(val) {
+      if (val) this.$emit("getList");
+    },
   },
   methods: {
     handleUpload() {
       const valid = this.$refs.form.validate();
       if (!valid) return;
       let form = { ...this.form };
-      form.origins = form.origins.split("\n");
+      if (form.origins) {
+        form.origins = form.origins.split("\n");
+      } else {
+        this.$delete(form, "origins");
+      }
       let task = new PinningServiceTaskWrapper(form, this.accessToken);
       this.tasks.push(task);
       this.processTask();
@@ -255,7 +267,9 @@ export default {
       const processing = this.tasks.filter((it) => it.status == 1);
       if (processing.length >= this.processLimit) return;
       const idles = this.tasks.filter((it) => it.status == 0);
-      const min = idles > this.processLimit ? this.processLimit : idles;
+      const min =
+        idles.length > this.processLimit ? this.processLimit : idles.length;
+      console.log(min);
       for (let i = 0; i < min; i++) {
         this.startTask(idles[i]);
       }

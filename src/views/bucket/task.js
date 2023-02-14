@@ -1,5 +1,6 @@
 import Vue from "vue";
 import { Upload } from "@aws-sdk/lib-storage";
+import { pinningServiceApi } from "../../api";
 export class TaskWrapper {
   id;
   s3;
@@ -326,10 +327,9 @@ export class PinningServiceTaskWrapper {
   async addPin() {
     try {
       this.status = 1;
-      console.log(11);
       const { data } = await Vue.prototype.$axios({
         method: "POST",
-        url: "$pinning-service/pins",
+        url: pinningServiceApi + "/pins",
         data: this.params,
         headers: {
           Authorization: "Bearer " + this.accessToken,
