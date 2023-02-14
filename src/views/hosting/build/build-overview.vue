@@ -88,7 +88,7 @@
               <msg-line
                 v-if="info.deployType == 'CID'"
                 label="Base IPFS"
-                :content="projInfo.ipfsPath"
+                :content="info.cid"
                 :state="state"
               ></msg-line>
               <msg-line
@@ -105,7 +105,7 @@
                   <msg-line
                     v-if="info.deployType == 'IPNS'"
                     label="Base IPFS"
-                    :content="projInfo.cid"
+                    :content="info.cid"
                     :state="state"
                     cutStr
                   ></msg-line
