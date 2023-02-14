@@ -15,6 +15,7 @@
         ></v-col>
         <v-col :sm="10" :cols="12" class="d-flex al-start">
           <v-text-field
+            ref="ipfsPathRef"
             persistent-placeholder
             outlined
             dense
@@ -23,10 +24,7 @@
               seleted == 'IPFS' ? 'Enter the IPFS CID' : 'Enter the IPNS'
             "
             v-model="form.ipfsPath"
-            :rules="[
-              (v) => !!(v || '').trim() || 'Invalid IPFS path',
-              (v) => (/^[a-zA-Z0-9]+$/.test(v) ? true : 'Invalid IPFS path'),
-            ]"
+            :rules="inputRules"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -148,6 +146,20 @@ export default {
           : "/ipns/" + this.form.ipfsPath;
       }
     },
+    inputRules() {
+      if (this.seleted == "IPNS")
+        return [
+          (v) => !!(v || "").trim() || "Invalid IPFS path",
+          (v) => (/^[a-zA-Z0-9]+$/.test(v) ? true : "Invalid IPFS path"),
+        ];
+      return [
+        (v) => !!(v || "").trim() || "Invalid IPFS path",
+        (v) =>
+          /^(\/ipfs\/)?(Qm[A-Za-z0-9]{44}|b[A-Za-z0-9]{58})$/.test(v)
+            ? true
+            : "Invalid IPFS path",
+      ];
+    },
   },
   methods: {
     async onDeploy() {
@@ -170,6 +182,8 @@ export default {
       this.$loading.close();
     },
     handleChangeDeployType(val) {
+      console.log(this.$refs.ipfsPathRef);
+      this.$refs.ipfsPathRef.reset();
       if (val == "IPFS") {
         this.form.deployType = "CID";
       } else if (val == "IPNS") {

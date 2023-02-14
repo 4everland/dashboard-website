@@ -239,7 +239,8 @@ export default {
     },
     latestDeployInfo() {
       let obj = {};
-      let ipnsResolve = this.ipnsDeployInfo.ipnsResolve ?? this.info.latest.cid;
+      let ipnsResolve =
+        this.ipnsDeployInfo.ipnsResolve ?? this.info.ipnsResolve;
       let updateAt = this.ipnsDeployInfo.updateAt ?? this.info.latest.createAt;
       obj.ipnsResolve = ipnsResolve ? ipnsResolve.cutStr(20, 10) : "/";
       obj.updateAt = updateAt ? new Date(updateAt).format() : "/";
