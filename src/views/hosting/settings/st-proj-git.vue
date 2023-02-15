@@ -28,15 +28,21 @@
           </v-btn>
         </div>
         <template v-else>
-          <div v-if="!showConnect">
-            <v-btn color="primary" @click="showConnect = true" disabled>
-              <v-icon>mdi-github</v-icon>
-              <span class="ml-2">No Git Repository connected</span>
-            </v-btn>
+          <div v-if="!isDeprecated">
+            <div v-if="!showConnect">
+              <v-btn color="primary" @click="showConnect = true">
+                <v-icon>mdi-github</v-icon>
+                <span class="ml-2">Connect Github</span>
+              </v-btn>
+            </div>
+            <div v-else>
+              <new-step-0-git @select="onConnect" in-setting />
+            </div>
           </div>
-          <div v-else>
-            <new-step-0-git @select="onConnect" in-setting />
-          </div>
+          <v-btn color="primary" v-else @click="showConnect = true" disabled>
+            <v-icon>mdi-github</v-icon>
+            <span class="ml-2">No Git Repository connected</span>
+          </v-btn>
         </template>
       </div>
     </div>

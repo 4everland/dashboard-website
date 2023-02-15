@@ -199,7 +199,7 @@
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status class="ta-l" :val="it.state"></h-status>
                 </div>
-                <div v-if="!it.deprecated">
+                <div v-if="!it.deprecated && it.repo.name">
                   <div
                     class="d-flex al-c"
                     v-if="it.repo && it.repo.id && it.currentBranch"

@@ -302,7 +302,9 @@ export default {
       } catch (error) {
         console.log(error, "build err");
         if (error.code == 10014)
-          this.$router.push(`/hosting/project/${projName}/${id}?tab=settings`);
+          this.$router.push(
+            `/hosting/project/${projName}/${id}?tab=settings&sub=git`
+          );
       }
       this.deploying = false;
     },
