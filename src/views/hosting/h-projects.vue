@@ -184,16 +184,21 @@
                   </div>
                 </div>
               </v-col>
-              <v-col cols="9" md="4" v-if="hashDeploy(it.deployType)">
+              <v-col cols="9" md="4" v-if="hashDeploy(it.deployType) || it.cli">
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status class="ta-l" :val="it.state"></h-status>
                 </div>
-                <div>
+                <div v-if="!it.cli">
                   <span class="d-ib deploy-origin-type fz-14">IPFS</span>
                   <span class="ml-3 fz-14">Deployment Through IPFS</span>
                 </div>
+                <div v-else>
+                  <span class="d-ib deploy-origin-type fz-14">CLI</span>
+                  <span class="ml-3 fz-14">Deployment Through CLI</span>
+                </div>
               </v-col>
+
               <v-col cols="9" md="4" v-else>
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->

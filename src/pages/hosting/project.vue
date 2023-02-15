@@ -58,7 +58,11 @@ export default {
       }
     },
     info() {
-      if (this.info.deployType == "CID" || this.info.deployType == "IPNS") {
+      if (
+        this.info.deployType == "CID" ||
+        this.info.deployType == "IPNS" ||
+        this.info.cli
+      ) {
         this.list = this.list.filter((it) => it.text != "Commits");
       }
     },

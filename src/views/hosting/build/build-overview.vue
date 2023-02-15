@@ -77,7 +77,10 @@
             </e-link>
           </e-kv2>
           <div class="mt-7 d-flex">
-            <e-kv2 label="Branch" v-if="!hashDeploy(info.deployType)">
+            <e-kv2
+              label="Branch"
+              v-if="!hashDeploy(info.deployType) && !info.cli"
+            >
               <div class="d-flex al-c f-wrap">
                 <h-branch :info="info" class="fz-15" />
                 <e-commit :info="info.commits" class="fz-14 ml-3"></e-commit>

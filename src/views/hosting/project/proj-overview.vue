@@ -134,7 +134,10 @@
             </e-kv>
             <e-kv label="Base IPNS" v-if="info.deployType == 'IPNS'"></e-kv>
           </div>
-          <div class="mt-9 d-flex" v-if="!hashDeploy(info.deployType)">
+          <div
+            class="mt-9 d-flex"
+            v-if="!hashDeploy(info.deployType) && !info.cli"
+          >
             <e-kv label="Branch">
               <div class="d-flex al-c f-wrap">
                 <h-branch :info="info" class="fz-15" />

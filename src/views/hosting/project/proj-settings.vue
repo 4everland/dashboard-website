@@ -39,7 +39,9 @@ export default {
         //     : [];
 
         const domains =
-          this.info.deployType == "CID" || this.info.deployType == "IPNS"
+          this.info.deployType == "CID" ||
+          this.info.deployType == "IPNS" ||
+          this.info.cli
             ? []
             : [
                 {
