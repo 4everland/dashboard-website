@@ -44,6 +44,7 @@ export default {
   },
   data() {
     return {
+      inviteCode: null,
       walletItem: [
         {
           name: "MetaMask",
@@ -72,6 +73,12 @@ export default {
         },
       ],
     };
+  },
+  mounted() {
+    const { inviteCode } = this.$route.query;
+    if (inviteCode) {
+      this.inviteCode = inviteCode;
+    }
   },
   methods: {
     onLoginData(data) {

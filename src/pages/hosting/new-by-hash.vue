@@ -28,7 +28,8 @@
           ></v-text-field>
         </v-col>
       </v-row>
-      <div>The Project Name</div>
+
+      <div class="mt-5">The Project Name</div>
       <v-text-field
         class="mt-4"
         persistent-placeholder

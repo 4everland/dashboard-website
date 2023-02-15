@@ -2,11 +2,15 @@
 .e-drawer {
   box-shadow: 5px 0px 30px 0px rgba(0, 0, 0, 0.1);
   z-index: 999;
+
   .v-navigation-drawer__border {
     display: none;
   }
   .v-navigation-drawer__content {
     overflow: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
   }
   .group-item {
     margin-bottom: 10px !important;
@@ -137,10 +141,9 @@
       </template>
     </v-list>
 
-    <!-- <div class="pos-a mini-arrow" @click="mini = !mini">
-      <img src="/img/svg/drawer/mini-arrow.svg" class="icon d-b" />
-    </div> -->
-    <div class="pos-a btm-0 left-0 w100p mb-4 al-c pa-3 bg-white">
+    <div class="mt-auto pa-3"></div>
+    <e-drawer-account></e-drawer-account>
+    <div class="mb-3 al-c pa-3 bg-white">
       <a
         class="flex-1 ta-c"
         :href="it.url"
@@ -154,16 +157,16 @@
         />
       </a>
     </div>
-    <div style="height: 80px"></div>
   </v-navigation-drawer>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import mixin from "./e-drawer-mixin";
 import { bus } from "@/utils/bus";
 const initFilePath = "/bucket/storage/";
 
 export default {
+  mixins: [mixin],
   data() {
     return {
       mLinks: [
@@ -196,108 +199,11 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      noticeMsg: (s) => s.noticeMsg,
-      userInfo: (s) => s.userInfo,
-      token: (s) => s.token(),
-    }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
     path() {
       return this.$route.path;
-    },
-    list() {
-      return [
-        {
-          label: "Overview",
-          img: "m-overview",
-          to: "/overview",
-          active: false,
-        },
-        {
-          label: "Hosting",
-          img: "m-hosting",
-          group: /^\/hosting/i,
-          subs: [
-            {
-              label: "Projects",
-              to: "/hosting/projects",
-              matPath: /hosting\/(new|project|build)/,
-            },
-            {
-              label: "Domains",
-              to: "/hosting/domains",
-            },
-            {
-              label: "Statistics",
-              to: "/hosting/statistics",
-            },
-            {
-              label: "Auth Tokens",
-              to: "/hosting/auth-tokens",
-            },
-          ],
-        },
-        {
-          label: "Bucket",
-          img: "m-bucket",
-          active: false,
-          group: /^\/bucket/i,
-          subs: [
-            // {
-            //   label: "Buckets",
-            //   to: this.path.includes(initFilePath)
-            //     ? initFilePath
-            //     : this.filesPath,
-            // },
-            {
-              label: "Buckets",
-              to: "/bucket/storage/",
-            },
-            {
-              label: "AR History",
-              to: "/bucket/arweave",
-            },
-            {
-              label: "Domains",
-              to: "/bucket/domains",
-              matPath: /bucket\/domain/,
-            },
-            {
-              label: "Access Keys",
-              to: "/bucket/access-keys",
-            },
-          ],
-        },
-        {
-          label: "Gateway",
-          img: "m-gateway",
-          suffixImg: "/img/svg/hosting/h-beta-active.svg",
-          group: /^\/gateway/i,
-          subs: [
-            {
-              label: "Dedicated Gateway",
-              to: "/gateway/list",
-            },
-            {
-              label: "IPNS Manager",
-              to: "/gateway/ipns",
-            },
-            {
-              label: "Auth Token",
-              to: "/gateway/auth-token",
-            },
-          ],
-        },
-        {
-          label: "Resource",
-          img: "m-usage",
-          to: "/resource",
-          active: false,
-          group: /^\/resource/i,
-        },
-      ];
     },
   },
   created() {
@@ -343,102 +249,3 @@ export default {
   },
 };
 </script>
-// <style lang="scss">
-// div#driver-highlighted-element-stage,
-// div#driver-page-overlay {
-//   background: transparent !important;
-//   outline: 5000px solid rgba(0, 0, 0, 0.75);
-//   z-index: 100013 !important;
-// }
-// .guide-class {
-//   max-width: 400px !important;
-//   .driver-next-btn {
-//     background: #634695 !important;
-//     border: none !important;
-//     text-shadow: none !important;
-//     border-radius: 0 !important;
-//     color: #fff !important;
-//     font-size: 14px !important;
-//     padding: 4px 20px !important;
-//   }
-//   .driver-prev-btn {
-//     display: none !important;
-//   }
-//   .driver-close-btn {
-//     padding: 3px !important;
-//     font-size: 14px !important;
-//     color: #889ab3 !important;
-//     background: #fff !important;
-//     border: none !important;
-//   }
-// }
-// .reward-guide-class {
-//   max-width: 600px !important;
-// }
-// .paging {
-//   position: absolute;
-//   left: 50px;
-//   bottom: 19px;
-//   font-size: 12px;
-//   color: #889ab3;
-// }
-// .description-content {
-//   color: #6c7789;
-//   line-height: 28px;
-// }
-// .airdrop-content {
-//   position: relative;
-//   padding: 10px;
-//   box-sizing: border-box;
-//   .text {
-//     margin-bottom: 10px;
-//     color: #0b0817;
-//     line-height: 36px;
-//   }
-//   .close-icon {
-//     position: absolute;
-//     top: 33px;
-//     right: 17px;
-//   }
-//   .resource-item {
-//     position: relative;
-//     padding: 5px 15px;
-//     height: 70px;
-//     color: #898989;
-//     box-sizing: border-box;
-//     background: #f9fbfc;
-//     box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
-//     border-radius: 10px;
-//     .resource-item-value {
-//       font-size: 18px;
-//       margin-left: 10px;
-//       color: #100d58;
-//     }
-//     .resource-text {
-//       margin-left: 16px;
-//     }
-//   }
-//   .resource-item::after {
-//     content: "";
-//     display: block;
-//     position: absolute;
-//     right: 15px;
-//     top: 10px;
-//     width: 18px;
-//     height: 18px;
-//     background: url("/img/airDrop/check.svg") no-repeat;
-//   }
-//   .claim-btn {
-//     display: block;
-//     width: 70%;
-//     margin: 20px auto;
-//     padding: 8px 5px;
-//     text-align: center;
-//     color: #fff;
-//     background: #634695;
-//     border-radius: 2px;
-//     text-decoration: none;
-//   }
-// }
-//
-</style>

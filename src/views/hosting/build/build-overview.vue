@@ -77,7 +77,10 @@
             </e-link>
           </e-kv2>
           <div class="mt-7 d-flex">
-            <e-kv2 label="Branch" v-if="!hashDeploy(info.deployType)">
+            <e-kv2
+              label="Branch"
+              v-if="!hashDeploy(info.deployType) && !info.cli"
+            >
               <div class="d-flex al-c f-wrap">
                 <h-branch :info="info" class="fz-15" />
                 <e-commit :info="info.commits" class="fz-14 ml-3"></e-commit>
@@ -150,13 +153,7 @@
               </v-list>
             </e-menu>
             <div class="flex-1 ml-5 pr-4">
-              <div
-                v-if="
-                  (!info.cli && !hashDeploy(info.deployType)) ||
-                  (!info.cli && info.state == 'FAILURE')
-                "
-                class="mb-5"
-              >
+              <div v-if="showBtn1Txt" class="mb-5">
                 <v-btn
                   color="error"
                   outlined
@@ -235,6 +232,14 @@ export default {
       if (this.showCancel) return "Cancel";
       return "Redeploy";
     },
+    showBtn1Txt() {
+      console.log(this.isDeprecated);
+      if (this.info.cli) return false;
+      if (this.isDeprecated) return false;
+      return (
+        !this.hashDeploy(this.info.deployType) || this.info.state == "FAILURE"
+      );
+    },
     visitUrl() {
       const { domain } = this.info;
       if (domain) return "//" + domain;
@@ -256,6 +261,9 @@ export default {
       return function (val) {
         return val.replace("/ipfs/", "").replace("/ipns/", "");
       };
+    },
+    isDeprecated() {
+      return this.projInfo.deprecated;
     },
   },
   async created() {
@@ -305,7 +313,9 @@ export default {
       } catch (error) {
         console.log(error, "build err");
         if (error.code == 10014)
-          this.$router.push(`/hosting/project/${projName}/${id}?tab=settings`);
+          this.$router.push(
+            `/hosting/project/${projName}/${id}?tab=settings&sub=git`
+          );
       }
       this.deploying = false;
     },

@@ -28,7 +28,11 @@
                 </div>
               </div>
               <div class="ml-auto" v-if="info.online !== false">
-                <v-btn color="primary" small @click="onDeploy(row)"
+                <v-btn
+                  color="primary"
+                  small
+                  @click="onDeploy(row)"
+                  :disabled="isDeprecated"
                   >Deploy</v-btn
                 >
               </div>
@@ -71,6 +75,9 @@ export default {
     noRepo() {
       const { id } = this.info.repo || {};
       return !id;
+    },
+    isDeprecated() {
+      return this.info.deprecated;
     },
   },
   data() {

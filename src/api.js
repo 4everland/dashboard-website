@@ -14,7 +14,7 @@ Vue.prototype.$axios = axios;
 export const endpoint = inDev
   ? "https://s3gw.foreverland.xyz"
   : "https://endpoint.4everland.co";
-const authApi = inDev
+export const authApi = inDev
   ? "https://auth.foreverland.xyz"
   : "https://oauth.4everland.org";
 const v3Api = inDev
@@ -36,6 +36,7 @@ const bucketDomainApi = inDev
   ? "https://domain.foreverland.xyz"
   : "https://api.4everland.org";
 Vue.prototype.$endpoint = endpoint;
+Vue.prototype.$authApi = authApi;
 
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   // console.log(location);
@@ -72,6 +73,13 @@ Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
   return pre + hash;
 };
 
+function keepMyToken(url) {
+  const urls = ["/user/activity/action/logs"];
+  const arr = urls.filter((it) => {
+    return new RegExp(it, "g").test(url);
+  });
+  return arr.length > 0;
+}
 const RefreshPath = "/refresh";
 const RefreshLockKey = "refresh";
 const lock = new AsyncLock({ timeout: 5000 });
@@ -79,11 +87,14 @@ const lock = new AsyncLock({ timeout: 5000 });
 [http, http2].forEach((axios) => {
   axios.interceptors.request.use(
     async (config) => {
-      let token = "";
+      let token = localStorage.token;
+      const { teamInfo } = store.getters;
+      if (teamInfo && !keepMyToken(config.url)) {
+        token = teamInfo.token || token;
+      }
       if (config.url != RefreshPath) {
         await lock
           .acquire(RefreshLockKey, async () => {
-            token = localStorage.token;
             let { accessTokenExpireAt, refreshToken } = JSON.parse(
               localStorage.authData || "{}"
             );
@@ -98,18 +109,18 @@ const lock = new AsyncLock({ timeout: 5000 });
                     _auth: 1,
                   },
                   headers: {
-                    Authorization: "Bearer " + token,
+                    Authorization: "Bearer " + localStorage.token,
                   },
                 }
               );
               localStorage.authData = JSON.stringify(data);
-              token = data.accessToken;
-              localStorage.token = token;
+              localStorage.token = data.accessToken;
+              if (teamInfo.isOwner) {
+                token = localStorage.token;
+              }
             }
           })
           .then(() => {});
-      } else {
-        token = localStorage.token;
       }
 
       const params = (config.params = config.params || {});
@@ -228,10 +239,10 @@ async function handleMsg(status, code, msg, config) {
       .then(() => {
         location.reload();
       });
-  } else if (msg && !config.noTip) {
+  } else if (msg && msg != "Request aborted" && !config.noTip) {
     vue.$alert(msg).then(() => {
-      if (msg == "Request aborted") {
-        location.reload();
+      if (status == 403) {
+        location.href = "/";
       }
     });
   }

@@ -8,6 +8,7 @@ import UserRoutes from "./user/routes";
 import MoreRoutes from "./more/routes";
 import ResRoutes from "./resource/routes";
 import GatewayRoutes from "./gateway/routes";
+import AccountRoutes from "./account/routes";
 
 export default [
   {
@@ -38,4 +39,5 @@ export default [
   ...MoreRoutes,
   ...ResRoutes,
   ...GatewayRoutes,
+  ...AccountRoutes,
 ];

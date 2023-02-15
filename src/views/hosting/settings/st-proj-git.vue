@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="mt-5 b-1">
-        <div class="d-flex al-c f-wrap" v-if="repoName">
+        <div class="d-flex al-c f-wrap" v-if="repoName && !isDeprecated">
           <v-icon color="#4A96FA" size="32">mdi-github</v-icon>
           <div class="ml-5 mr-auto">
             <h4 class="color-1">
@@ -28,20 +28,26 @@
           </v-btn>
         </div>
         <template v-else>
-          <div v-if="!showConnect">
-            <v-btn color="primary" @click="showConnect = true">
-              <v-icon>mdi-github</v-icon>
-              <span class="ml-2">Connect Github</span>
-            </v-btn>
+          <div v-if="!isDeprecated">
+            <div v-if="!showConnect">
+              <v-btn color="primary" @click="showConnect = true">
+                <v-icon>mdi-github</v-icon>
+                <span class="ml-2">Connect Github</span>
+              </v-btn>
+            </div>
+            <div v-else>
+              <new-step-0-git @select="onConnect" in-setting />
+            </div>
           </div>
-          <div v-else>
-            <new-step-0-git @select="onConnect" in-setting />
-          </div>
+          <v-btn color="primary" v-else @click="showConnect = true" disabled>
+            <v-icon>mdi-github</v-icon>
+            <span class="ml-2">No Git Repository connected</span>
+          </v-btn>
         </template>
       </div>
     </div>
 
-    <template v-if="repoName">
+    <template v-if="repoName && !isDeprecated">
       <div class="bd-1 mt-5">
         <div>
           <h3>Production Branch</h3>
@@ -134,6 +140,9 @@ export default {
         if (!this.keyword.trim()) return true;
         return new RegExp(this.keyword, "i").test(it.namespace + "/" + it.name);
       });
+    },
+    isDeprecated() {
+      return this.info.deprecated;
     },
   },
   watch: {

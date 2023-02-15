@@ -6,7 +6,7 @@
 </style>
 <template>
   <div class="pos-r">
-    <div class="pos-a top-0 w100p z-1000" v-show="showProgress">
+    <div class="pos-f top-0 w100p z-1000" v-show="showProgress">
       <v-progress-linear
         indeterminate
         color="cyan"
@@ -30,12 +30,13 @@
           v-for="(it, i) in menus"
           :key="i"
         >
+          <!-- :href="it.href"
+          :to="it.to"
+          :target="it.href ? '_blank' : ''" -->
           <v-btn
             slot="ref"
             text
-            :href="it.href"
-            :to="it.to"
-            :target="it.href ? '_blank' : ''"
+            @click="onMenu(it)"
             :style="it.btnStyle"
             class="ml-4"
             :id="it.to == '/reward-hub' ? 'reward-guide' : null"
@@ -61,13 +62,13 @@
           </v-btn>
 
           <v-list dense v-if="it.subs">
+            <!-- :to="sub.to"
+            :href="sub.href"
+            :target="sub.href ? '_blank' : ''" -->
             <v-list-item
               v-for="(sub, j) in it.subs"
               :key="j"
               link
-              :to="sub.to"
-              :href="sub.href"
-              :target="sub.href ? '_blank' : ''"
               @click="onMenu(sub)"
             >
               <img
@@ -86,7 +87,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
+
 export default {
   data() {
     return {};
@@ -97,6 +99,7 @@ export default {
       userInfo: (s) => s.userInfo,
       showProgress: (s) => s.showProgress,
     }),
+    ...mapGetters(["teamInfo"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
@@ -113,6 +116,7 @@ export default {
           label: "Changelog",
           icon: "m-log",
           to: "/changelog",
+          noLogin: true,
         },
       ];
 
@@ -149,7 +153,7 @@ export default {
             {
               label: "Activity Log",
               icon: "m-actlog",
-              to: "/activity-log",
+              to: "/account/activity-log",
             },
             {
               label: "Feedback",
@@ -184,16 +188,31 @@ export default {
     }
   },
   methods: {
-    onMenu(it) {
+    async onMenu(it) {
+      if (it.name == "logout") {
+        localStorage.clear();
+        location.href = this.$getLoginUrl();
+        return;
+      }
+      if (it.href) {
+        window.open(it.href);
+      }
+      if (it.to) {
+        if (this.teamInfo.isMember && !it.noLogin) {
+          await this.$confirm(
+            "You're about to switch to your individual account to display relevant content. Do you want to proceed?"
+          );
+          this.$setState({
+            teamId: null,
+          });
+        }
+        this.$router.push(it.to);
+      }
       if (it.noticeMsg) {
         console.log(it);
         this.$setMsg({
           ...it.noticeMsg,
         });
-      }
-      if (it.name == "logout") {
-        localStorage.clear();
-        location.href = this.$getLoginUrl();
       }
     },
   },

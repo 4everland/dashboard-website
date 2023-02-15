@@ -184,47 +184,60 @@
                   </div>
                 </div>
               </v-col>
-              <v-col cols="9" md="4" v-if="hashDeploy(it.deployType)">
+              <v-col cols="9" md="4" v-if="hashDeploy(it.deployType) || it.cli">
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status class="ta-l" :val="it.state"></h-status>
                 </div>
-                <div v-if="it.deployType !== 'IPNS'">
-                  <span class="d-ib deploy-origin-type fz-14">IPFS</span>
-                  <span class="ml-3 fz-14">Deployment Through IPFS</span>
+                <div v-if="!it.cli">
+                  <span class="d-ib deploy-origin-type fz-14">{{
+                    it.deployType == "IPNS" ? "IPNS" : "IPFS"
+                  }}</span>
+                  <span class="ml-3 fz-14"
+                    >Deployment Through
+                    {{ it.deployType == "IPNS" ? "IPNS" : "IPFS" }}</span
+                  >
                 </div>
                 <div v-else>
-                  <span class="d-ib deploy-origin-type fz-14">IPNS</span>
-                  <span class="ml-3 fz-14">Deployment Through IPNS</span>
+                  <span class="d-ib deploy-origin-type fz-14">CLI</span>
+                  <span class="ml-3 fz-14">Deployment Through CLI</span>
                 </div>
               </v-col>
+
               <v-col cols="9" md="4" v-else>
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status class="ta-l" :val="it.state"></h-status>
                 </div>
-                <div
-                  class="d-flex al-c"
-                  v-if="it.repo && it.repo.id && it.currentBranch"
-                >
-                  <e-icon-link
-                    @click.native.stop
-                    class="mr-6 shrink-0"
-                    img="/img/svg/hosting/m-branch.svg"
-                    :link="
-                      (it.repo.cloneUrl || '').replace(
-                        '.git',
-                        '/tree/' + it.currentBranch
-                      )
-                    "
+                <div v-if="!it.deprecated && it.repo.name">
+                  <div
+                    class="d-flex al-c"
+                    v-if="it.repo && it.repo.id && it.currentBranch"
                   >
-                    {{ it.currentBranch }}
-                  </e-icon-link>
-                  <e-commit
-                    @click.native.stop
-                    :info="it.commit"
-                    class="line-1"
-                  ></e-commit>
+                    <e-icon-link
+                      @click.native.stop
+                      class="mr-6 shrink-0"
+                      img="/img/svg/hosting/m-branch.svg"
+                      :link="
+                        (it.repo.cloneUrl || '').replace(
+                          '.git',
+                          '/tree/' + it.currentBranch
+                        )
+                      "
+                    >
+                      {{ it.currentBranch }}
+                    </e-icon-link>
+                    <e-commit
+                      @click.native.stop
+                      :info="it.commit"
+                      class="line-1"
+                    ></e-commit>
+                  </div>
+                </div>
+                <div v-else>
+                  <span class="d-ib deploy-origin-type fz-14"
+                    >No Git Repository connected</span
+                  >
                 </div>
               </v-col>
 
@@ -308,24 +321,6 @@
         class="pb-15 al-c justify-center"
         v-if="!list.length && !loading"
       >
-        <!-- <div
-          :style="{
-            height: loading ? '80px' : '60px',
-          }"
-        ></div>
-        <e-empty :loading="loading" :title="loading ? '' : 'No Projects, Yet!'">
-          {{
-            loading
-              ? "Loading projects..."
-              : "Create a project from a template, or import a Git repository."
-          }}
-        </e-empty>
-        <div class="mt-10" v-if="!loading">
-          <v-btn color="primary" to="/hosting/new">Create a New Project</v-btn>
-        </div>
-        <v-btn color="primary" to="/hosting/newByHash"
-          >Create a project by cid</v-btn
-        > -->
         <div class="mt-10">
           <img src="/img/svg/hosting/no-data.svg" width="180" alt="" />
           <p class="mt-7 fz-18">No projects, yet！</p>
@@ -512,35 +507,56 @@ export default {
           {
             comp: "h-proj-statis",
             data: [
-              [
-                {
-                  title: "New Users",
-                  num: data.newUsers,
-                },
-                {
-                  title: "Unique Visitor",
-                  num: data.uv, // data.totalUV,
-                },
-                {
-                  title: "Page Views",
-                  num: data.pv, // data.totalPV,
-                },
-              ],
-              [
-                {
-                  title: "Bandwidth used",
-                  ...this.$utils.getFileSize(data.usedBandwidth, 1),
-                },
-                {
-                  title: "Build Minutes used",
-                  unit: "Minutes",
-                  num: data.usedBuildMinutes.toFixed(2),
-                },
-                {
-                  title: "Storage used",
-                  ...this.$utils.getFileSize(data.usedStorage, 1),
-                },
-              ],
+              // [
+              //   {
+              //     title: "New Users",
+              //     num: data.newUsers,
+              //   },
+              //   {
+              //     title: "Unique Visitor",
+              //     num: data.uv, // data.totalUV,
+              //   },
+              //   {
+              //     title: "Page Views",
+              //     num: data.pv, // data.totalPV,
+              //   },
+              // ],
+              // [
+              //   {
+              //     title: "Bandwidth used",
+              //     ...this.$utils.getFileSize(data.usedBandwidth, 1),
+              //   },
+              //   {
+              //     title: "Build Minutes used",
+              //     unit: "Minutes",
+              //     num: data.usedBuildMinutes.toFixed(2),
+              //   },
+              //   {
+              //     title: "Storage used",
+              //     ...this.$utils.getFileSize(data.usedStorage, 1),
+              //   },
+              // ],
+              {
+                title: "Unique Visitor",
+                num: data.uv, // data.totalUV,
+              },
+              {
+                title: "Page Views",
+                num: data.pv, // data.totalPV,
+              },
+              {
+                title: "Bandwidth used",
+                ...this.$utils.getFileSize(data.usedBandwidth, 1),
+              },
+              {
+                title: "Build Minutes used",
+                unit: "Minutes",
+                num: data.usedBuildMinutes.toFixed(2),
+              },
+              {
+                title: "Storage used",
+                ...this.$utils.getFileSize(data.usedStorage, 1),
+              },
             ],
           },
           {
