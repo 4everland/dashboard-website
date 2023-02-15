@@ -6,7 +6,7 @@
 </style>
 <template>
   <div class="pos-r">
-    <div class="pos-a top-0 w100p z-1000" v-show="showProgress">
+    <div class="pos-f top-0 w100p z-1000" v-show="showProgress">
       <v-progress-linear
         indeterminate
         color="cyan"
