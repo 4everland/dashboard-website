@@ -321,35 +321,31 @@
         class="pb-15 al-c justify-center"
         v-if="!list.length && !loading"
       >
-        <div class="mt-10">
-          <img src="/img/svg/hosting/no-data.svg" width="180" alt="" />
-          <p class="mt-7 fz-18">No projects, yet！</p>
-          <div class="al-c mt-10">
-            <div
-              class="ipfs-deploy deploy"
-              @click="$router.push('/hosting/new-by-hash')"
-            >
-              <img
-                class="mb-1"
-                src="/img/svg/hosting/ipfs-deploy.svg"
-                alt=""
-                width="88"
-              />
-              <div class="fw-b">Create a project from a IPFS Path</div>
-            </div>
-            <div
-              class="template-deploy deploy"
-              @click="$router.push('/hosting/new')"
-            >
-              <img
-                class="mb-4"
-                src="/img/svg/hosting/template-deploy.svg"
-                alt=""
-                width="44"
-              />
-              <div class="fw-b">
-                Create a project from Template, or import a Git repository.
-              </div>
+        <div class="al-c mt-10">
+          <div
+            class="ipfs-deploy deploy"
+            @click="$router.push('/hosting/new-by-hash')"
+          >
+            <img
+              class="mb-1"
+              src="/img/svg/hosting/ipfs-deploy.svg"
+              alt=""
+              width="88"
+            />
+            <div class="fw-b">Create a project from a IPFS Path</div>
+          </div>
+          <div
+            class="template-deploy deploy"
+            @click="$router.push('/hosting/new')"
+          >
+            <img
+              class="mb-4"
+              src="/img/svg/hosting/template-deploy.svg"
+              alt=""
+              width="44"
+            />
+            <div class="fw-b">
+              Create a project from Template, or import a Git repository.
             </div>
           </div>
         </div>
