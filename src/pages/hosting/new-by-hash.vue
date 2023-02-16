@@ -28,7 +28,10 @@
           ></v-text-field>
         </v-col>
       </v-row>
-
+      <div class="fz-14 gray">
+        Tips: Due to the vast scale of the IPFS network, finding content for
+        IPFS Path deployments may take some time.
+      </div>
       <div class="mt-5">The Project Name</div>
       <v-text-field
         class="mt-4"

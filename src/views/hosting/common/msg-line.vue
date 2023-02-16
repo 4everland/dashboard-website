@@ -5,7 +5,11 @@
         class="fz-14"
         :href="$utils.getCidLink(transformIpfsPath(content), platForm)"
       >
-        {{ transformIpfsPath(content) }}
+        {{
+          cutStr
+            ? transformIpfsPath(content).cutStr(20, 10)
+            : transformIpfsPath(content)
+        }}
       </e-link>
       <img
         src="/img/svg/copy.svg"
@@ -51,7 +55,6 @@ export default {
     transformIpfsPath() {
       return function (val) {
         const str = val.replace("/ipfs/", "").replace("/ipns/", "");
-        if (this.cutStr) return str.cutStr(20, 10);
         return str;
       };
     },
