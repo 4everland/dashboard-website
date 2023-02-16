@@ -63,7 +63,7 @@
 <template>
   <div class="projects">
     <e-right-opt-wrap>
-      <e-menu open-on-hover offset-y>
+      <e-menu open-on-hover offset-y v-if="list.length">
         <v-btn slot="ref" outlined min-width="100">
           <!-- <img src="/img/svg/hosting/ic-sort.svg" width="12" /> -->
           <span class="ml-2">{{
@@ -91,7 +91,7 @@
         <span class="ml-2">New Project</span>
       </v-btn> -->
       <span class="px-4"></span>
-      <e-menu open-on-hover offset-y>
+      <e-menu open-on-hover offset-y v-if="list.length">
         <v-btn slot="ref" color="primary" dark>
           <img src="/img/svg/add1.svg" width="12" />
           <span class="ml-2">New Project</span>
