@@ -168,6 +168,7 @@
     </v-dialog>
     <pinning-service-control
       @close="showControl = false"
+      @retryUpload="onRetry"
       :tasks="tasks"
       v-show="showControl"
     ></pinning-service-control>
@@ -297,6 +298,14 @@ export default {
       for (let i = 0; i < min; i++) {
         this.startTask(idles[i]);
       }
+    },
+    onRetry() {
+      this.tasks.forEach((it) => {
+        console.log(it);
+        if (it.status == 4) it.resetStatus();
+      });
+
+      this.processTask();
     },
     getFileContent(file) {
       return new Promise((resolve, reject) => {

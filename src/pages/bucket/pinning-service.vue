@@ -3,7 +3,7 @@
     <e-right-opt-wrap :top="-75">
       <v-row>
         <v-col :md="3">
-          <v-btn color="primary" @click="getAccessToken"> Access Token </v-btn>
+          <v-btn color="primary" @click="handleGetToken"> Access Token </v-btn>
         </v-col>
         <v-col :md="4" style="max-width: 230px">
           <v-select
@@ -53,11 +53,44 @@
         <template v-slot:item.size="{ item }">
           <span>{{ $utils.getFileSize(item.info.dag_size) }}</span>
         </template>
+
+        <template #item.created="{ item }">
+          <span>{{ new Date(item.created).format() }}</span>
+        </template>
         <template v-slot:item.hash="{ item }">
-          <span>{{ item.pin.cid.cutStr(20, 10) }}</span>
+          <a
+            :href="$utils.getCidLink(item.pin.cid)"
+            class="hash-link"
+            style="color: #0b0817"
+            target="_blank"
+            @click.stop="onStop"
+            >{{ item.pin.cid.cutStr(20, 5) }}</a
+          >
+          <v-btn
+            class="e-btn-text ml-2"
+            icon
+            small
+            @click.stop
+            v-clipboard="item.pin.cid"
+            @success="$toast('Copied!')"
+          >
+            <img src="/img/svg/copy.svg" width="12" />
+          </v-btn>
         </template>
         <template v-slot:item.status="{ item }">
-          <span class="pinning-status">{{ item.status }}</span>
+          <span
+            class="pinning-status"
+            :style="{ color: pinStatusColor(item.status) }"
+            >{{ item.status }}</span
+          >
+          <v-tooltip top v-if="item.status == 'failed'">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon class="ml-4" size="18" v-bind="attrs" v-on="on"
+                >mdi-alert-circle-outline</v-icon
+              >
+            </template>
+            <span>failed reason</span>
+          </v-tooltip>
         </template>
       </v-data-table>
 
@@ -93,10 +126,14 @@
 
     <v-dialog v-model="showPop" max-width="500" persistent>
       <div class="pd-30">
-        <h3>Access Token Generated</h3>
-        <div class="mt-6" @click="$copy(accessToken)">
-          <p>{{ accessToken }}</p>
-          <div class="pd-10 bd-1 bdrs-3 mt-3 d-flex al-c hover-1">
+        <h3>API Key</h3>
+        <div class="mt-3" @click="$copy(accessToken)">
+          <div class="fz-14 gray">
+            Be sure to keep the unique API key for the pinning service safe. The
+            API key cannot be deleted, but it can be reset if has been
+            compromised.
+          </div>
+          <div class="pd-10 bd-1 bdrs-3 mt-5 d-flex al-c hover-1">
             <span class="el-label-1 fz-14">{{
               accessToken.cutStr(20, 10)
             }}</span>
@@ -105,7 +142,9 @@
         </div>
         <div class="mt-6 ta-c">
           <v-btn color="primary" @click="resetAccessToken">Reset</v-btn>
-          <v-btn color="primary" @click="showPop = false">Done</v-btn>
+          <v-btn color="primary" class="ml-8" @click="showPop = false"
+            >Done</v-btn
+          >
         </div>
       </div>
     </v-dialog>
@@ -171,6 +210,13 @@ export default {
     compeleted() {
       return !this.deleteTasks.some((it) => it.status != 3 && it.status != 4);
     },
+    pinStatusColor() {
+      return function (status) {
+        if (status == "queued") return "#34A9FF";
+        if (status == "failed") return "#FF5656";
+        return "#000";
+      };
+    },
   },
   watch: {
     seletedRecords: {
@@ -195,6 +241,10 @@ export default {
     await this.getList();
   },
   methods: {
+    async handleGetToken() {
+      await this.getAccessToken();
+      this.showPop = true;
+    },
     handleInput: debounce(function () {
       this.getList();
     }),

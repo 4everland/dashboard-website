@@ -12,7 +12,12 @@
         :style="{ width: progressValue + '%', background: statusColor }"
       ></div>
     </div>
-    <div class="gray fz-14 mt-4">{{ completedTasks }} / {{ tasks.length }}</div>
+    <div class="gray fz-14 mt-4">
+      <span>{{ completedTasks }} / {{ tasks.length }}</span>
+      <span class="ml-4" v-if="failed" @click="$emit('retryUpload')"
+        >Continue</span
+      >
+    </div>
   </div>
 </template>
 
@@ -39,6 +44,19 @@ export default {
     completed() {
       return !this.tasks.some((it) => it.status != 3);
     },
+    failed() {
+      // return (
+      //   this.tasks.filter((it) => it.status == 3 || it.status == 4).length ==
+      //   this.tasks.length
+      // );
+      return (
+        this.failedTasks.length &&
+        this.tasks.some((it) => it.status != 0 && it.status != 1)
+      );
+    },
+    failedTasks() {
+      return this.tasks.filter((it) => it.status == 4);
+    },
     statusColor() {
       return this.tasks.some((it) => it.status == 0 || it.status == 1)
         ? "#34A9FF"
@@ -51,7 +69,6 @@ export default {
       return (this.completedTasks / this.tasks.length) * 100;
     },
   },
-  methods: {},
 };
 </script>
 

@@ -355,6 +355,9 @@ export class PinningServiceTaskWrapper {
       console.log(error);
     }
   }
+  resetStatus() {
+    this.status = 0;
+  }
 }
 
 export class PinningServiceDeleteTaskWrapper {
@@ -395,5 +398,8 @@ export class PinningServiceDeleteTaskWrapper {
     } catch (error) {
       console.log(error);
     }
+  }
+  resetStatus() {
+    this.status = 0;
   }
 }
