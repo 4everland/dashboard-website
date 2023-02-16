@@ -64,19 +64,20 @@
     </v-dialog>
     <v-dialog v-model="showMultipleDialog" max-width="550">
       <div class="pa-5">
-        <h3>Pin By CID</h3>
+        <h3>Batch CIDs upload</h3>
         <div class="fz-14 my-3">
           This function allows you to pin content to 4EVERLAND bucket using an
           IPFS Content Identifier. (CID)
         </div>
         <div v-if="!file">
-          <div class="al-c mt-7">
-            <v-btn outlined @click="$refs.uploadInput.onClick()"
+          <div class="fz-14 gray-6 mt-2">
+            Only a single .txt file is supported for uploading with one CID per
+            line in the .txt file.
+          </div>
+          <div class="al-c mt-4 justify-center">
+            <v-btn tile color="primary" @click="$refs.uploadInput.onClick()"
               >Upload File</v-btn
             >
-          </div>
-          <div class="fz-14 gray-6 mt-3">
-            only support single file name suffix .text
           </div>
         </div>
         <div v-else>
@@ -86,18 +87,18 @@
               >mdi-trash-can</v-icon
             >
           </div>
-          <p class="my-3">
-            <span class="fz-14"
-              >Parse successfully , all counts is {{ readerFileList.length }},
-              parse useful {{ readerFileSuccessList.length }} cid!</span
-            >
+          <div class="mt-2 mb-5">
+            <span class="fz-14 gray">
+              Resolving completed! {{ readerFileList.length }} lines total,
+              resolved {{ readerFileSuccessList.length }} valid CIDs.
+            </span>
             <span
               class="cursor-p ml-4 fz-14"
               style="color: blue"
               @click="showFileView = true"
               >View List</span
             >
-          </p>
+          </div>
           <v-form ref="mutipleForm">
             <v-text-field
               persistent-placeholder
