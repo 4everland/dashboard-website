@@ -356,3 +356,44 @@ export class PinningServiceTaskWrapper {
     }
   }
 }
+
+export class PinningServiceDeleteTaskWrapper {
+  static id = 0;
+  constructor(requestId, accessToken) {
+    this.id = PinningServiceDeleteTaskWrapper.id++;
+    this.status = 0;
+    this.requestId = requestId;
+    this.accessToken = accessToken;
+    this.abortAxiosFn = null;
+  }
+  async startDelete() {
+    try {
+      this.status = 1;
+      const { data } = await Vue.prototype.$axios({
+        method: "DELETE",
+        url: pinningServiceApi + "/pins/" + this.requestId,
+        headers: {
+          Authorization: "Bearer " + this.accessToken,
+        },
+        cancelToken: new Vue.prototype.$axios.CancelToken((c) => {
+          this.abortAxiosFn = c;
+        }),
+      });
+      console.log(data);
+      this.status = 3;
+    } catch (error) {
+      console.log(error);
+      this.status = 4;
+    }
+  }
+  async abortTask() {
+    try {
+      if (this.abortAxiosFn) {
+        await this.abortAxiosFn({ status: 2 });
+        this.status = 2;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}

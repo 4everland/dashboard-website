@@ -32,7 +32,7 @@
             persistent-placeholder
             label="Set Name"
             counter="30"
-            :rules="[(v) => v.length <= 30 || 'name only 30 char']"
+            :rules="[(v) => (v && v.length <= 30) || 'name only 30 char']"
             v-model="form.name"
           ></v-text-field>
           <v-text-field
@@ -103,7 +103,7 @@
               persistent-placeholder
               label="Set Name"
               counter="30"
-              :rules="[(v) => v.length <= 30 || 'name only 30 char']"
+              :rules="[(v) => (v && v.length <= 30) || 'name only 30 char']"
               v-model="mutipleForm.name"
             ></v-text-field>
 
@@ -166,11 +166,17 @@
         </div>
       </div>
     </v-dialog>
+    <pinning-service-control
+      @close="showControl = false"
+      :tasks="tasks"
+      v-show="showControl"
+    ></pinning-service-control>
   </div>
 </template>
 
 <script>
 import { PinningServiceTaskWrapper } from "../task";
+import PinningServiceControl from "@/views/bucket/components/pinning-service-control.vue";
 import InputUpload from "@/views/bucket/components/input-upload";
 export default {
   props: {
@@ -198,6 +204,7 @@ export default {
       viewInvalid: false,
       processLimit: 10,
       tasks: [],
+      showControl: false,
     };
   },
   computed: {
@@ -214,7 +221,7 @@ export default {
       return this.readerFileList;
     },
     compeleted() {
-      return !this.tasks.some((it) => it.status != 3);
+      return !this.tasks.some((it) => it.status != 3 && it.status != 4);
     },
   },
 
@@ -230,6 +237,16 @@ export default {
     compeleted(val) {
       if (val) this.$emit("getList");
     },
+    showMultipleDialog(val) {
+      if (!val) {
+        this.$refs.mutipleForm.reset();
+        this.readerFileList = [];
+        this.file = null;
+      }
+    },
+    showDialog(val) {
+      if (!val) this.$refs.form.reset();
+    },
   },
   methods: {
     handleUpload() {
@@ -243,12 +260,15 @@ export default {
       }
       let task = new PinningServiceTaskWrapper(form, this.accessToken);
       this.tasks.push(task);
+      this.showControl = true;
       this.processTask();
       this.showDialog = false;
     },
     handleMultipleUpload() {
       let mutipleForm = { ...this.mutipleForm };
-      mutipleForm.origins = mutipleForm.origins.split("\n");
+      mutipleForm.origins = mutipleForm.origins
+        ? mutipleForm.origins.split("\n")
+        : "".split("\n");
       const tasks = this.readerFileSuccessList.map(
         (it) =>
           new PinningServiceTaskWrapper(
@@ -257,7 +277,9 @@ export default {
           )
       );
       this.tasks = this.tasks.concat(tasks);
+      this.showControl = true;
       this.processTask();
+      this.showMultipleDialog = false;
     },
     async startTask(task) {
       await task.addPin();
@@ -268,7 +290,9 @@ export default {
       if (processing.length >= this.processLimit) return;
       const idles = this.tasks.filter((it) => it.status == 0);
       const min =
-        idles.length > this.processLimit ? this.processLimit : idles.length;
+        idles.length > this.processLimit
+          ? this.processLimit - processing.length
+          : idles.length;
       console.log(min);
       for (let i = 0; i < min; i++) {
         this.startTask(idles[i]);
@@ -303,6 +327,7 @@ export default {
   },
   components: {
     InputUpload,
+    PinningServiceControl,
   },
 };
 </script>

@@ -12,7 +12,7 @@
             solo
             :items="items"
             v-model="state"
-            @change="getList"
+            @change="onChange"
           />
         </v-col>
         <v-col :md="5">
@@ -32,10 +32,11 @@
       <pinning-service-upload
         class="mb-7"
         :accessToken="accessToken"
-        @getList="getList"
+        @getList="getList({}, true)"
       ></pinning-service-upload>
       <v-data-table
         class="hide-bdb"
+        fixed-header
         :headers="headers"
         :items="list"
         :loading="tableLoading"
@@ -43,12 +44,14 @@
         v-model="seletedRecords"
         item-key="requestid"
         checkbox-color="#34A9FF"
-        no-data-text=""
-        loading-text=""
         hide-default-footer
+        disable-pagination
       >
         <template v-slot:item.name="{ item }">
           <span>{{ item.pin.name }}</span>
+        </template>
+        <template v-slot:item.size="{ item }">
+          <span>{{ $utils.getFileSize(item.info.dag_size) }}</span>
         </template>
         <template v-slot:item.hash="{ item }">
           <span>{{ item.pin.cid.cutStr(20, 10) }}</span>
@@ -57,27 +60,18 @@
           <span class="pinning-status">{{ item.status }}</span>
         </template>
       </v-data-table>
-      <div class="pd-20 gray ta-c fz-16 mt-5" v-if="list.length">
-        <v-btn
-          outlined
-          class="mr-5"
-          @click="handlePrevious"
-          :disabled="disabledPrevious"
-          >Previous</v-btn
-        >
-        <v-btn
-          min-width="100"
-          outlined
-          @click="handleNext"
-          :disabled="disabledNext"
-          >Next</v-btn
-        >
-      </div>
+
       <div class="ta-c mt-8" v-if="!list.length">
         <e-empty :loading="tableLoading">
           {{ tableLoading ? `Loading files...` : `No files` }}
         </e-empty>
       </div>
+      <bottom-detector
+        v-if="list.length"
+        :loadingMore="loadingMore"
+        @arriveBottom="handleLoadMore"
+        :noMore="noMore"
+      ></bottom-detector>
 
       <operation-bar ref="operationBar">
         <v-checkbox
@@ -90,7 +84,7 @@
           style="border-color: #6c7789"
           outlined
           class="ml-4"
-          @click="handleDelete()"
+          @click="handleDelete"
         >
           <span class="gray">Delete</span>
         </v-btn>
@@ -115,15 +109,13 @@
         </div>
       </div>
     </v-dialog>
-
-    <pinning-service-control></pinning-service-control>
   </div>
 </template>
 
 <script>
 import { bus } from "../../utils/bus";
 import PinningServiceUpload from "@/views/bucket/components/pinning-service-upload.vue";
-import PinningServiceControl from "@/views/bucket/components/pinning-service-control.vue";
+import { PinningServiceDeleteTaskWrapper } from "@/views/bucket/task";
 function debounce(func, delay = 300, immediate = false) {
   let timer = null;
   return function () {
@@ -141,7 +133,6 @@ function debounce(func, delay = 300, immediate = false) {
 export default {
   components: {
     PinningServiceUpload,
-    PinningServiceControl,
   },
   data() {
     return {
@@ -157,6 +148,7 @@ export default {
       showPop: false,
       accessToken: "",
       tableLoading: false,
+      loadingMore: false,
       headers: [
         { text: "Name", value: "name" },
         { text: "Size", value: "size" },
@@ -167,17 +159,17 @@ export default {
       list: [],
       seletedRecords: [],
       total: 0,
-      curPage: 1,
       limit: 10,
       checked: false,
+      deleteTasks: [],
+      processLimit: 10,
+      noMore: false,
+      showControl: false,
     };
   },
   computed: {
-    disabledNext() {
-      return this.total - this.curPage * this.limit <= 0;
-    },
-    disabledPrevious() {
-      return this.curPage == 1;
+    compeleted() {
+      return !this.deleteTasks.some((it) => it.status != 3 && it.status != 4);
     },
   },
   watch: {
@@ -194,6 +186,9 @@ export default {
       },
       deep: true,
     },
+    compeleted(val) {
+      if (val) this.getList({}, true);
+    },
   },
   async created() {
     await this.getAccessToken();
@@ -203,7 +198,7 @@ export default {
     handleInput: debounce(function () {
       this.getList();
     }),
-    async getList(params = {}) {
+    async getList(params = {}, state) {
       try {
         this.tableLoading = true;
         const { data } = await this.$http.get("$pinningService/pins", {
@@ -219,40 +214,61 @@ export default {
         });
         if (Object.keys(params).length == 0) {
           this.total = data.count;
-          this.curPage = 1;
         }
-        this.list = data.results;
+
+        if (!data.results.length || data.results.length < this.limit) {
+          this.noMore = true;
+        }
+        if (state) {
+          this.list = data.results;
+          this.noMore = false;
+        } else {
+          const list = [...this.list, ...data.results];
+          this.list = list;
+        }
       } catch (error) {
         console.log(error);
       }
       this.tableLoading = false;
     },
-    handleNext() {
-      this.curPage++;
-      const lastRecord = this.list[this.limit - 1];
-      this.getList({ before: lastRecord.created });
+    onChange() {
+      this.getList({}, true);
     },
-    handlePrevious() {
-      this.curPage--;
-      const firstRecord = this.list[0];
-      this.getList({ after: firstRecord.created });
+    async handleLoadMore() {
+      this.loadingMore = true;
+      const lastRecord = this.list[this.list.length - 1];
+      await this.getList({ before: lastRecord.created });
+      this.loadingMore = false;
     },
-    async handleDelete(item) {
-      try {
-        await this.$http.delete(`$pinningService/pins/${item.requestId}`, {
-          headers: {
-            Authorization: "Bearer " + this.accessToken,
-          },
-        });
-      } catch (error) {
-        console.log(error);
+    handleDelete() {
+      this.deleteTasks = this.seletedRecords.map(
+        (it) =>
+          new PinningServiceDeleteTaskWrapper(it.requestid, this.accessToken)
+      );
+      this.processTask();
+      this.seletedRecords = [];
+    },
+    async startTask(item) {
+      await item.startDelete();
+      this.processTask();
+    },
+    processTask() {
+      const processing = this.deleteTasks.filter((it) => it.status == 1).length;
+      const idles = this.deleteTasks.filter((it) => it.status == 0);
+      if (processing >= this.processLimit) return;
+      const min =
+        idles.length > this.processLimit
+          ? this.processLimit - processing
+          : idles.length;
+
+      for (let i = 0; i < min; i++) {
+        this.startTask(idles[i]);
       }
     },
     handleChangeCheck(val) {
       if (!val) return (this.seletedRecords = []);
     },
     async getAccessToken() {
-      this.tableLoading = true;
       try {
         const { data } = await this.$http.get(
           "/user/ipfs-pinning-service/token"
