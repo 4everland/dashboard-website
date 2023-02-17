@@ -61,8 +61,9 @@ export default {
   methods: {
     async getList() {
       try {
+        // https://static1.4everland.org/config/changelog.json
         const { data } = await Axios.get(
-          "https://static1.4everland.org/config/changelog.json"
+          "https://4ever-2.4everland.store/changelog.json"
         );
         this.list = data;
       } catch (error) {
