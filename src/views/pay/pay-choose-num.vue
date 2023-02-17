@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { BigNumber } from "@ethersproject/bignumber";
 export default {
   props: {
     options: Array,
@@ -80,15 +81,15 @@ export default {
         return [
           {
             text: "MB",
-            value: Math.pow(1024, 2),
+            value: BigNumber.from("1").shl(20),
           },
           {
             text: "GB",
-            value: Math.pow(1024, 3),
+            value: BigNumber.from("1").shl(30),
           },
           {
             text: "TB",
-            value: Math.pow(1024, 4),
+            value: BigNumber.from("1").shl(40),
           },
         ];
       }
@@ -154,7 +155,7 @@ export default {
         text = item.text;
       } else if (this.inputVal > 0) {
         text = this.inputVal + " " + this.unitItem.text;
-        val = this.inputVal * this.unitItem.value;
+        val = this.unitItem.value.mul(this.inputVal);
       }
       this.$emit("input", {
         val,
