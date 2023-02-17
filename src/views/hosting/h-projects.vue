@@ -63,7 +63,7 @@
 <template>
   <div class="projects">
     <e-right-opt-wrap>
-      <e-menu open-on-hover offset-y>
+      <e-menu open-on-hover offset-y v-if="list.length">
         <v-btn slot="ref" outlined min-width="100">
           <!-- <img src="/img/svg/hosting/ic-sort.svg" width="12" /> -->
           <span class="ml-2">{{
@@ -91,7 +91,7 @@
         <span class="ml-2">New Project</span>
       </v-btn> -->
       <span class="px-4"></span>
-      <e-menu open-on-hover offset-y>
+      <e-menu open-on-hover offset-y v-if="list.length">
         <v-btn slot="ref" color="primary" dark>
           <img src="/img/svg/add1.svg" width="12" />
           <span class="ml-2">New Project</span>
@@ -184,43 +184,60 @@
                   </div>
                 </div>
               </v-col>
-              <v-col cols="9" md="4" v-if="hashDeploy(it.deployType)">
+              <v-col cols="9" md="4" v-if="hashDeploy(it.deployType) || it.cli">
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status class="ta-l" :val="it.state"></h-status>
                 </div>
-                <div>
-                  <span class="d-ib deploy-origin-type fz-14">IPFS</span>
-                  <span class="ml-3 fz-14">Deployment Through IPFS</span>
+                <div v-if="!it.cli">
+                  <span class="d-ib deploy-origin-type fz-14">{{
+                    it.deployType == "IPNS" ? "IPNS" : "IPFS"
+                  }}</span>
+                  <span class="ml-3 fz-14"
+                    >Deployment Through
+                    {{ it.deployType == "IPNS" ? "IPNS" : "IPFS" }}</span
+                  >
+                </div>
+                <div v-else>
+                  <span class="d-ib deploy-origin-type fz-14">CLI</span>
+                  <span class="ml-3 fz-14">Deployment Through CLI</span>
                 </div>
               </v-col>
+
               <v-col cols="9" md="4" v-else>
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status class="ta-l" :val="it.state"></h-status>
                 </div>
-                <div
-                  class="d-flex al-c"
-                  v-if="it.repo && it.repo.id && it.currentBranch"
-                >
-                  <e-icon-link
-                    @click.native.stop
-                    class="mr-6 shrink-0"
-                    img="/img/svg/hosting/m-branch.svg"
-                    :link="
-                      (it.repo.cloneUrl || '').replace(
-                        '.git',
-                        '/tree/' + it.currentBranch
-                      )
-                    "
+                <div v-if="!it.deprecated && it.repo.name">
+                  <div
+                    class="d-flex al-c"
+                    v-if="it.repo && it.repo.id && it.currentBranch"
                   >
-                    {{ it.currentBranch }}
-                  </e-icon-link>
-                  <e-commit
-                    @click.native.stop
-                    :info="it.commit"
-                    class="line-1"
-                  ></e-commit>
+                    <e-icon-link
+                      @click.native.stop
+                      class="mr-6 shrink-0"
+                      img="/img/svg/hosting/m-branch.svg"
+                      :link="
+                        (it.repo.cloneUrl || '').replace(
+                          '.git',
+                          '/tree/' + it.currentBranch
+                        )
+                      "
+                    >
+                      {{ it.currentBranch }}
+                    </e-icon-link>
+                    <e-commit
+                      @click.native.stop
+                      :info="it.commit"
+                      class="line-1"
+                    ></e-commit>
+                  </div>
+                </div>
+                <div v-else>
+                  <span class="d-ib deploy-origin-type fz-14"
+                    >No Git Repository connected</span
+                  >
                 </div>
               </v-col>
 
@@ -304,53 +321,31 @@
         class="pb-15 al-c justify-center"
         v-if="!list.length && !loading"
       >
-        <!-- <div
-          :style="{
-            height: loading ? '80px' : '60px',
-          }"
-        ></div>
-        <e-empty :loading="loading" :title="loading ? '' : 'No Projects, Yet!'">
-          {{
-            loading
-              ? "Loading projects..."
-              : "Create a project from a template, or import a Git repository."
-          }}
-        </e-empty>
-        <div class="mt-10" v-if="!loading">
-          <v-btn color="primary" to="/hosting/new">Create a New Project</v-btn>
-        </div>
-        <v-btn color="primary" to="/hosting/newByHash"
-          >Create a project by cid</v-btn
-        > -->
-        <div class="mt-10">
-          <img src="/img/svg/hosting/no-data.svg" width="180" alt="" />
-          <p class="mt-7 fz-18">No projects, yet！</p>
-          <div class="al-c mt-10">
-            <div
-              class="ipfs-deploy deploy"
-              @click="$router.push('/hosting/newByHash')"
-            >
-              <img
-                class="mb-1"
-                src="/img/svg/hosting/ipfs-deploy.svg"
-                alt=""
-                width="88"
-              />
-              <div class="fw-b">Create a project from a IPFS Path</div>
-            </div>
-            <div
-              class="template-deploy deploy"
-              @click="$router.push('/hosting/new')"
-            >
-              <img
-                class="mb-4"
-                src="/img/svg/hosting/template-deploy.svg"
-                alt=""
-                width="44"
-              />
-              <div class="fw-b">
-                Create a project from Template, or import a Git repository.
-              </div>
+        <div class="al-c mt-10">
+          <div
+            class="ipfs-deploy deploy"
+            @click="$router.push('/hosting/new-by-hash')"
+          >
+            <img
+              class="mb-1"
+              src="/img/svg/hosting/ipfs-deploy.svg"
+              alt=""
+              width="88"
+            />
+            <div class="fw-b">Create a project from a IPFS Path</div>
+          </div>
+          <div
+            class="template-deploy deploy"
+            @click="$router.push('/hosting/new')"
+          >
+            <img
+              class="mb-4"
+              src="/img/svg/hosting/template-deploy.svg"
+              alt=""
+              width="44"
+            />
+            <div class="fw-b">
+              Create a project from Template, or import a Git repository.
             </div>
           </div>
         </div>
@@ -460,7 +455,7 @@ export default {
   methods: {
     onCreate(i) {
       if (i == 0) return this.$router.push("/hosting/new");
-      this.$router.push("/hosting/newByHash");
+      this.$router.push("/hosting/new-by-hash");
     },
     onSort(i) {
       this.sortType = i == 0 ? "Active" : "All";
@@ -508,35 +503,56 @@ export default {
           {
             comp: "h-proj-statis",
             data: [
-              [
-                {
-                  title: "New Users",
-                  num: data.newUsers,
-                },
-                {
-                  title: "Unique Visitor",
-                  num: data.uv, // data.totalUV,
-                },
-                {
-                  title: "Page Views",
-                  num: data.pv, // data.totalPV,
-                },
-              ],
-              [
-                {
-                  title: "Bandwidth used",
-                  ...this.$utils.getFileSize(data.usedBandwidth, 1),
-                },
-                {
-                  title: "Build Minutes used",
-                  unit: "Minutes",
-                  num: data.usedBuildMinutes.toFixed(2),
-                },
-                {
-                  title: "Storage used",
-                  ...this.$utils.getFileSize(data.usedStorage, 1),
-                },
-              ],
+              // [
+              //   {
+              //     title: "New Users",
+              //     num: data.newUsers,
+              //   },
+              //   {
+              //     title: "Unique Visitor",
+              //     num: data.uv, // data.totalUV,
+              //   },
+              //   {
+              //     title: "Page Views",
+              //     num: data.pv, // data.totalPV,
+              //   },
+              // ],
+              // [
+              //   {
+              //     title: "Bandwidth used",
+              //     ...this.$utils.getFileSize(data.usedBandwidth, 1),
+              //   },
+              //   {
+              //     title: "Build Minutes used",
+              //     unit: "Minutes",
+              //     num: data.usedBuildMinutes.toFixed(2),
+              //   },
+              //   {
+              //     title: "Storage used",
+              //     ...this.$utils.getFileSize(data.usedStorage, 1),
+              //   },
+              // ],
+              {
+                title: "Unique Visitor",
+                num: data.uv, // data.totalUV,
+              },
+              {
+                title: "Page Views",
+                num: data.pv, // data.totalPV,
+              },
+              {
+                title: "Bandwidth used",
+                ...this.$utils.getFileSize(data.usedBandwidth, 1),
+              },
+              {
+                title: "Build Minutes used",
+                unit: "Minutes",
+                num: data.usedBuildMinutes.toFixed(2),
+              },
+              {
+                title: "Storage used",
+                ...this.$utils.getFileSize(data.usedStorage, 1),
+              },
             ],
           },
           {

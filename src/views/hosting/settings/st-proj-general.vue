@@ -148,6 +148,59 @@
         >
       </div>
     </div>
+
+    <div class="bd-1 mt-5" v-if="ipnsDeploy">
+      <div>Automatic IPNS Redeployment</div>
+
+      <div class="d-flex al-c mt-3">
+        <span class="mr-auto fz-14">
+          Always allow 4EVERLAND to regularly check the IPNS for updated CID
+          files and redeploy the project if it has been updated.</span
+        >
+        <v-switch
+          class="hide-msg mt-0"
+          v-model="isAutoDeploy"
+          @change="onChangeIpnsAutoDeploy"
+        ></v-switch>
+      </div>
+      <div class="tips fz-14 mt-4 gray">
+        Tips: Automatic IPNS Redeployment will also consume your storage,
+        bindwidth, and build minutes. Alternatively, you can update the CID
+        manually after the project is created, since the network may not monitor
+        every update.
+      </div>
+    </div>
+
+    <div class="bd-1 mt-5" v-if="ipnsDeploy">
+      <div>
+        <div>Manual IPNS Redeployment</div>
+        <div class="d-flex al-c mt-3">
+          <span class="mr-auto fz-14">
+            Click the button on the right, the system will re-fetch the CID
+            corresponding to the current IPNS and redeploy it if there is an
+            update.</span
+          >
+          <v-btn
+            class="ml-3"
+            color="primary"
+            outlined
+            :loading="isDeploying"
+            @click="onDeployNow"
+            >Deploy now</v-btn
+          >
+        </div>
+      </div>
+
+      <div class="mt-4 fz-14">
+        <div style="color: #31ca77" v-if="isDeploying">Getting CID...</div>
+        <div style="color: #775da6" v-else>
+          <span>CID: {{ latestDeployInfo.ipnsResolve }}</span>
+          <span class="ml-5"
+            >Last updated: {{ latestDeployInfo.updateAt }}</span
+          >
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -159,6 +212,9 @@ import { mapState } from "vuex";
 import frameworks from "../../../plugins/config/frameworks.js";
 
 export default {
+  props: {
+    active: Boolean,
+  },
   computed: {
     ...mapState({
       info: (s) => s.projectInfo,
@@ -177,6 +233,18 @@ export default {
     },
     hashDeploy() {
       return this.info.deployType == "CID" || this.info.deployType == "IPNS";
+    },
+    ipnsDeploy() {
+      return this.info.deployType == "IPNS";
+    },
+    latestDeployInfo() {
+      let obj = {};
+      let ipnsResolve =
+        this.ipnsDeployInfo.ipnsResolve ?? this.info.ipnsResolve;
+      let updateAt = this.ipnsDeployInfo.updateAt ?? this.info.latest.createAt;
+      obj.ipnsResolve = ipnsResolve ? ipnsResolve.cutStr(20, 10) : "/";
+      obj.updateAt = updateAt ? new Date(updateAt).format() : "/";
+      return obj;
     },
   },
   data() {
@@ -209,11 +277,24 @@ export default {
           value: "MAINTENANCE_2",
         },
       ],
+      isAutoDeploy: false,
+      isDeploying: false,
+      timer: null,
+      ipnsDeployInfo: {},
     };
   },
   watch: {
     info() {
       this.setForm();
+    },
+    active(val) {
+      console.log(val, this.ipnsDeploy);
+      if (val && this.ipnsDeploy) {
+        this.pollDeployStatus();
+      }
+      if (!val && this.ipnsDeploy) {
+        clearInterval(this.timer);
+      }
     },
   },
   mounted() {
@@ -239,6 +320,7 @@ export default {
           break;
       }
       this.name = name;
+      this.isAutoDeploy = this.info.ipnsAuto;
       const form = {
         framework: "",
         nodeVersion: "",
@@ -331,6 +413,52 @@ export default {
       this.buildCommandHint = buildCommand.placeholder || "";
       this.outputDirHint =
         outputDirectory.placeholder || "`dist` if it exists, or `.`";
+    },
+    async onChangeIpnsAutoDeploy() {
+      try {
+        await this.saveProject({
+          ipnsAuto: this.isAutoDeploy,
+        });
+        this.$setState({
+          noticeMsg: {
+            name: "updateProject",
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async onDeployNow() {
+      this.isDeploying = true;
+      try {
+        const { data } = await this.$http2.post(
+          `/project/task/ipns/${this.info.id}/resolve`
+        );
+        this.isDeploying = data;
+        this.pollDeployStatus();
+      } catch (error) {
+        console.log(error);
+        this.isDeploying = false;
+      }
+    },
+    pollDeployStatus() {
+      this.timer = setInterval(() => {
+        this.getDeployStatus();
+      }, 3000);
+    },
+    async getDeployStatus() {
+      try {
+        const { data } = await this.$http2.get(
+          `/project/${this.info.id}/ipns/button/status`
+        );
+        this.isDeploying = data.ipnsAuto;
+        if (!data.ipnsAuto) {
+          this.ipnsDeployInfo = data;
+          clearInterval(this.timer);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   components: {

@@ -10,7 +10,7 @@
               :src="$getImgSrc(info.screenshotPath)"
               lazy-src="/img/bg/empty/project.png"
               aspect-ratio="1"
-              max-height="230"
+              height="100%"
             ></v-img>
           </e-link>
         </v-col>
@@ -77,7 +77,10 @@
             </e-link>
           </e-kv2>
           <div class="mt-7 d-flex">
-            <e-kv2 label="Branch" v-if="!hashDeploy(info.deployType)">
+            <e-kv2
+              label="Branch"
+              v-if="!hashDeploy(info.deployType) && !info.cli"
+            >
               <div class="d-flex al-c f-wrap">
                 <h-branch :info="info" class="fz-15" />
                 <e-commit :info="info.commits" class="fz-14 ml-3"></e-commit>
@@ -85,34 +88,42 @@
             </e-kv2>
 
             <div v-else>
-              <e-kv2 label="IPNS" v-if="info.deployType == 'IPNS'"> </e-kv2>
-              <e-kv2 label="Base IPFS">
-                <div class="al-c" v-if="projInfo.ipfsPath">
-                  <e-link
-                    class="fz-14"
-                    :href="
-                      $utils.getCidLink(
-                        transformIpfsPath(projInfo.ipfsPath),
-                        info.platform
-                      )
-                    "
-                  >
-                    <span>{{ transformIpfsPath(projInfo.ipfsPath) }}</span>
-                  </e-link>
-                  <img
-                    src="/img/svg/copy.svg"
-                    width="12"
-                    class="ml-3 hover-1"
-                    @success="$toast('Copied!')"
-                    v-clipboard="transformIpfsPath(projInfo.ipfsPath)"
-                  />
-                </div>
-                <h-status
-                  v-else
-                  :val="state == 'failure' ? 'Not synchronized' : state"
-                ></h-status>
-              </e-kv2>
-              <e-kv2 label="Base IPNS" v-if="info.deployType == 'IPNS'"></e-kv2>
+              <msg-line
+                v-if="info.deployType == 'CID'"
+                label="Base IPFS"
+                :content="info.cid"
+                :state="state"
+              ></msg-line>
+              <msg-line
+                class="mb-5"
+                v-if="info.deployType == 'IPNS' && info.platform == 'IPFS'"
+                label="IPNS"
+                :content="projInfo.ipns"
+                :state="state"
+                platForm="IPNS"
+              ></msg-line>
+
+              <v-row>
+                <v-col :md="6" :cols="12">
+                  <msg-line
+                    v-if="info.deployType == 'IPNS'"
+                    label="Base IPFS"
+                    :content="info.cid"
+                    :state="state"
+                    cutStr
+                  ></msg-line
+                ></v-col>
+                <v-col :md="6" :cols="12">
+                  <msg-line
+                    v-if="info.deployType == 'IPNS'"
+                    label="Base IPNS"
+                    :content="projInfo.ipfsPath"
+                    :state="state"
+                    platForm="IPNS"
+                    cutStr
+                  ></msg-line
+                ></v-col>
+              </v-row>
             </div>
           </div>
         </v-col>
@@ -142,13 +153,7 @@
               </v-list>
             </e-menu>
             <div class="flex-1 ml-5 pr-4">
-              <div
-                v-if="
-                  (!info.cli && !hashDeploy(info.deployType)) ||
-                  (!info.cli && info.state == 'FAILURE')
-                "
-                class="mb-5"
-              >
+              <div v-if="showBtn1Txt" class="mb-5">
                 <v-btn
                   color="error"
                   outlined
@@ -187,7 +192,7 @@ import BuildOverviewLogs from "@/views/hosting/build/build-overview-logs";
 import HStatus from "@/views/hosting/common/h-status";
 import HBranch from "@/views/hosting/common/h-branch";
 import ECommit from "@/views/hosting/common/e-commit";
-
+import MsgLine from "@/views/hosting/common/msg-line";
 import { mapState } from "vuex";
 
 export default {
@@ -227,6 +232,14 @@ export default {
       if (this.showCancel) return "Cancel";
       return "Redeploy";
     },
+    showBtn1Txt() {
+      console.log(this.isDeprecated);
+      if (this.info.cli) return false;
+      if (this.isDeprecated) return false;
+      return (
+        !this.hashDeploy(this.info.deployType) || this.info.state == "FAILURE"
+      );
+    },
     visitUrl() {
       const { domain } = this.info;
       if (domain) return "//" + domain;
@@ -248,6 +261,9 @@ export default {
       return function (val) {
         return val.replace("/ipfs/", "").replace("/ipns/", "");
       };
+    },
+    isDeprecated() {
+      return this.projInfo.deprecated;
     },
   },
   async created() {
@@ -297,7 +313,9 @@ export default {
       } catch (error) {
         console.log(error, "build err");
         if (error.code == 10014)
-          this.$router.push(`/hosting/project/${projName}/${id}?tab=settings`);
+          this.$router.push(
+            `/hosting/project/${projName}/${id}?tab=settings&sub=git`
+          );
       }
       this.deploying = false;
     },
@@ -340,6 +358,7 @@ Are you sure you want to continue?
     HStatus,
     HBranch,
     ECommit,
+    MsgLine,
   },
 };
 </script>

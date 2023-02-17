@@ -12,6 +12,15 @@
           </div>
           <div class="mt-3 d-flex al-c">
             <v-btn
+              v-if="it.type == 1 && it.account"
+              color="primary"
+              small
+              min-width="75"
+              @click="onDisconnect(it)"
+              >Disconnect</v-btn
+            >
+            <v-btn
+              v-else
               color="primary"
               :disabled="!!it.account"
               small
@@ -280,9 +289,9 @@ export default {
             {
               confirmText: "Send",
               inputAttrs: {
-                label: `Your email adress`,
+                label: `Your email address`,
                 rules: [
-                  (v) => this.$regMap.email.test(v) || "Invalid email adress.",
+                  (v) => this.$regMap.email.test(v) || "Invalid email address.",
                 ],
                 required: true,
               },
@@ -316,6 +325,35 @@ export default {
         }
       } catch (error) {
         console.log(error);
+      }
+    },
+    async onUnbind(it) {
+      const type = it.type;
+      const data = await this.$http.post(`$auth/unbind`, {
+        type,
+      });
+      if (data.code == 200) {
+        this.$toast("Disconnect " + it.account + " successfully");
+        this.$setMsg("updateUser");
+      }
+    },
+    async onDisconnect(it) {
+      const info = this.userInfo;
+      if (info.wallet) {
+        this.$confirm(
+          "You are about to unbind a GitHub account. After then, the projects in Hosting will no longer be updated and maintained, and you won't be able to access the dashboard via GitHub. Please confirm before proceeding.",
+          "Disconnect Github",
+          {
+            confirmText: "OK",
+          }
+        ).then(() => {
+          this.onUnbind(it);
+        });
+      } else {
+        this.$alert(
+          "Failed to unbind a GitHub account, please try again after binding any wallet address.",
+          "Alert"
+        );
       }
     },
     async exchangeCode(type) {

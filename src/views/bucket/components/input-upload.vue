@@ -26,6 +26,9 @@ export default {
       type: Number,
       default: 0,
     },
+    limitSize: {
+      type: Number,
+    },
     value: Array,
     disabled: Boolean,
     supportReapt: {
@@ -98,19 +101,8 @@ export default {
       if (this.disabled) return;
       if (!data) return;
       const { files = [] } = data;
-      // let arr = Array.from(files);
-
-      // const isEmoji =
-      //   arr.filter((it) => {
-      //     return it.webkitRelativePath == ""
-      //       ? this.isEmojiCharacter(it.name)
-      //       : this.isEmojiCharacter(it.webkitRelativePath);
-      //   }).length > 0;
-      // if (isEmoji)
-      //   return this.$alert(
-      //     "The file name or folder name cannot contain emojis."
-      //   );
-
+      if (this.limitSize && files[0].size > this.limitSize)
+        return this.$emit("onLimitSize", files[0].size);
       for (const file of files) {
         // console.log(file);
         if (this.limit && this.files.length >= this.limit) break;
@@ -129,10 +121,6 @@ export default {
         }
 
         file.id = this.genID(8);
-        // console.log(file);
-        // if (file.name !== ".DS_Store") {
-        //   this.files.unshift(file);
-        // }
         this.files.unshift(file);
       }
       if (this.files.length) {

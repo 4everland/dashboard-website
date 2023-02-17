@@ -106,38 +106,34 @@
               <e-time>{{ info.createAt }}</e-time>
             </e-kv>
           </div>
+          <div class="mt-9" v-if="hashDeploy(info.deployType)">
+            <msg-line-vertical
+              label="Base IPFS"
+              :content="info.ipfsPath"
+              :state="info.state"
+              v-if="info.platform != 'IPFS' && info.deployType != 'IPNS'"
+            ></msg-line-vertical>
+
+            <msg-line-vertical
+              label="Base IPFS"
+              :content="info.cid"
+              :state="info.state"
+              v-if="info.platform != 'IPFS' && info.deployType == 'IPNS'"
+            ></msg-line-vertical>
+
+            <msg-line-vertical
+              class="mt-8"
+              label="Base IPNS"
+              :content="info.ipfsPath"
+              platForm="IPNS"
+              :state="info.state"
+              v-if="info.deployType == 'IPNS'"
+            ></msg-line-vertical>
+          </div>
           <div
             class="mt-9 d-flex"
-            v-if="hashDeploy(info.deployType) && info.platform != 'IPFS'"
+            v-if="!hashDeploy(info.deployType) && !info.cli"
           >
-            <e-kv label="Base IPFS">
-              <div class="al-c">
-                <e-link
-                  class="fz-14"
-                  :href="
-                    $utils.getCidLink(
-                      transformIpfsPath(info.ipfsPath),
-                      info.platform
-                    )
-                  "
-                  v-if="info.ipfsPath"
-                >
-                  {{ transformIpfsPath(info.ipfsPath) }}
-                </e-link>
-                <h-status v-if="!info.ipfsPath" :val="info.state"></h-status>
-                <img
-                  v-if="info.ipfsPath"
-                  src="/img/svg/copy.svg"
-                  width="12"
-                  class="ml-3 hover-1"
-                  @success="$toast('Copied!')"
-                  v-clipboard="transformIpfsPath(info.ipfsPath)"
-                />
-              </div>
-            </e-kv>
-            <e-kv label="Base IPNS" v-if="info.deployType == 'IPNS'"></e-kv>
-          </div>
-          <div class="mt-9 d-flex" v-if="!hashDeploy(info.deployType)">
             <e-kv label="Branch">
               <div class="d-flex al-c f-wrap">
                 <h-branch :info="info" class="fz-15" />
@@ -161,7 +157,7 @@ import HStatus from "@/views/hosting/common/h-status";
 import HBranch from "@/views/hosting/common/h-branch";
 import ECommit from "@/views/hosting/common/e-commit";
 import ProjDeployments from "@/views/hosting/project/proj-deployments";
-
+import MsgLineVertical from "@/views/hosting/common/msg-line-vertical";
 import { mapState } from "vuex";
 
 export default {
@@ -220,6 +216,7 @@ export default {
     HBranch,
     ECommit,
     ProjDeployments,
+    MsgLineVertical,
   },
 };
 </script>

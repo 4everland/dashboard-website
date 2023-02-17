@@ -2,7 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store, { setState } from "./store";
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import vuetify from "./plugins/vuetify";
 import "./setup";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
@@ -43,7 +43,10 @@ new Vue({
       token: (s) => s.token(),
       noticeMsg: (s) => s.noticeMsg,
       allowNoLogin: (s) => s.allowNoLogin,
+      userInfo: (s) => s.userInfo,
+      teamId: (s) => s.teamId,
     }),
+    ...mapGetters(["teamInfo"]),
   },
   mounted() {
     this.onInit();
@@ -61,6 +64,8 @@ new Vue({
     noticeMsg({ name }) {
       if (name == "updateUser") {
         this.getUesrInfo();
+      } else if (name == "joinTeam" || name == "updateTeam") {
+        this.getTeamList();
       }
     },
   },
@@ -74,17 +79,19 @@ new Vue({
       if (this.token) {
         await this.getUesrInfo();
         this.initSocket();
+        // this.initBroadcast();
       } else if (["/", "/login"].indexOf(this.$route.path) == -1) {
         this.$router.replace("/");
       }
     },
     initSocket() {
+      let token = this.teamInfo.token || this.token;
       const url = /xyz$/.test(process.env.VUE_APP_BASE_URL)
         ? "ws.foreverland.xyz"
         : "ws.4everland.org";
       this.socket = window.io(url, {
         path: "/socket.io",
-        query: "authorization=" + encodeURIComponent(this.token),
+        query: "authorization=" + encodeURIComponent(token),
         withCredentials: false,
         transports: ["websocket", "polling"],
       });
@@ -117,6 +124,30 @@ new Vue({
       this.$setState({
         userInfo: data,
         allowNoLogin: this.allowNoLogin && !data.github,
+      });
+      this.getTeamList();
+    },
+    async getTeamList() {
+      let {
+        data: { items },
+      } = await this.$http.get("$auth/cooperation/teams");
+      items.forEach((it) => {
+        it.name = (it.teamName || it.teamId).cutStr(6, 4);
+        it.isOwner = it.type == "INDIVIDUAL";
+        it.isMember = it.type == "COLLABORATION";
+        if (it.teamAvatar) {
+          it.teamAvatar = this.$authApi + "/media/" + it.teamAvatar;
+        }
+      });
+      let teamId = this.teamId;
+      if (!items.find((it) => it.teamId == teamId)) {
+        teamId = items[0].teamId;
+      }
+      localStorage.teamList = JSON.stringify(items);
+      localStorage.teamId = teamId;
+      this.$setState({
+        teamList: items,
+        teamId,
       });
     },
   },

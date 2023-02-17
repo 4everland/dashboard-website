@@ -15,25 +15,24 @@
         ></v-col>
         <v-col :sm="10" :cols="12" class="d-flex al-start">
           <v-text-field
+            ref="ipfsPathRef"
             persistent-placeholder
             outlined
             dense
             label=""
-            placeholder="Enter the IPFS CID"
+            :placeholder="
+              seleted == 'IPFS' ? 'Enter the IPFS CID' : 'Enter the IPNS'
+            "
             v-model="form.ipfsPath"
-            :rules="[
-              (v) => !!(v || '').trim() || 'Invalid CID',
-              (v) =>
-                /^((\/ipfs\/)?|(\/ipns\/))([A-Za-z0-9]{46}|[A-Za-z0-9]{59})$/.test(
-                  v
-                )
-                  ? true
-                  : 'Invalid CID',
-            ]"
+            :rules="inputRules"
           ></v-text-field>
         </v-col>
       </v-row>
-      <div>The Project Name</div>
+      <div class="fz-14 gray">
+        Tips: Due to the vast scale of the IPFS network, finding content for
+        IPFS Path deployments may take some time.
+      </div>
+      <div class="mt-5">The Project Name</div>
       <v-text-field
         class="mt-4"
         persistent-placeholder
@@ -82,20 +81,23 @@
           </div>
         </v-col>
       </v-row>
-      <!-- <div class="mt-6">IPNS Automatic Deployment</div> -->
-      <!-- <div class="d-flex al-start mt-3">
-        <span class="mr-auto fz-14">
-          Always allow 4EVERLAND to regularly check the IPNS for updated CID
-          files and redeploy the project if it has been updated.</span
-        >
-        <v-switch class="hide-msg" v-model="isAutoDeploy"></v-switch>
+
+      <div v-if="seleted == 'IPNS'">
+        <div class="mt-10">IPNS Automatic Deployment</div>
+        <div class="d-flex al-c mt-3">
+          <span class="mr-auto fz-14">
+            Always allow 4EVERLAND to regularly check the IPNS for updated CID
+            files and redeploy the project if it has been updated.</span
+          >
+          <v-switch class="hide-msg mt-0" v-model="form.ipnsAuto"></v-switch>
+        </div>
+        <div class="tips fz-14 mt-4">
+          Tips: Automatic IPNS Redeployment will also consume your storage,
+          bindwidth, and build minutes. Alternatively, you can update the CID
+          manually after the project is created, since the network may not
+          monitor every update.
+        </div>
       </div>
-      <div class="tips fz-14 mt-2">
-        Tips: Automatic IPNS Redeployment will also consume your storage,
-        bindwidth, and build minutes. Alternatively, you can update the CID
-        manually after the project is created, since the network may not monitor
-        every update.
-      </div> -->
 
       <div class="d-flex justify-end mt-7">
         <v-btn color="primary" width="120" @click="onDeploy">Deploy</v-btn>
@@ -108,7 +110,7 @@
 export default {
   data() {
     return {
-      items: ["IPFS"],
+      items: ["IPFS", "IPNS"],
       seleted: "IPFS",
       platList: [
         {
@@ -132,8 +134,8 @@ export default {
         name: "",
         ipfsPath: "",
         deployType: "CID",
+        ipnsAuto: false,
       },
-      isAutoDeploy: false,
     };
   },
   computed: {
@@ -147,6 +149,20 @@ export default {
           ? this.form.ipfsPath
           : "/ipns/" + this.form.ipfsPath;
       }
+    },
+    inputRules() {
+      if (this.seleted == "IPNS")
+        return [
+          (v) => !!(v || "").trim() || "Invalid IPFS path",
+          (v) => (/^[a-zA-Z0-9]+$/.test(v) ? true : "Invalid IPFS path"),
+        ];
+      return [
+        (v) => !!(v || "").trim() || "Invalid IPFS path",
+        (v) =>
+          /^(\/ipfs\/)?(Qm[A-Za-z0-9]{44}|b[A-Za-z0-9]{58})$/.test(v)
+            ? true
+            : "Invalid IPFS path",
+      ];
     },
   },
   methods: {
@@ -170,6 +186,8 @@ export default {
       this.$loading.close();
     },
     handleChangeDeployType(val) {
+      console.log(this.$refs.ipfsPathRef);
+      this.$refs.ipfsPathRef.reset();
       if (val == "IPFS") {
         this.form.deployType = "CID";
       } else if (val == "IPNS") {

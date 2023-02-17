@@ -81,8 +81,10 @@ export default {
     }
   },
   mounted() {
-    const code = this.$route.query.code;
-    const inviteCode = this.$route.query.inviteCode;
+    const { code, inviteCode, loginTo } = this.$route.query;
+    if (loginTo) {
+      localStorage.loginTo = loginTo;
+    }
     if (inviteCode) {
       this.inviteCode = inviteCode;
     }
