@@ -89,7 +89,7 @@
                 >mdi-alert-circle-outline</v-icon
               >
             </template>
-            <span>failed reason</span>
+            <span>{{ item.info.failed_message }}</span>
           </v-tooltip>
         </template>
       </v-data-table>
@@ -246,7 +246,7 @@ export default {
       this.showPop = true;
     },
     handleInput: debounce(function () {
-      this.getList();
+      this.getList({}, true);
     }),
     async getList(params = {}, state) {
       try {

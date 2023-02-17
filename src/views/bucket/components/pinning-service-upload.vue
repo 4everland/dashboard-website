@@ -32,7 +32,7 @@
             persistent-placeholder
             label="Set Name"
             counter="30"
-            :rules="[(v) => (v && v.length <= 30) || 'name only 30 char']"
+            maxlength="30"
             v-model="form.name"
           ></v-text-field>
           <v-text-field
@@ -53,6 +53,22 @@
             label="Origins"
             v-model="form.origins"
           ></v-textarea>
+          <div>
+            <span class="fz-14">Origins</span>
+          </div>
+          <template v-for="(item, index) in originList">
+            <div :key="index" class="al-c">
+              <v-text-field
+                class="hide-msg"
+                persistent-placeholder
+                v-model="item.value"
+              ></v-text-field>
+              <span class="cursor-p" v-show="!index" @click="handleAddOrigin"
+                >+</span
+              >
+            </div>
+          </template>
+
           <div class="d-flex justify-center al-c mt-8">
             <v-btn outlined @click="showDialog = false">Cancel</v-btn>
             <v-btn color="primary" class="ml-10" @click="handleUpload"
@@ -207,6 +223,7 @@ export default {
       processLimit: 10,
       tasks: [],
       showControl: false,
+      originList: [{ id: 0, origin: "" }],
     };
   },
   computed: {
@@ -307,6 +324,9 @@ export default {
       });
 
       this.processTask();
+    },
+    handleAddOrigin() {
+      this.originList.push({ value: "" });
     },
     getFileContent(file) {
       return new Promise((resolve, reject) => {
