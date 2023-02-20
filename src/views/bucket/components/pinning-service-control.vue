@@ -14,7 +14,7 @@
     </div>
     <div class="gray fz-14 mt-4">
       <span>{{ completedTasks }} / {{ tasks.length }}</span>
-      <span class="ml-4" v-if="failed" @click="$emit('retryUpload')"
+      <span class="ml-4 cursor-p" v-if="failed" @click="$emit('retryUpload')"
         >Continue</span
       >
     </div>
@@ -35,20 +35,16 @@ export default {
   computed: {
     title() {
       if (this.processing) return "Uploading CID";
-      if (this.completed) return "Upload completed";
-      return "Uploading failed";
+      if (this.completed) return "Upload Completed";
+      return "Uploading Failed";
     },
     processing() {
-      return this.tasks.some((it) => it.status == 1);
+      return this.tasks.some((it) => it.status == 1 || it.status == 0);
     },
     completed() {
       return !this.tasks.some((it) => it.status != 3);
     },
     failed() {
-      // return (
-      //   this.tasks.filter((it) => it.status == 3 || it.status == 4).length ==
-      //   this.tasks.length
-      // );
       return (
         this.failedTasks.length &&
         this.tasks.some((it) => it.status != 0 && it.status != 1)
@@ -58,9 +54,9 @@ export default {
       return this.tasks.filter((it) => it.status == 4);
     },
     statusColor() {
-      return this.tasks.some((it) => it.status == 0 || it.status == 1)
-        ? "#34A9FF"
-        : "#00BD9A";
+      if (this.processing) return "#34A9FF";
+      if (this.completed) return "#00BD9A";
+      return "#FF5656";
     },
     completedTasks() {
       return this.tasks.filter((it) => it.status == 3).length;
@@ -86,7 +82,7 @@ export default {
   .progress {
     height: 8px;
     border-radius: 4px;
-    background: gray;
+    background: #f4f6f8;
     .progress-content {
       height: 100%;
       border-radius: 4px;

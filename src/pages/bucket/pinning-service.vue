@@ -2,8 +2,11 @@
   <div class="pinning-service-container">
     <e-right-opt-wrap :top="-75">
       <v-row>
-        <v-col :md="3">
-          <v-btn color="primary" @click="handleGetToken"> Access Token </v-btn>
+        <v-col :md="4">
+          <v-btn color="primary" @click="handleGetToken">
+            <v-icon size="16" class="mr-2">mdi-key-outline</v-icon>
+            <span>Access Token</span>
+          </v-btn>
         </v-col>
         <v-col :md="4" style="max-width: 230px">
           <v-select
@@ -15,7 +18,7 @@
             @change="onChange"
           />
         </v-col>
-        <v-col :md="5">
+        <v-col :md="4">
           <v-text-field
             class="hide-msg bd-1"
             prepend-inner-icon="mdi-magnify"
@@ -30,6 +33,7 @@
     </e-right-opt-wrap>
     <div class="pos-r">
       <pinning-service-upload
+        ref="pinningServiceUpload"
         class="mb-7"
         :accessToken="accessToken"
         @getList="getList({}, true)"
@@ -121,6 +125,16 @@
         >
           <span class="gray">Delete</span>
         </v-btn>
+
+        <v-btn
+          style="border-color: #6c7789"
+          outlined
+          class="ml-4"
+          @click="handleReplace"
+          v-show="allFailedRecords"
+        >
+          <span class="gray">Replace</span>
+        </v-btn>
       </operation-bar>
     </div>
 
@@ -198,7 +212,7 @@ export default {
       list: [],
       seletedRecords: [],
       total: 0,
-      limit: 10,
+      limit: 20,
       checked: false,
       deleteTasks: [],
       processLimit: 10,
@@ -216,6 +230,9 @@ export default {
         if (status == "failed") return "#FF5656";
         return "#000";
       };
+    },
+    allFailedRecords() {
+      return !this.seletedRecords.some((it) => it.status != "failed");
     },
   },
   watch: {
@@ -296,6 +313,11 @@ export default {
           new PinningServiceDeleteTaskWrapper(it.requestid, this.accessToken)
       );
       this.processTask();
+      this.seletedRecords = [];
+    },
+    async handleReplace() {
+      const replaceRecords = [...this.seletedRecords];
+      this.$refs.pinningServiceUpload.onReplace(replaceRecords);
       this.seletedRecords = [];
     },
     async startTask(item) {

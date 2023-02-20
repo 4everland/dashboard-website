@@ -102,12 +102,13 @@
           <template v-for="(sub, j) in it.subs">
             <v-list-group
               v-if="sub.subs"
-              :ref="i + '-' + j"
-              @input="Toggle(j, $event)"
+              :ref="'sub-' + j"
               :key="j"
+              :group="sub.group"
               sub-group
               no-action
-              :value="true"
+              v-model="openSub"
+              @input="onSubsToggle(j, $event)"
             >
               <template v-slot:activator>
                 <div class="ml-2"></div>
@@ -126,7 +127,7 @@
                 </v-list-item-content>
               </template>
               <v-list-item
-                :ref="i + '-' + j + '-' + k"
+                :ref="'sub' + j + '-' + k"
                 class="sub"
                 active-class="active-item"
                 :class="{
@@ -245,6 +246,7 @@ export default {
       activeArr: [],
       filesPath: initFilePath,
       guideActived: false,
+      openSub: true,
     };
   },
   computed: {
@@ -285,7 +287,6 @@ export default {
   },
   methods: {
     Toggle(i, open) {
-      console.log(i, open);
       if (this.guideActived) {
         return false;
       }
@@ -293,16 +294,21 @@ export default {
     },
     onToggle(i, open) {
       if (!open) return;
-      if (this.list[i].group.test(this.path)) return;
       if (i == 2) {
+        if (/^\/bucket\/pinning-service/.test(this.path)) return;
         setTimeout(() => {
-          this.$refs["2-0"][0].$children[0].$el.click();
-          this.$refs["2-0"][0].$children[1].$el.click();
+          this.openSub = true;
+          this.onSubsToggle(0, true);
         }, 300);
-        // this.$refs["2-0"][0].$children[0].click();
       } else {
+        if (this.list[i].group.test(this.path)) return;
         this.$refs[i + "-0"][0].$el.click();
       }
+    },
+    onSubsToggle(i, open) {
+      if (!open) return;
+      if (this.list[2].subs[0].group.test(this.path)) return;
+      this.$refs["sub" + i + "-0"][0].$el.click();
     },
   },
 };

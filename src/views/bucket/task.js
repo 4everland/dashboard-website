@@ -317,12 +317,13 @@ export class PinCidTaskWrapper {
 }
 export class PinningServiceTaskWrapper {
   static id = 0;
-  constructor(params, accessToken) {
+  constructor(params, accessToken, requestId = null) {
     this.id = PinningServiceTaskWrapper.id++;
     this.status = 0;
     this.params = params;
     this.accessToken = accessToken;
     this.abortAxiosFn = null;
+    this.requestId = requestId;
   }
   async addPin() {
     try {
@@ -330,6 +331,27 @@ export class PinningServiceTaskWrapper {
       const { data } = await Vue.prototype.$axios({
         method: "POST",
         url: pinningServiceApi + "/pins",
+        data: this.params,
+        headers: {
+          Authorization: "Bearer " + this.accessToken,
+        },
+        cancelToken: new Vue.prototype.$axios.CancelToken((c) => {
+          this.abortAxiosFn = c;
+        }),
+      });
+      console.log(data);
+      this.status = 3;
+    } catch (error) {
+      console.log(error);
+      this.status = 4;
+    }
+  }
+  async replacePin() {
+    try {
+      this.status = 1;
+      const { data } = await Vue.prototype.$axios({
+        method: "POST",
+        url: pinningServiceApi + "/pins/" + this.requestId,
         data: this.params,
         headers: {
           Authorization: "Bearer " + this.accessToken,

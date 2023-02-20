@@ -11,23 +11,19 @@
           <span class="gray-7">Selected CID</span>
         </v-list-item>
         <v-list-item link @click="showMultipleDialog = true">
-          <span class="gray-7">Multiple Upload CID</span>
+          <span class="gray-7">Batch CIDs upload</span>
         </v-list-item>
       </v-list>
     </e-menu>
 
-    <v-dialog v-model="showDialog" max-width="550">
+    <v-dialog v-model="showDialog" max-width="500">
       <div class="pa-5">
-        <h3>Pin By CID</h3>
-        <div class="fz-14 my-3">
+        <h3 class="fz-20">Pin By CID</h3>
+        <div class="fz-14 my-6">
           This function allows you to pin content to 4EVERLAND bucket using an
           IPFS Content Identifier. (CID)
         </div>
-        <div class="fz-14 mb-10 gray-6">
-          The IPFS network is large and it may take some time for our IPFS nodes
-          to locate and fetch your content.
-        </div>
-        <v-form ref="form">
+        <v-form ref="form" class="mt-6">
           <v-text-field
             persistent-placeholder
             label="Set Name"
@@ -47,24 +43,43 @@
                   : 'Invalid CID',
             ]"
           ></v-text-field>
-          <v-textarea
-            persistent-placeholder
-            name="input-7-1"
-            label="Origins"
-            v-model="form.origins"
-          ></v-textarea>
           <div>
-            <span class="fz-14">Origins</span>
+            <span class="fz-14 param-title mr-2">Origins</span>
+            <v-tooltip top>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon size="18" v-bind="attrs" v-on="on">
+                  mdi-alert-circle-outline
+                </v-icon>
+              </template>
+              <div style="width: 300px">
+                A list of known sources (providers) of the data. Sent by a
+                client in a pin request. Pinning service will try to connect to
+                them to speed up data transfer.
+              </div>
+            </v-tooltip>
           </div>
           <template v-for="(item, index) in originList">
-            <div :key="index" class="al-c">
+            <div class="mt-3 al-c" :key="index">
               <v-text-field
                 class="hide-msg"
                 persistent-placeholder
                 v-model="item.value"
               ></v-text-field>
-              <span class="cursor-p" v-show="!index" @click="handleAddOrigin"
-                >+</span
+              <v-icon
+                size="20"
+                class="ml-4"
+                color="primary"
+                @click="handleAddOrigin"
+                v-show="!index && originList.length < 20"
+                >mdi-plus-circle-outline</v-icon
+              >
+              <v-icon
+                size="20"
+                class="ml-4"
+                color="primary"
+                @click="handleRemoveOrigin(index)"
+                v-show="index"
+                >mdi-minus-circle-outline</v-icon
               >
             </div>
           </template>
@@ -81,9 +96,9 @@
     <v-dialog v-model="showMultipleDialog" max-width="550">
       <div class="pa-5">
         <h3>Batch CIDs upload</h3>
-        <div class="fz-14 my-3">
-          This function allows you to pin content to 4EVERLAND bucket using an
-          IPFS Content Identifier. (CID)
+        <div class="fz-14 my-3" style="line-break: anywhere">
+          The batch CIDs can be entered in a .txt file with one CID per line and
+          uploaded for resolution.
         </div>
         <div v-if="!file">
           <div class="fz-14 gray-6 mt-2">
@@ -91,29 +106,43 @@
             line in the .txt file.
           </div>
           <div class="al-c mt-4 justify-center">
-            <v-btn tile color="primary" @click="$refs.uploadInput.onClick()"
-              >Upload File</v-btn
+            <v-btn
+              slot="ref"
+              color="primary"
+              width="150"
+              @click="$refs.uploadInput.onClick()"
             >
+              <img src="/img/svg/upload.svg" width="16" />
+              <span class="ml-2">Upload</span>
+            </v-btn>
           </div>
         </div>
         <div v-else>
           <div>
-            <span class="fz-14 gray-6">{{ file.name }}</span>
+            <span class="fz-14" style="color: #775da6">{{ file.name }}</span>
             <v-icon class="ml-3 cursor-p" size="20" @click="file = null"
-              >mdi-trash-can</v-icon
+              >mdi-trash-can-outline</v-icon
             >
           </div>
-          <div class="mt-2 mb-5">
-            <span class="fz-14 gray">
-              Resolving completed! {{ readerFileList.length }} lines total,
-              resolved {{ readerFileSuccessList.length }} valid CIDs.
-            </span>
-            <span
+          <div class="mt-2 mb-5 al-c justify-space-between">
+            <div class="fz-14 gray">
+              Resolving completed!
+              <span class="fw-b" style="color: #775da6">{{
+                readerFileList.length
+              }}</span>
+              lines total, resolved
+              <span class="fw-b" style="color: #775da6">{{
+                readerFileSuccessList.length
+              }}</span>
+              valid CIDs.
+            </div>
+            <div
               class="cursor-p ml-4 fz-14"
-              style="color: blue"
+              style="color: #34a9ff"
               @click="showFileView = true"
-              >View List</span
             >
+              View List
+            </div>
           </div>
           <v-form ref="mutipleForm">
             <v-text-field
@@ -123,13 +152,48 @@
               :rules="[(v) => (v && v.length <= 30) || 'name only 30 char']"
               v-model="mutipleForm.name"
             ></v-text-field>
+            <div>
+              <span class="fz-14 param-title mr-2">Origins</span>
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon size="18" v-bind="attrs" v-on="on">
+                    mdi-alert-circle-outline
+                  </v-icon>
+                </template>
+                <div style="width: 300px">
+                  A list of known sources (providers) of the data. Sent by a
+                  client in a pin request. Pinning service will try to connect
+                  to them to speed up data transfer.
+                </div>
+              </v-tooltip>
+            </div>
 
-            <v-textarea
-              persistent-placeholder
-              name="input-7-1"
-              label="Origins"
-              v-model="mutipleForm.origins"
-            ></v-textarea>
+            <template v-for="(item, index) in originList">
+              <div class="mt-3 al-c" :key="index">
+                <v-text-field
+                  class="hide-msg"
+                  persistent-placeholder
+                  v-model="item.value"
+                ></v-text-field>
+                <v-icon
+                  size="20"
+                  class="ml-4"
+                  color="primary"
+                  @click="handleAddOrigin"
+                  v-show="!index && originList.length < 20"
+                  >mdi-plus-circle-outline</v-icon
+                >
+                <v-icon
+                  size="20"
+                  class="ml-4"
+                  color="primary"
+                  @click="handleRemoveOrigin(index)"
+                  v-show="index"
+                  >mdi-minus-circle-outline</v-icon
+                >
+              </div>
+            </template>
+
             <div class="d-flex justify-center al-c mt-8">
               <v-btn outlined @click="showMultipleDialog = false">Cancel</v-btn>
               <v-btn color="primary" class="ml-10" @click="handleMultipleUpload"
@@ -208,11 +272,9 @@ export default {
       form: {
         name: "",
         cid: "",
-        origins: "",
       },
       mutipleForm: {
         name: "",
-        origins: "",
       },
       isMultipleUpload: false,
       files: [],
@@ -223,7 +285,7 @@ export default {
       processLimit: 10,
       tasks: [],
       showControl: false,
-      originList: [{ id: 0, origin: "" }],
+      originList: [{ value: "" }],
     };
   },
   computed: {
@@ -261,21 +323,24 @@ export default {
         this.$refs.mutipleForm.reset();
         this.readerFileList = [];
         this.file = null;
+        this.originList = [{ value: "" }];
       }
     },
     showDialog(val) {
-      if (!val) this.$refs.form.reset();
+      if (!val) {
+        this.$refs.form.reset();
+        this.originList = [{ value: "" }];
+      }
     },
   },
   methods: {
     handleUpload() {
       const valid = this.$refs.form.validate();
       if (!valid) return;
+      let origins = this.originList.map((it) => it.value);
       let form = { ...this.form };
-      if (form.origins) {
-        form.origins = form.origins.split("\n");
-      } else {
-        this.$delete(form, "origins");
+      if (origins[0]) {
+        form = { ...this.form, origins };
       }
       let task = new PinningServiceTaskWrapper(form, this.accessToken);
       this.tasks.push(task);
@@ -284,10 +349,11 @@ export default {
       this.showDialog = false;
     },
     handleMultipleUpload() {
+      let origins = this.originList.map((it) => it.value);
       let mutipleForm = { ...this.mutipleForm };
-      mutipleForm.origins = mutipleForm.origins
-        ? mutipleForm.origins.split("\n")
-        : "".split("\n");
+      if (origins[0]) {
+        mutipleForm = { ...this.mutipleForm, origins };
+      }
       const tasks = this.readerFileSuccessList.map(
         (it) =>
           new PinningServiceTaskWrapper(
@@ -300,8 +366,22 @@ export default {
       this.processTask();
       this.showMultipleDialog = false;
     },
+
+    onReplace(params) {
+      const tasks = params.map(
+        (it) =>
+          new PinningServiceTaskWrapper(it.pin, this.accessToken, it.requestid)
+      );
+      this.tasks = this.tasks.concat(tasks);
+      this.showControl = true;
+      this.processTask();
+    },
     async startTask(task) {
-      await task.addPin();
+      if (task.requestId) {
+        await task.replacePin();
+      } else {
+        await task.addPin();
+      }
       this.processTask();
     },
     processTask() {
@@ -326,7 +406,11 @@ export default {
       this.processTask();
     },
     handleAddOrigin() {
+      if (this.originList.length >= 20) return;
       this.originList.push({ value: "" });
+    },
+    handleRemoveOrigin(i) {
+      this.originList = this.originList.filter((it, index) => index != i);
     },
     getFileContent(file) {
       return new Promise((resolve, reject) => {
@@ -363,4 +447,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.param-title {
+  color: rgba(0, 0, 0, 0.6);
+}
 </style>
