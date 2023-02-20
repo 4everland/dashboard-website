@@ -234,7 +234,7 @@ export default {
         bus.$emit("guide");
         this.move();
       }
-      if (this.stepCount != 5 && !val) {
+      if (this.stepCount != 6 && !val) {
         this.showDialog = true;
       }
     },
