@@ -261,6 +261,12 @@ export default {
     bus.$on("sidebar-item", (id) => {
       if (this.$refs[id][0] && !this.$refs[id][0].isActive) {
         this.$refs[id][0].click();
+        console.log(id);
+        if (id == "group-2") {
+          setTimeout(() => {
+            this.openSub = true;
+          }, 300);
+        }
       }
       this.guideActived = true;
     });
