@@ -137,7 +137,7 @@ export default {
         {
           element: "#team-guide",
           popover: {
-            title: "Tips",
+            title: "Collaboration",
             description: `<div class="description-content">Personal and collaborative accounts can be switched here.</div>
             <span class="paging">(5/7)</span>
             </div>`,
@@ -279,13 +279,19 @@ div#driver-page-overlay {
   outline: 5000px solid rgba(0, 0, 0, 0.75);
   z-index: 100013 !important;
 }
+.driver-next-btn {
+  border-radius: 4px !important;
+}
+.driver-close-btn {
+  border-radius: 4px !important;
+}
 .guide-class {
   max-width: 400px !important;
   .driver-next-btn {
     background: #634695 !important;
     border: none !important;
     text-shadow: none !important;
-    border-radius: 0 !important;
+    // border-radius: 0 !important;
     color: #fff !important;
     font-size: 14px !important;
     padding: 4px 20px !important;
@@ -316,7 +322,6 @@ div#driver-page-overlay {
     background: #634695 !important;
     border: none !important;
     text-shadow: none !important;
-    border-radius: 0 !important;
     color: #fff !important;
     font-size: 14px !important;
     padding: 8px 20px !important;
