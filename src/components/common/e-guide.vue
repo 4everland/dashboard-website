@@ -23,8 +23,15 @@
           </v-col>
         </v-row>
         <div class="d-flex justify-center mt-10">
-          <v-btn color="primary" min-width="200" @click="handleClaim"
-            >Get now</v-btn
+          <v-btn outlined color="primary" min-width="200" @click="handleClaim"
+            >Get more</v-btn
+          >
+          <v-btn
+            class="ml-6"
+            color="primary"
+            min-width="200"
+            @click="showDialog = false"
+            >Start now</v-btn
           >
         </div>
       </div>
@@ -46,7 +53,7 @@ export default {
         className: "guide-class",
         nextBtnText: "Next",
         closeBtnText: "Skip",
-        doneBtnText: "Let's Start",
+        doneBtnText: "Get more",
         allowClose: false,
         padding: 0,
       }),
@@ -182,7 +189,8 @@ export default {
           </div>
           `,
             // showButtons: false,
-            nextBtnText: "Let's Start",
+            closeBtnText: "Start now",
+            nextBtnText: "Get more",
             position: "left",
           },
           onNext: () => {
@@ -296,18 +304,29 @@ div#driver-page-overlay {
 .reward-guide-class {
   max-width: 600px !important;
   .driver-navigation-btns {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
     margin: 20px 0 !important;
     .driver-next-btn {
-      width: 70% !important;
-      padding: 8px 5px !important;
+      padding: 8px 20px !important;
+      background: #fff !important;
+      color: #634695 !important;
+      border: 1px solid #634695 !important;
     }
   }
   .driver-close-btn {
-    display: none !important;
+    background: #634695 !important;
+    border: none !important;
+    text-shadow: none !important;
+    border-radius: 0 !important;
+    color: #fff !important;
+    font-size: 14px !important;
+    padding: 8px 20px !important;
+    margin-left: 20px !important;
+  }
+  .driver-popover-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: row-reverse;
   }
 }
 .paging {
