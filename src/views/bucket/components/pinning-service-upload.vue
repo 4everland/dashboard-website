@@ -304,8 +304,15 @@ export default {
     compeleted() {
       return !this.tasks.some((it) => it.status != 3 && it.status != 4);
     },
+    failedTasks() {
+      return this.tasks.filter((it) => it.status == 4 || it.status == 2);
+    },
   },
-
+  created() {
+    if (this.tasks.length) {
+      this.showControl = true;
+    }
+  },
   watch: {
     files(val) {
       this.file = val[0];
@@ -317,6 +324,13 @@ export default {
     },
     compeleted(val) {
       if (val) this.$emit("getList");
+    },
+    failedTasks(tasks) {
+      if (tasks.length) {
+        this.tasks
+          .filter((it) => it.status != 3)
+          .forEach((it) => it.abortPin());
+      }
     },
     showMultipleDialog(val) {
       if (!val) {
@@ -400,7 +414,7 @@ export default {
     onRetry() {
       this.tasks.forEach((it) => {
         console.log(it);
-        if (it.status == 4) it.resetStatus();
+        if (it.status == 4 || it.status == 2) it.resetStatus();
       });
 
       this.processTask();

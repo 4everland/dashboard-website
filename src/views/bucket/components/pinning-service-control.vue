@@ -14,7 +14,10 @@
     </div>
     <div class="gray fz-14 mt-4">
       <span>{{ completedTasks }} / {{ tasks.length }}</span>
-      <span class="ml-4 cursor-p" v-if="failed" @click="$emit('retryUpload')"
+      <span
+        class="ml-4 cursor-p"
+        v-if="failedTasks.length"
+        @click="$emit('retryUpload')"
         >Continue</span
       >
     </div>
@@ -44,14 +47,8 @@ export default {
     completed() {
       return !this.tasks.some((it) => it.status != 3);
     },
-    failed() {
-      return (
-        this.failedTasks.length &&
-        this.tasks.some((it) => it.status != 0 && it.status != 1)
-      );
-    },
     failedTasks() {
-      return this.tasks.filter((it) => it.status == 4);
+      return this.tasks.filter((it) => it.status == 4 || it.status == 2);
     },
     statusColor() {
       if (this.processing) return "#34A9FF";

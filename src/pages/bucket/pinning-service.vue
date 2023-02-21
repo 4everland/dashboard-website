@@ -232,7 +232,10 @@ export default {
       };
     },
     allFailedRecords() {
-      return !this.seletedRecords.some((it) => it.status != "failed");
+      return (
+        this.seletedRecords.length &&
+        !this.seletedRecords.some((it) => it.status != "failed")
+      );
     },
   },
   watch: {

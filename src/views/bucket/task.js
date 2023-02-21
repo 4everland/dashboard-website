@@ -343,7 +343,12 @@ export class PinningServiceTaskWrapper {
       this.status = 3;
     } catch (error) {
       console.log(error);
-      this.status = 4;
+      const { message } = error;
+      if (message && message.status) {
+        this.status = message.status;
+      } else {
+        this.status = 4;
+      }
     }
   }
   async replacePin() {
@@ -360,19 +365,23 @@ export class PinningServiceTaskWrapper {
           this.abortAxiosFn = c;
         }),
       });
-      console.log(data);
       this.status = 3;
     } catch (error) {
       console.log(error);
-      this.status = 4;
+      const { message } = error;
+      if (message && message.status) {
+        this.status = message.status;
+      } else {
+        this.status = 4;
+      }
     }
   }
   async abortPin() {
     try {
       if (this.abortAxiosFn) {
         await this.abortAxiosFn({ status: 2 });
-        this.status = 2;
       }
+      this.status = 2;
     } catch (error) {
       console.log(error);
     }

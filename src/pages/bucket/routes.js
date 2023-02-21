@@ -69,7 +69,10 @@ export default [
   },
   {
     path: "/pinning-service",
-    component: () => import("./pinning-service"),
+    // component: () => import("./pinning-service"),
+    components: {
+      cache: () => import("./pinning-service"),
+    },
     meta: {
       title: "Pinning Service",
       // isTab: 1,
