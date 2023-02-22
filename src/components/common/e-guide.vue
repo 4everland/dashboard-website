@@ -5,13 +5,11 @@
         <v-icon size="16" class="close-icon" @click="showDialog = false"
           >mdi-close</v-icon
         >
+        <div class="text">Thank you for registering 4EVERLAND!</div>
         <div class="mb-6 text">
-          {{
-            `Thank you for registering with 4EVERLAND!  You will get the free
-        resources package and free airdrops of other resources that will also be
-        available to help you better experience 4EVERLAND products. Come to
-        Reward Hub to get it now!`
-          }}
+          You have received the following free resource packages which will help
+          you better experience 4EVERLAND service. For more free resources?
+          Claim them now in Reward Hub!
         </div>
         <v-row class="mt-2">
           <v-col :sm="6" :cols="12" v-for="item in items" :key="item.name">
@@ -176,18 +174,20 @@ export default {
           popover: {
             className: "reward-guide-class",
             title: "Reward-hub",
-            description: `<div class="airdrop-content"><div class="mb-6 text">Click on Reward Hub to claim your free new user resource package and get a better experience of 4EVERLAND products. More activities are available to earn more resources. Come and get your hands on!</div>
-          <div class="row mt-2">
-          <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="img/airDrop/ipfs.png" alt=""><span class="resource-item-value ml-2">25GB</span><span class="resource-text fz-12">IPFS Storage</span></div>
-          </div>
-          <div class="col-sm-6 col-12"><div class="resource-item al-c"><img  width="28" src="/img/airDrop/ar.png" alt=""><span class="resource-item-value ml-2">100MB</span><span  class="resource-text fz-12">Arweave Storage</span></div>
-          </div>
-          <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/minutes.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Build Minutes</span></div>
-          </div>
-          <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/balance.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Recharge Balance</span>
-          </div>
-          </div>
-          `,
+            description: `<div class="airdrop-content">
+                <div class="text"> Thank you for registering 4EVERLAND! </div>
+                <div class="mb-6 text">You have received the following free resource packages which will help you better experience 4EVERLAND service. For more free resources? Claim them now in Reward Hub!</div>
+              <div class="row mt-2">
+              <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="img/airDrop/ipfs.png" alt=""><span class="resource-item-value ml-2">25GB</span><span class="resource-text fz-12">IPFS Storage</span></div>
+              </div>
+              <div class="col-sm-6 col-12"><div class="resource-item al-c"><img  width="28" src="/img/airDrop/ar.png" alt=""><span class="resource-item-value ml-2">100MB</span><span  class="resource-text fz-12">Arweave Storage</span></div>
+              </div>
+              <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/minutes.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Build Minutes</span></div>
+              </div>
+              <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/balance.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Recharge Balance</span>
+              </div>
+            </div>
+            `,
             // showButtons: false,
             closeBtnText: "Start now",
             nextBtnText: "Get more",
@@ -352,7 +352,7 @@ div#driver-page-overlay {
   .text {
     margin-bottom: 10px;
     color: #0b0817;
-    line-height: 36px;
+    line-height: 30px;
   }
   .close-icon {
     position: absolute;
