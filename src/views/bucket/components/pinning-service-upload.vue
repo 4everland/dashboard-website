@@ -97,7 +97,7 @@
       <div class="pa-5">
         <h3>Bulk CIDs</h3>
         <div class="fz-14 my-3" style="line-break: anywhere">
-          The batch CIDs can be entered in a .txt file with one CID per line and
+          The Bulk CIDs can be entered in a .txt file with one CID per line and
           uploaded for resolution.
         </div>
         <div v-if="!file">
