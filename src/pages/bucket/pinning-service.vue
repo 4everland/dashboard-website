@@ -52,7 +52,7 @@
         disable-pagination
       >
         <template v-slot:item.name="{ item }">
-          <span>{{ item.pin.name }}</span>
+          <span>{{ item.pin.name.cutStr(10, 5) }}</span>
         </template>
         <template v-slot:item.size="{ item }">
           <span>{{ $utils.getFileSize(item.info.dag_size) }}</span>
@@ -133,7 +133,7 @@
           @click="handleReplace"
           v-show="allFailedRecords"
         >
-          <span class="gray">Replace</span>
+          <span class="gray">Re-upload</span>
         </v-btn>
       </operation-bar>
     </div>
@@ -206,7 +206,7 @@ export default {
         { text: "Name", value: "name" },
         { text: "Size", value: "size" },
         { text: "IPFS CID", value: "hash" },
-        { text: "Last Modified", value: "created" },
+        { text: "Created Time", value: "created" },
         { text: "Pin Status", value: "status" },
       ],
       list: [],
@@ -276,6 +276,7 @@ export default {
             status: this.state,
             name: this.searchKey,
             limit: this.limit,
+            match: "partial",
             ...params,
           },
           headers: {

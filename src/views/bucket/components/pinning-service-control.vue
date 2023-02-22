@@ -12,13 +12,21 @@
         :style="{ width: progressValue + '%', background: statusColor }"
       ></div>
     </div>
-    <div class="gray fz-14 mt-4">
+    <div class="gray fz-14 mt-4 al-c justify-space-between">
       <span>{{ completedTasks }} / {{ tasks.length }}</span>
-      <span
+      <!-- <span
         class="ml-4 cursor-p"
         v-if="failedTasks.length"
         @click="$emit('retryUpload')"
         >Continue</span
+      > -->
+
+      <v-btn
+        v-if="failedTasks.length"
+        small
+        @click="$emit('retryUpload')"
+        color="primary"
+        >Continue</v-btn
       >
     </div>
   </div>

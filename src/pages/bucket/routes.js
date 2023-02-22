@@ -74,7 +74,7 @@ export default [
       cache: () => import("./pinning-service"),
     },
     meta: {
-      title: "Pinning Service",
+      title: "4EVER Pin",
       // isTab: 1,
     },
   },

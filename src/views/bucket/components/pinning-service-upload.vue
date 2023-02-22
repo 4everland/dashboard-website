@@ -11,7 +11,7 @@
           <span class="gray-7">Selected CID</span>
         </v-list-item>
         <v-list-item link @click="showMultipleDialog = true">
-          <span class="gray-7">Batch CIDs upload</span>
+          <span class="gray-7">Bulk CIDs</span>
         </v-list-item>
       </v-list>
     </e-menu>
@@ -95,7 +95,7 @@
     </v-dialog>
     <v-dialog v-model="showMultipleDialog" max-width="550">
       <div class="pa-5">
-        <h3>Batch CIDs upload</h3>
+        <h3>Bulk CIDs</h3>
         <div class="fz-14 my-3" style="line-break: anywhere">
           The batch CIDs can be entered in a .txt file with one CID per line and
           uploaded for resolution.

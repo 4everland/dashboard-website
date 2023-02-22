@@ -57,7 +57,7 @@ const menuMap = {
         ],
       },
       {
-        label: "Pinning Service",
+        label: "4EVER Pin",
         to: "/bucket/pinning-service",
       },
     ],
