@@ -250,7 +250,7 @@
       </div>
     </v-dialog>
     <pinning-service-control
-      @close="showControl = false"
+      @close="handleClose"
       @retryUpload="onRetry"
       :tasks="tasks"
       v-show="showControl"
@@ -462,6 +462,10 @@ export default {
       });
       this.readerFileList = readerFileList;
     },
+    handleClose(){
+      this.showControl = false
+      this.tasks = []
+    }
   },
   components: {
     InputUpload,
