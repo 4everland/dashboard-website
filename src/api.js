@@ -38,7 +38,7 @@ const bucketDomainApi = inDev
 
 export const pinningServiceApi = inDev
   ? "https://pinning.foreverland.xyz"
-  : "https://pinning.foreverland.xyz";
+  : "https://api.4everland.dev";
 Vue.prototype.$endpoint = endpoint;
 Vue.prototype.$authApi = authApi;
 
