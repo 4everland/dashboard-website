@@ -15,7 +15,6 @@
         </v-list-item>
       </v-list>
     </e-menu>
-
     <v-dialog v-model="showDialog" max-width="500">
       <div class="pa-5">
         <h3 class="fz-20">Pin By CID</h3>
@@ -43,8 +42,8 @@
                   : 'Invalid CID',
             ]"
           ></v-text-field>
-          <div>
-            <span class="fz-14 param-title mr-2">Origins</span>
+          <!-- <div>
+            <span class="fz-14 param-title mr-2">Origins(optional)</span>
             <v-tooltip top>
               <template v-slot:activator="{ on, attrs }">
                 <v-icon size="18" v-bind="attrs" v-on="on">
@@ -61,9 +60,10 @@
           <template v-for="(item, index) in originList">
             <div class="mt-3 al-c" :key="index">
               <v-text-field
-                class="hide-msg"
+                placeholder="/ip4/203.0.113.142/tcp/4001/p2p/QmSourcePeerId"
                 persistent-placeholder
                 v-model="item.value"
+                :rules="[v=>handleValidOrigin(v) || 'invalid']"
               ></v-text-field>
               <v-icon
                 size="20"
@@ -82,7 +82,7 @@
                 >mdi-minus-circle-outline</v-icon
               >
             </div>
-          </template>
+          </template> -->
 
           <div class="d-flex justify-center al-c mt-8">
             <v-btn outlined @click="showDialog = false">Cancel</v-btn>
@@ -106,7 +106,10 @@
             line in the .txt file.
           </div>
           <div class="al-c mt-4 justify-center">
+
+            <v-btn  outlined @click="showMultipleDialog = false">Cancel</v-btn>
             <v-btn
+            class="ml-5"
               slot="ref"
               color="primary"
               width="150"
@@ -149,11 +152,11 @@
               persistent-placeholder
               label="Set Name"
               counter="30"
-              :rules="[(v) => (v && v.length <= 30) || 'name only 30 char']"
+              maxlength="30"
               v-model="mutipleForm.name"
             ></v-text-field>
-            <div>
-              <span class="fz-14 param-title mr-2">Origins</span>
+            <!-- <div>
+              <span class="fz-14 param-title mr-2">Origins(optional)</span>
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon size="18" v-bind="attrs" v-on="on">
@@ -192,7 +195,7 @@
                   >mdi-minus-circle-outline</v-icon
                 >
               </div>
-            </template>
+            </template> -->
 
             <div class="d-flex justify-center al-c mt-8">
               <v-btn outlined @click="showMultipleDialog = false">Cancel</v-btn>
@@ -257,9 +260,13 @@
 </template>
 
 <script>
+
 import { PinningServiceTaskWrapper } from "../task";
 import PinningServiceControl from "@/views/bucket/components/pinning-service-control.vue";
 import InputUpload from "@/views/bucket/components/input-upload";
+const addr = MultiformatsMultiaddr.multiaddr('/ip4/203.0.113.142/tcp/4001acs')
+const result = MultiformatsMultiaddr.isMultiaddr(addr)
+console.log(result)
 export default {
   props: {
     accessToken: String,
@@ -380,7 +387,15 @@ export default {
       this.processTask();
       this.showMultipleDialog = false;
     },
-
+    handleValidOrigin(v) {
+      try {
+        const addr = MultiformatsMultiaddr.multiaddr(v);
+        return  MultiformatsMultiaddr.isMultiaddr(addr)
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    },
     onReplace(params) {
       const tasks = params.map(
         (it) =>
@@ -406,7 +421,6 @@ export default {
         idles.length > this.processLimit
           ? this.processLimit - processing.length
           : idles.length;
-      console.log(min);
       for (let i = 0; i < min; i++) {
         this.startTask(idles[i]);
       }

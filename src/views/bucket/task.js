@@ -342,8 +342,11 @@ export class PinningServiceTaskWrapper {
       console.log(data);
       this.status = 3;
     } catch (error) {
-      console.log(error);
-      const { message } = error;
+      console.log(error, error.response);
+      const { message, response } = error;
+      if (response.data.error.details) {
+        Vue.prototype.$alert(response.data.error.details);
+      }
       if (message && message.status) {
         this.status = message.status;
       } else {

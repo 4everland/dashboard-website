@@ -133,17 +133,17 @@
           @click="handleReplace"
           v-show="allFailedRecords"
         >
-          <span class="gray">Re-upload</span>
+          <span class="gray">Re-pin</span>
         </v-btn>
       </operation-bar>
     </div>
 
     <v-dialog v-model="showPop" max-width="500" persistent>
       <div class="pd-30">
-        <h3>API Key</h3>
+        <h3>Access Token</h3>
         <div class="mt-3" @click="$copy(accessToken)">
           <div class="fz-14 gray">
-            Be sure to keep the unique API key for the pinning service safe. The
+            Be sure to keep the unique token for the pinning service safe. The
             API key cannot be deleted, but it can be reset if has been
             compromised.
           </div>
@@ -155,7 +155,7 @@
           </div>
         </div>
         <div class="mt-6 ta-c">
-          <v-btn color="primary" @click="resetAccessToken">Reset</v-btn>
+          <v-btn outlined @click="resetAccessToken">Reset</v-btn>
           <v-btn color="primary" class="ml-8" @click="showPop = false"
             >Done</v-btn
           >
