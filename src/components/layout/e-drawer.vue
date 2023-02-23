@@ -99,25 +99,75 @@
             </v-list-item-content>
           </template>
 
-          <v-list-item
-            :ref="i + '-' + j"
-            class="sub"
-            active-class="active-item"
-            :class="{
-              'v-list-item--active': sub.matPath && sub.matPath.test(path),
-            }"
-            :to="sub.to"
-            :href="sub.href"
-            :target="sub.href ? '_blank' : ''"
-            v-for="(sub, j) in it.subs"
-            :key="j"
-          >
-            <v-list-item-content>
-              <v-list-item-title>
-                <span class="fz-14"> {{ sub.label }}</span>
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+          <template v-for="(sub, j) in it.subs">
+            <v-list-group
+              v-if="sub.subs"
+              :ref="'sub-' + j"
+              :key="j"
+              :group="sub.group"
+              sub-group
+              no-action
+              v-model="openSub"
+              @input="onSubsToggle(j, $event)"
+            >
+              <template v-slot:activator>
+                <div class="ml-2"></div>
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <b class="fz-14 fw-n">{{ sub.label }}</b>
+                    <img
+                      v-if="sub.suffixImg"
+                      class="ml-2"
+                      width="25"
+                      :src="sub.suffixImg"
+                      alt=""
+                    />
+                  </v-list-item-title>
+                  <!--  -->
+                </v-list-item-content>
+              </template>
+              <v-list-item
+                :ref="'sub' + j + '-' + k"
+                class="sub"
+                active-class="active-item"
+                :class="{
+                  'v-list-item--active':
+                    secondSub.matPath && secondSub.matPath.test(path),
+                }"
+                :to="secondSub.to"
+                :href="secondSub.href"
+                :target="secondSub.href ? '_blank' : ''"
+                v-for="(secondSub, k) in sub.subs"
+                :key="k"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <span class="fz-14">{{ secondSub.label }}</span>
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-group>
+
+            <v-list-item
+              v-else
+              :ref="i + '-' + j"
+              class="sub"
+              active-class="active-item"
+              :class="{
+                'v-list-item--active': sub.matPath && sub.matPath.test(path),
+              }"
+              :to="sub.to"
+              :href="sub.href"
+              :target="sub.href ? '_blank' : ''"
+              :key="j"
+            >
+              <v-list-item-content>
+                <v-list-item-title>
+                  <span class="fz-14"> {{ sub.label }}</span>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
         </v-list-group>
 
         <v-list-item
@@ -196,6 +246,7 @@ export default {
       activeArr: [],
       filesPath: initFilePath,
       guideActived: false,
+      openSub: true,
     };
   },
   computed: {
@@ -210,6 +261,12 @@ export default {
     bus.$on("sidebar-item", (id) => {
       if (this.$refs[id][0] && !this.$refs[id][0].isActive) {
         this.$refs[id][0].click();
+        console.log(id);
+        if (id == "group-2") {
+          setTimeout(() => {
+            this.openSub = true;
+          }, 300);
+        }
       }
       this.guideActived = true;
     });
@@ -243,8 +300,21 @@ export default {
     },
     onToggle(i, open) {
       if (!open) return;
-      if (this.list[i].group.test(this.path)) return;
-      this.$refs[i + "-0"][0].$el.click();
+      if (i == 2) {
+        if (/^\/bucket\/pinning-service/.test(this.path)) return;
+        setTimeout(() => {
+          this.openSub = true;
+          this.onSubsToggle(0, true);
+        }, 300);
+      } else {
+        if (this.list[i].group.test(this.path)) return;
+        this.$refs[i + "-0"][0].$el.click();
+      }
+    },
+    onSubsToggle(i, open) {
+      if (!open) return;
+      if (this.list[2].subs[0].group.test(this.path)) return;
+      this.$refs["sub" + i + "-0"][0].$el.click();
     },
   },
 };

@@ -95,21 +95,6 @@
           {{ tableLoading ? `Loading files...` : `No files` }}
         </e-empty>
       </div>
-
-      <!-- <div
-        v-if="!finished"
-        class="pd-20 gray ta-c fz-16 mt-5"
-        :class="{
-          'hover-1': !loadingMore,
-        }"
-        @click="onLoadMore"
-        v-intersect="onLoadMore"
-      >
-        <span v-if="list.length" v-show="!tableLoading">
-          {{ loadingMore ? "Loading..." : "Load More" }}
-        </span>
-      </div> -->
-
       <bottom-detector
         @arriveBottom="onLoadMore"
         :loadingMore="loadingMore"

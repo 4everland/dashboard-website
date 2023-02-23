@@ -1,5 +1,6 @@
 import Vue from "vue";
 import { Upload } from "@aws-sdk/lib-storage";
+import { pinningServiceApi } from "../../api";
 export class TaskWrapper {
   id;
   s3;
@@ -312,5 +313,127 @@ export class PinCidTaskWrapper {
       this.status = 2;
     }
     this.status = 2;
+  }
+}
+export class PinningServiceTaskWrapper {
+  static id = 0;
+  constructor(params, accessToken, requestId = null) {
+    this.id = PinningServiceTaskWrapper.id++;
+    this.status = 0;
+    this.params = params;
+    this.accessToken = accessToken;
+    this.abortAxiosFn = null;
+    this.requestId = requestId;
+  }
+  async addPin() {
+    try {
+      this.status = 1;
+      const { data } = await Vue.prototype.$axios({
+        method: "POST",
+        url: pinningServiceApi + "/pins",
+        data: this.params,
+        headers: {
+          Authorization: "Bearer " + this.accessToken,
+        },
+        cancelToken: new Vue.prototype.$axios.CancelToken((c) => {
+          this.abortAxiosFn = c;
+        }),
+      });
+      console.log(data);
+      this.status = 3;
+    } catch (error) {
+      console.log(error, error.response);
+      const { message, response } = error;
+      if (response.data.error.details) {
+        Vue.prototype.$alert(response.data.error.details);
+      }
+      if (message && message.status) {
+        this.status = message.status;
+      } else {
+        this.status = 4;
+      }
+    }
+  }
+  async replacePin() {
+    try {
+      this.status = 1;
+      const { data } = await Vue.prototype.$axios({
+        method: "POST",
+        url: pinningServiceApi + "/pins/" + this.requestId,
+        data: this.params,
+        headers: {
+          Authorization: "Bearer " + this.accessToken,
+        },
+        cancelToken: new Vue.prototype.$axios.CancelToken((c) => {
+          this.abortAxiosFn = c;
+        }),
+      });
+      this.status = 3;
+    } catch (error) {
+      console.log(error);
+      const { message } = error;
+      if (message && message.status) {
+        this.status = message.status;
+      } else {
+        this.status = 4;
+      }
+    }
+  }
+  async abortPin() {
+    try {
+      if (this.abortAxiosFn) {
+        await this.abortAxiosFn({ status: 2 });
+      }
+      this.status = 2;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  resetStatus() {
+    this.status = 0;
+  }
+}
+
+export class PinningServiceDeleteTaskWrapper {
+  static id = 0;
+  constructor(requestId, accessToken) {
+    this.id = PinningServiceDeleteTaskWrapper.id++;
+    this.status = 0;
+    this.requestId = requestId;
+    this.accessToken = accessToken;
+    this.abortAxiosFn = null;
+  }
+  async startDelete() {
+    try {
+      this.status = 1;
+      const { data } = await Vue.prototype.$axios({
+        method: "DELETE",
+        url: pinningServiceApi + "/pins/" + this.requestId,
+        headers: {
+          Authorization: "Bearer " + this.accessToken,
+        },
+        cancelToken: new Vue.prototype.$axios.CancelToken((c) => {
+          this.abortAxiosFn = c;
+        }),
+      });
+      console.log(data);
+      this.status = 3;
+    } catch (error) {
+      console.log(error);
+      this.status = 4;
+    }
+  }
+  async abortTask() {
+    try {
+      if (this.abortAxiosFn) {
+        await this.abortAxiosFn({ status: 2 });
+        this.status = 2;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  resetStatus() {
+    this.status = 0;
   }
 }
