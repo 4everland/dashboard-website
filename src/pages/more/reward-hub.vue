@@ -94,9 +94,7 @@
 
 <script>
 import { mapState } from "vuex";
-import mixin from "./reward-hub-mixin";
 export default {
-  mixins: [mixin],
   computed: {
     ...mapState({
       isFocus: (s) => s.isFocus,
@@ -210,22 +208,6 @@ export default {
           if (/^http/.test(val)) this.$openWindow(val);
           else this.$navTo(val);
         } else if (type == "SEND_REQUEST") {
-          // if (it.type == "AIRDROP_FOR_NEW" && !this.isRegister) {
-          //   await this.registerForNew();
-          //   if (!this.isRegister)
-          //     return this.$alert(
-          //       "New user registration rewards are required for successful registration on the chain, please try later."
-          //     );
-          // }
-          if (!this.registerOverThreeDays) {
-            await this.registerForNew();
-            if (!this.isRegister)
-              return this.$alert(
-                "New user rewards are based on successful registration on the chain, please try again after five minutes.",
-                "Tips"
-              );
-          }
-
           await this.$http.post("$auth" + val);
           this.$toast("Claimed successfully");
           this.getList();

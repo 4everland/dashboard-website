@@ -32,7 +32,7 @@ const menuMap = {
     group: /^\/bucket/i,
     subs: [
       {
-        label: "Buckets(s3)",
+        label: "Bucket(s3)",
         active: false,
         group:
           /^(\/bucket\/storage)|(\/bucket\/arweave)|(\/bucket\/domains)|(\/bucket\/access-keys)/i,

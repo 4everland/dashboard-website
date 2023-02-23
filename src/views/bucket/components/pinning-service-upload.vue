@@ -19,7 +19,7 @@
       <div class="pa-5">
         <h3 class="fz-20">Pin By CID</h3>
         <div class="fz-14 my-6">
-          This function allows you to pin content to 4EVERLAND bucket using an
+          This function allows you to pin content to 4EVER storage using an
           IPFS Content Identifier. (CID)
         </div>
         <v-form ref="form" class="mt-6">
