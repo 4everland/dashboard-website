@@ -1,7 +1,7 @@
 <template>
   <v-dialog eager v-model="showPop" max-width="650">
     <div class="px-15 py-8">
-      <h3 class="mb-8" style="font-size: 30px">{{ title }}</h3>
+      <h2 class="mb-5 fz-22">{{ title }}</h2>
       <!-- prepend-icon="mdi-email" -->
       <div>
         <p class="al-c">
@@ -82,15 +82,10 @@
       <e-upload-img v-model="files" />
 
       <div class="ta-c mt-5">
-        <v-btn
-          color="primary"
-          tile
-          width="120"
-          :loading="loading"
-          @click="onSubmit"
+        <v-btn color="primary" width="120" :loading="loading" @click="onSubmit"
           >Reback</v-btn
         >
-        <v-btn class="ml-6" tile outlined width="120" @click="showPop = false"
+        <v-btn class="ml-6" outlined width="120" @click="showPop = false"
           >Cancel</v-btn
         >
       </div>
