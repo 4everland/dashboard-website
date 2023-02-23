@@ -228,6 +228,9 @@ async function handleMsg(status, code, msg, config) {
       goLogin();
     }
   } else if (msg == "Network Error") {
+    window.gtag("event", "api_error", {
+      url: config.url || "no url",
+    });
     vue
       .$confirm(
         "A network error has occurred. Please check your connections and try again.",

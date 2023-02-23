@@ -5,13 +5,11 @@
         <v-icon size="16" class="close-icon" @click="showDialog = false"
           >mdi-close</v-icon
         >
+        <div class="text">Thank you for registering 4EVERLAND!</div>
         <div class="mb-6 text">
-          {{
-            `Thank you for registering with 4EVERLAND!  You will get the free
-        resources package and free airdrops of other resources that will also be
-        available to help you better experience 4EVERLAND products. Come to
-        Reward Hub to get it now!`
-          }}
+          You have received the following free resource packages which will help
+          you better experience 4EVERLAND service. For more free resources?
+          Claim them now in Reward Hub!
         </div>
         <v-row class="mt-2">
           <v-col :sm="6" :cols="12" v-for="item in items" :key="item.name">
@@ -23,8 +21,15 @@
           </v-col>
         </v-row>
         <div class="d-flex justify-center mt-10">
-          <v-btn color="primary" min-width="200" @click="handleClaim"
-            >Get now</v-btn
+          <v-btn outlined color="primary" min-width="200" @click="handleClaim"
+            >Get more</v-btn
+          >
+          <v-btn
+            class="ml-6"
+            color="primary"
+            min-width="200"
+            @click="showDialog = false"
+            >Start now</v-btn
           >
         </div>
       </div>
@@ -46,7 +51,7 @@ export default {
         className: "guide-class",
         nextBtnText: "Next",
         closeBtnText: "Skip",
-        doneBtnText: "Let's Start",
+        doneBtnText: "Get more",
         allowClose: false,
         padding: 0,
       }),
@@ -130,7 +135,7 @@ export default {
         {
           element: "#team-guide",
           popover: {
-            title: "Tips",
+            title: "Collaboration",
             description: `<div class="description-content">Personal and collaborative accounts can be switched here.</div>
             <span class="paging">(5/7)</span>
             </div>`,
@@ -169,20 +174,23 @@ export default {
           popover: {
             className: "reward-guide-class",
             title: "Reward-hub",
-            description: `<div class="airdrop-content"><div class="mb-6 text">Click on Reward Hub to claim your free new user resource package and get a better experience of 4EVERLAND products. More activities are available to earn more resources. Come and get your hands on!</div>
-          <div class="row mt-2">
-          <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="img/airDrop/ipfs.png" alt=""><span class="resource-item-value ml-2">25GB</span><span class="resource-text fz-12">IPFS Storage</span></div>
-          </div>
-          <div class="col-sm-6 col-12"><div class="resource-item al-c"><img  width="28" src="/img/airDrop/ar.png" alt=""><span class="resource-item-value ml-2">100MB</span><span  class="resource-text fz-12">Arweave Storage</span></div>
-          </div>
-          <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/minutes.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Build Minutes</span></div>
-          </div>
-          <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/balance.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Recharge Balance</span>
-          </div>
-          </div>
-          `,
+            description: `<div class="airdrop-content">
+                <div class="text"> Thank you for registering 4EVERLAND! </div>
+                <div class="mb-6 text">You have received the following free resource packages which will help you better experience 4EVERLAND service. For more free resources? Claim them now in Reward Hub!</div>
+              <div class="row mt-2">
+              <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="img/airDrop/ipfs.png" alt=""><span class="resource-item-value ml-2">25GB</span><span class="resource-text fz-12">IPFS Storage</span></div>
+              </div>
+              <div class="col-sm-6 col-12"><div class="resource-item al-c"><img  width="28" src="/img/airDrop/ar.png" alt=""><span class="resource-item-value ml-2">100MB</span><span  class="resource-text fz-12">Arweave Storage</span></div>
+              </div>
+              <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/minutes.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Build Minutes</span></div>
+              </div>
+              <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/balance.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Recharge Balance</span>
+              </div>
+            </div>
+            `,
             // showButtons: false,
-            nextBtnText: "Let's Start",
+            closeBtnText: "Start now",
+            nextBtnText: "Get more",
             position: "left",
           },
           onNext: () => {
@@ -226,7 +234,7 @@ export default {
         bus.$emit("guide");
         this.move();
       }
-      if (this.stepCount != 5 && !val) {
+      if (this.stepCount != 6 && !val) {
         this.showDialog = true;
       }
     },
@@ -271,13 +279,19 @@ div#driver-page-overlay {
   outline: 5000px solid rgba(0, 0, 0, 0.75);
   z-index: 100013 !important;
 }
+.driver-next-btn {
+  border-radius: 4px !important;
+}
+.driver-close-btn {
+  border-radius: 4px !important;
+}
 .guide-class {
   max-width: 400px !important;
   .driver-next-btn {
     background: #634695 !important;
     border: none !important;
     text-shadow: none !important;
-    border-radius: 0 !important;
+    // border-radius: 0 !important;
     color: #fff !important;
     font-size: 14px !important;
     padding: 4px 20px !important;
@@ -296,18 +310,28 @@ div#driver-page-overlay {
 .reward-guide-class {
   max-width: 600px !important;
   .driver-navigation-btns {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
     margin: 20px 0 !important;
     .driver-next-btn {
-      width: 70% !important;
-      padding: 8px 5px !important;
+      padding: 8px 20px !important;
+      background: #fff !important;
+      color: #634695 !important;
+      border: 1px solid #634695 !important;
     }
   }
   .driver-close-btn {
-    display: none !important;
+    background: #634695 !important;
+    border: none !important;
+    text-shadow: none !important;
+    color: #fff !important;
+    font-size: 14px !important;
+    padding: 8px 20px !important;
+    margin-left: 20px !important;
+  }
+  .driver-popover-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: row-reverse;
   }
 }
 .paging {
@@ -328,7 +352,7 @@ div#driver-page-overlay {
   .text {
     margin-bottom: 10px;
     color: #0b0817;
-    line-height: 36px;
+    line-height: 30px;
   }
   .close-icon {
     position: absolute;
