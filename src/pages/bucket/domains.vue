@@ -81,59 +81,59 @@
       </div>
     </div>
 
-    <v-dialog v-model="showPop" max-width="520">
+    <v-dialog v-model="showPop" max-width="600">
       <div class="pd-30">
-        <h3>Add Domain</h3>
+        <h2 class="fz-20">Add Domain</h2>
         <v-window v-model="curStep">
           <v-window-item :value="0">
             <div class="gray mt-2 fz-14">
-              Select a bucket to add your domain to
+              Select a bucket to add your domain to:
             </div>
-            <div class="bd-1 mt-6">
+            <div class="mt-6">
               <div v-if="!bucketList">
                 <v-skeleton-loader type="article" />
               </div>
               <template v-else>
-                <div class="d-flex al-c bdb-1">
-                  <v-icon class="ml-4">mdi-magnify</v-icon>
-                  <input
-                    type="text"
-                    v-model="keyword"
-                    placeholder="Search For Bucket"
-                    class="flex-1 pd-10"
-                    style="height: 54px; outline: none"
-                  />
-                </div>
-                <div class="ov-a" style="max-height: 40vh">
-                  <div
-                    class="d-flex al-c pd-15"
-                    :class="{
-                      'bdt-1': i > 0,
-                    }"
-                    v-for="(it, i) in resBucketList"
-                    :key="i"
-                  >
-                    <v-icon size="14">mdi-folder-multiple</v-icon>
-                    <span class="ml-2 fz-15">{{ it.name }}</span>
-                    <v-btn
-                      small
-                      color="primary"
-                      class="ml-auto"
-                      @click="onSelect(it)"
-                      >Select</v-btn
+                <v-text-field
+                  class="hide-msg bd-1"
+                  dense
+                  solo
+                  clearable
+                  label="Search"
+                  prepend-inner-icon="mdi-magnify"
+                  v-model="keyword"
+                ></v-text-field>
+
+                <div class="bg-f6 pa-2 mt-5">
+                  <div class="ov-a" style="max-height: 40vh">
+                    <div
+                      class="d-flex al-c pd-15"
+                      v-for="(it, i) in resBucketList"
+                      :key="i"
                     >
+                      <v-icon size="14">mdi-folder-multiple</v-icon>
+                      <span class="ml-2 fz-15">{{
+                        (it.name || "").cutStr(10, 10)
+                      }}</span>
+                      <v-btn
+                        small
+                        color="primary"
+                        class="ml-auto"
+                        @click="onSelect(it)"
+                        >Select</v-btn
+                      >
+                    </div>
                   </div>
-                </div>
-                <div class="d-flex al-c bdt-1 pa-3">
-                  <v-btn
-                    text
-                    small
-                    color="primary"
-                    to="/bucket/storage/?new=bucket"
-                  >
-                    <v-icon size="16">mdi-folder-multiple-plus</v-icon>
-                    <span class="ml-1">Create a new bucket</span>
-                  </v-btn>
+                  <div class="pa-2 ta-c">
+                    <v-btn
+                      text
+                      color="primary"
+                      to="/bucket/storage/?new=bucket"
+                    >
+                      <v-icon size="16">mdi-folder-multiple-plus</v-icon>
+                      <span class="ml-1">Create New Bucket</span>
+                    </v-btn>
+                  </div>
                 </div>
               </template>
             </div>
