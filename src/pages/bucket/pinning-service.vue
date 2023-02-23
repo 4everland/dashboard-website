@@ -133,7 +133,7 @@
           @click="handleReplace"
           v-show="allFailedRecords"
         >
-          <span class="gray">Re-pin</span>
+          <span class="gray">Repin</span>
         </v-btn>
       </operation-bar>
     </div>
@@ -144,7 +144,7 @@
         <div class="mt-3" @click="$copy(accessToken)">
           <div class="fz-14 gray">
             Be sure to keep the unique token for the pinning service safe. The
-            API key cannot be deleted, but it can be reset if has been
+            token cannot be deleted, but it can be reset if has been
             compromised.
           </div>
           <div class="pd-10 bd-1 bdrs-3 mt-5 d-flex al-c hover-1">
@@ -157,7 +157,7 @@
         <div class="mt-6 ta-c">
           <v-btn outlined @click="resetAccessToken">Reset</v-btn>
           <v-btn color="primary" class="ml-8" @click="showPop = false"
-            >Done</v-btn
+            >DONE</v-btn
           >
         </div>
       </div>
@@ -206,7 +206,7 @@ export default {
         { text: "Name", value: "name" },
         { text: "Size", value: "size" },
         { text: "IPFS CID", value: "hash" },
-        { text: "Created Time", value: "created" },
+        { text: "CreateAt", value: "created" },
         { text: "Pin Status", value: "status" },
       ],
       list: [],

@@ -85,10 +85,10 @@
           </template> -->
 
           <div class="d-flex justify-center al-c mt-8">
-            <v-btn outlined @click="showDialog = false">Cancel</v-btn>
-            <v-btn color="primary" class="ml-10" @click="handleUpload"
+            <v-btn color="primary" @click="handleUpload"
               >Search and Pin</v-btn
             >
+            <v-btn outlined class="ml-10" @click="showDialog = false">Cancel</v-btn>
           </div>
         </v-form>
       </div>
@@ -96,7 +96,7 @@
     <v-dialog v-model="showMultipleDialog" max-width="550">
       <div class="pa-5">
         <h3>Bulk CIDs</h3>
-        <div class="fz-14 my-3" style="line-break: anywhere">
+        <div class="fz-14 my-3">
           The Bulk CIDs can be entered in a .txt file with one CID per line and
           uploaded for resolution.
         </div>
@@ -107,9 +107,7 @@
           </div>
           <div class="al-c mt-4 justify-center">
 
-            <v-btn  outlined @click="showMultipleDialog = false">Cancel</v-btn>
             <v-btn
-            class="ml-5"
               slot="ref"
               color="primary"
               width="150"
@@ -118,6 +116,7 @@
               <img src="/img/svg/upload.svg" width="16" />
               <span class="ml-2">Upload</span>
             </v-btn>
+            <v-btn class="ml-5" outlined @click="showMultipleDialog = false">Cancel</v-btn>
           </div>
         </div>
         <div v-else>
@@ -198,10 +197,10 @@
             </template> -->
 
             <div class="d-flex justify-center al-c mt-8">
-              <v-btn outlined @click="showMultipleDialog = false">Cancel</v-btn>
-              <v-btn color="primary" class="ml-10" @click="handleMultipleUpload"
+               <v-btn color="primary" @click="handleMultipleUpload"
                 >Search and Pin</v-btn
               >
+              <v-btn outlined class="ml-10" @click="showMultipleDialog = false">Cancel</v-btn>
             </div>
           </v-form>
         </div>
@@ -246,7 +245,7 @@
           </v-simple-table>
         </div>
         <div class="mt-6 ta-c">
-          <v-btn color="primary" @click="showFileView = false">Done</v-btn>
+          <v-btn color="primary" @click="showFileView = false">DONE</v-btn>
         </div>
       </div>
     </v-dialog>
@@ -335,7 +334,7 @@ export default {
     failedTasks(tasks) {
       if (tasks.length) {
         this.tasks
-          .filter((it) => it.status != 3)
+          .filter((it) => it.status != 3 && it.status != 4 && it.status != 2)
           .forEach((it) => it.abortPin());
       }
     },
@@ -430,7 +429,6 @@ export default {
         console.log(it);
         if (it.status == 4 || it.status == 2) it.resetStatus();
       });
-
       this.processTask();
     },
     handleAddOrigin() {
@@ -456,14 +454,12 @@ export default {
     },
     parseContentCid(content) {
       let arr = content.split("\n");
-      console.log(arr);
       const readerFileList = arr.map((it) => {
         const valid =
           /^Qm[a-zA-Z0-9]{44}$/g.test(it.trim()) ||
           /^b[a-z0-9]{58}$/g.test(it.trim());
         return { cid: it.trim(), valid };
       });
-      console.log(readerFileList);
       this.readerFileList = readerFileList;
     },
   },

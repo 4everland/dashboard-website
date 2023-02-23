@@ -328,7 +328,7 @@ export class PinningServiceTaskWrapper {
   async addPin() {
     try {
       this.status = 1;
-      const { data } = await Vue.prototype.$axios({
+      await Vue.prototype.$axios({
         method: "POST",
         url: pinningServiceApi + "/pins",
         data: this.params,
@@ -339,17 +339,13 @@ export class PinningServiceTaskWrapper {
           this.abortAxiosFn = c;
         }),
       });
-      console.log(data);
       this.status = 3;
     } catch (error) {
-      console.log(error, error.response);
-      const { message, response } = error;
-      if (response.data.error.details) {
-        Vue.prototype.$alert(response.data.error.details);
-      }
+      const { message } = error;
       if (message && message.status) {
         this.status = message.status;
       } else {
+        console.log('status = 4')
         this.status = 4;
       }
     }
@@ -357,7 +353,7 @@ export class PinningServiceTaskWrapper {
   async replacePin() {
     try {
       this.status = 1;
-      const { data } = await Vue.prototype.$axios({
+      await Vue.prototype.$axios({
         method: "POST",
         url: pinningServiceApi + "/pins/" + this.requestId,
         data: this.params,
@@ -370,7 +366,6 @@ export class PinningServiceTaskWrapper {
       });
       this.status = 3;
     } catch (error) {
-      console.log(error);
       const { message } = error;
       if (message && message.status) {
         this.status = message.status;
