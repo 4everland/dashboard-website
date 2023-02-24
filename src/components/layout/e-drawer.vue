@@ -84,7 +84,7 @@
         >
           <template v-slot:activator>
             <e-drawer-icon
-              class="ml-2"
+              class="ml-2 mr-6"
               :it="it"
               :active="activeArr[i]"
             ></e-drawer-icon>
@@ -185,7 +185,7 @@
           <e-drawer-icon
             :it="it"
             :active="path.indexOf(it.to) == 0"
-            class="ml-2"
+            class="ml-2 mr-6"
           ></e-drawer-icon>
           <v-list-item-content>
             <v-list-item-title>
