@@ -103,17 +103,18 @@ export default {
         this.noticeList = historyNoticeList
           ? historyNoticeList.concat(data.list)
           : data.list;
-        let EmailJoinSuccess = this.noticeList.findIndex(
+        let EmailJoinSuccess = this.noticeList.find(
           (it) => it.type == "SWITCH_TO_MEMBER"
         );
-        if (EmailJoinSuccess != -1) {
+
+        if (EmailJoinSuccess) {
           this.noticeList = this.noticeList.filter(
             (it) => it.type != "SWITCH_TO_MEMBER"
           );
-          await this.$alert(
-            "You have successfully joined the following collaboration accounts"
-          );
-
+          let tip = `You have been granted edit access to the following accounts`
+          tip += '<p class="mt-5 warn-1">' + EmailJoinSuccess.message.cutStr(6, 4) + "</p>";
+          console.log(tip)
+          await this.$alert(tip);
           if (this.alert) {
             this.$setMsg("joinTeam");
           } else {

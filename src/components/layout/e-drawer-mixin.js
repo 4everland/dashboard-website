@@ -26,27 +26,39 @@ const menuMap = {
     ],
   },
   BUCKET: {
-    label: "Bucket",
+    label: "Storage",
     img: "m-bucket",
     active: false,
     group: /^\/bucket/i,
     subs: [
       {
-        label: "Buckets",
-        to: "/bucket/storage/",
+        label: "Bucket(s3)",
+        active: false,
+        group:
+          /^(\/bucket\/storage)|(\/bucket\/arweave)|(\/bucket\/domains)|(\/bucket\/access-keys)/i,
+        subs: [
+          {
+            label: "Buckets",
+            to: "/bucket/storage/",
+          },
+          {
+            label: "AR History",
+            to: "/bucket/arweave",
+          },
+          {
+            label: "Domains",
+            to: "/bucket/domains",
+            matPath: /bucket\/domain/,
+          },
+          {
+            label: "Access Keys",
+            to: "/bucket/access-keys",
+          },
+        ],
       },
       {
-        label: "AR History",
-        to: "/bucket/arweave",
-      },
-      {
-        label: "Domains",
-        to: "/bucket/domains",
-        matPath: /bucket\/domain/,
-      },
-      {
-        label: "Access Keys",
-        to: "/bucket/access-keys",
+        label: "4EVER Pin",
+        to: "/bucket/pinning-service",
       },
     ],
   },

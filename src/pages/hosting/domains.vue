@@ -71,10 +71,11 @@
                       >
                     </div>
                   </div>
-                  <div class="ta-c mt-5">
-                    <v-btn plain to="/hosting/new">
-                      <img src="/img/svg/add2.svg" width="12" />
-                      <span class="link ml-2">Create New Project</span>
+                  <div class="ta-c pa-2">
+                    <v-btn text color="primary" to="/hosting/new">
+                      <!-- <img src="/img/svg/add2.svg" width="12" /> -->
+                      <v-icon size="16">mdi-folder-plus</v-icon>
+                      <span class="ml-1">Create New Project</span>
                     </v-btn>
                   </div>
                 </div>

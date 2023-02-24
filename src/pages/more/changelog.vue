@@ -66,6 +66,10 @@ export default {
           "https://4ever-2.4everland.store/changelog.json"
         );
         this.list = data;
+        this.$setState({
+          changelogNum: data.length,
+        });
+        localStorage.changelogNum = data.length;
       } catch (error) {
         console.log(error);
       }

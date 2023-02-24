@@ -8,15 +8,6 @@
       <template #header>
         <div class="control-header al-c">
           <div v-if="hasPinning || hasPause" class="al-c">
-            <!-- <img
-              width="15"
-              class="mr-3 pid-icon"
-              src="/img/svg/bucket/upload-icon.svg"
-              alt=""
-            />
-
-            <v-icon>mdi-loading</v-icon> -->
-
             <v-progress-circular
               indeterminate
               color="primary"
@@ -53,9 +44,6 @@
         }}</v-icon>
       </template>
       <div class="ml-auto">
-        <!-- <v-icon size="22" v-if="hasPinning" @click="handleAllStop">
-          mdi-pause</v-icon
-        > -->
         <v-tooltip top v-if="hasPinning">
           <template v-slot:activator="{ on, attrs }">
             <v-icon size="22" v-bind="attrs" v-on="on" @click="handleAllStop">
@@ -64,14 +52,6 @@
           </template>
           <span>Suspend all</span>
         </v-tooltip>
-        <!-- <v-icon
-          size="22"
-          v-if="hasPause && !hasPinning"
-          @click="handleAllStart"
-        >
-          mdi-play-outline</v-icon
-        > -->
-
         <v-tooltip top v-if="hasPause && !hasPinning">
           <template v-slot:activator="{ on, attrs }">
             <v-icon size="22" v-bind="attrs" v-on="on" @click="handleAllStart">
@@ -80,14 +60,6 @@
           </template>
           <span>Continue all </span>
         </v-tooltip>
-        <!-- <v-icon
-          size="20"
-          v-if="hasFailed && !hasPinning && !hasPause"
-          @click="handleAllReload"
-        >
-          mdi-reload</v-icon
-        > -->
-
         <v-tooltip top v-if="hasFailed && !hasPinning && !hasPause">
           <template v-slot:activator="{ on, attrs }">
             <v-icon size="20" v-bind="attrs" v-on="on" @click="handleAllReload">
@@ -96,9 +68,6 @@
           </template>
           <span>Retry all</span>
         </v-tooltip>
-        <!-- <v-icon size="20" class="ml-2" @click="handleAllClose"
-          >mdi-close</v-icon
-        > -->
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-icon
@@ -114,58 +83,6 @@
         </v-tooltip>
       </div>
       <template #content>
-        <!-- <ul class="control-content" ref="controlContent">
-          <li class="file-item pos-r" v-for="item in pinCidList" :key="item.id">
-            <div
-              class="progress-bg"
-              :style="{ width: item.progress + '%' }"
-            ></div>
-            <div class="file al-c mx-7">
-              <div class="file-info d-flex flex-column justify-space-between">
-                <span class="fz-14"> {{ item.form.name.cutStr(5, 5) }}</span>
-                <span class="fz-14 gray">
-                  {{ item.form.cid.cutStr(5, 5) }}</span
-                >
-              </div>
-              <div class="fz-14 gray">
-                {{ status(item.status) }}
-              </div>
-
-              <div class="file-control ml-auto">
-                <v-icon
-                  size="20"
-                  class="ml-2"
-                  v-if="item.status == 1"
-                  @click="handleStop(item.id)"
-                  >mdi-pause</v-icon
-                >
-                <v-icon
-                  size="20"
-                  class="ml-2"
-                  v-if="item.status == 2"
-                  @click="handleStart(item.id)"
-                  >mdi-play-outline</v-icon
-                >
-                <v-icon
-                  size="22"
-                  class="ml-2"
-                  v-if="item.status == 4"
-                  @click="handleStart(item.id)"
-                >
-                  mdi-reload</v-icon
-                >
-                <v-icon
-                  size="20"
-                  class="ml-2"
-                  v-if="item.status != 3"
-                  @click="handleCancel(item.id)"
-                  >mdi-close</v-icon
-                >
-              </div>
-            </div>
-          </li>
-        </ul> -->
-
         <RecycleScroller
           class="scroller"
           :items="pinCidList"

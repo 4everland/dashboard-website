@@ -1,7 +1,7 @@
 <template>
   <v-dialog eager v-model="showPop" max-width="650">
     <div class="px-15 py-8">
-      <h3 class="mb-8" style="font-size: 30px">{{ title }}</h3>
+      <h2 class="mb-5 fz-22">{{ title }}</h2>
       <!-- prepend-icon="mdi-email" -->
       <div>
         <p class="al-c">
