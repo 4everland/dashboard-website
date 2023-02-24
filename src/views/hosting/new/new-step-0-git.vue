@@ -266,7 +266,7 @@ export default {
       this.isAddClick = true;
       try {
         this.$loading();
-        const { data } = await this.$http2.get("/githubapp/install");
+        const { data } = await this.$http.get("$hosting/githubapp/install");
         this.$openWindow(data.installUrl);
       } catch (error) {
         //
@@ -305,7 +305,7 @@ export default {
     async getAccounts() {
       try {
         this.loading = true;
-        const { data } = await this.$http2.get("/user/git-namespaces", {
+        const { data } = await this.$http.get("$hosting/user/git-namespaces", {
           noTip: true,
         });
         if (data.length) {
@@ -351,7 +351,7 @@ export default {
           page: this.page - 1,
         };
         if (this.keyword) params.word = this.keyword;
-        const { data } = await this.$http2.get("/repo/refresh/list", {
+        const { data } = await this.$http.get("$hosting/repo/refresh/list", {
           params,
         });
         this.usedKeyword = this.keyword;

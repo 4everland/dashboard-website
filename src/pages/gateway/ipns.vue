@@ -187,7 +187,7 @@ export default {
           "The following IPNS will be deleted irrecoverably. Please confirm before proceeding.";
         tip += `<p class="mt-4" style="color:#775DA6">${item.name}</p>`;
         await this.$confirm(tip, "Delete IPNS");
-        await this.$http2.delete(`$ipns/names/${item.key}`);
+        await this.$http.delete(`$ipns/names/${item.key}`);
         this.getList(1);
       } catch (error) {
         //
@@ -206,7 +206,7 @@ export default {
           keyword: this.keyword,
         };
         this.loading = true;
-        const { data } = await this.$http2.get("$ipns/names", {
+        const { data } = await this.$http.get("$ipns/names", {
           params,
         });
 

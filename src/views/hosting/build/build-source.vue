@@ -136,8 +136,8 @@ export default {
       try {
         this.initLoading = true;
         this.isEmpty = false;
-        const { data } = await this.$http2.get(
-          `/project/task/object/${this.taskId}`,
+        const { data } = await this.$http.get(
+          `$hosting/project/task/object/${this.taskId}`,
           {
             noTip: 1,
           }
@@ -159,14 +159,14 @@ export default {
         this.fileName = name;
         this.loading = true;
         this.result = "";
-        const url = `/artifact/deployment/${hash}/file/${name}`;
+        const url = `$hosting/artifact/deployment/${hash}/file/${name}`;
         this.fileSize = size;
         if (this.isMedia || this.isLarge) {
           await this.$sleep(500);
           this.result =
             "//" + this.info.domain + "/" + dir + "/" + this.fileName;
         } else {
-          const { data } = await this.$http2.get(url);
+          const { data } = await this.$http.get(url);
           // console.log(data)
           this.result = data;
         }
@@ -180,8 +180,8 @@ export default {
       if (item) {
         params.cid = item.hash;
       }
-      const { data } = await this.$http2.get(
-        `/artifact/deployment/${this.taskId}/output`,
+      const { data } = await this.$http.get(
+        `$hosting/artifact/deployment/${this.taskId}/output`,
         {
           params,
           noTip: true,

@@ -497,7 +497,9 @@ export default {
       if (it.loading || it.statisList) return;
       try {
         it.loading = true;
-        const { data } = await this.$http2.get("/project/v3/detail/" + it.id);
+        const { data } = await this.$http.get(
+          "$hosting/project/v3/detail/" + it.id
+        );
         data.name = it.name;
         const statisList = [
           {
@@ -583,7 +585,7 @@ export default {
         else this.loading = true;
         const {
           data: { list, total },
-        } = await this.$http2.get("/project/v3/list", {
+        } = await this.$http.get("$hosting/project/v3/list", {
           params: {
             page: this.page - 1,
             size: this.pageSize,

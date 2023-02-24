@@ -171,12 +171,12 @@ export default {
         const valid = await this.$refs.form.validate();
         if (!valid) return;
         this.$loading();
-        const { data } = await this.$http2.post("/project", {
+        const { data } = await this.$http.post("$hosting/project", {
           ...this.form,
           ipfsPath: this.finalHash,
         });
-        await this.$http2.post(
-          `/project/task/cid/${data.projectId}/deploy/create`
+        await this.$http.post(
+          `$hosting/project/task/cid/${data.projectId}/deploy/create`
         );
         this.$router.replace(`/hosting/projects`);
         // this.$emit("next");

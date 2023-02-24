@@ -122,7 +122,10 @@ export default {
           return this.$toast("Invalid Name");
         }
         this.adding = true;
-        const { data } = await this.$http2.post("/user/token/new", this.form);
+        const { data } = await this.$http.post(
+          "$hosting/user/token/new",
+          this.form
+        );
         this.newToken = data.token;
         this.popNew = false;
         this.popCopy = true;
@@ -148,7 +151,7 @@ export default {
         await this.$confirm(html, "Delete token" + suffix);
         this.deleting = true;
         for (const row of this.selected) {
-          await this.$http2.delete("/user/token/" + row.id);
+          await this.$http.delete("$hosting/user/token/" + row.id);
         }
         this.$toast("Deleted successfully");
       } catch (error) {
@@ -161,7 +164,7 @@ export default {
     async getList() {
       try {
         this.loading = true;
-        const { data } = await this.$http2.get(`/user/token/list`);
+        const { data } = await this.$http.get(`$hosting/user/token/list`);
         // console.log(data)
         this.list = data.list.map((it) => {
           it.time = new Date(it.createAt).format();

@@ -64,8 +64,8 @@ export default {
     async getData() {
       try {
         this.tableLoading = true;
-        const { data: list } = await this.$http2.get(
-          "/analytics/user/retention/project/" + this.appId
+        const { data: list } = await this.$http.get(
+          "$hosting/analytics/user/retention/project/" + this.appId
         );
         this.tableList = list.map((it) => {
           it.date = new Date(it.createAt * 1e3).format("date");

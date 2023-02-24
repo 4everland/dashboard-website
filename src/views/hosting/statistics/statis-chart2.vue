@@ -170,7 +170,7 @@ export default {
       }
       try {
         this.loading = true;
-        const { data } = await this.$http2.get(this.api, {
+        const { data } = await this.$http.get("$hosting" + this.api, {
           params,
         });
         let total = 0;

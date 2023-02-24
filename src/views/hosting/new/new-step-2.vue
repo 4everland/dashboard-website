@@ -154,8 +154,8 @@ export default {
         return;
       }
       try {
-        const { data } = await this.$http2.get(
-          "/project/task/error/" + this.info.taskId
+        const { data } = await this.$http.get(
+          "$hosting/project/task/error/" + this.info.taskId
         );
         if (data) this.errMsg = data.capitalize();
       } catch (error) {
@@ -173,7 +173,7 @@ export default {
 Are you sure you want to continue?`;
         await this.$confirm(html, "Cancel Deployment");
         this.$loading();
-        await this.$http2.post(`/project/${this.info.taskId}/cancel`);
+        await this.$http.post(`$hosting/project/${this.info.taskId}/cancel`);
         await this.$alert("Cancelled successfully.");
       } catch (error) {
         //

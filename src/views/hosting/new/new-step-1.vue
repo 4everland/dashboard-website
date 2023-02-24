@@ -392,10 +392,10 @@ export default {
       // console.log(body);
       try {
         this.$loading();
-        const { data } = await this.$http2.post("/project", body);
+        const { data } = await this.$http.post("$hosting/project", body);
         const {
           data: { taskId },
-        } = await this.$http2.post(`/project/${data.projectId}/build`);
+        } = await this.$http.post(`$hosting/project/${data.projectId}/build`);
         this.$router.replace(
           `/hosting/new?id=${data.projectId}&taskId=${taskId}`
         );
@@ -425,8 +425,8 @@ export default {
         if (form.rootDirectory != srcDir) {
           params.path = form.rootDirectory.replace(/^\//, "");
         }
-        const { data } = await this.$http2.get(
-          "/project/detect-framework/" + this.info.id,
+        const { data } = await this.$http.get(
+          "$hosting/project/detect-framework/" + this.info.id,
           { params }
         );
         let { scripts, framework = null } = data;
@@ -481,8 +481,8 @@ export default {
     },
     async getBranchList() {
       try {
-        const { data } = await this.$http2.get(
-          "/project/branch/repo/" + this.info.id
+        const { data } = await this.$http.get(
+          "$hosting/project/branch/repo/" + this.info.id
         );
         this.branchList = data;
         this.form.currentBranch = data[0];
@@ -500,8 +500,8 @@ export default {
       }
       this.dirBranch = params.ref = this.form.currentBranch;
       const { name, namespace } = this.info;
-      let { data } = await this.$http2.get(
-        `/repo/${namespace}/dir/${name}/ref`,
+      let { data } = await this.$http.get(
+        `$hosting/repo/${namespace}/dir/${name}/ref`,
         {
           params,
         }

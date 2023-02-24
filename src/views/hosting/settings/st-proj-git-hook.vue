@@ -103,8 +103,8 @@ export default {
     async onDelete(it) {
       try {
         this.deleting = true;
-        await this.$http2.delete(
-          `/project/config/${it.id}/git/hooks/${it.name}`
+        await this.$http.delete(
+          `$hosting/project/config/${it.id}/git/hooks/${it.name}`
         );
         this.$toast("Deleted successfully");
       } catch (error) {
@@ -127,8 +127,8 @@ export default {
         if (msg) return this.$toast(msg);
         body.branch = this.branch;
         this.adding = true;
-        await this.$http2.post(
-          `/project/config/${this.info.id}/git/hooks`,
+        await this.$http.post(
+          `$hosting/project/config/${this.info.id}/git/hooks`,
           body
         );
         this.showPop = false;
@@ -145,8 +145,8 @@ export default {
     async getList() {
       try {
         this.loading = true;
-        const { data } = await this.$http2.get(
-          "/project/config/hooks/" + this.info.id
+        const { data } = await this.$http.get(
+          "$hosting/project/config/hooks/" + this.info.id
         );
         this.list = data;
       } catch (error) {

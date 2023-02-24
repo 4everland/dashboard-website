@@ -200,7 +200,7 @@ export default {
     async onSave() {
       try {
         this.saving = true;
-        await this.$http2.put("/favourite/analytics", this.projChecked);
+        await this.$http.put("$hosting/favourite/analytics", this.projChecked);
         this.$toast("Saved successfully.");
         this.curIdx = 0;
         this.showSelect = false;
@@ -213,10 +213,10 @@ export default {
     async getProjList() {
       try {
         this.projList = null;
-        let { data: list } = await this.$http2.get("/project/simple");
+        let { data: list } = await this.$http.get("$hosting/project/simple");
         if (list.length) {
-          let { data: arr } = await this.$http2.get(
-            "/favourite/analytics/list"
+          let { data: arr } = await this.$http.get(
+            "$hosting/favourite/analytics/list"
           );
 
           if (!arr.length) arr = list.slice(0, 5);
@@ -235,7 +235,7 @@ export default {
       try {
         this.uvList = null;
         this.chart = null;
-        let { data } = await this.$http2.get("/favourite/analytics/uv");
+        let { data } = await this.$http.get("$hosting/favourite/analytics/uv");
         data.sort((a, b) => {
           return a.totalUv - b.totalUv > 0 ? -1 : 1;
         });

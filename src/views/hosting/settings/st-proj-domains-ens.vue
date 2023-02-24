@@ -212,7 +212,7 @@ export default {
     async getInfo() {
       try {
         const { id } = this.$route.params;
-        const { data } = await this.$http2.put("/project/ipns/" + id);
+        const { data } = await this.$http.put("$hosting/project/ipns/" + id);
         this.info = data;
         if (data.ens != "") {
           this.domain = data.ens;
@@ -253,7 +253,10 @@ export default {
           ens: this.domain,
           content: this.ensIpns,
         };
-        const { data } = await this.$http2.put("/project/ipns/" + id, body);
+        const { data } = await this.$http.put(
+          "$hosting/project/ipns/" + id,
+          body
+        );
         this.info = data;
       } catch (error) {
         //
