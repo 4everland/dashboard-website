@@ -33,6 +33,8 @@
           persistent-placeholder
           v-model="form.feedbackType"
           :items="typeList"
+          item-text="name"
+          item-value="value"
         />
       </div>
 
@@ -107,7 +109,25 @@ export default {
     return {
       showPop: false,
       title: "Feedback",
-      typeList: ["BUG", "PAY", "OPINION", "OTHER"],
+      // typeList: ["BUG", "PAY", "OPINION", "OTHER"],
+      typeList: [
+        {
+          name: "Bug",
+          value: "BUG",
+        },
+        {
+          name: "Billing",
+          value: "PAY",
+        },
+        {
+          name: "Proposal",
+          value: "OPINION",
+        },
+        {
+          name: "Other",
+          value: "OTHER",
+        },
+      ],
       form: {
         email: "",
         ethAddress: "",
