@@ -29,8 +29,9 @@
         </v-col>
       </v-row>
       <div class="fz-14 gray">
-        Tips: Due to the vast scale of the IPFS network, finding content for
-        IPFS Path deployments may take some time.
+        <v-icon size="14">mdi-alert-circle</v-icon>
+        Due to the vast scale of the IPFS network, finding content for IPFS Path
+        deployments may take some time.
       </div>
       <div class="mt-5">The Project Name</div>
       <v-text-field
@@ -99,8 +100,11 @@
         </div>
       </div>
 
-      <div class="d-flex justify-end mt-7">
+      <div class="d-flex justify-center mt-7">
         <v-btn color="primary" width="120" @click="onDeploy">Deploy</v-btn>
+        <v-btn outlined class="ml-6" min-width="100" @click="onBack"
+          >Back</v-btn
+        >
       </div>
     </v-form>
   </div>
@@ -195,6 +199,10 @@ export default {
       } else {
         this.form.deployType = undefined;
       }
+    },
+    onBack() {
+      this.$router.back();
+      this.curStep -= 1;
     },
   },
 };

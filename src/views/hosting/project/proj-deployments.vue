@@ -302,8 +302,8 @@ export default {
       console.log(it);
       try {
         let html =
-          "You are about to create a new Deployment with the same source code as your current Deployment, but with the newest configuration from your Project Settings.";
-        await this.$confirm(html, "Redeploy to Production", {
+          "Your new deployment will have the same source code as your current deployment, but with the latest configuration from your project settings.";
+        await this.$confirm(html, "Redeploy", {
           confirmText: "Redeploy",
         });
         this.$loading();

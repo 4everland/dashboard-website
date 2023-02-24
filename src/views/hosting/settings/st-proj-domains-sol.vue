@@ -3,7 +3,7 @@
     <v-skeleton-loader type="article" v-if="!info" />
     <div v-else-if="!info.sns">
       <h3>SNS</h3>
-      <div class="gray mt-1 fz-14">Add your Solana name to your site.</div>
+      <div class="gray mt-1 fz-14">Add your SNS name to your site.</div>
       <div class="mt-5">
         <div class="d-flex">
           <v-text-field
@@ -201,7 +201,9 @@ export default {
 
     async onAdd() {
       if (this.projectInfo.state != "SUCCESS") {
-        return this.$alert("task status must be SUCCESS");
+        return this.$alert(
+          "Domain can only be added when the project has been successfully deployed."
+        );
       }
       let hostnameArray = this.domain.split(".");
       if (!reg.test(this.domain)) {

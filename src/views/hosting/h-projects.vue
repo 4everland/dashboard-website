@@ -332,7 +332,7 @@
               alt=""
               width="88"
             />
-            <div class="fw-b">Create a project from a IPFS Path</div>
+            <div class="fw-b">Create a project from a IPFS Path.</div>
           </div>
           <div
             class="template-deploy deploy"

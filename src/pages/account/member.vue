@@ -1,17 +1,15 @@
 <template>
   <div>
     <div class="main-wrap auto">
-      <h3>Add New</h3>
+      <h3>Invite members</h3>
       <div class="gray fz-14 mt-2">
-        Invite account collaborators. The beta version can only invite up to
-        three people and can only join three collaborative accounts.
-        <a href="https://discord.gg/4everland" target="_blank"
-          >Please get in touch with us for more information.</a
-        >
+        You can invite up to 3 members for this Beta version. Please contact
+        <a href="https://discord.gg/4everland" target="_blank">us</a>
+        if you want to invite more.
       </div>
       <v-row class="mt-3">
         <v-col cols="12" md="7">
-          <h4>Account Address</h4>
+          <h4>Member</h4>
           <div class="al-c">
             <v-select
               :items="typeItems"
@@ -25,7 +23,7 @@
             <v-text-field
               v-model="accBody.target"
               :placeholder="
-                accBody.type == 'EMAIL' ? 'Email address' : 'Wallet address'
+                accBody.type == 'EMAIL' ? 'Enter email' : 'Enter wallet'
               "
               outlined
               dense
@@ -37,7 +35,7 @@
           <h4>Permission</h4>
           <div>
             <v-text-field
-              placeholder="Permission configuration"
+              placeholder="Set permissions"
               outlined
               dense
               readonly
@@ -252,7 +250,7 @@ export default {
     async onDisband() {
       try {
         await this.$confirm(
-          "All collaborative accounts, members, and operation records will be deleted. Please confirm before proceeding."
+          "The operation logs and all members will be deleted. Are you sure you want to proceed?"
         );
         this.$loading();
         for (const row of this.list) {
@@ -291,7 +289,7 @@ export default {
           tip =
             "Disable or remove the collaboration permission for the following users?";
         else if (act == "REMOVE")
-          tip = `Remove the following users from the collaboration account？`;
+          tip = `Remove the following members from the account?`;
         if (tip && !opts.noTip) {
           tip +=
             '<p class="mt-5 warn-1">' + row.targetName.cutStr(6, 4) + "</p>";

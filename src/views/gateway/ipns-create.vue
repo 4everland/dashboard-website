@@ -170,14 +170,15 @@
         </div>
 
         <div class="ta-c mt-5">
-          <v-btn outlined width="180" @click="showPop = false">Cancel</v-btn>
           <v-btn
             color="primary"
-            class="ml-6"
             width="180"
             @click="onNext"
             :loading="createLoading"
             >{{ stepIdx == 0 ? "Next" : "Create" }}</v-btn
+          >
+          <v-btn outlined class="ml-6" width="180" @click="showPop = false"
+            >Cancel</v-btn
           >
         </div>
       </div>

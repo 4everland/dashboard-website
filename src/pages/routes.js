@@ -30,7 +30,7 @@ export default [
       title: "Overview",
       isTab: true,
       hideNav: 1,
-      subTitle: "Welcome back to 4EVERLAND dashboard",
+      subTitle: "Welcome to 4EVERLAND Dashboard",
     },
   },
   ...HostingRoutes,

@@ -200,7 +200,7 @@ export default {
       if (it.to) {
         if (this.teamInfo.isMember && !it.noLogin) {
           await this.$confirm(
-            "You're about to switch to your individual account to display relevant content. Do you want to proceed?"
+            "Switch to the owner account and show relevant content?"
           );
           this.$setState({
             teamId: null,

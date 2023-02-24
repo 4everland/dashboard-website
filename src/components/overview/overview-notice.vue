@@ -44,7 +44,7 @@
                 outlined
                 tile
                 @click="handleInvitation(item.id, false)"
-                >Reject</v-btn
+                >Cancel</v-btn
               >
             </div>
           </div>

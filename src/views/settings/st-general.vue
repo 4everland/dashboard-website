@@ -4,14 +4,13 @@
       <img src="/img/svg/settings/account-del.svg" class="d-b" width="150" />
     </div>
     <div class="mt-3">
-      <h3>Delete Personal Account</h3>
+      <h3>Delete Account</h3>
       <div class="gray fz-14 mt-3 ta-l">
-        Permanently delete your Personal Account and all of its content from the
-        4EVERLAND platform. This action is not reversible, so please continue to
-        act with caution.
+        Delete your account from 4EVERLAND along with all of its data
+        permanently and irrecoverably? Please confirm before proceeding.
       </div>
       <div class="mt-8">
-        <v-btn outlined small @click="onDelete">Delete Account</v-btn>
+        <v-btn outlined small @click="onDelete">Delete</v-btn>
       </div>
     </div>
   </div>

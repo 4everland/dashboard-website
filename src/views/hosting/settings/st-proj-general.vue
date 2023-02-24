@@ -3,8 +3,8 @@
     <div class="bd-1">
       <h3>Project Name</h3>
       <div class="gray fz-14">
-        Used to identify your Project in the Dashboard, and in the URL of your
-        Deployments.
+        Used to identify your project in the dashboard, and in the URL of your
+        deployments.
       </div>
       <div class="mt-5 d-flex hide-msg">
         <v-text-field outlined dense v-model="name"> </v-text-field>
@@ -25,7 +25,7 @@
     <div class="bd-1 mt-5">
       <h3>Project ID</h3>
       <div class="gray fz-14">
-        Used when interacting with the 4EVERLAND API.
+        Used when interacting with the 4EVERLAND Hosting API.
       </div>
       <div class="mt-5 d-flex hide-msg">
         <v-text-field outlined dense disabled :value="info.id"> </v-text-field>
@@ -132,7 +132,7 @@
       <div class="gray fz-14">
         The directory within your project, in which your code is located. Leave
         this field empty if your code is not located in a subdirectory. A new
-        Deployment is required for your changes to take effect.
+        deployment is required for your changes to take effect.
       </div>
       <div class="mt-5 d-flex">
         <v-text-field outlined dense v-model="rootDirectory"> </v-text-field>

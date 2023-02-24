@@ -99,7 +99,7 @@
           <!-- <div class="mt-9 d-flex justify-space-between"></div> -->
 
           <div class="mt-9 d-flex">
-            <e-kv label="State">
+            <e-kv label="Status">
               <h-status :val="info.state"></h-status>
             </e-kv>
             <e-kv class="ml-auto" label="Created" style="min-width: 195px">

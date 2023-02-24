@@ -93,7 +93,7 @@ export default {
       dType: [
         { text: "Past 24h", value: "DAY_1" },
 
-        { text: "Past 30Day", value: "DAY_30" },
+        { text: "Past 30d", value: "DAY_30" },
       ],
       dTypeSelected: "DAY_1",
     };
@@ -224,23 +224,23 @@ export default {
         it.link = "/account/config";
       } else if (act == "OAUTH_EXIT_TEAM") {
         it.desc = `Logging out of the collaborative account`;
-        it.path = "Member Management";
+        it.path = "Members";
         it.link = "/account/member";
       } else if (act == "OAUTH_DISABLE_MEMBER") {
         it.desc = `Disabled collaboration permissions for ${obj.name}`;
-        it.path = "Member Management";
+        it.path = "Members";
         it.link = "/account/member";
       } else if (act == "OAUTH_UPDATE_MEMBER_ACCESS") {
         it.desc = `Changed collaboration permissions for ${obj.name}`;
-        it.path = "Member Management";
+        it.path = "Members";
         it.link = "/account/member";
       } else if (act == "OAUTH_ENABLE_MEMBER") {
         it.desc = `Unblocked collaboration permissions for ${obj.name}`;
-        it.path = "Member Management";
+        it.path = "Members";
         it.link = "/account/member";
       } else if (act == "OAUTH_REMOVE_MEMBER") {
         it.desc = `Removed collaboration permissions for ${obj.name}`;
-        it.path = "Member Management";
+        it.path = "Members";
         it.link = "/account/member";
       } else if (act == "REWARD_HUB_USED_RESOURCE_VOUCHER") {
         it.desc = `Redeemed a Resource Voucher`;

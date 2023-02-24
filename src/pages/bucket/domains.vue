@@ -87,7 +87,7 @@
         <v-window v-model="curStep">
           <v-window-item :value="0">
             <div class="gray mt-2 fz-14">
-              Select a bucket to add your domain to
+              Select a bucket to add your domain
             </div>
             <div class="bd-1 mt-6">
               <div v-if="!bucketList">
@@ -306,7 +306,7 @@ export default {
       try {
         if (!this.$regMap.domain.test(this.domain)) {
           return this.$alert(
-            `The specified value “${this.domain}” is not a fully qualified domain name.`
+            `The specified value “${this.domain}” is an unqualified domain name.`
           );
         }
         this.adding = true;
@@ -343,7 +343,7 @@ export default {
   },
 };
 </script>
-<style lang="scss" >
+<style lang="scss">
 .e-btn-text {
   padding: 0 !important;
   font-weight: normal !important;

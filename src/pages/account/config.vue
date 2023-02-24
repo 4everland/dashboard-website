@@ -1,10 +1,10 @@
 <template>
   <div class="account-config-container">
     <div class="config-item" v-if="hasAccess">
-      <h3 class="fz-20">Collaboration account name</h3>
+      <h3 class="fz-20">Account name</h3>
       <p class="fz-14 mb-6 mt-3 description">
-        The name of the collaboration account will be displayed when
-        collaborating with several users.
+        The name will be displayed when members are invited to manage your
+        4EVERLAND account.
       </p>
       <div class="al-c">
         <v-text-field
@@ -28,11 +28,11 @@
     </div>
     <div class="mt-5 config-item al-c" v-if="hasAccess">
       <div style="width: 60%" class="mr-auto">
-        <h3 class="fz-20">Collaboration account profile</h3>
+        <h3 class="fz-20">Account profile</h3>
         <p class="fz-14 mb-6 mt-3 description">
-          The profile picture of the collaboration account will be displayed
-          when collaborating with several users. Click on the profile picture to
-          change. File types supported: JPG, JPEG, PNG, WEBP. Max size: 280KB
+          The profile will be displayed when members are invited to manage your
+          4EVERLAND account. File types supported: JPG, JPEG, PNG, WEBP. Max
+          file size: 280 KB
         </p>
       </div>
       <e-team-avatar
@@ -52,11 +52,10 @@
     </div>
     <div class="mt-5 config-item al-c" v-if="teamInfo.isMember">
       <div style="width: 60%" class="mr-auto">
-        <h3 class="fz-20">Exit collaboration</h3>
+        <h3 class="fz-20">Leave Account</h3>
         <p class="fz-14 mb-6 mt-3 description">
-          When you exit the collaboration, you will not be able to access the
-          content and projects of the collaboration account and the
-          collaboration account will no longer be displayed.
+          You won't be able to manage the account's projects or content when you
+          leave the account, and the account will be hidden.
         </p>
       </div>
       <v-btn color="primary" outlined tile @click="handleDelete">Exit</v-btn>
@@ -110,7 +109,7 @@ export default {
     async handleDelete() {
       try {
         await this.$confirm(
-          "You are going to exit the collaborative account. Do you want to continue?",
+          "Are you sure you want to leave the account?",
           "Alert"
         );
         // do something

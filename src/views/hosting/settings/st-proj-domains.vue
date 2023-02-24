@@ -13,7 +13,7 @@
     <div class="bd-1 mb-5">
       <h3>Domains</h3>
       <div class="gray fz-14">
-        These domains are assigned to your Production Deployments.
+        These domains are assigned to your production deployments.
       </div>
       <div class="mt-5 d-flex">
         <v-text-field
@@ -366,7 +366,7 @@ export default {
         }
         if (!this.$regMap.domain.test(this.domain)) {
           return this.$alert(
-            `The specified value "${this.domain}” is not a fully qualified domain name.`
+            `The specified value "${this.domain}” is an unqualified domain name.`
           );
         }
         let type = 3;

@@ -20,7 +20,7 @@ const menuMap = {
         to: "/hosting/statistics",
       },
       {
-        label: "Auth Tokens",
+        label: "Auth Token",
         to: "/hosting/auth-tokens",
       },
     ],
@@ -80,13 +80,13 @@ const menuMap = {
   MEMBER(target) {
     const subs = [
       {
-        label: "Account Configuration",
+        label: "Configurations",
         to: "/account/config",
       },
     ];
     if (target != "only") {
       subs.unshift({
-        label: "Member Management",
+        label: "Members",
         to: "/account/member",
       });
     }
@@ -97,7 +97,7 @@ const menuMap = {
       });
     }
     return {
-      label: "Collaboration",
+      label: "Manage Account",
       img: "m-team",
       group: /^\/account/i,
       subs,

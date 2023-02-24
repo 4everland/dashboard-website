@@ -3,7 +3,7 @@ export default [
     path: "/account/member",
     component: () => import("./member"),
     meta: {
-      title: "Member Management",
+      title: "Members",
       isTab: 1,
     },
   },
@@ -13,7 +13,7 @@ export default [
       cache: () => import("./config"),
     },
     meta: {
-      title: "Collaborative account configuration",
+      title: "Configurations",
       isTab: 1,
     },
   },

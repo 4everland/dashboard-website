@@ -341,7 +341,7 @@ export default {
       const info = this.userInfo;
       if (info.wallet) {
         this.$confirm(
-          "You are about to unbind a GitHub account. After then, the projects in Hosting will no longer be updated and maintained, and you won't be able to access the dashboard via GitHub. Please confirm before proceeding.",
+          "You will not be able to login to the Dashboard with Github, and the hosted projects will not be updated andmaintained if you unbundle your Github account. Are you sure you want to proceed?",
           "Disconnect Github",
           {
             confirmText: "OK",
@@ -351,7 +351,7 @@ export default {
         });
       } else {
         this.$alert(
-          "Failed to unbind a GitHub account, please try again after binding any wallet address.",
+          "Failed to unbundle the Github account, please try again after binding any wallet address.",
           "Alert"
         );
       }

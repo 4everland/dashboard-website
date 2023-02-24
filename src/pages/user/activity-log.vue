@@ -207,23 +207,23 @@ export default {
         it.link = "/account/config";
       } else if (act == "OAUTH_EXIT_TEAM") {
         it.desc = `Logging out of the collaborative account`;
-        it.path = "Member Management";
+        it.path = "Members";
         it.link = "/account/member";
       } else if (act == "OAUTH_DISABLE_MEMBER") {
         it.desc = `Disabled collaboration permissions for ${obj.name}`;
-        it.path = "Member Management";
+        it.path = "Members";
         it.link = "/account/member";
       } else if (act == "OAUTH_UPDATE_MEMBER_ACCESS") {
         it.desc = `Changed collaboration permissions for ${obj.name}`;
-        it.path = "Member Management";
+        it.path = "Members";
         it.link = "/account/member";
       } else if (act == "OAUTH_ENABLE_MEMBER") {
         it.desc = `Unblocked collaboration permissions for ${obj.name}`;
-        it.path = "Member Management";
+        it.path = "Members";
         it.link = "/account/member";
       } else if (act == "OAUTH_REMOVE_MEMBER") {
         it.desc = `Removed collaboration permissions for ${obj.name}`;
-        it.path = "Member Management";
+        it.path = "Members";
         it.link = "/account/member";
       } else {
         console.log(act, it);

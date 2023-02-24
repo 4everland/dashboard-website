@@ -279,7 +279,8 @@ export default {
       if (!chainId) return false;
       let msg = "";
       if (chainId != "0x1") {
-        msg = "Wrong network, please connect to Ethereum mainnet";
+        msg =
+          "Wrong network, please switch your wallet network to Ethereum mainnet.";
       }
       if (msg) {
         this.$alert(msg).then(() => {
@@ -297,7 +298,9 @@ export default {
     },
     async onAdd() {
       if (this.projectInfo.state != "SUCCESS") {
-        return this.$alert("task status must be SUCCESS");
+        return this.$alert(
+          "Domain can only be added when the project has been successfully deployed."
+        );
       }
       if (!reg.test(this.domain)) {
         return this.$alert("Invalid ETH Domain");

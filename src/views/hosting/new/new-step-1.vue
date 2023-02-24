@@ -208,7 +208,7 @@
       <div class="gray mt-5 fz-14 al-c">
         <v-icon size="14" class="mr-2">mdi-alert-circle</v-icon>
         <span
-          >4EVERLAND HOSTING only serves static pages (Server-Side-Rendering is
+          >4EVERLAND Hosting only serves static pages (Server-Side-Rendering is
           not supported now)</span
         >
       </div>

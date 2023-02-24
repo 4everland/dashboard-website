@@ -136,7 +136,7 @@ export default {
           element: "#team-guide",
           popover: {
             title: "Collaboration",
-            description: `<div class="description-content">Personal and collaborative accounts can be switched here.</div>
+            description: `<div class="description-content">Switch your owner account and member account here.</div>
             <span class="paging">(5/7)</span>
             </div>`,
             position: "top",

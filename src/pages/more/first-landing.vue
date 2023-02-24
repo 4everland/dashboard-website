@@ -103,17 +103,7 @@
           <div class="ov-a mt-5 gray-3 ta-c">
             <div class="ml-5 nowrap d-flex" v-if="list.length">
               <div
-                class="
-                  bg-white
-                  bdrs-5
-                  bd-1
-                  pt-5
-                  pb-5
-                  d-ib
-                  reward-item
-                  mr-6
-                  flex-1
-                "
+                class="bg-white bdrs-5 bd-1 pt-5 pb-5 d-ib reward-item mr-6 flex-1"
                 :class="{
                   done: it.done,
                 }"
@@ -337,7 +327,7 @@ export default {
         try {
           const msg = this.$inDev
             ? "Dev: please connect to rinkeby"
-            : "Wrong network, please connect to Ethereum mainnet";
+            : "Wrong network, please switch your wallet network to Ethereum mainnet.";
           await this.$alert(msg);
           await window.web3.currentProvider.request({
             method: "wallet_switchEthereumChain",

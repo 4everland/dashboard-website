@@ -47,14 +47,15 @@
         </div>
       </v-form>
       <div class="ta-c mt-5">
-        <v-btn outlined width="100" @click="handleCancel">Cancel</v-btn>
         <v-btn
           color="primary"
-          class="ml-6"
           width="100"
           @click="confirmPublish"
           :loading="publishLoading"
           >Publish</v-btn
+        >
+        <v-btn outlined class="ml-6" width="100" @click="handleCancel"
+          >Cancel</v-btn
         >
       </div>
     </div>
