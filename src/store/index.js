@@ -43,6 +43,7 @@ const store = new Vuex.Store({
     orderInfo: JSON.parse(localStorage.orderInfo || "{}"),
     showProgress: false,
     allowNoLogin: false,
+    changelogNum: localStorage.changelogNum || "30",
   },
   getters: {
     teamInfo(state) {

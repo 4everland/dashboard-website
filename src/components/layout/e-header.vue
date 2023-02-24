@@ -51,8 +51,10 @@
             <div class="u-avatar bdrs-100 mr-2" v-if="it.avatar">
               <e-avatar :address="it.addr" :diameter="22"></e-avatar>
             </div>
+            <v-badge dot color="error" :value="it.badge || 0">
+              <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
+            </v-badge>
 
-            <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
             <img
               v-if="it.subs && !it.noSuffix"
               :src="`/img/svg/header/ic-down-${it.color || 'def'}.svg`"
@@ -88,16 +90,20 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
+import Axios from "axios";
 
 export default {
   data() {
-    return {};
+    return {
+      newChagelogNum: 0,
+    };
   },
   computed: {
     ...mapState({
       pageLoaded: (s) => s.pageLoaded,
       userInfo: (s) => s.userInfo,
       showProgress: (s) => s.showProgress,
+      changelogNum: (s) => s.changelogNum,
     }),
     ...mapGetters(["teamInfo"]),
     asMobile() {
@@ -117,6 +123,7 @@ export default {
           icon: "m-log",
           to: "/changelog",
           noLogin: true,
+          badge: Math.max(0, this.newChagelogNum - this.changelogNum),
         },
       ];
 
@@ -186,8 +193,16 @@ export default {
         window.jdenticon();
       });
     }
+    this.getNewChagneLogNum();
   },
   methods: {
+    async getNewChagneLogNum() {
+      const { data } = await Axios.get(
+        "https://4ever-2.4everland.store/header.json"
+      );
+      this.newChagelogNum = data.changeLogNum;
+      // localStorage.changelogNum = this.newChagelogNum;
+    },
     async onMenu(it) {
       if (it.name == "logout") {
         localStorage.clear();
