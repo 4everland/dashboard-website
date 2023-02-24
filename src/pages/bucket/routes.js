@@ -56,16 +56,26 @@ export default [
           text: "{name}",
         },
       ],
-      isTab: 1,
     },
   },
   {
     path: "/access-keys",
     component: () => import("./accessKeys"),
     meta: {
-      title: "Access-Keys",
+      title: "Access Keys",
       isTab: 1,
       subTitle: "Use the API key for Storage SDK",
+    },
+  },
+  {
+    path: "/pinning-service",
+    // component: () => import("./pinning-service"),
+    components: {
+      cache: () => import("./pinning-service"),
+    },
+    meta: {
+      title: "4EVER Pin",
+      // isTab: 1,
     },
   },
 ].map((it) => {
