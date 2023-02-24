@@ -3,7 +3,7 @@
     <div style="height: 20vh"></div>
     <img src="/img/svg/no-access.svg" width="140" alt="" />
     <div class="mt-8 fz-16 gray-8">
-      Your collaborative account has been banned. Please contact the owner.
+      Your account has been disabled, please contact the owner.
     </div>
   </div>
 </template>

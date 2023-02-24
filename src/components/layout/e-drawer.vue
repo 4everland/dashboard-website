@@ -83,7 +83,11 @@
           no-action
         >
           <template v-slot:activator>
-            <e-drawer-icon :it="it" :active="activeArr[i]"></e-drawer-icon>
+            <e-drawer-icon
+              :it="it"
+              :active="activeArr[i]"
+              class="mr-2"
+            ></e-drawer-icon>
             <v-list-item-content>
               <v-list-item-title>
                 <b class="fz-16">{{ it.label }}</b>
@@ -181,6 +185,7 @@
           <e-drawer-icon
             :it="it"
             :active="path.indexOf(it.to) == 0"
+            class="mr-2"
           ></e-drawer-icon>
           <v-list-item-content>
             <v-list-item-title>
