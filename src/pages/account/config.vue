@@ -19,7 +19,6 @@
           color="primary"
           width="120px"
           class="ml-5"
-          tile
           :disabled="!teamName"
           @click="handleSave"
           >Save</v-btn
@@ -58,7 +57,9 @@
           leave the account, and the account will be hidden.
         </p>
       </div>
-      <v-btn color="primary" outlined tile @click="handleDelete">Exit</v-btn>
+      <v-btn color="primary" width="120px" outlined @click="handleDelete"
+        >Exit</v-btn
+      >
     </div>
   </div>
 </template>

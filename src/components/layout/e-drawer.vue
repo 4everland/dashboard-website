@@ -86,7 +86,7 @@
             <e-drawer-icon
               :it="it"
               :active="activeArr[i]"
-              class="mr-2"
+              class="ma-1"
             ></e-drawer-icon>
             <v-list-item-content>
               <v-list-item-title>
@@ -185,7 +185,7 @@
           <e-drawer-icon
             :it="it"
             :active="path.indexOf(it.to) == 0"
-            class="mr-2"
+            class="ma-1"
           ></e-drawer-icon>
           <v-list-item-content>
             <v-list-item-title>

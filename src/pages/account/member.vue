@@ -208,8 +208,7 @@ export default {
         ) {
           msg = "Invalid email address";
         } else if (!body.access.length) {
-          msg =
-            "Permissions are not configured, unable to invite, please configure and retry.";
+          msg = "The permissions for member are not configured";
         }
         if (msg) {
           this.$toast(msg);
