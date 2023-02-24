@@ -109,7 +109,7 @@ const menuMap = {
       });
     }
     return {
-      label: "Manage Account",
+      label: "Account",
       img: "m-team",
       group: /^\/account/i,
       subs,
