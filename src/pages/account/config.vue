@@ -34,12 +34,16 @@
           file size: 280 KB
         </p>
       </div>
-      <e-team-avatar
-        class="cursor-p"
-        :src="teamAvatar"
-        :uid="teamInfo.teamId"
-        @click="$refs.uploadInput.onClick(false)"
-      ></e-team-avatar>
+      <div class="avatar-box" @click="$refs.uploadInput.onClick(false)">
+        <e-team-avatar
+          class="cursor-p"
+          :src="teamAvatar"
+          :uid="teamInfo.teamId"
+        ></e-team-avatar>
+        <div class="avatar-mask">
+          <img :src="`/img/svg/account/upload.svg`" height="20" />
+        </div>
+      </div>
 
       <input-upload
         @input="onInput"
@@ -182,6 +186,21 @@ export default {
   border-radius: 10px;
   .description {
     color: #6c7789;
+  }
+}
+.avatar-box {
+  position: relative;
+  .avatar-mask {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
   }
 }
 </style>

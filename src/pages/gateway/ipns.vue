@@ -139,7 +139,7 @@ export default {
         { text: "Name", value: "name" },
         { text: "IPNS", value: "key" },
         { text: "IPFS Path Published", value: "value" },
-        { text: "CreatAt", value: "createdAt" },
+        { text: "CreateAt", value: "createdAt" },
         { text: "Action", value: "act" },
       ],
       list: [],
