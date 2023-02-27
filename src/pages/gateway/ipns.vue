@@ -311,8 +311,7 @@ export default {
     },
     async getEnsIpns(domain) {
       const chainId = this.walletObj.chainId;
-      // if (chainId !== "0x1") return;
-
+      if (chainId !== "0x1") return;
       try {
         // this.$loading();
         this.node = namehash(domain);
@@ -332,8 +331,7 @@ export default {
             this.resolver,
             this.provider
           ).contenthash(this.node);
-
-          this.$loading.close();
+          // this.$loading.close();
           if (contentHash.substring(2)) {
             const res = decode(contentHash);
             return res;

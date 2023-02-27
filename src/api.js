@@ -96,7 +96,6 @@ axiosRetry(http, {
     if (error.message.includes("Network Error")) return true;
   },
   onRetry: (retryCount, error, requestConfig) => {
-    console.log(retryCount);
     if (retryCount == 3) {
       console.log(retryCount, "retryCount");
       Vue.prototype
@@ -237,7 +236,7 @@ function goLogin() {
 }
 
 async function handleMsg(status, code, msg, config) {
-  // console.log(status, code, msg);
+  console.log(status, code, msg);
   if (!msg && typeof code == "string") {
     msg = code;
   }
