@@ -88,24 +88,28 @@ const RefreshLockKey = "refresh";
 const lock = new AsyncLock({ timeout: 5000 });
 
 axiosRetry(http, {
-  retries: 2,
+  retries: 3,
   retryDelay: (retryCount) => {
-    return retryCount * 5000;
+    return retryCount * 3000;
   },
   retryCondition: (error) => {
     if (error.message.includes("Network Error")) return true;
   },
   onRetry: (retryCount, error, requestConfig) => {
-    if (retryCount == 2) {
-      Vue.prototype(
-        "A network error has occurred. Please check your connections and try again.",
-        error.message,
-        {
-          confirmText: "Retry",
-        }
-      ).then(() => {
-        location.reload();
-      });
+    console.log(retryCount);
+    if (retryCount == 3) {
+      console.log(retryCount, "retryCount");
+      Vue.prototype
+        .$confirm(
+          "A network error has occurred. Please check your connections and try again.",
+          error.message,
+          {
+            confirmText: "Retry",
+          }
+        )
+        .then(() => {
+          location.reload();
+        });
     }
   },
 });
@@ -245,9 +249,9 @@ async function handleMsg(status, code, msg, config) {
       goLogin();
     }
   } else if (msg == "Network Error") {
-    window.gtag("event", "api_error", {
-      url: config.url || "no url",
-    });
+    // window.gtag("event", "api_error", {
+    //   url: config.url || "no url",
+    // });
     // vue
     //   .$confirm(
     //     "A network error has occurred. Please check your connections and try again.",

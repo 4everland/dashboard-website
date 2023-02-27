@@ -223,7 +223,7 @@ export default {
                 this.initLocalEns();
               }
               const ensIpns = await this.getEnsIpns(it.name);
-
+              console.log(ensIpns);
               if (ensIpns && ensIpns == it.key) {
                 it.verify = true;
               } else {
@@ -311,14 +311,13 @@ export default {
     },
     async getEnsIpns(domain) {
       const chainId = this.walletObj.chainId;
-      if (chainId !== "0x1") return undefined;
+      // if (chainId !== "0x1") return;
 
       try {
-        this.$loading();
+        // this.$loading();
         this.node = namehash(domain);
         this.provider = getProvider();
         const registry = getENSRegistry(this.provider);
-        console.log(1);
         this.owner = await registry.owner(this.node);
         console.log("owner", this.owner);
         let isNotRegister = this.owner
