@@ -90,7 +90,7 @@ export default {
         {
           title: "Account",
           type: "MEMBER",
-          subs: ["Members", "Permissions Setting"],
+          subs: ["Members", "Configurations"],
         },
       ],
     };
