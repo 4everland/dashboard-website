@@ -161,7 +161,7 @@ export default {
       list: [],
       headers: [
         {
-          text: "Member",
+          text: "Members",
           value: "name",
         },
         {
