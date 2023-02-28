@@ -170,7 +170,7 @@ export default {
       }
     },
     onLimitSize() {
-      this.$alert("The size of the uploaded image cannot exceed 280KB!");
+      this.$alert("The uploaded image shouldn't be larger than 280KB.");
     },
   },
   components: {
