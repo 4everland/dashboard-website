@@ -152,7 +152,7 @@ export default {
           page: this.page - 1,
           size: 10,
         };
-        const { data } = await this.$http2.get("/project/ens/list", {
+        const { data } = await this.$http.get("$hosting/project/ens/list", {
           params,
         });
         this.list = data.list.map((it) => {

@@ -204,14 +204,17 @@ export default {
         if (this.$inDev) {
           return 40000;
         }
-        const { data } = await this.$http2.post("/api/celer/estimate/amount", {
-          src_chain_id: this.isEth ? "1" : "56",
-          dst_chain_id: "137",
-          token_symbol: "USDC",
-          amount: this.curAmount * Math.pow(10, curAmountDecimals),
-          addr: this.connectAddr,
-          slippage_tolerance: 3000,
-        });
+        const { data } = await this.$http.post(
+          "$hosting/api/celer/estimate/amount",
+          {
+            src_chain_id: this.isEth ? "1" : "56",
+            dst_chain_id: "137",
+            token_symbol: "USDC",
+            amount: this.curAmount * Math.pow(10, curAmountDecimals),
+            addr: this.connectAddr,
+            slippage_tolerance: 3000,
+          }
+        );
         // console.log(data);
         console.log(data);
 

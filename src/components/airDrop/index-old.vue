@@ -153,7 +153,7 @@ export default {
     },
     async getCode() {
       if (this.code) return;
-      const { data } = await this.$http2.get("$auth/invitation/code");
+      const { data } = await this.$http.get("$auth/invitation/code");
       this.code = data;
     },
     conver(limit) {

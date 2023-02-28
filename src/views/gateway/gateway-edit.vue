@@ -51,7 +51,7 @@ export default {
     async onSave() {
       try {
         this.saveLoading = true;
-        await this.$http2.put(
+        await this.$http.put(
           "$gateway/gateway",
           {
             name: this.curGateway.name,

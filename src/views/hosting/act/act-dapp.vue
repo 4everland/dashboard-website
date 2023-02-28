@@ -98,7 +98,9 @@ export default {
       this.loading = true;
       try {
         await this.$sleep(300);
-        const { data } = await this.$http2.get("/project/bigbang/projects");
+        const { data } = await this.$http.get(
+          "$hosting/project/bigbang/projects"
+        );
         this.list = data;
         this.pageLen = Math.ceil(data.length / 10);
       } catch (error) {

@@ -108,7 +108,7 @@ export default {
         const valid = this.$refs.form.validate();
         if (!valid) return;
         this.publishLoading = true;
-        await this.$http2.put(`$ipns/names/${this.curPublishData.key}`, {
+        await this.$http.put(`$ipns/names/${this.curPublishData.key}`, {
           value: (this.cidType == 1 ? "/ipfs/" : "/ipns/") + this.form.value,
           lifetime: this.form.lifetime,
         });

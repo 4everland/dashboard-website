@@ -384,7 +384,7 @@ export default {
     async getCode() {
       this.code = this.userInfo.inviteCode;
       if (this.code) return;
-      const { data } = await this.$http2.get("$auth/invitation/code/");
+      const { data } = await this.$http.get("$auth/invitation/code/");
       this.code = data;
     },
 
@@ -402,7 +402,7 @@ export default {
       try {
         await this.getOverview();
         this.loading = true;
-        const { data } = await this.$http2.get(`$auth/invitation/${this.page}`);
+        const { data } = await this.$http.get(`$auth/invitation/${this.page}`);
         this.list = data.list;
         this.total = data.total;
       } catch (error) {

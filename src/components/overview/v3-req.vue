@@ -112,7 +112,9 @@ export default {
         this.loading = true;
         const isH = this.typeIdx == 0;
         if (isH)
-          res = await this.$http2.get("/favourite/analytics/request/flux");
+          res = await this.$http.get(
+            "$hosting/favourite/analytics/request/flux"
+          );
         else res = await this.$http.get("/bi/charts/map");
         const { data } = res;
         const list = !isH

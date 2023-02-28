@@ -261,8 +261,8 @@ export default {
       try {
         if (val) {
           this.$set(it, "editing", true);
-          const { data } = await this.$http2.get(
-            `/domain/redirect/${it.domainId}`
+          const { data } = await this.$http.get(
+            `$hosting/domain/redirect/${it.domainId}`
           );
           this.selectRedirect = data.selectRedirect;
           this.rediectForm = {
@@ -283,8 +283,8 @@ export default {
     async saveRedirect(it) {
       try {
         this.$set(it, "saving", true);
-        await this.$http2.put(
-          `/domain/redirect/${it.domainId}`,
+        await this.$http.put(
+          `$hosting/domain/redirect/${it.domainId}`,
           this.rediectForm
         );
         await this.getList();
@@ -321,7 +321,7 @@ export default {
     },
     async getList() {
       try {
-        const { data } = await this.$http2.get("/domain/list", {
+        const { data } = await this.$http.get("$hosting/domain/list", {
           params: {
             projectId: this.info.id,
           },
@@ -388,7 +388,7 @@ export default {
           if (isWww && type == 2) domain = "www." + domain;
         }
         this.adding = true;
-        await this.$http2.post("/domain", {
+        await this.$http.post("$hosting/domain", {
           domain,
           projectId: this.info.id,
           createType: type,
@@ -414,7 +414,7 @@ export default {
           confirmText: "Remove",
         });
         this.$set(it, "removing", true);
-        await this.$http2.delete("/domain/" + it.domainId);
+        await this.$http.delete("$hosting/domain/" + it.domainId);
         this.hasRefresh = false;
         await this.getList();
         this.$toast("Removed successfully");
@@ -427,8 +427,8 @@ export default {
     async onRefresh(it) {
       try {
         this.$set(it, "refreshing", true);
-        const { data } = await this.$http2.get(
-          "/domain/verify/" + it.domainId,
+        const { data } = await this.$http.get(
+          "$hosting/domain/verify/" + it.domainId,
           {
             noTip: true,
           }

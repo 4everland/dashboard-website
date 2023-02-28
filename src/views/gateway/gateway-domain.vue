@@ -89,7 +89,7 @@ export default {
       if (!this.$regMap.domain.test(this.domain)) return;
       try {
         this.addLoading = true;
-        await this.$http2.post("/domain/gateway/create", {
+        await this.$http.post("$hosting/domain/gateway/create", {
           businessId: this.curIpns.name,
           domain: this.domain,
           createType: 3,
@@ -108,16 +108,16 @@ export default {
         businessId: this.curIpns.name,
       };
       try {
-        const { data } = await this.$http2.get(`/domain/gateway/list`, {
+        const { data } = await this.$http.get(`$hosting/domain/gateway/list`, {
           params,
         });
 
         if (data.content.length && !data.content[0].valid) {
           for (const domain of data.content) {
-            await this.$http2.get(`/domain/verify/${domain.id}`);
+            await this.$http.get(`$hosting/domain/verify/${domain.id}`);
           }
 
-          const res = await this.$http2.get(`/domain/gateway/list`, {
+          const res = await this.$http.get(`$hosting/domain/gateway/list`, {
             params,
           });
           this.domainList = res.data.content;

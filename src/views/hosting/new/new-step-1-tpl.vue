@@ -148,7 +148,7 @@ export default {
   methods: {
     async checkBind() {
       try {
-        const { data } = await this.$http2.get("/user/git-namespaces", {
+        const { data } = await this.$http.get("$hosting/user/git-namespaces", {
           noTip: true,
         });
         this.isBind = !!data.length;
@@ -161,7 +161,7 @@ export default {
       if (!url) return;
       try {
         this.loading = true;
-        const { data } = await this.$http2.get("/template/git-repo", {
+        const { data } = await this.$http.get("$hosting/template/git-repo", {
           params: {
             url,
           },
@@ -183,12 +183,12 @@ export default {
     async getGitInfo() {
       try {
         this.$loading("Fetch Repo...");
-        const { data: accountList } = await this.$http2.get(
-          "/user/git-namespaces"
+        const { data: accountList } = await this.$http.get(
+          "$hosting/user/git-namespaces"
         );
         const account = accountList.filter((it) => it.ownerType == "User")[0];
         if (!account) throw new Error("No Github account");
-        const { data } = await this.$http2.get("/repo/refresh/list", {
+        const { data } = await this.$http.get("$hosting/repo/refresh/list", {
           params: {
             githubId: account.githubId,
             page: 0,
@@ -227,14 +227,17 @@ export default {
           return;
         }
         this.$loading("Create Repo...");
-        const { data: pushUrl } = await this.$http2.get("/repo/create/new", {
-          params: {
-            name,
-            isPrivate: this.isPrivate,
-          },
-        });
-        const { data: gitName } = await this.$http2.post(
-          "/template/clone-push",
+        const { data: pushUrl } = await this.$http.get(
+          "$hosting/repo/create/new",
+          {
+            params: {
+              name,
+              isPrivate: this.isPrivate,
+            },
+          }
+        );
+        const { data: gitName } = await this.$http.post(
+          "$hosting/template/clone-push",
           {
             pushUrl,
             ...this.info,
@@ -256,7 +259,7 @@ export default {
     async addNew() {
       try {
         this.$loading();
-        const { data } = await this.$http2.get("/githubapp/install");
+        const { data } = await this.$http.get("$hosting/githubapp/install");
         this.isOpenInstall = true;
         this.$openWindow(data.installUrl);
       } catch (error) {
