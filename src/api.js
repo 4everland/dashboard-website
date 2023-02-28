@@ -96,8 +96,12 @@ axiosRetry(http, {
     if (error.message.includes("Network Error")) return true;
   },
   onRetry: (retryCount, error, requestConfig) => {
+    if (retryCount == 1) {
+      window.gtag("event", "api_error", {
+        url: requestConfig.url || "no url",
+      });
+    }
     if (retryCount == 3) {
-      console.log(retryCount, "retryCount");
       Vue.prototype
         .$confirm(
           "A network error has occurred. Please check your connections and try again.",
