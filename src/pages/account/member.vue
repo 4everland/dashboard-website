@@ -288,7 +288,7 @@ export default {
           tip =
             "Disable or remove the collaboration permission for the following users?";
         else if (act == "REMOVE")
-          tip = `Remove the following members from the account?`;
+          tip = `Remove the following member from the account?`;
         if (tip && !opts.noTip) {
           tip +=
             '<p class="mt-5 warn-1">' + row.targetName.cutStr(6, 4) + "</p>";
