@@ -88,7 +88,7 @@ export default {
           ],
         },
         {
-          title: "Manage Account",
+          title: "Account",
           type: "MEMBER",
           subs: ["Members", "Permissions Setting"],
         },

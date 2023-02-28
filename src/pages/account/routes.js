@@ -21,7 +21,7 @@ export default [
     path: "/account/operation-log",
     component: () => import("./operation-log"),
     meta: {
-      title: "Operation log of collaborative account",
+      title: "Operation log",
     },
   },
 ];
