@@ -226,13 +226,13 @@ export default {
       switch (this.type) {
         case "domains":
           const ids = this.selected.map((it) => it.domainId).join(",");
-          await this.$http2.delete("/domain/" + ids);
+          await this.$http.delete("$hosting/domain/" + ids);
           break;
         case "ens":
           const ensProjectIds = this.selected
             .map((it) => it.projectId)
             .join(",");
-          await this.$http2.delete("/project/ipns", {
+          await this.$http.delete("$hosting/project/ipns", {
             params: {
               projectIds: ensProjectIds,
               type: "ENS",
@@ -243,7 +243,7 @@ export default {
           const snsProjectIds = this.selected
             .map((it) => it.projectId)
             .join(",");
-          await this.$http2.delete("/project/ipns", {
+          await this.$http.delete("$hosting/project/ipns", {
             params: {
               projectIds: snsProjectIds,
               type: "SNS",
@@ -258,7 +258,7 @@ export default {
     },
     async getProjects() {
       try {
-        const { data } = await this.$http2.get("/project/v3/list", {
+        const { data } = await this.$http.get("$hosting/project/v3/list", {
           params: {
             size: 100,
           },
@@ -285,7 +285,7 @@ export default {
         }
         this.adding = true;
         const projectId = this.chooseProj.id;
-        await this.$http2.post("/domain", {
+        await this.$http.post("$hosting/domain", {
           domain: this.domain,
           projectId,
         });

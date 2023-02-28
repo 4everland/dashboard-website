@@ -174,7 +174,7 @@ export default {
       }
       try {
         this.loading = true;
-        await this.$http2.post("/feedback/upload", form);
+        await this.$http.post("$hosting/feedback/upload", form);
         this.$toast("Your feedback is received.", 1);
         this.showPop = false;
       } catch (error) {

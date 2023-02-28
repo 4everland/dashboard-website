@@ -135,12 +135,12 @@ export default {
     async getData() {
       try {
         await this.getUsage();
-        const { data: hostingArData } = await this.$http2.get(
-          "/project/resource/consume?type=AR"
+        const { data: hostingArData } = await this.$http.get(
+          "$hosting/project/resource/consume?type=AR"
         );
         this.list0Ar = hostingArData;
-        const { data } = await this.$http2.get(
-          "/project/resource/consume?type=BANDWIDTH"
+        const { data } = await this.$http.get(
+          "$hosting/project/resource/consume?type=BANDWIDTH"
         );
         this.list0 = data;
         const {

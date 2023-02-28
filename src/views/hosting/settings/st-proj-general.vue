@@ -343,8 +343,8 @@ export default {
       try {
         const {
           data: { scripts },
-        } = await this.$http2.get(
-          "/project/detect-framework/" + this.info.repo.id,
+        } = await this.$http.get(
+          "$hosting/project/detect-framework/" + this.info.repo.id,
           {
             noTip: 1,
           }
@@ -362,7 +362,7 @@ export default {
       this.form[key] = isOver ? this.info.config[key] || "" : "";
     },
     async saveProject(body) {
-      await this.$http2.put("/project/config/" + this.info.id, body);
+      await this.$http.put("$hosting/project/config/" + this.info.id, body);
       this.$setState({
         noticeMsg: {
           name: "updateProject",
@@ -431,8 +431,8 @@ export default {
     async onDeployNow() {
       this.isDeploying = true;
       try {
-        const { data } = await this.$http2.post(
-          `/project/task/ipns/${this.info.id}/resolve`
+        const { data } = await this.$http.post(
+          `$hosting/project/task/ipns/${this.info.id}/resolve`
         );
         this.isDeploying = data;
         this.pollDeployStatus();
@@ -448,8 +448,8 @@ export default {
     },
     async getDeployStatus() {
       try {
-        const { data } = await this.$http2.get(
-          `/project/${this.info.id}/ipns/button/status`
+        const { data } = await this.$http.get(
+          `$hosting/project/${this.info.id}/ipns/button/status`
         );
         this.isDeploying = data.ipnsAuto;
         if (!data.ipnsAuto) {

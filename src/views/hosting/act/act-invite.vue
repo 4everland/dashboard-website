@@ -228,7 +228,7 @@ export default {
     async getCode() {
       this.code = this.userInfo.inviteCode;
       if (this.code) return;
-      const { data } = await this.$http2.get("/invite/code");
+      const { data } = await this.$http.get("$hosting/invite/code");
       this.code = data;
     },
     async getList() {
@@ -238,7 +238,7 @@ export default {
           page: this.page - 1,
           size: 10,
         };
-        const { data } = await this.$http2.get("/invite/list", {
+        const { data } = await this.$http.get("$hosting/invite/list", {
           params,
         });
         // console.log(data);

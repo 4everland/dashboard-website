@@ -187,7 +187,7 @@ export default {
           "The following IPNS will be deleted irrecoverably. Please confirm before proceeding.";
         tip += `<p class="mt-4" style="color:#775DA6">${item.name}</p>`;
         await this.$confirm(tip, "Delete IPNS");
-        await this.$http2.delete(`$ipns/names/${item.key}`);
+        await this.$http.delete(`$ipns/names/${item.key}`);
         this.getList(1);
       } catch (error) {
         //
@@ -206,7 +206,7 @@ export default {
           keyword: this.keyword,
         };
         this.loading = true;
-        const { data } = await this.$http2.get("$ipns/names", {
+        const { data } = await this.$http.get("$ipns/names", {
           params,
         });
 
@@ -223,7 +223,7 @@ export default {
                 this.initLocalEns();
               }
               const ensIpns = await this.getEnsIpns(it.name);
-
+              console.log(ensIpns);
               if (ensIpns && ensIpns == it.key) {
                 it.verify = true;
               } else {
@@ -311,14 +311,12 @@ export default {
     },
     async getEnsIpns(domain) {
       const chainId = this.walletObj.chainId;
-      if (chainId !== "0x1") return undefined;
-
+      if (chainId !== "0x1") return;
       try {
-        this.$loading();
+        // this.$loading();
         this.node = namehash(domain);
         this.provider = getProvider();
         const registry = getENSRegistry(this.provider);
-        console.log(1);
         this.owner = await registry.owner(this.node);
         console.log("owner", this.owner);
         let isNotRegister = this.owner
@@ -333,8 +331,7 @@ export default {
             this.resolver,
             this.provider
           ).contenthash(this.node);
-
-          this.$loading.close();
+          // this.$loading.close();
           if (contentHash.substring(2)) {
             const res = decode(contentHash);
             return res;

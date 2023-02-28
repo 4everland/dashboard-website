@@ -112,7 +112,7 @@ export default {
         this.$loading();
         const {
           data: { taskId },
-        } = await this.$http2.post(`/project/${this.id}/build`, {
+        } = await this.$http.post(`$hosting/project/${this.id}/build`, {
           commitHash: row.sha,
           message: row.message,
         });
@@ -141,13 +141,16 @@ export default {
         this.list = null;
       }
       try {
-        const { data } = await this.$http2.get(`/repo/commits/${repo.id}`, {
-          params: {
-            branch: config.currentBranch,
-            page: this.page,
-            size: 20,
-          },
-        });
+        const { data } = await this.$http.get(
+          `$hosting/repo/commits/${repo.id}`,
+          {
+            params: {
+              branch: config.currentBranch,
+              page: this.page,
+              size: 20,
+            },
+          }
+        );
         this.finished = data.length < 20;
         const list = this.page == 0 ? [] : [...this.list];
         for (const row of data) {

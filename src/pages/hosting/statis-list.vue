@@ -130,8 +130,8 @@ export default {
           page: this.page - 1,
           size: 10,
         };
-        let { data } = await this.$http2.get(
-          "/analytics/user/v3/project/page/list",
+        let { data } = await this.$http.get(
+          "$hosting/analytics/user/v3/project/page/list",
           {
             params,
           }

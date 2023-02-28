@@ -26,7 +26,7 @@ export default {
         },
       });
       this.$loading();
-      await this.$http2.delete("/project/" + it.id);
+      await this.$http.delete("$hosting/project/" + it.id);
       // this.$loading.close();
       this.$toast("Project deleted successfully");
     },

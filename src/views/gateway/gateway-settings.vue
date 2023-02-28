@@ -121,7 +121,7 @@ export default {
   methods: {
     async onChange() {
       try {
-        await this.$http2.put(
+        await this.$http.put(
           "$gateway/gateway/",
           {
             name: this.gatewayName,
@@ -142,7 +142,7 @@ export default {
       try {
         if (!this.$refs.defaultPageIpt.valid) return;
         this.saveLoading = true;
-        await this.$http2.put(
+        await this.$http.put(
           `$gateway/gateway/${this.info.name}/index`,
           {
             indexPage: this.defaultPage,

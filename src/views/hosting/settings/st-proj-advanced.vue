@@ -136,7 +136,7 @@ export default {
       }
     },
     async saveProject(body) {
-      await this.$http2.put("/project/config/" + this.info.id, body);
+      await this.$http.put("$hosting/project/config/" + this.info.id, body);
       this.$setState({
         noticeMsg: {
           name: "updateProject",

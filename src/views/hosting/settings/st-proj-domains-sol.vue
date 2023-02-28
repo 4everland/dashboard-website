@@ -149,7 +149,9 @@ export default {
     async getInfo() {
       try {
         const { id } = this.$route.params;
-        const { data } = await this.$http2.put("/project/ipns/sns/" + id);
+        const { data } = await this.$http.put(
+          "$hosting/project/ipns/sns/" + id
+        );
         this.info = data;
         if (data.sns != "") {
           this.domain = data.sns;
@@ -166,7 +168,10 @@ export default {
           sns: this.domain,
           content: this.resolveData,
         };
-        const { data } = await this.$http2.put("/project/ipns/sns/" + id, body);
+        const { data } = await this.$http.put(
+          "$hosting/project/ipns/sns/" + id,
+          body
+        );
         this.info = data;
       } catch (error) {
         //

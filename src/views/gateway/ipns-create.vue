@@ -252,7 +252,7 @@ export default {
         if (!this.form.value) {
           form.value = "";
         }
-        await this.$http2.post("$ipns/names", form);
+        await this.$http.post("$ipns/names", form);
       } catch (error) {
         console.log(error);
       }

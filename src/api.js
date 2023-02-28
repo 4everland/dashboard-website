@@ -1,8 +1,9 @@
 import Vue from "vue";
 import Axios from "axios";
+import axiosRetry from "axios-retry";
 import AsyncLock from "async-lock";
 import store from "./store";
-
+// console.log(axiosRetry);
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 Vue.prototype.$inDev = inDev;
 // const isLocal = /localhost/.test(location.host);
@@ -42,6 +43,8 @@ export const pinningServiceApi = inDev
 Vue.prototype.$endpoint = endpoint;
 Vue.prototype.$authApi = authApi;
 
+const hostingUrl = process.env.VUE_APP_HOST_URL;
+
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   // console.log(location);
   let url = "/login";
@@ -53,10 +56,6 @@ const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
 
 export const http = Axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
-});
-const hostingUrl = process.env.VUE_APP_HOST_URL;
-export const http2 = Axios.create({
-  baseURL: hostingUrl,
 });
 Vue.prototype.$getImgSrc = function (src) {
   if (!src) src = "/img/bg/empty/project.png";
@@ -88,129 +87,145 @@ const RefreshPath = "/refresh";
 const RefreshLockKey = "refresh";
 const lock = new AsyncLock({ timeout: 5000 });
 
-[http, http2].forEach((axios) => {
-  axios.interceptors.request.use(
-    async (config) => {
-      let token = localStorage.token;
-      const { teamInfo } = store.getters;
-      if (teamInfo && !keepMyToken(config.url)) {
-        token = teamInfo.token || token;
-      }
-      if (config.url != RefreshPath) {
-        await lock
-          .acquire(RefreshLockKey, async () => {
-            let { accessTokenExpireAt, refreshToken } = JSON.parse(
-              localStorage.authData || "{}"
-            );
-            if (token && Date.now() + 3600 * 1e3 >= accessTokenExpireAt) {
-              const { data } = await http.post(
-                RefreshPath,
-                {
-                  refreshToken,
-                },
-                {
-                  params: {
-                    _auth: 1,
-                  },
-                  headers: {
-                    Authorization: "Bearer " + localStorage.token,
-                  },
-                }
-              );
-              localStorage.authData = JSON.stringify(data);
-              localStorage.token = data.accessToken;
-              if (teamInfo.isOwner) {
-                token = localStorage.token;
-              }
-            }
-          })
-          .then(() => {});
-      }
-
-      const params = (config.params = config.params || {});
-      if (params._auth && !/^http/.test(config.url)) {
-        config.url = authApi + config.url;
-        delete params._auth;
-      }
-      config.url = config.url
-        .replace("$v3", v3Api)
-        .replace("$auth", authApi)
-        .replace("$gateway", gateWayApi)
-        .replace("$ipns", ipnsApi)
-        .replace("$resource", resourceApi)
-        .replace("$bucektDomain", bucketDomainApi)
-        .replace("$pinningService", pinningServiceApi);
-      if (config.url.includes(authApi)) {
-        token = "Bearer " + token;
-      }
-      if (token && config.url != RefreshPath) {
-        config.headers.common["Authorization"] = token;
-      }
-
-      return config;
-    },
-    (error) => {
-      console.log(error);
-      return Promise.reject(error);
-    }
-  );
-  axios.interceptors.response.use(
-    (res) => {
-      const data = res.data;
-      if (typeof data == "object" && data && "code" in data) {
-        if (data.code != 200 && data.code != "SUCCESS") {
-          let msg = data.message || `${data.code} error`;
-          handleMsg(200, data.code, msg, res.config);
-          Vue.prototype.$loading.close();
-          // console.log(data, res.config);
-          const error = new Error(msg);
-          error.code = data.code;
-          throw error;
-        }
-        if ("data" in data) {
-          return data;
-        }
-      }
-      return res;
-    },
-    (error) => {
-      const {
-        data = {},
-        status,
-        statusText,
-        config = {},
-      } = error.response || {};
-      console.log(error, status, statusText);
-      if (status == 409) {
-        console.log(data);
-        setTimeout(() => {
-          if (typeof data.data == "string") {
-            const jsonData = JSON.parse(data.data);
-            localStorage.authData = JSON.stringify(jsonData);
-            localStorage.token = jsonData.accessToken;
-            localStorage.stsData1 = "";
-            Vue.prototype
-              .$alert(" Successfully bound your account.")
-              .then(() => {
-                window.location.reload();
-              });
-          } else {
-            Vue.prototype.$alert(data.message).then(() => {
-              if (data.code == "OBJECT_ALREADY_EXIST") return;
-              window.location.reload();
-            });
+axiosRetry(http, {
+  retries: 3,
+  retryDelay: (retryCount) => {
+    return retryCount * 3000;
+  },
+  retryCondition: (error) => {
+    if (error.message.includes("Network Error")) return true;
+  },
+  onRetry: (retryCount, error, requestConfig) => {
+    if (retryCount == 3) {
+      console.log(retryCount, "retryCount");
+      Vue.prototype
+        .$confirm(
+          "A network error has occurred. Please check your connections and try again.",
+          error.message,
+          {
+            confirmText: "Retry",
           }
-        }, 10);
-      } else {
-        let msg = data.message || error.message;
-        handleMsg(status, data.code, msg, config);
-      }
-      error.code = data.code;
-      return Promise.reject(error);
+        )
+        .then(() => {
+          location.reload();
+        });
     }
-  );
+  },
 });
+http.interceptors.request.use(
+  async (config) => {
+    let token = localStorage.token;
+    const { teamInfo } = store.getters;
+    if (teamInfo && !keepMyToken(config.url)) {
+      token = teamInfo.token || token;
+    }
+    if (config.url != RefreshPath) {
+      await lock
+        .acquire(RefreshLockKey, async () => {
+          let { accessTokenExpireAt, refreshToken } = JSON.parse(
+            localStorage.authData || "{}"
+          );
+          if (token && Date.now() + 3600 * 1e3 >= accessTokenExpireAt) {
+            const { data } = await http.post(
+              RefreshPath,
+              {
+                refreshToken,
+              },
+              {
+                params: {
+                  _auth: 1,
+                },
+                headers: {
+                  Authorization: "Bearer " + localStorage.token,
+                },
+              }
+            );
+            localStorage.authData = JSON.stringify(data);
+            localStorage.token = data.accessToken;
+            if (teamInfo.isOwner) {
+              token = localStorage.token;
+            }
+          }
+        })
+        .then(() => {});
+    }
 
+    const params = (config.params = config.params || {});
+    if (params._auth && !/^http/.test(config.url)) {
+      config.url = authApi + config.url;
+      delete params._auth;
+    }
+    config.url = config.url
+      .replace("$hosting", hostingUrl)
+      .replace("$v3", v3Api)
+      .replace("$auth", authApi)
+      .replace("$gateway", gateWayApi)
+      .replace("$ipns", ipnsApi)
+      .replace("$resource", resourceApi)
+      .replace("$bucektDomain", bucketDomainApi)
+      .replace("$pinningService", pinningServiceApi);
+    if (config.url.includes(authApi)) {
+      token = "Bearer " + token;
+    }
+    if (token && config.url != RefreshPath) {
+      config.headers.common["Authorization"] = token;
+    }
+
+    return config;
+  },
+  (error) => {
+    console.log(error);
+    return Promise.reject(error);
+  }
+);
+http.interceptors.response.use(
+  (res) => {
+    const data = res.data;
+    if (typeof data == "object" && data && "code" in data) {
+      if (data.code != 200 && data.code != "SUCCESS") {
+        let msg = data.message || `${data.code} error`;
+        handleMsg(200, data.code, msg, res.config);
+        Vue.prototype.$loading.close();
+        // console.log(data, res.config);
+        const error = new Error(msg);
+        error.code = data.code;
+        throw error;
+      }
+      if ("data" in data) {
+        return data;
+      }
+    }
+    return res;
+  },
+  (error) => {
+    const { data = {}, status, statusText, config = {} } = error.response || {};
+    // console.log(error, status, statusText);
+    if (status == 409) {
+      console.log(data);
+      setTimeout(() => {
+        if (typeof data.data == "string") {
+          const jsonData = JSON.parse(data.data);
+          localStorage.authData = JSON.stringify(jsonData);
+          localStorage.token = jsonData.accessToken;
+          localStorage.stsData1 = "";
+          Vue.prototype.$alert(" Successfully bound your account.").then(() => {
+            window.location.reload();
+          });
+        } else {
+          Vue.prototype.$alert(data.message).then(() => {
+            if (data.code == "OBJECT_ALREADY_EXIST") return;
+            window.location.reload();
+          });
+        }
+      }, 10);
+    } else {
+      let msg = data.message || error.message;
+      handleMsg(status, data.code, msg, config);
+    }
+    error.code = data.code;
+    return Promise.reject(error);
+  }
+);
 function goLogin() {
   localStorage.clear();
   if (location.pathname != "/login") {
@@ -233,20 +248,20 @@ async function handleMsg(status, code, msg, config) {
       goLogin();
     }
   } else if (msg == "Network Error") {
-    window.gtag("event", "api_error", {
-      url: config.url || "no url",
-    });
-    vue
-      .$confirm(
-        "A network error has occurred. Please check your connections and try again.",
-        msg,
-        {
-          confirmText: "Retry",
-        }
-      )
-      .then(() => {
-        location.reload();
-      });
+    // window.gtag("event", "api_error", {
+    //   url: config.url || "no url",
+    // });
+    // vue
+    //   .$confirm(
+    //     "A network error has occurred. Please check your connections and try again.",
+    //     msg,
+    //     {
+    //       confirmText: "Retry",
+    //     }
+    //   )
+    //   .then(() => {
+    //     location.reload();
+    //   });
   } else if (msg && msg != "Request aborted" && !config.noTip) {
     vue.$alert(msg).then(() => {
       if (status == 403) {
@@ -257,6 +272,5 @@ async function handleMsg(status, code, msg, config) {
 }
 
 Vue.prototype.$http = http;
-Vue.prototype.$http2 = http2;
 
 export default http;

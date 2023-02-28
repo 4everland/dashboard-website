@@ -170,8 +170,8 @@ export default {
     async getInfo() {
       if (!this.taskId) return;
       try {
-        const { data } = await this.$http2.get(
-          `/project/task/object/${this.taskId}`
+        const { data } = await this.$http.get(
+          `$hosting/project/task/object/${this.taskId}`
         );
         const info = data.task;
         if (data.hash) info.hash = data.hash;

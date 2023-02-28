@@ -157,7 +157,7 @@ export default {
           page: this.page - 1,
           size: 10,
         };
-        const { data } = await this.$http2.get("/domain/list", {
+        const { data } = await this.$http.get("$hosting/domain/list", {
           params,
         });
         this.list = data.content.map((it) => {

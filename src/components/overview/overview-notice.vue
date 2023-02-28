@@ -98,7 +98,7 @@ export default {
   methods: {
     async getList() {
       try {
-        const { data } = await this.$http2.get("$auth/broadcast", { noTip: 1 });
+        const { data } = await this.$http.get("$auth/broadcast", { noTip: 1 });
         const historyNoticeList = JSON.parse(localStorage.getItem("notice"));
         this.noticeList = historyNoticeList
           ? historyNoticeList.concat(data.list)
@@ -111,9 +111,12 @@ export default {
           this.noticeList = this.noticeList.filter(
             (it) => it.type != "SWITCH_TO_MEMBER"
           );
-          let tip = `You have been granted edit access to the following accounts`
-          tip += '<p class="mt-5 warn-1">' + EmailJoinSuccess.message.cutStr(6, 4) + "</p>";
-          console.log(tip)
+          let tip = `You have been granted edit access to the following accounts`;
+          tip +=
+            '<p class="mt-5 warn-1">' +
+            EmailJoinSuccess.message.cutStr(6, 4) +
+            "</p>";
+          console.log(tip);
           await this.$alert(tip);
           if (this.alert) {
             this.$setMsg("joinTeam");
