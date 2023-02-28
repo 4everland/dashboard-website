@@ -220,7 +220,7 @@ export default {
         } else {
           it.desc = "Changed the account profile";
         }
-        it.path = "Configuration Account";
+        it.path = "Configurations Account";
         it.link = "/account/config";
       } else if (act == "OAUTH_EXIT_TEAM") {
         it.desc = `Left the account`;
