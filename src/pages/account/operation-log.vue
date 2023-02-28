@@ -216,31 +216,31 @@ export default {
         it.link = "/resource/bills";
       } else if (act == "OAUTH_UPDATE_TEAM_NAME") {
         if (obj.type == "name") {
-          it.desc = `Changed the name of the collaboration account to ${obj.name}`;
+          it.desc = `Changed the account name to ${obj.name}`;
         } else {
-          it.desc = "Changed the picture of the collaboration account";
+          it.desc = "Changed the account profile";
         }
-        it.path = "Account Configuration";
+        it.path = "Configuration Account";
         it.link = "/account/config";
       } else if (act == "OAUTH_EXIT_TEAM") {
-        it.desc = `Logging out of the collaborative account`;
-        it.path = "Members";
+        it.desc = `Left the account`;
+        it.path = "Members Account";
         it.link = "/account/member";
       } else if (act == "OAUTH_DISABLE_MEMBER") {
-        it.desc = `Disabled collaboration permissions for ${obj.name}`;
-        it.path = "Members";
+        it.desc = `Disabled the permissions to ${obj.name}`;
+        it.path = "Members Account";
         it.link = "/account/member";
       } else if (act == "OAUTH_UPDATE_MEMBER_ACCESS") {
-        it.desc = `Changed collaboration permissions for ${obj.name}`;
-        it.path = "Members";
+        it.desc = `Changed the permissions to ${obj.name}`;
+        it.path = "Members Account";
         it.link = "/account/member";
       } else if (act == "OAUTH_ENABLE_MEMBER") {
-        it.desc = `Unblocked collaboration permissions for ${obj.name}`;
-        it.path = "Members";
+        it.desc = `Enabled the permissions to ${obj.name}`;
+        it.path = "Members Account";
         it.link = "/account/member";
       } else if (act == "OAUTH_REMOVE_MEMBER") {
-        it.desc = `Removed collaboration permissions for ${obj.name}`;
-        it.path = "Members";
+        it.desc = `Removed the permissions to ${obj.name}`;
+        it.path = "Members Account";
         it.link = "/account/member";
       } else if (act == "REWARD_HUB_USED_RESOURCE_VOUCHER") {
         it.desc = `Redeemed a Resource Voucher`;

@@ -157,11 +157,11 @@ export default {
               icon: "m-collect",
               to: "/collections",
             },
-            {
-              label: "Activity Log",
-              icon: "m-actlog",
-              to: "/account/activity-log",
-            },
+            // {
+            //   label: "Activity Log",
+            //   icon: "m-actlog",
+            //   to: "/account/activity-log",
+            // },
             {
               label: "Feedback",
               icon: "m-report",
