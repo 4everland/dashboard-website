@@ -6,13 +6,14 @@
         The name will be displayed when members are invited to manage your
         4EVERLAND account.
       </p>
-      <div class="al-c">
+      <div class="d-flex">
         <v-text-field
           persistent-placeholder
           outlined
-          class="hide-msg"
           dense
           label=""
+          maxlength="50"
+          counter="50"
           v-model="teamName"
         ></v-text-field>
         <v-btn

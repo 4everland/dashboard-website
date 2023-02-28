@@ -17,7 +17,7 @@
       class="bg-f9 al-c ma-3 pa-1 hover-1"
       @click="showAccount = !showAccount"
     >
-      <span class="mr-auto fz-14">{{ teamInfo.name }}</span>
+      <span class="mr-auto fz-14 line-1">{{ teamInfo.name }}</span>
       <v-chip label small color="primary" class="ev-n">
         {{ teamInfo.isOwner ? "Owner" : "Member" }}
       </v-chip>
