@@ -110,7 +110,10 @@ export default {
           return this.$toast("Invalid Name");
         }
         this.adding = true;
-        await this.$http2.post("/project/env/" + this.info.id, this.form);
+        await this.$http.post(
+          "$hosting/project/env/" + this.info.id,
+          this.form
+        );
         this.showPop = false;
         this.form = {
           key: "",
@@ -134,7 +137,7 @@ export default {
         await this.$confirm(html, "Remove Environment Variable" + suffix);
         this.deleting = true;
         for (const row of this.selected) {
-          await this.$http2.delete("/project/env?id=" + row.id);
+          await this.$http.delete("$hosting/project/env?id=" + row.id);
         }
         this.$toast("Deleted successfully");
       } catch (error) {
@@ -147,7 +150,9 @@ export default {
     async getList() {
       try {
         this.loading = true;
-        const { data } = await this.$http2.get(`/project/env/${this.info.id}`);
+        const { data } = await this.$http.get(
+          `$hosting/project/env/${this.info.id}`
+        );
         // console.log(data)
         this.list = data.content.map((it) => {
           it.time = new Date(it.createAt).format();

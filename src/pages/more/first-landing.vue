@@ -286,12 +286,15 @@ export default {
         await this.checkNet();
         if (!this.isNetOk) return;
         this.$loading();
-        const { data: info } = await this.$http2.get("/firstland/claim-info", {
-          params: {
-            addr: this.ethAddr,
-          },
-          noTip: true,
-        });
+        const { data: info } = await this.$http.get(
+          "$hosting/firstland/claim-info",
+          {
+            params: {
+              addr: this.ethAddr,
+            },
+            noTip: true,
+          }
+        );
         this.claimInfo = info;
         this.claimAmount = parseInt(info.amount / 1e18);
         if (this.ethContract) {
@@ -504,7 +507,7 @@ export default {
         }
         let {
           data: { myRewards: rows = [], poolD2E: rest, totalRewards },
-        } = await this.$http2.get("/activity/rewards", { params });
+        } = await this.$http.get("$hosting/activity/rewards", { params });
         this.claimAmount = totalRewards;
         const list = [];
         for (const row of rows) {

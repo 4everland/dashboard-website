@@ -130,7 +130,7 @@ export default {
         this.$confirm(msg, "Wallet Changed", {
           confirmText: "Switch Account",
         }).then(() => {
-          localStorage.clear();
+          this.$clearLogin();
           location.href = "index.html";
         });
       }

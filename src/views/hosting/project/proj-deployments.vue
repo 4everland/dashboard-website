@@ -289,7 +289,7 @@ export default {
           confirmText: "Rollback",
         });
         this.$loading();
-        await this.$http2.put("/project/task/rollback/" + it.taskId);
+        await this.$http.put("$hosting/project/task/rollback/" + it.taskId);
         this.list = null;
         await this.$store.dispatch("getProjectInfo", this.id);
         this.$toast("Rollback successfully");
@@ -311,13 +311,13 @@ export default {
         await this.$store.dispatch("getProjectInfo", id);
 
         if (it.deployType == "CID" || it.deployType == "IPNS") {
-          await this.$http2.post(
-            `/project/task/cid/${it.projectId}/deploy/create`
+          await this.$http.post(
+            `$hosting/project/task/cid/${it.projectId}/deploy/create`
           );
           this.$router.replace("/hosting/projects");
         } else {
-          const { data } = await this.$http2.post(
-            `/project/${it.taskId}/redeploy`
+          const { data } = await this.$http.post(
+            `$hosting/project/${it.taskId}/redeploy`
           );
           this.$router.replace(
             `/hosting/build/${it.buildConfig.name}/${this.id}/${data.taskId}`
@@ -352,8 +352,8 @@ export default {
           page: this.page,
           size: this.limit || 10,
         };
-        const { data } = await this.$http2.get(
-          `/project/task/${this.id}/list`,
+        const { data } = await this.$http.get(
+          `$hosting/project/task/${this.id}/list`,
           {
             params,
           }

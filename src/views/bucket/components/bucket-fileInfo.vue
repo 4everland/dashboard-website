@@ -45,12 +45,9 @@
                 :
               </div>
               <div v-if="it.name == 'ipfs'" class="pa-1 ml-2 al-c">
-                <a
-                  class="link"
-                  target="_blank"
-                  :href="$utils.getCidLink(it.value)"
-                  >{{ it.value.cutStr(5, 5) }}</a
-                >
+                <a target="_blank" :href="$utils.getCidLink(it.value)">{{
+                  it.value.cutStr(5, 5)
+                }}</a>
                 <v-btn icon small v-clipboard="it.value" @success="onCopied">
                   <img src="/img/svg/copy.svg" width="12" />
                 </v-btn>
@@ -62,12 +59,9 @@
                 <template
                   v-if="fileInfo.arStatus == 'synced' && fileInfo.arHash"
                 >
-                  <a
-                    class="link"
-                    target="_blank"
-                    :href="$arHashPre + fileInfo.arHash"
-                    >{{ it.value.cutStr(5, 5) }}</a
-                  >
+                  <a target="_blank" :href="$arHashPre + fileInfo.arHash">{{
+                    it.value.cutStr(5, 5)
+                  }}</a>
                   <v-btn
                     icon
                     small

@@ -271,8 +271,8 @@ export default {
         if (this.list) {
           this.$loading();
         }
-        const api = this.$inDev ? "https://log.foreverland.xyz" : "";
-        const { data } = await this.$http2.get(
+        const api = this.$inDev ? "https://log.foreverland.xyz" : "$hosting";
+        const { data } = await this.$http.get(
           api + "/user/activity/action/logs",
           {
             params: {

@@ -83,7 +83,7 @@ export default {
     async onRefresh(item) {
       try {
         this.refreshing = true;
-        await this.$http2.get(`/domain/verify/${item.id}`);
+        await this.$http.get(`$hosting/domain/verify/${item.id}`);
         await this.$parent.getList();
         this.refreshing = false;
       } catch (error) {
@@ -99,7 +99,7 @@ export default {
         await this.$confirm(tip, "Remove Domain from Gateway");
         console.log(this.item);
         this.deleteLoading = true;
-        await this.$http2.delete(`/domain/gateway/${this.item.id}`);
+        await this.$http.delete(`$hosting/domain/gateway/${this.item.id}`);
         this.$emit("getList");
       } catch (error) {
         //

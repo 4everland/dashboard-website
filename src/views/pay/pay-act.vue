@@ -24,41 +24,50 @@
             <span class="fz-30">{{ balance }}</span>
             <span class="gray-6 ml-3">USDC</span>
           </div>
-          <div class="mt-6 al-c">
-            <v-btn color="primary" @click="onAct('/resource/subscribe')"
-              >Purchase</v-btn
-            >
-            <v-btn
-              color="primary"
-              outlined
-              class="ml-4"
-              @click="onAct('/resource/deposit')"
-              >Deposit</v-btn
-            >
-            <v-btn
-              plain
-              color="#0B0817"
-              class="ml-2 operation"
-              to="/resource/withdraw"
-              :disabled="teamInfo.isMember"
-            >
-              Withdraw
-            </v-btn>
-            <span class="gray">|</span>
-            <v-btn plain color="#0B0817" class="operation" to="/resource/bills">
-              Billing Details
-            </v-btn>
-            <span class="gray">|</span>
-            <v-btn
-              plain
-              color="#0B0817"
-              class="operation"
-              @click="handleResourceAirDrop"
-            >
-              Resource Vouchers
-            </v-btn>
+          <div class="mt-3 al-c flex-wrap">
+            <div class="mt-3">
+              <v-btn color="primary" @click="onAct('/resource/subscribe')"
+                >Purchase</v-btn
+              >
+              <v-btn
+                color="primary"
+                outlined
+                class="ml-4 mr-4"
+                @click="onAct('/resource/deposit')"
+                >Deposit</v-btn
+              >
+            </div>
+            <div class="mt-3">
+              <v-btn
+                plain
+                color="#0B0817"
+                class="pl-0 operation"
+                to="/resource/withdraw"
+                :disabled="teamInfo.isMember"
+              >
+                Withdraw
+              </v-btn>
+              <span class="gray">|</span>
+              <v-btn
+                plain
+                color="#0B0817"
+                class="operation"
+                to="/resource/bills"
+              >
+                Billing Details
+              </v-btn>
+              <span class="gray">|</span>
+              <v-btn
+                plain
+                color="#0B0817"
+                class="operation"
+                @click="handleResourceAirDrop"
+              >
+                Resource Vouchers
+              </v-btn>
+            </div>
           </div>
-          <div class="mt-9 pb-2 al-c hide-msg">
+          <div class="al-c hide-msg pos-a" style="left: 20px; bottom: 15px">
             <e-kv label="Auto-deduction:">
               <v-switch
                 v-model="isAuto"

@@ -296,11 +296,13 @@ export default {
         await this.$store.dispatch("getProjectInfo", id);
 
         if (this.info.deployType == "CID" || this.info.deployType == "IPNS") {
-          await this.$http2.post(`/project/task/cid/${id}/deploy/create`);
+          await this.$http.post(
+            `$hosting/project/task/cid/${id}/deploy/create`
+          );
           this.$router.replace("/hosting/projects");
         } else {
-          const { data } = await this.$http2.post(
-            `/project/${this.info.taskId}/redeploy`
+          const { data } = await this.$http.post(
+            `$hosting/project/${this.info.taskId}/redeploy`
           );
           this.$router.replace(
             `/hosting/build/${projName}/${id}/${data.taskId}`
@@ -325,7 +327,7 @@ export default {
 Are you sure you want to continue?`;
         await this.$confirm(html, "Cancel Deployment");
         this.$loading();
-        await this.$http2.post(`/project/${this.info.taskId}/cancel`);
+        await this.$http.post(`$hosting/project/${this.info.taskId}/cancel`);
         this.$alert("Cancelled successfully.").then(() => {
           location.reload();
         });
@@ -344,7 +346,9 @@ Are you sure you want to continue?
 `;
         await this.$confirm(html, "Delete Deployment");
         this.$loading();
-        await this.$http2.delete("/project/task/object/" + this.info.taskId);
+        await this.$http.delete(
+          "$hosting/project/task/object/" + this.info.taskId
+        );
         this.$toast("Deleted successfully.");
         this.$router.back();
       } catch (error) {

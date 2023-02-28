@@ -60,7 +60,7 @@ export default {
         this.deleting = true;
         // await this.$sleep(500)
         await this.$http.delete("$auth/accounts");
-        localStorage.clear();
+        this.$clearLogin();
         this.$loading.close();
         this.$alert("Personal account deleted successfully").then(() => {
           location.href = "index.html";

@@ -178,7 +178,7 @@ export default {
           this.$loading();
         }
         this.savingConnect = true;
-        await this.$http2[method](url);
+        await this.$http[method]("$hosting" + url);
         this.onUpdted();
         if (repoId) {
           this.keyword = "";
@@ -191,7 +191,7 @@ export default {
       this.$loading.close();
     },
     async saveProject(body) {
-      await this.$http2.put("/project/config/" + this.info.id, body);
+      await this.$http.put("$hosting/project/config/" + this.info.id, body);
       this.onUpdted();
     },
     async setHook() {

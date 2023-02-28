@@ -12,8 +12,8 @@
           outlined
           dense
           label=""
-          maxlength="50"
-          counter="50"
+          maxlength="70"
+          counter="70"
           v-model="teamName"
         ></v-text-field>
         <v-btn

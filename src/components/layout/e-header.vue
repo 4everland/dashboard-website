@@ -205,7 +205,7 @@ export default {
     },
     async onMenu(it) {
       if (it.name == "logout") {
-        localStorage.clear();
+        this.$clearLogin();
         location.href = this.$getLoginUrl();
         return;
       }

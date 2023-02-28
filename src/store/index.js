@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { http2 } from "../api";
+import http from "../api";
 
 Vue.use(Vuex);
 
@@ -84,7 +84,7 @@ const store = new Vuex.Store({
   },
   actions: {
     async getProjectInfo({ commit }, id) {
-      const { data } = await http2.get("/project/" + id);
+      const { data } = await http.get("$hosting/project/" + id);
       console.log(data.buildConfig.node, "----");
       if (data.platform == "IC") {
         let index = data.domains.findIndex((it) =>
