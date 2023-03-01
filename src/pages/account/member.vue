@@ -231,6 +231,15 @@ export default {
       if (/pending/i.test(txt)) return "Pending verification";
       return (txt || "").toLowerCase().capitalize();
     },
+    statusFormat(status) {
+      const Obj = {
+        VALID: "Active",
+        PENDING: "Invite Pending",
+        REJECT: "Reject",
+        DISABLED: "Disabled",
+      };
+      return Obj[status];
+    },
     async getList() {
       try {
         this.listLoading = true;
@@ -239,7 +248,7 @@ export default {
           it.name = it.targetName.cutStr(6, 4);
           if (it.invitationStatus) it.status = it.invitationStatus;
           it.roleTxt = this.capTxt(it.role);
-          it.staTxt = this.capTxt(it.status);
+          it.staTxt = this.statusFormat(it.status);
           return it;
         });
       } catch (error) {
