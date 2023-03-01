@@ -65,7 +65,7 @@ const menuMap = {
   GATEWAY: {
     label: "Gateway",
     img: "m-gateway",
-    suffixImg: "/img/svg/hosting/h-beta-active.svg",
+    // suffixImg: "/img/svg/hosting/h-beta-active.svg",
     group: /^\/gateway/i,
     subs: [
       {

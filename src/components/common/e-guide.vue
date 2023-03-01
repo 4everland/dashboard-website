@@ -97,8 +97,8 @@ export default {
         {
           element: "#group-2",
           popover: {
-            title: "Bucket",
-            description: `<div class="description-content">Use 4EVER-Bucket for faster file uploads and permanent file storage on IPFS and Arweave, observe storage capacity, traffic statistics, file access, etc.</div>
+            title: "Storage",
+            description: `<div class="description-content">4EVER Storage has s3-compatible IPFS and AR Bucket, as well as the 4EVER Pin service based on IPFS Pinning Service.</div>
             <span class="paging">(3/7)</span>
             </div>`,
             position: "right",
