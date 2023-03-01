@@ -103,7 +103,7 @@ export default {
         { text: "Access", value: "scope" },
         { text: "Past 30 days  of Bandwidth", value: "bytes" },
         { text: "Type", value: "type" },
-        { text: "Created", value: "created_at" },
+        { text: "CreateAt", value: "created_at" },
         { text: "Action", value: "act" },
       ],
       list: [],
