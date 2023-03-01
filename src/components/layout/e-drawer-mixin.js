@@ -161,7 +161,7 @@ export default {
     inAccess(name) {
       const { access, isOwner } = this.teamInfo;
       if (isOwner) return true;
-      if (name == "BUCKET") return false;
+      // if (name == "BUCKET") return false;
       return (access || []).includes(name);
     },
   },

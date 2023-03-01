@@ -186,7 +186,21 @@
           >
           </v-select>
         </v-col>
-
+        <v-col cols="6" md="4">
+          <h4>
+            <span>Rewrite</span>
+            <e-tooltip right max-width="300">
+              <v-icon slot="ref" size="16" class="ml-2" :color="$color1">
+                mdi-help-circle-outline
+              </v-icon>
+              <p>
+                If a URL doesn't exist, it will be redirected to the specified
+                target location.
+              </p>
+            </e-tooltip>
+          </h4>
+          <v-text-field v-model="form.rewrite" outlined dense></v-text-field>
+        </v-col>
         <v-col cols="6" md="4">
           <h4>
             <span>Deploy Hooks</span>
@@ -281,6 +295,7 @@ export default {
         env: [],
         platform: "IPFS",
         nodeVersion: "",
+        rewrite: "index.html",
       },
       buildCommandHint: "",
       scripts: null,
