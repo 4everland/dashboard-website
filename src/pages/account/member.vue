@@ -3,13 +3,14 @@
     <div class="main-wrap auto">
       <h3>Invite members</h3>
       <div class="gray fz-14 mt-2">
-        You can invite up to 3 members for this Beta version. Please contact
+        You can invite up to 3 team members to this Beta version. Please,
+        contact us
         <a href="https://discord.gg/4everland" target="_blank">us</a>
         if you want to invite more.
       </div>
       <v-row class="mt-3">
         <v-col cols="12" md="7">
-          <h4>Member</h4>
+          <h4>Members</h4>
           <div class="al-c">
             <v-select
               :items="typeItems"
@@ -32,7 +33,7 @@
           </div>
         </v-col>
         <v-col cols="12" md="5">
-          <h4>Permission</h4>
+          <h4>Permissions</h4>
           <div>
             <v-text-field
               placeholder="Set permissions"
@@ -106,7 +107,7 @@
                 isMemberMe(item)
               "
               @click="onAccess(item.access, item.invitationId)"
-              >Permission</v-btn
+              >Add permissions</v-btn
             >
             <v-btn text color="primary" small @click="onAct(item, 'REMOVE')"
               >Remove</v-btn
@@ -286,7 +287,7 @@ export default {
         let tip = "";
         if (act == "DISABLE")
           tip =
-            "Disable or remove the collaboration permission for the following users?";
+            "Disable or remove the collaboration permission for the following user?";
         else if (act == "REMOVE")
           tip = `Remove the following member from the account?`;
         if (tip && !opts.noTip) {

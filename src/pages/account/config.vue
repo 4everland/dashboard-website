@@ -28,9 +28,9 @@
     </div>
     <div class="mt-5 config-item al-c" v-if="hasAccess">
       <div style="width: 60%" class="mr-auto">
-        <h3 class="fz-20">Account profile</h3>
+        <h3 class="fz-20">Account photo</h3>
         <p class="fz-14 mb-6 mt-3 description">
-          The profile will be displayed when members are invited to manage your
+          The photo will be displayed when members are invited to manage your
           4EVERLAND account. File types supported: JPG, JPEG, PNG, WEBP. Max
           file size: 280 KB
         </p>

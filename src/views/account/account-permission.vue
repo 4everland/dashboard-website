@@ -1,6 +1,6 @@
 <template>
   <div class="pa-6">
-    <h2 class="mb-3">Account Permission</h2>
+    <h2 class="mb-3">Account Permissions</h2>
     <div
       class="al-c bg-f8 pa-2 mb-4 bdrs-10 hover-1"
       @click="onClick(it)"
