@@ -33,8 +33,9 @@
           IPFS Content Identifier. (CID)
         </div>
         <div class="gray tips mt-3 fz-12 pl-6">
-          The IPFS network is large and it may take some time for our IPFS nodes
-          to locate and fetch your content.
+          The IPFS network is large and it may take some time. Currently, the
+          Bucket does not support uploading root CIDs, so please use the 4EVER
+          Pin instead.
         </div>
         <div class="mt-5 pl-6">
           <v-form ref="form" v-model="valid">
