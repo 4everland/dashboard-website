@@ -193,7 +193,7 @@ export default {
           ),
         },
         {
-          label: "IPFS Storage",
+          label: "Purchased Storage",
           icon: "ipfs.svg",
           id: ResourceType.IPFSStorage,
           key: "ipfs",
