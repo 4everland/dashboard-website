@@ -23,8 +23,8 @@
         <h2 class="fz-20">Add Domain</h2>
         <v-window v-model="curStep">
           <v-window-item :value="0">
-            <div class="gray fz-14 mt-2">
-              Select a project to add your domains to:
+            <div class="gray fz-14 mt-1">
+              Select a project to add your domains
             </div>
             <div class="mt-6">
               <div v-if="!projects">
@@ -280,7 +280,7 @@ export default {
       try {
         if (!this.$regMap.domain.test(this.domain)) {
           return this.$alert(
-            `The specified value “${this.domain}” is not a fully qualified domain name.`
+            `The specified value “${this.domain}” is an unqualified domain name.`
           );
         }
         this.adding = true;

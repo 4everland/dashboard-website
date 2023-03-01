@@ -5,7 +5,7 @@
         <div>
           <h3>Connected Git Repository</h3>
           <div class="gray mt-1 fz-14">
-            Seamlessly create Deployments for any commits pushed to your Git
+            Seamlessly create deployments for any commits pushed to your Git
             repository.
           </div>
         </div>
@@ -53,8 +53,8 @@
           <h3>Production Branch</h3>
           <div class="gray mt-1 fz-14">
             By default, every commit pushed to the
-            <span class="color-1">`main`</span> branch will trigger a Production
-            Deployment instead of the usual Preview Deployment. You can switch
+            <span class="color-1">`main`</span> branch will trigger a production
+            deployment instead of the usual preview deployment. You can switch
             to a different branch here.
           </div>
           <div class="mt-5 d-flex al-c hide-msg">

@@ -5,15 +5,15 @@
 // import ActLog from "./activity-log";
 
 export default [
-  {
-    path: "/account/activity-log",
-    components: {
-      cache: () => import("./activity-log"),
-    },
-    meta: {
-      title: "Activity Log",
-    },
-  },
+  // {
+  //   path: "/account/activity-log",
+  //   components: {
+  //     cache: () => import("./activity-log"),
+  //   },
+  //   meta: {
+  //     title: "Activity Log",
+  //   },
+  // },
   {
     path: "/settings",
     component: () => import("./settings"),

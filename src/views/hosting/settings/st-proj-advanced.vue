@@ -44,8 +44,8 @@
       <h3>Your Statistics</h3>
       <div class="d-flex al-c mt-1">
         <div class="gray fz-14">
-          DApps statistics are displayed on the 4EVERLAND website. If you don't
-          want to display it, close the button to hide DApps statistics, but all
+          Dapps statistics are displayed on the 4EVERLAND website. If you don't
+          want to display it, close the button to hide Dapps statistics, but all
           your data is still visible.
         </div>
         <div class="ml-auto">

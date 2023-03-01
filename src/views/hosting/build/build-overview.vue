@@ -287,9 +287,9 @@ export default {
       const { projName, id } = this.$route.params;
       try {
         let html =
-          "You are about to create a new Deployment with the same source code as your current Deployment, but with the newest configuration from your Project Settings.";
+          "Your new deployment will have the same source code as your current deployment, but with the latest configuration from your project settings.";
         // html += '<p class="mt-3">The following Domains will point to your new Deployment:</p>'
-        await this.$confirm(html, "Redeploy to Production", {
+        await this.$confirm(html, "Redeploy", {
           confirmText: "Redeploy",
         });
         this.deploying = true;

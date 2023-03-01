@@ -4,8 +4,8 @@
       <div class="mr-5">
         <h3>Environment Variable</h3>
         <div class="gray fz-14">
-          In order to provide your Deployment with Environment Variables at
-          Build and Runtime, you may enter them right here, for the Environment
+          In order to provide your deployment with environment variables at
+          build and runtime, you may enter them right here, for the environment
           of your choice.
         </div>
       </div>

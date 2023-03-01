@@ -157,11 +157,11 @@ export default {
               icon: "m-collect",
               to: "/collections",
             },
-            {
-              label: "Activity Log",
-              icon: "m-actlog",
-              to: "/account/activity-log",
-            },
+            // {
+            //   label: "Activity Log",
+            //   icon: "m-actlog",
+            //   to: "/account/activity-log",
+            // },
             {
               label: "Feedback",
               icon: "m-report",
@@ -205,7 +205,7 @@ export default {
     },
     async onMenu(it) {
       if (it.name == "logout") {
-        localStorage.clear();
+        this.$clearLogin();
         location.href = this.$getLoginUrl();
         return;
       }
@@ -215,7 +215,7 @@ export default {
       if (it.to) {
         if (this.teamInfo.isMember && !it.noLogin) {
           await this.$confirm(
-            "You're about to switch to your individual account to display relevant content. Do you want to proceed?"
+            "Switch to the owner account and show relevant content?"
           );
           this.$setState({
             teamId: null,

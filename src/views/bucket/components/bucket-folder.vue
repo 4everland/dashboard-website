@@ -276,23 +276,20 @@
         <h2>Snapshot</h2>
         <div class="pl-6 pt-7">
           <div class="fz-14 gray">
-            The CID for your folder will be generated if you Snapshot a folder,
-            and you can publish it in the Snapshots list. Continue?
+            The CID for your folder will be generated if you Snapshot it and the
+            CID can be published in the Snapshots list.
           </div>
           <div class="snapshot-action al-c justify-center">
             <v-btn
-              outlined
-              width="180"
-              class="mr-8"
-              @click="showSnapshotDialog = false"
-              >Cancel</v-btn
-            >
-            <v-btn
               width="180"
               color="primary"
+              class="mr-8"
               @click="confirmSnapshot"
               :loading="this.generateSnapshotLoading"
               >Snapshot</v-btn
+            >
+            <v-btn outlined width="180" @click="showSnapshotDialog = false"
+              >Cancel</v-btn
             >
           </div>
         </div>
@@ -522,7 +519,7 @@ export default {
 };
 </script>
 
-<style >
+<style>
 .file-tab .v-slide-group__content {
   background: #f8fafb;
 }

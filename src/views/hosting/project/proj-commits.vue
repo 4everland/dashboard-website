@@ -107,7 +107,7 @@ export default {
       try {
         const hash = row.sha.substr(0, 6) + " - " + row.message;
         await this.$confirm(
-          `Are you sure to deploy this commit?<p class="mt-3 gray fz-14">${hash}</p>`
+          `Are you sure you want to deploy this commit?<p class="mt-3 gray fz-14">${hash}</p>`
         );
         this.$loading();
         const {

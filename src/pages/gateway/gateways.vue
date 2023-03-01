@@ -10,9 +10,9 @@
       </div>
       <div class="d-flex f-center">
         <div style="max-width: 550px">
-          As the 4EVERLAND account balance is less than $100, the gateway
-          service has been suspended. Once the balance is replenished, the
-          service will be automatically resumed.
+          The gateway service has been suspended because the balance on the
+          4EVERLAND account is less than $100. The service will automatically
+          resume when the balance is restored.
         </div>
       </div>
       <div
@@ -40,9 +40,9 @@
           >mdi-alert-circle-outline</v-icon
         >
         <span class="fz-13"
-          >As the 4EVERLAND account balance is less than $100, the gateway
-          service has been suspended. Once the balance is replenished, the
-          service will be automatically resumed.</span
+          >The gateway service has been suspended because the balance on the
+          4EVERLAND account is less than $100. The service will automatically
+          resume when the balance is restored.</span
         >
       </div>
 

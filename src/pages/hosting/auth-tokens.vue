@@ -33,7 +33,7 @@
       <div class="pd-30">
         <h2>Create Token</h2>
         <div class="gray mt-2 fz-14">
-          Enter a name for your token to differentiate it from other tokens.
+          Give a distinguished name for your token.
         </div>
         <div class="mt-5">
           <v-text-field

@@ -37,7 +37,7 @@
           </v-btn>
           <h2>{{ uname }}</h2>
         </div>
-        <div class="gray-8 fz-14 mt-1">Welcome back to 4EVERLAND dashboard</div>
+        <div class="gray-8 fz-14 mt-1">Welcome to 4EVERLAND Dashboard</div>
       </div>
       <e-right-opt-wrap v-if="!teamInfo.isMember">
         <v-btn class="mr-5" color="primary" to="/bucket/storage/?new=bucket">

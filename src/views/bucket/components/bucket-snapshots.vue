@@ -303,8 +303,8 @@ export default {
     async handlePublish(item) {
       try {
         await this.$confirm(
-          "Publishing your selected snapshot will consume some storage resources. Continue?",
-          "Pubulish Snapshot"
+          "It will consume some storage when publishing the selected snapshot.",
+          "Publish Snapshot"
         );
         this.$loading();
         await this.$http.post(`/snapshots/${item.id}`);
@@ -318,7 +318,7 @@ export default {
     async handleDelete(item) {
       try {
         await this.$confirm(
-          "Since the selected Snapshot will be deleted, the published file will be unpinned. Continue?",
+          "The published file will be unpinned once the selected snapshot is deleted.",
           "Delete Snapshot"
         );
         this.$loading();

@@ -53,6 +53,13 @@ const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   }
   return url;
 });
+const clearLogin = (Vue.prototype.$clearLogin = () => {
+  const keepArr = ["changelogNum", "loginTo"];
+  for (const key in localStorage) {
+    if (keepArr.includes(key)) continue;
+    localStorage.removeItem(key);
+  }
+});
 
 export const http = Axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
@@ -231,7 +238,7 @@ http.interceptors.response.use(
   }
 );
 function goLogin() {
-  localStorage.clear();
+  clearLogin();
   if (location.pathname != "/login") {
     localStorage.loginTo = location.pathname + location.search;
     location.href = getLoginUrl();

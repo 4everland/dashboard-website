@@ -144,7 +144,8 @@ export default {
       if (this.$inDev) {
         if (this.netType != "goerli") msg = "Dev: please connect to goerli";
       } else if (this.netType != "main") {
-        msg = "Wrong network, please connect to Ethereum mainnet";
+        msg =
+          "Wrong network, please switch your wallet network to Ethereum mainnet.";
       }
       if (msg) {
         this.$alert(msg).then(() => {

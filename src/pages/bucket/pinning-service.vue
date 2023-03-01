@@ -144,7 +144,7 @@
         <div class="mt-3" @click="$copy(accessToken)">
           <div class="fz-14 gray">
             Be sure to keep the unique token for the pinning service safe. The
-            token cannot be deleted, but it can be reset if has been
+            token cannot be deleted, but it can be reset if it has been
             compromised.
           </div>
           <div class="pd-10 bd-1 bdrs-3 mt-5 d-flex al-c hover-1">

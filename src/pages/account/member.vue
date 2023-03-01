@@ -1,17 +1,16 @@
 <template>
   <div>
     <div class="main-wrap auto">
-      <h3>Add New</h3>
+      <h3>Invite members</h3>
       <div class="gray fz-14 mt-2">
-        Invite account collaborators. The beta version can only invite up to
-        three people and can only join three collaborative accounts.
-        <a href="https://discord.gg/4everland" target="_blank"
-          >Please get in touch with us for more information.</a
-        >
+        You can invite up to 3 team members to this Beta version. Please,
+        contact us
+        <a href="https://discord.gg/4everland" target="_blank">us</a>
+        if you want to invite more.
       </div>
       <v-row class="mt-3">
         <v-col cols="12" md="7">
-          <h4>Account Address</h4>
+          <h4>Members</h4>
           <div class="al-c">
             <v-select
               :items="typeItems"
@@ -25,7 +24,7 @@
             <v-text-field
               v-model="accBody.target"
               :placeholder="
-                accBody.type == 'EMAIL' ? 'Email address' : 'Wallet address'
+                accBody.type == 'EMAIL' ? 'Enter email' : 'Enter wallet'
               "
               outlined
               dense
@@ -34,10 +33,10 @@
           </div>
         </v-col>
         <v-col cols="12" md="5">
-          <h4>Permission</h4>
+          <h4>Permissions</h4>
           <div>
             <v-text-field
-              placeholder="Permission configuration"
+              placeholder="Set permissions"
               outlined
               dense
               readonly
@@ -108,7 +107,7 @@
                 isMemberMe(item)
               "
               @click="onAccess(item.access, item.invitationId)"
-              >Permission</v-btn
+              >Add permissions</v-btn
             >
             <v-btn text color="primary" small @click="onAct(item, 'REMOVE')"
               >Remove</v-btn
@@ -163,7 +162,7 @@ export default {
       list: [],
       headers: [
         {
-          text: "Member",
+          text: "Members",
           value: "name",
         },
         {
@@ -210,8 +209,7 @@ export default {
         ) {
           msg = "Invalid email address";
         } else if (!body.access.length) {
-          msg =
-            "Permissions are not configured, unable to invite, please configure and retry.";
+          msg = "The permissions for member are not configured";
         }
         if (msg) {
           this.$toast(msg);
@@ -233,6 +231,15 @@ export default {
       if (/pending/i.test(txt)) return "Pending verification";
       return (txt || "").toLowerCase().capitalize();
     },
+    statusFormat(status) {
+      const Obj = {
+        VALID: "Active",
+        PENDING: "Invite Pending",
+        REJECT: "Reject",
+        DISABLED: "Disabled",
+      };
+      return Obj[status];
+    },
     async getList() {
       try {
         this.listLoading = true;
@@ -241,7 +248,7 @@ export default {
           it.name = it.targetName.cutStr(6, 4);
           if (it.invitationStatus) it.status = it.invitationStatus;
           it.roleTxt = this.capTxt(it.role);
-          it.staTxt = this.capTxt(it.status);
+          it.staTxt = this.statusFormat(it.status);
           return it;
         });
       } catch (error) {
@@ -252,7 +259,7 @@ export default {
     async onDisband() {
       try {
         await this.$confirm(
-          "All collaborative accounts, members, and operation records will be deleted. Please confirm before proceeding."
+          "The operation logs and all members will be deleted. Are you sure you want to proceed?"
         );
         this.$loading();
         for (const row of this.list) {
@@ -289,9 +296,9 @@ export default {
         let tip = "";
         if (act == "DISABLE")
           tip =
-            "Disable or remove the collaboration permission for the following users?";
+            "Disable or remove the collaboration permission for the following user?";
         else if (act == "REMOVE")
-          tip = `Remove the following users from the collaboration account？`;
+          tip = `Remove the following member from the account?`;
         if (tip && !opts.noTip) {
           tip +=
             '<p class="mt-5 warn-1">' + row.targetName.cutStr(6, 4) + "</p>";

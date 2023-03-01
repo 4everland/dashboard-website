@@ -139,7 +139,7 @@ export default {
         { text: "Name", value: "name" },
         { text: "IPNS", value: "key" },
         { text: "IPFS Path Published", value: "value" },
-        { text: "Created", value: "createdAt" },
+        { text: "CreateAt", value: "createdAt" },
         { text: "Action", value: "act" },
       ],
       list: [],
@@ -184,7 +184,7 @@ export default {
     async onDelete(item) {
       try {
         let tip =
-          "The following IPNS will be deleted irrecoverably. Please confirm before proceeding.";
+          "The following IPNS will be deleted irrecoverably. Are you sure you want to proceed?";
         tip += `<p class="mt-4" style="color:#775DA6">${item.name}</p>`;
         await this.$confirm(tip, "Delete IPNS");
         await this.$http.delete(`$ipns/names/${item.key}`);
@@ -391,7 +391,8 @@ export default {
       let msg = "";
       // if (chainId != "0x1" && chainId != "0x5") {
       if (chainId != "0x1") {
-        msg = "Wrong network, please connect to Ethereum mainnet";
+        msg =
+          "Wrong network, please switch your wallet network to Ethereum mainnet.";
       }
       if (msg) {
         this.$alert(msg).then(() => {

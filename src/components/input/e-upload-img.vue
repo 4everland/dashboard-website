@@ -60,7 +60,7 @@
           />
         </div>
       </div>
-      <div class="gray fz-13">You can attach {{ limit }} images at maximum</div>
+      <div class="gray fz-13">You can attach up to {{ limit }} images</div>
     </div>
   </div>
 </template>

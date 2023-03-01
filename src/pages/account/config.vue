@@ -1,25 +1,25 @@
 <template>
   <div class="account-config-container">
     <div class="config-item" v-if="hasAccess">
-      <h3 class="fz-20">Collaboration account name</h3>
+      <h3 class="fz-20">Account name</h3>
       <p class="fz-14 mb-6 mt-3 description">
-        The name of the collaboration account will be displayed when
-        collaborating with several users.
+        The name will be displayed when members are invited to manage your
+        4EVERLAND account.
       </p>
-      <div class="al-c">
+      <div class="d-flex">
         <v-text-field
           persistent-placeholder
           outlined
-          class="hide-msg"
           dense
           label=""
+          maxlength="70"
+          counter="70"
           v-model="teamName"
         ></v-text-field>
         <v-btn
           color="primary"
           width="120px"
           class="ml-5"
-          tile
           :disabled="!teamName"
           @click="handleSave"
           >Save</v-btn
@@ -28,19 +28,23 @@
     </div>
     <div class="mt-5 config-item al-c" v-if="hasAccess">
       <div style="width: 60%" class="mr-auto">
-        <h3 class="fz-20">Collaboration account profile</h3>
+        <h3 class="fz-20">Account photo</h3>
         <p class="fz-14 mb-6 mt-3 description">
-          The profile picture of the collaboration account will be displayed
-          when collaborating with several users. Click on the profile picture to
-          change. File types supported: JPG, JPEG, PNG, WEBP. Max size: 280KB
+          The photo will be displayed when members are invited to manage your
+          4EVERLAND account. File types supported: JPG, JPEG, PNG, WEBP. Max
+          file size: 280 KB
         </p>
       </div>
-      <e-team-avatar
-        class="cursor-p"
-        :src="teamAvatar"
-        :uid="teamInfo.teamId"
-        @click="$refs.uploadInput.onClick(false)"
-      ></e-team-avatar>
+      <div class="avatar-box" @click="$refs.uploadInput.onClick(false)">
+        <e-team-avatar
+          class="cursor-p"
+          :src="teamAvatar"
+          :uid="teamInfo.teamId"
+        ></e-team-avatar>
+        <div class="avatar-mask">
+          <img :src="`/img/svg/account/upload.svg`" height="20" />
+        </div>
+      </div>
 
       <input-upload
         @input="onInput"
@@ -52,14 +56,15 @@
     </div>
     <div class="mt-5 config-item al-c" v-if="teamInfo.isMember">
       <div style="width: 60%" class="mr-auto">
-        <h3 class="fz-20">Exit collaboration</h3>
+        <h3 class="fz-20">Leave Account</h3>
         <p class="fz-14 mb-6 mt-3 description">
-          When you exit the collaboration, you will not be able to access the
-          content and projects of the collaboration account and the
-          collaboration account will no longer be displayed.
+          You won't be able to manage the account's projects or content when you
+          leave the account, and the account will be hidden.
         </p>
       </div>
-      <v-btn color="primary" outlined tile @click="handleDelete">Exit</v-btn>
+      <v-btn color="primary" width="120px" outlined @click="handleDelete"
+        >Exit</v-btn
+      >
     </div>
   </div>
 </template>
@@ -110,7 +115,7 @@ export default {
     async handleDelete() {
       try {
         await this.$confirm(
-          "You are going to exit the collaborative account. Do you want to continue?",
+          "Are you sure you want to leave the account?",
           "Alert"
         );
         // do something
@@ -165,7 +170,7 @@ export default {
       }
     },
     onLimitSize() {
-      this.$alert("The size of the uploaded image cannot exceed 280KB!");
+      this.$alert("The uploaded image shouldn't be larger than 280KB.");
     },
   },
   components: {
@@ -182,6 +187,21 @@ export default {
   border-radius: 10px;
   .description {
     color: #6c7789;
+  }
+}
+.avatar-box {
+  position: relative;
+  .avatar-mask {
+    width: 80px;
+    height: 80px;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    top: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
   }
 }
 </style>
