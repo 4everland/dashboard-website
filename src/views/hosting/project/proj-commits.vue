@@ -32,7 +32,7 @@
                   color="primary"
                   small
                   @click="onDeploy(row)"
-                  :disabled="isDeprecated"
+                  :disabled="!ownerGithub"
                   >Deploy</v-btn
                 >
               </div>
@@ -76,8 +76,8 @@ export default {
       const { id } = this.info.repo || {};
       return !id;
     },
-    isDeprecated() {
-      return this.info.deprecated;
+    ownerGithub() {
+      return this.info.ownerGithub;
     },
   },
   data() {

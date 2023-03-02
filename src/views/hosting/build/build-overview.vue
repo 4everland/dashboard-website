@@ -233,9 +233,8 @@ export default {
       return "Redeploy";
     },
     showBtn1Txt() {
-      console.log(this.isDeprecated);
       if (this.info.cli) return false;
-      if (this.isDeprecated) return false;
+      if (!this.ownerGithub) return false;
       return (
         !this.hashDeploy(this.info.deployType) || this.info.state == "FAILURE"
       );
@@ -262,8 +261,8 @@ export default {
         return val.replace("/ipfs/", "").replace("/ipns/", "");
       };
     },
-    isDeprecated() {
-      return this.projInfo.deprecated;
+    ownerGithub() {
+      return this.projInfo.ownerGithub;
     },
   },
   async created() {
