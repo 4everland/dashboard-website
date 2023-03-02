@@ -4,7 +4,7 @@
       <h3>Invite members</h3>
       <div class="gray fz-14 mt-2">
         You can invite up to 3 team members to this Beta version. Please,
-        contact us
+        contact
         <a href="https://discord.gg/4everland" target="_blank">us</a>
         if you want to invite more.
       </div>

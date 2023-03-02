@@ -1,14 +1,22 @@
 <template>
   <div class="pinning-service-container">
-    <e-right-opt-wrap :top="-75">
-      <v-row>
-        <v-col :md="4">
+    <div class="pos-r">
+      <!-- <v-row>
+        <v-col :md="3">
+          <pinning-service-upload
+            ref="pinningServiceUpload"
+            class="mb-7"
+            :accessToken="accessToken"
+            @getList="getList({}, true)"
+          ></pinning-service-upload>
+        </v-col>
+        <v-col :md="3">
           <v-btn color="primary" @click="handleGetToken">
             <v-icon size="16" class="mr-2">mdi-key-outline</v-icon>
             <span>Access Token</span>
           </v-btn>
         </v-col>
-        <v-col :md="4" style="max-width: 230px">
+        <v-col :md="3" style="max-width: 230px">
           <v-select
             class="hide-msg bd-1"
             dense
@@ -18,7 +26,7 @@
             @change="onChange"
           />
         </v-col>
-        <v-col :md="4">
+        <v-col :md="3">
           <v-text-field
             class="hide-msg bd-1"
             prepend-inner-icon="mdi-magnify"
@@ -29,15 +37,40 @@
             @input="handleInput"
           />
         </v-col>
-      </v-row>
-    </e-right-opt-wrap>
-    <div class="pos-r">
-      <pinning-service-upload
-        ref="pinningServiceUpload"
-        class="mb-7"
-        :accessToken="accessToken"
-        @getList="getList({}, true)"
-      ></pinning-service-upload>
+      </v-row> -->
+
+      <div class="al-c justify-space-between flex-wrap">
+        <pinning-service-upload
+          ref="pinningServiceUpload"
+          :accessToken="accessToken"
+          @getList="getList({}, true)"
+        ></pinning-service-upload>
+        <div class="al-c">
+          <v-btn color="primary" @click="handleGetToken">
+            <v-icon size="16" class="mr-2">mdi-key-outline</v-icon>
+            <span>Access Token</span>
+          </v-btn>
+          <v-select
+            style="max-width: 230px"
+            class="hide-msg bd-1 ml-4"
+            dense
+            solo
+            :items="items"
+            v-model="state"
+            @change="onChange"
+          />
+          <v-text-field
+            style="max-width: 230px"
+            class="hide-msg bd-1 ml-4"
+            prepend-inner-icon="mdi-magnify"
+            solo
+            dense
+            placeholder="Search"
+            v-model="searchKey"
+            @input="handleInput"
+          />
+        </div>
+      </div>
       <v-data-table
         class="hide-bdb"
         fixed-header
