@@ -41,11 +41,12 @@
 
       <div class="al-c justify-space-between flex-wrap">
         <pinning-service-upload
+          class="mb-4"
           ref="pinningServiceUpload"
           :accessToken="accessToken"
           @getList="getList({}, true)"
         ></pinning-service-upload>
-        <div class="al-c">
+        <div class="al-c mb-4">
           <v-btn color="primary" @click="handleGetToken">
             <v-icon size="16" class="mr-2">mdi-key-outline</v-icon>
             <span>Access Token</span>
@@ -389,9 +390,19 @@ export default {
     },
     async resetAccessToken() {
       try {
+        await this.$confirm(
+          "The previous token will become invalid after the token has been reset. Are you sure you want to proceed?",
+          "Tips",
+          {
+            cancelText: "Cancel",
+            confirmText: "Reset",
+          }
+        );
+        this.$loading();
         const { data } = await this.$http.post(
           "/user/ipfs-pinning-service/token"
         );
+        this.$loading.close();
         this.accessToken = data.accessToken;
       } catch (error) {
         console.log(error);
