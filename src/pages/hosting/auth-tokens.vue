@@ -27,6 +27,7 @@
         :items="list"
         hide-default-footer
       ></v-data-table>
+      <e-empty v-if="!loading && !list.length">No Tokens</e-empty>
     </div>
 
     <v-dialog v-model="popNew" max-width="500">
@@ -64,8 +65,7 @@
         </div>
         <div
           class="pd-10 bd-1 bdrs-3 mt-8 d-flex al-c hover-1"
-          v-clipboard="newToken"
-          @success="onCopied"
+          @click="onCopied"
         >
           <span class="el-label-1 fz-14">{{ newToken.cutStr(20, 10) }}</span>
           <v-icon size="16" class="ml-auto">mdi-content-copy</v-icon>
@@ -108,8 +108,8 @@ export default {
   },
   methods: {
     onCopied() {
+      this.$copy(this.newToken, "Copied!");
       this.copied = true;
-      this.$toast("Copied!");
     },
     clickAdd() {
       if (this.list.length >= 10)
