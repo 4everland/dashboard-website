@@ -190,7 +190,7 @@ export default {
     // Settings-Page
     StAccount: () => import("@/views/settings/st-account"),
     StGeneral: () => import("@/views/settings/st-general"),
-
+    AccountProfile: () => import("@/views/account/account-profile"),
     // Gateway-detail
     GatewaySettings: () => import("@/views/gateway/gateway-settings"),
     GatewayAllowlists: () => import("@/views/gateway/gateway-allowlists"),
