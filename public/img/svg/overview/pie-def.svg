@@ -2,7 +2,7 @@
 <svg width="243px" height="223px" viewBox="0 0 243 223" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>grp 24</title>
     <g id="Overview" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Overview-无数据" transform="translate(-994.000000, -489.000000)">
+        <g id="Overview-no-data" transform="translate(-994.000000, -489.000000)">
             <g id="grp-7" transform="translate(852.000000, 374.000000)">
                 <g id="grp-24" transform="translate(142.996952, 116.000000)">
                     <g id="chart">
@@ -14,7 +14,7 @@
                             <path d="M57.774668,36.5834664 C24.4342949,55.336726 1.92411769,90.9665591 1.92411769,131.835009 C1.92411769,161.263604 13.5960196,187.975888 32.5788222,207.626552 L111.623463,131.83501 L57.774668,36.5834664 Z" id="1" fill="#5D68A6"></path>
                         </g>
                         <g id="number" transform="translate(59.136466, 38.305605)" fill="#FFFFFF">
-                            <ellipse id="椭圆形" cx="71.9076988" cy="72.1296418" rx="71.9076988" ry="72.1296418"></ellipse>
+                            <ellipse id="oval" cx="71.9076988" cy="72.1296418" rx="71.9076988" ry="72.1296418"></ellipse>
                         </g>
                     </g>
                     <text id="No-Data-Available" font-family="PingFangSC-Regular, PingFang SC" font-size="12" font-weight="normal" fill="#0B0817">

@@ -4,7 +4,7 @@
     <g id="Bucket-Bucket-List" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Bucket-List" transform="translate(-1170.000000, -349.000000)">
             <g id="group-3" transform="translate(1170.000000, 349.000000)">
-                <rect id="矩形" fill="#ECECEC" x="0" y="0" width="225" height="127" rx="6"></rect>
+                <rect id="group" fill="#ECECEC" x="0" y="0" width="225" height="127" rx="6"></rect>
                 <text id="Picture" font-family="PingFangSC-Medium, PingFang SC" font-size="20" font-weight="400" fill="#B8B5B5">
                     <tspan x="79" y="71">Picture</tspan>
                 </text>
