@@ -10,11 +10,14 @@ export default {
   computed: {
     ...mapGetters(["teamInfo"]),
     hasAccess() {
-      if (this.teamInfo.type == "INDIVIDUAL") return true;
-      return false;
+      return (
+        this.teamInfo.status !== "DISABLED" &&
+        this.teamInfo.access.includes("MEMBER") &&
+        this.teamInfo.isMember
+      );
     },
     list() {
-      if (this.hasAccess)
+      if (this.teamInfo.isOwner)
         return [
           {
             text: "Profile",
@@ -29,6 +32,18 @@ export default {
             comp: "account-general",
           },
         ];
+      if (this.hasAccess) {
+        return [
+          {
+            text: "Profile",
+            comp: "account-profile",
+          },
+          {
+            text: "General",
+            comp: "account-general",
+          },
+        ];
+      }
       return [
         {
           text: "General",

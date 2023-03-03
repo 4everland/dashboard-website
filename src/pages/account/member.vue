@@ -31,7 +31,7 @@
                 "
                 outlined
                 :rules="[
-                  (v) => !!v.trim() || 'Invalid Address',
+                  (v) => (v && !!v.trim()) || 'Invalid Address',
                   (v) => {
                     if (accBody.type == 'EMAIL') {
                       return (
@@ -229,6 +229,7 @@ export default {
           invitation: body,
         });
         this.$loading.close();
+        this.$refs.form.reset();
         this.accBody.target = "";
         this.accBody.access = [];
         this.getList();

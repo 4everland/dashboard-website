@@ -54,18 +54,6 @@
         @onLimitSize="onLimitSize"
       ></input-upload>
     </div>
-    <div class="mt-5 config-item al-c" v-if="teamInfo.isMember">
-      <div style="width: 60%" class="mr-auto">
-        <h3 class="fz-20">Leave Account</h3>
-        <p class="fz-14 mb-6 mt-3 description">
-          You won't be able to manage the account's projects or content when you
-          leave the account, and the account will be hidden.
-        </p>
-      </div>
-      <v-btn color="primary" width="120px" outlined @click="handleDelete"
-        >Exit</v-btn
-      >
-    </div>
   </div>
 </template>
 
@@ -110,25 +98,6 @@ export default {
         this.teamAvatar = this.teamInfo.teamAvatar;
       } else {
         this.teamAvatar = "";
-      }
-    },
-    async handleDelete() {
-      try {
-        await this.$confirm(
-          "Are you sure you want to leave the account?",
-          "Alert"
-        );
-        // do something
-        this.$loading();
-        await this.$http.post("$auth/cooperation/exit");
-        this.$loading.close();
-        this.$setState({
-          teamId: null,
-        });
-        location.href = "/overview";
-      } catch (error) {
-        //
-        console.log(error);
       }
     },
     async getAvatarSrc(file) {
