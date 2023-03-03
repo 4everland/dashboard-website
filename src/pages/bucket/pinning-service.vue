@@ -1,51 +1,19 @@
 <template>
   <div class="pinning-service-container">
     <div class="pos-r">
-      <!-- <v-row>
-        <v-col :md="3">
+      <div class="al-c justify-space-between flex-wrap">
+        <div class="al-c">
           <pinning-service-upload
+            class="mb-4"
             ref="pinningServiceUpload"
-            class="mb-7"
             :accessToken="accessToken"
             @getList="getList({}, true)"
           ></pinning-service-upload>
-        </v-col>
-        <v-col :md="3">
-          <v-btn color="primary" @click="handleGetToken">
-            <v-icon size="16" class="mr-2">mdi-key-outline</v-icon>
-            <span>Access Token</span>
+          <v-btn class="mb-4 ml-3" color="primary" text @click="handleOpenPage">
+            <img src="/img/svg/bucket/ipfs-sync.svg" alt="" />
+            <span class="ml-2">IPFS Pin Sync</span>
           </v-btn>
-        </v-col>
-        <v-col :md="3" style="max-width: 230px">
-          <v-select
-            class="hide-msg bd-1"
-            dense
-            solo
-            :items="items"
-            v-model="state"
-            @change="onChange"
-          />
-        </v-col>
-        <v-col :md="3">
-          <v-text-field
-            class="hide-msg bd-1"
-            prepend-inner-icon="mdi-magnify"
-            solo
-            dense
-            placeholder="Search"
-            v-model="searchKey"
-            @input="handleInput"
-          />
-        </v-col>
-      </v-row> -->
-
-      <div class="al-c justify-space-between flex-wrap">
-        <pinning-service-upload
-          class="mb-4"
-          ref="pinningServiceUpload"
-          :accessToken="accessToken"
-          @getList="getList({}, true)"
-        ></pinning-service-upload>
+        </div>
         <div class="al-c mb-4">
           <v-btn color="primary" @click="handleGetToken">
             <v-icon size="16" class="mr-2">mdi-key-outline</v-icon>
@@ -86,7 +54,7 @@
         disable-pagination
       >
         <template v-slot:item.name="{ item }">
-          <span>{{ item.pin.name.cutStr(10, 5) }}</span>
+          <span>{{ item.pin.name.cutStr(3, 5) }}</span>
         </template>
         <template v-slot:item.size="{ item }">
           <span>{{ $utils.getFileSize(item.info.dag_size) }}</span>
@@ -96,24 +64,26 @@
           <span>{{ new Date(item.created).format() }}</span>
         </template>
         <template v-slot:item.hash="{ item }">
-          <a
-            :href="$utils.getCidLink(item.pin.cid)"
-            class="hash-link"
-            style="color: #0b0817"
-            target="_blank"
-            @click.stop="onStop"
-            >{{ item.pin.cid.cutStr(20, 5) }}</a
-          >
-          <v-btn
-            class="e-btn-text ml-2"
-            icon
-            small
-            @click.stop
-            v-clipboard="item.pin.cid"
-            @success="$toast('Copied!')"
-          >
-            <img src="/img/svg/copy.svg" width="12" />
-          </v-btn>
+          <div class="al-c">
+            <a
+              :href="$utils.getCidLink(item.pin.cid)"
+              class="hash-link d-block"
+              style="color: #0b0817; min-width: 50px; max-width: 100px"
+              target="_blank"
+              @click.stop="onStop"
+              >{{ item.pin.cid.cutStr(3, 5) }}</a
+            >
+            <v-btn
+              class="e-btn-text ml-2"
+              icon
+              small
+              @click.stop
+              v-clipboard="item.pin.cid"
+              @success="$toast('Copied!')"
+            >
+              <img src="/img/svg/copy.svg" width="12" />
+            </v-btn>
+          </div>
         </template>
         <template v-slot:item.status="{ item }">
           <span
@@ -407,6 +377,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    handleOpenPage() {
+      window.open("https://ipfssync.4everland.app/");
     },
   },
 };

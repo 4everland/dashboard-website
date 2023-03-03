@@ -107,7 +107,7 @@
                 isMemberMe(item)
               "
               @click="onAccess(item.access, item.invitationId)"
-              >Add permissions</v-btn
+              >Edit</v-btn
             >
             <v-btn text color="primary" small @click="onAct(item, 'REMOVE')"
               >Remove</v-btn
@@ -182,6 +182,7 @@ export default {
           text: "Action",
           value: "act",
           width: "33%",
+          class: ["text-indent-12"],
         },
       ],
     };
