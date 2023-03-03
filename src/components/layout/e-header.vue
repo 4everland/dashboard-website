@@ -143,11 +143,6 @@ export default {
           noSuffix: true,
           subs: [
             {
-              label: "Settings",
-              icon: "m-settings",
-              to: "/settings",
-            },
-            {
               label: "Referral",
               icon: "m-refer",
               to: "/referral",

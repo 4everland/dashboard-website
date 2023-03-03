@@ -317,6 +317,7 @@ export default {
       }
     },
     onSubsToggle(i, open) {
+      console.log(1111, i, open);
       if (!open) return;
       if (this.list[i].subs[0].group.test(this.path)) return;
       this.$refs["sub" + "0" + "-0"][0].$el.click();

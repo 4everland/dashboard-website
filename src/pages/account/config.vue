@@ -7,24 +7,6 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  data() {
-    return {
-      // list: [
-      //   {
-      //     text: "Profile",
-      //     comp: "account-profile",
-      //   },
-      //   {
-      //     text: "Account Binding",
-      //     comp: "st-account",
-      //   },
-      //   {
-      //     text: "General",
-      //     comp: "st-general",
-      //   },
-      // ],
-    };
-  },
   computed: {
     ...mapGetters(["teamInfo"]),
     hasAccess() {
@@ -32,8 +14,6 @@ export default {
       return false;
     },
     list() {
-      // this.hasAccess;
-      // return [];
       if (this.hasAccess)
         return [
           {
@@ -42,17 +22,17 @@ export default {
           },
           {
             text: "Account Binding",
-            comp: "st-account",
+            comp: "account-binding",
           },
           {
             text: "General",
-            comp: "st-general",
+            comp: "account-general",
           },
         ];
       return [
         {
-          text: "Profile",
-          comp: "account-profile",
+          text: "General",
+          comp: "account-general",
         },
       ];
     },
