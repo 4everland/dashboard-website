@@ -48,7 +48,7 @@
                 :uid="it.teamId"
                 :size="22"
               ></e-team-avatar>
-              <span class="ml-2">{{ it.name }}</span>
+              <span class="ml-2 line-1">{{ it.name }}</span>
               <v-icon
                 v-if="it.teamId == teamInfo.teamId"
                 color="success"
