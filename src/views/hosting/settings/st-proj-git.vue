@@ -27,23 +27,7 @@
             Disconnect
           </v-btn>
         </div>
-        <template v-else>
-          <div v-if="!noGitProject">
-            <div v-if="!showConnect">
-              <v-btn color="primary" @click="showConnect = true">
-                <v-icon>mdi-github</v-icon>
-                <span class="ml-2">Connect Github</span>
-              </v-btn>
-            </div>
-            <div v-else>
-              <new-step-0-git @select="onConnect" in-setting />
-            </div>
-          </div>
-          <v-btn color="primary" v-else @click="showConnect = true" disabled>
-            <v-icon>mdi-github</v-icon>
-            <span class="ml-2">No Git Repository connected</span>
-          </v-btn>
-        </template>
+        <new-step-0-git v-else @select="onConnect" in-setting />
       </div>
     </div>
 
@@ -119,7 +103,6 @@ export default {
       currentBranch: "",
       branches: [],
       savingHook: false,
-      showConnect: false,
       keyword: "",
       hookSwitch: true,
     };
@@ -176,10 +159,12 @@ export default {
     },
     async setConnect(repoId) {
       try {
-        await this.$confirm(
-          "Any data related to Git projects will be changed. Are you sure you want to proceed?",
-          "Remove Git Connection"
-        );
+        if (!repoId) {
+          await this.$confirm(
+            "Any data related to Git projects will be changed. Are you sure you want to proceed?",
+            "Remove Git Connection"
+          );
+        }
         const { id } = this.info;
         let url = "/project/repo/" + id;
         let method = "delete";
@@ -212,7 +197,6 @@ export default {
           hookSwitch: this.hookSwitch,
         });
         this.$toast("Updated Web Hook successfully.");
-        this.showConnect = false;
       } catch (error) {
         //
       }

@@ -117,7 +117,7 @@
       </div>
     </template>
     <div class="bg-f9 pa-5 pt-8 pb-8" v-else>
-      <p class="fz-18 fw-b mt-">Continuous Deployment</p>
+      <p class="fz-18 fw-b mt-" v-if="!inSetting">Continuous Deployment</p>
       <template v-if="!inSetting">
         <div class="pa-5"></div>
         <div class="gray fz-15 mt-16">
@@ -129,7 +129,7 @@
         </div>
         <div class="pa-9"></div>
       </template>
-      <div class="mt-16 pb-1">
+      <div class="pb-1" :class="{ 'mt-16': !inSetting }">
         <v-btn color="primary" @click="addNew" :loading="loading">
           <v-icon size="20">mdi-github</v-icon>
           <span class="ml-2">Connect with Github</span>

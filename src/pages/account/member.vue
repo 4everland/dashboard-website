@@ -57,7 +57,7 @@
                 readonly
                 :rules="[
                   (v) =>
-                    !!v.trim() ||
+                    (v && !!v.trim()) ||
                     'The permissions for member are not configured',
                 ]"
                 :value="getText(accBody.access)"
@@ -229,7 +229,7 @@ export default {
           invitation: body,
         });
         this.$loading.close();
-        this.$refs.form.reset();
+        this.$refs.form.resetValidation();
         this.accBody.target = "";
         this.accBody.access = [];
         this.getList();
