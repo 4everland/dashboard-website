@@ -218,7 +218,7 @@ export default {
         if (obj.type == "name") {
           it.desc = `Changed the account name to ${obj.name}`;
         } else {
-          it.desc = "Changed the account profile";
+          it.desc = "Changed the account photo";
         }
         it.path = "Configurations Account";
         it.link = "/account/config";

@@ -295,7 +295,7 @@ export default {
         env: [],
         platform: "IPFS",
         nodeVersion: "",
-        rewrite: "index.html",
+        rewrite: "",
       },
       buildCommandHint: "",
       scripts: null,

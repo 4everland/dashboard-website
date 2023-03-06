@@ -176,6 +176,10 @@ export default {
     },
     async setConnect(repoId) {
       try {
+        await this.$confirm(
+          "Any data related to Git projects will be changed. Are you sure you want to proceed?",
+          "Remove Git Connection"
+        );
         const { id } = this.info;
         let url = "/project/repo/" + id;
         let method = "delete";
