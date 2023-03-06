@@ -11,7 +11,7 @@
           ></pinning-service-upload>
           <v-btn class="mb-4 ml-3" color="primary" text @click="handleOpenPage">
             <img src="/img/svg/bucket/ipfs-sync.svg" alt="" />
-            <span class="ml-2">IPFS Pin Sync</span>
+            <span class="ml-2">IPFS Migrator</span>
           </v-btn>
         </div>
         <div class="al-c mb-4">
@@ -379,7 +379,7 @@ export default {
       }
     },
     handleOpenPage() {
-      window.open("https://ipfssync.4everland.app/");
+      window.open("https://ipfsmigrator.4everland.app/");
     },
   },
 };
