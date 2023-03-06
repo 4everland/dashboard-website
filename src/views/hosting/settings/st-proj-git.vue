@@ -142,13 +142,19 @@ export default {
         this.getRepoList();
       }
     },
+    info() {
+      this.onInit();
+    },
   },
   mounted() {
-    this.currentBranch = this.info.config.currentBranch;
-    this.hookSwitch = this.info.config.gitHook;
-    console.log(this.info);
+    this.onInit();
   },
   methods: {
+    onInit() {
+      this.currentBranch = this.info.config.currentBranch;
+      this.hookSwitch = this.info.config.gitHook;
+      console.log(this.info);
+    },
     onConnect(it) {
       this.setConnect(it.id);
     },

@@ -109,6 +109,7 @@ export default {
         const { data } = await this.$http.post("$auth/media", formData);
         await this.$http.put("$auth/cooperation/teams", { teamAvatar: data });
         this.$setMsg("updateTeam");
+        this.$setMsg("updateUser");
         await this.$toast("Save successfully");
       } catch (error) {
         console.log(error);
@@ -131,7 +132,8 @@ export default {
         if (this.teamName == this.teamInfo.teamName) return;
         this.$loading();
         await this.$http.put("$auth/cooperation/teams", data);
-        this.$setMsg({ name: "updateTeam" });
+        this.$setMsg("updateTeam");
+        this.$setMsg("updateUser");
         this.$loading.close();
         await this.$toast("Save successfully");
       } catch (error) {
