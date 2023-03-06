@@ -84,7 +84,7 @@ Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
 };
 
 function keepMyToken(url) {
-  const urls = ["/user/activity/action/logs"];
+  const urls = ["/user/activity/action/logs", "/cooperation/teams"];
   const arr = urls.filter((it) => {
     return new RegExp(it, "g").test(url);
   });
