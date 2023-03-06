@@ -54,11 +54,39 @@
             <span class="fz-14 message">{{ item.message }}</span>
           </div>
         </template>
+        <template v-if="item.type == 'CUSTOM'">
+          <div class="notice-content al-c">
+            <span class="fz-14 message">{{ item.message.title }}</span>
+            <v-btn
+              small
+              width="100"
+              light
+              color="#FF994E"
+              class="invitation-btn ml-auto mr-6"
+              @click="handleDetail(item)"
+              tile
+              >Detail</v-btn
+            >
+          </div>
+        </template>
       </v-carousel-item>
     </v-carousel>
     <v-icon size="20" color="#ff994e" @click="handleCloseNotice"
       >mdi-close</v-icon
     >
+    <v-dialog v-model="showDialog" max-width="550">
+      <div class="pa-5">
+        <div class="al-c">
+          <h3 class="fz-20">{{ dialogDetail.message.title }}</h3>
+          <v-icon class="ml-auto" size="20" @click="showDialog = false"
+            >mdi-close</v-icon
+          >
+        </div>
+        <div class="my-6 fz-14" style="line-height: 30px">
+          <div v-html="dialogDetail.message.message"></div>
+        </div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -69,6 +97,10 @@ export default {
     return {
       noticeList: [],
       alert: false,
+      showDialog: false,
+      dialogDetail: {
+        message: {},
+      },
     };
   },
   created() {
@@ -133,10 +165,23 @@ export default {
           ? JSON.parse(localStorage.getItem("notice"))
           : [];
       }
+      if (!localStorage.getItem("custom-notice")) {
+        this.noticeList.push({
+          id: 9999,
+          type: "CUSTOM",
+          message: {
+            title: "Notice of Arweave Service Suspension",
+            message: `Due to the <a href="https://github.com/ArweaveTeam/arweave/releases" target="__blank">Arweave 2.6 upgrade</a>, Arweave related services will temporarily be suspended from 4:00pm 6 Mar to 7 Mar morning. The Arweave projects affected during the downtime will be implemented progressively when the service is restored!
+          If you have any enquiries, please contact us at <a href="mailto:contact@4everland.org" target="__blank">contact@4everland.org</a>. We apologize for any inconvenience caused.`,
+          },
+          url: "",
+        });
+      }
     },
     handleCloseNotice() {
       this.noticeList = [];
       localStorage.removeItem("notice");
+      localStorage.setItem("custom-notice", 1);
     },
     async handleInvitation(id, accept) {
       try {
@@ -154,6 +199,10 @@ export default {
       } catch (error) {
         this.getList();
       }
+    },
+    handleDetail(item) {
+      this.showDialog = true;
+      this.dialogDetail = item;
     },
   },
 };
