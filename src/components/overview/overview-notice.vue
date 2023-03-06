@@ -171,7 +171,7 @@ export default {
           type: "CUSTOM",
           message: {
             title: "Notice of Arweave Service Suspension",
-            message: `Due to the <a href="https://github.com/ArweaveTeam/arweave/releases" target="__blank">Arweave 2.6 upgrade</a>, Arweave related services will temporarily be suspended from 4:00pm 6 Mar to 7 Mar morning. The Arweave projects affected during the downtime will be implemented progressively when the service is restored!
+            message: `Due to the <a href="https://github.com/ArweaveTeam/arweave/releases" target="__blank">Arweave 2.6 upgrade</a>, Arweave related services will temporarily be suspended from 8:00am 6 Mar to 7 Mar morning UTC. The Arweave projects affected during the downtime will be implemented progressively when the service is restored!
           If you have any enquiries, please contact us at <a href="mailto:contact@4everland.org" target="__blank">contact@4everland.org</a>. We apologize for any inconvenience caused.`,
           },
           url: "",
