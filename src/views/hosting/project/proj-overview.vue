@@ -19,7 +19,7 @@
             <div class="al-c">
               <e-link
                 class="fz-14"
-                :href="$utils.getCidLink(info.hash, info.platform)"
+                :href="$utils.getCidLink(info.hash, info.platform, info.online)"
                 v-if="info.hash"
               >
                 <!-- {{ info.hash.cutStr(4, 4) }} -->
@@ -50,7 +50,7 @@
             <div class="al-c" v-if="info.ipns">
               <e-link
                 class="fz-14"
-                :href="$utils.getCidLink(info.ipns, 'IPNS')"
+                :href="$utils.getCidLink(info.ipns, 'IPNS', info.online)"
               >
                 {{ info.ipns }}
               </e-link>
@@ -71,14 +71,19 @@
               >Get IPNS</v-btn
             >
           </e-kv>
-          <!-- <e-kv label="Deployment" class="mt-2">
-            <e-link :href="buildPath">
-              {{ info.domain }}
-            </e-link>
-          </e-kv> -->
           <e-kv label="Domains" class="mt-9" v-if="info.domains">
+            <e-tooltip top slot="sub" v-if="!info.online">
+              <v-icon slot="ref" color="#666" size="14" class="pa-1"
+                >mdi-alert-circle-outline</v-icon
+              >
+              <span>The domain can't be accessed. </span>
+            </e-tooltip>
             <div class="d-flex al-c">
-              <h-domain class="mr-6" :val="domains[0]" />
+              <h-domain
+                class="mr-6"
+                :val="domains[0]"
+                :disabled="!info.online"
+              />
               <e-menu v-if="domains.length > 1" offset-y open-on-hover>
                 <v-btn slot="ref" color="error" rounded elevation="0" x-small
                   >+{{ domains.length - 1 }}</v-btn
@@ -89,7 +94,7 @@
                     v-for="(row, j) in domains.slice(1)"
                     :key="j"
                   >
-                    <h-domain :val="row" />
+                    <h-domain :val="row" :disabled="!info.online" />
                   </div>
                 </div>
               </e-menu>
@@ -100,7 +105,7 @@
 
           <div class="mt-9 d-flex">
             <e-kv label="Status">
-              <h-status :val="info.state"></h-status>
+              <h-status :val="!info.online ? 'Remove' : info.state"></h-status>
             </e-kv>
             <e-kv class="ml-auto" label="Created" style="min-width: 195px">
               <e-time>{{ info.createAt }}</e-time>
@@ -111,6 +116,7 @@
               label="Base IPFS"
               :content="info.ipfsPath"
               :state="info.state"
+              :online="info.online"
               v-if="info.platform != 'IPFS' && info.deployType != 'IPNS'"
             ></msg-line-vertical>
 
@@ -118,12 +124,14 @@
               label="Base IPFS"
               :content="info.cid"
               :state="info.state"
+              :online="info.online"
               v-if="info.platform != 'IPFS' && info.deployType == 'IPNS'"
             ></msg-line-vertical>
 
             <msg-line-vertical
               class="mt-8"
               label="Base IPNS"
+              :online="info.online"
               :content="info.ipfsPath"
               platForm="IPNS"
               :state="info.state"

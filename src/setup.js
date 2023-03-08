@@ -142,12 +142,23 @@ Vue.prototype.$utils = {
     }
     return cid;
   },
-  getCidLink(cid, plat) {
+  getCidLink(cid, plat, assign = true) {
     if (!cid) return "";
-    if (plat == "IPNS") return `https://${cid}.ipns.4everland.io/`;
-    if (plat == "IC") return `https://${cid}.raw.ic0.app/`;
-    if (plat == "AR") return `https://arweave.net/${cid}`;
-    return `https://${this.getCidV1(cid)}.ipfs.4everland.io`; // .ipfs.dweb.link
+    if (plat == "IPNS")
+      return assign
+        ? `https://${cid}.ipns.4everland.io/`
+        : "https://dashboard.4everland.org";
+    if (plat == "IC")
+      return assign
+        ? `https://${cid}.raw.ic0.app/`
+        : "https://dashboard.4everland.org";
+    if (plat == "AR")
+      return assign
+        ? `https://arweave.net/${cid}`
+        : "https://dashboard.4everland.org";
+    return assign
+      ? `https://${this.getCidV1(cid)}.ipfs.4everland.io`
+      : "https://dashboard.4everland.org"; // .ipfs.dweb.link
   },
   cutFixed(num, keep = 2) {
     const str = num + "";

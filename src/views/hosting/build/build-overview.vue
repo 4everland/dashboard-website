@@ -18,7 +18,7 @@
           <v-row class="pt-1">
             <v-col>
               <e-kv2 label="Status">
-                <h-status :val="state"></h-status>
+                <h-status :val="!info.online ? 'Remove' : state"></h-status>
               </e-kv2>
             </v-col>
             <v-col>
@@ -50,7 +50,9 @@
             <div class="al-c" v-if="info.hash">
               <e-link
                 class="fz-14"
-                :href="$utils.getCidLink(info.hash, info.platform)"
+                :href="
+                  $utils.getCidLink(info.hash, info.platform, projInfo.online)
+                "
               >
                 <span>{{ info.hash }}</span>
               </e-link>
@@ -72,9 +74,13 @@
             class="ml-auto mt-7"
             :class="showLabel ? '' : 'op-0'"
           >
-            <e-link :href="'//' + info.domain">
-              {{ info.domain }}
-            </e-link>
+            <e-tooltip top slot="sub" v-if="!projInfo.online">
+              <v-icon slot="ref" color="#666" size="14" class="pa-1"
+                >mdi-alert-circle-outline</v-icon
+              >
+              <span>The domain can't be accessed. </span>
+            </e-tooltip>
+            <h-domain :val="info.domain" :disabled="!projInfo.online" />
           </e-kv2>
           <div class="mt-7 d-flex">
             <e-kv2
@@ -93,6 +99,7 @@
                 label="Base IPFS"
                 :content="info.cid"
                 :state="state"
+                :online="projInfo.online"
               ></msg-line>
               <msg-line
                 class="mb-5"
@@ -100,6 +107,7 @@
                 label="IPNS"
                 :content="projInfo.ipns"
                 :state="state"
+                :online="projInfo.online"
                 platForm="IPNS"
               ></msg-line>
 
@@ -110,6 +118,7 @@
                     label="Base IPFS"
                     :content="info.cid"
                     :state="state"
+                    :online="projInfo.online"
                     cutStr
                   ></msg-line
                 ></v-col>
@@ -119,6 +128,7 @@
                     label="Base IPNS"
                     :content="projInfo.ipfsPath"
                     :state="state"
+                    :online="projInfo.online"
                     platForm="IPNS"
                     cutStr
                   ></msg-line
@@ -190,6 +200,7 @@
 <script>
 import BuildOverviewLogs from "@/views/hosting/build/build-overview-logs";
 import HStatus from "@/views/hosting/common/h-status";
+import HDomain from "@/views/hosting/common/h-domain";
 import HBranch from "@/views/hosting/common/h-branch";
 import ECommit from "@/views/hosting/common/e-commit";
 import MsgLine from "@/views/hosting/common/msg-line";
@@ -362,6 +373,7 @@ Are you sure you want to continue?
     HStatus,
     HBranch,
     ECommit,
+    HDomain,
     MsgLine,
   },
 };

@@ -28,7 +28,7 @@
       >
         <a
           class="u"
-          :href="$utils.getCidLink(info.hash, info.platform)"
+          :href="$utils.getCidLink(info.hash, info.platform, projInfo.online)"
           target="_blank"
           >{{ info.hash }}</a
         >

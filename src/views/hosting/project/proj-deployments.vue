@@ -157,6 +157,7 @@ export default {
       info: (s) => s.projectInfo,
       userInfo: (s) => s.userInfo,
       nowDate: (s) => s.nowDate,
+      projInfo: (s) => s.projectInfo,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -171,7 +172,7 @@ export default {
         } else {
           link = it.arHash;
         }
-        return this.$utils.getCidLink(link, it.platform);
+        return this.$utils.getCidLink(link, it.platform, this.projInfo.online);
       };
     },
     hashDeploy() {
