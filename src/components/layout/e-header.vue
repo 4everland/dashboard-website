@@ -51,19 +51,14 @@
 
             <e-team-avatar
               class="cursor-p mr-2"
+              v-if="it.uid"
               :src="it.avatar"
               :size="20"
               :uid="it.uid"
             ></e-team-avatar>
-            <!-- <div class="u-avatar bdrs-100 mr-2" v-if="it.avatar">
-              <e-avatar :address="it.addr" :diameter="22"></e-avatar>
-              e-team-avatar
-            </div> -->
-
             <v-badge dot color="error" :value="it.badge || 0">
               <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
             </v-badge>
-
             <img
               v-if="it.subs && !it.noSuffix"
               :src="`/img/svg/header/ic-down-${it.color || 'def'}.svg`"

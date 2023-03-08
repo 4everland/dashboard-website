@@ -35,7 +35,7 @@ const menuMap = {
         label: "Bucket(s3)",
         active: false,
         group:
-          /^(\/bucket\/storage)|(\/bucket\/arweave)|(\/bucket\/domains)|(\/bucket\/access-keys)/i,
+          /^(\/bucket\/storage)|(\/bucket\/arweave)|(\/bucket\/domain(s?))|(\/bucket\/access-keys)/i,
         subs: [
           {
             label: "Buckets",
@@ -47,7 +47,7 @@ const menuMap = {
           },
           {
             label: "Domains",
-            to: "/bucket/domains",
+            to: "/bucket/domains/",
             matPath: /bucket\/domain/,
           },
           {
@@ -164,5 +164,28 @@ export default {
       // if (name == "BUCKET") return false;
       return (access || []).includes(name);
     },
+    // redirectOverview(permission) {
+    //   const permissions = [...new Set(permission)];
+    //   const path = this.$route.path;
+    //   console.log(permissions);
+    //   for (const item of permissions) {
+    //     if (!menuMap[item]) continue;
+    //     console.log(menuMap[item]);
+    //     for (const it of menuMap[item].subs) {
+    //       console.log(it);
+    //       if (!new RegExp(it.to).test(path)) {
+    //         return this.$router.push("/");
+    //       }
+    //     }
+    //   }
+    // },
   },
+  // watch: {
+  //   "teamInfo.access"(val) {
+  //     console.log(val);
+  //     this.redirectOverview(val);
+
+  //     // Object.keys(menuMap).forEach()
+  //   },
+  // },
 };

@@ -27,10 +27,12 @@
     <e-empty v-else-if="!list.length" class="pt-10">No Logs</e-empty>
     <template v-else>
       <div class="al-c mb-5" v-for="it in pagiList" :key="it.id">
-        <!-- <div class="bdrs-100 bd-1">
-        </div> -->
         <e-avatar :diameter="34" :address="it.addr"></e-avatar>
-
+        <!-- <e-team-avatar
+          class="cursor-p"
+          :src="teamAvatar"
+          :uid="teamInfo.teamId"
+        ></e-team-avatar> -->
         <div class="ml-4 fz-14">
           <div>
             <span>{{ it.label }}</span>
@@ -246,6 +248,10 @@ export default {
         it.desc = `Redeemed a Resource Voucher`;
         it.path = "Resource Billing";
         it.link = "/resource/bills";
+      } else if (act == "PINNING_SERVICE_RESET_ACCESS_KEY") {
+        it.desc = `reset the access key`;
+        it.path = "4EVER Pin";
+        it.link = "/bucket/pinning-service";
       } else {
         console.log(act, it);
         it.desc = act;

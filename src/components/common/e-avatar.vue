@@ -18,10 +18,8 @@ export default {
       iconDom: null,
     };
   },
-  created() {
-    this.generateIdentIconDom();
-  },
   mounted() {
+    this.generateIdentIconDom();
     this.$refs.content.appendChild(this.iconDom);
   },
   computed: {

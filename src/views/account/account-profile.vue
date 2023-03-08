@@ -8,6 +8,7 @@
       </p>
       <div class="d-flex">
         <v-text-field
+          ref="teamNameRef"
           persistent-placeholder
           outlined
           dense
@@ -68,12 +69,18 @@ export default {
       teamAvatar: "",
     };
   },
+  props: {
+    active: Boolean,
+  },
   watch: {
     teamInfo: {
       handler() {
         this.initInfo();
       },
       immediate: true,
+    },
+    active(val) {
+      if (val) this.initInfo();
     },
   },
   computed: {
@@ -90,6 +97,9 @@ export default {
       }
       return false;
     },
+  },
+  activated() {
+    this.initInfo();
   },
   methods: {
     async initInfo() {
@@ -129,7 +139,6 @@ export default {
         const data = {
           teamName: this.teamName,
         };
-        if (this.teamName == this.teamInfo.teamName) return;
         this.$loading();
         await this.$http.put("$auth/cooperation/teams", data);
         this.$setMsg("updateTeam");
@@ -138,6 +147,7 @@ export default {
         await this.$toast("Save successfully");
       } catch (error) {
         console.log(error);
+        this.$refs.teamNameRef.onFocus();
       }
     },
     onLimitSize() {
