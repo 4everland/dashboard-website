@@ -27,7 +27,13 @@
             Disconnect
           </v-btn>
         </div>
-        <new-step-0-git v-else @select="onConnect" in-setting />
+        <template v-else>
+          <v-btn v-if="!ownerGithub && hasRepo" color="primary" disabled>
+            <v-icon>mdi-github</v-icon>
+            <span class="ml-2">No Git Repository connected</span>
+          </v-btn>
+          <new-step-0-git v-else @select="onConnect" in-setting />
+        </template>
       </div>
     </div>
 
@@ -95,7 +101,7 @@
 import StProjGitHook from "@/views/hosting/settings/st-proj-git-hook";
 import NewStep0Git from "@/views/hosting/new/new-step-0-git";
 import { mapState } from "vuex";
-
+//  false hasrepo  disabled     false norepo no disabled
 export default {
   data() {
     return {
@@ -133,6 +139,9 @@ export default {
     },
     ownerGithub() {
       return this.info.ownerGithub;
+    },
+    hasRepo() {
+      return this.info.repo.id ? true : false;
     },
   },
   watch: {

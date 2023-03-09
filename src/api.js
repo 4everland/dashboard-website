@@ -249,6 +249,7 @@ function goLogin() {
 async function handleMsg(status, code, msg, config) {
   console.log(status, code, msg);
   try {
+    const { teamInfo } = store.getters;
     if (!msg && typeof code == "string") {
       msg = code;
     }
@@ -256,6 +257,10 @@ async function handleMsg(status, code, msg, config) {
     const vue = Vue.prototype;
     await vue.$sleep(10);
     if (status == 401 || code == 401) {
+      if (teamInfo.isMember) {
+        localStorage.teamId = "";
+        return (location.href = "/");
+      }
       if (!store.state.allowNoLogin) {
         goLogin();
       }

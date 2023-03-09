@@ -107,21 +107,6 @@
               text
               color="primary"
               small
-              @click="
-                onAct(item, item.status == 'DISABLED' ? 'ENABLE' : 'DISABLE')
-              "
-              :disabled="
-                item.status == 'PENDING' ||
-                item.status == 'REJECT' ||
-                isMemberMe(item)
-              "
-            >
-              {{ item.status == "DISABLED" ? "Enable" : "Disable" }}
-            </v-btn>
-            <v-btn
-              text
-              color="primary"
-              small
               :disabled="
                 item.status == 'PENDING' ||
                 item.status == 'REJECT' ||
