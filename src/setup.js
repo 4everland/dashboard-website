@@ -147,18 +147,13 @@ Vue.prototype.$utils = {
     if (plat == "IPNS")
       return assign
         ? `https://${cid}.ipns.4everland.io/`
-        : "https://dashboard.4everland.org";
-    if (plat == "IC")
-      return assign
-        ? `https://${cid}.raw.ic0.app/`
-        : "https://dashboard.4everland.org";
-    if (plat == "AR")
-      return assign
-        ? `https://arweave.net/${cid}`
-        : "https://dashboard.4everland.org";
+        : `https://${cid}.ipns.io/`;
+    if (plat == "IC") return;
+    `https://${cid}.raw.ic0.app/`;
+    if (plat == "AR") `https://arweave.net/${cid}`;
     return assign
       ? `https://${this.getCidV1(cid)}.ipfs.4everland.io`
-      : "https://dashboard.4everland.org"; // .ipfs.dweb.link
+      : `https://${this.getCidV1(cid)}.ipfs.io`; // .ipfs.dweb.link
   },
   cutFixed(num, keep = 2) {
     const str = num + "";

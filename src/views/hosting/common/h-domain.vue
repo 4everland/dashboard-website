@@ -1,5 +1,5 @@
 <template>
-  <span v-if="disabled">
+  <span v-if="disabled" class="gray">
     {{ val }}
   </span>
   <a v-else :href="'//' + val" class="u" target="_blank">

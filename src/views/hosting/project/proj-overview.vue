@@ -85,7 +85,12 @@
                 :disabled="!info.online"
               />
               <e-menu v-if="domains.length > 1" offset-y open-on-hover>
-                <v-btn slot="ref" color="error" rounded elevation="0" x-small
+                <v-btn
+                  slot="ref"
+                  :color="info.online ? 'error' : 'gray'"
+                  rounded
+                  elevation="0"
+                  x-small
                   >+{{ domains.length - 1 }}</v-btn
                 >
                 <div class="bg-white pd-10 fz-14">
