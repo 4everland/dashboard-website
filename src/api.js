@@ -248,37 +248,25 @@ function goLogin() {
 
 async function handleMsg(status, code, msg, config) {
   console.log(status, code, msg);
-  if (!msg && typeof code == "string") {
-    msg = code;
-  }
-  msg = msg || "Unknown Error";
-  const vue = Vue.prototype;
-  await vue.$sleep(10);
-  if (status == 401 || code == 401) {
-    if (!store.state.allowNoLogin) {
-      goLogin();
+  try {
+    if (!msg && typeof code == "string") {
+      msg = code;
     }
-  } else if (msg == "Network Error") {
-    // window.gtag("event", "api_error", {
-    //   url: config.url || "no url",
-    // });
-    // vue
-    //   .$confirm(
-    //     "A network error has occurred. Please check your connections and try again.",
-    //     msg,
-    //     {
-    //       confirmText: "Retry",
-    //     }
-    //   )
-    //   .then(() => {
-    //     location.reload();
-    //   });
-  } else if (msg && msg != "Request aborted" && !config.noTip) {
-    vue.$alert(msg).then(() => {
+    msg = msg || "Unknown Error";
+    const vue = Vue.prototype;
+    await vue.$sleep(10);
+    if (status == 401 || code == 401) {
+      if (!store.state.allowNoLogin) {
+        goLogin();
+      }
+    } else if (msg && msg != "Request aborted" && !config.noTip) {
+      await vue.$alert(msg);
       if (status == 403) {
         location.href = "/";
       }
-    });
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
 

@@ -249,7 +249,7 @@ export default {
         it.path = "Resource Billing";
         it.link = "/resource/bills";
       } else if (act == "PINNING_SERVICE_RESET_ACCESS_KEY") {
-        it.desc = `reset the access key`;
+        it.desc = `Reset the Access Key`;
         it.path = "4EVER Pin";
         it.link = "/bucket/pinning-service";
       } else {
