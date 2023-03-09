@@ -303,6 +303,7 @@ export default {
         const { data } = await this.$http.post("$auth/bind", {
           type: it.type,
           apply,
+          entranceId: 100,
         });
         const url = data.applyR;
         if (it.type == 3) {

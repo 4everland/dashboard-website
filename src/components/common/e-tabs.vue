@@ -187,10 +187,10 @@ export default {
     BuildOverview: () => import("@/views/hosting/build/build-overview"),
     BuildSource: () => import("@/views/hosting/build/build-source"),
 
-    // Settings-Page
-    StAccount: () => import("@/views/settings/st-account"),
-    StGeneral: () => import("@/views/settings/st-general"),
-
+    // Account-Page
+    AccountBinding: () => import("@/views/account/account-binding"),
+    AccountGeneral: () => import("@/views/account/account-general"),
+    AccountProfile: () => import("@/views/account/account-profile"),
     // Gateway-detail
     GatewaySettings: () => import("@/views/gateway/gateway-settings"),
     GatewayAllowlists: () => import("@/views/gateway/gateway-allowlists"),

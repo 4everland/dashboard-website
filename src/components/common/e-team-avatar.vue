@@ -1,8 +1,6 @@
 <template>
   <div @click="$emit('click')">
-    <v-avatar v-if="imgSrc" color="primary" :size="size" style="display: block">
-      <img :src="imgSrc"
-    /></v-avatar>
+    <v-avatar v-if="imgSrc" :size="size"> <img :src="imgSrc" /></v-avatar>
     <e-avatar v-else :address="uid" :diameter="size"></e-avatar>
   </div>
 </template>

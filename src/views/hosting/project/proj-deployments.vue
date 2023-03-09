@@ -179,8 +179,8 @@ export default {
         return type == "CID" || type == "IPNS";
       };
     },
-    isDeprecated() {
-      return this.info.deprecated;
+    ownerGithub() {
+      return this.info.ownerGithub;
     },
   },
   data() {
@@ -225,7 +225,7 @@ export default {
       let arr = [];
       if (
         (!this.hashDeploy(it.deployType) || it.state == "FAILURE") &&
-        !this.isDeprecated
+        this.ownerGithub
       ) {
         arr.push({
           text: "Redeploy",
