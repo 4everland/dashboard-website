@@ -59,7 +59,11 @@
     >
       <div v-if="domains.length && isDone">
         <p v-for="(it, i) in domains" :key="i">
-          <h-domain :val="it" class="fz-14"></h-domain>
+          <h-domain
+            :val="it"
+            class="fz-14"
+            :disabled="!projInfo.online"
+          ></h-domain>
         </p>
       </div>
       <div v-else class="fz-14 gray">

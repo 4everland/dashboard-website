@@ -18,7 +18,7 @@
           <v-row class="pt-1">
             <v-col>
               <e-kv2 label="Status">
-                <h-status :val="!info.online ? 'Remove' : state"></h-status>
+                <h-status :val="!projInfo.online ? 'Remove' : state"></h-status>
               </e-kv2>
             </v-col>
             <v-col>
