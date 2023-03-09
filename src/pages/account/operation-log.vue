@@ -134,8 +134,8 @@ export default {
         it.link = "/overview";
       } else if (act == "OAUTH_BIND_GITHUB") {
         it.desc = "Connected Github account";
-        it.path = "Settings";
-        it.link = "/settings";
+        it.path = "Configurations Account";
+        it.link = "/account/config?tab=account_binding";
       } else if (act == "BILL_RECHARGE") {
         it.desc = `Deposited ${utils.cutFixed(obj.amount, 4)} USDC`;
       } else if (act == "BILL_WITHDRAW") {

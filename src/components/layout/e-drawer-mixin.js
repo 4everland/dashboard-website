@@ -96,18 +96,19 @@ const menuMap = {
         to: "/account/config",
       },
     ];
+    if (target == "all") {
+      subs.unshift({
+        label: "Operation Log",
+        to: "/account/operation-log",
+      });
+    }
     if (target != "only") {
       subs.unshift({
         label: "Members",
         to: "/account/member",
       });
     }
-    if (target == "all") {
-      subs.push({
-        label: "Operation Log",
-        to: "/account/operation-log",
-      });
-    }
+
     return {
       label: "Account",
       img: "m-team",
@@ -164,28 +165,5 @@ export default {
       // if (name == "BUCKET") return false;
       return (access || []).includes(name);
     },
-    // redirectOverview(permission) {
-    //   const permissions = [...new Set(permission)];
-    //   const path = this.$route.path;
-    //   console.log(permissions);
-    //   for (const item of permissions) {
-    //     if (!menuMap[item]) continue;
-    //     console.log(menuMap[item]);
-    //     for (const it of menuMap[item].subs) {
-    //       console.log(it);
-    //       if (!new RegExp(it.to).test(path)) {
-    //         return this.$router.push("/");
-    //       }
-    //     }
-    //   }
-    // },
   },
-  // watch: {
-  //   "teamInfo.access"(val) {
-  //     console.log(val);
-  //     this.redirectOverview(val);
-
-  //     // Object.keys(menuMap).forEach()
-  //   },
-  // },
 };
