@@ -100,7 +100,7 @@
               v-if="list.length > 1"
               >Disband</v-btn
             >
-            <span v-else class="pl-3">——</span>
+            <span v-else class="pl-3">--</span>
           </div>
           <div v-else>
             <v-btn
