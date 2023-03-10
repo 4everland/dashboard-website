@@ -2,7 +2,7 @@
   <div>
     <!-- <keep-alive v-if="inFolder || inFile"> -->
     <e-tabs
-      v-if="inFolder || inFile"
+      v-if="inFolder"
       :list="list"
       :defTab="1"
       bucket

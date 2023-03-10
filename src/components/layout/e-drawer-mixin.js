@@ -35,7 +35,7 @@ const menuMap = {
         label: "Bucket(s3)",
         active: false,
         group:
-          /^(\/bucket\/storage)|(\/bucket\/arweave)|(\/bucket\/domains)|(\/bucket\/access-keys)/i,
+          /^(\/bucket\/storage)|(\/bucket\/arweave)|(\/bucket\/domain(s?))|(\/bucket\/access-keys)/i,
         subs: [
           {
             label: "Buckets",
@@ -47,7 +47,7 @@ const menuMap = {
           },
           {
             label: "Domains",
-            to: "/bucket/domains",
+            to: "/bucket/domains/",
             matPath: /bucket\/domain/,
           },
           {
@@ -96,18 +96,19 @@ const menuMap = {
         to: "/account/config",
       },
     ];
+    if (target == "all") {
+      subs.unshift({
+        label: "Operation Log",
+        to: "/account/operation-log",
+      });
+    }
     if (target != "only") {
       subs.unshift({
         label: "Members",
         to: "/account/member",
       });
     }
-    if (target == "all") {
-      subs.push({
-        label: "Operation Log",
-        to: "/account/operation-log",
-      });
-    }
+
     return {
       label: "Account",
       img: "m-team",
@@ -161,7 +162,7 @@ export default {
     inAccess(name) {
       const { access, isOwner } = this.teamInfo;
       if (isOwner) return true;
-      if (name == "BUCKET") return false;
+      // if (name == "BUCKET") return false;
       return (access || []).includes(name);
     },
   },

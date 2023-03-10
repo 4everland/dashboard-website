@@ -78,6 +78,17 @@ export default {
           ],
         },
         {
+          title: "Storage",
+          type: "BUCKET",
+          subs: [
+            "Bucket Management",
+            "AR History",
+            "Bucket Domains",
+            "Access Keys",
+            "4EVER Pin",
+          ],
+        },
+        {
           title: "Resource",
           type: "RESOURCE",
           subs: [

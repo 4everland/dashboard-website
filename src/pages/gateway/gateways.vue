@@ -22,7 +22,7 @@
             teamInfo.isMember && teamInfo.access?.indexOf('RESOURCE') == -1,
         }"
       >
-        <v-btn color="primary" width="120" to="/resource/deposit"
+        <v-btn color="primary" width="120" @click="handleDeposit"
           >Deposit</v-btn
         >
       </div>
@@ -176,6 +176,14 @@ export default {
     },
     onRow(row) {
       this.$router.push(`/gateway/list/${row.name}?tab=settings`);
+    },
+    handleDeposit() {
+      if (this.teamInfo.isMember && !this.teamInfo.teamOwnerWallet) {
+        return this.$alert(
+          "This feature is not currently supported as the owner account is not bound to a wallet, please try again after binding a wallet."
+        );
+      }
+      this.$router.push("/resource/deposit");
     },
   },
 };

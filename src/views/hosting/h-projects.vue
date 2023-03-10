@@ -219,7 +219,7 @@
                     :val="!it.online ? 'Remove' : it.state"
                   ></h-status>
                 </div>
-                <div v-if="!it.deprecated && it.repo.name">
+                <div v-if="it.ownerGithub">
                   <div
                     class="d-flex al-c"
                     v-if="it.repo && it.repo.id && it.currentBranch"

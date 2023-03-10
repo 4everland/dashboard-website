@@ -99,7 +99,6 @@ export default {
         console.log(data);
         this.loading = false;
         let total = 0;
-        if (this.teamInfo.isMember) return (this.total = 0), (this.list = []);
         this.list = data.collections.map((it, i) => {
           total += it.value;
           it.size = this.$utils.getFileSize(it.value);

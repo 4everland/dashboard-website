@@ -66,10 +66,8 @@
 
 <script>
 import Axios from "axios";
-import { mapGetters } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["teamInfo"]),
     worldMapJson() {
       return this.$store.state.worldMapJson;
     },
@@ -126,17 +124,14 @@ export default {
                 bandWidth: it.flux,
               };
             });
-        if (!isH && this.teamInfo.isMember) {
-          this.list = [];
-        } else {
-          this.list = list
-            .filter((it) => !!it)
-            .map((it) => {
-              it.band = this.$utils.getFileSize(it.bandWidth || 0);
-              it.value = it.request;
-              return it;
-            });
-        }
+
+        this.list = list
+          .filter((it) => !!it)
+          .map((it) => {
+            it.band = this.$utils.getFileSize(it.bandWidth || 0);
+            it.value = it.request;
+            return it;
+          });
         this.noData = !this.list.length;
         if (this.noData) {
           this.list = this.noList.map((it) => {

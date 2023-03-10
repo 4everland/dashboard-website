@@ -27,10 +27,12 @@
     <e-empty v-else-if="!list.length" class="pt-10">No Logs</e-empty>
     <template v-else>
       <div class="al-c mb-5" v-for="it in pagiList" :key="it.id">
-        <!-- <div class="bdrs-100 bd-1">
-        </div> -->
         <e-avatar :diameter="34" :address="it.addr"></e-avatar>
-
+        <!-- <e-team-avatar
+          class="cursor-p"
+          :src="teamAvatar"
+          :uid="teamInfo.teamId"
+        ></e-team-avatar> -->
         <div class="ml-4 fz-14">
           <div>
             <span>{{ it.label }}</span>
@@ -132,8 +134,8 @@ export default {
         it.link = "/overview";
       } else if (act == "OAUTH_BIND_GITHUB") {
         it.desc = "Connected Github account";
-        it.path = "Settings";
-        it.link = "/settings";
+        it.path = "Configurations Account";
+        it.link = "/account/config?tab=account_binding";
       } else if (act == "BILL_RECHARGE") {
         it.desc = `Deposited ${utils.cutFixed(obj.amount, 4)} USDC`;
       } else if (act == "BILL_WITHDRAW") {
@@ -218,7 +220,7 @@ export default {
         if (obj.type == "name") {
           it.desc = `Changed the account name to ${obj.name}`;
         } else {
-          it.desc = "Changed the account profile";
+          it.desc = "Changed the account photo";
         }
         it.path = "Configurations Account";
         it.link = "/account/config";
@@ -246,6 +248,10 @@ export default {
         it.desc = `Redeemed a Resource Voucher`;
         it.path = "Resource Billing";
         it.link = "/resource/bills";
+      } else if (act == "PINNING_SERVICE_RESET_ACCESS_KEY") {
+        it.desc = `Reset the Access Key`;
+        it.path = "4EVER Pin";
+        it.link = "/bucket/pinning-service";
       } else {
         console.log(act, it);
         it.desc = act;

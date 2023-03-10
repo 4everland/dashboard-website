@@ -1,28 +1,4 @@
-// import Settings from "./settings";
-// import Collections from "./collections";
-// import Referral from "./referral";
-// import BugBounty from "./bug-bounty";
-// import ActLog from "./activity-log";
-
 export default [
-  // {
-  //   path: "/account/activity-log",
-  //   components: {
-  //     cache: () => import("./activity-log"),
-  //   },
-  //   meta: {
-  //     title: "Activity Log",
-  //   },
-  // },
-  {
-    path: "/settings",
-    component: () => import("./settings"),
-
-    meta: {
-      title: "Settings",
-      isTab: 1,
-    },
-  },
   {
     path: "/referral",
     component: () => import("./referral"),

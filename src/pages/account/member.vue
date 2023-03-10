@@ -8,44 +8,65 @@
         <a href="https://discord.gg/4everland" target="_blank">us</a>
         if you want to invite more.
       </div>
-      <v-row class="mt-3">
-        <v-col cols="12" md="7">
-          <h4>Members</h4>
-          <div class="al-c">
-            <v-select
-              :items="typeItems"
-              item-text="text"
-              item-value="value"
-              v-model="accBody.type"
-              outlined
-              dense
-              style="max-width: 140px"
-            ></v-select>
-            <v-text-field
-              v-model="accBody.target"
-              :placeholder="
-                accBody.type == 'EMAIL' ? 'Enter email' : 'Enter wallet'
-              "
-              outlined
-              dense
-              class="ml-4"
-            ></v-text-field>
-          </div>
-        </v-col>
-        <v-col cols="12" md="5">
-          <h4>Permissions</h4>
-          <div>
-            <v-text-field
-              placeholder="Set permissions"
-              outlined
-              dense
-              readonly
-              :value="getText(accBody.access)"
-              @click="onAccess(accBody.access)"
-            ></v-text-field>
-          </div>
-        </v-col>
-      </v-row>
+      <v-form ref="form">
+        <v-row class="mt-3">
+          <v-col cols="12" md="7">
+            <h4>Members</h4>
+            <div class="al-c">
+              <v-select
+                :items="typeItems"
+                item-text="text"
+                item-value="value"
+                v-model="accBody.type"
+                @change="onSeleted"
+                outlined
+                dense
+                style="max-width: 140px"
+              ></v-select>
+              <v-text-field
+                v-model="accBody.target"
+                ref="targetIpt"
+                :placeholder="
+                  accBody.type == 'EMAIL' ? 'Enter email' : 'Enter wallet'
+                "
+                outlined
+                :rules="[
+                  (v) => (v && !!v.trim()) || 'Invalid Address',
+                  (v) => {
+                    if (accBody.type == 'EMAIL') {
+                      return (
+                        this.$regMap.email.test(accBody.target) ||
+                        'Invalid Email Address'
+                      );
+                    }
+                    return true;
+                  },
+                ]"
+                dense
+                class="ml-4"
+              ></v-text-field>
+            </div>
+          </v-col>
+          <v-col cols="12" md="5">
+            <h4>Permissions</h4>
+            <div>
+              <v-text-field
+                placeholder="Set permissions"
+                outlined
+                dense
+                readonly
+                :rules="[
+                  (v) =>
+                    (v && !!v.trim()) ||
+                    'The permissions for member are not configured',
+                ]"
+                :value="getText(accBody.access)"
+                @click="onAccess(accBody.access)"
+              ></v-text-field>
+            </div>
+          </v-col>
+        </v-row>
+      </v-form>
       <div class="ta-r">
         <v-btn color="primary" width="100px" @click="addMember">Invite</v-btn>
       </div>
@@ -79,24 +100,9 @@
               v-if="list.length > 1"
               >Disband</v-btn
             >
-            <span v-else>——</span>
+            <span v-else class="pl-3">--</span>
           </div>
           <div v-else>
-            <v-btn
-              text
-              color="primary"
-              small
-              @click="
-                onAct(item, item.status == 'DISABLED' ? 'ENABLE' : 'DISABLE')
-              "
-              :disabled="
-                item.status == 'PENDING' ||
-                item.status == 'REJECT' ||
-                isMemberMe(item)
-              "
-            >
-              {{ item.status == "DISABLED" ? "Enable" : "Disable" }}
-            </v-btn>
             <v-btn
               text
               color="primary"
@@ -201,32 +207,24 @@ export default {
     },
     async addMember() {
       try {
+        const valid = await this.$refs.form.validate();
+        if (!valid) return;
         const body = this.accBody;
-        let msg = "";
-        if (!body.target) msg = "Invalid Address";
-        else if (
-          body.type == "EMAIL" &&
-          !this.$regMap.email.test(body.target)
-        ) {
-          msg = "Invalid email address";
-        } else if (!body.access.length) {
-          msg = "The permissions for member are not configured";
-        }
-        if (msg) {
-          this.$toast(msg);
-          return;
-        }
         this.$loading();
         await this.$http.post("$auth/cooperation/invitations", {
           invitation: body,
         });
         this.$loading.close();
+        this.$refs.form.resetValidation();
         this.accBody.target = "";
         this.accBody.access = [];
         this.getList();
       } catch (error) {
         console.log(error);
       }
+    },
+    onSeleted() {
+      this.$refs.targetIpt.reset();
     },
     capTxt(txt) {
       if (/pending/i.test(txt)) return "Pending verification";
