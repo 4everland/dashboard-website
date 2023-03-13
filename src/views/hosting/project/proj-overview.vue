@@ -110,7 +110,7 @@
 
           <div class="mt-9 d-flex">
             <e-kv label="Status">
-              <h-status :val="!info.online ? 'Remove' : info.state"></h-status>
+              <h-status :val="!info.online ? 'Removed' : info.state"></h-status>
             </e-kv>
             <e-kv class="ml-auto" label="Created" style="min-width: 195px">
               <e-time>{{ info.createAt }}</e-time>
