@@ -473,31 +473,36 @@ export default {
         if (this.hasMore && direction !== "pre" && !isExist) {
           this.continuationTokenArr.push(data.nextContinuationToken);
         }
-        let list = data.objects.map((it) => {
-          if (it.prefix)
+        console.log(Prefix);
+        let list = data.objects
+          .filter((it) => {
+            return it.name != Prefix;
+          })
+          .map((it) => {
+            if (it.prefix)
+              return {
+                name: it.prefix.replace(Prefix, "").replace("/", ""),
+                size: "--",
+                hash: "--",
+                updateAt: "--",
+                arStatus: "--",
+              };
+            const meta = it.metadata || {};
+            let arStatus = meta["X-Amz-Meta-Arweave-Status"];
+            if (!arStatus) {
+              arStatus = this.defArStatus;
+            }
             return {
-              name: it.prefix.replace(Prefix, "").replace("/", ""),
-              size: "--",
-              hash: "--",
-              updateAt: "--",
-              arStatus: "--",
+              Key: it.name,
+              name: it.name.replace(Prefix, ""),
+              updateAt: it.lastModified.format(),
+              size: this.$utils.getFileSize(it.size),
+              hash: this.$utils.getCidV1(it.etag),
+              isFile: true,
+              arStatus,
+              arHash: meta["X-Amz-Meta-Arweave-Hash"],
             };
-          const meta = it.metadata || {};
-          let arStatus = meta["X-Amz-Meta-Arweave-Status"];
-          if (!arStatus) {
-            arStatus = this.defArStatus;
-          }
-          return {
-            Key: it.name,
-            name: it.name.replace(Prefix, ""),
-            updateAt: it.lastModified.format(),
-            size: this.$utils.getFileSize(it.size),
-            hash: this.$utils.getCidV1(it.etag),
-            isFile: true,
-            arStatus,
-            arHash: meta["X-Amz-Meta-Arweave-Hash"],
-          };
-        });
+          });
         this.folderList = list;
         window.scrollTo(0, 0);
         this.$loading.close();
