@@ -9,7 +9,7 @@
       </e-empty>
     </div>
 
-    <div class="pr-6 pos-r">
+    <div class="pr-6 pos-r" v-else>
       <v-timeline dense align-top>
         <v-timeline-item small v-for="(it, i) in list" :key="i">
           <div class="color-1 fw-b">{{ it.date }}</div>
@@ -32,7 +32,7 @@
                   color="primary"
                   small
                   @click="onDeploy(row)"
-                  :disabled="isDeprecated"
+                  :disabled="!ownerGithub"
                   >Deploy</v-btn
                 >
               </div>
@@ -76,8 +76,8 @@ export default {
       const { id } = this.info.repo || {};
       return !id;
     },
-    isDeprecated() {
-      return this.info.deprecated;
+    ownerGithub() {
+      return this.info.ownerGithub;
     },
   },
   data() {
@@ -96,6 +96,7 @@ export default {
       this.getList();
     },
     active(val) {
+      console.log(val);
       if (val) this.getList();
     },
   },
@@ -107,7 +108,7 @@ export default {
       try {
         const hash = row.sha.substr(0, 6) + " - " + row.message;
         await this.$confirm(
-          `Are you sure to deploy this commit?<p class="mt-3 gray fz-14">${hash}</p>`
+          `Are you sure you want to deploy this commit?<p class="mt-3 gray fz-14">${hash}</p>`
         );
         this.$loading();
         const {

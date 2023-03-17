@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="20px" height="21px" viewBox="0 0 20 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>shape结合</title>
+    <title>shapecombine</title>
     <g id="Overview" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g transform="translate(-45.000000, -98.000000)" fill="#7C59AB" id="g-4">
             <g transform="translate(0.000000, -1.000000)">
-                <path d="M45,99 L54,99 L54,105 L45,105 L45,99 Z M45,108 L54,108 L54,120 L45,120 L45,108 Z M65,120 L56,120 L56,114 L65,114 L65,120 Z M65,111 L56,111 L56,99 L65,99 L65,111 Z" id="shape结合"></path>
+                <path d="M45,99 L54,99 L54,105 L45,105 L45,99 Z M45,108 L54,108 L54,120 L45,120 L45,108 Z M65,120 L56,120 L56,114 L65,114 L65,120 Z M65,111 L56,111 L56,99 L65,99 L65,111 Z" id="shapecombine"></path>
             </g>
         </g>
     </g>

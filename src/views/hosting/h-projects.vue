@@ -153,7 +153,9 @@
                       </h3>
                       <div class="ml-auto" v-if="asMobile">
                         <!-- @click.native.stop="onStatus(it)" -->
-                        <h-status :val="it.state"></h-status>
+                        <h-status
+                          :val="!it.online ? 'Remove' : it.state"
+                        ></h-status>
                       </div>
                     </div>
                     <div class="al-c mt-4">
@@ -163,7 +165,9 @@
                       />
                       <a
                         class="u ml-2 fz-12 gray"
-                        :href="$utils.getCidLink(it.hash, it.platform)"
+                        :href="
+                          $utils.getCidLink(it.hash, it.platform, it.online)
+                        "
                         target="_blank"
                         @click.stop
                         v-if="it.hash && it.state == 'SUCCESS'"
@@ -187,7 +191,10 @@
               <v-col cols="9" md="4" v-if="hashDeploy(it.deployType) || it.cli">
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
-                  <h-status class="ta-l" :val="it.state"></h-status>
+                  <h-status
+                    class="ta-l"
+                    :val="!it.online ? 'Removed' : it.state"
+                  ></h-status>
                 </div>
                 <div v-if="!it.cli">
                   <span class="d-ib deploy-origin-type fz-14">{{
@@ -207,9 +214,12 @@
               <v-col cols="9" md="4" v-else>
                 <div class="mb-4 mt-2" v-if="!asMobile">
                   <!-- @click.native.stop="onStatus(it)" -->
-                  <h-status class="ta-l" :val="it.state"></h-status>
+                  <h-status
+                    class="ta-l"
+                    :val="!it.online ? 'Removed' : it.state"
+                  ></h-status>
                 </div>
-                <div v-if="!it.deprecated && it.repo.name">
+                <div v-if="it.ownerGithub">
                   <div
                     class="d-flex al-c"
                     v-if="it.repo && it.repo.id && it.currentBranch"
@@ -332,7 +342,7 @@
               alt=""
               width="88"
             />
-            <div class="fw-b">Create a project from a IPFS Path</div>
+            <div class="fw-b">Create a project from a IPFS Path.</div>
           </div>
           <div
             class="template-deploy deploy"

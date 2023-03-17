@@ -152,8 +152,7 @@ export default {
       let msg = err.message;
       if (!msg) return;
       if (msg.indexOf("Please select a different name") > -1) {
-        msg =
-          "This name already exists or is in use by another user. Bucket name will generate unique url to ensure global service uniqueness. No duplicate names will be allowed.";
+        msg = "Bucket name already exists, please enter a different one.";
       }
       if (["Failed to fetch"].includes(msg)) {
         this.$confirm(msg, "Network Error", {
@@ -474,31 +473,36 @@ export default {
         if (this.hasMore && direction !== "pre" && !isExist) {
           this.continuationTokenArr.push(data.nextContinuationToken);
         }
-        let list = data.objects.map((it) => {
-          if (it.prefix)
+        console.log(Prefix);
+        let list = data.objects
+          .filter((it) => {
+            return it.name != Prefix;
+          })
+          .map((it) => {
+            if (it.prefix)
+              return {
+                name: it.prefix.replace(Prefix, "").replace("/", ""),
+                size: "--",
+                hash: "--",
+                updateAt: "--",
+                arStatus: "--",
+              };
+            const meta = it.metadata || {};
+            let arStatus = meta["X-Amz-Meta-Arweave-Status"];
+            if (!arStatus) {
+              arStatus = this.defArStatus;
+            }
             return {
-              name: it.prefix.replace(Prefix, "").replace("/", ""),
-              size: "--",
-              hash: "--",
-              updateAt: "--",
-              arStatus: "--",
+              Key: it.name,
+              name: it.name.replace(Prefix, ""),
+              updateAt: it.lastModified.format(),
+              size: this.$utils.getFileSize(it.size),
+              hash: this.$utils.getCidV1(it.etag),
+              isFile: true,
+              arStatus,
+              arHash: meta["X-Amz-Meta-Arweave-Hash"],
             };
-          const meta = it.metadata || {};
-          let arStatus = meta["X-Amz-Meta-Arweave-Status"];
-          if (!arStatus) {
-            arStatus = this.defArStatus;
-          }
-          return {
-            Key: it.name,
-            name: it.name.replace(Prefix, ""),
-            updateAt: it.lastModified.format(),
-            size: this.$utils.getFileSize(it.size),
-            hash: this.$utils.getCidV1(it.etag),
-            isFile: true,
-            arStatus,
-            arHash: meta["X-Amz-Meta-Arweave-Hash"],
-          };
-        });
+          });
         this.folderList = list;
         window.scrollTo(0, 0);
         this.$loading.close();

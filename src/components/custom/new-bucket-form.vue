@@ -5,8 +5,8 @@
       <v-switch v-model="isAr"></v-switch>
     </div>
     <div class="tip-wrap mt-5" v-show="isAr">
-      The start Arweave storage space is 100MB, and files stored on Arweave
-      network can't be deleted.
+      All data on the Arweave network cannot be deleted, and there is 100MB of
+      free AR storage.
     </div>
   </div>
 </template>

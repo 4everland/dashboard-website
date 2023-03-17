@@ -12,11 +12,11 @@
                     <mask id="mask-2" fill="white">
                         <use xlink:href="#path-1"></use>
                     </mask>
-                    <use id="蒙版" fill="#0C0918" transform="translate(4.949747, 3.005204) rotate(-90.000000) translate(-4.949747, -3.005204) " xlink:href="#path-1"></use>
+                    <use id="mask" fill="#0C0918" transform="translate(4.949747, 3.005204) rotate(-90.000000) translate(-4.949747, -3.005204) " xlink:href="#path-1"></use>
                     <mask id="mask-4" fill="white">
                         <use xlink:href="#path-3"></use>
                     </mask>
-                    <use id="蒙版" fill="#0C0918" transform="translate(4.949747, -3.994796) rotate(-90.000000) translate(-4.949747, 3.994796) " xlink:href="#path-3"></use>
+                    <use id="mask" fill="#0C0918" transform="translate(4.949747, -3.994796) rotate(-90.000000) translate(-4.949747, 3.994796) " xlink:href="#path-3"></use>
                 </g>
             </g>
         </g>

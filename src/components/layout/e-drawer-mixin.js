@@ -20,7 +20,7 @@ const menuMap = {
         to: "/hosting/statistics",
       },
       {
-        label: "Auth Tokens",
+        label: "Auth Token",
         to: "/hosting/auth-tokens",
       },
     ],
@@ -35,7 +35,7 @@ const menuMap = {
         label: "Bucket(s3)",
         active: false,
         group:
-          /^(\/bucket\/storage)|(\/bucket\/arweave)|(\/bucket\/domains)|(\/bucket\/access-keys)/i,
+          /^(\/bucket\/storage)|(\/bucket\/arweave)|(\/bucket\/domain(s?))|(\/bucket\/access-keys)/i,
         subs: [
           {
             label: "Buckets",
@@ -47,7 +47,7 @@ const menuMap = {
           },
           {
             label: "Domains",
-            to: "/bucket/domains",
+            to: "/bucket/domains/",
             matPath: /bucket\/domain/,
           },
           {
@@ -65,7 +65,7 @@ const menuMap = {
   GATEWAY: {
     label: "Gateway",
     img: "m-gateway",
-    suffixImg: "/img/svg/hosting/h-beta-active.svg",
+    // suffixImg: "/img/svg/hosting/h-beta-active.svg",
     group: /^\/gateway/i,
     subs: [
       {
@@ -92,24 +92,25 @@ const menuMap = {
   MEMBER(target) {
     const subs = [
       {
-        label: "Account Configuration",
+        label: "Configurations",
         to: "/account/config",
       },
     ];
-    if (target != "only") {
-      subs.unshift({
-        label: "Member Management",
-        to: "/account/member",
-      });
-    }
     if (target == "all") {
-      subs.push({
+      subs.unshift({
         label: "Operation Log",
         to: "/account/operation-log",
       });
     }
+    if (target != "only") {
+      subs.unshift({
+        label: "Members",
+        to: "/account/member",
+      });
+    }
+
     return {
-      label: "Collaboration",
+      label: "Account",
       img: "m-team",
       group: /^\/account/i,
       subs,
@@ -161,7 +162,7 @@ export default {
     inAccess(name) {
       const { access, isOwner } = this.teamInfo;
       if (isOwner) return true;
-      if (name == "BUCKET") return false;
+      // if (name == "BUCKET") return false;
       return (access || []).includes(name);
     },
   },

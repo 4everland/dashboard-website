@@ -5,13 +5,13 @@
         <div>
           <h3>Connected Git Repository</h3>
           <div class="gray mt-1 fz-14">
-            Seamlessly create Deployments for any commits pushed to your Git
+            Seamlessly create deployments for any commits pushed to your Git
             repository.
           </div>
         </div>
       </div>
       <div class="mt-5 b-1">
-        <div class="d-flex al-c f-wrap" v-if="repoName && !isDeprecated">
+        <div class="d-flex al-c f-wrap" v-if="!noGitProject && ownerGithub">
           <v-icon color="#4A96FA" size="32">mdi-github</v-icon>
           <div class="ml-5 mr-auto">
             <h4 class="color-1">
@@ -28,33 +28,23 @@
           </v-btn>
         </div>
         <template v-else>
-          <div v-if="!isDeprecated">
-            <div v-if="!showConnect">
-              <v-btn color="primary" @click="showConnect = true">
-                <v-icon>mdi-github</v-icon>
-                <span class="ml-2">Connect Github</span>
-              </v-btn>
-            </div>
-            <div v-else>
-              <new-step-0-git @select="onConnect" in-setting />
-            </div>
-          </div>
-          <v-btn color="primary" v-else @click="showConnect = true" disabled>
+          <v-btn v-if="!ownerGithub && hasRepo" color="primary" disabled>
             <v-icon>mdi-github</v-icon>
             <span class="ml-2">No Git Repository connected</span>
           </v-btn>
+          <new-step-0-git v-else @select="onConnect" in-setting />
         </template>
       </div>
     </div>
 
-    <template v-if="repoName && !isDeprecated">
+    <template v-if="!noGitProject && ownerGithub">
       <div class="bd-1 mt-5">
         <div>
           <h3>Production Branch</h3>
           <div class="gray mt-1 fz-14">
             By default, every commit pushed to the
-            <span class="color-1">`main`</span> branch will trigger a Production
-            Deployment instead of the usual Preview Deployment. You can switch
+            <span class="color-1">`main`</span> branch will trigger a production
+            deployment instead of the usual preview deployment. You can switch
             to a different branch here.
           </div>
           <div class="mt-5 d-flex al-c hide-msg">
@@ -111,7 +101,7 @@
 import StProjGitHook from "@/views/hosting/settings/st-proj-git-hook";
 import NewStep0Git from "@/views/hosting/new/new-step-0-git";
 import { mapState } from "vuex";
-
+//  false hasrepo  disabled     false norepo no disabled
 export default {
   data() {
     return {
@@ -119,7 +109,6 @@ export default {
       currentBranch: "",
       branches: [],
       savingHook: false,
-      showConnect: false,
       keyword: "",
       hookSwitch: true,
     };
@@ -135,14 +124,24 @@ export default {
     repoName() {
       return this.info.repo.name;
     },
+    noGitProject() {
+      return (
+        this.info.deployType == "CID" ||
+        this.info.deployType == "IPNS" ||
+        this.info.cli
+      );
+    },
     repoResList() {
       return this.repoList.filter((it) => {
         if (!this.keyword.trim()) return true;
         return new RegExp(this.keyword, "i").test(it.namespace + "/" + it.name);
       });
     },
-    isDeprecated() {
-      return this.info.deprecated;
+    ownerGithub() {
+      return this.info.ownerGithub;
+    },
+    hasRepo() {
+      return this.info.repo.id ? true : false;
     },
   },
   watch: {
@@ -152,13 +151,19 @@ export default {
         this.getRepoList();
       }
     },
+    info() {
+      this.onInit();
+    },
   },
   mounted() {
-    this.currentBranch = this.info.config.currentBranch;
-    this.hookSwitch = this.info.config.gitHook;
-    console.log(this.info);
+    this.onInit();
   },
   methods: {
+    onInit() {
+      this.currentBranch = this.info.config.currentBranch;
+      this.hookSwitch = this.info.config.gitHook;
+      console.log(this.info);
+    },
     onConnect(it) {
       this.setConnect(it.id);
     },
@@ -169,6 +174,12 @@ export default {
     },
     async setConnect(repoId) {
       try {
+        if (!repoId) {
+          await this.$confirm(
+            "Any data related to Git projects will be changed. Are you sure you want to proceed?",
+            "Remove Git Connection"
+          );
+        }
         const { id } = this.info;
         let url = "/project/repo/" + id;
         let method = "delete";
@@ -201,7 +212,6 @@ export default {
           hookSwitch: this.hookSwitch,
         });
         this.$toast("Updated Web Hook successfully.");
-        this.showConnect = false;
       } catch (error) {
         //
       }

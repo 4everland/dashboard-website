@@ -345,7 +345,7 @@ export class PinningServiceTaskWrapper {
       if (message && message.status) {
         this.status = message.status;
       } else {
-        console.log('status = 4')
+        console.log("status = 4");
         this.status = 4;
       }
     }
@@ -413,8 +413,13 @@ export class PinningServiceDeleteTaskWrapper {
       });
       console.log(data);
       this.status = 3;
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      const { data = {} } = err.response || {};
+      if (data.error) {
+        if (data.error.reason == "OBJECT_IS_PINNING") {
+          Vue.prototype.$toast("Items in pinning cannot be deleted", "red");
+        }
+      }
       this.status = 4;
     }
   }

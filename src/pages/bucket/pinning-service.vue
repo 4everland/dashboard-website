@@ -1,26 +1,36 @@
 <template>
   <div class="pinning-service-container">
-    <e-right-opt-wrap :top="-75">
-      <v-row>
-        <v-col :md="4">
+    <div class="pos-r">
+      <div class="al-c justify-space-between flex-wrap">
+        <div class="al-c">
+          <pinning-service-upload
+            class="mb-4"
+            ref="pinningServiceUpload"
+            :accessToken="accessToken"
+            @getList="getList({}, true)"
+          ></pinning-service-upload>
+          <v-btn class="mb-4 ml-3" color="primary" text @click="handleOpenPage">
+            <img src="/img/svg/bucket/ipfs-sync.svg" alt="" />
+            <span class="ml-2">IPFS Migrator</span>
+          </v-btn>
+        </div>
+        <div class="al-c mb-4">
           <v-btn color="primary" @click="handleGetToken">
             <v-icon size="16" class="mr-2">mdi-key-outline</v-icon>
             <span>Access Token</span>
           </v-btn>
-        </v-col>
-        <v-col :md="4" style="max-width: 230px">
           <v-select
-            class="hide-msg bd-1"
+            style="max-width: 230px"
+            class="hide-msg bd-1 ml-4"
             dense
             solo
             :items="items"
             v-model="state"
             @change="onChange"
           />
-        </v-col>
-        <v-col :md="4">
           <v-text-field
-            class="hide-msg bd-1"
+            style="max-width: 230px"
+            class="hide-msg bd-1 ml-4"
             prepend-inner-icon="mdi-magnify"
             solo
             dense
@@ -28,16 +38,8 @@
             v-model="searchKey"
             @input="handleInput"
           />
-        </v-col>
-      </v-row>
-    </e-right-opt-wrap>
-    <div class="pos-r">
-      <pinning-service-upload
-        ref="pinningServiceUpload"
-        class="mb-7"
-        :accessToken="accessToken"
-        @getList="getList({}, true)"
-      ></pinning-service-upload>
+        </div>
+      </div>
       <v-data-table
         class="hide-bdb"
         fixed-header
@@ -52,7 +54,7 @@
         disable-pagination
       >
         <template v-slot:item.name="{ item }">
-          <span>{{ item.pin.name.cutStr(10, 5) }}</span>
+          <span>{{ item.pin.name.cutStr(3, 5) }}</span>
         </template>
         <template v-slot:item.size="{ item }">
           <span>{{ $utils.getFileSize(item.info.dag_size) }}</span>
@@ -62,24 +64,26 @@
           <span>{{ new Date(item.created).format() }}</span>
         </template>
         <template v-slot:item.hash="{ item }">
-          <a
-            :href="$utils.getCidLink(item.pin.cid)"
-            class="hash-link"
-            style="color: #0b0817"
-            target="_blank"
-            @click.stop="onStop"
-            >{{ item.pin.cid.cutStr(20, 5) }}</a
-          >
-          <v-btn
-            class="e-btn-text ml-2"
-            icon
-            small
-            @click.stop
-            v-clipboard="item.pin.cid"
-            @success="$toast('Copied!')"
-          >
-            <img src="/img/svg/copy.svg" width="12" />
-          </v-btn>
+          <div class="al-c">
+            <a
+              :href="$utils.getCidLink(item.pin.cid)"
+              class="hash-link d-block"
+              style="color: #0b0817; min-width: 50px; max-width: 100px"
+              target="_blank"
+              @click.stop="onStop"
+              >{{ item.pin.cid.cutStr(3, 5) }}</a
+            >
+            <v-btn
+              class="e-btn-text ml-2"
+              icon
+              small
+              @click.stop
+              v-clipboard="item.pin.cid"
+              @success="$toast('Copied!')"
+            >
+              <img src="/img/svg/copy.svg" width="12" />
+            </v-btn>
+          </div>
         </template>
         <template v-slot:item.status="{ item }">
           <span
@@ -144,7 +148,7 @@
         <div class="mt-3" @click="$copy(accessToken)">
           <div class="fz-14 gray">
             Be sure to keep the unique token for the pinning service safe. The
-            token cannot be deleted, but it can be reset if has been
+            token cannot be deleted, but it can be reset if it has been
             compromised.
           </div>
           <div class="pd-10 bd-1 bdrs-3 mt-5 d-flex al-c hover-1">
@@ -356,13 +360,26 @@ export default {
     },
     async resetAccessToken() {
       try {
+        await this.$confirm(
+          "The previous token will become invalid after the token has been reset. Are you sure you want to proceed?",
+          "Tips",
+          {
+            cancelText: "Cancel",
+            confirmText: "Reset",
+          }
+        );
+        this.$loading();
         const { data } = await this.$http.post(
           "/user/ipfs-pinning-service/token"
         );
+        this.$loading.close();
         this.accessToken = data.accessToken;
       } catch (error) {
         console.log(error);
       }
+    },
+    handleOpenPage() {
+      window.open("https://ipfsmigrator.4everland.app/");
     },
   },
 };

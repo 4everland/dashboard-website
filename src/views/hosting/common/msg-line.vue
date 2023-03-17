@@ -1,22 +1,15 @@
 <template>
   <e-kv2 :label="label">
     <div class="al-c" v-if="content">
-      <e-link
-        class="fz-14"
-        :href="$utils.getCidLink(transformIpfsPath(content), platForm)"
-      >
-        {{
-          cutStr
-            ? transformIpfsPath(content).cutStr(20, 10)
-            : transformIpfsPath(content)
-        }}
+      <e-link class="fz-14" :href="link">
+        {{ cutStr ? value.cutStr(20, 10) : value }}
       </e-link>
       <img
         src="/img/svg/copy.svg"
         width="12"
         class="ml-3 hover-1"
         @success="$toast('Copied!')"
-        v-clipboard="transformIpfsPath(content)"
+        v-clipboard="value"
       />
     </div>
     <h-status
@@ -50,6 +43,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    online: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     transformIpfsPath() {
@@ -57,6 +54,12 @@ export default {
         const str = val.replace("/ipfs/", "").replace("/ipns/", "");
         return str;
       };
+    },
+    value() {
+      return this.transformIpfsPath(this.content);
+    },
+    link() {
+      return this.$utils.getCidLink(this.value, this.platForm, this.online);
     },
   },
   components: {

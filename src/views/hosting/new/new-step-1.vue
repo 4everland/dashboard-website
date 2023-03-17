@@ -186,7 +186,21 @@
           >
           </v-select>
         </v-col>
-
+        <v-col cols="6" md="4">
+          <h4>
+            <span>Rewrite</span>
+            <e-tooltip right max-width="300">
+              <v-icon slot="ref" size="16" class="ml-2" :color="$color1">
+                mdi-help-circle-outline
+              </v-icon>
+              <p>
+                If a URL doesn't exist, it will be redirected to the specified
+                target location.
+              </p>
+            </e-tooltip>
+          </h4>
+          <v-text-field v-model="form.rewrite" outlined dense></v-text-field>
+        </v-col>
         <v-col cols="6" md="4">
           <h4>
             <span>Deploy Hooks</span>
@@ -208,7 +222,7 @@
       <div class="gray mt-5 fz-14 al-c">
         <v-icon size="14" class="mr-2">mdi-alert-circle</v-icon>
         <span
-          >4EVERLAND HOSTING only serves static pages (Server-Side-Rendering is
+          >4EVERLAND Hosting only serves static pages (Server-Side-Rendering is
           not supported now)</span
         >
       </div>
@@ -281,6 +295,7 @@ export default {
         env: [],
         platform: "IPFS",
         nodeVersion: "",
+        rewrite: "",
       },
       buildCommandHint: "",
       scripts: null,

@@ -331,23 +331,15 @@
           ></v-sparkline>
         </template>
       </v-data-table>
-      <div
-        class="ta-c"
-        :class="tableLoading ? 'mt-10' : 'mt-15'"
-        v-if="!list.length"
-      >
-        <img
-          :src="`/img/svg/common/empty${tableLoading ? 1 : 2}.svg`"
-          :height="tableLoading ? 100 : 130"
-        />
-        <div class="mt-5 gray fz-17">
-          {{
-            tableLoading
-              ? `${inBucket ? "Loading buckets" : "Loading files"}...`
-              : `${inBucket ? "No buckets" : "No folders or files found"}`
-          }}
-        </div>
-      </div>
+
+      <e-empty v-if="!list.length" class="mt-6" :loading="tableLoading">
+        {{
+          tableLoading
+            ? `${inBucket ? "Loading buckets" : "Loading files"}...`
+            : `${inBucket ? "No buckets" : "No folders or files found"}`
+        }}
+      </e-empty>
+
       <operation-bar ref="operationBar">
         <v-checkbox
           v-model="checked"
@@ -527,9 +519,9 @@ export default {
               return;
             }
             if (form1.isAr) {
+              await this.$sleep(2000);
               await this.syncBucket(Bucket, true);
             }
-            await this.$sleep(1000);
             this.$loading.close();
             this.getBuckets();
           }

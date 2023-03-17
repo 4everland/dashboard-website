@@ -75,7 +75,7 @@
           class="group-item"
           :id="'group-' + i"
           :ref="'group-' + i"
-          @input="Toggle(i, $event)"
+          @input="Toggle(i, $event, it)"
           v-model="activeArr[i]"
           :group="it.group"
           v-if="it.subs"
@@ -83,7 +83,11 @@
           no-action
         >
           <template v-slot:activator>
-            <e-drawer-icon :it="it" :active="activeArr[i]"></e-drawer-icon>
+            <e-drawer-icon
+              class="ml-2 mr-6"
+              :it="it"
+              :active="activeArr[i]"
+            ></e-drawer-icon>
             <v-list-item-content>
               <v-list-item-title>
                 <b class="fz-16">{{ it.label }}</b>
@@ -108,7 +112,7 @@
               sub-group
               no-action
               v-model="openSub"
-              @input="onSubsToggle(j, $event)"
+              @input="onSubsToggle(i, $event)"
             >
               <template v-slot:activator>
                 <div class="ml-2"></div>
@@ -181,6 +185,7 @@
           <e-drawer-icon
             :it="it"
             :active="path.indexOf(it.to) == 0"
+            class="ml-2 mr-6"
           ></e-drawer-icon>
           <v-list-item-content>
             <v-list-item-title>
@@ -292,19 +297,20 @@ export default {
     },
   },
   methods: {
-    Toggle(i, open) {
+    Toggle(i, open, it) {
       if (this.guideActived) {
         return false;
       }
-      return this.onToggle(i, open);
+      return this.onToggle(i, open, it);
     },
-    onToggle(i, open) {
+    onToggle(i, open, it) {
+      console.log(i, open, it);
       if (!open) return;
-      if (i == 2) {
+      if (it.group.test("/bucket")) {
         if (/^\/bucket\/pinning-service/.test(this.path)) return;
         setTimeout(() => {
           this.openSub = true;
-          this.onSubsToggle(0, true);
+          this.onSubsToggle(i, true);
         }, 300);
       } else {
         if (this.list[i].group.test(this.path)) return;
@@ -313,8 +319,8 @@ export default {
     },
     onSubsToggle(i, open) {
       if (!open) return;
-      if (this.list[2].subs[0].group.test(this.path)) return;
-      this.$refs["sub" + i + "-0"][0].$el.click();
+      if (this.list[i].subs[0].group.test(this.path)) return;
+      this.$refs["sub" + "0" + "-0"][0].$el.click();
     },
   },
 };

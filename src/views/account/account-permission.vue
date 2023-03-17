@@ -1,6 +1,6 @@
 <template>
   <div class="pa-6">
-    <h2 class="mb-3">Account Permission</h2>
+    <h2 class="mb-3">Account Permissions</h2>
     <div
       class="al-c bg-f8 pa-2 mb-4 bdrs-10 hover-1"
       @click="onClick(it)"
@@ -28,11 +28,11 @@
         </div>
       </div>
     </div>
-    <div class="el-label-1 fz-14 m-auto" style="max-width: 500px">
+    <!-- <div class="el-label-1 fz-14 m-auto" style="max-width: 500px">
       Based on the corresponding permissions, the Hosting and Gateway functions
       are viewable or not viewable at all. Hosting and Bucket functions'
       viewability is based on the corresponding permissions.
-    </div>
+    </div> -->
     <div class="ta-c mt-5">
       <v-btn
         color="primary"
@@ -60,21 +60,32 @@ export default {
           title: "Hosting",
           type: "HOSTING",
           subs: [
-            "GitHub repository",
-            "Project management",
-            "Project deployment",
-            "CDN management",
-            "Auth Tokens",
+            "GitHub Repository",
+            "Project Management",
+            "Project Deployment",
+            "CDN Management",
+            "Auth Token",
           ],
         },
         {
           title: "Gateway",
           type: "GATEWAY",
           subs: [
-            "Create the gateway",
-            "Manage the gateway",
-            "IPNS management",
+            "IPNS Management",
             "IPNS API Key",
+            "Create a dedicated gateway",
+            "Manage a dedicated gateway",
+          ],
+        },
+        {
+          title: "Storage",
+          type: "BUCKET",
+          subs: [
+            "Bucket Management",
+            "AR History",
+            "Bucket Domains",
+            "Access Keys",
+            "4EVER Pin",
           ],
         },
         {
@@ -88,13 +99,9 @@ export default {
           ],
         },
         {
-          title: "Member Management",
+          title: "Account",
           type: "MEMBER",
-          subs: [
-            "Collaboration invitation",
-            "Member Management",
-            "Account configuration",
-          ],
+          subs: ["Members", "Configurations"],
         },
       ],
     };

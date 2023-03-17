@@ -5,13 +5,13 @@
         <path d="M12.9497475,6 L14.0104076,7.06066017 L10.121,10.949 L14.0104076,14.8388348 L12.9497475,15.8994949 L9.06066017,12.0104076 L8,10.9497475 L12.9497475,6 Z M13,10.9497475 L15.8284271,8.12132034 L16.8890873,9.18198052 L15.121,10.949 L16.8890873,12.7175144 L15.8284271,13.7781746 L13,10.9497475 Z" id="path-1"></path>
     </defs>
     <g id="Bucket-Bucket-List" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="选择非图片文件" transform="translate(-1355.000000, -319.000000)">
+        <g id="chose-no-image" transform="translate(-1355.000000, -319.000000)">
             <g id="group" transform="translate(1350.000000, 313.500000)">
                 <g id="icon/right" transform="translate(11.000000, 11.000000) scale(-1, 1) translate(-11.000000, -11.000000) ">
                     <mask id="mask-2" fill="white">
                         <use xlink:href="#path-1"></use>
                     </mask>
-                    <use id="蒙版" fill="#D8D8D8" transform="translate(12.444544, 10.949747) rotate(-360.000000) translate(-12.444544, -10.949747) " xlink:href="#path-1"></use>
+                    <use id="mask" fill="#D8D8D8" transform="translate(12.444544, 10.949747) rotate(-360.000000) translate(-12.444544, -10.949747) " xlink:href="#path-1"></use>
                     <g id="group" mask="url(#mask-2)" fill="#617083">
                         <g id="Colors/Background">
                             <rect id="Color" x="0" y="0" width="22" height="22"></rect>

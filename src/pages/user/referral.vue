@@ -128,12 +128,7 @@
         <v-skeleton-loader type="article" v-if="!code" />
         <div v-else class="referral-link flex-1">
           <div
-            class="
-              referral-link-header
-              d-flex
-              align-center
-              justify-space-between
-            "
+            class="referral-link-header d-flex align-center justify-space-between"
             style="margin-bottom: 34px"
           >
             <h3 class="title">Referrals Link</h3>
@@ -181,7 +176,7 @@
               <tr>
                 <td>#</td>
                 <td>Account</td>
-                <td>Created at</td>
+                <td>CreateAt</td>
               </tr>
             </thead>
             <tbody class="op-9">
@@ -298,10 +293,10 @@ export default {
           url: "http://discord.gg/4everland",
           label: "Discord",
         },
-        {
-          url: "https://4everland.medium.com/",
-          label: "FaceBook",
-        },
+        // {
+        //   url: "https://4everland.medium.com/",
+        //   label: "FaceBook",
+        // },
       ],
       overviewData: {
         today: "--",

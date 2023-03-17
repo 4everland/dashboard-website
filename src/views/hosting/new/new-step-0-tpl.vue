@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3>Clone Template</h3>
-    <div class="gray fz-15">Alternatively, get Started with template</div>
+    <div class="gray fz-15">Alternatively, get started with template</div>
     <v-row class="mt-2 mb-2">
       <v-col cols="6" v-for="(it, i) in tplList" :key="i">
         <div

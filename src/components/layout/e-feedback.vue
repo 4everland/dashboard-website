@@ -33,6 +33,8 @@
           persistent-placeholder
           v-model="form.feedbackType"
           :items="typeList"
+          item-text="name"
+          item-value="value"
         />
       </div>
 
@@ -50,7 +52,7 @@
           v-model.trim="form.ethAddress"
           label="Wallet Address"
           placeholder="Your wallet address"
-          hint="Please enter your eth wallet address otherwise may not receive rewards"
+          hint="Please enter your ETH wallet address"
           persistent-hint
         />
       </div>
@@ -83,7 +85,7 @@
 
       <div class="ta-c mt-5">
         <v-btn color="primary" width="120" :loading="loading" @click="onSubmit"
-          >Reback</v-btn
+          >Back</v-btn
         >
         <v-btn class="ml-6" outlined width="120" @click="showPop = false"
           >Cancel</v-btn
@@ -107,7 +109,25 @@ export default {
     return {
       showPop: false,
       title: "Feedback",
-      typeList: ["BUG", "PAY", "OPINION", "OTHER"],
+      // typeList: ["BUG", "PAY", "OPINION", "OTHER"],
+      typeList: [
+        {
+          name: "Bug",
+          value: "BUG",
+        },
+        {
+          name: "Billing",
+          value: "PAY",
+        },
+        {
+          name: "Proposal",
+          value: "OPINION",
+        },
+        {
+          name: "Other",
+          value: "OTHER",
+        },
+      ],
       form: {
         email: "",
         ethAddress: "",
@@ -185,7 +205,7 @@ export default {
   },
 };
 </script>
-<style >
+<style>
 .ops-item {
   color: #6c7789;
 }
@@ -195,5 +215,4 @@ export default {
   box-shadow: none !important;
 }
 </style>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

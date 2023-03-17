@@ -11,7 +11,7 @@ export default [
     path: "/auth-tokens",
     component: () => import("./auth-tokens"),
     meta: {
-      title: "Auth Tokens",
+      title: "Auth Token",
       isTab: 1,
       subTitle:
         "These tokens allow other apps to control your whole account. Be careful!",

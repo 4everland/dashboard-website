@@ -4,7 +4,7 @@
     <defs>
         <polygon id="path-1" points="0 0 12 0 12 10.2128835 0 10.2128835"></polygon>
     </defs>
-    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Account-Binding" transform="translate(-710.000000, -292.000000)">
             <g id="g" transform="translate(710.000000, 292.000000)">
                 <rect id="rect" fill="#F5841F" x="0" y="0" width="36" height="36" rx="12"></rect>

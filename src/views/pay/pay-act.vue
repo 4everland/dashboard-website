@@ -251,7 +251,7 @@ export default {
     onAct(to) {
       if (this.teamInfo.isMember && !this.teamInfo.teamOwnerWallet) {
         return this.$alert(
-          "The Owner account is not bound to a wallet and is not available for use at this time. Please try again after binding a wallet."
+          "This feature is not currently supported as the owner account is not bound to a wallet, please try again after binding a wallet."
         );
       }
       this.$router.push(to);
@@ -474,8 +474,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-</style>
+<style lang="scss"></style>
 <style lang="scss" scoped>
 ::v-deep .operation {
   font-weight: bold;

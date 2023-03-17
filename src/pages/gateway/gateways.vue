@@ -10,9 +10,9 @@
       </div>
       <div class="d-flex f-center">
         <div style="max-width: 550px">
-          As the 4EVERLAND account balance is less than $100, the gateway
-          service has been suspended. Once the balance is replenished, the
-          service will be automatically resumed.
+          The gateway service has been suspended because the balance on the
+          4EVERLAND account is less than $100. The service will automatically
+          resume when the balance is restored.
         </div>
       </div>
       <div
@@ -22,7 +22,7 @@
             teamInfo.isMember && teamInfo.access?.indexOf('RESOURCE') == -1,
         }"
       >
-        <v-btn color="primary" width="120" to="/resource/deposit"
+        <v-btn color="primary" width="120" @click="handleDeposit"
           >Deposit</v-btn
         >
       </div>
@@ -40,9 +40,9 @@
           >mdi-alert-circle-outline</v-icon
         >
         <span class="fz-13"
-          >As the 4EVERLAND account balance is less than $100, the gateway
-          service has been suspended. Once the balance is replenished, the
-          service will be automatically resumed.</span
+          >The gateway service has been suspended because the balance on the
+          4EVERLAND account is less than $100. The service will automatically
+          resume when the balance is restored.</span
         >
       </div>
 
@@ -103,7 +103,7 @@ export default {
         { text: "Access", value: "scope" },
         { text: "Past 30 days  of Bandwidth", value: "bytes" },
         { text: "Type", value: "type" },
-        { text: "Created", value: "created_at" },
+        { text: "CreateAt", value: "created_at" },
         { text: "Action", value: "act" },
       ],
       list: [],
@@ -176,6 +176,14 @@ export default {
     },
     onRow(row) {
       this.$router.push(`/gateway/list/${row.name}?tab=settings`);
+    },
+    handleDeposit() {
+      if (this.teamInfo.isMember && !this.teamInfo.teamOwnerWallet) {
+        return this.$alert(
+          "This feature is not currently supported as the owner account is not bound to a wallet, please try again after binding a wallet."
+        );
+      }
+      this.$router.push("/resource/deposit");
     },
   },
 };

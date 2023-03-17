@@ -157,6 +157,7 @@ export default {
       info: (s) => s.projectInfo,
       userInfo: (s) => s.userInfo,
       nowDate: (s) => s.nowDate,
+      projInfo: (s) => s.projectInfo,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -171,7 +172,7 @@ export default {
         } else {
           link = it.arHash;
         }
-        return this.$utils.getCidLink(link, it.platform);
+        return this.$utils.getCidLink(link, it.platform, this.projInfo.online);
       };
     },
     hashDeploy() {
@@ -179,8 +180,8 @@ export default {
         return type == "CID" || type == "IPNS";
       };
     },
-    isDeprecated() {
-      return this.info.deprecated;
+    ownerGithub() {
+      return this.info.ownerGithub;
     },
   },
   data() {
@@ -225,7 +226,7 @@ export default {
       let arr = [];
       if (
         (!this.hashDeploy(it.deployType) || it.state == "FAILURE") &&
-        !this.isDeprecated
+        this.ownerGithub
       ) {
         arr.push({
           text: "Redeploy",
@@ -302,8 +303,8 @@ export default {
       console.log(it);
       try {
         let html =
-          "You are about to create a new Deployment with the same source code as your current Deployment, but with the newest configuration from your Project Settings.";
-        await this.$confirm(html, "Redeploy to Production", {
+          "Your new deployment will have the same source code as your current deployment, but with the latest configuration from your project settings.";
+        await this.$confirm(html, "Redeploy", {
           confirmText: "Redeploy",
         });
         this.$loading();

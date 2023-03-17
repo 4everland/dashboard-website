@@ -53,6 +53,13 @@ const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   }
   return url;
 });
+const clearLogin = (Vue.prototype.$clearLogin = () => {
+  const keepArr = ["changelogNum", "loginTo"];
+  for (const key in localStorage) {
+    if (keepArr.includes(key)) continue;
+    localStorage.removeItem(key);
+  }
+});
 
 export const http = Axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
@@ -77,7 +84,7 @@ Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
 };
 
 function keepMyToken(url) {
-  const urls = ["/user/activity/action/logs"];
+  const urls = ["/user/activity/action/logs", "/cooperation/teams"];
   const arr = urls.filter((it) => {
     return new RegExp(it, "g").test(url);
   });
@@ -231,7 +238,7 @@ http.interceptors.response.use(
   }
 );
 function goLogin() {
-  localStorage.clear();
+  clearLogin();
   if (location.pathname != "/login") {
     localStorage.loginTo = location.pathname + location.search;
     location.href = getLoginUrl();
@@ -241,37 +248,30 @@ function goLogin() {
 
 async function handleMsg(status, code, msg, config) {
   console.log(status, code, msg);
-  if (!msg && typeof code == "string") {
-    msg = code;
-  }
-  msg = msg || "Unknown Error";
-  const vue = Vue.prototype;
-  await vue.$sleep(10);
-  if (status == 401 || code == 401) {
-    if (!store.state.allowNoLogin) {
-      goLogin();
+  try {
+    const { teamInfo } = store.getters;
+    if (!msg && typeof code == "string") {
+      msg = code;
     }
-  } else if (msg == "Network Error") {
-    // window.gtag("event", "api_error", {
-    //   url: config.url || "no url",
-    // });
-    // vue
-    //   .$confirm(
-    //     "A network error has occurred. Please check your connections and try again.",
-    //     msg,
-    //     {
-    //       confirmText: "Retry",
-    //     }
-    //   )
-    //   .then(() => {
-    //     location.reload();
-    //   });
-  } else if (msg && msg != "Request aborted" && !config.noTip) {
-    vue.$alert(msg).then(() => {
+    msg = msg || "Unknown Error";
+    const vue = Vue.prototype;
+    await vue.$sleep(10);
+    if (status == 401 || code == 401) {
+      if (teamInfo.isMember) {
+        localStorage.teamId = "";
+        return (location.href = "/");
+      }
+      if (!store.state.allowNoLogin) {
+        goLogin();
+      }
+    } else if (msg && msg != "Request aborted" && !config.noTip) {
+      await vue.$alert(msg);
       if (status == 403) {
         location.href = "/";
       }
-    });
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
 

@@ -31,6 +31,7 @@
             >
           </template>
         </v-data-table>
+        <e-empty v-if="!loading && !list.length">No Tokens</e-empty>
       </div>
     </div>
 
@@ -41,8 +42,7 @@
           class="mt-6"
           v-for="(it, i) in infoList"
           :key="i"
-          v-clipboard="it.value"
-          @success="$toast(it.label + ' Copied!')"
+          @click="$copy(it.value, it.label + ' Copied!')"
         >
           <p>{{ it.label }}</p>
           <div class="pd-10 bd-1 bdrs-3 mt-3 d-flex al-c hover-1">

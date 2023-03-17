@@ -1,30 +1,44 @@
 <template>
-  <div class="ta-c pt-10 pb-10 st-general">
-    <div class="del-wrap d-ib bdrs-8">
-      <img src="/img/svg/settings/account-del.svg" class="d-b" width="150" />
+  <div>
+    <div class="ta-c pt-10 pb-10 st-general" v-if="teamInfo.isOwner">
+      <div class="del-wrap d-ib bdrs-8">
+        <img src="/img/svg/settings/account-del.svg" class="d-b" width="150" />
+      </div>
+      <div class="mt-3">
+        <h3>Delete Account</h3>
+        <div class="gray fz-14 mt-3 ta-l">
+          Delete your account from 4EVERLAND along with all of its data
+          permanently and irrecoverably? Please confirm before proceeding.
+        </div>
+        <div class="mt-8">
+          <v-btn outlined small @click="onDelete">Delete</v-btn>
+        </div>
+      </div>
     </div>
-    <div class="mt-3">
-      <h3>Delete Personal Account</h3>
-      <div class="gray fz-14 mt-3 ta-l">
-        Permanently delete your Personal Account and all of its content from the
-        4EVERLAND platform. This action is not reversible, so please continue to
-        act with caution.
+    <div class="mt-5 config-item al-c" v-else>
+      <div style="width: 60%" class="mr-auto">
+        <h3 class="fz-20">Leave Account</h3>
+        <p class="fz-14 mb-6 mt-3 description">
+          You won't be able to manage the account's projects or content when you
+          leave the account, and the account will be hidden.
+        </p>
       </div>
-      <div class="mt-8">
-        <v-btn outlined small @click="onDelete">Delete Account</v-btn>
-      </div>
+      <v-btn color="primary" width="120px" outlined @click="handleDelete"
+        >Exit</v-btn
+      >
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
     }),
+    ...mapGetters(["teamInfo"]),
   },
   methods: {
     async onDelete() {
@@ -61,7 +75,7 @@ export default {
         this.deleting = true;
         // await this.$sleep(500)
         await this.$http.delete("$auth/accounts");
-        localStorage.clear();
+        this.$clearLogin();
         this.$loading.close();
         this.$alert("Personal account deleted successfully").then(() => {
           location.href = "index.html";
@@ -71,6 +85,24 @@ export default {
         this.$loading.close();
       }
       this.deleting = false;
+    },
+    async handleDelete() {
+      try {
+        await this.$confirm(
+          "Are you sure you want to leave the account?",
+          "Alert"
+        );
+        this.$loading();
+        await this.$http.post("$auth/cooperation/exit");
+        this.$loading.close();
+        this.$setState({
+          teamId: null,
+        });
+        location.href = "/overview";
+      } catch (error) {
+        //
+        console.log(error);
+      }
     },
   },
 };
@@ -83,6 +115,15 @@ export default {
   .del-wrap {
     background: #e2f2fa;
     padding: 20px 60px;
+  }
+}
+.config-item {
+  padding: 32px 28px;
+  background: #ffffff;
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
+  border-radius: 10px;
+  .description {
+    color: #6c7789;
   }
 }
 </style>

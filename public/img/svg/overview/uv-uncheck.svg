@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>矩形</title>
+    <title>rect</title>
     <g id="Overview" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="UV编辑" transform="translate(-949.000000, -541.000000)" fill="#FFFFFF" stroke="#D0DAE9">
-            <rect id="矩形" x="949.5" y="541.5" width="19" height="19"></rect>
+        <g id="UVedit" transform="translate(-949.000000, -541.000000)" fill="#FFFFFF" stroke="#D0DAE9">
+            <rect id="rect" x="949.5" y="541.5" width="19" height="19"></rect>
         </g>
     </g>
 </svg>

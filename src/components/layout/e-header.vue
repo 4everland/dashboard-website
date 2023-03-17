@@ -48,13 +48,17 @@
               :height="it.height"
               :class="it.imgCls"
             />
-            <div class="u-avatar bdrs-100 mr-2" v-if="it.avatar">
-              <e-avatar :address="it.addr" :diameter="22"></e-avatar>
-            </div>
+
+            <e-team-avatar
+              class="cursor-p mr-2"
+              v-if="it.uid"
+              :src="it.avatar"
+              :size="20"
+              :uid="it.uid"
+            ></e-team-avatar>
             <v-badge dot color="error" :value="it.badge || 0">
               <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
             </v-badge>
-
             <img
               v-if="it.subs && !it.noSuffix"
               :src="`/img/svg/header/ic-down-${it.color || 'def'}.svg`"
@@ -135,18 +139,15 @@ export default {
           imgCls: "mr-2 mb-1",
           width: 20,
         });
+
         list.push({
+          uid: info.uid,
           addr: info.username || "unkown",
           label: (info.username || "unkown").cutStr(6, 4),
           avatar: info.avatar || "/img/bg/user/def-avatar.png",
           btnStyle: "border: 1px solid #775DA6",
           noSuffix: true,
           subs: [
-            {
-              label: "Settings",
-              icon: "m-settings",
-              to: "/settings",
-            },
             {
               label: "Referral",
               icon: "m-refer",
@@ -157,11 +158,11 @@ export default {
               icon: "m-collect",
               to: "/collections",
             },
-            {
-              label: "Activity Log",
-              icon: "m-actlog",
-              to: "/account/activity-log",
-            },
+            // {
+            //   label: "Activity Log",
+            //   icon: "m-actlog",
+            //   to: "/account/activity-log",
+            // },
             {
               label: "Feedback",
               icon: "m-report",
@@ -205,7 +206,7 @@ export default {
     },
     async onMenu(it) {
       if (it.name == "logout") {
-        localStorage.clear();
+        this.$clearLogin();
         location.href = this.$getLoginUrl();
         return;
       }
@@ -215,7 +216,7 @@ export default {
       if (it.to) {
         if (this.teamInfo.isMember && !it.noLogin) {
           await this.$confirm(
-            "You're about to switch to your individual account to display relevant content. Do you want to proceed?"
+            "Switch to the owner account and show relevant content?"
           );
           this.$setState({
             teamId: null,

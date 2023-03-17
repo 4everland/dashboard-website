@@ -17,9 +17,9 @@
       class="bg-f9 al-c ma-3 pa-1 hover-1"
       @click="showAccount = !showAccount"
     >
-      <span class="mr-auto fz-14">{{ teamInfo.name }}</span>
+      <span class="mr-auto fz-14 line-1">{{ teamInfo.name }}</span>
       <v-chip label small color="primary" class="ev-n">
-        {{ teamInfo.isOwner ? "Individual" : "Collaboration" }}
+        {{ teamInfo.isOwner ? "Owner" : "Member" }}
       </v-chip>
       <img :src="`/img/svg/drawer/up-down.svg`" height="30" class="d-b" />
     </div>
@@ -27,7 +27,7 @@
       <div v-if="showTip">
         <h3>Tip</h3>
         <div class="pa-2 fz-14">
-          Personal and collaborative accounts can be switched here.
+          Switch your owner account and member account here.
         </div>
         <div class="ta-r">
           <v-btn small color="primary" @click="showTip = false">OK</v-btn>
@@ -48,7 +48,7 @@
                 :uid="it.teamId"
                 :size="22"
               ></e-team-avatar>
-              <span class="ml-2">{{ it.name }}</span>
+              <span class="ml-2 line-1">{{ it.name }}</span>
               <v-icon
                 v-if="it.teamId == teamInfo.teamId"
                 color="success"
@@ -65,7 +65,7 @@
           @click.native="onOut"
         >
           <v-icon color="primary" size="18">mdi-plus-circle</v-icon>
-          <span class="color-1 ml-1">Collaboration invitation</span>
+          <span class="color-1 ml-1">Invite members</span>
         </e-link>
       </template>
     </div>
@@ -88,11 +88,11 @@ export default {
       const list = this.teamList;
       return [
         {
-          title: "Individual account",
+          title: "Owner",
           subs: list.filter((it) => it.isOwner),
         },
         {
-          title: "Collaboration account",
+          title: "Member",
           subs: list.filter((it) => it.isMember),
         },
       ];
