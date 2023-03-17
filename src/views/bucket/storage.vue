@@ -519,9 +519,9 @@ export default {
               return;
             }
             if (form1.isAr) {
+              await this.$sleep(2000);
               await this.syncBucket(Bucket, true);
             }
-            await this.$sleep(1000);
             this.$loading.close();
             this.getBuckets();
           }

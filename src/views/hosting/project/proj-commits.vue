@@ -9,7 +9,7 @@
       </e-empty>
     </div>
 
-    <div class="pr-6 pos-r">
+    <div class="pr-6 pos-r" v-else>
       <v-timeline dense align-top>
         <v-timeline-item small v-for="(it, i) in list" :key="i">
           <div class="color-1 fw-b">{{ it.date }}</div>
@@ -96,6 +96,7 @@ export default {
       this.getList();
     },
     active(val) {
+      console.log(val);
       if (val) this.getList();
     },
   },

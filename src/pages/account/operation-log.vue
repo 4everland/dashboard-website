@@ -168,7 +168,7 @@ export default {
         it.link = "/hosting/auth-tokens";
       } else if (act == "BUCKET_GENERATE_ACCESS_KEY") {
         it.desc = "Generated an Access Key";
-        it.path = "Bucket Access Keys";
+        it.path = "Bucket(s3) Access Keys";
         it.link = "/bucket/access-keys";
       } else if (act == "BUCKET_DELETE") {
         it.desc = "Deleted bucket " + obj.bucket;
@@ -202,7 +202,7 @@ export default {
           obj.prefix.split("/")[obj.prefix.split("/").length - 2];
       } else if (act == "BUCKET_RESET_API_SECRET") {
         it.desc = "Resetted an API Secret";
-        it.path = "Bucket Access Keys";
+        it.path = "Bucket(s3) Access Keys";
         it.link = "/bucket/access-keys";
       } else if (act == "GATEWAY_GENERATE") {
         it.desc = `Generate a dedicated gateway named ${obj.name}.4everland.link`;
@@ -270,13 +270,13 @@ export default {
           it.link = `/hosting/project/${name}/${id}`;
         } else if (/bucket/i.test(act)) {
           if (/domain/i.test(act)) {
-            it.path = "Bucket Domains";
+            it.path = "Bucket(s3) Domains";
             it.link = "/bucket/domains";
           } else if (/snapshot/i.test(act)) {
-            it.path = "Bucket " + obj.bucket;
+            it.path = "Bucket(s3) " + obj.bucket;
             it.link = `/bucket/storage/${obj.bucket}/?tab=snapshots`;
           } else {
-            it.path = "Bucket";
+            it.path = "Bucket(s3)";
             it.link = "/bucket/storage/";
           }
         } else if (/ipns_manager/i.test(act)) {
