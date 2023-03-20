@@ -32,7 +32,9 @@
         <div class="pa-5">
           <div class="al-c">
             <img :src="`/img/svg/overview/${it.icon}`" width="16" />
-            <span class="ml-3 fz-15">{{ it.label }}</span>
+            <span class="ml-3 fz-15">{{
+              it.label == "Purchased Storage" ? "IPFS Storage" : it.label
+            }}</span>
           </div>
           <div class="mt-6 al-c">
             <e-kv class="flex-1" valueClass="al-c" :label="it.label + ':'">
@@ -163,8 +165,8 @@ export default {
           expireTime: info.freeBandwidthExpired,
           expireLabel: "Free expiration date",
           ...this.getPerc(
-            info.usedFreeBandwidth + info.usedPurchasedBandwidth,
-            info.freeBandwidth + info.purchasedBandwidth,
+            info.usedPurchasedBandwidth,
+            info.purchasedBandwidth,
             "GB",
             info.freeBandwidth,
             this.form.bandwidth
@@ -183,10 +185,8 @@ export default {
           expireTime: info.freeBuildMinutesExpired,
           expireLabel: "Free expiration date",
           ...this.getPerc(
-            parseInt(
-              info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes
-            ),
-            info.freeBuildMinutes + info.purchasedBuildMinutes,
+            parseInt(info.usedPurchasedBuildMinutes),
+            info.purchasedBuildMinutes,
             "Minutes",
             info.freeBuildMinutes,
             this.form.buildMinutes

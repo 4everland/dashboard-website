@@ -2,7 +2,7 @@
   <div>
     <div class="al-c mb-4">
       <e-radio-btn
-        :options="['Polygon', 'Cross-chain', 'airdrop']"
+        :options="['Polygon', 'Cross-chain', 'Airdrop']"
         v-model="typeIdx"
         min-width="170px"
       ></e-radio-btn>
@@ -56,6 +56,12 @@
       <template v-slot:item.cost="{ item }">
         <div v-if="item.usdt > 0">
           <span>{{ item.cost }}</span>
+          <span class="gray-7 ml-1">USDC</span>
+        </div>
+      </template>
+      <template #item.amount="{ item }">
+        <div>
+          <span>{{ item.amount }}</span>
           <span class="gray-7 ml-1">USDC</span>
         </div>
       </template>
@@ -185,30 +191,23 @@ export default {
         },
         {
           text: "Resource",
-          value: "resourceRecord",
+          value: "resource",
         },
         {
           text: "Amount",
           value: "amount",
         },
-        {
-          text: "Deadline",
-          value: "endChain",
-        },
+
         {
           text: "CreateAt",
           value: "time",
-        },
-        {
-          text: "State",
-          value: "status",
         },
       ];
     },
     requestApi() {
       if (this.typeIdx == 0) return "/bill/list";
       if (this.typeIdx == 1) return "/bill/cross/chain/list";
-      return "/bill/airdrop/list";
+      return "/airdrop/list";
     },
   },
   watch: {
@@ -222,7 +221,6 @@ export default {
   created() {
     console.log(this.$route.query);
     const { typeIdx = 0 } = this.$route.query;
-    console.log(typeIdx);
     this.typeIdx = typeIdx * 1;
   },
   mounted() {
@@ -298,9 +296,39 @@ export default {
           });
         } else {
           this.list = list.map((it, i) => {
+            const resourceRecord = JSON.parse(it.resourceRecord);
+            let resourceType = "";
+            const nameMap = {
+              BUILD_TIME: "Build Minutes",
+              TRAFFIC: "Bandwidth",
+              AR_STORAGE: "Arweave Storage",
+              IPFS_STORAGE: "IPFS Storage",
+            };
+            for (const key in resourceRecord) {
+              if (!nameMap[key]) {
+                continue;
+              } else {
+                resourceType = this.$utils.getPurchase(
+                  key,
+                  resourceRecord[key],
+                  resourceRecord["IPFS_EFFECTIVE_TIME"]
+                );
+              }
+            }
+            console.log(resourceType);
+
             it.seq = i + 1;
-            it.time = (it.createdAt * 1e3).format();
+            it.time = new Date(it.createdAt * 1e3).format();
             it.amount = "0.00";
+            it.resource =
+              resourceType.amount +
+                "" +
+                resourceType.unit +
+                " " +
+                resourceType.name +
+                " " +
+                resourceType.until ?? "";
+            return it;
           });
         }
         this.total = data.count;
@@ -310,6 +338,7 @@ export default {
       this.loading = false;
     },
     onItem(row) {
+      if (this.typeIdx == 2) return;
       let sub = this.typeIdx == 0 ? "" : "-cross";
       this.$navTo(`/resource/bill-detail${sub}?id=` + row.id);
     },
