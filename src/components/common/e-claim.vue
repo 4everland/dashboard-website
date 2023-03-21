@@ -42,7 +42,7 @@ export default {
       items: [
         {
           name: "IPFS Storage",
-          value: "25GB",
+          value: "6GB",
           icon: require("/public/img/airDrop/ipfs.png"),
         },
         {
@@ -52,12 +52,12 @@ export default {
         },
         {
           name: "Build Minutes",
-          value: "100",
+          value: "250Min",
           icon: require("/public/img/airDrop/minutes.png"),
         },
         {
-          name: "Recharge Balance",
-          value: "100",
+          name: "Bandwidth",
+          value: "100GB",
           icon: require("/public/img/airDrop/balance.png"),
         },
       ],
@@ -68,34 +68,39 @@ export default {
   },
   created() {
     this.isRegister();
-    this.initContract();
   },
   methods: {
-    initContract() {
+    async isRegister() {
+      // await window.ethereum.request({
+      //   method: "eth_requestAccounts",
+      // });
       const provider = new providers.Web3Provider(window.ethereum);
       polygonContract.setProvider(provider);
       this.contract = polygonContract;
-    },
-
-    async isRegister() {
+      if (!localStorage.token) return;
       try {
         const { data } = await this.$http.get(
           "$auth/self-handled-register-apply"
         );
-        this.showClaim = !data.handled;
+
         this.registerInfo = data;
         if (!data.handled) {
-          const euid = await this.contract.providerController.userRegistration(
-            data.wallet
+          const isExists = await this.contract.ProviderController.accountExists(
+            providerAddr,
+            data.uid
           );
-          if (euid) {
+          if (isExists) {
             // euid exist  over
+            console.log("register success");
             await this.registerSuccess();
             this.showClaim = false;
+            this.$emit("onUserGuide");
+            return;
           }
         }
+        this.showClaim = !data.handled;
       } catch (error) {
-        console.log(error);
+        console.log(error, "isRegister");
       }
     },
 
@@ -104,7 +109,7 @@ export default {
         this.loading = true;
         await this.switchPolygon();
         const { sign, encode } = await this.getSignAddress();
-        const tx = await this.contract.ProviderController.userRegistration(
+        const tx = await this.contract.ProviderController.registerAndDrip(
           providerAddr,
           this.registerInfo.wallet,
           this.registerInfo.uid,
@@ -112,12 +117,13 @@ export default {
           sign
         );
         console.log(tx);
-        const receipt = await tx.wait();
+        const receipt = await tx.wait(2);
         console.log(receipt);
         await this.registerSuccess();
         this.showClaim = false;
         this.$emit("onUserGuide");
       } catch (error) {
+        // this.onErr(error);
         console.log(error);
       }
       this.loading = false;

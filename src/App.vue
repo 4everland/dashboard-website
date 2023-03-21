@@ -87,15 +87,21 @@ export default {
 
     async getNewUser() {
       try {
-        const data = await airdropRequest();
-        if (data && this.showGuide) {
-          if (this.$route.path != "/overview" && this.$route.path != "/") {
-            this.$router.replace("/");
-          }
-          setTimeout(() => {
-            this.$refs.guide.guide();
-          }, 2000);
+        // const data = await airdropRequest();
+        // if (data && this.showGuide) {
+        //   if (this.$route.path != "/overview" && this.$route.path != "/") {
+        //     this.$router.replace("/");
+        //   }
+        //   setTimeout(() => {
+        //     this.$refs.guide.guide();
+        //   }, 2000);
+        // }
+        if (this.$route.path != "/overview" && this.$route.path != "/") {
+          this.$router.replace("/");
         }
+        setTimeout(() => {
+          this.$refs.guide.guide();
+        }, 1000);
         // setTimeout(() => {
         //   this.$refs.guide.guide();
         // }, 1000);
