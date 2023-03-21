@@ -20,7 +20,12 @@
             </div>
             <login-wallet ref="wallet" @walletVerify="onVerify"></login-wallet>
             <!-- <div class="line"></div> -->
-            <v-btn block :elevation="0" class="github-btn" @click="onVerify('github')">
+            <v-btn
+              block
+              :elevation="0"
+              class="github-btn"
+              @click="onVerify('github')"
+            >
               <v-icon class="mr-4"> mdi-github </v-icon>
               Continue with GitHub</v-btn
             >
@@ -74,9 +79,8 @@ export default {
       lockOverlay: false,
       accounts: "",
       inviteCode: null,
-      dialogShow:false,
-      sitekey: "6LdPnxclAAAAACTzYeZDztp3dcCKFUIG_5r313JV"
-
+      dialogShow: false,
+      sitekey: "6LdPnxclAAAAACTzYeZDztp3dcCKFUIG_5r313JV",
     };
   },
   created() {
@@ -95,8 +99,7 @@ export default {
     if (code) {
       this.getAuth(code);
     }
-    this.loaded()
-
+    this.loaded();
   },
   methods: {
     async onLogin(token) {
@@ -107,7 +110,7 @@ export default {
           appName: "BUCKET",
           entrance: 2,
           inviteCode: this.inviteCode,
-          capT:token
+          capT: token,
         };
         const { data } = await this.$axios.get(`${authApi}/login`, {
           params,
@@ -154,24 +157,24 @@ export default {
       }
     },
     onVerify(name) {
-      this.walletName = name
+      this.walletName = name;
       window.grecaptcha.execute();
     },
     submit(token) {
-      if(this.walletName == 'github'){
-        this.onLogin(token)
-      }else{
-        this.$refs.wallet.connect(this.walletName,token)
+      if (this.walletName == "github") {
+        this.onLogin(token);
+      } else {
+        this.$refs.wallet.connect(this.walletName, token);
       }
     },
     loaded() {
       setTimeout(() => {
         window.grecaptcha.render("grecaptcha", {
           sitekey: this.sitekey,
-          callback: this.submit
+          callback: this.submit,
         });
       }, 200);
-    }
+    },
   },
 };
 </script>

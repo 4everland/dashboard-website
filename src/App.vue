@@ -71,15 +71,18 @@ export default {
   async mounted() {
     const token = localStorage.token;
     if (!token) return;
-    await this.getNewUser();
-    if (this.newUserData && this.showGuide) {
-      if (this.$route.path != "/overview" && this.$route.path != "/") {
-        this.$router.replace("/");
-      }
-      setTimeout(() => {
-        this.$refs.guide.guide();
-      }, 2000);
-    }
+    // await this.getNewUser();
+    // if (this.newUserData && this.showGuide) {
+    //   if (this.$route.path != "/overview" && this.$route.path != "/") {
+    //     this.$router.replace("/");
+    //   }
+    //   setTimeout(() => {
+    //     this.$refs.guide.guide();
+    //   }, 2000);
+    // }
+    setTimeout(() => {
+      this.$refs.guide.guide();
+    }, 2000);
   },
   methods: {
     async getNewUser() {
