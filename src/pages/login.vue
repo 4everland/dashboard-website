@@ -18,9 +18,9 @@
             >
               Connect your wallet
             </div>
-            <login-wallet ref="wallet"></login-wallet>
+            <login-wallet ref="wallet" @walletVerify="onVerify"></login-wallet>
             <!-- <div class="line"></div> -->
-            <v-btn block :elevation="0" class="github-btn" @click="onLogin">
+            <v-btn block :elevation="0" class="github-btn" @click="onVerify('github')">
               <v-icon class="mr-4"> mdi-github </v-icon>
               Continue with GitHub</v-btn
             >
@@ -53,6 +53,7 @@
         >
       </div>
     </v-dialog>
+    <div id="grecaptcha" data-callback="onSubmit" data-size="invisible"></div>
   </div>
 </template>
 
@@ -73,6 +74,9 @@ export default {
       lockOverlay: false,
       accounts: "",
       inviteCode: null,
+      dialogShow:false,
+      sitekey: "6LdPnxclAAAAACTzYeZDztp3dcCKFUIG_5r313JV"
+
     };
   },
   created() {
@@ -91,9 +95,11 @@ export default {
     if (code) {
       this.getAuth(code);
     }
+    this.loaded()
+
   },
   methods: {
-    async onLogin() {
+    async onLogin(token) {
       this.$loading();
       try {
         const params = {
@@ -101,6 +107,7 @@ export default {
           appName: "BUCKET",
           entrance: 2,
           inviteCode: this.inviteCode,
+          capT:token
         };
         const { data } = await this.$axios.get(`${authApi}/login`, {
           params,
@@ -146,6 +153,25 @@ export default {
         console.log(error);
       }
     },
+    onVerify(name) {
+      this.walletName = name
+      window.grecaptcha.execute();
+    },
+    submit(token) {
+      if(this.walletName == 'github'){
+        this.onLogin(token)
+      }else{
+        this.$refs.wallet.connect(this.walletName,token)
+      }
+    },
+    loaded() {
+      setTimeout(() => {
+        window.grecaptcha.render("grecaptcha", {
+          sitekey: this.sitekey,
+          callback: this.submit
+        });
+      }, 200);
+    }
   },
 };
 </script>
