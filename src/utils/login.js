@@ -30,7 +30,7 @@ export const Web3Login = async (accounts, data) => {
     `$auth/web3login/${accounts}`,
     data
   );
-  return res.data.data.stoken;
+  return res.data.stoken;
 };
 
 export const ConnectMetaMask = async () => {
