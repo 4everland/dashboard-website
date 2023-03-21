@@ -222,7 +222,7 @@ export default {
         },
         {
           label: "Size",
-          value: this.$utils.getFileSize(info.size),
+          value: this.$utils.getFileSize(info.size) ?? "--",
         },
         {
           label: "IPFS CID",
@@ -296,6 +296,7 @@ export default {
       this.s3.headObject(
         { ...this.pathInfo, IfMatch: this.selected[0].hash },
         (err, data) => {
+          console.log(data);
           this.fileLoading = false;
           if (err) console.log(err);
           const meta = data.Metadata;
@@ -308,7 +309,7 @@ export default {
           this.fileInfo = {
             size: data.ContentLength,
             type: data.ContentType,
-            hash: this.$utils.getCidV1(data.ETag),
+            hash: this.$utils.getCidV1(data.Metadata["ipfs-hash"]),
             updateAt: data.LastModified,
             url: this.$endpoint,
             arStatus,
