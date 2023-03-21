@@ -26,7 +26,10 @@ export const ExchangeCode = async (accounts) => {
 };
 
 export const Web3Login = async (accounts, data) => {
-  const res = await axios.post(`${authApi}/web3login/${accounts}`, data);
+  const res = await Vue.prototype.$http.post(
+    `$auth/web3login/${accounts}`,
+    data
+  );
   return res.data.data.stoken;
 };
 
@@ -43,7 +46,7 @@ export const ConnectMetaMask = async () => {
   return accounts;
 };
 
-export const SignMetaMask = async (accounts, nonce, inviteCode,capToken) => {
+export const SignMetaMask = async (accounts, nonce, inviteCode, capToken) => {
   try {
     const signature = await contracts.signer.signMessage(nonce);
     const data = {
@@ -52,7 +55,7 @@ export const SignMetaMask = async (accounts, nonce, inviteCode,capToken) => {
       inviteCode,
       type: "ETH",
       walletType: "METAMASK",
-      capT:capToken
+      capT: capToken,
     };
     const stoken = await Web3Login(accounts, data);
     // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
@@ -79,7 +82,7 @@ export const ConnectOkx = async () => {
   return accounts;
 };
 
-export const SignOkx = async (accounts, nonce, inviteCode,capToken) => {
+export const SignOkx = async (accounts, nonce, inviteCode, capToken) => {
   try {
     const signature = await window.okxwallet.request({
       method: "personal_sign",
@@ -91,8 +94,7 @@ export const SignOkx = async (accounts, nonce, inviteCode,capToken) => {
       inviteCode,
       type: "ETH",
       walletType: "OKX",
-      capT:capToken
-
+      capT: capToken,
     };
     const stoken = await Web3Login(accounts, data);
     // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
@@ -120,7 +122,7 @@ export const ConnectPhantom = async () => {
   }
 };
 
-export const SignPhantom = async (accounts, nonce, inviteCode,capToken) => {
+export const SignPhantom = async (accounts, nonce, inviteCode, capToken) => {
   try {
     const encodedMessage = new TextEncoder().encode(nonce);
     const signedMessage = await window.solana.request({
@@ -135,8 +137,7 @@ export const SignPhantom = async (accounts, nonce, inviteCode,capToken) => {
       inviteCode,
       type: "SOLANA",
       walletType: "PHANTOM",
-      capT:capToken
-
+      capT: capToken,
     };
     const stoken = await Web3Login(accounts, data);
     // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
@@ -157,7 +158,7 @@ export const ConnectFlow = async () => {
   }
 };
 
-export const SignFlow = async (accounts, nonce, inviteCode,capToken) => {
+export const SignFlow = async (accounts, nonce, inviteCode, capToken) => {
   try {
     const MSG = Buffer.from(nonce).toString("hex");
     const signUserMessage = await fcl.currentUser.signUserMessage(MSG);
@@ -173,8 +174,7 @@ export const SignFlow = async (accounts, nonce, inviteCode,capToken) => {
       inviteCode,
       type: "ONFLOW",
       walletType: "ONFLOW",
-      capT:capToken
-
+      capT: capToken,
     };
     const stoken = await Web3Login(accounts, data);
     // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
@@ -199,7 +199,7 @@ export const ConnectPetra = async () => {
   }
 };
 
-export const SignPetra = async (account, nonce, inviteCode,capToken) => {
+export const SignPetra = async (account, nonce, inviteCode, capToken) => {
   try {
     const { signature } = await window.aptos.signMessage({
       nonce,
@@ -211,8 +211,7 @@ export const SignPetra = async (account, nonce, inviteCode,capToken) => {
       inviteCode,
       type: "NACL",
       walletType: "PETRA",
-      capT:capToken
-      
+      capT: capToken,
     };
     const stoken = await Web3Login(account, data);
     return stoken;
