@@ -1,40 +1,5 @@
 <template>
-  <div>
-    <v-dialog v-model="showDialog" max-width="800">
-      <div class="reward-hub-content">
-        <v-icon size="16" class="close-icon" @click="showDialog = false"
-          >mdi-close</v-icon
-        >
-        <div class="text">Thank you for registering 4EVERLAND!</div>
-        <div class="mb-6 text">
-          You have received the following free resource packages which will help
-          you better experience 4EVERLAND service. For more free resources?
-          Claim them now in Reward Hub!
-        </div>
-        <v-row class="mt-2">
-          <v-col :sm="6" :cols="12" v-for="item in items" :key="item.name">
-            <div class="resource-item al-c">
-              <img width="28" :src="item.icon" alt="" />
-              <span class="resource-item-value ml-2">{{ item.value }}</span>
-              <span class="ml-2 fz-12">{{ item.name }}</span>
-            </div>
-          </v-col>
-        </v-row>
-        <div class="d-flex justify-center mt-10">
-          <v-btn outlined color="primary" min-width="200" @click="handleClaim"
-            >Get more</v-btn
-          >
-          <v-btn
-            class="ml-6"
-            color="primary"
-            min-width="200"
-            @click="showDialog = false"
-            >Start now</v-btn
-          >
-        </div>
-      </div>
-    </v-dialog>
-  </div>
+  <div></div>
 </template>
 
 <script>
@@ -45,8 +10,6 @@ import "driver.js/dist/driver.min.css";
 export default {
   data() {
     return {
-      showDialog: false,
-
       driver: new Driver({
         className: "guide-class",
         nextBtnText: "Next",
@@ -173,10 +136,10 @@ export default {
           element: "#reward-guide",
           popover: {
             className: "reward-guide-class",
-            title: "Reward-hub",
+            title: "Reward Hub",
             description: `<div class="airdrop-content">
-                <div class="text"> Thank you for registering 4EVERLAND! </div>
-                <div class="mb-6 text">You have received the following free resource packages which will help you better experience 4EVERLAND service. For more free resources? Claim them now in Reward Hub!</div>
+                <div class=" mb-6 fz-14 lh-2">Thank You for Registering!
+                We have free resource packages for you in the Reward Hub!</div>
               <div class="row mt-2">
               <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="img/airDrop/ipfs.png" alt=""><span class="resource-item-value ml-2">25GB</span><span class="resource-text fz-12">IPFS Storage</span></div>
               </div>
@@ -198,28 +161,7 @@ export default {
           },
         },
       ],
-      items: [
-        {
-          name: "IPFS Storage",
-          value: "25GB",
-          icon: require("/public/img/airDrop/ipfs.png"),
-        },
-        {
-          name: "Arweave Storage",
-          value: "100MB",
-          icon: require("/public/img/airDrop/ar.png"),
-        },
-        {
-          name: "Build Minutes",
-          value: "100",
-          icon: require("/public/img/airDrop/minutes.png"),
-        },
-        {
-          name: "Recharge Balance",
-          value: "100",
-          icon: require("/public/img/airDrop/balance.png"),
-        },
-      ],
+
       stepCount: 0,
     };
   },
