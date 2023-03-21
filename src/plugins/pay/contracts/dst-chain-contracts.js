@@ -5,6 +5,7 @@ import {
   FundPool__factory,
   Governance__factory,
   ProviderController__factory,
+  ProviderControllerV2__factory,
   ProviderRegistry__factory,
   IERC20__factory,
   ResourcePriceAdaptor__factory,
@@ -56,7 +57,7 @@ class DstChainContracts extends Contracts {
   }
 
   get ProviderController() {
-    return ProviderController__factory.connect(
+    return ProviderControllerV2__factory.connect(
       MumbaiProviderController,
       this.signer
     );
