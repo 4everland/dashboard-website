@@ -10,7 +10,7 @@ import {
   BandwidthController__factory,
   BuildingTimeController__factory,
   IPFSStorageController__factory,
-  ProviderController__factory,
+  ProviderControllerV2__factory,
   SrcChainRecharge__factory,
 } from "@4everland/service-contracts";
 import { Bridge__factory } from "./sgn/contract/typechain";
@@ -62,7 +62,7 @@ class SrcChainContracts extends Contracts {
   }
 
   get ProviderController() {
-    return ProviderController__factory.connect(
+    return ProviderControllerV2__factory.connect(
       MumbaiProviderController,
       this.dstProvider
     );

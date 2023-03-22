@@ -32,6 +32,9 @@
 
 <script>
 import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
+import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
+import arbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-arbitrum";
+import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
 import { providers } from "ethers";
 
@@ -75,9 +78,8 @@ export default {
       //   method: "eth_requestAccounts",
       // });
       // console.log(account);
-      const provider = new providers.Web3Provider(window.ethereum);
-      polygonContract.setProvider(provider);
-      this.contract = polygonContract;
+      await this.getCurrentContract();
+
       if (!localStorage.token) return;
       try {
         const { data } = await this.$http.get(
@@ -86,7 +88,6 @@ export default {
 
         this.registerInfo = data;
         if (!data.handled) {
-          // console.log(providerAddr, data.uid, " is account Exists");
           const isExists = await this.contract.ProviderController.accountExists(
             providerAddr,
             data.uid
@@ -110,8 +111,8 @@ export default {
       try {
         this.loading = true;
         await this.switchPolygon();
+        await this.getCurrentContract();
         const { sign, encode } = await this.getSignAddress();
-        await this.$sleep(2000);
         const tx = await this.contract.ProviderController.registerAndDrip(
           providerAddr,
           this.registerInfo.wallet,
@@ -146,6 +147,27 @@ export default {
     async registerSuccess() {
       try {
         await this.$http.post("$auth/self-handled-register", { txn: "" });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getCurrentContract() {
+      try {
+        const provider = new providers.Web3Provider(window.ethereum);
+        const { chainId } = await provider.getNetwork();
+        if (chainId == 80001 || chainId == 137) {
+          polygonContract.setProvider(provider);
+          this.contract = polygonContract;
+        } else if (chainId == 97 || chainId == 56) {
+          bscContract.setProvider(provider);
+          this.contract = bscContract;
+        } else if (chainId == 42161) {
+          arbitrumContract.setProvider(provider);
+          this.contract = arbitrumContract;
+        } else {
+          ethContract.setProvider(provider);
+          this.contract = ethContract;
+        }
       } catch (error) {
         console.log(error);
       }
