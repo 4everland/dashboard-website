@@ -71,9 +71,10 @@ export default {
   },
   methods: {
     async isRegister() {
-      // await window.ethereum.request({
+      // const account = await window.ethereum.request({
       //   method: "eth_requestAccounts",
       // });
+      // console.log(account);
       const provider = new providers.Web3Provider(window.ethereum);
       polygonContract.setProvider(provider);
       this.contract = polygonContract;
@@ -85,6 +86,7 @@ export default {
 
         this.registerInfo = data;
         if (!data.handled) {
+          // console.log(providerAddr, data.uid, " is account Exists");
           const isExists = await this.contract.ProviderController.accountExists(
             providerAddr,
             data.uid
@@ -98,10 +100,10 @@ export default {
             return;
           }
         }
-        this.showClaim = !data.handled;
       } catch (error) {
         console.log(error, "isRegister");
       }
+      this.showClaim = !this.registerInfo.handled;
     },
 
     async handleClaim() {
