@@ -100,10 +100,10 @@ export default {
             return;
           }
         }
+        this.showClaim = !this.registerInfo.handled;
       } catch (error) {
         console.log(error, "isRegister");
       }
-      this.showClaim = !this.registerInfo.handled;
     },
 
     async handleClaim() {
