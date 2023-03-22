@@ -26,6 +26,7 @@
             <router-view></router-view>
           </e-wrap>
         </div>
+        <e-claim @onUserGuide="getNewUser"></e-claim>
         <e-guide ref="guide" />
       </v-main>
     </template>
@@ -71,23 +72,39 @@ export default {
   async mounted() {
     const token = localStorage.token;
     if (!token) return;
-    await this.getNewUser();
-    if (this.newUserData && this.showGuide) {
-      if (this.$route.path != "/overview" && this.$route.path != "/") {
-        this.$router.replace("/");
-      }
-      setTimeout(() => {
-        this.$refs.guide.guide();
-      }, 2000);
-    }
   },
   methods: {
+    // async getNewUser() {
+    //   try {
+    //     const data = await airdropRequest();
+    //     if (data) {
+    //       this.newUserData = data;
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+
     async getNewUser() {
       try {
-        const data = await airdropRequest();
-        if (data) {
-          this.newUserData = data;
+        // const data = await airdropRequest();
+        // if (data && this.showGuide) {
+        //   if (this.$route.path != "/overview" && this.$route.path != "/") {
+        //     this.$router.replace("/");
+        //   }
+        //   setTimeout(() => {
+        //     this.$refs.guide.guide();
+        //   }, 2000);
+        // }
+        if (this.$route.path != "/overview" && this.$route.path != "/") {
+          this.$router.replace("/");
         }
+        setTimeout(() => {
+          this.$refs.guide.guide();
+        }, 1000);
+        // setTimeout(() => {
+        //   this.$refs.guide.guide();
+        // }, 1000);
       } catch (error) {
         console.log(error);
       }
