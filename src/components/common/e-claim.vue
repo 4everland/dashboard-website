@@ -78,10 +78,6 @@ export default {
   },
   methods: {
     async isRegister() {
-      // const account = await window.ethereum.request({
-      //   method: "eth_requestAccounts",
-      // });
-      // console.log(account);
       await this.getCurrentContract();
 
       if (!localStorage.token) return;
@@ -92,10 +88,15 @@ export default {
 
         this.registerInfo = data;
         if (!data.handled) {
+          const account = await window.ethereum.request({
+            method: "eth_requestAccounts",
+          });
+          console.log(account);
           const isExists = await this.contract.ProviderController.accountExists(
             providerAddr,
             data.uid
           );
+          console.log(isExists);
           if (isExists) {
             // euid exist  over
             console.log("register success");
@@ -119,7 +120,6 @@ export default {
         const { sign, encode } = await this.getSignAddress();
         const tx = await this.contract.ProviderController.registerAndDrip(
           providerAddr,
-          this.registerInfo.wallet,
           this.registerInfo.uid,
           encode,
           sign
