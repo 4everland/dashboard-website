@@ -100,10 +100,10 @@ export default {
             return;
           }
         }
-        this.showClaim = !this.registerInfo.handled;
       } catch (error) {
         console.log(error, "isRegister");
       }
+      this.showClaim = !this.registerInfo.handled;
     },
 
     async handleClaim() {
@@ -111,6 +111,7 @@ export default {
         this.loading = true;
         await this.switchPolygon();
         const { sign, encode } = await this.getSignAddress();
+        await this.$sleep(2000);
         const tx = await this.contract.ProviderController.registerAndDrip(
           providerAddr,
           this.registerInfo.wallet,

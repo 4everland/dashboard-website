@@ -4,19 +4,31 @@
     <v-container>
       <v-row>
         <v-col cols="12" class="ma-auto">
-          <div class="text-center text-h3 font-bold font-weight-bold ma-16" style="color: #495667">
+          <div
+            class="text-center text-h3 font-bold font-weight-bold ma-16"
+            style="color: #495667"
+          >
             Login to 4EVERLAND
           </div>
 
           <div class="wallet">
-            <div class="font-weight-bold text-Subtitle-1 mb-4 ml-1" style="color: #495667">
+            <div
+              class="font-weight-bold text-Subtitle-1 mb-4 ml-1"
+              style="color: #495667"
+            >
               Connect your wallet
             </div>
             <login-wallet ref="wallet" @walletVerify="onVerify"></login-wallet>
             <!-- <div class="line"></div> -->
-            <v-btn block :elevation="0" class="github-btn" @click="onVerify('github')">
+            <v-btn
+              block
+              :elevation="0"
+              class="github-btn"
+              @click="onVerify('github')"
+            >
               <v-icon class="mr-4"> mdi-github </v-icon>
-              Continue with GitHub</v-btn>
+              Continue with GitHub</v-btn
+            >
           </div>
         </v-col>
       </v-row>
@@ -27,8 +39,11 @@
           Github has been disabled for new users, please login with your wallet
           instead.
         </div>
-        <v-btn class="start-btn text-subtitle-1 font-weight-black px-10 white--text"
-          @click="gitOverlay = false">OK</v-btn>
+        <v-btn
+          class="start-btn text-subtitle-1 font-weight-black px-10 white--text"
+          @click="gitOverlay = false"
+          >OK</v-btn
+        >
       </div>
     </v-dialog>
     <v-dialog v-model="lockOverlay" width="500">
@@ -36,8 +51,11 @@
         <div class="text-caption grey--text text--darken-2 mb-7">
           Metamask is locked, please open the extension before continuing.
         </div>
-        <v-btn class="start-btn text-subtitle-1 font-weight-black px-10 white--text"
-          @click="lockOverlay = false">RETRY</v-btn>
+        <v-btn
+          class="start-btn text-subtitle-1 font-weight-black px-10 white--text"
+          @click="lockOverlay = false"
+          >RETRY</v-btn
+        >
       </div>
     </v-dialog>
     <div id="grecaptcha" data-callback="onSubmit" data-size="invisible"></div>
@@ -62,8 +80,7 @@ export default {
       accounts: "",
       inviteCode: null,
       dialogShow: false,
-      sitekey: "6LdPnxclAAAAACTzYeZDztp3dcCKFUIG_5r313JV"
-
+      sitekey: "6LdPnxclAAAAACTzYeZDztp3dcCKFUIG_5r313JV",
     };
   },
   created() {
@@ -82,8 +99,7 @@ export default {
     if (code) {
       this.getAuth(code);
     }
-    this.loaded()
-
+    this.loaded();
   },
   methods: {
     async onLogin(token) {
@@ -94,7 +110,7 @@ export default {
           appName: "BUCKET",
           entrance: 2,
           inviteCode: this.inviteCode,
-          capT: token
+          capT: token,
         };
         const { data } = await this.$axios.get(`${authApi}/login`, {
           params,
@@ -141,25 +157,25 @@ export default {
       }
     },
     onVerify(name) {
-      this.walletName = name
+      this.walletName = name;
       window.grecaptcha.execute();
     },
     submit(token) {
-      if (this.walletName == 'github') {
-        this.onLogin(token)
+      if (this.walletName == "github") {
+        this.onLogin(token);
       } else {
-        this.$refs.wallet.connect(this.walletName, token)
-        window.grecaptcha.reset()
+        this.$refs.wallet.connect(this.walletName, token);
       }
+      window.grecaptcha.reset();
     },
     loaded() {
       setTimeout(() => {
         window.grecaptcha.render("grecaptcha", {
           sitekey: this.sitekey,
-          callback: this.submit
+          callback: this.submit,
         });
       }, 200);
-    }
+    },
   },
 };
 </script>
