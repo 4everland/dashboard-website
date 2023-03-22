@@ -102,7 +102,7 @@ export default {
         this.$loading.close();
       }
     },
-    connect(name,token) {
+    connect(name, token) {
       this.capToken = token;
 
       switch (name) {
@@ -134,7 +134,7 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignMetaMask(accounts[0], nonce, this.inviteCode,this.capToken);
+      const stoken = await SignMetaMask(accounts[0], nonce, this.inviteCode, this.capToken);
       if (stoken) {
         this.ssoLogin(stoken);
       }
@@ -148,7 +148,7 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignOkx(accounts[0], nonce, this.inviteCode,this.capToken);
+      const stoken = await SignOkx(accounts[0], nonce, this.inviteCode, this.capToken);
       if (stoken) {
         this.ssoLogin(stoken);
       }
@@ -162,7 +162,7 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignPhantom(publicKey, nonce, this.inviteCode,this.capToken);
+      const stoken = await SignPhantom(publicKey, nonce, this.inviteCode, this.capToken);
       if (stoken) {
         this.ssoLogin(stoken);
       }
@@ -178,7 +178,7 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignFlow(currentUser.addr, nonce, this.inviteCode,this.capToken);
+      const stoken = await SignFlow(currentUser.addr, nonce, this.inviteCode, this.capToken);
       if (stoken) {
         this.ssoLogin(stoken);
       }
@@ -192,13 +192,13 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignPetra(account, nonce, this.inviteCode,this.capToken);
+      const stoken = await SignPetra(account, nonce, this.inviteCode, this.capToken);
       if (stoken) {
         this.ssoLogin(stoken);
       }
     },
-    onVerify(name){
-      this.$emit('walletVerify',name)
+    onVerify(name) {
+      this.$emit('walletVerify', name)
     }
   },
 };

@@ -149,6 +149,7 @@ export default {
         this.onLogin(token)
       } else {
         this.$refs.wallet.connect(this.walletName, token)
+        window.grecaptcha.reset()
       }
     },
     loaded() {
