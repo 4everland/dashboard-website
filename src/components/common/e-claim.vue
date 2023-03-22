@@ -17,9 +17,13 @@
           </v-col>
         </v-row>
         <div class="d-flex justify-center mt-8">
+          <v-btn color="primary" outlined @click="onCancel" min-width="200">
+            Cancel
+          </v-btn>
           <v-btn
             color="primary"
             min-width="200"
+            class="ml-4"
             @click="handleClaim"
             :loading="loading"
             >Claim</v-btn
@@ -171,6 +175,10 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    onCancel() {
+      this.$clearLogin();
+      location.href = this.$getLoginUrl();
     },
     getChainId(type) {
       if (type == "Polygon") return this.$inDev ? 80001 : 137;
