@@ -252,6 +252,10 @@ export default {
         it.desc = `Reset the Access Key`;
         it.path = "4EVER Pin";
         it.link = "/bucket/pinning-service";
+      } else if (act == "PINNING_SERVICE_GENERATE_ACCESS_KEY") {
+        it.desc = `Generate an Access Key`;
+        it.path = "4EVER Pin";
+        it.link = "/bucket/pinning-service";
       } else {
         console.log(act, it);
         it.desc = act;
