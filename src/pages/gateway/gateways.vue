@@ -114,10 +114,10 @@ export default {
   computed: {
     ...mapGetters(["teamInfo"]),
     isLock() {
-      return this.balance < 100 && !this.list.length;
+      return this.balance < 99 && !this.list.length;
     },
     isInsufficient() {
-      return this.balance < 100 && (this.list.length ? true : false);
+      return this.balance < 99 && (this.list.length ? true : false);
     },
     gatewayType() {
       return function (type) {
