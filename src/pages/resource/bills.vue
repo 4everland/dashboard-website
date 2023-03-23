@@ -326,9 +326,7 @@ export default {
               "" +
               resourceType.unit +
               " " +
-              resourceType.name +
-              " " +
-              (resourceType.until ?? "");
+              resourceType.name;
             it.status = "Success";
             return it;
           });
