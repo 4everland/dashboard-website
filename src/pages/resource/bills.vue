@@ -202,6 +202,10 @@ export default {
           text: "CreateAt",
           value: "time",
         },
+        {
+          text: "Status",
+          value: "status",
+        },
       ];
     },
     requestApi() {
@@ -219,7 +223,6 @@ export default {
     },
   },
   created() {
-    console.log(this.$route.query);
     const { typeIdx = 0 } = this.$route.query;
     this.typeIdx = typeIdx * 1;
   },
@@ -315,19 +318,18 @@ export default {
                 );
               }
             }
-            console.log(resourceType);
-
             it.seq = i + 1;
             it.time = new Date(it.createdAt * 1e3).format();
             it.amount = "0.00";
             it.resource =
               resourceType.amount +
-                "" +
-                resourceType.unit +
-                " " +
-                resourceType.name +
-                " " +
-                resourceType.until ?? "";
+              "" +
+              resourceType.unit +
+              " " +
+              resourceType.name +
+              " " +
+              (resourceType.until ?? "");
+            it.status = "Success";
             return it;
           });
         }

@@ -70,6 +70,8 @@ export default {
             new Date(resourceRecord["IPFS_EFFECTIVE_TIME"] * 1000).format(
               "date"
             );
+        } else {
+          resource.time = "--";
         }
         resource.type = key;
         const row = this.$utils.getPurchase(resource.type, resource.amount);
@@ -112,12 +114,11 @@ export default {
         const { id } = this.$route.query;
         const { data } = await this.$http.get("$v3/airdrop/" + id);
         data.time = new Date(data.createdAt * 1000).format();
-        data.cost = this.$utils.getCost(0);
+        data.cost = "0.00";
         data.voucherInfo * 1 > 0
           ? (data.voucherInfo = (data.voucherInfo * 1).toFixed(2))
           : (data.voucherInfo = null);
         data.status = "Success";
-        console.log(data);
         // this.setData(data);
         this.info = data;
       } catch (error) {
