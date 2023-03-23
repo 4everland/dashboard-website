@@ -27,10 +27,10 @@ export default {
             text: "Account Binding",
             comp: "account-binding",
           },
-          {
-            text: "General",
-            comp: "account-general",
-          },
+          // {
+          //   text: "General",
+          //   comp: "account-general",
+          // },
         ];
       if (this.hasAccess) {
         return [
