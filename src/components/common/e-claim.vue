@@ -88,10 +88,10 @@ export default {
 
         this.registerInfo = data;
         if (!data.handled) {
-          const account = await window.ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          console.log(account);
+          // const account = await window.ethereum.request({
+          //   method: "eth_requestAccounts",
+          // });
+          // console.log(account);
           const isExists = await this.contract.ProviderController.accountExists(
             providerAddr,
             data.uid
