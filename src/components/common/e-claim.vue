@@ -252,7 +252,7 @@ export default {
           // notify server
         } else {
           throw new Error(
-            "Your zkSync  does't  have enough ETH, please recharge it."
+            "Your zkSync  account does't  have enough ETH, please recharge it."
           );
         }
       } catch (error) {
