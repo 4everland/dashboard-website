@@ -72,8 +72,9 @@ import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
 import arbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-arbitrum";
 import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
-import { providers } from "ethers";
-import zksync from "zksync";
+import { BigNumber, providers } from "ethers";
+import axios from "axios";
+import * as zksync from "zksync";
 export default {
   data() {
     return {
@@ -103,10 +104,21 @@ export default {
       registerInfo: {},
       loading: false,
       contract: null,
+      provider: null,
+      collectionAddress: "",
+      zkSyncfee: BigNumber.from("10000000000000"),
     };
   },
-  created() {
-    this.isRegister();
+  async created() {
+    const register = await this.isRegister();
+    console.log(register);
+    if (!register) {
+      const records = await this.searchZySyncRecord();
+      if (records.length) {
+        this.showClaim = false;
+        this.$emit("onUserGuide");
+      }
+    }
   },
   methods: {
     async isRegister() {
@@ -120,28 +132,26 @@ export default {
 
         this.registerInfo = data;
         if (!data.handled) {
-          // const account = await window.ethereum.request({
-          //   method: "eth_requestAccounts",
-          // });
-          // console.log(account);
           const isExists = await this.contract.ProviderController.accountExists(
             providerAddr,
             data.uid
           );
           console.log(isExists);
+
           if (isExists) {
             // euid exist  over
             console.log("register success");
             await this.registerSuccess();
             this.showClaim = false;
             this.$emit("onUserGuide");
-            return;
+            return true;
           }
         }
       } catch (error) {
         console.log(error, "isRegister");
       }
       this.showClaim = !this.registerInfo.handled;
+      return false;
     },
 
     async handleClaim() {
@@ -171,17 +181,28 @@ export default {
 
     async handleZySyncClaim() {
       try {
+        // check main eth
+        // this.switchEth();
+
         const zkprovider = await zksync.getDefaultProvider("mainnet");
         // eth signer
-        const signer = this.provider.getSigner();
+        const signer = this.contract.provider.getSigner();
+        const walletAddress = await signer.getAddress();
+
+        if (walletAddress.toLowerCase() != this.registerInfo.wallet) return;
+
         const wallet = await zksync.Wallet.fromEthSigner(signer, zkprovider);
         const accountState = await wallet.getAccountState();
-        if (accountState) {
+        console.log(accountState);
+
+        if (accountState.id) {
           const isSigningKeySet = await wallet.isSigningKeySet();
           console.log("isSigningKeySet", isSigningKeySet);
           if (!isSigningKeySet) {
+            const onchainAuthTransaction = await wallet.onchainAuthSigningKey();
+            await onchainAuthTransaction.wait();
             const changeKeyTx = await wallet.setSigningKey({
-              feeToken: "0x0000000000000000000000000000000000000000",
+              feeToken: "ETH",
               ethAuthType: "ECDSA",
             });
             console.log("setSigningKey", changeKeyTx);
@@ -193,7 +214,7 @@ export default {
             accountState.committed.balances["ETH"] || "0"
           );
           // 4everland zksync lite payment fee
-          const fee = BigNumber.from((1e18).toString()).div(100000);
+          const fee = this.zkSyncfee;
           if (!balance.gt(fee)) {
             throw "insufficient balance";
           }
@@ -205,14 +226,44 @@ export default {
             amount: fee,
           });
           console.log("tx", tx);
+          console.log(tx.txHash);
           const receipt = await tx.awaitVerifyReceipt();
           console.log("receipt", receipt);
+          const records = await this.searchZySyncRecord();
+          if (records.length) {
+            this.showClaim = false;
+            this.$emit("onUserGuide");
+          }
           // notify server
         } else {
           throw "no zksync lite account";
         }
       } catch (error) {
         console.log(error);
+      }
+    },
+    async searchZySyncRecord() {
+      try {
+        const { data } = await axios.get(
+          `https://api.zksync.io/api/v0.2/accounts/${this.registerInfo.wallet}/transactions?from=latest&limit=100&direction=older`
+        );
+        const { result } = data;
+        const records = result.list.filter((it) => {
+          return (
+            it.status == "finalized" &&
+            it.op.from.toLowerCase() ==
+              this.registerInfo.wallet.toLowerCase() &&
+            it.op.to.toLowerCase() == this.collectionAddress.toLowerCase() &&
+            it.op.type == "Transfer" &&
+            BigNumber.from(it.op.amount).gte(this.zkSyncfee)
+          );
+        });
+        if (records.length) {
+          this.registerSuccess(records[0].txHash);
+        }
+        return records;
+      } catch (error) {
+        console.log(errro);
       }
     },
     // get sign && encode(payload)
@@ -267,6 +318,11 @@ export default {
     },
     async switchPolygon() {
       const payBy = (localStorage.payBy = "Polygon");
+      const id = this.getChainId(payBy);
+      await this.switchNet(id);
+    },
+    async switchEth() {
+      const payBy = (localStorage.payBy = "");
       const id = this.getChainId(payBy);
       await this.switchNet(id);
     },
