@@ -21,42 +21,51 @@
             color="primary"
             outlined
             @click="onCancel"
-            min-width="130"
+            width="200"
             class="mr-4"
           >
             Cancel
           </v-btn>
 
           <e-menu open-on-hover offset-y>
-            <v-btn slot="ref" color="primary" dark>
-              <img src="/img/svg/add1.svg" width="12" />
+            <v-btn slot="ref" color="primary" dark width="200px">
               <span class="ml-2">Claim</span>
               <v-icon>mdi-chevron-down</v-icon>
             </v-btn>
             <v-list>
-              <!-- <v-list-item
-              v-for="(text, i) in projectTypeArr"
-              :key="i"
-              @click="onCreate(i)"
-            >
-              <v-list-item-title class="fz-15">{{ text }}</v-list-item-title>
-            </v-list-item> -->
-
               <v-list-item link @click="handleClaim">
-                <v-list-item-title class="fz-14"
-                  >Ploygon Claim</v-list-item-title
-                >
-                <!-- <v-btn color="primary" @click="handleClaim" :loading="loading"
-                  >Claim</v-btn
-                > -->
+                <v-list-item-title class="fz-14 al-c">
+                  <img
+                    src="/img/svg/billing/ic-polygon-0.svg"
+                    width="18"
+                    alt=""
+                  />
+                  <span class="ml-3">Ploygon Claim</span>
+                </v-list-item-title>
               </v-list-item>
               <v-list-item link @click="handleZySyncClaim">
-                <v-list-item-title class="fz-14"
-                  >zkSync Claim</v-list-item-title
-                >
-                <!-- <v-btn color="primary" @click="handleClaim" :loading="loading"
-                  >Claim</v-btn
-                > -->
+                <v-list-item-title class="fz-14 al-c justify-space-between">
+                  <div class="al-c">
+                    <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
+                    <span class="ml-3">zkSync Lite(V1) Claim</span>
+                  </div>
+
+                  <e-tooltip right>
+                    <v-icon
+                      slot="ref"
+                      size="18"
+                      color="#333"
+                      class="pa-1 d-ib ml-2"
+                      >mdi-alert-circle-outline</v-icon
+                    >
+                    <span
+                      >Please ensure that you have sufficient ETH in zkSync
+                      Lite. Interaction with the zkSync network will rely on
+                      cross-chain communication services to complete on-chain
+                      identity registration on Polygon.</span
+                    >
+                  </e-tooltip>
+                </v-list-item-title>
               </v-list-item>
             </v-list>
           </e-menu>
@@ -72,9 +81,10 @@ import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
 import arbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-arbitrum";
 import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
-import { BigNumber, providers } from "ethers";
+import { BigNumber, providers, utils } from "ethers";
 import axios from "axios";
 import * as zksync from "zksync";
+
 export default {
   data() {
     return {
@@ -105,20 +115,22 @@ export default {
       loading: false,
       contract: null,
       provider: null,
-      collectionAddress: "",
-      zkSyncfee: BigNumber.from("10000000000000"),
+      collectionAddress: "0xb7b4360f7f6298de2e7a11009270f35f189bd77e",
+      zkSyncfee: BigNumber.from("40000000000000"),
+      timer: null,
     };
   },
   async created() {
-    const register = await this.isRegister();
-    console.log(register);
-    if (!register) {
-      const records = await this.searchZySyncRecord();
-      if (records.length) {
-        this.showClaim = false;
-        this.$emit("onUserGuide");
-      }
-    }
+    this.isRegister();
+
+    // const register = await this.isRegister();
+    // if (records.length) {
+    //   this.showClaim = false;
+    //   this.$emit("onUserGuide");
+    // }
+    this.timer = setInterval(() => {
+      this.isRegister();
+    }, 10000);
   },
   methods: {
     async isRegister() {
@@ -136,16 +148,20 @@ export default {
             providerAddr,
             data.uid
           );
+          const records = await this.searchZySyncRecord();
+          console.log(records);
           console.log(isExists);
-
-          if (isExists) {
+          if (isExists || records.length) {
             // euid exist  over
             console.log("register success");
-            await this.registerSuccess();
+            clearInterval(this.timer);
+            await this.registerSuccess(records[0].txHash);
             this.showClaim = false;
             this.$emit("onUserGuide");
             return true;
           }
+        } else {
+          clearInterval(this.timer);
         }
       } catch (error) {
         console.log(error, "isRegister");
@@ -156,7 +172,8 @@ export default {
 
     async handleClaim() {
       try {
-        this.loading = true;
+        this.$loading();
+
         await this.switchPolygon();
         await this.getCurrentContract();
         const { sign, encode } = await this.getSignAddress();
@@ -176,38 +193,34 @@ export default {
         // this.onErr(error);
         console.log(error);
       }
-      this.loading = false;
+      this.$loading.close();
     },
 
     async handleZySyncClaim() {
       try {
         // check main eth
-        // this.switchEth();
-
+        this.switchEth();
+        this.$loading();
         const zkprovider = await zksync.getDefaultProvider("mainnet");
         // eth signer
         const signer = this.contract.provider.getSigner();
         const walletAddress = await signer.getAddress();
-
         if (walletAddress.toLowerCase() != this.registerInfo.wallet) return;
-
         const wallet = await zksync.Wallet.fromEthSigner(signer, zkprovider);
         const accountState = await wallet.getAccountState();
         console.log(accountState);
-
         if (accountState.id) {
           const isSigningKeySet = await wallet.isSigningKeySet();
           console.log("isSigningKeySet", isSigningKeySet);
           if (!isSigningKeySet) {
-            const onchainAuthTransaction = await wallet.onchainAuthSigningKey();
-            await onchainAuthTransaction.wait();
             const changeKeyTx = await wallet.setSigningKey({
               feeToken: "ETH",
               ethAuthType: "ECDSA",
+              // fee: utils.parseEther("0.0006"),
             });
             console.log("setSigningKey", changeKeyTx);
-            const changeKeyTxReceipt = await changeKeyTx.awaitVerifyReceipt();
-            console.log(changeKeyTxReceipt);
+            const changeKeyTxReceipt = await changeKeyTx.awaitReceipt();
+            console.log("changeKeyTxReceipt", changeKeyTxReceipt);
           }
           console.log("accountState.committed", accountState.committed);
           const balance = BigNumber.from(
@@ -216,31 +229,35 @@ export default {
           // 4everland zksync lite payment fee
           const fee = this.zkSyncfee;
           if (!balance.gt(fee)) {
-            throw "insufficient balance";
+            throw new Error("insufficient balance");
           }
-          const zkwalletFor4Everland =
-            "0xF1658C608708172655A8e70a1624c29F956Ee63D";
+          const zkwalletFor4Everland = this.collectionAddress.toLowerCase();
           const tx = await wallet.syncTransfer({
             to: zkwalletFor4Everland,
-            token: "0x0000000000000000000000000000000000000000",
+            token: "ETH",
             amount: fee,
+            // fee: utils.parseEther("0.0003"),
           });
           console.log("tx", tx);
           console.log(tx.txHash);
-          const receipt = await tx.awaitVerifyReceipt();
+          const receipt = await tx.awaitReceipt();
           console.log("receipt", receipt);
           const records = await this.searchZySyncRecord();
+          this.$loading.close();
           if (records.length) {
+            await this.registerSuccess(records[0].txHash);
             this.showClaim = false;
             this.$emit("onUserGuide");
           }
           // notify server
         } else {
-          throw "no zksync lite account";
+          throw new Error("no zksync lite account");
         }
       } catch (error) {
         console.log(error);
+        this.onErr(error);
       }
+      this.$loading.close();
     },
     async searchZySyncRecord() {
       try {
@@ -248,22 +265,21 @@ export default {
           `https://api.zksync.io/api/v0.2/accounts/${this.registerInfo.wallet}/transactions?from=latest&limit=100&direction=older`
         );
         const { result } = data;
+        console.log(result, "record");
         const records = result.list.filter((it) => {
+          if (it.op.type != "Transfer") return false;
           return (
-            it.status == "finalized" &&
+            (it.status == "finalized" || it.status == "committed") &&
             it.op.from.toLowerCase() ==
               this.registerInfo.wallet.toLowerCase() &&
             it.op.to.toLowerCase() == this.collectionAddress.toLowerCase() &&
-            it.op.type == "Transfer" &&
             BigNumber.from(it.op.amount).gte(this.zkSyncfee)
           );
         });
-        if (records.length) {
-          this.registerSuccess(records[0].txHash);
-        }
+        console.log(records);
         return records;
       } catch (error) {
-        console.log(errro);
+        console.log(error);
       }
     },
     // get sign && encode(payload)
@@ -278,9 +294,11 @@ export default {
       }
     },
     // request for account exist
-    async registerSuccess() {
+    async registerSuccess(txh) {
       try {
-        await this.$http.post("$auth/self-handled-register", { txn: "" });
+        await this.$http.post("$auth/self-handled-register", {
+          txn: txh ?? "",
+        });
       } catch (error) {
         console.log(error);
       }
