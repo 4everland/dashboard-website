@@ -251,7 +251,9 @@ export default {
           }
           // notify server
         } else {
-          throw new Error("no zksync lite account");
+          throw new Error(
+            "Your zkSync  does't  have enough ETH, please recharge it."
+          );
         }
       } catch (error) {
         console.log(error);
