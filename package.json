@@ -46,7 +46,8 @@
     "vue-virtual-scroller": "^1.0.10",
     "vuetify": "^2.6.1",
     "vuex": "^3.6.2",
-    "web3": "^1.7.1"
+    "web3": "^1.7.1",
+    "zksync": "^0.13.1"
   },
   "devDependencies": {
     "@ensdomains/content-hash": "^2.5.7",

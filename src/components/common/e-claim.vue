@@ -17,17 +17,49 @@
           </v-col>
         </v-row>
         <div class="d-flex justify-center mt-8">
-          <v-btn color="primary" outlined @click="onCancel" min-width="200">
-            Cancel
-          </v-btn>
           <v-btn
             color="primary"
-            min-width="200"
-            class="ml-4"
-            @click="handleClaim"
-            :loading="loading"
-            >Claim</v-btn
+            outlined
+            @click="onCancel"
+            min-width="130"
+            class="mr-4"
           >
+            Cancel
+          </v-btn>
+
+          <e-menu open-on-hover offset-y>
+            <v-btn slot="ref" color="primary" dark>
+              <img src="/img/svg/add1.svg" width="12" />
+              <span class="ml-2">Claim</span>
+              <v-icon>mdi-chevron-down</v-icon>
+            </v-btn>
+            <v-list>
+              <!-- <v-list-item
+              v-for="(text, i) in projectTypeArr"
+              :key="i"
+              @click="onCreate(i)"
+            >
+              <v-list-item-title class="fz-15">{{ text }}</v-list-item-title>
+            </v-list-item> -->
+
+              <v-list-item link @click="handleClaim">
+                <v-list-item-title class="fz-14"
+                  >Ploygon Claim</v-list-item-title
+                >
+                <!-- <v-btn color="primary" @click="handleClaim" :loading="loading"
+                  >Claim</v-btn
+                > -->
+              </v-list-item>
+              <v-list-item link @click="handleZySyncClaim">
+                <v-list-item-title class="fz-14"
+                  >zkSync Claim</v-list-item-title
+                >
+                <!-- <v-btn color="primary" @click="handleClaim" :loading="loading"
+                  >Claim</v-btn
+                > -->
+              </v-list-item>
+            </v-list>
+          </e-menu>
         </div>
       </div>
     </v-dialog>
@@ -41,7 +73,7 @@ import arbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-ar
 import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
 import { providers } from "ethers";
-
+import zksync from "zksync";
 export default {
   data() {
     return {
@@ -135,6 +167,53 @@ export default {
         console.log(error);
       }
       this.loading = false;
+    },
+
+    async handleZySyncClaim() {
+      try {
+        const zkprovider = await zksync.getDefaultProvider("mainnet");
+        // eth signer
+        const signer = this.provider.getSigner();
+        const wallet = await zksync.Wallet.fromEthSigner(signer, zkprovider);
+        const accountState = await wallet.getAccountState();
+        if (accountState) {
+          const isSigningKeySet = await wallet.isSigningKeySet();
+          console.log("isSigningKeySet", isSigningKeySet);
+          if (!isSigningKeySet) {
+            const changeKeyTx = await wallet.setSigningKey({
+              feeToken: "0x0000000000000000000000000000000000000000",
+              ethAuthType: "ECDSA",
+            });
+            console.log("setSigningKey", changeKeyTx);
+            const changeKeyTxReceipt = await changeKeyTx.awaitVerifyReceipt();
+            console.log(changeKeyTxReceipt);
+          }
+          console.log("accountState.committed", accountState.committed);
+          const balance = BigNumber.from(
+            accountState.committed.balances["ETH"] || "0"
+          );
+          // 4everland zksync lite payment fee
+          const fee = BigNumber.from((1e18).toString()).div(100000);
+          if (!balance.gt(fee)) {
+            throw "insufficient balance";
+          }
+          const zkwalletFor4Everland =
+            "0xF1658C608708172655A8e70a1624c29F956Ee63D";
+          const tx = await wallet.syncTransfer({
+            to: zkwalletFor4Everland,
+            token: "0x0000000000000000000000000000000000000000",
+            amount: fee,
+          });
+          console.log("tx", tx);
+          const receipt = await tx.awaitVerifyReceipt();
+          console.log("receipt", receipt);
+          // notify server
+        } else {
+          throw "no zksync lite account";
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     // get sign && encode(payload)
     async getSignAddress() {
