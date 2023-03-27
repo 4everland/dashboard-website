@@ -173,12 +173,13 @@ export default {
         const { data: sign } = await this.$http.post(
           "$v3/common/sign/" + this.connectAddr
         );
-        console.log(sign);
+        // console.log(sign);
         params.splice(2, 0, sign);
         const gasLimit =
           await this.curContract.FundPool.estimateGas.initWalletAndWithdraw(
             ...params
           );
+        console.log("initWalletAndWithdraw", params);
         tx = await this.curContract.FundPool.initWalletAndWithdraw(...params, {
           gasLimit: gasLimit.mul(15).div(10),
         });
