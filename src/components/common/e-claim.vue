@@ -215,7 +215,8 @@ export default {
           if (!isSigningKeySet) {
             const changeKeyTx = await wallet.setSigningKey({
               feeToken: "ETH",
-              ethAuthType: "ECDSA",
+              // ethAuthType: "ECDSA",
+              ethAuthType: "ECDSALegacyMessage",
               // fee: utils.parseEther("0.0006"),
             });
             console.log("setSigningKey", changeKeyTx);
