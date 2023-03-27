@@ -149,6 +149,9 @@ export default {
       if (/repriced/i.test(msg) && /replaced/i.test(msg)) {
         return this.$toast("Transaction was replaced.");
       }
+      window.gtag("event", "contract_error", {
+        message: msg,
+      });
       if (/missing revert data/i.test(msg)) {
         msg = "Network Error";
       } else if (/transaction failed/i.test(msg)) {
