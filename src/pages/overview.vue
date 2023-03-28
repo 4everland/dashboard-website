@@ -41,8 +41,9 @@
       </div>
       <e-right-opt-wrap v-if="!teamInfo.isMember">
         <v-btn class="mr-5" color="primary" to="/bucket/storage/?new=bucket">
-          <span class="fz-18">+</span>
-          <span class="ml-1"> New Bucket </span>
+          <!-- <span class="fz-18">+</span> -->
+          <img src="/img/svg/add-circle.svg" width="14" alt="" />
+          <span class="ml-2"> New Bucket </span>
         </v-btn>
         <!-- <v-btn color="primary" class="ml-5" to="/hosting/new">
           <span class="fz-18">+</span>
