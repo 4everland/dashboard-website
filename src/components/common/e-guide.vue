@@ -3,7 +3,13 @@
     <v-dialog v-model="showDialog" max-width="700" persistent>
       <div class="reward-hub-content pos-r">
         <h3>Thank You for Registering!</h3>
-        <v-icon size="18" class="pos-a">mdi-close</v-icon>
+        <v-icon
+          size="18"
+          class="cursor-p"
+          @click="showDialog = false"
+          style="position: absolute; top: 30px; right: 30px"
+          >mdi-close</v-icon
+        >
         <div class="mt-4 fz-14 lh-2">
           4EVERLAND offers free resource packages that help you better
           experience its services. Claim them now.
