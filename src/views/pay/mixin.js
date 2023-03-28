@@ -164,6 +164,9 @@ export default {
         const mat = /^(.+)\[/.exec(msg);
         if (mat) msg = mat[1];
       }
+      if (/already pending for origin/gi.test(msg)) {
+        msg = "Wrong network, please switch your wallet network and try again.";
+      }
       if (retry) {
         return this.$confirm(msg, "Network Error", {
           confirmText: "Retry",

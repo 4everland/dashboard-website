@@ -8,15 +8,23 @@
       />
     </div>
     <div class="main-wrap">
-      <div class="al-c mb-10">
+      <div class="al-c mb-4">
         <span class="fw-b mr-2 fz-20">Ways for Reward</span>
-        <e-tooltip top>
-          <v-icon slot="ref" color="#6C7789" size="16">mdi-alert-circle</v-icon>
-          <span
-            >Getting free resources by completing the following tasks and
-            resources are valid for one year after completion of tasks.</span
-          >
-        </e-tooltip>
+        <v-btn
+          class="ml-auto"
+          small
+          color="primary"
+          @click="$router.push('/resource/bills?typeIdx=2')"
+          >Transaction</v-btn
+        >
+      </div>
+      <div class="py-3 px-4 mb-4 tips">
+        <v-icon size="20">mdi-alert-decagram-outline</v-icon>
+        <span class="ml-4 fz-14"
+          >More free resources can be obtained by completing the following
+          tasks. Please note that the validity period of IPFS resources is
+          December 31, 2023.</span
+        >
       </div>
       <v-row v-if="list.length">
         <template v-for="item in list">
@@ -266,6 +274,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.tips {
+  border: 1px solid #d0dae9;
+  border-radius: 10px;
+  color: gray;
+}
 .reward-task {
   position: relative;
   height: 116px;

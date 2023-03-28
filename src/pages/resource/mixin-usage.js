@@ -68,17 +68,31 @@ export default {
       const info = this.usageInfo;
       if (name == "band") {
         return this.getPerc(
-          info.usedFreeBandwidth + info.usedPurchasedBandwidth,
-          info.freeBandwidth + info.purchasedBandwidth
+          info.airdropUseTraffic +
+            info.usedFreeBandwidth +
+            info.usedPurchasedBandwidth,
+          info.airdropTraffic + info.freeBandwidth + info.purchasedBandwidth
         );
       } else if (name == "ipfs") {
-        return this.getPerc(info.usedIpfsStorage, info.ipfsStorage);
+        return this.getPerc(
+          info.airdropUseIpfsStorage + info.usedIpfsStorage,
+          info.airdropIpfsStorage + info.ipfsStorage
+        );
       } else if (name == "ar") {
-        return this.getPerc(info.usedArStorage, info.arStorage);
+        return this.getPerc(
+          info.airdropUseArStorage + info.usedArStorage,
+          info.airdropArStorage + info.arStorage
+        );
       } else if (name == "time") {
         return this.getPerc(
-          parseInt(info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes),
-          info.freeBuildMinutes + info.purchasedBuildMinutes,
+          parseInt(
+            info.airdropUseBuildMinutes +
+              info.usedFreeBuildMinutes +
+              info.usedPurchasedBuildMinutes
+          ),
+          info.airdropBuildMinutes +
+            info.freeBuildMinutes +
+            info.purchasedBuildMinutes,
           "Minutes"
         );
       }
