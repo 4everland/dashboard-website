@@ -26,7 +26,7 @@
         <div class="d-flex justify-center mt-8">
           <e-menu open-on-hover offset-y>
             <v-btn slot="ref" color="primary" dark width="500px">
-              <span class="ml-2">Claim</span>
+              <span class="ml-2">Upgrade now</span>
               <v-icon>mdi-chevron-down</v-icon>
             </v-btn>
             <v-list>

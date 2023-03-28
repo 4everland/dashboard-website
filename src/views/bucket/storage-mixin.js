@@ -473,7 +473,6 @@ export default {
         if (this.hasMore && direction !== "pre" && !isExist) {
           this.continuationTokenArr.push(data.nextContinuationToken);
         }
-        console.log(Prefix);
         let list = data.objects
           .filter((it) => {
             return it.name != Prefix;
