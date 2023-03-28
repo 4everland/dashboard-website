@@ -26,7 +26,7 @@
             <router-view></router-view>
           </e-wrap>
         </div>
-        <e-claim @onUserGuide="getNewUser"></e-claim>
+        <!-- <e-claim @onUserGuide="getNewUser"></e-claim> -->
         <e-guide ref="guide" />
       </v-main>
     </template>
@@ -44,7 +44,6 @@ export default {
   data() {
     return {
       loadedCount: 0,
-      newUserData: null,
     };
   },
   computed: {
@@ -69,22 +68,12 @@ export default {
     },
   },
 
-  async mounted() {
+  mounted() {
     const token = localStorage.token;
     if (!token) return;
+    this.getNewUser();
   },
   methods: {
-    // async getNewUser() {
-    //   try {
-    //     const data = await airdropRequest();
-    //     if (data) {
-    //       this.newUserData = data;
-    //     }
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
-
     async getNewUser() {
       try {
         // const data = await airdropRequest();
@@ -96,19 +85,38 @@ export default {
         //     this.$refs.guide.guide();
         //   }, 2000);
         // }
-        if (this.$route.path != "/overview" && this.$route.path != "/") {
-          this.$router.replace("/");
-        }
         setTimeout(() => {
           this.$refs.guide.guide();
-        }, 1000);
-        // setTimeout(() => {
-        //   this.$refs.guide.guide();
-        // }, 1000);
+        }, 2000);
       } catch (error) {
         console.log(error);
       }
     },
+
+    // async getNewUser() {
+    //   try {
+    //     // const data = await airdropRequest();
+    //     // if (data && this.showGuide) {
+    //     //   if (this.$route.path != "/overview" && this.$route.path != "/") {
+    //     //     this.$router.replace("/");
+    //     //   }
+    //     //   setTimeout(() => {
+    //     //     this.$refs.guide.guide();
+    //     //   }, 2000);
+    //     // }
+    //     if (this.$route.path != "/overview" && this.$route.path != "/") {
+    //       this.$router.replace("/");
+    //     }
+    //     setTimeout(() => {
+    //       this.$refs.guide.guide();
+    //     }, 1000);
+    //     // setTimeout(() => {
+    //     //   this.$refs.guide.guide();
+    //     // }, 1000);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
   },
 };
 </script>
