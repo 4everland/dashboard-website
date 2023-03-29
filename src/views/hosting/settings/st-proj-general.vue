@@ -150,7 +150,7 @@
     </div>
 
     <div class="bd-1 mt-5" v-if="ipnsDeploy">
-      <div>Automatic IPNS Redeployment</div>
+      <h3>Automatic IPNS Redeployment</h3>
 
       <div class="d-flex al-c mt-3">
         <span class="mr-auto fz-14">
@@ -173,7 +173,7 @@
 
     <div class="bd-1 mt-5" v-if="ipnsDeploy">
       <div>
-        <div>Manual IPNS Redeployment</div>
+        <h3>Manual IPNS Redeployment</h3>
         <div class="d-flex al-c mt-3">
           <span class="mr-auto fz-14">
             Click the button on the right, the system will re-fetch the CID
