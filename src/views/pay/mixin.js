@@ -187,6 +187,7 @@ export default {
       // console.log(num.toNumber());
       let curAmountDecimals = await this.curContract[this.usdcKey].decimals();
       curAmountDecimals = curAmountDecimals.toNumber();
+      console.log(curAmountDecimals);
       this.walletBalance = this.$utils.cutFixed(
         num / 10 ** curAmountDecimals,
         4

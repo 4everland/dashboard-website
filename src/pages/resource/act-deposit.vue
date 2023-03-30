@@ -46,6 +46,7 @@ import PayNetwork from "@/views/pay/pay-network";
 import PayConfirm from "@/views/pay/pay-confirm";
 import mixin from "@/views/pay/mixin";
 import { BigNumber } from "@ethersproject/bignumber";
+import { ethers } from "ethers";
 
 export default {
   mixins: [mixin],
@@ -156,7 +157,11 @@ export default {
               `Your deposit amount cannot be less than ${minAmount} USDC due to the ${isEthOrBsc} network restrictions.`
             );
           }
-          const amount = BigNumber.from(num * 10 ** curAmountDecimals);
+          const amount = ethers.utils.parseUnits(
+            num.toString(),
+            curAmountDecimals
+          );
+          console.log(amount, amount.toString(), "amount");
           let gas = await target.estimateGas.recharge(
             this.providerAddr,
             this.uuid,
