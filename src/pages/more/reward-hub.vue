@@ -50,7 +50,7 @@
               </div>
 
               <div v-if="item.type == 'UPGRADE'">
-                <div v-if="item.status == 'DONE'">
+                <div v-if="item.status !== 'DONE'">
                   <e-menu open-on-hover offset-y>
                     <v-btn
                       slot="ref"
@@ -109,14 +109,8 @@
                   </v-btn>
                 </div>
 
-                <v-btn v-else tile class="mr-4" width="100" disabled>
-                  <span
-                    :class="{
-                      'white-0': !item.isDone,
-                    }"
-                  >
-                    Done
-                  </span>
+                <v-btn v-else tile class="mr-9" width="100" disabled>
+                  Done
                 </v-btn>
               </div>
               <div v-else class="al-c justify-center">
