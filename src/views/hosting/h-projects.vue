@@ -86,27 +86,10 @@
         </v-list>
       </e-menu>
 
-      <!-- <v-btn class="ml-5" color="primary" to="/hosting/new">
+      <v-btn class="ml-5" color="primary" to="/hosting/new">
         <img src="/img/svg/add1.svg" width="12" />
         <span class="ml-2">New Project</span>
-      </v-btn> -->
-      <span class="px-4"></span>
-      <e-menu open-on-hover offset-y v-if="list.length">
-        <v-btn slot="ref" color="primary" dark>
-          <img src="/img/svg/add1.svg" width="12" />
-          <span class="ml-2">New Project</span>
-          <v-icon>mdi-chevron-down</v-icon>
-        </v-btn>
-        <v-list>
-          <v-list-item
-            v-for="(text, i) in projectTypeArr"
-            :key="i"
-            @click="onCreate(i)"
-          >
-            <v-list-item-title class="fz-15">{{ text }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </e-menu>
+      </v-btn>
     </e-right-opt-wrap>
 
     <div class="pt-4">
@@ -426,7 +409,6 @@ export default {
       sortIdx: 0,
       newProjectIdx: 0,
       sortArr: ["Last Update", "Create Time"],
-      projectTypeArr: ["From Git / Template", "From IPFS Path"],
       refreshAt: Date.now(),
     };
   },
@@ -463,10 +445,6 @@ export default {
     this.curPath = this.path;
   },
   methods: {
-    onCreate(i) {
-      if (i == 0) return this.$router.push("/hosting/new");
-      this.$router.push("/hosting/new-by-hash");
-    },
     onSort(i) {
       this.sortType = i == 0 ? "Active" : "All";
       this.page = 1;

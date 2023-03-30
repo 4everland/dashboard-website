@@ -18,22 +18,28 @@
         </div>
       </v-col>
       <v-col cols="12" md="6">
-        <div
-          class="main-wrap"
-          :style="{
-            'min-height': minHeight,
-          }"
-        >
+        <div class="main-wrap">
+          <new-step-0-hash @onHashStart="onHashStart"></new-step-0-hash>
+        </div>
+        <div class="main-wrap mt-6" style="height: 350px; overflow: scroll">
           <new-step-0-tpl @item="onTplItem" />
         </div>
       </v-col>
     </v-row>
+
+    <div class="ta-c fz-14 mt-5">
+      Want to deploy with the CLI?
+      <a href="https://docs.4everland.org/hositng/hosting-cli" target="__blank"
+        >Find out more</a
+      >
+    </div>
   </div>
 </template>
 
 <script>
 import NewStep0Git from "@/views/hosting/new/new-step-0-git";
 import NewStep0Tpl from "@/views/hosting/new/new-step-0-tpl";
+import NewStep0Hash from "@/views/hosting/new/new-step-0-hash";
 
 export default {
   props: {
@@ -72,10 +78,17 @@ export default {
         this.cloneDir = "";
       }
     },
+    onHashStart({ hash, deployType }) {
+      this.$router.push(
+        `/hosting/new?type=hash&deployType=${deployType}&hash=${hash}`
+      );
+      this.$emit("next");
+    },
   },
   components: {
     NewStep0Git,
     NewStep0Tpl,
+    NewStep0Hash,
   },
 };
 </script>

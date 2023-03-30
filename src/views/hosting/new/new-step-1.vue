@@ -248,10 +248,17 @@
       >
     </div>
   </div>
+  <div v-else-if="isHash">
+    <new-step-1-hash
+      @onHashDeloy="onHashDeloy"
+      @back="$emit('back')"
+    ></new-step-1-hash>
+  </div>
 </template>
 
 <script>
 import NewStep1Tpl from "@/views/hosting/new/new-step-1-tpl";
+import NewStep1Hash from "@/views/hosting/new/new-step-1-hash";
 import BuildCmd from "@/views/hosting/common/build-cmd";
 import BuildCmdTip from "@/views/hosting/build/build-cmd-tip";
 import BuildOutputTip from "@/views/hosting/build/build-output-tip";
@@ -274,8 +281,11 @@ export default {
       return this.query.type == "clone-flow";
     },
     info() {
-      if (this.isTpl) return this.repoInfo;
+      if (this.isTpl || this.isHash) return this.repoInfo;
       return this.data;
+    },
+    isHash() {
+      return this.query.type == "hash";
     },
   },
   data() {
@@ -419,6 +429,10 @@ export default {
         console.log(error);
       }
       this.$loading.close();
+    },
+    onHashDeloy({ projectId, taskId }) {
+      this.$router.replace(`/hosting/new?id=${projectId}&taskId=${taskId}`);
+      this.$emit("next");
     },
     onFramework(val) {
       const item = this.$getFramework(val);
@@ -601,6 +615,7 @@ export default {
   },
   components: {
     NewStep1Tpl,
+    NewStep1Hash,
     BuildCmd,
     BuildCmdTip,
     BuildOutputTip,
