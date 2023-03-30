@@ -20,16 +20,16 @@
       </div>
       <div class="py-3 px-4 mb-4 tips">
         <v-icon size="20">mdi-alert-decagram-outline</v-icon>
-        <span class="ml-4 fz-14"
-          >More free resources can be obtained by completing the following
-          tasks. Please note that the validity period of IPFS resources is
-          December 31, 2023.</span
-        >
+        <span class="ml-4 fz-14">{{ tips }}</span>
       </div>
       <v-row v-if="list.length">
         <template v-for="item in list">
           <v-col
-            :md="item.type == 'AIRDROP_FOR_NEW' ? '12' : '6'"
+            :md="
+              item.type == 'AIRDROP_FOR_NEW' || item.type == 'UPGRADE'
+                ? '12'
+                : '6'
+            "
             cols="12"
             :key="item.id"
           >
@@ -48,7 +48,78 @@
                   {{ item.reward }}
                 </e-kv>
               </div>
-              <div class="al-c justify-center">
+
+              <div v-if="item.type == 'UPGRADE'">
+                <div v-if="item.status == 'DONE'">
+                  <e-menu open-on-hover offset-y>
+                    <v-btn
+                      slot="ref"
+                      color="primary"
+                      class="mr-2"
+                      width="250"
+                      tile
+                      dark
+                    >
+                      <span class="ml-2">Upgrade</span>
+                      <v-icon>mdi-chevron-down</v-icon>
+                    </v-btn>
+                    <v-list>
+                      <v-list-item link @click="handleClaim">
+                        <v-list-item-title class="fz-14 al-c justify-center">
+                          <img
+                            src="/img/svg/billing/ic-polygon-0.svg"
+                            width="18"
+                            alt=""
+                          />
+                          <span class="ml-3">Ploygon Claim</span>
+                        </v-list-item-title>
+                      </v-list-item>
+                      <v-list-item link @click="handleZySyncClaim">
+                        <v-list-item-title class="fz-14 al-c justify-center">
+                          <div class="al-c mx-auto">
+                            <img
+                              src="/img/svg/logo-no-letters.svg"
+                              width="20"
+                              alt=""
+                            />
+                            <span class="ml-3">zkSync Lite(V1) Claim</span>
+                          </div>
+                          <e-tooltip right>
+                            <v-icon
+                              slot="ref"
+                              size="18"
+                              color="#333"
+                              class="pa-1 d-ib"
+                              >mdi-alert-circle-outline</v-icon
+                            >
+                            <span
+                              >Please ensure that you have sufficient ETH in
+                              zkSync Lite. Interaction with the zkSync network
+                              will rely on cross-chain communication services to
+                              complete on-chain identity registration on
+                              Polygon.</span
+                            >
+                          </e-tooltip>
+                        </v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </e-menu>
+                  <v-btn :loading="refreshLoading" icon @click="isRegister">
+                    <v-icon>mdi-refresh</v-icon>
+                  </v-btn>
+                </div>
+
+                <v-btn v-else tile class="mr-4" width="100" disabled>
+                  <span
+                    :class="{
+                      'white-0': !item.isDone,
+                    }"
+                  >
+                    Done
+                  </span>
+                </v-btn>
+              </div>
+              <div v-else class="al-c justify-center">
                 <v-btn
                   :color="getBtnColor(item)"
                   @click="onAct(item)"
@@ -77,6 +148,7 @@
                   <v-icon>mdi-refresh</v-icon>
                 </v-btn>
               </div>
+
               <img
                 v-show="item.status == 'DONE'"
                 width="20"
@@ -102,7 +174,9 @@
 
 <script>
 import { mapState } from "vuex";
+import mixin from "@/pages/more/mixin-register";
 export default {
+  mixins: [mixin],
   computed: {
     ...mapState({
       isFocus: (s) => s.isFocus,
@@ -111,6 +185,11 @@ export default {
     }),
     shareUrl() {
       return location.origin + "?invite=" + this.code;
+    },
+    tips() {
+      if (this.userInfo.onChain)
+        return "More free resources can be obtained by completing tasks. Please note that the validity period of IPFS resources is December 31, 2023.";
+      return "More free resources can be obtained by upgrading registration tasks. Please note that the validity period of IPFS resources is December 31, 2023.";
     },
   },
   data() {
@@ -138,6 +217,7 @@ export default {
   },
   async created() {
     this.getCode();
+    this.isRegister();
   },
   mounted() {
     const { from } = this.$route.query;

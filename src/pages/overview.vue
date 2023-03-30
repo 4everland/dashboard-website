@@ -36,6 +36,13 @@
             <v-icon>mdi-menu</v-icon>
           </v-btn>
           <h2>{{ uname }}</h2>
+          <div v-if="userInfo.onChain" class="ml-3">vip user</div>
+          <div v-else class="ml-3">
+            <span>normal user</span>
+            <v-btn :loading="refreshLoading" icon @click="onCheckRegister">
+              <v-icon>mdi-refresh</v-icon>
+            </v-btn>
+          </div>
         </div>
         <div class="gray-8 fz-14 mt-1">Welcome to 4EVERLAND Dashboard</div>
       </div>
@@ -69,7 +76,7 @@
       </e-right-opt-wrap>
     </div>
 
-    <v3-usage />
+    <v3-usage ref="v3Usage" />
 
     <div class="mt-3">
       <v-row>
@@ -96,8 +103,10 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 // import { newUserDrop } from "@/plugins/airDrop/index.js";
+import mixin from "@/pages/more/mixin-register";
 
 export default {
+  mixins: [mixin],
   data() {
     return {
       banners: [
@@ -112,6 +121,9 @@ export default {
       ],
       projectTypeArr: ["From Git / Template", "From IPFS Path"],
     };
+  },
+  created() {
+    this.isRegister();
   },
   computed: {
     ...mapState({
@@ -133,6 +145,12 @@ export default {
     onCreate(i) {
       if (i == 0) return this.$router.push("/hosting/new");
       this.$router.push("/hosting/new-by-hash");
+    },
+    async onCheckRegister() {
+      const register = await this.isRegister();
+      if (register) {
+        this.$refs.v3Usage.getUsageInfo();
+      }
     },
   },
 };

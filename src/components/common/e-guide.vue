@@ -72,7 +72,10 @@ import { bus } from "@/utils/bus";
 import { mapState } from "vuex";
 import Driver from "driver.js";
 import "driver.js/dist/driver.min.css";
+import mixin from "@/pages/more/mixin-register";
+
 export default {
+  mixins: [mixin],
   data() {
     return {
       driver: new Driver({
@@ -293,13 +296,6 @@ export default {
       document.body.style.overflow = "";
       document.body.style.height = "";
       document.removeEventListener("touchmove", mo, false);
-    },
-    handleClaim() {
-      this.showDialog = false;
-      this.$router.push("/reward-hub");
-    },
-    handleZySyncClaim() {
-      console.log(1);
     },
   },
 };
