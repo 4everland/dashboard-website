@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { namehash } from "@ensdomains/ensjs";
 import { decode, getCodec } from "@ensdomains/content-hash";
 import { getProvider, getENSRegistry, getResolver } from "@/plugins/ens";
@@ -45,6 +46,15 @@ export default {
       provider: null,
     };
   },
+  computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
+    walletObj() {
+      const { walletType } = this.userInfo.wallet || {};
+      return walletType == "OKX" ? window.okxwallet : window.ethereum;
+    },
+  },
   methods: {
     onChange() {
       console.log("onchange");
@@ -53,6 +63,7 @@ export default {
       try {
         if (this.seleted == "ENS") {
           const { type, hash } = await this.getEnsIpns();
+          console.log(type, hash);
           let html = `<div>Deploying with the following ${type}?</div><div>${hash}</div>`;
           await this.$confirm(html, "Resolved successfully");
           this.$emit("onHashStart", {
@@ -72,23 +83,19 @@ export default {
     },
 
     async getEnsIpns() {
-      // if (!this.checkNet()) {
-      //   return;
-      // }
+      await this.checkNet();
       this.$loading();
       this.node = namehash(this.ipfsPath);
       this.provider = getProvider();
       const registry = getENSRegistry(this.provider);
       this.owner = await registry.owner(this.node);
       console.log(this.owner);
+
       this.resolver = await registry.resolver(this.node);
       let contentHash = await getResolver(
         this.resolver,
         this.provider
       ).contenthash(this.node);
-      console.log(contentHash);
-      this.$loading.close();
-      console.log(contentHash.substring(2));
       this.$loading.close();
       if (contentHash.substring(2)) {
         const hash = decode(contentHash);
@@ -102,10 +109,32 @@ export default {
         );
       }
     },
+    async checkNet() {
+      const chainId = this.walletObj.chainId;
+      const finalChainId = this.$inDev ? "0x5" : "0x1";
+      if (chainId != finalChainId) {
+        await this.$alert(
+          "Wrong network, please switch your wallet network to Ethereum mainnet."
+        );
+        await this.switchNet(finalChainId);
+      }
+    },
+    async switchNet(id) {
+      try {
+        const res = await window.web3.currentProvider.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: id }],
+        });
+        if (res && res.error) {
+          throw new Error(res.error);
+        }
+      } catch (error) {
+        console.log("switch net error", error);
+        throw new Error(error.message);
+      }
+    },
     onErr(e) {
-      // console.log(e);
       if (e) {
-        console.log(e.message);
         this.$alert(e.message, "The ENS resolution result");
       }
     },
