@@ -30,7 +30,7 @@
               <v-icon>mdi-chevron-down</v-icon>
             </v-btn>
             <v-list>
-              <v-list-item link @click="handleClaim">
+              <v-list-item link @click="handlePloygonClaim">
                 <v-list-item-title class="fz-14 al-c justify-center">
                   <img
                     src="/img/svg/billing/ic-polygon-0.svg"
@@ -40,7 +40,7 @@
                   <span class="ml-3">Ploygon Claim</span>
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item link @click="handleZySyncClaim">
+              <v-list-item link @click="handleZkSyncClaim">
                 <v-list-item-title class="fz-14 al-c justify-center">
                   <div class="al-c mx-auto">
                     <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
@@ -296,6 +296,30 @@ export default {
       document.body.style.overflow = "";
       document.body.style.height = "";
       document.removeEventListener("touchmove", mo, false);
+    },
+    async handlePloygonClaim() {
+      try {
+        const register = await this.isRegister();
+        if (register) return (this.showDialog = false);
+        const claimStatus = await this.handleClaim();
+        if (claimStatus) {
+          this.showDialog = false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async handleZkSyncClaim() {
+      try {
+        const register = await this.isRegister();
+        if (register) return (this.showDialog = false);
+        const claimStatus = await this.handleZkClaim();
+        if (claimStatus) {
+          this.showDialog = false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

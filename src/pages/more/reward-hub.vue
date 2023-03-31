@@ -64,7 +64,7 @@
                       <v-icon>mdi-chevron-down</v-icon>
                     </v-btn>
                     <v-list>
-                      <v-list-item link @click="handleClaim">
+                      <v-list-item link @click="handlePloygonClaim">
                         <v-list-item-title class="fz-14 al-c justify-center">
                           <img
                             src="/img/svg/billing/ic-polygon-0.svg"
@@ -74,7 +74,7 @@
                           <span class="ml-3">Ploygon Claim</span>
                         </v-list-item-title>
                       </v-list-item>
-                      <v-list-item link @click="handleZySyncClaim">
+                      <v-list-item link @click="handleZkSyncClaim">
                         <v-list-item-title class="fz-14 al-c justify-center">
                           <div class="al-c mx-auto">
                             <img
@@ -343,6 +343,30 @@ export default {
       if (this.code) return;
       const { data } = await this.$http.get("$auth/invitation/code");
       this.code = data;
+    },
+    async handlePloygonClaim() {
+      try {
+        const register = await this.isRegister();
+        if (register) return this.getList();
+        const claimStatus = await this.handleClaim();
+        if (claimStatus) {
+          this.getList();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async handleZkSyncClaim() {
+      try {
+        const register = await this.isRegister();
+        if (register) return this.getList();
+        const claimStatus = await this.handleZkClaim();
+        if (claimStatus) {
+          this.getList();
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

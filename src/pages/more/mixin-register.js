@@ -65,14 +65,16 @@ export default {
         const receipt = await tx.wait(2);
         console.log(receipt);
         await this.registerSuccess();
+        this.$loading.close();
+        return true;
       } catch (error) {
-        // this.onErr(error);
-        console.log(error);
+        this.$loading.close();
+        this.onErr(error);
+        return false;
       }
-      this.$loading.close();
     },
 
-    async handleZySyncClaim() {
+    async handleZkClaim() {
       try {
         // check main eth
         this.switchEth();
@@ -124,6 +126,7 @@ export default {
           if (records.length) {
             await this.registerSuccess(records[0].txHash);
           }
+          return true;
           // notify server
         } else {
           throw new Error(
@@ -131,10 +134,10 @@ export default {
           );
         }
       } catch (error) {
-        console.log(error);
+        this.$loading.close();
         this.onErr(error);
+        return false;
       }
-      this.$loading.close();
     },
     async searchZySyncRecord() {
       try {
@@ -347,6 +350,8 @@ export default {
       }
       if (/missing revert data/i.test(msg)) {
         msg = "Network Error";
+      } else if (/user rejected transaction/i.test(msg)) {
+        msg = "Your transaction has been canceled.";
       } else if (/transaction failed/i.test(msg)) {
         msg = "Transaction Failed";
       } else if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
