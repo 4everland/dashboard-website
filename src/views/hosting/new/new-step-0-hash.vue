@@ -33,27 +33,81 @@
 </template>
 
 <script>
+import { namehash } from "@ensdomains/ensjs";
+import { decode, getCodec } from "@ensdomains/content-hash";
+import { getProvider, getENSRegistry, getResolver } from "@/plugins/ens";
 export default {
   data() {
     return {
       items: ["IPFS", "IPNS", "ENS"],
       seleted: "IPFS",
       ipfsPath: "",
+      provider: null,
     };
   },
   methods: {
     onChange() {
       console.log("onchange");
     },
-    onStart() {
-      if (this.seleted == "ENS") {
-        console.log(1);
+    async onStart() {
+      try {
+        if (this.seleted == "ENS") {
+          const { type, hash } = await this.getEnsIpns();
+          let html = `<div>Deploying with the following ${type}?</div><div>${hash}</div>`;
+          await this.$confirm(html, "Resolved successfully");
+          this.$emit("onHashStart", {
+            hash,
+            deployType: type,
+          });
+        } else {
+          // resolve hash
+          this.$emit("onHashStart", {
+            hash: this.ipfsPath,
+            deployType: this.seleted,
+          });
+        }
+      } catch (error) {
+        this.onErr(error);
       }
-      // resolve hash
-      this.$emit("onHashStart", {
-        hash: this.ipfsPath,
-        deployType: this.seleted,
-      });
+    },
+
+    async getEnsIpns() {
+      // if (!this.checkNet()) {
+      //   return;
+      // }
+      this.$loading();
+      this.node = namehash(this.ipfsPath);
+      this.provider = getProvider();
+      const registry = getENSRegistry(this.provider);
+      this.owner = await registry.owner(this.node);
+      console.log(this.owner);
+      this.resolver = await registry.resolver(this.node);
+      let contentHash = await getResolver(
+        this.resolver,
+        this.provider
+      ).contenthash(this.node);
+      console.log(contentHash);
+      this.$loading.close();
+      console.log(contentHash.substring(2));
+      this.$loading.close();
+      if (contentHash.substring(2)) {
+        const hash = decode(contentHash);
+        console.log(hash);
+        let type = getCodec(contentHash);
+        type = type == "ipns-ns" ? "IPNS" : "IPFS";
+        return { hash, type };
+      } else {
+        throw new Error(
+          "The Content Hash for this ENS is not IPFS or IPNS, please reenter."
+        );
+      }
+    },
+    onErr(e) {
+      // console.log(e);
+      if (e) {
+        console.log(e.message);
+        this.$alert(e.message, "The ENS resolution result");
+      }
     },
   },
 };

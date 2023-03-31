@@ -203,19 +203,28 @@ export default {
       this.$loading.close();
     },
     handleChangeDeployType(val) {
-      console.log(this.$refs.ipfsPathRef);
+      // console.log(this.$refs.ipfsPathRef);
       this.$refs.ipfsPathRef.reset();
-      if (val == "IPFS") {
-        this.form.deployType = "CID";
-      } else if (val == "IPNS") {
-        this.form.deployType = "IPNS";
-      } else {
-        this.form.deployType = undefined;
-      }
+      // if (val == "IPFS") {
+      //   this.form.deployType = "CID";
+      // } else if (val == "IPNS") {
+      //   this.form.deployType = "IPNS";
+      // } else {
+      //   this.form.deployType = undefined;
+      // }
     },
     onBack() {
       this.$router.back();
       this.curStep -= 1;
+    },
+  },
+  watch: {
+    seleted(val) {
+      if (val == "IPNS") {
+        this.form.deployType = "IPNS";
+      } else if (val == "IPFS") {
+        this.form.deployType = "CID";
+      }
     },
   },
 };
