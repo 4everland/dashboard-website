@@ -54,13 +54,10 @@ export default {
         this.$loading();
         await this.switchPolygon();
         await this.getCurrentContract();
-        const { sign, encode } = await this.getSignAddress();
-        const tx = await this.contract.ProviderController.registerAndDrip(
-          providerAddr,
-          this.registerInfo.uid,
-          encode,
-          sign
-        );
+        const { sign } = await this.getSignAddress();
+        const tx = await this.contract.ProviderController.functions[
+          "registerAccount(address,bytes32,bytes)"
+        ](providerAddr, this.registerInfo.uid, sign);
         console.log(tx);
         const receipt = await tx.wait(2);
         console.log(receipt);

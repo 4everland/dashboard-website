@@ -19,7 +19,7 @@
       </div>
     </e-kv2>
     <e-kv2 class="mt-7" label="Network">
-      <pay-network :allow="['Polygon', 'Ethereum', 'BSC']" />
+      <pay-network :allow="allowNetwork" />
     </e-kv2>
 
     <div class="mt-8 fz-14 gray">
@@ -46,6 +46,7 @@ import PayNetwork from "@/views/pay/pay-network";
 import PayConfirm from "@/views/pay/pay-confirm";
 import mixin from "@/views/pay/mixin";
 import { BigNumber } from "@ethersproject/bignumber";
+import { mapState } from "vuex";
 
 export default {
   mixins: [mixin],
@@ -56,8 +57,15 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
     curAmount() {
       return this.$utils.cutFixed(this.amount || 0, 4);
+    },
+    allowNetwork() {
+      if (this.userInfo.onChain) return ["Polygon", "Ethereum", "BSC"];
+      return ["Polygon"];
     },
   },
   mounted() {
@@ -128,14 +136,25 @@ export default {
           return this.onApprove();
         }
         this.$loading();
-        await this.checkAccount();
         let tx = null;
         if (this.usdcKey == "MumbaiUSDC") {
-          tx = await target.recharge(
-            this.providerAddr,
-            this.uuid,
-            num * Math.pow(10, curAmountDecimals)
-          );
+          const accountExists = await this.checkAccount();
+          console.log(accountExists, "accountExists");
+          if (accountExists) {
+            tx = await target.recharge(
+              this.providerAddr,
+              this.uuid,
+              num * Math.pow(10, curAmountDecimals)
+            );
+          } else {
+            const { sign } = await this.getSignAddress();
+            tx = await target.rechargeWithRegistration(
+              this.providerAddr,
+              this.uuid,
+              num * Math.pow(10, curAmountDecimals),
+              sign
+            );
+          }
         } else {
           const fee = await target.calcFee(this.providerAddr, this.uuid);
           const token = await target.token();
@@ -224,6 +243,16 @@ export default {
         return data.max_slippage;
       } catch (error) {
         console.log(error, "======");
+      }
+    },
+    async getSignAddress() {
+      try {
+        const { data } = await this.$http.get(
+          "$auth/self-handled-register-sign-from-server"
+        );
+        return data;
+      } catch (error) {
+        console.log(error);
       }
     },
   },

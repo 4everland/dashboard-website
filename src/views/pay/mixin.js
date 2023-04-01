@@ -206,9 +206,7 @@ export default {
           this.uuid
         );
       console.log("account uuidRegistered", uuidRegistered);
-      if (!uuidRegistered) {
-        throw new Error("Account Not Registered");
-      }
+      return uuidRegistered;
     },
     async checkApprove(isBuy) {
       console.log(isBuy);

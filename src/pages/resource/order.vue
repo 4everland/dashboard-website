@@ -220,10 +220,19 @@ export default {
             return;
           }
         }
-
         console.log("pay", params, this.curContract[this.chainKey]);
-        // let tx = await target.payV2(...params);
-        let tx = await target.pay(...params);
+        const accountExists =
+          await this.curContract.ProviderController.accountExists(
+            this.providerAddr,
+            this.uuid
+          );
+        console.log(accountExists, "accountExists");
+        let tx = null;
+        if (accountExists) {
+          tx = await target.pay(...params);
+        } else {
+          tx = await target.payWithRegistration(...params);
+        }
         console.log("tx", tx);
         const receipt = await tx.wait(1);
         this.addHash(tx, this.totalPrice);
