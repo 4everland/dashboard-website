@@ -1,0 +1,28 @@
+{
+  "list": [
+    {
+      "name": "ENS",
+      "key": "ens",
+      "network": "",
+      "host": "www.baidu.com",
+      "icon": "111",
+      "rule": ".+.eth$"
+    },
+    {
+      "name": "SNS",
+      "key": "sns",
+      "network": "",
+      "host": "www.baidu.com",
+      "icon": "111",
+      "rule": ".+.sol$"
+    },
+    {
+      "name": "TEST",
+      "key": "test",
+      "network": "",
+      "host": "www.baidu.com",
+      "icon": "111",
+      "rule": ".+.test$"
+    }
+  ]
+}

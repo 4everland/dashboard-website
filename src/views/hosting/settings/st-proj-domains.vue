@@ -201,14 +201,16 @@
       </div>
     </div>
 
-    <st-proj-domains-sol v-if="info.platform == 'IPFS'" />
-    <st-proj-domains-ens v-if="info.platform == 'IPFS'" />
+    <!-- <st-proj-domains-sol v-if="info.platform == 'IPFS'" />
+    <st-proj-domains-ens v-if="info.platform == 'IPFS'" /> -->
+    <st-proj-domains-mix v-if="info.platform == 'IPFS'" />
   </div>
 </template>
 
 <script>
 import StProjDomainsEns from "@/views/hosting/settings/st-proj-domains-ens";
 import StProjDomainsSol from "@/views/hosting/settings/st-proj-domains-sol";
+import StProjDomainsMix from "@/views/hosting/settings/st-proj-domains-mix";
 
 import { mapState } from "vuex";
 
@@ -216,6 +218,7 @@ export default {
   components: {
     StProjDomainsEns,
     StProjDomainsSol,
+    StProjDomainsMix,
   },
   data() {
     const curPath = this.$route.path;

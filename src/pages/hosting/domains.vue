@@ -118,6 +118,8 @@
 </template>
 
 <script>
+const domainOptions = require("@/assets/domain/domainList.json");
+
 export default {
   data() {
     return {
@@ -181,6 +183,23 @@ export default {
         return false;
       };
     },
+    // tabList() {
+    //   let list = [
+    //     {
+    //       text: "Domains",
+    //       comp: "domain-domains",
+    //     },
+    //   ];
+
+    //   domainOptions.list.forEach((element) => {
+    //     let obj = {
+    //       text: element.name,
+    //       comp: "domain-mix",
+    //     };
+    //     list.push(obj);
+    //   });
+    //   return list;
+    // },
   },
   watch: {
     showPop(val) {
@@ -301,6 +320,7 @@ export default {
       }
       this.adding = false;
     },
+    tabsChange(e) {},
   },
 };
 </script>

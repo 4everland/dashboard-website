@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="17px" height="19px" viewBox="0 0 17 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>fida</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Domain样式1" transform="translate(-1205.000000, -665.000000)">
+            <g id="编组-3" transform="translate(593.000000, 646.000000)">
+                <g id="fida" transform="translate(612.724000, 19.576000)">
+                    <g id="编组" transform="translate(0.276000, 0.424000)">
+                        <line x1="7.51340135" y1="-5.86703224e-16" x2="7.53740135" y2="3.96341463" id="路径" stroke="#6868FC"></line>
+                        <line x1="15" y1="12.7099324" x2="11.545632" y2="10.7266709" id="路径" stroke="#6868FC"></line>
+                        <line x1="1.41525462e-16" y1="12.7099324" x2="3.454368" y2="10.7266709" id="路径" stroke="#6868FC"></line>
+                        <polygon id="路径" stroke="#77E3EF" stroke-linecap="round" points="7.48217345 8.47451877 3.44361232 6.19905249 7.48217345 3.92455763 11.5153567 6.20837817"></polygon>
+                        <polygon id="路径" stroke="#4ACBDC" points="7.48217345 13 3.44879098 10.7420194 3.44361232 6.19905249 7.48217345 8.47451877"></polygon>
+                        <polygon id="路径" stroke="#07ABC5" points="7.48217345 13 11.5153567 10.7521222 11.5153567 6.20837817 7.48217345 8.47451877"></polygon>
+                    </g>
+                    <polygon id="路径" stroke="#7C7CFF" points="15.276 13.1739025 15.276 4.67409755 7.77590061 0.424 0.276 4.67409755 0.276 13.1739025 7.77590061 17.424"></polygon>
+                    <polyline id="路径" stroke="#7C7CFF" stroke-linecap="round" points="0.276 4.424 7.76377547 8.424 15.276 4.424"></polyline>
+                    <line x1="7.276" y1="8.424" x2="7.276" y2="17.424" id="路径" stroke="#7C7CFF" stroke-linecap="round"></line>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

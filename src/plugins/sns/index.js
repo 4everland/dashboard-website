@@ -9,8 +9,11 @@ const SOL_TLD_AUTHORITY = new web3.PublicKey(
 );
 
 //'devnet' | 'testnet' | 'mainnet-beta';
-const main_net_rpc =
-  "https://skilled-silent-snowflake.solana-mainnet.quiknode.pro/";
+const main_net_rpc = "https://try-rpc.mainnet.solana.blockdaemon.tech";
+
+// const main_net_rpc =
+//   "https://skilled-silent-snowflake.solana-mainnet.quiknode.pro/";
+
 // const main_net_rpc = web3.clusterApiUrl("mainnet-beta");
 const connection = new web3.Connection(main_net_rpc, "confirmed");
 

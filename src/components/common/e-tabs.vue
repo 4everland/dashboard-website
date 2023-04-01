@@ -182,6 +182,7 @@ export default {
     DomainDomains: () => import("@/views/hosting/domain/domain-domains"),
     DomainEns: () => import("@/views/hosting/domain/domain-ens"),
     DomainSns: () => import("@/views/hosting/domain/domain-sns"),
+    DomainMix: () => import("@/views/hosting/domain/domain-mix"),
 
     // Build-Overview/Build-Source
     BuildOverview: () => import("@/views/hosting/build/build-overview"),
