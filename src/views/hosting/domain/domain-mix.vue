@@ -19,11 +19,18 @@
             text
             x-small
             class="e-btn-text"
-            :color="item.state ? 'success' : 'error'"
+            :color="
+              item.content == item.ipns || item.content == item.ipfs
+                ? 'success'
+                : 'error'
+            "
             :to="getPath(item)"
           >
             <b>{{ item.domain }}</b>
-            <v-tooltip bottom v-if="!item.state">
+            <v-tooltip
+              bottom
+              v-if="!(item.content == item.ipns || item.content == item.ipfs)"
+            >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
                   class="ml-2"
@@ -39,14 +46,14 @@
             </v-tooltip>
           </v-btn>
         </template>
-        <template v-slot:item.ipns="{ item }">
-          {{ item.ipns.cutStr(6, 4) }}
-          <v-btn icon>
+        <template v-slot:item.content="{ item }">
+          {{ item.content ? item.content.cutStr(6, 4) : "--" }}
+          <v-btn icon v-if="item.content">
             <v-icon
               small
               color="#999"
               @click.stop
-              v-clipboard="item.ipns"
+              v-clipboard="item.content"
               @success="$toast('Copied!')"
               >mdi-content-copy</v-icon
             >
@@ -78,14 +85,14 @@ export default {
   data() {
     return {
       headers: [
-        { text: "ENS", value: "domain" },
+        { text: "", value: "domain" },
         {
           text: "Project Name",
           value: "projectName",
         },
         {
           text: "Content",
-          value: "ipns",
+          value: "content",
         },
         { text: "CreateAt", value: "createTime" },
       ],
@@ -97,7 +104,6 @@ export default {
       loading: false,
       curStep: 0,
       chooseProj: {},
-      projects: null,
       adding: false,
       domain: "",
       deleting: false,
@@ -107,12 +113,6 @@ export default {
   computed: {
     noticeMsg() {
       return this.$store.state.noticeMsg;
-    },
-    projList() {
-      return this.projects.filter((it) => {
-        if (!this.keyword.trim()) return true;
-        return new RegExp(this.keyword, "i").test(it.name);
-      });
     },
   },
   watch: {
@@ -146,12 +146,15 @@ export default {
     },
     async getList() {
       try {
+        console.log(this);
         this.loading = true;
+        this.headers[0].text = this.$attrs.type.toUpperCase();
         const params = {
           page: this.page - 1,
           pageSize: 10,
-          type: "",
+          type: this.$attrs.type,
         };
+
         const { data } = await this.$http.get(
           "$hosting/project/decentralized/domain",
           {
@@ -159,13 +162,10 @@ export default {
           }
         );
         this.list = data.domainList.map((it) => {
-          it.createTime = new Date(it.createAt * 1e3).format();
+          it.createTime = new Date(it.createAt).format();
           return it;
         });
-        this.pageLen = Math.max(
-          1,
-          Math.ceil(data.numberOfElements / params.size)
-        );
+        this.pageLen = Math.max(1, Math.ceil(data.count / params.size));
       } catch (error) {
         console.log(error);
       }

@@ -3,26 +3,16 @@
     {
       "name": "ENS",
       "key": "ens",
-      "network": "",
+      "network": "function(domain){return 'https://' +  domain + '.limo'}",
       "host": "www.baidu.com",
-      "icon": "111",
       "rule": ".+.eth$"
     },
     {
       "name": "SNS",
       "key": "sns",
-      "network": "",
+      "network": "function(domain){return 'https://' + domain.split('.')[0] + '.4sol.xyz'}",
       "host": "www.baidu.com",
-      "icon": "111",
       "rule": ".+.sol$"
-    },
-    {
-      "name": "TEST",
-      "key": "test",
-      "network": "",
-      "host": "www.baidu.com",
-      "icon": "111",
-      "rule": ".+.test$"
     }
   ]
 }

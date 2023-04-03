@@ -378,12 +378,13 @@ export default {
           );
         }
         const isExist = await this.afterAdd();
+        console.log(isExist);
         if (isExist) {
           await this.$confirm(
             "The domain name already occupied by another project, rebundle it to the current one?",
             "",
             {
-              confirmText: "Ok",
+              confirmText: "OK",
             }
           );
         }

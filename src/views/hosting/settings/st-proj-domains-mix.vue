@@ -50,13 +50,14 @@
                   class="mr-2"
                 />
                 <div class="mr-auto">
+                  <!-- :href="`https://${item.domain.split('.')[0]}.4sol.xyz`" -->
                   <a
                     :class="
                       item.content == item.ipns || item.content == item.ipfs
                         ? ''
                         : 'disabled'
                     "
-                    :href="`https://${item.domain.split('.')[0]}.4sol.xyz`"
+                    :href="toHref(item)"
                     target="_blank"
                     >{{ item.domain }}</a
                   >
@@ -147,15 +148,9 @@
                   x-small
                   color="primary"
                   class="ml-4"
-                  :disabled="
-                    item.content == item.ipns || item.content == item.ipfs
-                  "
+                  :disabled="item.content == item.ipns"
                 >
-                  {{
-                    item.content == item.ipns || item.content == item.ipfs
-                      ? "Bound"
-                      : "Bind"
-                  }}
+                  {{ item.content == item.ipns ? "Bound" : "Bind" }}
                 </v-btn>
               </div>
               <div class="gray mt-1 fz-14 ml-10">
@@ -175,15 +170,9 @@
                   x-small
                   color="primary"
                   class="ml-4"
-                  :disabled="
-                    item.content == item.ipns || item.content == item.ipfs
-                  "
+                  :disabled="item.content == item.ipfs"
                 >
-                  {{
-                    item.content == item.ipns || item.content == item.ipfs
-                      ? "Bound"
-                      : "Bind"
-                  }}
+                  {{ item.content == item.ipfs ? "Bound" : "Bind" }}
                 </v-btn>
               </div>
             </div>
@@ -205,32 +194,6 @@
         </template>
       </div>
     </div>
-    <v-dialog v-model="showDialog" max-width="600">
-      <div class="pa-5">
-        <h3>Add ENS</h3>
-
-        <v-radio-group v-model="bindContent">
-          <v-radio
-            class="bind-radio"
-            v-for="n in bindOpt"
-            :key="n.value"
-            :label="n.label"
-            :value="n.value"
-          ></v-radio>
-        </v-radio-group>
-        <div class="al-c justify-center mt-7">
-          <v-btn color="primary" width="120" @click="setContentHash">OK</v-btn>
-          <v-btn
-            color="primary"
-            outlined
-            class="ml-4"
-            width="120"
-            @click="showDialog = false"
-            >Cancel</v-btn
-          >
-        </div>
-      </div>
-    </v-dialog>
   </div>
 </template>
 <script>
@@ -263,18 +226,6 @@ export default {
       seleted: "ens",
       items: domainOptions.list,
       showDialog: false,
-      bindOpt: [
-        // {
-        //   label:
-        //     "Bind the ENS to the IPNS (Base IPNS) used for project deployment",
-        //   value: "BaseIpns",
-        // },
-        {
-          label: "Bind the ENS to the IPNS generated in the IPNS Manager",
-          value: "ipns",
-        },
-        { label: "Bind ENS to the IPFS of the project", value: "BaseIpfs" },
-      ],
     };
   },
   computed: {
@@ -337,20 +288,18 @@ export default {
           owner,
         };
         await this.$http.post("$hosting/project/decentralized/domain", body);
+        this.domain = "";
         this.getInfo();
       } catch (error) {
         //
       }
     },
-    async updateInfo(id, content) {
+    async updateInfo(obj) {
       try {
-        let body = {
-          id: id,
-          content,
-        };
-        // `$hosting/project/decentralized/domain?id=${id}&content=${content}`
-
-        await this.$http.put("$hosting/project/decentralized/domain", body);
+        await this.$http.put(
+          `$hosting/project/decentralized/domain?id=${obj.id}&content=${obj.content}&owner=${obj.owner}`
+        );
+        // await this.$http.put("$hosting/project/decentralized/domain", body);
         this.getInfo();
       } catch (error) {
         //
@@ -365,23 +314,37 @@ export default {
       }
     },
     async verifyEnsConfiguration(item) {
+      console.log(this.connectAddr);
       if (!this.connectAddr) {
         this.showConnect();
         return;
       }
       if (!this.checkNet()) {
-        return false;
+        return;
       }
       this.$loading();
       const ensIpns = await this.getEnsIpns(item.domain);
-      await this.updateInfo(item.id, ensIpns);
+      const owner = await this.verifyEnsOwner(item.domain);
+      console.log(ensIpns);
+      console.log(owner);
+      let Obj = {
+        id: item.id,
+        content: ensIpns ? ensIpns : "",
+        owner: owner,
+      };
+      await this.updateInfo(Obj);
       this.$loading.close();
     },
     async verifySnsConfiguration(item) {
       this.$loading();
       const resolveData = await getResolveData(item.domain);
-      console.log(resolveData === item.content);
-      this.updateInfo(item.id, resolveData);
+      const owner = await this.verifySnsOwner(item.domain);
+      let Obj = {
+        id: item.id,
+        content: resolveData,
+        owner: owner,
+      };
+      this.updateInfo(Obj);
       this.$loading.close();
     },
     async onRemove(item) {
@@ -392,7 +355,7 @@ export default {
         this.$loading();
         await this.$http.delete("$hosting/project/decentralized/domain", {
           params: {
-            id: item.id,
+            ids: item.id,
           },
         });
         this.$toast("Removed successfully");
@@ -425,73 +388,74 @@ export default {
       }
     },
     async onAddEns() {
-      const owner = await this.verifyEnsOwner();
+      const domain = this.domain;
+      const owner = await this.verifyEnsOwner(domain);
       if (!owner) {
         return this.$alert("Invalid ETH Domain");
       }
       this.$confirm(
-        `${owner.cutStr(6, 4)} is the owner of ${this.domain}. Is that you?`
+        `${owner.cutStr(6, 4)} is the owner of ${domain}. Is that you?`
       ).then(async () => {
-        const resolveData = await this.getEnsIpns(this.domain);
+        const resolveData = await this.getEnsIpns(domain);
         await this.setInfo(owner, resolveData);
       });
     },
     async onAddSns() {
-      let hostnameArray = this.domain.split(".");
+      const domain = this.domain;
+      let hostnameArray = domain.split(".");
       if (hostnameArray.length !== 2) {
         return this.$alert("The domain name you entered is invalid.");
       }
-      const owner = await this.verifySnsOwner();
+      const owner = await this.verifySnsOwner(domain);
       if (!owner) {
         return this.$alert("Invalid SNS Domain");
       }
       this.$confirm(
-        `${owner.cutStr(6, 4)} is the owner of ${this.domain}. Is that you?`
+        `${owner.cutStr(6, 4)} is the owner of ${domain}. Is that you?`
       ).then(async () => {
-        const resolveData = await getResolveData(this.domain);
+        const resolveData = await getResolveData(domain);
         await this.setInfo(owner, resolveData);
       });
     },
-    async verifyEnsOwner() {
+    async verifyEnsOwner(domain) {
       if (!this.checkNet()) {
-        return "";
+        return;
       }
       try {
         this.$loading();
-        const node = namehash(this.domain);
-        this.provider = getProvider();
-        const registry = getENSRegistry(this.provider);
+        const node = namehash(domain);
+        const provider = getProvider();
+        const registry = getENSRegistry(provider);
         this.$loading.close();
         return await registry.owner(node);
       } catch (error) {
         this.onErr(error);
       }
     },
-    async verifySnsOwner() {
+    async verifySnsOwner(domain) {
       try {
         this.$loading();
-        const owner = await getOwner(this.domain);
+        const owner = await getOwner(domain);
         this.$loading.close();
         return owner;
       } catch (error) {
         this.onErr(error);
       }
     },
-    async getEnsIpns() {
+    async getEnsIpns(domain) {
       if (!this.checkNet()) {
         return;
       }
       try {
         this.$loading();
-        const node = namehash(this.domain);
-        this.provider = getProvider();
-        const registry = getENSRegistry(this.provider);
-        this.owner = await registry.owner(node);
-        this.resolver = await registry.resolver(node);
-        let contentHash = await getResolver(
-          this.resolver,
-          this.provider
-        ).contenthash(node);
+        const node = namehash(domain);
+        const provider = getProvider();
+        const registry = getENSRegistry(provider);
+        // const owner = await registry.owner(node);
+        const resolver = await registry.resolver(node);
+        let contentHash = await getResolver(resolver, provider).contenthash(
+          node
+        );
         this.$loading.close();
         if (contentHash.substring(2)) {
           const res = decode(contentHash);
@@ -519,39 +483,50 @@ export default {
       if (!this.checkNet()) {
         return false;
       }
-      if (item.owner !== this.connectAddr) {
-        return this.$alert(
-          "Connected account is not the controller of the domain. "
-        );
-      }
+      // if (item.owner !== this.connectAddr) {
+      //   return this.$alert(
+      //     "Connected account is not the controller of the domain. "
+      //   );
+      // }
       try {
         this.$loading();
-        const signer = this.provider.getSigner();
+        let Obj = {
+          id: item.id,
+          content: "",
+          owner: "",
+        };
+        const provider = getProvider();
+        const signer = provider.getSigner();
         let ipnsHashEncoded = "";
         if (type == "ipns") {
           ipnsHashEncoded = encode("ipns-ns", item.ipns);
+          Obj.content = item.ipns;
         } else {
           ipnsHashEncoded = encode("ipfs-ns", item.ipfs);
-          // console.log("set content hash", ipnsHashEncoded, this.baseHash);
+          Obj.content = item.ipfs;
         }
         const node = namehash(item.domain);
+        const registry = getENSRegistry(provider);
+        const resolver = await registry.resolver(node);
         const data = getResolver(
-          this.resolver,
-          this.provider
+          resolver,
+          provider
         ).interface.encodeFunctionData("setContenthash", [
           node,
           `0x${ipnsHashEncoded}`,
         ]);
+        console.log(data);
         const from = await signer.getAddress();
         const tx = await signer.sendTransaction({
-          to: this.resolver,
+          to: resolver,
           from,
           data,
         });
+
         this.$loading(`Transaction(${tx.hash.cutStr(4, 3)}) pending`);
         const receipt = await tx.wait();
         console.log(receipt);
-        this.getInfo(true);
+        await this.updateInfo(Obj);
       } catch (error) {
         this.onErr(error);
       }
@@ -572,7 +547,13 @@ export default {
         console.log(result);
         if (result) {
           const resolveData = await getResolveData(item.domain);
-          this.updateInfo(item.id, resolveData);
+          const owner = await this.verifySnsOwner(item.domain);
+          let Obj = {
+            id: item.id,
+            content: resolveData,
+            owner: owner,
+          };
+          this.updateInfo(Obj);
         }
       } catch (error) {
         console.log(error);
@@ -588,29 +569,34 @@ export default {
       });
     },
     checkNet() {
-      if (process.env != "production") {
-        return true;
-      }
-      const chainId = this.walletObj.chainId;
-      if (!chainId) return false;
-      let msg = "";
-      if (chainId != "0x1") {
-        msg =
-          "Wrong network, please switch your wallet network to Ethereum mainnet.";
-      }
-      if (msg) {
-        this.$alert(msg).then(() => {
-          this.switchNet(1);
-        });
-      }
-      return !msg;
+      // const chainId = this.walletObj.chainId;
+      // if (!chainId) return false;
+      // let msg = "";
+      // if (chainId != "0x1") {
+      //   msg =
+      //     "Wrong network, please switch your wallet network to Ethereum mainnet.";
+      // }
+      // if (msg) {
+      //   this.$alert(msg).then(() => {
+      //     this.switchNet(1);
+      //   });
+      // }
+      // return !msg;
+      return true;
     },
     onErr(e) {
       console.log(e);
       if (e) this.$alert(e.message);
     },
     handleChangeSelect() {
-      console.log(11);
+      this.domain = "";
+    },
+    toHref(domainObj) {
+      const rule = this.items.find((item) => {
+        return domainObj.type == item.key;
+      });
+      const fn = eval("(" + rule.network + ")");
+      return fn(domainObj.domain);
     },
   },
 };
