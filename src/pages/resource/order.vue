@@ -30,13 +30,7 @@
     </div>
 
     <e-kv2 class="mt-6" label="Network">
-      <pay-network
-        :allow="
-          $inDev
-            ? ['Polygon', 'Ethereum', 'BSC']
-            : ['Polygon', 'Ethereum', 'BSC', 'Arbitrum']
-        "
-      />
+      <pay-network :allow="allowNetwork" />
     </e-kv2>
 
     <div class="mt-8 gray fz-14">
@@ -141,11 +135,23 @@ export default {
       totalPrice: (s) => s.orderInfo.totalPrice,
       list: (s) => s.orderInfo.list,
       orderInfo: (s) => s.orderInfo,
+      userInfo: (s) => s.userInfo,
     }),
     finalPrice() {
       return this.totalPrice - this.AmountofDeduction >= 0
         ? (this.totalPrice - this.AmountofDeduction).toFixed(4)
         : "0.00";
+    },
+    allowNetwork() {
+      if (this.userInfo.onChain) {
+        // return ["Polygon", "Ethereum", "BSC"];
+        if (this.$inDev) {
+          return ["Polygon", "Ethereum", "BSC"];
+        }
+        return ["Polygon", "Ethereum", "BSC", "Arbitrum"];
+      } else {
+        return ["Polygon"];
+      }
     },
   },
   created() {
@@ -237,6 +243,9 @@ export default {
         const receipt = await tx.wait(1);
         this.addHash(tx, this.totalPrice);
         console.log("receipt", receipt);
+        if (!accountExists) {
+          await this.registerSuccess();
+        }
         this.$loading.close();
         await this.$alert(
           "Successful transaction! The resource release time is based on on-chain data."

@@ -137,9 +137,9 @@ export default {
         }
         this.$loading();
         let tx = null;
+        const accountExists = await this.checkAccount();
+        console.log(accountExists, "accountExists");
         if (this.usdcKey == "MumbaiUSDC") {
-          const accountExists = await this.checkAccount();
-          console.log(accountExists, "accountExists");
           if (accountExists) {
             tx = await target.recharge(
               this.providerAddr,
@@ -202,7 +202,12 @@ export default {
 
         const receipt = await tx.wait();
         console.log("receipt", receipt);
+
         this.addHash(tx, num, "Deposit");
+
+        if (!accountExists) {
+          await this.registerSuccess();
+        }
         this.$loading.close();
         await this.$alert(
           "Successful transaction! The arrival time of the amount is subject to the transaction on-chain data."

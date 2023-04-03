@@ -85,14 +85,13 @@ export default {
             this.$refs.guide.guide();
           }, 2000);
         }
-        setTimeout(() => {
-          this.$refs.guide.guide();
-        }, 2000);
+        // setTimeout(() => {
+        //   this.$refs.guide.guide();
+        // }, 2000);
       } catch (error) {
         console.log(error);
       }
     },
-
     // async getNewUser() {
     //   try {
     //     // const data = await airdropRequest();

@@ -69,9 +69,10 @@
 
 <script>
 import { bus } from "@/utils/bus";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import Driver from "driver.js";
 import "driver.js/dist/driver.min.css";
+import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
 import mixin from "@/pages/more/mixin-register";
 
 export default {
@@ -198,7 +199,9 @@ export default {
             //   this.driver.moveNext();
             //   this.stepCount += 1;
             // }, 250);
-            this.showDialog = true;
+            if (!this.accountExists) {
+              this.showDialog = true;
+            }
           },
         },
         // {
@@ -234,32 +237,48 @@ export default {
       items: [
         {
           name: "IPFS Storage",
-          value: "6GB",
+          value: "1GB",
           icon: require("/public/img/airDrop/ipfs.png"),
         },
         {
           name: "Arweave Storage",
-          value: "100MB",
+          value: "20MB",
           icon: require("/public/img/airDrop/ar.png"),
         },
         {
           name: "Build Minutes",
-          value: "250Min",
+          value: "100Min",
           icon: require("/public/img/airDrop/minutes.png"),
         },
         {
           name: "Bandwidth",
-          value: "100GB",
+          value: "10GB",
           icon: require("/public/img/airDrop/balance.png"),
         },
       ],
       showDialog: false,
+      accountExists: false,
     };
+  },
+  async created() {
+    await this.getCurrentContract();
+    const accountExists = await this.contract.ProviderController.accountExists(
+      providerAddr,
+      this.uuid
+    );
+    console.log(accountExists, "accountExists");
+    this.accountExists = accountExists;
   },
   computed: {
     ...mapState({
       noticeMsg: (s) => s.noticeMsg,
+      userInfo: (s) => s.userInfo,
     }),
+    ...mapGetters(["teamInfo"]),
+    uuid() {
+      if (this.teamInfo.isMember) return this.teamInfo.teamOwnerEuid;
+      return this.userInfo.euid;
+    },
   },
   watch: {
     "driver.isActivated"(val) {
@@ -267,7 +286,7 @@ export default {
         bus.$emit("guide");
         this.move();
       }
-      if (this.stepCount != 5 && !val) {
+      if (this.stepCount != 5 && !val && !this.accountExists) {
         this.showDialog = true;
       }
     },

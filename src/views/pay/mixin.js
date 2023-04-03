@@ -441,5 +441,15 @@ export default {
         });
       }
     },
+    async registerSuccess(txh) {
+      try {
+        await this.$http.post("$auth/self-handled-register", {
+          txn: txh ?? "",
+        });
+        this.$setMsg("updateUser");
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };

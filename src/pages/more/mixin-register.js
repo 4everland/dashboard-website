@@ -177,7 +177,6 @@ export default {
           txn: txh ?? "",
         });
         this.$setMsg("updateUser");
-        this.$setMsg("updateUseage");
         if (this.getList) {
           this.getList();
         }
