@@ -70,6 +70,9 @@
         <span>Pending</span>
       </div>
     </e-toggle-card>
+
+    <!-- buildType:  git | ipns | ipfs, platform: ipfs | ar | ic  -->
+    <!-- <build-overview-logs1 :buildType="git" :platform="ipfs" ></build-overview-logs1> -->
   </div>
 </template>
 

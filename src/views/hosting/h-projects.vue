@@ -308,45 +308,6 @@
       v-if="loading"
       type="article"
     ></v-skeleton-loader>
-    <div class="ta-c">
-      <div
-        :class="!limit ? 'main-wrap' : ''"
-        class="pb-15 al-c justify-center"
-        v-if="!list.length && !loading"
-      >
-        <div class="al-c mt-10">
-          <div
-            class="ipfs-deploy deploy"
-            @click="$router.push('/hosting/new-by-hash')"
-          >
-            <img
-              class="mb-1"
-              src="/img/svg/hosting/ipfs-deploy.svg"
-              alt=""
-              width="88"
-            />
-            <div class="fw-b">Create a project from a IPFS Path.</div>
-          </div>
-          <div
-            class="template-deploy deploy"
-            @click="$router.push('/hosting/new')"
-          >
-            <img
-              class="mb-4"
-              src="/img/svg/hosting/template-deploy.svg"
-              alt=""
-              width="44"
-            />
-            <div class="fw-b">
-              Create a project from Template, or import a Git repository.
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="mt-8" v-else-if="limit">
-        <v-btn color="primary" outlined to="/hosting/projects">View More</v-btn>
-      </div>
-    </div>
     <div class="mt-6" v-if="pageLen > 1">
       <v-pagination
         @input="onPage"
@@ -419,6 +380,11 @@ export default {
         this.lastState = data.state;
         if (this.inCurPath) this.getList();
         else this.needRefresh = true;
+      }
+    },
+    list(val) {
+      if (!val.length && !this.loading) {
+        this.$router.push("/hosting/new");
       }
     },
     // inCurPath(val) {
