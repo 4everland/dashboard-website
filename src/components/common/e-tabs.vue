@@ -58,7 +58,7 @@
           :info="info"
           @handleEvent="handleEvent"
           :active="curItem.comp == it.comp"
-          v-show="curItem.comp == it.comp"
+          v-show="isActive(it)"
           v-for="(it, i) in activeList"
           :key="i"
         ></component>
@@ -142,6 +142,10 @@ export default {
     this.curIdx = this.getIdx();
   },
   methods: {
+    isActive(it) {
+      if (it.id) return it.id == this.curItem.id;
+      return it.comp == this.curItem.comp;
+    },
     getIdx() {
       const tab = this.$route.query[this.tabKey] || this.defTab;
       let curIdx = 0;
