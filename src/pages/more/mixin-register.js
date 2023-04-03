@@ -35,7 +35,13 @@ export default {
           const records = await this.searchZySyncRecord();
           console.log(records);
           console.log(isExists);
-          if (isExists || records.length) {
+          if (isExists) {
+            // euid exist  over
+            console.log("register success");
+            await this.registerSuccess();
+            return true;
+          }
+          if (records.length) {
             // euid exist  over
             console.log("register success");
             await this.registerSuccess(records[0].txHash);

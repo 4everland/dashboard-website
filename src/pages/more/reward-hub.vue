@@ -120,7 +120,7 @@
                   depressed
                   tile
                   width="100"
-                  :disabled="item.isDone"
+                  :disabled="item.isDone || !userInfo.onChain"
                   :loading="item.loading"
                 >
                   <span
