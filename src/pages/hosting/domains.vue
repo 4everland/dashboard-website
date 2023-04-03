@@ -132,20 +132,20 @@ export default {
         { text: "CreateAt", value: "createTime" },
       ],
       list: [],
-      tabList: [
-        {
-          text: "Domains",
-          comp: "domain-domains",
-        },
-        {
-          text: "ENS",
-          comp: "domain-ens",
-        },
-        {
-          text: "SNS",
-          comp: "domain-sns",
-        },
-      ],
+      // tabList: [
+      //   {
+      //     text: "Domains",
+      //     comp: "domain-domains",
+      //   },
+      //   {
+      //     text: "ENS",
+      //     comp: "domain-ens",
+      //   },
+      //   {
+      //     text: "SNS",
+      //     comp: "domain-sns",
+      //   },
+      // ],
       page: 1,
       pageLen: 1,
       total: 0,
@@ -183,23 +183,23 @@ export default {
         return false;
       };
     },
-    // tabList() {
-    //   let list = [
-    //     {
-    //       text: "Domains",
-    //       comp: "domain-domains",
-    //     },
-    //   ];
+    tabList() {
+      let list = [
+        {
+          text: "Domains",
+          comp: "domain-domains",
+        },
+      ];
 
-    //   domainOptions.list.forEach((element) => {
-    //     let obj = {
-    //       text: element.name,
-    //       comp: "domain-mix",
-    //     };
-    //     list.push(obj);
-    //   });
-    //   return list;
-    // },
+      domainOptions.list.forEach((element) => {
+        let obj = {
+          text: element.name,
+          comp: "domain-mix",
+        };
+        list.push(obj);
+      });
+      return list;
+    },
   },
   watch: {
     showPop(val) {

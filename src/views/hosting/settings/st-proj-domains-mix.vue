@@ -147,8 +147,15 @@
                   x-small
                   color="primary"
                   class="ml-4"
+                  :disabled="
+                    item.content == item.ipns || item.content == item.ipfs
+                  "
                 >
-                  Bind
+                  {{
+                    item.content == item.ipns || item.content == item.ipfs
+                      ? "Bound"
+                      : "Bind"
+                  }}
                 </v-btn>
               </div>
               <div class="gray mt-1 fz-14 ml-10">
@@ -168,8 +175,15 @@
                   x-small
                   color="primary"
                   class="ml-4"
+                  :disabled="
+                    item.content == item.ipns || item.content == item.ipfs
+                  "
                 >
-                  Bind
+                  {{
+                    item.content == item.ipns || item.content == item.ipfs
+                      ? "Bound"
+                      : "Bind"
+                  }}
                 </v-btn>
               </div>
             </div>
@@ -191,6 +205,32 @@
         </template>
       </div>
     </div>
+    <v-dialog v-model="showDialog" max-width="600">
+      <div class="pa-5">
+        <h3>Add ENS</h3>
+
+        <v-radio-group v-model="bindContent">
+          <v-radio
+            class="bind-radio"
+            v-for="n in bindOpt"
+            :key="n.value"
+            :label="n.label"
+            :value="n.value"
+          ></v-radio>
+        </v-radio-group>
+        <div class="al-c justify-center mt-7">
+          <v-btn color="primary" width="120" @click="setContentHash">OK</v-btn>
+          <v-btn
+            color="primary"
+            outlined
+            class="ml-4"
+            width="120"
+            @click="showDialog = false"
+            >Cancel</v-btn
+          >
+        </div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 <script>
@@ -222,6 +262,19 @@ export default {
       owner: "",
       seleted: "ens",
       items: domainOptions.list,
+      showDialog: false,
+      bindOpt: [
+        // {
+        //   label:
+        //     "Bind the ENS to the IPNS (Base IPNS) used for project deployment",
+        //   value: "BaseIpns",
+        // },
+        {
+          label: "Bind the ENS to the IPNS generated in the IPNS Manager",
+          value: "ipns",
+        },
+        { label: "Bind ENS to the IPFS of the project", value: "BaseIpfs" },
+      ],
     };
   },
   computed: {
@@ -535,6 +588,9 @@ export default {
       });
     },
     checkNet() {
+      if (process.env != "production") {
+        return true;
+      }
       const chainId = this.walletObj.chainId;
       if (!chainId) return false;
       let msg = "";

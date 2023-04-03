@@ -361,6 +361,11 @@ export default {
         console.log(error);
       }
     },
+    async afterAdd() {
+      const domain = this.domain;
+      const { data } = await this.$http.get(`$hosting/domain/${domain}`);
+      return data;
+    },
     async onAdd() {
       try {
         if (!this.domain) return;
@@ -370,6 +375,16 @@ export default {
         if (!this.$regMap.domain.test(this.domain)) {
           return this.$alert(
             `The specified value "${this.domain}” is an unqualified domain name.`
+          );
+        }
+        const isExist = await this.afterAdd();
+        if (isExist) {
+          await this.$confirm(
+            "The domain name already occupied by another project, rebundle it to the current one?",
+            "",
+            {
+              confirmText: "Ok",
+            }
           );
         }
         let type = 3;
@@ -391,6 +406,7 @@ export default {
           if (isWww && type == 2) domain = "www." + domain;
         }
         this.adding = true;
+
         await this.$http.post("$hosting/domain", {
           domain,
           projectId: this.info.id,
