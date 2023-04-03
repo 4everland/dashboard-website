@@ -11,8 +11,11 @@
           >mdi-close</v-icon
         >
         <div class="mt-4 fz-14 lh-2">
-          4EVERLAND offers free resource packages that help you better
-          experience its services. Claim them now.
+          Below are the complimentary resource packages provided by 4EVERLAND to
+          enhance your experience with our product services. We highly recommend
+          upgrading your account to access additional storage resources, enter
+          the decentralized world, and align with the fundamental principles of
+          Web3.
         </div>
         <v-row class="mt-2">
           <v-col :sm="6" :cols="12" v-for="item in items" :key="item.name">
