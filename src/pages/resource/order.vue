@@ -237,7 +237,8 @@ export default {
         if (accountExists) {
           tx = await target.pay(...params);
         } else {
-          tx = await target.payWithRegistration(...params);
+          const { sign } = await this.getSignAddress();
+          tx = await target.payWithRegistration(...params, sign);
         }
         console.log("tx", tx);
         const receipt = await tx.wait(1);
@@ -299,6 +300,16 @@ export default {
       this.voucherCode = "";
       this.AmountofDeduction = 0;
       this.resourceResource = null;
+    },
+    async getSignAddress() {
+      try {
+        const { data } = await this.$http.get(
+          "$auth/self-handled-register-sign-from-server"
+        );
+        return data;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   components: {
