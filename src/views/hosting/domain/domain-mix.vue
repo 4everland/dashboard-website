@@ -82,7 +82,7 @@
 
 <script>
 export default {
-  props: ["type"],
+  props: ["type", "active"],
   data() {
     return {
       headers: [
@@ -117,6 +117,11 @@ export default {
     },
   },
   watch: {
+    active(val) {
+      if (val) {
+        this.getList();
+      }
+    },
     selected(val) {
       this.$setMsg({
         name: "domains-selected",
