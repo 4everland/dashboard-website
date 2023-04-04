@@ -230,7 +230,12 @@ export default {
         html += '<div class="pd-10"></div>';
         const now = new Date();
         for (const it of this.selected) {
-          const time = new Date(it.createAt * 1e3).toNiceTime(now);
+          let createAt = it.createAt;
+          const timeStr = String(createAt);
+          if (timeStr.length == 10) {
+            createAt = createAt * 1e3;
+          }
+          const time = new Date(createAt).toNiceTime(now);
           html += `<div class="mt-2 fz-14">${
             it.domain || it.value
           } <span class="fl-r gray">added ${time}</span></div>`;
