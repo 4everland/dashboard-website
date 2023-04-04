@@ -45,12 +45,12 @@
               </v-list-item>
               <v-list-item link @click="handleZkSyncClaim">
                 <v-list-item-title class="fz-14 al-c justify-center">
-                  <div class="al-c mx-auto">
+                  <div class="al-c">
                     <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
                     <span class="ml-3">zkSync Lite(V1) Claim</span>
                   </div>
                   <e-tooltip right>
-                    <v-icon slot="ref" size="18" color="#333" class="pa-1 d-ib"
+                    <v-icon slot="ref" size="18" color="#999" class="pa-1 d-ib"
                       >mdi-alert-circle-outline</v-icon
                     >
                     <span
@@ -72,10 +72,9 @@
 
 <script>
 import { bus } from "@/utils/bus";
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 import Driver from "driver.js";
 import "driver.js/dist/driver.min.css";
-import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
 import mixin from "@/pages/more/mixin-register";
 
 export default {
@@ -202,7 +201,8 @@ export default {
             //   this.driver.moveNext();
             //   this.stepCount += 1;
             // }, 250);
-            if (!this.accountExists) {
+
+            if (!this.registerInfo.handled) {
               this.showDialog = true;
             }
           },
@@ -261,23 +261,20 @@ export default {
       ],
       showDialog: false,
       accountExists: false,
+      registerInfo: {},
     };
   },
   async created() {
     await this.getCurrentContract();
-    const accountExists = await this.contract.ProviderController.accountExists(
-      providerAddr,
-      this.uuid
-    );
-    console.log(accountExists, "accountExists");
-    this.accountExists = accountExists;
+    if (localStorage.token) {
+      await this.getHandler();
+    }
   },
   computed: {
     ...mapState({
       noticeMsg: (s) => s.noticeMsg,
       userInfo: (s) => s.userInfo,
     }),
-    ...mapGetters(["teamInfo"]),
     uuid() {
       if (this.teamInfo.isMember) return this.teamInfo.teamOwnerEuid;
       return this.userInfo.euid;
@@ -289,7 +286,7 @@ export default {
         bus.$emit("guide");
         this.move();
       }
-      if (this.stepCount != 5 && !val && !this.accountExists) {
+      if (this.stepCount != 5 && !val && !this.registerInfo.handled) {
         this.showDialog = true;
       }
     },
@@ -318,6 +315,16 @@ export default {
       document.body.style.overflow = "";
       document.body.style.height = "";
       document.removeEventListener("touchmove", mo, false);
+    },
+    async getHandler() {
+      try {
+        const { data } = await this.$http.get(
+          "$auth/self-handled-register-apply"
+        );
+        this.registerInfo = data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     async handlePloygonClaim() {
       try {

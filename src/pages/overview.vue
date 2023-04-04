@@ -36,13 +36,21 @@
             <v-icon>mdi-menu</v-icon>
           </v-btn>
           <h2>{{ uname }}</h2>
-          <div v-if="userInfo.onChain" class="ml-3">vip user</div>
-          <div v-else class="ml-3">
+          <div
+            class="ml-3 px-3 fz-12 user-tag"
+            :style="{
+              background: userInfo.onChain ? '#775da6' : '#999',
+              color: userInfo.onChain ? '#fff' : '#000',
+            }"
+          >
+            Pro
+          </div>
+          <!-- <div v-else class="ml-3">
             <span>normal user</span>
             <v-btn :loading="refreshLoading" icon @click="onCheckRegister">
               <v-icon>mdi-refresh</v-icon>
             </v-btn>
-          </div>
+          </div> -->
         </div>
         <div class="gray-8 fz-14 mt-1">Welcome to 4EVERLAND Dashboard</div>
       </div>
@@ -155,3 +163,9 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.user-tag {
+  border-radius: 30px;
+  background: #999;
+}
+</style>

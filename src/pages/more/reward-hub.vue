@@ -13,6 +13,7 @@
         <v-btn
           class="ml-auto"
           small
+          outlined
           color="primary"
           @click="$router.push('/resource/bills?typeIdx=2')"
           >Transaction</v-btn
@@ -57,7 +58,6 @@
                       color="primary"
                       class="mr-2"
                       width="250"
-                      tile
                       dark
                     >
                       <span class="ml-2">Upgrade</span>
@@ -88,7 +88,7 @@
                             <v-icon
                               slot="ref"
                               size="18"
-                              color="#333"
+                              color="#999"
                               class="pa-1 d-ib"
                               >mdi-alert-circle-outline</v-icon
                             >
@@ -104,23 +104,20 @@
                       </v-list-item>
                     </v-list>
                   </e-menu>
-                  <v-btn :loading="refreshLoading" icon @click="isRegister">
+                  <!-- <v-btn :loading="refreshLoading" icon @click="isRegister">
                     <v-icon>mdi-refresh</v-icon>
-                  </v-btn>
+                  </v-btn> -->
                 </div>
 
-                <v-btn v-else tile class="mr-9" width="100" disabled>
-                  Done
-                </v-btn>
+                <v-btn v-else class="mr-9" width="100" disabled> Done </v-btn>
               </div>
               <div v-else class="al-c justify-center">
                 <v-btn
                   :color="getBtnColor(item)"
                   @click="onAct(item)"
                   depressed
-                  tile
                   width="100"
-                  :disabled="item.isDone || !userInfo.onChain"
+                  :disabled="item.isDone || !activitiesInfo.onChain"
                   :loading="item.loading"
                 >
                   <span
@@ -198,6 +195,9 @@ export default {
       showTg: false,
       tgTag: `<b>2</b>`,
       code: null,
+      activitiesInfo: {
+        onChain: false,
+      },
     };
   },
   watch: {
@@ -303,6 +303,7 @@ export default {
         }
       } catch (error) {
         console.log(error);
+        this.getList();
       }
     },
     async onAct(it) {
@@ -327,6 +328,7 @@ export default {
       try {
         this.loading = true;
         const { data } = await this.$http.get("$auth/rewardhub/activities");
+        this.activitiesInfo = data;
         this.list = data.item.map((it) => {
           if (it.status == "DONE") {
             it.isDone = true;
