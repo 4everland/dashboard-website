@@ -8,6 +8,7 @@ module.exports = {
     port: 8082,
     open: true,
     publicPath: "/",
+    disableHostCheck: true,
   },
   lintOnSave: false,
   chainWebpack: (config) => {

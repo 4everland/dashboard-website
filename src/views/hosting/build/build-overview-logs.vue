@@ -5,19 +5,23 @@
       title="Resolve IPNS"
       :value="getOpen(-1)"
       :icon="getIcon(-1)"
-      v-if="ipnsDeployAny"
+      v-if="ipnsDeployIpfs || ipnsDeployOther"
     >
       <template #time v-if="info && info.endAt">
         <div class="fz-14 gray">
           <e-time :endAt="info.endAt">{{ info.createAt }}</e-time>
         </div>
       </template>
-      <build-log v-if="info" :list="logs" :errMsg="errMsg" />
-      <div class="fz-14 gray" v-else>Pending</div>
+      <!-- <build-log v-if="info" :list="logs" :errMsg="errMsg" /> -->
+
+      <div class="fz-14">IPNS Resolve: {{ projInfo.ipfsPath }}</div>
+      <div class="fz-14 gray mt-4">
+        IPFS CID: {{ info.cid ? info.cid : "Pending" }}
+      </div>
     </e-toggle-card>
     <e-toggle-card
       class="mt-5"
-      title="Building"
+      :title="gitHubDeploy ? 'Building' : 'Pinning'"
       :value="getOpen(0)"
       :icon="getIcon(0)"
     >
@@ -29,12 +33,33 @@
       <build-log v-if="info" :list="logs" :errMsg="errMsg" />
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
+
     <e-toggle-card
       v-if="showHash"
       class="mt-5"
-      :title="'Syncing to ' + info.platform"
+      title="Assigning Domains"
       :value="getOpen(1)"
       :icon="getIcon(1)"
+    >
+      <div v-if="domains.length">
+        <p v-for="(it, i) in domains" :key="i">
+          <h-domain
+            :val="it"
+            class="fz-14"
+            :disabled="!projInfo.online"
+          ></h-domain>
+        </p>
+      </div>
+      <div v-else class="fz-14 gray">
+        <span>Pending</span>
+      </div>
+    </e-toggle-card>
+    <e-toggle-card
+      v-if="showHash && !ipfsDeployIpfs && !ipnsDeployIpfs"
+      class="mt-5"
+      :title="'Syncing to ' + info.platform"
+      :value="getOpen(2)"
+      :icon="getIcon(2)"
     >
       <e-kv
         min-width="70px"
@@ -63,26 +88,6 @@
         <span v-else>
           <h-status :val="state"></h-status>
         </span>
-      </div>
-    </e-toggle-card>
-    <e-toggle-card
-      v-if="showHash"
-      class="mt-5"
-      title="Assigning Domains"
-      :value="getOpen(2)"
-      :icon="getIcon(2)"
-    >
-      <div v-if="domains.length && isDone">
-        <p v-for="(it, i) in domains" :key="i">
-          <h-domain
-            :val="it"
-            class="fz-14"
-            :disabled="!projInfo.online"
-          ></h-domain>
-        </p>
-      </div>
-      <div v-else class="fz-14 gray">
-        <span>Pending</span>
       </div>
     </e-toggle-card>
 
@@ -159,39 +164,20 @@ export default {
         return type == "CID" || type == "IPNS";
       };
     },
-
-    deployWithPlatform() {
-      if (
-        this.projInfo.deployType == "IPFS" &&
-        this.projInfo.platform == "IPFS"
-      ) {
-        return "IPFS_DEPLOY_IPFS";
-      }
-      if (
-        this.projInfo.deployType == "IPFS" &&
-        this.projInfo.platform != "IPFS"
-      ) {
-        return "IPFS_DEPLOY_OTHER";
-      }
-      if (
-        this.projInfo.deployType == "IPNS" &&
-        this.projInfo.platform == "IPFS"
-      ) {
-        return "IPNS_DEPLOY_IPFS";
-      }
-      if (
-        this.projInfo.deployType == "IPNS" &&
-        this.projInfo.platform != "IPFS"
-      ) {
-        return "IPNS_DEPLOY_OTHER";
-      }
-      return "GIT_DEPLOY";
-    },
-    ipnsDeployAny() {
-      return /IPNS/.test(this.deployWithPlatform);
-    },
     ipfsDeployIpfs() {
-      return this.deployWithPlatform == "IPFS_DEPLOY_IPFS";
+      return this.info.deployType == "CID" && this.info.platform == "IPFS";
+    },
+    ipfsDeployOther() {
+      return this.info.deployType == "CID" && this.info.platform != "IPFS";
+    },
+    ipnsDeployIpfs() {
+      return this.info.deployType == "IPNS" && this.info.platform == "IPFS";
+    },
+    ipnsDeployOther() {
+      return this.info.deployType == "IPNS" && this.info.platform != "IPFS";
+    },
+    gitHubDeploy() {
+      return this.info.deployType == "GITHUB";
     },
   },
   watch: {
@@ -199,6 +185,7 @@ export default {
       this.getInfo();
     },
     buildInfo({ name, data }) {
+      console.log(data);
       if (data.taskId == this.taskId) {
         console.log(this.taskId, name);
         const last = this.logs[this.logs.length - 1];
@@ -248,37 +235,43 @@ export default {
             timestamp: info.endAt || info.createAt,
           };
           if (this.isFail) log.content = "deploy failed.";
-          else if (!this.isDone) log.content = "deploying...";
-          else log.content = "deploy site successfully: " + data.hash;
+          // else if (this.state == "syncing") log.content = "";
+          // else if (!this.isDone) log.content = "deploying...";
+          // else log.content = "deploy site successfully: " + data.hash;
+          else if (this.state == "syncing" || this.isDone)
+            log.content = "deploy site successfully " + info.cid;
+          else log.content = "deploying...";
           data.log = [log];
         }
         this.logs = data.log || [];
         if (this.isDone) {
           // this.curIdx = isIpfs ? 2 : 1;
-          if (this.ipfsDeployIpfs) {
+          if (this.ipfsDeployIpfs || this.ipfsDeployOther) {
             this.openIds = [0, 1, 2];
           }
-          if (this.deployWithPlatform == "IPFS_DEPLOY_OTHER") {
-            this.openIds = [0, 1, 2];
-          }
-          if (this.deployWithPlatform == "IPNS_DEPLOY_IPFS") {
+          if (this.ipnsDeployIpfs || this.ipnsDeployOther) {
             this.openIds = [-1, 0, 1, 2];
           }
-          if (this.deployWithPlatform == "IPNS_DEPLOY_OTHER") {
-            this.openIds = [-1, 0, 1, 2];
-          }
+
+          console.log(this.openIds, this.info);
           this.$store.dispatch("getProjectInfo", this.info.projectId);
         } else if (this.isSyncErr) {
           this.curIdx = 1;
         } else if (hash || this.state == "syncing") {
-          this.curIdx = isIpfs ? 2 : 1;
+          // this.curIdx = isIpfs ? 2 : 1;
+          if (this.ipfsDeployIpfs || this.ipfsDeployOther) {
+            this.openIds = [0, 1];
+          }
+          if (this.ipnsDeployIpfs || this.ipnsDeployOther) {
+            this.openIds = [-1, 0, 1];
+          }
         }
       } catch (error) {
         console.log(error);
       }
     },
     initOpenIds() {
-      if (this.ipnsDeployAny) {
+      if (this.ipnsDeployIpfs || this.ipnsDeployOther) {
         this.openIds = [-1];
       } else {
         this.openIds = [0];
@@ -306,8 +299,9 @@ export default {
       }
       if (this.isSyncErr && i == 1) return "fail";
       if (this.isFail) return "pending";
-      if (i < this.curIdx || this.isDone) return "checked";
-      return i == this.curIdx ? "loading" : "pending";
+      if (this.openIds.includes(i) || this.isDone) return "checked";
+      // return i == this.curIdx ? "loading" : "pending";
+      return "loading";
     },
   },
   components: {
