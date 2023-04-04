@@ -259,15 +259,14 @@ export default {
             this.openIds = [0, 1, 2];
           }
           if (this.deployWithPlatform == "IPFS_DEPLOY_OTHER") {
-            this.openIds = [0, 1];
+            this.openIds = [0, 1, 2];
           }
           if (this.deployWithPlatform == "IPNS_DEPLOY_IPFS") {
             this.openIds = [-1, 0, 1, 2];
           }
           if (this.deployWithPlatform == "IPNS_DEPLOY_OTHER") {
-            this.openIds = [-1, 0, 1];
+            this.openIds = [-1, 0, 1, 2];
           }
-
           this.$store.dispatch("getProjectInfo", this.info.projectId);
         } else if (this.isSyncErr) {
           this.curIdx = 1;
@@ -294,6 +293,7 @@ export default {
         this.openIds.splice(idx, 1);
       }
     },
+
     getOpen(i) {
       return this.openIds.includes(i);
       // return i >= -1 && i <= this.curIdx;
