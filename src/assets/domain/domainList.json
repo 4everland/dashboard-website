@@ -4,14 +4,14 @@
       "name": "ENS",
       "key": "ens",
       "network": "function(domain){return 'https://' +  domain + '.limo'}",
-      "host": "www.baidu.com",
+      "host": "https://app.ens.domains",
       "rule": ".+.eth$"
     },
     {
       "name": "SNS",
       "key": "sns",
       "network": "function(domain){return 'https://' + domain.split('.')[0] + '.4sol.xyz'}",
-      "host": "www.baidu.com",
+      "host": "https://naming.bonfida.org",
       "rule": ".+.sol$"
     }
   ]

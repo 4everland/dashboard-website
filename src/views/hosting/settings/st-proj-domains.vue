@@ -208,16 +208,16 @@
 </template>
 
 <script>
-import StProjDomainsEns from "@/views/hosting/settings/st-proj-domains-ens";
-import StProjDomainsSol from "@/views/hosting/settings/st-proj-domains-sol";
+// import StProjDomainsEns from "@/views/hosting/settings/st-proj-domains-ens";
+// import StProjDomainsSol from "@/views/hosting/settings/st-proj-domains-sol";
 import StProjDomainsMix from "@/views/hosting/settings/st-proj-domains-mix";
 
 import { mapState } from "vuex";
 
 export default {
   components: {
-    StProjDomainsEns,
-    StProjDomainsSol,
+    // StProjDomainsEns,
+    // StProjDomainsSol,
     StProjDomainsMix,
   },
   data() {

@@ -3,7 +3,19 @@
     <v-skeleton-loader type="article" v-if="domainLoading" />
     <div v-else>
       <div class="bd-1 mb-5">
-        <h3>Decentralized Domains</h3>
+        <div class="d-flex justify-space-between">
+          <h3>Decentralized Domains</h3>
+          <span>
+            <img
+              class="mx-2"
+              style="cursor: pointer"
+              v-for="item in items"
+              :key="item.key"
+              :src="require(`@/assets/domain/icon/${item.key}.svg`)"
+              @click="seleted = item.key"
+            />
+          </span>
+        </div>
         <div class="mt-5">
           <div class="d-flex">
             <div class="mr-4" style="width: 200px">
@@ -50,8 +62,8 @@
                   class="mr-2"
                 />
                 <div class="mr-auto">
-                  <!-- :href="`https://${item.domain.split('.')[0]}.4sol.xyz`" -->
                   <a
+                    v-if="item.type == 'ens' || item.type == 'sns'"
                     :class="
                       item.content == item.ipns || item.content == item.ipfs
                         ? ''
@@ -61,22 +73,50 @@
                     target="_blank"
                     >{{ item.domain }}</a
                   >
+                  <a v-else :href="toHref(item)" target="_blank">{{
+                    item.domain
+                  }}</a>
                 </div>
-                <div class="d-flex al-c ml-2">
+                <div
+                  class="d-flex al-c ml-2"
+                  v-if="item.type == 'ens' || item.type == 'sns'"
+                >
                   <v-icon
-                    :color="
+                    v-if="
                       item.content == item.ipns || item.content == item.ipfs
-                        ? 'success'
-                        : 'error'
+                    "
+                    color="
+                         success
                     "
                     size="18"
                   >
-                    mdi-{{
-                      item.content == item.ipns || item.content == item.ipfs
-                        ? "check-circle"
-                        : "information"
-                    }}
+                    mdi-check-circle
                   </v-icon>
+                  <v-tooltip bottom v-else>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-icon
+                        :color="
+                          item.content == item.ipns || item.content == item.ipfs
+                            ? 'success'
+                            : 'error'
+                        "
+                        size="18"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        mdi-{{
+                          item.content == item.ipns || item.content == item.ipfs
+                            ? "check-circle"
+                            : "information"
+                        }}
+                      </v-icon>
+                    </template>
+                    <span>{{
+                      `${
+                        item.domain
+                      } has the different hash on ${item.type.toUpperCase()}`
+                    }}</span>
+                  </v-tooltip>
                   <!-- <span
                     class="ml-1 fz-13"
                     :class="
@@ -126,9 +166,23 @@
             </div>
           </div>
           <div>
-            <div class="gray mt-1 fz-14">
-              Set the ENS content hash by clicking on"Bind" or copying the hash
-              to app.ens.domains.
+            <div
+              class="gray mt-1 fz-14"
+              v-if="item.type == 'ens' || item.type == 'sns'"
+            >
+              Set the {{ item.type.toUpperCase() }} content hash by clicking
+              on"Bind" or copying the hash to
+              <a :href="getDomainByType(item.type).host" target="_blank">{{
+                getDomainByType(item.type).host.replace("https://", "")
+              }}</a
+              >.
+            </div>
+            <div class="gray mt-1 fz-14" v-else>
+              Copy the hash to
+              <a :href="getDomainByType(item.type).host" target="_blank">{{
+                getDomainByType(item.type).host.replace("https://", "")
+              }}</a>
+              for binding.
             </div>
             <div class="d-flex al-c mt-4">
               <div class="gray mt-1 fz-14">
@@ -212,7 +266,7 @@ import {
 } from "@/plugins/sns";
 
 const domainOptions = require("@/assets/domain/domainList.json");
-
+console.log(domainOptions);
 export default {
   data() {
     return {
@@ -226,6 +280,8 @@ export default {
       seleted: "ens",
       items: domainOptions.list,
       showDialog: false,
+      tempItem: null,
+      tempType: "",
     };
   },
   computed: {
@@ -252,6 +308,15 @@ export default {
         this.projectInfo.deployType == "CID" ||
         this.projectInfo.deployType == "IPNS"
       );
+    },
+  },
+  watch: {
+    connectAddr(val) {
+      if (val) {
+        if (this.tempItem) {
+          this.setEnsContentHash(this.tempItem, this.tempType);
+        }
+      }
     },
   },
   created() {
@@ -314,11 +379,10 @@ export default {
       }
     },
     async verifyEnsConfiguration(item) {
-      console.log(this.connectAddr);
-      if (!this.connectAddr) {
-        this.showConnect();
-        return;
-      }
+      // if (!this.connectAddr) {
+      //   await this.showConnect();
+      //   return;
+      // }
       if (!this.checkNet()) {
         return;
       }
@@ -388,9 +452,12 @@ export default {
       }
     },
     async onAddEns() {
+      if (!this.checkNet()) {
+        return;
+      }
       const domain = this.domain;
       const owner = await this.verifyEnsOwner(domain);
-      if (!owner) {
+      if (!owner || owner == 0) {
         return this.$alert("Invalid ETH Domain");
       }
       this.$confirm(
@@ -476,18 +543,22 @@ export default {
     },
     async setEnsContentHash(item, type) {
       this.showDialog = false;
+      this.tempItem = null;
+      this.tempType = "";
       if (!this.connectAddr) {
-        this.showConnect();
+        this.tempItem = item;
+        this.tempType = type;
+        await this.showConnect();
         return;
       }
       if (!this.checkNet()) {
         return false;
       }
-      // if (item.owner !== this.connectAddr) {
-      //   return this.$alert(
-      //     "Connected account is not the controller of the domain. "
-      //   );
-      // }
+      if (item.owner !== this.connectAddr) {
+        return this.$alert(
+          "Connected account is not the controller of the domain. "
+        );
+      }
       try {
         this.$loading();
         let Obj = {
@@ -569,20 +640,39 @@ export default {
       });
     },
     checkNet() {
-      // const chainId = this.walletObj.chainId;
-      // if (!chainId) return false;
-      // let msg = "";
-      // if (chainId != "0x1") {
-      //   msg =
-      //     "Wrong network, please switch your wallet network to Ethereum mainnet.";
-      // }
-      // if (msg) {
-      //   this.$alert(msg).then(() => {
-      //     this.switchNet(1);
-      //   });
-      // }
-      // return !msg;
-      return true;
+      const chainId = this.walletObj.chainId;
+      if (!chainId) return false;
+      let msg = "";
+      if (chainId != "0x1") {
+        msg =
+          "Wrong network, please switch your wallet network to Ethereum mainnet.";
+      }
+      if (msg) {
+        this.$alert(msg).then(() => {
+          this.switchNet(1);
+        });
+      }
+      return !msg;
+    },
+    async switchNet(id) {
+      try {
+        const chainId = "0x" + id.toString(16);
+        // await this.addChain(chainId, id);
+        const res = await window.web3.currentProvider.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId }],
+        });
+        if (res && res.error) {
+          throw new Error(res.error);
+        }
+      } catch (error) {
+        console.log("switch net error");
+        // this.onErr(error).then(() => {
+        //   if (error.code === 4902) {
+        //     this.switchNet(id);
+        //   }
+        // });
+      }
     },
     onErr(e) {
       console.log(e);
@@ -591,12 +681,18 @@ export default {
     handleChangeSelect() {
       this.domain = "";
     },
-    toHref(domainObj) {
-      const rule = this.items.find((item) => {
+    async toHref(domainObj) {
+      let rule = {};
+      rule = this.items.find((item) => {
         return domainObj.type == item.key;
       });
-      const fn = eval("(" + rule.network + ")");
+      const fn = eval("(" + rule?.network + ")");
       return fn(domainObj.domain);
+    },
+    getDomainByType(type) {
+      return this.items.find((item) => {
+        return item.key == type;
+      });
     },
   },
 };
