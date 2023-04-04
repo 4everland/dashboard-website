@@ -82,6 +82,7 @@
 
 <script>
 export default {
+  props: ["type"],
   data() {
     return {
       headers: [
@@ -146,13 +147,12 @@ export default {
     },
     async getList() {
       try {
-        console.log(this);
         this.loading = true;
-        this.headers[0].text = this.$attrs.type.toUpperCase();
+        this.headers[0].text = this.type.toUpperCase();
         const params = {
           page: this.page - 1,
           pageSize: 10,
-          type: this.$attrs.type,
+          type: this.type,
         };
 
         const { data } = await this.$http.get(
