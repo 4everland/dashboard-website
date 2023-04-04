@@ -1,5 +1,73 @@
 <template>
-  <div></div>
+  <div>
+    <v-dialog v-model="showDialog" max-width="700" persistent>
+      <div class="reward-hub-content pos-r">
+        <h3>Thank You for Registering!</h3>
+        <v-icon
+          size="18"
+          class="cursor-p"
+          @click="showDialog = false"
+          style="position: absolute; top: 30px; right: 30px"
+          >mdi-close</v-icon
+        >
+        <div class="mt-4 fz-14 lh-2">
+          Below are the complimentary resource packages provided by 4EVERLAND to
+          enhance your experience with our product services. We highly recommend
+          upgrading your account to access additional storage resources, enter
+          the decentralized world, and align with the fundamental principles of
+          Web3.
+        </div>
+        <v-row class="mt-2">
+          <v-col :sm="6" :cols="12" v-for="item in items" :key="item.name">
+            <div class="resource-item al-c">
+              <img width="28" :src="item.icon" alt="" />
+              <span class="resource-item-value ml-2">{{ item.value }}</span>
+              <span class="ml-2 fz-12">{{ item.name }}</span>
+            </div>
+          </v-col>
+        </v-row>
+        <div class="d-flex justify-center mt-8">
+          <e-menu open-on-hover offset-y>
+            <v-btn slot="ref" color="primary" dark width="500px">
+              <span class="ml-2">Upgrade now</span>
+              <v-icon>mdi-chevron-down</v-icon>
+            </v-btn>
+            <v-list>
+              <v-list-item link @click="handlePloygonClaim">
+                <v-list-item-title class="fz-14 al-c justify-center">
+                  <img
+                    src="/img/svg/billing/ic-polygon-0.svg"
+                    width="18"
+                    alt=""
+                  />
+                  <span class="ml-3">Ploygon Claim</span>
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item link @click="handleZkSyncClaim">
+                <v-list-item-title class="fz-14 al-c justify-center">
+                  <div class="al-c">
+                    <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
+                    <span class="ml-3">zkSync Lite(V1) Claim</span>
+                  </div>
+                  <e-tooltip right>
+                    <v-icon slot="ref" size="18" color="#999" class="pa-1 d-ib"
+                      >mdi-alert-circle-outline</v-icon
+                    >
+                    <span
+                      >Please ensure that you have sufficient ETH in zkSync
+                      Lite. Interaction with the zkSync network will rely on
+                      cross-chain communication services to complete on-chain
+                      identity registration on Polygon.</span
+                    >
+                  </e-tooltip>
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </e-menu>
+        </div>
+      </div>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -7,14 +75,17 @@ import { bus } from "@/utils/bus";
 import { mapState } from "vuex";
 import Driver from "driver.js";
 import "driver.js/dist/driver.min.css";
+import mixin from "@/pages/more/mixin-register";
+
 export default {
+  mixins: [mixin],
   data() {
     return {
       driver: new Driver({
         className: "guide-class",
         nextBtnText: "Next",
         closeBtnText: "Skip",
-        doneBtnText: "Get more",
+        // doneBtnText: "Get more",
         allowClose: false,
         padding: 0,
       }),
@@ -124,51 +195,90 @@ export default {
             position: "left",
           },
           onNext: () => {
-            this.driver.preventMove();
-            setTimeout(() => {
-              this.driver.refresh();
-              this.driver.moveNext();
-              this.stepCount += 1;
-            }, 250);
+            // this.driver.preventMove();
+            // setTimeout(() => {
+            //   this.driver.refresh();
+            //   this.driver.moveNext();
+            //   this.stepCount += 1;
+            // }, 250);
+
+            if (!this.registerInfo.handled) {
+              this.showDialog = true;
+            }
           },
+        },
+        // {
+        //   element: "#reward-guide",
+        //   popover: {
+        //     className: "reward-guide-class",
+        //     title: "Reward Hub",
+        //     description: `<div class="airdrop-content">
+        //         <div class=" mb-6 fz-14 lh-2">Thank You for Registering!
+        //         We have free resource packages for you in the Reward Hub!</div>
+        //       <div class="row mt-2">
+        //       <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="img/airDrop/ipfs.png" alt=""><span class="resource-item-value ml-2">25GB</span><span class="resource-text fz-12">IPFS Storage</span></div>
+        //       </div>
+        //       <div class="col-sm-6 col-12"><div class="resource-item al-c"><img  width="28" src="/img/airDrop/ar.png" alt=""><span class="resource-item-value ml-2">100MB</span><span  class="resource-text fz-12">Arweave Storage</span></div>
+        //       </div>
+        //       <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/minutes.png" alt=""><span  class="resource-item-value ml-2">100Min</span><span class="resource-text fz-12">Build Minutes</span></div>
+        //       </div>
+        //       <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/balance.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Recharge Balance</span>
+        //       </div>
+        //     </div>
+        //     `,
+        //     // showButtons: false,
+        //     closeBtnText: "Start now",
+        //     nextBtnText: "Get more",
+        //     position: "left",
+        //   },
+        //   onNext: () => {
+        //     this.$router.push("/reward-hub");
+        //   },
+        // },
+      ],
+      stepCount: 0,
+      items: [
+        {
+          name: "IPFS Storage",
+          value: "1GB",
+          icon: require("/public/img/airDrop/ipfs.png"),
         },
         {
-          element: "#reward-guide",
-          popover: {
-            className: "reward-guide-class",
-            title: "Reward Hub",
-            description: `<div class="airdrop-content">
-                <div class=" mb-6 fz-14 lh-2">Thank You for Registering!
-                We have free resource packages for you in the Reward Hub!</div>
-              <div class="row mt-2">
-              <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="img/airDrop/ipfs.png" alt=""><span class="resource-item-value ml-2">25GB</span><span class="resource-text fz-12">IPFS Storage</span></div>
-              </div>
-              <div class="col-sm-6 col-12"><div class="resource-item al-c"><img  width="28" src="/img/airDrop/ar.png" alt=""><span class="resource-item-value ml-2">100MB</span><span  class="resource-text fz-12">Arweave Storage</span></div>
-              </div>
-              <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/minutes.png" alt=""><span  class="resource-item-value ml-2">100Min</span><span class="resource-text fz-12">Build Minutes</span></div>
-              </div>
-              <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/balance.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Recharge Balance</span>
-              </div>
-            </div>
-            `,
-            // showButtons: false,
-            closeBtnText: "Start now",
-            nextBtnText: "Get more",
-            position: "left",
-          },
-          onNext: () => {
-            this.$router.push("/reward-hub");
-          },
+          name: "Arweave Storage",
+          value: "20MB",
+          icon: require("/public/img/airDrop/ar.png"),
+        },
+        {
+          name: "Build Minutes",
+          value: "100Min",
+          icon: require("/public/img/airDrop/minutes.png"),
+        },
+        {
+          name: "Bandwidth",
+          value: "10GB",
+          icon: require("/public/img/airDrop/balance.png"),
         },
       ],
-
-      stepCount: 0,
+      showDialog: false,
+      accountExists: false,
+      registerInfo: {},
     };
+  },
+  async created() {
+    await this.getCurrentContract();
+    if (localStorage.token) {
+      await this.getHandler();
+    }
   },
   computed: {
     ...mapState({
       noticeMsg: (s) => s.noticeMsg,
+      userInfo: (s) => s.userInfo,
     }),
+    uuid() {
+      if (this.teamInfo.isMember) return this.teamInfo.teamOwnerEuid;
+      return this.userInfo.euid;
+    },
   },
   watch: {
     "driver.isActivated"(val) {
@@ -176,7 +286,7 @@ export default {
         bus.$emit("guide");
         this.move();
       }
-      if (this.stepCount != 6 && !val) {
+      if (this.stepCount != 5 && !val && !this.registerInfo.handled) {
         this.showDialog = true;
       }
     },
@@ -206,9 +316,39 @@ export default {
       document.body.style.height = "";
       document.removeEventListener("touchmove", mo, false);
     },
-    handleClaim() {
-      this.showDialog = false;
-      this.$router.push("/reward-hub");
+    async getHandler() {
+      try {
+        const { data } = await this.$http.get(
+          "$auth/self-handled-register-apply"
+        );
+        this.registerInfo = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async handlePloygonClaim() {
+      try {
+        const register = await this.isRegister();
+        if (register) return (this.showDialog = false);
+        const claimStatus = await this.handleClaim();
+        if (claimStatus) {
+          this.showDialog = false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async handleZkSyncClaim() {
+      try {
+        const register = await this.isRegister();
+        if (register) return (this.showDialog = false);
+        const claimStatus = await this.handleZkClaim();
+        if (claimStatus) {
+          this.showDialog = false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
@@ -344,7 +484,7 @@ div#driver-page-overlay {
 
 .reward-hub-content {
   position: relative;
-  padding: 40px;
+  padding: 30px;
   box-sizing: border-box;
   .text {
     color: #0b0817;

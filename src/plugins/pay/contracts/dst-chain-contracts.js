@@ -2,10 +2,11 @@ import Contracts from "./contracts";
 import {
   Router__factory,
   Billing__factory,
-  FundPool__factory,
+  FundPoolRegistration__factory,
   Governance__factory,
-  ProviderController__factory,
+  DstChainPaymentV2Registration__factory,
   ProviderControllerV2__factory,
+  ProviderControllerV2Registration__factory,
   ProviderRegistry__factory,
   IERC20__factory,
   ResourcePriceAdaptor__factory,
@@ -49,7 +50,7 @@ class DstChainContracts extends Contracts {
   }
 
   get FundPool() {
-    return FundPool__factory.connect(MumbaiFundPool, this.signer);
+    return FundPoolRegistration__factory.connect(MumbaiFundPool, this.signer);
   }
 
   get Billing() {
@@ -57,7 +58,7 @@ class DstChainContracts extends Contracts {
   }
 
   get ProviderController() {
-    return ProviderControllerV2__factory.connect(
+    return ProviderControllerV2Registration__factory.connect(
       MumbaiProviderController,
       this.signer
     );
@@ -82,7 +83,7 @@ class DstChainContracts extends Contracts {
   }
 
   get DstChainPayment() {
-    return DstChainPaymentV2__factory.connect(
+    return DstChainPaymentV2Registration__factory.connect(
       MumbaiDstChainPayment,
       this.signer
     );

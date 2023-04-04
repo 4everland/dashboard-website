@@ -15,7 +15,7 @@
         :key="item.key || item.id"
       >
         <template v-if="item.type == 'NORMAL'">
-          <div class="notice-content">
+          <div class="notice-content al-c">
             <a class="fz-14 message" :href="item.url">{{ item.message }}</a>
           </div>
         </template>

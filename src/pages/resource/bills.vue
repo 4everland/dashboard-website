@@ -2,7 +2,7 @@
   <div>
     <div class="al-c mb-4">
       <e-radio-btn
-        :options="['Polygon Transaction', 'Cross-chain Transaction']"
+        :options="['Polygon', 'Cross-chain', 'Airdrop']"
         v-model="typeIdx"
         min-width="170px"
       ></e-radio-btn>
@@ -59,6 +59,12 @@
           <span class="gray-7 ml-1">USDC</span>
         </div>
       </template>
+      <template #item.amount="{ item }">
+        <div>
+          <span>{{ item.amount }}</span>
+          <span class="gray-7 ml-1">USDC</span>
+        </div>
+      </template>
       <template v-slot:item.resource="{ item }">
         <div class="gray-5 fz-13 line-2" style="max-width: 140px">
           {{ item.resource }}
@@ -100,79 +106,112 @@ export default {
   },
   computed: {
     headers() {
-      return this.typeIdx == 0
-        ? [
-            {
-              text: "#",
-              value: "seq",
-            },
-            {
-              text: "Hash",
-              value: "hash",
-            },
-            {
-              text: "Type",
-              value: "contentType",
-            },
-            {
-              text: "Resource",
-              value: "resource",
-            },
-            {
-              text: "Network",
-              value: "network",
-            },
-            {
-              text: "Amount",
-              value: "cost",
-            },
-            {
-              text: "CreateAt",
-              value: "time",
-            },
-            {
-              text: "Status",
-              value: "status",
-            },
-          ]
-        : [
-            {
-              text: "#",
-              value: "seq",
-            },
-            {
-              text: "Type",
-              value: "contentType",
-            },
-            {
-              text: "From",
-              value: "startChain",
-            },
-            {
-              text: "Hash",
-              value: "startChainHash",
-            },
-            {
-              text: "To",
-              value: "endChain",
-            },
-            {
-              text: "Hash",
-              value: "endChainHash",
-            },
-            {
-              text: "Amount",
-              value: "cost",
-            },
-            {
-              text: "CreateAt",
-              value: "time",
-            },
-            {
-              text: "State",
-              value: "status",
-            },
-          ];
+      if (this.typeIdx == 0)
+        return [
+          {
+            text: "#",
+            value: "seq",
+          },
+          {
+            text: "Hash",
+            value: "hash",
+          },
+          {
+            text: "Type",
+            value: "contentType",
+          },
+          {
+            text: "Resource",
+            value: "resource",
+          },
+          {
+            text: "Network",
+            value: "network",
+          },
+          {
+            text: "Amount",
+            value: "cost",
+          },
+          {
+            text: "CreateAt",
+            value: "time",
+          },
+          {
+            text: "Status",
+            value: "status",
+          },
+        ];
+      if (this.typeIdx == 1)
+        return [
+          {
+            text: "#",
+            value: "seq",
+          },
+          {
+            text: "Type",
+            value: "contentType",
+          },
+          {
+            text: "From",
+            value: "startChain",
+          },
+          {
+            text: "Hash",
+            value: "startChainHash",
+          },
+          {
+            text: "To",
+            value: "endChain",
+          },
+          {
+            text: "Hash",
+            value: "endChainHash",
+          },
+          {
+            text: "Amount",
+            value: "cost",
+          },
+          {
+            text: "CreateAt",
+            value: "time",
+          },
+          {
+            text: "State",
+            value: "status",
+          },
+        ];
+      return [
+        {
+          text: "#",
+          value: "seq",
+        },
+        {
+          text: "Type",
+          value: "airdropType",
+        },
+        {
+          text: "Resource",
+          value: "resource",
+        },
+        {
+          text: "Amount",
+          value: "amount",
+        },
+
+        {
+          text: "CreateAt",
+          value: "time",
+        },
+        {
+          text: "Status",
+          value: "status",
+        },
+      ];
+    },
+    requestApi() {
+      if (this.typeIdx == 0) return "/bill/list";
+      if (this.typeIdx == 1) return "/bill/cross/chain/list";
+      return "/airdrop/list";
     },
   },
   watch: {
@@ -199,8 +238,7 @@ export default {
       try {
         this.loading = true;
         const isPolygon = this.typeIdx == 0;
-        const url = isPolygon ? "/bill/list" : "/bill/cross/chain/list";
-        const { data } = await this.$http.get("$v3" + url, {
+        const { data } = await this.$http.get("$v3" + this.requestApi, {
           params: {
             page: this.page,
             size: 10,
@@ -210,54 +248,89 @@ export default {
         this.lastHash = lastHash;
         this.showPending = !!lastHash && this.page == 1;
         const list = data.rows;
-        this.list = list.map((it, i) => {
-          if (it.contentType == "Recharge") it.contentType = "Deposit";
-          if (it.contentType == "Airdrop") it.contentType = "Giveaway";
-          if (["Deposit", "Withdraw"].includes(it.contentType)) {
-            it.resource = it.contentType + " Account";
-          } else if (it.contentJson) {
-            //contentType == "Purchase"
-            const arr = JSON.parse(it.contentJson);
-            it.resource = arr
-              .map((it) => {
-                let amount = it.overuse || it.amount;
-                if (/ipfs/i.test(it.type) && it.contentType == "Deductions") {
-                  amount /= 3600;
-                }
-                const row = this.$utils.getPurchase(
-                  it.type,
-                  amount,
-                  it.effectiveTime
+        if (this.typeIdx == 0 || this.typeIdx == 1) {
+          this.list = list.map((it, i) => {
+            if (it.contentType == "Recharge") it.contentType = "Deposit";
+            if (it.contentType == "Airdrop") it.contentType = "Giveaway";
+            if (["Deposit", "Withdraw"].includes(it.contentType)) {
+              it.resource = it.contentType + " Account";
+            } else if (it.contentJson) {
+              //contentType == "Purchase"
+              const arr = JSON.parse(it.contentJson);
+              it.resource = arr
+                .map((it) => {
+                  let amount = it.overuse || it.amount;
+                  if (/ipfs/i.test(it.type) && it.contentType == "Deductions") {
+                    amount /= 3600;
+                  }
+                  const row = this.$utils.getPurchase(
+                    it.type,
+                    amount,
+                    it.effectiveTime
+                  );
+                  return `${row.name} ${row.amount}${row.unit || ""} ${
+                    row.until || ""
+                  }`;
+                })
+                .join(", ");
+            }
+            it.seq = i + 1;
+            let time = isPolygon ? it.paymentTime : it.createdAt;
+            it.network = "Polygon";
+            if (this.showPending && lastHash.contentType == it.contentType) {
+              const timeDiff = Math.abs(time - lastHash.paymentTime);
+              const priceDiff = Math.abs(lastHash.usdt - it.usdt * 1);
+              const mt1h = Date.now() - lastHash.paymentTime * 1e3 > 3600e3;
+              if (
+                timeDiff < 120 ||
+                (priceDiff < 0.1 && timeDiff < 15 * 60) ||
+                mt1h
+              )
+                this.showPending = false;
+            }
+            it.time = new Date(time * 1e3).format();
+            it.cost = this.$utils.getCost(it.usdt);
+            if (!isPolygon) {
+              it.endChain = this.getChainType(it.endChain);
+              it.startChain = this.getChainType(it.startChain);
+              it.status = it.states;
+            }
+            return it;
+          });
+        } else {
+          this.list = list.map((it, i) => {
+            const resourceRecord = JSON.parse(it.resourceRecord);
+            let resourceType = "";
+            const nameMap = {
+              BUILD_TIME: "Build Minutes",
+              TRAFFIC: "Bandwidth",
+              AR_STORAGE: "Arweave Storage",
+              IPFS_STORAGE: "IPFS Storage",
+            };
+            for (const key in resourceRecord) {
+              if (!nameMap[key]) {
+                continue;
+              } else {
+                resourceType = this.$utils.getPurchase(
+                  key,
+                  resourceRecord[key],
+                  resourceRecord["IPFS_EFFECTIVE_TIME"]
                 );
-                return `${row.name} ${row.amount}${row.unit || ""} ${
-                  row.until || ""
-                }`;
-              })
-              .join(", ");
-          }
-          it.seq = i + 1;
-          let time = isPolygon ? it.paymentTime : it.createdAt;
-          it.network = "Polygon";
-          if (this.showPending && lastHash.contentType == it.contentType) {
-            const timeDiff = Math.abs(time - lastHash.paymentTime);
-            const priceDiff = Math.abs(lastHash.usdt - it.usdt * 1);
-            const mt1h = Date.now() - lastHash.paymentTime * 1e3 > 3600e3;
-            if (
-              timeDiff < 120 ||
-              (priceDiff < 0.1 && timeDiff < 15 * 60) ||
-              mt1h
-            )
-              this.showPending = false;
-          }
-          it.time = new Date(time * 1e3).format();
-          it.cost = this.$utils.getCost(it.usdt);
-          if (!isPolygon) {
-            it.endChain = this.getChainType(it.endChain);
-            it.startChain = this.getChainType(it.startChain);
-            it.status = it.states;
-          }
-          return it;
-        });
+              }
+            }
+            it.seq = i + 1;
+            it.time = new Date(it.createdAt * 1e3).format();
+            it.amount = "0.00";
+            it.resource =
+              resourceType.amount +
+              "" +
+              resourceType.unit +
+              " " +
+              resourceType.name;
+            it.status = "Success";
+            return it;
+          });
+        }
         this.total = data.count;
       } catch (error) {
         console.log(error);
@@ -265,6 +338,8 @@ export default {
       this.loading = false;
     },
     onItem(row) {
+      if (this.typeIdx == 2)
+        return this.$navTo(`/resource/airdrop-detail?id=` + row.id);
       let sub = this.typeIdx == 0 ? "" : "-cross";
       this.$navTo(`/resource/bill-detail${sub}?id=` + row.id);
     },

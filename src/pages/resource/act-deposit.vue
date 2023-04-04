@@ -19,7 +19,7 @@
       </div>
     </e-kv2>
     <e-kv2 class="mt-7" label="Network">
-      <pay-network :allow="['Polygon', 'Ethereum', 'BSC']" />
+      <pay-network :allow="allowNetwork" />
     </e-kv2>
 
     <div class="mt-8 fz-14 gray">
@@ -45,8 +45,8 @@
 import PayNetwork from "@/views/pay/pay-network";
 import PayConfirm from "@/views/pay/pay-confirm";
 import mixin from "@/views/pay/mixin";
-import { BigNumber } from "@ethersproject/bignumber";
 import { ethers } from "ethers";
+import { mapState } from "vuex";
 
 export default {
   mixins: [mixin],
@@ -57,8 +57,15 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
     curAmount() {
       return this.$utils.cutFixed(this.amount || 0, 4);
+    },
+    allowNetwork() {
+      if (this.userInfo.onChain) return ["Polygon", "Ethereum", "BSC"];
+      return ["Polygon"];
     },
   },
   mounted() {
@@ -129,14 +136,25 @@ export default {
           return this.onApprove();
         }
         this.$loading();
-        await this.checkAccount();
         let tx = null;
+        const accountExists = await this.checkAccount();
+        console.log(accountExists, "accountExists");
         if (this.usdcKey == "MumbaiUSDC") {
-          tx = await target.recharge(
-            this.providerAddr,
-            this.uuid,
-            num * Math.pow(10, curAmountDecimals)
-          );
+          if (accountExists) {
+            tx = await target.recharge(
+              this.providerAddr,
+              this.uuid,
+              num * Math.pow(10, curAmountDecimals)
+            );
+          } else {
+            const { sign } = await this.getSignAddress();
+            tx = await target.rechargeWithRegistration(
+              this.providerAddr,
+              this.uuid,
+              num * Math.pow(10, curAmountDecimals),
+              sign
+            );
+          }
         } else {
           const fee = await target.calcFee(this.providerAddr, this.uuid);
           const token = await target.token();
@@ -188,7 +206,12 @@ export default {
 
         const receipt = await tx.wait();
         console.log("receipt", receipt);
+
         this.addHash(tx, num, "Deposit");
+
+        if (!accountExists) {
+          await this.registerSuccess();
+        }
         this.$loading.close();
         await this.$alert(
           "Successful transaction! The arrival time of the amount is subject to the transaction on-chain data."
@@ -229,6 +252,16 @@ export default {
         return data.max_slippage;
       } catch (error) {
         console.log(error, "======");
+      }
+    },
+    async getSignAddress() {
+      try {
+        const { data } = await this.$http.get(
+          "$auth/self-handled-register-sign-from-server"
+        );
+        return data;
+      } catch (error) {
+        console.log(error);
       }
     },
   },
