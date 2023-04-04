@@ -52,16 +52,17 @@
         ></component>
       </keep-alive>
       <template v-else>
-        <component
-          :is="it.comp"
-          v-bind="it.props"
-          :info="info"
-          @handleEvent="handleEvent"
-          :active="curItem.comp == it.comp"
-          v-show="isActive(it)"
-          v-for="(it, i) in activeList"
-          :key="i"
-        ></component>
+        <div v-for="(it, i) in list" :key="i">
+          <component
+            :is="it.comp"
+            v-bind="it.props"
+            :info="info"
+            @handleEvent="handleEvent"
+            :active="isActive(it)"
+            v-show="isActive(it)"
+            v-if="isRender(i)"
+          ></component>
+        </div>
       </template>
     </div>
   </div>
@@ -131,17 +132,15 @@ export default {
     curItem() {
       return this.list[this.curIdx] || {};
     },
-    activeList() {
-      return this.list.filter((_, i) => {
-        return this.activeIdxList.includes(i);
-      });
-    },
   },
   mounted() {
     this.initPath = this.path;
     this.curIdx = this.getIdx();
   },
   methods: {
+    isRender(i) {
+      return this.activeIdxList.includes(i);
+    },
     isActive(it) {
       if (it.id) return it.id == this.curItem.id;
       return it.comp == this.curItem.comp;
