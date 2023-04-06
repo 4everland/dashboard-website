@@ -20,7 +20,8 @@
             x-small
             class="e-btn-text"
             :color="
-              item.content == item.ipns || item.content == hashV0toV1(item.ipfs)
+              item.content == item.ipns ||
+              hashV0toV1(item.content) == hashV0toV1(item.ipfs)
                 ? 'success'
                 : 'error'
             "
@@ -32,7 +33,7 @@
               v-if="
                 !(
                   item.content == item.ipns ||
-                  item.content == hashV0toV1(item.ipfs)
+                  hashV0toV1(item.content) == hashV0toV1(item.ipfs)
                 )
               "
             >

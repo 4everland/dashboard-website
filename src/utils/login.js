@@ -17,8 +17,6 @@ fcl
   .put("discovery.wallet", process.env.VUE_APP_FLOW_DISCOVERY);
 
 const authApi = process.env.VUE_APP_AUTH_URL;
-// eslint-disable-next-line no-unused-vars
-const BUCKET_HOST = process.env.VUE_APP_BUCKET_HOST;
 
 export const ExchangeCode = async (accounts) => {
   const res = await axios.get(`${authApi}/web3code/${accounts}`);
@@ -58,7 +56,6 @@ export const SignMetaMask = async (accounts, nonce, inviteCode, capToken) => {
       capT: capToken,
     };
     const stoken = await Web3Login(accounts, data);
-    // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
     return stoken;
   } catch (e) {
     console.log(e);
@@ -97,7 +94,6 @@ export const SignOkx = async (accounts, nonce, inviteCode, capToken) => {
       capT: capToken,
     };
     const stoken = await Web3Login(accounts, data);
-    // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
     return stoken;
   } catch (e) {
     console.log(e);
@@ -140,7 +136,6 @@ export const SignPhantom = async (accounts, nonce, inviteCode, capToken) => {
       capT: capToken,
     };
     const stoken = await Web3Login(accounts, data);
-    // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
     return stoken;
   } catch (e) {
     console.log(e);
@@ -177,7 +172,6 @@ export const SignFlow = async (accounts, nonce, inviteCode, capToken) => {
       capT: capToken,
     };
     const stoken = await Web3Login(accounts, data);
-    // location.href = `${BUCKET_HOST}/login?stoken=${stoken}`;
     return stoken;
   } catch (e) {
     console.log(e);

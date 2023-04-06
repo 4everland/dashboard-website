@@ -66,7 +66,7 @@
                     v-if="item.type == 'ens' || item.type == 'sns'"
                     :class="
                       item.content == item.ipns ||
-                      item.content == hashV0toV1(item.ipfs)
+                      hashV0toV1(item.content) == hashV0toV1(item.ipfs)
                         ? ''
                         : 'disabled'
                     "
@@ -85,7 +85,7 @@
                   <v-icon
                     v-if="
                       item.content == item.ipns ||
-                      item.content == hashV0toV1(item.ipfs)
+                      hashV0toV1(item.content) == hashV0toV1(item.ipfs)
                     "
                     color="
                          success
@@ -207,9 +207,13 @@
                   x-small
                   color="primary"
                   class="ml-4"
-                  :disabled="item.content == hashV0toV1(item.ipfs)"
+                  :disabled="hashV0toV1(item.content) == hashV0toV1(item.ipfs)"
                 >
-                  {{ item.content == hashV0toV1(item.ipfs) ? "Bound" : "Bind" }}
+                  {{
+                    hashV0toV1(item.content) == hashV0toV1(item.ipfs)
+                      ? "Bound"
+                      : "Bind"
+                  }}
                 </v-btn>
               </div>
             </div>
@@ -618,19 +622,23 @@ export default {
       });
     },
     checkNet() {
-      const chainId = this.walletObj.chainId;
-      if (!chainId) return false;
-      let msg = "";
-      if (chainId != "0x1") {
-        msg =
-          "Wrong network, please switch your wallet network to Ethereum mainnet.";
+      if (process.env.NODE_ENV !== "production") {
+        return true;
+      } else {
+        const chainId = this.walletObj.chainId;
+        if (!chainId) return false;
+        let msg = "";
+        if (chainId != "0x1") {
+          msg =
+            "Wrong network, please switch your wallet network to Ethereum mainnet.";
+        }
+        if (msg) {
+          this.$alert(msg).then(() => {
+            this.switchNet(1);
+          });
+        }
+        return !msg;
       }
-      if (msg) {
-        this.$alert(msg).then(() => {
-          this.switchNet(1);
-        });
-      }
-      return !msg;
     },
     async switchNet(id) {
       try {
