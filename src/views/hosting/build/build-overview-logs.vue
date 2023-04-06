@@ -177,7 +177,7 @@ export default {
       return this.info.deployType == "IPNS" && this.info.platform != "IPFS";
     },
     gitHubDeploy() {
-      return this.info.deployType == "GITHUB";
+      return this.projInfo.deployType == "GITHUB";
     },
   },
   watch: {
@@ -207,11 +207,12 @@ export default {
       if (oldVal) this.getInfo();
     },
   },
-  created() {
+
+  async mounted() {
+    console.log(2222);
+
+    await this.getInfo();
     this.initOpenIds();
-  },
-  mounted() {
-    this.getInfo();
   },
   methods: {
     async getInfo() {
@@ -223,8 +224,7 @@ export default {
         const info = data.task;
         if (data.hash) info.hash = data.hash;
         this.errMsg = data.errorMessage || "";
-        const { hash, state = "", platform } = info;
-        const isIpfs = platform == "IPFS";
+        const { hash, state = "" } = info;
         this.state = state.toLowerCase();
         this.isDone = this.state == "success";
         info.isFail = /fail|timeout|error|cancel/.test(this.state);
@@ -246,7 +246,11 @@ export default {
         this.logs = data.log || [];
         if (this.isDone) {
           // this.curIdx = isIpfs ? 2 : 1;
-          if (this.ipfsDeployIpfs || this.ipfsDeployOther) {
+          if (
+            this.ipfsDeployIpfs ||
+            this.ipfsDeployOther ||
+            this.gitHubDeploy
+          ) {
             this.openIds = [0, 1, 2];
           }
           if (this.ipnsDeployIpfs || this.ipnsDeployOther) {
@@ -271,6 +275,7 @@ export default {
       }
     },
     initOpenIds() {
+      console.log(this.ipnsDeployIpfs, this.ipnsDeployOther);
       if (this.ipnsDeployIpfs || this.ipnsDeployOther) {
         this.openIds = [-1];
       } else {
