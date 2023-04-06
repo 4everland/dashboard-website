@@ -8,20 +8,29 @@
       />
     </div>
     <div class="main-wrap">
-      <div class="al-c mb-10">
+      <div class="al-c mb-4">
         <span class="fw-b mr-2 fz-20">Ways for Reward</span>
-        <e-tooltip top>
-          <v-icon slot="ref" color="#6C7789" size="16">mdi-alert-circle</v-icon>
-          <span
-            >Getting free resources by completing the following tasks and
-            resources are valid for one year after completion of tasks.</span
-          >
-        </e-tooltip>
+        <v-btn
+          class="ml-auto"
+          small
+          outlined
+          color="primary"
+          @click="$router.push('/resource/bills?typeIdx=2')"
+          >Transaction</v-btn
+        >
+      </div>
+      <div class="py-3 px-4 mb-4 tips">
+        <v-icon size="20">mdi-alert-decagram-outline</v-icon>
+        <span class="ml-4 fz-14">{{ tips }}</span>
       </div>
       <v-row v-if="list.length">
         <template v-for="item in list">
           <v-col
-            :md="item.type == 'AIRDROP_FOR_NEW' ? '12' : '6'"
+            :md="
+              item.type == 'AIRDROP_FOR_NEW' || item.type == 'UPGRADE'
+                ? '12'
+                : '6'
+            "
             cols="12"
             :key="item.id"
           >
@@ -40,14 +49,75 @@
                   {{ item.reward }}
                 </e-kv>
               </div>
-              <div class="al-c justify-center">
+
+              <div v-if="item.type == 'UPGRADE'">
+                <div v-if="item.status !== 'DONE'">
+                  <e-menu open-on-hover offset-y>
+                    <v-btn
+                      slot="ref"
+                      color="primary"
+                      class="mr-2"
+                      width="250"
+                      dark
+                    >
+                      <span class="ml-2">Upgrade</span>
+                      <v-icon>mdi-chevron-down</v-icon>
+                    </v-btn>
+                    <v-list>
+                      <v-list-item link @click="handlePloygonClaim">
+                        <v-list-item-title class="fz-14 al-c justify-center">
+                          <img
+                            src="/img/svg/billing/ic-polygon-0.svg"
+                            width="18"
+                            alt=""
+                          />
+                          <span class="ml-3">Ploygon Claim</span>
+                        </v-list-item-title>
+                      </v-list-item>
+                      <v-list-item link @click="handleZkSyncClaim">
+                        <v-list-item-title class="fz-14 al-c justify-center">
+                          <div class="al-c mx-auto">
+                            <img
+                              src="/img/svg/logo-no-letters.svg"
+                              width="20"
+                              alt=""
+                            />
+                            <span class="ml-3">zkSync Lite(V1) Claim</span>
+                          </div>
+                          <e-tooltip right>
+                            <v-icon
+                              slot="ref"
+                              size="18"
+                              color="#999"
+                              class="pa-1 d-ib"
+                              >mdi-alert-circle-outline</v-icon
+                            >
+                            <span
+                              >Please ensure that you have sufficient ETH in
+                              zkSync Lite. Interaction with the zkSync network
+                              will rely on cross-chain communication services to
+                              complete on-chain identity registration on
+                              Polygon.</span
+                            >
+                          </e-tooltip>
+                        </v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </e-menu>
+                  <!-- <v-btn :loading="refreshLoading" icon @click="isRegister">
+                    <v-icon>mdi-refresh</v-icon>
+                  </v-btn> -->
+                </div>
+
+                <v-btn v-else class="mr-9" width="100" disabled> Done </v-btn>
+              </div>
+              <div v-else class="al-c justify-center">
                 <v-btn
                   :color="getBtnColor(item)"
                   @click="onAct(item)"
                   depressed
-                  tile
                   width="100"
-                  :disabled="item.isDone"
+                  :disabled="item.isDone || !activitiesInfo.onChain"
                   :loading="item.loading"
                 >
                   <span
@@ -69,6 +139,7 @@
                   <v-icon>mdi-refresh</v-icon>
                 </v-btn>
               </div>
+
               <img
                 v-show="item.status == 'DONE'"
                 width="20"
@@ -94,7 +165,9 @@
 
 <script>
 import { mapState } from "vuex";
+import mixin from "@/pages/more/mixin-register";
 export default {
+  mixins: [mixin],
   computed: {
     ...mapState({
       isFocus: (s) => s.isFocus,
@@ -103,6 +176,11 @@ export default {
     }),
     shareUrl() {
       return location.origin + "?invite=" + this.code;
+    },
+    tips() {
+      if (this.userInfo.onChain)
+        return "More free resources can be obtained by completing tasks. Please note that the validity period of IPFS resources is December 31, 2023.";
+      return "More free resources can be obtained by upgrading registration tasks. Please note that the validity period of IPFS resources is December 31, 2023.";
     },
   },
   data() {
@@ -117,6 +195,9 @@ export default {
       showTg: false,
       tgTag: `<b>2</b>`,
       code: null,
+      activitiesInfo: {
+        onChain: false,
+      },
     };
   },
   watch: {
@@ -130,6 +211,7 @@ export default {
   },
   async created() {
     this.getCode();
+    this.isRegister();
   },
   mounted() {
     const { from } = this.$route.query;
@@ -221,6 +303,7 @@ export default {
         }
       } catch (error) {
         console.log(error);
+        this.getList();
       }
     },
     async onAct(it) {
@@ -245,6 +328,7 @@ export default {
       try {
         this.loading = true;
         const { data } = await this.$http.get("$auth/rewardhub/activities");
+        this.activitiesInfo = data;
         this.list = data.item.map((it) => {
           if (it.status == "DONE") {
             it.isDone = true;
@@ -262,10 +346,39 @@ export default {
       const { data } = await this.$http.get("$auth/invitation/code");
       this.code = data;
     },
+    async handlePloygonClaim() {
+      try {
+        const register = await this.isRegister();
+        if (register) return this.getList();
+        const claimStatus = await this.handleClaim();
+        if (claimStatus) {
+          this.getList();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async handleZkSyncClaim() {
+      try {
+        const register = await this.isRegister();
+        if (register) return this.getList();
+        const claimStatus = await this.handleZkClaim();
+        if (claimStatus) {
+          this.getList();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
+.tips {
+  border: 1px solid #d0dae9;
+  border-radius: 10px;
+  color: gray;
+}
 .reward-task {
   position: relative;
   height: 116px;

@@ -659,12 +659,12 @@ export default {
     handleChangeSelect() {
       this.domain = "";
     },
-    async toHref(domainObj) {
+    toHref(domainObj) {
       let rule = {};
       rule = this.items.find((item) => {
         return domainObj.type == item.key;
       });
-      const fn = eval("(" + rule?.network + ")");
+      const fn = eval("(" + rule.network + ")");
       return fn(domainObj.domain);
     },
     getDomainByType(type) {

@@ -78,6 +78,27 @@ export default [
       ],
     },
   },
+
+  {
+    path: "/resource/airdrop-detail",
+    component: () => import("./airdrop-detail"),
+    meta: {
+      title: "Expenditure Details",
+      links: [
+        {
+          text: "Resource",
+          to: "/resource",
+        },
+        {
+          text: "Transaction History",
+          to: "/resource/bills",
+        },
+        {
+          text: `Expenditure Details`,
+        },
+      ],
+    },
+  },
   {
     path: "/resource/bills",
     component: () => import("./bills"),

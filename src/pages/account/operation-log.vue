@@ -215,7 +215,7 @@ export default {
       } else if (act == "REWARD_HUB_USED_RESOURCE_VOUCHER") {
         it.desc = `Redeemed a Resource Voucher`;
         it.path = "Resource Billing";
-        it.link = "/resource/bills";
+        it.link = "/resource/bills/?typeIdx=2";
       } else if (act == "OAUTH_UPDATE_TEAM_NAME") {
         if (obj.type == "name") {
           it.desc = `Changed the account name to ${obj.name}`;
@@ -261,9 +261,12 @@ export default {
         it.desc = act;
       }
       if (!it.path) {
-        if (/^bill/i.test(act) || act == "OAUTH_EXCLUSIVE_DRIP") {
-          it.path = "Resource Transaction History";
+        if (/^bill/i.test(act)) {
           it.link = "/resource/bills";
+          it.path = "Resource Transaction History";
+        } else if (act == "OAUTH_EXCLUSIVE_DRIP") {
+          it.link = "/resource/bills?typeIdx=2";
+          it.path = "Resource Transaction History";
         } else if (/^hosting.*project$/i.test(act) && obj.projectName) {
           it.path = "Hosting " + obj.projectName;
           it.link = `/hosting/project/${obj.projectName}/${obj.projectId}`;
