@@ -85,13 +85,10 @@
 </template>
 
 <script>
-import Vue from "vue";
 import InputUpload from "@/views/bucket/components/input-upload";
 import { mapState } from "vuex";
 import { bus } from "../../utils/bus";
 import { TaskWrapper, PinCidTaskWrapper } from "./task.js";
-import { Upload } from "@aws-sdk/lib-storage";
-
 export default {
   props: {
     info: {
@@ -159,7 +156,6 @@ export default {
       bus.$emit("taskData", this.tasks);
     });
     bus.$on("handleClearAllRecords", () => {
-      // this.tasks = this.tasks.filter((it) => it.status !== status);
       this.tasks = [];
       bus.$emit("taskData", this.tasks);
     });

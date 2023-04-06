@@ -118,6 +118,8 @@
 </template>
 
 <script>
+const domainOptions = require("@/assets/domain/domainList.json");
+
 export default {
   data() {
     return {
@@ -130,20 +132,20 @@ export default {
         { text: "CreateAt", value: "createTime" },
       ],
       list: [],
-      tabList: [
-        {
-          text: "Domains",
-          comp: "domain-domains",
-        },
-        {
-          text: "ENS",
-          comp: "domain-ens",
-        },
-        {
-          text: "SNS",
-          comp: "domain-sns",
-        },
-      ],
+      // tabList: [
+      //   {
+      //     text: "Domains",
+      //     comp: "domain-domains",
+      //   },
+      //   {
+      //     text: "ENS",
+      //     comp: "domain-ens",
+      //   },
+      //   {
+      //     text: "SNS",
+      //     comp: "domain-sns",
+      //   },
+      // ],
       page: 1,
       pageLen: 1,
       total: 0,
@@ -181,6 +183,27 @@ export default {
         return false;
       };
     },
+    tabList() {
+      let list = [
+        {
+          text: "Domains",
+          comp: "domain-domains",
+        },
+      ];
+
+      domainOptions.list.forEach((element) => {
+        let obj = {
+          id: element.key,
+          text: element.name,
+          comp: "domain-mix",
+          props: {
+            type: element.key,
+          },
+        };
+        list.push(obj);
+      });
+      return list;
+    },
   },
   watch: {
     showPop(val) {
@@ -207,7 +230,12 @@ export default {
         html += '<div class="pd-10"></div>';
         const now = new Date();
         for (const it of this.selected) {
-          const time = new Date(it.createAt * 1e3).toNiceTime(now);
+          let createAt = it.createAt;
+          const timeStr = String(createAt);
+          if (timeStr.length == 10) {
+            createAt = createAt * 1e3;
+          }
+          const time = new Date(createAt).toNiceTime(now);
           html += `<div class="mt-2 fz-14">${
             it.domain || it.value
           } <span class="fl-r gray">added ${time}</span></div>`;
@@ -223,33 +251,44 @@ export default {
       this.deleting = false;
     },
     async onTypeDelete() {
-      switch (this.type) {
-        case "domains":
-          const ids = this.selected.map((it) => it.domainId).join(",");
-          await this.$http.delete("$hosting/domain/" + ids);
-          break;
-        case "ens":
-          const ensProjectIds = this.selected
-            .map((it) => it.projectId)
-            .join(",");
-          await this.$http.delete("$hosting/project/ipns", {
-            params: {
-              projectIds: ensProjectIds,
-              type: "ENS",
-            },
-          });
-          break;
-        case "sns":
-          const snsProjectIds = this.selected
-            .map((it) => it.projectId)
-            .join(",");
-          await this.$http.delete("$hosting/project/ipns", {
-            params: {
-              projectIds: snsProjectIds,
-              type: "SNS",
-            },
-          });
-          break;
+      // switch (this.type) {
+      //   case "domains":
+      //     const ids = this.selected.map((it) => it.domainId).join(",");
+      //     await this.$http.delete("$hosting/domain/" + ids);
+      //     break;
+      //   case "ens":
+      //     const ensProjectIds = this.selected
+      //       .map((it) => it.projectId)
+      //       .join(",");
+      //     await this.$http.delete("$hosting/project/ipns", {
+      //       params: {
+      //         projectIds: ensProjectIds,
+      //         type: "ENS",
+      //       },
+      //     });
+      //     break;
+      //   case "sns":
+      //     const snsProjectIds = this.selected
+      //       .map((it) => it.projectId)
+      //       .join(",");
+      //     await this.$http.delete("$hosting/project/ipns", {
+      //       params: {
+      //         projectIds: snsProjectIds,
+      //         type: "SNS",
+      //       },
+      //     });
+      //     break;
+      // }
+      if (this.type == "domains") {
+        const ids = this.selected.map((it) => it.domainId).join(",");
+        await this.$http.delete("$hosting/domain/" + ids);
+      } else {
+        const ids = this.selected.map((it) => it.id).join(",");
+        await this.$http.delete("$hosting/project/decentralized/domain", {
+          params: {
+            ids: ids,
+          },
+        });
       }
       this.$setMsg({
         name: "domains-delete",
@@ -301,6 +340,7 @@ export default {
       }
       this.adding = false;
     },
+    tabsChange(e) {},
   },
 };
 </script>

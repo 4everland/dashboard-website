@@ -320,20 +320,22 @@ export default {
       this.autoLoading = false;
     },
     async handleResourceAirDrop() {
-      if (this.usageInfo.ipfsExpired) {
-        return this.$confirm(
-          "There are currently no IPFS resources available to you. Please claim your new user reward at Reward Hub or purchase resources at Resource.",
-          "Tips",
-          {
-            confirmText: "Go Claim",
-            cancelText: "Cancel",
-          }
-        ).then(() => {
-          this.$router.push("/reward-hub");
-        });
-      } else {
-        this.showVoucher = true;
-      }
+      this.showVoucher = true;
+
+      // if (this.usageInfo.ipfsExpired) {
+      //   return this.$confirm(
+      //     "There are currently no IPFS resources available to you. Please claim your new user reward at Reward Hub or purchase resources at Resource.",
+      //     "Tips",
+      //     {
+      //       confirmText: "Go Claim",
+      //       cancelText: "Cancel",
+      //     }
+      //   ).then(() => {
+      //     this.$router.push("/reward-hub");
+      //   });
+      // } else {
+      //   this.showVoucher = true;
+      // }
     },
     async handleCommit() {
       this.openPanels = 1;

@@ -166,6 +166,9 @@ export default {
         const mat = /^(.+)\[/.exec(msg);
         if (mat) msg = mat[1];
       }
+      if (/already pending for origin/gi.test(msg)) {
+        msg = "Wrong network, please switch your wallet network and try again.";
+      }
       if (retry) {
         return this.$confirm(msg, "Network Error", {
           confirmText: "Retry",
@@ -204,9 +207,7 @@ export default {
           this.uuid
         );
       console.log("account uuidRegistered", uuidRegistered);
-      if (!uuidRegistered) {
-        throw new Error("Account Not Registered");
-      }
+      return uuidRegistered;
     },
     async checkApprove(isBuy) {
       console.log(isBuy);
@@ -439,6 +440,16 @@ export default {
         this.$alert(error.message).then(() => {
           location.reload();
         });
+      }
+    },
+    async registerSuccess(txh) {
+      try {
+        await this.$http.post("$auth/self-handled-register", {
+          txn: txh ?? "",
+        });
+        this.$setMsg("updateUser");
+      } catch (error) {
+        console.log(error);
       }
     },
   },

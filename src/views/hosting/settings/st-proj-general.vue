@@ -164,10 +164,9 @@
         ></v-switch>
       </div>
       <div class="tips fz-14 mt-4 gray">
-        Tips: Automatic IPNS Redeployment will also consume your storage,
-        bindwidth, and build minutes. Alternatively, you can update the CID
-        manually after the project is created, since the network may not monitor
-        every update.
+        Tips: Every day at 18:00 (UTC), IPNS will be sequentially resolved, but
+        if there are currently no nodes in the network that can resolve the
+        IPNS, the resolution will fail.
       </div>
     </div>
 
@@ -192,12 +191,23 @@
       </div>
 
       <div class="mt-4 fz-14">
-        <div style="color: #31ca77" v-if="isDeploying">Getting CID...</div>
-        <div style="color: #775da6" v-else>
+        <div style="color: #31ca77" v-if="isDeploying">
+          Getting CID...The deployment will only be triggered if the IPNS CID
+          differs from the most recent version CID.
+        </div>
+        <div class="al-c" style="color: #775da6" v-else>
           <span>CID: {{ latestDeployInfo.ipnsResolve }}</span>
-          <span class="ml-5"
+          <span class="ml-5 mr-2"
             >Last updated: {{ latestDeployInfo.updateAt }}</span
           >
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon size="18" color="#775da6" v-bind="attrs" v-on="on">
+                mdi-alert-circle-outline</v-icon
+              >
+            </template>
+            <span>Last updated shows the time of the previous deployment.</span>
+          </v-tooltip>
         </div>
       </div>
     </div>

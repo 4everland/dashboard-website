@@ -201,21 +201,24 @@
       </div>
     </div>
 
-    <st-proj-domains-sol v-if="info.platform == 'IPFS'" />
-    <st-proj-domains-ens v-if="info.platform == 'IPFS'" />
+    <!-- <st-proj-domains-sol v-if="info.platform == 'IPFS'" />
+    <st-proj-domains-ens v-if="info.platform == 'IPFS'" /> -->
+    <st-proj-domains-mix v-if="info.platform == 'IPFS'" />
   </div>
 </template>
 
 <script>
-import StProjDomainsEns from "@/views/hosting/settings/st-proj-domains-ens";
-import StProjDomainsSol from "@/views/hosting/settings/st-proj-domains-sol";
+// import StProjDomainsEns from "@/views/hosting/settings/st-proj-domains-ens";
+// import StProjDomainsSol from "@/views/hosting/settings/st-proj-domains-sol";
+import StProjDomainsMix from "@/views/hosting/settings/st-proj-domains-mix";
 
 import { mapState } from "vuex";
 
 export default {
   components: {
-    StProjDomainsEns,
-    StProjDomainsSol,
+    // StProjDomainsEns,
+    // StProjDomainsSol,
+    StProjDomainsMix,
   },
   data() {
     const curPath = this.$route.path;
@@ -358,6 +361,11 @@ export default {
         console.log(error);
       }
     },
+    async afterAdd() {
+      const domain = this.domain;
+      const { data } = await this.$http.get(`$hosting/domain/${domain}`);
+      return data;
+    },
     async onAdd() {
       try {
         if (!this.domain) return;
@@ -367,6 +375,17 @@ export default {
         if (!this.$regMap.domain.test(this.domain)) {
           return this.$alert(
             `The specified value "${this.domain}” is an unqualified domain name.`
+          );
+        }
+        const isExist = await this.afterAdd();
+        console.log(isExist);
+        if (isExist) {
+          await this.$confirm(
+            "The domain name already occupied by another project, rebundle it to the current one?",
+            "",
+            {
+              confirmText: "OK",
+            }
           );
         }
         let type = 3;
@@ -388,6 +407,7 @@ export default {
           if (isWww && type == 2) domain = "www." + domain;
         }
         this.adding = true;
+
         await this.$http.post("$hosting/domain", {
           domain,
           projectId: this.info.id,

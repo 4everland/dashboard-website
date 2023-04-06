@@ -1,147 +1,31 @@
-<template>
-  <div>
-    <v-dialog v-model="showClaim" max-width="700" persistent>
-      <div class="reward-hub-content">
-        <h3>Thank You for Registering!</h3>
-        <div class="mt-2 fz-14 lh-2">
-          4EVERLAND offers free resource packages that help you better
-          experience its services. Claim them now.
-        </div>
-        <v-row class="mt-2">
-          <v-col :sm="6" :cols="12" v-for="item in items" :key="item.name">
-            <div class="resource-item al-c">
-              <img width="28" :src="item.icon" alt="" />
-              <span class="resource-item-value ml-2">{{ item.value }}</span>
-              <span class="ml-2 fz-12">{{ item.name }}</span>
-            </div>
-          </v-col>
-        </v-row>
-        <div class="d-flex justify-center mt-8">
-          <v-btn
-            color="primary"
-            outlined
-            @click="onCancel"
-            width="200"
-            class="mr-4"
-          >
-            Cancel
-          </v-btn>
-
-          <e-menu open-on-hover offset-y>
-            <v-btn slot="ref" color="primary" dark width="200px">
-              <span class="ml-2">Claim</span>
-              <v-icon>mdi-chevron-down</v-icon>
-            </v-btn>
-            <v-list>
-              <v-list-item link @click="handleClaim">
-                <v-list-item-title class="fz-14 al-c">
-                  <img
-                    src="/img/svg/billing/ic-polygon-0.svg"
-                    width="18"
-                    alt=""
-                  />
-                  <span class="ml-3">Ploygon Claim</span>
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item link @click="handleZySyncClaim">
-                <v-list-item-title class="fz-14 al-c justify-space-between">
-                  <div class="al-c">
-                    <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
-                    <span class="ml-3">zkSync Lite(V1) Claim</span>
-                  </div>
-
-                  <e-tooltip right>
-                    <v-icon
-                      slot="ref"
-                      size="18"
-                      color="#333"
-                      class="pa-1 d-ib ml-2"
-                      >mdi-alert-circle-outline</v-icon
-                    >
-                    <span
-                      >Please ensure that you have sufficient ETH in zkSync
-                      Lite. Interaction with the zkSync network will rely on
-                      cross-chain communication services to complete on-chain
-                      identity registration on Polygon.</span
-                    >
-                  </e-tooltip>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </e-menu>
-        </div>
-      </div>
-    </v-dialog>
-  </div>
-</template>
-
-<script>
 import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
 import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
 import arbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-arbitrum";
 import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
-import { BigNumber, providers, utils } from "ethers";
+import { BigNumber, providers } from "ethers";
 import axios from "axios";
 import * as zksync from "zksync";
-
 export default {
   data() {
     return {
-      showClaim: false,
-      items: [
-        {
-          name: "IPFS Storage",
-          value: "6GB",
-          icon: require("/public/img/airDrop/ipfs.png"),
-        },
-        {
-          name: "Arweave Storage",
-          value: "100MB",
-          icon: require("/public/img/airDrop/ar.png"),
-        },
-        {
-          name: "Build Minutes",
-          value: "250Min",
-          icon: require("/public/img/airDrop/minutes.png"),
-        },
-        {
-          name: "Bandwidth",
-          value: "100GB",
-          icon: require("/public/img/airDrop/balance.png"),
-        },
-      ],
       registerInfo: {},
-      loading: false,
+      refreshLoading: false,
       contract: null,
       provider: null,
       collectionAddress: "0xb7b4360f7f6298de2e7a11009270f35f189bd77e",
       zkSyncfee: BigNumber.from("40000000000000"),
-      timer: null,
     };
-  },
-  async created() {
-    this.isRegister();
-
-    // const register = await this.isRegister();
-    // if (records.length) {
-    //   this.showClaim = false;
-    //   this.$emit("onUserGuide");
-    // }
-    this.timer = setInterval(() => {
-      this.isRegister();
-    }, 10000);
   },
   methods: {
     async isRegister() {
+      this.refreshLoading = true;
       await this.getCurrentContract();
-
       if (!localStorage.token) return;
       try {
         const { data } = await this.$http.get(
           "$auth/self-handled-register-apply"
         );
-
         this.registerInfo = data;
         if (!data.handled) {
           const isExists = await this.contract.ProviderController.accountExists(
@@ -151,52 +35,49 @@ export default {
           const records = await this.searchZySyncRecord();
           console.log(records);
           console.log(isExists);
-          if (isExists || records.length) {
+          if (isExists) {
             // euid exist  over
             console.log("register success");
-            clearInterval(this.timer);
-            await this.registerSuccess(records[0].txHash);
-            this.showClaim = false;
-            this.$emit("onUserGuide");
+            await this.registerSuccess();
             return true;
           }
-        } else {
-          clearInterval(this.timer);
+          if (records.length) {
+            // euid exist  over
+            console.log("register success");
+            await this.registerSuccess(records[0].txHash);
+            return true;
+          }
         }
       } catch (error) {
         console.log(error, "isRegister");
       }
-      this.showClaim = !this.registerInfo.handled;
+      this.refreshLoading = false;
       return false;
     },
 
     async handleClaim() {
       try {
         this.$loading();
-
         await this.switchPolygon();
         await this.getCurrentContract();
-        const { sign, encode } = await this.getSignAddress();
-        const tx = await this.contract.ProviderController.registerAndDrip(
-          providerAddr,
-          this.registerInfo.uid,
-          encode,
-          sign
-        );
+        const { sign } = await this.getSignAddress();
+        const tx = await this.contract.ProviderController.functions[
+          "registerAccount(address,bytes32,bytes)"
+        ](providerAddr, this.registerInfo.uid, sign);
         console.log(tx);
         const receipt = await tx.wait(2);
         console.log(receipt);
         await this.registerSuccess();
-        this.showClaim = false;
-        this.$emit("onUserGuide");
+        this.$loading.close();
+        return true;
       } catch (error) {
-        // this.onErr(error);
-        console.log(error);
+        this.$loading.close();
+        this.onErr(error);
+        return false;
       }
-      this.$loading.close();
     },
 
-    async handleZySyncClaim() {
+    async handleZkClaim() {
       try {
         // check main eth
         this.switchEth();
@@ -247,9 +128,8 @@ export default {
           this.$loading.close();
           if (records.length) {
             await this.registerSuccess(records[0].txHash);
-            this.showClaim = false;
-            this.$emit("onUserGuide");
           }
+          return true;
           // notify server
         } else {
           throw new Error(
@@ -257,10 +137,10 @@ export default {
           );
         }
       } catch (error) {
-        console.log(error);
+        this.$loading.close();
         this.onErr(error);
+        return false;
       }
-      this.$loading.close();
     },
     async searchZySyncRecord() {
       try {
@@ -302,6 +182,10 @@ export default {
         await this.$http.post("$auth/self-handled-register", {
           txn: txh ?? "",
         });
+        this.$setMsg("updateUser");
+        if (this.getList) {
+          this.getList();
+        }
       } catch (error) {
         console.log(error);
       }
@@ -468,6 +352,8 @@ export default {
       }
       if (/missing revert data/i.test(msg)) {
         msg = "Network Error";
+      } else if (/user rejected transaction/i.test(msg)) {
+        msg = "Your transaction has been canceled.";
       } else if (/transaction failed/i.test(msg)) {
         msg = "Transaction Failed";
       } else if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
@@ -487,6 +373,3 @@ export default {
     },
   },
 };
-</script>
-
-<style lang="scss" scoped></style>

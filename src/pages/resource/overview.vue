@@ -59,14 +59,14 @@
             <div class="mt-3 gray-6 fz-14 mb-1">
               <p>{{ it.percTxt }}</p>
             </div>
-            <div
+            <!-- <div
               class="mb-2 fz-12 gray"
               :class="{
                 'op-0': !it.expired,
               }"
             >
               {{ it.expired || "0" }}
-            </div>
+            </div> -->
             <div class="fz-15">
               <e-link :href="'/resource/subscribe?i=' + i">Purchase</e-link>
               <!-- <e-link

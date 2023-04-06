@@ -93,21 +93,29 @@ export default {
         {
           label: "IPFS Storage",
           icon: "ipfs.svg",
-          ...this.getPerc(info.usedIpfsStorage, info.ipfsStorage),
+          ...this.getPerc(
+            info.airdropUseIpfsStorage + info.usedIpfsStorage,
+            info.airdropIpfsStorage + info.ipfsStorage
+          ),
         },
         {
           label: "Arweave",
           icon: "ar.svg",
           color: "#F9837C",
-          ...this.getPerc(info.usedArStorage, info.arStorage),
+          ...this.getPerc(
+            info.airdropUseArStorage + info.usedArStorage,
+            info.airdropArStorage + info.arStorage
+          ),
         },
         {
           label: "Bandwidth",
           icon: "bandwidth.svg",
           color: "#70B6C1",
           ...this.getPerc(
-            info.usedFreeBandwidth + info.usedPurchasedBandwidth,
-            info.freeBandwidth + info.purchasedBandwidth
+            info.airdropUseTraffic +
+              info.usedFreeBandwidth +
+              info.usedPurchasedBandwidth,
+            info.airdropTraffic + info.freeBandwidth + info.purchasedBandwidth
           ),
         },
         {
@@ -116,9 +124,13 @@ export default {
           color: "#F3CC5C",
           ...this.getPerc(
             parseInt(
-              info.usedFreeBuildMinutes + info.usedPurchasedBuildMinutes
+              info.airdropUseBuildMinutes +
+                info.usedFreeBuildMinutes +
+                info.usedPurchasedBuildMinutes
             ),
-            info.freeBuildMinutes + info.purchasedBuildMinutes,
+            info.airdropBuildMinutes +
+              info.freeBuildMinutes +
+              info.purchasedBuildMinutes,
             "Minutes"
           ),
         },
