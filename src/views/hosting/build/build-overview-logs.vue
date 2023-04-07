@@ -100,6 +100,7 @@
 import EToggleCard from "@/views/hosting/common/e-toggle-card";
 import BuildLog from "@/views/hosting/common/build-log";
 import HDomain from "@/views/hosting/common/h-domain";
+import HStatus from "@/views/hosting/common/h-status";
 import { mapState } from "vuex";
 
 export default {
@@ -179,6 +180,30 @@ export default {
     gitHubDeploy() {
       return this.projInfo.deployType == "GITHUB";
     },
+    getIcon() {
+      return function (i) {
+        if (!this.info) return "";
+        if (this.ipnsDeployOther || this.ipnsDeployIpfs) {
+          if (i == -1) {
+            if (this.isSyncErr) return "checked";
+            if (this.isFail) return "fail";
+          }
+        } else {
+          if (i == 0) {
+            if (this.isSyncErr) return "checked";
+            if (this.isFail) return "fail";
+          }
+        }
+        if (this.isSyncErr && i == 2) return "fail";
+        if (this.isFail) return "pending";
+        if (this.state == "pending" && i == -1) return "loading";
+        if (this.state == "syncing" && i != 2) return "checked";
+        if (this.state == "syncing" && i == 2) return "loading";
+        if (this.isDone) return "checked";
+        if (this.state == "running" && (i == 0 || i == -1)) return "loading";
+        return "pendding";
+      };
+    },
   },
   watch: {
     taskId() {
@@ -208,11 +233,8 @@ export default {
     },
   },
 
-  async mounted() {
-    console.log(2222);
-
-    await this.getInfo();
-    this.initOpenIds();
+  mounted() {
+    this.getInfo();
   },
   methods: {
     async getInfo() {
@@ -230,6 +252,8 @@ export default {
         info.isFail = /fail|timeout|error|cancel/.test(this.state);
         this.info = info;
         this.$emit("info", info);
+        this.initOpenIds();
+
         if (!data.log) {
           const log = {
             timestamp: info.endAt || info.createAt,
@@ -262,8 +286,11 @@ export default {
         } else if (this.isSyncErr) {
           this.curIdx = 1;
         } else if (hash || this.state == "syncing") {
-          // this.curIdx = isIpfs ? 2 : 1;
-          if (this.ipfsDeployIpfs || this.ipfsDeployOther) {
+          if (
+            this.ipfsDeployIpfs ||
+            this.ipfsDeployOther ||
+            this.gitHubDeploy
+          ) {
             this.openIds = [0, 1];
           }
           if (this.ipnsDeployIpfs || this.ipnsDeployOther) {
@@ -275,7 +302,6 @@ export default {
       }
     },
     initOpenIds() {
-      console.log(this.ipnsDeployIpfs, this.ipnsDeployOther);
       if (this.ipnsDeployIpfs || this.ipnsDeployOther) {
         this.openIds = [-1];
       } else {
@@ -294,25 +320,13 @@ export default {
 
     getOpen(i) {
       return this.openIds.includes(i);
-      // return i >= -1 && i <= this.curIdx;
-    },
-    getIcon(i) {
-      if (!this.info) return "";
-      if (i == 0) {
-        if (this.isSyncErr) return "checked";
-        if (this.isFail) return "fail";
-      }
-      if (this.isSyncErr && i == 1) return "fail";
-      if (this.isFail) return "pending";
-      if (this.openIds.includes(i) || this.isDone) return "checked";
-      // return i == this.curIdx ? "loading" : "pending";
-      return "loading";
     },
   },
   components: {
     EToggleCard,
     BuildLog,
     HDomain,
+    HStatus,
   },
 };
 </script>
