@@ -5,7 +5,7 @@
         <div class="d-flex al-c" v-if="it.domain">
           <span class="gray-6 fz-14 mr-5">{{ it.label }}</span>
           <e-link class="line-1 fz-14" :href="it.to">
-            {{ it.domain.cutStr(30) }}
+            {{ it.domain }}
           </e-link>
           <div class="ml-auto shrink-0">
             <e-time span-class="gray fz-14">{{ it.updateAt }}</e-time>
@@ -20,12 +20,19 @@
 export default {
   props: {
     info: Object,
+    platform: String,
   },
   computed: {
     list() {
+      console.log(this.platform);
       const { name, id } = this.info;
       const getObj = (key) => {
-        let it = this.info[key] || {};
+        let it = {};
+        if (this.platform == "IC") {
+          it = this.info["latest"];
+        } else {
+          it = this.info[key];
+        }
         if (key == "production" && !it.taskId) {
           it = {
             ...this.info.latest,
