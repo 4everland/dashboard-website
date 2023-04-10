@@ -63,7 +63,7 @@ export default {
       try {
         // https://static1.4everland.org/config/changelog.json
         const { data } = await Axios.get(
-          "https://4ever-2.4everland.store/changelog.json"
+          "https://tever.4everland.store/changelog.json"
         );
         this.list = data;
         this.$setState({
