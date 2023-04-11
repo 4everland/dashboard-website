@@ -189,7 +189,6 @@ export default {
           throw new Error("No Fee");
         }
         this.ethFeeInfo = null;
-        console.log(payloads);
         this.$loading();
         let params = [this.providerAddr, this.uuid, payloads];
         const nonce = this.resourceResource ? this.resourceResource.nonce : 0;
