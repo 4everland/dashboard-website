@@ -22,7 +22,11 @@
           <new-step-0-hash @onHashStart="onHashStart"></new-step-0-hash>
         </div>
         <div class="main-wrap mt-6" style="height: 350px; overflow: scroll">
-          <new-step-0-tpl @item="onTplItem" />
+          <!-- <new-step-0-tpl @item="onTplItem" /> -->
+
+          <!-- <new-step-0-web3tpl></new-step-0-web3tpl> -->
+          <!-- <NewStep0Web3Tpl @item="onWeb3TplItem"></NewStep0Web3Tpl> -->
+          <new-step-0-web3-tpl @item="onWeb3TplItem"></new-step-0-web3-tpl>
         </div>
       </v-col>
     </v-row>
@@ -38,7 +42,8 @@
 
 <script>
 import NewStep0Git from "@/views/hosting/new/new-step-0-git";
-import NewStep0Tpl from "@/views/hosting/new/new-step-0-tpl";
+// import NewStep0Tpl from "@/views/hosting/new/new-step-0-tpl";
+import NewStep0Web3Tpl from "@/views/hosting/new/new-step-0-web3-tpl";
 import NewStep0Hash from "@/views/hosting/new/new-step-0-hash";
 
 export default {
@@ -84,11 +89,18 @@ export default {
       );
       this.$emit("next");
     },
+    onWeb3TplItem(it) {
+      localStorage.setItem("curTplJson", it.configJson);
+      const link = `/hosting/new?type=web3Tpl&id=${it.id}`;
+      this.$navTo(link);
+      this.$emit("next");
+    },
   },
   components: {
     NewStep0Git,
-    NewStep0Tpl,
+    // NewStep0Tpl,
     NewStep0Hash,
+    NewStep0Web3Tpl,
   },
 };
 </script>

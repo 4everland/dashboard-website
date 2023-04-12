@@ -16,6 +16,7 @@
         <v-text-field
           persistent-placeholder
           outlined
+          class="hide-msg"
           dense
           label=""
           :placeholder="
@@ -28,7 +29,7 @@
         <v-btn color="primary" @click="onStart">Start</v-btn>
       </v-col>
     </v-row>
-    <div class="fz-14 gray">Deploy with IPFS, IPNS or ENS</div>
+    <div class="fz-14 gray mt-5">Deploy with IPFS, IPNS or ENS</div>
   </div>
 </template>
 

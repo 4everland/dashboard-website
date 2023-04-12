@@ -254,11 +254,19 @@
       @back="$emit('back')"
     ></new-step-1-hash>
   </div>
+
+  <div v-else-if="isWeb3Tpl">
+    <new-step-1-web3-tpl
+      @onHashDeloy="onHashDeloy"
+      @back="$emit('back')"
+    ></new-step-1-web3-tpl>
+  </div>
 </template>
 
 <script>
 import NewStep1Tpl from "@/views/hosting/new/new-step-1-tpl";
 import NewStep1Hash from "@/views/hosting/new/new-step-1-hash";
+import NewStep1Web3Tpl from "@/views/hosting/new/new-step-1-web3-tpl";
 import BuildCmd from "@/views/hosting/common/build-cmd";
 import BuildCmdTip from "@/views/hosting/build/build-cmd-tip";
 import BuildOutputTip from "@/views/hosting/build/build-output-tip";
@@ -279,6 +287,9 @@ export default {
     },
     isTpl() {
       return this.query.type == "clone-flow";
+    },
+    isWeb3Tpl() {
+      return this.query.type == "web3Tpl";
     },
     info() {
       if (this.isTpl || this.isHash) return this.repoInfo;
@@ -431,6 +442,10 @@ export default {
       this.$loading.close();
     },
     onHashDeloy({ projectId, taskId }) {
+      this.$router.replace(`/hosting/new?id=${projectId}&taskId=${taskId}`);
+      this.$emit("next");
+    },
+    onWeb3TplDeploy({ projectId, taskId }) {
       this.$router.replace(`/hosting/new?id=${projectId}&taskId=${taskId}`);
       this.$emit("next");
     },
@@ -621,6 +636,7 @@ export default {
     BuildOutputTip,
     EIconLink,
     EnvForm,
+    NewStep1Web3Tpl,
   },
 };
 </script>
