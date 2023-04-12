@@ -356,9 +356,8 @@ export default {
       }
     },
     async switchNet(id) {
+      const chainId = "0x" + id.toString(16);
       try {
-        const chainId = "0x" + id.toString(16);
-        await this.addChain(chainId, id);
         const res = await window.web3.currentProvider.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
@@ -373,6 +372,8 @@ export default {
           this.onErr(error).then(() => {
             // this.switchNet(id);
           });
+        } else {
+          this.addChain(chainId, id);
         }
       }
     },
