@@ -394,8 +394,8 @@ export default {
       await this.$confirm(html, this.title, {
         confirmText: "Switch Network",
       });
-      const payBy = (localStorage.payBy = "Polygon");
-      const id = this.getChainId(payBy);
+      this.payBy = localStorage.payBy = "Polygon";
+      const id = this.getChainId(this.payBy);
       await this.switchNet(id);
     },
     async switchMatchNet(payBy) {
