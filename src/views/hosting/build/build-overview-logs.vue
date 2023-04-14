@@ -15,12 +15,13 @@
       <!-- <build-log v-if="info" :list="logs" :errMsg="errMsg" /> -->
 
       <div class="fz-14">
-        IPNS: {{ projInfo.ipfsPath.replace("/ipns/", "") }}
+        IPNS:
+        {{ projInfo.ipfsPath ? projInfo.ipfsPath.replace("/ipns/", "") : "-" }}
       </div>
       <div class="fz-14 mt-4">
         <span v-if="isFail && !info.cid">Failure: The CID not found</span>
         <span v-else>
-          IPFS CID: {{ info.cid ? info.cid : "Resolve Pending" }}
+          IPFS CID: {{ info.cid ? info.cid : "Resolving pending" }}
         </span>
       </div>
     </e-toggle-card>
@@ -40,7 +41,7 @@
         <div v-else class="fz-14">
           <span v-if="isFail">{{ errMsg }}</span>
           <span v-else>
-            IPFS CID: {{ info.cid ? info.cid : "Resolve Pending" }}
+            IPFS CID: {{ ipfsHash ? ipfsHash : "Resolving pending" }}
           </span>
         </div>
       </div>
@@ -68,7 +69,10 @@
       </div>
     </e-toggle-card>
     <e-toggle-card
-      v-if="showHash && !ipfsDeployIpfs && !ipnsDeployIpfs"
+      v-if="
+        (showHash && !ipfsDeployIpfs && !ipnsDeployIpfs) ||
+        (showHash && web3TplDeploy)
+      "
       class="mt-5"
       :title="'Syncing to ' + info.platform"
       :value="getOpen(2)"
@@ -136,6 +140,11 @@ export default {
       projInfo: (s) => s.projectInfo,
       buildInfo: (s) => s.buildInfo,
     }),
+    ipfsHash() {
+      if (this.ipfsDeploy)
+        return this.info.cid || this.projInfo.ipfsPath.replace("/ipfs/", "");
+      return this.info.cid;
+    },
     taskId() {
       const { query, params } = this.$route;
       const { taskId } = {
@@ -186,17 +195,21 @@ export default {
     ipfsDeployIpfs() {
       return this.info.deployType == "CID" && this.info.platform == "IPFS";
     },
-    ipfsDeployOther() {
-      return this.info.deployType == "CID" && this.info.platform != "IPFS";
-    },
     ipnsDeployIpfs() {
       return this.info.deployType == "IPNS" && this.info.platform == "IPFS";
     },
     ipnsDeployOther() {
       return this.info.deployType == "IPNS" && this.info.platform != "IPFS";
     },
+
+    ipfsDeploy() {
+      return this.info.deployType == "CID";
+    },
     ipnsDeploy() {
       return this.info.deployType == "IPNS";
+    },
+    web3TplDeploy() {
+      return this.projInfo.web3TemplateId;
     },
     gitHubDeploy() {
       return this.projInfo.deployType == "GITHUB";
@@ -242,32 +255,6 @@ export default {
         } else {
           return "pending";
         }
-
-        // if (!this.info) return "";
-        // if (this.isSyncErr && i == 2) return "fail";
-        // if (this.isFail) return "pending";
-        // if (this.state == "pending" && i == -1 && !this.info.cid)
-        //   return "loading";
-        // if (this.state == "syncing" && i != 2) return "checked";
-        // if (this.state == "syncing" && i == 2) return "loading";
-        // if (this.isDone) return "checked";
-        // if (this.state == "running" && (i == 0 || i == -1)) return "loading";
-        // if (this.ipnsDeployOther || this.ipnsDeployIpfs) {
-        //   if (i == -1) {
-        //     if (this.isSyncErr && this.info.cid) return "checked";
-        //     if (this.isFail) return "fail";
-        //   }
-        //   if (i == 0) {
-        //     if (this.info.cid) return "loading";
-        //   }
-        // } else {
-        //   if (i == 0) {
-        //     if (this.isSyncErr) return "checked";
-        //     if (this.isFail) return "fail";
-        //   }
-        // }
-
-        // return "pendding";
       };
     },
     getIpns() {
@@ -355,27 +342,26 @@ export default {
           }
         }
         if (this.isDone) {
-          if (
-            this.ipfsDeployIpfs ||
-            this.ipfsDeployOther ||
-            this.gitHubDeploy
-          ) {
+          if (this.ipfsDeploy || this.gitHubDeploy) {
             this.openIds = [0, 1, 2];
           }
-          if (this.ipnsDeployIpfs || this.ipnsDeployOther) {
+          if (this.ipnsDeploy) {
             this.openIds = [-1, 0, 1, 2];
           }
           this.$store.dispatch("getProjectInfo", this.info.projectId);
         } else if (hash || this.state == "syncing" || this.isSyncErr) {
-          if (
-            this.ipfsDeployIpfs ||
-            this.ipfsDeployOther ||
-            this.gitHubDeploy
-          ) {
+          if (this.ipfsDeploy || this.gitHubDeploy) {
             this.openIds = [0, 1];
           }
-          if (this.ipnsDeployIpfs || this.ipnsDeployOther) {
+          if (this.ipnsDeploy) {
             this.openIds = [-1, 0, 1];
+          }
+        } else if (this.isFail) {
+          if (this.ipfsDeploy || this.gitHubDeploy) {
+            this.openIds = [0];
+          }
+          if (this.ipnsDeploy) {
+            this.openIds = [-1, 0];
           }
         }
       } catch (error) {
@@ -383,7 +369,7 @@ export default {
       }
     },
     initOpenIds() {
-      if (this.ipnsDeployIpfs || this.ipnsDeployOther) {
+      if (this.ipnsDeploy) {
         this.openIds = [-1];
       } else {
         this.openIds = [0];

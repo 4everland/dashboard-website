@@ -106,9 +106,13 @@
         </template>
       </div>
       <build-overview-logs in-new @done="isDone = true" @info="onInfo" />
+      <p class="gray fz-12 mt-4">
+        The deployment will take some time, click
+        <a href="/hosting/projects">here</a> to proceed without waiting.
+      </p>
     </div>
 
-    <div class="ta-c mt-4" v-if="!isDone">
+    <div class="ta-c mt-4" v-if="!isDone && !hashDeploy">
       <v-btn outlined @click="onCancel">Cancel</v-btn>
     </div>
   </div>
@@ -130,6 +134,10 @@ export default {
       if (this.info && /fail/i.test(this.info.syncState))
         return "Syncing failed";
       return this.errMsg || "Build failed";
+    },
+    hashDeploy() {
+      if (!this.info) return true;
+      return this.info.deployType == "CID" || this.info.deployType == "IPNS";
     },
   },
   async created() {
