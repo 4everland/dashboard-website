@@ -39,8 +39,8 @@
           <div
             class="ml-3 px-3 fz-12 user-tag"
             :style="{
-              background: userInfo.onChain ? '#775da6' : '#999',
-              color: userInfo.onChain ? '#fff' : '#000',
+              background: registerInfo.handled ? '#775da6' : '#999',
+              color: registerInfo.handled ? '#fff' : '#000',
             }"
           >
             Pro
