@@ -153,6 +153,8 @@ export default {
         this.errMsg = "";
         return;
       }
+      if (this.info.deployType == "IPNS" || this.info.deployType == "CID")
+        return;
       try {
         const { data } = await this.$http.get(
           "$hosting/project/task/error/" + this.info.taskId

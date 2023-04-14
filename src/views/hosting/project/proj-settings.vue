@@ -28,16 +28,6 @@ export default {
     ...mapState({
       info: (s) => s.projectInfo,
       list() {
-        // const domains =
-        //   this.info.platform == "IPFS"
-        //     ? [
-        //         {
-        //           comp: "st-proj-domains",
-        //           text: "Domains",
-        //         },
-        //       ]
-        //     : [];
-
         const domains =
           this.info.deployType == "CID" ||
           this.info.deployType == "IPNS" ||
@@ -53,6 +43,12 @@ export default {
                   text: "Environment Variable",
                 },
               ];
+        if (this.info.web3TemplateId) {
+          domains.push({
+            comp: "st-proj-edit",
+            text: "Edit",
+          });
+        }
         return [
           {
             comp: "st-proj-general",

@@ -125,17 +125,24 @@ export default {
           {
             ...this.form,
             configJson: JSON.stringify(this.configJson),
+          },
+          {
+            noTip: 1,
           }
         );
         const {
           data: { taskId },
-        } = await this.$http.post(`$hosting/project/${data.projectId}/build`);
+        } = await this.$http.post(
+          `$hosting/project/task/cid/${data.projectId}/deploy/create`
+        );
         this.$emit("onWeb3TplDeploy", {
           projectId: data.projectId,
           taskId: taskId,
         });
       } catch (error) {
-        console.log(error);
+        const { data = {} } = error.response || {};
+        let msg = data.message || error.message;
+        await this.$alert(msg);
       }
       this.$loading.close();
     },

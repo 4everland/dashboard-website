@@ -14,9 +14,14 @@
       </template>
       <!-- <build-log v-if="info" :list="logs" :errMsg="errMsg" /> -->
 
-      <div class="fz-14">IPNS Resolve: {{ projInfo.ipfsPath }}</div>
-      <div class="fz-14 gray mt-4">
-        IPFS CID: {{ info.cid ? info.cid : "Pending" }}
+      <div class="fz-14">
+        IPNS: {{ projInfo.ipfsPath.replace("/ipns/", "") }}
+      </div>
+      <div class="fz-14 mt-4">
+        <span v-if="isFail && !info.cid">Failure: The CID not found</span>
+        <span v-else>
+          IPFS CID: {{ info.cid ? info.cid : "Resolve Pending" }}
+        </span>
       </div>
     </e-toggle-card>
     <e-toggle-card
@@ -30,7 +35,15 @@
           <e-time :endAt="info.endAt">{{ info.createAt }}</e-time>
         </div>
       </template>
-      <build-log v-if="info" :list="logs" :errMsg="errMsg" />
+      <div v-if="info">
+        <build-log v-if="info && !hashDeploy" :list="logs" :errMsg="errMsg" />
+        <div v-else class="fz-14">
+          <span v-if="isFail">{{ errMsg }}</span>
+          <span v-else>
+            IPFS CID: {{ info.cid ? info.cid : "Resolve Pending" }}
+          </span>
+        </div>
+      </div>
       <div class="fz-14 gray" v-else>Pending</div>
     </e-toggle-card>
 
@@ -90,9 +103,6 @@
         </span>
       </div>
     </e-toggle-card>
-
-    <!-- buildType:  git | ipns | ipfs, platform: ipfs | ar | ic  -->
-    <!-- <build-overview-logs1 ref="" :buildType="git" :platform="ipfs" ></build-overview-logs1> -->
   </div>
 </template>
 
@@ -118,6 +128,7 @@ export default {
       state: "",
       errMsg: "",
       openIds: [],
+      timer: null,
     };
   },
   computed: {
@@ -151,6 +162,15 @@ export default {
         /fail/i.test(this.info.syncState) || this.info.state == "CANCELLED"
       );
     },
+    isSyncing() {
+      return this.info && this.state == "syncing";
+    },
+    isPending() {
+      return this.info && this.state == "pending";
+    },
+    isRunning() {
+      return this.info && this.state == "running";
+    },
     showHash() {
       return (
         (this.info.platform &&
@@ -161,9 +181,7 @@ export default {
       );
     },
     hashDeploy() {
-      return function (type) {
-        return type == "CID" || type == "IPNS";
-      };
+      return this.info.deployType == "CID" || this.info.deployType == "IPNS";
     },
     ipfsDeployIpfs() {
       return this.info.deployType == "CID" && this.info.platform == "IPFS";
@@ -177,31 +195,84 @@ export default {
     ipnsDeployOther() {
       return this.info.deployType == "IPNS" && this.info.platform != "IPFS";
     },
+    ipnsDeploy() {
+      return this.info.deployType == "IPNS";
+    },
     gitHubDeploy() {
       return this.projInfo.deployType == "GITHUB";
     },
     getIcon() {
       return function (i) {
-        if (!this.info) return "";
-        if (this.ipnsDeployOther || this.ipnsDeployIpfs) {
+        if ((this.isPending || this.isRunning) && !this.info.cid) {
           if (i == -1) {
-            if (this.isSyncErr) return "checked";
-            if (this.isFail) return "fail";
+            return "loading";
+          } else {
+            if (!this.ipnsDeploy && i == 0) return "loading";
+            return "pending";
           }
+        } else if ((this.isPending || this.isRunning) && this.info.cid) {
+          if (i == -1) {
+            return "checked";
+          } else {
+            if (this.ipnsDeploy && i == 0) return "loading";
+            if (i == 0) return "checked";
+            return "pending";
+          }
+        } else if (this.isSyncing) {
+          if (i != 2) {
+            return "checked";
+          }
+          return "loading";
+        } else if (this.isSyncErr) {
+          if (i != 2) {
+            return "checked";
+          }
+          return "fail";
+        } else if (this.isFail) {
+          if (this.ipnsDeploy) {
+            if (i == 0) return "fail";
+            if (i < 0) return "checked";
+            if (i > 0) return "pending";
+          } else {
+            if (i == 0) return "fail";
+            if (i > 0) return "pending";
+          }
+        } else if (this.isDone) {
+          return "checked";
         } else {
-          if (i == 0) {
-            if (this.isSyncErr) return "checked";
-            if (this.isFail) return "fail";
-          }
+          return "pending";
         }
-        if (this.isSyncErr && i == 2) return "fail";
-        if (this.isFail) return "pending";
-        if (this.state == "pending" && i == -1) return "loading";
-        if (this.state == "syncing" && i != 2) return "checked";
-        if (this.state == "syncing" && i == 2) return "loading";
-        if (this.isDone) return "checked";
-        if (this.state == "running" && (i == 0 || i == -1)) return "loading";
-        return "pendding";
+
+        // if (!this.info) return "";
+        // if (this.isSyncErr && i == 2) return "fail";
+        // if (this.isFail) return "pending";
+        // if (this.state == "pending" && i == -1 && !this.info.cid)
+        //   return "loading";
+        // if (this.state == "syncing" && i != 2) return "checked";
+        // if (this.state == "syncing" && i == 2) return "loading";
+        // if (this.isDone) return "checked";
+        // if (this.state == "running" && (i == 0 || i == -1)) return "loading";
+        // if (this.ipnsDeployOther || this.ipnsDeployIpfs) {
+        //   if (i == -1) {
+        //     if (this.isSyncErr && this.info.cid) return "checked";
+        //     if (this.isFail) return "fail";
+        //   }
+        //   if (i == 0) {
+        //     if (this.info.cid) return "loading";
+        //   }
+        // } else {
+        //   if (i == 0) {
+        //     if (this.isSyncErr) return "checked";
+        //     if (this.isFail) return "fail";
+        //   }
+        // }
+
+        // return "pendding";
+      };
+    },
+    getIpns() {
+      return function (val) {
+        return val.replace("/ipns/", "");
       };
     },
   },
@@ -212,7 +283,7 @@ export default {
     buildInfo({ name, data }) {
       console.log(data);
       if (data.taskId == this.taskId) {
-        console.log(this.taskId, name);
+        console.log(this.taskId, name, this.logs, "logs");
         const last = this.logs[this.logs.length - 1];
         if (name != "log") {
           if (data.state == "SUCCESS") {
@@ -244,6 +315,8 @@ export default {
           `$hosting/project/task/object/${this.taskId}`
         );
         const info = data.task;
+        console.log(info);
+
         if (data.hash) info.hash = data.hash;
         this.errMsg = data.errorMessage || "";
         const { hash, state = "" } = info;
@@ -254,22 +327,34 @@ export default {
         this.$emit("info", info);
         this.initOpenIds();
 
-        if (!data.log) {
-          const log = {
-            timestamp: info.endAt || info.createAt,
-          };
-          if (this.isFail) log.content = "deploy failed.";
-          // else if (this.state == "syncing") log.content = "";
-          // else if (!this.isDone) log.content = "deploying...";
-          // else log.content = "deploy site successfully: " + data.hash;
-          else if (this.state == "syncing" || this.isDone)
-            log.content = "deploy site successfully " + info.cid;
-          else log.content = "deploying...";
-          data.log = [log];
-        }
+        // if (!data.log) {
+        //   const log = {
+        //     timestamp: info.endAt || info.createAt,
+        //   };
+        //   if (this.isFail) log.content = "deploy failed.";
+        //   else if (this.state == "syncing" || this.isDone)
+        //     log.content = "deploy site successfully " + info.cid;
+        //   else log.content = "deploying...";
+        //   data.log = [log];
+        // }
+
         this.logs = data.log || [];
+        if (info.deployType == "IPNS") {
+          if (info.cid) {
+            this.timer ? clearInterval(this.timer) : false;
+            this.openIds = [-1, 0];
+          } else {
+            if (!this.timer) {
+              this.timer = setInterval(() => {
+                this.getInfo();
+              }, 3000);
+            }
+            if (info.state == "FAILURE") {
+              clearInterval(this.timer);
+            }
+          }
+        }
         if (this.isDone) {
-          // this.curIdx = isIpfs ? 2 : 1;
           if (
             this.ipfsDeployIpfs ||
             this.ipfsDeployOther ||
@@ -280,12 +365,8 @@ export default {
           if (this.ipnsDeployIpfs || this.ipnsDeployOther) {
             this.openIds = [-1, 0, 1, 2];
           }
-
-          console.log(this.openIds, this.info);
           this.$store.dispatch("getProjectInfo", this.info.projectId);
-        } else if (this.isSyncErr) {
-          this.curIdx = 1;
-        } else if (hash || this.state == "syncing") {
+        } else if (hash || this.state == "syncing" || this.isSyncErr) {
           if (
             this.ipfsDeployIpfs ||
             this.ipfsDeployOther ||
@@ -308,16 +389,6 @@ export default {
         this.openIds = [0];
       }
     },
-    setOpenId(id, isAdd = true) {
-      const idx = this.openIds.indexOf(id);
-      if (isAdd && idx == -1) {
-        this.openIds.push(id);
-      }
-      if (!isAdd && idx != -1) {
-        this.openIds.splice(idx, 1);
-      }
-    },
-
     getOpen(i) {
       return this.openIds.includes(i);
     },

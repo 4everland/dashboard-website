@@ -257,7 +257,7 @@
 
   <div v-else-if="isWeb3Tpl">
     <new-step-1-web3-tpl
-      @onHashDeloy="onHashDeloy"
+      @onWeb3TplDeploy="onWeb3TplDeploy"
       @back="$emit('back')"
     ></new-step-1-web3-tpl>
   </div>
@@ -446,6 +446,7 @@ export default {
       this.$emit("next");
     },
     onWeb3TplDeploy({ projectId, taskId }) {
+      console.log(1111);
       this.$router.replace(`/hosting/new?id=${projectId}&taskId=${taskId}`);
       this.$emit("next");
     },

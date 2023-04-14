@@ -8,12 +8,7 @@
     ></v-skeleton-loader>
     <v-row class="mb-2" v-else>
       <v-col cols="6" v-for="it in web3TplList" :key="it.id">
-        <div
-          class="bd-1 d-b hover-1 pos-r"
-          style="height: 270px"
-          v-ripple
-          @click="$emit('item', it)"
-        >
+        <div class="bd-1 d-b hover-1 pos-r" style="height: 270px">
           <img
             :style="{
               height: '160px',
@@ -38,8 +33,25 @@
             style="width: 100%"
           >
             <!-- <div class="fz-14">Deploy</div> -->
-            <v-btn color="primary" x-small> Deploy</v-btn>
-            <img width="18" src="/img/svg/hosting/m-github.svg" alt="" />
+
+            <div class="al-c">
+              <img
+                width="18"
+                src="/img/svg/hosting/m-github.svg"
+                alt=""
+                @click.stop="onGithub(it.githubUrl)"
+              />
+              <v-icon
+                class="ml-4"
+                size="18"
+                color="primary"
+                @click="onPreview(it.preview)"
+                >mdi-open-in-new</v-icon
+              >
+            </div>
+            <v-btn color="primary" x-small text @click="$emit('item', it)">
+              Start</v-btn
+            >
           </div>
         </div>
       </v-col>
@@ -126,11 +138,17 @@ export default {
             configJson: "json",
           },
         ];
-        this.web3TplList = this.web3TplList.concat(testArr);
+        this.web3TplList = this.web3TplList.concat(data);
         this.loading = false;
       } catch (error) {
         console.log(error);
       }
+    },
+    onGithub(url) {
+      window.open(url);
+    },
+    onPreview(url) {
+      window.open(url);
     },
   },
 };

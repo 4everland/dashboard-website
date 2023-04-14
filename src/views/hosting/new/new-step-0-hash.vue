@@ -8,7 +8,6 @@
           outlined
           :items="items"
           dense
-          @change="onChange"
           v-model="seleted"
         ></v-select
       ></v-col>
@@ -57,14 +56,10 @@ export default {
     },
   },
   methods: {
-    onChange() {
-      console.log("onchange");
-    },
     async onStart() {
       try {
         if (this.seleted == "ENS") {
           const { type, hash } = await this.getEnsIpns();
-          console.log(type, hash);
           let html = `<div>Deploying with the following ${type}?</div><div>${hash}</div>`;
           await this.$confirm(html, "Resolved successfully");
           this.$emit("onHashStart", {
@@ -79,6 +74,7 @@ export default {
           });
         }
       } catch (error) {
+        if (JSON.stringify(error) == "{}") return;
         this.onErr(error);
       }
     },
@@ -91,7 +87,6 @@ export default {
       const registry = getENSRegistry(this.provider);
       this.owner = await registry.owner(this.node);
       console.log(this.owner);
-
       this.resolver = await registry.resolver(this.node);
       let contentHash = await getResolver(
         this.resolver,

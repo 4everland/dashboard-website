@@ -5,6 +5,7 @@
     box-shadow: 0 0 2px rgb(136 136 136 / 30%);
     .num {
       padding: 8px 8px;
+      border-radius: 6px 0 0 6px;
       $bg: #636f7e;
       background: $bg;
       color: #fff;
@@ -50,7 +51,7 @@
   <v-row class="e-steps">
     <v-col v-for="(it, i) in list" :key="i">
       <div
-        class="item pa-1 lh-1"
+        class="item pa-1 lh-1 bdrs-6"
         :class="{ active: i == value, prev: i < value }"
       >
         <span class="num d-ib mr-8">Step {{ 1 + i }}</span>
