@@ -2,6 +2,7 @@
   <div>
     <v-dialog v-model="showDialog" max-width="700" persistent>
       <div class="reward-hub-content pos-r">
+        <v-btn color="primary" @click="onAnimation">Test Btn</v-btn>
         <h3>Thank You for Registering!</h3>
         <v-icon
           size="18"
@@ -67,6 +68,7 @@
         </div>
       </div>
     </v-dialog>
+    <e-register-share ref="share"></e-register-share>
   </div>
 </template>
 
@@ -286,12 +288,18 @@ export default {
         bus.$emit("guide");
         this.move();
       }
-      if (this.stepCount != 5 && !val && !this.registerInfo.handled) {
+      // if (this.stepCount != 5 && !val && !this.registerInfo.handled) {
+      if (this.stepCount != 5 && !val) {
         this.showDialog = true;
       }
     },
   },
   methods: {
+    onAnimation() {
+      this.showDialog = false;
+      this.$refs.share.showDialog = true;
+      // this.$refs.flowers.showAnimation();
+    },
     onGuide() {
       this.driver.start();
       this.stop();
