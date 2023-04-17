@@ -20,7 +20,8 @@
             x-small
             class="e-btn-text"
             :color="
-              item.content == item.ipns || item.content == item.ipfs
+              item.content == item.ipns ||
+              hashV0toV1(item.content) == hashV0toV1(item.ipfs)
                 ? 'success'
                 : 'error'
             "
@@ -29,7 +30,12 @@
             <b>{{ item.domain }}</b>
             <v-tooltip
               bottom
-              v-if="!(item.content == item.ipns || item.content == item.ipfs)"
+              v-if="
+                !(
+                  item.content == item.ipns ||
+                  hashV0toV1(item.content) == hashV0toV1(item.ipfs)
+                )
+              "
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-icon
@@ -81,6 +87,8 @@
 </template>
 
 <script>
+import { encode, decode, helpers } from "@ensdomains/content-hash";
+
 export default {
   props: ["type", "active"],
   data() {
@@ -175,6 +183,12 @@ export default {
         console.log(error);
       }
       this.loading = false;
+    },
+    hashV0toV1(baseHash) {
+      const hash = /^Qm[a-zA-Z0-9]{44}/.test(baseHash)
+        ? helpers.cidV0ToV1Base32(baseHash)
+        : baseHash;
+      return hash;
     },
   },
 };

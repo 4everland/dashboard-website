@@ -138,7 +138,7 @@ export default {
     },
     onErr(err, retry) {
       if (!err) return console.log("---- err null");
-      // console.log(err);
+      console.log(err);
       const { data } = err;
       // console.log(data);
       let msg = err.message;
@@ -356,9 +356,8 @@ export default {
       }
     },
     async switchNet(id) {
+      const chainId = "0x" + id.toString(16);
       try {
-        const chainId = "0x" + id.toString(16);
-        await this.addChain(chainId, id);
         const res = await window.web3.currentProvider.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
@@ -373,6 +372,8 @@ export default {
           this.onErr(error).then(() => {
             // this.switchNet(id);
           });
+        } else {
+          this.addChain(chainId, id);
         }
       }
     },
@@ -393,8 +394,8 @@ export default {
       await this.$confirm(html, this.title, {
         confirmText: "Switch Network",
       });
-      const payBy = (localStorage.payBy = "Polygon");
-      const id = this.getChainId(payBy);
+      this.payBy = localStorage.payBy = "Polygon";
+      const id = this.getChainId(this.payBy);
       await this.switchNet(id);
     },
     async switchMatchNet(payBy) {

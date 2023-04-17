@@ -26,6 +26,26 @@
       details, and you can also customize individual purchases based on resource
       consumption.
     </div>
+    <h4 class="mt-6">Guest</h4>
+    <table class="w100p e-table-1 mt-5 fz-14">
+      <thead class="bg-f7 gray-6">
+        <tr>
+          <td>Free bandwidth (Monthly)</td>
+          <td>Free build minutes (Monthly)</td>
+          <td>Free IPFS storage(New users only)</td>
+          <td>Free Arweave storage</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>10GB</td>
+          <td>100Min</td>
+          <td>1GB</td>
+          <td>20MB</td>
+        </tr>
+      </tbody>
+    </table>
+    <h4 class="mt-6">Pro User</h4>
     <table class="w100p e-table-1 mt-5 fz-14">
       <thead class="bg-f7 gray-6">
         <tr>
@@ -39,12 +59,11 @@
         <tr>
           <td>100GB</td>
           <td>250Min</td>
-          <td>6GB-25GB</td>
-          <td>100MB-200MB</td>
+          <td>5GB</td>
+          <td>100MB</td>
         </tr>
       </tbody>
     </table>
-
     <h3 class="mt-9">Price Details</h3>
     <div>
       The following billing standard applies to both the direct purchase of
@@ -105,20 +124,20 @@
             </e-menu>
           </td>
           <td rowspan="2">Storage</td>
-          <td>0-6GB</td>
-          <td>Free / 1 year</td>
+          <!-- <td>0-6GB</td>
+          <td>Free / 1 year</td> -->
         </tr>
         <tr>
-          <td>6GB+</td>
+          <td>1GB+</td>
           <td>$2 / 100G / Mth</td>
         </tr>
         <tr>
           <td rowspan="2">Storage duration</td>
-          <td>0-12 months</td>
-          <td>Free / 1 year</td>
+          <!-- <td>0-12 months</td>
+          <td>Free / 1 year</td> -->
         </tr>
         <tr>
-          <td>12 months+</td>
+          <td>1 months+</td>
           <td>
             Settlement method
             <e-tooltip top>
@@ -140,7 +159,7 @@
         </tr>
         <tr>
           <td>100MB+</td>
-          <td>$0.31</td>
+          <td>$0.81</td>
         </tr>
       </tbody>
     </table>

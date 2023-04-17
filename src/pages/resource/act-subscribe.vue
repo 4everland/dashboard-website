@@ -462,8 +462,13 @@ export default {
       try {
         let amount = val;
         this.feeLoading = true;
+        console.log({
+          providerAddr: this.providerAddr,
+          resId,
+          amount,
+        });
         if (resId == ResourceType.IPFSStorage) {
-          // console.log("ipfs", amount, this.ipfsTime);
+          console.log("ipfs", this.uuid, this.ipfsTime);
           fee = await this.curContract.DstChainPayment.ipfsAlloctionsFee(
             this.providerAddr,
             this.uuid,

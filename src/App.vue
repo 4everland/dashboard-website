@@ -26,7 +26,6 @@
             <router-view></router-view>
           </e-wrap>
         </div>
-        <!-- <e-claim @onUserGuide="getNewUser"></e-claim> -->
         <e-guide ref="guide" />
       </v-main>
     </template>

@@ -199,7 +199,7 @@ export default {
   methods: {
     async getNewChagneLogNum() {
       const { data } = await Axios.get(
-        "https://4ever-2.4everland.store/header.json"
+        "https://tever.4everland.store/header.json"
       );
       this.newChagelogNum = data.changeLogNum;
       // localStorage.changelogNum = this.newChagelogNum;

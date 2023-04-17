@@ -262,7 +262,11 @@
                 :key="j"
                 :href="j == 0 ? `/hosting/statistics/${it.name}/${it.id}` : ''"
               >
-                <component :is="row.comp" :info="row.data" />
+                <component
+                  :is="row.comp"
+                  :info="row.data"
+                  :platform="it.platform"
+                />
               </e-link>
               <div class="mt-5 d-flex al-c f-wrap">
                 <div class="d-flex" v-if="it.repo && it.repo.name">

@@ -65,7 +65,8 @@
                   <a
                     v-if="item.type == 'ens' || item.type == 'sns'"
                     :class="
-                      item.content == item.ipns || item.content == item.ipfs
+                      item.content == item.ipns ||
+                      hashV0toV1(item.content) == hashV0toV1(item.ipfs)
                         ? ''
                         : 'disabled'
                     "
@@ -83,7 +84,8 @@
                 >
                   <v-icon
                     v-if="
-                      item.content == item.ipns || item.content == item.ipfs
+                      item.content == item.ipns ||
+                      hashV0toV1(item.content) == hashV0toV1(item.ipfs)
                     "
                     color="
                          success
@@ -95,20 +97,15 @@
                   <v-tooltip bottom v-else>
                     <template v-slot:activator="{ on, attrs }">
                       <v-icon
-                        :color="
-                          item.content == item.ipns || item.content == item.ipfs
-                            ? 'success'
-                            : 'error'
+                        color="
+                     
+                             error
                         "
                         size="18"
                         v-bind="attrs"
                         v-on="on"
                       >
-                        mdi-{{
-                          item.content == item.ipns || item.content == item.ipfs
-                            ? "check-circle"
-                            : "information"
-                        }}
+                        mdi-information
                       </v-icon>
                     </template>
                     <span>{{
@@ -117,20 +114,6 @@
                       } has the different hash on ${item.type.toUpperCase()}`
                     }}</span>
                   </v-tooltip>
-                  <!-- <span
-                    class="ml-1 fz-13"
-                    :class="
-                      item.content == item.ipns || item.content == item.ipfs
-                        ? 'color-suc'
-                        : 'red-1'
-                    "
-                  >
-                    {{
-                      item.content == item.ipns || item.content == item.ipfs
-                        ? "Valid Configuration"
-                        : "Invalid Configuration"
-                    }}
-                  </span> -->
                 </div>
               </div>
               <div>
@@ -224,9 +207,13 @@
                   x-small
                   color="primary"
                   class="ml-4"
-                  :disabled="item.content == item.ipfs"
+                  :disabled="hashV0toV1(item.content) == hashV0toV1(item.ipfs)"
                 >
-                  {{ item.content == item.ipfs ? "Bound" : "Bind" }}
+                  {{
+                    hashV0toV1(item.content) == hashV0toV1(item.ipfs)
+                      ? "Bound"
+                      : "Bind"
+                  }}
                 </v-btn>
               </div>
             </div>
@@ -266,7 +253,6 @@ import {
 } from "@/plugins/sns";
 
 const domainOptions = require("@/assets/domain/domainList.json");
-console.log(domainOptions);
 export default {
   data() {
     return {
@@ -389,8 +375,6 @@ export default {
       this.$loading();
       const ensIpns = await this.getEnsIpns(item.domain);
       const owner = await this.verifyEnsOwner(item.domain);
-      console.log(ensIpns);
-      console.log(owner);
       let Obj = {
         id: item.id,
         content: ensIpns ? ensIpns : "",
@@ -526,7 +510,6 @@ export default {
         this.$loading.close();
         if (contentHash.substring(2)) {
           const res = decode(contentHash);
-          console.log(res);
           return res;
         }
       } catch (error) {
@@ -586,7 +569,6 @@ export default {
           node,
           `0x${ipnsHashEncoded}`,
         ]);
-        console.log(data);
         const from = await signer.getAddress();
         const tx = await signer.sendTransaction({
           to: resolver,
@@ -640,19 +622,23 @@ export default {
       });
     },
     checkNet() {
-      const chainId = this.walletObj.chainId;
-      if (!chainId) return false;
-      let msg = "";
-      if (chainId != "0x1") {
-        msg =
-          "Wrong network, please switch your wallet network to Ethereum mainnet.";
+      if (process.env.NODE_ENV !== "production") {
+        return true;
+      } else {
+        const chainId = this.walletObj.chainId;
+        if (!chainId) return false;
+        let msg = "";
+        if (chainId != "0x1") {
+          msg =
+            "Wrong network, please switch your wallet network to Ethereum mainnet.";
+        }
+        if (msg) {
+          this.$alert(msg).then(() => {
+            this.switchNet(1);
+          });
+        }
+        return !msg;
       }
-      if (msg) {
-        this.$alert(msg).then(() => {
-          this.switchNet(1);
-        });
-      }
-      return !msg;
     },
     async switchNet(id) {
       try {
@@ -693,6 +679,12 @@ export default {
       return this.items.find((item) => {
         return item.key == type;
       });
+    },
+    hashV0toV1(baseHash) {
+      const hash = /^Qm[a-zA-Z0-9]{44}/.test(baseHash)
+        ? helpers.cidV0ToV1Base32(baseHash)
+        : baseHash;
+      return hash;
     },
   },
 };
