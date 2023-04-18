@@ -48,7 +48,7 @@
           @click="form.platform = it.name"
         >
           <div
-            class="d-flex al-c bdrs-3 plat-item"
+            class="d-flex al-c bdrs-4 plat-item"
             :class="{
               active: form.platform == it.name,
             }"
