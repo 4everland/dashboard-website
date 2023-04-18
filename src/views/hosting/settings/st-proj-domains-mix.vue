@@ -11,7 +11,7 @@
               style="cursor: pointer"
               v-for="item in items"
               :key="item.key"
-              :src="require(`@/assets/domain/icon/${item.key}.svg`)"
+              :src="require(`@/assets/domain/icon/${item.icon}`)"
               @click="seleted = item.key"
             />
           </span>
@@ -35,7 +35,7 @@
               dense
               v-model.trim="domain"
               @keyup.enter="onAdd"
-              :placeholder="`${seleted.toUpperCase()} Domain`"
+              :placeholder="getDomainByType(seleted).placeholder"
             >
             </v-text-field>
             <v-btn
@@ -58,7 +58,7 @@
             <div class="d-flex al-c flex-wrap">
               <div class="mr-auto d-flex">
                 <img
-                  :src="require(`@/assets/domain/icon/${item.type}.svg`)"
+                  :src="require(`@/assets/domain/icon/${getDomainByType(item.type).icon}`)"
                   class="mr-2"
                 />
                 <div class="mr-auto">

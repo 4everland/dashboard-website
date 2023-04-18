@@ -5,28 +5,36 @@
       "key": "ens",
       "network": "function(domain){return 'https://' +  domain + '.limo'}",
       "host": "https://app.ens.domains",
-      "rule": ".+.eth$"
+      "rule": ".+.eth$",
+      "placeholder": "ENS Domain",
+      "icon": "ens.svg"
     },
     {
       "name": "SNS",
       "key": "sns",
       "network": "function(domain){return 'https://' + domain.split('.')[0] + '.4sol.xyz'}",
       "host": "https://naming.bonfida.org",
-      "rule": ".+.sol$"
+      "rule": ".+.sol$",
+      "placeholder": "SNS Domain",
+      "icon": "sns.svg"
     },
     {
-      "name": "zkSync",
-      "key": "zns",
+      "name": ".zksync",
+      "key": ".zksync",
       "network": "function(domain){return 'https://' +  domain + '.limo'}",
       "host": "https://zns.is",
-      "rule": ".+.zksync$"
+      "rule": ".+.zksync$",
+      "placeholder": ".zksync Domain",
+      "icon": "zksync.svg"
     },
     {
       "name": "CORE",
       "key": "core",
       "network": "function(domain){return 'https://' +  domain + '.limo'}",
       "host": "https://app.coredao.id",
-      "rule": ".+.core$"
+      "rule": ".+.core$",
+      "placeholder": "CORE Domain",
+      "icon": "core.svg"
     }
   ]
 }
