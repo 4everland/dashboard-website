@@ -146,9 +146,9 @@ export default {
       if (this.userInfo.onChain) {
         // return ["Polygon", "Ethereum", "BSC"];
         if (this.$inDev) {
-          return ["Polygon", "Ethereum", "BSC"];
+          return ["Polygon", "Ethereum", "BSC", "zkSync"];
         }
-        return ["Polygon", "Ethereum", "BSC", "Arbitrum"];
+        return ["Polygon", "Ethereum", "BSC", "Arbitrum", "zkSync"];
       } else {
         return ["Polygon"];
       }
@@ -206,21 +206,33 @@ export default {
           }
           console.log("totalFee", totalFee.toString());
           console.log(params, "calcFee params");
-          const feeMsg = await target.calcFee(...params);
-          console.log("feeMsg", feeMsg.toString());
-          let gas = await target.estimateGas.pay(...params, { value: feeMsg });
-          console.log("gas", gas);
-          let gasPrice = await this.curContract.provider.getGasPrice();
-          params.push({
-            value: feeMsg,
-            gasLimit: gas.mul(15).div(10),
-            gasPrice: gasPrice.mul(12).div(10),
-          });
-          this.ethFeeInfo = {
-            msgFee: this.$utils.cutFixed(feeMsg.toString() / 1e18, 4),
-            unit: this.isBSC ? "BNB" : "ETH",
-          };
-          console.log(this.ethFeeInfo);
+          if (this.isZk) {
+            let gas = await target.estimateGas.pay(...params);
+            console.log("gas", gas);
+            let gasPrice = await this.curContract.provider.getGasPrice();
+            params.push({
+              gasLimit: gas.mul(15).div(10),
+              gasPrice: gasPrice.mul(12).div(10),
+            });
+          } else {
+            const feeMsg = await target.calcFee(...params);
+            console.log("feeMsg", feeMsg.toString());
+            let gas = await target.estimateGas.pay(...params, {
+              value: feeMsg,
+            });
+            console.log("gas", gas);
+            let gasPrice = await this.curContract.provider.getGasPrice();
+            params.push({
+              value: feeMsg,
+              gasLimit: gas.mul(15).div(10),
+              gasPrice: gasPrice.mul(12).div(10),
+            });
+            this.ethFeeInfo = {
+              msgFee: this.$utils.cutFixed(feeMsg.toString() / 1e18, 4),
+              unit: this.isBSC ? "BNB" : "ETH",
+            };
+            console.log(this.ethFeeInfo);
+          }
           if (isPreview) {
             return;
           }

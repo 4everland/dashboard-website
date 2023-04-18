@@ -8,7 +8,6 @@
 export default {
   methods: {
     showAnimation() {
-      console.log(1);
       var COUNT = 100;
       var masthead = document.querySelector(".box");
       var canvas = document.createElement("canvas");
@@ -33,6 +32,8 @@ export default {
         this.vy = 0;
         this.vx = 0;
         this.r = 0;
+        this.bg = null;
+        this.done = false;
         this.reset();
       };
       Snowflake.prototype.reset = function () {
@@ -49,6 +50,9 @@ export default {
         snowflake;
       for (i = 0; i < COUNT; i++) {
         snowflake = new Snowflake();
+        const idx = Math.ceil(Math.random() * 3);
+        console.log(idx);
+        snowflake.bg = `/img/icon/share/${idx}.png`;
         snowflake.reset();
         snowflakes.push(snowflake);
       }
@@ -63,15 +67,22 @@ export default {
           ctx.beginPath();
           // ctx.arc(snowflake.x, snowflake.y, snowflake.r, 0, Math.PI * 2, false);
           let img = new Image();
-          img.src = "/img/icon/copy.svg";
+
+          img.src = snowflake.bg;
           ctx.drawImage(img, snowflake.x, snowflake.y, 20, 20);
           ctx.closePath();
           ctx.fill();
           if (snowflake.y > height) {
             // snowflake.reset();
+            snowflake.done = true;
           }
         }
-        requestAnimFrame(update);
+
+        const result = snowflakes.some((it) => !it.done);
+        console.log(result);
+        if (result) {
+          requestAnimFrame(update);
+        }
       }
       // shim layer with setTimeout fallback
       window.requestAnimFrame = (function () {

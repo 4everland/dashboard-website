@@ -142,6 +142,25 @@ export default {
         return false;
       }
     },
+
+    async handleZkClaimV2() {
+      const fee = await this.contract.Register.fee();
+      const tx = await this.contract.Register.register(
+        providerAddr,
+        this.registerInfo.uid,
+        {
+          value: fee,
+        }
+      );
+      const receipt = await tx.wait();
+
+      const isExists = await this.contract.ProviderController.accountExists(
+        providerAddr,
+        data.uid
+      );
+
+      await this.registerSuccess();
+    },
     async searchZySyncRecord() {
       try {
         const { data } = await axios.get(

@@ -11,6 +11,9 @@
             identity Enjoy more resources and enter the decentralized world of
             Web3
           </div>
+          <div class="ta-c mt-3">
+            <v-btn color="primary">Share</v-btn>
+          </div>
         </div>
       </div>
     </v-dialog>
@@ -41,6 +44,7 @@ export default {
   top: 0;
   height: 100vh;
   width: 100%;
+  pointer-events: none;
 }
 .share-container {
   background: url("/img/bg/share/share_bg.png") center/cover no-repeat;

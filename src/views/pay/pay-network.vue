@@ -66,10 +66,15 @@ export default {
           label: "Arbitrum",
           img: "/img/svg/billing/ic-arbitrum.png",
         },
+        {
+          label: "zkSync",
+          img: "/img/svg/billing/ic-arbitrum.png",
+        },
       ],
     };
   },
   created() {
+    console.log(this.allow);
     if (this.allow && !this.allow.includes(this.payBy)) {
       this.onSelect(this.allow[0]);
     }

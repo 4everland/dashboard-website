@@ -4,6 +4,7 @@ import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
 import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
 import ArbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-arbitrum";
+import zkSyncContract from "../../plugins/pay/contracts/src-chain-contracts-zkSync";
 // import client from "../../plugins/pay/contracts/SGNClient";
 import {
   MumbaiFundPool,
@@ -11,7 +12,7 @@ import {
   GoerliRecharge,
   providerAddr,
 } from "../../plugins/pay/contracts/contracts-addr";
-
+import { Web3Provider } from "zksync-web3";
 const uint256Max = BigNumber.from("1").shl(256).sub(1);
 
 export default {
@@ -54,6 +55,9 @@ export default {
     },
     isArbitrum() {
       return this.payBy == "Arbitrum";
+    },
+    isZk() {
+      return this.payBy == "zkSync";
     },
     payChainId() {
       return this.getChainId(this.payBy);
@@ -268,6 +272,7 @@ export default {
       if (type == "Polygon") return this.$inDev ? 80001 : 137;
       if (type == "BSC") return this.$inDev ? 97 : 56;
       if (type == "Arbitrum") return 42161;
+      if (type == "zkSync") return this.$inDev ? 280 : 324;
       return this.$inDev ? 5 : 1;
     },
     async addChain(chainId, id) {
@@ -335,7 +340,29 @@ export default {
           chainName: "Arbitrum One",
           rpcUrls: ["https://arb1.arbitrum.io/rpc"],
           nativeCurrency: {
-            name: "Arbitrum Coin",
+            name: "zkSync Coin",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        280: {
+          chainId,
+          chainName: "zkSync Era Testnet",
+          rpcUrls: ["https://testnet.era.zksync.dev"],
+          nativeCurrency: {
+            name: "zkSync Coin",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        324: {
+          chainId,
+          chainName: "zkSync Era Mainnet",
+          rpcUrls: ["https://mainnet.era.zksync.io"],
+          nativeCurrency: {
+            name: "zkSync Coin",
             symbol: "ETH",
             decimals: 18,
           },
@@ -411,8 +438,10 @@ export default {
           if (this.$inDev) {
             dev = this.isPolygon ? "Mumbai" : "Goerli";
             if (this.isBSC) dev = "Chapel";
+            if (this.isZk) dev = "zkSync";
             dev = `(dev - ${dev})`;
           }
+          console.log(this.payChainId);
           // await this.$alert(`Please switch to ${this.payBy}${dev} Network`);
           await this.switchNet(this.payChainId);
           return;
@@ -427,6 +456,10 @@ export default {
         } else if (this.isArbitrum) {
           ArbitrumContract.setProvider(provider);
           this.curContract = ArbitrumContract;
+        } else if (this.isZk) {
+          const provider = new Web3Provider(this.walletObj);
+          zkSyncContract.setProvider(provider);
+          this.curContract = zkSyncContract;
         } else {
           ethContract.setProvider(provider);
           this.curContract = ethContract;

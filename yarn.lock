@@ -10,6 +10,11 @@
     solc-0.8.9 "npm:solc@0.8.9"
     solidity-docgen "^0.5.16"
 
+"@4everland/zksync-era-payment@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@4everland/zksync-era-payment/-/zksync-era-payment-0.0.1.tgz#18e55d8517f27be30d18d4f2333028df83615093"
+  integrity sha512-qORzXiR1xE+C76FsERCRsVp8reTi8y0+FhjgNjo/lriqFzgL77TglDXjl59SKdcR6p+7rHp6nuSt1KLna7oAfA==
+
 "@achrinza/node-ipc@9.2.2":
   version "9.2.2"
   resolved "https://registry.npmjs.org/@achrinza/node-ipc/-/node-ipc-9.2.2.tgz"
@@ -13070,6 +13075,11 @@ zksync-crypto@^0.6.1:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/zksync-crypto/-/zksync-crypto-0.6.2.tgz#319dc9b1a274c1c8feaa40f81636ef326eb2c28b"
   integrity sha512-Ry8c9kixDu3rlGCZDOg1UhzKDYe93iOZ7/Z6N1bkkrVKhmZJTIc7h+1kOjOyyhaSaHwBt8quMeBAaZKjtUeB2Q==
+
+zksync-web3@^0.14.3:
+  version "0.14.3"
+  resolved "https://registry.yarnpkg.com/zksync-web3/-/zksync-web3-0.14.3.tgz#64ac2a16d597464c3fc4ae07447a8007631c57c9"
+  integrity sha512-hT72th4AnqyLW1d5Jlv8N2B/qhEnl2NePK2A3org7tAa24niem/UAaHMkEvmWI3SF9waYUPtqAtjpf+yvQ9zvQ==
 
 zksync@^0.13.1:
   version "0.13.1"

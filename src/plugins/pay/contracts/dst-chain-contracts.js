@@ -5,7 +5,6 @@ import {
   FundPoolRegistration__factory,
   Governance__factory,
   DstChainPaymentV2Registration__factory,
-  ProviderControllerV2__factory,
   ProviderControllerV2Registration__factory,
   ProviderRegistry__factory,
   IERC20__factory,
@@ -14,8 +13,6 @@ import {
   BandwidthController__factory,
   BuildingTimeController__factory,
   IPFSStorageController__factory,
-  // DstChainPayment__factory,
-  DstChainPaymentV2__factory,
   SafeWallet__factory,
 } from "@4everland/service-contracts";
 
