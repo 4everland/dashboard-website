@@ -108,7 +108,8 @@
       <build-overview-logs in-new @done="isDone = true" @info="onInfo" />
       <p class="gray fz-12 mt-4">
         The deployment will take some time, click
-        <a href="/hosting/projects">here</a> to proceed without waiting.
+        <router-link to="/hosting/projects">here</router-link> to proceed
+        without waiting.
       </p>
     </div>
 

@@ -101,7 +101,7 @@
       </div>
 
       <div class="d-flex justify-center mt-7">
-        <v-btn color="primary" width="120" @click="onDeploy">Deploy</v-btn>
+        <v-btn color="primary" min-width="100" @click="onDeploy">Deploy</v-btn>
         <v-btn outlined class="ml-6" min-width="100" @click="$emit('back')"
           >Back</v-btn
         >

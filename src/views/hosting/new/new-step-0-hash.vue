@@ -1,8 +1,8 @@
 <template>
   <div>
     <h3>Hash Deployment</h3>
-    <v-row class="mt-3">
-      <v-col :sm="3" :cols="12"
+    <v-row class="mt-3 pa-2">
+      <v-col :sm="3" :cols="12" class="pa-1"
         ><v-select
           class="ipfs-input hide-msg"
           outlined
@@ -11,20 +11,18 @@
           v-model="seleted"
         ></v-select
       ></v-col>
-      <v-col :sm="7" :cols="12" class="d-flex al-start">
+      <v-col :sm="7" :cols="12" class="d-flex al-start pa-1">
         <v-text-field
           persistent-placeholder
           outlined
           class="hide-msg"
           dense
           label=""
-          :placeholder="
-            seleted == 'IPFS' ? 'Enter the IPFS CID' : 'Enter the IPNS'
-          "
+          :placeholder="placeholder"
           v-model="ipfsPath"
         ></v-text-field>
       </v-col>
-      <v-col :sm="2" :cols="12" class="d-flex al-start">
+      <v-col :sm="2" :cols="12" class="d-flex al-start pa-1">
         <v-btn color="primary" @click="onStart">Start</v-btn>
       </v-col>
     </v-row>
@@ -54,11 +52,18 @@ export default {
       const { walletType } = this.userInfo.wallet || {};
       return walletType == "OKX" ? window.okxwallet : window.ethereum;
     },
+    placeholder() {
+      if (this.seleted == "IPFS") return "Enter the IPFS CID";
+      return this.seleted == "IPNS" ? "Enter the IPNS" : "Enter the ENS";
+    },
   },
   methods: {
     async onStart() {
       try {
         if (this.seleted == "ENS") {
+          if (!/.+\.eth$/.test(this.ipfsPath)) {
+            return this.$alert("Invalid ETH Domain");
+          }
           const { type, hash } = await this.getEnsIpns();
           let html = `<div>Deploying with the following ${type}?</div><div>${hash}</div>`;
           await this.$confirm(html, "Resolved successfully");
@@ -74,7 +79,6 @@ export default {
           });
         }
       } catch (error) {
-        if (JSON.stringify(error) == "{}") return;
         this.onErr(error);
       }
     },
@@ -82,11 +86,15 @@ export default {
     async getEnsIpns() {
       await this.checkNet();
       this.$loading();
-      this.node = namehash(this.ipfsPath);
+      this.node = namehash(this.ipfsPath.trim());
       this.provider = getProvider();
       const registry = getENSRegistry(this.provider);
       this.owner = await registry.owner(this.node);
       console.log(this.owner);
+      if (this.owner == "0x0000000000000000000000000000000000000000") {
+        this.$loading.close();
+        throw new Error("owner not exist!");
+      }
       this.resolver = await registry.resolver(this.node);
       let contentHash = await getResolver(
         this.resolver,
@@ -130,7 +138,7 @@ export default {
       }
     },
     onErr(e) {
-      if (e) {
+      if (e && e.message) {
         this.$alert(e.message, "The ENS resolution result");
       }
     },

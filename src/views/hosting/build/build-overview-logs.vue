@@ -27,7 +27,7 @@
     </e-toggle-card>
     <e-toggle-card
       class="mt-5"
-      :title="gitHubDeploy ? 'Building' : 'Pinning'"
+      :title="gitHubDeploy || web3TplDeploy ? 'Building' : 'Pinning'"
       :value="getOpen(0)"
       :icon="getIcon(0)"
     >
@@ -39,10 +39,13 @@
       <div v-if="info">
         <build-log v-if="info && !hashDeploy" :list="logs" :errMsg="errMsg" />
         <div v-else class="fz-14">
-          <span v-if="isFail">{{ errMsg }}</span>
-          <span v-else>
+          <p>
+            Download the file directory and update the configuration file...
+          </p>
+          <p v-if="isFail">{{ errMsg }}</p>
+          <p v-else>
             IPFS CID: {{ ipfsHash ? ipfsHash : "Resolving pending" }}
-          </span>
+          </p>
         </div>
       </div>
       <div class="fz-14 gray" v-else>Pending</div>
