@@ -13,6 +13,20 @@
       "network": "function(domain){return 'https://' + domain.split('.')[0] + '.4sol.xyz'}",
       "host": "https://naming.bonfida.org",
       "rule": ".+.sol$"
+    },
+    {
+      "name": "zkSync",
+      "key": "zns",
+      "network": "function(domain){return 'https://' +  domain + '.limo'}",
+      "host": "https://zns.is",
+      "rule": ".+.zksync$"
+    },
+    {
+      "name": "CORE",
+      "key": "core",
+      "network": "function(domain){return 'https://' +  domain + '.limo'}",
+      "host": "https://app.coredao.id",
+      "rule": ".+.core$"
     }
   ]
 }
