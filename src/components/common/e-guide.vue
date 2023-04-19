@@ -63,6 +63,25 @@
                   </e-tooltip>
                 </v-list-item-title>
               </v-list-item>
+              <v-list-item link @click="handleZkSyncClaimV2">
+                <v-list-item-title class="fz-14 al-c justify-center">
+                  <div class="al-c">
+                    <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
+                    <span class="ml-3">zkSync Lite(V2) Claim</span>
+                  </div>
+                  <e-tooltip right>
+                    <v-icon slot="ref" size="18" color="#999" class="pa-1 d-ib"
+                      >mdi-alert-circle-outline</v-icon
+                    >
+                    <span
+                      >Please ensure that you have sufficient ETH in zkSync
+                      Lite. Interaction with the zkSync network will rely on
+                      cross-chain communication services to complete on-chain
+                      identity registration on Polygon.</span
+                    >
+                  </e-tooltip>
+                </v-list-item-title>
+              </v-list-item>
             </v-list>
           </e-menu>
         </div>
@@ -351,6 +370,19 @@ export default {
         const register = await this.isRegister();
         if (register) return (this.showDialog = false);
         const claimStatus = await this.handleZkClaim();
+        if (claimStatus) {
+          this.showDialog = false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async handleZkSyncClaimV2() {
+      try {
+        const register = await this.isRegister();
+        if (register) return (this.showDialog = false);
+        const claimStatus = await this.handleZkClaimV2();
         if (claimStatus) {
           this.showDialog = false;
         }

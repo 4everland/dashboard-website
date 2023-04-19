@@ -142,24 +142,32 @@ export default {
         return false;
       }
     },
-
     async handleZkClaimV2() {
-      const fee = await this.contract.Register.fee();
-      const tx = await this.contract.Register.register(
-        providerAddr,
-        this.registerInfo.uid,
-        {
-          value: fee,
+      try {
+        this.switchEth();
+        this.$loading();
+        const fee = await this.contract.Register.fee();
+        const tx = await this.contract.Register.register(
+          providerAddr,
+          this.registerInfo.uid,
+          {
+            value: fee,
+          }
+        );
+        const receipt = await tx.wait();
+        console.log(receipt, "receipt");
+        const isExists = await this.contract.ProviderController.accountExists(
+          providerAddr,
+          data.uid
+        );
+        if (isExists) {
+          await this.registerSuccess();
         }
-      );
-      const receipt = await tx.wait();
-
-      const isExists = await this.contract.ProviderController.accountExists(
-        providerAddr,
-        data.uid
-      );
-
-      await this.registerSuccess();
+        return true;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
     },
     async searchZySyncRecord() {
       try {
