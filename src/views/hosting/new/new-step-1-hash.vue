@@ -1,5 +1,5 @@
 <template>
-  <div class="main-wrap">
+  <div class="main-wrap" style="min-height: 551px">
     <v-form ref="form">
       <div>IPFS Path</div>
       <v-row class="mt-3">
@@ -101,8 +101,8 @@
       </div>
 
       <div class="d-flex justify-center mt-7">
-        <v-btn color="primary" width="120" @click="onDeploy">Deploy</v-btn>
-        <v-btn outlined class="ml-6" min-width="100" @click="onBack"
+        <v-btn color="primary" min-width="100" @click="onDeploy">Deploy</v-btn>
+        <v-btn outlined class="ml-6" min-width="100" @click="$emit('back')"
           >Back</v-btn
         >
       </div>
@@ -142,6 +142,9 @@ export default {
       },
     };
   },
+  created() {
+    this.getDeployParams();
+  },
   computed: {
     finalHash() {
       if (this.seleted == "IPFS") {
@@ -170,6 +173,12 @@ export default {
     },
   },
   methods: {
+    getDeployParams() {
+      const { deployType, hash } = this.$route.query;
+      console.log(deployType, hash);
+      this.seleted = deployType;
+      this.form.ipfsPath = hash;
+    },
     async onDeploy() {
       try {
         const valid = await this.$refs.form.validate();
@@ -179,30 +188,43 @@ export default {
           ...this.form,
           ipfsPath: this.finalHash,
         });
-        await this.$http.post(
+        const {
+          data: { taskId },
+        } = await this.$http.post(
           `$hosting/project/task/cid/${data.projectId}/deploy/create`
         );
-        this.$router.replace(`/hosting/projects`);
-        // this.$emit("next");
+        this.$emit("onHashDeloy", {
+          projectId: data.projectId,
+          taskId: taskId,
+        });
       } catch (error) {
         console.log(error);
       }
       this.$loading.close();
     },
     handleChangeDeployType(val) {
-      console.log(this.$refs.ipfsPathRef);
+      // console.log(this.$refs.ipfsPathRef);
       this.$refs.ipfsPathRef.reset();
-      if (val == "IPFS") {
-        this.form.deployType = "CID";
-      } else if (val == "IPNS") {
-        this.form.deployType = "IPNS";
-      } else {
-        this.form.deployType = undefined;
-      }
+      // if (val == "IPFS") {
+      //   this.form.deployType = "CID";
+      // } else if (val == "IPNS") {
+      //   this.form.deployType = "IPNS";
+      // } else {
+      //   this.form.deployType = undefined;
+      // }
     },
     onBack() {
       this.$router.back();
       this.curStep -= 1;
+    },
+  },
+  watch: {
+    seleted(val) {
+      if (val == "IPNS") {
+        this.form.deployType = "IPNS";
+      } else if (val == "IPFS") {
+        this.form.deployType = "CID";
+      }
     },
   },
 };

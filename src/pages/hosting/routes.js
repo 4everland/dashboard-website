@@ -23,7 +23,8 @@ export default [
     component: () => import("./new"),
     meta: {
       title: "New Project",
-      subTitle: "3 easy steps to get your projects live",
+      subTitle:
+        "Use the GitHub repo, hash, or template deploying method and enjoy multiple ways of project deployment.",
       isTab: 1,
       links: [
         {

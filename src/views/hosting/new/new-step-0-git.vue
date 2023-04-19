@@ -122,9 +122,8 @@
         <div class="pa-5"></div>
         <div class="gray fz-15 mt-16">
           <p>
-            We use Deloyhooks to connect with your Github, and if we receive
-            push, we will automatically deploy updates. Github binds your Git
-            account with your 4EVERLAND account by default.
+            We use Deloyhooks to connect with your GitHub, and if we receive
+            push, we will automatically deploy updates.
           </p>
         </div>
         <div class="pa-9"></div>
@@ -134,6 +133,9 @@
           <v-icon size="20">mdi-github</v-icon>
           <span class="ml-2">Connect with Github</span>
         </v-btn>
+        <p class="gray fz-14 mt-4">
+          binds your Git account with your 4EVERLAND account by default.
+        </p>
       </div>
     </div>
   </div>
