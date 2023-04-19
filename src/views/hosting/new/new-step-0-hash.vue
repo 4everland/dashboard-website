@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>Hash Deployment</h3>
+    <h3 class="mb-2">Hash Deployment</h3>
     <v-row class="mt-3 pa-2">
       <v-col :sm="3" :cols="12" class="pa-1"
         ><v-select
@@ -26,7 +26,7 @@
         <v-btn color="primary" @click="onStart">Start</v-btn>
       </v-col>
     </v-row>
-    <div class="fz-14 gray mt-5">Deploy with IPFS, IPNS or ENS</div>
+    <div class="fz-14 gray mt-3">Deploy with IPFS, IPNS or ENS</div>
   </div>
 </template>
 

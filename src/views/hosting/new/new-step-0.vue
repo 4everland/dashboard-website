@@ -21,7 +21,7 @@
         <div class="main-wrap">
           <new-step-0-hash @onHashStart="onHashStart"></new-step-0-hash>
         </div>
-        <div class="main-wrap mt-6" style="height: 350px; overflow: scroll">
+        <div class="main-wrap mt-5">
           <!-- <new-step-0-tpl @item="onTplItem" /> -->
 
           <!-- <new-step-0-web3tpl></new-step-0-web3tpl> -->
