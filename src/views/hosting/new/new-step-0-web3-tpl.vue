@@ -20,7 +20,7 @@
               width: '100%',
               'object-fit': 'cover',
             }"
-            :src="it.preview"
+            :src="it.backgroundImage"
             alt=""
           />
           <div class="px-2">
@@ -44,13 +44,13 @@
                 width="18"
                 src="/img/svg/hosting/m-github.svg"
                 alt=""
-                @click.stop="onGithub(it.githubUrl)"
+                @click.stop="openLink(it.githubUrl)"
               />
               <v-icon
                 class="ml-4"
                 size="18"
                 color="primary"
-                @click.stop="onPreview(it.preview)"
+                @click.stop="openLink(it.preview)"
                 >mdi-open-in-new</v-icon
               >
             </div>
@@ -74,7 +74,7 @@
           v-ripple
           style="height: 250px"
           @click="
-            onGithub(
+            openLink(
               'https://github.com/Recommended-Templates/Templates-Campaign'
             )
           "
@@ -122,10 +122,7 @@ export default {
         console.log(error);
       }
     },
-    onGithub(url) {
-      window.open(url);
-    },
-    onPreview(url) {
+    openLink(url) {
       window.open(url);
     },
   },
