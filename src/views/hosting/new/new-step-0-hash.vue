@@ -93,7 +93,7 @@ export default {
       console.log(this.owner);
       if (this.owner == "0x0000000000000000000000000000000000000000") {
         this.$loading.close();
-        throw new Error("owner not exist!");
+        throw new Error("Domain ownership verification failed.");
       }
       this.resolver = await registry.resolver(this.node);
       let contentHash = await getResolver(
