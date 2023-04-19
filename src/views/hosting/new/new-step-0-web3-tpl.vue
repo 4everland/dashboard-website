@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 350px">
+  <div style="height: 334px">
     <h3>Recommended Templates</h3>
     <v-skeleton-loader
       class="mt-10 mb-10"
@@ -9,14 +9,14 @@
     <v-row class="mb-2" v-else style="overflow: scroll; height: 300px">
       <v-col cols="6" v-for="it in web3TplList" :key="it.id">
         <div
-          class="bd-1 d-b hover-1 pos-r bdrs-6"
+          class="bd-1 d-b hover-1 pos-r bdrs-6 ov-h"
           v-ripple
-          style="height: 270px"
+          style="height: 250px"
           @click="$emit('item', it)"
         >
           <img
             :style="{
-              height: '160px',
+              height: '130px',
               width: '100%',
               'object-fit': 'cover',
             }"
@@ -72,10 +72,15 @@
             justify-center
           "
           v-ripple
-          style="height: 270px"
+          style="height: 250px"
+          @click="
+            onGithub(
+              'https://github.com/Recommended-Templates/Templates-Campaign'
+            )
+          "
         >
           <v-icon size="50" color="primary">mdi-plus</v-icon>
-          <div class="fz-14">Templates Campaign</div>
+          <h3 class="fz-16 mt-5">Templates Campaign</h3>
         </div>
       </v-col>
     </v-row>
