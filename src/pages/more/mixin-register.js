@@ -147,8 +147,9 @@ export default {
     },
     async handleZkClaimV2() {
       try {
-        this.switchZk();
         this.$loading();
+        await this.switchZk();
+        await this.getCurrentContract();
         const fee = await this.contract.Register.fee();
         console.log(fee);
         const tx = await this.contract.Register.register(
