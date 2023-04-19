@@ -106,13 +106,7 @@
         </template>
       </div>
       <build-overview-logs in-new @done="isDone = true" @info="onInfo" />
-      <p class="gray fz-12 mt-4">
-        The deployment will take some time, click
-        <router-link to="/hosting/projects">here</router-link> to proceed
-        without waiting.
-      </p>
     </div>
-
     <div class="ta-c mt-4" v-if="!isDone && !hashDeploy">
       <v-btn outlined @click="onCancel">Cancel</v-btn>
     </div>

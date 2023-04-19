@@ -111,6 +111,7 @@ export default {
         const { data } = await this.$http("$hosting/template/web3/list");
         console.log(data, "data");
         this.web3TplList = this.web3TplList.concat(data);
+        this.$emit("list", this.web3TplList);
         this.loading = false;
       } catch (error) {
         console.log(error);

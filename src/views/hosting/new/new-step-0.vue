@@ -26,7 +26,10 @@
 
           <!-- <new-step-0-web3tpl></new-step-0-web3tpl> -->
           <!-- <NewStep0Web3Tpl @item="onWeb3TplItem"></NewStep0Web3Tpl> -->
-          <new-step-0-web3-tpl @item="onWeb3TplItem"></new-step-0-web3-tpl>
+          <new-step-0-web3-tpl
+            @list="onWeb3List"
+            @item="onWeb3TplItem"
+          ></new-step-0-web3-tpl>
         </div>
       </v-col>
     </v-row>
@@ -81,6 +84,15 @@ export default {
           this.onImport(item);
         }
         this.cloneDir = "";
+      }
+    },
+
+    onWeb3List(list) {
+      if (this.$route.query.id && this.$route.query.type == "web3Tpl") {
+        const item = list.filter((it) => it.id == this.$route.query.id)[0];
+        if (item) {
+          this.onWeb3TplItem(item);
+        }
       }
     },
     onHashStart({ hash, deployType }) {

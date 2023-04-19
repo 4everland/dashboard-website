@@ -51,22 +51,27 @@
     ></v-text-field>
 
     <h3 class="mt-2">Edit Configurations</h3>
-    <v-row>
-      <v-col cols="12" md="6" v-for="(it, i) of configJson" :key="i">
-        <div>{{ i }}</div>
-        <template v-for="(item, idx) in it">
-          <v-text-field
-            :key="idx"
-            class="mt-4 hide-msg"
-            persistent-placeholder
-            outlined
-            :placeholder="item.placeholder"
-            v-model="item.value"
-            dense
-          ></v-text-field>
-        </template>
-      </v-col>
-    </v-row>
+    <v-form ref="iptForm">
+      <v-row>
+        <v-col cols="12" md="6" v-for="(it, i) of configJson" :key="i">
+          <div>{{ i }}</div>
+          <template v-for="(item, idx) in it">
+            <v-text-field
+              :key="idx"
+              class="mt-4"
+              persistent-placeholder
+              outlined
+              :placeholder="item.placeholder"
+              v-model="item.value"
+              :maxlength="item.maxLen"
+              :rules="getRules(item)"
+              dense
+            ></v-text-field>
+          </template>
+        </v-col>
+      </v-row>
+    </v-form>
+
     <div class="d-flex justify-center mt-7">
       <v-btn color="primary" min-width="100" @click="onDeploy">Deploy</v-btn>
       <v-btn outlined class="ml-6" min-width="100" @click="$emit('back')"
@@ -117,8 +122,10 @@ export default {
     },
     async onDeploy() {
       try {
-        // const valid = await this.$refs.form.validate();
-        // if (!valid) return;
+        console.log(this.$refs.iptForm);
+        const valid = await this.$refs.iptForm.validate();
+        console.log(valid);
+        if (!valid) return;
         this.$loading();
         const { data } = await this.$http.post(
           "$hosting/template/web3/project/create",
@@ -146,7 +153,18 @@ export default {
       }
       this.$loading.close();
     },
-
+    getRules(item) {
+      if (!item.regExp) return [];
+      let regMsg = item.regMsg ?? "Invalid " + item.key;
+      return [
+        (v) => {
+          return item.required && !v ? "required" : true;
+        },
+        (v) => {
+          return !!v && new RegExp(item.regExp).test(v) ? true : regMsg;
+        },
+      ];
+    },
     onBack() {
       this.$router.back();
       this.curStep -= 1;
@@ -180,5 +198,9 @@ export default {
 }
 .tips {
   color: #889ab3;
+}
+
+::v-deep .v-text-field.v-text-field--enclosed .v-text-field__details {
+  margin: 0 !important;
 }
 </style>
