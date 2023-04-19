@@ -51,12 +51,11 @@
     ></v-text-field>
 
     <h3 class="mt-2">Edit Configurations</h3>
-    <v-form ref="iptForm">
-      <v-row>
-        <v-col cols="12" md="6" v-for="(it, i) of configJson" :key="i">
-          <div>{{ i }}</div>
-          <template v-for="(item, idx) in it">
-            <v-text-field
+    <v-row>
+      <v-col cols="12" md="6" v-for="(it, i) of configJson" :key="i">
+        <div>{{ i }}</div>
+        <template v-for="(item, idx) in it">
+          <!-- <v-text-field
               :key="idx"
               class="mt-4"
               persistent-placeholder
@@ -66,11 +65,19 @@
               :maxlength="item.maxLen"
               :rules="getRules(item)"
               dense
-            ></v-text-field>
-          </template>
-        </v-col>
-      </v-row>
-    </v-form>
+            ></v-text-field> -->
+          <v-text-field
+            :key="idx"
+            class="mt-4"
+            persistent-placeholder
+            outlined
+            :placeholder="item.placeholder"
+            v-model="item.value"
+            dense
+          ></v-text-field>
+        </template>
+      </v-col>
+    </v-row>
 
     <div class="d-flex justify-center mt-7">
       <v-btn color="primary" min-width="100" @click="onDeploy">Deploy</v-btn>
@@ -122,10 +129,9 @@ export default {
     },
     async onDeploy() {
       try {
-        console.log(this.$refs.iptForm);
-        const valid = await this.$refs.iptForm.validate();
-        console.log(valid);
-        if (!valid) return;
+        // const valid = await this.$refs.iptForm.validate();
+        // console.log(valid);
+        // if (!valid) return;
         this.$loading();
         const { data } = await this.$http.post(
           "$hosting/template/web3/project/create",

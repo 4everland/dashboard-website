@@ -40,7 +40,7 @@
         <build-log v-if="info && !hashDeploy" :list="logs" :errMsg="errMsg" />
         <div v-else class="fz-14">
           <p v-if="web3TplDeploy">
-            Start:Download the file directory and update the configuration
+            Start: Download the file directory and update the configuration
             file...
           </p>
           <p v-if="isFail">{{ errMsg }}</p>
