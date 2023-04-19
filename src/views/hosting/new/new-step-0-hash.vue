@@ -96,10 +96,15 @@ export default {
         throw new Error("Domain ownership verification failed.");
       }
       this.resolver = await registry.resolver(this.node);
+      if (this.resolver == "0x0000000000000000000000000000000000000000") {
+        this.$loading.close();
+        throw new Error("Resolve failed");
+      }
       let contentHash = await getResolver(
         this.resolver,
         this.provider
       ).contenthash(this.node);
+      console.log(contentHash, "contentHash");
       this.$loading.close();
       if (contentHash.substring(2)) {
         const hash = decode(contentHash);
