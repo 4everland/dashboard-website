@@ -163,7 +163,7 @@ export default {
         console.log(receipt, "receipt");
         const isExists = await this.contract.ProviderController.accountExists(
           providerAddr,
-          data.uid
+          this.registerInfo.uid
         );
         if (isExists) {
           await this.registerSuccess();
