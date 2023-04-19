@@ -80,7 +80,7 @@
           "
         >
           <v-icon size="50" color="primary">mdi-plus</v-icon>
-          <h3 class="fz-16 mt-5">Templates Campaign</h3>
+          <h3 class="fz-16 mt-5">Submit a template</h3>
         </div>
       </v-col>
     </v-row>
