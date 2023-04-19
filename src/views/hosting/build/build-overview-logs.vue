@@ -19,9 +19,9 @@
         {{ projInfo.ipfsPath ? projInfo.ipfsPath.replace("/ipns/", "") : "-" }}
       </div>
       <div class="fz-14 mt-4">
-        <span v-if="isFail && !info.cid">Failure: The CID not found</span>
+        <span v-if="isFail && !info.cid">Failure: The Hash not found</span>
         <span v-else>
-          IPFS CID: {{ info.cid ? info.cid : "Resolving pending" }}
+          IPFS Hash: {{ info.cid ? info.cid : "Resolving pending" }}
         </span>
       </div>
     </e-toggle-card>
@@ -45,7 +45,7 @@
           </p>
           <p v-if="isFail">{{ errMsg }}</p>
           <p v-else>
-            {{ web3TplDeploy ? "Generate Hash" : "IPFS CID" }}:
+            {{ web3TplDeploy ? "Generate Hash" : "IPFS Hash" }}:
             {{ ipfsHash ? ipfsHash : "Resolving pending" }}
           </p>
         </div>
