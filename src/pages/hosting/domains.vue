@@ -118,7 +118,7 @@
 </template>
 
 <script>
-const domainOptions = require("@/assets/domain/domainList.json");
+// const domainOptions = require("@/assets/domain/domainList.json");
 
 export default {
   data() {
@@ -159,6 +159,7 @@ export default {
       domain: "",
       deleting: false,
       keyword: "",
+      domainOptions: [],
     };
   },
   computed: {
@@ -191,7 +192,7 @@ export default {
         },
       ];
 
-      domainOptions.list.forEach((element) => {
+      this.domainOptions.forEach((element) => {
         let obj = {
           id: element.key,
           text: element.name,
@@ -222,8 +223,20 @@ export default {
       }
     },
   },
-  mounted() {},
+  mounted() {
+    this.getDomainOptions();
+  },
   methods: {
+    async getDomainOptions() {
+      this.$axios.get("/domainList.json").then((res) => {
+        const { data } = res;
+        this.allOptions = data.list;
+        let Array = data.list.filter((item) => {
+          return item.display === "true";
+        });
+        this.domainOptions = Array;
+      });
+    },
     async onDelete() {
       try {
         let html = `The following domains will be permanently deleted along with associated <b>aliases</b> and <b>certs</b>. If the domain is used as Staging Domain it will be <b>cleared</b>. Are you sure you want to continue?`;

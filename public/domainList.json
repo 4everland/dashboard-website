@@ -7,7 +7,8 @@
       "host": "https://app.ens.domains",
       "rule": ".+.eth$",
       "placeholder": "ENS Domain",
-      "icon": "ens.svg"
+      "icon": "ens.svg",
+      "display": "true"
     },
     {
       "name": "SNS",
@@ -16,7 +17,10 @@
       "host": "https://naming.bonfida.org",
       "rule": ".+.sol$",
       "placeholder": "SNS Domain",
-      "icon": "sns.svg"
+      "icon": "sns.svg",
+      "display": "true",
+      "register": "true",
+      "registerLink": "https://sns.id/?ref=4everland"
     },
     {
       "name": ".zksync",
@@ -25,7 +29,8 @@
       "host": "https://zns.is",
       "rule": ".+.zksync$",
       "placeholder": ".zksync Domain",
-      "icon": "zksync.svg"
+      "icon": "zksync.svg",
+      "display": "true"
     },
     {
       "name": "CORE",
@@ -34,7 +39,8 @@
       "host": "https://app.coredao.id",
       "rule": ".+.core$",
       "placeholder": "CORE Domain",
-      "icon": "core.svg"
+      "icon": "core.svg",
+      "display": "true"
     }
   ]
 }
