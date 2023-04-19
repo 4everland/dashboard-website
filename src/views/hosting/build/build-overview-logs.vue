@@ -40,11 +40,13 @@
         <build-log v-if="info && !hashDeploy" :list="logs" :errMsg="errMsg" />
         <div v-else class="fz-14">
           <p v-if="web3TplDeploy">
-            Download the file directory and update the configuration file...
+            Start:Download the file directory and update the configuration
+            file...
           </p>
           <p v-if="isFail">{{ errMsg }}</p>
           <p v-else>
-            IPFS CID: {{ ipfsHash ? ipfsHash : "Resolving pending" }}
+            {{ web3TplDeploy ? "Generate Hash" : "IPFS CID" }}:
+            {{ ipfsHash ? ipfsHash : "Resolving pending" }}
           </p>
         </div>
       </div>

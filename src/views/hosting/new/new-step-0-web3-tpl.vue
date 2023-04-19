@@ -8,7 +8,12 @@
     ></v-skeleton-loader>
     <v-row class="mb-2" v-else>
       <v-col cols="6" v-for="it in web3TplList" :key="it.id">
-        <div class="bd-1 d-b hover-1 pos-r bdrs-6" style="height: 270px">
+        <div
+          class="bd-1 d-b hover-1 pos-r bdrs-6"
+          v-ripple
+          style="height: 270px"
+          @click="$emit('item', it)"
+        >
           <img
             :style="{
               height: '160px',
@@ -45,14 +50,32 @@
                 class="ml-4"
                 size="18"
                 color="primary"
-                @click="onPreview(it.preview)"
+                @click.stop="onPreview(it.preview)"
                 >mdi-open-in-new</v-icon
               >
             </div>
-            <v-btn color="primary" x-small text @click="$emit('item', it)">
-              Start</v-btn
-            >
+            <v-btn color="primary" x-small text> Start</v-btn>
           </div>
+        </div>
+      </v-col>
+      <v-col cols="6">
+        <div
+          class="
+            bd-1
+            d-b
+            hover-1
+            pos-r
+            bdrs-6
+            d-flex
+            al-c
+            flex-column
+            justify-center
+          "
+          v-ripple
+          style="height: 270px"
+        >
+          <v-icon size="50" color="primary">mdi-plus</v-icon>
+          <div class="fz-14">Templates Campaign</div>
         </div>
       </v-col>
     </v-row>
