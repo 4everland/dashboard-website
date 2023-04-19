@@ -356,11 +356,9 @@ export default {
     async handlePloygonClaim() {
       try {
         const register = await this.isRegister();
-        if (register) return (this.showDialog = false);
+        if (register) return this.onAnimation();
         const claimStatus = await this.handleClaim();
-        if (claimStatus) {
-          this.showDialog = false;
-        }
+        if (claimStatus) this.onAnimation();
       } catch (error) {
         console.log(error);
       }
@@ -368,11 +366,9 @@ export default {
     async handleZkSyncClaim() {
       try {
         const register = await this.isRegister();
-        if (register) return (this.showDialog = false);
+        if (register) return this.onAnimation();
         const claimStatus = await this.handleZkClaim();
-        if (claimStatus) {
-          this.showDialog = false;
-        }
+        if (claimStatus) this.onAnimation();
       } catch (error) {
         console.log(error);
       }
@@ -381,11 +377,9 @@ export default {
     async handleZkSyncClaimV2() {
       try {
         const register = await this.isRegister();
-        if (register) return (this.showDialog = false);
+        if (register) return this.onAnimation();
         const claimStatus = await this.handleZkClaimV2();
-        if (claimStatus) {
-          this.showDialog = false;
-        }
+        if (claimStatus) this.onAnimation();
       } catch (error) {
         console.log(error);
       }

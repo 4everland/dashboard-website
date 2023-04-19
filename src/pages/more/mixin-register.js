@@ -2,6 +2,9 @@ import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
 import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
 import arbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-arbitrum";
 import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
+import zkSyncContract from "../../plugins/pay/contracts/src-chain-contracts-zkSync";
+import { Web3Provider } from "zksync-web3";
+
 import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
 import { BigNumber, providers } from "ethers";
 import axios from "axios";
@@ -144,9 +147,10 @@ export default {
     },
     async handleZkClaimV2() {
       try {
-        this.switchEth();
+        this.switchZk();
         this.$loading();
         const fee = await this.contract.Register.fee();
+        console.log(fee);
         const tx = await this.contract.Register.register(
           providerAddr,
           this.registerInfo.uid,
@@ -163,9 +167,11 @@ export default {
         if (isExists) {
           await this.registerSuccess();
         }
+        this.$loading.close();
         return true;
       } catch (error) {
         console.log(error);
+        this.$loading.close();
         return false;
       }
     },
@@ -230,6 +236,10 @@ export default {
         } else if (chainId == 42161) {
           arbitrumContract.setProvider(provider);
           this.contract = arbitrumContract;
+        } else if (chainId == 280 || chainId == 324) {
+          const provider = new Web3Provider(window.ethereum);
+          zkSyncContract.setProvider(provider);
+          this.contract = zkSyncContract;
         } else {
           ethContract.setProvider(provider);
           this.contract = ethContract;
@@ -246,6 +256,7 @@ export default {
       if (type == "Polygon") return this.$inDev ? 80001 : 137;
       if (type == "BSC") return this.$inDev ? 97 : 56;
       if (type == "Arbitrum") return 42161;
+      if (type == "zkSync") return this.$inDev ? 280 : 324;
       return this.$inDev ? 5 : 1;
     },
     async switchPolygon() {
@@ -255,6 +266,11 @@ export default {
     },
     async switchEth() {
       const payBy = (localStorage.payBy = "");
+      const id = this.getChainId(payBy);
+      await this.switchNet(id);
+    },
+    async switchZk() {
+      const payBy = (localStorage.payBy = "zkSync");
       const id = this.getChainId(payBy);
       await this.switchNet(id);
     },
