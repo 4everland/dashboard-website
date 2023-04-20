@@ -41,6 +41,16 @@
       "placeholder": "CORE Domain",
       "icon": "core.svg",
       "display": "true"
+    },
+    {
+      "name": "SuiNS",
+      "key": "suins",
+      "network": "function(domain){return 'https://' +  domain + '.id'}",
+      "host": "https://suins.io",
+      "rule": ".+.sui$",
+      "placeholder": "SuiNS Domain",
+      "icon": "suins.svg",
+      "display": "true"
     }
   ]
 }
