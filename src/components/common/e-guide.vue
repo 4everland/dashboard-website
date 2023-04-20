@@ -3,7 +3,7 @@
     <v-dialog v-model="showDialog" max-width="700" persistent>
       <div class="reward-hub-content pos-r">
         <v-btn color="primary" @click="onAnimation">Test Btn</v-btn>
-        <h3>Thank You for Registering!</h3>
+        <h3>Recommend Minting Your Own On-Chain Identity</h3>
         <v-icon
           size="18"
           class="cursor-p"
@@ -28,9 +28,9 @@
           </v-col>
         </v-row>
         <div class="d-flex justify-center mt-8">
-          <e-menu open-on-hover offset-y>
+          <e-menu open-on-hover top>
             <v-btn slot="ref" color="primary" dark width="500px">
-              <span class="ml-2">Upgrade now</span>
+              <span class="ml-2">Mint now</span>
               <v-icon>mdi-chevron-down</v-icon>
             </v-btn>
             <v-list>
@@ -317,7 +317,7 @@ export default {
     onAnimation() {
       this.showDialog = false;
       this.$refs.share.showDialog = true;
-      // this.$refs.flowers.showAnimation();
+      this.$flowersAnimation();
     },
     onGuide() {
       this.driver.start();

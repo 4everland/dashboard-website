@@ -5,7 +5,13 @@
 </template>
 
 <script>
+import Vue from "vue";
 export default {
+  created() {
+    Vue.prototype.$flowersAnimation = () => {
+      this.showAnimation();
+    };
+  },
   methods: {
     showAnimation() {
       var COUNT = 100;
@@ -106,7 +112,7 @@ export default {
 <style lang="scss" scoped>
 .animation-container {
   z-index: 200;
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   margin: 0;

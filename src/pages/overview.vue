@@ -109,6 +109,10 @@ export default {
           img: "https://static1.4everland.org/img/banner/20221109-160329.png",
           to: "/reward-hub",
         },
+        {
+          img: "https://static1.4everland.org/img/banner/20230420-173710.png",
+          to: "/reward-hub",
+        },
       ],
     };
   },

@@ -173,6 +173,9 @@ export default {
       } catch (error) {
         console.log(error);
         this.$loading.close();
+        this.onErr(error).then(() => {
+          // this.switchNet(id);
+        });
         return false;
       }
     },

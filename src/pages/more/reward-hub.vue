@@ -1,5 +1,7 @@
 <template>
   <div>
+    <v-btn color="primary" @click="onAnimation"> Test Btn</v-btn>
+
     <div class="bdrs-10 ov-h mb-4 pos-r">
       <img
         src="https://static1.4everland.org/img/banner/20221109-160350.png"
@@ -52,7 +54,7 @@
 
               <div v-if="item.type == 'UPGRADE'">
                 <div v-if="item.status !== 'DONE'">
-                  <e-menu open-on-hover offset-y>
+                  <e-menu open-on-hover top>
                     <v-btn
                       slot="ref"
                       color="primary"
@@ -60,7 +62,7 @@
                       width="250"
                       dark
                     >
-                      <span class="ml-2">Upgrade</span>
+                      <span class="ml-2">Mint</span>
                       <v-icon>mdi-chevron-down</v-icon>
                     </v-btn>
                     <v-list>
@@ -83,6 +85,34 @@
                               alt=""
                             />
                             <span class="ml-3">zkSync Lite(V1) Claim</span>
+                          </div>
+                          <e-tooltip right>
+                            <v-icon
+                              slot="ref"
+                              size="18"
+                              color="#999"
+                              class="pa-1 d-ib"
+                              >mdi-alert-circle-outline</v-icon
+                            >
+                            <span
+                              >Please ensure that you have sufficient ETH in
+                              zkSync Lite. Interaction with the zkSync network
+                              will rely on cross-chain communication services to
+                              complete on-chain identity registration on
+                              Polygon.</span
+                            >
+                          </e-tooltip>
+                        </v-list-item-title>
+                      </v-list-item>
+                      <v-list-item link @click="handleZkSyncClaimV2">
+                        <v-list-item-title class="fz-14 al-c justify-center">
+                          <div class="al-c mx-auto">
+                            <img
+                              src="/img/svg/logo-no-letters.svg"
+                              width="20"
+                              alt=""
+                            />
+                            <span class="ml-3">zkSync Lite(V2) Claim</span>
                           </div>
                           <e-tooltip right>
                             <v-icon
@@ -160,6 +190,7 @@
         </v-col>
       </v-row>
     </div>
+    <e-register-share ref="share"></e-register-share>
   </div>
 </template>
 
@@ -349,9 +380,13 @@ export default {
     async handlePloygonClaim() {
       try {
         const register = await this.isRegister();
-        if (register) return this.getList();
+        if (register) {
+          this.onAnimation();
+          return this.getList();
+        }
         const claimStatus = await this.handleClaim();
         if (claimStatus) {
+          this.onAnimation();
           this.getList();
         }
       } catch (error) {
@@ -361,14 +396,38 @@ export default {
     async handleZkSyncClaim() {
       try {
         const register = await this.isRegister();
-        if (register) return this.getList();
+        if (register) {
+          this.onAnimation();
+          return this.getList();
+        }
         const claimStatus = await this.handleZkClaim();
         if (claimStatus) {
+          this.onAnimation();
           this.getList();
         }
       } catch (error) {
         console.log(error);
       }
+    },
+    async handleZkSyncClaimV2() {
+      try {
+        const register = await this.isRegister();
+        if (register) {
+          this.onAnimation();
+          return this.getList();
+        }
+        const claimStatus = await this.handleZkClaimV2();
+        if (claimStatus) {
+          this.onAnimation();
+          this.getList();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    onAnimation() {
+      this.$refs.share.showDialog = true;
+      this.$flowersAnimation();
     },
   },
 };

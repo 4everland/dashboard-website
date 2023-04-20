@@ -68,7 +68,7 @@ export default {
         },
         {
           label: "zkSync",
-          img: "/img/svg/billing/ic-arbitrum.png",
+          img: "/img/svg/logo-no-letters.svg",
         },
       ],
     };
