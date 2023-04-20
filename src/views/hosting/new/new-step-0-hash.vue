@@ -23,7 +23,7 @@
         ></v-text-field>
       </v-col>
       <v-col :sm="2" :cols="12" class="d-flex al-start pa-1">
-        <v-btn color="primary" @click="onStart">Start</v-btn>
+        <v-btn color="primary" width="100%" @click="onStart">Start</v-btn>
       </v-col>
     </v-row>
     <div class="fz-14 gray mt-3">Deploy with IPFS, IPNS or ENS</div>
