@@ -107,8 +107,7 @@
       </div>
       <build-overview-logs in-new @done="isDone = true" @info="onInfo" />
     </div>
-
-    <div class="ta-c mt-4" v-if="!isDone">
+    <div class="ta-c mt-4" v-if="!isDone && !hashDeploy">
       <v-btn outlined @click="onCancel">Cancel</v-btn>
     </div>
   </div>
@@ -130,6 +129,10 @@ export default {
       if (this.info && /fail/i.test(this.info.syncState))
         return "Syncing failed";
       return this.errMsg || "Build failed";
+    },
+    hashDeploy() {
+      if (!this.info) return true;
+      return this.info.deployType == "CID" || this.info.deployType == "IPNS";
     },
   },
   async created() {
@@ -153,6 +156,8 @@ export default {
         this.errMsg = "";
         return;
       }
+      if (this.info.deployType == "IPNS" || this.info.deployType == "CID")
+        return;
       try {
         const { data } = await this.$http.get(
           "$hosting/project/task/error/" + this.info.taskId

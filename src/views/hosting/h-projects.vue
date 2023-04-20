@@ -86,27 +86,10 @@
         </v-list>
       </e-menu>
 
-      <!-- <v-btn class="ml-5" color="primary" to="/hosting/new">
+      <v-btn class="ml-5" color="primary" to="/hosting/new">
         <img src="/img/svg/add1.svg" width="12" />
         <span class="ml-2">New Project</span>
-      </v-btn> -->
-      <span class="px-4"></span>
-      <e-menu open-on-hover offset-y v-if="list.length">
-        <v-btn slot="ref" color="primary" dark>
-          <img src="/img/svg/add1.svg" width="12" />
-          <span class="ml-2">New Project</span>
-          <v-icon>mdi-chevron-down</v-icon>
-        </v-btn>
-        <v-list>
-          <v-list-item
-            v-for="(text, i) in projectTypeArr"
-            :key="i"
-            @click="onCreate(i)"
-          >
-            <v-list-item-title class="fz-15">{{ text }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </e-menu>
+      </v-btn>
     </e-right-opt-wrap>
 
     <div class="pt-4">
@@ -329,45 +312,6 @@
       v-if="loading"
       type="article"
     ></v-skeleton-loader>
-    <div class="ta-c">
-      <div
-        :class="!limit ? 'main-wrap' : ''"
-        class="pb-15 al-c justify-center"
-        v-if="!list.length && !loading"
-      >
-        <div class="al-c mt-10">
-          <div
-            class="ipfs-deploy deploy"
-            @click="$router.push('/hosting/new-by-hash')"
-          >
-            <img
-              class="mb-1"
-              src="/img/svg/hosting/ipfs-deploy.svg"
-              alt=""
-              width="88"
-            />
-            <div class="fw-b">Create a project from a IPFS Path.</div>
-          </div>
-          <div
-            class="template-deploy deploy"
-            @click="$router.push('/hosting/new')"
-          >
-            <img
-              class="mb-4"
-              src="/img/svg/hosting/template-deploy.svg"
-              alt=""
-              width="44"
-            />
-            <div class="fw-b">
-              Create a project from Template, or import a Git repository.
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="mt-8" v-else-if="limit">
-        <v-btn color="primary" outlined to="/hosting/projects">View More</v-btn>
-      </div>
-    </div>
     <div class="mt-6" v-if="pageLen > 1">
       <v-pagination
         @input="onPage"
@@ -430,7 +374,6 @@ export default {
       sortIdx: 0,
       newProjectIdx: 0,
       sortArr: ["Last Update", "Create Time"],
-      projectTypeArr: ["From Git / Template", "From IPFS Path"],
       refreshAt: Date.now(),
     };
   },
@@ -441,6 +384,11 @@ export default {
         this.lastState = data.state;
         if (this.inCurPath) this.getList();
         else this.needRefresh = true;
+      }
+    },
+    list(val) {
+      if (!val.length && !this.loading) {
+        this.$router.push("/hosting/new");
       }
     },
     // inCurPath(val) {
@@ -467,10 +415,6 @@ export default {
     this.curPath = this.path;
   },
   methods: {
-    onCreate(i) {
-      if (i == 0) return this.$router.push("/hosting/new");
-      this.$router.push("/hosting/new-by-hash");
-    },
     onSort(i) {
       this.sortType = i == 0 ? "Active" : "All";
       this.page = 1;

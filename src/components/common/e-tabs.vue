@@ -179,6 +179,7 @@ export default {
     StProjDomains: () => import("@/views/hosting/settings/st-proj-domains"),
     StProjGit: () => import("@/views/hosting/settings/st-proj-git"),
     StProjEnv: () => import("@/views/hosting/settings/st-proj-env"),
+    StProjEdit: () => import("@/views/hosting/settings/st-proj-edit"),
     StProjAdvanced: () => import("@/views/hosting/settings/st-proj-advanced"),
 
     // Hosting-Domain

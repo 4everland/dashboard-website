@@ -21,7 +21,8 @@
             class="e-btn-text"
             :color="
               item.content == item.ipns ||
-              hashV0toV1(item.content) == hashV0toV1(item.ipfs)
+              hashV0toV1(item.content) == hashV0toV1(item.ipfs) ||
+              !(item.type == 'ens' || item.type == 'sns')
                 ? 'success'
                 : 'error'
             "
@@ -31,6 +32,7 @@
             <v-tooltip
               bottom
               v-if="
+                (item.type == 'ens' || item.type == 'sns') &&
                 !(
                   item.content == item.ipns ||
                   hashV0toV1(item.content) == hashV0toV1(item.ipfs)

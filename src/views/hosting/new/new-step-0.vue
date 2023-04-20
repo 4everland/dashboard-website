@@ -18,22 +18,36 @@
         </div>
       </v-col>
       <v-col cols="12" md="6">
-        <div
-          class="main-wrap"
-          :style="{
-            'min-height': minHeight,
-          }"
-        >
-          <new-step-0-tpl @item="onTplItem" />
+        <div class="main-wrap">
+          <new-step-0-hash @onHashStart="onHashStart"></new-step-0-hash>
+        </div>
+        <div class="main-wrap mt-5">
+          <!-- <new-step-0-tpl @item="onTplItem" /> -->
+
+          <!-- <new-step-0-web3tpl></new-step-0-web3tpl> -->
+          <!-- <NewStep0Web3Tpl @item="onWeb3TplItem"></NewStep0Web3Tpl> -->
+          <new-step-0-web3-tpl
+            @list="onWeb3List"
+            @item="onWeb3TplItem"
+          ></new-step-0-web3-tpl>
         </div>
       </v-col>
     </v-row>
+
+    <div class="ta-c fz-14 mt-5">
+      Want to deploy with the CLI?
+      <a href="https://docs.4everland.org/hositng/hosting-cli" target="__blank"
+        >Find out more</a
+      >
+    </div>
   </div>
 </template>
 
 <script>
 import NewStep0Git from "@/views/hosting/new/new-step-0-git";
-import NewStep0Tpl from "@/views/hosting/new/new-step-0-tpl";
+// import NewStep0Tpl from "@/views/hosting/new/new-step-0-tpl";
+import NewStep0Web3Tpl from "@/views/hosting/new/new-step-0-web3-tpl";
+import NewStep0Hash from "@/views/hosting/new/new-step-0-hash";
 
 export default {
   props: {
@@ -72,10 +86,33 @@ export default {
         this.cloneDir = "";
       }
     },
+
+    onWeb3List(list) {
+      if (this.$route.query.id && this.$route.query.type == "web3Tpl") {
+        const item = list.filter((it) => it.id == this.$route.query.id)[0];
+        if (item) {
+          this.onWeb3TplItem(item);
+        }
+      }
+    },
+    onHashStart({ hash, deployType }) {
+      this.$router.push(
+        `/hosting/new?type=hash&deployType=${deployType}&hash=${hash}`
+      );
+      this.$emit("next");
+    },
+    onWeb3TplItem(it) {
+      localStorage.setItem("curTplJson", it.configJson);
+      const link = `/hosting/new?type=web3Tpl&id=${it.id}`;
+      this.$navTo(link);
+      this.$emit("next");
+    },
   },
   components: {
     NewStep0Git,
-    NewStep0Tpl,
+    // NewStep0Tpl,
+    NewStep0Hash,
+    NewStep0Web3Tpl,
   },
 };
 </script>
