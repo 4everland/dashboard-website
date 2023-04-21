@@ -6,7 +6,7 @@
       v-if="loading"
       type="article"
     ></v-skeleton-loader>
-    <v-row class="mb-2" v-else style="overflow: scroll; max-height: 95%">
+    <v-row class="mb-2" v-else style="overflow-y: scroll; max-height: 95%">
       <v-col xl="4" cols="6" v-for="it in web3TplList" :key="it.id">
         <div
           class="bd-1 d-b hover-1 pos-r bdrs-6 ov-h"
@@ -73,11 +73,7 @@
           "
           v-ripple
           style="height: 250px"
-          @click="
-            openLink(
-              'https://github.com/Recommended-Templates/Templates-Campaign'
-            )
-          "
+          @click="openLink('https://github.com/4everland/Templates')"
         >
           <v-icon size="50" color="primary">mdi-plus</v-icon>
           <h3 class="fz-16 mt-5">Submit a template</h3>
