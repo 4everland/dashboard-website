@@ -52,7 +52,7 @@
 
               <div v-if="item.type == 'UPGRADE'">
                 <div v-if="item.status !== 'DONE'">
-                  <e-menu open-on-hover offset-y>
+                  <e-menu open-on-hover top>
                     <v-btn
                       slot="ref"
                       color="primary"
@@ -60,7 +60,7 @@
                       width="250"
                       dark
                     >
-                      <span class="ml-2">Upgrade</span>
+                      <span class="ml-2">Mint</span>
                       <v-icon>mdi-chevron-down</v-icon>
                     </v-btn>
                     <v-list>

@@ -43,7 +43,7 @@
               color: registerInfo.handled ? '#fff' : '#000',
             }"
           >
-            Pro
+            {{ registerInfo.handled ? "Standard" : "Trial" }}
           </div>
           <!-- <div v-else class="ml-3">
             <span>normal user</span>

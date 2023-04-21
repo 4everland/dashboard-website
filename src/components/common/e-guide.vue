@@ -2,34 +2,23 @@
   <div>
     <v-dialog v-model="showDialog" max-width="700" persistent>
       <div class="reward-hub-content pos-r">
-        <h3>Thank You for Registering!</h3>
-        <v-icon
-          size="18"
-          class="cursor-p"
-          @click="showDialog = false"
-          style="position: absolute; top: 30px; right: 30px"
-          >mdi-close</v-icon
-        >
+        <h3>Minting Your Own On-Chain Identity</h3>
         <div class="mt-4 fz-14 lh-2">
-          Below are the complimentary resource packages provided by 4EVERLAND to
-          enhance your experience with our product services. We highly recommend
-          upgrading your account to access additional storage resources, enter
-          the decentralized world, and align with the fundamental principles of
-          Web3.
+          Welcome to 4EVERLAND. You are in a trial status and can only access
+          limited product functionalities. Please complete the on-chain identity
+          registration below to unlock the full potential of your Web3 journey.
         </div>
         <v-row class="mt-2">
           <v-col :sm="6" :cols="12" v-for="item in items" :key="item.name">
             <div class="resource-item al-c">
-              <img width="28" :src="item.icon" alt="" />
-              <span class="resource-item-value ml-2">{{ item.value }}</span>
               <span class="ml-2 fz-12">{{ item.name }}</span>
             </div>
           </v-col>
         </v-row>
         <div class="d-flex justify-center mt-8">
-          <e-menu open-on-hover offset-y>
+          <e-menu open-on-hover top>
             <v-btn slot="ref" color="primary" dark width="500px">
-              <span class="ml-2">Upgrade now</span>
+              <span class="ml-2">Mint now</span>
               <v-icon>mdi-chevron-down</v-icon>
             </v-btn>
             <v-list>
@@ -40,14 +29,14 @@
                     width="18"
                     alt=""
                   />
-                  <span class="ml-3">Ploygon Claim</span>
+                  <span class="ml-3">Ploygon</span>
                 </v-list-item-title>
               </v-list-item>
               <v-list-item link @click="handleZkSyncClaim">
                 <v-list-item-title class="fz-14 al-c justify-center">
                   <div class="al-c">
                     <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
-                    <span class="ml-3">zkSync Lite(V1) Claim</span>
+                    <span class="ml-3">zkSync Lite(V1)</span>
                   </div>
                   <e-tooltip right>
                     <v-icon slot="ref" size="18" color="#999" class="pa-1 d-ib"
@@ -60,6 +49,11 @@
                       identity registration on Polygon.</span
                     >
                   </e-tooltip>
+                </v-list-item-title>
+              </v-list-item>
+              <v-list-item link @click="onSkip">
+                <v-list-item-title class="fz-14 al-c justify-center">
+                  <span class="ml-3 gray">Skip</span>
                 </v-list-item-title>
               </v-list-item>
             </v-list>
@@ -239,24 +233,16 @@ export default {
       stepCount: 0,
       items: [
         {
-          name: "IPFS Storage",
-          value: "1GB",
-          icon: require("/public/img/airDrop/ipfs.png"),
+          name: "Web3 Identity",
         },
         {
-          name: "Arweave Storage",
-          value: "20MB",
-          icon: require("/public/img/airDrop/ar.png"),
+          name: "Ownership of data",
         },
         {
-          name: "Build Minutes",
-          value: "100Min",
-          icon: require("/public/img/airDrop/minutes.png"),
+          name: "Enhanced product functionalities",
         },
         {
-          name: "Bandwidth",
-          value: "10GB",
-          icon: require("/public/img/airDrop/balance.png"),
+          name: "Access to additional free resources",
         },
       ],
       showDialog: false,
@@ -292,6 +278,20 @@ export default {
     },
   },
   methods: {
+    async onSkip() {
+      try {
+        await this.$confirm(
+          "As a trial user, you will only have access to limited product functionalities and a small amount of experience resources. We recommend completing the on-chain registration to fully experience all the functionalities available.",
+          "Are you sure you want to skip the on-chain identity registration?",
+          {
+            cancelText: "Skip",
+            confirmText: "Mint",
+          }
+        );
+      } catch (error) {
+        this.showDialog = false;
+      }
+    },
     onGuide() {
       this.driver.start();
       this.stop();
