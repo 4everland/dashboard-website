@@ -1,12 +1,12 @@
 <template>
-  <div style="height: 334px">
+  <div style="height: calc(75vh - 215px)">
     <h3>Recommended Templates</h3>
     <v-skeleton-loader
       class="mt-10 mb-10"
       v-if="loading"
       type="article"
     ></v-skeleton-loader>
-    <v-row class="mb-2" v-else style="overflow: scroll; height: 300px">
+    <v-row class="mb-2" v-else style="overflow: scroll; max-height: 95%">
       <v-col xl="4" cols="6" v-for="it in web3TplList" :key="it.id">
         <div
           class="bd-1 d-b hover-1 pos-r bdrs-6 ov-h"
