@@ -122,7 +122,7 @@ export default {
     }),
     ...mapGetters(["teamInfo"]),
     asMobile() {
-      return this.$vuetify.breakpoint.smAndDown;
+      return this.$vuetify.breakpoint.mdAndDown;
     },
     uname() {
       const info = this.userInfo;
