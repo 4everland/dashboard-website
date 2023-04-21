@@ -1,29 +1,17 @@
 <template>
   <div>
     <v-dialog v-model="showDialog" max-width="700" persistent>
-      <div class="reward-hub-content pos-r">
-        <v-btn color="primary" @click="onAnimation">Test Btn</v-btn>
-        <h3>Recommend Minting Your Own On-Chain Identity</h3>
-        <v-icon
-          size="18"
-          class="cursor-p"
-          @click="showDialog = false"
-          style="position: absolute; top: 30px; right: 30px"
-          >mdi-close</v-icon
-        >
+      <div class="reward-hub-content">
+        <h3 class="ta-c">Minting Your Own On-Chain Identity</h3>
         <div class="mt-4 fz-14 lh-2">
-          Below are the complimentary resource packages provided by 4EVERLAND to
-          enhance your experience with our product services. We highly recommend
-          upgrading your account to access additional storage resources, enter
-          the decentralized world, and align with the fundamental principles of
-          Web3.
+          Welcome to 4EVERLAND. You are in a trial status and can only access
+          limited product functionalities. Please complete the on-chain identity
+          registration below to unlock the full potential of your Web3 journey.
         </div>
         <v-row class="mt-2">
           <v-col :sm="6" :cols="12" v-for="item in items" :key="item.name">
             <div class="resource-item al-c">
-              <img width="28" :src="item.icon" alt="" />
-              <span class="resource-item-value ml-2">{{ item.value }}</span>
-              <span class="ml-2 fz-12">{{ item.name }}</span>
+              <span class="ml-2 fz-14">{{ item.name }}</span>
             </div>
           </v-col>
         </v-row>
@@ -35,20 +23,20 @@
             </v-btn>
             <v-list>
               <v-list-item link @click="handlePloygonClaim">
-                <v-list-item-title class="fz-14 al-c justify-center">
+                <v-list-item-title class="item-title fz-14 al-c justify-center">
                   <img
                     src="/img/svg/billing/ic-polygon-0.svg"
                     width="18"
                     alt=""
                   />
-                  <span class="ml-3">Ploygon Claim</span>
+                  <span class="ml-3">Ploygon</span>
                 </v-list-item-title>
               </v-list-item>
               <v-list-item link @click="handleZkSyncClaim">
-                <v-list-item-title class="fz-14 al-c justify-center">
+                <v-list-item-title class="item-title fz-14 al-c justify-center">
                   <div class="al-c">
                     <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
-                    <span class="ml-3">zkSync Lite(V1) Claim</span>
+                    <span class="ml-3">zkSync Lite(V1)</span>
                   </div>
                   <e-tooltip right>
                     <v-icon slot="ref" size="18" color="#999" class="pa-1 d-ib"
@@ -64,10 +52,10 @@
                 </v-list-item-title>
               </v-list-item>
               <v-list-item link @click="handleZkSyncClaimV2">
-                <v-list-item-title class="fz-14 al-c justify-center">
+                <v-list-item-title class="item-title fz-14 al-c justify-center">
                   <div class="al-c">
                     <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
-                    <span class="ml-3">zkSync Lite(V2) Claim</span>
+                    <span class="ml-3">zkSync Era(V2)</span>
                   </div>
                   <e-tooltip right>
                     <v-icon slot="ref" size="18" color="#999" class="pa-1 d-ib"
@@ -82,12 +70,18 @@
                   </e-tooltip>
                 </v-list-item-title>
               </v-list-item>
+
+              <v-list-item link @click="onSkip">
+                <v-list-item-title class="fz-14 al-c justify-center">
+                  <span class="ml-3 gray">Skip</span>
+                </v-list-item-title>
+              </v-list-item>
             </v-list>
           </e-menu>
         </div>
       </div>
     </v-dialog>
-    <e-register-share ref="share"></e-register-share>
+    <!-- <e-register-share ref="share"></e-register-share> -->
   </div>
 </template>
 
@@ -260,24 +254,16 @@ export default {
       stepCount: 0,
       items: [
         {
-          name: "IPFS Storage",
-          value: "1GB",
-          icon: require("/public/img/airDrop/ipfs.png"),
+          name: "Web3 Identity",
         },
         {
-          name: "Arweave Storage",
-          value: "20MB",
-          icon: require("/public/img/airDrop/ar.png"),
+          name: "Ownership of data",
         },
         {
-          name: "Build Minutes",
-          value: "100Min",
-          icon: require("/public/img/airDrop/minutes.png"),
+          name: "Enhanced product functionalities",
         },
         {
-          name: "Bandwidth",
-          value: "10GB",
-          icon: require("/public/img/airDrop/balance.png"),
+          name: "Access to additional free resources",
         },
       ],
       showDialog: false,
@@ -314,10 +300,24 @@ export default {
     },
   },
   methods: {
+    async onSkip() {
+      try {
+        await this.$confirm(
+          "As a trial user, you will only have access to limited product functionalities and a small amount of experience resources. We recommend completing the on-chain registration to fully experience all the functionalities available.",
+          "Are you sure you want to skip the on-chain identity registration?",
+          {
+            cancelText: "Skip",
+            confirmText: "Mint",
+          }
+        );
+      } catch (error) {
+        this.showDialog = false;
+      }
+    },
     onAnimation() {
       this.showDialog = false;
-      this.$refs.share.showDialog = true;
-      this.$flowersAnimation();
+      // this.$refs.share.showDialog = true;
+      // this.$flowersAnimation();
     },
     onGuide() {
       this.driver.start();
@@ -349,6 +349,15 @@ export default {
           "$auth/self-handled-register-apply"
         );
         this.registerInfo = data;
+        console.log(data.createdAt);
+        const date = +new Date();
+
+        let days = (+new Date() - data.createdAt) / (864 * 10e5);
+        console.log(days);
+        console.log(date);
+        this.$setState({
+          onChain: data.handled,
+        });
       } catch (error) {
         console.log(error);
       }
@@ -553,5 +562,15 @@ div#driver-page-overlay {
     height: 18px;
     background: url("/img/airDrop/check.svg") no-repeat;
   }
+}
+.item-title::after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(200, 200, 200, 0.3);
 }
 </style>

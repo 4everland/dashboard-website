@@ -43,14 +43,8 @@
               color: registerInfo.handled ? '#fff' : '#000',
             }"
           >
-            {{ registerInfo.handled ? "Trial" : "Standard" }}
+            {{ registerInfo.handled ? "Standard" : "Trial" }}
           </div>
-          <!-- <div v-else class="ml-3">
-            <span>normal user</span>
-            <v-btn :loading="refreshLoading" icon @click="onCheckRegister">
-              <v-icon>mdi-refresh</v-icon>
-            </v-btn>
-          </div> -->
         </div>
         <div class="gray-8 fz-14 mt-1">Welcome to 4EVERLAND Dashboard</div>
       </div>
@@ -107,10 +101,6 @@ export default {
         // },
         {
           img: "https://static1.4everland.org/img/banner/20221109-160329.png",
-          to: "/reward-hub",
-        },
-        {
-          img: "https://static1.4everland.org/img/banner/20230420-173710.png",
           to: "/reward-hub",
         },
       ],

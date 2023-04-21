@@ -44,6 +44,7 @@ const store = new Vuex.Store({
     showProgress: false,
     allowNoLogin: false,
     changelogNum: localStorage.changelogNum || "30",
+    onChain: null,
   },
   getters: {
     teamInfo(state) {

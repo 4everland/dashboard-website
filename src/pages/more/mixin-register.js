@@ -30,6 +30,9 @@ export default {
           "$auth/self-handled-register-apply"
         );
         this.registerInfo = data;
+        this.$setState({
+          onChain: data.handled,
+        });
         if (!data.handled) {
           const isExists = await this.contract.ProviderController.accountExists(
             providerAddr,

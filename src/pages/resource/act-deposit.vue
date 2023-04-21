@@ -18,7 +18,7 @@
         <span class="fz-14 ml-1 mr-2">USDC</span>
       </div>
     </e-kv2>
-    <e-kv2 class="mt-7" label="Network">
+    <e-kv2 class="mt-7" label="Network" v-if="onChain != null">
       <pay-network :allow="allowNetwork" />
     </e-kv2>
 
@@ -59,12 +59,13 @@ export default {
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
+      onChain: (s) => s.onChain,
     }),
     curAmount() {
       return this.$utils.cutFixed(this.amount || 0, 4);
     },
     allowNetwork() {
-      if (this.userInfo.onChain) return ["Polygon", "Ethereum", "BSC"];
+      if (this.onChain) return ["Polygon", "Ethereum", "BSC"];
       return ["Polygon"];
     },
   },

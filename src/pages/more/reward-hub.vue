@@ -1,7 +1,5 @@
 <template>
   <div>
-    <v-btn color="primary" @click="onAnimation"> Test Btn</v-btn>
-
     <div class="bdrs-10 ov-h mb-4 pos-r">
       <img
         src="https://static1.4everland.org/img/banner/20221109-160350.png"
@@ -67,24 +65,28 @@
                     </v-btn>
                     <v-list>
                       <v-list-item link @click="handlePloygonClaim">
-                        <v-list-item-title class="fz-14 al-c justify-center">
+                        <v-list-item-title
+                          class="item-title fz-14 al-c justify-center"
+                        >
                           <img
                             src="/img/svg/billing/ic-polygon-0.svg"
                             width="18"
                             alt=""
                           />
-                          <span class="ml-3">Ploygon Claim</span>
+                          <span class="ml-3">Ploygon</span>
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item link @click="handleZkSyncClaim">
-                        <v-list-item-title class="fz-14 al-c justify-center">
+                        <v-list-item-title
+                          class="item-title fz-14 al-c justify-center"
+                        >
                           <div class="al-c mx-auto">
                             <img
                               src="/img/svg/logo-no-letters.svg"
                               width="20"
                               alt=""
                             />
-                            <span class="ml-3">zkSync Lite(V1) Claim</span>
+                            <span class="ml-3">zkSync Lite(V1)</span>
                           </div>
                           <e-tooltip right>
                             <v-icon
@@ -112,7 +114,7 @@
                               width="20"
                               alt=""
                             />
-                            <span class="ml-3">zkSync Lite(V2) Claim</span>
+                            <span class="ml-3">zkSync Era(V2)</span>
                           </div>
                           <e-tooltip right>
                             <v-icon
@@ -426,8 +428,8 @@ export default {
       }
     },
     onAnimation() {
-      this.$refs.share.showDialog = true;
-      this.$flowersAnimation();
+      // this.$refs.share.showDialog = true;
+      // this.$flowersAnimation();
     },
   },
 };
@@ -460,5 +462,15 @@ export default {
 .reward-task:hover {
   border: 1px solid #775da6;
   box-shadow: 2px 2px 0px 0px #775da6;
+}
+.item-title::after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(200, 200, 200, 0.3);
 }
 </style>

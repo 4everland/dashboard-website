@@ -29,7 +29,7 @@
       </table>
     </div>
 
-    <e-kv2 class="mt-6" label="Network">
+    <e-kv2 class="mt-6" label="Network" v-if="onChain != null">
       <pay-network :allow="allowNetwork" />
     </e-kv2>
 
@@ -136,6 +136,7 @@ export default {
       list: (s) => s.orderInfo.list,
       orderInfo: (s) => s.orderInfo,
       userInfo: (s) => s.userInfo,
+      onChain: (s) => s.onChain,
     }),
     finalPrice() {
       return this.totalPrice - this.AmountofDeduction >= 0
@@ -143,7 +144,7 @@ export default {
         : "0.00";
     },
     allowNetwork() {
-      if (this.userInfo.onChain) {
+      if (this.onChain) {
         // return ["Polygon", "Ethereum", "BSC"];
         if (this.$inDev) {
           return ["Polygon", "Ethereum", "BSC", "zkSync"];
