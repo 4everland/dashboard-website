@@ -134,7 +134,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .garlxy {
-  z-index: 999;
+  z-index: 99;
   left: 0;
   top: 0;
   width: 100%;
