@@ -1,11 +1,11 @@
 <template>
   <v-card class="no-register-container pa-5" v-if="onChain == false">
-    <label for="check" class="pos-a">
-      <img width="16" src="/img/svg/overview/notice.svg" alt="" />
+    <label for="check" class="pos-a check-box-label cursor-p">
+      <img width="16" src="/img/svg/overview/notice-gray.svg" alt="" />
     </label>
     <input type="checkbox" id="check" class="check-box" />
-    <div class="ml-8 fz-14 text">
-      You still have an outstanding benefit to claim, go ahead and claim it now
+    <div class="ml-8 fz-14 text cursor-p" @click="$router.push('/reward-hub')">
+      You still have an outstanding benefit to claim, go ahead and claim it now.
     </div>
   </v-card>
 </template>
@@ -23,11 +23,6 @@ export default {
       onChain: (s) => s.onChain,
     }),
   },
-  methods: {
-    onShowText() {
-      this.showText = !this.showText;
-    },
-  },
 };
 </script>
 
@@ -36,7 +31,6 @@ export default {
   z-index: 999;
   position: fixed;
   width: 50px;
-  height: 80px;
   right: 50px;
   bottom: 50px;
   border-radius: 10px;
@@ -47,14 +41,20 @@ export default {
 }
 .text {
   width: 230px;
-  transform: translateX(100px);
+  height: 0;
+  transform: translateX(50px);
   transition: all 0.5s ease-out;
+}
+.check-box-label {
+  top: 50%;
+  transform: translateY(-50%);
 }
 .check-box {
   display: none;
 }
 .check-box:checked + .text {
   transform: translateX(0);
+  height: 30px;
 }
 .no-register-container:has(.check-box:checked) {
   width: 300px;

@@ -79,6 +79,10 @@ Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
     pre = inDev
       ? "https://mumbai.polygonscan.com/tx/"
       : "https://polygonscan.com/tx/";
+  } else if (net == "zkSync") {
+    pre = inDev
+      ? "https://goerli.explorer.zksync.io/tx/"
+      : "https://explorer.zksync.io/tx/";
   }
   return pre + hash;
 };
