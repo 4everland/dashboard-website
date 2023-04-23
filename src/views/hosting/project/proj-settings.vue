@@ -43,22 +43,22 @@ export default {
                   text: "Environment Variable",
                 },
               ];
-        if (this.info.web3TemplateId) {
-          domains.push({
-            comp: "st-proj-edit",
-            text: "Edit",
-          });
-        }
+        // if (this.info.web3TemplateId) {
+        //   domains.push({
+        //     comp: "st-proj-edit",
+        //     text: "Edit",
+        //   });
+        // }
         return [
           {
             comp: "st-proj-general",
             text: "General",
           },
           // ...domains,
-          {
-            comp: "st-proj-domains",
-            text: "Domains",
-          },
+          // {
+          //   comp: "st-proj-domains",
+          //   text: "Domains",
+          // },
           ...domains,
           {
             comp: "st-proj-advanced",
