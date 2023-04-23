@@ -141,7 +141,7 @@ export default {
     getPath(item) {
       return `/hosting/project/${item.projectName || "project"}/${
         item.projectId
-      }?tab=settings&sub=domains`;
+      }?tab=domains`;
     },
     onRow(it) {
       const url = this.getPath(it);

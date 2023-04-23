@@ -66,7 +66,7 @@
                         color="primary"
                         class="ml-auto"
                         :disabled="!supportDomain(it.platform)"
-                        :to="`/hosting/project/${it.name}/${it.id}?tab=settings&sub=domains`"
+                        :to="`/hosting/project/${it.name}/${it.id}?tab=domains`"
                         >Select</v-btn
                       >
                     </div>
