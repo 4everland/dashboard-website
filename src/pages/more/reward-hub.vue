@@ -136,11 +136,7 @@
                       </v-list-item>
                     </v-list>
                   </e-menu>
-                  <!-- <v-btn :loading="refreshLoading" icon @click="isRegister">
-                    <v-icon>mdi-refresh</v-icon>
-                  </v-btn> -->
                 </div>
-
                 <v-btn v-else class="mr-9" width="100" disabled> Done </v-btn>
               </div>
               <div v-else class="al-c justify-center">

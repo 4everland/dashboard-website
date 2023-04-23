@@ -13,7 +13,6 @@ export default {
   data() {
     return {
       registerInfo: {},
-      refreshLoading: false,
       contract: null,
       provider: null,
       collectionAddress: "0xb7b4360f7f6298de2e7a11009270f35f189bd77e",
@@ -22,7 +21,6 @@ export default {
   },
   methods: {
     async isRegister() {
-      this.refreshLoading = true;
       await this.getCurrentContract();
       if (!localStorage.token) return;
       try {
@@ -57,7 +55,6 @@ export default {
       } catch (error) {
         console.log(error, "isRegister");
       }
-      this.refreshLoading = false;
       return false;
     },
 
