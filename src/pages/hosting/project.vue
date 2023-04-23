@@ -111,18 +111,6 @@ export default {
         this.getInfo();
       }
     },
-    info() {
-      if (
-        this.info.deployType == "CID" ||
-        this.info.deployType == "IPNS" ||
-        this.info.cli
-      ) {
-        this.list = this.list.filter((it) => it.text != "Commits");
-      }
-      if (!this.info.web3TemplateId) {
-        this.list = this.list.filter((it) => it.text != "Edit");
-      }
-    },
   },
   mounted() {
     this.$setState({

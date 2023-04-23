@@ -37,6 +37,23 @@
               </template>
               <span>Invalid Configuration</span>
             </v-tooltip>
+            <v-tooltip bottom v-else-if="!item.newVersion">
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  class="ml-2"
+                  small
+                  color="#6C7789"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  mdi-alert-circle
+                </v-icon>
+              </template>
+              <span
+                >Lost CDN protection, will be restored after deleting and
+                re-binding the domain name.
+              </span>
+            </v-tooltip>
           </v-btn>
         </template>
         <template v-slot:item.value="{ item }">
@@ -141,7 +158,7 @@ export default {
     getPath(item) {
       return `/hosting/project/${item.projectName || "project"}/${
         item.projectId
-      }?tab=settings&sub=domains`;
+      }?tab=domains`;
     },
     onRow(it) {
       const url = this.getPath(it);
