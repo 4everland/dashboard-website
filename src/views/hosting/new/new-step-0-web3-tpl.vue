@@ -141,5 +141,6 @@ export default {
   height: 100%;
   background-color: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(10px);
+  border-radius: 10px;
 }
 </style>
