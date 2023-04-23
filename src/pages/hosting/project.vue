@@ -24,6 +24,14 @@ const list = [
     comp: "proj-commits",
   },
   {
+    text: "Edit",
+    comp: "proj-Edit",
+  },
+  {
+    text: "Domains",
+    comp: "proj-Domains",
+  },
+  {
     text: "Settings",
     comp: "proj-settings",
   },
@@ -36,13 +44,59 @@ export default {
       noticeMsg: (s) => s.noticeMsg,
       buildInfo: (s) => s.buildInfo,
     }),
+    list() {
+      let list = [
+        {
+          text: "Overview",
+          comp: "proj-overview",
+        },
+        {
+          text: "Deployments",
+          comp: "proj-deployments",
+        },
+        {
+          text: "Commits",
+          comp: "proj-commits",
+        },
+        {
+          text: "Edit",
+          comp: "proj-Edit",
+        },
+        {
+          text: "Domains",
+          comp: "proj-Domains",
+        },
+        {
+          text: "Settings",
+          comp: "proj-settings",
+        },
+      ];
+      if (this.hashDeploy) {
+        list = list.filter((it) => it.text != "Commits");
+      }
+      if ((this.hashDeploy && !this.web3Deploy) || !this.hashDeploy) {
+        list = list.filter((it) => it.text != "Edit");
+      }
+      return list;
+    },
+
+    hashDeploy() {
+      return (
+        this.info.deployType == "CID" ||
+        this.info.deployType == "IPNS" ||
+        this.info.cli
+      );
+    },
+    web3Deploy() {
+      return this.info.web3TemplateId;
+    },
   },
   data() {
     const { projName, id } = this.$route.params;
     return {
       id,
       projName,
-      list,
+      // list,
     };
   },
   watch: {
@@ -64,6 +118,9 @@ export default {
         this.info.cli
       ) {
         this.list = this.list.filter((it) => it.text != "Commits");
+      }
+      if (!this.info.web3TemplateId) {
+        this.list = this.list.filter((it) => it.text != "Edit");
       }
     },
   },

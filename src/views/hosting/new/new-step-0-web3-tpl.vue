@@ -6,13 +6,14 @@
       v-if="loading"
       type="article"
     ></v-skeleton-loader>
-    <v-row class="mb-2" v-else style="overflow-y: scroll; max-height: 95%">
+    <v-row class="mb-2 pos-r ov-h" v-else style="max-height: 95%">
       <v-col xl="4" cols="6" v-for="it in web3TplList" :key="it.id">
+        <!-- @click="$emit('item', it)" -->
+
         <div
           class="bd-1 d-b hover-1 pos-r bdrs-6 ov-h"
           v-ripple
           style="height: 250px"
-          @click="$emit('item', it)"
         >
           <img
             :style="{
@@ -46,15 +47,15 @@
                 alt=""
                 @click.stop="openLink(it.githubUrl)"
               />
-              <v-icon
+              <img
                 class="ml-4"
-                size="18"
-                color="primary"
+                width="18"
+                src="/img/svg/hosting/preview.svg"
+                alt=""
                 @click.stop="openLink(it.preview)"
-                >mdi-open-in-new</v-icon
-              >
+              />
             </div>
-            <v-btn color="primary" x-small text> Start</v-btn>
+            <v-btn color="primary" x-small text>Start</v-btn>
           </div>
         </div>
       </v-col>
@@ -79,6 +80,13 @@
           <h3 class="fz-16 mt-5">Submit a template</h3>
         </div>
       </v-col>
+
+      <div class="garlxy pos-a al-c justify-center flex-column">
+        <h3 class="fz-18">Template Deployment - WL Only</h3>
+        <a href="https://discord.com/invite/4everland" target="__blank"
+          >More info</a
+        >
+      </div>
     </v-row>
   </div>
 </template>
@@ -124,3 +132,14 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.garlxy {
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+}
+</style>

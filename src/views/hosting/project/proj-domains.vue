@@ -5,11 +5,14 @@
       padding: 5px 10px;
     }
   }
+  .bd-1 {
+    padding: 20px;
+  }
 }
 </style>
 
 <template>
-  <div class="st-domains hide-msg">
+  <div class="st-domains hide-msg main-wrap">
     <div class="bd-1 mb-5">
       <h3>Domains</h3>
       <div class="gray fz-14">
@@ -201,17 +204,23 @@
       </div>
     </div>
 
+    <!-- <st-proj-domains-sol v-if="info.platform == 'IPFS'" />
+    <st-proj-domains-ens v-if="info.platform == 'IPFS'" /> -->
     <st-proj-domains-mix v-if="info.platform == 'IPFS'" />
   </div>
 </template>
 
 <script>
+// import StProjDomainsEns from "@/views/hosting/settings/st-proj-domains-ens";
+// import StProjDomainsSol from "@/views/hosting/settings/st-proj-domains-sol";
 import StProjDomainsMix from "@/views/hosting/settings/st-proj-domains-mix";
 
 import { mapState } from "vuex";
 
 export default {
   components: {
+    // StProjDomainsEns,
+    // StProjDomainsSol,
     StProjDomainsMix,
   },
   data() {
