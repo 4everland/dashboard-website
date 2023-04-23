@@ -116,7 +116,11 @@
         </div>
       </div>
     </template>
-    <div class="bg-f9 pa-5 pt-8 pb-8" v-else>
+    <div
+      class="bg-f9 pa-5 pt-8 pb-8"
+      :style="inSetting ? '' : 'height: 65vh'"
+      v-else
+    >
       <p class="fz-18 fw-b mt-" v-if="!inSetting">Continuous Deployment</p>
       <template v-if="!inSetting">
         <div class="pa-5"></div>

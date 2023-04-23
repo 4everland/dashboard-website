@@ -1,13 +1,13 @@
 <template>
-  <div style="height: 334px">
+  <div style="height: calc(75vh - 215px)">
     <h3>Recommended Templates</h3>
     <v-skeleton-loader
       class="mt-10 mb-10"
       v-if="loading"
       type="article"
     ></v-skeleton-loader>
-    <v-row class="mb-2" v-else style="overflow: scroll; height: 300px">
-      <v-col cols="6" v-for="it in web3TplList" :key="it.id">
+    <v-row class="mb-2" v-else style="overflow-y: scroll; max-height: 95%">
+      <v-col xl="4" cols="6" v-for="it in web3TplList" :key="it.id">
         <div
           class="bd-1 d-b hover-1 pos-r bdrs-6 ov-h"
           v-ripple
@@ -58,7 +58,7 @@
           </div>
         </div>
       </v-col>
-      <v-col cols="6">
+      <v-col xl="4" cols="6">
         <div
           class="
             bd-1
@@ -73,11 +73,7 @@
           "
           v-ripple
           style="height: 250px"
-          @click="
-            openLink(
-              'https://github.com/Recommended-Templates/Templates-Campaign'
-            )
-          "
+          @click="openLink('https://github.com/4everland/Templates')"
         >
           <v-icon size="50" color="primary">mdi-plus</v-icon>
           <h3 class="fz-16 mt-5">Submit a template</h3>
