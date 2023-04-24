@@ -16,12 +16,21 @@
           </v-col>
         </v-row>
         <div class="d-flex justify-center mt-8">
-          <e-menu open-on-hover top>
+          <e-menu ref="menu" open-on-hover top :close-on-content-click="false">
             <v-btn slot="ref" color="primary" dark width="500px">
               <span class="ml-2">Mint now</span>
               <v-icon>mdi-chevron-down</v-icon>
             </v-btn>
-            <v-list>
+
+            <v-list v-if="showMore">
+              <v-list-item link @click="onSkip">
+                <v-list-item-title class="fz-14 al-c justify-center">
+                  <span class="ml-3 gray">Skip</span>
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+
+            <v-list v-else>
               <v-list-item link @click="handlePloygonClaim">
                 <v-list-item-title class="item-title fz-14 al-c justify-center">
                   <img
@@ -71,9 +80,9 @@
                 </v-list-item-title>
               </v-list-item>
 
-              <v-list-item link @click="onSkip">
+              <v-list-item link @click="onMore" v-if="!showMore">
                 <v-list-item-title class="fz-14 al-c justify-center">
-                  <span class="ml-3 gray">Skip</span>
+                  <span class="ml-3 gray">More</span>
                 </v-list-item-title>
               </v-list-item>
             </v-list>
@@ -104,6 +113,7 @@ export default {
         allowClose: false,
         padding: 0,
       }),
+      showMore: false,
       steps: [
         {
           element: "#drawerList",
@@ -276,6 +286,7 @@ export default {
     if (localStorage.token) {
       await this.getHandler();
     }
+    // console.log();
   },
   computed: {
     ...mapState({
@@ -293,13 +304,17 @@ export default {
         bus.$emit("guide");
         this.move();
       }
-      // if (this.stepCount != 5 && !val && !this.registerInfo.handled) {
-      if (this.stepCount != 5 && !val) {
+      if (this.stepCount != 5 && !val && !this.registerInfo.handled) {
+        // if (this.stepCount != 5 && !val) {
         this.showDialog = true;
       }
     },
   },
   methods: {
+    onMore() {
+      this.showMore = true;
+      this.$refs.menu.$children[0].onResize();
+    },
     async onSkip() {
       try {
         await this.$confirm(
@@ -310,6 +325,7 @@ export default {
             confirmText: "Mint",
           }
         );
+        this.showMore = false;
       } catch (error) {
         this.showDialog = false;
       }
@@ -349,12 +365,13 @@ export default {
           "$auth/self-handled-register-apply"
         );
         this.registerInfo = data;
-        console.log(data.createdAt);
-        const date = +new Date();
-
-        let days = (+new Date() - data.createdAt) / (864 * 10e5);
-        console.log(days);
-        console.log(date);
+        if (!data.handled && localStorage.unregister != "1") {
+          let days = (+new Date() - data.createdAt) / (864 * 10e4);
+          if (days >= 1) {
+            this.showDialog = true;
+            localStorage.setItem("unregister", "1");
+          }
+        }
         this.$setState({
           onChain: data.handled,
         });
