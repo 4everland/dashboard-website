@@ -367,7 +367,7 @@ export default {
         this.registerInfo = data;
         if (!data.handled && localStorage.unregister != "1") {
           let days = (+new Date() - data.createdAt) / (864 * 10e4);
-          if (days >= 1) {
+          if (days >= 15) {
             this.showDialog = true;
             localStorage.setItem("unregister", "1");
           }
