@@ -39,48 +39,25 @@
           <div
             class="ml-3 px-3 fz-12 user-tag"
             :style="{
-              background: userInfo.onChain ? '#775da6' : '#999',
-              color: userInfo.onChain ? '#fff' : '#000',
+              background: registerInfo.handled ? '#775da6' : '#999',
+              color: registerInfo.handled ? '#fff' : '#000',
             }"
           >
-            Pro
+            {{ registerInfo.handled ? "Standard" : "Trial" }}
           </div>
-          <!-- <div v-else class="ml-3">
-            <span>normal user</span>
-            <v-btn :loading="refreshLoading" icon @click="onCheckRegister">
-              <v-icon>mdi-refresh</v-icon>
-            </v-btn>
-          </div> -->
         </div>
         <div class="gray-8 fz-14 mt-1">Welcome to 4EVERLAND Dashboard</div>
       </div>
       <e-right-opt-wrap v-if="!teamInfo.isMember">
-        <v-btn class="mr-5" color="primary" to="/bucket/storage/?new=bucket">
+        <v-btn color="primary" to="/bucket/storage/?new=bucket">
           <!-- <span class="fz-18">+</span> -->
           <img src="/img/svg/add-circle.svg" width="14" alt="" />
           <span class="ml-2"> New Bucket </span>
         </v-btn>
-        <!-- <v-btn color="primary" class="ml-5" to="/hosting/new">
+        <v-btn color="primary" class="ml-5" to="/hosting/new">
           <span class="fz-18">+</span>
           <span class="ml-1"> New Project </span>
-        </v-btn> -->
-
-        <e-menu open-on-hover offset-y>
-          <v-btn slot="ref" color="primary" dark>
-            <img src="/img/svg/add1.svg" width="12" />
-            <span class="ml-2">New Project</span>
-            <v-icon>mdi-chevron-down</v-icon>
-          </v-btn>
-          <v-list>
-            <v-list-item
-              v-for="(text, i) in projectTypeArr"
-              :key="i"
-              @click="onCreate(i)"
-            >
-              <v-list-item-title class="fz-15">{{ text }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </e-menu>
+        </v-btn>
       </e-right-opt-wrap>
     </div>
 
@@ -116,19 +93,7 @@ import mixin from "@/pages/more/mixin-register";
 export default {
   mixins: [mixin],
   data() {
-    return {
-      banners: [
-        // {
-        //   img: "https://4ever-web.4everland.store/img/banner/20221103-115504.jpg",
-        //   href: "https://forms.gle/CrCVBoWFaA4V3RiB6",
-        // },
-        {
-          img: "https://static1.4everland.org/img/banner/20221109-160329.png",
-          to: "/reward-hub",
-        },
-      ],
-      projectTypeArr: ["From Git / Template", "From IPFS Path"],
-    };
+    return {};
   },
   created() {
     this.isRegister();
@@ -140,7 +105,7 @@ export default {
     }),
     ...mapGetters(["teamInfo"]),
     asMobile() {
-      return this.$vuetify.breakpoint.smAndDown;
+      return this.$vuetify.breakpoint.mdAndDown;
     },
     uname() {
       const info = this.userInfo;
@@ -148,17 +113,25 @@ export default {
       if (info.username) return "Hi " + info.username.cutStr(6, 4);
       return "Overview";
     },
-  },
-  methods: {
-    onCreate(i) {
-      if (i == 0) return this.$router.push("/hosting/new");
-      this.$router.push("/hosting/new-by-hash");
-    },
-    async onCheckRegister() {
-      const register = await this.isRegister();
-      if (register) {
-        this.$refs.v3Usage.getUsageInfo();
+    banners() {
+      if (!this.registerInfo.handled) {
+        return [
+          {
+            img: "https://static1.4everland.org/img/banner/20221109-160329.png",
+            to: "/reward-hub",
+          },
+          {
+            img: "https://static1.4everland.org/img/banner/20230420-173710.png",
+            to: "/reward-hub",
+          },
+        ];
       }
+      return [
+        {
+          img: "https://static1.4everland.org/img/banner/20221109-160329.png",
+          to: "/reward-hub",
+        },
+      ];
     },
   },
 };

@@ -159,7 +159,7 @@
         </tr>
         <tr>
           <td>100MB+</td>
-          <td>$0.31</td>
+          <td>$0.81</td>
         </tr>
       </tbody>
     </table>

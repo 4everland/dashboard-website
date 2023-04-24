@@ -14,7 +14,7 @@
       <e-drawer />
       <v-main>
         <e-nav></e-nav>
-        <div class="pa-5" style="height: calc(100% - 37.5px)">
+        <div class="pa-5" style="height: calc(100% - 100px)">
           <e-no-access v-if="isDisabled"></e-no-access>
           <e-wrap
             v-else
@@ -26,10 +26,11 @@
             <router-view></router-view>
           </e-wrap>
         </div>
-        <e-guide ref="guide" />
       </v-main>
     </template>
-
+    <e-guide ref="guide" />
+    <e-no-register-tip></e-no-register-tip>
+    <e-register-share></e-register-share>
     <e-alert />
     <e-feedback />
     <e-meta-connect />

@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@4everland/service-contracts": "0.3.5",
+    "@4everland/zksync-era-payment": "^0.0.1",
     "@aws-sdk/client-s3": "3.58.0",
     "@aws-sdk/lib-storage": "3.58.0",
     "@bonfida/spl-name-service": "^0.1.58",
@@ -47,7 +48,8 @@
     "vuetify": "^2.6.1",
     "vuex": "^3.6.2",
     "web3": "^1.7.1",
-    "zksync": "^0.13.1"
+    "zksync": "^0.13.1",
+    "zksync-web3": "^0.14.3"
   },
   "devDependencies": {
     "@ensdomains/content-hash": "^2.5.7",

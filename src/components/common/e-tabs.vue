@@ -174,11 +174,14 @@ export default {
     ProjDeployments: () => import("@/views/hosting/project/proj-deployments"),
     ProjCommits: () => import("@/views/hosting/project/proj-commits"),
     ProjSettings: () => import("@/views/hosting/project/proj-settings"),
+    ProjEdit: () => import("@/views/hosting/project/proj-edit"),
+    ProjDomains: () => import("@/views/hosting/project/proj-domains"),
     // Projects-Settings
     StProjGeneral: () => import("@/views/hosting/settings/st-proj-general"),
-    StProjDomains: () => import("@/views/hosting/settings/st-proj-domains"),
+    // StProjDomains: () => import("@/views/hosting/settings/st-proj-domains"),
     StProjGit: () => import("@/views/hosting/settings/st-proj-git"),
     StProjEnv: () => import("@/views/hosting/settings/st-proj-env"),
+    // StProjEdit: () => import("@/views/hosting/settings/st-proj-edit"),
     StProjAdvanced: () => import("@/views/hosting/settings/st-proj-advanced"),
 
     // Hosting-Domain

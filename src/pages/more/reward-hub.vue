@@ -52,7 +52,7 @@
 
               <div v-if="item.type == 'UPGRADE'">
                 <div v-if="item.status !== 'DONE'">
-                  <e-menu open-on-hover offset-y>
+                  <e-menu open-on-hover top>
                     <v-btn
                       slot="ref"
                       color="primary"
@@ -60,21 +60,53 @@
                       width="250"
                       dark
                     >
-                      <span class="ml-2">Upgrade</span>
+                      <span class="ml-2">Mint</span>
                       <v-icon>mdi-chevron-down</v-icon>
                     </v-btn>
                     <v-list>
                       <v-list-item link @click="handlePloygonClaim">
-                        <v-list-item-title class="fz-14 al-c justify-center">
+                        <v-list-item-title
+                          class="item-title fz-14 al-c justify-center"
+                        >
                           <img
                             src="/img/svg/billing/ic-polygon-0.svg"
                             width="18"
                             alt=""
                           />
-                          <span class="ml-3">Ploygon Claim</span>
+                          <span class="ml-3">Ploygon</span>
                         </v-list-item-title>
                       </v-list-item>
                       <v-list-item link @click="handleZkSyncClaim">
+                        <v-list-item-title
+                          class="item-title fz-14 al-c justify-center"
+                        >
+                          <div class="al-c mx-auto">
+                            <img
+                              src="/img/svg/logo-no-letters.svg"
+                              width="20"
+                              alt=""
+                            />
+                            <span class="ml-3">zkSync Lite(V1)</span>
+                          </div>
+                          <e-tooltip right>
+                            <v-icon
+                              slot="ref"
+                              size="18"
+                              color="#999"
+                              class="pa-1 d-ib"
+                              >mdi-alert-circle-outline</v-icon
+                            >
+                            <span
+                              >Please ensure that you have sufficient ETH in
+                              zkSync Lite. Interaction with the zkSync network
+                              will rely on cross-chain communication services to
+                              complete on-chain identity registration on
+                              Polygon.</span
+                            >
+                          </e-tooltip>
+                        </v-list-item-title>
+                      </v-list-item>
+                      <v-list-item link @click="handleZkSyncClaimV2">
                         <v-list-item-title class="fz-14 al-c justify-center">
                           <div class="al-c mx-auto">
                             <img
@@ -82,7 +114,7 @@
                               width="20"
                               alt=""
                             />
-                            <span class="ml-3">zkSync Lite(V1) Claim</span>
+                            <span class="ml-3">zkSync Era(V2)</span>
                           </div>
                           <e-tooltip right>
                             <v-icon
@@ -104,11 +136,7 @@
                       </v-list-item>
                     </v-list>
                   </e-menu>
-                  <!-- <v-btn :loading="refreshLoading" icon @click="isRegister">
-                    <v-icon>mdi-refresh</v-icon>
-                  </v-btn> -->
                 </div>
-
                 <v-btn v-else class="mr-9" width="100" disabled> Done </v-btn>
               </div>
               <div v-else class="al-c justify-center">
@@ -160,6 +188,7 @@
         </v-col>
       </v-row>
     </div>
+    <e-register-share ref="share"></e-register-share>
   </div>
 </template>
 
@@ -349,9 +378,13 @@ export default {
     async handlePloygonClaim() {
       try {
         const register = await this.isRegister();
-        if (register) return this.getList();
+        if (register) {
+          this.onAnimation();
+          return this.getList();
+        }
         const claimStatus = await this.handleClaim();
         if (claimStatus) {
+          this.onAnimation();
           this.getList();
         }
       } catch (error) {
@@ -361,14 +394,38 @@ export default {
     async handleZkSyncClaim() {
       try {
         const register = await this.isRegister();
-        if (register) return this.getList();
+        if (register) {
+          this.onAnimation();
+          return this.getList();
+        }
         const claimStatus = await this.handleZkClaim();
         if (claimStatus) {
+          this.onAnimation();
           this.getList();
         }
       } catch (error) {
         console.log(error);
       }
+    },
+    async handleZkSyncClaimV2() {
+      try {
+        const register = await this.isRegister();
+        if (register) {
+          this.onAnimation();
+          return this.getList();
+        }
+        const claimStatus = await this.handleZkClaimV2();
+        if (claimStatus) {
+          this.onAnimation();
+          this.getList();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    onAnimation() {
+      // this.$refs.share.showDialog = true;
+      // this.$flowersAnimation();
     },
   },
 };
@@ -401,5 +458,15 @@ export default {
 .reward-task:hover {
   border: 1px solid #775da6;
   box-shadow: 2px 2px 0px 0px #775da6;
+}
+.item-title::after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(200, 200, 200, 0.3);
 }
 </style>

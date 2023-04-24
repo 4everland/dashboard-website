@@ -23,6 +23,11 @@ export const ArbitrumSrcChainPayment =
   "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
 export const ArbitrumRecharge = "";
 
+// src chain zksync
+export const zkSyncUSDC = "0x76bc4f22c07A02DC4C961D485d0467Da351A1b49";
+export const zkSyncPayment = "0x0015Ae791D08A94178005a9761dEe349eF1A9c8f";
+export const zkRegister = "0xC5FF4F0E97B6d8738AA0A41A656A5C5d07498cBC";
+
 // dst chain
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";
 export const MumbaiRouter = "0x44DDDef9c1fA0Ed35f64f98062E505a968AaBa9C";

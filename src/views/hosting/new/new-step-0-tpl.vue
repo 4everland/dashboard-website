@@ -35,6 +35,9 @@ export default {
   data() {
     return {};
   },
+  created() {
+    this.getWeb3TplList();
+  },
   computed: {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -44,6 +47,17 @@ export default {
       return arr.map((name) => {
         return this.$getFramework(name);
       });
+    },
+  },
+  methods: {
+    async getWeb3TplList() {
+      try {
+        const { data } = await this.$http("$hosting/template/web3/list");
+        console.log(data, "data");
+        this.defaultTpl.concat(data);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

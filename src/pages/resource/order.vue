@@ -29,7 +29,7 @@
       </table>
     </div>
 
-    <e-kv2 class="mt-6" label="Network">
+    <e-kv2 class="mt-6" label="Network" v-if="onChain != null">
       <pay-network :allow="allowNetwork" />
     </e-kv2>
 
@@ -136,6 +136,7 @@ export default {
       list: (s) => s.orderInfo.list,
       orderInfo: (s) => s.orderInfo,
       userInfo: (s) => s.userInfo,
+      onChain: (s) => s.onChain,
     }),
     finalPrice() {
       return this.totalPrice - this.AmountofDeduction >= 0
@@ -143,12 +144,12 @@ export default {
         : "0.00";
     },
     allowNetwork() {
-      if (this.userInfo.onChain) {
+      if (this.onChain) {
         // return ["Polygon", "Ethereum", "BSC"];
         if (this.$inDev) {
-          return ["Polygon", "Ethereum", "BSC"];
+          return ["Polygon", "Ethereum", "BSC", "zkSync"];
         }
-        return ["Polygon", "Ethereum", "BSC", "Arbitrum"];
+        return ["Polygon", "Ethereum", "BSC", "Arbitrum", "zkSync"];
       } else {
         return ["Polygon"];
       }
@@ -206,21 +207,33 @@ export default {
           }
           console.log("totalFee", totalFee.toString());
           console.log(params, "calcFee params");
-          const feeMsg = await target.calcFee(...params);
-          console.log("feeMsg", feeMsg.toString());
-          let gas = await target.estimateGas.pay(...params, { value: feeMsg });
-          console.log("gas", gas);
-          let gasPrice = await this.curContract.provider.getGasPrice();
-          params.push({
-            value: feeMsg,
-            gasLimit: gas.mul(15).div(10),
-            gasPrice: gasPrice.mul(12).div(10),
-          });
-          this.ethFeeInfo = {
-            msgFee: this.$utils.cutFixed(feeMsg.toString() / 1e18, 4),
-            unit: this.isBSC ? "BNB" : "ETH",
-          };
-          console.log(this.ethFeeInfo);
+          if (this.isZk) {
+            let gas = await target.estimateGas.pay(...params);
+            console.log("gas", gas);
+            let gasPrice = await this.curContract.provider.getGasPrice();
+            params.push({
+              gasLimit: gas.mul(15).div(10),
+              gasPrice: gasPrice.mul(12).div(10),
+            });
+          } else {
+            const feeMsg = await target.calcFee(...params);
+            console.log("feeMsg", feeMsg.toString());
+            let gas = await target.estimateGas.pay(...params, {
+              value: feeMsg,
+            });
+            console.log("gas", gas);
+            let gasPrice = await this.curContract.provider.getGasPrice();
+            params.push({
+              value: feeMsg,
+              gasLimit: gas.mul(15).div(10),
+              gasPrice: gasPrice.mul(12).div(10),
+            });
+            this.ethFeeInfo = {
+              msgFee: this.$utils.cutFixed(feeMsg.toString() / 1e18, 4),
+              unit: this.isBSC ? "BNB" : "ETH",
+            };
+            console.log(this.ethFeeInfo);
+          }
           if (isPreview) {
             return;
           }

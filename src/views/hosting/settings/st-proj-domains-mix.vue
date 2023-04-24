@@ -11,7 +11,7 @@
               style="cursor: pointer"
               v-for="item in items"
               :key="item.key"
-              :src="require(`@/assets/domain/icon/${item.key}.svg`)"
+              :src="require(`@/assets/domain/icon/${item.icon}`)"
               @click="seleted = item.key"
             />
           </span>
@@ -35,7 +35,7 @@
               dense
               v-model.trim="domain"
               @keyup.enter="onAdd"
-              :placeholder="`${seleted.toUpperCase()} Domain`"
+              :placeholder="getDomainByType(seleted).placeholder"
             >
             </v-text-field>
             <v-btn
@@ -50,6 +50,15 @@
               Add
             </v-btn>
           </div>
+          <div
+            class="mt-4 fz-12"
+            v-if="getDomainByType(seleted).register == 'true'"
+          >
+            Don't have an {{ getDomainByType(seleted).name }} domain name yet?
+            <a :href="getDomainByType(seleted).registerLink" target="_blank">
+              Register now</a
+            >
+          </div>
         </div>
       </div>
       <div class="bd-1 mb-5" v-for="item in domainList" :key="item.id">
@@ -58,7 +67,11 @@
             <div class="d-flex al-c flex-wrap">
               <div class="mr-auto d-flex">
                 <img
-                  :src="require(`@/assets/domain/icon/${item.type}.svg`)"
+                  :src="
+                    require(`@/assets/domain/icon/${
+                      getDomainByType(item.type).icon
+                    }`)
+                  "
                   class="mr-2"
                 />
                 <div class="mr-auto">
@@ -252,7 +265,6 @@ import {
   sendTransaction,
 } from "@/plugins/sns";
 
-const domainOptions = require("@/assets/domain/domainList.json");
 export default {
   data() {
     return {
@@ -264,7 +276,8 @@ export default {
       resolveData: "",
       owner: "",
       seleted: "ens",
-      items: domainOptions.list,
+      items: [],
+      allOptions: [],
       showDialog: false,
       tempItem: null,
       tempType: "",
@@ -306,9 +319,20 @@ export default {
     },
   },
   created() {
+    this.getDomainOptions();
     this.getInfo();
   },
   methods: {
+    async getDomainOptions() {
+      this.$axios.get("/domainList.json").then((res) => {
+        const { data } = res;
+        this.allOptions = data.list;
+        let Array = data.list.filter((item) => {
+          return item.display === "true";
+        });
+        this.items = Array;
+      });
+    },
     async getInfo() {
       try {
         const { id } = this.$route.params;
@@ -321,7 +345,15 @@ export default {
             },
           }
         );
-        this.domainList = data.domainList;
+        let newDomainList = [];
+        data.domainList.forEach((item) => {
+          this.allOptions.forEach((option) => {
+            if (item.type == option.key) {
+              newDomainList.push(item);
+            }
+          });
+        });
+        this.domainList = newDomainList;
         this.domainLoading = false;
       } catch (error) {
         //
@@ -669,14 +701,14 @@ export default {
     },
     toHref(domainObj) {
       let rule = {};
-      rule = this.items.find((item) => {
+      rule = this.allOptions.find((item) => {
         return domainObj.type == item.key;
       });
       const fn = eval("(" + rule.network + ")");
       return fn(domainObj.domain);
     },
     getDomainByType(type) {
-      return this.items.find((item) => {
+      return this.allOptions.find((item) => {
         return item.key == type;
       });
     },

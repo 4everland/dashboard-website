@@ -48,7 +48,7 @@
           @click="form.platform = it.name"
         >
           <div
-            class="d-flex al-c bdrs-3 plat-item"
+            class="d-flex al-c bdrs-4 plat-item"
             :class="{
               active: form.platform == it.name,
             }"
@@ -248,10 +248,25 @@
       >
     </div>
   </div>
+  <div v-else-if="isHash">
+    <new-step-1-hash
+      @onHashDeloy="onHashDeloy"
+      @back="$emit('back')"
+    ></new-step-1-hash>
+  </div>
+
+  <div v-else-if="isWeb3Tpl">
+    <new-step-1-web3-tpl
+      @onWeb3TplDeploy="onWeb3TplDeploy"
+      @back="$emit('back')"
+    ></new-step-1-web3-tpl>
+  </div>
 </template>
 
 <script>
 import NewStep1Tpl from "@/views/hosting/new/new-step-1-tpl";
+import NewStep1Hash from "@/views/hosting/new/new-step-1-hash";
+import NewStep1Web3Tpl from "@/views/hosting/new/new-step-1-web3-tpl";
 import BuildCmd from "@/views/hosting/common/build-cmd";
 import BuildCmdTip from "@/views/hosting/build/build-cmd-tip";
 import BuildOutputTip from "@/views/hosting/build/build-output-tip";
@@ -273,9 +288,15 @@ export default {
     isTpl() {
       return this.query.type == "clone-flow";
     },
+    isWeb3Tpl() {
+      return this.query.type == "web3Tpl";
+    },
     info() {
-      if (this.isTpl) return this.repoInfo;
+      if (this.isTpl || this.isHash) return this.repoInfo;
       return this.data;
+    },
+    isHash() {
+      return this.query.type == "hash";
     },
   },
   data() {
@@ -419,6 +440,15 @@ export default {
         console.log(error);
       }
       this.$loading.close();
+    },
+    onHashDeloy({ projectId, taskId }) {
+      this.$router.replace(`/hosting/new?id=${projectId}&taskId=${taskId}`);
+      this.$emit("next");
+    },
+    onWeb3TplDeploy({ projectId, taskId }) {
+      console.log(1111);
+      this.$router.replace(`/hosting/new?id=${projectId}&taskId=${taskId}`);
+      this.$emit("next");
     },
     onFramework(val) {
       const item = this.$getFramework(val);
@@ -601,11 +631,13 @@ export default {
   },
   components: {
     NewStep1Tpl,
+    NewStep1Hash,
     BuildCmd,
     BuildCmdTip,
     BuildOutputTip,
     EIconLink,
     EnvForm,
+    NewStep1Web3Tpl,
   },
 };
 </script>
