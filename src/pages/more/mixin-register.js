@@ -296,7 +296,7 @@ export default {
             // this.switchNet(id);
           });
         } else {
-          this.addChain(chainId, id);
+          await this.addChain(chainId, id);
         }
       }
     },
@@ -366,6 +366,28 @@ export default {
           rpcUrls: ["https://arb1.arbitrum.io/rpc"],
           nativeCurrency: {
             name: "Arbitrum Coin",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        280: {
+          chainId,
+          chainName: "zkSync Era Testnet",
+          rpcUrls: ["https://testnet.era.zksync.dev"],
+          nativeCurrency: {
+            name: "zkSync Coin",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        324: {
+          chainId,
+          chainName: "zkSync Era Mainnet",
+          rpcUrls: ["https://mainnet.era.zksync.io"],
+          nativeCurrency: {
+            name: "zkSync Coin",
             symbol: "ETH",
             decimals: 18,
           },
