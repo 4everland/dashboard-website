@@ -71,8 +71,8 @@
                       >mdi-alert-circle-outline</v-icon
                     >
                     <span
-                      >Please ensure that you have sufficient ETH in zkSync
-                      Lite. Interaction with the zkSync network will rely on
+                      >Please ensure that you have sufficient ETH in zkSync Era.
+                      Interaction with the zkSync network will rely on
                       cross-chain communication services to complete on-chain
                       identity registration on Polygon.</span
                     >
@@ -100,6 +100,7 @@ import { mapState } from "vuex";
 import Driver from "driver.js";
 import "driver.js/dist/driver.min.css";
 import mixin from "@/pages/more/mixin-register";
+import { airdropRequest } from "@/plugins/airDrop/api";
 
 export default {
   mixins: [mixin],
@@ -220,46 +221,12 @@ export default {
             position: "left",
           },
           onNext: () => {
-            // this.driver.preventMove();
-            // setTimeout(() => {
-            //   this.driver.refresh();
-            //   this.driver.moveNext();
-            //   this.stepCount += 1;
-            // }, 250);
-
             if (!this.registerInfo.handled) {
               this.showDialog = true;
+              localStorage.setItem("unregister", "1");
             }
           },
         },
-        // {
-        //   element: "#reward-guide",
-        //   popover: {
-        //     className: "reward-guide-class",
-        //     title: "Reward Hub",
-        //     description: `<div class="airdrop-content">
-        //         <div class=" mb-6 fz-14 lh-2">Thank You for Registering!
-        //         We have free resource packages for you in the Reward Hub!</div>
-        //       <div class="row mt-2">
-        //       <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="img/airDrop/ipfs.png" alt=""><span class="resource-item-value ml-2">25GB</span><span class="resource-text fz-12">IPFS Storage</span></div>
-        //       </div>
-        //       <div class="col-sm-6 col-12"><div class="resource-item al-c"><img  width="28" src="/img/airDrop/ar.png" alt=""><span class="resource-item-value ml-2">100MB</span><span  class="resource-text fz-12">Arweave Storage</span></div>
-        //       </div>
-        //       <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/minutes.png" alt=""><span  class="resource-item-value ml-2">100Min</span><span class="resource-text fz-12">Build Minutes</span></div>
-        //       </div>
-        //       <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/balance.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Recharge Balance</span>
-        //       </div>
-        //     </div>
-        //     `,
-        //     // showButtons: false,
-        //     closeBtnText: "Start now",
-        //     nextBtnText: "Get more",
-        //     position: "left",
-        //   },
-        //   onNext: () => {
-        //     this.$router.push("/reward-hub");
-        //   },
-        // },
       ],
       stepCount: 0,
       items: [
@@ -279,14 +246,15 @@ export default {
       showDialog: false,
       accountExists: false,
       registerInfo: {},
+      newUserInfo: null,
     };
   },
   async created() {
     await this.getCurrentContract();
     if (localStorage.token) {
+      await this.getNewUser();
       await this.getHandler();
     }
-    // console.log();
   },
   computed: {
     ...mapState({
@@ -296,6 +264,9 @@ export default {
     uuid() {
       if (this.teamInfo.isMember) return this.teamInfo.teamOwnerEuid;
       return this.userInfo.euid;
+    },
+    showGuide() {
+      return !this.$vuetify.breakpoint.mdAndDown;
     },
   },
   watch: {
@@ -307,6 +278,7 @@ export default {
       if (this.stepCount != 5 && !val && !this.registerInfo.handled) {
         // if (this.stepCount != 5 && !val) {
         this.showDialog = true;
+        localStorage.setItem("unregister", "1");
       }
     },
   },
@@ -359,6 +331,26 @@ export default {
       document.body.style.height = "";
       document.removeEventListener("touchmove", mo, false);
     },
+    async getNewUser() {
+      try {
+        const data = await airdropRequest();
+        this.newUserInfo = data;
+        if (data && this.showGuide) {
+          if (this.$route.path != "/overview" && this.$route.path != "/") {
+            this.$router.replace("/");
+          }
+          console.log("guide");
+          setTimeout(() => {
+            this.guide();
+          }, 2000);
+        }
+        // setTimeout(() => {
+        //   this.guide();
+        // }, 2000);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getHandler() {
       try {
         const { data } = await this.$http.get(
@@ -367,7 +359,7 @@ export default {
         this.registerInfo = data;
         if (!data.handled && localStorage.unregister != "1") {
           let days = (+new Date() - data.createdAt) / (864 * 10e4);
-          if (days >= 15) {
+          if (days >= 1 && !this.newUserInfo) {
             this.showDialog = true;
             localStorage.setItem("unregister", "1");
           }

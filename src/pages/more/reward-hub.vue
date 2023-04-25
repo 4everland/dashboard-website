@@ -126,7 +126,7 @@
                             >
                             <span
                               >Please ensure that you have sufficient ETH in
-                              zkSync Lite. Interaction with the zkSync network
+                              zkSync Era. Interaction with the zkSync network
                               will rely on cross-chain communication services to
                               complete on-chain identity registration on
                               Polygon.</span
@@ -149,6 +149,14 @@
                   :loading="item.loading"
                 >
                   <span
+                    v-if="!activitiesInfo.onChain"
+                    :class="{
+                      'white-0': !item.isDone,
+                    }"
+                    >To do</span
+                  >
+                  <span
+                    v-else
                     :class="{
                       'white-0': !item.isDone,
                     }"
