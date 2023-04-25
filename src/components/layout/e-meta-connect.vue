@@ -77,12 +77,17 @@ export default {
           await this.checkNet();
           this.walletObj.on("chainChanged", (networkId) => {
             console.log("chainChanged", networkId);
-            location.reload();
+            // location.reload();
           });
           this.walletObj.on("accountsChanged", (accounts) => {
             console.log("accountsChanged", accounts);
-            location.reload();
+            // location.reload();
           });
+          this.walletObj.on("message", (message) => {
+            console.log("message--------", message);
+            // location.reload();
+          });
+          console.log(111);
         }
         this.$setState({
           noticeMsg: {
