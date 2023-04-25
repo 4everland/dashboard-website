@@ -92,6 +92,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -103,6 +104,9 @@ export default {
     this.getWeb3TplList();
   },
   computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
