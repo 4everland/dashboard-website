@@ -432,7 +432,7 @@ export default {
       }
     },
     onAnimation() {
-      // this.$refs.share.showDialog = true;
+      this.$refs.share.showDialog = true;
       // this.$flowersAnimation();
     },
   },

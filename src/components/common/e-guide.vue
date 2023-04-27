@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="showDialog" max-width="700" persistent>
+    <!-- <v-dialog v-model="showDialog" max-width="700" persistent>
       <div class="reward-hub-content">
         <h3 class="ta-c">Minting Your Own On-Chain Identity</h3>
         <div class="mt-4 fz-14 lh-2">
@@ -9,9 +9,10 @@
           registration below to unlock the full potential of your Web3 journey.
         </div>
         <v-row class="mt-2">
-          <v-col :sm="6" :cols="12" v-for="item in items" :key="item.name">
-            <div class="resource-item al-c">
-              <span class="ml-2 fz-14">{{ item.name }}</span>
+          <v-col :sm="3" :cols="6" v-for="item in items" :key="item.name">
+            <div class="resource-item al-c flex-column pa-5 mb-5">
+              <img height="40" :src="item.img" alt="" />
+              <span class="mt-6 ta-c fz-12">{{ item.name }}</span>
             </div>
           </v-col>
         </v-row>
@@ -89,8 +90,10 @@
           </e-menu>
         </div>
       </div>
-    </v-dialog>
-    <!-- <e-register-share ref="share"></e-register-share> -->
+    </v-dialog> -->
+
+    <e-claim-dialog ref="claimRef"></e-claim-dialog>
+    <e-register-share ref="share"></e-register-share>
   </div>
 </template>
 
@@ -222,7 +225,9 @@ export default {
           },
           onNext: () => {
             if (!this.registerInfo.handled) {
-              this.showDialog = true;
+              // this.showDialog = true;
+              this.$refs.claimRef.showDialog = true;
+
               localStorage.setItem("unregister", "1");
             }
           },
@@ -231,15 +236,20 @@ export default {
       stepCount: 0,
       items: [
         {
+          img: "/img/svg/rewardHub/web3.svg",
           name: "Web3 Identity",
         },
         {
+          img: "/img/svg/rewardHub/ownership.svg",
           name: "Ownership of data",
         },
         {
+          img: "/img/svg/rewardHub/enhanced.svg",
           name: "Enhanced product functionalities",
         },
         {
+          img: "/img/svg/rewardHub/fee_resource.svg",
+
           name: "Access to additional free resources",
         },
       ],
@@ -250,7 +260,7 @@ export default {
     };
   },
   async created() {
-    await this.getCurrentContract();
+    // await this.getCurrentContract();
     if (localStorage.token) {
       await this.getNewUser();
       await this.getHandler();
@@ -277,36 +287,38 @@ export default {
       }
       if (this.stepCount != 5 && !val && !this.registerInfo.handled) {
         // if (this.stepCount != 5 && !val) {
-        this.showDialog = true;
+        // this.showDialog = true;
+
+        this.$refs.claimRef.showDialog = true;
         localStorage.setItem("unregister", "1");
       }
     },
   },
   methods: {
-    onMore() {
-      this.showMore = true;
-      this.$refs.menu.$children[0].onResize();
-    },
-    async onSkip() {
-      try {
-        await this.$confirm(
-          "As a trial user, you will only have access to limited product functionalities and a small amount of experience resources. We recommend completing the on-chain registration to fully experience all the functionalities available.",
-          "Are you sure you want to skip the on-chain identity registration?",
-          {
-            cancelText: "Skip",
-            confirmText: "Mint",
-          }
-        );
-        this.showMore = false;
-      } catch (error) {
-        this.showDialog = false;
-      }
-    },
-    onAnimation() {
-      this.showDialog = false;
-      // this.$refs.share.showDialog = true;
-      // this.$flowersAnimation();
-    },
+    // onMore() {
+    //   this.showMore = true;
+    //   this.$refs.menu.$children[0].onResize();
+    // },
+    // async onSkip() {
+    //   try {
+    //     await this.$confirm(
+    //       "As a trial user, you will only have access to limited product functionalities and a small amount of experience resources. We recommend completing the on-chain registration to fully experience all the functionalities available.",
+    //       "Are you sure you want to skip the on-chain identity registration?",
+    //       {
+    //         cancelText: "Skip",
+    //         confirmText: "Mint",
+    //       }
+    //     );
+    //     this.showMore = false;
+    //   } catch (error) {
+    //     this.showDialog = false;
+    //   }
+    // },
+    // onAnimation() {
+    //   this.showDialog = false;
+    //   this.$refs.share.showDialog = true;
+    //   // this.$flowersAnimation();
+    // },
     onGuide() {
       this.driver.start();
       this.stop();
@@ -339,7 +351,6 @@ export default {
           if (this.$route.path != "/overview" && this.$route.path != "/") {
             this.$router.replace("/");
           }
-          console.log("guide");
           setTimeout(() => {
             this.guide();
           }, 2000);
@@ -360,7 +371,9 @@ export default {
         if (!data.handled && localStorage.unregister != "1") {
           let days = (+new Date() - data.createdAt) / (864 * 10e4);
           if (days >= 15 && !this.newUserInfo) {
-            this.showDialog = true;
+            // this.showDialog = true;
+            this.$refs.claimRef.showDialog = true;
+
             localStorage.setItem("unregister", "1");
           }
         }
@@ -371,37 +384,36 @@ export default {
         console.log(error);
       }
     },
-    async handlePloygonClaim() {
-      try {
-        const register = await this.isRegister();
-        if (register) return this.onAnimation();
-        const claimStatus = await this.handleClaim();
-        if (claimStatus) this.onAnimation();
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async handleZkSyncClaim() {
-      try {
-        const register = await this.isRegister();
-        if (register) return this.onAnimation();
-        const claimStatus = await this.handleZkClaim();
-        if (claimStatus) this.onAnimation();
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    async handleZkSyncClaimV2() {
-      try {
-        const register = await this.isRegister();
-        if (register) return this.onAnimation();
-        const claimStatus = await this.handleZkClaimV2();
-        if (claimStatus) this.onAnimation();
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // async handlePloygonClaim() {
+    //   try {
+    //     const register = await this.isRegister();
+    //     if (register) return this.onAnimation();
+    //     const claimStatus = await this.handleClaim();
+    //     if (claimStatus) this.onAnimation();
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+    // async handleZkSyncClaim() {
+    //   try {
+    //     const register = await this.isRegister();
+    //     if (register) return this.onAnimation();
+    //     const claimStatus = await this.handleZkClaim();
+    //     if (claimStatus) this.onAnimation();
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+    // async handleZkSyncClaimV2() {
+    //   try {
+    //     const register = await this.isRegister();
+    //     if (register) return this.onAnimation();
+    //     const claimStatus = await this.handleZkClaimV2();
+    //     if (claimStatus) this.onAnimation();
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
   },
 };
 </script>
@@ -479,60 +491,6 @@ div#driver-page-overlay {
   color: #6c7789;
   line-height: 28px;
 }
-.airdrop-content {
-  position: relative;
-  padding: 10px;
-  box-sizing: border-box;
-  .text {
-    margin-bottom: 10px;
-    color: #0b0817;
-    line-height: 30px;
-  }
-  .close-icon {
-    position: absolute;
-    top: 33px;
-    right: 17px;
-  }
-  .resource-item {
-    position: relative;
-    padding: 5px 15px;
-    height: 70px;
-    color: #898989;
-    box-sizing: border-box;
-    background: #f9fbfc;
-    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
-    border-radius: 10px;
-    .resource-item-value {
-      font-size: 18px;
-      margin-left: 10px;
-      color: #100d58;
-    }
-    .resource-text {
-      margin-left: 16px;
-    }
-  }
-  .resource-item::after {
-    content: "";
-    display: block;
-    position: absolute;
-    right: 15px;
-    top: 10px;
-    width: 18px;
-    height: 18px;
-    background: url("/img/airDrop/check.svg") no-repeat;
-  }
-  .claim-btn {
-    display: block;
-    width: 70%;
-    margin: 20px auto;
-    padding: 8px 5px;
-    text-align: center;
-    color: #fff;
-    background: #634695;
-    border-radius: 2px;
-    text-decoration: none;
-  }
-}
 
 .reward-hub-content {
   position: relative;
@@ -548,28 +506,11 @@ div#driver-page-overlay {
     right: 17px;
   }
   .resource-item {
-    position: relative;
-    padding: 10px 20px;
-    height: 90px;
+    height: 150px;
     color: #898989;
+    background: #f9f9f9;
     box-sizing: border-box;
-    background: #f9fbfc;
-    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
-    border-radius: 10px;
-    .resource-item-value {
-      font-size: 20px;
-      color: #100d58;
-    }
-  }
-  .resource-item::after {
-    content: "";
-    display: block;
-    position: absolute;
-    right: 15px;
-    top: 10px;
-    width: 18px;
-    height: 18px;
-    background: url("/img/airDrop/check.svg") no-repeat;
+    border-radius: 15px;
   }
 }
 .item-title::after {

@@ -1,23 +1,51 @@
 <template>
   <div class="register-share-container pos-a">
-    <v-dialog v-model="showDialog" max-width="1000" hide-overlay>
+    <v-dialog v-model="showDialog" max-width="1000" hide-overlay class="ov-h">
       <div class="share-container pos-r">
         <div class="pos-a share-content">
-          <div class="wallet-input line-1 fz-14 gray">
+          <div class="white-0 ta-c fz-22">Congratulations</div>
+          <div class="white-0 ta-c fz-18">
+            Mint Your on-chain Standard Identity
+          </div>
+          <div class="wallet-input line-1 fz-14 gray ta-c">
             {{ userInfo.username }}
           </div>
-          <div class="fz-14 mt-6 white-0">
-            Congratulations on successfully minting 4EVERLAND's on-chain
-            identity Enjoy more resources and enter the decentralized world of
-            Web3
+        </div>
+        <img
+          class="pos-a cursor-p"
+          style="right: 20px; top: 20px"
+          width="20"
+          src="/img/svg/rewardHub/share_icon.svg"
+          alt=""
+          @click="handleShare"
+        />
+      </div>
+      <div style="background: #f7f9fb" class="py-10">
+        <h3 class="ta-c fz-22">- Unlock new benefits -</h3>
+        <div class="al-c mb-5">
+          <div
+            class="al-c flex-column pa-5"
+            v-for="item in items"
+            :key="item.name"
+            style="width: 25%"
+          >
+            <img height="60" :src="item.img" alt="" />
+            <span class="mt-6 ta-c fz-14">{{ item.name }}</span>
           </div>
-          <div class="ta-c mt-3">
-            <v-btn color="primary" @click="handleShare">Share</v-btn>
-          </div>
+        </div>
+        <div class="d-flex justify-center">
+          <v-btn
+            color="primary"
+            max-width="300"
+            width="300"
+            min-width="80"
+            @click="handleStart"
+            >Start Benefit
+          </v-btn>
         </div>
       </div>
     </v-dialog>
-    <e-animation-flowers ref="flowers"></e-animation-flowers>
+    <!-- <e-animation-flowers ref="flowers"></e-animation-flowers> -->
   </div>
 </template>
 
@@ -28,6 +56,25 @@ export default {
     return {
       showDialog: false,
       code: null,
+      items: [
+        {
+          img: "/img/svg/rewardHub/web3.svg",
+          name: "Web3 Identity",
+        },
+        {
+          img: "/img/svg/rewardHub/ownership.svg",
+          name: "Ownership of data",
+        },
+        {
+          img: "/img/svg/rewardHub/enhanced.svg",
+          name: "Enhanced product functionalities",
+        },
+        {
+          img: "/img/svg/rewardHub/fee_resource.svg",
+
+          name: "Access to additional free resources",
+        },
+      ],
     };
   },
   computed: {
@@ -47,7 +94,8 @@ export default {
     },
     showDialog(val) {
       if (val) {
-        this.$refs.flowers.showAnimation();
+        // this.$refs.flowers.showAnimation();
+        this.$flowersAnimation();
       }
     },
   },
@@ -66,6 +114,9 @@ export default {
       const { data } = await this.$http.get("$auth/invitation/code/");
       this.code = data;
     },
+    handleStart() {
+      this.$router.push("/overview");
+    },
   },
 };
 </script>
@@ -79,21 +130,25 @@ export default {
   pointer-events: none;
 }
 .share-container {
-  background: url("/img/bg/share/share_bg.png") center/cover no-repeat;
-  height: 500px;
+  background: url("/img/bg/share/share_bg.png") center/contain no-repeat;
+  height: 390px;
   width: 100%;
   .share-content {
     left: 50%;
     top: 50%;
-    width: 400px;
     transform: translate(-50%, -50%);
   }
   .wallet-input {
     width: 350px;
     padding: 10px;
-    margin: 50px auto 0;
+    margin: 30px auto 0;
     border-radius: 6px;
     background: #fff;
   }
+}
+.row-content {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }
 </style>

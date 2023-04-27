@@ -10,7 +10,7 @@ export default [
   {
     path: "/account/config",
     components: {
-      cache: () => import("./config"),
+      cache: () => import("./configurations"),
     },
     meta: {
       title: "Configurations",
