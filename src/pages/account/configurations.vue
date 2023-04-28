@@ -31,7 +31,7 @@
           </div>
           <div class="ml-auto">
             <v-btn
-              color="primary"
+              color="red"
               min-width="75"
               width="160"
               max-width="160"
@@ -127,7 +127,9 @@ export default {
       }
     },
     showClaim() {
-      this.$refs.claimRef.showDialog = true;
+      this.$flowersAnimation();
+
+      // this.$refs.claimRef.showDialog = true;
     },
     claimCompeleted() {
       this.getHandler();

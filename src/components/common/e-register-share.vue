@@ -102,9 +102,9 @@ export default {
   methods: {
     handleShare() {
       window.open(
-        `https://twitter.com/intent/tweet?text=The %23Web3 product journey has begun for me at @4everland_org, and I have received free resources to help me along the way.%0A%0AThe best way to explore Web3 is to experience its products. Join us today and start your Web3 journey.%0A%0A✅${encodeURIComponent(
+        `https://twitter.com/intent/tweet?text=I successfully minted my on-chain identity on 4EVERLAND and received an additional 5GB of IPFS storage, 100MB of Arweave storage, 100GB of bandwidth, and 250 build minutes. Join and experience it now! %0A%0A${encodeURIComponent(
           this.shareUrl
-        )}%0A&hashtags=IPFS,Arweave,Dfinity`
+        )}`
       );
     },
     async getCode() {
@@ -115,6 +115,7 @@ export default {
       this.code = data;
     },
     handleStart() {
+      this.showDialog = false;
       this.$router.push("/overview");
     },
   },

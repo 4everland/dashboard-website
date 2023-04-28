@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     showAnimation() {
-      var COUNT = 100;
+      var COUNT = 200;
       var masthead = document.querySelector(".box");
       var canvas = document.createElement("canvas");
       var ctx = canvas.getContext("2d");
@@ -57,7 +57,7 @@ export default {
       for (i = 0; i < COUNT; i++) {
         snowflake = new Snowflake();
         const idx = Math.ceil(Math.random() * 3);
-        console.log(idx);
+        // console.log(idx);
         snowflake.bg = `/img/icon/share/${idx}.png`;
         snowflake.reset();
         snowflakes.push(snowflake);
@@ -75,7 +75,7 @@ export default {
           let img = new Image();
 
           img.src = snowflake.bg;
-          ctx.drawImage(img, snowflake.x, snowflake.y, 20, 20);
+          ctx.drawImage(img, snowflake.x, snowflake.y, 30, 30);
           ctx.closePath();
           ctx.fill();
           if (snowflake.y > height) {
@@ -85,7 +85,7 @@ export default {
         }
 
         const result = snowflakes.some((it) => !it.done);
-        console.log(result);
+        // console.log(result);
         if (result) {
           requestAnimFrame(update);
         }

@@ -1,13 +1,15 @@
 <template>
-  <div class="tips-container">
+  <div
+    class="tips-container"
+    v-if="$route.path != '/login' && onChain == false"
+  >
     <label for="check" class="pos-a check-box-label cursor-p">
       <img width="40" src="/img/svg/rewardHub/notice.svg" alt="" />
     </label>
     <input type="checkbox" id="check" class="check-box" />
     <div
       class="fz-14 cursor-p no-register-container ta-c"
-      @click="$router.push('/reward-hub')"
-      v-if="onChain == false"
+      @click="$router.push('/account/config')"
     >
       <div class="text">
         You still have an outstanding benefit to claim, go ahead and claim it
@@ -36,7 +38,7 @@ export default {
 
 <style lang="scss" scoped>
 .tips-container {
-  z-index: 999;
+  z-index: 100;
   position: fixed;
   width: 50px;
   right: 50px;

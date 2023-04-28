@@ -48,12 +48,23 @@
             >
           </div>
         </div>
+
         <div class="al-c mt-6 gray">
           <div>
-            <div>User ID</div>
-            <div class="mt-3 fz-14">{{ onChain ? userInfo.uid : "--" }}</div>
+            <div>DID</div>
+            <div class="mt-3 fz-14 al-c">
+              <span>{{ onChain ? userInfo.euid.cutStr(6, 4) : "--" }}</span>
+              <img
+                class="ml-2 cursor-p"
+                v-if="onChain"
+                src="/img/icon/copy.svg"
+                width="16"
+                v-clipboard="userInfo.euid"
+                @success="$toast('Copied!')"
+              />
+            </div>
           </div>
-          <div class="ml-10">
+          <div class="ml-15">
             <div>
               <span>User Type</span>
               <v-icon
@@ -93,7 +104,7 @@
             functionalities.
           </div>
           <div class="gray fz-14 mt-3">Equity:</div>
-          <ul class="gray fz-14">
+          <ul class="gray fz-14 pl-3">
             <li>1 GB IPFS storage</li>
             <li>20 MB Arweave storage</li>
             <li>10 GB bandwidth</li>
@@ -119,7 +130,7 @@
           <div class="al-c">
             <div>
               <div class="gray fz-14 mt-3">Advantage:</div>
-              <ul class="gray fz-14">
+              <ul class="gray fz-14 pl-3">
                 <li>Web3 Identity</li>
                 <li>Ownership of data</li>
                 <li>Enhanced product functionalities</li>
@@ -128,7 +139,7 @@
             </div>
             <div class="ml-5">
               <div class="gray fz-14 mt-3">Equity:</div>
-              <ul class="gray fz-14">
+              <ul class="gray fz-14 pl-3">
                 <li>5 GB IPFS storage</li>
                 <li>100 MB Arweave storage</li>
                 <li>100 GB bandwidth</li>
@@ -266,5 +277,9 @@ export default {
 }
 .compeleted-status {
   color: #f49e28;
+}
+ul,
+li {
+  list-style: disc;
 }
 </style>
