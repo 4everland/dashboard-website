@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@4everland/minio@^7.0.35":
-  "integrity" "sha512-NsTsOxDAqLDgZgVqSW/UFX8CDfuyBDWar73kKX2er/LTQW+vsGcxap1YasR5PLHTcMd3vCdOcH3uMSeBdPRR+A=="
-  "resolved" "https://registry.npmjs.org/@4everland/minio/-/minio-7.0.35.tgz"
-  "version" "7.0.35"
+"@4everland/minio@^7.0.36":
+  "integrity" "sha512-DGYHtdCdMguAm2878L0tYJTS80EQkmAFAIskMg16D1q6pHrJCLpO706fwloyonBpz81WACbGA5pVSFtJ9HE+PQ=="
+  "resolved" "https://registry.npmjs.org/@4everland/minio/-/minio-7.0.36.tgz"
+  "version" "7.0.36"
   dependencies:
     "async" "^3.1.0"
     "block-stream2" "^2.0.0"
