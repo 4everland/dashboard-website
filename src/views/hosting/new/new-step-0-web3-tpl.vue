@@ -6,13 +6,17 @@
       v-if="loading"
       type="article"
     ></v-skeleton-loader>
-    <v-row class="mb-2 pos-r ov-h" v-else style="max-height: 95%">
+    <v-row
+      class="mb-2 pos-r"
+      :class="{ 'ov-h': !web3TplAccess, 'ov-a': web3TplAccess }"
+      v-else
+      style="max-height: 95%"
+    >
       <v-col xl="4" cols="6" v-for="it in web3TplList" :key="it.id">
-        <!-- @click="$emit('item', it)" -->
-
         <div
           class="bd-1 d-b hover-1 pos-r bdrs-6 ov-h"
           v-ripple
+          @click="onNext(it)"
           style="height: 250px"
         >
           <img
@@ -81,7 +85,10 @@
         </div>
       </v-col>
 
-      <div class="garlxy pos-a al-c justify-center flex-column">
+      <div
+        class="garlxy pos-a al-c justify-center flex-column"
+        v-if="!web3TplAccess"
+      >
         <h3 class="fz-18">Template Deployment - WL Only</h3>
         <a href="https://discord.com/invite/4everland" target="__blank"
           >More info</a
@@ -92,6 +99,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -103,15 +111,17 @@ export default {
     this.getWeb3TplList();
   },
   computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-    // tplList() {
-    //   const arr = ["vue", "create-react-app", "nextjs", "nuxtjs"];
-    //   return arr.map((name) => {
-    //     return this.$getFramework(name);
-    //   });
-    // },
+    web3TplAccess() {
+      return (
+        this.userInfo.whiteList && this.userInfo.whiteList.includes("template")
+      );
+    },
   },
   methods: {
     async getWeb3TplList() {
@@ -124,6 +134,11 @@ export default {
         this.loading = false;
       } catch (error) {
         console.log(error);
+      }
+    },
+    onNext(it) {
+      if (this.web3TplAccess) {
+        this.$emit("item", it);
       }
     },
     openLink(url) {

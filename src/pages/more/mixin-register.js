@@ -2,6 +2,9 @@ import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
 import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
 import arbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-arbitrum";
 import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
+import zkSyncContract from "../../plugins/pay/contracts/src-chain-contracts-zkSync";
+import { Web3Provider } from "zksync-web3";
+
 import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
 import { BigNumber, providers } from "ethers";
 import axios from "axios";
@@ -10,7 +13,6 @@ export default {
   data() {
     return {
       registerInfo: {},
-      refreshLoading: false,
       contract: null,
       provider: null,
       collectionAddress: "0xb7b4360f7f6298de2e7a11009270f35f189bd77e",
@@ -19,7 +21,6 @@ export default {
   },
   methods: {
     async isRegister() {
-      this.refreshLoading = true;
       await this.getCurrentContract();
       if (!localStorage.token) return;
       try {
@@ -27,6 +28,9 @@ export default {
           "$auth/self-handled-register-apply"
         );
         this.registerInfo = data;
+        this.$setState({
+          onChain: data.handled,
+        });
         if (!data.handled) {
           const isExists = await this.contract.ProviderController.accountExists(
             providerAddr,
@@ -51,7 +55,6 @@ export default {
       } catch (error) {
         console.log(error, "isRegister");
       }
-      this.refreshLoading = false;
       return false;
     },
 
@@ -142,6 +145,40 @@ export default {
         return false;
       }
     },
+    async handleZkClaimV2() {
+      try {
+        this.$loading();
+        await this.switchZk();
+        await this.getCurrentContract();
+        const fee = await this.contract.Register.fee();
+        console.log(fee);
+        const tx = await this.contract.Register.register(
+          providerAddr,
+          this.registerInfo.uid,
+          {
+            value: fee,
+          }
+        );
+        const receipt = await tx.wait();
+        console.log(receipt, "receipt");
+        const isExists = await this.contract.ProviderController.accountExists(
+          providerAddr,
+          this.registerInfo.uid
+        );
+        if (isExists) {
+          await this.registerSuccess();
+        }
+        this.$loading.close();
+        return true;
+      } catch (error) {
+        console.log(error);
+        this.$loading.close();
+        this.onErr(error).then(() => {
+          // this.switchNet(id);
+        });
+        return false;
+      }
+    },
     async searchZySyncRecord() {
       try {
         const { data } = await axios.get(
@@ -203,6 +240,10 @@ export default {
         } else if (chainId == 42161) {
           arbitrumContract.setProvider(provider);
           this.contract = arbitrumContract;
+        } else if (chainId == 280 || chainId == 324) {
+          const provider = new Web3Provider(window.ethereum);
+          zkSyncContract.setProvider(provider);
+          this.contract = zkSyncContract;
         } else {
           ethContract.setProvider(provider);
           this.contract = ethContract;
@@ -219,6 +260,7 @@ export default {
       if (type == "Polygon") return this.$inDev ? 80001 : 137;
       if (type == "BSC") return this.$inDev ? 97 : 56;
       if (type == "Arbitrum") return 42161;
+      if (type == "zkSync") return this.$inDev ? 280 : 324;
       return this.$inDev ? 5 : 1;
     },
     async switchPolygon() {
@@ -228,6 +270,11 @@ export default {
     },
     async switchEth() {
       const payBy = (localStorage.payBy = "");
+      const id = this.getChainId(payBy);
+      await this.switchNet(id);
+    },
+    async switchZk() {
+      const payBy = (localStorage.payBy = "zkSync");
       const id = this.getChainId(payBy);
       await this.switchNet(id);
     },
@@ -249,7 +296,7 @@ export default {
             // this.switchNet(id);
           });
         } else {
-          this.addChain(chainId, id);
+          await this.addChain(chainId, id);
         }
       }
     },
@@ -319,6 +366,28 @@ export default {
           rpcUrls: ["https://arb1.arbitrum.io/rpc"],
           nativeCurrency: {
             name: "Arbitrum Coin",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        280: {
+          chainId,
+          chainName: "zkSync Era Testnet",
+          rpcUrls: ["https://testnet.era.zksync.dev"],
+          nativeCurrency: {
+            name: "zkSync Coin",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        324: {
+          chainId,
+          chainName: "zkSync Era Mainnet",
+          rpcUrls: ["https://mainnet.era.zksync.io"],
+          nativeCurrency: {
+            name: "zkSync Coin",
             symbol: "ETH",
             decimals: 18,
           },

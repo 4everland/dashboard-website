@@ -45,12 +45,6 @@
           >
             {{ registerInfo.handled ? "Standard" : "Trial" }}
           </div>
-          <!-- <div v-else class="ml-3">
-            <span>normal user</span>
-            <v-btn :loading="refreshLoading" icon @click="onCheckRegister">
-              <v-icon>mdi-refresh</v-icon>
-            </v-btn>
-          </div> -->
         </div>
         <div class="gray-8 fz-14 mt-1">Welcome to 4EVERLAND Dashboard</div>
       </div>
@@ -99,18 +93,7 @@ import mixin from "@/pages/more/mixin-register";
 export default {
   mixins: [mixin],
   data() {
-    return {
-      banners: [
-        // {
-        //   img: "https://4ever-web.4everland.store/img/banner/20221103-115504.jpg",
-        //   href: "https://forms.gle/CrCVBoWFaA4V3RiB6",
-        // },
-        {
-          img: "https://static1.4everland.org/img/banner/20221109-160329.png",
-          to: "/reward-hub",
-        },
-      ],
-    };
+    return {};
   },
   created() {
     this.isRegister();
@@ -129,6 +112,26 @@ export default {
       if (this.teamInfo.name) return "Overview of " + this.teamInfo.name;
       if (info.username) return "Hi " + info.username.cutStr(6, 4);
       return "Overview";
+    },
+    banners() {
+      if (!this.registerInfo.handled) {
+        return [
+          {
+            img: "https://static1.4everland.org/img/banner/20221109-160329.png",
+            to: "/reward-hub",
+          },
+          {
+            img: "https://static1.4everland.org/img/banner/20230420-173710.png",
+            to: "/reward-hub",
+          },
+        ];
+      }
+      return [
+        {
+          img: "https://static1.4everland.org/img/banner/20221109-160329.png",
+          to: "/reward-hub",
+        },
+      ];
     },
   },
 };

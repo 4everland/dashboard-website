@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-dialog v-model="showDialog" max-width="700" persistent>
-      <div class="reward-hub-content pos-r">
-        <h3>Minting Your Own On-Chain Identity</h3>
+      <div class="reward-hub-content">
+        <h3 class="ta-c">Minting Your Own On-Chain Identity</h3>
         <div class="mt-4 fz-14 lh-2">
           Welcome to 4EVERLAND. You are in a trial status and can only access
           limited product functionalities. Please complete the on-chain identity
@@ -11,19 +11,28 @@
         <v-row class="mt-2">
           <v-col :sm="6" :cols="12" v-for="item in items" :key="item.name">
             <div class="resource-item al-c">
-              <span class="ml-2 fz-12">{{ item.name }}</span>
+              <span class="ml-2 fz-14">{{ item.name }}</span>
             </div>
           </v-col>
         </v-row>
         <div class="d-flex justify-center mt-8">
-          <e-menu open-on-hover top>
+          <e-menu ref="menu" open-on-hover top :close-on-content-click="false">
             <v-btn slot="ref" color="primary" dark width="500px">
               <span class="ml-2">Mint now</span>
               <v-icon>mdi-chevron-down</v-icon>
             </v-btn>
-            <v-list>
-              <v-list-item link @click="handlePloygonClaim">
+
+            <v-list v-if="showMore">
+              <v-list-item link @click="onSkip">
                 <v-list-item-title class="fz-14 al-c justify-center">
+                  <span class="ml-3 gray">Skip</span>
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+
+            <v-list v-else>
+              <v-list-item link @click="handlePloygonClaim">
+                <v-list-item-title class="item-title fz-14 al-c justify-center">
                   <img
                     src="/img/svg/billing/ic-polygon-0.svg"
                     width="18"
@@ -33,7 +42,7 @@
                 </v-list-item-title>
               </v-list-item>
               <v-list-item link @click="handleZkSyncClaim">
-                <v-list-item-title class="fz-14 al-c justify-center">
+                <v-list-item-title class="item-title fz-14 al-c justify-center">
                   <div class="al-c">
                     <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
                     <span class="ml-3">zkSync Lite(V1)</span>
@@ -51,9 +60,29 @@
                   </e-tooltip>
                 </v-list-item-title>
               </v-list-item>
-              <v-list-item link @click="onSkip">
+              <v-list-item link @click="handleZkSyncClaimV2">
+                <v-list-item-title class="item-title fz-14 al-c justify-center">
+                  <div class="al-c">
+                    <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
+                    <span class="ml-3">zkSync Era(V2)</span>
+                  </div>
+                  <e-tooltip right>
+                    <v-icon slot="ref" size="18" color="#999" class="pa-1 d-ib"
+                      >mdi-alert-circle-outline</v-icon
+                    >
+                    <span
+                      >Please ensure that you have sufficient ETH in zkSync Era.
+                      Interaction with the zkSync network will rely on
+                      cross-chain communication services to complete on-chain
+                      identity registration on Polygon.</span
+                    >
+                  </e-tooltip>
+                </v-list-item-title>
+              </v-list-item>
+
+              <v-list-item link @click="onMore" v-if="!showMore">
                 <v-list-item-title class="fz-14 al-c justify-center">
-                  <span class="ml-3 gray">Skip</span>
+                  <span class="ml-3 gray">More</span>
                 </v-list-item-title>
               </v-list-item>
             </v-list>
@@ -61,6 +90,7 @@
         </div>
       </div>
     </v-dialog>
+    <!-- <e-register-share ref="share"></e-register-share> -->
   </div>
 </template>
 
@@ -70,6 +100,7 @@ import { mapState } from "vuex";
 import Driver from "driver.js";
 import "driver.js/dist/driver.min.css";
 import mixin from "@/pages/more/mixin-register";
+import { airdropRequest } from "@/plugins/airDrop/api";
 
 export default {
   mixins: [mixin],
@@ -83,6 +114,7 @@ export default {
         allowClose: false,
         padding: 0,
       }),
+      showMore: false,
       steps: [
         {
           element: "#drawerList",
@@ -189,46 +221,12 @@ export default {
             position: "left",
           },
           onNext: () => {
-            // this.driver.preventMove();
-            // setTimeout(() => {
-            //   this.driver.refresh();
-            //   this.driver.moveNext();
-            //   this.stepCount += 1;
-            // }, 250);
-
             if (!this.registerInfo.handled) {
               this.showDialog = true;
+              localStorage.setItem("unregister", "1");
             }
           },
         },
-        // {
-        //   element: "#reward-guide",
-        //   popover: {
-        //     className: "reward-guide-class",
-        //     title: "Reward Hub",
-        //     description: `<div class="airdrop-content">
-        //         <div class=" mb-6 fz-14 lh-2">Thank You for Registering!
-        //         We have free resource packages for you in the Reward Hub!</div>
-        //       <div class="row mt-2">
-        //       <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="img/airDrop/ipfs.png" alt=""><span class="resource-item-value ml-2">25GB</span><span class="resource-text fz-12">IPFS Storage</span></div>
-        //       </div>
-        //       <div class="col-sm-6 col-12"><div class="resource-item al-c"><img  width="28" src="/img/airDrop/ar.png" alt=""><span class="resource-item-value ml-2">100MB</span><span  class="resource-text fz-12">Arweave Storage</span></div>
-        //       </div>
-        //       <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/minutes.png" alt=""><span  class="resource-item-value ml-2">100Min</span><span class="resource-text fz-12">Build Minutes</span></div>
-        //       </div>
-        //       <div class="col-sm-6 col-12"><div class="resource-item al-c"><img width="28" src="/img/airDrop/balance.png" alt=""><span  class="resource-item-value ml-2">100</span><span class="resource-text fz-12">Recharge Balance</span>
-        //       </div>
-        //     </div>
-        //     `,
-        //     // showButtons: false,
-        //     closeBtnText: "Start now",
-        //     nextBtnText: "Get more",
-        //     position: "left",
-        //   },
-        //   onNext: () => {
-        //     this.$router.push("/reward-hub");
-        //   },
-        // },
       ],
       stepCount: 0,
       items: [
@@ -248,11 +246,13 @@ export default {
       showDialog: false,
       accountExists: false,
       registerInfo: {},
+      newUserInfo: null,
     };
   },
   async created() {
     await this.getCurrentContract();
     if (localStorage.token) {
+      await this.getNewUser();
       await this.getHandler();
     }
   },
@@ -265,6 +265,9 @@ export default {
       if (this.teamInfo.isMember) return this.teamInfo.teamOwnerEuid;
       return this.userInfo.euid;
     },
+    showGuide() {
+      return !this.$vuetify.breakpoint.mdAndDown;
+    },
   },
   watch: {
     "driver.isActivated"(val) {
@@ -273,11 +276,17 @@ export default {
         this.move();
       }
       if (this.stepCount != 5 && !val && !this.registerInfo.handled) {
+        // if (this.stepCount != 5 && !val) {
         this.showDialog = true;
+        localStorage.setItem("unregister", "1");
       }
     },
   },
   methods: {
+    onMore() {
+      this.showMore = true;
+      this.$refs.menu.$children[0].onResize();
+    },
     async onSkip() {
       try {
         await this.$confirm(
@@ -288,9 +297,15 @@ export default {
             confirmText: "Mint",
           }
         );
+        this.showMore = false;
       } catch (error) {
         this.showDialog = false;
       }
+    },
+    onAnimation() {
+      this.showDialog = false;
+      // this.$refs.share.showDialog = true;
+      // this.$flowersAnimation();
     },
     onGuide() {
       this.driver.start();
@@ -316,12 +331,42 @@ export default {
       document.body.style.height = "";
       document.removeEventListener("touchmove", mo, false);
     },
+    async getNewUser() {
+      try {
+        const data = await airdropRequest();
+        this.newUserInfo = data;
+        if (data && this.showGuide) {
+          if (this.$route.path != "/overview" && this.$route.path != "/") {
+            this.$router.replace("/");
+          }
+          console.log("guide");
+          setTimeout(() => {
+            this.guide();
+          }, 2000);
+        }
+        // setTimeout(() => {
+        //   this.guide();
+        // }, 2000);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getHandler() {
       try {
         const { data } = await this.$http.get(
           "$auth/self-handled-register-apply"
         );
         this.registerInfo = data;
+        if (!data.handled && localStorage.unregister != "1") {
+          let days = (+new Date() - data.createdAt) / (864 * 10e4);
+          if (days >= 15 && !this.newUserInfo) {
+            this.showDialog = true;
+            localStorage.setItem("unregister", "1");
+          }
+        }
+        this.$setState({
+          onChain: data.handled,
+        });
       } catch (error) {
         console.log(error);
       }
@@ -329,11 +374,9 @@ export default {
     async handlePloygonClaim() {
       try {
         const register = await this.isRegister();
-        if (register) return (this.showDialog = false);
+        if (register) return this.onAnimation();
         const claimStatus = await this.handleClaim();
-        if (claimStatus) {
-          this.showDialog = false;
-        }
+        if (claimStatus) this.onAnimation();
       } catch (error) {
         console.log(error);
       }
@@ -341,11 +384,20 @@ export default {
     async handleZkSyncClaim() {
       try {
         const register = await this.isRegister();
-        if (register) return (this.showDialog = false);
+        if (register) return this.onAnimation();
         const claimStatus = await this.handleZkClaim();
-        if (claimStatus) {
-          this.showDialog = false;
-        }
+        if (claimStatus) this.onAnimation();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async handleZkSyncClaimV2() {
+      try {
+        const register = await this.isRegister();
+        if (register) return this.onAnimation();
+        const claimStatus = await this.handleZkClaimV2();
+        if (claimStatus) this.onAnimation();
       } catch (error) {
         console.log(error);
       }
@@ -519,5 +571,15 @@ div#driver-page-overlay {
     height: 18px;
     background: url("/img/airDrop/check.svg") no-repeat;
   }
+}
+.item-title::after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: rgba(200, 200, 200, 0.3);
 }
 </style>

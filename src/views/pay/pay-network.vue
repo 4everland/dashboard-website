@@ -23,7 +23,7 @@
           :class="{
             'color-1': payBy == it.label,
           }"
-          >{{ it.label }}</span
+          >{{ it.name }}</span
         >
         <img :src="it.img" height="20" />
       </div>
@@ -52,24 +52,34 @@ export default {
       list: [
         {
           label: "Polygon",
+          name: "Polygon",
           img: "/img/svg/billing/ic-polygon-0.svg",
         },
         {
           label: "Ethereum",
+          name: "Ethereum",
           img: "/img/svg/billing/ic-ethereum.svg",
         },
         {
           label: "BSC",
+          name: "BSC",
           img: "/img/svg/billing/ic-bsc.png",
         },
         {
           label: "Arbitrum",
+          name: "Arbitrum",
           img: "/img/svg/billing/ic-arbitrum.png",
+        },
+        {
+          label: "zkSync",
+          name: "zkSync Era",
+          img: "/img/svg/logo-no-letters.svg",
         },
       ],
     };
   },
   created() {
+    console.log(this.allow);
     if (this.allow && !this.allow.includes(this.payBy)) {
       this.onSelect(this.allow[0]);
     }

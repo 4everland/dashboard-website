@@ -26,10 +26,11 @@
             <router-view></router-view>
           </e-wrap>
         </div>
-        <e-guide ref="guide" />
       </v-main>
     </template>
-
+    <e-guide ref="guide" />
+    <e-no-register-tip></e-no-register-tip>
+    <!-- <e-register-share></e-register-share> -->
     <e-alert />
     <e-feedback />
     <e-meta-connect />
@@ -38,7 +39,6 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import { airdropRequest } from "@/plugins/airDrop/api";
 export default {
   data() {
     return {
@@ -56,41 +56,12 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-    showGuide() {
-      return !this.$vuetify.breakpoint.mdAndDown;
-    },
+
     isDisabled() {
       return (
         this.teamInfo.status == "DISABLED" &&
         !["/account/config"].includes(this.$route.path)
       );
-    },
-  },
-
-  mounted() {
-    const token = localStorage.token;
-    if (!token) return;
-    this.getNewUser();
-  },
-  methods: {
-    async getNewUser() {
-      try {
-        const data = await airdropRequest();
-        if (data && this.showGuide) {
-          if (this.$route.path != "/overview" && this.$route.path != "/") {
-            this.$router.replace("/");
-          }
-          console.log("guide");
-          setTimeout(() => {
-            this.$refs.guide.guide();
-          }, 2000);
-        }
-        // setTimeout(() => {
-        //   this.$refs.guide.guide();
-        // }, 2000);
-      } catch (error) {
-        console.log(error);
-      }
     },
   },
 };

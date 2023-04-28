@@ -123,6 +123,7 @@ export default {
       if ([5, 1].includes(id)) return "Ethereum";
       if ([97, 56].includes(id)) return "BSC";
       if ([42161].includes(id)) return "Arbitrum";
+      if ([280, 324].includes(id)) return "zkSync";
       return "Polygon";
     },
     async checkNet() {
