@@ -462,8 +462,6 @@ export default {
         ""
       );
       stream.on("data", (data) => {
-        console.log(data);
-
         this.tableLoading = false;
         data.objects.sort((a, b) => {
           return (b.prefix ? 1 : 0) - (a.prefix ? 1 : 0);
@@ -493,7 +491,6 @@ export default {
             if (!arStatus) {
               arStatus = this.defArStatus;
             }
-            console.log(it);
             return {
               Key: it.name,
               name: it.name.replace(Prefix, ""),
