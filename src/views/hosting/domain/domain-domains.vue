@@ -50,8 +50,8 @@
                 </v-icon>
               </template>
               <span
-                >Lost CDN protection, will be restored after deleting and
-                re-binding the domain name.
+                >Lost CDN protection, will be restored after deleting <br />
+                and re-binding the domain name.
               </span>
             </v-tooltip>
           </v-btn>
@@ -179,6 +179,10 @@ export default {
         });
         this.list = data.content.map((it) => {
           it.createTime = new Date(it.createAt * 1e3).format();
+          if (it.createType == 2 && !it.domainV2) {
+            it.type = "CNAME";
+            it.value = it.cname;
+          }
           return it;
         });
         this.pageLen = Math.max(

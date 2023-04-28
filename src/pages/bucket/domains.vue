@@ -65,7 +65,7 @@
               >mdi-alert-circle-outline</v-icon
             >
             <span
-              >Lost CDN protection, will be restored after deleting and
+              >Lost CDN protection, will be restored after<br />deleting and
               re-binding the domain name.</span
             >
           </e-tooltip>
