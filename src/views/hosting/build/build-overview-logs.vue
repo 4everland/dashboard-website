@@ -79,20 +79,39 @@
         (showHash && web3TplDeploy)
       "
       class="mt-5"
-      :title="'Syncing to ' + info.platform"
+      :title="
+        'Syncing to ' +
+        (info.platform == 'GREENFIELD'
+          ? 'Greenfield BSC Testent'
+          : info.platform)
+      "
       :value="getOpen(2)"
       :icon="getIcon(2)"
     >
       <e-kv
         min-width="70px"
         :label="`${info.platform} Hash:`"
-        v-if="info && info.hash"
+        v-if="info && info.hash && info.platform != 'GREENFIELD'"
       >
         <a
           class="u"
           :href="$utils.getCidLink(info.hash, info.platform, projInfo.online)"
           target="_blank"
           >{{ info.hash }}</a
+        >
+      </e-kv>
+      <e-kv
+        min-width="70px"
+        :label="`Greenfield BSC Testent Hash:`"
+        v-if="info && info.hash && info.platform == 'GREENFIELD'"
+      >
+        <a
+          class="u"
+          :href="
+            $utils.getCidLink(greenfieldHash, info.platform, projInfo.online)
+          "
+          target="_blank"
+          >{{ greenfieldHash }}</a
         >
       </e-kv>
       <div class="fz-14 gray" v-else>
@@ -266,6 +285,12 @@ export default {
       return function (val) {
         return val.replace("/ipns/", "");
       };
+    },
+    greenfieldHash() {
+      if (this.info.platform == "GREENFIELD" && this.info.greenfield) {
+        return this.info.greenfield.bucket + this.info.greenfield.object;
+      }
+      return "";
     },
   },
   watch: {

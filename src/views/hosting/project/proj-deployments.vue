@@ -19,7 +19,11 @@
               <a class="b fw-b fz-18">{{ it.title }}</a>
             </div>
             <div class="al-c mt-2">
-              <span class="mr-5 fz-14" v-if="!asMobile">{{ it.platform }}</span>
+              <span class="mr-5 fz-14" v-if="!asMobile">{{
+                it.platform == "GREENFIELD"
+                  ? "Greenfield BSC Testent"
+                  : it.platform
+              }}</span>
               <img
                 :src="`/img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
                 height="20"

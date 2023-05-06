@@ -157,6 +157,10 @@ Vue.prototype.$utils = {
     if (plat == "AR") {
       return `https://arweave.net/${cid}`;
     }
+
+    if (plat == "GREENFIELD") {
+      return `https://${cid}.ipfs.dweb.link`;
+    }
     return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
     // return assign
     //   ? `https://${this.getCidV1(cid)}.ipfs.4everland.io`

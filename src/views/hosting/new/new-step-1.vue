@@ -42,7 +42,7 @@
       <v-row>
         <v-col
           cols="12"
-          md="4"
+          md="3"
           v-for="(it, i) in platList"
           :key="i"
           @click="form.platform = it.name"
@@ -332,6 +332,11 @@ export default {
           label: "Arweave",
           name: "AR",
           icon: "h-ar.svg",
+        },
+        {
+          label: "Greenfield BSC Testent",
+          name: "GREENFIELD",
+          icon: "h-greenfield.svg",
         },
         {
           label: "Internet Computer",

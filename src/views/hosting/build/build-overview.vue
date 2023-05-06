@@ -42,34 +42,67 @@
 
           <e-kv2
             class="mt-7"
-            :label="info.platform"
+            :label="
+              info.platform == 'GREENFIELD'
+                ? 'Greenfield BSC Testent'
+                : info.platform
+            "
             style="min-width: 120px"
             v-if="
               (showLabel && info.platform !== 'IPFS') ||
               (showLabel && !hashDeploy(info.deployType))
             "
           >
-            <div class="al-c" v-if="info.hash">
-              <e-link
-                class="fz-14"
-                :href="
-                  $utils.getCidLink(info.hash, info.platform, projInfo.online)
-                "
-              >
-                <span>{{ info.hash }}</span>
-              </e-link>
-              <img
-                src="/img/svg/copy.svg"
-                width="12"
-                class="ml-3 hover-1"
-                @success="$toast('Copied!')"
-                v-clipboard="info.hash"
-              />
+            <div v-if="info.platform != 'GREENFIELD'">
+              <div class="al-c" v-if="info.hash">
+                <e-link
+                  class="fz-14"
+                  :href="
+                    $utils.getCidLink(info.hash, info.platform, projInfo.online)
+                  "
+                >
+                  <span>{{ info.hash }}</span>
+                </e-link>
+                <img
+                  src="/img/svg/copy.svg"
+                  width="12"
+                  class="ml-3 hover-1"
+                  @success="$toast('Copied!')"
+                  v-clipboard="info.hash"
+                />
+              </div>
+              <h-status
+                v-else
+                :val="state == 'failure' ? 'Not synchronized' : state"
+              ></h-status>
             </div>
-            <h-status
-              v-else
-              :val="state == 'failure' ? 'Not synchronized' : state"
-            ></h-status>
+            <div v-else>
+              <div class="al-c" v-if="info.greenfield">
+                <e-link
+                  class="fz-14"
+                  :href="
+                    $utils.getCidLink(
+                      greenfieldHash,
+                      info.platform,
+                      projInfo.online
+                    )
+                  "
+                >
+                  <span>{{ greenfieldHash }}</span>
+                </e-link>
+                <img
+                  src="/img/svg/copy.svg"
+                  width="12"
+                  class="ml-3 hover-1"
+                  @success="$toast('Copied!')"
+                  v-clipboard="greenfieldHash"
+                />
+              </div>
+              <h-status
+                v-else
+                :val="state == 'failure' ? 'Not synchronized' : state"
+              ></h-status>
+            </div>
           </e-kv2>
           <e-kv2
             label="Domain"
@@ -276,6 +309,12 @@ export default {
     },
     ownerGithub() {
       return this.projInfo.ownerGithub;
+    },
+    greenfieldHash() {
+      if (this.info.platform == "GREENFIELD" && this.info.greenfield) {
+        return this.info.greenfield.bucket + this.info.greenfield.object;
+      }
+      return "";
     },
   },
   async created() {

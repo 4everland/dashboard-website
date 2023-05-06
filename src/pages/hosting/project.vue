@@ -77,6 +77,9 @@ export default {
       if ((this.hashDeploy && !this.web3Deploy) || !this.hashDeploy) {
         list = list.filter((it) => it.text != "Edit");
       }
+      if (this.greenfieldPlatform) {
+        list = list.filter((it) => it.text != "Domains");
+      }
       return list;
     },
 
@@ -89,6 +92,9 @@ export default {
     },
     web3Deploy() {
       return this.info.web3TemplateId;
+    },
+    greenfieldPlatform() {
+      return this.info.platform == "GREENFIELD";
     },
   },
   data() {

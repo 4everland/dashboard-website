@@ -15,14 +15,29 @@
           </e-link>
         </v-col>
         <v-col cols="12" md="6">
-          <e-kv :label="info.platform" style="min-width: 120px">
-            <div class="al-c">
+          <e-kv
+            :label="
+              info.platform == 'GREENFIELD'
+                ? 'Greenfield BSC Testent'
+                : info.platform
+            "
+            style="min-width: 120px"
+          >
+            <e-tooltip top slot="sub" v-show="info.platform == 'GREENFIELD'">
+              <v-icon slot="ref" color="#666" size="14" class="pa-1"
+                >mdi-help-circle-outline</v-icon
+              >
+              <span
+                >IPFS exclusive gateway is recommended for access since the IPNS
+                broadcast mechanism may cause a 404 error.
+              </span>
+            </e-tooltip>
+            <div class="al-c" v-if="info.platform != 'GREENFIELD'">
               <e-link
                 class="fz-14"
                 :href="$utils.getCidLink(info.hash, info.platform, info.online)"
                 v-if="info.hash"
               >
-                <!-- {{ info.hash.cutStr(4, 4) }} -->
                 {{ info.hash }}
               </e-link>
               <h-status v-if="!info.hash" :val="info.state"></h-status>
@@ -33,6 +48,27 @@
                 class="ml-3 hover-1"
                 @success="$toast('Copied!')"
                 v-clipboard="info.hash"
+              />
+            </div>
+
+            <div class="al-c" v-else>
+              <e-link
+                class="fz-14"
+                :href="
+                  $utils.getCidLink(greenfieldHash, info.platform, info.online)
+                "
+                v-if="info.hash"
+              >
+                {{ greenfieldHash }}
+              </e-link>
+              <h-status v-if="!info.greenfield" :val="info.state"></h-status>
+              <img
+                v-if="info.greenfield"
+                src="/img/svg/copy.svg"
+                width="12"
+                class="ml-3 hover-1"
+                @success="$toast('Copied!')"
+                v-clipboard="greenfieldHash"
               />
             </div>
           </e-kv>
@@ -202,6 +238,12 @@ export default {
       return function (val) {
         return val.replace("/ipfs/", "").replace("/ipns/", "");
       };
+    },
+    greenfieldHash() {
+      if (this.info.platform == "GREENFIELD" && this.info.greenfield) {
+        return this.info.greenfield.bucket + this.info.greenfield.object;
+      }
+      return "";
     },
   },
   data() {

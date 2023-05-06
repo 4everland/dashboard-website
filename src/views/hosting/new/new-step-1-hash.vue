@@ -43,11 +43,11 @@
         dense
         :rules="[(v) => !!(v || '').trim() || 'Please enter a project name']"
       ></v-text-field>
-      <h3 class="mt-2">Hosting Platform</h3>
+      <!-- <h3 class="mt-2">Hosting Platform</h3>
       <v-row>
         <v-col
           cols="12"
-          md="4"
+          md="3"
           v-for="(it, i) in platList"
           :key="i"
           @click="form.platform = it.name"
@@ -81,7 +81,9 @@
             in Arweave are linked using relative paths due to its features.
           </div>
         </v-col>
-      </v-row>
+      </v-row> -->
+
+      <e-platform :platform.sync="form.platform"></e-platform>
 
       <div v-if="seleted == 'IPNS'">
         <div class="mt-10">IPNS Automatic Deployment</div>
@@ -126,6 +128,11 @@ export default {
           label: "Arweave",
           name: "AR",
           icon: "h-ar.svg",
+        },
+        {
+          label: "Greenfield",
+          name: "GREENFIELD",
+          icon: "h-greenfield.svg",
         },
         {
           label: "Internet Computer",

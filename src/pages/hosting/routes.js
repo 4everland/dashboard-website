@@ -38,23 +38,6 @@ export default [
     },
   },
   {
-    path: "/new-by-hash",
-    component: () => import("./new-by-hash"),
-    meta: {
-      title: "New Project",
-      isTab: 1,
-      links: [
-        {
-          text: "Projects",
-          to: "/hosting/projects",
-        },
-        {
-          text: "New Project",
-        },
-      ],
-    },
-  },
-  {
     path: "/projects",
     components: {
       cache: () => import("./projects"),
