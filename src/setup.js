@@ -157,15 +157,16 @@ Vue.prototype.$utils = {
     if (plat == "AR") {
       return `https://arweave.net/${cid}`;
     }
-
-    if (plat == "GREENFIELD") {
-      return `https://${cid}.ipfs.dweb.link`;
-    }
     return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
     // return assign
     //   ? `https://${this.getCidV1(cid)}.ipfs.4everland.io`
     //   : `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
   },
+
+  getGreenfieldLink(tx) {
+    return `https://greenfieldscan.com/tx/${tx}`;
+  },
+
   cutFixed(num, keep = 2) {
     const str = num + "";
     let i = str.indexOf(".");

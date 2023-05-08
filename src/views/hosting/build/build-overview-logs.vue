@@ -43,7 +43,7 @@
             Start: Download the file directory and update the configuration
             file...
           </p>
-          <p v-if="isFail">{{ errMsg }}</p>
+          <p v-if="isFail && !isSyncErr">{{ errMsg }}</p>
           <p v-else>
             {{ web3TplDeploy ? "Generate Hash" : "IPFS Hash" }}:
             {{ ipfsHash ? ipfsHash : "Resolving pending" }}
@@ -82,7 +82,7 @@
       :title="
         'Syncing to ' +
         (info.platform == 'GREENFIELD'
-          ? 'Greenfield BSC Testent'
+          ? 'BNB Greenfield Testnet'
           : info.platform)
       "
       :value="getOpen(2)"
@@ -102,16 +102,14 @@
       </e-kv>
       <e-kv
         min-width="70px"
-        :label="`Greenfield BSC Testent Hash:`"
-        v-if="info && info.hash && info.platform == 'GREENFIELD'"
+        :label="`BNB Greenfield Testnet :`"
+        v-else-if="info && info.greenfield && info.platform == 'GREENFIELD'"
       >
         <a
           class="u"
-          :href="
-            $utils.getCidLink(greenfieldHash, info.platform, projInfo.online)
-          "
+          :href="$utils.getGreenfieldLink(info.greenfield.tx)"
           target="_blank"
-          >{{ greenfieldHash }}</a
+          >{{ showHashVal(greenfieldHash, info.platform) }}</a
         >
       </e-kv>
       <div class="fz-14 gray" v-else>
@@ -288,9 +286,24 @@ export default {
     },
     greenfieldHash() {
       if (this.info.platform == "GREENFIELD" && this.info.greenfield) {
-        return this.info.greenfield.bucket + this.info.greenfield.object;
+        return this.info.greenfield.bucket + "/" + this.info.greenfield.object;
       }
       return "";
+    },
+    showHashVal() {
+      return function (val, plat) {
+        if (plat == "IC") {
+          return "ic://" + val;
+        } else if (plat == "AR") {
+          return "ar://" + val;
+        } else if (plat == "GREENFIELD") {
+          return "gnfs://" + val;
+        } else if (plat == "IPNS") {
+          return "ipns://" + val;
+        } else {
+          return "ipfs://" + val;
+        }
+      };
     },
   },
   watch: {

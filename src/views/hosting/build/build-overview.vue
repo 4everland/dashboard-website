@@ -44,7 +44,7 @@
             class="mt-7"
             :label="
               info.platform == 'GREENFIELD'
-                ? 'Greenfield BSC Testent'
+                ? 'BNB Greenfield Testnet'
                 : info.platform
             "
             style="min-width: 120px"
@@ -61,7 +61,7 @@
                     $utils.getCidLink(info.hash, info.platform, projInfo.online)
                   "
                 >
-                  <span>{{ info.hash }}</span>
+                  <span>{{ showHashVal(info.hash, info.platform) }}</span>
                 </e-link>
                 <img
                   src="/img/svg/copy.svg"
@@ -80,22 +80,16 @@
               <div class="al-c" v-if="info.greenfield">
                 <e-link
                   class="fz-14"
-                  :href="
-                    $utils.getCidLink(
-                      greenfieldHash,
-                      info.platform,
-                      projInfo.online
-                    )
-                  "
+                  :href="$utils.getGreenfieldLink(info.greenfield.tx)"
                 >
-                  <span>{{ greenfieldHash }}</span>
+                  <span>{{ showHashVal(greenfieldHash, info.platform) }}</span>
                 </e-link>
                 <img
                   src="/img/svg/copy.svg"
                   width="12"
                   class="ml-3 hover-1"
                   @success="$toast('Copied!')"
-                  v-clipboard="greenfieldHash"
+                  v-clipboard="$utils.getGreenfieldLink(info.greenfield.tx)"
                 />
               </div>
               <h-status
@@ -129,46 +123,50 @@
             </e-kv2>
 
             <div v-else>
-              <msg-line
-                v-if="info.deployType == 'CID'"
-                label="Base IPFS"
-                :content="info.cid"
-                :state="state"
-                :online="projInfo.online"
-              ></msg-line>
-              <msg-line
-                class="mb-5"
-                v-if="info.deployType == 'IPNS' && info.platform == 'IPFS'"
-                label="IPNS"
-                :content="projInfo.ipns"
-                :state="state"
-                :online="projInfo.online"
-                platForm="IPNS"
-              ></msg-line>
+              <div
+                v-if="info.platform != 'GREENFIELD' && info.platform != 'AR'"
+              >
+                <msg-line
+                  v-if="info.deployType == 'CID'"
+                  label="Base IPFS"
+                  :content="info.cid"
+                  :state="state"
+                  :online="projInfo.online"
+                ></msg-line>
+                <msg-line
+                  class="mb-5"
+                  v-if="info.deployType == 'IPNS' && info.platform == 'IPFS'"
+                  label="IPNS"
+                  :content="projInfo.ipns"
+                  :state="state"
+                  :online="projInfo.online"
+                  platForm="IPNS"
+                ></msg-line>
 
-              <v-row>
-                <v-col :md="6" :cols="12">
-                  <msg-line
-                    v-if="info.deployType == 'IPNS'"
-                    label="Base IPFS"
-                    :content="info.cid"
-                    :state="state"
-                    :online="projInfo.online"
-                    cutStr
-                  ></msg-line
-                ></v-col>
-                <v-col :md="6" :cols="12">
-                  <msg-line
-                    v-if="info.deployType == 'IPNS'"
-                    label="Base IPNS"
-                    :content="projInfo.ipfsPath"
-                    :state="state"
-                    :online="projInfo.online"
-                    platForm="IPNS"
-                    cutStr
-                  ></msg-line
-                ></v-col>
-              </v-row>
+                <v-row>
+                  <v-col :md="6" :cols="12">
+                    <msg-line
+                      v-if="info.deployType == 'IPNS'"
+                      label="Base IPFS"
+                      :content="info.cid"
+                      :state="state"
+                      :online="projInfo.online"
+                      cutStr
+                    ></msg-line
+                  ></v-col>
+                  <v-col :md="6" :cols="12">
+                    <msg-line
+                      v-if="info.deployType == 'IPNS'"
+                      label="Base IPNS"
+                      :content="projInfo.ipfsPath"
+                      :state="state"
+                      :online="projInfo.online"
+                      platForm="IPNS"
+                      cutStr
+                    ></msg-line
+                  ></v-col>
+                </v-row>
+              </div>
             </div>
           </div>
         </v-col>
@@ -312,9 +310,24 @@ export default {
     },
     greenfieldHash() {
       if (this.info.platform == "GREENFIELD" && this.info.greenfield) {
-        return this.info.greenfield.bucket + this.info.greenfield.object;
+        return this.info.greenfield.bucket + "/" + this.info.greenfield.object;
       }
       return "";
+    },
+    showHashVal() {
+      return function (val, plat) {
+        if (plat == "IC") {
+          return "ic://" + val;
+        } else if (plat == "AR") {
+          return "ar://" + val;
+        } else if (plat == "GREENFIELD") {
+          return "gnfs://" + val;
+        } else if (plat == "IPNS") {
+          return "ipns://" + val;
+        } else {
+          return "ipfs://" + val;
+        }
+      };
     },
   },
   async created() {

@@ -18,18 +18,22 @@
           <e-kv
             :label="
               info.platform == 'GREENFIELD'
-                ? 'Greenfield BSC Testent'
+                ? 'BNB Greenfield Testnet'
                 : info.platform
             "
             style="min-width: 120px"
           >
-            <e-tooltip top slot="sub" v-show="info.platform == 'GREENFIELD'">
+            <e-tooltip
+              top
+              slot="sub"
+              v-if="info.platform == 'GREENFIELD' && info.greenfield"
+            >
               <v-icon slot="ref" color="#666" size="14" class="pa-1"
                 >mdi-help-circle-outline</v-icon
               >
               <span
-                >IPFS exclusive gateway is recommended for access since the IPNS
-                broadcast mechanism may cause a 404 error.
+                >The file has been uploaded to the
+                {{ info.greenfield.bucket }} greenfield bucket.
               </span>
             </e-tooltip>
             <div class="al-c" v-if="info.platform != 'GREENFIELD'">
@@ -38,7 +42,7 @@
                 :href="$utils.getCidLink(info.hash, info.platform, info.online)"
                 v-if="info.hash"
               >
-                {{ info.hash }}
+                {{ showHashVal(info.hash, info.platform) }}
               </e-link>
               <h-status v-if="!info.hash" :val="info.state"></h-status>
               <img
@@ -54,12 +58,10 @@
             <div class="al-c" v-else>
               <e-link
                 class="fz-14"
-                :href="
-                  $utils.getCidLink(greenfieldHash, info.platform, info.online)
-                "
-                v-if="info.hash"
+                :href="$utils.getGreenfieldLink(info.greenfield.tx)"
+                v-if="info.greenfield"
               >
-                {{ greenfieldHash }}
+                {{ showHashVal(greenfieldHash, info.platform) }}
               </e-link>
               <h-status v-if="!info.greenfield" :val="info.state"></h-status>
               <img
@@ -68,7 +70,7 @@
                 width="12"
                 class="ml-3 hover-1"
                 @success="$toast('Copied!')"
-                v-clipboard="greenfieldHash"
+                v-clipboard="$utils.getGreenfieldLink(info.greenfield.tx)"
               />
             </div>
           </e-kv>
@@ -141,9 +143,6 @@
               </e-menu>
             </div>
           </e-kv>
-
-          <!-- <div class="mt-9 d-flex justify-space-between"></div> -->
-
           <div class="mt-9 d-flex">
             <e-kv label="Status">
               <h-status :val="!info.online ? 'Removed' : info.state"></h-status>
@@ -152,7 +151,14 @@
               <e-time>{{ info.createAt }}</e-time>
             </e-kv>
           </div>
-          <div class="mt-9" v-if="hashDeploy(info.deployType)">
+          <div
+            class="mt-9"
+            v-if="
+              hashDeploy(info.deployType) &&
+              info.platform != 'GREENFIELD' &&
+              info.platform != 'AR'
+            "
+          >
             <msg-line-vertical
               label="Base IPFS"
               :content="info.ipfsPath"
@@ -227,7 +233,11 @@ export default {
       return arr;
     },
     showIpns() {
-      return this.info.platform != "IC" && this.info.platform != "AR";
+      return (
+        this.info.platform != "IC" &&
+        this.info.platform != "AR" &&
+        this.info.platform != "GREENFIELD"
+      );
     },
     hashDeploy() {
       return function (type) {
@@ -241,9 +251,24 @@ export default {
     },
     greenfieldHash() {
       if (this.info.platform == "GREENFIELD" && this.info.greenfield) {
-        return this.info.greenfield.bucket + this.info.greenfield.object;
+        return this.info.greenfield.bucket + "/" + this.info.greenfield.object;
       }
       return "";
+    },
+    showHashVal() {
+      return function (val, plat) {
+        if (plat == "IC") {
+          return "ic://" + val;
+        } else if (plat == "AR") {
+          return "ar://" + val;
+        } else if (plat == "GREENFIELD") {
+          return "gnfs://" + val;
+        } else if (plat == "IPNS") {
+          return "ipns://" + val;
+        } else {
+          return "ipfs://" + val;
+        }
+      };
     },
   },
   data() {

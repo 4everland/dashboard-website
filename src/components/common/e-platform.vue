@@ -38,6 +38,13 @@
           Arweave are linked using relative paths due to its features.
         </div>
       </v-col>
+      <v-col v-if="platform == 'GREENFIELD'">
+        <div class="gray fz-14">
+          <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon> Please note
+          that Greenfield is currently a Testnet and is for experiential use
+          only!
+        </div>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -64,7 +71,7 @@ export default {
           icon: "h-ar.svg",
         },
         {
-          label: "Greenfield",
+          label: "BNB Greenfield Testnet",
           name: "GREENFIELD",
           icon: "h-greenfield.svg",
         },
