@@ -129,7 +129,7 @@
                 <msg-line
                   v-if="info.deployType == 'CID'"
                   label="Base IPFS"
-                  :content="info.cid"
+                  :content="showHashVal(info.cid, 'IPFS')"
                   :state="state"
                   :online="projInfo.online"
                 ></msg-line>
@@ -137,7 +137,7 @@
                   class="mb-5"
                   v-if="info.deployType == 'IPNS' && info.platform == 'IPFS'"
                   label="IPNS"
-                  :content="projInfo.ipns"
+                  :content="showHashVal(projInfo.ipns, 'IPNS')"
                   :state="state"
                   :online="projInfo.online"
                   platForm="IPNS"
@@ -148,7 +148,7 @@
                     <msg-line
                       v-if="info.deployType == 'IPNS'"
                       label="Base IPFS"
-                      :content="info.cid"
+                      :content="showHashVal(info.cid, 'IPFS')"
                       :state="state"
                       :online="projInfo.online"
                       cutStr
@@ -158,7 +158,7 @@
                     <msg-line
                       v-if="info.deployType == 'IPNS'"
                       label="Base IPNS"
-                      :content="projInfo.ipfsPath"
+                      :content="showHashVal(projInfo.ipfsPath, 'IPNS')"
                       :state="state"
                       :online="projInfo.online"
                       platForm="IPNS"

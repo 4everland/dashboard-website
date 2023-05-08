@@ -90,7 +90,7 @@
                 class="fz-14"
                 :href="$utils.getCidLink(info.ipns, 'IPNS', info.online)"
               >
-                {{ info.ipns }}
+                {{ showHashVal(info.ipns, "IPNS") }}
               </e-link>
               <img
                 src="/img/svg/copy.svg"
@@ -161,7 +161,7 @@
           >
             <msg-line-vertical
               label="Base IPFS"
-              :content="info.ipfsPath"
+              :content="showHashVal(info.ipfsPath, 'IPFS')"
               :state="info.state"
               :online="info.online"
               v-if="info.platform != 'IPFS' && info.deployType != 'IPNS'"
@@ -169,7 +169,7 @@
 
             <msg-line-vertical
               label="Base IPFS"
-              :content="info.cid"
+              :content="showHashVal(info.ipfsPath, 'IPFS')"
               :state="info.state"
               :online="info.online"
               v-if="info.platform != 'IPFS' && info.deployType == 'IPNS'"
@@ -179,7 +179,7 @@
               class="mt-8"
               label="Base IPNS"
               :online="info.online"
-              :content="info.ipfsPath"
+              :content="showHashVal(info.ipfsPath, 'IPNS')"
               platForm="IPNS"
               :state="info.state"
               v-if="info.deployType == 'IPNS'"
