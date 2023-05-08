@@ -366,6 +366,7 @@ export default {
     },
     showHashVal() {
       return function (val, plat) {
+        if (!val) return undefined;
         if (plat == "IC") {
           return "ic://" + val;
         } else if (plat == "AR") {

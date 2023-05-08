@@ -9,7 +9,7 @@
         width="12"
         class="ml-3 hover-1"
         @success="$toast('Copied!')"
-        v-clipboard="value"
+        v-clipboard="copyVal"
       />
     </div>
     <h-status
@@ -57,6 +57,11 @@ export default {
     },
     value() {
       return this.transformIpfsPath(this.content);
+    },
+    copyVal() {
+      return this.transformIpfsPath(this.content)
+        .replace("ipfs://", "")
+        .replace("ipns://", "");
     },
     link() {
       return this.$utils.getCidLink(this.value, this.platForm, this.online);
