@@ -135,7 +135,11 @@
                 ></msg-line>
                 <msg-line
                   class="mb-5"
-                  v-if="info.deployType == 'IPNS' && info.platform == 'IPFS'"
+                  v-if="
+                    info.deployType == 'IPNS' &&
+                    info.platform == 'IPFS' &&
+                    projInfo.ipns
+                  "
                   label="IPNS"
                   :content="showHashVal(projInfo.ipns, 'IPNS')"
                   :state="state"
