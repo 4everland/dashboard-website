@@ -169,7 +169,7 @@
 
             <msg-line-vertical
               label="Base IPFS"
-              :content="showHashVal(info.ipfsPath, 'IPFS')"
+              :content="showHashVal(info.cid, 'IPFS')"
               :state="info.state"
               :online="info.online"
               v-if="info.platform != 'IPFS' && info.deployType == 'IPNS'"
