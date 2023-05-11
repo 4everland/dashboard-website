@@ -31,6 +31,7 @@
       :headers="headers"
       :items="list"
       hide-default-footer
+      :items-per-page="-1"
       v-show="list.length"
     >
       <template v-slot:item.act="{ index }">

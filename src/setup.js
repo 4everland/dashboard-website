@@ -162,6 +162,11 @@ Vue.prototype.$utils = {
     //   ? `https://${this.getCidV1(cid)}.ipfs.4everland.io`
     //   : `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
   },
+
+  getGreenfieldLink(tx) {
+    return `https://greenfieldscan.com/tx/${tx}`;
+  },
+
   cutFixed(num, keep = 2) {
     const str = num + "";
     let i = str.indexOf(".");

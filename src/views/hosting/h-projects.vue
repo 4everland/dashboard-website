@@ -149,14 +149,25 @@
                       <a
                         class="u ml-2 fz-12 gray"
                         :href="
-                          $utils.getCidLink(it.hash, it.platform, it.online)
+                          it.greenfield
+                            ? $utils.getGreenfieldLink(it.greenfield.tx)
+                            : $utils.getCidLink(it.hash, it.platform, it.online)
                         "
                         target="_blank"
                         @click.stop
                         v-if="it.hash && it.state == 'SUCCESS'"
                       >
                         <!-- {{ it.hash.cutStr(4, 4) }} -->
-                        {{ it.hash }}
+                        {{
+                          it.greenfield
+                            ? showHashVal(
+                                it.greenfield.bucket +
+                                  "/" +
+                                  it.greenfield.object,
+                                it.platform
+                              )
+                            : showHashVal(it.hash, it.platform)
+                        }}
                       </a>
                       <span v-else-if="it.state == 'FAILURE'" class="ml-1 fz-14"
                         >Not synchronized</span
@@ -179,19 +190,12 @@
                     :val="!it.online ? 'Removed' : it.state"
                   ></h-status>
                 </div>
-                <div v-if="!it.cli">
-                  <span class="d-ib deploy-origin-type fz-14">{{
-                    it.deployType == "IPNS" ? "IPNS" : "IPFS"
-                  }}</span>
-                  <span class="ml-3 fz-14"
-                    >Deployment Through
-                    {{ it.deployType == "IPNS" ? "IPNS" : "IPFS" }}</span
-                  >
+
+                <div class="fz-14" v-if="it.cli">Deployment Through CLI</div>
+                <div class="fz-14" v-else-if="it.web3Tid">
+                  Deployment Through Template
                 </div>
-                <div v-else>
-                  <span class="d-ib deploy-origin-type fz-14">CLI</span>
-                  <span class="ml-3 fz-14">Deployment Through CLI</span>
-                </div>
+                <div class="fz-14" v-else>Deployment Through Hash</div>
               </v-col>
 
               <v-col cols="9" md="4" v-else>
@@ -358,6 +362,22 @@ export default {
     hashDeploy() {
       return function (type) {
         return type == "CID" || type == "IPNS";
+      };
+    },
+    showHashVal() {
+      return function (val, plat) {
+        if (!val) return undefined;
+        if (plat == "IC") {
+          return "ic://" + val;
+        } else if (plat == "AR") {
+          return "ar://" + val;
+        } else if (plat == "GREENFIELD") {
+          return "gnfs://" + val;
+        } else if (plat == "IPNS") {
+          return "ipns://" + val;
+        } else {
+          return "ipfs://" + val;
+        }
       };
     },
   },

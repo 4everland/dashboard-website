@@ -15,15 +15,34 @@
           </e-link>
         </v-col>
         <v-col cols="12" md="6">
-          <e-kv :label="info.platform" style="min-width: 120px">
-            <div class="al-c">
+          <e-kv
+            :label="
+              info.platform == 'GREENFIELD'
+                ? 'BNB Greenfield Testnet'
+                : info.platform
+            "
+            style="min-width: 120px"
+          >
+            <e-tooltip
+              top
+              slot="sub"
+              v-if="info.platform == 'GREENFIELD' && info.greenfield"
+            >
+              <v-icon slot="ref" color="#666" size="14" class="pa-1"
+                >mdi-help-circle-outline</v-icon
+              >
+              <span
+                >The file has been uploaded to the
+                {{ info.greenfield.bucket }} greenfield bucket.
+              </span>
+            </e-tooltip>
+            <div class="al-c" v-if="info.platform != 'GREENFIELD'">
               <e-link
                 class="fz-14"
                 :href="$utils.getCidLink(info.hash, info.platform, info.online)"
                 v-if="info.hash"
               >
-                <!-- {{ info.hash.cutStr(4, 4) }} -->
-                {{ info.hash }}
+                {{ showHashVal(info.hash, info.platform) }}
               </e-link>
               <h-status v-if="!info.hash" :val="info.state"></h-status>
               <img
@@ -33,6 +52,25 @@
                 class="ml-3 hover-1"
                 @success="$toast('Copied!')"
                 v-clipboard="info.hash"
+              />
+            </div>
+
+            <div class="al-c" v-else>
+              <e-link
+                class="fz-14"
+                :href="$utils.getGreenfieldLink(info.greenfield.tx)"
+                v-if="info.greenfield"
+              >
+                {{ showHashVal(greenfieldHash, info.platform) }}
+              </e-link>
+              <h-status v-if="!info.greenfield" :val="info.state"></h-status>
+              <img
+                v-if="info.greenfield"
+                src="/img/svg/copy.svg"
+                width="12"
+                class="ml-3 hover-1"
+                @success="$toast('Copied!')"
+                v-clipboard="$utils.getGreenfieldLink(info.greenfield.tx)"
               />
             </div>
           </e-kv>
@@ -52,7 +90,7 @@
                 class="fz-14"
                 :href="$utils.getCidLink(info.ipns, 'IPNS', info.online)"
               >
-                {{ info.ipns }}
+                {{ showHashVal(info.ipns, "IPNS") }}
               </e-link>
               <img
                 src="/img/svg/copy.svg"
@@ -105,9 +143,6 @@
               </e-menu>
             </div>
           </e-kv>
-
-          <!-- <div class="mt-9 d-flex justify-space-between"></div> -->
-
           <div class="mt-9 d-flex">
             <e-kv label="Status">
               <h-status :val="!info.online ? 'Removed' : info.state"></h-status>
@@ -116,10 +151,17 @@
               <e-time>{{ info.createAt }}</e-time>
             </e-kv>
           </div>
-          <div class="mt-9" v-if="hashDeploy(info.deployType)">
+          <div
+            class="mt-9"
+            v-if="
+              hashDeploy(info.deployType) &&
+              info.platform != 'GREENFIELD' &&
+              info.platform != 'AR'
+            "
+          >
             <msg-line-vertical
               label="Base IPFS"
-              :content="info.ipfsPath"
+              :content="showHashVal(info.ipfsPath, 'IPFS')"
               :state="info.state"
               :online="info.online"
               v-if="info.platform != 'IPFS' && info.deployType != 'IPNS'"
@@ -127,7 +169,7 @@
 
             <msg-line-vertical
               label="Base IPFS"
-              :content="info.cid"
+              :content="showHashVal(info.cid, 'IPFS')"
               :state="info.state"
               :online="info.online"
               v-if="info.platform != 'IPFS' && info.deployType == 'IPNS'"
@@ -137,7 +179,7 @@
               class="mt-8"
               label="Base IPNS"
               :online="info.online"
-              :content="info.ipfsPath"
+              :content="showHashVal(info.ipfsPath, 'IPNS')"
               platForm="IPNS"
               :state="info.state"
               v-if="info.deployType == 'IPNS'"
@@ -191,7 +233,11 @@ export default {
       return arr;
     },
     showIpns() {
-      return this.info.platform != "IC" && this.info.platform != "AR";
+      return (
+        this.info.platform != "IC" &&
+        this.info.platform != "AR" &&
+        this.info.platform != "GREENFIELD"
+      );
     },
     hashDeploy() {
       return function (type) {
@@ -201,6 +247,28 @@ export default {
     transformIpfsPath() {
       return function (val) {
         return val.replace("/ipfs/", "").replace("/ipns/", "");
+      };
+    },
+    greenfieldHash() {
+      if (this.info.platform == "GREENFIELD" && this.info.greenfield) {
+        return this.info.greenfield.bucket + "/" + this.info.greenfield.object;
+      }
+      return "";
+    },
+    showHashVal() {
+      return function (val, plat) {
+        if (!val) return undefined;
+        if (plat == "IC") {
+          return "ic://" + val;
+        } else if (plat == "AR") {
+          return "ar://" + val;
+        } else if (plat == "GREENFIELD") {
+          return "gnfs://" + val;
+        } else if (plat == "IPNS") {
+          return "ipns://" + val;
+        } else {
+          return "ipfs://" + val;
+        }
       };
     },
   },

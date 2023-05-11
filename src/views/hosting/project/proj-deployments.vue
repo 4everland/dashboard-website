@@ -19,7 +19,11 @@
               <a class="b fw-b fz-18">{{ it.title }}</a>
             </div>
             <div class="al-c mt-2">
-              <span class="mr-5 fz-14" v-if="!asMobile">{{ it.platform }}</span>
+              <span class="mr-5 fz-14" v-if="!asMobile">{{
+                it.platform == "GREENFIELD"
+                  ? "BNB Greenfield Testnet"
+                  : it.platform
+              }}</span>
               <img
                 :src="`/img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
                 height="20"
@@ -34,15 +38,23 @@
               >
                 <span v-if="it.platform == 'IPFS'">
                   <!-- {{ it.cid.cutStr(4, 4) }} -->
-                  {{ it.cid }}
+                  {{ showHashVal(it.cid, it.platform) }}
                 </span>
                 <span v-if="it.platform == 'IC'">
                   <!-- {{ it.canister.cutStr(4, 4) }} -->
-                  {{ it.canister }}
+                  {{ showHashVal(it.canister, it.platform) }}
                 </span>
                 <span v-if="it.platform == 'AR'">
                   <!-- {{ it.arHash.cutStr(4, 4) }} -->
-                  {{ it.arHash }}
+                  {{ showHashVal(it.arHash, it.platform) }}
+                </span>
+                <span v-if="it.platform == 'GREENFIELD'">
+                  {{
+                    showHashVal(
+                      it.greenfield.bucket + "/" + it.greenfield.object,
+                      it.platform
+                    )
+                  }}
                 </span>
               </a>
               <span
@@ -162,9 +174,12 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-    projectLink(it) {
+    projectLink() {
       return function (it) {
         let link = null;
+        if (it.platform == "GREENFIELD") {
+          return this.$utils.getGreenfieldLink(it.greenfield.tx);
+        }
         if (it.platform == "IPFS") {
           link = it.cid;
         } else if (it.platform == "IC") {
@@ -182,6 +197,22 @@ export default {
     },
     ownerGithub() {
       return this.info.ownerGithub;
+    },
+    showHashVal() {
+      return function (val, plat) {
+        if (!val) return undefined;
+        if (plat == "IC") {
+          return "ic://" + val;
+        } else if (plat == "AR") {
+          return "ar://" + val;
+        } else if (plat == "GREENFIELD") {
+          return "gnfs://" + val;
+        } else if (plat == "IPNS") {
+          return "ipns://" + val;
+        } else {
+          return "ipfs://" + val;
+        }
+      };
     },
   },
   data() {

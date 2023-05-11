@@ -38,45 +38,7 @@
     </div>
 
     <div class="main-wrap mt-5">
-      <h3>Hosting Platform</h3>
-      <v-row>
-        <v-col
-          cols="12"
-          md="4"
-          v-for="(it, i) in platList"
-          :key="i"
-          @click="form.platform = it.name"
-        >
-          <div
-            class="d-flex al-c bdrs-4 plat-item"
-            :class="{
-              active: form.platform == it.name,
-            }"
-          >
-            <img :src="'/img/svg/hosting/' + it.icon" height="30" />
-            <div class="ml-2 fw-b fz-16 pos-r">
-              <span> {{ it.label }}</span>
-            </div>
-            <img
-              class="ml-auto"
-              v-if="it.name == 'IC'"
-              :src="
-                form.platform == it.name
-                  ? '/img/svg/hosting/h-beta.svg'
-                  : '/img/svg/hosting/h-beta-active.svg'
-              "
-              height="20"
-              alt=""
-            />
-          </div>
-        </v-col>
-        <v-col v-if="form.platform == 'AR'">
-          <div class="gray fz-14">
-            <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon> All assets
-            in Arweave are linked using relative paths due to its features.
-          </div>
-        </v-col>
-      </v-row>
+      <e-platform :platform.sync="form.platform"></e-platform>
     </div>
 
     <div class="main-wrap mt-5">
@@ -322,23 +284,6 @@ export default {
       scripts: null,
       rootDirList: [],
       branchList: [],
-      platList: [
-        {
-          label: "IPFS",
-          name: "IPFS",
-          icon: "h-ipfs.svg",
-        },
-        {
-          label: "Arweave",
-          name: "AR",
-          icon: "h-ar.svg",
-        },
-        {
-          label: "Internet Computer",
-          name: "IC",
-          icon: "h-ic.svg",
-        },
-      ],
       nodeVersionList: [
         {
           name: "18.x",
@@ -577,49 +522,6 @@ export default {
         ];
       }
     },
-    // matchNodeVersion(nodeVersion) {
-    //   let nodeVersionList = [
-    //     {
-    //       name: "18.x",
-    //       value: "18",
-    //     },
-    //     {
-    //       name: "16.x",
-    //       value: "16",
-    //     },
-    //     {
-    //       name: "14.x",
-    //       value: "14",
-    //     },
-    //   ];
-    //   if (nodeVersion.indexOf("||") > 0) {
-    //     let versionList = nodeVersion.split("||");
-    //     versionList = versionList.map((it) => {
-    //       return this.getMajorVersion(it);
-    //     });
-    //     console.log(versionList);
-    //     for (const item of nodeVersionList) {
-    //       for (const it of versionList) {
-    //         if (item.value == it) {
-    //           return it;
-    //         }
-    //       }
-    //     }
-    //     return "14";
-    //   } else {
-    //     let match = this.getMajorVersion(nodeVersion);
-    //     let versionList = nodeVersionList.map((it) => it.value);
-    //     if (versionList.findIndex((it) => it == match) > -1) return match;
-    //     return "14";
-    //     // if (versionList.includes(match)) return match;
-    //   }
-    // },
-    // getMajorVersion(nodeVersion) {
-    //   let majorVersion = nodeVersion.split(".")[0];
-    //   let match = majorVersion.trim().replace(/\^|~|>|>=|<|<=|=/g, "");
-    //   return match;
-    // },
-
     matchNodeVersion(supportedNodeList, userNodeVersion) {
       for (const node of supportedNodeList) {
         console.log(node, userNodeVersion);
