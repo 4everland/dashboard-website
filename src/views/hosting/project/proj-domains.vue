@@ -345,7 +345,11 @@ export default {
               value: it.value,
             },
           ];
-          if (isA && it.createType == 2) {
+          if (it.createType == 2 && !it.domainV2) {
+            it.records[0].type = "CNAME";
+            it.records[0].value = it.cname;
+          }
+          if (isA && it.createType == 2 && it.newVersion) {
             it.records.push({
               type: "TXT",
               name: "@",
