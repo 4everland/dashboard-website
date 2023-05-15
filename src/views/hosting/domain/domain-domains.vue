@@ -179,9 +179,27 @@ export default {
         });
         this.list = data.content.map((it) => {
           it.createTime = new Date(it.createAt * 1e3).format();
-          if (it.createType == 2 && !it.domainV2) {
-            it.type = "CNAME";
-            it.value = it.cname;
+          const arr = it.domain.split(".");
+          arr.pop();
+          arr.pop();
+          const isA = !arr.length;
+          if (isA) {
+            switch (it.topLevel) {
+              case 0:
+                it.type = "A";
+                it.value = it.ip;
+                break;
+              case 1:
+                it.type = "A";
+                it.value = it.ip;
+                break;
+              case 2:
+                it.type = "CNAME";
+                it.value = it.cname;
+                break;
+              default:
+                break;
+            }
           }
           return it;
         });
