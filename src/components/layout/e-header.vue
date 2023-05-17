@@ -41,14 +41,6 @@
             class="ml-4"
             :id="it.to == '/reward-hub' ? 'reward-guide' : null"
           >
-            <img
-              v-if="it.img"
-              :src="it.img"
-              :width="it.width"
-              :height="it.height"
-              :class="it.imgCls"
-            />
-
             <e-team-avatar
               class="cursor-p mr-2"
               v-if="it.uid"
@@ -64,6 +56,13 @@
               :src="`/img/svg/header/ic-down-${it.color || 'def'}.svg`"
               width="10"
               class="ml-2"
+            />
+            <img
+              v-if="it.img"
+              :src="it.img"
+              :width="it.width"
+              :height="it.height"
+              :class="it.imgCls"
             />
           </v-btn>
 
@@ -134,10 +133,7 @@ export default {
       if (info.uid) {
         list.unshift({
           to: "/reward-hub",
-          img: "/img/svg/header/reward-gift.svg",
           label: "Reward Hub",
-          imgCls: "mr-2 mb-1",
-          width: 20,
         });
 
         list.push({
@@ -178,6 +174,13 @@ export default {
           ],
         });
       }
+      list.unshift({
+        href: "https://firstsowing.4everland.org/",
+        img: "/img/svg/header/rocket.svg",
+        label: "Firstsowing",
+        imgCls: "ml-2",
+        width: 16,
+      });
       return list;
     },
   },
