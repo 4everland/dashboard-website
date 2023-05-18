@@ -345,15 +345,37 @@ export default {
               value: it.value,
             },
           ];
-          if (isA && it.createType == 2) {
-            it.records.push({
-              type: "TXT",
-              name: "@",
-              value: it.txt,
-            });
+
+          if (isA) {
+            switch (it.topLevel) {
+              case 0:
+                it.records[0].type = "A";
+                it.records[0].value = it.ip;
+                break;
+              case 1:
+                it.records[0].type = "A";
+                it.records[0].value = it.ip;
+                it.records.push({
+                  type: "TXT",
+                  name: "@",
+                  value: it.txt,
+                });
+                break;
+              case 2:
+                it.records[0].type = "CNAME";
+                it.records[0].value = it.cname;
+                it.records.push({
+                  type: "TXT",
+                  name: "@",
+                  value: it.txt,
+                });
+                break;
+              default:
+                break;
+            }
           }
+
           it.conflicts = it.conflicts || [];
-          // it.valid = 1
           return it;
         });
         if (!this.hasRefresh) {

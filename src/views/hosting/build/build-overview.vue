@@ -42,34 +42,61 @@
 
           <e-kv2
             class="mt-7"
-            :label="info.platform"
+            :label="
+              info.platform == 'GREENFIELD'
+                ? 'BNB Greenfield Testnet'
+                : info.platform
+            "
             style="min-width: 120px"
             v-if="
               (showLabel && info.platform !== 'IPFS') ||
               (showLabel && !hashDeploy(info.deployType))
             "
           >
-            <div class="al-c" v-if="info.hash">
-              <e-link
-                class="fz-14"
-                :href="
-                  $utils.getCidLink(info.hash, info.platform, projInfo.online)
-                "
-              >
-                <span>{{ info.hash }}</span>
-              </e-link>
-              <img
-                src="/img/svg/copy.svg"
-                width="12"
-                class="ml-3 hover-1"
-                @success="$toast('Copied!')"
-                v-clipboard="info.hash"
-              />
+            <div v-if="info.platform != 'GREENFIELD'">
+              <div class="al-c" v-if="info.hash">
+                <e-link
+                  class="fz-14"
+                  :href="
+                    $utils.getCidLink(info.hash, info.platform, projInfo.online)
+                  "
+                >
+                  <span>{{ showHashVal(info.hash, info.platform) }}</span>
+                </e-link>
+                <img
+                  src="/img/svg/copy.svg"
+                  width="12"
+                  class="ml-3 hover-1"
+                  @success="$toast('Copied!')"
+                  v-clipboard="info.hash"
+                />
+              </div>
+              <h-status
+                v-else
+                :val="state == 'failure' ? 'Not synchronized' : state"
+              ></h-status>
             </div>
-            <h-status
-              v-else
-              :val="state == 'failure' ? 'Not synchronized' : state"
-            ></h-status>
+            <div v-else>
+              <div class="al-c" v-if="info.greenfield">
+                <e-link
+                  class="fz-14"
+                  :href="$utils.getGreenfieldLink(info.greenfield.tx)"
+                >
+                  <span>{{ showHashVal(greenfieldHash, info.platform) }}</span>
+                </e-link>
+                <img
+                  src="/img/svg/copy.svg"
+                  width="12"
+                  class="ml-3 hover-1"
+                  @success="$toast('Copied!')"
+                  v-clipboard="$utils.getGreenfieldLink(info.greenfield.tx)"
+                />
+              </div>
+              <h-status
+                v-else
+                :val="state == 'failure' ? 'Not synchronized' : state"
+              ></h-status>
+            </div>
           </e-kv2>
           <e-kv2
             label="Domain"
@@ -96,46 +123,54 @@
             </e-kv2>
 
             <div v-else>
-              <msg-line
-                v-if="info.deployType == 'CID'"
-                label="Base IPFS"
-                :content="info.cid"
-                :state="state"
-                :online="projInfo.online"
-              ></msg-line>
-              <msg-line
-                class="mb-5"
-                v-if="info.deployType == 'IPNS' && info.platform == 'IPFS'"
-                label="IPNS"
-                :content="projInfo.ipns"
-                :state="state"
-                :online="projInfo.online"
-                platForm="IPNS"
-              ></msg-line>
+              <div
+                v-if="info.platform != 'GREENFIELD' && info.platform != 'AR'"
+              >
+                <msg-line
+                  v-if="info.deployType == 'CID'"
+                  label="Base IPFS"
+                  :content="showHashVal(info.cid, 'IPFS')"
+                  :state="state"
+                  :online="projInfo.online"
+                ></msg-line>
+                <msg-line
+                  class="mb-5"
+                  v-if="
+                    info.deployType == 'IPNS' &&
+                    info.platform == 'IPFS' &&
+                    projInfo.ipns
+                  "
+                  label="IPNS"
+                  :content="showHashVal(projInfo.ipns, 'IPNS')"
+                  :state="state"
+                  :online="projInfo.online"
+                  platForm="IPNS"
+                ></msg-line>
 
-              <v-row>
-                <v-col :md="6" :cols="12">
-                  <msg-line
-                    v-if="info.deployType == 'IPNS'"
-                    label="Base IPFS"
-                    :content="info.cid"
-                    :state="state"
-                    :online="projInfo.online"
-                    cutStr
-                  ></msg-line
-                ></v-col>
-                <v-col :md="6" :cols="12">
-                  <msg-line
-                    v-if="info.deployType == 'IPNS'"
-                    label="Base IPNS"
-                    :content="projInfo.ipfsPath"
-                    :state="state"
-                    :online="projInfo.online"
-                    platForm="IPNS"
-                    cutStr
-                  ></msg-line
-                ></v-col>
-              </v-row>
+                <v-row>
+                  <v-col :md="6" :cols="12">
+                    <msg-line
+                      v-if="info.deployType == 'IPNS'"
+                      label="Base IPFS"
+                      :content="showHashVal(info.cid, 'IPFS')"
+                      :state="state"
+                      :online="projInfo.online"
+                      cutStr
+                    ></msg-line
+                  ></v-col>
+                  <v-col :md="6" :cols="12">
+                    <msg-line
+                      v-if="info.deployType == 'IPNS'"
+                      label="Base IPNS"
+                      :content="showHashVal(projInfo.ipfsPath, 'IPNS')"
+                      :state="state"
+                      :online="projInfo.online"
+                      platForm="IPNS"
+                      cutStr
+                    ></msg-line
+                  ></v-col>
+                </v-row>
+              </div>
             </div>
           </div>
         </v-col>
@@ -276,6 +311,28 @@ export default {
     },
     ownerGithub() {
       return this.projInfo.ownerGithub;
+    },
+    greenfieldHash() {
+      if (this.info.platform == "GREENFIELD" && this.info.greenfield) {
+        return this.info.greenfield.bucket + "/" + this.info.greenfield.object;
+      }
+      return "";
+    },
+    showHashVal() {
+      return function (val, plat) {
+        if (!val) return undefined;
+        if (plat == "IC") {
+          return "ic://" + val;
+        } else if (plat == "AR") {
+          return "ar://" + val;
+        } else if (plat == "GREENFIELD") {
+          return "gnfs://" + val;
+        } else if (plat == "IPNS") {
+          return "ipns://" + val;
+        } else {
+          return "ipfs://" + val;
+        }
+      };
     },
   },
   async created() {

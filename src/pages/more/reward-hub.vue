@@ -139,17 +139,21 @@
                 </div>
                 <v-btn v-else class="mr-9" width="100" disabled> Done </v-btn>
               </div>
-              <div v-else class="al-c justify-center">
+              <div
+                v-else
+                class="al-c justify-center"
+                :class="{ 'mr-9': !onChain }"
+              >
                 <v-btn
                   :color="getBtnColor(item)"
                   @click="onAct(item)"
                   depressed
                   width="100"
-                  :disabled="item.isDone || !activitiesInfo.onChain"
+                  :disabled="item.isDone || !onChain"
                   :loading="item.loading"
                 >
                   <span
-                    v-if="!activitiesInfo.onChain"
+                    v-if="!onChain"
                     :class="{
                       'white-0': !item.isDone,
                     }"
@@ -165,6 +169,7 @@
                   </span>
                 </v-btn>
                 <v-btn
+                  v-if="onChain"
                   :class="{
                     hidden: !(item.status == 'GOTO' || item.refreshing),
                   }"
@@ -210,12 +215,13 @@ export default {
       isFocus: (s) => s.isFocus,
       userInfo: (s) => s.userInfo,
       chainId: (s) => s.chainId,
+      onChain: (s) => s.onChain,
     }),
     shareUrl() {
       return location.origin + "?invite=" + this.code;
     },
     tips() {
-      if (this.userInfo.onChain)
+      if (this.onChain)
         return "More free resources can be obtained by completing tasks. Please note that the validity period of IPFS resources is December 31, 2023.";
       return "More free resources can be obtained by upgrading registration tasks. Please note that the validity period of IPFS resources is December 31, 2023.";
     },
@@ -232,9 +238,7 @@ export default {
       showTg: false,
       tgTag: `<b>2</b>`,
       code: null,
-      activitiesInfo: {
-        onChain: false,
-      },
+      activitiesInfo: {},
     };
   },
   watch: {

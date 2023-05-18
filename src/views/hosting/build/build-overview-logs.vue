@@ -43,7 +43,7 @@
             Start: Download the file directory and update the configuration
             file...
           </p>
-          <p v-if="isFail">{{ errMsg }}</p>
+          <p v-if="isFail && !isSyncErr">{{ errMsg }}</p>
           <p v-else>
             {{ web3TplDeploy ? "Generate Hash" : "IPFS Hash" }}:
             {{ ipfsHash ? ipfsHash : "Resolving pending" }}
@@ -79,20 +79,37 @@
         (showHash && web3TplDeploy)
       "
       class="mt-5"
-      :title="'Syncing to ' + info.platform"
+      :title="
+        'Syncing to ' +
+        (info.platform == 'GREENFIELD'
+          ? 'BNB Greenfield Testnet'
+          : info.platform)
+      "
       :value="getOpen(2)"
       :icon="getIcon(2)"
     >
       <e-kv
         min-width="70px"
         :label="`${info.platform} Hash:`"
-        v-if="info && info.hash"
+        v-if="info && info.hash && info.platform != 'GREENFIELD'"
       >
         <a
           class="u"
           :href="$utils.getCidLink(info.hash, info.platform, projInfo.online)"
           target="_blank"
-          >{{ info.hash }}</a
+          >{{ showHashVal(info.hash, info.platform) }}</a
+        >
+      </e-kv>
+      <e-kv
+        min-width="70px"
+        :label="`BNB Greenfield Testnet :`"
+        v-else-if="info && info.greenfield && info.platform == 'GREENFIELD'"
+      >
+        <a
+          class="u"
+          :href="$utils.getGreenfieldLink(info.greenfield.tx)"
+          target="_blank"
+          >{{ showHashVal(greenfieldHash, info.platform) }}</a
         >
       </e-kv>
       <div class="fz-14 gray" v-else>
@@ -265,6 +282,28 @@ export default {
     getIpns() {
       return function (val) {
         return val.replace("/ipns/", "");
+      };
+    },
+    greenfieldHash() {
+      if (this.info.platform == "GREENFIELD" && this.info.greenfield) {
+        return this.info.greenfield.bucket + "/" + this.info.greenfield.object;
+      }
+      return "";
+    },
+    showHashVal() {
+      return function (val, plat) {
+        if (!val) return undefined;
+        if (plat == "IC") {
+          return "ic://" + val;
+        } else if (plat == "AR") {
+          return "ar://" + val;
+        } else if (plat == "GREENFIELD") {
+          return "gnfs://" + val;
+        } else if (plat == "IPNS") {
+          return "ipns://" + val;
+        } else {
+          return "ipfs://" + val;
+        }
       };
     },
   },

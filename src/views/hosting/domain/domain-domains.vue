@@ -37,6 +37,23 @@
               </template>
               <span>Invalid Configuration</span>
             </v-tooltip>
+            <v-tooltip bottom v-else-if="!item.newVersion">
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  class="ml-2"
+                  small
+                  color="#6C7789"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  mdi-alert-circle
+                </v-icon>
+              </template>
+              <span
+                >Lost CDN protection, will be restored after deleting <br />
+                and re-binding the domain name.
+              </span>
+            </v-tooltip>
           </v-btn>
         </template>
         <template v-slot:item.value="{ item }">
@@ -162,6 +179,28 @@ export default {
         });
         this.list = data.content.map((it) => {
           it.createTime = new Date(it.createAt * 1e3).format();
+          const arr = it.domain.split(".");
+          arr.pop();
+          arr.pop();
+          const isA = !arr.length;
+          if (isA) {
+            switch (it.topLevel) {
+              case 0:
+                it.type = "A";
+                it.value = it.ip;
+                break;
+              case 1:
+                it.type = "A";
+                it.value = it.ip;
+                break;
+              case 2:
+                it.type = "CNAME";
+                it.value = it.cname;
+                break;
+              default:
+                break;
+            }
+          }
           return it;
         });
         this.pageLen = Math.max(

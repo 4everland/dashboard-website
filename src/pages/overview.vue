@@ -117,8 +117,8 @@ export default {
       if (!this.registerInfo.handled) {
         return [
           {
-            img: "https://static1.4everland.org/img/banner/20221109-160329.png",
-            to: "/reward-hub",
+            img: "https://static1.4everland.org/img/banner/2023516-181010.jpg",
+            href: "https://firstsowing.4everland.org",
           },
           {
             img: "https://static1.4everland.org/img/banner/20230420-173710.png",
@@ -128,8 +128,8 @@ export default {
       }
       return [
         {
-          img: "https://static1.4everland.org/img/banner/20221109-160329.png",
-          to: "/reward-hub",
+          img: "https://static1.4everland.org/img/banner/2023516-181010.jpg",
+          href: "https://firstsowing.4everland.org",
         },
       ];
     },

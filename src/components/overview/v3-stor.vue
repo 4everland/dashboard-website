@@ -100,6 +100,7 @@ export default {
         this.loading = false;
         let total = 0;
         this.list = data.collections.map((it, i) => {
+          it.value *= 1;
           total += it.value;
           it.size = this.$utils.getFileSize(it.value);
           it.itemStyle = {

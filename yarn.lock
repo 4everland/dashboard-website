@@ -2,9 +2,32 @@
 # yarn lockfile v1
 
 
+"@4everland/minio@^7.0.37":
+  version "7.0.37"
+  resolved "https://registry.npmjs.org/@4everland/minio/-/minio-7.0.37.tgz"
+  integrity sha512-br5Ho3ZaqFFkuvc36zcnqVX8p+gMBr7QtSDJ4UbLPsofvRpLbm7MZHUXE4BwXWLIhp/Pa6K/e+GqeVmMSharIg==
+  dependencies:
+    async "^3.1.0"
+    block-stream2 "^2.0.0"
+    browser-or-node "^1.3.0"
+    buffer-crc32 "^0.2.13"
+    crypto-browserify "^3.12.0"
+    es6-error "^4.1.1"
+    fast-xml-parser "^4.1.3"
+    ipaddr.js "^2.0.1"
+    json-stream "^1.0.0"
+    lodash "^4.17.21"
+    mime-types "^2.1.14"
+    mkdirp "^0.5.1"
+    query-string "^7.1.1"
+    through2 "^3.0.1"
+    web-encoding "^1.1.5"
+    xml "^1.0.0"
+    xml2js "^0.5.0"
+
 "@4everland/service-contracts@0.3.5":
   version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@4everland/service-contracts/-/service-contracts-0.3.5.tgz#4f402e3d76dcd5184bd6d3f71d242238c6071596"
+  resolved "https://registry.npmjs.org/@4everland/service-contracts/-/service-contracts-0.3.5.tgz"
   integrity sha512-53Gtyad/Wpo79bdVsWJpcf8CucPqQQHJSC6mCWNOfLAGcWBsiP7XBvJ5ZZWdnNS81h+8HHKlKa1hqr+PkXvSRQ==
   dependencies:
     solc-0.8.9 "npm:solc@0.8.9"
@@ -12,7 +35,7 @@
 
 "@4everland/zksync-era-payment@^0.0.1":
   version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@4everland/zksync-era-payment/-/zksync-era-payment-0.0.1.tgz#18e55d8517f27be30d18d4f2333028df83615093"
+  resolved "https://registry.npmjs.org/@4everland/zksync-era-payment/-/zksync-era-payment-0.0.1.tgz"
   integrity sha512-qORzXiR1xE+C76FsERCRsVp8reTi8y0+FhjgNjo/lriqFzgL77TglDXjl59SKdcR6p+7rHp6nuSt1KLna7oAfA==
 
 "@achrinza/node-ipc@9.2.2":
@@ -4487,7 +4510,7 @@ check-types@^8.0.3:
 
 chnl@^1.2.0:
   version "1.2.0"
-  resolved "https://registry.yarnpkg.com/chnl/-/chnl-1.2.0.tgz#d818c95367767a0880508e7cc0b5b3503f58fd4c"
+  resolved "https://registry.npmjs.org/chnl/-/chnl-1.2.0.tgz"
   integrity sha512-g5gJb59edwCliFbX2j7G6sBfY4sX9YLy211yctONI2GRaiX0f2zIbKWmBm+sPqFNEpM7Ljzm7IJX/xrjiEbPrw==
 
 "chokidar@>=3.0.0 <4.0.0", chokidar@^3.4.1:
@@ -6405,6 +6428,13 @@ fast-xml-parser@^3.17.5, fast-xml-parser@^3.21.1:
   integrity sha512-FTFVjYoBOZTJekiUsawGsSYV9QL0A+zDYCRj7y34IO6Jg+2IMYEtQa+bbictpdpV8dHxXywqU7C0gRDEOFtBFg==
   dependencies:
     strnum "^1.0.4"
+
+fast-xml-parser@^4.1.3:
+  version "4.2.2"
+  resolved "https://registry.npmjs.org/fast-xml-parser/-/fast-xml-parser-4.2.2.tgz"
+  integrity sha512-DLzIPtQqmvmdq3VUKR7T6omPK/VCRNqgFlGtbESfyhcH2R4I8EzK1/K6E8PkRCK2EabWrUHK32NjYRbEFnnz0Q==
+  dependencies:
+    strnum "^1.0.5"
 
 fastq@^1.6.0:
   version "1.14.0"
@@ -10011,7 +10041,7 @@ progress@^2.0.0:
 
 promise-controller@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/promise-controller/-/promise-controller-1.0.0.tgz#81ebea71271aa40ac8f3bebccab3d4158dc4cc02"
+  resolved "https://registry.npmjs.org/promise-controller/-/promise-controller-1.0.0.tgz"
   integrity sha512-goA0zA9L91tuQbUmiMinSYqlyUtEgg4fxJcjYnLYOQnrktb4o4UqciXDNXiRUPiDBPACmsr1k8jDW4r7UDq9Qw==
 
 promise-inflight@^1.0.1:
@@ -10021,7 +10051,7 @@ promise-inflight@^1.0.1:
 
 promise.prototype.finally@^3.1.2:
   version "3.1.4"
-  resolved "https://registry.yarnpkg.com/promise.prototype.finally/-/promise.prototype.finally-3.1.4.tgz#4e756a154e4db27fae24c6b18703495c31da3927"
+  resolved "https://registry.npmjs.org/promise.prototype.finally/-/promise.prototype.finally-3.1.4.tgz"
   integrity sha512-nNc3YbgMfLzqtqvO/q5DP6RR0SiHI9pUPGzyDf1q+usTwCN2kjvAnJkBb7bHe3o+fFSBPpsGMoYtaSi+LTNqng==
   dependencies:
     call-bind "^1.0.2"
@@ -11409,7 +11439,7 @@ strip-json-comments@^3.0.1:
   resolved "https://registry.npmjs.org/strip-json-comments/-/strip-json-comments-3.1.1.tgz"
   integrity sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==
 
-strnum@^1.0.4:
+strnum@^1.0.4, strnum@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/strnum/-/strnum-1.0.5.tgz"
   integrity sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==
@@ -12683,7 +12713,7 @@ webpack@^4.0.0:
 
 websocket-as-promised@^1.1.0:
   version "1.1.0"
-  resolved "https://registry.yarnpkg.com/websocket-as-promised/-/websocket-as-promised-1.1.0.tgz#3f5666645a5efdb3a6d89d53eb2f925649a70c32"
+  resolved "https://registry.npmjs.org/websocket-as-promised/-/websocket-as-promised-1.1.0.tgz"
   integrity sha512-agq8bPsPFKBWinKQkoXwY7LoBYe+2fQ7Gnuxx964+BTIiyAdL130FnB60bXuVQdUCdaS17R/MyRaaO4WIqtl4Q==
   dependencies:
     chnl "^1.2.0"
@@ -12916,6 +12946,14 @@ xml2js@^0.4.15:
     sax ">=0.6.0"
     xmlbuilder "~11.0.0"
 
+xml2js@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.npmjs.org/xml2js/-/xml2js-0.5.0.tgz"
+  integrity sha512-drPFnkQJik/O+uPKpqSgr22mpuFHqKdbS835iAQrUC73L2F5WkboIRd63ai/2Yg6I1jzifPFKH2NTK+cfglkIA==
+  dependencies:
+    sax ">=0.6.0"
+    xmlbuilder "~11.0.0"
+
 xml@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/xml/-/xml-1.0.1.tgz"
@@ -13073,17 +13111,17 @@ yorkie@^2.0.0:
 
 zksync-crypto@^0.6.1:
   version "0.6.2"
-  resolved "https://registry.yarnpkg.com/zksync-crypto/-/zksync-crypto-0.6.2.tgz#319dc9b1a274c1c8feaa40f81636ef326eb2c28b"
+  resolved "https://registry.npmjs.org/zksync-crypto/-/zksync-crypto-0.6.2.tgz"
   integrity sha512-Ry8c9kixDu3rlGCZDOg1UhzKDYe93iOZ7/Z6N1bkkrVKhmZJTIc7h+1kOjOyyhaSaHwBt8quMeBAaZKjtUeB2Q==
 
 zksync-web3@^0.14.3:
   version "0.14.3"
-  resolved "https://registry.yarnpkg.com/zksync-web3/-/zksync-web3-0.14.3.tgz#64ac2a16d597464c3fc4ae07447a8007631c57c9"
+  resolved "https://registry.npmjs.org/zksync-web3/-/zksync-web3-0.14.3.tgz"
   integrity sha512-hT72th4AnqyLW1d5Jlv8N2B/qhEnl2NePK2A3org7tAa24niem/UAaHMkEvmWI3SF9waYUPtqAtjpf+yvQ9zvQ==
 
 zksync@^0.13.1:
   version "0.13.1"
-  resolved "https://registry.yarnpkg.com/zksync/-/zksync-0.13.1.tgz#016f78f6c4079e3bdd143833f32f01d5c7c7a2c4"
+  resolved "https://registry.npmjs.org/zksync/-/zksync-0.13.1.tgz"
   integrity sha512-1WRMommc8qTuwh3qk6/dv34Eb+PnKBmM41sQMaAjkC47aw2Xm4RuqJfvHXPoKnZjtIhBAzXA25rwevxqGukQHw==
   dependencies:
     axios "^0.21.2"

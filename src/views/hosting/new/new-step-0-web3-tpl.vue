@@ -99,7 +99,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -111,15 +111,13 @@ export default {
     this.getWeb3TplList();
   },
   computed: {
-    ...mapState({
-      userInfo: (s) => s.userInfo,
-    }),
+    ...mapGetters(["teamInfo"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
     web3TplAccess() {
       return (
-        this.userInfo.whiteList && this.userInfo.whiteList.includes("template")
+        this.teamInfo.whiteList && this.teamInfo.whiteList.includes("template")
       );
     },
   },
