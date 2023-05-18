@@ -42,7 +42,8 @@
         <div class="gray fz-14">
           <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon> Please note
           that Greenfield is currently a Testnet and is for experiential use
-          only!
+          only. As such, it is subject to resets, which may result in loss of
+          data.
         </div>
       </v-col>
     </v-row>
