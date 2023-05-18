@@ -1,51 +1,58 @@
 <template>
   <div class="register-share-container pos-a">
-    <v-dialog v-model="showDialog" max-width="1000" hide-overlay class="ov-h">
-      <div class="share-container pos-r">
-        <div class="pos-a share-content">
-          <div class="white-0 ta-c fz-22">Congratulations</div>
-          <div class="white-0 ta-c fz-18">
-            Mint Your on-chain Standard Identity
-          </div>
-          <div class="wallet-input line-1 fz-14 gray ta-c">
+    <v-dialog v-model="showDialog" max-width="800" hide-overlay class="ov-h">
+      <div class="share-container pos-r ov-h">
+        <div class="bg pos-a"></div>
+        <div class="pos-a close-btn cursor-p" @click="showDialog = false"></div>
+        <div class="share-info pos-a">
+          <h2 class="share-title">
+            Congratulations on Minting Your On-chain Standard Identity
+          </h2>
+          <div class="fz-14 mt-3">
             {{ userInfo.username }}
           </div>
-        </div>
-        <img
-          class="pos-a cursor-p"
-          style="right: 20px; top: 20px"
-          width="20"
-          src="/img/svg/rewardHub/share_icon.svg"
-          alt=""
-          @click="handleShare"
-        />
-      </div>
-      <div style="background: #f7f9fb" class="py-10">
-        <h3 class="ta-c fz-22">- Unlock new benefits -</h3>
-        <div class="al-c mb-5">
-          <div
-            class="al-c flex-column pa-5"
-            v-for="item in items"
-            :key="item.name"
-            style="width: 25%"
-          >
-            <img height="60" :src="item.img" alt="" />
-            <span class="mt-6 ta-c fz-14">{{ item.name }}</span>
+          <div class="mt-12">
+            <h3 class="fz-18">- Unlock new benefits -</h3>
+            <div class="d-flex flex-wrap">
+              <div
+                class="d-flex al-c pa-2"
+                v-for="item in items"
+                :key="item.name"
+                style="width: 50%"
+              >
+                <img height="50" :src="item.img" alt="" />
+                <span class="fz-12 ml-3">{{ item.name }}</span>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="d-flex justify-center">
-          <v-btn
-            color="primary"
-            max-width="300"
-            width="300"
-            min-width="80"
-            @click="handleStart"
-            >Start Benefit
-          </v-btn>
+          <div class="d-flex justify-center mt-10">
+            <v-btn
+              color="primary"
+              width="300"
+              min-width="80"
+              class="btn"
+              @click="handleStart"
+              >START BENEFIT
+            </v-btn>
+            <v-btn
+              color="primary"
+              class="btn share-btn ml-4"
+              outlined
+              width="120"
+              @click="handleShare"
+              >SHARE
+
+              <img
+                height="10"
+                class="ml-2"
+                src="/img/svg/rewardHub/share_icon.svg"
+                alt=""
+              />
+            </v-btn>
+          </div>
         </div>
       </div>
     </v-dialog>
-    <!-- <e-animation-flowers ref="flowers"></e-animation-flowers> -->
   </div>
 </template>
 
@@ -58,20 +65,19 @@ export default {
       code: null,
       items: [
         {
-          img: "/img/svg/rewardHub/web3.svg",
+          img: "/img/svg/rewardHub/web31.svg",
           name: "Web3 Identity",
         },
         {
-          img: "/img/svg/rewardHub/ownership.svg",
+          img: "/img/svg/rewardHub/ownership1.svg",
           name: "Ownership of data",
         },
         {
-          img: "/img/svg/rewardHub/enhanced.svg",
+          img: "/img/svg/rewardHub/enhanced1.svg",
           name: "Enhanced product functionalities",
         },
         {
-          img: "/img/svg/rewardHub/fee_resource.svg",
-
+          img: "/img/svg/rewardHub/fee_resource1.svg",
           name: "Access to additional free resources",
         },
       ],
@@ -126,25 +132,58 @@ export default {
 .register-share-container {
   left: 0;
   top: 0;
-  height: 100vh;
   width: 100%;
   pointer-events: none;
 }
 .share-container {
-  background: url("/img/bg/share/share_bg.png") center/contain no-repeat;
-  height: 390px;
   width: 100%;
-  .share-content {
+  height: 500px;
+  .close-btn {
+    right: 20px;
+    top: 20px;
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    border: 1px solid rgba(140, 140, 161, 0.25);
+    border-radius: 50%;
+  }
+  .close-btn::after {
+    content: "";
+    display: block;
+    position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    background: url("/img/svg/close_icon.svg") no-repeat;
+    background-size: 100%;
+    width: 16px;
+    height: 16px;
   }
-  .wallet-input {
-    width: 350px;
+  .bg {
+    left: 0;
+    top: 0;
+    width: 60%;
+    height: 100%;
+    background: url("/img/svg/rewardHub/reward-share.svg") no-repeat;
+    background-size: 100%;
+  }
+  .share-info {
     padding: 10px;
-    margin: 30px auto 0;
-    border-radius: 6px;
-    background: #fff;
+    width: 480px;
+    right: 40px;
+    top: 60px;
+    .share-title {
+      color: #735ea1;
+      font-size: 25px;
+      line-height: 35px;
+    }
+  }
+  .btn {
+    font-size: 12px;
+  }
+  .share-btn {
+    color: #000 !important;
+    border-color: rgba(140, 140, 161, 0.25) !important;
   }
 }
 .row-content {

@@ -9,20 +9,20 @@
       <template v-if="teamInfo.isOwner">
         <account-info class="mb-5"></account-info>
         <div
-          class="mint-tip ta-c mb-5 py-4 bdrs-6 al-c justify-center cursor-p"
+          class="mint-tip ta-c mb-5 py-3 bdrs-6 al-c justify-center cursor-p"
           v-if="!onChain"
           @click="showClaim"
         >
           <img width="20" src="/img/svg/overview/notice-white.svg" alt="" />
-          <span class="ml-5">
+          <span class="ml-5 fz-14">
             You have a on-chain identity waiting for Mint.</span
           >
         </div>
         <account-bind></account-bind>
-        <div class="account-delete bg-white pa-8 bd-1 bdrs-10 al-c mt-6">
+        <div class="account-delete bg-white px-8 py-4 bd-1 bdrs-10 al-c mt-6">
           <img height="50" src="/img/svg/settings/delete_account.svg" alt="" />
           <div class="ml-3 d-flex flex-column">
-            <span class="fz-18">Delete Account</span>
+            <span class="fz-16">Delete Account</span>
             <span class="gray mt-2 fz-14"
               >Delete your account from 4EVERLAND along with all of its data
               permanently and irrecoverably? Please confirm before
@@ -104,7 +104,7 @@ export default {
           //   required: true,
           // },
           inputAttrs: {
-            label: `Type \`delete my account\` To verify`,
+            label: `Type \`delete my account\` to verify`,
             rules: [
               (v) =>
                 v == "delete my account" ||
@@ -127,12 +127,10 @@ export default {
       }
     },
     showClaim() {
-      this.$flowersAnimation();
-
-      // this.$refs.claimRef.showDialog = true;
+      this.$refs.claimRef.showDialog = true;
     },
-    claimCompeleted() {
-      this.getHandler();
+    async claimCompeleted() {
+      await this.getHandler();
     },
     async getHandler() {
       try {

@@ -1,43 +1,13 @@
 <template>
   <div class="bg-white px-8 bd-1 bdrs-10">
-    <div class="item py-6" v-for="(it, i) in list" :key="i">
-      <!-- <div class="d-flex al-c">
-        <img :src="`/img/svg/settings/${it.icon}.svg`" height="30" />
-        <b class="ml-3">{{ it.title }}</b>
-      </div>
-      <div class="mt-2 gray fz-14" style="min-height: 40px">
-        {{ it.desc }}
-      </div>
-      <div class="mt-3 d-flex al-c">
-        <v-btn
-          v-if="it.type == 1 && it.account"
-          color="primary"
-          small
-          min-width="75"
-          @click="onDisconnect(it)"
-          >Disconnect</v-btn
-        >
-        <v-btn
-          v-else
-          color="primary"
-          :disabled="!!it.account"
-          small
-          min-width="75"
-          @click="onBind(it)"
-          >{{ it.account ? "Verified" : "Verify" }}</v-btn
-        >
-        <span v-if="it.account" class="ml-auto gray fz-13">
-          {{ it.account.cutStr(6, 6) }}
-        </span>
-      </div> -->
-
+    <div class="item py-4" v-for="(it, i) in list" :key="i">
       <div class="al-c">
         <img :src="`/img/svg/settings/${it.icon}.svg`" height="50" />
         <div
           class="mt-2 ml-4 fz-14 d-flex flex-column"
           style="min-height: 40px"
         >
-          <span class="fz-18">{{ it.title }}</span>
+          <span class="fz-16">{{ it.title }}</span>
           <span class="mt-2 gray">{{ it.account ? it.account : it.desc }}</span>
         </div>
         <div class="ml-auto d-flex al-c">

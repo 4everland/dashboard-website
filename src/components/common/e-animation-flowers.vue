@@ -56,9 +56,11 @@ export default {
         snowflake;
       for (i = 0; i < COUNT; i++) {
         snowflake = new Snowflake();
-        const idx = Math.ceil(Math.random() * 3);
+        const idx = Math.ceil(Math.random() * 4);
         // console.log(idx);
         snowflake.bg = `/img/icon/share/${idx}.png`;
+        // snowflake.bg = `/img/svg/rewardHub/ribbon${idx}.svg`;
+
         snowflake.reset();
         snowflakes.push(snowflake);
       }
@@ -75,7 +77,7 @@ export default {
           let img = new Image();
 
           img.src = snowflake.bg;
-          ctx.drawImage(img, snowflake.x, snowflake.y, 30, 30);
+          ctx.drawImage(img, snowflake.x, snowflake.y, 12, 12);
           ctx.closePath();
           ctx.fill();
           if (snowflake.y > height) {

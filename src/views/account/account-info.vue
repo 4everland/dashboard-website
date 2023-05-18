@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="user-info d-flex al-c">
+    <v-card class="user-info d-flex al-c pa-8">
       <div>
         <div class="avatar-box" @click="$refs.uploadInput.onClick(false)">
           <e-team-avatar
@@ -66,7 +66,7 @@
           </div>
           <div class="ml-15">
             <div>
-              <span>User Type</span>
+              <span class="ml-2">User Type</span>
               <v-icon
                 class="ml-2"
                 size="20"
@@ -82,8 +82,8 @@
               }"
               @click="$router.push('/resource/bills/?typeIdx=2')"
             >
-              <span> {{ onChain ? "Standard" : "Trial" }}</span>
-              <v-icon class="ml-3" size="18" color="#fff"
+              <span class="fz-14"> {{ onChain ? "Standard" : "Trial" }}</span>
+              <v-icon class="ml-3" size="16" color="#fff"
                 >mdi-arrow-right-circle-outline</v-icon
               >
             </div>
@@ -241,9 +241,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.user-info {
-  padding: 50px;
-}
 .identification-tag {
   color: #fff;
   line-height: 24px;

@@ -10,7 +10,7 @@
         </div>
         <v-row class="mt-2">
           <v-col :sm="3" :cols="6" v-for="item in items" :key="item.name">
-            <div class="resource-item al-c flex-column pa-5 mb-5">
+            <div class="resource-item al-c flex-column px-3 py-5 mb-5">
               <img height="40" :src="item.img" alt="" />
               <span class="mt-6 ta-c fz-12">{{ item.name }}</span>
             </div>
