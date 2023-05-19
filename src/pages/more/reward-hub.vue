@@ -64,7 +64,7 @@
                       <v-icon>mdi-chevron-down</v-icon>
                     </v-btn>
                     <v-list>
-                      <v-list-item link @click="handlePloygonClaim">
+                      <v-list-item link @click="handleTypeClaim('polygon')">
                         <v-list-item-title
                           class="item-title fz-14 al-c justify-center"
                         >
@@ -76,7 +76,7 @@
                           <span class="ml-3">Ploygon</span>
                         </v-list-item-title>
                       </v-list-item>
-                      <v-list-item link @click="handleZkSyncClaim">
+                      <v-list-item link @click="handleTypeClaim('zkSync')">
                         <v-list-item-title
                           class="item-title fz-14 al-c justify-center"
                         >
@@ -106,7 +106,7 @@
                           </e-tooltip>
                         </v-list-item-title>
                       </v-list-item>
-                      <v-list-item link @click="handleZkSyncClaimV2">
+                      <v-list-item link @click="handleTypeClaim('zkSyncV2')">
                         <v-list-item-title class="fz-14 al-c justify-center">
                           <div class="al-c mx-auto">
                             <img
@@ -387,56 +387,46 @@ export default {
       const { data } = await this.$http.get("$auth/invitation/code");
       this.code = data;
     },
-    async handlePloygonClaim() {
+
+    async handleTypeClaim(type = "polygon") {
       try {
         const register = await this.isRegister();
         if (register) {
           this.onAnimation();
+          await this.getHandler();
           return this.getList();
         }
-        const claimStatus = await this.handleClaim();
+        let claimStatus = null;
+        if (type == "polygon") {
+          claimStatus = await this.handleClaim();
+        } else if (type == "zkSync") {
+          claimStatus = await this.handleZkClaim();
+        } else {
+          claimStatus = await this.handleZkClaimV2();
+        }
         if (claimStatus) {
           this.onAnimation();
+          await this.getHandler();
           this.getList();
         }
       } catch (error) {
         console.log(error);
       }
     },
-    async handleZkSyncClaim() {
+    async getHandler() {
       try {
-        const register = await this.isRegister();
-        if (register) {
-          this.onAnimation();
-          return this.getList();
-        }
-        const claimStatus = await this.handleZkClaim();
-        if (claimStatus) {
-          this.onAnimation();
-          this.getList();
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async handleZkSyncClaimV2() {
-      try {
-        const register = await this.isRegister();
-        if (register) {
-          this.onAnimation();
-          return this.getList();
-        }
-        const claimStatus = await this.handleZkClaimV2();
-        if (claimStatus) {
-          this.onAnimation();
-          this.getList();
-        }
+        const { data } = await this.$http.get(
+          "$auth/self-handled-register-apply"
+        );
+        this.$setState({
+          onChain: data.handled,
+        });
       } catch (error) {
         console.log(error);
       }
     },
     onAnimation() {
-      // this.$refs.share.showDialog = true;
+      this.$refs.share.showDialog = true;
       // this.$flowersAnimation();
     },
   },

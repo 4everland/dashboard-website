@@ -39,11 +39,11 @@
           <div
             class="ml-3 px-3 fz-12 user-tag"
             :style="{
-              background: registerInfo.handled ? '#775da6' : '#999',
-              color: registerInfo.handled ? '#fff' : '#000',
+              background: onChain ? '#775da6' : '#999',
+              color: onChain ? '#fff' : '#000',
             }"
           >
-            {{ registerInfo.handled ? "Standard" : "Trial" }}
+            {{ onChain ? "Standard" : "Trial" }}
           </div>
         </div>
         <div class="gray-8 fz-14 mt-1">Welcome to 4EVERLAND Dashboard</div>
@@ -102,6 +102,7 @@ export default {
     ...mapState({
       noticeMsg: (s) => s.noticeMsg,
       userInfo: (s) => s.userInfo,
+      onChain: (s) => s.onChain,
     }),
     ...mapGetters(["teamInfo"]),
     asMobile() {
@@ -114,7 +115,7 @@ export default {
       return "Overview";
     },
     banners() {
-      if (!this.registerInfo.handled) {
+      if (!this.onChain) {
         return [
           {
             img: "https://static1.4everland.org/img/banner/2023516-181010.jpg",
@@ -132,6 +133,11 @@ export default {
           href: "https://firstsowing.4everland.org",
         },
       ];
+    },
+  },
+  watch: {
+    onChain() {
+      this.$refs.v3Usage.getUsageInfo();
     },
   },
 };

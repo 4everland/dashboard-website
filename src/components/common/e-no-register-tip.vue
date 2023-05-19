@@ -1,14 +1,24 @@
 <template>
-  <v-card class="no-register-container pa-5" v-if="onChain == false">
+  <div
+    class="tips-container"
+    v-if="$route.path != '/login' && onChain == false"
+  >
     <label for="check" class="pos-a check-box-label cursor-p">
-      <img width="16" src="/img/svg/overview/notice-gray.svg" alt="" />
+      <img width="40" src="/img/svg/rewardHub/notice.svg" alt="" />
     </label>
     <input type="checkbox" id="check" class="check-box" />
-    <div class="ml-8 fz-14 text cursor-p" @click="$router.push('/reward-hub')">
-      You still have an outstanding benefit to claim, go ahead and claim it now.
+    <div
+      class="fz-14 cursor-p no-register-container ta-c"
+      @click="$router.push('/account/config')"
+    >
+      <div class="text">
+        You still have an outstanding benefit to claim, go ahead and claim it
+        now.
+      </div>
     </div>
-  </v-card>
+  </div>
 </template>
+
 
 <script>
 import { mapState } from "vuex";
@@ -27,36 +37,51 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.no-register-container {
-  z-index: 999;
+.tips-container {
+  z-index: 100;
   position: fixed;
   width: 50px;
   right: 50px;
   bottom: 50px;
+}
+
+.no-register-container {
+  z-index: 99;
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+  padding: 20px;
+  width: 300px;
   border-radius: 10px;
-  background: #fff;
-  align-items: flex-start;
+  background: #f2eefc;
+  border-image: linear-gradient(
+      90deg,
+      rgba(172, 148, 224, 1),
+      rgba(165, 135, 224, 1),
+      rgba(159, 127, 218, 1)
+    )
+    3 3;
+  transition: all 0.3s ease-out;
   overflow: hidden;
-  transition: width 0.5s ease-out;
+  border: 3px solid #a587e0;
 }
 .text {
-  width: 230px;
-  height: 0;
-  transform: translateX(50px);
-  transition: all 0.5s ease-out;
+  width: 260px;
 }
 .check-box-label {
-  top: 50%;
-  transform: translateY(-50%);
+  z-index: 100;
+  right: -20px;
+  bottom: -20px;
 }
 .check-box {
   display: none;
 }
-.check-box:checked + .text {
-  transform: translateX(0);
-  height: 30px;
+.check-box:checked + .no-register-container {
+  width: 0px;
+  height: 0;
+  padding: 0;
 }
-.no-register-container:has(.check-box:checked) {
-  width: 300px;
+.check-box:checked + .no-register-container .text {
+  display: none;
 }
 </style>
