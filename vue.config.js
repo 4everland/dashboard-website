@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 module.exports = {
   transpileDependencies: ["vuetify"],
   outputDir: "dist",
@@ -30,12 +31,8 @@ module.exports = {
     optimization: {
       splitChunks: {
         chunks: "all",
-        // maxSize: 4e5,
-        // minSize: 3e5,
-        // minChunks: 10,
         maxAsyncRequests: 30,
         maxInitialRequests: 30,
-        // enforceSizeThreshold: 50000,
         cacheGroups: {
           ensdomains: {
             name: "chunk-ensdomains",
@@ -55,5 +52,19 @@ module.exports = {
         },
       },
     },
+    resolve: {
+      alias: {
+        stream: "stream-browserify",
+      },
+      fallback: {
+        buffer: require.resolve("buffer/"),
+        stream: require.resolve("stream-browserify"),
+      },
+    },
+    plugins: [
+      new webpack.ProvidePlugin({
+        Buffer: ["buffer", "Buffer"],
+      }),
+    ],
   },
 };

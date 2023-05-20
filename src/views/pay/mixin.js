@@ -59,6 +59,9 @@ export default {
     isZk() {
       return this.payBy == "zkSync";
     },
+    isEverPay() {
+      return this.payBy == "everPay";
+    },
     payChainId() {
       return this.getChainId(this.payBy);
     },
@@ -273,6 +276,7 @@ export default {
       if (type == "BSC") return this.$inDev ? 97 : 56;
       if (type == "Arbitrum") return 42161;
       if (type == "zkSync") return this.$inDev ? 280 : 324;
+      if (type == "everPay") return this.$inDev ? 5 : 1;
       return this.$inDev ? 5 : 1;
     },
     async addChain(chainId, id) {
@@ -434,14 +438,14 @@ export default {
       // this.walletChanged(true);
       try {
         if (this.chainId != this.payChainId) {
-          let dev = "";
-          if (this.$inDev) {
-            dev = this.isPolygon ? "Mumbai" : "Goerli";
-            if (this.isBSC) dev = "Chapel";
-            if (this.isZk) dev = "zkSync";
-            dev = `(dev - ${dev})`;
-          }
-          console.log(this.payChainId);
+          // let dev = "";
+          // if (this.$inDev) {
+          //   dev = this.isPolygon ? "Mumbai" : "Goerli";
+          //   if (this.isBSC) dev = "Chapel";
+          //   if (this.isZk) dev = "zkSync";
+          //   dev = `(dev - ${dev})`;
+          // }
+          // console.log(this.payChainId);
           // await this.$alert(`Please switch to ${this.payBy}${dev} Network`);
           await this.switchNet(this.payChainId);
           return;

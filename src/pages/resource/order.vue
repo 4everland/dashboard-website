@@ -147,9 +147,9 @@ export default {
       if (this.onChain) {
         // return ["Polygon", "Ethereum", "BSC"];
         if (this.$inDev) {
-          return ["Polygon", "Ethereum", "BSC", "zkSync"];
+          return ["Polygon", "Ethereum", "BSC", "zkSync", "everPay"];
         }
-        return ["Polygon", "Ethereum", "BSC", "Arbitrum", "zkSync"];
+        return ["Polygon", "Ethereum", "BSC", "Arbitrum", "zkSync", "everPay"];
       } else {
         return ["Polygon"];
       }

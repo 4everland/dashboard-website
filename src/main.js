@@ -8,7 +8,7 @@ import "./setup";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 // import { newUserDrop } from "@/plugins/airDrop/index.js";
 // newUserDrop();
-
+// import Everpay from "everpay";
 router.beforeEach((to, _, next) => {
   let { title, group } = to.meta || {};
   const name = "4EVERLAND";
