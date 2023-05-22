@@ -45,14 +45,13 @@
             <!-- <div class="fz-14">Deploy</div> -->
 
             <div class="al-c">
-              <img
+              <!-- <img
                 width="18"
                 src="/img/svg/hosting/m-github.svg"
                 alt=""
                 @click.stop="openLink(it.githubUrl)"
-              />
+              /> -->
               <img
-                class="ml-4"
                 width="18"
                 src="/img/svg/hosting/preview.svg"
                 alt=""

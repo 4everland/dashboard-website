@@ -39,7 +39,7 @@
                     width="18"
                     alt=""
                   />
-                  <span class="ml-3">Ploygon</span>
+                  <span class="ml-3">Polygon</span>
                 </v-list-item-title>
               </v-list-item>
               <v-list-item link @click="handleTypeClaim('zkSync')">
