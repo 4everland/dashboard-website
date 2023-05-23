@@ -91,6 +91,12 @@ export default {
     connectAddr(val) {
       if (val) this.onConnect();
     },
+    payBy(val) {
+      if (val) {
+        if (val == "everPay") this.isApproved = true;
+        else this.onConnect();
+      }
+    },
     payChainId() {
       this.onConnect();
     },
@@ -218,6 +224,13 @@ export default {
     },
     async checkApprove(isBuy) {
       console.log(isBuy);
+      if (
+        isBuy &&
+        this.payBy == "everPay" &&
+        (this.chainId == 1 || this.chainId == 5)
+      ) {
+        return (this.isApproved = true);
+      }
       try {
         const addr = isBuy ? this.payAddr : this.rechargeAddr;
         console.log("check approve", this.connectAddr, addr);
@@ -237,6 +250,7 @@ export default {
     },
     async onApprove(isBuy) {
       try {
+        if (!this.checkPayBy()) return;
         this.$loading("Approving");
         // this.approving = true;
         const addr = isBuy ? this.payAddr : this.rechargeAddr;
@@ -261,6 +275,7 @@ export default {
       this.$loading.close();
     },
     formatToken(value, fixed = 2, decimals = 18) {
+      // console.log(value.toString());
       const v = value.div(
         BigNumber.from((10 ** (decimals - fixed)).toString())
       );
@@ -270,6 +285,13 @@ export default {
       this.$setMsg({
         name: "showMetaConnect",
       });
+    },
+    checkPayBy() {
+      if (!this.payBy) {
+        this.$alert("Please select network first.");
+        return false;
+      }
+      return true;
     },
     getChainId(type) {
       if (type == "Polygon") return this.$inDev ? 80001 : 137;
@@ -402,6 +424,10 @@ export default {
         if (error.code !== 4902) {
           this.onErr(error).then(() => {
             // this.switchNet(id);
+            this.$setState({
+              payBy: null,
+            });
+            localStorage.payBy = "";
           });
         } else {
           this.addChain(chainId, id);
@@ -468,7 +494,6 @@ export default {
           ethContract.setProvider(provider);
           this.curContract = ethContract;
         }
-        // console.log(this.payBy, this.curContract);
         // this.getSign();
         if (this.needCheckApprove) {
           this.checkApprove(this.isSubscribe);

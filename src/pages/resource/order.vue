@@ -30,7 +30,7 @@
     </div>
 
     <e-kv2 class="mt-6" label="Network" v-if="onChain != null">
-      <pay-network :allow="allowNetwork" />
+      <pay-network :allow="allowNetwork" ref="payNetwork" />
     </e-kv2>
 
     <div class="mt-8 gray fz-14">
@@ -86,18 +86,19 @@
       :price="totalPrice"
       :text="isApproved ? 'Confirm' : 'Approve'"
       :loading="approving"
+      :symbol="symbol"
       @submit="onSubmit"
     >
       <template #detail v-if="AmountofDeduction">
         <div>
           <span class="fz-14 gray-6 label">Credit:</span>
           <span class="black-1 fz-25 ml-3">-{{ AmountofDeduction }}</span>
-          <span class="gray-6 ml-2 fz-15">USDC</span>
+          <span class="gray-6 ml-2 fz-15">{{ symbol }}</span>
         </div>
         <div>
           <span class="fz-14 gray-6 label">Total:</span>
           <span class="red-1 fz-25 ml-3">{{ finalPrice }}</span>
-          <span class="gray-6 ml-2 fz-15">USDC</span>
+          <span class="gray-6 ml-2 fz-15">{{ symbol }}</span>
         </div>
       </template>
     </pay-confirm>
@@ -110,7 +111,9 @@ import PayConfirm from "@/views/pay/pay-confirm";
 import mixin from "@/views/pay/mixin";
 import { mapState } from "vuex";
 import { BigNumber } from "@ethersproject/bignumber";
-
+import { bus } from "../../utils/bus";
+import { getProvider } from "@/plugins/ens";
+import { utils } from "ethers";
 export default {
   mixins: [mixin],
   data() {
@@ -128,6 +131,8 @@ export default {
       AmountofDeduction: 0,
       resourceResource: null,
       needCheckApprove: true,
+      symbol: "USDC",
+      curEveypayChannel: null,
     };
   },
   computed: {
@@ -137,6 +142,7 @@ export default {
       orderInfo: (s) => s.orderInfo,
       userInfo: (s) => s.userInfo,
       onChain: (s) => s.onChain,
+      payBy: (s) => s.payBy,
     }),
     finalPrice() {
       return this.totalPrice - this.AmountofDeduction >= 0
@@ -158,10 +164,31 @@ export default {
   created() {
     console.log(this.orderInfo);
     if (!this.list) this.$router.replace("/resource/subscribe");
+
+    bus.$on("everPayChannel", async (curEveypayChannel) => {
+      this.curEveypayChannel = curEveypayChannel;
+      const balance = curEveypayChannel.balance;
+      if (balance < parseFloat(this.finalPrice)) {
+        await this.$alert(
+          "Insufficient balance, please deposit and try again.",
+          "alert"
+        );
+      } else {
+        // /
+        this.$refs.payNetwork.$refs.everPay.showEverPay = false;
+        this.$refs.payNetwork.$refs.everPay.allowPay = true;
+        this.symbol = curEveypayChannel.symbol;
+      }
+    });
   },
   methods: {
     async onSubmit(isPreview) {
       try {
+        if (!this.checkPayBy()) return;
+        if (this.payBy == "everPay") {
+          return await this.everPaySubmit();
+        }
+
         const target = this.curContract[this.chainKey];
         if (!target) {
           return this.onConnect();
@@ -276,6 +303,91 @@ export default {
         this.onErr(error);
       }
     },
+
+    async everPaySubmit() {
+      try {
+        this.$loading();
+        const provider = getProvider();
+        const signer = provider.getSigner();
+        const account = await signer.getAddress();
+        const nonce = this.resourceResource ? this.resourceResource.nonce : "";
+        const voucherAmount = this.resourceResource
+          ? this.resourceResource.voucherAmount
+          : "";
+        const signature = this.resourceResource
+          ? this.resourceResource.sign
+          : "";
+        const jsonData = {
+          account: this.userInfo.uid,
+          nonce,
+          signature,
+          voucherAmount,
+          payloads: this.orderInfo.mapList,
+          resourceAmounts: [],
+        };
+        const form = this.orderInfo.feeForm;
+        const values = [];
+        let totalFee = null;
+        for (const key in form) {
+          let val = form[key];
+          if (!val) continue;
+          Array.isArray(val)
+            ? val.forEach((it) => values.push(BigNumber.from(it)))
+            : values.push(BigNumber.from(val));
+        }
+        console.log(values, "values");
+        for (const fee of values) {
+          jsonData.resourceAmounts.push(fee.toString());
+          totalFee = totalFee ? totalFee.add(fee) : fee;
+        }
+        console.log(totalFee, "totalfee", totalFee.toString());
+        let finalPrice = null;
+        if (voucherAmount != "") {
+          const voucherAmountFee = BigNumber.from(voucherAmount);
+          finalPrice = totalFee.sub(voucherAmountFee).isNegative()
+            ? BigNumber.from("0")
+            : totalFee.sub(voucherAmountFee);
+        } else {
+          finalPrice = totalFee;
+        }
+        if (this.symbol == "DAI") {
+          finalPrice = utils.formatEther(finalPrice);
+        } else {
+          finalPrice = utils.formatUnits(finalPrice.div(10 ** 12), 6);
+        }
+
+        console.log(finalPrice, "finalprice");
+        // return false;
+        const everpay = new window.Everpay.default({
+          account,
+          chainType: "ethereum",
+          ethConnectedSigner: signer,
+        });
+        const data = await everpay.transfer({
+          tag: this.curEveypayChannel.tag,
+          amount: finalPrice,
+          to: this.$inDev ? "0xd8b38301655FaeE94C43f7121189E3E0f8973dd0" : "",
+          data: jsonData,
+        });
+
+        this.$loading.close();
+        await this.$alert(
+          "Successful transaction! The resource release time is based on on-chain data."
+        );
+        this.$router.replace({
+          path: "/resource/bills",
+          query: {
+            typeIdx: this.isPolygon ? 0 : 1,
+          },
+        });
+        localStorage.orderInfo = "";
+        console.log(data);
+      } catch (error) {
+        console.log("pay submit error");
+        this.$loading.close();
+        this.onErr(error);
+      }
+    },
     async handleCommit() {
       try {
         if (!this.voucherCode) return;
@@ -327,6 +439,13 @@ export default {
   components: {
     PayNetwork,
     PayConfirm,
+  },
+  watch: {
+    payBy(val) {
+      if (val != "everPay") {
+        this.symbol = "USDC";
+      }
+    },
   },
 };
 </script>

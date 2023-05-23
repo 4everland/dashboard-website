@@ -1,4 +1,3 @@
-const webpack = require("webpack");
 module.exports = {
   transpileDependencies: ["vuetify"],
   outputDir: "dist",
@@ -52,19 +51,5 @@ module.exports = {
         },
       },
     },
-    resolve: {
-      alias: {
-        stream: "stream-browserify",
-      },
-      fallback: {
-        buffer: require.resolve("buffer/"),
-        stream: require.resolve("stream-browserify"),
-      },
-    },
-    plugins: [
-      new webpack.ProvidePlugin({
-        Buffer: ["buffer", "Buffer"],
-      }),
-    ],
   },
 };

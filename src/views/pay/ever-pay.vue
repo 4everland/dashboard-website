@@ -1,35 +1,34 @@
 <template>
   <v-dialog v-model="showEverPay" class="dialog-everpay" max-width="600">
-    <div class="pt-10 pb-5 px-8 pos-r">
-      <div class="close-btn pos-a"></div>
-      <div class="fz-18 title">Balance on everPay</div>
-      <div class="al-c justify-space-between mt-5">
-        <div>
-          <span class="fw-b fz-40">0.00</span>
-          <span class="text ml-3">USD</span>
-        </div>
+    <div class="pt-8 pb-5 px-8 pos-r">
+      <!-- <div class="close-btn pos-a cursor-p" @click="showEverPay = false"></div> -->
+
+      <div class="d-flex align-start justify-space-between mb-5">
+        <div class="fz-20 title">Choose Token</div>
         <v-btn color="primary">Deposit</v-btn>
       </div>
-      <div class="mt-5 mb-2 fz-18 title">Choose Token</div>
-
       <template v-for="item in everPaySymbolList">
-        <div :key="item.symbol" class="everpay-symbol-item py-4 al-c">
+        <div
+          :key="item.symbol"
+          class="everpay-symbol-item py-4 al-c cursor-p"
+          @click="paymentChannel(item)"
+        >
           <img height="60" :src="item.img" alt="" />
           <div class="ml-3">
             <div>
               <span class="fw-b fz-18">{{ item.title }}</span>
               <span class="ml-2 fz-12 symbol">{{ item.symbol }}</span>
             </div>
-            <p class="fz-14 mt-1 text">{{ item.chainName }}</p>
+            <p class="fz-14 mt-1 text">{{ item.chainType }}</p>
           </div>
           <div class="ml-auto">
-            <p class="fw-b fz-18">{{ item.num }}</p>
-            <p class="text fz-14">{{ item.balance }}</p>
+            <p class="fw-b fz-18">{{ item.balance.toFixed(7) }}</p>
+            <p class="text fz-14">${{ item.balance.toFixed(2) }}</p>
           </div>
         </div>
       </template>
 
-      <div class="fz-18 mt-6 ta-c">
+      <div class="fz-16 mt-6 ta-c">
         Powered by <span>everPay</span> protocol
       </div>
     </div>
@@ -37,10 +36,9 @@
 </template>
 
 <script>
-import Everpay from "everpay";
-// console.log(Everpay);
-// console.log(window.Everpay.default);
 import { mapState } from "vuex";
+import { bus } from "../../utils/bus";
+
 export default {
   data() {
     return {
@@ -50,27 +48,26 @@ export default {
           img: "/img/svg/pay/usdc.svg",
           title: "USDC Coin",
           symbol: "USDC",
-          num: 0,
-          balance: "$0.00",
-          chainName: "Ethereum",
+          balance: 0,
+          chainType: "Ethereum",
         },
         {
           img: "/img/svg/pay/usdt.svg",
           title: "Tether USD",
           symbol: "USDT",
-          num: 0,
-          balance: "$0.00",
-          chainName: "Ethereum",
+          balance: 0,
+          chainType: "Ethereum",
         },
         {
           img: "/img/svg/pay/dai.svg",
           title: "Dai Stablecoin",
           symbol: "DAI",
-          num: 0,
-          balance: "$0.00",
-          chainName: "Ethereum",
+          balance: 0,
+          chainType: "Ethereum",
         },
       ],
+      curToken: "",
+      allowPay: false,
     };
   },
   computed: {
@@ -80,19 +77,56 @@ export default {
     }),
   },
 
-  created() {
-    this.initEverPay();
-  },
+  // created() {
+  // },
   methods: {
     async initEverPay() {
       // const everpay = new Everpay();
       const everPay = new window.Everpay.default();
-      console.log(everPay);
+      if (typeof window.ethereum !== "undefined") {
+        console.log("MetaMask is installed!");
+      }
+      const accounts = await window.ethereum
+        .request({ method: "eth_requestAccounts" })
+        .catch((err) => {
+          if (err.code === 4001) {
+            // EIP-1193 userRejectedRequest error
+            // If this happens, the user rejected the connection request.
+            console.log("Please connect to MetaMask.");
+          } else {
+            console.error(err);
+          }
+        });
+      const account = accounts[0];
       const data = await everPay.balances({
-        account: "0x1D773A644b4dC6e1B3b11D69F30d27101bF2F85e",
+        account,
       });
-      console.log(data);
-      // const
+      data.forEach((it) => {
+        // return it.symbol == 'USDC' || it.symbol == 'USDT' || it.symbol == 'DAI'
+        it.balance = parseFloat(it.balance);
+        if (it.symbol == "USDC") {
+          this.everPaySymbolList[0] = Object.assign(
+            this.everPaySymbolList[0],
+            it
+          );
+        }
+        if (it.symbol == "USDT") {
+          this.everPaySymbolList[1] = Object.assign(
+            this.everPaySymbolList[1],
+            it
+          );
+        }
+        if (it.symbol == "DAI") {
+          this.everPaySymbolList[2] = Object.assign(
+            this.everPaySymbolList[2],
+            it
+          );
+        }
+      });
+    },
+    async paymentChannel(item) {
+      bus.$emit("everPayChannel", item);
+      this.curToken = item.symbol;
     },
   },
   watch: {
@@ -100,9 +134,18 @@ export default {
       handler(val) {
         if (val == "everPay" && (this.chainId == 1 || this.chainId == 5)) {
           this.showEverPay = true;
+          this.initEverPay();
         }
       },
       immediate: true,
+    },
+    showEverPay(val) {
+      if (!val && !this.allowPay) {
+        this.$setState({
+          payBy: null,
+        });
+        localStorage.payBy = "";
+      }
     },
   },
 };
@@ -139,6 +182,7 @@ export default {
 }
 .text {
   color: #8c8ca1;
+  text-transform: capitalize;
 }
 .title {
   color: #0e0e2c;
