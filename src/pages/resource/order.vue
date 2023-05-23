@@ -340,6 +340,7 @@ export default {
           jsonData.resourceAmounts.push(fee.toString());
           totalFee = totalFee ? totalFee.add(fee) : fee;
         }
+
         console.log(totalFee, "totalfee", totalFee.toString());
         let finalPrice = null;
         if (voucherAmount != "") {

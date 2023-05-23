@@ -93,13 +93,12 @@ export default {
     },
     payBy(val) {
       if (val) {
-        if (val == "everPay") this.isApproved = true;
-        else this.onConnect();
+        this.onConnect();
       }
     },
-    payChainId() {
-      this.onConnect();
-    },
+    // payChainId() {
+    //   this.onConnect();
+    // },
   },
   mounted() {
     if (this.connectAddr) {
