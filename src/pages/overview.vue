@@ -9,6 +9,7 @@
     <div v-if="!teamInfo.isMember">
       <overview-notice class="mb-4" />
       <v-carousel
+        v-model="carouselIdx"
         ref="carousel"
         :interval="5000"
         :show-arrows="false"
@@ -93,7 +94,9 @@ import mixin from "@/pages/more/mixin-register";
 export default {
   mixins: [mixin],
   data() {
-    return {};
+    return {
+      carouselIdx: 0,
+    };
   },
   created() {
     this.isRegister();
