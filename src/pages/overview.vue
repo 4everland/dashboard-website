@@ -17,6 +17,8 @@
         class="bdrs-10 mb-4"
         cycle
         delimiter-icon="mdi-minus"
+        hide-delimiter-background
+        hide-delimiters
       >
         <v-carousel-item
           v-for="(it, i) in banners"
