@@ -179,7 +179,7 @@ export default {
       this.curEveypayChannel = curEveypayChannel;
       let finalPrice = this.getFinalPrice();
       let balance = utils.parseEther(curEveypayChannel.balance.toString());
-      if (balance.gt(finalPrice)) {
+      if (balance.gte(finalPrice)) {
         this.$refs.payNetwork.$refs.everPay.allowPay = true;
         this.$refs.payNetwork.$refs.everPay.showEverPay = false;
         this.symbol = curEveypayChannel.symbol;
