@@ -1,9 +1,8 @@
 <template>
-  <v-dialog v-model="showEverPay" class="dialog-everpay" max-width="600">
-    <div class="pt-8 pb-5 px-8 pos-r">
+  <v-dialog v-model="showEverPay" class="dialog-everpay" max-width="520">
+    <div class="pt-6 pb-5 px-8 pos-r">
       <!-- <div class="close-btn pos-a cursor-p" @click="showEverPay = false"></div> -->
-
-      <div class="fz-20 title pa-2">Choose Token</div>
+      <div class="fz-20 title py-2">Choose Token</div>
       <template v-for="item in everPaySymbolList">
         <div
           :key="item.symbol"
@@ -20,25 +19,26 @@
           </div>
           <div class="ml-auto">
             <p class="fw-b fz-18">{{ item.balance.toFixed(7) }}</p>
-            <p class="text fz-14">${{ item.balance.toFixed(2) }}</p>
+            <p class="text fz-14 ta-r">${{ item.balance.toFixed(2) }}</p>
           </div>
         </div>
       </template>
       <v-btn
         color="primary"
-        class="mt-4"
+        class="mt-4 py-5"
         width="100%"
         @click="handleOpenLink('https://app.everpay.io/')"
       >
         <img
           class="mr-3"
           src="/img/svg/billing/ic-everpay-white.svg"
-          height="20"
+          height="22"
           alt=""
         />
-        Deposit</v-btn
+
+        <span class="fz-16">Deposit</span></v-btn
       >
-      <div class="fz-16 mt-6 ta-c">
+      <div class="fz-16 mt-6 ta-c" style="color: #8c8ca1">
         Powered by
         <span
           class="cursor-p"
@@ -185,7 +185,7 @@ export default {
 }
 .everpay-symbol-item {
   .symbol {
-    color: #0e0e2c;
+    color: #4d4d67;
   }
 }
 .everpay-symbol-item + .everpay-symbol-item {
