@@ -109,7 +109,7 @@ export default {
       const data = await everPay.balances({
         account,
       });
-      console.log(data);
+      // console.log(data);
       data.forEach((it) => {
         it.balance = parseFloat(it.balance);
         if (it.symbol == "USDC") {

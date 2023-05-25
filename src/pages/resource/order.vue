@@ -175,7 +175,6 @@ export default {
   },
   created() {
     if (!this.list) this.$router.replace("/resource/subscribe");
-    console.log(bus);
     bus.$on("everPayChannel", async (curEveypayChannel) => {
       this.curEveypayChannel = curEveypayChannel;
       let finalPrice = this.getFinalPrice();
@@ -381,7 +380,7 @@ export default {
         } else {
           finalPrice = utils.formatUnits(finalPrice.div(10 ** 12), 6);
         }
-        console.log(finalPrice, jsonData, "jsondata");
+        // console.log(finalPrice, jsonData, "jsondata");
         const everpay = new window.Everpay.default({
           account,
           chainType: "ethereum",
