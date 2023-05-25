@@ -90,14 +90,14 @@
       :symbol="symbol"
       @submit="onSubmit"
     >
-      <template #evepay v-if="payBy == 'everPay' && curEveypayChannel">
+      <template #evepay v-if="payBy == 'everPay' && allowEverPay">
         <div class="mt-2 bdrs-6 fz-12 gray mb-2" style="bottom: 70px">
           Purchase resources using {{ symbol }} from your everPay
           <span
             class="cursor-p"
             style="color: #775da6"
             @click="handleCheckSymbol"
-            >Change</span
+            >Switch</span
           >
         </div>
       </template>
@@ -145,6 +145,7 @@ export default {
       needCheckApprove: true,
       symbol: "USDC",
       curEveypayChannel: null,
+      allowEverPay: false,
     };
   },
   computed: {
@@ -183,6 +184,7 @@ export default {
         this.$refs.payNetwork.$refs.everPay.allowPay = true;
         this.$refs.payNetwork.$refs.everPay.showEverPay = false;
         this.symbol = curEveypayChannel.symbol;
+        this.allowEverPay = true;
       } else {
         this.$alert(
           "Insufficient balance, please deposit and try again.",
@@ -470,6 +472,7 @@ export default {
     payBy(val) {
       if (val != "everPay") {
         this.symbol = "USDC";
+        this.allowEverPay = false;
       }
     },
   },
