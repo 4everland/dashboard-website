@@ -1,35 +1,34 @@
 <template>
   <div class="mt-2 pos-s btm-0 bdrs-6">
-    <div class="fz-12 gray mb-2" v-if="payBy == 'everPay'">
-      Purchase resources using {{ symbol }} from your everPay
-    </div>
-    <div class="al-c pa-3 shadow-2" style="background: #fff5eb">
-      <div class="amount-content">
-        <div class="detail">
-          <slot name="detail"></slot>
+    <div class="pa-3 shadow-2" style="background: #fff5eb">
+      <slot name="evepay"></slot>
+      <div class="al-c">
+        <div class="amount-content">
+          <div class="detail">
+            <slot name="detail"></slot>
+          </div>
+          <div class="al-c amount">
+            <span class="fz-14 gray-6 label">{{ label }}:</span>
+            <slot></slot>
+            <span class="fz-25 ml-3">{{ price }}</span>
+            <span class="gray-6 ml-2 fz-15">{{ symbol }}</span>
+          </div>
         </div>
-        <div class="al-c amount">
-          <span class="fz-14 gray-6 label">{{ label }}:</span>
-          <slot></slot>
-          <span class="fz-25 ml-3">{{ price }}</span>
-          <span class="gray-6 ml-2 fz-15">{{ symbol }}</span>
-        </div>
+        <v-btn
+          color="error"
+          depressed
+          class="ml-auto"
+          :to="to"
+          :loading="loading"
+          @click="$emit('submit')"
+          >{{ text }}</v-btn
+        >
       </div>
-      <v-btn
-        color="error"
-        depressed
-        class="ml-auto"
-        :to="to"
-        :loading="loading"
-        @click="$emit('submit')"
-        >{{ text }}</v-btn
-      >
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
 export default {
   props: {
     price: null,
@@ -47,11 +46,6 @@ export default {
     },
     to: String,
     loading: Boolean,
-  },
-  computed: {
-    ...mapState({
-      payBy: (s) => s.payBy,
-    }),
   },
 };
 </script>

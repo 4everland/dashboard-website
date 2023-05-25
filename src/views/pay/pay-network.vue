@@ -28,7 +28,7 @@
         <img :src="it.img" height="20" />
       </div>
     </div>
-    <ever-pay ref="everPay"></ever-pay>
+    <ever-pay ref="everPay" v-if="payBy == 'everPay'"></ever-pay>
   </div>
 </template>
 
@@ -84,7 +84,7 @@ export default {
         {
           label: "everPay",
           name: "everPay",
-          img: "/img/svg/logo-no-letters.svg",
+          img: "/img/svg/billing/ic-everpay.svg",
         },
       ],
     };

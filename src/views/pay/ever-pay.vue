@@ -3,10 +3,7 @@
     <div class="pt-8 pb-5 px-8 pos-r">
       <!-- <div class="close-btn pos-a cursor-p" @click="showEverPay = false"></div> -->
 
-      <div class="d-flex align-start justify-space-between mb-5">
-        <div class="fz-20 title">Choose Token</div>
-        <v-btn color="primary">Deposit</v-btn>
-      </div>
+      <div class="fz-20 title pa-2">Choose Token</div>
       <template v-for="item in everPaySymbolList">
         <div
           :key="item.symbol"
@@ -27,9 +24,29 @@
           </div>
         </div>
       </template>
-
+      <v-btn
+        color="primary"
+        class="mt-4"
+        width="100%"
+        @click="handleOpenLink('https://app.everpay.io/')"
+      >
+        <img
+          class="mr-3"
+          src="/img/svg/billing/ic-everpay-white.svg"
+          height="20"
+          alt=""
+        />
+        Deposit</v-btn
+      >
       <div class="fz-16 mt-6 ta-c">
-        Powered by <span>everPay</span> protocol
+        Powered by
+        <span
+          class="cursor-p"
+          style="color: #775da6"
+          @click="handleOpenLink('https://everpay.io/')"
+          >everPay</span
+        >
+        protocol
       </div>
     </div>
   </v-dialog>
@@ -76,22 +93,13 @@ export default {
       chainId: (s) => s.chainId,
     }),
   },
-
-  // created() {
-  // },
   methods: {
     async initEverPay() {
-      // const everpay = new Everpay();
       const everPay = new window.Everpay.default();
-      if (typeof window.ethereum !== "undefined") {
-        console.log("MetaMask is installed!");
-      }
       const accounts = await window.ethereum
         .request({ method: "eth_requestAccounts" })
         .catch((err) => {
           if (err.code === 4001) {
-            // EIP-1193 userRejectedRequest error
-            // If this happens, the user rejected the connection request.
             console.log("Please connect to MetaMask.");
           } else {
             console.error(err);
@@ -101,8 +109,8 @@ export default {
       const data = await everPay.balances({
         account,
       });
+      console.log(data);
       data.forEach((it) => {
-        // return it.symbol == 'USDC' || it.symbol == 'USDT' || it.symbol == 'DAI'
         it.balance = parseFloat(it.balance);
         if (it.symbol == "USDC") {
           this.everPaySymbolList[0] = Object.assign(
@@ -127,6 +135,9 @@ export default {
     async paymentChannel(item) {
       bus.$emit("everPayChannel", item);
       this.curToken = item.symbol;
+    },
+    handleOpenLink(url) {
+      window.open(url);
     },
   },
   watch: {

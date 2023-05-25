@@ -166,7 +166,7 @@ export default {
       });
       if (/missing revert data/i.test(msg)) {
         msg = "Network Error";
-      } else if (/user rejected transaction/i.test(msg)) {
+      } else if (/user rejected/i.test(msg)) {
         msg = "Your transaction has been canceled.";
       } else if (/transaction failed/i.test(msg)) {
         msg = "Transaction Failed";

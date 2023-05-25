@@ -81,6 +81,7 @@
       </v-col>
     </v-row>
     <div style="height: 20vh"></div>
+
     <pay-confirm
       label="Configuration costs"
       :price="totalPrice"
@@ -89,6 +90,17 @@
       :symbol="symbol"
       @submit="onSubmit"
     >
+      <template #evepay v-if="payBy == 'everPay' && curEveypayChannel">
+        <div class="mt-2 bdrs-6 fz-12 gray mb-2" style="bottom: 70px">
+          Purchase resources using {{ symbol }} from your everPay
+          <span
+            class="cursor-p"
+            style="color: #775da6"
+            @click="handleCheckSymbol"
+            >Change</span
+          >
+        </div>
+      </template>
       <template #detail v-if="AmountofDeduction">
         <div>
           <span class="fz-14 gray-6 label">Credit:</span>
@@ -162,24 +174,26 @@ export default {
     },
   },
   created() {
-    console.log(this.orderInfo);
     if (!this.list) this.$router.replace("/resource/subscribe");
-
+    console.log(bus);
     bus.$on("everPayChannel", async (curEveypayChannel) => {
       this.curEveypayChannel = curEveypayChannel;
-      const balance = curEveypayChannel.balance;
-      if (balance < parseFloat(this.finalPrice)) {
-        await this.$alert(
+      let finalPrice = this.getFinalPrice();
+      let balance = utils.parseEther(curEveypayChannel.balance.toString());
+      if (balance.gt(finalPrice)) {
+        this.$refs.payNetwork.$refs.everPay.allowPay = true;
+        this.$refs.payNetwork.$refs.everPay.showEverPay = false;
+        this.symbol = curEveypayChannel.symbol;
+      } else {
+        this.$alert(
           "Insufficient balance, please deposit and try again.",
           "alert"
         );
-      } else {
-        // /
-        this.$refs.payNetwork.$refs.everPay.showEverPay = false;
-        this.$refs.payNetwork.$refs.everPay.allowPay = true;
-        this.symbol = curEveypayChannel.symbol;
       }
     });
+  },
+  beforeDestroy() {
+    bus.$off("everPayChannel");
   },
   methods: {
     async onSubmit(isPreview) {
@@ -188,7 +202,6 @@ export default {
         if (this.payBy == "everPay") {
           return await this.everPaySubmit();
         }
-
         const target = this.curContract[this.chainKey];
         if (!target) {
           return this.onConnect();
@@ -303,7 +316,34 @@ export default {
         this.onErr(error);
       }
     },
-
+    getFinalPrice() {
+      const form = this.orderInfo.feeForm;
+      const values = [];
+      let totalFee = null;
+      for (const key in form) {
+        let val = form[key];
+        if (!val) continue;
+        Array.isArray(val)
+          ? val.forEach((it) => values.push(BigNumber.from(it)))
+          : values.push(BigNumber.from(val));
+      }
+      for (const fee of values) {
+        totalFee = totalFee ? totalFee.add(fee) : fee;
+      }
+      const voucherAmount = this.resourceResource
+        ? this.resourceResource.voucherAmount
+        : "";
+      let finalPrice = null;
+      if (voucherAmount != "") {
+        const voucherAmountFee = BigNumber.from(voucherAmount);
+        finalPrice = totalFee.sub(voucherAmountFee).isNegative()
+          ? BigNumber.from("0")
+          : totalFee.sub(voucherAmountFee);
+      } else {
+        finalPrice = totalFee;
+      }
+      return finalPrice;
+    },
     async everPaySubmit() {
       try {
         this.$loading();
@@ -322,43 +362,26 @@ export default {
           nonce,
           signature,
           voucherAmount,
-          payloads: this.orderInfo.mapList,
-          resourceAmounts: [],
+          payloads: [],
         };
         const form = this.orderInfo.feeForm;
-        const values = [];
-        let totalFee = null;
         for (const key in form) {
           let val = form[key];
           if (!val) continue;
-          Array.isArray(val)
-            ? val.forEach((it) => values.push(BigNumber.from(it)))
-            : values.push(BigNumber.from(val));
+          jsonData.payloads.push({
+            resourceType: key,
+            values: Array.isArray(form[key])
+              ? form[key].map((it) => BigNumber.from(it).toString())
+              : [BigNumber.from(form[key]).toString()],
+          });
         }
-        console.log(values, "values");
-        for (const fee of values) {
-          jsonData.resourceAmounts.push(fee.toString());
-          totalFee = totalFee ? totalFee.add(fee) : fee;
-        }
-
-        console.log(totalFee, "totalfee", totalFee.toString());
-        let finalPrice = null;
-        if (voucherAmount != "") {
-          const voucherAmountFee = BigNumber.from(voucherAmount);
-          finalPrice = totalFee.sub(voucherAmountFee).isNegative()
-            ? BigNumber.from("0")
-            : totalFee.sub(voucherAmountFee);
-        } else {
-          finalPrice = totalFee;
-        }
+        let finalPrice = this.getFinalPrice();
         if (this.symbol == "DAI") {
           finalPrice = utils.formatEther(finalPrice);
         } else {
           finalPrice = utils.formatUnits(finalPrice.div(10 ** 12), 6);
         }
-
-        console.log(finalPrice, "finalprice");
-        // return false;
+        console.log(finalPrice, jsonData, "jsondata");
         const everpay = new window.Everpay.default({
           account,
           chainType: "ethereum",
@@ -435,6 +458,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    handleCheckSymbol() {
+      this.$refs.payNetwork.$refs.everPay.showEverPay = true;
     },
   },
   components: {

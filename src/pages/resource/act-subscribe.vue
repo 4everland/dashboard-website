@@ -340,37 +340,6 @@ export default {
           `Configuration costs cannot be less than 0.01 USDC.`
         );
       }
-      const mapList = [];
-      for (const key in this.form) {
-        let obj = null;
-        if (this.form[key]) {
-          if (key == "buildMinutes") {
-            obj = {
-              resourceType: 1,
-              values: [this.form[key]],
-            };
-          }
-          if (key == "bandwidth") {
-            obj = {
-              resourceType: 2,
-              values: [this.form[key]],
-            };
-          }
-          if (key == "ar") {
-            obj = {
-              resourceType: 3,
-              values: [this.form[key]],
-            };
-          }
-          if (key == "ipfs") {
-            obj = {
-              resourceType: 4,
-              values: [this.form[key], this.ipfsTime],
-            };
-          }
-          mapList.push(obj);
-        }
-      }
       const form = {};
       for (const key in this.feeForm) {
         const val = this.feeForm[key];
@@ -381,7 +350,6 @@ export default {
         totalPrice: this.totalPrice,
         list: this.previewList,
         feeForm: form,
-        mapList,
       };
       localStorage.orderInfo = JSON.stringify(orderInfo);
       this.$setState({
@@ -494,11 +462,11 @@ export default {
       try {
         let amount = val;
         this.feeLoading = true;
-        console.log({
-          providerAddr: this.providerAddr,
-          resId,
-          amount,
-        });
+        // console.log({
+        //   providerAddr: this.providerAddr,
+        //   resId,
+        //   amount,
+        // });
         if (resId == ResourceType.IPFSStorage) {
           console.log("ipfs", this.uuid, this.ipfsTime);
           fee = await this.curContract.DstChainPayment.ipfsAlloctionsFee(
@@ -515,12 +483,6 @@ export default {
             amount
           );
         }
-        let fee1 = await this.curContract.DstChainPayment.getValueOf(
-          this.providerAddr,
-          resId,
-          1
-        );
-        console.log(fee1, "amount");
         this.feeForm = {
           ...this.feeForm,
           [resId]: fee,

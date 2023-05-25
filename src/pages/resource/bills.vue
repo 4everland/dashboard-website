@@ -56,7 +56,7 @@
       <template v-slot:item.cost="{ item }">
         <div v-if="item.usdt > 0">
           <span>{{ item.cost }}</span>
-          <span class="gray-7 ml-1">USDC</span>
+          <!-- <span class="gray-7 ml-1">USDC</span> -->
         </div>
       </template>
       <template #item.amount="{ item }">
@@ -349,6 +349,7 @@ export default {
       if ([56, 97].includes(id)) return "BSC";
       if ([42161].includes(id)) return "Arbitrum";
       if ([280, 324].includes(id)) return "zkSync";
+      if ([9999999].includes(id)) return "everPay";
       return "Ethereum";
     },
   },
