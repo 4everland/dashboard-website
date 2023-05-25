@@ -9,13 +9,13 @@
     <div v-if="!teamInfo.isMember">
       <overview-notice class="mb-4" />
       <v-carousel
-        hide-delimiter-background
+        ref="carousel"
         :interval="5000"
         :show-arrows="false"
         :height="asMobile ? 100 : 160"
         class="bdrs-10 mb-4"
         cycle
-        hide-delimiters
+        delimiter-icon="mdi-minus"
       >
         <v-carousel-item
           v-for="(it, i) in banners"
@@ -97,6 +97,9 @@ export default {
   },
   created() {
     this.isRegister();
+  },
+  mounted() {
+    console.log(this.$refs.carousel);
   },
   computed: {
     ...mapState({
