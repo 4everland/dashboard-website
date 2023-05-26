@@ -8,28 +8,40 @@
   <div>
     <div v-if="!teamInfo.isMember">
       <overview-notice class="mb-4" />
-      <v-carousel
-        v-model="carouselIdx"
-        ref="carousel"
-        :interval="5000"
-        :show-arrows="false"
-        :height="asMobile ? 100 : 160"
-        class="bdrs-10 mb-4"
-        cycle
-        delimiter-icon="mdi-minus"
-        hide-delimiter-background
-        hide-delimiters
-      >
-        <v-carousel-item
-          v-for="(it, i) in banners"
-          :key="i"
-          :src="it.img"
-          :to="it.to"
-          :href="it.href"
-          :target="it.href ? '_blank' : null"
+      <div class="pos-r">
+        <v-carousel
+          v-model="carouselIdx"
+          :interval="5000"
+          :show-arrows="false"
+          :height="asMobile ? 100 : 160"
+          class="bdrs-10 mb-4"
+          cycle
+          delimiter-icon="mdi-minus"
+          hide-delimiters
+          hide-delimiter-background
         >
-        </v-carousel-item>
-      </v-carousel>
+          <v-carousel-item
+            v-for="(it, i) in banners"
+            :key="i"
+            :src="it.img"
+            :to="it.to"
+            :href="it.href"
+            :target="it.href ? '_blank' : null"
+          >
+          </v-carousel-item>
+        </v-carousel>
+
+        <div class="delimiter-content al-c justify-center">
+          <template v-for="(item, index) in banners">
+            <div
+              class="delimiter cursor-p"
+              :class="{ active: carouselIdx == index }"
+              :key="index"
+              @click.stop="carouselIdx = index"
+            ></div>
+          </template>
+        </div>
+      </div>
     </div>
 
     <div class="pos-r mb-5">
@@ -103,9 +115,6 @@ export default {
   created() {
     this.isRegister();
   },
-  mounted() {
-    console.log(this.$refs.carousel);
-  },
   computed: {
     ...mapState({
       noticeMsg: (s) => s.noticeMsg,
@@ -162,5 +171,25 @@ export default {
 .user-tag {
   border-radius: 30px;
   background: #999;
+}
+.delimiter-content {
+  z-index: 999;
+  width: 100%;
+  height: 30px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  .delimiter {
+    width: 35px;
+    height: 5px;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .delimiter + .delimiter {
+    margin-left: 20px;
+  }
+  .delimiter.active {
+    background: #775da6;
+  }
 }
 </style>
