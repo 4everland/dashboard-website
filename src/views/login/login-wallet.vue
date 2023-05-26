@@ -1,8 +1,13 @@
 <template>
   <div>
     <div class="wallet-box">
-      <div class="wallet-item" v-for="(item, index) in walletItem" :key="item.name" v-ripple="{ class: `info--text` }"
-        @click="onVerify(item.name)">
+      <div
+        class="wallet-item"
+        v-for="(item, index) in walletItem"
+        :key="item.name"
+        v-ripple="{ class: `info--text` }"
+        @click="onVerify(item.name)"
+      >
         <div class="wallet-item-name">
           <span class="name">{{ item.name }}</span>
         </div>
@@ -42,7 +47,7 @@ export default {
     return {
       inviteCode: null,
       sitekey: "6LdPnxclAAAAACTzYeZDztp3dcCKFUIG_5r313JV",
-      walletName: '',
+      walletName: "",
       walletItem: [
         {
           name: "MetaMask",
@@ -134,7 +139,12 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignMetaMask(accounts[0], nonce, this.inviteCode, this.capToken);
+      const stoken = await SignMetaMask(
+        accounts[0],
+        nonce,
+        this.inviteCode,
+        this.capToken
+      );
       if (stoken) {
         this.ssoLogin(stoken);
       }
@@ -148,7 +158,13 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignOkx(accounts[0], nonce, this.inviteCode, this.capToken);
+      // window.alert(nonce);
+      const stoken = await SignOkx(
+        accounts[0],
+        nonce,
+        this.inviteCode,
+        this.capToken
+      );
       if (stoken) {
         this.ssoLogin(stoken);
       }
@@ -162,7 +178,12 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignPhantom(publicKey, nonce, this.inviteCode, this.capToken);
+      const stoken = await SignPhantom(
+        publicKey,
+        nonce,
+        this.inviteCode,
+        this.capToken
+      );
       if (stoken) {
         this.ssoLogin(stoken);
       }
@@ -178,7 +199,12 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignFlow(currentUser.addr, nonce, this.inviteCode, this.capToken);
+      const stoken = await SignFlow(
+        currentUser.addr,
+        nonce,
+        this.inviteCode,
+        this.capToken
+      );
       if (stoken) {
         this.ssoLogin(stoken);
       }
@@ -192,14 +218,19 @@ export default {
       if (!nonce) {
         return;
       }
-      const stoken = await SignPetra(account, nonce, this.inviteCode, this.capToken);
+      const stoken = await SignPetra(
+        account,
+        nonce,
+        this.inviteCode,
+        this.capToken
+      );
       if (stoken) {
         this.ssoLogin(stoken);
       }
     },
     onVerify(name) {
-      this.$emit('walletVerify', name)
-    }
+      this.$emit("walletVerify", name);
+    },
   },
 };
 </script>

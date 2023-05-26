@@ -80,10 +80,11 @@ export const ConnectOkx = async () => {
 };
 
 export const SignOkx = async (accounts, nonce, inviteCode, capToken) => {
+  const msg = `0x${Buffer.from(nonce, "utf8").toString("hex")}`;
   try {
     const signature = await window.okxwallet.request({
       method: "personal_sign",
-      params: [accounts, nonce],
+      params: [msg, accounts],
     });
     const data = {
       signature,
