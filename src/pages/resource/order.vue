@@ -391,7 +391,9 @@ export default {
         const data = await everpay.transfer({
           tag: this.curEveypayChannel.tag,
           amount: finalPrice,
-          to: this.$inDev ? "0xd8b38301655FaeE94C43f7121189E3E0f8973dd0" : "",
+          to: this.$inDev
+            ? "0xd8b38301655FaeE94C43f7121189E3E0f8973dd0"
+            : "0xb7B4360F7F6298dE2e7a11009270F35F189Bd77E",
           data: jsonData,
         });
 
