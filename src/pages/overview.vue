@@ -13,9 +13,9 @@
           v-model="carouselIdx"
           :interval="5000"
           :show-arrows="false"
-          :height="asMobile ? 100 : 160"
           class="bdrs-10 mb-4"
           cycle
+          height="100%"
           delimiter-icon="mdi-minus"
           hide-delimiters
           hide-delimiter-background
