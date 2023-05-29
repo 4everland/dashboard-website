@@ -59,6 +59,9 @@ export default {
     isZk() {
       return this.payBy == "zkSync";
     },
+    isEverPay() {
+      return this.payBy == "everPay";
+    },
     payChainId() {
       return this.getChainId(this.payBy);
     },
@@ -88,9 +91,14 @@ export default {
     connectAddr(val) {
       if (val) this.onConnect();
     },
-    payChainId() {
-      this.onConnect();
+    payBy(val) {
+      if (val) {
+        this.onConnect();
+      }
     },
+    // payChainId() {
+    //   this.onConnect();
+    // },
   },
   mounted() {
     if (this.connectAddr) {
@@ -158,7 +166,7 @@ export default {
       });
       if (/missing revert data/i.test(msg)) {
         msg = "Network Error";
-      } else if (/user rejected transaction/i.test(msg)) {
+      } else if (/user rejected/i.test(msg)) {
         msg = "Your transaction has been canceled.";
       } else if (/transaction failed/i.test(msg)) {
         msg = "Transaction Failed";
@@ -215,6 +223,13 @@ export default {
     },
     async checkApprove(isBuy) {
       console.log(isBuy);
+      if (
+        isBuy &&
+        this.payBy == "everPay" &&
+        (this.chainId == 1 || this.chainId == 5)
+      ) {
+        return (this.isApproved = true);
+      }
       try {
         const addr = isBuy ? this.payAddr : this.rechargeAddr;
         console.log("check approve", this.connectAddr, addr);
@@ -234,6 +249,7 @@ export default {
     },
     async onApprove(isBuy) {
       try {
+        if (!this.checkPayBy()) return;
         this.$loading("Approving");
         // this.approving = true;
         const addr = isBuy ? this.payAddr : this.rechargeAddr;
@@ -258,6 +274,7 @@ export default {
       this.$loading.close();
     },
     formatToken(value, fixed = 2, decimals = 18) {
+      // console.log(value.toString());
       const v = value.div(
         BigNumber.from((10 ** (decimals - fixed)).toString())
       );
@@ -268,11 +285,19 @@ export default {
         name: "showMetaConnect",
       });
     },
+    checkPayBy() {
+      if (!this.payBy) {
+        this.$alert("Please select network first.");
+        return false;
+      }
+      return true;
+    },
     getChainId(type) {
       if (type == "Polygon") return this.$inDev ? 80001 : 137;
       if (type == "BSC") return this.$inDev ? 97 : 56;
       if (type == "Arbitrum") return 42161;
       if (type == "zkSync") return this.$inDev ? 280 : 324;
+      if (type == "everPay") return this.$inDev ? 5 : 1;
       return this.$inDev ? 5 : 1;
     },
     async addChain(chainId, id) {
@@ -398,6 +423,10 @@ export default {
         if (error.code !== 4902) {
           this.onErr(error).then(() => {
             // this.switchNet(id);
+            this.$setState({
+              payBy: null,
+            });
+            localStorage.payBy = "";
           });
         } else {
           this.addChain(chainId, id);
@@ -434,14 +463,14 @@ export default {
       // this.walletChanged(true);
       try {
         if (this.chainId != this.payChainId) {
-          let dev = "";
-          if (this.$inDev) {
-            dev = this.isPolygon ? "Mumbai" : "Goerli";
-            if (this.isBSC) dev = "Chapel";
-            if (this.isZk) dev = "zkSync";
-            dev = `(dev - ${dev})`;
-          }
-          console.log(this.payChainId);
+          // let dev = "";
+          // if (this.$inDev) {
+          //   dev = this.isPolygon ? "Mumbai" : "Goerli";
+          //   if (this.isBSC) dev = "Chapel";
+          //   if (this.isZk) dev = "zkSync";
+          //   dev = `(dev - ${dev})`;
+          // }
+          // console.log(this.payChainId);
           // await this.$alert(`Please switch to ${this.payBy}${dev} Network`);
           await this.switchNet(this.payChainId);
           return;
@@ -464,7 +493,6 @@ export default {
           ethContract.setProvider(provider);
           this.curContract = ethContract;
         }
-        // console.log(this.payBy, this.curContract);
         // this.getSign();
         if (this.needCheckApprove) {
           this.checkApprove(this.isSubscribe);

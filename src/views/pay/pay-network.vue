@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="d-flex">
+    <div class="d-flex flex-wrap">
       <div
         @click="onSelect(it.label)"
-        class="bd-1 al-c pa-3 pl-7 pr-7 mr-5 bdrs-2 cursor-p"
+        class="bd-1 al-c pa-3 pl-7 pr-7 mr-5 bdrs-2 cursor-p mt-4"
         :class="{
           'bdc-c1': payBy == it.label,
         }"
@@ -28,19 +28,25 @@
         <img :src="it.img" height="20" />
       </div>
     </div>
+    <ever-pay ref="everPay" v-if="payBy == 'everPay'"></ever-pay>
   </div>
 </template>
 
 <script>
+import everPay from "./ever-pay.vue";
 import { mapState } from "vuex";
 
 export default {
+  components: {
+    everPay,
+  },
   props: {
     allow: Array,
   },
   computed: {
     ...mapState({
       payBy: (s) => s.payBy,
+      chainId: (s) => s.chainId,
     }),
     payList() {
       if (!this.allow) return this.list;
@@ -75,11 +81,15 @@ export default {
           name: "zkSync Era",
           img: "/img/svg/logo-no-letters.svg",
         },
+        {
+          label: "everPay",
+          name: "everPay",
+          img: "/img/svg/billing/ic-everpay.svg",
+        },
       ],
     };
   },
   created() {
-    console.log(this.allow);
     if (this.allow && !this.allow.includes(this.payBy)) {
       this.onSelect(this.allow[0]);
     }

@@ -30,12 +30,8 @@ module.exports = {
     optimization: {
       splitChunks: {
         chunks: "all",
-        // maxSize: 4e5,
-        // minSize: 3e5,
-        // minChunks: 10,
         maxAsyncRequests: 30,
         maxInitialRequests: 30,
-        // enforceSizeThreshold: 50000,
         cacheGroups: {
           ensdomains: {
             name: "chunk-ensdomains",
