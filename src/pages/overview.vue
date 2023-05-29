@@ -173,7 +173,7 @@ export default {
   background: #999;
 }
 .delimiter-content {
-  z-index: 999;
+  z-index: 100;
   width: 100%;
   height: 30px;
   position: absolute;
