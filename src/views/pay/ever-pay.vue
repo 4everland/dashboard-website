@@ -95,42 +95,44 @@ export default {
   },
   methods: {
     async initEverPay() {
-      const everPay = new window.Everpay.default();
-      const accounts = await window.ethereum
-        .request({ method: "eth_requestAccounts" })
-        .catch((err) => {
-          if (err.code === 4001) {
-            console.log("Please connect to MetaMask.");
-          } else {
-            console.error(err);
+      try {
+        const everPay = new window.Everpay.default();
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        const account = accounts[0];
+        const data = await everPay.balances({
+          account,
+        });
+        // console.log(data);
+        data.forEach((it) => {
+          it.balance = parseFloat(it.balance);
+          if (it.symbol == "USDC") {
+            this.everPaySymbolList[0] = Object.assign(
+              this.everPaySymbolList[0],
+              it
+            );
+          }
+          if (it.symbol == "USDT") {
+            this.everPaySymbolList[1] = Object.assign(
+              this.everPaySymbolList[1],
+              it
+            );
+          }
+          if (it.symbol == "DAI") {
+            this.everPaySymbolList[2] = Object.assign(
+              this.everPaySymbolList[2],
+              it
+            );
           }
         });
-      const account = accounts[0];
-      const data = await everPay.balances({
-        account,
-      });
-      // console.log(data);
-      data.forEach((it) => {
-        it.balance = parseFloat(it.balance);
-        if (it.symbol == "USDC") {
-          this.everPaySymbolList[0] = Object.assign(
-            this.everPaySymbolList[0],
-            it
-          );
+      } catch (err) {
+        if (err.code && err.code === 4001) {
+          console.log("Please connect to MetaMask.");
+        } else {
+          this.$alert(err.message);
         }
-        if (it.symbol == "USDT") {
-          this.everPaySymbolList[1] = Object.assign(
-            this.everPaySymbolList[1],
-            it
-          );
-        }
-        if (it.symbol == "DAI") {
-          this.everPaySymbolList[2] = Object.assign(
-            this.everPaySymbolList[2],
-            it
-          );
-        }
-      });
+      }
     },
     async paymentChannel(item) {
       bus.$emit("everPayChannel", item);

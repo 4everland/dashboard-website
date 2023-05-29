@@ -156,6 +156,7 @@ export default {
       userInfo: (s) => s.userInfo,
       onChain: (s) => s.onChain,
       payBy: (s) => s.payBy,
+      teamId: (s) => s.teamId,
     }),
     finalPrice() {
       return this.totalPrice - this.AmountofDeduction >= 0
@@ -359,7 +360,7 @@ export default {
           ? this.resourceResource.sign
           : "";
         const jsonData = {
-          account: this.userInfo.uid,
+          account: this.teamId,
           nonce,
           signature,
           voucherAmount,
