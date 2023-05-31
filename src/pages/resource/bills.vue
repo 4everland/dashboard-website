@@ -350,7 +350,8 @@ export default {
       if ([42161].includes(id)) return "Arbitrum";
       if ([280, 324].includes(id)) return "zkSync";
       if ([9999999].includes(id)) return "everPay";
-      return "Ethereum";
+      if ([1, 5].includes(id)) return "Ethereum";
+      return "";
     },
   },
   components: {
