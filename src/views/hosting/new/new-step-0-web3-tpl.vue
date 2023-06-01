@@ -6,12 +6,7 @@
       v-if="loading"
       type="article"
     ></v-skeleton-loader>
-    <v-row
-      class="mb-2 pos-r"
-      :class="{ 'ov-h': !web3TplAccess, 'ov-a': web3TplAccess }"
-      v-else
-      style="max-height: 95%"
-    >
+    <v-row class="mb-2 pos-r ov-a" v-else style="max-height: 95%">
       <v-col xl="4" cols="6" v-for="it in web3TplList" :key="it.id">
         <div
           class="bd-1 d-b hover-1 pos-r bdrs-6 ov-h"
@@ -83,16 +78,6 @@
           <h3 class="fz-16 mt-5">Submit a template</h3>
         </div>
       </v-col>
-
-      <div
-        class="garlxy pos-a al-c justify-center flex-column"
-        v-if="!web3TplAccess"
-      >
-        <h3 class="fz-18">Template Deployment - WL Only</h3>
-        <a href="https://discord.com/invite/4everland" target="__blank"
-          >More info</a
-        >
-      </div>
     </v-row>
   </div>
 </template>
@@ -114,11 +99,11 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-    web3TplAccess() {
-      return (
-        this.teamInfo.whiteList && this.teamInfo.whiteList.includes("template")
-      );
-    },
+    // web3TplAccess() {
+    //   return (
+    //     this.teamInfo.whiteList && this.teamInfo.whiteList.includes("template")
+    //   );
+    // },
   },
   methods: {
     async getWeb3TplList() {
@@ -134,9 +119,7 @@ export default {
       }
     },
     onNext(it) {
-      if (this.web3TplAccess) {
-        this.$emit("item", it);
-      }
+      this.$emit("item", it);
     },
     openLink(url) {
       window.open(url);
