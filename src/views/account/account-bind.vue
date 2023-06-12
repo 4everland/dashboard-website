@@ -39,7 +39,7 @@
 <script>
 import { mapState } from "vuex";
 import { providers } from "ethers";
-import { ConnectOkx, ConnectPetra, connectCoinBase } from "@/utils/login";
+import { ConnectOkx, ConnectPetra, ConnectCoinBase } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 fcl
   .config()
@@ -517,8 +517,8 @@ export default {
       }
     },
     async connectCoinBase() {
-      const account = await connectCoinBase();
-      return account;
+      const account = await ConnectCoinBase();
+      return account[0];
     },
     async verifyCoinBase() {
       try {

@@ -37,7 +37,6 @@ export const ConnectMetaMask = async () => {
     // window.open("https://metamask.io/download.html", "_blank");
     return;
   }
-  console.log(window.ethereum.isMetaMask);
   if (typeof window.ethereum !== "undefined") {
     let provider = window.ethereum;
     // edge case if MM and CBW are both installed
@@ -249,7 +248,10 @@ export const ConnectCoinBase = async () => {
           provider = p;
         }
       });
-    } else if (!window.ethereum.isCoinbaseWallet) {
+    } else if (
+      !window.ethereum.isCoinbaseWallet &&
+      !window.okxwallet.isOkxWallet
+    ) {
       Vue.prototype.$Dialog.getnoWallet("coinbase");
       // window.open("https://metamask.io/download.html", "_blank");
       return;
