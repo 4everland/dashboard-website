@@ -1,7 +1,7 @@
 <template>
   <div class="main-wrap" style="min-height: 551px">
     <e-platform :platform.sync="form.platform"></e-platform>
-    <h3 class="mt-5">The Project Name</h3>
+    <h3 style="margin-top: 56px">The Project Name</h3>
     <v-text-field
       class="mt-4"
       persistent-placeholder
@@ -12,27 +12,33 @@
       :rules="[(v) => !!(v || '').trim() || 'Please enter a project name']"
     ></v-text-field>
 
-    <h3 class="mt-2">Edit Configurations</h3>
+    <h3 style="margin-top: 48px; margin-bottom: 36px">Edit Configurations</h3>
     <v-row>
       <template v-for="(it, i) in configJson">
         <v-col cols="12" :md="it.group || it.col == 1 ? 12 : 6" :key="i">
           <template v-if="it.groupName">
             <div class="fz-17 mb-3">{{ it.groupName }}</div>
-            <div class="group-container pa-4">
+            <div class="group-container pa-6">
               <!-- group -->
               <v-row>
                 <v-col
                   cols="12"
-                  :md="group.options.some((it) => it.type == 'table') ? 12 : 6"
+                  :md="
+                    group.options.some(
+                      (it) => it.type == 'table' || it.type == 'switch'
+                    )
+                      ? 12
+                      : 6
+                  "
                   v-for="group in it.group"
                   :key="group.name"
                 >
-                  <div class="mb-3">{{ group.name }}</div>
+                  <div class="mb-2">{{ group.name }}</div>
                   <template v-for="(item, idx) in group.options">
                     <v-text-field
                       v-if="item.type == 'text'"
                       :key="idx"
-                      class="mt-4"
+                      class="mt-4 hide-msg"
                       persistent-placeholder
                       outlined
                       :placeholder="item.placeholder"
@@ -43,28 +49,39 @@
                       <div class="pos-a right-0" style="top: -40px">
                         <v-btn
                           color="primary"
-                          tile
+                          width="130"
                           @click="handleAdd(item.headers)"
                           >Add</v-btn
                         >
                       </div>
                       <v-data-table
                         :items="item.items"
-                        :headers="item.headers"
+                        :headers="[
+                          ...item.headers,
+                          { text: 'Action', value: 'action' },
+                        ]"
                         hide-default-footer
                         disable-pagination
                       >
-                        <template #item.action="{ item }"> edit </template>
+                        <template #item.action="{ index }">
+                          <img
+                            class="cursor-p"
+                            @click="handleDeleteTableData(item.items, index)"
+                            src="/img/svg/hosting/decrement.svg"
+                            width="20"
+                            alt=""
+                          />
+                        </template>
                       </v-data-table>
 
                       <v-dialog v-model="showTableAdd" max-width="500">
                         <div class="pa-5">
-                          <div v-for="(value, key) in tableForm" :key="key">
+                          <div v-for="it in tableForm" :key="it.value">
                             <v-text-field
-                              v-if="key != 'action'"
+                              v-if="it.value != 'action'"
                               persistent-placeholder
-                              v-model="tableForm[key]"
-                              :label="key"
+                              v-model="it.value1"
+                              :label="it.text"
                             ></v-text-field>
                           </div>
                           <v-btn
@@ -97,7 +114,7 @@
               <v-text-field
                 v-if="item.type == 'text'"
                 :key="idx"
-                class="mt-4"
+                class="mt-4 hide-msg"
                 persistent-placeholder
                 outlined
                 :placeholder="item.placeholder"
@@ -112,21 +129,32 @@
                 </div>
                 <v-data-table
                   :items="item.items"
-                  :headers="item.headers"
+                  :headers="[
+                    ...item.headers,
+                    { text: 'Action', value: 'action' },
+                  ]"
                   hide-default-footer
                   disable-pagination
                 >
-                  <template #item.action="{ item }"> edit </template>
+                  <template #item.action="{ index }">
+                    <img
+                      class="cursor-p"
+                      @click="handleDeleteTableData(item.items, index)"
+                      src="/img/svg/hosting/decrement.svg"
+                      width="20"
+                      alt=""
+                    />
+                  </template>
                 </v-data-table>
 
                 <v-dialog v-model="showTableAdd" max-width="500">
                   <div class="pa-5">
-                    <div v-for="(value, key) in tableForm" :key="key">
+                    <div v-for="it in tableForm" :key="it.value">
                       <v-text-field
-                        v-if="key != 'action'"
+                        v-if="it.value != 'action'"
                         persistent-placeholder
-                        v-model="tableForm[key]"
-                        :label="key"
+                        v-model="it.value"
+                        :label="it.text"
                       ></v-text-field>
                     </div>
                     <v-btn color="primary" @click="handleSaveTable(item.items)"
@@ -192,9 +220,9 @@ export default {
         projectName: "",
         web3TemplateId: null,
       },
-      configJson: [],
+      configJson: {},
       showTableAdd: false,
-      tableForm: {},
+      tableForm: [],
     };
   },
   created() {
@@ -208,7 +236,6 @@ export default {
       let tags = configJson.config.filter((it) => it.tag).map((it) => it.tag);
       tags = this.unique(tags);
       this.configJson = this.tagGrouping(tags, configJson.config);
-      // this.configJson = configJson;
     },
     async onDeploy() {
       try {
@@ -289,13 +316,24 @@ export default {
     },
 
     handleAdd(headers) {
-      headers.forEach((it) => {
-        this.$set(this.tableForm, it.value, "");
-      });
+      let transferHeader = JSON.parse(JSON.stringify(headers));
+      this.tableForm = transferHeader
+        .map((it) => {
+          it.value1 = "";
+          return it;
+        })
+        .filter((it) => it.text != "Action");
       this.showTableAdd = true;
     },
+    handleDeleteTableData(list, i) {
+      list.splice(i, 1);
+      console.log(i);
+    },
     handleSaveTable(tableData) {
-      let tableForm = JSON.parse(JSON.stringify(this.tableForm));
+      let tableForm = {};
+      this.tableForm.forEach((it) => {
+        this.$set(tableForm, it.value, it.value1);
+      });
       tableData.push(tableForm);
       this.showTableAdd = false;
     },
