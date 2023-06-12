@@ -37,11 +37,28 @@ export const ConnectMetaMask = async () => {
     // window.open("https://metamask.io/download.html", "_blank");
     return;
   }
-
-  const accounts = await window.ethereum.request({
-    method: "eth_requestAccounts",
-  });
-  return accounts;
+  console.log(window.ethereum.isMetaMask);
+  if (typeof window.ethereum !== "undefined") {
+    let provider = window.ethereum;
+    // edge case if MM and CBW are both installed
+    if (window.ethereum.providers?.length) {
+      window.ethereum.providers.forEach(async (p) => {
+        console.log(p);
+        if (p.isMetaMask) {
+          provider = p;
+        }
+      });
+    } else if (!window.ethereum.isMetaMask) {
+      Vue.prototype.$Dialog.getnoWallet("metamask");
+      // window.open("https://metamask.io/download.html", "_blank");
+      return;
+    }
+    const accounts = await provider.request({
+      method: "eth_requestAccounts",
+      params: [],
+    });
+    return accounts;
+  }
 };
 
 export const SignMetaMask = async (accounts, nonce, inviteCode, capToken) => {
@@ -209,6 +226,55 @@ export const SignPetra = async (account, nonce, inviteCode, capToken) => {
       capT: capToken,
     };
     const stoken = await Web3Login(account, data);
+    return stoken;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const ConnectCoinBase = async () => {
+  if (!window.ethereum) {
+    Vue.prototype.$Dialog.getnoWallet("coinbase");
+    // window.open("https://metamask.io/download.html", "_blank");
+    return;
+  }
+
+  if (typeof window.ethereum !== "undefined") {
+    let provider = window.ethereum;
+    // edge case if MM and CBW are both installed
+    if (window.ethereum.providers?.length) {
+      window.ethereum.providers.forEach(async (p) => {
+        if (p.isCoinbaseWallet) {
+          provider = p;
+        }
+      });
+    } else if (!window.ethereum.isCoinbaseWallet) {
+      Vue.prototype.$Dialog.getnoWallet("coinbase");
+      // window.open("https://metamask.io/download.html", "_blank");
+      return;
+    }
+    const accounts = await provider.request({
+      method: "eth_requestAccounts",
+      params: [],
+    });
+
+    return accounts;
+  }
+};
+
+export const SignCoinBase = async (accounts, nonce, inviteCode, capToken) => {
+  try {
+    const signature = await contracts.signer.signMessage(nonce);
+    const data = {
+      signature,
+      appName: "BUCKET",
+      inviteCode,
+      type: "ETH",
+      walletType: "COINBASE",
+      capT: capToken,
+    };
+    const stoken = await Web3Login(accounts, data);
     return stoken;
   } catch (e) {
     console.log(e);

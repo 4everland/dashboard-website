@@ -54,6 +54,12 @@ export default {
           tips: "A crypto wallet on Aptos",
           link: "https://petra.app/",
         },
+        coinbase: {
+          icon: require("@/assets/imgs/coinbase.png"),
+          name: "CoinBase Wallet",
+          tips: "A crypto wallet on CoinBase",
+          link: "https://www.coinbase.com/",
+        },
       },
     };
   },
