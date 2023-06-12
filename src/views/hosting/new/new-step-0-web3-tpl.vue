@@ -102,109 +102,11 @@ export default {
   },
   methods: {
     async getWeb3TplList() {
-      let json = {
-        config: [
-          {
-            name: "Website name",
-            options: [
-              {
-                type: "text",
-                key: "websiteName",
-                value: "",
-                placeholder: "please enter Website name",
-              },
-            ],
-            tag: "Website Basic Info",
-          },
-          {
-            name: "Avatar",
-            options: [
-              {
-                type: "text",
-                key: "Avatar",
-                value: "",
-                placeholder: "please enter Avatar",
-              },
-            ],
-            tag: "Website Basic Info",
-          },
-          {
-            name: "Bio",
-            options: [
-              {
-                type: "text",
-                key: "Bio",
-                value: "",
-                placeholder: "please enter Bio",
-              },
-            ],
-            tag: "Website Basic Info",
-          },
-          {
-            name: "IPFS Gateway",
-            options: [
-              {
-                type: "text",
-                key: "IpfsGateway",
-                value: "",
-                placeholder: "please enter IPFS Gateway",
-              },
-            ],
-            tag: "IPNS Resource Settings",
-          },
-          {
-            name: "IPNS Resources",
-            options: [
-              {
-                type: "table",
-                key: "ipnsResourceTable",
-                headers: [
-                  {
-                    text: "Resource name",
-                    value: "name",
-                  },
-                  {
-                    text: "IPNS",
-                    value: "ipns",
-                  },
-                  {
-                    text: "Action",
-                    value: "action",
-                  },
-                ],
-                items: [],
-              },
-            ],
-            tag: "IPNS Resource Settings",
-          },
-          {
-            name: "Display IPNS Input",
-            options: [
-              {
-                type: "switch",
-                key: "displaySwitch",
-                value: true,
-                text: "Display the IPNS input field and allow users to enter other IPNS?",
-              },
-            ],
-            tag: "IPNS Resource Settings",
-          },
-        ],
-      };
       try {
         this.loading = true;
         const { data } = await this.$http("$hosting/template/web3/list");
         console.log(data, "data");
-        data.push({
-          backgroundImage: "",
-          configJson: JSON.stringify(json),
-          desc: "Simplify sharing your social media and other information with a single link.",
-          githubUrl:
-            "https://github.com/4everland/Templates/tree/main/Templates/linkland",
-          id: "643ce27005b7823eb723238ca",
-          name: "test",
-          preview: "https://4everlinkland.4everland.app/",
-        });
+
         this.web3TplList = this.web3TplList.concat(data);
         this.$emit("list", this.web3TplList);
         this.loading = false;
