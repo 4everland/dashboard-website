@@ -99,11 +99,6 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-    // web3TplAccess() {
-    //   return (
-    //     this.teamInfo.whiteList && this.teamInfo.whiteList.includes("template")
-    //   );
-    // },
   },
   methods: {
     async getWeb3TplList() {
@@ -111,6 +106,7 @@ export default {
         this.loading = true;
         const { data } = await this.$http("$hosting/template/web3/list");
         console.log(data, "data");
+
         this.web3TplList = this.web3TplList.concat(data);
         this.$emit("list", this.web3TplList);
         this.loading = false;
