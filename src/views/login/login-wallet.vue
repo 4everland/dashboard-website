@@ -116,7 +116,6 @@ export default {
     },
     connect(name, token) {
       this.capToken = token;
-
       switch (name) {
         case "MetaMask":
           this.metaMaskConnect();
@@ -239,16 +238,16 @@ export default {
       }
     },
     async coinbaseConnect() {
-      const account = await ConnectCoinBase();
-      if (!account) {
+      const accounts = await ConnectCoinBase();
+      if (!accounts) {
         return;
       }
-      const nonce = await ExchangeCode(account);
+      const nonce = await ExchangeCode(accounts[0]);
       if (!nonce) {
         return;
       }
       const stoken = await SignCoinBase(
-        account,
+        accounts[0],
         nonce,
         this.inviteCode,
         this.capToken

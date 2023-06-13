@@ -42,7 +42,6 @@ export const ConnectMetaMask = async () => {
     // edge case if MM and CBW are both installed
     if (window.ethereum.providers?.length) {
       window.ethereum.providers.forEach(async (p) => {
-        console.log(p);
         if (p.isMetaMask) {
           provider = p;
         }
@@ -248,10 +247,7 @@ export const ConnectCoinBase = async () => {
           provider = p;
         }
       });
-    } else if (
-      !window.ethereum.isCoinbaseWallet &&
-      !window.okxwallet.isOkxWallet
-    ) {
+    } else if (!window.ethereum.isCoinbaseWallet) {
       Vue.prototype.$Dialog.getnoWallet("coinbase");
       // window.open("https://metamask.io/download.html", "_blank");
       return;
@@ -266,8 +262,21 @@ export const ConnectCoinBase = async () => {
 };
 
 export const SignCoinBase = async (accounts, nonce, inviteCode, capToken) => {
+  const msg = `0x${Buffer.from(nonce, "utf8").toString("hex")}`;
   try {
-    const signature = await contracts.signer.signMessage(nonce);
+    let provider = window.ethereum;
+    if (window.ethereum.providers?.length) {
+      window.ethereum.providers.forEach(async (p) => {
+        if (p.isCoinbaseWallet) {
+          provider = p;
+        }
+      });
+    }
+    // const signature = await contracts.signer.signMessage(nonce);
+    const signature = await provider.request({
+      method: "personal_sign",
+      params: [msg, accounts],
+    });
     const data = {
       signature,
       appName: "BUCKET",
