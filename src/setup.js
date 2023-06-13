@@ -152,7 +152,7 @@ Vue.prototype.$utils = {
       //   : `https://${cid}.ipns.dweb.link/`;
     }
     if (plat == "IC") {
-      return `https://${cid}.raw.ic0.app/`;
+      return `https://${cid}.raw.icp0.io/`;
     }
     if (plat == "AR") {
       return `https://arweave.net/${cid}`;
