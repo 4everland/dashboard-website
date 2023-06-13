@@ -84,11 +84,14 @@
                               :label="it.text"
                             ></v-text-field>
                           </div>
-                          <v-btn
-                            color="primary"
-                            @click="handleSaveTable(item.items)"
-                            >Save</v-btn
-                          >
+                          <div class="al-c justify-center mt-3">
+                            <v-btn
+                              width="200"
+                              color="primary"
+                              @click="handleSaveTable(item.items)"
+                              >Save</v-btn
+                            >
+                          </div>
                         </div>
                       </v-dialog>
                     </div>
@@ -157,9 +160,14 @@
                         :label="it.text"
                       ></v-text-field>
                     </div>
-                    <v-btn color="primary" @click="handleSaveTable(item.items)"
-                      >Save</v-btn
-                    >
+                    <div class="al-c justify-center mt-3">
+                      <v-btn
+                        width="200"
+                        color="primary"
+                        @click="handleSaveTable(item.items)"
+                        >Save</v-btn
+                      >
+                    </div>
                   </div>
                 </v-dialog>
               </div>
