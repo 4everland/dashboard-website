@@ -281,10 +281,11 @@ export default {
     async switchNet(id) {
       const chainId = "0x" + id.toString(16);
       try {
-        await window.web3.currentProvider.request({
+        const result = await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
+        console.log(result);
       } catch (error) {
         console.log("switch error 2", error);
         if (error.code == 4902 || error.data.originalError.code == 4902) {
