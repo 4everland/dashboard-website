@@ -251,7 +251,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { namehash } from "@ensdomains/ensjs";
 import { encode, decode, helpers } from "@ensdomains/content-hash";
 import { getProvider, getENSRegistry, getResolver } from "@/plugins/ens";
@@ -289,10 +289,7 @@ export default {
       userInfo: (s) => s.userInfo,
       projectInfo: (s) => s.projectInfo,
     }),
-    walletObj() {
-      const { walletType } = this.userInfo.wallet || {};
-      return walletType == "OKX" ? window.okxwallet : window.ethereum;
-    },
+    ...mapGetters(["walletObj"]),
     baseHash() {
       if (this.hashDeploy) {
         return this.projectInfo.ipfsPath

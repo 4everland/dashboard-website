@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { namehash } from "@ensdomains/ensjs";
 import { encode, decode } from "@ensdomains/content-hash";
 import { getProvider, getENSRegistry, getResolver } from "@/plugins/ens";
@@ -160,10 +160,7 @@ export default {
       connectAddr: (s) => s.connectAddr,
       userInfo: (s) => s.userInfo,
     }),
-    walletObj() {
-      const { walletType } = this.userInfo.wallet || {};
-      return walletType == "OKX" ? window.okxwallet : window.ethereum;
-    },
+    ...mapGetters(["walletObj"]),
   },
   mounted() {
     this.getList();
