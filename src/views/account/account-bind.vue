@@ -39,7 +39,7 @@
 <script>
 import { mapState } from "vuex";
 import { providers } from "ethers";
-import { ConnectOkx, ConnectPetra } from "@/utils/login";
+import { ConnectOkx, ConnectPetra, ConnectCoinBase } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 fcl
   .config()
@@ -89,6 +89,14 @@ export default {
           icon: "m-phantom",
           type: 4,
           account: (info.solana || {}).address,
+        });
+      if (info.wallet?.walletType == "COINBASE" || noWallet)
+        wArr.push({
+          title: "CoinBase",
+          desc: "Get verified by connecting your CoinBase account.",
+          icon: "m-coinbase",
+          type: 9,
+          account: (info.wallet || {}).address,
         });
       if (info.wallet?.walletType == "PETRA" || noWallet)
         wArr.push({
@@ -168,6 +176,12 @@ export default {
       if (this.binding == 8 && val) {
         this.binding = null;
         this.verifyPetra();
+      }
+    },
+    coinBaseAddr(val) {
+      if (this.binding == 9 && val) {
+        this.binding = null;
+        this.verifyCoinBase();
       }
     },
   },
@@ -277,6 +291,16 @@ export default {
         }
         return;
       }
+      if (it.type == 9) {
+        this.binding = 9;
+        if (!this.coinBaseAddr) {
+          const currentUser = await this.connectCoinBase();
+          this.coinBaseAddr = currentUser;
+        } else {
+          this.verifyCoinBase();
+        }
+        return;
+      }
       // if (it.type != 1) return this.$toast("todo");
       try {
         let apply = "";
@@ -369,7 +393,9 @@ export default {
       if (type == 8) {
         apply = this.petraAddr;
       }
-
+      if (type == 9) {
+        apply = this.coinBaseAddr;
+      }
       const { data } = await this.$http.post(`$auth/bind`, {
         type,
         apply,
@@ -485,6 +511,23 @@ export default {
         this.$loading.close();
         if (sig) {
           this.onVcode(8, sig);
+        }
+      } catch (error) {
+        this.$alert(error.message);
+      }
+    },
+    async connectCoinBase() {
+      const account = await ConnectCoinBase();
+      return account[0];
+    },
+    async verifyCoinBase() {
+      try {
+        this.$loading();
+        const nonce = await this.exchangeCode(9);
+        const sig = await MetaMask.getSigner().signMessage(nonce);
+        this.$loading.close();
+        if (sig) {
+          this.onVcode(9, sig);
         }
       } catch (error) {
         this.$alert(error.message);

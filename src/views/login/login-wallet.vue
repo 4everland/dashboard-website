@@ -9,13 +9,13 @@
         @click="onVerify(item.name)"
       >
         <div class="wallet-item-name">
+          <img :src="item.icon" alt="" />
           <span class="name">{{ item.name }}</span>
         </div>
         <div class="d-flex align-center">
           <span class="item-name" :class="{ 'item-name-pop': index == 0 }">{{
             item.btnText
           }}</span>
-          <img :src="item.icon" alt="" />
         </div>
       </div>
     </div>
@@ -36,6 +36,8 @@ import {
   SignFlow,
   ConnectPetra,
   SignPetra,
+  ConnectCoinBase,
+  SignCoinBase,
 } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 
@@ -58,6 +60,11 @@ export default {
           name: "Phantom",
           icon: require("@/assets/imgs/phantom.png"),
           btnText: "Solana",
+        },
+        {
+          name: "Coinbase Wallet",
+          icon: require("@/assets/imgs/coinbase.png"),
+          btnText: "",
         },
         {
           name: "Petra",
@@ -109,7 +116,6 @@ export default {
     },
     connect(name, token) {
       this.capToken = token;
-
       switch (name) {
         case "MetaMask":
           this.metaMaskConnect();
@@ -125,6 +131,9 @@ export default {
           break;
         case "Petra":
           this.petraConnect();
+          break;
+        case "Coinbase Wallet":
+          this.coinbaseConnect();
           break;
         default:
           break;
@@ -228,6 +237,25 @@ export default {
         this.ssoLogin(stoken);
       }
     },
+    async coinbaseConnect() {
+      const accounts = await ConnectCoinBase();
+      if (!accounts) {
+        return;
+      }
+      const nonce = await ExchangeCode(accounts[0]);
+      if (!nonce) {
+        return;
+      }
+      const stoken = await SignCoinBase(
+        accounts[0],
+        nonce,
+        this.inviteCode,
+        this.capToken
+      );
+      if (stoken) {
+        this.ssoLogin(stoken);
+      }
+    },
     onVerify(name) {
       this.$emit("walletVerify", name);
     },
@@ -237,18 +265,20 @@ export default {
 
 <style lang="scss">
 .wallet-box {
-  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-
   // padding: 0 30px;
   .wallet-item {
-    height: 70px;
-    padding: 25px 30px;
+    width: 100%;
+    max-width: 480px;
+    height: 56px;
+    background: rgba(140, 140, 161, 0.05);
+    border-radius: 8px;
+    margin: 0 auto;
+    margin-top: 12px;
+    padding: 12px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    border-bottom: 1px solid #e6e8eb;
 
     &:last-child {
       border-bottom: none;
@@ -260,31 +290,28 @@ export default {
     }
 
     img {
-      width: 24px;
+      width: 32px;
+      margin-right: 16px;
     }
 
     .name {
-      font-size: 20px;
+      font-size: 16px;
       font-family: Arial-BoldMT, Arial;
       font-weight: normal;
       color: #495667;
     }
 
     .item-name {
-      width: 70px;
-      height: 22px;
-      line-height: 22px;
       display: inline-block;
-      background-color: #dfdbe7;
-      color: #847f8e;
-      border-radius: 2px;
-      font-size: 12px;
+      color: #735ea1;
+      font-size: 10px;
       text-align: center;
-      margin-right: 16px;
+      padding: 4px 8px;
     }
 
     .item-name-pop {
-      background-color: #775da6;
+      background: linear-gradient(270deg, #735ea1 0%, #9747ff 100%);
+      border-radius: 8px 0px;
       color: #fff;
     }
 

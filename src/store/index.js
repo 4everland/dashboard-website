@@ -54,6 +54,29 @@ const store = new Vuex.Store({
       const info = { ...obj };
       return info;
     },
+    walletObj(state) {
+      const { walletType } = state.userInfo.wallet || {};
+      let provider = window.ethereum;
+      let metamaskProvider,
+        coinbaseProvider = null;
+      if (window.ethereum.providers?.length) {
+        window.ethereum.providers.forEach(async (p) => {
+          if (p.isCoinbaseWallet) {
+            coinbaseProvider = p;
+          }
+          if (p.isMetaMask) {
+            metamaskProvider = p;
+          }
+        });
+        if (walletType == "COINBASE") {
+          provider = coinbaseProvider;
+        } else {
+          provider = metamaskProvider;
+        }
+      }
+
+      return walletType == "OKX" ? window.okxwallet : provider;
+    },
   },
   mutations: {
     [SET_DATA](state, data) {

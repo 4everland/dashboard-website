@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { namehash } from "@ensdomains/ensjs";
 import { decode, getCodec } from "@ensdomains/content-hash";
 import { getProvider, getENSRegistry, getResolver } from "@/plugins/ens";
@@ -48,10 +48,7 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
     }),
-    walletObj() {
-      const { walletType } = this.userInfo.wallet || {};
-      return walletType == "OKX" ? window.okxwallet : window.ethereum;
-    },
+    ...mapGetters(["walletObj"]),
     placeholder() {
       if (this.seleted == "IPFS") return "Enter the IPFS CID";
       return this.seleted == "IPNS" ? "Enter the IPNS" : "Enter the ENS";

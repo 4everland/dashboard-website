@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import Web3 from "web3";
 
 export default {
@@ -55,10 +55,7 @@ export default {
       chainId: (s) => s.chainId,
       userInfo: (s) => s.userInfo,
     }),
-    walletObj() {
-      const { walletType } = this.userInfo.wallet || {};
-      return walletType == "OKX" ? window.okxwallet : window.ethereum;
-    },
+    ...mapGetters(["walletObj"]),
   },
   watch: {
     noticeMsg({ name }) {
@@ -169,6 +166,7 @@ export default {
       }
     },
     async connectMetaMask() {
+      console.log(this.walletObj);
       if (this.walletObj) {
         window.web3 = new Web3(this.walletObj);
         // await this.walletObj.enable();

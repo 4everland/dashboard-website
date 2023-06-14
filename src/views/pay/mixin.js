@@ -35,11 +35,7 @@ export default {
       payBy: (s) => s.payBy,
       userInfo: (s) => s.userInfo,
     }),
-    ...mapGetters(["teamInfo"]),
-    walletObj() {
-      const { walletType } = this.userInfo.wallet || {};
-      return walletType == "OKX" ? window.okxwallet : window.ethereum;
-    },
+    ...mapGetters(["teamInfo", "walletObj"]),
     uuid() {
       if (this.teamInfo.isMember) return this.teamInfo.teamOwnerEuid;
       return this.userInfo.euid;
@@ -152,9 +148,7 @@ export default {
       if (!err) return console.log("---- err null");
       console.log(err);
       const { data } = err;
-      // console.log(data);
       let msg = err.message;
-      // console.log(msg);
       if (data) {
         msg = data.message || msg;
       }
@@ -266,12 +260,12 @@ export default {
         const receipt = await tx.wait();
         console.log(receipt);
         this.isApproved = true;
+        this.$loading.close();
         this.$toast("Approved successfully");
       } catch (error) {
         console.log("on approve error");
         this.onErr(error);
       }
-      this.$loading.close();
     },
     formatToken(value, fixed = 2, decimals = 18) {
       // console.log(value.toString());

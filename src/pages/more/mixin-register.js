@@ -281,22 +281,17 @@ export default {
     async switchNet(id) {
       const chainId = "0x" + id.toString(16);
       try {
-        const res = await window.web3.currentProvider.request({
+        const result = await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
-        console.log("switch err 1", res);
-        if (res && res.error) {
-          throw new Error(res.error);
-        }
+        console.log(result);
       } catch (error) {
         console.log("switch error 2", error);
-        if (error.code !== 4902) {
-          this.onErr(error).then(() => {
-            // this.switchNet(id);
-          });
-        } else {
+        if (error.code == 4902 || error.data.originalError.code == 4902) {
           await this.addChain(chainId, id);
+        } else {
+          this.onErr(error);
         }
       }
     },

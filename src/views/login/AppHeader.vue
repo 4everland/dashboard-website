@@ -1,75 +1,66 @@
 <template>
   <div>
-    <v-app-bar
-      fixed
-      app
-      elevate-on-scroll
-      :elevation="4"
-      color="#fff"
-      height="100"
-    >
-      <v-container class="d-flex align-center">
-        <v-btn
+    <v-container class="d-flex align-center">
+      <!-- <v-btn
           text
           color="transparent"
           href="https://4everland.org/"
           class="always-active mr-8"
         >
           <logo />
-        </v-btn>
-        <v-spacer />
-        <v-menu
-          v-for="item in links"
-          :key="item.text"
-          open-on-hover
-          bottom
-          transition="slide-y-transition"
-          offset-y
-        >
-          <template #activator="{ on, attrs }">
+        </v-btn> -->
+      <v-spacer />
+      <v-menu
+        v-for="item in links"
+        :key="item.text"
+        open-on-hover
+        bottom
+        transition="slide-y-transition"
+        offset-y
+      >
+        <template #activator="{ on, attrs }">
+          <v-btn
+            class="hidden-sm-and-down nav-btn text-subtitle-1 ma-2"
+            plain
+            replace
+            :href="item.href"
+            :target="item.target"
+            :ripple="false"
+            color="#495667"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <span>
+              {{ item.text }}
+              <v-icon v-if="item.childs">{{ mdiChevronDown }}</v-icon>
+            </span>
+          </v-btn>
+        </template>
+        <v-list v-if="item.childs">
+          <v-list-item v-for="child in item.childs" :key="child.text">
             <v-btn
-              class="hidden-sm-and-down nav-btn text-subtitle-1 ma-2"
+              class="hidden-sm-and-down nav-btn text-subtitle-1"
               plain
-              replace
-              :href="item.href"
-              :target="item.target"
+              :href="child.href"
+              :target="child.target"
               :ripple="false"
-              color="#495667"
-              v-bind="attrs"
-              v-on="on"
             >
               <span>
-                {{ item.text }}
-                <v-icon v-if="item.childs">{{ mdiChevronDown }}</v-icon>
+                {{ child.text }}
               </span>
             </v-btn>
-          </template>
-          <v-list v-if="item.childs">
-            <v-list-item v-for="child in item.childs" :key="child.text">
-              <v-btn
-                class="hidden-sm-and-down nav-btn text-subtitle-1"
-                plain
-                :href="child.href"
-                :target="child.target"
-                :ripple="false"
-              >
-                <span>
-                  {{ child.text }}
-                </span>
-              </v-btn>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-        <v-btn
-          class="hidden-md-and-up"
-          text
-          icon
-          @click.stop="showDrawer = !showDrawer"
-        >
-          <v-icon>{{ mdiMenu }}</v-icon>
-        </v-btn>
-      </v-container>
-    </v-app-bar>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-btn
+        class="hidden-md-and-up"
+        text
+        icon
+        @click.stop="showDrawer = !showDrawer"
+      >
+        <v-icon>{{ mdiMenu }}</v-icon>
+      </v-btn>
+    </v-container>
     <v-navigation-drawer v-model="showDrawer" right temporary fixed>
       <v-list>
         <template v-for="item in links">
