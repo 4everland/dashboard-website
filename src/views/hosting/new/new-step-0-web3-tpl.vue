@@ -12,7 +12,7 @@
           class="bd-1 d-b hover-1 pos-r bdrs-6 ov-h"
           v-ripple
           @click="onNext(it)"
-          style="height: 250px"
+          style="height: 260px"
         >
           <img
             :style="{
@@ -25,16 +25,12 @@
           />
           <div class="px-2">
             <h2 class="gray-3 fz-16 mb-1">{{ it.name }}</h2>
-            <p
-              class="gray line-2"
-              style="line-height: 18px"
-              :class="asMobile ? 'fz-12' : 'fz-14'"
-            >
+            <p class="gray line-3 fz-12" style="line-height: 18px">
               {{ it.desc }}
             </p>
           </div>
           <div
-            class="px-2 al-c space-btw pos-a left-0 btm-0 pb-2"
+            class="px-2 al-c space-btw pos-a left-0 btm-0 pb-3"
             style="width: 100%"
           >
             <!-- <div class="fz-14">Deploy</div> -->
@@ -59,19 +55,9 @@
       </v-col>
       <v-col xl="4" cols="6">
         <div
-          class="
-            bd-1
-            d-b
-            hover-1
-            pos-r
-            bdrs-6
-            d-flex
-            al-c
-            flex-column
-            justify-center
-          "
+          class="bd-1 d-b hover-1 pos-r bdrs-6 d-flex al-c flex-column justify-center"
           v-ripple
-          style="height: 250px"
+          style="height: 260px"
           @click="openLink('https://github.com/4everland/Templates')"
         >
           <v-icon size="50" color="primary">mdi-plus</v-icon>
