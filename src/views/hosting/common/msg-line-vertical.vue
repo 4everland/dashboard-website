@@ -60,12 +60,10 @@ export default {
       return this.transformIpfsPath(this.content);
     },
     copyVal() {
-      return this.transformIpfsPath(this.content)
-        .replace("ipfs://", "")
-        .replace("ipns://", "");
+      return this.value.replace("ipfs://", "").replace("ipns://", "");
     },
     link() {
-      return this.$utils.getCidLink(this.value, this.platForm, this.online);
+      return this.$utils.getCidLink(this.copyVal, this.platForm, this.online);
     },
   },
   components: {
@@ -74,5 +72,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
