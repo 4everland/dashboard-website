@@ -56,10 +56,7 @@
                       </div>
                       <v-data-table
                         :items="item.items"
-                        :headers="[
-                          ...item.headers,
-                          { text: 'Action', value: 'action' },
-                        ]"
+                        :headers="handleInitheader(item.headers)"
                         hide-default-footer
                         disable-pagination
                       >
@@ -75,8 +72,13 @@
                       </v-data-table>
 
                       <v-dialog v-model="showTableAdd" max-width="500">
-                        <div class="pa-5">
-                          <div v-for="it in tableForm" :key="it.value">
+                        <div class="pa-6">
+                          <h2 class="mb-5">Add Items</h2>
+                          <div
+                            v-for="it in tableForm"
+                            :key="it.value"
+                            class="px-3"
+                          >
                             <v-text-field
                               v-if="it.value != 'action'"
                               persistent-placeholder
@@ -126,16 +128,16 @@
               ></v-text-field>
               <div v-if="item.type == 'table'" :key="idx" class="pos-r">
                 <div class="pos-a right-0" style="top: -40px">
-                  <v-btn color="primary" tile @click="handleAdd(item.headers)"
+                  <v-btn
+                    color="primary"
+                    width="130"
+                    @click="handleAdd(item.headers)"
                     >Add</v-btn
                   >
                 </div>
                 <v-data-table
                   :items="item.items"
-                  :headers="[
-                    ...item.headers,
-                    { text: 'Action', value: 'action' },
-                  ]"
+                  :headers="handleInitheader(item.headers)"
                   hide-default-footer
                   disable-pagination
                 >
@@ -151,8 +153,9 @@
                 </v-data-table>
 
                 <v-dialog v-model="showTableAdd" max-width="500">
-                  <div class="pa-5">
-                    <div v-for="it in tableForm" :key="it.value">
+                  <div class="pa-6">
+                    <h2 class="mb-5">Add Items</h2>
+                    <div v-for="it in tableForm" :key="it.value" class="px-3">
                       <v-text-field
                         v-if="it.value != 'action'"
                         persistent-placeholder
@@ -160,7 +163,7 @@
                         :label="it.text"
                       ></v-text-field>
                     </div>
-                    <div class="al-c justify-center mt-3">
+                    <div class="al-c justify-center mt-2">
                       <v-btn
                         width="200"
                         color="primary"
@@ -317,7 +320,15 @@ export default {
       this.$router.back();
       this.curStep -= 1;
     },
-
+    handleInitheader(headers) {
+      let tableHeaders = [];
+      tableHeaders = headers.map((it) => {
+        it.sortable = false;
+        return it;
+      });
+      tableHeaders.push({ text: "Action", value: "action", sortable: false });
+      return tableHeaders;
+    },
     handleAdd(headers) {
       let transferHeader = JSON.parse(JSON.stringify(headers));
 
