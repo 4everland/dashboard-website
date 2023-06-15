@@ -156,7 +156,7 @@
                       <v-text-field
                         v-if="it.value != 'action'"
                         persistent-placeholder
-                        v-model="it.value"
+                        v-model="it.value1"
                         :label="it.text"
                       ></v-text-field>
                     </div>
@@ -240,7 +240,6 @@ export default {
   methods: {
     parseJson() {
       const configJson = JSON.parse(localStorage.curTplJson);
-      console.log(configJson);
       let tags = configJson.config.filter((it) => it.tag).map((it) => it.tag);
       tags = this.unique(tags);
       this.configJson = this.tagGrouping(tags, configJson.config);
@@ -260,8 +259,6 @@ export default {
             configJson.config.push(it);
           }
         });
-        console.log(configJson);
-        // return;
         this.$loading();
         const { data } = await this.$http.post(
           "$hosting/template/web3/project/create",
@@ -308,14 +305,12 @@ export default {
       const noTags = arr
         .filter((it) => !it.tag)
         .map((it) => {
-          console.log(it);
           if (it.options.some((it) => it.type == "table")) {
             it.col = 1;
           }
           return it;
         });
       configs = configs.concat(noTags);
-      console.log(configs);
       return configs;
     },
     onBack() {
@@ -325,17 +320,18 @@ export default {
 
     handleAdd(headers) {
       let transferHeader = JSON.parse(JSON.stringify(headers));
+
       this.tableForm = transferHeader
         .map((it) => {
           it.value1 = "";
           return it;
         })
         .filter((it) => it.text != "Action");
+
       this.showTableAdd = true;
     },
     handleDeleteTableData(list, i) {
       list.splice(i, 1);
-      console.log(i);
     },
     handleSaveTable(tableData) {
       let tableForm = {};
