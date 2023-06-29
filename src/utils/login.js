@@ -135,16 +135,33 @@ export const ConnectPhantom = async () => {
 };
 
 export const SignPhantom = async (accounts, nonce, inviteCode, capToken) => {
+  const getProvider = () => {
+    if ("phantom" in window) {
+      const provider = window.phantom?.solana;
+      if (provider?.isPhantom) {
+        return provider;
+      }
+    }
+  };
+  const uint8Array = (uint8Array) => {
+    return Array.prototype.map
+      .call(uint8Array, (x) => ("00" + x.toString(16)).slice(-2))
+      .join("");
+  };
   try {
+    const provider = getProvider(); // see "Detecting the Provider"
     const encodedMessage = new TextEncoder().encode(nonce);
-    const signedMessage = await window.solana.request({
-      method: "signMessage",
-      params: {
-        message: encodedMessage,
-      },
-    });
+    // const signedMessage = await provider.request({
+    //   method: "signMessage",
+    //   params: {
+    //     message: encodedMessage,
+    //   },
+    // });
+
+    const signedMessage = await provider.signMessage(encodedMessage, "utf8");
+    const signature = uint8Array(signedMessage.signature);
     const data = {
-      signature: signedMessage.signature,
+      signature: signature,
       appName: "BUCKET",
       inviteCode,
       type: "SOLANA",
