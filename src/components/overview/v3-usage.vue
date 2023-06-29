@@ -1,76 +1,104 @@
 <template>
-  <v-row>
-    <v-col style="min-width: 200px" v-for="(it, i) in usageList" :key="i">
-      <div :id="it.isBalance ? 'resourse-guide' : null">
-        <v-card style="min-width: 120px">
-          <div class="pa-1" v-if="it.loading">
-            <v-skeleton-loader type="article" />
-          </div>
-          <div
-            class="ov-wrap-1 pos-r"
-            :class="{
-              'pb-6': it.isBalance,
-            }"
-            v-else
-          >
-            <img
-              v-if="it.icon"
-              :src="`/img/svg/overview/${it.icon}`"
-              :style="it.iconStyle || 'width: 24px'"
-              class="pos-a top-0 right-0 mt-3 mr-3"
-            />
-            <div class="d-flex al-end lh-1">
-              <span class="purple-1 fz-22">{{ it.num }}</span>
-              <span class="fz-12 ml-2">
-                {{ it.unitTxt }}
-              </span>
+  <div>
+    <v-row>
+      <v-col style="min-width: 200px" v-for="(it, i) in usageList" :key="i">
+        <div :id="it.isBalance ? 'resourse-guide' : null">
+          <v-card style="min-width: 120px">
+            <div class="pa-1" v-if="it.loading">
+              <v-skeleton-loader type="article" />
             </div>
-            <p class="mt-3 fz-14 gray-8">{{ it.label }}</p>
             <div
-              class="al-c fz-13 gray"
-              :style="{
-                marginTop: it.isBalance ? '11px' : '12px',
+              class="ov-wrap-1 pos-r"
+              :class="{
+                'pb-6': it.isBalance,
               }"
+              v-else
             >
+              <img
+                v-if="it.icon"
+                :src="`/img/svg/overview/${it.icon}`"
+                :style="it.iconStyle || 'width: 24px'"
+                class="pos-a top-0 right-0 mt-3 mr-3"
+              />
+              <div class="d-flex al-end lh-1">
+                <span class="purple-1 fz-22">{{ it.num }}</span>
+                <span class="fz-12 ml-2">
+                  {{ it.unitTxt }}
+                </span>
+              </div>
+              <p class="mt-3 fz-14 gray-8">{{ it.label }}</p>
               <div
-                v-if="it.isBalance"
-                :class="{
-                  hidden: teamInfo.isMember,
+                class="al-c fz-13 gray"
+                :style="{
+                  marginTop: it.isBalance ? '11px' : '12px',
                 }"
               >
-                <v-btn
-                  color="primary"
-                  small
-                  class="pl-2 pr-2"
-                  to="/resource/subscribe"
-                  >Purchase</v-btn
+                <div
+                  v-if="it.isBalance"
+                  :class="{
+                    hidden: teamInfo.isMember,
+                  }"
                 >
-                <v-btn
-                  outlined
-                  small
-                  class="pl-2 pr-2 ml-4"
-                  to="/resource/deposit"
-                  >Deposit</v-btn
-                >
-                <!-- <span>Airdropped</span>
+                  <v-btn
+                    color="primary"
+                    small
+                    class="pl-2 pr-2"
+                    to="/resource/subscribe"
+                    >Purchase</v-btn
+                  >
+                  <v-btn
+                    outlined
+                    small
+                    class="pl-2 pr-2 ml-4"
+                    to="/resource/deposit"
+                    >Deposit</v-btn
+                  >
+                  <!-- <span>Airdropped</span>
               <b class="link ml-1">{{ accoutInfo.freeOrder || 0 }}</b>
               <span class="ml-auto">Purchased</span>
               <b class="link ml-1">{{ accoutInfo.paidOrder || 0 }}</b> -->
+                </div>
+                <template v-else>
+                  <v-progress-linear
+                    :color="it.color || 'primary'"
+                    :value="it.perc || 0"
+                    height="6"
+                  ></v-progress-linear>
+                  <span class="ml-3 fz-14"> {{ it.perc }}% </span>
+                </template>
               </div>
-              <template v-else>
-                <v-progress-linear
-                  :color="it.color || 'primary'"
-                  :value="it.perc || 0"
-                  height="6"
-                ></v-progress-linear>
-                <span class="ml-3 fz-14"> {{ it.perc }}% </span>
-              </template>
             </div>
-          </div>
-        </v-card>
+          </v-card>
+        </div>
+      </v-col>
+    </v-row>
+
+    <v-dialog v-model="showDialog" max-width="500">
+      <div class="pa-6">
+        <h3 class="fz-20">Tips</h3>
+        <div class="mt-5 fz-14">
+          Your IPFS resources are expired! Hurry to the Reward Hub for more free
+          resources or visit the Resource to purchase.
+        </div>
+
+        <div class="ta-c mt-8">
+          <v-btn
+            color="primary"
+            width="180"
+            @click="handleRoute('/resource/subscribe')"
+            >Purchase</v-btn
+          >
+          <v-btn
+            outlined
+            width="180"
+            class="ml-6"
+            @click="handleRoute('/reward-hub')"
+            >Reward Hub</v-btn
+          >
+        </div>
       </div>
-    </v-col>
-  </v-row>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -80,6 +108,7 @@ export default {
     return {
       usageInfo: {},
       accoutInfo: {},
+      showDialog: false,
     };
   },
   computed: {
@@ -143,6 +172,29 @@ export default {
         },
       ];
     },
+    resourceExpired() {
+      if (JSON.stringify(this.usageInfo) != "{}") {
+        let dateTime = +new Date();
+        let finalTime = 0;
+        finalTime =
+          this.usageInfo.ipfsStorageExpired >
+          this.usageInfo.airdropIpfsStorageExpired
+            ? this.usageInfo.ipfsStorageExpired
+            : this.usageInfo.airdropIpfsStorageExpired;
+        if (finalTime * 1000 < dateTime) {
+          if (localStorage.resourceExpired) {
+            return false;
+          }
+          return true;
+        } else {
+          if (localStorage.resourceExpired) {
+            localStorage.removeItem("resourceExpired");
+          }
+          return false;
+        }
+      }
+      return false;
+    },
   },
   created() {
     // this.isSolana(); // move to: overview/new-user-tips.vue
@@ -197,6 +249,18 @@ export default {
         balance: this.$utils.cutFixed(balance, 4),
         loaded: true,
       };
+    },
+    handleRoute(link) {
+      this.showDialog = false;
+      this.$router.push(link);
+    },
+  },
+  watch: {
+    resourceExpired(val) {
+      if (val) this.showDialog = true;
+    },
+    showDialog(val) {
+      if (!val) localStorage.setItem("resourceExpired", "1");
     },
   },
 };
