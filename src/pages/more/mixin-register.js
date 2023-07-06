@@ -179,6 +179,10 @@ export default {
         return false;
       }
     },
+
+    async handleOpBNBClaim() {
+      console.log(11);
+    },
     async searchZySyncRecord() {
       try {
         const { data } = await axios.get(

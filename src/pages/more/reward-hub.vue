@@ -134,6 +134,28 @@
                           </e-tooltip>
                         </v-list-item-title>
                       </v-list-item>
+                      <v-list-item link @click="handleTypeClaim('opBNB')">
+                        <v-list-item-title class="fz-14 al-c justify-center">
+                          <div class="al-c mx-auto">
+                            <img
+                              src="/img/svg/logo-no-letters.svg"
+                              width="20"
+                              alt=""
+                            />
+                            <span class="ml-3">opBNB</span>
+                          </div>
+                          <e-tooltip right>
+                            <v-icon
+                              slot="ref"
+                              size="18"
+                              color="#999"
+                              class="pa-1 d-ib"
+                              >mdi-alert-circle-outline</v-icon
+                            >
+                            <span>opBNB test-net.</span>
+                          </e-tooltip>
+                        </v-list-item-title>
+                      </v-list-item>
                     </v-list>
                   </e-menu>
                 </div>
@@ -401,8 +423,10 @@ export default {
           claimStatus = await this.handleClaim();
         } else if (type == "zkSync") {
           claimStatus = await this.handleZkClaim();
-        } else {
+        } else if (type == "zkSyncV2") {
           claimStatus = await this.handleZkClaimV2();
+        } else {
+          claimStatus = await this.handleOpBNBClaim();
         }
         if (claimStatus) {
           this.onAnimation();
