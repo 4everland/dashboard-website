@@ -289,7 +289,12 @@ export class PinCidTaskWrapper {
       ) {
         this.status = 2;
       } else {
-        if (error.message != "All promises were rejected") {
+        if (
+          error.message ==
+          "Insufficient storage space is available to upload the file."
+        ) {
+          Vue.prototype.$utils.resourceInsufficient();
+        } else if (error.message != "All promises were rejected") {
           Vue.prototype.$alert(error.message);
         }
         this.status = 4;
