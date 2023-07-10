@@ -268,6 +268,13 @@ async function handleMsg(status, code, msg, config) {
       if (!store.state.allowNoLogin) {
         goLogin();
       }
+    } else if (
+      /storage has reached/.test(msg) ||
+      /Insufficient storage/.test(msg) ||
+      /Insufficient IPFS storage/.test(msg) ||
+      /Insufficient AR storage/.test(msg)
+    ) {
+      await Vue.prototype.$utils.resourceInsufficient();
     } else if (msg && msg != "Request aborted" && !config.noTip) {
       await vue.$alert(msg);
       if (status == 403) {

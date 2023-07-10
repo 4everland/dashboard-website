@@ -259,10 +259,7 @@ export default {
       }
     },
     async onConfirm() {
-      if (this.isStorageFull)
-        return this.$alert(
-          "Insufficient storage space is available to upload the file."
-        );
+      if (this.isStorageFull) return this.$utils.resourceInsufficient();
       this.addTasks(this.files, 10);
       this.files = [];
       this.$refs.uploadInput.handleRmoveAll();
