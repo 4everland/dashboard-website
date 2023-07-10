@@ -123,6 +123,7 @@ export default {
       if ([97, 56].includes(id)) return "BSC";
       if ([42161].includes(id)) return "Arbitrum";
       if ([280, 324].includes(id)) return "zkSync";
+      if ([5611].includes(id)) return "opBNB";
       return "Polygon";
     },
     async checkNet() {

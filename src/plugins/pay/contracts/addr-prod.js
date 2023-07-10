@@ -28,6 +28,9 @@ export const zkSyncUSDC = "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4";
 export const zkSyncPayment = "0x036d8A0275D48c0Fa62AB02707C99208b22a96ae";
 export const zkRegister = "0x92E0536939D1279f4aEF0d0beA55563bA8c1af94";
 
+// src chain opBNB
+export const opBNBRegister = "0x3EebD8ed5ed01613cdDac7BAfF61889dce1CC8Ea";
+
 // dst chain
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";
 export const MumbaiRouter = "0x44DDDef9c1fA0Ed35f64f98062E505a968AaBa9C";

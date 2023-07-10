@@ -3,6 +3,8 @@ import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
 import arbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-arbitrum";
 import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import zkSyncContract from "../../plugins/pay/contracts/src-chain-contracts-zkSync";
+import opBNBContract from "../../plugins/pay/contracts/src-chain-contracts-opBNB";
+
 import { Web3Provider } from "zksync-web3";
 
 import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
@@ -43,12 +45,14 @@ export default {
             // euid exist  over
             console.log("register success");
             await this.registerSuccess();
+            location.reload();
             return true;
           }
           if (records.length) {
             // euid exist  over
             console.log("register success");
             await this.registerSuccess(records[0].txHash);
+            location.reload();
             return true;
           }
         }
@@ -173,15 +177,42 @@ export default {
       } catch (error) {
         console.log(error);
         this.$loading.close();
-        this.onErr(error).then(() => {
-          // this.switchNet(id);
-        });
+        this.onErr(error);
         return false;
       }
     },
 
     async handleOpBNBClaim() {
-      console.log(11);
+      try {
+        this.$loading();
+        await this.switchOpBNB();
+        await this.getCurrentContract();
+        const fee = await this.contract.Register.fee();
+        console.log(fee);
+        const tx = await this.contract.Register.register(
+          providerAddr,
+          this.registerInfo.uid,
+          {
+            value: fee,
+          }
+        );
+        const receipt = await tx.wait();
+        console.log(receipt, "receipt");
+        const isExists = await this.contract.ProviderController.accountExists(
+          providerAddr,
+          this.registerInfo.uid
+        );
+        if (isExists) {
+          await this.registerSuccess();
+        }
+        this.$loading.close();
+        return true;
+      } catch (error) {
+        console.log(error);
+        this.$loading.close();
+        this.onErr(error);
+        return false;
+      }
     },
     async searchZySyncRecord() {
       try {
@@ -248,6 +279,9 @@ export default {
           const provider = new Web3Provider(window.ethereum);
           zkSyncContract.setProvider(provider);
           this.contract = zkSyncContract;
+        } else if (chainId == 5611) {
+          opBNBContract.setProvider(provider);
+          this.contract = opBNBContract;
         } else {
           ethContract.setProvider(provider);
           this.contract = ethContract;
@@ -265,6 +299,7 @@ export default {
       if (type == "BSC") return this.$inDev ? 97 : 56;
       if (type == "Arbitrum") return 42161;
       if (type == "zkSync") return this.$inDev ? 280 : 324;
+      if (type == "opBNB") return 5611;
       return this.$inDev ? 5 : 1;
     },
     async switchPolygon() {
@@ -279,6 +314,11 @@ export default {
     },
     async switchZk() {
       const payBy = (localStorage.payBy = "zkSync");
+      const id = this.getChainId(payBy);
+      await this.switchNet(id);
+    },
+    async switchOpBNB() {
+      const payBy = (localStorage.payBy = "opBNB");
       const id = this.getChainId(payBy);
       await this.switchNet(id);
     },
@@ -392,6 +432,17 @@ export default {
           },
           // blockExplorerUrls: [],
         },
+        5611: {
+          chainId,
+          chainName: "opBNB Testnet",
+          rpcUrls: ["https://opbnb-testnet-rpc.bnbchain.org"],
+          nativeCurrency: {
+            name: "BNB Coin",
+            symbol: "tBNB",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
       }[id];
       if (!params) return;
       try {
@@ -428,6 +479,8 @@ export default {
       } else if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
         msg = "IPFS Storage Expired, extending service duration is required.";
       } else if (/exceeds balance/i.test(msg) || msg == "overflow") {
+        msg = "Insufficient balance";
+      } else if (/err: insufficient/i.test(msg)) {
         msg = "Insufficient balance";
       } else if (msg.length > 100) {
         const mat = /^(.+)\[/.exec(msg);

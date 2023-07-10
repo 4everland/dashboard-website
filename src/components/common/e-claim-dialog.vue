@@ -83,15 +83,9 @@
               <v-list-item link @click="handleTypeClaim('opBNB')">
                 <v-list-item-title class="item-title fz-14 al-c justify-center">
                   <div class="al-c">
-                    <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
-                    <span class="ml-3">opBNB</span>
+                    <img src="/img/svg/opbnb.svg" width="20" alt="" />
+                    <span class="ml-3">opBNB Testnet</span>
                   </div>
-                  <e-tooltip right>
-                    <v-icon slot="ref" size="18" color="#999" class="pa-1 d-ib"
-                      >mdi-alert-circle-outline</v-icon
-                    >
-                    <span>opBNB TEST-NET.</span>
-                  </e-tooltip>
                 </v-list-item-title>
               </v-list-item>
 
