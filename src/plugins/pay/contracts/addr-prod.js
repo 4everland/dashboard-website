@@ -29,7 +29,7 @@ export const zkSyncPayment = "0x036d8A0275D48c0Fa62AB02707C99208b22a96ae";
 export const zkRegister = "0x92E0536939D1279f4aEF0d0beA55563bA8c1af94";
 
 // src chain opBNB
-export const opBNBRegister = "0x3EebD8ed5ed01613cdDac7BAfF61889dce1CC8Ea";
+export const opBNBRegister = "0x8f02889d36d01BdF95b3B7B63a32629fc46e643E";
 
 // dst chain
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";
