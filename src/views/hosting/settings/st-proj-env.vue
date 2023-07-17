@@ -35,6 +35,7 @@
         item-key="id"
         :headers="headers"
         :items="list"
+        :items-per-page="-1"
         hide-default-footer
       ></v-data-table>
     </div>
