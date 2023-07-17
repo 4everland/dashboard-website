@@ -36,7 +36,7 @@
                   ></v-text-field>
                   <div v-if="item.type == 'select'" :key="idx">
                     <v-select
-                      v-model="item.selected"
+                      v-model="item.select"
                       :items="item.items"
                       dense
                       outlined
@@ -129,7 +129,7 @@
 
             <div v-if="item.type == 'select'" :key="idx">
               <v-select
-                v-model="item.selected"
+                v-model="item.select"
                 :items="item.items"
                 dense
                 outlined
