@@ -100,8 +100,8 @@ export default {
   },
   methods: {
     clickAdd() {
-      if (this.list.length >= 10)
-        return this.$alert("You can add 10 variables at maximum.");
+      if (this.list.length >= 100)
+        return this.$alert("You can add 100 variables at maximum.");
       this.showPop = true;
     },
     async onAdd() {
