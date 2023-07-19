@@ -111,17 +111,17 @@ export default {
         },
         {
           name: "opBNB Testnet",
-          icon: require("/public/img/svg/opbnb.svg"),
+          icon: require("/public/img/svg/billing/ic-opbnb-test.svg"),
           type: "OpBNBTest",
         },
         {
           name: "Ethereum",
-          icon: require("/public/img/svg/eth.svg"),
+          icon: require("/public/img/svg/billing/ic-ethereum.svg"),
           type: "Ethereum",
         },
         {
           name: "Polygon ZkEVM",
-          icon: require("/public/img/svg/billing/ic-polygon-0.svg"),
+          icon: require("/public/img/svg/billing/ic-polygon-zkEVM.svg"),
           type: "PolygonZkEVM",
         },
         {
