@@ -17,7 +17,7 @@
           </v-col>
         </v-row>
         <div class="d-flex justify-center mt-8">
-          <e-menu ref="menu" open-on-hover top :close-on-content-click="false">
+          <e-menu ref="menu" top :close-on-content-click="false" open-on-hover>
             <v-btn slot="ref" color="primary" dark width="500px">
               <span class="ml-2">Mint now</span>
               <v-icon>mdi-chevron-down</v-icon>
@@ -32,68 +32,29 @@
             </v-list>
 
             <v-list v-else>
-              <v-list-item link @click="handleTypeClaim('polygon')">
-                <v-list-item-title class="item-title fz-14 al-c justify-center">
-                  <img
-                    src="/img/svg/billing/ic-polygon-0.svg"
-                    width="18"
-                    alt=""
-                  />
-                  <span class="ml-3">Polygon</span>
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item link @click="handleTypeClaim('zkSync')">
-                <v-list-item-title class="item-title fz-14 al-c justify-center">
-                  <div class="al-c">
-                    <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
-                    <span class="ml-3">zkSync Lite(V1)</span>
+              <div class="al-c flex-wrap pa-4" style="width: 500px">
+                <template v-for="item in claimList">
+                  <div
+                    :key="item.type"
+                    class="pa-3 claim-chain-item mt-2 cursor-p al-c"
+                    @click="handleTypeClaim(item.type)"
+                  >
+                    <img :src="item.icon" width="20" alt="" />
+                    <span class="ml-3 fz-14">
+                      {{ item.name }}
+                    </span>
                   </div>
-                  <e-tooltip right>
-                    <v-icon slot="ref" size="18" color="#999" class="pa-1 d-ib"
-                      >mdi-alert-circle-outline</v-icon
-                    >
-                    <span
-                      >Please ensure that you have sufficient ETH in zkSync
-                      Lite. Interaction with the zkSync network will rely on
-                      cross-chain communication services to complete on-chain
-                      identity registration on Polygon.</span
-                    >
-                  </e-tooltip>
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item link @click="handleTypeClaim('zkSyncV2')">
-                <v-list-item-title class="item-title fz-14 al-c justify-center">
-                  <div class="al-c">
-                    <img src="/img/svg/logo-no-letters.svg" width="20" alt="" />
-                    <span class="ml-3">zkSync Era(V2)</span>
-                  </div>
-                  <e-tooltip right>
-                    <v-icon slot="ref" size="18" color="#999" class="pa-1 d-ib"
-                      >mdi-alert-circle-outline</v-icon
-                    >
-                    <span
-                      >Please ensure that you have sufficient ETH in zkSync Era.
-                      Interaction with the zkSync network will rely on
-                      cross-chain communication services to complete on-chain
-                      identity registration on Polygon.</span
-                    >
-                  </e-tooltip>
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item link @click="handleTypeClaim('opBNB')">
-                <v-list-item-title class="item-title fz-14 al-c justify-center">
-                  <div class="al-c">
-                    <img src="/img/svg/opbnb.svg" width="20" alt="" />
-                    <span class="ml-3">opBNB Testnet</span>
-                  </div>
-                </v-list-item-title>
-              </v-list-item>
+                </template>
 
-              <v-list-item link @click="onMore" v-if="!showMore">
-                <v-list-item-title class="fz-14 al-c justify-center">
-                  <span class="ml-3 gray">More</span>
-                </v-list-item-title>
-              </v-list-item>
+                <div
+                  v-if="!showMore"
+                  @click="onMore"
+                  class="claim-chain-item pa-3 mt-2 cursor-p ta-c fz-14"
+                  style="width: 100%"
+                >
+                  More
+                </div>
+              </div>
             </v-list>
           </e-menu>
         </div>
@@ -125,7 +86,6 @@ export default {
         },
         {
           img: "/img/svg/rewardHub/fee_resource.svg",
-
           name: "Access to additional free resources",
         },
       ],
@@ -133,6 +93,48 @@ export default {
       accountExists: false,
       registerInfo: {},
       newUserInfo: null,
+      claimList: [
+        {
+          name: "Polygon",
+          icon: require("/public/img/svg/billing/ic-polygon-0.svg"),
+          type: "Polygon",
+        },
+        {
+          name: "zkSync Lite(v1)",
+          icon: require("/public/img/svg/logo-no-letters.svg"),
+          type: "zkSync",
+        },
+        {
+          name: "ZkSync Era(V2)",
+          icon: require("/public/img/svg/logo-no-letters.svg"),
+          type: "zkSyncV2",
+        },
+        {
+          name: "opBNB Testnet",
+          icon: require("/public/img/svg/opbnb.svg"),
+          type: "OpBNBTest",
+        },
+        {
+          name: "Ethereum",
+          icon: require("/public/img/svg/eth.svg"),
+          type: "Ethereum",
+        },
+        {
+          name: "Polygon ZkEVM",
+          icon: require("/public/img/svg/billing/ic-polygon-0.svg"),
+          type: "PolygonZkEVM",
+        },
+        {
+          name: "BNB Chain",
+          icon: require("/public/img/svg/billing/ic-bsc.png"),
+          type: "BSC",
+        },
+        {
+          name: "Arbitrum",
+          icon: require("/public/img/svg/billing/ic-arbitrum.png"),
+          type: "Arbitrum",
+        },
+      ],
     };
   },
   async created() {
@@ -162,7 +164,7 @@ export default {
       this.showDialog = false;
       this.$refs.share.showDialog = true;
     },
-    async handleTypeClaim(type = "polygon") {
+    async handleTypeClaim(type = "Polygon") {
       try {
         const register = await this.isRegister();
         if (register) {
@@ -170,14 +172,14 @@ export default {
           return this.$emit("claimCompeleted");
         }
         let claimStatus = null;
-        if (type == "polygon") {
+        if (type == "Polygon") {
           claimStatus = await this.handleClaim();
         } else if (type == "zkSync") {
           claimStatus = await this.handleZkClaim();
         } else if (type == "zkSyncV2") {
-          claimStatus = await this.handleZkClaimV2();
+          claimStatus = await this.handleOtherChainClaim("zkSync");
         } else {
-          claimStatus = await this.handleOpBNBClaim();
+          claimStatus = await this.handleOtherChainClaim(type);
         }
         if (claimStatus) {
           this.onAnimation();
@@ -197,3 +199,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.claim-chain-item {
+  width: calc(50% - 4px);
+  box-sizing: border-box;
+  background: rgba(140, 140, 161, 0.05);
+  color: #0e0e2c;
+}
+.claim-chain-item:nth-of-type(even) {
+  margin-left: 8px;
+}
+</style>
