@@ -76,21 +76,7 @@
                         >
                           <img :src="item.icon" width="18" alt="" />
                           <span class="ml-3">{{ item.name }}</span>
-                        </v-list-item-title>
-                      </v-list-item>
-                      <!-- <v-list-item link @click="handleTypeClaim('zkSync')">
-                        <v-list-item-title
-                          class="item-title fz-14 al-c justify-center"
-                        >
-                          <div class="al-c mx-auto">
-                            <img
-                              src="/img/svg/logo-no-letters.svg"
-                              width="20"
-                              alt=""
-                            />
-                            <span class="ml-3">zkSync Lite(V1)</span>
-                          </div>
-                          <e-tooltip right>
+                          <e-tooltip top v-if="item.tips">
                             <v-icon
                               slot="ref"
                               size="18"
@@ -98,52 +84,10 @@
                               class="pa-1 d-ib"
                               >mdi-alert-circle-outline</v-icon
                             >
-                            <span
-                              >Please ensure that you have sufficient ETH in
-                              zkSync Lite. Interaction with the zkSync network
-                              will rely on cross-chain communication services to
-                              complete on-chain identity registration on
-                              Polygon.</span
-                            >
+                            <span>{{ item.tips }}</span>
                           </e-tooltip>
                         </v-list-item-title>
                       </v-list-item>
-                      <v-list-item link @click="handleTypeClaim('zkSyncV2')">
-                        <v-list-item-title class="fz-14 al-c justify-center">
-                          <div class="al-c mx-auto">
-                            <img
-                              src="/img/svg/logo-no-letters.svg"
-                              width="20"
-                              alt=""
-                            />
-                            <span class="ml-3">zkSync Era(V2)</span>
-                          </div>
-                          <e-tooltip right>
-                            <v-icon
-                              slot="ref"
-                              size="18"
-                              color="#999"
-                              class="pa-1 d-ib"
-                              >mdi-alert-circle-outline</v-icon
-                            >
-                            <span
-                              >Please ensure that you have sufficient ETH in
-                              zkSync Era. Interaction with the zkSync network
-                              will rely on cross-chain communication services to
-                              complete on-chain identity registration on
-                              Polygon.</span
-                            >
-                          </e-tooltip>
-                        </v-list-item-title>
-                      </v-list-item>
-                      <v-list-item link @click="handleTypeClaim('opBNB')">
-                        <v-list-item-title class="fz-14 al-c justify-center">
-                          <div class="al-c mx-auto">
-                            <img src="/img/svg/opbnb.svg" width="20" alt="" />
-                            <span class="ml-3">opBNB Testnet</span>
-                          </div>
-                        </v-list-item-title>
-                      </v-list-item> -->
                     </v-list>
                   </e-menu>
                 </div>
@@ -259,11 +203,13 @@ export default {
           name: "zkSync Lite(v1)",
           icon: require("/public/img/svg/logo-no-letters.svg"),
           type: "zkSync",
+          tips: "Please ensure that you have sufficient ETH in zkSync Lite. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
         },
         {
           name: "ZkSync Era(V2)",
           icon: require("/public/img/svg/logo-no-letters.svg"),
           type: "zkSyncV2",
+          tips: "Please ensure that you have sufficient ETH inzkSync Era. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
         },
         {
           name: "opBNB Testnet",
@@ -289,6 +235,11 @@ export default {
           name: "Arbitrum",
           icon: require("/public/img/svg/billing/ic-arbitrum.png"),
           type: "Arbitrum",
+        },
+        {
+          name: "Linea",
+          icon: require("/public/img/svg/billing/ic-linea.svg"),
+          type: "Linea",
         },
       ],
     };

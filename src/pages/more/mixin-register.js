@@ -5,6 +5,8 @@ import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import zkSyncContract from "../../plugins/pay/contracts/src-chain-contracts-zkSync";
 import opBNBContract from "../../plugins/pay/contracts/src-chain-contracts-opBNB";
 import polygonZkEVMContract from "../../plugins/pay/contracts/src-chain-contracts-polygonZkEVM";
+import lineaContract from "../../plugins/pay/contracts/src-chain-contracts-linea";
+
 import { Web3Provider } from "zksync-web3";
 
 import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
@@ -251,6 +253,9 @@ export default {
         } else if (chainId == 1442 || chainId == 1101) {
           polygonZkEVMContract.setProvider(provider);
           this.contract = polygonZkEVMContract;
+        } else if (chainId == 59140 || chainId == 59144) {
+          lineaContract.setProvider(provider);
+          this.contract = lineaContract;
         } else {
           ethContract.setProvider(provider);
           this.contract = ethContract;
@@ -270,6 +275,7 @@ export default {
       if (type == "zkSync") return this.$inDev ? 280 : 324;
       if (type == "OpBNBTest") return 5611;
       if (type == "PolygonZkEVM") return this.$inDev ? 1442 : 1101;
+      if (type == "Linea") return this.$inDev ? 59140 : 59144;
       return this.$inDev ? 5 : 1;
     },
     async switchNet(chainName) {
@@ -421,6 +427,28 @@ export default {
           chainId,
           chainName: "Polygon zkEVM",
           rpcUrls: ["https://rpc.ankr.com/polygon_zkevm"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        59140: {
+          chainId,
+          chainName: "Linea Test",
+          rpcUrls: ["https://rpc.goerli.linea.build"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        59144: {
+          chainId,
+          chainName: "Linea",
+          rpcUrls: ["https://linea-mainnet.infura.io/v3"],
           nativeCurrency: {
             name: "ETH",
             symbol: "ETH",

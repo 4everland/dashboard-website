@@ -37,6 +37,8 @@ export const opBNBRegister = "0x8f02889d36d01BdF95b3B7B63a32629fc46e643E";
 // polygon zk evm
 export const polygonZkEVMRegister = "";
 
+export const lineaRegister = "";
+
 // dst chain
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";
 export const MumbaiRouter = "0x44DDDef9c1fA0Ed35f64f98062E505a968AaBa9C";

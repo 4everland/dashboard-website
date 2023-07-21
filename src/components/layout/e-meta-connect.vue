@@ -125,6 +125,7 @@ export default {
       if ([280, 324].includes(id)) return "zkSync";
       if ([5611].includes(id)) return "OpBNBTest";
       if ([1442, 1101].includes(id)) return "PolygonZkEVM";
+      if ([59140, 59144].includes(id)) return "Linea";
       return "Polygon";
     },
     async checkNet() {

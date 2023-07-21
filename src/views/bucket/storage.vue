@@ -462,11 +462,6 @@ export default {
       return this.fileUrls[0] || "";
     },
   },
-  watch: {
-    path() {
-      this.onRouteChange();
-    },
-  },
   methods: {
     onRouteChange() {
       if (!this.inStorage) return;
@@ -543,6 +538,9 @@ export default {
     },
   },
   watch: {
+    path() {
+      this.onRouteChange();
+    },
     selected: {
       handler(arr) {
         if (!this.$refs.operationBar) return;

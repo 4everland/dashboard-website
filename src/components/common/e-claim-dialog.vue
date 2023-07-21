@@ -43,16 +43,30 @@
                     <span class="ml-3 fz-14">
                       {{ item.name }}
                     </span>
+                    <e-tooltip top v-if="item.tips">
+                      <v-icon
+                        slot="ref"
+                        size="18"
+                        color="#999"
+                        class="pa-1 d-ib"
+                        >mdi-alert-circle-outline</v-icon
+                      >
+                      <span>{{ item.tips }}</span>
+                    </e-tooltip>
                   </div>
                 </template>
 
                 <div
                   v-if="!showMore"
                   @click="onMore"
-                  class="claim-chain-item pa-3 mt-2 cursor-p ta-c fz-14"
-                  style="width: 100%"
+                  class="claim-chain-item pa-3 mt-2 cursor-p fz-14 al-c"
+                  :class="{ 'f-center': claimList.length % 2 == 0 }"
+                  :style="{
+                    width: claimList.length % 2 ? 'calc(50% - 4px)' : '100%',
+                  }"
                 >
-                  More
+                  <img width="20" src="/img/svg/more.svg" alt="" />
+                  <span class="ml-3 fz-14">More</span>
                 </div>
               </div>
             </v-list>
@@ -103,11 +117,13 @@ export default {
           name: "zkSync Lite(v1)",
           icon: require("/public/img/svg/logo-no-letters.svg"),
           type: "zkSync",
+          tips: "Please ensure that you have sufficient ETH in zkSync Lite. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
         },
         {
           name: "ZkSync Era(V2)",
           icon: require("/public/img/svg/logo-no-letters.svg"),
           type: "zkSyncV2",
+          tips: "Please ensure that you have sufficient ETH inzkSync Era. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
         },
         {
           name: "opBNB Testnet",
@@ -133,6 +149,11 @@ export default {
           name: "Arbitrum",
           icon: require("/public/img/svg/billing/ic-arbitrum.png"),
           type: "Arbitrum",
+        },
+        {
+          name: "Linea",
+          icon: require("/public/img/svg/billing/ic-linea.svg"),
+          type: "Linea",
         },
       ],
     };
