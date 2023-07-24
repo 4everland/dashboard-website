@@ -126,7 +126,7 @@
         <div class="pa-5"></div>
         <div class="gray fz-15 mt-16">
           <p>
-            We use Deloyhooks to connect with your GitHub, and if we receive
+            We use Deloy hooks to connect with your GitHub, and if we receive
             push, we will automatically deploy updates.
           </p>
         </div>

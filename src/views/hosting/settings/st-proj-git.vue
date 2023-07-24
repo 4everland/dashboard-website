@@ -74,7 +74,7 @@
                     >mdi-alert-circle</v-icon
                   >
                   <span
-                    >Deloyhooks allow external services to be notified when
+                    >Deloy hooks allow external services to be notified when
                     certain events happen. When the specified events happen,
                     we’ll update the deployment.</span
                   >

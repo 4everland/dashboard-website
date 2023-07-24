@@ -8,6 +8,7 @@
   <div>
     <div v-if="!teamInfo.isMember">
       <overview-notice class="mb-4" />
+
       <div class="pos-r">
         <v-carousel
           v-model="carouselIdx"
@@ -16,9 +17,11 @@
           class="bdrs-10 mb-4"
           cycle
           height="100%"
+          :style="{ 'min-height': carouselWidth / 6.24 + 'px' }"
           delimiter-icon="mdi-minus"
           hide-delimiters
           hide-delimiter-background
+          ref="carouselRef"
         >
           <v-carousel-item
             v-for="(it, i) in banners"
@@ -110,10 +113,17 @@ export default {
   data() {
     return {
       carouselIdx: 0,
+      carouselWidth: 0,
     };
   },
   created() {
     this.isRegister();
+  },
+  mounted() {
+    this.carouselWidth = this.$refs.carouselRef.$el.offsetWidth;
+    window.onresize = () => {
+      this.carouselWidth = this.$refs.carouselRef.$el.offsetWidth;
+    };
   },
   computed: {
     ...mapState({
@@ -134,16 +144,16 @@ export default {
     banners() {
       return [
         {
+          img: "https://static1.4everland.org/img/banner/20230721-174716.png",
+          href: "https://forms.gle/SAzZ2Sw31atnSSsB8",
+        },
+        {
           img: "https://static1.4everland.org/img/banner/2023523-180202.jpg",
           href: "https://discord.com/channels/852482727164117022/1104253691676065893",
         },
         {
           img: "https://static1.4everland.org/img/banner/2023516-181010.jpg",
           href: "https://firstsowing.4everland.org",
-        },
-        {
-          img: "https://static1.4everland.org/img/banner/20230721-174716.png",
-          href: "https://forms.gle/SAzZ2Sw31atnSSsB8",
         },
       ];
     },
