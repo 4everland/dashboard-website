@@ -1,6 +1,6 @@
 import { providers } from "ethers";
 import Contracts from "./contracts";
-
+import { Registration__factory } from "@4everland/registration";
 import {
   IERC20__factory,
   SrcChainPaymentV2__factory,
@@ -20,6 +20,7 @@ import {
   ChapelSrcChainPayment,
   ChapelUSDC,
   ChapelRecharge,
+  ChapelRegister,
   MumbaiProviderController,
   MumbaiDstChainPayment,
   MumbaiResourcePriceAdaptor,
@@ -61,7 +62,9 @@ class SrcChainContracts extends Contracts {
   get SrcChainRecharge() {
     return SrcChainRecharge__factory.connect(ChapelRecharge, this.signer);
   }
-
+  get Register() {
+    return Registration__factory.connect(ChapelRegister, this.signer);
+  }
   get ProviderController() {
     return ProviderControllerV2__factory.connect(
       MumbaiProviderController,

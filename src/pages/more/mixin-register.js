@@ -4,6 +4,8 @@ import arbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-ar
 import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
 import zkSyncContract from "../../plugins/pay/contracts/src-chain-contracts-zkSync";
 import opBNBContract from "../../plugins/pay/contracts/src-chain-contracts-opBNB";
+import polygonZkEVMContract from "../../plugins/pay/contracts/src-chain-contracts-polygonZkEVM";
+import lineaContract from "../../plugins/pay/contracts/src-chain-contracts-linea";
 
 import { Web3Provider } from "zksync-web3";
 
@@ -65,7 +67,7 @@ export default {
     async handleClaim() {
       try {
         this.$loading();
-        await this.switchPolygon();
+        await this.switchNet("Polygon");
         await this.getCurrentContract();
         const { sign } = await this.getSignAddress();
         const tx = await this.contract.ProviderController.functions[
@@ -83,12 +85,11 @@ export default {
         return false;
       }
     },
-
     async handleZkClaim() {
       try {
         // check main eth
-        this.switchEth();
         this.$loading();
+        await this.switchNet("Ethereum");
         const zkprovider = await zksync.getDefaultProvider("mainnet");
         // eth signer
         const signer = this.contract.provider.getSigner();
@@ -107,7 +108,7 @@ export default {
               ethAuthType: "ECDSALegacyMessage",
               // fee: utils.parseEther("0.0006"),
             });
-            console.log("setSigningKey", changeKeyTx);
+            // console.log("setSigningKey", changeKeyTx);
             const changeKeyTxReceipt = await changeKeyTx.awaitReceipt();
             console.log("changeKeyTxReceipt", changeKeyTxReceipt);
           }
@@ -149,46 +150,13 @@ export default {
         return false;
       }
     },
-    async handleZkClaimV2() {
+    async handleOtherChainClaim(chain) {
       try {
         this.$loading();
-        await this.switchZk();
+        await this.switchNet(chain);
         await this.getCurrentContract();
         const fee = await this.contract.Register.fee();
-        console.log(fee);
-        const tx = await this.contract.Register.register(
-          providerAddr,
-          this.registerInfo.uid,
-          {
-            value: fee,
-          }
-        );
-        const receipt = await tx.wait();
-        console.log(receipt, "receipt");
-        const isExists = await this.contract.ProviderController.accountExists(
-          providerAddr,
-          this.registerInfo.uid
-        );
-        if (isExists) {
-          await this.registerSuccess();
-        }
-        this.$loading.close();
-        return true;
-      } catch (error) {
-        console.log(error);
-        this.$loading.close();
-        this.onErr(error);
-        return false;
-      }
-    },
-
-    async handleOpBNBClaim() {
-      try {
-        this.$loading();
-        await this.switchOpBNB();
-        await this.getCurrentContract();
-        const fee = await this.contract.Register.fee();
-        console.log(fee);
+        // console.log(fee);
         const tx = await this.contract.Register.register(
           providerAddr,
           this.registerInfo.uid,
@@ -272,7 +240,7 @@ export default {
         } else if (chainId == 97 || chainId == 56) {
           bscContract.setProvider(provider);
           this.contract = bscContract;
-        } else if (chainId == 42161) {
+        } else if (chainId == 421613 || chainId == 42161) {
           arbitrumContract.setProvider(provider);
           this.contract = arbitrumContract;
         } else if (chainId == 280 || chainId == 324) {
@@ -282,6 +250,12 @@ export default {
         } else if (chainId == 5611) {
           opBNBContract.setProvider(provider);
           this.contract = opBNBContract;
+        } else if (chainId == 1442 || chainId == 1101) {
+          polygonZkEVMContract.setProvider(provider);
+          this.contract = polygonZkEVMContract;
+        } else if (chainId == 59140 || chainId == 59144) {
+          lineaContract.setProvider(provider);
+          this.contract = lineaContract;
         } else {
           ethContract.setProvider(provider);
           this.contract = ethContract;
@@ -297,45 +271,28 @@ export default {
     getChainId(type) {
       if (type == "Polygon") return this.$inDev ? 80001 : 137;
       if (type == "BSC") return this.$inDev ? 97 : 56;
-      if (type == "Arbitrum") return 42161;
+      if (type == "Arbitrum") return this.$inDev ? 421613 : 42161;
       if (type == "zkSync") return this.$inDev ? 280 : 324;
-      if (type == "opBNB") return 5611;
+      if (type == "OpBNBTest") return 5611;
+      if (type == "PolygonZkEVM") return this.$inDev ? 1442 : 1101;
+      if (type == "Linea") return this.$inDev ? 59140 : 59144;
       return this.$inDev ? 5 : 1;
     },
-    async switchPolygon() {
-      const payBy = (localStorage.payBy = "Polygon");
+    async switchNet(chainName) {
+      const payBy = (localStorage.payBy = chainName);
       const id = this.getChainId(payBy);
-      await this.switchNet(id);
-    },
-    async switchEth() {
-      const payBy = (localStorage.payBy = "");
-      const id = this.getChainId(payBy);
-      await this.switchNet(id);
-    },
-    async switchZk() {
-      const payBy = (localStorage.payBy = "zkSync");
-      const id = this.getChainId(payBy);
-      await this.switchNet(id);
-    },
-    async switchOpBNB() {
-      const payBy = (localStorage.payBy = "opBNB");
-      const id = this.getChainId(payBy);
-      await this.switchNet(id);
-    },
-    async switchNet(id) {
       const chainId = "0x" + id.toString(16);
       try {
-        const result = await window.ethereum.request({
+        await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
-        console.log(result);
       } catch (error) {
         console.log("switch error 2", error);
-        if (error.code == 4902 || error.data.originalError.code == 4902) {
+        if (error.code == 4902 || error.data?.originalError.code == 4902) {
           await this.addChain(chainId, id);
         } else {
-          this.onErr(error);
+          throw new Error(error.message);
         }
       }
     },
@@ -399,6 +356,18 @@ export default {
           },
           // blockExplorerUrls: [],
         },
+
+        421613: {
+          chainId,
+          chainName: "Arbitrum Goerli",
+          rpcUrls: ["https://endpoints.omniatech.io/v1/arbitrum/goerli/public"],
+          nativeCurrency: {
+            name: "Arbitrum Coin",
+            symbol: "AGOR",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
         42161: {
           chainId,
           chainName: "Arbitrum One",
@@ -443,6 +412,50 @@ export default {
           },
           // blockExplorerUrls: [],
         },
+        1442: {
+          chainId,
+          chainName: "Polygon zkEVM Testnet",
+          rpcUrls: ["https://rpc.public.zkevm-test.net"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        1101: {
+          chainId,
+          chainName: "Polygon zkEVM",
+          rpcUrls: ["https://rpc.ankr.com/polygon_zkevm"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        59140: {
+          chainId,
+          chainName: "Linea Test",
+          rpcUrls: ["https://rpc.goerli.linea.build"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        59144: {
+          chainId,
+          chainName: "Linea",
+          rpcUrls: ["https://linea-mainnet.infura.io/v3"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
       }[id];
       if (!params) return;
       try {
@@ -459,11 +472,8 @@ export default {
     },
     onErr(err, retry) {
       if (!err) return console.log("---- err null");
-      // console.log(err);
       const { data } = err;
-      // console.log(data);
       let msg = err.message;
-      // console.log(msg);
       if (data) {
         msg = data.message || msg;
       }
@@ -478,9 +488,12 @@ export default {
         msg = "Transaction Failed";
       } else if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
         msg = "IPFS Storage Expired, extending service duration is required.";
-      } else if (/exceeds balance/i.test(msg) || msg == "overflow") {
-        msg = "Insufficient balance";
-      } else if (/err: insufficient/i.test(msg)) {
+      } else if (
+        /exceeds balance/i.test(msg) ||
+        msg == "overflow" ||
+        /err: insufficient/i.test(msg) ||
+        /insufficient funds/i.test(msg)
+      ) {
         msg = "Insufficient balance";
       } else if (msg.length > 100) {
         const mat = /^(.+)\[/.exec(msg);

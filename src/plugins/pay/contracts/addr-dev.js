@@ -8,6 +8,7 @@ export const GoerliBridge = "0x358234B325EF9eA8115291A8b81b7d33A2Fa762D";
 export const GoerliSrcChainPayment =
   "0x293b579B8da5538EaDD70B811E4eC2C3C6Ac0f05";
 export const GoerliRecharge = "0xaEBDD5d40c7D22D0343fAFef36501E44e2ad9454";
+export const GoerliRegister = "0xD925962A7e5A8eabbA1955BCD42145b909237a51";
 
 // src chain bsc
 export const ChapelUSDC = "0x855fC87f7F14Db747ef27603b02bAe579ba947B6";
@@ -15,6 +16,7 @@ export const ChapelBridge = "0xf89354F314faF344Abd754924438bA798E306DF2";
 export const ChapelSrcChainPayment =
   "0xde15Bd142D0BFa2e9E423B3473e027E0Cc6C10bC";
 export const ChapelRecharge = "0x1898A1d6dC1cF1ea727291Bf32E18712e1DAAcc8";
+export const ChapelRegister = "0xD420a3725db640ECaC4A9F56d08CFeCBb358Ce63";
 
 // src chain arbitrum one
 export const ArbitrumUSDC = "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8";
@@ -22,6 +24,7 @@ export const ArbitrumBridge = "0x1619DE6B6B20eD217a58d00f37B9d47C7663feca";
 export const ArbitrumSrcChainPayment =
   "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
 export const ArbitrumRecharge = "";
+export const ArbitrumRegister = "0xe3e2cB6ff2F049058169E2044A0EF603773267a7";
 
 // src chain zksync
 export const zkSyncUSDC = "0x76bc4f22c07A02DC4C961D485d0467Da351A1b49";
@@ -30,6 +33,13 @@ export const zkRegister = "0xC5FF4F0E97B6d8738AA0A41A656A5C5d07498cBC";
 
 // src chain opBNB
 export const opBNBRegister = "0x3EebD8ed5ed01613cdDac7BAfF61889dce1CC8Ea";
+
+// polygon zk evm
+export const polygonZkEVMRegister =
+  "0x3EebD8ed5ed01613cdDac7BAfF61889dce1CC8Ea";
+
+// linea
+export const lineaRegister = "0xe3e2cB6ff2F049058169E2044A0EF603773267a7";
 
 // dst chain
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";
