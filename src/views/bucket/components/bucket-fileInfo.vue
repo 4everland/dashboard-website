@@ -182,8 +182,8 @@ export default {
   },
   computed: {
     ...mapState({
-      s3: (s) => s.s3,
-      s3m: (s) => s.s3m,
+      s3: (s) => s.moduleS3.s3,
+      s3m: (s) => s.moduleS3.s3m,
     }),
     singleFile() {
       if (this.selected.length == 1 && this.selected[0].isFile) return true;

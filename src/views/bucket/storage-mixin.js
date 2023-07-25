@@ -21,8 +21,8 @@ export default {
   },
   computed: {
     ...mapState({
-      s3: (s) => s.s3,
-      s3m: (s) => s.s3m,
+      s3: (s) => s.moduleS3.s3,
+      s3m: (s) => s.moduleS3.s3m,
       navItems: (s) => s.navItems,
     }),
     path() {

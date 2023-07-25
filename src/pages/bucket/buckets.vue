@@ -38,9 +38,7 @@ import DeleteControl from "@/views/bucket/components/delete-control";
 import PinCidControl from "@/views/bucket/components/pin-cid-control";
 
 import { bus } from "../../utils/bus";
-import initS3 from "./initS3";
 export default {
-  mixins: [initS3],
   data() {
     return {
       list: [
@@ -77,7 +75,7 @@ export default {
   },
   created() {
     if (this.$s3) return;
-    this.initS3();
+    this.$store.dispatch("initS3");
   },
   mounted() {
     bus.$on("showOperationBar", (val) => {

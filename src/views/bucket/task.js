@@ -41,13 +41,14 @@ export class TaskWrapper {
       this.status = 3; // success
       //---------------------
     } catch (e) {
-      console.log(e.message);
+      console.log(e.Code);
       if (e.message == "Upload aborted.") {
         this.status = 2; // cancel/ stop
       } else {
         this.status = 4; // failed
         // Vue.prototype.$alert(e.message);
         this.failedMessage = e.message;
+        throw new Error(e.Code);
       }
     }
   }

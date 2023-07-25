@@ -237,8 +237,15 @@ export default {
       this.tasks = newTasks.concat(this.tasks);
     },
     async start(task) {
-      await task.startTask();
-      this.processTask();
+      try {
+        await task.startTask();
+        this.processTask();
+      } catch (error) {
+        console.log(error);
+        // if(error.message == 'InvalidAccessKeyId'){
+
+        // }
+      }
     },
     async processTask() {
       let processing = this.tasks.filter((task) => {
