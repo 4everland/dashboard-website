@@ -17,7 +17,6 @@ export default {
   },
   watch: {
     isFocus(val) {
-      console.log(val);
       if (val) {
         setTimeout(() => {
           const stsData = JSON.parse(localStorage.stsData1 || "null");

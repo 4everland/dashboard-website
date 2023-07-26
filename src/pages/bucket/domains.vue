@@ -190,7 +190,7 @@ import { mapState } from "vuex";
 export default {
   computed: {
     ...mapState({
-      s3: (s) => s.s3,
+      s3: (s) => s.moduleS3.s3,
     }),
     resBucketList() {
       return (this.bucketList || []).filter((it) => {

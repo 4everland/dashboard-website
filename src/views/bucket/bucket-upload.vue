@@ -145,6 +145,7 @@ export default {
         (v) =>
           /^([A-Za-z0-9]{46}|[A-Za-z0-9]{59})$/.test(v) ? true : "Invalid CID",
       ],
+      accessKeyExpired: false,
     };
   },
   async created() {
@@ -162,7 +163,7 @@ export default {
   },
   computed: {
     ...mapState({
-      s3: (s) => s.s3,
+      s3: (s) => s.moduleS3.s3,
     }),
     path() {
       const arr = this.$route.path.split("/");
@@ -214,14 +215,13 @@ export default {
           webkitRelativePath = arr.join("/") + "/";
         }
         return new TaskWrapper(
-          this.$s3,
+          this.s3,
           {
             Bucket: this.info.Bucket,
             Key: this.info.Prefix + webkitRelativePath + file.name,
             Body: file,
             ContentType: file.type,
           },
-          file.id,
           {
             name: file.name,
             path:
@@ -240,14 +240,24 @@ export default {
       try {
         await task.startTask();
         this.processTask();
+        this.accessKeyExpired = false;
       } catch (error) {
         console.log(error);
-        // if(error.message == 'InvalidAccessKeyId'){
-
-        // }
+        if (this.accessKeyExpired) return;
+        if (error.message == "InvalidAccessKeyId") {
+          this.accessKeyExpired = true;
+          localStorage.removeItem("stsData1");
+          await this.$store.dispatch("initS3");
+          this.processTask(true);
+        }
       }
     },
-    async processTask() {
+    async processTask(val) {
+      if (val) {
+        this.tasks
+          .filter((task) => task.status != 3)
+          .forEach((task) => task.updateS3Instance(this.s3));
+      }
       let processing = this.tasks.filter((task) => {
         return task.status == 1;
       });

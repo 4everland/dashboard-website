@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <!-- <keep-alive v-if="inFolder || inFile"> -->
     <e-tabs
       v-if="inFolder"
@@ -13,8 +13,6 @@
     <storage v-if="!inFolder" />
 
     <!-- Upload/Delete Folders Component -->
-    <!-- <navigation-drawers v-if="!inFile" ref="navDrawers"></navigation-drawers> -->
-
     <div
       class="control"
       :style="{
@@ -32,7 +30,6 @@
 
 <script>
 import Storage from "@/views/bucket/storage";
-// import NavigationDrawers from "@/views/bucket/components/navigation-drawers";
 import UploadControl from "@/views/bucket/components/upload-control";
 import DeleteControl from "@/views/bucket/components/delete-control";
 import PinCidControl from "@/views/bucket/components/pin-cid-control";
@@ -85,7 +82,6 @@ export default {
   methods: {},
   components: {
     Storage,
-    // NavigationDrawers,
     UploadControl,
     DeleteControl,
     PinCidControl,

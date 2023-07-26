@@ -25,7 +25,6 @@ export default {
   },
   actions: {
     async initS3({ state, commit }) {
-      console.log(222);
       let stsData = JSON.parse(localStorage.stsData1 || "null");
       if (!stsData || Date.now() >= (stsData.expiredAt - 3600) * 1e3) {
         const { data } = await Vue.prototype.$http.get("/user/sts/assume-role");
@@ -66,5 +65,4 @@ export default {
       commit("SET_S3", { s3, s3m }, { root: true });
     },
   },
-  getters: {},
 };

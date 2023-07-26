@@ -2,17 +2,9 @@ import Vue from "vue";
 import { Upload } from "@aws-sdk/lib-storage";
 import { pinningServiceApi } from "../../api";
 export class TaskWrapper {
-  id;
-  s3;
-  status;
-  param;
-  progress;
-  task;
-  failedMessage;
-  url;
-  fileSize;
-  constructor(s3, param, id, fileInfo, url) {
-    this.id = id;
+  static id = 0;
+  constructor(s3, param, fileInfo, url) {
+    this.id = TaskWrapper.id++;
     this.s3 = s3;
     this.status = 0; //waitingUpload
     this.param = param;
@@ -21,6 +13,7 @@ export class TaskWrapper {
     this.uploadFileSize = 0;
     this.fileSize = 0;
     this.progress = 0;
+    this.invalidAccessKey = false;
   }
   async startTask() {
     try {
@@ -46,8 +39,9 @@ export class TaskWrapper {
         this.status = 2; // cancel/ stop
       } else {
         this.status = 4; // failed
-        // Vue.prototype.$alert(e.message);
-        this.failedMessage = e.message;
+        if (e.Code == "InvalidAccessKeyId") {
+          this.invalidAccessKey = true;
+        }
         throw new Error(e.Code);
       }
     }
@@ -59,42 +53,28 @@ export class TaskWrapper {
     console.log("abort");
     this.status = 2; //cancel/stop
   }
+  // s3 accessKey expired or invalid
+  updateS3Instance(s3) {
+    this.s3 = s3;
+  }
   resetStatus() {
     this.status = 0;
   }
 }
 export class DeleteTaskWrapper {
-  that;
-  s3;
-  param;
-  id;
-  marker;
-  lastMarker;
-  deleteCount;
-  status;
-  curFiles;
-
-  constructor(that, s3, param, id, s3m) {
+  static id = 0;
+  constructor(that, param, s3m) {
     this.that = that;
-    this.s3 = s3;
     this.s3m = s3m;
     this.param = param;
-    this.id = id;
+    this.id = DeleteTaskWrapper.id++;
     this.status = 0; // pre delete
     this.deleteCount = 0;
   }
-
   async startTasks() {
     try {
       if (this.status !== 0 && this.status !== 1) return;
       this.status = 1; // deleting
-      // const listResults = await this.s3.listObjectsV2({
-      //   Bucket: this.param.Bucket,
-      //   MaxKeys: 2,
-      //   Delimiter: "",
-      //   Prefix: this.param.Prefix,
-      // });
-      // console.log(listResults, "s3");
       const listResultStream =
         this.s3m.extensions.listObjectsV2WithMetadataQuery(
           this.param.Bucket,
@@ -108,24 +88,14 @@ export class DeleteTaskWrapper {
         listResultStream.on("data", resolve);
         listResultStream.on("error", reject);
       });
-      console.log(listResult);
       if (!listResult.objects) {
         this.curFiles = [];
       } else {
         this.curFiles = listResult.objects.map((it) => {
-          // return { Key: it.name };
           return it.name;
         });
       }
       if (this.curFiles.length && this.status == 1) {
-        // const deleteResult = await this.s3.deleteObjects({
-        //   Bucket: this.param.Bucket,
-        //   Delete: {
-        //     Objects: this.curFiles,
-        //     Quiet: false,
-        //   },
-        // });
-
         await new Promise((resolve, reject) => {
           this.s3m.removeObjects(this.param.Bucket, this.curFiles, (err) => {
             if (err) reject(err);
@@ -148,10 +118,14 @@ export class DeleteTaskWrapper {
     } catch (error) {
       this.status = 4;
       console.log(error);
+      throw new Error(error.code);
     }
   }
   stopTasks() {
     this.status = 2; //stop
+  }
+  updateS3mInstance(s3m) {
+    this.s3m = s3m;
   }
   retryTasks() {
     this.status = 0; // retry
@@ -212,9 +186,6 @@ export class PinCidTaskWrapper {
         url: `${it}${this.form.cid}`,
         responseType: "blob",
       });
-      // .catch((err) => {
-      //   console.log(err);
-      // });
     });
     const data = await Promise.any(promiseList);
     if (!data) throw new Error("Network Error");
