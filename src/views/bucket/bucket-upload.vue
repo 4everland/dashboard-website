@@ -1,5 +1,6 @@
 <template>
   <div class="uploder-container">
+    <v-btn @click="testBtn">test-btn</v-btn>
     <e-menu offset-y open-on-hover nudge-bottom="11">
       <v-btn slot="ref" color="primary">
         <img src="/img/svg/upload.svg" width="16" />
@@ -164,6 +165,7 @@ export default {
   computed: {
     ...mapState({
       s3: (s) => s.moduleS3.s3,
+      s3m: (s) => s.moduleS3.s3m,
     }),
     path() {
       const arr = this.$route.path.split("/");
@@ -196,6 +198,11 @@ export default {
     },
   },
   methods: {
+    async testBtn() {
+      const data = await this.s3.config.credentials();
+      data.accessKeyId = "abc";
+      this.s3m.accessKey = "abc";
+    },
     handleSkip(item) {
       this.page = item;
     },

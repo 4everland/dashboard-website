@@ -61,8 +61,7 @@ export default {
         sessionToken,
       });
       window.s3 = Vue.prototype.$s3 = s3;
-
-      commit("SET_S3", { s3, s3m }, { root: true });
+      commit("SET_S3", { s3, s3m });
     },
   },
 };
