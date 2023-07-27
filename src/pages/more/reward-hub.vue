@@ -74,7 +74,7 @@
                         <v-list-item-title
                           class="item-title fz-14 al-c justify-center"
                         >
-                          <img :src="item.icon" width="18" alt="" />
+                          <img :src="item.icon" width="24" height="24" alt="" />
                           <span class="ml-3">{{ item.name }}</span>
                           <e-tooltip top v-if="item.tips">
                             <v-icon

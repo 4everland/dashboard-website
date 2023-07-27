@@ -39,7 +39,7 @@
                     class="pa-3 claim-chain-item mt-2 cursor-p al-c"
                     @click="handleTypeClaim(item.type)"
                   >
-                    <img :src="item.icon" width="20" alt="" />
+                    <img :src="item.icon" width="24" height="24" alt="" />
                     <span class="ml-3 fz-14">
                       {{ item.name }}
                     </span>
