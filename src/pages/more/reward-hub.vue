@@ -236,11 +236,11 @@ export default {
           icon: require("/public/img/svg/billing/ic-arbitrum.png"),
           type: "Arbitrum",
         },
-        // {
-        //   name: "Linea",
-        //   icon: require("/public/img/svg/billing/ic-linea.svg"),
-        //   type: "Linea",
-        // },
+        {
+          name: "Linea",
+          icon: require("/public/img/svg/billing/ic-linea.svg"),
+          type: "Linea",
+        },
       ],
     };
   },
