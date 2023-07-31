@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <!-- <keep-alive v-if="inFolder || inFile"> -->
     <e-tabs
       v-if="inFolder"
@@ -13,8 +13,6 @@
     <storage v-if="!inFolder" />
 
     <!-- Upload/Delete Folders Component -->
-    <!-- <navigation-drawers v-if="!inFile" ref="navDrawers"></navigation-drawers> -->
-
     <div
       class="control"
       :style="{
@@ -32,15 +30,12 @@
 
 <script>
 import Storage from "@/views/bucket/storage";
-// import NavigationDrawers from "@/views/bucket/components/navigation-drawers";
 import UploadControl from "@/views/bucket/components/upload-control";
 import DeleteControl from "@/views/bucket/components/delete-control";
 import PinCidControl from "@/views/bucket/components/pin-cid-control";
 
 import { bus } from "../../utils/bus";
-import initS3 from "./initS3";
 export default {
-  mixins: [initS3],
   data() {
     return {
       list: [
@@ -76,8 +71,7 @@ export default {
     },
   },
   created() {
-    if (this.$s3) return;
-    this.initS3();
+    this.$store.dispatch("initS3");
   },
   mounted() {
     bus.$on("showOperationBar", (val) => {
@@ -87,7 +81,6 @@ export default {
   methods: {},
   components: {
     Storage,
-    // NavigationDrawers,
     UploadControl,
     DeleteControl,
     PinCidControl,

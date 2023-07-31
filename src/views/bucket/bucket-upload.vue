@@ -1,5 +1,6 @@
 <template>
   <div class="uploder-container">
+    <v-btn @click="testBtn">test-btn</v-btn>
     <e-menu offset-y open-on-hover nudge-bottom="11">
       <v-btn slot="ref" color="primary">
         <img src="/img/svg/upload.svg" width="16" />
@@ -145,6 +146,7 @@ export default {
         (v) =>
           /^([A-Za-z0-9]{46}|[A-Za-z0-9]{59})$/.test(v) ? true : "Invalid CID",
       ],
+      accessKeyExpired: false,
     };
   },
   async created() {
@@ -162,7 +164,8 @@ export default {
   },
   computed: {
     ...mapState({
-      s3: (s) => s.s3,
+      s3: (s) => s.moduleS3.s3,
+      s3m: (s) => s.moduleS3.s3m,
     }),
     path() {
       const arr = this.$route.path.split("/");
@@ -195,6 +198,11 @@ export default {
     },
   },
   methods: {
+    async testBtn() {
+      const data = await this.s3.config.credentials();
+      data.accessKeyId = "abc";
+      this.s3m.accessKey = "abc";
+    },
     handleSkip(item) {
       this.page = item;
     },
@@ -214,14 +222,13 @@ export default {
           webkitRelativePath = arr.join("/") + "/";
         }
         return new TaskWrapper(
-          this.$s3,
+          this.s3,
           {
             Bucket: this.info.Bucket,
             Key: this.info.Prefix + webkitRelativePath + file.name,
             Body: file,
             ContentType: file.type,
           },
-          file.id,
           {
             name: file.name,
             path:
@@ -237,10 +244,27 @@ export default {
       this.tasks = newTasks.concat(this.tasks);
     },
     async start(task) {
-      await task.startTask();
-      this.processTask();
+      try {
+        await task.startTask();
+        this.processTask();
+        this.accessKeyExpired = false;
+      } catch (error) {
+        console.log(error);
+        if (this.accessKeyExpired) return;
+        if (error.message == "InvalidAccessKeyId") {
+          this.accessKeyExpired = true;
+          localStorage.removeItem("stsData1");
+          await this.$store.dispatch("initS3");
+          this.processTask(true);
+        }
+      }
     },
-    async processTask() {
+    async processTask(val) {
+      if (val) {
+        this.tasks
+          .filter((task) => task.status != 3)
+          .forEach((task) => task.updateS3Instance(this.s3));
+      }
       let processing = this.tasks.filter((task) => {
         return task.status == 1;
       });

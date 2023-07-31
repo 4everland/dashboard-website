@@ -121,7 +121,7 @@
                   style="color: #0b0817"
                   target="_blank"
                   v-if="item.hash"
-                  @click.stop="onStop"
+                  @click.stop
                   >{{ item.hash.cutStr(5, 4) }}</a
                 >
                 <v-btn
@@ -129,7 +129,7 @@
                   class="e-btn-text ml-2"
                   icon
                   small
-                  @click.stop="onStop"
+                  @click.stop
                   v-clipboard="item.hash"
                   @success="$toast('Copied!')"
                 >
@@ -336,6 +336,7 @@ export default {
       checked: false,
       showSnapshotDialog: false,
       generateSnapshotLoading: false,
+      accessKeyExpired: false,
     };
   },
   async created() {
@@ -369,8 +370,8 @@ export default {
   },
   computed: {
     ...mapState({
-      s3: (s) => s.s3,
-      s3m: (s) => s.s3m,
+      s3: (s) => s.moduleS3.s3,
+      s3m: (s) => s.moduleS3.s3m,
     }),
     isFile() {
       if (this.selected.length && this.selected[0].isFile) return true;
@@ -391,7 +392,6 @@ export default {
       this.getList();
       this.checkNew();
     },
-    onStop() {},
     addDeleteFolderTask(limit) {
       this.deleteFolderLimit = limit;
       let arr = this.$route.path.split("/");
@@ -416,17 +416,13 @@ export default {
         }
         return !it.isFile && isExist == -1;
       });
-      // console.log(deleteFoldersArr);
-
       const deleteFoldersTask = deleteFoldersArr.map((it) => {
         return new DeleteTaskWrapper(
           this,
-          this.s3,
           {
             Bucket: this.pathInfo.Bucket,
             Prefix: Prefix + it.name + "/",
           },
-          this.genID(),
           this.s3m
         );
       });
@@ -435,30 +431,38 @@ export default {
       );
     },
     async startDeleteFolder(task) {
-      bus.$emit("deleteFolderTasks", this.deleteFoldersTasks);
-      await task.startTasks();
-      this.processDeleteFolderTask();
+      try {
+        bus.$emit("deleteFolderTasks", this.deleteFoldersTasks);
+        await task.startTasks();
+        this.processDeleteFolderTask();
+        this.accessKeyExpired = false;
+      } catch (error) {
+        if (this.accessKeyExpired) return;
+        if (error.message == "InvalidAccessKeyId") {
+          this.accessKeyExpired = true;
+          localStorage.removeItem("stsData1");
+          await this.$store.dispatch("initS3");
+          this.processDeleteFolderTask(true);
+        }
+      }
     },
-    async processDeleteFolderTask() {
+    async processDeleteFolderTask(val) {
+      if (val) {
+        this.deleteFoldersTasks
+          .filter((task) => task.status != 3)
+          .forEach((task) => task.updateS3mInstance(this.s3m));
+      }
       let processing = this.deleteFoldersTasks.filter(
         (item) => item.status == 1
       );
-      // console.log(processing);
       if (processing.length >= this.deleteFolderLimit) return;
       const idles = this.deleteFoldersTasks.filter((item) => item.status == 0);
-      // console.log(idles, "idles");
       if (!idles.length) return;
       const fill = this.deleteFolderLimit - processing.length;
-      // console.log(fill);
       const min = idles.length <= fill ? idles.length : fill;
       for (let i = 0; i < min; i++) {
         this.startDeleteFolder(idles[i]);
       }
-    },
-    genID(length) {
-      return Number(
-        Math.random().toString().substr(3, length) + Date.now()
-      ).toString(36);
     },
     handleDownload() {
       window.open(this.getViewUrl(this.selected[0]));

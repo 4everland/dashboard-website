@@ -1,55 +1,45 @@
 import { S3 } from "@aws-sdk/client-s3";
 const Minio = require("@4everland/minio");
-import { endpoint } from "../../api";
+import { endpoint } from "../api";
 import Vue from "vue";
-import { mapState } from "vuex";
-
 export default {
-  data() {
-    return {
-      s3Timing: null,
-    };
-  },
-  computed: {
-    ...mapState({
-      isFocus: (s) => s.isFocus,
-    }),
-  },
-  watch: {
-    isFocus(val) {
-      if (val) {
-        setTimeout(() => {
-          const stsData = JSON.parse(localStorage.stsData1 || "null");
-          if (stsData && stsData.expiredAt - Date.now() / 1e3 < 600) {
-            location.reload();
-          }
-        }, 1e3);
-      }
+  state: () => ({
+    s3Timing: null,
+    s3: null,
+    s3m: null,
+  }),
+  mutations: {
+    SET_S3TIMING(state, refreshDelay) {
+      state.s3Timing = setTimeout(() => {
+        this.initS3();
+        console.info(
+          `refresh sts after ${(refreshDelay / 3600 / 1e3).toFixed(2)}h`
+        );
+      }, refreshDelay);
+    },
+
+    SET_S3(state, { s3, s3m }) {
+      state.s3 = s3;
+      state.s3m = s3m;
     },
   },
-  methods: {
-    async initS3() {
+  actions: {
+    async initS3({ state, commit }) {
       let stsData = JSON.parse(localStorage.stsData1 || "null");
       if (!stsData || Date.now() >= (stsData.expiredAt - 3600) * 1e3) {
-        const { data } = await this.$http.get("/user/sts/assume-role");
+        const { data } = await Vue.prototype.$http.get("/user/sts/assume-role");
         stsData = data;
         localStorage.stsData1 = JSON.stringify(data);
       }
       // auto refresh sts
-      if (this.s3Timing) {
-        clearTimeout(this.s3Timing);
+      if (state.s3Timing) {
+        clearTimeout(state.s3Timing);
       }
       const refreshDelay = (stsData.expiredAt - 3600) * 1e3 - Date.now();
       console.log(refreshDelay);
       if (refreshDelay > 1e3) {
-        this.s3Timing = setTimeout(() => {
-          this.initS3();
-        }, refreshDelay);
-        console.info(
-          `refresh sts after ${(refreshDelay / 3600 / 1e3).toFixed(2)}h`
-        );
+        commit("SET_S3TIMING", refreshDelay);
       }
-
       const { accessKey, secretKey, sessionToken } = stsData;
       const s3 = new S3({
         endpoint,
@@ -71,10 +61,7 @@ export default {
         sessionToken,
       });
       window.s3 = Vue.prototype.$s3 = s3;
-      this.$setState({
-        s3,
-        s3m,
-      });
+      commit("SET_S3", { s3, s3m });
     },
   },
 };

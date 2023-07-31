@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import http from "../api";
-
+import moduleS3 from "./s3";
 Vue.use(Vuex);
 
 const SET_DATA = "setData";
@@ -119,6 +119,9 @@ const store = new Vuex.Store({
       commit("setProject", data);
       return data;
     },
+  },
+  modules: {
+    moduleS3,
   },
 });
 

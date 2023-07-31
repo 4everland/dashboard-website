@@ -1,6 +1,6 @@
 <template>
-  <div :class="wrapCls || 'wrap-1'">
-    <div :class="conCls || ''">
+  <div :class="wrapCls || 'wrap-1'" style="height: 100%">
+    <div :class="conCls || ''" style="height: 100%">
       <slot></slot>
     </div>
   </div>

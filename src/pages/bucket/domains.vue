@@ -187,12 +187,10 @@
 
 <script>
 import { mapState } from "vuex";
-import initS3 from "./initS3";
 export default {
-  mixins: [initS3],
   computed: {
     ...mapState({
-      s3: (s) => s.s3,
+      s3: (s) => s.moduleS3.s3,
     }),
     resBucketList() {
       return (this.bucketList || []).filter((it) => {
@@ -240,8 +238,7 @@ export default {
     },
   },
   created() {
-    if (this.$s3) return;
-    this.initS3();
+    this.$store.dispatch("initS3");
   },
   mounted() {
     this.getList();

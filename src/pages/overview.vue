@@ -125,6 +125,9 @@ export default {
       this.carouselWidth = this.$refs.carouselRef.$el.offsetWidth;
     };
   },
+  beforeDestroy() {
+    window.onresize = null;
+  },
   computed: {
     ...mapState({
       noticeMsg: (s) => s.noticeMsg,
