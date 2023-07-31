@@ -24,7 +24,6 @@
       </v-list>
     </e-menu>
     <input-upload v-model="files" ref="uploadInput"></input-upload>
-
     <v-dialog v-model="isPinCidDialog" max-width="600">
       <div class="pa-6">
         <h2>Pin By CID</h2>
