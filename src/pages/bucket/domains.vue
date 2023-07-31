@@ -238,7 +238,6 @@ export default {
     },
   },
   created() {
-    if (this.$s3) return;
     this.$store.dispatch("initS3");
   },
   mounted() {
