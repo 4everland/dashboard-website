@@ -63,6 +63,9 @@
             <span>Deleted in Bucket</span>
           </e-tooltip>
         </template>
+        <template v-slot:item.size="{ item }">
+          {{ $utils.getFileSize(item.size) }}
+        </template>
         <template v-slot:item.arweaveHash="{ item }">
           <e-link
             class="d-ib fz-13"
@@ -123,11 +126,11 @@ export default {
   data() {
     return {
       headers: [
-        { text: "Name", value: "name" },
+        { text: "Name", value: "name", sortable: false },
         { text: "Size", value: "size" },
-        { text: "AR Hash", value: "arweaveHash" },
+        { text: "AR Hash", value: "arweaveHash", sortable: false },
         { text: "Last Modified", value: "updateAt" },
-        { text: "AR Status", value: "arweaveStatus" },
+        { text: "AR Status", value: "arweaveStatus", sortable: false },
       ],
       list: [],
       total: 0,
@@ -205,7 +208,7 @@ export default {
         const list = data.list.map((it, i) => {
           it.id = it.id || it.cid + i;
           it.name = it.key.replace(/^.+\//, "");
-          it.size = this.$utils.getFileSize(it.size);
+          // it.size = this.$utils.getFileSize(it.size);
           it.updateAt = new Date(it.lastModified * 1e3).format();
           return it;
         });

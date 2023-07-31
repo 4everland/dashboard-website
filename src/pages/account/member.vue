@@ -245,6 +245,9 @@ export default {
         const { data } = await this.$http.get("$auth/cooperation/invitations");
         this.list = data.items.map((it) => {
           it.name = it.targetName.cutStr(6, 4);
+          if (it.note) {
+            it.name = `${it.note.cutStr(4, 3)}(${it.name})`;
+          }
           if (it.invitationStatus) it.status = it.invitationStatus;
           it.roleTxt = this.capTxt(it.role);
           it.staTxt = this.statusFormat(it.status);

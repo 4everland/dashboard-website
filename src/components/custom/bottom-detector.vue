@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align: center" class="mt-3">
+  <div class="mt-3 ta-c">
     <div class="wavy" v-if="loadingMore">
       <span style="--i: 1">L</span>
       <span style="--i: 2">o</span>
@@ -86,4 +86,3 @@ export default {
   }
 }
 </style>
-

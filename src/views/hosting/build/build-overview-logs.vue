@@ -36,7 +36,16 @@
           <e-time :endAt="info.endAt">{{ info.createAt }}</e-time>
         </div>
       </template>
-      <div v-if="info">
+      <div v-if="info" class="pos-r">
+        <img
+          v-if="showLogsCopy"
+          class="cursor-p pos-a top-0"
+          style="right: 20px; z-index: 99"
+          src="/img/svg/copy.svg"
+          v-clipboard="logsStr"
+          @success="$toast('Copied!')"
+          width="14"
+        />
         <build-log v-if="info && !hashDeploy" :list="logs" :errMsg="errMsg" />
         <div v-else class="fz-14">
           <p v-if="web3TplDeploy">
@@ -223,7 +232,6 @@ export default {
     ipnsDeployOther() {
       return this.info.deployType == "IPNS" && this.info.platform != "IPFS";
     },
-
     ipfsDeploy() {
       return this.info.deployType == "CID";
     },
@@ -305,6 +313,22 @@ export default {
           return "ipfs://" + val;
         }
       };
+    },
+    logsStr() {
+      let str = "";
+      let reg = /\n$/;
+      this.logs.forEach((log) => {
+        str += `${new Date(log.timestamp).format("HH:mm:ss.S")}   ${
+          log.content
+        }${reg.test(log.content) ? "" : "\n"}`;
+      });
+      return str;
+    },
+    showLogsCopy() {
+      return (
+        (this.info.state == "SUCCESS" || this.info.state == "FAILURE") &&
+        !this.hashDeploy
+      );
     },
   },
   watch: {
