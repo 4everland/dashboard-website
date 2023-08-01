@@ -164,7 +164,7 @@ export default {
     top: 0;
     width: 60%;
     height: 100%;
-    background: url("/img/svg/rewardHub/reward-share.svg") no-repeat;
+    background: url("/img/bg/share/reward-share.png") no-repeat;
     background-size: 100%;
   }
   .share-info {

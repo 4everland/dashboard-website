@@ -62,7 +62,7 @@ export default {
     return {
       platList: [
         {
-          label: "IPFS",
+          label: "IPFS/Filecoin",
           name: "IPFS",
           icon: "h-ipfs.svg",
         },

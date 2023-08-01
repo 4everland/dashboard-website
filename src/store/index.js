@@ -45,6 +45,7 @@ const store = new Vuex.Store({
     allowNoLogin: false,
     changelogNum: localStorage.changelogNum || "30",
     onChain: null,
+    hasClaim: false,
   },
   getters: {
     teamInfo(state) {
@@ -105,6 +106,9 @@ const store = new Vuex.Store({
         projectInfo: data,
       });
     },
+    SET_HAS_CLAIM(state, value) {
+      state.hasClaim = value;
+    },
   },
   actions: {
     async getProjectInfo({ commit }, id) {
@@ -118,6 +122,20 @@ const store = new Vuex.Store({
       }
       commit("setProject", data);
       return data;
+    },
+    async checkClaim({ commit }) {
+      try {
+        await Vue.prototype.$http("$auth/rewardhub/un-claimed", {
+          noTip: 1,
+        });
+      } catch (error) {
+        console.log(error);
+        if (error.response.status == 302) {
+          commit("SET_HAS_CLAIM", true);
+        } else {
+          commit("SET_HAS_CLAIM", false);
+        }
+      }
     },
   },
   modules: {

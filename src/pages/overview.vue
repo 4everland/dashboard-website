@@ -154,10 +154,6 @@ export default {
           img: "https://static1.4everland.org/img/banner/2023523-180202.jpg",
           href: "https://discord.com/channels/852482727164117022/1104253691676065893",
         },
-        {
-          img: "https://static1.4everland.org/img/banner/2023516-181010.jpg",
-          href: "https://firstsowing.4everland.org",
-        },
       ];
     },
   },

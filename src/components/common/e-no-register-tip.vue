@@ -3,7 +3,7 @@
     class="tips-container"
     v-if="$route.path != '/login' && onChain == false"
   >
-    <div class="h-flex al-end" v-if="isOpen">
+    <div class="h-flex al-end" v-show="isOpen">
       <img
         class="cursor-p"
         src="/img/svg/rewardHub/notice-open1.svg"
@@ -19,7 +19,7 @@
       />
     </div>
 
-    <div class="h-flex al-end pos-r" v-else @click="isOpen = !isOpen">
+    <div class="h-flex al-end pos-r" v-show="!isOpen" @click="isOpen = !isOpen">
       <img
         class="cursor-p pos-a"
         style="top: -23px; left: -42px"

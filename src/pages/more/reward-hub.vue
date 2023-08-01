@@ -160,7 +160,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import mixin from "@/pages/more/mixin-register";
 export default {
   mixins: [mixin],
@@ -266,6 +266,7 @@ export default {
     this.getList();
   },
   methods: {
+    ...mapActions(["checkClaim"]),
     getBtnColor(it) {
       // console.log(it);
       if (it.type == "AIRDROP_FOR_NEW") return "#E21951";
@@ -380,6 +381,7 @@ export default {
           }
           return it;
         });
+        this.checkClaim();
       } catch (error) {
         //
       }

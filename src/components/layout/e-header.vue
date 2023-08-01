@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 import Axios from "axios";
 
 export default {
@@ -107,6 +107,7 @@ export default {
       userInfo: (s) => s.userInfo,
       showProgress: (s) => s.showProgress,
       changelogNum: (s) => s.changelogNum,
+      hasClaim: (s) => s.hasClaim,
     }),
     ...mapGetters(["teamInfo"]),
     asMobile() {
@@ -114,7 +115,6 @@ export default {
     },
     menus() {
       const info = this.userInfo;
-
       let list = [
         {
           label: "Docs",
@@ -134,6 +134,7 @@ export default {
         list.unshift({
           to: "/reward-hub",
           label: "Reward Hub",
+          badge: this.activedClaim,
         });
 
         list.push({
@@ -183,6 +184,9 @@ export default {
       });
       return list;
     },
+    activedClaim() {
+      return this.hasClaim;
+    },
   },
   watch: {
     userInfo() {
@@ -198,8 +202,12 @@ export default {
       });
     }
     this.getNewChagneLogNum();
+    if (localStorage.token) {
+      this.checkClaim();
+    }
   },
   methods: {
+    ...mapActions(["checkClaim"]),
     async getNewChagneLogNum() {
       const { data } = await Axios.get(
         "https://static1.4everland.org/config/header.json"
@@ -207,6 +215,7 @@ export default {
       this.newChagelogNum = data.changeLogNum;
       // localStorage.changelogNum = this.newChagelogNum;
     },
+
     async onMenu(it) {
       if (it.name == "logout") {
         this.$clearLogin();
