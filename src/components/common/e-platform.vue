@@ -19,17 +19,6 @@
           <div class="ml-2 fw-b fz-16 pos-r">
             <span> {{ it.label }}</span>
           </div>
-          <img
-            class="ml-auto"
-            v-if="it.name == 'IC'"
-            :src="
-              platform == it.name
-                ? '/img/svg/hosting/h-beta.svg'
-                : '/img/svg/hosting/h-beta-active.svg'
-            "
-            height="20"
-            alt=""
-          />
         </div>
       </v-col>
       <v-col v-if="platform == 'AR'">
