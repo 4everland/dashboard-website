@@ -179,7 +179,10 @@ export default {
           tab = "domains";
         }
         if (platform == "IPFS") return true;
-        if ((platform == "IC" || platform == "AR") && tab == "domains")
+        if (
+          (platform == "IC" || platform == "AR" || platform == "GREENFIELD") &&
+          tab == "domains"
+        )
           return true;
         return false;
       };
