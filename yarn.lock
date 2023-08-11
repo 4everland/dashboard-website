@@ -49,10 +49,10 @@
     solc-0.8.9 "npm:solc@0.8.9"
     solidity-docgen "^0.5.16"
 
-"@4everland/zksync-era-payment@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.npmjs.org/@4everland/zksync-era-payment/-/zksync-era-payment-0.0.1.tgz"
-  integrity sha512-qORzXiR1xE+C76FsERCRsVp8reTi8y0+FhjgNjo/lriqFzgL77TglDXjl59SKdcR6p+7rHp6nuSt1KLna7oAfA==
+"@4everland/zksync-era-payment@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@4everland/zksync-era-payment/-/zksync-era-payment-0.0.2.tgz#2a3f79132249084324406806e99eb29e1bb5bb91"
+  integrity sha512-PeA6jS6dyNfJw20nzTNPKb7GcdrFrIzXz4TGWQM5gmnb16QdUFmv/5zqWqcCrybt0CiqwjSQkmVMIVhP13Fc3g==
 
 "@achrinza/node-ipc@9.2.2":
   version "9.2.2"

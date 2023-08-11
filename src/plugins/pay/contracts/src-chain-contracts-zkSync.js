@@ -13,7 +13,7 @@ import {
 } from "@4everland/service-contracts";
 import {
   Payment__factory,
-  Registration__factory,
+  RegistrationV2__factory,
 } from "@4everland/zksync-era-payment";
 import {
   GoerliRpc,
@@ -53,7 +53,7 @@ class SrcChainContracts extends Contracts {
   }
 
   get Register() {
-    return Registration__factory.connect(zkRegister, this.signer);
+    return RegistrationV2__factory.connect(zkRegister, this.signer);
   }
 
   get ProviderController() {

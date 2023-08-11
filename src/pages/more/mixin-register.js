@@ -20,7 +20,7 @@ export default {
       contract: null,
       provider: null,
       collectionAddress: "0xb7b4360f7f6298de2e7a11009270f35f189bd77e",
-      zkSyncfee: BigNumber.from("40000000000000"),
+      zkSyncfee: BigNumber.from("100000000000000"),
     };
   },
   methods: {

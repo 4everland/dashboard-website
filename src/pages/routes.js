@@ -40,4 +40,8 @@ export default [
   ...ResRoutes,
   ...GatewayRoutes,
   ...AccountRoutes,
+  // {
+  //   path: "/changefee",
+  //   component: () => import("./changeFee"),
+  // },
 ];
