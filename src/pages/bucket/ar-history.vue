@@ -232,48 +232,36 @@ export default {
     async getStorage() {
       try {
         const { data } = await this.$http("/user/resource/usage");
-        console.log(data);
-        // const {
-        //   arweaveUsedStorage,
-        //   arweaveSyncingStorage,
-        //   arweavePaidStorage,
-        //   arweaveFreeStorage,
-        // } = data;
         const {
           arweaveUsedStorage,
           arweaveSyncingStorage,
           arweavePaidStorage,
           arweaveFreeStorage,
-        } = {
-          arweaveUsedStorage: "1232312311231221312313",
-          arweaveSyncingStorage: "123231313123123",
-          arweavePaidStorage: "123231233123123",
-          arweaveFreeStorage: "123231231",
-        };
+        } = data;
 
         this.usageInfo = [
           {
-            title: "TotalArweave",
+            title: "Total Arweave Usage",
             icon: require("/public/img/svg/ar-sync/total.svg"),
             value: arweaveUsedStorage,
           },
           {
-            title: "SyncingAr",
+            title: "Synchronizing",
             icon: require("/public/img/svg/ar-sync/syncing.svg"),
             value: arweaveSyncingStorage,
           },
           {
-            title: "Free",
+            title: "≤150KB (free)",
             icon: require("/public/img/svg/ar-sync/free.svg"),
             value: arweaveFreeStorage,
-            tips: "Regarding GreenSock Forum Topic: http://forums.greensock.com/topic/10140-fade-background-image/...",
+            tips: "Aggregate Storage for Files Smaller Than 150KB",
           },
           {
-            title: "Paid",
+            title: ">150KB ",
             icon: require("/public/img/svg/ar-sync/paid.svg"),
             value: arweavePaidStorage,
-            tips: "Regarding GreenSock Forum Topic: http://forums.greensock.com/topic/10140-fade-background-image/...",
-            link: "https://www.google.com",
+            tips: "Aggregate Storage for Files Larger Than 150KB",
+            link: "https://forms.gle/tgcHTQC86Yyer2HX7",
           },
         ];
       } catch (error) {

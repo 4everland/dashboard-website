@@ -24,7 +24,7 @@
         v-if="info.link"
         @click="handleLink(info.link)"
       >
-        <span class="fw-b fz-14">Grants</span>
+        <span class="fw-b fz-14">Apply</span>
         <img
           class="ml-1"
           width="14"
@@ -56,7 +56,7 @@ export default {
 
   computed: {
     formatData() {
-      let arByte = this.info.value / 1024 / 1024;
+      let arByte = this.value * 1024;
       if (arByte) {
         return this.$utils.getFileSize(arByte, true);
       }
