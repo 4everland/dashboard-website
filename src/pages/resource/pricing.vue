@@ -87,7 +87,7 @@
         </tr>
         <tr>
           <td>100GB+</td>
-          <td>$8.5 / 100G</td>
+          <td>$10 / 100G</td>
         </tr>
         <tr>
           <td rowspan="2">Build Minutes</td>
@@ -97,7 +97,7 @@
         </tr>
         <tr>
           <td>250Min+</td>
-          <td>$2 / 100Min</td>
+          <td>$3 / 100Min</td>
         </tr>
         <tr>
           <td rowspan="4">
@@ -129,7 +129,7 @@
         </tr>
         <tr>
           <td>1GB+</td>
-          <td>$2 / 100G / Mth</td>
+          <td>$8 / 100G / Mth</td>
         </tr>
         <tr>
           <td rowspan="2">Storage duration</td>
@@ -159,7 +159,15 @@
         </tr>
         <tr>
           <td>100MB+</td>
-          <td>$0.55</td>
+          <td>
+            ≈ $0.55
+            <e-tooltip top>
+              <v-icon slot="ref" color="#999" size="14" class="ml-2"
+                >mdi-alert-circle</v-icon
+              >
+              <div>The price will vary with the token $Ar</div>
+            </e-tooltip>
+          </td>
         </tr>
       </tbody>
     </table>
