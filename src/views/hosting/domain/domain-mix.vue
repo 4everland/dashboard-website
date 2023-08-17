@@ -164,6 +164,9 @@ export default {
       try {
         this.loading = true;
         this.headers[0].text = this.type.toUpperCase();
+        if (this.type == "suins") {
+          this.headers[0].text = "SuiNS";
+        }
         const params = {
           page: this.page - 1,
           pageSize: 10,
