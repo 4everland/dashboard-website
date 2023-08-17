@@ -165,8 +165,8 @@ export default {
           expireTime: info.freeBandwidthExpired,
           expireLabel: "Free expiration date",
           ...this.getPerc(
-            info.usedPurchasedBandwidth,
-            info.purchasedBandwidth,
+            info.airdropUseTraffic + info.usedPurchasedBandwidth,
+            info.airdropTraffic + info.freeBandwidth + info.purchasedBandwidth,
             "GB",
             info.freeBandwidth,
             this.form.bandwidth
@@ -205,8 +205,8 @@ export default {
           unitPricePer: 8 + " / 100GB / Mth", // price.ipfsStorageUnitPricePer
           expireTime: info.ipfsStorageExpired,
           ...this.getPerc(
-            info.usedIpfsStorage,
-            info.ipfsStorage,
+            info.airdropUseIpfsStorage + info.usedIpfsStorage,
+            info.airdropIpfsStorage + info.ipfsStorage,
             "GB",
             info.ipfsDefaultStorage,
             this.form.ipfs
