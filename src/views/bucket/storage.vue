@@ -88,11 +88,6 @@
           </v-btn>
         </div>
       </div>
-      <!-- <div class="d-flex mt-2">
-        <nav-item unit="Objects" class="ml-auto" v-if="inBucket">{{
-          list.length
-        }}</nav-item> -->
-      <!-- </div> -->
     </e-right-opt-wrap>
 
     <!-- padding layout -->

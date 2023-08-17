@@ -26,16 +26,19 @@
             />
           </v-col>
         </v-row>
-        <div class="d-flex ml-auto shrink-0 justify-end mt-2">
-          <nav-item icon="ic-sync" unit="MB">{{
-            usageInfo.arSyncing
-          }}</nav-item>
-          <nav-item icon="ic-synced" unit="MB" class="ml-7">{{
-            usageInfo.arSynced
-          }}</nav-item>
-        </div>
       </e-right-opt-wrap>
     </div>
+
+    <v-row v-if="usageInfo.length">
+      <v-col cols="12" md="3" v-for="usage in usageInfo" :key="usage.title">
+        <nav-item :info="usage" :value="usage.value"></nav-item>
+      </v-col>
+    </v-row>
+    <v-row v-else>
+      <v-col cols="12" md="3" v-for="i in 4" :key="i">
+        <v-skeleton-loader type="article"></v-skeleton-loader>
+      </v-col>
+    </v-row>
 
     <!-- :show-select="list.length > 0" -->
     <div class="main-wrap mt-6">
@@ -139,10 +142,7 @@ export default {
       finished: false,
       loadingMore: false,
       cursor: 0,
-      usageInfo: {
-        arSyncing: 0,
-        arSynced: 0,
-      },
+      usageInfo: [],
       state: "",
       searchKey: "",
       items: [
@@ -232,10 +232,38 @@ export default {
     async getStorage() {
       try {
         const { data } = await this.$http("/user/resource/usage");
-        console.log(data);
-        const { arweaveUsedStorage = 0, arweaveSyncingStorage = 0 } = data;
-        this.usageInfo.arSyncing = (arweaveSyncingStorage / 1024).toFixed(2);
-        this.usageInfo.arSynced = (arweaveUsedStorage / 1024).toFixed(2);
+        const {
+          arweaveUsedStorage,
+          arweaveSyncingStorage,
+          arweavePaidStorage,
+          arweaveFreeStorage,
+        } = data;
+
+        this.usageInfo = [
+          {
+            title: "Total Arweave Usage",
+            icon: require("/public/img/svg/ar-sync/total.svg"),
+            value: arweaveUsedStorage,
+          },
+          {
+            title: "Synchronizing",
+            icon: require("/public/img/svg/ar-sync/syncing.svg"),
+            value: arweaveSyncingStorage,
+          },
+          {
+            title: "≤150KB (free)",
+            icon: require("/public/img/svg/ar-sync/free.svg"),
+            value: arweaveFreeStorage,
+            tips: "Aggregate Storage for Files Smaller Than 150KB",
+          },
+          {
+            title: ">150KB ",
+            icon: require("/public/img/svg/ar-sync/paid.svg"),
+            value: arweavePaidStorage,
+            tips: "Aggregate Storage for Files Larger Than 150KB",
+            link: "https://forms.gle/tgcHTQC86Yyer2HX7",
+          },
+        ];
       } catch (error) {
         console.log(error, "error");
       }
