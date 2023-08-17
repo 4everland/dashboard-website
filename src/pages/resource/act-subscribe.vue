@@ -187,8 +187,14 @@ export default {
           expireTime: info.freeBuildMinutesExpired,
           expireLabel: "Free expiration date",
           ...this.getPerc(
-            parseInt(info.usedPurchasedBuildMinutes),
-            info.purchasedBuildMinutes,
+            parseInt(
+              info.airdropUseBuildMinutes +
+                info.usedFreeBuildMinutes +
+                info.usedPurchasedBuildMinutes
+            ),
+            info.airdropBuildMinutes +
+              info.freeBuildMinutes +
+              info.purchasedBuildMinutes,
             "Minutes",
             info.freeBuildMinutes,
             this.form.buildMinutes
@@ -226,8 +232,8 @@ export default {
           unitPricePer: price.arStorageUnitPricePer + " / 100MB",
           expireLabel: "Expiration date",
           ...this.getPerc(
-            info.usedArStorage,
-            info.arStorage,
+            info.airdropUseArStorage + info.usedArStorage,
+            info.airdropArStorage + info.arStorage,
             "GB",
             info.arDefaultStorage,
             this.form.ar
