@@ -165,7 +165,9 @@ export default {
           expireTime: info.freeBandwidthExpired,
           expireLabel: "Free expiration date",
           ...this.getPerc(
-            info.airdropUseTraffic + info.usedPurchasedBandwidth,
+            info.airdropUseTraffic +
+              info.usedFreeBandwidth +
+              info.usedPurchasedBandwidth,
             info.airdropTraffic + info.freeBandwidth + info.purchasedBandwidth,
             "GB",
             info.freeBandwidth,
