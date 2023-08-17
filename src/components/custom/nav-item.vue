@@ -8,7 +8,7 @@
       <img :src="info.icon" width="24" alt="" />
     </div>
     <div class="text fz-16 al-c space-btw" :class="info.link ? 'mt-7' : 'mt-8'">
-      <div>
+      <div class="al-c">
         <span class="fz-16">{{ info.title }}</span>
         <v-tooltip top v-if="info.tips" max-width="300">
           <template v-slot:activator="{ on, attrs }">
