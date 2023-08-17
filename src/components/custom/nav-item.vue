@@ -24,7 +24,7 @@
         v-if="info.link"
         @click="handleLink(info.link)"
       >
-        <span class="fw-b fz-14">Apply</span>
+        <span class="fw-b fz-14">90% reduction</span>
         <img
           class="ml-1"
           width="14"
