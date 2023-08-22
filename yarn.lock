@@ -25,14 +25,6 @@
     xml "^1.0.0"
     xml2js "^0.5.0"
 
-"@4everland/opbnb-registration@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@4everland/opbnb-registration/-/opbnb-registration-0.0.1.tgz#bc921cf50a2acb5a13d29cdf9ba1f04b38ec0f34"
-  integrity sha512-irST/MUcodYG/RK/bqzPqDuLg9i4oWS6IMSadtes9xweXchUEFfEhUJnYIQ94dH3JPCDJ5PCMmXY/daXXJ6rrQ==
-  dependencies:
-    solc-0.8.9 "npm:solc@0.8.9"
-    solidity-docgen "^0.5.16"
-
 "@4everland/registration@0.0.3":
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@4everland/registration/-/registration-0.0.3.tgz#5a1c96c2f2fa7015fd3e8cca0ac38046555dd626"
