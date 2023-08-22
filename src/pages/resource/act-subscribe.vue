@@ -165,8 +165,10 @@ export default {
           expireTime: info.freeBandwidthExpired,
           expireLabel: "Free expiration date",
           ...this.getPerc(
-            info.usedPurchasedBandwidth,
-            info.purchasedBandwidth,
+            info.airdropUseTraffic +
+              info.usedFreeBandwidth +
+              info.usedPurchasedBandwidth,
+            info.airdropTraffic + info.freeBandwidth + info.purchasedBandwidth,
             "GB",
             info.freeBandwidth,
             this.form.bandwidth
@@ -185,8 +187,14 @@ export default {
           expireTime: info.freeBuildMinutesExpired,
           expireLabel: "Free expiration date",
           ...this.getPerc(
-            parseInt(info.usedPurchasedBuildMinutes),
-            info.purchasedBuildMinutes,
+            parseInt(
+              info.airdropUseBuildMinutes +
+                info.usedFreeBuildMinutes +
+                info.usedPurchasedBuildMinutes
+            ),
+            info.airdropBuildMinutes +
+              info.freeBuildMinutes +
+              info.purchasedBuildMinutes,
             "Minutes",
             info.freeBuildMinutes,
             this.form.buildMinutes
@@ -205,8 +213,8 @@ export default {
           unitPricePer: 8 + " / 100GB / Mth", // price.ipfsStorageUnitPricePer
           expireTime: info.ipfsStorageExpired,
           ...this.getPerc(
-            info.usedIpfsStorage,
-            info.ipfsStorage,
+            info.airdropUseIpfsStorage + info.usedIpfsStorage,
+            info.airdropIpfsStorage + info.ipfsStorage,
             "GB",
             info.ipfsDefaultStorage,
             this.form.ipfs
@@ -224,8 +232,8 @@ export default {
           unitPricePer: price.arStorageUnitPricePer + " / 100MB",
           expireLabel: "Expiration date",
           ...this.getPerc(
-            info.usedArStorage,
-            info.arStorage,
+            info.airdropUseArStorage + info.usedArStorage,
+            info.airdropArStorage + info.arStorage,
             "GB",
             info.arDefaultStorage,
             this.form.ar
