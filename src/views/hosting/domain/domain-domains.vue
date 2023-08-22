@@ -171,7 +171,7 @@ export default {
       try {
         this.loading = true;
         const params = {
-          page: this.page - 1,
+          page: this.page,
           size: 10,
         };
         const { data } = await this.$http.get("$hosting/domain/list", {
@@ -203,10 +203,7 @@ export default {
           }
           return it;
         });
-        this.pageLen = Math.max(
-          1,
-          Math.ceil(data.numberOfElements / params.size)
-        );
+        this.pageLen = Math.max(1, Math.ceil(data.total / params.size));
       } catch (error) {
         console.log(error);
       }
