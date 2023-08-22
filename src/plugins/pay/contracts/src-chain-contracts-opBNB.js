@@ -5,7 +5,8 @@ import {
   IERC20__factory,
   ProviderControllerV2__factory,
 } from "@4everland/service-contracts";
-import { Registration__factory } from "@4everland/opbnb-registration";
+// import { Registration__factory } from "@4everland/opbnb-registration";
+import { Registration__factory } from "@4everland/registration";
 import {
   GoerliRpc,
   opBNBRegister,

@@ -126,9 +126,9 @@ export default {
           tips: "Please ensure that you have sufficient ETH inzkSync Era. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
         },
         {
-          name: "opBNB Testnet",
+          name: "opBNB",
           icon: require("/public/img/svg/billing/ic-opbnb-test.svg"),
-          type: "OpBNBTest",
+          type: "OpBNB",
         },
         {
           name: "Ethereum",

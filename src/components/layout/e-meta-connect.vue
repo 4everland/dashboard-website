@@ -123,7 +123,7 @@ export default {
       if ([97, 56].includes(id)) return "BSC";
       if ([42161].includes(id)) return "Arbitrum";
       if ([280, 324].includes(id)) return "zkSync";
-      if ([5611].includes(id)) return "OpBNBTest";
+      if ([5611, 204].includes(id)) return "OpBNB";
       if ([1442, 1101].includes(id)) return "PolygonZkEVM";
       if ([59140, 59144].includes(id)) return "Linea";
       return "Polygon";

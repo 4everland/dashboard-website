@@ -32,7 +32,7 @@ export const zkSyncPayment = "0x036d8A0275D48c0Fa62AB02707C99208b22a96ae";
 export const zkRegister = "0x92E0536939D1279f4aEF0d0beA55563bA8c1af94";
 
 // src chain opBNB
-export const opBNBRegister = "0x8f02889d36d01BdF95b3B7B63a32629fc46e643E";
+export const opBNBRegister = "0x742eAd8e4D06404d9A49945D086752E1f3eb18Ca";
 
 // polygon zk evm
 export const polygonZkEVMRegister =

@@ -45,9 +45,9 @@ export default {
           value: null,
         },
         {
-          name: "opBNB Testnet",
+          name: "opBNB",
           icon: require("/public/img/svg/billing/ic-opbnb-test.svg"),
-          type: "OpBNBTest",
+          type: "OpBNB",
           value: null,
         },
         {
@@ -281,7 +281,7 @@ export default {
       if (type == "BSC") return this.$inDev ? 97 : 56;
       if (type == "Arbitrum") return this.$inDev ? 421613 : 42161;
       if (type == "zkSync") return this.$inDev ? 280 : 324;
-      if (type == "OpBNBTest") return 5611;
+      if (type == "OpBNB") return this.$inDev ? 5611 : 204;
       if (type == "PolygonZkEVM") return this.$inDev ? 1442 : 1101;
       if (type == "Linea") return this.$inDev ? 59140 : 59144;
       return this.$inDev ? 5 : 1;

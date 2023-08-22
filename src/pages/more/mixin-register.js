@@ -247,7 +247,7 @@ export default {
           const provider = new Web3Provider(window.ethereum);
           zkSyncContract.setProvider(provider);
           this.contract = zkSyncContract;
-        } else if (chainId == 5611) {
+        } else if (chainId == 5611 || chainId == 204) {
           opBNBContract.setProvider(provider);
           this.contract = opBNBContract;
         } else if (chainId == 1442 || chainId == 1101) {
@@ -273,7 +273,7 @@ export default {
       if (type == "BSC") return this.$inDev ? 97 : 56;
       if (type == "Arbitrum") return this.$inDev ? 421613 : 42161;
       if (type == "zkSync") return this.$inDev ? 280 : 324;
-      if (type == "OpBNBTest") return 5611;
+      if (type == "OpBNB") return this.$inDev ? 5611 : 204;
       if (type == "PolygonZkEVM") return this.$inDev ? 1442 : 1101;
       if (type == "Linea") return this.$inDev ? 59140 : 59144;
       return this.$inDev ? 5 : 1;
@@ -408,6 +408,17 @@ export default {
           nativeCurrency: {
             name: "BNB Coin",
             symbol: "tBNB",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        204: {
+          chainId,
+          chainName: "opBNB",
+          rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
+          nativeCurrency: {
+            name: "BNB Coin",
+            symbol: "BNB",
             decimals: 18,
           },
           // blockExplorerUrls: [],
