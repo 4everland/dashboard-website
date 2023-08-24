@@ -227,7 +227,7 @@ export default {
           type: "PolygonZkEVM",
         },
         {
-          name: "BNB Chain",
+          name: "BNB Smart Chain",
           icon: require("/public/img/svg/billing/ic-bsc.png"),
           type: "BSC",
         },
