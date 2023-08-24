@@ -147,6 +147,7 @@ export default {
     },
     noticeMsg({ name, data }) {
       if (name == "domains-delete" && data.type == "domains") {
+        this.selected = [];
         this.getList();
       }
     },

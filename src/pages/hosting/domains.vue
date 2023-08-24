@@ -260,7 +260,10 @@ export default {
         this.deleting = true;
         await this.onTypeDelete();
         this.$toast(this.selected.length + " domain(s) deleted successfully");
-        this.selected = [];
+        this.$setMsg({
+          name: "domains-delete",
+          data: { type: this.type },
+        });
       } catch (error) {
         //
       }
@@ -306,10 +309,6 @@ export default {
           },
         });
       }
-      this.$setMsg({
-        name: "domains-delete",
-        data: { type: this.type },
-      });
     },
     async getProjects() {
       try {
