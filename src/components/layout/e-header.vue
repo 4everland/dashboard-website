@@ -176,9 +176,9 @@ export default {
         });
       }
       list.unshift({
-        href: "https://unleashar.4everland.org/",
+        href: "https://firstsowing.4everland.org/",
         img: "/img/svg/header/icon_hot.svg",
-        label: "Unleash Arweave",
+        label: "First Sowing",
         imgCls: "ml-2",
         width: 16,
       });
