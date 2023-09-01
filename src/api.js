@@ -185,7 +185,7 @@ http.interceptors.request.use(
       .replace("$bucektDomain", bucketDomainApi)
       .replace("$pinningService", pinningServiceApi)
       .replace("$template", templateApi);
-    if (config.url.includes(authApi) || config.url.includes(templateApi)) {
+    if (config.url.includes(authApi)) {
       token = "Bearer " + token;
     }
 
