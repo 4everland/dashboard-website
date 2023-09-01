@@ -43,7 +43,7 @@ export const pinningServiceApi = inDev
 
 export const templateApi = inDev
   ? "https://temp-template.foreverland.xyz"
-  : "https://temp-template.4everland.org";
+  : "https://fs-api.4everland.org";
 
 Vue.prototype.$endpoint = endpoint;
 Vue.prototype.$authApi = authApi;
