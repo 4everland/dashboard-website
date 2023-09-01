@@ -40,6 +40,11 @@ const bucketDomainApi = inDev
 export const pinningServiceApi = inDev
   ? "https://pinning.foreverland.xyz"
   : "https://api.4everland.dev";
+
+export const templateApi = inDev
+  ? "https://temp-template.foreverland.xyz"
+  : "https://temp-template.4everland.org";
+
 Vue.prototype.$endpoint = endpoint;
 Vue.prototype.$authApi = authApi;
 
@@ -178,10 +183,12 @@ http.interceptors.request.use(
       .replace("$ipns", ipnsApi)
       .replace("$resource", resourceApi)
       .replace("$bucektDomain", bucketDomainApi)
-      .replace("$pinningService", pinningServiceApi);
-    if (config.url.includes(authApi)) {
+      .replace("$pinningService", pinningServiceApi)
+      .replace("$template", templateApi);
+    if (config.url.includes(authApi) || config.url.includes(templateApi)) {
       token = "Bearer " + token;
     }
+
     if (token && config.url != RefreshPath) {
       config.headers.common["Authorization"] = token;
     }

@@ -23,6 +23,7 @@
                 <span class="gray-6">Let more people know your DWeb.</span>
                 <a
                   class="ml-3 u"
+                  @click="handleShare"
                   :href="`https://twitter.com/intent/tweet?text=${encodeURI(
                     `I've deployed a wonderful Dapp through @4everland_org Hosting, which helps developers quickly build, publish, and manage Dwebs. Come and experience it!  
   Click here to access: https://${info.domain}`
@@ -187,6 +188,17 @@ Are you sure you want to continue?`;
     },
     onInfo(obj) {
       this.info = obj;
+    },
+    async handleShare() {
+      try {
+        await this.$http.post(
+          "https://temp-template.foreverland.xyz/share",
+          {},
+          { noTip: 1 }
+        );
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   components: {
