@@ -187,6 +187,7 @@ export default {
     },
     async handleTypeClaim(type = "Polygon") {
       try {
+        this.$loading();
         const register = await this.isRegister();
         if (register) {
           this.onAnimation();
@@ -204,11 +205,12 @@ export default {
         }
         if (claimStatus) {
           this.onAnimation();
-          return this.$emit("claimCompeleted");
+          this.$emit("claimCompeleted");
         }
       } catch (error) {
         console.log(error);
       }
+      this.$loading.close();
     },
   },
   watch: {

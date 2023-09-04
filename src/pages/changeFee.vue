@@ -14,9 +14,37 @@
             @click="handleChangeFee(item.type, item.value)"
             >Confirm</v-btn
           >
+          <v-btn class="ml-2" color="primary" @click="show(item.type)"
+            >WithDraw</v-btn
+          >
         </div>
       </li>
     </ul>
+
+    <v-dialog max-width="500" v-model="showDialog">
+      <div class="pa-5">
+        <div class="al-c">
+          <span class="mr-4">WithDraw Address:</span>
+          <v-text-field v-model="toAddress" class="hide-msg"></v-text-field>
+        </div>
+        <div class="al-c mt-5">
+          <span class="mr-4">WithDraw Amount:</span>
+          <v-text-field v-model="amount" class="hide-msg"></v-text-field>
+          <v-btn class="ml-2" small color="primary" @click="handleMax">
+            Max</v-btn
+          >
+        </div>
+        <div class="al-c mt-5">
+          <span>Balance:</span>
+          <span class="ml-4">{{ balance }}</span>
+        </div>
+        <div class="al-c justify-center">
+          <v-btn class="mt-5" color="primary" @click="handleWithDraw"
+            >Confirm
+          </v-btn>
+        </div>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -35,6 +63,9 @@ import { utils, providers } from "ethers";
 export default {
   data() {
     return {
+      showDialog: false,
+      amount: null,
+      balance: 0,
       contract: null,
       claimList: [
         {
@@ -81,8 +112,10 @@ export default {
           value: null,
         },
       ],
+      toAddress: "",
     };
   },
+
   methods: {
     async switchNet(chainName) {
       const payBy = (localStorage.payBy = chainName);
@@ -218,6 +251,17 @@ export default {
           },
           // blockExplorerUrls: [],
         },
+        204: {
+          chainId,
+          chainName: "opBNB",
+          rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
+          nativeCurrency: {
+            name: "BNB Coin",
+            symbol: "BNB",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
         1442: {
           chainId,
           chainName: "Polygon zkEVM Testnet",
@@ -311,6 +355,50 @@ export default {
         return false;
       }
     },
+    async show(chain) {
+      try {
+        this.$loading();
+        if (chain == "zkSyncV2") {
+          await this.switchNet("zkSync");
+        } else {
+          await this.switchNet(chain);
+        }
+        await this.getCurrentContract();
+        const balance = await this.contract.provider.getBalance(
+          this.contract.Register.address
+        );
+        this.balance = utils.formatEther(balance);
+        this.showDialog = true;
+      } catch (error) {
+        console.log(error);
+      }
+      this.$loading.close();
+    },
+    handleMax() {
+      this.amount = this.balance;
+    },
+
+    async handleWithDraw() {
+      try {
+        if (!this.toAddress) {
+          throw new Error("withDraw address can not be empty!");
+        }
+        if (!this.amount || this.amount <= 0) {
+          throw new Error("withDraw amount can not be empty!");
+        }
+        const amount = utils.parseEther(this.amount);
+        this.$loading();
+        const tx = await this.contract.Register.ownerWithdrawNative(
+          this.toAddress,
+          amount
+        );
+        await tx.wait();
+        this.$toast("withDraw successfully");
+      } catch (error) {
+        this.onErr(error);
+      }
+      this.$loading.close();
+    },
 
     async getCurrentContract() {
       try {
@@ -329,7 +417,7 @@ export default {
           const provider = new Web3Provider(window.ethereum);
           zkSyncContract.setProvider(provider);
           this.contract = zkSyncContract;
-        } else if (chainId == 5611) {
+        } else if (chainId == 5611 || chainId == 204) {
           opBNBContract.setProvider(provider);
           this.contract = opBNBContract;
         } else if (chainId == 1442 || chainId == 1101) {
@@ -353,6 +441,7 @@ export default {
       if (data) {
         msg = data.message || msg;
       }
+      console.log(msg);
       if (/repriced/i.test(msg) && /replaced/i.test(msg)) {
         return this.$toast("Transaction was replaced.");
       }
@@ -381,6 +470,15 @@ export default {
         });
       }
       return this.$toast(msg);
+    },
+  },
+  watch: {
+    showDialog(val) {
+      if (!val) {
+        this.balance = 0;
+        this.amount = null;
+        this.toAddress = null;
+      }
     },
   },
 };

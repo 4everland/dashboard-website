@@ -66,7 +66,6 @@ export default {
 
     async handleClaim() {
       try {
-        this.$loading();
         await this.switchNet("Polygon");
         await this.getCurrentContract();
         const { sign } = await this.getSignAddress();
@@ -80,7 +79,6 @@ export default {
         this.$loading.close();
         return true;
       } catch (error) {
-        this.$loading.close();
         this.onErr(error);
         return false;
       }
@@ -88,7 +86,6 @@ export default {
     async handleZkClaim() {
       try {
         // check main eth
-        this.$loading();
         await this.switchNet("Ethereum");
         const zkprovider = await zksync.getDefaultProvider("mainnet");
         // eth signer
@@ -133,7 +130,6 @@ export default {
           const receipt = await tx.awaitReceipt();
           console.log("receipt", receipt);
           const records = await this.searchZySyncRecord();
-          this.$loading.close();
           if (records.length) {
             await this.registerSuccess(records[0].txHash);
           }
@@ -145,14 +141,12 @@ export default {
           );
         }
       } catch (error) {
-        this.$loading.close();
         this.onErr(error);
         return false;
       }
     },
     async handleOtherChainClaim(chain) {
       try {
-        this.$loading();
         await this.switchNet(chain);
         await this.getCurrentContract();
         const fee = await this.contract.Register.fee();
@@ -173,11 +167,9 @@ export default {
         if (isExists) {
           await this.registerSuccess();
         }
-        this.$loading.close();
         return true;
       } catch (error) {
         console.log(error);
-        this.$loading.close();
         this.onErr(error);
         return false;
       }
