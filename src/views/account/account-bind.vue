@@ -71,9 +71,34 @@ export default {
     }),
     list() {
       const info = this.userInfo;
+      console.log(info);
       const github = info.github || {};
       const wArr = [];
       const noWallet = !info.wallet && !info.solana && !info.onFlow;
+
+      let publicApp = [
+        {
+          title: "Twitter",
+          desc: "Get verified by connecting your twttier account.",
+          icon: "m-twitter",
+          type: 10,
+          account: (info.twitterAccount || {}).name,
+        },
+        {
+          title: "Telegram",
+          desc: "Get verified by connecting your telegram account.",
+          icon: "m-tg",
+          type: 10,
+          account: (info.telegramAccount || {}).name,
+        },
+        {
+          title: "Discord",
+          desc: "Get verified by connecting your discord account.",
+          icon: "m-dc",
+          type: 10,
+          account: (info.discordAccount || {}).name,
+        },
+      ];
       if (info.wallet?.walletType == "METAMASK" || noWallet)
         wArr.push({
           title: "MetaMask",
@@ -138,6 +163,7 @@ export default {
           type: 3,
           account: info.email,
         },
+        ...publicApp,
       ];
     },
     query() {
@@ -303,6 +329,15 @@ export default {
       }
       // if (it.type != 1) return this.$toast("todo");
       try {
+        if (it.type == 10) {
+          this.$loading();
+          const { data } = await this.$http.get(
+            `$auth/redirection/${it.title.toLowerCase()}`
+          );
+          this.$loading.close();
+          return window.open(data);
+        }
+
         let apply = "";
         if (it.type == 3) {
           const { value } = await this.$prompt(
