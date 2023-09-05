@@ -57,11 +57,22 @@ export default {
     this.getConfigJson();
   },
   methods: {
-    getConfigJson() {
-      const configJson = JSON.parse(this.info.configJson);
-      let tags = configJson.config.filter((it) => it.tag).map((it) => it.tag);
-      tags = this.unique(tags);
-      this.configJson = this.tagGrouping(tags, configJson.config);
+    async getConfigJson() {
+      try {
+        let configJson = JSON.parse(this.info.configJson);
+        if (!configJson.config) {
+          const { data } = await this.$http("$hosting/template/web3/list");
+          let item = data.find((it) => {
+            return it.id == this.info.web3TemplateId;
+          });
+          configJson = JSON.parse(item.configJson);
+        }
+        let tags = configJson.config.filter((it) => it.tag).map((it) => it.tag);
+        tags = this.unique(tags);
+        this.configJson = this.tagGrouping(tags, configJson.config);
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     async handleDeploy() {
@@ -117,7 +128,6 @@ export default {
       const noTags = arr
         .filter((it) => !it.tag)
         .map((it) => {
-          console.log(it);
           if (
             it.options.some(
               (it) =>
