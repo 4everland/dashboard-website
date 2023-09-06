@@ -136,7 +136,10 @@ new Vue({
         it.isOwner = it.type == "INDIVIDUAL";
         it.isMember = it.type == "COLLABORATION";
         if (it.teamAvatar) {
+          it.teamAvatar = "https://media.4everland.org/" + it.teamAvatar;
+          /*
           it.teamAvatar = this.$authApi + "/media/" + it.teamAvatar;
+          */
         }
       });
       let teamId = this.teamId;
