@@ -365,7 +365,7 @@ export default {
         const url = data.applyR;
         if (it.type == 3) {
           const { value } = await this.$prompt(
-            "A verify code has benn sended to your email address",
+            "The verification code has been sent to your email address.",
             "Verify Email",
             {
               confirmText: "Verify",
