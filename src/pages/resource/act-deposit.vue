@@ -65,7 +65,7 @@ export default {
       return this.$utils.cutFixed(this.amount || 0, 4);
     },
     allowNetwork() {
-      if (this.onChain) return ["Polygon", "Ethereum", "BSC"];
+      // if (this.onChain) return ["Polygon", "Ethereum", "BSC"];
       return ["Polygon"];
     },
   },
