@@ -294,7 +294,7 @@ export default {
           chainId,
           chainName: "Polygon Mainnet",
           rpcUrls: [
-            "https://rpc.ankr.com/polygon",
+            "https://polygon.llamarpc.com",
             // "https://polygon-rpc.com",
           ],
           nativeCurrency: {
