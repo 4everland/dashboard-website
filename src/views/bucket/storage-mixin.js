@@ -462,7 +462,6 @@ export default {
         ""
       );
       stream.on("data", (data) => {
-        console.log(111, data);
         this.tableLoading = false;
         data.objects.sort((a, b) => {
           return (b.prefix ? 1 : 0) - (a.prefix ? 1 : 0);
@@ -488,7 +487,12 @@ export default {
                 arStatus: "--",
               };
             let meta = it.metadata || {};
-            let arStatus = meta["X-Amz-Meta-Arweave-Status"];
+            let obj = {};
+            meta.Items.forEach((it) => {
+              obj[it.Key] = it.Value;
+            });
+
+            let arStatus = obj["X-Amz-Meta-Arweave-Status"];
 
             if (!arStatus) {
               arStatus = this.defArStatus;
@@ -501,11 +505,10 @@ export default {
               hash: this.$utils.getCidV1(it.etag),
               isFile: true,
               arStatus,
-              arHash: meta["X-Amz-Meta-Arweave-Hash"],
+              arHash: obj["X-Amz-Meta-Arweave-Hash"],
             };
           });
         this.folderList = list;
-        console.log(this.folderList);
         window.scrollTo(0, 0);
         this.$loading.close();
       });

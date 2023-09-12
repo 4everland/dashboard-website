@@ -138,6 +138,43 @@
               </div>
               <span v-else>--</span>
             </template>
+
+            <template v-slot:item.arHash="{ item }">
+              <div class="d-flex align-center" v-if="item.arHash">
+                <a
+                  :href="$utils.getCidLink(item.arHash, 'AR')"
+                  class="hash-link"
+                  style="color: #0b0817"
+                  target="_blank"
+                  v-if="item.arHash"
+                  @click.stop
+                  >{{ item.arHash.cutStr(5, 4) }}</a
+                >
+                <v-btn
+                  v-if="item.arHash"
+                  class="e-btn-text ml-2"
+                  icon
+                  small
+                  @click.stop
+                  v-clipboard="item.arHash"
+                  @success="$toast('Copied!')"
+                >
+                  <img src="/img/svg/copy.svg" width="12" />
+                </v-btn>
+              </div>
+
+              <div v-else>
+                <span class="mr-2 gray">Pending</span>
+                <v-btn
+                  small
+                  icon
+                  @click.stop="handleGetARHash(item)"
+                  :loading="loadingAr"
+                >
+                  <v-icon size="20">mdi-refresh</v-icon>
+                </v-btn>
+              </div>
+            </template>
             <template v-slot:item.arAct="{ item }">
               <div class="hide-msg d-flex al-c">
                 <v-switch
@@ -319,13 +356,6 @@ export default {
       drawer: false,
       tableLoading: true,
       vertical: false,
-      headers: [
-        { text: "Name", value: "name" },
-        { text: "IPFS CID", value: "hash" },
-        { text: "Size", value: "size" },
-        { text: "Last Modified", value: "updateAt" },
-        // { text: "AR Status", value: "arStatus" },
-      ],
       selected: [],
       deleteFolder: false,
       deleteFoldersTasks: [],
@@ -337,11 +367,13 @@ export default {
       showSnapshotDialog: false,
       generateSnapshotLoading: false,
       accessKeyExpired: false,
+      loadingAr: false,
     };
   },
   async created() {
-    bus.$on("uploadingLength", (uploadingLength) => {
+    bus.$on("uploadingLength", async (uploadingLength) => {
       if (uploadingLength == 0) {
+        await this.$sleep(1000);
         this.getList();
       }
     });
@@ -376,6 +408,24 @@ export default {
     isFile() {
       if (this.selected.length && this.selected[0].isFile) return true;
       return false;
+    },
+
+    headers() {
+      if (this.bucketInfo.isAr) {
+        return [
+          { text: "Name", value: "name" },
+          { text: "AR Hash", value: "arHash" },
+          { text: "Size", value: "size" },
+          { text: "Last Modified", value: "updateAt" },
+        ];
+      }
+      return [
+        { text: "Name", value: "name" },
+        { text: "IPFS CID", value: "hash" },
+        { text: "Size", value: "size" },
+        { text: "Last Modified", value: "updateAt" },
+        // { text: "AR Status", value: "arStatus" },
+      ];
     },
   },
   methods: {
@@ -463,6 +513,28 @@ export default {
       for (let i = 0; i < min; i++) {
         this.startDeleteFolder(idles[i]);
       }
+    },
+
+    handleGetARHash(item) {
+      this.loadingAr = true;
+      this.s3.headObject(
+        { Bucket: this.pathInfo.Bucket, Key: item.name },
+        (err, data) => {
+          if (err) {
+            this.loadingAr = false;
+            return this.onErr(err);
+          }
+          const meta = data.Metadata;
+          let arStatus = meta["arweave-status"];
+          if (!arStatus) {
+            arStatus = this.defArStatus;
+          }
+          if (meta["arweave-hash"]) {
+            item.arHash = meta["arweave-hash"];
+          }
+          this.loadingAr = false;
+        }
+      );
     },
     handleDownload() {
       window.open(this.getViewUrl(this.selected[0]));

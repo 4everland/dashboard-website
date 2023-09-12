@@ -6,6 +6,7 @@ import router from "./router";
 import { CID } from "multiformats/cid";
 import frameworks from "./plugins/config/frameworks";
 import * as clipboard from "clipboard-polyfill/text";
+const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 
 Vue.use(VueClipboards);
 
@@ -155,7 +156,9 @@ Vue.prototype.$utils = {
       return `https://${cid}.raw.icp0.io/`;
     }
     if (plat == "AR") {
-      return `https://arweave.net/${cid}`;
+      return inDev
+        ? `https://arweave.net/${cid}`
+        : `https://arweave.4everland.xyz/${cid}`;
     }
     return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
     // return assign

@@ -294,19 +294,7 @@
         </template>
         <template v-slot:item.arAct="{ item }">
           <div class="hide-msg d-flex al-c">
-            <v-switch
-              v-model="item.isAr"
-              dense
-              :loading="item.arLoading"
-              :disabled="item.arLoading || item.arCancel"
-              @click.stop.prevent="onSyncBucket(item)"
-            ></v-switch>
-            <e-tooltip top v-if="item.arCancel && !tableLoading">
-              <v-btn slot="ref" plain x-small @click.stop="getList">
-                <v-icon>mdi-refresh</v-icon>
-              </v-btn>
-              <span>Closing. Click to refresh.</span>
-            </e-tooltip>
+            {{ item.isAr ? "AR" : "IPFS" }}
           </div>
         </template>
         <template v-slot:item.arStatus="{ item }">
@@ -400,7 +388,7 @@ export default {
           { text: "AR Storage Usage", value: "arUsedStorage" },
           { text: "Traffic within 30 Days", value: "traffic" },
           { text: "Visits within 30 Days", value: "visitChartData" },
-          { text: "Sync to AR", value: "arAct" },
+          { text: "Type", value: "arAct" },
         ];
       return [
         { text: "Name", value: "name" },

@@ -8,7 +8,9 @@ const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 Vue.prototype.$inDev = inDev;
 // const isLocal = /localhost/.test(location.host);
 
-Vue.prototype.$arHashPre = "https://arweave.net/"; // https://ar.foreverland.xyz/
+Vue.prototype.$arHashPre = inDev
+  ? "https://arweave.net/"
+  : "https://arweave.4everland.xyz/"; // https://ar.foreverland.xyz/
 Vue.prototype.$arVerifyPre = "https://viewblock.io/arweave/tx/"; // https://ar.foreverland.xyz/tx/
 Vue.prototype.$axios = axios;
 

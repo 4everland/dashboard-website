@@ -293,6 +293,7 @@ export default {
       this.thumbnail = "";
       this.fileLoading = true;
       this.fileInfo = null;
+      console.log(this.pathInfo);
       this.s3.headObject(
         { ...this.pathInfo, IfMatch: this.selected[0].hash },
         (err, data) => {

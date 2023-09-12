@@ -35,15 +35,11 @@ const menuMap = {
         label: "Bucket(s3)",
         active: false,
         group:
-          /^(\/bucket\/storage)|(\/bucket\/arweave)|(\/bucket\/domain(s?))|(\/bucket\/access-keys)/i,
+          /^(\/bucket\/storage)|(\/bucket\/domain(s?))|(\/bucket\/access-keys)/i,
         subs: [
           {
             label: "Buckets",
             to: "/bucket/storage/",
-          },
-          {
-            label: "AR History",
-            to: "/bucket/arweave",
           },
           {
             label: "Domains",
@@ -55,6 +51,10 @@ const menuMap = {
             to: "/bucket/access-keys",
           },
         ],
+      },
+      {
+        label: "AR History",
+        to: "/bucket/arweave",
       },
       {
         label: "4EVER Pin",
