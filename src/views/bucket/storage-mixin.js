@@ -462,6 +462,7 @@ export default {
         ""
       );
       stream.on("data", (data) => {
+        console.log(111, data);
         this.tableLoading = false;
         data.objects.sort((a, b) => {
           return (b.prefix ? 1 : 0) - (a.prefix ? 1 : 0);
@@ -486,8 +487,9 @@ export default {
                 updateAt: "--",
                 arStatus: "--",
               };
-            const meta = it.metadata || {};
+            let meta = it.metadata || {};
             let arStatus = meta["X-Amz-Meta-Arweave-Status"];
+
             if (!arStatus) {
               arStatus = this.defArStatus;
             }
@@ -503,6 +505,7 @@ export default {
             };
           });
         this.folderList = list;
+        console.log(this.folderList);
         window.scrollTo(0, 0);
         this.$loading.close();
       });
