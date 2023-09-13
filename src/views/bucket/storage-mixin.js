@@ -488,11 +488,13 @@ export default {
               };
             let meta = it.metadata || {};
             let obj = {};
-            meta.Items.forEach((it) => {
-              obj[it.Key] = it.Value;
-            });
-
-            let arStatus = obj["X-Amz-Meta-Arweave-Status"];
+            let arStatus = null;
+            if (meta && meta.Items instanceof Array) {
+              meta.Items.forEach((it) => {
+                obj[it.Key] = it.Value;
+              });
+              arStatus = obj["X-Amz-Meta-Arweave-Status"];
+            }
 
             if (!arStatus) {
               arStatus = this.defArStatus;
