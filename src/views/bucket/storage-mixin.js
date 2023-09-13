@@ -179,56 +179,56 @@ export default {
         this.getObjects();
       }
     },
-    async onSyncBucket(it) {
-      try {
-        if (it.arLoading) return;
-        if (!it.isAr) {
-          await this.$confirm(
-            "When you close sync to AR, it will become closing status, and you won't be able to properly close it until all your files have been synchronized. Are you sure you want to close it?"
-          );
-        } else {
-          await this.beforeArSync();
-        }
-        this.$set(it, "arLoading", true);
-        const { data } = await this.syncBucket(it.name, it.isAr);
-        await this.$sleep(500);
-        // throw new Error("test err");
-      } catch (error) {
-        console.log(error);
-        this.$set(it, "isAr", !it.isAr);
-      }
-      this.$set(it, "arLoading", false);
-      this.getBuckets();
-    },
-    async syncBucket(name, sync) {
-      return this.$http.post("/arweave/buckets/" + name, {
-        sync,
-      });
-    },
-    async beforeArSync() {
-      const skey = "arTipOff";
-      if (localStorage[skey]) return;
-      const html =
-        `<ul>` +
-        "<li>Supports all AR public gateway access</li>" +
-        "<li class='mt-2'>Permanent storage is not removable, and file sizes are limited to 100M</li>" +
-        "<li class='mt-2'>Consumes AR storage</li>" +
-        "</ul>";
-      const fn = (data) => {
-        if (data.form1.noShow) localStorage[skey] = 1;
-      };
-      return this.$confirm(html, "Sync to AR", {
-        comp1: "no-show-form",
-      })
-        .then((data) => {
-          fn(data);
-          return data;
-        })
-        .catch((data) => {
-          fn(data);
-          throw new Error();
-        });
-    },
+    // async onSyncBucket(it) {
+    //   try {
+    //     if (it.arLoading) return;
+    //     if (!it.isAr) {
+    //       await this.$confirm(
+    //         "When you close sync to AR, it will become closing status, and you won't be able to properly close it until all your files have been synchronized. Are you sure you want to close it?"
+    //       );
+    //     } else {
+    //       await this.beforeArSync();
+    //     }
+    //     this.$set(it, "arLoading", true);
+    //     const { data } = await this.syncBucket(it.name, it.isAr);
+    //     await this.$sleep(500);
+    //     // throw new Error("test err");
+    //   } catch (error) {
+    //     console.log(error);
+    //     this.$set(it, "isAr", !it.isAr);
+    //   }
+    //   this.$set(it, "arLoading", false);
+    //   this.getBuckets();
+    // },
+    // async syncBucket(name, sync) {
+    //   return this.$http.post("/arweave/buckets/" + name, {
+    //     sync,
+    //   });
+    // },
+    // async beforeArSync() {
+    //   const skey = "arTipOff";
+    //   if (localStorage[skey]) return;
+    //   const html =
+    //     `<ul>` +
+    //     "<li>Supports all AR public gateway access</li>" +
+    //     "<li class='mt-2'>Permanent storage is not removable, and file sizes are limited to 100M</li>" +
+    //     "<li class='mt-2'>Consumes AR storage</li>" +
+    //     "</ul>";
+    //   const fn = (data) => {
+    //     if (data.form1.noShow) localStorage[skey] = 1;
+    //   };
+    //   return this.$confirm(html, "Sync to AR", {
+    //     comp1: "no-show-form",
+    //   })
+    //     .then((data) => {
+    //       fn(data);
+    //       return data;
+    //     })
+    //     .catch((data) => {
+    //       fn(data);
+    //       throw new Error();
+    //     });
+    // },
     async onSyncAR(name, method = "post") {
       if (this.selectArStatus == "syncing") {
         this.$alert("The file is being synced");
@@ -678,7 +678,6 @@ export default {
       window.open(this.getViewUrl(it));
     },
     onRow(it) {
-      const url = this.getPath(it);
       if (this.selected.length > 1) {
         if (this.selected.includes(it)) {
           const i = this.selected.findIndex((item) => item == it);

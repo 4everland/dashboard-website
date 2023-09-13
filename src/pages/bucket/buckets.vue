@@ -1,14 +1,7 @@
 <template>
   <div style="height: 100%">
     <!-- <keep-alive v-if="inFolder || inFile"> -->
-    <e-tabs
-      v-if="inFolder"
-      :list="list"
-      :defTab="1"
-      bucket
-      noRouter
-      ignorePath
-    />
+    <e-tabs v-if="inFolder" :list="list" bucket noRouter ignorePath />
     <!-- </keep-alive> -->
     <storage v-if="!inFolder" />
     <!-- Upload/Delete Folders Component -->

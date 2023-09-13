@@ -29,10 +29,16 @@
       </v-row>
     </div>
     <div class="domain-names bg-white">
-      <h3>Domain Names</h3>
-
-      <div @click="$router.push(`/bucket/domains?bucket=${bucketName}`)">
-        add Domain
+      <div class="al-c space-btw mb-3">
+        <h3>Domain Names</h3>
+        <v-btn
+          small
+          color="primary"
+          outlined
+          @click="$router.push(`/bucket/domains?bucket=${bucketName}`)"
+        >
+          Add Domain
+        </v-btn>
       </div>
       <div>
         <v-data-table
@@ -92,9 +98,7 @@
               dense
               :loading="arLoading"
               :disabled="arLoading"
-              @click.stop.prevent="
-                syncBucket(bucketName, extraData.arweave.sync)
-              "
+              @click.stop.prevent="onSyncBucket()"
             ></v-switch>
           </e-kv>
         </v-col>
@@ -124,7 +128,7 @@
         </v-col>
         <v-col sm="6" class="basic-settings-item">
           <e-kv label="Type" min-width="120px" labelColor="#6c7789">{{
-            extraData.storageClass
+            extraData.arweave.sync ? "Arweave" : "IPFS"
           }}</e-kv>
         </v-col>
       </v-row>
@@ -330,7 +334,49 @@ export default {
       });
     },
 
-    handleDeleteBucket() {},
+    async onSyncBucket() {
+      try {
+        if (this.arLoading) return;
+        this.arLoading = true;
+        if (!this.extraData.arweave.sync) {
+          await this.$confirm(
+            "When you close sync to AR, it will become closing status, and you won't be able to properly close it until all your files have been synchronized. Are you sure you want to close it?"
+          );
+        } else {
+          await this.beforeArSync();
+        }
+        await this.syncBucket(this.bucketName, this.extraData.arweave.sync);
+        await this.getExtraData();
+        await this.$sleep(500);
+      } catch (error) {
+        console.log(error);
+      }
+      this.arLoading = false;
+    },
+    async beforeArSync() {
+      const skey = "arTipOff";
+      if (localStorage[skey]) return;
+      const html =
+        `<ul>` +
+        "<li>Supports all AR public gateway access</li>" +
+        "<li class='mt-2'>Permanent storage is not removable, and file sizes are limited to 100M</li>" +
+        "<li class='mt-2'>Consumes AR storage</li>" +
+        "</ul>";
+      const fn = (data) => {
+        if (data.form1.noShow) localStorage[skey] = 1;
+      };
+      return this.$confirm(html, "Sync to AR", {
+        comp1: "no-show-form",
+      })
+        .then((data) => {
+          fn(data);
+          return data;
+        })
+        .catch((data) => {
+          fn(data);
+          throw new Error();
+        });
+    },
   },
   watch: {
     active(value) {

@@ -285,13 +285,25 @@
             v-clipboard="item.hash"
             @success="$toast('Copied!')"
           >
-            <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
             <img src="/img/svg/copy.svg" width="12" />
           </v-btn>
         </template>
         <template v-slot:item.arAct="{ item }">
           <div class="hide-msg d-flex al-c">
-            {{ item.isAr ? "Arweave" : "IPFS" }}
+            <div class="type-icon al-c" :class="item.isAr ? 'arweave' : 'ipfs'">
+              <img
+                width="12"
+                :src="
+                  item.isAr
+                    ? '/img/svg/hosting/h-ar.svg'
+                    : '/img/svg/hosting/h-ipfs.svg'
+                "
+                alt=""
+              />
+              <span style="margin-left: 2px" class="fz-12">
+                {{ item.isAr ? "Arweave" : "IPFS" }}
+              </span>
+            </div>
           </div>
         </template>
         <template v-slot:item.arStatus="{ item }">
@@ -352,11 +364,11 @@ export default {
       if (this.inBucket)
         return [
           { text: "Bucket Name", value: "name" },
+          { text: "Type", value: "arAct" },
           { text: "Storage Usage", value: "usedStorage" },
           { text: "AR Storage Usage", value: "arUsedStorage" },
           { text: "Traffic within 30 Days", value: "traffic" },
           { text: "Visits within 30 Days", value: "visitChartData" },
-          { text: "Type", value: "arAct" },
         ];
       return [
         { text: "Name", value: "name" },
@@ -525,5 +537,21 @@ export default {
     border-radius: 50%;
     transform: scale(0.7);
   }
+}
+.type-icon {
+  padding: 2px 4px;
+  border-radius: 38px;
+}
+.arweave {
+  border: 0.25px solid #000;
+  background: #fff;
+}
+.ipfs {
+  background: linear-gradient(
+      0deg,
+      rgba(96, 204, 207, 0.75) 0%,
+      rgba(96, 204, 207, 0.75) 100%
+    ),
+    #fff;
 }
 </style>
