@@ -10,8 +10,9 @@
       ></v-select>
     </div>
     <div class="tip-wrap mt-5" v-show="isAr">
-      All data on the Arweave network cannot be deleted, and there is 100MB of
-      free AR storage.
+      Free for up to 150KB, apply for reduction over 150KB.
+      <a href="https://unleashar.4everland.org/" target="__blank"> Learn more</a
+      >.
     </div>
   </div>
 </template>

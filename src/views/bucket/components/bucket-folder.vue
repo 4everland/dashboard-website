@@ -162,7 +162,6 @@
                   <img src="/img/svg/copy.svg" width="12" />
                 </v-btn>
               </div>
-
               <div v-else>
                 <span class="mr-2 gray">Pending</span>
                 <v-btn
@@ -173,23 +172,6 @@
                 >
                   <v-icon size="20">mdi-refresh</v-icon>
                 </v-btn>
-              </div>
-            </template>
-            <template v-slot:item.arAct="{ item }">
-              <div class="hide-msg d-flex al-c">
-                <v-switch
-                  v-model="item.isAr"
-                  dense
-                  :loading="item.arLoading"
-                  :disabled="item.arLoading || item.arCancel"
-                  @click.stop.prevent="onSyncBucket(item)"
-                ></v-switch>
-                <e-tooltip top v-if="item.arCancel && !tableLoading">
-                  <v-btn slot="ref" plain x-small @click.stop="getList">
-                    <v-icon>mdi-refresh</v-icon>
-                  </v-btn>
-                  <span>Closing. Click to refresh.</span>
-                </e-tooltip>
               </div>
             </template>
           </v-data-table>
@@ -424,7 +406,6 @@ export default {
         { text: "IPFS CID", value: "hash" },
         { text: "Size", value: "size" },
         { text: "Last Modified", value: "updateAt" },
-        // { text: "AR Status", value: "arStatus" },
       ];
     },
   },
@@ -518,7 +499,7 @@ export default {
     handleGetARHash(item) {
       this.loadingAr = true;
       this.s3.headObject(
-        { Bucket: this.pathInfo.Bucket, Key: item.name },
+        { Bucket: this.pathInfo.Bucket, Key: this.pathInfo.Prefix + item.name },
         (err, data) => {
           if (err) {
             this.loadingAr = false;

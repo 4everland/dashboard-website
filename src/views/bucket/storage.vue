@@ -223,12 +223,9 @@
         :headers="headers"
         :items="list"
         :loading="tableLoading"
-        v-model="selected"
-        :show-select="list.length > 0"
         item-key="name"
         no-data-text=""
         loading-text=""
-        :checkbox-color="$color1"
         hide-default-footer
         disable-pagination
         @click:row="onRow"
@@ -252,7 +249,7 @@
             small
             color="primary"
             v-if="item.isFile && bucketInfo.originList.length"
-            @click.stop="onStop"
+            @click.stop
             :href="getViewUrl(item)"
             target="_blank"
           >
@@ -272,7 +269,7 @@
             text
             target="_blank"
             v-if="item.hash"
-            @click.stop="onStop"
+            @click.stop
             :href="$utils.getCidLink(item.hash)"
           >
             <span class="d-ib" style="width: 80px">
@@ -284,7 +281,7 @@
             class="e-btn-text ml-2"
             icon
             small
-            @click.stop="onStop"
+            @click.stop
             v-clipboard="item.hash"
             @success="$toast('Copied!')"
           >
@@ -294,7 +291,7 @@
         </template>
         <template v-slot:item.arAct="{ item }">
           <div class="hide-msg d-flex al-c">
-            {{ item.isAr ? "AR" : "IPFS" }}
+            {{ item.isAr ? "Arweave" : "IPFS" }}
           </div>
         </template>
         <template v-slot:item.arStatus="{ item }">
@@ -322,33 +319,6 @@
             : `${inBucket ? "No buckets" : "No folders or files found"}`
         }}
       </e-empty>
-
-      <operation-bar ref="operationBar">
-        <v-checkbox
-          v-model="checked"
-          @change="handleChangeCheck"
-          class="px-4"
-          color="#34A9FF"
-        ></v-checkbox>
-        <v-btn
-          outlined
-          @click="$router.push(`/bucket/domains?bucket=${selected[0].name}`)"
-          v-show="selected.length <= 1"
-        >
-          <!-- <img src="/img/icon/ic-domain.svg" width="14" class="mr-2" /> -->
-          <span>Add Domain</span>
-        </v-btn>
-        <v-btn
-          style="border-color: #6c7789"
-          outlined
-          class="ml-4"
-          v-show="selected.length >= 1"
-          @click="onDelete"
-        >
-          <!-- <img src="/img/icon/ic-delete.svg" width="14" class="mr-2" /> -->
-          <span class="gray">Delete</span>
-        </v-btn>
-      </operation-bar>
     </div>
     <div v-if="inFolder && !finished" class="pd-20 gray ta-c fz-16 mt-5">
       <v-btn outlined v-if="list.length" @click="onLoadMore">{{
@@ -359,7 +329,6 @@
 </template>
 
 <script>
-import { bus } from "../../utils/bus";
 import mixin from "./storage-mixin";
 export default {
   mixins: [mixin],
@@ -373,7 +342,6 @@ export default {
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
       uploadingTaskLength: 0,
-      checked: false,
     };
   },
   computed: {
@@ -437,7 +405,6 @@ export default {
       const list = this.bucketInfo.originList.map((origin) => {
         return origin + "/" + Key;
       });
-      // console.log(list);
       if (!list.length) list.push(this.fileInfo.url);
       return list;
     },
@@ -448,12 +415,10 @@ export default {
   methods: {
     onRouteChange() {
       if (!this.inStorage) return;
-      this.selected = [];
       this.folderList = [];
       this.getList();
       this.checkNew();
     },
-    onStop() {},
     onCopied() {
       this.$toast("Copied!");
     },
@@ -516,26 +481,10 @@ export default {
         },
       });
     },
-    handleChangeCheck(val) {
-      if (!val) return (this.selected = []);
-    },
   },
   watch: {
     path() {
       this.onRouteChange();
-    },
-    selected: {
-      handler(arr) {
-        if (!this.$refs.operationBar) return;
-        if (arr.length) {
-          bus.$emit("showOperationBar", true);
-          this.$refs.operationBar.isShow = this.checked = true;
-        } else {
-          bus.$emit("showOperationBar", false);
-          this.$refs.operationBar.isShow = this.checked = false;
-        }
-      },
-      deep: true,
     },
   },
 };

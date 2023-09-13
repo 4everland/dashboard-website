@@ -11,7 +11,6 @@
     />
     <!-- </keep-alive> -->
     <storage v-if="!inFolder" />
-
     <!-- Upload/Delete Folders Component -->
     <div
       class="control"
@@ -40,10 +39,6 @@ export default {
     return {
       list: [
         {
-          text: "Overview",
-          comp: "bucket-overview",
-        },
-        {
           text: "Files",
           comp: "bucket-folder",
         },
@@ -54,6 +49,10 @@ export default {
         {
           text: "Statistics",
           comp: "bucket-statistics",
+        },
+        {
+          text: "Settings",
+          comp: "bucket-overview",
         },
       ],
       isShowOperationBar: false,

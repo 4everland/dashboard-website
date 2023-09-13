@@ -30,6 +30,10 @@
     </div>
     <div class="domain-names bg-white">
       <h3>Domain Names</h3>
+
+      <div @click="$router.push(`/bucket/domains?bucket=${bucketName}`)">
+        add Domain
+      </div>
       <div>
         <v-data-table
           class="hide-bdb"
@@ -81,11 +85,17 @@
           }}</e-kv>
         </v-col>
         <v-col sm="6" cols class="basic-settings-item">
-          <e-kv label="Sync to AR" min-width="120px" labelColor="#6c7789">
-            <span
-              :class="extraData.arweave.sync ? 'synced-ar' : 'no-synced-ar'"
-              >{{ extraData.arweave.sync ? "ON" : "OFF" }}</span
-            >
+          <e-kv label="Sync to Arweave" min-width="120px" labelColor="#6c7789">
+            <v-switch
+              class="mt-0"
+              v-model="extraData.arweave.sync"
+              dense
+              :loading="arLoading"
+              :disabled="arLoading"
+              @click.stop.prevent="
+                syncBucket(bucketName, extraData.arweave.sync)
+              "
+            ></v-switch>
           </e-kv>
         </v-col>
         <v-col sm="6" cols class="basic-settings-item">
@@ -113,16 +123,28 @@
           </e-kv>
         </v-col>
         <v-col sm="6" class="basic-settings-item">
-          <e-kv label="Storage Class" min-width="120px" labelColor="#6c7789">{{
+          <e-kv label="Type" min-width="120px" labelColor="#6c7789">{{
             extraData.storageClass
           }}</e-kv>
         </v-col>
       </v-row>
     </div>
+    <div class="delete bg-white">
+      <h3>Delete Bucket</h3>
+      <div class="mt-4 al-c space-btw">
+        <span class="mr-4 gray"
+          >Caution: This bucket will be permanently deleted, including any
+          linked domains. Please ensure that the bucket is empty before
+          proceeding with the deletion!</span
+        >
+        <v-btn small outlined color="red" @click="onDelete"> Delete</v-btn>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import HDomain from "@/views/hosting/common/h-domain";
 export default {
   name: "bucket-overview",
@@ -147,13 +169,19 @@ export default {
       basicStatisticsData: [],
       extraData: {},
       tableLoading: true,
+      arLoading: false,
     };
   },
   created() {
-    // console.log(this.$route.path.split("/")[3]);
     this.bucketName = this.$route.path.split("/")[3];
     this.getData();
   },
+  computed: {
+    ...mapState({
+      s3: (s) => s.moduleS3.s3,
+    }),
+  },
+
   methods: {
     getData() {
       this.getBasicStatisticsData();
@@ -249,6 +277,60 @@ export default {
         console.log(err, "err");
       }
     },
+    async syncBucket(name, sync) {
+      try {
+        this.arLoading = true;
+        await this.$http.post("/arweave/buckets/" + name, {
+          sync,
+        });
+        this.arLoading = false;
+      } catch (error) {
+        this.arLoading = false;
+        console.log(error);
+      }
+    },
+
+    async onDelete() {
+      try {
+        let html = `The following bucket will be permanently deleted. Are you sure you want to continue?`;
+        await this.$confirm(html, `Remove Bucket`);
+        await this.bucketEmpty(this.bucketName);
+        await this.delBucket(this.bucketName);
+        this.$toast("delete successfully!");
+        this.$router.push("/bucket/storage/");
+      } catch (err) {
+        if (err.message) this.$alert(err.message);
+      }
+    },
+    async bucketEmpty(name) {
+      let params = {
+        cursor: 0,
+        prefix: "",
+        bucket: name,
+      };
+      const { data } = await this.$http({
+        url: "/snapshots",
+        methods: "get",
+        params: params,
+      });
+      if (data.list.length)
+        throw new Error("The bucket you tried to delete is not empty");
+    },
+    delBucket(Bucket) {
+      return new Promise((resolve, reject) => {
+        this.s3.deleteBucket(
+          {
+            Bucket,
+          },
+          (err, data) => {
+            if (err) reject(err);
+            else resolve(data);
+          }
+        );
+      });
+    },
+
+    handleDeleteBucket() {},
   },
   watch: {
     active(value) {
@@ -274,7 +356,8 @@ export default {
 .overview-container {
   .basic-statistics,
   .domain-names,
-  .basic-settings {
+  .basic-settings,
+  .delete {
     padding: 23px 30px 29px;
     margin-bottom: 30px;
     border-radius: 10px;
