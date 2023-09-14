@@ -1,9 +1,9 @@
 <template>
   <div class="bg-white">
     <div class="bd-1 mt-3">
-      <div class="pd-20 d-flex al-c flex-wrap">
+      <div class="pd-20 pb-0 d-flex al-c flex-wrap">
         <div class="mr-auto">
-          <h3 class="mr-auto">{{ domain }}</h3>
+          <div class="mr-auto fz-20 lh-1">{{ domain }}</div>
           <div class="d-flex al-c mt-3">
             <v-icon :color="success ? 'success' : 'error'" size="18">
               mdi-{{ success ? "check-circle" : "information" }}
@@ -33,7 +33,7 @@
           </v-btn>
         </div>
       </div>
-      <div class="pd-20" v-if="!success">
+      <div class="pd-20 pt-0" v-if="!success">
         <!-- <div class="fz-14">
             <b>Nameservers</b>
           </div> -->
@@ -57,7 +57,7 @@
             </table>
           </div>
         </template>
-        <p class="gray mt-3 fz-14">
+        <p class="gray mt-4 fz-14">
           <span v-if="validInfo && validInfo.conflicts.length"
             >Afterwards,</span
           >
@@ -169,3 +169,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+table td {
+  padding: 5px 10px;
+}
+</style>
