@@ -1,17 +1,23 @@
 <template>
   <div class="mt-6">
-    <div class="d-flex al-c hide-msg">
-      <v-select
-        v-model="isAr"
-        dense
-        :items="items"
-        label="Type"
-        class="fz-14"
-      ></v-select>
-    </div>
-    <div class="tip-wrap mt-5" v-show="isAr">
-      All data on the Arweave network cannot be deleted, and there is 100MB of
-      free AR storage.
+    <div class="fz-13">Type</div>
+    <div class="hide-msg mt-3">
+      <v-btn-toggle v-model="isAr" borderless active-class="toggle-btn">
+        <v-btn :value="false" width="100" small>
+          <span :class="{ 'fw-b': !isAr }">IPFS</span>
+        </v-btn>
+
+        <v-btn :value="true" width="100" small class="py-3">
+          <span :class="{ 'fw-b': isAr }">Arweave</span>
+        </v-btn>
+      </v-btn-toggle>
+
+      <div class="tip-wrap mt-5" v-show="isAr">
+        Free for up to 150KB, apply for reduction over 150KB.
+        <a href="https://unleashar.4everland.org/" target="__blank">
+          Learn more</a
+        >.
+      </div>
     </div>
   </div>
 </template>
@@ -24,16 +30,6 @@ export default {
   data() {
     return {
       isAr: false,
-      items: [
-        {
-          text: "IPFS",
-          value: false,
-        },
-        {
-          text: "AR",
-          value: true,
-        },
-      ],
     };
   },
   watch: {
@@ -45,3 +41,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.toggle-btn {
+  background: #775da6 !important;
+  color: #fff !important;
+}
+</style>

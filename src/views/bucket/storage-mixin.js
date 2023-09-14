@@ -190,7 +190,7 @@ export default {
           await this.beforeArSync();
         }
         this.$set(it, "arLoading", true);
-        const { data } = await this.syncBucket(it.name, it.isAr);
+        await this.syncBucket(it.name, it.isAr);
         await this.$sleep(500);
         // throw new Error("test err");
       } catch (error) {
@@ -564,19 +564,7 @@ export default {
       }
       this.tableLoading = false;
     },
-    delBucket(Bucket) {
-      return new Promise((resolve, reject) => {
-        this.s3.deleteBucket(
-          {
-            Bucket,
-          },
-          (err, data) => {
-            if (err) reject(err);
-            else resolve(data);
-          }
-        );
-      });
-    },
+
     async onDelFile() {
       try {
         let tip =
@@ -598,18 +586,7 @@ export default {
     },
     delObjects(Objects) {
       const { Bucket } = this.pathInfo;
-      // const params = {
-      //   Bucket,
-      //   Delete: {
-      //     Objects, // [{key: value}, {key: value2}]
-      //     Quiet: false,
-      //   },
-      // };
       return new Promise((resolve, reject) => {
-        // this.s3.deleteObjects(params, (err, data) => {
-        //   if (err) reject(err);
-        //   else resolve(data);
-        // });
         this.s3m.removeObjects(Bucket, Objects, (err) => {
           if (err) reject(err);
           else resolve();
@@ -621,31 +598,11 @@ export default {
         this.tableLoading = true;
         this.curPage = 0;
         this.continuationTokenArr = [""];
-        const target = this.inBucket ? "bucket" : "file";
-        let html = `The following ${target}${
+        const target = "file";
+        let html = `The following file${
           this.selected.length > 1 ? "s" : ""
         } will be permanently deleted. Are you sure you want to continue?`;
 
-        if (this.inBucket) {
-          await this.$confirm(
-            html,
-            `Remove ${target}${this.selected.length > 1 ? "s" : ""}`
-          );
-          let errArr = [];
-
-          for (const row of this.selected) {
-            try {
-              await this.bucketEmpty(row);
-              await this.delBucket(row.name);
-            } catch (error) {
-              errArr.push(`${row.name}: ${error.message}`);
-            }
-          }
-          if (errArr.length)
-            setTimeout(() => {
-              this.$alert(errArr.join("<br>"));
-            }, 10);
-        }
         if (this.inFolder) {
           let hasFile = this.selected.filter((it) => it.isFile);
           let hasFolder = this.selected.filter((it) => !it.isFile);
@@ -660,7 +617,7 @@ export default {
             }
             await this.$confirm(
               html,
-              `Remove ${target}${this.selected.length > 1 ? "s" : ""}`
+              `Remove file${this.selected.length > 1 ? "s" : ""}`
             );
             this.deleteFolder = true;
             this.addDeleteFolderTask(2);
@@ -702,7 +659,6 @@ export default {
       }
       this.selected = [];
       this.getList();
-      // this.onUpdate();
     },
     async onUpdate(delay = 1000) {
       await this.$sleep(delay);
@@ -722,7 +678,6 @@ export default {
       window.open(this.getViewUrl(it));
     },
     onRow(it) {
-      const url = this.getPath(it);
       if (this.selected.length > 1) {
         if (this.selected.includes(it)) {
           const i = this.selected.findIndex((item) => item == it);
@@ -734,9 +689,17 @@ export default {
         this.selected = [];
         this.selected.push(it);
       }
-
       if (it.isFile) return;
       let urls = this.path + it.name + (it.isFile ? "" : "/") + location.search;
+
+      if (this.inBucket) {
+        return this.$router.push({
+          path: encodeURI(urls),
+          query: {
+            tab: "files",
+          },
+        });
+      }
       this.$router.push({
         path: encodeURI(urls),
       });
@@ -762,20 +725,6 @@ export default {
           ]);
         });
       });
-    },
-    async bucketEmpty(row) {
-      let params = {
-        cursor: 0,
-        prefix: "",
-        bucket: row.name,
-      };
-      const { data } = await this.$http({
-        url: "/snapshots",
-        methods: "get",
-        params: params,
-      });
-      if (data.list.length)
-        throw new Error("The bucket you tried to delete is not empty");
     },
   },
 };

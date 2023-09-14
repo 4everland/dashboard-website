@@ -223,12 +223,9 @@
         :headers="headers"
         :items="list"
         :loading="tableLoading"
-        v-model="selected"
-        :show-select="list.length > 0"
         item-key="name"
         no-data-text=""
         loading-text=""
-        :checkbox-color="$color1"
         hide-default-footer
         disable-pagination
         @click:row="onRow"
@@ -252,7 +249,7 @@
             small
             color="primary"
             v-if="item.isFile && bucketInfo.originList.length"
-            @click.stop="onStop"
+            @click.stop
             :href="getViewUrl(item)"
             target="_blank"
           >
@@ -272,7 +269,7 @@
             text
             target="_blank"
             v-if="item.hash"
-            @click.stop="onStop"
+            @click.stop
             :href="$utils.getCidLink(item.hash)"
           >
             <span class="d-ib" style="width: 80px">
@@ -284,17 +281,29 @@
             class="e-btn-text ml-2"
             icon
             small
-            @click.stop="onStop"
+            @click.stop
             v-clipboard="item.hash"
             @success="$toast('Copied!')"
           >
-            <!-- <v-icon size="14" color="primary">mdi-content-copy</v-icon> -->
             <img src="/img/svg/copy.svg" width="12" />
           </v-btn>
         </template>
         <template v-slot:item.arAct="{ item }">
           <div class="hide-msg d-flex al-c">
-            {{ item.isAr ? "AR" : "IPFS" }}
+            <div class="type-icon al-c" :class="item.isAr ? 'arweave' : 'ipfs'">
+              <img
+                width="12"
+                :src="
+                  item.isAr
+                    ? '/img/svg/hosting/h-ar.svg'
+                    : '/img/svg/hosting/h-ipfs.svg'
+                "
+                alt=""
+              />
+              <span style="margin-left: 2px" class="fz-12">
+                {{ item.isAr ? "Arweave" : "IPFS" }}
+              </span>
+            </div>
           </div>
         </template>
         <template v-slot:item.arStatus="{ item }">
@@ -322,33 +331,6 @@
             : `${inBucket ? "No buckets" : "No folders or files found"}`
         }}
       </e-empty>
-
-      <operation-bar ref="operationBar">
-        <v-checkbox
-          v-model="checked"
-          @change="handleChangeCheck"
-          class="px-4"
-          color="#34A9FF"
-        ></v-checkbox>
-        <v-btn
-          outlined
-          @click="$router.push(`/bucket/domains?bucket=${selected[0].name}`)"
-          v-show="selected.length <= 1"
-        >
-          <!-- <img src="/img/icon/ic-domain.svg" width="14" class="mr-2" /> -->
-          <span>Add Domain</span>
-        </v-btn>
-        <v-btn
-          style="border-color: #6c7789"
-          outlined
-          class="ml-4"
-          v-show="selected.length >= 1"
-          @click="onDelete"
-        >
-          <!-- <img src="/img/icon/ic-delete.svg" width="14" class="mr-2" /> -->
-          <span class="gray">Delete</span>
-        </v-btn>
-      </operation-bar>
     </div>
     <div v-if="inFolder && !finished" class="pd-20 gray ta-c fz-16 mt-5">
       <v-btn outlined v-if="list.length" @click="onLoadMore">{{
@@ -359,7 +341,6 @@
 </template>
 
 <script>
-import { bus } from "../../utils/bus";
 import mixin from "./storage-mixin";
 export default {
   mixins: [mixin],
@@ -373,7 +354,6 @@ export default {
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
       uploadingTaskLength: 0,
-      checked: false,
     };
   },
   computed: {
@@ -384,11 +364,11 @@ export default {
       if (this.inBucket)
         return [
           { text: "Bucket Name", value: "name" },
+          { text: "Type", value: "arAct" },
           { text: "Storage Usage", value: "usedStorage" },
           { text: "AR Storage Usage", value: "arUsedStorage" },
           { text: "Traffic within 30 Days", value: "traffic" },
           { text: "Visits within 30 Days", value: "visitChartData" },
-          { text: "Type", value: "arAct" },
         ];
       return [
         { text: "Name", value: "name" },
@@ -437,7 +417,6 @@ export default {
       const list = this.bucketInfo.originList.map((origin) => {
         return origin + "/" + Key;
       });
-      // console.log(list);
       if (!list.length) list.push(this.fileInfo.url);
       return list;
     },
@@ -448,12 +427,10 @@ export default {
   methods: {
     onRouteChange() {
       if (!this.inStorage) return;
-      this.selected = [];
       this.folderList = [];
       this.getList();
       this.checkNew();
     },
-    onStop() {},
     onCopied() {
       this.$toast("Copied!");
     },
@@ -516,26 +493,10 @@ export default {
         },
       });
     },
-    handleChangeCheck(val) {
-      if (!val) return (this.selected = []);
-    },
   },
   watch: {
     path() {
       this.onRouteChange();
-    },
-    selected: {
-      handler(arr) {
-        if (!this.$refs.operationBar) return;
-        if (arr.length) {
-          bus.$emit("showOperationBar", true);
-          this.$refs.operationBar.isShow = this.checked = true;
-        } else {
-          bus.$emit("showOperationBar", false);
-          this.$refs.operationBar.isShow = this.checked = false;
-        }
-      },
-      deep: true,
     },
   },
 };
@@ -576,5 +537,21 @@ export default {
     border-radius: 50%;
     transform: scale(0.7);
   }
+}
+.type-icon {
+  padding: 2px 4px;
+  border-radius: 38px;
+}
+.arweave {
+  border: 0.25px solid #000;
+  background: #fff;
+}
+.ipfs {
+  background: linear-gradient(
+      0deg,
+      rgba(96, 204, 207, 0.75) 0%,
+      rgba(96, 204, 207, 0.75) 100%
+    ),
+    #fff;
 }
 </style>

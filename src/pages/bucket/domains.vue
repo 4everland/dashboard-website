@@ -70,19 +70,7 @@
             >
           </e-tooltip>
         </template>
-        <!-- <template v-slot:item.bucketName="{ item }">
-          <v-btn
-            color="primary"
-            
-            text
-            small
-            :to="`/storage/${item.bucketName}/`"
-          >
-            <b>{{ item.bucketName }}</b></v-btn
-          >
-        </template> -->
       </v-data-table>
-
       <div class="mt-8" v-if="!list.length">
         <e-empty :loading="loading">
           {{ loading ? "Loading domains..." : "No domains" }}
@@ -93,92 +81,56 @@
     <v-dialog v-model="showPop" max-width="600">
       <div class="pd-30">
         <h2 class="fz-20">Add Domain</h2>
-        <v-window v-model="curStep">
-          <v-window-item :value="0">
-            <div class="gray mt-2 fz-14">
-              Select a bucket to add your domain
+        <div>
+          <div class="gray mt-2 fz-14">Select a bucket to add your domain</div>
+          <div class="mt-6">
+            <div v-if="!bucketList">
+              <v-skeleton-loader type="article" />
             </div>
-            <div class="mt-6">
-              <div v-if="!bucketList">
-                <v-skeleton-loader type="article" />
-              </div>
-              <template v-else>
-                <v-text-field
-                  class="hide-msg bd-1"
-                  dense
-                  solo
-                  clearable
-                  label="Search"
-                  prepend-inner-icon="mdi-magnify"
-                  v-model="keyword"
-                ></v-text-field>
+            <template v-else>
+              <v-text-field
+                class="hide-msg bd-1"
+                dense
+                solo
+                clearable
+                label="Search"
+                prepend-inner-icon="mdi-magnify"
+                v-model="keyword"
+              ></v-text-field>
 
-                <div class="bg-f6 pa-2 mt-5">
-                  <div class="ov-a" style="max-height: 40vh">
-                    <div
-                      class="d-flex al-c pd-15"
-                      v-for="(it, i) in resBucketList"
-                      :key="i"
-                    >
-                      <v-icon size="14">mdi-folder-multiple</v-icon>
-                      <span class="ml-2 fz-15">{{
-                        (it.name || "").cutStr(10, 10)
-                      }}</span>
-                      <v-btn
-                        small
-                        color="primary"
-                        class="ml-auto"
-                        @click="onSelect(it)"
-                        >Select</v-btn
-                      >
-                    </div>
-                  </div>
-                  <div class="pa-2 ta-c">
+              <div class="bg-f6 pa-2 mt-5">
+                <div class="ov-a" style="max-height: 40vh">
+                  <div
+                    class="d-flex al-c pd-15"
+                    v-for="(it, i) in resBucketList"
+                    :key="i"
+                  >
+                    <v-icon size="14">mdi-folder-multiple</v-icon>
+                    <span class="ml-2 fz-15">{{
+                      (it.name || "").cutStr(10, 10)
+                    }}</span>
                     <v-btn
-                      text
+                      small
                       color="primary"
-                      to="/bucket/storage/?new=bucket"
+                      class="ml-auto"
+                      @click="onSelect(it)"
+                      >Select</v-btn
                     >
-                      <v-icon size="16">mdi-folder-multiple-plus</v-icon>
-                      <span class="ml-1">Create New Bucket</span>
-                    </v-btn>
                   </div>
                 </div>
-              </template>
-            </div>
-          </v-window-item>
-          <v-window-item :value="1">
-            <div class="mt-5">
-              <p><b>Bucket</b>：{{ chooseBucket.name }}</p>
-              <p class="gray fz-14">
-                Enter the domain that you would like to add:
-              </p>
-            </div>
-            <div class="mt-5">
-              <v-text-field
-                dense
-                outlined
-                autofocus
-                v-model.trim="domain"
-                placeholder="mywebsite.com"
-                @keyup.enter="onAdd"
-              />
-            </div>
-          </v-window-item>
-        </v-window>
+                <div class="pa-2 ta-c">
+                  <v-btn text color="primary" to="/bucket/storage/?new=bucket">
+                    <v-icon size="16">mdi-folder-multiple-plus</v-icon>
+                    <span class="ml-1">Create New Bucket</span>
+                  </v-btn>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
 
         <div class="ta-c mt-8">
           <v-btn outlined width="90" @click="showPop = false">Cancel</v-btn>
-          <v-btn
-            color="primary"
-            width="90"
-            class="ml-6"
-            v-if="curStep > 0"
-            :loading="adding"
-            @click="onAdd"
-          >
-            Confirm
-          </v-btn>
         </div>
       </div>
     </v-dialog>
@@ -210,10 +162,7 @@ export default {
       selected: [],
       loading: false,
       showPop: false,
-      curStep: 0,
-      chooseBucket: {},
       bucketList: null,
-      adding: false,
       domain: "",
       deleting: false,
       keyword: "",
@@ -223,7 +172,6 @@ export default {
   watch: {
     showPop(val) {
       if (val) {
-        this.curStep = 0;
         this.getBuckets();
       }
     },
@@ -248,11 +196,7 @@ export default {
     getPath(item) {
       return `/bucket/domain/${item.domain}`;
     },
-    onRow(it) {
-      if (it.valid) return;
-      const url = this.getPath(it);
-      this.$router.push(url).catch(() => {});
-    },
+
     checkNew() {
       const { bucket } = this.$route.query;
       if (bucket && this.s3) {
@@ -305,31 +249,9 @@ export default {
       });
     },
     onSelect(it) {
-      this.chooseBucket = it;
-      this.curStep = 1;
+      this.$router.push(`/bucket/storage/${it.name}/?tab=settings`);
     },
-    async onAdd() {
-      try {
-        if (!this.$regMap.domain.test(this.domain)) {
-          return this.$alert(
-            `The specified value “${this.domain}” is an unqualified domain name.`
-          );
-        }
-        this.adding = true;
-        await this.$http.post("$bucektDomain/domain/bucket", {
-          domain: this.domain,
-          bucketName: this.chooseBucket.name,
-        });
-        this.showPop = false;
-        // this.getList();
-        this.$router.push(`/bucket/domain/${this.domain}`);
-        this.$toast("Added successfully");
-        this.domain = "";
-      } catch (error) {
-        console.log(error);
-      }
-      this.adding = false;
-    },
+
     async getList() {
       try {
         this.loading = true;
@@ -345,6 +267,9 @@ export default {
         console.log(error);
       }
       this.loading = false;
+    },
+    onRow(item) {
+      this.$router.push(`/bucket/storage/${item.bucketName}/?tab=settings`);
     },
   },
 };

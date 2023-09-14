@@ -36,7 +36,7 @@ export default {
         clearTimeout(state.s3Timing);
       }
       const refreshDelay = (stsData.expiredAt - 3600) * 1e3 - Date.now();
-      console.log(refreshDelay);
+
       if (refreshDelay > 1e3) {
         commit("SET_S3TIMING", refreshDelay);
       }

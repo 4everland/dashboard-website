@@ -1,17 +1,9 @@
 <template>
   <div style="height: 100%">
     <!-- <keep-alive v-if="inFolder || inFile"> -->
-    <e-tabs
-      v-if="inFolder"
-      :list="list"
-      :defTab="1"
-      bucket
-      noRouter
-      ignorePath
-    />
+    <e-tabs v-if="inFolder" :list="list" bucket noRouter ignorePath />
     <!-- </keep-alive> -->
     <storage v-if="!inFolder" />
-
     <!-- Upload/Delete Folders Component -->
     <div
       class="control"
@@ -40,10 +32,6 @@ export default {
     return {
       list: [
         {
-          text: "Overview",
-          comp: "bucket-overview",
-        },
-        {
           text: "Files",
           comp: "bucket-folder",
         },
@@ -54,6 +42,10 @@ export default {
         {
           text: "Statistics",
           comp: "bucket-statistics",
+        },
+        {
+          text: "Settings",
+          comp: "bucket-overview",
         },
       ],
       isShowOperationBar: false,

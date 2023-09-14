@@ -29,8 +29,18 @@
             >
           </template>
         </v-data-table>
+
         <e-empty v-if="!loading && !list.length">No Keys</e-empty>
       </div>
+    </div>
+    <div class="fz-14 ta-c mt-3">
+      Learn More About
+      <a
+        href="https://docs.4everland.org/storage/bucket/bucket-api-s3-compatible"
+        target="__blank"
+      >
+        S3 compatible bucket api</a
+      >.
     </div>
 
     <v-dialog v-model="showPop" max-width="500" persistent>

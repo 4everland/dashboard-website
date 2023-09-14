@@ -267,7 +267,6 @@ export default {
   },
   methods: {
     onForm1(form) {
-      console.log(form);
       this.form1 = form;
     },
     async hideAlert(isOk) {

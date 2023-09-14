@@ -30,7 +30,7 @@
     </div>
     <div class="domain-names bg-white">
       <h3>Domain Names</h3>
-      <div>
+      <!-- <div>
         <v-data-table
           class="hide-bdb"
           :headers="headers"
@@ -61,7 +61,34 @@
             {{ false ? `Loading domain...` : `No domain` }}
           </e-empty>
         </template>
+      </div> -->
+      <div>
+        <div class="gray fz-14">These domains are assigned to your bucket.</div>
+        <div class="mt-5 d-flex">
+          <v-text-field
+            outlined
+            dense
+            v-model.trim="domain"
+            @keyup.enter="onAdd"
+            placeholder="my.bucket.com"
+          >
+          </v-text-field>
+          <v-btn
+            min-width="100"
+            @click="onAdd"
+            :disabled="!domain"
+            :loading="adding"
+            color="primary"
+            class="ml-4"
+            style="margin-top: 2px"
+          >
+            Add
+          </v-btn>
+        </div>
       </div>
+      <template v-for="item in domainArr">
+        <domain :key="item.id" :info="item" @getList="getData"> </domain>
+      </template>
     </div>
     <div class="basic-settings bg-white">
       <h3>Basic Settings</h3>
@@ -81,11 +108,15 @@
           }}</e-kv>
         </v-col>
         <v-col sm="6" cols class="basic-settings-item">
-          <e-kv label="Sync to AR" min-width="120px" labelColor="#6c7789">
-            <span
-              :class="extraData.arweave.sync ? 'synced-ar' : 'no-synced-ar'"
-              >{{ extraData.arweave.sync ? "ON" : "OFF" }}</span
-            >
+          <e-kv label="Sync to Arweave" min-width="120px" labelColor="#6c7789">
+            <v-switch
+              class="mt-0"
+              v-model="isAr"
+              dense
+              :loading="arLoading"
+              :disabled="arLoading"
+              @click.stop.prevent="onSyncBucket()"
+            ></v-switch>
           </e-kv>
         </v-col>
         <v-col sm="6" cols class="basic-settings-item">
@@ -113,17 +144,30 @@
           </e-kv>
         </v-col>
         <v-col sm="6" class="basic-settings-item">
-          <e-kv label="Storage Class" min-width="120px" labelColor="#6c7789">{{
-            extraData.storageClass
+          <e-kv label="Type" min-width="120px" labelColor="#6c7789">{{
+            extraData.arweave.sync ? "Arweave" : "IPFS"
           }}</e-kv>
         </v-col>
       </v-row>
+    </div>
+    <div class="delete bg-white">
+      <h3>Delete Bucket</h3>
+      <div class="mt-4 al-c space-btw">
+        <span class="mr-4 gray"
+          >Caution: This bucket will be permanently deleted, including any
+          linked domains. Please ensure that the bucket is empty before
+          proceeding with the deletion!</span
+        >
+        <v-btn small outlined color="red" @click="onDelete"> Delete</v-btn>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import HDomain from "@/views/hosting/common/h-domain";
+import Domain from "@/views/bucket/domain/domain.vue";
 export default {
   name: "bucket-overview",
   props: {
@@ -142,23 +186,34 @@ export default {
         },
       ],
       domainList: [],
+      domainArr: [],
       customDomainList: [],
       bucketName: "",
       basicStatisticsData: [],
       extraData: {},
       tableLoading: true,
+      arLoading: false,
+      isAr: false,
+      domain: "",
+      adding: false,
     };
   },
   created() {
-    // console.log(this.$route.path.split("/")[3]);
     this.bucketName = this.$route.path.split("/")[3];
     this.getData();
   },
+  computed: {
+    ...mapState({
+      s3: (s) => s.moduleS3.s3,
+    }),
+  },
+
   methods: {
     getData() {
       this.getBasicStatisticsData();
       this.getDomainData();
       this.getExtraData();
+      this.getDomainList();
     },
     // get basicStatistics Data
     async getBasicStatisticsData() {
@@ -206,6 +261,22 @@ export default {
         console.log(error, "err");
       }
     },
+
+    async getDomainList() {
+      try {
+        const { data } = await this.$http({
+          methods: "get",
+          url: "$bucektDomain/domain/v1/list",
+          params: {
+            businessId: this.bucketName,
+            businessType: 1,
+          },
+        });
+        this.domainArr = data.content;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getDomainData() {
       try {
         const { data } = await this.$http({
@@ -245,9 +316,127 @@ export default {
           Number(data.list[0].createdAt * 1000)
         ).format();
         this.extraData = data.list[0];
+        this.isAr = this.extraData.arweave.sync;
       } catch (err) {
         console.log(err, "err");
       }
+    },
+    async onAdd() {
+      try {
+        if (!this.$regMap.domain.test(this.domain)) {
+          return this.$alert(
+            `The specified value “${this.domain}” is an unqualified domain name.`
+          );
+        }
+        this.adding = true;
+        await this.$http.post("$bucektDomain/domain/bucket", {
+          domain: this.domain,
+          bucketName: this.bucketName,
+        });
+        await this.getData();
+        this.$toast("Added successfully");
+        this.domain = "";
+      } catch (error) {
+        console.log(error);
+      }
+      this.adding = false;
+    },
+    async syncBucket(name, sync) {
+      try {
+        this.arLoading = true;
+        await this.$http.post("/arweave/buckets/" + name, {
+          sync,
+        });
+        this.arLoading = false;
+      } catch (error) {
+        this.arLoading = false;
+        console.log(error);
+      }
+    },
+
+    async onDelete() {
+      try {
+        let html = `The following bucket will be permanently deleted. Are you sure you want to continue?`;
+        await this.$confirm(html, `Remove Bucket`);
+        await this.bucketEmpty(this.bucketName);
+        await this.delBucket(this.bucketName);
+        this.$toast("delete successfully!");
+        this.$router.push("/bucket/storage/");
+      } catch (err) {
+        if (err.message) this.$alert(err.message);
+      }
+    },
+    async bucketEmpty(name) {
+      let params = {
+        cursor: 0,
+        prefix: "",
+        bucket: name,
+      };
+      const { data } = await this.$http({
+        url: "/snapshots",
+        methods: "get",
+        params: params,
+      });
+      if (data.list.length)
+        throw new Error("The bucket you tried to delete is not empty");
+    },
+    delBucket(Bucket) {
+      return new Promise((resolve, reject) => {
+        this.s3.deleteBucket(
+          {
+            Bucket,
+          },
+          (err, data) => {
+            if (err) reject(err);
+            else resolve(data);
+          }
+        );
+      });
+    },
+
+    async onSyncBucket() {
+      try {
+        if (this.arLoading) return;
+        this.arLoading = true;
+        if (!this.isAr) {
+          await this.$confirm(
+            "When you close sync to AR, it will become closing status, and you won't be able to properly close it until all your files have been synchronized. Are you sure you want to close it?"
+          );
+        } else {
+          await this.beforeArSync();
+        }
+        await this.syncBucket(this.bucketName, this.isAr);
+        await this.getExtraData();
+        await this.$sleep(500);
+      } catch (error) {
+        this.isAr = !this.isAr;
+        console.log(error);
+      }
+      this.arLoading = false;
+    },
+    async beforeArSync() {
+      const skey = "arTipOff";
+      if (localStorage[skey]) return;
+      const html =
+        `<ul>` +
+        "<li>Supports all AR public gateway access</li>" +
+        "<li class='mt-2'>Permanent storage is not removable, and file sizes are limited to 100M</li>" +
+        "<li class='mt-2'>Consumes AR storage</li>" +
+        "</ul>";
+      const fn = (data) => {
+        if (data.form1.noShow) localStorage[skey] = 1;
+      };
+      return this.$confirm(html, "Sync to AR", {
+        comp1: "no-show-form",
+      })
+        .then((data) => {
+          fn(data);
+          return data;
+        })
+        .catch((data) => {
+          fn(data);
+          throw new Error();
+        });
     },
   },
   watch: {
@@ -263,6 +452,7 @@ export default {
   },
   components: {
     HDomain,
+    Domain,
   },
 };
 </script>
@@ -274,7 +464,8 @@ export default {
 .overview-container {
   .basic-statistics,
   .domain-names,
-  .basic-settings {
+  .basic-settings,
+  .delete {
     padding: 23px 30px 29px;
     margin-bottom: 30px;
     border-radius: 10px;
