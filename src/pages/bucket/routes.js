@@ -41,24 +41,6 @@ export default [
     },
   },
   {
-    path: "/domain/:name",
-    // component: domain,
-    component: () => import("./domain"),
-    meta: {
-      title: "{name}",
-      isTab: 1,
-      links: [
-        {
-          text: "Domains",
-          to: "/bucket/domains",
-        },
-        {
-          text: "{name}",
-        },
-      ],
-    },
-  },
-  {
     path: "/access-keys",
     component: () => import("./accessKeys"),
     meta: {

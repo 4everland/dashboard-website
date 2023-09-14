@@ -140,7 +140,8 @@
             </template>
 
             <template v-slot:item.arHash="{ item }">
-              <div class="d-flex align-center" v-if="item.arHash">
+              <div v-if="item.hash == '--'">--</div>
+              <div class="d-flex align-center" v-else-if="item.arHash">
                 <a
                   :href="$utils.getCidLink(item.arHash, 'AR')"
                   class="hash-link"
@@ -353,6 +354,11 @@ export default {
     };
   },
   async created() {
+    // this.$router.replace({
+    //   query: {
+    //     tab: "files",
+    //   },
+    // });
     bus.$on("uploadingLength", async (uploadingLength) => {
       if (uploadingLength == 0) {
         await this.$sleep(1000);
@@ -416,6 +422,7 @@ export default {
     onRouteChange() {
       if (!this.inStorage || this.inFile || this.$route.query.tab != "files")
         return;
+
       this.curPage = 0;
       this.continuationTokenArr = [""];
       this.selected = [];

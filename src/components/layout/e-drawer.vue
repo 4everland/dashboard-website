@@ -304,7 +304,6 @@ export default {
       return this.onToggle(i, open, it);
     },
     onToggle(i, open, it) {
-      console.log(i, open, it);
       if (!open) return;
       if (it.group.test("/bucket")) {
         if (/^\/bucket\/pinning-service/.test(this.path)) return;

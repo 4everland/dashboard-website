@@ -29,18 +29,8 @@
       </v-row>
     </div>
     <div class="domain-names bg-white">
-      <div class="al-c space-btw mb-3">
-        <h3>Domain Names</h3>
-        <v-btn
-          small
-          color="primary"
-          outlined
-          @click="$router.push(`/bucket/domains?bucket=${bucketName}`)"
-        >
-          Add Domain
-        </v-btn>
-      </div>
-      <div>
+      <h3>Domain Names</h3>
+      <!-- <div>
         <v-data-table
           class="hide-bdb"
           :headers="headers"
@@ -71,7 +61,34 @@
             {{ false ? `Loading domain...` : `No domain` }}
           </e-empty>
         </template>
+      </div> -->
+      <div>
+        <div class="gray fz-14">These domains are assigned to your bucket.</div>
+        <div class="mt-5 d-flex">
+          <v-text-field
+            outlined
+            dense
+            v-model.trim="domain"
+            @keyup.enter="onAdd"
+            placeholder="my.bucket.com"
+          >
+          </v-text-field>
+          <v-btn
+            min-width="100"
+            @click="onAdd"
+            :disabled="!domain"
+            :loading="adding"
+            color="primary"
+            class="ml-4"
+            style="margin-top: 2px"
+          >
+            Add
+          </v-btn>
+        </div>
       </div>
+      <template v-for="item in domainArr">
+        <domain :key="item.id" :info="item" @getList="getData"> </domain>
+      </template>
     </div>
     <div class="basic-settings bg-white">
       <h3>Basic Settings</h3>
@@ -94,7 +111,7 @@
           <e-kv label="Sync to Arweave" min-width="120px" labelColor="#6c7789">
             <v-switch
               class="mt-0"
-              v-model="extraData.arweave.sync"
+              v-model="isAr"
               dense
               :loading="arLoading"
               :disabled="arLoading"
@@ -150,6 +167,7 @@
 <script>
 import { mapState } from "vuex";
 import HDomain from "@/views/hosting/common/h-domain";
+import Domain from "@/views/bucket/domain/domain.vue";
 export default {
   name: "bucket-overview",
   props: {
@@ -168,12 +186,16 @@ export default {
         },
       ],
       domainList: [],
+      domainArr: [],
       customDomainList: [],
       bucketName: "",
       basicStatisticsData: [],
       extraData: {},
       tableLoading: true,
       arLoading: false,
+      isAr: false,
+      domain: "",
+      adding: false,
     };
   },
   created() {
@@ -191,6 +213,7 @@ export default {
       this.getBasicStatisticsData();
       this.getDomainData();
       this.getExtraData();
+      this.getDomainList();
     },
     // get basicStatistics Data
     async getBasicStatisticsData() {
@@ -238,6 +261,22 @@ export default {
         console.log(error, "err");
       }
     },
+
+    async getDomainList() {
+      try {
+        const { data } = await this.$http({
+          methods: "get",
+          url: "$bucektDomain/domain/v1/list",
+          params: {
+            businessId: this.bucketName,
+            businessType: 1,
+          },
+        });
+        this.domainArr = data.content;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getDomainData() {
       try {
         const { data } = await this.$http({
@@ -277,9 +316,30 @@ export default {
           Number(data.list[0].createdAt * 1000)
         ).format();
         this.extraData = data.list[0];
+        this.isAr = this.extraData.arweave.sync;
       } catch (err) {
         console.log(err, "err");
       }
+    },
+    async onAdd() {
+      try {
+        if (!this.$regMap.domain.test(this.domain)) {
+          return this.$alert(
+            `The specified value “${this.domain}” is an unqualified domain name.`
+          );
+        }
+        this.adding = true;
+        await this.$http.post("$bucektDomain/domain/bucket", {
+          domain: this.domain,
+          bucketName: this.bucketName,
+        });
+        await this.getData();
+        this.$toast("Added successfully");
+        this.domain = "";
+      } catch (error) {
+        console.log(error);
+      }
+      this.adding = false;
     },
     async syncBucket(name, sync) {
       try {
@@ -338,17 +398,18 @@ export default {
       try {
         if (this.arLoading) return;
         this.arLoading = true;
-        if (!this.extraData.arweave.sync) {
+        if (!this.isAr) {
           await this.$confirm(
             "When you close sync to AR, it will become closing status, and you won't be able to properly close it until all your files have been synchronized. Are you sure you want to close it?"
           );
         } else {
           await this.beforeArSync();
         }
-        await this.syncBucket(this.bucketName, this.extraData.arweave.sync);
+        await this.syncBucket(this.bucketName, this.isAr);
         await this.getExtraData();
         await this.$sleep(500);
       } catch (error) {
+        this.isAr = !this.isAr;
         console.log(error);
       }
       this.arLoading = false;
@@ -391,6 +452,7 @@ export default {
   },
   components: {
     HDomain,
+    Domain,
   },
 };
 </script>
