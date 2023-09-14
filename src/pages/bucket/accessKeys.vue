@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="fz-14 ta-c mt-3">
-      Learn More About
+      Learn more about
       <a
         href="https://docs.4everland.org/storage/bucket/bucket-api-s3-compatible"
         target="__blank"
