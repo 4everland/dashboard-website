@@ -131,9 +131,9 @@ export default {
       headers: [
         { text: "Name", value: "name", sortable: false },
         { text: "Size", value: "size" },
-        { text: "AR Hash", value: "arweaveHash", sortable: false },
+        { text: "Arweave Hash", value: "arweaveHash", sortable: false },
         { text: "Last Modified", value: "updateAt" },
-        { text: "AR Status", value: "arweaveStatus", sortable: false },
+        { text: "Arweave Status", value: "arweaveStatus", sortable: false },
       ],
       list: [],
       total: 0,

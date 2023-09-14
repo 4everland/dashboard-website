@@ -354,11 +354,6 @@ export default {
     };
   },
   async created() {
-    // this.$router.replace({
-    //   query: {
-    //     tab: "files",
-    //   },
-    // });
     bus.$on("uploadingLength", async (uploadingLength) => {
       if (uploadingLength == 0) {
         await this.$sleep(1000);
@@ -402,7 +397,7 @@ export default {
       if (this.bucketInfo.isAr) {
         return [
           { text: "Name", value: "name" },
-          { text: "AR Hash", value: "arHash" },
+          { text: "Arweave Hash", value: "arHash" },
           { text: "Size", value: "size" },
           { text: "Last Modified", value: "updateAt" },
         ];

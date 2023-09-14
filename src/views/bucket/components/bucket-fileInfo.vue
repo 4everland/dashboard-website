@@ -31,7 +31,7 @@
           <p class="fz-16 fw-b file-name">{{ selected[0].name }}</p>
           <template v-for="(it, i) in fileInfoList">
             <li class="mt-2 mb-2 fz-12 d-flex align-center" :key="i">
-              <div class="d-ib pa-1" style="min-width: 85px">
+              <div class="d-ib pa-1" style="min-width: 120px">
                 <span> {{ it.label }}</span>
                 <e-tooltip top v-if="it.name == 'arHash'">
                   <v-icon slot="ref" color="#666" size="14" class="pa-1"
@@ -230,7 +230,7 @@ export default {
           value: info.hash,
         },
         {
-          label: "AR Hash",
+          label: "Arweave Hash",
           name: "arHash",
           value: info.arHash,
         },
