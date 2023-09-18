@@ -15,10 +15,10 @@ const menuMap = {
         label: "Domains",
         to: "/hosting/domains",
       },
-      {
-        label: "Statistics",
-        to: "/hosting/statistics",
-      },
+      // {
+      //   label: "Statistics",
+      //   to: "/hosting/statistics",
+      // },
       {
         label: "Auth Token",
         to: "/hosting/auth-tokens",

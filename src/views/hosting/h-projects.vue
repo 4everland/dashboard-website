@@ -260,11 +260,16 @@
           <v-expansion-panel-content>
             <v-skeleton-loader type="article" v-if="!it.statisList" />
             <div class="mt-2" v-else>
-              <e-link
+              <!-- <e-link
                 class="d-b mb-5"
                 v-for="(row, j) in it.statisList"
                 :key="j"
                 :href="j == 0 ? `/hosting/statistics/${it.name}/${it.id}` : ''"
+              > -->
+              <e-link
+                class="d-b mb-5"
+                v-for="(row, j) in it.statisList"
+                :key="j"
               >
                 <component
                   :is="row.comp"
@@ -512,14 +517,14 @@ export default {
               //     ...this.$utils.getFileSize(data.usedStorage, 1),
               //   },
               // ],
-              {
-                title: "Unique Visitor",
-                num: data.uv, // data.totalUV,
-              },
-              {
-                title: "Page Views",
-                num: data.pv, // data.totalPV,
-              },
+              // {
+              //   title: "Unique Visitor",
+              //   num: data.uv, // data.totalUV,
+              // },
+              // {
+              //   title: "Page Views",
+              //   num: data.pv, // data.totalPV,
+              // },
               {
                 title: "Bandwidth used",
                 ...this.$utils.getFileSize(data.usedBandwidth, 1),

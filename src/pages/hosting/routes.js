@@ -1,11 +1,3 @@
-// import New from "./new";
-// import Projects from "./projects";
-// import Project from "./project";
-// import Build from "./build";
-// import Domains from "./domains";
-// import Statistics from "./statis-list";
-// import StatisDetail from "./statistics-detail";
-
 export default [
   {
     path: "/auth-tokens",
@@ -99,34 +91,34 @@ export default [
       isTab: 1,
     },
   },
-  {
-    path: "/statistics",
-    // component: Statistics,
-    component: () => import("./statis-list"),
+  // {
+  //   path: "/statistics",
+  //   // component: Statistics,
+  //   component: () => import("./statis-list"),
 
-    meta: {
-      title: "Statistics",
-    },
-  },
-  {
-    path: "/statistics/:projName/:id",
-    // component: StatisDetail,
-    component: () => import("./statistics-detail"),
+  //   meta: {
+  //     title: "Statistics",
+  //   },
+  // },
+  // {
+  //   path: "/statistics/:projName/:id",
+  //   // component: StatisDetail,
+  //   component: () => import("./statistics-detail"),
 
-    meta: {
-      title: "{projName} - Statistic",
-      isTab: 1,
-      links: [
-        {
-          text: "Statistics",
-          to: "/hosting/statistics",
-        },
-        {
-          text: "{projName}",
-        },
-      ],
-    },
-  },
+  //   meta: {
+  //     title: "{projName} - Statistic",
+  //     isTab: 1,
+  //     links: [
+  //       {
+  //         text: "Statistics",
+  //         to: "/hosting/statistics",
+  //       },
+  //       {
+  //         text: "{projName}",
+  //       },
+  //     ],
+  //   },
+  // },
 ].map((it) => {
   it.path = "/hosting" + it.path;
   it.meta.group = "Hosting";
