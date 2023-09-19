@@ -56,7 +56,6 @@ export default {
       amount: "",
       needCheckApprove: true,
       depositIsApproved: false,
-      // allowance: BigNumber.from("0"),
     };
   },
   computed: {
@@ -85,7 +84,7 @@ export default {
       } else {
         let amount = "0";
         if (this.amount) {
-          amount = this.amount;
+          amount = this.amount.toString();
         }
         this.depositIsApproved = val.gte(parseUnits(amount, 6));
       }
@@ -173,7 +172,7 @@ export default {
           } else {
             let amount = "0";
             if (this.amount) {
-              amount = this.amount;
+              amount = this.amount.toString();
             }
             this.depositIsApproved = this.allowance.gte(parseUnits(amount, 6));
           }
