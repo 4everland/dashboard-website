@@ -46,6 +46,7 @@ const store = new Vuex.Store({
     changelogNum: localStorage.changelogNum || "30",
     onChain: null,
     hasClaim: false,
+    code: null,
   },
   getters: {
     teamInfo(state) {
@@ -109,6 +110,9 @@ const store = new Vuex.Store({
     SET_HAS_CLAIM(state, value) {
       state.hasClaim = value;
     },
+    SET_CODE(state, code) {
+      state.code = code;
+    },
   },
   actions: {
     async getProjectInfo({ commit }, id) {
@@ -135,6 +139,17 @@ const store = new Vuex.Store({
         } else {
           commit("SET_HAS_CLAIM", false);
         }
+      }
+    },
+    async getCode({ commit }) {
+      try {
+        const { data } = await Vue.prototype.$http.get(
+          "$auth/invitation/code/"
+        );
+        commit("SET_CODE", data);
+      } catch (error) {
+        // throw error
+        console.log(error);
       }
     },
   },
