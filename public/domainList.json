@@ -23,16 +23,6 @@
       "registerLink": "https://sns.id/?ref=4everland"
     },
     {
-      "name": ".zksync",
-      "key": ".zksync",
-      "network": "function(domain){return 'https://' +  domain + '.limo'}",
-      "host": "https://zns.is",
-      "rule": ".+.zksync$",
-      "placeholder": ".zksync Domain",
-      "icon": "zksync.svg",
-      "display": "true"
-    },
-    {
       "name": "CORE",
       "key": "core",
       "network": "function(domain){return 'https://' +  domain + '.limo'}",
