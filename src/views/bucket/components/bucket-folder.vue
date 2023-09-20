@@ -295,7 +295,23 @@
       <div class="px-7 py-6">
         <h2>Snapshot</h2>
         <div class="pl-6 pt-7">
-          <div class="fz-14 gray">
+          <div class="fz-14 mb-2">
+            Publish to the IPFS network after the snapshot completes?
+          </div>
+          <v-btn-toggle
+            v-model="isPublish"
+            borderless
+            active-class="toggle-btn"
+          >
+            <v-btn :value="true" width="100" small>
+              <span :class="{ 'fw-b': isPublish }">Publish</span>
+            </v-btn>
+
+            <v-btn :value="false" width="100" small class="py-3">
+              <span :class="{ 'fw-b': !isPublish }">Unpublish</span>
+            </v-btn>
+          </v-btn-toggle>
+          <div class="tip-wrap fz-14 mt-5">
             The CID for your folder will be generated if you Snapshot it and the
             CID can be published in the Snapshots list.
           </div>
@@ -351,6 +367,7 @@ export default {
       generateSnapshotLoading: false,
       accessKeyExpired: false,
       loadingAr: false,
+      isPublish: true,
     };
   },
   async created() {
@@ -542,13 +559,34 @@ export default {
           prefix: this.pathInfo.Prefix + this.selected[0].name + "/",
         };
         this.generateSnapshotLoading = true;
-        await this.$http.post("/snapshots", data);
+        const { data: result } = await this.$http.post("/snapshots", data);
+        if (this.isPublish) {
+          await this.snapshotPublish(result.id);
+        }
         this.generateSnapshotLoading = false;
         this.showSnapshotDialog = false;
         this.$toast("create snapshot success!");
         this.selected = [];
+        this.$router.replace({
+          query: {
+            tab: "snapshots",
+          },
+        });
       } catch (err) {
         console.log(err);
+      }
+    },
+
+    async snapshotPublish(id) {
+      try {
+        await this.$http.post(`/snapshots/${id}`, null, {
+          noTip: true,
+        });
+      } catch (error) {
+        console.log(error.code);
+        if (error.code == 409) {
+          await this.snapshotPublish(id);
+        }
       }
     },
   },
@@ -669,6 +707,6 @@ export default {
   }
 }
 .snapshot-action {
-  margin-top: 68px;
+  margin-top: 38px;
 }
 </style>

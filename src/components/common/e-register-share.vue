@@ -62,7 +62,6 @@ export default {
   data() {
     return {
       showDialog: false,
-      code: null,
       items: [
         {
           img: "/img/svg/rewardHub/web31.svg",
@@ -86,21 +85,15 @@ export default {
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
+      code: (s) => s.code,
     }),
     shareUrl() {
-      return location.origin + "?invite=" + this.code;
+      return location.origin + "?invite=" + this.$store.state.code;
     },
-  },
-  created() {
-    this.getCode();
   },
   watch: {
-    userInfo() {
-      this.getCode();
-    },
     showDialog(val) {
       if (val) {
-        // this.$refs.flowers.showAnimation();
         this.$flowersAnimation();
       }
     },
@@ -112,13 +105,6 @@ export default {
           this.shareUrl
         )}`
       );
-    },
-    async getCode() {
-      if (!localStorage.token) return;
-      this.code = this.userInfo.inviteCode;
-      if (this.code) return;
-      const { data } = await this.$http.get("$auth/invitation/code/");
-      this.code = data;
     },
     handleStart() {
       this.showDialog = false;

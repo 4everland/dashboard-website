@@ -170,9 +170,10 @@ export default {
       userInfo: (s) => s.userInfo,
       chainId: (s) => s.chainId,
       onChain: (s) => s.onChain,
+      code: (s) => s.code,
     }),
     shareUrl() {
-      return location.origin + "?invite=" + this.code;
+      return location.origin + "?invite=" + this.$store.state.code;
     },
     tips() {
       if (this.onChain)
@@ -253,8 +254,7 @@ export default {
       }
     },
   },
-  async created() {
-    this.getCode();
+  created() {
     this.isRegister();
   },
   mounted() {
@@ -386,11 +386,6 @@ export default {
         //
       }
       this.loading = false;
-    },
-    async getCode() {
-      if (this.code) return;
-      const { data } = await this.$http.get("$auth/invitation/code");
-      this.code = data;
     },
     async handleTypeClaim(type = "Polygon") {
       try {

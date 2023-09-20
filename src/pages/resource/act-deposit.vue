@@ -34,7 +34,7 @@
     <div style="height: 30vh"></div>
     <pay-confirm
       :price="curAmount"
-      :text="isApproved ? 'Deposit' : 'Approve'"
+      :text="depositApproved ? 'Deposit' : 'Approve'"
       :loading="approving"
       @submit="onSubmit"
     ></pay-confirm>
@@ -47,6 +47,7 @@ import PayConfirm from "@/views/pay/pay-confirm";
 import mixin from "@/views/pay/mixin";
 import { ethers } from "ethers";
 import { mapState } from "vuex";
+import { parseUnits } from "ethers/lib/utils";
 
 export default {
   mixins: [mixin],
@@ -54,6 +55,7 @@ export default {
     return {
       amount: "",
       needCheckApprove: true,
+      depositIsApproved: false,
     };
   },
   computed: {
@@ -68,13 +70,37 @@ export default {
       // if (this.onChain) return ["Polygon", "Ethereum", "BSC"];
       return ["Polygon"];
     },
+    depositApproved() {
+      return this.isApproved || this.depositIsApproved;
+    },
   },
   mounted() {
     this.getBalance();
   },
   watch: {
+    allowance(val) {
+      if (val.eq(0)) {
+        this.depositIsApproved = false;
+      } else {
+        let amount = "0";
+        if (this.amount) {
+          amount = this.amount.toString();
+        }
+        this.depositIsApproved = val.gte(parseUnits(amount, 6));
+      }
+    },
     amount(val) {
-      // console.log(val);
+      if (!this.isApproved) {
+        if (this.allowance.eq(0)) {
+          this.depositIsApproved = false;
+        } else {
+          let amount = "0";
+          if (val) {
+            amount = val.toString();
+          }
+          this.depositIsApproved = this.allowance.gte(parseUnits(amount, 6));
+        }
+      }
       if (val >= 0) {
         if (this.walletBalance && val > this.walletBalance) {
           this.amount = this.walletBalance;
@@ -133,8 +159,24 @@ export default {
         if (!target) {
           return this.onConnect();
         }
-        if (!this.isApproved) {
-          return this.onApprove();
+
+        console.log(this.isApproved, "isApproved");
+        if (!this.depositApproved) {
+          await this.onApprove();
+          this.allowance = await this.curContract[this.usdcKey].allowance(
+            this.connectAddr,
+            this.rechargeAddr
+          );
+          if (this.allowance.eq(0)) {
+            this.depositIsApproved = false;
+          } else {
+            let amount = "0";
+            if (this.amount) {
+              amount = this.amount.toString();
+            }
+            this.depositIsApproved = this.allowance.gte(parseUnits(amount, 6));
+          }
+          return;
         }
         this.$loading();
         let tx = null;

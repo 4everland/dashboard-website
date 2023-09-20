@@ -65,6 +65,10 @@ export default {
       );
     },
   },
+
+  async created() {
+    if (localStorage.token) await this.$store.dispatch("getCode");
+  },
 };
 </script>
 

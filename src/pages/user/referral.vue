@@ -259,7 +259,7 @@ export default {
       isFocus: (s) => s.isFocus,
     }),
     shareUrl() {
-      return location.origin + "?invite=" + this.code;
+      return location.origin + "?invite=" + this.$store.state.code;
     },
     pageLen() {
       return Math.ceil(this.total / 10);
@@ -305,13 +305,9 @@ export default {
     };
   },
   created() {
-    this.getCode();
     this.getList();
   },
   watch: {
-    userInfo() {
-      this.getCode();
-    },
     async code() {
       this.copyTxt = this.sharePre + this.shareUrl;
       const url = await qrcode.toDataURL(this.shareUrl);
@@ -381,13 +377,6 @@ export default {
       if (!this.code) return;
       this.popInvite = true;
     },
-    async getCode() {
-      this.code = this.userInfo.inviteCode;
-      if (this.code) return;
-      const { data } = await this.$http.get("$auth/invitation/code/");
-      this.code = data;
-    },
-
     async getOverview() {
       try {
         const dateStamp = new Date(new Date().toLocaleDateString()).getTime();

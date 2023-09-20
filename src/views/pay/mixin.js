@@ -25,6 +25,7 @@ export default {
       // client,
       walletBalance: 0,
       balance: null,
+      allowance: null,
     };
   },
   computed: {
@@ -217,6 +218,7 @@ export default {
     },
     async checkApprove(isBuy) {
       console.log(isBuy);
+      // return (this.isApproved = false);
       if (
         isBuy &&
         this.payBy == "everPay" &&
@@ -228,13 +230,21 @@ export default {
         const addr = isBuy ? this.payAddr : this.rechargeAddr;
         console.log("check approve", this.connectAddr, addr);
         if (!this.connectAddr) return console.log("no connectAddr");
+        console.log(this.curContract[this.usdcKey], this.connectAddr, addr);
         const allowance = await this.curContract[this.usdcKey].allowance(
           this.connectAddr,
           addr
         );
-        console.log(allowance);
-        const minAllowance = uint256Max.shr(1);
-        this.isApproved = !allowance.lt(minAllowance);
+        console.log(allowance, "allowance");
+        this.isApproved = allowance.eq(uint256Max);
+
+        // if (!amount) {
+        //   this.isApproved = allowance.eq(uint256Max);
+        //   return;
+        // }
+
+        // this.isApproved = allowance.gte(amount);
+
         console.log("isApproved", this.isApproved, allowance);
       } catch (error) {
         console.log("check approve error");
@@ -259,7 +269,8 @@ export default {
         console.log("tx", tx);
         const receipt = await tx.wait();
         console.log(receipt);
-        this.isApproved = true;
+        // this.isApproved = true;
+
         this.$loading.close();
         this.$toast("Approved successfully");
       } catch (error) {
@@ -487,6 +498,12 @@ export default {
           ethContract.setProvider(provider);
           this.curContract = ethContract;
         }
+        const addr = this.isSubscribe ? this.payAddr : this.rechargeAddr;
+        this.allowance = await this.curContract[this.usdcKey].allowance(
+          this.connectAddr,
+          addr
+        );
+
         // this.getSign();
         if (this.needCheckApprove) {
           this.checkApprove(this.isSubscribe);

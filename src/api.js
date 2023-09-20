@@ -225,7 +225,8 @@ http.interceptors.response.use(
     const { data = {}, status, statusText, config = {} } = error.response || {};
     // console.log(error, status, statusText);
     if (status == 409) {
-      console.log(data);
+      error.code = status;
+      if (config.noTip) return Promise.reject(error);
       setTimeout(() => {
         if (typeof data.data == "string") {
           const jsonData = JSON.parse(data.data);

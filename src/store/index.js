@@ -47,6 +47,7 @@ const store = new Vuex.Store({
     onChain: null,
     hasClaim: false,
     pointsTrack: 0,
+    code: null,
   },
   getters: {
     teamInfo(state) {
@@ -111,6 +112,9 @@ const store = new Vuex.Store({
       state.pointsTrack = data.total;
       state.hasClaim = data.hasClaim;
     },
+    SET_CODE(state, code) {
+      state.code = code;
+    },
   },
   actions: {
     async getProjectInfo({ commit }, id) {
@@ -141,6 +145,15 @@ const store = new Vuex.Store({
           commit("SET_HAS_CLAIM", data);
         }
       } catch (error) {
+        console.log(error);
+      }
+    },
+    async getCode({ commit }) {
+      try {
+        const { data } = await Vue.prototype.$http.get("$auth/invitation/code");
+        commit("SET_CODE", data);
+      } catch (error) {
+        // throw error
         console.log(error);
       }
     },

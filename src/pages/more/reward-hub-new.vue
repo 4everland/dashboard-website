@@ -211,9 +211,10 @@ export default {
       chainId: (s) => s.chainId,
       onChain: (s) => s.onChain,
       pointsTrack: (s) => s.pointsTrack,
+      code: (s) => s.code,
     }),
     shareUrl() {
-      return location.origin + "?invite=" + this.code;
+      return location.origin + "?invite=" + this.$store.state.code;
     },
   },
   data() {
@@ -277,10 +278,7 @@ export default {
       claimed_icon: require("@/assets/imgs/reward_hub/icon_points_green.png"),
     };
   },
-  async created() {
-    this.getCode();
-    // this.isRegister();
-  },
+  async created() {},
   mounted() {
     this.init();
   },
@@ -372,11 +370,6 @@ export default {
     async onPopup(data) {
       await this.$alert("+50 Activity", "Get it!");
       this.init();
-    },
-    async getCode() {
-      if (this.code) return;
-      const { data } = await this.$http.get("$auth/invitation/code");
-      this.code = data;
     },
     async handleTypeClaim(type = "Polygon") {
       try {

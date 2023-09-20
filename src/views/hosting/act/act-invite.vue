@@ -127,14 +127,14 @@ export default {
       userInfo: (s) => s.userInfo,
       actStatus: (s) => s.actStatus,
       isTouch: (s) => s.isTouch,
+      code: (s) => s.code,
     }),
     shareUrl() {
-      return location.origin + "?invite=" + this.code;
+      return location.origin + "?invite=" + this.$store.state.code;
     },
   },
   data() {
     return {
-      code: null,
       list: [],
       page: 1,
       pageLen: 1,
@@ -150,13 +150,9 @@ export default {
     };
   },
   created() {
-    this.getCode();
     this.getList();
   },
   watch: {
-    userInfo() {
-      this.getCode();
-    },
     async code() {
       this.copyTxt = this.sharePre + this.shareUrl;
       const url = await qrcode.toDataURL(this.shareUrl);
