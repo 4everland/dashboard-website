@@ -13,7 +13,7 @@ export default [
   },
   {
     path: "/reward-hub",
-    component: () => import("./reward-hub"),
+    component: () => import("./reward-hub-new"),
     meta: {
       title: "Reward Hub",
       isTab: 1,
