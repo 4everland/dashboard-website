@@ -232,6 +232,7 @@
         </v-col>
       </v-row>
     </div>
+
     <share-img ref="shareImg" />
   </div>
 </template>
@@ -330,15 +331,14 @@ export default {
           this.onEmailBind();
           break;
         case "NONE":
+          this.init();
           break;
         default:
           break;
       }
     },
     async onPopup(item, data) {
-      await this.$alert(`+${item.reward} Activity`, data.message || "Get it!", {
-        width: 300,
-      });
+      await this.$alert(`+${item.reward} Points`, data.message || "Get it!");
       this.init();
     },
     async onEmailBind() {

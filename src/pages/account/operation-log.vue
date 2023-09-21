@@ -142,7 +142,7 @@ export default {
       if (this.rewardHubAct.includes(act)) {
         console.log(it.message);
         it.desc = it.message;
-        it.path = "reward hub";
+        it.path = "Reward hub";
         it.link = "/reward-hub";
         return;
       }
