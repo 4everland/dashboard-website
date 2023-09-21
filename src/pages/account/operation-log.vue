@@ -98,6 +98,23 @@ export default {
         { text: "Past 30d", value: "DAY_30" },
       ],
       dTypeSelected: "DAY_1",
+      rewardHubAct: [
+        "OAUTH_BIND_EMAIL",
+        "OAUTH_BIND_DISCORD",
+        "OAUTH_BIND_TELEGRAM",
+        "OAUTH_BIND_TWITTER",
+        "OAUTH_CREATE_BUCKET",
+        "OAUTH_ARWEAVE_BUCKET",
+        "OAUTH_BIND_BUCKET_DOMAIN",
+        "OAUTH_SNAPSHOT",
+        "OAUTH_BIND_HOSTING_DOMAIN",
+        "OAUTH_DEPLOYED_IPFS",
+        "OAUTH_DEPLOYED_AR",
+        "OAUTH_DEPLOYED_GREENFIELD",
+        "OAUTH_MINT_CHAIN",
+        "OAUTH_CREATE_GATEWAY",
+        "OAUTH_INVITE_TEAM",
+      ],
     };
   },
   watch: {
@@ -122,6 +139,13 @@ export default {
         console.log(it, error.message);
       }
       const utils = this.$utils;
+      if (this.rewardHubAct.includes(act)) {
+        console.log(it.message);
+        it.desc = it.message;
+        it.path = "reward hub";
+        it.link = "/reward-hub";
+        return;
+      }
       if (act == "OAUTH_REGISTER_DRIP") {
         it.desc = "Got airdrop resources for new users";
         it.path = "Resource Transaction History";
