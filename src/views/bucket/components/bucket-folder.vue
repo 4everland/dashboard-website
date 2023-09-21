@@ -292,28 +292,29 @@
     </div>
 
     <v-dialog v-model="showSnapshotDialog" max-width="600">
-      <div class="px-7 py-6">
-        <h2>Snapshot</h2>
-        <div class="pl-6 pt-7">
+      <div class="pa-6">
+        <h3>Snapshot</h3>
+        <div class="pl-6 pt-5">
           <div class="fz-14 mb-2">
-            Publish to the IPFS network after the snapshot completes?
+            You are taking a snapshot of the current folder and generating a
+            CID. Do you require the simultaneous publication of this CID to the
+            IPFS network?
           </div>
-          <v-btn-toggle
-            v-model="isPublish"
-            borderless
-            active-class="toggle-btn"
-          >
-            <v-btn :value="true" width="100" small>
-              <span :class="{ 'fw-b': isPublish }">Publish</span>
-            </v-btn>
 
-            <v-btn :value="false" width="100" small class="py-3">
-              <span :class="{ 'fw-b': !isPublish }">Unpublish</span>
-            </v-btn>
-          </v-btn-toggle>
-          <div class="tip-wrap fz-14 mt-5">
-            The CID for your folder will be generated if you Snapshot it and the
-            CID can be published in the Snapshots list.
+          <v-radio-group v-model="isPublish" mandatory row>
+            <v-radio label="Yes, please" :value="true"></v-radio>
+            <v-radio
+              class="un-publish"
+              label="No, I'll do it manually."
+              :value="false"
+            ></v-radio>
+          </v-radio-group>
+          <div class="tip-wrap fz-14">
+            {{
+              isPublish
+                ? "Able to query the CID immediately on the IPFS network and obtain the data."
+                : "With only the CID generated, the data cannot be queried on the IPFS network. You can publish it manually in the snapshots list later."
+            }}
           </div>
           <div class="snapshot-action al-c justify-center">
             <v-btn
@@ -637,6 +638,12 @@ export default {
 /* .data-table tr:nth-of-type(odd) {
   background: #f7f9fb;
 } */
+.v-radio .v-label {
+  font-size: 14px !important;
+}
+.un-publish {
+  margin-left: 40px;
+}
 </style>
 <style lang="scss" scoped>
 .hash-link {
