@@ -207,48 +207,16 @@
       </div>
     </div>
 
-    <!-- share Img -->
-    <v-dialog v-model="popInvite" max-width="450" v-if="code">
-      <e-dialog-close @click="popInvite = false" />
-      <div class="pd-30 mt-2">
-        <div v-show="isBgLoad">
-          <div class="d-flex f-center al-c">
-            <div class="mt-3 bd-1 pos-r">
-              <div class="pos-r" ref="imgWrap">
-                <img
-                  @load="isBgLoad = true"
-                  src="/img/bg/user/refer-share.png"
-                  style="width: 220px"
-                  class="ev-n"
-                />
-                <img v-if="qrImg" :src="qrImg" class="pos-a refer-qr-img" />
-              </div>
-              <div class="pos-mask share-img-wrap" v-if="shareImg">
-                <img :src="shareImg" class="w100p" />
-              </div>
-            </div>
-          </div>
-
-          <div class="mt-5 gray ta-c" v-if="isTouch">
-            Long press for Preservation
-          </div>
-          <div v-else class="mt-10 ta-c">
-            <v-btn color="primary" @click="onSaveImg">Preservation</v-btn>
-          </div>
-        </div>
-      </div>
-    </v-dialog>
+    <share-img ref="shareImg" />
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import * as clipboard from "clipboard-polyfill/text";
-import html2canvas from "html2canvas";
-import canvas2image from "@/plugins/canvas2image";
-import qrcode from "qrcode";
+import shareImg from "@/components/rewardHub/shareImg";
 
 export default {
+  components: { shareImg },
   computed: {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -257,6 +225,7 @@ export default {
       userInfo: (s) => s.userInfo,
       isTouch: (s) => s.isTouch,
       isFocus: (s) => s.isFocus,
+      code: (s) => s.code,
     }),
     shareUrl() {
       return location.origin + "?invite=" + this.$store.state.code;
@@ -268,7 +237,6 @@ export default {
   data() {
     return {
       frameSrc: "",
-      code: null,
       list: [],
       page: 1,
       total: 0,
@@ -277,9 +245,6 @@ export default {
       sharePre:
         "I am participating in 4EVERLAND  First Landing event. Deploying projects to win your share of 50 million 4EVER, come and join here: ",
       copyTxt: "",
-      isBgLoad: false,
-      qrImg: "",
-      shareImg: "",
       mLinks: [
         {
           url: "https://twitter.com/4everland_org",
@@ -307,75 +272,13 @@ export default {
   created() {
     this.getList();
   },
-  watch: {
-    async code() {
-      this.copyTxt = this.sharePre + this.shareUrl;
-      const url = await qrcode.toDataURL(this.shareUrl);
-      this.qrImg = url;
-    },
-    isBgLoad() {
-      console.log("load");
-      setTimeout(() => {
-        this.genImg();
-      }, 300);
-    },
-  },
   methods: {
     onPage(curPage) {
       this.page = curPage;
       this.getList();
     },
-    async onCopy() {
-      try {
-        await clipboard.writeText(this.shareUrl);
-        this.$toast("Copied!");
-      } catch (error) {
-        this.$toast("Copied fail");
-      }
-    },
-    onCopied() {
-      this.$toast("Copied!");
-      this.popInvite = false;
-    },
-    onSaveImg() {
-      this.genImg("save");
-    },
-    async genImg(act) {
-      try {
-        const el = this.$refs.imgWrap;
-        let canvas = document.createElement("canvas");
-        const scale = 3;
-        const width = el.offsetWidth * scale;
-        const height = el.offsetHeight * scale;
-        canvas.width = width * scale;
-        canvas.height = height * scale;
-        canvas.getContext("2d").scale(scale, scale);
-        canvas = await html2canvas(el, {
-          canvas,
-          width,
-          height,
-          scale,
-        });
-        // console.log(canvas);
-        if (act == "save") {
-          canvas2image.saveAsImage(
-            canvas,
-            width,
-            height,
-            "jpeg",
-            "4everland-" + this.code
-          );
-        }
-        const img = canvas2image.convertToJPEG(canvas, width, height);
-        this.shareImg = img.src;
-      } catch (error) {
-        console.log(error);
-        this.$toast("fail to generate share image");
-      }
-    },
     onInvite() {
-      if (!this.code) return;
-      this.popInvite = true;
+      this.$refs.shareImg.onShow();
     },
     async getOverview() {
       try {

@@ -191,7 +191,7 @@ Are you sure you want to continue?`;
     },
     async handleShare() {
       try {
-        await this.$http.post("$template/share", {}, { noTip: 1 });
+        await this.$http.post("$auth/share", {}, { noTip: 1 });
       } catch (error) {
         console.log(error);
       }
