@@ -13,13 +13,14 @@ import {
 } from "./contracts-addr";
 
 class SrcChainContracts extends Contracts {
-  dstProvider = null;
+  dst = null;
 
-  constructor() {
-    super();
-    // mumbai rpc
-    this.dstProvider = new providers.JsonRpcProvider(GoerliRpc);
+  get dstProvider() {
+    if (this.dst) return this.dst;
+    this.dst = new providers.JsonRpcProvider(GoerliRpc);
+    return this.dst;
   }
+
   IERC20(addr) {
     return IERC20__factory.connect(addr, this.signer);
   }

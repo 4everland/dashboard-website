@@ -80,6 +80,69 @@
         >
       </v-col>
     </v-row>
+
+    <div class="al-c flex-wrap">
+      <div
+        class="reward-voucher mr-6 mt-5"
+        v-for="item in rewardVoucherList"
+        :key="item.code"
+      >
+        <div class="left fz-12">
+          You have an unclaimed
+          <p class="my-0 fw-b">{{ item.remark }}</p>
+          voucher.
+        </div>
+        <div class="right">
+          <v-btn
+            small
+            color="primary"
+            elevation="0"
+            @click="handleClaimVoucher(item)"
+            >Claim</v-btn
+          >
+        </div>
+      </div>
+    </div>
+
+    <v-dialog
+      v-model="showPop"
+      max-width="550"
+      v-if="rewardVoucherInfo"
+      persistent
+    >
+      <div class="pa-6">
+        <h3>{{ rewardVoucherInfo.remark }}</h3>
+        <div class="pa-4">
+          Successful claimed! Please save your voucher information carefully, as
+          this message will not appear again.
+        </div>
+        <ul class="voucher-info fz-14 pl-0">
+          <li>
+            <div class="voucher-label gray">Voucher Type</div>
+            <div>Gift Voucher</div>
+          </li>
+          <li>
+            <div class="voucher-label gray">Expiry Date</div>
+            <div>
+              {{ new Date(rewardVoucherInfo.expiredAt).format("date") }}
+            </div>
+          </li>
+          <li>
+            <div class="voucher-label gray">Voucher Amount</div>
+            <div>{{ rewardVoucherInfo.amount }} USDC</div>
+          </li>
+          <li>
+            <div class="voucher-label gray">Voucher Code</div>
+            <div>{{ rewardVoucherInfo.code }}</div>
+          </li>
+        </ul>
+        <div class="al-c justify-center mt-8">
+          <v-btn color="primary" class="mx-auto" @click="handleCopy"
+            >Copy and close</v-btn
+          >
+        </div>
+      </div>
+    </v-dialog>
     <div style="height: 20vh"></div>
 
     <pay-confirm
@@ -146,6 +209,9 @@ export default {
       symbol: "USDC",
       curEveypayChannel: null,
       allowEverPay: false,
+      showPop: false,
+      rewardVoucherInfo: null,
+      rewardVoucherList: [],
     };
   },
   computed: {
@@ -177,6 +243,7 @@ export default {
   },
   created() {
     if (!this.list) this.$router.replace("/resource/subscribe");
+    this.checkHaveVoucher();
     bus.$on("everPayChannel", async (curEveypayChannel) => {
       this.curEveypayChannel = curEveypayChannel;
       let finalPrice = this.getFinalPrice();
@@ -466,6 +533,33 @@ export default {
     handleCheckSymbol() {
       this.$refs.payNetwork.$refs.everPay.showEverPay = true;
     },
+
+    async checkHaveVoucher() {
+      try {
+        const { data } = await this.$http.get("$auth/vouchers");
+        this.rewardVoucherList = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async handleClaimVoucher(item) {
+      try {
+        this.rewardVoucherInfo = item;
+        this.showPop = true;
+        await this.$http.post("$auth/vouchers/claim", {
+          code: item.code,
+          activity: item.activity,
+        });
+        await this.checkHaveVoucher();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    handleCopy() {
+      this.$copy(this.rewardVoucherInfo.code);
+      this.voucherCode = this.rewardVoucherInfo.code;
+      this.showPop = false;
+    },
   },
   components: {
     PayNetwork,
@@ -486,5 +580,40 @@ export default {
   display: inline-block;
   min-width: 130px;
   text-align: right;
+}
+.reward-voucher {
+  position: relative;
+  width: 320px;
+  height: 104px;
+  background: url("/img/bg/resource/voucher-bg.png") no-repeat;
+  background-size: 100% 100%;
+  > div {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .left {
+    left: 20px;
+    width: 200px;
+  }
+  .right {
+    right: 0;
+    padding: 20px 27px;
+    border-left: 2px dashed #735ea1;
+  }
+}
+.voucher-info {
+  li {
+    display: flex;
+    padding-left: 20px;
+    align-items: center;
+    // justify-content: center;
+    .voucher-label {
+      min-width: 150px;
+    }
+  }
+  li + li {
+    margin-top: 8px;
+  }
 }
 </style>
