@@ -180,7 +180,7 @@
         </v-col>
       </v-row>
     </div>
-    <div class="tasks-box beginner-box">
+    <div v-if="beginnerList.list?.length > 0" class="tasks-box beginner-box">
       <div class="beginner-title">Beginner Tasks</div>
       <v-row class="task-list">
         <v-col
@@ -280,7 +280,9 @@ export default {
       claimed_icon: require("@/assets/imgs/reward_hub/icon_points_green.png"),
     };
   },
-  async created() {},
+  created() {
+    // this.onPopup({ reward: 50 }, { message: "12321" });
+  },
   mounted() {
     this.init();
   },
@@ -328,14 +330,15 @@ export default {
           this.onEmailBind();
           break;
         case "NONE":
-          // this.onPopup(item,data);
           break;
         default:
           break;
       }
     },
     async onPopup(item, data) {
-      await this.$alert(`+${item.reward} Activity`, data.message || "Get it!");
+      await this.$alert(`+${item.reward} Activity`, data.message || "Get it!", {
+        width: 300,
+      });
       this.init();
     },
     async onEmailBind() {
