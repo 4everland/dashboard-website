@@ -109,7 +109,7 @@
               <div class="task-info">
                 <div class="task-name">{{ item.name }}</div>
                 <div class="task-tips">
-                  {{ `${item.step} Active/${item.description}` }}
+                  {{ `${item.step} Active | ${item.description}` }}
                 </div>
               </div>
               <div class="task-btn" v-if="item.type == 'DAILY_INVITE'">
@@ -206,7 +206,9 @@
               <div class="task-info">
                 <div class="task-name">{{ item.name }}</div>
                 <div class="task-tips">
-                  {{ `${item.reward} Points/${item.description} ` }}
+                  {{
+                    `${item.reward} Points ${item.tips} | ${item.description} `
+                  }}
                 </div>
               </div>
               <div class="task-btn">
@@ -281,9 +283,7 @@ export default {
       claimed_icon: require("@/assets/imgs/reward_hub/icon_points_green.png"),
     };
   },
-  created() {
-    // this.onPopup({ reward: 50 }, { message: "12321" });
-  },
+  created() {},
   mounted() {
     this.init();
   },
@@ -327,6 +327,9 @@ export default {
         case "POPUP":
           this.onPopup(item, data);
           break;
+        case "POPUP_S_C_T":
+          this.onPopupMint(item, data);
+          break;
         case "EMAIL_BIND":
           this.onEmailBind();
           break;
@@ -338,7 +341,14 @@ export default {
       }
     },
     async onPopup(item, data) {
-      await this.$alert(`+${item.reward} Points`, data.message || "Get it!");
+      await this.$alert(`+${item.reward} Points`, data.message, {
+        maxWidth: 300,
+        textCenter: true,
+      });
+      this.init();
+    },
+    async onPopupMint(item, data) {
+      await this.$alert(data.tips, data.message);
       this.init();
     },
     async onEmailBind() {
