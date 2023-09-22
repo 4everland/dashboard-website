@@ -13,7 +13,7 @@
             Your project has been successfully deployed.
           </div>
         </div>
-        <div class="pt-10 pb-8 d-flex al-c pos-r">
+        <div class="pt-10 pb-8 d-flex al-c pos-r" style="height: 300px">
           <!--  -->
           <v-img
             class="bdrs-5 pos-a img-bg"
@@ -22,9 +22,9 @@
             :src="$getImgSrc(info.screenshotPath)"
             lazy-src="/img/bg/empty/project.png"
             aspect-ratio="1.6"
-            max-width="420"
+            width="400"
           />
-          <div class="flex-1" style="margin-left: -30px">
+          <div class="ml-auto pos-r" style="width: 530px; z-index: 599">
             <div class="fz-14 mt-5">
               <div class="al-c">
                 <img
