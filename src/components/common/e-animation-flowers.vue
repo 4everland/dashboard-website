@@ -113,7 +113,7 @@ export default {
 
 <style lang="scss" scoped>
 .animation-container {
-  z-index: 200;
+  z-index: 999999;
   position: fixed;
   left: 0;
   top: 0;
