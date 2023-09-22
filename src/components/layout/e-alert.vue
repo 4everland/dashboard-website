@@ -37,7 +37,7 @@
 
     <v-dialog
       v-model="showAlert"
-      max-width="600"
+      :max-width="alertInfo.maxWidth || 600"
       width="600"
       :persistent="alertInfo.persistent"
     >
@@ -58,7 +58,13 @@
 
         <v-card-text>
           <div class="pa-5">
-            <div class="fz-16 gray-6" v-html="alertInfo.content"></div>
+            <div
+              class="fz-16 gray-6"
+              :class="{
+                'text-center': alertInfo.textCenter,
+              }"
+              v-html="alertInfo.content"
+            ></div>
             <div class="mt-10" v-if="alertInfo.showInput">
               <v-form ref="form" lazy-validation @submit.native.prevent>
                 <v-text-field

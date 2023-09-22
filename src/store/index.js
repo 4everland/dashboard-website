@@ -46,6 +46,7 @@ const store = new Vuex.Store({
     changelogNum: localStorage.changelogNum || "30",
     onChain: null,
     hasClaim: false,
+    pointsTrack: 0,
     code: null,
   },
   getters: {
@@ -107,8 +108,9 @@ const store = new Vuex.Store({
         projectInfo: data,
       });
     },
-    SET_HAS_CLAIM(state, value) {
-      state.hasClaim = value;
+    SET_HAS_CLAIM(state, data) {
+      state.pointsTrack = data.total;
+      state.hasClaim = data.hasClaim;
     },
     SET_CODE(state, code) {
       state.code = code;
@@ -129,23 +131,26 @@ const store = new Vuex.Store({
     },
     async checkClaim({ commit }) {
       try {
-        await Vue.prototype.$http("$auth/rewardhub/un-claimed", {
-          noTip: 1,
-        });
+        const { data } = await Vue.prototype.$http(
+          "$auth/activities/point/overview",
+          {
+            noTip: 1,
+          }
+        );
+        if (data.unclaimed > 0) {
+          data.hasClaim = true;
+          commit("SET_HAS_CLAIM", data);
+        } else {
+          data.hasClaim = false;
+          commit("SET_HAS_CLAIM", data);
+        }
       } catch (error) {
         console.log(error);
-        if (error.response.status == 302) {
-          commit("SET_HAS_CLAIM", true);
-        } else {
-          commit("SET_HAS_CLAIM", false);
-        }
       }
     },
     async getCode({ commit }) {
       try {
-        const { data } = await Vue.prototype.$http.get(
-          "$auth/invitation/code/"
-        );
+        const { data } = await Vue.prototype.$http.get("$auth/invitation/code");
         commit("SET_CODE", data);
       } catch (error) {
         // throw error

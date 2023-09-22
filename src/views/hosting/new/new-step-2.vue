@@ -229,7 +229,7 @@ Are you sure you want to continue?`;
     },
     async handleShare() {
       try {
-        await this.$http.post("$template/share", {}, { noTip: 1 });
+        await this.$http.post("$auth/share", {}, { noTip: 1 });
         window.open(
           `https://twitter.com/intent/tweet?text=${encodeURI(
             `I've deployed a wonderful Dapp through @4everland_org Hosting, which helps developers quickly build, publish, and manage Dwebs. Come and experience it!  

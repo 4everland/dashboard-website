@@ -88,7 +88,7 @@ export default {
       code: (s) => s.code,
     }),
     shareUrl() {
-      return location.origin + "?invite=" + this.code;
+      return location.origin + "?invite=" + this.$store.state.code;
     },
   },
   watch: {
