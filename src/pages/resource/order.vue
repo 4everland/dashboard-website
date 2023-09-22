@@ -113,8 +113,8 @@
       <div class="pa-6">
         <h3>{{ rewardVoucherInfo.remark }}</h3>
         <div class="pa-4">
-          Successful claimed! Please save your voucher information carefully, as
-          this message will not appear again.
+          Please save your voucher information carefully, as this message will
+          not appear again after claimed.
         </div>
         <ul class="voucher-info fz-14 pl-0">
           <li>
@@ -137,8 +137,9 @@
           </li>
         </ul>
         <div class="al-c justify-center mt-8">
+          <v-btn class="mx-auto" @click="showPop = false">Cancel</v-btn>
           <v-btn color="primary" class="mx-auto" @click="handleCopy"
-            >Copy and close</v-btn
+            >Copy and claim</v-btn
           >
         </div>
       </div>
@@ -543,22 +544,22 @@ export default {
       }
     },
     async handleClaimVoucher(item) {
+      this.rewardVoucherInfo = item;
+      this.showPop = true;
+    },
+    async handleCopy() {
       try {
-        this.rewardVoucherInfo = item;
-        this.showPop = true;
         await this.$http.post("$auth/vouchers/claim", {
-          code: item.code,
-          activity: item.activity,
+          code: this.rewardVoucherInfo.code,
+          activity: this.rewardVoucherInfo.activity,
         });
         await this.checkHaveVoucher();
+        this.$copy(this.rewardVoucherInfo.code);
+        this.voucherCode = this.rewardVoucherInfo.code;
+        this.showPop = false;
       } catch (error) {
         console.log(error);
       }
-    },
-    handleCopy() {
-      this.$copy(this.rewardVoucherInfo.code);
-      this.voucherCode = this.rewardVoucherInfo.code;
-      this.showPop = false;
     },
   },
   components: {
