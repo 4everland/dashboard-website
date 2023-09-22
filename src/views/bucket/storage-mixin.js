@@ -508,6 +508,7 @@ export default {
               isFile: true,
               arStatus,
               arHash: obj["X-Amz-Meta-Arweave-Hash"],
+              arLoading: false,
             };
           });
         this.folderList = list;

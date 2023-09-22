@@ -169,7 +169,7 @@
                   small
                   icon
                   @click.stop="handleGetARHash(item)"
-                  :loading="loadingAr"
+                  :loading="item.arLoading"
                 >
                   <v-icon size="20">mdi-refresh</v-icon>
                 </v-btn>
@@ -367,7 +367,6 @@ export default {
       showSnapshotDialog: false,
       generateSnapshotLoading: false,
       accessKeyExpired: false,
-      loadingAr: false,
       isPublish: true,
     };
   },
@@ -517,12 +516,12 @@ export default {
     },
 
     handleGetARHash(item) {
-      this.loadingAr = true;
+      item.arLoading = true;
       this.s3.headObject(
         { Bucket: this.pathInfo.Bucket, Key: this.pathInfo.Prefix + item.name },
         (err, data) => {
           if (err) {
-            this.loadingAr = false;
+            item.arLoading = false;
             return this.onErr(err);
           }
           const meta = data.Metadata;
@@ -533,7 +532,7 @@ export default {
           if (meta["arweave-hash"]) {
             item.arHash = meta["arweave-hash"];
           }
-          this.loadingAr = false;
+          item.arLoading = false;
         }
       );
     },
