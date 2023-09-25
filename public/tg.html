@@ -1,44 +1,52 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <style>
+      .hover-1:hover {
+        cursor: pointer;
+        opacity: 0.8;
+      }
+    </style>
+  </head>
 
-<head>
-  <style>
-    .hover-1:hover {
-      cursor: pointer;
-      opacity: .8;
-    }
-  </style>
-</head>
-
-<body style="padding: 30px; text-align: center; margin-top: 80px;">
-  <div style="margin-bottom: 50px;">
-    <img src="img/svg/logo.svg" style="height: 36px; margin-bottom: 20px;">
-    <h1>4EVERLAND Reward Hub wants to access your Telegram account.</h1>
-  </div>
-  <script type="text/javascript">
-    function getParams(url) {
-      if (!url) url = location.href;
-      let query = url.split("?")[1] || "";
-      let arr = query.split("&");
-      let obj = {};
-      arr.forEach((str) => {
-        let [k, v] = str.split("=");
-        if (!k) return;
-        obj[k] = decodeURIComponent(v);
-      });
-      return obj;
-    }
-    var query = getParams()
-    var inDev = location.host != 'dashboard.4everland.org'
-    document.writeln(`<script async src="https:\/\/telegram.org\/js\/telegram-widget.js?21" 
-    data-telegram-login="${inDev ? 'gyfgugugu_bot' : 'tg_4everland_bot'}" data-size="large"
-    data-auth-url="https:\/\/${inDev ? 'auth.foreverland.xyz' : 'oauth.4everland.org'}/telegram/${query.uid || 0}\/callback" data-request-access="write"><\/script>
-  `)
-  </script>
-  <div style="margin-top: 30px;">
-    <span class="hover-1" style="font-size: 14px; color: #34a9ff;" onclick="window.close()">Cancel</span>
-  </div>
-
-</body>
-
+  <body style="padding: 30px; text-align: center; margin-top: 80px">
+    <div style="margin-bottom: 50px">
+      <img src="img/svg/logo.svg" style="height: 36px; margin-bottom: 20px" />
+      <h1>4EVERLAND Task Hub wants to access your Telegram account.</h1>
+    </div>
+    <script type="text/javascript">
+      function getParams(url) {
+        if (!url) url = location.href;
+        let query = url.split("?")[1] || "";
+        let arr = query.split("&");
+        let obj = {};
+        arr.forEach((str) => {
+          let [k, v] = str.split("=");
+          if (!k) return;
+          obj[k] = decodeURIComponent(v);
+        });
+        return obj;
+      }
+      var query = getParams();
+      var inDev = location.host != "dashboard.4everland.org";
+      document.writeln(`<script async src="https:\/\/telegram.org\/js\/telegram-widget.js?21" 
+    data-telegram-login="${
+      inDev ? "gyfgugugu_bot" : "tg_4everland_bot"
+    }" data-size="large"
+    data-auth-url="https:\/\/${
+      inDev ? "auth.foreverland.xyz" : "oauth.4everland.org"
+    }/telegram/${
+        query.uid || 0
+      }\/callback" data-request-access="write"><\/script>
+  `);
+    </script>
+    <div style="margin-top: 30px">
+      <span
+        class="hover-1"
+        style="font-size: 14px; color: #34a9ff"
+        onclick="window.close()"
+        >Cancel</span
+      >
+    </div>
+  </body>
 </html>

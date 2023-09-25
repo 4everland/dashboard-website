@@ -142,8 +142,8 @@ export default {
       if (this.rewardHubAct.includes(act)) {
         console.log(it.message);
         it.desc = it.message;
-        it.path = "Reward hub";
-        it.link = "/reward-hub";
+        it.path = "Task Hub";
+        it.link = "/task-hub";
         return;
       }
       if (act == "OAUTH_REGISTER_DRIP") {

@@ -1,7 +1,7 @@
 <template>
   <div id="RewardHub">
     <div class="banner">
-      <div class="banner-title">Reward Hub</div>
+      <div class="banner-title">Task Hub</div>
       <div class="points-box">
         <!-- <div class="num">{{ regexHandleNum(pointsTrack) }}</div> -->
         <div class="num">
@@ -191,15 +191,19 @@
         >
           <div
             class="card"
-            :class="item.taskStatus == 'COMPLETED' ? 'completed' : ''"
+            :class="{
+              completed: item.taskStatus == 'COMPLETED',
+              donetostay: item.taskStatus == 'DONE_TO_STAY',
+            }"
+            @click="onCardNext(item)"
           >
             <div class="task-detail">
               <img
                 class="task-icon"
                 :src="
-                  item.taskStatus == 'COMPLETED'
-                    ? item.iconCompleted
-                    : item.iconOngoing
+                  item.taskStatus == 'ON_GOING'
+                    ? item.iconOngoing
+                    : item.iconCompleted
                 "
                 alt=""
               />
@@ -216,11 +220,27 @@
                   v-if="item.taskStatus == 'COMPLETED'"
                   elevation="0"
                   class="task-button"
-                  @click="onNext(item)"
                 >
                   +{{ item.reward }}
                 </v-btn>
-                <v-btn v-else icon class="task-button" @click="onNext(item)">
+                <v-btn
+                  disabled
+                  icon
+                  v-else-if="item.taskStatus == 'DONE_TO_STAY'"
+                >
+                  <img
+                    src="@/assets/imgs/reward_hub/check-circle.png"
+                    alt=""
+                    width="24px"
+                    style="display: block"
+                  />
+                </v-btn>
+                <v-btn
+                  v-else
+                  icon
+                  class="task-button"
+                  @click.stop="onNext(item)"
+                >
                   <img
                     src="@/assets/imgs/reward_hub/arrow-circle-right.png"
                     alt=""
@@ -316,6 +336,12 @@ export default {
       const { data } = await this.$http.get(`$auth/activities/${item.id}/next`);
       this.onAfterNext(item, data);
     },
+    async onCardNext(item) {
+      if (item.taskStatus == "COMPLETED") {
+        this.onNext(item);
+      }
+    },
+
     async onAfterNext(item, data) {
       switch (data.next) {
         case "JUMP":
@@ -697,6 +723,7 @@ export default {
       }
       .completed {
         background: #f4fefa;
+        cursor: pointer;
         .task-detail {
           .task-btn {
             .task-button {
@@ -705,6 +732,26 @@ export default {
               font-family: DIN Alternate;
               font-size: 24px;
               font-weight: 700;
+            }
+          }
+        }
+      }
+      .donetostay {
+        background: #f4fefa;
+        .task-detail {
+          .task-icon {
+            opacity: 0.5;
+          }
+          .task-info {
+            opacity: 0.5;
+          }
+          .task-btn {
+            .referral-link {
+              border: 1px solid #83f6cd;
+              background: #e9fdf6;
+            }
+            .task-button {
+              background: #1eefa4;
             }
           }
         }

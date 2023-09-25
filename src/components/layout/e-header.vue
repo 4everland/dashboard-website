@@ -39,7 +39,7 @@
             @click="onMenu(it)"
             :style="it.btnStyle"
             class="ml-4"
-            :id="it.to == '/reward-hub' ? 'reward-guide' : null"
+            :id="it.to == '/task-hub' ? 'reward-guide' : null"
           >
             <e-team-avatar
               class="cursor-p mr-2"
@@ -132,8 +132,8 @@ export default {
 
       if (info.uid) {
         list.unshift({
-          to: "/reward-hub",
-          label: "Reward Hub",
+          to: "/task-hub",
+          label: "Task Hub",
           badge: this.activedClaim,
         });
 
