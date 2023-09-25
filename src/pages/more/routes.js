@@ -12,10 +12,10 @@ export default [
     },
   },
   {
-    path: "/reward-hub",
-    component: () => import("./reward-hub-new"),
+    path: "/task-hub",
+    component: () => import("./task-hub-new"),
     meta: {
-      title: "Reward Hub",
+      title: "Task Hub",
       isTab: 1,
       hideNav: 1,
     },

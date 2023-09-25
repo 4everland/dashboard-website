@@ -324,14 +324,14 @@ export default {
 
       // if (this.usageInfo.ipfsExpired) {
       //   return this.$confirm(
-      //     "There are currently no IPFS resources available to you. Please claim your new user reward at Reward Hub or purchase resources at Resource.",
+      //     "There are currently no IPFS resources available to you. Please claim your new user reward at Task Hub or purchase resources at Resource.",
       //     "Tips",
       //     {
       //       confirmText: "Go Claim",
       //       cancelText: "Cancel",
       //     }
       //   ).then(() => {
-      //     this.$router.push("/reward-hub");
+      //     this.$router.push("/task-hub");
       //   });
       // } else {
       //   this.showVoucher = true;

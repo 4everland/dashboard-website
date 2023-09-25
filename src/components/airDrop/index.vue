@@ -9,7 +9,7 @@
           `Thank you for registering with 4EVERLAND!  You will get the free
         resources package and free airdrops of other resources that will also be
         available to help you better experience 4EVERLAND products. Come to
-        Reward Hub to get it now!`
+        Task Hub to get it now!`
         }}
       </div>
       <v-row class="mt-2">
@@ -76,7 +76,7 @@ export default {
       }
     },
     handleClaim() {
-      router.push("/reward-hub");
+      router.push("/task-hub");
     },
   },
 };

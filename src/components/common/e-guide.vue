@@ -335,7 +335,7 @@ div#driver-page-overlay {
   line-height: 28px;
 }
 
-.reward-hub-content {
+.task-hub-content {
   position: relative;
   padding: 30px;
   box-sizing: border-box;

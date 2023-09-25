@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog v-model="showDialog" max-width="700" persistent>
-      <div class="reward-hub-content">
+      <div class="task-hub-content">
         <h3 class="ta-c">Minting Your Own On-Chain Identity</h3>
         <div class="mt-4 fz-14 lh-2">
           Welcome to 4EVERLAND. You are in a trial status and can only access

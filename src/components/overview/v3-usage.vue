@@ -77,7 +77,7 @@
       <div class="pa-6">
         <h3 class="fz-20">Tips</h3>
         <div class="mt-5 fz-14">
-          Your IPFS resources are expired! Hurry to the Reward Hub for more free
+          Your IPFS resources are expired! Hurry to the Task Hub for more free
           resources or visit the Resource to purchase.
         </div>
 
@@ -92,8 +92,8 @@
             outlined
             width="180"
             class="ml-6"
-            @click="handleRoute('/reward-hub')"
-            >Reward Hub</v-btn
+            @click="handleRoute('/task-hub')"
+            >Task Hub</v-btn
           >
         </div>
       </div>

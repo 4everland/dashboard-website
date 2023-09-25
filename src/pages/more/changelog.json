@@ -1,4 +1,5 @@
-[{
+[
+  {
     "time": "2023-8-1",
     "img": "https://static1.4everland.org/img/log/2023-4-20.png",
     "title": "Feature Updates",
@@ -92,9 +93,7 @@
     "time": "2022-12-14",
     "img": "https://static1.4everland.org/img/log/2022-12-14.png",
     "title": "OKX Wallet integration is live!",
-    "lines": [
-      
-    ]
+    "lines": []
   },
   {
     "time": "2022-12-08",
@@ -104,7 +103,7 @@
       "1. Support creating resource vouchers and credit in the backend management.",
       "2. Support redeeming and using resource vouchers and credit in Dashboard.",
       "3. Support ETH and BSC multi-chain deposit in Resource Hub.",
-      "4. Add AR storage reward for sharing on Twitter in Reward Hub.",
+      "4. Add AR storage reward for sharing on Twitter in Task Hub.",
       "5. Update sharing Tweet.",
       "6. Solana RPC is now live!"
     ]
@@ -136,7 +135,7 @@
   {
     "time": "2022-10-24",
     "img": "https://static1.4everland.org/img/log/2022-10-24.png",
-    "title": "Reward Hub is live!",
+    "title": "Task Hub is live!",
     "lines": [
       "1. oin 4EVERLAND Discord to get 1GB IPFS storage.",
       "2. Follow @4everland_org on Twitter to get 1GB IPFS storage.",
@@ -409,4 +408,5 @@
       "Support for automated content risk identification and review services",
       "Support for Feedback and reporting features"
     ]
-  }]
+  }
+]
