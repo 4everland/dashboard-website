@@ -212,16 +212,16 @@ Vue.prototype.$utils = {
   async resourceInsufficient() {
     try {
       await Vue.prototype.$confirm(
-        "Insufficient resources! Hurry to the Task Hub for more free resources or visit the Resource to purchase. ",
+        "Insufficient resources! Please make purchases in the Resource Centre.",
         "Tip",
         {
-          cancelText: "Task Hub",
+          cancelText: "Cancel",
           confirmText: "Purchase",
         }
       );
       location.href = "/resource/subscribe";
     } catch (error) {
-      location.href = "/task-hub";
+      console.log(error);
     }
   },
 };
