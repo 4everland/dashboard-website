@@ -158,7 +158,8 @@ Vue.prototype.$utils = {
     if (plat == "AR") {
       return inDev
         ? `https://arweave.net/${cid}`
-        : `https://arweave.4everland.xyz/${cid}`;
+        : `https://arweave.net/${cid}`;
+      // : `https://arweave.4everland.xyz/${cid}`;
     }
     return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
     // return assign
