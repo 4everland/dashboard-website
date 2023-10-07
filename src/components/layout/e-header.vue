@@ -33,6 +33,7 @@
           <!-- :href="it.href"
           :to="it.to"
           :target="it.href ? '_blank' : ''" -->
+
           <v-btn
             slot="ref"
             text
@@ -41,6 +42,13 @@
             class="ml-4"
             :id="it.to == '/task-hub' ? 'reward-guide' : null"
           >
+            <img
+              v-if="it.preImg"
+              :src="it.preImg"
+              :width="it.width"
+              :height="it.height"
+              :class="it.imgCls"
+            />
             <e-team-avatar
               class="cursor-p mr-2"
               v-if="it.uid"
@@ -132,6 +140,9 @@ export default {
 
       if (info.uid) {
         list.unshift({
+          preImg: "/img/svg/header/icon_hot.svg",
+          imgCls: "mr-2",
+          width: 16,
           to: "/task-hub",
           label: "Task Hub",
           badge: this.activedClaim,
@@ -177,10 +188,7 @@ export default {
       }
       list.unshift({
         href: "https://firstsowing.4everland.org/",
-        img: "/img/svg/header/icon_hot.svg",
         label: "First Sowing",
-        imgCls: "ml-2",
-        width: 16,
       });
       return list;
     },

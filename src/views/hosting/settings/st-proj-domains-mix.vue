@@ -252,9 +252,12 @@
 </template>
 <script>
 import { mapState, mapGetters } from "vuex";
-import { namehash } from "@ensdomains/ensjs";
-import { encode, decode, helpers } from "@ensdomains/content-hash";
-import { getProvider, getENSRegistry, getResolver } from "@/plugins/ens";
+// import { namehash } from "@ensdomains/ensjs";
+import { ENS } from "@ensdomains/ensjs/dist/cjs/index";
+import publicResolver from "@ensdomains/ensjs/dist/cjs/contracts/publicResolver";
+import { namehash } from "@ensdomains/ensjs/dist/cjs/utils/normalise";
+import { encode, helpers } from "@ensdomains/content-hash";
+import { getProvider } from "@/plugins/ens";
 
 import {
   getOwner,
@@ -281,6 +284,8 @@ export default {
       showDialog: false,
       tempItem: null,
       tempType: "",
+      resolver: null,
+      ENSInstance: null,
     };
   },
   computed: {
@@ -318,8 +323,18 @@ export default {
   created() {
     this.getDomainOptions();
     this.getInfo();
+    this.initEns();
   },
   methods: {
+    async initEns() {
+      try {
+        const provider = getProvider();
+        this.ENSInstance = new ENS();
+        await this.ENSInstance.setProvider(provider);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getDomainOptions() {
       this.$axios.get("/domainList.json").then((res) => {
         const { data } = res;
@@ -503,11 +518,9 @@ export default {
       }
       try {
         this.$loading();
-        const node = namehash(domain);
-        const provider = getProvider();
-        const registry = getENSRegistry(provider);
+        const profile = await this.ENSInstance.getOwner(domain);
         this.$loading.close();
-        return await registry.owner(node);
+        return profile.owner;
       } catch (error) {
         this.onErr(error);
       }
@@ -528,19 +541,9 @@ export default {
       }
       try {
         this.$loading();
-        const node = namehash(domain);
-        const provider = getProvider();
-        const registry = getENSRegistry(provider);
-        // const owner = await registry.owner(node);
-        const resolver = await registry.resolver(node);
-        let contentHash = await getResolver(resolver, provider).contenthash(
-          node
-        );
+        const data = await this.ENSInstance.getProfile(domain);
         this.$loading.close();
-        if (contentHash.substring(2)) {
-          const res = decode(contentHash);
-          return res;
-        }
+        return data.records.contentHash.decoded;
       } catch (error) {
         this.onErr(error);
       }
@@ -589,22 +592,12 @@ export default {
           Obj.content = item.ipfs;
         }
         const node = namehash(item.domain);
-        const registry = getENSRegistry(provider);
-        const resolver = await registry.resolver(node);
-        const data = getResolver(
-          resolver,
-          provider
-        ).interface.encodeFunctionData("setContenthash", [
+        const profile = await this.ENSInstance.getProfile(item.domain);
+        const resolver = profile.resolverAddress;
+        const tx = await publicResolver(signer, resolver).setContenthash(
           node,
-          `0x${ipnsHashEncoded}`,
-        ]);
-        const from = await signer.getAddress();
-        const tx = await signer.sendTransaction({
-          to: resolver,
-          from,
-          data,
-        });
-
+          `0x${ipnsHashEncoded}`
+        );
         this.$loading(`Transaction(${tx.hash.cutStr(4, 3)}) pending`);
         const receipt = await tx.wait();
         console.log(receipt);
@@ -657,6 +650,7 @@ export default {
         const chainId = this.walletObj.chainId;
         if (!chainId) return false;
         let msg = "";
+        // if (chainId != "0x1" && chainId != "0x5") {
         if (chainId != "0x1") {
           msg =
             "Wrong network, please switch your wallet network to Ethereum mainnet.";

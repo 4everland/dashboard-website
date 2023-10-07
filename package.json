@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@ensdomains/content-hash": "^2.5.7",
-    "@ensdomains/ensjs": "^2.0.1",
+    "@ensdomains/ensjs": "^3.0.0-alpha.67",
     "@types/minio": "^7.0.12",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",

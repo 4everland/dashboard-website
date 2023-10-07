@@ -121,9 +121,11 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import { namehash } from "@ensdomains/ensjs";
-import { encode, decode } from "@ensdomains/content-hash";
-import { getProvider, getENSRegistry, getResolver } from "@/plugins/ens";
+import { namehash } from "@ensdomains/ensjs/dist/cjs/utils/normalise";
+import publicResolver from "@ensdomains/ensjs/dist/cjs/contracts/publicResolver";
+import { ENS } from "@ensdomains/ensjs/dist/cjs/index";
+import { encode } from "@ensdomains/content-hash";
+import { getProvider } from "@/plugins/ens";
 import debounce from "../../plugins/debounce";
 import IpnsCreate from "@/views/gateway/ipns-create";
 import IpnsPublish from "@/views/gateway/ipns-publish";
@@ -153,6 +155,7 @@ export default {
       node: null,
       ensIpns: null,
       curItem: {},
+      ENSInstance: null,
     };
   },
   computed: {
@@ -162,10 +165,22 @@ export default {
     }),
     ...mapGetters(["walletObj"]),
   },
+  created() {
+    this.initEns();
+  },
   mounted() {
     this.getList();
   },
   methods: {
+    async initEns() {
+      try {
+        const provider = getProvider();
+        this.ENSInstance = new ENS();
+        await this.ENSInstance.setProvider(provider);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     localEnsList() {
       return localStorage.getItem("ens-list");
     },
@@ -257,7 +272,7 @@ export default {
       const verify = await this.verifyConfigure(item);
       if (verify) return;
       this.owner = await this.verifyOwner(item.name);
-      const ensIpns = await this.getEnsIpns(item.name);
+      await this.getEnsIpns(item.name);
       try {
         await this.$confirm(
           `${this.owner.cutStr(6, 4)} is the owner of ${
@@ -275,21 +290,17 @@ export default {
           );
         }
         this.$loading();
-        const signer = this.provider.getSigner();
+        const provider = getProvider();
+        const signer = provider.getSigner();
         const ipnsHashEncoded = encode("ipns-ns", item.key);
-        const data = getResolver(
-          this.resolver,
-          this.provider
-        ).interface.encodeFunctionData("setContenthash", [
-          this.node,
-          `0x${ipnsHashEncoded}`,
-        ]);
-        const from = await signer.getAddress();
-        const tx = await signer.sendTransaction({
-          to: this.resolver,
-          from,
-          data,
-        });
+        const node = namehash(item.name);
+        const profile = await this.ENSInstance.getProfile(item.name);
+        const resolver = profile.resolverAddress;
+        const tx = await publicResolver(signer, resolver).setContenthash(
+          node,
+          `0x${ipnsHashEncoded}`
+        );
+
         this.$loading(`Transaction(${tx.hash.cutStr(4, 3)}) pending`);
         const receipt = await tx.wait();
         console.log(receipt);
@@ -308,32 +319,15 @@ export default {
     },
     async getEnsIpns(domain) {
       const chainId = this.walletObj.chainId;
+      // if (chainId !== "0x1" && chainId !== "0x5") return;
+
       if (chainId !== "0x1") return;
       try {
-        // this.$loading();
-        this.node = namehash(domain);
-        this.provider = getProvider();
-        const registry = getENSRegistry(this.provider);
-        this.owner = await registry.owner(this.node);
-        console.log("owner", this.owner);
-        let isNotRegister = this.owner
-          .substring(2)
-          .split("")
-          .every((it) => it == "0");
-        if (isNotRegister) {
-          this.$loading.close();
-        } else {
-          this.resolver = await registry.resolver(this.node);
-          let contentHash = await getResolver(
-            this.resolver,
-            this.provider
-          ).contenthash(this.node);
-          // this.$loading.close();
-          if (contentHash.substring(2)) {
-            const res = decode(contentHash);
-            return res;
-          }
-        }
+        this.$loading();
+        const data = await this.ENSInstance.getProfile(domain);
+        this.$loading.close();
+        console.log(data);
+        return data.records.contentHash.decoded;
       } catch (error) {
         this.onErr(error);
       }
@@ -344,14 +338,11 @@ export default {
       }
       try {
         this.$loading();
-        this.node = namehash(domain);
-        this.provider = getProvider();
-        const registry = getENSRegistry(this.provider);
+        const profile = await this.ENSInstance.getOwner(domain);
         this.$loading.close();
-        return await registry.owner(this.node);
+        return profile.owner;
       } catch (error) {
-        // this.onErr(error);
-        console.log(error);
+        this.onErr(error);
       }
     },
     async verifyConfigure(item) {

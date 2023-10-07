@@ -32,7 +32,7 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import { namehash } from "@ensdomains/ensjs";
+import { namehash } from "@ensdomains/ensjs/dist/cjs/utils/normalise";
 import { decode, getCodec } from "@ensdomains/content-hash";
 import { getProvider, getENSRegistry, getResolver } from "@/plugins/ens";
 export default {
@@ -148,5 +148,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
