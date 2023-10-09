@@ -263,7 +263,7 @@ export default {
         } else if (plat == "AR") {
           return "ar://" + val;
         } else if (plat == "GREENFIELD") {
-          return "gnfs://" + val;
+          return "gnfd://" + val;
         } else if (plat == "IPNS") {
           return "ipns://" + val;
         } else {
