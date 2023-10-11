@@ -1,5 +1,5 @@
 import Vue from "vue";
-import { Upload } from "@aws-sdk/lib-storage";
+import { Upload } from "@4everland/s3-lib-storage";
 import { pinningServiceApi } from "../../api";
 export class TaskWrapper {
   static id = 0;
@@ -21,6 +21,7 @@ export class TaskWrapper {
         client: this.s3,
         queueSize: 3,
         params: this.param,
+        maxAttempts: 10,
       });
       this.fileSize = this.task.totalBytes;
       this.task.on("httpUploadProgress", (e) => {
@@ -233,6 +234,7 @@ export class PinCidTaskWrapper {
         Body: this.file,
         ContentType: this.file.type,
       },
+      maxAttempts: 10,
     });
     await this.task.done();
     this.status = 3; // upload success // pin success
