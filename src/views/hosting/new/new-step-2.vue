@@ -234,7 +234,7 @@ Are you sure you want to continue?`;
           `https://twitter.com/intent/tweet?text=${encodeURI(
             `I've deployed a wonderful Dapp through @4everland_org Hosting, which helps developers quickly build, publish, and manage Dwebs. Come and experience it!  
   Click here to access: https://${this.info.domain}`
-          )}&hashtags=IPFS,Arweave,Dfinity,Web3`
+          )}&hashtags=IPFS,Arweave,Dfinity,Web3,BNBGreenfield`
         );
       } catch (error) {
         console.log(error);
