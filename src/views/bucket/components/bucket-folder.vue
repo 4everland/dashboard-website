@@ -316,6 +316,12 @@
                 : "With only the CID generated, the data cannot be queried on the IPFS network. You can publish it manually in the snapshots list later."
             }}
           </div>
+
+          <div class="fz-14 mt-4 gray">
+            Please do not modify the contents of the folder during the ongoing
+            Snapshot, as it will result in failure.
+          </div>
+
           <div class="snapshot-action al-c justify-center">
             <v-btn
               width="180"
