@@ -110,7 +110,7 @@
         <v-col sm="6" cols class="basic-settings-item">
           <e-kv label="Sync to Arweave" min-width="120px" labelColor="#6c7789">
             <v-switch
-              class="mt-0"
+              class="mt-0 hide-msg"
               v-model="isAr"
               dense
               :loading="arLoading"
@@ -148,6 +148,18 @@
             extraData.arweave.sync ? "Arweave" : "IPFS"
           }}</e-kv>
         </v-col>
+        <v-col
+          sm="6"
+          class="basic-settings-item"
+          v-if="!extraData.arweave.sync"
+        >
+          <e-kv
+            label="Dedicated Gateway"
+            min-width="120px"
+            labelColor="#6c7789"
+            >{{ bucketDefaultGateWay }}</e-kv
+          >
+        </v-col>
       </v-row>
     </div>
     <div class="delete bg-white">
@@ -165,7 +177,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import HDomain from "@/views/hosting/common/h-domain";
 import Domain from "@/views/bucket/domain/domain.vue";
 export default {
@@ -206,6 +218,7 @@ export default {
     ...mapState({
       s3: (s) => s.moduleS3.s3,
     }),
+    ...mapGetters(["bucketDefaultGateWay"]),
   },
 
   methods: {

@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import http from "../api";
 import moduleS3 from "./s3";
+import md5 from "md5";
 Vue.use(Vuex);
 
 const SET_DATA = "setData";
@@ -79,6 +80,9 @@ const store = new Vuex.Store({
       }
 
       return walletType == "OKX" ? window.okxwallet : provider;
+    },
+    bucketDefaultGateWay(state) {
+      return "https://" + md5(state.teamId) + ".4everland.link";
     },
   },
   mutations: {
