@@ -9,6 +9,7 @@ import MoreRoutes from "./more/routes";
 import ResRoutes from "./resource/routes";
 import GatewayRoutes from "./gateway/routes";
 import AccountRoutes from "./account/routes";
+import BillingRoutes from "./billing/routes";
 
 export default [
   {
@@ -33,6 +34,7 @@ export default [
       subTitle: "Welcome to 4EVERLAND Dashboard",
     },
   },
+  ...BillingRoutes,
   ...HostingRoutes,
   ...BucketRoutes,
   ...UserRoutes,
