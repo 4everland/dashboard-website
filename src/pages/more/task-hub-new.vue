@@ -108,9 +108,10 @@
               />
               <div class="task-info">
                 <div class="task-name">{{ item.name }}</div>
-                <div class="task-tips">
-                  {{ `${item.step} Active | ${item.description}` }}
-                </div>
+                <div
+                  class="task-tips"
+                  v-html="`${item.step} Active | ${item.description}`"
+                ></div>
               </div>
               <div class="task-btn" v-if="item.type == 'DAILY_INVITE'">
                 <div class="referral-link">
@@ -209,11 +210,12 @@
               />
               <div class="task-info">
                 <div class="task-name">{{ item.name }}</div>
-                <div class="task-tips">
-                  {{
+                <div
+                  class="task-tips"
+                  v-html="
                     `${item.reward} Points ${item.tips} | ${item.description} `
-                  }}
-                </div>
+                  "
+                ></div>
               </div>
               <div class="task-btn">
                 <v-btn
