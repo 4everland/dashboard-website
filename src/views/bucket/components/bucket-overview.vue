@@ -30,38 +30,6 @@
     </div>
     <div class="domain-names bg-white">
       <h3>Domain Names</h3>
-      <!-- <div>
-        <v-data-table
-          class="hide-bdb"
-          :headers="headers"
-          :items="domainList"
-          :loading="tableLoading"
-          item-key="name"
-          no-data-text=""
-          loading-text=""
-          hide-default-footer
-          disable-pagination
-        >
-          <template #item.systemAllo="{ item }">
-            <span
-              >{{ item.systemAlloc ? "Assign Domain" : "Custom Domain" }}
-            </span>
-          </template>
-          <template #item.isHttps="{ item }">
-            <span>{{ item.isHttps ? "Supported" : "No Supported" }} </span>
-          </template>
-          <template #item.globalEdgeNetwork="{ item }">
-            <span
-              >{{ item.globalEdgeNetwork ? "Supported" : "No Supported" }}
-            </span>
-          </template>
-        </v-data-table>
-        <template v-if="domainList.length == 0">
-          <e-empty :loading="false">
-            {{ false ? `Loading domain...` : `No domain` }}
-          </e-empty>
-        </template>
-      </div> -->
       <div>
         <div class="gray fz-14">These domains are assigned to your bucket.</div>
         <div class="mt-5 d-flex">
@@ -175,23 +143,12 @@ export default {
   },
   data() {
     return {
-      headers: [
-        { text: "Type", value: "systemAllo", sortable: false },
-        { text: "Bucket Domain Name", value: "domain", sortable: false },
-        { text: "HTTPS", value: "isHttps", sortable: false },
-        {
-          text: "Global Edge Network",
-          value: "globalEdgeNetwork",
-          sortable: false,
-        },
-      ],
       domainList: [],
       domainArr: [],
       customDomainList: [],
       bucketName: "",
       basicStatisticsData: [],
       extraData: {},
-      tableLoading: true,
       arLoading: false,
       isAr: false,
       domain: "",
@@ -287,12 +244,7 @@ export default {
             displaySysAssign: 1,
           },
         });
-        data.list.forEach((item) => {
-          item.isHttps =
-            item.systemAlloc ||
-            Number(item.certificateExpiredAt) > new Date().getTime() / 1000;
-        });
-        this.tableLoading = false;
+
         this.domainList = data.list;
         this.customDomainList = data.list.filter((it) => !it.systemAlloc);
       } catch (err) {
@@ -442,7 +394,6 @@ export default {
   watch: {
     active(value) {
       if (value) {
-        this.tableLoading = true;
         this.basicStatisticsData = [];
         this.domainList = [];
         this.extraData = {};
