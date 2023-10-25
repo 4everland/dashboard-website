@@ -147,10 +147,6 @@ export default {
     banners() {
       return [
         {
-          img: "https://static1.4everland.org/img/banner/2023523-180202.jpg",
-          href: "https://firstsowing.4everland.org/",
-        },
-        {
           img: "https://static1.4everland.org/img/banner/20230815-153912.png",
           to: "/bucket/storage/",
         },
