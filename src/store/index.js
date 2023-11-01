@@ -83,7 +83,8 @@ const store = new Vuex.Store({
     },
     bucketDefaultGateWay(state) {
       console.log(process.env.NODE_ENV);
-      if (process.env.NODE_ENV != "production")
+      // if (process.env.NODE_ENV != "production")
+      if (Vue.prototype.$inDev)
         return "http://" + md5(state.teamId) + ".ipfs.foreverland-link.xyz";
       return "https://" + md5(state.teamId) + ".ipfs.4everland.link";
     },
