@@ -43,9 +43,7 @@
           <e-kv2
             class="mt-7"
             :label="
-              info.platform == 'GREENFIELD'
-                ? 'BNB Greenfield Testnet'
-                : info.platform
+              info.platform == 'GREENFIELD' ? 'BNB Greenfield' : info.platform
             "
             style="min-width: 120px"
             v-if="

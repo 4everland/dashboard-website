@@ -61,7 +61,7 @@ export default {
           icon: "h-ar.svg",
         },
         {
-          label: "BNB Greenfield Testnet",
+          label: "BNB Greenfield",
           name: "GREENFIELD",
           icon: "h-greenfield.svg",
         },
