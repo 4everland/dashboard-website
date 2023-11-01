@@ -55,7 +55,25 @@
           hide-default-footer
         >
           <template #item.name="{ item }">
-            <span>{{ item.name }}.4everland.link</span>
+            <div class="al-c">
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    class="mr-2"
+                    small
+                    color="#6C7789"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    mdi-alert-circle-outline
+                  </v-icon>
+                </template>
+                <span
+                  >System allocated for bucket, not manually removable.
+                </span>
+              </v-tooltip>
+              <span>{{ item.name.cutStr(6, 6) }}.4everland.link</span>
+            </div>
           </template>
           <template #item.scope="{ item }">
             <span style="text-transform: capitalize">{{
@@ -208,6 +226,8 @@ $color1: #775da6;
 }
 .action-btn.disable {
   color: gray;
+
+  cursor: not-allowed;
 }
 .tips {
   color: #6a778b;
