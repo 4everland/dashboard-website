@@ -203,7 +203,7 @@ export default {
     async usdcToland() {
       try {
         await this.$http.post(
-          "$bill/assets/transform",
+          "$bill-consume/assets/transform",
           {},
           {
             headers: {

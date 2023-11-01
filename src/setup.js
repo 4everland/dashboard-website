@@ -261,7 +261,8 @@ Vue.prototype.$utils = {
   },
 
   formatLand(land, isObj = false) {
-    const landNum = BigNumber.from(land).div((10e18).toString());
+    const landNum = BigNumber.from(land).div((1e18).toString());
+    console.log(landNum.toString());
     let formatVal = land;
     let unit = "";
     const k = BigNumber.from(Math.pow(10, 5).toString());
@@ -274,18 +275,19 @@ Vue.prototype.$utils = {
       formatVal = "> 99999";
       unit = "T";
     } else if (landNum.gte(t)) {
-      formatVal = landNum.div(t).toString();
+      formatVal = landNum.div(BigNumber.from(1e12)).toString();
       unit = "T";
     } else if (landNum.gte(b)) {
-      formatVal = landNum.div(b).toString();
+      formatVal = landNum.div(BigNumber.from(1e8)).toString();
       unit = "B";
     } else if (landNum.gte(m)) {
-      formatVal = landNum.div(m).toString();
+      formatVal = landNum.div(BigNumber.from(1e6)).toString();
       unit = "M";
     } else if (landNum.gte(k)) {
-      formatVal = landNum.div(k).toString();
+      formatVal = landNum.div(BigNumber.from(1e3)).toString();
       unit = "K";
     }
+
     if (isObj) {
       return {
         land: formatVal,

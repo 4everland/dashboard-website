@@ -24,7 +24,9 @@ export default {
   actions: {
     async getPrice({ commit }) {
       try {
-        const { data } = await Vue.prototype.$http.get("$bill/common/price");
+        const { data } = await Vue.prototype.$http.get(
+          "$bill-consume/common/price"
+        );
         const resources = data.items.map((item) => {
           const unitPrice = BigNumber.from(item.data);
           console.log(item.resourceType);

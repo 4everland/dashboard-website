@@ -154,12 +154,12 @@ export default {
   created() {
     this.getBalance();
     this.getUserResource();
-    this.getStaticView();
+    // this.getStaticView();
   },
   methods: {
     async getUserResource() {
       try {
-        const { data } = await this.$http.get("$bill/combo/user/list");
+        const { data } = await this.$http.get("$bill-consume/combo/user/list");
         console.log(data);
         const comboItem = data.comboItems[0];
         this.resourceList = comboItem.resourceItems.map((it, i) => {
@@ -214,7 +214,7 @@ export default {
     },
     async getBalance() {
       try {
-        const { data } = await this.$http.get("$bill/assets");
+        const { data } = await this.$http.get("$bill-consume/assets");
         console.log(data);
 
         this.balance = this.$utils.formatLand(data.land, true);
@@ -226,7 +226,7 @@ export default {
     async getStaticView() {
       try {
         const { data } = await this.$http.get(
-          "$bill/bill/land-used/analytics",
+          "$bill-analytics/bill/land-used/analytics",
           {
             params: {
               analyticsType: "HOUR",

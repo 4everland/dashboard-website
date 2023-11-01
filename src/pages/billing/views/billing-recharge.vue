@@ -139,7 +139,9 @@ export default {
   methods: {
     async getList() {
       try {
-        const { data } = await this.$http.get("$bill/assets/record/list");
+        const { data } = await this.$http.get(
+          "$bill-consume/assets/record/list"
+        );
         console.log(data);
       } catch (error) {
         console.log(error);
