@@ -10,7 +10,7 @@
         @click="$emit('update:platform', it.name)"
       >
         <div
-          class="d-flex al-c bdrs-4 plat-item"
+          class="d-flex al-c bdrs-4 plat-item pos-r"
           :class="{
             active: platform == it.name,
           }"
@@ -19,20 +19,16 @@
           <div class="ml-2 fw-b fz-16 pos-r">
             <span> {{ it.label }}</span>
           </div>
+
+          <div class="pos-a tag fw-b fz-12" v-if="it.name == 'GREENFIELD'">
+            Mainnet
+          </div>
         </div>
       </v-col>
       <v-col v-if="platform == 'AR'">
         <div class="gray fz-14">
           <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon> All assets in
           Arweave are linked using relative paths due to its features.
-        </div>
-      </v-col>
-      <v-col v-if="platform == 'GREENFIELD'">
-        <div class="gray fz-14">
-          <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon> Please note
-          that Greenfield is currently a Testnet and is for experiential use
-          only. As such, it is subject to resets, which may result in loss of
-          data.
         </div>
       </v-col>
     </v-row>
@@ -87,6 +83,14 @@ export default {
   &.active {
     background: #634695;
     color: #fff;
+  }
+  .tag {
+    right: 0;
+    top: 0;
+    padding: 2px 10px;
+    color: #000;
+    background: #edad27;
+    border-radius: 0 4px 0 4px;
   }
 }
 .beta-icon {
