@@ -90,9 +90,7 @@
       class="mt-5"
       :title="
         'Syncing to ' +
-        (info.platform == 'GREENFIELD'
-          ? 'BNB Greenfield Testnet'
-          : info.platform)
+        (info.platform == 'GREENFIELD' ? 'BNB Greenfield' : info.platform)
       "
       :value="getOpen(2)"
       :icon="getIcon(2)"
@@ -111,7 +109,7 @@
       </e-kv>
       <e-kv
         min-width="70px"
-        :label="`BNB Greenfield Testnet :`"
+        :label="`BNB Greenfield :`"
         v-else-if="info && info.greenfield && info.platform == 'GREENFIELD'"
       >
         <a

@@ -20,9 +20,7 @@
             </div>
             <div class="al-c mt-2">
               <span class="mr-5 fz-14" v-if="!asMobile">{{
-                it.platform == "GREENFIELD"
-                  ? "BNB Greenfield Testnet"
-                  : it.platform
+                it.platform == "GREENFIELD" ? "BNB Greenfield" : it.platform
               }}</span>
               <img
                 :src="`/img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
