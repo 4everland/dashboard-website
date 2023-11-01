@@ -3,9 +3,9 @@
     <div class="d-flex flex-wrap">
       <div
         @click="onSelect(it.label)"
-        class="bd-1 al-c pa-3 pl-7 pr-7 mr-5 bdrs-2 cursor-p mt-4"
+        class="network-label py-3 cursor-p justify-center d-flex"
         :class="{
-          'bdc-c1': payBy == it.label,
+          active: payBy == it.label,
         }"
         v-for="(it, i) in payList"
         :key="i"
@@ -17,6 +17,13 @@
               : "checkbox-blank-circle-outline"
           }}</v-icon
         >
+        <img
+          class="ml-3"
+          style="vertical-align: middle"
+          :src="it.img"
+          height="20"
+        />
+
         <span
           class="ml-2"
           style="width: 90px"
@@ -25,7 +32,6 @@
           }"
           >{{ it.name }}</span
         >
-        <img :src="it.img" height="20" />
       </div>
     </div>
     <ever-pay ref="everPay" v-if="payBy == 'everPay'"></ever-pay>
@@ -104,3 +110,20 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.network-label {
+  width: 172px;
+  background: #fff;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+}
+.network-label.active {
+  font-weight: bold;
+  border: 1px solid #735ea1;
+  background: #f3e8ff;
+}
+.network-label + .network-label {
+  margin-left: 8px;
+}
+</style>

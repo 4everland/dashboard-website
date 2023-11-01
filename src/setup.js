@@ -6,6 +6,7 @@ import router from "./router";
 import { CID } from "multiformats/cid";
 import frameworks from "./plugins/config/frameworks";
 import * as clipboard from "clipboard-polyfill/text";
+import { BigNumber } from "ethers";
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 
 Vue.use(VueClipboards);
@@ -224,5 +225,73 @@ Vue.prototype.$utils = {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  getBigFileSize(byte, isObj = false, fix = 2) {
+    const fileSize = BigNumber.from(byte);
+    let fixSize = fileSize.mul(BigNumber.from(Math.pow(10, fix).toString()));
+    const kb = BigNumber.from("1024");
+    const mb = BigNumber.from(Math.pow(1024, 2).toString());
+    const gb = BigNumber.from(Math.pow(1024, 3).toString());
+    const tb = BigNumber.from(Math.pow(1024, 4).toString());
+    let formatVal = "";
+    let unit = "Byte";
+
+    if (fileSize.gte(tb)) {
+      formatVal = fixSize.div(tb).toNumber() / Math.pow(10, fix);
+      unit = "TB";
+    } else if (fileSize.gte(gb)) {
+      formatVal = fixSize.div(gb).toNumber() / Math.pow(10, fix);
+      unit = "GB";
+    } else if (fileSize.gte(mb)) {
+      formatVal = fixSize.div(mb).toNumber() / Math.pow(10, fix);
+      unit = "MB";
+    } else if (fileSize.gte(kb)) {
+      formatVal = fixSize.div(kb).toNumber() / Math.pow(10, fix);
+      unit = "KB";
+    } else if (fileSize.gt(BigNumber.from("0"))) {
+      formatVal = fixSize.toNumber() / Math.pow(10, fix);
+      unit = "Byte";
+    } else {
+      formatVal = "0";
+      unit = "Byte";
+    }
+
+    return formatVal + " " + unit;
+  },
+
+  formatLand(land, isObj = false) {
+    const landNum = BigNumber.from(land).div((10e18).toString());
+    let formatVal = land;
+    let unit = "";
+    const k = BigNumber.from(Math.pow(10, 5).toString());
+    const m = BigNumber.from(Math.pow(10, 8).toString());
+    const b = BigNumber.from(Math.pow(10, 14).toString());
+    const t = BigNumber.from(Math.pow(10, 16).toString());
+    const thanT = BigNumber.from(Math.pow(10, 20).toString());
+
+    if (landNum.gte(thanT)) {
+      formatVal = "> 99999";
+      unit = "T";
+    } else if (landNum.gte(t)) {
+      formatVal = landNum.div(t).toString();
+      unit = "T";
+    } else if (landNum.gte(b)) {
+      formatVal = landNum.div(b).toString();
+      unit = "B";
+    } else if (landNum.gte(m)) {
+      formatVal = landNum.div(m).toString();
+      unit = "M";
+    } else if (landNum.gte(k)) {
+      formatVal = landNum.div(k).toString();
+      unit = "K";
+    }
+    if (isObj) {
+      return {
+        land: formatVal,
+        unit,
+      };
+    }
+    return formatVal + " " + unit;
   },
 };

@@ -24,6 +24,23 @@ export default [
       ],
     },
   },
+  {
+    path: "/deposite",
+    component: () => import("./deposite"),
+    meta: {
+      title: "Deposite",
+      isTab: 1,
+      links: [
+        {
+          text: "Billing",
+          to: "/billing",
+        },
+        {
+          text: "Deposite",
+        },
+      ],
+    },
+  },
 ].map((it) => {
   it.path = "/billing" + it.path;
   it.meta.group = "Billing";

@@ -1,5 +1,6 @@
 <template>
   <div class="hide-msg">
+    <v-btn color="primary" @click="usdcToland">toLand</v-btn>
     <e-kv label="Account Balance" min-width="120px" center>
       <span class="fz-18">{{ balance === null ? "--" : balance }}</span>
       <span class="gray-6 fz-13 ml-1">USDC</span>
@@ -56,6 +57,7 @@
 import PayNetwork from "@/views/pay/pay-network";
 import PayConfirm from "@/views/pay/pay-confirm";
 import mixin from "@/views/pay/mixin";
+import axios from "axios";
 
 export default {
   mixins: [mixin],
@@ -197,6 +199,21 @@ export default {
       const receipt = await tx.wait();
       this.addHash(tx, "Withdraw");
       console.log("receipt", receipt);
+    },
+    async usdcToland() {
+      try {
+        await this.$http.post(
+          "$bill/assets/transform",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   components: {

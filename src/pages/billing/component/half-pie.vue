@@ -1,41 +1,17 @@
 <template>
-  <div class="billing-mothly-pie">
-    <h2>Billing details for {{ data.month }}</h2>
-    <half-pie></half-pie>
-    <div class="legend mt-3">
-      <div class="al-c space-btw" v-for="item in dataOptions" :key="item.name">
-        <div>
-          <span
-            class="d-ib"
-            :style="{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              background: item.color,
-            }"
-          ></span>
-          <span class="ml-1 fz-14">{{ item.name }}</span>
-        </div>
-
-        <div class="fz-12" style="color: #64748b">
-          <span>23123GB</span>
-          +
-          <span>{{ item.value }}LAND</span>
-        </div>
-      </div>
-    </div>
+  <div class="pos-r">
+    <div id="pie"></div>
+    <div class="pos-a data">{{ "23123123123".toLocaleString() }}</div>
   </div>
 </template>
 
 <script>
-import halfPie from "./half-pie.vue";
+import * as echarts from "echarts";
 export default {
-  components: {
-    halfPie,
-  },
   props: {
-    data: {
-      type: Object,
+    height: {
+      type: String,
+      default: "200px",
     },
   },
   data() {
@@ -105,7 +81,7 @@ export default {
           {
             // name: "Access From",
             type: "pie",
-            radius: ["80%", "150%"],
+            radius: ["100%", "150%"],
             center: ["50%", "100%"],
             itemStyle: {
               borderRadius: "2px",
@@ -143,17 +119,30 @@ export default {
       };
     },
   },
-  mounted() {},
+  mounted() {
+    var myChart = echarts.init(document.getElementById("pie"));
+    myChart.setOption(this.options);
+    const fn = window.onresize;
+    window.onresize = () => {
+      fn();
+      myChart.resize();
+    };
+  },
   methods: {},
 };
 </script>
 
 <style lang="scss" scoped>
-.billing-mothly-pie {
-  width: 100%;
-}
 #pie {
   width: 100%;
-  height: 200px;
+  height: 100%;
+  min-height: 200px;
+}
+.data {
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0%;
+  font-family: "DIN Alternate";
+  font-size: 28px;
 }
 </style>

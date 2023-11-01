@@ -12,7 +12,7 @@
         :value="date"
         readonly
         prepend-icon="mdi-calendar"
-        v-bind="attrs"
+        v-bind="{ ...attrs, ...$attrs }"
         v-on="on"
       ></v-text-field>
     </template>

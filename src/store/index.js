@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import http from "../api";
 import moduleS3 from "./s3";
+import moduleResource from "./resource";
 Vue.use(Vuex);
 
 const SET_DATA = "setData";
@@ -160,6 +161,7 @@ const store = new Vuex.Store({
   },
   modules: {
     moduleS3,
+    moduleResource,
   },
 });
 

@@ -1,75 +1,49 @@
 <template>
-  <div class="billing-records-container">
-    <div class="notice fz-14 py-2">
-      <span class="ml-4">
+  <div class="billing-records-container main-wrap">
+    <div class="notice fz-14 py-2 px-4 al-c">
+      <img src="/img/svg/new-billing/notice.svg" width="24" alt="" />
+      <span class="ml-2">
         The resource center has been fully upgraded. If you wish to view your
-        billing history, please click here .
+        billing history, please
+        <a href="#"><b>click here</b></a> .
       </span>
     </div>
-    <v-tabs
-      v-model="tab"
-      style="border-radius: 8px"
-      class="mt-4 tabs-cpm db-i"
-      centered
-      background-color="#F1F5F9"
-    >
-      <v-tab active-class="active-tab" class="tab-cpm">Monthly Bill </v-tab>
-      <v-tab active-class="active-tab" class="tab-cpm"
-        >Transaction Record</v-tab
-      >
-      <v-tab active-class="active-tab" class="tab-cpm">Recharge Record</v-tab>
 
-      <v-tab-item v-for="item in tabItemList" :key="item">
-        <component :is="item"></component>
-      </v-tab-item>
-    </v-tabs>
+    <billing-tabs
+      class="mt-5"
+      :tabs="['Monthly Bill', 'Transaction History', 'Purchase History']"
+      :tabsCmpList="tabItemList"
+    ></billing-tabs>
   </div>
 </template>
 
 <script>
-import BillingMonthlyBill from "./component/billing-monthly-bill.vue";
-import BillingRecharge from "./component/billing-recharge.vue";
-import BillingTransction from "./component/billing-transction.vue";
+import BillingTabs from "./component/billing-tabs.vue";
+import BillingMonthlyBill from "./views/billing-monthly-bill.vue";
+import BillingRecharge from "./views/billing-recharge.vue";
+import BillingTransction from "./views/billing-transction.vue";
 export default {
   components: {
-    BillingMonthlyBill,
-    BillingRecharge,
-    BillingTransction,
+    BillingTabs,
   },
   data() {
     return {
       tab: 0,
-      tabItemList: [
-        "BillingMonthlyBill",
-        "BillingRecharge",
-        "BillingTransction",
-      ],
+      tabItemList: [BillingMonthlyBill, BillingTransction, BillingRecharge],
     };
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.active-tab {
-  background: #fff;
-  border-radius: 4px;
-}
-.tabs-cpm :deep .v-tabs-bar {
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-}
-.tab-cpm {
-  margin: 0 16px;
-  padding: 6px;
-}
-:deep .v-tabs-slider-wrapper .v-tabs-slider {
-  background: transparent;
-}
 .notice {
   color: #735ea1;
 
   border-radius: 4px;
   background: #f3e8ff;
+  a {
+    text-decoration: underline;
+    color: #735ea1;
+  }
 }
 </style>

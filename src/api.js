@@ -186,7 +186,8 @@ http.interceptors.request.use(
       .replace("$resource", resourceApi)
       .replace("$bucektDomain", bucketDomainApi)
       .replace("$pinningService", pinningServiceApi)
-      .replace("$template", templateApi);
+      .replace("$template", templateApi)
+      .replace("$bill", process.env.VUE_APP_BILL_URL);
     if (config.url.includes(authApi)) {
       token = "Bearer " + token;
     }
