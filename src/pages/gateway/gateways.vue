@@ -69,10 +69,22 @@
             <span>{{ new Date(item.created_at * 1000).format() }}</span>
           </template>
           <template #item.act="{ item }">
-            <span class="action-btn" @click.stop="onRow(item)">Edit</span>
-            <span class="action-btn ml-3" @click.stop="onDelete(item)"
-              >Delete</span
+            <button
+              class="action-btn"
+              @click.stop="onRow(item)"
+              :class="{ disable: item.is_bucket }"
+              :disabled="item.is_bucket"
             >
+              Edit
+            </button>
+            <button
+              class="action-btn ml-3"
+              :class="{ disable: item.is_bucket }"
+              @click.stop="onDelete(item)"
+              :disabled="item.is_bucket"
+            >
+              Delete
+            </button>
           </template>
         </v-data-table>
 
@@ -193,6 +205,9 @@ $color1: #775da6;
 .action-btn {
   cursor: pointer;
   color: $color1;
+}
+.action-btn.disable {
+  color: gray;
 }
 .tips {
   color: #6a778b;

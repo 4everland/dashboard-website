@@ -82,7 +82,10 @@ const store = new Vuex.Store({
       return walletType == "OKX" ? window.okxwallet : provider;
     },
     bucketDefaultGateWay(state) {
-      return "https://" + md5(state.teamId) + ".4everland.link";
+      console.log(process.env.NODE_ENV);
+      if (process.env.NODE_ENV != "production")
+        return "http://" + md5(state.teamId) + ".ipfs.foreverland-link.xyz";
+      return "https://" + md5(state.teamId) + ".ipfs.4everland.link";
     },
   },
   mutations: {
