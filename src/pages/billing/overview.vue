@@ -53,7 +53,7 @@
         @click="$router.push('/billing/records?tab=Monthly%20Bill')"
       >
         <span>Transaction history</span>
-        <img src="" alt="" />
+        <img src="/img/svg/new-billing/right-arrow.svg" width="16" alt="" />
       </div>
     </div>
 
@@ -62,7 +62,7 @@
         <div class="py-6 px-4 h-flex al-c">
           <h4 class="fz-14">LAND Balance</h4>
           <div class="my-6 al-c">
-            <img src="" alt="" />
+            <img src="/img/svg/new-billing/land-icon.svg" width="24" alt="" />
             <span class="balance fw-b">{{ balance.land }}</span>
             <span class="fz-12 ml-2">{{ balance.unit }}</span>
           </div>
@@ -72,7 +72,7 @@
             @click="$router.push('/billing/deposite')"
           >
             <span>Deposite</span>
-            <img src="" alt="" />
+            <img src="/img/svg/new-billing/right-arrow.svg" width="16" alt="" />
           </div>
         </div>
         <div class="land-consume py-6 px-4">
