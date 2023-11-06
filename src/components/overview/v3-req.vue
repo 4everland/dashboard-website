@@ -141,7 +141,7 @@ export default {
         }
         if (!this.worldMapJson) {
           const { data } = await Axios.get(
-            "https://static1.4everland.org/config/world.json"
+            "https://4ever-web.4everland.store/config/world.json"
           );
           this.$setState({
             worldMapJson: data,

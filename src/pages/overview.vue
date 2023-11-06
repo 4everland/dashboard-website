@@ -147,11 +147,11 @@ export default {
     banners() {
       return [
         {
-          img: "https://static1.4everland.org/img/banner/20230815-153912.png",
+          img: "https://4ever-web.4everland.store/img/banner/20230815-153912.png",
           to: "/bucket/storage/",
         },
         {
-          img: "https://static1.4everland.org/img/banner/20230721-174716.png",
+          img: "https://4ever-web.4everland.store/img/banner/20230721-174716.png",
           href: "https://forms.gle/SAzZ2Sw31atnSSsB8",
         },
       ];

@@ -18,7 +18,7 @@
           <v-img
             class="bdrs-5 pos-a img-bg"
             style="left: -64px"
-            src1="https://static1.4everland.org/bg/party.gif"
+            src1="https://4ever-web.4everland.store/bg/party.gif"
             :src="$getImgSrc(info.screenshotPath)"
             lazy-src="/img/bg/empty/project.png"
             aspect-ratio="1.6"

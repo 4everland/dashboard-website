@@ -175,7 +175,7 @@ export default {
             title: "Firstlanding",
             id: nftId,
             num,
-            img: "https://static1.4everland.org/nft/nft0.gif",
+            img: "https://4ever-web.4everland.store/nft/nft0.gif",
             desc: "NFT Firstlanding",
           });
         }
