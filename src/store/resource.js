@@ -9,7 +9,12 @@ export default {
       arUnitPrice: BigNumber.from("0"),
       bandwidthUnitPrice: BigNumber.from("0"),
       buildMinUnitPrice: BigNumber.from("0"),
-      IPFS_STORAGE: 1,
+      chainContract: null,
+
+      balance: {
+        land: 0,
+        unit: "",
+      },
     };
   },
   getters: {},
@@ -20,6 +25,9 @@ export default {
     SET_RESOURCE(state, { name, unitPrice }) {
       state[name] = unitPrice;
     },
+    SET_CONTRACT(state, contract) {
+      state.chainContract = contract;
+    },
   },
   actions: {
     async getPrice({ commit }) {
@@ -29,7 +37,6 @@ export default {
         );
         const resources = data.items.map((item) => {
           const unitPrice = BigNumber.from(item.data);
-          console.log(item.resourceType);
           switch (item.resourceType) {
             case "BUILD_TIME":
               commit("SET_RESOURCE", {
@@ -58,6 +65,17 @@ export default {
           };
         });
         commit("SET_RESOURCES", resources);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getBalance({ commit }) {
+      try {
+        const { data } = await Vue.prototype.get("$bill-consume/assets");
+        const balance = Vue.prototype.$utils.formatLand(data.land, true);
+
+        commit("SET_BALANCE", balance);
       } catch (error) {
         console.log(error);
       }

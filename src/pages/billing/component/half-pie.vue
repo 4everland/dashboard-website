@@ -1,7 +1,7 @@
 <template>
   <div class="pos-r">
     <div id="pie"></div>
-    <div class="pos-a data">{{ "23123123123".toLocaleString() }}</div>
+    <div class="pos-a data">{{ landConsume.toLocaleString() }}</div>
   </div>
 </template>
 
@@ -13,6 +13,19 @@ export default {
       type: String,
       default: "200px",
     },
+
+    data: {
+      type: Array,
+      default: () => {
+        return [
+          { value: 0, name: "IPFS" },
+          { value: 0, name: "Arweave" },
+          { value: 0, name: "Bandwidth" },
+          { value: 0, name: "Build Minutes" },
+          { value: 0, name: "RPC Requests" },
+        ];
+      },
+    },
   },
   data() {
     return {};
@@ -22,17 +35,13 @@ export default {
       return ["#836BAF", "#F3CC5C", "#9AD3DC", "#000", "#57B9BC"];
     },
     dataOptions() {
-      const arr = [
-        { value: 20093, name: "IPFS" },
-        { value: 12223, name: "Arweave" },
-        { value: 42293, name: "Bandwidth" },
-        { value: 32293, name: "Build Minutes" },
-        { value: 22293, name: "RPC Requests" },
-      ];
-
-      return arr.map((it, i) => {
+      if (this.landConsume == 0n) return [{ value: 0, name: "" }];
+      return this.data.map((it, i) => {
         return { ...it, color: this.colorList[i] };
       });
+    },
+    landConsume() {
+      return this.data.reduce((pre, it) => pre + BigInt(it.value), BigInt(0));
     },
     options() {
       return {
@@ -76,6 +85,7 @@ export default {
               </div>
           `;
           },
+          show: false,
         },
         series: [
           {
@@ -86,6 +96,7 @@ export default {
             itemStyle: {
               borderRadius: "2px",
               color: (colors) => {
+                if (this.landConsume == 0n) return "#94A3B8";
                 return this.colorList[colors.dataIndex];
               },
             },

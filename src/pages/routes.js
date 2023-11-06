@@ -34,6 +34,16 @@ export default [
       subTitle: "Welcome to 4EVERLAND Dashboard",
     },
   },
+  {
+    path: "/overview1",
+    component: () => import("./overview1"),
+    meta: {
+      title: "Overview",
+      isTab: true,
+      hideNav: 1,
+      subTitle: "Welcome to 4EVERLAND Dashboard",
+    },
+  },
   ...BillingRoutes,
   ...HostingRoutes,
   ...BucketRoutes,

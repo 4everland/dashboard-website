@@ -1,7 +1,10 @@
 <template>
   <div class="billing-container">
     <h3 class="mb-4">Plan</h3>
-    <v-row class="plan-row">
+    <v-row class="plan-row" v-show="resourceLoading">
+      <v-col> <v-skeleton-loader type="article"></v-skeleton-loader></v-col>
+    </v-row>
+    <v-row class="plan-row" v-show="!resourceLoading">
       <v-col
         :md="4"
         cols="12"
@@ -23,12 +26,16 @@
               alt=""
             />
             <span class="ml-1">Upcoming resource allocation:</span>
-            <span class="fw-b variable">June 24, 2023</span>
+            <span class="fw-b variable ml-2">{{
+              efficientAt ? new Date(efficientAt).format() : "--"
+            }}</span>
           </p>
           <p class="mb-0 fz-12 al-c mt-1">
             <img src="/img/svg/new-billing/validity.svg" width="16" alt="" />
             <span class="ml-1">Validity:</span>
-            <span class="fw-b variable">Permanent</span>
+            <span class="fw-b variable ml-2">{{
+              invalidAt ? new Date(invalidAt).format() : "--"
+            }}</span>
           </p>
         </div>
       </v-col>
@@ -49,7 +56,7 @@
     <div class="mb-4 mt-6 al-c space-btw">
       <h3>LAND</h3>
       <div
-        class="fz-12 cursor-p"
+        class="fz-12 cursor-p al-c"
         @click="$router.push('/billing/records?tab=Monthly%20Bill')"
       >
         <span>Transaction history</span>
@@ -63,11 +70,11 @@
           <h4 class="fz-14">LAND Balance</h4>
           <div class="my-6 al-c">
             <img src="/img/svg/new-billing/land-icon.svg" width="24" alt="" />
-            <span class="balance fw-b">{{ balance.land }}</span>
+            <span class="balance fw-b ml-2">{{ balance.land }}</span>
             <span class="fz-12 ml-2">{{ balance.unit }}</span>
           </div>
           <div
-            class="deposite-btn py-4 px-6 cursor-p"
+            class="deposite-btn py-4 px-6 cursor-p al-c"
             v-ripple
             @click="$router.push('/billing/deposite')"
           >
@@ -130,7 +137,6 @@
 
 <script>
 import { BigNumber } from "ethers";
-
 import billingConsumeLine from "./component/billing-consume-line.vue";
 import billingResourceView from "./component/billing-resource-view.vue";
 import halfPie from "./component/half-pie.vue";
@@ -145,78 +151,99 @@ export default {
   data() {
     return {
       resourceList: [],
+      resourceLoading: false,
       balance: {
         land: "",
         unit: "",
       },
+      invalidAt: null,
+      efficientAt: null,
     };
   },
   created() {
     this.getBalance();
     this.getUserResource();
-    // this.getStaticView();
+    this.getStaticView();
   },
   methods: {
     async getUserResource() {
+      this.resourceLoading = true;
       try {
         const { data } = await this.$http.get("$bill-consume/combo/user/list");
-        console.log(data);
-        const comboItem = data.comboItems[0];
-        this.resourceList = comboItem.resourceItems.map((it, i) => {
-          let total = this.$utils.getBigFileSize(it.size);
-          let used = this.$utils.getBigFileSize(comboItem.consumeItems[i].size);
-
-          if (it.resourceType == "BUILD_TIME") {
-            return {
-              type: it.resourceType,
-              total: Number(it.size) / 60 + " Min",
-              used: Number(comboItem.consumeItems[i].size) / 60 + " Min",
-              remaining:
-                Number(it.size) / 60 -
-                Number(comboItem.consumeItems[i].size) / 60 +
-                " Min",
-              percent:
-                (Number(comboItem.consumeItems[i].size) / Number(it.size)) *
-                100,
-            };
-          }
-          return {
-            type: it.resourceType,
-            total,
-            used,
-            remaining: this.$utils.getBigFileSize(
+        const comboItem = data.combo;
+        this.invalidAt = Number(comboItem.invalidAt) * 1e3;
+        this.efficientAt = Number(comboItem.efficientAt) * 1e3;
+        this.resourceList = comboItem.resourceItems
+          .filter((it) => it.resourceType != "COMPUTE_UNIT")
+          .map((it, i) => {
+            let total = this.$utils.getBigFileSize(it.size);
+            let used = this.$utils.getBigFileSize(
+              BigNumber.from(comboItem.consumeItems[i].size).add(
+                BigNumber.from(data.realTimeItems[i].size)
+              )
+            );
+            let remaining = this.$utils.getBigFileSize(
               BigNumber.from(it.size)
                 .sub(BigNumber.from(comboItem.consumeItems[i].size))
+                .sub(BigNumber.from(data.realTimeItems[i].size))
                 .toString()
-            ),
-            percent: BigNumber.from(comboItem.consumeItems[i].size)
-              .mul("100")
-              .div(BigNumber.from(it.size))
-              .toNumber(),
-          };
+            );
+            let percent;
+            if (it.size == "0") {
+              percent = 100;
+            } else {
+              percent = BigNumber.from(comboItem.consumeItems[i].size)
+                .add(BigNumber.from(data.realTimeItems[i].size))
+                .mul("100")
+                .div(BigNumber.from(it.size))
+                .toNumber();
+            }
 
-          // if(it.resourceType == "BUILD_TIME"){
-          //   return {
-          //      type: it.resourceType,
-          //   total: this.$utils.get(it.size),
-          //   }
-          // }
-          // return {
-          //   type: it.resourceType,
-          //   total: this.$utils.getFileSize(it.size),
-          //   used: this.$utils.getFileSize(comboItem.consumeItems[i].size),
-          // }
-        });
-        console.log(this.resourceList);
+            if (it.resourceType == "BUILD_TIME") {
+              return {
+                type: it.resourceType,
+                total: Number(it.size) / 60 + " Min",
+                used:
+                  Number(comboItem.consumeItems[i].size) / 60 +
+                  Number(data.realTimeItems[i].size) / 60 +
+                  " Min",
+                remaining:
+                  Number(it.size) / 60 -
+                  Number(comboItem.consumeItems[i].size) / 60 -
+                  Number(data.realTimeItems[i].size) / 60 +
+                  " Min",
+                percent:
+                  ((Number(comboItem.consumeItems[i].size) +
+                    Number(data.realTimeItems[i].size)) /
+                    Number(it.size)) *
+                  100,
+              };
+            }
+
+            if (it.resourceType == "IPFS_STORAGE") {
+              used = this.$utils.getBigFileSize(
+                BigNumber.from(comboItem.consumeItems[i].size).add(
+                  BigNumber.from(data.totalIpfsStorage)
+                )
+              );
+            }
+            return {
+              type: it.resourceType,
+              total,
+              used,
+              remaining,
+              percent,
+            };
+          });
       } catch (error) {
         console.log(error);
       }
+      this.resourceLoading = false;
     },
     async getBalance() {
       try {
         const { data } = await this.$http.get("$bill-consume/assets");
         console.log(data);
-
         this.balance = this.$utils.formatLand(data.land, true);
       } catch (error) {
         console.log(error);
@@ -229,7 +256,7 @@ export default {
           "$bill-analytics/bill/land-used/analytics",
           {
             params: {
-              analyticsType: "HOUR",
+              analyticsType: "DAY",
             },
           }
         );

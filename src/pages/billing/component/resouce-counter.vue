@@ -307,6 +307,7 @@ export default {
   border-radius: 8px !important;
 }
 .resource-counter-container {
+  z-index: 100;
   position: absolute;
   right: 0;
   top: 5%;

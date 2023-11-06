@@ -17,7 +17,7 @@
       <v-progress-linear
         class="mt-1"
         style="border-radius: 8px"
-        :value="view.percent"
+        :value="100 - view.percent"
         color="#775DA6"
         height="4"
       >
