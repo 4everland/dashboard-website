@@ -38,7 +38,7 @@
       <template v-slot:item.cid="{ item }">
         <div class="al-c">
           <a
-            :href="$utils.getCidLink(item.cid)"
+            :href="ipfsLink(item.cid)"
             class="hash-link"
             style="color: #0b0817"
             target="_blank"
@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   props: {
     snapshotId: String,
@@ -108,6 +109,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(["bucketDefaultGateWay"]),
     filterList() {
       if (this.searchKey == "" || this.searchKey == null) {
         return this.list;
@@ -164,6 +166,9 @@ export default {
         console.log(error);
       }
       this.userClick = false;
+    },
+    ipfsLink(ipfs) {
+      return this.bucketDefaultGateWay + "/ipfs/" + ipfs;
     },
   },
   watch: {

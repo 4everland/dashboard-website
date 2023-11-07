@@ -53,7 +53,7 @@
         <template v-slot:item.cid="{ item }">
           <div class="al-c" v-if="item.cid">
             <a
-              :href="$utils.getCidLink(item.cid)"
+              :href="ipfsLink(item.cid)"
               class="hash-link"
               style="color: #0b0817"
               target="_blank"
@@ -180,6 +180,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import bucketSnapshotsDetail from "./bucket-snapshots-detail.vue";
 function debounce(func, delay = 300, immediate = false) {
   let timer = null;
@@ -239,6 +240,7 @@ export default {
     this.getList();
   },
   computed: {
+    ...mapGetters(["bucketDefaultGateWay"]),
     childPath() {
       return this.$route.path.split("/").length > 5;
     },
@@ -340,6 +342,9 @@ export default {
     handleJoinDiscord() {
       window.open("https://discord.com/invite/Cun2VpsdjF");
       this.showDialog = false;
+    },
+    ipfsLink(ipfs) {
+      return this.bucketDefaultGateWay + "/ipfs/" + ipfs;
     },
   },
   components: {

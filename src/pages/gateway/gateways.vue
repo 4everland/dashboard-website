@@ -55,7 +55,25 @@
           hide-default-footer
         >
           <template #item.name="{ item }">
-            <span>{{ item.name }}.4everland.link</span>
+            <div class="al-c">
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    class="mr-2"
+                    small
+                    color="#6C7789"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    mdi-alert-circle-outline
+                  </v-icon>
+                </template>
+                <span
+                  >System allocated for bucket, not manually removable.
+                </span>
+              </v-tooltip>
+              <span>{{ item.name.cutStr(6, 6) }}.4everland.link</span>
+            </div>
           </template>
           <template #item.scope="{ item }">
             <span style="text-transform: capitalize">{{
@@ -69,10 +87,22 @@
             <span>{{ new Date(item.created_at * 1000).format() }}</span>
           </template>
           <template #item.act="{ item }">
-            <span class="action-btn" @click.stop="onRow(item)">Edit</span>
-            <span class="action-btn ml-3" @click.stop="onDelete(item)"
-              >Delete</span
+            <button
+              class="action-btn"
+              @click.stop="onRow(item)"
+              :class="{ disable: item.is_bucket }"
+              :disabled="item.is_bucket"
             >
+              Edit
+            </button>
+            <button
+              class="action-btn ml-3"
+              :class="{ disable: item.is_bucket }"
+              @click.stop="onDelete(item)"
+              :disabled="item.is_bucket"
+            >
+              Delete
+            </button>
           </template>
         </v-data-table>
 
@@ -193,6 +223,11 @@ $color1: #775da6;
 .action-btn {
   cursor: pointer;
   color: $color1;
+}
+.action-btn.disable {
+  color: gray;
+
+  cursor: not-allowed;
 }
 .tips {
   color: #6a778b;
