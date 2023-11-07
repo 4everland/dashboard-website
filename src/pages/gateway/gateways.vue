@@ -56,7 +56,7 @@
         >
           <template #item.name="{ item }">
             <div class="al-c">
-              <v-tooltip top>
+              <v-tooltip top v-if="item.is_bucket != 0">
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
                     class="mr-2"
@@ -91,7 +91,7 @@
               class="action-btn"
               @click.stop="onRow(item)"
               :class="{ disable: item.is_bucket }"
-              :disabled="item.is_bucket"
+              :disabled="item.is_bucket != 0"
             >
               Edit
             </button>
@@ -99,7 +99,7 @@
               class="action-btn ml-3"
               :class="{ disable: item.is_bucket }"
               @click.stop="onDelete(item)"
-              :disabled="item.is_bucket"
+              :disabled="item.is_bucket != 0"
             >
               Delete
             </button>
