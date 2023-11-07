@@ -1,5 +1,10 @@
 module.exports = {
-  transpileDependencies: ["vuetify", "@4everland/s3-lib-storage", "@smithy"],
+  transpileDependencies: [
+    "vuetify",
+    "@4everland/s3-lib-storage",
+    "@smithy",
+    "@solana/spl-token",
+  ],
   outputDir: "dist",
   publicPath: process.env.NODE_ENV === "production" ? "/" : "/",
   productionSourceMap: false,
