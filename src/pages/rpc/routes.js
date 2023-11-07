@@ -8,19 +8,23 @@ export default [
     },
   },
   {
-    path: "/rpc/detail/:id",
+    path: "/rpc/detail/:name/:id",
     component: () => import("./detail.vue"),
     meta: {
       title: "RPC Detail",
-      links: [{ text: "RPC", to: "/rpc" }],
+      links: [{ text: "RPC", to: "/rpc" }, { text: "{name}" }],
     },
   },
   {
-    path: "/rpc/settings/:id",
+    path: "/rpc/settings/:name/:id",
     component: () => import("./settings.vue"),
     meta: {
       title: "RPC Settings",
-      links: [{ text: "RPC", to: "/rpc" }, { text: "RPC Settings" }],
+      links: [
+        { text: "RPC", to: "/rpc" },
+        { text: "{name}", to: "/rpc/detail/{name}/{id}" },
+        { text: "RPC Settings" },
+      ],
     },
   },
 ];

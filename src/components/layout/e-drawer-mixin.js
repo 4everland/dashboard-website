@@ -83,7 +83,7 @@ const menuMap = {
     ],
   },
   RPC: {
-    label: "Rpc",
+    label: "RPC",
     img: "m-rpc",
     to: "/rpc",
     active: false,

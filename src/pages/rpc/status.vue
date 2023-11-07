@@ -2,62 +2,130 @@
   <div>
     <div class="select-box">
       <v-row>
-        <v-col v-for="item in 3" :key="item">
+        <v-col>
           <div style="background-color: #fff">
             <v-select
               class="hide-msg"
               outlined
-              :items="items"
+              :items="chain"
               item-text="name"
               item-value="key"
               dense
               @change="handleChangeSelect"
-              v-model="seleted"
+              v-model="seletedChain"
+            ></v-select>
+          </div>
+        </v-col>
+        <v-col>
+          <div style="background-color: #fff">
+            <v-select
+              class="hide-msg"
+              outlined
+              :items="userKey"
+              item-text="name"
+              item-value="key"
+              dense
+              @change="handleChangeSelect"
+              v-model="seletedUserKey"
+            ></v-select>
+          </div>
+        </v-col>
+        <v-col>
+          <div style="background-color: #fff">
+            <v-select
+              class="hide-msg"
+              outlined
+              :items="time"
+              dense
+              @change="handleChangeSelectTime"
+              v-model="seletedTime"
             ></v-select>
           </div>
         </v-col>
       </v-row>
     </div>
-    <top-board />
-
-    <v-row class="mt-2">
-      <v-col cols="12">
-        <div class="api-list">
-          <div class="d-flex al-c mb-8 justify-space-between">
-            <span class="list-tit">Trends</span>
-            <e-radio-btn
-              class="ml-auto"
-              minWidth="110px"
-              minHeight="24px"
-              :options="typeList"
-              v-model="typeIdx"
-            ></e-radio-btn>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
+    <top-board ref="topBoard" :overViewData="overViewData" />
+    <trends-chart ref="trendsChart" :chartParams="chartParams" />
+    <top-chart ref="topChart" :chartParams="chartParams" />
+    <rpc-chart ref="rpcChart" :chartParams="chartParams" />
   </div>
 </template>
 
 <script>
 import topBoard from "./topBoard.vue";
+import trendsChart from "./components/trendsChart.vue";
+import topChart from "./components/topChart.vue";
+import rpcChart from "./components/rpcChart.vue";
+import { fetchOverview, fetchKeyList } from "@/api/rpc.js";
 
 export default {
   name: "RpcStatus",
   components: {
     topBoard,
+    trendsChart,
+    topChart,
+    rpcChart,
   },
   data() {
     return {
-      typeList: ["Requests", "CU"],
-      typeIdx: 0,
-      items: ["111", "222", "333"],
+      overViewData: {
+        rate: 0,
+        requests: 0,
+        usage: 0,
+      },
+      seletedChain: "All Chains",
+      seletedUserKey: "All Api Keys",
+      seletedTime: 1,
+      chain: ["All Chains"],
+      userKey: ["All Api Keys"],
+      time: [
+        {
+          text: "Last 24 Hrs",
+          value: 1,
+        },
+        {
+          text: "Last Month",
+          value: 30,
+        },
+      ],
+      chartParams: {
+        type: "REQUESTS",
+        chain: "",
+        userKey: "",
+        startAt: "",
+        endAt: "",
+        days: 1,
+      },
     };
   },
   created() {},
-  mounted() {},
-
-  methods: {},
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init(days = 1) {
+      this.getOverview();
+      this.$refs.topBoard.setOverView(days);
+      this.$refs.trendsChart.getChartData();
+      this.$refs.topChart.getChartData();
+      this.$refs.rpcChart.getChartData();
+    },
+    async getOverview() {
+      const params = this.chartParams;
+      const { data } = await fetchOverview(params);
+      this.overViewData = data;
+      this.overViewData.days = params.days;
+    },
+    handleChangeSelect() {},
+    handleChangeSelectTime(val) {
+      let endAt = new Date().getTime();
+      let startAt = endAt - val * 24 * 3600 * 1000;
+      this.chartParams.days = val;
+      this.chartParams.startAt = startAt;
+      this.chartParams.endAt = endAt;
+      this.init(val);
+    },
+  },
 };
 </script>
 
@@ -72,37 +140,5 @@ export default {
   background-color: #fff;
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.05);
   padding: 20px;
-}
-.api-list {
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.05);
-  padding: 24px;
-  .list-tit {
-    color: #000;
-    font-size: 24px;
-    font-weight: 400;
-  }
-  .empty-box {
-    text-align: center;
-    padding: 90px 0;
-    .empty-tips {
-      color: #64748b;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 400;
-      max-width: 640px;
-      margin: 0 auto;
-      margin-top: 24px;
-    }
-  }
-  .list-box {
-    .list-item {
-      padding: 24px;
-      justify-content: space-between;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-    }
-  }
 }
 </style>

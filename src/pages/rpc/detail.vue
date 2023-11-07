@@ -2,7 +2,7 @@
   <div class="api-detail">
     <div class="d-flex al-c mb-2">
       <e-right-opt-wrap style="width: 100%" :top="-70">
-        <v-btn color="primary" to="/rpc/settings/111">
+        <v-btn color="primary" :to="`/rpc/settings/${name}/${id}`">
           <img :src="require('/public/img/svg/rpc/settings.svg')" width="24" />
           <span class="ml-2">Settings</span>
         </v-btn>
@@ -32,7 +32,7 @@
       </div>
       <div class="d-flex al-c">
         <div class="api-key-box">
-          <span>bf56ca27092903e28b500902f121358ee</span>
+          <span>{{ userKey }}</span>
           <img :src="require('/public/img/svg/rpc/copy.svg')" width="24" />
         </div>
         <div class="ml-2 api-time">Created on 2023-01-03</div>
@@ -108,7 +108,7 @@
             </div>
             <div class="d-flex endpoints-link-box">
               <div class="endpoints-link">
-                bf56ca27092903e28b500902f121358ee
+                {{ userKey }}
               </div>
               <div class="copy-btn">
                 <svg
@@ -137,9 +137,13 @@
 </template>
 
 <script>
+import { fetchKeyDetail } from "@/api/rpc.js";
+
 export default {
   data() {
     return {
+      name: "",
+      id: "",
       tipsShow: true,
       typeList: ["Https", "WebSockets"],
       typeIdx: 0,
@@ -341,14 +345,25 @@ export default {
           seleted: "Mainnet",
         },
       ],
+      userKey: "",
     };
   },
-
-  mounted() {
-    this.$route.meta.links = [{ text: "RPC", to: "/rpc" }, { text: "name" }];
+  created() {
+    this.name = this.$route.params.name;
+    this.id = this.$route.params.id;
+    this.init();
   },
-
-  methods: {},
+  mounted() {},
+  methods: {
+    init() {
+      this.getKey();
+    },
+    async getKey() {
+      const id = this.id;
+      const { data } = await fetchKeyDetail(id);
+      this.userKey = data.userKey;
+    },
+  },
 };
 </script>
 

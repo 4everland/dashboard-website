@@ -1,6 +1,6 @@
 <template>
   <div>
-    <top-board />
+    <top-board ref="topBoard" :overViewData="overViewData" />
     <v-row class="mt-2">
       <v-col cols="12">
         <div class="api-list">
@@ -20,22 +20,31 @@
             </div>
           </div>
           <div class="list-box" v-else>
-            <div class="list-item d-flex al-c" @click="toDetail()">
+            <div
+              class="list-item d-flex al-c"
+              v-for="item in apiList"
+              :key="item.id"
+              @click="toDetail(item)"
+            >
               <div>
                 <div class="project-name">
-                  Project1
-                  <span class="free">free</span>
+                  {{ item.name }}
+                  <span class="free" v-if="item.type == 'FREE'">Free</span>
                 </div>
-                <div class="project-tips">This is a descripton</div>
+                <div class="project-tips">{{ item.notes }}</div>
               </div>
               <div>
-                <div class="project-status">
-                  <span class="point"></span>Active
+                <div
+                  class="project-status"
+                  :class="item.active ? 'active-status' : ''"
+                >
+                  <span class="point"></span>
+                  {{ item.active ? "Active" : "Inactive" }}
                 </div>
                 <div class="project-tips text-center">Status</div>
               </div>
               <div>
-                <div class="project-request">1200</div>
+                <div class="project-request">{{ item.requests }}</div>
                 <div class="project-tips">Requests (24hrs)</div>
               </div>
               <div>
@@ -81,14 +90,14 @@
         </div>
 
         <div class="mt-6 ta-r">
-          <v-btn min-width="130" text plain tile @click="newKeyShowPop = false"
+          <v-btn min-width="130" text plain tile @click="resetInput"
             >Cancel</v-btn
           >
           <v-btn
             :disabled="!formIsValid"
             min-width="130"
             color="primary"
-            @click="newKeyShowPop = false"
+            @click="setCreate"
             class="ml-4"
             >Create</v-btn
           >
@@ -100,7 +109,7 @@
 
 <script>
 import topBoard from "./topBoard.vue";
-import { fetchOverview, fetchKeyList } from "@/api/rpc.js";
+import { fetchOverview, fetchKeyList, sendCreateKey } from "@/api/rpc.js";
 export default {
   name: "RpcList",
   components: {
@@ -113,7 +122,7 @@ export default {
   },
   data() {
     return {
-      apiList: [{ name: "111" }],
+      apiList: [],
       newKeyShowPop: false,
       rules: {
         name: [(val) => (val || "").length > 0 || "This field is required"],
@@ -122,25 +131,47 @@ export default {
         name: "",
         notes: "",
       },
+      overViewData: {
+        rate: 0,
+        requests: 0,
+        usage: 0,
+      },
     };
   },
   created() {
-    // this.getOverview();
+    this.init();
   },
   mounted() {},
-
   methods: {
+    init() {
+      this.getOverview();
+      this.getApiList();
+    },
     async getOverview() {
       const { data } = await fetchOverview();
-      console.log(data);
+      this.overViewData = data;
+      this.$refs.topBoard.setOverView(1);
     },
     async getApiList() {
       const { data } = await fetchKeyList();
-      console.log(data);
+      this.apiList = data;
     },
-    toDetail() {
+    async setCreate() {
+      const newAPIData = this.newAPIData;
+      await sendCreateKey(newAPIData);
+      this.resetInput();
+      this.init();
+    },
+    resetInput() {
+      this.newAPIData = {
+        name: "",
+        notes: "",
+      };
+      this.newKeyShowPop = false;
+    },
+    toDetail(item) {
       this.$router.push({
-        path: "/rpc/detail/111",
+        path: `/rpc/detail/${item.name}/${item.id}`,
       });
     },
   },
@@ -178,6 +209,7 @@ export default {
       border-radius: 8px;
       border: 1px solid #cbd5e1;
       cursor: pointer;
+      margin-bottom: 24px;
       .project-name {
         color: #000;
         font-size: 20px;
@@ -211,6 +243,12 @@ export default {
           border-radius: 50%;
           background-color: #94a3b8;
           margin-right: 4px;
+        }
+      }
+      .active-status {
+        color: #00bd9a;
+        .point {
+          background-color: #00bd9a;
         }
       }
       .project-request {

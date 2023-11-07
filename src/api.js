@@ -51,6 +51,8 @@ export const templateApi = inDev
   ? "https://temp-template.foreverland.xyz"
   : "https://fs-api.4everland.org";
 
+export const rpcApi = process.env.VUE_APP_RPC_URL;
+
 Vue.prototype.$endpoint = endpoint;
 Vue.prototype.$authApi = authApi;
 

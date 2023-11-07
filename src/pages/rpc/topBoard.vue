@@ -8,7 +8,7 @@
             <span class="top-tit">{{ item.title }}</span>
           </div>
           <div class="data-box">
-            <span class="data-value">10</span>
+            <span class="data-value">{{ item.value }}</span>
             <span class="data-unit">K</span>
           </div>
         </div>
@@ -21,30 +21,59 @@
 export default {
   name: "RpcTopBoard",
   components: {},
+  props: {
+    overViewData: {
+      type: Object,
+      default() {
+        return {
+          rate: 0,
+          requests: 0,
+          usage: 0,
+        };
+      },
+    },
+  },
   data() {
     return {
       rpcData: [
         {
-          title: "CU Usage (24hrs)",
+          title: "CU Usage ",
+          defaultTitle: "CU Usage ",
           icon: require("/public/img/svg/rpc/cu.svg"),
-          value: "",
+          value: "0",
+          key: "usage",
         },
         {
-          title: "Total Requests (24hrs)",
+          title: "Total Requests ",
+          defaultTitle: "Total Requests ",
           icon: require("/public/img/svg/rpc/total.svg"),
-          value: "",
+          value: "0",
+          key: "requests",
         },
         {
-          title: "Success Rate (24hrs)",
+          title: "Success Rate ",
+          defaultTitle: "Success Rate ",
           icon: require("/public/img/svg/rpc/rate.svg"),
-          value: "",
+          value: "0",
+          key: "rate",
         },
       ],
     };
   },
   created() {},
   mounted() {},
-  methods: {},
+  methods: {
+    setOverView(days) {
+      this.rpcData.forEach((item) => {
+        item.value = this.overViewData[item.key];
+        if (days == 1) {
+          item.title = item.defaultTitle + "(24hrs)";
+        } else {
+          item.title = item.defaultTitle + "(one Month)";
+        }
+      });
+    },
+  },
 };
 </script>
 
