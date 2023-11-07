@@ -32,7 +32,7 @@
         <gateway-generate
           @getList="getList"
           :isInsufficient="isInsufficient"
-          :listLength="list.length"
+          :listLength="maxGatewayList.length"
         />
       </e-right-opt-wrap>
       <div class="tips py-2 mb-3 pr-5 al-c" v-show="isInsufficient">
@@ -55,7 +55,36 @@
           hide-default-footer
         >
           <template #item.name="{ item }">
-            <span>{{ item.name }}.4everland.link</span>
+            <div class="al-c">
+              <span>{{ item.name.cutStr(6, 6) }}.4everland.link</span>
+
+              <v-btn
+                class="e-btn-text ml-2"
+                icon
+                small
+                @click.stop
+                v-clipboard="item.name + '.4everland.link'"
+                @success="$toast('Copied!')"
+              >
+                <img src="/img/svg/copy.svg" width="12" />
+              </v-btn>
+              <v-tooltip top v-if="item.is_bucket != 0">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon
+                    class="mr-2"
+                    small
+                    color="#6C7789"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    mdi-alert-circle-outline
+                  </v-icon>
+                </template>
+                <span
+                  >System allocated for bucket, not manually removable.
+                </span>
+              </v-tooltip>
+            </div>
           </template>
           <template #item.scope="{ item }">
             <span style="text-transform: capitalize">{{
@@ -69,10 +98,22 @@
             <span>{{ new Date(item.created_at * 1000).format() }}</span>
           </template>
           <template #item.act="{ item }">
-            <span class="action-btn" @click.stop="onRow(item)">Edit</span>
-            <span class="action-btn ml-3" @click.stop="onDelete(item)"
-              >Delete</span
+            <button
+              class="action-btn"
+              @click.stop="onRow(item)"
+              :class="{ disable: item.is_bucket }"
+              :disabled="item.is_bucket != 0"
             >
+              Edit
+            </button>
+            <button
+              class="action-btn ml-3"
+              :class="{ disable: item.is_bucket }"
+              @click.stop="onDelete(item)"
+              :disabled="item.is_bucket != 0"
+            >
+              Delete
+            </button>
           </template>
         </v-data-table>
 
@@ -123,6 +164,9 @@ export default {
       return function (type) {
         return type == "public" ? "Open" : "Restricted";
       };
+    },
+    maxGatewayList() {
+      return this.list.filter((it) => it.is_bucket == 0);
     },
   },
   async mounted() {
@@ -193,6 +237,11 @@ $color1: #775da6;
 .action-btn {
   cursor: pointer;
   color: $color1;
+}
+.action-btn.disable {
+  color: gray;
+
+  cursor: not-allowed;
 }
 .tips {
   color: #6a778b;

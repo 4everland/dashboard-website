@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import http from "../api";
 import moduleS3 from "./s3";
 import moduleResource from "./resource";
+import md5 from "md5";
 Vue.use(Vuex);
 
 const SET_DATA = "setData";
@@ -80,6 +81,13 @@ const store = new Vuex.Store({
       }
 
       return walletType == "OKX" ? window.okxwallet : provider;
+    },
+    bucketDefaultGateWay(state) {
+      console.log(process.env.NODE_ENV);
+      // if (process.env.NODE_ENV != "production")
+      if (Vue.prototype.$inDev)
+        return "http://" + md5(state.teamId) + ".ipfs.foreverland-link.xyz";
+      return "https://" + md5(state.teamId) + ".ipfs.4everland.link";
     },
   },
   mutations: {
