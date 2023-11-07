@@ -5,28 +5,53 @@ export default {
   state: () => {
     return {
       resources: [],
-      ipfsUnitPrice: BigNumber.from("0"),
-      arUnitPrice: BigNumber.from("0"),
-      bandwidthUnitPrice: BigNumber.from("0"),
-      buildMinUnitPrice: BigNumber.from("0"),
       chainContract: null,
-
-      balance: {
-        land: 0,
-        unit: "",
-      },
+      ipfsUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
+      arUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
+      bandwidthUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
+      buildMinUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
+      rpcUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
+      originBalance: BigNumber.from("0"), // not format balance (server date 1e18)
     };
   },
-  getters: {},
-  mutations: {
-    SET_RESOURCES(state, resources) {
-      state.resources = resources;
+  getters: {
+    balance(state) {
+      return Vue.prototype.$utils.formatLand(state.originBalance, true);
     },
+    landToResource(state) {
+      if (state.ipfsUnitPrice.eq(BigNumber.from("0"))) return {};
+      const balance = BigNumber.from(state.originBalance);
+      const IPFS_STORAGE = balance.div(state.ipfsUnitPrice.mul(86400 * 30));
+      const TRAFFIC = balance.div(state.bandwidthUnitPrice);
+      const BUILD_TIME = balance.div(state.buildMinUnitPrice);
+      const AR_STORAGE = balance.div(state.arUnitPrice);
+      const COMPUTE_UNIT = balance.div(state.rpcUnitPrice);
+      return {
+        IPFS_STORAGE: Vue.prototype.$utils.getBigFileSize(IPFS_STORAGE),
+        TRAFFIC: Vue.prototype.$utils.getBigFileSize(TRAFFIC),
+        BUILD_TIME: Vue.prototype.$utils.getResourceTypeSize(
+          BUILD_TIME,
+          false,
+          "BUILD_TIME"
+        ),
+        AR_STORAGE: Vue.prototype.$utils.getBigFileSize(AR_STORAGE),
+        COMPUTE_UNIT: Vue.prototype.$utils.getResourceTypeSize(
+          COMPUTE_UNIT,
+          false,
+          "COMPUTE_UNIT"
+        ),
+      };
+    },
+  },
+  mutations: {
     SET_RESOURCE(state, { name, unitPrice }) {
       state[name] = unitPrice;
     },
     SET_CONTRACT(state, contract) {
       state.chainContract = contract;
+    },
+    SET_BALANCE(state, balance) {
+      state.originBalance = balance;
     },
   },
   actions: {
@@ -35,7 +60,7 @@ export default {
         const { data } = await Vue.prototype.$http.get(
           "$bill-consume/common/price"
         );
-        const resources = data.items.map((item) => {
+        data.items.map((item) => {
           const unitPrice = BigNumber.from(item.data);
           switch (item.resourceType) {
             case "BUILD_TIME":
@@ -56,15 +81,16 @@ export default {
                 unitPrice,
               });
               break;
+            case "COMPUTE_UNIT":
+              commit("SET_RESOURCE", {
+                name: "rpcUnitPrice",
+                unitPrice,
+              });
+              break;
             default:
               break;
           }
-          return {
-            type: item.resourceType,
-            unitPrice,
-          };
         });
-        commit("SET_RESOURCES", resources);
       } catch (error) {
         console.log(error);
       }
@@ -72,10 +98,8 @@ export default {
 
     async getBalance({ commit }) {
       try {
-        const { data } = await Vue.prototype.get("$bill-consume/assets");
-        const balance = Vue.prototype.$utils.formatLand(data.land, true);
-
-        commit("SET_BALANCE", balance);
+        const { data } = await Vue.prototype.$http.get("$bill-consume/assets");
+        commit("SET_BALANCE", data.land);
       } catch (error) {
         console.log(error);
       }

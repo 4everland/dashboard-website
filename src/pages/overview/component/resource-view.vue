@@ -1,23 +1,29 @@
 <template>
-  <div class="resource-view h-flex space-btw pa-4">
+  <div class="resource-view h-flex space-btw py-4 px-2">
     <div class="al-c">
       <img width="16" :src="curResource.img" alt="" />
-      <span class="fz-14 ml-3">{{ curResource.name }}</span>
+      <span class="fz-14 ml-4">{{ curResource.name }}</span>
     </div>
+
     <div>
-      <div class="used-resource al-c">
-        <img src="/img/svg/new-billing/manage.svg" width="16" alt="" />
-        <span class="fz-12 ml-1">{{ view.total }} Total</span>
-      </div>
-      <div class="residu-resource al-c">
-        <img src="/img/svg/new-billing/residu.svg" width="16" alt="" />
-        <span class="fz-12 mx-1">Remaining</span>
-        <span class="fz-12">{{ view.remaining }}</span>
+      <div class="al-c space-btw">
+        <div class="resource-size d-flex al-c">
+          <div class="consume-resource">
+            <span class="fz-24 fw-b">{{ view.used.size }}</span>
+            <span class="fz-12 ml-1">{{ view.used.unit }}</span>
+          </div>
+          <div class="sparator">/</div>
+          <div class="total-resource fz-12">{{ view.total }}</div>
+        </div>
+        <div class="land-to-resource fz-12">
+          +{{ transformDate }}
+          {{ view.type == "IPFS_STORAGE" ? "(1month)" : "" }}
+        </div>
       </div>
       <v-progress-linear
         class="mt-1"
         style="border-radius: 8px"
-        :value="view.percent"
+        :value="100"
         color="#775DA6"
         height="4"
       >
@@ -32,6 +38,9 @@ export default {
     view: {
       type: Object,
       required: true,
+    },
+    transformDate: {
+      type: String,
     },
   },
 
@@ -58,6 +67,11 @@ export default {
             name: "Build Minutes",
             img: "/img/svg/overview/buildtime.svg",
           };
+        case "COMPUTE_UNIT":
+          return {
+            name: "RPC Requests",
+            img: "/img/svg/overview/buildtime.svg",
+          };
         default:
           return {
             name: "IPFS",
@@ -74,11 +88,22 @@ export default {
   border-radius: 4px;
   background: #f8fafc;
   height: 144px;
-  .used-resource {
-    color: #0f172a;
+
+  .land-to-resource {
+    color: #775da6;
   }
-  .residu-resource {
-    color: #64748b;
+
+  .consume-resource {
+    line-height: 24px;
+  }
+  .sparator {
+    margin: 0 2px;
+  }
+  .resource-size {
+    line-height: 24px;
+    .total-resource {
+      color: #64748b;
+    }
   }
 }
 </style>

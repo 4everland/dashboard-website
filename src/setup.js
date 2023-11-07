@@ -228,12 +228,15 @@ Vue.prototype.$utils = {
   },
 
   getBigFileSize(byte, isObj = false, fix = 2) {
-    const fileSize = BigNumber.from(byte);
-    let fixSize = fileSize.mul(BigNumber.from(Math.pow(10, fix).toString()));
+    let fileSize = byte;
+    if (typeof byte == "string") {
+      fileSize = BigNumber.from(byte);
+    }
+    let fixSize = fileSize.mul(BigNumber.from(10 ** fix));
     const kb = BigNumber.from("1024");
-    const mb = BigNumber.from(Math.pow(1024, 2).toString());
-    const gb = BigNumber.from(Math.pow(1024, 3).toString());
-    const tb = BigNumber.from(Math.pow(1024, 4).toString());
+    const mb = BigNumber.from(1024 ** 2);
+    const gb = BigNumber.from(1024 ** 3);
+    const tb = BigNumber.from(1024 ** 4);
     let formatVal = "";
     let unit = "Byte";
 
@@ -256,13 +259,17 @@ Vue.prototype.$utils = {
       formatVal = "0";
       unit = "Byte";
     }
-
+    if (isObj) {
+      return {
+        size: formatVal,
+        unit,
+      };
+    }
     return formatVal + " " + unit;
   },
 
   formatLand(land, isObj = false) {
     const landNum = BigNumber.from(land).div((1e18).toString());
-    console.log(landNum.toString());
     let formatVal = land;
     let unit = "";
     const k = BigNumber.from(Math.pow(10, 5).toString());
@@ -295,5 +302,32 @@ Vue.prototype.$utils = {
       };
     }
     return formatVal + " " + unit;
+  },
+
+  getResourceTypeSize(size, isObj = false, type = "byte") {
+    const k = BigNumber.from(1e3);
+    const m = BigNumber.from(1e6);
+    switch (type) {
+      case "BUILD_TIME":
+        if (BigNumber.from(size).div(60).gte(m)) {
+          return BigNumber.from(size).div(60).div(m).toString() + "M Min";
+        } else if (BigNumber.from(size).div(60).gte(k)) {
+          return BigNumber.from(size).div(60).div(k).toString() + "K Min";
+        } else {
+          return BigNumber.from(size).div(60).toString() + "Min";
+        }
+      case "COMPUTE_UNIT":
+        if (BigNumber.from(size).gte(m)) {
+          console.log(size.toString());
+          return BigNumber.from(size).div(m).toString() + "M CU";
+        } else if (BigNumber.from(size).gte(k)) {
+          return BigNumber.from(size).div(k).toString() + "K CU";
+        } else {
+          return BigNumber.from(size).toString() + "CU";
+        }
+      default:
+        return this.getBigFileSize(size, isObj);
+    }
+    // return result;
   },
 };

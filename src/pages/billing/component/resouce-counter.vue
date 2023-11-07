@@ -47,6 +47,7 @@
                     <span class="unit fz-14">LAND</span>
                   </div>
                 </div>
+                {{ arPrice.toString() }}
                 <div class="input-btn cursor-p fw-b">Input</div>
               </div>
             </v-tab-item>
@@ -243,6 +244,7 @@ export default {
       arUnitPrice: (s) => s.moduleResource.arUnitPrice,
       bandwidthUnitPrice: (s) => s.moduleResource.bandwidthUnitPrice,
       buildMinUnitPrice: (s) => s.moduleResource.buildMinUnitPrice,
+      rpcUnitPrice: (s) => s.moduleResource.rpcUnitPrice,
     }),
 
     totalPrice() {
@@ -265,6 +267,7 @@ export default {
   },
   methods: {
     countPrice(payload) {
+      console.log(payload.type);
       switch (payload.type) {
         case "IPFS Storage":
           this.recordIpfsSize = BigNumber.from(payload.value.toString());

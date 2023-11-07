@@ -134,9 +134,11 @@ export default {
     var myChart = echarts.init(document.getElementById("pie"));
     myChart.setOption(this.options);
     const fn = window.onresize;
+    console.log(fn);
     window.onresize = () => {
       fn();
       myChart.resize();
+      console.log(111);
     };
   },
   methods: {},

@@ -15,7 +15,9 @@
             <img src="/img/svg/new-billing/manage.svg" width="24" alt="" />
             <span class="fw-b ml-1">Manage Sub</span>
           </div>
-          <div class="level-tag cursor-p fz-14 fw-b py-2 px-3">Standard</div>
+          <div class="level-tag cursor-p fz-14 fw-b py-2 px-3">
+            {{ onChain ? "Standard" : "Trial" }}
+          </div>
         </div>
         <div>
           <p class="mb-0 fz-12 al-c">
@@ -27,14 +29,14 @@
             />
             <span class="ml-1">Upcoming resource allocation:</span>
             <span class="fw-b variable ml-2">{{
-              efficientAt ? new Date(efficientAt).format() : "--"
+              efficientAt ? new Date(efficientAt).format("date") : "--"
             }}</span>
           </p>
           <p class="mb-0 fz-12 al-c mt-1">
             <img src="/img/svg/new-billing/validity.svg" width="16" alt="" />
             <span class="ml-1">Validity:</span>
             <span class="fw-b variable ml-2">{{
-              invalidAt ? new Date(invalidAt).format() : "--"
+              invalidAt ? new Date(invalidAt).format("date") : "--"
             }}</span>
           </p>
         </div>
@@ -141,6 +143,7 @@ import billingConsumeLine from "./component/billing-consume-line.vue";
 import billingResourceView from "./component/billing-resource-view.vue";
 import halfPie from "./component/half-pie.vue";
 import pie from "./component/pie.vue";
+import { mapState } from "vuex";
 export default {
   components: {
     billingConsumeLine,
@@ -152,18 +155,19 @@ export default {
     return {
       resourceList: [],
       resourceLoading: false,
-      balance: {
-        land: "",
-        unit: "",
-      },
       invalidAt: null,
       efficientAt: null,
     };
   },
+  computed: {
+    ...mapState({
+      balance: (s) => s.moduleResource.balance,
+      onChain: (s) => s.onChain,
+    }),
+  },
   created() {
-    this.getBalance();
+    this.$store.dispatch("getBalance");
     this.getUserResource();
-    this.getStaticView();
   },
   methods: {
     async getUserResource() {
@@ -190,7 +194,7 @@ export default {
             );
             let percent;
             if (it.size == "0") {
-              percent = 100;
+              percent = 0;
             } else {
               percent = BigNumber.from(comboItem.consumeItems[i].size)
                 .add(BigNumber.from(data.realTimeItems[i].size))
@@ -226,6 +230,11 @@ export default {
                   BigNumber.from(data.totalIpfsStorage)
                 )
               );
+              percent = BigNumber.from(comboItem.consumeItems[i].size)
+                .add(BigNumber.from(data.totalIpfsStorage))
+                .mul("100")
+                .div(BigNumber.from(it.size))
+                .toNumber();
             }
             return {
               type: it.resourceType,
@@ -239,31 +248,6 @@ export default {
         console.log(error);
       }
       this.resourceLoading = false;
-    },
-    async getBalance() {
-      try {
-        const { data } = await this.$http.get("$bill-consume/assets");
-        console.log(data);
-        this.balance = this.$utils.formatLand(data.land, true);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    async getStaticView() {
-      try {
-        const { data } = await this.$http.get(
-          "$bill-analytics/bill/land-used/analytics",
-          {
-            params: {
-              analyticsType: "DAY",
-            },
-          }
-        );
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
     },
   },
 };

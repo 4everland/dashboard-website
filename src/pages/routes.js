@@ -36,7 +36,7 @@ export default [
   },
   {
     path: "/overview1",
-    component: () => import("./overview1"),
+    component: () => import("./overview/overview1"),
     meta: {
       title: "Overview",
       isTab: true,
