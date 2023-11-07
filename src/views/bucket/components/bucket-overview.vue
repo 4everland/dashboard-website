@@ -125,7 +125,11 @@
             label="Dedicated Gateway"
             min-width="120px"
             labelColor="#6c7789"
-            >{{ bucketDefaultGateWay }}</e-kv
+            >{{
+              bucketDefaultGateWay
+                .replace("http://", "")
+                .replace("https://", "")
+            }}</e-kv
           >
         </v-col>
       </v-row>

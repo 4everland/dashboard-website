@@ -32,7 +32,7 @@
         <gateway-generate
           @getList="getList"
           :isInsufficient="isInsufficient"
-          :listLength="list.length"
+          :listLength="maxGatewayList.length"
         />
       </e-right-opt-wrap>
       <div class="tips py-2 mb-3 pr-5 al-c" v-show="isInsufficient">
@@ -56,6 +56,18 @@
         >
           <template #item.name="{ item }">
             <div class="al-c">
+              <span>{{ item.name.cutStr(6, 6) }}.4everland.link</span>
+
+              <v-btn
+                class="e-btn-text ml-2"
+                icon
+                small
+                @click.stop
+                v-clipboard="item.name + '.4everland.link'"
+                @success="$toast('Copied!')"
+              >
+                <img src="/img/svg/copy.svg" width="12" />
+              </v-btn>
               <v-tooltip top v-if="item.is_bucket != 0">
                 <template v-slot:activator="{ on, attrs }">
                   <v-icon
@@ -72,7 +84,6 @@
                   >System allocated for bucket, not manually removable.
                 </span>
               </v-tooltip>
-              <span>{{ item.name.cutStr(6, 6) }}.4everland.link</span>
             </div>
           </template>
           <template #item.scope="{ item }">
@@ -153,6 +164,9 @@ export default {
       return function (type) {
         return type == "public" ? "Open" : "Restricted";
       };
+    },
+    maxGatewayList() {
+      return this.list.filter((it) => it.is_bucket == 0);
     },
   },
   async mounted() {
