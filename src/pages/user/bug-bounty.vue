@@ -11,7 +11,7 @@
 <template>
   <div class="con-3 bug-bounty">
     <v-img
-      src="https://static1.4everland.org/bg/bug-bounty.png"
+      src="https://4ever-web.4everland.store/bg/bug-bounty.png"
       class="wh100p d-b hover-1"
       min-height="100"
       alt="Submit Report"

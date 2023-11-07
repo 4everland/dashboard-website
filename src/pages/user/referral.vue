@@ -70,7 +70,7 @@
 }
 
 .refer-header {
-  background: #2b0c74 url(https://static1.4everland.org/bg/referral-bg1.png)
+  background: #2b0c74 url(https://4ever-web.4everland.store/bg/referral-bg1.png)
     no-repeat;
   background-size: 100%;
   // .wrap-1 {

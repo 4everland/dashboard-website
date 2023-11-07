@@ -15,7 +15,7 @@
             :src="
               /^http/.test(it.img)
                 ? it.img
-                : 'https://static1.4everland.org/' + it.img
+                : 'https://4ever-web.4everland.store/' + it.img
             "
             class="w100p mb-4"
             contain
@@ -62,7 +62,7 @@ export default {
     async getList() {
       try {
         const { data } = await Axios.get(
-          "https://static1.4everland.org/config/changelog.json"
+          "https://4ever-web.4everland.store/config/changelog.json"
         );
         this.list = data;
         this.$setState({

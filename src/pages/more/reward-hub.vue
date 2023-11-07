@@ -2,7 +2,7 @@
   <div>
     <div class="bdrs-10 ov-h mb-4 pos-r">
       <img
-        src="https://static1.4everland.org/img/banner/20221109-160350.png"
+        src="https://4ever-web.4everland.store/img/banner/20221109-160350.png"
         class="w100p img-cover d-b"
         style="max-height: 170px"
       />

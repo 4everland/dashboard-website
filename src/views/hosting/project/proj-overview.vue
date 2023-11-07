@@ -17,9 +17,7 @@
         <v-col cols="12" md="6">
           <e-kv
             :label="
-              info.platform == 'GREENFIELD'
-                ? 'BNB Greenfield Testnet'
-                : info.platform
+              info.platform == 'GREENFIELD' ? 'BNB Greenfield' : info.platform
             "
             style="min-width: 120px"
           >
