@@ -85,7 +85,7 @@ export default {
               </div>
           `;
           },
-          show: false,
+          // show: false,
         },
         series: [
           {
@@ -138,7 +138,6 @@ export default {
     window.onresize = () => {
       fn();
       myChart.resize();
-      console.log(111);
     };
   },
   methods: {},

@@ -6,16 +6,66 @@
 export default {
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true,
+    },
+    data: {
+      type: Array,
     },
   },
   data() {
-    return {
-      option: {
+    return {};
+  },
+  computed: {
+    domId() {
+      return "pie" + this.id;
+    },
+    colorList() {
+      return { HOSTING: "#809AF4", BUCKET: "#5066CA", GATEWAY: "#94ADF6" };
+    },
+    options() {
+      return {
+        tooltip: {
+          trigger: "item",
+          formatter(params) {
+            // console.log(params);
+            let curResource = "";
+            switch (params.name) {
+              case "IPFS":
+                curResource = params.value * 2 + "MD";
+                break;
+              case "Arweave":
+                curResource = params.value * 2 + "GB";
+                break;
+              case "Bandwidth":
+                curResource = params.value * 2 + "MB";
+                break;
+              case "Build Minutes":
+                curResource = params.value * 2 + "Min";
+                break;
+              case "RPC Requests":
+                curResource = params.value * 2 + "CU";
+                break;
+              default:
+                curResource = params.value * 2;
+                break;
+            }
+            return `
+              <div class="al-c">
+                <span class="d-ib" style="width: 8px; height: 8px; background: ${params.color}; border-radius:50%"></span>
+                <span class="ml-1">${params.name}</span>
+                <span class="ml-2 fw-b fz-20" style="font-family: DIN Alternate;">${params.percent}%</span></div>
+              <div class="mt-1 fz-12" style="color: #64748B">
+                <span>${curResource}</span>
+                +
+                <span>${params.value}LAND</span>
+              </div>
+          `;
+          },
+          // show: false,
+        },
         series: [
           {
-            name: "Access From",
             type: "pie",
             radius: ["50%", "90%"],
             avoidLabelOverlap: false,
@@ -23,39 +73,41 @@ export default {
               show: false,
               // position: "center",
             },
-            // emphasis: {
-            //   label: {
-            //     show: true,
-            //     fontSize: 40,
-            //     fontWeight: "bold",
-            //   },
-            // },
-            // labelLine: {
-            //   show: false,
-            // },
-            data: [
-              { value: 1048, name: "Search Engine" },
-              { value: 735, name: "Direct" },
-              { value: 580, name: "Email" },
-            ],
+            itemStyle: {
+              color: (colors) => {
+                // if (this.landConsume == 0n) return "#94A3B8";
+                if (!this.length) return "#94A3B8";
+                return colors.data.color;
+              },
+            },
+            data: this.dataOptions,
           },
         ],
-      },
-    };
-  },
-  computed: {
-    domId() {
-      return "pie" + this.id;
+      };
+    },
+    dataOptions() {
+      if (!this.length) return [{ value: 0, name: "" }];
+      return this.data.map((it) => {
+        return { ...it, color: this.colorList[it.name] };
+      });
+    },
+    length() {
+      return this.data.filter((it) => it.value != "0").length;
     },
   },
   mounted() {
-    var myChart = echarts.init(document.getElementById(this.domId));
-    myChart.setOption(this.option);
+    this.myChart = echarts.init(document.getElementById(this.domId));
+    this.myChart.setOption(this.options);
     const fn = window.onresize;
     window.onresize = () => {
       fn();
-      myChart.resize();
+      this.myChart.resize();
     };
+  },
+  watch: {
+    dataOptions() {
+      this.myChart.setOption(this.options);
+    },
   },
 };
 </script>

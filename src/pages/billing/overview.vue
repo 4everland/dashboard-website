@@ -122,14 +122,23 @@
       </v-col>
       <v-col :md="8" cols="12">
         <v-row style="height: 100%">
-          <v-col
-            :md="4"
-            cols="12"
-            class="pie-col"
-            v-for="item in 3"
-            :key="item"
-          >
-            <pie :id="item"></pie>
+          <v-col :md="4" cols="12" class="pie-col">
+            <resource-monthly-ipfs-pie
+              name="BandWidth"
+              :data="bandwidthResourceObj"
+            ></resource-monthly-ipfs-pie>
+          </v-col>
+          <v-col :md="4" cols="12" class="pie-col">
+            <resource-monthly-ipfs-pie
+              name="IPFS"
+              :data="ipfsResourceObj"
+            ></resource-monthly-ipfs-pie>
+          </v-col>
+          <v-col :md="4" cols="12" class="pie-col">
+            <resource-monthly-ipfs-pie
+              name="Arweave"
+              :data="arResourceObj"
+            ></resource-monthly-ipfs-pie>
           </v-col>
         </v-row>
       </v-col>
@@ -142,14 +151,16 @@ import { BigNumber } from "ethers";
 import billingConsumeLine from "./component/billing-consume-line.vue";
 import billingResourceView from "./component/billing-resource-view.vue";
 import halfPie from "./component/half-pie.vue";
-import pie from "./component/pie.vue";
+// import pie from "./component/pie.vue";
+import resourceMonthlyIpfsPie from "./component/resource-monthly-ipfs-pie.vue";
 import { mapGetters, mapState } from "vuex";
 export default {
   components: {
     billingConsumeLine,
     billingResourceView,
     halfPie,
-    pie,
+    resourceMonthlyIpfsPie,
+    // pie,
   },
   data() {
     return {
@@ -157,6 +168,20 @@ export default {
       resourceLoading: false,
       invalidAt: null,
       efficientAt: null,
+      ipfsResourceObj: {
+        HOSTING: "0",
+        BUCKET: "0",
+        GATEWAY: "0",
+      },
+      arResourceObj: {
+        HOSTING: "0",
+        BUCKET: "0",
+      },
+      bandwidthResourceObj: {
+        HOSTING: "0",
+        BUCKET: "0",
+        GATEWAY: "0",
+      },
     };
   },
   computed: {
@@ -168,6 +193,9 @@ export default {
   created() {
     this.$store.dispatch("getBalance");
     this.getUserResource();
+    this.getAnalyticsIpfs();
+    this.getAnalyticsAr();
+    this.getAnalyticsBandwidth();
   },
   methods: {
     async getUserResource() {
@@ -248,6 +276,73 @@ export default {
         console.log(error);
       }
       this.resourceLoading = false;
+    },
+    async getAnalyticsIpfs() {
+      try {
+        const { data } = await this.$http.get(
+          "$bill-analytics/bill/app/analytics",
+          {
+            params: {
+              resourceType: "IPFS_STORAGE",
+            },
+          }
+        );
+
+        for (const key in this.ipfsResourceObj) {
+          this.ipfsResourceObj[key] = data
+            .filter((it) => it.appType == key)
+            .reduce((prev, it) => {
+              return prev.add(BigNumber.from(it.resourceConsume));
+            }, BigNumber.from("0"))
+            .toString();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getAnalyticsAr() {
+      try {
+        const { data } = await this.$http.get(
+          "$bill-analytics/bill/app/analytics",
+          {
+            params: {
+              resourceType: "AR_STORAGE",
+            },
+          }
+        );
+        for (const key in this.arResourceObj) {
+          this.arResourceObj[key] = data
+            .filter((it) => it.appType == key)
+            .reduce((prev, it) => {
+              return prev.add(BigNumber.from(it.resourceConsume));
+            }, BigNumber.from("0"))
+            .toString();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getAnalyticsBandwidth() {
+      try {
+        const { data } = await this.$http.get(
+          "$bill-analytics/bill/app/analytics",
+          {
+            params: {
+              resourceType: "TRAFFIC",
+            },
+          }
+        );
+        for (const key in this.bandwidthResourceObj) {
+          this.bandwidthResourceObj[key] = data
+            .filter((it) => it.appType == key)
+            .reduce((prev, it) => {
+              return prev.add(BigNumber.from(it.resourceConsume));
+            }, BigNumber.from("0"))
+            .toString();
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

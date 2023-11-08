@@ -313,7 +313,6 @@ export default {
         console.log(error);
       }
     },
-    handleConversion() {},
   },
 };
 </script>
