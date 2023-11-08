@@ -82,16 +82,17 @@
           minHeight="32px"
           :options="typeList"
           v-model="typeIdx"
+          @input="changeType"
         ></e-radio-btn>
       </div>
       <div class="endpoints-list-box mt-4">
         <div
           class="endpoints-list-item"
-          v-for="(item, index) in apiKeyLise"
+          v-for="(item, index) in chainList"
           :key="index"
         >
           <div class="d-flex al-c">
-            <img :src="item.icon" width="32" />
+            <img :src="item.logo" width="32" />
             <span class="item-name">{{ item.name }}</span>
           </div>
           <div class="d-flex">
@@ -99,16 +100,21 @@
               <v-select
                 class="hide-msg"
                 outlined
-                :items="item.selectItems"
+                :items="item.networks"
                 item-text="name"
                 item-value="key"
                 dense
+                @change="
+                  (val) => {
+                    changeSelectNetwork(val, item);
+                  }
+                "
                 v-model="item.seleted"
               ></v-select>
             </div>
             <div class="d-flex endpoints-link-box">
               <div class="endpoints-link">
-                {{ userKey }}
+                {{ item.rpcUrl }}
               </div>
               <div class="copy-btn">
                 <svg
@@ -137,7 +143,7 @@
 </template>
 
 <script>
-import { fetchKeyDetail } from "@/api/rpc.js";
+import { fetchKeyDetail, fetchEndpoints } from "@/api/rpc.js";
 
 export default {
   data() {
@@ -345,6 +351,7 @@ export default {
           seleted: "Mainnet",
         },
       ],
+      chainList: [],
       userKey: "",
     };
   },
@@ -355,13 +362,41 @@ export default {
   },
   mounted() {},
   methods: {
-    init() {
-      this.getKey();
+    async init() {
+      await this.getKey();
+      await this.getEndpoints("HTTP");
     },
     async getKey() {
       const id = this.id;
       const { data } = await fetchKeyDetail(id);
       this.userKey = data.userKey;
+    },
+    async getEndpoints(type) {
+      const params = { type: type };
+      const { data } = await fetchEndpoints(params);
+      data.map((item) => {
+        item.seleted = item.networks[0];
+        item.rpcUrl = item.url[0].replace("%s", this.userKey);
+        return item;
+      });
+      this.chainList = data;
+    },
+    changeType(val) {
+      switch (val) {
+        case 0:
+          this.getEndpoints("HTTP");
+          break;
+        case 1:
+          this.getEndpoints("WEBSOCKET");
+          break;
+      }
+    },
+    changeSelectNetwork(val, item) {
+      if (val == "mainnet") {
+        item.rpcUrl = item.url[0].replace("%s", this.userKey);
+      } else {
+        item.rpcUrl = item.url[1].replace("%s", this.userKey);
+      }
     },
   },
 };

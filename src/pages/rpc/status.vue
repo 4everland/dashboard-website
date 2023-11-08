@@ -7,11 +7,11 @@
             <v-select
               class="hide-msg"
               outlined
-              :items="chain"
+              :items="chainList"
               item-text="name"
-              item-value="key"
+              item-value="chain"
               dense
-              @change="handleChangeSelect"
+              @change="handleChangeSelectChain"
               v-model="seletedChain"
             ></v-select>
           </div>
@@ -21,11 +21,11 @@
             <v-select
               class="hide-msg"
               outlined
-              :items="userKey"
+              :items="userKeyList"
               item-text="name"
-              item-value="key"
+              item-value="id"
               dense
-              @change="handleChangeSelect"
+              @change="handleChangeSelectKey"
               v-model="seletedUserKey"
             ></v-select>
           </div>
@@ -56,7 +56,7 @@ import topBoard from "./topBoard.vue";
 import trendsChart from "./components/trendsChart.vue";
 import topChart from "./components/topChart.vue";
 import rpcChart from "./components/rpcChart.vue";
-import { fetchOverview, fetchKeyList } from "@/api/rpc.js";
+import { fetchOverview, fetchEndpoints, fetchKeyList } from "@/api/rpc.js";
 
 export default {
   name: "RpcStatus",
@@ -73,11 +73,11 @@ export default {
         requests: 0,
         usage: 0,
       },
-      seletedChain: "All Chains",
-      seletedUserKey: "All Api Keys",
+      seletedChain: "",
+      seletedUserKey: "",
       seletedTime: 1,
-      chain: ["All Chains"],
-      userKey: ["All Api Keys"],
+      chainList: [],
+      userKeyList: [],
       time: [
         {
           text: "Last 24 Hrs",
@@ -98,13 +98,17 @@ export default {
       },
     };
   },
-  created() {},
+  created() {
+    this.getEndpoints();
+    this.getKeyList();
+  },
   mounted() {
     this.init();
   },
   methods: {
-    init(days = 1) {
+    init() {
       this.getOverview();
+      const days = this.chartParams.days;
       this.$refs.topBoard.setOverView(days);
       this.$refs.trendsChart.getChartData();
       this.$refs.topChart.getChartData();
@@ -116,14 +120,44 @@ export default {
       this.overViewData = data;
       this.overViewData.days = params.days;
     },
-    handleChangeSelect() {},
+    async getEndpoints() {
+      let chainList = [
+        {
+          name: "All Chains",
+          chain: "",
+        },
+      ];
+      const params = { type: "ALL" };
+      const { data } = await fetchEndpoints(params);
+      chainList = chainList.concat(data);
+      this.chainList = chainList;
+    },
+    async getKeyList() {
+      let userKeyList = [
+        {
+          name: "All Api Keys",
+          id: "",
+        },
+      ];
+      const { data } = await fetchKeyList();
+      userKeyList = userKeyList.concat(data);
+      this.userKeyList = userKeyList;
+    },
+    handleChangeSelectChain(val) {
+      this.chartParams.chain = val;
+      this.init();
+    },
+    handleChangeSelectKey(val) {
+      this.chartParams.userKey = val;
+      this.init();
+    },
     handleChangeSelectTime(val) {
       let endAt = new Date().getTime();
       let startAt = endAt - val * 24 * 3600 * 1000;
       this.chartParams.days = val;
       this.chartParams.startAt = startAt;
       this.chartParams.endAt = endAt;
-      this.init(val);
+      this.init();
     },
   },
 };

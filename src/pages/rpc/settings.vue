@@ -201,6 +201,7 @@ export default {
     async onDelete() {
       const id = this.id;
       await deletetKey(id);
+      this.$router.push("/rpc");
     },
   },
 };

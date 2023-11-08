@@ -76,3 +76,7 @@ export function resetKey(id) {
 export function deletetKey(id) {
   return request.delete(`/rpc/manager/keys/${id}`);
 }
+
+export function fetchEndpoints(params) {
+  return request.get(`/rpc/manager/endpoints`, { params });
+}

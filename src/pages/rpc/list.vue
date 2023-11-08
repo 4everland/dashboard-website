@@ -138,19 +138,19 @@ export default {
       },
     };
   },
-  created() {
+  created() {},
+  mounted() {
     this.init();
   },
-  mounted() {},
   methods: {
-    init() {
-      this.getOverview();
+    async init() {
+      await this.getOverview();
+      this.$refs.topBoard.setOverView(1);
       this.getApiList();
     },
     async getOverview() {
       const { data } = await fetchOverview();
       this.overViewData = data;
-      this.$refs.topBoard.setOverView(1);
     },
     async getApiList() {
       const { data } = await fetchKeyList();

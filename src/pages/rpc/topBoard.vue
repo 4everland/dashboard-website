@@ -63,7 +63,7 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    setOverView(days) {
+    setOverView(days = 1) {
       this.rpcData.forEach((item) => {
         item.value = this.overViewData[item.key];
         if (days == 1) {
