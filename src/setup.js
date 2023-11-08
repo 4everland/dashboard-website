@@ -305,29 +305,65 @@ Vue.prototype.$utils = {
   },
 
   getResourceTypeSize(size, isObj = false, type = "byte") {
+    let date = size;
+    let unit = "";
+    let formatVal = "0";
+    if (typeof size == "string") {
+      date = BigNumber.from(size);
+    }
     const k = BigNumber.from(1e3);
     const m = BigNumber.from(1e6);
+    const b = BigNumber.from(1e8);
+    const t = BigNumber.from(1e12);
     switch (type) {
       case "BUILD_TIME":
-        if (BigNumber.from(size).div(60).gte(m)) {
-          return BigNumber.from(size).div(60).div(m).toString() + "M Min";
-        } else if (BigNumber.from(size).div(60).gte(k)) {
-          return BigNumber.from(size).div(60).div(k).toString() + "K Min";
+        if (date.div(60).gte(t)) {
+          // return date.div(60).div(t).toString() + " T Min";
+          formatVal = date.div(60).div(t).toString();
+          unit = "T Min";
+        } else if (date.div(60).gte(b)) {
+          formatVal = date.div(60).div(b).toString();
+          unit = "B Min";
+        } else if (date.div(60).gte(m)) {
+          formatVal = date.div(60).div(m).toString();
+          unit = "M Min";
+        } else if (date.div(60).gte(k)) {
+          formatVal = date.div(60).div(k).toString();
+          unit = "K Min";
         } else {
-          return BigNumber.from(size).div(60).toString() + "Min";
+          formatVal = date.div(60).toString();
+          unit = "Min";
         }
+        break;
       case "COMPUTE_UNIT":
-        if (BigNumber.from(size).gte(m)) {
-          console.log(size.toString());
-          return BigNumber.from(size).div(m).toString() + "M CU";
-        } else if (BigNumber.from(size).gte(k)) {
-          return BigNumber.from(size).div(k).toString() + "K CU";
+        if (date.gte(t)) {
+          formatVal = date.div(t).toString();
+          unit = "T CU";
+        } else if (date.gte(b)) {
+          formatVal = date.div(b).toString();
+          unit = "B CU";
+        } else if (date.gte(m)) {
+          formatVal = date.div(m).toString();
+          unit = "M CU";
+        } else if (date.gte(k)) {
+          formatVal = date.div(k).toString();
+          unit = "K CU";
         } else {
-          return BigNumber.from(size).toString() + "CU";
+          formatVal = date.toString();
+          unit = " CU";
         }
+        break;
       default:
         return this.getBigFileSize(size, isObj);
     }
+
+    if (isObj) {
+      return {
+        size: formatVal,
+        unit,
+      };
+    }
+    return formatVal + " " + unit;
     // return result;
   },
 };

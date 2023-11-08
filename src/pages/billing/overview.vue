@@ -143,7 +143,7 @@ import billingConsumeLine from "./component/billing-consume-line.vue";
 import billingResourceView from "./component/billing-resource-view.vue";
 import halfPie from "./component/half-pie.vue";
 import pie from "./component/pie.vue";
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   components: {
     billingConsumeLine,
@@ -160,8 +160,8 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["balance"]),
     ...mapState({
-      balance: (s) => s.moduleResource.balance,
       onChain: (s) => s.onChain,
     }),
   },

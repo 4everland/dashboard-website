@@ -73,6 +73,17 @@
                   Deposite
                 </div>
                 <div class="conversion-btn" v-ripple>Conversion</div>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-icon class="ml-4" size="18" v-bind="attrs" v-on="on"
+                      >mdi-alert-circle-outline</v-icon
+                    >
+                  </template>
+                  <span
+                    >Conversion will convert LAND into various resources at the
+                    full amount, for reference purposes only</span
+                  >
+                </v-tooltip>
               </div>
             </div>
 
@@ -254,6 +265,24 @@ export default {
               ),
               true
             );
+          }
+
+          if (it.resourceType == "COMPUTE_UNIT") {
+            return {
+              type: it.resourceType,
+              total: this.$utils.getResourceTypeSize(
+                it.size,
+                false,
+                it.resourceType
+              ),
+              used: this.$utils.getResourceTypeSize(
+                BigNumber.from(comboItem.consumeItems[i].size).add(
+                  BigNumber.from(data.realTimeItems[i].size)
+                ),
+                true,
+                it.resourceType
+              ),
+            };
           }
           return {
             type: it.resourceType,

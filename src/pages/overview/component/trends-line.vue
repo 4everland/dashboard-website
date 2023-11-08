@@ -75,6 +75,9 @@ export default {
           type: "value",
         },
       },
+      GATEWAY: new Array(31).fill(0),
+      HOSTING: new Array(31).fill(0),
+      BUCKET: new Array(31).fill(0),
     };
   },
   computed: {
@@ -120,7 +123,7 @@ export default {
               color: "#809AF4",
             },
             stack: "Total",
-            data: new Array(31).fill(0),
+            data: this.HOSTING,
           },
           {
             name: "Bucket",
@@ -130,7 +133,7 @@ export default {
               color: "#5066CA",
             },
             stack: "Total",
-            data: new Array(31).fill(0),
+            data: this.BUCKET,
           },
           {
             name: "Gateway",
@@ -140,7 +143,7 @@ export default {
               color: "#94ADF6",
             },
             stack: "Total",
-            data: new Array(31).fill(0),
+            data: this.GATEWAY,
           },
         ],
       };
@@ -153,7 +156,6 @@ export default {
     window.onresize = () => {
       fn();
       this.myChart.resize();
-      console.log(222);
     };
     this.getAnalytics();
   },
@@ -168,7 +170,15 @@ export default {
             },
           }
         );
+        this.monthAgoTimeStamp.forEach((it, i) => {
+          data.forEach((item) => {
+            if (item.timestamp == it) {
+              this[item.appType][i] = Number(item.resourceConsume);
+            }
+          });
+        });
         console.log(data);
+        this.myChart.setOption({ ...this.baseOptions, ...this.options });
       } catch (error) {
         console.log(error);
       }
