@@ -26,6 +26,9 @@ export default {
       const BUILD_TIME = balance.div(state.buildMinUnitPrice);
       const AR_STORAGE = balance.div(state.arUnitPrice);
       const COMPUTE_UNIT = balance.div(state.rpcUnitPrice);
+
+      console.log(balance);
+      console.log(IPFS_STORAGE.toString(), TRAFFIC);
       return {
         IPFS_STORAGE: Vue.prototype.$utils.getBigFileSize(IPFS_STORAGE),
         TRAFFIC: Vue.prototype.$utils.getBigFileSize(TRAFFIC),

@@ -105,12 +105,31 @@ export default {
       return this.desserts[this.curIndex];
     },
   },
+  created() {
+    this.getList();
+  },
   mounted() {
     console.log("billmonth");
   },
   methods: {
     handleClick(index) {
       this.curIndex = index;
+    },
+
+    async getList() {
+      try {
+        const { data } = await this.$http.get(
+          "$bill-analytics/bill/land-used/analytics",
+          {
+            params: {
+              analyticsType: "DAY",
+            },
+          }
+        );
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

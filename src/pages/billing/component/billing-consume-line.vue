@@ -69,13 +69,11 @@ export default {
     },
     options() {
       return {
-        xAxis: [
-          {
-            type: "category",
-            boundaryGap: false,
-            data: this.monthAgoDate,
-          },
-        ],
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: this.monthAgoDate,
+        },
         series: [
           {
             name: "IPFS",
@@ -84,9 +82,6 @@ export default {
             areaStyle: {},
             itemStyle: {
               color: "#836BAF",
-            },
-            emphasis: {
-              focus: "series",
             },
             data: this.IPFS_STORAGE,
           },
@@ -98,9 +93,6 @@ export default {
             itemStyle: {
               color: "#F3CC5C",
             },
-            emphasis: {
-              focus: "series",
-            },
             data: this.AR_STORAGE,
           },
           {
@@ -110,9 +102,6 @@ export default {
             areaStyle: {},
             itemStyle: {
               color: "#9AD3DC",
-            },
-            emphasis: {
-              focus: "series",
             },
             data: this.TRAFFIC,
           },
@@ -124,26 +113,18 @@ export default {
             itemStyle: {
               color: "#000",
             },
-            emphasis: {
-              focus: "series",
-            },
             data: this.BUILD_TIME,
           },
           {
             name: "Rpc Requests",
             type: "line",
             stack: "Total",
-            // label: {
-            //   show: true,
-            //   position: "top",
-            // },
+
             areaStyle: {},
             itemStyle: {
               color: "#57B9BC",
             },
-            emphasis: {
-              focus: "series",
-            },
+
             data: this.COMPUTE_UNIT,
           },
         ],

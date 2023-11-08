@@ -119,6 +119,7 @@ export default {
           {
             name: "Hosting",
             type: "line",
+            areaStyle: {},
             itemStyle: {
               color: "#809AF4",
             },
@@ -177,7 +178,6 @@ export default {
             }
           });
         });
-        console.log(data);
         this.myChart.setOption({ ...this.baseOptions, ...this.options });
       } catch (error) {
         console.log(error);

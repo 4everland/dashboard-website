@@ -72,7 +72,13 @@
                 >
                   Deposite
                 </div>
-                <div class="conversion-btn" v-ripple>Conversion</div>
+                <div
+                  class="conversion-btn"
+                  v-ripple
+                  @click="showTransform = true"
+                >
+                  Conversion
+                </div>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon class="ml-4" size="18" v-bind="attrs" v-on="on"
@@ -143,6 +149,7 @@
         <v-col v-for="item in resourceList" :key="item.type">
           <resource-view
             :view="item"
+            :showTransform="showTransform"
             :transformDate="landToResource[item.type]"
           ></resource-view>
         </v-col>
@@ -180,6 +187,7 @@ export default {
       efficientAt: null,
       resourceList: [],
       changeLogList: [],
+      showTransform: false,
     };
   },
   created() {
@@ -305,6 +313,7 @@ export default {
         console.log(error);
       }
     },
+    handleConversion() {},
   },
 };
 </script>

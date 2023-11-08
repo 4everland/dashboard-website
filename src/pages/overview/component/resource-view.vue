@@ -15,7 +15,7 @@
           <div class="sparator">/</div>
           <div class="total-resource fz-12">{{ view.total }}</div>
         </div>
-        <div class="land-to-resource fz-12">
+        <div class="land-to-resource fz-12" v-show="showTransform">
           +{{ transformDate }}
           {{ view.type == "IPFS_STORAGE" ? "(1month)" : "" }}
         </div>
@@ -41,6 +41,10 @@ export default {
     },
     transformDate: {
       type: String,
+    },
+    showTransform: {
+      type: Boolean,
+      default: false,
     },
   },
 

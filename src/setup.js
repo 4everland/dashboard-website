@@ -241,19 +241,19 @@ Vue.prototype.$utils = {
     let unit = "Byte";
 
     if (fileSize.gte(tb)) {
-      formatVal = fixSize.div(tb).toNumber() / Math.pow(10, fix);
+      formatVal = fixSize.div(tb).div(BigNumber.from(10 ** fix));
       unit = "TB";
     } else if (fileSize.gte(gb)) {
-      formatVal = fixSize.div(gb).toNumber() / Math.pow(10, fix);
+      formatVal = fixSize.div(gb).div(BigNumber.from(10 ** fix));
       unit = "GB";
     } else if (fileSize.gte(mb)) {
-      formatVal = fixSize.div(mb).toNumber() / Math.pow(10, fix);
+      formatVal = fixSize.div(mb).div(BigNumber.from(10 ** fix));
       unit = "MB";
     } else if (fileSize.gte(kb)) {
-      formatVal = fixSize.div(kb).toNumber() / Math.pow(10, fix);
+      formatVal = fixSize.div(kb).div(BigNumber.from(10 ** fix));
       unit = "KB";
     } else if (fileSize.gt(BigNumber.from("0"))) {
-      formatVal = fixSize.toNumber() / Math.pow(10, fix);
+      formatVal = fixSize.div(BigNumber.from(10 ** fix));
       unit = "Byte";
     } else {
       formatVal = "0";
