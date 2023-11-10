@@ -9,7 +9,8 @@
           </div>
           <div class="data-box">
             <span class="data-value">{{ item.value }}</span>
-            <span class="data-unit">K</span>
+            <span class="data-unit" v-if="index == 0">K</span>
+            <span class="data-unit" v-if="index == 2">%</span>
           </div>
         </div>
       </v-col>

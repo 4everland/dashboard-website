@@ -6,7 +6,7 @@
         <div class="api-list">
           <div class="d-flex al-c mb-8 justify-space-between">
             <span class="list-tit">My API Keys</span>
-            <v-btn color="primary" @click="newKeyShowPop = true">
+            <v-btn color="primary" @click="newCreate" :loading="createLoading">
               <img :src="require('/public/img/svg/rpc/key.svg')" width="24" />
               <span class="ml-2">Create New key</span>
             </v-btn>
@@ -26,14 +26,14 @@
               :key="item.id"
               @click="toDetail(item)"
             >
-              <div>
+              <div class="name-box">
                 <div class="project-name">
                   {{ item.name }}
                   <span class="free" v-if="item.type == 'FREE'">Free</span>
                 </div>
-                <div class="project-tips">{{ item.notes }}</div>
+                <div class="project-tips">{{ item.notes || "-" }}</div>
               </div>
-              <div>
+              <div class="status-box">
                 <div
                   class="project-status"
                   :class="item.active ? 'active-status' : ''"
@@ -43,7 +43,7 @@
                 </div>
                 <div class="project-tips text-center">Status</div>
               </div>
-              <div>
+              <div class="status-box">
                 <div class="project-request">{{ item.requests }}</div>
                 <div class="project-tips">Requests (24hrs)</div>
               </div>
@@ -62,44 +62,63 @@
     <v-dialog v-model="newKeyShowPop" max-width="600" persistent>
       <div class="pd-30">
         <h3>Create An APl Key</h3>
-        <div class="mt-6">
-          <p>API Key Name</p>
-          <div class="mt-2">
-            <v-text-field
-              outlined
-              dense
-              counter="40"
-              required
-              :rules="rules.name"
-              v-model.trim="newAPIData.name"
-              placeholder="Type in a name for your API Key"
-            >
-            </v-text-field>
+        <v-form ref="form" v-model="valid">
+          <div class="mt-6">
+            <p>API Key Name</p>
+            <div class="mt-2">
+              <v-text-field
+                outlined
+                dense
+                counter="40"
+                required
+                :rules="rules.name"
+                v-model.trim="newAPIData.name"
+                placeholder="Type in a name for your API Key"
+              >
+              </v-text-field>
+            </div>
+            <p>Notes</p>
+            <div class="mt-2">
+              <v-text-field
+                outlined
+                dense
+                counter="80"
+                :rules="rules.notes"
+                v-model.trim="newAPIData.notes"
+                placeholder="E.g., chains, networks, etc."
+              >
+              </v-text-field>
+            </div>
           </div>
-          <p>Notes</p>
-          <div class="mt-2">
-            <v-text-field
-              outlined
-              dense
-              counter="80"
-              v-model.trim="newAPIData.notes"
-              placeholder="E.g., chains, networks, etc."
-            >
-            </v-text-field>
-          </div>
-        </div>
 
+          <div class="mt-6 ta-r">
+            <v-btn min-width="130" text plain tile @click="resetInput"
+              >Cancel</v-btn
+            >
+            <v-btn
+              :disabled="!valid"
+              :loading="loading"
+              min-width="130"
+              color="primary"
+              @click="setCreate"
+              class="ml-4"
+              >Create</v-btn
+            >
+          </div>
+        </v-form>
+      </div>
+    </v-dialog>
+
+    <v-dialog v-model="noMoreKey" max-width="600" persistent>
+      <div class="pd-30">
+        <h3>Create An APl Key</h3>
+        <div class="mt-6">
+          Please note that currently, only one API Key can be created per
+          account. We will launch paid API keys soon, so stay tuned.
+        </div>
         <div class="mt-6 ta-r">
-          <v-btn min-width="130" text plain tile @click="resetInput"
-            >Cancel</v-btn
-          >
-          <v-btn
-            :disabled="!formIsValid"
-            min-width="130"
-            color="primary"
-            @click="setCreate"
-            class="ml-4"
-            >Create</v-btn
+          <v-btn @click="noMoreKey = false" color="primary"
+            >All right, got it.</v-btn
           >
         </div>
       </div>
@@ -115,17 +134,21 @@ export default {
   components: {
     topBoard,
   },
-  computed: {
-    formIsValid() {
-      return this.newAPIData.name;
-    },
-  },
+  computed: {},
   data() {
     return {
+      createLoading: true,
+      valid: false,
+      loading: false,
       apiList: [],
       newKeyShowPop: false,
+      noMoreKey: false,
       rules: {
-        name: [(val) => (val || "").length > 0 || "This field is required"],
+        name: [
+          (val) => (val || "").length > 0 || "This field is required",
+          (val) => (val || "").length <= 40 || "Max 40 characters",
+        ],
+        notes: [(val) => (val || "").length <= 80 || "Max 80 characters"],
       },
       newAPIData: {
         name: "",
@@ -155,14 +178,25 @@ export default {
     async getApiList() {
       const { data } = await fetchKeyList();
       this.apiList = data;
+      this.createLoading = false;
+    },
+    async newCreate() {
+      if (this.apiList.length > 0) {
+        this.noMoreKey = true;
+      } else {
+        this.newKeyShowPop = true;
+      }
     },
     async setCreate() {
+      this.loading = true;
       const newAPIData = this.newAPIData;
       await sendCreateKey(newAPIData);
+      this.loading = false;
       this.resetInput();
       this.init();
     },
     resetInput() {
+      this.$refs.form.reset();
       this.newAPIData = {
         name: "",
         notes: "",
@@ -204,12 +238,24 @@ export default {
   }
   .list-box {
     .list-item {
-      padding: 24px;
+      padding: 12px 24px;
       justify-content: space-between;
       border-radius: 8px;
       border: 1px solid #cbd5e1;
       cursor: pointer;
       margin-bottom: 24px;
+      .name-box {
+        width: 50%;
+        max-width: 660px;
+      }
+      .status-box {
+        width: 160px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
       .project-name {
         color: #000;
         font-size: 20px;
@@ -225,10 +271,14 @@ export default {
         }
       }
       .project-tips {
+        width: 100%;
         color: #64748b;
         font-size: 14px;
         font-weight: 400;
         margin-top: 8px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
       .project-status {
         color: #94a3b8;
