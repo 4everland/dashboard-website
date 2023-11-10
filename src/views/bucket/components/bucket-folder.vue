@@ -116,7 +116,7 @@
             <template v-slot:item.hash="{ item }">
               <div class="d-flex align-center" v-if="item.hash !== '--'">
                 <a
-                  :href="$utils.getCidLink(item.hash)"
+                  :href="ipfsLink(item.hash)"
                   class="hash-link"
                   style="color: #0b0817"
                   target="_blank"
@@ -346,7 +346,7 @@ import BucketUpload from "@/views/bucket/bucket-upload";
 import BucketPartsList from "@/views/bucket/bucket-parts-list";
 import BucketFileInfo from "@/views/bucket/components/bucket-fileInfo";
 
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { bus } from "../../../utils/bus";
 import mixin from "../storage-mixin";
 import { DeleteTaskWrapper } from "../task.js";
@@ -407,6 +407,7 @@ export default {
       .catch((err) => err);
   },
   computed: {
+    ...mapGetters(["bucketDefaultGateWay"]),
     ...mapState({
       s3: (s) => s.moduleS3.s3,
       s3m: (s) => s.moduleS3.s3m,
@@ -594,6 +595,9 @@ export default {
           await this.snapshotPublish(id);
         }
       }
+    },
+    ipfsLink(ipfs) {
+      return this.bucketDefaultGateWay + "/ipfs/" + ipfs;
     },
   },
   watch: {

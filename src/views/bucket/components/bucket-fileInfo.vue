@@ -45,7 +45,7 @@
                 :
               </div>
               <div v-if="it.name == 'ipfs'" class="pa-1 ml-2 al-c">
-                <a target="_blank" :href="$utils.getCidLink(it.value)">{{
+                <a target="_blank" :href="ipfsLink(it.value)">{{
                   it.value.cutStr(5, 5)
                 }}</a>
                 <v-btn icon small v-clipboard="it.value" @success="onCopied">
@@ -161,7 +161,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 export default {
   props: {
     selected: Array,
@@ -181,6 +181,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["bucketDefaultGateWay"]),
     ...mapState({
       s3: (s) => s.moduleS3.s3,
       s3m: (s) => s.moduleS3.s3m,
@@ -390,6 +391,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    ipfsLink(ipfs) {
+      return this.bucketDefaultGateWay + "/ipfs/" + ipfs;
     },
   },
   watch: {
