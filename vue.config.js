@@ -4,6 +4,7 @@ module.exports = {
     "@4everland/s3-lib-storage",
     "@smithy",
     "@solana/spl-token",
+    "@walletconnect",
   ],
   outputDir: "dist",
   publicPath: process.env.NODE_ENV === "production" ? "/" : "/",

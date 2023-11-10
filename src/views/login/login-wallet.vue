@@ -38,6 +38,8 @@ import {
   SignPetra,
   ConnectCoinBase,
   SignCoinBase,
+  ConnectWalletCon,
+  SignWalletCon,
 } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 
@@ -64,6 +66,11 @@ export default {
         {
           name: "Coinbase Wallet",
           icon: require("@/assets/imgs/coinbase.png"),
+          btnText: "",
+        },
+        {
+          name: "WalletConnect",
+          icon: require("@/assets/imgs/walletConnect.svg"),
           btnText: "",
         },
         {
@@ -134,6 +141,9 @@ export default {
           break;
         case "Coinbase Wallet":
           this.coinbaseConnect();
+          break;
+        case "WalletConnect":
+          this.walletConnect();
           break;
         default:
           break;
@@ -251,6 +261,26 @@ export default {
         nonce,
         this.inviteCode,
         this.capToken
+      );
+      if (stoken) {
+        this.ssoLogin(stoken);
+      }
+    },
+    async walletConnect() {
+      const { session, account } = await ConnectWalletCon();
+      if (!account) {
+        return;
+      }
+      const nonce = await ExchangeCode(account);
+      if (!nonce) {
+        return;
+      }
+      const stoken = await SignWalletCon(
+        account,
+        nonce,
+        this.inviteCode,
+        this.capToken,
+        session
       );
       if (stoken) {
         this.ssoLogin(stoken);
