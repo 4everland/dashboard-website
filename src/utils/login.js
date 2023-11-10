@@ -314,7 +314,16 @@ export const SignCoinBase = async (accounts, nonce, inviteCode, capToken) => {
     return false;
   }
 };
-
+const walletConnectModal = new WalletConnectModal({
+  projectId: "0c6d755f31c61d762715e95f767f7ef8",
+  // `standaloneChains` can also be specified when calling `walletConnectModal.openModal(...)` later on.
+  standaloneChains: ["eip155:1"],
+  themeVariables: {
+    "--wcm-background-color": "#735EA1",
+    // "--wcm-accent-color": "#735EA1",
+  },
+});
+window.walletConnectModal = walletConnectModal;
 export const ConnectWalletCon = async () => {
   _signClient = await SignClient.init({
     projectId: "0c6d755f31c61d762715e95f767f7ef8",
@@ -327,15 +336,6 @@ export const ConnectWalletCon = async () => {
     },
   });
 
-  const walletConnectModal = new WalletConnectModal({
-    projectId: "0c6d755f31c61d762715e95f767f7ef8",
-    // `standaloneChains` can also be specified when calling `walletConnectModal.openModal(...)` later on.
-    standaloneChains: ["eip155:1"],
-    themeVariables: {
-      "--wcm-background-color": "#735EA1",
-      // "--wcm-accent-color": "#735EA1",
-    },
-  });
   try {
     const { uri, approval } = await _signClient.connect({
       // Optionally: pass a known prior pairing (e.g. from `_signClient.core.pairing.getPairings()`) to skip the `uri` step.
@@ -359,10 +359,10 @@ export const ConnectWalletCon = async () => {
     // Open QRCode modal if a URI was returned (i.e. we're not connecting an existing pairing).
     if (uri) {
       walletConnectModal.openModal({ uri });
+
       // Await session approval from the wallet.
       const session = await approval();
       // Handle the returned session (e.g. update UI to "connected" state).
-
       // Close the QRCode modal in case it was open.
       walletConnectModal.closeModal();
 
@@ -387,12 +387,13 @@ export const ConnectWalletCon = async () => {
 };
 
 export const onSignWalletCon = async (session, account, nonce) => {
+  const msg = Buffer.from(nonce).toString("hex");
   const signature = await _signClient.request({
     topic: session.topic,
     chainId: "eip155:1",
     request: {
       method: "personal_sign",
-      params: [nonce, account],
+      params: [msg, account],
     },
   });
   return signature;
@@ -406,12 +407,13 @@ export const SignWalletCon = async (
   session
 ) => {
   try {
+    const msg = Buffer.from(nonce).toString("hex");
     const signature = await _signClient.request({
       topic: session.topic,
       chainId: "eip155:1",
       request: {
         method: "personal_sign",
-        params: [nonce, account],
+        params: [msg, account],
       },
     });
 

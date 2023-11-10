@@ -16,6 +16,11 @@
           <span class="item-name" :class="{ 'item-name-pop': index == 0 }">{{
             item.btnText
           }}</span>
+          <v-btn
+            v-if="item.loading"
+            :loading="walletConnectLoading"
+            icon
+          ></v-btn>
         </div>
       </div>
     </div>
@@ -52,6 +57,7 @@ export default {
       inviteCode: null,
       sitekey: "6LdPnxclAAAAACTzYeZDztp3dcCKFUIG_5r313JV",
       walletName: "",
+      walletConnectLoading: false,
       walletItem: [
         {
           name: "MetaMask",
@@ -72,6 +78,7 @@ export default {
           name: "WalletConnect",
           icon: require("@/assets/imgs/walletConnect.svg"),
           btnText: "",
+          loading: true,
         },
         {
           name: "Petra",
@@ -267,6 +274,12 @@ export default {
       }
     },
     async walletConnect() {
+      this.walletConnectLoading = true;
+      window.walletConnectModal.subscribeModal((state) => {
+        if (!state.open) {
+          this.walletConnectLoading = false;
+        }
+      });
       const { session, account } = await ConnectWalletCon();
       if (!account) {
         return;
@@ -275,6 +288,7 @@ export default {
       if (!nonce) {
         return;
       }
+      this.walletConnectLoading = false;
       const stoken = await SignWalletCon(
         account,
         nonce,
