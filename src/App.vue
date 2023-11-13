@@ -34,7 +34,7 @@
     <e-animation-flowers></e-animation-flowers>
     <e-alert />
     <e-feedback />
-    <e-meta-connect />
+    <!-- <e-meta-connect /> -->
   </v-app>
 </template>
 

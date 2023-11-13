@@ -3,11 +3,11 @@ export const clientRpc = "https://cbridge-v2-test.celer.network";
 
 // src chain eth
 export const GoerliRpc = "https://rpc.ankr.com/polygon_mumbai";
-export const GoerliUSDC = "0xCbE56b00d173A26a5978cE90Db2E33622fD95A28";
-export const GoerliUSDT = "0xCbE56b00d173A26a5978cE90Db2E33622fD95A28";
-export const GoerliDAI = "0xCbE56b00d173A26a5978cE90Db2E33622fD95A28";
+export const GoerliUSDC = "0x8f02889d36d01BdF95b3B7B63a32629fc46e643E";
+export const GoerliUSDT = "0x94AaF8D29b814149A97489124Ac940d34096EB72";
+export const GoerliDAI = "0x568237585b8a3edFF837ef9Ab10cCF08C383C884";
 
-export const GoerliLandRecharge = "0xCbE56b00d173A26a5978cE90Db2E33622fD95A28";
+export const GoerliLandRecharge = "0x548293a09EA83Fb4101671D307Daf87C1acd3a3e";
 
 export const GoerliBridge = "0x358234B325EF9eA8115291A8b81b7d33A2Fa762D";
 export const GoerliSrcChainPayment =
@@ -16,10 +16,10 @@ export const GoerliRecharge = "0xaEBDD5d40c7D22D0343fAFef36501E44e2ad9454";
 export const GoerliRegister = "0xD925962A7e5A8eabbA1955BCD42145b909237a51";
 
 // src chain bsc
-export const ChapelUSDC = "0x855fC87f7F14Db747ef27603b02bAe579ba947B6";
-export const ChapelUSDT = "0x855fC87f7F14Db747ef27603b02bAe579ba947B6";
-export const ChapelDAI = "0x855fC87f7F14Db747ef27603b02bAe579ba947B6";
-export const ChapelLandRecharge = "0x855fC87f7F14Db747ef27603b02bAe579ba947B6";
+export const ChapelUSDC = "0x0092190380bAD586d68fB788D62CdB7300Af1c2c";
+export const ChapelUSDT = "0x5e338E7a9C3Be53a3e494Bb753104C480FeeDe7D";
+export const ChapelDAI = "0x80A3F669B88c053b53BFa7c8b14139842e7573DA";
+export const ChapelLandRecharge = "0x657E18668dA0b80D9d7F60D6a9C96B44533E71aE";
 export const ChapelBridge = "0xf89354F314faF344Abd754924438bA798E306DF2";
 export const ChapelSrcChainPayment =
   "0xde15Bd142D0BFa2e9E423B3473e027E0Cc6C10bC";

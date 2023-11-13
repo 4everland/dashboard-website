@@ -32,6 +32,7 @@ export default {
             dai: MumbaiDAI,
           },
           landRecharge: MumbaiLandRecharge,
+          chainId: this.$inDev ? 80001 : 137,
         },
         {
           name: "Ethereum",
@@ -41,6 +42,7 @@ export default {
             dai: GoerliDAI,
           },
           landRecharge: GoerliLandRecharge,
+          chainId: this.$inDev ? 11155111 : 1,
         },
         {
           name: "BSC",
@@ -50,6 +52,7 @@ export default {
             dai: ChapelDAI,
           },
           landRecharge: ChapelLandRecharge,
+          chainId: this.$inDev ? 97 : 56,
         },
         {
           name: "Arbitrum",
@@ -59,6 +62,7 @@ export default {
             dai: ArbitrumDAI,
           },
           landRecharge: ArbitrumLandRecharge,
+          chainId: this.$inDev ? 421613 : 42161,
         },
         {
           name: "zkSync",
@@ -66,6 +70,17 @@ export default {
             usdc: zkSyncUSDC,
           },
           landRecharge: zkSyncLandRecharge,
+          chainId: this.$inDev ? 280 : 324,
+        },
+        {
+          name: "everPay",
+          coin: {
+            usdc: "",
+            usdt: "",
+            dai: "",
+          },
+          landRecharge: "",
+          chainId: 999999999,
         },
       ],
     };
@@ -74,6 +89,6 @@ export default {
     ...mapGetters(["walletObj"]),
   },
   created() {
-    console.log(MumbaiUSDC);
+    // console.log(MumbaiUSDC);
   },
 };

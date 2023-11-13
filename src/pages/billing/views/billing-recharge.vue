@@ -17,7 +17,7 @@
           <td>{{ index }}</td>
           <td>{{ item.network }}</td>
           <td>{{ item.landAmount }}</td>
-          <td>{{ item.amount }}</td>
+          <td>{{ item.amount }} {{ item.coinType }}</td>
           <td>
             <a target="__blank" :href="$getTxLink(item.txHash, item.network)">
               {{ item.txHash.cutStr(6, 6) }}
@@ -39,13 +39,33 @@
       <img src="/img/svg/new-billing/no-date.svg" width="240" alt="" />
       <span class="mt-3 fz-14">no-data</span>
     </div>
+
+    <bottom-detector
+      @arriveBottom="loadMore"
+      :loadingMore="loadingMore"
+      :noMore="finished"
+    ></bottom-detector>
   </div>
 </template>
 
 <script>
 import { BigNumber } from "ethers";
 import BillingTable from "../component/billing-table.vue";
-
+import {
+  MumbaiUSDC,
+  MumbaiUSDT,
+  MumbaiDAI,
+  GoerliUSDC,
+  GoerliUSDT,
+  GoerliDAI,
+  ChapelUSDC,
+  ChapelUSDT,
+  ChapelDAI,
+  ArbitrumUSDC,
+  ArbitrumUSDT,
+  ArbitrumDAI,
+  zkSyncUSDC,
+} from "@/plugins/pay/contracts/contracts-addr";
 export default {
   components: {
     BillingTable,
@@ -54,6 +74,15 @@ export default {
   data() {
     return {
       list: [],
+      coinInfo: {
+        USDC: [MumbaiUSDC, GoerliUSDC, ChapelUSDC, ArbitrumUSDC, zkSyncUSDC],
+        USDT: [MumbaiUSDT, GoerliUSDT, ChapelUSDT, ArbitrumUSDT],
+        DAI: [MumbaiDAI, GoerliDAI, ChapelDAI, ArbitrumDAI],
+      },
+      finished: false,
+      loadingMore: false,
+      page: 1,
+      size: 10,
     };
   },
   mounted() {
@@ -67,26 +96,45 @@ export default {
           "$bill-consume/assets/record/list",
           {
             params: {
-              page: 0,
-              size: 10,
+              page: this.page++,
+              size: this.size,
             },
           }
         );
-
         console.log(data);
-
-        this.list = data.items.map((it) => {
+        let list = data.items.map((it) => {
           it.amount = BigNumber.from(it.amount)
             .div((1e18).toString())
             .toString();
-
           it.landAmount = this.$utils.formatLand(it.landAmount);
           it.network = this.getChainType(it.network);
+          let coinType = "USDC";
+          for (const key in this.coinInfo) {
+            let findCoinAddr = this.coinInfo[key].find(
+              (item) => item == it.amountType
+            );
+            if (findCoinAddr) coinType = key;
+          }
+          it.coinType = coinType;
           return it;
         });
+        if (list.length < this.size) {
+          this.finished = true;
+        }
+        this.list = [...this.list, ...list];
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
+    },
+    async loadMore() {
+      this.loadingMore = true;
+      try {
+        await this.getList();
       } catch (error) {
         console.log(error);
       }
+      this.loadingMore = false;
     },
     getChainType(id) {
       id *= 1;
@@ -104,7 +152,8 @@ export default {
 
 <style lang="scss" scoped>
 .billing-recharge {
-  height: 77vh;
+  min-height: 77vh;
+  // overflow-y: scroll;
 }
 .no-date {
   left: 50%;

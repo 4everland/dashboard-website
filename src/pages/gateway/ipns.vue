@@ -412,11 +412,7 @@ export default {
       }
     },
     showConnect() {
-      this.$setState({
-        noticeMsg: {
-          name: "showMetaConnect",
-        },
-      });
+      this.$store.dispatch("getWalletAccount");
     },
     initLocalEns() {
       if (!this.localEnsList()) {

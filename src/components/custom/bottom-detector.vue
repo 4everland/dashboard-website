@@ -12,7 +12,7 @@
       <span style="--i: 9">.</span>
       <span style="--i: 10">.</span>
     </div>
-    <div v-if="noMore"></div>
+    <div v-show="noMore" class="fz-14">No More</div>
   </div>
 </template>
 <script>

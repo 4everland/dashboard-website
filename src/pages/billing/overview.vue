@@ -100,8 +100,8 @@
         <div class="py-6 px-4 h-flex al-c">
           <h4 class="fz-14">Build Minutes</h4>
           <div class="my-6 al-c">
-            <span class="balance fw-b">23,233</span>
-            <span class="fz-12 ml-2">Mins</span>
+            <span class="balance fw-b">{{ buildMin.size }}</span>
+            <span class="fz-12 ml-2">{{ buildMin.unit }}</span>
           </div>
           <div class="py-4 px-6 fz-14 data">
             <span>Total builds:</span>
@@ -124,21 +124,38 @@
         <v-row style="height: 100%">
           <v-col :md="4" cols="12" class="pie-col">
             <resource-monthly-ipfs-pie
-              name="BandWidth"
+              name="Bandwidth"
+              type="TRAFFIC"
               :data="bandwidthResourceObj"
             ></resource-monthly-ipfs-pie>
           </v-col>
           <v-col :md="4" cols="12" class="pie-col">
             <resource-monthly-ipfs-pie
-              name="IPFS"
+              name="IPFS Storage"
+              type="IPFS_STORAGE"
               :data="ipfsResourceObj"
-            ></resource-monthly-ipfs-pie>
+            >
+              <div class="fz-12">Consumption: 223,344 MD</div>
+              <template #bottom>
+                <div class="fz-12">Consumption: 223,344 MD</div>
+              </template>
+            </resource-monthly-ipfs-pie>
           </v-col>
           <v-col :md="4" cols="12" class="pie-col">
             <resource-monthly-ipfs-pie
               name="Arweave"
+              type="AR_STORAGE"
               :data="arResourceObj"
-            ></resource-monthly-ipfs-pie>
+            >
+              <div class="fz-12">
+                Arweave files smaller than 150KB are excluded.
+              </div>
+              <template #bottom>
+                <div class="fz-12">
+                  Arweave files smaller than 150KB are excluded.
+                </div>
+              </template>
+            </resource-monthly-ipfs-pie>
           </v-col>
         </v-row>
       </v-col>
@@ -182,6 +199,10 @@ export default {
         BUCKET: "0",
         GATEWAY: "0",
       },
+      buildMin: {
+        size: 0,
+        unit: "Min",
+      },
     };
   },
   computed: {
@@ -196,6 +217,7 @@ export default {
     this.getAnalyticsIpfs();
     this.getAnalyticsAr();
     this.getAnalyticsBandwidth();
+    this.getAnalyticsBuildMin();
   },
   methods: {
     async getUserResource() {
@@ -240,10 +262,11 @@ export default {
                   Number(data.realTimeItems[i].size) / 60 +
                   " Min",
                 remaining:
-                  Number(it.size) / 60 -
-                  Number(comboItem.consumeItems[i].size) / 60 -
-                  Number(data.realTimeItems[i].size) / 60 +
-                  " Min",
+                  (
+                    Number(it.size) / 60 -
+                    Number(comboItem.consumeItems[i].size) / 60 -
+                    Number(data.realTimeItems[i].size) / 60
+                  ).toFixed(0) + " Min",
                 percent:
                   ((Number(comboItem.consumeItems[i].size) +
                     Number(data.realTimeItems[i].size)) /
@@ -310,6 +333,7 @@ export default {
             },
           }
         );
+        // console.log(data);
         for (const key in this.arResourceObj) {
           this.arResourceObj[key] = data
             .filter((it) => it.appType == key)
@@ -340,6 +364,32 @@ export default {
             }, BigNumber.from("0"))
             .toString();
         }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getAnalyticsBuildMin() {
+      try {
+        const { data } = await this.$http.get(
+          "$bill-analytics/bill/app/analytics",
+          {
+            params: {
+              resourceType: "BUILD_TIME",
+            },
+          }
+        );
+        console.log(data);
+
+        const totalMin = data.reduce((pre, it) => {
+          return pre.add(BigNumber.from(it.resourceConsume));
+        }, BigNumber.from("0"));
+
+        this.buildMin = this.$utils.getResourceTypeSize(
+          totalMin,
+          true,
+          "BUILD_TIME"
+        );
+        console.log(this.buildMin);
       } catch (error) {
         console.log(error);
       }

@@ -21,13 +21,25 @@
 
       <h2 class="fz-16 mt-6">Network</h2>
       <pay-network
-        class="mt-4"
         @onNetwork="onNetwork"
         :allow="allowNetwork"
         ref="payNetwork"
       />
+
+      <everpay-bar
+        ref="everpay"
+        @onEverpay="onEverpay"
+        v-if="isEverpay"
+        :payAmounts="payAmounts"
+      ></everpay-bar>
+      <pay-coin
+        v-else
+        class="mt-4"
+        :chainId="chainId"
+        @onSelectCoin="handleSelectCoin"
+      ></pay-coin>
     </div>
-    <resouce-counter></resouce-counter>
+    <resouce-counter @estimateInput="estimateInput"></resouce-counter>
 
     <div class="pay-confirm-container">
       <div class="pay-confirm pa-4 al-c space-btw">
@@ -36,13 +48,37 @@
 
           <div class="mt-1">
             <span class="amount fw-b">{{ usdcAmount.toString() }}</span>
-            <span class="unit fz-14 ml-1">USDC</span>
+            <span class="unit fz-14 ml-1">{{ CoinType }}</span>
 
             {{ payAmounts.toString() }}
           </div>
         </div>
-        <div class="confirm-btn fw-b" v-ripple @click="handleAct">
-          {{ confirmText }}
+
+        <!-- everpay confirm btn -->
+        <div
+          class="confirm-btn fw-b cursor-p"
+          v-ripple
+          v-if="isEverpay"
+          @click="handleEverpayPayment"
+        >
+          Confirm
+        </div>
+        <!-- other confirm btn -->
+        <div
+          class="confirm-btn fw-b cursor-p"
+          v-ripple="!checkApproving"
+          v-else
+          @click="
+            () => {
+              checkApproving ? '' : handleShowStep();
+            }
+          "
+        >
+          <v-btn v-show="checkApproving" text :loading="true" color="#fff">
+          </v-btn>
+          <span v-show="!checkApproving">
+            {{ confirmText }}
+          </span>
         </div>
       </div>
     </div>
@@ -50,22 +86,33 @@
     <recharge-step-dialog
       ref="rechargeDialog"
       :step="step"
+      :approving="approving"
+      :depositing="depositing"
       @handleApprove="handleApprove"
       @handleConfirm="handleRechargeLand"
+      @handleClose="handleClose"
     ></recharge-step-dialog>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
 import payNetwork from "./component/pay-network.vue";
+import payCoin from "./component/pay-coin.vue";
+import everpayBar from "./component/everpay-bar.vue";
 import resouceCounter from "./component/resouce-counter.vue";
 import rechargeStepDialog from "./component/recharge-step-dialog.vue";
-
+import { mapState } from "vuex";
 import { BigNumber } from "ethers";
-import { parseUnits } from "ethers/lib/utils";
-import { ICoin__factory } from "@4everland/land-v5";
+import {
+  parseUnits,
+  parseEther,
+  formatEther,
+  formatUnits,
+} from "ethers/lib/utils";
+import { ICoin__factory, Land__factory } from "@4everland/land-v5";
+import { getProvider } from "@/plugins/ens";
 
+import uidToEuid from "@/utils/uid2euid";
 import mixin from "./mixin";
 const uint256Max = BigNumber.from("1").shl(256).sub(1);
 
@@ -75,15 +122,23 @@ export default {
     payNetwork,
     resouceCounter,
     rechargeStepDialog,
+    payCoin,
+    everpayBar,
   },
   data() {
     return {
+      coinSelect: "USDC",
       landAmount: "",
       allowance: BigNumber.from("0"),
       usdcAmount: BigNumber.from("0"),
       curAmountDecimals: 18,
-      chainName: "Polygon",
+      chainId: this.$inDev ? 80001 : 137,
       rechargeSuccess: false,
+      checkApproving: false,
+      approving: false,
+      depositing: false,
+      isEverpay: localStorage.getItem("isEverpay") ? true : false,
+      everpayPayInfo: {},
     };
   },
   computed: {
@@ -91,6 +146,7 @@ export default {
       onChain: (s) => s.onChain,
       connectAddr: (s) => s.connectAddr,
       chainContract: (s) => s.moduleResource.chainContract,
+      teamId: (s) => s.teamId,
     }),
     allowNetwork() {
       if (this.onChain) {
@@ -113,7 +169,7 @@ export default {
       return "Approve";
     },
     payAmounts() {
-      if (!this.landAmount) return "";
+      if (!this.landAmount) return BigNumber.from("0");
       // return BigNumber.from(this.landAmount).mul(1e24).div(1e6);
       let amoutU = parseUnits(this.landAmount, 24).div(1e6);
       const subDecimal = 18 - this.curAmountDecimals;
@@ -126,91 +182,170 @@ export default {
     ERC20() {
       return ICoin__factory.connect(this.coinAddr, this.chainContract.signer);
     },
+    LandRecharge() {
+      return Land__factory.connect(
+        this.landRechargeAddr,
+        this.chainContract.signer
+      );
+    },
     curChainInfo() {
-      return this.chainAddrs.find((it) => it.name == this.chainName);
+      return this.chainAddrs.find((it) => it.chainId == this.chainId);
     },
     landRechargeAddr() {
-      return this.curChainInfo.landRecharge;
+      return this.curChainInfo?.landRecharge;
     },
     coinAddr() {
-      return this.curChainInfo.coin.usdc;
+      const coinType = this.coinSelect.toLowerCase();
+      return this.curChainInfo?.coin[coinType];
     },
     step() {
-      if (this.isApproved) return 2;
       if (this.rechargeSuccess) return 4;
+      if (this.isApproved) return 2;
       return 1;
+    },
+    euid() {
+      return uidToEuid(this.teamId);
+    },
+    CoinType() {
+      if (this.isEverpay) {
+        return this.everpayPayInfo.symbol;
+      }
+      return this.coinSelect;
     },
   },
   mounted() {
     this.checkApproved();
   },
   methods: {
-    onNetwork(chainName) {
-      this.chainName = chainName;
+    onNetwork(chainId) {
+      this.chainId = chainId;
+      if (this.chainId == 999999999) {
+        this.isEverpay = true;
+      } else {
+        this.isEverpay = false;
+      }
     },
     async handleRechargeLand() {
+      this.depositing = true;
       try {
-        const tx = await this.chainContract.LandRecharge.mint(
+        await this.getAccount();
+        const tx = await this.LandRecharge.mint(
           this.coinAddr,
-          "0x866925e79c447352711bf740183aa3cc67371e16000000000000000000000034", // uid
+          this.euid, // euid
           this.payAmounts
         );
         const receipt = await tx.wait();
         console.log(receipt);
+        console.log("recharge success");
         this.rechargeSuccess = true;
       } catch (error) {
         console.log(error);
       }
+      this.depositing = false;
     },
     async checkApproved() {
+      if (!this.landRechargeAddr) return;
+      this.checkApproving = true;
       try {
+        await this.getAccount();
         const allowance = await this.ERC20.allowance(
-          "0x866925e79c447352711bF740183AA3Cc67371E16",
+          this.connectAddr,
           this.landRechargeAddr
         );
         this.curAmountDecimals = await this.ERC20.decimals();
         console.log(allowance, "allowance");
-        // console.log(this.curAmountDecimals);
         this.allowance = allowance;
+        console.log("approve success");
       } catch (error) {
-        //
         console.log(error);
-
-        // if locked wallet  throw Error account
+        // if locked wallet  throw Error account, need get account
         this.getAccount();
       }
+      this.checkApproving = false;
     },
     async handleApprove() {
-      console.log(222);
-      let gas = await this.ERC20.estimateGas.approve(
-        this.landRechargeAddr,
-        uint256Max
-      );
-      console.log("gas", gas);
-      let gasPrice = await this.ERC20.provider.getGasPrice();
-      const tx = await this.ERC20.approve(this.landRechargeAddr, uint256Max, {
-        gasLimit: gas.mul(15).div(10),
-        gasPrice: gasPrice.mul(12).div(10),
-      });
-      console.log("tx", tx);
-      const receipt = await tx.wait();
-      console.log(receipt);
+      this.approving = true;
+      try {
+        let gas = await this.ERC20.estimateGas.approve(
+          this.landRechargeAddr,
+          uint256Max
+        );
+        console.log("gas", gas);
+        let gasPrice = await this.ERC20.provider.getGasPrice();
+        const tx = await this.ERC20.approve(this.landRechargeAddr, uint256Max, {
+          gasLimit: gas.mul(15).div(10),
+          gasPrice: gasPrice.mul(12).div(10),
+        });
+        console.log("tx", tx);
+        const receipt = await tx.wait();
+        console.log(receipt);
+      } catch (error) {
+        console.log(error);
+      }
+      this.approving = false;
+
       this.checkApproved();
     },
-    handleAct() {
-      // this.showDialog = true
+    handleShowStep() {
       this.$refs.rechargeDialog.showDialog = true;
-      // if (this.isApproved) {
-      //   this.handleRechargeLand();
-      // } else {
-      //   this.handleApprove();
-      // }
+    },
+    async handleSelectCoin(val) {
+      this.coinSelect = val;
+      await this.checkApproved();
+    },
+    handleClose() {
+      if (this.rechargeSuccess) {
+        this.landAmount = "";
+        this.rechargeSuccess = false;
+      }
     },
 
     async getAccount() {
-      await this.walletObj.request({
-        method: "eth_requestAccounts",
+      if (!this.connectAddr) {
+        await this.$store.dispatch("getWalletAccount");
+      }
+    },
+    estimateInput(val) {
+      this.landAmount = val;
+    },
+    onEverpay(item) {
+      console.log(item);
+      this.everpayPayInfo = item;
+    },
+    async handleEverpayPayment() {
+      const provider = getProvider();
+      const signer = provider.getSigner();
+      const account = await signer.getAddress();
+      const balance = parseEther(this.everpayPayInfo.balance.toString());
+      let payAmounts = this.payAmounts;
+      if (balance.lt(payAmounts))
+        return this.$alert(
+          "Insufficient balance, please deposit and try again.",
+          "alert"
+        );
+      if (this.everpayPayInfo.symbol == "DAI") {
+        payAmounts = formatEther(payAmounts);
+      } else {
+        payAmounts = formatUnits(payAmounts.div(10 ** 12), 6);
+      }
+      const everpay = new window.Everpay.default({
+        account,
+        chainType: "ethereum",
+        ethConnectedSigner: signer,
       });
+      const data = await everpay.transfer({
+        tag: this.everpayPayInfo.tag,
+        amount: payAmounts,
+        to: this.$inDev
+          ? "0xd8b38301655FaeE94C43f7121189E3E0f8973dd0"
+          : "0xb7B4360F7F6298dE2e7a11009270F35F189Bd77E",
+        data: {
+          account: this.teamId,
+        },
+      });
+      console.log(data);
+      this.$alert("Recharge success!!");
+      this.$refs.everpay.initEverPay();
     },
   },
   watch: {
@@ -219,7 +354,7 @@ export default {
       if (this.landAmount) {
         this.usdcAmount = BigNumber.from(this.landAmount);
       } else {
-        this.landAmount = "0";
+        this.usdcAmount = BigNumber.from("0");
       }
     },
   },

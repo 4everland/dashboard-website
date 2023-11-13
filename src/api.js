@@ -78,7 +78,7 @@ Vue.prototype.$getImgSrc = function (src) {
 };
 Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
   let pre = inDev
-    ? "https://goerli.etherscan.io/tx/"
+    ? "https://sepolia.etherscan.io/tx/"
     : "https://etherscan.io/tx/";
   if (net == "BSC") {
     pre = inDev ? "https://testnet.bscscan.com/tx/" : "https://bscscan.com/tx/";

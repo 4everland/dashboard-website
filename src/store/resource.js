@@ -26,23 +26,35 @@ export default {
       const BUILD_TIME = balance.div(state.buildMinUnitPrice);
       const AR_STORAGE = balance.div(state.arUnitPrice);
       const COMPUTE_UNIT = balance.div(state.rpcUnitPrice);
-
-      console.log(balance);
-      console.log(IPFS_STORAGE.toString(), TRAFFIC);
       return {
-        IPFS_STORAGE: Vue.prototype.$utils.getBigFileSize(IPFS_STORAGE),
-        TRAFFIC: Vue.prototype.$utils.getBigFileSize(TRAFFIC),
-        BUILD_TIME: Vue.prototype.$utils.getResourceTypeSize(
-          BUILD_TIME,
-          false,
-          "BUILD_TIME"
-        ),
-        AR_STORAGE: Vue.prototype.$utils.getBigFileSize(AR_STORAGE),
-        COMPUTE_UNIT: Vue.prototype.$utils.getResourceTypeSize(
-          COMPUTE_UNIT,
-          false,
-          "COMPUTE_UNIT"
-        ),
+        IPFS_STORAGE: {
+          value: IPFS_STORAGE,
+          transformVal: Vue.prototype.$utils.getBigFileSize(IPFS_STORAGE),
+        },
+        TRAFFIC: {
+          value: TRAFFIC,
+          transformVal: Vue.prototype.$utils.getBigFileSize(TRAFFIC),
+        },
+        BUILD_TIME: {
+          value: BUILD_TIME,
+          transformVal: Vue.prototype.$utils.getResourceTypeSize(
+            BUILD_TIME,
+            false,
+            "BUILD_TIME"
+          ),
+        },
+        AR_STORAGE: {
+          value: AR_STORAGE,
+          transformVal: Vue.prototype.$utils.getBigFileSize(AR_STORAGE),
+        },
+        COMPUTE_UNIT: {
+          value: COMPUTE_UNIT,
+          transformVal: Vue.prototype.$utils.getResourceTypeSize(
+            COMPUTE_UNIT,
+            false,
+            "COMPUTE_UNIT"
+          ),
+        },
       };
     },
   },

@@ -98,12 +98,9 @@
         </div>
       </div>
       <div class="right mt-4 mt-md-0">
-        <div
-          class="al-c space-btw cursor-p"
-          @click="$router.push('/changelog')"
-        >
+        <div class="al-c space-btw">
           <h3 class="fz-20">Announcement</h3>
-          <div class="al-c">
+          <div class="al-c cursor-p" @click="$router.push('/changelog')">
             <span class="fz-14">More</span>
             <img src="/img/svg/new-billing/right-arrow.svg" width="24" alt="" />
           </div>
@@ -111,9 +108,10 @@
 
         <div class="log-list">
           <div
-            class="log-item my-4 px-4 py-2 al-c"
+            class="log-item my-4 px-4 py-2 al-c cursor-p"
             v-for="(item, index) in changeLogList"
             :key="index"
+            @click="$router.push('/changelog')"
           >
             <img
               src="img/svg/overview/circle.svg"
@@ -203,6 +201,9 @@ export default {
       this.carouselWidth = this.$refs.carouselRef.$el.offsetWidth;
     };
   },
+  destroyed() {
+    window.onresize = () => {};
+  },
   computed: {
     ...mapGetters(["teamInfo", "balance", "landToResource"]),
     ...mapState({
@@ -237,60 +238,28 @@ export default {
         this.invalidAt = Number(comboItem.invalidAt) * 1e3;
         this.efficientAt = Number(comboItem.efficientAt) * 1e3;
         this.resourceList = comboItem.resourceItems.map((it, i) => {
-          let total = this.$utils.getBigFileSize(it.size);
-          let used = this.$utils.getBigFileSize(
-            BigNumber.from(comboItem.consumeItems[i].size).add(
-              BigNumber.from(data.realTimeItems[i].size)
-            ),
-            true
+          let total = BigNumber.from(it.size);
+          let used = BigNumber.from(comboItem.consumeItems[i].size).add(
+            BigNumber.from(data.realTimeItems[i].size)
           );
-
           if (it.resourceType == "BUILD_TIME") {
             return {
               type: it.resourceType,
-              total: Number(it.size) / 60 + " Min",
-              used: {
-                size:
-                  Number(comboItem.consumeItems[i].size) / 60 +
-                  Number(data.realTimeItems[i].size) / 60,
-                unit: "Min",
-              },
+              total: BigNumber.from(it.size),
+              used: BigNumber.from(comboItem.consumeItems[i].size).add(
+                BigNumber.from(data.realTimeItems[i].size)
+              ),
             };
           }
-
           if (it.resourceType == "IPFS_STORAGE") {
-            used = this.$utils.getBigFileSize(
-              BigNumber.from(comboItem.consumeItems[i].size).add(
-                BigNumber.from(data.totalIpfsStorage)
-              ),
-              true
+            used = BigNumber.from(comboItem.consumeItems[i].size).add(
+              BigNumber.from(data.totalIpfsStorage)
             );
           }
           if (it.resourceType == "AR_STORAGE") {
-            used = this.$utils.getBigFileSize(
-              BigNumber.from(comboItem.consumeItems[i].size).add(
-                BigNumber.from(data.totalArStorage)
-              ),
-              true
+            used = BigNumber.from(comboItem.consumeItems[i].size).add(
+              BigNumber.from(data.totalArStorage)
             );
-          }
-
-          if (it.resourceType == "COMPUTE_UNIT") {
-            return {
-              type: it.resourceType,
-              total: this.$utils.getResourceTypeSize(
-                it.size,
-                false,
-                it.resourceType
-              ),
-              used: this.$utils.getResourceTypeSize(
-                BigNumber.from(comboItem.consumeItems[i].size).add(
-                  BigNumber.from(data.realTimeItems[i].size)
-                ),
-                true,
-                it.resourceType
-              ),
-            };
           }
           return {
             type: it.resourceType,

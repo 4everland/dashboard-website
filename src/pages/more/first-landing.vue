@@ -313,11 +313,7 @@ export default {
     },
     async checkNet() {
       if (!this.connectAddr) {
-        this.$setState({
-          noticeMsg: {
-            name: "showMetaConnect",
-          },
-        });
+        this.$store.dispatch("getWalletAccount");
         return;
       }
       if (!this.chainId) {

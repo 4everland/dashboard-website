@@ -6,26 +6,38 @@
         <v-stepper-step :complete="step > 1" step="1">
           <h3 class="fz-16">Approve</h3>
         </v-stepper-step>
-
         <v-stepper-content step="1">
           <div class="fz-12 act-tip">
             Please sign the authorization for the maximum expenditure amount in
             your wallet.
           </div>
-          <div class="act-btn" @click="handleApprove">Approve</div>
-        </v-stepper-content>
+          <!-- <div class="act-btn" @click="handleApprove">Approve</div> -->
 
+          <v-btn
+            color="primary"
+            class="act-btn"
+            @click="handleApprove"
+            :loading="approving"
+          >
+            Approve</v-btn
+          >
+        </v-stepper-content>
         <v-stepper-step :complete="step > 2" step="2">
           <h3 class="fz-16">Payment</h3>
         </v-stepper-step>
-
         <v-stepper-content step="2">
           <div class="fz-12 act-tip">
             Please sign again to complete payment for your purchase.
           </div>
-          <div class="act-btn" @click="handleConfirm">Confirm</div>
+          <v-btn
+            color="primary"
+            class="act-btn"
+            @click="handleConfirm"
+            :loading="depositing"
+          >
+            Confirm</v-btn
+          >
         </v-stepper-content>
-
         <v-stepper-step :complete="step > 3" step="3">
           <h3 class="fz-16">Wait for the resources to be credited.</h3>
         </v-stepper-step>
@@ -35,7 +47,7 @@
         Please do not leave the current page before completing the frst two
         steps, as it may result in a failed purchase.
       </div>
-      <div class="ta-r cursor-p" @click="showDialog = false">Cancel</div>
+      <div class="ta-r cursor-p" @click="handleClose">Close</div>
     </div>
   </v-dialog>
 </template>
@@ -46,6 +58,14 @@ export default {
     step: {
       type: Number,
       default: 1,
+    },
+    approving: {
+      type: Boolean,
+      default: false,
+    },
+    depositing: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -62,14 +82,23 @@ export default {
     handleConfirm() {
       this.$emit("handleConfirm");
     },
+    handleClose() {
+      this.showDialog = false;
+      this.$emit("handleClose");
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-.v-stepper__step {
-  align-items: flex-start;
+<style>
+.v-stepper__step__step {
+  font-weight: bold !important;
 }
+</style>
+<style lang="scss" scoped>
+// .v-stepper__step {
+//   align-items: flex-start;
+// }
 
 .act-btn {
   display: inline-block;

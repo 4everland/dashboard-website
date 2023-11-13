@@ -85,7 +85,7 @@ export default {
               </div>
           `;
           },
-          // show: false,
+          show: this.landConsume == 0n ? false : true,
         },
         series: [
           {

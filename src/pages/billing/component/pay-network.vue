@@ -2,17 +2,17 @@
   <div>
     <div class="d-flex flex-wrap">
       <div
-        @click="onSelect(it.label)"
-        class="network-label py-3 cursor-p justify-center d-flex"
+        @click="onSelect(it.chainId)"
+        class="network-label py-3 cursor-p justify-center d-flex mr-2 mt-4"
         :class="{
-          active: selected == it.label,
+          active: selected == it.chainId,
         }"
-        v-for="(it, i) in payList"
+        v-for="(it, i) in chainList"
         :key="i"
       >
-        <v-icon size="16" :color="selected == it.label ? $color1 : '#555'"
+        <v-icon size="16" :color="selected == it.chainId ? $color1 : '#555'"
           >mdi-{{
-            selected == it.label
+            selected == it.chainId
               ? "circle-slice-8"
               : "checkbox-blank-circle-outline"
           }}</v-icon
@@ -28,7 +28,7 @@
           class="ml-2"
           style="width: 90px"
           :class="{
-            'color-1': selected == it.label,
+            'color-1': selected == it.chainId,
           }"
           >{{ it.name }}</span
         >
@@ -58,106 +58,80 @@ export default {
   },
   computed: {
     ...mapGetters(["walletObj"]),
-    payList() {
-      if (!this.allow) return this.list;
-      return this.list.filter((it) => this.allow.includes(it.label));
-    },
     chainList() {
-      return [
-        {
-          name: "Polygon",
-          chainId: this.$inDev ? 80001 : 137,
-        },
-        {
-          name: "BSC",
-          chainId: this.$inDev ? 97 : 56,
-        },
-        {
-          name: "Arbitrum",
-          chainId: this.$inDev ? 421613 : 42161,
-        },
-        {
-          name: "Ethereum",
-          chainId: this.$inDev ? 5 : 1,
-        },
-        {
-          name: "zkSync",
-          chainId: this.$inDev ? 280 : 324,
-        },
-        {
-          name: "OpBNB",
-          chainId: this.$inDev ? 5611 : 204,
-        },
-        {
-          name: "PolygonZkEVM",
-          chainId: this.$inDev ? 1442 : 1101,
-        },
-        {
-          name: "Linea",
-          chainId: this.$inDev ? 59140 : 59144,
-        },
-        {
-          name: "everPay",
-          chainId: this.$inDev ? 59140 : 59144,
-        },
-      ];
-    },
-    chainId() {
-      return parseInt(this.walletObj.chainId);
-    },
-  },
-  data() {
-    return {
-      list: [
+      const list = [
         {
           label: "Polygon",
           name: "Polygon",
           img: "/img/svg/billing/ic-polygon-0.svg",
+          chainId: this.$inDev ? 80001 : 137,
         },
         {
           label: "Ethereum",
           name: "Ethereum",
           img: "/img/svg/billing/ic-ethereum.svg",
+          chainId: this.$inDev ? 11155111 : 1,
         },
         {
           label: "BSC",
           name: "BSC",
           img: "/img/svg/billing/ic-bsc.png",
+          chainId: this.$inDev ? 97 : 56,
         },
         {
           label: "Arbitrum",
           name: "Arbitrum",
           img: "/img/svg/billing/ic-arbitrum.png",
+          chainId: this.$inDev ? 421613 : 42161,
         },
         {
           label: "zkSync",
           name: "zkSync Era",
           img: "/img/svg/logo-no-letters.svg",
+          chainId: this.$inDev ? 280 : 324,
         },
         {
           label: "everPay",
           name: "everPay",
           img: "/img/svg/billing/ic-everpay.svg",
+          chainId: 999999999,
         },
-      ],
+      ];
+      if (!this.allow) return list;
+      return list.filter((it) => this.allow.includes(it.label));
+    },
+  },
+  data() {
+    return {
       selected: "",
     };
   },
   created() {
+    this.walletObj.on("chainChanged", (networkId) => {
+      console.log("chainChanged", networkId);
+      this.initSeleted();
+    });
     this.initSeleted();
   },
   methods: {
     initSeleted() {
-      this.selected = this.chainList.find((item) => {
-        return item.chainId == parseInt(this.walletObj.chainId);
-      }).name;
+      if (localStorage.isEverpay) {
+        this.selected = 999999999;
+      } else {
+        this.selected = parseInt(this.walletObj.chainId);
+      }
       this.setContract();
     },
-    async onSelect(chainName) {
+    async onSelect(chainId) {
       try {
-        if (this.selected == chainName) return;
-        this.selected = chainName;
-        await this.switchNet(chainName);
+        if (this.selected == chainId) return;
+        this.selected = chainId;
+        if (chainId == 999999999) {
+          localStorage.setItem("isEverpay", 1);
+        } else {
+          localStorage.removeItem("isEverpay");
+          await this.switchNet(chainId);
+        }
         this.setContract();
       } catch (error) {
         // user cancel
@@ -165,7 +139,6 @@ export default {
         this.initSeleted();
       }
     },
-
     setContract() {
       const provider = new providers.Web3Provider(this.walletObj);
       let zkprovider = new Web3Provider(this.walletObj);
@@ -197,19 +170,7 @@ export default {
       this.$emit("onNetwork", this.selected);
       this.$store.commit("SET_CONTRACT", contract);
     },
-
-    getChainId(type) {
-      if (type == "Polygon") return this.$inDev ? 80001 : 137;
-      if (type == "BSC") return this.$inDev ? 97 : 56;
-      if (type == "Arbitrum") return this.$inDev ? 421613 : 42161;
-      if (type == "zkSync") return this.$inDev ? 280 : 324;
-      if (type == "OpBNB") return this.$inDev ? 5611 : 204;
-      if (type == "PolygonZkEVM") return this.$inDev ? 1442 : 1101;
-      if (type == "Linea") return this.$inDev ? 59140 : 59144;
-      return this.$inDev ? 5 : 1;
-    },
-    async switchNet(chainName) {
-      const id = this.getChainId(chainName);
+    async switchNet(id) {
       const chainId = "0x" + id.toString(16);
       try {
         await window.ethereum.request({
@@ -241,16 +202,16 @@ export default {
           },
           blockExplorerUrls: ["https://polygonscan.com"],
         },
-        5: {
+        11155111: {
           chainId,
-          chainName: "Goerli Testnet",
-          rpcUrls: ["https://rpc.ankr.com/eth_goerli"],
+          chainName: "Spolia",
+          rpcUrls: ["https://eth-sepolia.public.blastapi.io"],
           nativeCurrency: {
-            name: "Goerli-ETH",
-            symbol: "G-ETH",
+            name: "Sepolia-ETH",
+            symbol: "SepoliaETH",
             decimals: 18,
           },
-          blockExplorerUrls: ["https://goerli.etherscan.io/"],
+          // blockExplorerUrls: ["https://goerli.etherscan.io/"],
         },
         56: {
           chainId,
@@ -411,12 +372,6 @@ export default {
       }
     },
   },
-  watch: {
-    chainId() {
-      if (this.selected == "everpay") return;
-      this.initSeleted();
-    },
-  },
 };
 </script>
 
@@ -431,8 +386,5 @@ export default {
   font-weight: bold;
   border: 1px solid #735ea1;
   background: #f3e8ff;
-}
-.network-label + .network-label {
-  margin-left: 8px;
 }
 </style>

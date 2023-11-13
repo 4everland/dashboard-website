@@ -9,12 +9,12 @@ export default {
       type: String,
       required: true,
     },
+    type: {
+      type: String,
+    },
     data: {
       type: Array,
     },
-  },
-  data() {
-    return {};
   },
   computed: {
     domId() {
@@ -27,29 +27,8 @@ export default {
       return {
         tooltip: {
           trigger: "item",
-          formatter(params) {
-            // console.log(params);
-            let curResource = "";
-            switch (params.name) {
-              case "IPFS":
-                curResource = params.value * 2 + "MD";
-                break;
-              case "Arweave":
-                curResource = params.value * 2 + "GB";
-                break;
-              case "Bandwidth":
-                curResource = params.value * 2 + "MB";
-                break;
-              case "Build Minutes":
-                curResource = params.value * 2 + "Min";
-                break;
-              case "RPC Requests":
-                curResource = params.value * 2 + "CU";
-                break;
-              default:
-                curResource = params.value * 2;
-                break;
-            }
+          formatter: (params) => {
+            let curResource = this.$utils.getBigFileSize(params.data.data);
             return `
               <div class="al-c">
                 <span class="d-ib" style="width: 8px; height: 8px; background: ${params.color}; border-radius:50%"></span>
@@ -57,17 +36,15 @@ export default {
                 <span class="ml-2 fw-b fz-20" style="font-family: DIN Alternate;">${params.percent}%</span></div>
               <div class="mt-1 fz-12" style="color: #64748B">
                 <span>${curResource}</span>
-                +
-                <span>${params.value}LAND</span>
               </div>
           `;
           },
-          // show: false,
+          show: this.length ? true : false,
         },
         series: [
           {
             type: "pie",
-            radius: ["50%", "90%"],
+            radius: ["55%", "90%"],
             avoidLabelOverlap: false,
             label: {
               show: false,

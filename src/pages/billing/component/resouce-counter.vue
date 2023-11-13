@@ -48,7 +48,9 @@
                   </div>
                 </div>
                 {{ arPrice.toString() }}
-                <div class="input-btn cursor-p fw-b">Input</div>
+                <div class="input-btn cursor-p fw-b" @click="handleInputLand">
+                  Input
+                </div>
               </div>
             </v-tab-item>
           </v-tabs-items>
@@ -267,7 +269,6 @@ export default {
   },
   methods: {
     countPrice(payload) {
-      console.log(payload.type);
       switch (payload.type) {
         case "IPFS Storage":
           this.recordIpfsSize = BigNumber.from(payload.value.toString());
@@ -300,6 +301,22 @@ export default {
           break;
       }
       console.log(payload);
+    },
+
+    handleInputLand() {
+      let estimatePrice = BigNumber.from("1");
+      let fixNumber = BigNumber.from("0");
+      const totalPrice = this.totalPrice.toString();
+      if (totalPrice.length > 6) {
+        if (Number(totalPrice.slice(-6)) > 0) {
+          fixNumber = BigNumber.from("1");
+        }
+        estimatePrice = BigNumber.from(totalPrice).div(1e6).add(fixNumber);
+      }
+
+      this.$emit("estimateInput", estimatePrice.toString());
+
+      this.showPop = false;
     },
   },
 };

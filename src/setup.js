@@ -241,19 +241,31 @@ Vue.prototype.$utils = {
     let unit = "Byte";
 
     if (fileSize.gte(tb)) {
-      formatVal = fixSize.div(tb).div(BigNumber.from(10 ** fix));
+      formatVal = fixSize
+        .div(tb)
+        .div(BigNumber.from(10 ** fix))
+        .toString();
       unit = "TB";
     } else if (fileSize.gte(gb)) {
-      formatVal = fixSize.div(gb).div(BigNumber.from(10 ** fix));
+      formatVal = fixSize
+        .div(gb)
+        .div(BigNumber.from(10 ** fix))
+        .toString();
       unit = "GB";
     } else if (fileSize.gte(mb)) {
-      formatVal = fixSize.div(mb).div(BigNumber.from(10 ** fix));
+      formatVal = fixSize
+        .div(mb)
+        .div(BigNumber.from(10 ** fix))
+        .toString();
       unit = "MB";
     } else if (fileSize.gte(kb)) {
-      formatVal = fixSize.div(kb).div(BigNumber.from(10 ** fix));
+      formatVal = fixSize
+        .div(kb)
+        .div(BigNumber.from(10 ** fix))
+        .toString();
       unit = "KB";
     } else if (fileSize.gt(BigNumber.from("0"))) {
-      formatVal = fixSize.div(BigNumber.from(10 ** fix));
+      formatVal = fixSize.div(BigNumber.from(10 ** fix)).toString();
       unit = "Byte";
     } else {
       formatVal = "0";
@@ -272,11 +284,11 @@ Vue.prototype.$utils = {
     const landNum = BigNumber.from(land).div((1e18).toString());
     let formatVal = land;
     let unit = "";
-    const k = BigNumber.from(Math.pow(10, 5).toString());
-    const m = BigNumber.from(Math.pow(10, 8).toString());
-    const b = BigNumber.from(Math.pow(10, 14).toString());
-    const t = BigNumber.from(Math.pow(10, 16).toString());
-    const thanT = BigNumber.from(Math.pow(10, 20).toString());
+    const k = BigNumber.from(1e5);
+    const m = BigNumber.from(1e8);
+    const b = BigNumber.from(1e14);
+    const t = BigNumber.from((1e16).toString());
+    const thanT = BigNumber.from("1000000000000000000000");
 
     if (landNum.gte(thanT)) {
       formatVal = "> 99999";
@@ -318,39 +330,41 @@ Vue.prototype.$utils = {
     switch (type) {
       case "BUILD_TIME":
         if (date.div(60).gte(t)) {
-          // return date.div(60).div(t).toString() + " T Min";
           formatVal = date.div(60).div(t).toString();
-          unit = "T Min";
+          unit = "T Mins";
         } else if (date.div(60).gte(b)) {
           formatVal = date.div(60).div(b).toString();
-          unit = "B Min";
+          unit = "B Mins";
         } else if (date.div(60).gte(m)) {
           formatVal = date.div(60).div(m).toString();
-          unit = "M Min";
+          unit = "M Mins";
         } else if (date.div(60).gte(k)) {
           formatVal = date.div(60).div(k).toString();
-          unit = "K Min";
+          unit = "K Mins";
         } else {
           formatVal = date.div(60).toString();
-          unit = "Min";
+          unit = "Mins";
         }
         break;
       case "COMPUTE_UNIT":
         if (date.gte(t)) {
           formatVal = date.div(t).toString();
-          unit = "T CU";
+          if (date.gte(t.mul(1e5))) {
+            formatVal = "> 99999";
+          }
+          unit = "T CUs";
         } else if (date.gte(b)) {
           formatVal = date.div(b).toString();
-          unit = "B CU";
+          unit = "B CUs";
         } else if (date.gte(m)) {
           formatVal = date.div(m).toString();
-          unit = "M CU";
+          unit = "M CUs";
         } else if (date.gte(k)) {
           formatVal = date.div(k).toString();
-          unit = "K CU";
+          unit = "K CUs";
         } else {
           formatVal = date.toString();
-          unit = " CU";
+          unit = " CUs";
         }
         break;
       default:

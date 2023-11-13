@@ -124,6 +124,9 @@ const store = new Vuex.Store({
     SET_CODE(state, code) {
       state.code = code;
     },
+    SET_CONNECT_ADDR(state, addr) {
+      state.connectAddr = addr;
+    },
   },
   actions: {
     async getProjectInfo({ commit }, id) {
@@ -163,6 +166,17 @@ const store = new Vuex.Store({
         commit("SET_CODE", data);
       } catch (error) {
         // throw error
+        console.log(error);
+      }
+    },
+
+    async getWalletAccount({ getters, commit }) {
+      try {
+        const accounts = await getters.walletObj.request({
+          method: "eth_requestAccounts",
+        });
+        commit("SET_CONNECT_ADDR", accounts[0]);
+      } catch (error) {
         console.log(error);
       }
     },
