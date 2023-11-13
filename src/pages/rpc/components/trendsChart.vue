@@ -23,7 +23,7 @@
 
 <script>
 import * as echarts from "echarts";
-import { parseTime } from "@/utils";
+import { parseTime, setNotopt } from "@/utils";
 import { fetchTrends } from "@/api/rpc.js";
 
 export default {
@@ -61,7 +61,17 @@ export default {
     async getChartData() {
       const params = this.chartParams;
       const { data } = await fetchTrends(params);
-      this.setChart(data);
+      this.chartData = data;
+      if (data.x.length == 0) {
+        let chartDom = this.$refs.chart;
+        let myChart = echarts.init(chartDom, null, {
+          renderer: "canvas",
+          useDirtyRect: false,
+        });
+        return setNotopt(myChart, "No Data Available");
+      } else {
+        this.setChart(data);
+      }
     },
     setChart(data) {
       const _this = this;

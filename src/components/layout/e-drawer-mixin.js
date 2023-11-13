@@ -87,6 +87,7 @@ const menuMap = {
     img: "m-rpc",
     to: "/rpc",
     active: false,
+    suffixImg: "/img/svg/hosting/h-beta-active.svg",
     group: /^\/rpc/i,
   },
   RESOURCE: {

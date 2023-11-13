@@ -23,7 +23,7 @@
 
 <script>
 import * as echarts from "echarts";
-import { parseTime } from "@/utils";
+import { parseTime, setNotopt } from "@/utils";
 import { fetchToponchain } from "@/api/rpc.js";
 export default {
   props: {
@@ -57,7 +57,16 @@ export default {
     async getChartData() {
       const params = this.chartParams;
       const { data } = await fetchToponchain(params);
-      this.setChart(data);
+      if (data.x.length == 0) {
+        let chartDom = this.$refs.chart;
+        let myChart = echarts.init(chartDom, null, {
+          renderer: "canvas",
+          useDirtyRect: false,
+        });
+        return setNotopt(myChart, "No Data Available");
+      } else {
+        this.setChart(data);
+      }
     },
     setChart(data) {
       const _this = this;

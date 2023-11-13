@@ -52,3 +52,33 @@ export function parseTime(time, cFormat) {
   });
   return time_str;
 }
+
+export const setNotopt = (demo, subtext = "No Data Available") => {
+  const img = require("@/assets/imgs/rpc/empty.png");
+  var option = {
+    title: {
+      text: " {a|}",
+      x: "center",
+      y: "center",
+      subtext,
+      itemGap: -20,
+      textStyle: {
+        rich: {
+          a: {
+            color: "#64748B",
+            fontSize: "14",
+            height: 124,
+            width: 160,
+            backgroundColor: {
+              image: img,
+            },
+          },
+        },
+      },
+      subtextStyle: {
+        fontSize: 14,
+      },
+    },
+  };
+  demo.setOption(option, true);
+};

@@ -57,11 +57,11 @@ export function fetchSecurityMessage(id) {
   return request.get(`/rpc/manager/keys/${id}/security`);
 }
 
-export function sendSecurity(id, data) {
+export function switchSecurity(id, data) {
   return request.put(`/rpc/manager/keys/${id}/security`, data);
 }
 
-export function addSecurity(id, data) {
+export function sendSecurity(id, data) {
   return request.post(`/rpc/manager/keys/${id}/security`, data);
 }
 

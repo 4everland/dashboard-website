@@ -28,7 +28,9 @@
             >
               <div class="name-box">
                 <div class="project-name">
-                  {{ item.name }}
+                  <span class="name">
+                    {{ item.name }}
+                  </span>
                   <span class="free" v-if="item.type == 'FREE'">Free</span>
                 </div>
                 <div class="project-tips">{{ item.notes || "-" }}</div>
@@ -96,6 +98,7 @@
               >Cancel</v-btn
             >
             <v-btn
+              elevation="0"
               :disabled="!valid"
               :loading="loading"
               min-width="130"
@@ -257,11 +260,23 @@ export default {
         justify-content: center;
       }
       .project-name {
+        display: flex;
+        align-items: center;
         color: #000;
         font-size: 20px;
         font-weight: 700;
+
+        .name {
+          display: inline-block;
+          max-width: 100%;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
         .free {
-          padding: 2px 8px;
+          height: 18px;
+          // display: inline-block;
+          padding: 0px 8px;
           border-radius: 2px;
           background: #0a9e71;
           color: #fff;

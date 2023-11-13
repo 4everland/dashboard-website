@@ -4,91 +4,178 @@
       <div class="d-flex al-c mb-4 justify-space-between">
         <span class="list-tit">General Settings</span>
       </div>
-      <v-row>
-        <v-col cols="12" md="6" class="py-0">
-          <p class="int-name">API Key Name</p>
-          <div class="mt-2">
-            <v-text-field
-              outlined
-              dense
-              counter="40"
-              required
-              :rules="rules.name"
-              v-model.trim="keyInfo.name"
-              placeholder="Type in a name for your API Key"
-            >
-            </v-text-field>
-          </div>
-        </v-col>
+      <v-form ref="form" v-model="valid">
+        <v-row>
+          <v-col cols="12" md="6" class="py-0">
+            <p class="int-name">API Key Name</p>
+            <div class="mt-2">
+              <v-text-field
+                outlined
+                dense
+                counter="40"
+                required
+                :rules="rules.name"
+                v-model.trim="keyInfo.name"
+                placeholder="Type in a name for your API Key"
+              >
+              </v-text-field>
+            </div>
+          </v-col>
 
-        <v-col cols="12" md="6" class="py-0">
-          <p class="int-name">Notes</p>
-          <div class="mt-2">
-            <v-text-field
-              outlined
-              dense
-              counter="80"
-              v-model.trim="keyInfo.notes"
-              placeholder="E.g., chains, networks, etc."
+          <v-col cols="12" md="6" class="py-0">
+            <p class="int-name">Notes</p>
+            <div class="mt-2">
+              <v-text-field
+                outlined
+                dense
+                counter="80"
+                v-model.trim="keyInfo.notes"
+                placeholder="E.g., chains, networks, etc."
+              >
+              </v-text-field>
+            </div>
+          </v-col>
+          <v-col cols="12" class="py-0">
+            <p class="int-name">API Key Status</p>
+            <div class="mt-2" style="width: 220px">
+              <e-radio-btn
+                class="ml-auto"
+                minWidth="110px"
+                minHeight="32px"
+                :options="typeList"
+                v-model="typeIdx"
+              ></e-radio-btn>
+            </div>
+          </v-col>
+          <v-col cols="12">
+            <v-btn
+              class="mt-6"
+              :disabled="!valid"
+              color="primary"
+              large
+              @click="setKeyInfo"
             >
-            </v-text-field>
-          </div>
-        </v-col>
-        <v-col cols="12" class="py-0">
-          <p class="int-name">API Key Status</p>
-          <div class="mt-2" style="width: 220px">
-            <e-radio-btn
-              class="ml-auto"
-              minWidth="110px"
-              minHeight="32px"
-              :options="typeList"
-              v-model="typeIdx"
-            ></e-radio-btn>
-          </div>
-        </v-col>
-        <v-col cols="12">
-          <v-btn color="primary" large @click="setKeyInfo"> Save </v-btn>
-        </v-col>
-      </v-row>
+              Save
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-form>
     </div>
-    <div class="mt-6">
+    <div class="mt-16">
       <div class="d-flex al-c mb-4 justify-space-between">
         <span class="list-tit">Secuity</span>
       </div>
       <v-row>
         <v-col cols="12" class="py-0">
           <v-checkbox
-            v-model="checkbox"
+            v-model="enabled"
             label="Enable JWT for ALL Requests"
+            @change="changeEnabled"
           ></v-checkbox>
         </v-col>
-        <v-col cols="12" class="py-0" style="max-width: 560px">
-          <p class="int-name">JWT Public Key Name</p>
-          <div class="mt-2">
-            <v-text-field
-              outlined
-              dense
-              counter="80"
-              v-model.trim="keyInfo.notes"
-              placeholder="E.g., chains, networks, etc."
-            >
-            </v-text-field>
-          </div>
-        </v-col>
-        <v-col cols="12" class="py-0">
-          <p class="int-name">JWT Public Key</p>
-          <div class="mt-2">
-            <v-textarea outlined value="" auto-grow rows="4"></v-textarea>
-          </div>
-        </v-col>
-        <v-col cols="12" class="py-0">
-          <div>
-            <v-btn color="primary" large>Add</v-btn>
-          </div>
-        </v-col>
       </v-row>
+      <v-form ref="secuityForm" v-model="secuityValid">
+        <v-row>
+          <v-col cols="12" class="py-0" style="max-width: 560px">
+            <p class="int-name">JWT Public Key Name</p>
+            <div class="mt-2">
+              <v-text-field
+                outlined
+                dense
+                counter="32"
+                required
+                :rules="secuityRules.name"
+                v-model.trim="secuityInfo.name"
+                placeholder="E.g., chains, networks, etc."
+              >
+              </v-text-field>
+            </div>
+          </v-col>
+          <v-col cols="12" class="py-0">
+            <p class="int-name">JWT Public Key</p>
+            <div class="mt-2">
+              <v-textarea
+                outlined
+                v-model.trim="secuityInfo.pk"
+                auto-grow
+                rows="4"
+              ></v-textarea>
+            </div>
+          </v-col>
+
+          <v-col cols="12" class="pb-8" v-if="secuityList.length > 0">
+            <v-simple-table>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">Name</th>
+                    <th class="text-left">ID</th>
+                    <th class="text-left">JWT Public Key</th>
+                    <th class="text-left">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in secuityList" :key="item.id">
+                    <td>
+                      <span class="name-td">
+                        {{ item.name }}
+                      </span>
+                    </td>
+                    <td>
+                      <span>{{ item.id }}</span>
+                      <v-btn
+                        icon
+                        v-clipboard="item.id"
+                        @success="$toast('Copied!')"
+                      >
+                        <img
+                          :src="require('/public/img/svg/rpc/copy.svg')"
+                          width="16"
+                        />
+                      </v-btn>
+                    </td>
+                    <td class="d-flex al-c">
+                      <span class="pk-td">{{ item.pk }}</span>
+                      <v-btn
+                        icon
+                        v-clipboard="item.pk"
+                        @success="$toast('Copied!')"
+                      >
+                        <img
+                          :src="require('/public/img/svg/rpc/copy.svg')"
+                          width="16"
+                        />
+                      </v-btn>
+                    </td>
+                    <td>
+                      <v-btn icon @click="removeSecuity(item.id)">
+                        <img
+                          :src="require('/public/img/svg/rpc/remove.svg')"
+                          width="24"
+                        />
+                      </v-btn>
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-col>
+          <v-col cols="12" class="pb-8">
+            <div>
+              <v-btn
+                :disabled="!secuityValid"
+                color="primary"
+                large
+                @click="addSecurity"
+                :loading="addLoading"
+                >Add</v-btn
+              >
+            </div>
+          </v-col>
+        </v-row>
+      </v-form>
     </div>
-    <div class="mt-6 mb-16">
+    <div class="mt-16">
       <div class="d-flex al-c mb-4 justify-space-between">
         <span class="list-tit">Reset</span>
       </div>
@@ -101,16 +188,27 @@
           <div class="d-flex al-c">
             <div class="api-key-box">
               <span>{{ userKey }}</span>
-              <img :src="require('/public/img/svg/rpc/copy.svg')" width="24" />
+              <v-btn icon v-clipboard="userKey" @success="$toast('Copied!')">
+                <img
+                  :src="require('/public/img/svg/rpc/copy.svg')"
+                  width="24"
+                />
+              </v-btn>
             </div>
           </div>
           <div class="mt-6">
-            <v-btn color="primary" large @click="onReset">Reset</v-btn>
+            <v-btn
+              color="primary"
+              large
+              @click="onReset"
+              :loading="resetLoading"
+              >Reset</v-btn
+            >
           </div>
         </v-col>
       </v-row>
     </div>
-    <div class="mt-6 mb-16">
+    <div class="mt-16 mb-16">
       <div class="d-flex al-c mb-4 justify-space-between">
         <span class="list-tit">Delete</span>
       </div>
@@ -121,7 +219,13 @@
             with caution.
           </span>
           <div class="mt-6">
-            <v-btn color="primary" large @click="onDelete">Delete</v-btn>
+            <v-btn
+              color="primary"
+              large
+              @click="onDelete"
+              :loading="deleteLoading"
+              >Delete</v-btn
+            >
           </div>
         </v-col>
       </v-row>
@@ -134,6 +238,10 @@ import {
   fetchKeyDetail,
   fetchKeyDetailInfo,
   sendKeyDetailInfo,
+  fetchSecurityMessage,
+  switchSecurity,
+  sendSecurity,
+  deleteSecurity,
   resetKey,
   deletetKey,
 } from "@/api/rpc.js";
@@ -145,15 +253,35 @@ export default {
       id: "",
       typeList: ["Active", "Inactive"],
       typeIdx: 0,
+      valid: false,
+      secuityValid: false,
       rules: {
-        name: [(val) => (val || "").length > 0 || "This field is required"],
+        name: [
+          (val) => (val || "").length > 0 || "This field is required",
+          (val) => (val || "").length <= 40 || "Max 40 characters",
+        ],
+        notes: [(val) => (val || "").length <= 80 || "Max 80 characters"],
       },
-      checkbox: true,
+      secuityRules: {
+        name: [
+          (val) => (val || "").length > 0 || "This field is required",
+          (val) => (val || "").length <= 32 || "Max 32 characters",
+        ],
+      },
+      enabled: false,
       keyInfo: {
         name: "",
         notes: "",
       },
+      secuityList: [],
+      secuityInfo: {
+        name: "",
+        pk: "",
+      },
       userKey: "",
+      addLoading: false,
+      resetLoading: false,
+      deleteLoading: false,
     };
   },
   created() {
@@ -166,6 +294,7 @@ export default {
     init() {
       this.getKeyInfo();
       this.getKey();
+      this.getSecurityMessage();
     },
     async getKey() {
       const id = this.id;
@@ -192,16 +321,86 @@ export default {
         keyInfo.active = false;
       }
       await sendKeyDetailInfo(id, keyInfo);
+      this.$toast("Successful!");
       this.init();
     },
-    async onReset() {
+    async getSecurityMessage() {
       const id = this.id;
-      await resetKey(id);
+      const { data } = await fetchSecurityMessage(id);
+      this.enabled = data.enabled;
+      this.secuityList = data.list;
+    },
+    async changeEnabled() {
+      const id = this.id;
+      const params = {
+        enabled: this.enabled,
+      };
+      await switchSecurity(id, params);
+    },
+    async addSecurity() {
+      this.addLoading = true;
+      const id = this.id;
+      const params = this.secuityInfo;
+      try {
+        await sendSecurity(id, params);
+        this.$refs.secuityForm.reset();
+        this.secuityInfo = {
+          name: "",
+          pk: "",
+        };
+        this.getSecurityMessage();
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.addLoading = false;
+      }
+    },
+    async removeSecuity(securityId) {
+      const id = this.id;
+      await deleteSecurity(id, securityId);
+      this.getSecurityMessage();
+    },
+    async onReset() {
+      this.$confirm(
+        "After resetting, the previous key will no longer be usable. Are you sure you want to proceed with the reset?",
+        "Reset the API key",
+        {
+          cancelText: "Cancel",
+          confirmText: "Confirm",
+        }
+      ).then(async () => {
+        this.resetLoading = true;
+        const id = this.id;
+        try {
+          const { data } = await resetKey(id);
+          this.userKey = data;
+        } catch (error) {
+          console.log(error);
+        } finally {
+          this.resetLoading = false;
+        }
+      });
     },
     async onDelete() {
-      const id = this.id;
-      await deletetKey(id);
-      this.$router.push("/rpc");
+      this.$confirm(
+        "Once deleted, this API key cannot be recovered. Are you sure you want to proceed with the deletion?",
+        "Delete the API key",
+        {
+          cancelText: "Cancel",
+          confirmText: "Confirm",
+        }
+      ).then(async () => {
+        this.deleteLoading = true;
+        const id = this.id;
+        try {
+          await deletetKey(id);
+          this.$router.push("/rpc");
+        } catch (error) {
+          console.log(error);
+        } finally {
+          this.deleteLoading = false;
+        }
+      });
     },
   },
 };
@@ -234,6 +433,20 @@ export default {
     border-radius: 4px;
     background: #f1f5f9;
     gap: 253px;
+  }
+  .name-td {
+    display: inline-block;
+    max-width: 100px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .pk-td {
+    display: inline-block;
+    max-width: 300px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }
 </style>

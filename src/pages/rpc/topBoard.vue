@@ -8,8 +8,11 @@
             <span class="top-tit">{{ item.title }}</span>
           </div>
           <div class="data-box">
-            <span class="data-value">{{ item.value }}</span>
-            <span class="data-unit" v-if="index == 0">K</span>
+            <span class="data-value" v-if="index == 2">{{ item.value }}</span>
+            <span class="data-value" v-else>{{
+              functconvertvalu(item.value)
+            }}</span>
+            <!-- <span class="data-unit" v-if="index == 0">K</span> -->
             <span class="data-unit" v-if="index == 2">%</span>
           </div>
         </div>
@@ -73,6 +76,14 @@ export default {
           item.title = item.defaultTitle + "(one Month)";
         }
       });
+    },
+    functconvertvalu(value) {
+      if (value >= 1000000) {
+        value = value / 1000000 + "M";
+      } else if (value >= 1000) {
+        value = value / 1000 + "K";
+      }
+      return value;
     },
   },
 };

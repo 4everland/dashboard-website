@@ -186,10 +186,10 @@ export default {
           ],
         });
       }
-      list.unshift({
-        href: "https://firstsowing.4everland.org/",
-        label: "First Sowing",
-      });
+      // list.unshift({
+      //   href: "https://firstsowing.4everland.org/",
+      //   label: "First Sowing",
+      // });
       return list;
     },
     activedClaim() {

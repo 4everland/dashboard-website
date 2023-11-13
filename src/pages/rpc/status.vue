@@ -106,8 +106,8 @@ export default {
     this.init();
   },
   methods: {
-    init() {
-      this.getOverview();
+    async init() {
+      await this.getOverview();
       const days = this.chartParams.days;
       this.$refs.topBoard.setOverView(days);
       this.$refs.trendsChart.getChartData();
@@ -167,8 +167,11 @@ export default {
 .select-box {
   width: 100%;
   padding: 20px 0;
+  margin-bottom: 20px;
   position: sticky;
   top: 59px;
+  z-index: 99;
+  background-color: #f9fbfc;
 }
 .select-box-sticky {
   background-color: #fff;

@@ -4,8 +4,12 @@ import * as fcl from "@onflow/fcl";
 
 import Vue from "vue";
 import noWallet from "@/components/noWallet/index.js";
-Vue.use(noWallet);
 
+import SignClient from "@walletconnect/sign-client";
+import { WalletConnectModal } from "@walletconnect/modal";
+
+Vue.use(noWallet);
+let _signClient = null;
 fcl
   .config()
   .put("accessNode.api", process.env.VUE_APP_FLOW_API)
@@ -24,6 +28,7 @@ export const ExchangeCode = async (accounts) => {
 };
 
 export const Web3Login = async (accounts, data) => {
+  accounts = accounts.toLowerCase();
   const res = await Vue.prototype.$http.post(
     `$auth/web3login/${accounts}`,
     data
@@ -303,6 +308,124 @@ export const SignCoinBase = async (accounts, nonce, inviteCode, capToken) => {
       capT: capToken,
     };
     const stoken = await Web3Login(accounts, data);
+    return stoken;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+const walletConnectModal = new WalletConnectModal({
+  projectId: "0c6d755f31c61d762715e95f767f7ef8",
+  // `standaloneChains` can also be specified when calling `walletConnectModal.openModal(...)` later on.
+  standaloneChains: ["eip155:1"],
+  themeVariables: {
+    "--wcm-background-color": "#735EA1",
+    // "--wcm-accent-color": "#735EA1",
+  },
+});
+window.walletConnectModal = walletConnectModal;
+export const ConnectWalletCon = async () => {
+  _signClient = await SignClient.init({
+    projectId: "0c6d755f31c61d762715e95f767f7ef8",
+    metadata: {
+      name: "4EVERLAND",
+      description:
+        "As a Web3 infrastructure, 4EVERLAND simplifies the hosting of front-end, the storage of data, and access to the emerging open web, making projects faster and easier to manage.",
+      url: "https://dashboard.4everland.org/",
+      icons: ["https://4evericon.4everland.store/1024.png"],
+    },
+  });
+
+  try {
+    const { uri, approval } = await _signClient.connect({
+      // Optionally: pass a known prior pairing (e.g. from `_signClient.core.pairing.getPairings()`) to skip the `uri` step.
+      // pairingTopic: pairing?.topic,
+      // Provide the namespaces and chains (e.g. `eip155` for EVM-based chains) we want to use in this session.
+      requiredNamespaces: {
+        eip155: {
+          methods: [
+            "eth_sendTransaction",
+            "eth_signTransaction",
+            "eth_sign",
+            "personal_sign",
+            "eth_signTypedData",
+          ],
+          chains: ["eip155:1"],
+          events: ["chainChanged", "accountsChanged"],
+        },
+      },
+    });
+
+    // Open QRCode modal if a URI was returned (i.e. we're not connecting an existing pairing).
+    if (uri) {
+      walletConnectModal.openModal({ uri });
+
+      // Await session approval from the wallet.
+      const session = await approval();
+      // Handle the returned session (e.g. update UI to "connected" state).
+      // Close the QRCode modal in case it was open.
+      walletConnectModal.closeModal();
+
+      if (_signClient.session.length) {
+        const lastKeyIndex = _signClient.session.keys.length - 1;
+        const _session = _signClient.session.get(
+          _signClient.session.keys[lastKeyIndex]
+        );
+        const allNamespaceAccounts = Object.values(_session.namespaces)
+          .map((namespace) => namespace.accounts)
+          .flat();
+
+        const [namespace, reference, account] =
+          allNamespaceAccounts[0].split(":");
+
+        return { session, account };
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const onSignWalletCon = async (session, account, nonce) => {
+  const msg = Buffer.from(nonce).toString("hex");
+  const signature = await _signClient.request({
+    topic: session.topic,
+    chainId: "eip155:1",
+    request: {
+      method: "personal_sign",
+      params: [msg, account],
+    },
+  });
+  return signature;
+};
+
+export const SignWalletCon = async (
+  account,
+  nonce,
+  inviteCode,
+  capToken,
+  session
+) => {
+  try {
+    const msg = Buffer.from(nonce).toString("hex");
+    const signature = await _signClient.request({
+      topic: session.topic,
+      chainId: "eip155:1",
+      request: {
+        method: "personal_sign",
+        params: [msg, account],
+      },
+    });
+
+    const data = {
+      signature,
+      appName: "BUCKET",
+      inviteCode,
+      type: "ETH",
+      walletType: "Walletconnect",
+      capT: capToken,
+    };
+    const stoken = await Web3Login(account, data);
     return stoken;
   } catch (e) {
     console.log(e);
