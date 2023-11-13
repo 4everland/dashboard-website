@@ -36,7 +36,7 @@
 
 <script>
 import { BigNumber } from "ethers";
-import { formatEther } from "ethers/lib/utils";
+import { formatEther, parseEther } from "ethers/lib/utils";
 export default {
   props: {
     view: {
@@ -93,7 +93,14 @@ export default {
       if (this.showTransform) {
         total = total.add(BigNumber.from(this.transformDate.value));
       }
-      return Number(formatEther(this.view.used.div(total))) * 100;
+
+      return Number(
+        (
+          Number(
+            formatEther(parseEther(this.view.used.toString()).div(total))
+          ) * 100
+        ).toFixed(2)
+      );
     },
     data() {
       switch (this.view.type) {
