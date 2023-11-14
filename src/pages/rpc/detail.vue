@@ -11,12 +11,16 @@
     <div class="top-tips" v-show="tipsShow">
       <div class="d-flex al-c">
         <img :src="require('/public/img/svg/rpc/top-tips.svg')" width="24" />
-        <span class="ml-2">
+        <!-- <span class="ml-2">
           The current API key you have is a Free Key and has a request limit of
           500CUs/S. If you require a higher configuration,
           <a href="" target="_blank" class="text-link">
             please click here to learn about our VIP key options.</a
           >
+        </span> -->
+        <span class="ml-2">
+          The current API key you have is a Free Key and has a request limit of
+          500CUs/S.
         </span>
       </div>
       <img
@@ -46,7 +50,7 @@
       </div>
       <div class="d-flex al-c mt-2">
         <a
-          href="http://"
+          href="https://docs.4everland.org/rpc/guides"
           target="_blank"
           rel="noopener noreferrer"
           style="
@@ -86,7 +90,7 @@
         <e-radio-btn
           class="ml-auto"
           minWidth="110px"
-          minHeight="32px"
+          minHeight="24px"
           :options="typeList"
           v-model="typeIdx"
           @input="changeType"
