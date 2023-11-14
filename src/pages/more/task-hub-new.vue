@@ -231,6 +231,7 @@
                 <v-btn
                   v-if="item.taskStatus == 'COMPLETED'"
                   elevation="0"
+                  small
                   class="task-button"
                 >
                   +{{ item.reward }}
@@ -748,7 +749,7 @@ export default {
               background: #1eefa4;
               color: #fff;
               font-family: DIN Alternate;
-              font-size: 24px;
+              font-size: 16px;
               font-weight: 700;
             }
           }
