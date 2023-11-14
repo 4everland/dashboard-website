@@ -57,25 +57,19 @@ export default {
     async getChartData() {
       const params = this.chartParams;
       const { data } = await fetchToponchain(params);
-      if (data.x.length == 0) {
-        let chartDom = this.$refs.chart;
-        let myChart = echarts.init(chartDom, null, {
-          renderer: "canvas",
-          useDirtyRect: false,
-        });
-        return setNotopt(myChart, "No Data Available");
-      } else {
-        this.setChart(data);
-      }
-    },
-    setChart(data) {
-      const _this = this;
-      var chartDom = this.$refs.chart;
-      var myChart = echarts.init(chartDom, null, {
+      let chartDom = this.$refs.chart;
+      let myChart = echarts.init(chartDom, null, {
         renderer: "canvas",
         useDirtyRect: false,
       });
-
+      myChart.clear();
+      if (data.x.length == 0) {
+        return setNotopt(myChart, "No Data Available");
+      } else {
+        return this.setChart(myChart, data);
+      }
+    },
+    setChart(myChart, data) {
       const option = {
         grid: {
           top: 24,
@@ -86,6 +80,10 @@ export default {
         xAxis: {
           type: "category",
           data: data.x,
+          axisLabel: {
+            show: true,
+            interval: 0,
+          },
         },
         yAxis: {
           type: "value",
