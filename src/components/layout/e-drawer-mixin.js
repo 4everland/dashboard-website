@@ -82,6 +82,14 @@ const menuMap = {
       },
     ],
   },
+  RPC: {
+    label: "RPC",
+    img: "m-rpc",
+    to: "/rpc",
+    active: false,
+    suffixImg: "/img/svg/hosting/h-beta-active.svg",
+    group: /^\/rpc/i,
+  },
   RESOURCE: {
     label: "Resource",
     img: "m-usage",
@@ -135,7 +143,14 @@ export default {
           active: false,
         },
       ];
-      const nameArr = ["HOSTING", "BUCKET", "GATEWAY", "RESOURCE", "MEMBER"];
+      const nameArr = [
+        "HOSTING",
+        "BUCKET",
+        "GATEWAY",
+        "RPC",
+        "RESOURCE",
+        "MEMBER",
+      ];
       for (const name of nameArr) {
         let item = menuMap[name];
         if (this.inAccess(name)) {
