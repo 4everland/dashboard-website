@@ -91,11 +91,14 @@ export default {
       try {
         this.loading = true;
         const type = this.typeList[this.typeIdx];
-        const { data } = await this.$http.get(`/bi/charts/pie`, {
-          params: {
-            type,
-          },
-        });
+        const { data } = await this.$http.get(
+          `${process.env.VUE_APP_BASE_URL}/bi/charts/pie`,
+          {
+            params: {
+              type,
+            },
+          }
+        );
         console.log(data);
         this.loading = false;
         let total = 0;

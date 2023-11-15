@@ -18,18 +18,13 @@ export const endpoint = inDev
   ? "https://s3gw.foreverland.xyz"
   : "https://endpoint.4everland.co";
 
-export const authApi = process.env.VUE_APP_AUTH_URL;
-
-// export const authApi = inDev
-//   ? "https://auth.foreverland.xyz"
-//   : "https://oauth.4everland.org";
+const authApi = process.env.VUE_APP_AUTH_URL;
+const hostingUrl = process.env.VUE_APP_HOST_URL;
+const gateWayApi = process.env.VUE_APP_GATEWAY_URL;
 
 const v3Api = inDev
   ? "https://settlement.foreverland.xyz"
   : "https://pay.4everland.org";
-const gateWayApi = inDev
-  ? "https://gateway-api.foreverland.xyz"
-  : "https://gateway-api.4everland.org";
 
 const ipnsApi = inDev
   ? "https://ipns.foreverland.xyz"
@@ -51,12 +46,8 @@ export const templateApi = inDev
   ? "https://temp-template.foreverland.xyz"
   : "https://fs-api.4everland.org";
 
-export const rpcApi = process.env.VUE_APP_RPC_URL;
-
 Vue.prototype.$endpoint = endpoint;
 Vue.prototype.$authApi = authApi;
-
-const hostingUrl = process.env.VUE_APP_HOST_URL;
 
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   // console.log(location);
@@ -75,8 +66,9 @@ const clearLogin = (Vue.prototype.$clearLogin = () => {
 });
 
 export const http = Axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL,
+  // baseURL: process.env.VUE_APP_BASE_URL,
 });
+
 Vue.prototype.$getImgSrc = function (src) {
   if (!src) src = "/img/bg/empty/project.png";
   else if (!/^http/.test(src)) src = hostingUrl + src;
