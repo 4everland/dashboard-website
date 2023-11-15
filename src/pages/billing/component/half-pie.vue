@@ -124,7 +124,6 @@ export default {
       this.myChart.resize();
     };
   },
-  methods: {},
   watch: {
     landConsume() {
       this.myChart.setOption(this.options);

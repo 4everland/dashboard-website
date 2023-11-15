@@ -168,7 +168,6 @@ import axios from "axios";
 import resourceView from "./component/resource-view.vue";
 import trendsLine from "./component/trends-line.vue";
 import halfPie from "../billing/component/half-pie.vue";
-import { BigNumber } from "ethers";
 
 export default {
   components: {

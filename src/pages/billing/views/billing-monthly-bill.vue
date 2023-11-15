@@ -1,6 +1,6 @@
 <template>
-  <div class="billing-monthly-bill-container">
-    <div class="d-flex">
+  <div class="billing-monthly-bill-container pos-r">
+    <div class="d-flex" v-if="JSON.stringify(list) !== '{}'">
       <billing-table class="flex-1">
         <thead>
           <tr>
@@ -25,6 +25,10 @@
       <div class="pie-info ml-6" v-if="curData">
         <BillingMonthlyPie :curInfo="curData" />
       </div>
+    </div>
+    <div class="pos-a no-date h-flex al-c" v-else>
+      <img src="/img/svg/new-billing/no-date.svg" width="240" alt="" />
+      <span class="mt-3 fz-14">no-data</span>
     </div>
   </div>
 </template>
@@ -107,6 +111,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.billing-monthly-bill-container {
+  min-height: 77vh;
+}
+.no-date {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 .pie-info {
   width: 368px;
   height: 400px;
