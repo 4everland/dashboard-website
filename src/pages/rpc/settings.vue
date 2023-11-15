@@ -49,7 +49,7 @@
           </v-col>
           <v-col cols="12">
             <v-btn
-              class="mt-6"
+              class="mt-2"
               :disabled="!valid"
               color="primary"
               large
@@ -95,6 +95,7 @@
             <p class="int-name">JWT Public Key</p>
             <div class="mt-2">
               <v-textarea
+                class="hide-msg"
                 outlined
                 v-model.trim="secuityInfo.pk"
                 auto-grow
@@ -103,7 +104,7 @@
             </div>
           </v-col>
 
-          <v-col cols="12" class="pb-8" v-if="secuityList.length > 0">
+          <v-col cols="12" class="pb-4" v-if="secuityList.length > 0">
             <v-simple-table>
               <template v-slot:default>
                 <thead>
@@ -160,7 +161,7 @@
               </template>
             </v-simple-table>
           </v-col>
-          <v-col cols="12" class="pb-8">
+          <v-col cols="12" class="pb-4">
             <div>
               <v-btn
                 :disabled="!secuityValid"

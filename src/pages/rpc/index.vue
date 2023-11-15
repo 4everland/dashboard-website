@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      typeList: ["API Lists", "Status"],
+      typeList: ["API Lists", "Stats"],
       typeIdx: 0,
     };
   },
