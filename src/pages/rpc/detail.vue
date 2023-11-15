@@ -13,14 +13,21 @@
         <img :src="require('/public/img/svg/rpc/top-tips.svg')" width="24" />
         <!-- <span class="ml-2">
           The current API key you have is a Free Key and has a request limit of
-          500CUs/S. If you require a higher configuration,
+          500CUPS . If you require a higher configuration,
           <a href="" target="_blank" class="text-link">
             please click here to learn about our VIP key options.</a
           >
         </span> -->
         <span class="ml-2">
           The current API key you have is a Free Key and has a request limit of
-          500CUs/S.
+          <a
+            href="https://docs.4everland.org/rpc/whats-cus-cups"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-link"
+          >
+            300 CUPS </a
+          >.
         </span>
       </div>
       <img
