@@ -94,7 +94,7 @@
             <img src="/img/svg/new-billing/right-arrow.svg" width="16" alt="" />
           </div>
         </div>
-        <div class="land-consume py-6 px-4">
+        <div class="land-consume py-6 px-4 h-flex al-c">
           <h3 class="ta-c">Monthly Consumptior</h3>
           <half-pie :curInfo="landUsedMonthlyPie"></half-pie>
         </div>
@@ -135,14 +135,14 @@
       <v-col :md="8" cols="12">
         <v-row style="height: 100%">
           <v-col :md="4" cols="12" class="pie-col">
-            <resource-monthly-ipfs-pie
+            <resource-monthly-pie
               name="Bandwidth"
               type="TRAFFIC"
               :resourceAppUsed="bandwidthResourceObj"
-            ></resource-monthly-ipfs-pie>
+            ></resource-monthly-pie>
           </v-col>
           <v-col :md="4" cols="12" class="pie-col">
-            <resource-monthly-ipfs-pie
+            <resource-monthly-pie
               name="IPFS Storage"
               type="IPFS_STORAGE"
               :resourceAppUsed="ipfsResourceObj"
@@ -151,10 +151,10 @@
               <template #bottom>
                 <div class="fz-12">Consumption: 223,344 MD</div>
               </template>
-            </resource-monthly-ipfs-pie>
+            </resource-monthly-pie>
           </v-col>
           <v-col :md="4" cols="12" class="pie-col">
-            <resource-monthly-ipfs-pie
+            <resource-monthly-pie
               name="Arweave"
               type="AR_STORAGE"
               :resourceAppUsed="arResourceObj"
@@ -167,7 +167,7 @@
                   Arweave files smaller than 150KB are excluded.
                 </div>
               </template>
-            </resource-monthly-ipfs-pie>
+            </resource-monthly-pie>
           </v-col>
         </v-row>
       </v-col>
@@ -180,14 +180,14 @@ import { BigNumber } from "ethers";
 import billingConsumeLine from "./component/billing-consume-line.vue";
 import billingResourceView from "./component/billing-resource-view.vue";
 import halfPie from "./component/half-pie.vue";
-import resourceMonthlyIpfsPie from "./component/resource-monthly-ipfs-pie.vue";
+import resourceMonthlyPie from "./component/resource-monthly-pie.vue";
 import { mapGetters, mapState } from "vuex";
 export default {
   components: {
     billingConsumeLine,
     billingResourceView,
     halfPie,
-    resourceMonthlyIpfsPie,
+    resourceMonthlyPie,
   },
   data() {
     return {

@@ -43,7 +43,7 @@ export default {
         series: [
           {
             type: "pie",
-            minAngle: 1,
+            minAngle: 10,
             radius: ["55%", "90%"],
             avoidLabelOverlap: false,
             label: {

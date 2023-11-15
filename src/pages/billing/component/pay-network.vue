@@ -171,6 +171,7 @@ export default {
       this.$store.commit("SET_CONTRACT", contract);
     },
     async switchNet(id) {
+      console.log(window.ethereum);
       const chainId = "0x" + id.toString(16);
       try {
         await window.ethereum.request({

@@ -137,6 +137,7 @@ export default {
   width: 100%;
   height: 100%;
   min-height: 200px;
+  transform: rotateX("-30deg");
 }
 .data {
   left: 50%;
