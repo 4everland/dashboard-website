@@ -56,6 +56,7 @@
 
 <template>
   <v-navigation-drawer
+    width="240"
     class="e-drawer"
     :mini-variant.sync="mini"
     v-model="isShow"

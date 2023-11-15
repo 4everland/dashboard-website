@@ -33,6 +33,7 @@
 
 <script>
 import * as echarts from "echarts";
+import { BigNumber } from "ethers";
 export default {
   data() {
     return {
@@ -63,6 +64,29 @@ export default {
       baseOptions: {
         tooltip: {
           trigger: "axis",
+          formatter: (params) => {
+            // if (this.tagList[this.curIndex].type == "BUILD_TIME") {
+            //   return BigNumber.from(params.value).div(60).toString() + " Mins";
+            // }
+            // return BigNumber.from(params.value).div(1024).toString() + " KB";
+
+            let str = "";
+            params.forEach((it) => {
+              let size = this.$utils.getFileSize(it.value);
+              if (this.tagList[this.curIndex].type == "COMPUTE_UNIT") {
+                size = this.$utils.getNumCount(it.value) + "Cus";
+              }
+              str += `<div class="al-c mt-1">
+              <span class="mr-2 d-ib" style="width: 10px; height: 10px; border-radius: 50%; background: ${it.color}">  </span>
+              <span class="mr-1">${it.seriesName}:</span>
+              <span > ${size}</span>
+              </div>`;
+            });
+            return `
+              <div>${params[0].axisValueLabel}</div>
+              ${str}
+            `;
+          },
         },
         grid: {
           left: "3%",
@@ -73,6 +97,18 @@ export default {
 
         yAxis: {
           type: "value",
+          axisLabel: {
+            formatter: (value) => {
+              if (value <= 1) return value;
+              if (this.tagList[this.curIndex].type == "BUILD_TIME") {
+                return this.$utils.getNumCount(Number(value) / 60) + " Mins";
+              }
+              if (this.tagList[this.curIndex].type == "COMPUTE_UNIT") {
+                return this.$utils.getNumCount(value) + " Cus";
+              }
+              return this.$utils.getFileSize(value);
+            },
+          },
         },
       },
       GATEWAY: new Array(31).fill(0),
@@ -115,6 +151,7 @@ export default {
           boundaryGap: false,
           data: this.monthAgoDate,
         },
+
         series: [
           {
             name: "Hosting",
@@ -171,6 +208,7 @@ export default {
             },
           }
         );
+
         this.monthAgoTimeStamp.forEach((it, i) => {
           data.forEach((item) => {
             if (item.timestamp == it) {

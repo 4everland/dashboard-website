@@ -28,14 +28,13 @@ export default {
         tooltip: {
           trigger: "item",
           formatter: (params) => {
-            let curResource = this.$utils.getBigFileSize(params.data.data);
             return `
               <div class="al-c">
                 <span class="d-ib" style="width: 8px; height: 8px; background: ${params.color}; border-radius:50%"></span>
                 <span class="ml-1">${params.name}</span>
                 <span class="ml-2 fw-b fz-20" style="font-family: DIN Alternate;">${params.percent}%</span></div>
               <div class="mt-1 fz-12" style="color: #64748B">
-                <span>${curResource}</span>
+                <span>${params.data.data}</span>
               </div>
           `;
           },
@@ -44,6 +43,7 @@ export default {
         series: [
           {
             type: "pie",
+            minAngle: 1,
             radius: ["55%", "90%"],
             avoidLabelOverlap: false,
             label: {

@@ -80,7 +80,7 @@ export default {
             dai: "",
           },
           landRecharge: "",
-          chainId: 999999999,
+          chainId: 9999999,
         },
       ],
     };

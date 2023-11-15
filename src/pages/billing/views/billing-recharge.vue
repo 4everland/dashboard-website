@@ -41,6 +41,7 @@
     </div>
 
     <bottom-detector
+      v-if="list.length"
       @arriveBottom="loadMore"
       :loadingMore="loadingMore"
       :noMore="finished"
@@ -66,6 +67,10 @@ import {
   ArbitrumDAI,
   zkSyncUSDC,
 } from "@/plugins/pay/contracts/contracts-addr";
+
+const everPayDAI = "0x6b175474e89094c44da98b954eedeac495271d0f";
+const everPayUSDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+const everPayUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
 export default {
   components: {
     BillingTable,
@@ -75,9 +80,16 @@ export default {
     return {
       list: [],
       coinInfo: {
-        USDC: [MumbaiUSDC, GoerliUSDC, ChapelUSDC, ArbitrumUSDC, zkSyncUSDC],
-        USDT: [MumbaiUSDT, GoerliUSDT, ChapelUSDT, ArbitrumUSDT],
-        DAI: [MumbaiDAI, GoerliDAI, ChapelDAI, ArbitrumDAI],
+        USDC: [
+          MumbaiUSDC,
+          GoerliUSDC,
+          ChapelUSDC,
+          ArbitrumUSDC,
+          zkSyncUSDC,
+          everPayUSDC,
+        ],
+        USDT: [MumbaiUSDT, GoerliUSDT, ChapelUSDT, ArbitrumUSDT, everPayUSDT],
+        DAI: [MumbaiDAI, GoerliDAI, ChapelDAI, ArbitrumDAI, everPayDAI],
       },
       finished: false,
       loadingMore: false,

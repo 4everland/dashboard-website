@@ -52,6 +52,16 @@
             <billing-resource-view :view="item"></billing-resource-view>
           </v-col>
         </v-row>
+
+        <!-- <div class="al-c space-btw px-6 py-4">
+          <div
+            class="resource-col flex-1"
+            v-for="item in resourceList"
+            :key="item.type"
+          >
+            <billing-resource-view :view="item"></billing-resource-view>
+          </div>
+        </div> -->
       </v-col>
     </v-row>
 
@@ -86,11 +96,13 @@
         </div>
         <div class="land-consume py-6 px-4">
           <h3 class="ta-c">Monthly Consumptior</h3>
-          <half-pie></half-pie>
+          <half-pie :curInfo="landUsedMonthlyPie"></half-pie>
         </div>
       </v-col>
       <v-col :md="8" cols="12" class="line-charts">
-        <billing-consume-line></billing-consume-line>
+        <billing-consume-line
+          :landUsedMonthly="landUsedMonthlyLine"
+        ></billing-consume-line>
       </v-col>
     </v-row>
 
@@ -126,14 +138,14 @@
             <resource-monthly-ipfs-pie
               name="Bandwidth"
               type="TRAFFIC"
-              :data="bandwidthResourceObj"
+              :resourceAppUsed="bandwidthResourceObj"
             ></resource-monthly-ipfs-pie>
           </v-col>
           <v-col :md="4" cols="12" class="pie-col">
             <resource-monthly-ipfs-pie
               name="IPFS Storage"
               type="IPFS_STORAGE"
-              :data="ipfsResourceObj"
+              :resourceAppUsed="ipfsResourceObj"
             >
               <div class="fz-12">Consumption: 223,344 MD</div>
               <template #bottom>
@@ -145,7 +157,7 @@
             <resource-monthly-ipfs-pie
               name="Arweave"
               type="AR_STORAGE"
-              :data="arResourceObj"
+              :resourceAppUsed="arResourceObj"
             >
               <div class="fz-12">
                 Arweave files smaller than 150KB are excluded.
@@ -168,7 +180,6 @@ import { BigNumber } from "ethers";
 import billingConsumeLine from "./component/billing-consume-line.vue";
 import billingResourceView from "./component/billing-resource-view.vue";
 import halfPie from "./component/half-pie.vue";
-// import pie from "./component/pie.vue";
 import resourceMonthlyIpfsPie from "./component/resource-monthly-ipfs-pie.vue";
 import { mapGetters, mapState } from "vuex";
 export default {
@@ -177,7 +188,6 @@ export default {
     billingResourceView,
     halfPie,
     resourceMonthlyIpfsPie,
-    // pie,
   },
   data() {
     return {
@@ -203,6 +213,8 @@ export default {
         size: 0,
         unit: "Min",
       },
+      landUsedMonthlyLine: [],
+      landUsedMonthlyPie: [],
     };
   },
   computed: {
@@ -218,6 +230,7 @@ export default {
     this.getAnalyticsAr();
     this.getAnalyticsBandwidth();
     this.getAnalyticsBuildMin();
+    this.getLandUsedMonthly();
   },
   methods: {
     async getUserResource() {
@@ -230,62 +243,30 @@ export default {
         this.resourceList = comboItem.resourceItems
           .filter((it) => it.resourceType != "COMPUTE_UNIT")
           .map((it, i) => {
-            let total = this.$utils.getBigFileSize(it.size);
-            let used = this.$utils.getBigFileSize(
-              BigNumber.from(comboItem.consumeItems[i].size).add(
-                BigNumber.from(data.realTimeItems[i].size)
-              )
-            );
-            let remaining = this.$utils.getBigFileSize(
-              BigNumber.from(it.size)
-                .sub(BigNumber.from(comboItem.consumeItems[i].size))
-                .sub(BigNumber.from(data.realTimeItems[i].size))
-                .toString()
-            );
+            let total = Number(it.size);
+            let used =
+              Number(comboItem.consumeItems[i].size) +
+              Number(data.realTimeItems[i].size);
+            let remaining = total - used;
             let percent;
             if (it.size == "0") {
               percent = 0;
             } else {
-              percent = BigNumber.from(comboItem.consumeItems[i].size)
-                .add(BigNumber.from(data.realTimeItems[i].size))
-                .mul("100")
-                .div(BigNumber.from(it.size))
-                .toNumber();
+              percent = ((used / total) * 100).toFixed(0);
             }
-
             if (it.resourceType == "BUILD_TIME") {
               return {
                 type: it.resourceType,
-                total: Number(it.size) / 60 + " Min",
-                used:
-                  Number(comboItem.consumeItems[i].size) / 60 +
-                  Number(data.realTimeItems[i].size) / 60 +
-                  " Min",
-                remaining:
-                  (
-                    Number(it.size) / 60 -
-                    Number(comboItem.consumeItems[i].size) / 60 -
-                    Number(data.realTimeItems[i].size) / 60
-                  ).toFixed(0) + " Min",
-                percent:
-                  ((Number(comboItem.consumeItems[i].size) +
-                    Number(data.realTimeItems[i].size)) /
-                    Number(it.size)) *
-                  100,
+                total: total / 60,
+                used: used / 60,
+                remaining: (total - used) / 60,
+                percent,
               };
             }
-
             if (it.resourceType == "IPFS_STORAGE") {
-              used = this.$utils.getBigFileSize(
-                BigNumber.from(comboItem.consumeItems[i].size).add(
-                  BigNumber.from(data.totalIpfsStorage)
-                )
-              );
-              percent = BigNumber.from(comboItem.consumeItems[i].size)
-                .add(BigNumber.from(data.totalIpfsStorage))
-                .mul("100")
-                .div(BigNumber.from(it.size))
-                .toNumber();
+              used =
+                Number(comboItem.consumeItems[i].size) +
+                Number(data.totalIpfsStorage);
             }
             return {
               type: it.resourceType,
@@ -394,6 +375,88 @@ export default {
         console.log(error);
       }
     },
+
+    async getLandUsedMonthly() {
+      try {
+        const { data } = await this.$http.get(
+          "$bill-analytics/bill/land-used/analytics",
+          {
+            params: {
+              analyticsType: "DAY",
+            },
+          }
+        );
+
+        this.landUsedMonthlyLine = data;
+
+        let resourceUsedObj = {};
+        data.forEach((item) => {
+          if (
+            !Object.prototype.hasOwnProperty.call(
+              resourceUsedObj,
+              item.resourceType
+            )
+          ) {
+            resourceUsedObj[item.resourceType] = {
+              landUsed: 0,
+              resourceUsed: 0,
+              resourceType: item.resourceType,
+            };
+          }
+          resourceUsedObj[item.resourceType].landUsed = Number(
+            (
+              resourceUsedObj[item.resourceType].landUsed +
+              Number(item.landUsed)
+            ).toFixed(2)
+          );
+          resourceUsedObj[item.resourceType].resourceUsed =
+            resourceUsedObj[item.resourceType].resourceUsed +
+            Number(item.resourceUsed);
+        });
+        this.landUsedMonthlyPie = Object.values(resourceUsedObj).map((it) => {
+          let name = "IPFS";
+          let color = "#000";
+          let resourceUsed = "0";
+          switch (it.resourceType) {
+            case "AR_STORAGE":
+              name = "Arweave";
+              color = "#000";
+              resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+              break;
+            case "BUILD_TIME":
+              name = "Build Minutes";
+              color = "#F3CC5C";
+              resourceUsed =
+                this.$utils.getNumCount(it.resourceUsed / 60) + "Mins";
+              break;
+            case "TRAFFIC":
+              name = "Bandwidth";
+              color = "#9AD3DC";
+              resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+              break;
+            case "COMPUTE_UNIT":
+              name = "RPC Requests";
+              color = "#836BAF";
+              resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "Cus";
+              break;
+            default:
+              name = "IPFS";
+              color = "#57B9BC";
+              resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+              break;
+          }
+          return {
+            value: it.landUsed,
+            color,
+            name,
+            landUsed: it.landUsed.toString(),
+            resourceUsed,
+          };
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>
@@ -411,7 +474,6 @@ export default {
 
 .plan-level {
   display: flex;
-  height: 168px;
   box-sizing: border-box;
   flex-direction: column;
   justify-content: space-between;
@@ -433,7 +495,9 @@ export default {
 }
 .resource-col {
   height: 100%;
+  padding: 12px 6px;
 }
+
 .variable {
   color: #775da6;
 }

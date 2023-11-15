@@ -121,8 +121,20 @@ Vue.prototype.$utils = {
     if (typeof number !== "number") {
       num = parseInt(number);
     }
+    const t = Math.pow(10, 12);
+    const b = Math.pow(10, 9);
+    const m = Math.pow(10, 6);
     const k = Math.pow(10, 3);
-    if (num >= k) {
+    if (num >= t) {
+      num = num / t;
+      unit = "T";
+    } else if (num >= b) {
+      num = num / b;
+      unit = "B";
+    } else if (num >= m) {
+      num = num / m;
+      unit = "M";
+    } else if (num >= k) {
       num = num / k;
       unit = "K";
     }
@@ -136,6 +148,7 @@ Vue.prototype.$utils = {
       };
     return num + " " + unit;
   },
+
   getCidV1(cid) {
     if (!cid) return "";
     cid = cid.replace(/"/g, "");
@@ -281,8 +294,7 @@ Vue.prototype.$utils = {
   },
 
   formatLand(land, isObj = false) {
-    const landNum = BigNumber.from(land).div((1e18).toString());
-    let formatVal = land;
+    let formatVal = BigNumber.from(land).div((1e18).toString());
     let unit = "";
     const k = BigNumber.from(1e5);
     const m = BigNumber.from(1e8);
@@ -290,20 +302,20 @@ Vue.prototype.$utils = {
     const t = BigNumber.from((1e16).toString());
     const thanT = BigNumber.from("1000000000000000000000");
 
-    if (landNum.gte(thanT)) {
+    if (formatVal.gte(thanT)) {
       formatVal = "> 99999";
       unit = "T";
-    } else if (landNum.gte(t)) {
-      formatVal = landNum.div(BigNumber.from(1e12)).toString();
+    } else if (formatVal.gte(t)) {
+      formatVal = formatVal.div(BigNumber.from(1e12)).toString();
       unit = "T";
-    } else if (landNum.gte(b)) {
-      formatVal = landNum.div(BigNumber.from(1e8)).toString();
+    } else if (formatVal.gte(b)) {
+      formatVal = formatVal.div(BigNumber.from(1e8)).toString();
       unit = "B";
-    } else if (landNum.gte(m)) {
-      formatVal = landNum.div(BigNumber.from(1e6)).toString();
+    } else if (formatVal.gte(m)) {
+      formatVal = formatVal.div(BigNumber.from(1e6)).toString();
       unit = "M";
-    } else if (landNum.gte(k)) {
-      formatVal = landNum.div(BigNumber.from(1e3)).toString();
+    } else if (formatVal.gte(k)) {
+      formatVal = formatVal.div(BigNumber.from(1e3)).toString();
       unit = "K";
     }
 

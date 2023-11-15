@@ -1,7 +1,9 @@
 <template>
-  <div class="pos-r">
+  <div class="pos-r al-c" style="width: 328px">
     <div id="pie"></div>
-    <div class="pos-a data">{{ landConsume.toLocaleString() }}</div>
+    <div class="pos-a data">
+      {{ $utils.formatLand(landConsume.toString()) }}LAND
+    </div>
   </div>
 </template>
 
@@ -13,62 +15,43 @@ export default {
       type: String,
       default: "200px",
     },
-
-    data: {
+    curInfo: {
       type: Array,
       default: () => {
         return [
-          { value: 0, name: "IPFS" },
-          { value: 0, name: "Arweave" },
-          { value: 0, name: "Bandwidth" },
-          { value: 0, name: "Build Minutes" },
-          { value: 0, name: "RPC Requests" },
+          { value: 32331, name: "IPFS" },
+          { value: 2331, name: "Arweave" },
+          { value: 344, name: "Bandwidth" },
+          { value: 3434, name: "Build Minutes" },
+          { value: 333, name: "RPC Requests" },
         ];
       },
     },
   },
   data() {
-    return {};
+    return {
+      myChart: null,
+    };
   },
   computed: {
-    colorList() {
-      return ["#836BAF", "#F3CC5C", "#9AD3DC", "#000", "#57B9BC"];
-    },
     dataOptions() {
-      if (this.landConsume == 0n) return [{ value: 0, name: "" }];
-      return this.data.map((it, i) => {
-        return { ...it, color: this.colorList[i] };
-      });
+      if (this.landConsume == 0) return [{ value: 0, name: "" }];
+      return this.curInfo;
     },
     landConsume() {
-      return this.data.reduce((pre, it) => pre + BigInt(it.value), BigInt(0));
+      if (!this.curInfo) return 0;
+      const landConsume = this.curInfo.reduce(
+        (pre, it) => (pre += it.value),
+        0
+      );
+      return landConsume;
+      // return this.$utils.formatLand(landConsume.toString());
     },
     options() {
       return {
         tooltip: {
           trigger: "item",
-          formatter(params) {
-            let curResource = "";
-            switch (params.name) {
-              case "IPFS":
-                curResource = params.value * 2 + "MD";
-                break;
-              case "Arweave":
-                curResource = params.value * 2 + "GB";
-                break;
-              case "Bandwidth":
-                curResource = params.value * 2 + "MB";
-                break;
-              case "Build Minutes":
-                curResource = params.value * 2 + "Min";
-                break;
-              case "RPC Requests":
-                curResource = params.value * 2 + "CU";
-                break;
-              default:
-                curResource = params.value * 2;
-                break;
-            }
+          formatter: (params) => {
             return `
               <div class="al-c">
                 <span class="d-ib" style="width: 8px; height: 8px; background: ${
@@ -79,25 +62,27 @@ export default {
                   params.percent * 2
                 }%</span></div>
               <div class="mt-1 fz-12" style="color: #64748B">
-                <span>${curResource}</span>
+                <span>${params.data.resourceUsed}</span>
                 +
-                <span>${params.value}LAND</span>
+                <span>${this.$utils.formatLand(
+                  params.value.toString()
+                )}LAND</span>
               </div>
           `;
           },
-          show: this.landConsume == 0n ? false : true,
+          show: this.landConsume == 0 ? false : true,
         },
         series: [
           {
-            // name: "Access From",
             type: "pie",
+            minAngle: 10,
             radius: ["100%", "150%"],
             center: ["50%", "100%"],
             itemStyle: {
               borderRadius: "2px",
-              color: (colors) => {
-                if (this.landConsume == 0n) return "#94A3B8";
-                return this.colorList[colors.dataIndex];
+              color: (component) => {
+                if (this.landConsume == 0) return "#94A3B8";
+                return component.data.color;
               },
             },
             // adjust the start angle
@@ -131,15 +116,20 @@ export default {
     },
   },
   mounted() {
-    var myChart = echarts.init(document.getElementById("pie"));
-    myChart.setOption(this.options);
+    this.myChart = echarts.init(document.getElementById("pie"));
+    this.myChart.setOption(this.options);
     const fn = window.onresize;
     window.onresize = () => {
       fn();
-      myChart.resize();
+      this.myChart.resize();
     };
   },
   methods: {},
+  watch: {
+    landConsume() {
+      this.myChart.setOption(this.options);
+    },
+  },
 };
 </script>
 

@@ -10,9 +10,7 @@
 </template>
 
 <script>
-import { BigNumber } from "ethers";
 import pie from "./pie.vue";
-import { formatEther, parseEther } from "ethers/lib/utils";
 export default {
   components: {
     pie,
@@ -22,7 +20,7 @@ export default {
       type: String,
       default: "IPFS",
     },
-    data: {
+    resourceAppUsed: {
       type: Object,
     },
     type: {
@@ -35,24 +33,22 @@ export default {
   computed: {
     formatData() {
       let arr = [];
-      for (const key in this.data) {
+      console.log(this.resourceAppUsed);
+      for (const key in this.resourceAppUsed) {
         arr.push({
           name: key,
-          data: this.data[key],
-          value: Number(this.data[key]),
+          data: this.$utils.getFileSize(this.resourceAppUsed[key]),
+          value: Number(this.resourceAppUsed[key]),
         });
       }
-      let totalSize = arr.reduce((pre, it) => {
-        return pre.add(BigNumber.from(it.data));
-      }, BigNumber.from("0"));
-
-      arr = arr.map((it) => {
-        if (it.value == "0") return it;
-        it.value = Number(
-          Number(formatEther(parseEther(it.data).div(totalSize))).toFixed(4)
-        );
-        return it;
-      });
+      let totalSize = arr.reduce((pre, it) => (pre += it.value), 0);
+      arr = arr
+        .filter((item) => item.value)
+        .map((it) => {
+          if (it.value == 0) return it;
+          it.value = (it.value / totalSize).toFixed(4);
+          return it;
+        });
       console.log(arr);
       return arr;
     },

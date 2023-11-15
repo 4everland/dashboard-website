@@ -54,7 +54,7 @@
               />
             </div>
           </div>
-          <div class="d-flex space-btw" style="height: 100%">
+          <div class="h-flex space-btw flex-md-row" style="height: 100%">
             <div class="d-flex flex-column space-btw">
               <div>
                 <p class="fw-b mb-2">balance</p>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="fz-12 tips">Estimated depletion in 20 days</div>
               </div>
-              <div class="al-c space-btw">
+              <div class="al-c">
                 <div
                   class="deposite-btn mr-4"
                   @click="$router.push('/billing/deposite')"
@@ -93,7 +93,7 @@
               </div>
             </div>
 
-            <half-pie style="width: 50%"></half-pie>
+            <half-pie style="50%" :curInfo="landUsedMonthly"></half-pie>
           </div>
         </div>
       </div>
@@ -163,12 +163,12 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import { BigNumber } from "ethers";
 import axios from "axios";
 
 import resourceView from "./component/resource-view.vue";
 import trendsLine from "./component/trends-line.vue";
 import halfPie from "../billing/component/half-pie.vue";
+import { BigNumber } from "ethers";
 
 export default {
   components: {
@@ -185,7 +185,9 @@ export default {
       efficientAt: null,
       resourceList: [],
       changeLogList: [],
+
       showTransform: false,
+      landUsedMonthly: [],
     };
   },
   created() {
@@ -193,6 +195,7 @@ export default {
     this.$store.dispatch("getPrice");
     this.getUserResource();
     this.getList();
+    this.getLandUsedMonthly();
   },
 
   mounted() {
@@ -238,28 +241,22 @@ export default {
         this.invalidAt = Number(comboItem.invalidAt) * 1e3;
         this.efficientAt = Number(comboItem.efficientAt) * 1e3;
         this.resourceList = comboItem.resourceItems.map((it, i) => {
-          let total = BigNumber.from(it.size);
-          let used = BigNumber.from(comboItem.consumeItems[i].size).add(
-            BigNumber.from(data.realTimeItems[i].size)
-          );
+          let total = Number(it.size);
+          let used =
+            Number(comboItem.consumeItems[i].size) +
+            Number(data.realTimeItems[i].size);
           if (it.resourceType == "BUILD_TIME") {
             return {
               type: it.resourceType,
-              total: BigNumber.from(it.size),
-              used: BigNumber.from(comboItem.consumeItems[i].size).add(
-                BigNumber.from(data.realTimeItems[i].size)
-              ),
+              total: total / 60,
+              used: used / 60,
             };
           }
           if (it.resourceType == "IPFS_STORAGE") {
-            used = BigNumber.from(comboItem.consumeItems[i].size).add(
-              BigNumber.from(data.totalIpfsStorage)
-            );
+            used = Number(data.totalIpfsStorage);
           }
           if (it.resourceType == "AR_STORAGE") {
-            used = BigNumber.from(comboItem.consumeItems[i].size).add(
-              BigNumber.from(data.totalArStorage)
-            );
+            used = Number(data.totalArStorage);
           }
           return {
             type: it.resourceType,
@@ -278,6 +275,86 @@ export default {
           "https://4ever-web.4everland.store/config/changelog.json"
         );
         this.changeLogList = data.splice(0, 4);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getLandUsedMonthly() {
+      try {
+        const { data } = await this.$http.get(
+          "$bill-analytics/bill/land-used/analytics",
+          {
+            params: {
+              analyticsType: "DAY",
+            },
+          }
+        );
+        let resourceUsedObj = {};
+        data.forEach((item) => {
+          if (
+            !Object.prototype.hasOwnProperty.call(
+              resourceUsedObj,
+              item.resourceType
+            )
+          ) {
+            resourceUsedObj[item.resourceType] = {
+              landUsed: 0,
+              resourceUsed: 0,
+              resourceType: item.resourceType,
+            };
+          }
+          resourceUsedObj[item.resourceType].landUsed = Number(
+            (
+              resourceUsedObj[item.resourceType].landUsed +
+              Number(item.landUsed)
+            ).toFixed(2)
+          );
+          resourceUsedObj[item.resourceType].resourceUsed =
+            resourceUsedObj[item.resourceType].resourceUsed +
+            Number(item.resourceUsed);
+        });
+        this.landUsedMonthly = Object.values(resourceUsedObj).map((it) => {
+          let name = "IPFS";
+          let color = "#000";
+          let resourceUsed = "0";
+          switch (it.resourceType) {
+            case "AR_STORAGE":
+              name = "Arweave";
+              color = "#000";
+              resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+              break;
+            case "BUILD_TIME":
+              name = "Build Minutes";
+              color = "#F3CC5C";
+              resourceUsed =
+                this.$utils.getNumCount(it.resourceUsed / 60) + "Mins";
+              break;
+            case "TRAFFIC":
+              name = "Bandwidth";
+              color = "#9AD3DC";
+              resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+              break;
+            case "COMPUTE_UNIT":
+              name = "RPC Requests";
+              color = "#836BAF";
+              resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "Cus";
+              break;
+            default:
+              name = "IPFS";
+              color = "#57B9BC";
+              resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+              break;
+          }
+          return {
+            value: it.landUsed,
+            color,
+            name,
+            landUsed: it.landUsed.toString(),
+            resourceUsed,
+          };
+        });
+        console.log(this.landUsedMonthly);
       } catch (error) {
         console.log(error);
       }

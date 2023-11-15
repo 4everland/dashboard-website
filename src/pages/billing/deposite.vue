@@ -215,11 +215,17 @@ export default {
   },
   mounted() {
     this.checkApproved();
+
+    this.walletObj.on("accountsChanged", () => {
+      setTimeout(() => {
+        this.checkApproved();
+      }, 2000);
+    });
   },
   methods: {
     onNetwork(chainId) {
       this.chainId = chainId;
-      if (this.chainId == 999999999) {
+      if (this.chainId == 9999999) {
         this.isEverpay = true;
       } else {
         this.isEverpay = false;
@@ -228,7 +234,6 @@ export default {
     async handleRechargeLand() {
       this.depositing = true;
       try {
-        await this.getAccount();
         const tx = await this.LandRecharge.mint(
           this.coinAddr,
           this.euid, // euid
@@ -240,14 +245,19 @@ export default {
         this.rechargeSuccess = true;
       } catch (error) {
         console.log(error);
+        if (/unknown account/.test(error.message)) {
+          this.getAccount();
+        }
       }
       this.depositing = false;
     },
     async checkApproved() {
       if (!this.landRechargeAddr) return;
       this.checkApproving = true;
-      try {
+      if (!this.connectAddr) {
         await this.getAccount();
+      }
+      try {
         const allowance = await this.ERC20.allowance(
           this.connectAddr,
           this.landRechargeAddr
@@ -281,9 +291,11 @@ export default {
         console.log(receipt);
       } catch (error) {
         console.log(error);
+        if (/unknown account/.test(error.message)) {
+          this.getAccount();
+        }
       }
       this.approving = false;
-
       this.checkApproved();
     },
     handleShowStep() {
@@ -299,11 +311,8 @@ export default {
         this.rechargeSuccess = false;
       }
     },
-
     async getAccount() {
-      if (!this.connectAddr) {
-        await this.$store.dispatch("getWalletAccount");
-      }
+      await this.$store.dispatch("getWalletAccount");
     },
     estimateInput(val) {
       this.landAmount = val;

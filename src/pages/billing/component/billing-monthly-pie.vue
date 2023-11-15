@@ -1,7 +1,11 @@
 <template>
   <div class="billing-mothly-pie">
-    <h2>Billing details for {{ data.month }}</h2>
-    <half-pie></half-pie>
+    <h2 class="fz-18">
+      Billing details for
+      {{ new Date(curInfo.timestamp * 1000).format("date") }}
+    </h2>
+
+    <half-pie :curInfo="dataOptions"></half-pie>
     <div class="legend mt-3">
       <div class="al-c space-btw" v-for="item in dataOptions" :key="item.name">
         <div>
@@ -18,9 +22,9 @@
         </div>
 
         <div class="fz-12" style="color: #64748b">
-          <span>23123GB</span>
+          <span>{{ item.resourceUsed }}</span>
           +
-          <span>{{ item.value }}LAND</span>
+          <span>{{ $utils.formatLand(item.landUsed) }}LAND</span>
         </div>
       </div>
     </div>
@@ -34,7 +38,7 @@ export default {
     halfPie,
   },
   props: {
-    data: {
+    curInfo: {
       type: Object,
     },
   },
@@ -42,109 +46,50 @@ export default {
     return {};
   },
   computed: {
-    colorList() {
-      return ["#836BAF", "#F3CC5C", "#9AD3DC", "#000", "#57B9BC"];
-    },
     dataOptions() {
-      const arr = [
-        { value: 20093, name: "IPFS" },
-        { value: 12223, name: "Arweave" },
-        { value: 42293, name: "Bandwidth" },
-        { value: 32293, name: "Build Minutes" },
-        { value: 22293, name: "RPC Requests" },
-      ];
-
-      return arr.map((it, i) => {
-        return { ...it, color: this.colorList[i] };
+      const arr = this.curInfo.info.map((it) => {
+        let name = "IPFS";
+        let color = "#000";
+        let resourceUsed = "0";
+        switch (it.resourceType) {
+          case "AR_STORAGE":
+            name = "Arweave";
+            color = "#000";
+            resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+            break;
+          case "BUILD_TIME":
+            name = "Build Minutes";
+            color = "#F3CC5C";
+            resourceUsed =
+              this.$utils.getNumCount(it.resourceUsed / 60) + "Mins";
+            break;
+          case "TRAFFIC":
+            name = "Bandwidth";
+            color = "#9AD3DC";
+            resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+            break;
+          case "COMPUTE_UNIT":
+            name = "RPC Requests";
+            color = "#836BAF";
+            resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "Cus";
+            break;
+          default:
+            name = "IPFS";
+            color = "#57B9BC";
+            resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+            break;
+        }
+        return {
+          value: Number(it.landUsed),
+          color,
+          name,
+          landUsed: it.landUsed,
+          resourceUsed,
+        };
       });
-    },
-    options() {
-      return {
-        tooltip: {
-          trigger: "item",
-          formatter(params) {
-            let curResource = "";
-            switch (params.name) {
-              case "IPFS":
-                curResource = params.value * 2 + "MD";
-                break;
-              case "Arweave":
-                curResource = params.value * 2 + "GB";
-                break;
-              case "Bandwidth":
-                curResource = params.value * 2 + "MB";
-                break;
-              case "Build Minutes":
-                curResource = params.value * 2 + "Min";
-                break;
-              case "RPC Requests":
-                curResource = params.value * 2 + "CU";
-                break;
-              default:
-                curResource = params.value * 2;
-                break;
-            }
-            return `
-              <div class="al-c">
-                <span class="d-ib" style="width: 8px; height: 8px; background: ${
-                  params.color
-                }; border-radius:50%"></span>
-                <span class="ml-1">${params.name}</span>
-                <span class="ml-2 fw-b fz-20" style="font-family: DIN Alternate;">${
-                  params.percent * 2
-                }%</span></div>
-              <div class="mt-1 fz-12" style="color: #64748B">
-                <span>${curResource}</span>
-                +
-                <span>${params.value}LAND</span>
-              </div>
-          `;
-          },
-        },
-        series: [
-          {
-            // name: "Access From",
-            type: "pie",
-            radius: ["80%", "150%"],
-            center: ["50%", "100%"],
-            itemStyle: {
-              borderRadius: "2px",
-              color: (colors) => {
-                return this.colorList[colors.dataIndex];
-              },
-            },
-            // adjust the start angle
-            startAngle: 180,
-            labelLine: {
-              show: false,
-            },
-            label: {
-              show: false,
-            },
-            data: [
-              ...this.dataOptions,
-              {
-                // make an record to fill the bottom 50%
-                value: this.dataOptions.reduce((pre, it) => pre + it.value, 0),
-                itemStyle: {
-                  // stop the chart from rendering this piece
-                  color: "none",
-                  decal: {
-                    symbol: "none",
-                  },
-                },
-                label: {
-                  show: false,
-                },
-              },
-            ],
-          },
-        ],
-      };
+      return arr;
     },
   },
-  mounted() {},
-  methods: {},
 };
 </script>
 

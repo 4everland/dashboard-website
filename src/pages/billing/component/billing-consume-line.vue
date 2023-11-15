@@ -5,6 +5,11 @@
 <script>
 import * as echarts from "echarts";
 export default {
+  props: {
+    landUsedMonthly: {
+      type: Array,
+    },
+  },
   data() {
     return {
       IPFS_STORAGE: new Array(31).fill(0),
@@ -35,6 +40,12 @@ export default {
         },
         yAxis: {
           type: "value",
+          axisLabel: {
+            formatter: (value) => {
+              if (value <= 1) return value;
+              return this.$utils.formatLand(value.toString());
+            },
+          },
         },
       },
     };
@@ -139,33 +150,17 @@ export default {
       fn();
       this.myChart.resize();
     };
-    this.getStaticView();
   },
-  methods: {
-    async getStaticView() {
-      try {
-        const { data } = await this.$http.get(
-          "$bill-analytics/bill/land-used/analytics",
-          {
-            params: {
-              analyticsType: "DAY",
-            },
+  watch: {
+    landUsedMonthly() {
+      this.monthAgoTimeStamp.forEach((it, i) => {
+        this.landUsedMonthly.forEach((item) => {
+          if (item.timestamp == it) {
+            this[item.resourceType][i] = Number(item.landUsed);
           }
-        );
-        console.time();
-        this.monthAgoTimeStamp.forEach((it, i) => {
-          data.forEach((item) => {
-            if (item.timestamp == it) {
-              this[item.resourceType][i] = Number(item.landUsed);
-            }
-          });
         });
-        this.myChart.setOption({ ...this.baseOption, ...this.options });
-
-        console.timeEnd();
-      } catch (error) {
-        console.log(error);
-      }
+      });
+      this.myChart.setOption({ ...this.baseOption, ...this.options });
     },
   },
 };

@@ -90,12 +90,12 @@ export default {
           img: "/img/svg/logo-no-letters.svg",
           chainId: this.$inDev ? 280 : 324,
         },
-        {
-          label: "everPay",
-          name: "everPay",
-          img: "/img/svg/billing/ic-everpay.svg",
-          chainId: 999999999,
-        },
+        // {
+        //   label: "everPay",
+        //   name: "everPay",
+        //   img: "/img/svg/billing/ic-everpay.svg",
+        //   chainId: 9999999,
+        // },
       ];
       if (!this.allow) return list;
       return list.filter((it) => this.allow.includes(it.label));
@@ -116,7 +116,7 @@ export default {
   methods: {
     initSeleted() {
       if (localStorage.isEverpay) {
-        this.selected = 999999999;
+        this.selected = 9999999;
       } else {
         this.selected = parseInt(this.walletObj.chainId);
       }
@@ -126,7 +126,7 @@ export default {
       try {
         if (this.selected == chainId) return;
         this.selected = chainId;
-        if (chainId == 999999999) {
+        if (chainId == 9999999) {
           localStorage.setItem("isEverpay", 1);
         } else {
           localStorage.removeItem("isEverpay");

@@ -9,11 +9,11 @@
       <div class="al-c space-btw">
         <div class="resource-size d-flex al-c">
           <div class="consume-resource">
-            <span class="fz-24 fw-b">{{ data.used.size }}</span>
-            <span class="fz-12 ml-1">{{ data.used.unit }}</span>
+            <span class="fz-24 fw-b">{{ curResource.used.num }}</span>
+            <span class="fz-12 ml-1">{{ curResource.used.unit }}</span>
           </div>
           <div class="sparator">/</div>
-          <div class="total-resource fz-12">{{ data.total }}</div>
+          <div class="total-resource fz-12">{{ curResource.total }}</div>
         </div>
         <div class="land-to-resource fz-12" v-if="showTransform">
           <span>+{{ transformDate.transformVal }}</span>
@@ -35,8 +35,6 @@
 </template>
 
 <script>
-import { BigNumber } from "ethers";
-import { formatEther, parseEther } from "ethers/lib/utils";
 export default {
   props: {
     view: {
@@ -51,91 +49,66 @@ export default {
       default: false,
     },
   },
-
   computed: {
     curResource() {
+      let obj = {
+        total: this.$utils.getFileSize(this.view.total),
+        used: this.$utils.getFileSize(this.view.used, true),
+      };
       switch (this.view.type) {
         case "IPFS_STORAGE":
           return {
             name: "IPFS",
             img: "/img/svg/hosting/h-ipfs.svg",
+            ...obj,
           };
         case "AR_STORAGE":
           return {
             name: "Arweave",
             img: "/img/svg/hosting/h-ar.svg",
+            ...obj,
           };
         case "TRAFFIC":
           return {
             name: "Bandwidth",
             img: "/img/svg/overview/bandwidth.svg",
+            ...obj,
           };
         case "BUILD_TIME":
           return {
             name: "Build Minutes",
             img: "/img/svg/overview/buildtime.svg",
+            total: this.$utils.getNumCount(this.view.total) + "Mins",
+            used: {
+              num: this.$utils.getNumCount(this.view.used, true).num,
+              unit: this.$utils.getNumCount(this.view.used, true).unit + "Mins",
+            },
           };
         case "COMPUTE_UNIT":
           return {
             name: "RPC Requests",
             img: "/img/svg/overview/buildtime.svg",
+            total: this.$utils.getNumCount(this.view.total) + "Cus",
+            used: {
+              num: this.$utils.getNumCount(this.view.used, true).num,
+              unit: +this.$utils.getNumCount(this.view.used, true).unit + "Cus",
+            },
           };
         default:
           return {
             name: "IPFS",
             img: "/img/svg/hosting/h-ipfs.svg",
+            ...obj,
           };
       }
     },
     percent() {
-      if (this.view.total.eq(BigNumber.from(0))) return 0;
+      if (this.view.total == 0) return 0;
       let total = this.view.total;
       if (this.showTransform) {
-        total = total.add(BigNumber.from(this.transformDate.value));
+        total = total + this.transformDate.value.toNumber();
       }
-
-      return Number(
-        (
-          Number(
-            formatEther(parseEther(this.view.used.toString()).div(total))
-          ) * 100
-        ).toFixed(2)
-      );
-    },
-    data() {
-      switch (this.view.type) {
-        case "BUILD_TIME":
-          return {
-            total: this.$utils.getResourceTypeSize(
-              this.view.total,
-              false,
-              this.view.type
-            ),
-            used: this.$utils.getResourceTypeSize(
-              this.view.used,
-              true,
-              this.view.type
-            ),
-          };
-        case "COMPUTE_UNIT":
-          return {
-            total: this.$utils.getResourceTypeSize(
-              this.view.total,
-              false,
-              this.view.type
-            ),
-            used: this.$utils.getResourceTypeSize(
-              this.view.used,
-              true,
-              this.view.type
-            ),
-          };
-        default:
-          return {
-            total: this.$utils.getBigFileSize(this.view.total),
-            used: this.$utils.getBigFileSize(this.view.used, true),
-          };
-      }
+      return (this.view.used / total) * (100).toFixed(0);
     },
   },
 };
