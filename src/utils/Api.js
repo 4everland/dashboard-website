@@ -2,17 +2,10 @@ import Vue from "vue";
 import Axios from "axios";
 import axiosRetry from "axios-retry";
 import AsyncLock from "async-lock";
-import store from "./store";
+import store from "@/store";
 // console.log(axiosRetry);
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
-Vue.prototype.$inDev = inDev;
 // const isLocal = /localhost/.test(location.host);
-
-Vue.prototype.$arHashPre = inDev
-  ? "https://arweave.net/"
-  : "https://ar-io.dev/"; // https://ar.foreverland.xyz/
-Vue.prototype.$arVerifyPre = "https://viewblock.io/arweave/tx/"; // https://ar.foreverland.xyz/tx/
-Vue.prototype.$axios = axios;
 
 export const endpoint = inDev
   ? "https://s3gw.foreverland.xyz"
@@ -46,51 +39,9 @@ export const templateApi = inDev
   ? "https://temp-template.foreverland.xyz"
   : "https://fs-api.4everland.org";
 
-Vue.prototype.$endpoint = endpoint;
-Vue.prototype.$authApi = authApi;
-
-const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
-  // console.log(location);
-  let url = "/login";
-  if (localStorage.inviteCode) {
-    url += "?inviteCode=" + localStorage.inviteCode;
-  }
-  return url;
-});
-const clearLogin = (Vue.prototype.$clearLogin = () => {
-  const keepArr = ["changelogNum", "loginTo"];
-  for (const key in localStorage) {
-    if (keepArr.includes(key)) continue;
-    localStorage.removeItem(key);
-  }
-});
-
 export const http = Axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL,
+  // baseURL: process.env.VUE_APP_BASE_URL,
 });
-
-Vue.prototype.$getImgSrc = function (src) {
-  if (!src) src = "/img/bg/empty/project.png";
-  else if (!/^http/.test(src)) src = hostingUrl + src;
-  return src;
-};
-Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
-  let pre = inDev
-    ? "https://goerli.etherscan.io/tx/"
-    : "https://etherscan.io/tx/";
-  if (net == "BSC") {
-    pre = inDev ? "https://testnet.bscscan.com/tx/" : "https://bscscan.com/tx/";
-  } else if (net == "Polygon") {
-    pre = inDev
-      ? "https://mumbai.polygonscan.com/tx/"
-      : "https://polygonscan.com/tx/";
-  } else if (net == "zkSync") {
-    pre = inDev
-      ? "https://goerli.explorer.zksync.io/tx/"
-      : "https://explorer.zksync.io/tx/";
-  }
-  return pre + hash;
-};
 
 function keepMyToken(url) {
   const urls = ["/user/activity/action/logs", "/cooperation/teams"];
@@ -293,7 +244,5 @@ async function handleMsg(status, code, msg, config) {
     console.log(error);
   }
 }
-
-Vue.prototype.$http = http;
 
 export default http;
