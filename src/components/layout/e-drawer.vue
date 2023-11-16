@@ -69,7 +69,7 @@
     </div>
 
     <!-- <div class="pa-5"></div> -->
-    <div style="height: 100%; overflow-y: scroll">
+    <div class="pt-5" style="height: 100%; overflow-y: scroll">
       <v-list flat dense ref="drawerList" id="drawerList">
         <template v-for="(it, i) in list">
           <v-list-group
