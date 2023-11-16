@@ -2,7 +2,7 @@
   <div class="pos-r al-c" style="width: 328px">
     <div id="pie"></div>
     <div class="pos-a data">
-      {{ $utils.formatLand(landConsume.toString()) }}LAND
+      {{ $utils.formatLand(landConsume.toString(), false, false) }}LAND
     </div>
   </div>
 </template>
@@ -40,11 +40,9 @@ export default {
     },
     landConsume() {
       if (!this.curInfo) return 0;
-      const landConsume = this.curInfo.reduce(
-        (pre, it) => (pre += it.value),
-        0
-      );
-      return landConsume;
+      const landConsume =
+        this.curInfo.reduce((pre, it) => (pre += it.value), 0) / 1e18;
+      return parseInt(landConsume);
       // return this.$utils.formatLand(landConsume.toString());
     },
     options() {
@@ -65,7 +63,9 @@ export default {
                 <span>${params.data.resourceUsed}</span>
                 +
                 <span>${this.$utils.formatLand(
-                  params.value.toString()
+                  parseInt(params.value / 1e18),
+                  false,
+                  false
                 )}LAND</span>
               </div>
           `;

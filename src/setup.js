@@ -293,8 +293,11 @@ Vue.prototype.$utils = {
     return formatVal + " " + unit;
   },
 
-  formatLand(land, isObj = false) {
-    let formatVal = BigNumber.from(land).div((1e18).toString());
+  formatLand(land, isObj = false, isOrigin = true) {
+    let formatVal = BigNumber.from(land);
+    if (isOrigin) {
+      formatVal = formatVal.div((1e18).toString());
+    }
     let unit = "";
     const k = BigNumber.from(1e5);
     const m = BigNumber.from(1e8);

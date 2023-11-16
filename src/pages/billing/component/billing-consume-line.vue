@@ -21,6 +21,23 @@ export default {
       baseOption: {
         tooltip: {
           trigger: "axis",
+          formatter: (params) => {
+            let str = "";
+            params.forEach((it) => {
+              let size = this.$utils.formatLand(it.value.toString());
+              str += `<div class="al-c mt-1">
+              <span class="mr-2 d-ib" style="width: 10px; height: 10px; border-radius: 50%; background: ${
+                it.color
+              }">  </span>
+              <span class="mr-1">${it.seriesName}:</span>
+              <span > ${size == 0 ? "0" : size + "LAND"}</span>
+              </div>`;
+            });
+            return `
+              <div>${params[0].axisValueLabel}</div>
+              ${str}
+            `;
+          },
         },
         legend: {
           data: [
@@ -43,7 +60,7 @@ export default {
           axisLabel: {
             formatter: (value) => {
               if (value <= 1) return value;
-              return this.$utils.formatLand(value.toString());
+              return this.$utils.formatLand(value.toString()) + "LAND";
             },
           },
         },

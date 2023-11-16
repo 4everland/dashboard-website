@@ -353,8 +353,6 @@ export default {
             resourceUsed,
           };
         });
-
-        console.log(this.landUsedMonthly, "======");
       } catch (error) {
         console.log(error);
       }
