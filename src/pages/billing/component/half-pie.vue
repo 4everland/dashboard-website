@@ -1,8 +1,15 @@
 <template>
   <div class="pos-r al-c" style="width: 328px">
     <div id="pie"></div>
-    <div class="pos-a data">
-      {{ $utils.formatLand(landConsume.toString(), false, false) }}LAND
+    <div class="pos-a data ta-c">
+      <div class="fz-14 gray">LAND</div>
+      <div>
+        {{
+          landConsumeInt > 1
+            ? $utils.formatLand(landConsumeInt.toString(), false, false)
+            : "< 1"
+        }}
+      </div>
     </div>
   </div>
 </template>
@@ -19,11 +26,11 @@ export default {
       type: Array,
       default: () => {
         return [
-          { value: 32331, name: "IPFS" },
-          { value: 2331, name: "Arweave" },
-          { value: 344, name: "Bandwidth" },
-          { value: 3434, name: "Build Minutes" },
-          { value: 333, name: "RPC Requests" },
+          { value: 0, name: "IPFS" },
+          { value: 0, name: "Arweave" },
+          { value: 0, name: "Bandwidth" },
+          { value: 0, name: "Build Minutes" },
+          { value: 0, name: "RPC Requests" },
         ];
       },
     },
@@ -40,16 +47,18 @@ export default {
     },
     landConsume() {
       if (!this.curInfo) return 0;
-      const landConsume =
-        this.curInfo.reduce((pre, it) => (pre += it.value), 0) / 1e18;
-      return parseInt(landConsume);
-      // return this.$utils.formatLand(landConsume.toString());
+      return this.curInfo.reduce((pre, it) => (pre += it.value), 0) / 1e18;
     },
+    landConsumeInt() {
+      return this.landConsume.toFixed(0);
+    },
+
     options() {
       return {
         tooltip: {
           trigger: "item",
           formatter: (params) => {
+            const land = (params.value / 1e18).toFixed(0);
             return `
               <div class="al-c">
                 <span class="d-ib" style="width: 8px; height: 8px; background: ${
@@ -62,11 +71,11 @@ export default {
               <div class="mt-1 fz-12" style="color: #64748B">
                 <span>${params.data.resourceUsed}</span>
                 +
-                <span>${this.$utils.formatLand(
-                  parseInt(params.value / 1e18),
-                  false,
-                  false
-                )}LAND</span>
+                <span>${
+                  land < 1
+                    ? "< 1"
+                    : this.$utils.formatLand(land.toString(), false, false)
+                }LAND</span>
               </div>
           `;
           },

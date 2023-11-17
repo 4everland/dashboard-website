@@ -1,10 +1,14 @@
 <template>
   <div class="hide-msg">
-    <v-btn color="primary" @click="usdcToland">toLand</v-btn>
-    <e-kv label="Account Balance" min-width="120px" center>
-      <span class="fz-18">{{ balance === null ? "--" : balance }}</span>
-      <span class="gray-6 fz-13 ml-1">USDC</span>
-    </e-kv>
+    <div class="al-c">
+      <e-kv label="Account Balance" min-width="120px" center>
+        <span class="fz-18">{{ balance === null ? "--" : balance }}</span>
+        <span class="gray-6 fz-13 ml-1">USDC</span>
+      </e-kv>
+      <v-btn class="ml-4" color="primary" @click="usdcToland"
+        >All to LANDs</v-btn
+      >
+    </div>
     <e-kv2 class="mt-7" label="Withdraw Amount">
       <div class="d-ib bd-1 bdc-c1 bdrs-2">
         <input
@@ -202,6 +206,7 @@ export default {
     },
     async usdcToland() {
       try {
+        await this.$confirm("Transform To LANDs", "Transform To LANDs ?");
         await this.$http.post(
           "$bill-consume/assets/transform",
           {},
@@ -211,6 +216,8 @@ export default {
             },
           }
         );
+        this.$toast("Transform succssfully!");
+        this.getBalance();
       } catch (error) {
         console.log(error);
       }

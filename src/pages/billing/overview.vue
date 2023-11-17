@@ -147,10 +147,6 @@
               type="IPFS_STORAGE"
               :resourceAppUsed="ipfsResourceObj"
             >
-              <div class="fz-12">Consumption: 223,344 MD</div>
-              <template #bottom>
-                <div class="fz-12">Consumption: 223,344 MD</div>
-              </template>
             </resource-monthly-pie>
           </v-col>
           <v-col :md="4" cols="12" class="pie-col">
@@ -159,14 +155,6 @@
               type="AR_STORAGE"
               :resourceAppUsed="arResourceObj"
             >
-              <div class="fz-12">
-                Arweave files smaller than 150KB are excluded.
-              </div>
-              <template #bottom>
-                <div class="fz-12">
-                  Arweave files smaller than 150KB are excluded.
-                </div>
-              </template>
             </resource-monthly-pie>
           </v-col>
         </v-row>
@@ -300,6 +288,7 @@ export default {
             }, BigNumber.from("0"))
             .toString();
         }
+        console.log(this.ipfsResourceObj);
       } catch (error) {
         console.log(error);
       }
@@ -359,8 +348,6 @@ export default {
             },
           }
         );
-        console.log(data);
-
         const totalMin = data.reduce((pre, it) => {
           return pre.add(BigNumber.from(it.resourceConsume));
         }, BigNumber.from("0"));
@@ -370,7 +357,6 @@ export default {
           true,
           "BUILD_TIME"
         );
-        console.log(this.buildMin);
       } catch (error) {
         console.log(error);
       }

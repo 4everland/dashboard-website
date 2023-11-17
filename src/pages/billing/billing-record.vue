@@ -5,7 +5,8 @@
       <span class="ml-2">
         The resource center has been fully upgraded. If you wish to view your
         billing history, please
-        <a href="#"><b>click here</b></a> .
+        <a @click.prevent="$router.push('/billing/bills')"><b>click here</b></a>
+        .
       </span>
     </div>
 

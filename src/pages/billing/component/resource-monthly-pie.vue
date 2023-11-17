@@ -1,11 +1,19 @@
 <template>
-  <div class="al-c h-flex space-center mt-6 pos-r">
+  <div class="al-c h-flex space-center mt-6">
     <h3>{{ name }}</h3>
-    <pie :id="name" :data="formatData" :type="type"></pie>
-    <div class="center ta-c">
-      <slot></slot>
+    <div style="width: 100%" class="pos-r">
+      <pie :id="name" :data="finalData" :type="type"></pie>
+      <div class="center ta-c h-flex">
+        <span class="fw-b">Recently added</span>
+        <span class="fz-12">
+          {{ $utils.getFileSize(totalSize) }}
+        </span>
+      </div>
     </div>
-    <slot name="bottom"> </slot>
+
+    <div class="fz-12 ta-c" v-if="name == 'Arweave'">
+      Arweave files smaller than 150KB are excluded.
+    </div>
   </div>
 </template>
 
@@ -33,7 +41,6 @@ export default {
   computed: {
     formatData() {
       let arr = [];
-      console.log(this.resourceAppUsed);
       for (const key in this.resourceAppUsed) {
         arr.push({
           name: key,
@@ -41,16 +48,19 @@ export default {
           value: Number(this.resourceAppUsed[key]),
         });
       }
-      let totalSize = arr.reduce((pre, it) => (pre += it.value), 0);
-      arr = arr
+      return arr;
+    },
+    finalData() {
+      return this.formatData
         .filter((item) => item.value)
         .map((it) => {
           if (it.value == 0) return it;
-          it.value = (it.value / totalSize).toFixed(4);
+          it.value = (it.value / this.totalSize).toFixed(4);
           return it;
         });
-      console.log(arr);
-      return arr;
+    },
+    totalSize() {
+      return this.formatData.reduce((pre, it) => (pre += it.value), 0);
     },
   },
 };

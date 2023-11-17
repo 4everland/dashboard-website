@@ -227,14 +227,14 @@ Vue.prototype.$utils = {
   async resourceInsufficient() {
     try {
       await Vue.prototype.$confirm(
-        "Insufficient resources! Please make purchases in the Resource Centre.",
+        "Insufficient resources,please deposit 'LAND'.",
         "Tip",
         {
           cancelText: "Cancel",
-          confirmText: "Purchase",
+          confirmText: "Deposit",
         }
       );
-      location.href = "/resource/subscribe";
+      location.href = "/billing/deposite";
     } catch (error) {
       console.log(error);
     }
