@@ -66,12 +66,19 @@
         <span class="list-tit">Secuity</span>
       </div>
       <v-row>
-        <v-col cols="12" class="py-0">
+        <v-col cols="12" class="d-flex al-c">
           <v-checkbox
             v-model="enabled"
             label="Enable JWT for ALL Requests"
             @change="changeEnabled"
           ></v-checkbox>
+          <a
+            href="https://docs.4everland.org/rpc-beta/json-web-token-jwt"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-link ml-6"
+            >What's JWT?</a
+          >
         </v-col>
       </v-row>
       <v-form ref="secuityForm" v-model="secuityValid">
@@ -448,6 +455,12 @@ export default {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+  }
+  .text-link {
+    color: #735ea1;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration-line: underline;
   }
 }
 </style>
