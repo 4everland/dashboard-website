@@ -2,8 +2,12 @@
   <div>
     <div class="mb-8 mt-5" v-if="allowNoLogin && !userInfo.uid">
       <div class="m-auto" style="max-width: 500px">
-        <div class="ta-c mb-5 gray">Log in or sign up to clone and deploy.</div>
-        <login-wallet class="bg-white" mode="refresh" />
+        <div class="ta-c mb-5 fz-20 fw-b">
+          Log in or sign up to clone and deploy.
+        </div>
+        <div class="bg-white pa-5">
+          <login-choose mode="refresh" />
+        </div>
       </div>
     </div>
     <div class="main-wrap">
@@ -65,8 +69,8 @@
       <h3>Hosting Platform</h3>
 
       <div class="gray fz-14">
-        We offer IPFS, Arweave and IC hosting options for your website, please
-        select one.
+        We offer IPFS, Arweave, BNB Greenfield and IC hosting options for your
+        website, please select one.
       </div>
     </div>
     <div class="main-wrap mt-5">
@@ -86,12 +90,12 @@
 
 <script>
 import { mapState } from "vuex";
-import LoginWallet from "@/views/login/login-wallet.vue";
+import LoginChoose from "@/views/login/login-choose.vue";
 import EIconLink from "@/views/hosting/common/e-icon-link";
 
 export default {
   components: {
-    LoginWallet,
+    LoginChoose,
     EIconLink,
   },
   props: {

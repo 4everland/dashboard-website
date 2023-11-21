@@ -301,11 +301,7 @@ export default {
       }
     },
     onVerify(name) {
-      if (this.mode == "refresh") {
-        this.connect(name);
-      } else {
-        this.$emit("walletVerify", name);
-      }
+      this.$emit("walletVerify", name);
     },
   },
 };
