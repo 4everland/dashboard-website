@@ -14,7 +14,7 @@
         deployed automatically.
       </div>
       <v-skeleton-loader type="article" v-if="loading" v-show="!allowNoLogin" />
-      <div class="mt-5" v-else>
+      <div class="mt-5" v-else-if="info">
         <div class="d-flex al-c">
           <e-icon-link img="/img/svg/hosting/m-github.svg" :link="info.url">
             {{ info.namespace }}/{{ info.name }}
