@@ -78,8 +78,11 @@ export default {
     }
   },
   mounted() {
-    const { code, inviteCode, loginTo } = this.$route.query;
+    let { code, inviteCode, loginTo } = this.$route.query;
     if (loginTo) {
+      if ((this.mode = "refresh")) {
+        loginTo = location.pathname + location.search;
+      }
       localStorage.loginTo = loginTo;
     }
     if (inviteCode) {
@@ -104,11 +107,7 @@ export default {
         const { data } = await this.$axios.get(`${authApi}/login`, {
           params,
         });
-        if (this.mode == "refresh") {
-          location.reload();
-        } else {
-          location.href = data.data.login_url;
-        }
+        location.href = data.data.login_url;
       } catch (error) {
         console.log(error);
       }
