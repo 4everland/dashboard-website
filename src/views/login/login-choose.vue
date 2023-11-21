@@ -79,7 +79,7 @@ export default {
   },
   mounted() {
     let { code, inviteCode, loginTo } = this.$route.query;
-    if ((this.mode = "refresh")) {
+    if (this.mode == "refresh") {
       loginTo = location.pathname + location.search;
     }
     if (loginTo) {
