@@ -2,7 +2,7 @@ import Vue from "vue";
 import Axios from "axios";
 import axiosRetry from "axios-retry";
 import AsyncLock from "async-lock";
-import store from "./store";
+import store, { setState } from "./store";
 // console.log(axiosRetry);
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 Vue.prototype.$inDev = inDev;
@@ -268,7 +268,10 @@ async function handleMsg(status, code, msg, config) {
     msg = msg || "Unknown Error";
     const vue = Vue.prototype;
     await vue.$sleep(10);
-    if (status == 401 || code == 401) {
+    if (status == 401 || code == 401 || code == 400) {
+      setState({
+        userInfo: {},
+      });
       if (teamInfo.isMember) {
         localStorage.teamId = "";
         return (location.href = "/");
