@@ -118,7 +118,7 @@ export default {
   },
   created() {
     const { loginTo } = localStorage;
-    if (this.userInfo.uid && loginTo) {
+    if (loginTo) {
       localStorage.loginTo = "";
       location.href = loginTo;
     } else {
