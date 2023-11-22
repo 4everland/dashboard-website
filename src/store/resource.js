@@ -12,6 +12,7 @@ export default {
       buildMinUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
       rpcUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
       originBalance: BigNumber.from("0"), // not format balance (server date 1e18)
+      firstRecharge: true,
     };
   },
   getters: {
@@ -67,6 +68,9 @@ export default {
     },
     SET_BALANCE(state, balance) {
       state.originBalance = balance;
+    },
+    SET_FIRST_RECHARGE(state, firstRecharge) {
+      state.firstRecharge = firstRecharge;
     },
   },
   actions: {

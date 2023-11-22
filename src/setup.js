@@ -84,6 +84,11 @@ Vue.prototype.$utils = {
     if (!byte && byte !== 0 && !isObj) {
       return byte;
     }
+    let isMinus = false;
+    if (Number(byte) < 0) {
+      byte = Math.abs(byte);
+      isMinus = true;
+    }
     const mb = Math.pow(1024, 2);
     const gb = Math.pow(1024, 3);
     const tb = Math.pow(1024, 4);
@@ -108,6 +113,9 @@ Vue.prototype.$utils = {
       num = num.toFixed(fix);
     }
     if (num) num = (num + "").replace(".00", "");
+    if (isMinus) {
+      num = "-" + num;
+    }
     if (isObj)
       return {
         num,

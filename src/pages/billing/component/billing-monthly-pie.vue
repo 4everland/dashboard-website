@@ -71,7 +71,7 @@ export default {
           case "COMPUTE_UNIT":
             name = "RPC Requests";
             color = "#836BAF";
-            resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "Cus";
+            resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "CUs";
             break;
           default:
             name = "IPFS";

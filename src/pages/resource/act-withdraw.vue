@@ -6,7 +6,7 @@
         <span class="gray-6 fz-13 ml-1">USDC</span>
       </e-kv>
       <v-btn class="ml-4" color="primary" @click="usdcToland"
-        >All to LANDs</v-btn
+        >Convert All-Assets to LAND</v-btn
       >
     </div>
     <e-kv2 class="mt-7" label="Withdraw Amount">
@@ -206,7 +206,9 @@ export default {
     },
     async usdcToland() {
       try {
-        await this.$confirm("Transform To LANDs", "Transform To LANDs ?");
+        await this.$confirm(
+          `The current balance is ${this.balance} USDC. Do you confirm the conversion to ${this.balance} Million LAND?`
+        );
         await this.$http.post(
           "$bill-consume/assets/transform",
           {},

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="d-flex flex-wrap">
+    <div class="d-flex flex-wrap space-btw">
       <div
         @click="onSelect(it.chainId)"
-        class="network-label py-3 cursor-p justify-center d-flex mr-2 mt-4"
+        class="network-label py-3 cursor-p justify-center d-flex mt-4"
         :class="{
           active: selected == it.chainId,
         }"
@@ -378,14 +378,14 @@ export default {
 
 <style lang="scss" scoped>
 .network-label {
-  width: 172px;
+  width: 164px;
   background: #fff;
   border-radius: 4px;
-  border: 1px solid #cbd5e1;
 }
 .network-label.active {
   font-weight: bold;
   border: 1px solid #735ea1;
-  background: #f3e8ff;
+
+  // background: #f3e8ff;
 }
 </style>

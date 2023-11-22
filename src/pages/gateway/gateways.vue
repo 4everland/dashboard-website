@@ -2,17 +2,16 @@
   <div>
     <v-skeleton-loader
       type="article"
-      v-if="balance === null || !isGetList"
+      v-if="available === null || !isGetList"
     ></v-skeleton-loader>
-    <div v-else-if="isLock">
+    <div v-else-if="!available">
       <div class="pa-3 mt-5 ta-c">
         <img src="/img/svg/gateway/lock.svg" width="180" />
       </div>
       <div class="d-flex f-center">
         <div style="max-width: 550px">
-          The gateway service has been suspended because the balance on the
-          4EVERLAND account is less than $100. The service will automatically
-          resume when the balance is restored.
+          Complete your first deposit for LAND to unlock the dedicated gateway,
+          starting from $1.
         </div>
       </div>
       <div
@@ -35,17 +34,6 @@
           :listLength="maxGatewayList.length"
         />
       </e-right-opt-wrap>
-      <div class="tips py-2 mb-3 pr-5 al-c" v-show="isInsufficient">
-        <v-icon slot="ref" size="22" color="#ff6d24" class="d-ib mx-3"
-          >mdi-alert-circle-outline</v-icon
-        >
-        <span class="fz-13"
-          >The gateway service has been suspended because the balance on the
-          4EVERLAND account is less than $100. The service will automatically
-          resume when the balance is restored.</span
-        >
-      </div>
-
       <div class="main-wrap">
         <v-data-table
           :loading="loading"
@@ -138,7 +126,7 @@ export default {
   },
   data() {
     return {
-      balance: null,
+      available: null,
       headers: [
         { text: "Name", value: "name" },
         { text: "Access", value: "scope" },
@@ -154,12 +142,6 @@ export default {
   },
   computed: {
     ...mapGetters(["teamInfo"]),
-    isLock() {
-      return this.balance < 99 && !this.list.length;
-    },
-    isInsufficient() {
-      return this.balance < 99 && (this.list.length ? true : false);
-    },
     gatewayType() {
       return function (type) {
         return type == "public" ? "Open" : "Restricted";
@@ -170,16 +152,10 @@ export default {
     },
   },
   async mounted() {
-    await this.getBalance();
+    await this.getFirstRecharge();
     this.getList();
   },
   methods: {
-    // onDomain(item) {
-    //   this.$refs.gatewayDomain.show(item);
-    // },
-    // onEdit(item) {
-    //   this.$refs.gatewayEdit.show(item);
-    // },
     async onDelete(item) {
       try {
         let tip =
@@ -212,11 +188,11 @@ export default {
       this.loading = false;
       this.isGetList = true;
     },
-    async getBalance() {
-      const {
-        data: { balance },
-      } = await this.$http.get("$v3/account/balance");
-      this.balance = balance;
+    async getFirstRecharge() {
+      const { data } = await this.$http.get(
+        "$bill-consume/common/gateway/status"
+      );
+      this.available = data.available;
     },
     onRow(row) {
       this.$router.push(`/gateway/list/${row.name}?tab=settings`);
@@ -227,7 +203,7 @@ export default {
           "This feature is not currently supported as the owner account is not bound to a wallet, please try again after binding a wallet."
         );
       }
-      this.$router.push("/resource/deposit");
+      this.$router.push("/billing/deposite");
     },
   },
 };

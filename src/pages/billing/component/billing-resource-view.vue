@@ -1,7 +1,9 @@
 <template>
   <div class="resource-view h-flex space-btw pa-4">
     <div class="al-c">
-      <img width="16" :src="curResource.img" alt="" />
+      <div class="al-c justify-center pa-2" style="background: #fff">
+        <img width="16" :src="curResource.img" alt="" />
+      </div>
       <span class="fz-14 ml-3">{{ curResource.name }}</span>
     </div>
     <div>

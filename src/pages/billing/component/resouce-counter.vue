@@ -1,31 +1,41 @@
 <template>
-  <div class="resource-counter-container d-flex">
-    <div class="resource-counter-content" v-show="showPop" ref="refIpt">
-      <billing-tabs :tabs="tabs" :noActive="true" class="mt-4">
-        <template #default="{ tab }">
-          <v-tabs-items :value="tab" class="mt-4 pt-0">
-            <v-tab-item class="px-4">
-              <v-simple-table>
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th class="text-left"></th>
-                      <th class="text-left">Unit Price</th>
-                      <th class="text-left">Expected Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="item in resourcePriceList" :key="item.name">
-                      <td>{{ item.resourceName }}</td>
-                      <td>{{ item.unitPrice }}</td>
-                      <td>{{ item.value }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </v-tab-item>
-            <v-tab-item>
-              <div class="px-4">
+  <div class="resource-counter-content" ref="refIpt">
+    <billing-tabs
+      :tabs="tabs"
+      :noActive="true"
+      class="mt-4 pos-r"
+      style="height: 100%"
+    >
+      <template #default="{ tab }">
+        <v-tabs-items
+          :value="tab"
+          class="pt-0"
+          style="height: 100%; box-sizing: border-box"
+        >
+          <v-tab-item class="px-4" style="height: 100%">
+            <div class="table-header d-flex">
+              <div class="text-left flex-1"></div>
+              <div class="text-left flex-1">Unit Price</div>
+              <div class="text-left flex-1">Expected Value</div>
+            </div>
+            <div class="body">
+              <div
+                v-for="item in resourcePriceList"
+                :key="item.resourceName"
+                class="flex-1 d-flex fz-14 table-body-item"
+              >
+                <div class="flex-1 pa-4 fw-b">{{ item.resourceName }}</div>
+                <div class="flex-1 pa-4">{{ item.unitPrice }}</div>
+                <div class="flex-1 pa-4">{{ item.value }}</div>
+              </div>
+            </div>
+          </v-tab-item>
+          <v-tab-item style="height: 100%">
+            <div class="h-flex space-btw" style="height: 100%">
+              <div
+                class="pa-4 d-flex flex-wrap al-end"
+                style="overflow: auto; gap: 10px"
+              >
                 <resource-row-cpm
                   v-for="item in resourceTagsConfig"
                   :key="item.name"
@@ -37,7 +47,7 @@
                 ></resource-row-cpm>
               </div>
 
-              <div class="price-calculator pa-4 mt-3 al-c space-btw">
+              <div class="price-calculator pa-4 al-c space-btw">
                 <div>
                   <div class="fw-b">Estimated requirement:</div>
                   <div>
@@ -47,22 +57,15 @@
                     <span class="unit fz-14">LAND</span>
                   </div>
                 </div>
-                {{ arPrice.toString() }}
                 <div class="input-btn cursor-p fw-b" @click="handleInputLand">
                   Input
                 </div>
               </div>
-            </v-tab-item>
-          </v-tabs-items>
-        </template>
-      </billing-tabs>
-    </div>
-    <div
-      class="resource-tag ml-3 justify-center cursor-p al-c"
-      @click="showPop = !showPop"
-    >
-      <span class="fw-b fz-14">Calculator</span>
-    </div>
+            </div>
+          </v-tab-item>
+        </v-tabs-items>
+      </template>
+    </billing-tabs>
   </div>
 </template>
 
@@ -79,7 +82,6 @@ export default {
   },
   data() {
     return {
-      showPop: false,
       tabs: ["Resource", "calculator"],
       resourcePriceList: [
         {
@@ -260,13 +262,7 @@ export default {
   created() {
     this.$store.dispatch("getPrice");
   },
-  mounted() {
-    document.addEventListener("click", (e) => {
-      if (e.target.contains(this.$refs.refIpt)) {
-        this.showPop = false;
-      }
-    });
-  },
+
   methods: {
     countPrice(payload) {
       switch (payload.type) {
@@ -326,20 +322,13 @@ export default {
 :deep .v-tabs-items {
   border-radius: 8px !important;
 }
-.resource-counter-container {
-  z-index: 100;
-  position: absolute;
-  right: 0;
-  top: 5%;
-}
 
 .resource-counter-content {
+  height: 100%;
   display: flex;
   flex-direction: column;
   border-radius: 8px;
   justify-content: space-between;
-  border: 1px solid #cbd5e1;
-  box-shadow: 0px 4px 8px 0px rgba(15, 23, 42, 0.25);
   background: #fff;
   :deep table {
     border-spacing: 0 16px !important;
@@ -351,8 +340,11 @@ export default {
 }
 .price-calculator {
   width: 100%;
+  height: 88px;
+  border-top: 1px solid #cbd5e1;
   border-radius: 0px 0px 8px 8px;
-  background: #f3e8ff;
+  box-sizing: border-box;
+  background: #fff;
   .price {
     letter-spacing: 0.56px;
     font-family: "DIN Alternate";
@@ -362,26 +354,26 @@ export default {
     color: #64748b;
   }
   .input-btn {
-    padding: 15px 38px 14px 39px;
+    padding: 11px 24px 10px 25px;
+
     color: #735ea1;
     border-radius: 4px;
     border: 1.5px solid #735ea1;
   }
 }
-.resource-tag {
-  width: 40px;
-  height: 123px;
-  border-radius: 4px 0px 0px 4px;
-  border: 1px solid #cbd5e1;
-  border-right: none;
-  background: linear-gradient(
-      0deg,
-      rgba(243, 232, 255, 0.25) 0%,
-      rgba(243, 232, 255, 0.25) 100%
-    ),
-    #fff;
-  span {
-    transform: rotate(-90deg);
+.table-header {
+  border-radius: 4px;
+  > div {
+    background: #f1f5f9;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #64748b;
   }
+}
+.table-body-item {
+  border-bottom: 1px solid #cbd5e1;
+}
+.table-body-item:last-of-type {
+  border-bottom: none;
 }
 </style>

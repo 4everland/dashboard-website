@@ -1,5 +1,8 @@
 <template>
-  <div id="main"></div>
+  <div class="billing-consume-line pt-2 h-flex">
+    <div class="text fw-b mb-4 ml-4">LAND Consumption (31 Days)</div>
+    <div id="main" class="flex-1"></div>
+  </div>
 </template>
 
 <script>
@@ -24,7 +27,11 @@ export default {
           formatter: (params) => {
             let str = "";
             params.forEach((it) => {
-              let size = this.$utils.formatLand(it.value.toString());
+              let size = this.$utils.formatLand(
+                parseInt(it.value / 1e18),
+                false,
+                false
+              );
               str += `<div class="al-c mt-1">
               <span class="mr-2 d-ib" style="width: 10px; height: 10px; border-radius: 50%; background: ${
                 it.color
@@ -60,7 +67,10 @@ export default {
           axisLabel: {
             formatter: (value) => {
               if (value <= 1) return value;
-              return this.$utils.formatLand(value.toString()) + "LAND";
+              return (
+                this.$utils.formatLand(parseInt(value / 1e18), false, false) +
+                "LAND"
+              );
             },
           },
         },
@@ -183,10 +193,16 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.billing-consume-line {
+  width: 100%;
+  height: 100%;
+  .text {
+    color: #0f172a;
+  }
+}
 #main {
   width: 100%;
   min-height: 300px;
-  height: 100%;
 }
 </style>

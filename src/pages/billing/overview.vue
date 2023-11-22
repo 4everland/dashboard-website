@@ -1,5 +1,23 @@
 <template>
   <div class="billing-container">
+    <div
+      class="notice mb-6 fz-14 py-2 px-4 al-c fz-14"
+      v-show="showWithDrawNotice"
+    >
+      <img src="/img/svg/new-billing/notice.svg" width="24" alt="" />
+      <span class="ml-2 cursor-p" @click="$router.push('/billing/withdraw')">
+        The Resource center fully upgraded. If you need to withdraw USDC, please
+        click here. After January 1, 2023, any remaining assets that have not
+        been withdrawn will automatically convert to LAND.
+      </span>
+      <img
+        width="24"
+        class="cursor-p"
+        @click="showWithDrawNotice = false"
+        src="/img/svg/new-billing/close-icon.svg"
+        alt=""
+      />
+    </div>
     <h3 class="mb-4">Plan</h3>
     <v-row class="plan-row" v-show="resourceLoading">
       <v-col> <v-skeleton-loader type="article"></v-skeleton-loader></v-col>
@@ -79,7 +97,7 @@
     <v-row class="land-row">
       <v-col :md="4" cols="12" style="padding: 0">
         <div class="py-6 px-4 h-flex al-c">
-          <h4 class="fz-14">LAND Balance</h4>
+          <h4 class="fz-16">LAND Balance</h4>
           <div class="my-6 al-c">
             <img src="/img/svg/new-billing/land-icon.svg" width="24" alt="" />
             <span class="balance fw-b ml-2">{{ balance.land }}</span>
@@ -117,18 +135,18 @@
           </div>
           <div class="py-4 px-6 fz-14 data">
             <span>Total builds:</span>
-            <span>23</span>
+            <span>{{ buildCount }}</span>
           </div>
         </div>
         <div class="py-6 px-4 h-flex al-c rpc-section">
           <h4 class="fz-14">Web3 RPC</h4>
           <div class="my-6 al-c">
-            <span class="balance fw-b">23,233</span>
-            <span class="fz-12 ml-2">CUs</span>
+            <span class="balance fw-b">{{ rpcRequest.size }}</span>
+            <span class="fz-12 ml-2">{{ rpcRequest.unit }}</span>
           </div>
           <div class="py-4 px-6 fz-14 data">
             <span>Total instances:</span>
-            <span>1,200,202</span>
+            <span>{{ rpcInstance }}</span>
           </div>
         </div>
       </v-col>
@@ -201,8 +219,15 @@ export default {
         size: 0,
         unit: "Min",
       },
+      rpcRequest: {
+        size: 0,
+        unit: "",
+      },
       landUsedMonthlyLine: [],
       landUsedMonthlyPie: [],
+      showWithDrawNotice: true,
+      buildCount: 0,
+      rpcInstance: 0,
     };
   },
   computed: {
@@ -218,6 +243,7 @@ export default {
     this.getAnalyticsAr();
     this.getAnalyticsBandwidth();
     this.getAnalyticsBuildMin();
+    this.getAnalyticsRpc();
     this.getLandUsedMonthly();
   },
   methods: {
@@ -348,6 +374,7 @@ export default {
             },
           }
         );
+
         const totalMin = data.reduce((pre, it) => {
           return pre.add(BigNumber.from(it.resourceConsume));
         }, BigNumber.from("0"));
@@ -357,6 +384,47 @@ export default {
           true,
           "BUILD_TIME"
         );
+        this.buildCount = data.reduce((pre, it) => {
+          let value = 0;
+          if (it.statistics) {
+            value = Number(it.statistics);
+          }
+          return value + pre;
+        }, 0);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getAnalyticsRpc() {
+      try {
+        const { data } = await this.$http.get(
+          "$bill-analytics/bill/app/analytics",
+          {
+            params: {
+              resourceType: "COMPUTE_UNIT",
+            },
+          }
+        );
+        console.log(data);
+        const request = data.reduce((pre, it) => {
+          return pre.add(BigNumber.from(it.resourceConsume));
+        }, BigNumber.from("0"));
+
+        this.rpcRequest = this.$utils.getResourceTypeSize(
+          request,
+          true,
+          "COMPUTE_UNIT"
+        );
+
+        this.rpcInstance = data.reduce((pre, it) => {
+          let value = 0;
+          if (it.instance) {
+            value = Number(it.instance);
+          }
+          return value + pre;
+        }, 0);
+        console.log(this.rpcRequest);
       } catch (error) {
         console.log(error);
       }
@@ -423,7 +491,7 @@ export default {
             case "COMPUTE_UNIT":
               name = "RPC Requests";
               color = "#836BAF";
-              resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "Cus";
+              resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "CUs";
               break;
             default:
               name = "IPFS";
@@ -511,5 +579,10 @@ export default {
 }
 .pie-col {
   border-left: 1px solid #cbd5e1;
+}
+.notice {
+  color: #735ea1;
+  border-radius: 4px;
+  background: #f3e8ff;
 }
 </style>

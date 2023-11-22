@@ -37,7 +37,7 @@
     </billing-table>
     <div class="pos-a no-date h-flex al-c" v-else>
       <img src="/img/svg/new-billing/no-date.svg" width="240" alt="" />
-      <span class="mt-3 fz-14">no-data</span>
+      <span class="mt-3 fz-14">No Data</span>
     </div>
 
     <bottom-detector
@@ -94,7 +94,7 @@ export default {
       finished: false,
       loadingMore: false,
       page: 1,
-      size: 10,
+      size: 20,
     };
   },
   mounted() {
@@ -155,7 +155,7 @@ export default {
       if ([42161].includes(id)) return "Arbitrum";
       if ([280, 324].includes(id)) return "zkSync";
       if ([9999999].includes(id)) return "everPay";
-      if ([1, 5].includes(id)) return "Ethereum";
+      if ([1, 11155111].includes(id)) return "Ethereum";
       return "";
     },
   },

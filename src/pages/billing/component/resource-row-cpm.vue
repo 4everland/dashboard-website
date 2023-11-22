@@ -1,11 +1,13 @@
 <template>
-  <div>
-    <h3 class="my-3 fz-16">{{ name }}</h3>
-    <div class="al-c">
+  <div style="width: 48%">
+    <h3 class="fz-16 mt-1" v-show="name != 'IPFS Storage Days'">
+      {{ name }}
+    </h3>
+    <div class="al-c mt-3">
       <div
         v-for="(item, index) in tags"
         :key="index"
-        class="tag cursor-p fz-14 al-c justify-center"
+        class="tag cursor-p fz-12 al-c justify-center"
         :class="curIndex == index ? 'active' : ''"
         @click="handleTag(index)"
       >
@@ -17,19 +19,46 @@
       >
         <input
           type="text"
-          class="fz-14 ta-c resource-input"
+          class="fz-12 ta-c resource-input"
           @input="handleInput"
           v-model="value"
         />
-        <v-select
+        <!-- <v-select
           class="hide-msg resource-select fz-12"
           v-if="items.length > 1"
           v-model="selected"
           dense
           solo
           :items="items"
-        ></v-select>
-        <span class="fz-13 ml-3" v-else>{{ items[0].text }}</span>
+        ></v-select> -->
+
+        <div v-if="items.length > 1" class="al-c select-resource pa-1">
+          <select
+            @change="handleChangeUnit"
+            class="cursor-p"
+            :id="'select_' + name"
+            autofocus="true"
+          >
+            <option
+              class="fz-14"
+              :value="it.value"
+              v-for="it in items"
+              :key="it.value"
+            >
+              {{ it.text }}
+            </option>
+          </select>
+
+          <label class="cursor-p" :for="'select_' + name">
+            <img
+              width="8"
+              style="margin-left: 2px"
+              src="/img/svg/new-billing/down-arrow.svg"
+              alt=""
+            />
+          </label>
+        </div>
+        <span class="fz-12" v-else>{{ items[0].text }}</span>
       </div>
     </div>
   </div>
@@ -106,8 +135,8 @@ export default {
         type: this.name,
       });
     },
-    handleChangeUnit(val) {
-      console.log(val);
+    handleChangeUnit(e) {
+      this.selected = e.target.value;
     },
   },
   watch: {
@@ -122,11 +151,12 @@ export default {
 
 <style lang="scss" scoped>
 .select-content {
+  flex: 1;
+  width: 92px;
   border-radius: 4px;
   border: 1px solid #cbd5e1;
-  width: 148px;
   height: 40px;
-  padding: 10px;
+  padding: 12px 8px;
   box-sizing: border-box;
 }
 
@@ -134,7 +164,8 @@ export default {
   border: 1px solid #735ea1;
 }
 .tag {
-  width: 120px;
+  // width: 80px;
+  flex: 1;
   height: 40px;
   border-radius: 4px;
   border: 1px solid #cbd5e1;
@@ -149,11 +180,19 @@ export default {
   font-weight: bold;
 }
 .resource-input {
-  width: 50px;
+  width: 41px;
+  padding-right: 10px;
+  box-sizing: border-box;
   text-align: right;
 }
 
 // .resource-select :deep .v-input__control {
 //   width: 50px;
 // }
+.select-resource {
+  position: relative;
+  border-radius: 2px;
+  background: #f1f5f9;
+  font-size: 12px;
+}
 </style>

@@ -1,44 +1,42 @@
 <template>
   <div>
     <h2 class="fz-16 mt-6 mb-4">Choose Token</h2>
-    <div class="d-flex flex-wrap">
-      <div
-        @click="onSelect(it.label)"
-        class="coin-label py-2 px-4 cursor-p d-flex space-btw mr-2"
-        :class="{
-          active: selected == it.label,
-        }"
-        v-for="(it, i) in coinList"
-        :key="i"
-      >
-        <div class="al-c flex-1">
-          <v-icon size="16" :color="selected == it.label ? $color1 : '#555'"
-            >mdi-{{
-              selected == it.label
-                ? "circle-slice-8"
-                : "checkbox-blank-circle-outline"
-            }}</v-icon
+    <div
+      @click="onSelect(it.label)"
+      class="coin-label py-2 px-4 cursor-p d-flex space-btw mr-2 mb-2"
+      :class="{
+        active: selected == it.label,
+      }"
+      v-for="(it, i) in coinList"
+      :key="i"
+    >
+      <div class="al-c flex-1">
+        <v-icon size="16" :color="selected == it.label ? $color1 : '#555'"
+          >mdi-{{
+            selected == it.label
+              ? "circle-slice-8"
+              : "checkbox-blank-circle-outline"
+          }}</v-icon
+        >
+        <img
+          class="ml-3"
+          style="vertical-align: middle"
+          :src="it.img"
+          width="40"
+        />
+        <div class="fz-12 ml-1">
+          <div
+            class="fz-14"
+            :class="{
+              'color-1': selected == it.label,
+            }"
           >
-          <img
-            class="ml-3"
-            style="vertical-align: middle"
-            :src="it.img"
-            width="40"
-          />
-          <div class="fz-12 ml-1">
-            <div
-              class="fz-14"
-              :class="{
-                'color-1': selected == it.label,
-              }"
-            >
-              {{ it.name }}
-            </div>
-            <div>{{ it.label }}</div>
+            {{ it.name }}
           </div>
+          <div>{{ it.label }}</div>
         </div>
-        <div></div>
       </div>
+      <div></div>
     </div>
   </div>
 </template>
@@ -106,6 +104,5 @@ export default {
 .coin-label.active {
   font-weight: bold;
   border: 1px solid #735ea1;
-  background: #f3e8ff;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-flex">
     <v-tabs v-model="tab" class="tabs-cpm" centered @change="handleChange">
       <div class="d-flex tab-content">
         <v-tab
@@ -11,8 +11,10 @@
         </v-tab>
       </div>
     </v-tabs>
-    <slot :tab="tab"></slot>
-    <component v-if="tabsCmpList.length" :is="tabsCmpList[tab]"></component>
+    <div class="flex-1">
+      <slot :tab="tab"></slot>
+      <component v-if="tabsCmpList.length" :is="tabsCmpList[tab]"></component>
+    </div>
   </div>
 </template>
 
@@ -57,10 +59,18 @@ export default {
 };
 </script>
 
+<style></style>
 <style lang="scss" scoped>
 .active-tab {
   background: #fff;
   border-radius: 4px;
+}
+.tabs-cpm {
+  height: 48px;
+}
+
+.v-tabs {
+  flex: 0;
 }
 .tabs-cpm :deep .v-tabs-bar {
   display: flex;

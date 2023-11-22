@@ -4,11 +4,7 @@
     <div class="pos-a data ta-c">
       <div class="fz-14 gray">LAND</div>
       <div>
-        {{
-          landConsumeInt > 1
-            ? $utils.formatLand(landConsumeInt.toString(), false, false)
-            : "< 1"
-        }}
+        {{ showLandConsume }}
       </div>
     </div>
   </div>
@@ -52,6 +48,12 @@ export default {
     landConsumeInt() {
       return this.landConsume.toFixed(0);
     },
+    showLandConsume() {
+      if (this.landConsume == 0) return 0;
+      return this.landConsume > 1
+        ? this.$utils.formatLand(this.landConsumeInt.toString(), false, false)
+        : "< 1";
+    },
 
     options() {
       return {
@@ -80,6 +82,12 @@ export default {
           `;
           },
           show: this.landConsume == 0 ? false : true,
+        },
+        grid: {
+          left: "0px",
+          top: "0px",
+          right: "0px",
+          bottom: "0px",
         },
         series: [
           {

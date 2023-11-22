@@ -14,17 +14,12 @@
     </div>
 
     <div class="al-c">
-      <div>
-        <span class="circle hosting"></span>
-        <span class="fz-14 ml-1">Hosting</span>
-      </div>
-      <div class="ml-2">
-        <span class="circle bucket"></span>
-        <span class="fz-14 ml-1">Bucket</span>
-      </div>
-      <div class="ml-2">
-        <span class="circle gateway"></span>
-        <span class="fz-14 ml-1">Gateway</span>
+      <div v-for="item in appList" :key="item.name" class="mr-2">
+        <span
+          class="circle hosting"
+          :style="{ background: item.itemStyle.color }"
+        ></span>
+        <span class="fz-14 ml-1">{{ item.name }}</span>
       </div>
     </div>
     <div id="main"></div>
@@ -33,7 +28,6 @@
 
 <script>
 import * as echarts from "echarts";
-import { BigNumber } from "ethers";
 export default {
   data() {
     return {
@@ -65,16 +59,14 @@ export default {
         tooltip: {
           trigger: "axis",
           formatter: (params) => {
-            // if (this.tagList[this.curIndex].type == "BUILD_TIME") {
-            //   return BigNumber.from(params.value).div(60).toString() + " Mins";
-            // }
-            // return BigNumber.from(params.value).div(1024).toString() + " KB";
-
             let str = "";
             params.forEach((it) => {
               let size = this.$utils.getFileSize(it.value);
               if (this.tagList[this.curIndex].type == "COMPUTE_UNIT") {
-                size = this.$utils.getNumCount(it.value) + "Cus";
+                size = this.$utils.getNumCount(it.value) + "CUs";
+              }
+              if (this.tagList[this.curIndex].type == "BUILD_TIME") {
+                size = this.$utils.getNumCount(it.value / 60) + "Mins";
               }
               str += `<div class="al-c mt-1">
               <span class="mr-2 d-ib" style="width: 10px; height: 10px; border-radius: 50%; background: ${it.color}">  </span>
@@ -99,12 +91,12 @@ export default {
           type: "value",
           axisLabel: {
             formatter: (value) => {
-              if (value <= 1) return value;
+              if (value <= 1 && value >= 0) return value;
               if (this.tagList[this.curIndex].type == "BUILD_TIME") {
                 return this.$utils.getNumCount(Number(value) / 60) + " Mins";
               }
               if (this.tagList[this.curIndex].type == "COMPUTE_UNIT") {
-                return this.$utils.getNumCount(value) + " Cus";
+                return this.$utils.getNumCount(value) + " CUs";
               }
               return this.$utils.getFileSize(value);
             },
@@ -151,8 +143,29 @@ export default {
           boundaryGap: false,
           data: this.monthAgoDate,
         },
-
-        series: [
+        series: this.appList,
+      };
+    },
+    appList() {
+      if (this.tagList[this.curIndex].type == "BUILD_TIME") {
+        return [
+          {
+            name: "Hosting",
+            type: "line",
+            areaStyle: {},
+            itemStyle: {
+              color: "#809AF4",
+            },
+            stack: "Total",
+            data: this.HOSTING,
+          },
+        ];
+      }
+      if (
+        this.tagList[this.curIndex].type == "AR_STORAGE" ||
+        this.tagList[this.curIndex].type == "IPFS_STORAGE"
+      ) {
+        return [
           {
             name: "Hosting",
             type: "line",
@@ -173,23 +186,60 @@ export default {
             stack: "Total",
             data: this.BUCKET,
           },
+        ];
+      }
+      if (this.tagList[this.curIndex].type == "COMPUTE_UNIT") {
+        return [
           {
-            name: "Gateway",
+            name: "Rpc",
             type: "line",
             areaStyle: {},
             itemStyle: {
-              color: "#94ADF6",
+              color: "#809AF4",
             },
             stack: "Total",
-            data: this.GATEWAY,
+            data: this.HOSTING,
           },
-        ],
-      };
+        ];
+      }
+
+      return [
+        {
+          name: "Hosting",
+          type: "line",
+          areaStyle: {},
+          itemStyle: {
+            color: "#809AF4",
+          },
+          stack: "Total",
+          data: this.HOSTING,
+        },
+        {
+          name: "Bucket",
+          type: "line",
+          areaStyle: {},
+          itemStyle: {
+            color: "#5066CA",
+          },
+          stack: "Total",
+          data: this.BUCKET,
+        },
+        {
+          name: "Gateway",
+          type: "line",
+          areaStyle: {},
+          itemStyle: {
+            color: "#94ADF6",
+          },
+          stack: "Total",
+          data: this.GATEWAY,
+        },
+      ];
     },
   },
   mounted() {
     this.myChart = echarts.init(document.getElementById("main"));
-    this.myChart.setOption({ ...this.baseOptions, ...this.options });
+    this.myChart.setOption({ ...this.baseOptions, ...this.options }, true);
     const fn = window.onresize;
     window.onresize = () => {
       fn();
@@ -209,6 +259,9 @@ export default {
           }
         );
 
+        this.GATEWAY = new Array(31).fill(0);
+        this.HOSTING = new Array(31).fill(0);
+        this.BUCKET = new Array(31).fill(0);
         this.monthAgoTimeStamp.forEach((it, i) => {
           data.forEach((item) => {
             if (item.timestamp == it) {
@@ -216,7 +269,7 @@ export default {
             }
           });
         });
-        this.myChart.setOption({ ...this.baseOptions, ...this.options });
+        this.myChart.setOption({ ...this.baseOptions, ...this.options }, true);
       } catch (error) {
         console.log(error);
       }
@@ -260,14 +313,5 @@ export default {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-}
-.hosting {
-  background: #809af4;
-}
-.bucket {
-  background: #5066ca;
-}
-.gateway {
-  background: #94adf6;
 }
 </style>

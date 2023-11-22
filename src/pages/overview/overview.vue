@@ -1,50 +1,14 @@
 <template>
   <div>
-    <div class="pos-r">
-      <v-carousel
-        v-model="carouselIdx"
-        :interval="5000"
-        :show-arrows="false"
-        class="bdrs-10 mb-4"
-        cycle
-        height="100%"
-        :style="{ 'min-height': carouselWidth / 6.24 + 'px' }"
-        delimiter-icon="mdi-minus"
-        hide-delimiters
-        hide-delimiter-background
-        ref="carouselRef"
-      >
-        <v-carousel-item
-          v-for="(it, i) in banners"
-          :key="i"
-          :src="it.img"
-          :to="it.to"
-          :href="it.href"
-          :target="it.href ? '_blank' : null"
-        >
-        </v-carousel-item>
-      </v-carousel>
-
-      <div class="delimiter-content al-c justify-center">
-        <template v-for="(item, index) in banners">
-          <div
-            class="delimiter cursor-p"
-            :class="{ active: carouselIdx == index }"
-            :key="index"
-            @click.stop="carouselIdx = index"
-          ></div>
-        </template>
-      </div>
-    </div>
     <div class="user-plate d-flex flex-column flex-md-row space-btw mb-6">
-      <div class="left flex-1 mr-6">
+      <div class="left flex-2 mr-6">
         <div class="header">
           <p class="fz-12 mb-0 tips">Welcome to 4EVERLAND Dashboard</p>
           <h3 class="fz-20">{{ uname }}</h3>
         </div>
         <div class="body">
-          <div class="al-c space-btw mb-4">
-            <h3 class="fz-20">LAND</h3>
+          <div class="al-c space-btw">
+            <h3 class="fz-20">Balance</h3>
             <div class="cursor-p fz-14 al-c" @click="$router.push('/billing')">
               <span>More</span>
               <img
@@ -54,17 +18,26 @@
               />
             </div>
           </div>
-          <div class="h-flex space-btw flex-md-row" style="height: 100%">
-            <div class="d-flex flex-column space-btw">
+          <div class="space-btw al-end d-flex flex-wrap" style="height: 100%">
+            <div>
               <div>
-                <p class="fw-b mb-2">balance</p>
                 <div class="al-c">
-                  <span class="balance fw-b ml-2">{{ balance.land }}</span>
-                  <span class="fz-12 ml-2">{{ balance.unit }}</span>
+                  <div class="fz-20 fw-b" style="margin-right: 2px">LAND</div>
+                  <img
+                    width="16"
+                    class="cursor-p"
+                    src="/img/svg/overview/landfile.svg"
+                    alt=""
+                  />
+                  <div class="al-c ml-4">
+                    <span class="balance fw-b">{{ balance.land }}</span>
+                    <span class="fz-12 ml-2">{{ balance.unit }}</span>
+                  </div>
                 </div>
-                <div class="fz-12 tips">Estimated depletion in 20 days</div>
+                <div class="fz-14 tips mt-1">≈{{ balanceToUSD }}USD</div>
               </div>
-              <div class="al-c">
+
+              <div class="al-c mt-6">
                 <div
                   class="deposite-btn mr-4"
                   @click="$router.push('/billing/deposite')"
@@ -75,13 +48,13 @@
                 <div
                   class="conversion-btn"
                   v-ripple
-                  @click="showTransform = true"
+                  @click="showTransform = !showTransform"
                 >
                   Conversion
                 </div>
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon class="ml-4" size="18" v-bind="attrs" v-on="on"
+                    <v-icon class="ml-1" size="18" v-bind="attrs" v-on="on"
                       >mdi-alert-circle-outline</v-icon
                     >
                   </template>
@@ -97,34 +70,39 @@
           </div>
         </div>
       </div>
-      <div class="right mt-4 mt-md-0">
-        <div class="al-c space-btw">
-          <h3 class="fz-20">Announcement</h3>
-          <div class="al-c cursor-p" @click="$router.push('/changelog')">
-            <span class="fz-14">More</span>
-            <img src="/img/svg/new-billing/right-arrow.svg" width="24" alt="" />
-          </div>
-        </div>
 
-        <div class="log-list">
-          <div
-            class="log-item my-4 px-4 py-2 al-c cursor-p"
-            v-for="(item, index) in changeLogList"
-            :key="index"
-            @click="$router.push('/changelog')"
+      <div class="right mt-4 flex-1 mt-md-0 d-md-block d-none">
+        <div class="pos-r" style="height: 100%">
+          <v-carousel
+            :show-arrows="false"
+            v-model="carouselIdx"
+            :interval="5000"
+            class="bdrs-10 mb-4"
+            cycle
+            hide-delimiter-background
+            hide-delimiters
+            height="100%"
+            ref="carouselRef"
           >
-            <img
-              src="img/svg/overview/circle.svg"
-              class="mr-2"
-              width="12"
-              alt=""
-            />
-            <div class="h-flex space-btw">
-              <h4 class="fz-14">{{ item.title }}</h4>
-              <div class="fz-12 date">
-                {{ item.time.toDate().format("date") }}
-              </div>
-            </div>
+            <v-carousel-item
+              v-for="(it, i) in banners"
+              :key="i"
+              :src="it.img"
+              :to="it.to"
+              :href="it.href"
+              :target="it.href ? '_blank' : null"
+            >
+            </v-carousel-item>
+          </v-carousel>
+          <div class="delimiter-content al-c justify-center">
+            <template v-for="(item, index) in banners">
+              <div
+                class="delimiter cursor-p"
+                :class="{ active: carouselIdx == index }"
+                :key="index"
+                @click.stop="carouselIdx = index"
+              ></div>
+            </template>
           </div>
         </div>
       </div>
@@ -132,8 +110,24 @@
 
     <div class="usage-plate pa-6">
       <h3 class="fz-20">Usage</h3>
-      <div class="combo pa-2 al-c space-btw my-4">
-        <div class="combo-name fz-12">{{ onChain ? "Standard" : "Trial" }}</div>
+      <div
+        class="combo pa-2 al-c space-btw my-4"
+        :class="onChain ? 'on-chain' : ''"
+      >
+        <div class="combo-name fz-12 al-c">
+          <div class="combo-tag" :class="onChain ? 'on-chain' : ''">
+            {{ onChain ? "Standard" : "Trial" }}
+          </div>
+          <div
+            class="upgrad fw-b fz-14 al-c ml-4 cursor-p"
+            v-if="!onChain"
+            @click="handleUpgrad"
+          >
+            <img src="/img/svg/overview/upgrad.svg" width="24" alt="" />
+            <span style="margin-left: 2px">Upgrade Account</span>
+          </div>
+        </div>
+
         <div class="period">
           <span class="fw-b fz-14">Time period</span>:
           <span class="ml-1 fz-14"
@@ -155,7 +149,7 @@
     </div>
 
     <div class="trends-plate pa-6 mt-6">
-      <h3 class="fz-20">Usage</h3>
+      <h3 class="fz-20">Trends</h3>
       <trends-line></trends-line>
     </div>
   </div>
@@ -163,11 +157,12 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import axios from "axios";
+import { bus } from "@/utils/bus";
 
 import resourceView from "./component/resource-view.vue";
 import trendsLine from "./component/trends-line.vue";
 import halfPie from "../billing/component/half-pie.vue";
+import { formatEther } from "ethers/lib/utils";
 
 export default {
   components: {
@@ -183,8 +178,6 @@ export default {
       invalidAt: null,
       efficientAt: null,
       resourceList: [],
-      changeLogList: [],
-
       showTransform: false,
       landUsedMonthly: [],
     };
@@ -193,7 +186,6 @@ export default {
     this.$store.dispatch("getBalance");
     this.$store.dispatch("getPrice");
     this.getUserResource();
-    this.getList();
     this.getLandUsedMonthly();
   },
 
@@ -211,7 +203,12 @@ export default {
     ...mapState({
       onChain: (s) => s.onChain,
       userInfo: (s) => s.userInfo,
+      originBalance: (s) => s.moduleResource.originBalance,
     }),
+    balanceToUSD() {
+      const land = Number(formatEther(this.originBalance));
+      return Math.floor(land / 1e6);
+    },
     banners() {
       return [
         {
@@ -257,6 +254,7 @@ export default {
           if (it.resourceType == "AR_STORAGE") {
             used = Number(data.totalArStorage);
           }
+
           return {
             type: it.resourceType,
             total,
@@ -267,16 +265,6 @@ export default {
         console.log(error);
       }
       this.resourceLoading = false;
-    },
-    async getList() {
-      try {
-        const { data } = await axios.get(
-          "https://4ever-web.4everland.store/config/changelog.json"
-        );
-        this.changeLogList = data.splice(0, 4);
-      } catch (error) {
-        console.log(error);
-      }
     },
 
     async getLandUsedMonthly() {
@@ -337,7 +325,7 @@ export default {
             case "COMPUTE_UNIT":
               name = "RPC Requests";
               color = "#836BAF";
-              resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "Cus";
+              resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "CUs";
               break;
             default:
               name = "IPFS";
@@ -357,6 +345,10 @@ export default {
         console.log(error);
       }
     },
+
+    handleUpgrad() {
+      bus.$emit("showDialog");
+    },
   },
 };
 </script>
@@ -370,13 +362,13 @@ export default {
   left: 0;
   bottom: 0;
   .delimiter {
-    width: 35px;
-    height: 5px;
+    width: 10px;
+    height: 10px;
     border-radius: 10px;
     background: #fff;
   }
   .delimiter + .delimiter {
-    margin-left: 20px;
+    margin-left: 10px;
   }
   .delimiter.active {
     background: #775da6;
@@ -424,10 +416,7 @@ export default {
     }
   }
   .right {
-    padding: 24px;
     width: 368px;
-    box-sizing: border-box;
-
     .log-item {
       border-radius: 4px;
       background: #f8fafc;
@@ -444,11 +433,14 @@ export default {
 
   .combo {
     border-radius: 4px;
-    background: #f3e8ff;
-    .combo-name {
+    background: #f8fafc;
+    .combo-tag {
       color: #fff;
       padding: 4px 16px;
-      border-radius: 2px;
+      background: #94a3b8;
+      border-radius: 4px;
+    }
+    .combo-tag.on-chain {
       background: linear-gradient(
           307deg,
           rgba(151, 71, 255, 0.8) 37.75%,
@@ -456,10 +448,16 @@ export default {
         ),
         #735ea1;
     }
+    .upgrad {
+      color: #735ea1;
+    }
+  }
+  .combo.on-chain {
+    background: #f3e8ff;
   }
 }
 .trends-plate {
-  mt-6border-radius: 8px;
+  border-radius: 8px;
   background: #fff;
 }
 </style>

@@ -28,7 +28,7 @@
     </div>
     <div class="pos-a no-date h-flex al-c" v-else>
       <img src="/img/svg/new-billing/no-date.svg" width="240" alt="" />
-      <span class="mt-3 fz-14">no-data</span>
+      <span class="mt-3 fz-14">No Data</span>
     </div>
   </div>
 </template>

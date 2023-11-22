@@ -42,11 +42,21 @@
           <h3 class="fz-16">Wait for the resources to be credited.</h3>
         </v-stepper-step>
       </v-stepper>
+      <div class="tips my-6 fz-12 pa-2" v-if="step < 3">
+        A transaction has been generated, please check
+        <span
+          class="cursor-p"
+          @click="$router.push('/billing/records?tab=Purchase History')"
+          >here</span
+        >
+        to review.
+      </div>
 
-      <div class="tips my-6 fz-12 pa-2">
+      <div class="tips my-6 fz-12 pa-2" v-else>
         Please do not leave the current page before completing the frst two
         steps, as it may result in a failed purchase.
       </div>
+
       <div class="ta-r cursor-p" @click="handleClose">Close</div>
     </div>
   </v-dialog>
@@ -71,10 +81,8 @@ export default {
   data() {
     return {
       showDialog: false,
-      e6: 1,
     };
   },
-  computed: {},
   methods: {
     handleApprove() {
       this.$emit("handleApprove");

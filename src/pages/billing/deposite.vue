@@ -1,31 +1,37 @@
 <template>
-  <div class="main-wrap h-flex space-btw">
-    <div>
+  <div class="deposite-container d-flex">
+    <div class="deposite-content flex-1 h-flex">
+      <!-- <div>
       <span>'coin addr:' {{ coinAddr }}</span>
       <span class="ml-4">'land recharge addr:' {{ landRechargeAddr }}</span>
-    </div>
-    <div>
-      <h2 class="fz-16">Purchase</h2>
-      <div class="deposite-section mt-4">
-        <div class="al-c deposite-control">
-          <input
-            class="deposite-input flex-1"
-            v-model="landAmount"
-            type="text"
-          />
-          <span class="num">,000,000</span>
-          <span class="d-ib deposite-btn">LAND</span>
+    </div> -->
+      <div class="purchase-plate">
+        <h2 class="fz-16">Purchase</h2>
+        <div class="deposite-section mt-4">
+          <div class="al-c deposite-control">
+            <input
+              class="deposite-input flex-1"
+              v-model="landAmount"
+              type="text"
+            />
+            <span class="num">,000,000</span>
+            <span class="d-ib deposite-btn fz-14">LAND</span>
+          </div>
+          <div class="mt-1 fz-12">
+            1,000,000LAND=1USD,LAND cannot be withdrawn
+          </div>
         </div>
-        <p class="mt-1 fz-12">1,000,000 LAND = 1U</p>
       </div>
 
-      <h2 class="fz-16 mt-6">Network</h2>
+      <resouce-counter @estimateInput="estimateInput"></resouce-counter>
+    </div>
+    <div class="act-control ml-6 pos-r">
+      <h2 class="fz-16">Network</h2>
       <pay-network
         @onNetwork="onNetwork"
         :allow="allowNetwork"
         ref="payNetwork"
       />
-
       <everpay-bar
         ref="everpay"
         @onEverpay="onEverpay"
@@ -38,47 +44,44 @@
         :chainId="chainId"
         @onSelectCoin="handleSelectCoin"
       ></pay-coin>
-    </div>
-    <resouce-counter @estimateInput="estimateInput"></resouce-counter>
+      <div class="pay-confirm-container pos-a">
+        <div class="pay-confirm pa-4 al-c space-btw">
+          <div class="amout-info">
+            <div class="fz-16 fw-b">Total</div>
 
-    <div class="pay-confirm-container">
-      <div class="pay-confirm pa-4 al-c space-btw">
-        <div class="amout-info">
-          <div class="fz-16 fw-b">Total</div>
-
-          <div class="mt-1">
-            <span class="amount fw-b">{{ usdcAmount.toString() }}</span>
-            <span class="unit fz-14 ml-1">{{ CoinType }}</span>
-
-            {{ payAmounts.toString() }}
+            <div class="mt-1">
+              <span class="amount fw-b">{{ usdcAmount.toString() }}</span>
+              <span class="unit fz-14 ml-1">{{ CoinType }}</span>
+            </div>
           </div>
-        </div>
-
-        <!-- everpay confirm btn -->
-        <div
-          class="confirm-btn fw-b cursor-p"
-          v-ripple
-          v-if="isEverpay"
-          @click="handleEverpayPayment"
-        >
-          Confirm
-        </div>
-        <!-- other confirm btn -->
-        <div
-          class="confirm-btn fw-b cursor-p"
-          v-ripple="!checkApproving"
-          v-else
-          @click="
-            () => {
-              checkApproving ? '' : handleShowStep();
-            }
-          "
-        >
-          <v-btn v-show="checkApproving" text :loading="true" color="#fff">
-          </v-btn>
-          <span v-show="!checkApproving">
-            {{ confirmText }}
-          </span>
+          <!-- everpay confirm btn -->
+          <div
+            class="confirm-btn fw-b cursor-p"
+            v-ripple
+            v-if="isEverpay"
+            @click="handleEverpayPayment"
+          >
+            Confirm
+          </div>
+          <!-- other confirm btn -->
+          <div
+            class="confirm-btn fw-b cursor-p"
+            :class="payAmounts.toString() == '0' ? 'disabled' : ''"
+            v-ripple="!checkApproving"
+            v-else
+            @click="
+              () => {
+                if (payAmounts.toString() == '0') return '';
+                return checkApproving ? '' : handleShowStep();
+              }
+            "
+          >
+            <v-btn v-show="checkApproving" text :loading="true" color="#735EA1">
+            </v-btn>
+            <span v-show="!checkApproving">
+              {{ confirmText }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -143,21 +146,15 @@ export default {
   },
   computed: {
     ...mapState({
-      onChain: (s) => s.onChain,
       connectAddr: (s) => s.connectAddr,
       chainContract: (s) => s.moduleResource.chainContract,
       teamId: (s) => s.teamId,
     }),
     allowNetwork() {
-      if (this.onChain) {
-        // return ["Polygon", "Ethereum", "BSC"];
-        if (this.$inDev) {
-          return ["Polygon", "Ethereum", "BSC", "zkSync", "everPay"];
-        }
-        return ["Polygon", "Ethereum", "BSC", "Arbitrum", "zkSync", "everPay"];
-      } else {
-        return ["Polygon"];
+      if (this.$inDev) {
+        return ["Polygon", "Ethereum", "BSC", "zkSync", "everPay"];
       }
+      return ["Polygon", "Ethereum", "BSC", "Arbitrum", "zkSync", "everPay"];
     },
     isApproved() {
       return (
@@ -371,13 +368,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.deposite-container {
+  height: 100%;
+  // min-height: 100%;
+  align-items: stretch;
+}
 .deposite-control {
   border: 1px solid #cbd5e1;
   border-radius: 4px;
 }
 .deposite-input {
+  height: 48px;
   background: #fff;
-  padding: 13px 0;
   text-indent: 20px;
   text-align: right;
   font-size: 20px;
@@ -387,32 +389,62 @@ export default {
 .num {
   font-family: "DIN Alternate";
   font-size: 20px;
-  padding: 13px 10px 13px 0;
+  padding-right: 10px;
   color: #64748b;
 }
 .deposite-btn {
-  padding: 16px 41px;
+  padding: 0px 41px;
+  height: 48px;
+  line-height: 48px;
   background: #f1f5f9;
   border-radius: 0 4px 4px 0;
 }
 
-.pay-confirm {
+.deposite-content {
+  height: 100%;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  .purchase-plate {
+    padding: 24px 16px;
+    border-bottom: 1px solid #cbd5e1;
+  }
+}
+.act-control {
+  width: 368px;
+  padding: 24px 16px 0;
   border-radius: 8px;
   background: #f3e8ff;
-  .redeem-trigger {
-    color: #735ea1;
-  }
-  .amount {
-    font-size: 28px;
-  }
-  .unit {
-    color: #64748b;
-  }
-  .confirm-btn {
-    color: #fff;
-    padding: 15px 46px;
-    border-radius: 4px;
+  box-sizing: border-box;
+  .pay-confirm-container {
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    border-radius: 0px 0px 8px 8px;
     background: #735ea1;
+    .pay-confirm {
+      color: #fff;
+      .redeem-trigger {
+        color: #735ea1;
+      }
+      .amount {
+        font-size: 28px;
+      }
+      .unit {
+        color: #e2e8f0;
+        font-family: "DIN Alternate";
+      }
+      .confirm-btn {
+        color: #735ea1;
+        padding: 15px 46px;
+        border-radius: 4px;
+        background: #fff;
+      }
+      .confirm-btn.disabled {
+        color: #fff;
+        background: #ccc;
+      }
+    }
   }
 }
 </style>

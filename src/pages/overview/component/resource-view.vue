@@ -1,16 +1,20 @@
 <template>
   <div class="resource-view h-flex space-btw py-4 px-2">
-    <div class="al-c">
-      <img width="16" :src="curResource.img" alt="" />
-      <span class="fz-14 ml-4">{{ curResource.name }}</span>
+    <div class="d-flex al-start">
+      <div class="al-c justify-center pa-2" style="background: #fff">
+        <img width="16" :src="curResource.img" alt="" />
+      </div>
+      <span class="ml-4 fw-b">{{ curResource.name }}</span>
     </div>
 
     <div>
       <div class="al-c space-btw">
-        <div class="resource-size d-flex al-c">
+        <div class="resource-size d-flex al-end">
           <div class="consume-resource">
-            <span class="fz-24 fw-b">{{ curResource.used.num }}</span>
-            <span class="fz-12 ml-1">{{ curResource.used.unit }}</span>
+            <span class="consume-used fw-b">{{ curResource.used.num }}</span>
+            <span class="fz-12" style="margin-left: 2px">{{
+              curResource.used.unit
+            }}</span>
           </div>
           <div class="sparator">/</div>
           <div class="total-resource fz-12">{{ curResource.total }}</div>
@@ -77,7 +81,7 @@ export default {
         case "BUILD_TIME":
           return {
             name: "Build Minutes",
-            img: "/img/svg/overview/buildtime.svg",
+            img: "/img/svg/overview/rpc.svg",
             total: this.$utils.getNumCount(this.view.total) + "Mins",
             used: {
               num: this.$utils.getNumCount(this.view.used, true).num,
@@ -88,10 +92,10 @@ export default {
           return {
             name: "RPC Requests",
             img: "/img/svg/overview/buildtime.svg",
-            total: this.$utils.getNumCount(this.view.total) + "Cus",
+            total: this.$utils.getNumCount(this.view.total) + "CUs",
             used: {
               num: this.$utils.getNumCount(this.view.used, true).num,
-              unit: +this.$utils.getNumCount(this.view.used, true).unit + "Cus",
+              unit: this.$utils.getNumCount(this.view.used, true).unit + "CUs",
             },
           };
         default:
@@ -126,6 +130,10 @@ export default {
 
   .consume-resource {
     line-height: 24px;
+    .consume-used {
+      font-family: "DIN Alternate";
+      font-size: 24px;
+    }
   }
   .sparator {
     margin: 0 2px;
