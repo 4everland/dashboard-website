@@ -3,7 +3,7 @@
     <div class="mb-8 mt-5" v-if="allowNoLogin && !userInfo.uid">
       <div class="m-auto" style="max-width: 500px">
         <div class="ta-c mb-5 fz-20 fw-b">
-          Log in or sign up to clone and deploy.
+          Log in or sign up to clone and deploy
         </div>
         <div class="bg-white pa-5">
           <login-choose mode="refresh" />
@@ -146,6 +146,9 @@ export default {
     },
   },
   mounted() {
+    if (localStorage.token) {
+      localStorage.loginTo = "";
+    }
     console.log(this.query);
     this.getInfo();
   },
