@@ -117,7 +117,8 @@ export default {
     };
   },
   created() {
-    if (this.userInfo.uid && localStorage.loginTo) {
+    const { loginTo } = localStorage;
+    if (this.userInfo.uid && loginTo) {
       localStorage.loginTo = "";
       location.href = loginTo;
     } else {

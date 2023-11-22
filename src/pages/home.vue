@@ -17,12 +17,16 @@ export default {
     }
     if (token) {
       localStorage.token = token;
+    } else {
+      const { loginTo } = localStorage;
+      if (loginTo) {
+        localStorage.loginTo = "";
+        location.href = loginTo;
+        return;
+      }
     }
     if (!localStorage.token) {
       location.href = this.$getLoginUrl();
-    } else if (localStorage.loginTo) {
-      localStorage.loginTo = "";
-      location.href = loginTo;
     } else {
       this.$router.replace("/overview");
       if (token)
