@@ -117,7 +117,12 @@ export default {
     };
   },
   created() {
-    this.isRegister();
+    if (this.userInfo.uid && localStorage.loginTo) {
+      localStorage.loginTo = "";
+      location.href = loginTo;
+    } else {
+      this.isRegister();
+    }
   },
   mounted() {
     this.carouselWidth = this.$refs.carouselRef.$el.offsetWidth;

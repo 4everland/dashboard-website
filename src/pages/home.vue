@@ -12,7 +12,6 @@
 export default {
   mounted() {
     const { invite, token } = this.$route.query;
-    const { loginTo } = localStorage;
     if (invite) {
       localStorage.inviteCode = invite;
     }
@@ -21,7 +20,7 @@ export default {
     }
     if (!localStorage.token) {
       location.href = this.$getLoginUrl();
-    } else if (loginTo) {
+    } else if (localStorage.loginTo) {
       localStorage.loginTo = "";
       location.href = loginTo;
     } else {
