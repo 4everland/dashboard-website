@@ -149,7 +149,7 @@ export default {
   },
   async created() {
     if (localStorage.token) {
-      await this.getNewUser();
+      // await this.getNewUser();
       await this.getHandler();
     }
   },

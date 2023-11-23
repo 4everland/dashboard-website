@@ -30,6 +30,7 @@
         </div>
       </v-main>
     </template>
+    <e-guide ref="guide" />
     <e-no-register-tip></e-no-register-tip>
     <!-- <e-register-share></e-register-share> -->
     <e-animation-flowers></e-animation-flowers>
