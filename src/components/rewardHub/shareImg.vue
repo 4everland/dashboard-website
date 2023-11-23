@@ -26,7 +26,7 @@
             Long press for Preservation
           </div>
           <div v-else class="mt-10 ta-c">
-            <v-btn color="primary" @click="onSaveImg">Preservation</v-btn>
+            <v-btn color="primary" @click="onSaveImg">Download</v-btn>
           </div>
         </div>
       </div>

@@ -8,13 +8,15 @@
     <v-main v-if="meta.noLogin">
       <router-view></router-view>
     </v-main>
-
     <template v-else>
       <e-header></e-header>
       <e-drawer />
       <v-main>
         <e-nav></e-nav>
-        <div class="pa-5" style="height: calc(100% - 100px)">
+        <div
+          :class="meta.newLayout ? '' : 'pa-5'"
+          style="height: calc(100% - 100px)"
+        >
           <e-no-access v-if="isDisabled"></e-no-access>
           <e-wrap
             v-else

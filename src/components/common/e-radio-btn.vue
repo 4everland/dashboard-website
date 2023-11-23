@@ -5,6 +5,8 @@
       class="pa-1 fz-14 ta-c cursor-p"
       :style="{
         'min-width': minWidth,
+        'min-height': minHeight,
+        'line-height': minHeight,
       }"
       :class="{
         'bg-1': i == curIdx,
@@ -25,6 +27,10 @@ export default {
     minWidth: {
       type: String,
       default: "70px",
+    },
+    minHeight: {
+      type: String,
+      default: "auto",
     },
   },
   computed: {

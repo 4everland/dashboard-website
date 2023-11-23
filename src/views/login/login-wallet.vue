@@ -16,6 +16,11 @@
           <span class="item-name" :class="{ 'item-name-pop': index == 0 }">{{
             item.btnText
           }}</span>
+          <v-btn
+            v-if="item.loading"
+            :loading="walletConnectLoading"
+            icon
+          ></v-btn>
         </div>
       </div>
     </div>
@@ -38,6 +43,8 @@ import {
   SignPetra,
   ConnectCoinBase,
   SignCoinBase,
+  ConnectWalletCon,
+  SignWalletCon,
 } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 
@@ -50,6 +57,7 @@ export default {
       inviteCode: null,
       sitekey: "6LdPnxclAAAAACTzYeZDztp3dcCKFUIG_5r313JV",
       walletName: "",
+      walletConnectLoading: false,
       walletItem: [
         {
           name: "MetaMask",
@@ -65,6 +73,12 @@ export default {
           name: "Coinbase Wallet",
           icon: require("@/assets/imgs/coinbase.png"),
           btnText: "",
+        },
+        {
+          name: "WalletConnect",
+          icon: require("@/assets/imgs/walletConnect.svg"),
+          btnText: "",
+          loading: true,
         },
         {
           name: "Petra",
@@ -134,6 +148,9 @@ export default {
           break;
         case "Coinbase Wallet":
           this.coinbaseConnect();
+          break;
+        case "WalletConnect":
+          this.walletConnect();
           break;
         default:
           break;
@@ -251,6 +268,33 @@ export default {
         nonce,
         this.inviteCode,
         this.capToken
+      );
+      if (stoken) {
+        this.ssoLogin(stoken);
+      }
+    },
+    async walletConnect() {
+      this.walletConnectLoading = true;
+      window.walletConnectModal.subscribeModal((state) => {
+        if (!state.open) {
+          this.walletConnectLoading = false;
+        }
+      });
+      const { session, account } = await ConnectWalletCon();
+      if (!account) {
+        return;
+      }
+      const nonce = await ExchangeCode(account);
+      if (!nonce) {
+        return;
+      }
+      this.walletConnectLoading = false;
+      const stoken = await SignWalletCon(
+        account,
+        nonce,
+        this.inviteCode,
+        this.capToken,
+        session
       );
       if (stoken) {
         this.ssoLogin(stoken);

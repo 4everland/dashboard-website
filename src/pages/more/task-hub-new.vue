@@ -80,17 +80,18 @@
               }"
             >
               <span class="num">{{ item.at }}</span>
-              <span class="unit">Activity</span>
+              <!-- <span class="unit">Activity</span> -->
             </div>
           </div>
         </div>
       </div>
-      <v-row class="task-list">
+      <v-row class="task-list" no-gutters>
         <v-col
           :cols="12"
           :md="item.type == 'DAILY_INVITE' ? 12 : 6"
           v-for="item in dailyList.items"
           :key="item.id"
+          class="pa-2"
         >
           <div
             class="card"
@@ -127,7 +128,7 @@
                   <img
                     src="@/assets/imgs/reward_hub/copy.png"
                     alt=""
-                    width="24px"
+                    width="16px"
                     style="display: block"
                   />
                 </v-btn>
@@ -135,7 +136,7 @@
                   <img
                     src="@/assets/imgs/reward_hub/download.png"
                     alt=""
-                    width="24px"
+                    width="16px"
                     style="display: block"
                   />
                 </v-btn>
@@ -149,22 +150,30 @@
                     style="display: block"
                   />
                 </v-btn>
-                <v-btn
+                <v-progress-circular
                   v-else-if="item.type != 'CO_MINT'"
-                  icon
-                  class="task-button"
-                  @click="onNext(item)"
+                  :value="(item.cur / item.upLimit) * 100"
+                  :rotate="-90"
+                  :size="40"
+                  :width="3"
+                  color="#5865F2"
                 >
-                  <img
-                    src="@/assets/imgs/reward_hub/arrow-circle-right.png"
-                    alt=""
-                    width="24px"
-                    style="display: block"
-                  />
-                </v-btn>
+                  <v-btn
+                    icon
+                    class="task-button progress-button"
+                    @click="onNext(item)"
+                  >
+                    <img
+                      src="@/assets/imgs/reward_hub/arrow-circle-right-black.png"
+                      alt=""
+                      width="24px"
+                      style="display: block"
+                    />
+                  </v-btn>
+                </v-progress-circular>
               </div>
             </div>
-            <div class="task-progress">
+            <!-- <div class="task-progress">
               <v-progress-linear
                 class="progress-bar"
                 background-color="#fff"
@@ -176,19 +185,20 @@
               <div class="progress-text">
                 {{ item.cur }}/{{ item.upLimit }} Activity
               </div>
-            </div>
+            </div> -->
           </div>
         </v-col>
       </v-row>
     </div>
     <div v-if="beginnerList.list?.length > 0" class="tasks-box beginner-box">
       <div class="beginner-title">Beginner Tasks</div>
-      <v-row class="task-list">
+      <v-row class="task-list" no-gutters>
         <v-col
           :cols="12"
           :md="6"
           v-for="item in beginnerList.list"
           :key="item.id"
+          class="pa-2"
         >
           <div
             class="card"
@@ -221,6 +231,7 @@
                 <v-btn
                   v-if="item.taskStatus == 'COMPLETED'"
                   elevation="0"
+                  small
                   class="task-button"
                 >
                   +{{ item.reward }}
@@ -449,22 +460,22 @@ export default {
 </script>
 <style lang="scss" scoped>
 #RewardHub {
+  padding: 0 24px;
   padding-bottom: 72px;
+  background-image: url("../../assets/imgs/reward_hub/bg.png");
+  background-size: 100% 320px;
+  background-repeat: no-repeat;
+
   .banner {
     width: 100%;
-    height: 152px;
-    border-radius: 16px;
-    background-image: url("../../assets/imgs/reward_hub/bg.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+    height: 112px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: 20px;
     padding-right: 60px;
     .banner-title {
       color: #fff;
-      font-size: 48px;
+      font-size: 32px;
       font-weight: 900;
     }
     .points-box {
@@ -472,7 +483,7 @@ export default {
       padding: 8px 20px;
       align-items: baseline;
       gap: 8px;
-      border-radius: 16px;
+      border-radius: 16px 16px 0px 0px;
       background: rgba(0, 0, 0, 0.25);
       position: relative;
       .num {
@@ -497,35 +508,34 @@ export default {
       }
       .icon-2 {
         position: absolute;
-        width: 180px;
-        right: -100px;
-        bottom: -90px;
+        width: 110px;
+        right: -60px;
+        bottom: -45px;
       }
     }
   }
   .tasks-box {
     border-radius: 16px;
     background: #fff;
-    margin-top: 30px;
-    padding: 24px;
     .task-list {
+      padding: 8px;
+      padding-bottom: 16px;
       .card {
         width: 100%;
-        height: 168px;
-        padding: 24px;
-        border-radius: 12px;
+        height: 64px;
+        padding: 8px 16px;
+        border-radius: 8px;
         .task-detail {
           display: flex;
           align-items: center;
           gap: 16px;
-          margin-bottom: 24px;
           .task-icon {
-            width: 80px;
+            width: 48px;
           }
           .task-info {
             .task-name {
               color: #0e0e2c;
-              font-size: 20px;
+              font-size: 16px;
               font-weight: 700;
             }
             .task-tips {
@@ -540,7 +550,7 @@ export default {
             margin-left: auto;
             .task-button {
               padding: 8px;
-              border-radius: 8px;
+              border-radius: 34px;
               margin: 0 4px;
             }
           }
@@ -553,11 +563,10 @@ export default {
       border-radius: 12px;
       padding: 12px;
       padding-right: 48px;
-      margin-bottom: 24px;
       display: flex;
       align-items: center;
       .icon-plan {
-        width: 120px;
+        width: 96px;
       }
       .plan-text {
         margin-right: 24px;
@@ -649,20 +658,24 @@ export default {
           .task-btn {
             .referral-link {
               padding: 8px 16px;
-              border-radius: 8px;
+              border-radius: 31px;
               border: 1px solid rgba(88, 101, 242, 0.5);
               background: rgba(88, 101, 242, 0.05);
               margin-right: 16px;
+              font-size: 14px;
               span:first-child {
                 color: #0e0e2c;
                 font-family: SF Pro Text;
-                font-size: 16px;
+                font-size: 14px;
                 font-weight: 700;
                 margin-right: 8px;
               }
             }
             .task-button {
               background: #5865f2;
+            }
+            .progress-button {
+              background-color: transparent;
             }
           }
         }
@@ -705,15 +718,19 @@ export default {
     }
   }
   .beginner-box {
+    padding: 24px 8px;
+    margin-top: 24px;
     .beginner-title {
       color: #0e0e2c;
-      font-size: 32px;
+      font-size: 20px;
       font-weight: 900;
-      margin-bottom: 24px;
+      padding: 0 8px;
+      margin-bottom: 8px;
     }
     .task-list {
+      padding: 0;
       .card {
-        height: 128px;
+        height: 64px;
         background: #fff2ff;
         .task-detail {
           .task-btn {
@@ -732,7 +749,7 @@ export default {
               background: #1eefa4;
               color: #fff;
               font-family: DIN Alternate;
-              font-size: 24px;
+              font-size: 16px;
               font-weight: 700;
             }
           }

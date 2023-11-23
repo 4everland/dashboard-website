@@ -16,8 +16,10 @@ export default [
     component: () => import("./task-hub-new"),
     meta: {
       title: "Task Hub",
-      isTab: 1,
-      hideNav: 1,
+      isTab: true,
+      hideNav: true,
+      noLogin: false,
+      newLayout: true,
     },
   },
   {

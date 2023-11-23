@@ -10,6 +10,7 @@ import ResRoutes from "./resource/routes";
 import GatewayRoutes from "./gateway/routes";
 import AccountRoutes from "./account/routes";
 import BillingRoutes from "./billing/routes";
+import RpcRoutes from "./rpc/routes";
 
 export default [
   {
@@ -52,6 +53,7 @@ export default [
   ...ResRoutes,
   ...GatewayRoutes,
   ...AccountRoutes,
+  ...RpcRoutes,
   // {
   //   path: "/changefee",
   //   component: () => import("./changeFee"),

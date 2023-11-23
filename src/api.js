@@ -10,22 +10,21 @@ Vue.prototype.$inDev = inDev;
 
 Vue.prototype.$arHashPre = inDev
   ? "https://arweave.net/"
-  : "https://arweave.4everland.xyz/"; // https://ar.foreverland.xyz/
+  : "https://ar-io.dev/"; // https://ar.foreverland.xyz/
 Vue.prototype.$arVerifyPre = "https://viewblock.io/arweave/tx/"; // https://ar.foreverland.xyz/tx/
 Vue.prototype.$axios = axios;
 
 export const endpoint = inDev
   ? "https://s3gw.foreverland.xyz"
   : "https://endpoint.4everland.co";
-export const authApi = inDev
-  ? "https://auth.foreverland.xyz"
-  : "https://oauth.4everland.org";
+
+const authApi = process.env.VUE_APP_AUTH_URL;
+const hostingUrl = process.env.VUE_APP_HOST_URL;
+const gateWayApi = process.env.VUE_APP_GATEWAY_URL;
+
 const v3Api = inDev
   ? "https://settlement.foreverland.xyz"
   : "https://pay.4everland.org";
-const gateWayApi = inDev
-  ? "https://gateway-api.foreverland.xyz"
-  : "https://gateway-api.4everland.org";
 
 const ipnsApi = inDev
   ? "https://ipns.foreverland.xyz"
@@ -50,8 +49,6 @@ export const templateApi = inDev
 Vue.prototype.$endpoint = endpoint;
 Vue.prototype.$authApi = authApi;
 
-const hostingUrl = process.env.VUE_APP_HOST_URL;
-
 const getLoginUrl = (Vue.prototype.$getLoginUrl = () => {
   // console.log(location);
   let url = "/login";
@@ -71,6 +68,7 @@ const clearLogin = (Vue.prototype.$clearLogin = () => {
 export const http = Axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
 });
+
 Vue.prototype.$getImgSrc = function (src) {
   if (!src) src = "/img/bg/empty/project.png";
   else if (!/^http/.test(src)) src = hostingUrl + src;

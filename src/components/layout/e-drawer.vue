@@ -69,25 +69,125 @@
       </a>
     </div>
 
-    <div class="pa-5"></div>
-    <v-list flat dense ref="drawerList" id="drawerList">
-      <template v-for="(it, i) in list">
-        <v-list-group
-          class="group-item"
-          :id="'group-' + i"
-          :ref="'group-' + i"
-          @input="Toggle(i, $event, it)"
-          v-model="activeArr[i]"
-          :group="it.group"
-          v-if="it.subs"
-          :key="i"
-          no-action
-        >
-          <template v-slot:activator>
+    <!-- <div class="pa-5"></div> -->
+    <div class="pt-5" style="height: 100%; overflow-y: scroll">
+      <v-list flat dense ref="drawerList" id="drawerList">
+        <template v-for="(it, i) in list">
+          <v-list-group
+            class="group-item"
+            :id="'group-' + i"
+            :ref="'group-' + i"
+            @input="Toggle(i, $event, it)"
+            v-model="activeArr[i]"
+            :group="it.group"
+            v-if="it.subs"
+            :key="i"
+            no-action
+          >
+            <template v-slot:activator>
+              <e-drawer-icon
+                class="ml-2 mr-6"
+                :it="it"
+                :active="activeArr[i]"
+              ></e-drawer-icon>
+              <v-list-item-content>
+                <v-list-item-title>
+                  <b class="fz-16">{{ it.label }}</b>
+                  <img
+                    v-if="it.suffixImg"
+                    class="ml-2"
+                    width="25"
+                    :src="it.suffixImg"
+                    alt=""
+                  />
+                </v-list-item-title>
+                <!--  -->
+              </v-list-item-content>
+            </template>
+
+            <template v-for="(sub, j) in it.subs">
+              <v-list-group
+                v-if="sub.subs"
+                :ref="'sub-' + j"
+                :key="j"
+                :group="sub.group"
+                sub-group
+                no-action
+                v-model="openSub"
+                @input="onSubsToggle(i, $event)"
+              >
+                <template v-slot:activator>
+                  <div class="ml-2"></div>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      <b class="fz-14 fw-n">{{ sub.label }}</b>
+                      <img
+                        v-if="sub.suffixImg"
+                        class="ml-2"
+                        width="25"
+                        :src="sub.suffixImg"
+                        alt=""
+                      />
+                    </v-list-item-title>
+                    <!--  -->
+                  </v-list-item-content>
+                </template>
+                <v-list-item
+                  :ref="'sub' + j + '-' + k"
+                  class="sub"
+                  active-class="active-item"
+                  :class="{
+                    'v-list-item--active':
+                      secondSub.matPath && secondSub.matPath.test(path),
+                  }"
+                  :to="secondSub.to"
+                  :href="secondSub.href"
+                  :target="secondSub.href ? '_blank' : ''"
+                  v-for="(secondSub, k) in sub.subs"
+                  :key="k"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      <span class="fz-14">{{ secondSub.label }}</span>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-group>
+
+              <v-list-item
+                v-else
+                :ref="i + '-' + j"
+                class="sub"
+                active-class="active-item"
+                :class="{
+                  'v-list-item--active': sub.matPath && sub.matPath.test(path),
+                }"
+                :to="sub.to"
+                :href="sub.href"
+                :target="sub.href ? '_blank' : ''"
+                :key="j"
+              >
+                <v-list-item-content>
+                  <v-list-item-title>
+                    <span class="fz-14"> {{ sub.label }}</span>
+                  </v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+          </v-list-group>
+
+          <v-list-item
+            class="group-item"
+            v-else
+            :to="it.to"
+            :href="it.href"
+            :target="it.href ? '_blank' : ''"
+            :key="i"
+          >
             <e-drawer-icon
-              class="ml-2 mr-6"
               :it="it"
-              :active="activeArr[i]"
+              :active="path.indexOf(it.to) == 0"
+              class="ml-2 mr-6"
             ></e-drawer-icon>
             <v-list-item-content>
               <v-list-item-title>
@@ -100,104 +200,13 @@
                   alt=""
                 />
               </v-list-item-title>
-              <!--  -->
             </v-list-item-content>
-          </template>
+          </v-list-item>
+        </template>
+      </v-list>
+    </div>
 
-          <template v-for="(sub, j) in it.subs">
-            <v-list-group
-              v-if="sub.subs"
-              :ref="'sub-' + j"
-              :key="j"
-              :group="sub.group"
-              sub-group
-              no-action
-              v-model="openSub"
-              @input="onSubsToggle(i, $event)"
-            >
-              <template v-slot:activator>
-                <div class="ml-2"></div>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    <b class="fz-14 fw-n">{{ sub.label }}</b>
-                    <img
-                      v-if="sub.suffixImg"
-                      class="ml-2"
-                      width="25"
-                      :src="sub.suffixImg"
-                      alt=""
-                    />
-                  </v-list-item-title>
-                  <!--  -->
-                </v-list-item-content>
-              </template>
-              <v-list-item
-                :ref="'sub' + j + '-' + k"
-                class="sub"
-                active-class="active-item"
-                :class="{
-                  'v-list-item--active':
-                    secondSub.matPath && secondSub.matPath.test(path),
-                }"
-                :to="secondSub.to"
-                :href="secondSub.href"
-                :target="secondSub.href ? '_blank' : ''"
-                v-for="(secondSub, k) in sub.subs"
-                :key="k"
-              >
-                <v-list-item-content>
-                  <v-list-item-title>
-                    <span class="fz-14">{{ secondSub.label }}</span>
-                  </v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list-group>
-
-            <v-list-item
-              v-else
-              :ref="i + '-' + j"
-              class="sub"
-              active-class="active-item"
-              :class="{
-                'v-list-item--active': sub.matPath && sub.matPath.test(path),
-              }"
-              :to="sub.to"
-              :href="sub.href"
-              :target="sub.href ? '_blank' : ''"
-              :key="j"
-            >
-              <v-list-item-content>
-                <v-list-item-title>
-                  <span class="fz-14"> {{ sub.label }}</span>
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </template>
-        </v-list-group>
-
-        <v-list-item
-          class="group-item"
-          v-else
-          :to="it.to"
-          :href="it.href"
-          :target="it.href ? '_blank' : ''"
-          :key="i"
-        >
-          <e-drawer-icon
-            :it="it"
-            :active="path.indexOf(it.to) == 0"
-            class="ml-2 mr-6"
-          ></e-drawer-icon>
-          <v-list-item-content>
-            <v-list-item-title>
-              <b class="fz-16">{{ it.label }}</b>
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </template>
-    </v-list>
-
-    <div class="mt-auto pa-3"></div>
+    <!-- <div class="mt-auto"></div> -->
     <e-drawer-account></e-drawer-account>
     <div class="mb-3 al-c pa-3 bg-white">
       <a

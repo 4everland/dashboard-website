@@ -23,7 +23,7 @@
           <v-btn
             v-else
             color="primary"
-            :disabled="!!it.account"
+            :disabled="it.account"
             min-width="75"
             width="160"
             max-width="160"
@@ -39,7 +39,13 @@
 <script>
 import { mapState } from "vuex";
 import { providers } from "ethers";
-import { ConnectOkx, ConnectPetra, ConnectCoinBase } from "@/utils/login";
+import {
+  ConnectOkx,
+  ConnectPetra,
+  ConnectCoinBase,
+  ConnectWalletCon,
+  onSignWalletCon,
+} from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 fcl
   .config()
@@ -121,6 +127,14 @@ export default {
           desc: "Get verified by connecting your CoinBase account.",
           icon: "m-coinbase",
           type: 9,
+          account: (info.wallet || {}).address,
+        });
+      if (info.wallet?.walletType == "Walletconnect" || noWallet)
+        wArr.push({
+          title: "WalletConnect",
+          desc: "Get verified by connecting your WalletConnect.",
+          icon: "m-walletConnect",
+          type: 99,
           account: (info.wallet || {}).address,
         });
       if (info.wallet?.walletType == "PETRA" || noWallet)
@@ -208,6 +222,12 @@ export default {
       if (this.binding == 9 && val) {
         this.binding = null;
         this.verifyCoinBase();
+      }
+    },
+    WalletconnectAddr(val) {
+      if (this.binding == 99 && val) {
+        this.binding = null;
+        this.verifyWalletconnect();
       }
     },
   },
@@ -325,6 +345,18 @@ export default {
         }
         return;
       }
+      if (it.type == 99) {
+        this.binding = 99;
+        if (!this.WalletconnectAddr) {
+          const account = await this.connectWalletconnect();
+          console.log(account);
+          this.WalletconnectAddr = account;
+        } else {
+          this.verifyWalletconnect();
+        }
+
+        return;
+      }
       // if (it.type != 1) return this.$toast("todo");
       try {
         if (it.type == 10) {
@@ -428,6 +460,9 @@ export default {
       }
       if (type == 9) {
         apply = this.coinBaseAddr;
+      }
+      if (type == 99) {
+        apply = this.WalletconnectAddr;
       }
       const { data } = await this.$http.post(`$auth/bind`, {
         type,
@@ -561,6 +596,26 @@ export default {
         this.$loading.close();
         if (sig) {
           this.onVcode(9, sig);
+        }
+      } catch (error) {
+        this.$alert(error.message);
+      }
+    },
+    async connectWalletconnect() {
+      const { account } = await ConnectWalletCon();
+      return account;
+    },
+    async verifyWalletconnect() {
+      try {
+        const { session, account } = await ConnectWalletCon();
+        this.$loading();
+        const nonce = await this.exchangeCode(99);
+        const sig = await onSignWalletCon(session, account, nonce);
+        console.log(signature);
+        this.WalletconnectAddr = account;
+        this.$loading.close();
+        if (sig) {
+          this.onVcode(99, sig);
         }
       } catch (error) {
         this.$alert(error.message);
