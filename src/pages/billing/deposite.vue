@@ -1,15 +1,16 @@
 <template>
-  <div class="deposite-container d-flex">
+  <div class="deposite-container d-flex pa-6">
     <div class="deposite-content flex-1 h-flex">
       <!-- <div>
-      <span>'coin addr:' {{ coinAddr }}</span>
-      <span class="ml-4">'land recharge addr:' {{ landRechargeAddr }}</span>
-    </div> -->
+        <span>'coin addr:' {{ coinAddr }}</span>
+        <span class="ml-4">'land recharge addr:' {{ landRechargeAddr }}</span>
+      </div> -->
       <div class="purchase-plate">
         <h2 class="fz-16">Purchase</h2>
         <div class="deposite-section mt-4">
           <div class="al-c deposite-control">
             <input
+              maxlength="8"
               class="deposite-input flex-1"
               v-model="landAmount"
               type="text"
@@ -23,7 +24,10 @@
         </div>
       </div>
 
-      <resouce-counter @estimateInput="estimateInput"></resouce-counter>
+      <resouce-counter
+        @estimateInput="estimateInput"
+        :inputVal="landAmount"
+      ></resouce-counter>
     </div>
     <div class="act-control ml-6 pos-r">
       <h2 class="fz-16">Network</h2>
@@ -65,13 +69,13 @@
           </div>
           <!-- other confirm btn -->
           <div
-            class="confirm-btn fw-b cursor-p"
-            :class="payAmounts.toString() == '0' ? 'disabled' : ''"
+            class="confirm-btn fw-b cursor-p pos-r"
+            :class="disabled ? 'disabled' : ''"
             v-ripple="!checkApproving"
             v-else
             @click="
               () => {
-                if (payAmounts.toString() == '0') return '';
+                if (disabled) return '';
                 return checkApproving ? '' : handleShowStep();
               }
             "
@@ -81,6 +85,11 @@
             <span v-show="!checkApproving">
               {{ confirmText }}
             </span>
+
+            <div class="pos-a confirm-tip" v-if="!onChain">
+              After your first deposit, we'll upgrade you to a Standard User
+              with free on-chain identity minting.
+            </div>
           </div>
         </div>
       </div>
@@ -142,6 +151,7 @@ export default {
       depositing: false,
       isEverpay: localStorage.getItem("isEverpay") ? true : false,
       everpayPayInfo: {},
+      btnDisabled: true,
     };
   },
   computed: {
@@ -149,6 +159,7 @@ export default {
       connectAddr: (s) => s.connectAddr,
       chainContract: (s) => s.moduleResource.chainContract,
       teamId: (s) => s.teamId,
+      onChain: (s) => s.onChain,
     }),
     allowNetwork() {
       if (this.$inDev) {
@@ -209,24 +220,31 @@ export default {
       }
       return this.coinSelect;
     },
+    disabled() {
+      return this.payAmounts.toString() == "" || this.btnDisabled;
+    },
   },
   mounted() {
-    this.checkApproved();
-
-    this.walletObj.on("accountsChanged", () => {
-      setTimeout(() => {
-        this.checkApproved();
-      }, 2000);
+    // this.checkApproved();
+    this.walletObj.on("accountsChanged", (val) => {
+      this.$store.commit("SET_CONNECT_ADDR", val[0]);
+      this.checkApproved();
     });
   },
   methods: {
     onNetwork(chainId) {
+      if (this.chainAddrs.findIndex((it) => it.chainId == chainId) == -1) {
+        this.btnDisabled = true;
+      } else {
+        this.btnDisabled = false;
+      }
       this.chainId = chainId;
       if (this.chainId == 9999999) {
         this.isEverpay = true;
       } else {
         this.isEverpay = false;
       }
+      this.checkApproved();
     },
     async handleRechargeLand() {
       this.depositing = true;
@@ -240,11 +258,9 @@ export default {
         console.log(receipt);
         console.log("recharge success");
         this.rechargeSuccess = true;
+        this.$store.dispatch("checkOnChain");
       } catch (error) {
-        console.log(error);
-        if (/unknown account/.test(error.message)) {
-          this.getAccount();
-        }
+        this.onErr(error);
       }
       this.depositing = false;
     },
@@ -262,7 +278,6 @@ export default {
         this.curAmountDecimals = await this.ERC20.decimals();
         console.log(allowance, "allowance");
         this.allowance = allowance;
-        console.log("approve success");
       } catch (error) {
         console.log(error);
         // if locked wallet  throw Error account, need get account
@@ -277,20 +292,17 @@ export default {
           this.landRechargeAddr,
           uint256Max
         );
-        console.log("gas", gas);
+        // console.log("gas", gas);
         let gasPrice = await this.ERC20.provider.getGasPrice();
         const tx = await this.ERC20.approve(this.landRechargeAddr, uint256Max, {
           gasLimit: gas.mul(15).div(10),
           gasPrice: gasPrice.mul(12).div(10),
         });
-        console.log("tx", tx);
+        // console.log("tx", tx);
         const receipt = await tx.wait();
         console.log(receipt);
       } catch (error) {
-        console.log(error);
-        if (/unknown account/.test(error.message)) {
-          this.getAccount();
-        }
+        this.onErr(error);
       }
       this.approving = false;
       this.checkApproved();
@@ -315,7 +327,6 @@ export default {
       this.landAmount = val;
     },
     onEverpay(item) {
-      console.log(item);
       this.everpayPayInfo = item;
     },
     async handleEverpayPayment() {
@@ -353,10 +364,52 @@ export default {
       this.$alert("Recharge success!!");
       this.$refs.everpay.initEverPay();
     },
+    onErr(err, retry) {
+      if (!err) return console.log("---- err null");
+      console.log(err);
+      if (/unknown account/.test(err.message)) {
+        return this.getAccount();
+      }
+      const { data } = err;
+      let msg = err.message;
+      if (data) {
+        msg = data.message || msg;
+      }
+      if (/repriced/i.test(msg) && /replaced/i.test(msg)) {
+        return this.$toast("Transaction was replaced.");
+      }
+      window.gtag("event", "contract_error", {
+        message: msg,
+      });
+      if (/missing revert data/i.test(msg)) {
+        msg = "Network Error";
+      } else if (/user rejected/i.test(msg)) {
+        msg = "Your transaction has been canceled.";
+      } else if (/transaction failed/i.test(msg)) {
+        msg = "Transaction Failed";
+      } else if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
+        msg = "IPFS Storage Expired, extending service duration is required.";
+      } else if (/exceeds balance/i.test(msg) || msg == "overflow") {
+        msg = "Insufficient balance in your wallet.";
+      } else if (msg.length > 100) {
+        const mat = /^(.+)\[/.exec(msg);
+        if (mat) msg = mat[1];
+      }
+      if (/already pending for origin/gi.test(msg)) {
+        msg = "Wrong network, please switch your wallet network and try again.";
+      }
+      if (retry) {
+        return this.$confirm(msg, "Network Error", {
+          confirmText: "Retry",
+        });
+      }
+      return this.$alert(msg, "Error");
+    },
   },
   watch: {
     landAmount() {
       this.landAmount = this.landAmount.replace(/[^\d]/g, "");
+
       if (this.landAmount) {
         this.usdcAmount = BigNumber.from(this.landAmount);
       } else {
@@ -369,8 +422,9 @@ export default {
 
 <style lang="scss" scoped>
 .deposite-container {
-  height: 100%;
-  // min-height: 100%;
+  // height: 100%;
+  min-height: 100%;
+
   align-items: stretch;
 }
 .deposite-control {
@@ -401,12 +455,12 @@ export default {
 }
 
 .deposite-content {
-  height: 100%;
+  // height: 100%;
   border-radius: 8px;
   border: 1px solid #cbd5e1;
   background: #fff;
   .purchase-plate {
-    padding: 24px 16px;
+    padding: 18px 16px;
     border-bottom: 1px solid #cbd5e1;
   }
 }
@@ -442,7 +496,27 @@ export default {
       }
       .confirm-btn.disabled {
         color: #fff;
-        background: #ccc;
+        background: #e2e8f0;
+      }
+      .confirm-tip {
+        width: 336px;
+        padding: 8px;
+        font-size: 12px;
+        font-weight: normal;
+        top: -65px;
+        right: 0;
+        border-radius: 4px;
+        background: #d8c8ec;
+        color: #735ea1;
+      }
+      .confirm-tip::after {
+        display: block;
+        content: "";
+        position: absolute;
+        right: 30%;
+        bottom: -20px;
+        border: 10px solid transparent;
+        border-top-color: #d8c8ec;
       }
     }
   }

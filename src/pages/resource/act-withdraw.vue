@@ -36,9 +36,9 @@
         style="max-width: 500px"
       ></v-text-field>
     </e-kv2>
-    <e-kv2 class="mt-7" label="Network">
+    <!-- <e-kv2 class="mt-7" label="Network">
       <pay-network :allow="['Polygon']" />
-    </e-kv2>
+    </e-kv2> -->
     <div class="mt-8 fz-14 gray">
       <p class="mt-2">
         <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon>
@@ -61,7 +61,8 @@
 import PayNetwork from "@/views/pay/pay-network";
 import PayConfirm from "@/views/pay/pay-confirm";
 import mixin from "@/views/pay/mixin";
-import axios from "axios";
+import { providers } from "ethers"; //, utils
+import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
 
 export default {
   mixins: [mixin],
@@ -128,14 +129,10 @@ export default {
       }
       if (msg) return this.$alert(msg);
       try {
-        if (!this.isPolygon) {
-          return this.switchPolygon();
-        }
-        if (!this.curContract) {
-          this.needSubmit = true;
-          this.showConnect();
-          return;
-        }
+        await this.switchNet(this.$inDev ? 80001 : 137);
+        const provider = new providers.Web3Provider(this.walletObj);
+        polygonContract.setProvider(provider);
+        this.curContract = polygonContract;
         // if (this.maxNum == 0) throw new Error(tip1);
         this.$loading();
         const { data } = await this.$http.post("$v3/bill/generate/order", {
@@ -162,7 +159,7 @@ export default {
         await this.onWithdraw(params);
         this.$loading.close();
         await this.$alert("Your withdrawal was successful.");
-        this.$navTo("/resource");
+        this.$navTo("/resource/bills");
       } catch (error) {
         this.onErr(error);
       }
@@ -226,7 +223,7 @@ export default {
     },
   },
   components: {
-    PayNetwork,
+    // PayNetwork,
     PayConfirm,
   },
 };

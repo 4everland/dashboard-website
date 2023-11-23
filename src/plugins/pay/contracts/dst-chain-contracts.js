@@ -46,7 +46,7 @@ class DstChainContracts extends Contracts {
     return Governance__factory.connect(MumbaiGovernance, this.signer);
   }
 
-  get USDC() {
+  get MumbaiUSDC() {
     return IERC20__factory.connect(MumbaiUSDC, this.signer);
   }
 

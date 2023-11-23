@@ -30,6 +30,7 @@ export default [
     meta: {
       title: "Deposite",
       isTab: 1,
+      newLayout: true,
       links: [
         {
           text: "Billing",

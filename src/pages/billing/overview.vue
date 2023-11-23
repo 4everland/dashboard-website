@@ -7,7 +7,7 @@
       <img src="/img/svg/new-billing/notice.svg" width="24" alt="" />
       <span class="ml-2 cursor-p" @click="$router.push('/billing/withdraw')">
         The Resource center fully upgraded. If you need to withdraw USDC, please
-        click here. After January 1, 2023, any remaining assets that have not
+        click here. After February 28,2024, any remaining assets that have not
         been withdrawn will automatically convert to LAND.
       </span>
       <img
@@ -27,13 +27,17 @@
         :md="4"
         cols="12"
         class="plan-level py-8 px-4 h-flex al-c space-btw"
+        :class="onChain ? 'on-chain' : ''"
       >
         <div class="al-c space-btw" style="width: 100%">
           <div class="al-c">
             <img src="/img/svg/new-billing/manage.svg" width="24" alt="" />
             <span class="fw-b ml-1">Manage Sub</span>
           </div>
-          <div class="level-tag cursor-p fz-14 fw-b py-2 px-3">
+          <div
+            class="level-tag cursor-p fz-14 fw-b py-2 px-3"
+            :class="onChain ? 'on-chain' : ''"
+          >
             {{ onChain ? "Standard" : "Trial" }}
           </div>
         </div>
@@ -46,16 +50,20 @@
               alt=""
             />
             <span class="ml-1">Upcoming resource allocation:</span>
-            <span class="fw-b variable ml-2">{{
-              efficientAt ? new Date(efficientAt).format("date") : "--"
-            }}</span>
+            <span
+              class="fw-b variable ml-2"
+              :class="onChain ? 'on-chain' : ''"
+              >{{ efficientDate }}</span
+            >
           </p>
           <p class="mb-0 fz-12 al-c mt-1">
             <img src="/img/svg/new-billing/validity.svg" width="16" alt="" />
             <span class="ml-1">Validity:</span>
-            <span class="fw-b variable ml-2">{{
-              invalidAt ? new Date(invalidAt).format("date") : "--"
-            }}</span>
+            <span
+              class="fw-b variable ml-2"
+              :class="onChain ? 'on-chain' : ''"
+              >{{ onChain ? "Permanent" : invalidDate }}</span
+            >
           </p>
         </div>
       </v-col>
@@ -98,7 +106,7 @@
       <v-col :md="4" cols="12" style="padding: 0">
         <div class="py-6 px-4 h-flex al-c">
           <h4 class="fz-16">LAND Balance</h4>
-          <div class="my-6 al-c">
+          <div class="my-6">
             <img src="/img/svg/new-billing/land-icon.svg" width="24" alt="" />
             <span class="balance fw-b ml-2">{{ balance.land }}</span>
             <span class="fz-12 ml-2">{{ balance.unit }}</span>
@@ -129,7 +137,7 @@
       <v-col :md="4" cols="12" style="padding: 0">
         <div class="py-6 px-4 h-flex al-c">
           <h4 class="fz-14">Build Minutes</h4>
-          <div class="my-6 al-c">
+          <div class="my-6">
             <span class="balance fw-b">{{ buildMin.size }}</span>
             <span class="fz-12 ml-2">{{ buildMin.unit }}</span>
           </div>
@@ -140,7 +148,7 @@
         </div>
         <div class="py-6 px-4 h-flex al-c rpc-section">
           <h4 class="fz-14">Web3 RPC</h4>
-          <div class="my-6 al-c">
+          <div class="my-6">
             <span class="balance fw-b">{{ rpcRequest.size }}</span>
             <span class="fz-12 ml-2">{{ rpcRequest.unit }}</span>
           </div>
@@ -235,6 +243,15 @@ export default {
     ...mapState({
       onChain: (s) => s.onChain,
     }),
+
+    efficientDate() {
+      return this.efficientAt
+        ? new Date(this.efficientAt).format("date")
+        : "--";
+    },
+    invalidDate() {
+      return this.invalidAt ? new Date(this.invalidAt).format("date") : "--";
+    },
   },
   created() {
     this.$store.dispatch("getBalance");
@@ -532,13 +549,15 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  background: #f3e8ff;
+  background: #e2e8f0;
   border-radius: 8px 0 0 8px;
-
   .level-tag {
     color: #fff;
     line-height: 16px; /* 114.286% */
-    border-radius: 6px;
+    border-radius: 4px;
+    background: #94a3b8;
+  }
+  .level-tag.on-chain {
     background: linear-gradient(
         307deg,
         rgba(151, 71, 255, 0.8) 37.75%,
@@ -546,15 +565,22 @@ export default {
       ),
       #735ea1;
   }
+  .variable {
+    color: #0f172a;
+  }
+  .variable.on-chain {
+    color: #775da6;
+  }
+}
+
+.plan-level.on-chain {
+  background: #f3e8ff;
 }
 .resource-col {
   height: 100%;
   padding: 12px 6px;
 }
 
-.variable {
-  color: #775da6;
-}
 .balance {
   color: #0f172a;
   font-family: "DIN Alternate";

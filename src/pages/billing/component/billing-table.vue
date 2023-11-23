@@ -11,12 +11,13 @@ export default {};
 <style lang="scss" scoped>
 .monthly-billing-table {
   :deep table {
-    border-spacing: 0 16px !important;
+    border-spacing: 0 12px !important;
   }
 
   :deep th {
     border: none !important;
     font-size: 14px !important;
+    color: #64748b !important;
   }
   :deep tr:hover {
     background: #f3e8ff !important;

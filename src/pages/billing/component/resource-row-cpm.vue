@@ -1,9 +1,9 @@
 <template>
-  <div style="width: 48%">
+  <div class="resource-row-cpm mb-1">
     <h3 class="fz-16 mt-1" v-show="name != 'IPFS Storage Days'">
       {{ name }}
     </h3>
-    <div class="al-c mt-3">
+    <div class="al-c mt-2">
       <div
         v-for="(item, index) in tags"
         :key="index"
@@ -14,12 +14,12 @@
         {{ item.text }}
       </div>
       <div
-        class="select-content al-c ml-2"
+        class="select-content justify-center al-c ml-2"
         :class="curIndex == -1 ? 'active' : ''"
       >
         <input
           type="text"
-          class="fz-12 ta-c resource-input"
+          class="fz-12 ta-c resource-input flex-1"
           @input="handleInput"
           v-model="value"
         />
@@ -37,7 +37,7 @@
             @change="handleChangeUnit"
             class="cursor-p"
             :id="'select_' + name"
-            autofocus="true"
+            v-model="selected"
           >
             <option
               class="fz-14"
@@ -48,15 +48,6 @@
               {{ it.text }}
             </option>
           </select>
-
-          <label class="cursor-p" :for="'select_' + name">
-            <img
-              width="8"
-              style="margin-left: 2px"
-              src="/img/svg/new-billing/down-arrow.svg"
-              alt=""
-            />
-          </label>
         </div>
         <span class="fz-12" v-else>{{ items[0].text }}</span>
       </div>
@@ -102,6 +93,7 @@ export default {
       },
     },
     unit: {
+      type: Number,
       default: Math.pow(1024, 3),
     },
   },
@@ -137,6 +129,7 @@ export default {
     },
     handleChangeUnit(e) {
       this.selected = e.target.value;
+      this.handleInput();
     },
   },
   watch: {
@@ -150,6 +143,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.resource-row-cpm {
+  width: 48%;
+  min-width: 300px;
+}
 .select-content {
   flex: 1;
   width: 92px;

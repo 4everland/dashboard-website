@@ -4,7 +4,7 @@
       <div class="al-c justify-center pa-2" style="background: #fff">
         <img width="16" :src="curResource.img" alt="" />
       </div>
-      <span class="ml-4 fw-b">{{ curResource.name }}</span>
+      <span class="ml-2 fw-b">{{ curResource.name }}</span>
     </div>
 
     <div>
@@ -22,7 +22,7 @@
         <div class="land-to-resource fz-12" v-if="showTransform">
           <span>+{{ transformDate.transformVal }}</span>
           <span>
-            {{ view.type == "IPFS_STORAGE" ? "(1month)" : "" }}
+            {{ view.type == "IPFS_STORAGE" ? "* 1 mth" : "" }}
           </span>
         </div>
       </div>
@@ -63,7 +63,7 @@ export default {
         case "IPFS_STORAGE":
           return {
             name: "IPFS",
-            img: "/img/svg/hosting/h-ipfs.svg",
+            img: "/img/svg/overview/ipfs-icon.svg",
             ...obj,
           };
         case "AR_STORAGE":
@@ -81,7 +81,7 @@ export default {
         case "BUILD_TIME":
           return {
             name: "Build Minutes",
-            img: "/img/svg/overview/rpc.svg",
+            img: "/img/svg/overview/buildtime.svg",
             total: this.$utils.getNumCount(this.view.total) + "Mins",
             used: {
               num: this.$utils.getNumCount(this.view.used, true).num,
@@ -91,7 +91,7 @@ export default {
         case "COMPUTE_UNIT":
           return {
             name: "RPC Requests",
-            img: "/img/svg/overview/buildtime.svg",
+            img: "/img/svg/overview/rpc.svg",
             total: this.$utils.getNumCount(this.view.total) + "CUs",
             used: {
               num: this.$utils.getNumCount(this.view.used, true).num,

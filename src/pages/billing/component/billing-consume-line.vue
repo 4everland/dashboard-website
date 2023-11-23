@@ -52,7 +52,7 @@ export default {
             "Arweave",
             "Band Width",
             "Build Minutes",
-            "Rpc Requests",
+            "RPC Requests",
           ],
         },
         grid: {
@@ -154,7 +154,7 @@ export default {
             data: this.BUILD_TIME,
           },
           {
-            name: "Rpc Requests",
+            name: "RPC Requests",
             type: "line",
             stack: "Total",
 

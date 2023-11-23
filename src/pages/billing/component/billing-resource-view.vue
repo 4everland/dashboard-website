@@ -4,7 +4,7 @@
       <div class="al-c justify-center pa-2" style="background: #fff">
         <img width="16" :src="curResource.img" alt="" />
       </div>
-      <span class="fz-14 ml-3">{{ curResource.name }}</span>
+      <span class="fz-14 ml-2">{{ curResource.name }}</span>
     </div>
     <div>
       <div class="used-resource al-c">
@@ -53,7 +53,7 @@ export default {
         case "IPFS_STORAGE":
           return {
             name: "IPFS",
-            img: "/img/svg/hosting/h-ipfs.svg",
+            img: "/img/svg/overview/ipfs-icon.svg",
             ...info,
           };
         case "AR_STORAGE":

@@ -54,6 +54,14 @@
             <span class="fz-14 message">{{ item.message }}</span>
           </div>
         </template>
+        <template v-if="item.type == 'POPUP'">
+          <div
+            class="notice-content cursor-p al-c"
+            @click="handlePopup(item.url)"
+          >
+            <span class="fz-14 message">{{ item.message }}</span>
+          </div>
+        </template>
       </v-carousel-item>
     </v-carousel>
     <v-icon size="20" color="#ff994e" @click="handleCloseNotice"
@@ -153,6 +161,12 @@ export default {
         // this.noticeList = this.noticeList.filter((it) => it.id != id);
       } catch (error) {
         this.getList();
+      }
+    },
+
+    handlePopup(type) {
+      if (type == "claim") {
+        bus.$emit("showDialog");
       }
     },
   },

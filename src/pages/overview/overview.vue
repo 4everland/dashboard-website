@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div v-if="!teamInfo.isMember">
+      <overview-notice class="mb-4" />
+    </div>
     <div class="user-plate d-flex flex-column flex-md-row space-btw mb-6">
       <div class="left flex-2 mr-6">
         <div class="header">
@@ -21,18 +24,16 @@
           <div class="space-btw al-end d-flex flex-wrap" style="height: 100%">
             <div>
               <div>
-                <div class="al-c">
-                  <div class="fz-20 fw-b" style="margin-right: 2px">LAND</div>
+                <div>
+                  <span class="fz-20 fw-b" style="margin-right: 2px">LAND</span>
                   <img
                     width="16"
                     class="cursor-p"
                     src="/img/svg/overview/landfile.svg"
                     alt=""
                   />
-                  <div class="al-c ml-4">
-                    <span class="balance fw-b">{{ balance.land }}</span>
-                    <span class="fz-12 ml-2">{{ balance.unit }}</span>
-                  </div>
+                  <span class="balance fw-b ml-4">{{ balance.land }}</span>
+                  <span class="fz-12 ml-2">{{ balance.unit }}</span>
                 </div>
                 <div class="fz-14 tips mt-1">≈{{ balanceToUSD }}USD</div>
               </div>
@@ -52,21 +53,25 @@
                 >
                   Conversion
                 </div>
-                <v-tooltip top>
+                <v-tooltip top max-width="300" nudge-top="5">
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon class="ml-1" size="18" v-bind="attrs" v-on="on"
                       >mdi-alert-circle-outline</v-icon
                     >
                   </template>
-                  <span
-                    >Conversion will convert LAND into various resources at the
-                    full amount, for reference purposes only</span
-                  >
+                  <div style="line-height: normal" class="py-2">
+                    Conversion will convert LAND into various resources at the
+                    full amount, for reference purposes only
+                  </div>
                 </v-tooltip>
               </div>
             </div>
 
-            <half-pie style="50%" :curInfo="landUsedMonthly"></half-pie>
+            <half-pie
+              style="50%"
+              :curInfo="landUsedMonthly"
+              :showName="true"
+            ></half-pie>
           </div>
         </div>
       </div>
@@ -158,13 +163,14 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import { bus } from "@/utils/bus";
-
+import mixin from "@/pages/more/mixin-register";
 import resourceView from "./component/resource-view.vue";
 import trendsLine from "./component/trends-line.vue";
 import halfPie from "../billing/component/half-pie.vue";
 import { formatEther } from "ethers/lib/utils";
 
 export default {
+  mixins: [mixin],
   components: {
     halfPie,
     resourceView,
@@ -187,6 +193,7 @@ export default {
     this.$store.dispatch("getPrice");
     this.getUserResource();
     this.getLandUsedMonthly();
+    this.isRegister();
   },
 
   mounted() {
@@ -249,10 +256,13 @@ export default {
             };
           }
           if (it.resourceType == "IPFS_STORAGE") {
-            used = Number(data.totalIpfsStorage);
+            used =
+              Number(data.totalIpfsStorage) +
+              Number(data.realTimeItems[i].size);
           }
           if (it.resourceType == "AR_STORAGE") {
-            used = Number(data.totalArStorage);
+            used =
+              Number(data.totalArStorage) + Number(data.realTimeItems[i].size);
           }
 
           return {
@@ -383,14 +393,14 @@ export default {
   }
   .left {
     .header {
-      padding: 24px;
+      padding: 16px 24px;
       border-bottom: 1px solid #cbd5e1;
       .tips {
         color: #64748b;
       }
     }
     .body {
-      padding: 24px;
+      padding: 16px 24px 24px;
       .balance {
         color: #0f172a;
         font-family: "DIN Alternate";
@@ -459,5 +469,20 @@ export default {
 .trends-plate {
   border-radius: 8px;
   background: #fff;
+}
+
+.v-tooltip__content {
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 4px;
+}
+.v-tooltip__content::after {
+  display: block;
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -20px;
+  border: 10px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
 }
 </style>

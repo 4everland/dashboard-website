@@ -16,7 +16,7 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in list" :key="item.index">
-          <td>{{ index }}</td>
+          <td>{{ index + 1 }}</td>
           <td>{{ new Date(item.timestamp * 1e3).format("date") }}</td>
           <td>{{ item.timeSection }}</td>
           <td>{{ $utils.formatLand(item.landUsed) }} LAND</td>
@@ -66,8 +66,8 @@ export default {
         );
         data.forEach((it) => {
           const time = new Date(it.timestamp * 1e3).getHours();
-          const preTime = new Date(it.timestamp * 1e3).getHours() - 1;
-          it.timeSection = preTime + ":00 - " + time + ":00";
+          const nextTime = new Date(it.timestamp * 1e3).getHours() + 1;
+          it.timeSection = time + ":00 - " + nextTime + ":00";
           const resourceTypeObj = {
             IPFS_STORAGE: "IPFS Storage",
             AR_STORAGE: "Arweave",

@@ -80,7 +80,7 @@
               :style="{
                 background: onChain ? '#775da6' : '#dbdbdb',
               }"
-              @click="$router.push('/resource/bills/?typeIdx=2')"
+              @click="$router.push('/billing/records?tab=Purchase History')"
             >
               <span class="fz-14"> {{ onChain ? "Standard" : "Trial" }}</span>
               <v-icon class="ml-3" size="16" color="#fff"
@@ -105,8 +105,8 @@
           </div>
           <div class="gray fz-14 mt-3">Equity:</div>
           <ul class="gray fz-14 pl-3">
-            <li>1 GB IPFS storage</li>
-            <li>20 MB Arweave storage</li>
+            <li>5 GB IPFS storage</li>
+            <li>10 MB Arweave storage</li>
             <li>10 GB bandwidth</li>
             <li>100 build minutes</li>
           </ul>
@@ -140,7 +140,7 @@
             <div class="ml-5">
               <div class="gray fz-14 mt-3">Equity:</div>
               <ul class="gray fz-14 pl-3">
-                <li>5 GB IPFS storage</li>
+                <li>6 GB IPFS storage</li>
                 <li>100 MB Arweave storage</li>
                 <li>100 GB bandwidth</li>
                 <li>250 build minutes</li>

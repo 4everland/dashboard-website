@@ -63,7 +63,7 @@ export default {
 <style lang="scss" scoped>
 .active-tab {
   background: #fff;
-  border-radius: 4px;
+  font-weight: bold;
 }
 .tabs-cpm {
   height: 48px;

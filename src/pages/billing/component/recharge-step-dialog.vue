@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="showDialog" persistent max-width="500">
     <div class="pa-6">
-      <h3 class="fz-16 mb-0">Purchasing resources</h3>
+      <h3 class="fz-16 mb-0">Purchasing LAND</h3>
       <v-stepper v-model="step" vertical :elevation="0">
         <v-stepper-step :complete="step > 1" step="1">
           <h3 class="fz-16">Approve</h3>
@@ -39,12 +39,13 @@
           >
         </v-stepper-content>
         <v-stepper-step :complete="step > 3" step="3">
-          <h3 class="fz-16">Wait for the resources to be credited.</h3>
+          <h3 class="fz-16">Wait for the LAND to be credited.</h3>
         </v-stepper-step>
       </v-stepper>
-      <div class="tips my-6 fz-12 pa-2" v-if="step < 3">
+      <div class="tips my-6 fz-12 pa-2" v-if="step > 3">
         A transaction has been generated, please check
         <span
+          style="text-decoration: underline"
           class="cursor-p"
           @click="$router.push('/billing/records?tab=Purchase History')"
           >here</span
@@ -57,7 +58,9 @@
         steps, as it may result in a failed purchase.
       </div>
 
-      <div class="ta-r cursor-p" @click="handleClose">Close</div>
+      <div class="ta-r cursor-p" @click="handleClose">
+        {{ step > 3 ? "Done" : "Cancel" }}
+      </div>
     </div>
   </v-dialog>
 </template>

@@ -124,7 +124,6 @@
                 :close-on-content-click="false"
                 left
                 open-on-hover
-                nudge-top="8"
                 @input="
                   (val) => {
                     menuOpen = val;
@@ -256,7 +255,6 @@ export default {
       showDialog: false,
       firstRechargeDialog: false,
       accountExists: false,
-      registerInfo: {},
       claimList: [
         {
           name: "Polygon",
@@ -316,7 +314,7 @@ export default {
   async created() {
     await this.getCurrentContract();
     if (localStorage.token) {
-      this.getHandler();
+      this.$store.dispatch("checkOnChain");
       this.handleCheckFirstCharge();
     }
     bus.$on("showDialog", () => {
@@ -369,19 +367,6 @@ export default {
       }
     },
 
-    async getHandler() {
-      try {
-        const { data } = await this.$http.get(
-          "$auth/self-handled-register-apply"
-        );
-        this.registerInfo = data;
-        this.$setState({
-          onChain: data.handled,
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async handleCheckFirstCharge() {
       try {
         const { data } = await this.$http.get(
@@ -477,6 +462,7 @@ export default {
     color: #64748b;
     border-radius: 8px;
     border: 1px solid #cbd5e1;
+    background: #fff;
   }
   .deposite-now-btn {
     color: #fff;
@@ -495,6 +481,7 @@ export default {
       color: #735ea1;
     }
     .mint-description {
+      line-height: normal;
       color: #64748b;
     }
   }

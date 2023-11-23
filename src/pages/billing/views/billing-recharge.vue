@@ -14,7 +14,7 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in list" :key="item.index">
-          <td>{{ index }}</td>
+          <td>{{ index + 1 }}</td>
           <td>{{ item.network }}</td>
           <td>{{ item.landAmount }}</td>
           <td>{{ item.amount }} {{ item.coinType }}</td>
@@ -171,5 +171,9 @@ export default {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+.text-left {
+  color: red;
 }
 </style>

@@ -1,10 +1,21 @@
 <template>
   <div class="pos-r al-c" style="width: 328px">
     <div id="pie"></div>
-    <div class="pos-a data ta-c">
+    <!-- <div class="pos-a data ta-c">
       <div class="fz-14 gray">LAND</div>
       <div>
         {{ showLandConsume }}
+      </div>
+    </div> -->
+
+    <div class="pos-a data ta-c">
+      <div v-if="showName" class="data-title">Consumption for this month</div>
+
+      <div v-else>
+        <div class="fz-14 gray">LAND</div>
+        <div>
+          {{ showLandConsume }}
+        </div>
       </div>
     </div>
   </div>
@@ -29,6 +40,10 @@ export default {
           { value: 0, name: "RPC Requests" },
         ];
       },
+    },
+    showName: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -162,5 +177,14 @@ export default {
   bottom: 0%;
   font-family: "DIN Alternate";
   font-size: 28px;
+  .data-title {
+    color: #0f172a;
+    text-align: center;
+    font-family: SF Pro Text;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
 }
 </style>

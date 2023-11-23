@@ -12,7 +12,7 @@
           class="pt-0"
           style="height: 100%; box-sizing: border-box"
         >
-          <v-tab-item class="px-4" style="height: 100%">
+          <v-tab-item class="px-4 pt-4 pb-4" style="height: 100%">
             <div class="table-header d-flex">
               <div class="text-left flex-1"></div>
               <div class="text-left flex-1">Unit Price</div>
@@ -25,8 +25,20 @@
                 class="flex-1 d-flex fz-14 table-body-item"
               >
                 <div class="flex-1 pa-4 fw-b">{{ item.resourceName }}</div>
-                <div class="flex-1 pa-4">{{ item.unitPrice }}</div>
-                <div class="flex-1 pa-4">{{ item.value }}</div>
+                <div class="flex-1 pa-4">
+                  {{ item.unitPrice }} {{ item.unit }}
+                </div>
+                <div class="flex-1 pa-4">
+                  <span>
+                    {{
+                      ((inputVal * 1e6) / item.unitPrice).toFixed(
+                        item.resourceName == "RPC Requests" ? 0 : 2
+                      )
+                    }}</span
+                  >
+
+                  {{ item.expectedUnit }}
+                </div>
               </div>
             </div>
           </v-tab-item>
@@ -34,7 +46,7 @@
             <div class="h-flex space-btw" style="height: 100%">
               <div
                 class="pa-4 d-flex flex-wrap al-end"
-                style="overflow: auto; gap: 10px"
+                style="overflow: auto; gap: 0 10px"
               >
                 <resource-row-cpm
                   v-for="item in resourceTagsConfig"
@@ -47,7 +59,7 @@
                 ></resource-row-cpm>
               </div>
 
-              <div class="price-calculator pa-4 al-c space-btw">
+              <div class="price-calculator al-c space-btw">
                 <div>
                   <div class="fw-b">Estimated requirement:</div>
                   <div>
@@ -74,56 +86,35 @@ import { BigNumber } from "ethers";
 import { mapState } from "vuex";
 import billingTabs from "./billing-tabs.vue";
 import resourceRowCpm from "./resource-row-cpm.vue";
-import { parseEther } from "ethers/lib/utils";
+import { formatEther, parseEther } from "ethers/lib/utils";
 export default {
   components: {
     billingTabs,
     resourceRowCpm,
   },
+  props: {
+    inputVal: {
+      default: 0,
+    },
+  },
   data() {
     return {
-      tabs: ["Resource", "calculator"],
-      resourcePriceList: [
-        {
-          resourceName: "IPFS Storage",
-          unitPrice: "2000 MD/1000 LAND",
-          value: "2500000 MD",
-        },
-        {
-          resourceName: "Arweave",
-          unitPrice: "1 GB/1000 LAND",
-          value: "300 GB",
-        },
-        {
-          resourceName: "BindWidth",
-          unitPrice: "20 GB/1000 LAND",
-          value: "502 GB",
-        },
-        {
-          resourceName: "Build Minutes",
-          unitPrice: "500 Mins/1000 LAND",
-          value: "500000 Mins",
-        },
-        {
-          resourceName: "RPC Requests",
-          unitPrice: "5 CUs/LAND",
-          value: "500000 CUs",
-        },
-      ],
+      tabs: ["Resource", "Calculator"],
+
       resourceTagsConfig: [
         {
           name: "IPFS Storage",
           tags: [
             {
-              text: "30GB",
+              text: "30 GB",
               value: 30 * Math.pow(1024, 3),
             },
             {
-              text: "80GB",
+              text: "80 GB",
               value: 80 * Math.pow(1024, 3),
             },
             {
-              text: "500GB",
+              text: "500 GB",
               value: 500 * Math.pow(1024, 3),
             },
           ],
@@ -144,15 +135,15 @@ export default {
           name: "IPFS Storage Days",
           tags: [
             {
-              text: "180Days",
+              text: "180 Days",
               value: 180 * 86400,
             },
             {
-              text: "365Days",
+              text: "365 Days",
               value: 365 * 86400,
             },
             {
-              text: "1096Days",
+              text: "1096 Days",
               value: 1096 * 86400,
             },
           ],
@@ -163,15 +154,15 @@ export default {
           name: "Arweave",
           tags: [
             {
-              text: "500MB",
+              text: "500 MB",
               value: 500 * Math.pow(1024, 2),
             },
             {
-              text: "30GB",
+              text: "30 GB",
               value: 30 * Math.pow(1024, 3),
             },
             {
-              text: "100GB",
+              text: "100 GB",
               value: 100 * Math.pow(1024, 3),
             },
           ],
@@ -192,15 +183,15 @@ export default {
           name: "BindWidth",
           tags: [
             {
-              text: "500MB",
+              text: "500 MB",
               value: 500 * Math.pow(1024, 2),
             },
             {
-              text: "30GB",
+              text: "30 GB",
               value: 30 * Math.pow(1024, 3),
             },
             {
-              text: "100GB",
+              text: "100 GB",
               value: 100 * Math.pow(1024, 3),
             },
           ],
@@ -233,6 +224,28 @@ export default {
           unit: 60,
           items: [{ text: "Mins" }],
         },
+        {
+          name: "RPC Request",
+          tags: [
+            { text: "10K CUs", value: 1e4 },
+            {
+              text: "500K CUs",
+              value: 5e5,
+            },
+            {
+              text: "1M CUs",
+              value: 1e6,
+            },
+          ],
+          unit: 1e3,
+          items: [
+            {
+              text: "K CUs",
+              value: 1e3,
+            },
+            { text: "M Cus", value: 1e6 },
+          ],
+        },
       ],
       ipfsPrice: BigNumber.from("0"),
       arPrice: BigNumber.from("0"),
@@ -240,6 +253,7 @@ export default {
       buildMinPrice: BigNumber.from("0"),
       recordIpfsSize: BigNumber.from("0"),
       recordIpfsSeconds: BigNumber.from("0"),
+      rpcPrice: BigNumber.from("0"),
     };
   },
   computed: {
@@ -255,8 +269,57 @@ export default {
       return this.ipfsPrice
         .add(this.arPrice)
         .add(this.bandwidthPrice)
+        .add(this.rpcPrice)
         .add(this.buildMinPrice)
         .div(parseEther("1"));
+    },
+
+    resourcePriceList() {
+      return [
+        {
+          resourceName: "IPFS Storage",
+          unitPrice: Math.round(
+            Number(
+              formatEther(
+                this.ipfsUnitPrice.mul(1024 * 1024 * 1024 * 86400 * 30)
+              )
+            )
+          ),
+          unit: "LAND/GB/Month",
+          expectedUnit: "GB * Month",
+        },
+        {
+          resourceName: "Arweave",
+          unitPrice: Math.round(
+            Number(formatEther(this.arUnitPrice.mul(1024 * 1024 * 1024)))
+          ),
+          unit: "LAND/GB",
+          expectedUnit: "GB",
+        },
+        {
+          resourceName: "BindWidth",
+          // unitPrice: "20 GB/1000 LAND",
+          unitPrice: Math.round(
+            Number(formatEther(this.bandwidthUnitPrice.mul(1024 * 1024 * 1024)))
+          ),
+          unit: "LAND/GB",
+          expectedUnit: "GB",
+        },
+        {
+          resourceName: "Build Minutes",
+          unitPrice: Math.round(
+            Number(formatEther(this.buildMinUnitPrice.mul(60)))
+          ),
+          unit: "LAND/Minutes",
+          expectedUnit: "Minutes",
+        },
+        {
+          resourceName: "RPC Requests",
+          unitPrice: Number(formatEther(this.rpcUnitPrice)),
+          unit: "LAND/CU",
+          expectedUnit: "CUs",
+        },
+      ];
     },
   },
   created() {
@@ -293,10 +356,15 @@ export default {
             this.buildMinUnitPrice
           );
           break;
+        case "RPC Request":
+          this.rpcPrice = BigNumber.from(payload.value.toString()).mul(
+            this.rpcUnitPrice
+          );
+          break;
         default:
           break;
       }
-      console.log(payload);
+      // console.log(payload);
     },
 
     handleInputLand() {
@@ -339,6 +407,7 @@ export default {
   }
 }
 .price-calculator {
+  padding: 9px 16px;
   width: 100%;
   height: 88px;
   border-top: 1px solid #cbd5e1;
@@ -372,8 +441,5 @@ export default {
 }
 .table-body-item {
   border-bottom: 1px solid #cbd5e1;
-}
-.table-body-item:last-of-type {
-  border-bottom: none;
 }
 </style>
