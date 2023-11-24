@@ -2,15 +2,15 @@
   <div class="al-c">
     <div class="hours mr-2">
       <span class="d-ib label">{{ hours }}</span>
-      <span class="fz-14">Hours</span>
+      <span class="fz-14">hrs</span>
     </div>
     <div class="minutes mr-2">
       <span class="d-ib label">{{ minutes }}</span>
-      <span class="fz-14">Mins</span>
+      <span class="fz-14">mins</span>
     </div>
     <div class="seconds">
       <span class="d-ib label">{{ seconds }}</span>
-      <span class="fz-14">Sec</span>
+      <span class="fz-14">secs</span>
     </div>
   </div>
 </template>

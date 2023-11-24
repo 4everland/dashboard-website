@@ -20,7 +20,7 @@
             <time-count-down :endTimeStamp="endTime"></time-count-down>
           </div>
           <div class="fw-b">
-            Complete your frst deposit to unlock the following benefts.
+            Complete your First deposit to unlock the following benefts.
           </div>
           <div class="fz-14 task-hub-description">starting from $1</div>
 
@@ -220,8 +220,8 @@ export default {
           img: "/img/svg/new-user-activity/diamond.svg",
           title: this.isOverActivityTime ? "100Points" : "300 Points",
           description: this.isOverActivityTime
-            ? "Complete your frst deposit and receive 100 points!"
-            : "Limited-Time! Complete your first deposit before December 1st, and receive 300 points!",
+            ? "Complete your First deposit and receive 100 points!"
+            : "Limited-Time! Complete your First deposit before December 1st, and receive 300 points!",
         },
         {
           img: "/img/svg/new-user-activity/lock.svg",

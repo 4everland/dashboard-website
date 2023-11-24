@@ -75,11 +75,9 @@ export default {
   mounted() {
     this.myChart = echarts.init(document.getElementById(this.domId));
     this.myChart.setOption(this.options);
-    const fn = window.onresize;
-    window.onresize = () => {
-      fn();
+    window.addEventListener("resize", () => {
       this.myChart.resize();
-    };
+    });
   },
   watch: {
     dataOptions() {

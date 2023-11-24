@@ -67,6 +67,7 @@ import {
   ArbitrumDAI,
   zkSyncUSDC,
 } from "@/plugins/pay/contracts/contracts-addr";
+import { formatEther } from "ethers/lib/utils";
 
 const everPayDAI = "0x6b175474e89094c44da98b954eedeac495271d0f";
 const everPayUSDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
@@ -115,9 +116,8 @@ export default {
         );
         console.log(data);
         let list = data.items.map((it) => {
-          it.amount = BigNumber.from(it.amount)
-            .div((1e18).toString())
-            .toString();
+          it.amount = Number(formatEther(BigNumber.from(it.amount))).toFixed(2);
+
           it.landAmount = this.$utils.formatLand(it.landAmount);
           it.network = this.getChainType(it.network);
           let coinType = "USDC";
@@ -156,6 +156,10 @@ export default {
       if ([280, 324].includes(id)) return "zkSync";
       if ([9999999].includes(id)) return "everPay";
       if ([1, 11155111].includes(id)) return "Ethereum";
+      if ([99999991].includes(id))
+        return "Redeem Historical Remaining Resources";
+      if ([99999992].includes(id)) return " ";
+
       return "";
     },
   },

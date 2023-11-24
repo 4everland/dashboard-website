@@ -172,11 +172,10 @@ export default {
   mounted() {
     this.myChart = echarts.init(document.getElementById("main"));
     this.myChart.setOption({ ...this.baseOption, ...this.options });
-    const fn = window.onresize;
-    window.onresize = () => {
-      fn();
+
+    window.addEventListener("resize", () => {
       this.myChart.resize();
-    };
+    });
   },
   watch: {
     landUsedMonthly() {

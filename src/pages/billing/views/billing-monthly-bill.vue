@@ -1,6 +1,6 @@
 <template>
   <div class="billing-monthly-bill-container pos-r">
-    <div class="d-flex" v-if="JSON.stringify(list) !== '{}'">
+    <div class="d-flex" v-if="list.length">
       <billing-table class="flex-1">
         <thead>
           <tr>
@@ -11,11 +11,12 @@
         </thead>
         <tbody>
           <tr
-            v-for="(item, index) of list"
+            v-for="(item, index) in list"
             :key="index"
             @click="handleClick(index)"
+            :class="{ active: index == curIndex }"
           >
-            <td>{{ new Date(index * 1000).format("date") }}</td>
+            <td>{{ new Date(item.timestamp * 1000).format("date") }}</td>
             <td>{{ $utils.formatLand(item.landConumed) }}</td>
             <td>{{ item.formatU }}</td>
           </tr>
@@ -37,7 +38,7 @@
 import { BigNumber } from "ethers";
 import BillingMonthlyPie from "../component/billing-monthly-pie.vue";
 import BillingTable from "../component/billing-table.vue";
-import { formatUnits, parseEther } from "ethers/lib/utils";
+import { formatUnits } from "ethers/lib/utils";
 export default {
   components: {
     BillingMonthlyPie,
@@ -63,7 +64,6 @@ export default {
     handleClick(index) {
       this.curIndex = index;
     },
-
     async getList() {
       try {
         const { data } = await this.$http.get(
@@ -76,7 +76,6 @@ export default {
           }
         );
         let obj = {};
-
         data.forEach((it) => {
           if (!Object.prototype.hasOwnProperty.call(obj, it.timestamp)) {
             obj[it.timestamp] = {
@@ -97,11 +96,11 @@ export default {
             )
             .toString();
           obj[key].formatU =
-            formatUnits(parseEther(obj[key].landConumed), 24) + "U";
+            Number(
+              formatUnits(BigNumber.from(obj[key].landConumed), 24)
+            ).toFixed(2) + "U";
         }
-        this.list = obj;
-
-        console.log(this.list);
+        this.list = Object.values(obj);
       } catch (error) {
         console.log(error);
       }

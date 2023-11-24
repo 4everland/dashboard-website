@@ -10,7 +10,7 @@
       </div>
       <div class="d-flex f-center">
         <div style="max-width: 550px">
-          Complete your first deposit for LAND to unlock the dedicated gateway,
+          Complete your First deposit for LAND to unlock the dedicated gateway,
           starting from $1.
         </div>
       </div>

@@ -427,13 +427,7 @@ export default {
       } catch (error) {
         console.log("switch error 2", error);
         if (error.code !== 4902) {
-          this.onErr(error).then(() => {
-            // this.switchNet(id);
-            this.$setState({
-              payBy: null,
-            });
-            localStorage.payBy = "";
-          });
+          throw error;
         } else {
           this.addChain(chainId, id);
         }

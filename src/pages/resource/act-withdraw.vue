@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import PayNetwork from "@/views/pay/pay-network";
 import PayConfirm from "@/views/pay/pay-confirm";
 import mixin from "@/views/pay/mixin";
 import { providers } from "ethers"; //, utils
@@ -88,9 +87,6 @@ export default {
     connectAddr() {
       this.setAddr();
     },
-    address(val) {
-      console.log(val);
-    },
     amount(val) {
       if (val >= 0) {
         if (val > this.balance) this.amount = this.balance;
@@ -100,13 +96,13 @@ export default {
         this.amount = parseInt(val) || "";
       }
     },
-    curContract(val) {
-      console.log(val);
-      if (val && this.needSubmit) {
-        this.onSubmit();
-        this.needSubmit = false;
-      }
-    },
+    // curContract(val) {
+    //   console.log(val);
+    //   if (val && this.needSubmit) {
+    //     this.onSubmit();
+    //     this.needSubmit = false;
+    //   }
+    // },
   },
   methods: {
     setAddr() {
@@ -159,7 +155,7 @@ export default {
         await this.onWithdraw(params);
         this.$loading.close();
         await this.$alert("Your withdrawal was successful.");
-        this.$navTo("/resource/bills");
+        this.$navTo("/billing/bills");
       } catch (error) {
         this.onErr(error);
       }
@@ -187,8 +183,6 @@ export default {
           gasLimit: gasLimit.mul(15).div(10),
         });
       } else {
-        console.log("signed");
-        console.log(1111);
         const gasLimit = await this.curContract.FundPool.estimateGas.withdraw(
           ...params
         );
@@ -223,7 +217,6 @@ export default {
     },
   },
   components: {
-    // PayNetwork,
     PayConfirm,
   },
 };

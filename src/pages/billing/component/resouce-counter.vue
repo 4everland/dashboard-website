@@ -286,7 +286,7 @@ export default {
             )
           ),
           unit: "LAND/GB/Month",
-          expectedUnit: "GB * Month",
+          expectedUnit: "GB * 1 Month",
         },
         {
           resourceName: "Arweave",

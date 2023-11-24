@@ -72,8 +72,8 @@ export default {
           img: "/img/svg/pay/dai.svg",
         },
       ];
-      if (this.chainId == 280 || this.chainId == 324)
-        return coinList.filter((it) => it.label == "USDC");
+      // if (this.chainId == 280 || this.chainId == 324)
+      //   return coinList.filter((it) => it.label == "USDC");
 
       return coinList;
     },

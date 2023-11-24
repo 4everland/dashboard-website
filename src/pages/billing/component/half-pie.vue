@@ -1,16 +1,8 @@
 <template>
   <div class="pos-r al-c" style="width: 328px">
     <div id="pie"></div>
-    <!-- <div class="pos-a data ta-c">
-      <div class="fz-14 gray">LAND</div>
-      <div>
-        {{ showLandConsume }}
-      </div>
-    </div> -->
-
     <div class="pos-a data ta-c">
       <div v-if="showName" class="data-title">Consumption for this month</div>
-
       <div v-else>
         <div class="fz-14 gray">LAND</div>
         <div>
@@ -25,10 +17,6 @@
 import * as echarts from "echarts";
 export default {
   props: {
-    height: {
-      type: String,
-      default: "200px",
-    },
     curInfo: {
       type: Array,
       default: () => {
@@ -108,7 +96,7 @@ export default {
           {
             type: "pie",
             minAngle: 10,
-            radius: ["100%", "150%"],
+            radius: ["130%", "190%"],
             center: ["50%", "100%"],
             itemStyle: {
               borderRadius: "2px",
@@ -150,11 +138,9 @@ export default {
   mounted() {
     this.myChart = echarts.init(document.getElementById("pie"));
     this.myChart.setOption(this.options);
-    const fn = window.onresize;
-    window.onresize = () => {
-      fn();
+    window.addEventListener("resize", () => {
       this.myChart.resize();
-    };
+    });
   },
   watch: {
     landConsume() {
@@ -168,8 +154,7 @@ export default {
 #pie {
   width: 100%;
   height: 100%;
-  min-height: 200px;
-  transform: rotateX("-30deg");
+  min-height: 160px;
 }
 .data {
   left: 50%;
@@ -180,7 +165,7 @@ export default {
   .data-title {
     color: #0f172a;
     text-align: center;
-    font-family: SF Pro Text;
+    font-family: "SF Pro Text";
     font-size: 16px;
     font-style: normal;
     font-weight: 700;

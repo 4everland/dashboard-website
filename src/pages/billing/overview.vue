@@ -1,15 +1,17 @@
 <template>
   <div class="billing-container">
     <div
-      class="notice mb-6 fz-14 py-2 px-4 al-c fz-14"
+      class="notice mb-6 fz-14 py-2 px-4 al-c space-btw fz-14"
       v-show="showWithDrawNotice"
     >
-      <img src="/img/svg/new-billing/notice.svg" width="24" alt="" />
-      <span class="ml-2 cursor-p" @click="$router.push('/billing/withdraw')">
-        The Resource center fully upgraded. If you need to withdraw USDC, please
-        click here. After February 28,2024, any remaining assets that have not
-        been withdrawn will automatically convert to LAND.
-      </span>
+      <div class="al-c">
+        <img src="/img/svg/new-billing/notice.svg" width="24" alt="" />
+        <span class="ml-2 cursor-p" @click="$router.push('/billing/withdraw')">
+          The Resource center fully upgraded. If you need to withdraw USDC,
+          please click here. After February 28,2024, any remaining assets that
+          have not been withdrawn will automatically convert to LAND.
+        </span>
+      </div>
       <img
         width="24"
         class="cursor-p"
@@ -78,16 +80,6 @@
             <billing-resource-view :view="item"></billing-resource-view>
           </v-col>
         </v-row>
-
-        <!-- <div class="al-c space-btw px-6 py-4">
-          <div
-            class="resource-col flex-1"
-            v-for="item in resourceList"
-            :key="item.type"
-          >
-            <billing-resource-view :view="item"></billing-resource-view>
-          </div>
-        </div> -->
       </v-col>
     </v-row>
 
@@ -97,7 +89,7 @@
         class="fz-12 cursor-p al-c"
         @click="$router.push('/billing/records?tab=Monthly%20Bill')"
       >
-        <span>Transaction history</span>
+        <span>Billing History</span>
         <img src="/img/svg/new-billing/right-arrow.svg" width="16" alt="" />
       </div>
     </div>
@@ -142,7 +134,7 @@
             <span class="fz-12 ml-2">{{ buildMin.unit }}</span>
           </div>
           <div class="py-4 px-6 fz-14 data">
-            <span>Total builds:</span>
+            <span>Total builds: </span>
             <span>{{ buildCount }}</span>
           </div>
         </div>
@@ -153,7 +145,7 @@
             <span class="fz-12 ml-2">{{ rpcRequest.unit }}</span>
           </div>
           <div class="py-4 px-6 fz-14 data">
-            <span>Total instances:</span>
+            <span>Total instances: </span>
             <span>{{ rpcInstance }}</span>
           </div>
         </div>
@@ -331,7 +323,6 @@ export default {
             }, BigNumber.from("0"))
             .toString();
         }
-        console.log(this.ipfsResourceObj);
       } catch (error) {
         console.log(error);
       }
@@ -346,7 +337,6 @@ export default {
             },
           }
         );
-        // console.log(data);
         for (const key in this.arResourceObj) {
           this.arResourceObj[key] = data
             .filter((it) => it.appType == key)
@@ -423,7 +413,6 @@ export default {
             },
           }
         );
-        console.log(data);
         const request = data.reduce((pre, it) => {
           return pre.add(BigNumber.from(it.resourceConsume));
         }, BigNumber.from("0"));
@@ -441,7 +430,6 @@ export default {
           }
           return value + pre;
         }, 0);
-        console.log(this.rpcRequest);
       } catch (error) {
         console.log(error);
       }

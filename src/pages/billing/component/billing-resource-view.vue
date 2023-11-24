@@ -46,6 +46,7 @@ export default {
           this.$utils.getFileSize(this.view.remaining, true).num < 0
             ? 0 + " B"
             : this.$utils.getFileSize(this.view.remaining, true).num +
+              " " +
               this.$utils.getFileSize(this.view.remaining, true).unit,
         percent: this.view.percent,
       };

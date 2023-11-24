@@ -19,7 +19,7 @@
             <span class="d-ib deposite-btn fz-14">LAND</span>
           </div>
           <div class="mt-1 fz-12">
-            1,000,000LAND=1USD,LAND cannot be withdrawn
+            1000,000 LAND is equivalent to 1 USD, and it cannot be withdrawn.
           </div>
         </div>
       </div>
@@ -204,6 +204,7 @@ export default {
     },
     coinAddr() {
       const coinType = this.coinSelect.toLowerCase();
+      console.log(this.curChainInfo.coin);
       return this.curChainInfo?.coin[coinType];
     },
     step() {
@@ -221,7 +222,7 @@ export default {
       return this.coinSelect;
     },
     disabled() {
-      return this.payAmounts.toString() == "" || this.btnDisabled;
+      return this.payAmounts.toString() == "0" || this.btnDisabled;
     },
   },
   mounted() {

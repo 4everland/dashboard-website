@@ -103,6 +103,7 @@ export default {
           },
         },
       },
+      RPC_PROXY: new Array(31).fill(0),
       GATEWAY: new Array(31).fill(0),
       HOSTING: new Array(31).fill(0),
       BUCKET: new Array(31).fill(0),
@@ -152,7 +153,18 @@ export default {
           {
             name: "Hosting",
             type: "line",
-            areaStyle: {},
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#5066CA",
+                },
+                {
+                  offset: 1,
+                  color: "rgba(80, 102, 202, 0.00)",
+                },
+              ]),
+            },
             itemStyle: {
               color: "#809AF4",
             },
@@ -169,7 +181,18 @@ export default {
           {
             name: "Hosting",
             type: "line",
-            areaStyle: {},
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#5066CA",
+                },
+                {
+                  offset: 1,
+                  color: "rgba(80, 102, 202, 0.00)",
+                },
+              ]),
+            },
             itemStyle: {
               color: "#809AF4",
             },
@@ -179,7 +202,18 @@ export default {
           {
             name: "Bucket",
             type: "line",
-            areaStyle: {},
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#5066CA",
+                },
+                {
+                  offset: 1,
+                  color: "rgba(80, 102, 202, 0.00)",
+                },
+              ]),
+            },
             itemStyle: {
               color: "#5066CA",
             },
@@ -191,14 +225,25 @@ export default {
       if (this.tagList[this.curIndex].type == "COMPUTE_UNIT") {
         return [
           {
-            name: "Rpc",
+            name: "RPC",
             type: "line",
-            areaStyle: {},
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#5066CA",
+                },
+                {
+                  offset: 1,
+                  color: "rgba(80, 102, 202, 0.00)",
+                },
+              ]),
+            },
             itemStyle: {
               color: "#809AF4",
             },
             stack: "Total",
-            data: this.HOSTING,
+            data: this.RPC_PROXY,
           },
         ];
       }
@@ -207,7 +252,18 @@ export default {
         {
           name: "Hosting",
           type: "line",
-          areaStyle: {},
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: "#5066CA",
+              },
+              {
+                offset: 1,
+                color: "rgba(80, 102, 202, 0.00)",
+              },
+            ]),
+          },
           itemStyle: {
             color: "#809AF4",
           },
@@ -217,7 +273,18 @@ export default {
         {
           name: "Bucket",
           type: "line",
-          areaStyle: {},
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: "#5066CA",
+              },
+              {
+                offset: 1,
+                color: "rgba(80, 102, 202, 0.00)",
+              },
+            ]),
+          },
           itemStyle: {
             color: "#5066CA",
           },
@@ -227,7 +294,18 @@ export default {
         {
           name: "Gateway",
           type: "line",
-          areaStyle: {},
+          areaStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              {
+                offset: 0,
+                color: "#5066CA",
+              },
+              {
+                offset: 1,
+                color: "rgba(80, 102, 202, 0.00)",
+              },
+            ]),
+          },
           itemStyle: {
             color: "#94ADF6",
           },
@@ -240,11 +318,9 @@ export default {
   mounted() {
     this.myChart = echarts.init(document.getElementById("main"));
     this.myChart.setOption({ ...this.baseOptions, ...this.options }, true);
-    const fn = window.onresize;
-    window.onresize = () => {
-      fn();
+    window.addEventListener("resize", () => {
       this.myChart.resize();
-    };
+    });
     this.getAnalytics();
   },
   methods: {
@@ -262,6 +338,7 @@ export default {
         this.GATEWAY = new Array(31).fill(0);
         this.HOSTING = new Array(31).fill(0);
         this.BUCKET = new Array(31).fill(0);
+        this.RPC_PROXY = new Array(31).fill(0);
         this.monthAgoTimeStamp.forEach((it, i) => {
           data.forEach((item) => {
             if (item.timestamp == it) {

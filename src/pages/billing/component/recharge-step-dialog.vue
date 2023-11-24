@@ -58,8 +58,8 @@
         steps, as it may result in a failed purchase.
       </div>
 
-      <div class="ta-r cursor-p" @click="handleClose">
-        {{ step > 3 ? "Done" : "Cancel" }}
+      <div class="al-c" style="justify-content: end" @click="handleClose">
+        <div class="close-btn cursor-p">{{ step > 3 ? "Done" : "Cancel" }}</div>
       </div>
     </div>
   </v-dialog>
@@ -135,5 +135,17 @@ export default {
   color: #735ea1;
   border-radius: 4px;
   background: #f3e8ff;
+}
+.close-btn {
+  color: #fff;
+  text-align: center;
+  font-family: SF Pro Text;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 22px; /* 137.5% */
+  padding: 8px 40px;
+  border-radius: 4px;
+  background: #775da6;
 }
 </style>

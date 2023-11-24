@@ -16,6 +16,8 @@ import {
   ArbitrumDAI,
   ArbitrumLandRecharge,
   zkSyncUSDC,
+  zkSyncUSDT,
+  zkSyncDAI,
   zkSyncLandRecharge,
 } from "../../plugins/pay/contracts/contracts-addr";
 import { mapGetters } from "vuex";
@@ -68,6 +70,8 @@ export default {
           name: "zkSync",
           coin: {
             usdc: zkSyncUSDC,
+            usdt: zkSyncUSDT,
+            dai: zkSyncDAI,
           },
           landRecharge: zkSyncLandRecharge,
           chainId: this.$inDev ? 280 : 324,

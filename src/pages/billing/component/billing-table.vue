@@ -19,7 +19,11 @@ export default {};
     font-size: 14px !important;
     color: #64748b !important;
   }
-  :deep tr:hover {
+  :deep tbody tr:hover {
+    background: #f3e8ff !important;
+  }
+
+  :deep tbody tr.active {
     background: #f3e8ff !important;
   }
 

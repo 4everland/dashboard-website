@@ -12,7 +12,7 @@
 
     <billing-tabs
       class="mt-5"
-      :tabs="['Monthly Bill', 'Transaction History', 'Purchase History']"
+      :tabs="['Monthly Bill', 'Bill Details', 'Purchase History']"
       :tabsCmpList="tabItemList"
     ></billing-tabs>
   </div>

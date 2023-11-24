@@ -4,7 +4,7 @@
       <overview-notice class="mb-4" />
     </div>
     <div class="user-plate d-flex flex-column flex-md-row space-btw mb-6">
-      <div class="left flex-2 mr-6">
+      <div class="left flex-2">
         <div class="header">
           <p class="fz-12 mb-0 tips">Welcome to 4EVERLAND Dashboard</p>
           <h3 class="fz-20">{{ uname }}</h3>
@@ -13,7 +13,7 @@
           <div class="al-c space-btw">
             <h3 class="fz-20">Balance</h3>
             <div class="cursor-p fz-14 al-c" @click="$router.push('/billing')">
-              <span>More</span>
+              <span>Billing</span>
               <img
                 src="/img/svg/new-billing/right-arrow.svg"
                 width="24"
@@ -21,19 +21,24 @@
               />
             </div>
           </div>
-          <div class="space-btw al-end d-flex flex-wrap" style="height: 100%">
+          <div
+            class="space-btw al-end d-flex flex-wrap mt-3"
+            style="height: 100%"
+          >
             <div>
               <div>
                 <div>
-                  <span class="fz-20 fw-b" style="margin-right: 2px">LAND</span>
+                  <span class="balance fw-b">{{ balance.land }}</span>
+                  <span class="fz-12 ml-2">{{ balance.unit }}</span>
+                  <span class="fz-20 fw-b ml-4" style="margin-right: 2px"
+                    >LAND</span
+                  >
                   <img
                     width="16"
                     class="cursor-p"
                     src="/img/svg/overview/landfile.svg"
                     alt=""
                   />
-                  <span class="balance fw-b ml-4">{{ balance.land }}</span>
-                  <span class="fz-12 ml-2">{{ balance.unit }}</span>
                 </div>
                 <div class="fz-14 tips mt-1">≈{{ balanceToUSD }}USD</div>
               </div>
@@ -76,8 +81,8 @@
         </div>
       </div>
 
-      <div class="right mt-4 flex-1 mt-md-0 d-md-block d-none">
-        <div class="pos-r" style="height: 100%">
+      <div class="right ml-6 mt-4 flex-1 mt-md-0 d-md-block d-none">
+        <div class="pos-r carousel-container">
           <v-carousel
             :show-arrows="false"
             v-model="carouselIdx"
@@ -114,35 +119,33 @@
     </div>
 
     <div class="usage-plate pa-6">
-      <h3 class="fz-20">Usage</h3>
-      <div
-        class="combo pa-2 al-c space-btw my-4"
-        :class="onChain ? 'on-chain' : ''"
-      >
-        <div class="combo-name fz-12 al-c">
-          <div class="combo-tag" :class="onChain ? 'on-chain' : ''">
-            {{ onChain ? "Standard" : "Trial" }}
+      <div class="combo al-c space-btw">
+        <h3 class="fz-20">Usage</h3>
+        <div class="al-c">
+          <div class="combo-name fz-12 al-c">
+            <div class="combo-tag" :class="onChain ? 'on-chain' : ''">
+              {{ onChain ? "Standard" : "Trial" }}
+            </div>
+            <div
+              class="upgrad fw-b fz-12 al-c ml-1 cursor-p"
+              v-if="!onChain"
+              @click="handleUpgrad"
+            >
+              <img src="/img/svg/overview/upgrad.svg" width="16" alt="" />
+              <span class="pa-1" style="margin-left: 2px">Upgrade Account</span>
+            </div>
           </div>
-          <div
-            class="upgrad fw-b fz-14 al-c ml-4 cursor-p"
-            v-if="!onChain"
-            @click="handleUpgrad"
-          >
-            <img src="/img/svg/overview/upgrad.svg" width="24" alt="" />
-            <span style="margin-left: 2px">Upgrade Account</span>
-          </div>
-        </div>
-
-        <div class="period">
-          <span class="fw-b fz-14">Time period</span>:
-          <span class="ml-1 fz-14"
-            >{{ efficientAt ? new Date(efficientAt).format("date") : "--" }} -
+          <div class="period ml-2 fz-14">
+            {{ efficientAt ? new Date(efficientAt).format("date") : "--" }} -
             {{ invalidAt ? new Date(invalidAt).format("date") : "--" }}
-          </span>
+          </div>
         </div>
       </div>
 
-      <v-row>
+      <v-row v-show="resourceLoading" class="mt-3">
+        <v-col> <v-skeleton-loader type="article"></v-skeleton-loader></v-col>
+      </v-row>
+      <v-row v-show="!resourceLoading" class="mt-2">
         <v-col v-for="item in resourceList" :key="item.type">
           <resource-view
             :view="item"
@@ -219,11 +222,12 @@ export default {
     banners() {
       return [
         {
-          img: "https://4ever-web.4everland.store/img/banner/20230721-174716.png",
+          // img: "https://4ever-web.4everland.store/img/banner/20230721-174716.png",
+          img: "https://overview-banner.4everland.store/feedback.png",
           to: "/bucket/storage/",
         },
         {
-          img: "https://4ever-web.4everland.store/img/banner/20230815-153912.png",
+          img: "https://overview-banner.4everland.store/Frame%20337691.png",
           href: "https://forms.gle/SAzZ2Sw31atnSSsB8",
         },
       ];
@@ -364,6 +368,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media (width > 1440px) {
+  .carousel-container {
+    height: 324px !important;
+  }
+}
+.carousel-container {
+  height: 100%;
+}
+
 .delimiter-content {
   z-index: 100;
   width: 100%;
@@ -442,8 +455,7 @@ export default {
   background: #fff;
 
   .combo {
-    border-radius: 4px;
-    background: #f8fafc;
+    display: flex;
     .combo-tag {
       color: #fff;
       padding: 4px 16px;
@@ -459,11 +471,16 @@ export default {
         #735ea1;
     }
     .upgrad {
-      color: #735ea1;
+      color: #fff;
+      padding: 0 4px;
+      border-radius: 4px;
+      background: linear-gradient(
+          307deg,
+          rgba(151, 71, 255, 0.8) 37.75%,
+          rgba(115, 94, 161, 0.8) 93.02%
+        ),
+        #735ea1;
     }
-  }
-  .combo.on-chain {
-    background: #f3e8ff;
   }
 }
 .trends-plate {

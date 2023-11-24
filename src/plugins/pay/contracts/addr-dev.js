@@ -41,8 +41,10 @@ export const ArbitrumRegister = "0xe3e2cB6ff2F049058169E2044A0EF603773267a7";
 
 // src chain zksync
 
-export const zkSyncUSDC = "0x76bc4f22c07A02DC4C961D485d0467Da351A1b49";
-export const zkSyncLandRecharge = "0x76bc4f22c07A02DC4C961D485d0467Da351A1b49";
+export const zkSyncUSDC = "0x1CBFB107555fBa8DB2DaDfC00413405750B045dC";
+export const zkSyncUSDT = "0x4c314a3Bf152d86bE8D9c4447509D0D063F901D8";
+export const zkSyncDAI = "0xFa8A53251FFfa08E1771CF10735FD7237e3bcBF4";
+export const zkSyncLandRecharge = "0xDafAbBc89Eafa2212F3346C17711b703201Ab78F";
 export const zkSyncPayment = "0x0015Ae791D08A94178005a9761dEe349eF1A9c8f";
 export const zkRegister = "0xC5FF4F0E97B6d8738AA0A41A656A5C5d07498cBC";
 
