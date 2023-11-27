@@ -17,7 +17,10 @@
           </div>
           <div class="al-c fw-b py-6" v-if="!isOverActivityTime">
             <span class="mr-4">End Time:</span>
-            <time-count-down :endTimeStamp="endTime"></time-count-down>
+            <time-count-down
+              :endTimeStamp="endTime"
+              @timeOver="timeOver"
+            ></time-count-down>
           </div>
           <div class="fw-b">
             Complete your first deposit to unlock the following benefts.
@@ -202,12 +205,12 @@ export default {
       onChain: (s) => s.onChain,
     }),
 
-    endTime() {
-      return Number(this.firstRechargeInfo.timestamp) + 86400 * 3;
-    },
-    isOverActivityTime() {
-      return +new Date() >= this.endTime * 1000;
-    },
+    // endTime() {
+    //   return Number(this.firstRechargeInfo.timestamp) + 86400 * 3;
+    // },
+    // isOverActivityTime() {
+    //   return +new Date() >= this.endTime * 1000;
+    // },
     firstRechargeItems() {
       return [
         {
@@ -309,6 +312,8 @@ export default {
         firstRecharge: true,
       },
       menuOpen: false,
+      isOverActivityTime: true,
+      endTime: 0,
     };
   },
   async created() {
@@ -373,6 +378,10 @@ export default {
           "$bill-consume/common/first/recharge"
         );
         this.firstRechargeInfo = data;
+        this.endTime = Number(this.firstRechargeInfo.timestamp) + 86400 * 3;
+        console.log(this.endTime);
+        this.isOverActivityTime = +new Date() >= this.endTime * 1000;
+
         const loginTrigger = localStorage.getItem("loginTrigger");
         this.$store.commit("SET_FIRST_RECHARGE", data.firstRecharge);
         if (loginTrigger == "1") return;
@@ -384,7 +393,6 @@ export default {
         console.log(error);
       }
     },
-
     handleGiveUp() {
       this.firstRechargeDialog = false;
       if (!this.onChain) {
@@ -401,6 +409,9 @@ export default {
     },
     handleMenu(val) {
       console.log(val);
+    },
+    timeOver() {
+      this.isOverActivityTime = true;
     },
   },
 };

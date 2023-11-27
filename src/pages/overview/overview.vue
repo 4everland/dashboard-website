@@ -7,7 +7,17 @@
       <div class="left flex-2">
         <div class="header">
           <p class="fz-12 mb-0 tips">Welcome to 4EVERLAND Dashboard</p>
-          <h3 class="fz-20">{{ uname }}</h3>
+          <div class="al-c">
+            <v-btn
+              icon
+              v-if="asMobile"
+              style="margin-left: -8px"
+              @click="$setMsg('showDrawer')"
+            >
+              <v-icon>mdi-menu</v-icon>
+            </v-btn>
+            <h3 class="fz-20">{{ uname }}</h3>
+          </div>
         </div>
         <div class="body">
           <div class="al-c space-btw">
@@ -189,7 +199,6 @@ export default {
   data() {
     return {
       carouselIdx: 0,
-      carouselWidth: 0,
       resourceLoading: false,
       invalidAt: null,
       efficientAt: null,
@@ -206,15 +215,6 @@ export default {
     this.isRegister();
   },
 
-  mounted() {
-    this.carouselWidth = this.$refs.carouselRef.$el.offsetWidth;
-    window.onresize = () => {
-      this.carouselWidth = this.$refs.carouselRef.$el.offsetWidth;
-    };
-  },
-  destroyed() {
-    window.onresize = () => {};
-  },
   computed: {
     ...mapGetters(["teamInfo", "balance", "landToResource"]),
     ...mapState({
@@ -238,6 +238,9 @@ export default {
           href: "https://forms.gle/SAzZ2Sw31atnSSsB8",
         },
       ];
+    },
+    asMobile() {
+      return this.$vuetify.breakpoint.mdAndDown;
     },
     uname() {
       const info = this.userInfo;

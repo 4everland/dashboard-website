@@ -56,6 +56,8 @@ export default {
       this.timeInterval = setInterval(() => {
         this.curTimeStamp = +new Date() / 1e3;
         if (this.residueTimeStamp < 0) {
+          this.$emit("timeOver");
+
           clearInterval(this.timeInterval);
         }
       }, 1000);

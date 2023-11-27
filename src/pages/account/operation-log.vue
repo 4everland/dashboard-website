@@ -149,7 +149,7 @@ export default {
       if (act == "OAUTH_REGISTER_DRIP") {
         it.desc = "Got airdrop resources for new users";
         it.path = "Resource Transaction History";
-        it.link = "/resource/bills";
+        it.link = "/billing/bills";
       } else if (act == "OAUTH_EXCLUSIVE_DRIP") {
         it.desc = `Got a exclusive ${obj.name} resources`;
       } else if (act == "OAUTH_FIRST_LOGIN") {
@@ -235,11 +235,11 @@ export default {
       } else if (act == "REWARD_HUB_USED_GIFT_VOUCHER") {
         it.desc = `Redeemed a Credit`;
         it.path = "Resource Billing";
-        it.link = "/resource/bills";
+        it.link = "/billing/bills";
       } else if (act == "REWARD_HUB_USED_RESOURCE_VOUCHER") {
         it.desc = `Redeemed a Resource Voucher`;
         it.path = "Resource Billing";
-        it.link = "/resource/bills/?typeIdx=2";
+        it.link = "/billing/bills/?typeIdx=2";
       } else if (act == "OAUTH_UPDATE_TEAM_NAME") {
         if (obj.type == "name") {
           it.desc = `Changed the account name to ${obj.name}`;
@@ -271,7 +271,7 @@ export default {
       } else if (act == "REWARD_HUB_USED_RESOURCE_VOUCHER") {
         it.desc = `Redeemed a Resource Voucher`;
         it.path = "Resource Billing";
-        it.link = "/resource/bills";
+        it.link = "/billing/bills";
       } else if (act == "PINNING_SERVICE_RESET_ACCESS_KEY") {
         it.desc = `Reset the Access Key`;
         it.path = "4EVER Pin";
@@ -291,10 +291,10 @@ export default {
       }
       if (!it.path) {
         if (/^bill/i.test(act)) {
-          it.link = "/resource/bills";
+          it.link = "/billing/bills";
           it.path = "Resource Transaction History";
         } else if (act == "OAUTH_EXCLUSIVE_DRIP") {
-          it.link = "/resource/bills?typeIdx=2";
+          it.link = "/billing/bills?typeIdx=2";
           it.path = "Resource Transaction History";
         } else if (/^hosting.*project$/i.test(act) && obj.projectName) {
           it.path = "Hosting " + obj.projectName;

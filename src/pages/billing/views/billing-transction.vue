@@ -1,7 +1,12 @@
 <template>
   <div class="billing-transction pos-r">
     <div style="width: 150px" class="mt-4">
-      <e-date-pick outlined dense v-model="date"></e-date-pick>
+      <e-date-pick
+        outlined
+        dense
+        v-model="date"
+        :isAllow="isAllow"
+      ></e-date-pick>
     </div>
     <billing-table v-if="list.length">
       <thead>
@@ -46,12 +51,9 @@ export default {
     return {
       list: [],
       date: null,
+      start: "2023-11-26".toDate() * 1,
     };
   },
-  mounted() {
-    console.log("transction");
-  },
-
   methods: {
     async getHoursBill() {
       try {
@@ -84,10 +86,13 @@ export default {
         console.log(error);
       }
     },
+    isAllow(val) {
+      const date = val.toDate();
+      return date < new Date() && date > this.start;
+    },
   },
   watch: {
     date() {
-      console.log(222, this.date);
       this.getHoursBill();
     },
   },

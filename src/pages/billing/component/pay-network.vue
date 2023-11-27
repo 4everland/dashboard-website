@@ -66,12 +66,12 @@ export default {
           img: "/img/svg/billing/ic-polygon-0.svg",
           chainId: this.$inDev ? 80001 : 137,
         },
-        {
-          label: "Ethereum",
-          name: "Ethereum",
-          img: "/img/svg/billing/ic-ethereum.svg",
-          chainId: this.$inDev ? 11155111 : 1,
-        },
+        // {
+        //   label: "Ethereum",
+        //   name: "Ethereum",
+        //   img: "/img/svg/billing/ic-ethereum.svg",
+        //   chainId: this.$inDev ? 11155111 : 1,
+        // },
         {
           label: "BSC",
           name: "BSC",

@@ -339,9 +339,9 @@ export default {
     },
     onItem(row) {
       if (this.typeIdx == 2)
-        return this.$navTo(`/resource/airdrop-detail?id=` + row.id);
+        return this.$navTo(`/billing/airdrop-detail?id=` + row.id);
       let sub = this.typeIdx == 0 ? "" : "-cross";
-      this.$navTo(`/resource/bill-detail${sub}?id=` + row.id);
+      this.$navTo(`/billing/bill-detail${sub}?id=` + row.id);
     },
     getChainType(id) {
       id *= 1;

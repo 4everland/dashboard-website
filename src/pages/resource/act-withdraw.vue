@@ -36,9 +36,7 @@
         style="max-width: 500px"
       ></v-text-field>
     </e-kv2>
-    <!-- <e-kv2 class="mt-7" label="Network">
-      <pay-network :allow="['Polygon']" />
-    </e-kv2> -->
+
     <div class="mt-8 fz-14 gray">
       <p class="mt-2">
         <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon>

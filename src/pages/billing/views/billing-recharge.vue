@@ -68,6 +68,8 @@ import {
   ArbitrumUSDT,
   ArbitrumDAI,
   zkSyncUSDC,
+  zkSyncUSDT,
+  zkSyncDAI,
 } from "@/plugins/pay/contracts/contracts-addr";
 import { formatEther } from "ethers/lib/utils";
 
@@ -91,8 +93,22 @@ export default {
           zkSyncUSDC,
           everPayUSDC,
         ],
-        USDT: [MumbaiUSDT, GoerliUSDT, ChapelUSDT, ArbitrumUSDT, everPayUSDT],
-        DAI: [MumbaiDAI, GoerliDAI, ChapelDAI, ArbitrumDAI, everPayDAI],
+        USDT: [
+          MumbaiUSDT,
+          GoerliUSDT,
+          ChapelUSDT,
+          ArbitrumUSDT,
+          zkSyncUSDT,
+          everPayUSDT,
+        ],
+        DAI: [
+          MumbaiDAI,
+          GoerliDAI,
+          ChapelDAI,
+          ArbitrumDAI,
+          zkSyncDAI,
+          everPayDAI,
+        ],
       },
       finished: false,
       loadingMore: false,
