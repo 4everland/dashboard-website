@@ -70,6 +70,7 @@ export default {
         if (val) {
           this.showPop = false;
           const accounts = await window.web3.eth.getAccounts();
+          console.log(accounts);
           connectAddr = accounts[0];
           await this.checkNet();
           this.walletObj.on("chainChanged", (networkId) => {

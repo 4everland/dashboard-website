@@ -15,7 +15,7 @@ import {
   IPFSStorageController__factory,
   SafeWallet__factory,
 } from "@4everland/service-contracts";
-
+import { Land__factory } from "@4everland/land-v5";
 import {
   MumbaiRouter,
   MumbaiUSDC,
@@ -31,9 +31,13 @@ import {
   MumbaiFundPool,
   MumbaiBilling,
   MumbaiSafeWallet,
+  MumbaiLandRecharge,
 } from "./contracts-addr";
 
 class DstChainContracts extends Contracts {
+  get LandRecharge() {
+    return Land__factory.connect(MumbaiLandRecharge, this.signer);
+  }
   get Router() {
     return Router__factory.connect(MumbaiRouter, this.signer);
   }

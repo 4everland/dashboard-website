@@ -211,13 +211,9 @@ export default {
 //   font-family: "Arial-BoldMT", "Arial";
 // }
 .v-tab {
-  font-family: "Arial-MT";
-
   letter-spacing: normal !important;
 }
-.v-tab--active {
-  font-family: "Arial-BoldMT", "Arial";
-}
+
 .e-settings {
   .v3-horizon {
     .v-slide-group__content {

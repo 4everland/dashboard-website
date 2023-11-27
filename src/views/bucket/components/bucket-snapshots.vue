@@ -147,6 +147,7 @@
       </div> -->
 
       <bottom-detector
+        v-if="list.length"
         @arriveBottom="onLoadMore"
         :loadingMore="loadingMore"
         :noMore="!hasNext"

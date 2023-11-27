@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import http from "../api";
 import moduleS3 from "./s3";
+import moduleResource from "./resource";
 import md5 from "md5";
 Vue.use(Vuex);
 
@@ -62,7 +63,9 @@ const store = new Vuex.Store({
       const { walletType } = state.userInfo.wallet || {};
       let provider = window.ethereum;
       let metamaskProvider,
-        coinbaseProvider = null;
+        coinbaseProvider,
+        okxProvider = null;
+
       if (window.ethereum.providers?.length) {
         window.ethereum.providers.forEach(async (p) => {
           if (p.isCoinbaseWallet) {
@@ -71,15 +74,24 @@ const store = new Vuex.Store({
           if (p.isMetaMask) {
             metamaskProvider = p;
           }
+          if (p.isOkx) {
+            okxProvider = p;
+          }
         });
-        if (walletType == "COINBASE") {
-          provider = coinbaseProvider;
-        } else {
-          provider = metamaskProvider;
+        switch (walletType) {
+          case "COINBASE":
+            provider = coinbaseProvider;
+            break;
+          case "OKX":
+            provider = okxProvider;
+            break;
+          default:
+            provider = metamaskProvider;
+            break;
         }
       }
 
-      return walletType == "OKX" ? window.okxwallet : provider;
+      return provider;
     },
     bucketDefaultGateWay(state) {
       console.log(process.env.NODE_ENV);
@@ -123,6 +135,12 @@ const store = new Vuex.Store({
     SET_CODE(state, code) {
       state.code = code;
     },
+    SET_CONNECT_ADDR(state, addr) {
+      state.connectAddr = addr;
+    },
+    SET_ON_CHAIN(state, onChain) {
+      state.onChain = onChain;
+    },
   },
   actions: {
     async getProjectInfo({ commit }, id) {
@@ -165,9 +183,33 @@ const store = new Vuex.Store({
         console.log(error);
       }
     },
+
+    async getWalletAccount({ getters, commit }) {
+      try {
+        console.log(getters.walletObj);
+        const accounts = await getters.walletObj.request({
+          method: "eth_requestAccounts",
+        });
+        commit("SET_CONNECT_ADDR", accounts[0]);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async checkOnChain({ commit }) {
+      try {
+        const { data } = await Vue.prototype.$http.get(
+          "$auth/self-handled-register-apply"
+        );
+        commit("SET_ON_CHAIN", data.handled);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   modules: {
     moduleS3,
+    moduleResource,
   },
 });
 

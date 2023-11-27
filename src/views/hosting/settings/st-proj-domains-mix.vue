@@ -636,12 +636,8 @@ export default {
       }
       this.$loading.close();
     },
-    showConnect() {
-      this.$setState({
-        noticeMsg: {
-          name: "showMetaConnect",
-        },
-      });
+    async showConnect() {
+      await this.$store.dispatch("getWalletAccount");
     },
     checkNet() {
       if (process.env.NODE_ENV !== "production") {

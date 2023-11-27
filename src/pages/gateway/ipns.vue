@@ -111,6 +111,7 @@
     </div>
 
     <bottom-detector
+      v-if="list.length"
       :loadingMore="loadingMore"
       :noMore="!hasNext"
       @arriveBottom="onLoadMore"
@@ -412,11 +413,7 @@ export default {
       }
     },
     showConnect() {
-      this.$setState({
-        noticeMsg: {
-          name: "showMetaConnect",
-        },
-      });
+      this.$store.dispatch("getWalletAccount");
     },
     initLocalEns() {
       if (!this.localEnsList()) {

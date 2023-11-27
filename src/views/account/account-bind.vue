@@ -289,9 +289,7 @@ export default {
       if (it.type == 2) {
         this.binding = 2;
         if (!this.connectAddr) {
-          this.$setMsg({
-            name: "showMetaConnect",
-          });
+          this.$store.dispatch("getWalletAccount");
         } else {
           this.verifyMetaMask();
         }

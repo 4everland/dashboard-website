@@ -298,11 +298,16 @@ export default {
         let curBucketInfo = result.data.list[0];
         let isCurBucketAr = curBucketInfo.arweave.sync;
         let arStorageByte = null;
-        const { data } = await this.$http.get("$v3/usage/ipfs");
-        let ipfsStorageByte = data.storageByte;
+
+        const { data } = await this.$http.get(
+          "$bill-consume/combo/usage/IPFS_STORAGE"
+        );
+        let ipfsStorageByte = data.size;
         if (isCurBucketAr) {
-          const { data } = await this.$http.get("$v3/usage/ar");
-          arStorageByte = data.storageByte;
+          const { data } = await this.$http.get(
+            "$bill-consume/combo/usage/AR_STORAGE"
+          );
+          arStorageByte = data.size;
         }
         return { ipfsStorageByte, arStorageByte };
       } catch (err) {

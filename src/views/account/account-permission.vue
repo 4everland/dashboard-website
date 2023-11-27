@@ -89,14 +89,9 @@ export default {
           ],
         },
         {
-          title: "Resource",
+          title: "Billing",
           type: "RESOURCE",
-          subs: [
-            "Resource Statistics",
-            "Billing Details",
-            "Deposit",
-            "Purchase",
-          ],
+          subs: ["Plan", "LAND", "Deposite", "Transaction History"],
         },
         {
           title: "Account",

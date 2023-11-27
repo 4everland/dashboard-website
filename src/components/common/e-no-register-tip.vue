@@ -1,13 +1,13 @@
 <template>
   <div
     class="tips-container"
-    v-if="$route.path != '/login' && onChain == false"
+    v-if="$route.path == '/overview' && firstRecharge == false"
   >
     <div class="h-flex al-end" v-show="isOpen">
       <img
         class="cursor-p"
         src="/img/svg/rewardHub/notice-open1.svg"
-        @click="$router.push('/account/config')"
+        @click="$emit('showFirstRecharge')"
         alt=""
       />
       <img
@@ -46,7 +46,7 @@ export default {
   },
   computed: {
     ...mapState({
-      onChain: (s) => s.onChain,
+      firstRecharge: (s) => s.moduleResource.firstRecharge,
     }),
   },
 };

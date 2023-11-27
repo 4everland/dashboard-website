@@ -164,6 +164,7 @@ export default {
           providerAddr,
           this.registerInfo.uid
         );
+        console.log(isExists, "account Exists");
         if (isExists) {
           await this.registerSuccess();
         }

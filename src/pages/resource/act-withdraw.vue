@@ -1,9 +1,14 @@
 <template>
   <div class="hide-msg">
-    <e-kv label="Account Balance" min-width="120px" center>
-      <span class="fz-18">{{ balance === null ? "--" : balance }}</span>
-      <span class="gray-6 fz-13 ml-1">USDC</span>
-    </e-kv>
+    <div class="al-c">
+      <e-kv label="Account Balance" min-width="120px" center>
+        <span class="fz-18">{{ balance === null ? "--" : balance }}</span>
+        <span class="gray-6 fz-13 ml-1">USDC</span>
+      </e-kv>
+      <v-btn class="ml-4" color="primary" @click="usdcToland"
+        >Convert All-Assets to LAND</v-btn
+      >
+    </div>
     <e-kv2 class="mt-7" label="Withdraw Amount">
       <div class="d-ib bd-1 bdc-c1 bdrs-2">
         <input
@@ -31,9 +36,7 @@
         style="max-width: 500px"
       ></v-text-field>
     </e-kv2>
-    <e-kv2 class="mt-7" label="Network">
-      <pay-network :allow="['Polygon']" />
-    </e-kv2>
+
     <div class="mt-8 fz-14 gray">
       <p class="mt-2">
         <v-icon size="14" class="mr-1">mdi-alert-circle</v-icon>
@@ -53,9 +56,10 @@
 </template>
 
 <script>
-import PayNetwork from "@/views/pay/pay-network";
 import PayConfirm from "@/views/pay/pay-confirm";
 import mixin from "@/views/pay/mixin";
+import { providers } from "ethers"; //, utils
+import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
 
 export default {
   mixins: [mixin],
@@ -81,9 +85,6 @@ export default {
     connectAddr() {
       this.setAddr();
     },
-    address(val) {
-      console.log(val);
-    },
     amount(val) {
       if (val >= 0) {
         if (val > this.balance) this.amount = this.balance;
@@ -93,13 +94,13 @@ export default {
         this.amount = parseInt(val) || "";
       }
     },
-    curContract(val) {
-      console.log(val);
-      if (val && this.needSubmit) {
-        this.onSubmit();
-        this.needSubmit = false;
-      }
-    },
+    // curContract(val) {
+    //   console.log(val);
+    //   if (val && this.needSubmit) {
+    //     this.onSubmit();
+    //     this.needSubmit = false;
+    //   }
+    // },
   },
   methods: {
     setAddr() {
@@ -122,14 +123,10 @@ export default {
       }
       if (msg) return this.$alert(msg);
       try {
-        if (!this.isPolygon) {
-          return this.switchPolygon();
-        }
-        if (!this.curContract) {
-          this.needSubmit = true;
-          this.showConnect();
-          return;
-        }
+        await this.switchNet(this.$inDev ? 80001 : 137);
+        const provider = new providers.Web3Provider(this.walletObj);
+        polygonContract.setProvider(provider);
+        this.curContract = polygonContract;
         // if (this.maxNum == 0) throw new Error(tip1);
         this.$loading();
         const { data } = await this.$http.post("$v3/bill/generate/order", {
@@ -156,7 +153,7 @@ export default {
         await this.onWithdraw(params);
         this.$loading.close();
         await this.$alert("Your withdrawal was successful.");
-        this.$navTo("/resource");
+        this.$navTo("/billing/bills");
       } catch (error) {
         this.onErr(error);
       }
@@ -184,8 +181,6 @@ export default {
           gasLimit: gasLimit.mul(15).div(10),
         });
       } else {
-        console.log("signed");
-        console.log(1111);
         const gasLimit = await this.curContract.FundPool.estimateGas.withdraw(
           ...params
         );
@@ -198,9 +193,28 @@ export default {
       this.addHash(tx, "Withdraw");
       console.log("receipt", receipt);
     },
+    async usdcToland() {
+      try {
+        await this.$confirm(
+          `The current balance is ${this.balance} USDC. Do you confirm the conversion to ${this.balance} Million LAND?`
+        );
+        await this.$http.post(
+          "$bill-consume/assets/transform",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        this.$toast("Transform succssfully!");
+        this.getBalance();
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   components: {
-    PayNetwork,
     PayConfirm,
   },
 };

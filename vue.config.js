@@ -5,6 +5,7 @@ module.exports = {
     "@smithy",
     "@solana/spl-token",
     "@walletconnect",
+    "unstorage",
   ],
   outputDir: "dist",
   publicPath: process.env.NODE_ENV === "production" ? "/" : "/",

@@ -231,6 +231,7 @@ export default {
         console.log("check approve", this.connectAddr, addr);
         if (!this.connectAddr) return console.log("no connectAddr");
         console.log(this.curContract[this.usdcKey], this.connectAddr, addr);
+
         const allowance = await this.curContract[this.usdcKey].allowance(
           this.connectAddr,
           addr
@@ -426,13 +427,7 @@ export default {
       } catch (error) {
         console.log("switch error 2", error);
         if (error.code !== 4902) {
-          this.onErr(error).then(() => {
-            // this.switchNet(id);
-            this.$setState({
-              payBy: null,
-            });
-            localStorage.payBy = "";
-          });
+          throw error;
         } else {
           this.addChain(chainId, id);
         }
@@ -466,6 +461,7 @@ export default {
 
     async onConnect() {
       // this.walletChanged(true);
+      console.log(this.chainId, this.payBy);
       try {
         if (this.chainId != this.payChainId) {
           // let dev = "";

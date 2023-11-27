@@ -76,7 +76,7 @@ Vue.prototype.$getImgSrc = function (src) {
 };
 Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
   let pre = inDev
-    ? "https://goerli.etherscan.io/tx/"
+    ? "https://sepolia.etherscan.io/tx/"
     : "https://etherscan.io/tx/";
   if (net == "BSC") {
     pre = inDev ? "https://testnet.bscscan.com/tx/" : "https://bscscan.com/tx/";
@@ -184,7 +184,9 @@ http.interceptors.request.use(
       .replace("$resource", resourceApi)
       .replace("$bucektDomain", bucketDomainApi)
       .replace("$pinningService", pinningServiceApi)
-      .replace("$template", templateApi);
+      .replace("$template", templateApi)
+      .replace("$bill-consume", process.env.VUE_APP_BILL_CONSUME_URL)
+      .replace("$bill-analytics", process.env.VUE_APP_BILL_ANALYTICS_URL);
     if (config.url.includes(authApi)) {
       token = "Bearer " + token;
     }

@@ -12,7 +12,7 @@
         :value="date"
         readonly
         prepend-icon="mdi-calendar"
-        v-bind="attrs"
+        v-bind="{ ...attrs, ...$attrs }"
         v-on="on"
       ></v-text-field>
     </template>
@@ -20,6 +20,7 @@
       v-model="date"
       no-title
       @input="showPop = false"
+      :allowed-dates="isAllow"
     ></v-date-picker>
   </v-menu>
 </template>
@@ -32,6 +33,14 @@ export default {
       val: null,
       showPop: false,
     };
+  },
+  props: {
+    isAllow: {
+      type: Function,
+      default: () => {
+        return true;
+      },
+    },
   },
   mounted() {
     this.date = new Date().format("yy-MM-dd");

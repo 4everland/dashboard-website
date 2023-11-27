@@ -129,9 +129,7 @@ export default {
   },
   methods: {
     showConnect() {
-      this.$setMsg({
-        name: "showMetaConnect",
-      });
+      this.$store.dispatch("getWalletAccount");
     },
     async onInit() {
       if (!this.connectAddr || !this.netType) {

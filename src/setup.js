@@ -6,6 +6,7 @@ import router from "./router";
 import { CID } from "multiformats/cid";
 import frameworks from "./plugins/config/frameworks";
 import * as clipboard from "clipboard-polyfill/text";
+import { BigNumber } from "ethers";
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 
 Vue.use(VueClipboards);
@@ -83,6 +84,11 @@ Vue.prototype.$utils = {
     if (!byte && byte !== 0 && !isObj) {
       return byte;
     }
+    let isMinus = false;
+    if (Number(byte) < 0) {
+      byte = Math.abs(byte);
+      isMinus = true;
+    }
     const mb = Math.pow(1024, 2);
     const gb = Math.pow(1024, 3);
     const tb = Math.pow(1024, 4);
@@ -107,6 +113,9 @@ Vue.prototype.$utils = {
       num = num.toFixed(fix);
     }
     if (num) num = (num + "").replace(".00", "");
+    if (isMinus) {
+      num = "-" + num;
+    }
     if (isObj)
       return {
         num,
@@ -120,8 +129,20 @@ Vue.prototype.$utils = {
     if (typeof number !== "number") {
       num = parseInt(number);
     }
+    const t = Math.pow(10, 12);
+    const b = Math.pow(10, 9);
+    const m = Math.pow(10, 6);
     const k = Math.pow(10, 3);
-    if (num >= k) {
+    if (num >= t) {
+      num = num / t;
+      unit = "T";
+    } else if (num >= b) {
+      num = num / b;
+      unit = "B";
+    } else if (num >= m) {
+      num = num / m;
+      unit = "M";
+    } else if (num >= k) {
       num = num / k;
       unit = "K";
     }
@@ -135,6 +156,7 @@ Vue.prototype.$utils = {
       };
     return num + " " + unit;
   },
+
   getCidV1(cid) {
     if (!cid) return "";
     cid = cid.replace(/"/g, "");
@@ -211,16 +233,172 @@ Vue.prototype.$utils = {
   async resourceInsufficient() {
     try {
       await Vue.prototype.$confirm(
-        "Insufficient resources! Please make purchases in the Resource Centre.",
+        "Insufficient resources,please deposit 'LAND'.",
         "Tip",
         {
           cancelText: "Cancel",
-          confirmText: "Purchase",
+          confirmText: "Deposit",
         }
       );
-      location.href = "/resource/subscribe";
+      location.href = "/billing/deposit";
     } catch (error) {
       console.log(error);
     }
+  },
+
+  getBigFileSize(byte, isObj = false, fix = 2) {
+    let fileSize = byte;
+    if (typeof byte == "string") {
+      fileSize = BigNumber.from(byte);
+    }
+    let fixSize = fileSize.mul(BigNumber.from(10 ** fix));
+    const kb = BigNumber.from("1024");
+    const mb = BigNumber.from(1024 ** 2);
+    const gb = BigNumber.from(1024 ** 3);
+    const tb = BigNumber.from(1024 ** 4);
+    let formatVal = "";
+    let unit = "Byte";
+
+    if (fileSize.gte(tb)) {
+      formatVal = fixSize
+        .div(tb)
+        .div(BigNumber.from(10 ** fix))
+        .toString();
+      unit = "TB";
+    } else if (fileSize.gte(gb)) {
+      formatVal = fixSize
+        .div(gb)
+        .div(BigNumber.from(10 ** fix))
+        .toString();
+      unit = "GB";
+    } else if (fileSize.gte(mb)) {
+      formatVal = fixSize
+        .div(mb)
+        .div(BigNumber.from(10 ** fix))
+        .toString();
+      unit = "MB";
+    } else if (fileSize.gte(kb)) {
+      formatVal = fixSize
+        .div(kb)
+        .div(BigNumber.from(10 ** fix))
+        .toString();
+      unit = "KB";
+    } else if (fileSize.gt(BigNumber.from("0"))) {
+      formatVal = fixSize.div(BigNumber.from(10 ** fix)).toString();
+      unit = "Byte";
+    } else {
+      formatVal = "0";
+      unit = "Byte";
+    }
+    if (isObj) {
+      return {
+        size: formatVal,
+        unit,
+      };
+    }
+    return formatVal + " " + unit;
+  },
+
+  formatLand(land, isObj = false, isOrigin = true) {
+    let formatVal = BigNumber.from(land);
+    if (isOrigin) {
+      formatVal = formatVal.div((1e18).toString());
+    }
+    let unit = "";
+    const k = BigNumber.from(1e5);
+    const m = BigNumber.from(1e8);
+    const b = BigNumber.from(1e14);
+    const t = BigNumber.from((1e16).toString());
+    const thanT = BigNumber.from("1000000000000000000000");
+
+    if (formatVal.gte(thanT)) {
+      formatVal = "> 99999";
+      unit = "T";
+    } else if (formatVal.gte(t)) {
+      formatVal = formatVal.div(BigNumber.from(1e12)).toString();
+      unit = "T";
+    } else if (formatVal.gte(b)) {
+      formatVal = formatVal.div(BigNumber.from(1e8)).toString();
+      unit = "B";
+    } else if (formatVal.gte(m)) {
+      formatVal = formatVal.div(BigNumber.from(1e6)).toString();
+      unit = "M";
+    } else if (formatVal.gte(k)) {
+      formatVal = formatVal.div(BigNumber.from(1e3)).toString();
+      unit = "K";
+    }
+
+    if (isObj) {
+      return {
+        land: formatVal,
+        unit,
+      };
+    }
+    return formatVal + " " + unit;
+  },
+
+  getResourceTypeSize(size, isObj = false, type = "byte") {
+    let date = size;
+    let unit = "";
+    let formatVal = "0";
+    if (typeof size == "string") {
+      date = BigNumber.from(size);
+    }
+    const k = BigNumber.from(1e3);
+    const m = BigNumber.from(1e6);
+    const b = BigNumber.from(1e8);
+    const t = BigNumber.from(1e12);
+    switch (type) {
+      case "BUILD_TIME":
+        if (date.div(60).gte(t)) {
+          formatVal = date.div(60).div(t).toString();
+          unit = "T Mins";
+        } else if (date.div(60).gte(b)) {
+          formatVal = date.div(60).div(b).toString();
+          unit = "B Mins";
+        } else if (date.div(60).gte(m)) {
+          formatVal = date.div(60).div(m).toString();
+          unit = "M Mins";
+        } else if (date.div(60).gte(k)) {
+          formatVal = date.div(60).div(k).toString();
+          unit = "K Mins";
+        } else {
+          formatVal = date.div(60).toString();
+          unit = "Mins";
+        }
+        break;
+      case "COMPUTE_UNIT":
+        if (date.gte(t)) {
+          formatVal = date.div(t).toString();
+          if (date.gte(t.mul(1e5))) {
+            formatVal = "> 99999";
+          }
+          unit = "T CUs";
+        } else if (date.gte(b)) {
+          formatVal = date.div(b).toString();
+          unit = "B CUs";
+        } else if (date.gte(m)) {
+          formatVal = date.div(m).toString();
+          unit = "M CUs";
+        } else if (date.gte(k)) {
+          formatVal = date.div(k).toString();
+          unit = "K CUs";
+        } else {
+          formatVal = date.toString();
+          unit = " CUs";
+        }
+        break;
+      default:
+        return this.getBigFileSize(size, isObj);
+    }
+
+    if (isObj) {
+      return {
+        size: formatVal,
+        unit,
+      };
+    }
+    return formatVal + " " + unit;
+    // return result;
   },
 };

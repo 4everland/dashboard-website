@@ -91,11 +91,11 @@ const menuMap = {
     group: /^\/rpc/i,
   },
   RESOURCE: {
-    label: "Resource",
+    label: "Billing",
     img: "m-usage",
-    to: "/resource",
+    to: "/billing",
     active: false,
-    group: /^\/resource/i,
+    group: /^\/billing/i,
   },
   MEMBER(target) {
     const subs = [
