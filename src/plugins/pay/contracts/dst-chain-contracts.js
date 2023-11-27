@@ -15,7 +15,7 @@ import {
   IPFSStorageController__factory,
   SafeWallet__factory,
 } from "@4everland/service-contracts";
-import { Land__factory } from "@4everland/land-v5";
+import { Land__factory } from "@4everland-contracts";
 import {
   MumbaiRouter,
   MumbaiUSDC,

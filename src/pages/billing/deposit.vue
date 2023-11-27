@@ -121,7 +121,7 @@ import {
   formatEther,
   formatUnits,
 } from "ethers/lib/utils";
-import { ICoin__factory, Land__factory } from "@4everland/land-v5";
+import { ICoin__factory, Land__factory } from "@4everland-contracts";
 import { getProvider } from "@/plugins/ens";
 
 import uidToEuid from "@/utils/uid2euid";
