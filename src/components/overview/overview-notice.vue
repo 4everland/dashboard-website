@@ -1,6 +1,6 @@
 <template>
   <div class="notice-container al-c" v-if="noticeList.length">
-    <img width="20" class="mr-4" src="/img/svg/overview/notice.svg" alt="" />
+    <img width="20" class="mr-4" src="/img/svg/new-billing/notice.svg" alt="" />
     <v-carousel
       :show-arrows="false"
       vertical
@@ -64,7 +64,7 @@
         </template>
       </v-carousel-item>
     </v-carousel>
-    <v-icon size="20" color="#ff994e" @click="handleCloseNotice"
+    <v-icon size="20" color="#735ea1" @click="handleCloseNotice"
       >mdi-close</v-icon
     >
   </div>
@@ -178,14 +178,15 @@ export default {
   height: 50px;
   padding: 0 20px;
   border-radius: 10px;
-  background: #fff2e8;
+  background: #f3e8ff;
+
   // box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
   //   0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
 }
 .notice-content {
   height: 100%;
   .message {
-    color: #ff994e;
+    color: #735ea1;
   }
 }
 ::v-deep .invitation-btn .v-btn__content {

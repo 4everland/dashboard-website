@@ -10,7 +10,7 @@
       </div>
       <div class="d-flex f-center">
         <div style="max-width: 550px">
-          Complete your First deposit for LAND to unlock the dedicated gateway,
+          Complete your first deposit for LAND to unlock the dedicated gateway,
           starting from $1.
         </div>
       </div>
@@ -203,7 +203,7 @@ export default {
           "This feature is not currently supported as the owner account is not bound to a wallet, please try again after binding a wallet."
         );
       }
-      this.$router.push("/billing/deposite");
+      this.$router.push("/billing/deposit");
     },
   },
 };

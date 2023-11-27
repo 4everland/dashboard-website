@@ -6,7 +6,7 @@
         <span class="ml-4">'land recharge addr:' {{ landRechargeAddr }}</span>
       </div> -->
       <div class="purchase-plate">
-        <h2 class="fz-16">Purchase</h2>
+        <h2 class="fz-16">Deposit</h2>
         <div class="deposite-section mt-4">
           <div class="al-c deposite-control">
             <input
@@ -259,6 +259,8 @@ export default {
         console.log(receipt);
         console.log("recharge success");
         this.rechargeSuccess = true;
+
+        this.transactionCache(receipt.transactionHash);
         this.$store.dispatch("checkOnChain");
       } catch (error) {
         this.onErr(error);
@@ -405,6 +407,30 @@ export default {
         });
       }
       return this.$alert(msg, "Error");
+    },
+
+    transactionCache(txHash) {
+      let transactionItem = {
+        network: this.chainId.toString(),
+        landAmount: this.usdcAmount
+          .mul((1e18).toString())
+          .mul((1e6).toString())
+          .toString(),
+        amount: this.usdcAmount.mul((1e18).toString()).toString(),
+        txHash,
+        createdAt: +new Date() / 1e3,
+        status: "2",
+        amountType: this.coinAddr,
+      };
+      let transactionList = localStorage.getItem("transactionCache");
+      if (!transactionList) {
+        localStorage.setItem("transactionCache", JSON.stringify([]));
+        transactionList = [];
+      } else {
+        transactionList = JSON.parse(localStorage.getItem("transactionCache"));
+      }
+      transactionList.unshift(transactionItem);
+      localStorage.setItem("transactionCache", JSON.stringify(transactionList));
     },
   },
   watch: {

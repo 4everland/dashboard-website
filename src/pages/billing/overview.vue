@@ -6,11 +6,14 @@
     >
       <div class="al-c">
         <img src="/img/svg/new-billing/notice.svg" width="24" alt="" />
-        <span class="ml-2 cursor-p" @click="$router.push('/billing/withdraw')">
+        <div class="ml-2">
           The Resource center fully upgraded. If you need to withdraw USDC,
-          please click here. After February 28,2024, any remaining assets that
-          have not been withdrawn will automatically convert to LAND.
-        </span>
+          <span class="cursor-p" @click="$router.push('/billing/withdraw')">
+            please click here.
+          </span>
+          After February 28,2024, any remaining assets that have not been
+          withdrawn will automatically convert to LAND.
+        </div>
       </div>
       <img
         width="24"
@@ -28,20 +31,37 @@
       <v-col
         :md="4"
         cols="12"
-        class="plan-level py-8 px-4 h-flex al-c space-btw"
+        class="plan-level pa-4 h-flex al-c space-btw"
         :class="onChain ? 'on-chain' : ''"
       >
-        <div class="al-c space-btw" style="width: 100%">
-          <div class="al-c">
+        <div class="al-c space-btw">
+          <!-- <div class="al-c">
             <img src="/img/svg/new-billing/manage.svg" width="24" alt="" />
             <span class="fw-b ml-1">Manage Sub</span>
-          </div>
+          </div> -->
           <div
             class="level-tag cursor-p fz-14 fw-b py-2 px-3"
             :class="onChain ? 'on-chain' : ''"
           >
             {{ onChain ? "Standard" : "Trial" }}
           </div>
+
+          <div
+            class="upgrad pa-2 fw-b fz-14 al-c ml-1 cursor-p"
+            v-if="!onChain"
+            @click="handleUpgrad"
+          >
+            <img src="/img/svg/overview/upgrad.svg" width="16" alt="" />
+            <span style="margin-left: 2px">Activate Account</span>
+          </div>
+        </div>
+
+        <div class="resource-description py-4">
+          <div v-if="onChain" class="standard">
+            <span class="fee">$0</span>
+            <span>/mo</span>
+          </div>
+          <h3 v-else class="fz-20 trial">Free for one-month</h3>
         </div>
         <div>
           <p class="mb-0 fz-12 al-c">
@@ -51,11 +71,14 @@
               height="16"
               alt=""
             />
-            <span class="ml-1">Upcoming resource allocation:</span>
+            <span class="ml-1" style="text-wrap: nowrap"
+              >Upcoming resource allocation:</span
+            >
             <span
+              style="text-wrap: nowrap"
               class="fw-b variable ml-2"
               :class="onChain ? 'on-chain' : ''"
-              >{{ efficientDate }}</span
+              >{{ onChain ? efficientDate : "One-time distribution" }}</span
             >
           </p>
           <p class="mb-0 fz-12 al-c mt-1">
@@ -106,9 +129,9 @@
           <div
             class="deposite-btn py-4 px-6 cursor-p al-c"
             v-ripple
-            @click="$router.push('/billing/deposite')"
+            @click="$router.push('/billing/deposit')"
           >
-            <span>Deposite</span>
+            <span>Deposit</span>
             <img src="/img/svg/new-billing/right-arrow.svg" width="16" alt="" />
           </div>
         </div>
@@ -183,6 +206,7 @@
 
 <script>
 import { BigNumber } from "ethers";
+import { bus } from "@/utils/bus";
 import billingConsumeLine from "./component/billing-consume-line.vue";
 import billingResourceView from "./component/billing-resource-view.vue";
 import halfPie from "./component/half-pie.vue";
@@ -516,6 +540,9 @@ export default {
         console.log(error);
       }
     },
+    handleUpgrad() {
+      bus.$emit("showDialog");
+    },
   },
 };
 </script>
@@ -546,6 +573,33 @@ export default {
     background: #94a3b8;
   }
   .level-tag.on-chain {
+    background: linear-gradient(
+        307deg,
+        rgba(151, 71, 255, 0.8) 37.75%,
+        rgba(115, 94, 161, 0.8) 93.02%
+      ),
+      #735ea1;
+  }
+  .resource-description {
+    .standard {
+      .fee {
+        font-family: "DIN Alternate";
+        font-size: 24px;
+        color: #0f172a;
+      }
+      span {
+        color: #64748b;
+        font-size: 12px;
+      }
+    }
+    .trial {
+      color: #0f172a;
+    }
+  }
+  .upgrad {
+    color: #fff;
+    line-height: 16px;
+    border-radius: 4px;
     background: linear-gradient(
         307deg,
         rgba(151, 71, 255, 0.8) 37.75%,
@@ -598,5 +652,8 @@ export default {
   color: #735ea1;
   border-radius: 4px;
   background: #f3e8ff;
+  span {
+    text-decoration: underline;
+  }
 }
 </style>

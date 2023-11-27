@@ -25,10 +25,10 @@ export default [
     },
   },
   {
-    path: "/deposite",
-    component: () => import("./deposite"),
+    path: "/deposit",
+    component: () => import("./deposit"),
     meta: {
-      title: "Deposite",
+      title: "Deposit",
       isTab: 1,
       newLayout: true,
       links: [
@@ -37,7 +37,7 @@ export default [
           to: "/billing",
         },
         {
-          text: "Deposite",
+          text: "Deposit",
         },
       ],
     },

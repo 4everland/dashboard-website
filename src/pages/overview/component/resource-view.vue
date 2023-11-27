@@ -8,7 +8,7 @@
     </div>
 
     <div>
-      <div class="al-c space-btw">
+      <div class="">
         <div class="resource-size d-flex al-end">
           <div class="consume-resource">
             <span class="consume-used fw-b">{{ curResource.used.num }}</span>

@@ -240,7 +240,7 @@ Vue.prototype.$utils = {
           confirmText: "Deposit",
         }
       );
-      location.href = "/billing/deposite";
+      location.href = "/billing/deposit";
     } catch (error) {
       console.log(error);
     }

@@ -33,12 +33,17 @@
                   <span class="fz-20 fw-b ml-4" style="margin-right: 2px"
                     >LAND</span
                   >
-                  <img
-                    width="16"
-                    class="cursor-p"
-                    src="/img/svg/overview/landfile.svg"
-                    alt=""
-                  />
+                  <a
+                    href="https://docs.4everland.org/get-started/billing-and-pricing/what-is-land"
+                    target="__blank"
+                  >
+                    <img
+                      width="16"
+                      class="cursor-p"
+                      src="/img/svg/overview/landfile.svg"
+                      alt=""
+                    />
+                  </a>
                 </div>
                 <div class="fz-14 tips mt-1">≈{{ balanceToUSD }}USD</div>
               </div>
@@ -46,10 +51,10 @@
               <div class="al-c mt-6">
                 <div
                   class="deposite-btn mr-4"
-                  @click="$router.push('/billing/deposite')"
+                  @click="$router.push('/billing/deposit')"
                   v-ripple
                 >
-                  Deposite
+                  Deposit
                 </div>
                 <div
                   class="conversion-btn"
@@ -120,9 +125,9 @@
 
     <div class="usage-plate pa-6">
       <div class="combo al-c space-btw">
-        <h3 class="fz-20">Usage</h3>
         <div class="al-c">
-          <div class="combo-name fz-12 al-c">
+          <h3 class="fz-20">Usage</h3>
+          <div class="combo-name ml-2 fz-12 al-c">
             <div class="combo-tag" :class="onChain ? 'on-chain' : ''">
               {{ onChain ? "Standard" : "Trial" }}
             </div>
@@ -132,13 +137,15 @@
               @click="handleUpgrad"
             >
               <img src="/img/svg/overview/upgrad.svg" width="16" alt="" />
-              <span class="pa-1" style="margin-left: 2px">Upgrade Account</span>
+              <span class="pa-1" style="margin-left: 2px"
+                >Activate Account</span
+              >
             </div>
           </div>
-          <div class="period ml-2 fz-14">
-            {{ efficientAt ? new Date(efficientAt).format("date") : "--" }} -
-            {{ invalidAt ? new Date(invalidAt).format("date") : "--" }}
-          </div>
+        </div>
+        <div class="period fz-14">
+          {{ efficientAt ? new Date(efficientAt).format("date") : "--" }} -
+          {{ invalidAt ? new Date(invalidAt).format("date") : "--" }}
         </div>
       </div>
 

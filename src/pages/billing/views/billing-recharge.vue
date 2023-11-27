@@ -28,9 +28,11 @@
             <span
               class="d-ib"
               style="width: 8px; height: 8px; border-radius: 50%"
-              :style="{ background: '#0A9E71' }"
+              :style="{ background: item.status == 1 ? '#0A9E71' : '#f99536' }"
             ></span>
-            <span class="ml-2" style="text-transform: capitalize">success</span>
+            <span class="ml-2" style="text-transform: capitalize">{{
+              item.status == 1 ? "success" : "pending"
+            }}</span>
           </td>
         </tr>
       </tbody>
@@ -115,7 +117,9 @@ export default {
           }
         );
         console.log(data);
-        let list = data.items.map((it) => {
+        const originMergeTransaction = this.transactionCacheMatch(data.items);
+
+        let list = originMergeTransaction.map((it) => {
           it.amount = Number(formatEther(BigNumber.from(it.amount))).toFixed(2);
 
           it.landAmount = this.$utils.formatLand(it.landAmount);
@@ -159,8 +163,27 @@ export default {
       if ([99999991].includes(id))
         return "Redeem Historical Remaining Resources";
       if ([99999992].includes(id)) return " ";
-
       return "";
+    },
+
+    transactionCacheMatch(originList) {
+      if (!localStorage.getItem("transactionCache")) return originList;
+      let cacheList = JSON.parse(localStorage.getItem("transactionCache"));
+      let ltTenMinsTransactionList = cacheList.filter((it) => {
+        let timestamp = +new Date() / 1e3;
+        return (
+          timestamp > Number(it.createdAt) &&
+          timestamp <= Number(it.createdAt) + 60 * 10
+        );
+      });
+
+      const unRecordList = ltTenMinsTransactionList.filter((item) => {
+        let i = originList.findIndex((it) => it.txHash == item.txHash);
+        return i == -1;
+      });
+
+      localStorage.setItem("transactionCache", JSON.stringify(unRecordList));
+      return [...unRecordList, ...originList];
     },
   },
 };

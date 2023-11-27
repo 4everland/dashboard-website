@@ -282,7 +282,7 @@ export default {
         it.link = "/bucket/pinning-service";
       } else if (act == "BILL_LAND_RECHARGE") {
         const amount = JSON.parse(it.message).Amount / 1e18;
-        it.desc = `Deposite ${amount} LANDs`;
+        it.desc = `Deposited ${amount} LANDs`;
         it.path = "Purchase history";
         it.link = "/billing/records?tab=Purchase History";
       } else {

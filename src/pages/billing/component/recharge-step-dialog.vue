@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="showDialog" persistent max-width="500">
     <div class="pa-6">
-      <h3 class="fz-16 mb-0">Purchasing LAND</h3>
+      <h3 class="fz-16 mb-0">Depositing LAND</h3>
       <v-stepper v-model="step" vertical :elevation="0">
         <v-stepper-step :complete="step > 1" step="1">
           <h3 class="fz-16">Approve</h3>
@@ -58,7 +58,15 @@
         steps, as it may result in a failed purchase.
       </div>
 
-      <div class="al-c" style="justify-content: end" @click="handleClose">
+      <div
+        class="al-c"
+        style="justify-content: end"
+        @click="
+          () => {
+            step > 3 ? handleDone() : handleClose();
+          }
+        "
+      >
         <div class="close-btn cursor-p">{{ step > 3 ? "Done" : "Cancel" }}</div>
       </div>
     </div>
@@ -96,6 +104,10 @@ export default {
     handleClose() {
       this.showDialog = false;
       this.$emit("handleClose");
+    },
+    handleDone() {
+      this.handleClose();
+      this.$router.push("/billing");
     },
   },
 };

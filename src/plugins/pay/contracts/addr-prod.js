@@ -18,7 +18,7 @@ export const GoerliRegister = "0x5942d5f3a59EbCEa5f82deE35716Eb1B18C19D71";
 export const ChapelUSDC = "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d";
 export const ChapelUSDT = "0x55d398326f99059fF775485246999027B3197955";
 export const ChapelDAI = "0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3";
-export const ChapelLandRecharge = "0x855fC87f7F14Db747ef27603b02bAe579ba947B6";
+export const ChapelLandRecharge = "0xb67Bf3421dd0BcD47C9c197dDEf3d1bEC4263eBd";
 
 export const ChapelBridge = "0xdd90E5E87A2081Dcf0391920868eBc2FFB81a1aF";
 export const ChapelSrcChainPayment =
@@ -31,7 +31,7 @@ export const ArbitrumUSDC = "0xaf88d065e77c8cC2239327C5EDb3A432268e5831";
 export const ArbitrumUSDT = "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9";
 export const ArbitrumDAI = "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1";
 export const ArbitrumLandRecharge =
-  "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8";
+  "0x598a237eb2c0efe381C3b6a22e36220C2e2C74b6";
 
 export const ArbitrumBridge = "0x1619DE6B6B20eD217a58d00f37B9d47C7663feca";
 export const ArbitrumSrcChainPayment =
@@ -43,7 +43,7 @@ export const ArbitrumRegister = "0xAcdcA934E9D4dAA07E4B092fb8395DD872c3221C";
 export const zkSyncUSDC = "0x3355df6D4c9C3035724Fd0e3914dE96A5a83aaf4";
 export const zkSyncUSDT = "0x493257fD37EDB34451f62EDf8D2a0C418852bA4C";
 export const zkSyncDAI = "0x4B9eb6c0b6ea15176BBF62841C6B2A8a398cb656";
-export const zkSyncLandRecharge = "0x76bc4f22c07A02DC4C961D485d0467Da351A1b49";
+export const zkSyncLandRecharge = "0x5cCb7dfEA225Da03656d70EDE03f47f57A996db8";
 
 export const zkSyncPayment = "0x036d8A0275D48c0Fa62AB02707C99208b22a96ae";
 export const zkRegister = "0x92E0536939D1279f4aEF0d0beA55563bA8c1af94";
@@ -84,4 +84,4 @@ export const MumbaiDstChainPayment =
 export const MumbaiUSDC = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
 export const MumbaiUSDT = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
 export const MumbaiDAI = "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063";
-export const MumbaiLandRecharge = "0xd2B8C3Ab6bb2E26EFBB2337f94F96dE0008ad466";
+export const MumbaiLandRecharge = "0x8f786De53F6140b6c06D191c6fC9767842d2eF99";

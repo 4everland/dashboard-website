@@ -20,7 +20,7 @@
             <time-count-down :endTimeStamp="endTime"></time-count-down>
           </div>
           <div class="fw-b">
-            Complete your First deposit to unlock the following benefts.
+            Complete your first deposit to unlock the following benefts.
           </div>
           <div class="fz-14 task-hub-description">starting from $1</div>
 
@@ -48,9 +48,9 @@
               Give up the benefits
             </div>
             <div
-              class="deposite-now-btn al-c justify-center ml-6 flex-1 cursor-p"
+              class="deposit-now-btn al-c justify-center ml-6 flex-1 cursor-p"
               v-ripple
-              @click="handleDeposite"
+              @click="handleDeposit"
             >
               <span class="fz-14 fw-b">Deposit now</span>
               <img
@@ -220,8 +220,8 @@ export default {
           img: "/img/svg/new-user-activity/diamond.svg",
           title: this.isOverActivityTime ? "100Points" : "300 Points",
           description: this.isOverActivityTime
-            ? "Complete your First deposit and receive 100 points!"
-            : "Limited-Time! Complete your First deposit before December 1st, and receive 300 points!",
+            ? "Complete your first deposit and receive 100 points!"
+            : "Limited-Time! Complete your first deposit before December 1st, and receive 300 points!",
         },
         {
           img: "/img/svg/new-user-activity/lock.svg",
@@ -395,9 +395,9 @@ export default {
       this.firstRechargeDialog = true;
       this.showDialog = false;
     },
-    handleDeposite() {
+    handleDeposit() {
       this.firstRechargeDialog = false;
-      this.$router.push("/billing/deposite");
+      this.$router.push("/billing/deposit");
     },
     handleMenu(val) {
       console.log(val);
@@ -464,7 +464,7 @@ export default {
     border: 1px solid #cbd5e1;
     background: #fff;
   }
-  .deposite-now-btn {
+  .deposit-now-btn {
     color: #fff;
     border-radius: 8px;
     background: #735ea1;
