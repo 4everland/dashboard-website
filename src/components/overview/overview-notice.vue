@@ -30,9 +30,8 @@
                 small
                 width="100"
                 light
-                color="#FF994E"
+                color="#735ea1"
                 class="invitation-btn"
-                tile
                 @click="handleInvitation(item.id, true)"
                 >Join</v-btn
               >
@@ -40,9 +39,8 @@
                 small
                 width="100"
                 class="ml-4"
-                color="#FF994E"
+                color="#735ea1"
                 outlined
-                tile
                 @click="handleInvitation(item.id, false)"
                 >Cancel</v-btn
               >

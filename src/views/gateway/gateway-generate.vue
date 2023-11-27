@@ -6,11 +6,7 @@
 
 <template>
   <div>
-    <v-btn
-      color="primary"
-      @click="onShow"
-      :disabled="isInsufficient || listLength >= 3"
-    >
+    <v-btn color="primary" @click="onShow" :disabled="listLength >= 3">
       <span class="fz-18">+</span>
       <span class="ml-1">Generate</span>
     </v-btn>
@@ -87,7 +83,6 @@ export default {
     DecodeStatus,
   },
   props: {
-    isInsufficient: Boolean,
     listLength: Number,
   },
   data() {

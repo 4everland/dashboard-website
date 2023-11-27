@@ -30,7 +30,6 @@
       <e-right-opt-wrap :top="-55">
         <gateway-generate
           @getList="getList"
-          :isInsufficient="isInsufficient"
           :listLength="maxGatewayList.length"
         />
       </e-right-opt-wrap>

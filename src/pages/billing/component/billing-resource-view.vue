@@ -9,7 +9,10 @@
     <div>
       <div class="used-resource al-c">
         <img src="/img/svg/new-billing/manage.svg" width="16" alt="" />
-        <span class="fz-12 ml-1">{{ curResource.total }} Total</span>
+        <span class="fz-12 ml-1"
+          >{{ curResource.total }}
+          {{ curResource.name == "Arweave" ? "Total" : "/ Month" }}</span
+        >
       </div>
       <div class="residu-resource al-c fz-12">
         <img src="/img/svg/new-billing/residu.svg" width="16" alt="" />

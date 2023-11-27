@@ -6,7 +6,6 @@ import HostingRoutes from "./hosting/routes";
 import BucketRoutes from "./bucket/routes";
 import UserRoutes from "./user/routes";
 import MoreRoutes from "./more/routes";
-import ResRoutes from "./resource/routes";
 import GatewayRoutes from "./gateway/routes";
 import AccountRoutes from "./account/routes";
 import BillingRoutes from "./billing/routes";
@@ -50,7 +49,6 @@ export default [
   ...BucketRoutes,
   ...UserRoutes,
   ...MoreRoutes,
-  ...ResRoutes,
   ...GatewayRoutes,
   ...AccountRoutes,
   ...RpcRoutes,
