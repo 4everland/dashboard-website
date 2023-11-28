@@ -100,7 +100,7 @@ export default {
               formatUnits(BigNumber.from(obj[key].landConumed), 24)
             ).toFixed(2) + "U";
         }
-        this.list = Object.values(obj);
+        this.list = Object.values(obj).reverse();
       } catch (error) {
         console.log(error);
       }

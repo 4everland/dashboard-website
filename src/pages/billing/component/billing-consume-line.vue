@@ -119,7 +119,7 @@ export default {
             stack: "Total",
             areaStyle: {},
             itemStyle: {
-              color: "#836BAF",
+              color: "#57B9BC",
             },
             data: this.IPFS_STORAGE,
           },
@@ -129,7 +129,7 @@ export default {
             stack: "Total",
             areaStyle: {},
             itemStyle: {
-              color: "#F3CC5C",
+              color: "#000",
             },
             data: this.AR_STORAGE,
           },
@@ -149,7 +149,7 @@ export default {
             stack: "Total",
             areaStyle: {},
             itemStyle: {
-              color: "#000",
+              color: "#F3CC5C",
             },
             data: this.BUILD_TIME,
           },
@@ -160,7 +160,7 @@ export default {
 
             areaStyle: {},
             itemStyle: {
-              color: "#57B9BC",
+              color: "#836BAF",
             },
 
             data: this.COMPUTE_UNIT,

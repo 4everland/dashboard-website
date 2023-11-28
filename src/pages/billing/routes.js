@@ -11,7 +11,7 @@ export default [
     path: "/records",
     component: () => import("./billing-record"),
     meta: {
-      title: "Land",
+      title: "LAND",
       isTab: 1,
       links: [
         {
@@ -19,7 +19,7 @@ export default [
           to: "/billing",
         },
         {
-          text: "Land",
+          text: "LAND",
         },
       ],
     },

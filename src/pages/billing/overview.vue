@@ -8,10 +8,10 @@
         <img src="/img/svg/new-billing/notice.svg" width="24" alt="" />
         <div class="ml-2">
           The Resource center fully upgraded. If you need to withdraw USDC,
-          <span class="cursor-p" @click="$router.push('/billing/withdraw')">
-            please click here.
-          </span>
-          After February 28,2024, any remaining assets that have not been
+          please
+          <a @click.stop="$router.push('/billing/withdraw')">
+            <b>click here</b></a
+          >. After February 28,2024, any remaining assets that have not been
           withdrawn will automatically convert to LAND.
         </div>
       </div>
@@ -654,6 +654,10 @@ export default {
   background: #f3e8ff;
   span {
     text-decoration: underline;
+  }
+  a {
+    text-decoration: underline;
+    color: #735ea1;
   }
 }
 </style>
