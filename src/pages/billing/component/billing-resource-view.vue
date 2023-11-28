@@ -11,7 +11,7 @@
         <img src="/img/svg/new-billing/manage.svg" width="16" alt="" />
         <span class="fz-12 ml-1"
           >{{ curResource.total }}
-          {{ curResource.name == "Arweave" ? "Total" : "/ Month" }}</span
+          {{ curResource.name == "Arweave" ? "Total" : "/ mo" }}</span
         >
       </div>
       <div class="residu-resource al-c fz-12">

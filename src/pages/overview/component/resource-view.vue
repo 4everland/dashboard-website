@@ -8,7 +8,36 @@
     </div>
 
     <div>
-      <div class="">
+      <div>
+        <div class="land-to-resource fz-12 al-c" v-if="showTransform">
+          <span>+{{ transformDate.transformVal }}</span>
+          <span>
+            {{ view.type == "IPFS_STORAGE" ? "* 1 mo" : "" }}
+          </span>
+          <v-tooltip
+            top
+            max-width="300"
+            nudge-top="5"
+            v-if="view.type == 'IPFS_STORAGE'"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <img
+                class="ml-1"
+                width="16"
+                v-bind="attrs"
+                v-on="on"
+                src="/img/svg/overview/help.svg"
+                alt=""
+              />
+            </template>
+            <div style="line-height: normal" class="py-2">
+              The computation method for IPFS consumption is Time * Space. This
+              value is only an estimate of the storage that LANK balance can
+              consume in one month. The final charge will still be based on the
+              actual storage used
+            </div>
+          </v-tooltip>
+        </div>
         <div class="resource-size d-flex al-end">
           <div class="consume-resource">
             <span class="consume-used fw-b">{{ curResource.used.num }}</span>
@@ -18,12 +47,6 @@
           </div>
           <div class="sparator">/</div>
           <div class="total-resource fz-12">{{ curResource.total }}</div>
-        </div>
-        <div class="land-to-resource fz-12" v-if="showTransform">
-          <span>+{{ transformDate.transformVal }}</span>
-          <span>
-            {{ view.type == "IPFS_STORAGE" ? "* 1 mth" : "" }}
-          </span>
         </div>
       </div>
       <v-progress-linear
@@ -144,5 +167,20 @@ export default {
       color: #64748b;
     }
   }
+}
+
+.v-tooltip__content {
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 4px;
+}
+.v-tooltip__content::after {
+  display: block;
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -20px;
+  border: 10px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
 }
 </style>

@@ -147,7 +147,7 @@ export default {
       }
       if (msg) {
         this.$alert(msg).then(() => {
-          window.web3.currentProvider.request({
+          window.ethereum.request({
             method: "wallet_switchEthereumChain",
             params: [{ chainId: this.$inDev ? "0x5" : "0x1" }],
           });

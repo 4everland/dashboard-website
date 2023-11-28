@@ -11,7 +11,7 @@
             <v-btn
               icon
               v-if="asMobile"
-              style="margin-left: -8px"
+              style="margin-left: -px"
               @click="$setMsg('showDrawer')"
             >
               <v-icon>mdi-menu</v-icon>

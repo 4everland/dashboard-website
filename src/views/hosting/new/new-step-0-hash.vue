@@ -127,7 +127,7 @@ export default {
     },
     async switchNet(id) {
       try {
-        const res = await window.web3.currentProvider.request({
+        const res = await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId: id }],
         });

@@ -326,6 +326,8 @@ Vue.prototype.$utils = {
     } else if (formatVal.gte(k)) {
       formatVal = formatVal.div(BigNumber.from(1e3)).toString();
       unit = "K";
+    } else {
+      formatVal = formatVal.toString();
     }
 
     if (isObj) {

@@ -209,6 +209,7 @@ export default {
         );
         this.$toast("Transform succssfully!");
         this.getBalance();
+        this.$router.push("/billing");
       } catch (error) {
         console.log(error);
       }

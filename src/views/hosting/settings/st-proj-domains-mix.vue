@@ -663,7 +663,7 @@ export default {
       try {
         const chainId = "0x" + id.toString(16);
         // await this.addChain(chainId, id);
-        const res = await window.web3.currentProvider.request({
+        const res = await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });

@@ -24,7 +24,7 @@
           <td>{{ index + 1 }}</td>
           <td>{{ new Date(item.timestamp * 1e3).format("date") }}</td>
           <td>{{ item.timeSection }}</td>
-          <td>{{ $utils.formatLand(item.landUsed) }} LAND</td>
+          <td>{{ item.landUsed }} LAND</td>
           <td>{{ item.resourceType }}</td>
           <td>{{ $utils.getFileSize(item.resourceUsed) }}</td>
         </tr>
@@ -79,9 +79,15 @@ export default {
           };
 
           it.resourceType = resourceTypeObj[it.resourceType];
+          let formatLand = this.$utils.formatLand(it.landUsed, true);
+          console.log(formatLand);
+          it.landUsed =
+            Number(formatLand.land) == 0
+              ? "< 1"
+              : formatLand.land + " " + formatLand.unit;
         });
 
-        this.list = data;
+        this.list = data.reverse();
       } catch (error) {
         console.log(error);
       }

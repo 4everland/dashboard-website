@@ -97,11 +97,12 @@ export default {
     //   this.onConnect();
     // },
   },
-  mounted() {
+  async mounted() {
     if (this.connectAddr) {
       this.onConnect();
     } else {
       this.showConnect();
+      await this.$store.dispatch("getWalletAccount");
     }
   },
   methods: {
@@ -416,7 +417,7 @@ export default {
     async switchNet(id) {
       const chainId = "0x" + id.toString(16);
       try {
-        const res = await window.web3.currentProvider.request({
+        const res = await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });

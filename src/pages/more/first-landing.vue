@@ -329,7 +329,7 @@ export default {
             ? "Dev: please connect to rinkeby"
             : "Wrong network, please switch your wallet network to Ethereum mainnet.";
           await this.$alert(msg);
-          await window.web3.currentProvider.request({
+          await window.ethereum.request({
             method: "wallet_switchEthereumChain",
             params: [{ chainId: this.$inDev ? "0x4" : "0x1" }],
           });
