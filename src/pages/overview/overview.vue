@@ -440,6 +440,7 @@ export default {
       }
       .deposite-btn {
         color: #fff;
+        border: 1px solid #775da6;
         background: #775da6;
       }
       .conversion-btn {

@@ -161,7 +161,7 @@
         <div class="mt-6 ta-c">
           <v-btn outlined @click="resetAccessToken">Reset</v-btn>
           <v-btn color="primary" class="ml-8" @click="showPop = false"
-            >DONE</v-btn
+            >Done</v-btn
           >
         </div>
       </div>
