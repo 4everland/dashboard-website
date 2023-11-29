@@ -22,7 +22,7 @@
       <tbody>
         <tr v-for="(item, index) in list" :key="item.index">
           <td>{{ index + 1 }}</td>
-          <td>{{ new Date(item.timestamp * 1e3).format("date") }}</td>
+          <td>{{ new Date(date * 1e3).format("date") }}</td>
           <td>{{ item.timeSection }}</td>
           <td>{{ item.landUsed }} LAND</td>
           <td>{{ item.resourceType }}</td>
@@ -67,8 +67,8 @@ export default {
           }
         );
         data.forEach((it) => {
-          const time = new Date(it.timestamp * 1e3).getHours();
-          const nextTime = new Date(it.timestamp * 1e3).getHours() + 1;
+          const time = new Date(it.timestamp * 1e3).getUTCHours();
+          const nextTime = new Date(it.timestamp * 1e3).getUTCHours() + 1;
           it.timeSection = time + ":00 - " + nextTime + ":00";
           const resourceTypeObj = {
             IPFS_STORAGE: "IPFS Storage",
@@ -80,14 +80,13 @@ export default {
 
           it.resourceType = resourceTypeObj[it.resourceType];
           let formatLand = this.$utils.formatLand(it.landUsed, true);
-          console.log(formatLand);
           it.landUsed =
             Number(formatLand.land) == 0
               ? "< 1"
               : formatLand.land + " " + formatLand.unit;
         });
 
-        this.list = data.reverse();
+        this.list = data.sort((a, b) => b.timestamp - a.timestamp);
       } catch (error) {
         console.log(error);
       }

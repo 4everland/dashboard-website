@@ -32,7 +32,7 @@
             </template>
             <div style="line-height: normal" class="py-2">
               The computation method for IPFS consumption is Time * Space. This
-              value is only an estimate of the storage that LANK balance can
+              value is only an estimate of the storage that LAND balance can
               consume in one month. The final charge will still be based on the
               actual storage used
             </div>

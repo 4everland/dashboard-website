@@ -11,7 +11,9 @@
         <img src="/img/svg/new-billing/manage.svg" width="16" alt="" />
         <span class="fz-12 ml-1"
           >{{ curResource.total }}
-          {{ curResource.name == "Arweave" ? "Total" : "/ mo" }}</span
+          {{
+            curResource.name == "Arweave" || !onChain ? "Total" : "/ mo"
+          }}</span
         >
       </div>
       <div class="residu-resource al-c fz-12">
@@ -32,6 +34,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: {
     view: {
@@ -41,6 +44,9 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      onChain: (s) => s.onChain,
+    }),
     curResource() {
       let info = {
         total: this.$utils.getFileSize(this.view.total),

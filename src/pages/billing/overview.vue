@@ -87,7 +87,7 @@
             <span
               class="fw-b variable ml-2"
               :class="onChain ? 'on-chain' : ''"
-              >{{ onChain ? "Permanent" : invalidDate }}</span
+              >{{ invalidDate }}</span
             >
           </p>
         </div>
@@ -266,6 +266,9 @@ export default {
         : "--";
     },
     invalidDate() {
+      if (this.onChain) return "Permanent";
+      // let timestamp = +new Date()
+
       return this.invalidAt ? new Date(this.invalidAt).format("date") : "--";
     },
   },
