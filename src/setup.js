@@ -364,8 +364,11 @@ Vue.prototype.$utils = {
         } else if (date.div(60).gte(k)) {
           formatVal = date.div(60).div(k).toString();
           unit = "K Mins";
-        } else {
+        } else if (date.div(60).gte(BigNumber.from("0"))) {
           formatVal = date.div(60).toString();
+          unit = "Mins";
+        } else {
+          formatVal = 0;
           unit = "Mins";
         }
         break;
@@ -385,8 +388,11 @@ Vue.prototype.$utils = {
         } else if (date.gte(k)) {
           formatVal = date.div(k).toString();
           unit = "K CUs";
-        } else {
+        } else if (date.gte(BigNumber.from("0"))) {
           formatVal = date.toString();
+          unit = " CUs";
+        } else {
+          formatVal = 0;
           unit = " CUs";
         }
         break;

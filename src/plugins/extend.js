@@ -1,6 +1,29 @@
 Date.prototype.format = function (format) {
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   if (format == "date") {
     return this.toDateString().replace(/^\w+\s/, "");
+  }
+  if (format == "date-utc") {
+    return (
+      monthNames[this.getUTCMonth()] +
+      " " +
+      this.getUTCDate() +
+      " " +
+      this.getUTCFullYear()
+    );
   }
   if (!format) {
     return this.toString()

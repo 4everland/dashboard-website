@@ -78,7 +78,7 @@
               style="text-wrap: nowrap"
               class="fw-b variable ml-2"
               :class="onChain ? 'on-chain' : ''"
-              >{{ onChain ? efficientDate : "One-time distribution" }}</span
+              >{{ efficientDate }}</span
             >
           </p>
           <p class="mb-0 fz-12 al-c mt-1">
@@ -255,21 +255,26 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["balance"]),
+    ...mapGetters(["balance", "teamInfo"]),
     ...mapState({
       onChain: (s) => s.onChain,
     }),
 
     efficientDate() {
+      if (!this.onChain) return "One-time distribution";
       return this.efficientAt
         ? new Date(this.efficientAt).format("date")
         : "--";
     },
     invalidDate() {
+      console.log(this.teamInfo.createAt);
       if (this.onChain) return "Permanent";
-      // let timestamp = +new Date()
-
-      return this.invalidAt ? new Date(this.invalidAt).format("date") : "--";
+      let timestamp = +new Date();
+      if (timestamp > this.teamInfo.createAt + 86400 * 30 * 1000)
+        return "Expired";
+      return new Date(this.teamInfo.createAt + 86400 * 30 * 1000).format(
+        "date"
+      );
     },
   },
   created() {

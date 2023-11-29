@@ -22,7 +22,7 @@
       <tbody>
         <tr v-for="(item, index) in list" :key="item.index">
           <td>{{ index + 1 }}</td>
-          <td>{{ new Date(date * 1e3).format("date") }}</td>
+          <td>{{ new Date(item.timestamp * 1e3).format("date-utc") }}</td>
           <td>{{ item.timeSection }}</td>
           <td>{{ item.landUsed }} LAND</td>
           <td>{{ item.resourceType }}</td>
