@@ -6,8 +6,8 @@
     <div class="h-flex al-end" v-show="isOpen">
       <img
         class="cursor-p"
-        src="/img/svg/rewardHub/notice-open1.svg"
-        @click="$emit('showFirstRecharge')"
+        :src="noticeText"
+        @click="handleShowDialog"
         alt=""
       />
       <img
@@ -47,7 +47,22 @@ export default {
   computed: {
     ...mapState({
       firstRecharge: (s) => s.moduleResource.firstRecharge,
+      onChain: (s) => s.onChain,
     }),
+
+    noticeText() {
+      if (this.onChain) return "/img/svg/rewardHub/notice-open1.svg";
+      return "/img/svg/rewardHub/notice-open2.svg";
+    },
+  },
+  methods: {
+    handleShowDialog() {
+      if (this.onChain) {
+        this.$emit("showFirstRecharge");
+      } else {
+        this.$emit("showDialog");
+      }
+    },
   },
 };
 </script>
