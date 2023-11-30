@@ -1,4 +1,5 @@
 import Contracts from "./contracts";
+import { Registration__factory } from "@4everland/registration";
 import {
   Router__factory,
   Billing__factory,
@@ -32,9 +33,13 @@ import {
   MumbaiBilling,
   MumbaiSafeWallet,
   MumbaiLandRecharge,
+  MumbaiRegister,
 } from "./contracts-addr";
 
 class DstChainContracts extends Contracts {
+  get Register() {
+    return Registration__factory.connect(MumbaiRegister, this.signer);
+  }
   get LandRecharge() {
     return Land__factory.connect(MumbaiLandRecharge, this.signer);
   }

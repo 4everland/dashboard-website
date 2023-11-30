@@ -46,7 +46,7 @@ const store = new Vuex.Store({
     showProgress: false,
     allowNoLogin: false,
     changelogNum: localStorage.changelogNum || "30",
-    onChain: null,
+    onChain: false,
     hasClaim: false,
     pointsTrack: 0,
     code: null,

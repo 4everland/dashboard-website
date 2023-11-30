@@ -37,7 +37,7 @@ export default {
                 it.color
               }">  </span>
               <span class="mr-1">${it.seriesName}:</span>
-              <span > ${size == 0 ? "0" : size + "LAND"}</span>
+              <span> ${size == 0 ? "0" : size + " LAND"}</span>
               </div>`;
             });
             return `
@@ -69,6 +69,7 @@ export default {
               if (value <= 1) return value;
               return (
                 this.$utils.formatLand(parseInt(value / 1e18), false, false) +
+                " " +
                 "LAND"
               );
             },

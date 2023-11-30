@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="tips-container"
-    v-if="$route.path == '/overview' && firstRecharge == false"
-  >
+  <div class="tips-container" v-if="showTips">
     <div class="h-flex al-end" v-show="isOpen">
       <img
         class="cursor-p"
@@ -53,6 +50,10 @@ export default {
     noticeText() {
       if (this.onChain) return "/img/svg/rewardHub/notice-open1.svg";
       return "/img/svg/rewardHub/notice-open2.svg";
+    },
+    showTips() {
+      if (this.$route.path !== "/overview") return false;
+      return !this.firstRecharge || !this.onChain;
     },
   },
   methods: {

@@ -46,7 +46,7 @@
             <div
               class="give-up-btn fz-14 fw-b cursor-p"
               v-ripple
-              @click="handleGiveUp"
+              @click="firstRechargeDialog = false"
             >
               Give up the benefits
             </div>
@@ -323,8 +323,9 @@ export default {
   async created() {
     await this.getCurrentContract();
     if (localStorage.token) {
-      this.$store.dispatch("checkOnChain");
-      this.handleCheckFirstCharge();
+      await this.$store.dispatch("checkOnChain");
+      await this.handleCheckFirstCharge();
+      this.loginTrigger();
     }
     bus.$on("showDialog", () => {
       this.showDialog = true;
@@ -338,11 +339,11 @@ export default {
     async onSkip() {
       try {
         await this.$confirm(
-          "As a trial user, you will only have access to limited product functionalities and a small amount of experience resources. We recommend completing the on-chain registration to fully experience all the functionalities available.",
-          "Are you sure you want to skip the on-chain identity registration?",
+          "As a trial user, you will only have access to limited product functionalities and a small amount of experience resources. We recommend completing the account activation to fully experience all the functionalities available.",
+          "Are you sure you want to skip the account activation?",
           {
             cancelText: "Skip",
-            confirmText: "Mint",
+            confirmText: "Activate",
           }
         );
         this.showMore = false;
@@ -365,9 +366,16 @@ export default {
         }
         let claimStatus = null;
 
-        if (type == "Polygon") {
-          claimStatus = await this.handleClaim();
-        } else if (type == "zkSync") {
+        // if (type == "Polygon") {
+        //   claimStatus = await this.handleClaim();
+        // } else if (type == "zkSync") {
+        //   claimStatus = await this.handleZkClaim();
+        // } else if (type == "zkSyncV2") {
+        //   claimStatus = await this.handleOtherChainClaim("zkSync");
+        // } else {
+        //   claimStatus = await this.handleOtherChainClaim(type);
+        // }
+        if (type == "zkSync") {
           claimStatus = await this.handleZkClaim();
         } else if (type == "zkSyncV2") {
           claimStatus = await this.handleOtherChainClaim("zkSync");
@@ -404,24 +412,12 @@ export default {
         );
         this.firstRechargeInfo = data;
         this.endTime = Number(this.firstRechargeInfo.timestamp) + 86400 * 3;
-        console.log(this.endTime);
         this.isOverActivityTime = +new Date() >= this.endTime * 1000;
-
-        const loginTrigger = localStorage.getItem("loginTrigger");
         this.$store.commit("SET_FIRST_RECHARGE", data.firstRecharge);
-        if (loginTrigger == "1") return;
-        if (!data.firstRecharge) {
-          this.firstRechargeDialog = true;
-          localStorage.setItem("loginTrigger", "1");
-        }
       } catch (error) {
         console.log(error);
       }
     },
-    handleGiveUp() {
-      this.firstRechargeDialog = false;
-    },
-
     handleDeposit() {
       this.firstRechargeDialog = false;
       this.$router.push("/billing/deposit");
@@ -431,6 +427,46 @@ export default {
     },
     timeOver() {
       this.isOverActivityTime = true;
+    },
+
+    async getOldBalance() {
+      const {
+        data: { balance },
+      } = await this.$http.get("$v3/account/balance");
+      return balance;
+    },
+
+    async loginTrigger() {
+      const loginTrigger = localStorage.getItem("loginTrigger");
+      if (loginTrigger == "1") return;
+      try {
+        const balance = await this.getOldBalance();
+        if (balance >= 0.1) {
+          await this.$confirm(
+            `  The Resource center fully upgraded. If you have any remaining USDC balance, please withdraw it or convert it to LAND. Any USDC balance will automatically convert to LAND after February 28, 2024. 
+      <div class='mt-2 fw-b'>Converting USDC to LAND or completing the first LAND deposit can claim a 100 Points reward.</div>`,
+            "Important Notice",
+            {
+              cancelText: "Cancel",
+              confirmText: "Withdraw",
+            }
+          );
+          this.$router.push("/billing/withdraw");
+          localStorage.setItem("loginTrigger", "1");
+        } else {
+          if (!this.firstRechargeInfo.firstRecharge) {
+            if (this.onChain) {
+              this.firstRechargeDialog = true;
+            } else {
+              this.showDialog = true;
+            }
+            localStorage.setItem("loginTrigger", "1");
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        localStorage.setItem("loginTrigger", "1");
+      }
     },
   },
   watch: {

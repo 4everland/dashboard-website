@@ -69,6 +69,13 @@ export default {
       contract: null,
       claimList: [
         {
+          name: "Polygon",
+          icon: require("/public/img/svg/logo-no-letters.svg"),
+          type: "Polygon",
+          tips: "Please ensure that you have sufficient ETH inzkSync Era. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
+          value: null,
+        },
+        {
           name: "ZkSync Era(V2)",
           icon: require("/public/img/svg/logo-no-letters.svg"),
           type: "zkSyncV2",

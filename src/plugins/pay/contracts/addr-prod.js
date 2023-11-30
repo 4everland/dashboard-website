@@ -58,7 +58,7 @@ export const polygonZkEVMRegister =
 export const lineaRegister = "0x742eAd8e4D06404d9A49945D086752E1f3eb18Ca";
 
 // dst chain
-
+export const MumbaiRegister = "0x7Fe5B4e4AC8817bEBb737053Eb7E945fd9b03c10";
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";
 export const MumbaiRouter = "0x44DDDef9c1fA0Ed35f64f98062E505a968AaBa9C";
 export const MumbaiGovernance = "0xB35F070CC9E3503DCc7AED42E4ECbaA023975382";

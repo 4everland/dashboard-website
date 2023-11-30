@@ -13,7 +13,7 @@
         <tr>
           <th class="text-left">#</th>
           <th class="text-left">Date</th>
-          <th class="text-left">Time</th>
+          <th class="text-left">Time(UTC)</th>
           <th class="text-left">Land</th>
           <th class="text-left">Type</th>
           <th class="text-left">Resources consumed</th>
