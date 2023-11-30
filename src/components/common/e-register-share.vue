@@ -5,7 +5,7 @@
       <div class="share-info ml-auto">
         <div class="share-title ta-c">
           <div class="text fw-b">
-            You have successfully minted your on-chain standard identity.
+            You have successfully activated your account.
           </div>
           <div class="mt-4">
             {{ userInfo.username }}
