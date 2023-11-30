@@ -74,13 +74,11 @@ export default {
                   params.percent * 2
                 }%</span></div>
               <div class="mt-1 fz-12" style="color: #64748B">
-                <span>${params.data.resourceUsed}</span>
-                +
                 <span>${
                   land < 1
                     ? "< 1"
                     : this.$utils.formatLand(land.toString(), false, false)
-                }LAND</span>
+                } LAND</span>
               </div>
           `;
           },
