@@ -124,7 +124,7 @@
                 slot="ref"
                 class="mint-btn al-c justify-center fw-b fz-14 cursor-p"
               >
-                <span> Mint now</span>
+                <span> Activate now</span>
                 <img
                   class="ml-1"
                   width="16"
