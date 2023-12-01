@@ -22,9 +22,9 @@
         </div>
 
         <div class="fz-12" style="color: #64748b">
-          <span>{{ item.resourceUsed }}</span>
-          +
-          <span>{{ $utils.formatLand(item.landUsed) }}LAND</span>
+          <!-- <span>{{ item.resourceUsed }}</span>
+          + -->
+          <span>{{ $utils.formatLand(item.landUsed) }} LAND</span>
         </div>
       </div>
     </div>
