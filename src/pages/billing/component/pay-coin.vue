@@ -72,11 +72,7 @@ export default {
   },
   computed: {
     showToolTip() {
-      if (
-        this.$inDev
-          ? this.chainId == 80001
-          : this.chainId == 42161 || this.chainId == 137
-      ) {
+      if (this.$inDev ? this.chainId == 80001 : this.chainId == 137) {
         return true;
       }
       return false;
