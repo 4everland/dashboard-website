@@ -29,7 +29,7 @@
         :inputVal="landAmount"
       ></resouce-counter>
     </div>
-    <div class="act-control ml-6 pos-r">
+    <div class="act-control ml-6 pos-r h-flex">
       <h2 class="fz-16">Network</h2>
       <pay-network
         @onNetwork="onNetwork"
@@ -44,7 +44,7 @@
       ></everpay-bar>
       <pay-coin
         v-else
-        class="mt-4"
+        class="flex-1"
         :chainId="chainId"
         @onSelectCoin="handleSelectCoin"
       ></pay-coin>
@@ -204,7 +204,7 @@ export default {
     },
     coinAddr() {
       const coinType = this.coinSelect.toLowerCase();
-      console.log(this.curChainInfo.coin);
+      // console.log(this.curChainInfo.coin);
       return this.curChainInfo?.coin[coinType];
     },
     step() {
@@ -245,6 +245,7 @@ export default {
       } else {
         this.isEverpay = false;
       }
+      this.coinSelect = "USDC";
       this.checkApproved();
     },
     async handleRechargeLand() {

@@ -81,7 +81,8 @@ export const MumbaiIPFSStorageController =
   "0xAcdcA934E9D4dAA07E4B092fb8395DD872c3221C";
 export const MumbaiDstChainPayment =
   "0x62955f5BF3813aA4ABAC25799dF646C23522a5e9";
-export const MumbaiUSDC = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
+export const MumbaiUSDC = "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359";
+export const MumbaiUSDCE = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
 export const MumbaiUSDT = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
 export const MumbaiDAI = "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063";
 export const MumbaiLandRecharge = "0x8f786De53F6140b6c06D191c6fC9767842d2eF99";

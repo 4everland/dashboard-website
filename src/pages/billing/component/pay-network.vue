@@ -107,11 +107,11 @@ export default {
     };
   },
   created() {
-    this.walletObj.on("chainChanged", (networkId) => {
-      console.log("chainChanged", networkId);
-      this.initSeleted();
-    });
+    this.walletObj.on("chainChanged", this.initSeleted);
     this.initSeleted();
+  },
+  beforeDestroy() {
+    this.walletObj.removeListener("accountsChanged", this.initSeleted);
   },
   methods: {
     initSeleted() {

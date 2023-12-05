@@ -56,6 +56,7 @@ import { BigNumber } from "ethers";
 import BillingTable from "../component/billing-table.vue";
 import {
   MumbaiUSDC,
+  MumbaiUSDCE,
   MumbaiUSDT,
   MumbaiDAI,
   GoerliUSDC,
@@ -93,6 +94,7 @@ export default {
           zkSyncUSDC,
           everPayUSDC,
         ],
+        USDCE: [MumbaiUSDCE],
         USDT: [
           MumbaiUSDT,
           GoerliUSDT,
@@ -146,6 +148,10 @@ export default {
               (item) => item == it.amountType
             );
             if (findCoinAddr) coinType = key;
+          }
+
+          if (coinType == "USDCE") {
+            coinType = "USDC.e";
           }
           it.coinType = coinType;
           return it;
