@@ -33,10 +33,27 @@
           >
             {{ it.name }}
           </div>
-          <div>{{ it.label }}</div>
+          <div>{{ it.showLabel }}</div>
         </div>
+
+        <v-tooltip
+          top
+          max-width="300"
+          nudge-top="5"
+          v-if="it.label == 'USDC' && showToolTip"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon class="ml-auto" size="18" v-bind="attrs" v-on="on"
+              >mdi-alert-circle-outline</v-icon
+            >
+          </template>
+          <div style="line-height: normal" class="py-2">
+            The USDC.e is a "bridged form Ethereum USDC", which is bridged from
+            the Ethereum blockchain. You can also opt to purchase it from
+            Uniswap
+          </div>
+        </v-tooltip>
       </div>
-      <div></div>
     </div>
   </div>
 </template>
@@ -54,19 +71,28 @@ export default {
     };
   },
   computed: {
+    showToolTip() {
+      if (this.$inDev ? this.chainId == 80001 : this.chainId == 137) {
+        return true;
+      }
+      return false;
+    },
     coinList() {
       const coinList = [
         {
+          showLabel: this.showToolTip ? "USDC.e" : "USDC",
           label: "USDC",
-          name: "USDC Coin",
+          name: this.showToolTip ? "Bridged USDC" : "USDC Coin",
           img: "/img/svg/pay/usdc.svg",
         },
         {
+          showLabel: "USDT",
           label: "USDT",
           name: "Tether USD",
           img: "/img/svg/pay/usdt.svg",
         },
         {
+          showLabel: "DAI",
           label: "DAI",
           name: "Dai Stablecoin",
           img: "/img/svg/pay/dai.svg",
@@ -104,5 +130,18 @@ export default {
 .coin-label.active {
   font-weight: bold;
   border: 1px solid #735ea1;
+}
+.v-tooltip__content {
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 4px;
+}
+.v-tooltip__content::after {
+  display: block;
+  content: "";
+  position: absolute;
+  right: 52px;
+  bottom: -20px;
+  border: 10px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
 }
 </style>
