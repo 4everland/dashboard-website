@@ -1,5 +1,6 @@
 import {
   MumbaiUSDC,
+  MumbaiUSDCE,
   MumbaiUSDT,
   MumbaiDAI,
   MumbaiLandRecharge,
@@ -32,6 +33,7 @@ export default {
             usdc: MumbaiUSDC,
             usdt: MumbaiUSDT,
             dai: MumbaiDAI,
+            usdce: MumbaiUSDCE,
           },
           landRecharge: MumbaiLandRecharge,
           chainId: this.$inDev ? 80001 : 137,
