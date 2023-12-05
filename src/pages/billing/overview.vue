@@ -121,13 +121,23 @@
       <v-col :md="4" cols="12" style="padding: 0">
         <div class="py-6 px-4 h-flex al-c">
           <h4 class="fz-16">LAND Balance</h4>
-          <div class="my-6">
+          <div class="mt-6">
             <img src="/img/svg/new-billing/land-icon.svg" width="24" alt="" />
             <span class="balance fw-b ml-2">{{ balance.land }}</span>
             <span class="fz-12 ml-2">{{ balance.unit }}</span>
           </div>
+          <div v-if="!this.teamInfo.isMember">
+            <v-btn
+              text
+              plain
+              elevation="0"
+              color="#0079F2"
+              @click="balanceAlertShow = true"
+              >Balance Alert</v-btn
+            >
+          </div>
           <div
-            class="deposite-btn py-4 px-6 cursor-p al-c"
+            class="deposite-btn py-4 px-6 cursor-p al-c mt-6"
             v-ripple
             @click="$router.push('/billing/deposit')"
           >
@@ -201,57 +211,81 @@
         </v-row>
       </v-col>
     </v-row>
-
-    <h3 class="mb-4 mt-6">Balance Alert</h3>
-    <v-checkbox
-      v-model="alertEnable"
-      :disabled="!email"
-      label="Once the alert is activated, an email will be sent if the account balance falls below the threshold."
-      @change="saveAlert"
-    ></v-checkbox>
-    <v-row class="statistics-row">
-      <v-col cols="12">
-        <div class="py-4 px-6">
-          <h2 class="fz-16">Email</h2>
-          <div class="fz-14 mt-4">
-            <span v-if="email">
-              {{ email }}
-            </span>
-            <v-btn v-else elevation="0" color="primary" small @click="onBind">
-              Bind Email
-            </v-btn>
-          </div>
-        </div>
-        <div class="py-4 px-6">
-          <h2 class="fz-16">Alert Threshold</h2>
-          <div class="purchase-plate mt-4 d-flex al-c">
-            <div class="deposite-section">
-              <div class="al-c deposite-control">
-                <input
-                  class="deposite-input flex-1"
-                  v-model="alertLand"
-                  type="number"
-                  min="0"
-                  onkeyup="value=value.replace(/[^\d]+/g,'')"
-                />
-                <span class="d-ib deposite-btn fz-14">LAND</span>
+    <v-dialog
+      v-model="balanceAlertShow"
+      max-width="700"
+      @click:outside="cancelAlert"
+    >
+      <div class="pa-4">
+        <h3 class="mb-4">Balance Alert</h3>
+        <span class="fz-14 pa-4">
+          Once the alert is activated, an email will be sent if the account
+          balance falls below the threshold.
+        </span>
+        <v-row class="pa-6">
+          <v-col cols="12">
+            <div class="d-flex al-c mb-8" style="gap: 30px">
+              <h2 class="fz-16" style="width: 120px">Alert</h2>
+              <div>
+                <v-radio-group v-model="alertEnable" row>
+                  <v-radio label="ON" :value="true"></v-radio>
+                  <v-radio label="OFF" :value="false"></v-radio>
+                </v-radio-group>
               </div>
             </div>
-            <v-btn
-              :disabled="!email"
-              :loading="alertLoading"
-              elevation="0"
-              color="primary"
-              large
-              class="ml-4"
-              @click="saveAlert"
-            >
-              Save
-            </v-btn>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
+
+            <div class="d-flex al-c mb-8" style="gap: 30px">
+              <h2 class="fz-16" style="width: 120px">Alert Threshold</h2>
+              <div class="purchase-plate d-flex al-c">
+                <div class="deposite-section">
+                  <div class="al-c deposite-control">
+                    <input
+                      class="deposite-input flex-1"
+                      v-model="alertLand"
+                      type="number"
+                      min="0"
+                      onkeyup="value=value.replace(/[^\d]+/g,'')"
+                    />
+                    <span class="d-ib deposite-btn fz-14">LAND</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="d-flex al-c mb-8" style="gap: 30px">
+              <h2 class="fz-16" style="width: 120px">Email</h2>
+              <div class="fz-14">
+                <span v-if="email">
+                  {{ email }}
+                </span>
+                <v-btn
+                  v-else
+                  elevation="0"
+                  color="primary"
+                  small
+                  @click="onBind"
+                >
+                  Bind Email
+                </v-btn>
+              </div>
+            </div>
+            <div class="d-flex justify-center">
+              <v-btn elevation="0" large @click="cancelAlert"> Cancel </v-btn>
+              <v-btn
+                :disabled="!email"
+                :loading="alertLoading"
+                elevation="0"
+                color="primary"
+                large
+                class="ml-8"
+                @click="saveAlert"
+              >
+                Save
+              </v-btn>
+            </div>
+          </v-col>
+        </v-row>
+      </div>
+    </v-dialog>
   </div>
 </template>
 
@@ -303,10 +337,12 @@ export default {
       showWithDrawNotice: true,
       buildCount: 0,
       rpcInstance: 0,
+      balanceAlertShow: false,
       alertEnable: false,
       alertLand: "500000",
       fromValid: false,
       alertLoading: false,
+      defaultAlert: {},
     };
   },
   computed: {
@@ -679,6 +715,7 @@ export default {
         );
         this.alertEnable = data.enable;
         this.alertLand = data.land;
+        this.defaultAlert = data;
       } catch (error) {
         console.log(error);
       }
@@ -690,12 +727,18 @@ export default {
           land: this.alertLand,
           enable: this.alertEnable,
         });
+        this.balanceAlertShow = false;
         this.$toast("Save successfully!");
       } catch (error) {
         console.log(error);
       } finally {
         this.alertLoading = false;
       }
+    },
+    async cancelAlert() {
+      this.alertEnable = this.defaultAlert.enable;
+      this.alertLand = this.defaultAlert.land;
+      this.balanceAlertShow = false;
     },
   },
 };
