@@ -201,6 +201,57 @@
         </v-row>
       </v-col>
     </v-row>
+
+    <h3 class="mb-4 mt-6">Balance Alert</h3>
+    <v-checkbox
+      v-model="alertEnable"
+      :disabled="!email"
+      label="Once the alert is activated, an email will be sent if the account balance falls below the threshold."
+      @change="saveAlert"
+    ></v-checkbox>
+    <v-row class="statistics-row">
+      <v-col cols="12">
+        <div class="py-4 px-6">
+          <h2 class="fz-16">Email</h2>
+          <div class="fz-14 mt-4">
+            <span v-if="email">
+              {{ email }}
+            </span>
+            <v-btn v-else elevation="0" color="primary" small @click="onBind">
+              Bind Email
+            </v-btn>
+          </div>
+        </div>
+        <div class="py-4 px-6">
+          <h2 class="fz-16">Alert Threshold</h2>
+          <div class="purchase-plate mt-4 d-flex al-c">
+            <div class="deposite-section">
+              <div class="al-c deposite-control">
+                <input
+                  class="deposite-input flex-1"
+                  v-model="alertLand"
+                  type="number"
+                  min="0"
+                  onkeyup="value=value.replace(/[^\d]+/g,'')"
+                />
+                <span class="d-ib deposite-btn fz-14">LAND</span>
+              </div>
+            </div>
+            <v-btn
+              :disabled="!email"
+              :loading="alertLoading"
+              elevation="0"
+              color="primary"
+              large
+              class="ml-4"
+              @click="saveAlert"
+            >
+              Save
+            </v-btn>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -252,12 +303,17 @@ export default {
       showWithDrawNotice: true,
       buildCount: 0,
       rpcInstance: 0,
+      alertEnable: false,
+      alertLand: "500000",
+      fromValid: false,
+      alertLoading: false,
     };
   },
   computed: {
     ...mapGetters(["balance", "teamInfo"]),
     ...mapState({
       onChain: (s) => s.onChain,
+      email: (s) => s.userInfo.email,
     }),
 
     efficientDate() {
@@ -286,6 +342,7 @@ export default {
     this.getAnalyticsBuildMin();
     this.getAnalyticsRpc();
     this.getLandUsedMonthly();
+    this.getAlert();
   },
   methods: {
     async getUserResource() {
@@ -551,6 +608,95 @@ export default {
     handleUpgrad() {
       bus.$emit("showDialog");
     },
+    async onVcode(type, code) {
+      try {
+        this.$loading("Binding Email");
+        this.$loading.close();
+        let params = {
+          type,
+        };
+
+        // const { data } =
+        await this.$http.get(`$auth/auth/vcode/${code}`, {
+          params,
+        });
+        this.$setMsg({
+          name: "updateUser",
+        });
+        this.$toast("Email binded successfully!");
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async onBind() {
+      try {
+        let apply = "";
+        const email = await this.$prompt(
+          "Verify your email to stay up to date on the 4EVERLAND latest news and events.",
+          "Verify Email",
+          {
+            confirmText: "Send",
+            inputAttrs: {
+              label: `Your email address`,
+              rules: [
+                (v) => this.$regMap.email.test(v) || "Invalid email address.",
+              ],
+              required: true,
+            },
+          }
+        );
+        apply = email.value;
+        this.$loading();
+        await this.$http.post("$auth/bind", {
+          type: 3,
+          apply,
+          entranceId: 100,
+        });
+        const { value } = await this.$prompt(
+          "The verification code has been sent to your email address.",
+          "Verify Email",
+          {
+            confirmText: "Verify",
+            inputAttrs: {
+              label: `Verify code`,
+              rules: [(v) => v.trim().length >= 4 || "Invalid code."],
+              required: true,
+            },
+          }
+        );
+        await this.$sleep(100);
+        this.onVcode(3, value);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.$loading.close();
+      }
+    },
+    async getAlert() {
+      try {
+        const { data } = await this.$http.get(
+          "$bill-consume/assets/early/warn"
+        );
+        this.alertEnable = data.enable;
+        this.alertLand = data.land;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async saveAlert() {
+      this.alertLoading = true;
+      try {
+        await this.$http.put("$bill-consume/assets/early/warn", {
+          land: this.alertLand,
+          enable: this.alertEnable,
+        });
+        this.$toast("Save successfully!");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.alertLoading = false;
+      }
+    },
   },
 };
 </script>
@@ -667,5 +813,38 @@ export default {
     text-decoration: underline;
     color: #735ea1;
   }
+}
+
+.deposite-control {
+  min-width: 350px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+}
+.deposite-input {
+  height: 48px;
+  background: #fff;
+  text-indent: 20px;
+  text-align: right;
+  font-size: 20px;
+  border-radius: 4px 0 0 4px;
+  font-family: "DIN Alternate";
+  padding-right: 10px;
+}
+
+.deposite-input[type="number"]::-webkit-inner-spin-button,
+.deposite-input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.deposite-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.deposite-btn {
+  padding: 0px 20px;
+  height: 48px;
+  line-height: 48px;
+  background: #f1f5f9;
+  border-radius: 0 4px 4px 0;
 }
 </style>

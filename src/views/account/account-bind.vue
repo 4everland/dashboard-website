@@ -23,7 +23,7 @@
           <v-btn
             v-else
             color="primary"
-            :disabled="it.account"
+            :disabled="!!it.account"
             min-width="75"
             width="160"
             max-width="160"
@@ -77,7 +77,6 @@ export default {
     }),
     list() {
       const info = this.userInfo;
-      console.log(info);
       const github = info.github || {};
       const wArr = [];
       const noWallet = !info.wallet && !info.solana && !info.onFlow;
