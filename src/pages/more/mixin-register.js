@@ -6,6 +6,7 @@ import zkSyncContract from "../../plugins/pay/contracts/src-chain-contracts-zkSy
 import opBNBContract from "../../plugins/pay/contracts/src-chain-contracts-opBNB";
 import polygonZkEVMContract from "../../plugins/pay/contracts/src-chain-contracts-polygonZkEVM";
 import lineaContract from "../../plugins/pay/contracts/src-chain-contracts-linea";
+import zetaContract from "../../plugins/pay/contracts/src-chain-contracts-zeta";
 
 import { Web3Provider } from "zksync-web3";
 
@@ -249,6 +250,9 @@ export default {
         } else if (chainId == 59140 || chainId == 59144) {
           lineaContract.setProvider(provider);
           this.contract = lineaContract;
+        } else if (chainId == 7001) {
+          zetaContract.setProvider(provider);
+          this.contract = zetaContract;
         } else {
           ethContract.setProvider(provider);
           this.contract = ethContract;
@@ -269,6 +273,7 @@ export default {
       if (type == "OpBNB") return this.$inDev ? 5611 : 204;
       if (type == "PolygonZkEVM") return this.$inDev ? 1442 : 1101;
       if (type == "Linea") return this.$inDev ? 59140 : 59144;
+      if (type == "Zeta") return 7001;
       return this.$inDev ? 5 : 1;
     },
     async switchNet(chainName) {
@@ -460,6 +465,17 @@ export default {
           },
           // blockExplorerUrls: [],
         },
+        7001: {
+          chainId,
+          chainName: "ZetaChain Athens 3 Testnet",
+          rpcUrls: ["https://rpc.ankr.com/zetachain_evm_athens_testnet"],
+          nativeCurrency: {
+            name: "aZETA",
+            symbol: "aZETA",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
       }[id];
       if (!params) return;
       try {
@@ -496,7 +512,8 @@ export default {
         /exceeds balance/i.test(msg) ||
         msg == "overflow" ||
         /err: insufficient/i.test(msg) ||
-        /insufficient funds/i.test(msg)
+        /insufficient funds/i.test(msg) ||
+        /insufficient balance/i.test(msg)
       ) {
         msg = "Insufficient balance";
       } else if (msg.length > 100) {

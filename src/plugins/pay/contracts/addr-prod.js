@@ -57,6 +57,9 @@ export const polygonZkEVMRegister =
 
 export const lineaRegister = "0x742eAd8e4D06404d9A49945D086752E1f3eb18Ca";
 
+// zeta-testnet
+export const zetaRegister = "0xA6D3027F572BB7e9E141465640bb736ee78a5867";
+
 // dst chain
 export const MumbaiRegister = "0x7Fe5B4e4AC8817bEBb737053Eb7E945fd9b03c10";
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";

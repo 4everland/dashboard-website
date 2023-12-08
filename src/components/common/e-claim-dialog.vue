@@ -144,7 +144,15 @@
                 </v-list-item>
               </v-list>
               <v-list v-else>
-                <div class="al-c flex-wrap pa-4 pb-2" style="width: 560px">
+                <div
+                  class="al-c flex-wrap pa-4 pb-2"
+                  style="
+                    width: 560px;
+                    height: 304px;
+                    overflow-y: scroll;
+                    box-sizing: border-box;
+                  "
+                >
                   <template v-for="item in claimList">
                     <div
                       :key="item.type"
@@ -305,9 +313,20 @@ export default {
           type: "Linea",
         },
         {
-          name: "More",
+          name: "ZetaChain Testnet",
+          icon: require("/public/img/svg/billing/ic-zeta.svg"),
+          tips: "During the ZetaChain Testnet phase, Mint only unlocks Web3 Identity.",
+          type: "Zeta",
+        },
+        // {
+        //   name: "More",
+        //   icon: require("/public/img/svg/more.svg"),
+        //   type: "More",
+        // },
+        {
+          name: "Skip",
           icon: require("/public/img/svg/more.svg"),
-          type: "More",
+          type: "Skip",
         },
       ],
       firstRechargeInfo: {
@@ -346,7 +365,7 @@ export default {
             confirmText: "Activate",
           }
         );
-        this.showMore = false;
+        // this.showMore = false;
       } catch (error) {
         this.showDialog = false;
       }
@@ -357,6 +376,7 @@ export default {
     },
     async handleTypeClaim(type = "Polygon") {
       if (type == "More") return this.onMore();
+      if (type == "Skip") return this.onSkip();
       try {
         this.$loading();
         const register = await this.isRegister();
@@ -421,9 +441,6 @@ export default {
     handleDeposit() {
       this.firstRechargeDialog = false;
       this.$router.push("/billing/deposit");
-    },
-    handleMenu(val) {
-      console.log(val);
     },
     timeOver() {
       this.isOverActivityTime = true;
@@ -514,8 +531,9 @@ export default {
   margin-left: 8px;
 }
 
-.claim-chain-item.even:last-of-type {
+.claim-chain-item.last-item:last-of-type {
   width: 100%;
+  // justify-content: center;
 }
 
 .img-icon {

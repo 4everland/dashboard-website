@@ -1,5 +1,6 @@
 <template>
   <div>
+    fee: {{ fee }}
     <ul>
       <li v-for="item in claimList" :key="item.type">
         <div class="al-c">
@@ -8,6 +9,7 @@
             <img width="20" height="20" class="ml-2" :src="item.icon" alt="" />
           </div>
           <v-text-field v-model="item.value"></v-text-field>
+
           <v-btn
             class="ml-10"
             color="primary"
@@ -16,6 +18,9 @@
           >
           <v-btn class="ml-2" color="primary" @click="show(item.type)"
             >WithDraw</v-btn
+          >
+          <v-btn class="ml-2" color="primary" @click="handleGetFee(item.type)"
+            >Fee</v-btn
           >
         </div>
       </li>
@@ -57,9 +62,12 @@ import zkSyncContract from "../plugins/pay/contracts/src-chain-contracts-zkSync"
 import opBNBContract from "../plugins/pay/contracts/src-chain-contracts-opBNB";
 import polygonZkEVMContract from "../plugins/pay/contracts/src-chain-contracts-polygonZkEVM";
 import lineaContract from "../plugins/pay/contracts/src-chain-contracts-linea";
+import zetaContract from "../plugins/pay/contracts/src-chain-contracts-zeta";
+
 import { Web3Provider } from "zksync-web3";
 
 import { utils, providers } from "ethers";
+import { formatEther } from "ethers/lib/utils";
 export default {
   data() {
     return {
@@ -118,8 +126,15 @@ export default {
           type: "Linea",
           value: null,
         },
+        {
+          name: "Zeta chain testnet",
+          icon: require("/public/img/svg/billing/ic-linea.svg"),
+          type: "Zeta",
+          value: null,
+        },
       ],
       toAddress: "",
+      fee: "0",
     };
   },
 
@@ -335,6 +350,7 @@ export default {
       if (type == "OpBNB") return this.$inDev ? 5611 : 204;
       if (type == "PolygonZkEVM") return this.$inDev ? 1442 : 1101;
       if (type == "Linea") return this.$inDev ? 59140 : 59144;
+      if (type == "Zeta") return 7001;
       return this.$inDev ? 5 : 1;
     },
     async handleChangeFee(chain, value) {
@@ -360,6 +376,26 @@ export default {
         this.$loading.close();
         this.onErr(error);
         return false;
+      }
+    },
+
+    async handleGetFee(chain) {
+      try {
+        this.$loading();
+        if (chain == "zkSyncV2") {
+          await this.switchNet("zkSync");
+        } else {
+          await this.switchNet(chain);
+        }
+        await this.getCurrentContract();
+        const fee = await this.contract.Register.fee();
+        console.log(fee);
+        this.fee = formatEther(fee);
+        this.$loading.close();
+      } catch (error) {
+        console.log(error);
+        this.$loading.close();
+        this.onErr(error);
       }
     },
     async show(chain) {
@@ -433,6 +469,9 @@ export default {
         } else if (chainId == 59140 || chainId == 59144) {
           lineaContract.setProvider(provider);
           this.contract = lineaContract;
+        } else if (chainId == 7001) {
+          zetaContract.setProvider(provider);
+          this.contract = zetaContract;
         } else {
           ethContract.setProvider(provider);
           this.contract = ethContract;
