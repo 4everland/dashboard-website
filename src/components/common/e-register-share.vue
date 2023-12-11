@@ -66,7 +66,7 @@ export default {
   methods: {
     handleShare() {
       window.open(
-        `https://twitter.com/intent/tweet?text=I successfully minted my on-chain identity on 4EVERLAND and received 6GB of IPFS storage, 100MB of Arweave storage, 100GB of bandwidth, and 250 build minutes. Join and experience it now! %0A%0A${encodeURIComponent(
+        `https://twitter.com/intent/tweet?text=Upon activating my 4EVERLAND account, I upgraded to a standard user and gained access to 6GB of IPFS storage, 100MB of Arweave storage, 100GB of bandwidth, and 250 minutes of build time. Join now and experience it for yourself! %0A%0A${encodeURIComponent(
           this.shareUrl
         )}`
       );
