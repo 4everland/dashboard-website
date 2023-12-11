@@ -66,7 +66,7 @@ export default {
   methods: {
     handleShare() {
       window.open(
-        `https://twitter.com/intent/tweet?text=I successfully minted my on-chain identity on 4EVERLAND and received an additional 5GB of IPFS storage, 100MB of Arweave storage, 100GB of bandwidth, and 250 build minutes. Join and experience it now! %0A%0A${encodeURIComponent(
+        `https://twitter.com/intent/tweet?text=I successfully minted my on-chain identity on 4EVERLAND and received 6GB of IPFS storage, 100MB of Arweave storage, 100GB of bandwidth, and 250 build minutes. Join and experience it now! %0A%0A${encodeURIComponent(
           this.shareUrl
         )}`
       );
