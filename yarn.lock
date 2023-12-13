@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@4everland-contracts@npm:@4everland/land-v5@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@4everland/land-v5/-/land-v5-0.0.2.tgz#95ca5b9495f1ded3f33f13cf8eaa4f15a14048b4"
-  integrity sha512-dl7i+sLeguG1m9dnaOW7Xmm7NxA6T79SnoEHUtlGDNcc+pTvcBTsvJnaAxMZQnM/Gg7XsopZgnFACCoxdFoqbQ==
+"@4everland-contracts@npm:@4everland/land-v5@0.0.3":
+  version "0.0.3"
+  resolved "https://registry.npmjs.org/@4everland/land-v5/-/land-v5-0.0.3.tgz#b107c79bc8c47e55425b005d0dd2064b5ab7f601"
+  integrity sha512-qgw5BIm/V0FtF4ECGmk43LXZmLBcpUKFojZ4x51Xko0cWjGg5V2EZ+UenVbalgclmpKZ6TEm8Zr32E9LLi1q3w==
   dependencies:
     hardhat-ethers "^1.0.1"
     solc-0.8.9 "npm:solc@0.8.9"
