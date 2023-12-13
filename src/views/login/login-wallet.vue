@@ -45,6 +45,8 @@ import {
   SignCoinBase,
   ConnectWalletCon,
   SignWalletCon,
+  ConnectBitget,
+  SignBitget,
 } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 
@@ -79,6 +81,11 @@ export default {
           icon: require("@/assets/imgs/walletConnect.svg"),
           btnText: "",
           loading: true,
+        },
+        {
+          name: "Bitget Wallet",
+          icon: require("@/assets/imgs/Bitget.svg"),
+          btnText: "",
         },
         {
           name: "Petra",
@@ -151,6 +158,9 @@ export default {
           break;
         case "WalletConnect":
           this.walletConnect();
+          break;
+        case "Bitget Wallet":
+          this.bitgetConnect();
           break;
         default:
           break;
@@ -300,6 +310,27 @@ export default {
         this.ssoLogin(stoken);
       }
     },
+    async bitgetConnect() {
+      const accounts = await ConnectBitget();
+      if (!accounts) {
+        return;
+      }
+      const nonce = await ExchangeCode(accounts[0]);
+      if (!nonce) {
+        return;
+      }
+      // window.alert(nonce);
+      const stoken = await SignBitget(
+        accounts[0],
+        nonce,
+        this.inviteCode,
+        this.capToken
+      );
+      if (stoken) {
+        this.ssoLogin(stoken);
+      }
+    },
+
     onVerify(name) {
       this.$emit("walletVerify", name);
     },

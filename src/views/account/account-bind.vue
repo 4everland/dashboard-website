@@ -45,6 +45,7 @@ import {
   ConnectCoinBase,
   ConnectWalletCon,
   onSignWalletCon,
+  ConnectBitget,
 } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 fcl
@@ -134,6 +135,14 @@ export default {
           desc: "Get verified by connecting your WalletConnect.",
           icon: "m-walletConnect",
           type: 99,
+          account: (info.wallet || {}).address,
+        });
+      if (info.wallet?.walletType == "Bitget" || noWallet)
+        wArr.push({
+          title: "Bitget Wallet",
+          desc: "Get verified by connecting your Bitget Wallet.",
+          icon: "m-bitget",
+          type: 100,
           account: (info.wallet || {}).address,
         });
       if (info.wallet?.walletType == "PETRA" || noWallet)
@@ -227,6 +236,12 @@ export default {
       if (this.binding == 99 && val) {
         this.binding = null;
         this.verifyWalletconnect();
+      }
+    },
+    bitgetAddr(val) {
+      if (this.binding == 100 && val) {
+        this.binding = null;
+        this.verifyBitget();
       }
     },
   },
@@ -356,6 +371,17 @@ export default {
 
         return;
       }
+      if (it.type == 100) {
+        this.binding = 100;
+        if (!this.bitgetAddr) {
+          const account = await this.connectBitget();
+          this.bitgetAddr = account;
+        } else {
+          this.verifyBitget();
+        }
+
+        return;
+      }
       // if (it.type != 1) return this.$toast("todo");
       try {
         if (it.type == 10) {
@@ -462,6 +488,9 @@ export default {
       }
       if (type == 99) {
         apply = this.WalletconnectAddr;
+      }
+      if (type == 100) {
+        apply = this.bitgetAddr;
       }
       const { data } = await this.$http.post(`$auth/bind`, {
         type,
@@ -615,6 +644,28 @@ export default {
         this.$loading.close();
         if (sig) {
           this.onVcode(99, sig);
+        }
+      } catch (error) {
+        this.$alert(error.message);
+      }
+    },
+    async connectBitget() {
+      const { account } = await ConnectBitget();
+      return account;
+    },
+    async verifyBitget() {
+      try {
+        this.$loading();
+        const provider = window.bitkeep && window.bitkeep.ethereum;
+        const nonce = await this.exchangeCode(100);
+        const msg = `0x${Buffer.from(nonce, "utf8").toString("hex")}`;
+        const sig = await provider.request({
+          method: "personal_sign",
+          params: [msg, accounts],
+        });
+        this.$loading.close();
+        if (sig) {
+          this.onVcode(100, sig);
         }
       } catch (error) {
         this.$alert(error.message);
