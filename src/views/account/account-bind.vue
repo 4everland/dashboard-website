@@ -113,14 +113,6 @@ export default {
           type: 2,
           account: (info.wallet || {}).address,
         });
-      if (info.solana || info.wallet?.walletType == "PHANTOM" || noWallet)
-        wArr.push({
-          title: "Phantom",
-          desc: "Get verified by connecting your phantom account.",
-          icon: "m-phantom",
-          type: 4,
-          account: (info.solana || {}).address,
-        });
       if (info.wallet?.walletType == "COINBASE" || noWallet)
         wArr.push({
           title: "CoinBase",
@@ -137,6 +129,14 @@ export default {
           type: 99,
           account: (info.wallet || {}).address,
         });
+      if (info.wallet?.walletType == "OKX" || noWallet)
+        wArr.push({
+          title: "OKX",
+          desc: "Get verified by connecting your OKX account.",
+          icon: "m-okx",
+          type: 7,
+          account: (info.wallet || {}).address,
+        });
       if (info.wallet?.walletType == "Bitget" || noWallet)
         wArr.push({
           title: "Bitget Wallet",
@@ -144,6 +144,14 @@ export default {
           icon: "m-bitget",
           type: 100,
           account: (info.wallet || {}).address,
+        });
+      if (info.solana || info.wallet?.walletType == "PHANTOM" || noWallet)
+        wArr.push({
+          title: "Phantom",
+          desc: "Get verified by connecting your phantom account.",
+          icon: "m-phantom",
+          type: 4,
+          account: (info.solana || {}).address,
         });
       if (info.wallet?.walletType == "PETRA" || noWallet)
         wArr.push({
@@ -153,14 +161,7 @@ export default {
           type: 8,
           account: (info.wallet || {}).address,
         });
-      if (info.wallet?.walletType == "OKX" || noWallet)
-        wArr.push({
-          title: "OKX",
-          desc: "Get verified by connecting your OKX account.",
-          icon: "m-okx",
-          type: 7,
-          account: (info.wallet || {}).address,
-        });
+
       if (info.onFlow || info.wallet?.walletType == "ONFLOW" || noWallet)
         wArr.push({
           title: "Flow",
