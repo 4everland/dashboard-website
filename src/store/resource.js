@@ -5,7 +5,6 @@ export default {
   state: () => {
     return {
       resources: [],
-      chainContract: null,
       ipfsUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
       arUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
       bandwidthUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
@@ -62,9 +61,6 @@ export default {
   mutations: {
     SET_RESOURCE(state, { name, unitPrice }) {
       state[name] = unitPrice;
-    },
-    SET_CONTRACT(state, contract) {
-      state.chainContract = contract;
     },
     SET_BALANCE(state, balance) {
       state.originBalance = balance;

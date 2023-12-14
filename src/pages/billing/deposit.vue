@@ -31,11 +31,7 @@
     </div>
     <div class="act-control ml-6 pos-r h-flex">
       <h2 class="fz-16">Network</h2>
-      <pay-network
-        @onNetwork="onNetwork"
-        :allow="allowNetwork"
-        ref="payNetwork"
-      />
+      <pay-network @onNetwork="onNetwork" />
       <everpay-bar
         ref="everpay"
         @onEverpay="onEverpay"
@@ -114,7 +110,9 @@ import everpayBar from "./component/everpay-bar.vue";
 import resouceCounter from "./component/resouce-counter.vue";
 import rechargeStepDialog from "./component/recharge-step-dialog.vue";
 import { mapState } from "vuex";
-import { BigNumber } from "ethers";
+import { BigNumber, providers } from "ethers";
+import { Web3Provider } from "zksync-web3";
+
 import {
   parseUnits,
   parseEther,
@@ -157,15 +155,14 @@ export default {
   computed: {
     ...mapState({
       connectAddr: (s) => s.connectAddr,
-      chainContract: (s) => s.moduleResource.chainContract,
       teamId: (s) => s.teamId,
       onChain: (s) => s.onChain,
     }),
-    allowNetwork() {
-      if (this.$inDev) {
-        return ["Polygon", "Ethereum", "BSC", "zkSync", "everPay"];
-      }
-      return ["Polygon", "Ethereum", "BSC", "Arbitrum", "zkSync", "everPay"];
+    signer() {
+      let provider = new providers.Web3Provider(this.walletObj);
+      if (this.chainId == this.$inDev ? "280" : "324")
+        provider = new Web3Provider(this.walletObj);
+      return provider.getSigner();
     },
     isApproved() {
       return (
@@ -188,13 +185,10 @@ export default {
       return amoutU;
     },
     ERC20() {
-      return ICoin__factory.connect(this.coinAddr, this.chainContract.signer);
+      return ICoin__factory.connect(this.coinAddr, this.signer);
     },
     LandRecharge() {
-      return Land__factory.connect(
-        this.landRechargeAddr,
-        this.chainContract.signer
-      );
+      return Land__factory.connect(this.landRechargeAddr, this.signer);
     },
     curChainInfo() {
       return this.chainAddrs.find((it) => it.chainId == this.chainId);

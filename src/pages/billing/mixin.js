@@ -20,9 +20,15 @@ import {
   zkSyncUSDT,
   zkSyncDAI,
   zkSyncLandRecharge,
+  optimisUSDC,
+  optimisUSDT,
+  optimisDAI,
+  optimismRecharge,
 } from "../../plugins/pay/contracts/contracts-addr";
 import { mapGetters } from "vuex";
-
+import { IQuoter__factory, UNIWrapper__factory } from "@4everland-contracts";
+import { providers } from "ethers";
+import { solidityPack, parseUnits, formatEther } from "ethers/lib/utils";
 export default {
   data() {
     return {
@@ -79,6 +85,16 @@ export default {
           chainId: this.$inDev ? 280 : 324,
         },
         {
+          name: "Optimism",
+          coin: {
+            usdc: optimisUSDC,
+            usdt: optimisUSDT,
+            dai: optimisDAI,
+          },
+          landRecharge: optimismRecharge,
+          chainId: 10,
+        },
+        {
           name: "everPay",
           coin: {
             usdc: "",
@@ -93,8 +109,34 @@ export default {
   },
   computed: {
     ...mapGetters(["walletObj"]),
+    opLandRecharge() {
+      const addr = "";
+      const provider = new providers.Web3Provider(this.walletObj);
+      return UNIWrapper__factory.connect(addr, provider);
+    },
   },
-  created() {
-    // console.log(MumbaiUSDC);
+  methods: {
+    async usdc2eth() {
+      const provider = new providers.Web3Provider(this.walletObj);
+      const quoter = IQuoter__factory.connect(
+        "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+        provider.getSigner()
+      );
+      const path = solidityPack(
+        ["address", "uint24", "address"],
+        [
+          "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // usdc addr
+          500, //
+          "0x4200000000000000000000000000000000000006",
+        ]
+      );
+      const res = await quoter.callStatic.quoteExactOutput(
+        path,
+        parseUnits("2000", 6)
+      );
+      console.log("res", res);
+      // mul(1001).div(1000);
+      console.log(formatEther(res));
+    },
   },
 };

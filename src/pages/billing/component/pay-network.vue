@@ -39,13 +39,6 @@
 </template>
 
 <script>
-import { providers } from "ethers"; //, utils
-import { Web3Provider } from "zksync-web3";
-import ethContract from "../../../plugins/pay/contracts/src-chain-contracts";
-import bscContract from "../../../plugins/pay/contracts/src-chain-contracts-bsc";
-import polygonContract from "../../../plugins/pay/contracts/dst-chain-contracts";
-import ArbitrumContract from "../../../plugins/pay/contracts/src-chain-contracts-arbitrum";
-import zkSyncContract from "../../../plugins/pay/contracts/src-chain-contracts-zkSync";
 import { mapGetters } from "vuex";
 import everPay from "../../../views/pay/ever-pay.vue";
 
@@ -90,6 +83,12 @@ export default {
           img: "/img/svg/logo-no-letters.svg",
           chainId: this.$inDev ? 280 : 324,
         },
+        {
+          label: "Optimism",
+          name: "Optimism",
+          img: "/img/svg/logo-no-letters.svg",
+          chainId: 10,
+        },
         // {
         //   label: "everPay",
         //   name: "everPay",
@@ -125,7 +124,7 @@ export default {
         );
         this.selected = parseInt(this.walletObj.chainId);
       }
-      this.setContract();
+      this.$emit("onNetwork", this.selected);
     },
     async onSelect(chainId) {
       try {
@@ -137,44 +136,14 @@ export default {
           localStorage.removeItem("isEverpay");
           await this.switchNet(chainId);
         }
-        this.setContract();
+        this.$emit("onNetwork", this.selected);
       } catch (error) {
         // user cancel
         console.log(error, "==================");
         this.initSeleted();
       }
     },
-    setContract() {
-      const provider = new providers.Web3Provider(this.walletObj);
-      let zkprovider = new Web3Provider(this.walletObj);
-      let contract = null;
-      switch (this.selected) {
-        case "Polygon":
-          polygonContract.setProvider(provider);
-          contract = polygonContract;
-          break;
 
-        case "BSC":
-          bscContract.setProvider(provider);
-          contract = bscContract;
-          break;
-        case "Arbitrum":
-          ArbitrumContract.setProvider(provider);
-          this.curContract = ArbitrumContract;
-          break;
-        case "zkSync":
-          zkSyncContract.setProvider(zkprovider);
-          contract = zkSyncContract;
-          break;
-
-        default:
-          ethContract.setProvider(provider);
-          contract = ethContract;
-          break;
-      }
-      this.$emit("onNetwork", this.selected);
-      this.$store.commit("SET_CONTRACT", contract);
-    },
     async switchNet(id) {
       console.log(window.ethereum);
       const chainId = "0x" + id.toString(16);
@@ -356,6 +325,17 @@ export default {
           chainId,
           chainName: "Linea",
           rpcUrls: ["https://linea-mainnet.infura.io/v3"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        10: {
+          chainId,
+          chainName: "Optimism LlamaNodes",
+          rpcUrls: ["https://optimism.llamarpc.com"],
           nativeCurrency: {
             name: "ETH",
             symbol: "ETH",
