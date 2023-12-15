@@ -432,3 +432,37 @@ export const SignWalletCon = async (
     return false;
   }
 };
+
+export const ConnectBitget = async () => {
+  const provider = window.bitkeep && window.bitkeep.ethereum;
+  if (!provider) {
+    Vue.prototype.$Dialog.getnoWallet("bitget");
+  }
+  const accounts = await provider.request({ method: "eth_requestAccounts" });
+  return accounts;
+};
+
+export const SignBitget = async (accounts, nonce, inviteCode, capToken) => {
+  const provider = window.bitkeep && window.bitkeep.ethereum;
+
+  const msg = `0x${Buffer.from(nonce, "utf8").toString("hex")}`;
+  try {
+    const signature = await provider.request({
+      method: "personal_sign",
+      params: [msg, accounts],
+    });
+    const data = {
+      signature,
+      appName: "BUCKET",
+      inviteCode,
+      type: "ETH",
+      walletType: "Bitget",
+      capT: capToken,
+    };
+    const stoken = await Web3Login(accounts, data);
+    return stoken;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
