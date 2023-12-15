@@ -62,10 +62,10 @@ export const lineaRegister = "0xe3e2cB6ff2F049058169E2044A0EF603773267a7";
 export const zetaRegister = "0xA6E982F19D4f162Db98D59E663b53D714d2480F7";
 
 // optimism chain
-export const optimisUSDC = "0x1CBFB107555fBa8DB2DaDfC00413405750B045dC";
-export const optimisUSDT = "0x4c314a3Bf152d86bE8D9c4447509D0D063F901D8";
-export const optimisDAI = "0xFa8A53251FFfa08E1771CF10735FD7237e3bcBF4";
-export const optimismRecharge = "";
+export const optimisUSDC = "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85";
+export const optimisUSDT = "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58";
+export const optimisDAI = "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1";
+export const optimismRecharge = "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
 
 // dst chain
 export const MumbaiRegister = "0x9552515252815E7c0Fef403d1B2cfcB1B29A9cAE";

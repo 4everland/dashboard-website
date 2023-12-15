@@ -109,6 +109,14 @@ export default {
           img: "/img/svg/pay/usdc.svg",
         });
       }
+      if (this.chainId == 10) {
+        coinList.push({
+          label: "ETH",
+          showLabel: "ETH",
+          name: "ETH",
+          img: "/img/svg/pay/usdc.svg",
+        });
+      }
       return coinList;
     },
   },
@@ -121,9 +129,6 @@ export default {
 
   watch: {
     chainId() {
-      // if (this.$inDev ? val != 80001 : val != 137) {
-      // this.$emit("onSelectCoin", this.selected);
-      // }
       this.selected = "USDC";
     },
   },

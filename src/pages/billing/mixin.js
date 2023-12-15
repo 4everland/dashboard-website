@@ -26,9 +26,14 @@ import {
   optimismRecharge,
 } from "../../plugins/pay/contracts/contracts-addr";
 import { mapGetters } from "vuex";
-import { IQuoter__factory, UNIWrapper__factory } from "@4everland-contracts";
+import { IQuoter__factory, UNILand__factory } from "@4everland-contracts";
 import { providers } from "ethers";
-import { solidityPack, parseUnits, formatEther } from "ethers/lib/utils";
+import {
+  solidityPack,
+  parseUnits,
+  formatEther,
+  parseEther,
+} from "ethers/lib/utils";
 export default {
   data() {
     return {
@@ -90,6 +95,7 @@ export default {
             usdc: optimisUSDC,
             usdt: optimisUSDT,
             dai: optimisDAI,
+            eth: "0x4200000000000000000000000000000000000006",
           },
           landRecharge: optimismRecharge,
           chainId: 10,
@@ -110,12 +116,19 @@ export default {
   computed: {
     ...mapGetters(["walletObj"]),
     opLandRecharge() {
-      const addr = "";
+      const addr = "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
       const provider = new providers.Web3Provider(this.walletObj);
-      return UNIWrapper__factory.connect(addr, provider);
+      return UNILand__factory.connect(addr, provider);
     },
   },
   methods: {
+    async handleOpLandRecharge() {
+      const tx = await this.opLandRecharge.mintByETH(this.euid, {
+        value: parseEther("0.2"),
+      });
+      const receipt = await tx.wait();
+      console.log(receipt);
+    },
     async usdc2eth() {
       const provider = new providers.Web3Provider(this.walletObj);
       const quoter = IQuoter__factory.connect(

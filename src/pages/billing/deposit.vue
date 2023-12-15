@@ -1,10 +1,10 @@
 <template>
   <div class="deposite-container d-flex pa-6">
     <div class="deposite-content flex-1 h-flex">
-      <!-- <div>
+      <div>
         <span>'coin addr:' {{ coinAddr }}</span>
         <span class="ml-4">'land recharge addr:' {{ landRechargeAddr }}</span>
-      </div> -->
+      </div>
       <div class="purchase-plate">
         <h2 class="fz-16">Deposit</h2>
         <div class="deposite-section mt-4">
@@ -13,6 +13,7 @@
               maxlength="8"
               class="deposite-input flex-1"
               v-model="landAmount"
+              @input="handleInput"
               type="text"
             />
             <span class="num">,000,000</span>
@@ -50,7 +51,7 @@
             <div class="fz-16 fw-b">Total</div>
 
             <div class="mt-1">
-              <span class="amount fw-b">{{ usdcAmount.toString() }}</span>
+              <span class="amount fw-b">{{ displayPrice }}</span>
               <span class="unit fz-14 ml-1">{{ CoinType }}</span>
             </div>
           </div>
@@ -60,6 +61,15 @@
             v-ripple
             v-if="isEverpay"
             @click="handleEverpayPayment"
+          >
+            Confirm
+          </div>
+          <!-- eth bsc another payment btn -->
+          <div
+            class="confirm-btn fw-b cursor-p"
+            v-ripple
+            v-else-if="coinSelect == 'ETH'"
+            @click="handleAnotherPayment"
           >
             Confirm
           </div>
@@ -111,6 +121,8 @@ import resouceCounter from "./component/resouce-counter.vue";
 import rechargeStepDialog from "./component/recharge-step-dialog.vue";
 import { mapState } from "vuex";
 import { BigNumber, providers } from "ethers";
+import debounce from "../../plugins/debounce";
+
 import { Web3Provider } from "zksync-web3";
 
 import {
@@ -118,8 +130,14 @@ import {
   parseEther,
   formatEther,
   formatUnits,
+  solidityPack,
 } from "ethers/lib/utils";
-import { ICoin__factory, Land__factory } from "@4everland-contracts";
+import {
+  ICoin__factory,
+  Land__factory,
+  IQuoter__factory,
+  UNILand__factory,
+} from "@4everland-contracts";
 import { getProvider } from "@/plugins/ens";
 
 import uidToEuid from "@/utils/uid2euid";
@@ -141,6 +159,7 @@ export default {
       landAmount: "",
       allowance: BigNumber.from("0"),
       usdcAmount: BigNumber.from("0"),
+      ethAmount: BigNumber.from("0"),
       curAmountDecimals: 18,
       chainId: this.$inDev ? 80001 : 137,
       rechargeSuccess: false,
@@ -169,6 +188,13 @@ export default {
         this.allowance.eq(uint256Max) || this.allowance.gte(this.usdcAmount)
       );
     },
+    displayPrice() {
+      if (this.coinSelect == "ETH") {
+        return (formatEther(this.ethAmount) * 1).toFixed(5);
+      } else {
+        return this.usdcAmount.toString();
+      }
+    },
     confirmText() {
       if (this.isApproved) return "Confirm";
       return "Approve";
@@ -189,6 +215,10 @@ export default {
     },
     LandRecharge() {
       return Land__factory.connect(this.landRechargeAddr, this.signer);
+    },
+    opEthLandRecharge() {
+      const addr = "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
+      return UNILand__factory.connect(addr, this.signer);
     },
     curChainInfo() {
       return this.chainAddrs.find((it) => it.chainId == this.chainId);
@@ -245,13 +275,24 @@ export default {
     async handleRechargeLand() {
       this.depositing = true;
       try {
-        const tx = await this.LandRecharge.mint(
-          this.coinAddr,
-          this.euid, // euid
-          this.payAmounts
-        );
-        const receipt = await tx.wait();
-        console.log(receipt);
+        let receipt = "";
+
+        if (this.coinSelect == "ETH") {
+          const eth = await this.usdc2eth();
+          const tx = await this.opLandRecharge.mintByETH(this.euid, {
+            value: eth,
+          });
+          receipt = await tx.wait();
+          console.log(receipt);
+        } else {
+          const tx = await this.LandRecharge.mint(
+            this.coinAddr,
+            this.euid, // euid
+            this.payAmounts
+          );
+          receipt = await tx.wait();
+          console.log(receipt);
+        }
         console.log("recharge success");
         this.rechargeSuccess = true;
 
@@ -310,7 +351,11 @@ export default {
     },
     async handleSelectCoin(val) {
       this.coinSelect = val;
-      await this.checkApproved();
+      if (this.coinSelect == "ETH") {
+        this.usdc2eth();
+      } else {
+        await this.checkApproved();
+      }
     },
     handleClose() {
       if (this.rechargeSuccess) {
@@ -362,6 +407,21 @@ export default {
       this.$alert("Recharge success!!");
       this.$refs.everpay.initEverPay();
     },
+
+    async handleAnotherPayment() {
+      try {
+        this.$loading();
+        const tx = await this.opEthLandRecharge.mintByETH(this.euid, {
+          value: this.ethAmount,
+        });
+        const receipt = await tx.wait();
+        console.log(receipt);
+        this.$loading.close();
+      } catch (error) {
+        console.log(error);
+        this.onErr(error);
+      }
+    },
     onErr(err, retry) {
       if (!err) return console.log("---- err null");
       console.log(err);
@@ -387,7 +447,11 @@ export default {
         msg = "Transaction Failed";
       } else if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
         msg = "IPFS Storage Expired, extending service duration is required.";
-      } else if (/exceeds balance/i.test(msg) || msg == "overflow") {
+      } else if (
+        /exceeds balance/i.test(msg) ||
+        msg == "overflow" ||
+        /insufficient funds/i.test(msg)
+      ) {
         msg = "Insufficient balance in your wallet.";
       } else if (msg.length > 100) {
         const mat = /^(.+)\[/.exec(msg);
@@ -427,16 +491,55 @@ export default {
       transactionList.unshift(transactionItem);
       localStorage.setItem("transactionCache", JSON.stringify(transactionList));
     },
-  },
-  watch: {
-    landAmount() {
+    handleInput(val) {
       this.landAmount = this.landAmount.replace(/[^\d]/g, "");
-
       if (this.landAmount) {
         this.usdcAmount = BigNumber.from(this.landAmount);
       } else {
         this.usdcAmount = BigNumber.from("0");
+        this.ethAmount = BigNumber.from("0");
       }
+      if (this.coinSelect == "ETH") {
+        debounce(() => {
+          this.usdc2eth();
+        });
+      }
+    },
+
+    async usdc2eth() {
+      // const provider = new providers.Web3Provider(this.walletObj);
+      const quoter = IQuoter__factory.connect(
+        "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+        this.signer
+      );
+      const path = solidityPack(
+        ["address", "uint24", "address"],
+        [
+          "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // usdc addr
+          500, //
+          this.coinAddr,
+        ]
+      );
+
+      console.log(this.usdcAmount.toString());
+
+      if (this.usdcAmount.eq(BigNumber.from("0"))) {
+        this.ethAmount = BigNumber.from("0");
+
+        return BigNumber.from("0");
+      }
+
+      console.log(parseUnits(this.usdcAmount.toString(), 6).toString());
+      const res = await quoter.callStatic.quoteExactOutput(
+        path,
+        parseUnits(this.usdcAmount.toString(), 6)
+      );
+      console.log(formatEther(res));
+      this.ethAmount = res;
+      return res;
+      // console.log("res", res);
+      // // mul(1001).div(1000);
+      // console.log(formatEther(res));
     },
   },
 };
