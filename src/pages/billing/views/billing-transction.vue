@@ -26,7 +26,7 @@
           <td>{{ item.timeSection }}</td>
           <td>{{ item.landUsed }} LAND</td>
           <td>{{ item.resourceType }}</td>
-          <td>{{ $utils.getFileSize(item.resourceUsed) }}</td>
+          <td>{{ item.resourceUsed }}</td>
         </tr>
       </tbody>
     </billing-table>
@@ -73,17 +73,26 @@ export default {
           const resourceTypeObj = {
             IPFS_STORAGE: "IPFS Storage",
             AR_STORAGE: "Arweave",
-            BUILE_TIME: "Build Time",
+            BUILD_TIME: "Build Time",
             TRAFFIC: "Bandwidth",
             COMPUTE_UNIT: "RPC Request",
           };
 
-          it.resourceType = resourceTypeObj[it.resourceType];
           let formatLand = this.$utils.formatLand(it.landUsed, true);
           it.landUsed =
             Number(formatLand.land) == 0
               ? "< 1"
               : formatLand.land + " " + formatLand.unit;
+          if (it.resourceType == "BUILD_TIME") {
+            it.resourceUsed = this.$utils.getResourceTypeSize(
+              it.resourceUsed,
+              false,
+              "BUILD_TIME"
+            );
+          } else {
+            it.resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+          }
+          it.resourceType = resourceTypeObj[it.resourceType];
         });
 
         this.list = data.sort((a, b) => b.timestamp - a.timestamp);

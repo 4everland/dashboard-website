@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wallet-block">
     <div class="wallet-box">
       <div
         class="wallet-item"
@@ -18,6 +18,7 @@
           }}</span>
           <v-btn
             v-if="item.loading"
+            disabled
             :loading="walletConnectLoading"
             icon
           ></v-btn>
@@ -45,6 +46,8 @@ import {
   SignCoinBase,
   ConnectWalletCon,
   SignWalletCon,
+  ConnectBitget,
+  SignBitget,
 } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 
@@ -65,11 +68,6 @@ export default {
           btnText: "Popular",
         },
         {
-          name: "Phantom",
-          icon: require("@/assets/imgs/phantom.png"),
-          btnText: "Solana",
-        },
-        {
           name: "Coinbase Wallet",
           icon: require("@/assets/imgs/coinbase.png"),
           btnText: "",
@@ -81,19 +79,30 @@ export default {
           loading: true,
         },
         {
-          name: "Petra",
-          icon: require("@/assets/imgs/petra.svg"),
-          btnText: "Aptos",
-        },
-        {
           name: "OKX Wallet",
           icon: require("@/assets/imgs/okx.png"),
-          btnText: "Multi-Chain",
+          btnText: "",
         },
+        {
+          name: "Bitget Wallet",
+          icon: require("@/assets/imgs/Bitget.svg"),
+          btnText: "",
+        },
+        {
+          name: "Phantom",
+          icon: require("@/assets/imgs/phantom.png"),
+          btnText: "",
+        },
+        {
+          name: "Petra",
+          icon: require("@/assets/imgs/petra.svg"),
+          btnText: "",
+        },
+
         {
           name: "Flow",
           icon: require("@/assets/imgs/flow.svg"),
-          btnText: "Flow",
+          btnText: "",
         },
       ],
     };
@@ -151,6 +160,9 @@ export default {
           break;
         case "WalletConnect":
           this.walletConnect();
+          break;
+        case "Bitget Wallet":
+          this.bitgetConnect();
           break;
         default:
           break;
@@ -300,6 +312,27 @@ export default {
         this.ssoLogin(stoken);
       }
     },
+    async bitgetConnect() {
+      const accounts = await ConnectBitget();
+      if (!accounts) {
+        return;
+      }
+      const nonce = await ExchangeCode(accounts[0]);
+      if (!nonce) {
+        return;
+      }
+      // window.alert(nonce);
+      const stoken = await SignBitget(
+        accounts[0],
+        nonce,
+        this.inviteCode,
+        this.capToken
+      );
+      if (stoken) {
+        this.ssoLogin(stoken);
+      }
+    },
+
     onVerify(name) {
       this.$emit("walletVerify", name);
     },
@@ -308,64 +341,87 @@ export default {
 </script>
 
 <style lang="scss">
-.wallet-box {
-  // padding: 0 30px;
-  .wallet-item {
-    width: 100%;
-    max-width: 480px;
-    height: 56px;
-    background: rgba(140, 140, 161, 0.05);
-    border-radius: 8px;
-    margin: 0 auto;
-    margin-top: 12px;
-    padding: 12px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    &-name {
+.wallet-block {
+  height: 400px;
+  position: relative;
+  &::after {
+    content: "";
+    height: 50px;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 1s ease-in-out 0s;
+    background: linear-gradient(
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.9) 80%
+    );
+    bottom: 0px;
+    opacity: 1;
+  }
+  .wallet-box {
+    height: 100%;
+    overflow: hidden auto;
+    // padding: 0 30px;
+    padding-bottom: 20px;
+    .wallet-item {
+      width: 100%;
+      max-width: 480px;
+      height: 56px;
+      background: rgba(140, 140, 161, 0.05);
+      border-radius: 8px;
+      margin: 0 auto;
+      margin-top: 12px;
+      padding: 12px 20px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-    }
+      cursor: pointer;
 
-    img {
-      width: 32px;
-      margin-right: 16px;
-    }
+      &:last-child {
+        border-bottom: none;
+      }
 
-    .name {
-      font-size: 16px;
-      font-family: Arial-BoldMT, Arial;
-      font-weight: normal;
-      color: #495667;
-    }
+      &-name {
+        display: flex;
+        align-items: center;
+      }
 
-    .item-name {
-      display: inline-block;
-      color: #735ea1;
-      font-size: 10px;
-      text-align: center;
-      padding: 4px 8px;
-    }
+      img {
+        width: 32px;
+        margin-right: 16px;
+      }
 
-    .item-name-pop {
-      background: linear-gradient(270deg, #735ea1 0%, #9747ff 100%);
-      border-radius: 8px 0px;
-      color: #fff;
-    }
+      .name {
+        font-size: 16px;
+        font-family: Arial-BoldMT, Arial;
+        font-weight: normal;
+        color: #495667;
+      }
 
-    .start-btn {
-      color: #3eadff;
-      border-radius: 6px;
-    }
+      .item-name {
+        display: inline-block;
+        color: #735ea1;
+        font-size: 10px;
+        text-align: center;
+        padding: 4px 8px;
+      }
 
-    &:first-child .start-btn {
-      color: #fff;
+      .item-name-pop {
+        background: linear-gradient(270deg, #735ea1 0%, #9747ff 100%);
+        border-radius: 8px 0px;
+        color: #fff;
+      }
+
+      .start-btn {
+        color: #3eadff;
+        border-radius: 6px;
+      }
+
+      &:first-child .start-btn {
+        color: #fff;
+      }
     }
   }
 }

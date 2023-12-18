@@ -60,6 +60,12 @@ export default {
           tips: "A crypto wallet on CoinBase",
           link: "https://www.coinbase.com/",
         },
+        bitget: {
+          icon: require("@/assets/imgs/Bitget.svg"),
+          name: "Bitget Wallet",
+          tips: "A crypto wallet on Bitget",
+          link: "https://web3.bitget.com/en/wallet-download?type=2",
+        },
       },
     };
   },
