@@ -331,13 +331,13 @@ export default {
           this.landRechargeAddr,
           uint256Max
         );
-        // console.log("gas", gas);
+        console.log("gas", gas);
         let gasPrice = await this.ERC20.provider.getGasPrice();
         const tx = await this.ERC20.approve(this.landRechargeAddr, uint256Max, {
           gasLimit: gas.mul(15).div(10),
           gasPrice: gasPrice.mul(12).div(10),
         });
-        // console.log("tx", tx);
+        console.log("tx", tx);
         const receipt = await tx.wait();
         console.log(receipt);
       } catch (error) {

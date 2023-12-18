@@ -3,7 +3,7 @@
     <div class="d-flex flex-wrap space-btw">
       <div
         @click="onSelect(it.chainId)"
-        class="network-label py-3 cursor-p justify-center d-flex mt-4"
+        class="network-label py-3 al-c cursor-p justify-center d-flex mt-4"
         :class="{
           active: selected == it.chainId,
         }"
@@ -86,7 +86,7 @@ export default {
         {
           label: "Optimism",
           name: "Optimism",
-          img: "/img/svg/logo-no-letters.svg",
+          img: "/img/svg/billing/ic-optimism.svg",
           chainId: 10,
         },
         // {

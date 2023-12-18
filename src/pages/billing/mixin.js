@@ -23,6 +23,7 @@ import {
   optimisUSDC,
   optimisUSDT,
   optimisDAI,
+  optimisETH,
   optimismRecharge,
 } from "../../plugins/pay/contracts/contracts-addr";
 import { mapGetters } from "vuex";
@@ -95,7 +96,7 @@ export default {
             usdc: optimisUSDC,
             usdt: optimisUSDT,
             dai: optimisDAI,
-            eth: "0x4200000000000000000000000000000000000006",
+            eth: optimisETH,
           },
           landRecharge: optimismRecharge,
           chainId: 10,
@@ -140,7 +141,7 @@ export default {
         [
           "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // usdc addr
           500, //
-          "0x4200000000000000000000000000000000000006",
+          optimisETH,
         ]
       );
       const res = await quoter.callStatic.quoteExactOutput(

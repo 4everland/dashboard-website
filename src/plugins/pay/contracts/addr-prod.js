@@ -64,6 +64,8 @@ export const zetaRegister = "0xA6D3027F572BB7e9E141465640bb736ee78a5867";
 export const optimisUSDC = "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85";
 export const optimisUSDT = "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58";
 export const optimisDAI = "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1";
+export const optimisETH = "0x4200000000000000000000000000000000000006";
+
 export const optimismRecharge = "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
 
 // dst chain
