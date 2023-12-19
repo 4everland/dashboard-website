@@ -88,6 +88,8 @@ Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
     pre = inDev
       ? "https://goerli.explorer.zksync.io/tx/"
       : "https://explorer.zksync.io/tx/";
+  } else if (net == "Optimism") {
+    pre = "https://optimistic.etherscan.io/tx/";
   }
   return pre + hash;
 };
