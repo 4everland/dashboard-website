@@ -122,9 +122,6 @@ import rechargeStepDialog from "./component/recharge-step-dialog.vue";
 import { mapState } from "vuex";
 import { BigNumber, providers } from "ethers";
 import debounce from "../../plugins/debounce";
-
-import { Web3Provider } from "zksync-web3";
-
 import {
   parseUnits,
   parseEther,
@@ -142,6 +139,7 @@ import { getProvider } from "@/plugins/ens";
 
 import uidToEuid from "@/utils/uid2euid";
 import mixin from "./mixin";
+import { Web3Provider } from "zksync-web3";
 const uint256Max = BigNumber.from("1").shl(256).sub(1);
 
 export default {
@@ -179,8 +177,9 @@ export default {
     }),
     signer() {
       let provider = new providers.Web3Provider(this.walletObj);
-      if (this.chainId == this.$inDev ? "280" : "324")
+      if (this.chainId == (this.$inDev ? "280" : "324")) {
         provider = new Web3Provider(this.walletObj);
+      }
       return provider.getSigner();
     },
     isApproved() {
@@ -333,11 +332,21 @@ export default {
         );
         console.log("gas", gas);
         let gasPrice = await this.ERC20.provider.getGasPrice();
+
         const tx = await this.ERC20.approve(this.landRechargeAddr, uint256Max, {
           gasLimit: gas.mul(15).div(10),
           gasPrice: gasPrice.mul(12).div(10),
         });
         console.log("tx", tx);
+        // let timer = setInterval(async () => {
+        //   const receipt = await new providers.Web3Provider(
+        //     window.ethereum
+        //   ).getTransactionReceipt(tx.hash);
+        //   console.log(receipt);
+        //   if (receipt) {
+        //     clearInterval(timer);
+        //   }
+        // }, 1000);
         const receipt = await tx.wait();
         console.log(receipt);
       } catch (error) {
