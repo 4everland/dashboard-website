@@ -1,10 +1,6 @@
 <template>
   <div class="deposite-container d-flex pa-6">
     <div class="deposite-content flex-1 h-flex">
-      <div>
-        <span>'coin addr:' {{ coinAddr }}</span>
-        <span class="ml-4">'land recharge addr:' {{ landRechargeAddr }}</span>
-      </div>
       <div class="purchase-plate">
         <h2 class="fz-16">Deposit</h2>
         <div class="deposite-section mt-4">
@@ -41,10 +37,12 @@
       ></everpay-bar>
       <pay-coin
         v-else
+        v-model="coinSelect"
         class="flex-1"
         :chainId="chainId"
         @onSelectCoin="handleSelectCoin"
       ></pay-coin>
+
       <div class="pay-confirm-container pos-a">
         <div class="pay-confirm pa-4 al-c space-btw">
           <div class="amout-info">
@@ -65,9 +63,11 @@
             Confirm
           </div>
           <!-- eth bsc another payment btn -->
+
           <div
             class="confirm-btn fw-b cursor-p"
             v-ripple
+            :class="ethAmount.toString() == '0' ? 'disabled' : ''"
             v-else-if="coinSelect == 'ETH'"
             @click="handleAnotherPayment"
           >
@@ -268,6 +268,7 @@ export default {
       } else {
         this.isEverpay = false;
       }
+      // location.reload();
       this.coinSelect = "USDC";
       this.checkApproved();
     },
@@ -419,6 +420,7 @@ export default {
 
     async handleAnotherPayment() {
       try {
+        if (!this.ethAmount) return;
         this.$loading();
         const tx = await this.opEthLandRecharge.mintByETH(this.euid, {
           value: this.ethAmount,
@@ -516,7 +518,6 @@ export default {
     },
 
     async usdc2eth() {
-      // const provider = new providers.Web3Provider(this.walletObj);
       const quoter = IQuoter__factory.connect(
         "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
         this.signer

@@ -146,7 +146,19 @@ export default {
         const originMergeTransaction = this.transactionCacheMatch(data.items);
 
         let list = originMergeTransaction.map((it) => {
-          it.amount = Number(formatEther(BigNumber.from(it.amount))).toFixed(2);
+          if (it.amountType == "0x4200000000000000000000000000000000000006") {
+            if (!it.originalValue) {
+              it.amount = 0;
+            } else {
+              it.amount = Number(
+                formatEther(BigNumber.from(it.originalValue))
+              ).toFixed(5);
+            }
+          } else {
+            it.amount = Number(formatEther(BigNumber.from(it.amount))).toFixed(
+              2
+            );
+          }
 
           it.landAmount = this.$utils.formatLand(it.landAmount);
           it.network = this.getChainType(it.network);

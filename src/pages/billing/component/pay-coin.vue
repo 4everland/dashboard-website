@@ -6,15 +6,15 @@
         @click="onSelect(it.label)"
         class="coin-label py-2 px-4 cursor-p d-flex space-btw mr-2 mb-2"
         :class="{
-          active: selected == it.label,
+          active: value == it.label,
         }"
         v-for="(it, i) in coinList"
         :key="i"
       >
         <div class="al-c flex-1">
-          <v-icon size="16" :color="selected == it.label ? $color1 : '#555'"
+          <v-icon size="16" :color="value == it.label ? $color1 : '#555'"
             >mdi-{{
-              selected == it.label
+              value == it.label
                 ? "circle-slice-8"
                 : "checkbox-blank-circle-outline"
             }}</v-icon
@@ -29,7 +29,7 @@
             <div
               class="fz-14"
               :class="{
-                'color-1': selected == it.label,
+                'color-1': value == it.label,
               }"
             >
               {{ it.name }}
@@ -65,6 +65,9 @@ export default {
   props: {
     chainId: {
       type: Number,
+    },
+    value: {
+      type: String,
     },
   },
   data() {
@@ -122,14 +125,7 @@ export default {
   },
   methods: {
     onSelect(label) {
-      this.selected = label;
       this.$emit("onSelectCoin", label);
-    },
-  },
-
-  watch: {
-    chainId() {
-      this.selected = "USDC";
     },
   },
 };

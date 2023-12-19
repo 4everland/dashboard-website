@@ -117,11 +117,6 @@ export default {
       if (localStorage.isEverpay) {
         this.selected = 9999999;
       } else {
-        console.log(
-          this.walletObj.chainId,
-          parseInt(this.walletObj.chainId),
-          "chainId==="
-        );
         this.selected = parseInt(this.walletObj.chainId);
       }
       this.$emit("onNetwork", this.selected);
