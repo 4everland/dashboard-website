@@ -69,7 +69,7 @@
             v-ripple
             :class="ethAmount.toString() == '0' ? 'disabled' : ''"
             v-else-if="coinSelect == 'ETH'"
-            @click="handleAnotherPayment"
+            @click="handleRechargeLand"
           >
             Confirm
           </div>
@@ -122,6 +122,7 @@ import rechargeStepDialog from "./component/recharge-step-dialog.vue";
 import { mapState } from "vuex";
 import { BigNumber, providers } from "ethers";
 import debounce from "../../plugins/debounce";
+import { optimismRecharge } from "@/plugins/pay/contracts/contracts-addr";
 import {
   parseUnits,
   parseEther,
@@ -216,8 +217,7 @@ export default {
       return Land__factory.connect(this.landRechargeAddr, this.signer);
     },
     opEthLandRecharge() {
-      const addr = "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
-      return UNILand__factory.connect(addr, this.signer);
+      return UNILand__factory.connect(optimismRecharge, this.signer);
     },
     curChainInfo() {
       return this.chainAddrs.find((it) => it.chainId == this.chainId);
@@ -276,14 +276,14 @@ export default {
       this.depositing = true;
       try {
         let receipt = "";
-
         if (this.coinSelect == "ETH") {
-          const eth = await this.usdc2eth();
-          const tx = await this.opLandRecharge.mintByETH(this.euid, {
-            value: eth,
+          if (!this.ethAmount) return;
+          this.$loading();
+          const tx = await this.opEthLandRecharge.mintByETH(this.euid, {
+            value: this.ethAmount,
           });
           receipt = await tx.wait();
-          console.log(receipt);
+          this.$loading.close();
         } else {
           const tx = await this.LandRecharge.mint(
             this.coinAddr,
@@ -295,9 +295,11 @@ export default {
         }
         console.log("recharge success");
         this.rechargeSuccess = true;
-
         this.transactionCache(receipt.transactionHash);
         this.$store.dispatch("checkOnChain");
+        if (this.coinSelect == "ETH") {
+          this.$router.push("/billing/records?tab=Purchase History");
+        }
       } catch (error) {
         this.onErr(error);
       }
@@ -427,6 +429,7 @@ export default {
         });
         const receipt = await tx.wait();
         console.log(receipt);
+        this.$router.push("/billing/records?tab=Purchase History");
         this.$loading.close();
       } catch (error) {
         console.log(error);
@@ -487,6 +490,8 @@ export default {
           .mul((1e6).toString())
           .toString(),
         amount: this.usdcAmount.mul((1e18).toString()).toString(),
+        originalValue:
+          this.coinSelect == "ETH" ? this.ethAmount.toString() : "",
         txHash,
         createdAt: +new Date() / 1e3,
         status: "2",

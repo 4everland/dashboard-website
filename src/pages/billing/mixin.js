@@ -27,14 +27,6 @@ import {
   optimismRecharge,
 } from "../../plugins/pay/contracts/contracts-addr";
 import { mapGetters } from "vuex";
-import { IQuoter__factory, UNILand__factory } from "@4everland-contracts";
-import { providers } from "ethers";
-import {
-  solidityPack,
-  parseUnits,
-  formatEther,
-  parseEther,
-} from "ethers/lib/utils";
 export default {
   data() {
     return {
@@ -116,41 +108,5 @@ export default {
   },
   computed: {
     ...mapGetters(["walletObj"]),
-    opLandRecharge() {
-      const addr = "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
-      const provider = new providers.Web3Provider(this.walletObj);
-      return UNILand__factory.connect(addr, provider);
-    },
-  },
-  methods: {
-    async handleOpLandRecharge() {
-      const tx = await this.opLandRecharge.mintByETH(this.euid, {
-        value: parseEther("0.2"),
-      });
-      const receipt = await tx.wait();
-      console.log(receipt);
-    },
-    async usdc2eth() {
-      const provider = new providers.Web3Provider(this.walletObj);
-      const quoter = IQuoter__factory.connect(
-        "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
-        provider.getSigner()
-      );
-      const path = solidityPack(
-        ["address", "uint24", "address"],
-        [
-          "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // usdc addr
-          500, //
-          optimisETH,
-        ]
-      );
-      const res = await quoter.callStatic.quoteExactOutput(
-        path,
-        parseUnits("2000", 6)
-      );
-      console.log("res", res);
-      // mul(1001).div(1000);
-      console.log(formatEther(res));
-    },
   },
 };
