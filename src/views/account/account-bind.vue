@@ -20,6 +20,16 @@
             @click="onDisconnect(it)"
             >Disconnect</v-btn
           >
+
+          <v-btn
+            v-else-if="it.type == 3"
+            color="primary"
+            min-width="75"
+            width="160"
+            max-width="160"
+            @click="onBind(it)"
+            >{{ it.account ? "Change" : "Verify" }}</v-btn
+          >
           <v-btn
             v-else
             color="primary"
@@ -430,6 +440,7 @@ export default {
                 rules: [(v) => v.trim().length >= 4 || "Invalid code."],
                 required: true,
               },
+              persistent: true,
             }
           );
           await this.$sleep(100);
