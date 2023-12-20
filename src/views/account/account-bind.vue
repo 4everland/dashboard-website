@@ -28,7 +28,7 @@
             width="160"
             max-width="160"
             @click="onBind(it)"
-            >{{ it.account ? "Rebinding" : "Verify" }}</v-btn
+            >{{ it.account ? "Rebind" : "Verify" }}</v-btn
           >
           <v-btn
             v-else
