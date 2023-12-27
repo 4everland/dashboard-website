@@ -117,7 +117,7 @@ export default {
           label: "ETH",
           showLabel: "ETH",
           name: "ETH",
-          img: "/img/svg/pay/usdc.svg",
+          img: "/img/svg/pay/eth.svg",
         });
       }
       return coinList;
