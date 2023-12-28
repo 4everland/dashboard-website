@@ -380,6 +380,7 @@ export default {
     },
     estimateInput(val) {
       this.landAmount = val;
+      this.handleInput();
     },
     onEverpay(item) {
       this.everpayPayInfo = item;

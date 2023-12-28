@@ -75,6 +75,10 @@ import {
   optimisUSDT,
   optimisDAI,
   optimisETH,
+  scrollUSDC,
+  scrollUSDT,
+  scrollDAI,
+  scrollETH,
 } from "@/plugins/pay/contracts/contracts-addr";
 import { formatEther } from "ethers/lib/utils";
 
@@ -98,6 +102,7 @@ export default {
           zkSyncUSDC,
           optimisUSDC,
           everPayUSDC,
+          scrollUSDC,
         ],
         USDCE: [MumbaiUSDCE],
         USDT: [
@@ -108,6 +113,7 @@ export default {
           zkSyncUSDT,
           optimisUSDT,
           everPayUSDT,
+          scrollUSDT,
         ],
         DAI: [
           MumbaiDAI,
@@ -117,8 +123,9 @@ export default {
           zkSyncDAI,
           optimisDAI,
           everPayDAI,
+          scrollDAI,
         ],
-        ETH: [optimisETH],
+        ETH: [optimisETH, scrollETH],
       },
       finished: false,
       loadingMore: false,
@@ -203,6 +210,7 @@ export default {
       if ([9999999].includes(id)) return "everPay";
       if ([1, 11155111].includes(id)) return "Ethereum";
       if ([10].includes(id)) return "Optimism";
+      if ([534352].includes(id)) return "Scroll";
       if ([99999991].includes(id))
         return "Redeem Historical Remaining Resources";
       if ([99999992].includes(id)) return " ";
