@@ -95,6 +95,12 @@ export default {
         //   img: "/img/svg/billing/ic-everpay.svg",
         //   chainId: 9999999,
         // },
+        {
+          label: "Scroll",
+          name: "Scroll",
+          img: "/img/svg/billing/ic-scroll.svg",
+          chainId: 534352,
+        },
       ];
       if (!this.allow) return list;
       return list.filter((it) => this.allow.includes(it.label));
@@ -140,7 +146,6 @@ export default {
     },
 
     async switchNet(id) {
-      console.log(window.ethereum);
       const chainId = "0x" + id.toString(16);
       try {
         await window.ethereum.request({
@@ -337,6 +342,16 @@ export default {
             decimals: 18,
           },
           // blockExplorerUrls: [],
+        },
+        534352: {
+          chainId,
+          chainName: "Scroll",
+          rpcUrls: ["https://rpc.scroll.io"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
         },
       }[id];
       if (!params) return;

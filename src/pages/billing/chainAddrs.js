@@ -24,6 +24,11 @@ import {
   optimisUSDT,
   optimisDAI,
   optimismRecharge,
+  scrollUSDC,
+  scrollUSDT,
+  scrollDAI,
+  scrollETH,
+  scrollRecharge,
 } from "../plugins/pay/contracts/contracts-addr";
 import Vue from "vue";
 export const chainAddrs = [
@@ -148,6 +153,29 @@ export const chainAddrs = [
     },
     landRecharge: optimismRecharge,
     chainId: 10,
+  },
+  {
+    name: "Scroll",
+    coin: {
+      usdc: {
+        name: "USDC",
+        addr: scrollUSDC,
+      },
+      usdt: {
+        name: "USDT",
+        addr: scrollUSDT,
+      },
+      dai: {
+        name: "DAI",
+        addr: scrollDAI,
+      },
+      eth: {
+        name: "ETH",
+        addr: scrollETH,
+      },
+    },
+    landRecharge: scrollRecharge,
+    chainId: 534352,
   },
   // {
   //   name: "everPay",

@@ -25,6 +25,11 @@ import {
   optimisDAI,
   optimisETH,
   optimismRecharge,
+  scrollUSDC,
+  scrollUSDT,
+  scrollDAI,
+  scrollETH,
+  scrollRecharge,
 } from "../../plugins/pay/contracts/contracts-addr";
 import { mapGetters } from "vuex";
 export default {
@@ -92,6 +97,17 @@ export default {
           },
           landRecharge: optimismRecharge,
           chainId: 10,
+        },
+        {
+          name: "Scroll",
+          coin: {
+            usdc: scrollUSDC,
+            usdt: scrollUSDT,
+            dai: scrollDAI,
+            eth: scrollETH,
+          },
+          landRecharge: scrollRecharge,
+          chainId: 534352,
         },
         {
           name: "everPay",

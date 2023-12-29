@@ -153,7 +153,10 @@ export default {
         const originMergeTransaction = this.transactionCacheMatch(data.items);
 
         let list = originMergeTransaction.map((it) => {
-          if (it.amountType == "0x4200000000000000000000000000000000000006") {
+          if (
+            it.amountType == "0x4200000000000000000000000000000000000006" ||
+            it.amountType == "0x5300000000000000000000000000000000000004"
+          ) {
             if (!it.originalValue) {
               it.amount = 0;
             } else {

@@ -216,7 +216,7 @@ export default {
     LandRecharge() {
       return Land__factory.connect(this.landRechargeAddr, this.signer);
     },
-    opEthLandRecharge() {
+    ethLandRecharge() {
       return UNILand__factory.connect(optimismRecharge, this.signer);
     },
     curChainInfo() {
@@ -279,7 +279,7 @@ export default {
         if (this.coinSelect == "ETH") {
           if (!this.ethAmount) return;
           this.$loading();
-          const tx = await this.opEthLandRecharge.mintByETH(this.euid, {
+          const tx = await this.ethLandRecharge.mintByETH(this.euid, {
             value: this.ethAmount,
           });
           receipt = await tx.wait();
@@ -420,23 +420,6 @@ export default {
       this.$alert("Recharge success!!");
       this.$refs.everpay.initEverPay();
     },
-
-    async handleAnotherPayment() {
-      try {
-        if (!this.ethAmount) return;
-        this.$loading();
-        const tx = await this.opEthLandRecharge.mintByETH(this.euid, {
-          value: this.ethAmount,
-        });
-        const receipt = await tx.wait();
-        console.log(receipt);
-        this.$router.push("/billing/records?tab=Purchase History");
-        this.$loading.close();
-      } catch (error) {
-        console.log(error);
-        this.onErr(error);
-      }
-    },
     onErr(err, retry) {
       if (!err) return console.log("---- err null");
       console.log(err);
@@ -508,7 +491,7 @@ export default {
       transactionList.unshift(transactionItem);
       localStorage.setItem("transactionCache", JSON.stringify(transactionList));
     },
-    handleInput(val) {
+    handleInput() {
       this.landAmount = this.landAmount.replace(/[^\d]/g, "");
       if (this.landAmount) {
         this.usdcAmount = BigNumber.from(this.landAmount);
@@ -524,38 +507,34 @@ export default {
     },
 
     async usdc2eth() {
-      const quoter = IQuoter__factory.connect(
-        "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
-        this.signer
-      );
-      const path = solidityPack(
-        ["address", "uint24", "address"],
-        [
-          "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // usdc addr
-          500, //
-          this.coinAddr,
-        ]
-      );
-
-      console.log(this.usdcAmount.toString());
-
       if (this.usdcAmount.eq(BigNumber.from("0"))) {
         this.ethAmount = BigNumber.from("0");
-
-        return BigNumber.from("0");
+        return;
       }
-
-      console.log(parseUnits(this.usdcAmount.toString(), 6).toString());
-      const res = await quoter.callStatic.quoteExactOutput(
-        path,
-        parseUnits(this.usdcAmount.toString(), 6)
-      );
-      console.log(formatEther(res));
-      this.ethAmount = res;
-      return res;
-      // console.log("res", res);
-      // // mul(1001).div(1000);
-      // console.log(formatEther(res));
+      if (this.chainId == 534352) {
+        this.ethAmount = parseEther(
+          (this.usdcAmount.toNumber() / 2300).toFixed(18)
+        );
+      } else {
+        const quoter = IQuoter__factory.connect(
+          "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+          this.signer
+        );
+        const path = solidityPack(
+          ["address", "uint24", "address"],
+          [
+            "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // usdc addr
+            500, //
+            this.coinAddr,
+          ]
+        );
+        const res = await quoter.callStatic.quoteExactOutput(
+          path,
+          parseUnits(this.usdcAmount.toString(), 6)
+        );
+        console.log(formatEther(res));
+        this.ethAmount = res;
+      }
     },
   },
 };
