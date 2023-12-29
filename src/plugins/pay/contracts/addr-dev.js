@@ -71,7 +71,7 @@ export const optimismRecharge = "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
 
 // scroll chain
 export const scrollUSDC = "0x06eFdBFf2a14a7c8E15944D1F4A48F9F95F663A4";
-export const scrollUSDT = "0xf55bec9cafdbe8730f096aa55dad6d22d44099df";
+export const scrollUSDT = "0xf55BEC9cafDbE8730f096Aa55dad6D22d44099Df";
 export const scrollDAI = "0xcA77eB3fEFe3725Dc33bccB54eDEFc3D9f764f97";
 export const scrollETH = "0x5300000000000000000000000000000000000004";
 export const scrollRecharge = "0x5cE38C1CeBa8978503A61C107473e1Eb5ae27222";

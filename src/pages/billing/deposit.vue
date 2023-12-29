@@ -122,7 +122,6 @@ import rechargeStepDialog from "./component/recharge-step-dialog.vue";
 import { mapState } from "vuex";
 import { BigNumber, providers } from "ethers";
 import debounce from "../../plugins/debounce";
-import { optimismRecharge } from "@/plugins/pay/contracts/contracts-addr";
 import {
   parseUnits,
   parseEther,
@@ -137,7 +136,6 @@ import {
   UNILand__factory,
 } from "@4everland-contracts";
 import { getProvider } from "@/plugins/ens";
-
 import uidToEuid from "@/utils/uid2euid";
 import mixin from "./mixin";
 import { Web3Provider } from "zksync-web3";
@@ -217,7 +215,7 @@ export default {
       return Land__factory.connect(this.landRechargeAddr, this.signer);
     },
     ethLandRecharge() {
-      return UNILand__factory.connect(optimismRecharge, this.signer);
+      return UNILand__factory.connect(this.landRechargeAddr, this.signer);
     },
     curChainInfo() {
       return this.chainAddrs.find((it) => it.chainId == this.chainId);
@@ -513,7 +511,7 @@ export default {
       }
       if (this.chainId == 534352) {
         this.ethAmount = parseEther(
-          (this.usdcAmount.toNumber() / 2300).toFixed(18)
+          (this.usdcAmount.toNumber() / 2350).toFixed(18)
         );
       } else {
         const quoter = IQuoter__factory.connect(

@@ -175,7 +175,7 @@ export default {
           let coinType = "USDC";
           for (const key in this.coinInfo) {
             let findCoinAddr = this.coinInfo[key].find(
-              (item) => item == it.amountType
+              (item) => item.toLowerCase() == it.amountType.toLowerCase()
             );
             if (findCoinAddr) coinType = key;
           }
