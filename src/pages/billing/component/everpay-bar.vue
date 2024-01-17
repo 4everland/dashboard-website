@@ -38,10 +38,6 @@
           </div>
           <div class="fz-12 text">{{ item.chainType }}</div>
         </div>
-        <div class="ml-auto">
-          <div class="fw-b fz-14">{{ item.balance.toFixed(7) }}</div>
-          <div class="text fz-12 ta-r">${{ item.balance.toFixed(2) }}</div>
-        </div>
       </div>
     </div>
     <!-- 

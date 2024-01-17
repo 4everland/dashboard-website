@@ -60,6 +60,7 @@
             v-ripple
             v-if="isEverpay"
             @click="handleEverpayPayment"
+            :class="everpayDisabled ? 'disabled' : ''"
           >
             Confirm
           </div>
@@ -246,6 +247,12 @@ export default {
     disabled() {
       return this.payAmounts.toString() == "0" || this.btnDisabled;
     },
+    everpayDisabled() {
+      return (
+        this.payAmounts.toString() == "0" ||
+        this.everpayPayInfo.balance <= this.landAmount
+      );
+    },
   },
   mounted() {
     // this.checkApproved();
@@ -385,6 +392,7 @@ export default {
       this.everpayPayInfo = item;
     },
     async handleEverpayPayment() {
+      if (this.everpayDisabled) return;
       const provider = getProvider();
       const signer = provider.getSigner();
       const account = await signer.getAddress();
@@ -405,8 +413,6 @@ export default {
         chainType: "ethereum",
         ethConnectedSigner: signer,
       });
-
-      console.log(payAmounts);
       const data = await everpay.transfer({
         tag: this.everpayPayInfo.tag,
         amount: payAmounts,
