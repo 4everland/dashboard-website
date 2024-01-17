@@ -17,7 +17,7 @@
       <div
         v-for="item in everPaySymbolList"
         :key="item.symbol"
-        class="everpay-symbol-item py-2 px-3 al-c cursor-p mr-2 mt-4"
+        class="everpay-symbol-item py-2 px-3 al-c cursor-p mt-4"
         :class="{
           active: selected == item.symbol,
         }"
