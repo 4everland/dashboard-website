@@ -421,6 +421,8 @@ export default {
       await this.$alert(
         "Deposit successful! The 4EVER cross-chain bridge is in action, using USDC on Polygon for the final step. Please wait patiently for your LAND to be credited."
       );
+
+      this.$router.push("/billing");
       this.$refs.everpay.initEverPay();
     },
     onErr(err, retry) {
