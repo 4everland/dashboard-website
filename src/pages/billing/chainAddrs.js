@@ -177,14 +177,14 @@ export const chainAddrs = [
     landRecharge: scrollRecharge,
     chainId: 534352,
   },
-  // {
-  //   name: "everPay",
-  //   coin: {
-  //     usdc: "",
-  //     usdt: "",
-  //     dai: "",
-  //   },
-  //   landRecharge: "",
-  //   chainId: 9999999,
-  // },
+  {
+    name: "everPay",
+    coin: {
+      usdc: "",
+      usdt: "",
+      dai: "",
+    },
+    landRecharge: "",
+    chainId: 9999999,
+  },
 ];

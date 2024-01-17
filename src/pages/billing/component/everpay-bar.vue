@@ -13,7 +13,7 @@
         protocol
       </div>
     </div>
-    <div class="al-c flex-wrap">
+    <div class="everpay-coin-choose">
       <div
         v-for="item in everPaySymbolList"
         :key="item.symbol"
@@ -44,22 +44,22 @@
         </div>
       </div>
     </div>
-
+    <!-- 
     <div
       class="al-c fz-14 mt-3 cursor-p"
       v-ripple
       @click="handleOpenLink('https://app.everpay.io/')"
     >
-      <!-- <img
+      <img
           class="mr-1"
           src="/img/svg/billing/ic-everpay-white.svg"
           width="20"
           alt=""
         />
-        <span class="fz-16">Deposit</span> -->
+        <span class="fz-16">Deposit</span>
 
       Deposit in everPay
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -124,27 +124,22 @@ export default {
           account,
         });
         console.log(data);
-        data.forEach((it) => {
-          it.balance = parseFloat(it.balance);
-          if (it.symbol == "USDC") {
-            this.everPaySymbolList[0] = Object.assign(
-              this.everPaySymbolList[0],
-              it
-            );
+
+        this.everPaySymbolList = this.everPaySymbolList.map((it) => {
+          let everPayItem = {};
+          for (const item of data) {
+            if (item.symbol == it.symbol && item.chainType == "ethereum") {
+              everPayItem = {
+                ...it,
+                ...item,
+                balance: parseFloat(item.balance),
+              };
+              break;
+            }
           }
-          if (it.symbol == "USDT") {
-            this.everPaySymbolList[1] = Object.assign(
-              this.everPaySymbolList[1],
-              it
-            );
-          }
-          if (it.symbol == "DAI") {
-            this.everPaySymbolList[2] = Object.assign(
-              this.everPaySymbolList[2],
-              it
-            );
-          }
+          return everPayItem;
         });
+
         this.onSelect(this.everPaySymbolList[0]);
       } catch (err) {
         if (err.code && err.code === 4001) {
@@ -166,8 +161,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .everpay-symbol-item {
+  width: 100%;
   border-radius: 4px;
   border: 1px solid #cbd5e1;
+  background: #fff;
   .symbol {
     color: #4d4d67;
   }
@@ -176,7 +173,10 @@ export default {
 .everpay-symbol-item.active {
   font-weight: bold;
   border: 1px solid #735ea1;
-  background: #f3e8ff;
+}
+.everpay-coin-choose {
+  height: calc(100% - 168px);
+  overflow: auto;
 }
 
 .deposite-btn {

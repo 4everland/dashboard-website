@@ -3,7 +3,7 @@
     <div class="d-flex flex-wrap space-btw">
       <div
         @click="onSelect(it.chainId)"
-        class="network-label py-3 al-c cursor-p justify-center d-flex mt-4"
+        class="network-label pa-3 al-c cursor-p d-flex mt-4"
         :class="{
           active: selected == it.chainId,
         }"
@@ -18,20 +18,28 @@
           }}</v-icon
         >
         <img
-          class="ml-3"
+          class="mx-2"
           style="vertical-align: middle"
           :src="it.img"
           height="20"
         />
-
         <span
-          class="ml-2"
-          style="width: 90px"
           :class="{
             'color-1': selected == it.chainId,
           }"
           >{{ it.name }}</span
         >
+        <v-tooltip top v-if="it.label == 'everPay'">
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon small color="#6C7789" class="ml-2" v-bind="attrs" v-on="on">
+              mdi-alert-circle-outline
+            </v-icon>
+          </template>
+          <div style="width: 300px">
+            When you deposit using everPay, the 4EVER cross-chain bridge will
+            automatically complete your transaction, using USDC on Polygon.
+          </div>
+        </v-tooltip>
       </div>
     </div>
     <ever-pay ref="everPay" v-if="selected == 'everPay'"></ever-pay>
@@ -89,12 +97,12 @@ export default {
           img: "/img/svg/billing/ic-optimism.svg",
           chainId: 10,
         },
-        // {
-        //   label: "everPay",
-        //   name: "everPay",
-        //   img: "/img/svg/billing/ic-everpay.svg",
-        //   chainId: 9999999,
-        // },
+        {
+          label: "everPay",
+          name: "everPay",
+          img: "/img/svg/billing/ic-everpay.svg",
+          chainId: 9999999,
+        },
         {
           label: "Scroll",
           name: "Scroll",

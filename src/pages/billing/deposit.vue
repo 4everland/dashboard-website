@@ -31,6 +31,7 @@
       <pay-network @onNetwork="onNetwork" />
       <everpay-bar
         ref="everpay"
+        class="flex-1"
         @onEverpay="onEverpay"
         v-if="isEverpay"
         :payAmounts="payAmounts"
@@ -404,6 +405,8 @@ export default {
         chainType: "ethereum",
         ethConnectedSigner: signer,
       });
+
+      console.log(payAmounts);
       const data = await everpay.transfer({
         tag: this.everpayPayInfo.tag,
         amount: payAmounts,
@@ -415,7 +418,9 @@ export default {
         },
       });
       console.log(data);
-      this.$alert("Recharge success!!");
+      await this.$alert(
+        "Deposit successful! The 4EVER cross-chain bridge is in action, using USDC on Polygon for the final step. Please wait patiently for your LAND to be credited."
+      );
       this.$refs.everpay.initEverPay();
     },
     onErr(err, retry) {
