@@ -14,7 +14,6 @@ import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
 import { BigNumber, providers } from "ethers";
 import axios from "axios";
 import * as zksync from "zksync";
-import { parseEther } from "ethers/lib/utils";
 export default {
   data() {
     return {
@@ -38,13 +37,15 @@ export default {
           onChain: data.handled,
         });
         if (!data.handled) {
+          console.log(providerAddr, data.uid);
           const isExists = await this.contract.ProviderController.accountExists(
             providerAddr,
             data.uid
           );
+          console.log(isExists, "isExist");
+
           const records = await this.searchZySyncRecord();
           console.log(records);
-          console.log(isExists);
           if (isExists) {
             // euid exist  over
             console.log("register success");

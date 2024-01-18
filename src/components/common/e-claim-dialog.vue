@@ -271,18 +271,18 @@ export default {
           type: "Polygon",
         },
         {
-          name: "Polygon ZkEVM",
+          name: "Polygon zkEVM",
           icon: require("/public/img/svg/billing/ic-polygon-zkEVM.svg"),
           type: "PolygonZkEVM",
         },
         {
-          name: "zkSync Era(V2)",
+          name: "zkSync Era",
           icon: require("/public/img/svg/logo-no-letters.svg"),
           type: "zkSyncV2",
           tips: "Please ensure that you have sufficient ETH inzkSync Era. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
         },
         {
-          name: "zkSync Lite(v1)",
+          name: "zkSync Lite",
           icon: require("/public/img/svg/logo-no-letters.svg"),
           type: "zkSync",
           tips: "Please ensure that you have sufficient ETH in zkSync Lite. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
@@ -292,7 +292,6 @@ export default {
           icon: require("/public/img/svg/billing/ic-bsc.png"),
           type: "BSC",
         },
-
         {
           name: "opBNB",
           icon: require("/public/img/svg/billing/ic-opbnb-test.svg"),

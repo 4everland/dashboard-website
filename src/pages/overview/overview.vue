@@ -55,7 +55,7 @@
                     />
                   </a>
                 </div>
-                <div class="fz-14 tips mt-1">≈{{ balanceToUSD }}USD</div>
+                <div class="fz-14 tips mt-1">≈ {{ balanceToUSD }}USD</div>
               </div>
 
               <div class="al-c mt-6">
