@@ -60,7 +60,7 @@
 
               <div class="al-c mt-6">
                 <div
-                  class="deposite-btn mr-4"
+                  class="deposite-btn"
                   @click="$router.push('/billing/deposit')"
                   v-ripple
                 >
@@ -437,7 +437,7 @@ export default {
       .deposite-btn,
       .conversion-btn {
         border-radius: 4px;
-        padding: 12px 32px;
+        padding: 12px 48px;
         cursor: pointer;
       }
       .deposite-btn {
