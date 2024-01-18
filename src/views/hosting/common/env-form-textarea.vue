@@ -40,19 +40,27 @@
       @content="getContent"
     ></CodeEditor> -->
 
-    <div class="my-5">
-      <v-btn @click="onComplete" color="primary" class="ml-4">Complete</v-btn>
+    <SimpleCodeEditor
+      theme="github"
+      lineNums
+      :modelValue.sync="envArea"
+      width="100%"
+      height="500px"
+    ></SimpleCodeEditor>
+
+    <div class="my-2">
+      <v-btn @click="onComplete" color="primary" class="mr-4">Complete</v-btn>
+      <v-btn @click="$emit('edit')" outlined>Cancel</v-btn>
     </div>
   </div>
 </template>
 
 <script>
-// import CodeEditor from "simple-code-editor";
-
+import SimpleCodeEditor from "./simple-code-editor";
 export default {
-  // components: {
-  //   CodeEditor,
-  // },
+  components: {
+    SimpleCodeEditor,
+  },
   props: {
     value: Array,
   },
@@ -68,8 +76,7 @@ export default {
       return [
         (val) => {
           if (/^\w+=\W*/.test(val) || !val) return true;
-
-          return "error";
+          return false;
         },
       ];
     },
@@ -115,9 +122,7 @@ export default {
       //   .filter((it) => it.key);
       // this.$emit("input", list);
       // this.$emit("edit");
-
       console.log(this.envArea);
-
       let envs = this.envArea.split("\n");
       console.log(envs);
       envs = envs.filter((it) => {
