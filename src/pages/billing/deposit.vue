@@ -248,10 +248,7 @@ export default {
       return this.payAmounts.toString() == "0" || this.btnDisabled;
     },
     everpayDisabled() {
-      return (
-        this.payAmounts.toString() == "0" ||
-        this.everpayPayInfo.balance <= this.landAmount
-      );
+      return this.payAmounts.toString() == "0";
     },
   },
   mounted() {
@@ -393,6 +390,7 @@ export default {
     },
     async handleEverpayPayment() {
       if (this.everpayDisabled) return;
+      // this.everpayPayInfo.balance <= this.landAmount
       const provider = getProvider();
       const signer = provider.getSigner();
       const account = await signer.getAddress();

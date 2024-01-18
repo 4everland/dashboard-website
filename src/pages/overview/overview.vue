@@ -55,7 +55,7 @@
                     />
                   </a>
                 </div>
-                <div class="fz-14 tips mt-1">≈{{ balanceToUSD }}USD</div>
+                <div class="fz-14 tips mt-1">≈ {{ balanceToUSD }}USD</div>
               </div>
 
               <div class="al-c mt-6">
@@ -66,14 +66,14 @@
                 >
                   Deposit
                 </div>
-                <div
+                <!-- <div
                   class="conversion-btn"
                   v-ripple
                   @click="showTransform = !showTransform"
                 >
                   Conversion
-                </div>
-                <v-tooltip top max-width="300" nudge-top="5">
+                </div> -->
+                <!-- <v-tooltip top max-width="300" nudge-top="5">
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon class="ml-1" size="18" v-bind="attrs" v-on="on"
                       >mdi-alert-circle-outline</v-icon
@@ -83,7 +83,7 @@
                     Conversion will convert LAND into various resources at the
                     full amount, for reference purposes only
                   </div>
-                </v-tooltip>
+                </v-tooltip> -->
               </div>
             </div>
 
@@ -166,8 +166,7 @@
         <v-col v-for="item in resourceList" :key="item.type">
           <resource-view
             :view="item"
-            :showTransform="showTransform"
-            :transformDate="landToResource[item.type]"
+            :transformData="landToResource[item.type]"
           ></resource-view>
         </v-col>
       </v-row>
@@ -203,7 +202,6 @@ export default {
       invalidAt: null,
       efficientAt: null,
       resourceList: [],
-      showTransform: false,
       landUsedMonthly: [],
     };
   },

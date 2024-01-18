@@ -65,7 +65,7 @@ export const optimisUSDC = "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85";
 export const optimisUSDT = "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58";
 export const optimisDAI = "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1";
 export const optimisETH = "0x4200000000000000000000000000000000000006";
-
+export const optimismRegister = "0x6D2dE2ACD07aD7E107578863b046926f87d0D703";
 export const optimismRecharge = "0x19f240DD39FEF12D139a4E0Ae81f44945c06092f";
 
 // scroll chain

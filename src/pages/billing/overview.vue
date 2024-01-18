@@ -246,7 +246,7 @@
                       min="0"
                       onkeyup="value=value.replace(/[^\d]+/g,'')"
                     />
-                    <span class="d-ib deposite-btn fz-14">LAND</span>
+                    <span class="d-ib symbal fz-14">LAND</span>
                   </div>
                 </div>
               </div>
@@ -883,7 +883,7 @@ export default {
   -moz-appearance: textfield;
 }
 
-.deposite-btn {
+.symbal {
   padding: 0px 20px;
   height: 48px;
   line-height: 48px;

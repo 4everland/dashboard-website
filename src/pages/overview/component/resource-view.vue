@@ -9,11 +9,20 @@
 
     <div>
       <div>
-        <div class="land-to-resource fz-12 al-c" v-if="showTransform">
-          <span>+{{ transformDate.transformVal }}</span>
-          <span>
-            {{ view.type == "IPFS_STORAGE" ? "* 1 mo" : "" }}
-          </span>
+        <div class="al-c" v-if="showConversionResource">
+          <v-tooltip top max-width="300" nudge-top="5">
+            <template v-slot:activator="{ on, attrs }">
+              <div class="land-to-resource fz-12 al-c" v-bind="attrs" v-on="on">
+                <span>{{ transformVal }}</span>
+                <span>
+                  {{ view.type == "IPFS_STORAGE" ? "* 1 mo" : "" }}
+                </span>
+              </div>
+            </template>
+            <div style="line-height: normal" class="py-2">
+              The estimated resources usable with the current LAND balance.
+            </div>
+          </v-tooltip>
           <v-tooltip
             top
             max-width="300"
@@ -38,6 +47,7 @@
             </div>
           </v-tooltip>
         </div>
+
         <div class="resource-size d-flex al-end">
           <div class="consume-resource">
             <span class="consume-used fw-b">{{ curResource.used.num }}</span>
@@ -62,21 +72,19 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   props: {
     view: {
       type: Object,
       required: true,
     },
-    transformDate: {
+    transformData: {
       type: Object,
-    },
-    showTransform: {
-      type: Boolean,
-      default: false,
     },
   },
   computed: {
+    ...mapGetters(["balance"]),
     curResource() {
       let obj = {
         total: this.$utils.getFileSize(this.view.total),
@@ -132,10 +140,19 @@ export default {
     percent() {
       if (this.view.total == 0) return 0;
       let total = this.view.total;
-      if (this.showTransform) {
-        total = total + this.transformDate.value.toNumber();
+      if (this.transformData && this.transformData.value) {
+        total = total + this.transformData.value.toNumber();
       }
       return (this.view.used / total) * (100).toFixed(0);
+    },
+    transformVal() {
+      if (this.transformData && this.transformData.transformVal) {
+        return "+" + this.transformData.transformVal;
+      }
+      return "";
+    },
+    showConversionResource() {
+      return this.balance.land > 0;
     },
   },
 };
@@ -149,6 +166,7 @@ export default {
 
   .land-to-resource {
     color: #775da6;
+    cursor: help;
   }
 
   .consume-resource {
@@ -173,14 +191,14 @@ export default {
   background: rgba(0, 0, 0, 0.9);
   border-radius: 4px;
 }
-.v-tooltip__content::after {
-  display: block;
-  content: "";
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: -20px;
-  border: 10px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.9);
-}
+// .v-tooltip__content::after {
+//   display: block;
+//   content: "";
+//   position: absolute;
+//   left: 50%;
+//   transform: translateX(-50%);
+//   bottom: -20px;
+//   // border: 10px solid transparent;
+//   // border-top-color: rgba(0, 0, 0, 0.9);
+// }
 </style>

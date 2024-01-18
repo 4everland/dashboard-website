@@ -6,7 +6,7 @@
           <tr>
             <th class="text-left">Months</th>
             <th class="text-left">LAND consumed</th>
-            <th class="text-left">Equal to USDC</th>
+            <th class="text-left">Equal to USD</th>
           </tr>
         </thead>
         <tbody>
