@@ -24,7 +24,7 @@
         <v-col cols="6" md="4" class="al-end d-flex">
           <!-- <h4 class="op-0">Hide</h4> -->
           <v-btn color="primary" @click="onAdd">Add</v-btn>
-          <v-btn color="primary" class="ml-4" @click="isEdit = !isEdit">{{
+          <v-btn color="primary" class="ml-4" @click="$emit('edit')">{{
             isEdit ? "Complete" : "Edit"
           }}</v-btn>
         </v-col>
@@ -45,14 +45,9 @@
         </template>
       </v-data-table>
 
-      <div class="form-advance mt-5" v-show="isEdit">
-        <v-form>
-          <div
-            v-for="(item, index) in list"
-            :key="index"
-            class="al-c form-advance-item"
-            style="gap: 10px"
-          >
+      <!-- <div class="form-advance mt-5" v-show="isEdit">
+        <v-row v-for="(item, index) in list" :key="index">
+          <v-col cols="6" md="4">
             <v-text-field
               outlined
               dense
@@ -60,19 +55,28 @@
               :counter="10"
               label="KEY"
             ></v-text-field>
-
+          </v-col>
+          <v-col cols="6" md="4">
             <v-text-field
               outlined
               dense
               v-model="item.value"
               label="VALUE"
             ></v-text-field>
+          </v-col>
+          <v-col cols="6" md="4">
             <v-btn color="error" icon @click="onDel(index)">
               <v-icon size="16">mdi-delete</v-icon>
             </v-btn>
-          </div>
-        </v-form>
+          </v-col>
+        </v-row>
       </div>
+
+      <div class="form-edit-multi" v-show="isMulti">
+
+
+        
+      </div> -->
     </div>
   </div>
 </template>
@@ -95,6 +99,7 @@ export default {
       ],
       list: this.value || [],
       isEdit: false,
+      isMulti: true,
     };
   },
   watch: {
