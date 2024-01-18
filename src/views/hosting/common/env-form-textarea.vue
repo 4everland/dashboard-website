@@ -106,31 +106,12 @@ export default {
       this.editList.splice(i, 1);
     },
     onComplete() {
-      // this.$refs.form.validate();
-      // if (!this.valid) return;
-      // const list = this.editList
-      //   .map((it) => {
-      //     const envStr = it.env;
-      //     const index = envStr.indexOf("=");
-      //     const key = envStr.slice(0, index).trim();
-      //     const value = envStr.slice(index + 1).trim();
-      //     return {
-      //       key,
-      //       value,
-      //     };
-      //   })
-      //   .filter((it) => it.key);
-      // this.$emit("input", list);
-      // this.$emit("edit");
-      console.log(this.envArea);
       let envs = this.envArea.split("\n");
       console.log(envs);
       envs = envs.filter((it) => {
         const trimStr = it.trim();
         return !trimStr.startsWith("#") && trimStr != "";
       });
-
-      console.log(envs);
       const list = envs
         .map((it) => {
           it;
