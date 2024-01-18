@@ -20,7 +20,7 @@
               </div>
             </template>
             <div style="line-height: normal" class="py-2">
-              The estimated resources usable with the current LAND balance.
+              The estimated resources usable with the current LAND balance
             </div>
           </v-tooltip>
           <v-tooltip
