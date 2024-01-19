@@ -1,45 +1,8 @@
 <template>
   <div>
-    <!-- <div class="my-5">
-      <v-btn @click="onComplete" color="primary" class="ml-4">Complete</v-btn>
-    </div> -->
-    <!-- <v-form ref="form" v-model="valid">
-      <v-row>
-        <v-col
-          cols="6"
-          v-for="(item, index) in editList"
-          :key="index"
-          class="al-c"
-        >
-          <v-text-field
-            class="fz-14"
-            v-model="item.env"
-            color="deep-purple"
-            placeholder="VUE_APP_BASE_URL=XXX"
-            dense
-            :rules="rules"
-            outlined
-          ></v-text-field>
-          <v-btn color="error" icon @click="onDel(index)">
-            <v-icon size="16">mdi-delete</v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-form> -->
-
-    <!-- <v-textarea v-model="envArea" rows="15" row-height="30"></v-textarea> -->
-
-    <!-- <CodeEditor
-      :modelValue.sync="envArea"
-      :display-language="false"
-      theme="github"
-      :line-nums="true"
-      font-size="14px"
-      width="100%"
-      height="500px"
-      @content="getContent"
-    ></CodeEditor> -->
-
+    <div class="fz-14 gray ml-10 my-2">
+      Tips: Pre-existing environment variables will be replaced.
+    </div>
     <SimpleCodeEditor
       theme="github"
       lineNums
@@ -47,7 +10,6 @@
       width="100%"
       height="500px"
     ></SimpleCodeEditor>
-
     <div class="my-2">
       <v-btn @click="onComplete" color="primary" class="mr-4">Complete</v-btn>
       <v-btn @click="$emit('edit')" outlined>Cancel</v-btn>
@@ -66,56 +28,26 @@ export default {
   },
   data() {
     return {
-      editList: [],
-      valid: true,
       envArea: "",
     };
   },
-  computed: {
-    rules() {
-      return [
-        (val) => {
-          if (/^\w+=\W*/.test(val) || !val) return true;
-          return false;
-        },
-      ];
-    },
-  },
   watch: {
-    value(val) {
-      this.editList = val.map((it) => {
-        return {
-          ...it,
-          env: it.key ? it.key + "=" + it.value : "",
-        };
-      });
-    },
+    value() {},
   },
   methods: {
-    getContent(val) {
-      console.log(val);
-    },
-    onAdd() {
-      this.editList.push({
-        env: "",
-        key: "",
-        value: "",
-      });
-    },
-    onDel(i) {
-      this.editList.splice(i, 1);
-    },
+    // initEnvArea(){
+    //   this.value
+    // },
     onComplete() {
       let envs = this.envArea.split("\n");
-      console.log(envs);
       envs = envs.filter((it) => {
         const trimStr = it.trim();
         return !trimStr.startsWith("#") && trimStr != "";
       });
-      const list = envs
+      let envList = envs
         .map((it) => {
-          it;
           const index = it.indexOf("=");
+          if (index == -1) return { key: "", value: "" };
           const key = it.slice(0, index).trim();
           const value = it.slice(index + 1).trim();
           return {
@@ -124,6 +56,12 @@ export default {
           };
         })
         .filter((it) => it.key);
+      let list = [...this.value, ...envList];
+      let Obj = {};
+      list.forEach((it) => {
+        Obj[it.key] = it;
+      });
+      list = Object.values(Obj);
       this.$emit("input", list);
       this.$emit("edit");
     },

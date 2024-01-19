@@ -9,6 +9,7 @@
             placeholder="Variable_Name"
             outlined
             dense
+            @paste.stop="opaste"
           ></v-text-field>
         </v-col>
         <v-col cols="6" md="4">
@@ -113,6 +114,8 @@ export default {
   methods: {
     onAdd() {
       const { key } = this.form;
+      const hasSameKey = this.list.some((it) => it.key == key);
+      if (hasSameKey) return this.$toast("Already Existed Name");
       if (!key) return this.$toast("Empty Name");
       this.list.push(this.form);
       this.form = {
@@ -122,6 +125,37 @@ export default {
     },
     onDel(i) {
       this.list.splice(i, 1);
+    },
+    opaste(e) {
+      // Get pasteData
+      const clipboardData = e.clipboardData;
+      const pasteData = clipboardData.getData("Text");
+      const disableIpt = this.pasteRules(pasteData);
+      // Disabled Input
+      if (disableIpt) e.preventDefault();
+    },
+    pasteRules(pasteData) {
+      let envs = pasteData.split("\n");
+      envs = envs.filter((it) => {
+        const trimStr = it.trim();
+        return !trimStr.startsWith("#") && trimStr != "";
+      });
+      let envList = envs
+        .map((it) => {
+          const index = it.indexOf("=");
+          if (index == -1) return { key: "", value: "" };
+          const key = it.slice(0, index).trim();
+          if (key.indexOf(" ") != -1) return { key: "", value: "" };
+          const value = it.slice(index + 1).trim();
+          return {
+            key,
+            value,
+          };
+        })
+        .filter((it) => it.key);
+      if (!envList.length) return false;
+      this.list = [...this.value, ...envList];
+      return true;
     },
   },
 };

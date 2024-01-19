@@ -84,9 +84,6 @@
 </template>
 
 <script>
-// import "./themes/themes-base16.css";
-import "./themes.css";
-
 export default {
   name: "CodeEditor",
   props: {
@@ -423,5 +420,91 @@ export default {
   left: 0;
   border-right: 1px solid currentColor;
   opacity: 0.5;
+}
+
+[theme="github"] pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1em;
+}
+[theme="github"] code.hljs {
+  padding: 3px 5px;
+}
+[theme="github"] .hljs {
+  color: #24292e;
+  background: #fff;
+}
+[theme="github"] .hljs-doctag,
+[theme="github"] .hljs-keyword,
+[theme="github"] .hljs-meta .hljs-keyword,
+[theme="github"] .hljs-template-tag,
+[theme="github"] .hljs-template-variable,
+[theme="github"] .hljs-type,
+[theme="github"] .hljs-variable.language_ {
+  color: #d73a49;
+}
+[theme="github"] .hljs-title,
+[theme="github"] .hljs-title.class_,
+[theme="github"] .hljs-title.class_.inherited__,
+[theme="github"] .hljs-title.function_ {
+  color: #6f42c1;
+}
+[theme="github"] .hljs-attr,
+[theme="github"] .hljs-attribute,
+[theme="github"] .hljs-literal,
+[theme="github"] .hljs-meta,
+[theme="github"] .hljs-number,
+[theme="github"] .hljs-operator,
+[theme="github"] .hljs-selector-attr,
+[theme="github"] .hljs-selector-class,
+[theme="github"] .hljs-selector-id,
+[theme="github"] .hljs-variable {
+  color: #005cc5;
+}
+[theme="github"] .hljs-meta .hljs-string,
+[theme="github"] .hljs-regexp,
+[theme="github"] .hljs-string {
+  color: #032f62;
+}
+[theme="github"] .hljs-built_in,
+[theme="github"] .hljs-symbol {
+  color: #e36209;
+}
+[theme="github"] .hljs-code,
+[theme="github"] .hljs-comment,
+[theme="github"] .hljs-formula {
+  color: #6a737d;
+}
+[theme="github"] .hljs-name,
+[theme="github"] .hljs-quote,
+[theme="github"] .hljs-selector-pseudo,
+[theme="github"] .hljs-selector-tag {
+  color: #22863a;
+}
+[theme="github"] .hljs-subst {
+  color: #24292e;
+}
+[theme="github"] .hljs-section {
+  color: #005cc5;
+  font-weight: 700;
+}
+[theme="github"] .hljs-bullet {
+  color: #735c0f;
+}
+[theme="github"] .hljs-emphasis {
+  color: #24292e;
+  font-style: italic;
+}
+[theme="github"] .hljs-strong {
+  color: #24292e;
+  font-weight: 700;
+}
+[theme="github"] .hljs-addition {
+  color: #22863a;
+  background-color: #f0fff4;
+}
+[theme="github"] .hljs-deletion {
+  color: #b31d28;
+  background-color: #ffeef0;
 }
 </style>
