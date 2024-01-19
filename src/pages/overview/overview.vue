@@ -60,7 +60,7 @@
 
               <div class="al-c mt-6">
                 <div
-                  class="deposite-btn mr-4"
+                  class="deposite-btn"
                   @click="$router.push('/billing/deposit')"
                   v-ripple
                 >
@@ -144,7 +144,7 @@
       <v-row v-show="resourceLoading" class="mt-3">
         <v-col> <v-skeleton-loader type="article"></v-skeleton-loader></v-col>
       </v-row>
-      <v-row v-show="!resourceLoading" class="mt-2">
+      <v-row v-show="!resourceLoading">
         <v-col v-for="item in resourceList" :key="item.type">
           <resource-view
             :view="item"
@@ -419,7 +419,7 @@ export default {
       .deposite-btn,
       .conversion-btn {
         border-radius: 4px;
-        padding: 12px 32px;
+        padding: 12px 48px;
         cursor: pointer;
       }
       .deposite-btn {

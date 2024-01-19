@@ -1,62 +1,68 @@
 <template>
   <div class="resource-view h-flex space-btw py-4 px-2">
-    <div class="d-flex al-start">
+    <div class="al-c">
       <div class="al-c justify-center pa-2" style="background: #fff">
         <img width="16" :src="curResource.img" alt="" />
       </div>
-      <span class="ml-2 fw-b">{{ curResource.name }}</span>
+      <span class="ml-2 fw-b title-text">{{ curResource.name }}</span>
     </div>
 
     <div>
-      <div>
-        <div class="al-c" v-if="showConversionResource">
-          <v-tooltip top max-width="300" nudge-top="5">
-            <template v-slot:activator="{ on, attrs }">
-              <div class="land-to-resource fz-12 al-c" v-bind="attrs" v-on="on">
-                <span>{{ transformVal }}</span>
-                <span>
-                  {{ view.type == "IPFS_STORAGE" ? "* 1 mo" : "" }}
-                </span>
-              </div>
-            </template>
-            <div style="line-height: normal" class="py-2">
-              The estimated resources usable with the current LAND balance.
-            </div>
-          </v-tooltip>
-          <v-tooltip
-            top
-            max-width="300"
-            nudge-top="5"
-            v-if="view.type == 'IPFS_STORAGE'"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <img
-                class="ml-1"
-                width="16"
-                v-bind="attrs"
-                v-on="on"
-                src="/img/svg/overview/help.svg"
-                alt=""
-              />
-            </template>
-            <div style="line-height: normal" class="py-2">
-              The computation method for IPFS consumption is Time * Space. This
-              value is only an estimate of the storage that LAND balance can
-              consume in one month. The final charge will still be based on the
-              actual storage used
-            </div>
-          </v-tooltip>
-        </div>
-
-        <div class="resource-size d-flex al-end">
+      <div class="my-3">
+        <div>
+          <div class="used-text">Used</div>
           <div class="consume-resource">
             <span class="consume-used fw-b">{{ curResource.used.num }}</span>
             <span class="fz-12" style="margin-left: 2px">{{
               curResource.used.unit
             }}</span>
           </div>
-          <div class="sparator">/</div>
-          <div class="total-resource fz-12">{{ curResource.total }}</div>
+        </div>
+
+        <div class="mt-2">
+          <div class="total-text">Total</div>
+          <div class="resource-size d-flex al-end">
+            <div class="total-resource fz-12">{{ curResource.total }}</div>
+            <div class="al-c ml-1" v-if="showConversionResource">
+              <v-tooltip top max-width="300" nudge-top="5">
+                <template v-slot:activator="{ on, attrs }">
+                  <div
+                    class="land-to-resource fz-12 al-c"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <span>{{ transformVal }}</span>
+                  </div>
+                </template>
+                <div style="line-height: normal" class="py-2">
+                  The estimated resources usable with the current LAND balance
+                </div>
+              </v-tooltip>
+              <v-tooltip
+                top
+                max-width="300"
+                nudge-top="5"
+                v-if="view.type == 'IPFS_STORAGE'"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <img
+                    class="ml-1"
+                    width="16"
+                    v-bind="attrs"
+                    v-on="on"
+                    src="/img/svg/overview/help.svg"
+                    alt=""
+                  />
+                </template>
+                <div style="line-height: normal" class="py-2">
+                  The computation method for IPFS consumption is Time * Space.
+                  This value is only an estimate of the storage that LAND
+                  balance can consume in one month. The final charge will still
+                  be based on the actual storage used
+                </div>
+              </v-tooltip>
+            </div>
+          </div>
         </div>
       </div>
       <v-progress-linear
@@ -162,28 +168,32 @@ export default {
 .resource-view {
   border-radius: 4px;
   background: #f8fafc;
-  height: 144px;
-
   .land-to-resource {
     color: #775da6;
     cursor: help;
   }
-
   .consume-resource {
-    line-height: 24px;
     .consume-used {
       font-family: "DIN Alternate";
-      font-size: 24px;
+      font-size: 16px;
     }
   }
-  .sparator {
-    margin: 0 2px;
-  }
   .resource-size {
-    line-height: 24px;
     .total-resource {
       color: #64748b;
     }
+  }
+
+  .used-text,
+  .total-text {
+    color: #64748b;
+    font-size: 12px;
+  }
+  .title-text {
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
