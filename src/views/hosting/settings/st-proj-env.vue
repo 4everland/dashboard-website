@@ -173,7 +173,12 @@ export default {
       try {
         this.loading = true;
         const { data } = await this.$http.get(
-          `$hosting/project/env/${this.info.id}`
+          `$hosting/project/env/${this.info.id}`,
+          {
+            params: {
+              size: 100,
+            },
+          }
         );
         // console.log(data)
         this.list = data.content.map((it) => {
