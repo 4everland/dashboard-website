@@ -155,7 +155,7 @@ export default {
           `$hosting/project/env/${this.info.id}`,
           {
             params: {
-              size: 50,
+              size: 100,
             },
           }
         );
