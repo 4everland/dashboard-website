@@ -1,7 +1,12 @@
 <template>
   <e-toggle-card title="Environment Variables" v-model="isShow">
-    <env-form-view v-model="list" @edit="isEdit = true"></env-form-view>
+    <env-form-view
+      v-model="list"
+      @edit="isEdit = true"
+      v-show="!isEdit"
+    ></env-form-view>
     <env-form-textarea
+      v-show="isEdit"
       v-model="list"
       @edit="isEdit = false"
     ></env-form-textarea>

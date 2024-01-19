@@ -32,24 +32,28 @@ export default {
     };
   },
   watch: {
-    value() {},
+    value() {
+      this.initEnvArea();
+    },
   },
   methods: {
-    // initEnvArea(){
-    //   this.value
-    // },
+    initEnvArea() {
+      const envList = this.value.map((it) => it.key + "=" + it.value);
+      this.envArea = envList.join("\n");
+    },
     onComplete() {
       let envs = this.envArea.split("\n");
       envs = envs.filter((it) => {
-        const trimStr = it.trim();
+        let trimStr = it.trim();
         return !trimStr.startsWith("#") && trimStr != "";
       });
       let envList = envs
         .map((it) => {
           const index = it.indexOf("=");
           if (index == -1) return { key: "", value: "" };
-          const key = it.slice(0, index).trim();
-          const value = it.slice(index + 1).trim();
+
+          const key = this.removeQuotes(it.slice(0, index).trim());
+          const value = this.removeQuotes(it.slice(index + 1).trim());
           return {
             key,
             value,
@@ -64,6 +68,19 @@ export default {
       list = Object.values(Obj);
       this.$emit("input", list);
       this.$emit("edit");
+    },
+
+    removeQuotes(str) {
+      if (typeof str !== "string") return "";
+      let start = 0;
+      let end = str.length - 1;
+      while (start < end && (str[start] === '"' || str[start] === "'")) {
+        start++;
+      }
+      while (end > start && (str[end] === '"' || str[end] === "'")) {
+        end--;
+      }
+      return str.substring(start, end + 1);
     },
   },
 };
