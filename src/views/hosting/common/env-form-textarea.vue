@@ -68,6 +68,7 @@ export default {
       list = Object.values(Obj);
       this.$emit("input", list);
       this.$emit("edit");
+      this.$emit("complete", list);
     },
 
     removeQuotes(str) {

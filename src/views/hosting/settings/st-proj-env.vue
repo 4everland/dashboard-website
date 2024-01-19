@@ -54,6 +54,7 @@
       v-show="isEdit"
       v-model="list"
       @edit="isEdit = false"
+      @complete="onComplete"
     ></env-form-textarea>
 
     <v-dialog v-model="showPop" max-width="500">
@@ -189,6 +190,18 @@ export default {
         //
       }
       this.loading = false;
+    },
+    async onComplete(list) {
+      try {
+        const data = await this.$http.post(
+          "$hosting/project/env/multi/" + this.info.id,
+          list
+        );
+        console.log(data, "multiple edit env");
+        this.getList();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
