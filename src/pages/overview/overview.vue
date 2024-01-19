@@ -162,7 +162,7 @@
       <v-row v-show="resourceLoading" class="mt-3">
         <v-col> <v-skeleton-loader type="article"></v-skeleton-loader></v-col>
       </v-row>
-      <v-row v-show="!resourceLoading" class="mt-2">
+      <v-row v-show="!resourceLoading">
         <v-col v-for="item in resourceList" :key="item.type">
           <resource-view
             :view="item"
