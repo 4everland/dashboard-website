@@ -39,7 +39,11 @@
         </v-tab>
       </v-tabs>
     </div>
-    <div class="" :class="vertical ? 'flex-1 ml-5' : 'mt-5'">
+    <div
+      class=""
+      :class="vertical ? 'flex-1 ml-5' : 'mt-5'"
+      :style="vertical ? { width: 0 } : {}"
+    >
       <keep-alive
         v-if="bucket"
         :include="['bucket-overview', 'bucket-statistics']"
