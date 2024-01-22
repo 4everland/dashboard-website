@@ -152,7 +152,7 @@ export default {
     async onDelete() {
       try {
         const suffix = this.selected.length > 1 ? "s" : "";
-        let html = `The following Environment Variable${suffix} will be permanently deleted. Are you sure you want to continue?<ul class='mt-4'>`;
+        let html = `The following Environment Variable${suffix} will be permanently deleted. Are you sure you want to continue?<ul class='mt-4' style="max-height: 50vh; overflow: auto">`;
         for (const row of this.selected) {
           html += "<li>" + row.key + "</li>";
         }
