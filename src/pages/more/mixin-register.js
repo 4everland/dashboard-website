@@ -7,7 +7,7 @@ import opBNBContract from "../../plugins/pay/contracts/src-chain-contracts-opBNB
 import polygonZkEVMContract from "../../plugins/pay/contracts/src-chain-contracts-polygonZkEVM";
 import lineaContract from "../../plugins/pay/contracts/src-chain-contracts-linea";
 import zetaContract from "../../plugins/pay/contracts/src-chain-contracts-zeta";
-
+import optimismContract from "../../plugins/pay/contracts/src-chain-contracts-optimismContract";
 import { Web3Provider } from "zksync-web3";
 
 import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
@@ -37,13 +37,15 @@ export default {
           onChain: data.handled,
         });
         if (!data.handled) {
+          console.log(providerAddr, data.uid);
           const isExists = await this.contract.ProviderController.accountExists(
             providerAddr,
             data.uid
           );
+          console.log(isExists, "isExist");
+
           const records = await this.searchZySyncRecord();
           console.log(records);
-          console.log(isExists);
           if (isExists) {
             // euid exist  over
             console.log("register success");
@@ -151,7 +153,6 @@ export default {
         await this.switchNet(chain);
         await this.getCurrentContract();
         const fee = await this.contract.Register.fee();
-        // console.log(fee);
         const tx = await this.contract.Register.register(
           providerAddr,
           this.registerInfo.uid,
@@ -253,6 +254,9 @@ export default {
         } else if (chainId == 7001) {
           zetaContract.setProvider(provider);
           this.contract = zetaContract;
+        } else if (chainId == 10) {
+          optimismContract.setProvider(provider);
+          this.contract = optimismContract;
         } else {
           ethContract.setProvider(provider);
           this.contract = ethContract;
@@ -273,6 +277,7 @@ export default {
       if (type == "OpBNB") return this.$inDev ? 5611 : 204;
       if (type == "PolygonZkEVM") return this.$inDev ? 1442 : 1101;
       if (type == "Linea") return this.$inDev ? 59140 : 59144;
+      if (type == "Optimism") return 10;
       if (type == "Zeta") return 7001;
       return this.$inDev ? 5 : 1;
     },

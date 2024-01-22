@@ -55,25 +55,25 @@
                     />
                   </a>
                 </div>
-                <div class="fz-14 tips mt-1">≈{{ balanceToUSD }}USD</div>
+                <div class="fz-14 tips mt-1">≈ {{ balanceToUSD }}USD</div>
               </div>
 
               <div class="al-c mt-6">
                 <div
-                  class="deposite-btn mr-4"
+                  class="deposite-btn"
                   @click="$router.push('/billing/deposit')"
                   v-ripple
                 >
                   Deposit
                 </div>
-                <div
+                <!-- <div
                   class="conversion-btn"
                   v-ripple
                   @click="showTransform = !showTransform"
                 >
                   Conversion
-                </div>
-                <v-tooltip top max-width="300" nudge-top="5">
+                </div> -->
+                <!-- <v-tooltip top max-width="300" nudge-top="5">
                   <template v-slot:activator="{ on, attrs }">
                     <v-icon class="ml-1" size="18" v-bind="attrs" v-on="on"
                       >mdi-alert-circle-outline</v-icon
@@ -83,7 +83,7 @@
                     Conversion will convert LAND into various resources at the
                     full amount, for reference purposes only
                   </div>
-                </v-tooltip>
+                </v-tooltip> -->
               </div>
             </div>
 
@@ -162,12 +162,11 @@
       <v-row v-show="resourceLoading" class="mt-3">
         <v-col> <v-skeleton-loader type="article"></v-skeleton-loader></v-col>
       </v-row>
-      <v-row v-show="!resourceLoading" class="mt-2">
+      <v-row v-show="!resourceLoading">
         <v-col v-for="item in resourceList" :key="item.type">
           <resource-view
             :view="item"
-            :showTransform="showTransform"
-            :transformDate="landToResource[item.type]"
+            :transformData="landToResource[item.type]"
           ></resource-view>
         </v-col>
       </v-row>
@@ -203,7 +202,6 @@ export default {
       invalidAt: null,
       efficientAt: null,
       resourceList: [],
-      showTransform: false,
       landUsedMonthly: [],
     };
   },
@@ -439,7 +437,7 @@ export default {
       .deposite-btn,
       .conversion-btn {
         border-radius: 4px;
-        padding: 12px 32px;
+        padding: 12px 48px;
         cursor: pointer;
       }
       .deposite-btn {
