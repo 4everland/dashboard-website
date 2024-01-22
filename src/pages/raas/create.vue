@@ -13,13 +13,6 @@
                 4EVER RaaS offers solutions built on OP Stack and Celestia
               </div>
             </div>
-            <img
-              width="24"
-              class="cursor-p"
-              @click="showWithDrawNotice = false"
-              src="/img/svg/new-billing/close-icon.svg"
-              alt=""
-            />
           </div>
         </v-col>
 
@@ -46,7 +39,7 @@
                       persistent-placeholder
                       outlined
                       placeholder="Please enter chain id"
-                      :success-messages="chainIdHint"
+                      :hint="chainIdHint"
                       persistent-hint
                       dense
                       prefix="777"
@@ -204,9 +197,9 @@
 import Axios from "axios";
 import {
   fetchDefaultChainId,
-  sendCreateRass,
+  sendCreateRaas,
   sendCheckChainId,
-} from "@/api/rass.js";
+} from "@/api/raas.js";
 export default {
   data() {
     return {
@@ -232,6 +225,7 @@ export default {
       chainIdRules: [
         (v) => !!v || "chainId is required",
         (v) => (v && v.length <= 5) || "chainId must be less than 5 characters",
+        (v) => /^[0-9]\d*$/.test(v) || "chainId must be valid",
         () =>
           !this.isIdExist ||
           "The ID already exists, please enter a different one.",
@@ -269,8 +263,9 @@ export default {
         this.onLoading = false;
         return;
       }
+
       if (this.valid) {
-        const data = {
+        const body = {
           chainId: "777" + this.chainId,
           chainName: this.chainName,
           chainLogo: this.chainLogo,
@@ -279,7 +274,24 @@ export default {
           telegram: this.telegram,
           purchasePlan: this.purchasePlan,
         };
-        await sendCreateRass(data);
+        try {
+          const { data } = await sendCreateRaas(body);
+          if (data.id) {
+            this.$router.push("/raas");
+          }
+        } catch (error) {
+          const code = error.code;
+          if (code == 10002) {
+            this.$confirm(error.message, "Tips", {
+              cancelText: "Cancel",
+              confirmText: "Deposit",
+            }).then(async () => {
+              this.$router.push("/billing/deposit");
+            });
+          } else {
+            this.$alert(error.message);
+          }
+        }
       }
       this.onLoading = false;
     },
@@ -290,9 +302,8 @@ export default {
         this.isIdExist = true;
       } else {
         const { data } = await sendCheckChainId(id);
-        console.log(data.status);
         if (data.status) {
-          this.chainIdHint = "Valid ChainID";
+          this.chainIdHint = "✅ Valid ChainID";
         } else {
           this.isIdExist = true;
         }
@@ -306,7 +317,6 @@ export default {
       let result = chainList.some((el) => {
         el.chainId == id;
       });
-      console.log(result);
       return result;
     },
     onChainIdChange() {

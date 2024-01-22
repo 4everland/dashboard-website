@@ -1,19 +1,19 @@
 export default [
   {
-    path: "/rass",
+    path: "/raas",
     component: () => import("./index"),
     meta: {
-      title: "Rass",
+      title: "Raas",
       isTab: 1,
     },
   },
   {
-    path: "/rass/create",
+    path: "/raas/create",
     component: () => import("./create.vue"),
     meta: {
-      title: "Rass Create",
+      title: "Raas Create",
       isTab: 1,
-      links: [{ text: "Rass", to: "/rass" }, { text: "Create Rollup" }],
+      links: [{ text: "Raas", to: "/raas" }, { text: "Create Rollup" }],
     },
   },
 ];

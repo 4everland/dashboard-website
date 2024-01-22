@@ -90,6 +90,14 @@ const menuMap = {
     suffixImg: "/img/svg/hosting/h-beta-active.svg",
     group: /^\/rpc/i,
   },
+  RAAS: {
+    label: "RaaS",
+    img: "m-raas",
+    to: "/raas",
+    active: false,
+    suffixImg: "/img/svg/hosting/h-beta-active.svg",
+    group: /^\/raas/i,
+  },
   RESOURCE: {
     label: "Billing",
     img: "m-usage",
@@ -124,14 +132,6 @@ const menuMap = {
       subs,
     };
   },
-  RASS: {
-    label: "Rass",
-    img: "m-rass",
-    to: "/rass",
-    active: false,
-    suffixImg: "/img/svg/hosting/h-beta-active.svg",
-    group: /^\/rass/i,
-  },
 };
 export default {
   computed: {
@@ -156,9 +156,9 @@ export default {
         "BUCKET",
         "GATEWAY",
         "RPC",
+        "RAAS",
         "RESOURCE",
         "MEMBER",
-        "RASS",
       ];
       for (const name of nameArr) {
         let item = menuMap[name];

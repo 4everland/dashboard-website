@@ -2,7 +2,7 @@ import http from "@/utils/Api";
 
 const request = http;
 
-request.defaults.baseURL = process.env.VUE_APP_RASS_URL;
+request.defaults.baseURL = process.env.VUE_APP_RAAS_URL;
 request.interceptors.request.use(async (config) => {
   config.headers["Authorization"] = localStorage.token;
   return config;
@@ -20,8 +20,10 @@ export function fetchDefaultChainId(params) {
   });
 }
 
-export function sendCreateRass(data) {
-  return request.post(`/rollup`, data);
+export function sendCreateRaas(data) {
+  return request.post(`/rollup`, data, {
+    noTip: true,
+  });
 }
 
 export function sendCheckChainId(id) {

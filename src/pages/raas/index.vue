@@ -1,14 +1,10 @@
 <template>
   <div>
-    <v-skeleton-loader
-      v-if="!loaded"
-      v-bind="attrs"
-      type="article"
-    ></v-skeleton-loader>
+    <v-skeleton-loader v-if="!loaded" type="article"></v-skeleton-loader>
     <div v-else>
       <div v-if="rollupList.length == 0">
         <div class="pa-3 mt-5 ta-c">
-          <img src="@/assets/imgs/rass/empty.svg" width="160" />
+          <img src="@/assets/imgs/raas/empty.svg" width="160" />
         </div>
         <div class="d-flex f-center">
           <div style="max-width: 550px">
@@ -16,15 +12,15 @@
           </div>
         </div>
         <div class="ta-c mt-8">
-          <v-btn color="primary" width="120" to="/rass/create">Create</v-btn>
+          <v-btn color="primary" width="120" @click="onCreate">Create</v-btn>
         </div>
       </div>
       <div v-else>
         <div class="text-center">
-          <img src="@/assets/imgs/rass/success.svg" width="160" alt="" />
+          <img src="@/assets/imgs/raas/success.svg" width="160" alt="" />
         </div>
-        <div class="rass-tit">Submission Successful!</div>
-        <div class="rass-stit">
+        <div class="raas-tit">Submission Successful!</div>
+        <div class="raas-stit">
           Please be patient as we review your submission. An email will follow
           upon approval.
         </div>
@@ -37,7 +33,11 @@
           <div class="un-line preview">Preview</div>
           <div class="un-line item">
             <span>Chain Logo</span>
-            <span>{{ rollupList[0].chainLogo }}</span>
+            <span>
+              <v-avatar>
+                <v-img :src="rollupList[0].chainLogo"></v-img>
+              </v-avatar>
+            </span>
           </div>
           <div class="un-line item">
             <span>Chain Name</span>
@@ -70,7 +70,9 @@
 </template>
 
 <script>
-import { fetchRollupList } from "@/api/rass.js";
+import { fetchRollupList } from "@/api/raas.js";
+import { mapGetters, mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -78,7 +80,15 @@ export default {
       rollupList: [],
     };
   },
-
+  computed: {
+    ...mapGetters(["balance"]),
+    ...mapState({
+      originBalance: (s) => s.moduleResource.originBalance,
+    }),
+  },
+  created() {
+    this.$store.dispatch("getBalance");
+  },
   mounted() {
     this.getList();
   },
@@ -89,12 +99,29 @@ export default {
       this.loaded = true;
       this.rollupList = data.detail;
     },
+    async onCreate() {
+      const balance = this.originBalance / 1e18;
+      if (Number(balance) >= 1000000000) {
+        this.$router.push("/raas/create");
+      } else {
+        this.$confirm(
+          "To create a Rollup, ensure your account balance exceeds 1,000,000,000 LAND (1,000 USD). Please deposit before proceeding.",
+          "Tips",
+          {
+            cancelText: "Cancel",
+            confirmText: "Deposit",
+          }
+        ).then(async () => {
+          this.$router.push("billing/deposit");
+        });
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.rass-tit {
+.raas-tit {
   color: #0f172a;
   text-align: center;
   font-family: "SF Pro Text";
@@ -103,7 +130,7 @@ export default {
   font-weight: 700;
   line-height: normal;
 }
-.rass-stit {
+.raas-stit {
   color: #64748b;
   text-align: center;
   font-family: "SF Pro Text";
