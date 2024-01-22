@@ -66,24 +66,6 @@
                 >
                   Deposit
                 </div>
-                <!-- <div
-                  class="conversion-btn"
-                  v-ripple
-                  @click="showTransform = !showTransform"
-                >
-                  Conversion
-                </div> -->
-                <!-- <v-tooltip top max-width="300" nudge-top="5">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-icon class="ml-1" size="18" v-bind="attrs" v-on="on"
-                      >mdi-alert-circle-outline</v-icon
-                    >
-                  </template>
-                  <div style="line-height: normal" class="py-2">
-                    Conversion will convert LAND into various resources at the
-                    full amount, for reference purposes only
-                  </div>
-                </v-tooltip> -->
               </div>
             </div>
 

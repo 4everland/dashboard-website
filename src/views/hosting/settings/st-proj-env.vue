@@ -17,6 +17,16 @@
       </v-btn>
       <v-btn
         small
+        color="primary"
+        class="ml-5"
+        @click="isEdit = true"
+        min-width="70"
+      >
+        Edit
+      </v-btn>
+
+      <v-btn
+        small
         outlined
         class="ml-5"
         @click="onDelete"
@@ -27,7 +37,7 @@
       </v-btn>
     </div>
 
-    <div class="mt-3">
+    <div class="mt-3" v-show="!isEdit">
       <v-data-table
         v-model="selected"
         :loading="loading"
@@ -39,6 +49,13 @@
         hide-default-footer
       ></v-data-table>
     </div>
+
+    <env-form-textarea
+      v-show="isEdit"
+      v-model="list"
+      @edit="isEdit = false"
+      @complete="onComplete"
+    ></env-form-textarea>
 
     <v-dialog v-model="showPop" max-width="500">
       <div class="pd-30">
@@ -71,7 +88,11 @@
 </template>
 
 <script>
+import EnvFormTextarea from "../common/env-form-textarea.vue";
 export default {
+  components: {
+    EnvFormTextarea,
+  },
   computed: {
     info() {
       return this.$store.state.projectInfo;
@@ -94,6 +115,7 @@ export default {
         value: "",
       },
       adding: false,
+      isEdit: false,
     };
   },
   mounted() {
@@ -130,7 +152,7 @@ export default {
     async onDelete() {
       try {
         const suffix = this.selected.length > 1 ? "s" : "";
-        let html = `The following Environment Variable${suffix} will be permanently deleted. Are you sure you want to continue?<ul class='mt-4'>`;
+        let html = `The following Environment Variable${suffix} will be permanently deleted. Are you sure you want to continue?<ul class='mt-4' style="max-height: 50vh; overflow: auto">`;
         for (const row of this.selected) {
           html += "<li>" + row.key + "</li>";
         }
@@ -168,6 +190,18 @@ export default {
         //
       }
       this.loading = false;
+    },
+    async onComplete(list) {
+      try {
+        const data = await this.$http.post(
+          "$hosting/project/env/multi/" + this.info.id,
+          list
+        );
+        console.log(data, "multiple edit env");
+        this.getList();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
