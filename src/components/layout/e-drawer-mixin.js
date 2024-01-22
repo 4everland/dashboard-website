@@ -124,6 +124,14 @@ const menuMap = {
       subs,
     };
   },
+  RASS: {
+    label: "Rass",
+    img: "m-rass",
+    to: "/rass",
+    active: false,
+    suffixImg: "/img/svg/hosting/h-beta-active.svg",
+    group: /^\/rass/i,
+  },
 };
 export default {
   computed: {
@@ -150,6 +158,7 @@ export default {
         "RPC",
         "RESOURCE",
         "MEMBER",
+        "RASS",
       ];
       for (const name of nameArr) {
         let item = menuMap[name];
