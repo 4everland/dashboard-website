@@ -274,7 +274,7 @@ async function handleMsg(status, code, msg, config) {
     msg = msg || "Unknown Error";
     const vue = Vue.prototype;
     await vue.$sleep(10);
-    if (status == 401 || code == 401 || code == 400) {
+    if (status == 401 || code == 401) {
       setState({
         userInfo: {},
       });
