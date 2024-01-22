@@ -31,6 +31,10 @@
         </v-col>
       </v-row>
 
+      <div class="fz-14 gray mt-3">
+        Tip: Populate the form by pasting a .env file above.
+      </div>
+
       <v-data-table
         class="mt-5"
         :headers="headers"
@@ -45,39 +49,6 @@
           </v-btn>
         </template>
       </v-data-table>
-
-      <!-- <div class="form-advance mt-5" v-show="isEdit">
-        <v-row v-for="(item, index) in list" :key="index">
-          <v-col cols="6" md="4">
-            <v-text-field
-              outlined
-              dense
-              v-model="item.key"
-              :counter="10"
-              label="KEY"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="6" md="4">
-            <v-text-field
-              outlined
-              dense
-              v-model="item.value"
-              label="VALUE"
-            ></v-text-field>
-          </v-col>
-          <v-col cols="6" md="4">
-            <v-btn color="error" icon @click="onDel(index)">
-              <v-icon size="16">mdi-delete</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-      </div>
-
-      <div class="form-edit-multi" v-show="isMulti">
-
-
-        
-      </div> -->
     </div>
   </div>
 </template>
@@ -100,7 +71,6 @@ export default {
       ],
       list: this.value || [],
       isEdit: false,
-      isMulti: true,
     };
   },
   watch: {
@@ -154,7 +124,14 @@ export default {
         })
         .filter((it) => it.key);
       if (!envList.length) return false;
-      this.list = [...this.value, ...envList];
+
+      let list = [...this.list, ...envList];
+      let Obj = {};
+      list.forEach((it) => {
+        Obj[it.key] = it;
+      });
+      this.list = Object.values(Obj);
+
       return true;
     },
   },
