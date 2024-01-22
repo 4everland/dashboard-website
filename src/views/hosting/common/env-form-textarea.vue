@@ -60,15 +60,14 @@ export default {
           };
         })
         .filter((it) => it.key);
-      let list = [...this.value, ...envList];
       let Obj = {};
-      list.forEach((it) => {
+      envList.forEach((it) => {
         Obj[it.key] = it;
       });
-      list = Object.values(Obj);
-      this.$emit("input", list);
+      envList = Object.values(Obj);
+      this.$emit("input", envList);
       this.$emit("edit");
-      this.$emit("complete", list);
+      this.$emit("complete", envList);
     },
 
     removeQuotes(str) {
