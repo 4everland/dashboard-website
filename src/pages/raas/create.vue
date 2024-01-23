@@ -125,7 +125,7 @@
                     outlined
                     placeholder="Please enter your X ID"
                     dense
-                    prefix="Twitter.com/"
+                    prefix="twitter.com/"
                   >
                   </v-text-field>
                 </div>
