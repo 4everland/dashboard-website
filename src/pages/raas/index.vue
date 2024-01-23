@@ -7,8 +7,9 @@
           <img src="@/assets/imgs/raas/empty.svg" width="160" />
         </div>
         <div class="d-flex f-center">
-          <div style="max-width: 550px">
-            Haven't created Rollup? (What's RaaS?)
+          <div style="max-width: 550px" class="top-tips">
+            <!-- Haven't created Rollup? (What's RaaS?) -->
+            Haven't created Rollup?
           </div>
         </div>
         <div class="ta-c mt-8">
@@ -121,6 +122,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.top-tips {
+  color: #64748b;
+  text-align: center;
+  font-family: "SF Pro Text";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
 .raas-tit {
   color: #0f172a;
   text-align: center;
