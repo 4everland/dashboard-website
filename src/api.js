@@ -21,6 +21,8 @@ export const endpoint = inDev
 const authApi = process.env.VUE_APP_AUTH_URL;
 const hostingUrl = process.env.VUE_APP_HOST_URL;
 const gateWayApi = process.env.VUE_APP_GATEWAY_URL;
+const rpcApi = process.env.VUE_APP_RPC_URL;
+const raasApi = process.env.VUE_APP_RAAS_URL;
 
 const v3Api = inDev
   ? "https://settlement.foreverland.xyz"
@@ -190,8 +192,14 @@ http.interceptors.request.use(
       .replace("$pinningService", pinningServiceApi)
       .replace("$template", templateApi)
       .replace("$bill-consume", process.env.VUE_APP_BILL_CONSUME_URL)
-      .replace("$bill-analytics", process.env.VUE_APP_BILL_ANALYTICS_URL);
+      .replace("$bill-analytics", process.env.VUE_APP_BILL_ANALYTICS_URL)
+      .replace("$rpc", rpcApi)
+      .replace("$raas", raasApi);
+
     if (config.url.includes(authApi)) {
+      token = "Bearer " + token;
+    }
+    if (config.url.includes(rpcApi)) {
       token = "Bearer " + token;
     }
 
