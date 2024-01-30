@@ -8,18 +8,11 @@
         </v-btn>
       </e-right-opt-wrap>
     </div>
-    <div class="top-tips" v-show="tipsShow">
+    <div class="top-tips" v-show="tipsShow" v-if="keyType == 'FREE'">
       <div class="d-flex al-c">
         <img :src="require('/public/img/svg/rpc/top-tips.svg')" width="24" />
-        <!-- <span class="ml-2">
-          The current API key you have is a Free Key and has a request limit of
-          500CUPS . If you require a higher configuration,
-          <a href="" target="_blank" class="text-link">
-            please click here to learn about our VIP key options.</a
-          >
-        </span> -->
         <span class="ml-2">
-          The current API key you have is a Free Key and has a request limit of
+          Free Key has a request limit of
           <a
             href="https://docs.4everland.org/rpc/whats-cus-cups"
             target="_blank"
@@ -27,15 +20,47 @@
             class="text-link"
           >
             300 CUPS </a
-          >.
+          >, with a monthly cap of 150,000,000 CU (currently used:
+          {{ usage }} CU).
         </span>
       </div>
-      <img
+      <!-- <img
         :src="require('/public/img/svg/rpc/x-close.svg')"
         width="24"
         style="cursor: pointer"
         @click="tipsShow = false"
-      />
+      /> -->
+    </div>
+    <div class="top-tips" v-show="tipsShow" v-else>
+      <div class="d-flex al-c">
+        <img :src="require('/public/img/svg/rpc/top-tips.svg')" width="24" />
+        <span class="ml-2">
+          Currently operating with a premium key, consuming your LAND with a
+          request limit of
+          <a
+            href="https://docs.4everland.org/rpc/whats-cus-cups"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-link"
+          >
+            1000 CUPS </a
+          >. For enhanced configurations, feel free to
+          <a
+            href="http://discord.gg/4everland"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-link"
+            >contact us</a
+          >
+          for customized solutions.
+        </span>
+      </div>
+      <!-- <img
+        :src="require('/public/img/svg/rpc/x-close.svg')"
+        width="24"
+        style="cursor: pointer"
+        @click="tipsShow = false"
+      /> -->
     </div>
     <div class="mt-6">
       <div class="d-flex al-c mb-4 justify-space-between">
@@ -380,6 +405,8 @@ export default {
       userKey: "",
       createdAt: null,
       updatedAt: null,
+      usage: 0,
+      keyType: "FREE",
     };
   },
   created() {
@@ -400,6 +427,8 @@ export default {
       this.userKey = data.userKey;
       this.createdAt = data.createdAt;
       this.updatedAt = data.updatedAt;
+      this.usage = data.usage;
+      this.keyType = data.keyType;
     },
     async getEndpoints(type) {
       const params = { type: type };

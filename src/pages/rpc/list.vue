@@ -112,12 +112,32 @@
       </div>
     </v-dialog>
 
-    <v-dialog v-model="noMoreKey" max-width="600" persistent>
+    <!-- <v-dialog v-model="noMoreKey" max-width="600" persistent>
       <div class="pd-30">
         <h3>Create An APl Key</h3>
         <div class="mt-6">
           Please note that currently, only one API Key can be created per
           account. We will launch paid API keys soon, so stay tuned.
+        </div>
+        <div class="mt-6 ta-r">
+          <v-btn @click="noMoreKey = false" color="primary"
+            >All right, got it.</v-btn
+          >
+        </div>
+      </div>
+    </v-dialog> -->
+    <v-dialog v-model="noMoreKey" max-width="600" persistent>
+      <div class="pd-30">
+        <h3>Create An APl Key</h3>
+        <div class="mt-6">
+          Please note that currently, only three paid API Keys can be created
+          per account. If you need to create more, please
+          <a
+            href="http://discord.gg/4everland"
+            target="_blank"
+            rel="noopener noreferrer"
+            >contact us</a
+          >. Thank you!
         </div>
         <div class="mt-6 ta-r">
           <v-btn @click="noMoreKey = false" color="primary"
@@ -132,12 +152,19 @@
 <script>
 import topBoard from "./topBoard.vue";
 import { fetchOverview, fetchKeyList, sendCreateKey } from "@/api/rpc.js";
+import { mapGetters, mapState } from "vuex";
+
 export default {
   name: "RpcList",
   components: {
     topBoard,
   },
-  computed: {},
+  computed: {
+    ...mapGetters(["balance"]),
+    ...mapState({
+      originBalance: (s) => s.moduleResource.originBalance,
+    }),
+  },
   data() {
     return {
       createLoading: true,
@@ -164,7 +191,9 @@ export default {
       },
     };
   },
-  created() {},
+  created() {
+    this.$store.dispatch("getBalance");
+  },
   mounted() {
     this.init();
   },
@@ -184,8 +213,22 @@ export default {
       this.createLoading = false;
     },
     async newCreate() {
-      if (this.apiList.length > 0) {
+      const balance = this.originBalance / 1e18;
+      if (this.apiList.length == 0) {
+        this.newKeyShowPop = true;
+      } else if (this.apiList.length > 3) {
         this.noMoreKey = true;
+      } else if (Number(balance) < 10000000) {
+        this.$confirm(
+          "  Your account balance is insufficient: One account has only one Free API Key. To create more paid API Keys, your $LAND balance must be greater than 10 million.",
+          "Create An APl Key",
+          {
+            cancelText: "Cancel",
+            confirmText: "Deposit",
+          }
+        ).then(async () => {
+          this.$router.push("/billing/deposit");
+        });
       } else {
         this.newKeyShowPop = true;
       }

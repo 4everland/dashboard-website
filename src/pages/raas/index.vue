@@ -113,7 +113,7 @@ export default {
             confirmText: "Deposit",
           }
         ).then(async () => {
-          this.$router.push("billing/deposit");
+          this.$router.push("/billing/deposit");
         });
       }
     },

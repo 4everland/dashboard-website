@@ -178,7 +178,7 @@
             <span class="fz-12 ml-2">{{ rpcRequest.unit }}</span>
           </div>
           <div class="py-4 px-6 fz-14 data">
-            <span>Total instances: </span>
+            <span>Total Requests: </span>
             <span>{{ rpcInstance }}</span>
           </div>
         </div>
