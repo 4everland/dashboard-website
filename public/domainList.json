@@ -51,6 +51,16 @@
       "placeholder": "SuiNS Domain",
       "icon": "suins.svg",
       "display": "true"
+    },
+    {
+      "name": "BNS",
+      "key": "bns",
+      "network": "function(domain){return 'https://' +  domain + '.ink'}",
+      "host": "https://basename.app",
+      "rule": ".+.base$",
+      "placeholder": "BNS Domain",
+      "icon": "bns.svg",
+      "display": "true"
     }
   ]
 }
