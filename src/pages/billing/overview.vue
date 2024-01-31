@@ -174,7 +174,7 @@
         <div class="py-6 px-4 h-flex al-c rpc-section">
           <h4 class="fz-14">Web3 RPC</h4>
           <div class="my-6">
-            <span class="balance fw-b">{{ rpcRequest.size }}</span>
+            <span class="balance fw-b">{{ rpcRequest.num }}</span>
             <span class="fz-12 ml-2">{{ rpcRequest.unit }}</span>
           </div>
           <div class="py-4 px-6 fz-14 data">
@@ -329,7 +329,7 @@ export default {
         unit: "Min",
       },
       rpcRequest: {
-        size: 0,
+        num: 0,
         unit: "",
       },
       landUsedMonthlyLine: [],
@@ -542,11 +542,7 @@ export default {
           return pre.add(BigNumber.from(it.resourceConsume));
         }, BigNumber.from("0"));
 
-        this.rpcRequest = this.$utils.getResourceTypeSize(
-          request,
-          true,
-          "COMPUTE_UNIT"
-        );
+        this.rpcRequest = this.$utils.getNumCount(request, true);
 
         this.rpcInstance = data.reduce((pre, it) => {
           let value = 0;
@@ -555,6 +551,7 @@ export default {
           }
           return value + pre;
         }, 0);
+        console.log(this.rpcInstance);
       } catch (error) {
         console.log(error);
       }

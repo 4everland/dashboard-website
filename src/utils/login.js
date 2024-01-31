@@ -28,7 +28,7 @@ export const ExchangeCode = async (accounts) => {
 };
 
 export const Web3Login = async (accounts, data) => {
-  accounts = accounts.toLowerCase();
+  // accounts = accounts.toLowerCase();
   const res = await Vue.prototype.$http.post(
     `$auth/web3login/${accounts}`,
     data
