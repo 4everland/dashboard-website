@@ -90,6 +90,14 @@ const menuMap = {
     suffixImg: "/img/svg/hosting/h-beta-active.svg",
     group: /^\/rpc/i,
   },
+  RAAS: {
+    label: "RaaS",
+    img: "m-raas",
+    to: "/raas",
+    active: false,
+    suffixImg: "/img/svg/hosting/h-beta-active.svg",
+    group: /^\/raas/i,
+  },
   RESOURCE: {
     label: "Billing",
     img: "m-usage",
@@ -148,6 +156,7 @@ export default {
         "BUCKET",
         "GATEWAY",
         "RPC",
+        "RAAS",
         "RESOURCE",
         "MEMBER",
       ];
