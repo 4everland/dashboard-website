@@ -117,8 +117,6 @@ export default {
           {
             name: "IPFS",
             type: "line",
-            stack: "Total",
-            areaStyle: {},
             itemStyle: {
               color: "#57B9BC",
             },
@@ -127,8 +125,6 @@ export default {
           {
             name: "Arweave",
             type: "line",
-            stack: "Total",
-            areaStyle: {},
             itemStyle: {
               color: "#000",
             },
@@ -137,8 +133,6 @@ export default {
           {
             name: "Band Width",
             type: "line",
-            stack: "Total",
-            areaStyle: {},
             itemStyle: {
               color: "#9AD3DC",
             },
@@ -147,8 +141,6 @@ export default {
           {
             name: "Build Minutes",
             type: "line",
-            stack: "Total",
-            areaStyle: {},
             itemStyle: {
               color: "#F3CC5C",
             },
@@ -157,9 +149,6 @@ export default {
           {
             name: "RPC Requests",
             type: "line",
-            stack: "Total",
-
-            areaStyle: {},
             itemStyle: {
               color: "#836BAF",
             },
