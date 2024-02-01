@@ -427,7 +427,7 @@ export default {
       this.userKey = data.userKey;
       this.createdAt = data.createdAt;
       this.updatedAt = data.updatedAt;
-      this.usage = data.usage;
+      this.usage = this.numberWithCommas(data.usage);
       this.keyType = data.keyType;
     },
     async getEndpoints(type) {
@@ -456,6 +456,9 @@ export default {
       } else {
         item.rpcUrl = item.url[1].replace("%s", this.userKey);
       }
+    },
+    numberWithCommas(x) {
+      return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
     },
   },
 };
