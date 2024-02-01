@@ -544,14 +544,16 @@ export default {
 
         this.rpcRequest = this.$utils.getNumCount(request, true);
 
-        this.rpcInstance = data.reduce((pre, it) => {
+        console.log(data);
+        const rpcInstance = data.reduce((pre, it) => {
           let value = 0;
-          if (it.instance) {
-            value = Number(it.instance);
+          if (it.statistics) {
+            value = Number(it.statistics);
           }
           return value + pre;
         }, 0);
-        console.log(this.rpcInstance);
+        this.rpcInstance = this.$utils.getNumCount(rpcInstance);
+        this.$utils.getNumCount(request, true);
       } catch (error) {
         console.log(error);
       }
