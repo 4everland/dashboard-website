@@ -243,7 +243,7 @@ export default {
               text: "K CUs",
               value: 1e3,
             },
-            { text: "M Cus", value: 1e6 },
+            { text: "M CUs", value: 1e6 },
           ],
         },
       ],

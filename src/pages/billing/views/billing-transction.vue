@@ -90,7 +90,7 @@ export default {
               "BUILD_TIME"
             );
           } else if (it.resourceType == "COMPUTE_UNIT") {
-            it.resourceUsed = this.$utils.getNumCount(it.resourceUsed) + " Cus";
+            it.resourceUsed = this.$utils.getNumCount(it.resourceUsed) + " CUs";
           } else {
             it.resourceUsed = this.$utils.getFileSize(it.resourceUsed);
           }
