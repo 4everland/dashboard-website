@@ -88,7 +88,7 @@
       <v-row class="task-list" no-gutters>
         <v-col
           :cols="12"
-          :md="item.type == 'DAILY_INVITE' ? 12 : 6"
+          :md="item.type == 'DAILY_INVITE' ? 6 : 6"
           v-for="item in dailyList.items"
           :key="item.id"
           class="pa-2"
@@ -115,10 +115,10 @@
                 ></div>
               </div>
               <div class="task-btn" v-if="item.type == 'DAILY_INVITE'">
-                <div class="referral-link">
+                <!-- <div class="referral-link">
                   <span>Referral link:</span>
                   <span>{{ shareUrl }}</span>
-                </div>
+                </div> -->
                 <v-btn
                   icon
                   class="task-button"
