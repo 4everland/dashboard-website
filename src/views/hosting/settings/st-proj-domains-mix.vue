@@ -569,7 +569,7 @@ export default {
       if (!this.checkNet()) {
         return false;
       }
-      if (item.owner !== this.connectAddr) {
+      if (item.owner.toLowerCase() !== this.connectAddr.toLowerCase()) {
         return this.$alert(
           "Connected account is not the controller of the domain. "
         );
