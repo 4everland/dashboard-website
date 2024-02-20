@@ -153,10 +153,15 @@
                     box-sizing: border-box;
                   "
                 >
-                  <template v-for="item in claimList">
+                  <template v-for="(item, i) in claimList">
                     <div
                       :key="item.type"
                       class="pa-3 claim-chain-item mb-2 cursor-p al-c"
+                      :class="
+                        claimList.length % 2 != 0 && claimList.length - 1 == i
+                          ? 'last-item'
+                          : ''
+                      "
                       @click="handleTypeClaim(item.type)"
                     >
                       <img :src="item.icon" width="24" height="24" alt="" />
@@ -317,12 +322,12 @@ export default {
           icon: require("/public/img/svg/billing/ic-linea.svg"),
           type: "Linea",
         },
-        {
-          name: "ZetaChain Testnet",
-          icon: require("/public/img/svg/billing/ic-zeta.svg"),
-          tips: "During the ZetaChain Testnet phase, Mint only unlocks Web3 Identity.",
-          type: "Zeta",
-        },
+        // {
+        //   name: "ZetaChain Testnet",
+        //   icon: require("/public/img/svg/billing/ic-zeta.svg"),
+        //   tips: "During the ZetaChain Testnet phase, Mint only unlocks Web3 Identity.",
+        //   type: "Zeta",
+        // },
         // {
         //   name: "More",
         //   icon: require("/public/img/svg/more.svg"),
