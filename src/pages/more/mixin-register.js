@@ -7,6 +7,7 @@ import opBNBContract from "../../plugins/pay/contracts/src-chain-contracts-opBNB
 import polygonZkEVMContract from "../../plugins/pay/contracts/src-chain-contracts-polygonZkEVM";
 import lineaContract from "../../plugins/pay/contracts/src-chain-contracts-linea";
 import zetaContract from "../../plugins/pay/contracts/src-chain-contracts-zeta";
+import blastContract from "../../plugins/pay/contracts/src-chain-contracts-blast";
 import optimismContract from "../../plugins/pay/contracts/src-chain-contracts-optimismContract";
 import { Web3Provider } from "zksync-web3";
 
@@ -254,6 +255,9 @@ export default {
         } else if (chainId == 7001) {
           zetaContract.setProvider(provider);
           this.contract = zetaContract;
+        } else if (chainId == 168587773) {
+          blastContract.setProvider(provider);
+          this.contract = blastContract;
         } else if (chainId == 10) {
           optimismContract.setProvider(provider);
           this.contract = optimismContract;
@@ -279,6 +283,7 @@ export default {
       if (type == "Linea") return this.$inDev ? 59140 : 59144;
       if (type == "Optimism") return 10;
       if (type == "Zeta") return 7001;
+      if (type == "Blast") return 168587773;
       return this.$inDev ? 5 : 1;
     },
     async switchNet(chainName) {
@@ -359,7 +364,6 @@ export default {
           },
           // blockExplorerUrls: [],
         },
-
         421613: {
           chainId,
           chainName: "Arbitrum Goerli",
@@ -480,6 +484,17 @@ export default {
             decimals: 18,
           },
           // blockExplorerUrls: [],
+        },
+        168587773: {
+          chainId,
+          chainName: "Blast Sepolia Testnet",
+          rpcUrls: ["https://blast-sepolia.blockpi.network/v1/rpc/public"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://testnet.blastscan.io"],
         },
       }[id];
       if (!params) return;

@@ -328,6 +328,12 @@ export default {
         //   tips: "During the ZetaChain Testnet phase, Mint only unlocks Web3 Identity.",
         //   type: "Zeta",
         // },
+        {
+          name: "Blast",
+          icon: require("/public/img/svg/billing/ic-blast.svg"),
+          tips: "During the Blast Testnet phase, Mint only unlocks Web3 Identity.",
+          type: "Blast",
+        },
         // {
         //   name: "More",
         //   icon: require("/public/img/svg/more.svg"),
