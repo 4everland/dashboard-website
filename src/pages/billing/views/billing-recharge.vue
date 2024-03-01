@@ -214,6 +214,7 @@ export default {
       if ([1, 11155111].includes(id)) return "Ethereum";
       if ([10].includes(id)) return "Optimism";
       if ([534352].includes(id)) return "Scroll";
+      if ([81457].includes(id)) return "Blast";
       if ([99999991].includes(id))
         return "Redeem Historical Remaining Resources";
       if ([99999992].includes(id)) return " ";
