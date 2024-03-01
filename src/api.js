@@ -94,6 +94,8 @@ Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
     pre = "https://optimistic.etherscan.io/tx/";
   } else if (net == "Scroll") {
     pre = "https://scrollscan.com/tx/";
+  } else if (net == "Blast") {
+    pre = "https://blastscan.io/tx/";
   }
   return pre + hash;
 };
