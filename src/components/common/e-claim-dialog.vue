@@ -331,7 +331,6 @@ export default {
         {
           name: "Blast",
           icon: require("/public/img/svg/billing/ic-blast.svg"),
-          tips: "During the Blast Testnet phase, Mint only unlocks Web3 Identity.",
           type: "Blast",
         },
         // {

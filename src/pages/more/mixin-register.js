@@ -255,7 +255,7 @@ export default {
         } else if (chainId == 7001) {
           zetaContract.setProvider(provider);
           this.contract = zetaContract;
-        } else if (chainId == 168587773) {
+        } else if (chainId == 168587773 || chainId == 81457) {
           blastContract.setProvider(provider);
           this.contract = blastContract;
         } else if (chainId == 10) {
@@ -283,7 +283,7 @@ export default {
       if (type == "Linea") return this.$inDev ? 59140 : 59144;
       if (type == "Optimism") return 10;
       if (type == "Zeta") return 7001;
-      if (type == "Blast") return 168587773;
+      if (type == "Blast") return this.$inDev ? 168587773 : 81457;
       return this.$inDev ? 5 : 1;
     },
     async switchNet(chainName) {
@@ -495,6 +495,17 @@ export default {
             decimals: 18,
           },
           blockExplorerUrls: ["https://testnet.blastscan.io"],
+        },
+        81457: {
+          chainId,
+          chainName: "Blast",
+          rpcUrls: ["https://rpc.blast.io"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://blastscan.io"],
         },
       }[id];
       if (!params) return;

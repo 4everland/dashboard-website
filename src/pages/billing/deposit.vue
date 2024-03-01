@@ -184,9 +184,7 @@ export default {
       return provider.getSigner();
     },
     isApproved() {
-      return (
-        this.allowance.eq(uint256Max) || this.allowance.gte(this.usdcAmount)
-      );
+      return this.allowance.gte(this.payAmounts);
     },
     displayPrice() {
       if (this.coinSelect == "ETH") {
