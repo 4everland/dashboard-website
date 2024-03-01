@@ -71,7 +71,7 @@ export default {
           {
             params: {
               analyticsType: "MONTH",
-              timestamp: +new Date("2023") / 1e3,
+              timestamp: +new Date("2024") / 1e3,
             },
           }
         );
