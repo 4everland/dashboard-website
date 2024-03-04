@@ -1,5 +1,15 @@
 <template>
   <div class="billing-monthly-bill-container pos-r">
+    <div style="width: 100px">
+      <v-select
+        class="hide-msg bd-1"
+        dense
+        solo
+        :items="items"
+        v-model="curYear"
+        @change="getList"
+      />
+    </div>
     <div class="d-flex" v-if="list.length">
       <billing-table class="flex-1">
         <thead>
@@ -49,6 +59,11 @@ export default {
     return {
       curIndex: 0,
       list: {},
+      items: [
+        { text: "2023", value: "2023" },
+        { text: "2024", value: "2024" },
+      ],
+      curYear: "2024",
     };
   },
   computed: {
@@ -71,7 +86,7 @@ export default {
           {
             params: {
               analyticsType: "MONTH",
-              timestamp: +new Date("2024") / 1e3,
+              timestamp: +new Date(this.curYear) / 1e3,
             },
           }
         );
