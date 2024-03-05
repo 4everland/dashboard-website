@@ -19,8 +19,8 @@
       <div class="pa-5">
         <h3 class="fz-20">Pin By CID</h3>
         <div class="fz-14 my-6">
-          This function allows you to pin content to 4EVER storage using an
-          IPFS Content Identifier. (CID)
+          This function allows you to pin content to 4EVER storage using an IPFS
+          Content Identifier. (CID)
         </div>
         <v-form ref="form" class="mt-6">
           <v-text-field
@@ -37,7 +37,7 @@
             :rules="[
               (v) => !!(v || '').trim() || 'Invalid CID',
               (v) =>
-                /^([A-Za-z0-9]{46}|[A-Za-z0-9]{59})$/.test(v)
+                /^([A-Za-z0-9]{46}|[A-Za-z0-9]{59}|[A-Za-z0-9]{62})$/.test(v)
                   ? true
                   : 'Invalid CID',
             ]"
@@ -85,10 +85,10 @@
           </template> -->
 
           <div class="d-flex justify-center al-c mt-8">
-            <v-btn color="primary" @click="handleUpload"
-              >Search and Pin</v-btn
+            <v-btn color="primary" @click="handleUpload">Search and Pin</v-btn>
+            <v-btn outlined class="ml-10" @click="showDialog = false"
+              >Cancel</v-btn
             >
-            <v-btn outlined class="ml-10" @click="showDialog = false">Cancel</v-btn>
           </div>
         </v-form>
       </div>
@@ -106,7 +106,6 @@
             line in the .txt file.
           </div>
           <div class="al-c mt-4 justify-center">
-
             <v-btn
               slot="ref"
               color="primary"
@@ -116,7 +115,9 @@
               <img src="/img/svg/upload.svg" width="16" />
               <span class="ml-2">Upload</span>
             </v-btn>
-            <v-btn class="ml-5" outlined @click="showMultipleDialog = false">Cancel</v-btn>
+            <v-btn class="ml-5" outlined @click="showMultipleDialog = false"
+              >Cancel</v-btn
+            >
           </div>
         </div>
         <div v-else>
@@ -197,10 +198,12 @@
             </template> -->
 
             <div class="d-flex justify-center al-c mt-8">
-               <v-btn color="primary" @click="handleMultipleUpload"
+              <v-btn color="primary" @click="handleMultipleUpload"
                 >Search and Pin</v-btn
               >
-              <v-btn outlined class="ml-10" @click="showMultipleDialog = false">Cancel</v-btn>
+              <v-btn outlined class="ml-10" @click="showMultipleDialog = false"
+                >Cancel</v-btn
+              >
             </div>
           </v-form>
         </div>
@@ -259,13 +262,12 @@
 </template>
 
 <script>
-
 import { PinningServiceTaskWrapper } from "../task";
 import PinningServiceControl from "@/views/bucket/components/pinning-service-control.vue";
 import InputUpload from "@/views/bucket/components/input-upload";
-const addr = MultiformatsMultiaddr.multiaddr('/ip4/203.0.113.142/tcp/4001acs')
-const result = MultiformatsMultiaddr.isMultiaddr(addr)
-console.log(result)
+const addr = MultiformatsMultiaddr.multiaddr("/ip4/203.0.113.142/tcp/4001acs");
+const result = MultiformatsMultiaddr.isMultiaddr(addr);
+console.log(result);
 export default {
   props: {
     accessToken: String,
@@ -389,7 +391,7 @@ export default {
     handleValidOrigin(v) {
       try {
         const addr = MultiformatsMultiaddr.multiaddr(v);
-        return  MultiformatsMultiaddr.isMultiaddr(addr)
+        return MultiformatsMultiaddr.isMultiaddr(addr);
       } catch (error) {
         console.log(error);
         return false;
@@ -462,10 +464,10 @@ export default {
       });
       this.readerFileList = readerFileList;
     },
-    handleClose(){
-      this.showControl = false
-      this.tasks = []
-    }
+    handleClose() {
+      this.showControl = false;
+      this.tasks = [];
+    },
   },
   components: {
     InputUpload,
