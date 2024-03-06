@@ -133,7 +133,7 @@
                     </v-radio>
                     <div class="radio-text">
                       LAND is consumed based on CU usage, with a minimum
-                      requirement bf 10 million LAND before creation.
+                      requirement of 10 million LAND before creation.
                     </div>
                     <div class="radio-tips">Limit: 1000 CU/s</div>
                   </div>
