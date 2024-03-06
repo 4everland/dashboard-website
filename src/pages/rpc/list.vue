@@ -32,6 +32,7 @@
                     {{ item.name }}
                   </span>
                   <span class="free" v-if="item.type == 'FREE'">Free</span>
+                  <span class="vip" v-if="item.type == 'VIP'">PAYG</span>
                 </div>
                 <div class="project-tips">{{ item.notes || "-" }}</div>
               </div>
@@ -92,7 +93,54 @@
               </v-text-field>
             </div>
           </div>
-
+          <div>
+            <v-radio-group v-model="newAPIData.type" :rules="rules.type" row>
+              <v-row dense>
+                <v-col cols="6">
+                  <div
+                    class="radio-box"
+                    :class="{
+                      'radio-box-active': newAPIData.type == 'FREE',
+                      'radio-box-disabled': noFreeKey,
+                    }"
+                    @click="chooesType('FREE')"
+                  >
+                    <v-radio value="FREE" :disabled="noFreeKey">
+                      <template v-slot:label>
+                        <div class="radio-tit">Free</div>
+                      </template>
+                    </v-radio>
+                    <div class="radio-text">
+                      You can only create once without consuming LAND.
+                    </div>
+                    <div class="radio-tips">
+                      Limit: 300 CU/s & 150,000,000 CU/mo
+                    </div>
+                  </div>
+                </v-col>
+                <v-col cols="6">
+                  <div
+                    class="radio-box"
+                    :class="{
+                      'radio-box-active': newAPIData.type == 'VIP',
+                    }"
+                    @click="chooesType('VIP')"
+                  >
+                    <v-radio value="VIP">
+                      <template v-slot:label>
+                        <div class="radio-tit">Pay As You Go</div>
+                      </template>
+                    </v-radio>
+                    <div class="radio-text">
+                      LAND is consumed based on CU usage, with a minimum
+                      requirement bf 10 million LAND before creation.
+                    </div>
+                    <div class="radio-tips">Limit: 1000 CU/s</div>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-radio-group>
+          </div>
           <div class="mt-6 ta-r">
             <v-btn min-width="130" text plain tile @click="resetInput"
               >Cancel</v-btn
@@ -172,6 +220,7 @@ export default {
       loading: false,
       apiList: [],
       newKeyShowPop: false,
+      noFreeKey: false,
       noMoreKey: false,
       rules: {
         name: [
@@ -179,10 +228,12 @@ export default {
           (val) => (val || "").length <= 40 || "Max 40 characters",
         ],
         notes: [(val) => (val || "").length <= 80 || "Max 80 characters"],
+        type: [(val) => (val || "").length > 0 || "This option is required"],
       },
       newAPIData: {
         name: "",
         notes: "",
+        type: "",
       },
       overViewData: {
         rate: 0,
@@ -204,39 +255,42 @@ export default {
       this.getApiList();
     },
     async getOverview() {
-      const { data } = await fetchOverview();
-      this.overViewData = data;
-    },
-    async getApiList() {
-      const { data } = await fetchKeyList();
-      this.apiList = data;
-      this.createLoading = false;
-    },
-    async newCreate() {
-      const balance = this.originBalance / 1e18;
-      if (this.apiList.length == 0) {
-        this.newKeyShowPop = true;
-      } else if (this.apiList.length > 3) {
-        this.noMoreKey = true;
-      } else if (Number(balance) < 10000000) {
-        this.$confirm(
-          "  Your account balance is insufficient: One account has only one Free API Key. To create more paid API Keys, your $LAND balance must be greater than 10 million.",
-          "Create An APl Key",
-          {
-            cancelText: "Cancel",
-            confirmText: "Deposit",
-          }
-        ).then(async () => {
-          this.$router.push("/billing/deposit");
-        });
-      } else {
-        this.newKeyShowPop = true;
+      try {
+        const { data } = await fetchOverview();
+        this.overViewData = data;
+      } catch (error) {
+        console.log(error);
       }
     },
+    async getApiList() {
+      try {
+        const { data } = await fetchKeyList();
+        this.apiList = data;
+        this.createLoading = false;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async newCreate() {
+      const res = this.apiList.find((item) => item.type == "FREE");
+      if (res) {
+        this.noFreeKey = true;
+        this.newAPIData.type = "VIP";
+      }
+      this.newKeyShowPop = true;
+    },
     async setCreate() {
-      this.loading = true;
       const newAPIData = this.newAPIData;
-      await sendCreateKey(newAPIData);
+      const isVerify = this.verifyVipKey(newAPIData.type);
+      if (!isVerify) {
+        return;
+      }
+      try {
+        this.loading = true;
+        await sendCreateKey(newAPIData);
+      } catch (error) {
+        console.log(error);
+      }
       this.loading = false;
       this.resetInput();
       this.init();
@@ -246,8 +300,44 @@ export default {
       this.newAPIData = {
         name: "",
         notes: "",
+        type: "",
       };
       this.newKeyShowPop = false;
+    },
+    chooesType(type) {
+      if (type == "FREE" && this.noFreeKey) {
+        return;
+      }
+      this.newAPIData.type = type;
+    },
+    verifyVipKey(type) {
+      const balance = this.originBalance / 1e18;
+      let vipKeyCount = 0;
+      let isVerify = true;
+      if (type == "VIP") {
+        this.apiList.map((item) => {
+          if (item.type == "VIP") {
+            vipKeyCount += 1;
+          }
+        });
+        if (vipKeyCount >= 3) {
+          isVerify = false;
+          this.noMoreKey = true;
+        } else if (Number(balance) < 10000000) {
+          isVerify = false;
+          this.$confirm(
+            "Your account balance is insufficient: To create more paid API Keys, your $LAND balance must be greater than 10 million.",
+            "Create An APl Key",
+            {
+              cancelText: "Cancel",
+              confirmText: "Deposit",
+            }
+          ).then(async () => {
+            this.$router.push("/billing/deposit");
+          });
+        }
+      }
+      return isVerify;
     },
     toDetail(item) {
       this.$router.push({
@@ -321,11 +411,22 @@ export default {
           // display: inline-block;
           padding: 0px 8px;
           border-radius: 2px;
-          background: #0a9e71;
-          color: #fff;
+          color: #0a9e71;
           font-size: 12px;
           font-weight: 400;
           margin-left: 8px;
+          background: rgba(10, 158, 113, 0.1);
+        }
+        .vip {
+          height: 18px;
+          // display: inline-block;
+          padding: 0px 8px;
+          border-radius: 2px;
+          color: #ffad08;
+          font-size: 12px;
+          font-weight: 400;
+          margin-left: 8px;
+          background: rgba(255, 173, 8, 0.15);
         }
       }
       .project-tips {
@@ -366,6 +467,53 @@ export default {
         text-align: center;
       }
     }
+  }
+}
+
+.radio-box {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  .radio-tit {
+    color: #0f172a;
+    font-family: "SF Pro Text";
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .radio-text {
+    color: #64748b;
+    font-family: "SF Pro Text";
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 16px;
+    line-height: 14px;
+    height: 42px;
+  }
+  .radio-tips {
+    color: #94a3b8;
+    font-family: "SF Pro Text";
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 8px;
+  }
+}
+.radio-box-active {
+  border: 1px solid #735ea1;
+}
+
+.radio-box-disabled {
+  color: #e2e8f0;
+  border: 1px solid #e2e8f0;
+  cursor: no-drop;
+  .radio-tit {
+    color: #e2e8f0;
+  }
+  .radio-text {
+    color: #e2e8f0;
+  }
+  .radio-tips {
+    color: #e2e8f0;
   }
 }
 </style>
