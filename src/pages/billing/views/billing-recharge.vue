@@ -79,6 +79,7 @@ import {
   scrollUSDT,
   scrollDAI,
   scrollETH,
+  blastETH,
 } from "@/plugins/pay/contracts/contracts-addr";
 import { formatEther } from "ethers/lib/utils";
 
@@ -125,7 +126,7 @@ export default {
           everPayDAI,
           scrollDAI,
         ],
-        ETH: [optimisETH, scrollETH],
+        ETH: [optimisETH, scrollETH, blastETH],
       },
       finished: false,
       loadingMore: false,
@@ -155,7 +156,8 @@ export default {
         let list = originMergeTransaction.map((it) => {
           if (
             it.amountType == "0x4200000000000000000000000000000000000006" ||
-            it.amountType == "0x5300000000000000000000000000000000000004"
+            it.amountType == "0x5300000000000000000000000000000000000004" ||
+            it.amountType == "0x0000000000000000000000000000000000000000"
           ) {
             if (!it.originalValue) {
               it.amount = 0;
