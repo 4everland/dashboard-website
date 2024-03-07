@@ -116,7 +116,7 @@ export default {
             eth: "",
           },
           landRecharge: blastRecharge,
-          chainId: 534352,
+          chainId: 81457,
         },
         {
           name: "everPay",

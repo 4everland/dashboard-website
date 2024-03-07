@@ -151,7 +151,7 @@ export default {
           localStorage.removeItem("isEverpay");
           await this.switchNet(chainId);
         }
-        this.$emit("onNetwork", this.selected);
+        // this.$emit("onNetwork", this.selected);
       } catch (error) {
         // user cancel
         console.log(error, "==================");
@@ -368,7 +368,7 @@ export default {
           },
         },
         81457: {
-          chainId: "0x13e31",
+          chainId,
           chainName: "Blast Mainnet",
           rpcUrls: ["https://rpc.blast.io"],
           nativeCurrency: {
@@ -376,7 +376,7 @@ export default {
             symbol: "ETH",
             decimals: 18,
           },
-          blockExplorerUrls: "https://blastscan.io",
+          blockExplorerUrls: ["https://blastscan.io"],
         },
       }[id];
       if (!params) return;
