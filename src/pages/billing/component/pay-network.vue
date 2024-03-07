@@ -109,6 +109,12 @@ export default {
           img: "/img/svg/billing/ic-scroll.svg",
           chainId: 534352,
         },
+        {
+          label: "Blast",
+          name: "Blast",
+          img: "/img/svg/billing/ic-blast.svg",
+          chainId: 81457,
+        },
       ];
       if (!this.allow) return list;
       return list.filter((it) => this.allow.includes(it.label));
@@ -360,6 +366,17 @@ export default {
             symbol: "ETH",
             decimals: 18,
           },
+        },
+        81457: {
+          chainId: "0x13e31",
+          chainName: "Blast Mainnet",
+          rpcUrls: ["https://rpc.blast.io"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: "https://blastscan.io",
         },
       }[id];
       if (!params) return;

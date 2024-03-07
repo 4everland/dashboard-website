@@ -133,9 +133,10 @@ import {
 } from "ethers/lib/utils";
 import {
   ICoin__factory,
-  Land__factory,
+  // Land__factory,
   IQuoter__factory,
   UNILand__factory,
+  BlastOracleLand__factory,
 } from "@4everland-contracts";
 import { getProvider } from "@/plugins/ens";
 import uidToEuid from "@/utils/uid2euid";
@@ -212,9 +213,12 @@ export default {
       return ICoin__factory.connect(this.coinAddr, this.signer);
     },
     LandRecharge() {
-      return Land__factory.connect(this.landRechargeAddr, this.signer);
+      return BlastOracleLand__factory.connect(
+        this.landRechargeAddr,
+        this.signer
+      );
     },
-    ethLandRecharge() {
+    opEthLandRecharge() {
       return UNILand__factory.connect(this.landRechargeAddr, this.signer);
     },
     curChainInfo() {
@@ -280,9 +284,16 @@ export default {
         if (this.coinSelect == "ETH") {
           if (!this.ethAmount) return;
           this.$loading();
-          const tx = await this.ethLandRecharge.mintByETH(this.euid, {
-            value: this.ethAmount,
-          });
+          let tx;
+          if (this.chainId == 10) {
+            tx = await this.opEthLandRecharge.mintByETH(this.euid, {
+              value: this.ethAmount,
+            });
+          } else {
+            tx = await this.LandRecharge.mintByETH(this.euid, {
+              value: this.ethAmount,
+            });
+          }
           receipt = await tx.wait();
           this.$loading.close();
         } else {
@@ -541,6 +552,20 @@ export default {
         );
         console.log(formatEther(res));
         this.ethAmount = res;
+      }
+    },
+    async getBlastEthUnitPrice() {
+      try {
+        let provider = new providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const BlastOracleLand = BlastOracleLand__factory.connect(
+          blastRecharge,
+          signer
+        );
+        this.blastUnitPrice = await BlastOracleLand.callStatic.fetchPrice();
+        console.log(formatEther(this.blastUnitPrice));
+      } catch (error) {
+        console.log(error);
       }
     },
   },

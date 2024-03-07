@@ -30,6 +30,7 @@ import {
   scrollDAI,
   scrollETH,
   scrollRecharge,
+  blastRecharge,
 } from "../../plugins/pay/contracts/contracts-addr";
 import { mapGetters } from "vuex";
 export default {
@@ -107,6 +108,14 @@ export default {
             eth: scrollETH,
           },
           landRecharge: scrollRecharge,
+          chainId: 534352,
+        },
+        {
+          name: "Blast",
+          coin: {
+            eth: "",
+          },
+          landRecharge: blastRecharge,
           chainId: 534352,
         },
         {
