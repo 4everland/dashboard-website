@@ -133,9 +133,10 @@ import {
 } from "ethers/lib/utils";
 import {
   ICoin__factory,
-  Land__factory,
+  // Land__factory,
   IQuoter__factory,
   UNILand__factory,
+  BlastOracleLand__factory,
 } from "@4everland-contracts";
 import { getProvider } from "@/plugins/ens";
 import uidToEuid from "@/utils/uid2euid";
@@ -159,6 +160,7 @@ export default {
       allowance: BigNumber.from("0"),
       usdcAmount: BigNumber.from("0"),
       ethAmount: BigNumber.from("0"),
+      blastUnitPrice: BigNumber.from("0"),
       curAmountDecimals: 18,
       chainId: this.$inDev ? 80001 : 137,
       rechargeSuccess: false,
@@ -168,6 +170,7 @@ export default {
       isEverpay: localStorage.getItem("isEverpay") ? true : false,
       everpayPayInfo: {},
       btnDisabled: true,
+      blastUnitPriceTimer: null,
     };
   },
   computed: {
@@ -212,12 +215,16 @@ export default {
       return ICoin__factory.connect(this.coinAddr, this.signer);
     },
     LandRecharge() {
-      return Land__factory.connect(this.landRechargeAddr, this.signer);
+      return BlastOracleLand__factory.connect(
+        this.landRechargeAddr,
+        this.signer
+      );
     },
-    ethLandRecharge() {
+    opEthLandRecharge() {
       return UNILand__factory.connect(this.landRechargeAddr, this.signer);
     },
     curChainInfo() {
+      console.log(this.chainId);
       return this.chainAddrs.find((it) => it.chainId == this.chainId);
     },
     landRechargeAddr() {
@@ -257,7 +264,7 @@ export default {
     });
   },
   methods: {
-    onNetwork(chainId) {
+    async onNetwork(chainId) {
       if (this.chainAddrs.findIndex((it) => it.chainId == chainId) == -1) {
         this.btnDisabled = true;
       } else {
@@ -271,7 +278,22 @@ export default {
       }
       // location.reload();
       this.coinSelect = "USDC";
-      this.checkApproved();
+      if (chainId == 81457) {
+        this.coinSelect = "ETH";
+        await this.getBlastEthUnitPrice();
+        if (this.blastUnitPriceTimer) {
+          clearInterval(this.blastUnitPriceTimer);
+        }
+        this.blastUnitPriceTimer = setInterval(
+          this.getBlastEthUnitPrice,
+          20000
+        );
+      } else {
+        if (this.blastUnitPriceTimer) {
+          clearInterval(this.blastUnitPriceTimer);
+        }
+        this.checkApproved();
+      }
     },
     async handleRechargeLand() {
       this.depositing = true;
@@ -280,9 +302,16 @@ export default {
         if (this.coinSelect == "ETH") {
           if (!this.ethAmount) return;
           this.$loading();
-          const tx = await this.ethLandRecharge.mintByETH(this.euid, {
-            value: this.ethAmount,
-          });
+          let tx;
+          if (this.chainId == 10) {
+            tx = await this.opEthLandRecharge.mintByETH(this.euid, {
+              value: this.ethAmount,
+            });
+          } else {
+            tx = await this.LandRecharge.mintByETH(this.euid, {
+              value: this.ethAmount,
+            });
+          }
           receipt = await tx.wait();
           this.$loading.close();
         } else {
@@ -342,15 +371,6 @@ export default {
           gasPrice: gasPrice.mul(12).div(10),
         });
         console.log("tx", tx);
-        // let timer = setInterval(async () => {
-        //   const receipt = await new providers.Web3Provider(
-        //     window.ethereum
-        //   ).getTransactionReceipt(tx.hash);
-        //   console.log(receipt);
-        //   if (receipt) {
-        //     clearInterval(timer);
-        //   }
-        // }, 1000);
         const receipt = await tx.wait();
         console.log(receipt);
       } catch (error) {
@@ -508,7 +528,15 @@ export default {
       }
       if (this.coinSelect == "ETH") {
         debounce(() => {
-          this.usdc2eth();
+          if (this.chainId == 10) {
+            this.usdc2eth();
+          } else {
+            let value = this.usdcAmount
+              .mul((1e18).toString())
+              .mul((1e18).toString())
+              .div(this.blastUnitPrice);
+            this.ethAmount = value;
+          }
         });
       }
     },
@@ -542,6 +570,29 @@ export default {
         console.log(formatEther(res));
         this.ethAmount = res;
       }
+    },
+    async getBlastEthUnitPrice() {
+      try {
+        let provider = new providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const BlastOracleLand = BlastOracleLand__factory.connect(
+          this.landRechargeAddr,
+          signer
+        );
+        this.blastUnitPrice = await BlastOracleLand.callStatic.fetchPrice();
+        console.log(formatEther(this.blastUnitPrice));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  watch: {
+    blastUnitPrice() {
+      let value = this.usdcAmount
+        .mul((1e18).toString())
+        .mul((1e18).toString())
+        .div(this.blastUnitPrice);
+      this.ethAmount = value;
     },
   },
 };

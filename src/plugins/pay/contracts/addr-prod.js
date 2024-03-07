@@ -61,6 +61,8 @@ export const lineaRegister = "0x742eAd8e4D06404d9A49945D086752E1f3eb18Ca";
 export const zetaRegister = "0xA6D3027F572BB7e9E141465640bb736ee78a5867";
 
 export const blastRegister = "0xF2A77FEfa2f76d672E73C961E98Db21426D8308B";
+export const blastRecharge = "0xB7eB58402Fa60ad0764e383a9BF4a9117a32D462";
+
 // optimism chain
 export const optimisUSDC = "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85";
 export const optimisUSDT = "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58";

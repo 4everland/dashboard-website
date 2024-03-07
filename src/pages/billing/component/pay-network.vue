@@ -109,6 +109,12 @@ export default {
           img: "/img/svg/billing/ic-scroll.svg",
           chainId: 534352,
         },
+        {
+          label: "Blast",
+          name: "Blast",
+          img: "/img/svg/billing/ic-blast.svg",
+          chainId: 81457,
+        },
       ];
       if (!this.allow) return list;
       return list.filter((it) => this.allow.includes(it.label));
@@ -145,7 +151,7 @@ export default {
           localStorage.removeItem("isEverpay");
           await this.switchNet(chainId);
         }
-        this.$emit("onNetwork", this.selected);
+        // this.$emit("onNetwork", this.selected);
       } catch (error) {
         // user cancel
         console.log(error, "==================");
@@ -360,6 +366,17 @@ export default {
             symbol: "ETH",
             decimals: 18,
           },
+        },
+        81457: {
+          chainId,
+          chainName: "Blast Mainnet",
+          rpcUrls: ["https://rpc.blast.io"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://blastscan.io"],
         },
       }[id];
       if (!params) return;

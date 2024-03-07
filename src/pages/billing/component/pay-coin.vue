@@ -120,6 +120,17 @@ export default {
           img: "/img/svg/pay/eth.svg",
         });
       }
+
+      if (this.chainId == 81457) {
+        return [
+          {
+            label: "ETH",
+            showLabel: "ETH",
+            name: "ETH",
+            img: "/img/svg/pay/eth.svg",
+          },
+        ];
+      }
       return coinList;
     },
   },
