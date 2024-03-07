@@ -43,24 +43,6 @@ export default [
     },
   },
   {
-    path: "/withdraw",
-    component: () => import("../resource/act-withdraw"),
-    meta: {
-      title: "withdraw",
-      isTab: 1,
-      links: [
-        {
-          text: "Billing",
-          to: "/billing",
-        },
-        {
-          text: "withdraw",
-        },
-      ],
-    },
-  },
-
-  {
     path: "/bill-detail-cross",
     component: () => import("../resource/bill-detail2"),
 

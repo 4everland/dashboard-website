@@ -359,7 +359,6 @@ export default {
     if (localStorage.token) {
       await this.$store.dispatch("checkOnChain");
       await this.handleCheckFirstCharge();
-      this.loginTrigger();
     }
     bus.$on("showDialog", () => {
       this.showDialog = true;
@@ -459,46 +458,6 @@ export default {
     },
     timeOver() {
       this.isOverActivityTime = true;
-    },
-
-    async getOldBalance() {
-      const {
-        data: { balance },
-      } = await this.$http.get("$v3/account/balance");
-      return balance;
-    },
-
-    async loginTrigger() {
-      const loginTrigger = localStorage.getItem("loginTrigger");
-      if (loginTrigger == "1") return;
-      try {
-        const balance = await this.getOldBalance();
-        if (balance >= 0.1) {
-          await this.$confirm(
-            `  The Resource center fully upgraded. If you have any remaining USDC balance, please withdraw it or convert it to LAND. Any USDC balance will automatically convert to LAND after February 28, 2024. 
-      <div class='mt-2 fw-b'>Converting USDC to LAND or completing the first LAND deposit can claim a 100 Points reward.</div>`,
-            "Important Notice",
-            {
-              cancelText: "Cancel",
-              confirmText: "Withdraw",
-            }
-          );
-          this.$router.push("/billing/withdraw");
-          localStorage.setItem("loginTrigger", "1");
-        } else {
-          if (!this.firstRechargeInfo.firstRecharge) {
-            if (this.onChain) {
-              this.firstRechargeDialog = true;
-            } else {
-              this.showDialog = true;
-            }
-            localStorage.setItem("loginTrigger", "1");
-          }
-        }
-      } catch (error) {
-        console.log(error);
-        localStorage.setItem("loginTrigger", "1");
-      }
     },
   },
   watch: {

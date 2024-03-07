@@ -1,28 +1,5 @@
 <template>
   <div class="billing-container">
-    <div
-      class="notice mb-6 fz-14 py-2 px-4 al-c space-btw fz-14"
-      v-show="showWithDrawNotice"
-    >
-      <div class="al-c">
-        <img src="/img/svg/new-billing/notice.svg" width="24" alt="" />
-        <div class="ml-2">
-          The Resource center fully upgraded. If you need to withdraw USDC,
-          please
-          <a @click.stop="$router.push('/billing/withdraw')">
-            <b>click here</b></a
-          >. After February 28,2024, any remaining assets that have not been
-          withdrawn will automatically convert to LAND.
-        </div>
-      </div>
-      <img
-        width="24"
-        class="cursor-p"
-        @click="showWithDrawNotice = false"
-        src="/img/svg/new-billing/close-icon.svg"
-        alt=""
-      />
-    </div>
     <h3 class="mb-4">Plan</h3>
     <v-row class="plan-row" v-show="resourceLoading">
       <v-col> <v-skeleton-loader type="article"></v-skeleton-loader></v-col>
