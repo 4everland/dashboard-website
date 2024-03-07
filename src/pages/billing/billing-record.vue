@@ -1,17 +1,7 @@
 <template>
   <div class="billing-records-container main-wrap">
-    <div class="notice fz-14 py-2 px-4 al-c">
-      <img src="/img/svg/new-billing/notice.svg" width="24" alt="" />
-      <span class="ml-2">
-        The resource center has been fully upgraded. If you wish to view your
-        billing history, please
-        <a @click.prevent="$router.push('/billing/bills')"><b>click here</b></a>
-        .
-      </span>
-    </div>
-
     <billing-tabs
-      class="mt-5"
+      class=""
       :tabs="['Monthly Bill', 'Bill Details', 'Purchase History']"
       :tabsCmpList="tabItemList"
     ></billing-tabs>
