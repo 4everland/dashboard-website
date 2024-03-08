@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="showPop" max-width="600">
     <div class="pa-6 pt-5">
-      <h3 class="fz-20">Publish Access</h3>
+      <h3 class="fz-20">Update</h3>
       <v-form ref="form" v-model="valid" class="mt-4">
         <div class="mt-10">
           <v-text-field
