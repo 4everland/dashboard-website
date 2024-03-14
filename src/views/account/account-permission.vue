@@ -89,6 +89,11 @@ export default {
           ],
         },
         {
+          title: "RPC",
+          type: "RPC",
+          subs: ["API Lists", "Stats"],
+        },
+        {
           title: "Billing",
           type: "RESOURCE",
           subs: ["Plan", "LAND", "Deposite", "Transaction History"],
