@@ -359,6 +359,7 @@ export default {
     if (localStorage.token) {
       await this.$store.dispatch("checkOnChain");
       await this.handleCheckFirstCharge();
+      this.loginTrigger();
     }
     bus.$on("showDialog", () => {
       this.showDialog = true;
@@ -450,6 +451,19 @@ export default {
         this.$store.commit("SET_FIRST_RECHARGE", data.firstRecharge);
       } catch (error) {
         console.log(error);
+      }
+    },
+
+    loginTrigger() {
+      const loginTrigger = localStorage.getItem("loginTrigger");
+      if (loginTrigger == "1") return;
+      if (!this.firstRechargeInfo.firstRecharge) {
+        if (this.onChain) {
+          this.firstRechargeDialog = true;
+        } else {
+          this.showDialog = true;
+        }
+        localStorage.setItem("loginTrigger", "1");
       }
     },
     handleDeposit() {
