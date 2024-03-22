@@ -20,11 +20,23 @@
         <div class="text-center">
           <img src="@/assets/imgs/raas/success.svg" width="160" alt="" />
         </div>
-        <div class="raas-tit">Submission Successful!</div>
-        <div class="raas-stit">
-          Please be patient as we review your submission. An email will follow
-          upon approval.
-        </div>
+        <template v-if="this.rollupList[0].status == 0">
+          <div class="raas-tit">Submission Successful!</div>
+          <div class="raas-stit">
+            Please be patient as we review your submission. An email will follow
+            upon approval.
+          </div>
+        </template>
+        <template v-if="this.rollupList[0].status == 1">
+          <div class="raas-tit">Review approved!</div>
+          <div class="raas-stit">
+            Rollup creation begins after LAND payment.
+          </div>
+        </template>
+        <template v-if="this.rollupList[0].status == 2">
+          <div class="raas-tit">Payment completed!</div>
+          <div class="raas-stit">Rollup creation in progress...</div>
+        </template>
         <div
           class="main-wrap mt-6"
           :style="{
@@ -64,6 +76,32 @@
             <span>Telegram </span>
             <span>{{ rollupList[0].telegram }}</span>
           </div>
+          <div
+            class="d-flex space-btw al-c mt-10"
+            v-if="this.rollupList[0].status != 0"
+          >
+            <span style="color: #64748b; font-size: 14px; font-weight: 400">
+              {{ this.rollupList[0].status == 1 ? "Amount" : "Payment" }}:
+              {{ land }} LAND (${{ $land }})</span
+            >
+            <v-btn
+              v-if="this.rollupList[0].status == 1"
+              elevation="0"
+              :loading="loading"
+              min-width="130"
+              color="primary"
+              class="ml-4"
+              @click="onPay"
+              >Pay</v-btn
+            >
+
+            <span
+              v-if="this.rollupList[0].status == 2"
+              style="color: #64748b; font-size: 14px; font-weight: 400"
+            >
+              {{ timeFormat(this.rollupList[0].paymentTime) }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -71,7 +109,7 @@
 </template>
 
 <script>
-import { fetchRollupList } from "@/api/raas.js";
+import { fetchRollupList, sendTransaction } from "@/api/raas.js";
 import { mapGetters, mapState } from "vuex";
 
 export default {
@@ -79,6 +117,9 @@ export default {
     return {
       loaded: false,
       rollupList: [],
+      loading: false,
+      land: 0,
+      $land: 0,
     };
   },
   computed: {
@@ -99,6 +140,10 @@ export default {
       const { data } = await fetchRollupList();
       this.loaded = true;
       this.rollupList = data.detail;
+      const land = Number(this.rollupList[0].land) / 1e18;
+      console.log(land);
+      this.land = this.numberWithCommas(land);
+      this.$land = this.numberWithCommas(land / 1e6);
     },
     async onCreate() {
       const balance = this.originBalance / 1e18;
@@ -116,6 +161,77 @@ export default {
           this.$router.push("/billing/deposit");
         });
       }
+    },
+    async onPay() {
+      this.loading = true;
+      const balance = this.originBalance / 1e18;
+      try {
+        if (Number(balance) >= Number(this.rollupList[0].land) / 1e18) {
+          await sendTransaction({
+            rollupId: this.rollupList[0].id,
+          });
+          this.getList();
+        } else {
+          this.$confirm(
+            "Insufficient LAND balance. Please deposit before proceeding",
+            "Tips",
+            {
+              cancelText: "Cancel",
+              confirmText: "Deposit",
+            }
+          ).then(async () => {
+            this.$router.push("/billing/deposit");
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    timeFormat(timestamp) {
+      let year = new Date(timestamp * 1e3).getUTCFullYear();
+      let month =
+        new Date(timestamp * 1e3).getUTCMonth() + 1 > 9
+          ? new Date(timestamp * 1e3).getUTCMonth() + 1
+          : "0" + (new Date(timestamp * 1e3).getUTCMonth() + 1);
+      let date =
+        new Date(timestamp * 1e3).getUTCDate() > 9
+          ? new Date(timestamp * 1e3).getUTCDate()
+          : "0" + new Date(timestamp * 1e3).getUTCDate();
+
+      let hours =
+        new Date(timestamp * 1e3).getUTCHours() > 9
+          ? new Date(timestamp * 1e3).getUTCHours()
+          : "0" + new Date(timestamp * 1e3).getUTCHours();
+
+      let minutes =
+        new Date(timestamp * 1e3).getUTCMinutes() > 9
+          ? new Date(timestamp * 1e3).getUTCMinutes()
+          : "0" + new Date(timestamp * 1e3).getUTCMinutes();
+
+      let seconds =
+        new Date(timestamp * 1e3).getUTCSeconds() > 9
+          ? new Date(timestamp * 1e3).getUTCSeconds()
+          : "0" + new Date(timestamp * 1e3).getUTCSeconds();
+
+      return (
+        year +
+        "-" +
+        month +
+        "-" +
+        date +
+        " " +
+        hours +
+        ":" +
+        minutes +
+        ":" +
+        seconds +
+        " (UTC)"
+      );
     },
   },
 };
