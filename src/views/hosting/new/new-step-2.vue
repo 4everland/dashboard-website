@@ -4,7 +4,7 @@
       v-if="info"
       v-model="showPop"
       max-width="948"
-      class="deploy-success-dialog"
+      content-class="deploy-success-dialog no-scroll"
     >
       <div class="pa-6 pos-r">
         <div class="pos-a success-title">
@@ -247,11 +247,6 @@ Are you sure you want to continue?`;
 };
 </script>
 
-<style>
-.v-dialog {
-  overflow: initial !important;
-}
-</style>
 <style lang="scss" scoped>
 .dialog-title {
   color: #775da6;

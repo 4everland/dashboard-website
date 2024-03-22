@@ -362,6 +362,9 @@ export default {
           break;
         case "OPEN_NEW_TAB":
           window.open(data.message);
+          setTimeout(() => {
+            this.init();
+          }, 15000);
           break;
         case "POPUP":
           this.onPopup(item, data);

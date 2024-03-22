@@ -1,5 +1,9 @@
 <template>
-  <v-dialog v-model="showDialog" content-class="claim-dialog" max-width="920">
+  <v-dialog
+    v-model="showDialog"
+    content-class="claim-dialog no-scroll"
+    max-width="920"
+  >
     <div class="share-container pos-r">
       <div class="pos-a congratulations">Congratulations!</div>
       <div class="share-info ml-auto">
@@ -79,11 +83,6 @@ export default {
 };
 </script>
 
-<style>
-.v-dialog {
-  overflow: initial !important;
-}
-</style>
 <style lang="scss" scoped>
 .register-share-container {
   left: 0;
