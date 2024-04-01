@@ -49,10 +49,10 @@ export const zkSyncPayment = "0x0015Ae791D08A94178005a9761dEe349eF1A9c8f";
 export const zkRegister = "0xC5FF4F0E97B6d8738AA0A41A656A5C5d07498cBC";
 
 // src chain opBNB
-export const opBNBRegister = "0x3EebD8ed5ed01613cdDac7BAfF61889dce1CC8Ea";
+export const opBNBRecharge = "0x3EebD8ed5ed01613cdDac7BAfF61889dce1CC8Ea";
 
 // polygon zk evm
-export const polygonZkEVMRegister =
+export const polygonZkEVMRecharge =
   "0x3EebD8ed5ed01613cdDac7BAfF61889dce1CC8Ea";
 
 // linea

@@ -3,7 +3,7 @@
     <v-dialog
       v-model="firstRechargeDialog"
       max-width="920"
-      content-class="claim-dialog "
+      content-class="claim-dialog"
       persistent
     >
       <div class="first-recharge">
@@ -107,95 +107,86 @@
               </div>
             </div>
           </div>
-          <div class="mt-8">
-            <e-menu
-              ref="menu"
-              top
-              :close-on-content-click="false"
-              left
-              open-on-hover
-              @input="
-                (val) => {
-                  menuOpen = val;
-                }
-              "
+
+          <div class="al-c mt-8" style="gap: 16px">
+            <div
+              class="skip-btn fz-14 cursor-p"
+              style="width: 224px"
+              @click="showDialog = false"
             >
-              <div
-                slot="ref"
-                class="mint-btn al-c justify-center fw-b fz-14 cursor-p"
+              Skip
+            </div>
+            <div style="width: 320px">
+              <e-menu
+                ref="menu"
+                top
+                :close-on-content-click="false"
+                left
+                open-on-hover
+                @input="
+                  (val) => {
+                    menuOpen = val;
+                  }
+                "
               >
-                <span> Activate now</span>
-                <img
-                  class="ml-1"
-                  width="16"
-                  :src="
-                    menuOpen
-                      ? '/img/svg/rewardHub/down-arrow.svg'
-                      : '/img/svg/rewardHub/up-arrow.svg'
-                  "
-                  alt=""
-                />
-              </div>
-              <v-list v-if="showMore">
-                <v-list-item link @click="onSkip">
-                  <v-list-item-title class="fz-14 al-c justify-center">
-                    <span class="ml-3 gray">Skip</span>
-                  </v-list-item-title>
-                </v-list-item>
-              </v-list>
-              <v-list v-else>
                 <div
-                  class="al-c flex-wrap pa-4 pb-2"
-                  style="
-                    width: 560px;
-                    height: 304px;
-                    overflow-y: scroll;
-                    box-sizing: border-box;
-                  "
+                  slot="ref"
+                  class="mint-btn al-c justify-center fw-b fz-14 cursor-p"
                 >
-                  <template v-for="(item, i) in claimList">
-                    <div
-                      :key="item.type"
-                      class="pa-3 claim-chain-item mb-2 cursor-p al-c"
-                      :class="
-                        claimList.length % 2 != 0 && claimList.length - 1 == i
-                          ? 'last-item'
-                          : ''
-                      "
-                      @click="handleTypeClaim(item.type)"
-                    >
-                      <img :src="item.icon" width="24" height="24" alt="" />
-                      <span class="ml-3 fz-14">
-                        {{ item.name }}
-                      </span>
-                      <e-tooltip top v-if="item.tips">
-                        <v-icon
-                          slot="ref"
-                          size="18"
-                          color="#999"
-                          class="pa-1 d-ib"
-                          >mdi-alert-circle-outline</v-icon
-                        >
-                        <span>{{ item.tips }}</span>
-                      </e-tooltip>
-                    </div>
-                  </template>
+                  <span> Activate now</span>
+                  <img
+                    class="ml-1"
+                    width="16"
+                    :src="
+                      menuOpen
+                        ? '/img/svg/rewardHub/down-arrow.svg'
+                        : '/img/svg/rewardHub/up-arrow.svg'
+                    "
+                    alt=""
+                  />
                 </div>
 
-                <!-- <div
-                  v-if="!showMore"
-                  @click="onMore"
-                  class="claim-chain-item pa-3 mt-2 cursor-p fz-14 al-c"
-                  :class="{ 'f-center': claimList.length % 2 == 0 }"
-                  :style="{
-                    width: claimList.length % 2 ? 'calc(50% - 4px)' : '100%',
-                  }"
-                >
-                  <img width="20" src="/img/svg/more.svg" alt="" />
-                  <span class="ml-3 fz-14">More</span>
-                </div> -->
-              </v-list>
-            </e-menu>
+                <v-list>
+                  <div
+                    class="al-c flex-wrap pa-4 pb-2"
+                    style="
+                      width: 560px;
+                      height: 304px;
+                      overflow-y: scroll;
+                      box-sizing: border-box;
+                    "
+                  >
+                    <template v-for="(item, i) in claimList">
+                      <div
+                        :key="item.type"
+                        class="pa-3 claim-chain-item mb-2 cursor-p al-c"
+                        :class="
+                          claimList.length % 2 != 0 && claimList.length - 1 == i
+                            ? 'last-item'
+                            : ''
+                        "
+                        @click="handleTypeClaim(item)"
+                      >
+                        <img :src="item.icon" width="24" height="24" alt="" />
+                        <span class="ml-3 fz-14">
+                          {{ item.name }}
+                        </span>
+                        <e-tooltip top v-if="item.tips">
+                          <v-icon
+                            slot="ref"
+                            size="18"
+                            color="#999"
+                            class="pa-1 d-ib"
+                            >mdi-alert-circle-outline</v-icon
+                          >
+                          <span>{{ item.tips }}</span>
+                        </e-tooltip>
+                      </div>
+                    </template>
+                  </div>
+                </v-list>
+              </e-menu>
+            </div>
           </div>
         </div>
       </div>
@@ -213,6 +204,18 @@ import mixin from "@/pages/more/mixin-register";
 import timeCountDown from "./time-count-down.vue";
 import { bus } from "@/utils/bus";
 import { mapState } from "vuex";
+import {
+  ChapelLandRecharge,
+  ArbitrumLandRecharge,
+  zkSyncLandRecharge,
+  polygonZkEVMRecharge,
+  lineaRecharge,
+  blastRecharge,
+  optimismRecharge,
+  MumbaiLandRecharge,
+  opBNBRecharge,
+} from "../../plugins/pay/contracts/contracts-addr";
+
 export default {
   mixins: [mixin],
   components: {
@@ -274,74 +277,69 @@ export default {
           name: "Polygon",
           icon: require("/public/img/svg/billing/ic-polygon-0.svg"),
           type: "Polygon",
+          contractAddr: MumbaiLandRecharge,
         },
         {
           name: "Polygon zkEVM",
           icon: require("/public/img/svg/billing/ic-polygon-zkEVM.svg"),
           type: "PolygonZkEVM",
+          contractAddr: polygonZkEVMRecharge,
         },
         {
           name: "zkSync Era",
           icon: require("/public/img/svg/logo-no-letters.svg"),
           type: "zkSyncV2",
           tips: "Please ensure that you have sufficient ETH inzkSync Era. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
+          contractAddr: zkSyncLandRecharge,
         },
         {
           name: "zkSync Lite",
           icon: require("/public/img/svg/logo-no-letters.svg"),
           type: "zkSync",
           tips: "Please ensure that you have sufficient ETH in zkSync Lite. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
+          contractAddr: "",
         },
         {
           name: "BNB Smart Chain",
           icon: require("/public/img/svg/billing/ic-bsc.png"),
           type: "BSC",
+          contractAddr: ChapelLandRecharge,
         },
         {
           name: "opBNB",
           icon: require("/public/img/svg/billing/ic-opbnb-test.svg"),
           type: "OpBNB",
+          contractAddr: opBNBRecharge,
         },
         {
           name: "Arbitrum",
           icon: require("/public/img/svg/billing/ic-arbitrum.png"),
           type: "Arbitrum",
+          contractAddr: ArbitrumLandRecharge,
         },
         {
           name: "Optimism",
           icon: require("/public/img/svg/billing/ic-optimism.svg"),
           type: "Optimism",
+          contractAddr: optimismRecharge,
         },
-        {
-          name: "Ethereum",
-          icon: require("/public/img/svg/billing/ic-ethereum.svg"),
-          type: "Ethereum",
-        },
+        // {
+        //   name: "Ethereum",
+        //   icon: require("/public/img/svg/billing/ic-ethereum.svg"),
+        //   type: "Ethereum",
+        //   contractAddr: ''
+        // },
         {
           name: "Linea",
           icon: require("/public/img/svg/billing/ic-linea.svg"),
           type: "Linea",
+          contractAddr: lineaRecharge,
         },
-        // {
-        //   name: "ZetaChain Testnet",
-        //   icon: require("/public/img/svg/billing/ic-zeta.svg"),
-        //   tips: "During the ZetaChain Testnet phase, Mint only unlocks Web3 Identity.",
-        //   type: "Zeta",
-        // },
         {
           name: "Blast",
           icon: require("/public/img/svg/billing/ic-blast.svg"),
           type: "Blast",
-        },
-        // {
-        //   name: "More",
-        //   icon: require("/public/img/svg/more.svg"),
-        //   type: "More",
-        // },
-        {
-          name: "Skip",
-          icon: require("/public/img/svg/more.svg"),
-          type: "Skip",
+          contractAddr: blastRecharge,
         },
       ],
       firstRechargeInfo: {
@@ -351,11 +349,9 @@ export default {
       menuOpen: false,
       isOverActivityTime: true,
       endTime: 0,
-      showMore: false,
     };
   },
   async created() {
-    await this.getCurrentContract();
     if (localStorage.token) {
       await this.$store.dispatch("checkOnChain");
       await this.handleCheckFirstCharge();
@@ -366,32 +362,12 @@ export default {
     });
   },
   methods: {
-    onMore() {
-      this.showMore = true;
-      this.$refs.menu.$children[0].onResize();
-    },
-    async onSkip() {
-      try {
-        await this.$confirm(
-          "As a trial user, you will only have access to limited product functionalities and a small amount of experience resources. We recommend completing the account activation to fully experience all the functionalities available.",
-          "Are you sure you want to skip the account activation?",
-          {
-            cancelText: "Skip",
-            confirmText: "Activate",
-          }
-        );
-        // this.showMore = false;
-      } catch (error) {
-        this.showDialog = false;
-      }
-    },
     onAnimation() {
       this.showDialog = false;
       this.$refs.share.showDialog = true;
     },
-    async handleTypeClaim(type = "Polygon") {
-      if (type == "More") return this.onMore();
-      if (type == "Skip") return this.onSkip();
+    async handleTypeClaim(item) {
+      const type = item.type;
       try {
         this.$loading();
         const register = await this.isRegister();
@@ -400,22 +376,16 @@ export default {
           return this.$emit("claimCompeleted");
         }
         let claimStatus = null;
-
-        // if (type == "Polygon") {
-        //   claimStatus = await this.handleClaim();
-        // } else if (type == "zkSync") {
-        //   claimStatus = await this.handleZkClaim();
-        // } else if (type == "zkSyncV2") {
-        //   claimStatus = await this.handleOtherChainClaim("zkSync");
-        // } else {
-        //   claimStatus = await this.handleOtherChainClaim(type);
-        // }
         if (type == "zkSync") {
           claimStatus = await this.handleZkClaim();
         } else if (type == "zkSyncV2") {
-          claimStatus = await this.handleOtherChainClaim("zkSync");
+          console.log("zysyncv2");
+          claimStatus = await this.handleOtherChainClaim({
+            ...item,
+            type: "zkSync",
+          });
         } else {
-          claimStatus = await this.handleOtherChainClaim(type);
+          claimStatus = await this.handleOtherChainClaim(item);
         }
         if (claimStatus) {
           this.onAnimation();
@@ -474,19 +444,13 @@ export default {
       this.isOverActivityTime = true;
     },
   },
-  watch: {
-    showDialog(val) {
-      if (!val) {
-        this.showMore = false;
-      }
-    },
-  },
 };
 </script>
 
 <style>
 .claim-dialog {
   border-radius: 16px;
+  overflow: inherit;
 }
 .v-list.v-sheet.theme--light {
   padding: 0;
@@ -566,13 +530,15 @@ export default {
   }
 }
 
-// .skip-btn {
-//   color: #64748b;
-//   border-radius: 8px;
-//   padding: 16px 0;
-//   border: 1px solid #cbd5e1;
-//   background: #fff;
-// }
+.skip-btn {
+  color: #64748b;
+  border-radius: 8px;
+  text-align: center;
+  padding: 16px 0;
+  font-weight: bold;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+}
 .mint-btn {
   padding: 16px 0;
   color: #fff;

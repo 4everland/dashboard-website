@@ -8,7 +8,7 @@ import {
 import { Registration__factory } from "@4everland/registration";
 import {
   GoerliRpc,
-  polygonZkEVMRegister,
+  polygonZkEVMRecharge,
   MumbaiProviderController,
 } from "./contracts-addr";
 
@@ -24,7 +24,7 @@ class SrcChainContracts extends Contracts {
     return IERC20__factory.connect(addr, this.signer);
   }
   get Register() {
-    return Registration__factory.connect(polygonZkEVMRegister, this.signer);
+    return Registration__factory.connect(polygonZkEVMRecharge, this.signer);
   }
   get ProviderController() {
     return ProviderControllerV2__factory.connect(

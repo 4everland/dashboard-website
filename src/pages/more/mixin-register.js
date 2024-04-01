@@ -1,20 +1,17 @@
-import polygonContract from "../../plugins/pay/contracts/dst-chain-contracts";
-import bscContract from "../../plugins/pay/contracts/src-chain-contracts-bsc";
-import arbitrumContract from "../../plugins/pay/contracts/src-chain-contracts-arbitrum";
-import ethContract from "../../plugins/pay/contracts/src-chain-contracts";
-import zkSyncContract from "../../plugins/pay/contracts/src-chain-contracts-zkSync";
-import opBNBContract from "../../plugins/pay/contracts/src-chain-contracts-opBNB";
-import polygonZkEVMContract from "../../plugins/pay/contracts/src-chain-contracts-polygonZkEVM";
-import lineaContract from "../../plugins/pay/contracts/src-chain-contracts-linea";
-import zetaContract from "../../plugins/pay/contracts/src-chain-contracts-zeta";
-import blastContract from "../../plugins/pay/contracts/src-chain-contracts-blast";
-import optimismContract from "../../plugins/pay/contracts/src-chain-contracts-optimismContract";
 import { Web3Provider } from "zksync-web3";
-
-import { providerAddr } from "../../plugins/pay/contracts/contracts-addr";
+import uidToEuid from "@/utils/uid2euid";
+import {
+  providerAddr,
+  MumbaiProviderController,
+  GoerliRpc,
+} from "../../plugins/pay/contracts/contracts-addr";
 import { BigNumber, providers } from "ethers";
 import axios from "axios";
 import * as zksync from "zksync";
+import { BlastOracleLand__factory } from "@4everland-contracts";
+import { mapGetters, mapState } from "vuex";
+import { parseEther } from "ethers/lib/utils";
+import { ProviderControllerV2__factory } from "@4everland/service-contracts";
 export default {
   data() {
     return {
@@ -25,9 +22,23 @@ export default {
       zkSyncfee: BigNumber.from("500000000000000"),
     };
   },
+  computed: {
+    ...mapState({
+      teamId: (s) => s.teamId,
+    }),
+    ...mapGetters(["walletObj"]),
+    euid() {
+      return uidToEuid(this.teamId);
+    },
+    ProviderController() {
+      return ProviderControllerV2__factory.connect(
+        MumbaiProviderController,
+        new providers.JsonRpcProvider(GoerliRpc)
+      );
+    },
+  },
   methods: {
     async isRegister() {
-      await this.getCurrentContract();
       if (!localStorage.token) return;
       try {
         const { data } = await this.$http.get(
@@ -38,8 +49,7 @@ export default {
           onChain: data.handled,
         });
         if (!data.handled) {
-          console.log(providerAddr, data.uid);
-          const isExists = await this.contract.ProviderController.accountExists(
+          const isExists = await this.ProviderController.accountExists(
             providerAddr,
             data.uid
           );
@@ -71,9 +81,8 @@ export default {
     async handleClaim() {
       try {
         await this.switchNet("Polygon");
-        await this.getCurrentContract();
         const { sign } = await this.getSignAddress();
-        const tx = await this.contract.ProviderController.functions[
+        const tx = await this.ProviderController.functions[
           "registerAccount(address,bytes32,bytes)"
         ](providerAddr, this.registerInfo.uid, sign);
         console.log(tx);
@@ -93,7 +102,8 @@ export default {
         await this.switchNet("Ethereum");
         const zkprovider = await zksync.getDefaultProvider("mainnet");
         // eth signer
-        const signer = this.contract.provider.getSigner();
+        const provider = new providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
         const walletAddress = await signer.getAddress();
         if (walletAddress.toLowerCase() != this.registerInfo.wallet) return;
         const wallet = await zksync.Wallet.fromEthSigner(signer, zkprovider);
@@ -149,21 +159,26 @@ export default {
         return false;
       }
     },
-    async handleOtherChainClaim(chain) {
+    async handleOtherChainClaim(item) {
       try {
-        await this.switchNet(chain);
-        await this.getCurrentContract();
-        const fee = await this.contract.Register.fee();
-        const tx = await this.contract.Register.register(
-          providerAddr,
-          this.registerInfo.uid,
-          {
-            value: fee,
-          }
+        await this.switchNet(item.type);
+        let provider = new providers.Web3Provider(this.walletObj);
+        if (this.chainId == (this.$inDev ? "280" : "324")) {
+          provider = new Web3Provider(this.walletObj);
+        }
+        let signer = provider.getSigner();
+        const BlastOracleLand = BlastOracleLand__factory.connect(
+          item.contractAddr,
+          signer
         );
+        const price = await BlastOracleLand.callStatic.fetchPrice();
+
+        let tx = await BlastOracleLand.mintByETH(this.euid, {
+          value: parseEther("1").mul(parseEther("1")).div(price),
+        });
         const receipt = await tx.wait();
         console.log(receipt, "receipt");
-        const isExists = await this.contract.ProviderController.accountExists(
+        const isExists = await this.ProviderController.accountExists(
           providerAddr,
           this.registerInfo.uid
         );
@@ -226,49 +241,7 @@ export default {
         console.log(error);
       }
     },
-    async getCurrentContract() {
-      try {
-        const provider = new providers.Web3Provider(window.ethereum);
-        const { chainId } = await provider.getNetwork();
-        if (chainId == 80001 || chainId == 137) {
-          polygonContract.setProvider(provider);
-          this.contract = polygonContract;
-        } else if (chainId == 97 || chainId == 56) {
-          bscContract.setProvider(provider);
-          this.contract = bscContract;
-        } else if (chainId == 421613 || chainId == 42161) {
-          arbitrumContract.setProvider(provider);
-          this.contract = arbitrumContract;
-        } else if (chainId == 280 || chainId == 324) {
-          const provider = new Web3Provider(window.ethereum);
-          zkSyncContract.setProvider(provider);
-          this.contract = zkSyncContract;
-        } else if (chainId == 5611 || chainId == 204) {
-          opBNBContract.setProvider(provider);
-          this.contract = opBNBContract;
-        } else if (chainId == 1442 || chainId == 1101) {
-          polygonZkEVMContract.setProvider(provider);
-          this.contract = polygonZkEVMContract;
-        } else if (chainId == 59140 || chainId == 59144) {
-          lineaContract.setProvider(provider);
-          this.contract = lineaContract;
-        } else if (chainId == 7001) {
-          zetaContract.setProvider(provider);
-          this.contract = zetaContract;
-        } else if (chainId == 168587773 || chainId == 81457) {
-          blastContract.setProvider(provider);
-          this.contract = blastContract;
-        } else if (chainId == 10) {
-          optimismContract.setProvider(provider);
-          this.contract = optimismContract;
-        } else {
-          ethContract.setProvider(provider);
-          this.contract = ethContract;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
+
     onCancel() {
       this.$clearLogin();
       location.href = this.$getLoginUrl();

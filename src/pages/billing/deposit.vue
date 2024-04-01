@@ -133,9 +133,7 @@ import {
 } from "ethers/lib/utils";
 import {
   ICoin__factory,
-  // Land__factory,
   IQuoter__factory,
-  UNILand__factory,
   BlastOracleLand__factory,
 } from "@4everland-contracts";
 import { getProvider } from "@/plugins/ens";
@@ -220,9 +218,7 @@ export default {
         this.signer
       );
     },
-    opEthLandRecharge() {
-      return UNILand__factory.connect(this.landRechargeAddr, this.signer);
-    },
+
     curChainInfo() {
       console.log(this.chainId);
       return this.chainAddrs.find((it) => it.chainId == this.chainId);
@@ -302,16 +298,9 @@ export default {
         if (this.coinSelect == "ETH") {
           if (!this.ethAmount) return;
           this.$loading();
-          let tx;
-          if (this.chainId == 10) {
-            tx = await this.opEthLandRecharge.mintByETH(this.euid, {
-              value: this.ethAmount,
-            });
-          } else {
-            tx = await this.LandRecharge.mintByETH(this.euid, {
-              value: this.ethAmount,
-            });
-          }
+          let tx = await this.LandRecharge.mintByETH(this.euid, {
+            value: this.ethAmount,
+          });
           receipt = await tx.wait();
           this.$loading.close();
         } else {
