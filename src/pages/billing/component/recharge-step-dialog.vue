@@ -47,7 +47,7 @@
         <span
           style="text-decoration: underline"
           class="cursor-p"
-          @click="$router.push('/billing/records?tab=Purchase History')"
+          @click="$router.push('/billing/records?tab=Deposit History')"
           >here</span
         >
         to review.

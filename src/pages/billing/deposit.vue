@@ -317,7 +317,7 @@ export default {
         this.transactionCache(receipt.transactionHash);
         this.$store.dispatch("checkOnChain");
         if (this.coinSelect == "ETH") {
-          this.$router.push("/billing/records?tab=Purchase History");
+          this.$router.push("/billing/records?tab=Deposit History");
         }
       } catch (error) {
         this.onErr(error);

@@ -80,7 +80,7 @@
               :style="{
                 background: onChain ? '#775da6' : '#dbdbdb',
               }"
-              @click="$router.push('/billing/records?tab=Purchase History')"
+              @click="$router.push('/billing/records?tab=Deposit History')"
             >
               <span class="fz-14"> {{ onChain ? "Standard" : "Trial" }}</span>
               <v-icon class="ml-3" size="16" color="#fff"

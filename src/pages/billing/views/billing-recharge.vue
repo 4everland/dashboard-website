@@ -217,6 +217,9 @@ export default {
       if ([10].includes(id)) return "Optimism";
       if ([534352].includes(id)) return "Scroll";
       if ([81457].includes(id)) return "Blast";
+      if ([1101].includes(id)) return "Polygon zkEVM";
+      if ([204].includes(id)) return "opBNB";
+      if ([59144].includes(id)) return "Linea";
       if ([99999991].includes(id))
         return "Redeem Historical Remaining Resources";
       if ([99999992].includes(id)) return " ";

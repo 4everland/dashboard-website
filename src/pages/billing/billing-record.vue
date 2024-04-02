@@ -2,7 +2,7 @@
   <div class="billing-records-container main-wrap">
     <billing-tabs
       class=""
-      :tabs="['Monthly Bill', 'Bill Details', 'Purchase History']"
+      :tabs="['Monthly Bill', 'Bill Details', 'Deposit History']"
       :tabsCmpList="tabItemList"
     ></billing-tabs>
   </div>

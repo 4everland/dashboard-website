@@ -283,8 +283,8 @@ export default {
       } else if (act == "BILL_LAND_RECHARGE") {
         const amount = JSON.parse(it.message).Amount / 1e18;
         it.desc = `Deposited ${amount} LANDs`;
-        it.path = "Purchase history";
-        it.link = "/billing/records?tab=Purchase History";
+        it.path = "Deposit History";
+        it.link = "/billing/records?tab=Deposit History";
       } else {
         console.log(act, it);
         it.desc = act;
