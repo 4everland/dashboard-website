@@ -27,3 +27,7 @@ export function sendCheckChainId(id) {
     },
   });
 }
+
+export function sendTransaction(data) {
+  return request.post(`$raas/rollup/transaction`, data);
+}
