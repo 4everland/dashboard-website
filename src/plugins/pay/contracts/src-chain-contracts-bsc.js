@@ -11,7 +11,6 @@ import {
   BuildingTimeController__factory,
   IPFSStorageController__factory,
   ProviderControllerV2__factory,
-  SrcChainRecharge__factory,
 } from "@4everland/service-contracts";
 import { Bridge__factory } from "./sgn/contract/typechain";
 import {
@@ -19,7 +18,6 @@ import {
   ChapelBridge,
   ChapelSrcChainPayment,
   ChapelUSDC,
-  ChapelRecharge,
   ChapelRegister,
   MumbaiProviderController,
   MumbaiDstChainPayment,
@@ -59,9 +57,7 @@ class SrcChainContracts extends Contracts {
       this.signer
     );
   }
-  get SrcChainRecharge() {
-    return SrcChainRecharge__factory.connect(ChapelRecharge, this.signer);
-  }
+
   get Register() {
     return Registration__factory.connect(ChapelRegister, this.signer);
   }

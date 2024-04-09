@@ -19,7 +19,28 @@
             <h3 class="fz-20">{{ uname }}</h3>
           </div>
         </div>
-        <div class="body">
+        <div class="body pos-r">
+          <div
+            class="unchain-mask pos-a al-c justify-center flex-col"
+            v-if="!onChain"
+            @click="handleUpgrad"
+          >
+            <img
+              src="/img/svg/overview/unactived.png"
+              width="160"
+              height="120"
+              alt=""
+            />
+            <div class="fz-14 mt-2 mb-4">
+              The trial account is valid until
+              {{
+                new Date(teamInfo.createAt + 30 * 24 * 3600 * 1000).format(
+                  "date"
+                )
+              }}, and activating it unlocks permanent free resources.
+            </div>
+            <v-btn color="primary">Active</v-btn>
+          </div>
           <div class="al-c space-btw">
             <h3 class="fz-20">Balance</h3>
             <div class="cursor-p fz-14 al-c" @click="$router.push('/billing')">
@@ -408,6 +429,15 @@ export default {
     }
     .body {
       padding: 16px 24px 24px;
+      .unchain-mask {
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        opacity: 0.95;
+        z-index: 99;
+      }
       .balance {
         color: #0f172a;
         font-family: "DIN Alternate";

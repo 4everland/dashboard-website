@@ -11,7 +11,6 @@ import {
   BuildingTimeController__factory,
   IPFSStorageController__factory,
   ProviderControllerV2__factory,
-  SrcChainRecharge__factory,
 } from "@4everland/service-contracts";
 import { Bridge__factory } from "./sgn/contract/typechain";
 import {
@@ -19,7 +18,6 @@ import {
   ArbitrumBridge,
   ArbitrumSrcChainPayment,
   ArbitrumUSDC,
-  ArbitrumRecharge,
   ArbitrumRegister,
   MumbaiProviderController,
   MumbaiDstChainPayment,
@@ -29,8 +27,6 @@ import {
   MumbaiBuildingTimeController,
   MumbaiIPFSStorageController,
 } from "./contracts-addr";
-
-// import {  } from "./addr-dev";
 
 class SrcChainContracts extends Contracts {
   dst = null;
@@ -58,9 +54,6 @@ class SrcChainContracts extends Contracts {
       ArbitrumSrcChainPayment,
       this.signer
     );
-  }
-  get SrcChainRecharge() {
-    return SrcChainRecharge__factory.connect(ArbitrumRecharge, this.signer);
   }
 
   get Register() {

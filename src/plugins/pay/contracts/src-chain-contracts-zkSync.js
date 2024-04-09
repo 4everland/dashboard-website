@@ -11,13 +11,9 @@ import {
   IPFSStorageController__factory,
   ProviderControllerV2__factory,
 } from "@4everland/service-contracts";
-import {
-  Payment__factory,
-  RegistrationV2__factory,
-} from "@4everland/zksync-era-payment";
+import { RegistrationV2__factory } from "@4everland/zksync-era-payment";
 import {
   GoerliRpc,
-  zkSyncPayment,
   zkSyncUSDC,
   zkRegister,
   MumbaiProviderController,
@@ -45,10 +41,6 @@ class SrcChainContracts extends Contracts {
 
   IERC20(addr) {
     return IERC20__factory.connect(addr, this.signer);
-  }
-
-  get SrcChainPayment() {
-    return Payment__factory.connect(zkSyncPayment, this.signer);
   }
 
   get Register() {
