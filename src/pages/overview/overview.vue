@@ -31,13 +31,14 @@
               height="120"
               alt=""
             />
-            <div class="fz-14 mt-2 mb-4">
+            <div class="fz-14 mt-2 mb-4 ta-c">
               The trial account is valid until
-              {{
+              <b>{{
                 new Date(teamInfo.createAt + 30 * 24 * 3600 * 1000).format(
                   "date"
                 )
-              }}, and activating it unlocks permanent free resources.
+              }}</b>
+              , and activating it unlocks permanent free resources.
             </div>
             <v-btn color="primary">Active</v-btn>
           </div>
@@ -437,6 +438,10 @@ export default {
         background: #fff;
         opacity: 0.95;
         z-index: 99;
+        color: #475569;
+        b {
+          color: #0f172a;
+        }
       }
       .balance {
         color: #0f172a;
