@@ -31,7 +31,8 @@
               height="120"
               alt=""
             />
-            <div class="fz-14 mt-2 mb-4 ta-c">
+
+            <div class="fz-14 mt-2 mb-4 ta-c" v-show="!trialExpired">
               The trial account is valid until
               <b>{{
                 new Date(teamInfo.createAt + 30 * 24 * 3600 * 1000).format(
@@ -40,6 +41,11 @@
               }}</b>
               , and activating it unlocks permanent free resources.
             </div>
+            <div class="fz-14 mt-2 mb-4 ta-c" v-show="trialExpired">
+              Your trial account has expired. Activate now to unlock permanent
+              free resources.
+            </div>
+
             <v-btn color="primary">Active</v-btn>
           </div>
           <div class="al-c space-btw">
@@ -253,6 +259,12 @@ export default {
       if (this.teamInfo.name) return "Overview of " + this.teamInfo.name;
       if (info.username) return "Hi " + info.username.cutStr(6, 4);
       return "Overview";
+    },
+    trialExpired() {
+      return (
+        !this.onChain &&
+        +new Date() > this.teamInfo.createAt + 30 * 24 * 3600 * 1000
+      );
     },
   },
   methods: {
