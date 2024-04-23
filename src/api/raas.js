@@ -15,7 +15,7 @@ export function fetchDefaultChainId(params) {
 }
 
 export function sendCreateRaas(data) {
-  return request.post(`$raas/rollup`, data, {
+  return request.post(`$raas/rollup/create`, data, {
     noTip: true,
   });
 }
@@ -30,4 +30,8 @@ export function sendCheckChainId(id) {
 
 export function sendTransaction(data) {
   return request.post(`$raas/rollup/transaction`, data);
+}
+
+export function fetchRollupDetail(id) {
+  return request.get(`$raas/rollup/detail/${id}`);
 }

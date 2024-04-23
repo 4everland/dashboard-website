@@ -3,13 +3,106 @@
     <v-skeleton-loader v-if="!loaded" type="article"></v-skeleton-loader>
     <div v-else>
       <div v-if="rollupList.length == 0">
-        <Empty />
+        <div class="pa-3 mt-5 ta-c">
+          <img src="@/assets/imgs/raas/empty.svg" width="160" />
+        </div>
+        <div class="d-flex f-center">
+          <div style="max-width: 550px" class="top-tips">
+            <!-- Haven't created Rollup? (What's RaaS?) -->
+            Haven't created Rollup?
+          </div>
+        </div>
+        <div class="ta-c mt-8">
+          <v-btn color="primary" width="120" @click="onCreate">Create</v-btn>
+        </div>
       </div>
       <div v-else>
-        <e-right-opt-wrap style="width: 100%" :top="-60">
-          <v-btn color="primary" width="120" @click="onCreate">Create</v-btn>
-        </e-right-opt-wrap>
-        <rollup-list :rollup-data="rollupData" />
+        <div class="text-center">
+          <img src="@/assets/imgs/raas/success.svg" width="160" alt="" />
+        </div>
+        <template v-if="this.rollupList[0].status == 0">
+          <div class="raas-tit">Submission Successful!</div>
+          <div class="raas-stit">
+            Please be patient as we review your submission. An email will follow
+            upon approval.
+          </div>
+        </template>
+        <template v-if="this.rollupList[0].status == 1">
+          <div class="raas-tit">Review approved!</div>
+          <div class="raas-stit">
+            Rollup creation begins after LAND payment.
+          </div>
+        </template>
+        <template v-if="this.rollupList[0].status == 2">
+          <div class="raas-tit">Payment completed!</div>
+          <div class="raas-stit">Rollup creation in progress...</div>
+        </template>
+        <div
+          class="main-wrap mt-6"
+          :style="{
+            'min-height': 'auto',
+          }"
+        >
+          <div class="un-line preview">Preview</div>
+          <div class="un-line item">
+            <span>Chain Logo</span>
+            <span>
+              <v-avatar>
+                <v-img :src="rollupList[0].chainLogo"></v-img>
+              </v-avatar>
+            </span>
+          </div>
+          <div class="un-line item">
+            <span>Chain Name</span>
+            <span>{{ rollupList[0].chainName }}</span>
+          </div>
+          <div class="un-line item">
+            <span>Chain ID</span>
+            <span>{{ rollupList[0].chainId }}</span>
+          </div>
+          <div class="un-line item">
+            <span>Duration</span>
+            <span>{{ rollupList[0].expirationTime }} Days</span>
+          </div>
+          <div class="un-line item">
+            <span>Email </span>
+            <span>{{ rollupList[0].email }}</span>
+          </div>
+          <div class="un-line item">
+            <span>X</span>
+            <span>{{ rollupList[0].xId }}</span>
+          </div>
+          <div class="un-line item">
+            <span>Telegram </span>
+            <span>{{ rollupList[0].telegram }}</span>
+          </div>
+          <div
+            class="d-flex space-btw al-c mt-10"
+            v-if="this.rollupList[0].status != 0"
+          >
+            <span style="color: #64748b; font-size: 14px; font-weight: 400">
+              {{ this.rollupList[0].status == 1 ? "Amount" : "Payment" }}:
+              {{ land }} LAND (${{ $land }})</span
+            >
+            <v-btn
+              v-if="this.rollupList[0].status == 1"
+              elevation="0"
+              :loading="loading"
+              min-width="130"
+              color="primary"
+              class="ml-4"
+              @click="onPay"
+              >Pay</v-btn
+            >
+
+            <span
+              v-if="this.rollupList[0].status == 2"
+              style="color: #64748b; font-size: 14px; font-weight: 400"
+            >
+              {{ timeFormat(this.rollupList[0].paymentTime) }}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -18,15 +111,11 @@
 <script>
 import { fetchRollupList, sendTransaction } from "@/api/raas.js";
 import { mapGetters, mapState } from "vuex";
-import Empty from "./component/empty.vue";
-import rollupList from "./component/rollup-list.vue";
 
 export default {
-  components: { Empty, rollupList },
   data() {
     return {
       loaded: false,
-      rollupData: null,
       rollupList: [],
       loading: false,
       land: 0,
@@ -48,13 +137,8 @@ export default {
 
   methods: {
     async getList() {
-      const params = {
-        page: 0,
-        size: 20,
-      };
-      const { data } = await fetchRollupList(params);
+      const { data } = await fetchRollupList();
       this.loaded = true;
-      this.rollupData = data;
       this.rollupList = data.detail;
       const land = Number(this.rollupList[0].land) / 1e18;
       console.log(land);

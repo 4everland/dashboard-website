@@ -16,4 +16,13 @@ export default [
       links: [{ text: "RaaS", to: "/raas" }, { text: "Create Rollup" }],
     },
   },
+  {
+    path: "/raas/:name/:id",
+    component: () => import("./detail.vue"),
+    meta: {
+      title: "{name}",
+      isTab: 1,
+      links: [{ text: "RaaS", to: "/raas" }, { text: "{name}" }],
+    },
+  },
 ];
