@@ -23,8 +23,10 @@
                 <v-img :src="item.chainLogo"></v-img>
               </v-avatar>
               <div>
-                <div class="chain-name">{{ item.chainName }}</div>
-                <div class="chain-id">ChainId:{{ item.chainId }}</div>
+                <div class="chain-name">{{ item.chainName || "-" }}</div>
+                <div class="chain-id" v-if="item.chainId">
+                  ChainId:{{ item.chainId }}
+                </div>
               </div>
             </div>
           </td>
@@ -139,7 +141,7 @@ export default {
       if (item.status == 4) {
         return;
       }
-      this.$router.push(`/raas/${item.chainName}/${item.id}`);
+      this.$router.push(`/raas/${item.chainName || "-"}/${item.id}`);
     },
   },
 };
