@@ -19,7 +19,35 @@
             <h3 class="fz-20">{{ uname }}</h3>
           </div>
         </div>
-        <div class="body">
+        <div class="body pos-r">
+          <div
+            class="unchain-mask pos-a al-c justify-center flex-col"
+            v-if="!onChain"
+            @click="handleUpgrad"
+          >
+            <img
+              src="/img/svg/overview/unactived.png"
+              width="160"
+              height="120"
+              alt=""
+            />
+
+            <div class="fz-14 mt-2 mb-4 ta-c" v-show="!trialExpired">
+              The trial account is valid until
+              <b>{{
+                new Date(teamInfo.createAt + 30 * 24 * 3600 * 1000).format(
+                  "date"
+                )
+              }}</b>
+              , and activating it unlocks permanent free resources.
+            </div>
+            <div class="fz-14 mt-2 mb-4 ta-c" v-show="trialExpired">
+              Your trial account has expired. Activate now to unlock permanent
+              free resources.
+            </div>
+
+            <v-btn color="primary">Active</v-btn>
+          </div>
           <div class="al-c space-btw">
             <h3 class="fz-20">Balance</h3>
             <div class="cursor-p fz-14 al-c" @click="$router.push('/billing')">
@@ -232,6 +260,12 @@ export default {
       if (info.username) return "Hi " + info.username.cutStr(6, 4);
       return "Overview";
     },
+    trialExpired() {
+      return (
+        !this.onChain &&
+        +new Date() > this.teamInfo.createAt + 30 * 24 * 3600 * 1000
+      );
+    },
   },
   methods: {
     async getUserResource() {
@@ -408,6 +442,19 @@ export default {
     }
     .body {
       padding: 16px 24px 24px;
+      .unchain-mask {
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        opacity: 0.95;
+        z-index: 99;
+        color: #475569;
+        b {
+          color: #0f172a;
+        }
+      }
       .balance {
         color: #0f172a;
         font-family: "DIN Alternate";

@@ -517,6 +517,7 @@ export default {
 .mint-content {
   padding: 40px;
   background: url("/img/bg/share/mint-bg.png") no-repeat;
+  background-position: -30px;
   .mint-box {
     width: 560px;
     .mint-title {

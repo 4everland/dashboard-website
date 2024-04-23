@@ -15,7 +15,7 @@
         >
           <img width="20" src="/img/svg/overview/notice-white.svg" alt="" />
           <span class="ml-5 fz-14">
-            You have a on-chain identity waiting for Mint.</span
+            Click to claim your account activation gift pakage!</span
           >
         </div>
         <account-bind></account-bind>
