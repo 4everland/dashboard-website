@@ -10,6 +10,7 @@
       </thead>
       <tbody>
         <tr
+          class="border-bottom-tr"
           :class="
             item.status == 4 ? 'cursor-ban opacity-terminated' : 'cursor-p'
           "
@@ -20,7 +21,11 @@
           <td>
             <div class="chain-info-box">
               <v-avatar size="40" class="mr-3">
-                <v-img :src="item.chainLogo"></v-img>
+                <v-img
+                  :src="
+                    item.favicon || require('@/assets/imgs/raas/Avatar.png')
+                  "
+                ></v-img>
               </v-avatar>
               <div>
                 <div class="chain-name">{{ item.chainName || "-" }}</div>
@@ -141,7 +146,13 @@ export default {
       if (item.status == 4) {
         return;
       }
-      this.$router.push(`/raas/${item.chainName || "-"}/${item.id}`);
+      if (item.status == 3) {
+        this.$router.push(`/raas/${item.chainName || "-"}/${item.id}`);
+      } else if (item.status == 2) {
+        this.$router.push(`/raas/progress/${item.chainName || "-"}/${item.id}`);
+      } else {
+        this.$router.push(`/raas/status/${item.id}`);
+      }
     },
   },
 };
@@ -169,6 +180,12 @@ export default {
     th,
     td {
       padding: 16px 24px;
+    }
+    .border-bottom-tr {
+      border-bottom: 1px solid #cbd5e1;
+      &:last-child {
+        border: none;
+      }
     }
     .opacity-terminated {
       opacity: 0.5;

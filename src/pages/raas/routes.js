@@ -17,6 +17,15 @@ export default [
     },
   },
   {
+    path: "/raas/status/:id",
+    component: () => import("./status.vue"),
+    meta: {
+      title: "RaaS Status",
+      isTab: 1,
+      links: [{ text: "RaaS", to: "/raas" }, { text: "RaaS Status" }],
+    },
+  },
+  {
     path: "/raas/:name/:id",
     component: () => import("./detail.vue"),
     meta: {
@@ -24,5 +33,9 @@ export default [
       isTab: 1,
       links: [{ text: "RaaS", to: "/raas" }, { text: "{name}" }],
     },
+  },
+  {
+    path: "/raas/progress/:name/:id",
+    component: () => import("./progress.vue"),
   },
 ];

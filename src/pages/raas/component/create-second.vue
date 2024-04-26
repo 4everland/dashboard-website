@@ -50,7 +50,7 @@
                           >
                             <v-text-field
                               v-model="email"
-                              :rules="chainIdRules"
+                              :rules="emailRules"
                               outlined
                               placeholder="Please enter contact email"
                               dense
@@ -78,7 +78,7 @@
                           </div>
                           <v-text-field
                             v-model="telegram"
-                            :rules="chainNameRules"
+                            :rules="telegramRules"
                             persistent-placeholder
                             outlined
                             placeholder="Please enter your telegram"
@@ -170,17 +170,11 @@ export default {
     return {
       valid: true,
       validChainId: true,
-      chainIdRules: [
-        (v) => !!v || "chainId is required",
-        (v) =>
-          (v && v.length <= 16) || "chainId must be less than 16 characters",
-        (v) => /^[0-9]\d*$/.test(v) || "chainId must be valid",
-        () =>
-          !this.isIdExist ||
-          "The ID already exists, please enter a different one.",
+      emailRules: [
+        (v) => !!v || "Email is required",
+        (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || "Email must be valid",
       ],
-      chainNameRules: [(v) => !!v || "chainName is required"],
-      chainLogoRules: [(v) => !!v || "chainLogo is required"],
+      telegramRules: [(v) => !!v || "telegram is required"],
       email: "",
       xId: "",
       telegram: "",

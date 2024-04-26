@@ -2,38 +2,24 @@
   <div>
     <v-skeleton-loader v-if="!loaded" type="article"></v-skeleton-loader>
     <div v-else>
-      <div v-if="rollupList.length == 0">
-        <div class="pa-3 mt-5 ta-c">
-          <img src="@/assets/imgs/raas/empty.svg" width="160" />
-        </div>
-        <div class="d-flex f-center">
-          <div style="max-width: 550px" class="top-tips">
-            <!-- Haven't created Rollup? (What's RaaS?) -->
-            Haven't created Rollup?
-          </div>
-        </div>
-        <div class="ta-c mt-8">
-          <v-btn color="primary" width="120" @click="onCreate">Create</v-btn>
-        </div>
-      </div>
-      <div v-else>
+      <div>
         <div class="text-center">
           <img src="@/assets/imgs/raas/success.svg" width="160" alt="" />
         </div>
-        <template v-if="this.rollupList[0].status == 0">
+        <template v-if="this.detailData.status == 0">
           <div class="raas-tit">Submission Successful!</div>
           <div class="raas-stit">
             Please be patient as we review your submission. An email will follow
             upon approval.
           </div>
         </template>
-        <template v-if="this.rollupList[0].status == 1">
+        <template v-if="this.detailData.status == 1">
           <div class="raas-tit">Review approved!</div>
           <div class="raas-stit">
             Rollup creation begins after LAND payment.
           </div>
         </template>
-        <template v-if="this.rollupList[0].status == 2">
+        <template v-if="this.detailData.status == 2">
           <div class="raas-tit">Payment completed!</div>
           <div class="raas-stit">Rollup creation in progress...</div>
         </template>
@@ -48,44 +34,49 @@
             <span>Chain Logo</span>
             <span>
               <v-avatar>
-                <v-img :src="rollupList[0].chainLogo"></v-img>
+                <v-img
+                  :src="
+                    detailData.favicon ||
+                    require('@/assets/imgs/raas/Avatar.png')
+                  "
+                ></v-img>
               </v-avatar>
             </span>
           </div>
           <div class="un-line item">
             <span>Chain Name</span>
-            <span>{{ rollupList[0].chainName }}</span>
+            <span>{{ detailData.chainName }}</span>
           </div>
           <div class="un-line item">
             <span>Chain ID</span>
-            <span>{{ rollupList[0].chainId }}</span>
+            <span>{{ detailData.chainId }}</span>
           </div>
           <div class="un-line item">
             <span>Duration</span>
-            <span>{{ rollupList[0].expirationTime }} Days</span>
+            <span>{{ detailData.expirationTime }} Days</span>
           </div>
           <div class="un-line item">
             <span>Email </span>
-            <span>{{ rollupList[0].email }}</span>
+            <span>{{ detailData.email }}</span>
           </div>
           <div class="un-line item">
             <span>X</span>
-            <span>{{ rollupList[0].xId }}</span>
+            <span>{{ detailData.xId }}</span>
           </div>
           <div class="un-line item">
             <span>Telegram </span>
-            <span>{{ rollupList[0].telegram }}</span>
+            <span>{{ detailData.telegram }}</span>
           </div>
           <div
             class="d-flex space-btw al-c mt-10"
-            v-if="this.rollupList[0].status != 0"
+            v-if="this.detailData.status != 0"
           >
             <span style="color: #64748b; font-size: 14px; font-weight: 400">
-              {{ this.rollupList[0].status == 1 ? "Amount" : "Payment" }}:
+              {{ this.detailData.status == 1 ? "Amount" : "Payment" }}:
               {{ land }} LAND (${{ $land }})</span
             >
             <v-btn
-              v-if="this.rollupList[0].status == 1"
+              v-if="this.detailData.status == 1"
               elevation="0"
               :loading="loading"
               min-width="130"
@@ -96,10 +87,10 @@
             >
 
             <span
-              v-if="this.rollupList[0].status == 2"
+              v-if="this.detailData.status == 2"
               style="color: #64748b; font-size: 14px; font-weight: 400"
             >
-              {{ timeFormat(this.rollupList[0].paymentTime) }}
+              {{ timeFormat(this.detailData.paymentTime) }}
             </span>
           </div>
         </div>
@@ -109,14 +100,16 @@
 </template>
 
 <script>
-import { fetchRollupList, sendTransaction } from "@/api/raas.js";
+// import { fetchRollupList, sendTransaction } from "@/api/raas.js";
+import { fetchRollupDetail, sendTransaction } from "@/api/raas.js";
+
 import { mapGetters, mapState } from "vuex";
 
 export default {
   data() {
     return {
       loaded: false,
-      rollupList: [],
+      detailData: {},
       loading: false,
       land: 0,
       $land: 0,
@@ -132,19 +125,20 @@ export default {
     this.$store.dispatch("getBalance");
   },
   mounted() {
-    this.getList();
+    this.getDetail();
   },
 
   methods: {
-    async getList() {
-      const { data } = await fetchRollupList();
+    async getDetail() {
+      const id = this.$route.params.id;
+      const { data } = await fetchRollupDetail(id);
       this.loaded = true;
-      this.rollupList = data.detail;
-      const land = Number(this.rollupList[0].land) / 1e18;
-      console.log(land);
+      this.detailData = data;
+      const land = Number(data.land) / 1e18;
       this.land = this.numberWithCommas(land);
       this.$land = this.numberWithCommas(land / 1e6);
     },
+
     async onCreate() {
       const balance = this.originBalance / 1e18;
       if (Number(balance) >= 1000000000) {
@@ -166,11 +160,11 @@ export default {
       this.loading = true;
       const balance = this.originBalance / 1e18;
       try {
-        if (Number(balance) >= Number(this.rollupList[0].land) / 1e18) {
+        if (Number(balance) >= Number(this.detailData.land) / 1e18) {
           await sendTransaction({
-            rollupId: this.rollupList[0].id,
+            rollupId: this.detailData.id,
           });
-          this.getList();
+          this.getDetail();
         } else {
           this.$confirm(
             "Insufficient LAND balance. Please deposit before proceeding",

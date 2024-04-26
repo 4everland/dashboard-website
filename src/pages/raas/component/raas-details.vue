@@ -24,14 +24,28 @@
                 <img src="@/assets/imgs/raas/rpc.svg" width="24" />
                 <span> RPC </span>
               </div>
-              <div v-for="item in 2" class="raas-rpc-item">
+              <div class="raas-rpc-item">
                 <div class="raas-rpc-item-title">RPC</div>
                 <div class="raas-rpc-item-content">
-                  <span> https://rpc-aevo-mainnet-prod-O.t.conduit.xyz </span>
+                  <span> {{ infoData.detail.rpc }} </span>
                   <v-btn
                     icon
                     class="task-button"
-                    v-clipboard="'shareUrl'"
+                    v-clipboard="infoData.detail.rpc"
+                    @success="$toast('Copied!')"
+                  >
+                    <v-icon size="16" color="primary">mdi-content-copy</v-icon>
+                  </v-btn>
+                </div>
+              </div>
+              <div class="raas-rpc-item">
+                <div class="raas-rpc-item-title">WS</div>
+                <div class="raas-rpc-item-content">
+                  <span> {{ infoData.detail.ws }} </span>
+                  <v-btn
+                    icon
+                    class="task-button"
+                    v-clipboard="infoData.detail.ws"
                     @success="$toast('Copied!')"
                   >
                     <v-icon size="16" color="primary">mdi-content-copy</v-icon>
@@ -42,14 +56,17 @@
           </v-col>
           <v-col cols="12" md="6">
             <v-row>
-              <v-col v-for="item in 4" cols="12" md="6">
+              <v-col v-for="item in linkItem" :key="item.key" cols="12" md="6">
                 <div class="d-flex space-btw al-c raas-box-bg py-7 px-3">
                   <div class="d-flex al-c">
-                    <img src="@/assets/imgs/raas/rpc.svg" width="24" />
-                    <span class="raas-title ml-2">Block Explorer</span>
+                    <img :src="item.icon" width="24" />
+                    <span class="raas-title ml-2">{{ item.text }}</span>
                   </div>
-                  <div class="d-flex al-c">
-                    <img src="@/assets/imgs/raas/rpc.svg" width="24" />
+                  <div class="d-flex al-c cursor-p" @click="onLinkActive(item)">
+                    <img
+                      src="@/assets/imgs/raas/link-external.svg"
+                      width="24"
+                    />
                   </div>
                 </div>
               </v-col>
@@ -60,55 +77,225 @@
     </div>
     <div class="rass-box-boder mt-4 pa-4">
       <div class="raas-title mb-4">Sequencer Address Balance</div>
-      <div>12345</div>
+      <div class="rollup-list">
+        <table class="rollup-table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Type</th>
+              <th scope="col">Address</th>
+              <th scope="col">Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="border-bottom-tr"
+              v-for="(item, key, index) in sequncerAddressBalanceObj"
+              :key="item.id"
+            >
+              <td>
+                <div class="bill-type">
+                  {{ index + 1 }}
+                </div>
+              </td>
+              <td>
+                <div class="bill-plan">
+                  <span> {{ key }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="bill-plan">
+                  <span> {{ item }}</span>
+                  <v-btn
+                    icon
+                    class="task-button"
+                    v-clipboard="item"
+                    @success="$toast('Copied!')"
+                  >
+                    <v-icon size="16" color="#0F172A">mdi-content-copy</v-icon>
+                  </v-btn>
+                </div>
+              </td>
+              <td>
+                <div class="bill-plan">
+                  <span> {{ getBalance(item) }}</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+
+    <v-dialog v-model="dialog" max-width="860">
+      <v-card>
+        <v-card-actions class="d-flex al-c space-btw">
+          <span class="raas-title"> {{ dialogTitle }} </span>
+          <div>
+            <v-btn
+              icon
+              v-clipboard="
+                () => {
+                  return jsonCode;
+                }
+              "
+              @success="$toast('Copied!')"
+            >
+              <v-icon size="16">mdi-content-copy</v-icon>
+            </v-btn>
+            <v-btn icon @click="dialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+        </v-card-actions>
+
+        <v-card-text>
+          <SimpleCodeEditor
+            theme="github"
+            :modelValue.sync="jsonCode"
+            width="100%"
+            height="500px"
+            readOnly
+          ></SimpleCodeEditor>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
+import SimpleCodeEditor from "@/views/hosting/common/simple-code-editor";
+import { fetchEthBalance } from "@/api/raas.js";
 export default {
   name: "DashboardWebsiteRaasDetails",
-
+  components: { SimpleCodeEditor },
+  props: {
+    infoData: {
+      type: Object,
+      default: () => {
+        return {
+          detail: {
+            rpc: "",
+            ws: "",
+          },
+        };
+      },
+    },
+  },
+  watch: {
+    infoData(val) {
+      this.init(val.detail);
+    },
+  },
   data() {
     return {
+      dialog: false,
+      dialogTitle: "",
+      jsonCode: "",
       infoObj: [
         {
-          key: "layer1",
-          value: "Sepolia",
+          key: "settlementLayer",
+          value: "",
           text: "Settlement Layer",
         },
         {
-          key: "layer2",
-          value: "Sepolia",
+          key: "gasBlockLimit",
+          value: "",
           text: "Gas Block Limit",
         },
         {
-          key: "layer3",
-          value: "Sepolia",
+          key: "withdrawPeriod",
+          value: "",
           text: "Withdraw Period",
         },
         {
-          key: "layer4",
-          value: "Sepolia",
+          key: "gasToken",
+          value: "",
           text: "Gas Token",
         },
         {
-          key: "layer5",
-          value: "Sepolia",
+          key: "framework",
+          value: "",
           text: "Framework",
         },
         {
-          key: "layer6",
-          value: "Sepolia",
+          key: "daLayer",
+          value: "",
           text: "DA Layer",
         },
       ],
+      linkItem: [
+        {
+          key: "blockExplorer",
+          icon: require("@/assets/imgs/raas/block.svg"),
+          text: "Block Explorer",
+          link: "",
+          value: "",
+          type: "link",
+        },
+        {
+          key: "bridgeAssets",
+          icon: require("@/assets/imgs/raas/bridge.svg"),
+          text: "Bridge Assets",
+          link: "",
+          value: "",
+          type: "link",
+        },
+        {
+          key: "contractAddress",
+          icon: require("@/assets/imgs/raas/contract.svg"),
+          text: "Contract Address",
+          link: "",
+          value: "",
+          type: "dialog",
+        },
+        {
+          key: "rollupConfig",
+          icon: require("@/assets/imgs/raas/rollup.svg"),
+          text: "Rollup Config",
+          link: "",
+          value: "",
+          type: "dialog",
+        },
+      ],
+      sequncerAddressBalanceObj: {},
     };
   },
 
   mounted() {},
 
-  methods: {},
+  methods: {
+    init(val) {
+      const detail = val;
+      this.infoObj.forEach((element) => {
+        element.value = detail[element.key];
+      });
+      this.linkItem.forEach((element) => {
+        element.value = detail[element.key];
+      });
+      const sequncerAddressBalanceObj = JSON.parse(
+        detail.sequncerAddressBalance
+      );
+      this.sequncerAddressBalanceObj = sequncerAddressBalanceObj;
+    },
+    onLinkActive(item) {
+      if (item.type == "link") {
+        window.open(item.value);
+      }
+      if (item.type == "dialog") {
+        this.dialogTitle = item.text;
+        this.jsonCode = item.value;
+        this.dialog = true;
+      }
+    },
+
+    async getBalance(address) {
+      const { data } = await fetchEthBalance(address);
+      const balance = data.balance;
+      console.log(balance);
+      return balance;
+    },
+  },
 };
 </script>
 
@@ -178,6 +365,53 @@ export default {
           }
         }
       }
+    }
+  }
+}
+.rollup-list {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  overflow-x: scroll;
+  .rollup-table {
+    width: 100%;
+    background: #fff;
+    text-align: left;
+    border-collapse: collapse;
+    overflow-x: scroll;
+    thead {
+      height: 36px;
+      background: #f8fafc;
+      tr {
+        border-bottom: 1px solid #cbd5e1;
+      }
+    }
+
+    th,
+    td {
+      padding: 16px 24px;
+    }
+    .border-bottom-tr {
+      border-bottom: 1px solid #cbd5e1;
+      &:last-child {
+        border: none;
+      }
+    }
+    .bill-type {
+      color: #0f172a;
+      font-family: "SF Pro Text";
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: normal;
+    }
+    .bill-plan {
+      color: #0f172a;
+      font-family: "SF Pro Text";
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      text-transform: capitalize;
     }
   }
 }

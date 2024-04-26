@@ -3,7 +3,11 @@
     <div class="chain-info-box">
       <div class="chain-info">
         <v-avatar size="40" class="mr-3">
-          <v-img :src="detailData.chainLogo"></v-img>
+          <v-img
+            :src="
+              detailData.favicon || require('@/assets/imgs/raas/Avatar.png')
+            "
+          ></v-img>
         </v-avatar>
         <div class="mr-2">
           <div class="chain-name">{{ detailData.chainName }}</div>
@@ -14,22 +18,21 @@
             <span class="chain-status-box">
               <div
                 class="dot"
-                :class="`dot-${statusFilter(
-                  detailData.status,
-                  detailData.expirationAt
-                )}`"
+                :class="`dot-${statusFilter(detailData.status)}`"
               ></div>
               <span class="status-text">
-                {{ statusFilter(detailData.status, detailData.expirationAt) }}
+                {{ statusFilter(detailData.status) }}
               </span>
             </span>
           </div>
-          <div class="expira-time mt-1">Expiration: 18 July 2023</div>
+          <div class="expira-time mt-1">
+            Expiration: {{ parseTime(detailData.expirationAt, "{y}-{m}-{d}") }}
+          </div>
         </div>
       </div>
       <div>
-        <v-btn color="primary" width="130">
-          <v-icon> mdi-cloud-upload </v-icon>Renew</v-btn
+        <v-btn color="primary" width="130" @click="onRenew">
+          <v-icon class="mr-2"> mdi-wallet </v-icon>Renew</v-btn
         >
       </div>
     </div>
@@ -38,7 +41,8 @@
 </template>
 
 <script>
-import { fetchRollupDetail } from "@/api/raas.js";
+import { fetchRollupDetail, sendRenew } from "@/api/raas.js";
+import { parseTime } from "@/utils/index.js";
 
 export default {
   name: "DashboardWebsiteDetail",
@@ -50,6 +54,14 @@ export default {
         {
           text: "Details",
           comp: "raas-details",
+          props: {
+            infoData: {
+              detail: {
+                rpc: "",
+                ws: "",
+              },
+            },
+          },
         },
         {
           text: "Logs",
@@ -58,6 +70,9 @@ export default {
         {
           text: "Setting",
           comp: "raas-setting",
+          props: {
+            infoData: {},
+          },
         },
         {
           text: "Billings",
@@ -72,10 +87,13 @@ export default {
   mounted() {},
 
   methods: {
+    parseTime,
     async getDetail() {
       const id = this.$route.params.id;
       const { data } = await fetchRollupDetail(id);
       this.detailData = data;
+      this.list[0].props.infoData = data;
+      this.list[2].props.infoData = data;
     },
     formatExpirationAt(expirationAt) {
       const now = new Date().getTime();
@@ -101,19 +119,37 @@ export default {
       };
       return statusMap[expirationStatus];
     },
-    statusFilter(status, expirationAt) {
-      const days = this.formatExpirationAt(expirationAt);
-      if (days < 0) {
-        status = 4;
-      }
+    statusFilter(status) {
       const statusMap = {
         0: "Applying",
         1: "Pending Payment",
         2: "Creating",
         3: "Running",
         4: "Terminated",
+        5: "Creating",
       };
       return statusMap[status];
+    },
+    async onRenew() {
+      this.onLoading = true;
+      const id = this.$route.params.id;
+      try {
+        await sendRenew(id);
+        this.$toast("Successfully.");
+      } catch (error) {
+        const code = error.code;
+        if (code == 10002) {
+          this.$confirm(error.message, "Tips", {
+            cancelText: "Cancel",
+            confirmText: "Deposit",
+          }).then(async () => {
+            this.$router.push("/billing/deposit");
+          });
+        } else {
+          this.$alert(error.message);
+        }
+      }
+      this.onLoading = false;
     },
   },
 };

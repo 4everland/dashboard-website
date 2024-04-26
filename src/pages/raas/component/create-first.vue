@@ -35,7 +35,7 @@
               >
                 <v-col
                   cols="12"
-                  md="2"
+                  md="3"
                   v-for="item in stackOption"
                   :key="item.key"
                 >
@@ -76,7 +76,7 @@
               >
                 <v-col
                   cols="12"
-                  md="2"
+                  md="3"
                   v-for="item in dataAvailabilityOption"
                   :key="item.key"
                 >
@@ -117,7 +117,7 @@
               >
                 <v-col
                   cols="12"
-                  md="2"
+                  md="3"
                   v-for="item in layer1Option"
                   :key="item.key"
                 >
@@ -158,7 +158,7 @@
               >
                 <v-col
                   cols="12"
-                  md="2"
+                  md="3"
                   v-for="item in netWorkTypeOption"
                   :key="item.key"
                 >
@@ -196,10 +196,10 @@ export default {
 
   data() {
     return {
-      stack: null,
-      dataAvailability: null,
-      layer1: null,
-      netWorkType: null,
+      stack: 0,
+      dataAvailability: 0,
+      layer1: 0,
+      netWorkType: 0,
       nextDisabled: true,
       stackOption: [
         {
@@ -269,14 +269,20 @@ export default {
       layer1Option: [
         {
           name: "Ethereum",
-          key: "Ethereum",
+          key: "Ethereum_Sepolia",
           value: 0,
           icon: require("@/assets/imgs/raas/icon/eth.svg"),
         },
         {
           name: "Bitcoin",
-          key: "Bitcoin",
+          key: "Bitcoin_Signet",
           value: 1,
+          icon: require("@/assets/imgs/raas/icon/bitcoin.svg"),
+        },
+        {
+          name: "Bitcoin_Testnet",
+          key: "Bitcoin_Testnet",
+          value: 3,
           icon: require("@/assets/imgs/raas/icon/bitcoin.svg"),
         },
         {

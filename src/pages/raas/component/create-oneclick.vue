@@ -93,12 +93,7 @@
                           <div>
                             <span>Chain Logo Favicon (Optional)</span>
                           </div>
-                          <v-btn
-                            small
-                            text
-                            color="primary"
-                            width="60"
-                            @click="onCheck"
+                          <v-btn small text color="primary" width="60"
                             >Example</v-btn
                           >
                         </div>
@@ -107,7 +102,6 @@
                           outlined
                           placeholder="Please enter URL / 16*16"
                           dense
-                          @input="onChainIdChange"
                         >
                         </v-text-field>
                       </div>
@@ -118,22 +112,15 @@
                           <div>
                             <span>Chain Logo Lock-up (Optional)</span>
                           </div>
-                          <v-btn
-                            small
-                            text
-                            color="primary"
-                            width="60"
-                            @click="onCheck"
+                          <v-btn small text color="primary" width="60"
                             >Example</v-btn
                           >
                         </div>
                         <v-text-field
                           v-model="chainLogo"
-                          :rules="chainLogoRules"
                           outlined
                           placeholder="Please enter URL / 256*200"
                           dense
-                          @input="onChainIdChange"
                         >
                         </v-text-field>
                       </div>
@@ -144,12 +131,7 @@
                           <div>
                             <span>Background (Optional)</span>
                           </div>
-                          <v-btn
-                            small
-                            text
-                            color="primary"
-                            width="60"
-                            @click="onCheck"
+                          <v-btn small text color="primary" width="60"
                             >Example</v-btn
                           >
                         </div>
@@ -158,7 +140,6 @@
                           outlined
                           placeholder="Please enter URL / 400*200"
                           dense
-                          @input="onChainIdChange"
                         >
                         </v-text-field>
                       </div>
@@ -169,24 +150,10 @@
                           <div>
                             <span>Footer Link (Optional)</span>
                           </div>
-                          <v-btn
-                            small
-                            text
-                            color="primary"
-                            width="60"
-                            :disabled="!chainId"
-                            @click="onCheck"
+                          <v-btn small text color="primary" width="60"
                             >Example</v-btn
                           >
                         </div>
-                        <v-text-field
-                          v-model="chainId"
-                          outlined
-                          placeholder="Please enter chain id"
-                          dense
-                          @input="onChainIdChange"
-                        >
-                        </v-text-field>
                       </div>
                     </v-col>
                   </v-row>
@@ -198,17 +165,24 @@
             <div class="create-item-title mb-4">Duration</div>
             <v-row>
               <v-col cols="12">
-                <v-radio-group row class="mt-0 hide-msg" v-model="purchasePlan">
+                <v-radio-group
+                  row
+                  class="mt-0 hide-msg"
+                  v-model="purchasePlan"
+                  @change="chooseTime"
+                >
                   <v-col cols="12" md="6" v-for="(it, i) in timeList" :key="i">
                     <div
-                      class="d-flex al-c bdrs-4 plat-item pos-r"
+                      class="time-item"
                       :class="{
                         active: purchasePlan == it.value,
                       }"
                     >
                       <v-radio :value="it.value"></v-radio>
-                      <div class="ml-2 fw-b fz-16 pos-r">
-                        <span> {{ it.label }}</span>
+                      <div class="ml-2 fz-14">
+                        <span>{{ it.price }}</span>
+                        <span>/</span>
+                        <span class="fw-b fz-16"> {{ it.label }}</span>
                       </div>
                     </div>
                   </v-col>
@@ -237,8 +211,8 @@
         <div>
           <div class="create-item-title">Purchase</div>
           <div class="price">
-            <span class="num">0</span>
-            <span class="text">LANDS≈$30k</span>
+            <!-- <span class="num">0</span> -->
+            <span class="text">{{ showPrice }}</span>
           </div>
         </div>
         <div class="d-flex justify-end">
@@ -329,9 +303,10 @@ export default {
       favicon: "",
       background: "",
       footerLink: "",
-      purchasePlan: 90,
+      purchasePlan: 0,
       chainIdHint: "",
       isIdExist: false,
+      showPrice: "Free trial",
     };
   },
 
@@ -339,7 +314,11 @@ export default {
 
   methods: {
     chooseTime(val) {
-      this.purchasePlan = val;
+      // this.purchasePlan = val;
+      const chooseObj = this.timeList.find((item) => {
+        return item.value == val;
+      });
+      this.showPrice = chooseObj.price;
     },
     goBack() {
       this.$emit("goBack");
@@ -449,6 +428,15 @@ export default {
         line-height: 20px; /* 142.857% */
       }
     }
+  }
+  .time-item {
+    display: flex;
+    padding: 16px;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: #f1f5f9;
   }
 }
 .step-first {

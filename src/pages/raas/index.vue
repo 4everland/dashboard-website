@@ -7,7 +7,10 @@
       </div>
       <div v-else>
         <e-right-opt-wrap style="width: 100%" :top="-60">
-          <v-btn color="primary" width="120" @click="onCreate">Create</v-btn>
+          <v-btn color="primary" width="120" @click="onCreate">
+            <v-icon> mdi-plus </v-icon>
+            Create</v-btn
+          >
         </e-right-opt-wrap>
         <rollup-list :rollup-data="rollupData" />
       </div>
@@ -50,33 +53,37 @@ export default {
     async getList() {
       const params = {
         page: 0,
-        size: 20,
+        size: 100,
       };
       const { data } = await fetchRollupList(params);
       this.loaded = true;
       this.rollupData = data;
       this.rollupList = data.detail;
       const land = Number(this.rollupList[0].land) / 1e18;
-      console.log(land);
       this.land = this.numberWithCommas(land);
       this.$land = this.numberWithCommas(land / 1e6);
     },
     async onCreate() {
-      const balance = this.originBalance / 1e18;
-      if (Number(balance) >= 1000000000) {
-        this.$router.push("/raas/create");
-      } else {
-        this.$confirm(
-          "To create a Rollup, ensure your account balance exceeds 1,000,000,000 LAND (1,000 USD). Please deposit before proceeding.",
-          "Tips",
-          {
-            cancelText: "Cancel",
-            confirmText: "Deposit",
-          }
-        ).then(async () => {
-          this.$router.push("/billing/deposit");
-        });
-      }
+      this.$router.push("/raas/create");
+      // let limitBalance = 1000000000;
+      // if (process.env.NODE_ENV == "development") {
+      //   limitBalance = 10000000;
+      // }
+      // const balance = this.originBalance / 1e18;
+      // if (Number(balance) >= limitBalance) {
+      //   this.$router.push("/raas/create");
+      // } else {
+      //   this.$confirm(
+      //     "To create a Rollup, ensure your account balance exceeds 1,000,000,000 LAND (1,000 USD). Please deposit before proceeding.",
+      //     "Tips",
+      //     {
+      //       cancelText: "Cancel",
+      //       confirmText: "Deposit",
+      //     }
+      //   ).then(async () => {
+      //     this.$router.push("/billing/deposit");
+      //   });
+      // }
     },
     async onPay() {
       this.loading = true;
