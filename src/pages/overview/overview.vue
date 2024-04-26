@@ -173,7 +173,7 @@
         <v-col> <v-skeleton-loader type="article"></v-skeleton-loader></v-col>
       </v-row>
       <v-row v-show="!resourceLoading">
-        <v-col v-for="item in resourceList" :key="item.type">
+        <v-col v-for="item in resourceList" :md="4" :key="item.type">
           <resource-view
             :view="item"
             :transformData="landToResource[item.type]"
@@ -369,6 +369,13 @@ export default {
               color = "#836BAF";
               resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "CUs";
               break;
+            case "AI_RPC":
+              name = "AI_RPC";
+              color = "brown";
+              resourceUsed =
+                this.$utils.formatLand(it.resourceUsed, false, false) + "LAND";
+              break;
+
             default:
               name = "IPFS";
               color = "#57B9BC";

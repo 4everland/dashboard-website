@@ -76,6 +76,7 @@ export default {
             BUILD_TIME: "Build Time",
             TRAFFIC: "Bandwidth",
             COMPUTE_UNIT: "RPC Request",
+            AI_RPC: "AI RPC",
           };
 
           let formatLand = this.$utils.formatLand(it.landUsed, true);
@@ -91,6 +92,17 @@ export default {
             );
           } else if (it.resourceType == "COMPUTE_UNIT") {
             it.resourceUsed = this.$utils.getNumCount(it.resourceUsed) + " CUs";
+          } else if (it.resourceType == "AI_RPC") {
+            // it.resourceUsed = this.$utils.getNumCount(it.resourceUsed) + " CUs";
+            let formatLand = this.$utils.formatLand(
+              it.resourceUsed,
+              true,
+              false
+            );
+            it.resourceUsed =
+              Number(formatLand.land) == 0
+                ? "< 1 LAND"
+                : formatLand.land + " " + formatLand.unit + " LAND";
           } else {
             it.resourceUsed = this.$utils.getFileSize(it.resourceUsed);
           }

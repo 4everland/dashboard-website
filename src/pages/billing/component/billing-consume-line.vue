@@ -20,6 +20,7 @@ export default {
       BUILD_TIME: new Array(31).fill(0),
       TRAFFIC: new Array(31).fill(0),
       COMPUTE_UNIT: new Array(31).fill(0),
+      AI_RPC: new Array(31).fill(0),
       myChart: null,
       baseOption: {
         tooltip: {
@@ -53,6 +54,7 @@ export default {
             "Band Width",
             "Build Minutes",
             "RPC Requests",
+            "AI RPC",
           ],
         },
         grid: {
@@ -154,6 +156,15 @@ export default {
             },
 
             data: this.COMPUTE_UNIT,
+          },
+          {
+            name: "AI RPC",
+            type: "line",
+            itemStyle: {
+              color: "brown",
+            },
+
+            data: this.AI_RPC,
           },
         ],
       };

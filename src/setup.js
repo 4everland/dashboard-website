@@ -410,3 +410,15 @@ Vue.prototype.$utils = {
     // return result;
   },
 };
+
+Vue.prototype.$goChat = (path, type = 1) => {
+  const preUrl = inDev
+    ? "https://ai-dev.4everland.app"
+    : "https://chat.4everland.org";
+  const url = preUrl + path;
+  if (type == 1) {
+    window.open(url);
+  } else if (type == 2) {
+    location.href = url;
+  }
+};

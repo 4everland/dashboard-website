@@ -135,6 +135,20 @@ export default {
               unit: this.$utils.getNumCount(this.view.used, true).unit + "CUs",
             },
           };
+        case "AI_RPC":
+          return {
+            name: "AI RPC",
+            img: "/img/svg/overview/rpc.svg",
+            total:
+              this.$utils.formatLand(this.view.total, false, false) + "LAND",
+            used: {
+              num: this.$utils.formatLand(this.view.used, true, false).land,
+              unit:
+                this.$utils.formatLand(this.view.used, true, false).unit +
+                "LAND",
+            },
+          };
+
         default:
           return {
             name: "IPFS",

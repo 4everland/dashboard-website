@@ -53,6 +53,10 @@ export default {
           type: "AR_STORAGE",
           name: "AR Storage",
         },
+        {
+          type: "AI_RPC",
+          name: "AI RPC",
+        },
       ],
       curIndex: 0,
       baseOptions: {
@@ -67,6 +71,11 @@ export default {
               }
               if (this.tagList[this.curIndex].type == "BUILD_TIME") {
                 size = this.$utils.getNumCount(it.value / 60) + "Mins";
+              }
+              if (this.tagList[this.curIndex].type == "AI_RPC") {
+                size =
+                  this.$utils.formatLand(parseInt(it.value), false, false) +
+                  " LAND";
               }
               str += `<div class="al-c mt-1">
               <span class="mr-2 d-ib" style="width: 10px; height: 10px; border-radius: 50%; background: ${it.color}">  </span>
@@ -98,6 +107,10 @@ export default {
               if (this.tagList[this.curIndex].type == "COMPUTE_UNIT") {
                 return this.$utils.getNumCount(value) + " CUs";
               }
+              if (this.tagList[this.curIndex].type == "AI_RPC") {
+                return this.$utils.formatLand(value, false, false) + " LAND";
+              }
+
               return this.$utils.getFileSize(value);
             },
           },
@@ -107,6 +120,7 @@ export default {
       GATEWAY: new Array(31).fill(0),
       HOSTING: new Array(31).fill(0),
       BUCKET: new Array(31).fill(0),
+      AI_RPC_PROXY: new Array(31).fill(0),
     };
   },
   computed: {
@@ -247,6 +261,31 @@ export default {
           },
         ];
       }
+      if (this.tagList[this.curIndex].type == "AI_RPC") {
+        return [
+          {
+            name: "LAND",
+            type: "line",
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#5066CA",
+                },
+                {
+                  offset: 1,
+                  color: "rgba(80, 102, 202, 0.00)",
+                },
+              ]),
+            },
+            itemStyle: {
+              color: "#809AF4",
+            },
+            stack: "Total",
+            data: this.AI_RPC_PROXY,
+          },
+        ];
+      }
 
       return [
         {
@@ -339,6 +378,7 @@ export default {
         this.HOSTING = new Array(31).fill(0);
         this.BUCKET = new Array(31).fill(0);
         this.RPC_PROXY = new Array(31).fill(0);
+        this.AI_RPC_PROXY = new Array(31).fill(0);
         this.monthAgoTimeStamp.forEach((it, i) => {
           data.forEach((item) => {
             if (item.timestamp == it) {

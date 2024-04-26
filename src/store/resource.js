@@ -5,12 +5,13 @@ export default {
   state: () => {
     return {
       resources: [],
-      ipfsUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
-      arUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
-      bandwidthUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
-      buildMinUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
-      rpcUnitPrice: BigNumber.from("0"), // not format balance (server date 1e18)
-      originBalance: BigNumber.from("0"), // not format balance (server date 1e18)
+      ipfsUnitPrice: BigNumber.from("0"), // not format balance (server data 1e18)
+      arUnitPrice: BigNumber.from("0"), // not format balance (server data 1e18)
+      bandwidthUnitPrice: BigNumber.from("0"), // not format balance (server data 1e18)
+      buildMinUnitPrice: BigNumber.from("0"), // not format balance (server data 1e18)
+      rpcUnitPrice: BigNumber.from("0"), // not format balance (server data 1e18)
+      aiRpcUnitPrice: BigNumber.from("0"), // not format balance (server data 1e18)
+      originBalance: BigNumber.from("0"), // not format balance (server data 1e18)
       firstRecharge: true,
     };
   },
@@ -18,7 +19,7 @@ export default {
     balance(state) {
       return Vue.prototype.$utils.formatLand(state.originBalance, true);
     },
-    landToResource(state) {
+    landToResource(state, getters) {
       if (state.ipfsUnitPrice.eq(BigNumber.from("0"))) return {};
       const balance = BigNumber.from(state.originBalance);
       const IPFS_STORAGE = balance.div(state.ipfsUnitPrice.mul(86400 * 30));
@@ -26,6 +27,7 @@ export default {
       const BUILD_TIME = balance.div(state.buildMinUnitPrice);
       const AR_STORAGE = balance.div(state.arUnitPrice);
       const COMPUTE_UNIT = balance.div(state.rpcUnitPrice);
+      const AI_RPC = balance.div(state.aiRpcUnitPrice);
       return {
         IPFS_STORAGE: {
           value: IPFS_STORAGE,
@@ -54,6 +56,11 @@ export default {
             false,
             "COMPUTE_UNIT"
           ),
+        },
+        AI_RPC: {
+          value: balance,
+          transformVal:
+            getters.balance.land + " " + getters.balance.unit + " LAND",
         },
       };
     },
@@ -99,6 +106,12 @@ export default {
             case "COMPUTE_UNIT":
               commit("SET_RESOURCE", {
                 name: "rpcUnitPrice",
+                unitPrice,
+              });
+              break;
+            case "AI_RPC":
+              commit("SET_RESOURCE", {
+                name: "aiRpcUnitPrice",
                 unitPrice,
               });
               break;

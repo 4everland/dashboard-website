@@ -263,6 +263,7 @@ export default {
       bandwidthUnitPrice: (s) => s.moduleResource.bandwidthUnitPrice,
       buildMinUnitPrice: (s) => s.moduleResource.buildMinUnitPrice,
       rpcUnitPrice: (s) => s.moduleResource.rpcUnitPrice,
+      aiRpcUnitPrice: (s) => s.moduleResource.aiRpcUnitPrice,
     }),
 
     totalPrice() {
@@ -319,6 +320,12 @@ export default {
           unit: "LAND/CU",
           expectedUnit: "CUs",
         },
+        // {
+        //   resourceName: "AI RPC",
+        //   unitPrice: Number(formatEther(this.aiRpcUnitPrice)),
+        //   unit: "LAND",
+        //   expectedUnit: "LAND",
+        // },
       ];
     },
   },

@@ -58,38 +58,56 @@
   color: #3296fa;
   background: #e7eff6;
 }
+.search-ipt {
+  padding: 8px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+}
 </style>
 
 <template>
   <div class="projects">
     <e-right-opt-wrap>
-      <e-menu open-on-hover offset-y v-if="list.length">
-        <v-btn slot="ref" outlined min-width="100">
-          <!-- <img src="/img/svg/hosting/ic-sort.svg" width="12" /> -->
-          <span class="ml-2">{{
-            sortType == "Active" ? sortArr[0] : sortArr[1]
-          }}</span>
-          <v-icon>mdi-chevron-down</v-icon>
-        </v-btn>
-        <v-list dense>
-          <v-list-item-group v-model="sortIdx" color="primary">
-            <v-list-item
-              @click="onSort(i)"
-              v-for="(txt, i) in sortArr"
-              :key="i"
-            >
-              <v-list-item-title>
-                <span class="fz-15">{{ txt }}</span>
-              </v-list-item-title>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </e-menu>
+      <!-- <v-text-field></v-text-field> -->
+      <!-- <v-btn></v-btn> -->
+      <div class="al-c flex-wrap" style="justify-content: flex-end">
+        <div class="search-ipt mr-4 al-c">
+          <img src="/img/svg/hosting/search.svg" class="mr-2" width="20" />
+          <input
+            type="text"
+            placeholder="Search"
+            @input="handleIpt"
+            v-model="searchKey"
+          />
+        </div>
+        <e-menu open-on-hover offset-y v-if="list.length">
+          <v-btn slot="ref" outlined min-width="100">
+            <!-- <img src="/img/svg/hosting/ic-sort.svg" width="12" /> -->
+            <span class="ml-2">{{
+              sortType == "Active" ? sortArr[0] : sortArr[1]
+            }}</span>
+            <v-icon>mdi-chevron-down</v-icon>
+          </v-btn>
+          <v-list dense>
+            <v-list-item-group v-model="sortIdx" color="primary">
+              <v-list-item
+                @click="onSort(i)"
+                v-for="(txt, i) in sortArr"
+                :key="i"
+              >
+                <v-list-item-title>
+                  <span class="fz-15">{{ txt }}</span>
+                </v-list-item-title>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </e-menu>
 
-      <v-btn class="ml-5" color="primary" to="/hosting/new">
-        <img src="/img/svg/add1.svg" width="12" />
-        <span class="ml-2">New Project</span>
-      </v-btn>
+        <v-btn class="ml-5" color="primary" to="/hosting/new">
+          <img src="/img/svg/add1.svg" width="12" />
+          <span class="ml-2">New Project</span>
+        </v-btn>
+      </div>
     </e-right-opt-wrap>
 
     <div class="pt-4">
@@ -342,6 +360,7 @@ import HProjStatis from "@/views/hosting/common/h-proj-statis";
 import HBuildDomain from "@/views/hosting/common/h-build-domain";
 import { mapState } from "vuex";
 import mixin from "./settings/st-proj-advanced-mix";
+import debounce from "../../plugins/debounce";
 
 export default {
   mixins: [mixin],
@@ -400,6 +419,7 @@ export default {
       newProjectIdx: 0,
       sortArr: ["Last Update", "Create Time"],
       refreshAt: Date.now(),
+      searchKey: "",
     };
   },
   watch: {
@@ -413,7 +433,9 @@ export default {
     },
     list(val) {
       if (!val.length && !this.loading) {
-        this.$router.push("/hosting/new");
+        if (!this.searchKey) {
+          this.$router.push("/hosting/new");
+        }
       }
     },
     // inCurPath(val) {
@@ -598,6 +620,52 @@ export default {
       }
       this.loading = false;
       this.$loading.close();
+    },
+    async getSearchList() {
+      this.list = [];
+      try {
+        if (this.limit) {
+          this.sortType = "Active";
+        }
+        this.curIdx = [];
+        if (this.list.length) this.$loading();
+        else this.loading = true;
+        const {
+          data: { list, total },
+        } = await this.$http.get(
+          `$hosting/project/v3/search/list?page=${this.page - 1}&size=${
+            this.pageSize
+          }&sortType=${this.sortType.toUpperCase()}&keyword=${this.searchKey}`
+        );
+        this.list = list.map((it) => {
+          if (!it.platform) it.platform = "IPFS";
+          return it;
+        });
+        this.total = total;
+        if (!total) {
+          // this.$router.replace("/hosting/new");
+        }
+        if (list.length) {
+          setTimeout(() => {
+            this.curIdx = [0];
+            this.onOpen(list[0]);
+          }, 10);
+        }
+        if (this.page > 1 && !list.length) {
+          this.page = 1;
+          this.getList();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      this.loading = false;
+      this.$loading.close();
+    },
+    handleIpt() {
+      this.page = 1;
+      debounce(() => {
+        this.getSearchList();
+      });
     },
   },
   components: {

@@ -1,6 +1,11 @@
 <template>
   <div class="h-flex">
-    <v-tabs v-model="tab" class="tabs-cpm" centered @change="handleChange">
+    <v-tabs
+      v-model="tab"
+      class="tabs-cpm"
+      :centered="center"
+      @change="handleChange"
+    >
       <div class="d-flex tab-content">
         <v-tab
           active-class="active-tab"
@@ -36,6 +41,10 @@ export default {
         return [];
       },
     },
+    center: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -59,7 +68,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.v-tabs-bar {
+  background: transparent !important;
+}
+</style>
 <style lang="scss" scoped>
 .active-tab {
   background: #fff;
@@ -72,16 +85,15 @@ export default {
 .v-tabs {
   flex: 0;
 }
+
 .tabs-cpm :deep .v-tabs-bar {
   display: flex;
   align-items: center;
-  padding: 0 20px;
 }
 .tab-content {
   background-color: #f1f5f9;
   border-radius: 8px;
   height: 48px;
-  margin: 0 16px;
   padding: 8px;
 }
 
