@@ -161,11 +161,12 @@ export default {
       }
     },
     async handleOtherChainClaim(item) {
+      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
       try {
         await this.switchNet(item.type);
-        let provider = new providers.Web3Provider(this.walletObj);
+        let provider = new providers.Web3Provider(plugin);
         if (this.chainId == (this.$inDev ? "280" : "324")) {
-          provider = new Web3Provider(this.walletObj);
+          provider = new Web3Provider(plugin);
         }
         let signer = provider.getSigner();
         const BlastOracleLand = BlastOracleLand__factory.connect(
