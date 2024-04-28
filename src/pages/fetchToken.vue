@@ -4,12 +4,17 @@
 
 <script>
 export default {
-  created() {
-    if (localStorage.token) {
-      this.goUrl();
-    } else {
-      localStorage.loginTo = location.pathname + location.search;
-      this.$router.push("/login");
+  async created() {
+    try {
+      await this.$http.get("$auth/user");
+      if (localStorage.token) {
+        this.goUrl();
+      } else {
+        localStorage.loginTo = location.pathname + location.search;
+        this.$router.push("/login");
+      }
+    } catch (error) {
+      console.log(error);
     }
   },
   methods: {

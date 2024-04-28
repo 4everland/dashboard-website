@@ -161,7 +161,7 @@ export default {
             name: "AI RPC",
             type: "line",
             itemStyle: {
-              color: "brown",
+              color: "#9747FF",
             },
 
             data: this.AI_RPC,

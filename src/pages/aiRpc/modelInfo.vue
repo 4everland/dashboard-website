@@ -190,14 +190,16 @@ export default {
   methods: {
     async getItems() {
       try {
-        const { data } = await axios.get("https://openrouter.ai/api/v1/models");
+        const { data } = await axios.get(
+          "https://ai.api.4everland.org/api/v1/models"
+        );
 
         const arr = data.data.map((it) => {
           if (/openrouter\/auto/g.test(it.id)) {
             console.log(it);
             return {
               ...it,
-              id: "4everland/auto",
+              id: "4ever/auto",
             };
           }
           return it;

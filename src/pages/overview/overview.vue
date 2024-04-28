@@ -371,7 +371,7 @@ export default {
               break;
             case "AI_RPC":
               name = "AI_RPC";
-              color = "brown";
+              color = "#9747FF";
               resourceUsed =
                 this.$utils.formatLand(it.resourceUsed, false, false) + "LAND";
               break;

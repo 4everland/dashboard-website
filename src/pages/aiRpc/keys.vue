@@ -3,7 +3,10 @@
     <div class="keys-header pa-4 al-c">
       <h3>My API Keys</h3>
       <div class="ml-auto">
-        <v-btn outlined
+        <v-btn
+          outlined
+          target="blank"
+          href="https://docs.4everland.org/ai/ai-rpc/quick-start"
           >API Examples
           <img
             class="ml-2"
@@ -199,7 +202,6 @@ export default {
     async getList() {
       try {
         const { data } = await this.$http.get("$rpc/rpc/ai/manager/keys");
-        console.log(data);
         this.list = data.items;
       } catch (error) {
         console.log(error);
@@ -217,11 +219,10 @@ export default {
           );
         }
         this.createLoading = true;
-        const { data } = await this.$http.post("$rpc/rpc/ai/manager/keys", {
+        await this.$http.post("$rpc/rpc/ai/manager/keys", {
           name: this.name,
           limit: this.limit,
         });
-        console.log(data);
         this.reset();
         this.$toast("Create successfully.");
         this.getList();

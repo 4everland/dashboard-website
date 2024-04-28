@@ -83,7 +83,11 @@
             <v-col cols="12" sm="2">
               <div class="param-title">Limits</div>
               <div class="param-data">
-                {{ $utils.formatLand(keyInfo.limit, false, false) || "--" }}
+                {{
+                  keyInfo.limit
+                    ? $utils.formatLand(keyInfo.limit, false, false)
+                    : "--"
+                }}
                 LAND
               </div>
             </v-col>
@@ -382,7 +386,6 @@ export default {
             this.page
           }&size=${this.size}${this.curModel ? `&model=${this.curModel}` : ""}`
         );
-        console.log(data);
         this.activityList = data.items;
         this.total = data.total;
       } catch (error) {
@@ -395,7 +398,6 @@ export default {
         const { data } = await this.$http.get(
           `$rpc/rpc/ai/manager/activities/${this.$route.params.id}/models`
         );
-        console.log(data);
         let originData = data.items.map((it) => {
           return {
             text: it,

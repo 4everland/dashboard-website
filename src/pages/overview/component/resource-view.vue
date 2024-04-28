@@ -1,7 +1,10 @@
 <template>
   <div class="resource-view h-flex space-btw py-4 px-2">
     <div class="al-c">
-      <div class="al-c justify-center pa-2" style="background: #fff">
+      <div
+        class="al-c justify-center pa-2"
+        style="background: #fff; border-radius: 4px"
+      >
         <img width="16" :src="curResource.img" alt="" />
       </div>
       <span class="ml-2 fw-b title-text">{{ curResource.name }}</span>
@@ -138,7 +141,7 @@ export default {
         case "AI_RPC":
           return {
             name: "AI RPC",
-            img: "/img/svg/overview/rpc.svg",
+            img: "/img/svg/overview/ai-rpc.svg",
             total:
               this.$utils.formatLand(this.view.total, false, false) + "LAND",
             used: {
