@@ -11,18 +11,8 @@
     </div>
 
     <div>
-      <div class="my-3">
+      <div class="my-3 al-c space-btw">
         <div>
-          <div class="used-text">Used</div>
-          <div class="consume-resource">
-            <span class="consume-used fw-b">{{ curResource.used.num }}</span>
-            <span class="fz-12" style="margin-left: 2px">{{
-              curResource.used.unit
-            }}</span>
-          </div>
-        </div>
-
-        <div class="mt-2">
           <div class="total-text">Total</div>
           <div class="resource-size d-flex al-end">
             <div class="total-resource fz-12">{{ curResource.total }}</div>
@@ -65,6 +55,15 @@
                 </div>
               </v-tooltip>
             </div>
+          </div>
+        </div>
+        <div>
+          <div class="used-text">Used</div>
+          <div class="consume-resource">
+            <span class="consume-used fw-b">{{ curResource.used.num }}</span>
+            <span class="fz-12" style="margin-left: 2px">{{
+              curResource.used.unit
+            }}</span>
           </div>
         </div>
       </div>
