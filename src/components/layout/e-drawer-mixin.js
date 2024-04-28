@@ -97,25 +97,25 @@ const menuMap = {
     suffixImg: "/img/svg/hosting/h-beta-active.svg",
     group: /^\/raas/i,
   },
-  AIRPC: {
-    label: "AI",
-    img: "m-airpc",
-    group: /^\/ai-rpc/i,
-    suffixImg: "/img/svg/hosting/h-beta-active.svg",
-    subs: [
-      {
-        label: "AI RPC",
-        to: "/ai-rpc?tab=Models",
-      },
-      {
-        label: "Chat",
-        href:
-          process.env.NODE_ENV == "development"
-            ? "https://ai-dev.4everland.app"
-            : "https://chat.4everland.org",
-      },
-    ],
-  },
+  // AIRPC: {
+  //   label: "AI",
+  //   img: "m-airpc",
+  //   group: /^\/ai-rpc/i,
+  //   suffixImg: "/img/svg/hosting/h-beta-active.svg",
+  //   subs: [
+  //     {
+  //       label: "AI RPC",
+  //       to: "/ai-rpc?tab=Models",
+  //     },
+  //     {
+  //       label: "Chat",
+  //       href:
+  //         process.env.NODE_ENV == "development"
+  //           ? "https://ai-dev.4everland.app"
+  //           : "https://chat.4everland.org",
+  //     },
+  //   ],
+  // },
   RESOURCE: {
     label: "Billing",
     img: "m-usage",
@@ -175,7 +175,7 @@ export default {
         "GATEWAY",
         "RPC",
         "RAAS",
-        "AIRPC",
+        // "AIRPC",
         "RESOURCE",
         "MEMBER",
       ];
