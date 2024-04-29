@@ -255,7 +255,6 @@ export default {
   },
   mounted() {
     // this.checkApproved();
-    window.ethereum = undefined;
     let plugin = window.ethereum ? window.ethereum : window.okxwallet;
     plugin.on("accountsChanged", (val) => {
       this.$store.commit("SET_CONNECT_ADDR", val[0]);
