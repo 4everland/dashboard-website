@@ -1,25 +1,18 @@
 <template>
   <div class="resource-view h-flex space-btw py-4 px-2">
     <div class="al-c">
-      <div class="al-c justify-center pa-2" style="background: #fff">
+      <div
+        class="al-c justify-center pa-2"
+        style="background: #fff; border-radius: 4px"
+      >
         <img width="16" :src="curResource.img" alt="" />
       </div>
       <span class="ml-2 fw-b title-text">{{ curResource.name }}</span>
     </div>
 
     <div>
-      <div class="my-3">
+      <div class="my-3 al-c space-btw">
         <div>
-          <div class="used-text">Used</div>
-          <div class="consume-resource">
-            <span class="consume-used fw-b">{{ curResource.used.num }}</span>
-            <span class="fz-12" style="margin-left: 2px">{{
-              curResource.used.unit
-            }}</span>
-          </div>
-        </div>
-
-        <div class="mt-2">
           <div class="total-text">Total</div>
           <div class="resource-size d-flex al-end">
             <div class="total-resource fz-12">{{ curResource.total }}</div>
@@ -62,6 +55,15 @@
                 </div>
               </v-tooltip>
             </div>
+          </div>
+        </div>
+        <div>
+          <div class="used-text">Used</div>
+          <div class="consume-resource">
+            <span class="consume-used fw-b">{{ curResource.used.num }}</span>
+            <span class="fz-12" style="margin-left: 2px">{{
+              curResource.used.unit
+            }}</span>
           </div>
         </div>
       </div>
@@ -135,6 +137,20 @@ export default {
               unit: this.$utils.getNumCount(this.view.used, true).unit + "CUs",
             },
           };
+        case "AI_RPC":
+          return {
+            name: "AI RPC",
+            img: "/img/svg/overview/ai-rpc.svg",
+            total:
+              this.$utils.formatLand(this.view.total, false, false) + "LAND",
+            used: {
+              num: this.$utils.formatLand(this.view.used, true, false).land,
+              unit:
+                this.$utils.formatLand(this.view.used, true, false).unit +
+                "LAND",
+            },
+          };
+
         default:
           return {
             name: "IPFS",

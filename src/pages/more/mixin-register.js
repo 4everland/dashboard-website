@@ -102,7 +102,8 @@ export default {
         await this.switchNet("Ethereum");
         const zkprovider = await zksync.getDefaultProvider("mainnet");
         // eth signer
-        const provider = new providers.Web3Provider(window.ethereum);
+        let plugin = window.ethereum ? window.ethereum : window.okxwallet;
+        const provider = new providers.Web3Provider(plugin);
         const signer = provider.getSigner();
         const walletAddress = await signer.getAddress();
         if (walletAddress.toLowerCase() != this.registerInfo.wallet) return;
@@ -160,11 +161,12 @@ export default {
       }
     },
     async handleOtherChainClaim(item) {
+      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
       try {
         await this.switchNet(item.type);
-        let provider = new providers.Web3Provider(this.walletObj);
+        let provider = new providers.Web3Provider(plugin);
         if (this.chainId == (this.$inDev ? "280" : "324")) {
-          provider = new Web3Provider(this.walletObj);
+          provider = new Web3Provider(plugin);
         }
         let signer = provider.getSigner();
         const BlastOracleLand = BlastOracleLand__factory.connect(
@@ -263,8 +265,10 @@ export default {
       const payBy = (localStorage.payBy = chainName);
       const id = this.getChainId(payBy);
       const chainId = "0x" + id.toString(16);
+      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
+
       try {
-        await window.ethereum.request({
+        await plugin.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
@@ -278,6 +282,7 @@ export default {
       }
     },
     async addChain(chainId, id) {
+      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
       let params = {
         137: {
           chainId,
@@ -483,7 +488,7 @@ export default {
       }[id];
       if (!params) return;
       try {
-        await window.ethereum.request(
+        await plugin.request(
           {
             method: "wallet_addEthereumChain",
             params: [params],

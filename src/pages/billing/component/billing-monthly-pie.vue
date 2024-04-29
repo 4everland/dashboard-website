@@ -73,6 +73,12 @@ export default {
             color = "#836BAF";
             resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "CUs";
             break;
+          case "AI_RPC":
+            name = "AI RPC";
+            color = "#9747FF";
+            resourceUsed =
+              this.$utils.formatLand(it.resourceUsed, false, false) + "LAND";
+            break;
           default:
             name = "IPFS";
             color = "#57B9BC";

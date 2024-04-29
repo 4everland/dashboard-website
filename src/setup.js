@@ -178,7 +178,7 @@ Vue.prototype.$utils = {
       return `https://${cid}.raw.icp0.io/`;
     }
     if (plat == "AR") {
-      return inDev ? `https://arweave.net/${cid}` : `https://ar-io.dev//${cid}`;
+      return inDev ? `https://arweave.net/${cid}` : `https://ar-io.dev/${cid}`;
       // : `https://arweave.4everland.xyz/${cid}`;
     }
     return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
@@ -409,4 +409,16 @@ Vue.prototype.$utils = {
     return formatVal + " " + unit;
     // return result;
   },
+};
+
+Vue.prototype.$goChat = (path, type = 1) => {
+  const preUrl = inDev
+    ? "https://ai-dev.4everland.app"
+    : "https://chat.4everland.org";
+  const url = preUrl + path;
+  if (type == 1) {
+    window.open(url);
+  } else if (type == 2) {
+    location.href = url;
+  }
 };

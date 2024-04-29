@@ -73,7 +73,6 @@
         <v-row style="margin: 0; background: #fff" align="center">
           <v-col
             class="resource-col"
-            :md="3"
             v-for="item in resourceList"
             :key="item.type"
           >
@@ -137,26 +136,33 @@
     <h3 class="mb-4 mt-6">Resource Statistics (31 days)</h3>
     <v-row class="statistics-row">
       <v-col :md="4" cols="12" style="padding: 0">
-        <div class="py-6 px-4 h-flex al-c">
+        <div class="py-4 px-4 h-flex al-c">
           <h4 class="fz-14">Build Minutes</h4>
-          <div class="my-6">
+          <div class="my-2">
             <span class="balance fw-b">{{ buildMin.size }}</span>
             <span class="fz-12 ml-2">{{ buildMin.unit }}</span>
           </div>
-          <div class="py-4 px-6 fz-14 data">
+          <div class="fz-14 data">
             <span>Total builds: </span>
             <span>{{ buildCount }}</span>
           </div>
         </div>
-        <div class="py-6 px-4 h-flex al-c rpc-section">
+        <div class="py-4 px-4 h-flex al-c rpc-section">
           <h4 class="fz-14">Web3 RPC</h4>
-          <div class="my-6">
+          <div class="my-2">
             <span class="balance fw-b">{{ rpcRequest.num }}</span>
             <span class="fz-12 ml-2">{{ rpcRequest.unit }}</span>
           </div>
-          <div class="py-4 px-6 fz-14 data">
+          <div class="fz-14 data">
             <span>Total Requests: </span>
             <span>{{ rpcInstance }}</span>
+          </div>
+        </div>
+        <div class="py-4 px-4 h-flex al-c rpc-section">
+          <h4 class="fz-14">AI RPC</h4>
+          <div class="my-2">
+            <span class="balance fw-b">{{ airpcLandUsed.land }}</span>
+            <span class="fz-12 ml-2">{{ airpcLandUsed.unit }} LAND</span>
           </div>
         </div>
       </v-col>
@@ -314,6 +320,10 @@ export default {
       showWithDrawNotice: true,
       buildCount: 0,
       rpcInstance: 0,
+      airpcLandUsed: {
+        land: 0,
+        unit: "",
+      },
       balanceAlertShow: false,
       alertEnable: false,
       alertLand: "500000",
@@ -354,6 +364,7 @@ export default {
     this.getAnalyticsBandwidth();
     this.getAnalyticsBuildMin();
     this.getAnalyticsRpc();
+    this.getAnalyticsAiRpc();
     this.getLandUsedMonthly();
     this.getAlert();
   },
@@ -366,7 +377,10 @@ export default {
         this.invalidAt = Number(comboItem.invalidAt) * 1e3;
         this.efficientAt = Number(comboItem.efficientAt) * 1e3;
         this.resourceList = comboItem.resourceItems
-          .filter((it) => it.resourceType != "COMPUTE_UNIT")
+          .filter(
+            (it) =>
+              it.resourceType != "COMPUTE_UNIT" && it.resourceType != "AI_RPC"
+          )
           .map((it, i) => {
             let total = Number(it.size);
             let used =
@@ -535,6 +549,26 @@ export default {
         console.log(error);
       }
     },
+    async getAnalyticsAiRpc() {
+      try {
+        const { data } = await this.$http.get(
+          "$bill-analytics/bill/app/analytics",
+          {
+            params: {
+              resourceType: "AI_RPC",
+            },
+          }
+        );
+        console.log(data, "airpc");
+        const request = data.reduce((pre, it) => {
+          return pre.add(BigNumber.from(it.resourceConsume));
+        }, BigNumber.from("0"));
+
+        this.airpcLandUsed = this.$utils.formatLand(request, true, false);
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
     async getLandUsedMonthly() {
       try {
@@ -546,7 +580,6 @@ export default {
             },
           }
         );
-
         this.landUsedMonthlyLine = data;
 
         let resourceUsedObj = {};
@@ -598,6 +631,12 @@ export default {
               name = "RPC Requests";
               color = "#836BAF";
               resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "CUs";
+              break;
+            case "AI_RPC":
+              name = "AI_RPC";
+              color = "#9747FF";
+              resourceUsed =
+                this.$utils.formatLand(it.resourceUsed, false, false) + "LAND";
               break;
             default:
               name = "IPFS";

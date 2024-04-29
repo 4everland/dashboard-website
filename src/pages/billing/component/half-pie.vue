@@ -26,6 +26,7 @@ export default {
           { value: 0, name: "Bandwidth" },
           { value: 0, name: "Build Minutes" },
           { value: 0, name: "RPC Requests" },
+          { value: 0, name: "AI RPC" },
         ];
       },
     },

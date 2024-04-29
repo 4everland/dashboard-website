@@ -11,6 +11,7 @@ import AccountRoutes from "./account/routes";
 import BillingRoutes from "./billing/routes";
 import RpcRoutes from "./rpc/routes";
 import RaasRoutes from "./raas/routes";
+import AiRpcRoutes from "./aiRpc/routers";
 
 export default [
   {
@@ -35,6 +36,10 @@ export default [
       subTitle: "Welcome to 4EVERLAND Dashboard",
     },
   },
+  {
+    path: "/quick-login",
+    component: () => import("./fetchToken"),
+  },
   // {
   //   path: "/overview1",
   //   component: () => import("./overview/overview1"),
@@ -54,6 +59,7 @@ export default [
   ...AccountRoutes,
   ...RpcRoutes,
   ...RaasRoutes,
+  ...AiRpcRoutes,
   // {
   //   path: "/changefee",
   //   component: () => import("./changeFee"),
