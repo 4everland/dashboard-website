@@ -161,8 +161,10 @@ export default {
 
     async switchNet(id) {
       const chainId = "0x" + id.toString(16);
+      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
+
       try {
-        await window.ethereum.request({
+        await plugin.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
@@ -176,6 +178,8 @@ export default {
       }
     },
     async addChain(chainId, id) {
+      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
+
       let params = {
         137: {
           chainId,
@@ -381,7 +385,7 @@ export default {
       }[id];
       if (!params) return;
       try {
-        await window.ethereum.request(
+        await plugin.request(
           {
             method: "wallet_addEthereumChain",
             params: [params],

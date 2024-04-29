@@ -561,8 +561,9 @@ export default {
       }
     },
     async getBlastEthUnitPrice() {
+      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
       try {
-        let provider = new providers.Web3Provider(window.ethereum);
+        let provider = new providers.Web3Provider(plugin);
         const signer = provider.getSigner();
         const BlastOracleLand = BlastOracleLand__factory.connect(
           this.landRechargeAddr,
