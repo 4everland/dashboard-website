@@ -25,6 +25,7 @@ export default {
     return {
       id: "",
       progress: 0,
+      timer: null,
     };
   },
 
@@ -33,13 +34,16 @@ export default {
 
     this.getProgress();
   },
+  destroyed() {
+    clearTimeout(this.timer);
+  },
 
   methods: {
     async getProgress() {
       const { data } = await fetchProgress(this.id);
       this.progress = data.progress;
       if (data.progress != "100") {
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
           this.getProgress();
         }, 10000);
       } else {

@@ -12,7 +12,7 @@
           <v-btn
             color="primary"
             width="96"
-            :disabled="!(email && telegram)"
+            :disabled="!valid"
             @click="onSubmit"
           >
             Submit
@@ -43,20 +43,14 @@
                               <span style="color: #ff0000"> * </span>
                             </div>
                           </div>
-                          <v-form
-                            ref="formChainId"
-                            v-model="validChainId"
-                            lazy-validation
+                          <v-text-field
+                            v-model="email"
+                            :rules="emailRules"
+                            outlined
+                            placeholder="Please enter contact email"
+                            dense
                           >
-                            <v-text-field
-                              v-model="email"
-                              :rules="emailRules"
-                              outlined
-                              placeholder="Please enter contact email"
-                              dense
-                            >
-                            </v-text-field>
-                          </v-form>
+                          </v-text-field>
                         </div>
                       </div>
                     </v-col>
@@ -168,8 +162,7 @@ export default {
   },
   data() {
     return {
-      valid: true,
-      validChainId: true,
+      valid: false,
       emailRules: [
         (v) => !!v || "Email is required",
         (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || "Email must be valid",
@@ -193,13 +186,16 @@ export default {
       this.chainId = data.chainId;
     },
     async onSubmit() {
-      const data = {
-        email: this.email,
-        xId: this.xId,
-        telegram: this.telegram,
-        schedulingLink: this.schedulingLink,
-      };
-      this.$emit("onSubmit", data);
+      await this.$refs.form.validate();
+      if (this.valid) {
+        const data = {
+          email: this.email,
+          xId: this.xId,
+          telegram: this.telegram,
+          schedulingLink: this.schedulingLink,
+        };
+        this.$emit("onSubmit", data);
+      }
     },
     goBack() {
       this.$emit("goBack");

@@ -27,7 +27,7 @@
               <div class="raas-rpc-item">
                 <div class="raas-rpc-item-title">RPC</div>
                 <div class="raas-rpc-item-content">
-                  <span> {{ infoData.detail.rpc }} </span>
+                  <span> {{ truncateString(infoData.detail.rpc, 50) }} </span>
                   <v-btn
                     icon
                     class="task-button"
@@ -41,7 +41,7 @@
               <div class="raas-rpc-item">
                 <div class="raas-rpc-item-title">WS</div>
                 <div class="raas-rpc-item-content">
-                  <span> {{ infoData.detail.ws }} </span>
+                  <span> {{ truncateString(infoData.detail.ws, 50) }} </span>
                   <v-btn
                     icon
                     class="task-button"
@@ -90,8 +90,8 @@
           <tbody>
             <tr
               class="border-bottom-tr"
-              v-for="(item, key, index) in sequncerAddressBalanceObj"
-              :key="item.id"
+              v-for="(item, index) in sequncerAddressBalanceObj"
+              :key="item.key"
             >
               <td>
                 <div class="bill-type">
@@ -100,16 +100,16 @@
               </td>
               <td>
                 <div class="bill-plan">
-                  <span> {{ key }}</span>
+                  <span> {{ item.key }}</span>
                 </div>
               </td>
               <td>
                 <div class="bill-plan">
-                  <span> {{ item }}</span>
+                  <span> {{ item.value }}</span>
                   <v-btn
                     icon
                     class="task-button"
-                    v-clipboard="item"
+                    v-clipboard="item.value"
                     @success="$toast('Copied!')"
                   >
                     <v-icon size="16" color="#0F172A">mdi-content-copy</v-icon>
@@ -117,8 +117,18 @@
                 </div>
               </td>
               <td>
-                <div class="bill-plan">
-                  <span> {{ getBalance(item) }}</span>
+                <div
+                  class="bill-plan"
+                  :class="{
+                    'warning-text': item.warning,
+                  }"
+                >
+                  <span class="d-flex al-c">
+                    <v-icon size="16" v-if="item.warning" color="#FFAD08"
+                      >mdi-alert-octagon-outline</v-icon
+                    >
+                    {{ item.balance }}</span
+                  >
                 </div>
               </td>
             </tr>
@@ -258,14 +268,14 @@ export default {
           type: "dialog",
         },
       ],
-      sequncerAddressBalanceObj: {},
+      sequncerAddressBalanceObj: [],
     };
   },
 
   mounted() {},
 
   methods: {
-    init(val) {
+    async init(val) {
       const detail = val;
       this.infoObj.forEach((element) => {
         element.value = detail[element.key];
@@ -276,7 +286,22 @@ export default {
       const sequncerAddressBalanceObj = JSON.parse(
         detail.sequncerAddressBalance
       );
-      this.sequncerAddressBalanceObj = sequncerAddressBalanceObj;
+      let arr = [];
+      for (const key in sequncerAddressBalanceObj) {
+        const balance = await this.getBalance(sequncerAddressBalanceObj[key]);
+        let warning = false;
+        if (balance <= 0.1) {
+          warning = true;
+        }
+        let obj = {
+          key: key,
+          value: this.truncateString(sequncerAddressBalanceObj[key], 20),
+          balance: balance + " ETH",
+          warning,
+        };
+        arr.push(obj);
+      }
+      this.sequncerAddressBalanceObj = arr;
     },
     onLinkActive(item) {
       if (item.type == "link") {
@@ -292,8 +317,21 @@ export default {
     async getBalance(address) {
       const { data } = await fetchEthBalance(address);
       const balance = data.balance;
-      console.log(balance);
       return balance;
+    },
+    truncateString(str, maxLength) {
+      if (str.length <= maxLength) {
+        return str;
+      }
+
+      const ellipsisLength = 3;
+      const truncatedLength = maxLength - ellipsisLength;
+
+      const start = str.substring(0, Math.ceil(truncatedLength / 2));
+
+      const end = str.substring(str.length - Math.floor(truncatedLength / 2));
+
+      return start + "..." + end;
     },
   },
 };
@@ -412,6 +450,9 @@ export default {
       font-weight: 400;
       line-height: normal;
       text-transform: capitalize;
+    }
+    .warning-text {
+      color: #ffad08;
     }
   }
 }

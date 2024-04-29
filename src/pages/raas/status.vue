@@ -19,7 +19,9 @@
             Rollup creation begins after LAND payment.
           </div>
         </template>
-        <template v-if="this.detailData.status == 2">
+        <template
+          v-if="this.detailData.status == 2 || this.detailData.status == 5"
+        >
           <div class="raas-tit">Payment completed!</div>
           <div class="raas-stit">Rollup creation in progress...</div>
         </template>

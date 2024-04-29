@@ -99,7 +99,10 @@
       <div class="contact-us mt-4">
         For tailored brand element adjustments on your Bridge and Explorer, or
         any other customization requirements,please don't hesitate to
-        <a href="http://" target="_blank" rel="noopener noreferrer"
+        <a
+          href="https://discord.com/invite/4everland"
+          target="_blank"
+          rel="noopener noreferrer"
           >contact us</a
         >.
       </div>
@@ -122,7 +125,6 @@ export default {
   watch: {
     infoData(val) {
       this.init(val);
-      console.log(val);
     },
   },
   data() {
@@ -135,7 +137,6 @@ export default {
 
   mounted() {
     this.id = this.$route.params.id;
-    console.log(this.infoData);
     this.init(this.infoData);
   },
 

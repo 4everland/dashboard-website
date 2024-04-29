@@ -31,12 +31,55 @@
         </div>
       </div>
       <div>
-        <v-btn color="primary" width="130" @click="onRenew">
+        <v-btn color="primary" width="130" @click="renewDialog = true">
           <v-icon class="mr-2"> mdi-wallet </v-icon>Renew</v-btn
         >
       </div>
     </div>
     <e-tabs class="mt-6" :list="list" />
+    <v-dialog v-model="renewDialog" max-width="700">
+      <v-card class="pa-2">
+        <v-card-actions class="d-flex al-c space-btw">
+          <span class="raas-title"> Renew </span>
+          <div>
+            <v-btn icon @click="renewDialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+        </v-card-actions>
+
+        <v-card-text class="mt-6">
+          <v-row dense>
+            <v-col
+              cols="12"
+              md="4"
+              v-for="(item, index) in timeList"
+              :key="item.value"
+            >
+              <div
+                class="renew-item"
+                :class="{
+                  'renew-item-active': item.value == purchasePlan,
+                }"
+                @click="chooseTime(item)"
+              >
+                <div class="renew-item-label">{{ item.label }}</div>
+                <div>/</div>
+                <div>{{ item.price }}</div>
+              </div>
+            </v-col>
+          </v-row>
+          <div class="ta-r mt-6">
+            <v-btn text elevation="0" class="mr-6" @click="renewDialog = false"
+              >Cancel
+            </v-btn>
+            <v-btn elevation="0" color="primary" @click="onRenew"
+              >Pay with LAND</v-btn
+            >
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -49,7 +92,27 @@ export default {
 
   data() {
     return {
+      renewDialog: false,
+      purchasePlan: null,
       detailData: {},
+      timeList: [
+        {
+          label: "90 Days",
+          value: 90,
+          price: "1,500,000,000 LANDs≈$1.5k",
+        },
+        {
+          label: "185 Days",
+          value: 185,
+          price: "3,000,000,000 LANDs≈$3k",
+        },
+
+        {
+          label: "365 Days",
+          value: 365,
+          price: "6,000,000,000 LANDs≈$6k",
+        },
+      ],
       list: [
         {
           text: "Details",
@@ -130,12 +193,16 @@ export default {
       };
       return statusMap[status];
     },
+    chooseTime(item) {
+      this.purchasePlan = item.value;
+    },
     async onRenew() {
       this.onLoading = true;
       const id = this.$route.params.id;
       try {
-        await sendRenew(id);
+        await sendRenew(id, { purchasePlan: this.purchasePlan });
         this.$toast("Successfully.");
+        this.renewDialog = false;
       } catch (error) {
         const code = error.code;
         if (code == 10002) {
@@ -156,6 +223,46 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.raas-title {
+  color: #0f172a;
+  font-family: "SF Pro Text";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.renew-item {
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2px;
+  border-radius: 8px;
+  border: 1px solid #f1f5f9;
+  background: #f1f5f9;
+  text-align: center;
+  color: #0f172a;
+  text-align: center;
+  font-family: "SF Pro Text";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 22px; /* 183.333% */
+  cursor: pointer;
+  .renew-item-label {
+    color: #0f172a;
+    font-family: "SF Pro Text";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+}
+.renew-item-active {
+  border: 1px solid #735ea1;
+  background: #f3e8ff;
+}
 .chain-detail {
   .chain-info-box {
     display: flex;

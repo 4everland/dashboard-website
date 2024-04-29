@@ -93,7 +93,12 @@
                           <div>
                             <span>Chain Logo Favicon (Optional)</span>
                           </div>
-                          <v-btn small text color="primary" width="60"
+                          <v-btn
+                            small
+                            text
+                            color="primary"
+                            width="60"
+                            @click="onExample(0)"
                             >Example</v-btn
                           >
                         </div>
@@ -112,7 +117,12 @@
                           <div>
                             <span>Chain Logo Lock-up (Optional)</span>
                           </div>
-                          <v-btn small text color="primary" width="60"
+                          <v-btn
+                            small
+                            text
+                            color="primary"
+                            width="60"
+                            @click="onExample(1)"
                             >Example</v-btn
                           >
                         </div>
@@ -131,7 +141,12 @@
                           <div>
                             <span>Background (Optional)</span>
                           </div>
-                          <v-btn small text color="primary" width="60"
+                          <v-btn
+                            small
+                            text
+                            color="primary"
+                            width="60"
+                            @click="onExample(2)"
                             >Example</v-btn
                           >
                         </div>
@@ -150,8 +165,69 @@
                           <div>
                             <span>Footer Link (Optional)</span>
                           </div>
-                          <v-btn small text color="primary" width="60"
-                            >Example</v-btn
+                          <div>
+                            <v-btn
+                              small
+                              text
+                              color="primary"
+                              @click="downloadJson"
+                            >
+                              <v-icon size="16" class="mr-1">
+                                mdi-cloud-download-outline
+                              </v-icon>
+                              Download json template</v-btn
+                            >
+                            <v-btn
+                              small
+                              text
+                              color="primary"
+                              width="60"
+                              @click="onExample(3)"
+                              >Example</v-btn
+                            >
+                          </div>
+                        </div>
+                        <div class="file-box">
+                          <div class="upload-box">
+                            <v-btn v-if="fileName" elevation="0" width="100%">
+                              <v-icon size="16" class="mr-1">
+                                mdi-file-outline </v-icon
+                              >{{ fileName }}
+                            </v-btn>
+                            <v-btn
+                              v-else
+                              elevation="0"
+                              width="100%"
+                              @click="chooseJson"
+                            >
+                              <v-icon size="16" class="mr-1">
+                                mdi-cloud-upload-outline </v-icon
+                              >Upload .json File
+                            </v-btn>
+
+                            <input
+                              ref="uploadInput"
+                              type="file"
+                              accept=".json"
+                              @click="
+                                (e) => {
+                                  e.target.value = '';
+                                }
+                              "
+                              @change="getFileData"
+                              style="display: none"
+                            />
+                          </div>
+                          <v-btn
+                            icon
+                            elevation="0"
+                            color="primary"
+                            :disabled="fileName == ''"
+                            @click="onDelete"
+                          >
+                            <v-icon size="24">
+                              mdi-trash-can-outline
+                            </v-icon></v-btn
                           >
                         </div>
                       </div>
@@ -216,10 +292,22 @@
           </div>
         </div>
         <div class="d-flex justify-end">
+          <v-tooltip top color="rgba(0, 0, 0, 0.90)">
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon color="#fff" v-bind="attrs" v-on="on" class="mr-2">
+                mdi-alert-circle-outline
+              </v-icon>
+            </template>
+            <div class="tooltip-tit">Renew</div>
+            <div>
+              <span class="tooltip-num">$500</span>
+              <span class="tooltip-unit">/month</span>
+            </div>
+          </v-tooltip>
           <v-btn
             class="pay-btn"
-            :class="!valid ? 'pay-disabled' : ''"
-            :disabled="!valid"
+            :class="!valid || !validChainId ? 'pay-disabled' : ''"
+            :disabled="!valid || !validChainId"
             min-width="336"
             elevation="0"
             :loading="onLoading"
@@ -229,6 +317,24 @@
         </div>
       </div>
     </div>
+    <v-dialog v-model="exampleDialog" max-width="860">
+      <v-card class="pa-2">
+        <v-card-actions class="d-flex al-c space-btw">
+          <span class="raas-title"> Example </span>
+          <div>
+            <v-btn icon @click="exampleDialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div>
+        </v-card-actions>
+
+        <v-card-text class="mt-6">
+          <div>
+            <v-img max-width="100%" :src="exampleImg"></v-img>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -284,6 +390,13 @@ export default {
         "Discord & TG Support",
         "Advanced customization",
       ],
+      exampleList: [
+        require("@/assets/imgs/raas/example_0.jpg"),
+        require("@/assets/imgs/raas/example_1.jpg"),
+        require("@/assets/imgs/raas/example_2.jpg"),
+        require("@/assets/imgs/raas/example_3.jpg"),
+      ],
+      exampleImg: null,
       valid: true,
       validChainId: true,
       chainId: "",
@@ -303,10 +416,12 @@ export default {
       favicon: "",
       background: "",
       footerLink: "",
+      fileName: "",
       purchasePlan: 0,
       chainIdHint: "",
       isIdExist: false,
       showPrice: "Free trial",
+      exampleDialog: false,
     };
   },
 
@@ -319,6 +434,44 @@ export default {
         return item.value == val;
       });
       this.showPrice = chooseObj.price;
+    },
+    chooseJson() {
+      console.log(this.$refs.uploadInput);
+      this.$refs.uploadInput.click();
+    },
+    getFileData() {
+      const inputFile = this.$refs.uploadInput.files[0];
+      const fileName = inputFile.name;
+      const reader = new FileReader();
+      reader.readAsText(inputFile);
+      reader.onload = (e) => {
+        this.footerLink = e.target.result;
+        this.fileName = fileName;
+      };
+    },
+    downloadJson() {
+      let url = "https://raas.4everland.store/footer.json";
+      fetch(url)
+        .then((response) => response.blob())
+        .then((blob) => {
+          const url = URL.createObjectURL(blob);
+
+          const a = document.createElement("a");
+          a.style.display = "none";
+          a.href = url;
+          a.download = "footer.json";
+
+          document.body.appendChild(a);
+          a.click();
+
+          URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        })
+        .catch((error) => console.error("Fetch Error:", error));
+    },
+    onDelete() {
+      this.footerLink = "";
+      this.fileName = "";
     },
     goBack() {
       this.$emit("goBack");
@@ -374,11 +527,23 @@ export default {
       this.chainIdHint = "";
       this.isIdExist = false;
     },
+    onExample(type) {
+      this.exampleImg = this.exampleList[type];
+      this.exampleDialog = true;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.raas-title {
+  color: #0f172a;
+  font-family: "SF Pro Text";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
 .step-top {
   display: flex;
   align-items: center;
@@ -501,6 +666,7 @@ export default {
         text-transform: capitalize;
       }
     }
+
     .pay-btn {
       background: #fff;
       color: #735ea1;
@@ -515,5 +681,49 @@ export default {
       color: #fff !important;
     }
   }
+}
+.file-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .upload-box {
+    display: flex;
+    width: 100%;
+    height: 40px;
+    padding: 8px 0px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: 1px dashed #cbd5e1;
+    background: #f1f5f9;
+  }
+}
+.tooltip-tit {
+  color: #fff;
+  font-family: "SF Pro Text";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: capitalize;
+}
+.tooltip-num {
+  color: #fff;
+  text-align: right;
+  font-family: "DIN Alternate";
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.56px;
+}
+.tooltip-unit {
+  color: #e2e8f0;
+  font-family: "SF Pro Text";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px; /* 171.429% */
+  text-transform: capitalize;
 }
 </style>

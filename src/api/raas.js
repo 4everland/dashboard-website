@@ -56,12 +56,8 @@ export function fetchEthBalance(address) {
   return request.get(`$raas/common/eth/balance/${address}`);
 }
 
-export function sendRenew(id) {
-  return request.post(`$raas/rollup/${id}/renew`, {
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  });
+export function sendRenew(id, data) {
+  return request.post(`$raas/rollup/${id}/renew`, data);
 }
 
 export function fetchProgress(id) {

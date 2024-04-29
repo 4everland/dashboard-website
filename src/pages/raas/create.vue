@@ -87,11 +87,39 @@ export default {
     },
     onStep1Submit(data) {
       this.step1Data = data;
-      this.onSubmit();
+      if (data.purchasePlan == 0) {
+        this.onSubmit();
+      } else {
+        this.beforePayTips(data.purchasePlan);
+      }
     },
     onStep2Submit(data) {
       this.step2Data = data;
       this.onSubmit();
+    },
+    beforePayTips(purchasePlan) {
+      let land = "";
+      switch (purchasePlan) {
+        case 90:
+          land = "1,500,000,000";
+          break;
+        case 185:
+          land = "3,000,000,000";
+          break;
+        case 365:
+          land = "6,000,000,000";
+          break;
+        default:
+          break;
+      }
+
+      const message = `Creating will consume ${land} LAND, ready to proceed?`;
+      this.$confirm(message, "Tips", {
+        cancelText: "Cancel",
+        confirmText: "Pay",
+      }).then(async () => {
+        this.onSubmit();
+      });
     },
     goBack() {
       this.step = 0;
@@ -103,7 +131,6 @@ export default {
         ...this.step1Data,
         ...this.step2Data,
       };
-      console.log(body);
       try {
         const { data } = await sendCreateRaas(body);
         if (this.fastDeploy) {

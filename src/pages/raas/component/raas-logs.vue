@@ -21,6 +21,7 @@
         width="100%"
         height="500px"
         readOnly
+        fontSize="12px"
       ></SimpleCodeEditor>
     </div>
   </div>

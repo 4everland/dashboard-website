@@ -148,7 +148,7 @@ export default {
       }
       if (item.status == 3) {
         this.$router.push(`/raas/${item.chainName || "-"}/${item.id}`);
-      } else if (item.status == 2) {
+      } else if ((item.status == 2 || item.status == 5) && item.fastDeploy) {
         this.$router.push(`/raas/progress/${item.chainName || "-"}/${item.id}`);
       } else {
         this.$router.push(`/raas/status/${item.id}`);
