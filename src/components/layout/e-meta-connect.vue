@@ -65,7 +65,9 @@ export default {
     },
     async isConnect(val) {
       // this.onConnect();
+
       try {
+        let plugin = window.ethereum ? window.ethereum : window.okxwallet;
         let connectAddr = "";
         if (val) {
           this.showPop = false;
@@ -73,11 +75,11 @@ export default {
           console.log(accounts);
           connectAddr = accounts[0];
           await this.checkNet();
-          this.walletObj.on("chainChanged", (networkId) => {
+          plugin.on("chainChanged", (networkId) => {
             console.log("chainChanged", networkId);
             location.reload();
           });
-          this.walletObj.on("accountsChanged", (accounts) => {
+          plugin.on("accountsChanged", (accounts) => {
             console.log("accountsChanged", accounts);
             location.reload();
           });
@@ -170,12 +172,12 @@ export default {
       }
     },
     async connectMetaMask() {
-      console.log(this.walletObj);
-      if (this.walletObj) {
-        window.web3 = new Web3(this.walletObj);
+      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
+      if (plugin) {
+        window.web3 = new Web3(plugin);
         // await this.walletObj.enable();
         try {
-          await this.walletObj.request({ method: "eth_requestAccounts" });
+          await plugin.request({ method: "eth_requestAccounts" });
           return true;
         } catch (error) {
           this.$alert("Failed to connect wallet" + ": " + error.message);
