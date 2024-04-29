@@ -71,8 +71,9 @@ export default {
         let connectAddr = "";
         if (val) {
           this.showPop = false;
-          const accounts = await window.web3.eth.getAccounts();
-          console.log(accounts);
+          const accounts = await plugin.request({
+            method: "eth_requestAccounts",
+          });
           connectAddr = accounts[0];
           await this.checkNet();
           plugin.on("chainChanged", (networkId) => {
