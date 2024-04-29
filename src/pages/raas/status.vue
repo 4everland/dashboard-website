@@ -102,7 +102,6 @@
 </template>
 
 <script>
-// import { fetchRollupList, sendTransaction } from "@/api/raas.js";
 import { fetchRollupDetail, sendTransaction } from "@/api/raas.js";
 
 import { mapGetters, mapState } from "vuex";

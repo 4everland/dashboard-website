@@ -340,11 +340,7 @@
 
 <script>
 import Axios from "axios";
-import {
-  fetchDefaultChainId,
-  sendCreateRaas,
-  sendCheckChainId,
-} from "@/api/raas.js";
+import { fetchDefaultChainId, sendCheckChainId } from "@/api/raas.js";
 
 export default {
   name: "DashboardWebsiteCreateFirst",
@@ -482,6 +478,7 @@ export default {
     },
     async onSubmit() {
       await this.$refs.form.validate();
+      await this.$refs.formChainId.validate();
       if (this.isIdExist) {
         return;
       } else {
@@ -512,7 +509,7 @@ export default {
           this.isIdExist = true;
         }
       }
-      this.$refs.formChainId.validate();
+      await this.$refs.formChainId.validate();
     },
     async getChainIdList(id) {
       const url = "https://chainid.foreverland.xyz/chains.json";

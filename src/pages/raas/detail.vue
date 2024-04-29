@@ -36,7 +36,7 @@
         >
       </div>
     </div>
-    <e-tabs class="mt-6" :list="list" />
+    <e-tabs ref="rassTab" class="mt-6" :list="list" />
     <v-dialog v-model="renewDialog" max-width="700">
       <v-card class="pa-2">
         <v-card-actions class="d-flex al-c space-btw">
@@ -203,6 +203,9 @@ export default {
         await sendRenew(id, { purchasePlan: this.purchasePlan });
         this.$toast("Successfully.");
         this.renewDialog = false;
+        if (this.$refs.rassTab.curIdx == 3) {
+          this.$refs.rassTab.$children[2].getList();
+        }
       } catch (error) {
         const code = error.code;
         if (code == 10002) {

@@ -16,13 +16,8 @@
 </template>
 
 <script>
-import Axios from "axios";
 import { mapGetters, mapState } from "vuex";
-import {
-  fetchDefaultChainId,
-  sendCreateRaas,
-  sendCheckChainId,
-} from "@/api/raas.js";
+import { sendCreateRaas } from "@/api/raas.js";
 
 import createFirst from "./component/create-first.vue";
 import createOneclick from "./component/create-oneclick.vue";
