@@ -126,18 +126,22 @@ export default {
     };
   },
   created() {
-    this.walletObj.on("chainChanged", this.initSeleted);
+    let plugin = window.ethereum ? window.ethereum : window.okxwallet;
+
+    plugin.on("chainChanged", this.initSeleted);
     this.initSeleted();
   },
   beforeDestroy() {
-    this.walletObj.removeListener("accountsChanged", this.initSeleted);
+    let plugin = window.ethereum ? window.ethereum : window.okxwallet;
+    plugin.removeListener("accountsChanged", this.initSeleted);
   },
   methods: {
     initSeleted() {
+      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
       if (localStorage.isEverpay) {
         this.selected = 9999999;
       } else {
-        this.selected = parseInt(this.walletObj.chainId);
+        this.selected = parseInt(plugin.chainId);
       }
       this.$emit("onNetwork", this.selected);
     },
