@@ -182,6 +182,25 @@ export default {
             if (findCoinAddr) coinType = key;
           }
 
+          if (
+            it.amountType == "0x0000000000000000000000000000000000000000" &&
+            it.network == "Polygon"
+          ) {
+            coinType = "MATIC";
+          }
+          if (
+            it.amountType == "0x0000000000000000000000000000000000000000" &&
+            it.network == "BSC"
+          ) {
+            coinType = "BNB";
+          }
+          if (
+            it.amountType == "0x0000000000000000000000000000000000000000" &&
+            it.network == "opBNB"
+          ) {
+            coinType = "BNB";
+          }
+
           if (coinType == "USDCE") {
             coinType = "USDC.e";
           }
