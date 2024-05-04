@@ -80,9 +80,7 @@
             </v-row>
           </div>
           <div class="step-bottom-boder pa-4">
-            <div class="create-item-title mb-4">
-              Custom Website (Modifiable)
-            </div>
+            <div class="create-item-title mb-4">Custom Scan (Modifable)</div>
             <v-row>
               <v-col cols="12">
                 <div>
@@ -105,7 +103,7 @@
                         <v-text-field
                           v-model="favicon"
                           outlined
-                          placeholder="Please enter URL / 16*16"
+                          placeholder="Please enter URL/48*48"
                           dense
                         >
                         </v-text-field>
@@ -129,7 +127,7 @@
                         <v-text-field
                           v-model="chainLogo"
                           outlined
-                          placeholder="Please enter URL / 256*200"
+                          placeholder="Please enter URL/480*80"
                           dense
                         >
                         </v-text-field>
@@ -153,7 +151,7 @@
                         <v-text-field
                           v-model="background"
                           outlined
-                          placeholder="Please enter URL / 400*200"
+                          placeholder="Please enter URL/1440*200"
                           dense
                         >
                         </v-text-field>
@@ -330,7 +328,7 @@
 
         <v-card-text class="mt-6">
           <div>
-            <v-img max-width="100%" :src="exampleImg"></v-img>
+            <v-img max-width="100%" :src="exampleImg" contain></v-img>
           </div>
         </v-card-text>
       </v-card>
@@ -597,8 +595,8 @@ export default {
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
-    border-radius: 8px;
-    background: #f1f5f9;
+    border-radius: 4px;
+    border: 1px solid rgba(115, 94, 161, 0.5);
   }
 }
 .step-first {

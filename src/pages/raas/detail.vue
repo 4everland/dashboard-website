@@ -31,7 +31,22 @@
         </div>
       </div>
       <div>
-        <v-btn color="primary" width="130" @click="renewDialog = true">
+        <v-btn
+          elevation="0"
+          outlined
+          width="165"
+          @click="addWallet"
+          class="mr-2"
+        >
+          <v-icon class="mr-2"> mdi-wallet-plus-outline </v-icon>Add to
+          Wallet</v-btn
+        >
+        <v-btn
+          elevation="0"
+          color="primary"
+          width="130"
+          @click="renewDialog = true"
+        >
           <v-icon class="mr-2"> mdi-wallet </v-icon>Renew</v-btn
         >
       </div>
@@ -195,6 +210,25 @@ export default {
     },
     chooseTime(item) {
       this.purchasePlan = item.value;
+    },
+    async addWallet() {
+      window.ethereum &&
+        window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [
+            {
+              chainId: "0x" + this.detailData.chainId.toString(16),
+              chainName: this.detailData.chainName,
+              nativeCurrency: {
+                name: this.detailData.detail.gasToken,
+                symbol: this.detailData.detail.gasToken,
+                decimals: 18,
+              },
+              rpcUrls: [this.detailData.detail.rpc],
+              blockExplorerUrls: [this.detailData.detail.blockExplorer],
+            },
+          ],
+        });
     },
     async onRenew() {
       this.onLoading = true;

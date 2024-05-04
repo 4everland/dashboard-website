@@ -10,7 +10,14 @@
       <div>Create</div>
     </div>
     <div class="empty-tips mt-6">
-      You haven't created a Rollup yet. (What's Raas?)
+      You haven't created a Rollup yet. (
+      <a
+        href="https://docs.4everland.org/raas-beta/whats-rollups"
+        target="_blank"
+        rel="noopener noreferrer"
+        >What's Raas?</a
+      >
+      )
     </div>
   </div>
 </template>
