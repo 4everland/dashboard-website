@@ -87,7 +87,9 @@
                 </div>
                 <div class="mt-8 al-c space-btw">
                   <div class="reward fz-20 fw-b">5 million points reward</div>
-                  <v-btn style="color: #fff" color="#039CFF">Let's Go </v-btn>
+                  <v-btn style="color: #fff" color="#039CFF" @click="handleBnB"
+                    >Let's Go
+                  </v-btn>
                 </div>
               </div>
             </div>
@@ -112,6 +114,9 @@ export default {
     onLogin() {
       localStorage.loginTo = "/airdrop";
       this.$router.push("/login");
+    },
+    handleBnB() {
+      this.$router.push("/airdrop/bnb");
     },
   },
 };
