@@ -7,37 +7,153 @@
     </div>
     <div class="task-list">
       <div class="task-item" v-for="(item, index) in taskList" :key="index">
-        <div class="task-item-top">
-          <div>
-            <img src="@/assets/imgs/more/arrow-left.svg" alt="" />
+        <div class="task-item-top" @click="onTaskShow(item)">
+          <div class="task-item-top-icon">
+            <img
+              v-if="item.isShow"
+              src="@/assets/imgs/more/arrow-down.svg"
+              alt=""
+            />
+            <img v-else src="@/assets/imgs/more/arrow-left.svg" alt="" />
             <span>{{ item.name }}</span>
           </div>
           <div>
-            <v-btn style="color: #fff" color="#039CFF" @click="onLogin"
-              >Login</v-btn
-            >
+            <template v-if="userInfo.uid">
+              <div>
+                <v-btn
+                  v-if="
+                    item.info.taskStatus == 'NOT_READY' ||
+                    item.info.taskStatus == 'ON_GOING'
+                  "
+                  class="cursor-ban"
+                  style="color: #fff"
+                  color="rgba(255, 255, 255, 0.25)"
+                  @click.stop="
+                    (e) => {
+                      return e.default;
+                    }
+                  "
+                  >{{ item.disBtnTetx }}</v-btn
+                >
+                <v-btn
+                  v-if="item.info.taskStatus == 'CLAIM'"
+                  style="color: #fff"
+                  color="#039CFF"
+                  @click.stop="onClaim"
+                  >Claim</v-btn
+                >
+                <v-btn
+                  v-if="item.info.taskStatus == 'COMPLETED'"
+                  class="cursor-ban"
+                  style="color: #fff"
+                  color="rgba(255, 255, 255, 0.25)"
+                  @click.stop="
+                    (e) => {
+                      return e.default;
+                    }
+                  "
+                >
+                  <v-img
+                    class="mr-1"
+                    max-height="16"
+                    max-width="16"
+                    src="@/assets/imgs/more/check-circle.svg"
+                  ></v-img>
+                  Claimed</v-btn
+                >
+                <v-btn
+                  v-if="item.info.taskStatus == 'DENY'"
+                  class="cursor-ban"
+                  style="color: #fff"
+                  color="rgba(255, 255, 255, 0.25)"
+                  @click.stop="
+                    (e) => {
+                      return e.default;
+                    }
+                  "
+                >
+                  Not eligible</v-btn
+                >
+              </div>
+            </template>
+            <template v-else>
+              <v-btn style="color: #fff" color="#039CFF" @click.stop="onLogin"
+                >Login</v-btn
+              >
+            </template>
           </div>
         </div>
-        <div class="task-item-bottom">
-          <div class="task-item-bottom-description">{{ item.description }}</div>
-          <div class="task-item-bottom-reward">
-            <span>Requirements</span>
-            <span class="task-item-bottom-reward-points"
-              >{{ item.reward }} Points</span
-            >
+        <v-expand-transition>
+          <div class="task-item-bottom" v-show="item.isShow">
+            <div class="task-item-bottom-description">
+              {{ item.description }}
+            </div>
+            <div class="task-item-bottom-reward">
+              <div>
+                <span>Requirements</span>
+                <span class="task-item-bottom-reward-points">{{
+                  item.points
+                }}</span>
+              </div>
+              <div>
+                <span class="mr-1">Airdrop</span>
+                <span class="task-item-bottom-reward-points-get"
+                  >{{ item.info.reward }} Points</span
+                >
+              </div>
+            </div>
+            <div v-if="item.child">
+              <v-row dense>
+                <v-col
+                  cols="12"
+                  md="6"
+                  v-for="it in item.child"
+                  :key="it.type"
+                  class="pa-2"
+                >
+                  <div class="media-item">
+                    <div class="media-item-icon">
+                      <v-img
+                        max-height="32"
+                        max-width="32"
+                        :src="it.icon"
+                      ></v-img>
+                      <div>
+                        <div>{{ it.name }}</div>
+                        <div>{{ it.description }}</div>
+                      </div>
+                    </div>
+                    <div>
+                      <v-btn
+                        outlined
+                        min-width="96px"
+                        color="#039CFF"
+                        @click.stop="onNext(it)"
+                        >{{ it.btnName }}</v-btn
+                      >
+                    </div>
+                  </div>
+                </v-col>
+              </v-row>
+            </div>
           </div>
-        </div>
+        </v-expand-transition>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { fetchTaskList } from "@/api/airdrop.js";
+import { mapState } from "vuex";
+import { fetchTaskList, fetchNext, fetchClaim } from "@/api/airdrop.js";
 
 export default {
   name: "DashboardWebsiteBnbTask",
-
+  computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
+  },
   data() {
     return {
       taskList: [
@@ -48,7 +164,11 @@ export default {
             "Confirm your eligibility for BNB Chain's Airdrop Alliance Program level 1 criteria.",
           taskStatus: "",
           reward: 0,
-          child: [],
+          points: "4 million Points",
+          isShow: false,
+          disBtnTetx: "Not open",
+          info: {},
+          child: null,
         },
         {
           name: "Level 2",
@@ -57,7 +177,11 @@ export default {
             "Confirm your eligibility for BNB Chain's Airdrop Alliance Program level 2 criteria.",
           taskStatus: "",
           reward: 0,
-          child: [],
+          points: "2 million Points",
+          isShow: false,
+          disBtnTetx: "Not open",
+          info: {},
+          child: null,
         },
         {
           name: "Level 3",
@@ -66,23 +190,31 @@ export default {
             "Complete the tasks according to the requirements below to earn extra points.",
           taskStatus: "",
           reward: 0,
+          points: "9 million Points",
+          timeOut: 1717171200000,
+          isShow: false,
+          disBtnTetx: "Not completed",
+          info: {},
           child: [
             {
               name: "Step1: Follow on X",
               type: "FOLLOW_TWITTER",
-              description: "Follow @4everland_org on X to earn points.",
+              description: "Follow @4everland_org on X.",
               taskStatus: "",
               reward: 0,
               btnName: "Follow",
+              icon: require("@/assets/imgs/more/x.svg"),
+              info: {},
             },
             {
               name: "Step2: Join Discord",
               type: "JOIN_DISCORD",
-              description:
-                "Connect your Discord and join our server to earn points.",
+              description: "Connect your Discord and join our server.",
               taskStatus: "",
               reward: 0,
               btnName: "Join",
+              icon: require("@/assets/imgs/more/discord.svg"),
+              info: {},
             },
             {
               name: "Step3: Share on X",
@@ -91,30 +223,169 @@ export default {
               taskStatus: "",
               reward: 0,
               btnName: "Share",
+              icon: require("@/assets/imgs/more/share.svg"),
+              info: {},
             },
             {
-              name: "Step4: Standard user",
+              name: "Step4: Activate Account",
               type: "MINT_ID",
-              description:
-                "Become a standard user on the 4EVERLAND dashboard to earn points.",
+              description: "Become a standard user on the 4EVERLAND dashboard.",
               taskStatus: "",
               reward: 0,
-              btnName: "Go to Dashboard",
+              btnName: "Activate",
+              icon: require("@/assets/imgs/more/user.svg"),
+              info: {},
+            },
+            {
+              name: "Step5: Deposit LAND",
+              type: "FOREVERPASS_DEPOSIT",
+              description: "Deposit any amount of LAND through BSC.",
+              taskStatus: "",
+              reward: 0,
+              btnName: "Deposit",
+              icon: require("@/assets/imgs/more/deposit.svg"),
+              info: {},
             },
           ],
         },
       ],
     };
   },
-
-  mounted() {
-    this.getList();
+  async created() {
+    await this.getList();
   },
-
+  mounted() {},
   methods: {
+    async init() {
+      await this.getList();
+    },
     async getList() {
+      if (!localStorage.token) return;
       const { data } = await fetchTaskList();
-      console.log(data);
+      this.taskList.map((item) => {
+        data.list.map((task) => {
+          if (item.type == task.type) {
+            item.info = task;
+          }
+          if (item.child) {
+            item.child.map((ch) => {
+              if (ch.type == task.type) {
+                ch.info = task;
+              }
+            });
+          }
+        });
+        item.type;
+      });
+      console.log(this.taskList);
+    },
+    onLogin() {
+      localStorage.loginTo = "/airdrop/bnb";
+      this.$router.push("/login");
+    },
+    onTaskShow(item) {
+      item.isShow = !item.isShow;
+    },
+    async onClaim(item) {
+      const { data } = await fetchClaim(item.info.id);
+      this.init();
+    },
+    async onNext(item) {
+      const { data } = await fetchNext(item.info.id);
+      this.onAfterNext(item.info, data);
+    },
+    async onAfterNext(item, data) {
+      switch (data.next) {
+        case "JUMP":
+          this.$router.push(data.message);
+          break;
+        case "OPEN_NEW_TAB":
+          window.open(data.message);
+          setTimeout(() => {
+            this.init();
+          }, 15000);
+          break;
+        case "POPUP":
+          this.onPopup(item, data);
+          break;
+        case "POPUP_S_C_T":
+          this.onPopupMint(item, data);
+          break;
+        case "EMAIL_BIND":
+          this.onEmailBind();
+          break;
+        case "NONE":
+          this.init();
+          break;
+        default:
+          break;
+      }
+    },
+    async onPopup(item, data) {
+      await this.$alert(`+${item.reward} Points`, data.message, {
+        maxWidth: 300,
+        textCenter: true,
+      });
+      this.init();
+    },
+    async onPopupMint(item, data) {
+      await this.$alert(data.tips, data.message);
+      this.init();
+    },
+    async onEmailBind() {
+      try {
+        const { value } = await this.$prompt(
+          "Verify your email to stay up to date on the 4EVERLAND latest news and events.",
+          "E-mail verification",
+          {
+            confirmText: "Send",
+            inputAttrs: {
+              label: `Your email address`,
+              rules: [
+                (v) => this.$regMap.email.test(v) || "Invalid email address.",
+              ],
+              required: true,
+            },
+          }
+        );
+        this.$loading();
+        await this.$http.post("$auth/bind", {
+          type: 3,
+          apply: value,
+        });
+        this.$loading.close();
+        this.onVerifyEmail();
+      } catch (error) {
+        //
+      }
+    },
+    async onVerifyEmail() {
+      const { value } = await this.$prompt(
+        "The verification code has been sent to your email address.",
+        "E-mail verification",
+        {
+          confirmText: "Verify",
+          inputAttrs: {
+            label: `Verify code`,
+            rules: [(v) => v.trim().length >= 4 || "Invalid code."],
+            required: true,
+          },
+        }
+      );
+      await this.$sleep(100);
+      let params = {
+        type: 3,
+      };
+      this.$loading("Binding Email");
+      await this.$http.get(`$auth/auth/vcode/${value}`, {
+        params,
+      });
+      this.$setMsg({
+        name: "updateUser",
+      });
+      this.$loading.close();
+      this.$toast("Email binded successfully!");
+      this.init();
     },
   },
 };
@@ -139,11 +410,17 @@ export default {
       border-radius: 16px;
       background: #15171a;
       margin-bottom: 16px;
-      padding: 16px 24px;
+      padding: 24px;
       &-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        cursor: pointer;
+        &-icon {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
       }
       &-bottom {
         color: #f1f5f9;
@@ -152,11 +429,33 @@ export default {
         &-description {
         }
         &-reward {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
           &-points {
             color: #ffce56;
             font-size: 16px;
             font-weight: 700;
             margin-left: 4px;
+          }
+          &-points-get {
+            color: #039cff;
+            font-size: 16px;
+            font-weight: 700;
+          }
+        }
+        .media-item {
+          display: flex;
+          padding: 16px;
+          justify-content: space-between;
+          align-items: center;
+          flex-shrink: 0;
+          border-radius: 12px;
+          background: #1a1c21;
+          &-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
           }
         }
       }
