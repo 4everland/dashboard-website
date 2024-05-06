@@ -1,23 +1,8 @@
 <template>
   <div style="background: #000">
-    <div class="airdrop" ref="bnb" @scroll="onScroll">
-      <div
-        class="airdrop-header al-c space-btw"
-        :class="{ transparent: scrollTop == 0 }"
-      >
-        <a href="/" class="d-b">
-          <img
-            :src="`/img/airDrop/airdrop-logo.svg`"
-            height="26"
-            class="d-b m-auto"
-          />
-        </a>
-        <v-btn style="color: #fff" color="#039CFF" @click="onLogin"
-          >Login</v-btn
-        >
-      </div>
+    <div class="airdrop" @scroll="onScroll">
       <img width="100%" src="/img/airDrop/bnb-airdrop-bg.png" alt="" />
-
+      <nav-header :scrollTop="scrollTop"></nav-header>
       <div class="airdrop-body">
         <div class="airdrop-intro al-c space-btw">
           <div class="airdrop-desc">
@@ -38,19 +23,28 @@
               <div class="card-title fw-b">MEMBERS PROFILE.</div>
               <div class="al-c space-btw">
                 <div class="flex-1">
-                  <div class="fw-b" style="font-size: 24px">0×54...89a8</div>
-                  <div class="bind-type mt-3"></div>
+                  <div class="fw-b" style="font-size: 24px">{{ addr }}</div>
+                  <div class="bind-type mt-2">
+                    <img src="/img/airDrop/x.svg" width="14" alt="" />
+                    <img
+                      src="/img/airDrop/dc.svg"
+                      class="mx-2"
+                      width="14"
+                      alt=""
+                    />
+                    <img src="/img/airDrop/tg.svg" width="14" alt="" />
+                  </div>
                   <div class="d-flex al-end space-btw">
                     <div>
                       <div class="fz-12">Points</div>
                       <div class="fw-b fz-20">5240</div>
                     </div>
                     <div>
-                      <div class="fz-12">Points</div>
+                      <div class="fz-12">Tasks</div>
                       <div class="fw-b fz-20">5240</div>
                     </div>
                     <div>
-                      <div class="fz-12">Points</div>
+                      <div class="fz-12">Ranking</div>
                       <div class="fw-b fz-20">5240</div>
                     </div>
                   </div>
@@ -68,7 +62,7 @@
             earn points!
           </div>
           <div class="task-list mt-6">
-            <div class="task-item al-c">
+            <div class="task-item d-flex">
               <div class="pa-6 task-img-wrap">
                 <img
                   src="/img/airDrop/bnb-airdrop-activity.png"
@@ -101,19 +95,35 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import navHeader from "./components/nav-header.vue";
 export default {
   data() {
     return {
       scrollTop: 0,
     };
   },
+  computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
+    addr() {
+      if (Object.values(this.userInfo).length > 0) {
+        return (
+          this.userInfo.wallet.address.slice(0, 4) +
+          "..." +
+          this.userInfo.wallet.address.slice(-4)
+        );
+      }
+      return "-";
+    },
+  },
+  components: {
+    navHeader,
+  },
   methods: {
     onScroll(e) {
       this.scrollTop = e.target.scrollTop;
-    },
-    onLogin() {
-      localStorage.loginTo = "/airdrop";
-      this.$router.push("/login");
     },
     handleBnB() {
       this.$router.push("/airdrop/bnb");
@@ -129,19 +139,7 @@ export default {
   margin: 0 auto;
   overflow: scroll;
   background: #111214;
-  .airdrop-header {
-    z-index: 999;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 12px 48px;
-    background: #111214;
-    transition: all 0.4s ease;
-  }
-  .airdrop-header.transparent {
-    background: transparent;
-  }
+
   .airdrop-body {
     background: #111214;
     color: #fff;
@@ -179,9 +177,11 @@ export default {
     }
     .task-list {
       .task-item {
+        border-radius: 16px;
+        background: #15171a;
+        overflow: hidden;
         .task-img-wrap {
           width: 432px;
-          border-radius: 16px;
           background: #1a1c21;
         }
         .task-desc {
