@@ -125,6 +125,25 @@
                     </div>
                     <div>
                       <v-btn
+                        v-if="
+                          it.info.taskStatus == 'COMPLETED' ||
+                          it.info.taskStatus == 'DONE_TO_STAY'
+                        "
+                        class="cursor-ban"
+                        style="color: #fff"
+                        color="rgba(255, 255, 255, 0.05)"
+                        min-width="96px"
+                      >
+                        <v-img
+                          class="mr-1"
+                          max-height="16"
+                          max-width="16"
+                          src="@/assets/imgs/more/check-circle.svg"
+                        ></v-img>
+                        {{ it.info.buttonName || it.disBtnTetx }}</v-btn
+                      >
+                      <v-btn
+                        v-else
                         outlined
                         min-width="96px"
                         color="#039CFF"
@@ -203,6 +222,7 @@ export default {
               taskStatus: "",
               reward: 0,
               btnName: "Follow",
+
               icon: require("@/assets/imgs/more/x.svg"),
               info: {},
             },
@@ -223,6 +243,8 @@ export default {
               taskStatus: "",
               reward: 0,
               btnName: "Share",
+              disBtnTetx: "Shared",
+
               icon: require("@/assets/imgs/more/share.svg"),
               info: {},
             },
@@ -233,6 +255,8 @@ export default {
               taskStatus: "",
               reward: 0,
               btnName: "Activate",
+              disBtnTetx: "Activated",
+
               icon: require("@/assets/imgs/more/user.svg"),
               info: {},
             },
@@ -243,6 +267,8 @@ export default {
               taskStatus: "",
               reward: 0,
               btnName: "Deposit",
+              disBtnTetx: "Deposited",
+
               icon: require("@/assets/imgs/more/deposit.svg"),
               info: {},
             },
