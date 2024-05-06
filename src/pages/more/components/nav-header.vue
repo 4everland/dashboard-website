@@ -11,13 +11,20 @@
       />
     </a>
 
-    <e-team-avatar
-      class="cursor-p mr-2"
-      v-if="userInfo.uid"
-      :src="userInfo.avatar"
-      :size="30"
-      :uid="userInfo.uid"
-    ></e-team-avatar>
+    <e-menu v-if="userInfo.uid" offset-y open-on-hover>
+      <v-btn slot="ref" text>
+        <e-team-avatar
+          class="cursor-p mr-2"
+          :src="userInfo.avatar"
+          :size="30"
+          :uid="userInfo.uid"
+        >
+        </e-team-avatar>
+      </v-btn>
+      <v-list class="cursor-p">
+        <v-list-item @click="onLogout">Logout</v-list-item>
+      </v-list>
+    </e-menu>
     <v-btn v-else style="color: #fff" color="#039CFF" @click="onLogin"
       >Login</v-btn
     >
@@ -43,6 +50,11 @@ export default {
     onLogin() {
       localStorage.loginTo = "/airdrop";
       this.$router.push("/login");
+    },
+    onLogout() {
+      this.$clearLogin();
+      location.href = this.$getLoginUrl();
+      return;
     },
   },
 };

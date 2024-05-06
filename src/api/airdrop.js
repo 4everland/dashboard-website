@@ -9,5 +9,7 @@ export function fetchTaskList(params) {
 }
 
 export function fetchTaskCard() {
-  return request.get("$auth/4everpass");
+  return request.get("$auth/4everpass", {
+    noTip: 1,
+  });
 }
