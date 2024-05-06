@@ -1,7 +1,7 @@
 <template>
   <div id="airDropBnb">
-    <div class="container">
-      <nav-header></nav-header>
+    <div class="container" @scroll="onScroll">
+      <nav-header :scrollTop="scrollTop"></nav-header>
       <div class="bnb-body mb-10">
         <div class="mb-6 al-c">
           <div class="pa-2 back-arrow">
@@ -18,7 +18,7 @@
         </div>
 
         <div class="task-item d-flex">
-          <div class="pa-6 task-img-wrap">
+          <div class="pa-6 task-img-wrap al-c">
             <img
               src="/img/airDrop/bnb-airdrop-activity.png"
               width="100%"
@@ -36,7 +36,7 @@
                 outlined
                 color="#fff"
                 target="blank"
-                href="https://www.baidu.com"
+                href="https://www.google.com"
               >
                 Understand the details
                 <img
@@ -59,7 +59,17 @@
 import BnbTask from "./components/bnb/bnb-task.vue";
 import navHeader from "./components/nav-header.vue";
 export default {
+  data() {
+    return {
+      scrollTop: 0,
+    };
+  },
   components: { BnbTask, navHeader },
+  methods: {
+    onScroll(e) {
+      this.scrollTop = e.target.scrollTop;
+    },
+  },
 };
 </script>
 
@@ -68,8 +78,8 @@ export default {
   background: #111214;
   .container {
     height: 100vh;
+    overflow: scroll;
   }
-
   .bnb-body {
     margin-top: 78px;
     color: #fff;
@@ -85,6 +95,7 @@ export default {
       background: #15171a;
       overflow: hidden;
       .task-img-wrap {
+        width: 432px;
         background: #1a1c21;
       }
     }

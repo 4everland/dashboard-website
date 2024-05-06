@@ -7,3 +7,7 @@ export function fetchTaskList(params) {
     params,
   });
 }
+
+export function fetchTaskCard() {
+  return request.get("$auth/4everpass");
+}

@@ -1,7 +1,12 @@
 <template>
   <div style="background: #000">
     <div class="airdrop" @scroll="onScroll">
-      <img width="100%" src="/img/airDrop/bnb-airdrop-bg.png" alt="" />
+      <img
+        class="airdrop-bg"
+        width="100%"
+        src="/img/airDrop/bnb-airdrop-bg.png"
+        alt=""
+      />
       <nav-header :scrollTop="scrollTop"></nav-header>
       <div class="airdrop-body">
         <div class="airdrop-intro al-c space-btw">
@@ -37,15 +42,15 @@
                   <div class="d-flex al-end space-btw">
                     <div>
                       <div class="fz-12">Points</div>
-                      <div class="fw-b fz-20">5240</div>
+                      <div class="fw-b fz-20">{{ points }}</div>
                     </div>
                     <div>
                       <div class="fz-12">Tasks</div>
-                      <div class="fw-b fz-20">5240</div>
+                      <div class="fw-b fz-20">{{ tasks }}</div>
                     </div>
                     <div>
                       <div class="fz-12">Ranking</div>
-                      <div class="fw-b fz-20">5240</div>
+                      <div class="fw-b fz-20">{{ rank }}</div>
                     </div>
                   </div>
                 </div>
@@ -96,11 +101,20 @@
 
 <script>
 import { mapState } from "vuex";
+import { fetchTaskCard } from "@/api/airdrop";
 import navHeader from "./components/nav-header.vue";
 export default {
   data() {
     return {
       scrollTop: 0,
+      info: {
+        avatar: "",
+        completed: "-",
+        medals: [],
+        name: "",
+        points: "-",
+        rank: "-",
+      },
     };
   },
   computed: {
@@ -117,9 +131,30 @@ export default {
       }
       return "-";
     },
+    points() {
+      if (Object.values(this.userInfo).length > 0) {
+        return this.info.points;
+      }
+      return "-";
+    },
+    tasks() {
+      if (Object.values(this.userInfo).length > 0) {
+        return this.info.completed;
+      }
+      return "-";
+    },
+    rank() {
+      if (Object.values(this.userInfo).length > 0) {
+        return this.info.rank || 0;
+      }
+      return "-";
+    },
   },
   components: {
     navHeader,
+  },
+  created() {
+    this.getInfo();
   },
   methods: {
     onScroll(e) {
@@ -127,6 +162,16 @@ export default {
     },
     handleBnB() {
       this.$router.push("/airdrop/bnb");
+    },
+
+    async getInfo() {
+      try {
+        const { data } = await fetchTaskCard();
+        console.log(data);
+        this.info = data;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
@@ -196,6 +241,9 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+  .airdrop-bg {
+    margin-top: 54px;
+  }
   .airdrop-header {
     padding: 12px 16px !important;
   }
