@@ -1,8 +1,8 @@
 <template>
   <div id="airDropBnb">
-    <div class="container" @scroll="onScroll">
+    <div class="bnb-airdrop" @scroll="onScroll">
       <nav-header :scrollTop="scrollTop"></nav-header>
-      <div class="bnb-body mb-10">
+      <div class="bnb-body">
         <div class="mb-6 al-c">
           <div class="pa-2 back-arrow">
             <img
@@ -10,14 +10,14 @@
               src="/img/airDrop/back-arrow.svg"
               width="24"
               height="24"
-              @click="$router.back()"
+              @click="$router.push('/airdrop')"
               alt=""
             />
           </div>
           <div class="fz-20 ml-2">Go Back</div>
         </div>
 
-        <div class="task-item d-flex">
+        <div class="task-item d-flex mb-10">
           <div class="pa-6 task-img-wrap al-c">
             <img
               src="/img/airDrop/bnb-airdrop-activity.png"
@@ -49,8 +49,8 @@
             </div>
           </div>
         </div>
+        <bnb-task />
       </div>
-      <bnb-task />
     </div>
   </div>
 </template>
@@ -76,11 +76,14 @@ export default {
 <style lang="scss" scoped>
 #airDropBnb {
   background: #111214;
-  .container {
+  .bnb-airdrop {
+    max-width: 1440px;
     height: 100vh;
+    margin: 0 auto;
     overflow: scroll;
   }
   .bnb-body {
+    padding: 0 48px;
     margin-top: 78px;
     color: #fff;
     .back-arrow {
@@ -107,6 +110,9 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+  .bnb-body {
+    padding: 0 16px !important;
+  }
   .task-item {
     max-width: 100%;
     flex-direction: column;

@@ -25,19 +25,37 @@
 
           <div class="airdrop-card-container">
             <div class="airdrop-card pa-6">
-              <div class="card-title fw-b">MEMBERS PROFILE.</div>
+              <div class="card-title fw-b">MEMBERS PROFILE</div>
               <div class="al-c space-btw">
                 <div class="flex-1">
                   <div class="fw-b" style="font-size: 24px">{{ addr }}</div>
                   <div class="bind-type mt-2">
-                    <img src="/img/airDrop/x.svg" width="14" alt="" />
                     <img
-                      src="/img/airDrop/dc.svg"
-                      class="mx-2"
+                      :src="
+                        x ? '/img/airDrop/x-active.svg' : '/img/airDrop/x.svg'
+                      "
                       width="14"
                       alt=""
                     />
-                    <img src="/img/airDrop/tg.svg" width="14" alt="" />
+                    <img
+                      :src="
+                        dc
+                          ? '/img/airDrop/dc-active.svg'
+                          : '/img/airDrop/dc.svg'
+                      "
+                      class="mx-3"
+                      width="14"
+                      alt=""
+                    />
+                    <img
+                      :src="
+                        tg
+                          ? '/img/airDrop/tg-active.svg'
+                          : '/img/airDrop/tg.svg'
+                      "
+                      width="14"
+                      alt=""
+                    />
                   </div>
                   <div class="d-flex al-end space-btw">
                     <div>
@@ -54,7 +72,15 @@
                     </div>
                   </div>
                 </div>
-                <div class="card-avatar ml-8">?</div>
+                <img
+                  class="card-avatar ml-8"
+                  v-if="info.avatar"
+                  :src="info.avatar"
+                  alt=""
+                />
+                <div class="card-avatar ml-8 al-c flex-center" v-else>
+                  <img src="/img/airDrop/unknown.svg" width="32" alt="" />
+                </div>
               </div>
             </div>
           </div>
@@ -86,8 +112,8 @@
                 </div>
                 <div class="mt-8 al-c space-btw">
                   <div class="reward fz-20 fw-b">5 million points reward</div>
-                  <v-btn style="color: #fff" color="#039CFF" @click="handleBnB"
-                    >Let's Go
+                  <v-btn color="#039CFF" @click="handleBnB">
+                    <span class="fw-b" style="color: #fff">Let's Go</span>
                   </v-btn>
                 </div>
               </div>
@@ -149,6 +175,15 @@ export default {
       }
       return "-";
     },
+    x() {
+      return this.info.medals.includes("TWITTER");
+    },
+    dc() {
+      return this.info.medals.includes("DISCORD");
+    },
+    tg() {
+      return this.info.medals.includes("TELEGRAM");
+    },
   },
   components: {
     navHeader,
@@ -166,6 +201,7 @@ export default {
 
     async getInfo() {
       try {
+        if (!localStorage.token) return;
         const { data } = await fetchTaskCard();
         console.log(data);
         this.info = data;
@@ -186,7 +222,6 @@ export default {
   background: #111214;
 
   .airdrop-body {
-    background: #111214;
     color: #fff;
     padding: 0px 48px;
     .airdrop-intro {
@@ -206,12 +241,13 @@ export default {
           height: 200px;
           border-radius: 16px;
           background: url("/img/airDrop/airdrop-card.png") no-repeat;
-          background-size: cover;
+          background-size: 100% 100%;
 
           .card-title {
             font-size: 28px;
           }
           .card-avatar {
+            object-fit: cover;
             width: 88px;
             height: 88px;
             background: rgba(0, 0, 0, 0.5);
