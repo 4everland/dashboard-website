@@ -39,7 +39,7 @@
                   v-if="item.info.taskStatus == 'CLAIM'"
                   style="color: #fff"
                   color="#039CFF"
-                  @click.stop="onClaim"
+                  @click.stop="onClaim(item)"
                   >Claim</v-btn
                 >
                 <v-btn
@@ -90,16 +90,16 @@
             </div>
             <div class="task-item-bottom-reward">
               <div>
-                <span>Requirements</span>
+                <span>Total</span>
                 <span class="task-item-bottom-reward-points">{{
                   item.points
                 }}</span>
               </div>
-              <div>
-                <span class="mr-1">Airdrop</span>
-                <span class="task-item-bottom-reward-points-get"
-                  >{{ item.info.reward }} Points</span
-                >
+              <div
+                v-if="item.info.reward"
+                class="task-item-bottom-reward-points-get"
+              >
+                <span>{{ item.info.reward }} Points</span>
               </div>
             </div>
             <div v-if="item.child">
@@ -287,7 +287,8 @@ export default {
       item.isShow = !item.isShow;
     },
     async onClaim(item) {
-      const { data } = await fetchClaim(item.info.id);
+      await fetchClaim(item.info.id);
+      this.$toast("Congratulations, claim successful!");
       this.init();
     },
     async onNext(item) {
