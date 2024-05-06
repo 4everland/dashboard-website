@@ -96,8 +96,9 @@ export default {
   methods: {
     async initEverPay() {
       try {
+        let plugin = window.ethereum ? window.ethereum : window.okxwallet;
         const everPay = new window.Everpay.default();
-        const accounts = await window.ethereum.request({
+        const accounts = await plugin.request({
           method: "eth_requestAccounts",
         });
         const account = accounts[0];

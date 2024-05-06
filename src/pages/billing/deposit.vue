@@ -178,9 +178,10 @@ export default {
       onChain: (s) => s.onChain,
     }),
     signer() {
-      let provider = new providers.Web3Provider(this.walletObj);
+      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
+      let provider = new providers.Web3Provider(plugin);
       if (this.chainId == (this.$inDev ? "280" : "324")) {
-        provider = new Web3Provider(this.walletObj);
+        provider = new Web3Provider(plugin);
       }
       return provider.getSigner();
     },
@@ -254,7 +255,8 @@ export default {
   },
   mounted() {
     // this.checkApproved();
-    this.walletObj.on("accountsChanged", (val) => {
+    let plugin = window.ethereum ? window.ethereum : window.okxwallet;
+    plugin.on("accountsChanged", (val) => {
       this.$store.commit("SET_CONNECT_ADDR", val[0]);
       this.checkApproved();
     });
@@ -561,8 +563,9 @@ export default {
       }
     },
     async getBlastEthUnitPrice() {
+      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
       try {
-        let provider = new providers.Web3Provider(window.ethereum);
+        let provider = new providers.Web3Provider(plugin);
         const signer = provider.getSigner();
         const BlastOracleLand = BlastOracleLand__factory.connect(
           this.landRechargeAddr,

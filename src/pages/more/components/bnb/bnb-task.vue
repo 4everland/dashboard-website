@@ -77,8 +77,8 @@
               </div>
             </template>
             <template v-else>
-              <v-btn style="color: #fff" color="#039CFF" @click.stop="onLogin"
-                >Login</v-btn
+              <v-btn color="#039CFF" @click.stop="onLogin">
+                <span class="fw-b" style="color: #fff"> Login</span></v-btn
               >
             </template>
           </div>
