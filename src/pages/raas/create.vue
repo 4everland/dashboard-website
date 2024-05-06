@@ -42,7 +42,6 @@
                       :hint="chainIdHint"
                       persistent-hint
                       dense
-                      prefix="777"
                       @input="onChainIdChange"
                     >
                       <template v-slot:append-outer>
@@ -51,7 +50,7 @@
                           text
                           color="primary"
                           width="60"
-                          :disabled="!chainId"
+                          :disabled="!chainId || chainId.length > 16"
                           @click="onCheck"
                           >Check</v-btn
                         >
@@ -224,7 +223,8 @@ export default {
       chainId: "",
       chainIdRules: [
         (v) => !!v || "chainId is required",
-        (v) => (v && v.length <= 5) || "chainId must be less than 5 characters",
+        (v) =>
+          (v && v.length <= 16) || "chainId must be less than 16 characters",
         (v) => /^[0-9]\d*$/.test(v) || "chainId must be valid",
         () =>
           !this.isIdExist ||
@@ -244,7 +244,7 @@ export default {
     };
   },
   created() {
-    this.getDefaultChainId();
+    // this.getDefaultChainId();
   },
   mounted() {},
 
@@ -266,7 +266,7 @@ export default {
 
       if (this.valid) {
         const body = {
-          chainId: "777" + this.chainId,
+          chainId: this.chainId,
           chainName: this.chainName,
           chainLogo: this.chainLogo,
           email: this.email,
@@ -296,7 +296,7 @@ export default {
       this.onLoading = false;
     },
     async onCheck() {
-      const id = "777" + this.chainId;
+      const id = this.chainId;
       const isInChain = await this.getChainIdList(id);
       if (isInChain) {
         this.isIdExist = true;
