@@ -33,7 +33,17 @@ export default [
     },
   },
   {
-    path: "/bnb-airdrop",
+    path: "/airdrop",
+    component: () => import("./airdrop"),
+    meta: {
+      title: "AIRDROP",
+      hideNav: 1,
+      isTab: 1,
+      noLogin: 1,
+    },
+  },
+  {
+    path: "/airdrop/bnb",
     component: () => import("./bnb-airdrop"),
     meta: {
       title: "BNB AIRDROP",
