@@ -25,8 +25,8 @@
         <v-list-item @click="onLogout">Logout</v-list-item>
       </v-list>
     </e-menu>
-    <v-btn v-else style="color: #fff" color="#039CFF" @click="onLogin"
-      >Login</v-btn
+    <v-btn v-else color="#039CFF" @click="onLogin">
+      <span class="fw-b" style="color: #fff">Login</span></v-btn
     >
   </div>
 </template>
@@ -48,11 +48,12 @@ export default {
   },
   methods: {
     onLogin() {
-      localStorage.loginTo = "/airdrop";
+      localStorage.loginTo = location.pathname;
       this.$router.push("/login");
     },
     onLogout() {
       this.$clearLogin();
+      localStorage.loginTo = location.pathname;
       location.href = this.$getLoginUrl();
       return;
     },

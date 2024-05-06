@@ -112,8 +112,8 @@
                 </div>
                 <div class="mt-8 al-c space-btw">
                   <div class="reward fz-20 fw-b">5 million points reward</div>
-                  <v-btn style="color: #fff" color="#039CFF" @click="handleBnB"
-                    >Let's Go
+                  <v-btn color="#039CFF" @click="handleBnB">
+                    <span class="fw-b" style="color: #fff">Let's Go</span>
                   </v-btn>
                 </div>
               </div>
@@ -241,7 +241,7 @@ export default {
           height: 200px;
           border-radius: 16px;
           background: url("/img/airDrop/airdrop-card.png") no-repeat;
-          background-size: cover;
+          background-size: 100% 100%;
 
           .card-title {
             font-size: 28px;
