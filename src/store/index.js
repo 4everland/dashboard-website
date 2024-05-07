@@ -62,6 +62,10 @@ const store = new Vuex.Store({
     walletObj(state) {
       const { walletType } = state.userInfo.wallet || {};
       let provider = window.ethereum;
+
+      if (!provider) {
+        return window.okxwallet;
+      }
       let metamaskProvider,
         coinbaseProvider,
         okxProvider = null;
