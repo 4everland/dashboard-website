@@ -119,7 +119,7 @@
                         :src="it.icon"
                       ></v-img>
                       <div>
-                        <div>{{ it.name }}</div>
+                        <div class="media-item-title">{{ it.name }}</div>
                         <div>{{ it.description }}</div>
                       </div>
                     </div>
@@ -203,7 +203,7 @@ export default {
           child: null,
         },
         {
-          name: "Level 3",
+          name: "Complete Tasks to Unlock Extra Rewards",
           type: "FOREVER_PASS_BNB_TASK_3",
           description:
             "Complete the tasks according to the requirements below to earn extra points.",
@@ -239,7 +239,7 @@ export default {
             {
               name: "Step3: Share on X",
               type: "FOREVER_PASS_SHARE_TWITTER",
-              description: "Share on Xto earn points.",
+              description: "Share on X to earn points.",
               taskStatus: "",
               reward: 0,
               btnName: "Share",
@@ -422,7 +422,7 @@ export default {
 .task-box {
   color: #fff;
   .task-tit {
-    color: #f1f5f9;
+    color: #fff;
     font-size: 24px;
     font-weight: 700;
   }
@@ -447,6 +447,10 @@ export default {
           display: flex;
           align-items: center;
           gap: 8px;
+          color: #fff;
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 20px; /* 125% */
         }
       }
       &-bottom {
@@ -483,6 +487,12 @@ export default {
             display: flex;
             align-items: center;
             gap: 8px;
+          }
+          &-title {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 16px; /* 114.286% */
           }
         }
       }
