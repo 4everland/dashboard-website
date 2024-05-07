@@ -17,7 +17,19 @@
             <img v-else src="@/assets/imgs/more/arrow-left.svg" alt="" />
             <span>{{ item.name }}</span>
           </div>
-          <div>
+          <div class="task-item-top-btn-box">
+            <div v-if="item.timeOut && isShowTimer" class="time-out-box">
+              <div style="font-size: 12px">Ends in</div>
+              <div>
+                <span class="time-num">{{ cunStr1.day }}</span>
+                <span>:</span>
+                <span class="time-num">{{ cunStr1.hour }}</span>
+                <span>:</span>
+                <span class="time-num">{{ cunStr1.minute }}</span>
+                <span>:</span>
+                <span class="time-num">{{ cunStr1.second }}</span>
+              </div>
+            </div>
             <template v-if="userInfo.uid">
               <div>
                 <v-btn
@@ -37,7 +49,21 @@
                   >{{ item.disBtnTetx }}</v-btn
                 >
                 <v-btn
-                  v-if="item.info.taskStatus == 'CLAIM'"
+                  v-if="
+                    item.timeOut &&
+                    isShowTimer &&
+                    item.info.taskStatus == 'CLAIM'
+                  "
+                  class="cursor-ban"
+                  style="color: #fff"
+                  elevation="0"
+                  color="rgba(255, 255, 255, 0.25)"
+                  @click.stop
+                >
+                  Waiting to claim</v-btn
+                >
+                <v-btn
+                  v-else-if="item.info.taskStatus == 'CLAIM'"
                   style="color: #fff"
                   color="#039CFF"
                   elevation="0"
@@ -314,6 +340,9 @@ export default {
           ],
         },
       ],
+      cunStr1: { day: "00", hour: "00", minute: "00", second: "00" },
+      isShowTimer: false,
+      timer: null,
     };
   },
   async created() {
@@ -342,7 +371,19 @@ export default {
         });
         item.type;
       });
-      console.log(this.taskList);
+      let startTime = new Date().getTime();
+      const endTime = 1717171200000;
+      // const endTime = startTime + 5000;
+      if (endTime - startTime > 0) {
+        this.isShowTimer = true;
+        this.cunStr1 = this.cutdonw(startTime, endTime);
+        this.timer = setInterval(() => {
+          startTime = new Date().getTime();
+          this.cunStr1 = this.cutdonw(startTime, endTime);
+        }, 1000);
+      } else {
+        this.isShowTimer = false;
+      }
     },
     onLogin() {
       localStorage.loginTo = "/quest/bnb";
@@ -453,6 +494,30 @@ export default {
       this.$toast("Email binded successfully!");
       this.init();
     },
+    cutdonw(startTime, endTime) {
+      function num(n) {
+        if (n < 0) {
+          n = 0;
+        }
+        return n < 10 ? "0" + n : n;
+      }
+
+      let countDown = endTime - startTime;
+      if (countDown <= 0) {
+        clearInterval(this.timer);
+        this.isShowTimer = false;
+      }
+      let oDay = Math.floor(countDown / 1000 / 60 / 60 / 24);
+      let oHour = Math.floor((countDown / 1000 / 60 / 60) % 24);
+      let oMinute = Math.floor((countDown / 1000 / 60) % 60);
+      let oSecond = Math.floor((countDown / 1000) % 60);
+      return {
+        day: num(oDay),
+        hour: num(oHour),
+        minute: num(oMinute),
+        second: num(oSecond),
+      };
+    },
   },
 };
 </script>
@@ -490,6 +555,29 @@ export default {
           font-size: 16px;
           font-weight: 700;
           line-height: 20px; /* 125% */
+        }
+        &-btn-box {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          .time-out-box {
+            text-align: right;
+            color: #fff;
+            font-family: "DIN Alternate";
+            font-size: 16px;
+            font-weight: 700;
+            span {
+              margin: 0 4px;
+              font-size: 20px;
+            }
+            .time-num {
+              font-size: 16px;
+              padding: 4px;
+              margin: 0;
+              border-radius: 4px;
+              background: #039cff;
+            }
+          }
         }
       }
       &-bottom {
