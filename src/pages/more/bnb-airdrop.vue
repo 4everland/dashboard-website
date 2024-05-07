@@ -10,7 +10,7 @@
               src="/img/airDrop/back-arrow.svg"
               width="24"
               height="24"
-              @click="$router.push('/airdrop')"
+              @click="$router.push('/quest')"
               alt=""
             />
           </div>
