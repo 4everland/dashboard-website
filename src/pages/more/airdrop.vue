@@ -164,12 +164,17 @@ export default {
       userInfo: (s) => s.userInfo,
     }),
     addr() {
+      console.log(this.userInfo);
       if (Object.values(this.userInfo).length > 0) {
-        return (
-          this.userInfo.wallet.address.slice(0, 4) +
-          "..." +
-          this.userInfo.wallet.address.slice(-4)
-        );
+        if (this.userInfo.wallet) {
+          return (
+            this.userInfo.wallet.address.slice(0, 4) +
+            "..." +
+            this.userInfo.wallet.address.slice(-4)
+          );
+        } else {
+          return this.userInfo.username;
+        }
       }
       return "-";
     },
@@ -222,7 +227,6 @@ export default {
       try {
         if (!localStorage.token) return;
         const { data } = await fetchTaskCard();
-        console.log(data);
         this.info = data;
       } catch (error) {
         console.log(error);
