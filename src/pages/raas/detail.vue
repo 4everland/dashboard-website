@@ -112,19 +112,19 @@ export default {
       detailData: {},
       timeList: [
         {
-          label: "90 Days",
-          value: 90,
+          label: "93 Days",
+          value: 3,
           price: "1,500,000,000 LANDs≈$1.5k",
         },
         {
-          label: "185 Days",
-          value: 185,
+          label: "186 Days",
+          value: 6,
           price: "3,000,000,000 LANDs≈$3k",
         },
 
         {
-          label: "365 Days",
-          value: 365,
+          label: "372 Days",
+          value: 12,
           price: "6,000,000,000 LANDs≈$6k",
         },
       ],
