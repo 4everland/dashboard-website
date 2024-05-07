@@ -12,7 +12,7 @@
         <div class="airdrop-intro al-c space-btw">
           <div class="airdrop-desc">
             <div class="mb-2 fw-b text-white" style="font-size: 24px">
-              4EVERLAND Elite Quest
+              Elite Quest
             </div>
             <div class="fz-14">
               Welcome to the 4EVERLAND Elite Quest, your go-to destination for
@@ -95,7 +95,7 @@
             earn points!
           </div>
           <div class="task-list mt-6">
-            <div class="task-item d-flex">
+            <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
                 <img
                   src="/img/airDrop/bnb-airdrop-activity.png"
@@ -104,10 +104,7 @@
                 />
               </div>
               <div class="pa-6 task-desc">
-                <div
-                  class="fz-20 fw-b cursor-p text-white"
-                  @click="$router.push('/airdrop/bnb')"
-                >
+                <div class="fz-20 fw-b cursor-p text-white" @click="handleBnB">
                   BNB CHAIN AIRDROP ALLIANCE PROGRAM
                 </div>
                 <div class="fz-14 mt-4">
@@ -118,10 +115,22 @@
                   Chain (BSC) and opBNB.
                 </div>
                 <div class="mt-8 al-c space-btw">
-                  <div class="reward fz-20 fw-b">15 million points</div>
+                  <div class="reward fz-20 fw-b">15 Million Points</div>
                   <v-btn color="#039CFF" @click="handleBnB">
                     <span class="fw-b" style="color: #fff">Let's Go</span>
                   </v-btn>
+                </div>
+              </div>
+            </div>
+            <div class="task-item d-flex mb-4">
+              <div class="pa-6 task-img-wrap">
+                <img src="/img/airDrop/commingsoon.png" width="100%" alt="" />
+              </div>
+              <div class="pa-6 task-desc">
+                <div class="fz-20 fw-b cursor-p text-white">TO BE REVEALED</div>
+                <div class="fz-14 mt-4">
+                  More thrilling activities coming your way soon. Stay tuned for
+                  updates!
                 </div>
               </div>
             </div>
@@ -206,7 +215,7 @@ export default {
       this.scrollTop = e.target.scrollTop;
     },
     handleBnB() {
-      this.$router.push("/airdrop/bnb");
+      this.$router.push("/quest/bnb");
     },
 
     async getInfo() {
@@ -243,6 +252,7 @@ export default {
       border-bottom: 1px solid #3a3d43;
       .airdrop-desc {
         flex: 1;
+        margin-right: 60px;
       }
       .airdrop-card-container {
         position: relative;
@@ -306,6 +316,9 @@ export default {
     padding: 0px 16px !important;
     .airdrop-card-container {
       width: 100% !important;
+    }
+    .airdrop-desc {
+      margin-right: 0 !important;
     }
   }
   .airdrop-intro {

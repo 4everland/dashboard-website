@@ -21,8 +21,11 @@
         >
         </e-team-avatar>
       </v-btn>
-      <v-list class="cursor-p">
-        <v-list-item @click="onLogout">Logout</v-list-item>
+      <v-list class="cursor-p menu-list">
+        <v-list-item class="menu-item" @click="onLogout">
+          <img src="/img/airDrop/logout.svg" width="24" class="mr-2" alt="" />
+          <span>Logout</span>
+        </v-list-item>
       </v-list>
     </e-menu>
     <v-btn v-else color="#039CFF" @click="onLogin">
@@ -74,6 +77,15 @@ export default {
 }
 .airdrop-header.transparent {
   background: transparent;
+}
+.menu-list {
+  background: #000;
+  border-radius: 4px;
+  box-shadow: 0px 4px 8px 0px rgba(14, 14, 44, 0.15);
+}
+.menu-item {
+  border-radius: 4px !important;
+  color: #fff !important;
 }
 @media screen and (max-width: 768px) {
   .airdrop-header {
