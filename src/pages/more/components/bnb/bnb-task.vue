@@ -559,6 +559,7 @@ export default {
         &-btn-box {
           display: flex;
           align-items: center;
+          flex-wrap: wrap;
           gap: 16px;
           .time-out-box {
             text-align: right;
