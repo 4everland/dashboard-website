@@ -1,19 +1,17 @@
 <template>
   <div style="background: #000">
     <div class="airdrop" @scroll="onScroll">
-      <div>
-        <img
-          class="airdrop-bg"
-          width="100%"
-          src="/img/airDrop/bnb-airdrop-bg.png"
-          alt=""
-        />
-      </div>
+      <img
+        class="airdrop-bg"
+        width="100%"
+        src="/img/airDrop/bnb-airdrop-bg.png"
+        alt=""
+      />
       <nav-header :scrollTop="scrollTop"></nav-header>
       <div class="airdrop-body">
         <div class="airdrop-intro al-c space-btw">
           <div class="airdrop-desc">
-            <div class="mb-2 fw-b" style="font-size: 24px">
+            <div class="mb-2 fw-b text-white" style="font-size: 24px">
               4EVERLAND Elite Quest
             </div>
             <div class="fz-14">
@@ -30,7 +28,9 @@
               <div class="card-title fw-b">MEMBERS PROFILE</div>
               <div class="al-c space-btw">
                 <div class="flex-1">
-                  <div class="fw-b" style="font-size: 24px">{{ addr }}</div>
+                  <div class="fw-b text-white" style="font-size: 24px">
+                    {{ addr }}
+                  </div>
                   <div class="bind-type mt-2">
                     <img
                       :src="
@@ -62,15 +62,15 @@
                   <div class="d-flex al-end space-btw">
                     <div>
                       <div class="fz-12">Points</div>
-                      <div class="fw-b fz-20">{{ points }}</div>
+                      <div class="fw-b fz-20 text-white">{{ points }}</div>
                     </div>
                     <div>
                       <div class="fz-12">Tasks</div>
-                      <div class="fw-b fz-20">{{ tasks }}</div>
+                      <div class="fw-b fz-20 text-white">{{ tasks }}</div>
                     </div>
                     <div>
                       <div class="fz-12">Ranking</div>
-                      <div class="fw-b fz-20">{{ rank }}</div>
+                      <div class="fw-b fz-20 text-white">{{ rank }}</div>
                     </div>
                   </div>
                 </div>
@@ -89,7 +89,7 @@
         </div>
 
         <div class="airdrop-task mt-10">
-          <div class="fw-b" style="font-size: 24px">Campaigns</div>
+          <div class="fw-b text-white" style="font-size: 24px">Campaigns</div>
           <div class="mt-2 fz-14">
             Check the campaign details, complete the corresponding tasks, and
             earn points!
@@ -104,7 +104,12 @@
                 />
               </div>
               <div class="pa-6 task-desc">
-                <div class="fz-20 fw-b">BNB CHAIN AIRDROP ALLIANCE PROGRAM</div>
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="$router.push('/airdrop/bnb')"
+                >
+                  BNB CHAIN AIRDROP ALLIANCE PROGRAM
+                </div>
                 <div class="fz-14 mt-4">
                   The BNB Chain Airdrop Alliance Program serves as a gesture of
                   gratitude towards the supportive BNB Chain community. Through
@@ -219,6 +224,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.text-white {
+  color: #fff;
+}
 .airdrop {
   height: 100vh;
   margin: 0 auto;
@@ -228,8 +236,7 @@ export default {
   .airdrop-body {
     max-width: 1440px;
     margin: 0 auto;
-
-    color: #fff;
+    color: #f1f5f9;
     padding: 0px 48px;
     .airdrop-intro {
       padding: 12px 0 64px 0;
@@ -253,6 +260,7 @@ export default {
 
           .card-title {
             font-size: 28px;
+            color: #fff;
           }
           .card-avatar {
             object-fit: cover;
@@ -287,6 +295,9 @@ export default {
 @media screen and (max-width: 768px) {
   .airdrop-bg {
     margin-top: 54px;
+
+    height: 200px;
+    object-fit: cover;
   }
   .airdrop-header {
     padding: 12px 16px !important;

@@ -128,5 +128,8 @@ export default {
       padding: 12px !important;
     }
   }
+  .link-btn {
+    margin-top: 20px;
+  }
 }
 </style>
