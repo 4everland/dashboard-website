@@ -26,6 +26,7 @@
                     item.info.taskStatus == 'ON_GOING'
                   "
                   class="cursor-ban"
+                  elevation="0"
                   style="color: #fff"
                   color="rgba(255, 255, 255, 0.25)"
                   @click.stop="
@@ -39,6 +40,7 @@
                   v-if="item.info.taskStatus == 'CLAIM'"
                   style="color: #fff"
                   color="#039CFF"
+                  elevation="0"
                   @click.stop="onClaim(item)"
                   >Claim</v-btn
                 >
@@ -46,6 +48,7 @@
                   v-if="item.info.taskStatus == 'COMPLETED'"
                   class="cursor-ban"
                   style="color: #fff"
+                  elevation="0"
                   color="rgba(255, 255, 255, 0.25)"
                   @click.stop="
                     (e) => {
@@ -65,6 +68,7 @@
                   v-if="item.info.taskStatus == 'DENY'"
                   class="cursor-ban"
                   style="color: #fff"
+                  elevation="0"
                   color="rgba(255, 255, 255, 0.25)"
                   @click.stop="
                     (e) => {
@@ -77,7 +81,7 @@
               </div>
             </template>
             <template v-else>
-              <v-btn color="#039CFF" @click.stop="onLogin">
+              <v-btn elevation="0" color="#039CFF" @click.stop="onLogin">
                 <span class="fw-b" style="color: #fff"> Login</span></v-btn
               >
             </template>
@@ -124,32 +128,67 @@
                       </div>
                     </div>
                     <div>
-                      <v-btn
+                      <div
                         v-if="
                           it.info.taskStatus == 'COMPLETED' ||
                           it.info.taskStatus == 'DONE_TO_STAY'
                         "
-                        class="cursor-ban"
-                        style="color: #fff"
-                        color="rgba(255, 255, 255, 0.05)"
-                        min-width="96px"
                       >
-                        <v-img
-                          class="mr-1"
-                          max-height="16"
-                          max-width="16"
-                          src="@/assets/imgs/more/check-circle.svg"
-                        ></v-img>
-                        {{ it.info.buttonName || it.disBtnTetx }}</v-btn
-                      >
-                      <v-btn
-                        v-else
-                        outlined
-                        min-width="96px"
-                        color="#039CFF"
-                        @click.stop="onNext(it)"
-                        >{{ it.btnName }}</v-btn
-                      >
+                        <v-btn
+                          v-if="$vuetify.breakpoint.smAndDown"
+                          elevation="0"
+                          min-width="32"
+                          height="32"
+                          class="cursor-ban pa-0"
+                          style="color: #fff"
+                          color="rgba(255, 255, 255, 0.05)"
+                        >
+                          <v-img
+                            max-height="16"
+                            max-width="16"
+                            src="@/assets/imgs/more/check-circle.svg"
+                          ></v-img>
+                        </v-btn>
+                        <v-btn
+                          v-else
+                          elevation="0"
+                          class="cursor-ban"
+                          style="color: #fff"
+                          color="rgba(255, 255, 255, 0.05)"
+                          min-width="96px"
+                        >
+                          <v-img
+                            class="mr-1"
+                            max-height="16"
+                            max-width="16"
+                            src="@/assets/imgs/more/check-circle.svg"
+                          ></v-img>
+                          {{ it.info.buttonName || it.disBtnTetx }}</v-btn
+                        >
+                      </div>
+                      <div v-else>
+                        <v-btn
+                          v-if="$vuetify.breakpoint.smAndDown"
+                          elevation="0"
+                          class="pa-0"
+                          outlined
+                          min-width="32"
+                          height="32"
+                          color="#039CFF"
+                          @click.stop="onNext(it)"
+                        >
+                          <v-icon size="16">mdi-arrow-right</v-icon>
+                        </v-btn>
+                        <v-btn
+                          v-else
+                          elevation="0"
+                          outlined
+                          min-width="96px"
+                          color="#039CFF"
+                          @click.stop="onNext(it)"
+                          >{{ it.btnName }}</v-btn
+                        >
+                      </div>
                     </div>
                   </div>
                 </v-col>
