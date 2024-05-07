@@ -544,36 +544,36 @@ export default {
       }
     },
 
-    async usdc2eth() {
-      if (this.usdcAmount.eq(BigNumber.from("0"))) {
-        this.ethAmount = BigNumber.from("0");
-        return;
-      }
-      if (this.chainId == 534352) {
-        this.ethAmount = parseEther(
-          (this.usdcAmount.toNumber() / 2350).toFixed(18)
-        );
-      } else {
-        const quoter = IQuoter__factory.connect(
-          "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
-          this.signer
-        );
-        const path = solidityPack(
-          ["address", "uint24", "address"],
-          [
-            "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // usdc addr
-            500, //
-            this.coinAddr,
-          ]
-        );
-        const res = await quoter.callStatic.quoteExactOutput(
-          path,
-          parseUnits(this.usdcAmount.toString(), 6)
-        );
-        console.log(formatEther(res));
-        this.ethAmount = res;
-      }
-    },
+    // async usdc2eth() {
+    //   if (this.usdcAmount.eq(BigNumber.from("0"))) {
+    //     this.ethAmount = BigNumber.from("0");
+    //     return;
+    //   }
+    //   if (this.chainId == 534352) {
+    //     this.ethAmount = parseEther(
+    //       (this.usdcAmount.toNumber() / 2350).toFixed(18)
+    //     );
+    //   } else {
+    //     const quoter = IQuoter__factory.connect(
+    //       "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+    //       this.signer
+    //     );
+    //     const path = solidityPack(
+    //       ["address", "uint24", "address"],
+    //       [
+    //         "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // usdc addr
+    //         500, //
+    //         this.coinAddr,
+    //       ]
+    //     );
+    //     const res = await quoter.callStatic.quoteExactOutput(
+    //       path,
+    //       parseUnits(this.usdcAmount.toString(), 6)
+    //     );
+    //     console.log(formatEther(res));
+    //     this.ethAmount = res;
+    //   }
+    // },
     async getBlastEthUnitPrice() {
       let plugin = window.ethereum ? window.ethereum : window.okxwallet;
       try {
@@ -584,7 +584,7 @@ export default {
           signer
         );
         this.blastUnitPrice = await BlastOracleLand.callStatic.fetchPrice();
-        console.log(formatEther(this.blastUnitPrice));
+        // console.log(formatEther(this.blastUnitPrice));
       } catch (error) {
         console.log(error);
       }

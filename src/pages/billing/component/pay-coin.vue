@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="fz-16 mt-6 mb-4">Choose Token</h2>
-    <div style="min-height: 200px; padding-bottom: 100px; overflow: auto">
+    <div style="height: 100%; margin-bottom: 100px; overflow: auto">
       <div
         @click="onSelect(it.label)"
         class="coin-label py-2 px-4 cursor-p d-flex space-btw mr-2 mb-2"

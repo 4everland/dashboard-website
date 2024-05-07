@@ -25,14 +25,18 @@
               alt=""
             />
           </div>
-          <div class="pa-6 task-desc flex-1">
-            <div class="fz-20 fw-b">BNB CHAIN AIRDROP ALLIANCE PROGRAM</div>
-            <div class="fz-14 mt-4">
-              Introducing the BNB Chain Airdrop Alliance Program, tailored for
-              retroactive users on BSC and opBNB! Get set to enjoy the benefits!
+          <div class="pa-6 task-desc flex-1 h-flex space-btw">
+            <div>
+              <div class="fz-20 fw-b">BNB CHAIN AIRDROP ALLIANCE PROGRAM</div>
+              <div class="fz-14 mt-4">
+                Introducing the BNB Chain Airdrop Alliance Program, tailored for
+                retroactive users on BSC and opBNB! Get set to enjoy the
+                benefits!
+              </div>
             </div>
-            <div class="mt-10 link-btn">
+            <div class="link-btn">
               <v-btn
+                height="40"
                 outlined
                 color="#fff"
                 target="blank"
