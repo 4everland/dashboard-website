@@ -10,7 +10,7 @@
               src="/img/airDrop/back-arrow.svg"
               width="24"
               height="24"
-              @click="$router.push('/airdrop')"
+              @click="$router.push('/quest')"
               alt=""
             />
           </div>
@@ -40,7 +40,7 @@
                 outlined
                 color="#fff"
                 target="blank"
-                href="https://www.google.com"
+                href="https://medium.com/4everland/up-for-grabs-15-000-000-4ever-points-allocated-for-the-bnb-chain-airdrop-alliance-program-192a0153de9a"
               >
                 Understand the details
                 <img
