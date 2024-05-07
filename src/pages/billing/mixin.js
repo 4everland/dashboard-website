@@ -31,6 +31,7 @@ import {
   scrollETH,
   scrollRecharge,
   blastRecharge,
+  opBNBRecharge,
 } from "../../plugins/pay/contracts/contracts-addr";
 import { mapGetters } from "vuex";
 export default {
@@ -64,6 +65,7 @@ export default {
             usdc: ChapelUSDC,
             usdt: ChapelUSDT,
             dai: ChapelDAI,
+            bnb: "",
           },
           landRecharge: ChapelLandRecharge,
           chainId: this.$inDev ? 97 : 56,
@@ -117,6 +119,14 @@ export default {
           },
           landRecharge: blastRecharge,
           chainId: 81457,
+        },
+        {
+          name: "opBNB",
+          coin: {
+            bnb: "",
+          },
+          landRecharge: opBNBRecharge,
+          chainId: this.$inDev ? 5611 : 204,
         },
         {
           name: "everPay",

@@ -74,6 +74,12 @@ export default {
         //   chainId: this.$inDev ? 11155111 : 1,
         // },
         {
+          Label: "opBNB",
+          name: "opBNB",
+          img: "/img/svg/billing/ic-opbnb-test.svg",
+          chainId: this.$inDev ? 5611 : 204,
+        },
+        {
           label: "BSC",
           name: "BSC",
           img: "/img/svg/billing/ic-bsc.png",

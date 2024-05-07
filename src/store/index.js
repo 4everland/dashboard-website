@@ -190,7 +190,6 @@ const store = new Vuex.Store({
 
     async getWalletAccount({ getters, commit }) {
       try {
-        console.log(getters.walletObj);
         const accounts = await getters.walletObj.request({
           method: "eth_requestAccounts",
         });
