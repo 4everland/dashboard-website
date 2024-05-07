@@ -1,12 +1,14 @@
 <template>
   <div style="background: #000">
     <div class="airdrop" @scroll="onScroll">
-      <img
-        class="airdrop-bg"
-        width="100%"
-        src="/img/airDrop/bnb-airdrop-bg.png"
-        alt=""
-      />
+      <div>
+        <img
+          class="airdrop-bg"
+          width="100%"
+          src="/img/airDrop/bnb-airdrop-bg.png"
+          alt=""
+        />
+      </div>
       <nav-header :scrollTop="scrollTop"></nav-header>
       <div class="airdrop-body">
         <div class="airdrop-intro al-c space-btw">
@@ -34,7 +36,7 @@
                       :src="
                         x ? '/img/airDrop/x-active.svg' : '/img/airDrop/x.svg'
                       "
-                      width="14"
+                      width="24"
                       alt=""
                     />
                     <img
@@ -43,17 +45,17 @@
                           ? '/img/airDrop/dc-active.svg'
                           : '/img/airDrop/dc.svg'
                       "
-                      class="mx-3"
-                      width="14"
+                      class="mx-2"
+                      width="24"
                       alt=""
                     />
                     <img
                       :src="
-                        tg
-                          ? '/img/airDrop/tg-active.svg'
-                          : '/img/airDrop/tg.svg'
+                        onChain
+                          ? '/img/airDrop/auth-active.svg'
+                          : '/img/airDrop/auth.svg'
                       "
-                      width="14"
+                      width="24"
                       alt=""
                     />
                   </div>
@@ -111,7 +113,7 @@
                   Chain (BSC) and opBNB.
                 </div>
                 <div class="mt-8 al-c space-btw">
-                  <div class="reward fz-20 fw-b">5 million points reward</div>
+                  <div class="reward fz-20 fw-b">15 million points</div>
                   <v-btn color="#039CFF" @click="handleBnB">
                     <span class="fw-b" style="color: #fff">Let's Go</span>
                   </v-btn>
@@ -184,6 +186,9 @@ export default {
     tg() {
       return this.info.medals.includes("TELEGRAM");
     },
+    onChain() {
+      return this.info.medals.includes("ON_CHAIN");
+    },
   },
   components: {
     navHeader,
@@ -215,13 +220,15 @@ export default {
 
 <style lang="scss" scoped>
 .airdrop {
-  max-width: 1440px;
   height: 100vh;
   margin: 0 auto;
   overflow: scroll;
   background: #111214;
 
   .airdrop-body {
+    max-width: 1440px;
+    margin: 0 auto;
+
     color: #fff;
     padding: 0px 48px;
     .airdrop-intro {
@@ -242,6 +249,7 @@ export default {
           border-radius: 16px;
           background: url("/img/airDrop/airdrop-card.png") no-repeat;
           background-size: 100% 100%;
+          backdrop-filter: blur(10px);
 
           .card-title {
             font-size: 28px;
