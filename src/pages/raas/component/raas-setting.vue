@@ -51,7 +51,7 @@
                           v-model="xId"
                           outlined
                           prefix="Twitter.com/"
-                          placeholder="Please enter your X handle"
+                          placeholder="X handle"
                           dense
                         >
                         </v-text-field>

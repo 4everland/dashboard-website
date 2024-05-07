@@ -212,23 +212,28 @@ export default {
       this.purchasePlan = item.value;
     },
     async addWallet() {
-      window.ethereum &&
-        window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: "0x" + this.detailData.chainId.toString(16),
-              chainName: this.detailData.chainName,
-              nativeCurrency: {
-                name: this.detailData.detail.gasToken,
-                symbol: this.detailData.detail.gasToken,
-                decimals: 18,
+      try {
+        const chainId = Number(this.detailData.chainId);
+        window.ethereum &&
+          (await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: "0x" + chainId.toString(16),
+                chainName: this.detailData.chainName,
+                nativeCurrency: {
+                  name: this.detailData.detail.gasToken,
+                  symbol: this.detailData.detail.gasToken,
+                  decimals: 18,
+                },
+                rpcUrls: [this.detailData.detail.rpc],
+                blockExplorerUrls: [this.detailData.detail.blockExplorer],
               },
-              rpcUrls: [this.detailData.detail.rpc],
-              blockExplorerUrls: [this.detailData.detail.blockExplorer],
-            },
-          ],
-        });
+            ],
+          }));
+      } catch (error) {
+        this.$alert(error.message);
+      }
     },
     async onRenew() {
       this.onLoading = true;
@@ -236,6 +241,7 @@ export default {
       try {
         await sendRenew(id, { purchasePlan: this.purchasePlan });
         this.$toast("Successfully.");
+        this.getDetail();
         this.renewDialog = false;
         if (this.$refs.rassTab.curIdx == 3) {
           this.$refs.rassTab.$children[2].getList();
