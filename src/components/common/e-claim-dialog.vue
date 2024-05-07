@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!/airdrop/g.test($route.path)">
+  <div v-if="!/quest/g.test($route.path)">
     <v-dialog
       v-model="firstRechargeDialog"
       max-width="920"

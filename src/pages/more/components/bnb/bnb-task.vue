@@ -306,7 +306,7 @@ export default {
       console.log(this.taskList);
     },
     onLogin() {
-      localStorage.loginTo = "/airdrop/bnb";
+      localStorage.loginTo = "/quest/bnb";
       this.$router.push("/login");
     },
     onTaskShow(item) {
