@@ -237,6 +237,10 @@ export default {
     banners() {
       return [
         {
+          img: "https://overview-banner.4everland.store/EliteQuest.png",
+          to: "/quest",
+        },
+        {
           img: "https://overview-banner.4everland.store/land.png",
           href: "https://medium.com/4everland/embracing-efficiency-and-innovation-introducing-land-as-the-unified-payment-unit-on-4everland-3a935f6b0d9e",
         },

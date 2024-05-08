@@ -140,12 +140,18 @@ export default {
 
       if (info.uid) {
         list.unshift({
-          preImg: "/img/svg/header/icon_hot.svg",
+          // preImg: "/img/svg/header/icon_hot.svg",
           imgCls: "mr-2",
           width: 16,
           to: "/task-hub",
           label: "Task Hub",
           badge: this.activedClaim,
+        });
+        list.unshift({
+          imgCls: "mr-2",
+          width: 16,
+          to: "/quest",
+          label: "Elite Quest",
         });
 
         list.push({
