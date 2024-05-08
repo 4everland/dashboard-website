@@ -16,7 +16,7 @@
             </div>
             <div class="fz-14">
               Welcome to the 4EVERLAND Elite Quest, your go-to destination for
-              collaborative activities that reward you with 4EVERLAND Points! By
+              collaborative activities that reward you with $4EVER Points! By
               working together with our esteemed alliance partners, we are
               excited to offer a series of enriching experiences designed to
               engage and reward our community members.
