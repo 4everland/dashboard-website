@@ -114,18 +114,18 @@ export default {
         {
           label: "93 Days",
           value: 3,
-          price: "1,500,000,000 LANDs≈$1.5k",
+          price: "",
         },
         {
           label: "186 Days",
           value: 6,
-          price: "3,000,000,000 LANDs≈$3k",
+          price: "",
         },
 
         {
           label: "372 Days",
           value: 12,
-          price: "6,000,000,000 LANDs≈$6k",
+          price: "",
         },
       ],
       list: [
@@ -172,6 +172,17 @@ export default {
       this.detailData = data;
       this.list[0].props.infoData = data;
       this.list[2].props.infoData = data;
+      const renewLand = Number(data.renewLand) / 1e18;
+      this.timeList.map((item) => {
+        let land = item.value * renewLand;
+        let dollar = land / 1e6;
+        if (dollar > 1000) {
+          dollar = dollar / 1e3 + "k";
+        }
+        item.price = `${land
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} LANDs≈$${dollar}`;
+      });
     },
     formatExpirationAt(expirationAt) {
       const now = new Date().getTime();
