@@ -70,7 +70,7 @@
             class="confirm-btn fw-b cursor-p"
             v-ripple
             :class="ethAmount.toString() == '0' ? 'disabled' : ''"
-            v-else-if="coinSelect == 'ETH'"
+            v-else-if="coinSelect == 'ETH' || coinSelect == 'BNB'"
             @click="handleRechargeLand"
           >
             Confirm
@@ -129,13 +129,8 @@ import {
   parseEther,
   formatEther,
   formatUnits,
-  solidityPack,
 } from "ethers/lib/utils";
-import {
-  ICoin__factory,
-  IQuoter__factory,
-  BlastOracleLand__factory,
-} from "@4everland-contracts";
+import { ICoin__factory, BlastOracleLand__factory } from "@4everland-contracts";
 import { getProvider } from "@/plugins/ens";
 import uidToEuid from "@/utils/uid2euid";
 import mixin from "./mixin";
@@ -189,7 +184,7 @@ export default {
       return this.allowance.gte(this.payAmounts);
     },
     displayPrice() {
-      if (this.coinSelect == "ETH") {
+      if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
         return (formatEther(this.ethAmount) * 1).toFixed(5);
       } else {
         return this.usdcAmount.toString();
@@ -221,7 +216,6 @@ export default {
     },
 
     curChainInfo() {
-      console.log(this.chainId);
       return this.chainAddrs.find((it) => it.chainId == this.chainId);
     },
     landRechargeAddr() {
@@ -286,6 +280,21 @@ export default {
           this.getBlastEthUnitPrice,
           20000
         );
+      } else if (
+        chainId == 56 ||
+        chainId == 97 ||
+        chainId == 204 ||
+        chainId == 5611
+      ) {
+        this.coinSelect = "BNB";
+        await this.getBlastEthUnitPrice();
+        if (this.blastUnitPriceTimer) {
+          clearInterval(this.blastUnitPriceTimer);
+        }
+        this.blastUnitPriceTimer = setInterval(
+          this.getBlastEthUnitPrice,
+          20000
+        );
       } else {
         if (this.blastUnitPriceTimer) {
           clearInterval(this.blastUnitPriceTimer);
@@ -297,7 +306,7 @@ export default {
       this.depositing = true;
       try {
         let receipt = "";
-        if (this.coinSelect == "ETH") {
+        if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
           if (!this.ethAmount) return;
           this.$loading();
           let tx = await this.LandRecharge.mintByETH(this.euid, {
@@ -318,7 +327,7 @@ export default {
         this.rechargeSuccess = true;
         this.transactionCache(receipt.transactionHash);
         this.$store.dispatch("checkOnChain");
-        if (this.coinSelect == "ETH") {
+        if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
           this.$router.push("/billing/records?tab=Deposit History");
         }
       } catch (error) {
@@ -375,8 +384,8 @@ export default {
     },
     async handleSelectCoin(val) {
       this.coinSelect = val;
-      if (this.coinSelect == "ETH") {
-        this.usdc2eth();
+      if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
+        this.getBlastEthUnitPrice();
       } else {
         await this.checkApproved();
       }
@@ -493,7 +502,9 @@ export default {
           .toString(),
         amount: this.usdcAmount.mul((1e18).toString()).toString(),
         originalValue:
-          this.coinSelect == "ETH" ? this.ethAmount.toString() : "",
+          this.coinSelect == "ETH" || this.coinSelect == "BNB"
+            ? this.ethAmount.toString()
+            : "",
         txHash,
         createdAt: +new Date() / 1e3,
         status: "2",
@@ -517,51 +528,47 @@ export default {
         this.usdcAmount = BigNumber.from("0");
         this.ethAmount = BigNumber.from("0");
       }
-      if (this.coinSelect == "ETH") {
+      if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
         debounce(() => {
-          if (this.chainId == 10) {
-            this.usdc2eth();
-          } else {
-            let value = this.usdcAmount
-              .mul((1e18).toString())
-              .mul((1e18).toString())
-              .div(this.blastUnitPrice);
-            this.ethAmount = value;
-          }
+          let value = this.usdcAmount
+            .mul((1e18).toString())
+            .mul((1e18).toString())
+            .div(this.blastUnitPrice);
+          this.ethAmount = value;
         });
       }
     },
 
-    async usdc2eth() {
-      if (this.usdcAmount.eq(BigNumber.from("0"))) {
-        this.ethAmount = BigNumber.from("0");
-        return;
-      }
-      if (this.chainId == 534352) {
-        this.ethAmount = parseEther(
-          (this.usdcAmount.toNumber() / 2350).toFixed(18)
-        );
-      } else {
-        const quoter = IQuoter__factory.connect(
-          "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
-          this.signer
-        );
-        const path = solidityPack(
-          ["address", "uint24", "address"],
-          [
-            "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // usdc addr
-            500, //
-            this.coinAddr,
-          ]
-        );
-        const res = await quoter.callStatic.quoteExactOutput(
-          path,
-          parseUnits(this.usdcAmount.toString(), 6)
-        );
-        console.log(formatEther(res));
-        this.ethAmount = res;
-      }
-    },
+    // async usdc2eth() {
+    //   if (this.usdcAmount.eq(BigNumber.from("0"))) {
+    //     this.ethAmount = BigNumber.from("0");
+    //     return;
+    //   }
+    //   if (this.chainId == 534352) {
+    //     this.ethAmount = parseEther(
+    //       (this.usdcAmount.toNumber() / 2350).toFixed(18)
+    //     );
+    //   } else {
+    //     const quoter = IQuoter__factory.connect(
+    //       "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+    //       this.signer
+    //     );
+    //     const path = solidityPack(
+    //       ["address", "uint24", "address"],
+    //       [
+    //         "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // usdc addr
+    //         500, //
+    //         this.coinAddr,
+    //       ]
+    //     );
+    //     const res = await quoter.callStatic.quoteExactOutput(
+    //       path,
+    //       parseUnits(this.usdcAmount.toString(), 6)
+    //     );
+    //     console.log(formatEther(res));
+    //     this.ethAmount = res;
+    //   }
+    // },
     async getBlastEthUnitPrice() {
       let plugin = window.ethereum ? window.ethereum : window.okxwallet;
       try {
@@ -572,7 +579,7 @@ export default {
           signer
         );
         this.blastUnitPrice = await BlastOracleLand.callStatic.fetchPrice();
-        console.log(formatEther(this.blastUnitPrice));
+        // console.log(formatEther(this.blastUnitPrice));
       } catch (error) {
         console.log(error);
       }
@@ -594,7 +601,6 @@ export default {
 .deposite-container {
   // height: 100%;
   min-height: 100%;
-
   align-items: stretch;
 }
 .deposite-control {

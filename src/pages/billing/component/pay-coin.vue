@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="fz-16 mt-6 mb-4">Choose Token</h2>
-    <div style="height: calc(100% - 168px); overflow: auto">
+    <div style="height: 100%; margin-bottom: 100px; overflow: auto">
       <div
         @click="onSelect(it.label)"
         class="coin-label py-2 px-4 cursor-p d-flex space-btw mr-2 mb-2"
@@ -130,6 +130,26 @@ export default {
             img: "/img/svg/pay/eth.svg",
           },
         ];
+      }
+
+      if (this.chainId == 5611 || this.chainId == 204) {
+        return [
+          {
+            label: "BNB",
+            showLabel: "BNB",
+            name: "BNB",
+            img: "/img/svg/pay/bnb.svg",
+          },
+        ];
+      }
+
+      if (this.chainId == 56 || this.chainId == 97) {
+        coinList.unshift({
+          label: "BNB",
+          showLabel: "BNB",
+          name: "BNB",
+          img: "/img/svg/pay/bnb.svg",
+        });
       }
       return coinList;
     },

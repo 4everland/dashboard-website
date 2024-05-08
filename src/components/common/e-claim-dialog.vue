@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!/quest/g.test($route.path)">
     <v-dialog
       v-model="firstRechargeDialog"
       max-width="920"
@@ -71,7 +71,7 @@
     <v-dialog
       v-model="showDialog"
       max-width="920"
-      content-class="claim-dialog "
+      content-class="claim-dialog"
       persistent
     >
       <div class="d-flex mint-content pos-r">
