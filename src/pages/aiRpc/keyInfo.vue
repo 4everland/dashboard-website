@@ -163,7 +163,7 @@
                   </td>
                   <td class="fz-14">{{ item.model }}</td>
                   <td class="fz-14">
-                    {{ item.inputTokens }} > {{ item.outputTokens }}
+                    {{ item.inputTokens }} —> {{ item.outputTokens }}
                   </td>
                   <td class="fz-14">
                     {{ $utils.formatLand(item.cost, false, false) }} LAND
