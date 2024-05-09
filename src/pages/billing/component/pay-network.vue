@@ -132,22 +132,18 @@ export default {
     };
   },
   created() {
-    let plugin = window.ethereum ? window.ethereum : window.okxwallet;
-
-    plugin.on("chainChanged", this.initSeleted);
+    this.walletObj.on("chainChanged", this.initSeleted);
     this.initSeleted();
   },
   beforeDestroy() {
-    let plugin = window.ethereum ? window.ethereum : window.okxwallet;
-    plugin.removeListener("accountsChanged", this.initSeleted);
+    this.walletObj.removeListener("accountsChanged", this.initSeleted);
   },
   methods: {
     initSeleted() {
-      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
       if (localStorage.isEverpay) {
         this.selected = 9999999;
       } else {
-        this.selected = parseInt(plugin.chainId);
+        this.selected = parseInt(this.walletObj.chainId);
       }
       this.$emit("onNetwork", this.selected);
     },
@@ -171,10 +167,8 @@ export default {
 
     async switchNet(id) {
       const chainId = "0x" + id.toString(16);
-      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
-
       try {
-        await plugin.request({
+        await this.walletObj.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
@@ -188,8 +182,6 @@ export default {
       }
     },
     async addChain(chainId, id) {
-      let plugin = window.ethereum ? window.ethereum : window.okxwallet;
-
       let params = {
         137: {
           chainId,
@@ -395,7 +387,7 @@ export default {
       }[id];
       if (!params) return;
       try {
-        await plugin.request(
+        await this.walletObj.request(
           {
             method: "wallet_addEthereumChain",
             params: [params],
@@ -404,6 +396,13 @@ export default {
         );
       } catch (error) {
         console.log("add chain err", error);
+      }
+    },
+  },
+  watch: {
+    selected(val) {
+      if (val == 9999999) {
+        this.$emit("onNetwork", val);
       }
     },
   },
