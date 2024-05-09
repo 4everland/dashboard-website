@@ -273,7 +273,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
 import mixin from "@/pages/more/mixin-register";
 import shareImg from "@/components/rewardHub/shareImg";
 import ScrollNum from "@/components/rewardHub/ScrollNum";
@@ -321,13 +321,13 @@ export default {
     this.init();
   },
   methods: {
-    ...mapActions(["checkClaim"]),
+    // ...mapActions(["checkClaim"]),
     async init() {
       // this.getPoints();
       this.getProgress();
       this.getDailyList();
       this.getBeginnerList();
-      this.checkClaim();
+      // this.checkClaim();
     },
     async getPoints() {
       const { data } = await this.$http.get("$auth/activities/point/overview");
