@@ -133,6 +133,12 @@ export default {
           type: "Zeta",
           value: null,
         },
+        {
+          name: "Optimism",
+          icon: require("/public/img/svg/billing/ic-optimism.svg"),
+          type: "Optimism",
+          value: null,
+        },
       ],
       toAddress: "",
       fee: "0",
@@ -496,6 +502,9 @@ export default {
         } else if (chainId == 7001) {
           zetaContract.setProvider(provider);
           this.contract = zetaContract;
+        } else if (chainId == 10) {
+          optimismContract.setProvider(provider);
+          this.contract = optimismContract;
         } else {
           ethContract.setProvider(provider);
           this.contract = ethContract;
