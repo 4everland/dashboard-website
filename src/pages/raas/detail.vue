@@ -238,7 +238,6 @@ export default {
       const provider = providers.find((provider) => {
         return provider.isMetaMask && Boolean(provider._events);
       });
-      console.log(provider);
       return provider;
     },
     async addWallet() {
@@ -261,6 +260,7 @@ export default {
               },
             ],
           }));
+        this.$toast("Successfully added network to your wallet");
       } catch (error) {
         this.$alert(error.message);
       }
