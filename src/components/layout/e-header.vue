@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState, mapActions } from "vuex";
 import Axios from "axios";
 
 export default {
@@ -115,7 +115,7 @@ export default {
       userInfo: (s) => s.userInfo,
       showProgress: (s) => s.showProgress,
       changelogNum: (s) => s.changelogNum,
-      // hasClaim: (s) => s.hasClaim,
+      hasClaim: (s) => s.hasClaim,
     }),
     ...mapGetters(["teamInfo"]),
     asMobile() {
@@ -199,9 +199,9 @@ export default {
       // });
       return list;
     },
-    // activedClaim() {
-    //   return this.hasClaim;
-    // },
+    activedClaim() {
+      return this.hasClaim;
+    },
   },
   watch: {
     userInfo() {
@@ -217,12 +217,12 @@ export default {
       });
     }
     this.getNewChagneLogNum();
-    // if (localStorage.token) {
-    //   this.checkClaim();
-    // }
+    if (localStorage.token) {
+      this.checkClaim();
+    }
   },
   methods: {
-    // ...mapActions(["checkClaim"]),
+    ...mapActions(["checkClaim"]),
     async getNewChagneLogNum() {
       const { data } = await Axios.get(
         "https://4ever-web.4everland.store/config/header.json"

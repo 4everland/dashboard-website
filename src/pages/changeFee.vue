@@ -63,6 +63,7 @@ import opBNBContract from "../plugins/pay/contracts/src-chain-contracts-opBNB";
 import polygonZkEVMContract from "../plugins/pay/contracts/src-chain-contracts-polygonZkEVM";
 import lineaContract from "../plugins/pay/contracts/src-chain-contracts-linea";
 import zetaContract from "../plugins/pay/contracts/src-chain-contracts-zeta";
+import optimismContract from "../plugins/pay/contracts/src-chain-contracts-optimismContract";
 
 import { Web3Provider } from "zksync-web3";
 
@@ -328,6 +329,27 @@ export default {
           },
           // blockExplorerUrls: [],
         },
+        534352: {
+          chainId,
+          chainName: "Scroll",
+          rpcUrls: ["https://rpc.scroll.io"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+        },
+        81457: {
+          chainId,
+          chainName: "Blast Mainnet",
+          rpcUrls: ["https://rpc.blast.io"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://blastscan.io"],
+        },
       }[id];
       if (!params) return;
       try {
@@ -351,6 +373,8 @@ export default {
       if (type == "PolygonZkEVM") return this.$inDev ? 1442 : 1101;
       if (type == "Linea") return this.$inDev ? 59140 : 59144;
       if (type == "Zeta") return 7001;
+      if (type == "Optimism") return 10;
+      if (type == "Blast") return this.$inDev ? 168587773 : 81457;
       return this.$inDev ? 5 : 1;
     },
     async handleChangeFee(chain, value) {
