@@ -32,14 +32,15 @@
       </div>
       <div>
         <v-btn
+          v-if="provider"
           elevation="0"
           outlined
           width="165"
           @click="addWallet"
           class="mr-2"
         >
-          <v-icon class="mr-2"> mdi-wallet-plus-outline </v-icon>Add to
-          Wallet</v-btn
+          <v-img src="@/assets/imgs/metamask.svg" class="mr-2"></v-img>
+          Add to Wallet</v-btn
         >
         <v-btn
           elevation="0"
@@ -157,12 +158,15 @@ export default {
           comp: "raas-Billings",
         },
       ],
+      provider: undefined,
     };
   },
   created() {
     this.getDetail();
   },
-  mounted() {},
+  mounted() {
+    this.provider = this.getProvider();
+  },
 
   methods: {
     parseTime,
@@ -222,11 +226,26 @@ export default {
     chooseTime(item) {
       this.purchasePlan = item.value;
     },
+
+    getProvider() {
+      if (!("ethereum" in window && window.ethereum)) {
+        return;
+      }
+      const providers = Array.isArray(window.ethereum.providers)
+        ? window.ethereum.providers
+        : [window.ethereum];
+
+      const provider = providers.find((provider) => {
+        return provider.isMetaMask && Boolean(provider._events);
+      });
+      console.log(provider);
+      return provider;
+    },
     async addWallet() {
       try {
         const chainId = Number(this.detailData.chainId);
-        window.ethereum &&
-          (await window.ethereum.request({
+        this.provider &&
+          (await this.provider.request({
             method: "wallet_addEthereumChain",
             params: [
               {
