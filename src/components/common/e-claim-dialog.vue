@@ -212,6 +212,7 @@ import {
   lineaRecharge,
   blastRecharge,
   optimismRecharge,
+  GoerliLandRecharge,
   MumbaiLandRecharge,
   opBNBRecharge,
 } from "../../plugins/pay/contracts/contracts-addr";
@@ -289,7 +290,6 @@ export default {
           name: "zkSync Era",
           icon: require("/public/img/svg/logo-no-letters.svg"),
           type: "zkSyncV2",
-          tips: "Please ensure that you have sufficient ETH inzkSync Era. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
           contractAddr: zkSyncLandRecharge,
         },
         {
@@ -323,12 +323,12 @@ export default {
           type: "Optimism",
           contractAddr: optimismRecharge,
         },
-        // {
-        //   name: "Ethereum",
-        //   icon: require("/public/img/svg/billing/ic-ethereum.svg"),
-        //   type: "Ethereum",
-        //   contractAddr: ''
-        // },
+        {
+          name: "Ethereum",
+          icon: require("/public/img/svg/billing/ic-ethereum.svg"),
+          type: "Ethereum",
+          contractAddr: GoerliLandRecharge,
+        },
         {
           name: "Linea",
           icon: require("/public/img/svg/billing/ic-linea.svg"),

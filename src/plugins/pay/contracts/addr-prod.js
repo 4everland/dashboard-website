@@ -6,12 +6,12 @@ export const GoerliRpc = "https://rpc.ankr.com/polygon";
 export const GoerliUSDC = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
 export const GoerliUSDT = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
 export const GoerliDAI = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
-export const GoerliLandRecharge = "0xCbE56b00d173A26a5978cE90Db2E33622fD95A28";
+export const GoerliLandRecharge = "0xE663E0E3f9b034E9911d4746760efE00115D11E5";
 
 export const GoerliBridge = "0x5427FEFA711Eff984124bFBB1AB6fbf5E3DA1820";
 export const GoerliSrcChainPayment =
   "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
-export const GoerliRegister = "0x5942d5f3a59EbCEa5f82deE35716Eb1B18C19D71";
+export const GoerliRegister = "0xE663E0E3f9b034E9911d4746760efE00115D11E5";
 
 // src chain bsc
 export const ChapelUSDC = "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d";
