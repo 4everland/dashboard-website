@@ -179,13 +179,14 @@ export default {
       const renewLand = Number(data.renewLand) / 1e18;
       this.timeList.map((item) => {
         let land = item.value * renewLand;
+        let landText = land / 1e6;
         let dollar = land / 1e6;
         if (dollar > 1000) {
           dollar = dollar / 1e3 + "k";
         }
-        item.price = `${land
+        item.price = `${landText
           .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")} LANDs≈$${dollar}`;
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}M LANDs≈$${dollar}`;
       });
     },
     formatExpirationAt(expirationAt) {

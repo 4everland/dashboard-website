@@ -25,9 +25,11 @@
             <div class="bill-plan">
               <span>
                 {{
-                  (item.land / 1e18)
+                  (item.land / 1e18 / 1e6)
                     .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " LAND"
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                  "M" +
+                  " LAND"
                 }}</span
               >
             </div>

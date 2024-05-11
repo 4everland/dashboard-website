@@ -359,18 +359,18 @@ export default {
         {
           label: "93 Days",
           value: 3,
-          price: "1,500,000,000 LANDs≈$1.5k",
+          price: "1,500M LANDs≈$1.5k",
         },
         {
           label: "186 Days",
           value: 6,
-          price: "3,000,000,000 LANDs≈$3k",
+          price: "3,000M LANDs≈$3k",
         },
 
         {
           label: "372 Days",
           value: 12,
-          price: "6,000,000,000 LANDs≈$6k",
+          price: "6,000M LANDs≈$6k",
         },
       ],
       includeList: [
