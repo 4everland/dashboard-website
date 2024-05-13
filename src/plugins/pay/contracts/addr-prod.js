@@ -75,7 +75,7 @@ export const scrollETH = "0x5300000000000000000000000000000000000004";
 export const scrollRecharge = "0xfE99cdC31A0D588AB940aB7143533242AEf5276d";
 
 // dst chain
-export const MumbaiRegister = "0x12bCabE468A0CDF439750154d77216Dbb4653fd9";
+export const MumbaiRegister = "0x9b6f144A0aAd126a1AA97EeE2061277B39b8B9d8";
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";
 export const MumbaiRouter = "0x44DDDef9c1fA0Ed35f64f98062E505a968AaBa9C";
 export const MumbaiGovernance = "0xB35F070CC9E3503DCc7AED42E4ECbaA023975382";
@@ -102,4 +102,4 @@ export const MumbaiUSDC = "0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359";
 export const MumbaiUSDCE = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
 export const MumbaiUSDT = "0xc2132D05D31c914a87C6611C10748AEb04B58e8F";
 export const MumbaiDAI = "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063";
-export const MumbaiLandRecharge = "0x12bCabE468A0CDF439750154d77216Dbb4653fd9";
+export const MumbaiLandRecharge = "0x9b6f144A0aAd126a1AA97EeE2061277B39b8B9d8";
