@@ -55,9 +55,9 @@ export const lineaRecharge = "0xfE99cdC31A0D588AB940aB7143533242AEf5276d";
 // zeta-testnet
 export const zetaRegister = "0xA6D3027F572BB7e9E141465640bb736ee78a5867";
 
-export const blastRegister = "0xE663E0E3f9b034E9911d4746760efE00115D11E5";
+export const blastRegister = "0x8873759fC064fB23651A0739a95Bdc9e00d3F00a";
 export const blastETH = "0x0000000000000000000000000000000000000000";
-export const blastRecharge = "0xE663E0E3f9b034E9911d4746760efE00115D11E5";
+export const blastRecharge = "0x8873759fC064fB23651A0739a95Bdc9e00d3F00a";
 
 // optimism chain
 export const optimisUSDC = "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85";
