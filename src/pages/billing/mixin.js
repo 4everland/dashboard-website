@@ -55,6 +55,7 @@ export default {
             usdc: GoerliUSDC,
             usdt: GoerliUSDT,
             dai: GoerliDAI,
+            eth: "",
           },
           landRecharge: GoerliLandRecharge,
           chainId: this.$inDev ? 11155111 : 1,

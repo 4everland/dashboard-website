@@ -112,7 +112,7 @@ export default {
           img: "/img/svg/pay/usdc.svg",
         });
       }
-      if (this.chainId == 10 || this.chainId == 534352) {
+      if (this.chainId == 1 || this.chainId == 10 || this.chainId == 534352) {
         coinList.push({
           label: "ETH",
           showLabel: "ETH",
