@@ -6,7 +6,7 @@
           <v-btn tile text icon @click="goBack">
             <v-icon> mdi-arrow-left </v-icon></v-btn
           >
-          <span>STEP 2: Pay AND Create</span>
+          <span>STEP 2: Pay and Create</span>
         </div>
         <div></div>
       </div>
@@ -669,7 +669,6 @@ export default {
       font-style: normal;
       font-weight: 700;
       line-height: normal;
-      text-transform: capitalize;
     }
     .pay-disabled {
       background: #e2e8f0 !important;
