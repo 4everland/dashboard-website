@@ -206,6 +206,12 @@ export default {
     GatewaySettings: () => import("@/views/gateway/gateway-settings"),
     GatewayAllowlists: () => import("@/views/gateway/gateway-allowlists"),
     GatewayDomains: () => import("@/views/gateway/gateway-domains"),
+
+    //Rass-detail
+    RaasDetails: () => import("@/pages/raas/component/raas-details"),
+    RaasLogs: () => import("@/pages/raas/component/raas-logs"),
+    RaasSetting: () => import("@/pages/raas/component/raas-setting"),
+    RaasBillings: () => import("@/pages/raas/component/raas-billings"),
   },
 };
 </script>
