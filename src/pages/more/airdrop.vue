@@ -115,7 +115,9 @@
                   Chain (BSC) and opBNB.
                 </div>
                 <div class="mt-8 al-c space-btw">
-                  <div class="reward fz-20 fw-b">15 Million Points</div>
+                  <div class="reward fz-20 fw-b">
+                    Shared Reward of 15 Million Points
+                  </div>
                   <v-btn color="#039CFF" @click="handleBnB">
                     <span class="fw-b" style="color: #fff">Let's Go</span>
                   </v-btn>
