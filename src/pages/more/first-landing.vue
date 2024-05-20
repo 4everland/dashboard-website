@@ -197,7 +197,6 @@ export default {
       isFocus: (s) => s.isFocus,
       nowDate: (s) => s.nowDate,
       connectAddr: (s) => s.connectAddr,
-      chainId: (s) => s.chainId,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -214,6 +213,7 @@ export default {
     return {
       loading: false,
       isEnd: true,
+      chainId: null,
       list: [
         {
           type: "OLD_USER_DEPLOY",
@@ -277,6 +277,9 @@ export default {
     },
   },
   mounted() {
+    if (window.ethereum) {
+      this.chainId = window.ethereum.chainId;
+    }
     sessionStorage.loginTo = location.pathname;
     this.getList();
   },
@@ -314,10 +317,6 @@ export default {
     async checkNet() {
       if (!this.connectAddr) {
         this.$store.dispatch("getWalletAccount");
-        return;
-      }
-      if (!this.chainId) {
-        console.log("Unknown network");
         return;
       }
       this.isNetOk =
