@@ -94,7 +94,7 @@ const menuMap = {
     img: "m-raas",
     to: "/raas",
     active: false,
-    suffixImg: "/img/svg/hosting/tag_hot.png",
+    suffixImg: "/img/svg/hosting/tag_fire.png",
     group: /^\/raas/i,
   },
   AIRPC: {
