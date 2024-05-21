@@ -360,6 +360,9 @@ export default {
         case "JUMP":
           this.$router.push(data.message);
           break;
+        case "JUMP_OUT":
+          location.href = data.message;
+          break;
         case "OPEN_NEW_TAB":
           window.open(data.message);
           setTimeout(() => {
