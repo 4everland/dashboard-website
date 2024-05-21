@@ -407,7 +407,7 @@ export default {
           this.$router.push(data.message);
           break;
         case "JUMP_OUT":
-          window.open(data.message);
+          location.href = data.message;
           break;
         case "OPEN_NEW_TAB":
           window.open(data.message);
