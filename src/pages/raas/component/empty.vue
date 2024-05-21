@@ -15,7 +15,7 @@
         href="https://docs.4everland.org/raas-beta/whats-rollups"
         target="_blank"
         rel="noopener noreferrer"
-        >What's Raas?</a
+        >What's RaaS?</a
       >
       )
     </div>
