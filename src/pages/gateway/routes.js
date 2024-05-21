@@ -4,7 +4,7 @@ export default [
     component: () => import("./gateways"),
     meta: {
       title: "Dedicated Gateway",
-      // icon: "/img/svg/hosting/h-beta-active.svg",
+      // icon: "/img/svg/hosting/tag_beta.png",
       // hideNav: 1,
       isTab: 1,
     },

@@ -96,7 +96,7 @@
                   <img
                     v-if="it.suffixImg"
                     class="ml-2"
-                    width="25"
+                    width="28"
                     :src="it.suffixImg"
                     alt=""
                   />
@@ -124,7 +124,7 @@
                       <img
                         v-if="sub.suffixImg"
                         class="ml-2"
-                        width="25"
+                        width="28"
                         :src="sub.suffixImg"
                         alt=""
                       />
@@ -195,7 +195,7 @@
                 <img
                   v-if="it.suffixImg"
                   class="ml-2"
-                  width="25"
+                  width="28"
                   :src="it.suffixImg"
                   alt=""
                 />

@@ -65,7 +65,7 @@ const menuMap = {
   GATEWAY: {
     label: "Gateway",
     img: "m-gateway",
-    // suffixImg: "/img/svg/hosting/h-beta-active.svg",
+    // suffixImg: "/img/svg/hosting/tag_beta.png",
     group: /^\/gateway/i,
     subs: [
       {
@@ -94,14 +94,14 @@ const menuMap = {
     img: "m-raas",
     to: "/raas",
     active: false,
-    suffixImg: "/img/svg/hosting/h-hot.svg",
+    suffixImg: "/img/svg/hosting/tag_hot.png",
     group: /^\/raas/i,
   },
   AIRPC: {
     label: "AI",
     img: "m-airpc",
     group: /^\/ai-rpc/i,
-    suffixImg: "/img/svg/hosting/h-beta-active.svg",
+    suffixImg: "/img/svg/hosting/tag_beta.png",
     subs: [
       {
         label: "AI RPC",
