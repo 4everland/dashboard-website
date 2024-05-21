@@ -212,7 +212,7 @@
                           min-width="96px"
                           color="#039CFF"
                           @click.stop="onNext(it)"
-                          >{{ it.btnName }}</v-btn
+                          >{{ it.info.buttonName || it.btnName }}</v-btn
                         >
                       </div>
                     </div>
@@ -405,6 +405,9 @@ export default {
       switch (data.next) {
         case "JUMP":
           this.$router.push(data.message);
+          break;
+        case "JUMP_OUT":
+          window.open(data.message);
           break;
         case "OPEN_NEW_TAB":
           window.open(data.message);
