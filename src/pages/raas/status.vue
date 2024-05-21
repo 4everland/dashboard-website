@@ -147,7 +147,7 @@ export default {
       } else {
         this.$confirm(
           "To create a Rollup, ensure your account balance exceeds 1,000,000,000 LAND (1,000 USD). Please deposit before proceeding.",
-          "Tips",
+          "Notice",
           {
             cancelText: "Cancel",
             confirmText: "Deposit",
@@ -169,7 +169,7 @@ export default {
         } else {
           this.$confirm(
             "Insufficient LAND balance. Please deposit before proceeding",
-            "Tips",
+            "Notice",
             {
               cancelText: "Cancel",
               confirmText: "Deposit",

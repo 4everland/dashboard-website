@@ -3,7 +3,7 @@
     <v-skeleton-loader v-if="!loaded" type="article"></v-skeleton-loader>
     <div v-else style="height: 100%">
       <div v-if="rollupList.length == 0" class="raas-home">
-        <Empty />
+        <Empty @onCreate="onCreate" />
       </div>
       <div v-else>
         <e-right-opt-wrap style="width: 100%" :top="-60">
@@ -23,6 +23,7 @@ import { fetchRollupList, sendTransaction } from "@/api/raas.js";
 import { mapGetters, mapState } from "vuex";
 import Empty from "./component/empty.vue";
 import rollupList from "./component/rollup-list.vue";
+import { bus } from "@/utils/bus";
 
 export default {
   components: { Empty, rollupList },
@@ -40,6 +41,7 @@ export default {
     ...mapGetters(["balance"]),
     ...mapState({
       originBalance: (s) => s.moduleResource.originBalance,
+      onChain: (s) => s.onChain,
     }),
   },
   created() {
@@ -64,7 +66,17 @@ export default {
       this.$land = this.numberWithCommas(land / 1e6);
     },
     async onCreate() {
-      this.$router.push("/raas/create");
+      if (!this.onChain) {
+        this.$confirm("Only for Standard Account", "Notice", {
+          cancelText: "Cancel",
+          confirmText: "Activate",
+        }).then(async () => {
+          bus.$emit("showDialog");
+        });
+      } else {
+        this.$router.push("/raas/create");
+      }
+
       // let limitBalance = 1000000000;
       // if (process.env.NODE_ENV == "development") {
       //   limitBalance = 10000000;
@@ -75,7 +87,7 @@ export default {
       // } else {
       //   this.$confirm(
       //     "To create a Rollup, ensure your account balance exceeds 1,000,000,000 LAND (1,000 USD). Please deposit before proceeding.",
-      //     "Tips",
+      //     "Notice",
       //     {
       //       cancelText: "Cancel",
       //       confirmText: "Deposit",
@@ -97,7 +109,7 @@ export default {
         } else {
           this.$confirm(
             "Insufficient LAND balance. Please deposit before proceeding",
-            "Tips",
+            "Notice",
             {
               cancelText: "Cancel",
               confirmText: "Deposit",

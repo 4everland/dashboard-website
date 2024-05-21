@@ -280,7 +280,7 @@ export default {
       } catch (error) {
         const code = error.code;
         if (code == 10002) {
-          this.$confirm(error.message, "Tips", {
+          this.$confirm(error.message, "Notice", {
             cancelText: "Cancel",
             confirmText: "Deposit",
           }).then(async () => {

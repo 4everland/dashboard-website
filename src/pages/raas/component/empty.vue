@@ -24,6 +24,7 @@
 
 <script>
 import createSelect from "./create-select.vue";
+
 export default {
   components: { createSelect },
   data() {
@@ -31,7 +32,7 @@ export default {
   },
   methods: {
     toCreate() {
-      this.$router.push("/raas/create");
+      this.$emit("onCreate");
     },
   },
 };

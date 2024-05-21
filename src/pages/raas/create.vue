@@ -69,7 +69,7 @@ export default {
         } else {
           this.$confirm(
             "To create a Rollup, ensure your account balance exceeds 1,000,000,000 LAND (1,000 USD). Please deposit before proceeding.",
-            "Tips",
+            "Notice",
             {
               cancelText: "Cancel",
               confirmText: "Deposit",
@@ -109,7 +109,7 @@ export default {
       }
 
       const message = `Creating will consume ${land} LAND, ready to proceed?`;
-      this.$confirm(message, "Tips", {
+      this.$confirm(message, "Notice", {
         cancelText: "Cancel",
         confirmText: "Pay",
       }).then(async () => {
@@ -138,7 +138,7 @@ export default {
       } catch (error) {
         const code = error.code;
         if (code == 10002) {
-          this.$confirm(error.message, "Tips", {
+          this.$confirm(error.message, "Notice", {
             cancelText: "Cancel",
             confirmText: "Deposit",
           }).then(async () => {

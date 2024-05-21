@@ -46,7 +46,7 @@
               free resources.
             </div>
 
-            <v-btn color="primary">Active</v-btn>
+            <v-btn color="primary">Activate</v-btn>
           </div>
           <div class="al-c space-btw">
             <h3 class="fz-20">Balance</h3>
