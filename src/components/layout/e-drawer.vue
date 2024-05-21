@@ -91,7 +91,7 @@
                 :active="activeArr[i]"
               ></e-drawer-icon>
               <v-list-item-content>
-                <v-list-item-title>
+                <v-list-item-title class="d-flex al-c">
                   <b class="fz-16">{{ it.label }}</b>
                   <img
                     v-if="it.suffixImg"
@@ -190,7 +190,7 @@
               class="ml-2 mr-6"
             ></e-drawer-icon>
             <v-list-item-content>
-              <v-list-item-title>
+              <v-list-item-title class="d-flex al-c">
                 <b class="fz-16">{{ it.label }}</b>
                 <img
                   v-if="it.suffixImg"
