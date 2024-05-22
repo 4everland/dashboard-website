@@ -543,7 +543,7 @@ export default {
         this.$loading();
         const data = await this.ENSInstance.getProfile(domain);
         this.$loading.close();
-        return data.records.contentHash.decoded;
+        return data.records.contentHash?.decoded;
       } catch (error) {
         this.onErr(error);
       }
