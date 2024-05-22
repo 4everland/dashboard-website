@@ -67,7 +67,7 @@ export default {
     },
     async onCreate() {
       if (!this.onChain) {
-        this.$confirm("Only for Standard Account", "Notice", {
+        this.$confirm("Activate your account to get started", "Notice", {
           cancelText: "Cancel",
           confirmText: "Activate",
         }).then(async () => {
