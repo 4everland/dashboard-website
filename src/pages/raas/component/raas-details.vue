@@ -105,7 +105,7 @@
               </td>
               <td>
                 <div class="bill-plan">
-                  <span> {{ item.value }}</span>
+                  <span> {{ truncateString(item.value[key], 20) }}</span>
                   <v-btn
                     icon
                     class="task-button"
@@ -295,7 +295,7 @@ export default {
         }
         let obj = {
           key: key,
-          value: this.truncateString(sequncerAddressBalanceObj[key], 20),
+          value: sequncerAddressBalanceObj[key],
           balance: balance + " ETH",
           warning,
         };
