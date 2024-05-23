@@ -105,7 +105,7 @@
               </td>
               <td>
                 <div class="bill-plan">
-                  <span> {{ truncateString(item.value[key], 20) }}</span>
+                  <span> {{ item.value }}</span>
                   <v-btn
                     icon
                     class="task-button"
