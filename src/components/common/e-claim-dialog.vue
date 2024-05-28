@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!/quest/g.test($route.path)">
+  <div v-if="showComponent">
     <v-dialog
       v-model="firstRechargeDialog"
       max-width="920"
@@ -248,6 +248,12 @@ export default {
             "Deposit to activate dedicated gateway functionality and gain priority access to new feature experiences.",
         },
       ];
+    },
+
+    showComponent() {
+      return (
+        !/quest/g.test(this.$route.path) && !/claim/g.test(this.$route.path)
+      );
     },
   },
   data() {
