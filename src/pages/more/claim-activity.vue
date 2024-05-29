@@ -511,7 +511,6 @@ export default {
           address,
           chainId: this.curChainId,
         });
-        console.log(+new Date());
         const receipt = await tx.wait();
         console.log(receipt, "receipt");
 

@@ -56,7 +56,7 @@ export default [
     path: "/claim",
     component: () => import("./claim-activity"),
     meta: {
-      title: "CLAIM",
+      title: "Claim LAND",
       hideNav: 1,
       isTab: 1,
       noLogin: 1,
