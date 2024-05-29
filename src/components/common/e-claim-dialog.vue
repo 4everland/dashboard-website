@@ -215,6 +215,7 @@ import {
   GoerliLandRecharge,
   MumbaiLandRecharge,
   opBNBRecharge,
+  taikoRecharge,
 } from "../../plugins/pay/contracts/contracts-addr";
 
 export default {
@@ -346,6 +347,12 @@ export default {
           icon: require("/public/img/svg/billing/ic-blast.svg"),
           type: "Blast",
           contractAddr: blastRecharge,
+        },
+        {
+          name: "Taiko",
+          icon: require("/public/img/svg/billing/ic-taiko.svg"),
+          type: "Taiko",
+          contractAddr: taikoRecharge,
         },
       ],
       firstRechargeInfo: {

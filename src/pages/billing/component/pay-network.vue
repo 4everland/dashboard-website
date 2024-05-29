@@ -121,6 +121,12 @@ export default {
           img: "/img/svg/billing/ic-blast.svg",
           chainId: 81457,
         },
+        {
+          label: "Taiko",
+          name: "Taiko",
+          img: "/img/svg/billing/ic-taiko.svg",
+          chainId: 167000,
+        },
       ];
       if (!this.allow) return list;
       return list.filter((it) => this.allow.includes(it.label));
@@ -383,6 +389,17 @@ export default {
             decimals: 18,
           },
           blockExplorerUrls: ["https://blastscan.io"],
+        },
+        167000: {
+          chainId,
+          chainName: "Taiko Mainnet",
+          rpcUrls: ["https://rpc.taiko.xyz"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://taikoscan.network"],
         },
       }[id];
       if (!params) return;

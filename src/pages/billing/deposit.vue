@@ -268,7 +268,7 @@ export default {
       }
       // location.reload();
       this.coinSelect = "USDC";
-      if (chainId == 81457) {
+      if (chainId == 81457 || chainId == 167000) {
         this.coinSelect = "ETH";
         await this.getBlastEthUnitPrice();
         if (this.blastUnitPriceTimer) {

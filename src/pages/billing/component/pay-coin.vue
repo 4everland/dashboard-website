@@ -121,7 +121,7 @@ export default {
         });
       }
 
-      if (this.chainId == 81457) {
+      if (this.chainId == 81457 || this.chainId == 167000) {
         return [
           {
             label: "ETH",

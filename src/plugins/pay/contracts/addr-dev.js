@@ -75,6 +75,9 @@ export const scrollDAI = "0xcA77eB3fEFe3725Dc33bccB54eDEFc3D9f764f97";
 export const scrollETH = "0x5300000000000000000000000000000000000004";
 export const scrollRecharge = "0x5cE38C1CeBa8978503A61C107473e1Eb5ae27222";
 
+// taiko chain
+export const taikoRecharge = "0xfE99cdC31A0D588AB940aB7143533242AEf5276d";
+
 // dst chain
 export const MumbaiRegister = "0xeeb60DaFD099FAb5fbAf6757B7f71F2472E0AAcc";
 export const MumbaiSafeWallet = "0xbbB3194D73925019194F8b288325bd039fa97880";

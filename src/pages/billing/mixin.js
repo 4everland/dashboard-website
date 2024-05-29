@@ -32,6 +32,7 @@ import {
   scrollRecharge,
   blastRecharge,
   opBNBRecharge,
+  taikoRecharge,
 } from "../../plugins/pay/contracts/contracts-addr";
 import { mapGetters } from "vuex";
 export default {
@@ -120,6 +121,14 @@ export default {
           },
           landRecharge: blastRecharge,
           chainId: 81457,
+        },
+        {
+          name: "Taiko",
+          coin: {
+            eth: "",
+          },
+          landRecharge: taikoRecharge,
+          chainId: 167000,
         },
         {
           name: "opBNB",

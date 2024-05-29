@@ -104,6 +104,8 @@ Vue.prototype.$getTxLink = (hash, net = "Polygon") => {
     pre = "https://arbiscan.io/tx/";
   } else if (net == "Linea") {
     pre = "https://lineascan.build/tx/";
+  } else if (net == "Taiko") {
+    pre = "https://taikoscan.network/tx/";
   }
   return pre + hash;
 };

@@ -257,6 +257,7 @@ export default {
       if (type == "Optimism") return 10;
       if (type == "Zeta") return 7001;
       if (type == "Blast") return this.$inDev ? 168587773 : 81457;
+      if (type == "Taiko") return 167000;
       return this.$inDev ? 5 : 1;
     },
     async switchNet(chainName) {
@@ -480,6 +481,17 @@ export default {
             decimals: 18,
           },
           blockExplorerUrls: ["https://blastscan.io"],
+        },
+        167000: {
+          chainId,
+          chainName: "Taiko Mainnet",
+          rpcUrls: ["https://rpc.taiko.xyz"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://taikoscan.network"],
         },
       }[id];
       if (!params) return;
