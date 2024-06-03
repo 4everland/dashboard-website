@@ -162,10 +162,10 @@
               >
                 <template v-for="item in netWorkTypeOption">
                   <v-col
+                    :key="item.key"
                     cols="12"
                     md="3"
                     v-show="isShowNetwork(item)"
-                    :key="item.key"
                   >
                     <div
                       class="option-item"
@@ -324,6 +324,14 @@ export default {
           defaultNetwork: 3,
         },
         {
+          name: "BNB Chain",
+          key: "BNB_CHAIN",
+          value: 3,
+          icon: require("@/assets/imgs/raas/icon/bnb_chain.svg"),
+          type: "layer1",
+          defaultNetwork: 0,
+        },
+        {
           name: "Others",
           key: "Layer1_Others",
           value: 2,
@@ -354,7 +362,7 @@ export default {
           key: "TestNet",
           value: 0,
           icon: null,
-          layer1Show: [1, 2],
+          layer1Show: [1, 2, 3],
           type: "netWorkType",
         },
         {
@@ -362,7 +370,7 @@ export default {
           key: "MainNet",
           value: 1,
           icon: null,
-          layer1Show: [0, 1, 2],
+          layer1Show: [0, 1, 2, 3],
           type: "netWorkType",
         },
       ],
