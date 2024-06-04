@@ -61,11 +61,9 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from "vuex";
 export default {
   props: {
-    chainId: {
-      type: Number,
-    },
     value: {
       type: String,
     },
@@ -73,9 +71,20 @@ export default {
   data() {
     return {
       selected: "USDC",
+      chainId: 1,
     };
   },
+  created() {
+    this.walletObj.on("chainChanged", (chainId) => {
+      this.chainId = parseInt(chainId);
+    });
+  },
   computed: {
+    ...mapState({
+      isZksyncLite: (s) => s.isZksyncLite,
+    }),
+    ...mapGetters(["walletObj"]),
+
     showToolTip() {
       if (this.$inDev ? this.chainId == 80001 : this.chainId == 137) {
         return true;
@@ -112,6 +121,17 @@ export default {
           img: "/img/svg/pay/usdc.svg",
         });
       }
+      if (this.isZksyncLite) {
+        return [
+          {
+            label: "ETH",
+            showLabel: "ETH",
+            name: "ETH",
+            img: "/img/svg/pay/eth.svg",
+          },
+        ];
+      }
+
       if (this.chainId == 1 || this.chainId == 10 || this.chainId == 534352) {
         coinList.push({
           label: "ETH",

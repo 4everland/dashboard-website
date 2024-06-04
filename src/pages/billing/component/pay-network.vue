@@ -2,17 +2,19 @@
   <div>
     <div class="d-flex flex-wrap space-btw">
       <div
-        @click="onSelect(it.chainId)"
+        @click="onSelect(it.chainId, it.label)"
         class="network-label pa-3 al-c cursor-p d-flex mt-4"
         :class="{
-          active: selected == it.chainId,
+          active: actived(it.chainId, it.label),
         }"
         v-for="(it, i) in chainList"
         :key="i"
       >
-        <v-icon size="16" :color="selected == it.chainId ? $color1 : '#555'"
+        <v-icon
+          size="16"
+          :color="actived(it.chainId, it.label) ? $color1 : '#555'"
           >mdi-{{
-            selected == it.chainId
+            actived(it.chainId, it.label)
               ? "circle-slice-8"
               : "checkbox-blank-circle-outline"
           }}</v-icon
@@ -24,8 +26,9 @@
           height="20"
         />
         <span
+          class="nowrap"
           :class="{
-            'color-1': selected == it.chainId,
+            'color-1': actived(it.chainId, it.label),
           }"
           >{{ it.name }}</span
         >
@@ -47,7 +50,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import everPay from "../../../views/pay/ever-pay.vue";
 
 export default {
@@ -58,7 +61,34 @@ export default {
     allow: Array,
   },
   computed: {
+    ...mapState({
+      isZksyncLite: (s) => s.isZksyncLite,
+      isEverpay: (s) => s.isEverpay,
+    }),
     ...mapGetters(["walletObj"]),
+    actived() {
+      return function (chainId, label) {
+        if (chainId == 1 && chainId == this.selected) {
+          if (this.isZksyncLite) {
+            if (label == "ZksyncLite") {
+              return true;
+            }
+            return false;
+          } else if (this.isEverpay) {
+            if (label == "everPay") {
+              return true;
+            }
+            return false;
+          } else {
+            if (label == "Ethereum") {
+              return true;
+            }
+            return false;
+          }
+        }
+        return this.selected == chainId;
+      };
+    },
     chainList() {
       const list = [
         {
@@ -127,6 +157,12 @@ export default {
           img: "/img/svg/billing/ic-taiko.svg",
           chainId: 167000,
         },
+        {
+          label: "ZksyncLite",
+          name: "Zksync Lite",
+          img: "/img/svg/logo-no-letters.svg",
+          chainId: 1,
+        },
       ];
       if (!this.allow) return list;
       return list.filter((it) => this.allow.includes(it.label));
@@ -146,22 +182,34 @@ export default {
   },
   methods: {
     initSeleted() {
-      if (localStorage.isEverpay) {
+      if (this.isEverpay) {
         this.selected = 9999999;
       } else {
         this.selected = parseInt(this.walletObj.chainId);
       }
       this.$emit("onNetwork", this.selected);
     },
-    async onSelect(chainId) {
+    async onSelect(chainId, label) {
       try {
-        if (this.selected == chainId) return;
+        // if (this.selected == chainId) return;
         this.selected = chainId;
         if (chainId == 9999999) {
           localStorage.setItem("isEverpay", 1);
-        } else {
-          localStorage.removeItem("isEverpay");
+          this.$store.commit("SET_IS_EVERPAY", true);
+          localStorage.removeItem("isZksyncLite");
+          this.$store.commit("SET_IS_ZKSYNCLITE", false);
+        } else if (label == "ZksyncLite") {
           await this.switchNet(chainId);
+          localStorage.setItem("isZksyncLite", 1);
+          this.$store.commit("SET_IS_ZKSYNCLITE", true);
+          localStorage.removeItem("isEverpay");
+          this.$store.commit("SET_IS_EVERPAY", false);
+        } else {
+          await this.switchNet(chainId);
+          localStorage.removeItem("isEverpay");
+          localStorage.removeItem("isZksyncLite");
+          this.$store.commit("SET_IS_EVERPAY", false);
+          this.$store.commit("SET_IS_ZKSYNCLITE", false);
         }
         // this.$emit("onNetwork", this.selected);
       } catch (error) {

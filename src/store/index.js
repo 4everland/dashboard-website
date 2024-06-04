@@ -50,6 +50,8 @@ const store = new Vuex.Store({
     hasClaim: false,
     pointsTrack: 0,
     code: null,
+    isZksyncLite: !!localStorage.isZksyncLite,
+    isEverpay: !!localStorage.isEverpay,
   },
   getters: {
     teamInfo(state) {
@@ -144,6 +146,13 @@ const store = new Vuex.Store({
     },
     SET_ON_CHAIN(state, onChain) {
       state.onChain = onChain;
+    },
+
+    SET_IS_ZKSYNCLITE(state, isZksyncLite) {
+      state.isZksyncLite = isZksyncLite;
+    },
+    SET_IS_EVERPAY(state, isEverpay) {
+      state.isEverpay = isEverpay;
     },
   },
   actions: {

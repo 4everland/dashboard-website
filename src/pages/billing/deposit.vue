@@ -123,6 +123,7 @@ import resouceCounter from "./component/resouce-counter.vue";
 import rechargeStepDialog from "./component/recharge-step-dialog.vue";
 import { mapState } from "vuex";
 import { BigNumber, providers } from "ethers";
+import * as zksync from "zksync";
 import debounce from "../../plugins/debounce";
 import {
   parseUnits,
@@ -160,9 +161,11 @@ export default {
       checkApproving: false,
       approving: false,
       depositing: false,
-      isEverpay: localStorage.getItem("isEverpay") ? true : false,
       everpayPayInfo: {},
       btnDisabled: true,
+      collectionAddress: this.$inDev
+        ? "0xA8425124C2B26E6b52983aFfbB5176187375CdC8"
+        : "0xb7b4360f7f6298de2e7a11009270f35f189bd77e",
       blastUnitPriceTimer: null,
     };
   },
@@ -171,6 +174,9 @@ export default {
       connectAddr: (s) => s.connectAddr,
       teamId: (s) => s.teamId,
       onChain: (s) => s.onChain,
+      isZksyncLite: (s) => s.isZksyncLite,
+      userInfo: (s) => s.userInfo,
+      isEverpay: (s) => s.isEverpay,
     }),
     signer() {
       let provider = new providers.Web3Provider(this.walletObj);
@@ -255,20 +261,15 @@ export default {
   },
   methods: {
     async onNetwork(chainId) {
+      console.log(chainId, "onNetwork---");
       if (this.chainAddrs.findIndex((it) => it.chainId == chainId) == -1) {
         this.btnDisabled = true;
       } else {
         this.btnDisabled = false;
       }
       this.chainId = chainId;
-      if (this.chainId == 9999999) {
-        this.isEverpay = true;
-      } else {
-        this.isEverpay = false;
-      }
-      // location.reload();
       this.coinSelect = "USDC";
-      if (chainId == 81457 || chainId == 167000) {
+      if (chainId == 81457 || chainId == 167000 || this.isZksyncLite) {
         this.coinSelect = "ETH";
         await this.getBlastEthUnitPrice();
         if (this.blastUnitPriceTimer) {
@@ -302,34 +303,113 @@ export default {
     },
     async handleRechargeLand() {
       this.depositing = true;
-      try {
-        let receipt = "";
-        if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
-          if (!this.ethAmount) return;
+
+      if (this.isZksyncLite) {
+        try {
+          // check main eth
           this.$loading();
-          let tx = await this.LandRecharge.mintByETH(this.euid, {
-            value: this.ethAmount,
-          });
-          receipt = await tx.wait();
-          this.$loading.close();
-        } else {
-          const tx = await this.LandRecharge.mint(
-            this.coinAddr,
-            this.euid, // euid
-            this.payAmounts
-          );
-          receipt = await tx.wait();
-          console.log(receipt);
+          const zkprovider = await zksync.getDefaultProvider("mainnet");
+          // eth signer
+          const provider = new providers.Web3Provider(this.walletObj);
+          const signer = provider.getSigner();
+          const walletAddress = await signer.getAddress();
+          if (walletAddress.toLowerCase() != this.userInfo.wallet.address)
+            return;
+          const wallet = await zksync.Wallet.fromEthSigner(signer, zkprovider);
+          const accountState = await wallet.getAccountState();
+          console.log(accountState);
+          if (accountState.id) {
+            const isSigningKeySet = await wallet.isSigningKeySet();
+            console.log("isSigningKeySet", isSigningKeySet);
+            if (!isSigningKeySet) {
+              const changeKeyTx = await wallet.setSigningKey({
+                feeToken: "ETH",
+                // ethAuthType: "ECDSA",
+                ethAuthType: "ECDSALegacyMessage",
+                // fee: utils.parseEther("0.0006"),
+              });
+              // console.log("setSigningKey", changeKeyTx);
+              const changeKeyTxReceipt = await changeKeyTx.awaitReceipt();
+              console.log("changeKeyTxReceipt", changeKeyTxReceipt);
+            }
+            console.log("accountState.committed", accountState.committed);
+            const balance = BigNumber.from(
+              accountState.committed.balances["ETH"] || "0"
+            );
+
+            console.log(
+              this.ethAmount,
+              zksync.utils.closestPackableTransactionAmount(this.ethAmount)
+            );
+
+            if (!balance.gt(this.ethAmount)) {
+              throw new Error("insufficient balance");
+            }
+            const zkwalletFor4Everland = this.collectionAddress.toLowerCase();
+            const tx = await wallet.syncTransfer({
+              to: zkwalletFor4Everland,
+              token: "ETH",
+              amount: zksync.utils.closestPackableTransactionAmount(
+                this.ethAmount
+              ),
+
+              // fee: utils.parseEther("0.0003"),
+            });
+            console.log("tx", tx);
+            console.log(tx.txHash);
+            const receipt = await tx.awaitReceipt();
+            console.log("receipt", receipt);
+            let hash = tx.txHash.replace("sync-tx:", "0x");
+            this.$http.post("$bill-consume/recharge_agent/report", {
+              address: accountState.address,
+              hash,
+              source: 1,
+            });
+            // const records = await this.searchZySyncRecord();
+            // if (records.length) {
+            //   await this.registerSuccess(records[0].txHash);
+            // }
+            this.$loading.close();
+
+            // notify server
+          } else {
+            throw new Error(
+              "Your zkSync account does't have enough ETH, please recharge it."
+            );
+          }
+        } catch (error) {
+          this.onErr(error);
         }
-        console.log("recharge success");
-        this.rechargeSuccess = true;
-        this.transactionCache(receipt.transactionHash);
-        this.$store.dispatch("checkOnChain");
-        if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
-          this.$router.push("/billing/records?tab=Deposit History");
+      } else {
+        try {
+          let receipt = "";
+          if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
+            if (!this.ethAmount) return;
+            this.$loading();
+            let tx = await this.LandRecharge.mintByETH(this.euid, {
+              value: this.ethAmount,
+            });
+            receipt = await tx.wait();
+            this.$loading.close();
+          } else {
+            const tx = await this.LandRecharge.mint(
+              this.coinAddr,
+              this.euid, // euid
+              this.payAmounts
+            );
+            receipt = await tx.wait();
+            console.log(receipt);
+          }
+          console.log("recharge success");
+          this.rechargeSuccess = true;
+          this.transactionCache(receipt.transactionHash);
+          this.$store.dispatch("checkOnChain");
+          if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
+            this.$router.push("/billing/records?tab=Deposit History");
+          }
+        } catch (error) {
+          this.onErr(error);
         }
-      } catch (error) {
-        this.onErr(error);
       }
       this.depositing = false;
     },
@@ -411,17 +491,19 @@ export default {
       const signer = provider.getSigner();
       const account = await signer.getAddress();
       const balance = parseEther(this.everpayPayInfo.balance.toString());
-      let payAmounts = this.payAmounts;
-      if (balance.lt(payAmounts))
+
+      let landAmount = parseEther(this.landAmount);
+      if (balance.lt(landAmount))
         return this.$alert(
           "Insufficient balance, please deposit and try again.",
           "alert"
         );
       if (this.everpayPayInfo.symbol == "DAI") {
-        payAmounts = formatEther(payAmounts);
+        landAmount = formatEther(landAmount);
       } else {
-        payAmounts = formatUnits(payAmounts.div(10 ** 12), 6);
+        landAmount = formatUnits(landAmount.div(10 ** 12), 6);
       }
+
       const everpay = new window.Everpay.default({
         account,
         chainType: "ethereum",
@@ -429,7 +511,7 @@ export default {
       });
       const data = await everpay.transfer({
         tag: this.everpayPayInfo.tag,
-        amount: payAmounts,
+        amount: landAmount,
         to: this.$inDev
           ? "0xd8b38301655FaeE94C43f7121189E3E0f8973dd0"
           : "0xb7B4360F7F6298dE2e7a11009270F35F189Bd77E",
@@ -438,6 +520,11 @@ export default {
         },
       });
       console.log(data);
+      this.$http.post("$bill-consume/recharge_agent/report", {
+        address: account,
+        hash: data.everHash,
+        source: 0,
+      });
       await this.$alert(
         "Deposit successful! The 4EVER cross-chain bridge is in action, using USDC on Polygon for the final step. Please wait patiently for your LAND to be credited."
       );
@@ -536,37 +623,6 @@ export default {
         });
       }
     },
-
-    // async usdc2eth() {
-    //   if (this.usdcAmount.eq(BigNumber.from("0"))) {
-    //     this.ethAmount = BigNumber.from("0");
-    //     return;
-    //   }
-    //   if (this.chainId == 534352) {
-    //     this.ethAmount = parseEther(
-    //       (this.usdcAmount.toNumber() / 2350).toFixed(18)
-    //     );
-    //   } else {
-    //     const quoter = IQuoter__factory.connect(
-    //       "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
-    //       this.signer
-    //     );
-    //     const path = solidityPack(
-    //       ["address", "uint24", "address"],
-    //       [
-    //         "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85", // usdc addr
-    //         500, //
-    //         this.coinAddr,
-    //       ]
-    //     );
-    //     const res = await quoter.callStatic.quoteExactOutput(
-    //       path,
-    //       parseUnits(this.usdcAmount.toString(), 6)
-    //     );
-    //     console.log(formatEther(res));
-    //     this.ethAmount = res;
-    //   }
-    // },
     async getBlastEthUnitPrice() {
       try {
         let provider = new providers.Web3Provider(this.walletObj);
@@ -576,7 +632,7 @@ export default {
           signer
         );
         this.blastUnitPrice = await BlastOracleLand.callStatic.fetchPrice();
-        // console.log(formatEther(this.blastUnitPrice));
+        console.log(formatEther(this.blastUnitPrice));
       } catch (error) {
         console.log(error);
       }
@@ -589,6 +645,13 @@ export default {
         .mul((1e18).toString())
         .div(this.blastUnitPrice);
       this.ethAmount = value;
+    },
+    isZksyncLite(val) {
+      if (val) {
+        this.chainId = 1;
+        this.coinSelect = "ETH";
+        this.getBlastEthUnitPrice();
+      }
     },
   },
 };

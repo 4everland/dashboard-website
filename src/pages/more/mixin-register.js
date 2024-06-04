@@ -140,9 +140,14 @@ export default {
             // fee: utils.parseEther("0.0003"),
           });
           console.log("tx", tx);
-          console.log(tx.txHash);
           const receipt = await tx.awaitReceipt();
           console.log("receipt", receipt);
+          // let hash = tx.txHash.replace("sync-tx:", "0x");
+          // this.$http.post("$bill-consume/recharge_agent/report", {
+          //   address: accountState.address,
+          //   hash,
+          //   source: 1,
+          // });
           const records = await this.searchZySyncRecord();
           if (records.length) {
             await this.registerSuccess(records[0].txHash);

@@ -148,6 +148,14 @@ export default {
           landRecharge: "",
           chainId: 9999999,
         },
+        {
+          name: "ZksyncLite",
+          coin: {
+            eth: "",
+          },
+          landRecharge: "0xE663E0E3f9b034E9911d4746760efE00115D11E5",
+          chainId: 1,
+        },
       ],
     };
   },

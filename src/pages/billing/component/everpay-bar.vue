@@ -40,22 +40,6 @@
         </div>
       </div>
     </div>
-    <!-- 
-    <div
-      class="al-c fz-14 mt-3 cursor-p"
-      v-ripple
-      @click="handleOpenLink('https://app.everpay.io/')"
-    >
-      <img
-          class="mr-1"
-          src="/img/svg/billing/ic-everpay-white.svg"
-          width="20"
-          alt=""
-        />
-        <span class="fz-16">Deposit</span>
-
-      Deposit in everPay
-    </div> -->
   </div>
 </template>
 
@@ -108,6 +92,9 @@ export default {
   },
   created() {
     this.initEverPay();
+    this.walletObj.on("accountsChanged", (val) => {
+      this.initEverPay();
+    });
   },
   methods: {
     async initEverPay() {
