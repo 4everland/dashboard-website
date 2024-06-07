@@ -19,7 +19,10 @@
             </div>
           </div>
           <div class="al-c">
-            <div class="al-c flex-col fz-12">
+            <div
+              class="al-c flex-col fz-12"
+              v-show="modelInfo.id !== '4ever/auto'"
+            >
               <span
                 >{{ calcPrice(modelInfo.pricing.prompt) }} / input tkns</span
               >

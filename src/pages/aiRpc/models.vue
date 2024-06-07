@@ -29,7 +29,11 @@
           <div>
             <div class="fz-14 model-name fw-b">{{ it.name }}</div>
             <div class="my-2 fz-12 model-desc" v-html="it.markdown"></div>
-            <div class="fz-12" style="color: #475569">
+            <div
+              class="fz-12"
+              style="color: #475569"
+              v-show="it.id !== '4ever/auto'"
+            >
               <span class="py-2"
                 >{{ calcPrice(it.pricing.prompt) }} /input tkns
               </span>
