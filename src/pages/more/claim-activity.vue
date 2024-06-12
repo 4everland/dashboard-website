@@ -860,7 +860,7 @@ export default {
     }
     .network-card {
       width: 445px;
-      margin: 0 auto 220px !important;
+      margin: 0 auto 130px !important;
     }
   }
   .claim-body {
