@@ -338,8 +338,31 @@
 
 <script>
 import Axios from "axios";
-import { fetchDefaultChainId, sendCheckChainId } from "@/api/raas.js";
+import {
+  fetchDefaultChainId,
+  sendCheckChainId,
+  fetchFree,
+} from "@/api/raas.js";
 
+const TIME_LIST = [
+  {},
+  {
+    label: "93 Days",
+    value: 3,
+    price: "1,500M LANDs≈$1.5k",
+  },
+  {
+    label: "186 Days",
+    value: 6,
+    price: "3,000M LANDs≈$3k",
+  },
+
+  {
+    label: "372 Days",
+    value: 12,
+    price: "6,000M LANDs≈$6k",
+  },
+];
 export default {
   name: "DashboardWebsiteCreateFirst",
   props: {
@@ -348,33 +371,28 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      timeList: [
-        {
+  computed: {
+    timeList() {
+      let arr = TIME_LIST;
+      if (this.freeExist) {
+        arr[0] = {
+          label: "1 Days",
+          value: 50001,
+          price: "18M LANDs≈$18",
+        };
+      } else {
+        arr[0] = {
           label: "2 Hours",
           value: 0,
           price: "Free trial",
-        },
-        {
-          label: "93 Days",
-          value: 3,
-          price: "1,500M LANDs≈$1.5k",
-        },
-        {
-          label: "186 Days",
-          value: 6,
-          price: "3,000M LANDs≈$3k",
-        },
-
-        {
-          label: "372 Days",
-          value: 12,
-          price: "6,000M LANDs≈$6k",
-        },
-      ],
+        };
+      }
+      return arr;
+    },
+  },
+  data() {
+    return {
       includeList: [
-        "Built on OP STACK with ETHEREUM DA",
         "Built-in block explorer, tracer, and bridge",
         "RPC (Remote Procedure Call) interface",
         "Scan API",
@@ -416,12 +434,23 @@ export default {
       isIdExist: false,
       showPrice: "Free trial",
       exampleDialog: false,
+      freeExist: false,
     };
   },
-
+  created() {
+    this.getFree();
+  },
   mounted() {},
 
   methods: {
+    async getFree() {
+      const { data } = await fetchFree();
+      this.freeExist = data.exist;
+      if (data.exist) {
+        this.purchasePlan = 50001;
+        this.showPrice = "18M LANDs≈$18";
+      }
+    },
     chooseTime(val) {
       // this.purchasePlan = val;
       const chooseObj = this.timeList.find((item) => {

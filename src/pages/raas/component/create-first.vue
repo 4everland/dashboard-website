@@ -375,24 +375,15 @@ export default {
       ],
     };
   },
-
   mounted() {},
 
   methods: {
     onNext() {
-      let fastDeploy = false;
       const stack = this.stack;
       const dataAvailability = this.dataAvailability;
       const layer1 = this.layer1;
       const netWorkType = this.netWorkType;
-      if (
-        stack == 0 &&
-        dataAvailability == 0 &&
-        layer1 == 0 &&
-        netWorkType == 2
-      ) {
-        fastDeploy = true;
-      }
+      const fastDeploy = this.isFastDeploy();
       const data = {
         stack,
         dataAvailability,
@@ -401,6 +392,22 @@ export default {
         fastDeploy,
       };
       this.$emit("onNext", data);
+    },
+    isFastDeploy() {
+      let fastDeploy = false;
+      const stack = this.stack;
+      const dataAvailability = this.dataAvailability;
+      const layer1 = this.layer1;
+      const netWorkType = this.netWorkType;
+      if (stack == 0 && dataAvailability == 0) {
+        if (
+          (layer1 == 0 && netWorkType == 2) ||
+          (layer1 == 3 && netWorkType == 0)
+        ) {
+          fastDeploy = true;
+        }
+      }
+      return fastDeploy;
     },
     isShowNetwork(item) {
       return item.layer1Show.includes(this.layer1);
