@@ -376,7 +376,7 @@ export default {
       let arr = TIME_LIST;
       if (this.freeExist) {
         arr[0] = {
-          label: "1 Days",
+          label: "1 Day",
           value: 50001,
           price: "18M LANDs≈$18",
         };

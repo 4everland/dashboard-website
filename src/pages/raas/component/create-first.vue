@@ -227,7 +227,7 @@ export default {
   data() {
     return {
       stack: 0,
-      dataAvailability: 0,
+      dataAvailability: 6,
       layer1: 0,
       netWorkType: 2,
       nextDisabled: true,
@@ -262,11 +262,18 @@ export default {
         },
       ],
       dataAvailabilityOption: [
+        // {
+        //   name: "Ethereum Blobs",
+        //   key: "Ethereum_Blobs",
+        //   value: 0,
+        //   icon: require("@/assets/imgs/raas/icon/eth.svg"),
+        //   type: "dataAvailability",
+        // },
         {
-          name: "Ethereum Blobs",
-          key: "Ethereum_Blobs",
-          value: 0,
-          icon: require("@/assets/imgs/raas/icon/eth.svg"),
+          name: "Settlement Layer",
+          key: "SettlementLayer",
+          value: 6,
+          icon: require("@/assets/imgs/raas/icon/settlement_layer.svg"),
           type: "dataAvailability",
         },
         {
@@ -399,7 +406,7 @@ export default {
       const dataAvailability = this.dataAvailability;
       const layer1 = this.layer1;
       const netWorkType = this.netWorkType;
-      if (stack == 0 && dataAvailability == 0) {
+      if (stack == 0 && dataAvailability == 6) {
         if (
           (layer1 == 0 && netWorkType == 2) ||
           (layer1 == 3 && netWorkType == 0)
