@@ -109,7 +109,7 @@ export default {
   data() {
     return {
       renewDialog: false,
-      purchasePlan: null,
+      purchasePlan: 3,
       detailData: {},
       timeList: [
         {

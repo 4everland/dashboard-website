@@ -63,3 +63,7 @@ export function sendRenew(id, data) {
 export function fetchProgress(id) {
   return request.get(`$raas/rollup/${id}/progress`);
 }
+
+export function fetchFree() {
+  return request.get(`$raas/rollup/free`);
+}

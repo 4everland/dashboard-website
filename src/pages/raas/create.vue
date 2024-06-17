@@ -95,6 +95,9 @@ export default {
     beforePayTips(purchasePlan) {
       let land = "";
       switch (purchasePlan) {
+        case 50001:
+          land = "18,000,000";
+          break;
         case 3:
           land = "1,500,000,000";
           break;
