@@ -460,7 +460,7 @@ export default {
         bottom: 0;
         background: #fff;
         opacity: 0.95;
-        z-index: 99;
+        z-index: 2;
         color: #475569;
         b {
           color: #0f172a;
