@@ -283,6 +283,13 @@ export default {
           icon: require("@/assets/imgs/raas/icon/ar.svg"),
           type: "dataAvailability",
         },
+        {
+          name: "BNB Greenfield",
+          key: "Greenfield",
+          value: 7,
+          icon: require("@/assets/imgs/raas/icon/BNB_Greenfield.svg"),
+          type: "dataAvailability",
+        },
         // {
         //   name: "Celestia",
         //   key: "Celestia",
