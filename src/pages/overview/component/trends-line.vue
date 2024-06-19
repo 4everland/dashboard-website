@@ -121,6 +121,7 @@ export default {
       HOSTING: new Array(31).fill(0),
       BUCKET: new Array(31).fill(0),
       AI_RPC_PROXY: new Array(31).fill(0),
+      IPFS_PINNING_SERVICE: new Array(31).fill(0),
     };
   },
   computed: {
@@ -187,10 +188,7 @@ export default {
           },
         ];
       }
-      if (
-        this.tagList[this.curIndex].type == "AR_STORAGE" ||
-        this.tagList[this.curIndex].type == "IPFS_STORAGE"
-      ) {
+      if (this.tagList[this.curIndex].type == "AR_STORAGE") {
         return [
           {
             name: "Hosting",
@@ -233,6 +231,74 @@ export default {
             },
             stack: "Total",
             data: this.BUCKET,
+          },
+        ];
+      }
+
+      if (this.tagList[this.curIndex].type == "IPFS_STORAGE") {
+        return [
+          {
+            name: "Hosting",
+            type: "line",
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#5066CA",
+                },
+                {
+                  offset: 1,
+                  color: "rgba(80, 102, 202, 0.00)",
+                },
+              ]),
+            },
+            itemStyle: {
+              color: "#809AF4",
+            },
+            stack: "Total",
+            data: this.HOSTING,
+          },
+          {
+            name: "Bucket",
+            type: "line",
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#5066CA",
+                },
+                {
+                  offset: 1,
+                  color: "rgba(80, 102, 202, 0.00)",
+                },
+              ]),
+            },
+            itemStyle: {
+              color: "#5066CA",
+            },
+            stack: "Total",
+            data: this.BUCKET,
+          },
+          {
+            name: "4EVER Pin",
+            type: "line",
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#5066CA",
+                },
+                {
+                  offset: 1,
+                  color: "rgba(80, 102, 202, 0.00)",
+                },
+              ]),
+            },
+            itemStyle: {
+              color: "#5066CA",
+            },
+            stack: "Total",
+            data: this.IPFS_PINNING_SERVICE,
           },
         ];
       }
@@ -377,6 +443,7 @@ export default {
         this.GATEWAY = new Array(31).fill(0);
         this.HOSTING = new Array(31).fill(0);
         this.BUCKET = new Array(31).fill(0);
+        this.IPFS_PINNING_SERVICE = new Array(31).fill(0);
         this.RPC_PROXY = new Array(31).fill(0);
         this.AI_RPC_PROXY = new Array(31).fill(0);
         this.monthAgoTimeStamp.forEach((it, i) => {
