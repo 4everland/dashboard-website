@@ -4,12 +4,13 @@
     <div v-else class="claim-header py-4 px-3 d-flex al-c space-btw">
       <div class="al-c">
         <img
-          src="/img/svg/logo-m.svg"
+          src="/img/svg/logo.svg"
           style="vertical-align: bottom"
-          width="43"
+          width="151"
           alt=""
         />
-
+      </div>
+      <div class="al-c">
         <div class="network al-c ml-2 pa-2" @click="sheet = !sheet">
           <img
             style="vertical-align: bottom"
@@ -19,8 +20,6 @@
           />
           <img class="ml-1" src="/img/claim/down-arrow.svg" width="16" alt="" />
         </div>
-      </div>
-      <div>
         <e-menu offset-y open-on-hover v-if="userInfo.uid">
           <v-btn slot="ref" text>
             <e-team-avatar
