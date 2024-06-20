@@ -94,6 +94,16 @@ export default {
           subs: ["API Lists", "Stats"],
         },
         {
+          title: "RaaS",
+          type: "RAAS",
+          subs: ["Create Rollup", "Rollup List", "Rollup Details", "Renew"],
+        },
+        {
+          title: "AI RPC",
+          type: "AIRPC",
+          subs: ["Models", "AI RPC Key"],
+        },
+        {
           title: "Billing",
           type: "RESOURCE",
           subs: ["Plan", "LAND", "Deposite", "Transaction History"],
