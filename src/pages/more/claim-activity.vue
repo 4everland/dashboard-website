@@ -673,7 +673,7 @@ export default {
         42161: {
           chainId,
           chainName: "Arbitrum One",
-          rpcUrls: ["https://arb1.arbitrum.io/rpc"],
+          rpcUrls: ["https://arbitrum.llamarpc.com"],
           nativeCurrency: {
             name: "Arbitrum Coin",
             symbol: "ETH",
@@ -717,7 +717,7 @@ export default {
         204: {
           chainId,
           chainName: "opBNB Mainnet",
-          rpcUrls: ["https://opbnb-rpc.publicnode.com"],
+          rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
           nativeCurrency: {
             name: "BNB Coin",
             symbol: "BNB",
