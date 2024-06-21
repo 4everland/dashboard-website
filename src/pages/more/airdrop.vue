@@ -158,7 +158,9 @@
                 <img src="/img/airDrop/commingsoon.png" width="100%" alt="" />
               </div>
               <div class="pa-6 task-desc">
-                <div class="fz-20 fw-b cursor-p text-white">TO BE REVEALED</div>
+                <div class="fz-20 fw-b cursor-p text-white">
+                  Rolling Out Shortly
+                </div>
                 <div class="fz-14 mt-4">
                   More thrilling activities coming your way soon. Stay tuned for
                   updates!
