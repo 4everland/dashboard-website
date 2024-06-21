@@ -124,6 +124,35 @@
                 </div>
               </div>
             </div>
+
+            <div class="task-item d-flex mb-4">
+              <div class="pa-6 task-img-wrap">
+                <img
+                  src="/img/airDrop/bitget-airdrop.png"
+                  width="100%"
+                  alt=""
+                />
+              </div>
+              <div class="pa-6 task-desc h-flex">
+                <div class="fz-20 fw-b cursor-p text-white">
+                  4EVERLAND Bitget GetDrop
+                </div>
+                <div class="fz-14 mt-4">
+                  GetDrop is an exclusive airdrop platform for high-quality
+                  projects within Bitget Wallet Earning Center. 4EVERLAND is
+                  thrilled to collaborate with Bitget, providing up to 5,000,000
+                  $4EVER points in rewards.
+                </div>
+                <div class="mt-8 al-c space-btw">
+                  <div class="reward fz-20 fw-b">
+                    Shared Reward of 5 Million Points
+                  </div>
+                  <v-btn color="#039CFF" @click="handleToBitget">
+                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  </v-btn>
+                </div>
+              </div>
+            </div>
             <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
                 <img src="/img/airDrop/commingsoon.png" width="100%" alt="" />
@@ -223,6 +252,9 @@ export default {
     },
     handleBnB() {
       this.$router.push("/quest/bnb");
+    },
+    handleToBitget() {
+      window.open("https://link.medium.com/gIieBSoqBKb");
     },
 
     async getInfo() {
