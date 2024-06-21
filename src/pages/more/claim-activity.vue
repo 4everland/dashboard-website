@@ -332,21 +332,21 @@ export default {
       networkList: [
         {
           name: "Polygon",
-          icon: require("/public/img/svg/billing/ic-polygon-0.svg"),
+          icon: require("/public/img/svg/billing/ic-polygon.png"),
           type: "Polygon",
           chainId: this.$inDev ? 80001 : 137,
           contractAddr: MumbaiLandRecharge,
         },
         {
           name: "Polygon zkEVM",
-          icon: require("/public/img/svg/billing/ic-polygon-zkEVM.svg"),
+          icon: require("/public/img/svg/billing/ic-polygon-zkEVM.png"),
           type: "PolygonZkEVM",
           chainId: this.$inDev ? 1442 : 1101,
           contractAddr: polygonZkEVMRecharge,
         },
         {
           name: "Ethereum",
-          icon: require("/public/img/svg/billing/ic-ethereum.svg"),
+          icon: require("/public/img/svg/billing/ic-ethereum.png"),
           type: "Ethereum",
           chainId: this.$inDev ? 11155111 : 1,
           contractAddr: GoerliLandRecharge,
@@ -388,14 +388,14 @@ export default {
         },
         {
           name: "Linea",
-          icon: require("/public/img/svg/billing/ic-linea.svg"),
+          icon: require("/public/img/svg/billing/ic-linea.png"),
           type: "Linea",
           chainId: this.$inDev ? 59140 : 59144,
           contractAddr: lineaRecharge,
         },
         {
           name: "Blast",
-          icon: require("/public/img/svg/billing/ic-blast.svg"),
+          icon: require("/public/img/svg/billing/ic-blast.png"),
           type: "Blast",
           chainId: this.$inDev ? 168587773 : 81457,
           contractAddr: blastRecharge,
