@@ -173,11 +173,21 @@ export default {
       }
       return coinList;
     },
+
+    tokenAddrList() {
+      return [
+        { token: "USDC", addr: "" },
+        { token: "USDT", addr: "" },
+        { token: "DAI", addr: "" },
+      ];
+    },
   },
   methods: {
     onSelect(label) {
       this.$emit("onSelectCoin", label);
     },
+
+    getBalance() {},
   },
 };
 </script>
