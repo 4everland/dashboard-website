@@ -155,6 +155,29 @@
             </div>
             <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
+                <img src="/img/airDrop/tge-airdrop.png" width="100%" alt="" />
+              </div>
+              <div class="pa-6 task-desc h-flex">
+                <div class="fz-20 fw-b cursor-p text-white">
+                  4EVERLAND - TGE Party with SPACE ID
+                </div>
+                <div class="fz-14 mt-4">
+                  Join the Pre-TGE Party with SPACE ID & 4EVERLAND to win $4EVER
+                  points and snag upcoming airdrops! 1,000 OAT holders will be
+                  randomly selected to share 500,000 $4EVER Points!
+                </div>
+                <div class="mt-8 al-c space-btw">
+                  <div class="reward fz-20 fw-b">
+                    Shared Reward of 5 Million Points
+                  </div>
+                  <v-btn color="#039CFF" @click="handleToTge">
+                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  </v-btn>
+                </div>
+              </div>
+            </div>
+            <div class="task-item d-flex mb-4">
+              <div class="pa-6 task-img-wrap">
                 <img src="/img/airDrop/commingsoon.png" width="100%" alt="" />
               </div>
               <div class="pa-6 task-desc">
@@ -257,6 +280,9 @@ export default {
     },
     handleToBitget() {
       window.open("https://link.medium.com/gIieBSoqBKb");
+    },
+    handleToTge() {
+      window.open("https://app.galxe.com/quest/4EVERLAND/GCGhwtgwin");
     },
 
     async getInfo() {
