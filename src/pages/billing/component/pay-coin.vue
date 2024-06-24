@@ -61,7 +61,9 @@
 </template>
 
 <script>
+import { ethers } from "ethers";
 import { mapState, mapGetters } from "vuex";
+import { formatEther } from "ethers/lib/utils";
 export default {
   props: {
     value: {
@@ -82,6 +84,7 @@ export default {
   computed: {
     ...mapState({
       isZksyncLite: (s) => s.isZksyncLite,
+      connectAddr: (s) => s.connectAddr,
     }),
     ...mapGetters(["walletObj"]),
 
@@ -182,12 +185,54 @@ export default {
       ];
     },
   },
+
   methods: {
     onSelect(label) {
       this.$emit("onSelectCoin", label);
     },
 
-    getBalance() {},
+    async fetchBalance(tokenAddress) {
+      try {
+        this.isLoading = true;
+        const provider = new ethers.providers.Web3Provider(this.walletObj);
+        if (tokenAddress) {
+          const contract = new ethers.Contract(
+            tokenAddress,
+            ["function balanceOf(address) view returns (uint256)"],
+            provider
+          );
+
+          console.log(contract);
+          const tokenBalance = await contract.balanceOf(this.connectAddr);
+          const balance = ethers.utils.formatUnits(
+            tokenBalance,
+            await contract.decimals()
+          );
+          console.log(balance);
+        } else {
+          const ethBalance = await provider.getBalance(this.connectAddr);
+
+          console.log(ethBalance);
+          console.log(formatEther(ethBalance));
+          // this.balance = formatEther(ethBalance);
+        }
+      } catch (err) {
+        this.error = err;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+  },
+  watch: {
+    connectAddr(val) {
+      if (val) {
+        this.fetchBalance();
+      }
+    },
+    chainId(val) {
+      console.log(val);
+      this.fetchBalance();
+    },
   },
 };
 </script>
