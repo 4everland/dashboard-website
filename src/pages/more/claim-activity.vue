@@ -304,7 +304,6 @@ import { BlastOracleLand__factory } from "@4everland-contracts";
 import { providers } from "ethers";
 import { Web3Provider } from "zksync-web3";
 import { parseEther } from "ethers/lib/utils";
-
 import uidToEuid from "@/utils/uid2euid";
 import {
   ChapelLandRecharge,
@@ -428,6 +427,7 @@ export default {
     ...mapState({
       teamId: (s) => s.teamId,
       userInfo: (s) => s.userInfo,
+      connectAddr: (s) => s.connectAddr,
     }),
     ...mapGetters(["walletObj"]),
     euid() {
@@ -501,8 +501,15 @@ export default {
 
         const price = await BlastOracleLand.callStatic.fetchPrice();
 
+        const mintPrice = parseEther("0.05").mul(parseEther("1")).div(price);
+
+        const balance = await this.fetchBalance(address);
+        if (balance.lte(mintPrice)) {
+          throw new Error("Insufficient balance in your wallet.");
+        }
+
         let tx = await BlastOracleLand.mintByETH(this.euid, {
-          value: parseEther("0.05").mul(parseEther("1")).div(price),
+          value: mintPrice,
         });
         await this.$http.post(`$bill-consume/activity/recharge/report`, {
           source: this.source,
@@ -815,6 +822,11 @@ export default {
         console.log("add chain err", error);
         throw error;
       }
+    },
+    async fetchBalance(addr) {
+      const provider = new providers.Web3Provider(this.walletObj);
+      const ethBalance = await provider.getBalance(addr);
+      return ethBalance;
     },
   },
 };
