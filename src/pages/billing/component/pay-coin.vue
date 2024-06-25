@@ -34,26 +34,33 @@
             >
               {{ it.name }}
             </div>
-            <div>{{ it.showLabel }}</div>
+            <div>
+              {{ it.showLabel }}
+
+              <v-tooltip
+                top
+                max-width="300"
+                nudge-top="5"
+                v-if="it.label == 'USDCE'"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon class="ml-auto" size="18" v-bind="attrs" v-on="on"
+                    >mdi-alert-circle-outline</v-icon
+                  >
+                </template>
+                <div style="line-height: normal" class="py-2">
+                  The USDC.e is a "bridged form Ethereum USDC", which is bridged
+                  from the Ethereum blockchain. You can also opt to purchase it
+                  from Uniswap
+                </div>
+              </v-tooltip>
+            </div>
           </div>
 
-          <v-tooltip
-            top
-            max-width="300"
-            nudge-top="5"
-            v-if="it.label == 'USDCE'"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon class="ml-auto" size="18" v-bind="attrs" v-on="on"
-                >mdi-alert-circle-outline</v-icon
-              >
-            </template>
-            <div style="line-height: normal" class="py-2">
-              The USDC.e is a "bridged form Ethereum USDC", which is bridged
-              from the Ethereum blockchain. You can also opt to purchase it from
-              Uniswap
-            </div>
-          </v-tooltip>
+          <div class="ml-auto ta-r" v-show="it.balance">
+            <div class="fz-14">{{ it.balance }}</div>
+            <div class="balance fz-12">Balance</div>
+          </div>
         </div>
       </div>
     </div>
@@ -61,27 +68,57 @@
 </template>
 
 <script>
+import { ethers } from "ethers";
 import { mapState, mapGetters } from "vuex";
+import { formatEther } from "ethers/lib/utils";
+
+import {
+  MumbaiUSDC,
+  MumbaiUSDCE,
+  MumbaiUSDT,
+  MumbaiDAI,
+  GoerliUSDC,
+  GoerliUSDT,
+  GoerliDAI,
+  ChapelUSDC,
+  ChapelUSDT,
+  ChapelDAI,
+  ArbitrumUSDC,
+  ArbitrumUSDT,
+  ArbitrumDAI,
+  zkSyncUSDC,
+  zkSyncUSDT,
+  zkSyncDAI,
+  optimisUSDC,
+  optimisUSDT,
+  optimisDAI,
+  scrollUSDC,
+  scrollUSDT,
+  scrollDAI,
+} from "../../../plugins/pay/contracts/contracts-addr";
 export default {
   props: {
     value: {
       type: String,
     },
+    chainId: {
+      type: Number,
+    },
   },
   data() {
     return {
       selected: "USDC",
-      chainId: 1,
+      USDCbalance: "",
+      USDCEbalance: "",
+      USDTbalance: "",
+      DAIbalance: "",
+      originBalance: "",
     };
-  },
-  created() {
-    this.walletObj.on("chainChanged", (chainId) => {
-      this.chainId = parseInt(chainId);
-    });
   },
   computed: {
     ...mapState({
       isZksyncLite: (s) => s.isZksyncLite,
+      connectAddr: (s) => s.connectAddr,
     }),
     ...mapGetters(["walletObj"]),
 
@@ -98,28 +135,59 @@ export default {
           showLabel: "USDC",
           name: "USDC Coin",
           img: "/img/svg/pay/usdc.svg",
+          addr: "",
         },
         {
           label: "USDT",
           showLabel: "USDT",
           name: "Tether USD",
           img: "/img/svg/pay/usdt.svg",
+          addr: "",
         },
         {
           label: "DAI",
           showLabel: "DAI",
           name: "Dai Stablecoin",
           img: "/img/svg/pay/dai.svg",
+          addr: "",
         },
       ];
 
       if (this.showToolTip) {
-        coinList.splice(1, 0, {
-          label: "USDCE",
-          showLabel: "USDC.e",
-          name: "Bridged USDC",
-          img: "/img/svg/pay/usdc.svg",
-        });
+        return [
+          {
+            label: "USDCE",
+            showLabel: "USDC.e",
+            name: "Bridged USDC",
+            img: "/img/svg/pay/usdc.svg",
+            addr: MumbaiUSDCE,
+            balance: this.USDCEbalance,
+          },
+          {
+            label: "USDC",
+            showLabel: "USDC",
+            name: "USDC Coin",
+            img: "/img/svg/pay/usdc.svg",
+            addr: MumbaiUSDC,
+            balance: this.USDCbalance,
+          },
+          {
+            label: "USDT",
+            showLabel: "USDT",
+            name: "Tether USD",
+            img: "/img/svg/pay/usdt.svg",
+            addr: MumbaiUSDT,
+            balance: this.USDTbalance,
+          },
+          {
+            label: "DAI",
+            showLabel: "DAI",
+            name: "Dai Stablecoin",
+            img: "/img/svg/pay/dai.svg",
+            addr: MumbaiDAI,
+            balance: this.DAIbalance,
+          },
+        ];
       }
       if (this.isZksyncLite) {
         return [
@@ -128,17 +196,62 @@ export default {
             showLabel: "ETH",
             name: "ETH",
             img: "/img/svg/pay/eth.svg",
+            addr: "",
+            // balance: this.originBalance,
           },
         ];
       }
 
       if (this.chainId == 1 || this.chainId == 10 || this.chainId == 534352) {
-        coinList.push({
-          label: "ETH",
-          showLabel: "ETH",
-          name: "ETH",
-          img: "/img/svg/pay/eth.svg",
-        });
+        return [
+          {
+            label: "USDC",
+            showLabel: "USDC",
+            name: "USDC Coin",
+            img: "/img/svg/pay/usdc.svg",
+            addr:
+              this.chainId == 1
+                ? GoerliUSDC
+                : this.chainId == 10
+                ? optimisUSDC
+                : scrollUSDC,
+            balance: this.USDCbalance,
+          },
+          {
+            label: "USDT",
+            showLabel: "USDT",
+            name: "Tether USD",
+            img: "/img/svg/pay/usdt.svg",
+            addr:
+              this.chainId == 1
+                ? GoerliUSDT
+                : this.chainId == 10
+                ? optimisUSDT
+                : scrollUSDT,
+            balance: this.USDTbalance,
+          },
+          {
+            label: "DAI",
+            showLabel: "DAI",
+            name: "Dai Stablecoin",
+            img: "/img/svg/pay/dai.svg",
+            addr:
+              this.chainId == 1
+                ? GoerliDAI
+                : this.chainId == 10
+                ? optimisDAI
+                : scrollDAI,
+            balance: this.DAIbalance,
+          },
+          {
+            label: "ETH",
+            showLabel: "ETH",
+            name: "ETH",
+            img: "/img/svg/pay/eth.svg",
+            addr: "",
+            balance: this.originBalance,
+          },
+        ];
       }
 
       if (this.chainId == 81457 || this.chainId == 167000) {
@@ -148,6 +261,8 @@ export default {
             showLabel: "ETH",
             name: "ETH",
             img: "/img/svg/pay/eth.svg",
+            addr: "",
+            balance: this.originBalance,
           },
         ];
       }
@@ -159,24 +274,200 @@ export default {
             showLabel: "BNB",
             name: "BNB",
             img: "/img/svg/pay/bnb.svg",
+            addr: "",
+            balance: this.originBalance,
           },
         ];
       }
 
       if (this.chainId == 56 || this.chainId == 97) {
-        coinList.unshift({
-          label: "BNB",
-          showLabel: "BNB",
-          name: "BNB",
-          img: "/img/svg/pay/bnb.svg",
-        });
+        return [
+          {
+            label: "BNB",
+            showLabel: "BNB",
+            name: "BNB",
+            img: "/img/svg/pay/bnb.svg",
+            addr: "",
+            balance: this.originBalance,
+          },
+          {
+            label: "USDC",
+            showLabel: "USDC",
+            name: "USDC Coin",
+            img: "/img/svg/pay/usdc.svg",
+            addr: ChapelUSDC,
+            balance: this.USDCbalance,
+          },
+          {
+            label: "USDT",
+            showLabel: "USDT",
+            name: "Tether USD",
+            img: "/img/svg/pay/usdt.svg",
+            addr: ChapelUSDT,
+            balance: this.USDTbalance,
+          },
+          {
+            label: "DAI",
+            showLabel: "DAI",
+            name: "Dai Stablecoin",
+            img: "/img/svg/pay/dai.svg",
+            addr: ChapelDAI,
+            balance: this.DAIbalance,
+          },
+        ];
       }
+
+      if (this.chainId == 42161 || this.chainId == 421613) {
+        return [
+          {
+            label: "USDC",
+            showLabel: "USDC",
+            name: "USDC Coin",
+            img: "/img/svg/pay/usdc.svg",
+            addr: ArbitrumUSDC,
+            balance: this.USDCbalance,
+          },
+          {
+            label: "USDT",
+            showLabel: "USDT",
+            name: "Tether USD",
+            img: "/img/svg/pay/usdt.svg",
+            addr: ArbitrumUSDT,
+            balance: this.USDTbalance,
+          },
+          {
+            label: "DAI",
+            showLabel: "DAI",
+            name: "Dai Stablecoin",
+            img: "/img/svg/pay/dai.svg",
+            addr: ArbitrumDAI,
+            balance: this.DAIbalance,
+          },
+        ];
+      }
+      if (this.chainId == 324 || this.chainId == 280) {
+        return [
+          {
+            label: "USDC",
+            showLabel: "USDC",
+            name: "USDC Coin",
+            img: "/img/svg/pay/usdc.svg",
+            addr: zkSyncUSDC,
+            balance: this.USDCbalance,
+          },
+          {
+            label: "USDT",
+            showLabel: "USDT",
+            name: "Tether USD",
+            img: "/img/svg/pay/usdt.svg",
+            addr: zkSyncUSDT,
+            balance: this.USDTbalance,
+          },
+          {
+            label: "DAI",
+            showLabel: "DAI",
+            name: "Dai Stablecoin",
+            img: "/img/svg/pay/dai.svg",
+            addr: zkSyncDAI,
+            balance: this.DAIbalance,
+          },
+        ];
+      }
+
       return coinList;
     },
   },
   methods: {
     onSelect(label) {
       this.$emit("onSelectCoin", label);
+    },
+
+    async fetchBalance(tokenAddress) {
+      try {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        let address = accounts[0];
+
+        if (!address) return;
+        const provider = new ethers.providers.Web3Provider(this.walletObj);
+        if (tokenAddress) {
+          const contract = new ethers.Contract(
+            tokenAddress,
+            [
+              {
+                constant: true,
+                inputs: [],
+                name: "decimals",
+                outputs: [
+                  {
+                    name: "",
+                    type: "uint8",
+                  },
+                ],
+                payable: false,
+                stateMutability: "view",
+                type: "function",
+              },
+              {
+                constant: true,
+                inputs: [
+                  {
+                    name: "account",
+                    type: "address",
+                  },
+                ],
+                name: "balanceOf",
+                outputs: [
+                  {
+                    name: "",
+                    type: "uint256",
+                  },
+                ],
+                payable: false,
+                stateMutability: "view",
+                type: "function",
+              },
+            ],
+            provider
+          );
+
+          const tokenBalance = await contract.balanceOf(address);
+          const balance = ethers.utils.formatUnits(
+            tokenBalance,
+            await contract.decimals()
+          );
+
+          return Number(balance).toFixed(5);
+        } else {
+          const ethBalance = await provider.getBalance(address);
+          return Number(formatEther(ethBalance)).toFixed(5);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    fetchAllBalance() {
+      this.coinList.forEach((it) => {
+        let varibal = it.label + "balance";
+        this.fetchBalance(it.addr).then((res) => {
+          if (!it.addr) {
+            this.originBalance = res;
+          } else {
+            this[varibal] = res;
+          }
+        });
+      });
+    },
+  },
+  watch: {
+    chainId(val) {
+      console.log(val);
+      this.fetchAllBalance();
+    },
+    connectAddr() {
+      this.fetchAllBalance();
     },
   },
 };
@@ -192,6 +483,9 @@ export default {
   font-weight: bold;
   border: 1px solid #735ea1;
 }
+.balance {
+  color: #64748b;
+}
 .v-tooltip__content {
   background: rgba(0, 0, 0, 0.9);
   border-radius: 4px;
@@ -200,7 +494,7 @@ export default {
   display: block;
   content: "";
   position: absolute;
-  right: 52px;
+  right: 50%;
   bottom: -20px;
   border: 10px solid transparent;
   border-top-color: rgba(0, 0, 0, 0.9);

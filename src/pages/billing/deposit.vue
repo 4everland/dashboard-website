@@ -40,6 +40,7 @@
         v-else
         v-model="coinSelect"
         class="flex-1"
+        ref="payCoin"
         :chainId="chainId"
         @onSelectCoin="handleSelectCoin"
       ></pay-coin>
@@ -156,7 +157,7 @@ export default {
       ethAmount: BigNumber.from("0"),
       blastUnitPrice: BigNumber.from("0"),
       curAmountDecimals: 18,
-      chainId: this.$inDev ? 80001 : 137,
+      chainId: 0,
       rechargeSuccess: false,
       checkApproving: false,
       approving: false,
@@ -253,12 +254,12 @@ export default {
     },
   },
   mounted() {
-    // this.checkApproved();
     this.walletObj.on("accountsChanged", (val) => {
       this.$store.commit("SET_CONNECT_ADDR", val[0]);
       this.checkApproved();
     });
   },
+
   methods: {
     async onNetwork(chainId) {
       console.log(chainId, "onNetwork---");
@@ -407,6 +408,8 @@ export default {
           if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
             this.$router.push("/billing/records?tab=Deposit History");
           }
+
+          this.$refs.payCoin.fetchAllBalance();
         } catch (error) {
           this.onErr(error);
         }
@@ -560,7 +563,8 @@ export default {
       } else if (
         /exceeds balance/i.test(msg) ||
         msg == "overflow" ||
-        /insufficient funds/i.test(msg)
+        /insufficient funds/i.test(msg) ||
+        /insufficient-balance/i.test(msg)
       ) {
         msg = "Insufficient balance in your wallet.";
       } else if (msg.length > 100) {
@@ -577,7 +581,6 @@ export default {
       }
       return this.$alert(msg, "Error");
     },
-
     transactionCache(txHash) {
       let transactionItem = {
         network: this.chainId.toString(),
