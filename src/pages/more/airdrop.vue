@@ -168,7 +168,7 @@
                 </div>
                 <div class="mt-8 al-c space-btw">
                   <div class="reward fz-20 fw-b">
-                    Shared Reward of 5 Million Points
+                    Shared Reward of 500 Thousand Points
                   </div>
                   <v-btn color="#039CFF" @click="handleToTge">
                     <span class="fw-b" style="color: #fff">Let's Go</span>
