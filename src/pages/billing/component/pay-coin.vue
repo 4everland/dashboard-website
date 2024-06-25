@@ -57,7 +57,7 @@
             </div>
           </div>
 
-          <div class="ml-auto ta-r">
+          <div class="ml-auto ta-r" v-show="it.balance">
             <div class="fz-14">{{ it.balance }}</div>
             <div class="balance fz-12">Balance</div>
           </div>
@@ -108,19 +108,12 @@ export default {
   data() {
     return {
       selected: "USDC",
-      // chainId: 1,
       USDCbalance: "",
       USDCEbalance: "",
       USDTbalance: "",
       DAIbalance: "",
       originBalance: "",
     };
-  },
-  created() {
-    // this.walletObj.on("chainChanged", (chainId) => {
-    //   console.log(chainId);
-    //   this.chainId = parseInt(chainId);
-    // });
   },
   computed: {
     ...mapState({
@@ -161,13 +154,6 @@ export default {
       ];
 
       if (this.showToolTip) {
-        // coinList.splice(1, 0, {
-        //   label: "USDCE",
-        //   showLabel: "USDC.e",
-        //   name: "Bridged USDC",
-        //   img: "/img/svg/pay/usdc.svg",
-        // });
-
         return [
           {
             label: "USDCE",
@@ -211,19 +197,12 @@ export default {
             name: "ETH",
             img: "/img/svg/pay/eth.svg",
             addr: "",
-            balance: this.originBalance,
+            // balance: this.originBalance,
           },
         ];
       }
 
       if (this.chainId == 1 || this.chainId == 10 || this.chainId == 534352) {
-        // coinList.push({
-        //   label: "ETH",
-        //   showLabel: "ETH",
-        //   name: "ETH",
-        //   img: "/img/svg/pay/eth.svg",
-        // });
-
         return [
           {
             label: "USDC",
@@ -302,13 +281,6 @@ export default {
       }
 
       if (this.chainId == 56 || this.chainId == 97) {
-        // coinList.unshift({
-        //   label: "BNB",
-        //   showLabel: "BNB",
-        //   name: "BNB",
-        //   img: "/img/svg/pay/bnb.svg",
-        // });
-
         return [
           {
             label: "BNB",
@@ -465,13 +437,11 @@ export default {
             tokenBalance,
             await contract.decimals()
           );
+
           return Number(balance).toFixed(5);
         } else {
           const ethBalance = await provider.getBalance(address);
-          // console.log(ethBalance);
-          // console.log(formatEther(ethBalance));
           return Number(formatEther(ethBalance)).toFixed(5);
-          // this.balance = formatEther(ethBalance);
         }
       } catch (err) {
         console.log(err);
@@ -492,7 +462,8 @@ export default {
     },
   },
   watch: {
-    chainId() {
+    chainId(val) {
+      console.log(val);
       this.fetchAllBalance();
     },
     connectAddr() {
