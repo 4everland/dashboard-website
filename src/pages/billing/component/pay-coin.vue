@@ -34,26 +34,33 @@
             >
               {{ it.name }}
             </div>
-            <div>{{ it.showLabel }}</div>
+            <div>
+              {{ it.showLabel }}
+
+              <v-tooltip
+                top
+                max-width="300"
+                nudge-top="5"
+                v-if="it.label == 'USDCE'"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-icon class="ml-auto" size="18" v-bind="attrs" v-on="on"
+                    >mdi-alert-circle-outline</v-icon
+                  >
+                </template>
+                <div style="line-height: normal" class="py-2">
+                  The USDC.e is a "bridged form Ethereum USDC", which is bridged
+                  from the Ethereum blockchain. You can also opt to purchase it
+                  from Uniswap
+                </div>
+              </v-tooltip>
+            </div>
           </div>
 
-          <v-tooltip
-            top
-            max-width="300"
-            nudge-top="5"
-            v-if="it.label == 'USDCE'"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon class="ml-auto" size="18" v-bind="attrs" v-on="on"
-                >mdi-alert-circle-outline</v-icon
-              >
-            </template>
-            <div style="line-height: normal" class="py-2">
-              The USDC.e is a "bridged form Ethereum USDC", which is bridged
-              from the Ethereum blockchain. You can also opt to purchase it from
-              Uniswap
-            </div>
-          </v-tooltip>
+          <div class="ml-auto ta-r">
+            <div class="fz-14">{{ it.balance }}</div>
+            <div class="balance fz-12">Balance</div>
+          </div>
         </div>
       </div>
     </div>
@@ -94,11 +101,14 @@ export default {
     value: {
       type: String,
     },
+    chainId: {
+      type: Number,
+    },
   },
   data() {
     return {
       selected: "USDC",
-      chainId: 1,
+      // chainId: 1,
       USDCbalance: "",
       USDCEbalance: "",
       USDTbalance: "",
@@ -107,9 +117,10 @@ export default {
     };
   },
   created() {
-    this.walletObj.on("chainChanged", (chainId) => {
-      this.chainId = parseInt(chainId);
-    });
+    // this.walletObj.on("chainChanged", (chainId) => {
+    //   console.log(chainId);
+    //   this.chainId = parseInt(chainId);
+    // });
   },
   computed: {
     ...mapState({
@@ -199,6 +210,8 @@ export default {
             showLabel: "ETH",
             name: "ETH",
             img: "/img/svg/pay/eth.svg",
+            addr: "",
+            balance: this.originBalance,
           },
         ];
       }
@@ -256,6 +269,8 @@ export default {
             showLabel: "ETH",
             name: "ETH",
             img: "/img/svg/pay/eth.svg",
+            addr: "",
+            balance: this.originBalance,
           },
         ];
       }
@@ -267,6 +282,8 @@ export default {
             showLabel: "ETH",
             name: "ETH",
             img: "/img/svg/pay/eth.svg",
+            addr: "",
+            balance: this.originBalance,
           },
         ];
       }
@@ -278,6 +295,8 @@ export default {
             showLabel: "BNB",
             name: "BNB",
             img: "/img/svg/pay/bnb.svg",
+            addr: "",
+            balance: this.originBalance,
           },
         ];
       }
@@ -296,6 +315,8 @@ export default {
             showLabel: "BNB",
             name: "BNB",
             img: "/img/svg/pay/bnb.svg",
+            addr: "",
+            balance: this.originBalance,
           },
           {
             label: "USDC",
@@ -384,7 +405,6 @@ export default {
       return coinList;
     },
   },
-
   methods: {
     onSelect(label) {
       this.$emit("onSelectCoin", label);
@@ -392,30 +412,65 @@ export default {
 
     async fetchBalance(tokenAddress) {
       try {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        let address = accounts[0];
+
+        if (!address) return;
         const provider = new ethers.providers.Web3Provider(this.walletObj);
         if (tokenAddress) {
           const contract = new ethers.Contract(
             tokenAddress,
-            ["function balanceOf(address) view returns (uint256)"],
+            [
+              {
+                constant: true,
+                inputs: [],
+                name: "decimals",
+                outputs: [
+                  {
+                    name: "",
+                    type: "uint8",
+                  },
+                ],
+                payable: false,
+                stateMutability: "view",
+                type: "function",
+              },
+              {
+                constant: true,
+                inputs: [
+                  {
+                    name: "account",
+                    type: "address",
+                  },
+                ],
+                name: "balanceOf",
+                outputs: [
+                  {
+                    name: "",
+                    type: "uint256",
+                  },
+                ],
+                payable: false,
+                stateMutability: "view",
+                type: "function",
+              },
+            ],
             provider
           );
 
-          console.log(contract);
-          const tokenBalance = await contract.balanceOf(this.connectAddr);
+          const tokenBalance = await contract.balanceOf(address);
           const balance = ethers.utils.formatUnits(
             tokenBalance,
             await contract.decimals()
           );
-          console.log(balance);
-
-          return balance;
+          return Number(balance).toFixed(5);
         } else {
-          const ethBalance = await provider.getBalance(this.connectAddr);
-
-          console.log(ethBalance);
-          console.log(formatEther(ethBalance));
-
-          return formatEther(ethBalance);
+          const ethBalance = await provider.getBalance(address);
+          // console.log(ethBalance);
+          // console.log(formatEther(ethBalance));
+          return Number(formatEther(ethBalance)).toFixed(5);
           // this.balance = formatEther(ethBalance);
         }
       } catch (err) {
@@ -424,22 +479,23 @@ export default {
     },
 
     fetchAllBalance() {
-      // this.coinList.forEach((it) => {
-      //   let varibal = it.label + "balance";
-      //   this.fetchAllBalance(it.addr).then((res) => {
-      //     console.log(res);
-      //   });
-      //   console.log(varibal);
-      // });
+      this.coinList.forEach((it) => {
+        let varibal = it.label + "balance";
+        this.fetchBalance(it.addr).then((res) => {
+          if (!it.addr) {
+            this.originBalance = res;
+          } else {
+            this[varibal] = res;
+          }
+        });
+      });
     },
   },
   watch: {
-    connectAddr(val) {
-      if (val) {
-        this.fetchAllBalance();
-      }
-    },
     chainId() {
+      this.fetchAllBalance();
+    },
+    connectAddr() {
       this.fetchAllBalance();
     },
   },
@@ -456,6 +512,9 @@ export default {
   font-weight: bold;
   border: 1px solid #735ea1;
 }
+.balance {
+  color: #64748b;
+}
 .v-tooltip__content {
   background: rgba(0, 0, 0, 0.9);
   border-radius: 4px;
@@ -464,7 +523,7 @@ export default {
   display: block;
   content: "";
   position: absolute;
-  right: 52px;
+  right: 50%;
   bottom: -20px;
   border: 10px solid transparent;
   border-top-color: rgba(0, 0, 0, 0.9);
