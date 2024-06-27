@@ -1917,6 +1917,11 @@
     "@bonfida/name-offers" "^0.0.1"
     "@ethersproject/sha2" "^5.5.0"
 
+"@consenlabs-fe/webview@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@consenlabs-fe/webview/-/webview-0.1.1.tgz#2911a6ad7044c20d782131e02231f92fc76be02d"
+  integrity sha512-BC3k66NMAk1+cvOptMNNYe0/wQAZoxHeRbYN+YLJay9tIsu+4YES5nt7b31+k2uAmuFRUphQdNcfYFeRMbqMNg==
+
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
