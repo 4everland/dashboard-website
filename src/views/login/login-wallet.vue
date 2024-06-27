@@ -27,7 +27,7 @@
     </div>
     <div id="grecaptcha" data-callback="onSubmit" data-size="invisible"></div>
     <div>
-      <v-dialog v-model="showQrcode" max-width="450">
+      <v-dialog v-model="showQrcode" max-width="450" :retain-focus="false">
         <div class="qrcode-title">
           <v-btn icon class="close-icon" @click="showQrcode = false">
             <v-icon> mdi-close</v-icon>
