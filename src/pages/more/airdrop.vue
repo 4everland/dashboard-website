@@ -140,11 +140,11 @@
                   <div class="reward fz-20 fw-b">
                     Shared Reward of 5 Million Points
                   </div>
-                  <v-btn color="#039CFF" @click="handleToBitget">
+                  <!-- <v-btn color="#039CFF" @click="handleToBitget">
                     <span class="fw-b" style="color: #fff">Let's Go</span>
-                  </v-btn>
+                  </v-btn> -->
 
-                  <!-- <div class="al-c">
+                  <div class="al-c">
                     <span
                       class="mr-2 fw-b"
                       style="color: #039cff"
@@ -172,7 +172,7 @@
                         bitgetStatus.buttonName
                       }}</span>
                     </v-btn>
-                  </div> -->
+                  </div>
                 </div>
               </div>
             </div>
