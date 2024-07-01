@@ -97,34 +97,27 @@
           <div class="task-list mt-6">
             <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
-                <img
-                  src="/img/airDrop/bnb-airdrop-activity.png"
-                  width="100%"
-                  alt=""
-                />
+                <img src="/img/airDrop/tge-airdrop.png" width="100%" alt="" />
               </div>
-              <div class="pa-6 task-desc">
-                <div class="fz-20 fw-b cursor-p text-white" @click="handleBnB">
-                  BNB CHAIN AIRDROP ALLIANCE PROGRAM
+              <div class="pa-6 task-desc h-flex">
+                <div class="fz-20 fw-b cursor-p text-white">
+                  4EVERLAND - TGE Party with SPACE ID
                 </div>
                 <div class="fz-14 mt-4">
-                  The BNB Chain Airdrop Alliance Program serves as a gesture of
-                  gratitude towards the supportive BNB Chain community. Through
-                  this program, 4EVERLAND is partnering with BNB Chain to
-                  introduce exclusive rewards for retroactive users on BNB Smart
-                  Chain (BSC) and opBNB.
+                  Join the Pre-TGE Party with SPACE ID & 4EVERLAND to win $4EVER
+                  points and snag upcoming airdrops! 1,000 OAT holders will be
+                  randomly selected to share 500,000 $4EVER Points!
                 </div>
                 <div class="mt-8 al-c space-btw">
                   <div class="reward fz-20 fw-b">
-                    Shared Reward of 15 Million Points
+                    Shared Reward of 500,000 Points
                   </div>
-                  <v-btn color="#039CFF" @click="handleBnB">
+                  <v-btn color="#039CFF" @click="handleToTge">
                     <span class="fw-b" style="color: #fff">Let's Go</span>
                   </v-btn>
                 </div>
               </div>
             </div>
-
             <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
                 <img
@@ -185,28 +178,35 @@
             </div>
             <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
-                <img src="/img/airDrop/tge-airdrop.png" width="100%" alt="" />
+                <img
+                  src="/img/airDrop/bnb-airdrop-activity.png"
+                  width="100%"
+                  alt=""
+                />
               </div>
-              <div class="pa-6 task-desc h-flex">
-                <div class="fz-20 fw-b cursor-p text-white">
-                  4EVERLAND - TGE Party with SPACE ID
+              <div class="pa-6 task-desc">
+                <div class="fz-20 fw-b cursor-p text-white" @click="handleBnB">
+                  BNB CHAIN AIRDROP ALLIANCE PROGRAM
                 </div>
                 <div class="fz-14 mt-4">
-                  Join the Pre-TGE Party with SPACE ID & 4EVERLAND to win $4EVER
-                  points and snag upcoming airdrops! 1,000 OAT holders will be
-                  randomly selected to share 500,000 $4EVER Points!
+                  The BNB Chain Airdrop Alliance Program serves as a gesture of
+                  gratitude towards the supportive BNB Chain community. Through
+                  this program, 4EVERLAND is partnering with BNB Chain to
+                  introduce exclusive rewards for retroactive users on BNB Smart
+                  Chain (BSC) and opBNB.
                 </div>
                 <div class="mt-8 al-c space-btw">
                   <div class="reward fz-20 fw-b">
-                    Shared Reward of 500,000 Points
+                    Shared Reward of 15 Million Points
                   </div>
-                  <v-btn color="#039CFF" @click="handleToTge">
-                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  <v-btn color="#039CFF" @click="handleBnB">
+                    <span class="fw-b" style="color: #fff">Claim</span>
                   </v-btn>
                 </div>
               </div>
             </div>
-            <div class="task-item d-flex mb-4">
+
+            <!-- <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
                 <img src="/img/airDrop/commingsoon.png" width="100%" alt="" />
               </div>
@@ -219,7 +219,7 @@
                   updates!
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
