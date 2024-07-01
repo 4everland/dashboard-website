@@ -52,7 +52,7 @@ export default {
             "IPFS",
             "Arweave",
             "Band Width",
-            "Build Minutes",
+            "Build Time",
             "RPC Requests",
             "AI RPC",
           ],
@@ -141,7 +141,7 @@ export default {
             data: this.TRAFFIC,
           },
           {
-            name: "Build Minutes",
+            name: "Build Time",
             type: "line",
             itemStyle: {
               color: "#F3CC5C",

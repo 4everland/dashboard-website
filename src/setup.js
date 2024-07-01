@@ -199,7 +199,7 @@ Vue.prototype.$utils = {
   },
   getPurchase(type, amount = 0, time) {
     const nameMap = {
-      BUILD_TIME: "Build Minutes",
+      BUILD_TIME: "Build Time",
       TRAFFIC: "Bandwidth",
       AR_STORAGE: "Arweave Storage",
       IPFS_STORAGE: "IPFS Storage",

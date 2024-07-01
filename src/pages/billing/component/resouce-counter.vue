@@ -180,7 +180,7 @@ export default {
           ],
         },
         {
-          name: "BindWidth",
+          name: "Bindwidth",
           tags: [
             {
               text: "500 MB",
@@ -209,7 +209,7 @@ export default {
           ],
         },
         {
-          name: "Build Minutes",
+          name: "Build Time",
           tags: [
             { text: "500 Min", value: 500 * 60 },
             {
@@ -298,7 +298,7 @@ export default {
           expectedUnit: "GB",
         },
         {
-          resourceName: "BindWidth",
+          resourceName: "Bindwidth",
           // unitPrice: "20 GB/1000 LAND",
           unitPrice: Math.round(
             Number(formatEther(this.bandwidthUnitPrice.mul(1024 * 1024 * 1024)))
@@ -307,7 +307,7 @@ export default {
           expectedUnit: "GB",
         },
         {
-          resourceName: "Build Minutes",
+          resourceName: "Build Time",
           unitPrice: Math.round(
             Number(formatEther(this.buildMinUnitPrice.mul(60)))
           ),
@@ -353,12 +353,12 @@ export default {
             this.arUnitPrice
           );
           break;
-        case "BindWidth":
+        case "Bindwidth":
           this.bandwidthPrice = BigNumber.from(payload.value.toString()).mul(
             this.bandwidthUnitPrice
           );
           break;
-        case "Build Minutes":
+        case "Build Time":
           this.buildMinPrice = BigNumber.from(payload.value.toString()).mul(
             this.buildMinUnitPrice
           );

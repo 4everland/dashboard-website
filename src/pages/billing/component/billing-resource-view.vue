@@ -80,7 +80,7 @@ export default {
           };
         case "BUILD_TIME":
           return {
-            name: "Build Minutes",
+            name: "Build Time",
             img: "/img/svg/overview/buildtime.svg",
             total: this.$utils.getNumCount(this.view.total) + "Mins",
             used: this.$utils.getNumCount(this.view.used),

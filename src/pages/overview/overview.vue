@@ -358,7 +358,7 @@ export default {
               resourceUsed = this.$utils.getFileSize(it.resourceUsed);
               break;
             case "BUILD_TIME":
-              name = "Build Minutes";
+              name = "Build Time";
               color = "#F3CC5C";
               resourceUsed =
                 this.$utils.getNumCount(it.resourceUsed / 60) + "Mins";

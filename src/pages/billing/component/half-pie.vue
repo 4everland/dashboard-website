@@ -24,7 +24,7 @@ export default {
           { value: 0, name: "IPFS" },
           { value: 0, name: "Arweave" },
           { value: 0, name: "Bandwidth" },
-          { value: 0, name: "Build Minutes" },
+          { value: 0, name: "Build Time" },
           { value: 0, name: "RPC Requests" },
           { value: 0, name: "AI RPC" },
         ];
