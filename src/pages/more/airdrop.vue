@@ -155,7 +155,10 @@
                     <span
                       class="mr-2 fw-b"
                       style="color: #039cff"
-                      v-show="bitgetStatus.reward"
+                      v-show="
+                        bitgetStatus.reward &&
+                        bitgetStatus.taskStatus !== 'UNDO'
+                      "
                       >{{ bitgetStatus.reward }} Points</span
                     >
                     <v-btn
