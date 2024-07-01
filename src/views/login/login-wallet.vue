@@ -111,12 +111,12 @@ export default {
           icon: require("@/assets/imgs/Bitget.svg"),
           btnText: "",
         },
-        // {
-        //   name: "imToken",
-        //   icon: require("@/assets/imgs/imToken.svg"),
-        //   btnText: "",
-        //   loading: true,
-        // },
+        {
+          name: "imToken",
+          icon: require("@/assets/imgs/imToken.svg"),
+          btnText: "",
+          loading: true,
+        },
         {
           name: "Phantom",
           icon: require("@/assets/imgs/phantom.png"),
