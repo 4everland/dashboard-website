@@ -8,6 +8,10 @@ export function fetchTaskList(params) {
   });
 }
 
+export function fetchTaskStatus(id) {
+  return request.get("$auth/4everpass/newbie/" + id);
+}
+
 export function fetchTaskCard() {
   return request.get("$auth/4everpass", {
     noTip: 1,

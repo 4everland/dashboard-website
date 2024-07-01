@@ -150,6 +150,33 @@
                   <v-btn color="#039CFF" @click="handleToBitget">
                     <span class="fw-b" style="color: #fff">Let's Go</span>
                   </v-btn>
+
+                  <!-- <div class="al-c">
+                    <span
+                      class="mr-2 fw-b"
+                      style="color: #039cff"
+                      v-show="bitgetStatus.reward"
+                      >{{ bitgetStatus.reward }} Points</span
+                    >
+                    <v-btn
+                      class="claim-btn"
+                      color="#039cff"
+                      :disabled="bitgetStatus.taskStatus !== 'CLAIM'"
+                      :loading="bitgetLoading"
+                      @click="handleClaim"
+                    >
+                      <img
+                        v-show="bitgetStatus.taskStatus == 'DONE'"
+                        class="mr-1"
+                        width="16"
+                        src="/img/airDrop/checked.svg"
+                        alt=""
+                      />
+                      <span class="fw-b" style="color: #fff">{{
+                        bitgetStatus.buttonName
+                      }}</span>
+                    </v-btn>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -199,7 +226,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { fetchTaskCard } from "@/api/airdrop";
+import { fetchTaskCard, fetchTaskStatus, fetchNext } from "@/api/airdrop";
 import navHeader from "./components/nav-header.vue";
 export default {
   data() {
@@ -213,6 +240,12 @@ export default {
         points: "-",
         rank: "-",
       },
+      bitgetStatus: {
+        buttonName: "Not eligible",
+        taskStatus: "UNDO",
+        reward: "",
+      },
+      bitgetLoading: false,
     };
   },
   computed: {
@@ -270,6 +303,7 @@ export default {
   },
   created() {
     this.getInfo();
+    this.getBitgetInfo();
   },
   methods: {
     onScroll(e) {
@@ -294,11 +328,36 @@ export default {
         console.log(error);
       }
     },
+
+    async getBitgetInfo() {
+      try {
+        if (!localStorage.token) return;
+        const { data } = await fetchTaskStatus(6671);
+        this.bitgetStatus = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async handleClaim() {
+      this.bitgetLoading = true;
+      try {
+        await fetchNext(6671);
+        await this.getBitgetInfo();
+        await this.getInfo();
+      } catch (error) {
+        console.log(error);
+      }
+      this.bitgetLoading = false;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.claim-btn.theme--light.v-btn.v-btn--disabled.v-btn--has-bg {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+}
+
 .text-white {
   color: #fff;
 }
