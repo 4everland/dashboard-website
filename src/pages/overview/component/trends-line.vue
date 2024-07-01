@@ -35,7 +35,7 @@ export default {
       tagList: [
         {
           type: "TRAFFIC",
-          name: "BindWidth",
+          name: "Bandwidth",
         },
         {
           type: "BUILD_TIME",

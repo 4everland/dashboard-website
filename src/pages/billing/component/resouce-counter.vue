@@ -180,7 +180,7 @@ export default {
           ],
         },
         {
-          name: "BindWidth",
+          name: "Bandwidth",
           tags: [
             {
               text: "500 MB",
@@ -298,7 +298,7 @@ export default {
           expectedUnit: "GB",
         },
         {
-          resourceName: "BindWidth",
+          resourceName: "Bandwidth",
           // unitPrice: "20 GB/1000 LAND",
           unitPrice: Math.round(
             Number(formatEther(this.bandwidthUnitPrice.mul(1024 * 1024 * 1024)))
@@ -353,7 +353,7 @@ export default {
             this.arUnitPrice
           );
           break;
-        case "BindWidth":
+        case "Bandwidth":
           this.bandwidthPrice = BigNumber.from(payload.value.toString()).mul(
             this.bandwidthUnitPrice
           );
