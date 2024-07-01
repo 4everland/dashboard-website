@@ -209,7 +209,7 @@ export default {
           ],
         },
         {
-          name: "Build Minutes",
+          name: "Build Time",
           tags: [
             { text: "500 Min", value: 500 * 60 },
             {
@@ -307,7 +307,7 @@ export default {
           expectedUnit: "GB",
         },
         {
-          resourceName: "Build Minutes",
+          resourceName: "Build Time",
           unitPrice: Math.round(
             Number(formatEther(this.buildMinUnitPrice.mul(60)))
           ),
@@ -358,7 +358,7 @@ export default {
             this.bandwidthUnitPrice
           );
           break;
-        case "Build Minutes":
+        case "Build Time":
           this.buildMinPrice = BigNumber.from(payload.value.toString()).mul(
             this.buildMinUnitPrice
           );

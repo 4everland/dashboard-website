@@ -108,7 +108,7 @@
             <li>5 GB IPFS storage</li>
             <li>20 MB Arweave storage</li>
             <li>10 GB bandwidth</li>
-            <li>100 build minutes</li>
+            <li>100 build time</li>
           </ul>
         </div>
         <div class="step-title mt-4">
@@ -143,7 +143,7 @@
                 <li>6 GB IPFS storage</li>
                 <li>100 MB Arweave storage</li>
                 <li>100 GB bandwidth</li>
-                <li>250 build minutes</li>
+                <li>250 build time</li>
               </ul>
             </div>
           </div>

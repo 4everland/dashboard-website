@@ -137,7 +137,7 @@
     <v-row class="statistics-row">
       <v-col :md="4" cols="12" style="padding: 0">
         <div class="py-4 px-4 h-flex al-c">
-          <h4 class="fz-14">Build Minutes</h4>
+          <h4 class="fz-14">Build Time</h4>
           <div class="my-2">
             <span class="balance fw-b">{{ buildMin.size }}</span>
             <span class="fz-12 ml-2">{{ buildMin.unit }}</span>
@@ -617,7 +617,7 @@ export default {
               resourceUsed = this.$utils.getFileSize(it.resourceUsed);
               break;
             case "BUILD_TIME":
-              name = "Build Minutes";
+              name = "Build Time";
               color = "#F3CC5C";
               resourceUsed =
                 this.$utils.getNumCount(it.resourceUsed / 60) + "Mins";

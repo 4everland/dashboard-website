@@ -56,7 +56,7 @@
         </div>
         <div class="tips fz-14 mt-4">
           Tips: Automatic IPNS Redeployment will also consume your storage,
-          Bandwidth, and build minutes. Alternatively, you can update the CID
+          Bandwidth, and build time. Alternatively, you can update the CID
           manually after the project is created, since the network may not
           monitor every update.
         </div>

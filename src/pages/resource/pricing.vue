@@ -10,8 +10,8 @@
   <div class="price-docs fz-15 gray-6">
     <h3>Billing Methods</h3>
     <div>
-      4EVERLAND's service billing includes network bandwidth, build minutes,
-      IPFS storage, IPFS storage duration, and Arweave storage. You will receive
+      4EVERLAND's service billing includes network bandwidth, build time, IPFS
+      storage, IPFS storage duration, and Arweave storage. You will receive
       separate invoices for some services based on your usage. The system
       currently supports two payment methods, one for purchasing resources
       directly and one for depositing wallet balance. The system will give
@@ -31,7 +31,7 @@
       <thead class="bg-f7 gray-6">
         <tr>
           <td>Free bandwidth (Monthly)</td>
-          <td>Free build minutes (Monthly)</td>
+          <td>Free build time (Monthly)</td>
           <td>Free IPFS storage(New users only)</td>
           <td>Free Arweave storage</td>
         </tr>
@@ -50,7 +50,7 @@
       <thead class="bg-f7 gray-6">
         <tr>
           <td>Free bandwidth (Monthly)</td>
-          <td>Free build minutes (Monthly)</td>
+          <td>Free build time (Monthly)</td>
           <td>Free IPFS storage(New users only)</td>
           <td>Free Arweave storage</td>
         </tr>
@@ -90,8 +90,8 @@
           <td>$10 / 100G</td>
         </tr>
         <tr>
-          <td rowspan="2">Build Minutes</td>
-          <td rowspan="2">Build Minutes</td>
+          <td rowspan="2">Build Time</td>
+          <td rowspan="2">Build Time</td>
           <td>0-250Min</td>
           <td>Free / Month</td>
         </tr>

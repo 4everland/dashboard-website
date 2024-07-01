@@ -148,7 +148,7 @@ export default {
           ),
         },
         {
-          label: "Build Minutes",
+          label: "Build Time",
           icon: "buildtime.svg",
           color: "#F3CC5C",
           ...this.getPerc(

@@ -39,7 +39,7 @@ export default {
         },
         {
           type: "BUILD_TIME",
-          name: "Build Minutes",
+          name: "Build Time",
         },
         {
           type: "COMPUTE_UNIT",
