@@ -19,13 +19,31 @@
           <v-btn
             v-if="item.loading"
             disabled
-            :loading="walletConnectLoading"
+            :loading="walletConnectLoading && loadingName == item.name"
             icon
           ></v-btn>
         </div>
       </div>
     </div>
     <div id="grecaptcha" data-callback="onSubmit" data-size="invisible"></div>
+    <div>
+      <v-dialog v-model="showQrcode" max-width="450" :retain-focus="false">
+        <div class="qrcode-title">
+          <v-btn icon class="close-icon" @click="showQrcode = false">
+            <v-icon> mdi-close</v-icon>
+          </v-btn>
+          <span>Scan to use imToken</span>
+        </div>
+        <div class="qrcode">
+          <v-img max-height="300" max-width="300" :src="qrCodeUrl"></v-img>
+        </div>
+        <div class="text-center">
+          <v-btn text plain v-clipboard="qrcodeUri" @success="$toast('Copied!')"
+            >Copy to clipboard</v-btn
+          >
+        </div>
+      </v-dialog>
+    </div>
   </div>
 </template>
 
@@ -48,6 +66,10 @@ import {
   SignWalletCon,
   ConnectBitget,
   SignBitget,
+  ConnectImToken,
+  SignImToken,
+  ConnectImTokenWithMobile,
+  SignImTokenWithMobil,
 } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 
@@ -61,6 +83,7 @@ export default {
       sitekey: "6LdPnxclAAAAACTzYeZDztp3dcCKFUIG_5r313JV",
       walletName: "",
       walletConnectLoading: false,
+      loadingName: null,
       walletItem: [
         {
           name: "MetaMask",
@@ -89,6 +112,12 @@ export default {
           btnText: "",
         },
         {
+          name: "imToken",
+          icon: require("@/assets/imgs/imToken.svg"),
+          btnText: "",
+          loading: true,
+        },
+        {
           name: "Phantom",
           icon: require("@/assets/imgs/phantom.png"),
           btnText: "",
@@ -105,6 +134,9 @@ export default {
           btnText: "",
         },
       ],
+      showQrcode: false,
+      qrCodeUrl: "",
+      qrcodeUri: "",
     };
   },
   mounted() {
@@ -163,6 +195,9 @@ export default {
           break;
         case "Bitget Wallet":
           this.bitgetConnect();
+          break;
+        case "imToken":
+          this.imTokenConnect();
           break;
         default:
           break;
@@ -287,6 +322,7 @@ export default {
     },
     async walletConnect() {
       this.walletConnectLoading = true;
+      this.loadingName = "WalletConnect";
       window.walletConnectModal.subscribeModal((state) => {
         if (!state.open) {
           this.walletConnectLoading = false;
@@ -331,6 +367,58 @@ export default {
       if (stoken) {
         this.ssoLogin(stoken);
       }
+    },
+
+    async imTokenConnect() {
+      const isImToken = window.ethereum.isImToken;
+      if (isImToken) {
+        const accounts = await ConnectImTokenWithMobile();
+        if (!accounts) {
+          return;
+        }
+        const nonce = await ExchangeCode(accounts[0]);
+        if (!nonce) {
+          return;
+        }
+        const stoken = await SignImTokenWithMobil(
+          accounts[0],
+          nonce,
+          this.inviteCode,
+          this.capToken
+        );
+        if (stoken) {
+          this.ssoLogin(stoken);
+        }
+      } else {
+        this.walletConnectLoading = true;
+        this.loadingName = "imToken";
+        const { session, account } = await ConnectImToken(
+          this.showImTokenQrcode
+        );
+        if (!account) {
+          return;
+        }
+        const nonce = await ExchangeCode(account);
+        if (!nonce) {
+          return;
+        }
+        const stoken = await SignImToken(
+          account,
+          nonce,
+          this.inviteCode,
+          this.capToken,
+          session
+        );
+        if (stoken) {
+          this.ssoLogin(stoken);
+        }
+      }
+    },
+    showImTokenQrcode(url, uri) {
+      this.qrCodeUrl = url;
+      this.qrcodeUri = uri;
+      this.showQrcode = true;
+      this.walletConnectLoading = false;
     },
 
     onVerify(name) {
@@ -424,5 +512,42 @@ export default {
       }
     }
   }
+}
+
+.qrcode-title {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin: 16px 0;
+  padding-bottom: 10px;
+  position: relative;
+  border-bottom: 1px solid rgb(234, 236, 246);
+  .close-icon {
+    position: absolute;
+    left: 8px;
+    top: -8px;
+  }
+}
+.qrcode {
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+}
+.qrcode::after {
+  content: "";
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDUiIGhlaWdodD0iNDUiIHZpZXdCb3g9IjAgMCA0NSA0NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQzLjYgNy40QzQzLjEgNS4zIDQyLjIgNCA0MS4yIDNDNDAuMiAyIDM4LjggMSAzNi44IDAuNUMzNC44IDAgMzAuMiAwIDMwLjIgMEgxMy45QzEzLjkgMCA5LjQgMCA3LjMgMC41QzUuMyAxIDQgMS45IDIuOSAyLjlDMS45IDMuOSAwLjkgNS4zIDAuNSA3LjNDMCA5LjMgMCAxMy45IDAgMTMuOVYzMC4yQzAgMzAuMiAwIDM0LjcgMC41IDM2LjhDMSAzOC45IDEuOSA0MC4yIDIuOSA0MS4zQzMuOSA0Mi4zIDUuMyA0My4yIDcuMyA0My44QzkuMyA0NC4zIDEzLjkgNDQuMyAxMy45IDQ0LjNIMzAuMkMzMC4yIDQ0LjMgMzQuNyA0NC4zIDM2LjggNDMuOEMzOC45IDQzLjMgNDAuMiA0Mi40IDQxLjIgNDEuM0M0Mi4yIDQwLjMgNDMuMiAzOC45IDQzLjYgMzYuOUM0NC4xIDM0LjkgNDQuMSAzMC4zIDQ0LjEgMzAuM1YxNEM0NC4xIDE0IDQ0LjEgOS41IDQzLjYgNy40Wk0yMi4yIDMyLjdDMTUuMiAzMy4zIDguNyAyOS4yIDguMiAyMi44QzcuNyAxNy42IDExLjEgMTUuMyAxMy43IDE1LjFDMTYuNCAxNC45IDE4LjcgMTYuNyAxOC45IDE4LjlDMTkuMSAyMSAxNy43IDIyIDE2LjggMjIuMUMxNiAyMi4yIDE1LjEgMjEuNyAxNSAyMC44QzE0LjkgMjAgMTUuMyAxOS45IDE1LjIgMTlDMTUuMSAxNy41IDEzLjcgMTcuMyAxMi45IDE3LjRDMTIgMTcuNSAxMC4zIDE4LjUgMTAuNiAyMS4xQzEwLjggMjMuNyAxMy40IDI1LjcgMTYuOCAyNS40QzIwLjQgMjUuMSAyMyAyMi40IDIzLjIgMTguNUMyMy4yIDE4LjMgMjMuMyAxOC4xIDIzLjMgMTcuOUMyMy40IDE3LjggMjMuNCAxNy44IDIzLjQgMTcuN0MyMy41IDE3LjUgMjMuNiAxNy40IDIzLjcgMTcuM0wyNCAxN0MyNS42IDE1LjYgMzEuMyAxMi4xIDM2LjcgMTMuMkgzNi44QzM3IDEzLjIgMzcuMSAxMy4zIDM3LjEgMTMuNUMzOC4xIDI2LjEgMjkuNyAzMi4xIDIyLjIgMzIuN1oiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcikiLz4KPHBhdGggZD0iTTIyLjIgMzIuNzAwMUMxNS4yIDMzLjMwMDEgOC43IDI5LjIwMDEgOC4yIDIyLjgwMDFDNy43IDE3LjYwMDEgMTEuMSAxNS4zMDAxIDEzLjcgMTUuMTAwMUMxNi40IDE0LjkwMDEgMTguNyAxNi43MDAxIDE4LjkgMTguOTAwMUMxOS4xIDIxLjAwMDEgMTcuNyAyMi4wMDAxIDE2LjggMjIuMTAwMUMxNiAyMi4yMDAxIDE1LjEgMjEuNzAwMSAxNSAyMC44MDAxQzE0LjkgMjAuMDAwMSAxNS4zIDE5LjkwMDEgMTUuMiAxOS4wMDAxQzE1LjEgMTcuNTAwMSAxMy43IDE3LjMwMDEgMTIuOSAxNy40MDAxQzEyIDE3LjUwMDEgMTAuMyAxOC41MDAxIDEwLjYgMjEuMTAwMUMxMC44IDIzLjcwMDEgMTMuNCAyNS43MDAxIDE2LjggMjUuNDAwMUMyMC40IDI1LjEwMDEgMjMgMjIuNDAwMSAyMy4yIDE4LjUwMDFDMjMuMiAxOC4zMDAxIDIzLjMgMTguMTAwMSAyMy4zIDE3LjkwMDFDMjMuNCAxNy44MDAxIDIzLjQgMTcuODAwMSAyMy40IDE3LjcwMDFDMjMuNSAxNy41MDAxIDIzLjYgMTcuNDAwMSAyMy43IDE3LjMwMDFMMjQgMTcuMDAwMUMyNS42IDE1LjYwMDEgMzEuMyAxMi4xMDAxIDM2LjcgMTMuMjAwMUgzNi44QzM3IDEzLjIwMDEgMzcuMSAxMy4zMDAxIDM3LjEgMTMuNTAwMUMzOC4xIDI2LjEwMDEgMjkuNyAzMi4xMDAxIDIyLjIgMzIuNzAwMVoiIGZpbGw9IndoaXRlIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXIiIHgxPSI0Mi44NzA0IiB5MT0iMS40MDM3IiB4Mj0iLTAuMDU2NjkyNyIgeTI9IjQ0LjA0NTIiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzExQzREMSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwMDYyQUQiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  width: 45px;
+  height: 45px;
+  position: absolute;
+}
+
+.v-dialog,
+.v-dialog--active {
+  border-radius: 10px;
 }
 </style>

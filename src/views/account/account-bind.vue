@@ -139,6 +139,14 @@ export default {
           type: 99,
           account: (info.wallet || {}).address,
         });
+      if (info.wallet?.walletType == "IMTOKEN" || noWallet)
+        wArr.push({
+          title: "ImToken",
+          desc: "Get verified by connecting your ImToken.",
+          icon: "m-imToken",
+          type: 101,
+          account: (info.wallet || {}).address,
+        });
       if (info.wallet?.walletType == "OKX" || noWallet)
         wArr.push({
           title: "OKX",

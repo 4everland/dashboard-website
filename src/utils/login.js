@@ -7,6 +7,9 @@ import noWallet from "@/components/noWallet/index.js";
 
 import SignClient from "@walletconnect/sign-client";
 import { WalletConnectModal } from "@walletconnect/modal";
+import TokenWebView from "@consenlabs-fe/webview";
+
+import qrcode from "qrcode";
 
 Vue.use(noWallet);
 let _signClient = null;
@@ -355,7 +358,6 @@ export const ConnectWalletCon = async () => {
         },
       },
     });
-
     // Open QRCode modal if a URI was returned (i.e. we're not connecting an existing pairing).
     if (uri) {
       walletConnectModal.openModal({ uri });
@@ -457,6 +459,162 @@ export const SignBitget = async (accounts, nonce, inviteCode, capToken) => {
       inviteCode,
       type: "ETH",
       walletType: "Bitget",
+      capT: capToken,
+    };
+    const stoken = await Web3Login(accounts, data);
+    return stoken;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const ConnectImToken = async (callback) => {
+  _signClient = await SignClient.init({
+    projectId: "0c6d755f31c61d762715e95f767f7ef8",
+    metadata: {
+      name: "4EVERLAND",
+      description:
+        "As a Web3 infrastructure, 4EVERLAND simplifies the hosting of front-end, the storage of data, and access to the emerging open web, making projects faster and easier to manage.",
+      url: "https://dashboard.4everland.org/",
+      icons: ["https://4evericon.4everland.store/1024.png"],
+    },
+  });
+
+  try {
+    const { uri, approval } = await _signClient.connect({
+      // Optionally: pass a known prior pairing (e.g. from `_signClient.core.pairing.getPairings()`) to skip the `uri` step.
+      // pairingTopic: pairing?.topic,
+      // Provide the namespaces and chains (e.g. `eip155` for EVM-based chains) we want to use in this session.
+      requiredNamespaces: {
+        eip155: {
+          methods: [
+            "eth_sendTransaction",
+            "eth_signTransaction",
+            "eth_sign",
+            "personal_sign",
+            "eth_signTypedData",
+          ],
+          chains: ["eip155:1"],
+          events: ["chainChanged", "accountsChanged"],
+        },
+      },
+    });
+    // Open QRCode modal if a URI was returned (i.e. we're not connecting an existing pairing).
+    if (uri) {
+      const url = await qrcode.toDataURL(uri);
+      callback(url, uri);
+      // Await session approval from the wallet.
+      const session = await approval();
+      // Handle the returned session (e.g. update UI to "connected" state).
+      // Close the QRCode modal in case it was open.
+      walletConnectModal.closeModal();
+
+      if (_signClient.session.length) {
+        const lastKeyIndex = _signClient.session.keys.length - 1;
+        const _session = _signClient.session.get(
+          _signClient.session.keys[lastKeyIndex]
+        );
+        const allNamespaceAccounts = Object.values(_session.namespaces)
+          .map((namespace) => namespace.accounts)
+          .flat();
+
+        const [namespace, reference, account] =
+          allNamespaceAccounts[0].split(":");
+
+        return { session, account };
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const onSignImToken = async (session, account, nonce) => {
+  const msg = Buffer.from(nonce).toString("hex");
+  const signature = await _signClient.request({
+    topic: session.topic,
+    chainId: "eip155:1",
+    request: {
+      method: "personal_sign",
+      params: [msg, account],
+    },
+  });
+  return signature;
+};
+
+export const SignImToken = async (
+  account,
+  nonce,
+  inviteCode,
+  capToken,
+  session
+) => {
+  try {
+    const msg = Buffer.from(nonce).toString("hex");
+    const signature = await _signClient.request({
+      topic: session.topic,
+      chainId: "eip155:1",
+      request: {
+        method: "personal_sign",
+        params: [msg, account],
+      },
+    });
+
+    const data = {
+      signature,
+      appName: "BUCKET",
+      inviteCode,
+      type: "ETH",
+      walletType: "IMTOKEN",
+      capT: capToken,
+    };
+    const stoken = await Web3Login(account, data);
+    return stoken;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+export const ConnectImTokenWithMobile = async () => {
+  if (!window.ethereum.isImToken) {
+    return;
+  }
+  if (typeof window.ethereum !== "undefined") {
+    let provider = window.ethereum;
+    // edge case if MM and CBW are both installed
+    if (window.ethereum.providers?.length) {
+      window.ethereum.providers.forEach(async (p) => {
+        if (p.isImToken) {
+          provider = p;
+        }
+      });
+    } else if (!window.ethereum.isImToken) {
+      return;
+    }
+    const accounts = await provider.request({
+      method: "eth_requestAccounts",
+      params: [],
+    });
+    return accounts;
+  }
+};
+
+export const SignImTokenWithMobil = async (
+  accounts,
+  nonce,
+  inviteCode,
+  capToken
+) => {
+  try {
+    const signature = await contracts.signer.signMessage(nonce);
+    const data = {
+      signature,
+      appName: "BUCKET",
+      inviteCode,
+      type: "ETH",
+      walletType: "IMTOKEN",
       capT: capToken,
     };
     const stoken = await Web3Login(accounts, data);
