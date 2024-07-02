@@ -140,11 +140,11 @@
                   <div class="reward fz-20 fw-b">
                     Shared Reward of 5 Million Points
                   </div>
-                  <!-- <v-btn color="#039CFF" @click="handleToBitget">
-                    <span class="fw-b" style="color: #fff">Let's Go</span>
-                  </v-btn> -->
+                  <v-btn color="#039CFF" @click="$router.push('/quest/bitget')">
+                    <span class="fw-b" style="color: #fff">Claim</span>
+                  </v-btn>
 
-                  <div class="al-c">
+                  <!-- <div class="al-c">
                     <span
                       class="mr-2 fw-b"
                       style="color: #039cff"
@@ -172,7 +172,7 @@
                         bitgetStatus.buttonName
                       }}</span>
                     </v-btn>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>
@@ -229,7 +229,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { fetchTaskCard, fetchTaskStatus, fetchNext } from "@/api/airdrop";
+import { fetchTaskCard } from "@/api/airdrop";
 import navHeader from "./components/nav-header.vue";
 export default {
   data() {
@@ -243,12 +243,6 @@ export default {
         points: "-",
         rank: "-",
       },
-      bitgetStatus: {
-        buttonName: "Not eligible",
-        taskStatus: "UNDO",
-        reward: "",
-      },
-      bitgetLoading: false,
     };
   },
   computed: {
@@ -330,27 +324,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
-
-    async getBitgetInfo() {
-      try {
-        if (!localStorage.token) return;
-        const { data } = await fetchTaskStatus(6671);
-        this.bitgetStatus = data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async handleClaim() {
-      this.bitgetLoading = true;
-      try {
-        await fetchNext(6671);
-        await this.getBitgetInfo();
-        await this.getInfo();
-      } catch (error) {
-        console.log(error);
-      }
-      this.bitgetLoading = false;
     },
   },
 };
