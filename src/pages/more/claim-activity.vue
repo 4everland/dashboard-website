@@ -316,6 +316,8 @@ import {
   lineaRecharge,
   blastRecharge,
   polygonZkEVMRecharge,
+  scrollRecharge,
+  taikoRecharge,
 } from "../../plugins/pay/contracts/contracts-addr";
 
 export default {
@@ -398,6 +400,20 @@ export default {
           type: "Blast",
           chainId: this.$inDev ? 168587773 : 81457,
           contractAddr: blastRecharge,
+        },
+        {
+          name: "Scroll",
+          icon: require("/public/img/svg/billing/ic-scroll.svg"),
+          type: "Scroll",
+          chainId: 534352,
+          contractAddr: scrollRecharge,
+        },
+        {
+          name: "Taiko",
+          icon: require("/public/img/svg/billing/ic-taiko.svg"),
+          type: "Taiko",
+          chainId: 167000,
+          contractAddr: taikoRecharge,
         },
       ],
       links: [
@@ -807,6 +823,17 @@ export default {
             decimals: 18,
           },
           blockExplorerUrls: ["https://blastscan.io"],
+        },
+        167000: {
+          chainId,
+          chainName: "Taiko Mainnet",
+          rpcUrls: ["https://rpc.taiko.xyz"],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://taikoscan.network"],
         },
       }[id];
       if (!params) return;
