@@ -311,7 +311,7 @@
     "img": "https://4ever-web.4everland.store/img/log/2021-12-06-2.jpeg",
     "title": "Modified the billing model and bill display page.",
     "lines": [
-      "Billing statistics are modified to the three dimensions of bandwidth, storage, and build minutes. Users before the HOSTING beta release will have access to 100M bandwidth and 40G storage until December 31, 2021.",
+      "Billing statistics are modified to the three dimensions of bandwidth, storage, and build time. Users before the HOSTING beta release will have access to 100M bandwidth and 40G storage until December 31, 2021.",
       "Added payment record, you can view payment details.",
       "Added status reminder function. "
     ]

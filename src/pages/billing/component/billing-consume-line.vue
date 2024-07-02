@@ -51,8 +51,8 @@ export default {
           data: [
             "IPFS",
             "Arweave",
-            "Band Width",
-            "Build Minutes",
+            "Bandwidth",
+            "Build Time",
             "RPC Requests",
             "AI RPC",
           ],
@@ -133,7 +133,7 @@ export default {
             data: this.AR_STORAGE,
           },
           {
-            name: "Band Width",
+            name: "Bandwidth",
             type: "line",
             itemStyle: {
               color: "#9AD3DC",
@@ -141,7 +141,7 @@ export default {
             data: this.TRAFFIC,
           },
           {
-            name: "Build Minutes",
+            name: "Build Time",
             type: "line",
             itemStyle: {
               color: "#F3CC5C",

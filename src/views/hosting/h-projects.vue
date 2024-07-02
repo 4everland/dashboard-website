@@ -530,7 +530,7 @@ export default {
               //     ...this.$utils.getFileSize(data.usedBandwidth, 1),
               //   },
               //   {
-              //     title: "Build Minutes used",
+              //     title: "Build Time used",
               //     unit: "Minutes",
               //     num: data.usedBuildMinutes.toFixed(2),
               //   },
@@ -552,7 +552,7 @@ export default {
                 ...this.$utils.getFileSize(data.usedBandwidth, 1),
               },
               {
-                title: "Build Minutes used",
+                title: "Build Time used",
                 unit: "Minutes",
                 num: data.usedBuildMinutes.toFixed(2),
               },

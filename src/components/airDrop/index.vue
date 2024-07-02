@@ -48,7 +48,7 @@ export default {
           icon: require("/public/img/airDrop/ar.png"),
         },
         {
-          name: "Build Minutes",
+          name: "Build Time",
           value: "100",
           icon: require("/public/img/airDrop/minutes.png"),
         },

@@ -101,7 +101,7 @@ const menuMap = {
     label: "AI",
     img: "m-airpc",
     group: /^\/ai-rpc/i,
-    suffixImg: "/img/svg/hosting/tag_beta.png",
+    suffixImg: "/img/svg/hosting/tag_fire.png",
     subs: [
       {
         label: "AI RPC",
