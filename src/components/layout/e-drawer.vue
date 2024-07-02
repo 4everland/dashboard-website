@@ -1,6 +1,6 @@
 <style lang="scss">
 .e-drawer {
-  box-shadow: 5px 0px 30px 0px rgba(0, 0, 0, 0.1);
+  // box-shadow: 5px 0px 30px 0px rgba(0, 0, 0, 0.1);
   z-index: 999;
 
   .v-navigation-drawer__border {
@@ -61,10 +61,10 @@
     :mini-variant.sync="mini"
     v-model="isShow"
     app
-    clipped
+    color="#FCFCFD"
   >
     <div>
-      <a href="/" class="mt-8 d-b" v-if="asMobile">
+      <a href="/" class="mt-8 d-b">
         <img :src="`/img/svg/logo.svg`" height="26" class="d-b m-auto" />
       </a>
     </div>

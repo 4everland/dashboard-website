@@ -1,19 +1,14 @@
-<style lang="scss">
-#e-header {
-  box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 15%) !important;
-  z-index: 110;
-}
-</style>
 <template>
-  <div class="pos-r">
-    <div class="pos-f top-0 w100p z-1000" v-show="showProgress">
+  <!-- <div class="pos-r"> -->
+  <div>
+    <!-- <div class="pos-f top-0 w100p z-1000" v-show="showProgress">
       <v-progress-linear
         indeterminate
         color="cyan"
         height="2"
       ></v-progress-linear>
-    </div>
-    <v-app-bar id="e-header" app clipped-left height="60" color="#fff">
+    </div> -->
+    <v-app-bar app height="64" color="#fff" elevation="0">
       <a href="/">
         <img
           :src="`/img/svg/logo${asMobile ? '-m' : ''}.svg`"

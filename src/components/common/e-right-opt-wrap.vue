@@ -1,7 +1,14 @@
 <template>
-  <div class="pos-r">
-    <div
+  <div class="al-c">
+    <!-- <div
       :class="!asMobile || fix ? 'pos-a right-0' : 'ta-r mb-5'"
+      :style="{
+        top: (top || -50) + 'px',
+        ...customStyle,
+      }"
+    > -->
+    <div
+      :class="!asMobile || fix ? 'ml-auto' : 'ta-r mb-5'"
       :style="{
         top: (top || -50) + 'px',
         ...customStyle,
