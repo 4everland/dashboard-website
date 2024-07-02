@@ -87,13 +87,14 @@
               </div>
 
               <div class="al-c mt-6">
-                <div
-                  class="deposite-btn"
+                <v-btn
+                  elevation="0"
+                  class="primary white--text"
                   @click="$router.push('/billing/deposit')"
                   v-ripple
                 >
                   Deposit
-                </div>
+                </v-btn>
               </div>
             </div>
 

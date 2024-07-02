@@ -15,6 +15,9 @@ const vuetify = new Vuetify({
       light,
       dark,
     },
+    options: {
+      customProperties: true,
+    },
   },
 });
 
