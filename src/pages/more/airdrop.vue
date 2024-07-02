@@ -100,7 +100,10 @@
                 <img src="/img/airDrop/tge-airdrop.png" width="100%" alt="" />
               </div>
               <div class="pa-6 task-desc h-flex">
-                <div class="fz-20 fw-b cursor-p text-white">
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="$router.push('/quest/tge')"
+                >
                   4EVERLAND - TGE Party with SPACE ID
                 </div>
                 <div class="fz-14 mt-4">
@@ -127,7 +130,10 @@
                 />
               </div>
               <div class="pa-6 task-desc h-flex">
-                <div class="fz-20 fw-b cursor-p text-white">
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="$router.push('/quest/bitget')"
+                >
                   4EVERLAND Bitget GetDrop
                 </div>
                 <div class="fz-14 mt-4">
@@ -143,36 +149,6 @@
                   <v-btn color="#039CFF" @click="$router.push('/quest/bitget')">
                     <span class="fw-b" style="color: #fff">Claim</span>
                   </v-btn>
-
-                  <!-- <div class="al-c">
-                    <span
-                      class="mr-2 fw-b"
-                      style="color: #039cff"
-                      v-show="
-                        bitgetStatus.reward &&
-                        bitgetStatus.taskStatus !== 'UNDO'
-                      "
-                      >{{ bitgetStatus.reward }} Points</span
-                    >
-                    <v-btn
-                      class="claim-btn"
-                      color="#039cff"
-                      :disabled="bitgetStatus.taskStatus !== 'CLAIM'"
-                      :loading="bitgetLoading"
-                      @click="handleClaim"
-                    >
-                      <img
-                        v-show="bitgetStatus.taskStatus == 'DONE'"
-                        class="mr-1"
-                        width="16"
-                        src="/img/airDrop/checked.svg"
-                        alt=""
-                      />
-                      <span class="fw-b" style="color: #fff">{{
-                        bitgetStatus.buttonName
-                      }}</span>
-                    </v-btn>
-                  </div> -->
                 </div>
               </div>
             </div>
@@ -185,7 +161,10 @@
                 />
               </div>
               <div class="pa-6 task-desc">
-                <div class="fz-20 fw-b cursor-p text-white" @click="handleBnB">
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="$router.push('/quest/bnb')"
+                >
                   BNB CHAIN AIRDROP ALLIANCE PROGRAM
                 </div>
                 <div class="fz-14 mt-4">
@@ -199,7 +178,7 @@
                   <div class="reward fz-20 fw-b">
                     Shared Reward of 15 Million Points
                   </div>
-                  <v-btn color="#039CFF" @click="handleBnB">
+                  <v-btn color="#039CFF" @click="$router.push('/quest/bnb')">
                     <span class="fw-b" style="color: #fff">Claim</span>
                   </v-btn>
                 </div>
@@ -300,22 +279,11 @@ export default {
   },
   created() {
     this.getInfo();
-    this.getBitgetInfo();
   },
   methods: {
     onScroll(e) {
       this.scrollTop = e.target.scrollTop;
     },
-    handleBnB() {
-      this.$router.push("/quest/bnb");
-    },
-    handleToBitget() {
-      window.open("https://link.medium.com/gIieBSoqBKb");
-    },
-    handleToTge() {
-      window.open("https://app.galxe.com/quest/4EVERLAND/GCGhwtgwin");
-    },
-
     async getInfo() {
       try {
         if (!localStorage.token) return;
