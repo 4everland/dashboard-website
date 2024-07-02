@@ -1,6 +1,6 @@
 <template>
-  <div id="airDropBitget">
-    <div class="bitget-airdrop" @scroll="onScroll">
+  <div id="airDropTge">
+    <div class="tge-airdrop" @scroll="onScroll">
       <nav-header :scrollTop="scrollTop"></nav-header>
       <div class="bitget-body">
         <div class="mb-6 al-c">
@@ -19,16 +19,15 @@
 
         <div class="task-item d-flex mb-10">
           <div class="pa-6 task-img-wrap al-c">
-            <img src="/img/airDrop/bitget-airdrop.png" width="100%" alt="" />
+            <img src="/img/airDrop/tge-airdrop.png" width="100%" alt="" />
           </div>
           <div class="pa-6 task-desc flex-1 h-flex space-btw">
             <div>
-              <div class="fz-20 fw-b">4EVERLAND Bitget GetDrop</div>
+              <div class="fz-20 fw-b">4EVERLAND - TGE Party with SPACE ID</div>
               <div class="fz-14 mt-4">
-                GetDrop is an exclusive airdrop platform for high-quality
-                projects within Bitget Wallet Earning Center. 4EVERLAND is
-                thrilled to collaborate with Bitget, providing up to 5,000,000
-                $4EVER points in rewards.
+                Join the Pre-TGE Party with SPACE ID & 4EVERLAND to win $4EVER
+                points and snag upcoming airdrops! 1,000 OAT holders will be
+                randomly selected to share 500,000 $4EVER Points!
               </div>
             </div>
             <div class="link-btn">
@@ -37,7 +36,7 @@
                 outlined
                 color="#fff"
                 target="blank"
-                href="https://link.medium.com/gIieBSoqBKb"
+                href="https://app.galxe.com/quest/4EVERLAND/GCGhwtgwin"
               >
                 Understand the details
                 <img
@@ -53,21 +52,17 @@
 
         <div class="task-box">
           <div class="task-tit">Claim Your $4EVER Points!</div>
-
           <div class="task-item-step pa-6 al-c space-btw">
             <div>
               <div class="task-item-step-tit fw-b">
-                Claim Your Share of 4 Million $4EVER Points!
+                Claim Your Share of 500,000 $4EVER Points!
               </div>
               <div class="task-item-step-desc fz-12 mt-2">
-                This reward will be shared among all eligible users in this
-                campaign.
+                1,000 OAT holders were randomly selected to share this reward.
               </div>
               <div class="task-item-step-reward fz-12 mt-2">
                 <span>Total </span>
-                <span class="task-item-step-reward-amount"
-                  >4 Million Points</span
-                >
+                <span class="task-item-step-reward-amount">500,000 Points</span>
               </div>
             </div>
 
@@ -100,52 +95,6 @@
               </v-btn>
             </div>
           </div>
-          <div class="task-item-step pa-6 al-c space-btw">
-            <div>
-              <div class="task-item-step-tit fw-b">
-                Exclusive 1 Million $4EVER Points for $BWB Holders!
-              </div>
-              <div class="task-item-step-desc fz-12 mt-2">
-                Only those who hold at least 500 $BWB and have completed all
-                tasks will share this reward.
-              </div>
-              <div class="task-item-step-reward fz-12 mt-2">
-                <span>Total </span>
-                <span class="task-item-step-reward-amount"
-                  >1 Million Points</span
-                >
-              </div>
-            </div>
-
-            <div class="al-c">
-              <span
-                class="mr-2 fw-b"
-                style="color: #039cff"
-                v-show="
-                  bitgetStatus2.reward && bitgetStatus2.taskStatus !== 'UNDO'
-                "
-                >{{ bitgetStatus2.reward }} Points</span
-              >
-              <v-btn
-                class="claim-btn"
-                color="#039cff"
-                :disabled="bitgetStatus2.taskStatus !== 'CLAIM'"
-                :loading="bitgetLoading2"
-                @click="handleClaim2"
-              >
-                <img
-                  v-show="bitgetStatus2.taskStatus == 'DONE'"
-                  class="mr-1"
-                  width="16"
-                  src="/img/airDrop/checked.svg"
-                  alt=""
-                />
-                <span class="fw-b" style="color: #fff">{{
-                  bitgetStatus2.buttonName
-                }}</span>
-              </v-btn>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -165,13 +114,7 @@ export default {
         taskStatus: "UNDO",
         reward: "",
       },
-      bitgetStatus2: {
-        buttonName: "Not eligible",
-        taskStatus: "UNDO",
-        reward: "",
-      },
       bitgetLoading1: false,
-      bitgetLoading2: false,
     };
   },
   components: { navHeader },
@@ -185,10 +128,8 @@ export default {
     async getBitgetInfo() {
       try {
         if (!localStorage.token) return;
-        const { data } = await fetchTaskStatus(6671);
-        const { data: data2 } = await fetchTaskStatus(6672);
+        const { data } = await fetchTaskStatus(6673);
         this.bitgetStatus1 = data;
-        this.bitgetStatus2 = data2;
       } catch (error) {
         console.log(error);
       }
@@ -197,31 +138,21 @@ export default {
     async handleClaim1() {
       this.bitgetLoading1 = true;
       try {
-        await fetchNext(6671);
+        await fetchNext(6673);
         await this.getBitgetInfo();
       } catch (error) {
         console.log(error);
       }
       this.bitgetLoading1 = false;
     },
-    async handleClaim2() {
-      this.bitgetLoading2 = true;
-      try {
-        await fetchNext(6672);
-        await this.getBitgetInfo();
-      } catch (error) {
-        console.log(error);
-      }
-      this.bitgetLoading2 = false;
-    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-#airDropBitget {
+#airDropTge {
   background: #111214;
-  .bitget-airdrop {
+  .tge-airdrop {
     max-width: 1440px;
     height: 100vh;
     margin: 0 auto;

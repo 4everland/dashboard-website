@@ -112,8 +112,8 @@
                   <div class="reward fz-20 fw-b">
                     Shared Reward of 500,000 Points
                   </div>
-                  <v-btn color="#039CFF" @click="handleToTge">
-                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  <v-btn color="#039CFF" @click="$router.push('/quest/tge')">
+                    <span class="fw-b" style="color: #fff">Claim</span>
                   </v-btn>
                 </div>
               </div>
