@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div class="tags al-c my-4">
+    <div
+      class="tags d-flex align-center justify-center justify-sm-start flex-wrap my-4"
+    >
       <div
         class="tag fz-14 mr-1 cursor-p"
         v-ripple
@@ -467,6 +469,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 600px) {
+  .tag {
+    width: 120px !important;
+  }
+}
 #main {
   width: 100%;
   min-height: 300px;
@@ -474,20 +481,19 @@ export default {
 }
 
 .tags {
+  gap: 8px;
   .tag {
     width: 152px;
     height: 33px;
     text-align: center;
     line-height: 33px;
     color: #0f172a;
-
     border-radius: 4px;
     border: 1px solid #cbd5e1;
   }
   .tag.actived {
     font-weight: bold;
     color: #735ea1;
-
     background: #f3e8ff;
     border: none;
   }
