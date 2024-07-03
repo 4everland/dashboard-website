@@ -3,25 +3,14 @@
     <div v-if="!teamInfo.isMember">
       <overview-notice class="mb-4" />
     </div>
-    <div class="user-plate d-flex flex-column flex-md-row space-btw mb-6">
-      <div class="left flex-2">
-        <div class="header">
-          <p class="fz-12 mb-0 tips">Welcome to 4EVERLAND Dashboard</p>
-          <div class="al-c">
-            <v-btn
-              icon
-              v-if="asMobile"
-              style="margin-left: -px"
-              @click="$setMsg('showDrawer')"
-            >
-              <v-icon>mdi-menu</v-icon>
-            </v-btn>
-            <h3 class="fz-20">{{ uname }}</h3>
-          </div>
-        </div>
-        <div class="body pos-r">
+    <!-- <div class="user-plate d-flex flex-column flex-md-row justify-space-between mb-6"> -->
+    <div
+      class="user-plate d-flex flex-column flex-md-row justify-space-between mb-6"
+    >
+      <div class="left flex-1">
+        <div class="body pos-r pa-4">
           <div
-            class="unchain-mask pos-a al-c justify-center flex-col"
+            class="unchain-mask pos-a d-flex align-center justify-center flex-col"
             v-if="!onChain"
             @click="handleUpgrad"
           >
@@ -48,9 +37,12 @@
 
             <v-btn color="primary">Activate</v-btn>
           </div>
-          <div class="al-c space-btw">
+          <div class="d-flex align-center justify-space-between">
             <h3 class="fz-20">Balance</h3>
-            <div class="cursor-p fz-14 al-c" @click="$router.push('/billing')">
+            <div
+              class="cursor-p fz-14 d-flex align-center"
+              @click="$router.push('/billing')"
+            >
               <span>Billing</span>
               <img
                 src="/img/svg/new-billing/right-arrow.svg"
@@ -60,10 +52,12 @@
             </div>
           </div>
           <div
-            class="space-btw al-end d-flex flex-wrap mt-3"
+            class="justify-space-between align-center d-flex flex-column flex-sm-row mt-2"
             style="height: 100%"
           >
-            <div>
+            <div
+              class="d-flex flex-row flex-sm-column align-center align-sm-start justify-space-between"
+            >
               <div>
                 <div>
                   <span class="balance fw-b">{{ balance.land }}</span>
@@ -86,16 +80,14 @@
                 <div class="fz-14 tips mt-1">≈ {{ balanceToUSD }}USD</div>
               </div>
 
-              <div class="al-c mt-6">
-                <v-btn
-                  elevation="0"
-                  class="primary white--text"
-                  @click="$router.push('/billing/deposit')"
-                  v-ripple
-                >
-                  Deposit
-                </v-btn>
-              </div>
+              <v-btn
+                elevation="0"
+                class="primary white--text mt-sm-6 ml-2 ml-sm-0"
+                @click="$router.push('/billing/deposit')"
+                v-ripple
+              >
+                Deposit
+              </v-btn>
             </div>
 
             <half-pie
@@ -107,7 +99,7 @@
         </div>
       </div>
 
-      <div class="right ml-6 mt-4 flex-1 mt-md-0 d-md-block d-none">
+      <div class="right">
         <div class="pos-r carousel-container">
           <v-carousel
             :show-arrows="false"
@@ -130,7 +122,7 @@
             >
             </v-carousel-item>
           </v-carousel>
-          <div class="delimiter-content al-c justify-center">
+          <div class="delimiter-content d-flex align-center justify-center">
             <template v-for="(item, index) in banners">
               <div
                 class="delimiter cursor-p"
@@ -145,15 +137,17 @@
     </div>
 
     <div class="usage-plate pa-6">
-      <div class="combo al-c space-btw">
-        <div class="al-c">
+      <div
+        class="combo d-flex flex-column flex-sm-row align-sm-center justify-space-between"
+      >
+        <div class="d-flex align-center justify-space-between">
           <h3 class="fz-20">Usage</h3>
-          <div class="combo-name ml-2 fz-12 al-c">
+          <div class="combo-name ml-2 fz-12 d-flex align-center">
             <div class="combo-tag" :class="onChain ? 'on-chain' : ''">
               {{ onChain ? "Standard" : "Trial" }}
             </div>
             <div
-              class="upgrad fw-b fz-12 al-c ml-1 cursor-p"
+              class="upgrad fw-b fz-12 d-flex align-center ml-1 cursor-p"
               v-if="!onChain"
               @click="handleUpgrad"
             >
@@ -258,12 +252,6 @@ export default {
     },
     asMobile() {
       return this.$vuetify.breakpoint.mdAndDown;
-    },
-    uname() {
-      const info = this.userInfo;
-      if (this.teamInfo.name) return "Overview of " + this.teamInfo.name;
-      if (info.username) return "Hi " + info.username.cutStr(6, 4);
-      return "Overview";
     },
     trialExpired() {
       return (
@@ -408,9 +396,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media (width > 1440px) {
-  .carousel-container {
-    height: 324px !important;
+@media screen and (max-width: 960px) {
+  .right {
+    width: 100% !important;
   }
 }
 .carousel-container {
@@ -439,21 +427,16 @@ export default {
 }
 
 .user-plate {
+  gap: 12px;
   .left,
   .right {
     border-radius: 8px;
     background: #fff;
   }
   .left {
-    .header {
-      padding: 16px 24px;
-      border-bottom: 1px solid #cbd5e1;
-      .tips {
-        color: #64748b;
-      }
-    }
     .body {
-      padding: 16px 24px 24px;
+      background: #f9fafb;
+      border-radius: 8px;
       .unchain-mask {
         left: 0;
         top: 0;
@@ -493,7 +476,8 @@ export default {
     }
   }
   .right {
-    width: 368px;
+    width: 472px;
+    height: 228px;
     .log-item {
       border-radius: 4px;
       background: #f8fafc;
