@@ -56,7 +56,7 @@
             style="height: 100%"
           >
             <div
-              class="d-flex flex-row flex-sm-column align-center align-sm-start justify-space-between"
+              class="balance-content d-flex flex-row flex-sm-column align-center align-sm-start justify-space-between"
             >
               <div>
                 <div>
@@ -399,6 +399,12 @@ export default {
 @media screen and (max-width: 960px) {
   .right {
     width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .balance-content {
+    width: 100%;
   }
 }
 .carousel-container {
