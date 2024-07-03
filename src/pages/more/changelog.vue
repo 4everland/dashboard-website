@@ -3,7 +3,7 @@
     <v-skeleton-loader type="article" v-if="!list" />
     <v-timeline dense align-top v-else>
       <v-timeline-item small v-for="(it, i) in list" :key="i">
-        <div class="pos-r bdrs-10 bd-1">
+        <div class="pos-r bdrs-10 bd-1" v-if="it.video || it.img">
           <video
             v-if="it.video"
             :src="it.video"
