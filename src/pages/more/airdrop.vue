@@ -321,7 +321,7 @@ export default {
       }
     },
     handleToOkx() {
-      window.open("https://app.galxe.com/quest/OKXWEB3/GCRoatgGoA");
+      window.open("https://okx.com/web3/giveaway");
     },
   },
 };
