@@ -242,7 +242,7 @@ export default {
   border-bottom: 1px solid #d0dae9;
 }
 .v-tab.v-tab--active {
-  color: #775da6;
+  color: var(--v-primary-base);
 }
 .v-tab.v-tab--active span:nth-of-type(1) {
   font-size: 20px;

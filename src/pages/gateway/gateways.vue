@@ -159,7 +159,7 @@ export default {
       try {
         let tip =
           "The following gateways will be deleted, Are you sure you want to continue?";
-        tip += `<p class="mt-4" style="color:#775DA6">${item.name}.4everland.link</p>`;
+        tip += `<p class="mt-4" style="color:#6172F3">${item.name}.4everland.link</p>`;
         await this.$confirm(tip, "Delete Gateway");
         this.loading = true;
         await this.$http.delete(`$gateway/gateway/${item.name}`, { noTip: 1 });

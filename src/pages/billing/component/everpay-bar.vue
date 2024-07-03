@@ -5,8 +5,7 @@
       <div class="fz-14">
         Powered by
         <span
-          class="cursor-p"
-          style="color: #775da6"
+          class="cursor-p primary--text"
           @click="handleOpenLink('https://everpay.io/')"
           >everPay</span
         >
@@ -19,7 +18,7 @@
         :key="item.symbol"
         class="everpay-symbol-item py-2 px-3 al-c cursor-p mt-4"
         :class="{
-          active: selected == item.symbol,
+          trigger: selected == item.symbol,
         }"
         @click="onSelect(item)"
       >
@@ -144,6 +143,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .everpay-coin-choose {
+    padding-bottom: 150px;
+  }
+}
 .everpay-symbol-item {
   width: 100%;
   border-radius: 4px;
@@ -154,9 +158,9 @@ export default {
   }
 }
 
-.everpay-symbol-item.active {
+.everpay-symbol-item.trigger {
   font-weight: bold;
-  border: 1px solid #735ea1;
+  border: 1px solid var(--v-primary-base);
 }
 .everpay-coin-choose {
   height: calc(100% - 168px);
@@ -168,7 +172,6 @@ export default {
   font-weight: bold;
   color: #fff;
   border-radius: 4px;
-  background: #735ea1;
 }
 .text {
   color: #8c8ca1;

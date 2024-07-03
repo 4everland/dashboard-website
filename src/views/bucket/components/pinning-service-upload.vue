@@ -122,7 +122,7 @@
         </div>
         <div v-else>
           <div>
-            <span class="fz-14" style="color: #775da6">{{ file.name }}</span>
+            <span class="fz-14 primary--text">{{ file.name }}</span>
             <v-icon class="ml-3 cursor-p" size="20" @click="file = null"
               >mdi-trash-can-outline</v-icon
             >
@@ -130,11 +130,11 @@
           <div class="mt-2 mb-5 al-c justify-space-between">
             <div class="fz-14 gray">
               Resolving completed!
-              <span class="fw-b" style="color: #775da6">{{
+              <span class="fw-b primary--text">{{
                 readerFileList.length
               }}</span>
               lines total, resolved
-              <span class="fw-b" style="color: #775da6">{{
+              <span class="fw-b primary--text">{{
                 readerFileSuccessList.length
               }}</span>
               valid CIDs.

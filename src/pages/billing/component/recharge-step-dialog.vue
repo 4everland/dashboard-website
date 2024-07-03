@@ -130,7 +130,7 @@ export default {
   font-size: 14px;
   font-weight: bold;
   border-radius: 4px;
-  background: #775da6;
+  background: var(--v-primary-base);
   color: #fff;
   cursor: pointer;
 }

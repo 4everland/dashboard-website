@@ -93,11 +93,9 @@
         </template>
         <template #item.action="{ item }">
           <v-btn
-            class="action-btn"
+            class="action-btn primary--text"
             text
-            @click="handlePublish(item)"
-            color="#775da6"
-            @click.stop
+            @click.stop="handlePublish(item)"
             :disabled="
               item.status == 'pin' ||
               item.status == 'pinning' ||
@@ -107,11 +105,9 @@
             Publish
           </v-btn>
           <v-btn
-            class="action-btn ml-2"
+            class="action-btn primary--text ml-2"
             text
-            @click="handleDelete(item)"
-            color="#775da6"
-            @click.stop
+            @click.stop="handleDelete(item)"
             :disabled="item.status == 'pinning'"
           >
             Delete

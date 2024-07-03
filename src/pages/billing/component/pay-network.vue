@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="d-flex flex-wrap justify-space-around">
+    <div class="d-flex flex-wrap" style="gap: 12px">
       <div
         @click="onSelect(it.chainId, it.label)"
         class="network-label pa-3 al-c cursor-p d-flex mt-4"
@@ -476,7 +476,8 @@ export default {
 
 <style lang="scss" scoped>
 .network-label {
-  width: 164px;
+  // width: 164px;
+  width: 48%;
   background: #fff;
   border-radius: 4px;
 }

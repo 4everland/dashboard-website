@@ -400,7 +400,7 @@ export default {
         }
       }
       .expira-time {
-        color: #775da6;
+        color: var(--v-primary-base);
         font-family: "SF Pro Text";
         font-size: 11px;
         font-style: normal;

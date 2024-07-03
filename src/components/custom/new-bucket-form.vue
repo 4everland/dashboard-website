@@ -44,7 +44,7 @@ export default {
 
 <style lang="scss">
 .toggle-btn {
-  background: #775da6 !important;
+  background: var(--v-primary-base) !important;
   color: #fff !important;
 }
 </style>

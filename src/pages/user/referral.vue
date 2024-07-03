@@ -55,7 +55,7 @@
       color: #ffffff;
       text-align: center;
       border: 1px solid #889ab3;
-      background: #775da6;
+      background: var(--v-primary-base);
       border-radius: 2px;
       cursor: pointer;
     }

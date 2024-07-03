@@ -1,5 +1,5 @@
 <template>
-  <div class="deposite-container d-flex flex-column flex-sm-row pa-sm-6">
+  <div class="deposite-container d-flex flex-column flex-md-row pa-md-6">
     <div class="deposite-content flex-1 h-flex">
       <div class="purchase-plate">
         <h2 class="fz-16">Deposit</h2>
@@ -661,7 +661,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 960px) {
   .act-control {
     width: 100% !important;
   }

@@ -421,9 +421,6 @@ export default {
   .delimiter + .delimiter {
     margin-left: 10px;
   }
-  .delimiter.active {
-    background: #775da6;
-  }
 }
 
 .user-plate {
@@ -457,21 +454,6 @@ export default {
       }
       .tips {
         color: #64748b;
-      }
-      .deposite-btn,
-      .conversion-btn {
-        border-radius: 4px;
-        padding: 12px 48px;
-        cursor: pointer;
-      }
-      .deposite-btn {
-        color: #fff;
-        border: 1px solid #775da6;
-        background: #775da6;
-      }
-      .conversion-btn {
-        color: #775da6;
-        border: 1px solid #775da6;
       }
     }
   }

@@ -132,7 +132,7 @@ export default {
         margin: 0 5px;
       }
       .btn-install {
-        background-color: #775da6;
+        background-color: var(--v-primary-base);
         color: #fff;
       }
       .btn-cancel {
