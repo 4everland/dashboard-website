@@ -1,0 +1,32 @@
+// Shades
+// ? We updated black value because our template design have `rgb(94, 86, 105)` as black instead of solid black
+// $shades: (
+//   "black": #5e5669,
+//   "white": #fff,
+//   "transparent": transparent,
+// );
+
+// $primary-shade--light: #5e5669;
+// $primary-shade--dark: #e7e3fc;
+// $shadow-color--light: $primary-shade--light;
+// $shadow-color--dark: #131120;
+
+// Typography
+$body-font-family: "Inter", sans-serif;
+
+@import "~vuetify/src/styles/styles.sass";
+
+$material-light: map-deep-merge(
+  $material-light,
+  (
+    "text": (
+      "primary": var(--v-textPrimary-base),
+      "secondary": var(--v-textSecondary-base),
+      "disabled": var(--v-disabled-base),
+    ),
+    "buttons": (
+      "disabled": "#fff",
+      "focused": var(--v-disabled-base),
+    ),
+  )
+);
