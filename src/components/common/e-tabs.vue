@@ -19,26 +19,24 @@
   </div>
 
   <div v-else class="e-settings" :class="vertical ? 'd-flex' : ''">
-    <div>
-      <v-tabs
-        class="tabs"
-        :class="vertical ? 'v3-vertical bdr-1' : 'v3-horizon'"
-        color="black"
-        v-model="curIdx"
-        :height="vertical ? null : 44"
-        :hide-slider="vertical"
-        :vertical="vertical"
+    <v-tabs
+      class="tabs"
+      :class="vertical ? 'v3-vertical bdr-1' : 'v3-horizon'"
+      color="black"
+      v-model="curIdx"
+      :height="vertical ? null : 44"
+      :hide-slider="vertical"
+      :vertical="vertical"
+    >
+      <v-tab
+        v-for="(it, i) in list"
+        :key="i"
+        class="tab"
+        :class="{ 'fw-b': curIdx == i }"
       >
-        <v-tab
-          v-for="(it, i) in list"
-          :key="i"
-          class="tab"
-          :class="{ 'fw-b': curIdx == i }"
-        >
-          {{ it.text }}
-        </v-tab>
-      </v-tabs>
-    </div>
+        {{ it.text }}
+      </v-tab>
+    </v-tabs>
     <div
       class=""
       :class="vertical ? 'flex-1 ml-5' : 'mt-5'"
@@ -217,9 +215,6 @@ export default {
 </script>
 
 <style lang="scss">
-// .tabs {
-//   font-family: "Arial-BoldMT", "Arial";
-// }
 .v-tab {
   letter-spacing: normal !important;
 }
@@ -237,7 +232,7 @@ export default {
     background-color: transparent;
   }
   .v-tabs-slider {
-    background: #775da6;
+    background: var(--v-primary-base);
   }
 
   .v3-vertical {
@@ -246,7 +241,7 @@ export default {
       text-align: left;
     }
     .v-tab--active {
-      color: #775da6;
+      color: var(--v-primary-base);
       &::after {
         position: absolute;
         content: "";
@@ -255,7 +250,7 @@ export default {
         transform: translateY(-50%);
         height: 20px;
         width: 3px;
-        background: #775da6;
+        background: var(--v-primary-base);
         border-radius: 1px;
       }
     }

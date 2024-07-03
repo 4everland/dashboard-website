@@ -264,7 +264,7 @@ export default {
       recordIpfsSize: BigNumber.from("0"),
       recordIpfsSeconds: BigNumber.from("0"),
       rpcPrice: BigNumber.from("0"),
-      showCalc: false,
+      showCalc: true,
     };
   },
   computed: {

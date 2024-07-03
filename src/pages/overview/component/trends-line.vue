@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div
-      class="tags d-flex align-center justify-center justify-sm-start flex-wrap my-4"
-    >
+    <div class="tags d-flex align-center flex-wrap my-4">
       <div
         class="tag fz-14 cursor-p"
         v-ripple

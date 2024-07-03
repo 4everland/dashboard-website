@@ -177,8 +177,7 @@
         </div>
         <span
           v-show="!isBulkOperation"
-          class="cursor-p fz-14"
-          style="color: #775da6"
+          class="cursor-p fz-14 primary--text"
           @click="handleBulkOperation"
           >Bulk Operation</span
         >

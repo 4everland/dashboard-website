@@ -208,10 +208,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-$color1: #775da6;
 .action-btn {
   cursor: pointer;
-  color: $color1;
+  color: var(--v-primary-base);
 }
 .action-btn.disable {
   color: gray;

@@ -90,7 +90,7 @@ export default {
                 Number(params[0].axisValue)
               ).format()}</div>
              <div  style="height:30px">
-                  <span class=" fz-16" style="color: #775DA6">${
+                  <span class=" fz-16" style="color: #6172F3">${
                     this.dataType
                       ? this.$utils.getNumCount(params[0].value, true).num
                       : this.$utils.getFileSize(params[0].value, true).num
@@ -110,7 +110,7 @@ export default {
             type: "line",
             symbolSize: 8,
             itemStyle: {
-              color: "#775DA6",
+              color: "#6172F3",
             },
           },
         ],
