@@ -35,7 +35,7 @@
     }
   }
   .v-list-item--active {
-    color: #775da6;
+    color: var(--v-primary-base);
     background: none;
 
     &.sub::before {

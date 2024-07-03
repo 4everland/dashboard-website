@@ -9,13 +9,14 @@
       ></v-progress-linear>
     </div> -->
     <v-app-bar app height="64" color="#fff" elevation="0">
-      <a href="/">
+      <v-app-bar-nav-icon @click="$setMsg('showDrawer')"></v-app-bar-nav-icon>
+      <!-- <a href="/">
         <img
           :src="`/img/svg/logo${asMobile ? '-m' : ''}.svg`"
           height="30"
           class="d-b"
         />
-      </a>
+      </a> -->
       <v-spacer></v-spacer>
       <template>
         <e-menu

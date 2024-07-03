@@ -5,7 +5,8 @@
 @import "color";
 @import "anim";
 
-$color1: #775da6;
+// $color1: #775da6;
+$color1: var(--v-primary-base);
 
 body {
   background: #f9fbfc;
@@ -13,15 +14,6 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   .v-application {
-    font-family: Arial, "PingFang SC", Roboto, "Helvetica Neue",
-      "Helvetica, Tahoma", "PingFang SC-Light", "Microsoft YaHei";
-    // .primary {
-    //   background-color: $color1 !important;
-    //   border-color: $color1 !important;
-    // }
-    // .primary--text {
-    //   color: $color1 !important;
-    // }
     p {
       margin-bottom: 5px;
     }
@@ -74,7 +66,7 @@ body {
     text-transform: none;
   }
   .theme--light.v-btn {
-    color: #775da6;
+    color: $color1;
   }
   .menu-btn.v-btn--active {
     background: #fff;
@@ -366,3 +358,10 @@ ul.ls-none {
 .no-scroll {
   overflow: initial !important;
 }
+
+// .theme--light.v-btn.v-btn--disabled:not(.v-btn--flat):not(.v-btn--text):not(
+//     .v-btn-outlined
+//   ) {
+//   background-color: var(--v-disabled-base) !important;
+//   color: #fff !important;
+// }
