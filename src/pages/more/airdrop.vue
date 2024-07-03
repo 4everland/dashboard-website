@@ -97,6 +97,33 @@
           <div class="task-list mt-6">
             <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
+                <img src="/img/airDrop/okx-airdrop.png" width="100%" alt="" />
+              </div>
+              <div class="pa-6 task-desc h-flex">
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="handleToOkx"
+                >
+                  6M $4EVER Points Giveaway with OKX Wallet
+                </div>
+                <div class="fz-14 mt-4">
+                  We're thrilled to announce our exciting collaboration with OKX
+                  Wallet, bringing you a chance to win a share of 6,000,000
+                  4EVER Points! Join us to become one of the 10,000 lucky
+                  winners with this incredible opportunity!
+                </div>
+                <div class="mt-8 al-c space-btw">
+                  <div class="reward fz-20 fw-b">
+                    Shared Reward of 6 Million Points
+                  </div>
+                  <v-btn color="#039CFF" @click="handleToOkx">
+                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  </v-btn>
+                </div>
+              </div>
+            </div>
+            <div class="task-item d-flex mb-4">
+              <div class="pa-6 task-img-wrap">
                 <img src="/img/airDrop/tge-airdrop.png" width="100%" alt="" />
               </div>
               <div class="pa-6 task-desc h-flex">
@@ -292,6 +319,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    handleToOkx() {
+      window.open("https://app.galxe.com/quest/OKXWEB3/GCRoatgGoA");
     },
   },
 };
