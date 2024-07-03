@@ -8,6 +8,8 @@ export default {
   active: "#444CE7",
   disabled: "#98A2B3",
   background: "#ffffff",
+  background2: "#F5F8FF",
+  background3: "#EEF4FF",
   border1: "#EAECF0",
   border2: "#E0EAFF",
   textPrimary: "#101828",

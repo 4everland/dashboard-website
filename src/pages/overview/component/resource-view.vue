@@ -24,7 +24,7 @@
                     v-bind="attrs"
                     v-on="on"
                   >
-                    <span>{{ transformVal }}</span>
+                    <span class="primary--text">{{ transformVal }}</span>
                   </div>
                 </template>
                 <div style="line-height: normal" class="py-2">
@@ -71,7 +71,7 @@
         class="mt-1"
         style="border-radius: 8px"
         :value="percent"
-        color="#775DA6"
+        color="primary"
         height="4"
       >
       </v-progress-linear>
@@ -185,7 +185,6 @@ export default {
   border-radius: 4px;
   background: #f8fafc;
   .land-to-resource {
-    color: #775da6;
     cursor: help;
   }
   .consume-resource {
@@ -196,7 +195,7 @@ export default {
   }
   .resource-size {
     .total-resource {
-      color: #64748b;
+      color: #232428;
     }
   }
 

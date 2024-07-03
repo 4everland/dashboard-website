@@ -1,5 +1,5 @@
 <template>
-  <div class="deposite-container d-flex pa-6">
+  <div class="deposite-container d-flex flex-column flex-sm-row pa-sm-6">
     <div class="deposite-content flex-1 h-flex">
       <div class="purchase-plate">
         <h2 class="fz-16">Deposit</h2>
@@ -26,7 +26,7 @@
         :inputVal="landAmount"
       ></resouce-counter>
     </div>
-    <div class="act-control ml-6 pos-r h-flex">
+    <div class="act-control pos-r h-flex">
       <h2 class="fz-16">Network</h2>
       <pay-network @onNetwork="onNetwork" />
       <everpay-bar
@@ -46,7 +46,7 @@
       ></pay-coin>
 
       <div class="pay-confirm-container pos-a">
-        <div class="pay-confirm pa-4 al-c space-btw">
+        <div class="pay-confirm primary pa-4 al-c space-btw">
           <div class="amout-info">
             <div class="fz-16 fw-b">Total</div>
 
@@ -661,9 +661,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 600px) {
+  .act-control {
+    width: 100% !important;
+  }
+}
 .deposite-container {
-  // height: 100%;
   min-height: 100%;
+  gap: 24px;
   align-items: stretch;
 }
 .deposite-control {
@@ -707,14 +712,13 @@ export default {
   width: 368px;
   padding: 24px 16px 0;
   border-radius: 8px;
-  background: #f3e8ff;
+  background: var(--v-background3-base);
   box-sizing: border-box;
   .pay-confirm-container {
     width: 100%;
     left: 0;
     bottom: 0;
     border-radius: 0px 0px 8px 8px;
-    background: #735ea1;
     .pay-confirm {
       color: #fff;
       .redeem-trigger {

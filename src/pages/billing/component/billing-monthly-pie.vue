@@ -70,12 +70,12 @@ export default {
             break;
           case "COMPUTE_UNIT":
             name = "RPC Requests";
-            color = "#836BAF";
+            color = "#8098F9";
             resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "CUs";
             break;
           case "AI_RPC":
             name = "AI RPC";
-            color = "#9747FF";
+            color = "#6172F3";
             resourceUsed =
               this.$utils.formatLand(it.resourceUsed, false, false) + "LAND";
             break;

@@ -8,7 +8,7 @@
     >
       <div class="first-recharge">
         <div class="task-hub-content ml-auto">
-          <div class="task-hub-title fw-b">
+          <div class="task-hub-title primary--text fw-b">
             {{
               isOverActivityTime
                 ? "First Deposit Bonus for LAND!"
@@ -36,7 +36,9 @@
               <img :src="item.img" alt="" />
             </div>
             <div>
-              <div class="recharge-item-title fw-b fz-16">{{ item.title }}</div>
+              <div class="primary--text fw-b fz-16">
+                {{ item.title }}
+              </div>
               <div class="recharge-item-description fz-12">
                 {{ item.description }}
               </div>
@@ -51,7 +53,7 @@
               Give up the benefits
             </div>
             <div
-              class="deposit-now-btn al-c justify-center ml-6 flex-1 cursor-p"
+              class="deposit-now-btn primary al-c justify-center ml-6 flex-1 cursor-p"
               v-ripple
               @click="handleDeposit"
             >
@@ -83,7 +85,7 @@
           />
         </div>
         <div class="mint-box ml-auto">
-          <h3 class="mint-title fw-b">Activate Your Account</h3>
+          <h3 class="mint-title fw-b primary--text">Activate Your Account</h3>
           <div class="mint-description fz-14">
             Welcome to 4EVERLAND. You are in a trial status and can only access
             limited product functionalities. Please complete the on-chain
@@ -131,9 +133,9 @@
               >
                 <div
                   slot="ref"
-                  class="mint-btn al-c justify-center fw-b fz-14 cursor-p"
+                  class="mint-btn primary al-c justify-center fw-b fz-14 cursor-p"
                 >
-                  <span> Activate now</span>
+                  <span>Activate now</span>
                   <img
                     class="ml-1"
                     width="16"
@@ -479,7 +481,6 @@ export default {
   width: 560px;
   .task-hub-title {
     font-size: 24px;
-    color: #735ea1;
   }
   .task-hub-description {
     color: #64748b;
@@ -503,16 +504,11 @@ export default {
 
 .img-icon {
   border-radius: 50%;
-  background: #f3e8ff;
+  background-color: #eef4ff;
 }
 .first-recharge {
   padding: 40px;
   background: url("/img/bg/share/first-recharge-bg.png") no-repeat;
-  .recharge-item {
-    .recharge-item-title {
-      color: #775da6;
-    }
-  }
   .give-up-btn {
     padding: 16px 38px 16px 37px;
     color: #64748b;
@@ -523,7 +519,6 @@ export default {
   .deposit-now-btn {
     color: #fff;
     border-radius: 8px;
-    background: #735ea1;
   }
 }
 
@@ -535,7 +530,6 @@ export default {
     width: 560px;
     .mint-title {
       font-size: 24px;
-      color: #735ea1;
     }
     .mint-description {
       line-height: normal;
@@ -557,7 +551,6 @@ export default {
   padding: 16px 0;
   color: #fff;
   border-radius: 8px;
-  background: #735ea1;
 }
 .registe-gift {
   right: 140px;

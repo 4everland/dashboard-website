@@ -1,8 +1,5 @@
 <style lang="scss">
 .e-drawer {
-  // box-shadow: 5px 0px 30px 0px rgba(0, 0, 0, 0.1);
-  z-index: 999;
-
   .v-navigation-drawer__border {
     display: none;
   }

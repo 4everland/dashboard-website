@@ -6,7 +6,7 @@
         @click="onSelect(it.label)"
         class="coin-label py-2 px-4 cursor-p d-flex space-btw mr-2 mb-2"
         :class="{
-          active: value == it.label,
+          border2: value == it.label,
         }"
         v-for="(it, i) in coinList"
         :key="i"
@@ -29,7 +29,7 @@
             <div
               class="fz-14"
               :class="{
-                'color-1': value == it.label,
+                'primary--text': value == it.label,
               }"
             >
               {{ it.name }}

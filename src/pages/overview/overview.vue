@@ -359,12 +359,12 @@ export default {
               break;
             case "COMPUTE_UNIT":
               name = "RPC Requests";
-              color = "#836BAF";
+              color = "#8098F9";
               resourceUsed = this.$utils.getNumCount(it.resourceUsed) + "CUs";
               break;
             case "AI_RPC":
               name = "AI_RPC";
-              color = "#9747FF";
+              color = "#6172F3";
               resourceUsed =
                 this.$utils.formatLand(it.resourceUsed, false, false) + "LAND";
               break;
@@ -497,16 +497,16 @@ export default {
     .combo-tag {
       color: #fff;
       padding: 4px 16px;
-      background: #94a3b8;
+      background: var(--v-textInfo-base);
       border-radius: 4px;
     }
     .combo-tag.on-chain {
       background: linear-gradient(
           307deg,
-          rgba(151, 71, 255, 0.8) 37.75%,
-          rgba(115, 94, 161, 0.8) 93.02%
+          rgba(110, 88, 242, 0.8) 37.75%,
+          rgba(105, 65, 198, 0.8) 93.02%
         ),
-        #735ea1;
+        var(--color-font-brand, #6172f3);
     }
     .upgrad {
       color: #fff;
@@ -514,10 +514,10 @@ export default {
       border-radius: 4px;
       background: linear-gradient(
           307deg,
-          rgba(151, 71, 255, 0.8) 37.75%,
-          rgba(115, 94, 161, 0.8) 93.02%
+          rgba(110, 88, 242, 0.8) 37.75%,
+          rgba(105, 65, 198, 0.8) 93.02%
         ),
-        #735ea1;
+        var(--color-font-brand, #6172f3);
     }
   }
 }

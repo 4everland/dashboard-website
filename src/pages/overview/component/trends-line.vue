@@ -4,7 +4,7 @@
       class="tags d-flex align-center justify-center justify-sm-start flex-wrap my-4"
     >
       <div
-        class="tag fz-14 mr-1 cursor-p"
+        class="tag fz-14 cursor-p"
         v-ripple
         v-for="(item, index) in tagList"
         :key="item.type"
@@ -487,15 +487,15 @@ export default {
     height: 33px;
     text-align: center;
     line-height: 33px;
-    color: #0f172a;
+    color: var(--v-textSecondary-base);
     border-radius: 4px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--v-border1-base);
   }
   .tag.actived {
     font-weight: bold;
-    color: #735ea1;
-    background: #f3e8ff;
-    border: none;
+    color: var(--v-primary-base);
+    background: var(--v-background2-base);
+    border: 1px solid var(--v-border2-base);
   }
 }
 .circle {

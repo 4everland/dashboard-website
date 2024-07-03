@@ -5,7 +5,7 @@
         @click="onSelect(it.chainId, it.label)"
         class="network-label pa-3 al-c cursor-p d-flex mt-4"
         :class="{
-          active: actived(it.chainId, it.label),
+          border2: actived(it.chainId, it.label),
         }"
         v-for="(it, i) in chainList"
         :key="i"
@@ -483,7 +483,5 @@ export default {
 .network-label.active {
   font-weight: bold;
   border: 1px solid #735ea1;
-
-  // background: #f3e8ff;
 }
 </style>
