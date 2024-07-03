@@ -19,24 +19,26 @@
   </div>
 
   <div v-else class="e-settings" :class="vertical ? 'd-flex' : ''">
-    <v-tabs
-      class="tabs"
-      :class="vertical ? 'v3-vertical bdr-1' : 'v3-horizon'"
-      color="black"
-      v-model="curIdx"
-      :height="vertical ? null : 44"
-      :hide-slider="vertical"
-      :vertical="vertical"
-    >
-      <v-tab
-        v-for="(it, i) in list"
-        :key="i"
-        class="tab"
-        :class="{ 'fw-b': curIdx == i }"
+    <div>
+      <v-tabs
+        class="tabs"
+        :class="vertical ? 'v3-vertical bdr-1' : 'v3-horizon'"
+        color="black"
+        v-model="curIdx"
+        :height="vertical ? null : 44"
+        :hide-slider="vertical"
+        :vertical="vertical"
       >
-        {{ it.text }}
-      </v-tab>
-    </v-tabs>
+        <v-tab
+          v-for="(it, i) in list"
+          :key="i"
+          class="tab"
+          :class="{ 'fw-b': curIdx == i }"
+        >
+          {{ it.text }}
+        </v-tab>
+      </v-tabs>
+    </div>
     <div
       class=""
       :class="vertical ? 'flex-1 ml-5' : 'mt-5'"

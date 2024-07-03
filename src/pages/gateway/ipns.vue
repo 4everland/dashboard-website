@@ -198,7 +198,7 @@ export default {
       try {
         let tip =
           "The following IPNS will be deleted irrecoverably. Are you sure you want to proceed?";
-        tip += `<p class="mt-4" style="color:#775DA6">${item.name}</p>`;
+        tip += `<p class="mt-4" style="color:#6172F3">${item.name}</p>`;
         await this.$confirm(tip, "Delete IPNS");
         await this.$http.delete(`$ipns/names/${item.key}`);
         this.getList(1);
@@ -460,10 +460,9 @@ export default {
 };
 </script>
 <style lang="scss" scpoed>
-$color1: #775da6;
 .action-btn {
   cursor: pointer;
-  color: $color1;
+  color: var(--v-primary-base);
   padding: 0 !important;
   letter-spacing: 0;
 }

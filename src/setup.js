@@ -11,7 +11,7 @@ const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 
 Vue.use(VueClipboards);
 
-Vue.prototype.$color1 = "#775DA6";
+Vue.prototype.$color1 = "#6172f3";
 Vue.prototype.$color2 = "#ff6960";
 
 Vue.prototype.$sleep = (msec = 300) => {

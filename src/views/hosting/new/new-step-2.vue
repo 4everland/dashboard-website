@@ -58,8 +58,7 @@
                       eye-catching!</span
                     >
                     <a
-                      class="ml-3 u fw-b"
-                      style="color: #775da6"
+                      class="ml-3 u fw-b primary--text"
                       href="https://docs.google.com/forms/d/e/1FAIpQLSeLHwlNcFieeHhoyYJiKDydeZJShhwlerWE9ZsdNrdbgQgLCg/viewform"
                       target="_blank"
                       >Apply</a
@@ -76,8 +75,7 @@
                     We also offer CLI deployment methods. Click here to
                     <a
                       href="https://docs.hosting.4everland.org/cli/"
-                      style="color: #775da6"
-                      class="u fw-b"
+                      class="u fw-b primary--text"
                       target="_blank"
                       >learn more</a
                     >.
@@ -249,7 +247,7 @@ Are you sure you want to continue?`;
 
 <style lang="scss" scoped>
 .dialog-title {
-  color: #775da6;
+  color: var(--v-primary-base);
   font-size: 14px;
   font-weight: bold;
 }
