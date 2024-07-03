@@ -8,15 +8,16 @@
     >
       <template #default="{ tab }">
         <v-tabs-items
+          v-show="showCalc"
           :value="tab"
           class="pt-0"
           style="height: 100%; box-sizing: border-box"
         >
           <v-tab-item class="px-4 pt-4 pb-4" style="height: 100%">
             <div class="table-header d-flex">
-              <div class="text-left flex-1"></div>
-              <div class="text-left flex-1">Unit Price</div>
-              <div class="text-left flex-1">Expected Value</div>
+              <div class="text-left flex-1 pa-2 pa-sm-4"></div>
+              <div class="text-left flex-1 pa-2 pa-sm-4">Unit Price</div>
+              <div class="text-left flex-1 pa-2 pa-sm-4">Expected Value</div>
             </div>
             <div class="body">
               <div
@@ -24,11 +25,13 @@
                 :key="item.resourceName"
                 class="flex-1 d-flex fz-14 table-body-item"
               >
-                <div class="flex-1 pa-4 fw-b">{{ item.resourceName }}</div>
-                <div class="flex-1 pa-4">
+                <div class="flex-1 pa-2 pa-sm-4 fw-b">
+                  {{ item.resourceName }}
+                </div>
+                <div class="flex-1 pa-2 pa-sm-4">
                   {{ item.unitPrice }} {{ item.unit }}
                 </div>
-                <div class="flex-1 pa-4">
+                <div class="flex-1 pa-2 pa-sm-4">
                   <span>
                     {{
                       ((inputVal * 1e6) / item.unitPrice).toFixed(
@@ -76,6 +79,14 @@
             </div>
           </v-tab-item>
         </v-tabs-items>
+
+        <div
+          v-show="asMobile"
+          @click="showCalc = !showCalc"
+          class="ta-c pa-2 fz-12 textInfo--text"
+        >
+          View All
+        </div>
       </template>
     </billing-tabs>
   </div>
@@ -100,7 +111,6 @@ export default {
   data() {
     return {
       tabs: ["Resource", "Calculator"],
-
       resourceTagsConfig: [
         {
           name: "IPFS Storage",
@@ -254,6 +264,7 @@ export default {
       recordIpfsSize: BigNumber.from("0"),
       recordIpfsSeconds: BigNumber.from("0"),
       rpcPrice: BigNumber.from("0"),
+      showCalc: false,
     };
   },
   computed: {
@@ -328,6 +339,9 @@ export default {
         // },
       ];
     },
+    asMobile() {
+      return this.$vuetify.breakpoint.name == "xs";
+    },
   },
   created() {
     this.$store.dispatch("getPrice");
@@ -390,6 +404,12 @@ export default {
       this.showPop = false;
     },
   },
+
+  watch: {
+    asMobile(val) {
+      this.showCalc = !val;
+    },
+  },
 };
 </script>
 
@@ -431,17 +451,15 @@ export default {
   }
   .input-btn {
     padding: 11px 24px 10px 25px;
-
-    color: #735ea1;
+    color: var(--v-primary-base);
     border-radius: 4px;
-    border: 1.5px solid #735ea1;
+    border: 1.5px solid var(--v-primary-base);
   }
 }
 .table-header {
   border-radius: 4px;
   > div {
     background: #f1f5f9;
-    padding: 12px 16px;
     font-size: 14px;
     color: #64748b;
   }

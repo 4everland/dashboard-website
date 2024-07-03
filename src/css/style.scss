@@ -365,3 +365,14 @@ ul.ls-none {
 //   background-color: var(--v-disabled-base) !important;
 //   color: #fff !important;
 // }
+
+.border-base {
+  border-color: var(--v-primary-base) !important;
+  border: 1px solid var(--v-primary-base);
+}
+.border-1 {
+  border: 1px solid var(--v-border1-base);
+}
+.border-2 {
+  border: 1px solid var(--v-border2-base);
+}

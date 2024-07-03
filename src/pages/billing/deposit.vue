@@ -676,6 +676,7 @@ export default {
   border-radius: 4px;
 }
 .deposite-input {
+  min-width: 20px;
   height: 48px;
   background: #fff;
   text-indent: 20px;
@@ -732,14 +733,10 @@ export default {
         font-family: "DIN Alternate";
       }
       .confirm-btn {
-        color: #735ea1;
         padding: 15px 46px;
         border-radius: 4px;
         background: #fff;
-      }
-      .confirm-btn.disabled {
-        color: #fff;
-        background: #e2e8f0;
+        // color: #000;
       }
       .confirm-tip {
         width: 336px;

@@ -7,6 +7,7 @@
         class="coin-label py-2 px-4 cursor-p d-flex space-btw mr-2 mb-2"
         :class="{
           border2: value == it.label,
+          active: value == it.label,
         }"
         v-for="(it, i) in coinList"
         :key="i"
@@ -27,9 +28,9 @@
           />
           <div class="fz-12 ml-1">
             <div
-              class="fz-14"
+              class="fz-14 unit"
               :class="{
-                'primary--text': value == it.label,
+                trigger: value == it.label,
               }"
             >
               {{ it.name }}
@@ -480,8 +481,7 @@ export default {
   border: 1px solid #cbd5e1;
 }
 .coin-label.active {
-  font-weight: bold;
-  border: 1px solid #735ea1;
+  border: 1px solid var(--v-primary-base) !important;
 }
 .balance {
   color: #64748b;
@@ -498,5 +498,9 @@ export default {
   bottom: -20px;
   border: 10px solid transparent;
   border-top-color: rgba(0, 0, 0, 0.9);
+}
+.unit.trigger {
+  color: var(--v-primary-base);
+  font-weight: 700;
 }
 </style>

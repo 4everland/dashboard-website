@@ -8,14 +8,14 @@
         v-for="(item, index) in tags"
         :key="index"
         class="tag cursor-p fz-12 al-c justify-center"
-        :class="curIndex == index ? 'active' : ''"
+        :class="curIndex == index ? 'trigger' : ''"
         @click="handleTag(index)"
       >
         {{ item.text }}
       </div>
       <div
         class="select-content justify-center al-c ml-2"
-        :class="curIndex == -1 ? 'active' : ''"
+        :class="curIndex == -1 ? 'trigger' : ''"
       >
         <input
           type="text"
@@ -156,8 +156,8 @@ export default {
   box-sizing: border-box;
 }
 
-.select-content.active {
-  border: 1px solid #735ea1;
+.select-content.trigger {
+  border: 1px solid var(--v-primary-base);
 }
 .tag {
   // width: 80px;
@@ -170,9 +170,9 @@ export default {
 .tag + .tag {
   margin-left: 8px;
 }
-.tag.active {
-  border: 1px solid #735ea1;
-  color: #735ea1;
+.tag.trigger {
+  border: 1px solid var(--v-primary-base);
+  color: var(--v-primary-base);
   font-weight: bold;
 }
 .resource-input {
