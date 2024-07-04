@@ -41,8 +41,7 @@
       <div class="fz-16 mt-6 ta-c" style="color: #8c8ca1">
         Powered by
         <span
-          class="cursor-p"
-          style="color: #775da6"
+          class="cursor-p primary--text"
           @click="handleOpenLink('https://everpay.io/')"
           >everPay</span
         >

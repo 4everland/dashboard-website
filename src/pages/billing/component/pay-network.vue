@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="d-flex flex-wrap space-btw">
+    <div class="d-flex flex-wrap" style="gap: 12px">
       <div
         @click="onSelect(it.chainId, it.label)"
         class="network-label pa-3 al-c cursor-p d-flex mt-4"
         :class="{
-          border2: actived(it.chainId, it.label),
+          'border2 active font-weight-bold': actived(it.chainId, it.label),
         }"
         v-for="(it, i) in chainList"
         :key="i"
@@ -476,12 +476,12 @@ export default {
 
 <style lang="scss" scoped>
 .network-label {
-  width: 164px;
+  // width: 164px;
+  width: 48%;
   background: #fff;
   border-radius: 4px;
 }
 .network-label.active {
-  font-weight: bold;
-  border: 1px solid #735ea1;
+  border: 1px solid var(--v-primary-base) !important;
 }
 </style>

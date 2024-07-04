@@ -1,5 +1,5 @@
 <template>
-  <div class="deposite-container d-flex flex-column flex-sm-row pa-sm-6">
+  <div class="deposite-container d-flex flex-column flex-md-row pa-md-6">
     <div class="deposite-content flex-1 h-flex">
       <div class="purchase-plate">
         <h2 class="fz-16">Deposit</h2>
@@ -661,7 +661,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 960px) {
   .act-control {
     width: 100% !important;
   }
@@ -676,6 +676,7 @@ export default {
   border-radius: 4px;
 }
 .deposite-input {
+  min-width: 20px;
   height: 48px;
   background: #fff;
   text-indent: 20px;
@@ -732,14 +733,10 @@ export default {
         font-family: "DIN Alternate";
       }
       .confirm-btn {
-        color: #735ea1;
         padding: 15px 46px;
         border-radius: 4px;
         background: #fff;
-      }
-      .confirm-btn.disabled {
-        color: #fff;
-        background: #e2e8f0;
+        // color: #000;
       }
       .confirm-tip {
         width: 336px;

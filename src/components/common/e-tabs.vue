@@ -217,9 +217,6 @@ export default {
 </script>
 
 <style lang="scss">
-// .tabs {
-//   font-family: "Arial-BoldMT", "Arial";
-// }
 .v-tab {
   letter-spacing: normal !important;
 }
@@ -237,7 +234,7 @@ export default {
     background-color: transparent;
   }
   .v-tabs-slider {
-    background: #775da6;
+    background: var(--v-primary-base);
   }
 
   .v3-vertical {
@@ -246,7 +243,7 @@ export default {
       text-align: left;
     }
     .v-tab--active {
-      color: #775da6;
+      color: var(--v-primary-base);
       &::after {
         position: absolute;
         content: "";
@@ -255,7 +252,7 @@ export default {
         transform: translateY(-50%);
         height: 20px;
         width: 3px;
-        background: #775da6;
+        background: var(--v-primary-base);
         border-radius: 1px;
       }
     }

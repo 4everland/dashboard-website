@@ -78,7 +78,7 @@
             <div
               class="identification-tag px-3 al-c fz-14 mt-3 cursor-p d-ib"
               :style="{
-                background: onChain ? '#775da6' : '#dbdbdb',
+                background: onChain ? '#6172F3' : '#dbdbdb',
               }"
               @click="$router.push('/billing/records?tab=Deposit History')"
             >

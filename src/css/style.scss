@@ -5,7 +5,6 @@
 @import "color";
 @import "anim";
 
-// $color1: #775da6;
 $color1: var(--v-primary-base);
 
 body {
@@ -357,6 +356,19 @@ ul.ls-none {
 
 .no-scroll {
   overflow: initial !important;
+}
+
+.border-base {
+  border-color: var(--v-primary-base) !important;
+  border: 1px solid var(--v-primary-base);
+}
+
+.border-1 {
+  border: 1px solid var(--v-border1-base);
+}
+
+.border-2 {
+  border: 1px solid var(--v-border2-base);
 }
 
 .v-btn.v-btn--is-elevated {

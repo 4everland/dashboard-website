@@ -25,7 +25,7 @@
         class="mt-1"
         style="border-radius: 8px"
         :value="curResource.percent"
-        color="#775DA6"
+        color="#6172F3"
         height="4"
       >
       </v-progress-linear>

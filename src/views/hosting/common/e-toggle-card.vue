@@ -46,7 +46,7 @@ export default {
     title: String,
     color: {
       type: String,
-      default: "#775DA6",
+      default: "#6172f3",
     },
     icon: String,
   },

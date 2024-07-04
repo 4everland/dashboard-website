@@ -295,7 +295,12 @@ export default {
     padding: 8px 16px;
     color: #fff;
     border-radius: 4px;
-    background: linear-gradient(79deg, #775da6 0%, #9747ff 100%);
+    background: linear-gradient(
+        307deg,
+        rgba(110, 88, 242, 0.8) 37.75%,
+        rgba(105, 65, 198, 0.8) 93.02%
+      ),
+      var(--color-font-brand, #6172f3);
     cursor: pointer;
   }
 }

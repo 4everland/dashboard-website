@@ -152,7 +152,7 @@ export default {
             name: "RPC Requests",
             type: "line",
             itemStyle: {
-              color: "#836BAF",
+              color: "#8098F9",
             },
 
             data: this.COMPUTE_UNIT,
@@ -161,7 +161,7 @@ export default {
             name: "AI RPC",
             type: "line",
             itemStyle: {
-              color: "#9747FF",
+              color: "#6172F3",
             },
 
             data: this.AI_RPC,

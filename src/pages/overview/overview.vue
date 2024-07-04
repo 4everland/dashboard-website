@@ -56,7 +56,7 @@
             style="height: 100%"
           >
             <div
-              class="d-flex flex-row flex-sm-column align-center align-sm-start justify-space-between"
+              class="balance-content d-flex flex-row flex-sm-column align-center align-sm-start justify-space-between"
             >
               <div>
                 <div>
@@ -401,6 +401,12 @@ export default {
     width: 100% !important;
   }
 }
+
+@media screen and (max-width: 600px) {
+  .balance-content {
+    width: 100%;
+  }
+}
 .carousel-container {
   height: 100%;
 }
@@ -420,9 +426,6 @@ export default {
   }
   .delimiter + .delimiter {
     margin-left: 10px;
-  }
-  .delimiter.active {
-    background: #775da6;
   }
 }
 
@@ -457,21 +460,6 @@ export default {
       }
       .tips {
         color: #64748b;
-      }
-      .deposite-btn,
-      .conversion-btn {
-        border-radius: 4px;
-        padding: 12px 48px;
-        cursor: pointer;
-      }
-      .deposite-btn {
-        color: #fff;
-        border: 1px solid #775da6;
-        background: #775da6;
-      }
-      .conversion-btn {
-        color: #775da6;
-        border: 1px solid #775da6;
       }
     }
   }

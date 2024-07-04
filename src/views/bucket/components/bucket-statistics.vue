@@ -159,17 +159,7 @@ export default {
     },
   },
   watch: {
-    active(val) {
-      // if (val) {
-      //   this.ipfsData.xAxis = [];
-      //   this.ipfsData.yAxis = [];
-      //   this.arData.xAxis = [];
-      //   this.arData.yAxis = [];
-      //   this.trafficData.xAxis = [];
-      //   this.trafficData.yAxis = [];
-      //   this.requestData.xAxis = [];
-      //   this.requestData.yAxis = [];
-      // }
+    active() {
       this.ipfsData.xAxis = [];
       this.ipfsData.yAxis = [];
       this.arData.xAxis = [];
@@ -213,7 +203,7 @@ export default {
   },
 };
 </script>
-<style >
+<style>
 .data-range .v-input {
   margin: 0 !important;
 }

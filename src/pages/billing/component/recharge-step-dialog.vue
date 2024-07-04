@@ -130,7 +130,7 @@ export default {
   font-size: 14px;
   font-weight: bold;
   border-radius: 4px;
-  background: #775da6;
+  background: var(--v-primary-base);
   color: #fff;
   cursor: pointer;
 }
@@ -144,9 +144,9 @@ export default {
   padding-bottom: 0 !important;
 }
 .tips {
-  color: #735ea1;
+  color: var(--v-primary-base);
   border-radius: 4px;
-  background: #f3e8ff;
+  background: var(--v-border2-base);
 }
 .close-btn {
   color: #fff;
@@ -158,6 +158,6 @@ export default {
   line-height: 22px; /* 137.5% */
   padding: 8px 40px;
   border-radius: 4px;
-  background: #775da6;
+  background: var(--v-primary-base);
 }
 </style>

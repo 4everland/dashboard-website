@@ -19,13 +19,12 @@
         top: 0;
       }
     }
-    $color1: #775da6;
     &.active {
-      background: $color1;
+      background: var(--v-primary-base);
       color: #fff;
       .num {
         background: #fff;
-        color: $color1;
+        color: var(--v-primary-base);
         &::after {
           border-left-color: #fff;
         }
@@ -34,12 +33,12 @@
     &.prev {
       background: #fff url(/img/svg/common/ic-check.svg) 98% center no-repeat;
       background-size: 18px;
-      color: $color1;
+      color: var(--v-primary-base);
       .num {
-        background: $color1;
+        background: var(--v-primary-base);
         color: #fff;
         &::after {
-          border-left-color: $color1;
+          border-left-color: var(--v-primary-base);
         }
       }
     }

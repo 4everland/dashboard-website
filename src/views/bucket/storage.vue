@@ -521,7 +521,7 @@ export default {
   position: fixed;
   bottom: 80px;
   right: 20px;
-  color: #775da6;
+  color: var(--v-primary-base);
   font-size: 16px;
   cursor: pointer;
   .task-count {

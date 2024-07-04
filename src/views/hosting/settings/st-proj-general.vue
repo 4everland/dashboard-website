@@ -195,14 +195,14 @@
           Getting CID...The deployment will only be triggered if the IPNS CID
           differs from the most recent version CID.
         </div>
-        <div class="al-c" style="color: #775da6" v-else>
+        <div class="al-c primary--text" v-else>
           <span>CID: {{ latestDeployInfo.ipnsResolve }}</span>
           <span class="ml-5 mr-2"
             >Last updated: {{ latestDeployInfo.updateAt }}</span
           >
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
-              <v-icon size="18" color="#775da6" v-bind="attrs" v-on="on">
+              <v-icon size="18" class="primary--text" v-bind="attrs" v-on="on">
                 mdi-alert-circle-outline</v-icon
               >
             </template>

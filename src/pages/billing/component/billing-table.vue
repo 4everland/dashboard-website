@@ -20,11 +20,11 @@ export default {};
     color: #64748b !important;
   }
   :deep tbody tr:hover {
-    background: #f3e8ff !important;
+    background: var(--v-background2-base) !important;
   }
 
   :deep tbody tr.active {
-    background: #f3e8ff !important;
+    background: var(--v-background2-base) !important;
   }
 
   :deep td {

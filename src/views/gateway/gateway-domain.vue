@@ -151,7 +151,7 @@ export default {
     color: #6c7789;
   }
   .tips-name {
-    color: #775da6;
+    color: var(--v-primary-base);
   }
   .domain-input-container {
     background: #f4f6f8;

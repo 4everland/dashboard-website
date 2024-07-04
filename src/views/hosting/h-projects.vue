@@ -49,7 +49,7 @@
 }
 .ipfs-deploy {
   padding: 30px 30px;
-  color: #775da6;
+  color: var(--v-primary-base);
   background: #f3effa;
 }
 .template-deploy {
