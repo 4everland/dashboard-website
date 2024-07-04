@@ -246,12 +246,7 @@
                   @change="chooseTime"
                 >
                   <v-col cols="12" md="6" v-for="(it, i) in timeList" :key="i">
-                    <div
-                      class="time-item"
-                      :class="{
-                        active: purchasePlan == it.value,
-                      }"
-                    >
+                    <div class="time-item">
                       <v-radio :value="it.value"></v-radio>
                       <div class="ml-2 fz-14">
                         <span>{{ it.price }}</span>
@@ -303,7 +298,7 @@
             </div>
           </v-tooltip>
           <v-btn
-            class="pay-btn"
+            class="pay-btn primary--text"
             :class="!valid || !validChainId ? 'pay-disabled' : ''"
             :disabled="!valid || !validChainId"
             min-width="336"
@@ -625,7 +620,7 @@ export default {
     align-items: center;
     flex-shrink: 0;
     border-radius: 4px;
-    border: 1px solid rgba(115, 94, 161, 0.5);
+    border: 1px solid var(--v-primary-base);
   }
 }
 .step-first {
@@ -635,7 +630,7 @@ export default {
 }
 .step-include {
   border-radius: 8px;
-  background: #f3e8ff;
+  background: var(--v-background2-base);
   .create-item-title {
     color: #0f172a;
     font-family: "SF Pro Text";
@@ -650,7 +645,7 @@ export default {
       display: flex;
       flex-wrap: wrap;
       gap: 8px 24px;
-      color: #735ea1;
+      color: var(--v-primary-base);
       font-family: "SF Pro Text";
       font-size: 14px;
       font-style: normal;
@@ -661,7 +656,7 @@ export default {
   .step-include-bottom {
     padding: 16px;
     border-radius: 0px 0px 8px 8px;
-    background: #735ea1;
+    background: var(--v-primary-base);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -693,7 +688,6 @@ export default {
 
     .pay-btn {
       background: #fff;
-      color: #735ea1;
       font-size: 16px;
       font-style: normal;
       font-weight: 700;

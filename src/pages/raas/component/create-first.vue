@@ -491,8 +491,8 @@ export default {
     }
   }
   .option-item-active {
-    border: 1px solid rgba(115, 94, 161, 0.5);
-    background: rgba(243, 232, 255, 0.25);
+    border: 1px solid var(--v-primary-base);
+    background: var(--v-background2-base);
   }
 }
 .step-first {
