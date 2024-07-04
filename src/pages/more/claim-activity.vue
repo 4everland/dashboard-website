@@ -500,7 +500,7 @@ export default {
     async handleRechargeLand() {
       this.load = true;
       try {
-        const accounts = await window.ethereum.request({
+        const accounts = await this.walletObj.request({
           method: "eth_requestAccounts",
         });
         let address = accounts[0];
