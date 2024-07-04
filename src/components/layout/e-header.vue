@@ -1,98 +1,92 @@
 <template>
-  <!-- <div class="pos-r"> -->
-  <div>
-    <!-- <div class="pos-f top-0 w100p z-1000" v-show="showProgress">
-      <v-progress-linear
-        indeterminate
-        color="cyan"
-        height="2"
-      ></v-progress-linear>
+  <v-app-bar app height="64" color="#fff" elevation="0">
+    <v-app-bar-nav-icon @click="$setMsg('showDrawer')"></v-app-bar-nav-icon>
+
+    <a href="/">
+      <img v-if="asMobile" src="/img/svg/logo-m.svg" width="46" alt="" />
+    </a>
+    <!-- <div>
+      <div class="fz-20 fw-b">Overview of 0x8807...f445</div>
+      <div class="fz-11 text--secondary">Welcome to 4EVERLAND Dashboard</div>
     </div> -->
-    <v-app-bar app height="64" color="#fff" elevation="0">
-      <v-app-bar-nav-icon @click="$setMsg('showDrawer')"></v-app-bar-nav-icon>
-      <!-- <a href="/">
-        <img
-          :src="`/img/svg/logo${asMobile ? '-m' : ''}.svg`"
-          height="30"
-          class="d-b"
-        />
-      </a> -->
-      <v-spacer></v-spacer>
-      <template>
-        <e-menu
-          offset-y
-          open-on-hover
-          :disabled="!it.subs"
-          v-for="(it, i) in menus"
-          :key="i"
+    <v-spacer></v-spacer>
+    <div class="header-right-box">
+      <div class="hidden-sm-and-down">
+        <v-btn
+          v-for="item in textBtnList"
+          :key="item.label"
+          :text="item.text || true"
+          :plain="item.plain || true"
+          :ripple="item.ripple || false"
+          :color="item.color || 'textSecondary'"
+          :to="item.to"
+          :href="item.href"
+          :target="item.target"
+          >{{ item.label }}</v-btn
         >
-          <!-- :href="it.href"
-          :to="it.to"
-          :target="it.href ? '_blank' : ''" -->
+      </div>
 
+      <v-divider vertical class="mr-4 hidden-sm-and-down"></v-divider>
+      <div class="menu-btn-box mr-4 mr-sm-2">
+        <v-btn
+          v-for="item in menuBtnList"
+          class="px-0 px-md-4"
+          :class="item.hiddenMobile ? 'hidden-sm-and-down' : ''"
+          :key="item.label"
+          :color="item.color"
+          :to="item.to"
+          :href="item.href"
+          :target="item.target"
+          :min-width="asMobile ? '40px' : ''"
+        >
+          <img
+            v-if="item.icon"
+            class="mr-0"
+            :class="item.iconClass || 'mr-md-2'"
+            :src="item.icon"
+            :width="item.iconWhidth || 24"
+            :alt="item.label + '_icon'"
+          />
+          <span v-if="!asMobile"> {{ item.label }}</span>
+        </v-btn>
+      </div>
+      <v-menu bottom min-width="128px" rounded offset-y>
+        <template v-slot:activator="{ on }">
           <v-btn
-            slot="ref"
-            text
-            @click="onMenu(it)"
-            :style="it.btnStyle"
-            class="ml-4"
-            :id="it.to == '/task-hub' ? 'reward-guide' : null"
+            icon
+            :max-width="asMobile ? 24 : 40"
+            :max-height="asMobile ? 24 : 40"
+            v-on="on"
           >
-            <img
-              v-if="it.preImg"
-              :src="it.preImg"
-              :width="it.width"
-              :height="it.height"
-              :class="it.imgCls"
-            />
-            <e-team-avatar
-              class="cursor-p mr-2"
-              v-if="it.uid"
-              :src="it.avatar"
-              :size="20"
-              :uid="it.uid"
-            ></e-team-avatar>
-            <v-badge dot color="error" :value="it.badge || 0">
-              <span :style="{ color: it.color || '#555' }">{{ it.label }}</span>
-            </v-badge>
-            <img
-              v-if="it.subs && !it.noSuffix"
-              :src="`/img/svg/header/ic-down-${it.color || 'def'}.svg`"
-              width="10"
-              class="ml-2"
-            />
-            <img
-              v-if="it.img"
-              :src="it.img"
-              :width="it.width"
-              :height="it.height"
-              :class="it.imgCls"
-            />
+            <v-avatar color="brown" :size="asMobile ? 24 : 40">
+              <img :src="avatar" alt="avatar" />
+            </v-avatar>
           </v-btn>
-
-          <v-list dense v-if="it.subs">
+        </template>
+        <v-card elevation="4">
+          <v-list>
             <!-- :to="sub.to"
             :href="sub.href"
             :target="sub.href ? '_blank' : ''" -->
             <v-list-item
-              v-for="(sub, j) in it.subs"
-              :key="j"
+              v-for="(item, i) in menus"
+              :key="i"
               link
-              @click="onMenu(sub)"
+              @click="onMenu(item)"
             >
               <img
-                :src="sub.img || `/img/svg/header/${sub.icon}.svg`"
-                :width="sub.width || 12"
-                :height="sub.height"
+                :src="item.img || `/img/svg/header/${item.icon}.svg`"
+                :width="item.width || 24"
+                :height="item.height"
                 class="mr-2"
               />
-              <span class="gray-6">{{ sub.label }}</span>
+              <span class="text--secondary fz-12">{{ item.label }}</span>
             </v-list-item>
           </v-list>
-        </e-menu>
-      </template>
-    </v-app-bar>
-  </div>
+        </v-card>
+      </v-menu>
+    </div>
+  </v-app-bar>
 </template>
 
 <script>
@@ -102,101 +96,73 @@ import Axios from "axios";
 export default {
   data() {
     return {
+      textBtnList: [
+        {
+          label: "Docs",
+          href: "https://docs.4everland.org",
+          target: "_blank",
+        },
+        {
+          label: "Changelog",
+          to: "/changelog",
+          badge: Math.max(0, this.newChagelogNum - this.changelogNum),
+        },
+      ],
+      menuBtnList: [
+        {
+          label: "Task Hub",
+          to: "/task-hub",
+          hiddenMobile: true,
+        },
+        {
+          label: "Elite Quest",
+          to: "/quest",
+          color: "primary",
+          icon: require("@/assets/imgs/header/eliteQuest.png"),
+          iconClass: "mr-md-2",
+          iconWhidth: 24,
+        },
+      ],
+      menus: [
+        {
+          label: "Referral",
+          icon: "m-refer",
+          to: "/referral",
+        },
+        {
+          label: "Collection",
+          icon: "m-collect",
+          to: "/collections",
+        },
+        {
+          label: "Feedback",
+          icon: "m-report",
+          noticeMsg: {
+            name: "feedback",
+          },
+        },
+        {
+          label: "Disconnect",
+          icon: "m-logout",
+          name: "logout",
+        },
+      ],
       newChagelogNum: 0,
     };
   },
   computed: {
     ...mapState({
-      pageLoaded: (s) => s.pageLoaded,
       userInfo: (s) => s.userInfo,
       showProgress: (s) => s.showProgress,
       changelogNum: (s) => s.changelogNum,
-      hasClaim: (s) => s.hasClaim,
     }),
     ...mapGetters(["teamInfo"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-    menus() {
+    avatar() {
       const info = this.userInfo;
-      let list = [
-        {
-          label: "Docs",
-          icon: "m-docs",
-          href: "https://docs.4everland.org",
-        },
-        {
-          label: "Changelog",
-          icon: "m-log",
-          to: "/changelog",
-          noLogin: true,
-          badge: Math.max(0, this.newChagelogNum - this.changelogNum),
-        },
-      ];
-
-      if (info.uid) {
-        list.unshift({
-          // preImg: "/img/svg/header/icon_hot.svg",
-          imgCls: "mr-2",
-          width: 16,
-          to: "/task-hub",
-          label: "Task Hub",
-          // badge: this.activedClaim,
-        });
-        list.unshift({
-          preImg: "/img/svg/header/icon_hot.svg",
-          imgCls: "mr-2",
-          width: 16,
-          to: "/quest",
-          label: "Elite Quest",
-        });
-
-        list.push({
-          uid: info.uid,
-          addr: info.username || "unkown",
-          label: (info.username || "unkown").cutStr(6, 4),
-          avatar: info.avatar || "/img/bg/user/def-avatar.png",
-          btnStyle: "border: 1px solid #775DA6",
-          noSuffix: true,
-          subs: [
-            {
-              label: "Referral",
-              icon: "m-refer",
-              to: "/referral",
-            },
-            {
-              label: "Collection",
-              icon: "m-collect",
-              to: "/collections",
-            },
-            // {
-            //   label: "Activity Log",
-            //   icon: "m-actlog",
-            //   to: "/account/activity-log",
-            // },
-            {
-              label: "Feedback",
-              icon: "m-report",
-              noticeMsg: {
-                name: "feedback",
-              },
-            },
-            {
-              label: "Disconnect",
-              icon: "m-logout",
-              name: "logout",
-            },
-          ],
-        });
-      }
-      // list.unshift({
-      //   href: "https://firstsowing.4everland.org/",
-      //   label: "First Sowing",
-      // });
-      return list;
-    },
-    activedClaim() {
-      return this.hasClaim;
+      return info.avatar || "/img/bg/user/def-avatar.png";
     },
   },
   watch: {
@@ -257,3 +223,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.header-right-box {
+  display: flex;
+  align-items: center;
+  .menu-btn-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+}
+</style>

@@ -9,28 +9,8 @@
       <router-view></router-view>
     </v-main>
     <template v-else>
-      <e-header></e-header>
       <e-drawer />
-      <!-- <v-main>
-        <e-nav></e-nav>
-        <div
-          :class="meta.newLayout ? '' : 'pa-5'"
-          style="height: calc(100% - 100px)"
-        >
-        <div>
-          <e-no-access v-if="isDisabled"></e-no-access>
-          <e-wrap
-            v-else
-            :class="meta.wrapCls || (meta.isTab ? 'pa-0' : 'main-wrap mb-12')"
-          >
-            <keep-alive>
-              <router-view name="cache"></router-view>
-            </keep-alive>
-            <router-view></router-view>
-          </e-wrap>
-        </div>
-      </v-main> -->
-
+      <e-header></e-header>
       <v-main>
         <v-container fluid style="height: 100%">
           <e-no-access v-if="isDisabled"></e-no-access>

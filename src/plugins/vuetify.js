@@ -7,7 +7,7 @@ import dark from "./themes/dark";
 import "./extend";
 
 Vue.use(Vuetify);
-
+console.log(Vuetify);
 const vuetify = new Vuetify({
   theme: {
     // dark: true,

@@ -359,9 +359,6 @@ ul.ls-none {
   overflow: initial !important;
 }
 
-// .theme--light.v-btn.v-btn--disabled:not(.v-btn--flat):not(.v-btn--text):not(
-//     .v-btn-outlined
-//   ) {
-//   background-color: var(--v-disabled-base) !important;
-//   color: #fff !important;
-// }
+.v-btn.v-btn--is-elevated {
+  box-shadow: none;
+}
