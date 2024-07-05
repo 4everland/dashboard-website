@@ -3,7 +3,7 @@ import { mapState, mapGetters } from "vuex";
 const menuMap = {
   HOSTING: {
     label: "Hosting",
-    img: "m-hosting",
+    icon: "$drawer/hostingIcon",
     group: /^\/hosting/i,
     subs: [
       {
@@ -27,7 +27,7 @@ const menuMap = {
   },
   BUCKET: {
     label: "Storage",
-    img: "m-bucket",
+    icon: "$drawer/storageIcon",
     active: false,
     group: /^\/bucket/i,
     subs: [
@@ -64,7 +64,7 @@ const menuMap = {
   },
   GATEWAY: {
     label: "Gateway",
-    img: "m-gateway",
+    icon: "$drawer/gatewayIcon",
     // suffixImg: "/img/svg/hosting/tag_beta.png",
     group: /^\/gateway/i,
     subs: [
@@ -84,14 +84,14 @@ const menuMap = {
   },
   RPC: {
     label: "RPC",
-    img: "m-rpc",
+    icon: "$drawer/rpcIcon",
     to: "/rpc",
     active: false,
     group: /^\/rpc/i,
   },
   RAAS: {
     label: "RaaS",
-    img: "m-raas",
+    icon: "$drawer/raasIcon",
     to: "/raas",
     active: false,
     suffixImg: "/img/svg/hosting/tag_fire.png",
@@ -118,7 +118,7 @@ const menuMap = {
   },
   RESOURCE: {
     label: "Billing",
-    img: "m-usage",
+    icon: "$drawer/billingIcon",
     to: "/billing",
     active: false,
     group: /^\/billing/i,
@@ -145,7 +145,7 @@ const menuMap = {
 
     return {
       label: "Account",
-      img: "m-team",
+      icon: "$drawer/accountIcon",
       group: /^\/account/i,
       subs,
     };
@@ -164,7 +164,7 @@ export default {
       const list = [
         {
           label: "Overview",
-          img: "m-overview",
+          icon: "$drawer/overviewIcon",
           to: "/overview",
           active: false,
         },

@@ -4,10 +4,13 @@ import Vuetify from "vuetify/lib";
 import light from "./themes/light";
 import dark from "./themes/dark";
 
+import CUSTOM_ICONS from "@/icons/index";
+console.log(CUSTOM_ICONS);
+
 import "./extend";
 
 Vue.use(Vuetify);
-console.log(Vuetify);
+
 const vuetify = new Vuetify({
   theme: {
     // dark: true,
@@ -18,6 +21,9 @@ const vuetify = new Vuetify({
     options: {
       customProperties: true,
     },
+  },
+  icons: {
+    values: CUSTOM_ICONS,
   },
 });
 

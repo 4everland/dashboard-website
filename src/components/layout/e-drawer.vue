@@ -83,13 +83,13 @@
           >
             <template v-slot:activator>
               <e-drawer-icon
-                class="ml-2 mr-6"
+                class="mx-2"
                 :it="it"
                 :active="activeArr[i]"
               ></e-drawer-icon>
               <v-list-item-content>
                 <v-list-item-title class="d-flex al-c">
-                  <b class="fz-16">{{ it.label }}</b>
+                  <span class="fz-14">{{ it.label }}</span>
                   <img
                     v-if="it.suffixImg"
                     class="ml-2"
@@ -117,7 +117,7 @@
                   <div class="ml-2"></div>
                   <v-list-item-content>
                     <v-list-item-title>
-                      <b class="fz-14 fw-n">{{ sub.label }}</b>
+                      <span class="fz-14">{{ sub.label }}</span>
                       <img
                         v-if="sub.suffixImg"
                         class="ml-2"
@@ -184,11 +184,11 @@
             <e-drawer-icon
               :it="it"
               :active="path.indexOf(it.to) == 0"
-              class="ml-2 mr-6"
+              class="mx-2"
             ></e-drawer-icon>
             <v-list-item-content>
               <v-list-item-title class="d-flex al-c">
-                <b class="fz-16">{{ it.label }}</b>
+                <b class="fz-14">{{ it.label }}</b>
                 <img
                   v-if="it.suffixImg"
                   class="ml-2"
