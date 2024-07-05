@@ -319,34 +319,42 @@ export default {
           "$bill-analytics/bill/land-used/analytics",
           {
             params: {
-              analyticsType: "CURRENT_MONTH",
+              analyticsType: "DAY",
             },
           }
         );
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth() + 1;
+        const startOfMonth =
+          new Date(currentYear, currentMonth - 1, 1).getTime() / 1000;
         let resourceUsedObj = {};
-        data.forEach((item) => {
-          if (
-            !Object.prototype.hasOwnProperty.call(
-              resourceUsedObj,
-              item.resourceType
-            )
-          ) {
-            resourceUsedObj[item.resourceType] = {
-              landUsed: 0,
-              resourceUsed: 0,
-              resourceType: item.resourceType,
-            };
-          }
-          resourceUsedObj[item.resourceType].landUsed = Number(
-            (
-              resourceUsedObj[item.resourceType].landUsed +
-              Number(item.landUsed)
-            ).toFixed(2)
-          );
-          resourceUsedObj[item.resourceType].resourceUsed =
-            resourceUsedObj[item.resourceType].resourceUsed +
-            Number(item.resourceUsed);
-        });
+        data
+          .filter((it) => it.timestamp >= startOfMonth)
+          .forEach((item) => {
+            if (
+              !Object.prototype.hasOwnProperty.call(
+                resourceUsedObj,
+                item.resourceType
+              )
+            ) {
+              resourceUsedObj[item.resourceType] = {
+                landUsed: 0,
+                resourceUsed: 0,
+                resourceType: item.resourceType,
+                timestamp: item.timestamp,
+              };
+            }
+            resourceUsedObj[item.resourceType].landUsed = Number(
+              (
+                resourceUsedObj[item.resourceType].landUsed +
+                Number(item.landUsed)
+              ).toFixed(2)
+            );
+            resourceUsedObj[item.resourceType].resourceUsed =
+              resourceUsedObj[item.resourceType].resourceUsed +
+              Number(item.resourceUsed);
+          });
         this.landUsedMonthly = Object.values(resourceUsedObj).map((it) => {
           let name = "IPFS";
           let color = "#000";
@@ -392,8 +400,11 @@ export default {
             name,
             landUsed: it.landUsed.toString(),
             resourceUsed,
+            timestamp: it.timestamp,
           };
         });
+
+        console.log(this.landUsedMonthly);
       } catch (error) {
         console.log(error);
       }
