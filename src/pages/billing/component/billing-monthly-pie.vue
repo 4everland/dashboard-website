@@ -2,7 +2,7 @@
   <div class="billing-mothly-pie">
     <h2 class="fz-18">
       Billing details for
-      {{ new Date(curInfo.timestamp * 1000).format("date") }}
+      {{ new Date(curInfo.timestamp * 1000).format("yy-MM") }}
     </h2>
 
     <half-pie :curInfo="dataOptions"></half-pie>
