@@ -91,10 +91,7 @@
                     item.domain
                   }}</a>
                 </div>
-                <div
-                  class="d-flex al-c ml-2"
-                  v-if="item.type == 'ens' || item.type == 'sns'"
-                >
+                <div class="d-flex al-c ml-2" v-if="item.type == 'ens'">
                   <v-icon
                     v-if="
                       item.content == item.ipns ||
@@ -146,7 +143,7 @@
                         <span>Copy CID</span>
                       </v-list-item> -->
                       <v-list-item
-                        v-if="item.type == 'ens' || item.type == 'sns'"
+                        v-if="item.type == 'ens'"
                         link
                         @click="verifyConfiguration(item)"
                       >
@@ -162,10 +159,7 @@
             </div>
           </div>
           <div>
-            <div
-              class="gray mt-1 fz-14"
-              v-if="item.type == 'ens' || item.type == 'sns'"
-            >
+            <div class="gray mt-1 fz-14" v-if="item.type == 'ens'">
               Set the {{ item.type.toUpperCase() }} content hash by clicking
               on"Bind" or copying the hash to
               <a :href="getDomainByType(item.type).host" target="_blank">{{
@@ -192,7 +186,7 @@
                   v-clipboard="item.ipns"
                 />
                 <v-btn
-                  v-if="item.type == 'ens' || item.type == 'sns'"
+                  v-if="item.type == 'ens'"
                   @click="onBind(item, 'ipns')"
                   rounded
                   x-small
@@ -404,9 +398,9 @@ export default {
       if (item.type == "ens") {
         this.verifyEnsConfiguration(item);
       }
-      if (item.type == "sns") {
-        this.verifySnsConfiguration(item);
-      }
+      // if (item.type == "sns") {
+      //   this.verifySnsConfiguration(item);
+      // }
     },
     async verifyEnsConfiguration(item) {
       // if (!this.connectAddr) {
@@ -473,8 +467,6 @@ export default {
       }
       if (type == "ens") {
         this.onAddEns();
-      } else if (type == "sns") {
-        this.onAddSns();
       } else {
         this.setInfo();
       }
@@ -552,9 +544,9 @@ export default {
       if (item.type == "ens") {
         this.setEnsContentHash(item, type);
       }
-      if (item.type == "sns") {
-        this.setSnsContentHash(item);
-      }
+      // if (item.type == "sns") {
+      //   this.setSnsContentHash(item);
+      // }
     },
     async setEnsContentHash(item, type) {
       this.showDialog = false;

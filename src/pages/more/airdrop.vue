@@ -97,10 +97,40 @@
           <div class="task-list mt-6">
             <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
+                <img src="/img/airDrop/okx-airdrop.png" width="100%" alt="" />
+              </div>
+              <div class="pa-6 task-desc h-flex">
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="handleToOkx"
+                >
+                  6M $4EVER Points Giveaway with OKX Wallet
+                </div>
+                <div class="fz-14 mt-4">
+                  We're thrilled to announce our exciting collaboration with OKX
+                  Wallet, bringing you a chance to win a share of 6,000,000
+                  4EVER Points! Join us to become one of the 10,000 lucky
+                  winners with this incredible opportunity!
+                </div>
+                <div class="mt-8 al-c space-btw">
+                  <div class="reward fz-20 fw-b">
+                    Shared Reward of 6 Million Points
+                  </div>
+                  <v-btn color="#039CFF" @click="handleToOkx">
+                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  </v-btn>
+                </div>
+              </div>
+            </div>
+            <div class="task-item d-flex mb-4">
+              <div class="pa-6 task-img-wrap">
                 <img src="/img/airDrop/tge-airdrop.png" width="100%" alt="" />
               </div>
               <div class="pa-6 task-desc h-flex">
-                <div class="fz-20 fw-b cursor-p text-white">
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="$router.push('/quest/tge')"
+                >
                   4EVERLAND - TGE Party with SPACE ID
                 </div>
                 <div class="fz-14 mt-4">
@@ -112,8 +142,8 @@
                   <div class="reward fz-20 fw-b">
                     Shared Reward of 500,000 Points
                   </div>
-                  <v-btn color="#039CFF" @click="handleToTge">
-                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  <v-btn color="#039CFF" @click="$router.push('/quest/tge')">
+                    <span class="fw-b" style="color: #fff">Claim</span>
                   </v-btn>
                 </div>
               </div>
@@ -127,7 +157,10 @@
                 />
               </div>
               <div class="pa-6 task-desc h-flex">
-                <div class="fz-20 fw-b cursor-p text-white">
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="$router.push('/quest/bitget')"
+                >
                   4EVERLAND Bitget GetDrop
                 </div>
                 <div class="fz-14 mt-4">
@@ -140,39 +173,9 @@
                   <div class="reward fz-20 fw-b">
                     Shared Reward of 5 Million Points
                   </div>
-                  <!-- <v-btn color="#039CFF" @click="handleToBitget">
-                    <span class="fw-b" style="color: #fff">Let's Go</span>
-                  </v-btn> -->
-
-                  <div class="al-c">
-                    <span
-                      class="mr-2 fw-b"
-                      style="color: #039cff"
-                      v-show="
-                        bitgetStatus.reward &&
-                        bitgetStatus.taskStatus !== 'UNDO'
-                      "
-                      >{{ bitgetStatus.reward }} Points</span
-                    >
-                    <v-btn
-                      class="claim-btn"
-                      color="#039cff"
-                      :disabled="bitgetStatus.taskStatus !== 'CLAIM'"
-                      :loading="bitgetLoading"
-                      @click="handleClaim"
-                    >
-                      <img
-                        v-show="bitgetStatus.taskStatus == 'DONE'"
-                        class="mr-1"
-                        width="16"
-                        src="/img/airDrop/checked.svg"
-                        alt=""
-                      />
-                      <span class="fw-b" style="color: #fff">{{
-                        bitgetStatus.buttonName
-                      }}</span>
-                    </v-btn>
-                  </div>
+                  <v-btn color="#039CFF" @click="$router.push('/quest/bitget')">
+                    <span class="fw-b" style="color: #fff">Claim</span>
+                  </v-btn>
                 </div>
               </div>
             </div>
@@ -185,7 +188,10 @@
                 />
               </div>
               <div class="pa-6 task-desc">
-                <div class="fz-20 fw-b cursor-p text-white" @click="handleBnB">
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="$router.push('/quest/bnb')"
+                >
                   BNB CHAIN AIRDROP ALLIANCE PROGRAM
                 </div>
                 <div class="fz-14 mt-4">
@@ -199,7 +205,7 @@
                   <div class="reward fz-20 fw-b">
                     Shared Reward of 15 Million Points
                   </div>
-                  <v-btn color="#039CFF" @click="handleBnB">
+                  <v-btn color="#039CFF" @click="$router.push('/quest/bnb')">
                     <span class="fw-b" style="color: #fff">Claim</span>
                   </v-btn>
                 </div>
@@ -229,7 +235,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { fetchTaskCard, fetchTaskStatus, fetchNext } from "@/api/airdrop";
+import { fetchTaskCard } from "@/api/airdrop";
 import navHeader from "./components/nav-header.vue";
 export default {
   data() {
@@ -243,12 +249,6 @@ export default {
         points: "-",
         rank: "-",
       },
-      bitgetStatus: {
-        buttonName: "Not eligible",
-        taskStatus: "UNDO",
-        reward: "",
-      },
-      bitgetLoading: false,
     };
   },
   computed: {
@@ -306,22 +306,11 @@ export default {
   },
   created() {
     this.getInfo();
-    this.getBitgetInfo();
   },
   methods: {
     onScroll(e) {
       this.scrollTop = e.target.scrollTop;
     },
-    handleBnB() {
-      this.$router.push("/quest/bnb");
-    },
-    handleToBitget() {
-      window.open("https://link.medium.com/gIieBSoqBKb");
-    },
-    handleToTge() {
-      window.open("https://app.galxe.com/quest/4EVERLAND/GCGhwtgwin");
-    },
-
     async getInfo() {
       try {
         if (!localStorage.token) return;
@@ -331,26 +320,8 @@ export default {
         console.log(error);
       }
     },
-
-    async getBitgetInfo() {
-      try {
-        if (!localStorage.token) return;
-        const { data } = await fetchTaskStatus(6671);
-        this.bitgetStatus = data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async handleClaim() {
-      this.bitgetLoading = true;
-      try {
-        await fetchNext(6671);
-        await this.getBitgetInfo();
-        await this.getInfo();
-      } catch (error) {
-        console.log(error);
-      }
-      this.bitgetLoading = false;
+    handleToOkx() {
+      window.open("https://okx.com/web3/giveaway");
     },
   },
 };

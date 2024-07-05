@@ -53,6 +53,26 @@ export default [
     },
   },
   {
+    path: "/quest/bitget",
+    component: () => import("./bitget-airdrop"),
+    meta: {
+      title: "Bitget QUEST",
+      hideNav: 1,
+      isTab: 1,
+      noLogin: 1,
+    },
+  },
+  {
+    path: "/quest/tge",
+    component: () => import("./tge-airdrop"),
+    meta: {
+      title: "TGE QUEST",
+      hideNav: 1,
+      isTab: 1,
+      noLogin: 1,
+    },
+  },
+  {
     path: "/claim",
     component: () => import("./claim-activity"),
     meta: {

@@ -26,7 +26,7 @@
             @click="handleClick(index)"
             :class="{ active: index == curIndex }"
           >
-            <td>{{ new Date(item.timestamp * 1000).format("date") }}</td>
+            <td>{{ new Date(item.timestamp * 1000).format("yy-MM") }}</td>
             <td>{{ $utils.formatLand(item.landConumed) }}</td>
             <td>{{ item.formatU }}</td>
           </tr>
