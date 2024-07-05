@@ -122,7 +122,7 @@
           </div>
         </div>
         <div class="land-consume py-6 px-4 h-flex al-c">
-          <h3 class="ta-c">Monthly Consumptior</h3>
+          <h3 class="ta-c">31 Days Consumptior</h3>
           <half-pie :curInfo="landUsedMonthlyPie"></half-pie>
         </div>
       </v-col>

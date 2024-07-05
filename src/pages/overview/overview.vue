@@ -319,7 +319,7 @@ export default {
           "$bill-analytics/bill/land-used/analytics",
           {
             params: {
-              analyticsType: "DAY",
+              analyticsType: "CURRENT_MONTH",
             },
           }
         );
