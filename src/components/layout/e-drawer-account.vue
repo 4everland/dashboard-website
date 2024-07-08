@@ -12,16 +12,26 @@
 </style>
 
 <template>
-  <div id="team-guide" class="pos-r" v-click-outside="onOut" v-if="teamInfo">
-    <div
-      class="bg-f9 al-c ma-3 pa-1 hover-1"
-      @click="showAccount = !showAccount"
-    >
-      <span class="mr-auto fz-14 line-1">{{ teamInfo.name }}</span>
-      <v-chip label small color="primary" class="ev-n">
-        {{ teamInfo.isOwner ? "Owner" : "Member" }}
-      </v-chip>
-      <img :src="`/img/svg/drawer/up-down.svg`" height="30" class="d-b" />
+  <div
+    id="team-guide"
+    class="pos-r"
+    v-click-outside="onOut"
+    v-if="teamInfo"
+    style="background: #f2f4f7"
+  >
+    <div class="al-c ma-3 pa-1 hover-1" @click="showAccount = !showAccount">
+      <div>
+        <v-avatar>
+          <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+        </v-avatar>
+      </div>
+      <div>
+        <span class="mr-auto fz-14 line-1">{{ teamInfo.name }}</span>
+        <div>{{ teamInfo.isOwner ? "Owner" : "Member" }}</div>
+      </div>
+      <div>
+        <img :src="`/img/svg/drawer/up-down.svg`" height="30" class="d-b" />
+      </div>
     </div>
     <div class="pos-a bg-white shadow-1 account-card pa-3" v-show="showAccount">
       <div v-if="showTip">

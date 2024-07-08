@@ -99,7 +99,7 @@ const menuMap = {
   },
   AIRPC: {
     label: "AI",
-    img: "m-airpc",
+    icon: "$drawer/aiIcon",
     group: /^\/ai-rpc/i,
     suffixImg: "/img/svg/hosting/tag_fire.png",
     subs: [

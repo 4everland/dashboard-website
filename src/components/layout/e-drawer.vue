@@ -66,7 +66,6 @@
       </a>
     </div>
 
-    <!-- <div class="pa-5"></div> -->
     <div class="pt-5" style="height: 100%; overflow-y: scroll">
       <v-list flat dense ref="drawerList" id="drawerList">
         <template v-for="(it, i) in list">
@@ -204,8 +203,9 @@
     </div>
 
     <!-- <div class="mt-auto"></div> -->
+    <div></div>
     <e-drawer-account></e-drawer-account>
-    <div class="mb-3 al-c pa-3 bg-white">
+    <div class="al-c pa-3" style="background: #f2f4f7">
       <a
         class="flex-1 ta-c"
         :href="it.url"
