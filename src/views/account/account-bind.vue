@@ -147,6 +147,14 @@ export default {
           type: 101,
           account: (info.wallet || {}).address,
         });
+      if (info.wallet?.walletType == "TokenPocket" || noWallet)
+        wArr.push({
+          title: "TokenPocket",
+          desc: "Get verified by connecting your TokenPocket.",
+          icon: "m-tokenPocket",
+          type: 102,
+          account: (info.wallet || {}).address,
+        });
       if (info.wallet?.walletType == "OKX" || noWallet)
         wArr.push({
           title: "OKX",

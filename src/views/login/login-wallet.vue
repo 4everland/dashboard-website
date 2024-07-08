@@ -9,13 +9,13 @@
         @click="onVerify(item.name)"
       >
         <div class="wallet-item-name">
-          <img :src="item.icon" alt="" />
+          <img class="wallet-item-icon" :src="item.icon" alt="" />
           <span class="name">{{ item.name }}</span>
         </div>
         <div class="d-flex align-center">
-          <span class="item-name" :class="{ 'item-name-pop': index == 0 }">{{
+          <!-- <span class="item-name" :class="{ 'item-name-pop': index == 0 }">{{
             item.btnText
-          }}</span>
+          }}</span> -->
           <v-btn
             v-if="item.loading"
             disabled
@@ -32,9 +32,9 @@
           <v-btn icon class="close-icon" @click="showQrcode = false">
             <v-icon> mdi-close</v-icon>
           </v-btn>
-          <span>Scan to use imToken</span>
+          <span>Scan to use {{ loadingName }}</span>
         </div>
-        <div class="qrcode">
+        <div class="qrcode" :style="dialogIcon">
           <v-img max-height="300" max-width="300" :src="qrCodeUrl"></v-img>
         </div>
         <div class="text-center">
@@ -70,12 +70,21 @@ import {
   SignImToken,
   ConnectImTokenWithMobile,
   SignImTokenWithMobil,
+  ConnectTokenPocket,
+  SignTokenPocket,
+  ConnectTokenPocketWithMobile,
+  SignTokenPocketWithMobil,
 } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 
 export default {
   props: {
     mode: String,
+  },
+  computed: {
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
   },
   data() {
     return {
@@ -84,11 +93,37 @@ export default {
       walletName: "",
       walletConnectLoading: false,
       loadingName: null,
+      dialogIcon: {
+        "--icon": "",
+      },
+      loadingIcon: null,
       walletItem: [
         {
           name: "MetaMask",
           icon: require("@/assets/imgs/metamask.png"),
           btnText: "Popular",
+        },
+        {
+          name: "OKX Wallet",
+          icon: require("@/assets/imgs/okx.png"),
+          btnText: "",
+        },
+        {
+          name: "Bitget Wallet",
+          icon: require("@/assets/imgs/Bitget.svg"),
+          btnText: "",
+        },
+        {
+          name: "TokenPocket",
+          icon: require("@/assets/imgs/TokenPocket.svg"),
+          btnText: "",
+          loading: true,
+        },
+        {
+          name: "imToken",
+          icon: require("@/assets/imgs/imToken.svg"),
+          btnText: "",
+          loading: true,
         },
         {
           name: "Coinbase Wallet",
@@ -102,22 +137,6 @@ export default {
           loading: true,
         },
         {
-          name: "OKX Wallet",
-          icon: require("@/assets/imgs/okx.png"),
-          btnText: "",
-        },
-        {
-          name: "Bitget Wallet",
-          icon: require("@/assets/imgs/Bitget.svg"),
-          btnText: "",
-        },
-        {
-          name: "imToken",
-          icon: require("@/assets/imgs/imToken.svg"),
-          btnText: "",
-          loading: true,
-        },
-        {
           name: "Phantom",
           icon: require("@/assets/imgs/phantom.png"),
           btnText: "",
@@ -127,7 +146,6 @@ export default {
           icon: require("@/assets/imgs/petra.svg"),
           btnText: "",
         },
-
         {
           name: "Flow",
           icon: require("@/assets/imgs/flow.svg"),
@@ -198,6 +216,9 @@ export default {
           break;
         case "imToken":
           this.imTokenConnect();
+          break;
+        case "TokenPocket":
+          this.tokenPocketConnect();
           break;
         default:
           break;
@@ -414,15 +435,70 @@ export default {
         }
       }
     },
+    async tokenPocketConnect() {
+      const isTokenPocket = window.ethereum.isTokenPocket;
+      if (this.asMobile && isTokenPocket) {
+        const accounts = await ConnectTokenPocketWithMobile();
+        console.log(accounts);
+        if (!accounts) {
+          return;
+        }
+        const nonce = await ExchangeCode(accounts[0]);
+        if (!nonce) {
+          return;
+        }
+        const stoken = await SignTokenPocketWithMobil(
+          accounts[0],
+          nonce,
+          this.inviteCode,
+          this.capToken
+        );
+        if (stoken) {
+          this.ssoLogin(stoken);
+        }
+      } else {
+        this.walletConnectLoading = true;
+        this.loadingName = "TokenPocket";
+        const { session, account } = await ConnectTokenPocket(
+          this.showImTokenQrcode
+        );
+        if (!account) {
+          return;
+        }
+        const nonce = await ExchangeCode(account);
+        if (!nonce) {
+          return;
+        }
+        const stoken = await SignTokenPocket(
+          account,
+          nonce,
+          this.inviteCode,
+          this.capToken,
+          session
+        );
+        if (stoken) {
+          this.ssoLogin(stoken);
+        }
+      }
+    },
+
     showImTokenQrcode(url, uri) {
       this.qrCodeUrl = url;
       this.qrcodeUri = uri;
+      this.chooseIcon();
       this.showQrcode = true;
       this.walletConnectLoading = false;
     },
 
     onVerify(name) {
       this.$emit("walletVerify", name);
+    },
+    chooseIcon() {
+      let url = this.walletItem.filter((item) => {
+        return item.name == this.loadingName;
+      });
+      console.log(url);
+      this.dialogIcon["--icon"] = `url(${url[0].icon})`;
     },
   },
 };
@@ -476,9 +552,10 @@ export default {
         align-items: center;
       }
 
-      img {
+      &-icon {
         width: 32px;
         margin-right: 16px;
+        border-radius: 4px;
       }
 
       .name {
@@ -537,7 +614,8 @@ export default {
 }
 .qrcode::after {
   content: "";
-  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDUiIGhlaWdodD0iNDUiIHZpZXdCb3g9IjAgMCA0NSA0NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQzLjYgNy40QzQzLjEgNS4zIDQyLjIgNCA0MS4yIDNDNDAuMiAyIDM4LjggMSAzNi44IDAuNUMzNC44IDAgMzAuMiAwIDMwLjIgMEgxMy45QzEzLjkgMCA5LjQgMCA3LjMgMC41QzUuMyAxIDQgMS45IDIuOSAyLjlDMS45IDMuOSAwLjkgNS4zIDAuNSA3LjNDMCA5LjMgMCAxMy45IDAgMTMuOVYzMC4yQzAgMzAuMiAwIDM0LjcgMC41IDM2LjhDMSAzOC45IDEuOSA0MC4yIDIuOSA0MS4zQzMuOSA0Mi4zIDUuMyA0My4yIDcuMyA0My44QzkuMyA0NC4zIDEzLjkgNDQuMyAxMy45IDQ0LjNIMzAuMkMzMC4yIDQ0LjMgMzQuNyA0NC4zIDM2LjggNDMuOEMzOC45IDQzLjMgNDAuMiA0Mi40IDQxLjIgNDEuM0M0Mi4yIDQwLjMgNDMuMiAzOC45IDQzLjYgMzYuOUM0NC4xIDM0LjkgNDQuMSAzMC4zIDQ0LjEgMzAuM1YxNEM0NC4xIDE0IDQ0LjEgOS41IDQzLjYgNy40Wk0yMi4yIDMyLjdDMTUuMiAzMy4zIDguNyAyOS4yIDguMiAyMi44QzcuNyAxNy42IDExLjEgMTUuMyAxMy43IDE1LjFDMTYuNCAxNC45IDE4LjcgMTYuNyAxOC45IDE4LjlDMTkuMSAyMSAxNy43IDIyIDE2LjggMjIuMUMxNiAyMi4yIDE1LjEgMjEuNyAxNSAyMC44QzE0LjkgMjAgMTUuMyAxOS45IDE1LjIgMTlDMTUuMSAxNy41IDEzLjcgMTcuMyAxMi45IDE3LjRDMTIgMTcuNSAxMC4zIDE4LjUgMTAuNiAyMS4xQzEwLjggMjMuNyAxMy40IDI1LjcgMTYuOCAyNS40QzIwLjQgMjUuMSAyMyAyMi40IDIzLjIgMTguNUMyMy4yIDE4LjMgMjMuMyAxOC4xIDIzLjMgMTcuOUMyMy40IDE3LjggMjMuNCAxNy44IDIzLjQgMTcuN0MyMy41IDE3LjUgMjMuNiAxNy40IDIzLjcgMTcuM0wyNCAxN0MyNS42IDE1LjYgMzEuMyAxMi4xIDM2LjcgMTMuMkgzNi44QzM3IDEzLjIgMzcuMSAxMy4zIDM3LjEgMTMuNUMzOC4xIDI2LjEgMjkuNyAzMi4xIDIyLjIgMzIuN1oiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcikiLz4KPHBhdGggZD0iTTIyLjIgMzIuNzAwMUMxNS4yIDMzLjMwMDEgOC43IDI5LjIwMDEgOC4yIDIyLjgwMDFDNy43IDE3LjYwMDEgMTEuMSAxNS4zMDAxIDEzLjcgMTUuMTAwMUMxNi40IDE0LjkwMDEgMTguNyAxNi43MDAxIDE4LjkgMTguOTAwMUMxOS4xIDIxLjAwMDEgMTcuNyAyMi4wMDAxIDE2LjggMjIuMTAwMUMxNiAyMi4yMDAxIDE1LjEgMjEuNzAwMSAxNSAyMC44MDAxQzE0LjkgMjAuMDAwMSAxNS4zIDE5LjkwMDEgMTUuMiAxOS4wMDAxQzE1LjEgMTcuNTAwMSAxMy43IDE3LjMwMDEgMTIuOSAxNy40MDAxQzEyIDE3LjUwMDEgMTAuMyAxOC41MDAxIDEwLjYgMjEuMTAwMUMxMC44IDIzLjcwMDEgMTMuNCAyNS43MDAxIDE2LjggMjUuNDAwMUMyMC40IDI1LjEwMDEgMjMgMjIuNDAwMSAyMy4yIDE4LjUwMDFDMjMuMiAxOC4zMDAxIDIzLjMgMTguMTAwMSAyMy4zIDE3LjkwMDFDMjMuNCAxNy44MDAxIDIzLjQgMTcuODAwMSAyMy40IDE3LjcwMDFDMjMuNSAxNy41MDAxIDIzLjYgMTcuNDAwMSAyMy43IDE3LjMwMDFMMjQgMTcuMDAwMUMyNS42IDE1LjYwMDEgMzEuMyAxMi4xMDAxIDM2LjcgMTMuMjAwMUgzNi44QzM3IDEzLjIwMDEgMzcuMSAxMy4zMDAxIDM3LjEgMTMuNTAwMUMzOC4xIDI2LjEwMDEgMjkuNyAzMi4xMDAxIDIyLjIgMzIuNzAwMVoiIGZpbGw9IndoaXRlIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXIiIHgxPSI0Mi44NzA0IiB5MT0iMS40MDM3IiB4Mj0iLTAuMDU2NjkyNyIgeTI9IjQ0LjA0NTIiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzExQzREMSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwMDYyQUQiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K);
+  // background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDUiIGhlaWdodD0iNDUiIHZpZXdCb3g9IjAgMCA0NSA0NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQzLjYgNy40QzQzLjEgNS4zIDQyLjIgNCA0MS4yIDNDNDAuMiAyIDM4LjggMSAzNi44IDAuNUMzNC44IDAgMzAuMiAwIDMwLjIgMEgxMy45QzEzLjkgMCA5LjQgMCA3LjMgMC41QzUuMyAxIDQgMS45IDIuOSAyLjlDMS45IDMuOSAwLjkgNS4zIDAuNSA3LjNDMCA5LjMgMCAxMy45IDAgMTMuOVYzMC4yQzAgMzAuMiAwIDM0LjcgMC41IDM2LjhDMSAzOC45IDEuOSA0MC4yIDIuOSA0MS4zQzMuOSA0Mi4zIDUuMyA0My4yIDcuMyA0My44QzkuMyA0NC4zIDEzLjkgNDQuMyAxMy45IDQ0LjNIMzAuMkMzMC4yIDQ0LjMgMzQuNyA0NC4zIDM2LjggNDMuOEMzOC45IDQzLjMgNDAuMiA0Mi40IDQxLjIgNDEuM0M0Mi4yIDQwLjMgNDMuMiAzOC45IDQzLjYgMzYuOUM0NC4xIDM0LjkgNDQuMSAzMC4zIDQ0LjEgMzAuM1YxNEM0NC4xIDE0IDQ0LjEgOS41IDQzLjYgNy40Wk0yMi4yIDMyLjdDMTUuMiAzMy4zIDguNyAyOS4yIDguMiAyMi44QzcuNyAxNy42IDExLjEgMTUuMyAxMy43IDE1LjFDMTYuNCAxNC45IDE4LjcgMTYuNyAxOC45IDE4LjlDMTkuMSAyMSAxNy43IDIyIDE2LjggMjIuMUMxNiAyMi4yIDE1LjEgMjEuNyAxNSAyMC44QzE0LjkgMjAgMTUuMyAxOS45IDE1LjIgMTlDMTUuMSAxNy41IDEzLjcgMTcuMyAxMi45IDE3LjRDMTIgMTcuNSAxMC4zIDE4LjUgMTAuNiAyMS4xQzEwLjggMjMuNyAxMy40IDI1LjcgMTYuOCAyNS40QzIwLjQgMjUuMSAyMyAyMi40IDIzLjIgMTguNUMyMy4yIDE4LjMgMjMuMyAxOC4xIDIzLjMgMTcuOUMyMy40IDE3LjggMjMuNCAxNy44IDIzLjQgMTcuN0MyMy41IDE3LjUgMjMuNiAxNy40IDIzLjcgMTcuM0wyNCAxN0MyNS42IDE1LjYgMzEuMyAxMi4xIDM2LjcgMTMuMkgzNi44QzM3IDEzLjIgMzcuMSAxMy4zIDM3LjEgMTMuNUMzOC4xIDI2LjEgMjkuNyAzMi4xIDIyLjIgMzIuN1oiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcikiLz4KPHBhdGggZD0iTTIyLjIgMzIuNzAwMUMxNS4yIDMzLjMwMDEgOC43IDI5LjIwMDEgOC4yIDIyLjgwMDFDNy43IDE3LjYwMDEgMTEuMSAxNS4zMDAxIDEzLjcgMTUuMTAwMUMxNi40IDE0LjkwMDEgMTguNyAxNi43MDAxIDE4LjkgMTguOTAwMUMxOS4xIDIxLjAwMDEgMTcuNyAyMi4wMDAxIDE2LjggMjIuMTAwMUMxNiAyMi4yMDAxIDE1LjEgMjEuNzAwMSAxNSAyMC44MDAxQzE0LjkgMjAuMDAwMSAxNS4zIDE5LjkwMDEgMTUuMiAxOS4wMDAxQzE1LjEgMTcuNTAwMSAxMy43IDE3LjMwMDEgMTIuOSAxNy40MDAxQzEyIDE3LjUwMDEgMTAuMyAxOC41MDAxIDEwLjYgMjEuMTAwMUMxMC44IDIzLjcwMDEgMTMuNCAyNS43MDAxIDE2LjggMjUuNDAwMUMyMC40IDI1LjEwMDEgMjMgMjIuNDAwMSAyMy4yIDE4LjUwMDFDMjMuMiAxOC4zMDAxIDIzLjMgMTguMTAwMSAyMy4zIDE3LjkwMDFDMjMuNCAxNy44MDAxIDIzLjQgMTcuODAwMSAyMy40IDE3LjcwMDFDMjMuNSAxNy41MDAxIDIzLjYgMTcuNDAwMSAyMy43IDE3LjMwMDFMMjQgMTcuMDAwMUMyNS42IDE1LjYwMDEgMzEuMyAxMi4xMDAxIDM2LjcgMTMuMjAwMUgzNi44QzM3IDEzLjIwMDEgMzcuMSAxMy4zMDAxIDM3LjEgMTMuNTAwMUMzOC4xIDI2LjEwMDEgMjkuNyAzMi4xMDAxIDIyLjIgMzIuNzAwMVoiIGZpbGw9IndoaXRlIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXIiIHgxPSI0Mi44NzA0IiB5MT0iMS40MDM3IiB4Mj0iLTAuMDU2NjkyNyIgeTI9IjQ0LjA0NTIiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzExQzREMSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwMDYyQUQiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K);
+  background-image: var(--icon);
   background-repeat: no-repeat;
   background-position: center center;
   background-size: contain;
