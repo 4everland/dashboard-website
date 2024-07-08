@@ -51,14 +51,7 @@
             style="gap: 8px"
           >
             <div
-              class="give-up-btn fz-14 fw-b cursor-p ta-c"
-              v-ripple
-              @click="firstRechargeDialog = false"
-            >
-              Give up the benefits
-            </div>
-            <div
-              class="deposit-now-btn primary al-c justify-center flex-1 cursor-p"
+              class="deposit-now-btn primary al-c justify-center flex-2 cursor-p"
               v-ripple
               @click="handleDeposit"
             >
@@ -69,6 +62,13 @@
                 src="/img/svg/new-user-activity/right-circle.svg"
                 alt=""
               />
+            </div>
+            <div
+              class="give-up-btn fz-14 cursor-p ta-c"
+              v-ripple
+              @click="firstRechargeDialog = false"
+            >
+              Give up the benefits
             </div>
           </div>
         </div>
@@ -101,22 +101,13 @@
           <div class="mt-6">
             <h3 class="fz-16">Unlock new benefits</h3>
             <div class="d-flex flex-column flex-md-row">
-              <!-- <div class="d-flex pa-2" v-for="item in items" :key="item.name">
-                <div class="img-icon al-c space-btw pa-2">
-                  <img height="40" :src="item.img" alt="" />
-                </div>
-                <div class="ml-3 fz-14">
-                  {{ item.name }}
-                </div>
-              </div> -->
-
               <v-row>
                 <v-col
                   cols="12"
                   sm="6"
                   v-for="item in items"
                   :key="item.name"
-                  class="d-flex align-center py-2 px-1"
+                  class="d-flex align-center"
                 >
                   <div class="img-icon al-c space-btw pa-2">
                     <img height="40" :src="item.img" alt="" />
@@ -130,13 +121,7 @@
           </div>
 
           <div class="d-flex flex-column flex-md-row mt-8" style="gap: 8px">
-            <div
-              class="skip-btn fz-14 cursor-p flex-1"
-              @click="showDialog = false"
-            >
-              Skip
-            </div>
-            <div class="flex-1">
+            <div class="flex-2">
               <e-menu
                 ref="menu"
                 top
@@ -200,6 +185,12 @@
                   </div>
                 </v-list>
               </e-menu>
+            </div>
+            <div
+              class="skip-btn fz-14 cursor-p flex-1"
+              @click="showDialog = false"
+            >
+              Skip
             </div>
           </div>
         </div>
@@ -549,6 +540,7 @@ export default {
 .mint-content {
   background: url("/img/bg/share/mint-bg.png") no-repeat;
   background-position: -30px;
+  background-size: 60%;
   .mint-box {
     max-width: 560px;
     width: 100%;
@@ -567,7 +559,6 @@ export default {
   border-radius: 8px;
   text-align: center;
   padding: 16px 0;
-  font-weight: bold;
   border: 1px solid #cbd5e1;
   background: #fff;
 }
