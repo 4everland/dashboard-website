@@ -83,9 +83,16 @@
         <div
           v-show="asMobile"
           @click="showCalc = !showCalc"
-          class="ta-c pa-2 fz-12 textInfo--text"
+          class="pa-2 fz-12 textInfo--text d-flex item-center justify-center"
         >
-          View All
+          <span>View All</span>
+          <img
+            :class="{ 'up-arrow': showCalc }"
+            class="ml-2"
+            src="/img/svg/billing/down-arrow.svg"
+            width="8"
+            alt=""
+          />
         </div>
       </template>
     </billing-tabs>
@@ -466,5 +473,8 @@ export default {
 }
 .table-body-item {
   border-bottom: 1px solid #cbd5e1;
+}
+.up-arrow {
+  transform: rotate(180deg);
 }
 </style>

@@ -6,9 +6,11 @@
       content-class="claim-dialog"
       persistent
     >
-      <div class="first-recharge">
+      <div class="first-recharge pa-4 pa-md-10">
         <div class="task-hub-content ml-auto">
-          <div class="task-hub-title primary--text fw-b">
+          <div
+            class="task-hub-title primary--text fw-b text-center text-sm-left"
+          >
             {{
               isOverActivityTime
                 ? "First Deposit Bonus for LAND!"
@@ -44,16 +46,19 @@
               </div>
             </div>
           </div>
-          <div class="d-flex justify-center mt-8">
+          <div
+            class="d-flex flex-column flex-md-row justify-center mt-8"
+            style="gap: 8px"
+          >
             <div
-              class="give-up-btn fz-14 fw-b cursor-p"
+              class="give-up-btn fz-14 fw-b cursor-p ta-c"
               v-ripple
               @click="firstRechargeDialog = false"
             >
               Give up the benefits
             </div>
             <div
-              class="deposit-now-btn primary al-c justify-center ml-6 flex-1 cursor-p"
+              class="deposit-now-btn primary al-c justify-center flex-1 cursor-p"
               v-ripple
               @click="handleDeposit"
             >
@@ -76,7 +81,7 @@
       content-class="claim-dialog"
       persistent
     >
-      <div class="d-flex mint-content pos-r">
+      <div class="d-flex mint-content pa-4 pa-md-10 pos-r">
         <div class="pos-a registe-gift al-c cursor-p">
           <img
             width="260"
@@ -95,30 +100,43 @@
 
           <div class="mt-6">
             <h3 class="fz-16">Unlock new benefits</h3>
-            <div class="d-flex flex-wrap">
-              <div
-                class="d-flex al-c pa-2"
-                v-for="item in items"
-                :key="item.name"
-                style="width: 50%"
-              >
+            <div class="d-flex flex-column flex-md-row">
+              <!-- <div class="d-flex pa-2" v-for="item in items" :key="item.name">
                 <div class="img-icon al-c space-btw pa-2">
                   <img height="40" :src="item.img" alt="" />
                 </div>
-                <div class="ml-3 fz-14">{{ item.name }}</div>
-              </div>
+                <div class="ml-3 fz-14">
+                  {{ item.name }}
+                </div>
+              </div> -->
+
+              <v-row>
+                <v-col
+                  cols="12"
+                  sm="6"
+                  v-for="item in items"
+                  :key="item.name"
+                  class="d-flex align-center py-2 px-1"
+                >
+                  <div class="img-icon al-c space-btw pa-2">
+                    <img height="40" :src="item.img" alt="" />
+                  </div>
+                  <div class="ml-3 fz-14">
+                    {{ item.name }}
+                  </div>
+                </v-col>
+              </v-row>
             </div>
           </div>
 
-          <div class="al-c mt-8" style="gap: 16px">
+          <div class="d-flex flex-column flex-md-row mt-8" style="gap: 8px">
             <div
-              class="skip-btn fz-14 cursor-p"
-              style="width: 224px"
+              class="skip-btn fz-14 cursor-p flex-1"
               @click="showDialog = false"
             >
               Skip
             </div>
-            <div style="width: 320px">
+            <div class="flex-1">
               <e-menu
                 ref="menu"
                 top
@@ -150,13 +168,7 @@
 
                 <v-list>
                   <div
-                    class="al-c flex-wrap pa-4 pb-2"
-                    style="
-                      width: 560px;
-                      height: 304px;
-                      overflow-y: scroll;
-                      box-sizing: border-box;
-                    "
+                    class="claim-chain-list d-flex align-center flex-column pa-4 pb-2"
                   >
                     <template v-for="(item, i) in claimList">
                       <div
@@ -279,7 +291,7 @@ export default {
           name: "Access to additional free resources",
         },
       ],
-      showDialog: false,
+      showDialog: true,
       firstRechargeDialog: false,
       accountExists: false,
       claimList: [
@@ -477,8 +489,18 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+@media screen and (max-width: 600px) {
+  .first-recharge {
+    background: none !important;
+  }
+  .mint-content {
+    background: none !important;
+  }
+}
+
 .task-hub-content {
-  width: 560px;
+  max-width: 560px;
+  width: 100%;
   .task-hub-title {
     font-size: 24px;
   }
@@ -486,28 +508,29 @@ export default {
     color: #64748b;
   }
 }
+.claim-chain-list {
+  max-width: 560px;
+  width: 100%;
+  height: 304px;
+  overflow-y: scroll;
+  box-sizing: border-box;
+}
 .claim-chain-item {
-  width: calc(50% - 4px);
+  width: 100%;
   box-sizing: border-box;
   background: rgba(140, 140, 161, 0.05);
   color: #0e0e2c;
 }
 
-.claim-chain-item:nth-of-type(even) {
-  margin-left: 8px;
-}
-
 .claim-chain-item.last-item:last-of-type {
   width: 100%;
-  // justify-content: center;
 }
-
 .img-icon {
   border-radius: 50%;
   background-color: #eef4ff;
 }
+
 .first-recharge {
-  padding: 40px;
   background: url("/img/bg/share/first-recharge-bg.png") no-repeat;
   .give-up-btn {
     padding: 16px 38px 16px 37px;
@@ -518,16 +541,17 @@ export default {
   }
   .deposit-now-btn {
     color: #fff;
+    padding: 16px 38px 16px 37px;
     border-radius: 8px;
   }
 }
 
 .mint-content {
-  padding: 40px;
   background: url("/img/bg/share/mint-bg.png") no-repeat;
   background-position: -30px;
   .mint-box {
-    width: 560px;
+    max-width: 560px;
+    width: 100%;
     .mint-title {
       font-size: 24px;
     }
@@ -553,8 +577,8 @@ export default {
   border-radius: 8px;
 }
 .registe-gift {
-  right: 140px;
-  top: -20px;
-  color: #735ea1;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -50px;
 }
 </style>

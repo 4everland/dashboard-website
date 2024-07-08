@@ -89,7 +89,12 @@
               }
             "
           >
-            <v-btn v-show="checkApproving" text :loading="true" color="#735EA1">
+            <v-btn
+              v-show="checkApproving"
+              text
+              :loading="true"
+              class="primary--text"
+            >
             </v-btn>
             <span v-show="!checkApproving">
               {{ confirmText }}
@@ -736,8 +741,12 @@ export default {
         padding: 15px 46px;
         border-radius: 4px;
         background: #fff;
-        // color: #000;
+        color: #000;
       }
+      .confirm-btn.disabled {
+        color: #fff;
+      }
+
       .confirm-tip {
         width: 336px;
         padding: 8px;
