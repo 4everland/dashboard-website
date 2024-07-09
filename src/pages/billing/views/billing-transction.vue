@@ -75,6 +75,7 @@ export default {
             TRAFFIC: "Bandwidth",
             COMPUTE_UNIT: "RPC Request",
             AI_RPC: "AI RPC",
+            RAAS: "RaaS",
           };
 
           let formatLand = this.$utils.formatLand(it.landUsed, true);
@@ -113,7 +114,8 @@ export default {
             it.resourceUsed = this.$utils.getFileSize(it.resourceUsed);
             it.msg = resourceTypeObj[it.resourceType] + " " + it.resourceUsed;
           } else {
-            it.msg = it.message + " " + it.landUsed;
+            it.msg = resourceTypeObj[it.resourceType] + ":" + it.message;
+            it.timeSection = new Date(it.timestamp).toLocaleTimeString();
           }
           it.resourceType = resourceTypeObj[it.resourceType];
         });
