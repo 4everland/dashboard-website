@@ -15,8 +15,7 @@
           <th class="text-left">Date</th>
           <th class="text-left">Time(UTC)</th>
           <th class="text-left">Land</th>
-          <th class="text-left">Type</th>
-          <th class="text-left">Resources consumed</th>
+          <th class="text-left">Item</th>
         </tr>
       </thead>
       <tbody>
@@ -25,8 +24,7 @@
           <td>{{ new Date(item.timestamp * 1e3).format("date-utc") }}</td>
           <td>{{ item.timeSection }}</td>
           <td>{{ item.landUsed }} LAND</td>
-          <td>{{ item.resourceType }}</td>
-          <td>{{ item.resourceUsed }}</td>
+          <td>{{ item.msg }}</td>
         </tr>
       </tbody>
     </billing-table>
@@ -84,14 +82,17 @@ export default {
             Number(formatLand.land) == 0
               ? "< 1"
               : formatLand.land + " " + formatLand.unit;
+
           if (it.resourceType == "BUILD_TIME") {
             it.resourceUsed = this.$utils.getResourceTypeSize(
               it.resourceUsed,
               false,
               "BUILD_TIME"
             );
+            it.msg = resourceTypeObj[it.resourceType] + " " + it.resourceUsed;
           } else if (it.resourceType == "COMPUTE_UNIT") {
             it.resourceUsed = this.$utils.getNumCount(it.resourceUsed) + " CUs";
+            it.msg = resourceTypeObj[it.resourceType] + " " + it.resourceUsed;
           } else if (it.resourceType == "AI_RPC") {
             // it.resourceUsed = this.$utils.getNumCount(it.resourceUsed) + " CUs";
             let formatLand = this.$utils.formatLand(
@@ -103,8 +104,16 @@ export default {
               Number(formatLand.land) == 0
                 ? "< 1 LAND"
                 : formatLand.land + " " + formatLand.unit + " LAND";
-          } else {
+            it.msg = resourceTypeObj[it.resourceType] + " " + it.resourceUsed;
+          } else if (
+            it.resourceType == "IPFS_STORAGE" ||
+            it.resourceType == "AR_STORAGE" ||
+            it.resourceType == "TRAFFIC"
+          ) {
             it.resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+            it.msg = resourceTypeObj[it.resourceType] + " " + it.resourceUsed;
+          } else {
+            it.msg = it.message + " " + it.landUsed;
           }
           it.resourceType = resourceTypeObj[it.resourceType];
         });
