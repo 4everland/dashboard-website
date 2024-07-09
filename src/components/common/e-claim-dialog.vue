@@ -282,7 +282,7 @@ export default {
           name: "Access to additional free resources",
         },
       ],
-      showDialog: true,
+      showDialog: false,
       firstRechargeDialog: false,
       accountExists: false,
       claimList: [
