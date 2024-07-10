@@ -12,6 +12,7 @@ import BillingRoutes from "./billing/routes";
 import RpcRoutes from "./rpc/routes";
 import RaasRoutes from "./raas/routes";
 import AiRpcRoutes from "./aiRpc/routers";
+import BoosterRouters from "./booster/routers";
 
 export default [
   {
@@ -60,6 +61,7 @@ export default [
   ...RpcRoutes,
   ...RaasRoutes,
   ...AiRpcRoutes,
+  ...BoosterRouters,
   // {
   //   path: "/changefee",
   //   component: () => import("./changeFee"),
