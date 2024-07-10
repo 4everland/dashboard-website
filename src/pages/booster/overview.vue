@@ -18,7 +18,7 @@
               </div>
               <div class="task-title">Storage Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>base</span>
+                <span>Base</span>
                 <span>20/H</span>
               </div>
             </div>
@@ -52,7 +52,7 @@
               </div>
               <div class="task-title">Storage Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>base</span>
+                <span>Base</span>
                 <span>20/H</span>
               </div>
             </div>
