@@ -97,6 +97,33 @@
           <div class="task-list mt-6">
             <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
+                <img src="/img/airDrop/tp-airdrop.png" width="100%" alt="" />
+              </div>
+              <div class="pa-6 task-desc h-flex">
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="handleToOkx"
+                >
+                  5M $4EVER Points Giveaway with TokenPocket
+                </div>
+                <div class="fz-14 mt-4">
+                  We are delighted to share our thrilling partnership with
+                  TokenPocket, offering you the opportunity to compete for a
+                  portion of 5,000,000 4EVER Points! Don't miss the chance to be
+                  one of 10,000 winners in this amazing opportunity!
+                </div>
+                <div class="mt-8 al-c space-btw">
+                  <div class="reward fz-20 fw-b">
+                    Shared Reward of 5 Million Points
+                  </div>
+                  <v-btn color="#039CFF" @click="handleToTp">
+                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  </v-btn>
+                </div>
+              </div>
+            </div>
+            <div class="task-item d-flex mb-4">
+              <div class="pa-6 task-img-wrap">
                 <img src="/img/airDrop/okx-airdrop.png" width="100%" alt="" />
               </div>
               <div class="pa-6 task-desc h-flex">
@@ -322,6 +349,9 @@ export default {
     },
     handleToOkx() {
       window.open("https://okx.com/web3/giveaway");
+    },
+    handleToTp() {
+      window.open("https://app.galxe.com/quest/TokenPocket/GCgZktkepa");
     },
   },
 };
