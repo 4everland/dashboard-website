@@ -622,6 +622,7 @@ export default {
   width: 45px;
   height: 45px;
   position: absolute;
+  border-radius: 4px;
 }
 
 .v-dialog,
