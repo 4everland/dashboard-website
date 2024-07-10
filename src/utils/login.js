@@ -687,7 +687,7 @@ export const ConnectTokenPocket = async (callback) => {
 };
 
 export const onSignTokenPocket = async (session, account, nonce) => {
-  const msg = Buffer.from(nonce).toString("hex");
+  const msg = "0x" + Buffer.from(nonce).toString("hex");
   const signature = await _signClient.request({
     topic: session.topic,
     chainId: "eip155:1",
@@ -696,6 +696,7 @@ export const onSignTokenPocket = async (session, account, nonce) => {
       params: [msg, account],
     },
   });
+
   return signature;
 };
 
@@ -707,7 +708,7 @@ export const SignTokenPocket = async (
   session
 ) => {
   try {
-    const msg = Buffer.from(nonce).toString("hex");
+    const msg = "0x" + Buffer.from(nonce).toString("hex");
     const signature = await _signClient.request({
       topic: session.topic,
       chainId: "eip155:1",
@@ -765,6 +766,7 @@ export const SignTokenPocketWithMobil = async (
 ) => {
   try {
     const signature = await contracts.signer.signMessage(nonce);
+
     const data = {
       signature,
       appName: "BUCKET",
