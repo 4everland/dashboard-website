@@ -95,7 +95,7 @@
             earn points!
           </div>
           <div class="task-list mt-6">
-            <div class="task-item d-flex mb-4">
+            <!-- <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
                 <img src="/img/airDrop/tp-airdrop.png" width="100%" alt="" />
               </div>
@@ -121,7 +121,7 @@
                   </v-btn>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
                 <img src="/img/airDrop/okx-airdrop.png" width="100%" alt="" />
