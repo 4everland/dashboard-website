@@ -95,15 +95,12 @@
             earn points!
           </div>
           <div class="task-list mt-6">
-            <!-- <div class="task-item d-flex mb-4">
+            <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
                 <img src="/img/airDrop/tp-airdrop.png" width="100%" alt="" />
               </div>
               <div class="pa-6 task-desc h-flex">
-                <div
-                  class="fz-20 fw-b cursor-p text-white"
-                  @click="handleToOkx"
-                >
+                <div class="fz-20 fw-b cursor-p text-white" @click="handleToTp">
                   5M $4EVER Points Giveaway with TokenPocket
                 </div>
                 <div class="fz-14 mt-4">
@@ -121,7 +118,7 @@
                   </v-btn>
                 </div>
               </div>
-            </div> -->
+            </div>
             <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
                 <img src="/img/airDrop/okx-airdrop.png" width="100%" alt="" />
