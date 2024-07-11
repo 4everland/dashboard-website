@@ -79,6 +79,16 @@ export default {
             resourceUsed =
               this.$utils.formatLand(it.resourceUsed, false, false) + "LAND";
             break;
+          case "RAAS":
+            name = "RaaS";
+            color = "#F78E69";
+            resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+            break;
+          case "ASS_NODE":
+            name = "Others";
+            color = "#70707B";
+            resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+            break;
           default:
             name = "IPFS";
             color = "#57B9BC";

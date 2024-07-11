@@ -21,6 +21,8 @@ export default {
       TRAFFIC: new Array(31).fill(0),
       COMPUTE_UNIT: new Array(31).fill(0),
       AI_RPC: new Array(31).fill(0),
+      RAAS: new Array(31).fill(0),
+      ASS_NODE: new Array(31).fill(0),
       myChart: null,
       baseOption: {
         tooltip: {
@@ -55,6 +57,8 @@ export default {
             "Build Time",
             "RPC Requests",
             "AI RPC",
+            "RaaS",
+            "Others",
           ],
         },
         grid: {
@@ -154,7 +158,6 @@ export default {
             itemStyle: {
               color: "#836BAF",
             },
-
             data: this.COMPUTE_UNIT,
           },
           {
@@ -163,8 +166,23 @@ export default {
             itemStyle: {
               color: "#9747FF",
             },
-
             data: this.AI_RPC,
+          },
+          {
+            name: "RaaS",
+            type: "line",
+            itemStyle: {
+              color: "#F78E69",
+            },
+            data: this.RAAS,
+          },
+          {
+            name: "Others",
+            type: "line",
+            itemStyle: {
+              color: "#70707B",
+            },
+            data: this.ASS_NODE,
           },
         ],
       };
