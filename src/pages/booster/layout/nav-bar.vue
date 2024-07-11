@@ -1,25 +1,102 @@
 <template>
   <div class="nav-bar">
-    <div class="nav d-flex align-center">
+    <div class="nav d-none d-md-flex align-center">
       <div class="logo d-flex align-center">
         <img src="/img/booster/svg/logo.svg" width="157" alt="" />
       </div>
-
       <div class="router-link d-flex align-center">
-        <div class="router-item">Home</div>
-        <div class="router-item">Elite Quest</div>
-        <div class="router-item">Leaderboard</div>
+        <div
+          class="router-item"
+          :class="{
+            corner: currentHoverIdx == index,
+            'corner trigger': $route.path == item.path,
+          }"
+          @mouseenter="currentHoverIdx = index"
+          @mouseleave="currentHoverIdx = -1"
+          v-for="(item, index) in routers"
+          :key="index"
+        >
+          {{ item.name }}
+          <span
+            class="top-left"
+            v-show="currentHoverIdx == index || $route.path == item.path"
+          ></span>
+          <span
+            class="top-right"
+            v-show="currentHoverIdx == index || $route.path == item.path"
+          ></span>
+          <span
+            class="bottom-left"
+            v-show="currentHoverIdx == index || $route.path == item.path"
+          ></span>
+          <span
+            class="bottom-right"
+            v-show="currentHoverIdx == index || $route.path == item.path"
+          ></span>
+        </div>
       </div>
-
       <div class="flex-1"></div>
-
-      <div class="user-info">0xDD3..33e38</div>
+      <div class="user-info d-flex align-center justify-center px-4">
+        <e-team-avatar
+          :src="userInfo.avatar"
+          :size="32"
+          :uid="userInfo.uid"
+        ></e-team-avatar>
+        <div class="info-content">
+          <div class="d-flex align-center">
+            <span class="fw-b fz-14"> 0xDD3..33e38 </span>
+            <img
+              class="cursor-p"
+              src="/img/booster/svg/down-arrow.svg"
+              width="12"
+              alt=""
+            />
+          </div>
+          <div class="balance fz-12">
+            <span>LAND Balance:</span>
+            <span class="ml-1">99999K LAND</span>
+          </div>
+        </div>
+        <v-btn style="background: rgba(255, 255, 255, 0.1)">
+          <img src="/img/booster/svg/invite-user.svg" width="16" alt="" />
+          <span class="ml-1" style="color: #fff">Invite</span>
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+export default {
+  data() {
+    return {
+      currentHoverIdx: -1,
+      routers: [
+        {
+          name: "Home",
+          path: "/booster",
+        },
+        {
+          name: "Elite Quest",
+          path: "/booster/quest",
+        },
+        {
+          name: "Leaderboard",
+          path: "/booster/leaderboard",
+        },
+      ],
+    };
+  },
+  computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
+    notLogin() {
+      return Object.keys(this.userInfo).length == 0;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -29,7 +106,7 @@ export default {};
   width: 100%;
   top: 24px;
   .nav {
-    height: 48px;
+    height: 50px;
     margin: 0 24px;
     border: 1px solid rgba(255, 255, 255, 0.25);
     background: linear-gradient(
@@ -58,22 +135,68 @@ export default {};
         box-sizing: border-box;
       }
 
-      .router-item:hover {
-        // background: url("/img/booster/svg/link-hover.svg") no-repeat;
-        background: linear-gradient(270deg, #fff, #fff) 0 0 no-repeat,
-          linear-gradient(180deg, #fff, #fff) 0 0 no-repeat,
-          linear-gradient(270deg, #fff, #fff) 100% 0 no-repeat,
-          linear-gradient(180deg, #fff, #fff) 100% 0 no-repeat,
-          linear-gradient(270deg, #fff, #fff) 0 100% no-repeat,
-          linear-gradient(180deg, #fff, #fff) 0 100% no-repeat,
-          linear-gradient(270deg, #fff, #fff) 100% 100% no-repeat,
-          linear-gradient(270deg, #fff, #fff) 100% 100% no-repeat;
-        background-size: 1px 8px, 8px 1px, 1px 8px, 8px 1px;
+      .router-item.trigger {
+        font-weight: bold;
+        background: radial-gradient(
+            34.71% 14.84% at 50% 68.75%,
+            rgba(97, 114, 243, 0.5) 0%,
+            rgba(97, 114, 243, 0) 100%
+          ),
+          radial-gradient(
+            50% 50% at 50% 50%,
+            rgba(13, 13, 13, 0) 0%,
+            #0d0d0d 100%
+          ),
+          url("/img/booster/header-link-shadow.png") 50% / cover no-repeat;
+      }
+    }
+
+    .corner {
+      position: relative;
+      .top-left {
+        position: absolute;
+        left: -1px;
+        top: -1px;
+        padding: 4px;
+        border-style: solid;
+        border-color: #fff;
+        border-width: 1px 0 0 1px;
+      }
+      .top-right {
+        position: absolute;
+        right: -1px;
+        top: -1px;
+        padding: 4px;
+        border-style: solid;
+        border-color: #fff;
+        border-width: 1px 1px 0 0;
+      }
+      .bottom-left {
+        position: absolute;
+        right: -1px;
+        bottom: -1px;
+        padding: 4px;
+        border-style: solid;
+        border-color: #fff;
+        border-width: 0 1px 1px 0;
+      }
+      .bottom-right {
+        position: absolute;
+        left: -1px;
+        bottom: -1px;
+        padding: 4px;
+        border-style: solid;
+        border-color: #fff;
+        border-width: 0 0 1px 1px;
       }
     }
 
     .user-info {
+      gap: 8px;
       border-left: 1px solid rgba(255, 255, 255, 0.25);
+      .balance {
+        color: #94a3b8;
+      }
     }
   }
 }
