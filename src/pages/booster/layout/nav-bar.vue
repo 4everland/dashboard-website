@@ -63,6 +63,22 @@
         </v-btn>
       </div>
     </div>
+
+    <div
+      class="nav-mobile px-2 d-flex align-center justify-space-between d-md-none"
+    >
+      <div class="logo d-flex align-center">
+        <img src="/img/booster/svg/logo.svg" width="157" alt="" />
+      </div>
+      <div class="d-flex align-center">
+        <div class="mobile-btn pa-1">
+          <img src="/img/booster/svg/invite-user.svg" width="24" alt="" />
+        </div>
+        <div class="mobile-btn ml-1 pa-1">
+          <img src="/img/booster/svg/mobile-draw-icon.svg" width="24" alt="" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -197,6 +213,12 @@ export default {
       .balance {
         color: #94a3b8;
       }
+    }
+  }
+  .nav-mobile {
+    .mobile-btn {
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.1);
     }
   }
 }
