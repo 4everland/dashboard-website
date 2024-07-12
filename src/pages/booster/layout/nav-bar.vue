@@ -36,7 +36,11 @@
         </div>
       </div>
       <div class="flex-1"></div>
-      <div class="user-info d-flex align-center justify-center px-4">
+
+      <div
+        v-if="!notLogin"
+        class="login-content user-info d-flex align-center justify-center px-4"
+      >
         <e-team-avatar
           :src="userInfo.avatar"
           :size="32"
@@ -62,6 +66,13 @@
           <span class="ml-1" style="color: #fff">Invite</span>
         </v-btn>
       </div>
+
+      <div v-else class="login-content d-flex align-center justify-center">
+        <v-btn style="background: rgba(255, 255, 255, 0.1)">
+          <img src="/img/booster/svg/wallet.svg" width="16" alt="" />
+          <span class="ml-1" style="color: #fff">Connect Wallet</span>
+        </v-btn>
+      </div>
     </div>
 
     <div
@@ -83,7 +94,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -108,14 +119,19 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
     }),
-    notLogin() {
-      return Object.keys(this.userInfo).length == 0;
-    },
+
+    ...mapGetters(["notLogin"]),
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .nav-bar {
+    top: 0 !important;
+    height: 64px;
+  }
+}
 .nav-bar {
   z-index: 999;
   position: fixed;
@@ -209,16 +225,24 @@ export default {
 
     .user-info {
       gap: 8px;
-      border-left: 1px solid rgba(255, 255, 255, 0.25);
       .balance {
         color: #94a3b8;
       }
     }
+    .login-content {
+      width: 340px;
+      border-left: 1px solid rgba(255, 255, 255, 0.25);
+    }
   }
   .nav-mobile {
+    height: 100%;
+
     .mobile-btn {
       border-radius: 4px;
       background: rgba(255, 255, 255, 0.1);
+      > img {
+        vertical-align: middle;
+      }
     }
   }
 }

@@ -7,6 +7,25 @@
         alt=""
       />
 
+      <div class="not-login d-none d-md-block">
+        <div style="position: relative">
+          <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
+        </div>
+        <div class="top-card">
+          <div class="card-storage mb-1 pos-r">
+            <img
+              class="pos-a"
+              style="left: 37%; top: -20px"
+              src="/img/booster/boost-icon.png"
+              width="64"
+              alt=""
+            />
+            <div class="boost-btn pos-a">Boost</div>
+          </div>
+          <img src="/img/booster/svg/storage-line.svg" width="280" alt="" />
+        </div>
+      </div>
+
       <div class="user-card d-none d-md-block">
         <div class="user-card-item fz-12">
           <div class="user-card-item-title">Total $4EVER points</div>
@@ -43,7 +62,6 @@
           </div>
         </div>
       </div>
-
       <div class="point-square d-none d-md-block">
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
@@ -53,7 +71,6 @@
           <img src="/img/booster/3d-square.png" width="120" alt="" />
         </div>
       </div>
-
       <div class="storage-boost d-none d-md-block">
         <div style="position: relative">
           <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
@@ -287,6 +304,7 @@ export default {
       #94acfb 100%
     );
   }
+
   .user-card {
     position: absolute;
     right: 20px;
@@ -321,6 +339,31 @@ export default {
     }
   }
 
+  .not-login {
+    position: absolute;
+    left: 45%;
+    top: 56%;
+    .top-card {
+      position: absolute;
+      bottom: 22%;
+      right: -226%;
+
+      .boost-btn {
+        width: 232px;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 10%;
+        text-align: center;
+        padding: 0 8px;
+        font-weight: bold;
+        font-size: 20px;
+        border-radius: 4px;
+        background: rgba(97, 114, 243, 0.75);
+        box-shadow: 0px 0px 16px 0px rgba(137, 234, 251, 0.5);
+        backdrop-filter: blur(2px);
+      }
+    }
+  }
   .point-square {
     position: absolute;
     left: 49%;
