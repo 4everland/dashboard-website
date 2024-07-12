@@ -115,7 +115,18 @@ export default {
             it.msg = resourceTypeObj[it.resourceType] + " " + it.resourceUsed;
           } else {
             it.msg = resourceTypeObj[it.resourceType] + ":" + it.message;
-            it.timeSection = new Date(it.timestamp).toLocaleTimeString();
+            const date = new Date(it.timestamp * 1000);
+
+            const utcMinutes =
+              date.getUTCMinutes() < 10
+                ? "0" + date.getUTCMinutes()
+                : date.getUTCMinutes();
+            const utcSeconds =
+              date.getUTCSeconds() < 10
+                ? "0" + date.getUTCSeconds()
+                : date.getUTCSeconds();
+            it.timeSection =
+              date.getUTCHours() + ":" + utcMinutes + ":" + utcSeconds;
           }
           it.resourceType = resourceTypeObj[it.resourceType];
         });
