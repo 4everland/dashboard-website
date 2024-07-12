@@ -524,9 +524,20 @@ export default {
           throw new Error("Insufficient balance in your wallet.");
         }
 
+        const gasLimit = await BlastOracleLand.estimateGas.mintByETH(
+          this.euid,
+          {
+            value: mintPrice,
+          }
+        );
+
+        const gasPrice = await provider.getGasPrice();
         let tx = await BlastOracleLand.mintByETH(this.euid, {
           value: mintPrice,
+          gasLimit: gasLimit.mul(12).div(10),
+          gasPrice: gasPrice.mul(12).div(10),
         });
+
         await this.$http.post(`$bill-consume/activity/recharge/report`, {
           source: this.source,
           hash: tx.hash,
