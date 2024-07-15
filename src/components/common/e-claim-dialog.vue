@@ -23,7 +23,7 @@
             ></time-count-down>
           </div>
           <div class="fw-b">
-            Complete your first deposit to unlock the following benefts.
+            Complete your first deposit to unlock the following benefits.
           </div>
           <div class="fz-14 task-hub-description">starting from $1</div>
 
