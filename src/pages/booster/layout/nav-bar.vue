@@ -15,6 +15,7 @@
           @mouseleave="currentHoverIdx = -1"
           v-for="(item, index) in routers"
           :key="index"
+          @click="$router.push(item.path)"
         >
           {{ item.name }}
           <span
@@ -61,10 +62,58 @@
             <span class="ml-1">99999K LAND</span>
           </div>
         </div>
-        <v-btn style="background: rgba(255, 255, 255, 0.1)">
-          <img src="/img/booster/svg/invite-user.svg" width="16" alt="" />
-          <span class="ml-1" style="color: #fff">Invite</span>
-        </v-btn>
+
+        <v-menu offset-y content-class="inviter-menu" nudge-bottom="20">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              style="background: rgba(255, 255, 255, 0.1)"
+              v-on="on"
+              v-bind="attrs"
+            >
+              <img src="/img/booster/svg/invite-user.svg" width="16" alt="" />
+              <span class="ml-1" style="color: #fff">Invite</span>
+            </v-btn>
+          </template>
+          <!-- <v-list>
+            <v-list-item v-for="(item, index) in items" :key="index">
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list> -->
+          <div class="invite-panel">
+            <div class="invite-panel-basic-item d-flex align-center fz-14">
+              <div>
+                <span>Invite link:</span>
+                <span> ddddld..d.dd..d./ X ID</span>
+              </div>
+              <img class="ml-auto" src="" width="24" alt="" />
+            </div>
+            <div class="invite-panel-basic-item d-flex align-center fz-14">
+              <div>
+                <span>Invite link:</span>
+                <span> ddddld..d.dd..d./ X ID</span>
+              </div>
+              <img class="ml-auto" src="" width="24" alt="" />
+            </div>
+            <div class="invite-panel-basic-item d-flex align-center fz-14">
+              <div>
+                <span>Invite link:</span>
+                <span> ddddld..d.dd..d./ X ID</span>
+              </div>
+              <img class="ml-auto" src="" width="24" alt="" />
+            </div>
+            <div class="invite-panel-basic-item d-flex align-center fz-14">
+              <div>
+                <span>Invite link:</span>
+                <span> ddddld..d.dd..d./ X ID</span>
+              </div>
+              <img class="ml-auto" src="" width="24" alt="" />
+            </div>
+
+            <div class="fz-12 invite-panel-basic-item-desc">
+              * You will get +10 capacity for every new booster you invited.
+            </div>
+          </div>
+        </v-menu>
       </div>
 
       <div v-else class="login-content d-flex align-center justify-center">
@@ -125,6 +174,28 @@ export default {
 };
 </script>
 
+<style>
+.inviter-menu {
+  border-radius: 0;
+}
+.invite-panel {
+  color: #fff;
+  padding: 32px 20px;
+  width: 340px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(54, 59, 64, 0.9);
+}
+.invite-panel-basic-item {
+  padding: 4px 20px;
+  margin-bottom: 12px;
+  backdrop-filter: blur(2px);
+}
+.invite-panel-basic-item-desc {
+  padding: 4px 20px;
+  backdrop-filter: blur(2px);
+  color: rgba(255, 255, 255, 0.4);
+}
+</style>
 <style lang="scss" scoped>
 @media screen and (max-width: 960px) {
   .nav-bar {
@@ -165,6 +236,7 @@ export default {
         border-right: 1px solid rgba(255, 255, 255, 0.25);
         line-height: 16px;
         box-sizing: border-box;
+        cursor: pointer;
       }
 
       .router-item.trigger {
@@ -234,9 +306,10 @@ export default {
       border-left: 1px solid rgba(255, 255, 255, 0.25);
     }
   }
+
   .nav-mobile {
     height: 100%;
-
+    background: #000;
     .mobile-btn {
       border-radius: 4px;
       background: rgba(255, 255, 255, 0.1);
