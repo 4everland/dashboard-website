@@ -6,8 +6,10 @@
         width="100%"
         alt=""
       />
+      <!-- <overview-pc></overview-pc> -->
+      <overview-h5></overview-h5>
 
-      <div class="not-login d-none d-md-block">
+      <!-- <div class="not-login d-none d-md-block">
         <div style="position: relative">
           <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
         </div>
@@ -198,54 +200,26 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
+import OverviewPc from "./overview/overview-pc.vue";
+import OverviewH5 from "./overview/overview-h5.vue";
 export default {
   data() {
-    return {
-      locked: true,
-      activity: [
-        {
-          icon: "/img/booster/svg/explore.svg",
-          activityIcon: "/img/booster/svg/explore-active.svg",
-          name: "Explore",
-          path: "/booster/explore",
-        },
-        {
-          icon: "/img/booster/svg/explore.svg",
-          activityIcon: "/img/booster/svg/explore-active.svg",
-          name: "Explore",
-          path: "/booster/explore",
-        },
-        {
-          icon: "/img/booster/svg/tasks.svg",
-          activityIcon: "/img/booster/svg/tasks-active.svg",
-          name: "Tasks",
-          path: "/booster/explore",
-        },
-        {
-          icon: "/img/booster/svg/staking.svg",
-          activityIcon: "/img/booster/svg/staking-active.svg",
-          name: "Staking",
-          path: "/booster/explore",
-        },
-        {
-          icon: "/img/booster/svg/explore.svg",
-          activityIcon: "/img/booster/svg/explore-active.svg",
-          name: "Explore",
-          path: "/booster/explore",
-        },
-      ],
-    };
+    return {};
   },
   computed: {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+  },
+  components: {
+    OverviewPc,
+    OverviewH5,
   },
 };
 </script>

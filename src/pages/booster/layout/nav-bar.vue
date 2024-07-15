@@ -85,7 +85,7 @@
         <div class="mobile-btn pa-1">
           <img src="/img/booster/svg/invite-user.svg" width="24" alt="" />
         </div>
-        <div class="mobile-btn ml-1 pa-1">
+        <div class="mobile-btn ml-1 pa-1" @click="$emit('open-drawer')">
           <img src="/img/booster/svg/mobile-draw-icon.svg" width="24" alt="" />
         </div>
       </div>
@@ -133,7 +133,7 @@ export default {
   }
 }
 .nav-bar {
-  z-index: 999;
+  z-index: 2;
   position: fixed;
   width: 100%;
   top: 24px;
