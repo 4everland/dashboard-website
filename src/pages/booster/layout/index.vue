@@ -11,7 +11,12 @@
       temporary
     >
       <div class="drawer-header d-flex align-center justify-end px-2">
-        <img src="/img/booster/svg/close.svg" width="24" alt="" />
+        <img
+          @click="drawer = false"
+          src="/img/booster/svg/close.svg"
+          width="24"
+          alt=""
+        />
       </div>
       <div class="drawer-content px-4">
         <div class="user-info d-flex align-center">
@@ -34,10 +39,25 @@
 
         <div class="menus my-4 py-4">
           <div>Menu</div>
-          <div class="menu-item pa-2">
-            <img class="mr-2" src="" width="24" alt="" />
-            <span>Home</span>
+          <div
+            class="menu-item d-flex align-center pa-2 mt-2 fz-14"
+            :class="{ trigger: it.path == $route.path }"
+            v-for="(it, i) in menuList"
+            :key="i"
+          >
+            <img class="mr-2" :src="it.icon" width="24" alt="" />
+            <span>{{ it.name }}</span>
           </div>
+        </div>
+
+        <div class="logout pa-2 fz-14">
+          <img
+            class="mr-2"
+            src="/img/booster/menu/logout.svg"
+            width="24"
+            alt=""
+          />
+          <span>Log out</span>
         </div>
       </div>
     </v-navigation-drawer>
@@ -58,17 +78,19 @@ export default {
       group: null,
       menuList: [
         {
-          icon: "",
+          icon: "/img/booster/menu/home.svg",
           name: "Home",
           path: "/booster",
         },
         {
-          icon: "",
+          icon: "/img/booster/menu/elite.svg",
+
           name: "Elite Quest",
           path: "/booster/quest",
         },
         {
-          icon: "",
+          icon: "/img/booster/menu/leaderboard.svg",
+
           name: "Leaderboard",
           path: "/booster/leaderboard",
         },
@@ -79,6 +101,9 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
     }),
+  },
+  created() {
+    console.log(this.$route.path);
   },
 };
 </script>
@@ -109,8 +134,14 @@ img {
       }
     }
     .menus {
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+
       .menu-item {
         border-radius: 4px;
+      }
+      .trigger {
+        font-weight: bold;
         background: #0d004d;
       }
     }

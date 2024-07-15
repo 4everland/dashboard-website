@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="points fz-12 d-flex align-center justify-center">
+      <span> Points 44,002k </span>
+      <img src="" alt="" />
+    </div>
     <div class="storage-boost">
       <div style="position: relative">
         <div style="width: 10px; height: 10px"></div>
@@ -90,6 +94,16 @@
         </div>
       </div>
     </div>
+
+    <div class="point-square d-none d-md-block">
+      <div style="position: relative">
+        <div style="width: 10px; height: 10px"></div>
+      </div>
+      <div class="top-card">
+        <span class="points fz-14"> 31/10000 </span>
+        <img src="/img/booster/3d-square.png" width="120" alt="" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -104,6 +118,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.points {
+  position: absolute;
+  right: 8px;
+  top: 100px;
+  width: 127px;
+  height: 42px;
+  background: url("/img/booster/mobile/card_background_points.png") no-repeat;
+  background-size: 100%;
+}
 .card-storage.locked {
   background: url("/img/booster/svg/mobile_card_background_white.svg") no-repeat;
   .card-storage-status {
@@ -176,7 +199,6 @@ export default {
     top: -800%;
   }
 }
-
 .network-boost {
   position: absolute;
   left: 24%;
