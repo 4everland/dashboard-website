@@ -1,6 +1,13 @@
 <template>
   <div>
-    <div class="points fz-12 d-flex align-center justify-center">
+    <div
+      class="points-card fz-12 d-flex align-center justify-center"
+      @click="handleOpenSheet"
+    >
+      <div class="rate-box">
+        <img src="/img/booster/3d-square.png" width="40" alt="" />
+        <span class="text fw-b">50/H</span>
+      </div>
       <span> Points 44,002k </span>
       <img src="" alt="" />
     </div>
@@ -95,37 +102,58 @@
       </div>
     </div>
 
-    <div class="point-square d-none d-md-block">
+    <div class="point-square">
       <div style="position: relative">
         <div style="width: 10px; height: 10px"></div>
       </div>
       <div class="top-card">
         <span class="points fz-14"> 31/10000 </span>
-        <img src="/img/booster/3d-square.png" width="120" alt="" />
+        <img src="/img/booster/3d-square.png" width="64" alt="" />
       </div>
     </div>
+    <mobile-points-sheet ref="pointsSheet"></mobile-points-sheet>
   </div>
 </template>
 
 <script>
+import MobilePointsSheet from "../components/mobile-points-sheet.vue";
 export default {
   data() {
     return {
-      locked: true,
+      locked: false,
     };
+  },
+  components: {
+    MobilePointsSheet,
+  },
+  methods: {
+    handleOpenSheet() {
+      this.$refs.pointsSheet.sheet = true;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.points {
+.points-card {
   position: absolute;
   right: 8px;
-  top: 100px;
+  top: 80px;
   width: 127px;
   height: 42px;
   background: url("/img/booster/mobile/card_background_points.png") no-repeat;
   background-size: 100%;
+  .rate-box {
+    position: absolute;
+    left: -20px;
+    bottom: -5px;
+    .text {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
 }
 .card-storage.locked {
   background: url("/img/booster/svg/mobile_card_background_white.svg") no-repeat;
@@ -207,6 +235,20 @@ export default {
     position: absolute;
     left: -800%;
     top: -800%;
+  }
+}
+
+.point-square {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 30%;
+  .points {
+    position: absolute;
+    left: 0;
+    top: 40%;
+    font-weight: bold;
+    font-size: 14px;
   }
 }
 </style>
