@@ -6,9 +6,10 @@
         width="100%"
         alt=""
       />
-      <!-- <overview-pc></overview-pc> -->
-      <overview-h5></overview-h5>
-
+      <overview-pc @handleStartBoost="showStartBoost = true"></overview-pc>
+      <overview-h5 @handleStartBoost="showStartBoost = true"></overview-h5>
+      <start-boosting v-model="showStartBoost"></start-boosting>
+      <end-boosting v-model="showEndBoost"></end-boosting>
       <!-- <div class="not-login d-none d-md-block">
         <div style="position: relative">
           <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
@@ -208,9 +209,14 @@
 <script>
 import OverviewPc from "./overview/overview-pc.vue";
 import OverviewH5 from "./overview/overview-h5.vue";
+import StartBoosting from "./components/start-boosting.vue";
+import EndBoosting from "./components/end-boosting.vue";
 export default {
   data() {
-    return {};
+    return {
+      showStartBoost: false,
+      showEndBoost: false,
+    };
   },
   computed: {
     asMobile() {
@@ -220,6 +226,8 @@ export default {
   components: {
     OverviewPc,
     OverviewH5,
+    StartBoosting,
+    EndBoosting,
   },
 };
 </script>
@@ -269,195 +277,5 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  .linear-border {
-    height: 1px;
-    width: 100%;
-    background: linear-gradient(
-      90deg,
-      rgba(97, 114, 243, 0.05) 0%,
-      #94acfb 100%
-    );
-  }
-
-  .user-card {
-    position: absolute;
-    right: 20px;
-    top: 12%;
-    padding: 16px;
-    width: 264px;
-    background: url("/img/booster/user_card_bg.png") no-repeat;
-    background-size: 100% 100%;
-    > img {
-      position: absolute;
-    }
-
-    .user-card-item {
-      .user-card-item-content {
-        padding: 4px 16px;
-        background: linear-gradient(
-          90deg,
-          rgba(97, 114, 243, 0.05) 0%,
-          rgba(97, 114, 243, 0.5) 100%
-        );
-        backdrop-filter: blur(2px);
-
-        .content-rate {
-          font-family: "DIN Alternate";
-          font-size: 24px;
-          font-weight: 700;
-        }
-        .content-detail {
-          border-top: 1px solid rgba(164, 188, 253, 0.25);
-        }
-      }
-    }
-  }
-
-  .not-login {
-    position: absolute;
-    left: 45%;
-    top: 56%;
-    .top-card {
-      position: absolute;
-      bottom: 22%;
-      right: -226%;
-
-      .boost-btn {
-        width: 232px;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 10%;
-        text-align: center;
-        padding: 0 8px;
-        font-weight: bold;
-        font-size: 20px;
-        border-radius: 4px;
-        background: rgba(97, 114, 243, 0.75);
-        box-shadow: 0px 0px 16px 0px rgba(137, 234, 251, 0.5);
-        backdrop-filter: blur(2px);
-      }
-    }
-  }
-  .point-square {
-    position: absolute;
-    left: 49%;
-    top: 30%;
-    .top-card {
-      position: absolute;
-      bottom: 22%;
-      left: -449%;
-      .points {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%);
-        font-weight: bold;
-        text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.5);
-      }
-    }
-  }
-
-  .card-storage.locked {
-    background: url("/img/booster/svg/card_background_white.svg") no-repeat;
-    .card-storage-status {
-      .task-title {
-        color: rgba(255, 255, 255, 0.25);
-        border-top: 1px solid rgba(255, 255, 255, 0.25);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-        background: url("/img/booster/svg/fringe-bg.svg") no-repeat 100%;
-        text-shadow: none;
-      }
-    }
-  }
-  .card-storage {
-    height: 98px;
-    padding: 0 8px;
-    background: url("/img/booster/svg/card_background_blue.svg") no-repeat;
-    background-size: 100%;
-    .card-storage-status {
-      .task-title {
-        text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
-        font-size: 20px;
-        font-weight: 700;
-        padding: 8px;
-        margin: 4px 0;
-        border-top: 1px solid #a4bcfd;
-        border-bottom: 1px solid #a4bcfd;
-        background: rgba(97, 114, 243, 0.1);
-      }
-    }
-  }
-
-  .storage-boost {
-    position: absolute;
-    left: 23%;
-    top: 63%;
-    .top-card {
-      position: absolute;
-      bottom: 22%;
-      right: -226%;
-    }
-  }
-
-  .computing-boost {
-    position: absolute;
-    left: 23%;
-    top: 34%;
-    .top-card {
-      position: absolute;
-      bottom: 22%;
-      left: -500%;
-    }
-  }
-
-  .network-boost {
-    position: absolute;
-    right: 19%;
-    bottom: 32%;
-    .top-card {
-      position: absolute;
-      bottom: 22%;
-      left: -500%;
-    }
-  }
-  .overview-activity {
-    position: absolute;
-    bottom: 24px;
-    width: 100%;
-    padding: 0 24px;
-    .activity {
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      height: 64px;
-      .activity-item {
-        padding: 8px 16px;
-        border-right: 1px solid rgba(255, 255, 255, 0.25);
-        .scale {
-          z-index: 9999;
-          display: none;
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          width: 110%;
-          height: 120%;
-          border: 1px solid #6172f3;
-        }
-      }
-      .activity-item:hover .scale {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 8px 16px;
-        background: linear-gradient(
-            113deg,
-            rgba(97, 114, 243, 0) 19.38%,
-            rgba(97, 114, 243, 0.5) 84.92%
-          ),
-          url("/img/booster/hover-linea-bg.png") lightgray 50% / cover no-repeat;
-
-        font-weight: bold;
-      }
-    }
-  }
 }
 </style>
