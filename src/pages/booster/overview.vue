@@ -6,191 +6,30 @@
         width="100%"
         alt=""
       />
-
-      <div class="not-login d-none d-md-block">
-        <div style="position: relative">
-          <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
-        </div>
-        <div class="top-card">
-          <div class="card-storage mb-1 pos-r">
-            <img
-              class="pos-a"
-              style="left: 37%; top: -20px"
-              src="/img/booster/boost-icon.png"
-              width="64"
-              alt=""
-            />
-            <div class="boost-btn pos-a">Boost</div>
-          </div>
-          <img src="/img/booster/svg/storage-line.svg" width="280" alt="" />
-        </div>
-      </div>
-
-      <div class="user-card d-none d-md-block">
-        <div class="user-card-item fz-12">
-          <div class="user-card-item-title">Total $4EVER points</div>
-          <div class="linear-border mb-1"></div>
-          <div class="user-card-item-content">
-            <div class="content-rate d-flex align-center justify-space-between">
-              <img src="/img/booster/svg/union.svg" width="52" alt="" />
-              <div>44002</div>
-            </div>
-          </div>
-        </div>
-        <div class="user-card-item fz-12 mt-2">
-          <div class="user-card-item-title">Current Production Rate</div>
-          <div class="linear-border mb-1"></div>
-          <div class="user-card-item-content">
-            <div class="content-rate d-flex align-center justify-space-between">
-              <img src="/img/booster/svg/union.svg" width="52" alt="" />
-              <div>50/H</div>
-            </div>
-            <div class="content-detail pt-2 fz-12">
-              <div class="d-flex align-center justify-space-between">
-                <span>Base Production Rate</span>
-                <span>20/H</span>
-              </div>
-              <div class="d-flex align-center justify-space-between mt-1">
-                <span>Boost Production Rate</span>
-                <span>+5/H</span>
-              </div>
-              <div class="d-flex align-center justify-space-between mt-1">
-                <span>Staking Weight</span>
-                <span>10%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="point-square d-none d-md-block">
-        <div style="position: relative">
-          <div style="width: 10px; height: 10px"></div>
-        </div>
-        <div class="top-card">
-          <span class="points fz-14"> 31/10000 </span>
-          <img src="/img/booster/3d-square.png" width="120" alt="" />
-        </div>
-      </div>
-      <div class="storage-boost d-none d-md-block">
-        <div style="position: relative">
-          <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
-        </div>
-        <div class="top-card">
-          <div
-            class="card-storage mb-1 d-flex align-center justify-space-between"
-          >
-            <img src="/img/booster/storage-icon.png" width="64" alt="" />
-            <div class="card-storage-status flex-1">
-              <div class="d-flex align-center justify-space-between">
-                <span class="fz-12">Status</span>
-                <img src="/img/booster/svg/actived.svg" width="16" alt="" />
-              </div>
-              <div class="task-title">Storage Boost</div>
-              <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base</span>
-                <span>20/H</span>
-              </div>
-            </div>
-          </div>
-          <img src="/img/booster/svg/storage-line.svg" width="280" alt="" />
-        </div>
-      </div>
-      <div class="computing-boost d-none d-md-block">
-        <div style="position: relative">
-          <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
-        </div>
-        <div class="top-card">
-          <div
-            class="card-storage mb-1 d-flex align-center justify-space-between"
-            :class="{ locked: locked }"
-          >
-            <img
-              :src="
-                locked
-                  ? '/img/booster/svg/locked-icon.svg'
-                  : '/img/booster/storage-icon.png'
-              "
-              width="64"
-              alt=""
-            />
-            <div class="card-storage-status flex-1">
-              <div
-                v-show="locked"
-                class="d-flex align-center justify-space-between fz-12"
-              >
-                <span>Status</span>
-                <img src="/img/booster/svg/actived.svg" width="16" alt="" />
-              </div>
-              <div v-show="!locked" class="fz-12 text-center">
-                Unlock at 10,000 points
-              </div>
-              <div class="task-title">Computing Boost</div>
-              <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base</span>
-                <span>20/H</span>
-              </div>
-            </div>
-          </div>
-          <img src="/img/booster/svg/right_line_white.svg" width="280" alt="" />
-        </div>
-      </div>
-      <div class="network-boost d-none d-md-block">
-        <div style="position: relative">
-          <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
-        </div>
-        <div class="top-card">
-          <div
-            class="card-storage mb-1 d-flex align-center justify-space-between"
-            :class="{ locked: locked }"
-          >
-            <img
-              :src="
-                locked
-                  ? '/img/booster/svg/locked-icon.svg'
-                  : '/img/booster/storage-icon.png'
-              "
-              width="64"
-              alt=""
-            />
-            <div class="card-storage-status flex-1">
-              <div
-                v-show="locked"
-                class="d-flex align-center justify-space-between fz-12"
-              >
-                <span>Status</span>
-                <img src="/img/booster/svg/actived.svg" width="16" alt="" />
-              </div>
-              <div v-show="!locked" class="fz-12 text-center">
-                Unlock at 10,000 points
-              </div>
-              <div class="task-title">Network Boost</div>
-              <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base</span>
-                <span>20/H</span>
-              </div>
-            </div>
-          </div>
-          <img src="/img/booster/svg/right_line_white.svg" width="280" alt="" />
-        </div>
-      </div>
+      <overview-pc></overview-pc>
+      <!-- <overview-h5></overview-h5> -->
       <bottom-bar />
     </div>
   </div>
 </template>
 
 <script>
+import OverviewPc from "./overview/overview-pc.vue";
+import OverviewH5 from "./overview/overview-h5.vue";
 import BottomBar from "./components/bottom-bar.vue";
 export default {
-  components: { BottomBar },
   data() {
-    return {
-      locked: true,
-    };
+    return {};
   },
   computed: {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+  },
+  components: {
+    OverviewPc,
+    OverviewH5,
+    BottomBar,
   },
 };
 </script>
