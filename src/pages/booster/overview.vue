@@ -3,13 +3,14 @@
     <div style="position: relative">
       <img
         :src="asMobile ? '/img/booster/mobile-bg.png' : '/img/booster/bg.png'"
-        width="100%"
+        style="max-height: 100vh; width: 100%"
         alt=""
       />
       <overview-pc @handleStartBoost="showStartBoost = true"></overview-pc>
       <overview-h5 @handleStartBoost="showStartBoost = true"></overview-h5>
       <start-boosting v-model="showStartBoost"></start-boosting>
       <end-boosting v-model="showEndBoost"></end-boosting>
+      <deposit-dialog v-model="showDeposit"></deposit-dialog>
       <!-- <div class="not-login d-none d-md-block">
         <div style="position: relative">
           <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
@@ -211,11 +212,13 @@ import OverviewPc from "./overview/overview-pc.vue";
 import OverviewH5 from "./overview/overview-h5.vue";
 import StartBoosting from "./components/start-boosting.vue";
 import EndBoosting from "./components/end-boosting.vue";
+import DepositDialog from "./components/deposit-dialog.vue";
 export default {
   data() {
     return {
       showStartBoost: false,
       showEndBoost: false,
+      showDeposit: true,
     };
   },
   computed: {
@@ -228,6 +231,7 @@ export default {
     OverviewH5,
     StartBoosting,
     EndBoosting,
+    DepositDialog,
   },
 };
 </script>
