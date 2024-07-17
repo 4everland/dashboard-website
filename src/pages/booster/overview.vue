@@ -11,6 +11,8 @@
       <start-boosting v-model="showStartBoost"></start-boosting>
       <end-boosting v-model="showEndBoost"></end-boosting>
       <deposit-dialog v-model="showDeposit"></deposit-dialog>
+      <bottom-bar></bottom-bar>
+      <nft-drawer></nft-drawer>
     </div>
   </div>
 </template>
@@ -21,6 +23,8 @@ import OverviewH5 from "./overview/overview-h5.vue";
 import StartBoosting from "./components/start-boosting.vue";
 import EndBoosting from "./components/end-boosting.vue";
 import DepositDialog from "./components/deposit-dialog.vue";
+import NftDrawer from "./components/nft-drawer.vue";
+import BottomBar from "./components/bottom-bar.vue";
 export default {
   data() {
     return {
@@ -40,6 +44,8 @@ export default {
     StartBoosting,
     EndBoosting,
     DepositDialog,
+    NftDrawer,
+    BottomBar,
   },
 };
 </script>
