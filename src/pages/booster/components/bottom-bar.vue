@@ -24,18 +24,14 @@
         </div>
       </div>
     </div>
-    <!-- <nft-drawer /> -->
   </div>
 </template>
 
 <script>
-import NftDrawer from "./nft-drawer.vue";
-
 export default {
-  components: { NftDrawer },
+  components: {},
   data() {
     return {
-      locked: true,
       activity: [
         {
           icon: "/img/booster/svg/explore.svg",
@@ -120,7 +116,7 @@ export default {
 }
 .overview-activity {
   position: absolute;
-  bottom: 24px;
+  bottom: 0px;
   width: 100%;
   padding: 0 24px;
   .activity {

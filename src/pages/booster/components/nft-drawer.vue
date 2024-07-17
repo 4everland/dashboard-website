@@ -1,29 +1,50 @@
 <template>
-  <v-navigation-drawer v-model="drawer" absolute temporary>
-    <v-list-item>
-      <v-list-item-avatar>
-        <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
-      </v-list-item-avatar>
-
-      <v-list-item-content>
-        <v-list-item-title>John Leider</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-
-    <v-divider></v-divider>
-
-    <v-list dense>
-      <v-list-item v-for="item in items" :key="item.title" link>
-        <v-list-item-icon>
-          <v-icon>{{ item.icon }}</v-icon>
-        </v-list-item-icon>
-
-        <v-list-item-content>
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
-  </v-navigation-drawer>
+  <div class="nft-drawer-box">
+    <v-navigation-drawer
+      class="nft-drawer"
+      v-model="drawer"
+      absolute
+      bottom
+      temporary
+      hide-overlay
+      color="#1E2234"
+      width="558"
+    >
+      <v-container fluid>
+        <div>
+          <div>T4EVER STAKING</div>
+          <div>Received a 10% bonus on staking yield.</div>
+          <div>
+            <div>
+              <img src="/favicon.ico" alt="" />
+            </div>
+            <div><v-btn>Stake</v-btn></div>
+          </div>
+        </div>
+        <v-row no-gutters>
+          <v-col v-for="(n, i) in 13" :key="n" cols="4" md="15">
+            <div class="nft-item-box">
+              <img
+                class="nft-item-image"
+                :src="`/img/booster/nft/badge_${i}_1.png`"
+                alt=""
+              />
+              <!-- <img
+                class="nft-item-image"
+                :src="`/img/booster/nft/badge_${i}_2.png`"
+                alt=""
+              />
+              <img
+                class="nft-item-image"
+                :src="`/img/booster/nft/badge_${i}_3.png`"
+                alt=""
+              /> -->
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-navigation-drawer>
+  </div>
 </template>
 <script>
 export default {
@@ -31,10 +52,44 @@ export default {
     return {
       drawer: true,
       items: [
-        { title: "Home", icon: "mdi-view-dashboard" },
-        { title: "About", icon: "mdi-forum" },
+        { title: "Dashboard", icon: "mdi-view-dashboard" },
+        { title: "Photos", icon: "mdi-image" },
+        { title: "About", icon: "mdi-help-box" },
       ],
+      right: null,
     };
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.nft-drawer-box {
+  // position: relative;
+  // top: -714px;
+  // height: calc(100%);
+  ::v-deep .nft-drawer {
+    // width: 558px;
+    // height: 648px;
+    top: 80px !important;
+    left: 20px !important;
+    height: calc(100% - 80px - 100px) !important;
+    background-image: url("/img/booster/drawer/bg.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .nft-item-box {
+    width: 100px;
+    .nft-item-image {
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: 960px) {
+  .col-md-15 {
+    width: 20%;
+    max-width: 20%;
+  }
+}
+</style>
