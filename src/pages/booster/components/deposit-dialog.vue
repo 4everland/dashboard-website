@@ -9,22 +9,76 @@
           width="18"
           alt=""
         />
-        <div class="first-dialog-title fz-20 mb-5">Claim LAND</div>
-        <div class="first-dialog-content pt-5">
-          <div class="paragraph-1">
-            A journey that began with 88,822 Points in Dashboard Taskhub,
-            converting into 1,000 4EVER points.
+        <div class="first-dialog-title py-2 fz-20 text-center mb-2">
+          Claim LAND
+        </div>
+        <div class="first-dialog-content">
+          <div class="paragraph d-flex align-center justify-space-between">
+            <span>Amount</span>
+            <span>50,000 LAND ($0.05)</span>
           </div>
-          <div class="paragraph-2 py-4">
-            And further enriched by an extra 888 $4EVER points from the Elite
-            Quest.
-          </div>
-          <div class="panel-box d-flex align-center justify-center">
-            <img width="28" src="/img/booster/4ever-point-icon.png" alt="" />
-            <span class="panel-text ml-2">999888</span>
+          <div class="paragraph d-flex align-center justify-space-between">
+            <span>Network</span>
+            <v-select
+              style="max-width: 194px"
+              class="hide-msg network-select"
+              dense
+              solo
+              item-value="chain"
+              :items="chainList"
+              v-model="chain"
+              :menu-props="{
+                'offset-y': true,
+                'content-class': 'select-menu',
+              }"
+            >
+              <template v-slot:selection="{ item }">
+                <div class="d-flex align-center">
+                  <img :src="item.img" width="20" alt="" />
+                  <span class="ml-2" style="color: #fff">{{ item.name }}</span>
+                </div>
+              </template>
+              <template v-slot:item="{ item }">
+                <div class="d-flex align-center">
+                  <img :src="item.img" width="20" alt="" />
+                  <span class="ml-2" style="color: #fff">{{ item.name }}</span>
+                </div>
+              </template>
+              <template v-slot:append>
+                <img
+                  :src="'/img/booster/svg/down-arrow.svg'"
+                  width="16"
+                  alt=""
+                />
+              </template>
+            </v-select>
           </div>
 
-          <div class="text-center mt-5">Dive into boosting...</div>
+          <div
+            class="act-btn d-flex align-center justify-center mt-10"
+            style="gap: 16px"
+          >
+            <v-btn
+              outlined
+              color="rgba(255, 255, 255, 0.60)"
+              @click="$emit('input', false)"
+              >Cancel</v-btn
+            >
+            <v-btn
+              style="
+                border: 1px solid #0e6cc6;
+                background: linear-gradient(
+                  180deg,
+                  #00070c 0%,
+                  #074178 113.39%
+                );
+                text-shadow: 0px 0px 8px #6172f3;
+              "
+              outlined
+              color="#fff"
+              >Claim</v-btn
+            >
+          </div>
         </div>
       </div>
     </v-overlay>
@@ -39,14 +93,6 @@
     >
       <div class="booster-module-dialog">
         <div class="start-boosting-dialog">
-          <img
-            class="close-btn"
-            @click="$emit('input', false)"
-            src="/img/booster/svg/close.svg"
-            width="18"
-            alt=""
-          />
-
           <div class="deposit-dialog-title text-center fz-20 mb-5">
             Claim LAND
           </div>
@@ -56,7 +102,65 @@
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Network</span>
-            <span>50,000 LAND ($0.05)</span>
+            <v-select
+              style="max-width: 194px"
+              class="hide-msg network-select"
+              dense
+              solo
+              item-value="chain"
+              :items="chainList"
+              v-model="chain"
+              :menu-props="{
+                'offset-y': true,
+                'content-class': 'select-menu',
+              }"
+            >
+              <template v-slot:selection="{ item }">
+                <div class="d-flex align-center">
+                  <img :src="item.img" width="20" alt="" />
+                  <span class="ml-2" style="color: #fff">{{ item.name }}</span>
+                </div>
+              </template>
+              <template v-slot:item="{ item }">
+                <div class="d-flex align-center">
+                  <img :src="item.img" width="20" alt="" />
+                  <span class="ml-2" style="color: #fff">{{ item.name }}</span>
+                </div>
+              </template>
+              <template v-slot:append>
+                <img
+                  :src="'/img/booster/svg/down-arrow.svg'"
+                  width="16"
+                  alt=""
+                />
+              </template>
+            </v-select>
+          </div>
+
+          <div
+            class="act-btn d-flex align-center justify-center mt-10"
+            style="gap: 16px"
+          >
+            <v-btn
+              outlined
+              color="rgba(255, 255, 255, 0.60)"
+              @click="$emit('input', false)"
+              >Cancel</v-btn
+            >
+            <v-btn
+              style="
+                border: 1px solid #0e6cc6;
+                background: linear-gradient(
+                  180deg,
+                  #00070c 0%,
+                  #074178 113.39%
+                );
+                text-shadow: 0px 0px 8px #6172f3;
+              "
+              outlined
+              color="#fff"
+              >Claim</v-btn
+            >
           </div>
         </div>
       </div>
@@ -72,6 +176,75 @@ export default {
   data() {
     return {
       // overlay: false,
+      chainList: [
+        {
+          label: "Polygon",
+          name: "Polygon",
+          img: "/img/svg/billing/ic-polygon-0.svg",
+          chainId: this.$inDev ? 80001 : 137,
+        },
+        {
+          label: "Ethereum",
+          name: "Ethereum",
+          img: "/img/svg/billing/ic-ethereum.svg",
+          chainId: this.$inDev ? 11155111 : 1,
+        },
+        {
+          Label: "opBNB",
+          name: "opBNB",
+          img: "/img/svg/billing/ic-opbnb-test.svg",
+          chainId: this.$inDev ? 5611 : 204,
+        },
+        {
+          label: "BSC",
+          name: "BSC",
+          img: "/img/svg/billing/ic-bsc.png",
+          chainId: this.$inDev ? 97 : 56,
+        },
+        {
+          label: "Arbitrum",
+          name: "Arbitrum",
+          img: "/img/svg/billing/ic-arbitrum.png",
+          chainId: this.$inDev ? 421613 : 42161,
+        },
+        {
+          label: "zkSync",
+          name: "zkSync Era",
+          img: "/img/svg/logo-no-letters.svg",
+          chainId: this.$inDev ? 280 : 324,
+        },
+        {
+          label: "Optimism",
+          name: "Optimism",
+          img: "/img/svg/billing/ic-optimism.svg",
+          chainId: 10,
+        },
+        {
+          label: "Scroll",
+          name: "Scroll",
+          img: "/img/svg/billing/ic-scroll.svg",
+          chainId: 534352,
+        },
+        {
+          label: "Blast",
+          name: "Blast",
+          img: "/img/svg/billing/ic-blast.svg",
+          chainId: 81457,
+        },
+        {
+          label: "Taiko",
+          name: "Taiko",
+          img: "/img/svg/billing/ic-taiko.svg",
+          chainId: 167000,
+        },
+        {
+          label: "ZksyncLite",
+          name: "Zksync Lite",
+          img: "/img/svg/logo-no-letters.svg",
+          chainId: 1,
+        },
+      ],
+      chain: null,
     };
   },
   computed: {
@@ -101,35 +274,8 @@ export default {
   }
 
   .first-dialog-title {
-    padding: 4px 12px;
     background: rgba(0, 129, 248, 0.1);
     text-shadow: 0px 0px 8px #6172f3;
-  }
-  .first-dialog-content {
-    border-top: 1px solid #3e4043;
-
-    .paragraph-1,
-    .paragraph-2 {
-      padding: 0 12px;
-    }
-    .paragraph-1 {
-      color: #40e8ff;
-    }
-    .panel-box {
-      margin: 0 auto;
-      width: 100%;
-      max-width: 380px;
-      height: 167px;
-      border-radius: 16px;
-      background: url("/img/booster/4ever-point-bg.png") no-repeat;
-      .panel-text {
-        color: #40e8ff;
-        font-family: "DIN Alternate";
-        font-size: 50px;
-        font-weight: 700;
-        line-height: normal;
-      }
-    }
   }
 }
 
@@ -148,7 +294,7 @@ export default {
 .start-boosting-dialog {
   position: relative;
   height: 100%;
-  padding: 26px 7px 20px 7px;
+  padding: 20px 8px;
   color: #fff;
   border-radius: 5px;
   border-radius: 5px;
@@ -172,11 +318,26 @@ export default {
     background: rgba(0, 129, 248, 0.1);
     text-shadow: 0px 0px 8px #6172f3;
   }
+}
 
-  .paragraph {
-    padding: 16px 24px;
-    margin-bottom: 8px;
-    background: url("/img/booster/svg/fringe-bg.svg");
+.paragraph {
+  padding: 16px 24px;
+  margin-bottom: 8px;
+  background: url("/img/booster/svg/fringe-bg.svg");
+}
+
+.network-select {
+  color: #fff;
+  border-radius: 4px;
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  background: rgba(49, 49, 49, 0.9);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.35);
+}
+.select-menu {
+  .v-list.v-select-list.v-sheet.theme--light.v-list--dense.theme--light {
+    border-radius: 4px !important;
+    border: 0.5px solid rgba(255, 255, 255, 0.3) !important;
+    background: rgba(49, 49, 49, 0.9) !important;
   }
 }
 </style>
