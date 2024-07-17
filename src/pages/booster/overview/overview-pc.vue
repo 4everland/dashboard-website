@@ -13,7 +13,12 @@
             width="64"
             alt=""
           />
-          <div class="boost-btn pos-a">Boost</div>
+          <div
+            class="boost-btn pos-a cursor-p"
+            @click="$emit('handleStartBoost')"
+          >
+            Boost
+          </div>
         </div>
         <img src="/img/booster/svg/storage-line.svg" width="280" alt="" />
       </div>
@@ -24,9 +29,88 @@
         <div class="user-card-item-title">Total $4EVER points</div>
         <div class="linear-border mb-1"></div>
         <div class="user-card-item-content">
-          <div class="content-rate d-flex align-center justify-space-between">
+          <div class="content-rate d-flex align-center">
             <img src="/img/booster/svg/union.svg" width="52" alt="" />
-            <div>44002</div>
+
+            <v-menu
+              offset-y
+              content-class="pc-log-menu"
+              nudge-top="75"
+              :close-on-content-click="false"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <div class="ml-auto" v-on="on" v-bind="attrs">
+                  44002
+                  <img
+                    src="/img/booster/svg/log.svg"
+                    v-on="on"
+                    v-bind="attrs"
+                    width="16"
+                    alt=""
+                  />
+                </div>
+              </template>
+              <div class="pc-log-panel">
+                <div class="pc-log-panel-content">
+                  <div
+                    class="pc-log-panel-basic-item d-flex align-center fz-14"
+                  >
+                    <div>
+                      <span>Invite link:</span>
+                      <span> ddddld..d.dd..d./ X ID</span>
+                    </div>
+                    <img
+                      class="ml-auto cursor-p"
+                      src="/img/booster/svg/copy.svg"
+                      width="24"
+                      alt=""
+                    />
+                  </div>
+                  <div
+                    class="pc-log-panel-basic-item d-flex align-center fz-14"
+                  >
+                    <div>
+                      <span>Invite link:</span>
+                      <span> ddddld..d.dd..d./ X ID</span>
+                    </div>
+                    <img
+                      class="ml-auto cursor-p"
+                      src="/img/booster/svg/copy.svg"
+                      width="24"
+                      alt=""
+                    />
+                  </div>
+                  <div
+                    class="pc-log-panel-basic-item d-flex align-center fz-14"
+                  >
+                    <div>
+                      <span>Invite link:</span>
+                      <span> ddddld..d.dd..d./ X ID</span>
+                    </div>
+                    <img
+                      class="ml-auto cursor-p"
+                      src="/img/booster/svg/expanded.svg"
+                      width="24"
+                      alt=""
+                    />
+                  </div>
+                  <div
+                    class="pc-log-panel-basic-item d-flex align-center fz-14"
+                  >
+                    <div>
+                      <span>Invite link:</span>
+                      <span> ddddld..d.dd..d./ X ID</span>
+                    </div>
+                    <img class="ml-auto" src="" width="24" alt="" />
+                  </div>
+
+                  <div class="fz-12 pc-log-panel-basic-item-desc">
+                    * You will get +10 capacity for every new booster you
+                    invited.
+                  </div>
+                </div>
+              </div>
+            </v-menu>
           </div>
         </div>
       </div>
@@ -166,7 +250,7 @@
         <img src="/img/booster/svg/right_line_white.svg" width="280" alt="" />
       </div>
     </div>
-    <div class="overview-activity">
+    <div class="overview-activity d-none d-md-block">
       <div class="activity d-flex">
         <div
           class="activity-item flex-1"
@@ -234,8 +318,52 @@ export default {
       ],
     };
   },
+  methods: {
+    handleBoost() {
+      const logined = true;
+      if (logined) {
+        this.sta;
+      } else {
+        this.$router.push("/login");
+      }
+    },
+  },
 };
 </script>
+
+<style>
+.pc-log-menu {
+  border-radius: 0;
+}
+.pc-log-panel {
+  color: #fff;
+  padding: 32px 20px;
+  width: 518px;
+  min-height: 600px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(54, 59, 64, 0.9);
+}
+.pc-log-panel-content {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(
+      to right,
+      rgba(164, 188, 253, 0),
+      rgba(164, 188, 253, 1)
+    )
+    1;
+}
+.pc-log-panel-basic-item {
+  padding: 4px 20px;
+  margin-bottom: 12px;
+  backdrop-filter: blur(2px);
+}
+.pc-log-panel-basic-item-desc {
+  padding: 4px 20px;
+  backdrop-filter: blur(2px);
+  color: rgba(255, 255, 255, 0.4);
+}
+</style>
 
 <style lang="scss" scoped>
 .corner {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="d-md-none d-block">
     <div
       class="points-card fz-12 d-flex align-center justify-center"
       @click="handleOpenSheet"
@@ -11,104 +11,113 @@
       <span> Points 44,002k </span>
       <img src="" alt="" />
     </div>
-    <div class="storage-boost">
-      <div style="position: relative">
-        <div style="width: 10px; height: 10px"></div>
-      </div>
-      <div class="top-card">
-        <div class="card-storage" :class="{ locked }">
-          <img src="/img/booster/storage-icon.png" width="48" alt="" />
-          <div class="card-storage-status">
-            <div
-              v-if="!locked"
-              class="d-flex align-center justify-space-between"
-            >
-              <span class="fz-12">Status</span>
-              <img src="/img/booster/svg/actived.svg" width="16" alt="" />
-            </div>
-            <div v-else class="text-center fz-12">
-              <div class="unlock-btn">Unlock</div>
-              <div>Unlock with 50,000 LAND</div>
-            </div>
+    <img
+      v-if="locked"
+      class="start-booster-btn"
+      @click="$emit('handleStartBoost')"
+      src="/img/booster/mobile/mobile-boost-start.png"
+      width="80%"
+      alt=""
+    />
+    <div v-else>
+      <div class="storage-boost">
+        <div style="position: relative">
+          <div style="width: 10px; height: 10px"></div>
+        </div>
+        <div class="top-card">
+          <div class="card-storage" :class="{ locked: storageLocked }">
+            <img src="/img/booster/storage-icon.png" width="48" alt="" />
+            <div class="card-storage-status">
+              <div
+                v-if="!storageLocked"
+                class="d-flex align-center justify-space-between"
+              >
+                <span class="fz-12">Status</span>
+                <img src="/img/booster/svg/actived.svg" width="16" alt="" />
+              </div>
+              <div v-else class="text-center fz-12">
+                <div class="unlock-btn">Unlock</div>
+                <div>Unlock with 50,000 LAND</div>
+              </div>
 
-            <div class="task-title">Storage Boost</div>
-            <div class="d-flex align-center justify-space-between fz-12">
-              <span>Base</span>
-              <span>20/H</span>
+              <div class="task-title">Storage Boost</div>
+              <div class="d-flex align-center justify-space-between fz-12">
+                <span>Base</span>
+                <span>20/H</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="computing-boost">
-      <div style="position: relative">
-        <div style="width: 10px; height: 10px"></div>
-      </div>
-      <div class="top-card">
-        <div class="card-storage" :class="{ locked }">
-          <img src="/img/booster/storage-icon.png" width="48" alt="" />
-          <div class="card-storage-status">
-            <div
-              v-if="!locked"
-              class="d-flex align-center justify-space-between"
-            >
-              <span class="fz-12">Status</span>
-              <img src="/img/booster/svg/actived.svg" width="16" alt="" />
-            </div>
-            <div v-else class="text-center fz-12">
-              <div class="unlock-btn">Unlock</div>
-              <div>Unlock with 50,000 LAND</div>
-            </div>
-            <div class="task-title">Computing Boost</div>
-            <div class="d-flex align-center justify-space-between fz-12">
-              <span>Base</span>
-              <span>20/H</span>
+      <div class="computing-boost">
+        <div style="position: relative">
+          <div style="width: 10px; height: 10px"></div>
+        </div>
+        <div class="top-card">
+          <div class="card-storage" :class="{ locked: computingLocked }">
+            <img src="/img/booster/storage-icon.png" width="48" alt="" />
+            <div class="card-storage-status">
+              <div
+                v-if="!computingLocked"
+                class="d-flex align-center justify-space-between"
+              >
+                <span class="fz-12">Status</span>
+                <img src="/img/booster/svg/actived.svg" width="16" alt="" />
+              </div>
+              <div v-else class="text-center fz-12">
+                <div class="unlock-btn">Unlock</div>
+                <div>Unlock with 50,000 LAND</div>
+              </div>
+              <div class="task-title">Computing Boost</div>
+              <div class="d-flex align-center justify-space-between fz-12">
+                <span>Base</span>
+                <span>20/H</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="network-boost">
-      <div style="position: relative">
-        <div style="width: 10px; height: 10px"></div>
-      </div>
-      <div class="top-card">
-        <div class="card-storage" :class="{ locked }">
-          <img
-            class="pos-a"
-            src="/img/booster/storage-icon.png"
-            width="48"
-            alt=""
-          />
-          <div class="card-storage-status">
-            <div
-              v-if="!locked"
-              class="d-flex align-center justify-space-between"
-            >
-              <span class="fz-12">Status</span>
-              <img src="/img/booster/svg/actived.svg" width="16" alt="" />
-            </div>
-            <div v-else class="text-center fz-12">
-              <div class="unlock-btn">Unlock</div>
-              <div>Unlock with 50,000 LAND</div>
-            </div>
-            <div class="task-title">Network Boost</div>
-            <div class="d-flex align-center justify-space-between fz-12">
-              <span>Base</span>
-              <span>20/H</span>
+      <div class="network-boost">
+        <div style="position: relative">
+          <div style="width: 10px; height: 10px"></div>
+        </div>
+        <div class="top-card">
+          <div class="card-storage" :class="{ locked: networkLocked }">
+            <img
+              class="pos-a"
+              src="/img/booster/storage-icon.png"
+              width="48"
+              alt=""
+            />
+            <div class="card-storage-status">
+              <div
+                v-if="!networkLocked"
+                class="d-flex align-center justify-space-between"
+              >
+                <span class="fz-12">Status</span>
+                <img src="/img/booster/svg/actived.svg" width="16" alt="" />
+              </div>
+              <div v-else class="text-center fz-12">
+                <div class="unlock-btn">Unlock</div>
+                <div>Unlock with 50,000 LAND</div>
+              </div>
+              <div class="task-title">Network Boost</div>
+              <div class="d-flex align-center justify-space-between fz-12">
+                <span>Base</span>
+                <span>20/H</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="point-square">
-      <div style="position: relative">
-        <div style="width: 10px; height: 10px"></div>
-      </div>
-      <div class="top-card">
-        <span class="points fz-14"> 31/10000 </span>
-        <img src="/img/booster/3d-square.png" width="64" alt="" />
+      <div class="point-square">
+        <div style="position: relative">
+          <div style="width: 10px; height: 10px"></div>
+        </div>
+        <div class="top-card">
+          <span class="points fz-14"> 31/10000 </span>
+          <img src="/img/booster/3d-square.png" width="64" alt="" />
+        </div>
       </div>
     </div>
     <mobile-points-sheet ref="pointsSheet"></mobile-points-sheet>
@@ -120,8 +129,20 @@ import MobilePointsSheet from "../components/mobile-points-sheet.vue";
 export default {
   data() {
     return {
-      locked: false,
+      locked: true,
     };
+  },
+
+  computed: {
+    storageLocked() {
+      return true;
+    },
+    networkLocked() {
+      return true;
+    },
+    computingLocked() {
+      return true;
+    },
   },
   components: {
     MobilePointsSheet,
@@ -250,5 +271,13 @@ export default {
     font-weight: bold;
     font-size: 14px;
   }
+}
+
+.start-booster-btn {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%);
+  cursor: pointer;
 }
 </style>

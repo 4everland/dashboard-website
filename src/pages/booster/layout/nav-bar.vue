@@ -63,7 +63,12 @@
           </div>
         </div>
 
-        <v-menu offset-y content-class="inviter-menu" nudge-bottom="20">
+        <v-menu
+          offset-y
+          content-class="inviter-menu"
+          nudge-bottom="20"
+          :close-on-content-click="false"
+        >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               style="background: rgba(255, 255, 255, 0.1)"
@@ -74,43 +79,55 @@
               <span class="ml-1" style="color: #fff">Invite</span>
             </v-btn>
           </template>
-          <!-- <v-list>
-            <v-list-item v-for="(item, index) in items" :key="index">
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item>
-          </v-list> -->
           <div class="invite-panel">
-            <div class="invite-panel-basic-item d-flex align-center fz-14">
-              <div>
-                <span>Invite link:</span>
-                <span> ddddld..d.dd..d./ X ID</span>
+            <div class="invite-panel-content">
+              <div class="invite-panel-basic-item d-flex align-center fz-14">
+                <div>
+                  <span>Invite link:</span>
+                  <span> ddddld..d.dd..d./ X ID</span>
+                </div>
+                <img
+                  class="ml-auto cursor-p"
+                  src="/img/booster/svg/copy.svg"
+                  width="24"
+                  alt=""
+                />
               </div>
-              <img class="ml-auto" src="" width="24" alt="" />
-            </div>
-            <div class="invite-panel-basic-item d-flex align-center fz-14">
-              <div>
-                <span>Invite link:</span>
-                <span> ddddld..d.dd..d./ X ID</span>
+              <div class="invite-panel-basic-item d-flex align-center fz-14">
+                <div>
+                  <span>Invite link:</span>
+                  <span> ddddld..d.dd..d./ X ID</span>
+                </div>
+                <img
+                  class="ml-auto cursor-p"
+                  src="/img/booster/svg/copy.svg"
+                  width="24"
+                  alt=""
+                />
               </div>
-              <img class="ml-auto" src="" width="24" alt="" />
-            </div>
-            <div class="invite-panel-basic-item d-flex align-center fz-14">
-              <div>
-                <span>Invite link:</span>
-                <span> ddddld..d.dd..d./ X ID</span>
+              <div class="invite-panel-basic-item d-flex align-center fz-14">
+                <div>
+                  <span>Invite link:</span>
+                  <span> ddddld..d.dd..d./ X ID</span>
+                </div>
+                <img
+                  class="ml-auto cursor-p"
+                  src="/img/booster/svg/expanded.svg"
+                  width="24"
+                  alt=""
+                />
               </div>
-              <img class="ml-auto" src="" width="24" alt="" />
-            </div>
-            <div class="invite-panel-basic-item d-flex align-center fz-14">
-              <div>
-                <span>Invite link:</span>
-                <span> ddddld..d.dd..d./ X ID</span>
+              <div class="invite-panel-basic-item d-flex align-center fz-14">
+                <div>
+                  <span>Invite link:</span>
+                  <span> ddddld..d.dd..d./ X ID</span>
+                </div>
+                <img class="ml-auto" src="" width="24" alt="" />
               </div>
-              <img class="ml-auto" src="" width="24" alt="" />
-            </div>
 
-            <div class="fz-12 invite-panel-basic-item-desc">
-              * You will get +10 capacity for every new booster you invited.
+              <div class="fz-12 invite-panel-basic-item-desc">
+                * You will get +10 capacity for every new booster you invited.
+              </div>
             </div>
           </div>
         </v-menu>
@@ -131,9 +148,79 @@
         <img src="/img/booster/svg/logo.svg" width="157" alt="" />
       </div>
       <div class="d-flex align-center">
-        <div class="mobile-btn pa-1">
-          <img src="/img/booster/svg/invite-user.svg" width="24" alt="" />
-        </div>
+        <v-menu
+          offset-y
+          content-class="mobile-inviter-menu"
+          :close-on-content-click="false"
+          min-width="100%"
+          nudge-bottom="10"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <div class="mobile-btn pa-1" v-on="on" v-bind="attrs">
+              <img src="/img/booster/svg/invite-user.svg" width="24" alt="" />
+            </div>
+          </template>
+          <div class="mobile-invite-panel">
+            <div class="mobile-invite-title mb-4">Invite</div>
+            <div class="mobile-invite-panel-content">
+              <div
+                class="mobile-invite-panel-basic-item d-flex align-center fz-14"
+              >
+                <div>
+                  <span>Invite link:</span>
+                  <span> ddddld..d.dd..d./ X ID</span>
+                </div>
+                <img
+                  class="ml-auto cursor-p"
+                  src="/img/booster/svg/copy.svg"
+                  width="24"
+                  alt=""
+                />
+              </div>
+              <div
+                class="mobile-invite-panel-basic-item d-flex align-center fz-14"
+              >
+                <div>
+                  <span>Invite link:</span>
+                  <span> ddddld..d.dd..d./ X ID</span>
+                </div>
+                <img
+                  class="ml-auto cursor-p"
+                  src="/img/booster/svg/copy.svg"
+                  width="24"
+                  alt=""
+                />
+              </div>
+              <div
+                class="mobile-invite-panel-basic-item d-flex align-center fz-14"
+              >
+                <div>
+                  <span>Invite link:</span>
+                  <span> ddddld..d.dd..d./ X ID</span>
+                </div>
+                <img
+                  class="ml-auto cursor-p"
+                  src="/img/booster/svg/expanded.svg"
+                  width="24"
+                  alt=""
+                />
+              </div>
+              <div
+                class="mobile-invite-panel-basic-item d-flex align-center fz-14"
+              >
+                <div>
+                  <span>Invite link:</span>
+                  <span> ddddld..d.dd..d./ X ID</span>
+                </div>
+                <img class="ml-auto" src="" width="24" alt="" />
+              </div>
+
+              <div class="fz-12 mobile-invite-panel-basic-item-desc">
+                * You will get +10 capacity for every new booster you invited.
+              </div>
+            </div>
+          </div>
+        </v-menu>
         <div class="mobile-btn ml-1 pa-1" @click="$emit('open-drawer')">
           <img src="/img/booster/svg/mobile-draw-icon.svg" width="24" alt="" />
         </div>
@@ -175,6 +262,44 @@ export default {
 </script>
 
 <style>
+.v-menu__content.theme--light.v-menu__content--fixed {
+  border: none !important;
+  border-radius: 0 !important;
+}
+.mobile-inviter-menu {
+  border: none;
+  border-radius: 0;
+}
+.mobile-invite-panel {
+  color: #fff;
+  padding: 16px;
+  background: linear-gradient(180deg, #202538 0%, #151928 100%);
+  backdrop-filter: blur(19.75px);
+}
+.mobile-invite-title {
+  font-size: 24px;
+  text-shadow: 0px 0px 8px #6172f3;
+}
+.mobile-invite-panel-content {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(
+      to right,
+      rgba(164, 188, 253, 0),
+      rgba(164, 188, 253, 1)
+    )
+    1;
+}
+.mobile-invite-panel-basic-item {
+  padding: 4px 0;
+  margin-bottom: 12px;
+  backdrop-filter: blur(2px);
+}
+.mobile-invite-panel-basic-item-desc {
+  padding: 4px 0;
+  backdrop-filter: blur(2px);
+  color: rgba(255, 255, 255, 0.4);
+}
 .inviter-menu {
   border-radius: 0;
 }
@@ -184,6 +309,16 @@ export default {
   width: 340px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: rgba(54, 59, 64, 0.9);
+}
+.invite-panel-content {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(
+      to right,
+      rgba(164, 188, 253, 0),
+      rgba(164, 188, 253, 1)
+    )
+    1;
 }
 .invite-panel-basic-item {
   padding: 4px 20px;
@@ -205,7 +340,7 @@ export default {
 }
 .nav-bar {
   z-index: 2;
-  position: fixed;
+  // position: fixed;
   width: 100%;
   top: 24px;
   .nav {
