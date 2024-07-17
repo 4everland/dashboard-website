@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <nft-drawer />
+    <!-- <nft-drawer /> -->
   </div>
 </template>
 
@@ -79,6 +79,45 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.corner {
+  position: relative;
+  .top-left {
+    position: absolute;
+    left: -1px;
+    top: -1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #fff;
+    border-width: 2px 0 0 2px;
+  }
+  .top-right {
+    position: absolute;
+    right: -1px;
+    top: -1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #fff;
+    border-width: 2px 2px 0 0;
+  }
+  .bottom-left {
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #fff;
+    border-width: 0 2px 2px 0;
+  }
+  .bottom-right {
+    position: absolute;
+    left: -1px;
+    bottom: -1px;
+    padding: 8px;
+    border-style: solid;
+    border-color: #fff;
+    border-width: 0 0 2px 2px;
+  }
+}
 .overview-activity {
   position: absolute;
   bottom: 24px;

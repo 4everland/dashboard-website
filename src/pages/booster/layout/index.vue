@@ -61,6 +61,7 @@
         </div>
       </div>
     </v-navigation-drawer>
+    <nft-drawer />
     <router-view></router-view>
   </div>
 </template>
@@ -68,9 +69,12 @@
 <script>
 import { mapState } from "vuex";
 import Navbar from "./nav-bar.vue";
+import NftDrawer from "../components/nft-drawer.vue";
+
 export default {
   components: {
     Navbar,
+    NftDrawer,
   },
   data() {
     return {
