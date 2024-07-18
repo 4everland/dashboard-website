@@ -340,7 +340,7 @@ export default {
 }
 .nav-bar {
   z-index: 2;
-  // position: fixed;
+  position: fixed;
   width: 100%;
   top: 24px;
   .nav {

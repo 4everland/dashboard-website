@@ -34,6 +34,16 @@ export default [
           noLogin: 1,
         },
       },
+      {
+        path: "/booster/test",
+        component: () => import("./newPage"),
+        meta: {
+          title: "newPage",
+          hideNav: 1,
+          isTab: 1,
+          noLogin: 1,
+        },
+      },
     ],
   },
 ];

@@ -8,6 +8,7 @@
         :key="index"
         @mouseenter="currentHoverIdx = index"
         @mouseleave="currentHoverIdx = -1"
+        @click="item.action"
       >
         <div class="d-flex align-center justify-space-between">
           <img :src="item.icon" :width="'48px'" alt="" />
@@ -31,6 +32,7 @@
 export default {
   components: {},
   data() {
+    let _this = this;
     return {
       activity: [
         {
@@ -38,30 +40,43 @@ export default {
           activityIcon: "/img/booster/svg/explore-active.svg",
           name: "Explore",
           path: "/booster/explore",
-        },
-        {
-          icon: "/img/booster/svg/explore.svg",
-          activityIcon: "/img/booster/svg/explore-active.svg",
-          name: "Explore",
-          path: "/booster/explore",
-        },
-        {
-          icon: "/img/booster/svg/tasks.svg",
-          activityIcon: "/img/booster/svg/tasks-active.svg",
-          name: "Tasks",
-          path: "/booster/explore",
+          action() {},
         },
         {
           icon: "/img/booster/svg/staking.svg",
           activityIcon: "/img/booster/svg/staking-active.svg",
           name: "Staking",
           path: "/booster/explore",
+          action() {
+            _this.toggleStakeDrawer();
+          },
         },
         {
           icon: "/img/booster/svg/explore.svg",
           activityIcon: "/img/booster/svg/explore-active.svg",
           name: "Explore",
           path: "/booster/explore",
+          action() {
+            console.log(_this);
+          },
+        },
+        {
+          icon: "/img/booster/svg/tasks.svg",
+          activityIcon: "/img/booster/svg/tasks-active.svg",
+          name: "Tasks",
+          path: "/booster/explore",
+          action() {
+            _this.toggleTaskDrawer();
+          },
+        },
+        {
+          icon: "/img/booster/svg/explore.svg",
+          activityIcon: "/img/booster/svg/explore-active.svg",
+          name: "Explore",
+          path: "/booster/explore",
+          action() {
+            console.log(_this);
+          },
         },
       ],
     };
@@ -69,6 +84,14 @@ export default {
   computed: {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+  },
+  methods: {
+    toggleStakeDrawer() {
+      this.$store.dispatch("StakeDrawerToggle");
+    },
+    toggleTaskDrawer() {
+      this.$store.dispatch("TaskDrawerToggle");
     },
   },
 };
