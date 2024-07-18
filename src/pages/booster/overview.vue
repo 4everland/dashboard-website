@@ -3,7 +3,7 @@
     <div style="position: relative">
       <img
         :src="asMobile ? '/img/booster/mobile-bg.png' : '/img/booster/bg.png'"
-        style="width: 100%; display: block"
+        style="max-height: 100vh; width: 100%; display: block"
         alt=""
       />
       <overview-pc @handleStartBoost="showStartBoost = true"></overview-pc>
@@ -13,6 +13,7 @@
       <deposit-dialog v-model="showDeposit"></deposit-dialog>
       <bottom-bar></bottom-bar>
       <nft-drawer></nft-drawer>
+      <task-drawer></task-drawer>
     </div>
   </div>
 </template>
@@ -24,6 +25,7 @@ import StartBoosting from "./components/start-boosting.vue";
 import EndBoosting from "./components/end-boosting.vue";
 import DepositDialog from "./components/deposit-dialog.vue";
 import NftDrawer from "./components/nft-drawer.vue";
+import TaskDrawer from "./components/task-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
 export default {
   data() {
@@ -45,6 +47,7 @@ export default {
     EndBoosting,
     DepositDialog,
     NftDrawer,
+    TaskDrawer,
     BottomBar,
   },
 };
@@ -56,5 +59,6 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 </style>
