@@ -16,6 +16,20 @@ const boosterRequest = new BaseRequest({
   },
 });
 
+export const fetchPreTaskActivity = async () => {
+  return boosterRequest.get({
+    url: `/node/activities/pre_tasks`,
+  });
+};
+export const onNext = async (id, payment = null) => {
+  return boosterRequest.post({
+    url: `/node/activities/${id}/onNext`,
+    data: {
+      payment,
+    },
+  });
+};
+
 export const fetchUserBoostInfo = async () => {
   return boosterRequest.post({
     url: "/node/node",
