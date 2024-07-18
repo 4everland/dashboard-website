@@ -50,7 +50,7 @@
 export default {
   data() {
     return {
-      drawer: true,
+      drawer: false,
       items: [
         { title: "Dashboard", icon: "mdi-view-dashboard" },
         { title: "Photos", icon: "mdi-image" },

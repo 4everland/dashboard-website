@@ -40,7 +40,7 @@
 
       <div
         v-if="!notLogin"
-        class="login-content user-info d-flex align-center justify-center px-4"
+        class="login-content user-info d-flex align-center px-4"
       >
         <e-team-avatar
           :src="userInfo.avatar"
@@ -49,17 +49,64 @@
         ></e-team-avatar>
         <div class="info-content">
           <div class="d-flex align-center">
-            <span class="fw-b fz-14"> 0xDD3..33e38 </span>
-            <img
-              class="cursor-p"
-              src="/img/booster/svg/down-arrow.svg"
-              width="12"
-              alt=""
-            />
+            <span class="fw-b fz-14">
+              {{ (userInfo.username || "unkown").cutStr(6, 4) }}
+            </span>
+            <v-menu
+              offset-y
+              content-class="user-menu"
+              left
+              nudge-right="243"
+              nudge-bottom="40"
+              :close-on-content-click="false"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <img
+                  v-on="on"
+                  v-bind="attrs"
+                  class="cursor-p"
+                  src="/img/booster/svg/down-arrow.svg"
+                  width="12"
+                  alt=""
+                />
+              </template>
+              <div class="user-panel">
+                <div
+                  class="user-panel-header d-flex align-center justify-space-between mb-1"
+                >
+                  <div>
+                    <span>LAND Balance: </span>
+
+                    <span>{{ balance.land }}</span>
+                    <span>{{ balance.unit }}</span>
+                    <span class="ml-1">LAND</span>
+                  </div>
+                  <v-btn color="#6172F3">
+                    <img
+                      src="/img/booster/svg/pig_bank.svg"
+                      width="16"
+                      alt=""
+                    />
+                    <span class="ml-1" style="color: #fff">Deposit</span>
+                  </v-btn>
+                </div>
+                <div
+                  class="logout d-flex align-center py-2 cursor-p"
+                  @click="handleLogout"
+                >
+                  <img width="24" src="/img/booster/menu/logout.svg" alt="" />
+                  <span class="fz-14 ml-2" style="color: #e2e8f0">Logout</span>
+                </div>
+              </div>
+            </v-menu>
           </div>
           <div class="balance fz-12">
             <span>LAND Balance:</span>
-            <span class="ml-1">99999K LAND</span>
+            <span>
+              {{ balance.land }}
+              {{ balance.unit }}
+              LAND</span
+            >
           </div>
         </div>
 
@@ -67,13 +114,17 @@
           offset-y
           content-class="inviter-menu"
           nudge-bottom="20"
+          left
+          nudge-left="-13"
           :close-on-content-click="false"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               style="background: rgba(255, 255, 255, 0.1)"
+              class="ml-auto"
               v-on="on"
               v-bind="attrs"
+              width="80"
             >
               <img src="/img/booster/svg/invite-user.svg" width="16" alt="" />
               <span class="ml-1" style="color: #fff">Invite</span>
@@ -134,7 +185,10 @@
       </div>
 
       <div v-else class="login-content d-flex align-center justify-center">
-        <v-btn style="background: rgba(255, 255, 255, 0.1)">
+        <v-btn
+          style="background: rgba(255, 255, 255, 0.1)"
+          @click="$router.push('/login')"
+        >
           <img src="/img/booster/svg/wallet.svg" width="16" alt="" />
           <span class="ml-1" style="color: #fff">Connect Wallet</span>
         </v-btn>
@@ -255,8 +309,19 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
     }),
+    ...mapGetters(["notLogin", "balance"]),
+  },
 
-    ...mapGetters(["notLogin"]),
+  created() {
+    if (!this.notLogin) {
+      this.$store.dispatch("getBalance");
+    }
+  },
+  methods: {
+    handleLogout() {
+      localStorage.clear();
+      location.reload();
+    },
   },
 };
 </script>
@@ -329,6 +394,24 @@ export default {
   padding: 4px 20px;
   backdrop-filter: blur(2px);
   color: rgba(255, 255, 255, 0.4);
+}
+
+.user-menu {
+  border-radius: 0;
+}
+
+.user-panel {
+  color: #fff;
+  padding: 24px 20px;
+  width: 340px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(54, 59, 64, 0.9);
+}
+
+.user-panel-header {
+  padding-bottom: 16px;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 </style>
 <style lang="scss" scoped>
@@ -432,7 +515,13 @@ export default {
 
     .user-info {
       gap: 8px;
+
+      .info-content {
+        padding-right: 16px;
+        border-right: 1px solid rgba(255, 255, 255, 0.25);
+      }
       .balance {
+        white-space: nowrap;
         color: #94a3b8;
       }
     }

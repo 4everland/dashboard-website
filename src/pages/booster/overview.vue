@@ -3,7 +3,7 @@
     <div style="position: relative">
       <img
         :src="asMobile ? '/img/booster/mobile-bg.png' : '/img/booster/bg.png'"
-        style="max-height: 100vh; width: 100%"
+        style="width: 100%; display: block"
         alt=""
       />
       <overview-pc @handleStartBoost="showStartBoost = true"></overview-pc>
