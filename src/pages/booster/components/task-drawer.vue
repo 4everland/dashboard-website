@@ -16,17 +16,18 @@
           <div class="drawer-title task-drawer-title">
             Daily Task: Claim LAND
           </div>
-          <div class="daily-sign-box">
-            <div v-for="n in 7" :key="n" class="daily-sign-item">
-              <div class="daily-sign-item-top">
-                <div>+1/H</div>
-                <div>
-                  <img src="/img/booster/drawer/coin.png" alt="" />
+          <div class="daily-sign">
+            <div class="daily-sign-box">
+              <div v-for="n in 7" :key="n" class="daily-sign-item">
+                <div class="daily-sign-item-top">
+                  <div class="point">+1/H</div>
+                  <div>
+                    <img src="/img/booster/drawer/coin.png" alt="" />
+                  </div>
                 </div>
+                <div class="daily-sign-item-bottom">Day 1</div>
               </div>
-              <div class="daily-sign-item-bottom">Day 1</div>
             </div>
-
             <v-btn class="drawer-btn"> Claim LAND </v-btn>
           </div>
         </div>
@@ -103,26 +104,39 @@ export default {
     .task-drawer-top {
       border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
-      .daily-sign-box {
+      .daily-sign {
+        margin-top: 16px;
         display: flex;
         align-items: center;
-        gap: 10px;
-        .daily-sign-item {
-          .daily-sign-item-top {
-            display: flex;
-            padding: 7px 7.5px 10px 7.5px;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-            border-radius: 100px;
-            background: rgba(255, 255, 255, 0.1);
-            img {
-              width: 24px;
-              height: 24px;
+        justify-content: space-between;
+        .daily-sign-box {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          .daily-sign-item {
+            .daily-sign-item-top {
+              display: flex;
+              padding: 7px 7.5px 10px 7.5px;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              gap: 5px;
+              border-radius: 100px;
+              background: rgba(255, 255, 255, 0.1);
+              .point {
+                font-size: 12px;
+              }
+              img {
+                width: 24px;
+                height: 24px;
+              }
             }
-          }
-          .daily-sign-item-bottom {
+            .daily-sign-item-bottom {
+              font-size: 12px;
+              opacity: 0.6;
+              text-align: center;
+              margin-top: 6px;
+            }
           }
         }
       }
