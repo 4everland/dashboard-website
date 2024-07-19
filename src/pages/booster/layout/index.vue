@@ -33,7 +33,7 @@
             </div>
           </div>
           <div class="pgb ml-auto">
-            <img src="/img/booster/svg/pig_bank.svg" width="24" alt="" />
+            < img src="/img/booster/svg/pig_bank.svg" width="24" alt="" />
           </div>
         </div>
 
@@ -45,7 +45,7 @@
             v-for="(it, i) in menuList"
             :key="i"
           >
-            <img class="mr-2" :src="it.icon" width="24" alt="" />
+            < img class="mr-2" :src="it.icon" width="24" alt="" />
             <span>{{ it.name }}</span>
           </div>
         </div>
