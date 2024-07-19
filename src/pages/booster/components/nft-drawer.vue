@@ -58,6 +58,7 @@
 </template>
 <script>
 import { mapGetters, mapState } from "vuex";
+import { fetchNftLists } from "@/api/booster.js";
 
 export default {
   computed: {
@@ -66,7 +67,15 @@ export default {
   data() {
     return {};
   },
+  created() {
+    this.getNftLists();
+  },
   methods: {
+    async getNftLists() {
+      fetchNftLists().then((res) => {
+        console.log(res);
+      });
+    },
     stateStakeDrawerShow(state) {
       this.$store.dispatch("StakeDrawerState", { state });
     },

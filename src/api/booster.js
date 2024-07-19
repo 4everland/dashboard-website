@@ -1,10 +1,10 @@
 import BaseRequest from "./request";
 
 const boosterRequest = new BaseRequest({
-  baseURL: process.env.VUE_APP_BASE_URL,
+  baseURL: process.env.VUE_APP_BOOSTER_URL,
   interceptors: {
     requestInterceptor(config) {
-      const token = localStorage.token;
+      const token = localStorage.nodeToken;
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -61,5 +61,17 @@ export const fetchLeaderboard = async (page, size = 10) => {
 export const fetchRemainingExploration = async () => {
   return boosterRequest.get({
     url: "/node/exploration/today",
+  });
+};
+
+export const fetchNftLists = async () => {
+  return boosterRequest.get({
+    url: "/node/nft/list",
+  });
+};
+
+export const fetchDailySign = async () => {
+  return boosterRequest.get({
+    url: "/node/activities/daily_sign",
   });
 };

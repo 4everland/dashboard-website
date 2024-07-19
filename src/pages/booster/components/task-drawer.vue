@@ -60,6 +60,7 @@
 </template>
 <script>
 import { mapGetters, mapState } from "vuex";
+import { fetchDailySign } from "@/api/booster.js";
 
 export default {
   computed: {
@@ -68,7 +69,15 @@ export default {
   data() {
     return {};
   },
+  created() {
+    this.getDailySign();
+  },
+  mounted() {},
   methods: {
+    async getDailySign() {
+      const { data } = await fetchDailySign();
+      console.log(data);
+    },
     stateTaskDrawerShow(state) {
       this.$store.dispatch("TaskDrawerState", { state });
     },
