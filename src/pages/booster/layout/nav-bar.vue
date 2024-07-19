@@ -42,78 +42,100 @@
         v-if="!notLogin"
         class="login-content user-info d-flex align-center px-4"
       >
-        <e-team-avatar
-          :src="userInfo.avatar"
-          :size="32"
-          :uid="userInfo.uid"
-        ></e-team-avatar>
-        <div class="info-content">
-          <div class="d-flex align-center">
-            <span class="fw-b fz-14">
-              {{ (userInfo.username || "unkown").cutStr(6, 4) }}
-            </span>
-            <v-menu
-              offset-y
-              content-class="user-menu"
-              left
-              nudge-right="243"
-              nudge-bottom="40"
-              :close-on-content-click="false"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <img
-                  v-on="on"
-                  v-bind="attrs"
-                  class="cursor-p"
-                  src="/img/booster/svg/down-arrow.svg"
-                  width="12"
-                  alt=""
-                />
-              </template>
-              <div class="user-panel">
-                <div
-                  class="user-panel-header d-flex align-center justify-space-between mb-1"
-                >
-                  <div>
-                    <span>LAND Balance: </span>
+        <div class="flex-1 d-flex align-center">
+          <e-team-avatar
+            :src="userInfo.avatar"
+            :size="32"
+            :uid="userInfo.uid"
+          ></e-team-avatar>
+          <div class="info-content flex-1">
+            <div class="d-flex align-center justify-space-between">
+              <span class="fw-b fz-14 ml-2">
+                {{ (userInfo.username || "unkown").cutStr(6, 4) }}
+              </span>
 
-                    <span>{{ balance.land }}</span>
-                    <span>{{ balance.unit }}</span>
-                    <span class="ml-1">LAND</span>
+              <v-menu
+                offset-y
+                content-class="user-menu"
+                left
+                nudge-right="118"
+                nudge-bottom="20"
+                :close-on-content-click="false"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <div v-on="on" v-bind="attrs">
+                    <div class="d-flex align-center">
+                      <img
+                        width="16"
+                        src="/img/booster/4ever-point-icon.png"
+                        alt=""
+                      />
+                      <span class="points mx-1">44,002</span>
+                      <img
+                        src="/img/booster/svg/down-arrow.svg"
+                        width="12"
+                        alt=""
+                      />
+                    </div>
                   </div>
-                  <v-btn color="#6172F3">
-                    <img
-                      src="/img/booster/svg/pig_bank.svg"
-                      width="16"
-                      alt=""
-                    />
-                    <span class="ml-1" style="color: #fff">Deposit</span>
-                  </v-btn>
+                </template>
+                <div class="user-panel">
+                  <div class="user-panel-header">
+                    <div
+                      class="d-flex align-center justify-space-between py-2 mb-2"
+                    >
+                      <div>Total $4EVER points</div>
+                      <div class="d-flex align-center">
+                        <img
+                          width="16"
+                          src="/img/booster/4ever-point-icon.png"
+                          alt=""
+                        />
+                        <span class="points mx-1">44,002</span>
+                        <img
+                          srcset="/img/booster/svg/log.svg"
+                          width="16"
+                          src=""
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                    <div class="d-flex align-center justify-space-between py-2">
+                      <div>
+                        <span>LAND Balance: </span>
+                        <span>{{ balance.land }}</span>
+                        <span>{{ balance.unit }}</span>
+                        <span class="ml-1">LAND</span>
+                      </div>
+                      <v-btn color="#6172F3">
+                        <img
+                          src="/img/booster/svg/pig_bank.svg"
+                          width="16"
+                          alt=""
+                        />
+                        <span class="ml-1" style="color: #fff">Deposit</span>
+                      </v-btn>
+                    </div>
+                  </div>
+                  <div
+                    class="logout d-flex align-center py-2 cursor-p"
+                    @click="handleLogout"
+                  >
+                    <img width="24" src="/img/booster/menu/logout.svg" alt="" />
+                    <span class="fz-14 ml-2" style="color: #e2e8f0"
+                      >Logout</span
+                    >
+                  </div>
                 </div>
-                <div
-                  class="logout d-flex align-center py-2 cursor-p"
-                  @click="handleLogout"
-                >
-                  <img width="24" src="/img/booster/menu/logout.svg" alt="" />
-                  <span class="fz-14 ml-2" style="color: #e2e8f0">Logout</span>
-                </div>
-              </div>
-            </v-menu>
-          </div>
-          <div class="balance fz-12">
-            <span>LAND Balance:</span>
-            <span>
-              {{ balance.land }}
-              {{ balance.unit }}
-              LAND</span
-            >
+              </v-menu>
+            </div>
           </div>
         </div>
 
         <v-menu
           offset-y
           content-class="inviter-menu"
-          nudge-bottom="20"
+          nudge-bottom="15"
           left
           nudge-left="-13"
           :close-on-content-click="false"
@@ -396,22 +418,12 @@ export default {
   color: rgba(255, 255, 255, 0.4);
 }
 
-.user-menu {
-  border-radius: 0;
-}
-
 .user-panel {
   color: #fff;
   padding: 24px 20px;
   width: 340px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: rgba(54, 59, 64, 0.9);
-}
-
-.user-panel-header {
-  padding-bottom: 16px;
-  font-size: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 </style>
 <style lang="scss" scoped>
@@ -421,6 +433,22 @@ export default {
     height: 64px;
   }
 }
+::v-deep .user-menu {
+  border-radius: 0;
+}
+::v-deep .user-panel-header {
+  padding-bottom: 16px;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+.points {
+  color: #6172f3;
+  font-family: "DIN Alternate";
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px; /* 120% */
+}
+
 .nav-bar {
   z-index: 2;
   position: fixed;

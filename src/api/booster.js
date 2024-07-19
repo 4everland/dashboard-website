@@ -57,3 +57,9 @@ export const fetchLeaderboard = async (page, size = 10) => {
     url: `/node/node/leaderboard?page=${page}&size=${size}`,
   });
 };
+
+export const fetchRemainingExploration = async () => {
+  return boosterRequest.get({
+    url: "/node/exploration/today",
+  });
+};
