@@ -34,6 +34,16 @@ export default [
           noLogin: 1,
         },
       },
+      {
+        path: "/booster/explore",
+        component: () => import("./explore"),
+        meta: {
+          title: "Explore",
+          hideNav: 1,
+          isTab: 1,
+          noLogin: 1,
+        },
+      },
     ],
   },
 ];
