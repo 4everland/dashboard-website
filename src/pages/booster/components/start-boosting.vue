@@ -153,6 +153,7 @@
 </template>
 
 <script>
+import { fetchPreTaskActivity } from "@/api/booster";
 export default {
   props: {
     value: Boolean,
@@ -165,6 +166,18 @@ export default {
   computed: {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+  },
+  created() {
+    this.getTaskList();
+  },
+  methods: {
+    async getTaskList() {
+      try {
+        await fetchPreTaskActivity();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

@@ -1,3 +1,4 @@
+import { fetchUserBoostInfo } from "@/api/booster";
 export default {
   state: () => ({
     points: "",
@@ -39,6 +40,15 @@ export default {
     },
     TaskDrawerToggle: async (context, payload) => {
       context.commit("TASKDRAWER_TOGGLE", payload);
+    },
+
+    async getBoosterUserInfo() {
+      try {
+        const data = await fetchUserBoostInfo();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
