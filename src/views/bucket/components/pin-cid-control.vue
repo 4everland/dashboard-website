@@ -288,6 +288,12 @@ export default {
 };
 </script>
 
+<style>
+.vue-recycle-scroller__item-wrapper .vue-recycle-scroller__item-view.hover {
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+</style>
 <style lang="scss" scoped>
 .scroller {
   height: 100%;

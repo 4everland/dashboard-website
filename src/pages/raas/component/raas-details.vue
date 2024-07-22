@@ -394,7 +394,7 @@ export default {
             line-height: normal;
           }
           .raas-rpc-item-content {
-            color: #735ea1;
+            color: var(--v-primary-base);
             font-family: "SF Pro Text";
             font-size: 16px;
             font-style: normal;

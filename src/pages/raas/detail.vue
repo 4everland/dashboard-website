@@ -334,8 +334,8 @@ export default {
   }
 }
 .renew-item-active {
-  border: 1px solid #735ea1;
-  background: #f3e8ff;
+  border: 1px solid var(--v-primary-base);
+  background: var(--v-background2-base);
 }
 .chain-detail {
   .chain-info-box {

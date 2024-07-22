@@ -1,6 +1,9 @@
 <template>
   <v-app-bar app height="64" color="#fff" elevation="0">
-    <v-app-bar-nav-icon @click="$setMsg('showDrawer')"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon
+      class="d-block d-lg-none"
+      @click="$setMsg('showDrawer')"
+    ></v-app-bar-nav-icon>
     <a href="/">
       <img v-if="asMobile" src="/img/svg/logo-m.svg" width="46" alt="" />
     </a>

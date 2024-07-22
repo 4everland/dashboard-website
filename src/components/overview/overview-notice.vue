@@ -30,16 +30,14 @@
                 small
                 width="100"
                 light
-                color="#735ea1"
-                class="invitation-btn"
+                class="invitation-btn primary--text"
                 @click="handleInvitation(item.id, true)"
                 >Join</v-btn
               >
               <v-btn
                 small
                 width="100"
-                class="ml-4"
-                color="#735ea1"
+                class="ml-4 primary--text"
                 outlined
                 @click="handleInvitation(item.id, false)"
                 >Cancel</v-btn
@@ -62,7 +60,7 @@
         </template>
       </v-carousel-item>
     </v-carousel>
-    <v-icon size="20" color="#735ea1" @click="handleCloseNotice"
+    <v-icon size="20" class="primary--text" @click="handleCloseNotice"
       >mdi-close</v-icon
     >
   </div>
@@ -176,15 +174,12 @@ export default {
   height: 50px;
   padding: 0 20px;
   border-radius: 10px;
-  background: #f3e8ff;
-
-  // box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
-  //   0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  background: var(--v-background2-base);
 }
 .notice-content {
   height: 100%;
   .message {
-    color: #735ea1;
+    color: var(--v-primary-base);
   }
 }
 ::v-deep .invitation-btn .v-btn__content {

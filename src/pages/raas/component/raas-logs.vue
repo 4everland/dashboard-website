@@ -113,7 +113,7 @@ export default {
       }
       .active {
         font-weight: 700;
-        color: #735ea1;
+        color: #fff;
         border: 1px solid rgba(115, 94, 161, 0.25);
         background: #f3e8ff;
       }

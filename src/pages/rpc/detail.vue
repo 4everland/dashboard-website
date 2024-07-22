@@ -86,7 +86,7 @@
           target="_blank"
           rel="noopener noreferrer"
           style="
-            color: #735ea1;
+            color: #6172f3;
             font-size: 14px;
             font-weight: 400;
             text-decoration-line: underline;
@@ -473,8 +473,8 @@ export default {
   }
   .top-tips {
     border-radius: 4px;
-    background: #f3e8ff;
-    color: #735ea1;
+    background: var(--v-background2-base);
+    color: var(--v-primary-base);
     font-size: 14px;
     font-weight: 400;
     display: flex;
@@ -482,7 +482,7 @@ export default {
     justify-content: space-between;
     align-items: center;
     .text-link {
-      color: #735ea1;
+      color: var(--v-primary-base);
       font-size: 14px;
       font-weight: 700;
       text-decoration-line: underline;
@@ -546,7 +546,7 @@ export default {
           padding: 8px;
           align-items: center;
           gap: 464px;
-          background: #735ea1;
+          background: #6172f3;
           cursor: pointer;
         }
       }

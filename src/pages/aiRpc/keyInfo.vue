@@ -504,7 +504,7 @@ input[type="number"] {
 .status-tab.active {
   border: 1px solid rgba(115, 94, 161, 0.25);
   background: #f3e8ff;
-  color: #735ea1;
+  color: #fff;
   font-weight: bold;
 }
 .limit-ipt {

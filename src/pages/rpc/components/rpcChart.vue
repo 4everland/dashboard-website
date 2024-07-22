@@ -119,7 +119,7 @@ export default {
         tooltip: {
           trigger: "axis",
         },
-        color: ["#735EA1"],
+        color: [this.$color1],
       };
       if (option && typeof option === "object") {
         myChart.setOption(option);

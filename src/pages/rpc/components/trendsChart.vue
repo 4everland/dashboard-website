@@ -135,7 +135,7 @@ export default {
             return timeFliter + "<br />" + params[0].marker + " " + value;
           },
         },
-        color: ["#735EA1"],
+        color: [this.$color1],
       };
       if (option && typeof option === "object") {
         myChart.setOption(option);

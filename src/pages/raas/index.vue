@@ -12,7 +12,7 @@
             Create</v-btn
           >
         </e-right-opt-wrap>
-        <rollup-list :rollup-data="rollupData" />
+        <rollup-list class="mt-5" :rollup-data="rollupData" />
       </div>
     </div>
   </div>

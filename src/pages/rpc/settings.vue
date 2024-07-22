@@ -76,7 +76,7 @@
             href="https://docs.4everland.org/rpc-beta/json-web-token-jwt"
             target="_blank"
             rel="noopener noreferrer"
-            class="text-link ml-6"
+            class="text-link ml-6 primary--text"
             >What's JWT?</a
           >
         </v-col>
