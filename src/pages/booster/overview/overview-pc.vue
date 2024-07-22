@@ -259,7 +259,7 @@
 export default {
   data() {
     return {
-      locked: false,
+      locked: true,
     };
   },
   computed: {
