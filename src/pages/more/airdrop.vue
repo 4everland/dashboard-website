@@ -97,6 +97,34 @@
           <div class="task-list mt-6">
             <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
+                <img src="/img/airDrop/elite-airdrop.png" width="100%" alt="" />
+              </div>
+              <div class="pa-6 task-desc h-flex">
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="handleToElite"
+                >
+                  Dive into the AI World with Aperture Finance, Chainbase, and
+                  4EVERLAND!
+                </div>
+                <div class="fz-14 mt-4">
+                  Seize the opportunity to win 600 USDT and 50,000 $4EVER Points
+                  in our exclusive giveaway. Only 100 lucky winners will take
+                  home these incredible rewards.
+                </div>
+                <div class="mt-8 al-c space-btw">
+                  <div class="reward fz-20 fw-b">
+                    Shared Reward of 600 USDT & 50,000 $4EVER Points
+                  </div>
+                  <v-btn color="#039CFF" @click="handleToElite">
+                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  </v-btn>
+                </div>
+              </div>
+            </div>
+
+            <div class="task-item d-flex mb-4">
+              <div class="pa-6 task-img-wrap">
                 <img
                   src="/img/airDrop/bountyBay-airdrop.png"
                   width="100%"
@@ -385,6 +413,9 @@ export default {
       window.open(
         "https://t.me/bountybay_bot/deals?startapp=campaign_recGjT1wPikWAC7sM"
       );
+    },
+    handleToElite() {
+      window.open("https://app.galxe.com/quest/4EVERLAND/GCKdetkwbs");
     },
   },
 };
