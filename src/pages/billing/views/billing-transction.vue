@@ -1,6 +1,6 @@
 <template>
   <div class="billing-transction pos-r">
-    <div style="width: 150px" class="mt-4">
+    <div style="width: 160px" class="mt-4">
       <e-date-pick
         outlined
         dense

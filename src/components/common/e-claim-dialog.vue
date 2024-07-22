@@ -24,7 +24,7 @@
               @timeOver="timeOver"
             ></time-count-down>
           </div>
-          <div class="fw-b">
+          <div class="fw-b task-hub-text">
             Complete your first deposit to unlock the following benefts.
           </div>
           <div class="fz-14 task-hub-description">starting from $1</div>
@@ -32,13 +32,13 @@
           <div
             v-for="(item, index) in firstRechargeItems"
             :key="index"
-            class="mt-4 recharge-item al-c"
+            class="mt-1 mt-md-4 recharge-item al-c"
           >
             <div class="pa-2 al-c space-btw mr-4 img-icon">
-              <img :src="item.img" alt="" />
+              <img :width="asMobile ? 24 : 40" :src="item.img" alt="" />
             </div>
             <div>
-              <div class="primary--text fw-b fz-16">
+              <div class="primary--text fw-b fz-16 recharge-item-title">
                 {{ item.title }}
               </div>
               <div class="recharge-item-description fz-12">
@@ -47,7 +47,7 @@
             </div>
           </div>
           <div
-            class="d-flex flex-column flex-md-row justify-center mt-8"
+            class="d-flex flex-column flex-md-row justify-center mt-2 mt-md-8"
             style="gap: 8px"
           >
             <div
@@ -98,19 +98,19 @@
             Web3 journey.
           </div>
 
-          <div class="mt-6">
+          <div class="mt-2 mt-md-6">
             <h3 class="fz-16">Unlock new benefits</h3>
             <div class="d-flex flex-column flex-md-row">
-              <v-row>
+              <v-row no-gutters>
                 <v-col
                   cols="12"
                   sm="6"
                   v-for="item in items"
                   :key="item.name"
-                  class="d-flex align-center"
+                  class="d-flex align-center pa-1"
                 >
                   <div class="img-icon al-c space-btw pa-2">
-                    <img height="40" :src="item.img" alt="" />
+                    <img :height="asMobile ? 24 : 40" :src="item.img" alt="" />
                   </div>
                   <div class="ml-3 fz-14">
                     {{ item.name }}
@@ -120,7 +120,10 @@
             </div>
           </div>
 
-          <div class="d-flex flex-column flex-md-row mt-8" style="gap: 8px">
+          <div
+            class="d-flex flex-column flex-md-row mt-2 mt-md-6"
+            style="gap: 8px"
+          >
             <div class="flex-2">
               <e-menu
                 ref="menu"
@@ -255,11 +258,13 @@ export default {
         },
       ];
     },
-
     showComponent() {
       return (
         !/quest/g.test(this.$route.path) && !/claim/g.test(this.$route.path)
       );
+    },
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
     },
   },
   data() {
@@ -484,8 +489,30 @@ export default {
   .first-recharge {
     background: none !important;
   }
+  .mint-title {
+    font-size: 20px !important;
+  }
   .mint-content {
     background: none !important;
+  }
+  .mint-description {
+    font-size: 12px !important;
+  }
+
+  .task-hub-title {
+    font-size: 20px !important;
+  }
+  .task-hub-text {
+    font-size: 14px;
+  }
+  .give-up-btn {
+    padding: 12px !important;
+  }
+  .deposit-now-btn {
+    padding: 12px !important;
+  }
+  .recharge-item-title {
+    font-size: 14px !important;
   }
 }
 
@@ -558,12 +585,12 @@ export default {
   color: #64748b;
   border-radius: 8px;
   text-align: center;
-  padding: 16px 0;
+  padding: 8px 0;
   border: 1px solid #cbd5e1;
   background: #fff;
 }
 .mint-btn {
-  padding: 16px 0;
+  padding: 12px 0;
   color: #fff;
   border-radius: 8px;
 }

@@ -232,14 +232,14 @@
           <div class="al-c">
             <div
               class="status-tab"
-              :class="{ active: isActived }"
+              :class="{ trigger: isActived }"
               @click="isActived = true"
             >
               Active
             </div>
             <div
               class="status-tab ml-2"
-              :class="{ active: !isActived }"
+              :class="{ trigger: !isActived }"
               @click="isActived = false"
             >
               Inactive
@@ -501,10 +501,10 @@ input[type="number"] {
   border: 1px solid #cbd5e1;
   cursor: pointer;
 }
-.status-tab.active {
-  border: 1px solid rgba(115, 94, 161, 0.25);
-  background: #f3e8ff;
-  color: #fff;
+.status-tab.trigger {
+  border: 1px solid var(--v-border2-base);
+  background: var(--v-background2-base);
+  color: var(--v-primary-base);
   font-weight: bold;
 }
 .limit-ipt {

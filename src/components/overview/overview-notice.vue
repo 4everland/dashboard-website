@@ -30,7 +30,7 @@
                 small
                 width="100"
                 light
-                class="invitation-btn primary--text"
+                class="invitation-btn primary"
                 @click="handleInvitation(item.id, true)"
                 >Join</v-btn
               >
@@ -182,6 +182,12 @@ export default {
     color: var(--v-primary-base);
   }
 }
+// @media screen and (max-width: 600px) {
+//   .message {
+//     font-size: 12px;
+//   }
+// }
+
 ::v-deep .invitation-btn .v-btn__content {
   color: #fff;
 }

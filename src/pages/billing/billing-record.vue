@@ -1,5 +1,5 @@
 <template>
-  <div class="billing-records-container main-wrap">
+  <div class="billing-records-container">
     <billing-tabs
       class=""
       :tabs="['Monthly Bill', 'Bill Details', 'Deposit History']"
@@ -27,14 +27,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.notice {
-  color: #735ea1;
-
-  border-radius: 4px;
-  background: #f3e8ff;
-  a {
-    text-decoration: underline;
-    color: #735ea1;
+@media screen and (max-width: 960px) {
+  .billing-records-container {
+    padding: 12px !important;
   }
+}
+.billing-records-container {
+  padding: 26px 32px;
 }
 </style>

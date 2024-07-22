@@ -1,5 +1,5 @@
 <template>
-  <div class="pos-r al-c" style="width: 328px">
+  <div class="pos-r al-c pie-content">
     <div id="pie"></div>
     <div class="pos-a data ta-c">
       <div v-if="showName" class="data-title">Consumption for this month</div>
@@ -150,6 +150,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.pie-content {
+  width: 100%;
+}
 #pie {
   width: 100%;
   height: 100%;
@@ -164,7 +167,6 @@ export default {
   .data-title {
     color: #0f172a;
     text-align: center;
-    font-family: "SF Pro Text";
     font-size: 16px;
     font-style: normal;
     font-weight: 700;

@@ -187,7 +187,7 @@
             ></e-drawer-icon>
             <v-list-item-content>
               <v-list-item-title class="d-flex al-c">
-                <b class="fz-14">{{ it.label }}</b>
+                <span class="fz-14">{{ it.label }}</span>
                 <img
                   v-if="it.suffixImg"
                   class="ml-2"

@@ -6,7 +6,7 @@
           v-for="(item, index) in btnList"
           :key="item.type"
           class="type-btn"
-          :class="btnActive == index ? 'active' : ''"
+          :class="btnActive == index ? 'trigger' : ''"
           elevation="0"
           @click="chooseType(item, index)"
           >{{ item.text }}</v-btn
@@ -111,11 +111,11 @@ export default {
         border: 1px solid #cbd5e1;
         background: #fff;
       }
-      .active {
+      .trigger {
         font-weight: 700;
-        color: #fff;
-        border: 1px solid rgba(115, 94, 161, 0.25);
-        background: #f3e8ff;
+        color: var(--v-primary-base);
+        border: 1px solid var(--v-border2-base);
+        background: var(--v-background2-base);
       }
     }
   }

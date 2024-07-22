@@ -814,10 +814,10 @@ export default {
     border-radius: 4px;
     background: linear-gradient(
         307deg,
-        rgba(151, 71, 255, 0.8) 37.75%,
-        rgba(115, 94, 161, 0.8) 93.02%
+        rgba(110, 88, 242, 0.8) 37.75%,
+        rgba(105, 65, 198, 0.8) 93.02%
       ),
-      #735ea1;
+      var(--color-font-brand, #6172f3);
   }
   .variable {
     color: #0f172a;

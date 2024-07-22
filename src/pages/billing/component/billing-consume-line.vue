@@ -58,7 +58,7 @@ export default {
           ],
         },
         grid: {
-          top: "10%",
+          top: "20%",
           left: "3%",
           right: "4%",
           bottom: "3%",

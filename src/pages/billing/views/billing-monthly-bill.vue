@@ -1,6 +1,6 @@
 <template>
   <div class="billing-monthly-bill-container pos-r">
-    <div style="width: 100px">
+    <div style="width: 100px" class="mb-6">
       <v-select
         class="hide-msg bd-1"
         dense
@@ -10,7 +10,10 @@
         @change="getList"
       />
     </div>
-    <div class="d-flex" v-if="list.length">
+    <div
+      class="billing-monthly-bill-content d-flex flex-column-reverse flex-md-row"
+      v-if="list.length"
+    >
       <billing-table class="flex-1">
         <thead>
           <tr>
@@ -33,7 +36,7 @@
         </tbody>
       </billing-table>
 
-      <div class="pie-info ml-6" v-if="curData">
+      <div class="pie-info" v-if="curData">
         <BillingMonthlyPie :curInfo="curData" />
       </div>
     </div>
@@ -127,18 +130,27 @@ export default {
 <style lang="scss" scoped>
 .billing-monthly-bill-container {
   min-height: 77vh;
+  margin-top: 24px;
 }
 .no-date {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
+.billing-monthly-bill-content {
+  gap: 24px;
+  flex-direction: row-reverse;
+}
+
+@media screen and (max-width: 960px) {
+  .pie-info {
+    width: 100% !important;
+  }
+}
 .pie-info {
   width: 368px;
-  height: 400px;
   display: flex;
   padding: 16px;
-  margin-top: 80px;
   flex-direction: column;
   align-items: flex-start;
   gap: 24px;
