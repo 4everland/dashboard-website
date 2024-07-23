@@ -159,7 +159,10 @@
                 <img src="/img/airDrop/tp-airdrop.png" width="100%" alt="" />
               </div>
               <div class="pa-6 task-desc h-flex">
-                <div class="fz-20 fw-b cursor-p text-white" @click="handleToTp">
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="$router.push('/quest/tp')"
+                >
                   5M $4EVER Points Giveaway with TokenPocket
                 </div>
                 <div class="fz-14 mt-4">
@@ -172,8 +175,8 @@
                   <div class="reward fz-20 fw-b">
                     Shared Reward of 5 Million Points
                   </div>
-                  <v-btn color="#039CFF" @click="handleToTp">
-                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  <v-btn color="#039CFF" @click="$router.push('/quest/tp')">
+                    <span class="fw-b" style="color: #fff">Claim</span>
                   </v-btn>
                 </div>
               </div>

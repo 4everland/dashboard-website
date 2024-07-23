@@ -83,6 +83,16 @@ export default [
     },
   },
   {
+    path: "/quest/tp",
+    component: () => import("./tp-airdrop"),
+    meta: {
+      title: "TP QUEST",
+      hideNav: 1,
+      isTab: 1,
+      noLogin: 1,
+    },
+  },
+  {
     path: "/claim",
     component: () => import("./claim-activity"),
     meta: {
