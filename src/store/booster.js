@@ -17,6 +17,15 @@ export default {
   getters: {
     showStakeDrawer: (state) => state.showStakeDrawer,
     showTaskDrawer: (state) => state.showTaskDrawer,
+    boostLocked({ boosterInfo }) {
+      return boosterInfo.baseRate.length == 0;
+    },
+    baseRate({ boosterInfo }) {
+      return boosterInfo.baseRate.reduce((prev, it) => it.rate + prev, 0);
+    },
+    boostRate({ boosterInfo }) {
+      return boosterInfo.boosts.reduce((prev, it) => it.rate + prev, 0);
+    },
   },
   mutations: {
     SHOWSTAKEDRAWER_STATE: (state, payload) => {

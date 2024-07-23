@@ -45,7 +45,7 @@ export const initBoost = async (code) => {
 export const unlockStage = async (index, inviteCode = null) => {
   const stages = ["storage", "network", "compute"];
   return boosterRequest.post({
-    url: `/node/node/stage/${stages[index]}`,
+    url: `/node/stage/${stages[index]}`,
     data: {
       invite_code: inviteCode,
     },

@@ -6,13 +6,13 @@
     >
       <div class="rate-box">
         <img src="/img/booster/3d-square.png" width="40" alt="" />
-        <span class="text fw-b">50/H</span>
+        <span class="text fw-b">{{ totalRate }}/H</span>
       </div>
-      <span> Points 44,002k </span>
+      <span> Points {{ boosterInfo.totalPoint }} </span>
       <img src="" alt="" />
     </div>
     <img
-      v-if="locked"
+      v-if="boostLocked"
       class="start-booster-btn"
       @click="$emit('handleStartBoost')"
       src="/img/booster/mobile/mobile-boost-start.png"
@@ -36,7 +36,7 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="text-center fz-12">
-                <div class="unlock-btn">Unlock</div>
+                <div class="unlock-btn" @click="handleUnlock(0)">Unlock</div>
                 <div>Unlock with 50,000 LAND</div>
               </div>
 
@@ -65,7 +65,7 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="text-center fz-12">
-                <div class="unlock-btn">Unlock</div>
+                <div class="unlock-btn" @click="handleUnlock(1)">Unlock</div>
                 <div>Unlock with 50,000 LAND</div>
               </div>
               <div class="task-title">Computing Boost</div>
@@ -98,7 +98,7 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="text-center fz-12">
-                <div class="unlock-btn">Unlock</div>
+                <div class="unlock-btn" @click="handleUnlock(2)">Unlock</div>
                 <div>Unlock with 50,000 LAND</div>
               </div>
               <div class="task-title">Network Boost</div>
@@ -115,7 +115,7 @@
           <div style="width: 10px; height: 10px"></div>
         </div>
         <div class="top-card">
-          <span class="points fz-14"> 31/10000 </span>
+          <span class="points fz-14"> 31/{{ boosterInfo.capacity }} </span>
           <img src="/img/booster/3d-square.png" width="64" alt="" />
         </div>
       </div>
@@ -126,22 +126,40 @@
 
 <script>
 import MobilePointsSheet from "../components/mobile-points-sheet.vue";
+import { mapGetters, mapState } from "vuex";
+import { unlockStage } from "@/api/booster";
 export default {
   data() {
-    return {
-      locked: true,
-    };
+    return {};
   },
 
   computed: {
+    ...mapState({
+      boosterInfo: (s) => s.moduleBooster.boosterInfo,
+    }),
+    ...mapGetters(["boostLocked", "baseRate", "boostRate"]),
+    totalRate() {
+      return (
+        (this.baseRate + this.boostRate) * (1 + this.boosterInfo.rateBuff / 100)
+      );
+    },
+    storageBoost() {
+      return this.boosterInfo.baseRate.filter((it) => it.name == "storage");
+    },
+    networkBoost() {
+      return this.boosterInfo.baseRate.filter((it) => it.name == "network");
+    },
+    computeBoost() {
+      return this.boosterInfo.baseRate.filter((it) => it.name == "compute");
+    },
     storageLocked() {
-      return true;
+      return this.storageBoost.length == 0;
     },
     networkLocked() {
-      return true;
+      return this.networkBoost.length == 0;
     },
     computingLocked() {
-      return true;
+      return this.computeBoost.length == 0;
     },
   },
   components: {
@@ -150,6 +168,14 @@ export default {
   methods: {
     handleOpenSheet() {
       this.$refs.pointsSheet.sheet = true;
+    },
+    async handleUnlock(index) {
+      try {
+        const { data } = await unlockStage(index);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
