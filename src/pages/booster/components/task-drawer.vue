@@ -18,37 +18,54 @@
           </div>
           <div class="daily-sign">
             <div class="daily-sign-box">
-              <div v-for="n in 7" :key="n" class="daily-sign-item">
+              <div
+                v-for="(item, index) in signList"
+                :key="index"
+                class="daily-sign-item"
+              >
                 <div class="daily-sign-item-top">
-                  <div class="point">+1/H</div>
+                  <div class="point">+{{ item.reward }}/H</div>
                   <div>
                     <img src="/img/booster/drawer/coin.png" alt="" />
                   </div>
                 </div>
-                <div class="daily-sign-item-bottom">Day 1</div>
+                <div class="daily-sign-item-bottom">Day {{ item.step }}</div>
               </div>
             </div>
-            <v-btn class="drawer-btn"> Claim LAND </v-btn>
+            <v-btn class="drawer-btn" @click="onSign"> Claim LAND </v-btn>
           </div>
         </div>
         <div class="task-box">
           <v-row no-gutters style="gap: 18px 0">
-            <v-col v-for="(n, i) in 13" :key="n" cols="12">
+            <v-col
+              v-for="(item, index) in tasksLists"
+              :key="item.actId"
+              cols="12"
+            >
               <div class="task-item-box">
                 <div class="task-item-left">
                   <img
                     class="task-item-image"
-                    :src="`/img/booster/nft/badge_${i}_1.png`"
+                    :src="`/img/booster/nft/badge_${index}_1.png`"
                     alt=""
                   />
                   <div class="task-text-box">
-                    <div class="task-name">Invite a new booster</div>
+                    <div class="task-name">{{ item.actName }}</div>
                     <div class="task-desc">+3/H, valid for 24 hours</div>
                   </div>
                 </div>
 
                 <div class="task-item-right">
-                  <v-btn class="drawer-btn">Claim</v-btn>
+                  <v-btn
+                    v-if="item.actStatus == 'UNDO'"
+                    class="drawer-btn"
+                    @click="stepNext(item)"
+                    >{{ item.extra.buttonName }}</v-btn
+                  >
+                  <!-- <v-btn class="go-btn">Go</v-btn> -->
+                  <v-btn v-if="item.actStatus == 'DONE'" class="done-btn"
+                    >Done</v-btn
+                  >
                 </div>
               </div>
             </v-col>
@@ -60,23 +77,53 @@
 </template>
 <script>
 import { mapGetters, mapState } from "vuex";
-import { fetchDailySign } from "@/api/booster.js";
+import { fetchDailySign, fetchTasks, onNext } from "@/api/booster.js";
 
 export default {
   computed: {
     ...mapGetters(["showTaskDrawer"]),
   },
   data() {
-    return {};
+    return {
+      signList: [],
+      tasksLists: [],
+    };
   },
   created() {
     this.getDailySign();
+    this.getTasks();
   },
   mounted() {},
   methods: {
     async getDailySign() {
       const { data } = await fetchDailySign();
+      const rewardList = data.items[0].extra.dailySign.rewardList;
+      const stepList = data.items[0].extra.dailySign.stepList;
+      const signDays = data.items[0].extra.dailySign.continuous;
+      let signList = [];
+      rewardList.forEach((element, index) => {
+        signList.push({
+          reward: element,
+          step: stepList[index],
+          signDays: signDays,
+        });
+      });
+      console.log(signList);
+      this.signList = signList;
+    },
+    async getTasks() {
+      const { data } = await fetchTasks();
+      this.tasksLists = data.items;
+    },
+    async stepNext(item) {
+      const id = item.actId;
+      const { data } = await onNext(id);
       console.log(data);
+    },
+    async onSign() {
+      await this.$http.post(`$bill-consume/activity/recharge/report`, {
+        source: "assnode",
+      });
     },
     stateTaskDrawerShow(state) {
       this.$store.dispatch("TaskDrawerState", { state });
@@ -86,13 +133,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.go-btn {
+  border-radius: 4px;
+  border: 1px solid #43e7fa;
+  background: rgba(0, 48, 92, 0.8) !important;
+  box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}
 .drawer-btn {
   background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
   box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
   color: #fff !important;
   font-size: 14px;
   font-weight: 400;
+  min-width: 80px !important;
   cursor: pointer;
+}
+.done-btn {
+  border-radius: 21px;
+  background: #31383f !important;
+  color: #fff !important;
 }
 .task-drawer-box {
   ::v-deep .task-drawer {

@@ -10,7 +10,7 @@ const boosterRequest = new BaseRequest({
       }
       return config;
     },
-    responseIntercepotor(res) {
+    responseInterceptor(res) {
       return res.data;
     },
   },
@@ -66,12 +66,18 @@ export const fetchRemainingExploration = async () => {
 
 export const fetchNftLists = async () => {
   return boosterRequest.get({
-    url: "/node/nft/list",
+    url: "/nft/list",
   });
 };
 
 export const fetchDailySign = async () => {
   return boosterRequest.get({
     url: "/node/activities/daily_sign",
+  });
+};
+
+export const fetchTasks = async () => {
+  return boosterRequest.get({
+    url: "/node/activities/tasks",
   });
 };

@@ -72,9 +72,8 @@ export default {
   },
   methods: {
     async getNftLists() {
-      fetchNftLists().then((res) => {
-        console.log(res);
-      });
+      const { data } = fetchNftLists();
+      console.log(data);
     },
     stateStakeDrawerShow(state) {
       this.$store.dispatch("StakeDrawerState", { state });
