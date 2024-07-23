@@ -76,6 +76,19 @@ export const fetchNftLists = async () => {
   });
 };
 
+export const fetchNftIsStake = async () => {
+  return boosterRequest.get({
+    url: "/nft/isStake",
+  });
+};
+
+export const fetchNftBind = async (params) => {
+  return boosterRequest.get({
+    url: "/nft/bind",
+    params,
+  });
+};
+
 export const fetchDailySign = async () => {
   return boosterRequest.get({
     url: "/node/activities/daily_sign",
