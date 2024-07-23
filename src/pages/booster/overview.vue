@@ -10,7 +10,6 @@
       <overview-h5 @handleStartBoost="showStartBoost = true"></overview-h5>
       <start-boosting v-model="showStartBoost"></start-boosting>
       <end-boosting v-model="showEndBoost"></end-boosting>
-      <deposit-dialog v-model="showDeposit"></deposit-dialog>
       <bottom-bar></bottom-bar>
       <nft-drawer></nft-drawer>
       <task-drawer></task-drawer>
@@ -23,7 +22,6 @@ import OverviewPc from "./overview/overview-pc.vue";
 import OverviewH5 from "./overview/overview-h5.vue";
 import StartBoosting from "./components/start-boosting.vue";
 import EndBoosting from "./components/end-boosting.vue";
-import DepositDialog from "./components/deposit-dialog.vue";
 import NftDrawer from "./components/nft-drawer.vue";
 import TaskDrawer from "./components/task-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
@@ -32,8 +30,10 @@ export default {
     return {
       showStartBoost: false,
       showEndBoost: false,
-      showDeposit: false,
     };
+  },
+  created() {
+    this.$store.dispatch("getBoosterUserInfo");
   },
   computed: {
     asMobile() {
@@ -45,7 +45,6 @@ export default {
     OverviewH5,
     StartBoosting,
     EndBoosting,
-    DepositDialog,
     NftDrawer,
     TaskDrawer,
     BottomBar,

@@ -129,7 +129,7 @@ import MobilePointsSheet from "../components/mobile-points-sheet.vue";
 export default {
   data() {
     return {
-      locked: false,
+      locked: true,
     };
   },
 

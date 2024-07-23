@@ -1,10 +1,15 @@
+import { fetchUserBoostInfo } from "@/api/booster";
 export default {
   state: () => ({
-    points: "",
-    rate: {
-      baseRate: "",
-      productionRate: "",
-      stakingWeight: "",
+    boosterInfo: {
+      baseRate: [],
+      boosts: [],
+      capacity: 100,
+      claimable: 0,
+      computeTimestamp: 0,
+      computed: 0,
+      rateBuff: 0,
+      totalPoint: 0,
     },
     showStakeDrawer: false,
     showTaskDrawer: false,
@@ -26,6 +31,9 @@ export default {
     TASKDRAWER_TOGGLE: (state) => {
       state.showTaskDrawer = !state.showTaskDrawer;
     },
+    SET_BOOST_INFO(state, info) {
+      state.boosterInfo = info;
+    },
   },
   actions: {
     StakeDrawerState: async (context, payload) => {
@@ -39,6 +47,15 @@ export default {
     },
     TaskDrawerToggle: async (context, payload) => {
       context.commit("TASKDRAWER_TOGGLE", payload);
+    },
+
+    async getBoosterUserInfo({ commit }) {
+      try {
+        const { data } = await fetchUserBoostInfo();
+        commit("SET_BOOST_INFO", data);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

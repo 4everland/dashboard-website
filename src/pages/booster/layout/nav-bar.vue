@@ -107,7 +107,7 @@
                         <span>{{ balance.unit }}</span>
                         <span class="ml-1">LAND</span>
                       </div>
-                      <v-btn color="#6172F3">
+                      <v-btn color="#6172F3" @click="handleShowDeposit">
                         <img
                           src="/img/booster/svg/pig_bank.svg"
                           width="16"
@@ -307,6 +307,8 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
+import { bus } from "@/utils/bus";
+
 export default {
   data() {
     return {
@@ -343,6 +345,9 @@ export default {
     handleLogout() {
       localStorage.clear();
       location.reload();
+    },
+    handleShowDeposit() {
+      bus.$emit("showDepositDialog");
     },
   },
 };

@@ -31,8 +31,14 @@ export const onNext = async (id, payment = null) => {
 };
 
 export const fetchUserBoostInfo = async () => {
+  return boosterRequest.get({
+    url: "/node/info",
+  });
+};
+
+export const initBoost = async (code) => {
   return boosterRequest.post({
-    url: "/node/node",
+    url: `/node/node/create/${code}`,
   });
 };
 

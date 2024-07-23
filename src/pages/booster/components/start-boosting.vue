@@ -93,58 +93,46 @@
 
           <div class="text-center fz-20 mt-4 fw-b">START BOOSTING</div>
           <div
-            class="boosting-task d-flex align-center justify-space-between fz-14"
+            class="boosting-task fz-14"
+            v-for="(item, idx) in activity"
+            :key="item.actId"
           >
-            <div class="d-flex align-center">
-              <div class="idx">1</div>
-              <div class="ml-4">Follow @4everland_org on X</div>
+            <div
+              v-if="item.actType != 'invite'"
+              class="d-flex align-center justify-space-between"
+            >
+              <div class="d-flex align-center">
+                <div class="idx">{{ idx + 1 }}</div>
+                <div class="ml-4">{{ item.actName }}</div>
+              </div>
+              <div class="act-btn">{{ item.extra.buttonName }}</div>
             </div>
-            <div class="act-btn">Authorize</div>
-          </div>
-          <div
-            class="boosting-task d-flex align-center justify-space-between fz-14"
-          >
-            <div class="d-flex align-center">
-              <div class="idx">2</div>
-              <div class="ml-4">Share on X</div>
-            </div>
-            <div class="act-btn">Authorize</div>
-          </div>
-          <div
-            class="boosting-task d-flex align-center justify-space-between fz-14"
-          >
-            <div class="d-flex align-center">
-              <div class="idx">3</div>
-              <div class="ml-4">Join Telegram</div>
-            </div>
-            <div class="act-btn">Authorize</div>
-          </div>
-          <div
-            class="boosting-task d-flex align-center justify-space-between fz-14"
-          >
-            <div class="d-flex align-center">
-              <div class="idx">4</div>
-              <div class="ml-4">Join Discord</div>
-            </div>
-            <div class="act-btn">Authorize</div>
-          </div>
-
-          <div
-            class="boosting-task d-flex align-center justify-space-between fz-14"
-          >
-            <div class="d-flex align-center">
-              <div class="idx">5</div>
-              <div class="ml-4">
-                <span>Invite code (optional)</span>
-                <span class="fz-12 ml-2" style="color: rgba(255, 255, 255, 0.6)"
-                  >Boost production rate by +3/H for 24 hours</span
-                >
+            <div class="d-flex align-center justify-space-between" v-else>
+              <div class="d-flex align-center">
+                <div class="idx">5</div>
+                <div class="ml-4">
+                  <span>Invite code (optional)</span>
+                  <span
+                    class="fz-12 ml-2"
+                    style="color: rgba(255, 255, 255, 0.6)"
+                    >Boost production rate by +3/H for 24 hours</span
+                  >
+                </div>
+              </div>
+              <div class="invite-content">
+                <input
+                  class="invite-input"
+                  type="text"
+                  placeholder="Enter your invite code"
+                />
               </div>
             </div>
-            <div>Enter your invite code</div>
           </div>
+
           <div class="d-flex align-center justify-center">
-            <div class="start-boost-btn">Start Boosting Now</div>
+            <div class="start-boost-btn" @click="handleStartBoost">
+              Start Boosting Now
+            </div>
           </div>
         </div>
       </div>
@@ -153,6 +141,7 @@
 </template>
 
 <script>
+import { fetchPreTaskActivity, initBoost } from "@/api/booster";
 export default {
   props: {
     value: Boolean,
@@ -160,11 +149,34 @@ export default {
   data() {
     return {
       // overlay: false,
+      activity: [],
+      inviteCode: "",
     };
   },
   computed: {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+  },
+  created() {
+    this.getTaskList();
+  },
+  methods: {
+    async getTaskList() {
+      try {
+        const { data } = await fetchPreTaskActivity();
+        console.log(data);
+        this.activity = data.items;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async handleStartBoost() {
+      try {
+        await initBoost(this.inviteCode);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
@@ -295,6 +307,17 @@ export default {
     box-shadow: 0px -4px 8px 0px rgba(0, 133, 195, 0.25),
       0px 4px 8px 0px rgba(0, 133, 195, 0.25);
     cursor: pointer;
+  }
+
+  .invite-content {
+    padding: 8px;
+    border-radius: 4px;
+    border: 0.5px solid rgba(255, 255, 255, 0.3);
+    background: rgba(49, 49, 49, 0.9);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.35);
+    .invite-input {
+      color: #fff;
+    }
   }
 }
 </style>
