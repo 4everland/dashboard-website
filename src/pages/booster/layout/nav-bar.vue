@@ -70,7 +70,9 @@
                         src="/img/booster/4ever-point-icon.png"
                         alt=""
                       />
-                      <span class="points mx-1">44,002</span>
+                      <span class="points mx-1">{{
+                        boosterInfo.totalPoint
+                      }}</span>
                       <img
                         src="/img/booster/svg/down-arrow.svg"
                         width="12"
@@ -91,7 +93,9 @@
                           src="/img/booster/4ever-point-icon.png"
                           alt=""
                         />
-                        <span class="points mx-1">44,002</span>
+                        <span class="points mx-1">{{
+                          boosterInfo.totalPoint
+                        }}</span>
                         <img
                           srcset="/img/booster/svg/log.svg"
                           width="16"
@@ -332,6 +336,7 @@ export default {
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
+      boosterInfo: (s) => s.moduleBooster.boosterInfo,
     }),
     ...mapGetters(["notLogin", "balance"]),
   },

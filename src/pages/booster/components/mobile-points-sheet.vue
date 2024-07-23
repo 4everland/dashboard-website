@@ -12,7 +12,7 @@
               >
                 <img src="/img/booster/svg/union.svg" width="52" alt="" />
                 <div>
-                  <span>44002</span>
+                  <span>{{ boosterInfo.totalPoint }}</span>
                   <img
                     @click="showLog = true"
                     class="ml-1"
@@ -32,20 +32,20 @@
                 class="content-rate d-flex align-center justify-space-between"
               >
                 <img src="/img/booster/svg/union.svg" width="52" alt="" />
-                <div>50/H</div>
+                <div>{{ totalRate }}/H</div>
               </div>
               <div class="content-detail pt-2 fz-12">
                 <div class="d-flex align-center justify-space-between">
                   <span>Base Production Rate</span>
-                  <span>20/H</span>
+                  <span>{{ baseRate }}/H</span>
                 </div>
                 <div class="d-flex align-center justify-space-between mt-1">
                   <span>Boost Production Rate</span>
-                  <span>+5/H</span>
+                  <span>+{{ boostRate }}/H</span>
                 </div>
                 <div class="d-flex align-center justify-space-between mt-1">
                   <span>Staking Weight</span>
-                  <span>10%</span>
+                  <span>{{ boosterInfo.rateBuff }}%</span>
                 </div>
               </div>
             </div>
@@ -78,6 +78,8 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -126,6 +128,17 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    ...mapState({
+      boosterInfo: (s) => s.moduleBooster.boosterInfo,
+    }),
+    ...mapGetters(["boostLocked", "baseRate", "boostRate"]),
+    totalRate() {
+      return (
+        (this.baseRate + this.boostRate) * (1 + this.boosterInfo.rateBuff / 100)
+      );
+    },
   },
   methods: {},
 };

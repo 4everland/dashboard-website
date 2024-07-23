@@ -1,121 +1,32 @@
 <template>
   <div>
     <div class="user-card d-none d-md-block">
-      <div class="user-card-item fz-12">
-        <div class="user-card-item-title">Total $4EVER points</div>
-        <div class="linear-border mb-1"></div>
-        <div class="user-card-item-content">
-          <div class="content-rate d-flex align-center">
-            <img src="/img/booster/svg/union.svg" width="52" alt="" />
-
-            <v-menu
-              offset-y
-              content-class="pc-log-menu"
-              nudge-top="75"
-              :close-on-content-click="false"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <div class="ml-auto" v-on="on" v-bind="attrs">
-                  44002
-                  <img
-                    src="/img/booster/svg/log.svg"
-                    v-on="on"
-                    v-bind="attrs"
-                    width="16"
-                    alt=""
-                  />
-                </div>
-              </template>
-              <div class="pc-log-panel">
-                <div class="pc-log-panel-content">
-                  <div
-                    class="pc-log-panel-basic-item d-flex align-center fz-14"
-                  >
-                    <div>
-                      <span>Invite link:</span>
-                      <span> ddddld..d.dd..d./ X ID</span>
-                    </div>
-                    <img
-                      class="ml-auto cursor-p"
-                      src="/img/booster/svg/copy.svg"
-                      width="24"
-                      alt=""
-                    />
-                  </div>
-                  <div
-                    class="pc-log-panel-basic-item d-flex align-center fz-14"
-                  >
-                    <div>
-                      <span>Invite link:</span>
-                      <span> ddddld..d.dd..d./ X ID</span>
-                    </div>
-                    <img
-                      class="ml-auto cursor-p"
-                      src="/img/booster/svg/copy.svg"
-                      width="24"
-                      alt=""
-                    />
-                  </div>
-                  <div
-                    class="pc-log-panel-basic-item d-flex align-center fz-14"
-                  >
-                    <div>
-                      <span>Invite link:</span>
-                      <span> ddddld..d.dd..d./ X ID</span>
-                    </div>
-                    <img
-                      class="ml-auto cursor-p"
-                      src="/img/booster/svg/expanded.svg"
-                      width="24"
-                      alt=""
-                    />
-                  </div>
-                  <div
-                    class="pc-log-panel-basic-item d-flex align-center fz-14"
-                  >
-                    <div>
-                      <span>Invite link:</span>
-                      <span> ddddld..d.dd..d./ X ID</span>
-                    </div>
-                    <img class="ml-auto" src="" width="24" alt="" />
-                  </div>
-
-                  <div class="fz-12 pc-log-panel-basic-item-desc">
-                    * You will get +10 capacity for every new booster you
-                    invited.
-                  </div>
-                </div>
-              </div>
-            </v-menu>
-          </div>
-        </div>
-      </div>
       <div class="user-card-item fz-12 mt-2">
         <div class="user-card-item-title">Current Production Rate</div>
         <div class="linear-border mb-1"></div>
         <div class="user-card-item-content">
           <div class="content-rate d-flex align-center justify-space-between">
             <img src="/img/booster/svg/union.svg" width="52" alt="" />
-            <div>50/H</div>
+            <div>{{ totalRate }}/H</div>
           </div>
           <div class="content-detail pt-2 fz-12">
             <div class="d-flex align-center justify-space-between">
               <span>Base Production Rate</span>
-              <span>20/H</span>
+              <span>{{ baseRate }}/H</span>
             </div>
             <div class="d-flex align-center justify-space-between mt-1">
               <span>Boost Production Rate</span>
-              <span>+5/H</span>
+              <span>+{{ boostRate }}/H</span>
             </div>
             <div class="d-flex align-center justify-space-between mt-1">
               <span>Staking Weight</span>
-              <span>10%</span>
+              <span>{{ boosterInfo.rateBuff }}%</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="not-login d-none d-md-block" v-if="locked">
+    <div class="not-login d-none d-md-block" v-if="boostLocked">
       <div style="position: relative">
         <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
       </div>
@@ -145,7 +56,7 @@
           <div style="width: 10px; height: 10px"></div>
         </div>
         <div class="top-card">
-          <span class="points fz-14"> 31/10000 </span>
+          <span class="points fz-14"> 31/{{ boosterInfo.capacity }} </span>
           <img src="/img/booster/3d-square.png" width="120" alt="" />
         </div>
       </div>
@@ -160,7 +71,12 @@
           >
             <div class="card-storage-icon">
               <img src="/img/booster/storage-icon.png" width="64" alt="" />
-              <span v-show="storageLocked" class="unlock-btn">Unlock</span>
+              <span
+                v-show="storageLocked"
+                class="unlock-btn"
+                @click="handleUnlock(0)"
+                >Unlock</span
+              >
             </div>
             <div class="card-storage-status flex-1">
               <div
@@ -194,7 +110,12 @@
           >
             <div class="card-storage-icon">
               <img src="/img/booster/storage-icon.png" width="64" alt="" />
-              <span v-show="computingLocked" class="unlock-btn">Unlock</span>
+              <span
+                v-show="computingLocked"
+                class="unlock-btn"
+                @click="handleUnlock(1)"
+                >Unlock</span
+              >
             </div>
             <div class="card-storage-status flex-1">
               <div
@@ -228,7 +149,12 @@
           >
             <div class="card-storage-icon">
               <img src="/img/booster/storage-icon.png" width="64" alt="" />
-              <span v-show="networkLocked" class="unlock-btn">Unlock</span>
+              <span
+                v-show="networkLocked"
+                class="unlock-btn"
+                @click="handleUnlock(2)"
+                >Unlock</span
+              >
             </div>
             <div class="card-storage-status flex-1">
               <div
@@ -256,6 +182,8 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from "vuex";
+import { unlockStage } from "@/api/booster";
 export default {
   data() {
     return {
@@ -263,23 +191,42 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      boosterInfo: (s) => s.moduleBooster.boosterInfo,
+    }),
+    ...mapGetters(["boostLocked", "baseRate", "boostRate"]),
+    totalRate() {
+      return (
+        (this.baseRate + this.boostRate) * (1 + this.boosterInfo.rateBuff / 100)
+      );
+    },
+
+    storageBoost() {
+      return this.boosterInfo.baseRate.filter((it) => it.name == "storage");
+    },
+    networkBoost() {
+      return this.boosterInfo.baseRate.filter((it) => it.name == "network");
+    },
+    computeBoost() {
+      return this.boosterInfo.baseRate.filter((it) => it.name == "compute");
+    },
     storageLocked() {
-      return false;
+      return this.storageBoost.length == 0;
     },
     networkLocked() {
-      return true;
+      return this.networkBoost.length == 0;
     },
     computingLocked() {
-      return true;
+      return this.computeBoost.length == 0;
     },
   },
   methods: {
-    handleBoost() {
-      const logined = true;
-      if (logined) {
-        this.sta;
-      } else {
-        this.$router.push("/login");
+    async handleUnlock(index) {
+      try {
+        const { data } = await unlockStage(index);
+        console.log(data);
+      } catch (error) {
+        console.log(error);
       }
     },
   },
@@ -461,6 +408,7 @@ export default {
       background: rgba(97, 114, 243, 0.75);
       box-shadow: 0px 0px 8px 0px rgba(137, 234, 251, 0.5);
       backdrop-filter: blur(2px);
+      cursor: pointer;
     }
   }
   .card-storage-status {
