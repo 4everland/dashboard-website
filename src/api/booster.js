@@ -87,12 +87,31 @@ export const fetchRemainingExploration = async () => {
 
 export const fetchNftLists = async () => {
   return boosterRequest.get({
-    url: "/node/nft/list",
+    url: "/nft/list",
+  });
+};
+
+export const fetchNftIsStake = async () => {
+  return boosterRequest.get({
+    url: "/nft/isStake",
+  });
+};
+
+export const fetchNftBind = async (params) => {
+  return boosterRequest.get({
+    url: "/nft/bind",
+    params,
   });
 };
 
 export const fetchDailySign = async () => {
   return boosterRequest.get({
     url: "/node/activities/daily_sign",
+  });
+};
+
+export const fetchTasks = async () => {
+  return boosterRequest.get({
+    url: "/node/activities/tasks",
   });
 };

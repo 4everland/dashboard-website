@@ -26,27 +26,40 @@
         </div>
         <div class="nft-box">
           <div class="drawer-title mb-4">NFT STAKE</div>
-          <v-row no-gutters style="gap: 16px 0">
-            <v-col v-for="(n, i) in 13" :key="n" cols="4" md="15">
+          <v-row v-if="nftList.length > 0" no-gutters style="gap: 16px 0">
+            <v-col v-for="item in nftList" :key="item.key" cols="4" md="15">
               <div class="nft-item-box">
                 <img
+                  v-if="item.private && item.isStakeData.stake"
                   class="nft-item-image"
-                  :src="`/img/booster/nft/badge_${i}_1.png`"
+                  :src="`/img/booster/nft/${item.key}_1.png`"
                   alt=""
                 />
-                <!-- <img
-                class="nft-item-image"
-                :src="`/img/booster/nft/badge_${i}_2.png`"
-                alt=""
-              />
-              <img
-                class="nft-item-image"
-                :src="`/img/booster/nft/badge_${i}_3.png`"
-                alt=""
-              /> -->
-                <div class="nft-item-boost">+10%</div>
-                <div class="nft-item-btn-box">
-                  <v-btn class="drawer-btn">Stake</v-btn>
+                <img
+                  v-else-if="item.private"
+                  class="nft-item-image"
+                  :src="`/img/booster/nft/${item.key}_2.png`"
+                  alt=""
+                />
+                <img
+                  v-else
+                  class="nft-item-image"
+                  :src="`/img/booster/nft/${item.key}_3.png`"
+                  alt=""
+                />
+                <div
+                  v-if="item.private && !item.isStakeData.stake"
+                  class="nft-item-boost"
+                >
+                  +{{ item.public.coefficient }}%
+                </div>
+                <div
+                  v-if="item.private && !item.isStakeData.stake"
+                  class="nft-item-btn-box"
+                >
+                  <v-btn class="drawer-btn" @click="onBindNft(item)"
+                    >Stake</v-btn
+                  >
                 </div>
               </div>
             </v-col>
@@ -58,23 +71,56 @@
 </template>
 <script>
 import { mapGetters, mapState } from "vuex";
-import { fetchNftLists } from "@/api/booster.js";
+import { fetchNftLists, fetchNftIsStake, fetchNftBind } from "@/api/booster.js";
+
+import NFT_LISTS from "../nft.js";
 
 export default {
   computed: {
     ...mapGetters(["showStakeDrawer"]),
   },
   data() {
-    return {};
+    return {
+      nftList: [],
+    };
   },
   created() {
     this.getNftLists();
   },
   methods: {
     async getNftLists() {
-      fetchNftLists().then((res) => {
-        console.log(res);
+      const { data } = await fetchNftLists();
+      const isStakeData = await this.getNftIsStake();
+
+      NFT_LISTS.map((el, index) => {
+        el.public = data.public.find(
+          (item) =>
+            item.contractAddress == el.contractAddress && item.batch == el.batch
+        );
+        el.private = data.private.find(
+          (item) =>
+            item.contractAddress == el.contractAddress && item.batch == el.batch
+        );
+        el.isStakeData = isStakeData.find(
+          (item) =>
+            item.contract == el.contractAddress && item.batch == el.batch
+        );
       });
+
+      this.nftList = NFT_LISTS;
+    },
+    async getNftIsStake() {
+      const { data } = await fetchNftIsStake();
+      return data;
+    },
+    async onBindNft(item) {
+      const params = {
+        contract: item.contractAddress,
+        nftId: item.private.nftId,
+        id: "",
+      };
+      const { data } = await fetchNftBind(params);
+      console.log(data);
     },
     stateStakeDrawerShow(state) {
       this.$store.dispatch("StakeDrawerState", { state });
