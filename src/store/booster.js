@@ -1,19 +1,21 @@
 import { fetchUserBoostInfo } from "@/api/booster";
 export default {
-  state: () => ({
-    boosterInfo: {
-      baseRate: [],
-      boosts: [],
-      capacity: 100,
-      claimable: 0,
-      computeTimestamp: 0,
-      computed: 0,
-      rateBuff: 0,
-      totalPoint: 0,
-    },
-    showStakeDrawer: false,
-    showTaskDrawer: false,
-  }),
+  state: () => {
+    return {
+      boosterInfo: {
+        baseRate: [],
+        boosts: [],
+        capacity: 100,
+        claimable: 0,
+        computeTimestamp: 0,
+        computed: 0,
+        rateBuff: 0,
+        totalPoint: 0,
+      },
+      showStakeDrawer: false,
+      showTaskDrawer: false,
+    };
+  },
   getters: {
     showStakeDrawer: (state) => state.showStakeDrawer,
     showTaskDrawer: (state) => state.showTaskDrawer,
@@ -25,6 +27,31 @@ export default {
     },
     boostRate({ boosterInfo }) {
       return boosterInfo.boosts.reduce((prev, it) => it.rate + prev, 0);
+    },
+    totalRate(state, getters) {
+      return (
+        (getters.baseRate + getters.boostRate) *
+        (1 + state.boosterInfo.rateBuff / 100)
+      );
+    },
+
+    currentComputed({ boosterInfo }) {
+      let curTimestamp = +new Date() / 1000;
+      if (boosterInfo.computeTimestamp != 0) {
+        const basicComputed = boosterInfo.baseRate.reduce((pre, it) => {
+          return (
+            pre +
+            ((curTimestamp - boosterInfo.computeTimestamp) / 3600) * it.rate
+          );
+        }, 0);
+
+        return basicComputed + boosterInfo.computed;
+      }
+      const basicComputed = boosterInfo.baseRate.reduce((pre, it) => {
+        return pre + ((curTimestamp - it.start) / 3600) * it.rate;
+      }, 0);
+
+      return basicComputed;
     },
   },
   mutations: {
@@ -61,6 +88,8 @@ export default {
     async getBoosterUserInfo({ commit }) {
       try {
         const { data } = await fetchUserBoostInfo();
+        console.log("data", data);
+        if (!data) return;
         commit("SET_BOOST_INFO", data);
       } catch (error) {
         console.log(error);

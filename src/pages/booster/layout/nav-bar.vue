@@ -161,7 +161,13 @@
               <div class="invite-panel-basic-item d-flex align-center fz-14">
                 <div>
                   <span>Invite link:</span>
-                  <span> ddddld..d.dd..d./ X ID</span>
+                  <span class="ml-2">
+                    {{
+                      inviteInfo.link.slice(0, 12) +
+                      "..." +
+                      inviteInfo.link.slice(-8)
+                    }}</span
+                  >
                 </div>
                 <img
                   class="ml-auto cursor-p"
@@ -172,8 +178,8 @@
               </div>
               <div class="invite-panel-basic-item d-flex align-center fz-14">
                 <div>
-                  <span>Invite link:</span>
-                  <span> ddddld..d.dd..d./ X ID</span>
+                  <span>Invite code:</span>
+                  <span class="ml-2">{{ inviteInfo.inviteCode }}</span>
                 </div>
                 <img
                   class="ml-auto cursor-p"
@@ -184,8 +190,8 @@
               </div>
               <div class="invite-panel-basic-item d-flex align-center fz-14">
                 <div>
-                  <span>Invite link:</span>
-                  <span> ddddld..d.dd..d./ X ID</span>
+                  <span>Total invites:</span>
+                  <span class="ml-2">{{ inviteInfo.invited }}</span>
                 </div>
                 <img
                   class="ml-auto cursor-p"
@@ -196,10 +202,9 @@
               </div>
               <div class="invite-panel-basic-item d-flex align-center fz-14">
                 <div>
-                  <span>Invite link:</span>
-                  <span> ddddld..d.dd..d./ X ID</span>
+                  <span>Today invites:</span>
+                  <span class="ml-2">{{ inviteInfo.daily }}</span>
                 </div>
-                <img class="ml-auto" src="" width="24" alt="" />
               </div>
 
               <div class="fz-12 invite-panel-basic-item-desc">
@@ -248,7 +253,13 @@
               >
                 <div>
                   <span>Invite link:</span>
-                  <span> ddddld..d.dd..d./ X ID</span>
+                  <span class="ml-2">
+                    {{
+                      inviteInfo.link.slice(0, 12) +
+                      "..." +
+                      inviteInfo.link.slice(-8)
+                    }}</span
+                  >
                 </div>
                 <img
                   class="ml-auto cursor-p"
@@ -261,8 +272,8 @@
                 class="mobile-invite-panel-basic-item d-flex align-center fz-14"
               >
                 <div>
-                  <span>Invite link:</span>
-                  <span> ddddld..d.dd..d./ X ID</span>
+                  <span>Invite code:</span>
+                  <span class="ml-2">{{ inviteInfo.inviteCode }}</span>
                 </div>
                 <img
                   class="ml-auto cursor-p"
@@ -275,8 +286,8 @@
                 class="mobile-invite-panel-basic-item d-flex align-center fz-14"
               >
                 <div>
-                  <span>Invite link:</span>
-                  <span> ddddld..d.dd..d./ X ID</span>
+                  <span>Total invites:</span>
+                  <span class="ml-2">{{ inviteInfo.invited }}</span>
                 </div>
                 <img
                   class="ml-auto cursor-p"
@@ -289,8 +300,8 @@
                 class="mobile-invite-panel-basic-item d-flex align-center fz-14"
               >
                 <div>
-                  <span>Invite link:</span>
-                  <span> ddddld..d.dd..d./ X ID</span>
+                  <span>Today invites:</span>
+                  <span class="ml-2">{{ inviteInfo.daily }}</span>
                 </div>
                 <img class="ml-auto" src="" width="24" alt="" />
               </div>
@@ -310,6 +321,7 @@
 </template>
 
 <script>
+import { fetchInviteInfo } from "@/api/booster";
 import { mapGetters, mapState } from "vuex";
 import { bus } from "@/utils/bus";
 
@@ -331,6 +343,12 @@ export default {
           path: "/booster/leaderboard",
         },
       ],
+      inviteInfo: {
+        daily: "-",
+        inviteCode: "-",
+        invited: "-",
+        link: "-",
+      },
     };
   },
   computed: {
@@ -344,6 +362,7 @@ export default {
   created() {
     if (!this.notLogin) {
       this.$store.dispatch("getBalance");
+      this.getInviteInfo();
     }
   },
   methods: {
@@ -353,6 +372,17 @@ export default {
     },
     handleShowDeposit() {
       bus.$emit("showDepositDialog");
+    },
+
+    async getInviteInfo() {
+      try {
+        const { data } = await fetchInviteInfo();
+        if (data) {
+          this.inviteInfo = data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

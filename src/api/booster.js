@@ -23,7 +23,7 @@ export const fetchPreTaskActivity = async () => {
 };
 export const onNext = async (id, payment = null) => {
   return boosterRequest.post({
-    url: `/node/activities/${id}/onNext`,
+    url: `/node/activities/${id}/next`,
     data: {
       payment,
     },
@@ -38,12 +38,15 @@ export const fetchUserBoostInfo = async () => {
 
 export const initBoost = async (code) => {
   return boosterRequest.post({
-    url: `/node/node/create/${code}`,
+    url: `/node/create`,
+    data: {
+      code,
+    },
   });
 };
 
 export const unlockStage = async (index, inviteCode = null) => {
-  const stages = ["storage", "network", "compute"];
+  const stages = ["storage", "compute", "network"];
   return boosterRequest.post({
     url: `/node/stage/${stages[index]}`,
     data: {
@@ -52,15 +55,27 @@ export const unlockStage = async (index, inviteCode = null) => {
   });
 };
 
+export const claimPoints = async () => {
+  return boosterRequest.put({
+    url: `/node/claim`,
+  });
+};
+
+export const fetchPointsHistory = async (page, size = 10) => {
+  return boosterRequest.get({
+    url: `/node/history?page=${page}&size=${size}`,
+  });
+};
+
 export const fetchInviteInfo = async () => {
   return boosterRequest.get({
-    url: "/node/invite",
+    url: "/node/invite/info",
   });
 };
 
 export const fetchLeaderboard = async (page, size = 10) => {
   return boosterRequest.get({
-    url: `/node/node/leaderboard?page=${page}&size=${size}`,
+    url: `/node/leaderboard?page=${page}&size=${size}`,
   });
 };
 
