@@ -105,11 +105,13 @@
                 <div class="idx">{{ idx + 1 }}</div>
                 <div class="ml-4">{{ item.actName }}</div>
               </div>
-              <div class="act-btn">{{ item.extra.buttonName }}</div>
+              <v-btn class="act-btn" @click="handleNext(item.actId)">
+                {{ item.extra.buttonName }}
+              </v-btn>
             </div>
             <div class="d-flex align-center justify-space-between" v-else>
               <div class="d-flex align-center">
-                <div class="idx">5</div>
+                <div class="idx">{{ idx + 1 }}</div>
                 <div class="ml-4">
                   <span>Invite code (optional)</span>
                   <span
@@ -141,7 +143,7 @@
 </template>
 
 <script>
-import { fetchPreTaskActivity, initBoost } from "@/api/booster";
+import { fetchPreTaskActivity, initBoost, onNext } from "@/api/booster";
 export default {
   props: {
     value: Boolean,
@@ -172,8 +174,29 @@ export default {
       }
     },
     async handleStartBoost() {
+      this.$loading();
       try {
         await initBoost(this.inviteCode);
+      } catch (error) {
+        console.log(error);
+      }
+      this.$loading.close();
+    },
+
+    async handleNext(id) {
+      try {
+        const { data } = await onNext(id);
+        console.log(data);
+        switch (data.action.web.next) {
+          case "REDIRECT":
+            location.href = data.action.web.message;
+            break;
+          case "JUMP_OUT":
+            window.open(data.action.web.message);
+            break;
+          default:
+            break;
+        }
       } catch (error) {
         console.log(error);
       }
@@ -213,6 +236,7 @@ export default {
       background: rgba(255, 255, 255, 0.6);
     }
     .act-btn {
+      color: #fff;
       width: 88px;
       height: 29px;
       line-height: 29px;
@@ -287,6 +311,7 @@ export default {
       background: rgba(255, 255, 255, 0.6);
     }
     .act-btn {
+      color: #fff;
       width: 88px;
       height: 29px;
       line-height: 29px;

@@ -43,7 +43,7 @@
               <div class="task-title">Storage Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>20/H</span>
+                <span>5/H</span>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@
               <div class="task-title">Computing Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>20/H</span>
+                <span>5/H</span>
               </div>
             </div>
           </div>
@@ -104,18 +104,24 @@
               <div class="task-title">Network Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>20/H</span>
+                <span>5/H</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="point-square">
+      <div class="point-square" @click="hanleClaim">
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
         </div>
         <div class="top-card">
-          <span class="points fz-14"> 31/{{ boosterInfo.capacity }} </span>
+          <span class="points fz-14">
+            {{
+              computedPoints > boosterInfo.capacity
+                ? boosterInfo.capacity
+                : computedPoints.toFixed(3)
+            }}/{{ boosterInfo.capacity }}
+          </span>
           <img src="/img/booster/3d-square.png" width="64" alt="" />
         </div>
       </div>
@@ -126,41 +132,11 @@
 
 <script>
 import MobilePointsSheet from "../components/mobile-points-sheet.vue";
-import { mapGetters, mapState } from "vuex";
-import { unlockStage } from "@/api/booster";
+import mixin from "./mixin";
 export default {
+  mixins: [mixin],
   data() {
     return {};
-  },
-
-  computed: {
-    ...mapState({
-      boosterInfo: (s) => s.moduleBooster.boosterInfo,
-    }),
-    ...mapGetters(["boostLocked", "baseRate", "boostRate"]),
-    totalRate() {
-      return (
-        (this.baseRate + this.boostRate) * (1 + this.boosterInfo.rateBuff / 100)
-      );
-    },
-    storageBoost() {
-      return this.boosterInfo.baseRate.filter((it) => it.name == "storage");
-    },
-    networkBoost() {
-      return this.boosterInfo.baseRate.filter((it) => it.name == "network");
-    },
-    computeBoost() {
-      return this.boosterInfo.baseRate.filter((it) => it.name == "compute");
-    },
-    storageLocked() {
-      return this.storageBoost.length == 0;
-    },
-    networkLocked() {
-      return this.networkBoost.length == 0;
-    },
-    computingLocked() {
-      return this.computeBoost.length == 0;
-    },
   },
   components: {
     MobilePointsSheet,
@@ -168,14 +144,6 @@ export default {
   methods: {
     handleOpenSheet() {
       this.$refs.pointsSheet.sheet = true;
-    },
-    async handleUnlock(index) {
-      try {
-        const { data } = await unlockStage(index);
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
     },
   },
 };

@@ -36,7 +36,12 @@
           </div>
         </div>
         <div class="pgb ml-auto" @click="$emit('showDepositDialog')">
-          <img src="/img/booster/svg/pig_bank.svg" width="24" alt="" />
+          <img
+            style="display: block"
+            src="/img/booster/svg/pig_bank.svg"
+            width="24"
+            alt=""
+          />
         </div>
       </div>
 

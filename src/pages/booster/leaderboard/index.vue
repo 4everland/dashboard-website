@@ -18,16 +18,20 @@
         <tbody>
           <tr
             v-for="(item, i) in list"
-            :key="item.name"
+            :key="item.address"
             :class="{ trigger: i == 0 }"
           >
-            <td class="text-center">{{ item.id }}</td>
+            <td class="text-center">{{ item.rank }}</td>
             <td class="text-center">
               {{ item.address.slice(0, 6) + "..." + item.address.slice(-4) }}
             </td>
             <td class="text-center">{{ item.points }}</td>
             <td class="text-center">
-              {{ item.inviter.slice(0, 6) + "..." + item.inviter.slice(-4) }}
+              {{
+                !item.inviter
+                  ? item.inviter
+                  : item.inviter.slice(0, 6) + "..." + item.inviter.slice(-4)
+              }}
             </td>
           </tr>
         </tbody>
@@ -35,7 +39,7 @@
     </v-simple-table>
 
     <booster-pagination
-      :length="15"
+      :length="totalPages"
       class="mt-5"
       v-model="page"
     ></booster-pagination>
@@ -44,73 +48,39 @@
 
 <script>
 import BoosterPagination from "../components/booster-pagination.vue";
+import { fetchLeaderboard } from "@/api/booster";
 export default {
   data() {
     return {
       page: 1,
-      list: [
-        {
-          id: 1,
-          address: "0x88434234324c34fd5mdsx000008333324223434",
-          points: "1111",
-          inviter: "0x88434234324c34fd5mdsx000008333324223434",
-        },
-        {
-          id: 2,
-          address: "0x88434234324c34fd5mdsx000008333324223434",
-          points: "1111",
-          inviter: "0x88434234324c34fd5mdsx000008333324223434",
-        },
-        {
-          id: 3,
-          address: "0x88434234324c34fd5mdsx000008333324223434",
-          points: "1111",
-          inviter: "0x88434234324c34fd5mdsx000008333324223434",
-        },
-        {
-          id: 4,
-          address: "0x88434234324c34fd5mdsx000008333324223434",
-          points: "1111",
-          inviter: "0x88434234324c34fd5mdsx000008333324223434",
-        },
-        {
-          id: 5,
-          address: "0x88434234324c34fd5mdsx000008333324223434",
-          points: "1111",
-          inviter: "0x88434234324c34fd5mdsx000008333324223434",
-        },
-        {
-          id: 6,
-          address: "0x88434234324c34fd5mdsx000008333324223434",
-          points: "1111",
-          inviter: "0x88434234324c34fd5mdsx000008333324223434",
-        },
-        {
-          id: 7,
-          address: "0x88434234324c34fd5mdsx000008333324223434",
-          points: "1111",
-          inviter: "0x88434234324c34fd5mdsx000008333324223434",
-        },
-        {
-          id: 8,
-          address: "0x88434234324c34fd5mdsx000008333324223434",
-          points: "1111",
-          inviter: "0x88434234324c34fd5mdsx000008333324223434",
-        },
-        {
-          id: 9,
-          address: "0x88434234324c34fd5mdsx000008333324223434",
-          points: "1111",
-          inviter: "0x88434234324c34fd5mdsx000008333324223434",
-        },
-        {
-          id: 10,
-          address: "0x88434234324c34fd5mdsx000008333324223434",
-          points: "1111",
-          inviter: "0x88434234324c34fd5mdsx000008333324223434",
-        },
-      ],
+      ranks: [],
+      myRankInfo: {},
+      totalPages: 0,
     };
+  },
+  created() {
+    this.getList();
+  },
+  computed: {
+    list() {
+      const ranks = this.ranks.filter(
+        (it) => it.address !== this.myRankInfo.address
+      );
+      return [this.myRankInfo, ...ranks];
+    },
+  },
+  methods: {
+    async getList() {
+      try {
+        const { data } = await fetchLeaderboard(this.page);
+        console.log(data);
+        this.myRankInfo = data.my;
+        this.ranks = data.ranks.content;
+        this.totalPages = data.ranks.totalPages;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   components: {
     BoosterPagination,
