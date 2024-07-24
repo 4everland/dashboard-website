@@ -105,7 +105,11 @@
                 <div class="idx">{{ idx + 1 }}</div>
                 <div class="ml-4">{{ item.actName }}</div>
               </div>
-              <v-btn class="act-btn" @click="handleNext(item.actId)">
+              <v-btn
+                class="act-btn"
+                @click="handleNext(item.actId)"
+                :disabled="item.actStatus == 'DONE'"
+              >
                 {{ item.extra.buttonName }}
               </v-btn>
             </div>
@@ -125,6 +129,7 @@
                 <input
                   class="invite-input"
                   type="text"
+                  v-model="inviteCode"
                   placeholder="Enter your invite code"
                 />
               </div>
@@ -167,7 +172,6 @@ export default {
     async getTaskList() {
       try {
         const { data } = await fetchPreTaskActivity();
-        console.log(data);
         this.activity = data.items;
       } catch (error) {
         console.log(error);
@@ -176,7 +180,11 @@ export default {
     async handleStartBoost() {
       this.$loading();
       try {
-        await initBoost(this.inviteCode);
+        const { data } = await initBoost(this.inviteCode);
+        console.log(data);
+        this.$store.dispatch("getBoosterUserInfo");
+
+        this.$emit("input", false);
       } catch (error) {
         console.log(error);
       }
@@ -186,10 +194,14 @@ export default {
     async handleNext(id) {
       try {
         const { data } = await onNext(id);
-        console.log(data);
+        const idx = this.activity.findIndex((it) => it.actId == data.actId);
+        if (data.action.web.nextButtonName) {
+          this.activity[idx].extra.buttonName = data.action.web.nextButtonName;
+        }
         switch (data.action.web.next) {
           case "REDIRECT":
             location.href = data.action.web.message;
+
             break;
           case "JUMP_OUT":
             window.open(data.action.web.message);

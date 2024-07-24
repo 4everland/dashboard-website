@@ -14,7 +14,7 @@
                 <div>
                   <span>{{ boosterInfo.totalPoint }}</span>
                   <img
-                    @click="showLog = true"
+                    @click="handleShowLog"
                     class="ml-1"
                     width="16"
                     src="/img/booster/svg/log.svg"
@@ -64,11 +64,11 @@
           <div class="log-list">
             <div
               class="log-item mb-6 d-flex align-center justify-space-between"
-              v-for="(it, i) in logs"
+              v-for="(it, i) in list"
               :key="i"
             >
-              <div style="width: 250px">{{ it.text }}</div>
-              <div>{{ it.time }}</div>
+              <div style="width: 250px">I claimed {{ it.value }} points.</div>
+              <div>{{ new Date(it.createdAt * 1000).format("date") }}</div>
             </div>
           </div>
         </div>
@@ -79,54 +79,16 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
+import { fetchPointsHistory } from "@/api/booster";
 
 export default {
   data() {
     return {
       sheet: false,
       showLog: false,
-      logs: [
-        {
-          text: "I claimed 100 points.",
-          time: "2024-06-12 17:33",
-        },
-        {
-          text: "0x223 claimed 100 points and received a 10-point commission.",
-          time: "2024-06-12 17:33",
-        },
-        {
-          text: "I helped 0x222 claim points and received a 10-point commission.",
-          time: "2024-06-12 17:33",
-        },
-        {
-          text: "I won 100 points in the raffle.",
-          time: "2024-06-12 17:33",
-        },
-        {
-          text: "0x223 claimed 100 points and received a 10-point commission.",
-          time: "2024-06-12 17:33",
-        },
-        {
-          text: "I claimed 100 points.",
-          time: "2024-06-12 17:33",
-        },
-        {
-          text: "0x223 claimed 100 points and received a 10-point commission.",
-          time: "2024-06-12 17:33",
-        },
-        {
-          text: "I helped 0x222 claim points and received a 10-point commission.",
-          time: "2024-06-12 17:33",
-        },
-        {
-          text: "I won 100 points in the raffle.",
-          time: "2024-06-12 17:33",
-        },
-        {
-          text: "0x223 claimed 100 points and received a 10-point commission.",
-          time: "2024-06-12 17:33",
-        },
-      ],
+      list: [],
+      page: 1,
+      totalPages: 0,
     };
   },
   computed: {
@@ -140,7 +102,19 @@ export default {
       );
     },
   },
-  methods: {},
+  methods: {
+    async handleShowLog() {
+      this.showLog = true;
+      try {
+        const { data } = await fetchPointsHistory(this.page);
+        console.log(data);
+        this.list = data.content;
+        this.totalPages = data.totalPages;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
 };
 </script>
 

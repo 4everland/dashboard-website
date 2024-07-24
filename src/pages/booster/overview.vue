@@ -1,6 +1,6 @@
 <template>
   <div class="booster-overview">
-    <div style="position: relative">
+    <div class="booster-overview-content" style="position: relative">
       <img
         :src="asMobile ? '/img/booster/mobile-bg.png' : '/img/booster/bg.png'"
         style="max-height: 100vh; width: 100%; display: block"
@@ -34,6 +34,7 @@ export default {
   },
   created() {
     this.$store.dispatch("getBoosterUserInfo");
+    localStorage.loginTo = location.pathname + location.search;
   },
   computed: {
     asMobile() {

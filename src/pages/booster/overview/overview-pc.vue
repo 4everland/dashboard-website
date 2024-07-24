@@ -39,10 +39,7 @@
             width="64"
             alt=""
           />
-          <div
-            class="boost-btn pos-a cursor-p"
-            @click="$emit('handleStartBoost')"
-          >
+          <div class="boost-btn pos-a cursor-p" @click="handleStartBoost">
             Boost
           </div>
         </div>

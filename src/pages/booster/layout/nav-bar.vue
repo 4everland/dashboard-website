@@ -96,12 +96,7 @@
                         <span class="points mx-1">{{
                           boosterInfo.totalPoint
                         }}</span>
-                        <img
-                          srcset="/img/booster/svg/log.svg"
-                          width="16"
-                          src=""
-                          alt=""
-                        />
+                        <PointLogs></PointLogs>
                       </div>
                     </div>
                     <div class="d-flex align-center justify-space-between py-2">
@@ -142,6 +137,7 @@
           nudge-bottom="15"
           left
           nudge-left="-13"
+          @input="handleTriggerInvite"
           :close-on-content-click="false"
         >
           <template v-slot:activator="{ on, attrs }">
@@ -239,6 +235,7 @@
           :close-on-content-click="false"
           min-width="100%"
           nudge-bottom="10"
+          @input="handleTriggerInvite"
         >
           <template v-slot:activator="{ on, attrs }">
             <div class="mobile-btn pa-1" v-on="on" v-bind="attrs">
@@ -324,7 +321,7 @@
 import { fetchInviteInfo } from "@/api/booster";
 import { mapGetters, mapState } from "vuex";
 import { bus } from "@/utils/bus";
-
+import PointLogs from "../components/point-logs.vue";
 export default {
   data() {
     return {
@@ -362,7 +359,6 @@ export default {
   created() {
     if (!this.notLogin) {
       this.$store.dispatch("getBalance");
-      this.getInviteInfo();
     }
   },
   methods: {
@@ -384,6 +380,14 @@ export default {
         console.log(error);
       }
     },
+    handleTriggerInvite(val) {
+      if (val) {
+        this.getInviteInfo();
+      }
+    },
+  },
+  components: {
+    PointLogs,
   },
 };
 </script>

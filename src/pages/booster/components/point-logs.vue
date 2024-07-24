@@ -1,0 +1,89 @@
+<template>
+  <div>
+    <v-menu
+      offset-y
+      content-class="logs-menu"
+      :attach="id"
+      :close-on-content-click="false"
+      @input="handleInput"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <img
+          v-on="on"
+          v-bind="attrs"
+          srcset="/img/booster/svg/log.svg"
+          width="16"
+          src=""
+          alt=""
+        />
+      </template>
+      <div class="logs">
+        <div
+          class="log d-flex align-center justify-space-between mb-4 fz-14"
+          v-for="it in list"
+          :key="it.createdAt"
+        >
+          <span> I claimed {{ it.value }} points. </span>
+          <span>{{ new Date(it.createdAt * 1000).format("date") }}</span>
+        </div>
+      </div>
+    </v-menu>
+  </div>
+</template>
+
+<script>
+import { fetchPointsHistory } from "@/api/booster";
+export default {
+  data() {
+    return {
+      id: null,
+      page: 1,
+      totalPages: 0,
+      list: [],
+      showLog: false,
+    };
+  },
+  created() {
+    // this.getList();
+  },
+  mounted() {
+    this.id = document.querySelector(".booster-overview-content");
+  },
+  methods: {
+    async getList() {
+      try {
+        const { data } = await fetchPointsHistory(this.page);
+        console.log(data);
+
+        this.list = data.content;
+        this.totalPages = data.totalPages;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    handleInput(val) {
+      if (val) {
+        this.getList();
+      }
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+::v-deep.logs-menu {
+  height: 100%;
+  border-radius: 0;
+  right: 24px;
+  top: 89px !important;
+  left: initial !important;
+}
+.logs {
+  color: #fff;
+  padding: 32px 20px;
+  width: 518px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(54, 59, 64, 0.9);
+  height: calc(100% - 72px - 64px - 32px) !important;
+}
+</style>
