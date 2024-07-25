@@ -286,7 +286,7 @@ export default {
         it.path = "Deposit History";
         it.link = "/billing/records?tab=Deposit History";
       } else {
-        console.log(act, it);
+        // console.log(act, it);
         it.desc = act;
       }
       if (!it.path) {
@@ -326,6 +326,87 @@ export default {
         } else if (/gateway/i.test(act)) {
           it.path = "Gateway Dedicated Gateway";
           it.link = "/gateway/list";
+        } else if (act == "RAAS_ONE_CLIENT_CREATE_ROLLUP") {
+          const name = obj.RollupName;
+          const id = obj.RollupId;
+          it.desc = `deployed rollup ${name}`;
+          it.path = `RaaS ${name}`;
+          it.link = `/raas/${name}/${id}`;
+        } else if (act == "RAAS_RENEW_ROLLUP") {
+          const name = obj.RollupName;
+          const id = obj.RollupId;
+          const days = obj.Days;
+          it.desc = `renewed rollup ${name} for ${days} Days`;
+          it.path = `RaaS ${name}`;
+          it.link = `/raas/${name}/${id}`;
+        } else if (act == "RAAS_CREATE_ROLLUP") {
+          it.desc = "submitted a Rollup creation form";
+          it.path = `RaaS`;
+          it.link = `/raas`;
+        } else if (act == "RPC_CREATE_KEY") {
+          const keyName = obj.keyName;
+          const keyId = obj.keyId;
+          it.desc = `created RPC Key ${keyName}`;
+          it.path = `RPC ${keyName}`;
+          it.link = `/rpc/detail/${keyName}/${keyId}`;
+        } else if (act == "RPC_RESET_KEY") {
+          const keyName = obj.keyName;
+          const keyId = obj.keyId;
+          it.desc = `reset RPC Key ${keyName}`;
+          it.path = `RPC ${keyName}`;
+          it.link = `/rpc/detail/${keyName}/${keyId}`;
+        } else if (act == "RPC_DELETE_KEY") {
+          it.desc = `deleted RPC Key`;
+          it.path = `RPC`;
+          it.link = `/rpc`;
+        } else if (act == "RPC_ACTIVE_KEY") {
+          const keyName = obj.keyName;
+          const keyId = obj.keyId;
+          it.desc = `set RPC Key ${keyName} to active`;
+          it.path = `RPC ${keyName}`;
+          it.link = `/rpc/detail/${keyName}/${keyId}`;
+        } else if (act == "RPC_INACTIVE_KEY") {
+          const keyName = obj.keyName;
+          const keyId = obj.keyId;
+          it.desc = `set RPC Key ${keyName} to inactive`;
+          it.path = `RPC ${keyName}`;
+          it.link = `/rpc/detail/${keyName}/${keyId}`;
+        } else if (act == "AI_RPC_CREATE_KEY") {
+          const keyName = obj.keyName;
+          const keyId = obj.keyId;
+          it.desc = `created AI RPC Key ${keyName}`;
+          it.path = `AI ${keyName}`;
+          it.link = `/ai-rpc/key/${keyName}/${keyId}`;
+        } else if (act == "AI_RPC_DELETE_KEY") {
+          const keyName = obj.keyName;
+          it.desc = `deleted AI RPC Key ${keyName}`;
+          it.path = `AI`;
+          it.link = `/ai-rpc?tab=Keys`;
+        } else if (act == "AI_RPC_RESET_KEY") {
+          const keyName = obj.keyName;
+          const keyId = obj.keyId;
+          it.desc = `reset AI RPC Key ${keyName}`;
+          it.path = `AI ${keyName}`;
+          it.link = `/ai-rpc/key/${keyName}/${keyId}`;
+        } else if (act == "AI_RPC_LIMIT_KEY") {
+          const keyName = obj.keyName;
+          const limit = obj.limit;
+          const keyId = obj.keyId;
+          it.desc = `set  AI RPC Key ${keyName}  month limit to ${limit} LAND`;
+          it.path = `AI ${keyName}`;
+          it.link = `/ai-rpc/key/${keyName}/${keyId}`;
+        } else if (act == "AI_RPC_INACTIVE_KEY") {
+          const keyName = obj.keyName;
+          const keyId = obj.keyId;
+          it.desc = `set AI RPC Key ${keyName} to inactive`;
+          it.path = `AI ${keyName}`;
+          it.link = `/ai-rpc/key/${keyName}/${keyId}`;
+        } else if (act == "AI_RPC_ACTIVE_KEY") {
+          const keyName = obj.keyName;
+          const keyId = obj.keyId;
+          it.desc = `set AI RPC Key ${keyName} to active`;
+          it.path = `AI ${keyName}`;
+          it.link = `/ai-rpc/key/${keyName}/${keyId}`;
         }
       }
     },
