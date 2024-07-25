@@ -19,27 +19,25 @@ export default {
 <style lang="scss" scoped>
 .booster-pagination {
   :deep .v-pagination__item {
-    background: transparent;
-    color: #6172f3;
-    border: 1px solid #6172f3;
-    border-radius: 0;
+    background: transparent !important;
+    color: #fff !important;
     font-weight: bold;
+    box-shadow: none !important;
   }
 
   :deep .v-pagination__navigation {
-    background: transparent;
-    border: 1px solid #6172f3;
-    border-radius: 0;
+    background: transparent !important;
     font-weight: bold;
+    box-shadow: none !important;
     > i {
-      color: #6172f3;
+      color: #fff;
     }
   }
 
   :deep .v-pagination__item--active {
-    background: #6172f3 !important;
-    color: #fff;
-    border: none;
+    background: transparent !important;
+    color: #6172f3 !important;
+    border: 1px solid #6172f3 !important;
   }
 }
 </style>

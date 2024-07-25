@@ -23,7 +23,11 @@
           >
             <td class="text-center">{{ item.rank }}</td>
             <td class="text-center">
-              {{ item.address.slice(0, 6) + "..." + item.address.slice(-4) }}
+              {{
+                item.address
+                  ? item.address.slice(0, 6) + "..." + item.address.slice(-4)
+                  : "-"
+              }}
             </td>
             <td class="text-center">{{ item.points }}</td>
             <td class="text-center">

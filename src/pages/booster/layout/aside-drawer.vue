@@ -59,7 +59,7 @@
         </div>
       </div>
 
-      <div class="logout pa-2 fz-14 d-flex align-center">
+      <div class="logout pa-2 fz-14 d-flex align-center" @click="handleLogout">
         <img
           class="mr-2"
           src="/img/booster/menu/logout.svg"
@@ -106,6 +106,13 @@ export default {
       userInfo: (s) => s.userInfo,
     }),
     ...mapGetters(["notLogin", "balance"]),
+  },
+  methods: {
+    handleLogout() {
+      localStorage.clear();
+      localStorage.loginTo = location.pathname + location.search;
+      location.reload();
+    },
   },
 };
 </script>

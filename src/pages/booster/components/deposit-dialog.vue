@@ -25,6 +25,7 @@
               dense
               solo
               item-value="chainId"
+              @change="(v) => onSelect(v)"
               :items="chainList"
               v-model="selected"
               :menu-props="{
@@ -76,6 +77,8 @@
               "
               outlined
               color="#fff"
+              @click="handleRechargeLand"
+              :loading="load"
               >Claim</v-btn
             >
           </div>
@@ -175,7 +178,7 @@
 
 <script>
 import { BlastOracleLand__factory } from "@4everland-contracts";
-import { BigNumber, providers } from "ethers";
+import { providers } from "ethers";
 import { Web3Provider } from "zksync-web3";
 import { mapGetters, mapState } from "vuex";
 import {

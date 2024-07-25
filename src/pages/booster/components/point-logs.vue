@@ -9,6 +9,7 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <img
+          style="display: block"
           v-on="on"
           v-bind="attrs"
           srcset="/img/booster/svg/log.svg"

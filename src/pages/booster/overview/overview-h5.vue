@@ -14,7 +14,7 @@
     <img
       v-if="boostLocked"
       class="start-booster-btn"
-      @click="$emit('handleStartBoost')"
+      @click="handleStartBoost"
       src="/img/booster/mobile/mobile-boost-start.png"
       width="80%"
       alt=""
@@ -43,7 +43,7 @@
               <div class="task-title">Storage Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>5/H</span>
+                <span>20/H</span>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@
               <div class="task-title">Computing Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>5/H</span>
+                <span>20/H</span>
               </div>
             </div>
           </div>
@@ -104,7 +104,7 @@
               <div class="task-title">Network Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>5/H</span>
+                <span>20/H</span>
               </div>
             </div>
           </div>
@@ -267,7 +267,7 @@ export default {
   top: 30%;
   .points {
     position: absolute;
-    left: 10%;
+    left: 0;
     top: 45%;
     font-weight: bold;
   }

@@ -66,13 +66,31 @@ export default {
         if (!this.storageLocked && !this.computingLocked)
           return "/img/booster/mobile-bg-s2c.png";
         if (!this.networkLocked && this.computingLocked)
-          return "/img/booster/mobile-bg-s2c.png";
+          return "/img/booster/mobile-bg-n2c.png";
         if (!this.storageLocked) return "/img/booster/mobile-bg-storage.png";
         if (!this.networkLocked) return "/img/booster/mobile-bg-network.png";
         if (!this.computingLocked) return "/img/booster/mobile-bg-computed.png";
+
+        if (this.boosterInfo.baseRate.length == 0) {
+          return "/img/booster/mobile-bg-locked.png";
+        }
         return "/img/booster/mobile-bg-unlocked.png";
       } else {
-        return "/img/booster/bg.png";
+        if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
+          return "/img/booster/bg.png";
+        if (!this.storageLocked && !this.networkLocked)
+          return "/img/booster/bg-s2n.png";
+        if (!this.storageLocked && !this.computingLocked)
+          return "/img/booster/bg-s2c.png";
+        if (!this.networkLocked && this.computingLocked)
+          return "/img/booster/bg-n2c.png";
+        if (!this.storageLocked) return "/img/booster/bg-storage.png";
+        if (!this.networkLocked) return "/img/booster/bg-network.png";
+        if (!this.computingLocked) return "/img/booster/bg-computed.png";
+        if (this.boosterInfo.baseRate.length == 0) {
+          return "/img/booster/bg-locked.png";
+        }
+        return "/img/booster/bg-unlocked.png";
       }
     },
   },

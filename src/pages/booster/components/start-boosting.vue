@@ -13,56 +13,55 @@
           <img src="/img/booster/boost-icon.png" width="94" alt="" />
         </div>
         <div class="text-center fz-20 mb-4 fw-b">START BOOSTING</div>
-        <div
-          class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
-        >
-          <div class="d-flex align-center">
-            <div class="idx">1</div>
-            <div class="ml-4">Follow @4everland_org on X</div>
+        <div v-for="(item, idx) in activity" :key="item.actId">
+          <div
+            class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
+            v-if="item.actType != 'invite'"
+          >
+            <div class="d-flex align-center">
+              <div class="idx">{{ idx + 1 }}</div>
+              <div class="ml-4">{{ item.actName }}</div>
+            </div>
+            <v-btn
+              class="act-btn"
+              @click="handleNext(item.actId)"
+              :disabled="item.actStatus == 'DONE'"
+            >
+              {{ item.extra.buttonName }}
+            </v-btn>
           </div>
-          <div class="act-btn">Authorize</div>
-        </div>
-        <div
-          class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
-        >
-          <div class="d-flex align-center">
-            <div class="idx">2</div>
-            <div class="ml-4">Share on X</div>
-          </div>
-          <div class="act-btn">Authorize</div>
-        </div>
-        <div
-          class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
-        >
-          <div class="d-flex align-center">
-            <div class="idx">3</div>
-            <div class="ml-4">Join Telegram</div>
-          </div>
-          <div class="act-btn">Authorize</div>
-        </div>
-        <div
-          class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
-        >
-          <div class="d-flex align-center">
-            <div class="idx">4</div>
-            <div class="ml-4">Join Discord</div>
-          </div>
-          <div class="act-btn">Authorize</div>
-        </div>
 
-        <div class="boosting-task pa-3 fz-14">
-          <div class="d-flex align-center">
-            <div class="idx">5</div>
-            <div class="ml-4">
-              <div>Invite code (optional)</div>
-              <div>Boost production rate by</div>
-              <div>+3/H for 24 hours</div>
+          <div class="boosting-task pa-3 fz-14" v-else>
+            <div class="d-flex align-center">
+              <div class="idx">{{ idx + 1 }}</div>
+              <div class="ml-4">
+                <div>Invite code (optional)</div>
+                <div>Boost production rate by</div>
+                <div>+3/H for 24 hours</div>
+              </div>
+            </div>
+            <div class="invite-content">
+              <input
+                class="invite-input"
+                type="text"
+                v-model="inviteCode"
+                placeholder="Enter your invite code"
+              />
             </div>
           </div>
-          <div>Enter your invite code</div>
         </div>
 
-        <div class="start-boost-btn text-center fw-b">Start Boosting Now</div>
+        <!-- <div class="start-boost-btn text-center fw-b">Start Boosting Now</div> -->
+
+        <v-btn
+          class="start-boost-btn"
+          height="54"
+          style="color: #fff"
+          @click="handleStartBoost"
+          :loading="loading"
+        >
+          Start Boosting Now
+        </v-btn>
       </div>
     </v-overlay>
 
@@ -140,6 +139,7 @@
             <v-btn
               class="start-boost-btn"
               style="color: #fff"
+              height="54"
               @click="handleStartBoost"
               :loading="loading"
             >

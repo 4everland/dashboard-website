@@ -61,6 +61,13 @@
             }}/{{ boosterInfo.capacity }}
           </span>
           <img src="/img/booster/3d-square.png" width="120" alt="" />
+          <img
+            class="pos-a"
+            style="left: 50%; top: 32%; transform: translateX(-50%)"
+            src="/img/booster/svg/finger.svg"
+            width="16"
+            alt=""
+          />
         </div>
       </div>
       <div class="storage-boost d-none d-md-block">
@@ -95,7 +102,7 @@
               <div class="task-title">Storage Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>5/H</span>
+                <span>20/H</span>
               </div>
             </div>
           </div>
@@ -134,7 +141,7 @@
               <div class="task-title">Computing Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>5/H</span>
+                <span>20/H</span>
               </div>
             </div>
           </div>
@@ -173,7 +180,7 @@
               <div class="task-title">Network Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>5/H</span>
+                <span>20/H</span>
               </div>
             </div>
           </div>
@@ -402,7 +409,7 @@ export default {
 }
 .point-square {
   position: absolute;
-  left: 49%;
+  left: 50%;
   top: 30%;
   .top-card {
     position: absolute;
@@ -453,6 +460,8 @@ export default {
   padding: 0 8px;
   background: url("/img/booster/svg/card_background_blue.svg") no-repeat;
   background-size: 100%;
+  fill: rgba(97, 114, 243, 0.05);
+  backdrop-filter: blur(4px);
   .card-storage-status {
     .task-title {
       text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);

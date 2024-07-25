@@ -58,7 +58,7 @@
                 offset-y
                 content-class="user-menu"
                 left
-                nudge-right="118"
+                nudge-right="122"
                 nudge-bottom="20"
                 :close-on-content-click="false"
               >
@@ -244,7 +244,7 @@
           @input="handleTriggerInvite"
         >
           <template v-slot:activator="{ on, attrs }">
-            <div class="mobile-btn pa-1" v-on="on" v-bind="attrs">
+            <div class="mobile-btn pa-2" v-on="on" v-bind="attrs">
               <img src="/img/booster/svg/invite-user.svg" width="24" alt="" />
             </div>
           </template>
@@ -321,7 +321,7 @@
             </div>
           </div>
         </v-menu>
-        <div class="mobile-btn ml-1 pa-1" @click="$emit('open-drawer')">
+        <div class="mobile-btn ml-1 pa-2" @click="$emit('open-drawer')">
           <img src="/img/booster/svg/mobile-draw-icon.svg" width="24" alt="" />
         </div>
       </div>
