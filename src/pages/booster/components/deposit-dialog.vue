@@ -160,7 +160,9 @@
                 );
                 text-shadow: 0px 0px 8px #6172f3;
               "
+              @click="handleRechargeLand"
               outlined
+              :loading="load"
               color="#fff"
               >Claim</v-btn
             >
@@ -172,83 +174,111 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { BlastOracleLand__factory } from "@4everland-contracts";
+import { BigNumber, providers } from "ethers";
+import { Web3Provider } from "zksync-web3";
+import { mapGetters, mapState } from "vuex";
+import {
+  ChapelLandRecharge,
+  ArbitrumLandRecharge,
+  zkSyncLandRecharge,
+  GoerliLandRecharge,
+  MumbaiLandRecharge,
+  opBNBRecharge,
+  optimismRecharge,
+  blastRecharge,
+  polygonZkEVMRecharge,
+  scrollRecharge,
+  taikoRecharge,
+} from "@/plugins/pay/contracts/contracts-addr";
+import { parseEther } from "ethers/lib/utils";
 export default {
   props: {
     value: Boolean,
   },
   data() {
     return {
-      // overlay: false,
       chainList: [
         {
           label: "Polygon",
           name: "Polygon",
           img: "/img/svg/billing/ic-polygon-0.svg",
           chainId: this.$inDev ? 80001 : 137,
+          contractAddr: MumbaiLandRecharge,
+        },
+        {
+          label: "PolygonZkEVM",
+          name: "Polygon zkEVM",
+          img: "/img/svg/billing/ic-polygon-zkEVM.png",
+          chainId: this.$inDev ? 1442 : 1101,
+          contractAddr: polygonZkEVMRecharge,
         },
         {
           label: "Ethereum",
           name: "Ethereum",
           img: "/img/svg/billing/ic-ethereum.svg",
           chainId: this.$inDev ? 11155111 : 1,
+          contractAddr: GoerliLandRecharge,
         },
         {
           Label: "opBNB",
           name: "opBNB",
           img: "/img/svg/billing/ic-opbnb-test.svg",
           chainId: this.$inDev ? 5611 : 204,
+          contractAddr: opBNBRecharge,
         },
         {
           label: "BSC",
           name: "BSC",
           img: "/img/svg/billing/ic-bsc.png",
           chainId: this.$inDev ? 97 : 56,
+          contractAddr: ChapelLandRecharge,
         },
         {
           label: "Arbitrum",
           name: "Arbitrum",
           img: "/img/svg/billing/ic-arbitrum.png",
           chainId: this.$inDev ? 421613 : 42161,
+          contractAddr: ArbitrumLandRecharge,
         },
         {
           label: "zkSync",
           name: "zkSync Era",
           img: "/img/svg/logo-no-letters.svg",
           chainId: this.$inDev ? 280 : 324,
+          contractAddr: zkSyncLandRecharge,
         },
         {
           label: "Optimism",
           name: "Optimism",
           img: "/img/svg/billing/ic-optimism.svg",
           chainId: 10,
+          contractAddr: optimismRecharge,
         },
         {
           label: "Scroll",
           name: "Scroll",
           img: "/img/svg/billing/ic-scroll.svg",
           chainId: 534352,
+          contractAddr: scrollRecharge,
         },
         {
           label: "Blast",
           name: "Blast",
           img: "/img/svg/billing/ic-blast.svg",
           chainId: 81457,
+          contractAddr: blastRecharge,
         },
         {
           label: "Taiko",
           name: "Taiko",
           img: "/img/svg/billing/ic-taiko.svg",
           chainId: 167000,
-        },
-        {
-          label: "ZksyncLite",
-          name: "Zksync Lite",
-          img: "/img/svg/logo-no-letters.svg",
-          chainId: 1,
+          contractAddr: taikoRecharge,
         },
       ],
       selected: null,
+      load: false,
     };
   },
   computed: {
@@ -256,6 +286,10 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+      connectAddr: (s) => s.connectAddr,
+    }),
   },
   created() {
     this.walletObj.on("chainChanged", this.initSeleted);
@@ -274,7 +308,6 @@ export default {
         // if (this.selected == chainId) return;
         this.selected = chainId;
         await this.switchNet(chainId);
-        // this.$emit("onNetwork", this.selected);
       } catch (error) {
         // user cancel
         console.log(error, "==================");
@@ -525,6 +558,113 @@ export default {
       } catch (error) {
         console.log("add chain err", error);
       }
+    },
+    async handleRechargeLand() {
+      this.load = true;
+      try {
+        const accounts = await this.walletObj.request({
+          method: "eth_requestAccounts",
+        });
+        let address = accounts[0];
+        let provider = new providers.Web3Provider(this.walletObj);
+        if (this.selected == (this.$inDev ? "280" : "324")) {
+          provider = new Web3Provider(this.walletObj);
+        }
+        let signer = provider.getSigner();
+
+        const curNetwork = this.chainList.filter(
+          (it) => it.chainId == this.selected
+        );
+        let contractAddr = null;
+        if (curNetwork.length) {
+          contractAddr = curNetwork[0].contractAddr;
+        }
+        console.log(curNetwork, "====");
+
+        console.log(contractAddr);
+
+        const BlastOracleLand = BlastOracleLand__factory.connect(
+          contractAddr,
+          signer
+        );
+
+        const price = await BlastOracleLand.callStatic.fetchPrice();
+
+        let mintPrice = parseEther("0.05").mul((1e18).toString()).div(price);
+
+        // const balance = await this.fetchBalance(address);
+        // if (balance.lte(mintPrice)) {
+        //   throw new Error("Insufficient balance in your wallet.");
+        // }
+
+        const gasLimit = await BlastOracleLand.estimateGas.mintByETH(
+          this.userInfo.euid,
+          {
+            value: mintPrice,
+          }
+        );
+        const gasPrice = await provider.getGasPrice();
+        let tx = await BlastOracleLand.mintByETH(this.userInfo.euid, {
+          value: mintPrice,
+          gasLimit: gasLimit.mul(12).div(10),
+          gasPrice: gasPrice.mul(12).div(10),
+        });
+
+        const receipt = await tx.wait();
+        this.$store.dispatch("getBalance");
+
+        console.log(receipt, "receipt");
+        this.$toast2("LAND Claimed successfully");
+      } catch (error) {
+        console.log(error);
+        this.onErr(error);
+      }
+      this.load = false;
+    },
+    onErr(err, retry) {
+      if (!err) return console.log("---- err null");
+      console.log(err);
+      if (/unknown account/.test(err.message)) {
+        return this.getAccount();
+      }
+      const { data } = err;
+      let msg = err.message;
+      if (data) {
+        msg = data.message || msg;
+      }
+      if (/repriced/i.test(msg) && /replaced/i.test(msg)) {
+        return this.$toast("Transaction was replaced.");
+      }
+      window.gtag("event", "contract_error", {
+        message: msg,
+      });
+      if (/missing revert data/i.test(msg)) {
+        msg = "Network Error";
+      } else if (/user rejected/i.test(msg)) {
+        msg = "Your transaction has been canceled.";
+      } else if (/transaction failed/i.test(msg)) {
+        msg = "Transaction Failed";
+      } else if (/ipfs/.test(msg) && /invalid params/.test(msg)) {
+        msg = "IPFS Storage Expired, extending service duration is required.";
+      } else if (
+        /exceeds balance/i.test(msg) ||
+        msg == "overflow" ||
+        /insufficient funds/i.test(msg)
+      ) {
+        msg = "Insufficient balance in your wallet.";
+      } else if (msg.length > 100) {
+        const mat = /^(.+)\[/.exec(msg);
+        if (mat) msg = mat[1];
+      }
+      if (/already pending for origin/gi.test(msg)) {
+        msg = "Wrong network, please switch your wallet network and try again.";
+      }
+      if (retry) {
+        return this.$confirm(msg, "Network Error", {
+          confirmText: "Retry",
+        });
+      }
+      return this.$alert(msg, "Error");
     },
   },
 };

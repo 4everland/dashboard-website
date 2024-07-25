@@ -26,6 +26,13 @@
           <span> I claimed {{ it.value }} points. </span>
           <span>{{ new Date(it.createdAt * 1000).format("date") }}</span>
         </div>
+        <booster-pagination
+          v-show="list.length != 0"
+          :length="totalPages"
+          class="mt-5"
+          v-model="page"
+          @input="onPage"
+        ></booster-pagination>
       </div>
     </v-menu>
   </div>
@@ -33,6 +40,7 @@
 
 <script>
 import { fetchPointsHistory } from "@/api/booster";
+import BoosterPagination from "./booster-pagination.vue";
 export default {
   data() {
     return {
@@ -42,9 +50,6 @@ export default {
       list: [],
       showLog: false,
     };
-  },
-  created() {
-    // this.getList();
   },
   mounted() {
     this.id = document.querySelector(".booster-overview-content");
@@ -66,6 +71,12 @@ export default {
         this.getList();
       }
     },
+    onPage() {
+      this.getList();
+    },
+  },
+  components: {
+    BoosterPagination,
   },
 };
 </script>

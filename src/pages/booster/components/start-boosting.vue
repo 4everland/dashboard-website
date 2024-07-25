@@ -137,9 +137,14 @@
           </div>
 
           <div class="d-flex align-center justify-center">
-            <div class="start-boost-btn" @click="handleStartBoost">
+            <v-btn
+              class="start-boost-btn"
+              style="color: #fff"
+              @click="handleStartBoost"
+              :loading="loading"
+            >
               Start Boosting Now
-            </div>
+            </v-btn>
           </div>
         </div>
       </div>
@@ -158,6 +163,7 @@ export default {
       // overlay: false,
       activity: [],
       inviteCode: "",
+      loading: false,
     };
   },
   computed: {
@@ -178,17 +184,16 @@ export default {
       }
     },
     async handleStartBoost() {
-      this.$loading();
+      this.loading = true;
       try {
         const { data } = await initBoost(this.inviteCode);
         console.log(data);
         this.$store.dispatch("getBoosterUserInfo");
-
         this.$emit("input", false);
       } catch (error) {
         console.log(error);
       }
-      this.$loading.close();
+      this.loading = false;
     },
 
     async handleNext(id) {

@@ -115,7 +115,7 @@
           <div style="width: 10px; height: 10px"></div>
         </div>
         <div class="top-card">
-          <span class="points fz-14">
+          <span class="points fz-12">
             {{
               computedPoints > boosterInfo.capacity
                 ? boosterInfo.capacity
@@ -123,6 +123,13 @@
             }}/{{ boosterInfo.capacity }}
           </span>
           <img src="/img/booster/3d-square.png" width="64" alt="" />
+          <img
+            class="pos-a"
+            style="left: 50%; top: 30%; transform: translateX(-50%)"
+            src="/img/booster/svg/finger.svg"
+            width="16"
+            alt=""
+          />
         </div>
       </div>
     </div>
@@ -260,10 +267,9 @@ export default {
   top: 30%;
   .points {
     position: absolute;
-    left: 0;
-    top: 40%;
+    left: 10%;
+    top: 45%;
     font-weight: bold;
-    font-size: 14px;
   }
 }
 

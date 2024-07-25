@@ -56,8 +56,7 @@ export default {
     },
     async handleUnlock(index) {
       try {
-        const { data } = await unlockStage(index);
-        console.log(data);
+        await unlockStage(index);
         this.$store.dispatch("getBoosterUserInfo");
       } catch (error) {
         console.log(error);

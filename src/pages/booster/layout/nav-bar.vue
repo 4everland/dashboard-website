@@ -159,9 +159,11 @@
                   <span>Invite link:</span>
                   <span class="ml-2">
                     {{
-                      inviteInfo.link.slice(0, 12) +
-                      "..." +
-                      inviteInfo.link.slice(-8)
+                      inviteInfo.link == "-"
+                        ? "-"
+                        : inviteInfo.link.slice(0, 12) +
+                          "..." +
+                          inviteInfo.link.slice(-8)
                     }}</span
                   >
                 </div>
@@ -170,6 +172,8 @@
                   src="/img/booster/svg/copy.svg"
                   width="24"
                   alt=""
+                  v-clipboard="inviteInfo.link"
+                  @success="$toast2(`Copied!`)"
                 />
               </div>
               <div class="invite-panel-basic-item d-flex align-center fz-14">
@@ -182,6 +186,8 @@
                   src="/img/booster/svg/copy.svg"
                   width="24"
                   alt=""
+                  v-clipboard="inviteInfo.inviteCode"
+                  @success="$toast2('Copied!')"
                 />
               </div>
               <div class="invite-panel-basic-item d-flex align-center fz-14">
@@ -252,9 +258,11 @@
                   <span>Invite link:</span>
                   <span class="ml-2">
                     {{
-                      inviteInfo.link.slice(0, 12) +
-                      "..." +
-                      inviteInfo.link.slice(-8)
+                      inviteInfo.link == "-"
+                        ? "-"
+                        : inviteInfo.link.slice(0, 12) +
+                          "..." +
+                          inviteInfo.link.slice(-8)
                     }}</span
                   >
                 </div>
@@ -263,6 +271,8 @@
                   src="/img/booster/svg/copy.svg"
                   width="24"
                   alt=""
+                  v-clipboard="inviteInfo.link"
+                  @success="$toast2('Copied!')"
                 />
               </div>
               <div
@@ -277,6 +287,8 @@
                   src="/img/booster/svg/copy.svg"
                   width="24"
                   alt=""
+                  v-clipboard="inviteInfo.inviteCode"
+                  @success="$toast2('Copied!')"
                 />
               </div>
               <div
@@ -364,6 +376,7 @@ export default {
   methods: {
     handleLogout() {
       localStorage.clear();
+      localStorage.loginTo = location.pathname + location.search;
       location.reload();
     },
     handleShowDeposit() {
