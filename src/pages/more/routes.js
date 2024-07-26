@@ -93,6 +93,17 @@ export default [
     },
   },
   {
+    path: "/quest/bountybay",
+    component: () => import("./bountybay-airdrop"),
+    meta: {
+      title: "Bounty Bay",
+      hideNav: 1,
+      isTab: 1,
+      noLogin: 1,
+    },
+  },
+
+  {
     path: "/claim",
     component: () => import("./claim-activity"),
     meta: {

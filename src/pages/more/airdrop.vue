@@ -134,7 +134,7 @@
               <div class="pa-6 task-desc h-flex">
                 <div
                   class="fz-20 fw-b cursor-p text-white"
-                  @click="handleToBountyBay"
+                  @click="$router.push('/quest/bountybay')"
                 >
                   100,000 $4EVER Points Giveaway with BountyBay
                 </div>
@@ -147,8 +147,11 @@
                   <div class="reward fz-20 fw-b">
                     Shared Reward of 100,000 Points
                   </div>
-                  <v-btn color="#039CFF" @click="handleToBountyBay">
-                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  <v-btn
+                    color="#039CFF"
+                    @click="$router.push('/quest/bountybay')"
+                  >
+                    <span class="fw-b" style="color: #fff">Claim</span>
                   </v-btn>
                 </div>
               </div>
