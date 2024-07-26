@@ -19,9 +19,13 @@
           <div class="nft-drawer-btn-box">
             <div class="nft-drawer-logo">
               <img class="logo" src="/favicon.ico" alt="" />
-              <div>Staked: 8,899,902 T4EVER</div>
+              <div>Staked: {{ staking }} T4EVER</div>
             </div>
-            <div><v-btn class="drawer-btn">Stake</v-btn></div>
+            <div>
+              <v-btn class="drawer-btn" @click="showStakeDialog = true"
+                >Stake</v-btn
+              >
+            </div>
           </div>
         </div>
         <div class="nft-box">
@@ -67,27 +71,46 @@
         </div>
       </v-container>
     </v-navigation-drawer>
+    <StakeDialog v-model="showStakeDialog" />
   </div>
 </template>
 <script>
 import { mapGetters, mapState } from "vuex";
-import { fetchNftLists, fetchNftIsStake, fetchNftBind } from "@/api/booster.js";
+import {
+  fetchStakeInfo,
+  fetchNftLists,
+  fetchNftIsStake,
+  fetchNftBind,
+} from "@/api/booster.js";
 
 import NFT_LISTS from "../nft.js";
 
+import StakeDialog from "@/pages/booster/components/stake-dialog";
+
 export default {
+  components: {
+    StakeDialog,
+  },
   computed: {
     ...mapGetters(["showStakeDrawer"]),
   },
   data() {
     return {
+      staking: 0,
       nftList: [],
+      showStakeDialog: false,
     };
   },
   created() {
+    this.getStakeInfo();
     this.getNftLists();
   },
   methods: {
+    async getStakeInfo() {
+      const { data } = await fetchStakeInfo();
+      console.log(data);
+      this.staking = data.staking;
+    },
     async getNftLists() {
       const { data } = await fetchNftLists();
       const isStakeData = await this.getNftIsStake();
@@ -116,11 +139,14 @@ export default {
     async onBindNft(item) {
       const params = {
         contract: item.contractAddress,
-        nftId: item.private.nftId,
-        id: "",
+        id: item.private.batch,
       };
-      const { data } = await fetchNftBind(params);
-      console.log(data);
+      try {
+        await fetchNftBind(params);
+        this.getNftLists();
+      } catch (error) {
+        console.log(error);
+      }
     },
     stateStakeDrawerShow(state) {
       this.$store.dispatch("StakeDrawerState", { state });
