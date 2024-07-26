@@ -58,7 +58,7 @@ export default {
             "RPC Requests",
             "AI RPC",
             "RaaS",
-            // "Others",
+            "ASS Node",
           ],
         },
         grid: {
@@ -176,14 +176,14 @@ export default {
             },
             data: this.RAAS,
           },
-          // {
-          //   name: "Others",
-          //   type: "line",
-          //   itemStyle: {
-          //     color: "#70707B",
-          //   },
-          //   data: this.ASS_NODE,
-          // },
+          {
+            name: "ASS Node",
+            type: "line",
+            itemStyle: {
+              color: "#70707B",
+            },
+            data: this.ASS_NODE,
+          },
         ],
       };
     },
