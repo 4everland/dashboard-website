@@ -19,21 +19,29 @@
         />
       </template>
       <div class="logs">
-        <div
-          class="log d-flex align-center justify-space-between mb-4 fz-14"
-          v-for="it in list"
-          :key="it.createdAt"
-        >
-          <span> I claimed {{ it.value }} points. </span>
-          <span>{{ new Date(it.createdAt * 1000).format("date") }}</span>
+        <div class="empty text-center" v-if="!list.length">
+          <img src="/img/booster/svg/empty.svg" width="200" alt="" />
+          <div>Empty</div>
         </div>
-        <booster-pagination
-          v-show="list.length != 0"
-          :length="totalPages"
-          class="mt-5"
-          v-model="page"
-          @input="onPage"
-        ></booster-pagination>
+        <div class="logs-content" v-else>
+          <div class="log-list">
+            <div
+              class="log d-flex align-center justify-space-between mb-4 fz-14"
+              v-for="it in list"
+              :key="it.createdAt"
+            >
+              <span> I claimed {{ it.value }} points. </span>
+              <span>{{ new Date(it.createdAt * 1000).format("date") }}</span>
+            </div>
+          </div>
+          <booster-pagination
+            v-show="list.length != 0"
+            :length="totalPages"
+            class="mt-5"
+            v-model="page"
+            @input="onPage"
+          ></booster-pagination>
+        </div>
       </div>
     </v-menu>
   </div>
@@ -91,11 +99,25 @@ export default {
   left: initial !important;
 }
 .logs {
+  position: relative;
   color: #fff;
   padding: 32px 20px;
   width: 518px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: rgba(54, 59, 64, 0.9);
   height: calc(100% - 72px - 64px - 32px) !important;
+  .logs-content {
+    height: 100%;
+    .log-list {
+      height: calc(100% - 70px);
+      overflow: auto;
+    }
+  }
+  .empty {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 </style>

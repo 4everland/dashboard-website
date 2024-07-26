@@ -5,48 +5,54 @@
       <div class="desc">Collect, Explore, & invite friends to rank up.</div>
     </div>
 
-    <v-simple-table class="leaderboard-table mt-10">
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-center">#</th>
-            <th class="text-center">Address</th>
-            <th class="text-center">Points</th>
-            <th class="text-center">Invited By</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(item, i) in list"
-            :key="item.address"
-            :class="{ trigger: i == 0 }"
-          >
-            <td class="text-center">{{ item.rank }}</td>
-            <td class="text-center">
-              {{
-                item.address
-                  ? item.address.slice(0, 6) + "..." + item.address.slice(-4)
-                  : "-"
-              }}
-            </td>
-            <td class="text-center">{{ item.points }}</td>
-            <td class="text-center">
-              {{
-                !item.inviter
-                  ? item.inviter
-                  : item.inviter.slice(0, 6) + "..." + item.inviter.slice(-4)
-              }}
-            </td>
-          </tr>
-        </tbody>
-      </template>
-    </v-simple-table>
+    <div class="empty text-center" v-if="!list.length">
+      <img src="/img/booster/svg/empty.svg" width="200" alt="" />
+      <div>Empty</div>
+    </div>
+    <div v-else>
+      <v-simple-table class="leaderboard-table mt-10">
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-center">#</th>
+              <th class="text-center">Address</th>
+              <th class="text-center">Points</th>
+              <th class="text-center">Invited By</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(item, i) in list"
+              :key="item.address"
+              :class="{ trigger: i == 0 }"
+            >
+              <td class="text-center">{{ item.rank }}</td>
+              <td class="text-center">
+                {{
+                  item.address
+                    ? item.address.slice(0, 6) + "..." + item.address.slice(-4)
+                    : "-"
+                }}
+              </td>
+              <td class="text-center">{{ item.points }}</td>
+              <td class="text-center">
+                {{
+                  !item.inviter
+                    ? item.inviter
+                    : item.inviter.slice(0, 6) + "..." + item.inviter.slice(-4)
+                }}
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
 
-    <booster-pagination
-      :length="totalPages"
-      class="mt-5"
-      v-model="page"
-    ></booster-pagination>
+      <booster-pagination
+        :length="totalPages"
+        class="mt-5"
+        v-model="page"
+      ></booster-pagination>
+    </div>
   </div>
 </template>
 
@@ -67,6 +73,7 @@ export default {
   },
   computed: {
     list() {
+      if (this.ranks.length == 0) return [];
       const ranks = this.ranks.filter(
         (it) => it.address !== this.myRankInfo.address
       );
@@ -134,7 +141,7 @@ export default {
     }
   }
   :deep tbody tr:hover {
-    font-weight: bold;
+    // font-weight: bold;
     background: linear-gradient(
         113deg,
         rgba(97, 114, 243, 0) 19.38%,
@@ -145,5 +152,12 @@ export default {
   :deep tbody tr:hover td {
     border-bottom: 1px solid rgba(97, 114, 243, 0.5) !important;
   }
+}
+
+.empty {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>

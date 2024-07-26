@@ -409,7 +409,7 @@ export default {
 }
 .point-square {
   position: absolute;
-  left: 50%;
+  left: 50.6%;
   top: 30%;
   .top-card {
     position: absolute;
@@ -478,7 +478,7 @@ export default {
 
 .storage-boost {
   position: absolute;
-  left: 23%;
+  left: 19%;
   top: 63%;
   .top-card {
     position: absolute;
@@ -489,7 +489,7 @@ export default {
 
 .computing-boost {
   position: absolute;
-  left: 23%;
+  left: 25%;
   top: 34%;
   .top-card {
     position: absolute;
