@@ -29,8 +29,19 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from "vuex";
+
 export default {
   components: {},
+  computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
+    ...mapGetters(["notLogin", "balance"]),
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
+  },
   data() {
     let _this = this;
     return {
@@ -38,7 +49,7 @@ export default {
         {
           icon: "/img/booster/svg/explore.svg",
           activityIcon: "/img/booster/svg/explore-active.svg",
-          name: "Explore",
+          name: "Coming soon",
           path: "/booster/explore",
           action() {},
         },
@@ -72,7 +83,7 @@ export default {
         {
           icon: "/img/booster/svg/explore.svg",
           activityIcon: "/img/booster/svg/explore-active.svg",
-          name: "Explore",
+          name: "Coming soon",
           path: "/booster/explore",
           action() {
             console.log(_this);
@@ -81,16 +92,17 @@ export default {
       ],
     };
   },
-  computed: {
-    asMobile() {
-      return this.$vuetify.breakpoint.smAndDown;
-    },
-  },
   methods: {
     toggleStakeDrawer() {
+      if (this.notLogin) {
+        return;
+      }
       this.$store.dispatch("StakeDrawerToggle");
     },
     toggleTaskDrawer() {
+      if (this.notLogin) {
+        return;
+      }
       this.$store.dispatch("TaskDrawerToggle");
     },
   },
@@ -155,8 +167,8 @@ export default {
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        width: 110%;
-        height: 120%;
+        width: 100%;
+        height: 100%;
         border: 1px solid #6172f3;
       }
     }

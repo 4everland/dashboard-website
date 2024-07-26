@@ -22,11 +22,17 @@
                 v-for="(item, index) in signList"
                 :key="index"
                 class="daily-sign-item"
+                :class="signDays % 7 > index ? 'daily-signed' : ''"
               >
                 <div class="daily-sign-item-top">
                   <div class="point">+{{ item.reward }}/H</div>
                   <div>
-                    <img src="/img/booster/drawer/coin.png" alt="" />
+                    <img
+                      v-if="signDays % 7 > index"
+                      src="/img/booster/drawer/check.png"
+                      alt=""
+                    />
+                    <img v-else src="/img/booster/drawer/coin.png" alt="" />
                   </div>
                 </div>
                 <div class="daily-sign-item-bottom">Day {{ item.step }}</div>
@@ -87,6 +93,7 @@ export default {
     return {
       signList: [],
       tasksLists: [],
+      signDays: 0,
     };
   },
   created() {
@@ -100,6 +107,7 @@ export default {
       const rewardList = data.items[0].extra.dailySign.rewardList;
       const stepList = data.items[0].extra.dailySign.stepList;
       const signDays = data.items[0].extra.dailySign.continuous;
+      this.signDays = signDays;
       let signList = [];
       rewardList.forEach((element, index) => {
         signList.push({
@@ -208,6 +216,18 @@ export default {
               opacity: 0.6;
               text-align: center;
               margin-top: 6px;
+            }
+          }
+          .daily-signed {
+            .daily-sign-item-top {
+              opacity: 0.8;
+              background: rgba(97, 114, 243, 0.1);
+              .point {
+                color: #6172f3;
+              }
+            }
+            .daily-sign-item-bottom {
+              opacity: 0.3;
             }
           }
         }
