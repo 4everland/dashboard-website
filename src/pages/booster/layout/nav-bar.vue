@@ -195,12 +195,6 @@
                   <span>Total invites:</span>
                   <span class="ml-2">{{ inviteInfo.invited }}</span>
                 </div>
-                <img
-                  class="ml-auto cursor-p"
-                  src="/img/booster/svg/expanded.svg"
-                  width="24"
-                  alt=""
-                />
               </div>
               <div class="invite-panel-basic-item d-flex align-center fz-14">
                 <div>
@@ -298,12 +292,6 @@
                   <span>Total invites:</span>
                   <span class="ml-2">{{ inviteInfo.invited }}</span>
                 </div>
-                <img
-                  class="ml-auto cursor-p"
-                  src="/img/booster/svg/expanded.svg"
-                  width="24"
-                  alt=""
-                />
               </div>
               <div
                 class="mobile-invite-panel-basic-item d-flex align-center fz-14"

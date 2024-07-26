@@ -74,6 +74,8 @@ export default {
   computed: {
     list() {
       if (this.ranks.length == 0) return [];
+
+      if (!this.myRankInfo) return this.ranks;
       const ranks = this.ranks.filter(
         (it) => it.address !== this.myRankInfo.address
       );
