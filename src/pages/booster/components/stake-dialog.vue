@@ -201,6 +201,9 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    currentAddress() {
+      return this.userInfo.wallet.address;
+    },
   },
   created() {},
   mounted() {},
@@ -213,7 +216,7 @@ export default {
       try {
         const everPay = new window.Everpay.default();
 
-        const account = this.userInfo.uid;
+        const account = this.currentAddress;
 
         const tag = this.tag;
 
@@ -233,7 +236,7 @@ export default {
     },
     async getEthereumBalance() {
       try {
-        const account = this.userInfo.uid;
+        const account = this.currentAddress;
         const tokenAddress = this.tokenAddress;
 
         const provider = new ethers.providers.Web3Provider(this.walletObj);
@@ -307,9 +310,9 @@ export default {
         method: "eth_requestAccounts",
       });
       const account = accounts[0];
-      if (account.toLowerCase() !== this.userInfo.uid.toLowerCase()) {
+      if (account.toLowerCase() !== this.currentAddress.toLowerCase()) {
         return this.$toast(
-          `The currently connected wallet is not the one bound to your 4EVERLAND account. Please switch to the ${this.userInfo.uid.cutStr(
+          `The currently connected wallet is not the one bound to your 4EVERLAND account. Please switch to the ${this.currentAddress.cutStr(
             6,
             4
           )} wallet to proceed.`
