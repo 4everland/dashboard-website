@@ -58,7 +58,7 @@
                 offset-y
                 content-class="user-menu"
                 left
-                nudge-right="118"
+                nudge-right="122"
                 nudge-bottom="20"
                 :close-on-content-click="false"
               >
@@ -96,12 +96,7 @@
                         <span class="points mx-1">{{
                           boosterInfo.totalPoint
                         }}</span>
-                        <img
-                          srcset="/img/booster/svg/log.svg"
-                          width="16"
-                          src=""
-                          alt=""
-                        />
+                        <PointLogs></PointLogs>
                       </div>
                     </div>
                     <div class="d-flex align-center justify-space-between py-2">
@@ -142,6 +137,7 @@
           nudge-bottom="15"
           left
           nudge-left="-13"
+          @input="handleTriggerInvite"
           :close-on-content-click="false"
         >
           <template v-slot:activator="{ on, attrs }">
@@ -163,9 +159,11 @@
                   <span>Invite link:</span>
                   <span class="ml-2">
                     {{
-                      inviteInfo.link.slice(0, 12) +
-                      "..." +
-                      inviteInfo.link.slice(-8)
+                      inviteInfo.link == "-"
+                        ? "-"
+                        : inviteInfo.link.slice(0, 12) +
+                          "..." +
+                          inviteInfo.link.slice(-8)
                     }}</span
                   >
                 </div>
@@ -174,6 +172,8 @@
                   src="/img/booster/svg/copy.svg"
                   width="24"
                   alt=""
+                  v-clipboard="inviteInfo.link"
+                  @success="$toast2(`Copied!`)"
                 />
               </div>
               <div class="invite-panel-basic-item d-flex align-center fz-14">
@@ -186,6 +186,8 @@
                   src="/img/booster/svg/copy.svg"
                   width="24"
                   alt=""
+                  v-clipboard="inviteInfo.inviteCode"
+                  @success="$toast2('Copied!')"
                 />
               </div>
               <div class="invite-panel-basic-item d-flex align-center fz-14">
@@ -239,9 +241,10 @@
           :close-on-content-click="false"
           min-width="100%"
           nudge-bottom="10"
+          @input="handleTriggerInvite"
         >
           <template v-slot:activator="{ on, attrs }">
-            <div class="mobile-btn pa-1" v-on="on" v-bind="attrs">
+            <div class="mobile-btn pa-2" v-on="on" v-bind="attrs">
               <img src="/img/booster/svg/invite-user.svg" width="24" alt="" />
             </div>
           </template>
@@ -255,9 +258,11 @@
                   <span>Invite link:</span>
                   <span class="ml-2">
                     {{
-                      inviteInfo.link.slice(0, 12) +
-                      "..." +
-                      inviteInfo.link.slice(-8)
+                      inviteInfo.link == "-"
+                        ? "-"
+                        : inviteInfo.link.slice(0, 12) +
+                          "..." +
+                          inviteInfo.link.slice(-8)
                     }}</span
                   >
                 </div>
@@ -266,6 +271,8 @@
                   src="/img/booster/svg/copy.svg"
                   width="24"
                   alt=""
+                  v-clipboard="inviteInfo.link"
+                  @success="$toast2('Copied!')"
                 />
               </div>
               <div
@@ -280,6 +287,8 @@
                   src="/img/booster/svg/copy.svg"
                   width="24"
                   alt=""
+                  v-clipboard="inviteInfo.inviteCode"
+                  @success="$toast2('Copied!')"
                 />
               </div>
               <div
@@ -312,7 +321,7 @@
             </div>
           </div>
         </v-menu>
-        <div class="mobile-btn ml-1 pa-1" @click="$emit('open-drawer')">
+        <div class="mobile-btn ml-1 pa-2" @click="$emit('open-drawer')">
           <img src="/img/booster/svg/mobile-draw-icon.svg" width="24" alt="" />
         </div>
       </div>
@@ -324,7 +333,7 @@
 import { fetchInviteInfo } from "@/api/booster";
 import { mapGetters, mapState } from "vuex";
 import { bus } from "@/utils/bus";
-
+import PointLogs from "../components/point-logs.vue";
 export default {
   data() {
     return {
@@ -362,12 +371,12 @@ export default {
   created() {
     if (!this.notLogin) {
       this.$store.dispatch("getBalance");
-      this.getInviteInfo();
     }
   },
   methods: {
     handleLogout() {
       localStorage.clear();
+      localStorage.loginTo = location.pathname + location.search;
       location.reload();
     },
     handleShowDeposit() {
@@ -384,6 +393,14 @@ export default {
         console.log(error);
       }
     },
+    handleTriggerInvite(val) {
+      if (val) {
+        this.getInviteInfo();
+      }
+    },
+  },
+  components: {
+    PointLogs,
   },
 };
 </script>

@@ -17,6 +17,7 @@ export default {
       "boostRate",
       "currentComputed",
       "totalRate",
+      "notLogin",
     ]),
     storageBoost() {
       return this.boosterInfo.baseRate.filter((it) => it.name == "storage");
@@ -46,10 +47,16 @@ export default {
     }, this.interval);
   },
   methods: {
+    handleStartBoost() {
+      if (this.notLogin) {
+        this.$router.push("/login");
+      } else {
+        this.$emit("handleStartBoost");
+      }
+    },
     async handleUnlock(index) {
       try {
-        const { data } = await unlockStage(index);
-        console.log(data);
+        await unlockStage(index);
         this.$store.dispatch("getBoosterUserInfo");
       } catch (error) {
         console.log(error);
@@ -59,6 +66,7 @@ export default {
       try {
         const data = await claimPoints();
         console.log(data);
+        this.computedPoints = 0;
         this.$store.dispatch("getBoosterUserInfo");
       } catch (error) {
         console.log(error);

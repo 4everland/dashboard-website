@@ -13,56 +13,55 @@
           <img src="/img/booster/boost-icon.png" width="94" alt="" />
         </div>
         <div class="text-center fz-20 mb-4 fw-b">START BOOSTING</div>
-        <div
-          class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
-        >
-          <div class="d-flex align-center">
-            <div class="idx">1</div>
-            <div class="ml-4">Follow @4everland_org on X</div>
+        <div v-for="(item, idx) in activity" :key="item.actId">
+          <div
+            class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
+            v-if="item.actType != 'invite'"
+          >
+            <div class="d-flex align-center">
+              <div class="idx">{{ idx + 1 }}</div>
+              <div class="ml-4">{{ item.actName }}</div>
+            </div>
+            <v-btn
+              class="act-btn"
+              @click="handleNext(item.actId)"
+              :disabled="item.actStatus == 'DONE'"
+            >
+              {{ item.extra.buttonName }}
+            </v-btn>
           </div>
-          <div class="act-btn">Authorize</div>
-        </div>
-        <div
-          class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
-        >
-          <div class="d-flex align-center">
-            <div class="idx">2</div>
-            <div class="ml-4">Share on X</div>
-          </div>
-          <div class="act-btn">Authorize</div>
-        </div>
-        <div
-          class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
-        >
-          <div class="d-flex align-center">
-            <div class="idx">3</div>
-            <div class="ml-4">Join Telegram</div>
-          </div>
-          <div class="act-btn">Authorize</div>
-        </div>
-        <div
-          class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
-        >
-          <div class="d-flex align-center">
-            <div class="idx">4</div>
-            <div class="ml-4">Join Discord</div>
-          </div>
-          <div class="act-btn">Authorize</div>
-        </div>
 
-        <div class="boosting-task pa-3 fz-14">
-          <div class="d-flex align-center">
-            <div class="idx">5</div>
-            <div class="ml-4">
-              <div>Invite code (optional)</div>
-              <div>Boost production rate by</div>
-              <div>+3/H for 24 hours</div>
+          <div class="boosting-task pa-3 fz-14" v-else>
+            <div class="d-flex align-center">
+              <div class="idx">{{ idx + 1 }}</div>
+              <div class="ml-4">
+                <div>Invite code (optional)</div>
+                <div>Boost production rate by</div>
+                <div>+3/H for 24 hours</div>
+              </div>
+            </div>
+            <div class="invite-content">
+              <input
+                class="invite-input"
+                type="text"
+                v-model="inviteCode"
+                placeholder="Enter your invite code"
+              />
             </div>
           </div>
-          <div>Enter your invite code</div>
         </div>
 
-        <div class="start-boost-btn text-center fw-b">Start Boosting Now</div>
+        <!-- <div class="start-boost-btn text-center fw-b">Start Boosting Now</div> -->
+
+        <v-btn
+          class="start-boost-btn"
+          height="54"
+          style="color: #fff"
+          @click="handleStartBoost"
+          :loading="loading"
+        >
+          Start Boosting Now
+        </v-btn>
       </div>
     </v-overlay>
 
@@ -105,7 +104,11 @@
                 <div class="idx">{{ idx + 1 }}</div>
                 <div class="ml-4">{{ item.actName }}</div>
               </div>
-              <v-btn class="act-btn" @click="handleNext(item.actId)">
+              <v-btn
+                class="act-btn"
+                @click="handleNext(item.actId)"
+                :disabled="item.actStatus == 'DONE'"
+              >
                 {{ item.extra.buttonName }}
               </v-btn>
             </div>
@@ -125,6 +128,7 @@
                 <input
                   class="invite-input"
                   type="text"
+                  v-model="inviteCode"
                   placeholder="Enter your invite code"
                 />
               </div>
@@ -132,9 +136,16 @@
           </div>
 
           <div class="d-flex align-center justify-center">
-            <div class="start-boost-btn" @click="handleStartBoost">
+            <v-btn
+              class="start-boost-btn"
+              style="color: #fff"
+              height="54"
+              :disabled="startDisabled"
+              @click="handleStartBoost"
+              :loading="loading"
+            >
               Start Boosting Now
-            </div>
+            </v-btn>
           </div>
         </div>
       </div>
@@ -153,11 +164,15 @@ export default {
       // overlay: false,
       activity: [],
       inviteCode: "",
+      loading: false,
     };
   },
   computed: {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+    startDisabled() {
+      return this.activity.filter((it) => it.actStatus == "DONE").length < 4;
     },
   },
   created() {
@@ -174,19 +189,27 @@ export default {
       }
     },
     async handleStartBoost() {
-      this.$loading();
+      this.loading = true;
       try {
-        await initBoost(this.inviteCode);
+        const { data } = await initBoost(this.inviteCode);
+        console.log(data);
+        this.$store.dispatch("getBoosterUserInfo");
+        this.$emit("input", false);
       } catch (error) {
         console.log(error);
       }
-      this.$loading.close();
+      this.loading = false;
     },
 
     async handleNext(id) {
       try {
         const { data } = await onNext(id);
+        const idx = this.activity.findIndex((it) => it.actId == data.actId);
         console.log(data);
+        this.activity[idx].actStatus = data.actStatus;
+        if (data.action.web.nextButtonName) {
+          this.activity[idx].extra.buttonName = data.action.web.nextButtonName;
+        }
         switch (data.action.web.next) {
           case "REDIRECT":
             location.href = data.action.web.message;
@@ -326,6 +349,7 @@ export default {
     margin-top: 8px;
     padding: 16px 24px;
     font-weight: bold;
+    color: #fff !important;
     border-radius: 4px;
     border: 1px solid #0e6cc6;
     background: linear-gradient(180deg, #00070c 0%, #074178 113.39%);

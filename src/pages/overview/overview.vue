@@ -392,11 +392,11 @@ export default {
               color = "#F78E69";
               resourceUsed = this.$utils.getFileSize(it.resourceUsed);
               break;
-            // case "ASS_NODE":
-            //   name = "Others";
-            //   color = "#70707B";
-            //   resourceUsed = this.$utils.getFileSize(it.resourceUsed);
-            //   break;
+            case "ASS_NODE":
+              name = "ASS Node";
+              color = "#70707B";
+              resourceUsed = this.$utils.getFileSize(it.resourceUsed);
+              break;
 
             default:
               name = "IPFS";

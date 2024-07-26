@@ -9,7 +9,7 @@
       v-model="showSnackbar"
     >
       <div class="snackbar-content">
-        {{ noticeInfo.content }}
+        <div v-html="noticeInfo.content"></div>
       </div>
       <!-- <template #action>
         <v-btn text @click="showSnackbar = false"> close </v-btn>
@@ -133,6 +133,13 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-snackbar top timeout="2000" dark v-model="showBoosterSnackbar">
+      <div class="snackbar-content d-flex align-center">
+        <img class="mr-3" src="/img/svg/success.svg" width="20" alt="" />
+        <div>{{ boosterToastInfo.content }}</div>
+      </div>
+    </v-snackbar>
   </div>
 </template>
 
@@ -163,6 +170,8 @@ export default {
       inputVal: "",
       inputVal2: "",
       noticeInfo: {},
+      showBoosterSnackbar: false,
+      boosterToastInfo: {},
     };
   },
   watch: {
@@ -269,6 +278,14 @@ export default {
         ...opts,
       };
       this.showSnackbar = true;
+    };
+
+    Vue.prototype.$toast2 = (content) => {
+      this.showBoosterSnackbar = false;
+      this.boosterToastInfo = {
+        content,
+      };
+      this.showBoosterSnackbar = true;
     };
   },
   methods: {

@@ -45,6 +45,7 @@ export default {
           );
         }, 0);
 
+        console.log(basicComputed + boosterInfo.computed);
         return basicComputed + boosterInfo.computed;
       }
       const basicComputed = boosterInfo.baseRate.reduce((pre, it) => {

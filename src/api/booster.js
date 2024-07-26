@@ -11,6 +11,9 @@ const boosterRequest = new BaseRequest({
       return config;
     },
     responseInterceptor(res) {
+      if (res.data.code == 401 || res.data.code == 500) {
+        throw new Error("Access Denied!");
+      }
       return res.data;
     },
   },

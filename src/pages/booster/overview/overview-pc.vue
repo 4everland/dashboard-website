@@ -39,10 +39,7 @@
             width="64"
             alt=""
           />
-          <div
-            class="boost-btn pos-a cursor-p"
-            @click="$emit('handleStartBoost')"
-          >
+          <div class="boost-btn pos-a cursor-p" @click="handleStartBoost">
             Boost
           </div>
         </div>
@@ -64,6 +61,13 @@
             }}/{{ boosterInfo.capacity }}
           </span>
           <img src="/img/booster/3d-square.png" width="120" alt="" />
+          <img
+            class="pos-a"
+            style="left: 50%; top: 32%; transform: translateX(-50%)"
+            src="/img/booster/svg/finger.svg"
+            width="16"
+            alt=""
+          />
         </div>
       </div>
       <div class="storage-boost d-none d-md-block">
@@ -76,7 +80,15 @@
             :class="{ locked: storageLocked }"
           >
             <div class="card-storage-icon">
-              <img src="/img/booster/storage-icon.png" width="64" alt="" />
+              <img
+                :src="
+                  storageLocked
+                    ? '/img/booster/svg/locked-icon.svg'
+                    : '/img/booster/storage-icon.png'
+                "
+                width="64"
+                alt=""
+              />
               <span
                 v-show="storageLocked"
                 class="unlock-btn"
@@ -98,7 +110,7 @@
               <div class="task-title">Storage Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>5/H</span>
+                <span>20/H</span>
               </div>
             </div>
           </div>
@@ -115,7 +127,15 @@
             :class="{ locked: computingLocked }"
           >
             <div class="card-storage-icon">
-              <img src="/img/booster/storage-icon.png" width="64" alt="" />
+              <img
+                :src="
+                  computingLocked
+                    ? '/img/booster/svg/locked-icon.svg'
+                    : '/img/booster/storage-icon.png'
+                "
+                width="64"
+                alt=""
+              />
               <span
                 v-show="computingLocked"
                 class="unlock-btn"
@@ -137,7 +157,7 @@
               <div class="task-title">Computing Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>5/H</span>
+                <span>20/H</span>
               </div>
             </div>
           </div>
@@ -154,7 +174,16 @@
             :class="{ locked: networkLocked }"
           >
             <div class="card-storage-icon">
-              <img src="/img/booster/storage-icon.png" width="64" alt="" />
+              <img
+                :src="
+                  networkLocked
+                    ? '/img/booster/svg/locked-icon.svg'
+                    : '/img/booster/storage-icon.png'
+                "
+                width="64"
+                alt=""
+              />
+
               <span
                 v-show="networkLocked"
                 class="unlock-btn"
@@ -176,7 +205,7 @@
               <div class="task-title">Network Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>5/H</span>
+                <span>20/H</span>
               </div>
             </div>
           </div>
@@ -405,7 +434,7 @@ export default {
 }
 .point-square {
   position: absolute;
-  left: 49%;
+  left: 50.6%;
   top: 30%;
   .top-card {
     position: absolute;
@@ -456,6 +485,8 @@ export default {
   padding: 0 8px;
   background: url("/img/booster/svg/card_background_blue.svg") no-repeat;
   background-size: 100%;
+  fill: rgba(97, 114, 243, 0.05);
+  backdrop-filter: blur(4px);
   .card-storage-status {
     .task-title {
       text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
@@ -472,7 +503,7 @@ export default {
 
 .storage-boost {
   position: absolute;
-  left: 23%;
+  left: 19%;
   top: 63%;
   .top-card {
     position: absolute;
@@ -483,7 +514,7 @@ export default {
 
 .computing-boost {
   position: absolute;
-  left: 23%;
+  left: 25%;
   top: 34%;
   .top-card {
     position: absolute;
