@@ -255,6 +255,7 @@ export default {
       console.log(data);
       localStorage.authData = JSON.stringify(data);
       localStorage.token = data.accessToken;
+      localStorage.nodeToken = data.nodeToken;
       if (this.mode == "refresh") {
         location.reload();
       } else {

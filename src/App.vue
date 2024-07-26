@@ -23,7 +23,7 @@
         </v-container>
       </v-main>
     </template>
-    <e-claim-dialog></e-claim-dialog>
+    <e-claim-dialog v-if="$route.path !== '/booster'"></e-claim-dialog>
     <e-animation-flowers></e-animation-flowers>
     <e-alert />
     <e-feedback />

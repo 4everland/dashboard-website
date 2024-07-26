@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import http from "../api";
 import moduleS3 from "./s3";
 import moduleResource from "./resource";
+import moduleBooster from "./booster";
 import md5 from "md5";
 Vue.use(Vuex);
 
@@ -105,6 +106,9 @@ const store = new Vuex.Store({
       if (Vue.prototype.$inDev)
         return "http://" + md5(state.teamId) + ".ipfs.foreverland-link.xyz";
       return "https://" + md5(state.teamId) + ".ipfs.4everland.link";
+    },
+    notLogin(state) {
+      return Object.keys(state.userInfo).length == 0;
     },
   },
   mutations: {
@@ -222,6 +226,7 @@ const store = new Vuex.Store({
   modules: {
     moduleS3,
     moduleResource,
+    moduleBooster,
   },
 });
 
