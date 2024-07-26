@@ -85,6 +85,18 @@ export const fetchRemainingExploration = async () => {
   });
 };
 
+export const fetchStakeInfo = async () => {
+  return boosterRequest.get({
+    url: "/t4ever/stake/info",
+  });
+};
+
+export const fetchEverPayHash = async (hash) => {
+  return boosterRequest.post({
+    url: `/everpay/stake/${hash}`,
+  });
+};
+
 export const fetchNftLists = async () => {
   return boosterRequest.get({
     url: "/nft/list",
@@ -97,10 +109,10 @@ export const fetchNftIsStake = async () => {
   });
 };
 
-export const fetchNftBind = async (params) => {
-  return boosterRequest.get({
+export const fetchNftBind = async (data) => {
+  return boosterRequest.post({
     url: "/nft/bind",
-    params,
+    data,
   });
 };
 
