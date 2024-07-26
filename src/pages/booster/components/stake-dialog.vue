@@ -173,12 +173,7 @@
 
 <script>
 import { BigNumber, ethers } from "ethers";
-import {
-  parseUnits,
-  parseEther,
-  formatEther,
-  formatUnits,
-} from "ethers/lib/utils";
+
 import { mapGetters, mapState } from "vuex";
 import { fetchEverPayHash } from "@/api/booster";
 export default {
@@ -207,13 +202,14 @@ export default {
       return this.$vuetify.breakpoint.smAndDown;
     },
   },
-  created() {
-    this.initEverPay();
-    this.getEthereumBalance();
-  },
+  created() {},
+  mounted() {},
   methods: {
+    init() {
+      this.initEverPay();
+      this.getEthereumBalance();
+    },
     async initEverPay() {
-      console.log(this.userInfo);
       try {
         const everPay = new window.Everpay.default();
 
@@ -230,7 +226,8 @@ export default {
         if (err.code && err.code === 4001) {
           console.log("Please connect to MetaMask.");
         } else {
-          this.$alert(err.message);
+          console.log(err);
+          // this.$alert(err.message);
         }
       }
     },
