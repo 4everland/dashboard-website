@@ -22,9 +22,7 @@
               <div>Staked: {{ staking }} T4EVER</div>
             </div>
             <div>
-              <v-btn class="drawer-btn" @click="showStakeDialog = true"
-                >Stake</v-btn
-              >
+              <v-btn class="drawer-btn" @click="onStake">Stake</v-btn>
             </div>
           </div>
         </div>
@@ -71,7 +69,7 @@
         </div>
       </v-container>
     </v-navigation-drawer>
-    <StakeDialog v-model="showStakeDialog" />
+    <StakeDialog v-model="showStakeDialog" ref="StakeDialog" />
   </div>
 </template>
 <script>
@@ -106,6 +104,10 @@ export default {
     this.getNftLists();
   },
   methods: {
+    onStake() {
+      this.$refs.StakeDialog.init();
+      this.showStakeDialog = true;
+    },
     async getStakeInfo() {
       const { data } = await fetchStakeInfo();
       console.log(data);
