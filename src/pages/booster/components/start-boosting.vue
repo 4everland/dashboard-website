@@ -140,6 +140,7 @@
               class="start-boost-btn"
               style="color: #fff"
               height="54"
+              :disabled="startDisabled"
               @click="handleStartBoost"
               :loading="loading"
             >
@@ -170,6 +171,9 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    startDisabled() {
+      return this.activity.filter((it) => it.actStatus == "DONE").length < 4;
+    },
   },
   created() {
     this.getTaskList();
@@ -178,6 +182,7 @@ export default {
     async getTaskList() {
       try {
         const { data } = await fetchPreTaskActivity();
+        console.log(data);
         this.activity = data.items;
       } catch (error) {
         console.log(error);
@@ -200,13 +205,14 @@ export default {
       try {
         const { data } = await onNext(id);
         const idx = this.activity.findIndex((it) => it.actId == data.actId);
+        console.log(data);
+        this.activity[idx].actStatus = data.actStatus;
         if (data.action.web.nextButtonName) {
           this.activity[idx].extra.buttonName = data.action.web.nextButtonName;
         }
         switch (data.action.web.next) {
           case "REDIRECT":
             location.href = data.action.web.message;
-
             break;
           case "JUMP_OUT":
             window.open(data.action.web.message);
@@ -343,6 +349,7 @@ export default {
     margin-top: 8px;
     padding: 16px 24px;
     font-weight: bold;
+    color: #fff !important;
     border-radius: 4px;
     border: 1px solid #0e6cc6;
     background: linear-gradient(180deg, #00070c 0%, #074178 113.39%);

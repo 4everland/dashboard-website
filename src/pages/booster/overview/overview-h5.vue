@@ -26,7 +26,15 @@
         </div>
         <div class="top-card">
           <div class="card-storage" :class="{ locked: storageLocked }">
-            <img src="/img/booster/storage-icon.png" width="48" alt="" />
+            <img
+              :src="
+                storageLocked
+                  ? '/img/booster/svg/locked-icon.svg'
+                  : '/img/booster/storage-icon.png'
+              "
+              width="48"
+              alt=""
+            />
             <div class="card-storage-status">
               <div
                 v-if="!storageLocked"
@@ -55,7 +63,15 @@
         </div>
         <div class="top-card">
           <div class="card-storage" :class="{ locked: computingLocked }">
-            <img src="/img/booster/storage-icon.png" width="48" alt="" />
+            <img
+              :src="
+                computingLocked
+                  ? '/img/booster/svg/locked-icon.svg'
+                  : '/img/booster/storage-icon.png'
+              "
+              width="48"
+              alt=""
+            />
             <div class="card-storage-status">
               <div
                 v-if="!computingLocked"
@@ -84,8 +100,11 @@
         <div class="top-card">
           <div class="card-storage" :class="{ locked: networkLocked }">
             <img
-              class="pos-a"
-              src="/img/booster/storage-icon.png"
+              :src="
+                networkLocked
+                  ? '/img/booster/svg/locked-icon.svg'
+                  : '/img/booster/storage-icon.png'
+              "
               width="48"
               alt=""
             />
@@ -267,7 +286,8 @@ export default {
   top: 30%;
   .points {
     position: absolute;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     top: 45%;
     font-weight: bold;
   }

@@ -68,7 +68,7 @@
               :key="i"
             >
               <div style="width: 250px">I claimed {{ it.value }} points.</div>
-              <div>{{ new Date(it.createdAt * 1000).format("date") }}</div>
+              <div>{{ new Date(it.createdAt * 1000).format() }}</div>
             </div>
             <booster-pagination
               v-show="list.length != 0"

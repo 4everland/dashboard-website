@@ -31,7 +31,7 @@
               :key="it.createdAt"
             >
               <span> I claimed {{ it.value }} points. </span>
-              <span>{{ new Date(it.createdAt * 1000).format("date") }}</span>
+              <span>{{ new Date(it.createdAt * 1000).format() }}</span>
             </div>
           </div>
           <booster-pagination

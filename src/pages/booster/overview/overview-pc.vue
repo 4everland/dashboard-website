@@ -80,7 +80,15 @@
             :class="{ locked: storageLocked }"
           >
             <div class="card-storage-icon">
-              <img src="/img/booster/storage-icon.png" width="64" alt="" />
+              <img
+                :src="
+                  storageLocked
+                    ? '/img/booster/svg/locked-icon.svg'
+                    : '/img/booster/storage-icon.png'
+                "
+                width="64"
+                alt=""
+              />
               <span
                 v-show="storageLocked"
                 class="unlock-btn"
@@ -119,7 +127,15 @@
             :class="{ locked: computingLocked }"
           >
             <div class="card-storage-icon">
-              <img src="/img/booster/storage-icon.png" width="64" alt="" />
+              <img
+                :src="
+                  computingLocked
+                    ? '/img/booster/svg/locked-icon.svg'
+                    : '/img/booster/storage-icon.png'
+                "
+                width="64"
+                alt=""
+              />
               <span
                 v-show="computingLocked"
                 class="unlock-btn"
@@ -158,7 +174,16 @@
             :class="{ locked: networkLocked }"
           >
             <div class="card-storage-icon">
-              <img src="/img/booster/storage-icon.png" width="64" alt="" />
+              <img
+                :src="
+                  networkLocked
+                    ? '/img/booster/svg/locked-icon.svg'
+                    : '/img/booster/storage-icon.png'
+                "
+                width="64"
+                alt=""
+              />
+
               <span
                 v-show="networkLocked"
                 class="unlock-btn"
