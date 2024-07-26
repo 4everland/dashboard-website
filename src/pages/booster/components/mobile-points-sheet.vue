@@ -62,21 +62,27 @@
           />
 
           <div class="log-list">
-            <div
-              class="log-item mb-6 d-flex align-center justify-space-between"
-              v-for="(it, i) in list"
-              :key="i"
-            >
-              <div style="width: 250px">I claimed {{ it.value }} points.</div>
-              <div>{{ new Date(it.createdAt * 1000).format() }}</div>
+            <div class="empty text-center" v-if="!list.length">
+              <img src="/img/booster/svg/empty.svg" width="150" alt="" />
+              <div>Empty</div>
             </div>
-            <booster-pagination
-              v-show="list.length != 0"
-              :length="totalPages"
-              class="mt-5"
-              v-model="page"
-              @input="onPage"
-            ></booster-pagination>
+            <div v-else>
+              <div
+                class="log-item mb-6 d-flex align-center justify-space-between"
+                v-for="(it, i) in list"
+                :key="i"
+              >
+                <div style="width: 250px">I claimed {{ it.value }} points.</div>
+                <div>{{ new Date(it.createdAt * 1000).format() }}</div>
+              </div>
+              <booster-pagination
+                v-show="list.length != 0"
+                :length="totalPages"
+                class="mt-5"
+                v-model="page"
+                @input="onPage"
+              ></booster-pagination>
+            </div>
           </div>
         </div>
       </div>
@@ -118,9 +124,10 @@ export default {
       this.showLog = true;
       try {
         const { data } = await fetchPointsHistory(this.page);
-        console.log(data);
-        this.list = data.content;
-        this.totalPages = data.totalPages;
+        if (data) {
+          this.list = data.content;
+          this.totalPages = data.totalPages;
+        }
       } catch (error) {
         console.log(error);
       }
@@ -170,9 +177,16 @@ export default {
   }
 
   .log-list {
+    position: relative;
     height: 500px;
     font-size: 14px;
     overflow: auto;
+    .empty {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 }
 </style>
