@@ -436,6 +436,8 @@ export default {
       console.log(data);
       const everHash = data.everHash;
       await fetchEverPayHash(everHash);
+      this.$toast2("Successfully staked!");
+      this.$emit("input", false);
     },
 
     async handleEthPayment() {
@@ -468,6 +470,8 @@ export default {
       console.log(tx);
       const receipt = await tx.wait();
       console.log(receipt);
+      this.$toast2("Successfully staked!");
+      this.$emit("input", false);
     },
   },
 };
