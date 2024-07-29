@@ -13,10 +13,74 @@
         <div
           class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
         >
-          <div class="d-flex align-center">
+          <div>
             <div>Choose network:</div>
+            <div>
+              <v-radio-group v-model="network" row>
+                <v-radio
+                  class="choose-item"
+                  :class="network == 'ethereum' ? 'choosed' : ''"
+                  value="ethereum"
+                >
+                  <template v-slot:label>
+                    <div style="color: #fff">
+                      <img
+                        class="mx-2"
+                        style="vertical-align: middle"
+                        src="/img/booster/drawer/ethereum.svg"
+                        height="20"
+                      />
+                      Ethereum
+                    </div>
+                  </template>
+                </v-radio>
+                <v-radio
+                  class="choose-item"
+                  :class="network == 'everPay' ? 'choosed' : ''"
+                  value="everPay"
+                >
+                  <template v-slot:label>
+                    <div
+                      class="d-flex"
+                      style="
+                        color: #fff;
+                        justify-content: space-between;
+                        flex: 1;
+                      "
+                    >
+                      <div>
+                        <img
+                          class="mx-2"
+                          style="vertical-align: middle"
+                          src="/img/booster/drawer/everpay.svg"
+                          width="20"
+                        />
+                        <span> everPay </span>
+                      </div>
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-icon
+                            small
+                            color="#6C7789"
+                            class="ml-2"
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            mdi-alert-circle-outline
+                          </v-icon>
+                        </template>
+                        <div style="width: 300px">
+                          When you deposit using everPay, the 4EVER cross-chain
+                          bridge will automatically complete your transaction,
+                          using USDC on Polygon.
+                        </div>
+                      </v-tooltip>
+                    </div>
+                  </template>
+                </v-radio>
+              </v-radio-group>
+            </div>
           </div>
-          <div class="act-btn">Authorize</div>
         </div>
         <div
           class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
@@ -24,7 +88,9 @@
           <div class="d-flex align-center">
             <div>Balance</div>
           </div>
-          <div>50,000</div>
+          <div>
+            {{ network == "ethereum" ? ethereumBalance : everPayBalance }}
+          </div>
         </div>
         <div
           class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
@@ -32,7 +98,17 @@
           <div class="d-flex align-center">
             <div>Stake amount</div>
           </div>
-          <div class="act-btn">Authorize</div>
+          <div class="d-flex">
+            <div class="invite-content">
+              <input
+                class="invite-input"
+                type="text"
+                placeholder="Enter your invite code"
+                v-model="stakeAmount"
+              />
+            </div>
+            <v-btn text @click="onMax">Max</v-btn>
+          </div>
         </div>
 
         <div class="start-boost-btn text-center fw-b">Stake</div>
@@ -351,7 +427,7 @@ export default {
         tag: this.tag,
         amount: stakeAmount,
         to: this.$inDev
-          ? "0x3A1A365D9Ee59B47471Cfe31451b4Fd1D7A83Daa"
+          ? "0x2b013D5499a3C61FbBbd8970C28f3edc7edF612e"
           : "0xb7B4360F7F6298dE2e7a11009270F35F189Bd77E",
         data: {
           account: this.teamId,
@@ -382,7 +458,7 @@ export default {
         params: [
           {
             to: this.$inDev
-              ? "0x3A1A365D9Ee59B47471Cfe31451b4Fd1D7A83Daa"
+              ? "0x2b013D5499a3C61FbBbd8970C28f3edc7edF612e"
               : "0xb7B4360F7F6298dE2e7a11009270F35F189Bd77E",
             from: account,
             value: stakeAmount,
@@ -551,16 +627,15 @@ export default {
       0px 4px 8px 0px rgba(0, 133, 195, 0.25);
     cursor: pointer;
   }
-
-  .invite-content {
-    padding: 8px;
-    border-radius: 4px;
-    border: 0.5px solid rgba(255, 255, 255, 0.3);
-    background: rgba(49, 49, 49, 0.9);
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.35);
-    .invite-input {
-      color: #fff;
-    }
+}
+.invite-content {
+  padding: 8px;
+  border-radius: 4px;
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  background: rgba(49, 49, 49, 0.9);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.35);
+  .invite-input {
+    color: #fff;
   }
 }
 ::v-deep .choose-item {
