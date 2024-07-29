@@ -106,7 +106,10 @@
                         <span>{{ balance.unit }}</span>
                         <span class="ml-1">LAND</span>
                       </div>
-                      <v-btn color="#6172F3" @click="handleShowDeposit">
+                      <v-btn
+                        color="#6172F3"
+                        @click="$router.push('/billing/deposit')"
+                      >
                         <img
                           src="/img/booster/svg/pig_bank.svg"
                           width="16"
@@ -320,7 +323,6 @@
 <script>
 import { fetchInviteInfo } from "@/api/booster";
 import { mapGetters, mapState } from "vuex";
-import { bus } from "@/utils/bus";
 import PointLogs from "../components/point-logs.vue";
 export default {
   data() {
@@ -367,10 +369,6 @@ export default {
       localStorage.loginTo = location.pathname + location.search;
       location.reload();
     },
-    handleShowDeposit() {
-      bus.$emit("showDepositDialog");
-    },
-
     async getInviteInfo() {
       try {
         const { data } = await fetchInviteInfo();

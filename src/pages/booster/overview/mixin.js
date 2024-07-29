@@ -4,7 +4,7 @@ export default {
   data() {
     return {
       computedPoints: 0,
-      interval: 2000,
+      interval: 1000,
     };
   },
   computed: {

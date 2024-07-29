@@ -30,7 +30,7 @@
               v-for="it in list"
               :key="it.createdAt"
             >
-              <span> I claimed {{ it.value }} points. </span>
+              <span> {{ it.log }} </span>
               <span>{{ new Date(it.createdAt * 1000).format() }}</span>
             </div>
           </div>
@@ -67,10 +67,35 @@ export default {
     async getList() {
       try {
         const { data } = await fetchPointsHistory(this.page);
-        console.log(data);
+        if (data) {
+          const list = data.content.map((it) => {
+            switch (it.valueType) {
+              case "initial":
+                it.log = `I gained ${it.value} initial points.`;
+                break;
+              case "claim":
+                it.log = `I collect ${it.value} points.`;
+                break;
+              case "activity":
+                it.log = `I won ${it.value} points in the raffle.`;
+                break;
+              case "explorer":
+                it.log = `I helped ${it.explorerAddress} collect points and received a ${it.explorerValue}-point commission.`;
+                break;
+              case "explored":
+                it.log = `${it.explorerAddress} collected ${it.value} points and received a ${it.explorerValue}-point commission.`;
+                break;
+              default:
+                break;
+            }
+            return it;
+          });
+          console.log(list);
 
-        this.list = data.content;
-        this.totalPages = data.totalPages;
+          this.list = list;
+
+          this.totalPages = data.totalPages;
+        }
       } catch (error) {
         console.log(error);
       }

@@ -141,7 +141,12 @@
                 : computedPoints.toFixed(3)
             }}/{{ boosterInfo.capacity }}
           </span>
-          <img src="/img/booster/3d-square.png" width="64" alt="" />
+          <img
+            class="square-box"
+            src="/img/booster/3d-square.png"
+            width="64"
+            alt=""
+          />
           <img
             class="pos-a"
             style="left: 50%; top: 30%; transform: translateX(-50%)"
@@ -176,6 +181,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-10%);
+  }
+  50% {
+    transform: translateY(0);
+  }
+}
+
+.square-box {
+  animation: bounce 2s infinite linear;
+}
 .points-card {
   position: absolute;
   right: 8px;
@@ -285,6 +303,7 @@ export default {
   transform: translateX(-50%);
   top: 30%;
   .points {
+    z-index: 10;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
