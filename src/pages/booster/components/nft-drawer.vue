@@ -31,24 +31,31 @@
           <v-row v-if="nftList.length > 0" no-gutters style="gap: 16px 0">
             <v-col v-for="item in nftList" :key="item.key" cols="4" md="15">
               <div class="nft-item-box">
-                <img
-                  v-if="item.private && item.isStakeData.stake"
-                  class="nft-item-image"
-                  :src="`/img/booster/nft/${item.key}_1.png`"
-                  alt=""
-                />
-                <img
-                  v-else-if="item.private"
-                  class="nft-item-image"
-                  :src="`/img/booster/nft/${item.key}_2.png`"
-                  alt=""
-                />
-                <img
-                  v-else
-                  class="nft-item-image"
-                  :src="`/img/booster/nft/${item.key}_3.png`"
-                  alt=""
-                />
+                <v-tooltip bottom color="primary" nudge-top="40">
+                  <template v-slot:activator="{ on, attrs }">
+                    <div v-bind="attrs" v-on="on">
+                      <img
+                        v-if="item.private && item.isStakeData.stake"
+                        class="nft-item-image"
+                        :src="`/img/booster/nft/${item.key}_1.png`"
+                        alt=""
+                      />
+                      <img
+                        v-else-if="item.private"
+                        class="nft-item-image"
+                        :src="`/img/booster/nft/${item.key}_2.png`"
+                        alt=""
+                      />
+                      <img
+                        v-else
+                        class="nft-item-image"
+                        :src="`/img/booster/nft/${item.key}_3.png`"
+                        alt=""
+                      />
+                    </div>
+                  </template>
+                  <span>{{ item.name }}</span>
+                </v-tooltip>
                 <div
                   v-if="item.private && !item.isStakeData.stake"
                   class="nft-item-boost"
@@ -106,6 +113,7 @@ export default {
   methods: {
     onStake() {
       this.$refs.StakeDialog.init();
+      this.stateStakeDrawerShow(false);
       this.showStakeDialog = true;
     },
     async getStakeInfo() {
