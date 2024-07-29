@@ -7,7 +7,7 @@
         <div class="user-card-item-content">
           <div class="content-rate d-flex align-center justify-space-between">
             <img src="/img/booster/svg/union.svg" width="52" alt="" />
-            <div>{{ totalRate }}/H</div>
+            <div>{{ Math.ceil(totalRate) }}/H</div>
           </div>
           <div class="content-detail pt-2 fz-12">
             <div class="d-flex align-center justify-space-between">
@@ -52,7 +52,7 @@
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
         </div>
-        <div class="top-card">
+        <div class="top-card square-box">
           <span class="points fz-14">
             {{
               computedPoints > boosterInfo.capacity
@@ -60,12 +60,7 @@
                 : computedPoints.toFixed(3)
             }}/{{ boosterInfo.capacity }}
           </span>
-          <img
-            class="square-box"
-            src="/img/booster/3d-square.png"
-            width="120"
-            alt=""
-          />
+          <img src="/img/booster/3d-square.png" width="120" alt="" />
           <img
             class="pos-a"
             style="left: 50%; top: 32%; transform: translateX(-50%)"

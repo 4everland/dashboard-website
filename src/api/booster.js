@@ -88,6 +88,29 @@ export const fetchRemainingExploration = async () => {
   });
 };
 
+export const fectchExploreId = async (nodeId = null) => {
+  return boosterRequest.post({
+    url: "/node/exploration",
+    data: {
+      nodeId,
+    },
+  });
+};
+export const fectchExploreInfo = async (id) => {
+  return boosterRequest.get({
+    url: `/node/exploration/info/${id}`,
+  });
+};
+
+export const claimExplorePoints = async (explorationId) => {
+  return boosterRequest.post({
+    url: "/node/exploration/collect",
+    data: {
+      explorationId,
+    },
+  });
+};
+
 export const fetchStakeInfo = async () => {
   return boosterRequest.get({
     url: "/t4ever/stake/info",

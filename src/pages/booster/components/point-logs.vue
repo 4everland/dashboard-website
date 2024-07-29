@@ -77,7 +77,11 @@ export default {
                 it.log = `I collect ${it.value} points.`;
                 break;
               case "activity":
-                it.log = `I won ${it.value} points in the raffle.`;
+                if (it.value > 0) {
+                  it.log = `I won ${it.value} points in the raffle.`;
+                } else {
+                  it.log = `I consumed ${it.value} points for the raffle.`;
+                }
                 break;
               case "explorer":
                 it.log = `I helped ${it.explorerAddress} collect points and received a ${it.explorerValue}-point commission.`;

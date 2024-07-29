@@ -35,7 +35,8 @@ export default [
         },
       },
       {
-        path: "/booster/explore",
+        name: "booster-explore",
+        path: "/booster/explore/:id?",
         component: () => import("./explore"),
         meta: {
           title: "Explore",

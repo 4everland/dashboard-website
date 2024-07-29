@@ -69,6 +69,7 @@ export default {
           path: "/booster/explore",
           action() {
             console.log(_this);
+            _this.$router.push("/booster/explore");
           },
         },
         {

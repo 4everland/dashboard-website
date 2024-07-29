@@ -1,21 +1,36 @@
 <template>
   <div class="booster-overview">
     <div style="position: relative">
-      <img
-        :src="asMobile ? '/img/booster/mobile-bg.png' : '/img/booster/bg.png'"
-        style="width: 100%; display: block"
-        alt=""
-      />
+      <img :src="bgImg" style="width: 100%; display: block" alt="" />
 
       <div class="point-square">
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
         </div>
-        <div class="top-card">
-          <span class="points fz-14"> 31/10000 </span>
+        <div class="top-card square-box">
+          <span class="points fz-14">
+            {{
+              computedPoints > info.capacity
+                ? info.capacity
+                : computedPoints.toFixed(3)
+            }}/{{ info.capacity }}
+          </span>
           <img src="/img/booster/3d-square.png" width="120" alt="" />
+          <img
+            class="pos-a"
+            style="left: 50%; top: 30%; transform: translateX(-50%)"
+            src="/img/booster/svg/finger.svg"
+            width="16"
+            alt=""
+          />
         </div>
       </div>
+      <ExploreBar
+        class="explore-bar"
+        :count="count"
+        :address="info.address"
+        @onExplore="handleExplore"
+      ></ExploreBar>
     </div>
 
     <v-dialog
@@ -42,15 +57,166 @@
 </template>
 
 <script>
+import {
+  fetchRemainingExploration,
+  fectchExploreId,
+  fectchExploreInfo,
+  claimExplorePoints,
+} from "@/api/booster";
+import ExploreBar from "../components/explore-bar.vue";
 export default {
   data() {
     return {
+      computedPoints: 0,
       showExploring: false,
+      interval: 1000,
+      info: {
+        address: "",
+        baseRate: [],
+        boosts: [],
+        capacity: 100,
+        claimable: 0,
+        computeTimestamp: 0,
+        computed: 0,
+        rateBuff: 0,
+        totalPoint: 0,
+      },
+      count: 0,
     };
+  },
+  components: {
+    ExploreBar,
   },
   computed: {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+    storageBoost() {
+      return this.info.baseRate.filter((it) => it.name == "storage");
+    },
+    networkBoost() {
+      return this.info.baseRate.filter((it) => it.name == "network");
+    },
+    computeBoost() {
+      return this.info.baseRate.filter((it) => it.name == "compute");
+    },
+    storageLocked() {
+      return this.storageBoost.length == 0;
+    },
+    networkLocked() {
+      return this.networkBoost.length == 0;
+    },
+    computingLocked() {
+      return this.computeBoost.length == 0;
+    },
+    bgImg() {
+      if (this.asMobile) {
+        if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
+          return "/img/booster/mobile-bg.png";
+        if (!this.storageLocked && !this.networkLocked)
+          return "/img/booster/mobile-bg-s2n.png";
+        if (!this.storageLocked && !this.computingLocked)
+          return "/img/booster/mobile-bg-s2c.png";
+        if (!this.networkLocked && this.computingLocked)
+          return "/img/booster/mobile-bg-n2c.png";
+        if (!this.storageLocked) return "/img/booster/mobile-bg-storage.png";
+        if (!this.networkLocked) return "/img/booster/mobile-bg-network.png";
+        if (!this.computingLocked) return "/img/booster/mobile-bg-computed.png";
+
+        if (this.info.baseRate.length == 0) {
+          return "/img/booster/mobile-bg-locked.png";
+        }
+        return "/img/booster/mobile-bg-unlocked.png";
+      } else {
+        if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
+          return "/img/booster/bg.png";
+        if (!this.storageLocked && !this.networkLocked)
+          return "/img/booster/bg-s2n.png";
+        if (!this.storageLocked && !this.computingLocked)
+          return "/img/booster/bg-s2c.png";
+        if (!this.networkLocked && this.computingLocked)
+          return "/img/booster/bg-n2c.png";
+        if (!this.storageLocked) return "/img/booster/bg-storage.png";
+        if (!this.networkLocked) return "/img/booster/bg-network.png";
+        if (!this.computingLocked) return "/img/booster/bg-computed.png";
+        if (this.info.baseRate.length == 0) {
+          return "/img/booster/bg-locked.png";
+        }
+        return "/img/booster/bg-unlocked.png";
+      }
+    },
+    currentComputed() {
+      let curTimestamp = +new Date() / 1000;
+      if (this.info.computeTimestamp != 0) {
+        const basicComputed = this.info.baseRate.reduce((pre, it) => {
+          return (
+            pre + ((curTimestamp - this.info.computeTimestamp) / 3600) * it.rate
+          );
+        }, 0);
+        return basicComputed + this.info.computed;
+      }
+      const basicComputed = this.info.baseRate.reduce((pre, it) => {
+        return pre + ((curTimestamp - it.start) / 3600) * it.rate;
+      }, 0);
+
+      return basicComputed;
+    },
+    baseRate() {
+      return this.info.baseRate.reduce((prev, it) => it.rate + prev, 0);
+    },
+    boostRate() {
+      return this.info.boosts.reduce((prev, it) => it.rate + prev, 0);
+    },
+    totalRate() {
+      return (this.baseRate + this.boostRate) * (1 + this.info.rateBuff / 100);
+    },
+  },
+
+  async created() {
+    await this.getExploreInfo();
+    setInterval(() => {
+      this.computedPoints =
+        this.computedPoints == 0 ? this.currentComputed : this.computedPoints;
+      this.computedPoints += (this.totalRate * this.interval) / 3600000;
+    }, this.interval);
+  },
+  methods: {
+    async getRemain() {
+      try {
+        const { data } = await fetchRemainingExploration();
+        this.count = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getExploreId() {
+      const { data, message } = await fectchExploreId();
+      console.log(data);
+      if (!data) throw new Error(message);
+      return data.explorationId;
+    },
+    async getExploreInfo() {
+      this.showExploring = true;
+      try {
+        let id = this.$route.params.id;
+        if (!id) {
+          id = await this.getExploreId();
+          this.$router.replace({ name: "booster-explore", params: { id } });
+        }
+        const { data } = await fectchExploreInfo(id);
+        console.log(data);
+        this.getRemain();
+        this.info = data.node;
+      } catch (error) {
+        console.log(error);
+        this.$toast2(error.message);
+      }
+      this.showExploring = false;
+    },
+
+    handleExplore() {
+      this.$router.replace({ name: "booster-explore" });
+      this.getExploreInfo();
     },
   },
 };
@@ -63,6 +229,19 @@ export default {
     top: 39% !important;
   }
 }
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-10%);
+  }
+  50% {
+    transform: translateY(0);
+  }
+}
+
+.square-box {
+  animation: bounce 2s infinite linear;
+}
 .booster-overview {
   background: #000;
   position: relative;
@@ -71,7 +250,7 @@ export default {
 
   .point-square {
     position: absolute;
-    left: 49%;
+    left: 50%;
     top: 31%;
     .top-card {
       position: absolute;
@@ -86,6 +265,13 @@ export default {
         text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.5);
       }
     }
+  }
+
+  .explore-bar {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
   }
 }
 ::v-deep .exploring-dialog {

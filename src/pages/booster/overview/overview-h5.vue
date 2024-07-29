@@ -133,7 +133,7 @@
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
         </div>
-        <div class="top-card">
+        <div class="top-card square-box">
           <span class="points fz-12">
             {{
               computedPoints > boosterInfo.capacity
@@ -141,12 +141,7 @@
                 : computedPoints.toFixed(3)
             }}/{{ boosterInfo.capacity }}
           </span>
-          <img
-            class="square-box"
-            src="/img/booster/3d-square.png"
-            width="64"
-            alt=""
-          />
+          <img src="/img/booster/3d-square.png" width="64" alt="" />
           <img
             class="pos-a"
             style="left: 50%; top: 30%; transform: translateX(-50%)"
