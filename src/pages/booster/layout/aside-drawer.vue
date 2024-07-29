@@ -5,7 +5,7 @@
     @input="(val) => $emit('input', val)"
     width="80%"
     right
-    absolute
+    fixed
     temporary
   >
     <div class="drawer-header d-flex align-center justify-end px-2">

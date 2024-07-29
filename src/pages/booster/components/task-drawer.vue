@@ -63,11 +63,12 @@
 
                 <div class="task-item-right">
                   <v-btn
-                    v-if="item.actStatus == 'UNDO'"
+                    v-if="item.actStatus !== 'DONE'"
                     class="drawer-btn"
                     @click="stepNext(item)"
                     >{{ item.extra.buttonName }}</v-btn
                   >
+
                   <!-- <v-btn class="go-btn">Go</v-btn> -->
                   <v-btn v-if="item.actStatus == 'DONE'" class="done-btn"
                     >Done</v-btn
@@ -126,7 +127,17 @@ export default {
     async stepNext(item) {
       const id = item.actId;
       const { data } = await onNext(id);
-      console.log(data);
+      switch (data.action.web.next) {
+        case "REDIRECT":
+          location.href = data.action.web.message;
+          break;
+        case "JUMP_OUT":
+          window.open(data.action.web.message);
+          break;
+        default:
+          break;
+      }
+      this.getTasks();
     },
     async onSign() {
       await this.$http.post(`$bill-consume/activity/recharge/report`, {

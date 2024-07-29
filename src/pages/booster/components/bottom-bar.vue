@@ -15,14 +15,14 @@
           <span>{{ item.name }}</span>
         </div>
 
-        <div class="scale corner">
+        <!-- <div class="scale corner">
           <span class="top-left"></span>
           <span class="top-right"></span>
           <span class="bottom-left"></span>
           <span class="bottom-right"></span>
           <img :src="item.activityIcon" width="130" alt="" />
           <span>{{ item.name }}</span>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -69,6 +69,7 @@ export default {
           path: "/booster/explore",
           action() {
             console.log(_this);
+            _this.$router.push("/booster/explore");
           },
         },
         {

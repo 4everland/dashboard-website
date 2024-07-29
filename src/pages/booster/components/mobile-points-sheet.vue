@@ -32,7 +32,7 @@
                 class="content-rate d-flex align-center justify-space-between"
               >
                 <img src="/img/booster/svg/union.svg" width="52" alt="" />
-                <div>{{ totalRate }}/H</div>
+                <div>{{ Math.ceil(totalRate) }}/H</div>
               </div>
               <div class="content-detail pt-2 fz-12">
                 <div class="d-flex align-center justify-space-between">
@@ -134,7 +134,11 @@ export default {
                 it.log = `I collect ${it.value} points.`;
                 break;
               case "activity":
-                it.log = `I won ${it.value} points in the raffle.`;
+                if (it.value > 0) {
+                  it.log = `I won ${it.value} points in the raffle.`;
+                } else {
+                  it.log = `I consumed ${it.value} points for the raffle.`;
+                }
                 break;
               case "explorer":
                 it.log = `I helped ${it.explorerAddress} collect points and received a ${it.explorerValue}-point commission.`;
