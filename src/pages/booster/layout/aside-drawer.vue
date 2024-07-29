@@ -35,7 +35,7 @@
             >
           </div>
         </div>
-        <div class="pgb ml-auto" @click="$emit('showDepositDialog')">
+        <div class="pgb ml-auto" @click="$router.push('/billing/deposit')">
           <img
             style="display: block"
             src="/img/booster/svg/pig_bank.svg"

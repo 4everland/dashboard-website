@@ -60,7 +60,12 @@
                 : computedPoints.toFixed(3)
             }}/{{ boosterInfo.capacity }}
           </span>
-          <img src="/img/booster/3d-square.png" width="120" alt="" />
+          <img
+            class="square-box"
+            src="/img/booster/3d-square.png"
+            width="120"
+            alt=""
+          />
           <img
             class="pos-a"
             style="left: 50%; top: 32%; transform: translateX(-50%)"
@@ -327,6 +332,19 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(-10%);
+  }
+  50% {
+    transform: translateY(0);
+  }
+}
+
+.square-box {
+  animation: bounce 2s infinite linear;
+}
 .corner {
   position: relative;
   .top-left {
@@ -441,6 +459,7 @@ export default {
     bottom: 22%;
     left: -449%;
     .points {
+      z-index: 10;
       position: absolute;
       top: 50%;
       left: 50%;

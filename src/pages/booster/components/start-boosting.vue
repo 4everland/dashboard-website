@@ -40,7 +40,7 @@
                 <div>+3/H for 24 hours</div>
               </div>
             </div>
-            <div class="invite-content">
+            <div class="invite-content mt-2" style="width: 50%">
               <input
                 class="invite-input"
                 type="text"
@@ -50,14 +50,12 @@
             </div>
           </div>
         </div>
-
-        <!-- <div class="start-boost-btn text-center fw-b">Start Boosting Now</div> -->
-
         <v-btn
           class="start-boost-btn"
           height="54"
           style="color: #fff"
           @click="handleStartBoost"
+          :disabled="startDisabled"
           :loading="loading"
         >
           Start Boosting Now
@@ -138,7 +136,6 @@
           <div class="d-flex align-center justify-center">
             <v-btn
               class="start-boost-btn"
-              style="color: #fff"
               height="54"
               :disabled="startDisabled"
               @click="handleStartBoost"
@@ -220,6 +217,9 @@ export default {
           default:
             break;
         }
+        setTimeout(() => {
+          this.getTaskList();
+        }, 6000);
       } catch (error) {
         console.log(error);
       }
@@ -348,7 +348,6 @@ export default {
   .start-boost-btn {
     margin-top: 8px;
     padding: 16px 24px;
-    font-weight: bold;
     color: #fff !important;
     border-radius: 4px;
     border: 1px solid #0e6cc6;
@@ -357,16 +356,15 @@ export default {
       0px 4px 8px 0px rgba(0, 133, 195, 0.25);
     cursor: pointer;
   }
-
-  .invite-content {
-    padding: 8px;
-    border-radius: 4px;
-    border: 0.5px solid rgba(255, 255, 255, 0.3);
-    background: rgba(49, 49, 49, 0.9);
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.35);
-    .invite-input {
-      color: #fff;
-    }
+}
+.invite-content {
+  padding: 8px;
+  border-radius: 4px;
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  background: rgba(49, 49, 49, 0.9);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.35);
+  .invite-input {
+    color: #fff;
   }
 }
 </style>
