@@ -7,7 +7,7 @@
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
         </div>
-        <div class="top-card square-box">
+        <div class="top-card square-box cursor-p" @click="handleClaim">
           <span class="points fz-14">
             {{
               computedPoints > info.capacity
@@ -28,6 +28,7 @@
       <ExploreBar
         class="explore-bar"
         :count="count"
+        :uid="info.uid"
         :address="info.address"
         @onExplore="handleExplore"
       ></ExploreBar>
@@ -80,8 +81,10 @@ export default {
         computed: 0,
         rateBuff: 0,
         totalPoint: 0,
+        uid: "",
       },
       count: 0,
+      timer: null,
     };
   },
   components: {
@@ -174,13 +177,17 @@ export default {
 
   async created() {
     await this.getExploreInfo();
-    setInterval(() => {
-      this.computedPoints =
-        this.computedPoints == 0 ? this.currentComputed : this.computedPoints;
-      this.computedPoints += (this.totalRate * this.interval) / 3600000;
-    }, this.interval);
+    this.pointCount();
   },
+
   methods: {
+    pointCount() {
+      this.timer = setInterval(() => {
+        this.computedPoints =
+          this.computedPoints == 0 ? this.currentComputed : this.computedPoints;
+        this.computedPoints += (this.totalRate * this.interval) / 3600000;
+      }, this.interval);
+    },
     async getRemain() {
       try {
         const { data } = await fetchRemainingExploration();
@@ -191,7 +198,6 @@ export default {
     },
     async getExploreId() {
       const { data, message } = await fectchExploreId();
-      console.log(data);
       if (!data) throw new Error(message);
       return data.explorationId;
     },
@@ -204,9 +210,10 @@ export default {
           this.$router.replace({ name: "booster-explore", params: { id } });
         }
         const { data } = await fectchExploreInfo(id);
-        console.log(data);
         if (data) {
           this.info = data.node;
+          this.computedPoints = 0;
+          this.pointCount();
         }
         this.getRemain();
       } catch (error) {
@@ -219,6 +226,21 @@ export default {
     handleExplore() {
       this.$router.replace({ name: "booster-explore" });
       this.getExploreInfo();
+    },
+
+    async handleClaim() {
+      try {
+        let id = this.$route.params.id;
+        const data = await claimExplorePoints(id);
+        if (data.data) {
+          this.getExploreInfo();
+        } else {
+          this.$toast2(data.message, "error");
+        }
+        this.$store.dispatch("getBoosterUserInfo");
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
