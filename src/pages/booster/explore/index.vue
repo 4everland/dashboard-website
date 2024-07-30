@@ -211,7 +211,7 @@ export default {
         this.getRemain();
       } catch (error) {
         console.log(error);
-        this.$toast2(error.message);
+        this.$toast2(error.message, "error");
       }
       this.showExploring = false;
     },

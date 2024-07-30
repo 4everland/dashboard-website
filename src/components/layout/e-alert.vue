@@ -136,7 +136,20 @@
 
     <v-snackbar top timeout="2000" dark v-model="showBoosterSnackbar">
       <div class="snackbar-content d-flex align-center">
-        <img class="mr-3" src="/img/svg/success.svg" width="20" alt="" />
+        <img
+          v-show="boosterToastInfo.type == 'success'"
+          class="mr-3"
+          src="/img/svg/success.svg"
+          width="20"
+          alt=""
+        />
+        <img
+          v-show="boosterToastInfo.type == 'error'"
+          class="mr-3"
+          src="/img/svg/error.svg"
+          width="20"
+          alt=""
+        />
         <div>{{ boosterToastInfo.content }}</div>
       </div>
     </v-snackbar>
@@ -280,10 +293,11 @@ export default {
       this.showSnackbar = true;
     };
 
-    Vue.prototype.$toast2 = (content) => {
+    Vue.prototype.$toast2 = (content, type = "success") => {
       this.showBoosterSnackbar = false;
       this.boosterToastInfo = {
         content,
+        type,
       };
       this.showBoosterSnackbar = true;
     };

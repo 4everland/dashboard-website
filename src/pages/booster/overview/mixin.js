@@ -60,13 +60,12 @@ export default {
     async handleUnlock(index) {
       try {
         const data = await unlockStage(index);
-        console.log(data);
-
         if (data.code == 10002) {
-          this.$toast2(data.message);
+          this.$toast2(data.message, "error");
           bus.$emit("showDepositDialog", data.data.land);
         } else {
           this.$store.dispatch("getBoosterUserInfo");
+          this.$store.dispatch("getBalance");
         }
       } catch (error) {
         console.log(error);
