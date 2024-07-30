@@ -15,7 +15,11 @@
         <div class="first-dialog-content">
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Amount</span>
-            <span>50,000 LAND ($0.05)</span>
+            <span
+              >{{ depositLand.toLocaleString() }} LAND (${{
+                depositLand / 1e6
+              }})</span
+            >
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Network</span>
@@ -101,7 +105,7 @@
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Amount</span>
-            <span>50,000 LAND ($0.05)</span>
+            {{ depositLand.toLocaleString() }} LAND (${{ depositLand / 1e6 }})
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Network</span>
@@ -198,6 +202,7 @@ import { parseEther } from "ethers/lib/utils";
 export default {
   props: {
     value: Boolean,
+    depositLand: Number,
   },
   data() {
     return {
@@ -593,7 +598,9 @@ export default {
 
         const price = await BlastOracleLand.callStatic.fetchPrice();
 
-        let mintPrice = parseEther("0.05").mul((1e18).toString()).div(price);
+        let mintPrice = parseEther((this.depositLand / 1e6).toString())
+          .mul((1e18).toString())
+          .div(price);
 
         // const balance = await this.fetchBalance(address);
         // if (balance.lte(mintPrice)) {
