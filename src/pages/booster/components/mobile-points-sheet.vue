@@ -72,8 +72,12 @@
                 v-for="(it, i) in list"
                 :key="i"
               >
-                <div style="width: 250px">I claimed {{ it.value }} points.</div>
-                <div>{{ new Date(it.createdAt * 1000).format() }}</div>
+                <div style="word-wrap: break-word; width: 230px">
+                  {{ it.log }}
+                </div>
+                <div>
+                  {{ new Date(it.createdAt * 1000).format() }}
+                </div>
               </div>
               <booster-pagination
                 v-show="list.length != 0"

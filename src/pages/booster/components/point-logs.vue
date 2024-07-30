@@ -30,7 +30,9 @@
               v-for="it in list"
               :key="it.createdAt"
             >
-              <div style="width: 300px">{{ it.log }}</div>
+              <div style="width: 300px; word-wrap: break-word">
+                {{ it.log }}
+              </div>
               <div>{{ new Date(it.createdAt * 1000).format() }}</div>
             </div>
           </div>
