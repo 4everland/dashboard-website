@@ -39,6 +39,7 @@ export default {
   },
 
   created() {
+    this.$store.dispatch("getBoosterUserInfo");
     bus.$on("showDepositDialog", (val) => {
       if (val > 10000) {
         this.depositLand = val;

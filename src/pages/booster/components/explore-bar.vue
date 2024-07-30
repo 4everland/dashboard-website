@@ -13,6 +13,7 @@
     </div>
     <div class="user-container px-3 flex-2">
       <img src="" width="42" alt="" />
+      <e-team-avatar :size="42" :uid="uid"></e-team-avatar>
       <span>{{
         address ? address.slice(0, 4) + "..." + address.slice(-4) : ""
       }}</span>
@@ -38,6 +39,10 @@
 export default {
   props: {
     address: {
+      type: String,
+      default: "",
+    },
+    uid: {
       type: String,
       default: "",
     },

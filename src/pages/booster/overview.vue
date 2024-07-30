@@ -29,9 +29,6 @@ export default {
       showEndBoost: false,
     };
   },
-  created() {
-    this.$store.dispatch("getBoosterUserInfo");
-  },
   computed: {
     ...mapState({
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
