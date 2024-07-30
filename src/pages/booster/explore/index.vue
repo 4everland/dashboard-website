@@ -205,8 +205,10 @@ export default {
         }
         const { data } = await fectchExploreInfo(id);
         console.log(data);
+        if (data) {
+          this.info = data.node;
+        }
         this.getRemain();
-        this.info = data.node;
       } catch (error) {
         console.log(error);
         this.$toast2(error.message);

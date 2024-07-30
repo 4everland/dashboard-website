@@ -48,9 +48,11 @@
       </v-simple-table>
 
       <booster-pagination
+        v-show="list.length != 0"
         :length="totalPages"
         class="mt-5"
         v-model="page"
+        @input="getList"
       ></booster-pagination>
     </div>
   </div>
