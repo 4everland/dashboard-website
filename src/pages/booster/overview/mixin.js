@@ -5,6 +5,7 @@ export default {
     return {
       computedPoints: 0,
       interval: 1000,
+      timer: null,
     };
   },
   computed: {
@@ -40,7 +41,7 @@ export default {
   },
 
   created() {
-    setInterval(() => {
+    this.timer = setInterval(() => {
       this.computedPoints =
         this.computedPoints == 0 ? this.currentComputed : this.computedPoints;
       this.computedPoints += (this.totalRate * this.interval) / 3600000;
@@ -66,8 +67,16 @@ export default {
       try {
         const data = await claimPoints();
         console.log(data);
+        clearInterval(this.timer);
         this.computedPoints = 0;
-        this.$store.dispatch("getBoosterUserInfo");
+        await this.$store.dispatch("getBoosterUserInfo");
+        this.timer = setInterval(() => {
+          this.computedPoints =
+            this.computedPoints == 0
+              ? this.currentComputed
+              : this.computedPoints;
+          this.computedPoints += (this.totalRate * this.interval) / 3600000;
+        }, this.interval);
       } catch (error) {
         console.log(error);
       }
