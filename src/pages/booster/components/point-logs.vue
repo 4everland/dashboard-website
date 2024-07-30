@@ -30,8 +30,8 @@
               v-for="it in list"
               :key="it.createdAt"
             >
-              <span> {{ it.log }} </span>
-              <span>{{ new Date(it.createdAt * 1000).format() }}</span>
+              <div style="width: 300px">{{ it.log }}</div>
+              <div>{{ new Date(it.createdAt * 1000).format() }}</div>
             </div>
           </div>
           <booster-pagination

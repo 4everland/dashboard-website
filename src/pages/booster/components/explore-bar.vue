@@ -54,7 +54,11 @@ export default {
 
   methods: {
     handleExplore() {
-      if (this.count < 1) return this.$toast2("over limit");
+      if (this.count < 1)
+        return this.$toast2(
+          "Whoops, you've used all your exploration times. Try again tomorrow!",
+          "error"
+        );
       this.$emit("onExplore");
     },
   },
