@@ -11,7 +11,10 @@
       "
     ></AsideDrawer>
     <router-view></router-view>
-    <DepositDialog v-model="showDeposit"></DepositDialog>
+    <DepositDialog
+      v-model="showDeposit"
+      :depositLand="depositLand"
+    ></DepositDialog>
   </div>
 </template>
 
@@ -31,11 +34,17 @@ export default {
     return {
       drawer: false,
       showDeposit: false,
+      depositLand: 10000,
     };
   },
 
   created() {
-    bus.$on("showDepositDialog", () => {
+    bus.$on("showDepositDialog", (val) => {
+      if (val > 10000) {
+        this.depositLand = val;
+      } else {
+        this.depositLand = 10000;
+      }
       this.showDeposit = true;
     });
   },

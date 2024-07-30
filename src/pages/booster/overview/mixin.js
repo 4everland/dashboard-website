@@ -1,5 +1,7 @@
 import { mapGetters, mapState } from "vuex";
 import { unlockStage, claimPoints } from "@/api/booster";
+import { bus } from "@/utils/bus";
+
 export default {
   data() {
     return {
@@ -57,8 +59,15 @@ export default {
     },
     async handleUnlock(index) {
       try {
-        await unlockStage(index);
-        this.$store.dispatch("getBoosterUserInfo");
+        const data = await unlockStage(index);
+        console.log(data);
+
+        if (data.code == 10002) {
+          this.$toast2(data.message);
+          bus.$emit("showDepositDialog", data.data.land);
+        } else {
+          this.$store.dispatch("getBoosterUserInfo");
+        }
       } catch (error) {
         console.log(error);
       }
