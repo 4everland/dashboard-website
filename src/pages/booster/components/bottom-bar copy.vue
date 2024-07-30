@@ -1,26 +1,19 @@
 <template>
   <div class="overview-activity">
-    <div class="activity">
+    <div class="activity d-flex">
       <div
-        class="activity-item"
-        :class="item.isOpen ? 'mobile-item-active' : 'mobile-item'"
+        class="activity-item flex-1"
+        style="position: relative"
         v-for="(item, index) in activity"
         :key="index"
         @mouseenter="currentHoverIdx = index"
         @mouseleave="currentHoverIdx = -1"
         @click="item.action"
       >
-        <div class="item-box">
-          <img class="mobile-icon" :src="item.activityIcon" alt="" />
-          <div v-if="item.isOpen" class="mobile-name">
-            {{ item.name }}
-          </div>
-        </div>
-
-        <!-- <div class="d-flex align-center justify-space-between">
+        <div class="d-flex align-center justify-space-between">
           <img :src="item.icon" :width="'48px'" alt="" />
           <span>{{ item.name }}</span>
-        </div> -->
+        </div>
 
         <!-- <div class="scale corner">
           <span class="top-left"></span>
@@ -54,50 +47,45 @@ export default {
     return {
       activity: [
         {
-          icon: "/img/booster/nav/gift.svg",
-          activityIcon: "/img/booster/nav/gift.svg",
+          icon: "/img/booster/svg/explore.svg",
+          activityIcon: "/img/booster/svg/explore-active.svg",
           name: "Coming soon",
           path: "/booster/explore",
-          isOpen: false,
           action() {},
         },
         {
-          icon: "/img/booster/nav/staking.svg",
-          activityIcon: "/img/booster/nav/staking-active.svg",
+          icon: "/img/booster/svg/staking.svg",
+          activityIcon: "/img/booster/svg/staking-active.svg",
           name: "Staking",
           path: "/booster/explore",
-          isOpen: true,
           action() {
             _this.toggleStakeDrawer();
           },
         },
         {
-          icon: "/img/booster/nav/explore.svg",
-          activityIcon: "/img/booster/nav/explore-active.svg",
+          icon: "/img/booster/svg/explore.svg",
+          activityIcon: "/img/booster/svg/explore-active.svg",
           name: "Explore",
           path: "/booster/explore",
-          isOpen: true,
           action() {
             console.log(_this);
             _this.$router.push("/booster/explore");
           },
         },
         {
-          icon: "/img/booster/nav/tasks.svg",
-          activityIcon: "/img/booster/nav/tasks-active.svg",
+          icon: "/img/booster/svg/tasks.svg",
+          activityIcon: "/img/booster/svg/tasks-active.svg",
           name: "Tasks",
           path: "/booster/explore",
-          isOpen: true,
           action() {
             _this.toggleTaskDrawer();
           },
         },
         {
-          icon: "/img/booster/nav/gaming.svg",
-          activityIcon: "/img/booster/nav/gaming.svg",
+          icon: "/img/booster/svg/explore.svg",
+          activityIcon: "/img/booster/svg/explore-active.svg",
           name: "Coming soon",
           path: "/booster/explore",
-          isOpen: false,
           action() {
             console.log(_this);
           },
@@ -170,31 +158,9 @@ export default {
   .activity {
     border: 1px solid rgba(255, 255, 255, 0.25);
     height: 64px;
-    display: flex;
-    align-items: center;
     .activity-item {
       padding: 8px 16px;
-      flex: 1;
       border-right: 1px solid rgba(255, 255, 255, 0.25);
-      .item-box {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .mobile-icon {
-        width: 48px;
-        height: 48px;
-      }
-      .mobile-name {
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-        color: #fff;
-        text-align: center;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-      }
       .scale {
         z-index: 9999;
         display: none;
@@ -220,70 +186,6 @@ export default {
         url("/img/booster/hover-linea-bg.png") lightgray 50% / cover no-repeat;
 
       font-weight: bold;
-    }
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .overview-activity {
-    bottom: 30px;
-    padding: 0;
-    .activity {
-      height: auto;
-      border: none;
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      .activity-item {
-        width: 56px;
-        height: 56px;
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
-        border: none;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        flex: none;
-      }
-
-      .mobile-item {
-        background-image: url("/img/booster/nav/mobile-item.png");
-        .item-box {
-        }
-        .mobile-icon {
-          width: 24px;
-          height: 24px;
-        }
-      }
-      .mobile-item-active {
-        background-image: url("/img/booster/nav/mobile-item-active.png");
-        .mobile-icon {
-          width: 48px;
-          height: 48px;
-        }
-        .mobile-name {
-          position: absolute;
-          width: 60px;
-          height: 20px;
-          flex-shrink: 0;
-          background-image: url("/img/booster/nav/mobile-name-bg.svg");
-          background-size: contain;
-          background-position: center;
-          background-repeat: no-repeat;
-          color: #fff;
-          text-align: center;
-          font-size: 12px;
-          font-style: normal;
-          font-weight: 400;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          margin: auto;
-        }
-      }
     }
   }
 }
