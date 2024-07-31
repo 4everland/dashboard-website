@@ -1,7 +1,7 @@
 <template>
   <div class="booster-overview">
     <div style="position: relative">
-      <img :src="bgImg" style="width: 100%; display: block" alt="" />
+      <img class="booster-overview-bg" :src="bgImg" alt="" />
 
       <div class="point-square">
         <div style="position: relative">
@@ -63,7 +63,7 @@ import {
   claimExplorePoints,
 } from "@/api/booster";
 import ExploreBar from "../components/explore-bar.vue";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -92,6 +92,8 @@ export default {
     ...mapState({
       exploreRemain: (s) => s.moduleBooster.exploreRemain,
     }),
+    ...mapGetters(["notLogin"]),
+
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
@@ -177,6 +179,7 @@ export default {
   },
 
   async created() {
+    if (this.notLogin) return this.$router.replace("/booster");
     await this.getExploreInfo();
     this.pointCount();
   },
@@ -191,8 +194,12 @@ export default {
     },
 
     async getExploreId() {
-      const { data, message } = await fectchExploreId();
-      if (!data) throw new Error(message);
+      const { data, message, code } = await fectchExploreId();
+      this.$store.dispatch("getExploreRemain");
+      if (code == 11005 && !this.$route.params.id) {
+        this.$router.push("/booster");
+      }
+      if (!data) throw new Error(message, code);
       return data.explorationId;
     },
     async getExploreInfo() {
@@ -209,9 +216,7 @@ export default {
           this.computedPoints = 0;
           this.pointCount();
         }
-        this.$store.dispatch("getExploreRemain");
       } catch (error) {
-        console.log(error);
         this.$toast2(error.message, "error");
       }
       this.showExploring = false;
@@ -265,6 +270,13 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
+
+  .booster-overview-bg {
+    max-height: 100vh;
+    width: 100%;
+    display: block;
+  }
 
   .point-square {
     position: absolute;

@@ -3,7 +3,6 @@
     <v-menu
       offset-y
       content-class="logs-menu"
-      :attach="id"
       :close-on-content-click="false"
       @input="handleInput"
     >
@@ -55,15 +54,11 @@ import BoosterPagination from "./booster-pagination.vue";
 export default {
   data() {
     return {
-      id: null,
       page: 1,
       totalPages: 0,
       list: [],
       showLog: false,
     };
-  },
-  mounted() {
-    this.id = document.querySelector(".booster-overview-content");
   },
   methods: {
     async getList() {
@@ -86,10 +81,18 @@ export default {
                 }
                 break;
               case "explorer":
-                it.log = `I helped ${it.explorerAddress} collect points and received a ${it.value}-point commission.`;
+                it.log = `I helped ${
+                  it.explorerAddress.slice(0, 5) +
+                  "..." +
+                  it.explorerAddress.slice(-4)
+                } collect points and received a ${it.value}-point commission.`;
                 break;
               case "explored":
-                it.log = `${it.explorerAddress} helped me collect ${it.value} points.`;
+                it.log = `${
+                  it.explorerAddress.slice(0, 5) +
+                  "..." +
+                  it.explorerAddress.slice(-4)
+                } helped me collect ${it.value} points.`;
                 break;
               default:
                 break;
