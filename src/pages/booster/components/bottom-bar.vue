@@ -43,6 +43,7 @@ export default {
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
+      exploreRemain: (s) => s.moduleBooster.exploreRemain,
     }),
     ...mapGetters(["notLogin", "balance"]),
     asMobile() {
@@ -78,7 +79,14 @@ export default {
           path: "/booster/explore",
           isOpen: true,
           action() {
-            console.log(_this);
+            if (_this.exploreRemain < 1)
+              return _this.$toast2(
+                "Whoops, you've used all your exploration times. Try again tomorrow!",
+                "error"
+              );
+
+            if (_this.notLogin) return;
+
             _this.$router.push("/booster/explore");
           },
         },

@@ -100,7 +100,7 @@ export default {
         console.log(error);
       }
     },
-    async getExploreRemain() {
+    async getExploreRemain({ commit }) {
       try {
         const { data } = await fetchRemainingExploration();
         if (!data) return;
