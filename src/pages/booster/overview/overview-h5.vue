@@ -8,17 +8,38 @@
         <img src="/img/booster/3d-square.png" width="40" alt="" />
         <span class="text fw-b">{{ totalRate }}/H</span>
       </div>
-      <span> Points {{ boosterInfo.totalPoint }} </span>
-      <img src="" alt="" />
+      <div>
+        Points
+
+        <ICountUp
+          :delay="1000"
+          :endVal="boosterInfo.totalPoint"
+          :options="{
+            useEasing: true,
+            useGrouping: true,
+            separator: ',',
+            decimal: '.',
+            prefix: '',
+            suffix: '',
+          }"
+        />
+      </div>
     </div>
-    <img
-      v-if="boostLocked"
-      class="start-booster-btn"
-      @click="handleStartBoost"
-      src="/img/booster/mobile/mobile-boost-start.png"
-      width="80%"
-      alt=""
-    />
+    <div class="not-login" v-if="boostLocked">
+      <div class="card-storage mb-1 pos-r">
+        <img
+          class="pos-a"
+          style="left: 50%; top: -20px"
+          src="/img/booster/boost-icon.png"
+          width="64"
+          alt=""
+        />
+        <div class="boost-btn pos-a cursor-p" @click="handleStartBoost">
+          Start Boosting
+        </div>
+      </div>
+    </div>
+
     <div v-else>
       <div class="storage-boost">
         <div style="position: relative">
@@ -159,6 +180,7 @@
 <script>
 import MobilePointsSheet from "../components/mobile-points-sheet.vue";
 import mixin from "./mixin";
+import ICountUp from "vue-countup-v2";
 export default {
   mixins: [mixin],
   data() {
@@ -166,6 +188,7 @@ export default {
   },
   components: {
     MobilePointsSheet,
+    ICountUp,
   },
   methods: {
     handleOpenSheet() {
@@ -188,6 +211,32 @@ export default {
 
 .square-box {
   animation: bounce 2s infinite linear;
+}
+.not-login {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  .card-storage {
+    width: 280px;
+    height: 98px;
+    background: url("/img/booster/svg/mobile_card_locked.svg") no-repeat;
+    background-size: contain;
+  }
+  .boost-btn {
+    width: 232px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10%;
+    text-align: center;
+    padding: 0 8px;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 4px;
+    background: rgba(97, 114, 243, 0.75);
+    box-shadow: 0px 0px 16px 0px rgba(137, 234, 251, 0.5);
+    backdrop-filter: blur(2px);
+  }
 }
 .points-card {
   position: absolute;

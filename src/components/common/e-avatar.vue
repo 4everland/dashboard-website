@@ -35,6 +35,13 @@ export default {
       this.iconDom = identicon.cloneNode(true);
     },
   },
+  watch: {
+    address() {
+      this.$refs.content.removeChild(this.iconDom);
+      this.generateIdentIconDom();
+      this.$refs.content.appendChild(this.iconDom);
+    },
+  },
 };
 </script>
 

@@ -27,7 +27,6 @@
       </div>
       <ExploreBar
         class="explore-bar"
-        :count="count"
         :uid="info.uid"
         :address="info.address"
         @onExplore="handleExplore"
@@ -59,12 +58,12 @@
 
 <script>
 import {
-  fetchRemainingExploration,
   fectchExploreId,
   fectchExploreInfo,
   claimExplorePoints,
 } from "@/api/booster";
 import ExploreBar from "../components/explore-bar.vue";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -83,7 +82,6 @@ export default {
         totalPoint: 0,
         uid: "",
       },
-      count: 0,
       timer: null,
     };
   },
@@ -91,6 +89,9 @@ export default {
     ExploreBar,
   },
   computed: {
+    ...mapState({
+      exploreRemain: (s) => s.moduleBooster.exploreRemain,
+    }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
@@ -188,14 +189,7 @@ export default {
         this.computedPoints += (this.totalRate * this.interval) / 3600000;
       }, this.interval);
     },
-    async getRemain() {
-      try {
-        const { data } = await fetchRemainingExploration();
-        this.count = data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
+
     async getExploreId() {
       const { data, message } = await fectchExploreId();
       if (!data) throw new Error(message);
@@ -215,7 +209,7 @@ export default {
           this.computedPoints = 0;
           this.pointCount();
         }
-        this.getRemain();
+        this.$store.dispatch("getExploreRemain");
       } catch (error) {
         console.log(error);
         this.$toast2(error.message, "error");
