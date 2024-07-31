@@ -102,7 +102,7 @@
               <div class="pa-6 task-desc h-flex">
                 <div
                   class="fz-20 fw-b cursor-p text-white"
-                  @click="handleToElite"
+                  @click="$router.push('/quest/ai-world')"
                 >
                   Dive into the AI World with Aperture Finance, Chainbase, and
                   4EVERLAND!
@@ -116,8 +116,11 @@
                   <div class="reward fz-20 fw-b">
                     Shared Reward of 600 USDT & 50,000 $4EVER Points
                   </div>
-                  <v-btn color="#039CFF" @click="handleToElite">
-                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  <v-btn
+                    color="#039CFF"
+                    @click="$router.push('/quest/ai-world')"
+                  >
+                    <span class="fw-b" style="color: #fff">Claim</span>
                   </v-btn>
                 </div>
               </div>
@@ -419,9 +422,6 @@ export default {
       window.open(
         "https://t.me/bountybay_bot/deals?startapp=campaign_recGjT1wPikWAC7sM"
       );
-    },
-    handleToElite() {
-      window.open("https://app.galxe.com/quest/4EVERLAND/GCKdetkwbs");
     },
   },
 };
