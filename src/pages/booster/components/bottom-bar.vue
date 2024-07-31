@@ -11,25 +11,16 @@
         @click="item.action"
       >
         <div class="item-box">
+          <img
+            class="pc-icon"
+            :src="currentHoverIdx == index ? item.activityIcon : item.icon"
+            alt=""
+          />
           <img class="mobile-icon" :src="item.activityIcon" alt="" />
           <div v-if="item.isOpen" class="mobile-name">
             {{ item.name }}
           </div>
         </div>
-
-        <!-- <div class="d-flex align-center justify-space-between">
-          <img :src="item.icon" :width="'48px'" alt="" />
-          <span>{{ item.name }}</span>
-        </div> -->
-
-        <!-- <div class="scale corner">
-          <span class="top-left"></span>
-          <span class="top-right"></span>
-          <span class="bottom-left"></span>
-          <span class="bottom-right"></span>
-          <img :src="item.activityIcon" width="130" alt="" />
-          <span>{{ item.name }}</span>
-        </div> -->
       </div>
     </div>
   </div>
@@ -53,6 +44,7 @@ export default {
   data() {
     let _this = this;
     return {
+      currentHoverIdx: -1,
       activity: [
         {
           icon: "/img/booster/nav/gift.png",
@@ -181,16 +173,26 @@ export default {
     display: flex;
     align-items: center;
     .activity-item {
-      padding: 8px 16px;
+      height: 100%;
+      padding: 0 16px;
       flex: 1;
       border-right: 1px solid rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      cursor: pointer;
       .item-box {
+        flex: 1;
         display: flex;
         align-items: center;
         justify-content: space-between;
       }
-      .mobile-icon {
+      .pc-icon {
+        display: block;
         width: 56px;
+        height: 56px;
+      }
+      .mobile-icon {
+        display: none;
       }
       .mobile-name {
         background-size: contain;
@@ -214,11 +216,7 @@ export default {
         border: 1px solid #6172f3;
       }
     }
-    .activity-item:hover .scale {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 16px;
+    .activity-item:hover {
       background: linear-gradient(
           113deg,
           rgba(97, 114, 243, 0) 19.38%,
@@ -226,6 +224,8 @@ export default {
         ),
         url("/img/booster/hover-linea-bg.png") lightgray 50% / cover no-repeat;
 
+      border: 1px solid #6172f3;
+      backdrop-filter: blur(2px);
       font-weight: bold;
     }
   }
@@ -259,16 +259,26 @@ export default {
       .mobile-item {
         background-image: url("/img/booster/nav/mobile-item.png");
         .item-box {
+          justify-content: center;
+        }
+        .pc-icon {
+          display: none;
         }
         .mobile-icon {
+          display: block;
           width: 34px;
         }
       }
       .mobile-item-active {
         background-image: url("/img/booster/nav/mobile-item-active.png");
         .item-box {
+          justify-content: center;
+        }
+        .pc-icon {
+          display: none;
         }
         .mobile-icon {
+          display: block;
           width: 34px;
         }
         .mobile-name {
