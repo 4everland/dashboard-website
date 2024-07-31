@@ -73,7 +73,11 @@
         </div>
       </v-container>
     </v-navigation-drawer>
-    <StakeDialog v-model="showStakeDialog" ref="StakeDialog" />
+    <StakeDialog
+      v-model="showStakeDialog"
+      @onStaked="onStaked"
+      ref="StakeDialog"
+    />
   </div>
 </template>
 <script>
@@ -157,9 +161,13 @@ export default {
       try {
         await fetchNftBind(params);
         this.getNftLists();
+        this.$store.dispatch("getBoosterUserInfo");
       } catch (error) {
         console.log(error);
       }
+    },
+    onStaked() {
+      this.getStakeInfo();
     },
     stateStakeDrawerShow(state) {
       this.$store.dispatch("StakeDrawerState", { state });
