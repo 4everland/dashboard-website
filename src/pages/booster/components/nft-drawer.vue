@@ -56,10 +56,7 @@
                   </template>
                   <span>{{ item.name }}</span>
                 </v-tooltip>
-                <div
-                  v-if="item.private && !item.isStakeData.stake"
-                  class="nft-item-boost"
-                >
+                <div v-if="item.private" class="nft-item-boost">
                   +{{ item.public.coefficient }}%
                 </div>
                 <div
@@ -154,7 +151,8 @@ export default {
     async onBindNft(item) {
       const params = {
         contract: item.contractAddress,
-        id: item.private.batch,
+        id: item.private.nftId,
+        batch: item.private.batch,
       };
       try {
         await fetchNftBind(params);
