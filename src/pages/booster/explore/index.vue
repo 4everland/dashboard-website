@@ -280,7 +280,8 @@ export default {
 
   .point-square {
     position: absolute;
-    left: 50%;
+    left: 49.9%;
+
     top: 31%;
     .top-card {
       position: absolute;
