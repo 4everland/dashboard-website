@@ -62,7 +62,7 @@ export default {
         const data = await unlockStage(index);
         if (data.code == 10002) {
           this.$toast2(data.message, "error");
-          bus.$emit("showDepositDialog", data.data.land);
+          bus.$emit("showDepositDialog", { land: data.data.land });
         } else {
           this.$store.dispatch("getBoosterUserInfo");
           this.$store.dispatch("getBalance");
