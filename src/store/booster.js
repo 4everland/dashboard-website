@@ -103,7 +103,6 @@ export default {
     async getExploreRemain({ commit }) {
       try {
         const { data } = await fetchRemainingExploration();
-        if (!data) return;
         commit("SET_EXPLORE_REMAIN", data);
       } catch (error) {
         console.log(error);

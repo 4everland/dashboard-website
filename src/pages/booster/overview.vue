@@ -91,6 +91,14 @@ export default {
       }
     },
   },
+  beforeRouteEnter(_, from, next) {
+    next((vm) => {
+      if (from.path == "/booster/explore") {
+        vm.$store.dispatch("getBoosterUserInfo");
+      }
+    });
+  },
+
   components: {
     OverviewPc,
     OverviewH5,

@@ -185,6 +185,7 @@ import { BlastOracleLand__factory } from "@4everland-contracts";
 import { providers } from "ethers";
 import { Web3Provider } from "zksync-web3";
 import { mapGetters, mapState } from "vuex";
+import { bus } from "@/utils/bus";
 import {
   ChapelLandRecharge,
   ArbitrumLandRecharge,
@@ -203,6 +204,7 @@ export default {
   props: {
     value: Boolean,
     depositLand: Number,
+    report: Boolean,
   },
   data() {
     return {
@@ -625,6 +627,13 @@ export default {
 
         console.log(receipt, "receipt");
         this.$toast2("LAND Claimed successfully");
+
+        if (this.report) {
+          await this.$http.post(`$bill-consume/activity/recharge/report`, {
+            source: "assnode",
+          });
+          bus.$emit("getDailyTasks");
+        }
       } catch (error) {
         console.log(error);
         this.onErr(error);
