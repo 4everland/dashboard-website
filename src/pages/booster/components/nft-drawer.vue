@@ -130,15 +130,18 @@ export default {
       NFT_LISTS.map((el, index) => {
         el.public = data.public.find(
           (item) =>
-            item.contractAddress == el.contractAddress && item.batch == el.batch
+            item.contractAddress.toLowerCase() ==
+              el.contractAddress.toLowerCase() && item.batch == el.batch
         );
         el.private = data.private.find(
           (item) =>
-            item.contractAddress == el.contractAddress && item.batch == el.batch
+            item.contractAddress.toLowerCase() ==
+              el.contractAddress.toLowerCase() && item.batch == el.batch
         );
         el.isStakeData = isStakeData.find(
           (item) =>
-            item.contract == el.contractAddress && item.batch == el.batch
+            item.contract.toLowerCase() == el.contractAddress.toLowerCase() &&
+            item.batch == el.batch
         );
       });
 
