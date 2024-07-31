@@ -79,6 +79,7 @@ export default {
           path: "/booster/explore",
           isOpen: true,
           action() {
+            if (_this.notLogin) return;
             if (_this.exploreRemain < 1)
               return _this.$toast2(
                 "Whoops, you've used all your exploration times. Try again tomorrow!",
