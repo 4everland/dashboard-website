@@ -14,6 +14,7 @@
     <DepositDialog
       v-model="showDeposit"
       :depositLand="depositLand"
+      :report="report"
     ></DepositDialog>
   </div>
 </template>
@@ -35,15 +36,21 @@ export default {
       drawer: false,
       showDeposit: false,
       depositLand: 10000,
+      report: false,
     };
   },
 
   created() {
     this.$store.dispatch("getBoosterUserInfo");
     this.$store.dispatch("getExploreRemain");
-    bus.$on("showDepositDialog", (val) => {
-      if (val > 10000) {
-        this.depositLand = val;
+    bus.$on("showDepositDialog", ({ land, report }) => {
+      if (report) {
+        this.report = report;
+      } else {
+        this.report = false;
+      }
+      if (land > 10000) {
+        this.depositLand = land;
       } else {
         this.depositLand = 10000;
       }

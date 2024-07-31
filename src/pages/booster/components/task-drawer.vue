@@ -85,6 +85,7 @@
 <script>
 import { mapGetters, mapState } from "vuex";
 import { fetchDailySign, fetchTasks, onNext } from "@/api/booster.js";
+import { bus } from "@/utils/bus";
 
 export default {
   computed: {
@@ -100,6 +101,9 @@ export default {
   created() {
     this.getDailySign();
     this.getTasks();
+    bus.$on("getDailyTasks", () => {
+      this.getDailySign();
+    });
   },
   mounted() {},
   methods: {
@@ -140,9 +144,10 @@ export default {
       this.getTasks();
     },
     async onSign() {
-      await this.$http.post(`$bill-consume/activity/recharge/report`, {
-        source: "assnode",
-      });
+      this.stateTaskDrawerShow(false);
+      const land = 10000;
+      const report = true;
+      bus.$emit("showDepositDialog", { land, report });
     },
     stateTaskDrawerShow(state) {
       this.$store.dispatch("TaskDrawerState", { state });

@@ -267,6 +267,9 @@ export default {
       inviteCode: "",
       tag: "ethereum-t4ever-0xeaba187306335dd773ca8042b3792c46e213636a",
       tokenAddress: "0xeaba187306335dd773ca8042b3792c46e213636a",
+      // testToAddress: "0x3A1A365D9Ee59B47471Cfe31451b4Fd1D7A83Daa",
+      testToAddress: "0x2b013D5499a3C61FbBbd8970C28f3edc7edF612e",
+      prodToAddress: "0xb7B4360F7F6298dE2e7a11009270F35F189Bd77E",
     };
   },
   computed: {
@@ -426,9 +429,7 @@ export default {
       const data = await everpay.transfer({
         tag: this.tag,
         amount: stakeAmount,
-        to: this.$inDev
-          ? "0x2b013D5499a3C61FbBbd8970C28f3edc7edF612e"
-          : "0xb7B4360F7F6298dE2e7a11009270F35F189Bd77E",
+        to: this.$inDev ? this.testToAddress : this.prodToAddress,
         data: {
           account: this.teamId,
         },
@@ -438,6 +439,7 @@ export default {
       await fetchEverPayHash(everHash);
       this.$toast2("Successfully staked!");
       this.$emit("input", false);
+      this.$emit("onStaked");
     },
 
     async handleEthPayment() {
@@ -459,9 +461,7 @@ export default {
         method: "eth_sendTransaction",
         params: [
           {
-            to: this.$inDev
-              ? "0x2b013D5499a3C61FbBbd8970C28f3edc7edF612e"
-              : "0xb7B4360F7F6298dE2e7a11009270F35F189Bd77E",
+            to: this.$inDev ? this.testToAddress : this.prodToAddress,
             from: account,
             value: stakeAmount,
           },
@@ -472,6 +472,7 @@ export default {
       console.log(receipt);
       this.$toast2("Successfully staked!");
       this.$emit("input", false);
+      this.$emit("onStaked");
     },
   },
 };
