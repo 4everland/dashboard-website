@@ -1,4 +1,4 @@
-import { fetchUserBoostInfo } from "@/api/booster";
+import { fetchUserBoostInfo, fetchRemainingExploration } from "@/api/booster";
 export default {
   state: () => {
     return {
@@ -12,6 +12,7 @@ export default {
         rateBuff: 0,
         totalPoint: 0,
       },
+      exploreRemain: 0,
       showStakeDrawer: false,
       showTaskDrawer: false,
     };
@@ -71,6 +72,9 @@ export default {
     SET_BOOST_INFO(state, info) {
       state.boosterInfo = info;
     },
+    SET_EXPLORE_REMAIN(state, count) {
+      state.exploreRemain = count;
+    },
   },
   actions: {
     StakeDrawerState: async (context, payload) => {
@@ -92,6 +96,15 @@ export default {
         console.log("data", data);
         if (!data) return;
         commit("SET_BOOST_INFO", data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getExploreRemain() {
+      try {
+        const { data } = await fetchRemainingExploration();
+        if (!data) return;
+        commit("SET_EXPLORE_REMAIN", data);
       } catch (error) {
         console.log(error);
       }

@@ -11,8 +11,7 @@
       />
       <div class="back-content flex-1 text-right">Back</div>
     </div>
-    <div class="user-container px-3 flex-2">
-      <img src="" width="42" alt="" />
+    <div class="user-container px-3 flex-2" v-show="uid">
       <e-team-avatar :size="42" :uid="uid"></e-team-avatar>
       <span>{{
         address ? address.slice(0, 4) + "..." + address.slice(-4) : ""
@@ -28,7 +27,7 @@
           :width="asMobile ? 24 : 36"
           alt=""
         />
-        <div class="count pos-a">x{{ count }}</div>
+        <div class="count pos-a">x{{ exploreRemain }}</div>
       </div>
       <div class="explore-content flex-1 text-right">Explore</div>
     </div>
@@ -36,6 +35,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: {
     address: {
@@ -46,12 +46,11 @@ export default {
       type: String,
       default: "",
     },
-    count: {
-      type: Number,
-      default: 0,
-    },
   },
   computed: {
+    ...mapState({
+      exploreRemain: (s) => s.moduleBooster.exploreRemain,
+    }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
@@ -59,7 +58,7 @@ export default {
 
   methods: {
     handleExplore() {
-      if (this.count < 1)
+      if (this.exploreRemain < 1)
         return this.$toast2(
           "Whoops, you've used all your exploration times. Try again tomorrow!",
           "error"

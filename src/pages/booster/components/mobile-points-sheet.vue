@@ -145,10 +145,10 @@ export default {
                 }
                 break;
               case "explorer":
-                it.log = `I helped ${it.explorerAddress} collect points and received a ${it.explorerValue}-point commission.`;
+                it.log = `I helped ${it.explorerAddress} collect points and received a ${it.value}-point commission.`;
                 break;
               case "explored":
-                it.log = `${it.explorerAddress} collected ${it.value} points and received a ${it.explorerValue}-point commission.`;
+                it.log = `${it.explorerAddress} helped me collect ${it.value} points.`;
                 break;
               default:
                 break;

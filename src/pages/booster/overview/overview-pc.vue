@@ -40,7 +40,7 @@
             alt=""
           />
           <div class="boost-btn pos-a cursor-p" @click="handleStartBoost">
-            Boost
+            Start Boosting
           </div>
         </div>
         <img src="/img/booster/svg/storage-line.svg" width="280" alt="" />

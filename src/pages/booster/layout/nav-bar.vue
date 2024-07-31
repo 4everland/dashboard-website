@@ -70,9 +70,24 @@
                         src="/img/booster/4ever-point-icon.png"
                         alt=""
                       />
-                      <span class="points mx-1">{{
+                      <!-- <span class="points mx-1">{{
                         boosterInfo.totalPoint
-                      }}</span>
+                      }}</span> -->
+
+                      <ICountUp
+                        class="points mx-1"
+                        :delay="1000"
+                        :endVal="boosterInfo.totalPoint"
+                        :options="{
+                          useEasing: true,
+                          useGrouping: true,
+                          separator: ',',
+                          decimal: '.',
+                          prefix: '',
+                          suffix: '',
+                        }"
+                      />
+
                       <img
                         src="/img/booster/svg/down-arrow.svg"
                         width="12"
@@ -324,6 +339,8 @@
 import { fetchInviteInfo } from "@/api/booster";
 import { mapGetters, mapState } from "vuex";
 import PointLogs from "../components/point-logs.vue";
+import ICountUp from "vue-countup-v2";
+
 export default {
   data() {
     return {
@@ -356,6 +373,14 @@ export default {
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
     }),
     ...mapGetters(["notLogin", "balance"]),
+    numArr() {
+      const str = String(this.boosterInfo.totalPoint);
+      let arr = [];
+      for (let i = 0; i < str.length; i++) {
+        arr.push(parseInt(str[i]));
+      }
+      return arr;
+    },
   },
 
   created() {
@@ -384,9 +409,14 @@ export default {
         this.getInviteInfo();
       }
     },
+    // onReady: function (instance, CountUp) {
+    //   const that = this;
+    //   instance.update(that.endVal + 100);
+    // },
   },
   components: {
     PointLogs,
+    ICountUp,
   },
 };
 </script>
