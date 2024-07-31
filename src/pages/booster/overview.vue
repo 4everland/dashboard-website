@@ -27,6 +27,7 @@ export default {
     return {
       showStartBoost: false,
       showEndBoost: false,
+      timer: null,
     };
   },
   computed: {
@@ -90,6 +91,15 @@ export default {
         return "/img/booster/bg-unlocked.png";
       }
     },
+  },
+
+  created() {
+    this.timer = setInterval(() => {
+      this.$store.commit("updateDate");
+    }, 1000);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
   beforeRouteEnter(_, from, next) {
     next((vm) => {

@@ -15,6 +15,7 @@ export default {
       exploreRemain: 0,
       showStakeDrawer: false,
       showTaskDrawer: false,
+      currentDate: +new Date() / 1000,
     };
   },
   getters: {
@@ -26,8 +27,13 @@ export default {
     baseRate({ boosterInfo }) {
       return boosterInfo.baseRate.reduce((prev, it) => it.rate + prev, 0);
     },
-    boostRate({ boosterInfo }) {
-      return boosterInfo.boosts.reduce((prev, it) => it.rate + prev, 0);
+    boostRate({ currentDate, boosterInfo }) {
+      return boosterInfo.boosts.reduce((prev, it) => {
+        if (currentDate > it.end) {
+          return 0 + prev;
+        }
+        return it.rate + prev;
+      }, 0);
     },
     totalRate(state, getters) {
       return (
@@ -35,7 +41,6 @@ export default {
         (1 + state.boosterInfo.rateBuff / 100)
       );
     },
-
     currentComputed({ boosterInfo }) {
       let curTimestamp = +new Date() / 1000;
       if (boosterInfo.computeTimestamp != 0) {
@@ -74,6 +79,9 @@ export default {
     },
     SET_EXPLORE_REMAIN(state, count) {
       state.exploreRemain = count;
+    },
+    updateDate(state) {
+      state.currentDate = +new Date() / 1000;
     },
   },
   actions: {
