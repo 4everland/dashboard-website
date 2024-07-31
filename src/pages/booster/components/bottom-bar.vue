@@ -55,16 +55,16 @@ export default {
     return {
       activity: [
         {
-          icon: "/img/booster/nav/gift.svg",
-          activityIcon: "/img/booster/nav/gift.svg",
+          icon: "/img/booster/nav/gift.png",
+          activityIcon: "/img/booster/nav/gift.png",
           name: "Coming soon",
           path: "/booster/explore",
           isOpen: false,
           action() {},
         },
         {
-          icon: "/img/booster/nav/staking.svg",
-          activityIcon: "/img/booster/nav/staking-active.svg",
+          icon: "/img/booster/nav/staking.png",
+          activityIcon: "/img/booster/nav/staking-active.png",
           name: "Staking",
           path: "/booster/explore",
           isOpen: true,
@@ -73,8 +73,8 @@ export default {
           },
         },
         {
-          icon: "/img/booster/nav/explore.svg",
-          activityIcon: "/img/booster/nav/explore-active.svg",
+          icon: "/img/booster/nav/explore.png",
+          activityIcon: "/img/booster/nav/explore-active.png",
           name: "Explore",
           path: "/booster/explore",
           isOpen: true,
@@ -91,8 +91,8 @@ export default {
           },
         },
         {
-          icon: "/img/booster/nav/tasks.svg",
-          activityIcon: "/img/booster/nav/tasks-active.svg",
+          icon: "/img/booster/nav/tasks.png",
+          activityIcon: "/img/booster/nav/tasks-active.png",
           name: "Tasks",
           path: "/booster/explore",
           isOpen: true,
@@ -101,8 +101,8 @@ export default {
           },
         },
         {
-          icon: "/img/booster/nav/gaming.svg",
-          activityIcon: "/img/booster/nav/gaming.svg",
+          icon: "/img/booster/nav/gaming.png",
+          activityIcon: "/img/booster/nav/gaming.png",
           name: "Coming soon",
           path: "/booster/explore",
           isOpen: false,
@@ -190,8 +190,7 @@ export default {
         justify-content: space-between;
       }
       .mobile-icon {
-        width: 48px;
-        height: 48px;
+        width: 56px;
       }
       .mobile-name {
         background-size: contain;
@@ -262,15 +261,15 @@ export default {
         .item-box {
         }
         .mobile-icon {
-          width: 24px;
-          height: 24px;
+          width: 34px;
         }
       }
       .mobile-item-active {
         background-image: url("/img/booster/nav/mobile-item-active.png");
+        .item-box {
+        }
         .mobile-icon {
-          width: 48px;
-          height: 48px;
+          width: 34px;
         }
         .mobile-name {
           position: absolute;
