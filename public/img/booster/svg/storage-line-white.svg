@@ -1,9 +1,7 @@
 <svg width="293" height="47" viewBox="0 0 293 47" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M0.5 1H291L251 41" stroke="#6172F3"/>
-<g filter="url(#filter0_d_332_11258)">
-<circle cx="2.5" cy="2.5" r="2.5" transform="matrix(-1 0 0 1 254 38)" fill="#89EAFB"/>
-<circle cx="2.5" cy="2.5" r="2" transform="matrix(-1 0 0 1 254 38)" stroke="#6172F3"/>
-</g>
+<path d="M0.5 1H291L251 41" stroke="#fff"/>
+<circle cx="2.5" cy="2.5" r="2.5" transform="matrix(-1 0 0 1 254 38)" fill="#94A3B8"/>
+<circle cx="2.5" cy="2.5" r="2" transform="matrix(-1 0 0 1 254 38)" stroke="#fff"/>
 <defs>
 <filter id="filter0_d_332_11258" x="245" y="34" width="13" height="13" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
 <feFlood flood-opacity="0" result="BackgroundImageFix"/>

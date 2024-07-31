@@ -27,9 +27,7 @@
       </div>
     </div>
     <div class="not-login d-none d-md-block" v-if="boostLocked">
-      <div style="position: relative">
-        <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
-      </div>
+      <div style="position: relative; width: 10px; height: 10px"></div>
       <div class="top-card">
         <div class="card-storage mb-1 pos-r">
           <img
@@ -49,9 +47,7 @@
 
     <div v-else>
       <div class="point-square d-none d-md-block cursor-p" @click="hanleClaim">
-        <div style="position: relative">
-          <div style="width: 10px; height: 10px"></div>
-        </div>
+        <div style="position: relative; width: 10px; height: 10px"></div>
         <div class="top-card square-box">
           <span class="points fz-14">
             {{
@@ -71,9 +67,7 @@
         </div>
       </div>
       <div class="storage-boost d-none d-md-block">
-        <div style="position: relative">
-          <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
-        </div>
+        <div style="position: relative; width: 10px; height: 10px"></div>
         <div class="top-card">
           <div
             class="card-storage mb-1 d-flex align-center justify-space-between"
@@ -114,13 +108,19 @@
               </div>
             </div>
           </div>
-          <img src="/img/booster/svg/storage-line.svg" width="280" alt="" />
+          <img
+            :src="
+              storageLocked
+                ? '/img/booster/svg/storage-line-white.svg'
+                : '/img/booster/svg/storage-line.svg'
+            "
+            width="280"
+            alt=""
+          />
         </div>
       </div>
       <div class="computing-boost d-none d-md-block">
-        <div style="position: relative">
-          <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
-        </div>
+        <div style="position: relative; width: 10px; height: 10px"></div>
         <div class="top-card">
           <div
             class="card-storage mb-1 d-flex align-center justify-space-between"
@@ -161,13 +161,19 @@
               </div>
             </div>
           </div>
-          <img src="/img/booster/svg/right_line_white.svg" width="280" alt="" />
+          <img
+            :src="
+              computingLocked
+                ? '/img/booster/svg/right_line_white.svg'
+                : '/img/booster/svg/right_line_blue.svg'
+            "
+            width="280"
+            alt=""
+          />
         </div>
       </div>
       <div class="network-boost d-none d-md-block">
-        <div style="position: relative">
-          <img src="/img/booster/svg/light-circle.svg" width="10" alt="" />
-        </div>
+        <div style="position: relative; width: 10px; height: 10px"></div>
         <div class="top-card">
           <div
             class="card-storage mb-1 d-flex align-center justify-space-between"
@@ -209,7 +215,15 @@
               </div>
             </div>
           </div>
-          <img src="/img/booster/svg/right_line_white.svg" width="280" alt="" />
+          <img
+            :src="
+              networkLocked
+                ? '/img/booster/svg/right_line_white.svg'
+                : '/img/booster/svg/right_line_blue.svg'
+            "
+            width="280"
+            alt=""
+          />
         </div>
       </div>
     </div>
