@@ -186,6 +186,9 @@ export default {
 
   methods: {
     pointCount() {
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
       this.timer = setInterval(() => {
         this.computedPoints =
           this.computedPoints == 0 ? this.currentComputed : this.computedPoints;
@@ -196,7 +199,7 @@ export default {
     async getExploreId() {
       const { data, message, code } = await fectchExploreId();
       this.$store.dispatch("getExploreRemain");
-      if (code == 11005 && !this.$route.params.id) {
+      if (code == 11005) {
         this.$router.push("/booster");
       }
       if (!data) throw new Error(message, code);
