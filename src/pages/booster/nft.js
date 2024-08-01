@@ -57,13 +57,13 @@ const NFT_LISTS = [
     name: "4EVERLAND x Galaxy OAT",
     key: "Galaxy",
     contractAddress: "0x1871464f087db27823cff66aa88599aa4815ae95",
-    batch: null,
+    batch: 0,
   },
   {
     name: "4EVERLAND, BNB Chain Airdrop Alliance Program OAT",
     key: "BNB_Airdrop",
     contractAddress: "0xadc466855ebe8d1402c5f7e6706fccc3aedb44a0",
-    batch: null,
+    batch: 0,
   },
   {
     name: "4EVERLAND - TGE Party with SPACE ID OAT",
