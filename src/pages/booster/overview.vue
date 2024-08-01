@@ -63,7 +63,7 @@ export default {
           return "/img/booster/mobile-bg-s2n.png";
         if (!this.storageLocked && !this.computingLocked)
           return "/img/booster/mobile-bg-s2c.png";
-        if (!this.networkLocked && this.computingLocked)
+        if (!this.networkLocked && !this.computingLocked)
           return "/img/booster/mobile-bg-n2c.png";
         if (!this.storageLocked) return "/img/booster/mobile-bg-storage.png";
         if (!this.networkLocked) return "/img/booster/mobile-bg-network.png";
@@ -80,7 +80,7 @@ export default {
           return "/img/booster/bg-s2n.png";
         if (!this.storageLocked && !this.computingLocked)
           return "/img/booster/bg-s2c.png";
-        if (!this.networkLocked && this.computingLocked)
+        if (!this.networkLocked && !this.computingLocked)
           return "/img/booster/bg-n2c.png";
         if (!this.storageLocked) return "/img/booster/bg-storage.png";
         if (!this.networkLocked) return "/img/booster/bg-network.png";
