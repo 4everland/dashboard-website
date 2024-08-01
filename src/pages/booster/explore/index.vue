@@ -186,6 +186,9 @@ export default {
 
   methods: {
     pointCount() {
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
       this.timer = setInterval(() => {
         this.computedPoints =
           this.computedPoints == 0 ? this.currentComputed : this.computedPoints;
