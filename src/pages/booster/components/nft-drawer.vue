@@ -156,7 +156,6 @@ export default {
       const params = {
         contract: item.contractAddress,
         id: item.private.nftId,
-        batch: item.private.batch,
       };
       try {
         await fetchNftBind(params);
