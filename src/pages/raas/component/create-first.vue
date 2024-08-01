@@ -413,7 +413,7 @@ export default {
       const dataAvailability = this.dataAvailability;
       const layer1 = this.layer1;
       const netWorkType = this.netWorkType;
-      if (stack == 0 && dataAvailability == 6) {
+      if ((stack == 0 || stack == 2) && dataAvailability == 6) {
         if (
           (layer1 == 0 && netWorkType == 2) ||
           (layer1 == 3 && netWorkType == 0)
