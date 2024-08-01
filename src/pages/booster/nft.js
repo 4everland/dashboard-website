@@ -3,25 +3,25 @@ const NFT_LISTS = [
     name: "Bucket NFT",
     key: "Bucket",
     contractAddress: "0xabed66466051acfa1d5f6ffbf674dc180fa59f62",
-    batch: null,
+    batch: 0,
   },
   {
     name: "Moss Genesis NFT",
     key: "Moss",
     contractAddress: "0x43C9BFc4d707ecE5c83ebF8fB1B647Bafdf96aAe",
-    batch: null,
+    batch: 0,
   },
   {
     name: "First Landing NFT",
     key: "First_Landing",
     contractAddress: "0x4d95adfedd17c3b604e8658cf26d137409c872f9",
-    batch: null,
+    batch: 0,
   },
   {
     name: "First Sowing NFT",
     key: "First_Sowing",
     contractAddress: "0x876b36ef73072b27dcf3a1234e19bba398fe0ceb",
-    batch: null,
+    batch: 0,
   },
   {
     name: "Junior contirbutor OAT",
@@ -39,7 +39,7 @@ const NFT_LISTS = [
     name: "Join 4EVERLAND Greenfield Chad Camp!OAT",
     key: "Greenfield",
     contractAddress: "0x38ce0432eb9bfd5d0da82c5aaf125a3bf911b358",
-    batch: null,
+    batch: 0,
   },
   {
     name: "Arweave started OAT",
@@ -51,7 +51,7 @@ const NFT_LISTS = [
     name: "4EVERLAND | Launch on the BNB Greenfield Mainnet NFT",
     key: "BNB_Greenfield",
     contractAddress: "0x9a28e1b0f1a7b4a6c1d71a3c82ec72a66dacbc2e",
-    batch: null,
+    batch: 0,
   },
   {
     name: "4EVERLAND x Galaxy OAT",
@@ -75,7 +75,7 @@ const NFT_LISTS = [
     name: "4EVERLAND Spooky halloween NFT",
     key: "halloween",
     contractAddress: "0x26d40d0020de2bd5ad63b48f72b565b2ffec63a1",
-    batch: null,
+    batch: 0,
   },
 ];
 
