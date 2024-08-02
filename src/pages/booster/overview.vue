@@ -7,8 +7,8 @@
       <start-boosting v-model="showStartBoost"></start-boosting>
       <end-boosting v-model="showEndBoost"></end-boosting>
       <bottom-bar></bottom-bar>
-      <nft-drawer></nft-drawer>
-      <task-drawer></task-drawer>
+      <nft-drawer v-if="userInfo.uid"></nft-drawer>
+      <task-drawer v-if="userInfo.uid"></task-drawer>
     </div>
   </div>
 </template>
@@ -33,6 +33,7 @@ export default {
   computed: {
     ...mapState({
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
+      userInfo: (s) => s.userInfo,
     }),
     storageBoost() {
       return this.boosterInfo.baseRate.filter((it) => it.name == "storage");
