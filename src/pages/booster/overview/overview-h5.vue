@@ -173,6 +173,8 @@
         </div>
       </div>
     </div>
+
+    <TgStartBoostOverlay></TgStartBoostOverlay>
     <mobile-points-sheet ref="pointsSheet"></mobile-points-sheet>
   </div>
 </template>
@@ -181,6 +183,7 @@
 import MobilePointsSheet from "../components/mobile-points-sheet.vue";
 import mixin from "./mixin";
 import ICountUp from "vue-countup-v2";
+import TgStartBoostOverlay from "../components/tg-start-boost-overlay.vue";
 export default {
   mixins: [mixin],
   data() {
@@ -189,6 +192,7 @@ export default {
   components: {
     MobilePointsSheet,
     ICountUp,
+    TgStartBoostOverlay,
   },
   methods: {
     handleOpenSheet() {

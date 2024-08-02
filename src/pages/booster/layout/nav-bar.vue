@@ -256,7 +256,12 @@
           @input="handleTriggerInvite"
         >
           <template v-slot:activator="{ on, attrs }">
-            <div class="mobile-btn pa-2" v-on="on" v-bind="attrs">
+            <div
+              class="mobile-btn pa-2"
+              v-on="on"
+              v-bind="attrs"
+              v-show="!notLogin"
+            >
               <img src="/img/booster/svg/invite-user.svg" width="24" alt="" />
             </div>
           </template>
@@ -327,6 +332,7 @@
             </div>
           </div>
         </v-menu>
+
         <div class="mobile-btn ml-1 pa-2" @click="$emit('open-drawer')">
           <img src="/img/booster/svg/mobile-draw-icon.svg" width="24" alt="" />
         </div>

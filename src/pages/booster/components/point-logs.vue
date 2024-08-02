@@ -71,7 +71,7 @@ export default {
                 it.log = `I gained ${it.value} initial points.`;
                 break;
               case "claim":
-                it.log = `I collect ${it.value} points.`;
+                it.log = `I collected ${it.value} points.`;
                 break;
               case "activity":
                 if (it.value > 0) {
