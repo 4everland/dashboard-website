@@ -333,7 +333,11 @@
           </div>
         </v-menu>
 
-        <div class="connect-wallet" @click="$router.push('/login')">
+        <div
+          class="connect-wallet"
+          @click="$router.push('/login')"
+          v-show="notLogin"
+        >
           Connect Wallet
         </div>
         <div class="mobile-btn ml-1 pa-2" @click="$emit('open-drawer')">
@@ -392,6 +396,12 @@ export default {
     },
   },
 
+  created() {
+    if (!this.notLogin) {
+      this.$store.dispatch("getBalance");
+    }
+  },
+
   methods: {
     handleLogout() {
       localStorage.clear();
@@ -413,10 +423,6 @@ export default {
         this.getInviteInfo();
       }
     },
-    // onReady: function (instance, CountUp) {
-    //   const that = this;
-    //   instance.update(that.endVal + 100);
-    // },
   },
   components: {
     PointLogs,
