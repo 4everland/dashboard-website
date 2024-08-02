@@ -50,7 +50,7 @@
           loop
           autoplay
         ></dotlottie-player>
-        <div class="pb-4">Exploring...</div>
+        <div class="pb-4">LOADING...</div>
       </div>
     </v-dialog>
   </div>

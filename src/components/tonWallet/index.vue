@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div id="tonClickBtn">Button</div>
+    <div class="connect-wallet" @click="handleSign" v-show="!connected">
+      Connect Wallet
+    </div>
   </div>
 </template>
 
@@ -8,27 +10,64 @@
 import { TonConnectUI } from "@tonconnect/ui";
 
 export default {
+  data() {
+    return {
+      tonConnectUI: null,
+    };
+  },
+  computed: {
+    connected() {
+      if (this.tonConnectUI) {
+        return this.tonConnectUI.connected;
+      }
+      return false;
+    },
+  },
   mounted() {
-    console.log(TonConnectUI);
     const tonConnectUI = new TonConnectUI({
-      manifestUrl: "http://localhost:8080/tonconnect-manifest.json",
-      buttonRootId: "tonClickBtn",
+      manifestUrl: "https://hb.4everland.app/tonconnect-manifest.json",
     });
     this.tonConnectUI = tonConnectUI;
+    this.tonConnectUI.onStatusChange((wallet) => {
+      if (
+        wallet &&
+        wallet.connectItems?.tonProof &&
+        "proof" in wallet.connectItems.tonProof
+      ) {
+        console.log(wallet.connectItems.tonProof, "-----");
+      }
+    });
   },
   methods: {
-    async connectToWallet() {
-      try {
-        const connectedWallet = await this.tonConnectUI.connectWallet();
-        console.log(connectedWallet);
-      } catch (error) {
-        console.log(error);
+    async handleShowModel() {
+      await this.tonConnectUI.openModal();
+      console.log(this.tonConnectUI);
+    },
+
+    handleSign() {
+      if (process.env.VUE_APP_TG_VERSION == "false") {
+        this.$router.push("/login");
+      } else {
+        this.tonConnectUI.setConnectRequestParameters({ state: "loading" });
+        const tonProof = "abcdefg";
+        this.tonConnectUI.setConnectRequestParameters({
+          state: "ready",
+          value: { tonProof },
+        });
+        this.handleShowModel();
       }
-      // Do something with connectedWallet if needed
-      console.log(connectedWallet);
     },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.connect-wallet {
+  display: inline-flex;
+  padding: 8px 12px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+}
+</style>
