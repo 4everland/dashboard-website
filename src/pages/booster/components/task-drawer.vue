@@ -50,11 +50,7 @@
             >
               <div class="task-item-box">
                 <div class="task-item-left">
-                  <img
-                    class="task-item-image"
-                    :src="`/img/booster/nft/badge_${index}_1.png`"
-                    alt=""
-                  />
+                  <img class="task-item-image" :src="item.icon" alt="" />
                   <div class="task-text-box">
                     <div class="task-name">{{ item.actName }}</div>
                     <div class="task-desc">+3/H, valid for 24 hours</div>
