@@ -310,12 +310,10 @@ export default {
   },
   methods: {
     initSeleted() {
-      console.log(parseInt(this.walletObj.chainId));
       this.selected = parseInt(this.walletObj.chainId);
     },
     async onSelect(chainId) {
       try {
-        // if (this.selected == chainId) return;
         this.selected = chainId;
         await this.switchNet(chainId);
       } catch (error) {

@@ -37,7 +37,7 @@
             >
           </div>
         </div>
-        <div class="pgb ml-auto" @click="$router.push('/billing/deposit')">
+        <div class="pgb ml-auto" @click="handleToDeposit">
           <img
             style="display: block"
             src="/img/booster/svg/pig_bank.svg"
@@ -114,6 +114,9 @@ export default {
       localStorage.clear();
       localStorage.loginTo = location.pathname + location.search;
       location.reload();
+    },
+    handleToDeposit() {
+      if (!this.notLogin) this.$router.push("/billing/deposit");
     },
   },
 };

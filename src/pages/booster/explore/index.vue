@@ -261,6 +261,8 @@ export default {
       try {
         let id = this.$route.params.id;
         const data = await claimExplorePoints(id);
+
+        console.log(data);
         if (data.data) {
           this.getExploreInfo();
         } else {
