@@ -25,7 +25,7 @@
         ></e-team-avatar>
         <div class="ml-1">
           <div class="fz-14 fw-b">
-            {{ (userInfo.username || "unkown").cutStr(6, 4) }}
+            {{ (userInfo.username || "-").cutStr(6, 4) }}
           </div>
           <div class="fz-12 balance">
             <span>LAND Balance:</span>
