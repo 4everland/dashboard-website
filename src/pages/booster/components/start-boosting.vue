@@ -173,14 +173,18 @@ export default {
     },
   },
   created() {
+    if (this.$route.query) {
+      this.inviteCode = this.$route.query.invite;
+    }
     this.getTaskList();
   },
   methods: {
     async getTaskList() {
       try {
         const { data } = await fetchPreTaskActivity();
-        console.log(data);
-        this.activity = data.items;
+        if (data) {
+          this.activity = data.items;
+        }
       } catch (error) {
         console.log(error);
       }

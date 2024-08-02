@@ -333,6 +333,9 @@
           </div>
         </v-menu>
 
+        <div class="connect-wallet" @click="$router.push('/login')">
+          Connect Wallet
+        </div>
         <div class="mobile-btn ml-1 pa-2" @click="$emit('open-drawer')">
           <img src="/img/booster/svg/mobile-draw-icon.svg" width="24" alt="" />
         </div>
@@ -389,11 +392,6 @@ export default {
     },
   },
 
-  created() {
-    if (!this.notLogin) {
-      this.$store.dispatch("getBalance");
-    }
-  },
   methods: {
     handleLogout() {
       localStorage.clear();
@@ -423,6 +421,13 @@ export default {
   components: {
     PointLogs,
     ICountUp,
+  },
+  watch: {
+    notLogin(val) {
+      if (!val) {
+        this.$store.dispatch("getBalance");
+      }
+    },
   },
 };
 </script>
@@ -519,6 +524,14 @@ export default {
   padding-bottom: 16px;
   font-size: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+.connect-wallet {
+  display: inline-flex;
+  padding: 8px 12px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
 }
 .points {
   color: #6172f3;

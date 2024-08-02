@@ -24,9 +24,13 @@ export default {
   },
   computed: {
     jsNumberForAddress() {
-      const addr = this.address.slice(2, 10);
-      const seed = parseInt(addr, 16);
-      return seed;
+      if (this.address) {
+        const addr = this.address.slice(2, 10);
+        const seed = parseInt(addr, 16);
+        return seed;
+      }
+
+      return "";
     },
   },
   methods: {

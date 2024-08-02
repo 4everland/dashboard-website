@@ -101,7 +101,6 @@ export default {
     async getBoosterUserInfo({ commit }) {
       try {
         const { data } = await fetchUserBoostInfo();
-        console.log("data", data);
         if (!data) return;
         commit("SET_BOOST_INFO", data);
       } catch (error) {
