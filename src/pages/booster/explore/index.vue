@@ -3,6 +3,30 @@
     <div style="position: relative">
       <img class="booster-overview-bg" :src="bgImg" alt="" />
 
+      <div
+        class="d-md-none d-block points-card fz-12 d-flex align-center justify-center"
+      >
+        <div class="rate-box">
+          <img src="/img/booster/3d-square.png" width="40" alt="" />
+          <span class="text fw-b">{{ totalRate }}/H</span>
+        </div>
+        <div>
+          Points
+
+          <ICountUp
+            :delay="1000"
+            :endVal="info.totalPoint"
+            :options="{
+              useEasing: true,
+              useGrouping: true,
+              separator: ',',
+              decimal: '.',
+              prefix: '',
+              suffix: '',
+            }"
+          />
+        </div>
+      </div>
       <div class="point-square">
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
@@ -63,6 +87,8 @@ import {
   claimExplorePoints,
 } from "@/api/booster";
 import ExploreBar from "../components/explore-bar.vue";
+import ICountUp from "vue-countup-v2";
+
 import { mapState, mapGetters } from "vuex";
 export default {
   data() {
@@ -87,6 +113,7 @@ export default {
   },
   components: {
     ExploreBar,
+    ICountUp,
   },
   computed: {
     ...mapState({
@@ -265,6 +292,26 @@ export default {
   }
 }
 
+.points-card {
+  position: absolute;
+  right: 8px;
+  top: 80px;
+  width: 127px;
+  height: 42px;
+  background: url("/img/booster/mobile/card_background_points.png") no-repeat;
+  background-size: 100%;
+  .rate-box {
+    position: absolute;
+    left: -20px;
+    bottom: -5px;
+    .text {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
 .square-box {
   animation: bounce 2s infinite linear;
 }
@@ -276,7 +323,7 @@ export default {
   overflow: hidden;
 
   .booster-overview-bg {
-    max-height: 100vh;
+    // min-height: 100vh;
     width: 100%;
     display: block;
   }

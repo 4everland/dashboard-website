@@ -333,8 +333,6 @@
           </div>
         </v-menu>
 
-        <TonWallet></TonWallet>
-
         <div class="mobile-btn ml-1 pa-2" @click="$emit('open-drawer')">
           <img src="/img/booster/svg/mobile-draw-icon.svg" width="24" alt="" />
         </div>
@@ -348,7 +346,6 @@ import { fetchInviteInfo } from "@/api/booster";
 import { mapGetters, mapState } from "vuex";
 import PointLogs from "../components/point-logs.vue";
 import ICountUp from "vue-countup-v2";
-import TonWallet from "@/components/tonWallet";
 
 export default {
   data() {
@@ -426,7 +423,6 @@ export default {
   components: {
     PointLogs,
     ICountUp,
-    TonWallet,
   },
 };
 </script>
