@@ -103,7 +103,7 @@
               <input
                 class="invite-input"
                 type="text"
-                placeholder="Enter your invite code"
+                placeholder="Please enter"
                 v-model="stakeAmount"
               />
             </div>
@@ -221,7 +221,7 @@
                   <input
                     class="invite-input"
                     type="text"
-                    placeholder="Enter your invite code"
+                    placeholder="Please enter"
                     v-model="stakeAmount"
                   />
                 </div>
@@ -255,6 +255,7 @@ import { fetchEverPayHash } from "@/api/booster";
 export default {
   props: {
     value: Boolean,
+    stakingAmount: Number,
   },
   data() {
     return {
@@ -385,6 +386,12 @@ export default {
       }
     },
     async onStake() {
+      if (this.stakingAmount == 0 && this.stakeAmount < 100) {
+        this.$toast(
+          "Sorry, the initial staking amount cannot be less than 100 T4EVER."
+        );
+        return;
+      }
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
@@ -437,6 +444,7 @@ export default {
       console.log(data);
       const everHash = data.everHash;
       await fetchEverPayHash(everHash);
+      this.$store.dispatch("getBoosterUserInfo");
       this.$toast2("Successfully staked!");
       this.$emit("input", false);
       this.$emit("onStaked");
@@ -470,6 +478,7 @@ export default {
       console.log(tx);
       const receipt = await tx.wait();
       console.log(receipt);
+      this.$store.dispatch("getBoosterUserInfo");
       this.$toast2("Successfully staked!");
       this.$emit("input", false);
       this.$emit("onStaked");
