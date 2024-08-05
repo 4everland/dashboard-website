@@ -75,7 +75,7 @@
     </v-navigation-drawer>
     <StakeDialog
       v-model="showStakeDialog"
-      :stakingAmount="stakingAmountstakingAmount"
+      :stakingAmount="stakingAmount"
       @onStaked="onStaked"
       ref="StakeDialog"
     />
