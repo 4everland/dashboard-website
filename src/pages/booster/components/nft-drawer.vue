@@ -19,7 +19,7 @@
           <div class="nft-drawer-btn-box">
             <div class="nft-drawer-logo">
               <img class="logo" src="/favicon.ico" alt="" />
-              <div>Staked: {{ staking + everpayStaking }} T4EVER</div>
+              <div>Staked: {{ stakingAmount }} T4EVER</div>
             </div>
             <div>
               <v-btn class="drawer-btn" @click="onStake">Stake</v-btn>
@@ -75,6 +75,7 @@
     </v-navigation-drawer>
     <StakeDialog
       v-model="showStakeDialog"
+      :stakingAmount="stakingAmount"
       @onStaked="onStaked"
       ref="StakeDialog"
     />
@@ -106,6 +107,7 @@ export default {
       everpayStaking: 0,
       nftList: [],
       showStakeDialog: false,
+      stakingAmount: 0,
     };
   },
   created() {
@@ -123,6 +125,7 @@ export default {
       console.log(data);
       this.staking = data.staking;
       this.everpayStaking = data.everpayStaking;
+      this.stakingAmount = data.staking + data.everpayStaking;
     },
     async getNftLists() {
       const { data } = await fetchNftLists();

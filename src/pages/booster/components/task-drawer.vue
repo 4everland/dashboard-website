@@ -138,6 +138,7 @@ export default {
           break;
       }
       this.getTasks();
+      this.$store.dispatch("getBoosterUserInfo");
     },
     async onSign() {
       this.stateTaskDrawerShow(false);
