@@ -22,6 +22,7 @@ import NftDrawer from "./components/nft-drawer.vue";
 import TaskDrawer from "./components/task-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
 import { mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -109,6 +110,7 @@ export default {
       }
     });
   },
+  methods: {},
 
   components: {
     OverviewPc,
