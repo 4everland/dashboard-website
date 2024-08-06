@@ -8,7 +8,7 @@
           Unlock at 10,000 points Unlock at 10,000 points Unlock at 10,000
           points Unlock at
         </div>
-        <v-btn class="start-btn mt-4" @click="handleStart">START MINING</v-btn>
+        <v-btn class="start-btn mt-4" @click="handleStart">{{ btnText }}</v-btn>
       </div>
     </div>
   </div>
@@ -24,15 +24,19 @@ export default {
     },
 
     isShow() {
-      return false;
-      // return this.notLogin && this.isTg;
+      // return false;
+      return this.isTg;
+    },
+    btnText() {
+      if (this.notLogin) {
+        return "LOGIN";
+      }
+      return "START MINING";
     },
   },
   methods: {
     handleStart() {
-      console.log(2);
-
-      // location.href = 'hb.4everland.app/tg.html?uid=2'
+      location.href = "https://hb.4everland.app/tg.html?uid=2";
     },
   },
 };

@@ -232,6 +232,7 @@
       <div v-else class="login-content d-flex align-center justify-center">
         <v-btn
           style="background: rgba(255, 255, 255, 0.1)"
+          class="fz-14"
           @click="$router.push('/login')"
         >
           <img src="/img/booster/svg/wallet.svg" width="16" alt="" />
@@ -577,6 +578,7 @@ export default {
         padding: 16px 0;
         width: 128px;
         text-align: center;
+        font-size: 14px;
         border-right: 1px solid rgba(255, 255, 255, 0.25);
         line-height: 16px;
         box-sizing: border-box;

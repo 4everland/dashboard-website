@@ -32,7 +32,7 @@
         <div class="card-storage mb-1 pos-r">
           <img
             class="pos-a"
-            style="left: 37%; top: -20px"
+            style="left: 50%; top: -20px; transform: translateX(-50%)"
             src="/img/booster/boost-icon.png"
             width="64"
             alt=""
@@ -380,7 +380,7 @@ export default {
       transform: translateX(-50%);
       bottom: 10%;
       text-align: center;
-      padding: 0 8px;
+      padding: 4px 8px;
       font-weight: bold;
       font-size: 20px;
       border-radius: 4px;
