@@ -6,6 +6,8 @@ import { mapGetters, mapState } from "vuex";
 import vuetify from "./plugins/vuetify";
 import "./setup";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
+import tgUtil from "@/utils/tg.js";
+
 router.beforeEach((to, _, next) => {
   let { title, group } = to.meta || {};
   const name = "4EVERLAND";
@@ -29,7 +31,11 @@ router.afterEach(() => {
     showProgress: false,
   });
 });
-
+if (window.Telegram) {
+  window.$tg = window.Telegram.WebApp;
+  Vue.prototype.$tg = $tg;
+  Object.assign($tg, tgUtil);
+}
 new Vue({
   router,
   store,

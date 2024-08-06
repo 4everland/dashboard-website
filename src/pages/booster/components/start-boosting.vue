@@ -174,7 +174,7 @@ export default {
   },
   created() {
     if (this.$route.query) {
-      this.inviteCode = this.$route.query.invite;
+      this.inviteCode = this.$route.query.boosterCode;
     }
     this.getTaskList();
   },

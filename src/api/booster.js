@@ -48,6 +48,15 @@ export const initBoost = async (code) => {
   });
 };
 
+export const initTgBoost = async (code) => {
+  return boosterRequest.post({
+    url: `/node/tg/create`,
+    data: {
+      code,
+    },
+  });
+};
+
 export const unlockStage = async (index, inviteCode = null) => {
   const stages = ["storage", "compute", "network"];
   return boosterRequest.post({
@@ -73,6 +82,12 @@ export const fetchPointsHistory = async (page, size = 10) => {
 export const fetchInviteInfo = async () => {
   return boosterRequest.get({
     url: "/node/invite/info",
+  });
+};
+
+export const fetchTgInviteInfo = async () => {
+  return boosterRequest.get({
+    url: "/node/invite/tg/info",
   });
 };
 

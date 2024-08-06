@@ -174,7 +174,10 @@
       </div>
     </div>
 
-    <TgStartBoostOverlay></TgStartBoostOverlay>
+    <TgStartBoostOverlay
+      :tgLoading="tgLoading"
+      @handleTgStart="handleTGStartBoost"
+    ></TgStartBoostOverlay>
     <mobile-points-sheet ref="pointsSheet"></mobile-points-sheet>
   </div>
 </template>

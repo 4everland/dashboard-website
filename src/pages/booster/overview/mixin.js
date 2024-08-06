@@ -1,6 +1,7 @@
 import { mapGetters, mapState } from "vuex";
-import { unlockStage, claimPoints } from "@/api/booster";
+import { unlockStage, claimPoints, initTgBoost } from "@/api/booster";
 import { bus } from "@/utils/bus";
+import { sendStoken } from "@/api/login.js";
 
 export default {
   data() {
@@ -8,6 +9,7 @@ export default {
       computedPoints: 0,
       interval: 1000,
       timer: null,
+      tgLoading: false,
     };
   },
   computed: {
@@ -42,12 +44,18 @@ export default {
     },
   },
 
-  created() {
+  async created() {
     this.timer = setInterval(() => {
       this.computedPoints =
         this.computedPoints == 0 ? this.currentComputed : this.computedPoints;
       this.computedPoints += (this.totalRate * this.interval) / 3600000;
     }, this.interval);
+
+    if (this.$route.query && this.$route.query.st) {
+      const stoken = this.$route.query.st;
+      const { data } = await sendStoken(stoken);
+      this.onLoginData(data);
+    }
   },
   methods: {
     handleStartBoost() {
@@ -57,6 +65,20 @@ export default {
         this.$emit("handleStartBoost");
       }
     },
+    async handleTGStartBoost() {
+      if (this.notLogin) {
+        const boosterCode = this.$tg.initDataUnsafe.start_param;
+        console.log(boosterCode);
+        location.href = `https://hb.4everland.app/tg.html?uid=2&boosterCode=${boosterCode}`;
+      } else {
+        let code = this.$route.query.boosterCode;
+        this.tgLoading = true;
+        await initTgBoost(code || "");
+        this.tgLoading = false;
+        this.$store.dispatch("getBoosterUserInfo");
+      }
+    },
+
     async handleUnlock(index) {
       try {
         const data = await unlockStage(index);
@@ -88,6 +110,26 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    onLoginData(data) {
+      localStorage.authData = JSON.stringify(data);
+      localStorage.token = data.accessToken;
+      localStorage.nodeToken = data.nodeToken;
+      let query = this.$route.query;
+      let queryKeys = Object.keys(query).filter((it) => it != "st");
+      let queryObj = {};
+      if (queryKeys.length > 0) {
+        queryKeys.forEach((it) => {
+          queryObj[it] = query[it];
+        });
+      }
+      if (this.$route.query) {
+        this.$router.replace({
+          path: "/booster",
+          query: queryObj,
+        });
+      }
+      location.reload();
     },
   },
 };
