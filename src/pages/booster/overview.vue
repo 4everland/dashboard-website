@@ -4,7 +4,10 @@
       <img class="booster-overview-bg" :src="bgImg" alt="" />
       <overview-pc @handleStartBoost="showStartBoost = true"></overview-pc>
       <overview-h5 @handleStartBoost="showStartBoost = true"></overview-h5>
-      <start-boosting v-model="showStartBoost"></start-boosting>
+      <start-boosting
+        v-model="showStartBoost"
+        @showEndPoints="showEndBoost = true"
+      ></start-boosting>
       <end-boosting v-model="showEndBoost"></end-boosting>
       <bottom-bar></bottom-bar>
       <nft-drawer v-if="userInfo.uid"></nft-drawer>

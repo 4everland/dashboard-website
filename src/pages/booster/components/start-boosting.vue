@@ -133,7 +133,10 @@
             </div>
           </div>
 
-          <div class="d-flex align-center justify-center">
+          <div
+            class="d-flex align-center justify-center"
+            style="margin-top: 30px"
+          >
             <v-btn
               class="start-boost-btn"
               height="54"
@@ -196,6 +199,7 @@ export default {
         console.log(data);
         this.$store.dispatch("getBoosterUserInfo");
         this.$emit("input", false);
+        this.$emit("showEndPoints");
       } catch (error) {
         console.log(error);
       }
@@ -324,7 +328,7 @@ export default {
     top: -50px;
   }
   .boosting-task {
-    padding: 16px 24px;
+    padding: 12px 24px;
     margin-bottom: 8px;
     background: url("/img/booster/svg/fringe-bg.svg");
     .idx {
