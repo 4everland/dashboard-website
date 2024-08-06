@@ -368,6 +368,7 @@ export default {
   background: rgba(49, 49, 49, 0.9);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.35);
   .invite-input {
+    width: 100%;
     color: #fff;
   }
 }
