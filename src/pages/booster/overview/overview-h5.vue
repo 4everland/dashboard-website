@@ -363,11 +363,16 @@ export default {
   top: 30%;
   .points {
     z-index: 10;
+    padding: 0px 8px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 45%;
+    top: 55%;
     font-weight: bold;
+    border-radius: 16px;
+    border: 1px solid rgba(18, 21, 54, 0.5);
+    background: rgba(97, 114, 243, 0.75);
+    box-shadow: 0px 0px 4px 0px rgba(255, 255, 255, 0.5);
   }
 }
 

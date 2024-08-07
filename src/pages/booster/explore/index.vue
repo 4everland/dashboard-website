@@ -191,17 +191,42 @@ export default {
       let curTimestamp = +new Date() / 1000;
       if (this.info.computeTimestamp != 0) {
         const basicComputed = this.info.baseRate.reduce((pre, it) => {
+          if (curTimestamp < this.info.computeTimestamp) return pre;
           return (
             pre + ((curTimestamp - this.info.computeTimestamp) / 3600) * it.rate
           );
         }, 0);
-        return basicComputed + this.info.computed;
+
+        const boostComputed = this.info.boosts.reduce((pre, it) => {
+          let endTimeStamp = curTimestamp;
+          if (it.end > 0 && endTimeStamp > it.end) {
+            endTimeStamp = it.end;
+          }
+          if (endTimeStamp < this.info.computeTimestamp) {
+            return pre;
+          }
+          return (
+            pre + ((endTimeStamp - this.info.computeTimestamp) / 3600) * it.rate
+          );
+        }, 0);
+        return basicComputed + boostComputed + this.info.computed;
       }
       const basicComputed = this.info.baseRate.reduce((pre, it) => {
+        if (curTimestamp < it.start) return pre;
         return pre + ((curTimestamp - it.start) / 3600) * it.rate;
       }, 0);
+      const boostComputed = this.info.boosts.reduce((pre, it) => {
+        let endTimeStamp = curTimestamp;
+        if (it.end > 0 && endTimeStamp > it.end) {
+          endTimeStamp = it.end;
+        }
+        if (endTimeStamp < it.start) {
+          return pre;
+        }
+        return pre + ((endTimeStamp - it.start) / 3600) * it.rate;
+      }, 0);
 
-      return basicComputed;
+      return basicComputed + boostComputed;
     },
     baseRate() {
       return this.info.baseRate.reduce((prev, it) => it.rate + prev, 0);
