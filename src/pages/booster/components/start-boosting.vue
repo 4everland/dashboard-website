@@ -353,6 +353,14 @@ export default {
       cursor: pointer;
     }
   }
+  .boosting-task:hover {
+    background: linear-gradient(
+        270deg,
+        rgba(0, 114, 248, 0) 0.18%,
+        rgba(0, 114, 248, 0.2) 100.11%
+      ),
+      url("/img/booster/svg/fringe-bg.svg");
+  }
   .start-boost-btn {
     margin-top: 8px;
     padding: 16px 24px;

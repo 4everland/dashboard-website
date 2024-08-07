@@ -56,7 +56,15 @@
                 : computedPoints.toFixed(3)
             }}/{{ boosterInfo.capacity }}
           </span>
-          <img src="/img/booster/3d-square.png" width="120" alt="" />
+          <img
+            :src="
+              computedPoints >= boosterInfo.capacity
+                ? '/img/booster/3d-square-full.png'
+                : '/img/booster/3d-square.png'
+            "
+            width="120"
+            alt=""
+          />
           <img
             class="pos-a"
             style="left: 50%; top: 32%; transform: translateX(-50%)"
@@ -99,7 +107,7 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                Consumes 1,000,000 LAND to unlock
+                Consumes 1 million LAND to unlock.
               </div>
               <div class="task-title">Storage Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
@@ -152,7 +160,7 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                Consumes 1,000,000 LAND to unlock
+                Consumes 1 million LAND to unlock.
               </div>
               <div class="task-title">Computing Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
@@ -206,7 +214,7 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                Consumes 1,000,000 LAND to unlock
+                Consumes 1 million LAND to unlock.
               </div>
               <div class="task-title">Network Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
@@ -392,7 +400,7 @@ export default {
 }
 .point-square {
   position: absolute;
-  left: 49.9%;
+  left: 50.3%;
   top: 30%;
   .top-card {
     position: absolute;
