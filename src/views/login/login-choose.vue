@@ -159,6 +159,11 @@ export default {
     },
     onTelegram() {
       location.href = "/tg.html?uid=1";
+      // window.open(
+      //   "https://hb.4everland.app//tg.html?uid=1",
+      //   "Telegram",
+      //   "width=500,height=500,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no"
+      // );
     },
     onVerify(name) {
       this.walletName = name;

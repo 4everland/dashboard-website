@@ -12,6 +12,8 @@
       <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar>
       <nft-drawer v-if="userInfo.uid"></nft-drawer>
       <task-drawer v-if="userInfo.uid"></task-drawer>
+
+      <bind-dialog v-model="showBindWallet"></bind-dialog>
     </div>
   </div>
 </template>
@@ -24,6 +26,8 @@ import EndBoosting from "./components/end-boosting.vue";
 import NftDrawer from "./components/nft-drawer.vue";
 import TaskDrawer from "./components/task-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
+import BindDialog from "./components/bind-dialog.vue";
+
 import { mapState } from "vuex";
 
 export default {
@@ -31,6 +35,7 @@ export default {
     return {
       showStartBoost: false,
       showEndBoost: false,
+      showBindWallet: false,
       timer: null,
     };
   },
@@ -116,7 +121,11 @@ export default {
   },
   methods: {
     handleShowStartBoost() {
-      this.showStartBoost = true;
+      if (!this.userInfo.wallet) {
+        this.showBindWallet = true;
+      } else {
+        this.showStartBoost = true;
+      }
     },
   },
 
@@ -128,6 +137,7 @@ export default {
     NftDrawer,
     TaskDrawer,
     BottomBar,
+    BindDialog,
   },
 };
 </script>

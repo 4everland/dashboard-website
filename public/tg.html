@@ -39,12 +39,19 @@
         query.uid || 0
       }\/callback" data-request-access="write"><\/script>
   `);
+      function onCancel() {
+        if (window.history.length > 0) {
+          window.history.go(-1);
+        } else {
+          window.close();
+        }
+      }
     </script>
     <div style="margin-top: 30px">
       <span
         class="hover-1"
         style="font-size: 14px; color: #34a9ff"
-        onclick="window.close()"
+        onclick="onCancel()"
         >Cancel</span
       >
     </div>
