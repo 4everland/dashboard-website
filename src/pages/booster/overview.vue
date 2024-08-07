@@ -2,14 +2,14 @@
   <div class="booster-overview">
     <div class="booster-overview-content" style="position: relative">
       <img class="booster-overview-bg" :src="bgImg" alt="" />
-      <overview-pc @handleStartBoost="showStartBoost = true"></overview-pc>
-      <overview-h5 @handleStartBoost="showStartBoost = true"></overview-h5>
+      <overview-pc @handleStartBoost="handleShowStartBoost"></overview-pc>
+      <overview-h5 @handleStartBoost="handleShowStartBoost"></overview-h5>
       <start-boosting
         v-model="showStartBoost"
         @showEndPoints="showEndBoost = true"
       ></start-boosting>
       <end-boosting v-model="showEndBoost"></end-boosting>
-      <bottom-bar @handleStartBoost="showStartBoost = true"></bottom-bar>
+      <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar>
       <nft-drawer v-if="userInfo.uid"></nft-drawer>
       <task-drawer v-if="userInfo.uid"></task-drawer>
     </div>
@@ -103,7 +103,6 @@ export default {
       this.$store.commit("updateDate");
     }, 1000);
   },
-
   mounted() {
     console.log("tg initData", this.$tg.initDataUnsafe);
   },
@@ -117,7 +116,11 @@ export default {
       }
     });
   },
-  methods: {},
+  methods: {
+    handleShowStartBoost() {
+      this.showStartBoost = true;
+    },
+  },
 
   components: {
     OverviewPc,
