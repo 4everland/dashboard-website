@@ -61,7 +61,7 @@
                   <v-btn
                     v-if="item.actStatus !== 'DONE'"
                     class="drawer-btn"
-                    @click="stepNext(item)"
+                    @click="stepNext(item, index)"
                     >{{ item.extra.buttonName }}</v-btn
                   >
 
@@ -124,9 +124,12 @@ export default {
       const { data } = await fetchTasks();
       this.tasksLists = data.items;
     },
-    async stepNext(item) {
+    async stepNext(item, index) {
+      let _this = this;
       const id = item.actId;
       const { data } = await onNext(id);
+      item.extra.buttonName = data.action.web.nextButtonName;
+      this.$set(_this.tasksLists, index, item);
       switch (data.action.web.next) {
         case "REDIRECT":
           location.href = data.action.web.message;
@@ -134,10 +137,17 @@ export default {
         case "JUMP_OUT":
           window.open(data.action.web.message);
           break;
+        case "CLAIM":
+          this.$toast2(data.action.web.message, "success");
+          this.getTasks();
+          break;
+        case "COMPLETE":
+          this.getTasks();
+          break;
         default:
+          this.getTasks();
           break;
       }
-      this.getTasks();
       this.$store.dispatch("getBoosterUserInfo");
     },
     async onSign() {
@@ -283,7 +293,7 @@ export default {
       top: 74px !important;
       right: 24px !important;
       width: 558px !important;
-      height: calc(100% - 74px - 64px) !important;
+      height: calc(100% - 74px - 64px - 24px) !important;
       .task-drawer-top {
         padding-bottom: 24px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.3);
