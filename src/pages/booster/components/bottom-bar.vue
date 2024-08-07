@@ -49,12 +49,9 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-  },
-  data() {
-    let _this = this;
-    return {
-      currentHoverIdx: -1,
-      activity: [
+    activity() {
+      let _this = this;
+      let Arr = [
         {
           icon: "/img/booster/nav/gift.png",
           activityIcon: "/img/booster/nav/gift.png",
@@ -103,7 +100,16 @@ export default {
             console.log(_this);
           },
         },
-      ],
+      ];
+      if (Object.keys(this.$tg.initDataUnsafe).length > 0) {
+        Arr.splice(1, 1);
+      }
+      return Arr;
+    },
+  },
+  data() {
+    return {
+      currentHoverIdx: -1,
     };
   },
   methods: {
