@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import BoosterPagination from "../components/booster-pagination.vue";
 import { fetchLeaderboard } from "@/api/booster";
 export default {
@@ -71,9 +72,14 @@ export default {
     };
   },
   created() {
+    if (this.notLogin) {
+      this.$router.push("/booster");
+      return;
+    }
     this.getList();
   },
   computed: {
+    ...mapGetters(["notLogin"]),
     list() {
       if (this.ranks.length == 0) return [];
 

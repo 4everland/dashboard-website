@@ -15,7 +15,7 @@
           @mouseleave="currentHoverIdx = -1"
           v-for="(item, index) in routers"
           :key="index"
-          @click="$router.push(item.path)"
+          @click="handleNavChange(item)"
         >
           {{ item.name }}
           <span
@@ -406,6 +406,14 @@ export default {
   },
 
   methods: {
+    handleNavChange(item) {
+      if (item.name == "Leaderboard" && this.notLogin) {
+        this.$router.push("/login");
+        return;
+      }
+
+      this.$router.push(item.path);
+    },
     handleLogout() {
       localStorage.clear();
       localStorage.loginTo = location.pathname + location.search;
