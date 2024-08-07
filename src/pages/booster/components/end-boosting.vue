@@ -10,18 +10,18 @@
           alt=""
         />
         <div class="first-dialog-title fz-20 mb-5">
-          As we gear up for 4EVER Node Boosting, we're in the midst of
-          calculating your initial $4EVER points...
+          Hello fam! Welcome to 4EVER Boost, a thrilling adventure where you can
+          earn and maximize your $4EVER points!
         </div>
         <div class="first-dialog-content pt-5">
-          <div class="paragraph-1">
-            A journey that began with 88,822 Points in Dashboard Taskhub,
-            converting into 1,000 4EVER points.
+          <div class="paragraph-1 mb-4">
+            Before start, let’s calculate your initial $4EVER points. It all
+            started with 1,000 4EVERLAND Points in Taskhub, which converted into
+            20,000 $4EVER points at a 1:20 ratio. But it didn’t end there; you
+            earned 888 $4EVER points from the Elite Quest. So, your initial
+            $4EVER points:
           </div>
-          <div class="paragraph-2 py-4">
-            And further enriched by an extra 888 $4EVER points from the Elite
-            Quest.
-          </div>
+
           <div class="panel-box d-flex align-center justify-center">
             <img width="28" src="/img/booster/4ever-point-icon.png" alt="" />
             <ICountUp
@@ -61,18 +61,18 @@
           />
 
           <div class="first-dialog-title text-center fz-20 mb-5">
-            As we gear up for 4EVER Node Boosting, we're in the midst of
-            calculating your initial $4EVER points...
+            Hello fam! Welcome to 4EVER Boost, a thrilling adventure where you
+            can earn and maximize your $4EVER points!
           </div>
           <div class="first-dialog-content pt-5">
-            <div class="paragraph-1">
-              A journey that began with 88,822 Points in Dashboard Taskhub,
-              converting into 1,000 4EVER points.
+            <div class="paragraph-1 mb-4">
+              Before start, let’s calculate your initial $4EVER points. It all
+              started with 1,000 4EVERLAND Points in Taskhub, which converted
+              into 20,000 $4EVER points at a 1:20 ratio. But it didn’t end
+              there; you earned 888 $4EVER points from the Elite Quest. So, your
+              initial $4EVER points:
             </div>
-            <div class="paragraph-2 py-4">
-              And further enriched by an extra 888 $4EVER points from the Elite
-              Quest.
-            </div>
+
             <div class="panel-box d-flex align-center justify-center">
               <img width="28" src="/img/booster/4ever-point-icon.png" alt="" />
               <ICountUp
@@ -102,11 +102,6 @@ import { mapState } from "vuex";
 export default {
   props: {
     value: Boolean,
-  },
-  data() {
-    return {
-      // overlay: false,
-    };
   },
   computed: {
     ...mapState({

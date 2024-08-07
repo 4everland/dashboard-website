@@ -2,7 +2,7 @@
   <div>
     <div class="user-card d-none d-md-block">
       <div class="user-card-item fz-12 mt-2">
-        <div class="user-card-item-title">Current Production Rate</div>
+        <div class="user-card-item-title">Earning Rate</div>
         <div class="linear-border mb-1"></div>
         <div class="user-card-item-content">
           <div class="content-rate d-flex align-center justify-space-between">
@@ -107,11 +107,11 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                1 million LAND to unlock.
+                Unlock with 1 million LAND
               </div>
               <div class="task-title">STORAGE BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base</span>
+                <span>Base Rate</span>
                 <span>100 pts/h</span>
               </div>
             </div>
@@ -160,11 +160,11 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                1 million LAND to unlock.
+                Unlock with 1 million LAND
               </div>
               <div class="task-title">COMPUTING BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base</span>
+                <span>Base Rate</span>
                 <span>100 pts/h</span>
               </div>
             </div>
@@ -214,11 +214,11 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                1 million LAND to unlock.
+                Unlock with 1 million LAND
               </div>
               <div class="task-title">NETWORK BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base</span>
+                <span>Base Rate</span>
                 <span>100 pts/h</span>
               </div>
             </div>
