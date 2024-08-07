@@ -17,15 +17,20 @@
           Please bind your wallet before proceeding
         </div>
 
-        <v-btn
-          class="start-boost-btn"
-          height="54"
-          style="color: #fff"
-          @click="handleStartBoost"
-          :loading="loading"
-        >
-          Start Boosting Now
-        </v-btn>
+        <div class="d-flex align-center justify-center mt-4">
+          <div class="cancel-btn" @click="$emit('input', false)">Cancel</div>
+
+          <div class="start-boost-btn" @click="onBind">Go</div>
+        </div>
+        <div class="text-center mt-4">
+          <span class="mr-2" style="opacity: 0.6">What is a Wallet?</span>
+          <a
+            href="https://docs.4everland.org/get-started/quick-start-guide/login-options"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Learn more</a
+          >
+        </div>
       </div>
     </v-overlay>
 
@@ -152,16 +157,31 @@ export default {
       box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
     }
   }
-  .start-boost-btn {
-    margin: 34px auto 0;
-    width: 50%;
-    padding: 16px 24px;
+  .cancel-btn {
+    display: flex;
+    width: 148px;
+    padding: 8px 24px;
+    justify-content: center;
+    align-items: center;
     border-radius: 4px;
-    text-shadow: 0px 0px 8px #6172f3;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(2px);
+    margin-right: 30px;
+    cursor: pointer;
+  }
+  .start-boost-btn {
+    display: flex;
+    padding: 8px 24px;
+    width: 148px;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border-radius: 4px;
     border: 1px solid #0e6cc6;
     background: linear-gradient(180deg, #00070c 0%, #074178 113.39%);
     box-shadow: 0px -4px 8px 0px rgba(0, 133, 195, 0.25),
       0px 4px 8px 0px rgba(0, 133, 195, 0.25);
+    cursor: pointer;
   }
 }
 

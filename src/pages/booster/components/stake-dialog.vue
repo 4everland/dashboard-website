@@ -110,7 +110,13 @@
             <v-btn text @click="onMax">Max</v-btn>
           </div>
         </div>
-
+        <div class="stake-tips">
+          <div>Each T4EVER token staked contributes 0.01% to your yield.</div>
+          <div>
+            The staked T4EVER will automatically convert to 4EVER tokens during
+            the Airdrop.
+          </div>
+        </div>
         <div class="start-boost-btn text-center fw-b" @click="onStake">
           Stake
         </div>
@@ -234,7 +240,7 @@
           <div class="stake-tips">
             <div>Each T4EVER token staked contributes 0.01% to your yield.</div>
             <div>
-              The staked tokens will automatically convert to 4EVER tokens
+              The staked T4EVER will automatically convert to 4EVER tokens
               during the Airdrop.
             </div>
           </div>
@@ -607,16 +613,7 @@ export default {
       cursor: pointer;
     }
   }
-  .stake-tips {
-    padding: 0 24px;
-    color: #fff;
-    font-family: Inter;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: normal;
-    opacity: 0.6;
-  }
+
   .cancel-btn {
     display: flex;
     width: 148px;
@@ -668,5 +665,15 @@ export default {
   border-radius: 4px;
   border: 1px solid #43e7fa;
   background: rgba(0, 48, 92, 0.8);
+}
+.stake-tips {
+  padding: 0 24px;
+  color: #fff;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  opacity: 0.6;
 }
 </style>
