@@ -208,9 +208,12 @@ export default {
 
     async handleNext(id) {
       try {
-        const { data, message } = await onNext(id);
-        if (message) {
-          return this.$toast2(message, "error");
+        const { data, code } = await onNext(id);
+        if (code == 11032) {
+          return this.$toast2(
+            "Request too frequent, please try again later.",
+            "error"
+          );
         }
         const idx = this.activity.findIndex((it) => it.actId == data.actId);
         console.log(data);
