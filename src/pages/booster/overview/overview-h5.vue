@@ -72,7 +72,7 @@
               <div class="task-title">STORAGE BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>100/H</span>
+                <span>100 pts/h</span>
               </div>
             </div>
           </div>
@@ -108,7 +108,7 @@
               <div class="task-title">COMPUTING BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>100/H</span>
+                <span>100 pts/h</span>
               </div>
             </div>
           </div>
@@ -144,7 +144,7 @@
               <div class="task-title">NETWORK BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>100/H</span>
+                <span>100 pts/h</span>
               </div>
             </div>
           </div>
