@@ -213,13 +213,14 @@
               </div>
               <div class="invite-panel-basic-item d-flex align-center fz-14">
                 <div>
-                  <span>Today invites:</span>
+                  <span>Today's invites:</span>
                   <span class="ml-2">{{ inviteInfo.daily }}</span>
                 </div>
               </div>
 
               <div class="fz-12 invite-panel-basic-item-desc">
-                * You will get +10 capacity for every new booster you invited.
+                * You'll receive a 10-capacity increase for every new booster
+                you invite.
               </div>
             </div>
           </div>
@@ -318,14 +319,15 @@
                 class="mobile-invite-panel-basic-item d-flex align-center fz-14"
               >
                 <div>
-                  <span>Today invites:</span>
+                  <span>Today's invites:</span>
                   <span class="ml-2">{{ inviteInfo.daily }}</span>
                 </div>
                 <img class="ml-auto" src="" width="24" alt="" />
               </div>
 
               <div class="fz-12 mobile-invite-panel-basic-item-desc">
-                * You will get +10 capacity for every new booster you invited.
+                * You'll receive a 10-capacity increase for every new booster
+                you invite.
               </div>
 
               <v-btn

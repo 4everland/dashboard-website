@@ -3,7 +3,7 @@
     <div class="activity">
       <div
         class="activity-item"
-        :class="item.isOpen ? 'mobile-item-active' : 'mobile-item'"
+        :class="[item.isOpen ? 'mobile-item-active' : 'mobile-item']"
         v-for="(item, index) in activity"
         :key="index"
         @mouseenter="currentHoverIdx = index"
@@ -48,6 +48,9 @@ export default {
     ...mapGetters(["notLogin", "boostLocked", "balance"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+    isTg() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
     activity() {
       let _this = this;
@@ -96,12 +99,10 @@ export default {
           name: "Coming soon",
           path: "/booster/explore",
           isOpen: false,
-          action() {
-            console.log(_this);
-          },
+          action() {},
         },
       ];
-      if (Object.keys(this.$tg.initDataUnsafe).length > 0) {
+      if (this.isTg) {
         Arr.splice(1, 1);
       }
       return Arr;
@@ -292,8 +293,12 @@ export default {
 
 @media screen and (max-width: 768px) {
   .overview-activity {
-    bottom: 30px;
+    position: fixed;
+    left: 0;
+    right: 0;
     padding: 0;
+    bottom: 24px;
+    margin: auto;
     .activity {
       height: auto;
       border: none;
@@ -380,6 +385,9 @@ export default {
         backdrop-filter: unset;
         font-weight: unset;
       }
+    }
+    .item-fixed {
+      position: fixed;
     }
   }
 }

@@ -127,7 +127,6 @@ export default {
           signDays: signDays,
         });
       });
-      console.log(signList);
       this.signList = signList;
     },
     async getTasks() {
@@ -143,7 +142,6 @@ export default {
       item.extra.buttonName = data.action.web.nextButtonName;
       this.$set(_this.tasksLists, index, item);
       if (actType == "daily_invite") {
-        console.log("daily_invite");
         try {
           const textToCopy = this.inviteInfo.link;
           await navigator.clipboard.writeText(textToCopy);

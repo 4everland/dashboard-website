@@ -13,9 +13,7 @@
       <v-container fluid>
         <div class="nft-drawer-top">
           <div class="drawer-title nft-drawer-title">T4EVER STAKING</div>
-          <div class="nft-drawer-desc">
-            Received a 10% bonus on staking yield.
-          </div>
+          <div class="nft-drawer-desc">Receive a 10% Staking Yield</div>
           <div class="nft-drawer-btn-box">
             <div class="nft-drawer-logo">
               <img class="logo" src="/favicon.ico" alt="" />
@@ -27,7 +25,7 @@
           </div>
         </div>
         <div class="nft-box">
-          <div class="drawer-title mb-4">NFT STAKE</div>
+          <div class="drawer-title mb-4">NFT STAKING</div>
           <v-row v-if="nftList.length > 0" no-gutters style="gap: 16px 0">
             <v-col v-for="item in nftList" :key="item.key" cols="4" md="15">
               <div class="nft-item-box">
@@ -119,7 +117,6 @@ export default {
     },
     async getStakeInfo() {
       const { data } = await fetchStakeInfo();
-      console.log(data);
       this.staking = data.staking;
       this.everpayStaking = data.everpayStaking;
       this.stakingAmount = data.staking + data.everpayStaking;

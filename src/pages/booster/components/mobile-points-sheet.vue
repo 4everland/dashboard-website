@@ -32,16 +32,16 @@
                 class="content-rate d-flex align-center justify-space-between"
               >
                 <img src="/img/booster/svg/union.svg" width="52" alt="" />
-                <div>{{ Math.ceil(totalRate) }}/H</div>
+                <div>{{ Math.ceil(totalRate) }} pts/h</div>
               </div>
               <div class="content-detail pt-2 fz-12">
                 <div class="d-flex align-center justify-space-between">
-                  <span>Base Production Rate</span>
-                  <span>{{ baseRate }}/H</span>
+                  <span>Base Rate</span>
+                  <span>{{ baseRate }} pts/h</span>
                 </div>
                 <div class="d-flex align-center justify-space-between mt-1">
-                  <span>Boost Production Rate</span>
-                  <span>+{{ boostRate }}/H</span>
+                  <span>Boost Rate</span>
+                  <span>+{{ boostRate }} pts/h</span>
                 </div>
                 <div class="d-flex align-center justify-space-between mt-1">
                   <span>Staking Weight</span>
