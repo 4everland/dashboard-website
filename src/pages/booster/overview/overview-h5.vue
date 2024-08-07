@@ -66,10 +66,10 @@
               </div>
               <div v-else class="text-center fz-12">
                 <div class="unlock-btn" @click="handleUnlock(0)">Unlock</div>
-                <div>Consumes 1 million LAND to unlock.</div>
+                <div>1 million LAND to unlock.</div>
               </div>
 
-              <div class="task-title">Storage Boost</div>
+              <div class="task-title">STORAGE BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
                 <span>100/H</span>
@@ -103,9 +103,9 @@
               </div>
               <div v-else class="text-center fz-12">
                 <div class="unlock-btn" @click="handleUnlock(1)">Unlock</div>
-                <div>Consumes 1 million LAND to unlock.</div>
+                <div>1 million LAND to unlock.</div>
               </div>
-              <div class="task-title">Computing Boost</div>
+              <div class="task-title">COMPUTING BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
                 <span>100/H</span>
@@ -139,9 +139,9 @@
               </div>
               <div v-else class="text-center fz-12">
                 <div class="unlock-btn" @click="handleUnlock(2)">Unlock</div>
-                <div>Consumes 1 million LAND to unlock.</div>
+                <div>1 million LAND to unlock.</div>
               </div>
-              <div class="task-title">Network Boost</div>
+              <div class="task-title">NETWORK BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
                 <span>100/H</span>
@@ -314,7 +314,7 @@ export default {
     }
     .task-title {
       text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 700;
       padding: 4px 8px;
       margin: 4px 0;

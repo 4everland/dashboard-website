@@ -107,9 +107,9 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                Consumes 1 million LAND to unlock.
+                1 million LAND to unlock.
               </div>
-              <div class="task-title">Storage Boost</div>
+              <div class="task-title">STORAGE BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
                 <span>100/H</span>
@@ -160,9 +160,9 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                Consumes 1 million LAND to unlock.
+                1 million LAND to unlock.
               </div>
-              <div class="task-title">Computing Boost</div>
+              <div class="task-title">COMPUTING BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
                 <span>100/H</span>
@@ -214,9 +214,9 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                Consumes 1 million LAND to unlock.
+                1 million LAND to unlock.
               </div>
-              <div class="task-title">Network Boost</div>
+              <div class="task-title">NETWORK BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
                 <span>100/H</span>
@@ -462,7 +462,7 @@ export default {
   .card-storage-status {
     .task-title {
       text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
       padding: 8px;
       margin: 4px 0;
