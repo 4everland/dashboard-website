@@ -61,7 +61,11 @@
         </div>
       </div>
 
-      <div class="logout pa-2 fz-14 d-flex align-center" @click="handleLogout">
+      <div
+        v-if="!isTgMiniApp"
+        class="logout pa-2 fz-14 d-flex align-center"
+        @click="handleLogout"
+      >
         <img
           class="mr-2"
           src="/img/booster/menu/logout.svg"
@@ -108,6 +112,9 @@ export default {
       userInfo: (s) => s.userInfo,
     }),
     ...mapGetters(["notLogin", "balance"]),
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
   methods: {
     handleLogout() {

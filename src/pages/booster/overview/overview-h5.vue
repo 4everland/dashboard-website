@@ -5,7 +5,7 @@
       @click="handleOpenSheet"
     >
       <div class="rate-box">
-        <img src="/img/booster/3d-square.png" width="40" alt="" />
+        <img src="/img/booster/3d-square-full.png" width="40" alt="" />
         <span class="text fw-b">{{ Math.ceil(totalRate) }}/H</span>
       </div>
       <div>
@@ -66,13 +66,13 @@
               </div>
               <div v-else class="text-center fz-12">
                 <div class="unlock-btn" @click="handleUnlock(0)">Unlock</div>
-                <div>Unlock with 50,000 LAND</div>
+                <div>Consumes 1 million LAND to unlock.</div>
               </div>
 
               <div class="task-title">Storage Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>20/H</span>
+                <span>100/H</span>
               </div>
             </div>
           </div>
@@ -103,12 +103,12 @@
               </div>
               <div v-else class="text-center fz-12">
                 <div class="unlock-btn" @click="handleUnlock(1)">Unlock</div>
-                <div>Unlock with 50,000 LAND</div>
+                <div>Consumes 1 million LAND to unlock.</div>
               </div>
               <div class="task-title">Computing Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>20/H</span>
+                <span>100/H</span>
               </div>
             </div>
           </div>
@@ -139,12 +139,12 @@
               </div>
               <div v-else class="text-center fz-12">
                 <div class="unlock-btn" @click="handleUnlock(2)">Unlock</div>
-                <div>Unlock with 50,000 LAND</div>
+                <div>Consumes 1 million LAND to unlock.</div>
               </div>
               <div class="task-title">Network Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>20/H</span>
+                <span>100/H</span>
               </div>
             </div>
           </div>
@@ -162,7 +162,15 @@
                 : computedPoints.toFixed(3)
             }}/{{ boosterInfo.capacity }}
           </span>
-          <img src="/img/booster/3d-square.png" width="64" alt="" />
+          <img
+            :src="
+              computedPoints >= boosterInfo.capacity
+                ? '/img/booster/3d-square-full.png'
+                : '/img/booster/3d-square.png'
+            "
+            width="64"
+            alt=""
+          />
           <img
             class="pos-a"
             style="left: 50%; top: 30%; transform: translateX(-50%)"

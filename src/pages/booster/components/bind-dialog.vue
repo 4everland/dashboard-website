@@ -12,50 +12,16 @@
         <div class="text-center" style="margin-bottom: 44px">
           <img src="/img/booster/boost-icon.png" width="94" alt="" />
         </div>
-        <div class="text-center fz-20 mb-4 fw-b">START BOOSTING</div>
-        <div v-for="(item, idx) in activity" :key="item.actId">
-          <div
-            class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
-            v-if="item.actType != 'invite'"
-          >
-            <div class="d-flex align-center">
-              <div class="idx">{{ idx + 1 }}</div>
-              <div class="ml-4">{{ item.actName }}</div>
-            </div>
-            <v-btn
-              class="act-btn"
-              @click="handleNext(item.actId)"
-              :disabled="item.actStatus == 'DONE'"
-            >
-              {{ item.extra.buttonName }}
-            </v-btn>
-          </div>
-
-          <div class="boosting-task pa-3 fz-14" v-else>
-            <div class="d-flex align-center">
-              <div class="idx">{{ idx + 1 }}</div>
-              <div class="ml-4">
-                <div>Invite code (optional)</div>
-                <div>Boost production rate by</div>
-                <div>+10/H for 24 hours</div>
-              </div>
-            </div>
-            <div class="invite-content mt-2" style="width: 50%">
-              <input
-                class="invite-input"
-                type="text"
-                v-model="inviteCode"
-                placeholder="Enter your invite code"
-              />
-            </div>
-          </div>
+        <div class="text-center fz-20 mb-4 fw-b">Bind Wallet</div>
+        <div class="text-center fz-16">
+          Please bind your wallet before proceeding
         </div>
+
         <v-btn
           class="start-boost-btn"
           height="54"
           style="color: #fff"
           @click="handleStartBoost"
-          :disabled="startDisabled"
           :loading="loading"
         >
           Start Boosting Now
@@ -88,64 +54,29 @@
             alt=""
           />
 
-          <div class="text-center fz-20 mt-4 fw-b">START BOOSTING</div>
           <div
-            class="boosting-task fz-14"
-            v-for="(item, idx) in activity"
-            :key="item.actId"
+            class="text-center fz-20 mb-4 fw-b"
+            style="background: rgba(0, 129, 248, 0.1); padding: 4px 64px"
           >
-            <div
-              v-if="item.actType != 'invite'"
-              class="d-flex align-center justify-space-between"
-            >
-              <div class="d-flex align-center">
-                <div class="idx">{{ idx + 1 }}</div>
-                <div class="ml-4">{{ item.actName }}</div>
-              </div>
-              <v-btn
-                class="act-btn"
-                @click="handleNext(item.actId)"
-                :disabled="item.actStatus == 'DONE'"
-              >
-                {{ item.extra.buttonName }}
-              </v-btn>
-            </div>
-            <div class="d-flex align-center justify-space-between" v-else>
-              <div class="d-flex align-center">
-                <div class="idx">{{ idx + 1 }}</div>
-                <div class="ml-4">
-                  <span>Invite code (optional)</span>
-                  <span
-                    class="fz-12 ml-2"
-                    style="color: rgba(255, 255, 255, 0.6)"
-                    >Boost production rate by +10/H for 24 hours</span
-                  >
-                </div>
-              </div>
-              <div class="invite-content">
-                <input
-                  class="invite-input"
-                  type="text"
-                  v-model="inviteCode"
-                  placeholder="Enter your invite code"
-                />
-              </div>
-            </div>
+            Bind Wallet
+          </div>
+          <div class="text-center fz-16">
+            Please bind your wallet before proceeding
           </div>
 
-          <div
-            class="d-flex align-center justify-center"
-            style="margin-top: 30px"
-          >
-            <v-btn
-              class="start-boost-btn"
-              height="54"
-              :disabled="startDisabled"
-              @click="handleStartBoost"
-              :loading="loading"
+          <div class="d-flex align-center justify-center mt-4">
+            <div class="cancel-btn" @click="$emit('input', false)">Cancel</div>
+
+            <div class="start-boost-btn" @click="onBind">Go</div>
+          </div>
+          <div class="text-center mt-4">
+            <span class="mr-2" style="opacity: 0.6">What is a Wallet?</span>
+            <a
+              href="https://docs.4everland.org/get-started/quick-start-guide/login-options"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Learn more</a
             >
-              Start Boosting Now
-            </v-btn>
           </div>
         </div>
       </div>
@@ -154,7 +85,6 @@
 </template>
 
 <script>
-import { fetchPreTaskActivity, initBoost, onNext } from "@/api/booster";
 export default {
   props: {
     value: Boolean,
@@ -171,66 +101,11 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-    startDisabled() {
-      return this.activity.filter((it) => it.actStatus == "DONE").length < 4;
-    },
   },
-  created() {
-    if (this.$route.query) {
-      this.inviteCode = this.$route.query.boosterCode;
-    }
-    this.getTaskList();
-  },
+  created() {},
   methods: {
-    async getTaskList() {
-      try {
-        const { data } = await fetchPreTaskActivity();
-        if (data) {
-          this.activity = data.items;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async handleStartBoost() {
-      this.loading = true;
-      try {
-        const { data } = await initBoost(this.inviteCode);
-        console.log(data);
-        this.$store.dispatch("getBoosterUserInfo");
-        this.$emit("input", false);
-        this.$emit("showEndPoints");
-      } catch (error) {
-        console.log(error);
-      }
-      this.loading = false;
-    },
-
-    async handleNext(id) {
-      try {
-        const { data } = await onNext(id);
-        const idx = this.activity.findIndex((it) => it.actId == data.actId);
-        console.log(data);
-        this.activity[idx].actStatus = data.actStatus;
-        if (data.action.web.nextButtonName) {
-          this.activity[idx].extra.buttonName = data.action.web.nextButtonName;
-        }
-        switch (data.action.web.next) {
-          case "REDIRECT":
-            location.href = data.action.web.message;
-            break;
-          case "JUMP_OUT":
-            window.open(data.action.web.message);
-            break;
-          default:
-            break;
-        }
-        setTimeout(() => {
-          this.getTaskList();
-        }, 6000);
-      } catch (error) {
-        console.log(error);
-      }
+    onBind() {
+      this.$router.push("/account/config");
     },
   },
 };
@@ -314,6 +189,10 @@ export default {
     ),
     rgba(5, 5, 5, 0.8);
   backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 
   .close-btn {
     position: absolute;
@@ -361,10 +240,25 @@ export default {
       ),
       url("/img/booster/svg/fringe-bg.svg");
   }
+  .cancel-btn {
+    display: flex;
+    width: 148px;
+    padding: 8px 24px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(2px);
+    margin-right: 30px;
+    cursor: pointer;
+  }
   .start-boost-btn {
-    margin-top: 8px;
-    padding: 16px 24px;
-    color: #fff !important;
+    display: flex;
+    padding: 8px 24px;
+    width: 148px;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
     border-radius: 4px;
     border: 1px solid #0e6cc6;
     background: linear-gradient(180deg, #00070c 0%, #074178 113.39%);
