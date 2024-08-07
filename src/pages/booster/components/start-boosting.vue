@@ -45,7 +45,7 @@
                 class="invite-input"
                 type="text"
                 v-model="inviteCode"
-                placeholder="Enter your invite code"
+                placeholder="Enter the invite code"
               />
             </div>
           </div>
@@ -118,7 +118,7 @@
                   <span
                     class="fz-12 ml-2"
                     style="color: rgba(255, 255, 255, 0.6)"
-                    >Boost production rate by +10/H for 24 hours</span
+                    >Booste Rate: + 10 pts/h, valid for 24 hours</span
                   >
                 </div>
               </div>
@@ -127,7 +127,7 @@
                   class="invite-input"
                   type="text"
                   v-model="inviteCode"
-                  placeholder="Enter your invite code"
+                  placeholder="Enter the invite code"
                 />
               </div>
             </div>
@@ -154,6 +154,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { fetchPreTaskActivity, initBoost, onNext } from "@/api/booster";
 export default {
   props: {
@@ -168,6 +169,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      boosterInfo: (s) => s.moduleBooster.boosterInfo,
+    }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
@@ -199,7 +203,10 @@ export default {
         console.log(data);
         this.$store.dispatch("getBoosterUserInfo");
         this.$emit("input", false);
-        this.$emit("showEndPoints");
+
+        if (this.boosterInfo.totalPoint > 0) {
+          this.$emit("showEndPoints");
+        }
       } catch (error) {
         console.log(error);
       }
