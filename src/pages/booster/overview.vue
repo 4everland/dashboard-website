@@ -103,9 +103,7 @@ export default {
       this.$store.commit("updateDate");
     }, 1000);
   },
-  mounted() {
-    console.log("tg initData", this.$tg.initDataUnsafe);
-  },
+
   beforeDestroy() {
     clearInterval(this.timer);
   },

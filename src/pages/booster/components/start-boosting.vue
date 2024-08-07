@@ -208,7 +208,10 @@ export default {
 
     async handleNext(id) {
       try {
-        const { data } = await onNext(id);
+        const { data, message } = await onNext(id);
+        if (message) {
+          return this.$toast2(message, "error");
+        }
         const idx = this.activity.findIndex((it) => it.actId == data.actId);
         console.log(data);
         this.activity[idx].actStatus = data.actStatus;
