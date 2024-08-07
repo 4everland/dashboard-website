@@ -45,18 +45,25 @@ export default {
       let curTimestamp = +new Date() / 1000;
       if (boosterInfo.computeTimestamp != 0) {
         const basicComputed = boosterInfo.baseRate.reduce((pre, it) => {
+          if (curTimestamp < boosterInfo.computeTimestamp) {
+            return pre;
+          }
           return (
             pre +
             ((curTimestamp - boosterInfo.computeTimestamp) / 3600) * it.rate
           );
         }, 0);
-        const boostComputed = boosterInfo.boostRate.reduce((pre, it) => {
+        const boostComputed = boosterInfo.boosts.reduce((pre, it) => {
           let endTimeStamp = curTimestamp;
-          if (it.end > 0 && endTimeStamp > it.end) { endTimeStamp = it.end;}
-          if(endTimeStamp < boosterInfo.computeTimestamp) {return pre;}
+          if (it.end > 0 && endTimeStamp > it.end) {
+            endTimeStamp = it.end;
+          }
+          if (endTimeStamp < boosterInfo.computeTimestamp) {
+            return pre;
+          }
           return (
             pre +
-            ((curTimestamp - boosterInfo.computeTimestamp) / 3600) * it.rate
+            ((endTimeStamp - boosterInfo.computeTimestamp) / 3600) * it.rate
           );
         }, 0);
 
@@ -64,13 +71,20 @@ export default {
         return basicComputed + boostComputed + boosterInfo.computed;
       }
       const basicComputed = boosterInfo.baseRate.reduce((pre, it) => {
+        if (curTimestamp < it.start) {
+          return pre;
+        }
         return pre + ((curTimestamp - it.start) / 3600) * it.rate;
       }, 0);
 
-      const boostComputed = boosterInfo.boostRate.reduce((pre, it) => {
+      const boostComputed = boosterInfo.boosts.reduce((pre, it) => {
         let endTimeStamp = curTimestamp;
-        if (it.end > 0 && endTimeStamp > it.end) { endTimeStamp = it.end;}
-        if(endTimeStamp < it.start) {return pre;}
+        if (it.end > 0 && endTimeStamp > it.end) {
+          endTimeStamp = it.end;
+        }
+        if (endTimeStamp < it.start) {
+          return pre;
+        }
         return pre + ((endTimeStamp - it.start) / 3600) * it.rate;
       }, 0);
 

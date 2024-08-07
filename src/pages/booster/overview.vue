@@ -107,6 +107,24 @@ export default {
     this.timer = setInterval(() => {
       this.$store.commit("updateDate");
     }, 1000);
+
+    if (this.$route.query && this.$route.query.showStart) {
+      this.showStartBoost = true;
+      let query = this.$route.query;
+      let queryKeys = Object.keys(query).filter((it) => it != "showStart");
+      let queryObj = {};
+      if (queryKeys.length > 0) {
+        queryKeys.forEach((it) => {
+          queryObj[it] = query[it];
+        });
+      }
+      if (this.$route.query) {
+        this.$router.replace({
+          path: "/booster",
+          query: queryObj,
+        });
+      }
+    }
   },
 
   beforeDestroy() {
