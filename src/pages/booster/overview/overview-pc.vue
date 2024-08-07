@@ -67,7 +67,7 @@
           />
           <img
             class="pos-a"
-            style="left: 50%; top: 32%; transform: translateX(-50%)"
+            style="left: 50%; top: 40%; transform: translateX(-50%)"
             src="/img/booster/svg/finger.svg"
             width="16"
             alt=""
@@ -408,12 +408,17 @@ export default {
     left: -449%;
     .points {
       z-index: 10;
+      padding: 0px 8px;
       position: absolute;
-      top: 50%;
+      top: 68%;
       left: 50%;
       transform: translateX(-50%);
       font-weight: bold;
       text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.5);
+      border-radius: 16px;
+      border: 1px solid rgba(18, 21, 54, 0.5);
+      background: rgba(97, 114, 243, 0.75);
+      box-shadow: 0px 0px 4px 0px rgba(255, 255, 255, 0.5);
     }
   }
 }
