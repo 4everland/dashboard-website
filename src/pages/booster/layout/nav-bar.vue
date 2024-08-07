@@ -232,6 +232,7 @@
       <div v-else class="login-content d-flex align-center justify-center">
         <v-btn
           style="background: rgba(255, 255, 255, 0.1)"
+          class="fz-14"
           @click="$router.push('/login')"
         >
           <img src="/img/booster/svg/wallet.svg" width="16" alt="" />
@@ -329,6 +330,16 @@
               <div class="fz-12 mobile-invite-panel-basic-item-desc">
                 * You will get +10 capacity for every new booster you invited.
               </div>
+
+              <v-btn
+                class="tg-invite"
+                v-if="isTg"
+                :disabled="inviteInfo.link == '-'"
+                @click="handleTgShare"
+              >
+                <img src="/img/booster/svg/tg-icon.svg" width="16" alt="" />
+                <span class="ml-2">INVITE FRIENDS</span>
+              </v-btn>
             </div>
           </div>
         </v-menu>
@@ -349,7 +360,7 @@
 </template>
 
 <script>
-import { fetchInviteInfo } from "@/api/booster";
+import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
 import { mapGetters, mapState } from "vuex";
 import PointLogs from "../components/point-logs.vue";
 import ICountUp from "vue-countup-v2";
@@ -386,13 +397,8 @@ export default {
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
     }),
     ...mapGetters(["notLogin", "balance"]),
-    numArr() {
-      const str = String(this.boosterInfo.totalPoint);
-      let arr = [];
-      for (let i = 0; i < str.length; i++) {
-        arr.push(parseInt(str[i]));
-      }
-      return arr;
+    isTg() {
+      return process.env.VUE_APP_TG_VERSION == "true";
     },
   },
 
@@ -418,10 +424,31 @@ export default {
         console.log(error);
       }
     },
+
+    async getTgInviteInfo() {
+      try {
+        const { data } = await fetchTgInviteInfo();
+        if (data) {
+          this.inviteInfo = data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     handleTriggerInvite(val) {
       if (val) {
-        this.getInviteInfo();
+        console.log(this.isTg);
+        if (this.isTg) {
+          this.getTgInviteInfo();
+        } else {
+          this.getInviteInfo();
+        }
       }
+    },
+
+    handleTgShare() {
+      this.$tg.shareUrl(this.inviteInfo.link);
     },
   },
   components: {
@@ -577,6 +604,7 @@ export default {
         padding: 16px 0;
         width: 128px;
         text-align: center;
+        font-size: 14px;
         border-right: 1px solid rgba(255, 255, 255, 0.25);
         line-height: 16px;
         box-sizing: border-box;
@@ -668,5 +696,14 @@ export default {
       }
     }
   }
+}
+.tg-invite {
+  margin: 16px 0;
+  color: #fff !important;
+  width: 100%;
+  padding: 8px 18px;
+  border-radius: 4px;
+  background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
+  box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
 }
 </style>

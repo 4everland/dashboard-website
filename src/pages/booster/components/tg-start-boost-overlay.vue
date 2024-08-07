@@ -1,6 +1,7 @@
 <template>
   <div class="tg-start-boost" v-if="isShow">
-    <div class="start-boost-bg">
+    <TgStartBoostLoading v-if="loading"></TgStartBoostLoading>
+    <div class="start-boost-bg" v-else>
       <div class="start-boost-content">
         <img src="/img/booster/boost-icon.png" width="64" alt="" />
         <div class="start-boost-title mt-3">Welcome</div>
@@ -8,7 +9,12 @@
           Unlock at 10,000 points Unlock at 10,000 points Unlock at 10,000
           points Unlock at
         </div>
-        <v-btn class="start-btn mt-4" @click="handleStart">START MINING</v-btn>
+        <v-btn
+          class="start-btn mt-4"
+          :loading="tgLoading"
+          @click="$emit('handleTgStart')"
+          >{{ btnText }}</v-btn
+        >
       </div>
     </div>
   </div>
@@ -16,24 +22,42 @@
 
 <script>
 import { mapGetters } from "vuex";
+import TgStartBoostLoading from "./tg-start-boost-loading.vue";
 export default {
+  data() {
+    return {
+      loading: true,
+    };
+  },
+  props: {
+    tgLoading: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  created() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 2000);
+  },
   computed: {
-    ...mapGetters(["notLogin"]),
+    ...mapGetters(["notLogin", "boostLocked"]),
     isTg() {
       return process.env.VUE_APP_TG_VERSION == "true";
     },
-
     isShow() {
-      return false;
-      // return this.notLogin && this.isTg;
+      // return true;
+      return this.isTg && this.boostLocked;
+    },
+    btnText() {
+      if (this.notLogin) {
+        return "LOGIN";
+      }
+      return "START MINING";
     },
   },
-  methods: {
-    handleStart() {
-      console.log(2);
-
-      // location.href = 'hb.4everland.app/tg.html?uid=2'
-    },
+  components: {
+    TgStartBoostLoading,
   },
 };
 </script>
@@ -69,9 +93,6 @@ export default {
       left: 50%;
       top: -20px;
       font-size: 12px;
-      fill: rgba(97, 114, 243, 0.05);
-      backdrop-filter: blur(4px);
-
       transform: translateX(-50%);
       .start-boost-title {
         font-size: 20px;

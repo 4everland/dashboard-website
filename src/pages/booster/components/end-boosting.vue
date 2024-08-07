@@ -24,10 +24,20 @@
           </div>
           <div class="panel-box d-flex align-center justify-center">
             <img width="28" src="/img/booster/4ever-point-icon.png" alt="" />
-            <span class="panel-text ml-2">999888</span>
+            <ICountUp
+              class="panel-text ml-2"
+              :delay="1000"
+              :endVal="boosterInfo.totalPoint"
+              :options="{
+                useEasing: true,
+                useGrouping: true,
+                separator: ',',
+                decimal: '.',
+                prefix: '',
+                suffix: '',
+              }"
+            />
           </div>
-
-          <div class="text-center mt-5">Dive into boosting...</div>
         </div>
       </div>
     </v-overlay>
@@ -65,10 +75,20 @@
             </div>
             <div class="panel-box d-flex align-center justify-center">
               <img width="28" src="/img/booster/4ever-point-icon.png" alt="" />
-              <span class="panel-text ml-2">999888</span>
+              <ICountUp
+                class="panel-text ml-2"
+                :delay="1000"
+                :endVal="boosterInfo.totalPoint"
+                :options="{
+                  useEasing: true,
+                  useGrouping: true,
+                  separator: ',',
+                  decimal: '.',
+                  prefix: '',
+                  suffix: '',
+                }"
+              />
             </div>
-
-            <div class="text-center mt-5">Dive into boosting...</div>
           </div>
         </div>
       </div>
@@ -77,6 +97,8 @@
 </template>
 
 <script>
+import ICountUp from "vue-countup-v2";
+import { mapState } from "vuex";
 export default {
   props: {
     value: Boolean,
@@ -87,9 +109,15 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      boosterInfo: (s) => s.moduleBooster.boosterInfo,
+    }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+  },
+  components: {
+    ICountUp,
   },
 };
 </script>

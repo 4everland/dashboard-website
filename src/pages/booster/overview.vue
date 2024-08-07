@@ -2,9 +2,16 @@
   <div class="booster-overview">
     <div class="booster-overview-content" style="position: relative">
       <img class="booster-overview-bg" :src="bgImg" alt="" />
+
+      <div style="background: #fff; color: #000">
+        Tg initData: {{ $tg.initDataUnsafe }}
+      </div>
       <overview-pc @handleStartBoost="showStartBoost = true"></overview-pc>
       <overview-h5 @handleStartBoost="showStartBoost = true"></overview-h5>
-      <start-boosting v-model="showStartBoost"></start-boosting>
+      <start-boosting
+        v-model="showStartBoost"
+        @showEndPoints="showEndBoost = true"
+      ></start-boosting>
       <end-boosting v-model="showEndBoost"></end-boosting>
       <bottom-bar></bottom-bar>
       <nft-drawer v-if="userInfo.uid"></nft-drawer>
@@ -22,6 +29,7 @@ import NftDrawer from "./components/nft-drawer.vue";
 import TaskDrawer from "./components/task-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
 import { mapState } from "vuex";
+
 export default {
   data() {
     return {
@@ -109,6 +117,7 @@ export default {
       }
     });
   },
+  methods: {},
 
   components: {
     OverviewPc,
