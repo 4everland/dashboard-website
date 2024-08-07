@@ -2,10 +2,6 @@
   <div class="booster-overview">
     <div class="booster-overview-content" style="position: relative">
       <img class="booster-overview-bg" :src="bgImg" alt="" />
-
-      <div style="background: #fff; color: #000">
-        Tg initData: {{ $tg.initDataUnsafe }}
-      </div>
       <overview-pc @handleStartBoost="showStartBoost = true"></overview-pc>
       <overview-h5 @handleStartBoost="showStartBoost = true"></overview-h5>
       <start-boosting
@@ -106,6 +102,10 @@ export default {
     this.timer = setInterval(() => {
       this.$store.commit("updateDate");
     }, 1000);
+  },
+
+  mounted() {
+    console.log("tg initData", this.$tg.initDataUnsafe);
   },
   beforeDestroy() {
     clearInterval(this.timer);

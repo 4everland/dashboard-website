@@ -13,7 +13,7 @@
           class="start-btn mt-4"
           :loading="tgLoading"
           @click="$emit('handleTgStart')"
-          >{{ btnText }}</v-btn
+          >START MINING</v-btn
         >
       </div>
     </div>
@@ -23,6 +23,7 @@
 <script>
 import { mapGetters } from "vuex";
 import TgStartBoostLoading from "./tg-start-boost-loading.vue";
+import { sendTGStoken, sendStoken } from "@/api/login.js";
 export default {
   data() {
     return {
@@ -38,7 +39,8 @@ export default {
   created() {
     setTimeout(() => {
       this.loading = false;
-    }, 2000);
+    }, 3000);
+    this.tgMiniAppLogin();
   },
   computed: {
     ...mapGetters(["notLogin", "boostLocked"]),
@@ -46,14 +48,26 @@ export default {
       return process.env.VUE_APP_TG_VERSION == "true";
     },
     isShow() {
-      // return true;
+      // return false;
       return this.isTg && this.boostLocked;
     },
-    btnText() {
-      if (this.notLogin) {
-        return "LOGIN";
+  },
+  methods: {
+    async tgMiniAppLogin() {
+      if (localStorage.token) return;
+      if (Object.keys(this.$tg.initDataUnsafe).length > 0) {
+        const { data: datas } = await sendTGStoken(this.$tg.initDataUnsafe);
+        console.log(datas);
+        const { data } = await sendStoken(datas.stToken);
+        this.onLoginData(data);
       }
-      return "START MINING";
+    },
+    onLoginData(data) {
+      localStorage.authData = JSON.stringify(data);
+      localStorage.token = data.accessToken;
+      localStorage.nodeToken = data.nodeToken;
+      this.$store.dispatch("getBalance");
+      this.$store.dispatch("getBoosterUserInfo");
     },
   },
   components: {
@@ -64,7 +78,7 @@ export default {
 
 <style lang="scss" scoped>
 .tg-start-boost {
-  z-index: 99;
+  z-index: 100;
   position: absolute;
   left: 0;
   top: 0;

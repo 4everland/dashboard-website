@@ -7,6 +7,8 @@ import vuetify from "./plugins/vuetify";
 import "./setup";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 import tgUtil from "@/utils/tg.js";
+import VConsole from "vconsole";
+const vConsole = new VConsole();
 
 router.beforeEach((to, _, next) => {
   let { title, group } = to.meta || {};
