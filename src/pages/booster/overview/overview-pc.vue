@@ -2,7 +2,7 @@
   <div>
     <div class="user-card d-none d-md-block">
       <div class="user-card-item fz-12 mt-2">
-        <div class="user-card-item-title">Current Production Rate</div>
+        <div class="user-card-item-title">Earning Rate</div>
         <div class="linear-border mb-1"></div>
         <div class="user-card-item-content">
           <div class="content-rate d-flex align-center justify-space-between">
