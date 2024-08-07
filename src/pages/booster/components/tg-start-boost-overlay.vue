@@ -36,7 +36,7 @@ export default {
       default: false,
     },
   },
-  created() {
+  async created() {
     setTimeout(() => {
       this.loading = false;
     }, 3000);

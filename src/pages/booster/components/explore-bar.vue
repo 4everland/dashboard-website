@@ -17,7 +17,7 @@
         address ? address.slice(0, 4) + "..." + address.slice(-4) : ""
       }}</span>
 
-      <div>
+      <div class="d-flex align-center">
         <img width="16" src="/img/booster/4ever-point-icon.png" alt="" />
 
         <ICountUp

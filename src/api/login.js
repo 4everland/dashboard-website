@@ -15,7 +15,9 @@ export function sendStoken(stoken) {
 }
 
 export function sendTGStoken(tgInitData) {
-  return request.post(`$auth/st-tg`, JSON.stringify(tgInitData), {
-    "Content-Type": "application/json",
+  return request.post(`$auth/st-tg`, tgInitData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 }
