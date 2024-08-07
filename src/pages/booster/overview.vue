@@ -9,7 +9,7 @@
         @showEndPoints="showEndBoost = true"
       ></start-boosting>
       <end-boosting v-model="showEndBoost"></end-boosting>
-      <bottom-bar></bottom-bar>
+      <bottom-bar @handleStartBoost="showStartBoost = true"></bottom-bar>
       <nft-drawer v-if="userInfo.uid"></nft-drawer>
       <task-drawer v-if="userInfo.uid"></task-drawer>
     </div>
