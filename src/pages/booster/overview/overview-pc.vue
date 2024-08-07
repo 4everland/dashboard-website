@@ -7,16 +7,16 @@
         <div class="user-card-item-content">
           <div class="content-rate d-flex align-center justify-space-between">
             <img src="/img/booster/svg/union.svg" width="52" alt="" />
-            <div>{{ Math.ceil(totalRate) }}/H</div>
+            <div>{{ Math.ceil(totalRate) }} pts/h</div>
           </div>
           <div class="content-detail pt-2 fz-12">
             <div class="d-flex align-center justify-space-between">
-              <span>Base Production Rate</span>
-              <span>{{ baseRate }}/H</span>
+              <span>Base Rate</span>
+              <span>{{ baseRate }} pts/h</span>
             </div>
             <div class="d-flex align-center justify-space-between mt-1">
-              <span>Boost Production Rate</span>
-              <span>+{{ boostRate }}/H</span>
+              <span>Boost Rate</span>
+              <span>+{{ boostRate }} pst/h</span>
             </div>
             <div class="d-flex align-center justify-space-between mt-1">
               <span>Staking Weight</span>
@@ -107,12 +107,12 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                Consumes 1 million LAND to unlock.
+                1 million LAND to unlock.
               </div>
-              <div class="task-title">Storage Boost</div>
+              <div class="task-title">STORAGE BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>100/H</span>
+                <span>100 pts/h</span>
               </div>
             </div>
           </div>
@@ -160,12 +160,12 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                Consumes 1 million LAND to unlock.
+                1 million LAND to unlock.
               </div>
-              <div class="task-title">Computing Boost</div>
+              <div class="task-title">COMPUTING BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>100/H</span>
+                <span>100 pts/h</span>
               </div>
             </div>
           </div>
@@ -214,12 +214,12 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                Consumes 1 million LAND to unlock.
+                1 million LAND to unlock.
               </div>
-              <div class="task-title">Network Boost</div>
+              <div class="task-title">NETWORK BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>100/H</span>
+                <span>100 pts/h</span>
               </div>
             </div>
           </div>
@@ -462,7 +462,7 @@ export default {
   .card-storage-status {
     .task-title {
       text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
       padding: 8px;
       margin: 4px 0;

@@ -53,7 +53,7 @@
                   <img class="task-item-image" :src="item.icon" alt="" />
                   <div class="task-text-box">
                     <div class="task-name">{{ item.actName }}</div>
-                    <div class="task-desc">+3/H, valid for 24 hours</div>
+                    <div class="task-desc">{{ item.description }}</div>
                   </div>
                 </div>
 
@@ -82,16 +82,26 @@
 import { mapGetters, mapState } from "vuex";
 import { fetchDailySign, fetchTasks, onNext } from "@/api/booster.js";
 import { bus } from "@/utils/bus";
+import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
 
 export default {
   computed: {
     ...mapGetters(["showTaskDrawer"]),
+    isTg() {
+      return process.env.VUE_APP_TG_VERSION == "true";
+    },
   },
   data() {
     return {
       signList: [],
       tasksLists: [],
       signDays: 0,
+      inviteInfo: {
+        daily: "-",
+        inviteCode: "-",
+        invited: "-",
+        link: "-",
+      },
     };
   },
   created() {
@@ -117,7 +127,6 @@ export default {
           signDays: signDays,
         });
       });
-      console.log(signList);
       this.signList = signList;
     },
     async getTasks() {
@@ -128,8 +137,25 @@ export default {
       let _this = this;
       const id = item.actId;
       const { data } = await onNext(id);
+      const actType = data.actType;
+
       item.extra.buttonName = data.action.web.nextButtonName;
       this.$set(_this.tasksLists, index, item);
+      if (actType == "daily_invite") {
+        try {
+          const textToCopy = this.inviteInfo.link;
+          await navigator.clipboard.writeText(textToCopy);
+          this.$toast2("Copied!");
+        } catch (error) {
+          console.error(error);
+        }
+        return;
+      } else if (actType == "share_twitter") {
+        const inviteLink = encodeURI(this.inviteInfo.link);
+        const shareUrl = data.action.web.message.replace("%25s", inviteLink);
+        window.open(shareUrl);
+        return;
+      }
       switch (data.action.web.next) {
         case "REDIRECT":
           location.href = data.action.web.message;
@@ -157,7 +183,38 @@ export default {
       bus.$emit("showDepositDialog", { land, report });
     },
     stateTaskDrawerShow(state) {
+      if (state) {
+        this.getInvite();
+      }
       this.$store.dispatch("TaskDrawerState", { state });
+    },
+    async getInviteInfo() {
+      try {
+        const { data } = await fetchInviteInfo();
+        if (data) {
+          this.inviteInfo = data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getTgInviteInfo() {
+      try {
+        const { data } = await fetchTgInviteInfo();
+        if (data) {
+          this.inviteInfo = data;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    getInvite() {
+      if (this.isTg) {
+        this.getTgInviteInfo();
+      } else {
+        this.getInviteInfo();
+      }
     },
   },
 };
