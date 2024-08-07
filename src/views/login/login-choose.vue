@@ -158,7 +158,7 @@ export default {
       }
     },
     onTelegram() {
-      location.href = "https://hb.4everland.app/tg.html?uid=1";
+      location.href = "/tg.html?uid=1";
     },
     onVerify(name) {
       this.walletName = name;
