@@ -14,7 +14,8 @@
       <v-container fluid style="padding: 24px 16px">
         <div class="task-drawer-top">
           <div class="drawer-title task-drawer-title">
-            Daily Task: Claim LAND
+            <span> Daily Task: Claim LAND </span>
+            <v-btn class="drawer-btn" @click="onSign"> Claim LAND </v-btn>
           </div>
           <div class="daily-sign">
             <div class="daily-sign-box">
@@ -38,7 +39,6 @@
                 <div class="daily-sign-item-bottom">Day {{ item.step }}</div>
               </div>
             </div>
-            <v-btn class="drawer-btn" @click="onSign"> Claim LAND </v-btn>
           </div>
         </div>
         <div class="task-box">
@@ -260,6 +260,9 @@ export default {
       font-weight: 500;
       color: #fff;
       text-shadow: 0px 0px 8px #6172f3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
     .task-drawer-top {
       border-bottom: 1px solid rgba(255, 255, 255, 0.3);
