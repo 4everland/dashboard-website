@@ -66,12 +66,12 @@
               </div>
               <div v-else class="text-center fz-12">
                 <div class="unlock-btn" @click="handleUnlock(0)">Unlock</div>
-                <div>1 million LAND to unlock.</div>
+                <div>Unlock with 1 million LAND</div>
               </div>
 
               <div class="task-title">STORAGE BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base</span>
+                <span>Base Rate</span>
                 <span>100 pts/h</span>
               </div>
             </div>
@@ -103,11 +103,11 @@
               </div>
               <div v-else class="text-center fz-12">
                 <div class="unlock-btn" @click="handleUnlock(1)">Unlock</div>
-                <div>1 million LAND to unlock.</div>
+                <div>Unlock with 1 million LAND</div>
               </div>
               <div class="task-title">COMPUTING BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base</span>
+                <span>Base Rate</span>
                 <span>100 pts/h</span>
               </div>
             </div>
@@ -139,11 +139,11 @@
               </div>
               <div v-else class="text-center fz-12">
                 <div class="unlock-btn" @click="handleUnlock(2)">Unlock</div>
-                <div>1 million LAND to unlock.</div>
+                <div>Unlock with 1 million LAND</div>
               </div>
               <div class="task-title">NETWORK BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base</span>
+                <span>Base Rate</span>
                 <span>100 pts/h</span>
               </div>
             </div>
