@@ -110,10 +110,7 @@ export default {
       stakingAmount: 0,
     };
   },
-  created() {
-    this.getStakeInfo();
-    this.getNftLists();
-  },
+  created() {},
   methods: {
     onStake() {
       this.$refs.StakeDialog.init();
@@ -172,6 +169,10 @@ export default {
       this.getStakeInfo();
     },
     stateStakeDrawerShow(state) {
+      if (state) {
+        this.getStakeInfo();
+        this.getNftLists();
+      }
       this.$store.dispatch("StakeDrawerState", { state });
     },
   },
