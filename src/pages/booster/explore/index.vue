@@ -53,6 +53,7 @@
         class="explore-bar"
         :uid="info.uid"
         :address="info.address"
+        :totalPoint="info.totalPoint"
         @onExplore="handleExplore"
       ></ExploreBar>
     </div>
@@ -243,6 +244,7 @@ export default {
         const { data } = await fectchExploreInfo(id);
         if (data) {
           this.info = data.node;
+          console.log(data.node);
           this.computedPoints = 0;
           this.pointCount();
         }
@@ -265,6 +267,10 @@ export default {
         console.log(data);
         if (data.data) {
           this.getExploreInfo();
+          this.$toast2(
+            `Successfully collected, you earn a ${data.data}-point share.`,
+            "success"
+          );
         } else {
           this.$toast2(data.message, "error");
         }

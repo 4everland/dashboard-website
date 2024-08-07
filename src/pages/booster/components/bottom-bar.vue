@@ -11,12 +11,21 @@
         @click="item.action"
       >
         <div class="item-box">
-          <img
-            class="pc-icon"
-            :src="currentHoverIdx == index ? item.activityIcon : item.icon"
-            alt=""
-          />
-          <img class="mobile-icon" :src="item.activityIcon" alt="" />
+          <div class="icon-box">
+            <img
+              class="pc-icon"
+              :src="currentHoverIdx == index ? item.activityIcon : item.icon"
+              alt=""
+            />
+            <img class="mobile-icon" :src="item.activityIcon" alt="" />
+            <div
+              v-if="item.name == 'Explore' && exploreRemain > 0"
+              class="count pos-a"
+            >
+              x{{ exploreRemain }}
+            </div>
+          </div>
+
           <div v-if="item.isOpen" class="mobile-name">
             {{ item.name }}
           </div>
@@ -36,7 +45,7 @@ export default {
       userInfo: (s) => s.userInfo,
       exploreRemain: (s) => s.moduleBooster.exploreRemain,
     }),
-    ...mapGetters(["notLogin", "balance"]),
+    ...mapGetters(["notLogin", "boostLocked", "balance"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
@@ -61,6 +70,10 @@ export default {
           path: "/booster/explore",
           isOpen: true,
           action() {
+            if (_this.boostLocked) {
+              _this.$emit("handleStartBoost");
+              return;
+            }
             _this.toggleStakeDrawer();
           },
         },
@@ -71,15 +84,15 @@ export default {
           path: "/booster/explore",
           isOpen: true,
           action() {
-            if (_this.notLogin) return;
+            if (_this.boostLocked) {
+              _this.$emit("handleStartBoost");
+              return;
+            }
             if (_this.exploreRemain < 1)
               return _this.$toast2(
                 "Whoops, you've used all your exploration times. Try again tomorrow!",
                 "error"
               );
-
-            if (_this.notLogin) return;
-
             _this.$router.push("/booster/explore");
           },
         },
@@ -90,6 +103,10 @@ export default {
           path: "/booster/explore",
           isOpen: true,
           action() {
+            if (_this.boostLocked) {
+              _this.$emit("handleStartBoost");
+              return;
+            }
             _this.toggleTaskDrawer();
           },
         },
@@ -165,7 +182,7 @@ export default {
 }
 .overview-activity {
   position: absolute;
-  bottom: 0px;
+  bottom: 24px;
   width: 100%;
   padding: 0 24px;
   .activity {
@@ -180,12 +197,25 @@ export default {
       border-right: 1px solid rgba(255, 255, 255, 0.25);
       display: flex;
       align-items: center;
-      cursor: pointer;
       .item-box {
         flex: 1;
         display: flex;
         align-items: center;
         justify-content: space-between;
+      }
+      .icon-box {
+        position: relative;
+      }
+      .count {
+        position: absolute;
+        right: 0;
+        top: 4px;
+        font-size: 12px;
+        line-height: 9px;
+        padding: 2px 4px;
+        background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
+        box-shadow: 0px 1.582px 4.746px 0px rgba(0, 50, 228, 0.4);
+        border-radius: 12px;
       }
       .pc-icon {
         display: block;
@@ -217,6 +247,14 @@ export default {
         border: 1px solid #6172f3;
       }
     }
+
+    .mobile-item-active {
+      cursor: pointer;
+    }
+    .mobile-item {
+      cursor: not-allowed;
+    }
+
     .activity-item:hover {
       background: linear-gradient(
           113deg,
@@ -228,6 +266,11 @@ export default {
       border: 1px solid #6172f3;
       backdrop-filter: blur(2px);
       font-weight: bold;
+    }
+    .mobile-item:hover {
+      background: unset;
+      border: unset;
+      border-right: 1px solid rgba(255, 255, 255, 0.25);
     }
   }
 }
@@ -301,6 +344,26 @@ export default {
           right: 0;
           margin: auto;
         }
+      }
+      .mobile-item-active:hover {
+        background: unset;
+        background-image: url("/img/booster/nav/mobile-item-active.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        border: none;
+        backdrop-filter: unset;
+        font-weight: unset;
+      }
+      .mobile-item:hover {
+        background: unset;
+        background-image: url("/img/booster/nav/mobile-item.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        border: none;
+        backdrop-filter: unset;
+        font-weight: unset;
       }
     }
   }

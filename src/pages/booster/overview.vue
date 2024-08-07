@@ -9,7 +9,7 @@
         @showEndPoints="showEndBoost = true"
       ></start-boosting>
       <end-boosting v-model="showEndBoost"></end-boosting>
-      <bottom-bar></bottom-bar>
+      <bottom-bar @handleStartBoost="showStartBoost = true"></bottom-bar>
       <nft-drawer v-if="userInfo.uid"></nft-drawer>
       <task-drawer v-if="userInfo.uid"></task-drawer>
     </div>
@@ -102,6 +102,10 @@ export default {
     this.timer = setInterval(() => {
       this.$store.commit("updateDate");
     }, 1000);
+  },
+
+  mounted() {
+    console.log("tg initData", this.$tg.initDataUnsafe);
   },
   beforeDestroy() {
     clearInterval(this.timer);

@@ -42,6 +42,9 @@ export default {
     computingLocked() {
       return this.computeBoost.length == 0;
     },
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
   },
 
   async created() {
@@ -66,17 +69,11 @@ export default {
       }
     },
     async handleTGStartBoost() {
-      if (this.notLogin) {
-        const boosterCode = this.$tg.initDataUnsafe.start_param;
-        console.log(boosterCode);
-        location.href = `https://hb.4everland.app/tg.html?uid=2&boosterCode=${boosterCode}`;
-      } else {
-        let code = this.$route.query.boosterCode;
-        this.tgLoading = true;
-        await initTgBoost(code || "");
-        this.tgLoading = false;
-        this.$store.dispatch("getBoosterUserInfo");
-      }
+      const code = this.$tg.initDataUnsafe.start_param;
+      this.tgLoading = true;
+      await initTgBoost(code || "");
+      this.tgLoading = false;
+      this.$store.dispatch("getBoosterUserInfo");
     },
 
     async handleUnlock(index) {

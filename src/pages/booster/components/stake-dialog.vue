@@ -111,7 +111,9 @@
           </div>
         </div>
 
-        <div class="start-boost-btn text-center fw-b">Stake</div>
+        <div class="start-boost-btn text-center fw-b" @click="onStake">
+          Stake
+        </div>
       </div>
     </v-overlay>
 
