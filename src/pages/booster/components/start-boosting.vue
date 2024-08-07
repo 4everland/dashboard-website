@@ -37,7 +37,7 @@
               <div class="ml-4">
                 <div>Invite code (optional)</div>
                 <div>Boost production rate by</div>
-                <div>+3/H for 24 hours</div>
+                <div>+10/H for 24 hours</div>
               </div>
             </div>
             <div class="invite-content mt-2" style="width: 50%">
@@ -118,7 +118,7 @@
                   <span
                     class="fz-12 ml-2"
                     style="color: rgba(255, 255, 255, 0.6)"
-                    >Boost production rate by +3/H for 24 hours</span
+                    >Boost production rate by +10/H for 24 hours</span
                   >
                 </div>
               </div>

@@ -17,6 +17,12 @@
           <span class="name">Continue with GitHub</span>
         </div>
       </div>
+      <div class="wallet-item" @click="onTelegram">
+        <div class="wallet-item-name">
+          <img src="@/assets/imgs/telegram.svg" alt="" />
+          <span class="name">Continue with Telegram</span>
+        </div>
+      </div>
     </div>
 
     <v-dialog v-model="gitOverlay" width="500">
@@ -48,7 +54,6 @@
   </div>
 </template>
 
-
 <script>
 import * as fcl from "@onflow/fcl";
 import LoginWallet from "@/views/login/login-wallet.vue";
@@ -78,7 +83,7 @@ export default {
     }
   },
   mounted() {
-    let { code, inviteCode, loginTo } = this.$route.query;
+    let { code, inviteCode, loginTo, st } = this.$route.query;
     if (this.mode == "refresh") {
       loginTo = location.pathname + location.search;
     }
@@ -91,6 +96,10 @@ export default {
     if (code) {
       this.getAuth(code);
     }
+    if (st) {
+      this.$refs.wallet.ssoLogin(st);
+    }
+
     this.loaded();
   },
   methods: {
@@ -147,6 +156,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    onTelegram() {
+      location.href = "/tg.html?uid=1";
     },
     onVerify(name) {
       this.walletName = name;

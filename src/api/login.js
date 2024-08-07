@@ -13,3 +13,11 @@ export function fetchWeb3code(account) {
 export function sendStoken(stoken) {
   return request.post(`$auth/st/${stoken}`);
 }
+
+export function sendTGStoken(tgInitData) {
+  return request.post(`$auth/st-tg`, tgInitData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}

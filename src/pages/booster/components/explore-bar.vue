@@ -16,6 +16,24 @@
       <span>{{
         address ? address.slice(0, 4) + "..." + address.slice(-4) : ""
       }}</span>
+
+      <div class="d-flex align-center">
+        <img width="16" src="/img/booster/4ever-point-icon.png" alt="" />
+
+        <ICountUp
+          class="points mx-1"
+          :delay="1000"
+          :endVal="totalPoint"
+          :options="{
+            useEasing: true,
+            useGrouping: true,
+            separator: ',',
+            decimal: '.',
+            prefix: '',
+            suffix: '',
+          }"
+        />
+      </div>
     </div>
     <div
       class="px-2 px-md-6 flex-1 d-flex align-center cursor-p"
@@ -36,6 +54,8 @@
 
 <script>
 import { mapState } from "vuex";
+import ICountUp from "vue-countup-v2";
+
 export default {
   props: {
     address: {
@@ -45,6 +65,10 @@ export default {
     uid: {
       type: String,
       default: "",
+    },
+    totalPoint: {
+      type: Number,
+      default: 0,
     },
   },
   computed: {
@@ -66,6 +90,9 @@ export default {
       this.$emit("onExplore");
     },
   },
+  components: {
+    ICountUp,
+  },
 };
 </script>
 
@@ -82,7 +109,7 @@ export default {
   .user-container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     gap: 8px;
     height: 48px;
     font-family: "DIN Alternate";
@@ -117,6 +144,13 @@ export default {
     background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
     box-shadow: 0px 1.582px 4.746px 0px rgba(0, 50, 228, 0.4);
     border-radius: 6px;
+  }
+  .points {
+    color: #6172f3;
+    font-family: "DIN Alternate";
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px; /* 120% */
   }
 }
 </style>

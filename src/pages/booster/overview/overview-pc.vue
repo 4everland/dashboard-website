@@ -99,12 +99,12 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                Unlock at 10,000 points
+                Consumes 1,000,000 LAND to unlock
               </div>
               <div class="task-title">Storage Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>20/H</span>
+                <span>100/H</span>
               </div>
             </div>
           </div>
@@ -152,12 +152,12 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                Unlock at 10,000 points
+                Consumes 1,000,000 LAND to unlock
               </div>
               <div class="task-title">Computing Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>20/H</span>
+                <span>100/H</span>
               </div>
             </div>
           </div>
@@ -206,12 +206,12 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="fz-12 text-center">
-                Unlock at 10,000 points
+                Consumes 1,000,000 LAND to unlock
               </div>
               <div class="task-title">Network Boost</div>
               <div class="d-flex align-center justify-space-between fz-12">
                 <span>Base</span>
-                <span>20/H</span>
+                <span>100/H</span>
               </div>
             </div>
           </div>

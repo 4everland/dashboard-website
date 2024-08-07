@@ -70,9 +70,6 @@
                         src="/img/booster/4ever-point-icon.png"
                         alt=""
                       />
-                      <!-- <span class="points mx-1">{{
-                        boosterInfo.totalPoint
-                      }}</span> -->
 
                       <ICountUp
                         class="points mx-1"
