@@ -70,10 +70,6 @@ export default {
           path: "/booster/explore",
           isOpen: true,
           action() {
-            if (_this.boostLocked) {
-              _this.$emit("handleStartBoost");
-              return;
-            }
             _this.toggleStakeDrawer();
           },
         },
@@ -84,16 +80,7 @@ export default {
           path: "/booster/explore",
           isOpen: true,
           action() {
-            if (_this.boostLocked) {
-              _this.$emit("handleStartBoost");
-              return;
-            }
-            if (_this.exploreRemain < 1)
-              return _this.$toast2(
-                "Whoops, you've used all your exploration times. Try again tomorrow!",
-                "error"
-              );
-            _this.$router.push("/booster/explore");
+            _this.toggleExplore();
           },
         },
         {
@@ -103,10 +90,6 @@ export default {
           path: "/booster/explore",
           isOpen: true,
           action() {
-            if (_this.boostLocked) {
-              _this.$emit("handleStartBoost");
-              return;
-            }
             _this.toggleTaskDrawer();
           },
         },
@@ -126,12 +109,38 @@ export default {
   methods: {
     toggleStakeDrawer() {
       if (this.notLogin) {
+        this.$router.push("/login");
+        return;
+      }
+      if (this.boostLocked) {
+        this.$emit("handleStartBoost");
         return;
       }
       this.$store.dispatch("StakeDrawerToggle");
     },
+    toggleExplore() {
+      if (this.notLogin) {
+        this.$router.push("/login");
+        return;
+      }
+      if (this.boostLocked) {
+        this.$emit("handleStartBoost");
+        return;
+      }
+      if (this.exploreRemain < 1)
+        return this.$toast2(
+          "Whoops, you've used all your exploration times. Try again tomorrow!",
+          "error"
+        );
+      this.$router.push("/booster/explore");
+    },
     toggleTaskDrawer() {
       if (this.notLogin) {
+        this.$router.push("/login");
+        return;
+      }
+      if (this.boostLocked) {
+        this.$emit("handleStartBoost");
         return;
       }
       this.$store.dispatch("TaskDrawerToggle");

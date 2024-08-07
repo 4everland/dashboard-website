@@ -2,16 +2,18 @@
   <div class="booster-overview">
     <div class="booster-overview-content" style="position: relative">
       <img class="booster-overview-bg" :src="bgImg" alt="" />
-      <overview-pc @handleStartBoost="showStartBoost = true"></overview-pc>
-      <overview-h5 @handleStartBoost="showStartBoost = true"></overview-h5>
+      <overview-pc @handleStartBoost="handleShowStartBoost"></overview-pc>
+      <overview-h5 @handleStartBoost="handleShowStartBoost"></overview-h5>
       <start-boosting
         v-model="showStartBoost"
         @showEndPoints="showEndBoost = true"
       ></start-boosting>
       <end-boosting v-model="showEndBoost"></end-boosting>
-      <bottom-bar @handleStartBoost="showStartBoost = true"></bottom-bar>
+      <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar>
       <nft-drawer v-if="userInfo.uid"></nft-drawer>
       <task-drawer v-if="userInfo.uid"></task-drawer>
+
+      <bind-dialog v-model="showBindWallet"></bind-dialog>
     </div>
   </div>
 </template>
@@ -24,6 +26,8 @@ import EndBoosting from "./components/end-boosting.vue";
 import NftDrawer from "./components/nft-drawer.vue";
 import TaskDrawer from "./components/task-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
+import BindDialog from "./components/bind-dialog.vue";
+
 import { mapState } from "vuex";
 
 export default {
@@ -31,6 +35,7 @@ export default {
     return {
       showStartBoost: false,
       showEndBoost: false,
+      showBindWallet: false,
       timer: null,
     };
   },
@@ -102,11 +107,26 @@ export default {
     this.timer = setInterval(() => {
       this.$store.commit("updateDate");
     }, 1000);
+
+    if (this.$route.query && this.$route.query.showStart) {
+      this.showStartBoost = true;
+      let query = this.$route.query;
+      let queryKeys = Object.keys(query).filter((it) => it != "showStart");
+      let queryObj = {};
+      if (queryKeys.length > 0) {
+        queryKeys.forEach((it) => {
+          queryObj[it] = query[it];
+        });
+      }
+      if (this.$route.query) {
+        this.$router.replace({
+          path: "/booster",
+          query: queryObj,
+        });
+      }
+    }
   },
 
-  mounted() {
-    console.log("tg initData", this.$tg.initDataUnsafe);
-  },
   beforeDestroy() {
     clearInterval(this.timer);
   },
@@ -117,7 +137,15 @@ export default {
       }
     });
   },
-  methods: {},
+  methods: {
+    handleShowStartBoost() {
+      if (!this.userInfo.wallet) {
+        this.showBindWallet = true;
+      } else {
+        this.showStartBoost = true;
+      }
+    },
+  },
 
   components: {
     OverviewPc,
@@ -127,6 +155,7 @@ export default {
     NftDrawer,
     TaskDrawer,
     BottomBar,
+    BindDialog,
   },
 };
 </script>

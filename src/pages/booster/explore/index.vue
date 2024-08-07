@@ -39,7 +39,15 @@
                 : computedPoints.toFixed(3)
             }}/{{ info.capacity }}
           </span>
-          <img src="/img/booster/3d-square.png" width="120" alt="" />
+          <img
+            :src="
+              computedPoints >= info.capacity
+                ? '/img/booster/3d-square-full.png'
+                : '/img/booster/3d-square.png'
+            "
+            width="120"
+            alt=""
+          />
           <img
             class="pos-a"
             style="left: 50%; top: 30%; transform: translateX(-50%)"
@@ -338,7 +346,7 @@ export default {
 
   .point-square {
     position: absolute;
-    left: 49.9%;
+    left: 50.3%;
 
     top: 31%;
     .top-card {

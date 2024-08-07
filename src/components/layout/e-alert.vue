@@ -101,7 +101,7 @@
           <v-spacer></v-spacer>
 
           <v-btn
-            min-width="180"
+            :min-width="asMobile ? 120 : 180"
             v-bind="{
               color: 'primary',
               ...alertInfo.confirmTextAttrs,
@@ -113,7 +113,7 @@
           </v-btn>
           <v-btn
             outlined
-            width="180"
+            :min-width="asMobile ? 120 : 180"
             class="ml-6"
             v-if="alertInfo.showCancel"
             @click="hideAlert(0)"
@@ -173,6 +173,9 @@ export default {
     iconColor() {
       const { type, iconColor } = this.alertInfo;
       return iconColor || type || "warning";
+    },
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
     },
   },
   data() {
