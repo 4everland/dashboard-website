@@ -67,6 +67,7 @@
               outlined
               color="rgba(255, 255, 255, 0.60)"
               @click="$emit('input', false)"
+              width="180"
               >Cancel</v-btn
             >
             <v-btn
@@ -81,6 +82,7 @@
               "
               outlined
               color="#fff"
+              width="180"
               @click="handleRechargeLand"
               :loading="load"
               >Claim</v-btn
@@ -155,6 +157,7 @@
               outlined
               color="rgba(255, 255, 255, 0.60)"
               @click="$emit('input', false)"
+              width="180"
               >Cancel</v-btn
             >
             <v-btn
@@ -170,6 +173,7 @@
               @click="handleRechargeLand"
               outlined
               :loading="load"
+              width="180"
               color="#fff"
               >Claim</v-btn
             >
@@ -687,6 +691,12 @@ export default {
 };
 </script>
 
+<style>
+.select-menu {
+  border-radius: 4px !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+</style>
 <style lang="scss" scoped>
 .start-boosting {
   position: relative;
@@ -765,11 +775,10 @@ export default {
   background: rgba(49, 49, 49, 0.9);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.35);
 }
-.select-menu {
-  .v-list.v-select-list.v-sheet.theme--light.v-list--dense.theme--light {
-    border-radius: 4px !important;
-    border: 0.5px solid rgba(255, 255, 255, 0.3) !important;
-    background: rgba(49, 49, 49, 0.9) !important;
-  }
+
+.v-list.v-select-list.v-sheet.theme--light.v-list--dense.theme--light {
+  border-radius: 4px !important;
+  // border: 0.5px solid rgba(255, 255, 255, 0.3) !important;
+  background: rgba(49, 49, 49, 0.9) !important;
 }
 </style>

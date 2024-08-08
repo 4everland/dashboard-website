@@ -22,11 +22,11 @@
               <div class="idx">{{ idx + 1 }}</div>
               <div class="ml-4">{{ item.actName }}</div>
             </div>
-            <v-btn
-              class="act-btn"
-              @click="handleNext(item.actId)"
-              :disabled="item.actStatus == 'DONE'"
-            >
+
+            <div class="done-btn" v-if="item.actStatus == 'DONE'">
+              <img src="/img/booster/svg/check.svg" width="18" alt="" />
+            </div>
+            <v-btn class="act-btn" v-else @click="handleNext(item.actId)">
               {{ item.extra.buttonName }}
             </v-btn>
           </div>
@@ -53,7 +53,6 @@
         <v-btn
           class="start-boost-btn"
           height="54"
-          style="color: #fff"
           @click="handleStartBoost"
           :disabled="startDisabled"
           :loading="loading"
@@ -88,7 +87,7 @@
             alt=""
           />
 
-          <div class="text-center fz-20 mt-4 fw-b">START BOOSTING</div>
+          <div class="text-center fz-20 mt-6 fw-b">START BOOSTING</div>
           <div
             class="boosting-task fz-14"
             v-for="(item, idx) in activity"
@@ -102,11 +101,11 @@
                 <div class="idx">{{ idx + 1 }}</div>
                 <div class="ml-4">{{ item.actName }}</div>
               </div>
-              <v-btn
-                class="act-btn"
-                @click="handleNext(item.actId)"
-                :disabled="item.actStatus == 'DONE'"
-              >
+
+              <div class="done-btn" v-if="item.actStatus == 'DONE'">
+                <img src="/img/booster/svg/check.svg" width="18" alt="" />
+              </div>
+              <v-btn class="act-btn" @click="handleNext(item.actId)" v-else>
                 {{ item.extra.buttonName }}
               </v-btn>
             </div>
@@ -135,13 +134,13 @@
 
           <div
             class="d-flex align-center justify-center"
-            style="margin-top: 30px"
+            style="margin-top: 15px"
           >
             <v-btn
               class="start-boost-btn"
               height="54"
-              :disabled="startDisabled"
               @click="handleStartBoost"
+              :disabled="startDisabled"
               :loading="loading"
             >
               Start Boosting Now
@@ -201,7 +200,7 @@ export default {
       try {
         const { data } = await initBoost(this.inviteCode);
         console.log(data);
-        this.$store.dispatch("getBoosterUserInfo");
+        await this.$store.dispatch("getBoosterUserInfo");
         this.$emit("input", false);
 
         if (this.boosterInfo.totalPoint > 0) {
@@ -288,6 +287,15 @@ export default {
       border-radius: 4px;
       background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
       box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
+      cursor: pointer;
+    }
+    .done-btn {
+      > img {
+        display: block;
+      }
+      padding: 6px 18px;
+      border-radius: 21px;
+      background: #31383f;
     }
   }
   .start-boost-btn {
@@ -295,11 +303,19 @@ export default {
     width: 50%;
     padding: 16px 24px;
     border-radius: 4px;
+    color: #fff !important;
     text-shadow: 0px 0px 8px #6172f3;
     border: 1px solid #0e6cc6;
     background: linear-gradient(180deg, #00070c 0%, #074178 113.39%);
     box-shadow: 0px -4px 8px 0px rgba(0, 133, 195, 0.25),
       0px 4px 8px 0px rgba(0, 133, 195, 0.25);
+  }
+  .start-boost-btn.v-btn--disabled {
+    color: #fff;
+    opacity: 0.5;
+    border: 1px solid rgba(217, 217, 217, 0.25);
+    background: linear-gradient(0deg, #00070c 0%, #00070c 100%);
+    box-shadow: none;
   }
 }
 
@@ -365,6 +381,15 @@ export default {
       box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
       cursor: pointer;
     }
+
+    .done-btn {
+      > img {
+        display: block;
+      }
+      padding: 6px 18px;
+      border-radius: 21px;
+      background: #31383f;
+    }
   }
   .boosting-task:hover {
     background: linear-gradient(
@@ -382,8 +407,15 @@ export default {
     border: 1px solid #0e6cc6;
     background: linear-gradient(180deg, #00070c 0%, #074178 113.39%);
     box-shadow: 0px -4px 8px 0px rgba(0, 133, 195, 0.25),
-      0px 4px 8px 0px rgba(0, 133, 195, 0.25);
-    cursor: pointer;
+      0px 4px 8px 0px rgba(69, 78, 82, 0.25);
+  }
+
+  .start-boost-btn.v-btn--disabled {
+    color: #fff;
+    opacity: 0.5;
+    border: 1px solid rgba(217, 217, 217, 0.25);
+    background: linear-gradient(0deg, #00070c 0%, #00070c 100%);
+    box-shadow: none;
   }
 }
 .invite-content {

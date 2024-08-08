@@ -1,7 +1,12 @@
 <template>
   <div class="booster-overview">
     <div class="booster-overview-content" style="position: relative">
-      <img class="booster-overview-bg" :src="bgImg" alt="" />
+      <img
+        class="booster-overview-bg"
+        id="booster-overview-bg"
+        :src="bgImg"
+        alt=""
+      />
       <overview-pc @handleStartBoost="handleShowStartBoost"></overview-pc>
       <overview-h5 @handleStartBoost="handleShowStartBoost"></overview-h5>
       <start-boosting
@@ -27,7 +32,6 @@ import NftDrawer from "./components/nft-drawer.vue";
 import TaskDrawer from "./components/task-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
 import BindDialog from "./components/bind-dialog.vue";
-
 import { mapState } from "vuex";
 
 export default {

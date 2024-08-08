@@ -63,7 +63,7 @@
                 left
                 nudge-right="122"
                 nudge-bottom="20"
-                :close-on-content-click="false"
+                :close-on-content-click="true"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <div v-on="on" v-bind="attrs">
@@ -476,7 +476,7 @@ export default {
 </script>
 
 <style>
-.v-menu__content.theme--light.v-menu__content--fixed {
+.user-menu {
   border: none !important;
   border-radius: 0 !important;
 }
@@ -586,7 +586,7 @@ export default {
 
 .nav-bar {
   z-index: 2;
-  position: fixed;
+  position: absolute;
   width: 100%;
   top: 24px;
   .nav {

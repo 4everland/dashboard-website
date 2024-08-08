@@ -9,17 +9,27 @@
           width="18"
           alt=""
         />
-        <div class="first-dialog-title fz-20 mb-5">
+        <div class="first-dialog-title fz-16 mb-5">
           Hello fam! Welcome to 4EVER Boost, a thrilling adventure where you can
-          earn and maximize your $4EVER points!
+          earn and maximize $4EVER points! 🚀
         </div>
         <div class="first-dialog-content pt-5">
-          <div class="paragraph-1 mb-4">
-            Before start, let’s calculate your initial $4EVER points. It all
-            started with 1,000 4EVERLAND Points in Taskhub, which converted into
-            20,000 $4EVER points at a 1:20 ratio. But it didn’t end there; you
-            earned 888 $4EVER points from the Elite Quest. So, your initial
-            $4EVER points:
+          <div class="paragraph-1 mb-4 fz-14">
+            <div>
+              Before we set off on this thrilling ride, let's calculate your
+              initial $4EVER points. Here’s the deal:
+            </div>
+            <ul>
+              <li>
+                <b>{{ boosterInfo.taskHubPoints / 20 }} TaskHub Points: </b
+                >Converted to $4EVER points at a rate of 1:20.
+              </li>
+              <li>
+                <b>{{ boosterInfo.eqPoints / 10 }} Elite Quest Points: </b
+                >Converted to $4EVER points at a rate of 1:10.
+              </li>
+            </ul>
+            <div>So, your initial $4EVER points are:</div>
           </div>
 
           <div class="panel-box d-flex align-center justify-center">
@@ -60,17 +70,27 @@
             alt=""
           />
 
-          <div class="first-dialog-title text-center fz-20 mb-5">
+          <div class="first-dialog-title text-center fz-20 my-5">
             Hello fam! Welcome to 4EVER Boost, a thrilling adventure where you
-            can earn and maximize your $4EVER points!
+            can earn and maximize $4EVER points! 🚀
           </div>
           <div class="first-dialog-content pt-5">
             <div class="paragraph-1 mb-4">
-              Before start, let’s calculate your initial $4EVER points. It all
-              started with 1,000 4EVERLAND Points in Taskhub, which converted
-              into 20,000 $4EVER points at a 1:20 ratio. But it didn’t end
-              there; you earned 888 $4EVER points from the Elite Quest. So, your
-              initial $4EVER points:
+              <div>
+                Before we set off on this thrilling ride, let's calculate your
+                initial $4EVER points. Here’s the deal:
+              </div>
+              <ul>
+                <li>
+                  <b>{{ boosterInfo.taskHubPoints / 20 }} TaskHub Points: </b
+                  >Converted to $4EVER points at a rate of 1:20.
+                </li>
+                <li>
+                  <b>{{ boosterInfo.eqPoints / 10 }} Elite Quest Points: </b
+                  >Converted to $4EVER points at a rate of 1:10.
+                </li>
+              </ul>
+              <div>So, your initial $4EVER points are:</div>
             </div>
 
             <div class="panel-box d-flex align-center justify-center">
@@ -118,6 +138,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+ul,
+li {
+  list-style: outside;
+}
 .start-boosting {
   position: relative;
   width: 100vw;
@@ -160,7 +184,7 @@ export default {
       .panel-text {
         color: #40e8ff;
         font-family: "DIN Alternate";
-        font-size: 50px;
+        font-size: 30px;
         font-weight: 700;
         line-height: normal;
       }
@@ -197,12 +221,13 @@ export default {
 
   .close-btn {
     position: absolute;
-    right: 10px;
-    top: 5px;
+    right: 20px;
+    top: 20px;
     cursor: pointer;
   }
   .first-dialog-title {
-    padding: 4px 60px;
+    padding: 16px 40px;
+    line-height: 24px;
     background: rgba(0, 129, 248, 0.1);
     text-shadow: 0px 0px 8px #6172f3;
   }

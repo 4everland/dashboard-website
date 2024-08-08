@@ -49,13 +49,25 @@
       <div class="point-square d-none d-md-block cursor-p" @click="hanleClaim">
         <div style="position: relative; width: 10px; height: 10px"></div>
         <div class="top-card square-box">
-          <span class="points fz-14">
-            {{
-              computedPoints > boosterInfo.capacity
-                ? boosterInfo.capacity
-                : computedPoints.toFixed(3)
-            }}/{{ boosterInfo.capacity }}
-          </span>
+          <div class="points fz-14 d-flex align-center">
+            <span class="mr-1">
+              {{
+                computedPoints > boosterInfo.capacity
+                  ? boosterInfo.capacity
+                  : computedPoints.toFixed(3)
+              }}/{{ boosterInfo.capacity }}</span
+            >
+
+            <!-- <v-tooltip top max-width="300">
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon size="18" v-bind="attrs" v-on="on"
+                  >mdi-alert-circle-outline</v-icon
+                >
+              </template>
+              <span>Full-load click collection available in 5h 46m.</span>
+            </v-tooltip> -->
+          </div>
+
           <img
             :src="
               computedPoints >= boosterInfo.capacity
@@ -425,7 +437,7 @@ export default {
 
 .card-storage.locked {
   background: url("/img/booster/svg/card_background_white.svg") no-repeat;
-
+  background-size: 100%;
   .card-storage-icon {
     position: relative;
     .unlock-btn {
