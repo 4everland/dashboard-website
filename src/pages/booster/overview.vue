@@ -112,6 +112,9 @@ export default {
       this.$store.commit("updateDate");
     }, 1000);
 
+    if (!localStorage.token) {
+      localStorage.loginTo = location.pathname + location.search;
+    }
     if (this.$route.query && this.$route.query.showStart) {
       this.showStartBoost = true;
       let query = this.$route.query;
