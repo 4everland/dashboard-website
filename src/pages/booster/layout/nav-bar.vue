@@ -49,7 +49,10 @@
             :uid="userInfo.uid"
           ></e-team-avatar>
           <div class="info-content flex-1">
-            <div class="d-flex align-center justify-space-between">
+            <div
+              class="d-flex align-center justify-space-between"
+              style="gap: 8px"
+            >
               <span class="fw-b fz-14 ml-2">
                 {{ (userInfo.username || "unkown").cutStr(6, 4) }}
               </span>
@@ -517,7 +520,7 @@ export default {
 .invite-panel {
   color: #fff;
   padding: 32px 20px;
-  width: 340px;
+  width: 348px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: rgba(54, 59, 64, 0.9);
 }

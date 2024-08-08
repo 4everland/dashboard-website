@@ -45,26 +45,28 @@ export default {
       let curTimestamp = +new Date() / 1000;
       if (boosterInfo.computeTimestamp != 0) {
         const basicComputed = boosterInfo.baseRate.reduce((pre, it) => {
-          if (curTimestamp < boosterInfo.computeTimestamp) {
+          let startTime = boosterInfo.computeTimestamp;
+          if (boosterInfo.computeTimestamp < it.start) {
+            startTime = it.start;
+          }
+          if (curTimestamp < startTime) {
             return pre;
           }
-          return (
-            pre +
-            ((curTimestamp - boosterInfo.computeTimestamp) / 3600) * it.rate
-          );
+          return pre + ((curTimestamp - startTime) / 3600) * it.rate;
         }, 0);
         const boostComputed = boosterInfo.boosts.reduce((pre, it) => {
           let endTimeStamp = curTimestamp;
+          let startTime = boosterInfo.computeTimestamp;
+          if (boosterInfo.computeTimestamp < it.start) {
+            startTime = it.start;
+          }
           if (it.end > 0 && endTimeStamp > it.end) {
             endTimeStamp = it.end;
           }
-          if (endTimeStamp < boosterInfo.computeTimestamp) {
+          if (endTimeStamp < startTime) {
             return pre;
           }
-          return (
-            pre +
-            ((endTimeStamp - boosterInfo.computeTimestamp) / 3600) * it.rate
-          );
+          return pre + ((endTimeStamp - startTime) / 3600) * it.rate;
         }, 0);
 
         console.log(basicComputed + boostComputed + boosterInfo.computed);
