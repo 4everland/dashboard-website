@@ -5,7 +5,7 @@
       absolute
       bottom
       temporary
-      hide-overlay
+      :hide-overlay="!asMobile"
       color="#1E2234"
       :value="showStakeDrawer"
       @input="stateStakeDrawerShow"
@@ -98,6 +98,9 @@ export default {
   },
   computed: {
     ...mapGetters(["showStakeDrawer"]),
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
   },
   data() {
     return {
