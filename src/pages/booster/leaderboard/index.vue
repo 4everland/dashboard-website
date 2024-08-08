@@ -15,7 +15,7 @@
           <thead>
             <tr>
               <th class="text-center">#</th>
-              <th class="text-center">Address</th>
+              <th class="text-center">Username</th>
               <th class="text-center">$4EVER Points</th>
               <th class="text-center">Invited By</th>
             </tr>
