@@ -111,7 +111,7 @@
           </div>
         </div>
         <div class="stake-tips">
-          <div>Each T4EVER token staked contributes 0.01% to your yield.</div>
+          <div>Each T4EVER token staked contributes 0.005% to your yield.</div>
           <div>
             The staked T4EVER will automatically convert to 4EVER tokens during
             the Airdrop.
@@ -242,7 +242,9 @@
             </div>
           </div>
           <div class="stake-tips">
-            <div>Each T4EVER token staked contributes 0.01% to your yield.</div>
+            <div>
+              Each T4EVER token staked contributes 0.005% to your yield.
+            </div>
             <div>
               The staked T4EVER will automatically convert to 4EVER tokens
               during the Airdrop.
