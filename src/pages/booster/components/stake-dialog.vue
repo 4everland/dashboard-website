@@ -288,7 +288,7 @@ export default {
       tokenAddress: "0xeaba187306335dd773ca8042b3792c46e213636a",
       // testToAddress: "0x3A1A365D9Ee59B47471Cfe31451b4Fd1D7A83Daa",
       testToAddress: "0xD47a47D44AF4a509b862AC05505D5254DceECCf5",
-      prodToAddress: "0xb7B4360F7F6298dE2e7a11009270F35F189Bd77E",
+      prodToAddress: "0xE770EB217B850341AA5654eb09617eA9b88De657",
       stakeLoading: false,
     };
   },
