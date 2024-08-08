@@ -633,6 +633,7 @@ export default {
         if (this.report) {
           await this.$http.post(`$bill-consume/activity/recharge/report`, {
             source: "assnode",
+            hash: tx.hash,
           });
           bus.$emit("getDailyTasks");
         }

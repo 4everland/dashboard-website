@@ -205,7 +205,7 @@ export default {
     },
     async onSign() {
       this.stateTaskDrawerShow(false);
-      const land = 10000;
+      const land = 50000;
       const report = true;
       bus.$emit("showDepositDialog", { land, report });
     },
