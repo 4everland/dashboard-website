@@ -629,7 +629,6 @@ export default {
 
         console.log(receipt, "receipt");
         this.$toast2("LAND Claimed successfully");
-
         if (this.report) {
           await this.$http.post(`$bill-consume/activity/recharge/report`, {
             source: "assnode",
@@ -638,6 +637,7 @@ export default {
           });
           bus.$emit("getDailyTasks");
         }
+        this.$emit("input", false);
       } catch (error) {
         console.log(error);
         this.onErr(error);
