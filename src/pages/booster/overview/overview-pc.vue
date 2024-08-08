@@ -49,7 +49,7 @@
       <div class="point-square d-none d-md-block cursor-p" @click="hanleClaim">
         <div style="position: relative; width: 10px; height: 10px"></div>
         <div class="top-card square-box">
-          <div class="points fz-14 d-flex align-center">
+          <div class="points fz-14 d-flex align-center" id="point-send">
             <span class="mr-1">
               {{
                 computedPoints > boosterInfo.capacity

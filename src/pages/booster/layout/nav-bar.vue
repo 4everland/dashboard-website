@@ -67,7 +67,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <div v-on="on" v-bind="attrs">
-                    <div class="d-flex align-center">
+                    <div class="d-flex align-center" id="point-receive">
                       <img
                         width="16"
                         src="/img/booster/4ever-point-icon.png"
