@@ -300,13 +300,16 @@ export default {
         align-items: center;
         justify-content: space-between;
         .daily-sign-box {
+          width: 100%;
           display: flex;
           align-items: center;
+          justify-content: space-between;
+
           gap: 10px;
           .daily-sign-item {
             .daily-sign-item-top {
               display: flex;
-              padding: 7px 7.5px 10px 7.5px;
+              padding: 10px 7px;
               flex-direction: column;
               justify-content: center;
               align-items: center;
@@ -314,11 +317,11 @@ export default {
               border-radius: 100px;
               background: rgba(255, 255, 255, 0.1);
               .point {
-                font-size: 12px;
+                font-size: 10px;
               }
               img {
                 width: 24px;
-                height: 24px;
+                height: 24;
               }
             }
             .daily-sign-item-bottom {
