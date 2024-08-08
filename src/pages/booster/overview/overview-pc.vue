@@ -29,7 +29,7 @@
     <div class="not-login d-none d-md-block" v-if="boostLocked">
       <div style="position: relative; width: 10px; height: 10px"></div>
       <div class="top-card">
-        <div class="card-storage mb-1 pos-r">
+        <div class="card-storage mb-1 pos-r" style="width: 280px">
           <img
             class="pos-a"
             style="left: 50%; top: -20px; transform: translateX(-50%)"
@@ -41,7 +41,7 @@
             Start Boosting
           </div>
         </div>
-        <img src="/img/booster/svg/storage-line.svg" width="280" alt="" />
+        <img src="/img/booster/svg/start-boost-line.svg" width="330" alt="" />
       </div>
     </div>
 
