@@ -233,6 +233,7 @@ export default {
   .nft-box {
     padding: 24px 16px;
     .nft-item-box {
+      margin: 0 auto;
       width: 100px;
       position: relative;
       .nft-item-image {
