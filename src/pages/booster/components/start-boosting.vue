@@ -232,9 +232,7 @@ export default {
             location.href = data.action.web.message;
             break;
           case "JUMP_OUT":
-            this.asMobile
-              ? (location.href = data.action.web.message)
-              : window.open(data.action.web.message);
+            this.onJumpOut(data.action.web.message);
             break;
           default:
             break;
@@ -245,6 +243,10 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    onJumpOut(url) {
+      url = url.replace("%25s", "");
+      this.asMobile ? (location.href = url) : window.open(url);
     },
   },
 };

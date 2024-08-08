@@ -5,7 +5,7 @@
       absolute
       bottom
       temporary
-      hide-overlay
+      :hide-overlay="!asMobile"
       right
       color="#1E2234"
       :value="showTaskDrawer"
