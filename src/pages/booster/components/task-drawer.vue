@@ -83,6 +83,7 @@ import { mapGetters, mapState } from "vuex";
 import { fetchDailySign, fetchTasks, onNext } from "@/api/booster.js";
 import { bus } from "@/utils/bus";
 import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
+import * as clipboard from "clipboard-polyfill/text";
 
 export default {
   computed: {
@@ -174,11 +175,14 @@ export default {
           if (actType == "daily_invite") {
             try {
               const textToCopy = this.inviteInfo.link;
-              await navigator.clipboard.writeText(textToCopy);
+              await clipboard.writeText(textToCopy);
               this.$toast2("Copied!");
             } catch (error) {
               console.error(error);
             }
+          } else {
+            await clipboard.writeText(data.action.web.message);
+            this.$toast2("Copied!");
           }
           break;
         default:
