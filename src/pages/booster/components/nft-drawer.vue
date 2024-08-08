@@ -29,7 +29,7 @@
           <v-row v-if="nftList.length > 0" no-gutters style="gap: 16px 0">
             <v-col v-for="item in nftList" :key="item.key" cols="4" md="15">
               <div class="nft-item-box">
-                <v-tooltip bottom color="primary" nudge-top="40">
+                <v-tooltip bottom color="#000" nudge-top="40">
                   <template v-slot:activator="{ on, attrs }">
                     <div v-bind="attrs" v-on="on">
                       <img

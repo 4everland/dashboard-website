@@ -174,11 +174,27 @@ export default {
           if (actType == "daily_invite") {
             try {
               const textToCopy = this.inviteInfo.link;
-              await navigator.clipboard.writeText(textToCopy);
-              this.$toast2("Copied!");
+              this.$copyText(textToCopy).then(
+                (e) => {
+                  this.$toast2("Copied!");
+                },
+                function (e) {
+                  console.log(e);
+                }
+              );
             } catch (error) {
               console.error(error);
             }
+          } else {
+            const textToCopy = data.action.web.message;
+            this.$copyText(textToCopy).then(
+              (e) => {
+                this.$toast2("Copied!");
+              },
+              function (e) {
+                console.log(e);
+              }
+            );
           }
           break;
         default:
