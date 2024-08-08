@@ -117,9 +117,13 @@
             the Airdrop.
           </div>
         </div>
-        <div class="start-boost-btn text-center fw-b" @click="onStake">
+        <v-btn
+          class="start-boost-btn text-center fw-b"
+          @click="onStake"
+          :loading="stakeLoading"
+        >
           Stake
-        </div>
+        </v-btn>
       </div>
     </v-overlay>
 
@@ -245,9 +249,15 @@
             </div>
           </div>
           <div class="d-flex align-center justify-center mt-4">
-            <div class="cancel-btn" @click="$emit('input', false)">Cancel</div>
-
-            <div class="start-boost-btn" @click="onStake">Stake</div>
+            <v-btn class="cancel-btn" @click="$emit('input', false)"
+              >Cancel</v-btn
+            >
+            <v-btn
+              class="start-boost-btn"
+              @click="onStake"
+              :loading="stakeLoading"
+              >Stake</v-btn
+            >
           </div>
         </div>
       </div>
@@ -279,6 +289,7 @@ export default {
       // testToAddress: "0x3A1A365D9Ee59B47471Cfe31451b4Fd1D7A83Daa",
       testToAddress: "0xD47a47D44AF4a509b862AC05505D5254DceECCf5",
       prodToAddress: "0xb7B4360F7F6298dE2e7a11009270F35F189Bd77E",
+      stakeLoading: false,
     };
   },
   computed: {
@@ -425,71 +436,85 @@ export default {
       }
     },
     async handleEverpayPayment() {
-      const provider = new ethers.providers.Web3Provider(this.walletObj);
-      const signer = provider.getSigner();
-      const account = await signer.getAddress();
-      const balance = this.everPayBalance;
-      let stakeAmount = this.stakeAmount;
-      if (stakeAmount > balance)
-        return this.$alert(
-          "Insufficient balance, please deposit and try again.",
-          "alert"
-        );
+      this.stakeLoading = true;
+      try {
+        const provider = new ethers.providers.Web3Provider(this.walletObj);
+        const signer = provider.getSigner();
+        const account = await signer.getAddress();
+        const balance = this.everPayBalance;
+        let stakeAmount = this.stakeAmount;
+        if (stakeAmount > balance)
+          return this.$alert(
+            "Insufficient balance, please deposit and try again.",
+            "alert"
+          );
 
-      const everpay = new window.Everpay.default({
-        account,
-        chainType: "ethereum",
-        ethConnectedSigner: signer,
-      });
-      const data = await everpay.transfer({
-        tag: this.tag,
-        amount: stakeAmount,
-        to: this.$inDev ? this.testToAddress : this.prodToAddress,
-        data: {
-          account: this.teamId,
-        },
-      });
-      console.log(data);
-      const everHash = data.everHash;
-      await fetchEverPayHash(everHash);
-      this.$store.dispatch("getBoosterUserInfo");
-      this.$toast2("Successfully staked!");
-      this.$emit("input", false);
-      this.$emit("onStaked");
+        const everpay = new window.Everpay.default({
+          account,
+          chainType: "ethereum",
+          ethConnectedSigner: signer,
+        });
+        const data = await everpay.transfer({
+          tag: this.tag,
+          amount: stakeAmount,
+          to: this.$inDev ? this.testToAddress : this.prodToAddress,
+          data: {
+            account: this.teamId,
+          },
+        });
+        console.log(data);
+        const everHash = data.everHash;
+        await fetchEverPayHash(everHash);
+        this.$store.dispatch("getBoosterUserInfo");
+        this.$toast2("Successfully staked!");
+        this.$emit("input", false);
+        this.$emit("onStaked");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.stakeLoading = false;
+      }
     },
 
     async handleEthPayment() {
-      const provider = new ethers.providers.Web3Provider(this.walletObj);
-      const signer = provider.getSigner();
-      const account = await signer.getAddress();
-      const balance = this.ethereumBalance;
-      let stakeAmount = this.stakeAmount;
+      this.stakeLoading = true;
+      try {
+        const provider = new ethers.providers.Web3Provider(this.walletObj);
+        const signer = provider.getSigner();
+        const account = await signer.getAddress();
+        const balance = this.ethereumBalance;
+        let stakeAmount = this.stakeAmount;
 
-      if (stakeAmount > balance)
-        return this.$alert(
-          "Insufficient balance, please deposit and try again.",
-          "alert"
-        );
+        if (stakeAmount > balance)
+          return this.$alert(
+            "Insufficient balance, please deposit and try again.",
+            "alert"
+          );
 
-      console.log(stakeAmount);
+        console.log(stakeAmount);
 
-      const tx = await window.ethereum.request({
-        method: "eth_sendTransaction",
-        params: [
-          {
-            to: this.$inDev ? this.testToAddress : this.prodToAddress,
-            from: account,
-            value: stakeAmount,
-          },
-        ],
-      });
-      console.log(tx);
-      const receipt = await tx.wait();
-      console.log(receipt);
-      this.$store.dispatch("getBoosterUserInfo");
-      this.$toast2("Successfully staked!");
-      this.$emit("input", false);
-      this.$emit("onStaked");
+        const tx = await window.ethereum.request({
+          method: "eth_sendTransaction",
+          params: [
+            {
+              to: this.$inDev ? this.testToAddress : this.prodToAddress,
+              from: account,
+              value: stakeAmount,
+            },
+          ],
+        });
+        console.log(tx);
+        const receipt = await tx.wait();
+        console.log(receipt);
+        this.$store.dispatch("getBoosterUserInfo");
+        this.$toast2("Successfully staked!");
+        this.$emit("input", false);
+        this.$emit("onStaked");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.stakeLoading = false;
+      }
     },
   },
 };
@@ -538,6 +563,7 @@ export default {
   }
 
   .start-boost-btn {
+    color: #fff;
     margin: 34px auto 0;
     width: 50%;
     padding: 16px 24px;
@@ -625,8 +651,11 @@ export default {
     backdrop-filter: blur(2px);
     margin-right: 30px;
     cursor: pointer;
+    background: transparent;
+    color: #fff;
   }
   .start-boost-btn {
+    color: #fff;
     display: flex;
     padding: 16px 24px;
     width: 148px;

@@ -34,6 +34,11 @@
 
 <script>
 export default {
+  computed: {
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
+  },
   data() {
     return {
       quests: [
@@ -96,7 +101,7 @@ export default {
       if (item.path) {
         this.$router.push(item.path);
       } else {
-        window.open(item.link);
+        this.asMobile ? (location.href = item.link) : window.open(item.link);
       }
     },
   },
