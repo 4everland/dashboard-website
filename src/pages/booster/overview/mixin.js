@@ -85,8 +85,8 @@ export default {
           this.$toast2(data.message, "error");
           bus.$emit("showDepositDialog", { land: data.data.land });
         } else {
-          this.$store.dispatch("getBoosterUserInfo");
           this.$store.dispatch("getBalance");
+          await this.$store.dispatch("getBoosterUserInfo");
         }
       } catch (error) {
         console.log(error);
