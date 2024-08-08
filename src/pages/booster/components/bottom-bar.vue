@@ -293,16 +293,18 @@ export default {
 
 @media screen and (max-width: 768px) {
   .overview-activity {
+    min-height: 70px;
     position: fixed;
     left: 0;
     right: 0;
     padding: 0;
-    bottom: 24px;
+    bottom: 0;
     margin: auto;
     background-image: url("/img/booster/nav/mobile-bg.png");
-    background-size: 100% 200%;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position-y: 24px;
+    padding-bottom: 24px;
     .activity {
       height: auto;
       border: none;
