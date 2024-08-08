@@ -266,7 +266,7 @@ export default {
       top: 74px !important;
       left: 24px !important;
       width: 558px !important;
-      height: calc(100% - 74px - 64px) - 24px !important;
+      height: calc(100% - 74px - 64px - 24px) !important;
       .nft-drawer-top {
         padding: 24px 16px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.3);

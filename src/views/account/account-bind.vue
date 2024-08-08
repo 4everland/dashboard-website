@@ -313,10 +313,12 @@ export default {
         if (type == 5) {
           params.keyId = keyId;
         }
-        // const { data } =
-        await this.$http.get(`$auth/auth/vcode/${code}`, {
+        const { data } = await this.$http.get(`$auth/auth/vcode/${code}`, {
           params,
         });
+        if (data.nodeToken) {
+          localStorage.nodeToken = data.nodeToken;
+        }
         this.$setMsg({
           name: "updateUser",
         });
