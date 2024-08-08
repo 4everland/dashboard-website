@@ -46,7 +46,7 @@
     }
   }
   .active-item {
-    background: #eeebf4;
+    background: #eef4ff;
   }
 }
 </style>
