@@ -90,6 +90,9 @@ export default {
     isTg() {
       return process.env.VUE_APP_TG_VERSION == "true";
     },
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
   },
   data() {
     return {
@@ -153,9 +156,11 @@ export default {
               "%25s",
               inviteLink
             );
-            window.open(shareUrl);
+            this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
           } else {
-            window.open(data.action.web.message);
+            this.asMobile
+              ? (location.href = data.action.web.message)
+              : window.open(data.action.web.message);
           }
           break;
         case "CLAIM":

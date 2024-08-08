@@ -232,7 +232,9 @@ export default {
             location.href = data.action.web.message;
             break;
           case "JUMP_OUT":
-            window.open(data.action.web.message);
+            this.asMobile
+              ? (location.href = data.action.web.message)
+              : window.open(data.action.web.message);
             break;
           default:
             break;

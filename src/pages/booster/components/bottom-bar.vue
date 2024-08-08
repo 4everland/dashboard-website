@@ -299,6 +299,10 @@ export default {
     padding: 0;
     bottom: 24px;
     margin: auto;
+    background-image: url("/img/booster/nav/mobile-bg.png");
+    background-size: 100% 200%;
+    background-repeat: no-repeat;
+    background-position-y: 24px;
     .activity {
       height: auto;
       border: none;
