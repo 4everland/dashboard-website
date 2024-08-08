@@ -41,7 +41,7 @@
       </div>
       <template v-else>
         <div v-show="row.subs.length" v-for="(row, i) in list" :key="i">
-          <div>{{ row.title }}</div>
+          <div style="font-size: 12px; color: #667085">{{ row.title }}</div>
           <ul class="mt-2 ml-3">
             <li
               class="al-c hover-1 mb-2"
