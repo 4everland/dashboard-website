@@ -10,6 +10,7 @@ export default {
       interval: 1000,
       timer: null,
       tgLoading: false,
+      unlockLoading: -1,
     };
   },
   computed: {
@@ -77,6 +78,7 @@ export default {
     },
 
     async handleUnlock(index) {
+      this.unlockLoading = index;
       try {
         const data = await unlockStage(index);
         if (data.code == 10002) {
@@ -89,6 +91,7 @@ export default {
       } catch (error) {
         console.log(error);
       }
+      this.unlockLoading = -1;
     },
     async hanleClaim() {
       try {

@@ -103,11 +103,13 @@
                 width="64"
                 alt=""
               />
-              <span
+              <v-btn
                 v-show="storageLocked"
+                height="29"
                 class="unlock-btn"
+                :loading="unlockLoading == 0"
                 @click="handleUnlock(0)"
-                >Unlock</span
+                >Unlock</v-btn
               >
             </div>
             <div class="card-storage-status flex-1">
@@ -156,11 +158,13 @@
                 width="64"
                 alt=""
               />
-              <span
+              <v-btn
                 v-show="computingLocked"
                 class="unlock-btn"
+                height="29"
+                :loading="unlockLoading == 1"
                 @click="handleUnlock(1)"
-                >Unlock</span
+                >Unlock</v-btn
               >
             </div>
             <div class="card-storage-status flex-1">
@@ -210,11 +214,13 @@
                 alt=""
               />
 
-              <span
+              <v-btn
                 v-show="networkLocked"
                 class="unlock-btn"
+                height="29"
+                :loading="unlockLoading == 2"
                 @click="handleUnlock(2)"
-                >Unlock</span
+                >Unlock</v-btn
               >
             </div>
             <div class="card-storage-status flex-1">
@@ -441,9 +447,11 @@ export default {
   .card-storage-icon {
     position: relative;
     .unlock-btn {
+      letter-spacing: 0;
       position: absolute;
       bottom: 0;
       left: 50%;
+      color: #fff;
       transform: translateX(-50%);
       font-size: 14px;
       padding: 4px 8px;

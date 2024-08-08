@@ -65,7 +65,13 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="text-center fz-12">
-                <div class="unlock-btn" @click="handleUnlock(0)">Unlock</div>
+                <v-btn
+                  class="unlock-btn"
+                  height="22"
+                  :loading="unlockLoading == 0"
+                  @click="handleUnlock(0)"
+                  >Unlock</v-btn
+                >
                 <div>Unlock with 1 million LAND</div>
               </div>
 
@@ -102,7 +108,13 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="text-center fz-12">
-                <div class="unlock-btn" @click="handleUnlock(1)">Unlock</div>
+                <v-btn
+                  class="unlock-btn"
+                  height="22"
+                  :loading="unlockLoading == 1"
+                  @click="handleUnlock(1)"
+                  >Unlock</v-btn
+                >
                 <div>Unlock with 1 million LAND</div>
               </div>
               <div class="task-title">COMPUTING BOOST</div>
@@ -138,7 +150,13 @@
                 <img src="/img/booster/svg/actived.svg" width="16" alt="" />
               </div>
               <div v-else class="text-center fz-12">
-                <div class="unlock-btn" @click="handleUnlock(2)">Unlock</div>
+                <v-btn
+                  class="unlock-btn"
+                  height="22"
+                  :loading="unlockLoading == 2"
+                  @click="handleUnlock(2)"
+                  >Unlock</v-btn
+                >
                 <div>Unlock with 1 million LAND</div>
               </div>
               <div class="task-title">NETWORK BOOST</div>
@@ -307,6 +325,8 @@ export default {
       position: absolute;
       left: 50%;
       top: 4%;
+      color: #fff;
+      letter-spacing: 0;
       transform: translateX(-50%);
       padding: 2px 4px;
       border-radius: 2px;
