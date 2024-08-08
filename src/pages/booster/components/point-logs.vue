@@ -1,51 +1,49 @@
 <template>
-  <div>
-    <v-menu
-      offset-y
-      content-class="logs-menu"
-      :close-on-content-click="false"
-      @input="handleInput"
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <img
-          style="display: block"
-          v-on="on"
-          v-bind="attrs"
-          srcset="/img/booster/svg/log.svg"
-          width="16"
-          src=""
-          alt=""
-        />
-      </template>
-      <div class="logs">
-        <div class="empty text-center" v-if="!list.length">
-          <img src="/img/booster/svg/empty.svg" width="200" alt="" />
-          <div>Empty</div>
-        </div>
-        <div class="logs-content" v-else>
-          <div class="log-list">
-            <div
-              class="log d-flex align-center justify-space-between mb-4 fz-14"
-              v-for="it in list"
-              :key="it.createdAt"
-            >
-              <div style="width: 300px; word-wrap: break-word">
-                {{ it.log }}
-              </div>
-              <div>{{ new Date(it.createdAt * 1000).format() }}</div>
-            </div>
-          </div>
-          <booster-pagination
-            v-show="list.length != 0"
-            :length="totalPages"
-            class="mt-5"
-            v-model="page"
-            @input="onPage"
-          ></booster-pagination>
-        </div>
+  <v-menu
+    offset-y
+    content-class="logs-menu"
+    :close-on-content-click="false"
+    @input="handleInput"
+  >
+    <template v-slot:activator="{ on, attrs }">
+      <img
+        style="display: block"
+        v-on="on"
+        v-bind="attrs"
+        srcset="/img/booster/svg/log.svg"
+        width="16"
+        src=""
+        alt=""
+      />
+    </template>
+    <div class="logs">
+      <div class="empty text-center" v-if="!list.length">
+        <img src="/img/booster/svg/empty.svg" width="200" alt="" />
+        <div>Empty</div>
       </div>
-    </v-menu>
-  </div>
+      <div class="logs-content" v-else>
+        <div class="log-list">
+          <div
+            class="log d-flex align-center justify-space-between mb-4 fz-14"
+            v-for="it in list"
+            :key="it.createdAt"
+          >
+            <div style="width: 300px; word-wrap: break-word">
+              {{ it.log }}
+            </div>
+            <div>{{ new Date(it.createdAt * 1000).format() }}</div>
+          </div>
+        </div>
+        <booster-pagination
+          v-show="list.length != 0"
+          :length="totalPages"
+          class="mt-5"
+          v-model="page"
+          @input="onPage"
+        ></booster-pagination>
+      </div>
+    </div>
+  </v-menu>
 </template>
 
 <script>
@@ -58,7 +56,11 @@ export default {
       totalPages: 0,
       list: [],
       showLog: false,
+      attach: null,
     };
+  },
+  mounted() {
+    this.attach = document.querySelector(".booster-overview-bg");
   },
   methods: {
     async getList() {
@@ -126,7 +128,7 @@ export default {
 
 <style lang="scss" scoped>
 ::v-deep.logs-menu {
-  height: 100%;
+  height: 700px;
   border-radius: 0;
   right: 24px;
   top: 89px !important;

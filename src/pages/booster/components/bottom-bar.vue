@@ -19,7 +19,7 @@
             />
             <img class="mobile-icon" :src="item.activityIcon" alt="" />
             <div
-              v-if="item.name == 'Explore' && exploreRemain > 0"
+              v-if="item.name == 'Explore' && !boostLocked && exploreRemain > 0"
               class="count pos-a"
             >
               x{{ exploreRemain }}

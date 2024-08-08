@@ -275,6 +275,8 @@ export default {
 }
 .card-storage.locked {
   background: url("/img/booster/svg/mobile_card_background_white.svg") no-repeat;
+  background-size: 100%;
+
   .card-storage-status {
     .task-title {
       color: rgba(255, 255, 255, 0.25);
