@@ -186,7 +186,7 @@
                 ? '/img/booster/3d-square-full.png'
                 : '/img/booster/3d-square.png'
             "
-            width="64"
+            width="100"
             alt=""
           />
           <img

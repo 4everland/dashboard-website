@@ -634,6 +634,7 @@ export default {
           await this.$http.post(`$bill-consume/activity/recharge/report`, {
             source: "assnode",
             hash: tx.hash,
+            address,
           });
           bus.$emit("getDailyTasks");
         }
