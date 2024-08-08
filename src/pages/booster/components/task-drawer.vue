@@ -141,27 +141,22 @@ export default {
 
       item.extra.buttonName = data.action.web.nextButtonName;
       this.$set(_this.tasksLists, index, item);
-      if (actType == "daily_invite") {
-        try {
-          const textToCopy = this.inviteInfo.link;
-          await navigator.clipboard.writeText(textToCopy);
-          this.$toast2("Copied!");
-        } catch (error) {
-          console.error(error);
-        }
-        return;
-      } else if (actType == "share_twitter") {
-        const inviteLink = encodeURI(this.inviteInfo.link);
-        const shareUrl = data.action.web.message.replace("%25s", inviteLink);
-        window.open(shareUrl);
-        return;
-      }
+
       switch (data.action.web.next) {
         case "REDIRECT":
           location.href = data.action.web.message;
           break;
         case "JUMP_OUT":
-          window.open(data.action.web.message);
+          if (actType == "share_twitter") {
+            const inviteLink = encodeURI(this.inviteInfo.link);
+            const shareUrl = data.action.web.message.replace(
+              "%25s",
+              inviteLink
+            );
+            window.open(shareUrl);
+          } else {
+            window.open(data.action.web.message);
+          }
           break;
         case "CLAIM":
           this.$toast2(data.action.web.message, "success");
@@ -169,6 +164,17 @@ export default {
           break;
         case "COMPLETE":
           this.getTasks();
+          break;
+        case "COPY":
+          if (actType == "daily_invite") {
+            try {
+              const textToCopy = this.inviteInfo.link;
+              await navigator.clipboard.writeText(textToCopy);
+              this.$toast2("Copied!");
+            } catch (error) {
+              console.error(error);
+            }
+          }
           break;
         default:
           this.getTasks();
