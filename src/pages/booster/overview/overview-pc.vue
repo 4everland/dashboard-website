@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="user-card d-none d-md-block">
-      <div class="user-card-item fz-12 mt-2">
+      <div class="user-card-item fz-12">
         <div class="user-card-item-title">Earning Rate</div>
         <div class="linear-border mb-1"></div>
         <div class="user-card-item-content">
@@ -29,7 +29,7 @@
     <div class="not-login d-none d-md-block" v-if="boostLocked">
       <div style="position: relative; width: 10px; height: 10px"></div>
       <div class="top-card">
-        <div class="card-storage mb-1 pos-r">
+        <div class="card-storage mb-1 pos-r" style="width: 280px">
           <img
             class="pos-a"
             style="left: 50%; top: -20px; transform: translateX(-50%)"
@@ -41,7 +41,7 @@
             Start Boosting
           </div>
         </div>
-        <img src="/img/booster/svg/storage-line.svg" width="280" alt="" />
+        <img src="/img/booster/svg/start-boost-line.svg" width="330" alt="" />
       </div>
     </div>
 
@@ -342,7 +342,7 @@ export default {
 .user-card {
   position: absolute;
   right: 20px;
-  top: 12%;
+  top: 86px;
   padding: 16px;
   width: 264px;
   background: url("/img/booster/user_card_bg.png") no-repeat;

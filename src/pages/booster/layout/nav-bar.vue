@@ -49,7 +49,10 @@
             :uid="userInfo.uid"
           ></e-team-avatar>
           <div class="info-content flex-1">
-            <div class="d-flex align-center justify-space-between">
+            <div
+              class="d-flex align-center justify-space-between"
+              style="gap: 24px"
+            >
               <span class="fw-b fz-14 ml-2">
                 {{ (userInfo.username || "unkown").cutStr(6, 4) }}
               </span>
@@ -227,7 +230,7 @@
         </v-menu>
       </div>
 
-      <div v-else class="login-content d-flex align-center justify-center">
+      <div v-else class="login-content d-flex align-center justify-center px-4">
         <v-btn
           style="background: rgba(255, 255, 255, 0.1)"
           class="fz-14"
@@ -687,7 +690,7 @@ export default {
       }
     }
     .login-content {
-      width: 340px;
+      // width: 340px;
       border-left: 1px solid rgba(255, 255, 255, 0.25);
     }
   }
