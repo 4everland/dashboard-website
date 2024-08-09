@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       showStartBoost: false,
-      showEndBoost: true,
+      showEndBoost: false,
       showBindWallet: false,
       timer: null,
     };
