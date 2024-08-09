@@ -13,7 +13,7 @@
       <v-container fluid>
         <div class="nft-drawer-top">
           <div class="drawer-title nft-drawer-title">T4EVER STAKING</div>
-          <div class="nft-drawer-desc">Receive a 10% Staking Yield</div>
+          <!-- <div class="nft-drawer-desc">Receive a 10% Staking Yield</div> -->
           <div class="nft-drawer-btn-box">
             <div class="nft-drawer-logo">
               <img class="logo" src="/favicon.ico" alt="" />
