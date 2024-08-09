@@ -116,7 +116,7 @@
                     </div>
                     <div class="d-flex align-center justify-space-between py-2">
                       <div>
-                        <span>LAND Balance: </span>
+                        <span>Balance: </span>
                         <span>{{ balance.land }}</span>
                         <span>{{ balance.unit }}</span>
                         <span class="ml-1">LAND</span>
@@ -222,8 +222,8 @@
               </div>
 
               <div class="fz-12 invite-panel-basic-item-desc">
-                * You'll receive a 10-capacity increase for every new booster
-                you invite.
+                You'll receive a 10-capacity increase for every new booster you
+                invite.
               </div>
             </div>
           </div>
@@ -329,8 +329,8 @@
               </div>
 
               <div class="fz-12 mobile-invite-panel-basic-item-desc">
-                * You'll receive a 10-capacity increase for every new booster
-                you invite.
+                You'll receive a 10-capacity increase for every new booster you
+                invite.
               </div>
 
               <v-btn

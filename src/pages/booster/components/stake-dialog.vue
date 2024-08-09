@@ -14,7 +14,7 @@
           class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
         >
           <div>
-            <div>Choose network:</div>
+            <div>Choose network</div>
             <div>
               <v-radio-group v-model="network" row>
                 <v-radio
@@ -110,13 +110,16 @@
             <v-btn text @click="onMax">Max</v-btn>
           </div>
         </div>
-        <div class="stake-tips">
-          <div>Each T4EVER token staked contributes 0.005% to your yield.</div>
-          <div>
-            The staked T4EVER will automatically convert to 4EVER tokens during
-            the Airdrop.
-          </div>
-        </div>
+        <ul class="stake-tips">
+          <li>Stake a minimum of 100 T4EVER to start.</li>
+          <li>
+            Each staked T4EVER token contributes to a 0.005% Staking Yield.
+          </li>
+          <li>
+            Staked T4EVER will automatically convert to 4EVER tokens at a 1:1
+            ratio during the airdrop.
+          </li>
+        </ul>
         <v-btn
           class="start-boost-btn text-center fw-b"
           @click="onStake"
@@ -149,7 +152,7 @@
           </div>
           <div class="boosting-task fz-16">
             <div class="">
-              <div class="d-flex align-center">Choose network:</div>
+              <div class="d-flex align-center">Choose network</div>
               <div>
                 <v-radio-group v-model="network" row>
                   <v-radio
@@ -241,15 +244,16 @@
               </div>
             </div>
           </div>
-          <div class="stake-tips">
-            <div>
-              Each T4EVER token staked contributes 0.005% to your yield.
-            </div>
-            <div>
-              The staked T4EVER will automatically convert to 4EVER tokens
-              during the Airdrop.
-            </div>
-          </div>
+          <ul class="stake-tips">
+            <li>Stake a minimum of 100 T4EVER to start.</li>
+            <li>
+              Each staked T4EVER token contributes to a 0.005% Staking Yield.
+            </li>
+            <li>
+              Staked T4EVER will automatically convert to 4EVER tokens at a 1:1
+              ratio during the airdrop.
+            </li>
+          </ul>
           <div class="d-flex align-center justify-center mt-4">
             <v-btn class="cancel-btn" @click="$emit('input', false)"
               >Cancel</v-btn
@@ -706,5 +710,10 @@ export default {
   font-weight: 300;
   line-height: normal;
   opacity: 0.6;
+}
+
+ul,
+li {
+  list-style: outside;
 }
 </style>

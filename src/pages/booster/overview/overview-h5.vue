@@ -35,7 +35,7 @@
           alt=""
         />
         <div class="boost-btn pos-a cursor-p" @click="handleStartBoost">
-          Start Boosting
+          START BOOST
         </div>
       </div>
     </div>
@@ -173,7 +173,7 @@
           <div style="width: 10px; height: 10px"></div>
         </div>
         <div class="top-card square-box">
-          <span class="points fz-12">
+          <span class="points fz-12" :class="{ locked: computedPoints < 1 }">
             {{
               computedPoints > boosterInfo.capacity
                 ? boosterInfo.capacity
@@ -182,7 +182,9 @@
           </span>
           <img
             :src="
-              computedPoints >= boosterInfo.capacity
+              computedPoints < 1
+                ? '/img/booster/3d-square-unlock.png'
+                : computedPoints >= boosterInfo.capacity
                 ? '/img/booster/3d-square-full.png'
                 : '/img/booster/3d-square.png'
             "
@@ -395,6 +397,10 @@ export default {
     border: 1px solid rgba(18, 21, 54, 0.5);
     background: rgba(97, 114, 243, 0.75);
     box-shadow: 0px 0px 4px 0px rgba(255, 255, 255, 0.5);
+  }
+
+  .points.locked {
+    background: rgba(52, 64, 84, 0.75);
   }
 }
 

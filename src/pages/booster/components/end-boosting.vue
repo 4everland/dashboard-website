@@ -75,6 +75,14 @@
             can earn and maximize $4EVER points! 🚀
           </div>
           <div class="first-dialog-content pt-5">
+            <video
+              class="end-boost-video"
+              src="/img/booster/video/end-boost-video.webm"
+              width="100%"
+              autoplay
+              loop
+              muted
+            ></video>
             <div class="paragraph-1 mb-4">
               <div>
                 Before we set off on this thrilling ride, let's calculate your
@@ -232,10 +240,19 @@ li {
     text-shadow: 0px 0px 8px #6172f3;
   }
   .first-dialog-content {
+    position: relative;
     border-top: 1px solid #3e4043;
-
+    overflow: hidden;
+    .end-boost-video {
+      position: absolute;
+      left: 0;
+      top: -50px;
+      width: 100%;
+    }
     .paragraph-1,
     .paragraph-2 {
+      z-index: 9;
+      position: relative;
       padding-left: 64px;
       padding-right: 64px;
     }
@@ -243,6 +260,8 @@ li {
       color: #40e8ff;
     }
     .panel-box {
+      z-index: 9;
+      position: relative;
       margin: 0 auto;
       width: 380px;
       height: 167px;

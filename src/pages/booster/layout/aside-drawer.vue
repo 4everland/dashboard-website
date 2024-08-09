@@ -30,7 +30,7 @@
             {{ (userInfo.username || "-").cutStr(6, 4) }}
           </div>
           <div class="fz-12 balance">
-            <span>LAND Balance:</span>
+            <span>Balance:</span>
             <span class="ml-1">
               <span>{{ balance.land }}</span>
               <span>{{ balance.unit }}</span> LAND</span
