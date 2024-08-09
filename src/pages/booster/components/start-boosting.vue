@@ -9,10 +9,9 @@
           width="18"
           alt=""
         />
-        <div class="text-center" style="margin-bottom: 44px">
+        <div class="text-center" style="margin-bottom: 24px">
           <img src="/img/booster/boost-icon.png" width="94" alt="" />
         </div>
-        <div class="text-center fz-20 mb-4 fw-b">START BOOSTING</div>
         <div v-for="(item, idx) in activity" :key="item.actId">
           <div
             class="boosting-task d-flex align-center justify-space-between pa-3 fz-14"
@@ -57,7 +56,7 @@
           :disabled="startDisabled"
           :loading="loading"
         >
-          Start Boosting Now
+          Start
         </v-btn>
       </div>
     </v-overlay>
@@ -87,7 +86,7 @@
             alt=""
           />
 
-          <div class="text-center fz-20 mt-6 fw-b">START BOOSTING</div>
+          <div class="mt-10"></div>
           <div
             class="boosting-task fz-14"
             v-for="(item, idx) in activity"
@@ -117,7 +116,7 @@
                   <span
                     class="fz-12 ml-2"
                     style="color: rgba(255, 255, 255, 0.6)"
-                    >Booste Rate: + 10 pts/h, valid for 24 hours</span
+                    >Boost Rate: + 10 pts/h, valid for 24 hours</span
                   >
                 </div>
               </div>
@@ -143,7 +142,7 @@
               :disabled="startDisabled"
               :loading="loading"
             >
-              Start Boosting Now
+              Start
             </v-btn>
           </div>
         </div>

@@ -15,7 +15,7 @@
         <div class="task-drawer-top">
           <div class="drawer-title task-drawer-title">
             <span> Daily Task: Claim LAND </span>
-            <v-btn class="drawer-btn" @click="onSign"> Claim LAND </v-btn>
+            <v-btn class="drawer-btn" @click="onSign"> Claim </v-btn>
           </div>
           <div class="daily-sign">
             <div class="daily-sign-box">
@@ -26,7 +26,7 @@
                 :class="signDays % 7 > index ? 'daily-signed' : ''"
               >
                 <div class="daily-sign-item-top">
-                  <div class="point">+{{ item.reward }}/H</div>
+                  <div class="point">+{{ item.reward }}pts/h</div>
                   <div>
                     <img
                       v-if="signDays % 7 > index"

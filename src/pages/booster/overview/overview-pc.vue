@@ -38,7 +38,7 @@
             alt=""
           />
           <div class="boost-btn pos-a cursor-p" @click="handleStartBoost">
-            Start Boosting
+            START BOOST
           </div>
         </div>
         <img src="/img/booster/svg/start-boost-line.svg" width="330" alt="" />
@@ -49,7 +49,11 @@
       <div class="point-square d-none d-md-block cursor-p" @click="hanleClaim">
         <div style="position: relative; width: 10px; height: 10px"></div>
         <div class="top-card square-box">
-          <div class="points fz-14 d-flex align-center" id="point-send">
+          <div
+            class="points fz-14 d-flex align-center"
+            :class="{ locked: computedPoints < 1 }"
+            id="point-send"
+          >
             <span class="mr-1">
               {{
                 computedPoints > boosterInfo.capacity
@@ -70,7 +74,9 @@
 
           <img
             :src="
-              computedPoints >= boosterInfo.capacity
+              computedPoints < 1
+                ? '/img/booster/3d-square-unlock.png'
+                : computedPoints >= boosterInfo.capacity
                 ? '/img/booster/3d-square-full.png'
                 : '/img/booster/3d-square.png'
             "
@@ -437,6 +443,9 @@ export default {
       border: 1px solid rgba(18, 21, 54, 0.5);
       background: rgba(97, 114, 243, 0.75);
       box-shadow: 0px 0px 4px 0px rgba(255, 255, 255, 0.5);
+    }
+    .points.locked {
+      background: rgba(52, 64, 84, 0.75);
     }
   }
 }
