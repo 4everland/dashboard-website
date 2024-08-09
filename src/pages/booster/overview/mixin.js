@@ -70,7 +70,11 @@ export default {
       }
     },
     async handleTGStartBoost() {
-      const code = this.$tg.initDataUnsafe.start_param;
+      let code = this.$tg.initDataUnsafe.start_param;
+
+      if (code) {
+        code = decodeURI(code);
+      }
       this.tgLoading = true;
       await initTgBoost(code || "");
       this.tgLoading = false;
