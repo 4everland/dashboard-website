@@ -190,8 +190,8 @@
                   src="/img/booster/svg/copy.svg"
                   width="24"
                   alt=""
-                  v-clipboard="inviteInfo.link"
-                  @success="$toast2(`Copied!`)"
+                  v-clipboard:copy="inviteInfo.link"
+                  v-clipboard:success="() => $toast2('Copied!', 'success')"
                 />
               </div>
               <div class="invite-panel-basic-item d-flex align-center fz-14">
@@ -204,8 +204,8 @@
                   src="/img/booster/svg/copy.svg"
                   width="24"
                   alt=""
-                  v-clipboard="inviteInfo.inviteCode"
-                  @success="$toast2('Copied!')"
+                  v-clipboard:copy="inviteInfo.inviteCode"
+                  v-clipboard:success="() => $toast2('Copied!', 'success')"
                 />
               </div>
               <div class="invite-panel-basic-item d-flex align-center fz-14">
@@ -290,8 +290,8 @@
                   src="/img/booster/svg/copy.svg"
                   width="24"
                   alt=""
-                  v-clipboard="inviteInfo.link"
-                  @success="$toast2('Copied!')"
+                  v-clipboard:copy="inviteInfo.link"
+                  v-clipboard:success="() => $toast2('Copied!', 'success')"
                 />
               </div>
               <div
@@ -306,8 +306,8 @@
                   src="/img/booster/svg/copy.svg"
                   width="24"
                   alt=""
-                  v-clipboard="inviteInfo.inviteCode"
-                  @success="$toast2('Copied!')"
+                  v-clipboard:copy="inviteInfo.inviteCode"
+                  v-clipboard:success="() => $toast2('Copied!', 'success')"
                 />
               </div>
               <div
