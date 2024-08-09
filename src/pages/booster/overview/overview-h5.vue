@@ -24,6 +24,14 @@
           }"
         />
       </div>
+
+      <!-- <img
+        class="arrow-btn"
+        :class="{ rotate: true }"
+        src="/img/booster/svg/down-arrow.svg"
+        width="12"
+        alt=""
+      /> -->
     </div>
     <div class="not-login" v-if="boostLocked">
       <div class="card-storage mb-1 pos-r">
@@ -289,6 +297,16 @@ export default {
       top: 50%;
       transform: translate(-50%, -50%);
     }
+  }
+  .arrow-btn {
+    position: absolute;
+    right: 7px;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: all 1s ease;
+  }
+  .arrow-btn.rotate {
+    rotate: 180deg;
   }
 }
 .card-storage.locked {
