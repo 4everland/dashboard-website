@@ -77,8 +77,7 @@
 
               <div class="task-title">STORAGE BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base Rate</span>
-                <span>100 pts/h</span>
+                +100 pts/h & 2,500 Capacity
               </div>
             </div>
           </div>
@@ -119,8 +118,7 @@
               </div>
               <div class="task-title">COMPUTING BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base Rate</span>
-                <span>100 pts/h</span>
+                +100 pts/h & 2,500 Capacity
               </div>
             </div>
           </div>
@@ -161,8 +159,7 @@
               </div>
               <div class="task-title">NETWORK BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base Rate</span>
-                <span>100 pts/h</span>
+                +100 pts/h & 2,500 Capacity
               </div>
             </div>
           </div>
@@ -192,6 +189,7 @@
             alt=""
           />
           <img
+            v-show="computedPoints > 1"
             class="pos-a"
             style="left: 50%; top: 30%; transform: translateX(-50%)"
             src="/img/booster/svg/finger.svg"

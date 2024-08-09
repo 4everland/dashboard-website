@@ -1,8 +1,7 @@
 import { mapGetters, mapState } from "vuex";
-import { unlockStage, claimPoints, initTgBoost } from "@/api/booster";
-import { bus } from "@/utils/bus";
+import { claimPoints, initTgBoost } from "@/api/booster";
 import { sendStoken } from "@/api/login.js";
-import { coinMove } from "../../../utils/animation";
+// import { coinMove } from "../../../utils/animation";
 export default {
   data() {
     return {
@@ -82,20 +81,7 @@ export default {
     },
 
     async handleUnlock(index) {
-      this.unlockLoading = index;
-      try {
-        const data = await unlockStage(index);
-        if (data.code == 10002) {
-          this.$toast2(data.message, "error");
-          bus.$emit("showDepositDialog", { land: data.data.land });
-        } else {
-          this.$store.dispatch("getBalance");
-          await this.$store.dispatch("getBoosterUserInfo");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-      this.unlockLoading = -1;
+      this.$emit("handleUnlock", index);
     },
     async hanleClaim() {
       try {
