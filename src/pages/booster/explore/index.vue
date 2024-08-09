@@ -364,7 +364,7 @@ export default {
   overflow: hidden;
 
   .booster-overview-bg {
-    // min-height: 100vh;
+    max-height: 100vh;
     width: 100%;
     display: block;
   }
