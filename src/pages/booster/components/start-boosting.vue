@@ -174,7 +174,7 @@ export default {
       return this.$vuetify.breakpoint.smAndDown;
     },
     startDisabled() {
-      return this.activity.filter((it) => it.actStatus == "DONE").length < 4;
+      return this.activity.filter((it) => it.actStatus == "DONE").length < 3;
     },
   },
   created() {
