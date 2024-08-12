@@ -105,9 +105,9 @@ export default {
           action() {},
         },
       ];
-      if (this.isTg) {
-        Arr.splice(1, 1);
-      }
+      // if (this.isTg) {
+      //   Arr.splice(1, 1);
+      // }
       return Arr;
     },
   },
