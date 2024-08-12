@@ -171,7 +171,7 @@ export default {
   },
   methods: {
     handleShowStartBoost() {
-      if (!this.userInfo.wallet && boostLocked) {
+      if (!this.userInfo.wallet && this.boostLocked) {
         this.showBindWallet = true;
       } else {
         this.showStartBoost = true;
