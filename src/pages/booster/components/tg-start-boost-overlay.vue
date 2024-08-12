@@ -1,5 +1,5 @@
 <template>
-  <div class="tg-start-boost" v-if="isShow">
+  <div class="tg-start-boost">
     <TgStartBoostLoading v-if="loading"></TgStartBoostLoading>
     <div class="start-boost-bg" v-else>
       <div class="start-boost-content">
@@ -44,13 +44,6 @@ export default {
   },
   computed: {
     ...mapGetters(["notLogin", "boostLocked"]),
-    isTg() {
-      return process.env.VUE_APP_TG_VERSION == "true";
-    },
-    isShow() {
-      // return false;
-      return this.isTg && this.boostLocked;
-    },
   },
   methods: {
     async tgMiniAppLogin() {
@@ -84,7 +77,7 @@ export default {
   top: 0;
   bottom: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(6.5px);
   .start-boost-bg {
     position: absolute;
