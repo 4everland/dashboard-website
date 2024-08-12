@@ -1,58 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <title>4EVERLAND</title>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="#DePIN #AI #Web3" />
+    <meta name="twitter:description" content="" />
+    <meta
+      name="twitter:image"
+      content="https://4evericon.4everland.store/DePIN%20+%20AI.png"
+    />
+    <meta property="og:title" content="#IPFS #Arweave #Dfinity #Web3" />
+    <meta property="og:description" content="" />
+    <meta property="og:image" content="https://www.4everland.org/cover.gif" />
+    <meta property="og:type" content="website" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.6.1/vuetify.min.css"
+      rel="stylesheet"
+    />
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport"
-    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-  <title>4EVERLAND</title>
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="#DePIN #AI #Web3">
-  <meta name="twitter:description" content="">
-  <meta name="twitter:image" content="https://4evericon.4everland.store/DePIN%20+%20AI.png">
-  <meta property="og:title" content="#IPFS #Arweave #Dfinity #Web3" />
-  <meta property="og:description" content="" />
-  <meta property="og:image" content="https://www.4everland.org/cover.gif" />
-  <meta property="og:type" content="website" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.6.1/vuetify.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css"> -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/6.5.95/css/materialdesignicons.min.css"
+      integrity="sha512-Zw6ER2h5+Zjtrej6afEKgS8G5kehmDAHYp9M2xf38MPmpUWX39VrYmdGtCrDQbdLQrTnBVT8/gcNhgS4XPgvEg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
 
-  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css"> -->
-  <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/6.5.95/css/materialdesignicons.min.css"
-    integrity="sha512-Zw6ER2h5+Zjtrej6afEKgS8G5kehmDAHYp9M2xf38MPmpUWX39VrYmdGtCrDQbdLQrTnBVT8/gcNhgS4XPgvEg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/everpay@0.6.1/umd/index.umd.min.js"
+      defer
+      type="text/javascript"
+    ></script>
+    <script src="/js/socket.io.slim.js"></script>
+    <script src="https://unpkg.com/@multiformats/multiaddr/dist/index.min.js"></script>
+    <script
+      src="https://www.recaptcha.net/recaptcha/api.js?render=explicit"
+      async
+      defer
+    ></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-V914V7FWJJ"
+    ></script>
+    <script
+      src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs"
+      type="module"
+    ></script>
+    <script src="/js/tg-web-app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-V914V7FWJJ");
+    </script>
+    <script src="/js/jdenticon.min.js"></script>
+    <script>
+      (function(){
+      var app= Telegram.WebApp
+      app.expand()
+      app.disableVerticalSwipes(
+      app.setHeaderColor('#000000');
+      app.setBackgroundcolor('#000000');
+      app.ready()
+      })()
+    </script>
+  </head>
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script src="https://cdn.jsdelivr.net/npm/everpay@0.6.1/umd/index.umd.min.js" defer type="text/javascript"></script>
-  <script src="/js/socket.io.slim.js"></script>
-  <script src="https://unpkg.com/@multiformats/multiaddr/dist/index.min.js"></script>
-  <script src="https://www.recaptcha.net/recaptcha/api.js?render=explicit" async defer></script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V914V7FWJJ"></script>
-  <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
-  <script src="/js/tg-web-app.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-V914V7FWJJ');
-  </script>
-  <script src="/js/jdenticon.min.js"></script>
-</head>
-
-<body>
-  <div id="app"></div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.3.1/echarts.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.6.1/ethers.umd.min.js"></script>
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script> -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.6.1/vuetify.min.js"></script> -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.5.1/vue-router.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-</body>
-
+  <body>
+    <div id="app"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.3.1/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.6.1/ethers.umd.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/2.6.1/vuetify.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.5.1/vue-router.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.6.2/vuex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  </body>
 </html>
