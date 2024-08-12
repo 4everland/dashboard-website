@@ -116,6 +116,9 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
   data() {
     return {
@@ -232,6 +235,12 @@ export default {
       this.$store.dispatch("getBoosterUserInfo");
     },
     async onSign() {
+      if (this.isTgMiniApp) {
+        return this.$toast2(
+          "This feature is coming soon for the bot. Stay tuned!",
+          "success"
+        );
+      }
       this.stateTaskDrawerShow(false);
       const land = 50000;
       const report = true;

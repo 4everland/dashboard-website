@@ -11,6 +11,7 @@ export default {
         computed: 0,
         rateBuff: 0,
         totalPoint: 0,
+        preActivities: true,
       },
       exploreRemain: 0,
       showStakeDrawer: false,

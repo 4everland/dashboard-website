@@ -7,6 +7,14 @@
         :src="bgImg"
         alt=""
       />
+      <div
+        v-if="!boosterInfo.preActivities"
+        class="booster-overview-task"
+        @click="handleShowStartBoost"
+      >
+        <img src="/img/booster/Logo.png" alt="" />
+        <span>Claim +20pts/h</span>
+      </div>
       <overview-pc
         @handleStartBoost="handleShowStartBoost"
         @handleUnlock="handleShowUnlock"
@@ -186,9 +194,52 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.booster-overview-task {
+  position: absolute;
+  top: 88px;
+  left: 38px;
+  cursor: pointer;
+  img {
+    width: 94px;
+  }
+  span {
+    width: 120px;
+    display: block;
+    font-size: 14px;
+    padding: 4px 8px;
+    align-items: center;
+    border-radius: 4px;
+    background: rgba(71, 205, 137, 0.75);
+    box-shadow: 0px 0px 8px 0px rgba(137, 234, 251, 0.5);
+    backdrop-filter: blur(2px);
+    position: absolute;
+    text-align: center;
+    bottom: -10px;
+    white-space: nowrap;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 50%为自身尺寸的一半 */
+    -webkit-transform: translate(-50%, -50%);
+  }
+}
+
 @media screen and(max-width: 960px) {
   .booster-overview-bg {
     max-height: initial !important;
+  }
+  .booster-overview-task {
+    position: absolute;
+    top: 128px;
+    right: 20px;
+    left: unset;
+    cursor: pointer;
+    img {
+      width: 64px;
+    }
+    span {
+      width: 100px;
+      font-size: 12px;
+      padding: 2px 4px;
+    }
   }
 }
 .booster-overview {
