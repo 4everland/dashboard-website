@@ -8,7 +8,7 @@
         alt=""
       />
       <div
-        v-if="!boosterInfo.preActivities"
+        v-if="!boosterInfo.preActivities && !isTg"
         class="booster-overview-task"
         @click="handleShowStartBoost"
       >
@@ -125,6 +125,9 @@ export default {
         }
         return "/img/booster/bg-unlocked.png";
       }
+    },
+    isTg() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
   },
 

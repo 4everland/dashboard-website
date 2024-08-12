@@ -3,7 +3,10 @@
     <div class="activity">
       <div
         class="activity-item"
-        :class="[item.isOpen ? 'mobile-item-active' : 'mobile-item']"
+        :class="[
+          item.isOpen ? 'mobile-item-active' : 'mobile-item',
+          notLogin || boostLocked ? 'item-disabled' : '',
+        ]"
         v-for="(item, index) in activity"
         :key="index"
         @mouseenter="currentHoverIdx = index"
@@ -14,7 +17,11 @@
           <div class="icon-box">
             <img
               class="pc-icon"
-              :src="currentHoverIdx == index ? item.activityIcon : item.icon"
+              :src="
+                currentHoverIdx == index && !notLogin && !boostLocked
+                  ? item.activityIcon
+                  : item.icon
+              "
               alt=""
             />
             <img class="mobile-icon" :src="item.activityIcon" alt="" />
@@ -309,6 +316,14 @@ export default {
       background: unset;
       border: unset;
       border-right: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .item-disabled:hover {
+      background: unset;
+      border: unset;
+      border-right: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: unset;
+      font-weight: unset;
+      cursor: not-allowed;
     }
   }
 }
