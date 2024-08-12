@@ -250,9 +250,7 @@ export default {
     },
     onJumpOut(url) {
       url = url.replace("%25s", "");
-      this.asMobile && !this.isTgMiniApp
-        ? (location.href = url)
-        : window.open(url);
+      this.asMobile ? (location.href = url) : window.open(url);
     },
   },
 };
