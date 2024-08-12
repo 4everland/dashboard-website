@@ -179,7 +179,7 @@ export default {
   },
   created() {
     if (this.$route.query) {
-      localStorage.setItem("boosterCode", this.$route.query.boosterCode);
+      localStorage.setItem("boosterCode", this.$route.query.boosterCode || "");
       this.inviteCode =
         this.$route.query.boosterCode || localStorage.getItem("boosterCode");
     }
