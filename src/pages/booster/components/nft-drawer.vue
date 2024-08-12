@@ -78,7 +78,7 @@
       @onStaked="onStaked"
       ref="StakeDialog"
     />
-    <stake-error v-model="showStakeError" ref="StakeDialog" />
+    <stake-error v-model="showStakeError" />
   </div>
 </template>
 <script>
