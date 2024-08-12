@@ -51,7 +51,7 @@ import TaskDrawer from "./components/task-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
 import BindDialog from "./components/bind-dialog.vue";
 import UnlockDialog from "./components/unlock-dialog.vue";
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   data() {
@@ -69,6 +69,7 @@ export default {
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
       userInfo: (s) => s.userInfo,
     }),
+    ...mapGetters(["notLogin", "boostLocked", "balance"]),
     storageBoost() {
       return this.boosterInfo.baseRate.filter((it) => it.name == "storage");
     },
@@ -170,7 +171,7 @@ export default {
   },
   methods: {
     handleShowStartBoost() {
-      if (!this.userInfo.wallet) {
+      if (!this.userInfo.wallet && boostLocked) {
         this.showBindWallet = true;
       } else {
         this.showStartBoost = true;
