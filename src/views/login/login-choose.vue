@@ -158,7 +158,8 @@ export default {
       }
     },
     onTelegram() {
-      location.href = "/tg.html?uid=1";
+      // location.href = "/tg.html?uid=1";
+      location.href = "https://t2.4everland.app/tg.html?uid=1";
       // window.open(
       //   "https://hb.4everland.app//tg.html?uid=1",
       //   "Telegram",
