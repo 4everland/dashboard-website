@@ -6,8 +6,7 @@
         <img src="/img/booster/boost-icon.png" width="64" alt="" />
         <div class="start-boost-title mt-3">Welcome</div>
         <div class="mt-1">
-          Unlock at 10,000 points Unlock at 10,000 points Unlock at 10,000
-          points Unlock at
+          4EVER Boost is live! Let's start earning together!
         </div>
         <v-btn
           class="start-btn mt-4"
@@ -61,6 +60,16 @@ export default {
       localStorage.nodeToken = data.nodeToken;
       this.$store.dispatch("getBalance");
       this.$store.dispatch("getBoosterUserInfo");
+      this.getUesrInfo();
+    },
+
+    async getUesrInfo() {
+      const { data } = await this.$http.get("$auth/user");
+      localStorage.userInfo = JSON.stringify(data);
+      this.$setState({
+        userInfo: data,
+        allowNoLogin: this.allowNoLogin && !data.github,
+      });
     },
   },
   components: {
