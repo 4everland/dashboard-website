@@ -2,7 +2,8 @@
   <div class="nft-drawer-box">
     <v-navigation-drawer
       class="nft-drawer"
-      absolute
+      :absolute="!asMobile"
+      :fixed="asMobile"
       bottom
       temporary
       :hide-overlay="!asMobile"

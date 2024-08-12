@@ -2,7 +2,8 @@
   <div class="task-drawer-box">
     <v-navigation-drawer
       class="task-drawer"
-      absolute
+      :absolute="!asMobile"
+      :fixed="asMobile"
       bottom
       temporary
       :hide-overlay="!asMobile"
@@ -15,7 +16,13 @@
         <div class="task-drawer-top">
           <div class="drawer-title task-drawer-title">
             <span> Daily Task: Claim LAND </span>
-            <v-btn class="drawer-btn" @click="onSign"> Claim </v-btn>
+            <v-btn
+              :class="signed ? 'done-btn' : 'drawer-btn'"
+              :disabled="signed"
+              @click="onSign"
+            >
+              {{ signed ? "Done" : "Claim" }}
+            </v-btn>
           </div>
           <div class="daily-sign">
             <div class="daily-sign-box">
@@ -23,20 +30,29 @@
                 v-for="(item, index) in signList"
                 :key="index"
                 class="daily-sign-item"
-                :class="signDays % 7 > index ? 'daily-signed' : ''"
+                :class="[
+                  signDays % 7 > index ? 'daily-signed' : '',
+                  signDays % 7 == index && !signed ? 'daily-today' : '',
+                ]"
               >
                 <div class="daily-sign-item-top">
-                  <div class="point">+{{ item.reward }}pts/h</div>
+                  <div class="point">
+                    +{{ item.reward }}
+                    <br />
+                    pts/h
+                  </div>
                   <div>
                     <img
                       v-if="signDays % 7 > index"
-                      src="/img/booster/drawer/check.png"
+                      src="/img/booster/drawer/check-circle.png"
                       alt=""
                     />
                     <img v-else src="/img/booster/drawer/coin.png" alt="" />
                   </div>
                 </div>
-                <div class="daily-sign-item-bottom">Day {{ item.step }}</div>
+                <div class="daily-sign-item-bottom">
+                  {{ signDays % 7 == index ? "Today" : `Day ${item.step}` }}
+                </div>
               </div>
             </div>
           </div>
@@ -59,13 +75,20 @@
 
                 <div class="task-item-right">
                   <v-btn
-                    v-if="item.actStatus !== 'DONE'"
+                    v-if="
+                      item.actStatus !== 'DONE' && item.extra.buttonName == 'Go'
+                    "
+                    class="go-btn"
+                    @click="stepNext(item, index)"
+                    >Go</v-btn
+                  >
+                  <v-btn
+                    v-else-if="item.actStatus !== 'DONE'"
                     class="drawer-btn"
                     @click="stepNext(item, index)"
                     >{{ item.extra.buttonName }}</v-btn
                   >
 
-                  <!-- <v-btn class="go-btn">Go</v-btn> -->
                   <v-btn v-if="item.actStatus == 'DONE'" class="done-btn"
                     >Done</v-btn
                   >
@@ -99,6 +122,7 @@ export default {
       signList: [],
       tasksLists: [],
       signDays: 0,
+      signed: false,
       inviteInfo: {
         daily: "-",
         inviteCode: "-",
@@ -111,7 +135,8 @@ export default {
     this.getDailySign();
     this.getTasks();
     bus.$on("getDailyTasks", () => {
-      this.getDailySign();
+      // this.getDailySign();
+      this.signed = true;
     });
   },
   mounted() {},
@@ -121,6 +146,9 @@ export default {
       const rewardList = data.items[0].extra.dailySign.rewardList;
       const stepList = data.items[0].extra.dailySign.stepList;
       const signDays = data.items[0].extra.dailySign.continuous;
+      if (data.items[0].actStatus == "DONE") {
+        this.signed = true;
+      }
       this.signDays = signDays;
       let signList = [];
       rewardList.forEach((element, index) => {
@@ -271,6 +299,10 @@ export default {
   border-radius: 21px;
   background: #31383f !important;
   color: #fff !important;
+  cursor: not-allowed;
+}
+::v-deep .theme--light.v-btn.v-btn--disabled.done-btn {
+  color: #fff !important;
 }
 .task-drawer-box {
   ::v-deep .task-drawer {
@@ -304,20 +336,25 @@ export default {
           display: flex;
           align-items: center;
           justify-content: space-between;
-
-          gap: 10px;
+          gap: auto;
           .daily-sign-item {
             .daily-sign-item-top {
               display: flex;
-              padding: 10px 7px;
+              width: 44px;
+              padding: 5px 8px 4px 6px;
               flex-direction: column;
               justify-content: center;
               align-items: center;
-              gap: 5px;
+              gap: 4px;
               border-radius: 100px;
-              background: rgba(255, 255, 255, 0.1);
+              opacity: 0.8;
+              background: rgba(97, 114, 243, 0.1);
               .point {
-                font-size: 10px;
+                color: #6172f3;
+                text-align: center;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 400;
               }
               img {
                 width: 24px;
@@ -333,14 +370,28 @@ export default {
           }
           .daily-signed {
             .daily-sign-item-top {
-              opacity: 0.8;
-              background: rgba(97, 114, 243, 0.1);
+              opacity: 1;
+              background: rgba(255, 255, 255, 0.1);
+
               .point {
-                color: #6172f3;
+                color: #fff;
               }
             }
             .daily-sign-item-bottom {
-              opacity: 0.3;
+              opacity: 1;
+            }
+          }
+          .daily-today {
+            .daily-sign-item-top {
+              opacity: 1;
+              background: #6172f3;
+
+              .point {
+                color: #fff;
+              }
+            }
+            .daily-sign-item-bottom {
+              opacity: 1;
             }
           }
         }
