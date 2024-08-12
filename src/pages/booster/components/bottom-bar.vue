@@ -35,14 +35,19 @@
         </div>
       </div>
     </div>
+    <stake-error v-model="showStakeError" ref="StakeDialog" />
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from "vuex";
 
+import StakeError from "@/pages/booster/components/stake-error";
+
 export default {
-  components: {},
+  components: {
+    StakeError,
+  },
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
@@ -114,6 +119,7 @@ export default {
   data() {
     return {
       currentHoverIdx: -1,
+      showStakeError: false,
     };
   },
   methods: {
@@ -124,6 +130,10 @@ export default {
       }
       if (this.boostLocked) {
         // this.$emit("handleStartBoost");
+        return;
+      }
+      if (this.isTg) {
+        this.showStakeError = true;
         return;
       }
       this.$store.dispatch("StakeDrawerToggle");

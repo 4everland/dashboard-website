@@ -2,7 +2,8 @@
   <div class="task-drawer-box">
     <v-navigation-drawer
       class="task-drawer"
-      absolute
+      :absolute="!asMobile"
+      :fixed="asMobile"
       bottom
       temporary
       :hide-overlay="!asMobile"
