@@ -130,10 +130,17 @@ export default {
           return "";
       }
     },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
-  created() {},
   methods: {
     async handleUnlock() {
+      if (this.isTgMiniApp)
+        return this.$toast2(
+          "This feature is coming soon for the bot. Stay tuned!",
+          "success"
+        );
       this.unlockLoading = true;
       try {
         const data = await unlockStage(this.unlockStage);
