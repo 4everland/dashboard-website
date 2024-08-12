@@ -187,9 +187,11 @@ export default {
               "%25s",
               inviteLink
             );
-            this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
+            this.asMobile && !this.isTgMiniApp
+              ? (location.href = shareUrl)
+              : window.open(shareUrl);
           } else {
-            this.asMobile
+            this.asMobile && !this.isTgMiniApp
               ? (location.href = data.action.web.message)
               : window.open(data.action.web.message);
           }
