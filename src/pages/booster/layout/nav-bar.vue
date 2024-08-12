@@ -349,7 +349,7 @@
         <div
           class="connect-wallet"
           @click="$router.push('/login')"
-          v-show="notLogin"
+          v-show="notLogin && !this.isTgMiniApp"
         >
           Connect Wallet
         </div>
@@ -401,6 +401,9 @@ export default {
     ...mapGetters(["notLogin", "balance"]),
     isTg() {
       return process.env.VUE_APP_TG_VERSION == "true";
+    },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
   },
 

@@ -33,19 +33,27 @@
         alt=""
       /> -->
     </div>
-    <div class="not-login" v-if="boostLocked">
-      <div class="card-storage mb-1 pos-r">
-        <img
-          class="pos-a"
-          style="left: 50%; top: -20px"
-          src="/img/booster/boost-icon.png"
-          width="64"
-          alt=""
-        />
-        <div class="boost-btn pos-a cursor-p" @click="handleStartBoost">
-          START BOOST
+
+    <div v-if="boostLocked">
+      <div class="not-login" v-if="!isTg">
+        <div class="card-storage mb-1 pos-r">
+          <img
+            class="pos-a"
+            style="left: 50%; top: -20px"
+            src="/img/booster/boost-icon.png"
+            width="64"
+            alt=""
+          />
+          <div class="boost-btn pos-a cursor-p" @click="handleStartBoost">
+            START BOOST
+          </div>
         </div>
       </div>
+      <TgStartBoostOverlay
+        v-else
+        :tgLoading="tgLoading"
+        @handleTgStart="handleTGStartBoost"
+      ></TgStartBoostOverlay>
     </div>
 
     <div v-else>
@@ -208,10 +216,6 @@
       </div>
     </div>
 
-    <TgStartBoostOverlay
-      :tgLoading="tgLoading"
-      @handleTgStart="handleTGStartBoost"
-    ></TgStartBoostOverlay>
     <mobile-points-sheet ref="pointsSheet"></mobile-points-sheet>
   </div>
 </template>
@@ -225,6 +229,12 @@ export default {
   mixins: [mixin],
   data() {
     return {};
+  },
+
+  computed: {
+    isTg() {
+      return process.env.VUE_APP_TG_VERSION == "true";
+    },
   },
   components: {
     MobilePointsSheet,
