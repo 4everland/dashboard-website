@@ -78,6 +78,7 @@
       @onStaked="onStaked"
       ref="StakeDialog"
     />
+    <stake-error v-model="showStakeError" ref="StakeDialog" />
   </div>
 </template>
 <script>
@@ -92,15 +93,20 @@ import {
 import NFT_LISTS from "../nft.js";
 
 import StakeDialog from "@/pages/booster/components/stake-dialog";
+import StakeError from "@/pages/booster/components/stake-error";
 
 export default {
   components: {
     StakeDialog,
+    StakeError,
   },
   computed: {
     ...mapGetters(["showStakeDrawer"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+    isTg() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
   },
   data() {
@@ -110,11 +116,16 @@ export default {
       nftList: [],
       showStakeDialog: false,
       stakingAmount: 0,
+      showStakeError: false,
     };
   },
   created() {},
   methods: {
     onStake() {
+      if (this.isTg) {
+        this.showStakeError = true;
+        return;
+      }
       this.$refs.StakeDialog.init();
       this.stateStakeDrawerShow(false);
       this.showStakeDialog = true;

@@ -11,6 +11,7 @@ export default {
         computed: 0,
         rateBuff: 0,
         totalPoint: 0,
+        preActivities: true,
       },
       exploreRemain: 0,
       showStakeDrawer: false,
@@ -29,7 +30,7 @@ export default {
     },
     boostRate({ currentDate, boosterInfo }) {
       return boosterInfo.boosts.reduce((prev, it) => {
-        if (currentDate > it.end) {
+        if (currentDate > it.end && it.end > 0) {
           return 0 + prev;
         }
         return it.rate + prev;
