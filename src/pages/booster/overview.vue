@@ -7,17 +7,27 @@
         :src="bgImg"
         alt=""
       />
-      <overview-pc @handleStartBoost="handleShowStartBoost"></overview-pc>
-      <overview-h5 @handleStartBoost="handleShowStartBoost"></overview-h5>
+      <overview-pc
+        @handleStartBoost="handleShowStartBoost"
+        @handleUnlock="handleShowUnlock"
+      ></overview-pc>
+      <overview-h5
+        @handleStartBoost="handleShowStartBoost"
+        @handleUnlock="handleShowUnlock"
+      ></overview-h5>
       <start-boosting
         v-model="showStartBoost"
         @showEndPoints="showEndBoost = true"
       ></start-boosting>
       <end-boosting v-model="showEndBoost"></end-boosting>
+      <unlock-dialog
+        v-model="showUnlockDialog"
+        :unlockStage="unlockStage"
+      ></unlock-dialog>
+
       <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar>
       <nft-drawer v-if="userInfo.uid"></nft-drawer>
       <task-drawer v-if="userInfo.uid"></task-drawer>
-
       <bind-dialog v-model="showBindWallet"></bind-dialog>
     </div>
   </div>
@@ -32,6 +42,7 @@ import NftDrawer from "./components/nft-drawer.vue";
 import TaskDrawer from "./components/task-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
 import BindDialog from "./components/bind-dialog.vue";
+import UnlockDialog from "./components/unlock-dialog.vue";
 import { mapState } from "vuex";
 
 export default {
@@ -40,7 +51,9 @@ export default {
       showStartBoost: false,
       showEndBoost: false,
       showBindWallet: false,
+      showUnlockDialog: false,
       timer: null,
+      unlockStage: 0,
     };
   },
   computed: {
@@ -152,6 +165,10 @@ export default {
         this.showStartBoost = true;
       }
     },
+    handleShowUnlock(val) {
+      this.unlockStage = val;
+      this.showUnlockDialog = true;
+    },
   },
 
   components: {
@@ -163,6 +180,7 @@ export default {
     TaskDrawer,
     BottomBar,
     BindDialog,
+    UnlockDialog,
   },
 };
 </script>

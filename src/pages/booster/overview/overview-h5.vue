@@ -24,6 +24,14 @@
           }"
         />
       </div>
+
+      <!-- <img
+        class="arrow-btn"
+        :class="{ rotate: true }"
+        src="/img/booster/svg/down-arrow.svg"
+        width="12"
+        alt=""
+      /> -->
     </div>
     <div class="not-login" v-if="boostLocked">
       <div class="card-storage mb-1 pos-r">
@@ -77,8 +85,7 @@
 
               <div class="task-title">STORAGE BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base Rate</span>
-                <span>100 pts/h</span>
+                +100 pts/h & 2,500 Capacity
               </div>
             </div>
           </div>
@@ -119,8 +126,7 @@
               </div>
               <div class="task-title">COMPUTING BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base Rate</span>
-                <span>100 pts/h</span>
+                +100 pts/h & 2,500 Capacity
               </div>
             </div>
           </div>
@@ -161,8 +167,7 @@
               </div>
               <div class="task-title">NETWORK BOOST</div>
               <div class="d-flex align-center justify-space-between fz-12">
-                <span>Base Rate</span>
-                <span>100 pts/h</span>
+                +100 pts/h & 2,500 Capacity
               </div>
             </div>
           </div>
@@ -192,6 +197,7 @@
             alt=""
           />
           <img
+            v-show="computedPoints > 1"
             class="pos-a"
             style="left: 50%; top: 30%; transform: translateX(-50%)"
             src="/img/booster/svg/finger.svg"
@@ -291,6 +297,16 @@ export default {
       top: 50%;
       transform: translate(-50%, -50%);
     }
+  }
+  .arrow-btn {
+    position: absolute;
+    right: 7px;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: all 1s ease;
+  }
+  .arrow-btn.rotate {
+    rotate: 180deg;
   }
 }
 .card-storage.locked {
