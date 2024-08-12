@@ -176,6 +176,9 @@ export default {
     startDisabled() {
       return this.activity.filter((it) => it.actStatus == "DONE").length < 3;
     },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
   created() {
     if (this.$route.query) {
@@ -247,7 +250,9 @@ export default {
     },
     onJumpOut(url) {
       url = url.replace("%25s", "");
-      this.asMobile ? (location.href = url) : window.open(url);
+      this.asMobile && !this.isTgMiniApp
+        ? (location.href = url)
+        : window.open(url);
     },
   },
 };
