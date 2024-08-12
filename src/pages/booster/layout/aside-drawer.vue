@@ -123,6 +123,11 @@ export default {
       location.reload();
     },
     handleToDeposit() {
+      if (this.isTgMiniApp)
+        return this.$toast2(
+          "This feature is coming soon for the bot. Stay tuned!",
+          "success"
+        );
       if (!this.notLogin) this.$router.push("/billing/deposit");
     },
   },
