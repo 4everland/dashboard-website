@@ -74,13 +74,20 @@
 
                 <div class="task-item-right">
                   <v-btn
-                    v-if="item.actStatus !== 'DONE'"
+                    v-if="
+                      item.actStatus !== 'DONE' && item.extra.buttonName == 'Go'
+                    "
+                    class="go-btn"
+                    @click="stepNext(item, index)"
+                    >Go</v-btn
+                  >
+                  <v-btn
+                    v-else-if="item.actStatus !== 'DONE'"
                     class="drawer-btn"
                     @click="stepNext(item, index)"
                     >{{ item.extra.buttonName }}</v-btn
                   >
 
-                  <!-- <v-btn class="go-btn">Go</v-btn> -->
                   <v-btn v-if="item.actStatus == 'DONE'" class="done-btn"
                     >Done</v-btn
                   >

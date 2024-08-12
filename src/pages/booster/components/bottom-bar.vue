@@ -119,22 +119,22 @@ export default {
   methods: {
     toggleStakeDrawer() {
       if (this.notLogin) {
-        this.$router.push("/login");
+        // this.$router.push("/login");
         return;
       }
       if (this.boostLocked) {
-        this.$emit("handleStartBoost");
+        // this.$emit("handleStartBoost");
         return;
       }
       this.$store.dispatch("StakeDrawerToggle");
     },
     toggleExplore() {
       if (this.notLogin) {
-        this.$router.push("/login");
+        // this.$router.push("/login");
         return;
       }
       if (this.boostLocked) {
-        this.$emit("handleStartBoost");
+        // this.$emit("handleStartBoost");
         return;
       }
       if (this.exploreRemain < 1)
@@ -146,11 +146,11 @@ export default {
     },
     toggleTaskDrawer() {
       if (this.notLogin) {
-        this.$router.push("/login");
+        // this.$router.push("/login");
         return;
       }
       if (this.boostLocked) {
-        this.$emit("handleStartBoost");
+        // this.$emit("handleStartBoost");
         return;
       }
       this.$store.dispatch("TaskDrawerToggle");
