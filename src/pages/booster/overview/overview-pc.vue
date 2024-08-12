@@ -402,7 +402,7 @@ export default {
   .top-card {
     position: absolute;
     bottom: 22%;
-    right: -226%;
+    // right: -226%;
 
     .boost-btn {
       width: 232px;
