@@ -123,6 +123,7 @@ export default {
   methods: {
     onStake() {
       if (this.isTg) {
+        this.stateStakeDrawerShow(false);
         this.showStakeError = true;
         return;
       }
