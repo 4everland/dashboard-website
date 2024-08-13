@@ -2,7 +2,8 @@
   <div class="task-drawer-box">
     <v-navigation-drawer
       class="task-drawer"
-      absolute
+      :absolute="!asMobile"
+      :fixed="asMobile"
       bottom
       temporary
       :hide-overlay="!asMobile"
@@ -115,6 +116,9 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
   data() {
     return {
@@ -183,9 +187,11 @@ export default {
               "%25s",
               inviteLink
             );
-            this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
+            this.asMobile && !this.isTgMiniApp
+              ? (location.href = shareUrl)
+              : window.open(shareUrl);
           } else {
-            this.asMobile
+            this.asMobile && !this.isTgMiniApp
               ? (location.href = data.action.web.message)
               : window.open(data.action.web.message);
           }
@@ -231,6 +237,12 @@ export default {
       this.$store.dispatch("getBoosterUserInfo");
     },
     async onSign() {
+      if (this.isTgMiniApp) {
+        return this.$toast2(
+          "This feature is coming soon for the bot. Stay tuned!",
+          "success"
+        );
+      }
       this.stateTaskDrawerShow(false);
       const land = 50000;
       const report = true;
