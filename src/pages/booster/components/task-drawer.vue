@@ -189,9 +189,12 @@ export default {
             );
             this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
           } else {
+            // this.asMobile
+            //   ? (location.href = data.action.web.message)
+            //   : window.open(data.action.web.message);
             this.asMobile
               ? (location.href = data.action.web.message)
-              : window.open(data.action.web.message);
+              : this.openUrl(data.action.web.message);
           }
           break;
         case "CLAIM":
@@ -279,6 +282,14 @@ export default {
       } else {
         this.getInviteInfo();
       }
+    },
+    openUrl(url) {
+      let a = document.createElement("a");
+      a.target = "_blank";
+      a.href = url;
+      window.document.body.appendChild(a);
+      a.click();
+      window.document.body.removeChild(a);
     },
   },
 };
