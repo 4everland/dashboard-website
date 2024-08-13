@@ -30,7 +30,7 @@
             </v-btn>
           </div>
 
-          <div class="boosting-task pa-3 fz-14" v-else-if="boostLocked">
+          <div class="boosting-task pa-3 fz-14" v-else>
             <div class="d-flex align-center">
               <div class="idx">{{ idx + 1 }}</div>
               <div class="ml-4">
@@ -194,6 +194,9 @@ export default {
       try {
         const { data } = await fetchPreTaskActivity();
         if (data) {
+          if (!this.boostLocked) {
+            data.items = data.items.filter((item) => item.actType != "invite");
+          }
           this.activity = data.items;
         }
       } catch (error) {
