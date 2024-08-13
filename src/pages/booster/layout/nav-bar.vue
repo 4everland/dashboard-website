@@ -461,7 +461,10 @@ export default {
     },
 
     handleTgShare() {
-      this.$tg.shareUrl(this.inviteInfo.link);
+      this.$tg.shareUrl(
+        this.inviteInfo.link,
+        "Earn and maximize your $4EVER points through the thrilling 4EVER Boost campaign!"
+      );
     },
   },
   components: {
