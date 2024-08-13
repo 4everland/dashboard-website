@@ -58,7 +58,6 @@ export default {
     return {
       showStartBoost: false,
       showEndBoost: false,
-      showBindWallet: false,
       showUnlockDialog: false,
       timer: null,
       unlockStage: 0,
@@ -69,7 +68,8 @@ export default {
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
       userInfo: (s) => s.userInfo,
     }),
-    ...mapGetters(["notLogin", "boostLocked", "balance"]),
+    ...mapGetters(["notLogin", "boostLocked", "balance", "showBindWallet"]),
+
     storageBoost() {
       return this.boosterInfo.baseRate.filter((it) => it.name == "storage");
     },
@@ -172,7 +172,7 @@ export default {
   methods: {
     handleShowStartBoost() {
       if (!this.userInfo.wallet && this.boostLocked) {
-        this.showBindWallet = true;
+        this.$store.dispatch("BindWalletToggle");
       } else {
         this.showStartBoost = true;
       }
