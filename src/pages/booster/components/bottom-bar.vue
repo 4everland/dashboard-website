@@ -3,7 +3,10 @@
     <div class="activity">
       <div
         class="activity-item"
-        :class="[item.isOpen ? 'mobile-item-active' : 'mobile-item']"
+        :class="[
+          item.isOpen ? 'mobile-item-active' : 'mobile-item',
+          notLogin || boostLocked ? 'item-disabled' : '',
+        ]"
         v-for="(item, index) in activity"
         :key="index"
         @mouseenter="currentHoverIdx = index"
@@ -14,7 +17,11 @@
           <div class="icon-box">
             <img
               class="pc-icon"
-              :src="currentHoverIdx == index ? item.activityIcon : item.icon"
+              :src="
+                currentHoverIdx == index && !notLogin && !boostLocked
+                  ? item.activityIcon
+                  : item.icon
+              "
               alt=""
             />
             <img class="mobile-icon" :src="item.activityIcon" alt="" />
@@ -28,6 +35,9 @@
 
           <div v-if="item.isOpen" class="mobile-name">
             {{ item.name }}
+          </div>
+          <div v-if="!item.isOpen" class="come-soon">
+            <img src="/img/booster/nav/comesoon.png" alt="" />
           </div>
         </div>
       </div>
@@ -102,9 +112,9 @@ export default {
           action() {},
         },
       ];
-      if (this.isTg) {
-        Arr.splice(1, 1);
-      }
+      // if (this.isTg) {
+      //   Arr.splice(1, 1);
+      // }
       return Arr;
     },
   },
@@ -116,22 +126,23 @@ export default {
   methods: {
     toggleStakeDrawer() {
       if (this.notLogin) {
-        this.$router.push("/login");
+        // this.$router.push("/login");
         return;
       }
       if (this.boostLocked) {
-        this.$emit("handleStartBoost");
+        // this.$emit("handleStartBoost");
         return;
       }
+
       this.$store.dispatch("StakeDrawerToggle");
     },
     toggleExplore() {
       if (this.notLogin) {
-        this.$router.push("/login");
+        // this.$router.push("/login");
         return;
       }
       if (this.boostLocked) {
-        this.$emit("handleStartBoost");
+        // this.$emit("handleStartBoost");
         return;
       }
       if (this.exploreRemain < 1)
@@ -143,11 +154,11 @@ export default {
     },
     toggleTaskDrawer() {
       if (this.notLogin) {
-        this.$router.push("/login");
+        // this.$router.push("/login");
         return;
       }
       if (this.boostLocked) {
-        this.$emit("handleStartBoost");
+        // this.$emit("handleStartBoost");
         return;
       }
       this.$store.dispatch("TaskDrawerToggle");
@@ -206,6 +217,15 @@ export default {
     height: 64px;
     display: flex;
     align-items: center;
+    // .activity-item::before {
+    //   content: "";
+    //   width: 100%;
+    //   height: 100%;
+    //   position: absolute;
+    //   left: 0;
+    //   background-color: rgba(0, 0, 0, 0.25);
+    //   filter: blur(2px);
+    // }
     .activity-item {
       height: 100%;
       padding: 0 16px;
@@ -213,6 +233,7 @@ export default {
       border-right: 1px solid rgba(255, 255, 255, 0.25);
       display: flex;
       align-items: center;
+      position: relative;
       .item-box {
         flex: 1;
         display: flex;
@@ -251,6 +272,15 @@ export default {
         font-style: normal;
         font-weight: 400;
       }
+      .come-soon {
+        width: 90%;
+        position: absolute;
+        // transform: translateX(-40px);
+        img {
+          width: 100%;
+          display: block;
+        }
+      }
       .scale {
         z-index: 9999;
         display: none;
@@ -278,7 +308,6 @@ export default {
           rgba(97, 114, 243, 0.5) 84.92%
         ),
         url("/img/booster/hover-linea-bg.png") lightgray 50% / cover no-repeat;
-
       border: 1px solid #6172f3;
       backdrop-filter: blur(2px);
       font-weight: bold;
@@ -287,6 +316,14 @@ export default {
       background: unset;
       border: unset;
       border-right: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .item-disabled:hover {
+      background: unset;
+      border: unset;
+      border-right: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: unset;
+      font-weight: unset;
+      cursor: not-allowed;
     }
   }
 }
@@ -390,6 +427,9 @@ export default {
         border: none;
         backdrop-filter: unset;
         font-weight: unset;
+      }
+      .come-soon {
+        display: none !important;
       }
     }
     .item-fixed {

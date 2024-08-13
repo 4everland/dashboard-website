@@ -41,7 +41,7 @@
             START BOOST
           </div>
         </div>
-        <img src="/img/booster/svg/start-boost-line.svg" width="330" alt="" />
+        <!-- <img src="/img/booster/svg/start-boost-line.svg" width="330" alt="" /> -->
       </div>
     </div>
 
@@ -402,7 +402,7 @@ export default {
   .top-card {
     position: absolute;
     bottom: 22%;
-    right: -226%;
+    // right: -226%;
 
     .boost-btn {
       width: 232px;
@@ -485,7 +485,7 @@ export default {
   background: url("/img/booster/svg/card_background_blue.svg") no-repeat;
   background-size: 100%;
   fill: rgba(97, 114, 243, 0.05);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(10px);
   .card-storage-status {
     .task-title {
       text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
