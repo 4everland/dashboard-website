@@ -30,7 +30,7 @@
             </v-btn>
           </div>
 
-          <div class="boosting-task pa-3 fz-14" v-else>
+          <div class="boosting-task pa-3 fz-14" v-else-if="boostLocked">
             <div class="d-flex align-center">
               <div class="idx">{{ idx + 1 }}</div>
               <div class="ml-4">
@@ -152,7 +152,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { fetchPreTaskActivity, initBoost, onNext } from "@/api/booster";
 export default {
   props: {
@@ -170,6 +170,7 @@ export default {
     ...mapState({
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
     }),
+    ...mapGetters(["notLogin", "boostLocked", "balance"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },

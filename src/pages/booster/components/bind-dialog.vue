@@ -4,7 +4,7 @@
       <div class="start-boosting d-flex flex-column justify-center">
         <img
           class="close-btn"
-          @click="$emit('input', false)"
+          @click="stateTaskDrawerShow(false)"
           src="/img/booster/svg/close.svg"
           width="18"
           alt=""
@@ -18,7 +18,9 @@
         </div>
 
         <div class="d-flex align-center justify-center mt-4">
-          <div class="cancel-btn" @click="$emit('input', false)">Cancel</div>
+          <div class="cancel-btn" @click="stateTaskDrawerShow(false)">
+            Cancel
+          </div>
 
           <div class="start-boost-btn" @click="onBind">Go</div>
         </div>
@@ -46,7 +48,7 @@
         <div class="start-boosting-dialog">
           <img
             class="close-btn"
-            @click="$emit('input', false)"
+            @click="stateTaskDrawerShow(false)"
             src="/img/booster/svg/close.svg"
             width="18"
             alt=""
@@ -70,7 +72,9 @@
           </div>
 
           <div class="d-flex align-center justify-center mt-4">
-            <div class="cancel-btn" @click="$emit('input', false)">Cancel</div>
+            <div class="cancel-btn" @click="stateTaskDrawerShow(false)">
+              Cancel
+            </div>
 
             <div class="start-boost-btn" @click="onBind">Go</div>
           </div>
@@ -111,6 +115,9 @@ export default {
   methods: {
     onBind() {
       this.$router.push("/account/config");
+    },
+    stateTaskDrawerShow(state) {
+      this.$store.dispatch("BindWalletState", { state });
     },
   },
 };

@@ -189,12 +189,18 @@ export default {
             );
             this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
           } else {
-            // this.asMobile
-            //   ? (location.href = data.action.web.message)
-            //   : window.open(data.action.web.message);
-            this.asMobile
-              ? (location.href = data.action.web.message)
-              : this.openUrl(data.action.web.message);
+            if (this.isTgMiniApp) {
+              if (actType == "4ever_chat") {
+                window.open("https://ai-dev.4everland.app/");
+              }
+              if (actType == "storage") {
+                window.open("/bucket/storage/");
+              }
+            } else {
+              this.asMobile
+                ? (location.href = data.action.web.message)
+                : window.open(data.action.web.message);
+            }
           }
           break;
         case "CLAIM":
@@ -244,10 +250,15 @@ export default {
           "success"
         );
       }
-      this.stateTaskDrawerShow(false);
-      const land = 50000;
-      const report = true;
-      bus.$emit("showDepositDialog", { land, report });
+      if (!this.userInfo.wallet) {
+        this.$store.dispatch("BindWalletToggle");
+        this.stateTaskDrawerShow(false);
+      } else {
+        this.stateTaskDrawerShow(false);
+        const land = 50000;
+        const report = true;
+        bus.$emit("showDepositDialog", { land, report });
+      }
     },
     stateTaskDrawerShow(state) {
       if (state) {
