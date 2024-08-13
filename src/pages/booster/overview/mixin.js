@@ -1,7 +1,7 @@
 import { mapGetters, mapState } from "vuex";
 import { claimPoints, initTgBoost } from "@/api/booster";
 import { sendStoken } from "@/api/login.js";
-// import { coinMove } from "../../../utils/animation";
+import { coinMove } from "../../../utils/animation";
 export default {
   data() {
     return {
@@ -90,7 +90,11 @@ export default {
         clearInterval(this.timer);
         this.computedPoints = 0;
 
-        // coinMove("point-send", "point-receive");
+        if (this.asMobile) {
+          coinMove("mobile-point-send", "mobile-point-receive");
+        } else {
+          coinMove("point-send", "point-receive");
+        }
         await this.$store.dispatch("getBoosterUserInfo");
         this.timer = setInterval(() => {
           this.computedPoints =

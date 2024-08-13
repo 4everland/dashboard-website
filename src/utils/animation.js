@@ -26,7 +26,7 @@ export const coinMove = (curId, targetId) => {
     duration: 0.5,
     x: (i) => {
       const angle = 360 / coinCount;
-      console.log(Math.sin(angle * i) * 30 + walletRect.left, i);
+      // console.log(Math.sin(angle * i) * 30 + walletRect.left, i);
       return Math.sin(angle * i) * 30;
     },
     y: (i) => {
@@ -49,10 +49,10 @@ export const coinMove = (curId, targetId) => {
     stagger: 0.05,
     ease: "power3.in",
     onComplete: () => {
-      // window.gsap.to(coins, { duration: 0.5, opacity: 0 });
-      // coins.forEach((it) => {
-      //   wallet.removeChild(it);
-      // });
+      window.gsap.to(coins, { duration: 0.5, opacity: 0 });
+      coins.forEach((it) => {
+        wallet.removeChild(it);
+      });
     },
   });
 };
