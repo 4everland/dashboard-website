@@ -17,11 +17,13 @@ export default {
       showStakeDrawer: false,
       showTaskDrawer: false,
       currentDate: +new Date() / 1000,
+      showBindWallet: false,
     };
   },
   getters: {
     showStakeDrawer: (state) => state.showStakeDrawer,
     showTaskDrawer: (state) => state.showTaskDrawer,
+    showBindWallet: (state) => state.showBindWallet,
     boostLocked({ boosterInfo }) {
       return boosterInfo.baseRate.length == 0;
     },
@@ -107,6 +109,12 @@ export default {
     TASKDRAWER_TOGGLE: (state) => {
       state.showTaskDrawer = !state.showTaskDrawer;
     },
+    SHOWBINDWALLET_STATE: (state, payload) => {
+      state.showBindWallet = payload.state;
+    },
+    BINDWALLET_TOGGLE: (state) => {
+      state.showBindWallet = !state.showBindWallet;
+    },
     SET_BOOST_INFO(state, info) {
       state.boosterInfo = info;
     },
@@ -129,6 +137,12 @@ export default {
     },
     TaskDrawerToggle: async (context, payload) => {
       context.commit("TASKDRAWER_TOGGLE", payload);
+    },
+    BindWalletState: async (context, payload) => {
+      context.commit("SHOWBINDWALLET_STATE", payload);
+    },
+    BindWalletToggle: async (context, payload) => {
+      context.commit("BINDWALLET_TOGGLE", payload);
     },
 
     async getBoosterUserInfo({ commit }) {
