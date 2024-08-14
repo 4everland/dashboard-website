@@ -64,7 +64,14 @@
               :key="item.actId"
               cols="12"
             >
-              <div class="task-item-box">
+              <div
+                v-if="
+                  item.deployOn == 'all' ||
+                  (item.deployOn == 'pc' && !isTgMiniApp) ||
+                  (item.deployOn == 'tg' && isTgMiniApp)
+                "
+                class="task-item-box"
+              >
                 <div class="task-item-left">
                   <img class="task-item-image" :src="item.icon" alt="" />
                   <div class="task-text-box">
