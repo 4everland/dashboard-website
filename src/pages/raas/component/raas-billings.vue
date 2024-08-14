@@ -50,6 +50,8 @@
 <script>
 import { fetchRollupBillings } from "@/api/raas.js";
 import { parseTime } from "@/utils/index.js";
+import { bus } from "@/utils/bus.js";
+
 export default {
   name: "DashboardWebsiteRaasBillings",
   props: {
@@ -87,6 +89,11 @@ export default {
     return {
       listData: [],
     };
+  },
+  created() {
+    bus.$on("getRassBilling", () => {
+      this.getList();
+    });
   },
   mounted() {
     this.id = this.$route.params.id;
