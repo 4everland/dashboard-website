@@ -112,6 +112,16 @@ export default [
       noLogin: 1,
     },
   },
+  {
+    path: "/quest/batching-ai",
+    component: () => import("./batching-ai-airdrop"),
+    meta: {
+      title: "AI World",
+      hideNav: 1,
+      isTab: 1,
+      noLogin: 1,
+    },
+  },
 
   {
     path: "/claim",
