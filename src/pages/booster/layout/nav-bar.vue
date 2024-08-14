@@ -222,8 +222,8 @@
               </div>
 
               <div class="fz-12 invite-panel-basic-item-desc">
-                You'll receive a 10-capacity increase for every new booster you
-                invite.
+                For every 20+ Points collected by your invited Boosters, you'll
+                earn an additional 5% points reward!
               </div>
             </div>
           </div>
@@ -329,8 +329,8 @@
               </div>
 
               <div class="fz-12 mobile-invite-panel-basic-item-desc">
-                You'll receive a 10-capacity increase for every new booster you
-                invite.
+                For every 20+ Points collected by your invited Boosters, you'll
+                earn an additional 5% points reward!
               </div>
 
               <v-btn
