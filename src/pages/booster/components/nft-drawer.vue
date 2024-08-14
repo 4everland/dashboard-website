@@ -124,7 +124,8 @@ export default {
     onStake() {
       if (this.isTg) {
         this.stateStakeDrawerShow(false);
-        this.showStakeError = true;
+        // this.showStakeError = true;
+        window.open("/booster");
         return;
       }
       this.$refs.StakeDialog.init();
