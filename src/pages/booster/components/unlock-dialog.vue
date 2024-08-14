@@ -136,11 +136,14 @@ export default {
   },
   methods: {
     async handleUnlock() {
-      if (this.isTgMiniApp)
+      if (this.isTgMiniApp) {
+        // window.open("/booster");
         return this.$toast2(
           "This feature is coming soon for the bot. Stay tuned!",
           "success"
         );
+      }
+
       this.unlockLoading = true;
       try {
         const data = await unlockStage(this.unlockStage);

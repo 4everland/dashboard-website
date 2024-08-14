@@ -64,7 +64,14 @@
               :key="item.actId"
               cols="12"
             >
-              <div class="task-item-box">
+              <div
+                v-if="
+                  item.deployOn == 'all' ||
+                  (item.deployOn == 'pc' && !isTgMiniApp) ||
+                  (item.deployOn == 'tg' && isTgMiniApp)
+                "
+                class="task-item-box"
+              >
                 <div class="task-item-left">
                   <img class="task-item-image" :src="item.icon" alt="" />
                   <div class="task-text-box">
@@ -109,6 +116,9 @@ import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
 
 export default {
   computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
     ...mapGetters(["showTaskDrawer"]),
     isTg() {
       return process.env.VUE_APP_TG_VERSION == "true";
@@ -169,6 +179,14 @@ export default {
     },
     async stepNext(item, index) {
       let _this = this;
+      if (item.extra.buttonName == "Go") {
+        if (item.actType == "4ever_chat") {
+          window.open("https://ai-dev.4everland.app/");
+        }
+        if (item.actType == "storage") {
+          window.open("/bucket/storage/");
+        }
+      }
       const id = item.actId;
       const { data } = await onNext(id);
       const actType = data.actType;
@@ -189,14 +207,7 @@ export default {
             );
             this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
           } else {
-            if (this.isTgMiniApp) {
-              if (actType == "4ever_chat") {
-                window.open("https://ai-dev.4everland.app/");
-              }
-              if (actType == "storage") {
-                window.open("/bucket/storage/");
-              }
-            } else {
+            if (data.action.web.message) {
               this.asMobile
                 ? (location.href = data.action.web.message)
                 : window.open(data.action.web.message);
@@ -245,10 +256,12 @@ export default {
     },
     async onSign() {
       if (this.isTgMiniApp) {
-        return this.$toast2(
-          "This feature is coming soon for the bot. Stay tuned!",
-          "success"
-        );
+        window.open("/booster");
+        // return this.$toast2(
+        //   "This feature is coming soon for the bot. Stay tuned!",
+        //   "success"
+        // );
+        return;
       }
       if (!this.userInfo.wallet) {
         this.$store.dispatch("BindWalletToggle");
