@@ -97,12 +97,41 @@
           <div class="task-list mt-6">
             <div class="task-item d-flex mb-4">
               <div class="pa-6 task-img-wrap">
+                <img
+                  src="/img/airDrop/batching-ai-airdrop-bg.jpg"
+                  width="100%"
+                  alt=""
+                />
+              </div>
+              <div class="pa-6 task-desc h-flex">
+                <div
+                  class="fz-20 fw-b cursor-p text-white"
+                  @click="handleToBatchingAi"
+                >
+                  2,000,000 $4EVER Points Giveaway with Batching AI
+                </div>
+                <div class="fz-14 mt-4">
+                  Join our collaborative event and seize the chance to win big!
+                  2,000,000 Points and 10M pBAT await you!
+                </div>
+                <div class="mt-8 al-c space-btw">
+                  <div class="reward fz-20 fw-b">
+                    Shared Reward of 2,000,000 Points & 10M pBAT
+                  </div>
+                  <v-btn color="#039CFF" @click="handleToBatchingAi">
+                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  </v-btn>
+                </div>
+              </div>
+            </div>
+            <div class="task-item d-flex mb-4">
+              <div class="pa-6 task-img-wrap">
                 <img src="/img/airDrop/elite-airdrop.png" width="100%" alt="" />
               </div>
               <div class="pa-6 task-desc h-flex">
                 <div
                   class="fz-20 fw-b cursor-p text-white"
-                  @click="handleToElite"
+                  @click="$router.push('/quest/ai-world')"
                 >
                   Dive into the AI World with Aperture Finance, Chainbase, and
                   4EVERLAND!
@@ -116,8 +145,11 @@
                   <div class="reward fz-20 fw-b">
                     Shared Reward of 600 USDT & 50,000 $4EVER Points
                   </div>
-                  <v-btn color="#039CFF" @click="handleToElite">
-                    <span class="fw-b" style="color: #fff">Let's Go</span>
+                  <v-btn
+                    color="#039CFF"
+                    @click="$router.push('/quest/ai-world')"
+                  >
+                    <span class="fw-b" style="color: #fff">Claim</span>
                   </v-btn>
                 </div>
               </div>
@@ -420,8 +452,8 @@ export default {
         "https://t.me/bountybay_bot/deals?startapp=campaign_recGjT1wPikWAC7sM"
       );
     },
-    handleToElite() {
-      window.open("https://app.galxe.com/quest/4EVERLAND/GCKdetkwbs");
+    handleToBatchingAi() {
+      window.open("https://www.batching.ai");
     },
   },
 };

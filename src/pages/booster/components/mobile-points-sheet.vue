@@ -158,6 +158,9 @@ export default {
                   it.explorerAddress.slice(-4)
                 } helped me collect ${it.value} points.`;
                 break;
+              case "invite":
+                it.log = `I received ${it.value} points from my booster.`;
+                break;
               default:
                 break;
             }
