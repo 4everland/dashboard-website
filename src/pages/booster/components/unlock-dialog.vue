@@ -137,7 +137,7 @@ export default {
   methods: {
     async handleUnlock() {
       if (this.isTgMiniApp) {
-        // window.open("/booster");
+        // window.open("https://dashboard.4everland.org/booster");
         return this.$toast2(
           "This feature is coming soon for the bot. Stay tuned!",
           "success"

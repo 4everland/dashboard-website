@@ -125,7 +125,7 @@ export default {
       if (this.isTg) {
         this.stateStakeDrawerShow(false);
         // this.showStakeError = true;
-        window.open("/booster");
+        window.open("https://dashboard.4everland.org/booster");
         return;
       }
       this.$refs.StakeDialog.init();

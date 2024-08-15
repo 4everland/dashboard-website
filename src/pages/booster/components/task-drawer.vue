@@ -182,10 +182,10 @@ export default {
           window.open("https://ai-dev.4everland.app/");
         }
         if (item.actType == "storage") {
-          window.open("/bucket/storage/");
+          window.open("https://dashboard.4everland.org/bucket/storage/");
         }
         if (item.actType == "access_event_desktop") {
-          window.open("/booster/");
+          window.open("https://dashboard.4everland.org/booster/");
         }
       }
       const id = item.actId;
@@ -257,7 +257,7 @@ export default {
     },
     async onSign() {
       if (this.isTgMiniApp) {
-        window.open("/booster");
+        window.open("https://dashboard.4everland.org/booster");
         // return this.$toast2(
         //   "This feature is coming soon for the bot. Stay tuned!",
         //   "success"
