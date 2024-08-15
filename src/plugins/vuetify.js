@@ -5,7 +5,6 @@ import light from "./themes/light";
 import dark from "./themes/dark";
 
 import CUSTOM_ICONS from "@/icons/index";
-console.log(CUSTOM_ICONS);
 
 import "./extend";
 

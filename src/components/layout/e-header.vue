@@ -7,10 +7,10 @@
     <a href="/">
       <img v-if="asMobile" src="/img/svg/logo-m.svg" width="46" alt="" />
     </a>
-    <!-- <div>
-      <div class="fz-20 fw-b">Overview of 0x8807...f445</div>
+    <div v-if="path == '/overview'">
+      <div class="fz-20 fw-b">Overview of {{ teamInfo.name }}</div>
       <div class="fz-11 text--secondary">Welcome to 4EVERLAND Dashboard</div>
-    </div> -->
+    </div>
     <v-spacer></v-spacer>
     <div class="header-right-box">
       <div class="hidden-sm-and-down">
@@ -171,6 +171,9 @@ export default {
     avatar() {
       const info = this.userInfo;
       return info.avatar || "/img/bg/user/def-avatar.png";
+    },
+    path() {
+      return this.$route.path;
     },
   },
   watch: {
