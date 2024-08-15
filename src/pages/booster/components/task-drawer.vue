@@ -184,6 +184,9 @@ export default {
         if (item.actType == "storage") {
           window.open("/bucket/storage/");
         }
+        if (item.actType == "access_event_desktop") {
+          window.open("/booster/");
+        }
       }
       const id = item.actId;
       const { data } = await onNext(id);
