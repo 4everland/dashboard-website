@@ -63,15 +63,13 @@
               v-for="(item, index) in tasksLists"
               :key="item.actId"
               cols="12"
+              v-show="
+                item.deployOn == 'all' ||
+                (item.deployOn == 'pc' && !isTgMiniApp) ||
+                (item.deployOn == 'tg' && isTgMiniApp)
+              "
             >
-              <div
-                v-if="
-                  item.deployOn == 'all' ||
-                  (item.deployOn == 'pc' && !isTgMiniApp) ||
-                  (item.deployOn == 'tg' && isTgMiniApp)
-                "
-                class="task-item-box"
-              >
+              <div class="task-item-box">
                 <div class="task-item-left">
                   <img class="task-item-image" :src="item.icon" alt="" />
                   <div class="task-text-box">
