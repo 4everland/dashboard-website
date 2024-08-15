@@ -488,6 +488,7 @@ export default {
   backdrop-filter: blur(10px);
   .card-storage-status {
     .task-title {
+      text-align: center;
       text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
       font-size: 18px;
       font-weight: 700;

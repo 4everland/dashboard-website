@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-bottom-sheet v-model="sheet">
+    <v-bottom-sheet :value="value" @input="$emit('input', false)">
       <div class="sheet-content">
         <div class="user-card" v-show="!showLog">
           <div class="user-card-item fz-12">
@@ -100,9 +100,13 @@ import { fetchPointsHistory } from "@/api/booster";
 import BoosterPagination from "./booster-pagination.vue";
 
 export default {
+  props: {
+    value: {
+      type: Boolean,
+    },
+  },
   data() {
     return {
-      sheet: false,
       showLog: false,
       list: [],
       page: 1,
