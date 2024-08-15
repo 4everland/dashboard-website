@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="mt-2">
     <div class="d-flex flex-wrap" style="gap: 12px">
       <div
         @click="onSelect(it.chainId, it.label)"
-        class="network-label pa-3 al-c cursor-p d-flex mt-4"
+        class="network-label pa-3 al-c cursor-p d-flex"
         :class="{
           'border2 active font-weight-bold': actived(it.chainId, it.label),
         }"

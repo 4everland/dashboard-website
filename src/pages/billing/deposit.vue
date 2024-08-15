@@ -726,9 +726,10 @@ export default {
     bottom: 0;
     border-radius: 0px 0px 8px 8px;
     .pay-confirm {
+      border-radius: 0 0 8px 8px;
       color: #fff;
       .redeem-trigger {
-        color: #735ea1;
+        color: var(--v-primary-base);
       }
       .amount {
         font-size: 28px;
@@ -755,8 +756,8 @@ export default {
         top: -65px;
         right: 0;
         border-radius: 4px;
-        background: #d8c8ec;
-        color: #735ea1;
+        background: var(--v-background3-base);
+        color: var(--v-primary-base);
       }
       .confirm-tip::after {
         display: block;
@@ -765,7 +766,7 @@ export default {
         right: 30%;
         bottom: -20px;
         border: 10px solid transparent;
-        border-top-color: #d8c8ec;
+        border-top-color: var(--v-background3-base);
       }
     }
   }

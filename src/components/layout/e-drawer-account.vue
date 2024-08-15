@@ -71,7 +71,7 @@
           @click.native="onOut"
         >
           <v-icon color="primary" size="18">mdi-plus</v-icon>
-          <span class="color-1 ml-1">Invite members</span>
+          <span class="color-1 ml-1 fz-14">Invite members</span>
         </e-link>
       </template>
     </div>
@@ -156,6 +156,7 @@ export default {
   left: 24px;
   width: 240px;
   min-height: 120px;
+  border-radius: 4px;
   ul {
     padding: 0;
   }

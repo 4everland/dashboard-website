@@ -52,7 +52,13 @@
           <span v-if="!asMobile"> {{ item.label }}</span>
         </v-btn>
       </div>
-      <v-menu bottom min-width="128px" rounded offset-y>
+      <v-menu
+        bottom
+        min-width="128px"
+        content-class="avartar-menu"
+        rounded
+        offset-y
+      >
         <template v-slot:activator="{ on }">
           <v-btn
             icon
@@ -235,5 +241,11 @@ export default {
     align-items: center;
     gap: 16px;
   }
+}
+.avartar-menu {
+  border-radius: 4px !important;
+  border: 1px solid #eaecf0 !important;
+  box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08),
+    0px 4px 6px -2px rgba(16, 24, 40, 0.03) !important;
 }
 </style>

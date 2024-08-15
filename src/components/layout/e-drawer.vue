@@ -205,6 +205,8 @@
     <!-- <div class="mt-auto"></div> -->
     <div></div>
     <e-drawer-account></e-drawer-account>
+
+    <div class="mx-3" style="height: 1px; background: #eaecf0"></div>
     <div class="al-c pa-3" style="background: #f2f4f7">
       <a
         class="flex-1 ta-c"

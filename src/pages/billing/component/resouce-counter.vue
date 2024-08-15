@@ -81,7 +81,7 @@
         </v-tabs-items>
 
         <div
-          v-show="asMobile"
+          v-if="asMobile"
           @click="showCalc = !showCalc"
           class="pa-2 fz-12 textInfo--text d-flex item-center justify-center"
         >
