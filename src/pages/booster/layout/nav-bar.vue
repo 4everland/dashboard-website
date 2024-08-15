@@ -1,8 +1,19 @@
 <template>
   <div class="nav-bar">
     <div class="nav d-none d-md-flex align-center">
-      <div class="logo d-flex align-center" @click="handleToOfficial">
-        <img src="/img/booster/svg/logo.svg" width="157" alt="" />
+      <div class="logo d-flex align-center">
+        <a
+          href="https://www.4everland.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="/img/booster/svg/logo.svg"
+            width="157"
+            alt=""
+            style="display: block"
+          />
+        </a>
       </div>
       <div class="router-link d-flex align-center">
         <div
