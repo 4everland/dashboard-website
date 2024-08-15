@@ -29,12 +29,12 @@
     <div class="not-login d-none d-md-block" v-if="boostLocked">
       <div style="position: relative; width: 10px; height: 10px"></div>
       <div class="top-card">
-        <div class="card-storage mb-1 pos-r" style="width: 280px">
+        <div class="card-storage mb-1 pos-r">
           <img
             class="pos-a"
             style="left: 50%; top: -20px; transform: translateX(-50%)"
             src="/img/booster/boost-icon.png"
-            width="64"
+            width="80"
             alt=""
           />
           <div class="boost-btn pos-a cursor-p" @click="handleStartBoost">
@@ -397,18 +397,25 @@ export default {
 
 .not-login {
   position: absolute;
-  left: 45%;
-  top: 56%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  .card-storage {
+    fill: none;
+    backdrop-filter: none;
+    height: 131px;
+  }
   .top-card {
     position: absolute;
-    bottom: 22%;
-    // right: -226%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 
     .boost-btn {
       width: 232px;
       left: 50%;
       transform: translateX(-50%);
-      bottom: 10%;
+      bottom: 16%;
       text-align: center;
       padding: 4px 8px;
       font-weight: bold;
@@ -480,10 +487,11 @@ export default {
   }
 }
 .card-storage {
+  width: 280px;
   height: 98px;
   padding: 0 8px;
   background: url("/img/booster/svg/card_background_blue.svg") no-repeat;
-  background-size: 100%;
+  background-size: contain;
   fill: rgba(97, 114, 243, 0.05);
   backdrop-filter: blur(10px);
   .card-storage-status {
