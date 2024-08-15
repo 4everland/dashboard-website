@@ -56,11 +56,7 @@ export default {
       totalPages: 0,
       list: [],
       showLog: false,
-      attach: null,
     };
-  },
-  mounted() {
-    this.attach = document.querySelector(".booster-overview-bg");
   },
   methods: {
     async getList() {
