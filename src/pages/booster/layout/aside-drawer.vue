@@ -10,14 +10,14 @@
     fixed
     temporary
   >
-    <div class="drawer-header d-flex align-center justify-end px-2">
+    <!-- <div class="drawer-header d-flex align-center justify-end px-2">
       <img
         @click="$emit('input', false)"
         src="/img/booster/svg/close.svg"
         width="24"
         alt=""
       />
-    </div>
+    </div> -->
     <div class="drawer-content px-4">
       <div class="user-info d-flex align-center">
         <e-team-avatar
@@ -85,27 +85,7 @@ export default {
     value: Boolean,
   },
   data() {
-    return {
-      menuList: [
-        {
-          icon: "/img/booster/menu/home.svg",
-          name: "Home",
-          path: "/booster",
-        },
-        {
-          icon: "/img/booster/menu/elite.svg",
-
-          name: "Elite Quest",
-          path: "/booster/quest",
-        },
-        {
-          icon: "/img/booster/menu/leaderboard.svg",
-
-          name: "Leaderboard",
-          path: "/booster/leaderboard",
-        },
-      ],
-    };
+    return {};
   },
   computed: {
     ...mapState({
@@ -114,6 +94,39 @@ export default {
     ...mapGetters(["notLogin", "balance"]),
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
+
+    menuList() {
+      if (this.isTgMiniApp)
+        return [
+          {
+            icon: "/img/booster/menu/home.svg",
+            name: "Home",
+            path: "/booster",
+          },
+          {
+            icon: "/img/booster/menu/leaderboard.svg",
+            name: "Leaderboard",
+            path: "/booster/leaderboard",
+          },
+        ];
+      return [
+        {
+          icon: "/img/booster/menu/home.svg",
+          name: "Home",
+          path: "/booster",
+        },
+        {
+          icon: "/img/booster/menu/elite.svg",
+          name: "Elite Quest",
+          path: "/booster/quest",
+        },
+        {
+          icon: "/img/booster/menu/leaderboard.svg",
+          name: "Leaderboard",
+          path: "/booster/leaderboard",
+        },
+      ];
     },
   },
   methods: {
@@ -139,6 +152,7 @@ export default {
   height: 64px;
 }
 .drawer-content {
+  margin-top: 32px;
   .user-info {
     padding: 16px 8px;
     border-radius: 8px;
