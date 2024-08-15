@@ -26,13 +26,13 @@
         />
       </div>
 
-      <!-- <img
+      <img
         class="arrow-btn"
-        :class="{ rotate: true }"
+        :class="{ rotate: sheet }"
         src="/img/booster/svg/down-arrow.svg"
         width="12"
         alt=""
-      /> -->
+      />
     </div>
 
     <div v-if="boostLocked">
@@ -217,7 +217,7 @@
       </div>
     </div>
 
-    <mobile-points-sheet ref="pointsSheet"></mobile-points-sheet>
+    <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
   </div>
 </template>
 
@@ -229,7 +229,9 @@ import TgStartBoostOverlay from "../components/tg-start-boost-overlay.vue";
 export default {
   mixins: [mixin],
   data() {
-    return {};
+    return {
+      sheet: false,
+    };
   },
 
   computed: {
@@ -244,7 +246,7 @@ export default {
   },
   methods: {
     handleOpenSheet() {
-      this.$refs.pointsSheet.sheet = true;
+      this.sheet = true;
     },
   },
 };
@@ -311,10 +313,9 @@ export default {
   }
   .arrow-btn {
     position: absolute;
-    right: 7px;
-    top: 50%;
-    transform: translateY(-50%);
-    animation: all 1s ease;
+    right: 10px;
+    transition: all 0.3s ease;
+    transform-origin: center;
   }
   .arrow-btn.rotate {
     rotate: 180deg;
@@ -364,6 +365,7 @@ export default {
       backdrop-filter: blur(2px);
     }
     .task-title {
+      text-align: center;
       text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
       font-size: 14px;
       font-weight: 700;
