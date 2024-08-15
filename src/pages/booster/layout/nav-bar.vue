@@ -1,8 +1,19 @@
 <template>
   <div class="nav-bar">
     <div class="nav d-none d-md-flex align-center">
-      <div class="logo d-flex align-center" @click="handleToOfficial">
-        <img src="/img/booster/svg/logo.svg" width="157" alt="" />
+      <div class="logo d-flex align-center">
+        <a
+          href="https://www.4everland.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="/img/booster/svg/logo.svg"
+            width="157"
+            alt=""
+            style="display: block"
+          />
+        </a>
       </div>
       <div class="router-link d-flex align-center">
         <div
@@ -245,8 +256,19 @@
     <div
       class="nav-mobile px-2 d-flex align-center justify-space-between d-md-none"
     >
-      <div class="logo d-flex align-center" @click="handleToOfficial">
-        <img src="/img/booster/svg/logo.svg" width="157" alt="" />
+      <div class="logo d-flex align-center">
+        <a
+          href="https://www.4everland.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="/img/booster/svg/logo.svg"
+            width="157"
+            alt=""
+            style="display: block"
+          />
+        </a>
       </div>
       <div class="d-flex align-center">
         <v-menu
@@ -465,10 +487,6 @@ export default {
         this.inviteInfo.link,
         "Earn and maximize your $4EVER points through the thrilling 4EVER Boost campaign!"
       );
-    },
-
-    handleToOfficial() {
-      location.href = "https://www.4everland.org/";
     },
   },
   components: {
