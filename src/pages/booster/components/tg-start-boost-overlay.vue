@@ -38,6 +38,8 @@ export default {
   async created() {
     setTimeout(() => {
       this.loading = false;
+
+      console.log(this.loading, "loading...");
     }, 3000);
     this.tgMiniAppLogin();
   },
