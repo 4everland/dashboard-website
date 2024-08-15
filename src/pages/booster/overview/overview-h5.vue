@@ -12,6 +12,7 @@
         Points
 
         <ICountUp
+          id="mobile-point-receive"
           :delay="1000"
           :endVal="boosterInfo.totalPoint"
           :options="{
@@ -185,7 +186,7 @@
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
         </div>
-        <div class="top-card square-box">
+        <div class="top-card square-box" id="mobile-point-send">
           <span class="points fz-12" :class="{ locked: computedPoints < 1 }">
             {{
               computedPoints > boosterInfo.capacity
