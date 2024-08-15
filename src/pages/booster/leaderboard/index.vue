@@ -141,7 +141,6 @@ export default {
   :deep tbody tr.trigger {
     font-weight: bold;
     background: linear-gradient(
-        113deg,
         rgba(97, 114, 243, 0) 19.38%,
         rgba(97, 114, 243, 0.25) 84.92%
       ),
@@ -151,9 +150,7 @@ export default {
     }
   }
   :deep tbody tr:hover {
-    // font-weight: bold;
     background: linear-gradient(
-        113deg,
         rgba(97, 114, 243, 0) 19.38%,
         rgba(97, 114, 243, 0.25) 84.92%
       ),

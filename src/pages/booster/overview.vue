@@ -5,7 +5,7 @@
       <video
         v-else
         class="booster-overview-bg vid"
-        src="/img/booster/video/test-bg.webm"
+        src="/img/booster/video/bg-unlock.webm"
         autoplay
         loop
         muted
