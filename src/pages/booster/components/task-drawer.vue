@@ -13,7 +13,7 @@
       @input="stateTaskDrawerShow"
     >
       <v-container fluid style="padding: 24px 16px">
-        <div class="task-drawer-top">
+        <div class="task-drawer-top" v-if="!isTgMiniApp">
           <div class="drawer-title task-drawer-title">
             <span> Daily Task: Claim LAND </span>
             <v-btn
