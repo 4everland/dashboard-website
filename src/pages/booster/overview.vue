@@ -1,12 +1,16 @@
 <template>
   <div class="booster-overview">
     <div class="booster-overview-content" style="position: relative">
-      <img
-        class="booster-overview-bg"
-        id="booster-overview-bg"
-        :src="bgImg"
-        alt=""
-      />
+      <img class="booster-overview-bg" v-if="asMobile" :src="bgImg" alt="" />
+      <video
+        v-else
+        class="booster-overview-bg vid"
+        src="/img/booster/video/test-bg.webm"
+        autoplay
+        loop
+        muted
+      ></video>
+
       <div
         v-if="!boosterInfo.preActivities && !isTg"
         class="booster-overview-task"
@@ -257,6 +261,9 @@ export default {
     max-height: 100vh;
     width: 100%;
     display: block;
+  }
+  .booster-overview-bg.vid {
+    object-fit: cover;
   }
 }
 </style>
