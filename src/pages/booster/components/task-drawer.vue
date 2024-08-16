@@ -91,6 +91,7 @@
                       item.actType == 'daily_invite'
                     "
                     class="go-btn"
+                    width="84"
                     @click="stepNext(item, index)"
                     v-clipboard="inviteInfo.link"
                     @success="() => $toast2('Copied!', 'success')"
@@ -101,12 +102,14 @@
                       item.actStatus !== 'DONE' && item.extra.buttonName == 'Go'
                     "
                     class="go-btn"
+                    width="84"
                     @click="stepNext(item, index)"
                     >Go</v-btn
                   >
                   <v-btn
                     v-else-if="item.actStatus !== 'DONE'"
                     class="drawer-btn"
+                    width="84"
                     @click="stepNext(item, index)"
                     >{{ item.extra.buttonName }}</v-btn
                   >
