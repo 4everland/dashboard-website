@@ -37,8 +37,9 @@
   .v-list-item--active {
     color: var(--v-primary-base);
     background: var(--v-background2-base);
-    font-weight: 700;
-
+    span {
+      font-weight: 700;
+    }
     &.sub::before {
       opacity: 0;
     }
@@ -61,9 +62,9 @@
     app
     color="#FCFCFD"
   >
-    <div style="padding: 19px 0">
+    <div style="padding: 20px 0">
       <a href="/">
-        <img :src="`/img/svg/logo.svg`" height="26" class="d-b m-auto" />
+        <img :src="`/img/svg/logo.svg`" height="24" class="d-b ml-5" />
       </a>
     </div>
 

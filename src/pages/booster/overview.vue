@@ -128,7 +128,7 @@ export default {
         if (this.boosterInfo.baseRate.length == 0)
           return "/img/booster/bg-locked.png";
 
-        return "/img/booster/bg-unlocked.png";
+        return "/img/booster/video/bg-unlocked.webm";
       }
     },
     isVideo() {

@@ -1,8 +1,15 @@
 <template>
   <div class="booster-overview">
     <div style="position: relative">
-      <img class="booster-overview-bg" :src="bgImg" alt="" />
-
+      <img v-if="!isVideo" class="booster-overview-bg" :src="bgImg" alt="" />
+      <video
+        v-else
+        class="booster-overview-bg vid"
+        :src="bgImg"
+        autoplay
+        loop
+        muted
+      ></video>
       <div
         class="d-md-none d-block points-card fz-12 d-flex align-center justify-center"
       >
@@ -171,21 +178,24 @@ export default {
         return "/img/booster/mobile-bg-unlocked.png";
       } else {
         if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
-          return "/img/booster/bg.png";
+          return "/img/booster/video/bg.webm";
         if (!this.storageLocked && !this.networkLocked)
-          return "/img/booster/bg-s2n.png";
+          return "/img/booster/video/bg-s2n.webm";
         if (!this.storageLocked && !this.computingLocked)
-          return "/img/booster/bg-s2c.png";
-        if (!this.networkLocked && this.computingLocked)
-          return "/img/booster/bg-n2c.png";
-        if (!this.storageLocked) return "/img/booster/bg-storage.png";
-        if (!this.networkLocked) return "/img/booster/bg-network.png";
-        if (!this.computingLocked) return "/img/booster/bg-computed.png";
-        if (this.info.baseRate.length == 0) {
+          return "/img/booster/video/bg-s2c.webm";
+        if (!this.networkLocked && !this.computingLocked)
+          return "/img/booster/video/bg-n2c.webm";
+        if (!this.storageLocked) return "/img/booster/video/bg-storage.webm";
+        if (!this.networkLocked) return "/img/booster/video/bg-computed.webm";
+        if (!this.computingLocked) return "/img/booster/video/bg-network.webm";
+        if (this.boosterInfo.baseRate.length == 0)
           return "/img/booster/bg-locked.png";
-        }
-        return "/img/booster/bg-unlocked.png";
+
+        return "/img/booster/video/bg-unlocked.webm";
       }
+    },
+    isVideo() {
+      return /.webm/.test(this.bgImg);
     },
     currentComputed() {
       let curTimestamp = +new Date() / 1000;
@@ -367,6 +377,9 @@ export default {
     max-height: 100vh;
     width: 100%;
     display: block;
+  }
+  .booster-overview-bg.vid {
+    object-fit: cover;
   }
 
   .point-square {
