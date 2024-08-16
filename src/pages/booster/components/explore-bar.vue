@@ -12,7 +12,7 @@
       <div class="back-content flex-1 text-right">Back</div>
     </div>
     <div class="user-container px-3 flex-2" v-show="uid">
-      <e-team-avatar :size="42" :uid="uid"></e-team-avatar>
+      <e-team-avatar :size="asMobile ? 30 : 42" :uid="uid"></e-team-avatar>
       <span>{{
         address ? address.slice(0, 4) + "..." + address.slice(-4) : ""
       }}</span>
@@ -100,6 +100,16 @@ export default {
 @media screen and (max-width: 960px) {
   .explore-bar {
     width: calc(100% - 20px) !important;
+  }
+  .user-container {
+    font-size: 14px !important;
+  }
+  .back-content,
+  .explore-content {
+    font-size: 14px !important;
+  }
+  .points {
+    font-size: 14px !important;
   }
 }
 .explore-bar {
