@@ -1,5 +1,5 @@
 <template>
-  <div class="notice-container al-c" v-if="noticeList.length">
+  <div class="notice-container al-c mx-6" v-if="noticeList.length">
     <img width="20" class="mr-4" src="/img/svg/new-billing/notice.svg" alt="" />
     <v-carousel
       :show-arrows="false"

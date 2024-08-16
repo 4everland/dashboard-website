@@ -7,7 +7,7 @@
     <a href="/">
       <img v-if="asMobile" src="/img/svg/logo-m.svg" width="46" alt="" />
     </a>
-    <div v-if="path == '/overview'">
+    <div v-if="path == '/overview' && !asMobile">
       <div class="fz-20 fw-b">Overview of {{ teamInfo.name }}</div>
       <div class="fz-11 text--secondary">Welcome to 4EVERLAND Dashboard</div>
     </div>

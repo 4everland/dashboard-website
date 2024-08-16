@@ -1,11 +1,11 @@
 <template>
   <div class="booster-overview">
     <div class="booster-overview-content" style="position: relative">
-      <img class="booster-overview-bg" v-if="asMobile" :src="bgImg" alt="" />
+      <img class="booster-overview-bg" v-if="!isVideo" :src="bgImg" alt="" />
       <video
         v-else
         class="booster-overview-bg vid"
-        src="/img/booster/video/bg-unlock.webm"
+        :src="bgImg"
         autoplay
         loop
         muted
@@ -115,21 +115,24 @@ export default {
         return "/img/booster/mobile-bg-unlocked.png";
       } else {
         if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
-          return "/img/booster/bg.png";
+          return "/img/booster/video/bg.webm";
         if (!this.storageLocked && !this.networkLocked)
-          return "/img/booster/bg-s2n.png";
+          return "/img/booster/video/bg-s2n.webm";
         if (!this.storageLocked && !this.computingLocked)
           return "/img/booster/bg-s2c.png";
         if (!this.networkLocked && !this.computingLocked)
           return "/img/booster/bg-n2c.png";
-        if (!this.storageLocked) return "/img/booster/bg-storage.png";
-        if (!this.networkLocked) return "/img/booster/bg-network.png";
+        if (!this.storageLocked) return "/img/booster/video/bg-storage.webm";
+        if (!this.networkLocked) return "/img/booster/video/bg-network.webm";
         if (!this.computingLocked) return "/img/booster/bg-computed.png";
         if (this.boosterInfo.baseRate.length == 0) {
           return "/img/booster/bg-locked.png";
         }
         return "/img/booster/bg-unlocked.png";
       }
+    },
+    isVideo() {
+      return /.webm/.test(this.bgImg);
     },
     isTg() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;

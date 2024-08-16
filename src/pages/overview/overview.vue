@@ -5,7 +5,7 @@
     </div>
     <!-- <div class="user-plate d-flex flex-column flex-md-row justify-space-between mb-6"> -->
     <div
-      class="user-plate d-flex flex-column flex-md-row justify-space-between mb-6"
+      class="user-plate d-flex flex-column flex-md-row justify-space-between mx-6"
     >
       <div class="left flex-1">
         <div class="body pos-r pa-4">
@@ -56,16 +56,19 @@
             style="height: 100%"
           >
             <div
-              class="balance-content d-flex flex-row flex-sm-column align-center align-sm-start justify-space-between"
+              class="balance-content d-flex flex-column align-center align-sm-start justify-space-between"
             >
               <div>
-                <div>
-                  <span class="balance fw-b">{{ balance.land }}</span>
-                  <span class="fz-12 ml-2">{{ balance.unit }}</span>
-                  <span class="fz-20 fw-b ml-4" style="margin-right: 2px"
-                    >LAND</span
-                  >
+                <div class="d-flex align-end">
+                  <div>
+                    <span class="balance fw-b">{{ balance.land }}</span>
+                    <span class="fz-12 ml-2">{{ balance.unit }}</span>
+                    <span class="fz-20 fw-b ml-4" style="margin-right: 2px"
+                      >LAND</span
+                    >
+                  </div>
                   <a
+                    class="ml-2"
                     href="https://docs.4everland.org/get-started/billing-and-pricing/what-is-land"
                     target="__blank"
                   >
@@ -83,6 +86,7 @@
               <v-btn
                 elevation="0"
                 class="primary white--text mt-sm-6 ml-2 ml-sm-0"
+                style="padding: 0 48px"
                 @click="$router.push('/billing/deposit')"
                 v-ripple
               >
@@ -90,16 +94,12 @@
               </v-btn>
             </div>
 
-            <half-pie
-              style="50%"
-              :curInfo="landUsedMonthly"
-              :showName="true"
-            ></half-pie>
+            <half-pie :curInfo="landUsedMonthly" :showName="true"></half-pie>
           </div>
         </div>
       </div>
 
-      <div class="right">
+      <div class="right flex-1">
         <div class="pos-r carousel-container">
           <v-carousel
             :show-arrows="false"
@@ -177,7 +177,7 @@
       </v-row>
     </div>
 
-    <div class="trends-plate pa-6 mt-6">
+    <div class="trends-plate pa-6 pt-0">
       <h3 class="fz-20">Trends</h3>
       <trends-line></trends-line>
     </div>
@@ -451,7 +451,7 @@ export default {
 }
 
 .user-plate {
-  gap: 12px;
+  gap: 16px;
   .left,
   .right {
     border-radius: 8px;

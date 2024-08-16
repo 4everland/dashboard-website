@@ -36,7 +36,8 @@
   }
   .v-list-item--active {
     color: var(--v-primary-base);
-    background: none;
+    background: var(--v-background2-base);
+    font-weight: 700;
 
     &.sub::before {
       opacity: 0;
@@ -60,13 +61,13 @@
     app
     color="#FCFCFD"
   >
-    <div>
-      <a href="/" class="mt-8 d-b">
+    <div style="padding: 19px 0">
+      <a href="/">
         <img :src="`/img/svg/logo.svg`" height="26" class="d-b m-auto" />
       </a>
     </div>
 
-    <div class="pt-5" style="height: 100%; overflow-y: scroll">
+    <div class="mt-4" style="height: 100%; overflow-y: scroll">
       <v-list flat dense ref="drawerList" id="drawerList">
         <template v-for="(it, i) in list">
           <v-list-group
