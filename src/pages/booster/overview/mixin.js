@@ -85,6 +85,7 @@ export default {
     },
     async hanleClaim() {
       try {
+        if (this.computedPoints < 1) return;
         const data = await claimPoints();
         console.log(data);
         clearInterval(this.timer);
