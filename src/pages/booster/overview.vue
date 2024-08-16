@@ -156,7 +156,7 @@ export default {
       }
       if (this.$route.query) {
         this.$router.replace({
-          path: "/booster",
+          path: "/boost",
           query: queryObj,
         });
       }
@@ -168,7 +168,7 @@ export default {
   },
   beforeRouteEnter(_, from, next) {
     next((vm) => {
-      if (from.path == "/booster/explore") {
+      if (from.path == "/boost/explore") {
         vm.$store.dispatch("getBoosterUserInfo");
       }
     });

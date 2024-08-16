@@ -79,8 +79,8 @@ export default {
   mounted() {},
   methods: {
     onStake() {
-      // location.href = "https://t2.4everland.app/booster";
-      window.open("https://dashboard.4everland.org/booster", "_blank");
+      // location.href = "https://t2.4everland.app/boost";
+      window.open("https://dashboard.4everland.org/boost", "_blank");
     },
   },
 };

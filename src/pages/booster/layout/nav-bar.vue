@@ -396,15 +396,15 @@ export default {
       routers: [
         {
           name: "Home",
-          path: "/booster",
+          path: "/boost",
         },
         {
           name: "Elite Quest",
-          path: "/booster/quest",
+          path: "/boost/quest",
         },
         {
           name: "Leaderboard",
-          path: "/booster/leaderboard",
+          path: "/boost/leaderboard",
         },
       ],
       inviteInfo: {

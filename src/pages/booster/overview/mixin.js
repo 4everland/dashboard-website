@@ -121,7 +121,7 @@ export default {
       }
       if (this.$route.query) {
         this.$router.replace({
-          path: "/booster",
+          path: "/boost",
           query: queryObj,
         });
       }

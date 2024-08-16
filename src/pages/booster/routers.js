@@ -1,11 +1,11 @@
 import layout from "./layout";
 export default [
   {
-    path: "/booster",
+    path: "/boost",
     component: layout,
     children: [
       {
-        path: "/booster",
+        path: "/boost",
         component: () => import("./overview"),
         meta: {
           title: "Booster",
@@ -15,7 +15,7 @@ export default [
         },
       },
       {
-        path: "/booster/quest",
+        path: "/boost/quest",
         component: () => import("./eliteQuest"),
         meta: {
           title: "Elite Quest",
@@ -25,7 +25,7 @@ export default [
         },
       },
       {
-        path: "/booster/leaderboard",
+        path: "/boost/leaderboard",
         component: () => import("./leaderboard"),
         meta: {
           title: "Leaderboard",
@@ -36,7 +36,7 @@ export default [
       },
       {
         name: "booster-explore",
-        path: "/booster/explore/:id?",
+        path: "/boost/explore/:id?",
         component: () => import("./explore"),
         meta: {
           title: "Explore",

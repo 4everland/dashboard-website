@@ -69,7 +69,7 @@ export default {
           icon: "/img/booster/nav/gift.png",
           activityIcon: "/img/booster/nav/gift.png",
           name: "Coming soon",
-          path: "/booster/explore",
+          path: "/boost/explore",
           isOpen: false,
           action() {},
         },
@@ -77,7 +77,7 @@ export default {
           icon: "/img/booster/nav/staking.png",
           activityIcon: "/img/booster/nav/staking-active.png",
           name: "Staking",
-          path: "/booster/explore",
+          path: "/boost/explore",
           isOpen: true,
           action() {
             _this.toggleStakeDrawer();
@@ -87,7 +87,7 @@ export default {
           icon: "/img/booster/nav/explore.png",
           activityIcon: "/img/booster/nav/explore-active.png",
           name: "Explore",
-          path: "/booster/explore",
+          path: "/boost/explore",
           isOpen: true,
           action() {
             _this.toggleExplore();
@@ -97,7 +97,7 @@ export default {
           icon: "/img/booster/nav/tasks.png",
           activityIcon: "/img/booster/nav/tasks-active.png",
           name: "Tasks",
-          path: "/booster/explore",
+          path: "/boost/explore",
           isOpen: true,
           action() {
             _this.toggleTaskDrawer();
@@ -107,7 +107,7 @@ export default {
           icon: "/img/booster/nav/gaming.png",
           activityIcon: "/img/booster/nav/gaming.png",
           name: "Coming soon",
-          path: "/booster/explore",
+          path: "/boost/explore",
           isOpen: false,
           action() {},
         },
@@ -150,7 +150,7 @@ export default {
           "Whoops, you've used all your exploration times. Try again tomorrow!",
           "error"
         );
-      this.$router.push("/booster/explore");
+      this.$router.push("/boost/explore");
     },
     toggleTaskDrawer() {
       if (this.notLogin) {

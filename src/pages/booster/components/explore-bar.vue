@@ -2,7 +2,7 @@
   <div class="explore-bar py-2 d-flex align-center">
     <div
       class="px-2 px-md-6 flex-1 d-flex align-center cursor-p"
-      @click="$router.push('/booster')"
+      @click="$router.push('/boost')"
     >
       <img
         src="/img/booster/explore/back.svg"

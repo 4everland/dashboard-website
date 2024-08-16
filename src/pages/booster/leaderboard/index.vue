@@ -73,7 +73,7 @@ export default {
   },
   created() {
     if (this.notLogin) {
-      this.$router.push("/booster");
+      this.$router.push("/boost");
       return;
     }
     this.getList();

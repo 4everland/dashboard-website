@@ -240,7 +240,7 @@ export default {
   },
 
   async created() {
-    if (this.notLogin) return this.$router.replace("/booster");
+    if (this.notLogin) return this.$router.replace("/boost");
     await this.getExploreInfo();
     this.pointCount();
   },
@@ -261,7 +261,7 @@ export default {
       const { data, message, code } = await fectchExploreId();
       this.$store.dispatch("getExploreRemain");
       if (code == 11005) {
-        this.$router.push("/booster");
+        this.$router.push("/boost");
       }
       if (!data) throw new Error(message, code);
       return data.explorationId;

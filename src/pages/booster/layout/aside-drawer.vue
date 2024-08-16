@@ -102,29 +102,29 @@ export default {
           {
             icon: "/img/booster/menu/home.svg",
             name: "Home",
-            path: "/booster",
+            path: "/boost",
           },
           {
             icon: "/img/booster/menu/leaderboard.svg",
             name: "Leaderboard",
-            path: "/booster/leaderboard",
+            path: "/boost/leaderboard",
           },
         ];
       return [
         {
           icon: "/img/booster/menu/home.svg",
           name: "Home",
-          path: "/booster",
+          path: "/boost",
         },
         {
           icon: "/img/booster/menu/elite.svg",
           name: "Elite Quest",
-          path: "/booster/quest",
+          path: "/boost/quest",
         },
         {
           icon: "/img/booster/menu/leaderboard.svg",
           name: "Leaderboard",
-          path: "/booster/leaderboard",
+          path: "/boost/leaderboard",
         },
       ];
     },
@@ -137,7 +137,7 @@ export default {
     },
     handleToDeposit() {
       if (this.isTgMiniApp) {
-        // window.open("https://dashboard.4everland.org/booster");
+        // window.open("https://dashboard.4everland.org/boost");
         return this.$toast2(
           "This feature is coming soon for the bot. Stay tuned!",
           "success"
