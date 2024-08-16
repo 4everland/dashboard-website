@@ -48,11 +48,10 @@
     <div v-else>
       <div class="point-square d-none d-md-block cursor-p" @click="hanleClaim">
         <div style="position: relative; width: 10px; height: 10px"></div>
-        <div class="top-card square-box">
+        <div class="top-card square-box" id="point-send">
           <div
             class="points fz-14 d-flex align-center"
             :class="{ locked: computedPoints < 1 }"
-            id="point-send"
           >
             <span class="mr-1">
               {{
@@ -401,6 +400,8 @@ export default {
   top: 50%;
   transform: translate(-50%, -50%);
   .card-storage {
+    background: url("/img/booster/svg/card_background_blue.svg") no-repeat;
+    background-size: contain;
     fill: none;
     backdrop-filter: none;
     height: 131px;
@@ -490,7 +491,7 @@ export default {
   width: 280px;
   height: 98px;
   padding: 0 8px;
-  background: url("/img/booster/svg/card_background_blue.svg") no-repeat;
+  background: url("/img/booster/svg/card_background_blue2.svg") no-repeat;
   background-size: contain;
   fill: rgba(97, 114, 243, 0.05);
   backdrop-filter: blur(10px);

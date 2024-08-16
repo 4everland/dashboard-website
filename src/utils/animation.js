@@ -12,8 +12,9 @@ export const coinMove = (curId, targetId) => {
     coin.className = "coin";
 
     coin.src = "/img/booster/4ever-point-icon.png";
-    coin.style.left = "0px";
-    coin.style.top = "0px";
+    coin.style.left = "50%";
+    coin.style.top = "50%";
+    coin.style.transform = "translate(-50%, -50%)";
     coin.style.width = "16px";
     coin.style.height = "16px";
     coin.style.position = "absolute";
@@ -40,16 +41,16 @@ export const coinMove = (curId, targetId) => {
     duration: 1.5,
     x: function () {
       //function-based value
-      return targetRect.left - walletRect.left;
+      return targetRect.left - targetRect.width * 0.5 - 16 - walletRect.left;
     },
     y: function () {
       //function-based value
-      return targetRect.top - walletRect.top;
+      return targetRect.top - targetRect.height * 0.5 - 16 - walletRect.top;
     },
     stagger: 0.05,
     ease: "power3.in",
     onComplete: () => {
-      window.gsap.to(coins, { duration: 0.5, opacity: 0 });
+      window.gsap.to(coins, { duration: 0.2, opacity: 0 });
       coins.forEach((it) => {
         wallet.removeChild(it);
       });
