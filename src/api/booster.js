@@ -11,8 +11,12 @@ const boosterRequest = new BaseRequest({
       return config;
     },
     responseInterceptor(res) {
-      if (res.data.code == 401 || res.data.code == 500) {
+      if (res.data.code == 401) {
+        localStorage.clear();
+        location.reload();
         throw new Error("Access Denied!");
+      } else if (res.data.code == 500) {
+        throw new Error("Serivce Error!");
       }
       return res.data;
     },
