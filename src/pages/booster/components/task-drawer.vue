@@ -86,6 +86,18 @@
                 <div class="task-item-right">
                   <v-btn
                     v-if="
+                      item.actStatus !== 'DONE' &&
+                      item.extra.buttonName == 'Go' &&
+                      item.actType == 'daily_invite'
+                    "
+                    class="go-btn"
+                    @click="stepNext(item, index)"
+                    v-clipboard="inviteInfo.link"
+                    @success="() => $toast2('Copied!', 'success')"
+                    >Go</v-btn
+                  >
+                  <v-btn
+                    v-else-if="
                       item.actStatus !== 'DONE' && item.extra.buttonName == 'Go'
                     "
                     class="go-btn"
@@ -184,7 +196,7 @@ export default {
       let _this = this;
       if (item.extra.buttonName == "Go") {
         if (item.actType == "4ever_chat") {
-          window.open("https://ai-dev.4everland.app/");
+          window.open("https://chat.4everland.org/");
         }
         if (item.actType == "storage") {
           window.open("https://dashboard.4everland.org/bucket/storage/");
@@ -228,31 +240,31 @@ export default {
           this.getTasks();
           break;
         case "COPY":
-          if (actType == "daily_invite") {
-            try {
-              const textToCopy = this.inviteInfo.link;
-              this.$copyText(textToCopy).then(
-                (e) => {
-                  this.$toast2("Copied!");
-                },
-                function (e) {
-                  console.log(e);
-                }
-              );
-            } catch (error) {
-              console.error(error);
-            }
-          } else {
-            const textToCopy = data.action.web.message;
-            this.$copyText(textToCopy).then(
-              (e) => {
-                this.$toast2("Copied!");
-              },
-              function (e) {
-                console.log(e);
-              }
-            );
-          }
+          // if (actType == "daily_invite") {
+          //   try {
+          //     const textToCopy = this.inviteInfo.link;
+          //     this.$copyText(textToCopy).then(
+          //       (e) => {
+          //         this.$toast2("Copied!");
+          //       },
+          //       function (e) {
+          //         console.log(e);
+          //       }
+          //     );
+          //   } catch (error) {
+          //     console.error(error);
+          //   }
+          // } else {
+          //   const textToCopy = data.action.web.message;
+          //   this.$copyText(textToCopy).then(
+          //     (e) => {
+          //       this.$toast2("Copied!");
+          //     },
+          //     function (e) {
+          //       console.log(e);
+          //     }
+          //   );
+          // }
           break;
         default:
           this.getTasks();
