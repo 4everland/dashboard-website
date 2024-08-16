@@ -73,7 +73,10 @@ export default {
         }, 0);
 
         console.log(basicComputed + boostComputed + boosterInfo.computed);
-        return basicComputed + boostComputed + boosterInfo.computed;
+        return (
+          (basicComputed + boostComputed) * (boosterInfo.rateBuff / 100 + 1) +
+          boosterInfo.computed
+        );
       }
       const basicComputed = boosterInfo.baseRate.reduce((pre, it) => {
         if (curTimestamp < it.start) {
@@ -93,7 +96,7 @@ export default {
         return pre + ((endTimeStamp - it.start) / 3600) * it.rate;
       }, 0);
 
-      return basicComputed + boostComputed;
+      return (basicComputed + boostComputed) * (boosterInfo.rateBuff / 100 + 1);
     },
   },
   mutations: {

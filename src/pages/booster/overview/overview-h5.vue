@@ -93,7 +93,7 @@
               </div>
 
               <div class="task-title">STORAGE BOOST</div>
-              <div class="d-flex align-center justify-space-between fz-12">
+              <div class="d-flex align-center justify-space-between fz-10">
                 +100 pts/h & 2,500 Capacity
               </div>
             </div>
@@ -134,7 +134,7 @@
                 <div>Unlock with 1 million LAND</div>
               </div>
               <div class="task-title">COMPUTING BOOST</div>
-              <div class="d-flex align-center justify-space-between fz-12">
+              <div class="d-flex align-center justify-space-between fz-10">
                 +100 pts/h & 2,500 Capacity
               </div>
             </div>
@@ -175,7 +175,7 @@
                 <div>Unlock with 1 million LAND</div>
               </div>
               <div class="task-title">NETWORK BOOST</div>
-              <div class="d-flex align-center justify-space-between fz-12">
+              <div class="d-flex align-center justify-space-between fz-10">
                 +100 pts/h & 2,500 Capacity
               </div>
             </div>
@@ -369,7 +369,7 @@ export default {
       text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
       font-size: 14px;
       font-weight: 700;
-      padding: 4px 8px;
+      padding: 4px 0px;
       margin: 4px 0;
       border-top: 1px solid #a4bcfd;
       border-bottom: 1px solid #a4bcfd;
