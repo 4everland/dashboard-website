@@ -56,7 +56,7 @@
             style="height: 100%"
           >
             <div
-              class="balance-content d-flex flex-column align-center align-sm-start justify-space-between"
+              class="balance-content d-flex flex-column align-start justify-space-between"
             >
               <div>
                 <div class="d-flex align-end">
@@ -85,7 +85,7 @@
 
               <v-btn
                 elevation="0"
-                class="primary white--text mt-sm-6 ml-2 ml-sm-0"
+                class="primary white--text mt-sm-6 mt-4"
                 style="padding: 0 48px"
                 @click="$router.push('/billing/deposit')"
                 v-ripple
