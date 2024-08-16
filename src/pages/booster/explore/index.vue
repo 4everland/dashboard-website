@@ -134,6 +134,7 @@ export default {
   computed: {
     ...mapState({
       exploreRemain: (s) => s.moduleBooster.exploreRemain,
+      currentDate: (s) => s.moduleBooster.currentDate,
     }),
     ...mapGetters(["notLogin"]),
 
@@ -219,7 +220,10 @@ export default {
             pre + ((endTimeStamp - this.info.computeTimestamp) / 3600) * it.rate
           );
         }, 0);
-        return basicComputed + boostComputed + this.info.computed;
+        return (
+          (basicComputed + boostComputed) * (this.info.rateBuff / 100 + 1) +
+          this.info.computed
+        );
       }
       const basicComputed = this.info.baseRate.reduce((pre, it) => {
         if (curTimestamp < it.start) return pre;
@@ -236,13 +240,18 @@ export default {
         return pre + ((endTimeStamp - it.start) / 3600) * it.rate;
       }, 0);
 
-      return basicComputed + boostComputed;
+      return (basicComputed + boostComputed) * (this.info.rateBuff / 100 + 1);
     },
     baseRate() {
       return this.info.baseRate.reduce((prev, it) => it.rate + prev, 0);
     },
     boostRate() {
-      return this.info.boosts.reduce((prev, it) => it.rate + prev, 0);
+      return this.info.boosts.reduce((prev, it) => {
+        if (this.currentDate > it.end && it.end > 0) {
+          return 0 + prev;
+        }
+        return it.rate + prev;
+      }, 0);
     },
     totalRate() {
       return (this.baseRate + this.boostRate) * (1 + this.info.rateBuff / 100);
