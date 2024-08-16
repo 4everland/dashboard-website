@@ -47,10 +47,11 @@ export const coinMove = (curId, targetId) => {
       //function-based value
       return targetRect.top - targetRect.height * 0.5 - 16 - walletRect.top;
     },
+    opacity: 0,
     stagger: 0.05,
     ease: "power3.in",
     onComplete: () => {
-      window.gsap.to(coins, { duration: 0.2, opacity: 0 });
+      // window.gsap.to(coins, { duration: 0.2, opacity: 0 });
       coins.forEach((it) => {
         wallet.removeChild(it);
       });
