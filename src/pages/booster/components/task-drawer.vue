@@ -51,7 +51,12 @@
                   </div>
                 </div>
                 <div class="daily-sign-item-bottom">
-                  {{ signDays % 7 == index ? "Today" : `Day ${item.step}` }}
+                  {{
+                    (!signed && signDays % 7 == index) ||
+                    (signed && (signDays % 7) - 1 == index)
+                      ? "Today"
+                      : `Day ${item.step}`
+                  }}
                 </div>
               </div>
             </div>

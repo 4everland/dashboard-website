@@ -228,7 +228,7 @@ export default {
       }
       .nft-drawer-desc {
         color: rgba(255, 255, 255, 0.6);
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 400;
       }
       .nft-drawer-btn-box {
@@ -292,7 +292,7 @@ export default {
         border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
         .nft-drawer-desc {
-          font-size: 16px;
+          font-size: 12px;
         }
       }
     }
