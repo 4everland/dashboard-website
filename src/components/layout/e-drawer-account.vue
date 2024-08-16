@@ -25,12 +25,12 @@
           </div>
         </div>
       </div>
-      <div>
+      <div class="switch-icon">
         <img :src="`/img/svg/drawer/switch.svg`" height="16" />
       </div>
     </div>
-    <div class="pos-a bg-white shadow-1 account-card pa-3" v-show="showAccount">
-      <div v-if="showTip">
+    <div class="pos-a bg-white shadow-1 account-card" v-show="showAccount">
+      <div v-if="showTip" class="pa-3">
         <h3>Tip</h3>
         <div class="pa-2 fz-14">
           Switch your owner account and member account here.
@@ -40,7 +40,12 @@
         </div>
       </div>
       <template v-else>
-        <div v-show="row.subs.length" v-for="(row, i) in list" :key="i">
+        <div
+          v-show="row.subs.length"
+          v-for="(row, i) in list"
+          :key="i"
+          class="pa-3"
+        >
           <div style="font-size: 12px; color: #667085">{{ row.title }}</div>
           <ul class="mt-2 ml-3">
             <li
@@ -67,8 +72,9 @@
         </div>
         <e-link
           href="/account/member"
-          class="al-c flex-center mt-6 hover-1"
+          class="al-c flex-center py-3 hover-1"
           @click.native="onOut"
+          style="background-color: #f9fafb"
         >
           <v-icon color="primary" size="18">mdi-plus</v-icon>
           <span class="color-1 ml-1 fz-14">Invite members</span>
@@ -168,5 +174,8 @@ export default {
   border-radius: 4px;
   background: #eaecf0;
   margin-right: 8px;
+}
+.switch-icon:hover {
+  background-color: #eaecf0;
 }
 </style>
