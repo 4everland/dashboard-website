@@ -5,7 +5,7 @@
     </div>
     <!-- <div class="user-plate d-flex flex-column flex-md-row justify-space-between mb-6"> -->
     <div
-      class="user-plate d-flex flex-column flex-md-row justify-space-between mx-6"
+      class="user-plate d-flex flex-column flex-md-row justify-space-between mx-3"
     >
       <div class="left flex-1">
         <div class="body pos-r pa-4">
@@ -136,7 +136,7 @@
       </div>
     </div>
 
-    <div class="usage-plate pa-6">
+    <div class="usage-plate py-6 px-3">
       <div
         class="combo d-flex flex-column flex-sm-row align-sm-center justify-space-between"
       >
@@ -177,7 +177,7 @@
       </v-row>
     </div>
 
-    <div class="trends-plate pa-6 pt-0">
+    <div class="trends-plate py-6 pt-0 px-3">
       <h3 class="fz-20">Trends</h3>
       <trends-line></trends-line>
     </div>

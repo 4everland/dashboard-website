@@ -119,15 +119,15 @@ export default {
         if (!this.storageLocked && !this.networkLocked)
           return "/img/booster/video/bg-s2n.webm";
         if (!this.storageLocked && !this.computingLocked)
-          return "/img/booster/bg-s2c.png";
+          return "/img/booster/video/bg-s2c.webm";
         if (!this.networkLocked && !this.computingLocked)
-          return "/img/booster/bg-n2c.png";
+          return "/img/booster/video/bg-n2c.webm";
         if (!this.storageLocked) return "/img/booster/video/bg-storage.webm";
-        if (!this.networkLocked) return "/img/booster/video/bg-network.webm";
-        if (!this.computingLocked) return "/img/booster/bg-computed.png";
-        if (this.boosterInfo.baseRate.length == 0) {
+        if (!this.networkLocked) return "/img/booster/video/bg-computed.webm";
+        if (!this.computingLocked) return "/img/booster/video/bg-network.webm";
+        if (this.boosterInfo.baseRate.length == 0)
           return "/img/booster/bg-locked.png";
-        }
+
         return "/img/booster/bg-unlocked.png";
       }
     },

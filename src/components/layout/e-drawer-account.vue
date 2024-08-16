@@ -20,13 +20,13 @@
           <span class="mr-auto fz-14 line-1 textPrimary--text">{{
             teamInfo.name
           }}</span>
-          <div class="fz-12 primary--text">
+          <div class="fz-12 primary--text" style="font-weight: 500">
             {{ teamInfo.isOwner ? "Owner" : "Member" }}
           </div>
         </div>
       </div>
       <div class="switch-icon">
-        <img :src="`/img/svg/drawer/switch.svg`" height="16" />
+        <img class="d-b" :src="`/img/svg/drawer/switch.svg`" height="16" />
       </div>
     </div>
     <div class="pos-a bg-white shadow-1 account-card" v-show="showAccount">

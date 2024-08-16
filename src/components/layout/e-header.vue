@@ -1,5 +1,11 @@
 <template>
-  <v-app-bar app height="64" color="#fff" elevation="0">
+  <v-app-bar
+    app
+    height="64"
+    color="#fff"
+    elevation="0"
+    style="padding: 0px 8px"
+  >
     <v-app-bar-nav-icon
       class="d-block d-lg-none"
       @click="$setMsg('showDrawer')"
