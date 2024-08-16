@@ -14,7 +14,9 @@
       <v-container fluid>
         <div class="nft-drawer-top">
           <div class="drawer-title nft-drawer-title">T4EVER STAKING</div>
-          <!-- <div class="nft-drawer-desc">Receive a 10% Staking Yield</div> -->
+          <div class="nft-drawer-desc">
+            Each T4EVER token staked contributes to a 0.005% Staking Yield.
+          </div>
           <div class="nft-drawer-btn-box">
             <div class="nft-drawer-logo">
               <img class="logo" src="/favicon.ico" alt="" />
@@ -226,7 +228,7 @@ export default {
       }
       .nft-drawer-desc {
         color: rgba(255, 255, 255, 0.6);
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 400;
       }
       .nft-drawer-btn-box {
@@ -290,7 +292,7 @@ export default {
         border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
         .nft-drawer-desc {
-          font-size: 16px;
+          font-size: 12px;
         }
       }
     }
