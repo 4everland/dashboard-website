@@ -1,5 +1,5 @@
 <template>
-  <div class="al-c">
+  <div class="al-c mb-4">
     <!-- <div
       :class="!asMobile || fix ? 'pos-a right-0' : 'ta-r mb-5'"
       :style="{
