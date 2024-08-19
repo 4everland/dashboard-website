@@ -35,7 +35,7 @@
       </div>
 
       <v-divider vertical class="mr-4 hidden-sm-and-down"></v-divider>
-      <div class="menu-btn-box mr-4 mr-sm-2">
+      <!-- <div class="menu-btn-box mr-4 mr-sm-2">
         <v-btn
           v-for="item in menuBtnList"
           class="px-0 px-md-4"
@@ -57,7 +57,7 @@
           />
           <span v-if="!asMobile"> {{ item.label }}</span>
         </v-btn>
-      </div>
+      </div> -->
       <v-menu
         bottom
         min-width="128px"

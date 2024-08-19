@@ -24,6 +24,7 @@ import { mapGetters } from "vuex";
 import TgStartBoostLoading from "./tg-start-boost-loading.vue";
 import { initTgBoost } from "@/api/booster";
 import { sendTGStoken, sendStoken } from "@/api/login.js";
+import { bus } from "@/utils/bus";
 
 export default {
   data() {
@@ -61,6 +62,7 @@ export default {
       await initTgBoost(code || "");
       this.tgLoading = false;
       this.$store.dispatch("getBoosterUserInfo");
+      bus.$emit("showEndBoostEvent");
     },
 
     async tgMiniAppLogin() {

@@ -35,7 +35,6 @@
           v-model="showStartBoost"
           @showEndPoints="showEndBoost = true"
         ></start-boosting>
-        <end-boosting v-model="showEndBoost"></end-boosting>
         <unlock-dialog
           v-model="showUnlockDialog"
           :unlockStage="unlockStage"
@@ -46,6 +45,7 @@
         <task-drawer v-if="userInfo.uid"></task-drawer>
         <bind-dialog v-model="showBindWallet"></bind-dialog>
       </template>
+      <end-boosting v-model="showEndBoost"></end-boosting>
     </div>
   </div>
 </template>
@@ -61,7 +61,7 @@ import BottomBar from "./components/bottom-bar.vue";
 import BindDialog from "./components/bind-dialog.vue";
 import UnlockDialog from "./components/unlock-dialog.vue";
 import TgStartBoostOverlay from "./components/tg-start-boost-overlay.vue";
-
+import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
 
 export default {
@@ -147,6 +147,9 @@ export default {
   },
 
   async created() {
+    bus.$on("showEndBoostEvent", () => {
+      this.showEndBoost = true;
+    });
     this.timer = setInterval(() => {
       this.$store.commit("updateDate");
     }, 1000);

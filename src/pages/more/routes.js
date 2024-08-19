@@ -11,17 +11,17 @@ export default [
       title: "Changelog",
     },
   },
-  {
-    path: "/task-hub",
-    component: () => import("./task-hub-new"),
-    meta: {
-      title: "Task Hub",
-      isTab: true,
-      hideNav: true,
-      noLogin: false,
-      newLayout: true,
-    },
-  },
+  // {
+  //   path: "/task-hub",
+  //   component: () => import("./task-hub-new"),
+  //   meta: {
+  //     title: "Task Hub",
+  //     isTab: true,
+  //     hideNav: true,
+  //     noLogin: false,
+  //     newLayout: true,
+  //   },
+  // },
   {
     path: "/first-landing",
     component: () => import("./first-landing"),
@@ -32,16 +32,16 @@ export default [
       noLogin: 1,
     },
   },
-  {
-    path: "/quest",
-    component: () => import("./airdrop"),
-    meta: {
-      title: "QUEST",
-      hideNav: 1,
-      isTab: 1,
-      noLogin: 1,
-    },
-  },
+  // {
+  //   path: "/quest",
+  //   component: () => import("./airdrop"),
+  //   meta: {
+  //     title: "QUEST",
+  //     hideNav: 1,
+  //     isTab: 1,
+  //     noLogin: 1,
+  //   },
+  // },
   {
     path: "/quest/bnb",
     component: () => import("./bnb-airdrop"),
