@@ -314,7 +314,13 @@ export default {
             this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
           } else {
             if (data.action.web.message) {
-              if (this.isTgMiniApp) return window.open(data.action.web.message);
+              if (this.isTgMiniApp) {
+                if (this.asMobile) {
+                  return (location.href = data.action.web.message);
+                } else {
+                  return window.open(data.action.web.message);
+                }
+              }
               this.asMobile
                 ? (location.href = data.action.web.message)
                 : window.open(data.action.web.message);
