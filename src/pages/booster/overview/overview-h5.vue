@@ -89,7 +89,7 @@
                   @click="handleUnlock(0)"
                   >Unlock</v-btn
                 >
-                <div>Unlock with 1 million LAND</div>
+                <div v-show="!isTg">Unlock with 1 million LAND</div>
               </div>
 
               <div class="task-title">STORAGE BOOST</div>
@@ -131,7 +131,7 @@
                   @click="handleUnlock(1)"
                   >Unlock</v-btn
                 >
-                <div>Unlock with 1 million LAND</div>
+                <div v-show="!isTg">Unlock with 1 million LAND</div>
               </div>
               <div class="task-title">COMPUTING BOOST</div>
               <div class="d-flex align-center justify-space-between fz-10">
@@ -172,7 +172,7 @@
                   @click="handleUnlock(2)"
                   >Unlock</v-btn
                 >
-                <div>Unlock with 1 million LAND</div>
+                <div v-show="!isTg">Unlock with 1 million LAND</div>
               </div>
               <div class="task-title">NETWORK BOOST</div>
               <div class="d-flex align-center justify-space-between fz-10">

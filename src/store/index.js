@@ -193,7 +193,12 @@ const store = new Vuex.Store({
     },
     async getCode({ commit }) {
       try {
-        const { data } = await Vue.prototype.$http.get("$auth/invitation/code");
+        const { data } = await Vue.prototype.$http.get(
+          "$auth/invitation/code",
+          {
+            noTip: true,
+          }
+        );
         commit("SET_CODE", data);
       } catch (error) {
         // throw error
