@@ -13,6 +13,7 @@ const boosterRequest = new BaseRequest({
     responseInterceptor(res) {
       if (res.data.code == 401) {
         localStorage.clear();
+        localStorage.loginTo("/boost");
         location.reload();
         throw new Error("Access Denied!");
       } else if (res.data.code == 500) {

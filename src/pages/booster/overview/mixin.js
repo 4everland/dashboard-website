@@ -85,7 +85,8 @@ export default {
     },
     async hanleClaim() {
       try {
-        if (this.computedPoints < 1) return;
+        if (this.computedPoints < 1)
+          return this.$toast2("Points below 1 unclaimable.", "error");
         const data = await claimPoints();
         console.log(data);
         clearInterval(this.timer);

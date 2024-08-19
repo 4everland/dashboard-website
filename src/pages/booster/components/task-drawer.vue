@@ -114,7 +114,10 @@
                     >{{ item.extra.buttonName }}</v-btn
                   >
 
-                  <v-btn v-if="item.actStatus == 'DONE'" class="done-btn"
+                  <v-btn
+                    v-if="item.actStatus == 'DONE'"
+                    class="done-btn"
+                    width="84"
                     >Done</v-btn
                   >
                 </div>

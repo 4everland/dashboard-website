@@ -27,16 +27,16 @@
           >
             <v-btn
               class="cancel-btn"
-              width="148px"
-              height="50px"
+              width="120px"
+              height="48px"
               outlined
               @click="$emit('input', false)"
               >Cancel</v-btn
             >
             <v-btn
               class="unlock-btn"
-              width="148px"
-              height="50px"
+              width="120px"
+              height="48px"
               outlined
               @click="handleUnlock"
               :loading="unlockLoading"
@@ -238,7 +238,7 @@ export default {
 
 .cancel-btn {
   color: rgba(255, 255, 255, 0.8) !important;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: 0;
   border-radius: 4px;
@@ -248,7 +248,7 @@ export default {
 .unlock-btn {
   color: #fff !important;
   text-shadow: 0px 0px 8px #6172f3;
-  font-size: 20px;
+  font-size: 16px;
   letter-spacing: 0;
   font-weight: 500;
   line-height: normal;

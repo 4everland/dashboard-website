@@ -219,6 +219,12 @@ async function handleMsg(status, code, msg, config) {
     msg = msg || "Unknown Error";
     const vue = Vue.prototype;
     await vue.$sleep(10);
+    if (process.env.VUE_APP_TG_VERSION == "true") {
+      localStorage.clear();
+      localStorage.loginTo("/boost");
+      location.reload();
+      return;
+    }
     if (status == 401 || code == 401) {
       if (teamInfo.isMember) {
         localStorage.teamId = "";
