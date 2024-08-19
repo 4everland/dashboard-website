@@ -12,7 +12,7 @@
           class="start-btn mt-4"
           :loading="tgLoading"
           @click="handleTGStartBoost"
-          >START MINING</v-btn
+          >START BOOST</v-btn
         >
       </div>
     </div>
