@@ -2,13 +2,13 @@
   <div>
     <v-overlay :value="value" opacity="1" v-if="asMobile">
       <div class="start-boosting d-flex flex-column justify-center">
-        <img
+        <!-- <img
           class="close-btn"
           @click="$emit('input', false)"
           src="/img/booster/svg/close.svg"
           width="18"
           alt=""
-        />
+        /> -->
         <div class="first-dialog-title fz-16 mb-5">
           Hello fam! Welcome to 4EVER Boost, a thrilling adventure where you can
           earn and maximize $4EVER points! 🚀
@@ -47,6 +47,16 @@
                 suffix: '',
               }"
             />
+          </div>
+
+          <div class="text-center">
+            <v-btn
+              width="200"
+              height="48"
+              class="start-boost-btn"
+              @click="$emit('input', false)"
+              >Confirm</v-btn
+            >
           </div>
         </div>
       </div>
@@ -277,5 +287,17 @@ li {
       }
     }
   }
+}
+.start-boost-btn {
+  margin: 34px auto 0;
+  width: 50%;
+  padding: 16px 24px;
+  border-radius: 4px;
+  color: #fff !important;
+  text-shadow: 0px 0px 8px #6172f3;
+  border: 1px solid #0e6cc6;
+  background: linear-gradient(180deg, #00070c 0%, #074178 113.39%);
+  box-shadow: 0px -4px 8px 0px rgba(0, 133, 195, 0.25),
+    0px 4px 8px 0px rgba(0, 133, 195, 0.25);
 }
 </style>

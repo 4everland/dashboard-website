@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import TgStartBoostLoading from "./tg-start-boost-loading.vue";
 import { initTgBoost } from "@/api/booster";
 import { sendTGStoken, sendStoken } from "@/api/login.js";
@@ -47,6 +47,9 @@ export default {
     this.$store.dispatch("getExploreRemain");
   },
   computed: {
+    ...mapState({
+      boosterInfo: (s) => s.moduleBooster.boosterInfo,
+    }),
     ...mapGetters(["notLogin", "boostLocked"]),
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
@@ -62,7 +65,9 @@ export default {
       await initTgBoost(code || "");
       this.tgLoading = false;
       await this.$store.dispatch("getBoosterUserInfo");
-      bus.$emit("showEndBoostEvent");
+      if (this.boosterInfo.totalPoint > 0) {
+        bus.$emit("showEndBoostEvent");
+      }
     },
 
     async tgMiniAppLogin() {
