@@ -235,12 +235,13 @@ export default {
     };
   },
   created() {
+    this.getDailySign();
+    this.getTasks();
     bus.$on("getDailyTasks", () => {
       // this.getDailySign();
       this.signed = true;
     });
   },
-  mounted() {},
   methods: {
     async getDailySign() {
       const { data } = await fetchDailySign();
@@ -379,8 +380,6 @@ export default {
     },
     stateTaskDrawerShow(state) {
       if (state) {
-        this.getDailySign();
-        this.getTasks();
         this.getInvite();
       }
       this.$store.dispatch("TaskDrawerState", { state });
@@ -556,7 +555,7 @@ export default {
     }
   }
   .task-box {
-    padding: 24px 0;
+    // padding: 24px 0;
     .task-item-box {
       display: flex;
       align-items: center;

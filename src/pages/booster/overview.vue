@@ -11,10 +11,12 @@
         muted
       ></video>
 
-      <TgStartBoostOverlay v-if="isTg && boostLocked"></TgStartBoostOverlay>
+      <TgStartBoostOverlay
+        v-if="isTgMiniApp && boostLocked"
+      ></TgStartBoostOverlay>
       <template v-else>
         <div
-          v-if="!boosterInfo.preActivities && !isTg"
+          v-if="!boosterInfo.preActivities && !isTgMiniApp"
           class="booster-overview-task"
           @click="handleShowStartBoost"
         >
@@ -139,7 +141,7 @@ export default {
     isVideo() {
       return /.webm/.test(this.bgImg);
     },
-    isTg() {
+    isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
   },

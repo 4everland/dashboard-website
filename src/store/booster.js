@@ -72,7 +72,6 @@ export default {
           return pre + ((endTimeStamp - startTime) / 3600) * it.rate;
         }, 0);
 
-        console.log(basicComputed + boostComputed + boosterInfo.computed);
         return (
           (basicComputed + boostComputed) * (boosterInfo.rateBuff / 100 + 1) +
           boosterInfo.computed

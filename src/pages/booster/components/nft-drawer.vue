@@ -107,7 +107,7 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-    isTg() {
+    isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
   },
@@ -124,7 +124,7 @@ export default {
   created() {},
   methods: {
     onStake() {
-      if (this.isTg) {
+      if (this.isTgMiniApp) {
         this.stateStakeDrawerShow(false);
         // this.showStakeError = true;
         // window.open("https://dashboard.4everland.org/boost");

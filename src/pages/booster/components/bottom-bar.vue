@@ -59,9 +59,7 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-    isTg() {
-      return Object.keys(this.$tg.initDataUnsafe).length > 0;
-    },
+
     activity() {
       let _this = this;
       let Arr = [
@@ -112,9 +110,6 @@ export default {
           action() {},
         },
       ];
-      // if (this.isTg) {
-      //   Arr.splice(1, 1);
-      // }
       return Arr;
     },
   },

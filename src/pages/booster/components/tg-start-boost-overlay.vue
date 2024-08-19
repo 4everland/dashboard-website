@@ -39,7 +39,7 @@ export default {
       console.log(this.loading, "loading...");
     }, 3000);
 
-    if (this.isTg) {
+    if (this.isTgMiniApp) {
       await this.tgMiniAppLogin();
     }
     this.$store.dispatch("getBoosterUserInfo");
@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     ...mapGetters(["notLogin", "boostLocked"]),
-    isTg() {
+    isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
   },
