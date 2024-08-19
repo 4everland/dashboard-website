@@ -106,7 +106,7 @@
               <ICountUp
                 class="panel-text ml-2"
                 :delay="1000"
-                :endVal="boosterInfo.totalPoint"
+                :endVal="boosterInfo.taskHubPoints + boosterInfo.eqPoints"
                 :options="{
                   useEasing: true,
                   useGrouping: true,
