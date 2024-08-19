@@ -267,6 +267,7 @@ export default {
       const { data: datas } = await fetchTasks_One();
       this.tasksLists = data.items;
       this.tasksLists_one = datas.items;
+      this.$store.dispatch("getBoosterUserInfo");
     },
     async stepNext(item, index, taskListType) {
       let _this = this;
