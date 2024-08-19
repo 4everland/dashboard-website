@@ -427,6 +427,7 @@ export default {
 
 <style lang="scss" scoped>
 .task-list-title {
+  padding: 16px 0;
   font-size: 20px;
   text-shadow: 0px 0px 8px #6172f3;
   font-weight: 700;

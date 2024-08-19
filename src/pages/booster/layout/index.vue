@@ -24,6 +24,7 @@ import Navbar from "./nav-bar.vue";
 import AsideDrawer from "./aside-drawer.vue";
 import DepositDialog from "../components/deposit-dialog.vue";
 import { bus } from "@/utils/bus";
+import { sendTGStoken, sendStoken } from "@/api/login.js";
 
 export default {
   components: {
@@ -39,8 +40,16 @@ export default {
       report: false,
     };
   },
+  computed: {
+    isTg() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
+  },
+  async created() {
+    if (this.isTg) {
+      await this.tgMiniAppLogin();
+    }
 
-  created() {
     this.$store.dispatch("getBoosterUserInfo");
     this.$store.dispatch("getExploreRemain");
     bus.$on("showDepositDialog", ({ land, report }) => {
@@ -56,6 +65,32 @@ export default {
       }
       this.showDeposit = true;
     });
+  },
+
+  methods: {
+    async tgMiniAppLogin() {
+      const { data: datas } = await sendTGStoken(this.$tg.initDataUnsafe);
+      console.log(datas);
+      const { data } = await sendStoken(datas.stToken);
+      this.onLoginData(data);
+    },
+    onLoginData(data) {
+      localStorage.authData = JSON.stringify(data);
+      localStorage.token = data.accessToken;
+      localStorage.nodeToken = data.nodeToken;
+      this.$store.dispatch("getBalance");
+      this.$store.dispatch("getBoosterUserInfo");
+      this.getUesrInfo();
+    },
+
+    async getUesrInfo() {
+      const { data } = await this.$http.get("$auth/user");
+      localStorage.userInfo = JSON.stringify(data);
+      this.$setState({
+        userInfo: data,
+        allowNoLogin: this.allowNoLogin && !data.github,
+      });
+    },
   },
 };
 </script>
