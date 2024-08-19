@@ -13,7 +13,7 @@ const boosterRequest = new BaseRequest({
     responseInterceptor(res) {
       if (res.data.code == 401) {
         localStorage.clear();
-        localStorage.loginTo("/boost");
+        localStorage.loginTo = location.pathname + location.search;
         location.reload();
         throw new Error("Access Denied!");
       } else if (res.data.code == 500) {
@@ -27,7 +27,8 @@ const boosterRequest = new BaseRequest({
       console.log(data, status, "==========");
       if (data.code == 401 || status == 401) {
         localStorage.clear();
-        localStorage.loginTo("/boost");
+        localStorage.loginTo = location.pathname + location.search;
+
         location.reload();
       }
     },

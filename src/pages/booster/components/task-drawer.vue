@@ -235,8 +235,6 @@ export default {
     };
   },
   created() {
-    this.getDailySign();
-    this.getTasks();
     bus.$on("getDailyTasks", () => {
       // this.getDailySign();
       this.signed = true;
@@ -381,6 +379,8 @@ export default {
     },
     stateTaskDrawerShow(state) {
       if (state) {
+        this.getDailySign();
+        this.getTasks();
         this.getInvite();
       }
       this.$store.dispatch("TaskDrawerState", { state });

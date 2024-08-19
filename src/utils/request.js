@@ -221,7 +221,7 @@ async function handleMsg(status, code, msg, config) {
     await vue.$sleep(10);
     if (process.env.VUE_APP_TG_VERSION == "true") {
       localStorage.clear();
-      localStorage.loginTo("/boost");
+      localStorage.loginTo = location.pathname + location.search;
       location.reload();
       return;
     }

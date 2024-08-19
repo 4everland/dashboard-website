@@ -17,7 +17,7 @@
         @click="handleShowStartBoost"
       >
         <img src="/img/booster/Logo.png" alt="" />
-        <span>Claim +20pts/h</span>
+        <span>Claim +30pts/h</span>
       </div>
       <overview-pc
         @handleStartBoost="handleShowStartBoost"
