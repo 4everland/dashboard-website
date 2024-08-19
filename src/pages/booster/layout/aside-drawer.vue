@@ -107,7 +107,7 @@ export default {
           {
             icon: "/img/booster/menu/faq.svg",
             name: "FAQ",
-            link: "https://4everland.org",
+            link: "https://link.medium.com/TONm0rEzbMb",
           },
           {
             icon: "/img/booster/menu/leaderboard.svg",
