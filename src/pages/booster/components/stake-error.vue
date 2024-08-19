@@ -10,12 +10,11 @@
           alt=""
         />
         <div class="text-center fz-18 mb-4 fw-b">
-          Staking isn't supported in the Bot. Please visit your computer to
-          complete.
+          The staking feature is launching soon!
         </div>
-        <v-btn class="start-boost-btn text-center fw-b" @click="onStake">
+        <!-- <v-btn class="start-boost-btn text-center fw-b" @click="onStake">
           Go
-        </v-btn>
+        </v-btn> -->
       </div>
     </v-overlay>
 

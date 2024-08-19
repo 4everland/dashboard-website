@@ -145,7 +145,7 @@ export default {
         // window.open("https://dashboard.4everland.org/boost");
         return this.$toast2(
           "This feature is coming soon for the bot. Stay tuned!",
-          "success"
+          "error"
         );
       }
 

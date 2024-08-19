@@ -208,7 +208,12 @@ export default {
           window.open("https://dashboard.4everland.org/bucket/storage/");
         }
         if (item.actType == "access_event_desktop") {
-          window.open("https://dashboard.4everland.org/boost/");
+          // window.open("https://dashboard.4everland.org/boost/");
+
+          this.$toast2(
+            "This feature is coming soon for the bot. Stay tuned!",
+            "error"
+          );
         }
       }
       const id = item.actId;

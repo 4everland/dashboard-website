@@ -127,7 +127,11 @@ export default {
       if (this.isTg) {
         this.stateStakeDrawerShow(false);
         // this.showStakeError = true;
-        window.open("https://dashboard.4everland.org/boost");
+        // window.open("https://dashboard.4everland.org/boost");
+        this.$toast2(
+          "This feature is coming soon for the bot. Stay tuned!",
+          "error"
+        );
         return;
       }
       this.$refs.StakeDialog.init();

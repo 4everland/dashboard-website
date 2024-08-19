@@ -48,7 +48,6 @@ export default {
   },
   methods: {
     async tgMiniAppLogin() {
-      if (localStorage.token) return;
       if (Object.keys(this.$tg.initDataUnsafe).length > 0) {
         const { data: datas } = await sendTGStoken(this.$tg.initDataUnsafe);
         console.log(datas);
