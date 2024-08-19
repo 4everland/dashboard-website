@@ -2,18 +2,13 @@
   <div class="nav-bar">
     <div class="nav d-none d-md-flex align-center">
       <div class="logo d-flex align-center">
-        <a
-          href="https://www.4everland.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            src="/img/booster/svg/logo.svg"
-            width="157"
-            alt=""
-            style="display: block"
-          />
-        </a>
+        <img
+          src="/img/booster/svg/logo.svg"
+          @click="$router.push('/boost')"
+          width="157"
+          alt=""
+          style="display: block"
+        />
       </div>
       <div class="router-link d-flex align-center">
         <div
@@ -257,18 +252,13 @@
       class="nav-mobile px-2 d-flex align-center justify-space-between d-md-none"
     >
       <div class="logo d-flex align-center">
-        <a
-          href="https://www.4everland.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            src="/img/booster/svg/logo.svg"
-            width="157"
-            alt=""
-            style="display: block"
-          />
-        </a>
+        <img
+          src="/img/booster/svg/logo.svg"
+          width="157"
+          @click="$router.push('/boost')"
+          alt=""
+          style="display: block"
+        />
       </div>
       <div class="d-flex align-center">
         <v-menu

@@ -41,6 +41,7 @@ export default {
   },
 
   created() {
+    this.$store.dispatch("getBoosterUserInfo");
     bus.$on("showDepositDialog", ({ land, report }) => {
       if (report) {
         this.report = report;
