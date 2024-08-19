@@ -61,7 +61,7 @@ export default {
       this.tgLoading = true;
       await initTgBoost(code || "");
       this.tgLoading = false;
-      this.$store.dispatch("getBoosterUserInfo");
+      await this.$store.dispatch("getBoosterUserInfo");
       bus.$emit("showEndBoostEvent");
     },
 

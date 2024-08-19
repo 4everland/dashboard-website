@@ -95,10 +95,10 @@ export default {
               case "invite":
                 it.log = `I received ${it.value} points from my booster.`;
                 break;
-              case "join_telegram":
+              case "(tg)Join telegram group":
                 it.log = `Join Telegram group ${it.value} points.`;
                 break;
-              case "join_telegram_channel":
+              case "(tg)Subscribe telegram channel":
                 it.log = `Subscribe Telegram channel ${it.value} points.`;
                 break;
               default:
