@@ -22,7 +22,6 @@
 <script>
 import { mapGetters } from "vuex";
 import TgStartBoostLoading from "./tg-start-boost-loading.vue";
-import { sendTGStoken, sendStoken } from "@/api/login.js";
 export default {
   data() {
     return {
@@ -38,40 +37,38 @@ export default {
   async created() {
     setTimeout(() => {
       this.loading = false;
-
       console.log(this.loading, "loading...");
     }, 3000);
-    this.tgMiniAppLogin();
+    // this.tgMiniAppLogin();
   },
   computed: {
     ...mapGetters(["notLogin", "boostLocked"]),
   },
   methods: {
-    async tgMiniAppLogin() {
-      if (Object.keys(this.$tg.initDataUnsafe).length > 0) {
-        const { data: datas } = await sendTGStoken(this.$tg.initDataUnsafe);
-        console.log(datas);
-        const { data } = await sendStoken(datas.stToken);
-        this.onLoginData(data);
-      }
-    },
-    onLoginData(data) {
-      localStorage.authData = JSON.stringify(data);
-      localStorage.token = data.accessToken;
-      localStorage.nodeToken = data.nodeToken;
-      this.$store.dispatch("getBalance");
-      this.$store.dispatch("getBoosterUserInfo");
-      this.getUesrInfo();
-    },
-
-    async getUesrInfo() {
-      const { data } = await this.$http.get("$auth/user");
-      localStorage.userInfo = JSON.stringify(data);
-      this.$setState({
-        userInfo: data,
-        allowNoLogin: this.allowNoLogin && !data.github,
-      });
-    },
+    // async tgMiniAppLogin() {
+    //   if (Object.keys(this.$tg.initDataUnsafe).length > 0) {
+    //     const { data: datas } = await sendTGStoken(this.$tg.initDataUnsafe);
+    //     console.log(datas);
+    //     const { data } = await sendStoken(datas.stToken);
+    //     this.onLoginData(data);
+    //   }
+    // },
+    // onLoginData(data) {
+    //   localStorage.authData = JSON.stringify(data);
+    //   localStorage.token = data.accessToken;
+    //   localStorage.nodeToken = data.nodeToken;
+    //   this.$store.dispatch("getBalance");
+    //   this.$store.dispatch("getBoosterUserInfo");
+    //   this.getUesrInfo();
+    // },
+    // async getUesrInfo() {
+    //   const { data } = await this.$http.get("$auth/user");
+    //   localStorage.userInfo = JSON.stringify(data);
+    //   this.$setState({
+    //     userInfo: data,
+    //     allowNoLogin: this.allowNoLogin && !data.github,
+    //   });
+    // },
   },
   components: {
     TgStartBoostLoading,

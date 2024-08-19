@@ -55,6 +55,7 @@ import TaskDrawer from "./components/task-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
 import BindDialog from "./components/bind-dialog.vue";
 import UnlockDialog from "./components/unlock-dialog.vue";
+import { sendTGStoken, sendStoken } from "@/api/login.js";
 import { mapState, mapGetters } from "vuex";
 
 export default {
@@ -139,10 +140,14 @@ export default {
     },
   },
 
-  created() {
+  async created() {
     this.timer = setInterval(() => {
       this.$store.commit("updateDate");
     }, 1000);
+
+    if (this.isTg) {
+      await this.tgMiniAppLogin();
+    }
 
     if (!localStorage.token) {
       localStorage.loginTo = location.pathname + location.search;
@@ -177,6 +182,31 @@ export default {
     });
   },
   methods: {
+    async tgMiniAppLogin() {
+      if (Object.keys(this.$tg.initDataUnsafe).length > 0) {
+        const { data: datas } = await sendTGStoken(this.$tg.initDataUnsafe);
+        console.log(datas);
+        const { data } = await sendStoken(datas.stToken);
+        this.onLoginData(data);
+      }
+    },
+    onLoginData(data) {
+      localStorage.authData = JSON.stringify(data);
+      localStorage.token = data.accessToken;
+      localStorage.nodeToken = data.nodeToken;
+      this.$store.dispatch("getBalance");
+      this.$store.dispatch("getBoosterUserInfo");
+      this.getUesrInfo();
+    },
+
+    async getUesrInfo() {
+      const { data } = await this.$http.get("$auth/user");
+      localStorage.userInfo = JSON.stringify(data);
+      this.$setState({
+        userInfo: data,
+        allowNoLogin: this.allowNoLogin && !data.github,
+      });
+    },
     handleShowStartBoost() {
       if (!this.userInfo.wallet && this.boostLocked) {
         this.$store.dispatch("BindWalletToggle");
