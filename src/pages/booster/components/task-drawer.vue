@@ -63,6 +63,7 @@
           </div>
         </div>
         <div class="task-box">
+          <div class="task-list-title">Daily Tasks</div>
           <v-row no-gutters style="gap: 18px 0">
             <v-col
               v-for="(item, index) in tasksLists"
@@ -92,7 +93,7 @@
                     "
                     class="go-btn"
                     width="84"
-                    @click="stepNext(item, index)"
+                    @click="stepNext(item, index, 'daily')"
                     v-clipboard="inviteInfo.link"
                     @success="() => $toast2('Copied!', 'success')"
                     >Go</v-btn
@@ -103,14 +104,76 @@
                     "
                     class="go-btn"
                     width="84"
-                    @click="stepNext(item, index)"
+                    @click="stepNext(item, index, 'daily')"
                     >Go</v-btn
                   >
                   <v-btn
                     v-else-if="item.actStatus !== 'DONE'"
                     class="drawer-btn"
                     width="84"
-                    @click="stepNext(item, index)"
+                    @click="stepNext(item, index, 'daily')"
+                    >{{ item.extra.buttonName }}</v-btn
+                  >
+
+                  <v-btn
+                    v-if="item.actStatus == 'DONE'"
+                    class="done-btn"
+                    width="84"
+                    >Done</v-btn
+                  >
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+          <div class="task-list-title">One-off Tasks</div>
+          <v-row no-gutters style="gap: 18px 0">
+            <v-col
+              v-for="(item, index) in tasksLists_one"
+              :key="item.actId"
+              cols="12"
+              v-show="
+                item.deployOn == 'all' ||
+                (item.deployOn == 'pc' && !isTgMiniApp) ||
+                (item.deployOn == 'tg' && isTgMiniApp)
+              "
+            >
+              <div class="task-item-box">
+                <div class="task-item-left">
+                  <img class="task-item-image" :src="item.icon" alt="" />
+                  <div class="task-text-box">
+                    <div class="task-name">{{ item.actName }}</div>
+                    <div class="task-desc">{{ item.description }}</div>
+                  </div>
+                </div>
+
+                <div class="task-item-right">
+                  <v-btn
+                    v-if="
+                      item.actStatus !== 'DONE' &&
+                      item.extra.buttonName == 'Go' &&
+                      item.actType == 'daily_invite'
+                    "
+                    class="go-btn"
+                    width="84"
+                    @click="stepNext(item, index, 'one')"
+                    v-clipboard="inviteInfo.link"
+                    @success="() => $toast2('Copied!', 'success')"
+                    >Go</v-btn
+                  >
+                  <v-btn
+                    v-else-if="
+                      item.actStatus !== 'DONE' && item.extra.buttonName == 'Go'
+                    "
+                    class="go-btn"
+                    width="84"
+                    @click="stepNext(item, index, 'one')"
+                    >Go</v-btn
+                  >
+                  <v-btn
+                    v-else-if="item.actStatus !== 'DONE'"
+                    class="drawer-btn"
+                    width="84"
+                    @click="stepNext(item, index, 'one')"
                     >{{ item.extra.buttonName }}</v-btn
                   >
 
@@ -131,7 +194,12 @@
 </template>
 <script>
 import { mapGetters, mapState } from "vuex";
-import { fetchDailySign, fetchTasks, onNext } from "@/api/booster.js";
+import {
+  fetchDailySign,
+  fetchTasks,
+  onNext,
+  fetchTasks_One,
+} from "@/api/booster.js";
 import { bus } from "@/utils/bus";
 import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
 
@@ -155,6 +223,7 @@ export default {
     return {
       signList: [],
       tasksLists: [],
+      tasksLists_one: [],
       signDays: 0,
       signed: false,
       inviteInfo: {
@@ -196,9 +265,11 @@ export default {
     },
     async getTasks() {
       const { data } = await fetchTasks();
+      const { data: datas } = await fetchTasks_One();
       this.tasksLists = data.items;
+      this.tasksLists_one = datas.items;
     },
-    async stepNext(item, index) {
+    async stepNext(item, index, taskListType) {
       let _this = this;
       if (item.extra.buttonName == "Go") {
         if (item.actType == "4ever_chat") {
@@ -222,6 +293,12 @@ export default {
 
       item.extra.buttonName = data.action.web.nextButtonName;
       this.$set(_this.tasksLists, index, item);
+
+      if (taskListType == "daily") {
+        this.$set(_this.tasksLists, index, item);
+      } else {
+        this.$set(_this.tasksLists_one, index, item);
+      }
 
       switch (data.action.web.next) {
         case "REDIRECT":
@@ -349,6 +426,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.task-list-title {
+  font-size: 20px;
+  text-shadow: 0px 0px 8px #6172f3;
+  font-weight: 700;
+  color: #fff;
+}
 .go-btn {
   border-radius: 4px;
   border: 1px solid #43e7fa;

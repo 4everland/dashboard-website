@@ -21,6 +21,16 @@ const boosterRequest = new BaseRequest({
       }
       return res.data;
     },
+    responseInterceptorCatch(error) {
+      const { data = {}, status } = error.response || {};
+
+      console.log(data, status, "==========");
+      if (data.code == 401 || status == 401) {
+        localStorage.clear();
+        localStorage.loginTo("/boost");
+        location.reload();
+      }
+    },
   },
 });
 
@@ -171,5 +181,11 @@ export const fetchDailySign = async () => {
 export const fetchTasks = async () => {
   return boosterRequest.get({
     url: "/node/activities/tasks",
+  });
+};
+
+export const fetchTasks_One = async () => {
+  return boosterRequest.get({
+    url: "/node/activities/tasks_one",
   });
 };
