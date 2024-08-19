@@ -54,7 +54,7 @@
           :class="{ trigger: it.path == $route.path }"
           v-for="(it, i) in menuList"
           :key="i"
-          @click="$router.push(it.path)"
+          @click="handleOpen(it)"
         >
           <img class="mr-2" :src="it.icon" width="24" alt="" />
           <span>{{ it.name }}</span>
@@ -105,6 +105,11 @@ export default {
             path: "/boost",
           },
           {
+            icon: "/img/booster/menu/faq.svg",
+            name: "FAQ",
+            link: "https://4everland.org",
+          },
+          {
             icon: "/img/booster/menu/leaderboard.svg",
             name: "Leaderboard",
             path: "/boost/leaderboard",
@@ -145,6 +150,13 @@ export default {
       }
 
       if (!this.notLogin) this.$router.push("/billing/deposit");
+    },
+    handleOpen(it) {
+      if (it.path) {
+        this.$router.push(it.path);
+      } else {
+        window.open(it.link);
+      }
     },
   },
 };

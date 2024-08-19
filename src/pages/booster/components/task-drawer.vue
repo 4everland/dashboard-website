@@ -488,7 +488,7 @@ export default {
           .task-desc {
             font-size: 12px;
             font-weight: 400;
-            color: rgba(255, 255, 255, 0.6);
+            color: #a4bcfd;
           }
         }
       }
