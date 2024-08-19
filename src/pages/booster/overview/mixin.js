@@ -1,5 +1,5 @@
 import { mapGetters, mapState } from "vuex";
-import { claimPoints, initTgBoost } from "@/api/booster";
+import { claimPoints } from "@/api/booster";
 import { sendStoken } from "@/api/login.js";
 import { coinMove } from "../../../utils/animation";
 export default {
@@ -67,17 +67,6 @@ export default {
       } else {
         this.$emit("handleStartBoost");
       }
-    },
-    async handleTGStartBoost() {
-      let code = this.$tg.initDataUnsafe.start_param;
-
-      if (code) {
-        code = decodeURI(code);
-      }
-      this.tgLoading = true;
-      await initTgBoost(code || "");
-      this.tgLoading = false;
-      this.$store.dispatch("getBoosterUserInfo");
     },
 
     async handleUnlock(index) {

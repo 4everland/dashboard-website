@@ -11,7 +11,7 @@
         <v-btn
           class="start-btn mt-4"
           :loading="tgLoading"
-          @click="$emit('handleTgStart')"
+          @click="handleTgStart"
           >START MINING</v-btn
         >
       </div>
@@ -22,53 +22,70 @@
 <script>
 import { mapGetters } from "vuex";
 import TgStartBoostLoading from "./tg-start-boost-loading.vue";
+import { initTgBoost } from "@/api/booster";
+import { sendTGStoken, sendStoken } from "@/api/login.js";
+
 export default {
   data() {
     return {
       loading: true,
+      tgLoading: false,
     };
   },
-  props: {
-    tgLoading: {
-      type: Boolean,
-      default: false,
-    },
-  },
+
   async created() {
     setTimeout(() => {
       this.loading = false;
       console.log(this.loading, "loading...");
     }, 3000);
-    // this.tgMiniAppLogin();
+
+    if (this.isTg) {
+      await this.tgMiniAppLogin();
+    }
+    this.$store.dispatch("getBoosterUserInfo");
+    this.$store.dispatch("getExploreRemain");
   },
   computed: {
     ...mapGetters(["notLogin", "boostLocked"]),
+    isTg() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
   methods: {
-    // async tgMiniAppLogin() {
-    //   if (Object.keys(this.$tg.initDataUnsafe).length > 0) {
-    //     const { data: datas } = await sendTGStoken(this.$tg.initDataUnsafe);
-    //     console.log(datas);
-    //     const { data } = await sendStoken(datas.stToken);
-    //     this.onLoginData(data);
-    //   }
-    // },
-    // onLoginData(data) {
-    //   localStorage.authData = JSON.stringify(data);
-    //   localStorage.token = data.accessToken;
-    //   localStorage.nodeToken = data.nodeToken;
-    //   this.$store.dispatch("getBalance");
-    //   this.$store.dispatch("getBoosterUserInfo");
-    //   this.getUesrInfo();
-    // },
-    // async getUesrInfo() {
-    //   const { data } = await this.$http.get("$auth/user");
-    //   localStorage.userInfo = JSON.stringify(data);
-    //   this.$setState({
-    //     userInfo: data,
-    //     allowNoLogin: this.allowNoLogin && !data.github,
-    //   });
-    // },
+    async handleTGStartBoost() {
+      let code = this.$tg.initDataUnsafe.start_param;
+      if (code) {
+        code = decodeURI(code);
+      }
+      this.tgLoading = true;
+      await initTgBoost(code || "");
+      this.tgLoading = false;
+      this.$store.dispatch("getBoosterUserInfo");
+    },
+
+    async tgMiniAppLogin() {
+      const { data: datas } = await sendTGStoken(this.$tg.initDataUnsafe);
+      console.log(datas);
+      const { data } = await sendStoken(datas.stToken);
+      this.onLoginData(data);
+    },
+    onLoginData(data) {
+      localStorage.authData = JSON.stringify(data);
+      localStorage.token = data.accessToken;
+      localStorage.nodeToken = data.nodeToken;
+      this.$store.dispatch("getBalance");
+      this.$store.dispatch("getBoosterUserInfo");
+      this.getUesrInfo();
+    },
+
+    async getUesrInfo() {
+      const { data } = await this.$http.get("$auth/user");
+      localStorage.userInfo = JSON.stringify(data);
+      this.$setState({
+        userInfo: data,
+        allowNoLogin: this.allowNoLogin && !data.github,
+      });
+    },
   },
   components: {
     TgStartBoostLoading,

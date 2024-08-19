@@ -11,36 +11,39 @@
         muted
       ></video>
 
-      <div
-        v-if="!boosterInfo.preActivities && !isTg"
-        class="booster-overview-task"
-        @click="handleShowStartBoost"
-      >
-        <img src="/img/booster/Logo.png" alt="" />
-        <span>Claim +30pts/h</span>
-      </div>
-      <overview-pc
-        @handleStartBoost="handleShowStartBoost"
-        @handleUnlock="handleShowUnlock"
-      ></overview-pc>
-      <overview-h5
-        @handleStartBoost="handleShowStartBoost"
-        @handleUnlock="handleShowUnlock"
-      ></overview-h5>
-      <start-boosting
-        v-model="showStartBoost"
-        @showEndPoints="showEndBoost = true"
-      ></start-boosting>
-      <end-boosting v-model="showEndBoost"></end-boosting>
-      <unlock-dialog
-        v-model="showUnlockDialog"
-        :unlockStage="unlockStage"
-      ></unlock-dialog>
+      <TgStartBoostOverlay v-if="isTg && boostLocked"></TgStartBoostOverlay>
+      <template v-else>
+        <div
+          v-if="!boosterInfo.preActivities && !isTg"
+          class="booster-overview-task"
+          @click="handleShowStartBoost"
+        >
+          <img src="/img/booster/Logo.png" alt="" />
+          <span>Claim +30pts/h</span>
+        </div>
+        <overview-pc
+          @handleStartBoost="handleShowStartBoost"
+          @handleUnlock="handleShowUnlock"
+        ></overview-pc>
+        <overview-h5
+          @handleStartBoost="handleShowStartBoost"
+          @handleUnlock="handleShowUnlock"
+        ></overview-h5>
+        <start-boosting
+          v-model="showStartBoost"
+          @showEndPoints="showEndBoost = true"
+        ></start-boosting>
+        <end-boosting v-model="showEndBoost"></end-boosting>
+        <unlock-dialog
+          v-model="showUnlockDialog"
+          :unlockStage="unlockStage"
+        ></unlock-dialog>
 
-      <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar>
-      <nft-drawer v-if="userInfo.uid"></nft-drawer>
-      <task-drawer v-if="userInfo.uid"></task-drawer>
-      <bind-dialog v-model="showBindWallet"></bind-dialog>
+        <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar>
+        <nft-drawer v-if="userInfo.uid"></nft-drawer>
+        <task-drawer v-if="userInfo.uid"></task-drawer>
+        <bind-dialog v-model="showBindWallet"></bind-dialog>
+      </template>
     </div>
   </div>
 </template>
@@ -55,6 +58,8 @@ import TaskDrawer from "./components/task-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
 import BindDialog from "./components/bind-dialog.vue";
 import UnlockDialog from "./components/unlock-dialog.vue";
+import TgStartBoostOverlay from "./components/tg-start-boost-overlay.vue";
+
 import { mapState, mapGetters } from "vuex";
 
 export default {
@@ -200,6 +205,7 @@ export default {
     BottomBar,
     BindDialog,
     UnlockDialog,
+    TgStartBoostOverlay,
   },
 };
 </script>

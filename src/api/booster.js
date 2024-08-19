@@ -12,8 +12,8 @@ const boosterRequest = new BaseRequest({
     },
     responseInterceptor(res) {
       if (res.data.code == 401) {
-        localStorage.clear();
-        localStorage.loginTo = location.pathname + location.search;
+        // localStorage.clear();
+        // localStorage.loginTo = location.pathname + location.search;
         throw new Error("Access Denied!");
       } else if (res.data.code == 500) {
         throw new Error("Serivce Error!");
@@ -24,10 +24,10 @@ const boosterRequest = new BaseRequest({
       const { data = {}, status } = error.response || {};
 
       console.log(data, status, "==========");
-      if (data.code == 401 || status == 401) {
-        localStorage.clear();
-        localStorage.loginTo = location.pathname + location.search;
-      }
+      // if (data.code == 401 || status == 401) {
+      //   localStorage.clear();
+      //   localStorage.loginTo = location.pathname + location.search;
+      // }
     },
   },
 });
