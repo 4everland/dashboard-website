@@ -15,13 +15,13 @@
       <v-container fluid style="padding: 24px 16px">
         <div class="task-drawer-top" v-if="!isTgMiniApp">
           <div class="drawer-title task-drawer-title">
-            <span> Daily Task: Claim LAND </span>
+            <span class="fz-20 fw-b"> Daily Tasks </span>
             <v-btn
               :class="signed ? 'done-btn' : 'drawer-btn'"
               :disabled="signed"
               @click="onSign"
             >
-              {{ signed ? "Done" : "Claim" }}
+              {{ signed ? "Done" : "Claim LAND" }}
             </v-btn>
           </div>
           <div class="daily-sign">
@@ -63,8 +63,8 @@
           </div>
         </div>
         <div class="task-box">
-          <div class="task-list-title">Daily Tasks</div>
-          <v-row no-gutters style="gap: 18px 0">
+          <div class="task-list-title" v-if="isTgMiniApp">Daily Tasks</div>
+          <v-row no-gutters style="gap: 18px 0; margin-bottom: 24px">
             <v-col
               v-for="(item, index) in tasksLists"
               :key="item.actId"
@@ -125,7 +125,12 @@
               </div>
             </v-col>
           </v-row>
-          <div class="task-list-title">One-off Tasks</div>
+          <div
+            class="task-list-title"
+            style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
+          >
+            One-off Tasks
+          </div>
           <v-row no-gutters style="gap: 18px 0">
             <v-col
               v-for="(item, index) in tasksLists_one"
@@ -484,7 +489,7 @@ export default {
       justify-content: space-between;
     }
     .task-drawer-top {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      // border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
       .daily-sign {
         margin-top: 16px;
@@ -597,7 +602,7 @@ export default {
       height: calc(100% - 74px - 64px - 24px) !important;
       .task-drawer-top {
         padding-bottom: 24px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        // border-bottom: 1px solid rgba(255, 255, 255, 0.3);
       }
     }
   }

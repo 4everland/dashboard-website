@@ -49,6 +49,7 @@
 
       <booster-pagination
         v-show="list.length != 0"
+        :total-visible="7"
         :length="totalPages"
         class="mt-5"
         v-model="page"
