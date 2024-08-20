@@ -260,7 +260,9 @@ export default {
     },
     showComponent() {
       return (
-        !/quest/g.test(this.$route.path) && !/claim/g.test(this.$route.path)
+        !/quest/g.test(this.$route.path) &&
+        !/claim/g.test(this.$route.path) &&
+        !/boost/g.test(this.$route.path)
       );
     },
     asMobile() {

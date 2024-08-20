@@ -311,11 +311,22 @@ export default {
           break;
         case "JUMP_OUT":
           if (actType == "share_twitter") {
-            const inviteLink = encodeURI(this.inviteInfo.link);
-            const shareUrl = data.action.web.message.replace(
-              "%25s",
-              inviteLink
-            );
+            // const inviteLink = encodeURI(this.inviteInfo.link);
+            // const shareUrl = data.action.web.message.replace(
+            //   "%s",
+            //   inviteLink
+            // );
+
+            let shareUrl =
+              "🚨 Hey folks! Join me in the thrilling #4EVERBoost campaign, where we earn and maximize $4EVER points through tasks like staking T4EVER/NFTs. Gear up for exciting @4everland_org #airdrops!🪂 ";
+            if (this.isTgMiniApp) {
+              shareUrl =
+                "😍Join the thrilling #4EVERBoost campaign to maximize $4EVER points through node boosting and seize the exciting @4everland_org #airdrops!🌊🏆 ";
+            }
+            shareUrl += this.inviteInfo.link;
+            shareUrl =
+              "https://x.com/intent/post?text=" + encodeURIComponent(shareUrl);
+
             this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
           } else {
             if (data.action.web.message) {

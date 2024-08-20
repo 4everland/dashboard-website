@@ -480,7 +480,7 @@ export default {
     handleTgShare() {
       this.$tg.shareUrl(
         this.inviteInfo.link,
-        "Earn and maximize your $4EVER points through the thrilling 4EVER Boost campaign!"
+        "Embark on the exciting 4EVER Boost campaign to boost your $4EVER points and grab exciting upcoming airdrops!🚨"
       );
     },
   },
