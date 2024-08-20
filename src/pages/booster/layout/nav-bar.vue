@@ -240,7 +240,7 @@
         <v-btn
           style="background: rgba(255, 255, 255, 0.1)"
           class="fz-14"
-          @click="$router.push('/login')"
+          @click="handleLogin"
         >
           <img src="/img/booster/svg/wallet.svg" width="16" alt="" />
           <span class="ml-1" style="color: #fff">Connect Wallet</span>
@@ -360,7 +360,7 @@
 
         <div
           class="connect-wallet"
-          @click="$router.push('/login')"
+          @click="handleLogin"
           v-show="notLogin && !this.isTgMiniApp"
         >
           Connect Wallet
@@ -433,6 +433,11 @@ export default {
       }
 
       this.$router.push(item.path);
+    },
+
+    handleLogin() {
+      localStorage.loginTo = location.pathname + location.search;
+      this.$router.push("/login");
     },
     handleLogout() {
       localStorage.clear();

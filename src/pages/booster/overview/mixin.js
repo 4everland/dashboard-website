@@ -63,6 +63,7 @@ export default {
   methods: {
     handleStartBoost() {
       if (this.notLogin) {
+        localStorage.loginTo = location.pathname + location.search;
         this.$router.push("/login");
       } else {
         this.$emit("handleStartBoost");
