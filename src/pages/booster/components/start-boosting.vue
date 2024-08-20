@@ -30,7 +30,14 @@
             </v-btn>
           </div>
 
-          <div class="boosting-task pa-3 fz-14" v-else>
+          <div
+            class="boosting-task pa-3 fz-14"
+            v-if="
+              item.actType == 'invite' &&
+              boosterInfo.preActivities &&
+              !isTgMiniApp
+            "
+          >
             <div class="d-flex align-center">
               <div class="idx">{{ idx + 1 }}</div>
               <div class="ml-4">
@@ -87,50 +94,59 @@
           />
 
           <div class="mt-10"></div>
-          <div
-            class="boosting-task fz-14"
-            v-for="(item, idx) in activity"
-            :key="item.actId"
-          >
+          <template v-for="(item, idx) in activity">
             <div
+              class="boosting-task fz-14"
+              :key="item.actId"
               v-if="item.actType != 'invite'"
-              class="d-flex align-center justify-space-between"
             >
-              <div class="d-flex align-center">
-                <div class="idx">{{ idx + 1 }}</div>
-                <div class="ml-4">{{ item.actName }}</div>
-              </div>
+              <div class="d-flex align-center justify-space-between">
+                <div class="d-flex align-center">
+                  <div class="idx">{{ idx + 1 }}</div>
+                  <div class="ml-4">{{ item.actName }}</div>
+                </div>
 
-              <div class="done-btn" v-if="item.actStatus == 'DONE'">
-                <img src="/img/booster/svg/check.svg" width="18" alt="" />
+                <div class="done-btn" v-if="item.actStatus == 'DONE'">
+                  <img src="/img/booster/svg/check.svg" width="18" alt="" />
+                </div>
+                <v-btn class="act-btn" @click="handleNext(item.actId)" v-else>
+                  {{ item.extra.buttonName }}
+                </v-btn>
               </div>
-              <v-btn class="act-btn" @click="handleNext(item.actId)" v-else>
-                {{ item.extra.buttonName }}
-              </v-btn>
             </div>
-            <div class="d-flex align-center justify-space-between" v-else>
-              <div class="d-flex align-center">
-                <div class="idx">{{ idx + 1 }}</div>
-                <div class="ml-4">
-                  <span>Invite code (optional)</span>
-                  <span
-                    class="fz-12 ml-2"
-                    style="color: rgba(255, 255, 255, 0.6)"
-                    >Boost Rate: + 10 pts/h, valid for 24 hours</span
-                  >
+
+            <div
+              class="boosting-task fz-14"
+              :key="item.actId"
+              v-if="
+                item.actType == 'invite' &&
+                boosterInfo.preActivities &&
+                !isTgMiniApp
+              "
+            >
+              <div class="d-flex align-center justify-space-between">
+                <div class="d-flex align-center">
+                  <div class="idx">{{ idx + 1 }}</div>
+                  <div class="ml-4">
+                    <span>Invite code (optional)</span>
+                    <span
+                      class="fz-12 ml-2"
+                      style="color: rgba(255, 255, 255, 0.6)"
+                      >Boost Rate: + 10 pts/h, valid for 24 hours</span
+                    >
+                  </div>
+                </div>
+                <div class="invite-content">
+                  <input
+                    class="invite-input"
+                    type="text"
+                    v-model="inviteCode"
+                    placeholder="Enter the invite code"
+                  />
                 </div>
               </div>
-              <div class="invite-content">
-                <input
-                  class="invite-input"
-                  type="text"
-                  v-model="inviteCode"
-                  placeholder="Enter the invite code"
-                />
-              </div>
             </div>
-          </div>
-
+          </template>
           <div
             class="d-flex align-center justify-center"
             style="margin-top: 15px"
@@ -338,9 +354,10 @@ export default {
 }
 .booster-module-dialog {
   padding: 13px;
-  height: 524px;
-  background: url("/img/booster/svg/dialog-bg.svg") no-repeat;
+  height: 434px;
+  background: url("/img/booster/svg/start-boost-bg.svg") no-repeat;
   background-size: contain;
+  background-position: center;
 }
 .start-boosting-dialog {
   position: relative;
