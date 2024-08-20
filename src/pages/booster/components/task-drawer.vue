@@ -307,7 +307,7 @@ export default {
 
       switch (data.action.web.next) {
         case "REDIRECT":
-          if (this.isTgMiniApp) return this.openAuto(shareUrl);
+          if (this.isTgMiniApp) return this.$tg.openAuto(shareUrl);
           location.href = data.action.web.message;
           break;
         case "JUMP_OUT":
@@ -322,7 +322,7 @@ export default {
             shareUrl =
               "https://x.com/intent/post?text=" + encodeURIComponent(shareUrl);
 
-            if (this.isTgMiniApp) return this.openAuto(shareUrl);
+            if (this.isTgMiniApp) return this.$tg.openAuto(shareUrl);
             this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
           } else {
             if (data.action.web.message) {
