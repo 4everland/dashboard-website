@@ -15,7 +15,7 @@
       >
         <div class="rate-box">
           <img src="/img/booster/3d-square.png" width="40" alt="" />
-          <span class="text fw-b">{{ totalRate }}/H</span>
+          <span class="text fw-b">{{ Math.ceil(totalRate) }}/H</span>
         </div>
         <div>
           Points

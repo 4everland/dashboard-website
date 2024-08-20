@@ -50,7 +50,7 @@
       <div class="menus my-4 py-4">
         <div class="menus-title fz-12">Menu</div>
         <div
-          class="menu-item d-flex align-center pa-2 mt-2 fz-14"
+          class="menu-item d-flex align-center pa-2 mt-2 fz-14 cursor-p"
           :class="{ trigger: it.path == $route.path }"
           v-for="(it, i) in menuList"
           :key="i"

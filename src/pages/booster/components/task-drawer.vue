@@ -307,16 +307,11 @@ export default {
 
       switch (data.action.web.next) {
         case "REDIRECT":
+          if (this.isTgMiniApp) return this.openAuto(shareUrl);
           location.href = data.action.web.message;
           break;
         case "JUMP_OUT":
           if (actType == "share_twitter") {
-            // const inviteLink = encodeURI(this.inviteInfo.link);
-            // const shareUrl = data.action.web.message.replace(
-            //   "%s",
-            //   inviteLink
-            // );
-
             let shareUrl =
               "🚨 Hey folks! Join me in the thrilling #4EVERBoost campaign, where we earn and maximize $4EVER points through tasks like staking T4EVER/NFTs. Gear up for exciting @4everland_org #airdrops!🪂 ";
             if (this.isTgMiniApp) {
@@ -327,6 +322,7 @@ export default {
             shareUrl =
               "https://x.com/intent/post?text=" + encodeURIComponent(shareUrl);
 
+            if (this.isTgMiniApp) return this.openAuto(shareUrl);
             this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
           } else {
             if (data.action.web.message) {
