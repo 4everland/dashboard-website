@@ -189,8 +189,7 @@ export default {
         if (!this.storageLocked) return "/img/booster/video/bg-storage.webm";
         if (!this.networkLocked) return "/img/booster/video/bg-network.webm";
         if (!this.computingLocked) return "/img/booster/video/bg-computed.webm";
-        if (this.boosterInfo.baseRate.length == 0)
-          return "/img/booster/bg-locked.png";
+        if (this.info.baseRate.length == 0) return "/img/booster/bg-locked.png";
 
         return "/img/booster/video/bg-unlocked.webm";
       }
