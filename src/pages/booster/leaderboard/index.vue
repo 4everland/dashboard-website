@@ -94,7 +94,7 @@ export default {
   methods: {
     async getList() {
       try {
-        const { data } = await fetchLeaderboard(this.page);
+        const { data } = await fetchLeaderboard(this.page, 20);
         console.log(data);
         this.myRankInfo = data.my;
         this.ranks = data.ranks.content;
