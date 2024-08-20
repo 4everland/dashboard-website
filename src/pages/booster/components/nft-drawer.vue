@@ -130,7 +130,7 @@ export default {
         // window.open("https://dashboard.4everland.org/boost");
         this.$toast2(
           "This feature is coming soon for the bot. Stay tuned!",
-          "error"
+          "info"
         );
         return;
       }

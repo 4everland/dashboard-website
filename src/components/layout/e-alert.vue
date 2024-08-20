@@ -150,6 +150,14 @@
           width="20"
           alt=""
         />
+        <img
+          v-show="boosterToastInfo.type == 'info'"
+          class="mr-3"
+          src="/img/svg/info.svg"
+          width="20"
+          alt=""
+        />
+
         <div>{{ boosterToastInfo.content }}</div>
       </div>
     </v-snackbar>

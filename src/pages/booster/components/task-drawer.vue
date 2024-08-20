@@ -288,7 +288,7 @@ export default {
 
           this.$toast2(
             "This feature is coming soon for the bot. Stay tuned!",
-            "error"
+            "info"
           );
         }
       }

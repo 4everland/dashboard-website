@@ -628,7 +628,7 @@ export default {
         this.$store.dispatch("getBalance");
 
         console.log(receipt, "receipt");
-        this.$toast2("LAND Claimed successfully");
+        this.$toast2("LAND Claimed successfully", "success");
         if (this.report) {
           await this.$http.post(`$bill-consume/activity/recharge/report`, {
             source: "assnode",
