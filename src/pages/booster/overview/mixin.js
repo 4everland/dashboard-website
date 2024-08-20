@@ -77,16 +77,15 @@ export default {
       try {
         if (this.computedPoints < 1)
           return this.$toast2("Points below 1 unclaimable.", "info");
-
         if (this.asMobile) {
           coinMove("mobile-point-send", "mobile-point-receive");
         } else {
           coinMove("point-send", "point-receive");
         }
-        const data = await claimPoints();
-        console.log(data);
         clearInterval(this.timer);
         this.computedPoints = 0;
+        const data = await claimPoints();
+        console.log(data);
         await this.$store.dispatch("getBoosterUserInfo");
         this.timer = setInterval(() => {
           this.computedPoints =
