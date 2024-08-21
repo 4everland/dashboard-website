@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 module.exports = {
   transpileDependencies: [
     "vuetify",
@@ -38,6 +39,11 @@ module.exports = {
     config.plugins.delete("prefetch");
   },
   configureWebpack: {
+    plugins: [
+      new webpack.ProvidePlugin({
+        Buffer: ["buffer", "Buffer"],
+      }),
+    ],
     optimization: {
       splitChunks: {
         chunks: "all",
@@ -60,6 +66,11 @@ module.exports = {
             reuseExistingChunk: true,
           },
         },
+      },
+    },
+    resolve: {
+      alias: {
+        buffer: require.resolve("buffer/"),
       },
     },
   },
