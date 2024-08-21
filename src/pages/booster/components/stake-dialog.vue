@@ -541,7 +541,7 @@ export default {
 
         const tx = await tokenContract.transfer(
           this.$inDev ? this.testToAddress : this.prodToAddress,
-          ethers.utils.parseEther(stakeAmount)
+          ethers.utils.parseEther(stakeAmount.toString())
         );
         // const tx = await window.ethereum.request({
         //   method: "eth_sendTransaction",
