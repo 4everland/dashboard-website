@@ -443,8 +443,9 @@ export default {
     },
     async onStake() {
       if (this.stakingAmount == 0 && this.stakeAmount < 100) {
-        this.$toast(
-          "Sorry, the initial staking amount cannot be less than 100 T4EVER."
+        this.$toast2(
+          "Sorry, the initial staking amount cannot be less than 100 T4EVER.",
+          "info"
         );
         return;
       }
@@ -453,11 +454,12 @@ export default {
       });
       const account = accounts[0];
       if (account.toLowerCase() !== this.currentAddress.toLowerCase()) {
-        return this.$toast(
+        return this.$toast2(
           `The currently connected wallet is not the one bound to your 4EVERLAND account. Please switch to the ${this.currentAddress.cutStr(
             6,
             4
-          )} wallet to proceed.`
+          )} wallet to proceed.`,
+          "info"
         );
       }
       const network = this.network;
