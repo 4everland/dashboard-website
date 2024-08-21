@@ -91,18 +91,18 @@ export default {
     },
     chainList() {
       const list = [
-        // {
-        //   label: "Polygon",
-        //   name: "Polygon",
-        //   img: "/img/svg/billing/ic-polygon-0.svg",
-        //   chainId: this.$inDev ? 80001 : 137,
-        // },
-        // {
-        //   label: "Ethereum",
-        //   name: "Ethereum",
-        //   img: "/img/svg/billing/ic-ethereum.svg",
-        //   chainId: this.$inDev ? 11155111 : 1,
-        // },
+        {
+          label: "Polygon",
+          name: "Polygon",
+          img: "/img/svg/billing/ic-polygon-0.svg",
+          chainId: this.$inDev ? 80001 : 137,
+        },
+        {
+          label: "Ethereum",
+          name: "Ethereum",
+          img: "/img/svg/billing/ic-ethereum.svg",
+          chainId: this.$inDev ? 11155111 : 1,
+        },
         {
           Label: "opBNB",
           name: "opBNB",
@@ -115,54 +115,54 @@ export default {
           img: "/img/svg/billing/ic-opbnb-test.svg",
           chainId: this.$inDev ? 97 : 56,
         },
-        // {
-        //   label: "Arbitrum",
-        //   name: "Arbitrum",
-        //   img: "/img/svg/billing/ic-arbitrum.png",
-        //   chainId: this.$inDev ? 421613 : 42161,
-        // },
-        // {
-        //   label: "zkSync",
-        //   name: "zkSync Era",
-        //   img: "/img/svg/logo-no-letters.svg",
-        //   chainId: this.$inDev ? 280 : 324,
-        // },
-        // {
-        //   label: "Optimism",
-        //   name: "Optimism",
-        //   img: "/img/svg/billing/ic-optimism.svg",
-        //   chainId: 10,
-        // },
-        // {
-        //   label: "everPay",
-        //   name: "everPay",
-        //   img: "/img/svg/billing/ic-everpay.svg",
-        //   chainId: 9999999,
-        // },
-        // {
-        //   label: "Scroll",
-        //   name: "Scroll",
-        //   img: "/img/svg/billing/ic-scroll.svg",
-        //   chainId: 534352,
-        // },
-        // {
-        //   label: "Blast",
-        //   name: "Blast",
-        //   img: "/img/svg/billing/ic-blast.svg",
-        //   chainId: 81457,
-        // },
-        // {
-        //   label: "Taiko",
-        //   name: "Taiko",
-        //   img: "/img/svg/billing/ic-taiko.svg",
-        //   chainId: 167000,
-        // },
-        // {
-        //   label: "ZksyncLite",
-        //   name: "Zksync Lite",
-        //   img: "/img/svg/logo-no-letters.svg",
-        //   chainId: 1,
-        // },
+        {
+          label: "Arbitrum",
+          name: "Arbitrum",
+          img: "/img/svg/billing/ic-arbitrum.png",
+          chainId: this.$inDev ? 421613 : 42161,
+        },
+        {
+          label: "zkSync",
+          name: "zkSync Era",
+          img: "/img/svg/logo-no-letters.svg",
+          chainId: this.$inDev ? 280 : 324,
+        },
+        {
+          label: "Optimism",
+          name: "Optimism",
+          img: "/img/svg/billing/ic-optimism.svg",
+          chainId: 10,
+        },
+        {
+          label: "everPay",
+          name: "everPay",
+          img: "/img/svg/billing/ic-everpay.svg",
+          chainId: 9999999,
+        },
+        {
+          label: "Scroll",
+          name: "Scroll",
+          img: "/img/svg/billing/ic-scroll.svg",
+          chainId: 534352,
+        },
+        {
+          label: "Blast",
+          name: "Blast",
+          img: "/img/svg/billing/ic-blast.svg",
+          chainId: 81457,
+        },
+        {
+          label: "Taiko",
+          name: "Taiko",
+          img: "/img/svg/billing/ic-taiko.svg",
+          chainId: 167000,
+        },
+        {
+          label: "ZksyncLite",
+          name: "Zksync Lite",
+          img: "/img/svg/logo-no-letters.svg",
+          chainId: 1,
+        },
       ];
       if (!this.allow) return list;
       return list.filter((it) => this.allow.includes(it.label));
