@@ -21,6 +21,7 @@
           Points
 
           <ICountUp
+            id="mobile-explore-point-receive"
             :delay="1000"
             :endVal="info.totalPoint"
             :options="{
@@ -38,7 +39,11 @@
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
         </div>
-        <div class="top-card square-box cursor-p" @click="handleClaim">
+        <div
+          class="top-card square-box cursor-p"
+          id="point-explore-send"
+          @click="handleClaim"
+        >
           <span class="points fz-14">
             {{
               computedPoints > info.capacity
@@ -104,6 +109,7 @@ import {
 } from "@/api/booster";
 import ExploreBar from "../components/explore-bar.vue";
 import ICountUp from "vue-countup-v2";
+import { coinMove } from "../../../utils/animation";
 
 import { mapState, mapGetters } from "vuex";
 export default {
@@ -297,7 +303,6 @@ export default {
         const { data } = await fectchExploreInfo(id);
         if (data) {
           this.info = data.node;
-          console.log(data.node);
           this.computedPoints = 0;
           this.pointCount();
         }
@@ -314,7 +319,13 @@ export default {
 
     async handleClaim() {
       try {
+        if (this.computedPoints < this.info.capacity) return;
         let id = this.$route.params.id;
+        if (this.asMobile) {
+          coinMove("point-explore-send", "mobile-explore-point-receive");
+        } else {
+          coinMove("point-explore-send", "point-receive");
+        }
         const data = await claimExplorePoints(id);
 
         console.log(data);
