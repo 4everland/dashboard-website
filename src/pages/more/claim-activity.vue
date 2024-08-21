@@ -361,7 +361,7 @@ export default {
         },
         {
           name: "BSC",
-          icon: require("/public/img/svg/billing/ic-bsc.png"),
+          icon: require("/public/img/svg/billing/ic-opbnb-test.svg"),
           type: "BSC",
           chainId: this.$inDev ? 97 : 56,
           contractAddr: ChapelLandRecharge,

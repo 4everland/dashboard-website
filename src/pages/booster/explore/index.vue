@@ -284,8 +284,10 @@ export default {
       if (!data) throw new Error(message, code);
       return data.explorationId;
     },
-    async getExploreInfo() {
-      this.showExploring = true;
+    async getExploreInfo(loading = true) {
+      if (loading) {
+        this.showExploring = true;
+      }
       try {
         let id = this.$route.params.id;
         if (!id) {
@@ -317,7 +319,7 @@ export default {
 
         console.log(data);
         if (data.data) {
-          this.getExploreInfo();
+          this.getExploreInfo(false);
           this.$toast2(
             `Successfully collected, you earn a ${data.data}-point share.`,
             "success"

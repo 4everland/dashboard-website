@@ -21,8 +21,12 @@
             class="quest-act d-flex align-center justify-space-between fz-14"
           >
             <div class="reward">{{ item.reward }}</div>
-            <div class="act-btn" @click="handleToLink(item)">
-              {{ item.link ? "Let's Go" : "Claim" }}
+            <div
+              class="act-btn"
+              :class="{ disabled: item.done }"
+              @click="handleToLink(item)"
+            >
+              {{ item.done ? "Done" : item.link ? "Let's Go" : "Claim" }}
             </div>
           </div>
         </div>
@@ -49,6 +53,7 @@ export default {
           desc: "Seize the opportunity to win 600 USDT and 50,000 $4EVER Points in our exclusive giveaway. Only 100 lucky winners will take home these incredible rewards.",
           reward: "Shared Reward of 600 USDT & 50,000 $4EVER Points",
           link: "https://app.galxe.com/quest/4EVERLAND/GCKdetkwbs",
+          done: false,
         },
         {
           img: "/img/airDrop/bountyBay-airdrop.png",
@@ -56,6 +61,7 @@ export default {
           desc: "We're thrilled to announce our partnership with BountyBay and introduce an exclusive giveaway, offering the chance to win a share of 100,000 $4EVER points!",
           reward: "Shared Reward of 100,000 Points",
           path: "/quest/bountybay",
+          done: true,
         },
         {
           img: "/img/airDrop/tp-airdrop.png",
@@ -63,6 +69,7 @@ export default {
           desc: "We are delighted to share our thrilling partnership with TokenPocket, offering you the opportunity to compete for a portion of 5,000,000 4EVER Points! Don't miss the chance to be one of 10,000 winners in this amazing opportunity!",
           reward: "Shared Reward of 5 Million Points",
           path: "/quest/tp",
+          done: true,
         },
         {
           img: "/img/airDrop/okx-airdrop.png",
@@ -70,6 +77,7 @@ export default {
           desc: "We're thrilled to announce our exciting collaboration with OKX Wallet, bringing you a chance to win a share of 6,000,000 4EVER Points! Join us to become one of the 10,000 lucky winners with this incredible opportunity!",
           reward: "Shared Reward of 6 Million Points",
           path: "/quest/okx",
+          done: true,
         },
         {
           img: "/img/airDrop/tge-airdrop.png",
@@ -77,6 +85,7 @@ export default {
           desc: "Join the Pre-TGE Party with SPACE ID & 4EVERLAND to win $4EVER points and snag upcoming airdrops! 1,000 OAT holders will be randomly selected to share 500,000 $4EVER Points!",
           reward: "Shared Reward of 500,000 Points",
           path: "/quest/tge",
+          done: true,
         },
         {
           img: "/img/airDrop/bitget-airdrop.png",
@@ -84,6 +93,7 @@ export default {
           desc: "GetDrop is an exclusive airdrop platform for high-quality projects within Bitget Wallet Earning Center. 4EVERLAND is thrilled to collaborate with Bitget, providing up to 5,000,000 $4EVER points in rewards.",
           reward: "Shared Reward of 5 Million Points",
           path: "/quest/bitget",
+          done: true,
         },
         {
           img: "/img/airDrop/bnb-airdrop-activity.png",
@@ -91,6 +101,7 @@ export default {
           desc: "The BNB Chain Airdrop Alliance Program serves as a gesture of gratitude towards the supportive BNB Chain community. Through this program, 4EVERLAND is partnering with BNB Chain to introduce exclusive rewards for retroactive users on BNB Smart Chain (BSC) and opBNB.",
           reward: "Shared Reward of 15 Million Points",
           path: "/quest/bnb",
+          done: true,
         },
       ],
     };
@@ -98,6 +109,7 @@ export default {
 
   methods: {
     handleToLink(item) {
+      if (item.done) return;
       if (item.path) {
         this.$router.push(item.path);
       } else {
@@ -157,6 +169,10 @@ export default {
           background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
           box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
           cursor: pointer;
+        }
+        .act-btn.disabled {
+          background: #ccc;
+          cursor: not-allowed;
         }
       }
     }
