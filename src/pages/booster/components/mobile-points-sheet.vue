@@ -174,7 +174,7 @@ export default {
               case "visit_like":
                 it.log = `Like @4everland_org Tweet ${it.value} points.`;
                 break;
-              case "visit_qoute":
+              case "visit_quote":
                 it.log = `Quote the Tweet and mention 3 friends ${it.value} points.`;
                 break;
               default:

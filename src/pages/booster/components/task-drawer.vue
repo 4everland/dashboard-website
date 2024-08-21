@@ -297,8 +297,6 @@ export default {
       const actType = data.actType;
 
       item.extra.buttonName = data.action.web.nextButtonName;
-      this.$set(_this.tasksLists, index, item);
-
       if (taskListType == "daily") {
         this.$set(_this.tasksLists, index, item);
       } else {
