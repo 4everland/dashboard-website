@@ -35,8 +35,8 @@
       </div>
 
       <v-divider vertical class="mr-4 hidden-sm-and-down"></v-divider>
-      <!-- <div class="menu-btn-box mr-4 mr-sm-2">
-        <v-btn
+      <div class="menu-btn-box mr-4 mr-sm-2">
+        <!-- <v-btn
           v-for="item in menuBtnList"
           class="px-0 px-md-4"
           :class="item.hiddenMobile ? 'hidden-sm-and-down' : ''"
@@ -56,8 +56,19 @@
             :alt="item.label + '_icon'"
           />
           <span v-if="!asMobile"> {{ item.label }}</span>
-        </v-btn>
-      </div> -->
+        </v-btn> -->
+
+        <!-- <v-btn
+          class="boost-enter px-0 px-md-4"
+          @click="$router.push('/boost')"
+          :min-width="asMobile ? '40px' : ''"
+        >
+          <img width="28" src="/img/booster/4ever-point-icon.png" alt="" />
+          <span v-if="!asMobile" class="fw-b ml-2" style="color: #fff"
+            >4EVER Boost</span
+          >
+        </v-btn> -->
+      </div>
       <v-menu
         bottom
         min-width="128px"
@@ -256,5 +267,10 @@ export default {
   border: 1px solid #eaecf0 !important;
   box-shadow: 0px 12px 16px -4px rgba(16, 24, 40, 0.08),
     0px 4px 6px -2px rgba(16, 24, 40, 0.03) !important;
+}
+
+.boost-enter {
+  background: url("/img/booster/enter-bg.png") lightgray 50% / cover no-repeat;
+  background-size: 100% 100%;
 }
 </style>

@@ -171,6 +171,12 @@ export default {
               case "(tg)Subscribe telegram channel":
                 it.log = `Subscribe Telegram channel ${it.value} points.`;
                 break;
+              case "Like @4everland_org Tweet":
+                it.log = `Like @4everland_org Tweet ${it.value} points.`;
+                break;
+              case "Quote the Tweet and mention 3 friends":
+                it.log = `Quote the Tweet and mention 3 friends ${it.value} points.`;
+                break;
               default:
                 break;
             }

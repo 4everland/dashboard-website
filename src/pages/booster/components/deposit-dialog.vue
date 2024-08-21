@@ -244,7 +244,7 @@ export default {
         {
           label: "BSC",
           name: "BSC",
-          img: "/img/svg/billing/ic-bsc.png",
+          img: "/img/svg/billing/ic-opbnb-test.svg",
           chainId: this.$inDev ? 97 : 56,
           contractAddr: ChapelLandRecharge,
         },

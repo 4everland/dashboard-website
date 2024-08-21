@@ -17,7 +17,7 @@
               <th class="text-center">#</th>
               <th class="text-center">Username</th>
               <th class="text-center">$4EVER Points</th>
-              <th class="text-center">Invited By</th>
+              <!-- <th class="text-center">Invited By</th> -->
             </tr>
           </thead>
           <tbody>
@@ -34,14 +34,14 @@
                     : "-"
                 }}
               </td>
-              <td class="text-center">{{ item.points }}</td>
-              <td class="text-center">
+              <td class="text-center">{{ item.points.toLocaleString() }}</td>
+              <!-- <td class="text-center">
                 {{
                   !item.inviter
                     ? item.inviter
                     : item.inviter.slice(0, 6) + "..." + item.inviter.slice(-4)
                 }}
-              </td>
+              </td> -->
             </tr>
           </tbody>
         </template>

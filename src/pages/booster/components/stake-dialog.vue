@@ -154,7 +154,11 @@
             <div class="">
               <div class="d-flex align-center">Choose network</div>
               <div>
-                <v-radio-group v-model="network" row>
+                <v-radio-group
+                  v-model="network"
+                  row
+                  @change="handleChangeNetwork"
+                >
                   <v-radio
                     class="choose-item"
                     :class="network == 'ethereum' ? 'choosed' : ''"
@@ -272,7 +276,7 @@
 </template>
 
 <script>
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 
 import { mapGetters, mapState } from "vuex";
 import { fetchEverPayHash } from "@/api/booster";
@@ -283,7 +287,7 @@ export default {
   },
   data() {
     return {
-      network: "ethereum",
+      network: "",
       ethereumBalance: 0,
       everPayBalance: 0,
       stakeAmount: 0,
@@ -310,12 +314,36 @@ export default {
       return this.userInfo.wallet.address;
     },
   },
-  created() {},
-  mounted() {},
+  created() {
+    this.initNetwork();
+    this.walletObj.on("chainChanged", this.initNetwork);
+  },
   methods: {
+    initNetwork() {
+      this.network = parseInt(this.walletObj.chainId) == 1 ? "ethereum" : "";
+    },
     init() {
       this.initEverPay();
       this.getEthereumBalance();
+    },
+    async handleChangeNetwork(val) {
+      if (val == "ethereum") {
+        await this.switchNet(1);
+        this.init();
+      }
+    },
+    async switchNet(id) {
+      const chainId = "0x" + id.toString(16);
+      try {
+        await this.walletObj.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId }],
+        });
+      } catch (error) {
+        console.log("switch error 2", error);
+
+        this.network = "";
+      }
     },
     async initEverPay() {
       try {
@@ -387,11 +415,14 @@ export default {
         );
         console.log("contract", contract);
 
+        console.log(account);
         const tokenBalance = await contract.balanceOf(account);
         const balance = ethers.utils.formatUnits(
           tokenBalance,
           await contract.decimals()
         );
+
+        console.log(balance, "balance");
         this.ethereumBalance = Math.floor(balance);
       } catch (err) {
         console.log(err);
@@ -412,8 +443,9 @@ export default {
     },
     async onStake() {
       if (this.stakingAmount == 0 && this.stakeAmount < 100) {
-        this.$toast(
-          "Sorry, the initial staking amount cannot be less than 100 T4EVER."
+        this.$toast2(
+          "Sorry, the initial staking amount cannot be less than 100 T4EVER.",
+          "info"
         );
         return;
       }
@@ -422,11 +454,12 @@ export default {
       });
       const account = accounts[0];
       if (account.toLowerCase() !== this.currentAddress.toLowerCase()) {
-        return this.$toast(
+        return this.$toast2(
           `The currently connected wallet is not the one bound to your 4EVERLAND account. Please switch to the ${this.currentAddress.cutStr(
             6,
             4
-          )} wallet to proceed.`
+          )} wallet to proceed.`,
+          "info"
         );
       }
       const network = this.network;
@@ -488,6 +521,7 @@ export default {
         const provider = new ethers.providers.Web3Provider(this.walletObj);
         const signer = provider.getSigner();
         const account = await signer.getAddress();
+
         const balance = this.ethereumBalance;
         let stakeAmount = this.stakeAmount;
 
@@ -499,16 +533,26 @@ export default {
 
         console.log(stakeAmount);
 
-        const tx = await window.ethereum.request({
-          method: "eth_sendTransaction",
-          params: [
-            {
-              to: this.$inDev ? this.testToAddress : this.prodToAddress,
-              from: account,
-              value: stakeAmount,
-            },
-          ],
-        });
+        const tokenContract = new ethers.Contract(
+          this.tokenAddress,
+          ["function transfer(address to, uint amount) returns (bool)"],
+          signer
+        );
+
+        const tx = await tokenContract.transfer(
+          this.$inDev ? this.testToAddress : this.prodToAddress,
+          ethers.utils.parseEther(stakeAmount.toString())
+        );
+        // const tx = await window.ethereum.request({
+        //   method: "eth_sendTransaction",
+        //   params: [
+        //     {
+        //       to: this.$inDev ? this.testToAddress : this.prodToAddress,
+        //       from: account,
+        //       value: stakeAmount,
+        //     },
+        //   ],
+        // });
         console.log(tx);
         const receipt = await tx.wait();
         console.log(receipt);

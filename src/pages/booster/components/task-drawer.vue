@@ -320,7 +320,7 @@ export default {
             }
             shareUrl += this.inviteInfo.link;
             shareUrl =
-              "https://x.com/intent/post?text=" + encodeURIComponent(shareUrl);
+              "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
 
             if (this.isTgMiniApp) return this.$tg.openAuto(shareUrl);
             this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
