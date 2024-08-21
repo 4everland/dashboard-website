@@ -1,13 +1,17 @@
 <template>
   <div>
-    <div class="connect-wallet" @click="handleSign" v-show="!connected">
+    <div class="connect-wallet" @click="handleShowModel" v-show="!connected">
       Connect Wallet
     </div>
+
+    <div @click="handleDeposit">Deposit</div>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { TonConnectUI } from "@tonconnect/ui";
+import { beginCell } from "@ton/ton";
 
 export default {
   data() {
@@ -16,6 +20,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
     connected() {
       if (this.tonConnectUI) {
         return this.tonConnectUI.connected;
@@ -44,17 +51,59 @@ export default {
       console.log(this.tonConnectUI);
     },
 
-    handleSign() {
-      if (process.env.VUE_APP_TG_VERSION == "false") {
-        this.$router.push("/login");
-      } else {
-        this.tonConnectUI.setConnectRequestParameters({ state: "loading" });
-        const tonProof = "abcdefg";
-        this.tonConnectUI.setConnectRequestParameters({
-          state: "ready",
-          value: { tonProof },
-        });
-        this.handleShowModel();
+    // handleSign() {
+    //   if (process.env.VUE_APP_TG_VERSION == "false") {
+    //     this.$router.push("/login");
+    //   } else {
+    //     this.tonConnectUI.setConnectRequestParameters({ state: "loading" });
+    //     const tonProof = "abcdefg";
+    //     this.tonConnectUI.setConnectRequestParameters({
+    //       state: "ready",
+    //       value: { tonProof },
+    //     });
+    //     this.handleShowModel();
+    //   }
+    // },
+
+    async handleDeposit() {
+      if (!this.connected) return this.handleShowModel();
+
+      let payload = JSON.stringify({
+        uid: "580fa3ae794f4998a358389d25a60667",
+      });
+
+      const body = beginCell()
+        .storeUint(0, 32)
+        .storeStringTail(payload)
+        .endCell();
+      const transaction = {
+        validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
+        messages: [
+          // {
+          //   address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA",
+          //   amount: "20000000",
+          //   // stateInit: "base64bocblahblahblah==" // just for instance. Replace with your transaction initState or remove
+          // },
+          {
+            address: "UQCdcwc7GXPGy8aglWg8B03LLWx_BtwF2rL5HUtqCoUp_1Ge",
+            amount: "20000000",
+            // payload: "base64bocblahblahblah==" // just for instance. Replace with your transaction payload or remove
+            payload: body.toBoc().toString("base64"),
+          },
+        ],
+      };
+
+      try {
+        const result = await this.tonConnectUI.sendTransaction(transaction);
+
+        console.log(result, "result");
+        // // you can use signed boc to find the transaction
+        // const someTxData = await myAppExplorerService.getTransaction(
+        //   result.boc
+        // );
+        // alert("Transaction was sent successfully", someTxData);
+      } catch (e) {
+        console.error(e);
       }
     },
   },

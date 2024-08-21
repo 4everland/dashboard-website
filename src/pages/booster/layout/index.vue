@@ -16,6 +16,8 @@
       :depositLand="depositLand"
       :report="report"
     ></DepositDialog>
+
+    <TonWallet></TonWallet>
   </div>
 </template>
 
@@ -23,6 +25,7 @@
 import Navbar from "./nav-bar.vue";
 import AsideDrawer from "./aside-drawer.vue";
 import DepositDialog from "../components/deposit-dialog.vue";
+import TonWallet from "@/components/tonWallet";
 import { bus } from "@/utils/bus";
 
 export default {
@@ -30,6 +33,7 @@ export default {
     Navbar,
     DepositDialog,
     AsideDrawer,
+    TonWallet,
   },
   data() {
     return {
