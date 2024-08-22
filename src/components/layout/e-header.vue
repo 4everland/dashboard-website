@@ -58,7 +58,7 @@
           <span v-if="!asMobile"> {{ item.label }}</span>
         </v-btn> -->
 
-        <!-- <v-btn
+        <v-btn
           class="boost-enter px-0 px-md-4"
           @click="$router.push('/boost')"
           :min-width="asMobile ? '40px' : ''"
@@ -67,7 +67,7 @@
           <span v-if="!asMobile" class="fw-b ml-2" style="color: #fff"
             >4EVER Boost</span
           >
-        </v-btn> -->
+        </v-btn>
       </div>
       <v-menu
         bottom

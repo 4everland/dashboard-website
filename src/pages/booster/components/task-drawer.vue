@@ -327,6 +327,22 @@ export default {
               if (this.isTgMiniApp)
                 return this.$tg.openAuto(data.action.web.message);
 
+              if (actType == "visit_like") {
+                return this.asMobile
+                  ? (location.href =
+                      "https://x.com/intent/like?tweet_id=1825476575191859312")
+                  : window.open(
+                      "https://x.com/intent/like?tweet_id=1825476575191859312"
+                    );
+              }
+              if (actType == "visit_quote") {
+                return this.asMobile
+                  ? (location.href =
+                      "https://x.com/intent/retweet?tweet_id=1825476575191859312")
+                  : window.open(
+                      "https://x.com/intent/retweet?tweet_id=1825476575191859312"
+                    );
+              }
               this.asMobile
                 ? (location.href = data.action.web.message)
                 : window.open(data.action.web.message);
