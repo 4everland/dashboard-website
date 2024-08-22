@@ -4,14 +4,16 @@
       Connect Wallet
     </div>
 
-    <div @click="handleDeposit">Deposit</div>
+    <div style="color: red" @click="handleDeposit">Deposit</div>
+    <div style="color: red" @click="handleDepositUSDT">Deposit USDT</div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 import { TonConnectUI } from "@tonconnect/ui";
-import { beginCell } from "@ton/ton";
+// import { beginCell } from "@ton/ton";
+import { Address, TonClient, beginCell, storeStateInit } from "@ton/ton";
 
 export default {
   data() {
@@ -44,6 +46,8 @@ export default {
         console.log(wallet.connectItems.tonProof, "-----");
       }
     });
+
+    console.log(this.tonConnectUI);
   },
   methods: {
     async handleShowModel() {
@@ -105,6 +109,49 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+
+    async handleDepositUSDT() {
+      try {
+        await this.initJettonWallet();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async initJettonWallet() {
+      const client = new TonClient({
+        endpoint: "https://toncenter.com/api/v2/jsonRPC",
+        apiKey:
+          "d563005e128325d79f740c2d26729093f2418ddef6fd5369f2a4f939ccab66df",
+      });
+
+      const jettonWalletAddress = Address.parse("Sender_Jetton_Wallet");
+      let jettonWalletDataResult = await client.runMethod(
+        jettonWalletAddress,
+        "get_wallet_data"
+      );
+      jettonWalletDataResult.stack.readNumber();
+      const ownerAddress = jettonWalletDataResult.stack.readAddress();
+      const jettonMasterAddress = jettonWalletDataResult.stack.readAddress();
+      const jettonCode = jettonWalletDataResult.stack.readCell();
+      const jettonData = beginCell()
+        .storeCoins(0)
+        .storeAddress(ownerAddress)
+        .storeAddress(jettonMasterAddress)
+        .storeRef(jettonCode)
+        .endCell();
+
+      const stateInit = {
+        code: jettonCode,
+        data: jettonData,
+      };
+
+      const stateInitCell = beginCell()
+        .store(storeStateInit(stateInit))
+        .endCell();
+
+      console.log(new Address(0, stateInitCell.hash()));
     },
   },
 };
