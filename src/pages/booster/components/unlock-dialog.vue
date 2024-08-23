@@ -113,6 +113,7 @@ export default {
   },
   computed: {
     ...mapState({
+      userInfo: (s) => s.userInfo,
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
     }),
     asMobile() {
@@ -149,7 +150,11 @@ export default {
         const data = await unlockStage(this.unlockStage);
         if (data.code == 10002) {
           this.$toast2(data.message, "error");
-          bus.$emit("showDepositDialog", { land: data.data.land });
+          if (!this.userInfo.wallet && !this.isTgMiniApp) {
+            this.$store.dispatch("BindWalletToggle");
+          } else {
+            bus.$emit("showDepositDialog", { land: data.data.land });
+          }
         } else {
           this.$store.dispatch("getBalance");
           await this.$store.dispatch("getBoosterUserInfo");
