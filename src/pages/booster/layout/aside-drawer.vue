@@ -80,6 +80,8 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
+import { bus } from "@/utils/bus";
+
 export default {
   props: {
     value: Boolean,
@@ -141,12 +143,17 @@ export default {
       location.reload();
     },
     handleToDeposit() {
+      // return bus.$emit("showDepositDialog", { report: true, land: 50000 });
+
       if (this.isTgMiniApp) {
         // window.open("https://dashboard.4everland.org/boost");
-        return this.$toast2(
-          "This feature is coming soon for the bot. Stay tuned!",
-          "info"
-        );
+        // return this.$toast2(
+        //   "This feature is coming soon for the bot. Stay tuned!",
+        //   "info"
+        // );
+
+        bus.$emit("showDepositDialog", { land: 0 });
+        return this.$emit("input", false);
       }
 
       if (!this.notLogin) this.$router.push("/billing/deposit");

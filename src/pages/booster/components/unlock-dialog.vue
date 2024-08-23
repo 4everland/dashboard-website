@@ -136,13 +136,13 @@ export default {
   },
   methods: {
     async handleUnlock() {
-      if (this.isTgMiniApp) {
-        // window.open("https://dashboard.4everland.org/boost");
-        return this.$toast2(
-          "This feature is coming soon for the bot. Stay tuned!",
-          "info"
-        );
-      }
+      // if (this.isTgMiniApp) {
+      //   // window.open("https://dashboard.4everland.org/boost");
+      //   return this.$toast2(
+      //     "This feature is coming soon for the bot. Stay tuned!",
+      //     "info"
+      //   );
+      // }
 
       this.unlockLoading = true;
       try {
