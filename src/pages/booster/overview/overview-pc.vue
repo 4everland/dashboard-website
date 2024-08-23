@@ -16,7 +16,7 @@
             </div>
             <div class="d-flex align-center justify-space-between mt-1">
               <span>Boost Rate</span>
-              <span>+{{ boostRate }} pst/h</span>
+              <span>+{{ boostRate }} pts/h</span>
             </div>
             <div class="d-flex align-center justify-space-between mt-1">
               <span>Staking Weight</span>
