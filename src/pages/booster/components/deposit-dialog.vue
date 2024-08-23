@@ -83,6 +83,7 @@
               outlined
               color="#fff"
               width="180"
+              :disabled="depositDisabled"
               @click="handleRechargeLand"
               :loading="load"
               >Claim</v-btn
@@ -171,10 +172,11 @@
                 text-shadow: 0px 0px 8px #6172f3;
               "
               @click="handleRechargeLand"
+              color="#fff"
               outlined
               :loading="load"
+              :disabled="depositDisabled"
               width="180"
-              color="#fff"
               >Claim</v-btn
             >
           </div>
@@ -304,6 +306,11 @@ export default {
       userInfo: (s) => s.userInfo,
       connectAddr: (s) => s.connectAddr,
     }),
+
+    depositDisabled() {
+      let index = this.chainList.findIndex((it) => it.chainId == this.selected);
+      return index == -1;
+    },
   },
   created() {
     this.walletObj.on("chainChanged", this.initSeleted);
@@ -782,5 +789,9 @@ export default {
   border-radius: 4px !important;
   // border: 0.5px solid rgba(255, 255, 255, 0.3) !important;
   background: rgba(49, 49, 49, 0.9) !important;
+}
+
+::v-deep .theme--light.v-btn.v-btn--disabled {
+  color: rgba(255, 255, 255, 0.3) !important;
 }
 </style>

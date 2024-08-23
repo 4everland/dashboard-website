@@ -163,7 +163,7 @@ export default {
     async handleDeposit() {
       if (!this.connected) return this.handleShowModel();
       let payload = JSON.stringify({
-        uid: "7ddd909d671343698be182d0e8bbe8e2",
+        uid: this.userInfo.uid,
       });
 
       const body = beginCell()
