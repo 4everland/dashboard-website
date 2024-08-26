@@ -25,6 +25,7 @@
               style="width: 50px; color: #fff"
               maxlength="5"
               v-model="customLand"
+              autofocus
               type="number"
             />
             <span class="num">,000,000</span>

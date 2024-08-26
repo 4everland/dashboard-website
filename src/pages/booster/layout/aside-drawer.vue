@@ -4,7 +4,7 @@
     :value="value"
     class="booster-aside-drawer"
     overlay-opacity="0.7"
-    @input="(val) => $emit('input', val)"
+    @input="handleOpenDrawer"
     width="80%"
     right
     fixed
@@ -163,6 +163,13 @@ export default {
         this.$router.push(it.path);
       } else {
         window.open(it.link);
+      }
+    },
+    handleOpenDrawer(val) {
+      this.$emit("input", val);
+
+      if (val) {
+        this.$store.dispatch("getBalance");
       }
     },
   },
