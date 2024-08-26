@@ -56,6 +56,15 @@ export default {
           done: false,
         },
         {
+          img: "/img/airDrop/batching-ai-airdrop-bg.jpg",
+          title: "2,000,000 $4EVER Points Giveaway with Batching AI",
+          desc: "Join our collaborative event and seize the chance to win big! 2,000,000 Points and 10M pBAT await you! ",
+          reward: "Shared Reward of 2,000,000 Points",
+          link: "https://app.galxe.com/quest/4EVERLAND/GCKdetkwbs",
+          done: true,
+        },
+
+        {
           img: "/img/airDrop/bountyBay-airdrop.png",
           title: "100,000 $4EVER Points Giveaway with BountyBay",
           desc: "We're thrilled to announce our partnership with BountyBay and introduce an exclusive giveaway, offering the chance to win a share of 100,000 $4EVER points!",
