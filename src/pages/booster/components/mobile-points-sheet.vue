@@ -177,6 +177,12 @@ export default {
               case "visit_quote":
                 it.log = `Quote the Tweet and mention 3 friends ${it.value} points.`;
                 break;
+              case "batching_ai":
+                it.log = `Giveaway with Batching AI ${it.value} points.`;
+                break;
+              case "play_coco_park":
+                it.log = `Play Coco Park ${it.value} points.`;
+                break;
               default:
                 break;
             }
