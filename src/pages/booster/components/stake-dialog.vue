@@ -449,7 +449,7 @@ export default {
         );
         return;
       }
-      const accounts = await window.ethereum.request({
+      const accounts = await this.walletObj.request({
         method: "eth_requestAccounts",
       });
       const account = accounts[0];
@@ -463,6 +463,8 @@ export default {
         );
       }
       const network = this.network;
+
+      console.log("checking...");
       switch (network) {
         case "ethereum":
           this.handleEthPayment();
@@ -521,7 +523,6 @@ export default {
         const provider = new ethers.providers.Web3Provider(this.walletObj);
         const signer = provider.getSigner();
         const account = await signer.getAddress();
-
         const balance = this.ethereumBalance;
         let stakeAmount = this.stakeAmount;
 
@@ -543,16 +544,6 @@ export default {
           this.$inDev ? this.testToAddress : this.prodToAddress,
           ethers.utils.parseEther(stakeAmount.toString())
         );
-        // const tx = await window.ethereum.request({
-        //   method: "eth_sendTransaction",
-        //   params: [
-        //     {
-        //       to: this.$inDev ? this.testToAddress : this.prodToAddress,
-        //       from: account,
-        //       value: stakeAmount,
-        //     },
-        //   ],
-        // });
         console.log(tx);
         const receipt = await tx.wait();
         console.log(receipt);
