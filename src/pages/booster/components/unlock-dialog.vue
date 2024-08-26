@@ -147,14 +147,13 @@ export default {
 
       this.unlockLoading = true;
       try {
+        if (!this.userInfo.wallet && !this.isTgMiniApp)
+          return this.$store.dispatch("BindWalletToggle");
         const data = await unlockStage(this.unlockStage);
         if (data.code == 10002) {
           this.$toast2(data.message, "error");
-          if (!this.userInfo.wallet && !this.isTgMiniApp) {
-            this.$store.dispatch("BindWalletToggle");
-          } else {
-            bus.$emit("showDepositDialog", { land: data.data.land });
-          }
+
+          bus.$emit("showDepositDialog", { land: data.data.land });
         } else {
           this.$store.dispatch("getBalance");
           await this.$store.dispatch("getBoosterUserInfo");

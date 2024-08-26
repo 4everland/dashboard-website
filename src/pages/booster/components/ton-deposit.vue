@@ -141,27 +141,10 @@ export default {
     console.log(this.tonConnectUI);
   },
   methods: {
-    async handleShowModel() {
-      await this.tonConnectUI.openModal();
-      console.log(this.tonConnectUI);
-    },
-
-    // handleSign() {
-    //   if (process.env.VUE_APP_TG_VERSION == "false") {
-    //     this.$router.push("/login");
-    //   } else {
-    //     this.tonConnectUI.setConnectRequestParameters({ state: "loading" });
-    //     const tonProof = "abcdefg";
-    //     this.tonConnectUI.setConnectRequestParameters({
-    //       state: "ready",
-    //       value: { tonProof },
-    //     });
-    //     this.handleShowModel();
-    //   }
-    // },
-
     async handleDeposit() {
-      if (!this.connected) return this.handleShowModel();
+      if (!this.connected) {
+        await this.tonConnectUI.connectWallet();
+      }
       let payload = JSON.stringify({
         uid: this.userInfo.uid,
       });
@@ -189,17 +172,9 @@ export default {
           },
         ],
       };
-
       try {
         const result = await this.tonConnectUI.sendTransaction(transaction);
-
         console.log(result, "result");
-        // you can use signed boc to find the transaction
-        // const someTxData = await myAppExplorerService.getTransaction(
-        //   result.boc
-        // );
-        // alert("Transaction was sent successfully", someTxData);
-
         this.$toast2("Claim Successfully", "success");
         this.$emit("input", false);
       } catch (e) {
@@ -207,101 +182,101 @@ export default {
       }
     },
 
-    async handleDepositUSDT() {
-      if (!this.connected) return this.handleShowModel();
-      try {
-        const jettonWalletContract = await this.initJettonWallet();
-        let payload = JSON.stringify({
-          uid: "580fa3ae794f4998a358389d25a60667",
-        });
-        // const body = beginCell()
-        //   .storeUint(0xf8a7ea5, 32)
-        //   .storeUint(0, 64)
-        //   .storeCoins(1000000)
-        //   .storeAddress(
-        //     Address.parse("UQCdcwc7GXPGy8aglWg8B03LLWx_BtwF2rL5HUtqCoUp_1Ge")
-        //   )
-        //   .storeAddress(
-        //     Address.parse("UQBD_LZMPv4U5DrZ9XyKOrtSYttVW05wnwQGIARIpMjnUcjk")
-        //   )
-        //   .storeUint(0, 1)
-        //   .storeCoins(toNano(0.05))
-        //   .storeUInt(0, 1)
-        //   .endCell();
+    // async handleDepositUSDT() {
+    //   if (!this.connected) return this.handleShowModel();
+    //   try {
+    //     const jettonWalletContract = await this.initJettonWallet();
+    //     let payload = JSON.stringify({
+    //       uid: "580fa3ae794f4998a358389d25a60667",
+    //     });
+    //     // const body = beginCell()
+    //     //   .storeUint(0xf8a7ea5, 32)
+    //     //   .storeUint(0, 64)
+    //     //   .storeCoins(1000000)
+    //     //   .storeAddress(
+    //     //     Address.parse("UQCdcwc7GXPGy8aglWg8B03LLWx_BtwF2rL5HUtqCoUp_1Ge")
+    //     //   )
+    //     //   .storeAddress(
+    //     //     Address.parse("UQBD_LZMPv4U5DrZ9XyKOrtSYttVW05wnwQGIARIpMjnUcjk")
+    //     //   )
+    //     //   .storeUint(0, 1)
+    //     //   .storeCoins(toNano(0.05))
+    //     //   .storeUInt(0, 1)
+    //     //   .endCell();
 
-        const body = beginCell()
-          .storeUint(0xf8a7ea5, 32) // jetton 转账操作码
-          .storeUint(0, 64) // query_id:uint64
-          .storeCoins(1000000) // amount:(VarUInteger 16) -  转账的 Jetton 金额（小数位 = 6 - jUSDT, 9 - 默认）
-          .storeAddress(
-            Address.parse("EQDc77Qoo0DXIJ_aPRflpoYUHag4gRCg7ojy5DmhmewgTURh")
-          ) // destination:MsgAddress
-          .storeAddress(
-            Address.parse("EQAazWpAwnNHUGwgHlof4G3CIEqbJLqhW5Dg09_ouqwh8aTe")
-          ) // response_destination:MsgAddress
-          .storeUint(0, 1) // custom_payload:(Maybe ^Cell)
-          .storeCoins(toNano(0.05)) // forward_ton_amount:(VarUInteger 16)
-          .storeUint(0, 1) // forward_payload:(Either Cell ^Cell)
-          .endCell();
+    //     const body = beginCell()
+    //       .storeUint(0xf8a7ea5, 32) // jetton 转账操作码
+    //       .storeUint(0, 64) // query_id:uint64
+    //       .storeCoins(1000000) // amount:(VarUInteger 16) -  转账的 Jetton 金额（小数位 = 6 - jUSDT, 9 - 默认）
+    //       .storeAddress(
+    //         Address.parse("")
+    //       ) // destination:MsgAddress
+    //       .storeAddress(
+    //         Address.parse("")
+    //       ) // response_destination:MsgAddress
+    //       .storeUint(0, 1) // custom_payload:(Maybe ^Cell)
+    //       .storeCoins(toNano(0.05)) // forward_ton_amount:(VarUInteger 16)
+    //       .storeUint(0, 1) // forward_payload:(Either Cell ^Cell)
+    //       .endCell();
 
-        const transaction = {
-          validUntil: Math.floor(Date.now() / 1000) + 360,
-          messages: [
-            {
-              address: "EQDc77Qoo0DXIJ_aPRflpoYUHag4gRCg7ojy5DmhmewgTURh",
-              amount: toNano("0.05").toString(),
-              payload: body.toBoc().toString("base64"),
-            },
-          ],
-        };
+    //     const transaction = {
+    //       validUntil: Math.floor(Date.now() / 1000) + 360,
+    //       messages: [
+    //         {
+    //           address: "",
+    //           amount: toNano("0.05").toString(),
+    //           payload: body.toBoc().toString("base64"),
+    //         },
+    //       ],
+    //     };
 
-        const result = await this.tonConnectUI.sendTransaction(transaction);
-        console.log(result, "result");
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    //     const result = await this.tonConnectUI.sendTransaction(transaction);
+    //     console.log(result, "result");
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
 
-    async initJettonWallet() {
-      const client = new TonClient({
-        endpoint: "https://toncenter.com/api/v2/jsonRPC",
-        apiKey:
-          "d563005e128325d79f740c2d26729093f2418ddef6fd5369f2a4f939ccab66df",
-      });
+    // async initJettonWallet() {
+    //   const client = new TonClient({
+    //     endpoint: "https://toncenter.com/api/v2/jsonRPC",
+    //     apiKey:
+    //       "",
+    //   });
 
-      const jettonWalletAddress = Address.parse(
-        "EQAazWpAwnNHUGwgHlof4G3CIEqbJLqhW5Dg09_ouqwh8aTe"
-      );
-      let jettonWalletDataResult = await client.runMethod(
-        jettonWalletAddress,
-        "get_wallet_data"
-      );
-      jettonWalletDataResult.stack.readNumber();
-      const ownerAddress = jettonWalletDataResult.stack.readAddress();
-      const jettonMasterAddress = jettonWalletDataResult.stack.readAddress();
-      const jettonCode = jettonWalletDataResult.stack.readCell();
+    //   const jettonWalletAddress = Address.parse(
+    //     ""
+    //   );
+    //   let jettonWalletDataResult = await client.runMethod(
+    //     jettonWalletAddress,
+    //     "get_wallet_data"
+    //   );
+    //   jettonWalletDataResult.stack.readNumber();
+    //   const ownerAddress = jettonWalletDataResult.stack.readAddress();
+    //   const jettonMasterAddress = jettonWalletDataResult.stack.readAddress();
+    //   const jettonCode = jettonWalletDataResult.stack.readCell();
 
-      console.log(ownerAddress.toString(), jettonMasterAddress.toString());
-      const jettonData = beginCell()
-        .storeCoins(0)
-        .storeAddress(ownerAddress)
-        .storeAddress(jettonMasterAddress)
-        .storeRef(jettonCode)
-        .endCell();
+    //   console.log(ownerAddress.toString(), jettonMasterAddress.toString());
+    //   const jettonData = beginCell()
+    //     .storeCoins(0)
+    //     .storeAddress(ownerAddress)
+    //     .storeAddress(jettonMasterAddress)
+    //     .storeRef(jettonCode)
+    //     .endCell();
 
-      const stateInit = {
-        code: jettonCode,
-        data: jettonData,
-      };
+    //   const stateInit = {
+    //     code: jettonCode,
+    //     data: jettonData,
+    //   };
 
-      const stateInitCell = beginCell()
-        .store(storeStateInit(stateInit))
-        .endCell();
+    //   const stateInitCell = beginCell()
+    //     .store(storeStateInit(stateInit))
+    //     .endCell();
 
-      console.log(new Address(0, stateInitCell.hash()));
+    //   console.log(new Address(0, stateInitCell.hash()));
 
-      return new Address(0, stateInitCell.hash());
-    },
+    //   return new Address(0, stateInitCell.hash());
+    // },
   },
 };
 </script>
