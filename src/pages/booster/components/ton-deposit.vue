@@ -48,6 +48,10 @@
           </div>
         </div>
 
+        <div class="fz-12 text-center">
+          Claiming LAND may take some time. Please wait.
+        </div>
+
         <div
           class="act-btn d-flex align-center justify-center mt-10"
           style="gap: 16px"
@@ -82,10 +86,10 @@
 <script>
 import { mapState } from "vuex";
 import { TonConnectUI } from "@tonconnect/ui";
-// import { beginCell } from "@ton/ton";
 import {
   Address,
   TonClient,
+  Cell,
   beginCell,
   storeStateInit,
   toNano,
@@ -103,6 +107,7 @@ export default {
       tonConnectUI: null,
       load: false,
       customLand: "",
+      tonClient: null,
     };
   },
   computed: {
@@ -125,7 +130,7 @@ export default {
   },
   mounted() {
     const tonConnectUI = new TonConnectUI({
-      manifestUrl: "https://hb.4everland.app/tonconnect-manifest.json",
+      manifestUrl: "https://dashboard.4everland.app/tonconnect-manifest.json",
     });
     this.tonConnectUI = tonConnectUI;
     this.tonConnectUI.onStatusChange((wallet) => {
@@ -138,15 +143,49 @@ export default {
       }
     });
 
-    console.log(this.tonConnectUI);
+    // const tonClient = new TonClient({
+    //   endpoint: "https://toncenter.com/api/v2/jsonRPC",
+    // });
+    // this.tonClient = tonClient;
+
+    // const cell = Cell.fromBase64(
+    //   "te6cckEBBAEA5QAB5YgAh/lsmH38Kch1s+r5FHV2pMW2qrac4T4IDEAIkUmRzqIDm0s7c///+Is2Yj1gAAAATNd4k05gDmj7mlwK6i5+iQcUG9Y4a1XsOVZZmNncyzfBuvE4Ofv7cLnchRkBgyHyBF79awl9qt4cGz7UNvC7OgUBAgoOw8htAwIDAAAAxEIATrmDnYy542XjUEq0HgOm5Za2P4NuAu1ZfI6ltQVClP+gslpLKAAAAAAAAAAAAAAAAAAAAAAAeyJ1aWQiOiI1ODBmYTNhZTc5NGY0OTk4YTM1ODM4OWQyNWE2MDY2NyJ9F8yYPQ=="
+    // );
+    // const buffer = cell.hash();
+    // const hashHex = buffer.toString("hex");
+    // console.log(hashHex);
   },
   methods: {
+    // async getTxs() {
+    //   try {
+    //     console.log(this.tonConnectUI.account);
+    //     if (this.tonConnectUI.account.address) {
+    //       const data = await this.tonClient.getTransactions(
+    //         Address.parse(this.tonConnectUI.account.address),
+    //         {
+    //           limit: 10,
+    //         }
+    //       );
+
+    //       // const data = await this.tonClient.getTransaction(
+    //       //   Address.parse(this.tonConnectUI.account.address),
+    //       //   "0",
+    //       //   "28b666c83471b0db08f9a6116b1f906b59df2cae9d9809aa2e88f8ff30cf1957"
+    //       // );
+    //       console.log(data);
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // },
+
     async handleDeposit() {
       if (!this.connected) {
         await this.tonConnectUI.connectWallet();
       }
       let payload = JSON.stringify({
         uid: this.userInfo.uid,
+        // uid: "580fa3ae794f4998a358389d25a60667",
       });
 
       const body = beginCell()
@@ -166,7 +205,7 @@ export default {
         validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
         messages: [
           {
-            address: "UQCdcwc7GXPGy8aglWg8B03LLWx_BtwF2rL5HUtqCoUp_1Ge",
+            address: process.env.VUE_APP_TON_DST_ADDR,
             amount,
             payload: body.toBoc().toString("base64"),
           },
@@ -175,12 +214,22 @@ export default {
       try {
         const result = await this.tonConnectUI.sendTransaction(transaction);
         console.log(result, "result");
-        this.$toast2("Claim Successfully", "success");
+        this.$toast2("Submission successful. Claiming in progress!", "success");
         this.$emit("input", false);
       } catch (e) {
         console.error(e);
       }
     },
+    // setTonDepositHash(hash) {
+    //   let hashJson = localStorage.getItem("ton_deposit_hash");
+    //   if (!hashJson) {
+    //     localStorage.setItem("ton_deposit_hash", JSON.stringify([hash]));
+    //   } else {
+    //     let hashArr = JSON.parse(hashJson);
+    //     hashArr.push(hash);
+    //     localStorage.setItem("ton_deposit_hash", JSON.stringify(hashArr));
+    //   }
+    // },
 
     // async handleDepositUSDT() {
     //   if (!this.connected) return this.handleShowModel();
