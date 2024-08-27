@@ -8,7 +8,7 @@ export default [
         path: "/boost",
         component: () => import("./overview"),
         meta: {
-          title: "Boost",
+          title: "4EVER Boost",
           hideNav: 1,
           isTab: 1,
           noLogin: 1,
