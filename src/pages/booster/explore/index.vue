@@ -326,6 +326,9 @@ export default {
         } else {
           coinMove("point-explore-send", "point-receive");
         }
+        clearInterval(this.timer);
+        this.computedPoints = 0;
+
         const data = await claimExplorePoints(id);
 
         console.log(data);

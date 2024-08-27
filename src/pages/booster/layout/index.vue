@@ -12,10 +12,19 @@
     ></AsideDrawer>
     <router-view></router-view>
     <DepositDialog
+      v-if="!isTgMiniApp"
       v-model="showDeposit"
       :depositLand="depositLand"
       :report="report"
     ></DepositDialog>
+
+    <TonDeposit
+      v-else
+      v-model="showDeposit"
+      :depositLand="depositLand"
+      :report="report"
+    ></TonDeposit>
+    <!-- <TonDepositTest></TonDepositTest> -->
   </div>
 </template>
 
@@ -24,20 +33,30 @@ import Navbar from "./nav-bar.vue";
 import AsideDrawer from "./aside-drawer.vue";
 import DepositDialog from "../components/deposit-dialog.vue";
 import { bus } from "@/utils/bus";
+import TonDeposit from "../components/ton-deposit.vue";
+
+// import TonDepositTest from "../components/ton-deposit-test.vue";
 
 export default {
   components: {
     Navbar,
     DepositDialog,
     AsideDrawer,
+    TonDeposit,
+    // TonDepositTest,
   },
   data() {
     return {
       drawer: false,
       showDeposit: false,
-      depositLand: 10000,
+      depositLand: 0,
       report: false,
     };
+  },
+  computed: {
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
 
   created() {
@@ -49,11 +68,7 @@ export default {
       } else {
         this.report = false;
       }
-      if (land > 10000) {
-        this.depositLand = land;
-      } else {
-        this.depositLand = 10000;
-      }
+      this.depositLand = land;
       this.showDeposit = true;
     });
   },

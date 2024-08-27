@@ -113,6 +113,7 @@ export default {
   },
   computed: {
     ...mapState({
+      userInfo: (s) => s.userInfo,
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
     }),
     asMobile() {
@@ -136,19 +137,22 @@ export default {
   },
   methods: {
     async handleUnlock() {
-      if (this.isTgMiniApp) {
-        // window.open("https://dashboard.4everland.org/boost");
-        return this.$toast2(
-          "This feature is coming soon for the bot. Stay tuned!",
-          "info"
-        );
-      }
+      // if (this.isTgMiniApp) {
+      //   // window.open("https://dashboard.4everland.org/boost");
+      //   return this.$toast2(
+      //     "This feature is coming soon for the bot. Stay tuned!",
+      //     "info"
+      //   );
+      // }
 
       this.unlockLoading = true;
       try {
+        if (!this.userInfo.wallet && !this.isTgMiniApp)
+          return this.$store.dispatch("BindWalletToggle");
         const data = await unlockStage(this.unlockStage);
         if (data.code == 10002) {
           this.$toast2(data.message, "error");
+
           bus.$emit("showDepositDialog", { land: data.data.land });
         } else {
           this.$store.dispatch("getBalance");

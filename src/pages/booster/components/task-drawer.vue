@@ -13,7 +13,7 @@
       @input="stateTaskDrawerShow"
     >
       <v-container fluid style="padding: 24px 16px">
-        <div class="task-drawer-top" v-if="!isTgMiniApp">
+        <div class="task-drawer-top">
           <div class="drawer-title task-drawer-title">
             <span class="fz-20 fw-b"> Daily Tasks </span>
             <v-btn
@@ -390,15 +390,15 @@ export default {
       this.$store.dispatch("getBoosterUserInfo");
     },
     async onSign() {
-      if (this.isTgMiniApp) {
-        window.open("https://dashboard.4everland.org/boost");
-        // return this.$toast2(
-        //   "This feature is coming soon for the bot. Stay tuned!",
-        //   "success"
-        // );
-        return;
-      }
-      if (!this.userInfo.wallet) {
+      // if (this.isTgMiniApp) {
+      //   window.open("https://dashboard.4everland.org/boost");
+      //   // return this.$toast2(
+      //   //   "This feature is coming soon for the bot. Stay tuned!",
+      //   //   "success"
+      //   // );
+      //   return;
+      // }
+      if (!this.userInfo.wallet && !this.isTgMiniApp) {
         this.$store.dispatch("BindWalletToggle");
         this.stateTaskDrawerShow(false);
       } else {

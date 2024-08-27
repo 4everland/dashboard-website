@@ -8,7 +8,9 @@ import "./setup";
 import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 import tgUtil from "@/utils/tg.js";
 import VConsole from "vconsole";
+import { Buffer } from "buffer";
 
+window.Buffer = Buffer;
 process.env.VUE_APP_TG_VERSION == "true" &&
 process.env.NODE_ENV == "development"
   ? new VConsole()

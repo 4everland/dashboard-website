@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 module.exports = {
   transpileDependencies: [
     "vuetify",
@@ -6,6 +7,10 @@ module.exports = {
     "@solana/spl-token",
     "@walletconnect",
     "unstorage",
+    "@ton/core",
+    "@ton/crypto",
+    "@ton/ton",
+    "buffer",
   ],
   outputDir: "dist",
   publicPath: process.env.NODE_ENV === "production" ? "/" : "/",
@@ -34,6 +39,11 @@ module.exports = {
     config.plugins.delete("prefetch");
   },
   configureWebpack: {
+    plugins: [
+      new webpack.ProvidePlugin({
+        Buffer: ["buffer", "Buffer"],
+      }),
+    ],
     optimization: {
       splitChunks: {
         chunks: "all",
@@ -56,6 +66,11 @@ module.exports = {
             reuseExistingChunk: true,
           },
         },
+      },
+    },
+    resolve: {
+      alias: {
+        buffer: require.resolve("buffer/"),
       },
     },
   },

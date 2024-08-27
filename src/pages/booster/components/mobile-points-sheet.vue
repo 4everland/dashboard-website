@@ -68,7 +68,7 @@
             </div>
             <div v-else>
               <div
-                class="log-item mb-6 d-flex align-center justify-space-between"
+                class="log-item mb-6 d-flex align-center justify-space-between fz-12"
                 v-for="(it, i) in list"
                 :key="i"
               >

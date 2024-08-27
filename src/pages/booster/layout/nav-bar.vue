@@ -126,6 +126,17 @@
                         <span>{{ balance.land }}</span>
                         <span>{{ balance.unit }}</span>
                         <span class="ml-1">LAND</span>
+
+                        <v-btn
+                          class="ml-1"
+                          small
+                          color="#fff"
+                          icon
+                          :loading="reloadBalance"
+                          @click.stop="handleGetBalance"
+                        >
+                          <v-icon color="#fff">mdi-refresh</v-icon>
+                        </v-btn>
                       </div>
                       <v-btn
                         color="#6172F3"
@@ -403,6 +414,7 @@ export default {
         invited: "-",
         link: "-",
       },
+      reloadBalance: false,
     };
   },
   computed: {
@@ -482,6 +494,15 @@ export default {
         this.inviteInfo.link,
         "Embark on the exciting 4EVER Boost campaign to boost your $4EVER points and grab exciting upcoming airdrops!🚨"
       );
+    },
+    async handleGetBalance() {
+      try {
+        this.reloadBalance = true;
+        await this.$store.dispatch("getBalance");
+        this.reloadBalance = false;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   components: {

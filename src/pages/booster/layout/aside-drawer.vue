@@ -4,7 +4,7 @@
     :value="value"
     class="booster-aside-drawer"
     overlay-opacity="0.7"
-    @input="(val) => $emit('input', val)"
+    @input="handleOpenDrawer"
     width="80%"
     right
     fixed
@@ -29,14 +29,25 @@
           <div class="fz-14 fw-b">
             {{ (userInfo.username || "-").cutStr(6, 4) }}
           </div>
-          <div class="fz-12 balance">
+          <div class="fz-12 balance d-flex align-center">
             <span>Balance:</span>
             <span class="ml-1">
               <span>{{ balance.land }}</span>
               <span>{{ balance.unit }}</span> LAND</span
             >
+            <v-btn
+              class="ml-1"
+              small
+              color="#fff"
+              icon
+              :loading="reloadBalance"
+              @click="handleGetBalance"
+            >
+              <v-icon color="#fff">mdi-refresh</v-icon>
+            </v-btn>
           </div>
         </div>
+
         <div class="pgb ml-auto" @click="handleToDeposit">
           <img
             style="display: block"
@@ -80,12 +91,16 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
+import { bus } from "@/utils/bus";
+
 export default {
   props: {
     value: Boolean,
   },
   data() {
-    return {};
+    return {
+      reloadBalance: false,
+    };
   },
   computed: {
     ...mapState({
@@ -141,12 +156,17 @@ export default {
       location.reload();
     },
     handleToDeposit() {
+      // return bus.$emit("showDepositDialog", { report: true, land: 50000 });
+
       if (this.isTgMiniApp) {
         // window.open("https://dashboard.4everland.org/boost");
-        return this.$toast2(
-          "This feature is coming soon for the bot. Stay tuned!",
-          "info"
-        );
+        // return this.$toast2(
+        //   "This feature is coming soon for the bot. Stay tuned!",
+        //   "info"
+        // );
+
+        bus.$emit("showDepositDialog", { land: 0 });
+        return this.$emit("input", false);
       }
 
       if (!this.notLogin) this.$router.push("/billing/deposit");
@@ -156,6 +176,23 @@ export default {
         this.$router.push(it.path);
       } else {
         window.open(it.link);
+      }
+    },
+    handleOpenDrawer(val) {
+      this.$emit("input", val);
+
+      if (val) {
+        this.$store.dispatch("getBalance");
+      }
+    },
+
+    async handleGetBalance() {
+      try {
+        this.reloadBalance = true;
+        await this.$store.dispatch("getBalance");
+        this.reloadBalance = false;
+      } catch (error) {
+        console.log(error);
       }
     },
   },
