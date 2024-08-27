@@ -29,14 +29,25 @@
           <div class="fz-14 fw-b">
             {{ (userInfo.username || "-").cutStr(6, 4) }}
           </div>
-          <div class="fz-12 balance">
+          <div class="fz-12 balance d-flex align-center">
             <span>Balance:</span>
             <span class="ml-1">
               <span>{{ balance.land }}</span>
               <span>{{ balance.unit }}</span> LAND</span
             >
+            <v-btn
+              class="ml-1"
+              small
+              color="#fff"
+              icon
+              :loading="reloadBalance"
+              @click="handleGetBalance"
+            >
+              <v-icon color="#fff">mdi-refresh</v-icon>
+            </v-btn>
           </div>
         </div>
+
         <div class="pgb ml-auto" @click="handleToDeposit">
           <img
             style="display: block"
@@ -87,7 +98,9 @@ export default {
     value: Boolean,
   },
   data() {
-    return {};
+    return {
+      reloadBalance: false,
+    };
   },
   computed: {
     ...mapState({
@@ -170,6 +183,16 @@ export default {
 
       if (val) {
         this.$store.dispatch("getBalance");
+      }
+    },
+
+    async handleGetBalance() {
+      try {
+        this.reloadBalance = true;
+        await this.$store.dispatch("getBalance");
+        this.reloadBalance = false;
+      } catch (error) {
+        console.log(error);
       }
     },
   },
