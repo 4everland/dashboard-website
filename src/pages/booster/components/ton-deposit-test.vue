@@ -1,9 +1,9 @@
 <template>
-  <v-overlay :value="value" opacity="1">
+  <v-overlay v-model="showoverlay" opacity="1">
     <div class="start-boosting d-flex flex-column justify-center">
       <img
         class="close-btn"
-        @click="$emit('input', false)"
+        @click="showoverlay = false"
         src="/img/booster/svg/close.svg"
         width="18"
         alt=""
@@ -60,7 +60,7 @@
           <v-btn
             outlined
             color="rgba(255, 255, 255, 0.60)"
-            @click="$emit('input', false)"
+            @click="showoverlay = false"
             width="180"
             >Cancel</v-btn
           >
@@ -79,6 +79,8 @@
             >Claim</v-btn
           >
         </div>
+
+        <button @click="getLastHash">Get Last Transaction</button>
       </div>
     </div>
   </v-overlay>
@@ -100,11 +102,16 @@ import axios from "axios";
 export default {
   props: {
     value: Boolean,
-    depositLand: Number,
+    depositLand: {
+      type: Number,
+      default: 0,
+    },
     report: Boolean,
   },
+
   data() {
     return {
+      showoverlay: true,
       tonConnectUI: null,
       load: false,
       customLand: "",
@@ -144,17 +151,10 @@ export default {
       }
     });
 
-    // const tonClient = new TonClient({
-    //   endpoint: "https://toncenter.com/api/v2/jsonRPC",
-    // });
-    // this.tonClient = tonClient;
-
-    // const cell = Cell.fromBase64(
-    //   "te6cckEBBAEA5QAB5YgAh/lsmH38Kch1s+r5FHV2pMW2qrac4T4IDEAIkUmRzqIDm0s7c///+Is2Yj1gAAAATNd4k05gDmj7mlwK6i5+iQcUG9Y4a1XsOVZZmNncyzfBuvE4Ofv7cLnchRkBgyHyBF79awl9qt4cGz7UNvC7OgUBAgoOw8htAwIDAAAAxEIATrmDnYy542XjUEq0HgOm5Za2P4NuAu1ZfI6ltQVClP+gslpLKAAAAAAAAAAAAAAAAAAAAAAAeyJ1aWQiOiI1ODBmYTNhZTc5NGY0OTk4YTM1ODM4OWQyNWE2MDY2NyJ9F8yYPQ=="
-    // );
-    // const buffer = cell.hash();
-    // const hashHex = buffer.toString("hex");
-    // console.log(hashHex);
+    const tonClient = new TonClient({
+      endpoint: "https://toncenter.com/api/v2/jsonRPC",
+    });
+    this.tonClient = tonClient;
   },
   methods: {
     // async getTxs() {
@@ -185,8 +185,7 @@ export default {
         await this.tonConnectUI.connectWallet();
       }
       let payload = JSON.stringify({
-        uid: this.userInfo.uid,
-        // uid: "580fa3ae794f4998a358389d25a60667",
+        uid: "580fa3ae794f4998a358389d25a60667",
       });
 
       const body = beginCell()
@@ -199,9 +198,7 @@ export default {
       );
       let price = data.parsed[0].price.price;
 
-      const amount = ((this.customAmount / 1e6 / price) * 1e17 * 1.05).toFixed(
-        0
-      );
+      const amount = ((200000 / 1e6 / price) * 1e17 * 1.05).toFixed(0);
       const transaction = {
         validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
         messages: [
@@ -215,11 +212,30 @@ export default {
       try {
         const result = await this.tonConnectUI.sendTransaction(transaction);
         console.log(result, "result");
+
+        this.transformBoc(result.boc);
         this.$toast2("Submission successful. Claiming in progress!", "success");
         this.$emit("input", false);
       } catch (e) {
         console.error(e);
       }
+    },
+
+    transformBoc(boc) {
+      const cell = Cell.fromBase64(boc);
+      const buffer = cell.hash();
+      const hashHex = buffer.toString("hex");
+      console.log(hashHex);
+    },
+
+    async getLastHash() {
+      if (!this.connected) {
+        await this.tonConnectUI.connectWallet();
+      }
+      const data = await this.tonClient.getContractState(
+        Address.parse(this.tonConnectUI.account.address)
+      );
+      console.log(data, "last-data");
     },
     // setTonDepositHash(hash) {
     //   let hashJson = localStorage.getItem("ton_deposit_hash");

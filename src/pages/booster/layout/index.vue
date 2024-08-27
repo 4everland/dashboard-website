@@ -18,13 +18,13 @@
       :report="report"
     ></DepositDialog>
 
-    <!-- <TonWallet></TonWallet> -->
     <TonDeposit
       v-else
       v-model="showDeposit"
       :depositLand="depositLand"
       :report="report"
     ></TonDeposit>
+    <!-- <TonDepositTest></TonDepositTest> -->
   </div>
 </template>
 
@@ -32,9 +32,10 @@
 import Navbar from "./nav-bar.vue";
 import AsideDrawer from "./aside-drawer.vue";
 import DepositDialog from "../components/deposit-dialog.vue";
-// import TonWallet from "@/components/tonWallet";
 import { bus } from "@/utils/bus";
 import TonDeposit from "../components/ton-deposit.vue";
+
+// import TonDepositTest from "../components/ton-deposit-test.vue";
 
 export default {
   components: {
@@ -42,7 +43,7 @@ export default {
     DepositDialog,
     AsideDrawer,
     TonDeposit,
-    // TonWallet,
+    // TonDepositTest,
   },
   data() {
     return {
