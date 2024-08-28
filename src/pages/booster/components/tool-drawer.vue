@@ -12,7 +12,11 @@
       @input="(val) => $store.commit('SET_TOOL_BAR', val)"
     >
       <v-container fluid style="padding: 24px 16px">
-        <ToolCard></ToolCard>
+        <v-row>
+          <v-col :cols="4" v-for="item in cardList" :key="item.cardName">
+            <ToolCard v-bind="item"></ToolCard>
+          </v-col>
+        </v-row>
       </v-container>
     </v-navigation-drawer>
   </div>
@@ -33,7 +37,34 @@ export default {
     ToolCard,
   },
   data() {
-    return {};
+    return {
+      cardList: [
+        {
+          cardName: "Capacity",
+          cardDesc: "Capacity limit+10",
+          cardImg: "/img/booster/drawer/capacity_card.png",
+          maxCount: 99,
+          minCount: 0,
+          unitPrice: 50000,
+        },
+        {
+          cardName: "Explore",
+          cardDesc: "Explore time +1",
+          cardImg: "/img/booster/drawer/explore_card.png",
+          maxCount: 5,
+          minCount: 0,
+          unitPrice: 50000,
+        },
+        {
+          cardName: "Explore",
+          cardDesc: "Explore time +1",
+          cardImg: "/img/booster/drawer/explore_card.png",
+          maxCount: 5,
+          minCount: 0,
+          unitPrice: 50000,
+        },
+      ],
+    };
   },
   created() {},
   methods: {},
