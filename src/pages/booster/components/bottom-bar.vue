@@ -66,10 +66,12 @@ export default {
         {
           icon: "/img/booster/nav/gift.png",
           activityIcon: "/img/booster/nav/gift.png",
-          name: "Coming soon",
+          name: "Tool",
           path: "/boost/explore",
-          isOpen: false,
-          action() {},
+          isOpen: true,
+          action() {
+            _this.toggleToolDrawer();
+          },
         },
         {
           icon: "/img/booster/nav/staking.png",
@@ -157,6 +159,17 @@ export default {
         return;
       }
       this.$store.dispatch("TaskDrawerToggle");
+    },
+    toggleToolDrawer() {
+      if (this.notLogin) {
+        // this.$router.push("/login");
+        return;
+      }
+      if (this.boostLocked) {
+        // this.$emit("handleStartBoost");
+        return;
+      }
+      this.$store.commit("SET_TOOL_BAR", true);
     },
   },
 };

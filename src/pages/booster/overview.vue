@@ -43,6 +43,7 @@
         <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar>
         <nft-drawer v-if="userInfo.uid"></nft-drawer>
         <task-drawer v-if="userInfo.uid"></task-drawer>
+        <tool-drawer v-if="userInfo.uid"></tool-drawer>
         <bind-dialog v-model="showBindWallet"></bind-dialog>
       </template>
       <end-boosting v-model="showEndBoost"></end-boosting>
@@ -57,6 +58,7 @@ import StartBoosting from "./components/start-boosting.vue";
 import EndBoosting from "./components/end-boosting.vue";
 import NftDrawer from "./components/nft-drawer.vue";
 import TaskDrawer from "./components/task-drawer.vue";
+import ToolDrawer from "./components/tool-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
 import BindDialog from "./components/bind-dialog.vue";
 import UnlockDialog from "./components/unlock-dialog.vue";
@@ -211,6 +213,7 @@ export default {
     BindDialog,
     UnlockDialog,
     TgStartBoostOverlay,
+    ToolDrawer,
   },
 };
 </script>

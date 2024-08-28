@@ -16,6 +16,7 @@ export default {
       exploreRemain: 0,
       showStakeDrawer: false,
       showTaskDrawer: false,
+      showToolDrawer: false,
       currentDate: +new Date() / 1000,
       showBindWallet: false,
     };
@@ -125,6 +126,9 @@ export default {
     },
     updateDate(state) {
       state.currentDate = +new Date() / 1000;
+    },
+    SET_TOOL_BAR(state, isShow) {
+      state.showToolDrawer = isShow;
     },
   },
   actions: {
