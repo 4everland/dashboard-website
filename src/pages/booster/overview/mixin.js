@@ -2,6 +2,8 @@ import { mapGetters, mapState } from "vuex";
 import { claimPoints } from "@/api/booster";
 import { sendStoken } from "@/api/login.js";
 import { coinMove } from "../../../utils/animation";
+import TgStartBoostLoading from "../components/tg-start-boost-loading.vue";
+
 export default {
   data() {
     return {
@@ -12,9 +14,13 @@ export default {
       unlockLoading: -1,
     };
   },
+  components: {
+    TgStartBoostLoading,
+  },
   computed: {
     ...mapState({
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
+      tgMiniOverlayLoading: (s) => s.moduleBooster.tgMiniOverlayLoading,
     }),
     ...mapGetters([
       "boostLocked",

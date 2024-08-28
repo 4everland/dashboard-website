@@ -1,6 +1,6 @@
 <template>
   <div class="tg-start-boost">
-    <TgStartBoostLoading v-if="loading"></TgStartBoostLoading>
+    <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
     <div class="start-boost-bg" v-else>
       <div class="start-boost-content">
         <img src="/img/booster/boost-icon.png" width="64" alt="" />
@@ -29,17 +29,11 @@ import { bus } from "@/utils/bus";
 export default {
   data() {
     return {
-      loading: true,
       tgLoading: false,
     };
   },
 
   async created() {
-    setTimeout(() => {
-      this.loading = false;
-      console.log(this.loading, "loading...");
-    }, 3000);
-
     if (this.isTgMiniApp) {
       await this.tgMiniAppLogin();
     }
@@ -49,6 +43,7 @@ export default {
   computed: {
     ...mapState({
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
+      tgMiniOverlayLoading: (s) => s.moduleBooster.tgMiniOverlayLoading,
     }),
     ...mapGetters(["notLogin", "boostLocked"]),
     isTgMiniApp() {

@@ -13,6 +13,7 @@ export default {
         totalPoint: 0,
         preActivities: true,
       },
+      tgMiniOverlayLoading: true,
       exploreRemain: 0,
       showStakeDrawer: false,
       showTaskDrawer: false,
@@ -121,6 +122,9 @@ export default {
     SET_BOOST_INFO(state, info) {
       state.boosterInfo = info;
     },
+    SET_TG_OVERLAY_LOAD(state, val) {
+      state.tgMiniOverlayLoading = val;
+    },
     SET_EXPLORE_REMAIN(state, count) {
       state.exploreRemain = count;
     },
@@ -151,13 +155,16 @@ export default {
       context.commit("BINDWALLET_TOGGLE", payload);
     },
 
-    async getBoosterUserInfo({ commit }) {
+    async getBoosterUserInfo({ commit, state }) {
       try {
         const { data } = await fetchUserBoostInfo();
         if (!data) return;
         commit("SET_BOOST_INFO", data);
       } catch (error) {
         console.log(error);
+      }
+      if (state.tgMiniOverlayLoading) {
+        commit("SET_TG_OVERLAY_LOAD", false);
       }
     },
     async getExploreRemain({ commit }) {

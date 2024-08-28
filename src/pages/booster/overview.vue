@@ -278,8 +278,6 @@ export default {
     max-height: 100vh;
     width: 100%;
     display: block;
-  }
-  .booster-overview-bg.vid {
     object-fit: cover;
   }
 }

@@ -34,181 +34,184 @@
         alt=""
       />
     </div>
-
-    <div class="not-login" v-if="boostLocked">
-      <div class="card-storage mb-1 pos-r">
-        <img
-          class="pos-a"
-          style="left: 50%; top: -20px"
-          src="/img/booster/boost-icon.png"
-          width="64"
-          alt=""
-        />
-        <div class="boost-btn pos-a cursor-p" @click="handleStartBoost">
-          START BOOST
-        </div>
-      </div>
-    </div>
+    <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
 
     <div v-else>
-      <div class="storage-boost">
-        <div style="position: relative">
-          <div style="width: 10px; height: 10px"></div>
-        </div>
-        <div class="top-card">
-          <div class="card-storage" :class="{ locked: storageLocked }">
-            <img
-              :src="
-                storageLocked
-                  ? '/img/booster/svg/locked-icon.svg'
-                  : '/img/booster/storage-icon.png'
-              "
-              width="48"
-              alt=""
-            />
-            <div class="card-storage-status">
-              <div
-                v-if="!storageLocked"
-                class="d-flex align-center justify-space-between"
-              >
-                <span class="fz-12">Status</span>
-                <img src="/img/booster/svg/actived.svg" width="16" alt="" />
-              </div>
-              <div v-else class="text-center fz-12">
-                <v-btn
-                  class="unlock-btn"
-                  height="22"
-                  :loading="unlockLoading == 0"
-                  @click="handleUnlock(0)"
-                  >Unlock</v-btn
-                >
-                <div v-if="!isTg">Unlock with 1 million LAND</div>
-                <div v-else style="height: 15px"></div>
-              </div>
-
-              <div class="task-title">STORAGE BOOST</div>
-              <div class="d-flex align-center justify-space-between fz-10">
-                +100 pts/h & 2,500 Capacity
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="computing-boost">
-        <div style="position: relative">
-          <div style="width: 10px; height: 10px"></div>
-        </div>
-        <div class="top-card">
-          <div class="card-storage" :class="{ locked: computingLocked }">
-            <img
-              :src="
-                computingLocked
-                  ? '/img/booster/svg/locked-icon.svg'
-                  : '/img/booster/storage-icon.png'
-              "
-              width="48"
-              alt=""
-            />
-            <div class="card-storage-status">
-              <div
-                v-if="!computingLocked"
-                class="d-flex align-center justify-space-between"
-              >
-                <span class="fz-12">Status</span>
-                <img src="/img/booster/svg/actived.svg" width="16" alt="" />
-              </div>
-              <div v-else class="text-center fz-12">
-                <v-btn
-                  class="unlock-btn"
-                  height="22"
-                  :loading="unlockLoading == 1"
-                  @click="handleUnlock(1)"
-                  >Unlock</v-btn
-                >
-                <div v-if="!isTg">Unlock with 1 million LAND</div>
-                <div v-else style="height: 15px"></div>
-              </div>
-              <div class="task-title">COMPUTING BOOST</div>
-              <div class="d-flex align-center justify-space-between fz-10">
-                +100 pts/h & 2,500 Capacity
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="network-boost">
-        <div style="position: relative">
-          <div style="width: 10px; height: 10px"></div>
-        </div>
-        <div class="top-card">
-          <div class="card-storage" :class="{ locked: networkLocked }">
-            <img
-              :src="
-                networkLocked
-                  ? '/img/booster/svg/locked-icon.svg'
-                  : '/img/booster/storage-icon.png'
-              "
-              width="48"
-              alt=""
-            />
-            <div class="card-storage-status">
-              <div
-                v-if="!networkLocked"
-                class="d-flex align-center justify-space-between"
-              >
-                <span class="fz-12">Status</span>
-                <img src="/img/booster/svg/actived.svg" width="16" alt="" />
-              </div>
-              <div v-else class="text-center fz-12">
-                <v-btn
-                  class="unlock-btn"
-                  height="22"
-                  :loading="unlockLoading == 2"
-                  @click="handleUnlock(2)"
-                  >Unlock</v-btn
-                >
-                <div v-if="!isTg">Unlock with 1 million LAND</div>
-                <div v-else style="height: 15px"></div>
-              </div>
-              <div class="task-title">NETWORK BOOST</div>
-              <div class="d-flex align-center justify-space-between fz-10">
-                +100 pts/h & 2,500 Capacity
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="point-square" @click="hanleClaim">
-        <div style="position: relative">
-          <div style="width: 10px; height: 10px"></div>
-        </div>
-        <div class="top-card square-box" id="mobile-point-send">
-          <span class="points fz-12" :class="{ locked: computedPoints < 1 }">
-            {{
-              computedPoints > boosterInfo.capacity
-                ? boosterInfo.capacity
-                : computedPoints.toFixed(3)
-            }}/{{ boosterInfo.capacity }}
-          </span>
+      <div class="not-login" v-if="boostLocked">
+        <div class="card-storage mb-1 pos-r">
           <img
-            :src="
-              computedPoints < 1
-                ? '/img/booster/3d-square-unlock.png'
-                : computedPoints >= boosterInfo.capacity
-                ? '/img/booster/3d-square-full.png'
-                : '/img/booster/3d-square.png'
-            "
-            width="100"
-            alt=""
-          />
-          <img
-            v-show="computedPoints > 1"
             class="pos-a"
-            style="left: 50%; top: 30%; transform: translateX(-50%)"
-            src="/img/booster/svg/finger.svg"
-            width="16"
+            style="left: 50%; top: -20px"
+            src="/img/booster/boost-icon.png"
+            width="64"
             alt=""
           />
+          <div class="boost-btn pos-a cursor-p" @click="handleStartBoost">
+            START BOOST
+          </div>
+        </div>
+      </div>
+
+      <div v-else>
+        <div class="storage-boost">
+          <div style="position: relative">
+            <div style="width: 10px; height: 10px"></div>
+          </div>
+          <div class="top-card">
+            <div class="card-storage" :class="{ locked: storageLocked }">
+              <img
+                :src="
+                  storageLocked
+                    ? '/img/booster/svg/locked-icon.svg'
+                    : '/img/booster/storage-icon.png'
+                "
+                width="48"
+                alt=""
+              />
+              <div class="card-storage-status">
+                <div
+                  v-if="!storageLocked"
+                  class="d-flex align-center justify-space-between"
+                >
+                  <span class="fz-12">Status</span>
+                  <img src="/img/booster/svg/actived.svg" width="16" alt="" />
+                </div>
+                <div v-else class="text-center fz-12">
+                  <v-btn
+                    class="unlock-btn"
+                    height="22"
+                    :loading="unlockLoading == 0"
+                    @click="handleUnlock(0)"
+                    >Unlock</v-btn
+                  >
+                  <div v-if="!isTg">Unlock with 1 million LAND</div>
+                  <div v-else style="height: 15px"></div>
+                </div>
+
+                <div class="task-title">STORAGE BOOST</div>
+                <div class="d-flex align-center justify-space-between fz-10">
+                  +100 pts/h & 2,500 Capacity
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="computing-boost">
+          <div style="position: relative">
+            <div style="width: 10px; height: 10px"></div>
+          </div>
+          <div class="top-card">
+            <div class="card-storage" :class="{ locked: computingLocked }">
+              <img
+                :src="
+                  computingLocked
+                    ? '/img/booster/svg/locked-icon.svg'
+                    : '/img/booster/storage-icon.png'
+                "
+                width="48"
+                alt=""
+              />
+              <div class="card-storage-status">
+                <div
+                  v-if="!computingLocked"
+                  class="d-flex align-center justify-space-between"
+                >
+                  <span class="fz-12">Status</span>
+                  <img src="/img/booster/svg/actived.svg" width="16" alt="" />
+                </div>
+                <div v-else class="text-center fz-12">
+                  <v-btn
+                    class="unlock-btn"
+                    height="22"
+                    :loading="unlockLoading == 1"
+                    @click="handleUnlock(1)"
+                    >Unlock</v-btn
+                  >
+                  <div v-if="!isTg">Unlock with 1 million LAND</div>
+                  <div v-else style="height: 15px"></div>
+                </div>
+                <div class="task-title">COMPUTING BOOST</div>
+                <div class="d-flex align-center justify-space-between fz-10">
+                  +100 pts/h & 2,500 Capacity
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="network-boost">
+          <div style="position: relative">
+            <div style="width: 10px; height: 10px"></div>
+          </div>
+          <div class="top-card">
+            <div class="card-storage" :class="{ locked: networkLocked }">
+              <img
+                :src="
+                  networkLocked
+                    ? '/img/booster/svg/locked-icon.svg'
+                    : '/img/booster/storage-icon.png'
+                "
+                width="48"
+                alt=""
+              />
+              <div class="card-storage-status">
+                <div
+                  v-if="!networkLocked"
+                  class="d-flex align-center justify-space-between"
+                >
+                  <span class="fz-12">Status</span>
+                  <img src="/img/booster/svg/actived.svg" width="16" alt="" />
+                </div>
+                <div v-else class="text-center fz-12">
+                  <v-btn
+                    class="unlock-btn"
+                    height="22"
+                    :loading="unlockLoading == 2"
+                    @click="handleUnlock(2)"
+                    >Unlock</v-btn
+                  >
+                  <div v-if="!isTg">Unlock with 1 million LAND</div>
+                  <div v-else style="height: 15px"></div>
+                </div>
+                <div class="task-title">NETWORK BOOST</div>
+                <div class="d-flex align-center justify-space-between fz-10">
+                  +100 pts/h & 2,500 Capacity
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="point-square" @click="hanleClaim">
+          <div style="position: relative">
+            <div style="width: 10px; height: 10px"></div>
+          </div>
+          <div class="top-card square-box" id="mobile-point-send">
+            <span class="points fz-12" :class="{ locked: computedPoints < 1 }">
+              {{
+                computedPoints > boosterInfo.capacity
+                  ? boosterInfo.capacity
+                  : computedPoints.toFixed(3)
+              }}/{{ boosterInfo.capacity }}
+            </span>
+            <img
+              :src="
+                computedPoints < 1
+                  ? '/img/booster/3d-square-unlock.png'
+                  : computedPoints >= boosterInfo.capacity
+                  ? '/img/booster/3d-square-full.png'
+                  : '/img/booster/3d-square.png'
+              "
+              width="100"
+              alt=""
+            />
+            <img
+              v-show="computedPoints > 1"
+              class="pos-a"
+              style="left: 50%; top: 30%; transform: translateX(-50%)"
+              src="/img/booster/svg/finger.svg"
+              width="16"
+              alt=""
+            />
+          </div>
         </div>
       </div>
     </div>
