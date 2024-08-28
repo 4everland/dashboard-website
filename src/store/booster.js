@@ -158,11 +158,14 @@ export default {
     async getBoosterUserInfo({ commit, state }) {
       try {
         const { data } = await fetchUserBoostInfo();
-        if (!data) return;
-        commit("SET_BOOST_INFO", data);
+        if (data) {
+          commit("SET_BOOST_INFO", data);
+        }
       } catch (error) {
         console.log(error);
       }
+
+      console.log(11111);
       if (state.tgMiniOverlayLoading) {
         commit("SET_TG_OVERLAY_LOAD", false);
       }
