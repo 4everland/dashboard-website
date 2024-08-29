@@ -113,6 +113,9 @@ export default {
               case "play_coco_park":
                 it.log = `Play Coco Park ${it.value} points.`;
                 break;
+              case "play_capybara_bot":
+                it.log = `Play Capybara MEME Bot ${it.value} points.`;
+                break;
               default:
                 break;
             }
