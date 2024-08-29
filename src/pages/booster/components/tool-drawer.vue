@@ -38,14 +38,13 @@
             ></ToolCard>
           </v-col>
         </v-row>
+        <BuyCardDialog
+          @getCards="getCards"
+          v-model="showBuyDialog"
+          v-bind="buyDialogObj"
+        ></BuyCardDialog>
       </v-container>
     </v-navigation-drawer>
-
-    <BuyCardDialog
-      @getCards="getCards"
-      v-model="showBuyDialog"
-      v-bind="buyDialogObj"
-    ></BuyCardDialog>
   </div>
 </template>
 <script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-overlay :value="value" opacity="1" v-if="asMobile">
+    <v-overlay :value="value" opacity="1" v-if="asMobile" z-index="9999">
       <div class="buy-card d-flex flex-column justify-center">
         <img
           class="close-btn"
@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import { bus } from "@/utils/bus";
 import { buyCard } from "@/api/booster";
 export default {
   props: {
@@ -146,6 +147,7 @@ export default {
           this.$toast2("buy successfully!!");
           this.$emit("getCards");
           this.$emit("input", false);
+          bus.$emit("clearBuyCardCount", this.buyType);
         }
       } catch (error) {
         console.log(error);

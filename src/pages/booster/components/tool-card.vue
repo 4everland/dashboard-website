@@ -13,8 +13,8 @@
       v-else
     >
       <div class="card_calculate d-flex align-center">
-        <v-btn icon x-small @click="() => (count -= 1)" :disabled="count <= 0">
-          <img src="/img/booster/svg/decrement.svg" width="16" alt="" />
+        <v-btn icon x-small @click="handleCrement(-1)" :disabled="count <= 0">
+          <v-icon class="count-icon" color="#fff">mdi-minus </v-icon>
         </v-btn>
 
         <div class="fz-14 text-center" style="width: 18px">
@@ -30,10 +30,12 @@
         <v-btn
           icon
           x-small
-          @click="() => (count += 1)"
+          @click="handleCrement(1)"
           :disabled="count >= stock"
         >
-          <img src="/img/booster/svg/increment.svg" width="16" alt="" />
+          <!-- <img src="/img/booster/svg/increment.svg" width="16" alt="" /> -->
+
+          <v-icon color="#fff" class="count-icon">mdi-plus</v-icon>
         </v-btn>
       </div>
 
@@ -51,6 +53,7 @@
 </template>
 
 <script>
+import { bus } from "@/utils/bus";
 export default {
   props: {
     type: {
@@ -95,6 +98,13 @@ export default {
       return true;
     },
   },
+  created() {
+    bus.$on("clearBuyCardCount", (buyCardType) => {
+      if (this.type == buyCardType) {
+        this.count = 0;
+      }
+    });
+  },
   methods: {
     handleInput(e) {
       if (e.target.value < 0) {
@@ -104,11 +114,22 @@ export default {
         this.count = this.stock;
       }
     },
+    handleCrement(val) {
+      if (this.count == "" || this.count == 0) {
+        this.count = 1;
+      } else {
+        this.count = Number(this.count) + val;
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.theme--light.v-btn.v-btn--disabled .count-icon.v-icon {
+  color: #fff !important;
+  opacity: 0.2;
+}
 .tool-card-container {
   width: 164px;
   .card_item_header {
