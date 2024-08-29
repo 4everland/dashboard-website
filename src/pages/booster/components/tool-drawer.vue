@@ -9,12 +9,29 @@
       :hide-overlay="!asMobile"
       color="#1E2234"
       :value="showToolDrawer"
-      @input="(val) => $store.commit('SET_TOOL_BAR', val)"
+      @input="handleToggle"
     >
       <v-container fluid style="padding: 24px 16px">
-        <v-row>
-          <v-col :cols="4" v-for="item in cardList" :key="item.cardName">
-            <ToolCard v-bind="item"></ToolCard>
+        <div class="drawer-title mb-6">Tools</div>
+
+        <v-row v-show="loading">
+          <v-col :cols="6" :md="4" v-for="item in 3" :key="item">
+            <v-skeleton-loader dark type="article"></v-skeleton-loader>
+          </v-col>
+        </v-row>
+
+        <v-row v-show="!loading">
+          <v-col
+            :cols="6"
+            :md="4"
+            v-for="item in cardList"
+            :key="item.cardName"
+          >
+            <ToolCard
+              class="mx-auto"
+              v-bind="item"
+              @getCards="getCards"
+            ></ToolCard>
           </v-col>
         </v-row>
       </v-container>
@@ -22,6 +39,7 @@
   </div>
 </template>
 <script>
+import { fetchToolCards } from "@/api/booster";
 import { mapState } from "vuex";
 import ToolCard from "./tool-card.vue";
 export default {
@@ -32,42 +50,71 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    cardList() {
+      if (!this.types.length) {
+        return [];
+      }
+      const cards = this.types.map((it) => {
+        if (this.cards[it.name])
+          return {
+            ...this.cards[it.name],
+            stock: it.stock == -1 ? 99 : it.stock,
+            price: it.price,
+            type: it.name,
+          };
+      });
+      return cards;
+    },
   },
   components: {
     ToolCard,
   },
   data() {
     return {
-      cardList: [
-        {
+      cards: {
+        capacity: {
           cardName: "Capacity",
           cardDesc: "Capacity limit+10",
           cardImg: "/img/booster/drawer/capacity_card.png",
-          maxCount: 99,
-          minCount: 0,
-          unitPrice: 50000,
+          price: 50000,
+          stock: -1,
         },
-        {
+        explore: {
           cardName: "Explore",
           cardDesc: "Explore time +1",
           cardImg: "/img/booster/drawer/explore_card.png",
-          maxCount: 5,
-          minCount: 0,
-          unitPrice: 50000,
+          stock: 5,
+          price: 50000,
         },
-        {
-          cardName: "Explore",
-          cardDesc: "Explore time +1",
-          cardImg: "/img/booster/drawer/explore_card.png",
-          maxCount: 5,
-          minCount: 0,
-          unitPrice: 50000,
-        },
-      ],
+      },
+      types: [],
+      loading: false,
     };
   },
-  created() {},
-  methods: {},
+  methods: {
+    async getCards() {
+      this.loading = true;
+
+      try {
+        const { data } = await fetchToolCards();
+        console.log(data);
+        if (data && data.items) {
+          this.types = data.items;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      this.loading = false;
+    },
+    handleToggle(val) {
+      if (val) {
+        console.log(val);
+        this.getCards();
+      } else {
+        this.$store.commit("SET_TOOL_BAR", val);
+      }
+    },
+  },
 };
 </script>
 
@@ -77,7 +124,7 @@ export default {
     width: 100% !important;
     height: 80% !important;
     max-height: 100% !important;
-    background-image: url("/img/booster/drawer/task-bg.png");
+    background-image: url("/img/booster/drawer/tools-bg.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: bottom;
@@ -91,80 +138,6 @@ export default {
       align-items: center;
       justify-content: space-between;
     }
-    .tool-drawer-top {
-      // border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-
-      .daily-sign {
-        margin-top: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        .daily-sign-box {
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: auto;
-          .daily-sign-item {
-            .daily-sign-item-top {
-              display: flex;
-              width: 44px;
-              padding: 5px 8px 4px 6px;
-              flex-direction: column;
-              justify-content: center;
-              align-items: center;
-              gap: 4px;
-              border-radius: 100px;
-              opacity: 0.8;
-              background: rgba(97, 114, 243, 0.1);
-              .point {
-                color: #6172f3;
-                text-align: center;
-                font-size: 12px;
-                font-style: normal;
-                font-weight: 400;
-              }
-              img {
-                width: 24px;
-                height: 24;
-              }
-            }
-            .daily-sign-item-bottom {
-              font-size: 12px;
-              opacity: 0.6;
-              text-align: center;
-              margin-top: 6px;
-            }
-          }
-          .daily-signed {
-            .daily-sign-item-top {
-              opacity: 1;
-              background: rgba(255, 255, 255, 0.1);
-
-              .point {
-                color: #fff;
-              }
-            }
-            .daily-sign-item-bottom {
-              opacity: 1;
-            }
-          }
-          .daily-today {
-            .daily-sign-item-top {
-              opacity: 1;
-              background: #6172f3;
-
-              .point {
-                color: #fff;
-              }
-            }
-            .daily-sign-item-bottom {
-              opacity: 1;
-            }
-          }
-        }
-      }
-    }
   }
 }
 
@@ -175,15 +148,7 @@ export default {
       left: 24px !important;
       width: 558px !important;
       height: calc(100% - 74px - 64px - 24px) !important;
-      .tool-drawer-top {
-        padding-bottom: 24px;
-        // border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-      }
     }
-  }
-  .col-md-15 {
-    width: 20%;
-    max-width: 20%;
   }
 }
 </style>

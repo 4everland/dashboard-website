@@ -64,10 +64,9 @@ export default {
       let _this = this;
       let Arr = [
         {
-          icon: "/img/booster/nav/gift.png",
-          activityIcon: "/img/booster/nav/gift.png",
-          name: "Tool",
-          path: "/boost/explore",
+          icon: "/img/booster/nav/tools.png",
+          activityIcon: "/img/booster/nav/tools-active.png",
+          name: "Tools",
           isOpen: true,
           action() {
             _this.toggleToolDrawer();
@@ -77,7 +76,6 @@ export default {
           icon: "/img/booster/nav/staking.png",
           activityIcon: "/img/booster/nav/staking-active.png",
           name: "Staking",
-          path: "/boost/explore",
           isOpen: true,
           action() {
             _this.toggleStakeDrawer();
@@ -87,7 +85,6 @@ export default {
           icon: "/img/booster/nav/explore.png",
           activityIcon: "/img/booster/nav/explore-active.png",
           name: "Explore",
-          path: "/boost/explore",
           isOpen: true,
           action() {
             _this.toggleExplore();
@@ -97,7 +94,6 @@ export default {
           icon: "/img/booster/nav/tasks.png",
           activityIcon: "/img/booster/nav/tasks-active.png",
           name: "Tasks",
-          path: "/boost/explore",
           isOpen: true,
           action() {
             _this.toggleTaskDrawer();
@@ -107,7 +103,6 @@ export default {
           icon: "/img/booster/nav/gaming.png",
           activityIcon: "/img/booster/nav/gaming.png",
           name: "Coming soon",
-          path: "/boost/explore",
           isOpen: false,
           action() {},
         },
@@ -122,26 +117,11 @@ export default {
   },
   methods: {
     toggleStakeDrawer() {
-      if (this.notLogin) {
-        // this.$router.push("/login");
-        return;
-      }
-      if (this.boostLocked) {
-        // this.$emit("handleStartBoost");
-        return;
-      }
-
+      if (this.notLogin || this.boostLocked) return;
       this.$store.dispatch("StakeDrawerToggle");
     },
     toggleExplore() {
-      if (this.notLogin) {
-        // this.$router.push("/login");
-        return;
-      }
-      if (this.boostLocked) {
-        // this.$emit("handleStartBoost");
-        return;
-      }
+      if (this.notLogin || this.boostLocked) return;
       if (this.exploreRemain < 1)
         return this.$toast2(
           "Whoops, you've used all your exploration times. Try again tomorrow!",
@@ -150,25 +130,11 @@ export default {
       this.$router.push("/boost/explore");
     },
     toggleTaskDrawer() {
-      if (this.notLogin) {
-        // this.$router.push("/login");
-        return;
-      }
-      if (this.boostLocked) {
-        // this.$emit("handleStartBoost");
-        return;
-      }
+      if (this.notLogin || this.boostLocked) return;
       this.$store.dispatch("TaskDrawerToggle");
     },
     toggleToolDrawer() {
-      if (this.notLogin) {
-        // this.$router.push("/login");
-        return;
-      }
-      if (this.boostLocked) {
-        // this.$emit("handleStartBoost");
-        return;
-      }
+      if (this.notLogin || this.boostLocked) return;
       this.$store.commit("SET_TOOL_BAR", true);
     },
   },

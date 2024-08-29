@@ -164,8 +164,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-
-      console.log(11111);
       if (state.tgMiniOverlayLoading) {
         commit("SET_TG_OVERLAY_LOAD", false);
       }

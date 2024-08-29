@@ -187,3 +187,19 @@ export const fetchTasks_One = async () => {
     url: "/node/activities/tasks_one",
   });
 };
+
+export const fetchToolCards = async () => {
+  return boosterRequest.get({
+    url: "/node/cards",
+  });
+};
+
+export const buyCard = async (name, number) => {
+  return boosterRequest.post({
+    url: "/node/cards",
+    data: {
+      name,
+      number,
+    },
+  });
+};

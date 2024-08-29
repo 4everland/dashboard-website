@@ -4,20 +4,16 @@
       <div class="card_name">{{ cardName }} Card</div>
       <div class="card_desc">{{ cardDesc }}</div>
       <img class="d-b" :src="cardImg" width="164" alt="" />
-      <div class="card_unit_price">
-        {{ unitPrice.toLocaleString() }} LAND ×1
-      </div>
+      <div class="card_unit_price">{{ price.toLocaleString() }} LAND ×1</div>
     </div>
+
+    <div class="card_sold_out mt-1" v-if="stock == 0">Sold Out</div>
     <div
       class="card_calculate_container d-flex align-center justify-space-between mt-1"
+      v-else
     >
       <div class="card_calculate d-flex align-center">
-        <v-btn
-          icon
-          x-small
-          @click="() => (count -= 1)"
-          :disabled="count <= minCount"
-        >
+        <v-btn icon x-small @click="() => (count -= 1)" :disabled="count <= 0">
           <img src="/img/booster/svg/decrement.svg" width="16" alt="" />
         </v-btn>
 
@@ -27,24 +23,38 @@
           icon
           x-small
           @click="() => (count += 1)"
-          :disabled="count >= maxCount"
+          :disabled="count >= stock"
         >
           <img src="/img/booster/svg/increment.svg" width="16" alt="" />
         </v-btn>
       </div>
 
-      <v-btn class="act-btn" height="25" min-width="58">Buy</v-btn>
+      <v-btn
+        class="act-btn"
+        height="25"
+        min-width="58"
+        @click="handleBuyCard"
+        :loading="loading"
+        :disabled="buyDisabled"
+        >Buy</v-btn
+      >
     </div>
   </div>
 </template>
 
 <script>
+import { buyCard } from "@/api/booster";
 export default {
   props: {
+    type: {
+      type: String,
+      require: true,
+    },
     cardName: {
       type: String,
       default: "Capacity",
     },
+
     cardDesc: {
       type: String,
       default: "Capacity limit+10",
@@ -53,23 +63,47 @@ export default {
       type: String,
       default: "/img/booster/drawer/capacity_card.png",
     },
-    maxCount: {
-      type: Number,
-      default: 99,
-    },
-    minCount: {
-      type: Number,
-      default: 0,
-    },
-    unitPrice: {
+    price: {
       type: Number,
       default: 50000,
+    },
+    stock: {
+      type: Number,
+      default: 99,
     },
   },
   data() {
     return {
       count: 0,
+      loading: false,
     };
+  },
+  computed: {
+    buyDisabled() {
+      return false;
+    },
+  },
+  methods: {
+    async handleBuyCard() {
+      this.loading = true;
+      try {
+        const data = await buyCard(this.type, this.count);
+        if (data) {
+          if (this.type == "explore") {
+            this.$store.dispatch("getExploreRemain");
+          } else {
+            this.$store.dispatch("getBoosterUserInfo");
+          }
+          this.count = 0;
+          this.$store.dispatch("getBalance");
+          this.$toast2("buy successfully!!");
+          this.$emit("getCards");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      this.loading = false;
+    },
   },
 };
 </script>
@@ -111,6 +145,16 @@ export default {
       background: rgba(0, 0, 0, 0.75);
       box-shadow: 0px -4px 0px 0px rgba(0, 0, 0, 0.25) inset;
     }
+  }
+
+  .card_sold_out {
+    padding: 4px 0;
+    width: 90px;
+    margin-left: auto;
+    font-size: 14px;
+    text-align: center;
+    border-radius: 4px;
+    background: rgba(152, 162, 179, 0.2);
   }
   .card_calculate_container {
     .card_calculate {
