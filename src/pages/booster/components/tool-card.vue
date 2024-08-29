@@ -17,7 +17,15 @@
           <img src="/img/booster/svg/decrement.svg" width="16" alt="" />
         </v-btn>
 
-        <div class="fz-14 text-center" style="width: 18px">{{ count }}</div>
+        <div class="fz-14 text-center" style="width: 18px">
+          <input
+            style="width: 100%; color: #fff"
+            class="text-center count-ipt"
+            type="number"
+            @input="handleInput"
+            v-model="count"
+          />
+        </div>
 
         <v-btn
           icon
@@ -33,9 +41,9 @@
         class="act-btn"
         height="25"
         min-width="58"
-        @click="handleBuyCard"
         :loading="loading"
         :disabled="buyDisabled"
+        @click="$emit('showBuy', { type, count, price, buff })"
         >Buy</v-btn
       >
     </div>
@@ -43,7 +51,6 @@
 </template>
 
 <script>
-import { buyCard } from "@/api/booster";
 export default {
   props: {
     type: {
@@ -71,6 +78,10 @@ export default {
       type: Number,
       default: 99,
     },
+    buff: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
@@ -80,29 +91,18 @@ export default {
   },
   computed: {
     buyDisabled() {
-      return false;
+      if (this.count >= 1) return false;
+      return true;
     },
   },
   methods: {
-    async handleBuyCard() {
-      this.loading = true;
-      try {
-        const data = await buyCard(this.type, this.count);
-        if (data) {
-          if (this.type == "explore") {
-            this.$store.dispatch("getExploreRemain");
-          } else {
-            this.$store.dispatch("getBoosterUserInfo");
-          }
-          this.count = 0;
-          this.$store.dispatch("getBalance");
-          this.$toast2("buy successfully!!");
-          this.$emit("getCards");
-        }
-      } catch (error) {
-        console.log(error);
+    handleInput(e) {
+      if (e.target.value < 0) {
+        this.count = 0;
       }
-      this.loading = false;
+      if (e.target.value > this.stock) {
+        this.count = this.stock;
+      }
     },
   },
 };
@@ -172,6 +172,14 @@ export default {
       ) !important;
       box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
     }
+  }
+  .count-ipt[type="number"]::-webkit-inner-spin-button,
+  .count-ipt[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .count-ipt[type="number"] {
+    -moz-appearance: textfield;
   }
 }
 </style>

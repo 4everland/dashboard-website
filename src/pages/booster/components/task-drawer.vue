@@ -455,6 +455,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .task-name {
+    font-size: 14px;
+  }
+}
+
 .task-list-title {
   padding: 16px 0;
   font-size: 20px;

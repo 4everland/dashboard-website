@@ -15,8 +15,12 @@
         <div class="drawer-title mb-6">Tools</div>
 
         <v-row v-show="loading">
-          <v-col :cols="6" :md="4" v-for="item in 3" :key="item">
-            <v-skeleton-loader dark type="article"></v-skeleton-loader>
+          <v-col :cols="6" :md="4" v-for="item in 2" :key="item">
+            <v-skeleton-loader
+              height="240"
+              dark
+              type="article,list-item-two-line"
+            ></v-skeleton-loader>
           </v-col>
         </v-row>
 
@@ -30,18 +34,25 @@
             <ToolCard
               class="mx-auto"
               v-bind="item"
-              @getCards="getCards"
+              @showBuy="handleBuy"
             ></ToolCard>
           </v-col>
         </v-row>
       </v-container>
     </v-navigation-drawer>
+
+    <BuyCardDialog
+      @getCards="getCards"
+      v-model="showBuyDialog"
+      v-bind="buyDialogObj"
+    ></BuyCardDialog>
   </div>
 </template>
 <script>
 import { fetchToolCards } from "@/api/booster";
 import { mapState } from "vuex";
 import ToolCard from "./tool-card.vue";
+import BuyCardDialog from "./buy-card-dialog.vue";
 export default {
   computed: {
     ...mapState({
@@ -68,6 +79,7 @@ export default {
   },
   components: {
     ToolCard,
+    BuyCardDialog,
   },
   data() {
     return {
@@ -78,6 +90,7 @@ export default {
           cardImg: "/img/booster/drawer/capacity_card.png",
           price: 50000,
           stock: -1,
+          buff: 10,
         },
         explore: {
           cardName: "Explore",
@@ -85,10 +98,18 @@ export default {
           cardImg: "/img/booster/drawer/explore_card.png",
           stock: 5,
           price: 50000,
+          buff: 1,
         },
       },
       types: [],
       loading: false,
+      showBuyDialog: false,
+      buyDialogObj: {
+        buyType: "",
+        buyCount: 1,
+        unitPrice: 50000,
+        buff: 0,
+      },
     };
   },
   methods: {
@@ -108,11 +129,20 @@ export default {
     },
     handleToggle(val) {
       if (val) {
-        console.log(val);
         this.getCards();
       } else {
         this.$store.commit("SET_TOOL_BAR", val);
       }
+    },
+    handleBuy({ type, count, price, buff }) {
+      this.buyDialogObj = {
+        buyType: type,
+        buyCount: count,
+        unitPrice: price,
+        buff,
+      };
+
+      this.showBuyDialog = true;
     },
   },
 };
