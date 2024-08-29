@@ -187,3 +187,15 @@ export const fetchTasks_One = async () => {
     url: "/node/activities/tasks_one",
   });
 };
+
+export const fetchInvite_Tasks = async () => {
+  return boosterRequest.get({
+    url: "/node/activities/invite_tasks",
+  });
+};
+
+export const fetchPartner_Tasks = async () => {
+  return boosterRequest.get({
+    url: "/node/activities/partner_tasks",
+  });
+};
