@@ -203,3 +203,14 @@ export const buyCard = async (name, number) => {
     },
   });
 };
+export const fetchInvite_Tasks = async () => {
+  return boosterRequest.get({
+    url: "/node/activities/invite_tasks",
+  });
+};
+
+export const fetchPartner_Tasks = async () => {
+  return boosterRequest.get({
+    url: "/node/activities/partner_tasks",
+  });
+};

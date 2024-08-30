@@ -19,42 +19,46 @@
       />
     </div> -->
     <div class="drawer-content px-4">
-      <div class="user-info d-flex align-center">
-        <e-team-avatar
-          :src="userInfo.avatar"
-          :size="32"
-          :uid="userInfo.uid"
-        ></e-team-avatar>
-        <div class="ml-1">
-          <div class="fz-14 fw-b">
+      <div class="user-info">
+        <div class="d-flex align-center user-info-header">
+          <e-team-avatar
+            :src="userInfo.avatar"
+            :size="32"
+            :uid="userInfo.uid"
+          ></e-team-avatar>
+          <div class="fz-14 fw-b ml-1">
             {{ (userInfo.username || "-").cutStr(6, 4) }}
           </div>
-          <div class="fz-12 balance d-flex align-center">
-            <span>Balance:</span>
-            <span class="ml-1">
-              <span>{{ balance.land }}</span>
-              <span>{{ balance.unit }}</span> LAND</span
-            >
-            <v-btn
-              class="ml-1"
-              small
-              color="#fff"
-              icon
-              :loading="reloadBalance"
-              @click="handleGetBalance"
-            >
-              <v-icon color="#fff">mdi-refresh</v-icon>
-            </v-btn>
-          </div>
         </div>
-
-        <div class="pgb ml-auto" @click="handleToDeposit">
-          <img
-            style="display: block"
-            src="/img/booster/svg/pig_bank.svg"
-            width="24"
-            alt=""
-          />
+        <div class="d-flex align-center mt-3">
+          <div class="fz-12 balance">
+            <div>Balance:</div>
+            <div class="d-flex align-center">
+              <div style="color: #fff">
+                <span>{{ balance.land }}</span>
+                <span>{{ balance.unit }}</span> LAND
+              </div>
+              <v-btn
+                class="ml-1"
+                x-small
+                color="#fff"
+                icon
+                :loading="reloadBalance"
+                @click="handleGetBalance"
+              >
+                <v-icon size="18" color="#fff">mdi-refresh</v-icon>
+              </v-btn>
+            </div>
+          </div>
+          <div class="d-flex align-center pgb ml-auto" @click="handleToDeposit">
+            <img
+              style="display: block"
+              src="/img/booster/svg/pig_bank.svg"
+              width="16"
+              alt=""
+            />
+            <span class="fz-12 ml-1">Deposit</span>
+          </div>
         </div>
       </div>
 
@@ -209,13 +213,17 @@ export default {
     padding: 16px 8px;
     border-radius: 8px;
     background: #000;
+    .user-info-header {
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    }
     .balance {
       color: #94a3b8;
     }
     .pgb {
+      padding: 8px 16px;
       border-radius: 4px;
       background: #6172f3;
-      padding: 4px;
     }
   }
   .menus {

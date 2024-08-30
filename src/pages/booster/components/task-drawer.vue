@@ -131,7 +131,7 @@
           >
             One-off Tasks
           </div>
-          <v-row no-gutters style="gap: 18px 0">
+          <v-row no-gutters style="gap: 18px 0; margin-bottom: 24px">
             <v-col
               v-for="(item, index) in tasksLists_one"
               :key="item.actId"
@@ -192,6 +192,147 @@
               </div>
             </v-col>
           </v-row>
+          <div
+            class="task-list-title"
+            style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
+          >
+            Invite Tasks
+          </div>
+          <v-row no-gutters style="gap: 18px 0; margin-bottom: 24px">
+            <v-col
+              v-for="(item, index) in tasksLists_invite"
+              :key="item.actId"
+              cols="12"
+              v-show="
+                item.deployOn == 'all' ||
+                (item.deployOn == 'pc' && !isTgMiniApp) ||
+                (item.deployOn == 'tg' && isTgMiniApp)
+              "
+            >
+              <div class="task-item-box">
+                <div class="task-item-left">
+                  <img class="task-item-image" :src="item.icon" alt="" />
+                  <div class="task-text-box">
+                    <div class="task-name">{{ item.actName }}</div>
+                    <div class="task-desc">{{ item.description }}</div>
+                  </div>
+                </div>
+
+                <div class="task-item-right">
+                  <v-btn
+                    v-if="
+                      item.actStatus !== 'DONE' &&
+                      item.extra.buttonName == 'Go' &&
+                      !isTgMiniApp
+                    "
+                    class="go-btn"
+                    width="84"
+                    @click="stepNext(item, index, 'invite')"
+                    v-clipboard="inviteInfo.link"
+                    @success="() => $toast2('Copied!', 'success')"
+                    >Go</v-btn
+                  >
+                  <v-btn
+                    v-else-if="
+                      item.actStatus !== 'DONE' &&
+                      item.extra.buttonName == 'Go' &&
+                      isTgMiniApp
+                    "
+                    class="go-btn"
+                    width="84"
+                    @click="stepNext(item, index, 'invite')"
+                    >Go</v-btn
+                  >
+                  <v-btn
+                    v-else-if="item.actStatus !== 'DONE'"
+                    class="drawer-btn"
+                    width="84"
+                    @click="stepNext(item, index, 'invite')"
+                    >{{ item.extra.buttonName }}</v-btn
+                  >
+
+                  <v-btn
+                    v-if="item.actStatus == 'DONE'"
+                    class="done-btn"
+                    width="84"
+                    >Done</v-btn
+                  >
+                </div>
+              </div>
+            </v-col>
+          </v-row>
+          <div
+            class="task-list-title"
+            style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
+            v-if="isTgMiniApp"
+          >
+            Partner Tasks
+          </div>
+          <v-row
+            no-gutters
+            style="gap: 18px 0; margin-bottom: 24px"
+            v-if="isTgMiniApp"
+          >
+            <v-col
+              v-for="(item, index) in tasksLists_partner"
+              :key="item.actId"
+              cols="12"
+              v-show="
+                item.deployOn == 'all' ||
+                (item.deployOn == 'pc' && !isTgMiniApp) ||
+                (item.deployOn == 'tg' && isTgMiniApp)
+              "
+            >
+              <div class="task-item-box">
+                <div class="task-item-left">
+                  <img class="task-item-image" :src="item.icon" alt="" />
+                  <div class="task-text-box">
+                    <div class="task-name">{{ item.actName }}</div>
+                    <div class="task-desc">{{ item.description }}</div>
+                  </div>
+                </div>
+
+                <div class="task-item-right">
+                  <v-btn
+                    v-if="
+                      item.actStatus !== 'DONE' &&
+                      item.extra.buttonName == 'Go' &&
+                      item.actType == 'daily_invite'
+                    "
+                    class="go-btn"
+                    width="84"
+                    @click="stepNext(item, index, 'partner')"
+                    v-clipboard="inviteInfo.link"
+                    @success="() => $toast2('Copied!', 'success')"
+                    >Go</v-btn
+                  >
+                  <v-btn
+                    v-else-if="
+                      item.actStatus !== 'DONE' && item.extra.buttonName == 'Go'
+                    "
+                    class="go-btn"
+                    width="84"
+                    @click="stepNext(item, index, 'partner')"
+                    >Go</v-btn
+                  >
+                  <v-btn
+                    v-else-if="item.actStatus !== 'DONE'"
+                    class="drawer-btn"
+                    width="84"
+                    @click="stepNext(item, index, 'partner')"
+                    >{{ item.extra.buttonName }}</v-btn
+                  >
+
+                  <v-btn
+                    v-if="item.actStatus == 'DONE'"
+                    class="done-btn"
+                    width="84"
+                    >Done</v-btn
+                  >
+                </div>
+              </div>
+            </v-col>
+          </v-row>
         </div>
       </v-container>
     </v-navigation-drawer>
@@ -204,6 +345,8 @@ import {
   fetchTasks,
   onNext,
   fetchTasks_One,
+  fetchPartner_Tasks,
+  fetchInvite_Tasks,
 } from "@/api/booster.js";
 import { bus } from "@/utils/bus";
 import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
@@ -229,6 +372,8 @@ export default {
       signList: [],
       tasksLists: [],
       tasksLists_one: [],
+      tasksLists_invite: [],
+      tasksLists_partner: [],
       signDays: 0,
       signed: false,
       inviteInfo: {
@@ -270,8 +415,12 @@ export default {
     async getTasks() {
       const { data } = await fetchTasks();
       const { data: datas } = await fetchTasks_One();
+      const { data: inviteTasksData } = await fetchInvite_Tasks();
+      const { data: partnerTaskData } = await fetchPartner_Tasks();
       this.tasksLists = data.items;
       this.tasksLists_one = datas.items;
+      this.tasksLists_invite = inviteTasksData.items;
+      this.tasksLists_partner = partnerTaskData.items;
       this.$store.dispatch("getBoosterUserInfo");
     },
     async stepNext(item, index, taskListType) {
@@ -299,8 +448,12 @@ export default {
       item.extra.buttonName = data.action.web.nextButtonName;
       if (taskListType == "daily") {
         this.$set(_this.tasksLists, index, item);
-      } else {
+      } else if (taskListType == "one") {
         this.$set(_this.tasksLists_one, index, item);
+      } else if (taskListType == "invite") {
+        this.$set(_this.tasksLists_invite, index, item);
+      } else {
+        this.$set(_this.tasksLists_partner, index, item);
       }
 
       switch (data.action.web.next) {
@@ -357,6 +510,12 @@ export default {
           this.getTasks();
           break;
         case "COPY":
+          if (this.isTgMiniApp) {
+            this.$tg.shareUrl(
+              this.inviteInfo.link,
+              "Embark on the exciting 4EVER Boost campaign to boost your $4EVER points and grab exciting upcoming airdrops!🚨"
+            );
+          }
           // if (actType == "daily_invite") {
           //   try {
           //     const textToCopy = this.inviteInfo.link;

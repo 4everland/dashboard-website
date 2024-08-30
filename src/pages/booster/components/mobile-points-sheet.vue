@@ -183,6 +183,18 @@ export default {
               case "play_coco_park":
                 it.log = `Play Coco Park ${it.value} points.`;
                 break;
+              case "play_capybara_bot":
+                it.log = `Play Capybara MEME Bot ${it.value} points.`;
+                break;
+              case "invite_milestones_2":
+                it.log = `Invite 2 new boosters ${it.value} points.`;
+                break;
+              case "invite_milestones_5":
+                it.log = `Invite 5 new boosters ${it.value} points.`;
+                break;
+              case "invite_milestones_10":
+                it.log = `Invite 10 new boosters ${it.value} points.`;
+                break;
               default:
                 break;
             }
