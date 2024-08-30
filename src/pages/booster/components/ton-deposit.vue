@@ -1,5 +1,5 @@
 <template>
-  <v-overlay :value="value" opacity="1">
+  <v-overlay :value="value" opacity="1" z-index="10">
     <div class="start-boosting d-flex flex-column justify-center">
       <img
         class="close-btn"

@@ -54,6 +54,7 @@
 
 <script>
 import { bus } from "@/utils/bus";
+import { mapState } from "vuex";
 export default {
   props: {
     type: {
@@ -93,9 +94,11 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      showToolDrawer: (s) => s.moduleBooster.showToolDrawer,
+    }),
     buyDisabled() {
-      if (this.count >= 1) return false;
-      return true;
+      return this.count < 1;
     },
   },
   created() {
@@ -120,6 +123,11 @@ export default {
       } else {
         this.count = Number(this.count) + val;
       }
+    },
+  },
+  watch: {
+    showToolDrawer(val) {
+      if (!val) this.count = 0;
     },
   },
 };

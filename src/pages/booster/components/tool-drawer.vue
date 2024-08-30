@@ -144,6 +144,13 @@ export default {
       this.showBuyDialog = true;
     },
   },
+  watch: {
+    showToolDrawer(val) {
+      if (!val) {
+        this.showBuyDialog = false;
+      }
+    },
+  },
 };
 </script>
 

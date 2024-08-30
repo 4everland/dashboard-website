@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-overlay :value="value" opacity="1" v-if="asMobile" z-index="9999">
+    <v-overlay :value="value" opacity="1" v-if="asMobile" z-index="1">
       <div class="buy-card d-flex flex-column justify-center">
         <img
           class="close-btn"
@@ -137,20 +137,26 @@ export default {
       this.loading = true;
       try {
         const data = await buyCard(this.buyType, this.buyCount);
-        if (data) {
+        if (data.code == 200) {
           if (this.buyType == "explore") {
             this.$store.dispatch("getExploreRemain");
           } else {
             this.$store.dispatch("getBoosterUserInfo");
           }
           this.$store.dispatch("getBalance");
-          this.$toast2("buy successfully!!");
+          this.$toast2("Purchase successful!");
           this.$emit("getCards");
           this.$emit("input", false);
           bus.$emit("clearBuyCardCount", this.buyType);
+        } else if (data.code == 10002) {
+          bus.$emit("showDepositDialog", { land: Number(data.data.land) });
+          this.$toast2(data.message, "error");
+        } else {
+          this.$toast2(data.message, "error");
         }
       } catch (error) {
         console.log(error);
+        this.$toast2(error.message, "error");
       }
       this.loading = false;
     },

@@ -84,7 +84,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import {
   fetchStakeInfo,
   fetchNftLists,
