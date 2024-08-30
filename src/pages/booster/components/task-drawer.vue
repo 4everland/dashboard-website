@@ -356,7 +356,7 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
     }),
-    ...mapGetters(["showTaskDrawer"]),
+    ...mapGetters(["showTaskDrawer", "boostLocked"]),
     isTg() {
       return process.env.VUE_APP_TG_VERSION == "true";
     },
@@ -370,6 +370,7 @@ export default {
   data() {
     return {
       signList: [],
+      dailyTaskList: [],
       tasksLists: [],
       tasksLists_one: [],
       tasksLists_invite: [],
@@ -395,6 +396,8 @@ export default {
   methods: {
     async getDailySign() {
       const { data } = await fetchDailySign();
+
+      this.dailyTaskList = data.items;
       const rewardList = data.items[0].extra.dailySign.rewardList;
       const stepList = data.items[0].extra.dailySign.stepList;
       const signDays = data.items[0].extra.dailySign.continuous;
@@ -411,6 +414,8 @@ export default {
         });
       });
       this.signList = signList;
+
+      this.checkUndo();
     },
     async getTasks() {
       const { data } = await fetchTasks();
@@ -422,6 +427,7 @@ export default {
       this.tasksLists_invite = inviteTasksData.items;
       this.tasksLists_partner = partnerTaskData.items;
       this.$store.dispatch("getBoosterUserInfo");
+      this.checkUndo();
     },
     async stepNext(item, index, taskListType) {
       let _this = this;
@@ -608,6 +614,37 @@ export default {
       window.document.body.appendChild(a);
       a.click();
       window.document.body.removeChild(a);
+    },
+    checkUndo() {
+      const dailyUndo = this.dailyTaskList.filter(
+        (it) => it.actStatus == "UNDO" || it.actStatus == "CLAIM"
+      );
+
+      console.log(dailyUndo.length);
+      const taskUndo = this.tasksLists.filter(
+        (it) => it.actStatus == "UNDO" || it.actStatus == "CLAIM"
+      );
+      const taskOneUndo = this.tasksLists_one.filter(
+        (it) => it.actStatus == "UNDO" || it.actStatus == "CLAIM"
+      );
+      const taskInviteUndo = this.tasksLists_invite.filter(
+        (it) => it.actStatus == "UNDO" || it.actStatus == "CLAIM"
+      );
+      const taskPartner = this.tasksLists_partner.filter(
+        (it) => it.actStatus == "UNDO" || it.actStatus == "CLAIM"
+      );
+      if (
+        (dailyUndo.length ||
+          taskUndo.length ||
+          taskOneUndo.length ||
+          taskInviteUndo.length ||
+          taskPartner.length) &&
+        !this.boostLocked
+      ) {
+        this.$store.commit("SET_BOOST_TASK_UNDO", true);
+      } else {
+        this.$store.commit("SET_BOOST_TASK_UNDO", false);
+      }
     },
   },
 };

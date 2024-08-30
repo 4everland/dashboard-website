@@ -2,7 +2,7 @@
   <div class="tool-card-container">
     <div class="card_item_header">
       <div class="card_name">{{ cardName }} Card</div>
-      <div class="card_desc">{{ cardDesc }}</div>
+      <div class="card_desc mt-1">{{ cardDesc }}</div>
       <img class="d-b" :src="cardImg" width="164" alt="" />
       <div class="card_unit_price">{{ price.toLocaleString() }} LAND ×1</div>
     </div>
@@ -17,7 +17,7 @@
           <v-icon class="count-icon" color="#fff">mdi-minus </v-icon>
         </v-btn>
 
-        <div class="fz-14 text-center" style="width: 18px">
+        <div class="fz-14 text-center" style="width: 28px">
           <input
             style="width: 100%; color: #fff"
             class="text-center count-ipt"
@@ -200,6 +200,11 @@ export default {
         #1102fc 99.83%
       ) !important;
       box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
+    }
+
+    .act-btn.v-btn--disabled {
+      opacity: 0.5 !important;
+      color: #fff !important;
     }
   }
   .count-ipt[type="number"]::-webkit-inner-spin-button,

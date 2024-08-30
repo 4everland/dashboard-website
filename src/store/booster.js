@@ -20,6 +20,8 @@ export default {
       showToolDrawer: false,
       currentDate: +new Date() / 1000,
       showBindWallet: false,
+      taskUndo: false,
+      stakeUndo: false,
     };
   },
   getters: {
@@ -133,6 +135,12 @@ export default {
     },
     SET_TOOL_BAR(state, isShow) {
       state.showToolDrawer = isShow;
+    },
+    SET_BOOST_TASK_UNDO(state, undo) {
+      state.taskUndo = undo;
+    },
+    SET_BOOST_STAKE_UNDO(state, undo) {
+      state.stakeUndo = undo;
     },
   },
   actions: {

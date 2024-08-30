@@ -34,11 +34,20 @@
           </div>
 
           <div v-if="item.isOpen" class="mobile-name">
-            {{ item.name }}
+            <v-badge v-show="item.undo" color="red" dot>
+              {{ item.name }}
+            </v-badge>
+            <span v-show="!item.undo">
+              {{ item.name }}
+            </span>
           </div>
           <div v-if="!item.isOpen" class="come-soon">
             <img src="/img/booster/nav/comesoon.png" alt="" />
           </div>
+
+          <!-- <div v-if="item.name == 'Tasks' && taskUndo">
+            <v-badge color="red" dot></v-badge>
+          </div> -->
         </div>
       </div>
     </div>
@@ -54,6 +63,8 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
       exploreRemain: (s) => s.moduleBooster.exploreRemain,
+      taskUndo: (s) => s.moduleBooster.taskUndo,
+      stakeUndo: (s) => s.moduleBooster.stakeUndo,
     }),
     ...mapGetters(["notLogin", "boostLocked", "balance"]),
     asMobile() {
@@ -71,6 +82,7 @@ export default {
           action() {
             _this.toggleToolDrawer();
           },
+          undo: false,
         },
         {
           icon: "/img/booster/nav/staking.png",
@@ -80,6 +92,7 @@ export default {
           action() {
             _this.toggleStakeDrawer();
           },
+          undo: this.stakeUndo,
         },
         {
           icon: "/img/booster/nav/explore.png",
@@ -89,6 +102,7 @@ export default {
           action() {
             _this.toggleExplore();
           },
+          undo: false,
         },
         {
           icon: "/img/booster/nav/tasks.png",
@@ -98,6 +112,7 @@ export default {
           action() {
             _this.toggleTaskDrawer();
           },
+          undo: this.taskUndo,
         },
         {
           icon: "/img/booster/nav/gaming.png",
@@ -105,6 +120,7 @@ export default {
           name: "Coming soon",
           isOpen: false,
           action() {},
+          undo: false,
         },
       ];
       return Arr;

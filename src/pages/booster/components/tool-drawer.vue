@@ -85,7 +85,7 @@ export default {
       cards: {
         capacity: {
           cardName: "Capacity",
-          cardDesc: "Capacity limit+10",
+          cardDesc: "Capacity limit +10",
           cardImg: "/img/booster/drawer/capacity_card.png",
           price: 50000,
           stock: -1,
@@ -114,7 +114,6 @@ export default {
   methods: {
     async getCards() {
       this.loading = true;
-
       try {
         const { data } = await fetchToolCards();
         console.log(data);
