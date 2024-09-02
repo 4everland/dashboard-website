@@ -216,12 +216,15 @@
       </div>
     </div>
 
+    <TokenDialog></TokenDialog>
     <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
   </div>
 </template>
 
 <script>
 import MobilePointsSheet from "../components/mobile-points-sheet.vue";
+import TokenDialog from "../components/token-dialog.vue";
+
 import mixin from "./mixin";
 import ICountUp from "vue-countup-v2";
 export default {
@@ -240,6 +243,7 @@ export default {
   components: {
     MobilePointsSheet,
     ICountUp,
+    TokenDialog,
   },
   methods: {
     handleOpenSheet() {
