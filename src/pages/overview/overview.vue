@@ -232,8 +232,8 @@ export default {
     banners() {
       return [
         {
-          img: "https://overview-banner.4everland.store/EliteQuest.png",
-          to: "/quest",
+          img: "https://overview-banner.4everland.store/boost.png",
+          to: "/boost",
         },
         {
           img: "https://overview-banner.4everland.store/land.png",
@@ -245,7 +245,7 @@ export default {
           to: "/bucket/storage/",
         },
         {
-          img: "https://overview-banner.4everland.store/Frame%20337691.png",
+          img: "https://overview-banner.4everland.store/arweave.png",
           href: "https://forms.gle/SAzZ2Sw31atnSSsB8",
         },
       ];
