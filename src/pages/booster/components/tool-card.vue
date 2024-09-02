@@ -110,6 +110,8 @@ export default {
   },
   methods: {
     handleInput(e) {
+      e.target.value = e.target.value.replace(".", "");
+      this.count = Number(e.target.value.replace(".", ""));
       if (e.target.value < 0) {
         this.count = 0;
       }

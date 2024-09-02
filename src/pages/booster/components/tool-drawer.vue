@@ -85,18 +85,18 @@ export default {
       cards: {
         capacity: {
           cardName: "Capacity",
-          cardDesc: "Capacity limit +10",
+          cardDesc: "Capacity limit +100",
           cardImg: "/img/booster/drawer/capacity_card.png",
           price: 50000,
           stock: -1,
-          buff: 10,
+          buff: 100,
         },
         explore: {
           cardName: "Explore",
           cardDesc: "Explore time +1",
           cardImg: "/img/booster/drawer/explore_card.png",
           stock: 5,
-          price: 50000,
+          price: 2000,
           buff: 1,
         },
       },

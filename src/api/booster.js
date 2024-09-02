@@ -18,8 +18,6 @@ const boosterRequest = new BaseRequest({
       } else if (res.data.code == 500) {
         throw new Error("Serivce Error!");
       }
-
-      console.log(res.data);
       return res.data;
     },
     responseInterceptorCatch(error) {

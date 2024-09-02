@@ -18,6 +18,7 @@ export default {
       showStakeDrawer: false,
       showTaskDrawer: false,
       showToolDrawer: false,
+      showInviteDrawer: false,
       currentDate: +new Date() / 1000,
       showBindWallet: false,
       taskUndo: false,
@@ -135,6 +136,9 @@ export default {
     },
     SET_TOOL_BAR(state, isShow) {
       state.showToolDrawer = isShow;
+    },
+    SET_INVITE_BAR(state, isShow) {
+      state.showInviteDrawer = isShow;
     },
     SET_BOOST_TASK_UNDO(state, undo) {
       state.taskUndo = undo;

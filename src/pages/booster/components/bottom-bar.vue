@@ -115,11 +115,13 @@ export default {
           undo: this.taskUndo,
         },
         {
-          icon: "/img/booster/nav/gaming.png",
-          activityIcon: "/img/booster/nav/gaming.png",
-          name: "Coming soon",
-          isOpen: false,
-          action() {},
+          icon: "/img/booster/nav/invite.png",
+          activityIcon: "/img/booster/nav/invite-active.png",
+          name: "Invite",
+          isOpen: true,
+          action() {
+            _this.toggleInviteDrawer();
+          },
           undo: false,
         },
       ];
@@ -152,6 +154,10 @@ export default {
     toggleToolDrawer() {
       if (this.notLogin || this.boostLocked) return;
       this.$store.commit("SET_TOOL_BAR", true);
+    },
+    toggleInviteDrawer() {
+      if (this.notLogin || this.boostLocked) return;
+      this.$store.commit("SET_INVITE_BAR", true);
     },
   },
 };
