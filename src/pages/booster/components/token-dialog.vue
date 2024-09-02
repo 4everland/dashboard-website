@@ -1,7 +1,24 @@
 <template>
-  <div class="token-dialog">
-    <v-dialog persistent v-model="showTokenDialog" width="327">
+  <div>
+    <div class="trigger-icon" @click="showTokenDialog = true">
+      <img src="/img/booster/4ever-token-icon.png" width="56" alt="" />
+      <div class="trigger-text fz-12 fw-b text-center">$4EVER</div>
+    </div>
+    <v-dialog
+      persistent
+      v-model="showTokenDialog"
+      content-class="token-dialog"
+      width="327"
+      overlay-opacity="0.5"
+    >
       <div class="token-dialog-content px-4 py-9">
+        <img
+          class="pos-a"
+          style="top: -20%; right: -20%"
+          src="/img/booster/4ever-token-coin.png"
+          width="250"
+          alt=""
+        />
         <div class="token-title">$4EVER token</div>
         <ul>
           <li>
@@ -15,13 +32,46 @@
           <img src="/img/booster/svg/token-banner.svg" width="100%" alt="" />
         </div>
 
-        <div></div>
+        <div class="progress-container mt-2 mb-6 fz-14 fw-b">
+          <div class="d-flex align-center justify-space-between">
+            <div>🔥 TGE</div>
+            <div class="comming-soon">Comming Soon</div>
+          </div>
+
+          <div class="progress-content mt-8">
+            <div class="progress">
+              <img
+                style="border-radius: 12px"
+                class="d-b"
+                width="100%"
+                src="/img/booster/4ever-token-progress-mask.png"
+                height="12"
+                alt=""
+              />
+              <div class="zebra-stripe-content"></div>
+
+              <img
+                class="hot-icon"
+                src="/img/booster/progress-hot.png"
+                height="26"
+                alt=""
+              />
+            </div>
+          </div>
+        </div>
 
         <div class="boost-btn">
           <img src="/img/booster/svg/lightning.svg" width="20" alt="" />
           <span>Boost your earn</span>
         </div>
       </div>
+
+      <img
+        class="close-btn"
+        @click="showTokenDialog = false"
+        src="/img/booster/svg/close.svg"
+        alt=""
+      />
     </v-dialog>
   </div>
 </template>
@@ -30,14 +80,48 @@
 export default {
   data() {
     return {
-      showTokenDialog: true,
+      showTokenDialog: false,
     };
   },
 };
 </script>
 
+<style>
+.v-dialog__content--active:has(> .token-dialog) {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+}
+.token-dialog {
+  background: transparent !important;
+  overflow: initial;
+}
+</style>
 <style lang="scss" scoped>
+.close-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  width: 18px !important;
+  cursor: pointer;
+}
+.trigger-icon {
+  position: relative;
+  cursor: pointer;
+  .trigger-text {
+    position: absolute;
+    left: 0;
+    bottom: 15%;
+    width: 100%;
+    fill: linear-gradient(
+      135deg,
+      rgba(154, 41, 150, 0.5) 14.29%,
+      rgba(255, 56, 33, 0.13) 97.32%
+    );
+    backdrop-filter: blur(2px);
+  }
+}
 .token-dialog-content {
+  position: relative;
   color: #fff;
   border-radius: 16px;
   border: 1px solid #1aa6ff;
@@ -54,6 +138,10 @@ export default {
     font-size: 24px;
     font-weight: 700;
   }
+
+  ul {
+    padding-left: 16px;
+  }
   ul,
   li {
     font-size: 12px;
@@ -64,6 +152,45 @@ export default {
   .partner-container {
     margin-top: 13px;
     width: 100%;
+  }
+
+  .comming-soon {
+    display: inline-flex;
+    padding: 2px 4px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 4px;
+    background: linear-gradient(100deg, #dc33d6 0%, #ff3821 100%);
+  }
+  .progress-content {
+    position: relative;
+    height: 20px;
+    border-radius: 12px;
+    border: 4px solid #041f44;
+    background: #17191d;
+    .progress {
+      position: absolute;
+      width: 97%;
+
+      .zebra-stripe-content {
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 12px;
+        border-radius: 12px;
+        position: absolute;
+        background-image: url("/img/booster/zebra-stripe.png");
+        background-repeat: repeat;
+        animation: run 6s infinite linear;
+      }
+
+      .hot-icon {
+        position: absolute;
+        right: -1%;
+        top: -87%;
+      }
+    }
   }
 
   .boost-btn {
@@ -77,6 +204,16 @@ export default {
     background: linear-gradient(100deg, #dc33d6 0%, #ff3821 100%),
       linear-gradient(129deg, #0fe1f8 2.4%, #1102fc 69.3%),
       linear-gradient(180deg, #00070c 0%, #074178 113.39%);
+    cursor: pointer;
+  }
+  @keyframes run {
+    from {
+      background-position-x: -100px;
+    }
+
+    to {
+      /*left:500px;*/
+    }
   }
 }
 </style>

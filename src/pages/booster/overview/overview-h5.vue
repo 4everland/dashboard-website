@@ -34,6 +34,9 @@
         alt=""
       />
     </div>
+
+    <TokenDialog class="pos-a" style="right: 8px; top: 140px"></TokenDialog>
+
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
 
     <div v-else>
@@ -216,7 +219,6 @@
       </div>
     </div>
 
-    <TokenDialog></TokenDialog>
     <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
   </div>
 </template>
