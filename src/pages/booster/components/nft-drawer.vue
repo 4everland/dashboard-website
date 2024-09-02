@@ -121,7 +121,10 @@ export default {
       showStakeError: false,
     };
   },
-  created() {},
+  created() {
+    this.getStakeInfo();
+    this.getNftLists();
+  },
   methods: {
     onStake() {
       if (this.isTgMiniApp) {

@@ -18,6 +18,8 @@ const boosterRequest = new BaseRequest({
       } else if (res.data.code == 500) {
         throw new Error("Serivce Error!");
       }
+
+      console.log(res.data);
       return res.data;
     },
     responseInterceptorCatch(error) {
@@ -28,6 +30,8 @@ const boosterRequest = new BaseRequest({
       //   localStorage.clear();
       //   localStorage.loginTo = location.pathname + location.search;
       // }
+
+      return data;
     },
   },
 });
