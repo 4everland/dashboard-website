@@ -28,6 +28,8 @@ const boosterRequest = new BaseRequest({
       //   localStorage.clear();
       //   localStorage.loginTo = location.pathname + location.search;
       // }
+
+      return data;
     },
   },
 });
@@ -188,6 +190,21 @@ export const fetchTasks_One = async () => {
   });
 };
 
+export const fetchToolCards = async () => {
+  return boosterRequest.get({
+    url: "/node/cards",
+  });
+};
+
+export const buyCard = async (name, number) => {
+  return boosterRequest.post({
+    url: "/node/cards",
+    data: {
+      name,
+      number,
+    },
+  });
+};
 export const fetchInvite_Tasks = async () => {
   return boosterRequest.get({
     url: "/node/activities/invite_tasks",

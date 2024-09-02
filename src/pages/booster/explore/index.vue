@@ -23,7 +23,7 @@
           <ICountUp
             id="mobile-explore-point-receive"
             :delay="1000"
-            :endVal="info.totalPoint"
+            :endVal="boosterInfo.totalPoint"
             :options="{
               useEasing: true,
               useGrouping: true,
@@ -139,10 +139,11 @@ export default {
   },
   computed: {
     ...mapState({
+      boosterInfo: (s) => s.moduleBooster.boosterInfo,
       exploreRemain: (s) => s.moduleBooster.exploreRemain,
       currentDate: (s) => s.moduleBooster.currentDate,
     }),
-    ...mapGetters(["notLogin"]),
+    ...mapGetters(["notLogin", "totalRate"]),
 
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -258,7 +259,7 @@ export default {
         return it.rate + prev;
       }, 0);
     },
-    totalRate() {
+    exploreUserTotalRate() {
       return (this.baseRate + this.boostRate) * (1 + this.info.rateBuff / 100);
     },
   },
@@ -271,13 +272,18 @@ export default {
 
   methods: {
     pointCount() {
+      this.computedPoints =
+        this.computedPoints == 0 ? this.currentComputed : this.computedPoints;
+      this.computedPoints +=
+        (this.exploreUserTotalRate * this.interval) / 3600000;
       if (this.timer) {
         clearInterval(this.timer);
       }
       this.timer = setInterval(() => {
         this.computedPoints =
           this.computedPoints == 0 ? this.currentComputed : this.computedPoints;
-        this.computedPoints += (this.totalRate * this.interval) / 3600000;
+        this.computedPoints +=
+          (this.exploreUserTotalRate * this.interval) / 3600000;
       }, this.interval);
     },
 

@@ -2,12 +2,21 @@
   <div>
     <div class="user-card d-none d-md-block">
       <div class="user-card-item fz-12">
-        <div class="user-card-item-title">Earning Rate</div>
+        <div class="user-card-item-title mb-1">Earning Rate</div>
         <div class="linear-border mb-1"></div>
         <div class="user-card-item-content">
           <div class="content-rate d-flex align-center justify-space-between">
-            <img src="/img/booster/svg/union.svg" width="52" alt="" />
+            <!-- <img src="/img/booster/svg/union.svg" width="52" alt="" /> -->
             <div>{{ Math.ceil(totalRate) }} pts/h</div>
+            <v-btn
+              class="act-btn"
+              height="24"
+              max-width="62"
+              @click="$store.commit('TASKDRAWER_TOGGLE')"
+            >
+              <img src="/img/booster/svg/more.svg" width="12" alt="" />
+              <span class="ml-1">More</span>
+            </v-btn>
           </div>
           <div class="content-detail pt-2 fz-12">
             <div class="d-flex align-center justify-space-between">
@@ -381,6 +390,9 @@ export default {
   }
 
   .user-card-item {
+    .user-card-item-title {
+      width: 100%;
+    }
     .user-card-item-content {
       padding: 4px 16px;
       background: linear-gradient(
@@ -549,5 +561,19 @@ export default {
     bottom: 22%;
     left: -500%;
   }
+}
+
+.act-btn {
+  border-radius: 4px;
+  opacity: 1;
+  color: #fff !important;
+  font-size: 12px;
+  letter-spacing: 0;
+  background: linear-gradient(
+    97deg,
+    #0fe1f8 -22.19%,
+    #1102fc 99.83%
+  ) !important;
+  box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
 }
 </style>

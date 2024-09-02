@@ -17,8 +17,12 @@ export default {
       exploreRemain: 0,
       showStakeDrawer: false,
       showTaskDrawer: false,
+      showToolDrawer: false,
+      showInviteDrawer: false,
       currentDate: +new Date() / 1000,
       showBindWallet: false,
+      taskUndo: false,
+      stakeUndo: false,
     };
   },
   getters: {
@@ -130,6 +134,18 @@ export default {
     updateDate(state) {
       state.currentDate = +new Date() / 1000;
     },
+    SET_TOOL_BAR(state, isShow) {
+      state.showToolDrawer = isShow;
+    },
+    SET_INVITE_BAR(state, isShow) {
+      state.showInviteDrawer = isShow;
+    },
+    SET_BOOST_TASK_UNDO(state, undo) {
+      state.taskUndo = undo;
+    },
+    SET_BOOST_STAKE_UNDO(state, undo) {
+      state.stakeUndo = undo;
+    },
   },
   actions: {
     StakeDrawerState: async (context, payload) => {
@@ -160,8 +176,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-
-      console.log(11111);
       if (state.tgMiniOverlayLoading) {
         commit("SET_TG_OVERLAY_LOAD", false);
       }

@@ -34,11 +34,20 @@
           </div>
 
           <div v-if="item.isOpen" class="mobile-name">
-            {{ item.name }}
+            <v-badge v-show="item.undo" color="red" dot>
+              {{ item.name }}
+            </v-badge>
+            <span v-show="!item.undo">
+              {{ item.name }}
+            </span>
           </div>
           <div v-if="!item.isOpen" class="come-soon">
             <img src="/img/booster/nav/comesoon.png" alt="" />
           </div>
+
+          <!-- <div v-if="item.name == 'Tasks' && taskUndo">
+            <v-badge color="red" dot></v-badge>
+          </div> -->
         </div>
       </div>
     </div>
@@ -54,6 +63,8 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
       exploreRemain: (s) => s.moduleBooster.exploreRemain,
+      taskUndo: (s) => s.moduleBooster.taskUndo,
+      stakeUndo: (s) => s.moduleBooster.stakeUndo,
     }),
     ...mapGetters(["notLogin", "boostLocked", "balance"]),
     asMobile() {
@@ -64,50 +75,54 @@ export default {
       let _this = this;
       let Arr = [
         {
-          icon: "/img/booster/nav/gift.png",
-          activityIcon: "/img/booster/nav/gift.png",
-          name: "Coming soon",
-          path: "/boost/explore",
-          isOpen: false,
-          action() {},
+          icon: "/img/booster/nav/tools.png",
+          activityIcon: "/img/booster/nav/tools-active.png",
+          name: "Tools",
+          isOpen: true,
+          action() {
+            _this.toggleToolDrawer();
+          },
+          undo: false,
         },
         {
           icon: "/img/booster/nav/staking.png",
           activityIcon: "/img/booster/nav/staking-active.png",
           name: "Staking",
-          path: "/boost/explore",
           isOpen: true,
           action() {
             _this.toggleStakeDrawer();
           },
+          undo: this.stakeUndo,
         },
         {
           icon: "/img/booster/nav/explore.png",
           activityIcon: "/img/booster/nav/explore-active.png",
           name: "Explore",
-          path: "/boost/explore",
           isOpen: true,
           action() {
             _this.toggleExplore();
           },
+          undo: false,
         },
         {
           icon: "/img/booster/nav/tasks.png",
           activityIcon: "/img/booster/nav/tasks-active.png",
           name: "Tasks",
-          path: "/boost/explore",
           isOpen: true,
           action() {
             _this.toggleTaskDrawer();
           },
+          undo: this.taskUndo,
         },
         {
-          icon: "/img/booster/nav/gaming.png",
-          activityIcon: "/img/booster/nav/gaming.png",
-          name: "Coming soon",
-          path: "/boost/explore",
-          isOpen: false,
-          action() {},
+          icon: "/img/booster/nav/invite.png",
+          activityIcon: "/img/booster/nav/invite-active.png",
+          name: "Invite",
+          isOpen: true,
+          action() {
+            _this.toggleInviteDrawer();
+          },
+          undo: false,
         },
       ];
       return Arr;
@@ -120,26 +135,11 @@ export default {
   },
   methods: {
     toggleStakeDrawer() {
-      if (this.notLogin) {
-        // this.$router.push("/login");
-        return;
-      }
-      if (this.boostLocked) {
-        // this.$emit("handleStartBoost");
-        return;
-      }
-
+      if (this.notLogin || this.boostLocked) return;
       this.$store.dispatch("StakeDrawerToggle");
     },
     toggleExplore() {
-      if (this.notLogin) {
-        // this.$router.push("/login");
-        return;
-      }
-      if (this.boostLocked) {
-        // this.$emit("handleStartBoost");
-        return;
-      }
+      if (this.notLogin || this.boostLocked) return;
       if (this.exploreRemain < 1)
         return this.$toast2(
           "Whoops, you've used all your exploration times. Try again tomorrow!",
@@ -148,15 +148,16 @@ export default {
       this.$router.push("/boost/explore");
     },
     toggleTaskDrawer() {
-      if (this.notLogin) {
-        // this.$router.push("/login");
-        return;
-      }
-      if (this.boostLocked) {
-        // this.$emit("handleStartBoost");
-        return;
-      }
+      if (this.notLogin || this.boostLocked) return;
       this.$store.dispatch("TaskDrawerToggle");
+    },
+    toggleToolDrawer() {
+      if (this.notLogin || this.boostLocked) return;
+      this.$store.commit("SET_TOOL_BAR", true);
+    },
+    toggleInviteDrawer() {
+      if (this.notLogin || this.boostLocked) return;
+      this.$store.commit("SET_INVITE_BAR", true);
     },
   },
 };

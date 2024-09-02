@@ -125,6 +125,10 @@ export default {
               case "invite_milestones_10":
                 it.log = `Invite 10 new boosters ${it.value} points.`;
                 break;
+              case "(tg)Join Capybara Channel":
+                it.log = `Join Capybara Channel ${it.value} points.`;
+                break;
+
               default:
                 break;
             }

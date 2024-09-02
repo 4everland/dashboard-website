@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-overlay :value="value" opacity="1" v-if="asMobile">
+    <v-overlay :value="value" opacity="1" v-if="asMobile" z-index="10">
       <div class="start-boosting d-flex flex-column justify-center">
         <img
           class="close-btn"

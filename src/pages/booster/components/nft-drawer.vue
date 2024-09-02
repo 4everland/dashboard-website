@@ -84,7 +84,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
 import {
   fetchStakeInfo,
   fetchNftLists,
@@ -121,7 +121,10 @@ export default {
       showStakeError: false,
     };
   },
-  created() {},
+  created() {
+    this.getStakeInfo();
+    this.getNftLists();
+  },
   methods: {
     onStake() {
       if (this.isTgMiniApp) {
@@ -166,7 +169,10 @@ export default {
         );
       });
 
+      console.log(NFT_LISTS);
+
       this.nftList = NFT_LISTS;
+      this.checkUndo();
     },
     async getNftIsStake() {
       const { data } = await fetchNftIsStake();
@@ -194,6 +200,17 @@ export default {
         this.getNftLists();
       }
       this.$store.dispatch("StakeDrawerState", { state });
+    },
+
+    checkUndo() {
+      const unStakeList = this.nftList.filter((it) => {
+        return it.private && !it.isStakeData.stake;
+      });
+      if (unStakeList.length > 0) {
+        this.$store.commit("SET_BOOST_STAKE_UNDO", true);
+      } else {
+        this.$store.commit("SET_BOOST_STAKE_UNDO", false);
+      }
     },
   },
 };
