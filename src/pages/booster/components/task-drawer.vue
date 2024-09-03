@@ -525,17 +525,17 @@ export default {
               if (actType == "visit_like") {
                 return this.asMobile
                   ? (location.href =
-                      "https://x.com/intent/like?tweet_id=1830813088054157553")
+                      "https://x.com/intent/like?tweet_id=1830815258581385484")
                   : window.open(
-                      "https://x.com/intent/like?tweet_id=1830813088054157553"
+                      "https://x.com/intent/like?tweet_id=1830815258581385484"
                     );
               }
               if (actType == "visit_quote") {
                 return this.asMobile
                   ? (location.href =
-                      "https://x.com/intent/retweet?tweet_id=1830813088054157553")
+                      "https://x.com/intent/retweet?tweet_id=1830815258581385484")
                   : window.open(
-                      "https://x.com/intent/retweet?tweet_id=1830813088054157553"
+                      "https://x.com/intent/retweet?tweet_id=1830815258581385484"
                     );
               }
               this.asMobile
