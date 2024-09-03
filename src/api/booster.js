@@ -21,9 +21,16 @@ const boosterRequest = new BaseRequest({
       return res.data;
     },
     responseInterceptorCatch(error) {
+      console.log(error, error.message);
       const { data = {}, status } = error.response || {};
 
       console.log(data, status, "==========");
+
+      if (!status) {
+        return {
+          message: error.message,
+        };
+      }
       // if (data.code == 401 || status == 401) {
       //   localStorage.clear();
       //   localStorage.loginTo = location.pathname + location.search;

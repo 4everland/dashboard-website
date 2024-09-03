@@ -30,6 +30,10 @@
 
         <div class="partner-container pos-r">
           <img src="/img/booster/svg/token-banner.svg" width="100%" alt="" />
+
+          <div class="pos-a fw-b" style="width: 100%; left: 19px; top: 5px">
+            ⭐ Partner
+          </div>
           <div class="pos-a" style="width: 100%; left: 0; top: 32px">
             <v-carousel
               :show-arrows="false"
