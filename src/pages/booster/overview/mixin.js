@@ -51,6 +51,9 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
 
   async created() {

@@ -35,7 +35,11 @@
       />
     </div>
 
-    <TokenDialog class="pos-a" style="right: 8px; top: 140px"></TokenDialog>
+    <TokenDialog
+      v-if="isTgMiniApp"
+      class="pos-a"
+      style="right: 8px; top: 140px"
+    ></TokenDialog>
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
 

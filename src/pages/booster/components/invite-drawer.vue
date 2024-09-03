@@ -13,83 +13,72 @@
       @input="handleToggle"
     >
       <v-container fluid style="padding: 24px 16px">
-        <div class="drawer-title mb-6">Invite</div>
+        <div class="drawer-title mb-6">Invite Friends Earn Cash!</div>
 
-        <div class="mobile-invite-panel">
-          <div class="mobile-invite-panel-content">
-            <div
-              class="mobile-invite-panel-basic-item d-flex align-center fz-14"
-            >
-              <div>
-                <span>Invite link:</span>
-                <span class="ml-2">
-                  {{
-                    inviteInfo.link == "-"
-                      ? "-"
-                      : inviteInfo.link.slice(0, 12) +
-                        "..." +
-                        inviteInfo.link.slice(-8)
-                  }}</span
-                >
-              </div>
-              <img
-                class="ml-auto cursor-p"
-                src="/img/booster/svg/copy.svg"
-                width="24"
-                alt=""
-                v-clipboard="inviteInfo.link"
-                @success="() => $toast2('Copied!', 'success')"
-              />
+        <div class="mobile-invite-panel-content">
+          <div class="mobile-invite-panel-basic-item d-flex align-center fz-14">
+            <div>
+              <span>Invite link:</span>
+              <span class="ml-2">
+                {{
+                  inviteInfo.link == "-"
+                    ? "-"
+                    : inviteInfo.link.slice(0, 12) +
+                      "..." +
+                      inviteInfo.link.slice(-8)
+                }}</span
+              >
             </div>
-            <div
-              class="mobile-invite-panel-basic-item d-flex align-center fz-14"
-            >
-              <div>
-                <span>Invite code:</span>
-                <span class="ml-2">{{ inviteInfo.inviteCode }}</span>
-              </div>
-              <img
-                class="ml-auto cursor-p"
-                src="/img/booster/svg/copy.svg"
-                width="24"
-                alt=""
-                v-clipboard="inviteInfo.inviteCode"
-                @success="() => $toast2('Copied!', 'success')"
-              />
-            </div>
-            <div
-              class="mobile-invite-panel-basic-item d-flex align-center fz-14"
-            >
-              <div>
-                <span>Total invites:</span>
-                <span class="ml-2">{{ inviteInfo.invited }}</span>
-              </div>
-            </div>
-            <div
-              class="mobile-invite-panel-basic-item d-flex align-center fz-14"
-            >
-              <div>
-                <span>Today's invites:</span>
-                <span class="ml-2">{{ inviteInfo.daily }}</span>
-              </div>
-              <img class="ml-auto" src="" width="24" alt="" />
-            </div>
-
-            <div class="fz-12 mobile-invite-panel-basic-item-desc">
-              For every 20+ Points collected by your invited Boosters, you'll
-              earn an additional 5% points reward!
-            </div>
-
-            <v-btn
-              class="tg-invite"
-              v-if="isTg"
-              :disabled="inviteInfo.link == '-'"
-              @click="handleTgShare"
-            >
-              <img src="/img/booster/svg/tg-icon.svg" width="16" alt="" />
-              <span class="ml-2">INVITE FRIENDS</span>
-            </v-btn>
+            <img
+              class="ml-auto cursor-p"
+              src="/img/booster/svg/copy.svg"
+              width="24"
+              alt=""
+              v-clipboard="inviteInfo.link"
+              @success="() => $toast2('Copied!', 'success')"
+            />
           </div>
+          <div class="mobile-invite-panel-basic-item d-flex align-center fz-14">
+            <div>
+              <span>Invite code:</span>
+              <span class="ml-2">{{ inviteInfo.inviteCode }}</span>
+            </div>
+            <img
+              class="ml-auto cursor-p"
+              src="/img/booster/svg/copy.svg"
+              width="24"
+              alt=""
+              v-clipboard="inviteInfo.inviteCode"
+              @success="() => $toast2('Copied!', 'success')"
+            />
+          </div>
+          <div class="mobile-invite-panel-basic-item d-flex align-center fz-14">
+            <div>
+              <span>Total invites:</span>
+              <span class="ml-2">{{ inviteInfo.invited }}</span>
+            </div>
+          </div>
+          <div class="mobile-invite-panel-basic-item d-flex align-center fz-14">
+            <div>
+              <span>Today's invites:</span>
+              <span class="ml-2">{{ inviteInfo.daily }}</span>
+            </div>
+            <img class="ml-auto" src="" width="24" alt="" />
+          </div>
+
+          <div class="fz-12 mobile-invite-panel-basic-item-desc">
+            🎁 Earn a 5% Points Reward for every invitation!
+          </div>
+
+          <v-btn
+            class="tg-invite"
+            v-if="isTg"
+            :disabled="inviteInfo.link == '-'"
+            @click="handleTgShare"
+          >
+            <img src="/img/booster/svg/tg-icon.svg" width="16" alt="" />
+            <span class="ml-2">INVITE FRIENDS</span>
+          </v-btn>
         </div>
       </v-container>
     </v-navigation-drawer>
@@ -213,35 +202,29 @@ export default {
   }
 }
 
-.mobile-invite-panel {
-  color: #fff;
-  padding: 16px;
-  background: linear-gradient(180deg, #202538 0%, #151928 100%);
-  backdrop-filter: blur(19.75px);
-}
 .mobile-invite-title {
   font-size: 24px;
   text-shadow: 0px 0px 8px #6172f3;
 }
-.mobile-invite-panel-content {
-  border-top: 1px solid transparent;
-  border-bottom: 1px solid transparent;
-  border-image: linear-gradient(
-      to right,
-      rgba(164, 188, 253, 0),
-      rgba(164, 188, 253, 1)
-    )
-    1;
-}
+
 .mobile-invite-panel-basic-item {
-  padding: 4px 0;
+  padding: 4px 20px;
   margin-bottom: 12px;
   backdrop-filter: blur(2px);
 }
 .mobile-invite-panel-basic-item-desc {
-  padding: 4px 0;
-  backdrop-filter: blur(2px);
-  color: rgba(255, 255, 255, 0.4);
+  display: flex;
+  padding: 8px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  align-self: stretch;
+  border-radius: 4px;
+  background: linear-gradient(
+    163deg,
+    #6172f3 2.92%,
+    rgba(97, 114, 243, 0.25) 79.4%
+  );
 }
 .tg-invite {
   margin: 16px 0;

@@ -28,8 +28,24 @@
           <li>Stay tuned, won't be long.</li>
         </ul>
 
-        <div class="partner-container">
+        <div class="partner-container pos-r">
           <img src="/img/booster/svg/token-banner.svg" width="100%" alt="" />
+          <div class="pos-a" style="width: 100%; left: 0; top: 32px">
+            <v-carousel
+              :show-arrows="false"
+              height="auto"
+              vertical
+              interval="5000"
+              cycle
+              hide-delimiters
+            >
+              <v-carousel-item
+                v-for="(item, i) in items"
+                :key="i"
+                :src="item.src"
+              ></v-carousel-item>
+            </v-carousel>
+          </div>
         </div>
 
         <div class="progress-container mt-2 mb-6 fz-14 fw-b">
@@ -60,7 +76,7 @@
           </div>
         </div>
 
-        <div class="boost-btn">
+        <div class="boost-btn" @click="handleClick">
           <img src="/img/booster/svg/lightning.svg" width="20" alt="" />
           <span>Boost your earn</span>
         </div>
@@ -81,7 +97,27 @@ export default {
   data() {
     return {
       showTokenDialog: false,
+      items: [
+        {
+          src: "/img/booster/banner-1.png",
+        },
+        {
+          src: "/img/booster/banner-2.png",
+        },
+        {
+          src: "/img/booster/banner-3.png",
+        },
+        {
+          src: "/img/booster/banner-4.png",
+        },
+      ],
     };
+  },
+  methods: {
+    handleClick() {
+      this.showTokenDialog = false;
+      this.$store.dispatch("TaskDrawerState", { state: true });
+    },
   },
 };
 </script>
@@ -94,6 +130,9 @@ export default {
 .token-dialog {
   background: transparent !important;
   overflow: initial;
+}
+.partner-banner-item > .v-carousel__item {
+  height: initial !important;
 }
 </style>
 <style lang="scss" scoped>
@@ -111,12 +150,10 @@ export default {
     position: absolute;
     left: 0;
     bottom: 15%;
-    width: 100%;
-    fill: linear-gradient(
-      135deg,
-      rgba(154, 41, 150, 0.5) 14.29%,
-      rgba(255, 56, 33, 0.13) 97.32%
-    );
+    width: 60px;
+    height: 20px;
+    line-height: 20px;
+    background: url("/img/booster/svg/4ever-token-text-bg.svg");
     backdrop-filter: blur(2px);
   }
 }
@@ -150,6 +187,7 @@ export default {
     font-weight: 500;
   }
   .partner-container {
+    position: relative;
     margin-top: 13px;
     width: 100%;
   }

@@ -519,84 +519,7 @@ export default {
 };
 </script>
 
-<style>
-.user-menu {
-  border: none !important;
-  border-radius: 0 !important;
-}
-.mobile-inviter-menu {
-  border: none;
-  border-radius: 0;
-}
-.mobile-invite-panel {
-  color: #fff;
-  padding: 16px;
-  background: linear-gradient(180deg, #202538 0%, #151928 100%);
-  backdrop-filter: blur(19.75px);
-}
-.mobile-invite-title {
-  font-size: 24px;
-  text-shadow: 0px 0px 8px #6172f3;
-}
-.mobile-invite-panel-content {
-  border-top: 1px solid transparent;
-  border-bottom: 1px solid transparent;
-  border-image: linear-gradient(
-      to right,
-      rgba(164, 188, 253, 0),
-      rgba(164, 188, 253, 1)
-    )
-    1;
-}
-.mobile-invite-panel-basic-item {
-  padding: 4px 0;
-  margin-bottom: 12px;
-  backdrop-filter: blur(2px);
-}
-.mobile-invite-panel-basic-item-desc {
-  padding: 4px 0;
-  backdrop-filter: blur(2px);
-  color: rgba(255, 255, 255, 0.4);
-}
-.inviter-menu {
-  border-radius: 0;
-}
-.invite-panel {
-  color: #fff;
-  padding: 32px 20px;
-  width: 340px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(54, 59, 64, 0.9);
-}
-.invite-panel-content {
-  border-top: 1px solid transparent;
-  border-bottom: 1px solid transparent;
-  border-image: linear-gradient(
-      to right,
-      rgba(164, 188, 253, 0),
-      rgba(164, 188, 253, 1)
-    )
-    1;
-}
-.invite-panel-basic-item {
-  padding: 4px 20px;
-  margin-bottom: 12px;
-  backdrop-filter: blur(2px);
-}
-.invite-panel-basic-item-desc {
-  padding: 4px 20px;
-  backdrop-filter: blur(2px);
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.user-panel {
-  color: #fff;
-  padding: 24px 20px;
-  width: 340px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(54, 59, 64, 0.9);
-}
-</style>
+<style></style>
 <style lang="scss" scoped>
 @media screen and (max-width: 960px) {
   .nav-bar {
@@ -612,7 +535,84 @@ export default {
   font-size: 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
-.connect-wallet {
+
+::v-deep .user-menu {
+  border: none !important;
+  border-radius: 0 !important;
+}
+::v-deep .mobile-inviter-menu {
+  border: none;
+  border-radius: 0;
+}
+::v-deep .mobile-invite-panel {
+  color: #fff;
+  padding: 16px;
+  background: linear-gradient(180deg, #202538 0%, #151928 100%);
+  backdrop-filter: blur(19.75px);
+}
+::v-deep .mobile-invite-title {
+  font-size: 24px;
+  text-shadow: 0px 0px 8px #6172f3;
+}
+::v-deep .mobile-invite-panel-content {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(
+      to right,
+      rgba(164, 188, 253, 0),
+      rgba(164, 188, 253, 1)
+    )
+    1;
+}
+::v-deep .mobile-invite-panel-basic-item {
+  padding: 4px 0;
+  margin-bottom: 12px;
+  backdrop-filter: blur(2px);
+}
+::v-deep .mobile-invite-panel-basic-item-desc {
+  padding: 4px 0;
+  backdrop-filter: blur(2px);
+  color: rgba(255, 255, 255, 0.4);
+}
+::v-deep .inviter-menu {
+  border-radius: 0;
+}
+::v-deep .invite-panel {
+  color: #fff;
+  padding: 32px 20px;
+  width: 340px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(54, 59, 64, 0.9);
+}
+::v-deep .invite-panel-content {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(
+      to right,
+      rgba(164, 188, 253, 0),
+      rgba(164, 188, 253, 1)
+    )
+    1;
+}
+::v-deep .invite-panel-basic-item {
+  padding: 4px 20px;
+  margin-bottom: 12px;
+  backdrop-filter: blur(2px);
+}
+::v-deep .invite-panel-basic-item-desc {
+  padding: 4px 20px;
+  backdrop-filter: blur(2px);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+::v-deep .user-panel {
+  color: #fff;
+  padding: 24px 20px;
+  width: 340px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(54, 59, 64, 0.9);
+}
+::v-deep .connect-wallet {
   display: inline-flex;
   padding: 8px 12px;
   align-items: center;
@@ -620,7 +620,7 @@ export default {
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.1);
 }
-.points {
+::v-deep .points {
   color: #6172f3;
   font-family: "DIN Alternate";
   font-size: 20px;

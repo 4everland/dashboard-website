@@ -112,8 +112,17 @@
                     class="drawer-btn"
                     width="84"
                     @click="stepNext(item, index, 'daily')"
-                    >{{ item.extra.buttonName }}</v-btn
                   >
+                    <span>{{ item.extra.buttonName }}</span>
+                    <v-progress-circular
+                      indeterminate
+                      :size="18"
+                      :width="2"
+                      color="#fff"
+                      class="ml-1"
+                      v-if="item.extra.buttonName == 'Check'"
+                    ></v-progress-circular>
+                  </v-btn>
 
                   <v-btn
                     v-if="item.actStatus == 'DONE'"
@@ -179,8 +188,17 @@
                     class="drawer-btn"
                     width="84"
                     @click="stepNext(item, index, 'one')"
-                    >{{ item.extra.buttonName }}</v-btn
                   >
+                    <span>{{ item.extra.buttonName }}</span>
+                    <v-progress-circular
+                      indeterminate
+                      :size="18"
+                      :width="2"
+                      color="#fff"
+                      class="ml-1"
+                      v-if="item.extra.buttonName == 'Check'"
+                    ></v-progress-circular
+                  ></v-btn>
 
                   <v-btn
                     v-if="item.actStatus == 'DONE'"
@@ -248,8 +266,17 @@
                     class="drawer-btn"
                     width="84"
                     @click="stepNext(item, index, 'invite')"
-                    >{{ item.extra.buttonName }}</v-btn
                   >
+                    <span>{{ item.extra.buttonName }}</span>
+                    <v-progress-circular
+                      indeterminate
+                      :size="18"
+                      :width="2"
+                      color="#fff"
+                      class="ml-1"
+                      v-if="item.extra.buttonName == 'Check'"
+                    ></v-progress-circular
+                  ></v-btn>
 
                   <v-btn
                     v-if="item.actStatus == 'DONE'"
@@ -320,8 +347,17 @@
                     class="drawer-btn"
                     width="84"
                     @click="stepNext(item, index, 'partner')"
-                    >{{ item.extra.buttonName }}</v-btn
                   >
+                    <span>{{ item.extra.buttonName }}</span>
+                    <v-progress-circular
+                      indeterminate
+                      :size="18"
+                      :width="2"
+                      color="#fff"
+                      class="ml-1"
+                      v-if="item.extra.buttonName == 'Check'"
+                    ></v-progress-circular
+                  ></v-btn>
 
                   <v-btn
                     v-if="item.actStatus == 'DONE'"
@@ -620,7 +656,6 @@ export default {
         (it) => it.actStatus == "UNDO" || it.actStatus == "CLAIM"
       );
 
-      console.log(dailyUndo.length);
       const taskUndo = this.tasksLists.filter(
         (it) => it.actStatus == "UNDO" || it.actStatus == "CLAIM"
       );
