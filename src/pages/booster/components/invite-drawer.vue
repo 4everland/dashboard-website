@@ -14,7 +14,7 @@
     >
       <v-container fluid style="padding: 24px 16px">
         <div class="drawer-title mb-6">Invite Friends Earn Cash!</div>
-
+        <InviteReward></InviteReward>
         <div class="mobile-invite-panel-content">
           <div class="mobile-invite-panel-basic-item d-flex align-center fz-14">
             <div>
@@ -87,8 +87,11 @@
 <script>
 import { mapState } from "vuex";
 import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
-
+import InviteReward from "./invite-reward.vue";
 export default {
+  components: {
+    InviteReward,
+  },
   computed: {
     ...mapState({
       showInviteDrawer: (s) => s.moduleBooster.showInviteDrawer,
