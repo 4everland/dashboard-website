@@ -128,6 +128,12 @@ export default {
               case "(tg)Join Capybara Channel":
                 it.log = `Join Capybara Channel ${it.value} points.`;
                 break;
+              case "(tg)Play Whycoin Bot":
+                it.log = `Play Whycoin Bot ${it.value} points.`;
+                break;
+              case "(tg)Join Whycoin Channel":
+                it.log = `Join Whycoin Channel ${it.value} points.`;
+                break;
 
               default:
                 break;
