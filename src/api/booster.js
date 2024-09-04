@@ -223,3 +223,9 @@ export const fetchPartner_Tasks = async () => {
     url: "/node/activities/partner_tasks",
   });
 };
+
+export const fetchInvite_Milestone_Tasks = async () => {
+  return boosterRequest.get({
+    url: "/node/activities/invite_milestone_tasks",
+  });
+};

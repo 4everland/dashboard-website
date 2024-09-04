@@ -12,10 +12,24 @@
       :value="showInviteDrawer"
       @input="handleToggle"
     >
-      <v-container fluid style="padding: 24px 16px">
-        <div class="drawer-title mb-6">Invite Friends Earn Cash!</div>
-        <InviteReward></InviteReward>
-        <div class="mobile-invite-panel-content">
+      <v-container fluid style="padding: 24px 0 24px 16px">
+        <div class="d-flex align-center justify-space-between mb-6">
+          <div class="drawer-title">Invite Friends Earn Cash!</div>
+          <div class="usdt-withdraw d-flex align-center justify-space-between">
+            <div>
+              <div class="fz-12">Balance</div>
+              <div>
+                <img src="" width="16" alt="" />
+                <span class="usdt-enabled ml-1 fz-20">0.0</span>
+              </div>
+            </div>
+
+            <div class="withdraw-btn">Withdraw</div>
+          </div>
+        </div>
+
+        <InviteTaskContent></InviteTaskContent>
+        <!-- <div class="mobile-invite-panel-content">
           <div class="mobile-invite-panel-basic-item d-flex align-center fz-14">
             <div>
               <span>Invite link:</span>
@@ -79,7 +93,7 @@
             <img src="/img/booster/svg/tg-icon.svg" width="16" alt="" />
             <span class="ml-2">INVITE FRIENDS</span>
           </v-btn>
-        </div>
+        </div> -->
       </v-container>
     </v-navigation-drawer>
   </div>
@@ -87,11 +101,8 @@
 <script>
 import { mapState } from "vuex";
 import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
-import InviteReward from "./invite-reward.vue";
+import InviteTaskContent from "./invite-components/invite-task-content.vue";
 export default {
-  components: {
-    InviteReward,
-  },
   computed: {
     ...mapState({
       showInviteDrawer: (s) => s.moduleBooster.showInviteDrawer,
@@ -102,6 +113,9 @@ export default {
     isTg() {
       return process.env.VUE_APP_TG_VERSION == "true";
     },
+  },
+  components: {
+    InviteTaskContent,
   },
 
   data() {
@@ -190,6 +204,30 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+
+    .usdt-withdraw {
+      width: 216px;
+      padding: 8px;
+      color: #000;
+      border-radius: 16px 0px 0px 16px;
+      background: linear-gradient(0deg, #fff 0%, #fff 100%),
+        linear-gradient(99deg, #ffe205 35.35%, #ffc305 56.77%);
+
+      .usdt-enabled {
+        font-family: "DIN Alternate";
+        font-weight: 700;
+      }
+      .withdraw-btn {
+        padding: 8px;
+        color: rgba(6, 9, 15, 0.5);
+        font-size: 16px;
+        font-weight: 700;
+        border-radius: 8px;
+        background: linear-gradient(0deg, #eaecf0 0%, #eaecf0 100%),
+          linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
+        cursor: pointer;
+      }
     }
   }
 }
