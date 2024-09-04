@@ -134,6 +134,12 @@ export default {
               case "(tg)Join Whycoin Channel":
                 it.log = `Join Whycoin Channel ${it.value} points.`;
                 break;
+              case "space_id_white_list":
+                it.log = `Space ID 2nd Anniversary ${it.value} points.`;
+                break;
+              case "(tg)Play Squirrel Legend Miner":
+                it.log = `Play Squirrel Legend Miner ${it.value} points.`;
+                break;
 
               default:
                 break;
