@@ -210,6 +210,9 @@ export default {
               case "(tg)Play Squirrel Legend Miner":
                 it.log = `Play Squirrel Legend Miner ${it.value} points.`;
                 break;
+              case "(tg)Play StarAI bot":
+                it.log = `Play StarAI bot ${it.value} points.`;
+                break;
 
               default:
                 break;

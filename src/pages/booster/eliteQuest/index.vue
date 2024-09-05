@@ -53,7 +53,7 @@ export default {
           desc: "Seize the opportunity to win 600 USDT and 50,000 $4EVER Points in our exclusive giveaway. Only 100 lucky winners will take home these incredible rewards.",
           reward: "Shared Reward of 600 USDT & 50,000 $4EVER Points",
           link: "https://app.galxe.com/quest/4EVERLAND/GCKdetkwbs",
-          done: false,
+          done: true,
         },
         {
           img: "/img/airDrop/batching-ai-airdrop-bg.jpg",
