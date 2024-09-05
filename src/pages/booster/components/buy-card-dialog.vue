@@ -109,6 +109,9 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
     cardTitle() {
       switch (this.buyType) {
         case "explore":
@@ -150,7 +153,9 @@ export default {
           bus.$emit("clearBuyCardCount", this.buyType);
         } else if (data.code == 10002) {
           // bus.$emit("showDepositDialog", { land: Number(data.data.land) });
-          bus.$emit("showDepositDialog", { land: 0 });
+
+          let land = this.isTgMiniApp ? 0 : Number(data.data.land);
+          bus.$emit("showDepositDialog", { land });
 
           this.$toast2(data.message, "error");
         } else {

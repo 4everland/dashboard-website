@@ -28,7 +28,7 @@
               <span>+{{ boostRate }} pts/h</span>
             </div>
             <div class="d-flex align-center justify-space-between mt-1">
-              <span>Staking Weight</span>
+              <span>Staking Yield</span>
               <span>{{ boosterInfo.rateBuff }}%</span>
             </div>
           </div>

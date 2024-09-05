@@ -22,7 +22,7 @@
         <div class="token-title">$4EVER token</div>
         <ul>
           <li>
-            Over 3 years development, 2 round of financing, $4EVER is comming.
+            Over 3 years development, 2 round of financing, $4EVER is coming.
           </li>
           <li>Grab $4EVER points and harvest $4EVER token.</li>
           <li>Stay tuned, won't be long.</li>
@@ -55,7 +55,7 @@
         <div class="progress-container mt-2 mb-6 fz-14 fw-b">
           <div class="d-flex align-center justify-space-between">
             <div>🔥 TGE</div>
-            <div class="comming-soon">Comming Soon</div>
+            <div class="comming-soon">Coming Soon</div>
           </div>
 
           <div class="progress-content mt-8">
