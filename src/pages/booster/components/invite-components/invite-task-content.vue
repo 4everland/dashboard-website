@@ -1,12 +1,14 @@
 <template>
-  <div style="padding-right: 16px">
+  <div class="d-flex flex-column" style="padding-right: 16px">
     <div class="d-flex align-center justify-space-between">
-      <div class="tab trigger" @click="curIdx = 0">Invite Detail</div>
-      <div class="tab" @click="curIdx = 1">Invite List</div>
+      <div class="tab" :class="{ trigger: curIdx == 0 }" @click="curIdx = 0">
+        Invite Detail
+      </div>
+      <div class="tab" :class="{ trigger: curIdx == 1 }" @click="curIdx = 1">
+        Invite List
+      </div>
     </div>
-    <div class="mt-4">
-      <component :is="cpm"></component>
-    </div>
+    <component :is="cpm" class="mt-4 flex-1"></component>
   </div>
 </template>
 

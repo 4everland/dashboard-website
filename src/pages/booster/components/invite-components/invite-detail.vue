@@ -1,5 +1,5 @@
 <template>
-  <div class="invite-detail">
+  <div class="invite-detail d-flex flex-column">
     <div class="invite-reward-content">
       <InviteReward></InviteReward>
 
@@ -11,21 +11,23 @@
         <div class="claim-btn">Claim</div>
       </div>
     </div>
-    <div class="invite-act d-flex align-center mt-10" style="gap: 12px">
-      <v-btn class="act-btn flex-1" height="49">
-        <span class="mr-2">Share on </span>
-        <img src="/img/booster/invite/x.svg" width="16" alt="" />
-      </v-btn>
+    <div style="margin-top: auto">
+      <div class="invite-act d-flex align-center" style="gap: 12px">
+        <v-btn class="act-btn flex-1" height="49">
+          <span class="mr-2">Share on </span>
+          <img src="/img/booster/invite/x.svg" width="16" alt="" />
+        </v-btn>
 
-      <v-btn class="act-btn" width="160" height="49">
-        <img src="/img/booster/invite/copy.svg" width="24" alt="" />
-        <span class="ml-2"> Copy</span>
-      </v-btn>
-    </div>
+        <v-btn class="act-btn" width="160" height="49">
+          <img src="/img/booster/invite/copy.svg" width="24" alt="" />
+          <span class="ml-2"> Copy</span>
+        </v-btn>
+      </div>
 
-    <div class="d-flex justify-center mt-2">
-      <div class="invite-tips">
-        🎁 you'll earn an additional 5% points reward!
+      <div class="d-flex justify-center mt-2">
+        <div class="invite-tips">
+          🎁 you'll earn an additional 5% points reward!
+        </div>
       </div>
     </div>
   </div>

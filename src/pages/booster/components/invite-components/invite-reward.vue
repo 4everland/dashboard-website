@@ -5,7 +5,7 @@
         class="point-dot"
         v-for="(item, index) in list"
         :key="index"
-        :style="{ left: index * 108 + 'px' }"
+        :style="{ left: index * 158 + 'px' }"
         v-bind="item"
       ></PointDesc>
     </div>

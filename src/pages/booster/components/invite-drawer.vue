@@ -12,7 +12,11 @@
       :value="showInviteDrawer"
       @input="handleToggle"
     >
-      <v-container fluid style="padding: 24px 0 24px 16px">
+      <v-container
+        fluid
+        class="d-flex flex-column"
+        style="padding: 24px 0 24px 16px; height: 100%"
+      >
         <div class="d-flex align-center justify-space-between mb-6">
           <div class="drawer-title">Invite Friends Earn Cash!</div>
           <div class="usdt-withdraw d-flex align-center justify-space-between">
@@ -28,7 +32,7 @@
           </div>
         </div>
 
-        <InviteTaskContent></InviteTaskContent>
+        <InviteTaskContent class="flex-1"></InviteTaskContent>
         <!-- <div class="mobile-invite-panel-content">
           <div class="mobile-invite-panel-basic-item d-flex align-center fz-14">
             <div>

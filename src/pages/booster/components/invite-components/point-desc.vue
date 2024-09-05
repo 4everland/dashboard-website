@@ -1,8 +1,13 @@
 <template>
   <div>
-    <div class="point-desc d-flex align-center">
+    <div
+      class="point-desc d-flex align-center"
+      :class="{ usdt: pointType !== 'point' }"
+    >
       <img :src="icon" width="24" alt="" />
-      <span class="ml-1 fz-14">+{{ rewardValue }}</span>
+      <span class="ml-1 fz-14"
+        >+{{ rewardValue }}{{ pointType == "usdt" ? "USDT" : "" }}</span
+      >
     </div>
     <div class="d-flex align-center justify-center text-center mt-1">
       <img width="16" src="/img/booster/svg/invite-user.svg" alt="" />
@@ -36,7 +41,7 @@ export default {
       if (this.pointType == "point") {
         return "/img/booster/4ever-point-icon.png";
       }
-      return "/img/booster/4ever-point-icon.png";
+      return "/img/booster/usdt.png";
     },
   },
 };
@@ -47,5 +52,9 @@ export default {
   padding: 2px 4px;
   border-radius: 100px;
   background: linear-gradient(101deg, #2d31a6 10.8%, #6172f3 90.48%);
+}
+
+.point-desc.usdt {
+  background: #009393;
 }
 </style>
