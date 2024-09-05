@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="point-desc d-flex align-center">
-      <img :src="icon" width="39" alt="" />
-      <span class="ml-1">+ {{ rewardValue }}</span>
+      <img :src="icon" width="24" alt="" />
+      <span class="ml-1 fz-14">+{{ rewardValue }}</span>
     </div>
-    <div class="text-center mt-1">
+    <div class="d-flex align-center justify-center text-center mt-1">
       <img width="16" src="/img/booster/svg/invite-user.svg" alt="" />
-      <span>{{ inviteCount }}</span>
+      <span class="fz-12">{{ inviteCount }}</span>
     </div>
   </div>
 </template>
@@ -27,12 +27,15 @@ export default {
       default: "+ 500",
     },
     inviteCount: {
-      type: Number,
-      default: 1,
+      type: String,
+      default: "1",
     },
   },
   computed: {
     icon() {
+      if (this.pointType == "point") {
+        return "/img/booster/4ever-point-icon.png";
+      }
       return "/img/booster/4ever-point-icon.png";
     },
   },

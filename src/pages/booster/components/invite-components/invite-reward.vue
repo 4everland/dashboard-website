@@ -72,7 +72,7 @@ export default {
     .point-dot {
       position: absolute;
       left: 8px;
-      top: -20px;
+      top: -12px;
     }
   }
 }
