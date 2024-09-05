@@ -2,25 +2,31 @@
   <div class="invite-detail d-flex flex-column">
     <div class="invite-reward-content">
       <InviteReward></InviteReward>
-
-      <div class="total-invite mt-4 d-flex align-center justify-space-between">
-        <div class="d-flex aling-center">
-          <span class="total-text">Total invites</span>
-          <span class="total-num ml-2">0</span>
-        </div>
-        <div class="claim-btn">Claim</div>
-      </div>
     </div>
     <div style="margin-top: auto">
       <div class="invite-act d-flex align-center" style="gap: 12px">
-        <v-btn class="act-btn flex-1" height="49">
-          <span class="mr-2">Share on </span>
-          <img src="/img/booster/invite/x.svg" width="16" alt="" />
+        <v-btn
+          class="act-btn flex-1"
+          height="48"
+          @click="handleShare"
+          :disabled="inviteInfo.link == '-'"
+        >
+          <div class="d-flex align-center" v-if="!isTgMiniApp">
+            <span class="mr-2">Share on </span>
+            <img src="/img/booster/invite/x.svg" width="16" alt="" />
+          </div>
+          <div v-else>Invite Friend</div>
         </v-btn>
 
-        <v-btn class="act-btn" width="160" height="49">
+        <v-btn
+          class="act-btn"
+          :width="!asMobile ? 160 : 48"
+          height="48"
+          v-clipboard="inviteInfo.link"
+          @success="() => $toast2('Copied!', 'success')"
+        >
           <img src="/img/booster/invite/copy.svg" width="24" alt="" />
-          <span class="ml-2"> Copy</span>
+          <span v-if="!asMobile" class="ml-2"> Copy</span>
         </v-btn>
       </div>
 
@@ -34,8 +40,32 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import InviteReward from "./invite-reward.vue";
 export default {
+  computed: {
+    ...mapState({
+      inviteInfo: (s) => s.moduleBooster.inviteInfo,
+    }),
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
+  },
+  methods: {
+    handleShare() {
+      if (this.isTgMiniApp) {
+        this.$tg.shareUrl(
+          this.inviteInfo.link,
+          "Embark on the exciting 4EVER Boost campaign to boost your $4EVER points and grab exciting upcoming airdrops!🚨"
+        );
+      } else {
+        console.log(2222);
+      }
+    },
+  },
   components: {
     InviteReward,
   },
@@ -43,39 +73,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// @media screen and (max-width: 900px) {
+//   .invite-tips {
+//     font-size: 14px;
+//   }
+// }
 .invite-detail {
   .invite-reward-content {
     padding: 16px;
     border-radius: 16px;
     background: linear-gradient(117deg, #0fe1f8 -21.41%, #1102fc 99.47%);
-  }
-  .total-invite {
-    color: #06090f;
-    padding: 8px;
-    border-radius: 16px;
-    background: linear-gradient(99deg, #ffe205 35.35%, #ffc305 56.77%);
-    .total-text {
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 32px; /* 114.286% */
-    }
-    .total-num {
-      font-family: "DIN Alternate";
-      font-size: 28px;
-      font-weight: 700;
-      line-height: 32px; /* 114.286% */
-    }
-    .claim-btn {
-      display: flex;
-      padding: 12px 24px;
-      color: rgba(6, 9, 15, 0.5);
-      font-size: 16px;
-      font-weight: 700;
-      border-radius: 8px;
-      background: linear-gradient(0deg, #eaecf0 0%, #eaecf0 100%),
-        linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
-      cursor: pointer;
-    }
   }
 
   .invite-act {
@@ -95,6 +102,7 @@ export default {
   .invite-tips {
     display: inline-block;
     padding: 4px 20px;
+    font-size: 14px;
     border-radius: 80px;
     background: rgba(0, 0, 0, 0.5);
   }

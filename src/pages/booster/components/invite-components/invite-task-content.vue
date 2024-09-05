@@ -1,10 +1,24 @@
 <template>
   <div class="d-flex flex-column" style="padding-right: 16px">
-    <div class="d-flex align-center justify-space-between">
-      <div class="tab" :class="{ trigger: curIdx == 0 }" @click="curIdx = 0">
+    <div class="d-flex align-center justify-center">
+      <div
+        :class="{
+          trigger: curIdx == 0,
+          'mobile-tab': asMobile,
+          tab: !asMobile,
+        }"
+        @click="curIdx = 0"
+      >
         Invite Detail
       </div>
-      <div class="tab" :class="{ trigger: curIdx == 1 }" @click="curIdx = 1">
+      <div
+        :class="{
+          trigger: curIdx == 1,
+          'mobile-tab': asMobile,
+          tab: !asMobile,
+        }"
+        @click="curIdx = 1"
+      >
         Invite List
       </div>
     </div>
@@ -22,6 +36,9 @@ export default {
     };
   },
   computed: {
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
     cpm() {
       if (this.curIdx == 1) {
         return InviteList;
@@ -38,19 +55,29 @@ export default {
 
 <style lang="scss" scoped>
 .tab {
-  padding: 12px 0;
-  background: #131428;
-  flex: 1;
+  width: 263px;
+  height: 48px;
+  line-height: 48px;
   text-align: center;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 400;
   background: url("/img/booster/invite/tab-bg.svg") no-repeat;
-  background-size: 100%;
   cursor: pointer;
 }
 
 .tab.trigger {
   background: url("/img/booster/invite/tab-bg-active.svg") no-repeat;
-  background-size: 100%;
+}
+
+.mobile-tab {
+  width: 172px;
+  height: 48px;
+  line-height: 48px;
+  text-align: center;
+  background: url("/img/booster/invite/mobile-tab-bg.svg") no-repeat;
+  cursor: pointer;
+}
+.mobile-tab.trigger {
+  background: url("/img/booster/invite/mobile-tab-bg-active.svg") no-repeat;
 }
 </style>

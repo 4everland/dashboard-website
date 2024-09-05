@@ -1,26 +1,101 @@
 <template>
-  <div class="invite-reward">
-    <div class="reward-progress">
-      <PointDesc
-        class="point-dot"
-        v-for="(item, index) in list"
-        :key="index"
-        :style="{ left: index * 158 + 'px' }"
-        v-bind="item"
-      ></PointDesc>
+  <div>
+    <div class="invite-reward">
+      <div class="reward-progress" :style="{ width: list.length * 100 + 'px' }">
+        <PointDesc
+          class="point-dot"
+          v-for="(item, index) in list"
+          :key="index"
+          :style="{ left: index * 100 + 'px' }"
+          v-bind="item"
+        ></PointDesc>
+
+        <div
+          class="completed-progress"
+          :style="{ width: curTaskIdx * 100 + 'px' }"
+        ></div>
+      </div>
+    </div>
+
+    <div class="total-invite mt-4 d-flex align-center justify-space-between">
+      <div class="d-flex aling-center">
+        <span class="total-text">Total invites</span>
+
+        <ICountUp
+          class="total-num ml-2"
+          :delay="1000"
+          :endVal="inviteInfo.invited"
+          :options="{
+            useEasing: true,
+            useGrouping: true,
+            separator: ',',
+            decimal: '.',
+            prefix: '',
+            suffix: '',
+          }"
+        />
+      </div>
+      <v-btn
+        class="claim-btn text-center"
+        @click="handleBatchClaim"
+        :loading="loading"
+        :disabled="claimList.length == 0"
+        :class="{ disabled: claimList.length == 0 }"
+      >
+        <div>
+          <div class="fz-16">Claim</div>
+          <div class="fz-12 claim-text">
+            {{ claimText }}
+          </div>
+        </div>
+      </v-btn>
     </div>
   </div>
 </template>
 
 <script>
-import { fetchInvite_Milestone_Tasks } from "@/api/booster";
+import { fetchInvite_Milestone_Tasks, inviteBatchClaim } from "@/api/booster";
 import PointDesc from "./point-desc.vue";
+import ICountUp from "vue-countup-v2";
+import { mapState } from "vuex";
+
 export default {
-  components: { PointDesc },
+  components: { PointDesc, ICountUp },
   data() {
     return {
       list: [],
+      loading: false,
+      curTaskIdx: 0,
     };
+  },
+
+  computed: {
+    ...mapState({
+      inviteInfo: (s) => s.moduleBooster.inviteInfo,
+    }),
+    claimList() {
+      return this.list.filter((it) => it.status == "CLAIM");
+    },
+    claimText() {
+      if (this.claimList.length == 0) return "";
+      const usdt = this.claimList.reduce((prev, it) => {
+        return (prev += it.pointType == "usdt" ? Number(it.rewardValue) : 0);
+      }, 0);
+
+      const point = this.claimList.reduce((prev, it) => {
+        return (prev += it.pointType == "point" ? Number(it.rewardValue) : 0);
+      }, 0);
+
+      let text = "";
+      if (point > 0) {
+        text += "+" + point;
+      }
+      if (usdt > 0) {
+        text += "+" + usdt;
+      }
+
+      return text;
+    },
   },
   created() {
     this.getTaskList();
@@ -30,9 +105,11 @@ export default {
       try {
         const { data } = await fetchInvite_Milestone_Tasks();
         console.log(data);
-
         if (data) {
-          const list = data.items.map((it) => {
+          const list = data.items.map((it, i) => {
+            if (it.actStatus == "CLAIM" || it.actStatus == "DONE") {
+              this.curTaskIdx = i;
+            }
             const descArr = it.description.split(":");
             return {
               status: it.actStatus,
@@ -47,6 +124,18 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+
+    async handleBatchClaim() {
+      this.loading = true;
+      try {
+        const data = await inviteBatchClaim();
+        console.log(data);
+        this.getTaskList();
+      } catch (error) {
+        console.log(error);
+      }
+      this.loading = false;
     },
   },
 };
@@ -65,15 +154,63 @@ export default {
   .reward-progress {
     position: relative;
     margin: 0 12px;
-    width: 2000px;
     height: 8px;
     background: #2b364f;
     border-radius: 16px;
     .point-dot {
       position: absolute;
+      z-index: 99;
       left: 8px;
-      top: -12px;
+      top: -9px;
     }
+    .completed-progress {
+      z-index: 1;
+      position: absolute;
+      width: 100%;
+      height: 8px;
+      left: 0;
+      top: 0;
+      background: linear-gradient(163deg, #1102fc 2.92%, #0fe1f8 79.4%);
+      border-radius: 16px;
+    }
+  }
+}
+.total-invite {
+  color: #06090f;
+  padding: 8px;
+  border-radius: 16px;
+  background: linear-gradient(99deg, #ffe205 35.35%, #ffc305 56.77%);
+  .total-text {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 32px; /* 114.286% */
+  }
+  .total-num {
+    font-family: "DIN Alternate";
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 32px; /* 114.286% */
+  }
+  .claim-btn {
+    letter-spacing: 0;
+    padding: 0 24px;
+    height: 44px;
+    color: #06090f;
+    font-weight: 700;
+    border-radius: 8px;
+    background: linear-gradient(0deg, #fff 0%, #fff 100%),
+      linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
+    cursor: pointer;
+    .claim-text {
+      color: #6172f3;
+      line-height: 14px;
+    }
+  }
+
+  .claim-btn.disabled {
+    color: rgba(6, 9, 15, 0.5);
+    background: linear-gradient(0deg, #eaecf0 0%, #eaecf0 100%),
+      linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
   }
 }
 </style>
