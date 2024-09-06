@@ -146,6 +146,9 @@ export default {
               case "(tg)Play Fantasy Olympics":
                 it.log = `Play Fantasy Olympics ${it.value} points.`;
                 break;
+              case "(tg)Follow 4EVERLAND Twitter":
+                it.log = `Follow 4EVERLAND Twitter ${it.value} points.`;
+                break;
 
               default:
                 break;
