@@ -64,7 +64,7 @@
         </div>
         <div class="task-box">
           <div v-if="tasksLists_without_done.length > 0">
-            <v-row no-gutters style="gap: 18px 0; margin: 24px 0">
+            <v-row no-gutters style="gap: 18px 0; margin: 12px 0">
               <v-col
                 v-for="(item, index) in tasksLists_without_done"
                 :key="item.actId"
@@ -125,7 +125,7 @@
           <!-- one off task -->
           <div
             v-if="tasksLists_one_without_done.length > 0"
-            style="margin-bottom: 24px"
+            style="margin: 12px 0"
           >
             <div
               class="task-list-title"
@@ -193,7 +193,7 @@
           <!-- partner task -->
           <div
             v-if="isTgMiniApp && tasksLists_partner_without_done.length > 0"
-            style="margin-bottom: 24px"
+            style="margin: 12px 0"
           >
             <div
               class="task-list-title"
@@ -259,14 +259,17 @@
             </v-row>
           </div>
           <!-- invite task -->
-          <div v-if="tasksLists_invite_without_done.length > 0">
+          <div
+            v-if="tasksLists_invite_without_done.length > 0"
+            style="margin: 12px 0"
+          >
             <div
               class="task-list-title"
               style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
             >
               Invite Tasks
             </div>
-            <v-row no-gutters style="gap: 18px 0; margin-bottom: 24px">
+            <v-row no-gutters style="gap: 18px 0">
               <v-col
                 v-for="(item, index) in tasksLists_invite_without_done"
                 :key="item.actId"
@@ -334,7 +337,7 @@
           </div>
 
           <!-- done task -->
-          <div v-if="completedTaskList.length > 0">
+          <div v-if="completedTaskList.length > 0" style="margin: 12px 0">
             <div
               class="task-list-title"
               style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
@@ -342,7 +345,7 @@
               Completed Tasks
             </div>
 
-            <v-row no-gutters style="gap: 18px 0; margin-bottom: 24px">
+            <v-row no-gutters style="gap: 18px 0">
               <v-col
                 v-for="item in completedTaskList"
                 :key="item.actId"
