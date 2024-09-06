@@ -143,7 +143,7 @@ export default {
               case "(tg)Play StarAI bot":
                 it.log = `Play StarAI bot ${it.value} points.`;
                 break;
-              case "Play Fantasy Olympics":
+              case "(tg)Play Fantasy Olympics":
                 it.log = `Play Fantasy Olympics ${it.value} points.`;
                 break;
 
