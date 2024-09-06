@@ -505,13 +505,10 @@ export default {
           break;
         case "JUMP_OUT":
           if (actType == "share_twitter") {
-            let shareUrl =
-              "🚨 Hey folks! Join me in the thrilling #4EVERBoost campaign, where we earn and maximize $4EVER points through tasks like staking T4EVER/NFTs. Gear up for exciting @4everland_org #airdrops!🪂 ";
-            if (this.isTgMiniApp) {
-              shareUrl =
-                "😍Join the thrilling #4EVERBoost campaign to maximize $4EVER points through node boosting and seize the exciting @4everland_org #airdrops!🌊🏆 ";
-            }
+            let shareUrl = `@4everland_org is nominated for 'Infra' in the @BNBCHAIN 4th Anniversary Ecosystem Catalyst Awards! Vote now👇🏻\n\n`;
             shareUrl += this.inviteInfo.link;
+
+            shareUrl += `\n\nhttps://x.com/4everland_org/status/1830815258581385484`;
             shareUrl =
               "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
 

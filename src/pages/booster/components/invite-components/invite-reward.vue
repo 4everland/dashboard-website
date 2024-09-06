@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="invite-reward">
+    <div class="invite-reward" ref="inviteReward">
       <div class="reward-progress" :style="{ width: list.length * 100 + 'px' }">
         <PointDesc
           class="point-dot"
@@ -63,7 +63,57 @@ export default {
   components: { PointDesc, ICountUp },
   data() {
     return {
-      list: [],
+      list: [
+        {
+          status: "UNDO",
+          inviteCount: "2",
+          pointType: "point",
+          rewardValue: "300",
+        },
+        {
+          status: "UNDO",
+          inviteCount: "5",
+          pointType: "point",
+          rewardValue: "600",
+        },
+        {
+          status: "UNDO",
+          inviteCount: "10",
+          pointType: "point",
+          rewardValue: "1500",
+        },
+        {
+          status: "UNDO",
+          inviteCount: "20",
+          pointType: "usdt",
+          rewardValue: "0.5",
+        },
+        {
+          status: "UNDO",
+          inviteCount: "50",
+          pointType: "usdt",
+          rewardValue: "0.8",
+        },
+        {
+          status: "UNDO",
+          inviteCount: "100",
+          pointType: "usdt",
+          rewardValue: "5",
+        },
+
+        {
+          status: "UNDO",
+          inviteCount: "300",
+          pointType: "usdt",
+          rewardValue: "8",
+        },
+        {
+          status: "UNDO",
+          inviteCount: "500",
+          pointType: "usdt",
+          rewardValue: "10",
+        },
+      ],
       loading: false,
       curTaskIdx: 0,
     };
@@ -132,10 +182,25 @@ export default {
         const data = await inviteBatchClaim();
         console.log(data);
         this.getTaskList();
+        this.$store.dispatch("getBoostUSDTCount");
       } catch (error) {
         console.log(error);
       }
       this.loading = false;
+    },
+  },
+
+  watch: {
+    list(val, oldVal) {
+      if (val.length != oldVal) {
+        const completedArr = val.filter(
+          (it) => it.status == "DONE" || it.status == "CLAIM"
+        );
+        this.$refs.inviteReward.scrollTo({
+          left: (completedArr.length - 2) * 100,
+          behavior: "smooth",
+        });
+      }
     },
   },
 };
@@ -159,7 +224,7 @@ export default {
     border-radius: 16px;
     .point-dot {
       position: absolute;
-      z-index: 99;
+      z-index: 5;
       left: 8px;
       top: -9px;
     }
@@ -172,6 +237,7 @@ export default {
       top: 0;
       background: linear-gradient(163deg, #1102fc 2.92%, #0fe1f8 79.4%);
       border-radius: 16px;
+      transition: all 1s ease;
     }
   }
 }

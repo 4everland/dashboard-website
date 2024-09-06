@@ -31,7 +31,7 @@ export default {
       showStakeDrawer: false,
       showTaskDrawer: false,
       showToolDrawer: false,
-      showInviteDrawer: true,
+      showInviteDrawer: false,
       currentDate: +new Date() / 1000,
       showBindWallet: false,
       taskUndo: false,

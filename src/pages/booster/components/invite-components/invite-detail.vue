@@ -59,10 +59,16 @@ export default {
       if (this.isTgMiniApp) {
         this.$tg.shareUrl(
           this.inviteInfo.link,
-          "Embark on the exciting 4EVER Boost campaign to boost your $4EVER points and grab exciting upcoming airdrops!🚨"
+          "Join the #4EVERBoost campaign to earn $4EVER points, cash rewards, and thrilling @4everland_org #airdrops!"
         );
       } else {
-        console.log(2222);
+        let shareUrl =
+          "join the #4EVERBoost campaign to earn $4EVER points, cash rewards, and thrilling @4everland_org #airdrops! ";
+        shareUrl += this.inviteInfo.link;
+        shareUrl =
+          "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
+
+        this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
       }
     },
   },

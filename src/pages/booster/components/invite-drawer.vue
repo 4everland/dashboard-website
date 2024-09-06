@@ -41,13 +41,17 @@
               </div>
             </div>
 
-            <v-btn class="withdraw-btn" :disabled="usdtCount <= 10"
+            <v-btn
+              class="withdraw-btn"
+              :disabled="usdtCount <= 0"
+              @click="showWithdrawDialog = true"
               >Withdraw
             </v-btn>
           </div>
         </div>
 
         <InviteTaskContent class="flex-1"></InviteTaskContent>
+        <WithdrawDialog v-model="showWithdrawDialog"></WithdrawDialog>
       </v-container>
     </v-navigation-drawer>
   </div>
@@ -55,6 +59,7 @@
 <script>
 import { mapState } from "vuex";
 import ICountUp from "vue-countup-v2";
+import WithdrawDialog from "./withdraw-dialog.vue";
 import InviteTaskContent from "./invite-components/invite-task-content.vue";
 export default {
   computed: {
@@ -72,10 +77,13 @@ export default {
   components: {
     InviteTaskContent,
     ICountUp,
+    WithdrawDialog,
   },
 
   data() {
-    return {};
+    return {
+      showWithdrawDialog: false,
+    };
   },
   methods: {
     handleToggle(val) {
@@ -84,6 +92,13 @@ export default {
         this.$store.dispatch("getBoostUSDTCount");
       } else {
         this.$store.commit("SET_INVITE_BAR", val);
+      }
+    },
+  },
+  watch: {
+    showInviteDrawer(val) {
+      if (!val) {
+        this.showWithdrawDialog = false;
       }
     },
   },
