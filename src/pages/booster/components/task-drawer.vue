@@ -64,7 +64,7 @@
         </div>
         <div class="task-box">
           <div v-if="tasksLists_without_done.length > 0">
-            <v-row no-gutters style="gap: 18px 0; margin-bottom: 24px">
+            <v-row no-gutters style="gap: 18px 0; margin: 24px 0">
               <v-col
                 v-for="(item, index) in tasksLists_without_done"
                 :key="item.actId"
@@ -578,8 +578,14 @@ export default {
             this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
           } else {
             if (data.action.web.message) {
-              if (this.isTgMiniApp)
-                return this.$tg.openAuto(data.action.web.message);
+              if (this.isTgMiniApp) {
+                const descArr = data.action.web.message.split(";");
+                if (descArr > 1) {
+                  return this.$tg.openAuto(descArr[0]);
+                } else {
+                  return this.$tg.openAuto(data.action.web.message);
+                }
+              }
 
               if (actType == "visit_like") {
                 return this.asMobile
@@ -596,6 +602,14 @@ export default {
                   : window.open(
                       "https://x.com/intent/retweet?tweet_id=1830815258581385484"
                     );
+              }
+              if (actType == "jump_completion") {
+                const descArr = data.action.web.message.split(";");
+                if (descArr.length > 1) {
+                  return this.asMobile
+                    ? (location.href = descArr[1])
+                    : window.open(descArr[1]);
+                }
               }
               this.asMobile
                 ? (location.href = data.action.web.message)
