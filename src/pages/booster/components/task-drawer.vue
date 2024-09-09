@@ -63,312 +63,315 @@
           </div>
         </div>
         <div class="task-box">
-          <div class="task-list-title" v-if="isTgMiniApp">Daily Tasks</div>
-          <v-row no-gutters style="gap: 18px 0; margin-bottom: 24px">
-            <v-col
-              v-for="(item, index) in tasksLists"
-              :key="item.actId"
-              cols="12"
-              v-show="
-                item.deployOn == 'all' ||
-                (item.deployOn == 'pc' && !isTgMiniApp) ||
-                (item.deployOn == 'tg' && isTgMiniApp)
-              "
-            >
-              <div class="task-item-box">
-                <div class="task-item-left">
-                  <img class="task-item-image" :src="item.icon" alt="" />
-                  <div class="task-text-box">
-                    <div class="task-name">{{ item.actName }}</div>
-                    <div class="task-desc">{{ item.description }}</div>
+          <div v-if="tasksLists_without_done.length > 0">
+            <v-row no-gutters style="gap: 18px 0; margin: 12px 0">
+              <v-col
+                v-for="(item, index) in tasksLists_without_done"
+                :key="item.actId"
+                cols="12"
+                v-show="
+                  item.deployOn == 'all' ||
+                  (item.deployOn == 'pc' && !isTgMiniApp) ||
+                  (item.deployOn == 'tg' && isTgMiniApp)
+                "
+              >
+                <div class="task-item-box">
+                  <div class="task-item-left" @click="handleTitle(item)">
+                    <img class="task-item-image" :src="item.icon" alt="" />
+                    <div class="task-text-box">
+                      <div class="task-name">{{ item.actName }}</div>
+                      <div class="task-desc">{{ item.description }}</div>
+                    </div>
+                  </div>
+
+                  <div class="task-item-right">
+                    <v-btn
+                      v-if="
+                        item.actStatus !== 'DONE' &&
+                        item.extra.buttonName == 'Go' &&
+                        item.actType == 'daily_invite'
+                      "
+                      class="go-btn"
+                      width="84"
+                      @click="stepNext(item, index, 'daily')"
+                      v-clipboard="inviteInfo.link"
+                      @success="() => $toast2('Copied!', 'success')"
+                      >Go</v-btn
+                    >
+                    <v-btn
+                      v-else-if="item.actStatus !== 'DONE'"
+                      :class="
+                        item.extra.buttonName == 'Go' ? 'go-btn' : 'drawer-btn'
+                      "
+                      width="84"
+                      :loading="false || loadingStatus[item.actId]"
+                      @click="stepNext(item, index, 'daily')"
+                    >
+                      <span>{{ item.extra.buttonName }}</span>
+                    </v-btn>
+
+                    <v-btn
+                      v-if="item.actStatus == 'DONE'"
+                      class="done-btn"
+                      width="84"
+                      >Done</v-btn
+                    >
                   </div>
                 </div>
-
-                <div class="task-item-right">
-                  <v-btn
-                    v-if="
-                      item.actStatus !== 'DONE' &&
-                      item.extra.buttonName == 'Go' &&
-                      item.actType == 'daily_invite'
-                    "
-                    class="go-btn"
-                    width="84"
-                    @click="stepNext(item, index, 'daily')"
-                    v-clipboard="inviteInfo.link"
-                    @success="() => $toast2('Copied!', 'success')"
-                    >Go</v-btn
-                  >
-                  <v-btn
-                    v-else-if="
-                      item.actStatus !== 'DONE' && item.extra.buttonName == 'Go'
-                    "
-                    class="go-btn"
-                    width="84"
-                    @click="stepNext(item, index, 'daily')"
-                    >Go</v-btn
-                  >
-                  <v-btn
-                    v-else-if="item.actStatus !== 'DONE'"
-                    class="drawer-btn"
-                    width="84"
-                    @click="stepNext(item, index, 'daily')"
-                  >
-                    <span>{{ item.extra.buttonName }}</span>
-                    <v-progress-circular
-                      indeterminate
-                      :size="18"
-                      :width="2"
-                      color="#fff"
-                      class="ml-1"
-                      v-if="item.extra.buttonName == 'Check'"
-                    ></v-progress-circular>
-                  </v-btn>
-
-                  <v-btn
-                    v-if="item.actStatus == 'DONE'"
-                    class="done-btn"
-                    width="84"
-                    >Done</v-btn
-                  >
-                </div>
-              </div>
-            </v-col>
-          </v-row>
-          <div
-            class="task-list-title"
-            style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
-          >
-            One-off Tasks
+              </v-col>
+            </v-row>
           </div>
-          <v-row no-gutters style="gap: 18px 0; margin-bottom: 24px">
-            <v-col
-              v-for="(item, index) in tasksLists_one"
-              :key="item.actId"
-              cols="12"
-              v-show="
-                item.deployOn == 'all' ||
-                (item.deployOn == 'pc' && !isTgMiniApp) ||
-                (item.deployOn == 'tg' && isTgMiniApp)
-              "
-            >
-              <div class="task-item-box">
-                <div class="task-item-left">
-                  <img class="task-item-image" :src="item.icon" alt="" />
-                  <div class="task-text-box">
-                    <div class="task-name">{{ item.actName }}</div>
-                    <div class="task-desc">{{ item.description }}</div>
-                  </div>
-                </div>
 
-                <div class="task-item-right">
-                  <v-btn
-                    v-if="
-                      item.actStatus !== 'DONE' &&
-                      item.extra.buttonName == 'Go' &&
-                      item.actType == 'daily_invite'
-                    "
-                    class="go-btn"
-                    width="84"
-                    @click="stepNext(item, index, 'one')"
-                    v-clipboard="inviteInfo.link"
-                    @success="() => $toast2('Copied!', 'success')"
-                    >Go</v-btn
-                  >
-                  <v-btn
-                    v-else-if="
-                      item.actStatus !== 'DONE' && item.extra.buttonName == 'Go'
-                    "
-                    class="go-btn"
-                    width="84"
-                    @click="stepNext(item, index, 'one')"
-                    >Go</v-btn
-                  >
-                  <v-btn
-                    v-else-if="item.actStatus !== 'DONE'"
-                    class="drawer-btn"
-                    width="84"
-                    @click="stepNext(item, index, 'one')"
-                  >
-                    <span>{{ item.extra.buttonName }}</span>
-                    <v-progress-circular
-                      indeterminate
-                      :size="18"
-                      :width="2"
-                      color="#fff"
-                      class="ml-1"
-                      v-if="item.extra.buttonName == 'Check'"
-                    ></v-progress-circular
-                  ></v-btn>
-
-                  <v-btn
-                    v-if="item.actStatus == 'DONE'"
-                    class="done-btn"
-                    width="84"
-                    >Done</v-btn
-                  >
-                </div>
-              </div>
-            </v-col>
-          </v-row>
+          <!-- one off task -->
           <div
-            class="task-list-title"
-            style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
+            v-if="tasksLists_one_without_done.length > 0"
+            style="margin: 12px 0"
           >
-            Invite Tasks
-          </div>
-          <v-row no-gutters style="gap: 18px 0; margin-bottom: 24px">
-            <v-col
-              v-for="(item, index) in tasksLists_invite"
-              :key="item.actId"
-              cols="12"
-              v-show="
-                item.deployOn == 'all' ||
-                (item.deployOn == 'pc' && !isTgMiniApp) ||
-                (item.deployOn == 'tg' && isTgMiniApp)
-              "
+            <div
+              class="task-list-title"
+              style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
             >
-              <div class="task-item-box">
-                <div class="task-item-left">
-                  <img class="task-item-image" :src="item.icon" alt="" />
-                  <div class="task-text-box">
-                    <div class="task-name">{{ item.actName }}</div>
-                    <div class="task-desc">{{ item.description }}</div>
+              Basic Tasks
+            </div>
+            <v-row no-gutters style="gap: 18px 0">
+              <v-col
+                v-for="(item, index) in tasksLists_one_without_done"
+                :key="item.actId"
+                cols="12"
+                v-show="
+                  item.deployOn == 'all' ||
+                  (item.deployOn == 'pc' && !isTgMiniApp) ||
+                  (item.deployOn == 'tg' && isTgMiniApp)
+                "
+              >
+                <div class="task-item-box">
+                  <div class="task-item-left" @click="handleTitle(item)">
+                    <img class="task-item-image" :src="item.icon" alt="" />
+                    <div class="task-text-box">
+                      <div class="task-name">{{ item.actName }}</div>
+                      <div class="task-desc">{{ item.description }}</div>
+                    </div>
+                  </div>
+
+                  <div class="task-item-right">
+                    <v-btn
+                      v-if="
+                        item.actStatus !== 'DONE' &&
+                        item.extra.buttonName == 'Go' &&
+                        item.actType == 'daily_invite'
+                      "
+                      class="go-btn"
+                      width="84"
+                      @click="stepNext(item, index, 'one')"
+                      v-clipboard="inviteInfo.link"
+                      @success="() => $toast2('Copied!', 'success')"
+                      >Go</v-btn
+                    >
+                    <v-btn
+                      v-else-if="item.actStatus !== 'DONE'"
+                      :class="
+                        item.extra.buttonName == 'Go' ? 'go-btn' : 'drawer-btn'
+                      "
+                      :loading="false || loadingStatus[item.actId]"
+                      width="84"
+                      @click="stepNext(item, index, 'one')"
+                    >
+                      <span>{{ item.extra.buttonName }}</span>
+                    </v-btn>
+
+                    <v-btn
+                      v-if="item.actStatus == 'DONE'"
+                      class="done-btn"
+                      width="84"
+                      >Done</v-btn
+                    >
                   </div>
                 </div>
-
-                <div class="task-item-right">
-                  <v-btn
-                    v-if="
-                      item.actStatus !== 'DONE' &&
-                      item.extra.buttonName == 'Go' &&
-                      !isTgMiniApp
-                    "
-                    class="go-btn"
-                    width="84"
-                    @click="stepNext(item, index, 'invite')"
-                    v-clipboard="inviteInfo.link"
-                    @success="() => $toast2('Copied!', 'success')"
-                    >Go</v-btn
-                  >
-                  <v-btn
-                    v-else-if="
-                      item.actStatus !== 'DONE' &&
-                      item.extra.buttonName == 'Go' &&
-                      isTgMiniApp
-                    "
-                    class="go-btn"
-                    width="84"
-                    @click="stepNext(item, index, 'invite')"
-                    >Go</v-btn
-                  >
-                  <v-btn
-                    v-else-if="item.actStatus !== 'DONE'"
-                    class="drawer-btn"
-                    width="84"
-                    @click="stepNext(item, index, 'invite')"
-                  >
-                    <span>{{ item.extra.buttonName }}</span>
-                    <v-progress-circular
-                      indeterminate
-                      :size="18"
-                      :width="2"
-                      color="#fff"
-                      class="ml-1"
-                      v-if="item.extra.buttonName == 'Check'"
-                    ></v-progress-circular
-                  ></v-btn>
-
-                  <v-btn
-                    v-if="item.actStatus == 'DONE'"
-                    class="done-btn"
-                    width="84"
-                    >Done</v-btn
-                  >
-                </div>
-              </div>
-            </v-col>
-          </v-row>
+              </v-col>
+            </v-row>
+          </div>
+          <!-- partner task -->
           <div
-            class="task-list-title"
-            style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
-            v-if="isTgMiniApp"
+            v-if="isTgMiniApp && tasksLists_partner_without_done.length > 0"
+            style="margin: 12px 0"
           >
-            Partner Tasks
-          </div>
-          <v-row
-            no-gutters
-            style="gap: 18px 0; margin-bottom: 24px"
-            v-if="isTgMiniApp"
-          >
-            <v-col
-              v-for="(item, index) in tasksLists_partner"
-              :key="item.actId"
-              cols="12"
-              v-show="
-                item.deployOn == 'all' ||
-                (item.deployOn == 'pc' && !isTgMiniApp) ||
-                (item.deployOn == 'tg' && isTgMiniApp)
-              "
+            <div
+              class="task-list-title"
+              style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
             >
-              <div class="task-item-box">
-                <div class="task-item-left">
-                  <img class="task-item-image" :src="item.icon" alt="" />
-                  <div class="task-text-box">
-                    <div class="task-name">{{ item.actName }}</div>
-                    <div class="task-desc">{{ item.description }}</div>
+              Partner Tasks
+            </div>
+            <v-row no-gutters style="gap: 18px 0">
+              <v-col
+                v-for="(item, index) in tasksLists_partner_without_done"
+                :key="item.actId"
+                cols="12"
+                v-show="
+                  item.deployOn == 'all' ||
+                  (item.deployOn == 'pc' && !isTgMiniApp) ||
+                  (item.deployOn == 'tg' && isTgMiniApp)
+                "
+              >
+                <div class="task-item-box">
+                  <div class="task-item-left" @click="handleTitle(item)">
+                    <img class="task-item-image" :src="item.icon" alt="" />
+                    <div class="task-text-box">
+                      <div class="task-name">{{ item.actName }}</div>
+                      <div class="task-desc">{{ item.description }}</div>
+                    </div>
+                  </div>
+
+                  <div class="task-item-right">
+                    <v-btn
+                      v-if="
+                        item.actStatus !== 'DONE' &&
+                        item.extra.buttonName == 'Go' &&
+                        item.actType == 'daily_invite'
+                      "
+                      class="go-btn"
+                      width="84"
+                      @click="stepNext(item, index, 'partner')"
+                      v-clipboard="inviteInfo.link"
+                      @success="() => $toast2('Copied!', 'success')"
+                      >Go</v-btn
+                    >
+                    <v-btn
+                      v-else-if="item.actStatus !== 'DONE'"
+                      :class="
+                        item.extra.buttonName == 'Go' ? 'go-btn' : 'drawer-btn'
+                      "
+                      width="84"
+                      :loading="false || loadingStatus[item.actId]"
+                      @click="stepNext(item, index, 'partner')"
+                    >
+                      <span>{{ item.extra.buttonName }}</span>
+                    </v-btn>
+
+                    <v-btn
+                      v-if="item.actStatus == 'DONE'"
+                      class="done-btn"
+                      width="84"
+                      >Done</v-btn
+                    >
                   </div>
                 </div>
+              </v-col>
+            </v-row>
+          </div>
+          <!-- invite task -->
+          <div
+            v-if="tasksLists_invite_without_done.length > 0"
+            style="margin: 12px 0"
+          >
+            <div
+              class="task-list-title"
+              style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
+            >
+              Invite Tasks
+            </div>
+            <v-row no-gutters style="gap: 18px 0">
+              <v-col
+                v-for="(item, index) in tasksLists_invite_without_done"
+                :key="item.actId"
+                cols="12"
+                v-show="
+                  item.deployOn == 'all' ||
+                  (item.deployOn == 'pc' && !isTgMiniApp) ||
+                  (item.deployOn == 'tg' && isTgMiniApp)
+                "
+              >
+                <div class="task-item-box">
+                  <div class="task-item-left" @click="handleTitle(item)">
+                    <img class="task-item-image" :src="item.icon" alt="" />
+                    <div class="task-text-box">
+                      <div class="task-name">{{ item.actName }}</div>
+                      <div class="task-desc">{{ item.description }}</div>
+                    </div>
+                  </div>
 
-                <div class="task-item-right">
-                  <v-btn
-                    v-if="
-                      item.actStatus !== 'DONE' &&
-                      item.extra.buttonName == 'Go' &&
-                      item.actType == 'daily_invite'
-                    "
-                    class="go-btn"
-                    width="84"
-                    @click="stepNext(item, index, 'partner')"
-                    v-clipboard="inviteInfo.link"
-                    @success="() => $toast2('Copied!', 'success')"
-                    >Go</v-btn
-                  >
-                  <v-btn
-                    v-else-if="
-                      item.actStatus !== 'DONE' && item.extra.buttonName == 'Go'
-                    "
-                    class="go-btn"
-                    width="84"
-                    @click="stepNext(item, index, 'partner')"
-                    >Go</v-btn
-                  >
-                  <v-btn
-                    v-else-if="item.actStatus !== 'DONE'"
-                    class="drawer-btn"
-                    width="84"
-                    @click="stepNext(item, index, 'partner')"
-                  >
-                    <span>{{ item.extra.buttonName }}</span>
-                    <v-progress-circular
-                      indeterminate
-                      :size="18"
-                      :width="2"
-                      color="#fff"
-                      class="ml-1"
-                      v-if="item.extra.buttonName == 'Check'"
-                    ></v-progress-circular
-                  ></v-btn>
+                  <div class="task-item-right">
+                    <v-btn
+                      v-if="
+                        item.actStatus !== 'DONE' &&
+                        item.extra.buttonName == 'Go' &&
+                        !isTgMiniApp
+                      "
+                      class="go-btn"
+                      width="84"
+                      @click="stepNext(item, index, 'invite')"
+                      v-clipboard="inviteInfo.link"
+                      @success="() => $toast2('Copied!', 'success')"
+                      >Go</v-btn
+                    >
+                    <v-btn
+                      v-else-if="
+                        item.actStatus !== 'DONE' &&
+                        item.extra.buttonName == 'Go' &&
+                        isTgMiniApp
+                      "
+                      class="go-btn"
+                      width="84"
+                      @click="stepNext(item, index, 'invite')"
+                      >Go</v-btn
+                    >
+                    <v-btn
+                      v-else-if="item.actStatus !== 'DONE'"
+                      class="drawer-btn"
+                      width="84"
+                      :loading="false || loadingStatus[item.actId]"
+                      @click="stepNext(item, index, 'invite')"
+                    >
+                      <span>{{ item.extra.buttonName }}</span>
+                    </v-btn>
 
-                  <v-btn
-                    v-if="item.actStatus == 'DONE'"
-                    class="done-btn"
-                    width="84"
-                    >Done</v-btn
-                  >
+                    <v-btn
+                      v-if="item.actStatus == 'DONE'"
+                      class="done-btn"
+                      width="84"
+                      >Done</v-btn
+                    >
+                  </div>
                 </div>
-              </div>
-            </v-col>
-          </v-row>
+              </v-col>
+            </v-row>
+          </div>
+
+          <!-- done task -->
+          <div v-if="completedTaskList.length > 0" style="margin: 12px 0">
+            <div
+              class="task-list-title"
+              style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
+            >
+              Completed Tasks
+            </div>
+
+            <v-row no-gutters style="gap: 18px 0">
+              <v-col
+                v-for="item in completedTaskList"
+                :key="item.actId"
+                cols="12"
+                v-show="
+                  item.deployOn == 'all' ||
+                  (item.deployOn == 'pc' && !isTgMiniApp) ||
+                  (item.deployOn == 'tg' && isTgMiniApp)
+                "
+              >
+                <div class="task-item-box">
+                  <div class="task-item-left" @click="handleTitle(item)">
+                    <img class="task-item-image" :src="item.icon" alt="" />
+                    <div class="task-text-box">
+                      <div class="task-name">{{ item.actName }}</div>
+                      <div class="task-desc">{{ item.description }}</div>
+                    </div>
+                  </div>
+
+                  <div class="task-item-right">
+                    <v-btn class="done-btn" width="84">Done</v-btn>
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
+          </div>
         </div>
       </v-container>
     </v-navigation-drawer>
@@ -402,6 +405,28 @@ export default {
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
+    completedTaskList() {
+      let completedTaskList = this.tasksLists
+        .concat(this.tasksLists_one)
+        .concat(this.tasksLists_invite)
+        .concat(this.tasksLists_partner);
+      completedTaskList = completedTaskList.filter(
+        (it) => it.actStatus == "DONE"
+      );
+      return completedTaskList;
+    },
+    tasksLists_one_without_done() {
+      return this.tasksLists_one.filter((it) => it.actStatus != "DONE");
+    },
+    tasksLists_without_done() {
+      return this.tasksLists.filter((it) => it.actStatus != "DONE");
+    },
+    tasksLists_invite_without_done() {
+      return this.tasksLists_invite.filter((it) => it.actStatus != "DONE");
+    },
+    tasksLists_partner_without_done() {
+      return this.tasksLists_partner.filter((it) => it.actStatus != "DONE");
+    },
   },
   data() {
     return {
@@ -419,8 +444,10 @@ export default {
         invited: "-",
         link: "-",
       },
+      loadingStatus: {},
     };
   },
+
   created() {
     this.getDailySign();
     this.getTasks();
@@ -458,10 +485,43 @@ export default {
       const { data: datas } = await fetchTasks_One();
       const { data: inviteTasksData } = await fetchInvite_Tasks();
       const { data: partnerTaskData } = await fetchPartner_Tasks();
-      this.tasksLists = data.items;
-      this.tasksLists_one = datas.items;
-      this.tasksLists_invite = inviteTasksData.items;
-      this.tasksLists_partner = partnerTaskData.items;
+      this.tasksLists = data.items.filter((it) => {
+        if (
+          it.deployOn == "all" ||
+          (it.deployOn == "pc" && !this.isTgMiniApp) ||
+          (it.deployOn == "tg" && this.isTgMiniApp)
+        ) {
+          return it;
+        }
+      });
+      this.tasksLists_one = datas.items.filter((it) => {
+        if (
+          it.deployOn == "all" ||
+          (it.deployOn == "pc" && !this.isTgMiniApp) ||
+          (it.deployOn == "tg" && this.isTgMiniApp)
+        ) {
+          return it;
+        }
+      });
+      this.tasksLists_invite = inviteTasksData.items.filter((it) => {
+        if (
+          it.deployOn == "all" ||
+          (it.deployOn == "pc" && !this.isTgMiniApp) ||
+          (it.deployOn == "tg" && this.isTgMiniApp)
+        ) {
+          return it;
+        }
+      });
+      this.tasksLists_partner = partnerTaskData.items.filter((it) => {
+        if (
+          it.deployOn == "all" ||
+          (it.deployOn == "pc" && !this.isTgMiniApp) ||
+          (it.deployOn == "tg" && this.isTgMiniApp)
+        ) {
+          return it;
+        }
+      });
+
       this.$store.dispatch("getBoosterUserInfo");
       this.checkUndo();
     },
@@ -483,8 +543,13 @@ export default {
           );
         }
       }
+      if (item.extra.buttonName == "Check") {
+        this.$set(this.loadingStatus, item.actId, true);
+      }
       const id = item.actId;
       const { data } = await onNext(id);
+
+      this.$set(this.loadingStatus, item.actId, false);
       const actType = data.actType;
 
       item.extra.buttonName = data.action.web.nextButtonName;
@@ -505,10 +570,10 @@ export default {
           break;
         case "JUMP_OUT":
           if (actType == "share_twitter") {
-            let shareUrl = `@4everland_org is nominated for 'Infra' in the @BNBCHAIN 4th Anniversary Ecosystem Catalyst Awards! Vote now👇🏻\n\n`;
+            let shareUrl = `As you join #4EVERBoost, be sure to check out our new event - #4EVERLAND Sprint Movement on @GalxeQuest!🌊\n\n💰 Earn 19,000 $4EVER Points\n💎 1 #GalxeOAT = 3% Staking Yield\n\n`;
+            shareUrl += `🔍 GalxeQuest:\nhttps://x.com/4everland_org/status/1833023657922437322\n🔗 4EVERBoost:\n`;
             shareUrl += this.inviteInfo.link;
 
-            shareUrl += `\n\nhttps://x.com/4everland_org/status/1830815258581385484`;
             shareUrl =
               "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
 
@@ -516,8 +581,14 @@ export default {
             this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
           } else {
             if (data.action.web.message) {
-              if (this.isTgMiniApp)
-                return this.$tg.openAuto(data.action.web.message);
+              if (this.isTgMiniApp) {
+                const descArr = data.action.web.message.split(";");
+                if (descArr > 1) {
+                  return this.$tg.openAuto(descArr[0]);
+                } else {
+                  return this.$tg.openAuto(data.action.web.message);
+                }
+              }
 
               if (actType == "visit_like") {
                 return this.asMobile
@@ -534,6 +605,14 @@ export default {
                   : window.open(
                       "https://x.com/intent/retweet?tweet_id=1830815258581385484"
                     );
+              }
+              if (actType == "jump_completion") {
+                const descArr = data.action.web.message.split(";");
+                if (descArr.length > 1) {
+                  return this.asMobile
+                    ? (location.href = descArr[1])
+                    : window.open(descArr[1]);
+                }
               }
               this.asMobile
                 ? (location.href = data.action.web.message)
@@ -649,22 +728,52 @@ export default {
       window.document.body.removeChild(a);
     },
     checkUndo() {
-      const dailyUndo = this.dailyTaskList.filter(
-        (it) => it.actStatus == "UNDO" || it.actStatus == "CLAIM"
-      );
+      const dailyUndo = this.dailyTaskList.filter((it) => {
+        if (
+          it.deployOn == "all" ||
+          (it.deployOn == "pc" && !this.isTgMiniApp) ||
+          (it.deployOn == "tg" && this.isTgMiniApp)
+        ) {
+          return it.actStatus == "UNDO" || it.actStatus == "CLAIM";
+        }
+      });
 
-      const taskUndo = this.tasksLists.filter(
-        (it) => it.actStatus == "UNDO" || it.actStatus == "CLAIM"
-      );
-      const taskOneUndo = this.tasksLists_one.filter(
-        (it) => it.actStatus == "UNDO" || it.actStatus == "CLAIM"
-      );
-      const taskInviteUndo = this.tasksLists_invite.filter(
-        (it) => it.actStatus == "UNDO" || it.actStatus == "CLAIM"
-      );
-      const taskPartner = this.tasksLists_partner.filter(
-        (it) => it.actStatus == "UNDO" || it.actStatus == "CLAIM"
-      );
+      const taskUndo = this.tasksLists.filter((it) => {
+        if (
+          it.deployOn == "all" ||
+          (it.deployOn == "pc" && !this.isTgMiniApp) ||
+          (it.deployOn == "tg" && this.isTgMiniApp)
+        ) {
+          return it.actStatus == "UNDO" || it.actStatus == "CLAIM";
+        }
+      });
+      const taskOneUndo = this.tasksLists_one.filter((it) => {
+        if (
+          it.deployOn == "all" ||
+          (it.deployOn == "pc" && !this.isTgMiniApp) ||
+          (it.deployOn == "tg" && this.isTgMiniApp)
+        ) {
+          return it.actStatus == "UNDO" || it.actStatus == "CLAIM";
+        }
+      });
+      const taskInviteUndo = this.tasksLists_invite.filter((it) => {
+        if (
+          it.deployOn == "all" ||
+          (it.deployOn == "pc" && !this.isTgMiniApp) ||
+          (it.deployOn == "tg" && this.isTgMiniApp)
+        ) {
+          return it.actStatus == "UNDO" || it.actStatus == "CLAIM";
+        }
+      });
+      const taskPartner = this.tasksLists_partner.filter((it) => {
+        if (
+          it.deployOn == "all" ||
+          (it.deployOn == "pc" && !this.isTgMiniApp) ||
+          (it.deployOn == "tg" && this.isTgMiniApp)
+        ) {
+          return it.actStatus == "UNDO" || it.actStatus == "CLAIM";
+        }
+      });
       if (
         (dailyUndo.length ||
           taskUndo.length ||
@@ -677,6 +786,23 @@ export default {
       } else {
         this.$store.commit("SET_BOOST_TASK_UNDO", false);
       }
+    },
+    handleTitle(it) {
+      console.log(11);
+      // switch (it.actType) {
+      //   case '2':
+      //     break;
+
+      //   default:
+      //     if (this.isTgMiniApp) {
+      //       this.$tg.openAuto(it.oriDescription);
+      //     } else {
+      //       this.asMobile
+      //         ? (location.href = it.oriDescription)
+      //         : window.open(it.oriDescription);
+      //     }
+      //     break;
+      // }
     },
   },
 };
@@ -828,6 +954,7 @@ export default {
         display: flex;
         align-items: center;
         gap: 12px;
+        cursor: pointer;
         .task-item-image {
           width: 44px;
         }
