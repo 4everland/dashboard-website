@@ -85,7 +85,7 @@
 
       <div class="ta-c mt-5">
         <v-btn color="primary" width="120" :loading="loading" @click="onSubmit"
-          >Back</v-btn
+          >Submit</v-btn
         >
         <v-btn class="ml-6" outlined width="120" @click="showPop = false"
           >Cancel</v-btn

@@ -570,10 +570,9 @@ export default {
           break;
         case "JUMP_OUT":
           if (actType == "share_twitter") {
-            let shareUrl = `@4everland_org is nominated for 'Infra' in the @BNBCHAIN 4th Anniversary Ecosystem Catalyst Awards! Vote now👇🏻\n\n`;
+            let shareUrl = `As you join #4EVERBoost, be sure to check out our new event - #4EVERLAND Sprint Movement on @GalxeQuest!🌊\n\n💰 Earn 19,000 $4EVER Points\n💎 1 #GalxeOAT = 3% Staking Yield\n\n`;
+            shareUrl += `🔍 GalxeQuest:\nhttps://x.com/4everland_org/status/1833023657922437322\n🔗 4EVERBoost:\n`;
             shareUrl += this.inviteInfo.link;
-
-            shareUrl += `\n\nhttps://x.com/4everland_org/status/1830815258581385484`;
             shareUrl =
               "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
 
