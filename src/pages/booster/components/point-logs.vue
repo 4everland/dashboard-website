@@ -149,7 +149,12 @@ export default {
               case "(tg)Follow 4EVERLAND Twitter":
                 it.log = `Follow 4EVERLAND Twitter ${it.value} points.`;
                 break;
-
+              case "collected":
+                it.log = `Another Booster claimed your $4EVER points:-${it.value}.`;
+                break;
+              case "collect":
+                it.log = `I just exploredand snagged ${it.value} points from ${it.explorerAddress}!`;
+                break;
               default:
                 break;
             }
