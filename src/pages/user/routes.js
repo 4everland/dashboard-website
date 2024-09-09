@@ -18,13 +18,13 @@ export default [
       title: "My Collection",
     },
   },
-  {
-    path: "/bug-bounty",
-    components: {
-      cache: () => import("./bug-bounty"),
-    },
-    meta: {
-      title: "Bug Bounty",
-    },
-  },
+  // {
+  //   path: "/bug-bounty",
+  //   components: {
+  //     cache: () => import("./bug-bounty"),
+  //   },
+  //   meta: {
+  //     title: "Bug Bounty",
+  //   },
+  // },
 ];
