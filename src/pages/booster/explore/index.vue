@@ -45,21 +45,9 @@
           @click="handleClaim"
         >
           <span class="points fz-14">
-            {{
-              computedPoints > info.capacity
-                ? info.capacity
-                : computedPoints.toFixed(3)
-            }}/{{ info.capacity }}
+            {{ displayPoints }}/{{ info.capacity }}
           </span>
-          <img
-            :src="
-              computedPoints >= info.capacity
-                ? '/img/booster/3d-square-full.png'
-                : '/img/booster/3d-square.png'
-            "
-            width="120"
-            alt=""
-          />
+          <img :src="displaySquare" width="120" alt="" />
           <img
             class="pos-a"
             style="left: 50%; top: 30%; transform: translateX(-50%)"
@@ -261,6 +249,18 @@ export default {
     },
     exploreUserTotalRate() {
       return (this.baseRate + this.boostRate) * (1 + this.info.rateBuff / 100);
+    },
+    displayPoints() {
+      if (this.info.negative) return this.info.capacity - this.info.negative;
+      return this.computedPoints > this.info.capacity
+        ? this.info.capacity
+        : this.computedPoints.toFixed(3);
+    },
+    displaySquare() {
+      if (this.info.negative > 0) return "/img/booster/3d-square-explored.png";
+      return this.computedPoints >= this.info.capacity
+        ? "/img/booster/3d-square-full.png"
+        : "/img/booster/3d-square.png";
     },
   },
 

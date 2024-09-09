@@ -54,6 +54,24 @@ export default {
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
+    isExplored() {
+      return this.boosterInfo.negative > 0;
+    },
+    displayPoints() {
+      if (this.isExplored)
+        return this.boosterInfo.capacity - this.boosterInfo.negative;
+      return this.computedPoints > this.boosterInfo.capacity
+        ? this.boosterInfo.capacity
+        : this.computedPoints.toFixed(3);
+    },
+    displaySquare() {
+      if (this.isExplored) return "/img/booster/3d-square-explored.png";
+      return this.computedPoints < 1
+        ? "/img/booster/3d-square-unlock.png"
+        : this.computedPoints >= this.boosterInfo.capacity
+        ? "/img/booster/3d-square-full.png"
+        : "/img/booster/3d-square.png";
+    },
   },
 
   async created() {

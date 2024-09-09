@@ -67,37 +67,27 @@
           <div class="top-card square-box" id="point-send">
             <div
               class="points fz-14 d-flex align-center"
-              :class="{ locked: computedPoints < 1 }"
+              :class="{ locked: computedPoints < 1, explored: isExplored }"
             >
               <span class="mr-1">
-                {{
-                  computedPoints > boosterInfo.capacity
-                    ? boosterInfo.capacity
-                    : computedPoints.toFixed(3)
-                }}/{{ boosterInfo.capacity }}</span
+                {{ displayPoints }}/{{ boosterInfo.capacity }}</span
               >
 
-              <!-- <v-tooltip top max-width="300">
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon size="18" v-bind="attrs" v-on="on"
-                  >mdi-alert-circle-outline</v-icon
-                >
-              </template>
-              <span>Full-load click collection available in 5h 46m.</span>
-            </v-tooltip> -->
+              <v-tooltip top max-width="300" v-if="isExplored">
+                <template v-slot:activator="{ on, attrs }">
+                  <img
+                    src="/img/booster/svg/tips.svg"
+                    v-on="on"
+                    v-bind="attrs"
+                    width="18"
+                    alt=""
+                  />
+                </template>
+                <span>Claim and restart generating points.</span>
+              </v-tooltip>
             </div>
 
-            <img
-              :src="
-                computedPoints < 1
-                  ? '/img/booster/3d-square-unlock.png'
-                  : computedPoints >= boosterInfo.capacity
-                  ? '/img/booster/3d-square-full.png'
-                  : '/img/booster/3d-square.png'
-              "
-              width="120"
-              alt=""
-            />
+            <img :src="displaySquare" width="120" alt="" />
             <img
               v-show="computedPoints > 1"
               class="pos-a"
@@ -472,6 +462,15 @@ export default {
     }
     .points.locked {
       background: rgba(52, 64, 84, 0.75);
+    }
+    .points.explored {
+      background: linear-gradient(
+          0deg,
+          rgba(255, 173, 8, 0.5) 0%,
+          rgba(255, 173, 8, 0.5) 100%
+        ),
+        linear-gradient(0deg, #121536 0%, #121536 100%),
+        rgba(97, 114, 243, 0.75);
     }
   }
 }

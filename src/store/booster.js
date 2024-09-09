@@ -19,6 +19,7 @@ export default {
         rateBuff: 0,
         totalPoint: 0,
         preActivities: true,
+        negative: 0,
       },
       inviteInfo: {
         daily: 0,
