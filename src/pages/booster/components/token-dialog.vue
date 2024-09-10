@@ -1,7 +1,13 @@
 <template>
   <div>
     <div class="trigger-icon" @click="showTokenDialog = true">
-      <img src="/img/booster/4ever-token-icon.png" width="56" alt="" />
+      <video
+        src="/img/booster/video/4ever-token-icon.webm"
+        width="56"
+        autoplay
+        loop
+        muted
+      ></video>
       <div class="trigger-text fz-12 fw-b text-center">$4EVER</div>
     </div>
     <v-dialog
