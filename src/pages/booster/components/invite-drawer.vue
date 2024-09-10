@@ -180,7 +180,7 @@ export default {
     background-position: bottom;
     overflow: scroll;
     .drawer-title {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 500;
       color: #fff;
       text-shadow: 0px 0px 8px #6172f3;
