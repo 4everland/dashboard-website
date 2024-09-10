@@ -14,21 +14,40 @@
 
         <div class="withdraw-title">Withdraw</div>
         <div
-          class="withdraw-amount-paragraph my-4 d-flex align-center justify-space-between"
+          class="withdraw-amount-paragraph mt-6 d-flex align-center justify-space-between"
           style="width: 100%"
         >
           <div>Balance</div>
           <div class="d-flex align-center">
             <img src="/img/booster/invite/usdt.png" width="24" alt="" />
-            <span class="ml-1 fz-14">0.5USDT</span>
+            <span class="ml-1 fz-14">{{ amount }}USDT</span>
           </div>
         </div>
-        <div class="withdraw-tips d-flex align-center fz-14">
-          <div>🔈</div>
-          <div>
-            <div>The minimum withdrawal amount is 1 USDT.</div>
-            <div>Withdrawal will be processed within 24 hours.</div>
+        <div class="withdraw-log">
+          <div class="withdraw-log-title">Balance history</div>
+          <div
+            class="d-flex flex-column"
+            style="gap: 8px; height: 117px; overflow: auto"
+          >
+            <div
+              v-for="item in usdtLogs"
+              :key="item.id"
+              class="d-flex align-center justify-space-between fz-14"
+              style="line-height: 16px"
+            >
+              <span class="withdraw-log-text"
+                >Invite {{ item.from.replace("invite_milestones_", "") }} new
+                boosters {{ item.value }} USDT.</span
+              >
+              <span class="withdraw-log-created">
+                {{ new Date(item.createdAt).format() }}</span
+              >
+            </div>
           </div>
+        </div>
+        <div class="withdraw-tips d-flex align-center fz-12">
+          🔈 The minimum withdrawal amount is 1 USDT.Withdrawal will be
+          processed within 24 hours.
         </div>
 
         <v-btn
@@ -62,21 +81,41 @@
           <div class="withdraw-title">Withdraw</div>
 
           <div
-            class="withdraw-amount-paragraph my-4 d-flex align-center justify-space-between"
+            class="withdraw-amount-paragraph mt-6 d-flex align-center justify-space-between"
             style="width: 100%"
           >
             <div>Balance</div>
             <div class="d-flex align-center">
               <img src="/img/booster/invite/usdt.png" width="24" alt="" />
-              <span class="ml-1 fz-14">0.5USDT</span>
+              <span class="ml-1 fz-14">{{ amount }}USDT</span>
             </div>
           </div>
-          <div class="withdraw-tips d-flex align-center fz-14">
-            <div>🔈</div>
-            <div>
-              <div>The minimum withdrawal amount is 1 USDT.</div>
-              <div>Withdrawal will be processed within 24 hours.</div>
+
+          <div class="withdraw-log">
+            <div class="withdraw-log-title">Balance history</div>
+            <div
+              class="d-flex flex-column"
+              style="gap: 8px; height: 117px; overflow: auto"
+            >
+              <div
+                v-for="item in usdtLogs"
+                :key="item.id"
+                class="d-flex align-center justify-space-between fz-14"
+                style="line-height: 16px"
+              >
+                <span class="withdraw-log-text"
+                  >Invite {{ item.from.replace("invite_milestones_", "") }} new
+                  boosters {{ item.value }} USDT.</span
+                >
+                <span class="withdraw-log-created">
+                  {{ new Date(item.createdAt).format() }}</span
+                >
+              </div>
             </div>
+          </div>
+          <div class="withdraw-tips d-flex align-center fz-12">
+            🔈 The minimum withdrawal amount is 1 USDT.Withdrawal will be
+            processed within 24 hours.
           </div>
 
           <v-btn
@@ -94,13 +133,17 @@
 </template>
 
 <script>
+import { fetchClaimUSDTLog } from "@/api/booster";
 export default {
   props: {
     value: Boolean,
+    amount: Number,
   },
   data() {
     return {
-      // overlay: false,
+      size: 5,
+      page: 1,
+      usdtLogs: [],
     };
   },
   computed: {
@@ -109,7 +152,24 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    async getList() {
+      try {
+        const { data } = await fetchClaimUSDTLog(this.page, this.size);
+        console.log(data);
+        this.usdtLogs = data.content;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+  watch: {
+    value(val) {
+      if (val) {
+        this.getList();
+      }
+    },
+  },
 };
 </script>
 
@@ -146,7 +206,7 @@ export default {
 }
 .booster-module-dialog {
   padding: 13px;
-  height: 325px;
+  height: 489px;
   background: url("/img/booster/svg/withdraw-dialog-bg.svg") no-repeat;
   background-size: contain;
   background-position: center;
@@ -186,11 +246,27 @@ export default {
     ),
     url("/img/booster/svg/fringe-bg.svg");
 }
-.withdraw-tips {
-  padding: 4px 20px;
-  gap: 12px;
-  color: rgba(255, 255, 255, 0.75);
 
+.withdraw-log {
+  margin: 24px 0;
+  width: 100%;
+  font-weight: 400;
+  .withdraw-log-title {
+    color: #a4bcfd;
+    line-height: normal;
+    margin-bottom: 12px;
+  }
+  .withdraw-log-text {
+    color: rgba(255, 255, 255, 0.75);
+  }
+  .withdraw-log-created {
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
+.withdraw-tips {
+  width: 100%;
+  padding: 2px 8px;
+  color: rgba(255, 255, 255, 0.75);
   border-radius: 80px;
   background: rgba(97, 114, 243, 0.25);
 }

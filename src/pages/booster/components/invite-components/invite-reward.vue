@@ -12,7 +12,7 @@
 
         <div
           class="completed-progress"
-          :style="{ width: curTaskIdx * 100 + 'px' }"
+          :style="{ width: curTaskIdx * 100 + 40 + 'px' }"
         ></div>
       </div>
     </div>
@@ -245,7 +245,8 @@ export default {
   color: #06090f;
   padding: 8px;
   border-radius: 16px;
-  background: linear-gradient(99deg, #ffe205 35.35%, #ffc305 56.77%);
+  background: linear-gradient(0deg, #fff 0%, #fff 100%),
+    linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
   .total-text {
     font-size: 14px;
     font-weight: 500;
@@ -264,11 +265,11 @@ export default {
     color: #06090f;
     font-weight: 700;
     border-radius: 8px;
-    background: linear-gradient(0deg, #fff 0%, #fff 100%),
-      linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
+    background: linear-gradient(99deg, #ffe205 35.35%, #ffc305 56.77%);
+
     cursor: pointer;
     .claim-text {
-      color: #6172f3;
+      font-weight: 400;
       line-height: 14px;
     }
   }

@@ -223,7 +223,7 @@ export default {
                 it.log = `Another Booster claimed your $4EVER points:-${it.value}.`;
                 break;
               case "collect":
-                it.log = `I just exploredand snagged ${it.value} points from ${it.explorerAddress}!`;
+                it.log = `I just explored and snagged ${it.value} points from ${it.explorerAddress}!`;
                 break;
 
               default:

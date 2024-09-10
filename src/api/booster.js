@@ -242,9 +242,12 @@ export const fetchClaimUSDT = async () => {
   });
 };
 
-export const fetchClaimUSDTLog = async (page) => {
+export const fetchClaimUSDTLog = async (page, size) => {
   return boosterRequest.get({
     url: `/node/usdt/log/${page}`,
+    params: {
+      size: size,
+    },
   });
 };
 

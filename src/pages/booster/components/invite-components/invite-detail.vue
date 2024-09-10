@@ -22,7 +22,7 @@
           class="act-btn"
           :width="!asMobile ? 160 : 48"
           height="48"
-          v-clipboard="inviteInfo.link"
+          v-clipboard="copyValue"
           @success="() => $toast2('Copied!', 'success')"
         >
           <img src="/img/booster/invite/copy.svg" width="24" alt="" />
@@ -52,6 +52,16 @@ export default {
     },
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
+
+    copyValue() {
+      return (
+        "Invite link:https:" +
+        this.inviteInfo.link +
+        "\n" +
+        "Invite code:" +
+        this.inviteInfo.inviteCode
+      );
     },
   },
   methods: {

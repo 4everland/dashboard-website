@@ -67,7 +67,7 @@
                 offset-y
                 content-class="user-menu"
                 left
-                nudge-right="122"
+                nudge-right="18"
                 nudge-bottom="20"
                 :close-on-content-click="true"
               >
@@ -166,7 +166,7 @@
           </div>
         </div>
 
-        <v-menu
+        <!-- <v-menu
           offset-y
           content-class="inviter-menu"
           nudge-bottom="15"
@@ -244,7 +244,7 @@
               </div>
             </div>
           </div>
-        </v-menu>
+        </v-menu> -->
       </div>
 
       <div v-else class="login-content d-flex align-center justify-center px-4">
@@ -272,7 +272,7 @@
         />
       </div>
       <div class="d-flex align-center">
-        <v-menu
+        <!-- <v-menu
           offset-y
           content-class="mobile-inviter-menu"
           :close-on-content-click="false"
@@ -367,7 +367,7 @@
               </v-btn>
             </div>
           </div>
-        </v-menu>
+        </v-menu> -->
 
         <div
           class="connect-wallet"
@@ -724,10 +724,10 @@ export default {
     .user-info {
       gap: 8px;
 
-      .info-content {
-        padding-right: 16px;
-        border-right: 1px solid rgba(255, 255, 255, 0.25);
-      }
+      // .info-content {
+      //   padding-right: 16px;
+      //   border-right: 1px solid rgba(255, 255, 255, 0.25);
+      // }
       .balance {
         white-space: nowrap;
         color: #94a3b8;

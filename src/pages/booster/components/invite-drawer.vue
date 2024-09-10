@@ -44,14 +44,17 @@
             <v-btn
               class="withdraw-btn"
               :disabled="usdtCount <= 0"
-              @click="showWithdrawDialog = true"
+              @click="handleWithdraw"
               >Withdraw
             </v-btn>
           </div>
         </div>
 
         <InviteTaskContent class="flex-1"></InviteTaskContent>
-        <WithdrawDialog v-model="showWithdrawDialog"></WithdrawDialog>
+        <WithdrawDialog
+          v-model="showWithdrawDialog"
+          :amount="usdtCount"
+        ></WithdrawDialog>
       </v-container>
     </v-navigation-drawer>
   </div>
@@ -92,6 +95,13 @@ export default {
         this.$store.dispatch("getBoostUSDTCount");
       } else {
         this.$store.commit("SET_INVITE_BAR", val);
+      }
+    },
+    handleWithdraw() {
+      if (this.usdtCount >= 1) {
+        this.showWithdrawDialog = true;
+      } else {
+        this.$toast2("At Least 1 USDT", "info");
       }
     },
   },
