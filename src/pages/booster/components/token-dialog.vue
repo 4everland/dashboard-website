@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="trigger-icon" @click="showTokenDialog = true">
-      <img src="/img/booster/4ever-token-icon.png" width="56" alt="" />
+      <img src="/img/booster/4ever-token-icon.gif" width="56" alt="" />
       <div class="trigger-text fz-12 fw-b text-center">$4EVER</div>
     </div>
     <v-dialog

@@ -15,7 +15,7 @@
       <v-container fluid style="padding: 24px 16px">
         <div class="task-drawer-top">
           <div class="drawer-title task-drawer-title">
-            <span class="fz-20 fw-b"> Daily Tasks </span>
+            <span class="fz-16 fw-b"> Daily Tasks </span>
             <v-btn
               :class="signed ? 'done-btn' : 'drawer-btn'"
               :disabled="signed"
@@ -817,7 +817,7 @@ export default {
 
 .task-list-title {
   padding: 16px 0;
-  font-size: 20px;
+  font-size: 16px;
   text-shadow: 0px 0px 8px #6172f3;
   font-weight: 700;
   color: #fff;

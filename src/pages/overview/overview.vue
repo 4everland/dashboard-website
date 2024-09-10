@@ -240,13 +240,12 @@ export default {
           href: "https://medium.com/4everland/embracing-efficiency-and-innovation-introducing-land-as-the-unified-payment-unit-on-4everland-3a935f6b0d9e",
         },
         {
-          // img: "https://4ever-web.4everland.store/img/banner/20230721-174716.png",
           img: "https://overview-banner.4everland.store/feedback1.png",
-          to: "/bucket/storage/",
+          href: "https://forms.gle/SAzZ2Sw31atnSSsB8",
         },
         {
           img: "https://overview-banner.4everland.store/arweave1.png",
-          href: "https://forms.gle/SAzZ2Sw31atnSSsB8",
+          to: "/bucket/storage/",
         },
       ];
     },
@@ -433,7 +432,7 @@ export default {
 }
 
 .delimiter-content {
-  z-index: 100;
+  z-index: 1;
   width: 100%;
   height: 30px;
   position: absolute;

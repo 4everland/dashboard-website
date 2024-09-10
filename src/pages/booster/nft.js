@@ -1,5 +1,11 @@
 const NFT_LISTS = [
   {
+    name: "4EVERLAND Sprint Movement",
+    key: "Sprint_Movement",
+    contractAddress: "0xcbe29f1a6685a90f68552988898baebb59ea4374",
+    batch: 0,
+  },
+  {
     name: "Bucket",
     key: "Bucket",
     contractAddress: "0xabed66466051acfa1d5f6ffbf674dc180fa59f62",
