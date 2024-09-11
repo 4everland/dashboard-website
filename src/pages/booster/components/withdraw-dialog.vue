@@ -19,8 +19,8 @@
         >
           <div>Balance</div>
           <div class="d-flex align-center">
-            <img src="/img/booster/invite/usdt.png" width="24" alt="" />
-            <span class="ml-1 fz-14">{{ amount }}USDT</span>
+            <img src="/img/booster/ton-icon.png" width="24" alt="" />
+            <span class="ml-1 fz-14">{{ amount }}Ton</span>
           </div>
         </div>
         <div class="withdraw-log">
@@ -37,7 +37,7 @@
             >
               <span class="withdraw-log-text"
                 >Invite {{ item.from.replace("invite_milestones_", "") }} new
-                boosters {{ item.value }} USDT.</span
+                boosters {{ item.value }} Ton.</span
               >
               <span class="withdraw-log-created">
                 {{ new Date(item.createdAt).format() }}</span
@@ -86,8 +86,8 @@
           >
             <div>Balance</div>
             <div class="d-flex align-center">
-              <img src="/img/booster/invite/usdt.png" width="24" alt="" />
-              <span class="ml-1 fz-14">{{ amount }}USDT</span>
+              <img src="/img/booster/ton-icon.png" width="24" alt="" />
+              <span class="ml-1 fz-14">{{ amount }}Ton</span>
             </div>
           </div>
 
@@ -105,7 +105,7 @@
               >
                 <span class="withdraw-log-text"
                   >Invite {{ item.from.replace("invite_milestones_", "") }} new
-                  boosters {{ item.value }} USDT.</span
+                  boosters {{ item.value }} Ton.</span
                 >
                 <span class="withdraw-log-created">
                   {{ new Date(item.createdAt).format() }}</span

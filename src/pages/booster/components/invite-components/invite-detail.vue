@@ -89,11 +89,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// @media screen and (max-width: 900px) {
-//   .invite-tips {
-//     font-size: 14px;
-//   }
-// }
+@media screen and (max-width: 900px) {
+  .invite-reward-content {
+    padding: 12px 8px !important;
+  }
+}
 .invite-detail {
   .invite-reward-content {
     padding: 16px;

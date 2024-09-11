@@ -2,7 +2,7 @@
   <div>
     <div
       class="point-desc d-flex align-center justify-center"
-      :class="{ usdt: pointType !== 'point', done: status == 'DONE' }"
+      :class="{ ton: pointType !== 'point', done: status == 'DONE' }"
     >
       <img :src="icon" width="24" alt="" />
       <span class="ml-1 fz-14">+{{ rewardValue }}</span>
@@ -42,7 +42,7 @@ export default {
       if (this.pointType == "point") {
         return "/img/booster/4ever-point-icon.png";
       }
-      return "/img/booster/usdt.png";
+      return "/img/booster/ton-invite-icon.png";
     },
   },
 };
@@ -55,8 +55,8 @@ export default {
   background: linear-gradient(101deg, #2d31a6 10.8%, #6172f3 90.48%);
 }
 
-.point-desc.usdt {
-  background: #009393;
+.point-desc.ton {
+  background: #0098ea;
 }
 .point-desc.done {
   background: linear-gradient(0deg, #1f235b 0%, #1f235b 100%), #000 !important;

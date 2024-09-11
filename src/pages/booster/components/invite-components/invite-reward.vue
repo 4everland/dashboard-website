@@ -244,7 +244,7 @@ export default {
 .total-invite {
   color: #06090f;
   padding: 8px;
-  border-radius: 16px;
+  border-radius: 12px;
   background: linear-gradient(0deg, #fff 0%, #fff 100%),
     linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
   .total-text {

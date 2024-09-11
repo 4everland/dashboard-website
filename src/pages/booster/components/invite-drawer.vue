@@ -23,7 +23,7 @@
             <div>
               <div class="fz-12">Balance</div>
               <div>
-                <img src="/img/booster/invite/usdt.png" width="16" alt="" />
+                <img src="/img/booster/ton-invite-icon.png" width="16" alt="" />
                 <ICountUp
                   class="usdt-enabled ml-1 fz-20"
                   :delay="1000"
