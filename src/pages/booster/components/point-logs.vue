@@ -155,6 +155,10 @@ export default {
               case "collect":
                 it.log = `I just explored and snagged ${it.value} points from ${it.explorerAddress}!`;
                 break;
+              case "bnb_winner":
+                it.log = `Vote for 4EVERLAND ${it.value} points.`;
+                break;
+
               default:
                 break;
             }

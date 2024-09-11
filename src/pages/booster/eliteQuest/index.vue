@@ -47,6 +47,22 @@ export default {
     return {
       quests: [
         {
+          img: "/img/airDrop/sprint_movement-airdrop.png",
+          title: "Dive into the 4EVERLAND Sprint Movement available on Galxe!",
+          desc: "Connect with a vibrant community, discover innovative features, enhance your on-chain contributions, and unlock exclusive rewards for this thrilling web3 experience.",
+          reward: "Grab 19,000 $4EVER Points and 1 OAT",
+          link: "https://app.galxe.com/quest/4EVERLAND/GCnditvNG3",
+          done: false,
+        },
+        {
+          img: "/img/airDrop/bnb-airdrop.png",
+          title: "Vote for 4EVERLAND in BNBCHAIN Ecosystem Catalyst Awards!",
+          desc: "We are proud to be nominated as the 'Infra' in the BNBCHAIN 4th Anniversary Ecosystem Catalyst Awards! Cast your vote and grab your chance to win amazing rewards! Let’s make it happen!",
+          reward: "Grab 10,000 $4EVER Points",
+          link: "https://app.galxe.com/quest/4EVERLAND/GCnditvNG3",
+          done: true,
+        },
+        {
           img: "/img/airDrop/elite-airdrop.png",
           title:
             "Dive into the AI World with Aperture Finance, Chainbase, and 4EVERLAND!",
