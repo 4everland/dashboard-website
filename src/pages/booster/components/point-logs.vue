@@ -149,6 +149,9 @@ export default {
               case "(tg)Follow 4EVERLAND Twitter":
                 it.log = `Follow 4EVERLAND Twitter ${it.value} points.`;
                 break;
+              case "bnb_winner":
+                it.log = `Vote for 4EVERLAND ${it.value} points.`;
+                break;
 
               default:
                 break;
