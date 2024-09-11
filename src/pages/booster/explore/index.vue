@@ -258,10 +258,6 @@ export default {
     },
     displaySquare() {
       return "/img/booster/3d-square-explored.png";
-      // if (this.info.negative > 0) return "/img/booster/3d-square-explored.png";
-      // return this.computedPoints >= this.info.capacity
-      //   ? "/img/booster/3d-square-explored.png"
-      //   : "/img/booster/3d-square.png";
     },
   },
 
@@ -328,20 +324,16 @@ export default {
       try {
         if (this.computedPoints < this.info.capacity) return;
         let id = this.$route.params.id;
-        if (this.asMobile) {
-          coinMove("point-explore-send", "mobile-explore-point-receive");
-        } else {
-          coinMove("point-explore-send", "point-receive");
-        }
+
         clearInterval(this.timer);
         this.computedPoints = 0;
-
         const data = await claimExplorePoints(id);
-
-        console.log(data);
-        this.getExploreInfo(false);
-
         if (data.data) {
+          if (this.asMobile) {
+            coinMove("point-explore-send", "mobile-explore-point-receive");
+          } else {
+            coinMove("point-explore-send", "point-receive");
+          }
           this.$toast2(
             `Successfully collected, you earn a ${data.data}-point share.`,
             "success"
