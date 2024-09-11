@@ -26,7 +26,7 @@
               :class="{ disabled: item.done }"
               @click="handleToLink(item)"
             >
-              {{ item.done ? "End" : item.link ? "Let's Go" : "Claim" }}
+              {{ item.done ? "Ended" : item.link ? "Let's Go" : "Claim" }}
             </div>
           </div>
         </div>
