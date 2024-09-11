@@ -55,6 +55,14 @@ export default {
           done: false,
         },
         {
+          img: "/img/airDrop/bnb-airdrop.png",
+          title: "Vote for 4EVERLAND in BNBCHAIN Ecosystem Catalyst Awards!",
+          desc: "We are proud to be nominated as the 'Infra' in the BNBCHAIN 4th Anniversary Ecosystem Catalyst Awards! Cast your vote and grab your chance to win amazing rewards! Let’s make it happen!",
+          reward: "Grab 10,000 $4EVER Points",
+          link: "https://app.galxe.com/quest/4EVERLAND/GCnditvNG3",
+          done: true,
+        },
+        {
           img: "/img/airDrop/elite-airdrop.png",
           title:
             "Dive into the AI World with Aperture Finance, Chainbase, and 4EVERLAND!",
