@@ -199,7 +199,11 @@
             >
               <span> {{ displayPoints }}/{{ boosterInfo.capacity }}</span>
 
-              <v-tooltip top max-width="300" v-if="isExplored">
+              <v-tooltip
+                top
+                max-width="300"
+                v-if="isExplored || computedPoints >= boosterInfo.capacity"
+              >
                 <template v-slot:activator="{ on, attrs }">
                   <img
                     src="/img/booster/svg/tips.svg"

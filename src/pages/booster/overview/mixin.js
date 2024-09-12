@@ -69,7 +69,7 @@ export default {
       return this.computedPoints < 1
         ? "/img/booster/3d-square-unlock.png"
         : this.computedPoints >= this.boosterInfo.capacity
-        ? "/img/booster/3d-square-full.png"
+        ? "/img/booster/3d-square-explored.png"
         : "/img/booster/3d-square.png";
     },
   },
