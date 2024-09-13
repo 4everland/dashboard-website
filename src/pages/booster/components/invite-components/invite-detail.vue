@@ -3,7 +3,8 @@
     <div class="invite-reward-content">
       <InviteReward></InviteReward>
     </div>
-    <div style="margin-top: auto">
+
+    <div class="mt-4">
       <div class="invite-act d-flex align-center" style="gap: 12px">
         <v-btn
           class="act-btn flex-1"
@@ -29,12 +30,29 @@
           <span v-if="!asMobile" class="ml-2"> Copy</span>
         </v-btn>
       </div>
-
-      <div class="d-flex justify-center mt-2">
-        <div class="invite-tips">
-          🎁 you'll earn an additional 5% points reward!
-        </div>
+    </div>
+    <div class="fz-12 my-3" style="line-height: 20px">
+      <div class="fw-b fz-16 mb-2">Rules</div>
+      <div>
+        Invite friends and earn TON rewards! Have them log in to the 4EVERLAND
+        Bot and activate a node—<span class="fw-b"
+          >each activation counts as one invite!</span
+        >
       </div>
+      <ul style="list-style: disc">
+        <li style="list-style: disc">
+          The invite count <span class="fw-b">resets</span> when the event
+          launches.
+        </li>
+        <li style="list-style: disc">
+          Track your <span class="fw-b">My Invites</span> on the page and claim
+          rewards once you hit the target.
+        </li>
+        <li style="list-style: disc">
+          You will earn a <span class="fw-b">5%</span> points reward for every
+          invitation!
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -56,7 +74,7 @@ export default {
 
     copyValue() {
       return (
-        "Invite link:https:" +
+        "Invite link:" +
         this.inviteInfo.link +
         "\n" +
         "Invite code:" +
@@ -69,11 +87,11 @@ export default {
       if (this.isTgMiniApp) {
         this.$tg.shareUrl(
           this.inviteInfo.link,
-          "Join the #4EVERBoost campaign to earn $4EVER points, cash rewards, and thrilling @4everland_org #airdrops!"
+          "💎 Join me in the #4EVERBoost and reap amazing rewards! Earn $4EVER points, Ton rewards, and exciting @4everland_org #airdrops! Don't miss out—let's boost together! 🎗️🎊"
         );
       } else {
         let shareUrl =
-          "join the #4EVERBoost campaign to earn $4EVER points, cash rewards, and thrilling @4everland_org #airdrops! ";
+          "💎 Join me in the #4EVERBoost and reap amazing rewards! Earn $4EVER points, Ton rewards, and exciting @4everland_org #airdrops! Don't miss out—let's boost together! 🎗️🎊 ";
         shareUrl += this.inviteInfo.link;
         shareUrl =
           "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
@@ -89,11 +107,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 900px) {
-  .invite-reward-content {
-    padding: 12px 8px !important;
-  }
-}
 .invite-detail {
   .invite-reward-content {
     padding: 16px;
@@ -113,14 +126,6 @@ export default {
       box-shadow: 0px -4px 8px 0px rgba(0, 133, 195, 0.25),
         0px 4px 8px 0px rgba(0, 133, 195, 0.25);
     }
-  }
-
-  .invite-tips {
-    display: inline-block;
-    padding: 4px 20px;
-    font-size: 14px;
-    border-radius: 80px;
-    background: rgba(0, 0, 0, 0.5);
   }
 }
 </style>

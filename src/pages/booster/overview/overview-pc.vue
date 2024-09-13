@@ -61,13 +61,16 @@
       <div v-else>
         <div
           class="point-square d-none d-md-block cursor-p"
-          @click="hanleClaim"
+          @click="handleClaim"
         >
           <div style="position: relative; width: 10px; height: 10px"></div>
           <div class="top-card square-box" id="point-send">
             <div
               class="points fz-14 d-flex align-center"
-              :class="{ locked: computedPoints < 1, explored: isExplored }"
+              :class="{
+                locked: computedPoints < 1,
+                explored: isExplored || computedPoints >= boosterInfo.capacity,
+              }"
             >
               <span class="mr-1">
                 {{ displayPoints }}/{{ boosterInfo.capacity }}</span
@@ -87,7 +90,7 @@
                     alt=""
                   />
                 </template>
-                <span>Claim and restart generating points.</span>
+                <span>Claim to restart</span>
               </v-tooltip>
             </div>
 

@@ -264,13 +264,14 @@
     >
       <div class="logo d-flex align-center">
         <img
-          src="/img/booster/svg/logo.svg"
-          width="157"
+          src="/img/svg/logo-m.svg"
+          width="46"
           @click="$router.push('/boost')"
           alt=""
           style="display: block"
         />
       </div>
+      <MobilePointsRate v-if="!notLogin"></MobilePointsRate>
       <div class="d-flex align-center">
         <!-- <v-menu
           offset-y
@@ -389,6 +390,7 @@ import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
 import { mapGetters, mapState } from "vuex";
 import PointLogs from "../components/point-logs.vue";
 import ICountUp from "vue-countup-v2";
+import MobilePointsRate from "../components/mobile-points-rate.vue";
 
 export default {
   data() {
@@ -508,6 +510,7 @@ export default {
   components: {
     PointLogs,
     ICountUp,
+    MobilePointsRate,
   },
   watch: {
     notLogin(val) {
@@ -741,6 +744,7 @@ export default {
 
   .nav-mobile {
     height: 100%;
+
     .mobile-btn {
       border-radius: 4px;
       background: rgba(255, 255, 255, 0.1);

@@ -37,7 +37,8 @@ export default {
       showBindWallet: false,
       taskUndo: false,
       stakeUndo: false,
-      usdtCount: 0,
+      tonCount: 0,
+      updateBoostUserInfo: false,
     };
   },
   getters: {
@@ -165,10 +166,13 @@ export default {
       state.stakeUndo = undo;
     },
     SET_USDT_COUNT(state, count) {
-      state.usdtCount = count;
+      state.tonCount = count;
     },
     SET_INVITE_INFO(state, info) {
       state.inviteInfo = info;
+    },
+    SET_UPDATE_BOOST_USER_INFO(state) {
+      state.updateBoostUserInfo = !state.updateBoostUserInfo;
     },
   },
   actions: {
@@ -196,6 +200,7 @@ export default {
         const { data } = await fetchUserBoostInfo();
         if (data) {
           commit("SET_BOOST_INFO", data);
+          commit("SET_UPDATE_BOOST_USER_INFO");
         }
       } catch (error) {
         console.log(error);
@@ -213,7 +218,7 @@ export default {
       }
     },
 
-    async getBoostUSDTCount({ commit }) {
+    async getBoostTonCount({ commit }) {
       try {
         const { data } = await fetchClaimUSDT();
         if (data) {

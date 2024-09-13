@@ -4,15 +4,7 @@
       <div
         class="withdraw-overlay d-flex flex-column align-center justify-center"
       >
-        <img
-          class="close-btn"
-          @click="$emit('input', false)"
-          src="/img/booster/svg/close.svg"
-          width="18"
-          alt=""
-        />
-
-        <div class="withdraw-title">Withdraw</div>
+        <div class="withdraw-title">Withdraw Ton</div>
         <div
           class="withdraw-amount-paragraph mt-6 d-flex align-center justify-space-between"
           style="width: 100%"
@@ -20,11 +12,11 @@
           <div>Balance</div>
           <div class="d-flex align-center">
             <img src="/img/booster/ton-icon.png" width="24" alt="" />
-            <span class="ml-1 fz-14">{{ amount }}Ton</span>
+            <span class="ml-1 fz-14">{{ amount }} Ton</span>
           </div>
         </div>
         <div class="withdraw-log">
-          <div class="withdraw-log-title">Balance history</div>
+          <div class="withdraw-log-title">Balance History</div>
           <div
             class="d-flex flex-column"
             style="gap: 8px; height: 117px; overflow: auto"
@@ -46,18 +38,31 @@
           </div>
         </div>
         <div class="withdraw-tips d-flex align-center fz-12">
-          🔈 The minimum withdrawal amount is 1 USDT.Withdrawal will be
+          🔈 The minimum withdrawal amount is 0.1 Ton.Withdrawal will be
           processed within 24 hours.
         </div>
 
-        <v-btn
-          class="withdraw-btn mt-8"
-          width="200"
-          height="48"
-          @click="$toast2('Cash withdrawals will be available soon!', 'info')"
-        >
-          Withdraw
-        </v-btn>
+        <div class="mt-8 d-flex align-center" style="gap: 30px">
+          <v-btn
+            outlined
+            class="cancel-btn"
+            color="#fff"
+            width="140"
+            height="48"
+            @click="$emit('input', false)"
+          >
+            Cancel
+          </v-btn>
+
+          <v-btn
+            class="withdraw-btn"
+            width="140"
+            height="48"
+            @click="handleTonWithdraw"
+          >
+            Withdraw
+          </v-btn>
+        </div>
       </div>
     </v-overlay>
 
@@ -78,7 +83,7 @@
             width="18"
             alt=""
           />
-          <div class="withdraw-title">Withdraw</div>
+          <div class="withdraw-title">Withdraw Ton</div>
 
           <div
             class="withdraw-amount-paragraph mt-6 d-flex align-center justify-space-between"
@@ -87,12 +92,12 @@
             <div>Balance</div>
             <div class="d-flex align-center">
               <img src="/img/booster/ton-icon.png" width="24" alt="" />
-              <span class="ml-1 fz-14">{{ amount }}Ton</span>
+              <span class="ml-1 fz-14">{{ amount }} Ton</span>
             </div>
           </div>
 
           <div class="withdraw-log">
-            <div class="withdraw-log-title">Balance history</div>
+            <div class="withdraw-log-title">Balance History</div>
             <div
               class="d-flex flex-column"
               style="gap: 8px; height: 117px; overflow: auto"
@@ -114,18 +119,30 @@
             </div>
           </div>
           <div class="withdraw-tips d-flex align-center fz-12">
-            🔈 The minimum withdrawal amount is 1 USDT.Withdrawal will be
+            🔈 The minimum withdrawal amount is 0.1 Ton.Withdrawal will be
             processed within 24 hours.
           </div>
 
-          <v-btn
-            class="withdraw-btn mt-auto"
-            width="200"
-            height="48"
-            @click="$toast2('Cash withdrawals will be available soon!', 'info')"
-          >
-            Withdraw
-          </v-btn>
+          <div class="mt-auto d-flex align-center" style="gap: 8px">
+            <v-btn
+              outlined
+              class="cancel-btn"
+              color="#fff"
+              width="200"
+              height="48"
+              @click="$emit('input', false)"
+            >
+              Cancel
+            </v-btn>
+            <v-btn
+              class="withdraw-btn"
+              width="200"
+              height="48"
+              @click="handleTonWithdraw"
+            >
+              Withdraw
+            </v-btn>
+          </div>
         </div>
       </div>
     </v-dialog>
@@ -160,6 +177,13 @@ export default {
         this.usdtLogs = data.content;
       } catch (error) {
         console.log(error);
+      }
+    },
+    handleTonWithdraw() {
+      if (this.amount < 0.1) {
+        this.$toast2("At Least 0.1 Ton", "info");
+      } else {
+        this.$toast2("Cash withdrawals will be available soon!", "info");
       }
     },
   },
@@ -248,6 +272,7 @@ export default {
 }
 
 .withdraw-log {
+  padding: 0 8px;
   margin: 24px 0;
   width: 100%;
   font-weight: 400;
@@ -280,5 +305,13 @@ export default {
   background: linear-gradient(180deg, #00070c 0%, #074178 113.39%);
   box-shadow: 0px -4px 8px 0px rgba(0, 133, 195, 0.25),
     0px 4px 8px 0px rgba(0, 133, 195, 0.25);
+}
+.cancel-btn {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(2px);
 }
 </style>

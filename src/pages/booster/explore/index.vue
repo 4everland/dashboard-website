@@ -10,7 +10,7 @@
         loop
         muted
       ></video>
-      <div
+      <!-- <div
         class="d-md-none d-block points-card fz-12 d-flex align-center justify-center"
       >
         <div class="rate-box">
@@ -34,7 +34,7 @@
             }"
           />
         </div>
-      </div>
+      </div> -->
       <div class="point-square">
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
@@ -47,7 +47,7 @@
           <span class="points fz-14">
             {{ displayPoints }}/{{ info.capacity }}
           </span>
-          <img :src="displaySquare" width="120" alt="" />
+          <img :src="displaySquare" :width="asMobile ? 80 : 120" alt="" />
           <img
             class="pos-a"
             style="left: 50%; top: 40%; transform: translateX(-50%)"
@@ -96,7 +96,6 @@ import {
   claimExplorePoints,
 } from "@/api/booster";
 import ExploreBar from "../components/explore-bar.vue";
-import ICountUp from "vue-countup-v2";
 import { coinMove } from "../../../utils/animation";
 
 import { mapState, mapGetters } from "vuex";
@@ -123,7 +122,6 @@ export default {
   },
   components: {
     ExploreBar,
-    ICountUp,
   },
   computed: {
     ...mapState({
@@ -326,11 +324,11 @@ export default {
         let id = this.$route.params.id;
 
         clearInterval(this.timer);
-        this.computedPoints = 0;
+        // this.computedPoints = 0;
         const data = await claimExplorePoints(id);
         if (data.data) {
           if (this.asMobile) {
-            coinMove("point-explore-send", "mobile-explore-point-receive");
+            coinMove("point-explore-send", "mobile-point-receive");
           } else {
             coinMove("point-explore-send", "point-receive");
           }
@@ -409,13 +407,13 @@ export default {
 
   .point-square {
     position: absolute;
-    left: 50.3%;
+    left: 49.5%;
 
     top: 31%;
     .top-card {
       position: absolute;
       bottom: 22%;
-      left: -449%;
+      left: -311%;
       .points {
         position: absolute;
         top: 68%;

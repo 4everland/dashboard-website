@@ -19,7 +19,7 @@
 
     <div class="total-invite mt-4 d-flex align-center justify-space-between">
       <div class="d-flex aling-center">
-        <span class="total-text">Total invites</span>
+        <span class="total-text">My Invites</span>
 
         <ICountUp
           class="total-num ml-2"
@@ -66,52 +66,46 @@ export default {
       list: [
         {
           status: "UNDO",
-          inviteCount: "2",
-          pointType: "point",
-          rewardValue: "300",
+          inviteCount: "1",
+          pointType: "ton",
+          rewardValue: "0.0035",
         },
         {
           status: "UNDO",
-          inviteCount: "5",
-          pointType: "point",
-          rewardValue: "600",
+          inviteCount: "3",
+          pointType: "ton",
+          rewardValue: "0.007",
         },
         {
           status: "UNDO",
-          inviteCount: "10",
-          pointType: "point",
-          rewardValue: "1500",
+          inviteCount: "7",
+          pointType: "ton",
+          rewardValue: "0.014",
         },
         {
           status: "UNDO",
-          inviteCount: "20",
-          pointType: "usdt",
-          rewardValue: "0.5",
+          inviteCount: "15",
+          pointType: "ton",
+          rewardValue: "0.028",
         },
         {
           status: "UNDO",
-          inviteCount: "50",
-          pointType: "usdt",
-          rewardValue: "0.8",
+          inviteCount: "30",
+          pointType: "ton",
+          rewardValue: "0.0525",
         },
         {
           status: "UNDO",
           inviteCount: "100",
-          pointType: "usdt",
-          rewardValue: "5",
+          pointType: "ton",
+          rewardValue: "0.245",
         },
 
         {
           status: "UNDO",
-          inviteCount: "300",
-          pointType: "usdt",
-          rewardValue: "8",
-        },
-        {
-          status: "UNDO",
           inviteCount: "500",
-          pointType: "usdt",
-          rewardValue: "10",
+          pointType: "ton",
+          rewardValue: "1.4",
         },
       ],
       loading: false,
@@ -128,20 +122,12 @@ export default {
     },
     claimText() {
       if (this.claimList.length == 0) return "";
-      const usdt = this.claimList.reduce((prev, it) => {
-        return (prev += it.pointType == "usdt" ? Number(it.rewardValue) : 0);
+      const ton = this.claimList.reduce((prev, it) => {
+        return (prev += it.pointType == "ton" ? Number(it.rewardValue) : 0);
       }, 0);
-
-      const point = this.claimList.reduce((prev, it) => {
-        return (prev += it.pointType == "point" ? Number(it.rewardValue) : 0);
-      }, 0);
-
       let text = "";
-      if (point > 0) {
-        text += "+" + point;
-      }
-      if (usdt > 0) {
-        text += "+" + usdt;
+      if (ton > 0) {
+        text += "+" + ton + "Ton";
       }
 
       return text;
@@ -182,7 +168,7 @@ export default {
         const data = await inviteBatchClaim();
         console.log(data);
         this.getTaskList();
-        this.$store.dispatch("getBoostUSDTCount");
+        this.$store.dispatch("getBoostTonCount");
       } catch (error) {
         console.log(error);
       }

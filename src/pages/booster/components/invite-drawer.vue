@@ -11,6 +11,7 @@
       color="#1E2234"
       :value="showInviteDrawer"
       @input="handleToggle"
+      touchless
     >
       <v-container
         fluid
@@ -27,9 +28,9 @@
                 <ICountUp
                   class="usdt-enabled ml-1 fz-20"
                   :delay="1000"
-                  :endVal="usdtCount"
+                  :endVal="tonCount"
                   :options="{
-                    decimalPlaces: 1,
+                    decimalPlaces: 3,
                     useEasing: true,
                     useGrouping: true,
                     separator: ',',
@@ -43,7 +44,7 @@
 
             <v-btn
               class="withdraw-btn"
-              :disabled="usdtCount <= 0"
+              :disabled="tonCount <= 0"
               @click="handleWithdraw"
               >Withdraw
             </v-btn>
@@ -53,7 +54,7 @@
         <InviteTaskContent class="flex-1"></InviteTaskContent>
         <WithdrawDialog
           v-model="showWithdrawDialog"
-          :amount="usdtCount"
+          :amount="tonCount"
         ></WithdrawDialog>
       </v-container>
     </v-navigation-drawer>
@@ -68,7 +69,7 @@ export default {
   computed: {
     ...mapState({
       showInviteDrawer: (s) => s.moduleBooster.showInviteDrawer,
-      usdtCount: (s) => s.moduleBooster.usdtCount,
+      tonCount: (s) => s.moduleBooster.tonCount,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -92,17 +93,13 @@ export default {
     handleToggle(val) {
       if (val) {
         this.$store.dispatch("getInviteInfo");
-        this.$store.dispatch("getBoostUSDTCount");
+        this.$store.dispatch("getBoostTonCount");
       } else {
         this.$store.commit("SET_INVITE_BAR", val);
       }
     },
     handleWithdraw() {
-      if (this.usdtCount >= 1) {
-        this.showWithdrawDialog = true;
-      } else {
-        this.$toast2("At Least 1 USDT", "info");
-      }
+      this.showWithdrawDialog = true;
     },
   },
   watch: {

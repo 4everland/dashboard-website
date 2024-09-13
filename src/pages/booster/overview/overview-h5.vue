@@ -1,45 +1,14 @@
 <template>
   <div class="d-md-none d-block">
+    <TokenDialog class="pos-a" style="right: 8px; top: 70px"></TokenDialog>
     <div
-      class="points-card fz-12 d-flex align-center justify-center"
-      @click="handleOpenSheet"
+      class="trigger-icon pos-a"
+      style="right: 8px; top: 136px"
+      @click="$store.commit('SET_INVITE_BAR', true)"
     >
-      <div class="rate-box">
-        <img src="/img/booster/3d-square-full.png" width="40" alt="" />
-        <span class="text fw-b">{{ Math.ceil(totalRate) }}/H</span>
-      </div>
-      <div>
-        Points
-
-        <ICountUp
-          id="mobile-point-receive"
-          :delay="1000"
-          :endVal="boosterInfo.totalPoint"
-          :options="{
-            useEasing: true,
-            useGrouping: true,
-            separator: ',',
-            decimal: '.',
-            prefix: '',
-            suffix: '',
-          }"
-        />
-      </div>
-
-      <img
-        class="arrow-btn"
-        :class="{ rotate: sheet }"
-        src="/img/booster/svg/down-arrow.svg"
-        width="12"
-        alt=""
-      />
+      <img src="/img/booster/ton-claim-icon.png" width="56" alt="" />
+      <div class="trigger-text fz-12 fw-b text-center">CLAIM</div>
     </div>
-
-    <TokenDialog
-      v-if="isTgMiniApp"
-      class="pos-a"
-      style="right: 8px; top: 140px"
-    ></TokenDialog>
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
 
@@ -187,7 +156,7 @@
             </div>
           </div>
         </div>
-        <div class="point-square" @click="hanleClaim">
+        <div class="point-square" @click="handleClaim">
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>
           </div>
@@ -195,29 +164,15 @@
             <div
               class="points fz-12 d-flex align-center"
               style="gap: 4px"
-              :class="{ locked: computedPoints < 1, explored: isExplored }"
+              :class="{
+                locked: computedPoints < 1,
+                explored: isExplored || computedPoints >= boosterInfo.capacity,
+              }"
             >
               <span> {{ displayPoints }}/{{ boosterInfo.capacity }}</span>
-
-              <v-tooltip
-                top
-                max-width="300"
-                v-if="isExplored || computedPoints >= boosterInfo.capacity"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <img
-                    src="/img/booster/svg/tips.svg"
-                    v-on="on"
-                    v-bind="attrs"
-                    width="18"
-                    alt=""
-                  />
-                </template>
-                <span>Claim and restart generating points.</span>
-              </v-tooltip>
             </div>
 
-            <img :src="displaySquare" width="100" alt="" />
+            <img :src="displaySquare" width="80" alt="" />
             <img
               v-show="computedPoints > 1"
               class="pos-a"
@@ -226,6 +181,13 @@
               width="16"
               alt=""
             />
+
+            <div
+              class="full-explored-tips"
+              v-if="isExplored || computedPoints >= boosterInfo.capacity"
+            >
+              Claim to restart
+            </div>
           </div>
         </div>
       </div>
@@ -238,9 +200,9 @@
 <script>
 import MobilePointsSheet from "../components/mobile-points-sheet.vue";
 import TokenDialog from "../components/token-dialog.vue";
-
 import mixin from "./mixin";
-import ICountUp from "vue-countup-v2";
+import { bus } from "@/utils/bus";
+
 export default {
   mixins: [mixin],
   data() {
@@ -254,15 +216,14 @@ export default {
       return process.env.VUE_APP_TG_VERSION == "true";
     },
   },
+  created() {
+    bus.$on("showMobileSheet", () => {
+      this.sheet = true;
+    });
+  },
   components: {
     MobilePointsSheet,
-    ICountUp,
     TokenDialog,
-  },
-  methods: {
-    handleOpenSheet() {
-      this.sheet = true;
-    },
   },
 };
 </script>
@@ -428,14 +389,14 @@ export default {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 30%;
+  top: 28%;
   .points {
     z-index: 10;
     padding: 0px 8px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 55%;
+    top: 65%;
     font-weight: bold;
     border-radius: 16px;
     border: 1px solid rgba(18, 21, 54, 0.5);
@@ -454,6 +415,18 @@ export default {
       ),
       linear-gradient(0deg, #121536 0%, #121536 100%), rgba(97, 114, 243, 0.75);
   }
+
+  .full-explored-tips {
+    white-space: nowrap;
+    position: absolute;
+    font-size: 12px;
+    left: 50%;
+    top: -6%;
+    padding: 0px 8px;
+    font-weight: bold;
+    border-radius: 16px 16px 16px 0;
+    background: #f04438;
+  }
 }
 
 .start-booster-btn {
@@ -462,5 +435,18 @@ export default {
   top: 40%;
   transform: translate(-50%);
   cursor: pointer;
+}
+.trigger-icon {
+  cursor: pointer;
+  .trigger-text {
+    position: absolute;
+    left: 0;
+    bottom: 15%;
+    width: 60px;
+    height: 20px;
+    line-height: 20px;
+    background: url("/img/booster/svg/ton-text-bg.svg");
+    backdrop-filter: blur(2px);
+  }
 }
 </style>
