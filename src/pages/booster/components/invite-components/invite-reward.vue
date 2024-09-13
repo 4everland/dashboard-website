@@ -123,12 +123,15 @@ export default {
     },
     claimText() {
       if (this.claimList.length == 0) return "";
+
       const ton = this.claimList.reduce((prev, it) => {
+        console.log(prev);
         return (prev += it.pointType == "ton" ? Number(it.rewardValue) : 0);
       }, 0);
+      console.log();
       let text = "";
       if (ton > 0) {
-        text += "+" + ton + "Ton";
+        text += "+" + ton.toFixed(4) + "Ton";
       }
 
       return text;
