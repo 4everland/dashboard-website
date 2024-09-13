@@ -94,6 +94,7 @@ export default {
       if (val) {
         this.$store.dispatch("getInviteInfo");
         this.$store.dispatch("getBoostTonCount");
+        this.$store.dispatch("getInviteCount");
       } else {
         this.$store.commit("SET_INVITE_BAR", val);
       }

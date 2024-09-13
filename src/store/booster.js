@@ -4,6 +4,7 @@ import {
   fetchClaimUSDT,
   fetchInviteInfo,
   fetchTgInviteInfo,
+  fetchInviteCount,
 } from "@/api/booster";
 
 export default {
@@ -39,6 +40,7 @@ export default {
       stakeUndo: false,
       tonCount: 0,
       updateBoostUserInfo: false,
+      userInviteCount: 0,
     };
   },
   getters: {
@@ -174,6 +176,9 @@ export default {
     SET_UPDATE_BOOST_USER_INFO(state) {
       state.updateBoostUserInfo = !state.updateBoostUserInfo;
     },
+    SET_USER_INVITE_COUNT(state, count) {
+      state.userInviteCount = count;
+    },
   },
   actions: {
     StakeDrawerState: async (context, payload) => {
@@ -241,6 +246,17 @@ export default {
         }
         if (info) {
           commit("SET_INVITE_INFO", info);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getInviteCount({ commit }) {
+      try {
+        const { data } = await fetchInviteCount();
+        if (data) {
+          commit("SET_USER_INVITE_COUNT", data.count);
         }
       } catch (error) {
         console.log(error);

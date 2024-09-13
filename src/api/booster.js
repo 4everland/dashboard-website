@@ -256,3 +256,9 @@ export const fetchInviteLog = async (page, size = 10) => {
     url: `/node/invite/history?page=${page}&size=${size}`,
   });
 };
+
+export const fetchInviteCount = async () => {
+  return boosterRequest.get({
+    url: `/node/activities/invite_milestone/count`,
+  });
+};

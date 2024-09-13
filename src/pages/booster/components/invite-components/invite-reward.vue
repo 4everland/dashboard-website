@@ -24,7 +24,7 @@
         <ICountUp
           class="total-num ml-2"
           :delay="1000"
-          :endVal="inviteInfo.invited"
+          :endVal="userInviteCount"
           :options="{
             useEasing: true,
             useGrouping: true,
@@ -116,6 +116,7 @@ export default {
   computed: {
     ...mapState({
       inviteInfo: (s) => s.moduleBooster.inviteInfo,
+      userInviteCount: (s) => s.moduleBooster.userInviteCount,
     }),
     claimList() {
       return this.list.filter((it) => it.status == "CLAIM");
