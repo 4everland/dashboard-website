@@ -50,6 +50,21 @@
               </div>
             </div>
           </div>
+
+          <div class="user-card-item fz-12 mt-2">
+            <div class="user-card-item-title">Key Concepts</div>
+            <div class="linear-border mb-1"></div>
+            <div
+              v-for="(item, index) in concepts"
+              :key="index"
+              class="concepts"
+            >
+              <div class="fw-b" style="opacity: 0.75">{{ item.title }}</div>
+              <ul>
+                <li v-for="(it, idx) in item.list" :key="idx" v-html="it"></li>
+              </ul>
+            </div>
+          </div>
         </div>
 
         <div v-show="showLog">
@@ -111,6 +126,40 @@ export default {
       list: [],
       page: 1,
       totalPages: 0,
+      concepts: [
+        {
+          title: "Base Rate",
+          list: [
+            "Permanently valid.",
+            "Base rate is <b style='color:#fff'>10pts/h</b>.",
+            "Boost by enabling Storage, Network, or Computing nodes, consuming <b style='color:#fff'>1,000,000 LAND</b> for an extra <b style='color:#fff'>100pts/h</b>.",
+          ],
+        },
+        {
+          title: "Boost Rate",
+          list: [
+            "Valid for 24 hours.",
+            "Earn through tasks, raffles, or referral codes <b style='color:#fff'>(+10pts/h)</b>.",
+          ],
+        },
+        {
+          title: "Staking Yield",
+          list: [
+            "Boost your earning rate by staking <b style='color:#fff'>T4EVER/NFTs</b>.",
+            "Valid during staking, expires upon unstaking.",
+          ],
+        },
+        {
+          title: "Points & Capacity Limit",
+          list: [
+            "Points are the crucial proof for snagging 4EVERLAND <b style='color:#fff'>airdrops</b>.",
+            "Initial capacity is <b style='color:#fff'>100 points</b>.",
+            "Points generate at your earning rate and must be collected manually.",
+            "Generation stops if uncollected points hit the capacity limit.",
+            "Increase capacity via node boosts, capacity cards, raffles.",
+          ],
+        },
+      ],
     };
   },
   computed: {
@@ -122,6 +171,9 @@ export default {
       return (
         (this.baseRate + this.boostRate) * (1 + this.boosterInfo.rateBuff / 100)
       );
+    },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
   },
   components: {
@@ -219,6 +271,12 @@ export default {
               case "(tg)Follow 4EVERLAND Twitter":
                 it.log = `Follow 4EVERLAND Twitter ${it.value} points.`;
                 break;
+              case "collected":
+                it.log = `Another Booster claimed your $4EVER points:-${it.value}.`;
+                break;
+              case "collect":
+                it.log = `I just explored and snagged ${it.value} points from ${it.explorerAddress}!`;
+                break;
               case "bnb_winner":
                 it.log = `Vote for 4EVERLAND ${it.value} points.`;
                 break;
@@ -255,6 +313,7 @@ export default {
     );
   background-blend-mode: overlay, normal;
   backdrop-filter: blur(19.75px);
+  overflow: auto;
 
   .user-card {
     .user-card-item {
@@ -277,6 +336,15 @@ export default {
         }
       }
     }
+    .linear-border {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(
+        to right,
+        rgba(164, 188, 253, 0),
+        rgba(164, 188, 253, 1) 50%
+      );
+    }
   }
 
   .log-list {
@@ -289,6 +357,15 @@ export default {
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+    }
+  }
+
+  .concepts {
+    color: #d0d5dd;
+
+    ul,
+    li {
+      list-style: disc;
     }
   }
 }

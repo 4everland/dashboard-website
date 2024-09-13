@@ -10,7 +10,7 @@
         loop
         muted
       ></video>
-      <div
+      <!-- <div
         class="d-md-none d-block points-card fz-12 d-flex align-center justify-center"
       >
         <div class="rate-box">
@@ -34,7 +34,7 @@
             }"
           />
         </div>
-      </div>
+      </div> -->
       <div class="point-square">
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
@@ -45,24 +45,12 @@
           @click="handleClaim"
         >
           <span class="points fz-14">
-            {{
-              computedPoints > info.capacity
-                ? info.capacity
-                : computedPoints.toFixed(3)
-            }}/{{ info.capacity }}
+            {{ displayPoints }}/{{ info.capacity }}
           </span>
-          <img
-            :src="
-              computedPoints >= info.capacity
-                ? '/img/booster/3d-square-full.png'
-                : '/img/booster/3d-square.png'
-            "
-            width="120"
-            alt=""
-          />
+          <img :src="displaySquare" :width="asMobile ? 80 : 120" alt="" />
           <img
             class="pos-a"
-            style="left: 50%; top: 30%; transform: translateX(-50%)"
+            style="left: 50%; top: 40%; transform: translateX(-50%)"
             src="/img/booster/svg/finger.svg"
             width="16"
             alt=""
@@ -108,7 +96,6 @@ import {
   claimExplorePoints,
 } from "@/api/booster";
 import ExploreBar from "../components/explore-bar.vue";
-import ICountUp from "vue-countup-v2";
 import { coinMove } from "../../../utils/animation";
 
 import { mapState, mapGetters } from "vuex";
@@ -135,7 +122,6 @@ export default {
   },
   components: {
     ExploreBar,
-    ICountUp,
   },
   computed: {
     ...mapState({
@@ -262,6 +248,15 @@ export default {
     exploreUserTotalRate() {
       return (this.baseRate + this.boostRate) * (1 + this.info.rateBuff / 100);
     },
+    displayPoints() {
+      if (this.info.negative) return this.info.capacity - this.info.negative;
+      return this.computedPoints > this.info.capacity
+        ? this.info.capacity
+        : this.computedPoints.toFixed(3);
+    },
+    displaySquare() {
+      return "/img/booster/3d-square-explored.png";
+    },
   },
 
   async created() {
@@ -327,19 +322,16 @@ export default {
       try {
         if (this.computedPoints < this.info.capacity) return;
         let id = this.$route.params.id;
-        if (this.asMobile) {
-          coinMove("point-explore-send", "mobile-explore-point-receive");
-        } else {
-          coinMove("point-explore-send", "point-receive");
-        }
+
         clearInterval(this.timer);
-        this.computedPoints = 0;
-
+        // this.computedPoints = 0;
         const data = await claimExplorePoints(id);
-
-        console.log(data);
         if (data.data) {
-          this.getExploreInfo(false);
+          if (this.asMobile) {
+            coinMove("point-explore-send", "mobile-point-receive");
+          } else {
+            coinMove("point-explore-send", "point-receive");
+          }
           this.$toast2(
             `Successfully collected, you earn a ${data.data}-point share.`,
             "success"
@@ -347,6 +339,7 @@ export default {
         } else {
           this.$toast2(data.message, "error");
         }
+        this.getExploreInfo(false);
         this.$store.dispatch("getBoosterUserInfo");
       } catch (error) {
         console.log(error);
@@ -414,20 +407,31 @@ export default {
 
   .point-square {
     position: absolute;
-    left: 50.3%;
+    left: 49.5%;
 
     top: 31%;
     .top-card {
       position: absolute;
       bottom: 22%;
-      left: -449%;
+      left: -311%;
       .points {
         position: absolute;
-        top: 50%;
+        top: 68%;
         left: 50%;
         transform: translateX(-50%);
         font-weight: bold;
         text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.5);
+        padding: 0px 8px;
+        border-radius: 16px;
+        border: 1px solid rgba(18, 21, 54, 0.5);
+        background: linear-gradient(
+            0deg,
+            rgba(255, 173, 8, 0.5) 0%,
+            rgba(255, 173, 8, 0.5) 100%
+          ),
+          linear-gradient(0deg, #121536 0%, #121536 100%),
+          rgba(97, 114, 243, 0.75);
+        box-shadow: 0px 0px 4px 0px rgba(255, 255, 255, 0.5);
       }
     }
   }

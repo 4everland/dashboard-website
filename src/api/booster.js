@@ -223,3 +223,36 @@ export const fetchPartner_Tasks = async () => {
     url: "/node/activities/partner_tasks",
   });
 };
+
+export const fetchInvite_Milestone_Tasks = async () => {
+  return boosterRequest.get({
+    url: "/node/activities/invite_milestone_tasks",
+  });
+};
+
+export const inviteBatchClaim = async () => {
+  return boosterRequest.post({
+    url: "/node/activities/invite_milestone_tasks/batchClaim",
+  });
+};
+
+export const fetchClaimUSDT = async () => {
+  return boosterRequest.get({
+    url: "/node/usdt",
+  });
+};
+
+export const fetchClaimUSDTLog = async (page, size) => {
+  return boosterRequest.get({
+    url: `/node/usdt/log/${page}`,
+    params: {
+      size: size,
+    },
+  });
+};
+
+export const fetchInviteLog = async (page, size = 10) => {
+  return boosterRequest.get({
+    url: `/node/invite/history?page=${page}&size=${size}`,
+  });
+};

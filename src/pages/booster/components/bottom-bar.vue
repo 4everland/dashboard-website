@@ -121,8 +121,10 @@ export default {
           isOpen: true,
           action() {
             _this.toggleInviteDrawer();
+            _this.inviteUndo = false;
+            localStorage.setItem("invite-drawer", "1");
           },
-          undo: false,
+          undo: this.inviteUndo,
         },
       ];
       return Arr;
@@ -131,6 +133,7 @@ export default {
   data() {
     return {
       currentHoverIdx: -1,
+      inviteUndo: localStorage.getItem("invite-drawer") ? false : true,
     };
   },
   methods: {

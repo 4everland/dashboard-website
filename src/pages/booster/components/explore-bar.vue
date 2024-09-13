@@ -13,7 +13,7 @@
     </div>
     <div class="user-container px-3 flex-2" v-show="uid">
       <e-team-avatar :size="asMobile ? 30 : 42" :uid="uid"></e-team-avatar>
-      <span>{{
+      <span style="white-space: nowrap">{{
         address ? address.slice(0, 4) + "..." + address.slice(-4) : ""
       }}</span>
 

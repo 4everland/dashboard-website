@@ -624,6 +624,7 @@ export default {
             value: mintPrice,
           }
         );
+
         const gasPrice = await provider.getGasPrice();
         let tx = await BlastOracleLand.mintByETH(this.userInfo.euid, {
           value: mintPrice,

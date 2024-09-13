@@ -169,8 +169,6 @@ export default {
         );
       });
 
-      console.log(NFT_LISTS);
-
       this.nftList = NFT_LISTS;
       this.checkUndo();
     },

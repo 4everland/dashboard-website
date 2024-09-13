@@ -67,7 +67,7 @@
                 offset-y
                 content-class="user-menu"
                 left
-                nudge-right="122"
+                nudge-right="18"
                 nudge-bottom="20"
                 :close-on-content-click="true"
               >
@@ -166,7 +166,7 @@
           </div>
         </div>
 
-        <v-menu
+        <!-- <v-menu
           offset-y
           content-class="inviter-menu"
           nudge-bottom="15"
@@ -244,7 +244,7 @@
               </div>
             </div>
           </div>
-        </v-menu>
+        </v-menu> -->
       </div>
 
       <div v-else class="login-content d-flex align-center justify-center px-4">
@@ -264,15 +264,16 @@
     >
       <div class="logo d-flex align-center">
         <img
-          src="/img/booster/svg/logo.svg"
-          width="157"
+          src="/img/svg/logo-m.svg"
+          width="46"
           @click="$router.push('/boost')"
           alt=""
           style="display: block"
         />
       </div>
+      <MobilePointsRate v-if="!notLogin"></MobilePointsRate>
       <div class="d-flex align-center">
-        <v-menu
+        <!-- <v-menu
           offset-y
           content-class="mobile-inviter-menu"
           :close-on-content-click="false"
@@ -367,7 +368,7 @@
               </v-btn>
             </div>
           </div>
-        </v-menu>
+        </v-menu> -->
 
         <div
           class="connect-wallet"
@@ -389,6 +390,7 @@ import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
 import { mapGetters, mapState } from "vuex";
 import PointLogs from "../components/point-logs.vue";
 import ICountUp from "vue-countup-v2";
+import MobilePointsRate from "../components/mobile-points-rate.vue";
 
 export default {
   data() {
@@ -508,6 +510,7 @@ export default {
   components: {
     PointLogs,
     ICountUp,
+    MobilePointsRate,
   },
   watch: {
     notLogin(val) {
@@ -724,10 +727,10 @@ export default {
     .user-info {
       gap: 8px;
 
-      .info-content {
-        padding-right: 16px;
-        border-right: 1px solid rgba(255, 255, 255, 0.25);
-      }
+      // .info-content {
+      //   padding-right: 16px;
+      //   border-right: 1px solid rgba(255, 255, 255, 0.25);
+      // }
       .balance {
         white-space: nowrap;
         color: #94a3b8;
@@ -741,6 +744,7 @@ export default {
 
   .nav-mobile {
     height: 100%;
+
     .mobile-btn {
       border-radius: 4px;
       background: rgba(255, 255, 255, 0.1);

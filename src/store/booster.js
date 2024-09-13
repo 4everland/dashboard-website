@@ -1,4 +1,11 @@
-import { fetchUserBoostInfo, fetchRemainingExploration } from "@/api/booster";
+import {
+  fetchUserBoostInfo,
+  fetchRemainingExploration,
+  fetchClaimUSDT,
+  fetchInviteInfo,
+  fetchTgInviteInfo,
+} from "@/api/booster";
+
 export default {
   state: () => {
     return {
@@ -12,6 +19,13 @@ export default {
         rateBuff: 0,
         totalPoint: 0,
         preActivities: true,
+        negative: 0,
+      },
+      inviteInfo: {
+        daily: 0,
+        inviteCode: "-",
+        invited: 0,
+        link: "-",
       },
       tgMiniOverlayLoading: true,
       exploreRemain: 0,
@@ -23,9 +37,14 @@ export default {
       showBindWallet: false,
       taskUndo: false,
       stakeUndo: false,
+      tonCount: 0,
+      updateBoostUserInfo: false,
     };
   },
   getters: {
+    isTgMiniApp() {
+      return Object.keys(window.$tg.initDataUnsafe).length > 0;
+    },
     showStakeDrawer: (state) => state.showStakeDrawer,
     showTaskDrawer: (state) => state.showTaskDrawer,
     showBindWallet: (state) => state.showBindWallet,
@@ -146,6 +165,15 @@ export default {
     SET_BOOST_STAKE_UNDO(state, undo) {
       state.stakeUndo = undo;
     },
+    SET_USDT_COUNT(state, count) {
+      state.tonCount = count;
+    },
+    SET_INVITE_INFO(state, info) {
+      state.inviteInfo = info;
+    },
+    SET_UPDATE_BOOST_USER_INFO(state) {
+      state.updateBoostUserInfo = !state.updateBoostUserInfo;
+    },
   },
   actions: {
     StakeDrawerState: async (context, payload) => {
@@ -172,6 +200,7 @@ export default {
         const { data } = await fetchUserBoostInfo();
         if (data) {
           commit("SET_BOOST_INFO", data);
+          commit("SET_UPDATE_BOOST_USER_INFO");
         }
       } catch (error) {
         console.log(error);
@@ -184,6 +213,35 @@ export default {
       try {
         const { data } = await fetchRemainingExploration();
         commit("SET_EXPLORE_REMAIN", data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getBoostTonCount({ commit }) {
+      try {
+        const { data } = await fetchClaimUSDT();
+        if (data) {
+          commit("SET_USDT_COUNT", Number(data.balance));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getInviteInfo({ getters, commit }) {
+      try {
+        let info = {};
+        if (getters.isTgMiniApp) {
+          const { data } = await fetchTgInviteInfo();
+          info = data;
+        } else {
+          const { data } = await fetchInviteInfo();
+          info = data;
+        }
+        if (info) {
+          commit("SET_INVITE_INFO", info);
+        }
       } catch (error) {
         console.log(error);
       }

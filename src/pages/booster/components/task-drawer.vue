@@ -573,6 +573,7 @@ export default {
             let shareUrl = `As you join #4EVERBoost, be sure to check out our new event - #4EVERLAND Sprint Movement on @GalxeQuest!🌊\n\n💰 Earn 19,000 $4EVER Points\n💎 1 #GalxeOAT = 3% Staking Yield\n\n`;
             shareUrl += `🔍 GalxeQuest:\nhttps://x.com/4everland_org/status/1833023657922437322\n🔗 4EVERBoost:\n`;
             shareUrl += this.inviteInfo.link;
+
             shareUrl =
               "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
 

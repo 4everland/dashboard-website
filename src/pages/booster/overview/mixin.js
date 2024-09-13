@@ -20,6 +20,7 @@ export default {
   computed: {
     ...mapState({
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
+      updateBoostUserInfo: (s) => s.moduleBooster.updateBoostUserInfo,
       tgMiniOverlayLoading: (s) => s.moduleBooster.tgMiniOverlayLoading,
     }),
     ...mapGetters([
@@ -54,13 +55,35 @@ export default {
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
+    isExplored() {
+      return this.boosterInfo.negative > 0;
+    },
+    displayPoints() {
+      if (this.isExplored)
+        return this.boosterInfo.capacity - this.boosterInfo.negative;
+      return this.computedPoints >= this.boosterInfo.capacity
+        ? this.boosterInfo.capacity
+        : this.computedPoints.toFixed(3);
+    },
+    displaySquare() {
+      if (this.isExplored) return "/img/booster/3d-square-explored.png";
+      return this.computedPoints < 1
+        ? "/img/booster/3d-square-unlock.png"
+        : this.computedPoints >= this.boosterInfo.capacity
+        ? "/img/booster/3d-square-explored.png"
+        : "/img/booster/3d-square.png";
+    },
   },
 
   async created() {
     this.timer = setInterval(() => {
       this.computedPoints =
         this.computedPoints == 0 ? this.currentComputed : this.computedPoints;
+
       this.computedPoints += (this.totalRate * this.interval) / 3600000;
+      if (this.computedPoints > this.boosterInfo.capacity) {
+        this.computedPoints = this.boosterInfo.capacity;
+      }
     }, this.interval);
 
     if (this.$route.query && this.$route.query.st) {
@@ -82,7 +105,7 @@ export default {
     async handleUnlock(index) {
       this.$emit("handleUnlock", index);
     },
-    async hanleClaim() {
+    async handleClaim() {
       try {
         if (this.computedPoints < 1)
           return this.$toast2("Points below 1 unclaimable.", "info");
@@ -96,6 +119,7 @@ export default {
         const data = await claimPoints();
         console.log(data);
         await this.$store.dispatch("getBoosterUserInfo");
+
         this.timer = setInterval(() => {
           this.computedPoints =
             this.computedPoints == 0
@@ -126,6 +150,12 @@ export default {
         });
       }
       location.reload();
+    },
+  },
+
+  watch: {
+    updateBoostUserInfo() {
+      this.computedPoints = this.currentComputed;
     },
   },
 };
