@@ -19,11 +19,11 @@
         style="padding: 24px 0 24px 16px; height: 100%"
       >
         <div class="d-flex align-center justify-space-between mb-6">
-          <div class="drawer-title">Invite Friends Earn Cash!</div>
+          <div class="drawer-title">Invite to Earn Ton Rewards!</div>
           <div class="usdt-withdraw d-flex align-center justify-space-between">
             <div>
               <div class="fz-12">Balance</div>
-              <div>
+              <div class="d-flex align-center">
                 <img src="/img/booster/ton-invite-icon.png" width="16" alt="" />
                 <ICountUp
                   class="usdt-enabled ml-1 fz-20"

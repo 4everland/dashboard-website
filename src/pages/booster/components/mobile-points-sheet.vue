@@ -4,7 +4,7 @@
       <div class="sheet-content">
         <div class="user-card" v-show="!showLog">
           <div class="user-card-item fz-12">
-            <div class="user-card-item-title">Total $4EVER points</div>
+            <div class="user-card-item-title">Total $4EVER Points</div>
             <div class="linear-border mb-1"></div>
             <div class="user-card-item-content">
               <div
@@ -24,7 +24,7 @@
               </div>
             </div>
           </div>
-          <div class="user-card-item fz-12 mt-2">
+          <div class="user-card-item fz-12 mt-4">
             <div class="user-card-item-title">Earning Rate</div>
             <div class="linear-border mb-1"></div>
             <div class="user-card-item-content">
@@ -51,7 +51,7 @@
             </div>
           </div>
 
-          <div class="user-card-item fz-12 mt-2">
+          <div class="user-card-item fz-12 mt-4">
             <div class="user-card-item-title">Key Concepts</div>
             <div class="linear-border mb-1"></div>
             <div
@@ -128,11 +128,26 @@ export default {
       totalPages: 0,
       concepts: [
         {
+          title: "$4EVER Points",
+          list: [
+            "$4EVER Points are the crucial proof for snagging 4EVERLAND <b style='color:#fff'>airdrops</b>.",
+          ],
+        },
+        {
+          title: "Earning Rate",
+          list: [
+            "Earning Rate = (Base Rate + Boost Rate) * (1 + Staking Yield).",
+            "Points generation at the earning rate but must be collected manually.",
+            "Collect $4EVER points on time! <b style='color:#fff'>If not, generation stops and you could lose 50% to others</b>.",
+          ],
+        },
+        {
           title: "Base Rate",
           list: [
             "Permanently valid.",
-            "Base rate is <b style='color:#fff'>10pts/h</b>.",
-            "Boost by enabling Storage, Network, or Computing nodes, consuming <b style='color:#fff'>1,000,000 LAND</b> for an extra <b style='color:#fff'>100pts/h</b>.",
+            "Miniapp: <b style='color:#fff'>10 pts/h</b>.",
+            "Webpage: <b style='color:#fff'>30 pts/h</b>.",
+            "Unlock Storage, Network, or Computing nodes to earn <b style='color:#fff'>100 pts/h</b> and get <b style='color:#fff'>2,500</b> capacity.",
           ],
         },
         {
@@ -145,18 +160,16 @@ export default {
         {
           title: "Staking Yield",
           list: [
-            "Boost your earning rate by staking <b style='color:#fff'>T4EVER/NFTs</b>.",
-            "Valid during staking, expires upon unstaking.",
+            "Increase your earning rate by staking <b style='color:#fff'>T4EVER/NFTs</b>.",
+            "Invalid if NFT is transferred.",
           ],
         },
         {
-          title: "Points & Capacity Limit",
+          title: "Capacity Limit",
           list: [
-            "Points are the crucial proof for snagging 4EVERLAND <b style='color:#fff'>airdrops</b>.",
-            "Initial capacity is <b style='color:#fff'>100 points</b>.",
-            "Points generate at your earning rate and must be collected manually.",
-            "Generation stops if uncollected points hit the capacity limit.",
-            "Increase capacity via node boosts, capacity cards, raffles.",
+            "Miniapp: <b style='color:#fff'>100 points</b>.",
+            "Webpage: <b style='color:#fff'>300 points</b>.",
+            "Increase capacity with unlocked 3 nodes, capacity cards, or raffles.",
           ],
         },
       ],

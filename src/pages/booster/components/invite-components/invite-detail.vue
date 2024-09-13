@@ -33,24 +33,21 @@
     </div>
     <div class="fz-12 my-3" style="line-height: 20px">
       <div class="fw-b fz-16 mb-2">Rules</div>
-      <div>
-        Invite friends and earn TON rewards! Have them log in to the 4EVERLAND
-        Bot and activate a node—<span class="fw-b"
-          >each activation counts as one invite!</span
-        >
-      </div>
+
       <ul style="list-style: disc">
         <li style="list-style: disc">
-          The invite count <span class="fw-b">resets</span> when the event
-          launches.
+          Encourage your friends to
+          <b>log in to the 4EVERLAND Bot and start boost</b>—each Boost counts
+          as one invite!
         </li>
         <li style="list-style: disc">
-          Track your <span class="fw-b">My Invites</span> on the page and claim
-          rewards once you hit the target.
+          Invite counts <b>resets</b> at the start of the event.
         </li>
         <li style="list-style: disc">
-          You will earn a <span class="fw-b">5%</span> points reward for every
-          invitation!
+          Track your <b>My Invites</b> on the page and claim
+        </li>
+        <li style="list-style: disc">
+          Earn an extra <b>5%</b> points reward for every successful invitation!
         </li>
       </ul>
     </div>
