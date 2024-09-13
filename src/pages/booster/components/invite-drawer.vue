@@ -30,7 +30,7 @@
                   :delay="1000"
                   :endVal="tonCount"
                   :options="{
-                    decimalPlaces: 3,
+                    decimalPlaces: 4,
                     useEasing: true,
                     useGrouping: true,
                     separator: ',',
