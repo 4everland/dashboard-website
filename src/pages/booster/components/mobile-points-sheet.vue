@@ -7,19 +7,25 @@
             <div class="user-card-item-title">Total $4EVER Points</div>
             <div class="linear-border mb-1"></div>
             <div class="user-card-item-content">
-              <div
-                class="content-rate d-flex align-center justify-space-between"
-              >
-                <img src="/img/booster/svg/union.svg" width="52" alt="" />
-                <div>
-                  <span>{{ boosterInfo.totalPoint }}</span>
-                  <img
-                    @click="handleShowLog"
-                    class="ml-1"
-                    width="16"
-                    src="/img/booster/svg/log.svg"
-                    alt=""
-                  />
+              <div class="content-rate">
+                <div class="d-flex align-center justify-space-between">
+                  <img src="/img/booster/svg/union.svg" width="52" alt="" />
+                  <div>
+                    <span>{{ boosterInfo.totalPoint }}</span>
+                    <img
+                      @click="handleShowLog"
+                      class="ml-1"
+                      width="16"
+                      src="/img/booster/svg/log.svg"
+                      alt=""
+                    />
+                  </div>
+                </div>
+                <div class="content-rate-tips mt-1 d-flex align-center">
+                  <img src="/img/booster/airdrop.png" width="20" alt="" />
+                  <span class="fz-12"
+                    >$4EVER Points to qualify for 4EVERLAND airdrops!</span
+                  >
                 </div>
               </div>
             </div>
@@ -343,6 +349,15 @@ export default {
           font-family: "DIN Alternate";
           font-size: 20px;
           font-weight: 700;
+
+          .content-rate-tips {
+            color: #000;
+            font-family: Inter;
+            font-weight: 500;
+            padding: 2px 4px 2px 4px;
+            border-radius: 40px;
+            background: #ffe205;
+          }
         }
         .content-detail {
           border-top: 1px solid rgba(164, 188, 253, 0.25);
