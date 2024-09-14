@@ -299,6 +299,9 @@ export default {
               case "bnb_winner":
                 it.log = `Vote for 4EVERLAND ${it.value} points.`;
                 break;
+              case "white_list_4":
+                it.log = `VoteRaffle with Cellula ${it.value} points.`;
+                break;
 
               default:
                 break;
