@@ -34,9 +34,9 @@
 
       <booster-pagination
         v-show="list.length != 0"
-        :total-visible="7"
+        :total-visible="5"
         :length="totalPages"
-        class="mt-5"
+        class="my-5"
         v-model="page"
         @input="getList"
       ></booster-pagination>

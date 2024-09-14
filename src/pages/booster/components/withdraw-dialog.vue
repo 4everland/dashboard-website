@@ -158,7 +158,7 @@ export default {
   },
   data() {
     return {
-      size: 5,
+      size: 10,
       page: 1,
       usdtLogs: [],
     };

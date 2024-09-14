@@ -18,7 +18,10 @@
         class="d-flex flex-column"
         style="padding: 24px 0 24px 16px; height: 100%"
       >
-        <div class="d-flex align-center justify-space-between mb-6">
+        <div
+          class="d-flex align-center justify-space-between mb-6"
+          style="gap: 8px"
+        >
           <div class="drawer-title">Invite to Earn Ton Rewards!</div>
           <div class="usdt-withdraw d-flex align-center justify-space-between">
             <div>
@@ -135,6 +138,7 @@ export default {
     }
 
     .usdt-withdraw {
+      gap: 8px;
       width: 216px;
       padding: 8px;
       color: #000;
