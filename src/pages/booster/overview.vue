@@ -68,6 +68,73 @@ import UnlockDialog from "./components/unlock-dialog.vue";
 import TgStartBoostOverlay from "./components/tg-start-boost-overlay.vue";
 import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+const driverObj = driver({
+  showProgress: true,
+  steps: [
+    {
+      element: "#mobile-point-send",
+      popover: {
+        title: "Animated Tour Example",
+        description:
+          "Here is the code example showing animated tour. Let's walk you through it.",
+        side: "left",
+        align: "start",
+      },
+    },
+    {
+      element: ".token-dialog-icon",
+      popover: {
+        title: "Import the Library",
+        description:
+          "It works the same in vanilla JavaScript as well as frameworks.",
+        side: "bottom",
+        align: "start",
+      },
+    },
+    {
+      element: ".activity-item:nth-child(4)",
+      popover: {
+        title: "Importing CSS",
+        description:
+          "Import the CSS which gives you the default styling for popover and overlay.",
+        side: "bottom",
+        align: "start",
+      },
+    },
+    {
+      element: ".mobile-points",
+      popover: {
+        title: "Create Driver",
+        description:
+          "Simply call the driver function to create a driver.js instance",
+        side: "left",
+        align: "start",
+      },
+    },
+    {
+      element: "#storage-boost",
+      popover: {
+        title: "Start Tour",
+        description:
+          "Call the drive method to start the tour and your tour will be started.",
+        side: "top",
+        align: "start",
+      },
+    },
+    {
+      element: ".activity-item:nth-child(3)",
+      popover: {
+        title: "More Configuration",
+        description:
+          "Look at this page for all the configuration options you can pass.",
+        side: "right",
+        align: "start",
+      },
+    },
+  ],
+});
 
 export default {
   data() {
@@ -203,6 +270,10 @@ export default {
       this.unlockStage = val;
       this.showUnlockDialog = true;
     },
+
+    onGuide() {
+      driverObj.drive();
+    },
   },
 
   components: {
@@ -218,6 +289,16 @@ export default {
     TgStartBoostOverlay,
     ToolDrawer,
     InviteDrawer,
+  },
+
+  watch: {
+    boostLocked(val) {
+      if (!val) {
+        setTimeout(() => {
+          driverObj.drive();
+        }, 2000);
+      }
+    },
   },
 };
 </script>

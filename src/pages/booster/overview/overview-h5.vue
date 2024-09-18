@@ -33,7 +33,7 @@
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>
           </div>
-          <div class="top-card">
+          <div class="top-card" id="storage-boost">
             <div class="card-storage" :class="{ locked: storageLocked }">
               <img
                 :src="
