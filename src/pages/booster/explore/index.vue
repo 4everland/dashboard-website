@@ -10,31 +10,19 @@
         loop
         muted
       ></video>
-      <!-- <div
-        class="d-md-none d-block points-card fz-12 d-flex align-center justify-center"
-      >
-        <div class="rate-box">
-          <img src="/img/booster/3d-square.png" width="40" alt="" />
-          <span class="text fw-b">{{ Math.ceil(totalRate) }}/H</span>
-        </div>
-        <div>
-          Points
 
-          <ICountUp
-            id="mobile-explore-point-receive"
-            :delay="1000"
-            :endVal="boosterInfo.totalPoint"
-            :options="{
-              useEasing: true,
-              useGrouping: true,
-              separator: ',',
-              decimal: '.',
-              prefix: '',
-              suffix: '',
-            }"
-          />
-        </div>
-      </div> -->
+      <div
+        class="pos-a"
+        style="left: 50%; top: 50%; transform: translate(-50%, -50%)"
+      >
+        <vue-turnstile
+          v-show="showTurnstile"
+          ref="turnstile"
+          site-key="0x4AAAAAAAkLgKo8SKSWigO5"
+          @verified="token = $event"
+        />
+      </div>
+
       <div class="point-square">
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
@@ -97,6 +85,7 @@ import {
 } from "@/api/booster";
 import ExploreBar from "../components/explore-bar.vue";
 import { coinMove } from "../../../utils/animation";
+import VueTurnstile from "@gaviti/vue-turnstile";
 
 import { mapState, mapGetters } from "vuex";
 export default {
@@ -118,10 +107,13 @@ export default {
         uid: "",
       },
       timer: null,
+      token: "",
+      showTurnstile: false,
     };
   },
   components: {
     ExploreBar,
+    VueTurnstile,
   },
   computed: {
     ...mapState({
@@ -320,6 +312,10 @@ export default {
 
     async handleClaim() {
       try {
+        console.log(this.$refs.turnstile);
+        this.showTurnstile = true;
+        if (!this.token) return;
+
         if (this.computedPoints < this.info.capacity) return;
         let id = this.$route.params.id;
 
