@@ -72,6 +72,9 @@ import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 const driverObj = driver({
   showProgress: true,
+  nextBtnText: "Next",
+  prevBtnText: "Prev",
+  doneBtnText: "Done",
   steps: [
     {
       element: "#mobile-point-send",
@@ -270,10 +273,6 @@ export default {
       this.unlockStage = val;
       this.showUnlockDialog = true;
     },
-
-    onGuide() {
-      driverObj.drive();
-    },
   },
 
   components: {
@@ -303,6 +302,27 @@ export default {
 };
 </script>
 
+<style>
+.driver-popover-arrow {
+  display: none;
+}
+.driver-popover {
+  background: #17191d;
+  color: #fff;
+}
+.driver-popover-prev-btn {
+  text-shadow: none !important;
+  border: none !important;
+}
+
+.driver-popover-next-btn {
+  text-shadow: none !important;
+  border: none !important;
+
+  background: #6172f3 !important;
+  color: #fff !important;
+}
+</style>
 <style lang="scss" scoped>
 .booster-overview-task {
   position: absolute;
