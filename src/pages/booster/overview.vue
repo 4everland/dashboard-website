@@ -303,6 +303,9 @@ export default {
 </script>
 
 <style>
+:not(body):has(> .driver-active-element) {
+  overflow: initial !important;
+}
 .driver-popover-arrow {
   display: none;
 }
