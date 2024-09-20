@@ -125,9 +125,12 @@ export const fetchRemainingExploration = async () => {
   });
 };
 
-export const fectchExploreId = async (nodeId = null) => {
+export const fectchExploreId = async (token, nodeId = null) => {
   return boosterRequest.post({
     url: "/node/exploration",
+    headers: {
+      "cf-turnstile-response": token,
+    },
     data: {
       nodeId,
     },
@@ -142,6 +145,7 @@ export const fectchExploreInfo = async (id) => {
 export const claimExplorePoints = async (explorationId) => {
   return boosterRequest.post({
     url: "/node/exploration/collect",
+
     data: {
       explorationId,
     },

@@ -16,10 +16,10 @@
         style="left: 50%; top: 50%; transform: translate(-50%, -50%)"
       >
         <vue-turnstile
-          v-show="showTurnstile"
           ref="turnstile"
-          site-key="0x4AAAAAAAkLgKo8SKSWigO5"
-          @verified="token = $event"
+          :site-key="siteKey"
+          @verified="onVerified"
+          @error="onError"
         />
       </div>
 
@@ -108,7 +108,7 @@ export default {
       },
       timer: null,
       token: "",
-      showTurnstile: false,
+      siteKey: process.env.VUE_APP_CF_TURNSTILE_SITE_KEY,
     };
   },
   components: {
@@ -253,8 +253,9 @@ export default {
 
   async created() {
     if (this.notLogin) return this.$router.replace("/boost");
-    await this.getExploreInfo();
-    this.pointCount();
+    this.showExploring = true;
+    // await this.getExploreInfo();
+    // this.pointCount();
   },
 
   methods: {
@@ -275,7 +276,7 @@ export default {
     },
 
     async getExploreId() {
-      const { data, message, code } = await fectchExploreId();
+      const { data, message, code } = await fectchExploreId(this.token);
       this.$store.dispatch("getExploreRemain");
       if (code == 11005) {
         this.$router.push("/boost");
@@ -284,9 +285,9 @@ export default {
       return data.explorationId;
     },
     async getExploreInfo(loading = true) {
-      if (loading) {
-        this.showExploring = true;
-      }
+      // if (loading) {
+      //   this.showExploring = true;
+      // }
       try {
         let id = this.$route.params.id;
         if (!id) {
@@ -302,23 +303,21 @@ export default {
       } catch (error) {
         this.$toast2(error.message, "error");
       }
-      this.showExploring = false;
+      // this.showExploring = false;
     },
 
     handleExplore() {
       this.$router.replace({ name: "booster-explore" });
-      this.getExploreInfo();
+      this.showExploring = true;
+      this.$refs.turnstile.execute();
+      // this.getExploreInfo();
     },
 
     async handleClaim() {
       try {
-        console.log(this.$refs.turnstile);
-        this.showTurnstile = true;
         if (!this.token) return;
-
         if (this.computedPoints < this.info.capacity) return;
         let id = this.$route.params.id;
-
         clearInterval(this.timer);
         // this.computedPoints = 0;
         const data = await claimExplorePoints(id);
@@ -340,6 +339,19 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async onVerified(val) {
+      // console.log(val);
+      this.showExploring = true;
+      this.token = val;
+      await this.getExploreInfo();
+      this.pointCount();
+      this.showExploring = false;
+    },
+
+    onError() {
+      this.$refs.turnstile.reset();
+      // this.showExploring = false
     },
   },
 };
