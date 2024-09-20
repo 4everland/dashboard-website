@@ -210,7 +210,6 @@ export default {
       sheet: false,
     };
   },
-
   computed: {
     isTg() {
       return process.env.VUE_APP_TG_VERSION == "true";

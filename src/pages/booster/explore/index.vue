@@ -10,31 +10,19 @@
         loop
         muted
       ></video>
-      <!-- <div
-        class="d-md-none d-block points-card fz-12 d-flex align-center justify-center"
-      >
-        <div class="rate-box">
-          <img src="/img/booster/3d-square.png" width="40" alt="" />
-          <span class="text fw-b">{{ Math.ceil(totalRate) }}/H</span>
-        </div>
-        <div>
-          Points
 
-          <ICountUp
-            id="mobile-explore-point-receive"
-            :delay="1000"
-            :endVal="boosterInfo.totalPoint"
-            :options="{
-              useEasing: true,
-              useGrouping: true,
-              separator: ',',
-              decimal: '.',
-              prefix: '',
-              suffix: '',
-            }"
-          />
-        </div>
-      </div> -->
+      <div
+        class="pos-a"
+        style="left: 50%; top: 50%; transform: translate(-50%, -50%)"
+      >
+        <vue-turnstile
+          ref="turnstile"
+          :site-key="siteKey"
+          @verified="onVerified"
+          @error="onError"
+        />
+      </div>
+
       <div class="point-square">
         <div style="position: relative">
           <div style="width: 10px; height: 10px"></div>
@@ -97,6 +85,7 @@ import {
 } from "@/api/booster";
 import ExploreBar from "../components/explore-bar.vue";
 import { coinMove } from "../../../utils/animation";
+import VueTurnstile from "@gaviti/vue-turnstile";
 
 import { mapState, mapGetters } from "vuex";
 export default {
@@ -118,10 +107,13 @@ export default {
         uid: "",
       },
       timer: null,
+      token: "",
+      siteKey: process.env.VUE_APP_CF_TURNSTILE_SITE_KEY,
     };
   },
   components: {
     ExploreBar,
+    VueTurnstile,
   },
   computed: {
     ...mapState({
@@ -261,8 +253,9 @@ export default {
 
   async created() {
     if (this.notLogin) return this.$router.replace("/boost");
-    await this.getExploreInfo();
-    this.pointCount();
+    this.showExploring = true;
+    // await this.getExploreInfo();
+    // this.pointCount();
   },
 
   methods: {
@@ -283,7 +276,7 @@ export default {
     },
 
     async getExploreId() {
-      const { data, message, code } = await fectchExploreId();
+      const { data, message, code } = await fectchExploreId(this.token);
       this.$store.dispatch("getExploreRemain");
       if (code == 11005) {
         this.$router.push("/boost");
@@ -292,9 +285,9 @@ export default {
       return data.explorationId;
     },
     async getExploreInfo(loading = true) {
-      if (loading) {
-        this.showExploring = true;
-      }
+      // if (loading) {
+      //   this.showExploring = true;
+      // }
       try {
         let id = this.$route.params.id;
         if (!id) {
@@ -310,19 +303,21 @@ export default {
       } catch (error) {
         this.$toast2(error.message, "error");
       }
-      this.showExploring = false;
+      // this.showExploring = false;
     },
 
     handleExplore() {
       this.$router.replace({ name: "booster-explore" });
-      this.getExploreInfo();
+      this.showExploring = true;
+      this.$refs.turnstile.execute();
+      // this.getExploreInfo();
     },
 
     async handleClaim() {
       try {
+        if (!this.token) return;
         if (this.computedPoints < this.info.capacity) return;
         let id = this.$route.params.id;
-
         clearInterval(this.timer);
         // this.computedPoints = 0;
         const data = await claimExplorePoints(id);
@@ -344,6 +339,19 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async onVerified(val) {
+      // console.log(val);
+      this.showExploring = true;
+      this.token = val;
+      await this.getExploreInfo();
+      this.pointCount();
+      this.showExploring = false;
+    },
+
+    onError() {
+      this.$refs.turnstile.reset();
+      // this.showExploring = false
     },
   },
 };

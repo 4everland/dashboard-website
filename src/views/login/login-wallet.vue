@@ -26,20 +26,47 @@
     </div>
     <div id="grecaptcha" data-callback="onSubmit" data-size="invisible"></div>
     <div>
-      <v-dialog v-model="showQrcode" max-width="450" :retain-focus="false">
-        <div class="qrcode-title">
-          <v-btn icon class="close-icon" @click="showQrcode = false">
-            <v-icon> mdi-close</v-icon>
-          </v-btn>
-          <span>Scan to use {{ loadingName }}</span>
-        </div>
-        <div class="qrcode" :style="dialogIcon">
-          <v-img max-height="300" max-width="300" :src="qrCodeUrl"></v-img>
-        </div>
-        <div class="text-center">
-          <v-btn text plain v-clipboard="qrcodeUri" @success="$toast('Copied!')"
-            >Copy to clipboard</v-btn
-          >
+      <v-dialog
+        v-model="showQrcode"
+        max-width="358"
+        :retain-focus="false"
+        content-class="qrcode-dialog"
+      >
+        <div class="qrcode-content">
+          <div class="qrcode-title d-flex align-center justify-space-between">
+            <span>{{ loadingName }}</span>
+            <v-btn
+              icon
+              color="#fff"
+              class="close-icon"
+              @click="showQrcode = false"
+            >
+              <v-icon> mdi-close</v-icon>
+            </v-btn>
+          </div>
+
+          <div class="qrcode" :style="dialogIcon">
+            <v-img max-height="300" max-width="300" :src="qrCodeUrl"></v-img>
+          </div>
+          <div class="qrcode-footer">
+            <div
+              class="d-flex align-center justify-space-between fz-16 fw-b"
+              style="color: #0f172a"
+            >
+              <span>Scan To Use {{ loadingName }}</span>
+              <v-btn
+                icon
+                plain
+                v-clipboard="qrcodeUri"
+                @success="$toast('Copied!')"
+                ><img src="/img/svg/account/copy.svg" width="24" alt=""
+              /></v-btn>
+            </div>
+            <div class="mt-2">
+              Scan this QR code with your mobile wallet or camera to get
+              connected.
+            </div>
+          </div>
         </div>
       </v-dialog>
     </div>
@@ -102,6 +129,13 @@ export default {
           isEvm: true,
         },
         {
+          name: "Binance Web3 Wallet",
+          icon: require("@/assets/imgs/bn.png"),
+          provider: null,
+          walletType: "BN",
+          isEvm: true,
+        },
+        {
           name: "Bitget Wallet",
           icon: require("@/assets/imgs/Bitget.svg"),
           provider: null,
@@ -129,6 +163,7 @@ export default {
           walletType: "COINBASE",
           isEvm: true,
         },
+
         {
           name: "WalletConnect",
           icon: require("@/assets/imgs/walletConnect.svg"),
@@ -587,26 +622,41 @@ export default {
   }
 }
 
-.qrcode-title {
+.qrcode-dialog {
+  border-radius: 16px !important;
+}
+.qrcode-content {
+  border-radius: 16px;
+  background: #6172f3;
+}
+.qrcode-footer {
+  padding: 16px 20px;
+  color: #64748b;
+  font-size: 12px;
   text-align: center;
+  border-radius: 0 0 16px 16px;
+  border-top: 1px solid #cbd5e1;
+  background: #fff;
+}
+.qrcode-title {
+  padding: 10px 20px;
   font-size: 20px;
   font-weight: bold;
-  margin: 16px 0;
-  padding-bottom: 10px;
   position: relative;
-  border-bottom: 1px solid rgb(234, 236, 246);
-  .close-icon {
-    position: absolute;
-    left: 8px;
-    top: -8px;
-  }
+  border-radius: 16px 16px 0 0;
+  color: #fff;
 }
 .qrcode {
+  width: 100%;
+  height: 318px;
+  padding: 20px;
+  border-radius: 16px 16px 0 0;
   display: flex;
   -webkit-box-align: center;
   align-items: center;
   -webkit-box-pack: center;
   justify-content: center;
+  background: #fff;
 }
 .qrcode::after {
   content: "";
