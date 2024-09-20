@@ -102,6 +102,13 @@ export default {
           isEvm: true,
         },
         {
+          name: "Binance Web3 Wallet",
+          icon: require("@/assets/imgs/bn.png"),
+          provider: null,
+          walletType: "BN",
+          isEvm: true,
+        },
+        {
           name: "Bitget Wallet",
           icon: require("@/assets/imgs/Bitget.svg"),
           provider: null,
@@ -129,6 +136,7 @@ export default {
           walletType: "COINBASE",
           isEvm: true,
         },
+
         {
           name: "WalletConnect",
           icon: require("@/assets/imgs/walletConnect.svg"),

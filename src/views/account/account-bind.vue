@@ -163,6 +163,14 @@ export default {
           type: 7,
           account: (info.wallet || {}).address,
         });
+      if (info.wallet?.walletType == "BN" || noWallet)
+        wArr.push({
+          title: "Binance Web3 Wallet",
+          desc: "Get verified by connecting your Binance Web3 Wallet.",
+          icon: "m-bn",
+          type: 103,
+          account: (info.wallet || {}).address,
+        });
       if (info.wallet?.walletType == "Bitget" || noWallet)
         wArr.push({
           title: "Bitget Wallet",
