@@ -15,7 +15,7 @@
         <div class="drawer-title mb-6">Tools</div>
 
         <v-row v-show="loading">
-          <v-col :cols="6" :md="4" v-for="item in 2" :key="item">
+          <v-col :cols="6" :md="4" v-for="item in 3" :key="item">
             <v-skeleton-loader
               height="240"
               dark
@@ -98,6 +98,14 @@ export default {
           stock: 5,
           price: 2000,
           buff: 1,
+        },
+        protect: {
+          cardName: "Protect Card",
+          cardDesc: "Unexplored for 24 hours",
+          cardImg: "/img/booster/drawer/protact_card.png",
+          stock: 1,
+          price: 20000,
+          buff: 24,
         },
       },
       types: [],

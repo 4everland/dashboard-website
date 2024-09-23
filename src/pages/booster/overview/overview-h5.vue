@@ -171,7 +171,9 @@
             >
               <span> {{ displayPoints }}/{{ boosterInfo.capacity }}</span>
             </div>
-
+            <div v-if="boosterInfo.protectExpiredAt != -1">
+              {{ boosterInfo.protectExpiredAt }}
+            </div>
             <img :src="displaySquare" width="80" alt="" />
             <img
               v-show="computedPoints > 1"

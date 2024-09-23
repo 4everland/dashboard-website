@@ -21,6 +21,7 @@ export default {
         totalPoint: 0,
         preActivities: true,
         negative: 0,
+        protectExpiredAt: -1,
       },
       inviteInfo: {
         daily: 0,
@@ -122,6 +123,9 @@ export default {
       }, 0);
 
       return (basicComputed + boostComputed) * (boosterInfo.rateBuff / 100 + 1);
+    },
+    protactCountTime({ boosterInfo, currentDate }) {
+      return boosterInfo.protectExpiredAt - currentDate;
     },
   },
   mutations: {
