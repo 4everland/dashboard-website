@@ -47,7 +47,7 @@
         <invite-drawer v-if="userInfo.uid"></invite-drawer>
         <bind-dialog v-model="showBindWallet"></bind-dialog>
       </template>
-      <end-boosting v-model="showEndBoost"></end-boosting>
+      <!-- <end-boosting v-model="showEndBoost"></end-boosting> -->
     </div>
   </div>
 </template>
@@ -79,9 +79,7 @@ const driverObj = driver({
     {
       element: "#mobile-point-send",
       popover: {
-        title: "Animated Tour Example",
-        description:
-          "Here is the code example showing animated tour. Let's walk you through it.",
+        description: "Click to Claim Points!",
         side: "left",
         align: "start",
       },
@@ -89,9 +87,8 @@ const driverObj = driver({
     {
       element: ".token-dialog-icon",
       popover: {
-        title: "Import the Library",
         description:
-          "It works the same in vanilla JavaScript as well as frameworks.",
+          "Backed by BNBCHAIN, Arweave, and IPFS! Grab Your Airdrop Ticket: $4EVER Points!",
         side: "bottom",
         align: "start",
       },
@@ -99,9 +96,7 @@ const driverObj = driver({
     {
       element: ".activity-item:nth-child(4)",
       popover: {
-        title: "Importing CSS",
-        description:
-          "Import the CSS which gives you the default styling for popover and overlay.",
+        description: "Complete Tasks for More Points!",
         side: "bottom",
         align: "start",
       },
@@ -109,9 +104,7 @@ const driverObj = driver({
     {
       element: ".mobile-points",
       popover: {
-        title: "Create Driver",
-        description:
-          "Simply call the driver function to create a driver.js instance",
+        description: "Boost Earning Rate for Faster Point Generation!",
         side: "left",
         align: "start",
       },
@@ -119,9 +112,8 @@ const driverObj = driver({
     {
       element: "#storage-boost",
       popover: {
-        title: "Start Tour",
         description:
-          "Call the drive method to start the tour and your tour will be started.",
+          "Unlock Storage, Network, and Computing Nodes to achieve massive points!",
         side: "top",
         align: "start",
       },
@@ -129,9 +121,7 @@ const driverObj = driver({
     {
       element: ".activity-item:nth-child(3)",
       popover: {
-        title: "More Configuration",
-        description:
-          "Look at this page for all the configuration options you can pass.",
+        description: "Explore Daily and 'Steal' Points from Others!",
         side: "right",
         align: "start",
       },
@@ -292,7 +282,7 @@ export default {
 
   watch: {
     boostLocked(val) {
-      if (!val) {
+      if (!val && this.isTgMiniApp) {
         setTimeout(() => {
           driverObj.drive();
         }, 2000);
@@ -310,20 +300,25 @@ export default {
   display: none;
 }
 .driver-popover {
-  background: #17191d;
+  /* background: #17191d; */
+  background: #6172f3 !important;
   color: #fff;
 }
 .driver-popover-prev-btn {
   text-shadow: none !important;
   border: none !important;
+  color: #101828 !important;
 }
 
 .driver-popover-next-btn {
   text-shadow: none !important;
   border: none !important;
-
-  background: #6172f3 !important;
-  color: #fff !important;
+  background: #fff !important;
+  color: #6172f3 !important;
+  font-weight: bolder !important;
+}
+.driver-popover-progress-text {
+  color: #eaecf0;
 }
 </style>
 <style lang="scss" scoped>

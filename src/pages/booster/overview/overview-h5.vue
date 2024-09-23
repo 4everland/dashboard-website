@@ -33,127 +33,102 @@
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>
           </div>
-          <div class="top-card" id="storage-boost">
+          <div class="top-card" id="storage-boost" v-if="storageLocked">
             <div class="card-storage" :class="{ locked: storageLocked }">
-              <img
-                :src="
-                  storageLocked
-                    ? '/img/booster/svg/locked-icon.svg'
-                    : '/img/booster/storage-icon.png'
-                "
-                width="48"
-                alt=""
-              />
-              <div class="card-storage-status">
-                <div
-                  v-if="!storageLocked"
-                  class="d-flex align-center justify-space-between"
-                >
-                  <span class="fz-12">Status</span>
-                  <img src="/img/booster/svg/actived.svg" width="16" alt="" />
-                </div>
-                <div v-else class="text-center fz-12">
-                  <v-btn
-                    class="unlock-btn"
-                    height="22"
-                    :loading="unlockLoading == 0"
-                    @click="handleUnlock(0)"
-                    >Unlock</v-btn
-                  >
-                  <div v-if="!isTg">Unlock with 1 million LAND</div>
-                  <div v-else style="height: 15px"></div>
-                </div>
-
-                <div class="task-title">STORAGE BOOST</div>
-                <div class="d-flex align-center justify-space-between fz-10">
-                  +100 pts/h & 2,500 Capacity
-                </div>
+              <div class="task-title d-flex align-center" style="gap: 2px">
+                <img src="/img/booster/svg/locked-icon.svg" width="16" alt="" />
+                <span> STORAGE BOOST</span>
               </div>
+              <div class="mt-1 fz-10">+100 pts/h & 2,500 Capacity</div>
             </div>
+          </div>
+
+          <div class="unlocked-card" id="storage-boost">
+            <div
+              class="unlocked-card-title d-flex align-center"
+              v-if="!storageLocked"
+              style="gap: 2px"
+            >
+              <img src="/img/booster/svg/actived.svg" width="16" alt="" />
+              <span> STORAGE BOOST</span>
+            </div>
+
+            <v-btn
+              v-else
+              class="unlock-btn"
+              min-width="56"
+              height="19"
+              :loading="unlockLoading == 0"
+              @click="handleUnlock(0)"
+              >Unlock</v-btn
+            >
           </div>
         </div>
         <div class="computing-boost">
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>
           </div>
-          <div class="top-card">
+          <div class="top-card" v-if="computingLocked">
             <div class="card-storage" :class="{ locked: computingLocked }">
-              <img
-                :src="
-                  computingLocked
-                    ? '/img/booster/svg/locked-icon.svg'
-                    : '/img/booster/storage-icon.png'
-                "
-                width="48"
-                alt=""
-              />
-              <div class="card-storage-status">
-                <div
-                  v-if="!computingLocked"
-                  class="d-flex align-center justify-space-between"
-                >
-                  <span class="fz-12">Status</span>
-                  <img src="/img/booster/svg/actived.svg" width="16" alt="" />
-                </div>
-                <div v-else class="text-center fz-12">
-                  <v-btn
-                    class="unlock-btn"
-                    height="22"
-                    :loading="unlockLoading == 1"
-                    @click="handleUnlock(1)"
-                    >Unlock</v-btn
-                  >
-                  <div v-if="!isTg">Unlock with 1 million LAND</div>
-                  <div v-else style="height: 15px"></div>
-                </div>
-                <div class="task-title">COMPUTING BOOST</div>
-                <div class="d-flex align-center justify-space-between fz-10">
-                  +100 pts/h & 2,500 Capacity
-                </div>
+              <div class="task-title d-flex align-center" style="gap: 2px">
+                <img src="/img/booster/svg/locked-icon.svg" width="16" alt="" />
+                <span> COMPUTING BOOST</span>
               </div>
+              <div class="mt-1 fz-10">+100 pts/h & 2,500 Capacity</div>
             </div>
+          </div>
+          <div class="unlocked-card">
+            <div
+              class="unlocked-card-title d-flex align-center"
+              v-if="!computingLocked"
+              style="gap: 2px"
+            >
+              <img src="/img/booster/svg/actived.svg" width="16" alt="" />
+              <span> COMPUTING BOOST</span>
+            </div>
+            <v-btn
+              v-else
+              class="unlock-btn"
+              min-width="56"
+              height="19"
+              :loading="unlockLoading == 1"
+              @click="handleUnlock(1)"
+              >Unlock</v-btn
+            >
           </div>
         </div>
         <div class="network-boost">
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>
           </div>
-          <div class="top-card">
+          <div class="top-card" v-if="networkLocked">
             <div class="card-storage" :class="{ locked: networkLocked }">
-              <img
-                :src="
-                  networkLocked
-                    ? '/img/booster/svg/locked-icon.svg'
-                    : '/img/booster/storage-icon.png'
-                "
-                width="48"
-                alt=""
-              />
-              <div class="card-storage-status">
-                <div
-                  v-if="!networkLocked"
-                  class="d-flex align-center justify-space-between"
-                >
-                  <span class="fz-12">Status</span>
-                  <img src="/img/booster/svg/actived.svg" width="16" alt="" />
-                </div>
-                <div v-else class="text-center fz-12">
-                  <v-btn
-                    class="unlock-btn"
-                    height="22"
-                    :loading="unlockLoading == 2"
-                    @click="handleUnlock(2)"
-                    >Unlock</v-btn
-                  >
-                  <div v-if="!isTg">Unlock with 1 million LAND</div>
-                  <div v-else style="height: 15px"></div>
-                </div>
-                <div class="task-title">NETWORK BOOST</div>
-                <div class="d-flex align-center justify-space-between fz-10">
-                  +100 pts/h & 2,500 Capacity
-                </div>
+              <div class="task-title d-flex align-center" style="gap: 2px">
+                <img src="/img/booster/svg/locked-icon.svg" width="16" alt="" />
+
+                NETWORK BOOST
               </div>
+              <div class="mt-1 fz-10">+100 pts/h & 2,500 Capacity</div>
             </div>
+          </div>
+          <div class="unlocked-card">
+            <div
+              class="unlocked-card-title d-flex align-center"
+              v-if="!networkLocked"
+              style="gap: 2px"
+            >
+              <img src="/img/booster/svg/actived.svg" width="16" alt="" />
+              <span> NETWORK BOOST</span>
+            </div>
+            <v-btn
+              v-else
+              min-width="56"
+              class="unlock-btn"
+              height="19"
+              :loading="unlockLoading == 2"
+              @click="handleUnlock(2)"
+              >Unlock</v-btn
+            >
           </div>
         </div>
         <div class="point-square" @click="handleClaim">
@@ -296,81 +271,84 @@ export default {
     rotate: 180deg;
   }
 }
-.card-storage.locked {
-  background: url("/img/booster/svg/mobile_card_background_white.svg") no-repeat;
-  background-size: 100%;
-
-  .card-storage-status {
-    .task-title {
-      color: rgba(255, 255, 255, 0.25);
-      border-top: 1px solid rgba(255, 255, 255, 0.25);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-      background: url("/img/booster/svg/fringe-bg.svg") no-repeat 100%;
-      text-shadow: none;
-    }
-  }
+.unlock-btn {
+  color: #fff !important;
+  font-size: 12px;
+  padding: 0 !important;
+  letter-spacing: 0;
+  border-radius: 2px;
+  background: rgba(97, 114, 243, 0.75) !important;
+  box-shadow: 0px 0px 8px 0px rgba(137, 234, 251, 0.5);
+  backdrop-filter: blur(2px);
 }
+
 .card-storage {
-  width: 172px;
-  height: 107px;
-  padding: 0 8px;
-  background: url("/img/booster/svg/mobile_card_background_blue.svg") no-repeat;
-  background-size: 100%;
-  fill: rgba(97, 114, 243, 0.05);
-  backdrop-filter: blur(4px);
+  white-space: nowrap;
+  padding: 4px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(2px);
   > img {
     position: absolute;
     top: -20%;
     left: 50%;
     transform: translateX(-50%);
   }
-  .card-storage-status {
-    padding-top: 27px;
-    .unlock-btn {
-      position: absolute;
-      left: 50%;
-      top: 4%;
-      color: #fff;
-      letter-spacing: 0;
-      transform: translateX(-50%);
-      padding: 2px 4px;
-      border-radius: 2px;
-      background: rgba(97, 114, 243, 0.75);
-      box-shadow: 0px 0px 8px 0px rgba(137, 234, 251, 0.5);
-      backdrop-filter: blur(2px);
-    }
-    .task-title {
-      text-align: center;
-      text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.5);
-      font-size: 14px;
-      font-weight: 700;
-      padding: 4px 0px;
-      margin: 4px 0;
-      border-top: 1px solid #a4bcfd;
-      border-bottom: 1px solid #a4bcfd;
-      background: rgba(97, 114, 243, 0.1);
-    }
+  .task-title {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 4px;
+    color: rgba(255, 255, 255, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    background: url("/img/booster/svg/fringe-bg.svg") no-repeat 100%;
+    text-shadow: none;
   }
 }
-
+.unlocked-card-title {
+  white-space: nowrap;
+  padding: 2px 4px;
+  border-top: 1px solid rgba(164, 188, 253, 0.25);
+  border-bottom: 1px solid rgba(164, 188, 253, 0.25);
+  background: rgba(97, 114, 243, 0.1);
+  backdrop-filter: blur(2px);
+  color: rgba(255, 255, 255, 0.75);
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+}
 .storage-boost {
   position: absolute;
-  left: 24%;
-  top: 26%;
+  left: 20%;
+  top: 50%;
   .top-card {
     position: absolute;
-    left: -800%;
+    left: 50%;
+    transform: translateX(-50%);
     top: -800%;
+  }
+  .unlocked-card {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 400%;
   }
 }
 .computing-boost {
   position: absolute;
-  right: 24%;
-  top: 59%;
+  right: 25%;
+  top: 58%;
   .top-card {
     position: absolute;
-    left: -800%;
+    right: 50%;
+    transform: translateX(50%);
     top: -800%;
+  }
+  .unlocked-card {
+    position: absolute;
+    right: 50%;
+    transform: translateX(50%);
+    top: 450%;
   }
 }
 .network-boost {
@@ -379,16 +357,23 @@ export default {
   bottom: 25%;
   .top-card {
     position: absolute;
-    left: -800%;
-    top: -800%;
+    right: 50%;
+    transform: translateX(50%);
+    top: -850%;
+  }
+  .unlocked-card {
+    position: absolute;
+    right: 50%;
+    transform: translateX(50%);
+    top: 200%;
   }
 }
 
 .point-square {
   position: absolute;
-  left: 50%;
+  left: 50.5%;
   transform: translateX(-50%);
-  top: 28%;
+  top: 11%;
   .points {
     z-index: 10;
     padding: 0px 8px;
