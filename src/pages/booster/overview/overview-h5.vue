@@ -171,8 +171,11 @@
             >
               <span> {{ displayPoints }}/{{ boosterInfo.capacity }}</span>
             </div>
-            <div v-if="boosterInfo.protectExpiredAt != -1">
-              {{ boosterInfo.protectExpiredAt }}
+            <div class="protect-mask">
+              <div class="protect-time">
+                <img src="/img/booster/svg/protect-icon.svg" width="8" alt="" />
+                <span>{{ protectTime }}</span>
+              </div>
             </div>
             <img :src="displaySquare" width="80" alt="" />
             <img
@@ -383,6 +386,28 @@ export default {
     position: absolute;
     left: -800%;
     top: -800%;
+  }
+}
+
+.protect-mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: url("/img/booster/protect.png") no-repeat;
+  background-size: 100%;
+
+  .protect-time {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex;
+    color: #2d3282;
+    font-size: 8px;
+    padding: 0px 2px;
+    border-radius: 20px;
+    background: #a4bcfd;
   }
 }
 

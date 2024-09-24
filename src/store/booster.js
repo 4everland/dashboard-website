@@ -124,9 +124,6 @@ export default {
 
       return (basicComputed + boostComputed) * (boosterInfo.rateBuff / 100 + 1);
     },
-    protactCountTime({ boosterInfo, currentDate }) {
-      return boosterInfo.protectExpiredAt - currentDate;
-    },
   },
   mutations: {
     SHOWSTAKEDRAWER_STATE: (state, payload) => {

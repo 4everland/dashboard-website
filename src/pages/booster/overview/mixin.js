@@ -12,6 +12,9 @@ export default {
       timer: null,
       tgLoading: false,
       unlockLoading: -1,
+      protectTime: "",
+      protectTimer: null,
+      isProtecting: false,
     };
   },
   components: {
@@ -151,11 +154,37 @@ export default {
       }
       location.reload();
     },
+    protectCardTime() {
+      if (this.boosterInfo.protectExpiredAt * 1000 > +new Date()) {
+        this.protectTimer = setInterval(() => {
+          let seconds =
+            this.boosterInfo.protectExpiredAt - Math.ceil(+new Date() / 1000);
+
+          if (this.seconds < 0) {
+            this.protectTime = "";
+            clearInterval(this.protectTimer);
+            this.isProtecting = false;
+            return;
+          }
+          this.isProtecting = true;
+          const hours = Math.floor(seconds / 3600);
+          const minutes = Math.floor((seconds % 3600) / 60);
+          const remainingSeconds = seconds % 60;
+
+          this.protectTime = `${String(hours).padStart(2, "0")}:${String(
+            minutes
+          ).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
+        }, 1000);
+      }
+    },
   },
 
   watch: {
     updateBoostUserInfo() {
       this.computedPoints = this.currentComputed;
+    },
+    "boosterInfo.protectExpiredAt"() {
+      this.protectCardTime();
     },
   },
 };
