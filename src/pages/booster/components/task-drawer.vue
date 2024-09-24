@@ -521,8 +521,6 @@ export default {
           return it;
         }
       });
-
-      this.$store.dispatch("getBoosterUserInfo");
       this.checkUndo();
     },
     async stepNext(item, index, taskListType) {

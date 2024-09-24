@@ -47,7 +47,7 @@
         <invite-drawer v-if="userInfo.uid"></invite-drawer>
         <bind-dialog v-model="showBindWallet"></bind-dialog>
       </template>
-      <end-boosting v-model="showEndBoost"></end-boosting>
+      <!-- <end-boosting v-model="showEndBoost"></end-boosting> -->
     </div>
   </div>
 </template>
@@ -68,6 +68,83 @@ import UnlockDialog from "./components/unlock-dialog.vue";
 import TgStartBoostOverlay from "./components/tg-start-boost-overlay.vue";
 import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+const driverObj = driver({
+  showProgress: true,
+  nextBtnText: "Next  &raquo;",
+  prevBtnText: "Skip",
+  showButtons: ["next", "close"],
+  doneBtnText: "Done",
+  allowClose: false,
+  steps: [
+    {
+      element: "#mobile-point-send",
+      popover: {
+        description: "Click to Claim Points!",
+        side: "left",
+        align: "start",
+      },
+    },
+    {
+      element: ".token-dialog-icon",
+      popover: {
+        description:
+          "Backed by BNBCHAIN, Arweave, and IPFS! Grab Your Airdrop Ticket: $4EVER Points!",
+        side: "bottom",
+        align: "start",
+      },
+    },
+    {
+      element: ".activity-item:nth-child(4)",
+      popover: {
+        description: "Complete Tasks for More Points!",
+        side: "bottom",
+        align: "start",
+      },
+    },
+    {
+      element: ".mobile-points",
+      popover: {
+        description: "Boost Earning Rate for Faster Point Generation!",
+        side: "left",
+        align: "start",
+      },
+    },
+    {
+      element: "#storage-boost",
+      popover: {
+        description:
+          "Unlock Storage, Network, and Computing Nodes to achieve massive points!",
+        side: "top",
+        align: "start",
+      },
+    },
+    {
+      element: ".activity-item:nth-child(3)",
+      popover: {
+        description: "Explore Daily and 'Steal' Points from Others!",
+        side: "right",
+        align: "start",
+      },
+    },
+  ],
+  onPopoverRender: (popover, { config, state }) => {
+    const firstButton = document.createElement("button");
+    const nextBtn = document.querySelector(".driver-popover-next-btn");
+    firstButton.innerText = "Skip";
+    firstButton.style.color = "#fff";
+    firstButton.style.fontWeight = "900";
+    firstButton.style.background = "transparent";
+    firstButton.style.textShadow = "none";
+    firstButton.style.border = "none";
+    popover.footerButtons.insertBefore(firstButton, nextBtn);
+
+    firstButton.addEventListener("click", () => {
+      driverObj.destroy();
+    });
+  },
+});
 
 export default {
   data() {
@@ -219,9 +296,51 @@ export default {
     ToolDrawer,
     InviteDrawer,
   },
+
+  watch: {
+    boostLocked(val) {
+      if (localStorage.guide) return;
+      if (!val && this.isTgMiniApp) {
+        setTimeout(() => {
+          driverObj.drive();
+          localStorage.setItem("guide", "1");
+        }, 2000);
+      }
+    },
+  },
 };
 </script>
 
+<style>
+:not(body):has(> .driver-active-element) {
+  overflow: initial !important;
+}
+.driver-popover-arrow {
+  display: none;
+}
+.driver-popover {
+  /* background: #17191d; */
+  background: #6172f3 !important;
+  color: #fff;
+}
+.driver-popover-prev-btn {
+  text-shadow: none !important;
+  border: none !important;
+  color: #101828 !important;
+}
+
+.driver-popover-next-btn {
+  padding: 6px 12px !important;
+  text-shadow: none !important;
+  border: none !important;
+  background: #fff !important;
+  color: #6172f3 !important;
+  font-weight: bolder !important;
+}
+.driver-popover-progress-text {
+  color: #eaecf0;
+}
+</style>
 <style lang="scss" scoped>
 .booster-overview-task {
   position: absolute;

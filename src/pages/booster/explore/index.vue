@@ -361,7 +361,7 @@ export default {
 @media screen and (max-width: 960px) {
   .point-square {
     left: 48% !important;
-    top: 39% !important;
+    top: 21% !important;
   }
 }
 @keyframes bounce {
