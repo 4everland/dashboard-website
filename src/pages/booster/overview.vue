@@ -72,9 +72,11 @@ import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 const driverObj = driver({
   showProgress: true,
-  nextBtnText: "Next",
-  prevBtnText: "Prev",
+  nextBtnText: "Next  &raquo;",
+  prevBtnText: "Skip",
+  showButtons: ["next", "close"],
   doneBtnText: "Done",
+  allowClose: false,
   steps: [
     {
       element: "#mobile-point-send",
@@ -127,6 +129,21 @@ const driverObj = driver({
       },
     },
   ],
+  onPopoverRender: (popover, { config, state }) => {
+    const firstButton = document.createElement("button");
+    const nextBtn = document.querySelector(".driver-popover-next-btn");
+    firstButton.innerText = "Skip";
+    firstButton.style.color = "#fff";
+    firstButton.style.fontWeight = "900";
+    firstButton.style.background = "transparent";
+    firstButton.style.textShadow = "none";
+    firstButton.style.border = "none";
+    popover.footerButtons.insertBefore(firstButton, nextBtn);
+
+    firstButton.addEventListener("click", () => {
+      driverObj.destroy();
+    });
+  },
 });
 
 export default {
@@ -282,9 +299,11 @@ export default {
 
   watch: {
     boostLocked(val) {
+      if (localStorage.guide) return;
       if (!val && this.isTgMiniApp) {
         setTimeout(() => {
           driverObj.drive();
+          localStorage.setItem("guide", "1");
         }, 2000);
       }
     },
@@ -311,6 +330,7 @@ export default {
 }
 
 .driver-popover-next-btn {
+  padding: 6px 12px !important;
   text-shadow: none !important;
   border: none !important;
   background: #fff !important;
