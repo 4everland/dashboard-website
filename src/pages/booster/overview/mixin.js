@@ -159,8 +159,8 @@ export default {
         this.protectTimer = setInterval(() => {
           let seconds =
             this.boosterInfo.protectExpiredAt - Math.ceil(+new Date() / 1000);
-
-          if (this.seconds < 0) {
+          console.log(seconds);
+          if (seconds < 0) {
             this.protectTime = "";
             clearInterval(this.protectTimer);
             this.isProtecting = false;
@@ -183,8 +183,10 @@ export default {
     updateBoostUserInfo() {
       this.computedPoints = this.currentComputed;
     },
-    "boosterInfo.protectExpiredAt"() {
-      this.protectCardTime();
+    "boosterInfo.protectExpiredAt"(val, oldVal) {
+      if (val != oldVal) {
+        this.protectCardTime();
+      }
     },
   },
 };

@@ -171,7 +171,7 @@
             >
               <span> {{ displayPoints }}/{{ boosterInfo.capacity }}</span>
             </div>
-            <div class="protect-mask">
+            <div class="protect-mask" v-if="isProtecting">
               <div class="protect-time">
                 <img src="/img/booster/svg/protect-icon.svg" width="8" alt="" />
                 <span>{{ protectTime }}</span>

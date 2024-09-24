@@ -13,10 +13,11 @@
         <div
           class="buy-card-content d-flex flex-column align-center justify-center justify-md-space-between text-center"
         >
-          <div class="py-4">
+          <div class="py-2" style="width: 100%">
             <div class="buy-card-title">{{ cardTitle }} Card</div>
-            <div class="mt-6">{{ cardDesc }}</div>
-            <div class="card-buff mt-2">{{ cardBuff }}</div>
+            <div class="mt-4">{{ cardDesc }}</div>
+            <div class="card-buff">{{ cardBuff }}</div>
+            <div class="card-tips" v-if="cardTips">{{ cardTips }}</div>
           </div>
 
           <div class="d-flex align-center" style="gap: 30px">
@@ -56,10 +57,13 @@
         <div
           class="buy-card-content d-flex flex-column align-center justify-space-between text-center"
         >
-          <div class="py-4">
+          <div class="py-2" style="width: 100%">
             <div class="buy-card-title">{{ cardTitle }} Card</div>
-            <div class="mt-6">{{ cardDesc }}</div>
-            <div class="card-buff mt-2">{{ cardBuff }}</div>
+            <div class="mt-2">{{ cardDesc }}</div>
+            <div class="card-buff">{{ cardBuff }}</div>
+            <div class="card-tips" v-if="cardTips">
+              {{ cardTips }}
+            </div>
           </div>
 
           <div class="d-flex align-center" style="gap: 30px">
@@ -116,6 +120,8 @@ export default {
       switch (this.buyType) {
         case "explore":
           return "Explore";
+        case "protect":
+          return `Protect`;
         default:
           return "Capacity";
       }
@@ -129,8 +135,19 @@ export default {
       switch (this.buyType) {
         case "explore":
           return "Explore time: +" + this.buyCount * this.buff;
+        case "protect":
+          return "Protect period: +" + this.buyCount * this.buff + "h";
         default:
           return "Capacity limit: +" + this.buyCount * this.buff;
+      }
+    },
+
+    cardTips() {
+      switch (this.buyType) {
+        case "protect":
+          return "Existing protect card expires instantly, new one valid for 24 hours!";
+        default:
+          return "";
       }
     },
   },
@@ -217,12 +234,21 @@ export default {
 
   .buy-card-title {
     padding: 8px;
-    font-size: 24px;
-    text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.25);
+    font-size: 20px;
+    text-shadow: 0px 0px 8px #6172f3;
     background: rgba(0, 129, 248, 0.1);
   }
   .card-buff {
     color: #0fe1f8;
+  }
+  .card-tips {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #fff;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 40px;
+    background: #2d3282;
   }
   .cancel-btn {
     color: rgba(255, 255, 255, 0.8) !important;

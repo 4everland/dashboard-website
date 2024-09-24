@@ -100,8 +100,8 @@ export default {
           buff: 1,
         },
         protect: {
-          cardName: "Protect Card",
-          cardDesc: "Unexplored for 24 hours",
+          cardName: "Protect",
+          cardDesc: "Protect period +24h",
           cardImg: "/img/booster/drawer/protact_card.png",
           stock: 1,
           price: 20000,
