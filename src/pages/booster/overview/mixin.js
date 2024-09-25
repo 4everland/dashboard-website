@@ -77,7 +77,6 @@ export default {
         : "/img/booster/3d-square.png";
     },
   },
-
   async created() {
     this.timer = setInterval(() => {
       this.computedPoints =
@@ -89,6 +88,9 @@ export default {
       }
     }, this.interval);
 
+    if (this.boosterInfo.protectExpiredAt > 0) {
+      this.protectCardTime();
+    }
     if (this.$route.query && this.$route.query.st) {
       const stoken = this.$route.query.st;
       const { data } = await sendStoken(stoken);
@@ -156,10 +158,12 @@ export default {
     },
     protectCardTime() {
       if (this.boosterInfo.protectExpiredAt * 1000 > +new Date()) {
+        if (this.protectTimer) {
+          clearInterval(this.protectTimer);
+        }
         this.protectTimer = setInterval(() => {
           let seconds =
             this.boosterInfo.protectExpiredAt - Math.ceil(+new Date() / 1000);
-          console.log(seconds);
           if (seconds < 0) {
             this.protectTime = "";
             clearInterval(this.protectTimer);
@@ -178,15 +182,9 @@ export default {
       }
     },
   },
-
   watch: {
     updateBoostUserInfo() {
       this.computedPoints = this.currentComputed;
-    },
-    "boosterInfo.protectExpiredAt"(val, oldVal) {
-      if (val != oldVal) {
-        this.protectCardTime();
-      }
     },
   },
 };

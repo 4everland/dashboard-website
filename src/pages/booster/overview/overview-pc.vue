@@ -249,6 +249,14 @@
 import mixin from "./mixin";
 export default {
   mixins: [mixin],
+  beforeDestroy() {
+    clearInterval(this.protectTimer);
+  },
+  watch: {
+    "boosterInfo.protectExpiredAt"() {
+      this.protectCardTime();
+    },
+  },
 };
 </script>
 
@@ -393,6 +401,7 @@ export default {
     background-size: contain;
     fill: none;
     backdrop-filter: none;
+    width: 280px;
     height: 131px;
   }
   .top-card {

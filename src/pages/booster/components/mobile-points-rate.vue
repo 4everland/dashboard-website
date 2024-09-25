@@ -45,7 +45,6 @@ export default {
     ...mapState({
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
       updateBoostUserInfo: (s) => s.moduleBooster.updateBoostUserInfo,
-      tgMiniOverlayLoading: (s) => s.moduleBooster.tgMiniOverlayLoading,
     }),
     ...mapGetters([
       "boostLocked",

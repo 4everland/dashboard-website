@@ -202,17 +202,18 @@ export default {
     },
 
     async getBoosterUserInfo({ commit, state }) {
-      try {
-        const { data } = await fetchUserBoostInfo();
-        if (data) {
-          commit("SET_BOOST_INFO", data);
-          commit("SET_UPDATE_BOOST_USER_INFO");
+      const { code, data, message } = await fetchUserBoostInfo();
+      if (data) {
+        commit("SET_BOOST_INFO", data);
+        commit("SET_UPDATE_BOOST_USER_INFO");
+        if (state.tgMiniOverlayLoading) {
+          commit("SET_TG_OVERLAY_LOAD", false);
         }
-      } catch (error) {
-        console.log(error);
-      }
-      if (state.tgMiniOverlayLoading) {
-        commit("SET_TG_OVERLAY_LOAD", false);
+      } else {
+        if (state.tgMiniOverlayLoading) {
+          commit("SET_TG_OVERLAY_LOAD", false);
+        }
+        throw { code, message };
       }
     },
     async getExploreRemain({ commit }) {
@@ -223,7 +224,6 @@ export default {
         console.log(error);
       }
     },
-
     async getBoostTonCount({ commit }) {
       try {
         const { data } = await fetchClaimUSDT();

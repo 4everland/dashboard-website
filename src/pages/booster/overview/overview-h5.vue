@@ -162,12 +162,12 @@
               alt=""
             />
 
-            <div
+            <!-- <div
               class="full-explored-tips"
               v-if="isExplored || computedPoints >= boosterInfo.capacity"
             >
               Claim to restart
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -200,9 +200,17 @@ export default {
       this.sheet = true;
     });
   },
+  beforeDestroy() {
+    clearInterval(this.protectTimer);
+  },
   components: {
     MobilePointsSheet,
     TokenDialog,
+  },
+  watch: {
+    "boosterInfo.protectExpiredAt"() {
+      this.protectCardTime();
+    },
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="tg-start-boost">
-    <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
+    <TgStartBoostLoading v-if="overlayLoading"></TgStartBoostLoading>
     <div class="start-boost-bg" v-else>
       <div class="start-boost-content">
         <img src="/img/booster/boost-icon.png" width="64" alt="" />
@@ -10,7 +10,7 @@
         </div>
         <v-btn
           class="start-btn mt-4"
-          :loading="tgLoading"
+          :loading="btnLoading"
           @click="handleTGStartBoost"
           >START BOOST</v-btn
         >
@@ -29,7 +29,8 @@ import { bus } from "@/utils/bus";
 export default {
   data() {
     return {
-      tgLoading: false,
+      btnLoading: false,
+      overlayLoading: true,
     };
   },
 
@@ -37,13 +38,10 @@ export default {
     if (this.isTgMiniApp) {
       await this.tgMiniAppLogin();
     }
-    this.$store.dispatch("getBoosterUserInfo");
-    this.$store.dispatch("getExploreRemain");
   },
   computed: {
     ...mapState({
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
-      tgMiniOverlayLoading: (s) => s.moduleBooster.tgMiniOverlayLoading,
     }),
     ...mapGetters(["notLogin", "boostLocked"]),
     isTgMiniApp() {
@@ -56,10 +54,11 @@ export default {
       if (code) {
         code = decodeURI(code);
       }
-      this.tgLoading = true;
+      this.btnLoading = true;
       await initTgBoost(code || "");
-      this.tgLoading = false;
+      this.btnLoading = false;
       await this.$store.dispatch("getBoosterUserInfo");
+      this.overlayLoading = false;
       if (this.boosterInfo.totalPoint > 0) {
         bus.$emit("showEndBoostEvent");
       }
@@ -71,13 +70,21 @@ export default {
       const { data } = await sendStoken(datas.stToken);
       this.onLoginData(data);
     },
-    onLoginData(data) {
-      localStorage.authData = JSON.stringify(data);
-      localStorage.token = data.accessToken;
-      localStorage.nodeToken = data.nodeToken;
-      this.$store.dispatch("getBalance");
-      this.$store.dispatch("getBoosterUserInfo");
-      this.getUesrInfo();
+    async onLoginData(data) {
+      try {
+        localStorage.authData = JSON.stringify(data);
+        localStorage.token = data.accessToken;
+        localStorage.nodeToken = data.nodeToken;
+        this.$store.dispatch("getBalance");
+        await this.$store.dispatch("getBoosterUserInfo");
+        this.$store.dispatch("getExploreRemain");
+        this.getUesrInfo();
+      } catch (error) {
+        console.log(error);
+        if (error.code == 11013) {
+          await this.handleTGStartBoost();
+        }
+      }
     },
 
     async getUesrInfo() {

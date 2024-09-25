@@ -24,10 +24,12 @@
           <span>Claim +30pts/h</span>
         </div>
         <overview-pc
+          v-if="!asMobile"
           @handleStartBoost="handleShowStartBoost"
           @handleUnlock="handleShowUnlock"
         ></overview-pc>
         <overview-h5
+          v-else
           @handleStartBoost="handleShowStartBoost"
           @handleUnlock="handleShowUnlock"
         ></overview-h5>

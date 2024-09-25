@@ -242,6 +242,7 @@ export default {
     color: #0fe1f8;
   }
   .card-tips {
+    display: inline-flex;
     margin-top: 8px;
     font-size: 12px;
     color: #fff;
@@ -249,6 +250,7 @@ export default {
     padding: 2px 8px;
     border-radius: 40px;
     background: #2d3282;
+    opacity: 0.6;
   }
   .cancel-btn {
     color: rgba(255, 255, 255, 0.8) !important;
