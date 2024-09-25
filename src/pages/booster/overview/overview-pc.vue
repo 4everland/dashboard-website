@@ -54,7 +54,6 @@
               START BOOST
             </div>
           </div>
-          <!-- <img src="/img/booster/svg/start-boost-line.svg" width="330" alt="" /> -->
         </div>
       </div>
 
