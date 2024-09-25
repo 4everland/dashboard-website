@@ -87,7 +87,7 @@
           <div class="first-dialog-content pt-5">
             <video
               class="end-boost-video"
-              src="/img/booster/video/end-boost-video.webm"
+              src="https://booster.4everland.store/end-boost-video.webm"
               width="100%"
               autoplay
               loop

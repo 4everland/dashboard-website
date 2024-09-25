@@ -41,16 +41,6 @@ export default [
     path: "/quick-login",
     component: () => import("./fetchToken"),
   },
-  // {
-  //   path: "/overview1",
-  //   component: () => import("./overview/overview1"),
-  //   meta: {
-  //     title: "Overview",
-  //     isTab: true,
-  //     hideNav: 1,
-  //     subTitle: "Welcome to 4EVERLAND Dashboard",
-  //   },
-  // },
   ...BillingRoutes,
   ...HostingRoutes,
   ...BucketRoutes,

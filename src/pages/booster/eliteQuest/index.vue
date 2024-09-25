@@ -47,7 +47,7 @@ export default {
     return {
       quests: [
         {
-          img: "/img/airDrop/sprint_movement-airdrop.png",
+          img: "https://elitequest.4everland.store/Galxe.jpg",
           title: "Dive into the 4EVERLAND Sprint Movement available on Galxe!",
           desc: "Connect with a vibrant community, discover innovative features, enhance your on-chain contributions, and unlock exclusive rewards for this thrilling web3 experience.",
           reward: "Grab 19,000 $4EVER Points and 1 OAT",
@@ -55,7 +55,7 @@ export default {
           done: false,
         },
         {
-          img: "/img/airDrop/bnb-airdrop.png",
+          img: "https://elitequest.4everland.store/Vote.jpg",
           title: "Vote for 4EVERLAND in BNBCHAIN Ecosystem Catalyst Awards!",
           desc: "We are proud to be nominated as the 'Infra' in the BNBCHAIN 4th Anniversary Ecosystem Catalyst Awards! Cast your vote and grab your chance to win amazing rewards! Let’s make it happen!",
           reward: "Grab 10,000 $4EVER Points",
@@ -63,7 +63,7 @@ export default {
           done: true,
         },
         {
-          img: "/img/airDrop/elite-airdrop.png",
+          img: "https://elitequest.4everland.store/Aperture.jpg",
           title:
             "Dive into the AI World with Aperture Finance, Chainbase, and 4EVERLAND!",
           desc: "Seize the opportunity to win 600 USDT and 50,000 $4EVER Points in our exclusive giveaway. Only 100 lucky winners will take home these incredible rewards.",
@@ -72,7 +72,7 @@ export default {
           done: true,
         },
         {
-          img: "/img/airDrop/batching-ai-airdrop-bg.jpg",
+          img: "https://elitequest.4everland.store/Batching.jpg",
           title: "2,000,000 $4EVER Points Giveaway with Batching AI",
           desc: "Join our collaborative event and seize the chance to win big! 2,000,000 Points and 10M pBAT await you! ",
           reward: "Shared Reward of 2,000,000 Points",
@@ -81,7 +81,7 @@ export default {
         },
 
         {
-          img: "/img/airDrop/bountyBay-airdrop.png",
+          img: "https://elitequest.4everland.store/bountybay.jpg",
           title: "100,000 $4EVER Points Giveaway with BountyBay",
           desc: "We're thrilled to announce our partnership with BountyBay and introduce an exclusive giveaway, offering the chance to win a share of 100,000 $4EVER points!",
           reward: "Shared Reward of 100,000 Points",
@@ -89,7 +89,7 @@ export default {
           done: true,
         },
         {
-          img: "/img/airDrop/tp-airdrop.png",
+          img: "https://elitequest.4everland.store/TOKENPOCKET.jpg",
           title: "5M $4EVER Points Giveaway with TokenPocket",
           desc: "We are delighted to share our thrilling partnership with TokenPocket, offering you the opportunity to compete for a portion of 5,000,000 4EVER Points! Don't miss the chance to be one of 10,000 winners in this amazing opportunity!",
           reward: "Shared Reward of 5 Million Points",
@@ -97,7 +97,7 @@ export default {
           done: true,
         },
         {
-          img: "/img/airDrop/okx-airdrop.png",
+          img: "https://elitequest.4everland.store/okxwallet.jpg",
           title: "6M $4EVER Points Giveaway with OKX Wallet",
           desc: "We're thrilled to announce our exciting collaboration with OKX Wallet, bringing you a chance to win a share of 6,000,000 4EVER Points! Join us to become one of the 10,000 lucky winners with this incredible opportunity!",
           reward: "Shared Reward of 6 Million Points",
@@ -105,7 +105,7 @@ export default {
           done: true,
         },
         {
-          img: "/img/airDrop/tge-airdrop.png",
+          img: "https://elitequest.4everland.store/spACEID.jpg",
           title: "4EVERLAND - TGE Party with SPACE ID",
           desc: "Join the Pre-TGE Party with SPACE ID & 4EVERLAND to win $4EVER points and snag upcoming airdrops! 1,000 OAT holders will be randomly selected to share 500,000 $4EVER Points!",
           reward: "Shared Reward of 500,000 Points",
@@ -113,7 +113,7 @@ export default {
           done: true,
         },
         {
-          img: "/img/airDrop/bitget-airdrop.png",
+          img: "https://elitequest.4everland.store/bitget.jpg",
           title: "4EVERLAND Bitget GetDrop",
           desc: "GetDrop is an exclusive airdrop platform for high-quality projects within Bitget Wallet Earning Center. 4EVERLAND is thrilled to collaborate with Bitget, providing up to 5,000,000 $4EVER points in rewards.",
           reward: "Shared Reward of 5 Million Points",
@@ -121,7 +121,7 @@ export default {
           done: true,
         },
         {
-          img: "/img/airDrop/bnb-airdrop-activity.png",
+          img: "https://elitequest.4everland.store/bnbchain.jpg",
           title: "BNB CHAIN AIRDROP ALLIANCE PROGRAM",
           desc: "The BNB Chain Airdrop Alliance Program serves as a gesture of gratitude towards the supportive BNB Chain community. Through this program, 4EVERLAND is partnering with BNB Chain to introduce exclusive rewards for retroactive users on BNB Smart Chain (BSC) and opBNB.",
           reward: "Shared Reward of 15 Million Points",

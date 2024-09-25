@@ -9,22 +9,4 @@ export default [
       isTab: 1,
     },
   },
-  {
-    path: "/collections",
-    components: {
-      cache: () => import("./collections"),
-    },
-    meta: {
-      title: "My Collection",
-    },
-  },
-  // {
-  //   path: "/bug-bounty",
-  //   components: {
-  //     cache: () => import("./bug-bounty"),
-  //   },
-  //   meta: {
-  //     title: "Bug Bounty",
-  //   },
-  // },
 ];

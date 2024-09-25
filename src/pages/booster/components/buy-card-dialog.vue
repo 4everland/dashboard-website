@@ -145,7 +145,7 @@ export default {
     cardTips() {
       switch (this.buyType) {
         case "protect":
-          return "Existing protect card expires instantly, new one valid for 24 hours!";
+          return "Existing protect card expires instantly, new one valid for 24h!";
         default:
           return "";
       }

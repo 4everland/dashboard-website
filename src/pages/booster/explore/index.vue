@@ -164,19 +164,22 @@ export default {
         return "/img/booster/mobile-bg-unlocked.png";
       } else {
         if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
-          return "/img/booster/video/bg.webm";
+          return "https://booster.4everland.store/bg.webm";
         if (!this.storageLocked && !this.networkLocked)
-          return "/img/booster/video/bg-s2n.webm";
+          return "https://booster.4everland.store/bg-s2n.webm";
         if (!this.storageLocked && !this.computingLocked)
-          return "/img/booster/video/bg-s2c.webm";
+          return "https://booster.4everland.store/bg-s2c.webm";
         if (!this.networkLocked && !this.computingLocked)
-          return "/img/booster/video/bg-n2c.webm";
-        if (!this.storageLocked) return "/img/booster/video/bg-storage.webm";
-        if (!this.networkLocked) return "/img/booster/video/bg-network.webm";
-        if (!this.computingLocked) return "/img/booster/video/bg-computed.webm";
+          return "https://booster.4everland.store/bg-n2c.webm";
+        if (!this.storageLocked)
+          return "https://booster.4everland.store/bg-storage.webm";
+        if (!this.networkLocked)
+          return "https://booster.4everland.store/bg-network.webm";
+        if (!this.computingLocked)
+          return "https://booster.4everland.store/bg-computed.webm";
         if (this.info.baseRate.length == 0) return "/img/booster/bg-locked.png";
 
-        return "/img/booster/video/bg-unlocked.webm";
+        return "https://booster.4everland.store/bg-unlocked.webm";
       }
     },
     isVideo() {
