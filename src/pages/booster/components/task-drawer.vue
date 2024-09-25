@@ -568,10 +568,8 @@ export default {
           break;
         case "JUMP_OUT":
           if (actType == "share_twitter") {
-            let shareUrl = `As you join #4EVERBoost, be sure to check out our new event - #4EVERLAND Sprint Movement on @GalxeQuest!🌊\n\n💰 Earn 19,000 $4EVER Points\n💎 1 #GalxeOAT = 3% Staking Yield\n\n`;
-            shareUrl += `🔍 GalxeQuest:\nhttps://x.com/4everland_org/status/1833023657922437322\n🔗 4EVERBoost:\n`;
+            let shareUrl = `🥳 Excited that #4EVERLAND supports Binance Web3 Wallet @Web3WithBinance for login! Accessing amazing offerings is easy with my @Binance Web3 Wallet!\nhttps://x.com/4everland_org/status/1838795193417634167\n\nJoin #4EVERBoost to earn $4EVER points—the ticket to 4EVERLAND #airdrops! 🚀\n`;
             shareUrl += this.inviteInfo.link;
-
             shareUrl =
               "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
 
