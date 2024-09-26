@@ -128,7 +128,7 @@ export default {
 }
 
 .leaderboard-table {
-  color: #fff;
+  color: #fff !important;
 
   :deep th {
     border-bottom: 1px solid rgba(255, 255, 255, 0.25) !important;

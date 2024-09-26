@@ -953,6 +953,7 @@ export default {
         cursor: pointer;
         .task-item-image {
           width: 44px;
+          border-radius: 100%;
         }
         .task-text-box {
           .task-text {
