@@ -302,7 +302,9 @@ export default {
               case "white_list_4":
                 it.log = `VoteRaffle with Cellula ${it.value} points.`;
                 break;
-
+              case "quest":
+                it.log = it.name + it.value;
+                break;
               default:
                 break;
             }
