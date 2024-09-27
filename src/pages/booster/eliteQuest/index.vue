@@ -23,7 +23,7 @@
             <div class="reward">{{ item.rewardStr }}</div>
             <div
               class="act-btn"
-              :class="{ disabled: item.state == 2 }"
+              :class="{ disabled: status(item) == 'Ended' }"
               @click="handleClaim(item)"
             >
               {{ status(item) }}
@@ -44,7 +44,8 @@ export default {
       return this.$vuetify.breakpoint.smAndDown;
     },
     status() {
-      return function ({ state }) {
+      return function ({ endAt, state }) {
+        if (endAt && endAt < +new Date() / 1000 && state == 0) return "Ended";
         if (state == 0) return "Let's Go";
         if (state == 1) return "Claim";
         if (state == 2) return "Ended";
