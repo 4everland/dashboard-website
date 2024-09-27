@@ -568,7 +568,7 @@ export default {
           break;
         case "JUMP_OUT":
           if (actType == "share_twitter") {
-            let shareUrl = `🥳 Excited that #4EVERLAND supports Binance Web3 Wallet @Web3WithBinance for login! Accessing amazing offerings is easy with my @Binance Web3 Wallet!\nhttps://x.com/4everland_org/status/1838795193417634167\n\nJoin #4EVERBoost to earn $4EVER points—the ticket to 4EVERLAND #airdrops! 🚀\n`;
+            let shareUrl = `Wow, I’m beyond excited to see #4EVERLAND take the top spot in User Growth and Transaction Growth within the @BNBCHAIN ecosystem! 🎉\nhttps://x.com/4everland_org/status/1839288817368371219\n\n🥳 Join #4EVERBoost to start earning $4EVER points— ticket to exclusive 4EVERLAND #airdrops!\n`;
             shareUrl += this.inviteInfo.link;
             shareUrl =
               "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
