@@ -15,6 +15,7 @@ export default {
       protectTime: "",
       protectTimer: null,
       isProtecting: false,
+      tabTimer: null,
     };
   },
   components: {
@@ -180,6 +181,16 @@ export default {
           ).padStart(2, "0")}:${String(remainingSeconds).padStart(2, "0")}`;
         }, 1000);
       }
+    },
+    onPress(e) {
+      e.preventDefault();
+      this.tabTimer = setTimeout(() => {
+        // this.show
+        this.$store.commit("SET_EASTER_EGG_DIALOG", true);
+      }, 3000);
+    },
+    onUp() {
+      clearInterval(this.tabTimer);
     },
   },
   watch: {

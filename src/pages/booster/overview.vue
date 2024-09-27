@@ -41,7 +41,7 @@
           v-model="showUnlockDialog"
           :unlockStage="unlockStage"
         ></unlock-dialog>
-        <EasterEgg v-model="showEasterEgg"></EasterEgg>
+        <EasterEgg v-model="showEasterEggDialog"></EasterEgg>
         <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar>
         <nft-drawer v-if="userInfo.uid"></nft-drawer>
         <task-drawer v-if="userInfo.uid"></task-drawer>
@@ -157,12 +157,12 @@ export default {
       showUnlockDialog: false,
       timer: null,
       unlockStage: 0,
-      showEasterEgg: true,
     };
   },
   computed: {
     ...mapState({
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
+      showEasterEggDialog: (s) => s.moduleBooster.showEasterEggDialog,
       userInfo: (s) => s.userInfo,
     }),
     ...mapGetters(["notLogin", "boostLocked", "balance", "showBindWallet"]),

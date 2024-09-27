@@ -131,7 +131,13 @@
             >
           </div>
         </div>
-        <div class="point-square" @click="handleClaim">
+        <div
+          class="point-square"
+          @click="handleClaim"
+          @touchstart="onPress"
+          @touchend="onUp"
+          @touchcancel="onUp"
+        >
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>
           </div>

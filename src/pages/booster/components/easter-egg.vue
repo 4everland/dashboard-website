@@ -1,27 +1,31 @@
 <template>
   <div>
     <v-overlay :value="value" opacity="1" v-if="asMobile">
-      <div class="buy-card d-flex flex-column align-center justify-center">
+      <div
+        class="easter-egg-overlay d-flex flex-column align-center justify-center"
+      >
         <img
           class="close-btn"
-          @click="$emit('input', false)"
+          @click="$store.commit('SET_EASTER_EGG_DIALOG', false)"
           src="/img/booster/svg/close.svg"
           width="18"
           alt=""
         />
 
-        <div class="py-2" style="width: 100%">
-          <div class="easter-egg-title">EasterEgg</div>
-          <div class="invite-content mt-2" style="width: 50%">
-            <input
-              class="invite-input"
-              type="text"
-              v-model="code"
-              placeholder="Enter the code"
-            />
+        <div
+          class="py-2 d-flex flex-column align-center justify-center"
+          style="width: 100%; gap: 8px"
+        >
+          <img src="/img/booster/easter-egg.png" width="94" alt="" />
+          <div class="easter-egg-title">Mystery Code Surprise</div>
+          <div class="easter-egg-desc">
+            Enter your code to access exclusive rewards.
+          </div>
+          <div class="easter-egg-input mt-2">
+            <input type="text" v-model="code" placeholder="Enter the code" />
           </div>
           <v-btn
-            class="start-boost-btn"
+            class="start-boost-btn mt-4"
             height="40"
             :disabled="!code"
             :loading="loading"
@@ -46,17 +50,25 @@
         >
           <img
             class="close-btn"
-            @click="$emit('input', false)"
+            @click="$store.commit('SET_EASTER_EGG_DIALOG', false)"
             src="/img/booster/svg/close.svg"
             width="18"
             alt=""
           />
-          <div class="easter-egg-title">Debug Node</div>
-          <div class="easter-egg-desc">23232323</div>
-          <div class="easter-egg-input">
-            <input type="text" v-model="code" />
+          <img
+            src="/img/booster/easter-egg.png"
+            width="84"
+            alt=""
+            class="easter-egg-icon"
+          />
+          <div class="easter-egg-title">Mystery Code Surprise</div>
+          <div class="easter-egg-desc">
+            Enter your code to access exclusive rewards.
           </div>
-          <div class="mt-4">
+          <div class="easter-egg-input">
+            <input type="text" v-model="code" placeholder="Enter the code" />
+          </div>
+          <div class="mt-2">
             <v-btn
               class="start-boost-btn"
               height="40"
@@ -98,8 +110,9 @@ export default {
   position: absolute;
   right: 20px;
   top: 20px;
+  cursor: pointer;
 }
-.buy-card {
+.easter-egg-overlay {
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -120,7 +133,7 @@ export default {
 .booster-module-dialog {
   padding: 13px;
   height: 273px;
-  background: url("/img/booster/svg/buy-card-bg.svg") no-repeat;
+  background: url("/img/booster/svg/easter-egg-overlay-bg.svg") no-repeat;
   background-size: contain;
   background-position: center;
 }
@@ -137,41 +150,36 @@ export default {
     ),
     rgba(5, 5, 5, 0.8);
   backdrop-filter: blur(4px);
-  .easter-egg-title {
-    font-size: 24px;
-    font-weight: 600;
-    text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.25);
-  }
-  .easter-egg-input {
-    background: url("/img/booster/svg/fringe-bg.svg");
-    width: 100%;
-    padding: 8px 24px;
-    text-align: center;
-
-    input {
-      width: 300px;
-      padding: 8px 0px;
-      color: #fff;
-      text-align: center;
-      border-radius: 4px;
-      border: 1px solid #0fe1f8;
-      background: rgba(49, 49, 49, 0.9);
-      box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.35);
-    }
-  }
 }
+.easter-egg-title {
+  font-size: 24px;
+  font-weight: 600;
+  text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.25);
+}
+.easter-egg-input {
+  background: url("/img/booster/svg/fringe-bg.svg");
+  width: 100%;
+  padding: 8px 24px;
+  text-align: center;
 
-.invite-content {
-  padding: 8px;
-  border-radius: 4px;
-  border: 0.5px solid rgba(255, 255, 255, 0.3);
-  background: rgba(49, 49, 49, 0.9);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.35);
-  .invite-input {
-    width: 100%;
+  input {
+    width: 300px;
+    padding: 8px 0px;
     color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid #0fe1f8;
+    background: rgba(49, 49, 49, 0.9);
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.35);
   }
 }
+.easter-egg-icon {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -50px;
+}
+
 .start-boost-btn {
   padding: 16px 24px;
   border-radius: 4px;
@@ -183,7 +191,7 @@ export default {
     0px 4px 8px 0px rgba(0, 133, 195, 0.25);
 }
 .start-boost-btn.v-btn--disabled {
-  color: #fff;
+  color: #fff !important;
   opacity: 0.5;
   border: 1px solid rgba(217, 217, 217, 0.25);
   background: linear-gradient(0deg, #00070c 0%, #00070c 100%);

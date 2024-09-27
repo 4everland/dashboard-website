@@ -42,6 +42,7 @@ export default {
       tonCount: 0,
       updateBoostUserInfo: false,
       userInviteCount: 0,
+      showEasterEggDialog: false,
     };
   },
   getters: {
@@ -179,6 +180,9 @@ export default {
     },
     SET_USER_INVITE_COUNT(state, count) {
       state.userInviteCount = count;
+    },
+    SET_EASTER_EGG_DIALOG(state, val) {
+      state.showEasterEggDialog = val;
     },
   },
   actions: {

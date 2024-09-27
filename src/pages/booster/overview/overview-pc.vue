@@ -60,6 +60,9 @@
       <div v-else>
         <div
           class="point-square d-none d-md-block cursor-p"
+          @mousedown="onPress"
+          @mouseup="onUp"
+          @mouseleave="onUp"
           @click="handleClaim"
         >
           <div style="position: relative; width: 10px; height: 10px"></div>
