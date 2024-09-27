@@ -258,83 +258,6 @@
               </v-col>
             </v-row>
           </div>
-          <!-- invite task -->
-          <div
-            v-if="tasksLists_invite_without_done.length > 0"
-            style="margin: 12px 0"
-          >
-            <div
-              class="task-list-title"
-              style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
-            >
-              Invite Tasks
-            </div>
-            <v-row no-gutters style="gap: 18px 0">
-              <v-col
-                v-for="(item, index) in tasksLists_invite_without_done"
-                :key="item.actId"
-                cols="12"
-                v-show="
-                  item.deployOn == 'all' ||
-                  (item.deployOn == 'pc' && !isTgMiniApp) ||
-                  (item.deployOn == 'tg' && isTgMiniApp)
-                "
-              >
-                <div class="task-item-box">
-                  <div class="task-item-left" @click="handleTitle(item)">
-                    <img class="task-item-image" :src="item.icon" alt="" />
-                    <div class="task-text-box">
-                      <div class="task-name">{{ item.actName }}</div>
-                      <div class="task-desc">{{ item.description }}</div>
-                    </div>
-                  </div>
-
-                  <div class="task-item-right">
-                    <v-btn
-                      v-if="
-                        item.actStatus !== 'DONE' &&
-                        item.extra.buttonName == 'Go' &&
-                        !isTgMiniApp
-                      "
-                      class="go-btn"
-                      width="84"
-                      @click="stepNext(item, index, 'invite')"
-                      v-clipboard="inviteInfo.link"
-                      @success="() => $toast2('Copied!', 'success')"
-                      >Go</v-btn
-                    >
-                    <v-btn
-                      v-else-if="
-                        item.actStatus !== 'DONE' &&
-                        item.extra.buttonName == 'Go' &&
-                        isTgMiniApp
-                      "
-                      class="go-btn"
-                      width="84"
-                      @click="stepNext(item, index, 'invite')"
-                      >Go</v-btn
-                    >
-                    <v-btn
-                      v-else-if="item.actStatus !== 'DONE'"
-                      class="drawer-btn"
-                      width="84"
-                      :loading="false || loadingStatus[item.actId]"
-                      @click="stepNext(item, index, 'invite')"
-                    >
-                      <span>{{ item.extra.buttonName }}</span>
-                    </v-btn>
-
-                    <v-btn
-                      v-if="item.actStatus == 'DONE'"
-                      class="done-btn"
-                      width="84"
-                      >Done</v-btn
-                    >
-                  </div>
-                </div>
-              </v-col>
-            </v-row>
-          </div>
 
           <!-- done task -->
           <div v-if="completedTaskList.length > 0" style="margin: 12px 0">
@@ -408,7 +331,7 @@ export default {
     completedTaskList() {
       let completedTaskList = this.tasksLists
         .concat(this.tasksLists_one)
-        .concat(this.tasksLists_invite)
+
         .concat(this.tasksLists_partner);
       completedTaskList = completedTaskList.filter(
         (it) => it.actStatus == "DONE"
@@ -421,9 +344,7 @@ export default {
     tasksLists_without_done() {
       return this.tasksLists.filter((it) => it.actStatus != "DONE");
     },
-    tasksLists_invite_without_done() {
-      return this.tasksLists_invite.filter((it) => it.actStatus != "DONE");
-    },
+
     tasksLists_partner_without_done() {
       return this.tasksLists_partner.filter((it) => it.actStatus != "DONE");
     },
@@ -434,7 +355,6 @@ export default {
       dailyTaskList: [],
       tasksLists: [],
       tasksLists_one: [],
-      tasksLists_invite: [],
       tasksLists_partner: [],
       signDays: 0,
       signed: false,
@@ -483,7 +403,6 @@ export default {
     async getTasks() {
       const { data } = await fetchTasks();
       const { data: datas } = await fetchTasks_One();
-      const { data: inviteTasksData } = await fetchInvite_Tasks();
       const { data: partnerTaskData } = await fetchPartner_Tasks();
       this.tasksLists = data.items.filter((it) => {
         if (
@@ -503,15 +422,7 @@ export default {
           return it;
         }
       });
-      this.tasksLists_invite = inviteTasksData.items.filter((it) => {
-        if (
-          it.deployOn == "all" ||
-          (it.deployOn == "pc" && !this.isTgMiniApp) ||
-          (it.deployOn == "tg" && this.isTgMiniApp)
-        ) {
-          return it;
-        }
-      });
+
       this.tasksLists_partner = partnerTaskData.items.filter((it) => {
         if (
           it.deployOn == "all" ||
@@ -526,20 +437,7 @@ export default {
     async stepNext(item, index, taskListType) {
       let _this = this;
       if (item.extra.buttonName == "Go") {
-        if (item.actType == "4ever_chat") {
-          window.open("https://chat.4everland.org/");
-        }
-        if (item.actType == "storage") {
-          window.open("https://dashboard.4everland.org/bucket/storage/");
-        }
-        if (item.actType == "access_event_desktop") {
-          // window.open("https://dashboard.4everland.org/boost/");
-
-          this.$toast2(
-            "This feature is coming soon for the bot. Stay tuned!",
-            "info"
-          );
-        }
+        window.open(item.oriDescription);
       }
       if (item.extra.buttonName == "Check") {
         this.$set(this.loadingStatus, item.actId, true);
@@ -555,8 +453,6 @@ export default {
         this.$set(_this.tasksLists, index, item);
       } else if (taskListType == "one") {
         this.$set(_this.tasksLists_one, index, item);
-      } else if (taskListType == "invite") {
-        this.$set(_this.tasksLists_invite, index, item);
       } else {
         this.$set(_this.tasksLists_partner, index, item);
       }
@@ -630,31 +526,6 @@ export default {
               "Embark on the exciting 4EVER Boost campaign to boost your $4EVER points and grab exciting upcoming airdrops!🚨"
             );
           }
-          // if (actType == "daily_invite") {
-          //   try {
-          //     const textToCopy = this.inviteInfo.link;
-          //     this.$copyText(textToCopy).then(
-          //       (e) => {
-          //         this.$toast2("Copied!");
-          //       },
-          //       function (e) {
-          //         console.log(e);
-          //       }
-          //     );
-          //   } catch (error) {
-          //     console.error(error);
-          //   }
-          // } else {
-          //   const textToCopy = data.action.web.message;
-          //   this.$copyText(textToCopy).then(
-          //     (e) => {
-          //       this.$toast2("Copied!");
-          //     },
-          //     function (e) {
-          //       console.log(e);
-          //     }
-          //   );
-          // }
           break;
         default:
           this.getTasks();
@@ -663,14 +534,6 @@ export default {
       this.$store.dispatch("getBoosterUserInfo");
     },
     async onSign() {
-      // if (this.isTgMiniApp) {
-      //   window.open("https://dashboard.4everland.org/boost");
-      //   // return this.$toast2(
-      //   //   "This feature is coming soon for the bot. Stay tuned!",
-      //   //   "success"
-      //   // );
-      //   return;
-      // }
       if (!this.userInfo.wallet && !this.isTgMiniApp) {
         this.$store.dispatch("BindWalletToggle");
         this.stateTaskDrawerShow(false);
@@ -752,15 +615,6 @@ export default {
           return it.actStatus == "UNDO" || it.actStatus == "CLAIM";
         }
       });
-      const taskInviteUndo = this.tasksLists_invite.filter((it) => {
-        if (
-          it.deployOn == "all" ||
-          (it.deployOn == "pc" && !this.isTgMiniApp) ||
-          (it.deployOn == "tg" && this.isTgMiniApp)
-        ) {
-          return it.actStatus == "UNDO" || it.actStatus == "CLAIM";
-        }
-      });
       const taskPartner = this.tasksLists_partner.filter((it) => {
         if (
           it.deployOn == "all" ||
@@ -774,7 +628,6 @@ export default {
         (dailyUndo.length ||
           taskUndo.length ||
           taskOneUndo.length ||
-          taskInviteUndo.length ||
           taskPartner.length) &&
         !this.boostLocked
       ) {
@@ -784,21 +637,7 @@ export default {
       }
     },
     handleTitle(it) {
-      console.log(11);
-      // switch (it.actType) {
-      //   case '2':
-      //     break;
-
-      //   default:
-      //     if (this.isTgMiniApp) {
-      //       this.$tg.openAuto(it.oriDescription);
-      //     } else {
-      //       this.asMobile
-      //         ? (location.href = it.oriDescription)
-      //         : window.open(it.oriDescription);
-      //     }
-      //     break;
-      // }
+      window.open(it.oriDescription);
     },
   },
 };
