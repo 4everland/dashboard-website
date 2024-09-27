@@ -266,3 +266,15 @@ export const fetchInviteCount = async () => {
     url: `/node/activities/invite_milestone/count`,
   });
 };
+
+export const fetchEliteQuest = async () => {
+  return boosterRequest.get({
+    url: "/elitequest/list",
+  });
+};
+
+export const claimEliteQuest = async (activityId) => {
+  return boosterRequest.post({
+    url: `/elitequest/claim/${activityId}`,
+  });
+};
