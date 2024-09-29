@@ -112,11 +112,12 @@ export default {
         if (code == 200) {
           this.$store.dispatch("getBoosterUserInfo");
           this.$toast2(message, "success");
-        } else if (code == 111) {
+        } else if (code == 7001) {
           this.$toast2(message, "error");
         } else {
           this.$toast2(message, "info");
         }
+        this.code = "";
         this.$store.commit("SET_EASTER_EGG_DIALOG", false);
       } catch (error) {
         console.log(error);
