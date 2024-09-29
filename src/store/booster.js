@@ -43,6 +43,7 @@ export default {
       tonCount: 0,
       updateBoostUserInfo: false,
       userInviteCount: 0,
+      showEasterEggDialog: false,
       tonConnectUI: new TonConnectUI({
         manifestUrl: "https://dashboard.4everland.org/tonconnect-manifest.json",
       }),
@@ -190,7 +191,9 @@ export default {
     SET_USER_INVITE_COUNT(state, count) {
       state.userInviteCount = count;
     },
-
+    SET_EASTER_EGG_DIALOG(state, val) {
+      state.showEasterEggDialog = val;
+    },
     SET_TON_WALLET_CLIENT(state) {
       const tonConnectUI = new TonConnectUI({
         manifestUrl: "https://dashboard.4everland.org/tonconnect-manifest.json",

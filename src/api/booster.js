@@ -267,6 +267,14 @@ export const fetchInviteCount = async () => {
   });
 };
 
+export const onEasterEgg = async (content) => {
+  return boosterRequest.post({
+    url: "/activity/mystery",
+    data: {
+      content,
+    },
+  });
+};
 export const fetchEliteQuest = async () => {
   return boosterRequest.get({
     url: "/elitequest/list",
