@@ -156,7 +156,7 @@ export const GetSignFlow = async (accounts, nonce) => {
     if (!signature) {
       return;
     }
-    return signature;
+    return { signature, keyId };
   } catch (e) {
     console.log(e);
     return false;

@@ -191,9 +191,10 @@ export default {
         const walletItem = walletArr.filter((item) => {
           return item.walletType == info.wallet?.walletType;
         });
+        // wArr.push(...walletArr);
+
         wArr.push(...walletItem);
       }
-      console.log(wArr);
       return [
         {
           title: "Github",
@@ -559,9 +560,9 @@ export default {
       if (!nonce) {
         return;
       }
-      const signature = await GetSignFlow(currentUser.addr, nonce);
+      const { signature, keyId } = await GetSignFlow(currentUser.addr, nonce);
       if (signature) {
-        this.onVcode(item.type, signature);
+        this.onVcode(item.type, signature, keyId);
       }
     },
     async onBindWithPetra(item) {
