@@ -295,6 +295,7 @@ export default {
           name: "updateUser",
         });
         this.$toast(item.title + " binded successfully!");
+        this.showQrcode = false;
         this.onBindSuc();
       } catch (error) {
         console.log(error);
