@@ -267,6 +267,14 @@ export const fetchInviteCount = async () => {
   });
 };
 
+export const onEasterEgg = async (content) => {
+  return boosterRequest.post({
+    url: "/activity/mystery",
+    data: {
+      content,
+    },
+  });
+};
 export const fetchEliteQuest = async () => {
   return boosterRequest.get({
     url: "/elitequest/list",
@@ -276,5 +284,15 @@ export const fetchEliteQuest = async () => {
 export const claimEliteQuest = async (activityId) => {
   return boosterRequest.post({
     url: `/elitequest/claim/${activityId}`,
+  });
+};
+
+export const tonWithdraw = async (address, amount) => {
+  return boosterRequest.post({
+    url: `/node/withdraw`,
+    data: {
+      address,
+      amount,
+    },
   });
 };

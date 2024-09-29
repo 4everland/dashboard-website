@@ -41,7 +41,7 @@
           v-model="showUnlockDialog"
           :unlockStage="unlockStage"
         ></unlock-dialog>
-
+        <EasterEgg v-model="showEasterEggDialog"></EasterEgg>
         <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar>
         <nft-drawer v-if="userInfo.uid"></nft-drawer>
         <task-drawer v-if="userInfo.uid"></task-drawer>
@@ -68,6 +68,7 @@ import BottomBar from "./components/bottom-bar.vue";
 import BindDialog from "./components/bind-dialog.vue";
 import UnlockDialog from "./components/unlock-dialog.vue";
 import TgStartBoostOverlay from "./components/tg-start-boost-overlay.vue";
+import EasterEgg from "./components/easter-egg.vue";
 import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
 import { driver } from "driver.js";
@@ -161,6 +162,7 @@ export default {
   computed: {
     ...mapState({
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
+      showEasterEggDialog: (s) => s.moduleBooster.showEasterEggDialog,
       userInfo: (s) => s.userInfo,
     }),
     ...mapGetters(["notLogin", "boostLocked", "balance", "showBindWallet"]),
@@ -303,6 +305,7 @@ export default {
     TgStartBoostOverlay,
     ToolDrawer,
     InviteDrawer,
+    EasterEgg,
   },
 
   watch: {
