@@ -2,7 +2,7 @@
   <div class="bg-white px-8 bd-1 bdrs-10">
     <div class="item py-4" v-for="(it, i) in list" :key="i">
       <div class="al-c">
-        <img :src="`/img/svg/settings/${it.icon}.svg`" height="50" />
+        <img :src="it.icon" alt="" height="50" />
         <div
           class="mt-2 ml-4 fz-14 d-flex flex-column"
           style="min-height: 40px"
@@ -43,21 +43,76 @@
         </div>
       </div>
     </div>
+    <div>
+      <v-dialog
+        v-model="showQrcode"
+        max-width="358"
+        :retain-focus="false"
+        content-class="qrcode-dialog"
+      >
+        <div class="qrcode-content">
+          <div class="qrcode-title d-flex align-center justify-space-between">
+            <span>{{ loadingName }}</span>
+            <v-btn
+              icon
+              color="#fff"
+              class="close-icon"
+              @click="showQrcode = false"
+            >
+              <v-icon> mdi-close</v-icon>
+            </v-btn>
+          </div>
+
+          <div class="qrcode" :style="dialogIcon">
+            <v-img max-height="300" max-width="300" :src="qrCodeUrl"></v-img>
+          </div>
+          <div class="qrcode-footer">
+            <div
+              class="d-flex align-center justify-space-between fz-16 fw-b"
+              style="color: #0f172a"
+            >
+              <span>Scan To Use {{ loadingName }}</span>
+              <v-btn
+                icon
+                plain
+                v-clipboard="qrcodeUri"
+                @success="$toast('Copied!')"
+                ><img src="/img/svg/account/copy.svg" width="24" alt=""
+              /></v-btn>
+            </div>
+            <div class="mt-2">
+              Scan this QR code with your mobile wallet or camera to get
+              connected.
+            </div>
+          </div>
+        </div>
+      </v-dialog>
+    </div>
   </div>
 </template>
 
 <script>
+import SignClient from "@walletconnect/sign-client";
+import qrcode from "qrcode";
+
+import WalletList from "@/views/login/WalletList.js";
+
 import { mapState } from "vuex";
-import { providers } from "ethers";
+
 import {
-  ConnectOkx,
+  ConnectPhantom,
+  GetSignPhantom,
+  ConnectFlow,
+  GetSignFlow,
   ConnectPetra,
-  ConnectCoinBase,
   ConnectWalletCon,
   onSignWalletCon,
-  ConnectBitget,
 } from "@/utils/login";
+
 import * as fcl from "@onflow/fcl";
+
+import { fetchWeb3code } from "@/api/login.js";
+
 fcl
   .config()
   .put("accessNode.api", process.env.VUE_APP_FLOW_API)
@@ -67,11 +122,9 @@ fcl
     "https://eco.4everland.space/logo/4EVERLAND-logo3.png"
   )
   .put("discovery.wallet", process.env.VUE_APP_FLOW_DISCOVERY);
-let MetaMask;
-try {
-  MetaMask = new providers.Web3Provider(window.ethereum);
-  // eslint-disable-next-line no-empty
-} catch (error) {}
+
+let _signClient = null;
+
 export default {
   data() {
     return {
@@ -79,6 +132,16 @@ export default {
       flowAddr: "",
       okxAddr: "",
       petraAddr: "",
+      walletAddr: "",
+      loadingName: null,
+      dialogIcon: {
+        "--icon": "",
+      },
+      loadingIcon: null,
+      showQrcode: false,
+      qrCodeUrl: "",
+      qrcodeUri: "",
+      providerDetails: {},
     };
   },
   computed: {
@@ -96,119 +159,46 @@ export default {
         {
           title: "Twitter",
           desc: "Get verified by connecting your twttier account.",
-          icon: "m-twitter",
+          icon: "/img/svg/settings/m-twitter.svg",
           type: 10,
           account: (info.twitterAccount || {}).name,
         },
         {
           title: "Telegram",
           desc: "Get verified by connecting your telegram account.",
-          icon: "m-tg",
+          icon: "/img/svg/settings/m-tg.svg",
           type: 10,
           account: (info.telegramAccount || {}).name,
         },
         {
           title: "Discord",
           desc: "Get verified by connecting your discord account.",
-          icon: "m-dc",
+          icon: "/img/svg/settings/m-dc.svg",
           type: 10,
           account: (info.discordAccount || {}).name,
         },
       ];
-      if (info.wallet?.walletType == "METAMASK" || noWallet)
-        wArr.push({
-          title: "MetaMask",
-          desc: "Get verified by connecting your metamask account.",
-          icon: "m-metamask",
-          type: 2,
-          account: (info.wallet || {}).address,
-        });
-      if (info.wallet?.walletType == "COINBASE" || noWallet)
-        wArr.push({
-          title: "CoinBase",
-          desc: "Get verified by connecting your CoinBase account.",
-          icon: "m-coinbase",
-          type: 9,
-          account: (info.wallet || {}).address,
-        });
-      if (info.wallet?.walletType == "Walletconnect" || noWallet)
-        wArr.push({
-          title: "WalletConnect",
-          desc: "Get verified by connecting your WalletConnect.",
-          icon: "m-walletConnect",
-          type: 99,
-          account: (info.wallet || {}).address,
-        });
-      if (info.wallet?.walletType == "IMTOKEN" || noWallet)
-        wArr.push({
-          title: "ImToken",
-          desc: "Get verified by connecting your ImToken.",
-          icon: "m-imToken",
-          type: 101,
-          account: (info.wallet || {}).address,
-        });
-      if (info.wallet?.walletType == "TokenPocket" || noWallet)
-        wArr.push({
-          title: "TokenPocket",
-          desc: "Get verified by connecting your TokenPocket.",
-          icon: "m-tokenPocket",
-          type: 102,
-          account: (info.wallet || {}).address,
-        });
-      if (info.wallet?.walletType == "OKX" || noWallet)
-        wArr.push({
-          title: "OKX",
-          desc: "Get verified by connecting your OKX account.",
-          icon: "m-okx",
-          type: 7,
-          account: (info.wallet || {}).address,
-        });
-      if (info.wallet?.walletType == "BN" || noWallet)
-        wArr.push({
-          title: "Binance Web3 Wallet",
-          desc: "Get verified by connecting your Binance Web3 Wallet.",
-          icon: "m-bn",
-          type: 103,
-          account: (info.wallet || {}).address,
-        });
-      if (info.wallet?.walletType == "Bitget" || noWallet)
-        wArr.push({
-          title: "Bitget Wallet",
-          desc: "Get verified by connecting your Bitget Wallet.",
-          icon: "m-bitget",
-          type: 100,
-          account: (info.wallet || {}).address,
-        });
-      if (info.solana || info.wallet?.walletType == "PHANTOM" || noWallet)
-        wArr.push({
-          title: "Phantom",
-          desc: "Get verified by connecting your phantom account.",
-          icon: "m-phantom",
-          type: 4,
-          account: (info.solana || {}).address,
-        });
-      if (info.wallet?.walletType == "PETRA" || noWallet)
-        wArr.push({
-          title: "Petra",
-          desc: "Get verified by connecting your Petra account.",
-          icon: "m-petra",
-          type: 8,
-          account: (info.wallet || {}).address,
-        });
+      let walletArr = WalletList.map((item) => {
+        item.title = item.name;
+        item.desc = `Get verified by connecting your ${item.name} account.`;
+        item.account = (info.wallet || {}).address;
 
-      if (info.onFlow || info.wallet?.walletType == "ONFLOW" || noWallet)
-        wArr.push({
-          title: "Flow",
-          desc: "Get verified by connecting your flow account.",
-          icon: "m-flow",
-          type: 5,
-          account: (info.onFlow || {}).address,
+        return item;
+      });
+      if (noWallet) {
+        wArr.push(...walletArr);
+      } else {
+        const walletItem = walletArr.filter((item) => {
+          return item.walletType == info.wallet?.walletType;
         });
+        wArr.push(...walletItem);
+      }
+      console.log(wArr);
       return [
         {
           title: "Github",
           desc: "Get verified by connecting your github account.",
-          icon: "m-github",
+          icon: "/img/svg/settings/m-github.svg",
           type: 1,
           account: github.name || github.email,
         },
@@ -216,7 +206,7 @@ export default {
         {
           title: "Email",
           desc: "Verify your email address to receive updates and notices for your account.",
-          icon: "m-email",
+          icon: "/img/svg/settings/m-email.svg",
           type: 3,
           account: info.email,
         },
@@ -231,60 +221,33 @@ export default {
     query() {
       this.checkQuery();
     },
-    connectAddr(val) {
-      if (this.binding == 2 && val) {
-        this.binding = null;
-        this.verifyMetaMask();
-      }
-    },
-    phantomAddr(val) {
-      if (this.binding == 4 && val) {
-        this.binding = null;
-        this.verifyPhantom();
-      }
-    },
-    flowAddr(val) {
-      if (this.binding == 5 && val) {
-        this.binding = null;
-        this.verifyFlow();
-      }
-    },
-    okxAddr(val) {
-      if (this.binding == 7 && val) {
-        this.binding = null;
-        this.verifyOkx();
-      }
-    },
-    petraAddr(val) {
-      if (this.binding == 8 && val) {
-        this.binding = null;
-        this.verifyPetra();
-      }
-    },
-    coinBaseAddr(val) {
-      if (this.binding == 9 && val) {
-        this.binding = null;
-        this.verifyCoinBase();
-      }
-    },
-    WalletconnectAddr(val) {
-      if (this.binding == 99 && val) {
-        this.binding = null;
-        this.verifyWalletconnect();
-      }
-    },
-    bitgetAddr(val) {
-      if (this.binding == 100 && val) {
-        this.binding = null;
-        this.verifyBitget();
-      }
-    },
   },
   mounted() {
+    window.addEventListener("eip6963:announceProvider", this.eventHandler);
+
+    window.dispatchEvent(new Event("eip6963:requestProvider"));
+
     this.onGithubCode();
     this.checkQuery();
   },
+  beforeDestroy() {
+    window.removeEventListener("eip6963:announceProvider", this.eventHandler);
+  },
   methods: {
+    async eventHandler(event) {
+      const newProviderDetail = { ...event.detail };
+      const {
+        info: { name },
+      } = newProviderDetail;
+      if (!this.providerDetails[name]) {
+        try {
+          // this.$set(this.providerDetails, name, newProviderDetail);
+          this.providerDetails[name] = newProviderDetail;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
     checkQuery() {
       const { type, redirect } = this.query;
       if (type) {
@@ -336,146 +299,27 @@ export default {
         console.log(error);
       }
     },
-    async onBind(it) {
-      if (it.type == 2) {
-        this.binding = 2;
-        if (!this.connectAddr) {
-          this.$store.dispatch("getWalletAccount");
-        } else {
-          this.verifyMetaMask();
+    async onBind(item) {
+      if (!item.isEvm) {
+        this.onConnectWithOther(item);
+      } else if (!this.providerDetails[item.name]) {
+        this.onShowQrcode(item);
+      } else {
+        const providerDetail = this.providerDetails[item.name];
+        let accounts = [];
+        try {
+          accounts = await providerDetail.provider.request({
+            method: "eth_requestAccounts",
+          });
+          const account = accounts[0];
+          const nonce = await this.onExchangeCode(account);
+          const signature = await this.onSign(account, nonce, providerDetail);
+          if (signature) {
+            this.onVcode(item.type, signature);
+          }
+        } catch (err) {
+          console.error(err);
         }
-        return;
-      }
-      if (it.type == 4) {
-        this.binding = 4;
-        if (!this.phantomAddr) {
-          const publicKey = await this.connectPhantom();
-          this.phantomAddr = publicKey;
-        } else {
-          this.verifyPhantom();
-        }
-        return;
-      }
-      if (it.type == 5) {
-        this.binding = 5;
-        if (!this.flowAddr) {
-          const currentUser = await this.connectFlow();
-          this.flowAddr = currentUser.addr;
-        } else {
-          this.verifyFlow();
-        }
-        return;
-      }
-      if (it.type == 7) {
-        this.binding = 7;
-        if (!this.okxAddr) {
-          const currentUser = await this.connectOkx();
-          this.okxAddr = currentUser;
-        } else {
-          this.verifyOkx();
-        }
-        return;
-      }
-      if (it.type == 8) {
-        this.binding = 8;
-        if (!this.petraAddr) {
-          const currentUser = await this.connectPetra();
-          this.petraAddr = currentUser;
-        } else {
-          this.verifyPetra();
-        }
-        return;
-      }
-      if (it.type == 9) {
-        this.binding = 9;
-        if (!this.coinBaseAddr) {
-          const currentUser = await this.connectCoinBase();
-          this.coinBaseAddr = currentUser;
-        } else {
-          this.verifyCoinBase();
-        }
-        return;
-      }
-      if (it.type == 99) {
-        this.binding = 99;
-        if (!this.WalletconnectAddr) {
-          const account = await this.connectWalletconnect();
-          console.log(account);
-          this.WalletconnectAddr = account;
-        } else {
-          this.verifyWalletconnect();
-        }
-
-        return;
-      }
-      if (it.type == 100) {
-        this.binding = 100;
-        if (!this.bitgetAddr) {
-          const account = await this.connectBitget();
-          this.bitgetAddr = account;
-        } else {
-          this.verifyBitget();
-        }
-
-        return;
-      }
-      // if (it.type != 1) return this.$toast("todo");
-      try {
-        if (it.type == 10) {
-          this.$loading();
-          const { data } = await this.$http.get(
-            `$auth/redirection/${it.title.toLowerCase()}`
-          );
-          this.$loading.close();
-          return window.open(data);
-        }
-
-        let apply = "";
-        if (it.type == 3) {
-          const { value } = await this.$prompt(
-            "Verify your email to stay up to date on the 4EVERLAND latest news and events.",
-            "Verify Email",
-            {
-              confirmText: "Send",
-              inputAttrs: {
-                label: `Your email address`,
-                rules: [
-                  (v) => this.$regMap.email.test(v) || "Invalid email address.",
-                ],
-                required: true,
-              },
-            }
-          );
-          apply = value;
-        }
-        this.$loading();
-        const { data } = await this.$http.post("$auth/bind", {
-          type: it.type,
-          apply,
-          entranceId: 100,
-        });
-        const url = data.applyR;
-        if (it.type == 3) {
-          const { value } = await this.$prompt(
-            "The verification code has been sent to your email address.",
-            "Verify Email",
-            {
-              confirmText: "Verify",
-              inputAttrs: {
-                label: `Verify code`,
-                rules: [(v) => v.trim().length >= 4 || "Invalid code."],
-                required: true,
-              },
-              persistent: true,
-            }
-          );
-          await this.$sleep(100);
-          this.onVcode(3, value);
-        } else if (it.type == 1) {
-          location.href = url;
-        }
-      } catch (error) {
-        console.log(error);
       }
     },
     async onUnbind(it) {
@@ -507,206 +351,284 @@ export default {
         );
       }
     },
-    async exchangeCode(type) {
-      let apply = this.connectAddr;
-      if (type == 4) {
-        apply = this.phantomAddr;
-      }
-      if (type == 5) {
-        apply = this.flowAddr;
-      }
-      if (type == 7) {
-        apply = this.okxAddr;
-      }
-      if (type == 8) {
-        apply = this.petraAddr;
-      }
-      if (type == 9) {
-        apply = this.coinBaseAddr;
-      }
-      if (type == 99) {
-        apply = this.WalletconnectAddr;
-      }
-      if (type == 100) {
-        apply = this.bitgetAddr;
-      }
-      const { data } = await this.$http.post(`$auth/bind`, {
-        type,
-        apply,
-      });
-      return data.applyR;
-    },
-    async verifyMetaMask() {
+
+    async onExchangeCode(account) {
       try {
-        this.$loading();
-        const nonce = await this.exchangeCode(2);
-        const sig = await MetaMask.getSigner().signMessage(nonce);
-        this.$loading.close();
-        if (sig) {
-          this.onVcode(2, sig);
-        }
+        const { data } = await fetchWeb3code(account);
+        return data.nonce;
       } catch (error) {
-        this.$alert(error.message);
+        console.log(error);
       }
     },
-    async connectPhantom() {
+
+    async onSign(account, nonce, providerDetail) {
       try {
-        const isPhantomInstalled = window.solana && window.solana.isPhantom;
-        if (!isPhantomInstalled) {
-          window.open("https://phantom.app/", "_blank");
-          return console.log("Please install Phantom to use this app.");
-        }
-        const resp = await window.solana.connect();
-        return resp.publicKey.toString();
-      } catch (err) {
-        // { code: 4001, message: 'User rejected the request.' }
+        const msg = "0x" + Buffer.from(nonce).toString("hex");
+        const signature = await providerDetail.provider.request({
+          method: "personal_sign",
+          params: [msg, account],
+        });
+
+        return signature;
+      } catch (error) {
+        console.log(error);
       }
     },
-    async verifyPhantom() {
+    async onShowQrcode(item) {
+      this.walletConnectLoading = true;
+      this.loadingName = item.name;
+      const { session, account } = await this.init_signClient();
+      if (!account) {
+        return;
+      }
+      const nonce = await this.onExchangeCode(account);
+
+      const signature = await this.onQrcodeSign(account, nonce, session);
+      if (signature) {
+        this.onVcode(item.type, signature);
+      }
+    },
+    async init_signClient() {
+      _signClient = await SignClient.init({
+        projectId: "0c6d755f31c61d762715e95f767f7ef8",
+        metadata: {
+          name: "4EVERLAND",
+          description:
+            "As a Web3 infrastructure, 4EVERLAND simplifies the hosting of front-end, the storage of data, and access to the emerging open web, making projects faster and easier to manage.",
+          url: "https://dashboard.4everland.org/",
+          icons: ["https://4evericon.4everland.store/1024.png"],
+        },
+      });
+
       try {
-        this.$loading();
-        const nonce = await this.exchangeCode(4);
-        const encodedMessage = new TextEncoder().encode(nonce);
-        const signedMessage = await window.solana.request({
-          method: "signMessage",
-          params: {
-            message: encodedMessage,
+        const { uri, approval } = await _signClient.connect({
+          // Optionally: pass a known prior pairing (e.g. from `_signClient.core.pairing.getPairings()`) to skip the `uri` step.
+          // pairingTopic: pairing?.topic,
+          // Provide the namespaces and chains (e.g. `eip155` for EVM-based chains) we want to use in this session.
+          requiredNamespaces: {
+            eip155: {
+              methods: [
+                "eth_sendTransaction",
+                "eth_signTransaction",
+                "eth_sign",
+                "personal_sign",
+                "eth_signTypedData",
+              ],
+              chains: ["eip155:1"],
+              events: ["chainChanged", "accountsChanged"],
+            },
           },
         });
-        const sig = signedMessage.signature;
-        this.$loading.close();
-        if (sig) {
-          this.onVcode(4, sig);
+        // Open QRCode modal if a URI was returned (i.e. we're not connecting an existing pairing).
+        if (uri) {
+          const url = await qrcode.toDataURL(uri);
+          this.showImTokenQrcode(url, uri);
+          // Await session approval from the wallet.
+          const session = await approval();
+          // Handle the returned session (e.g. update UI to "connected" state).
+          // Close the QRCode modal in case it was open.
+          walletConnectModal.closeModal();
+
+          if (_signClient.session.length) {
+            const lastKeyIndex = _signClient.session.keys.length - 1;
+            const _session = _signClient.session.get(
+              _signClient.session.keys[lastKeyIndex]
+            );
+            const allNamespaceAccounts = Object.values(_session.namespaces)
+              .map((namespace) => namespace.accounts)
+              .flat();
+
+            const [namespace, reference, account] =
+              allNamespaceAccounts[0].split(":");
+
+            return { session, account };
+          }
         }
-      } catch (error) {
-        this.$alert(error.message);
+      } catch (e) {
+        console.error(e);
       }
     },
-    async connectFlow() {
+    showImTokenQrcode(url, uri) {
+      this.qrCodeUrl = url;
+      this.qrcodeUri = uri;
+      this.chooseIcon();
+      this.showQrcode = true;
+      this.walletConnectLoading = false;
+    },
+    chooseIcon() {
+      let url = WalletList.filter((item) => {
+        return item.name == this.loadingName;
+      });
+      console.log(url);
+      this.dialogIcon["--icon"] = `url(${url[0].icon})`;
+    },
+    async onQrcodeSign(account, nonce, session) {
+      try {
+        const msg = "0x" + Buffer.from(nonce).toString("hex");
+        const signature = await _signClient.request({
+          topic: session.topic,
+          chainId: "eip155:1",
+          request: {
+            method: "personal_sign",
+            params: [msg, account],
+          },
+        });
+
+        return signature;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async onBindWithGithub(item) {
+      this.$loading();
+      const { data } = await this.$http.post("$auth/bind", {
+        type: item.type,
+        apply: "",
+        entranceId: 100,
+      });
+      const url = data.applyR;
+      location.href = url;
+    },
+    async onBindWithEmail(item) {
+      const { value: email } = await this.$prompt(
+        "Verify your email to stay up to date on the 4EVERLAND latest news and events.",
+        "Verify Email",
+        {
+          confirmText: "Send",
+          inputAttrs: {
+            label: `Your email address`,
+            rules: [
+              (v) => this.$regMap.email.test(v) || "Invalid email address.",
+            ],
+            required: true,
+          },
+        }
+      );
+      this.$loading();
+      await this.$http.post("$auth/bind", {
+        type: it.type,
+        apply: email,
+        entranceId: 100,
+      });
+      const { value: verifyCode } = await this.$prompt(
+        "The verification code has been sent to your email address.",
+        "Verify Email",
+        {
+          confirmText: "Verify",
+          inputAttrs: {
+            label: `Verify code`,
+            rules: [(v) => v.trim().length >= 4 || "Invalid code."],
+            required: true,
+          },
+          persistent: true,
+        }
+      );
+      await this.$sleep(100);
+      this.onVcode(item.type, verifyCode);
+    },
+    async onBindWithMedia(item) {
+      this.$loading();
+      const { data } = await this.$http.get(
+        `$auth/redirection/${item.title.toLowerCase()}`
+      );
+      this.$loading.close();
+      return window.open(data);
+    },
+    async onBindWithPhantom(item) {
+      const publicKey = await ConnectPhantom();
+      if (!publicKey) {
+        return;
+      }
+      const nonce = await this.onExchangeCode(publicKey);
+      if (!nonce) {
+        return;
+      }
+      const signature = await GetSignPhantom(publicKey, nonce);
+      if (signature) {
+        this.onVcode(item.type, signature);
+      }
+    },
+    async onBindWithFlow(item) {
       fcl.unauthenticate();
-      try {
-        await fcl.authenticate();
-        return fcl.currentUser.snapshot();
-      } catch (err) {
-        console.log(err);
+      // anywhere on the page
+      const currentUser = await ConnectFlow();
+      if (!currentUser.addr) {
+        return;
+      }
+      const nonce = await this.onExchangeCode(currentUser.addr);
+      if (!nonce) {
+        return;
+      }
+      const signature = await GetSignFlow(currentUser.addr, nonce);
+      if (signature) {
+        this.onVcode(item.type, signature);
       }
     },
-    async verifyFlow() {
-      try {
-        this.$loading();
-        const nonce = await this.exchangeCode(5);
-        const MSG = Buffer.from(nonce).toString("hex");
-        const signUserMessage = await fcl.currentUser.signUserMessage(MSG);
-        const sig = signUserMessage[0].signature;
-        const keyId = signUserMessage[0].keyId;
-        this.$loading.close();
-        if (sig) {
-          this.onVcode(5, sig, keyId);
-        }
-      } catch (error) {
-        this.$alert(error.message);
-      }
-    },
-    async connectOkx() {
-      const accounts = await ConnectOkx();
-      const account = accounts[0];
-      return account;
-    },
-    async verifyOkx() {
-      try {
-        this.$loading();
-        const account = this.okxAddr;
-        const nonce = await this.exchangeCode(7);
-        const sig = await window.okxwallet.request({
-          method: "personal_sign",
-          params: [account, nonce],
-        });
-        this.$loading.close();
-        if (sig) {
-          this.onVcode(7, sig);
-        }
-      } catch (error) {
-        this.$alert(error.message);
-      }
-    },
-    async connectPetra() {
+    async onBindWithPetra(item) {
       const account = await ConnectPetra();
-      return account;
-    },
-    async verifyPetra() {
-      try {
-        this.$loading();
-        const nonce = await this.exchangeCode(8);
-        const { signature } = await window.aptos.signMessage({
-          nonce,
-          message: nonce,
-        });
-        const sig = signature;
-        this.$loading.close();
-        if (sig) {
-          this.onVcode(8, sig);
-        }
-      } catch (error) {
-        this.$alert(error.message);
+      if (!account) {
+        return;
+      }
+      const nonce = await this.onExchangeCode(account);
+      if (!nonce) {
+        return;
+      }
+      const { signature } = await window.aptos.signMessage({
+        nonce,
+        message: nonce,
+      });
+
+      if (signature) {
+        this.onVcode(item.type, signature);
       }
     },
-    async connectCoinBase() {
-      const account = await ConnectCoinBase();
-      return account[0];
-    },
-    async verifyCoinBase() {
-      try {
-        this.$loading();
-        const nonce = await this.exchangeCode(9);
-        const sig = await MetaMask.getSigner().signMessage(nonce);
-        this.$loading.close();
-        if (sig) {
-          this.onVcode(9, sig);
+    async onBindWithWalletConnect(item) {
+      this.walletConnectLoading = true;
+      this.loadingName = "WalletConnect";
+      window.walletConnectModal.subscribeModal((state) => {
+        if (!state.open) {
+          this.walletConnectLoading = false;
         }
-      } catch (error) {
-        this.$alert(error.message);
+      });
+      const { session, account } = await ConnectWalletCon();
+      if (!account) {
+        return;
+      }
+      const nonce = await this.onExchangeCode(account);
+      if (!nonce) {
+        return;
+      }
+      this.walletConnectLoading = false;
+      const signature = await onSignWalletCon(session, account, nonce);
+      if (signature) {
+        this.onVcode(item.type, signature);
       }
     },
-    async connectWalletconnect() {
-      const { account } = await ConnectWalletCon();
-      return account;
-    },
-    async verifyWalletconnect() {
-      try {
-        const { session, account } = await ConnectWalletCon();
-        this.$loading();
-        const nonce = await this.exchangeCode(99);
-        const sig = await onSignWalletCon(session, account, nonce);
-        console.log(signature);
-        this.WalletconnectAddr = account;
-        this.$loading.close();
-        if (sig) {
-          this.onVcode(99, sig);
-        }
-      } catch (error) {
-        this.$alert(error.message);
-      }
-    },
-    async connectBitget() {
-      const { account } = await ConnectBitget();
-      return account;
-    },
-    async verifyBitget() {
-      try {
-        this.$loading();
-        const provider = window.bitkeep && window.bitkeep.ethereum;
-        const nonce = await this.exchangeCode(100);
-        const msg = `0x${Buffer.from(nonce, "utf8").toString("hex")}`;
-        const sig = await provider.request({
-          method: "personal_sign",
-          params: [msg, accounts],
-        });
-        this.$loading.close();
-        if (sig) {
-          this.onVcode(100, sig);
-        }
-      } catch (error) {
-        this.$alert(error.message);
+    onConnectWithOther(item) {
+      switch (item.type) {
+        case 1:
+          this.onBindWithGithub(item);
+          break;
+        case 3:
+          this.onBindWithEmail(item);
+          break;
+        case 4:
+          this.onBindWithPhantom(item);
+          break;
+        case 5:
+          this.onBindWithFlow(item);
+          break;
+        case 8:
+          this.onBindWithPetra(item);
+          break;
+        case 10:
+          this.onBindWithMedia(item);
+          break;
+        case 99:
+          this.onBindWithWalletConnect(item);
+          break;
+        default:
+          break;
       }
     },
   },
@@ -715,5 +637,60 @@ export default {
 <style lang="scss" scoped>
 .item + .item {
   border-top: 1px solid #d0dae9;
+}
+
+.qrcode-dialog {
+  border-radius: 16px !important;
+}
+.qrcode-content {
+  border-radius: 16px;
+  background: #6172f3;
+}
+.qrcode-footer {
+  padding: 16px 20px;
+  color: #64748b;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 0 0 16px 16px;
+  border-top: 1px solid #cbd5e1;
+  background: #fff;
+}
+.qrcode-title {
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  position: relative;
+  border-radius: 16px 16px 0 0;
+  color: #fff;
+}
+.qrcode {
+  width: 100%;
+  height: 318px;
+  padding: 20px;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  background: #fff;
+}
+.qrcode::after {
+  content: "";
+  // background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDUiIGhlaWdodD0iNDUiIHZpZXdCb3g9IjAgMCA0NSA0NSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQzLjYgNy40QzQzLjEgNS4zIDQyLjIgNCA0MS4yIDNDNDAuMiAyIDM4LjggMSAzNi44IDAuNUMzNC44IDAgMzAuMiAwIDMwLjIgMEgxMy45QzEzLjkgMCA5LjQgMCA3LjMgMC41QzUuMyAxIDQgMS45IDIuOSAyLjlDMS45IDMuOSAwLjkgNS4zIDAuNSA3LjNDMCA5LjMgMCAxMy45IDAgMTMuOVYzMC4yQzAgMzAuMiAwIDM0LjcgMC41IDM2LjhDMSAzOC45IDEuOSA0MC4yIDIuOSA0MS4zQzMuOSA0Mi4zIDUuMyA0My4yIDcuMyA0My44QzkuMyA0NC4zIDEzLjkgNDQuMyAxMy45IDQ0LjNIMzAuMkMzMC4yIDQ0LjMgMzQuNyA0NC4zIDM2LjggNDMuOEMzOC45IDQzLjMgNDAuMiA0Mi40IDQxLjIgNDEuM0M0Mi4yIDQwLjMgNDMuMiAzOC45IDQzLjYgMzYuOUM0NC4xIDM0LjkgNDQuMSAzMC4zIDQ0LjEgMzAuM1YxNEM0NC4xIDE0IDQ0LjEgOS41IDQzLjYgNy40Wk0yMi4yIDMyLjdDMTUuMiAzMy4zIDguNyAyOS4yIDguMiAyMi44QzcuNyAxNy42IDExLjEgMTUuMyAxMy43IDE1LjFDMTYuNCAxNC45IDE4LjcgMTYuNyAxOC45IDE4LjlDMTkuMSAyMSAxNy43IDIyIDE2LjggMjIuMUMxNiAyMi4yIDE1LjEgMjEuNyAxNSAyMC44QzE0LjkgMjAgMTUuMyAxOS45IDE1LjIgMTlDMTUuMSAxNy41IDEzLjcgMTcuMyAxMi45IDE3LjRDMTIgMTcuNSAxMC4zIDE4LjUgMTAuNiAyMS4xQzEwLjggMjMuNyAxMy40IDI1LjcgMTYuOCAyNS40QzIwLjQgMjUuMSAyMyAyMi40IDIzLjIgMTguNUMyMy4yIDE4LjMgMjMuMyAxOC4xIDIzLjMgMTcuOUMyMy40IDE3LjggMjMuNCAxNy44IDIzLjQgMTcuN0MyMy41IDE3LjUgMjMuNiAxNy40IDIzLjcgMTcuM0wyNCAxN0MyNS42IDE1LjYgMzEuMyAxMi4xIDM2LjcgMTMuMkgzNi44QzM3IDEzLjIgMzcuMSAxMy4zIDM3LjEgMTMuNUMzOC4xIDI2LjEgMjkuNyAzMi4xIDIyLjIgMzIuN1oiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcikiLz4KPHBhdGggZD0iTTIyLjIgMzIuNzAwMUMxNS4yIDMzLjMwMDEgOC43IDI5LjIwMDEgOC4yIDIyLjgwMDFDNy43IDE3LjYwMDEgMTEuMSAxNS4zMDAxIDEzLjcgMTUuMTAwMUMxNi40IDE0LjkwMDEgMTguNyAxNi43MDAxIDE4LjkgMTguOTAwMUMxOS4xIDIxLjAwMDEgMTcuNyAyMi4wMDAxIDE2LjggMjIuMTAwMUMxNiAyMi4yMDAxIDE1LjEgMjEuNzAwMSAxNSAyMC44MDAxQzE0LjkgMjAuMDAwMSAxNS4zIDE5LjkwMDEgMTUuMiAxOS4wMDAxQzE1LjEgMTcuNTAwMSAxMy43IDE3LjMwMDEgMTIuOSAxNy40MDAxQzEyIDE3LjUwMDEgMTAuMyAxOC41MDAxIDEwLjYgMjEuMTAwMUMxMC44IDIzLjcwMDEgMTMuNCAyNS43MDAxIDE2LjggMjUuNDAwMUMyMC40IDI1LjEwMDEgMjMgMjIuNDAwMSAyMy4yIDE4LjUwMDFDMjMuMiAxOC4zMDAxIDIzLjMgMTguMTAwMSAyMy4zIDE3LjkwMDFDMjMuNCAxNy44MDAxIDIzLjQgMTcuODAwMSAyMy40IDE3LjcwMDFDMjMuNSAxNy41MDAxIDIzLjYgMTcuNDAwMSAyMy43IDE3LjMwMDFMMjQgMTcuMDAwMUMyNS42IDE1LjYwMDEgMzEuMyAxMi4xMDAxIDM2LjcgMTMuMjAwMUgzNi44QzM3IDEzLjIwMDEgMzcuMSAxMy4zMDAxIDM3LjEgMTMuNTAwMUMzOC4xIDI2LjEwMDEgMjkuNyAzMi4xMDAxIDIyLjIgMzIuNzAwMVoiIGZpbGw9IndoaXRlIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXIiIHgxPSI0Mi44NzA0IiB5MT0iMS40MDM3IiB4Mj0iLTAuMDU2NjkyNyIgeTI9IjQ0LjA0NTIiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KPHN0b3Agc3RvcC1jb2xvcj0iIzExQzREMSIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwMDYyQUQiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8L3N2Zz4K);
+  background-image: var(--icon);
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  width: 45px;
+  height: 45px;
+  position: absolute;
+  border-radius: 4px;
+}
+
+.v-dialog,
+.v-dialog--active {
+  border-radius: 10px;
 }
 </style>
