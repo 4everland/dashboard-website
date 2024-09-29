@@ -189,43 +189,43 @@ export default {
     bgImg() {
       if (this.asMobile) {
         if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
-          return "https://booster.4everland.store/mobile-bg.png";
+          return "https://static.4everland.org/boost/background/mobile-bg.png";
         if (!this.storageLocked && !this.networkLocked)
-          return "https://booster.4everland.store/mobile-bg-s2n.png";
+          return "https://static.4everland.org/boost/background/mobile-bg-s2n.png";
         if (!this.storageLocked && !this.computingLocked)
-          return "https://booster.4everland.store/mobile-bg-s2c.png";
+          return "https://static.4everland.org/boost/background/mobile-bg-s2c.png";
         if (!this.networkLocked && !this.computingLocked)
-          return "https://booster.4everland.store/mobile-bg-n2c.png";
+          return "https://static.4everland.org/boost/background/mobile-bg-n2c.png";
         if (!this.storageLocked)
-          return "https://booster.4everland.store/mobile-bg-storage.png";
+          return "https://static.4everland.org/boost/background/mobile-bg-storage.png";
         if (!this.networkLocked)
-          return "https://booster.4everland.store/mobile-bg-network.png";
+          return "https://static.4everland.org/boost/background/mobile-bg-network.png";
         if (!this.computingLocked)
-          return "https://booster.4everland.store/mobile-bg-computed.png";
+          return "https://static.4everland.org/boost/background/mobile-bg-computed.png";
 
         if (this.boosterInfo.baseRate.length == 0) {
-          return "https://booster.4everland.store/mobile-bg-locked.png";
+          return "https://static.4everland.org/boost/background/mobile-bg-locked.png";
         }
-        return "https://booster.4everland.store/mobile-bg-unlocked.png";
+        return "https://static.4everland.org/boost/background/mobile-bg-unlocked.png";
       } else {
         if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
-          return "https://booster.4everland.store/bg.webm";
+          return "https://static.4everland.org/boost/background/bg.webm";
         if (!this.storageLocked && !this.networkLocked)
-          return "https://booster.4everland.store/bg-s2n.webm";
+          return "https://static.4everland.org/boost/background/bg-s2n.webm";
         if (!this.storageLocked && !this.computingLocked)
-          return "https://booster.4everland.store/bg-s2c.webm";
+          return "https://static.4everland.org/boost/background/bg-s2c.webm";
         if (!this.networkLocked && !this.computingLocked)
-          return "https://booster.4everland.store/bg-n2c.webm";
+          return "https://static.4everland.org/boost/background/bg-n2c.webm";
         if (!this.storageLocked)
-          return "https://booster.4everland.store/bg-storage.webm";
+          return "https://static.4everland.org/boost/background/bg-storage.webm";
         if (!this.networkLocked)
-          return "https://booster.4everland.store/bg-network.webm";
+          return "https://static.4everland.org/boost/background/bg-network.webm";
         if (!this.computingLocked)
-          return "https://booster.4everland.store/bg-computed.webm";
+          return "https://static.4everland.org/boost/background/bg-computed.webm";
         if (this.boosterInfo.baseRate.length == 0)
-          return "https://booster.4everland.store/bg-locked.png";
+          return "https://static.4everland.org/boost/background/bg-locked.png";
 
-        return "https://booster.4everland.store/bg-unlocked.webm";
+        return "https://static.4everland.org/boost/background/bg-unlocked.webm";
       }
     },
     isVideo() {
