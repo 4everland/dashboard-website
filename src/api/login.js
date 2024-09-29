@@ -21,3 +21,7 @@ export function sendTGStoken(tgInitData) {
     },
   });
 }
+
+export function fetchWeb3codeBind(data) {
+  return request.post(`$auth/bind`, data);
+}

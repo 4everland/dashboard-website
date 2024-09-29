@@ -111,7 +111,7 @@ import {
 
 import * as fcl from "@onflow/fcl";
 
-import { fetchWeb3code } from "@/api/login.js";
+import { fetchWeb3codeBind } from "@/api/login.js";
 
 fcl
   .config()
@@ -313,7 +313,11 @@ export default {
             method: "eth_requestAccounts",
           });
           const account = accounts[0];
-          const nonce = await this.onExchangeCode(account);
+          const params = {
+            type: item.type,
+            apply: account,
+          };
+          const nonce = await this.onExchangeCode(params);
           const signature = await this.onSign(account, nonce, providerDetail);
           if (signature) {
             this.onVcode(item.type, signature);
@@ -353,10 +357,10 @@ export default {
       }
     },
 
-    async onExchangeCode(account) {
+    async onExchangeCode(params) {
       try {
-        const { data } = await fetchWeb3code(account);
-        return data.nonce;
+        const { data } = await fetchWeb3codeBind(params);
+        return data.applyR;
       } catch (error) {
         console.log(error);
       }
@@ -382,7 +386,11 @@ export default {
       if (!account) {
         return;
       }
-      const nonce = await this.onExchangeCode(account);
+      const params = {
+        type: item.type,
+        apply: account,
+      };
+      const nonce = await this.onExchangeCode(params);
 
       const signature = await this.onQrcodeSign(account, nonce, session);
       if (signature) {
@@ -540,7 +548,11 @@ export default {
       if (!publicKey) {
         return;
       }
-      const nonce = await this.onExchangeCode(publicKey);
+      const params = {
+        type: item.type,
+        apply: publicKey,
+      };
+      const nonce = await this.onExchangeCode(params);
       if (!nonce) {
         return;
       }
@@ -556,7 +568,11 @@ export default {
       if (!currentUser.addr) {
         return;
       }
-      const nonce = await this.onExchangeCode(currentUser.addr);
+      const params = {
+        type: item.type,
+        apply: currentUser.addr,
+      };
+      const nonce = await this.onExchangeCode(params);
       if (!nonce) {
         return;
       }
@@ -570,7 +586,11 @@ export default {
       if (!account) {
         return;
       }
-      const nonce = await this.onExchangeCode(account);
+      const params = {
+        type: item.type,
+        apply: account,
+      };
+      const nonce = await this.onExchangeCode(params);
       if (!nonce) {
         return;
       }
@@ -595,7 +615,11 @@ export default {
       if (!account) {
         return;
       }
-      const nonce = await this.onExchangeCode(account);
+      const params = {
+        type: item.type,
+        apply: account,
+      };
+      const nonce = await this.onExchangeCode(params);
       if (!nonce) {
         return;
       }
@@ -690,8 +714,8 @@ export default {
   border-radius: 4px;
 }
 
-.v-dialog,
+:deep .v-dialog,
 .v-dialog--active {
-  border-radius: 10px;
+  border-radius: 16px !important;
 }
 </style>
