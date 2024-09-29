@@ -462,56 +462,56 @@ export default {
           if (this.isTgMiniApp) return this.$tg.openAuto(shareUrl);
           location.href = data.action.web.message;
           break;
-        case "JUMP_OUT":
-          if (actType == "share_twitter") {
-            let shareUrl = `Wow, I’m beyond excited to see #4EVERLAND take the top spot in User Growth and Transaction Growth within the @BNBCHAIN ecosystem! 🎉\nhttps://x.com/4everland_org/status/1839288817368371219\n\n🥳 Join #4EVERBoost to start earning $4EVER points— ticket to exclusive 4EVERLAND #airdrops!\n`;
-            shareUrl += this.inviteInfo.link;
-            shareUrl =
-              "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
+        // case "JUMP_OUT":
+        //   if (actType == "share_twitter") {
+        //     let shareUrl = `Wow, I’m beyond excited to see #4EVERLAND take the top spot in User Growth and Transaction Growth within the @BNBCHAIN ecosystem! 🎉\nhttps://x.com/4everland_org/status/1839288817368371219\n\n🥳 Join #4EVERBoost to start earning $4EVER points— ticket to exclusive 4EVERLAND #airdrops!\n`;
+        //     shareUrl += this.inviteInfo.link;
+        //     shareUrl =
+        //       "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
 
-            if (this.isTgMiniApp) return this.$tg.openAuto(shareUrl);
-            this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
-          } else {
-            if (data.action.web.message) {
-              if (this.isTgMiniApp) {
-                const descArr = data.action.web.message.split(";");
-                if (descArr > 1) {
-                  return this.$tg.openAuto(descArr[0]);
-                } else {
-                  return this.$tg.openAuto(data.action.web.message);
-                }
-              }
+        //     if (this.isTgMiniApp) return this.$tg.openAuto(shareUrl);
+        //     this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
+        //   } else {
+        //     if (data.action.web.message) {
+        //       if (this.isTgMiniApp) {
+        //         const descArr = data.action.web.message.split(";");
+        //         if (descArr > 1) {
+        //           return this.$tg.openAuto(descArr[0]);
+        //         } else {
+        //           return this.$tg.openAuto(data.action.web.message);
+        //         }
+        //       }
 
-              if (actType == "visit_like") {
-                return this.asMobile
-                  ? (location.href =
-                      "https://x.com/intent/like?tweet_id=1830815258581385484")
-                  : window.open(
-                      "https://x.com/intent/like?tweet_id=1830815258581385484"
-                    );
-              }
-              if (actType == "visit_quote") {
-                return this.asMobile
-                  ? (location.href =
-                      "https://x.com/intent/retweet?tweet_id=1830815258581385484")
-                  : window.open(
-                      "https://x.com/intent/retweet?tweet_id=1830815258581385484"
-                    );
-              }
-              if (actType == "jump_completion") {
-                const descArr = data.action.web.message.split(";");
-                if (descArr.length > 1) {
-                  return this.asMobile
-                    ? (location.href = descArr[1])
-                    : window.open(descArr[1]);
-                }
-              }
-              this.asMobile
-                ? (location.href = data.action.web.message)
-                : window.open(data.action.web.message);
-            }
-          }
-          break;
+        //       if (actType == "visit_like") {
+        //         return this.asMobile
+        //           ? (location.href =
+        //               "https://x.com/intent/like?tweet_id=1830815258581385484")
+        //           : window.open(
+        //               "https://x.com/intent/like?tweet_id=1830815258581385484"
+        //             );
+        //       }
+        //       if (actType == "visit_quote") {
+        //         return this.asMobile
+        //           ? (location.href =
+        //               "https://x.com/intent/retweet?tweet_id=1830815258581385484")
+        //           : window.open(
+        //               "https://x.com/intent/retweet?tweet_id=1830815258581385484"
+        //             );
+        //       }
+        //       if (actType == "jump_completion") {
+        //         const descArr = data.action.web.message.split(";");
+        //         if (descArr.length > 1) {
+        //           return this.asMobile
+        //             ? (location.href = descArr[1])
+        //             : window.open(descArr[1]);
+        //         }
+        //       }
+        //       this.asMobile
+        //         ? (location.href = data.action.web.message)
+        //         : window.open(data.action.web.message);
+        //     }
+        //   }
+        //   break;
         case "CLAIM":
           this.$toast2(data.action.web.message, "success");
           this.getTasks();
