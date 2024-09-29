@@ -266,3 +266,12 @@ export const fetchInviteCount = async () => {
     url: `/node/activities/invite_milestone/count`,
   });
 };
+
+export const onEasterEgg = async (content) => {
+  return boosterRequest.post({
+    url: "/activity/mystery",
+    data: {
+      content,
+    },
+  });
+};

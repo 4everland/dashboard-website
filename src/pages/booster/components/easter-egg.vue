@@ -29,6 +29,7 @@
             height="40"
             :disabled="!code"
             :loading="loading"
+            @click="handleConfrim"
           >
             Confirm
           </v-btn>
@@ -74,6 +75,7 @@
               height="40"
               :disabled="!code"
               :loading="loading"
+              @click="handleConfrim"
             >
               Confirm
             </v-btn>
@@ -85,6 +87,7 @@
 </template>
 
 <script>
+import { onEasterEgg } from "@/api/booster";
 export default {
   props: {
     value: Boolean,
@@ -101,7 +104,25 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    async handleConfrim() {
+      try {
+        this.loading = true;
+        const { code, message } = await onEasterEgg(this.code);
+        console.log(data);
+        if (code == 200) {
+          this.$store.dispatch("getBoosterUserInfo");
+          this.$toast(message, "success");
+        } else {
+          this.$toast(message, "error");
+        }
+        this.$emit("input", false);
+      } catch (error) {
+        console.log(error);
+      }
+      this.loading = false;
+    },
+  },
 };
 </script>
 
