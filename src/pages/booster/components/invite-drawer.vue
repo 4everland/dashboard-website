@@ -26,7 +26,10 @@
           <div class="usdt-withdraw d-flex align-center justify-space-between">
             <div>
               <div class="fz-12">Balance</div>
-              <div class="d-flex align-center">
+              <div
+                class="d-flex align-center"
+                @click="showWithdrawLogDialog = true"
+              >
                 <img src="/img/booster/ton-invite-icon.png" width="16" alt="" />
                 <ICountUp
                   class="usdt-enabled ml-1 fz-20"
@@ -41,6 +44,12 @@
                     prefix: '',
                     suffix: '',
                   }"
+                />
+                <img
+                  class="cursor-p"
+                  src="/img/booster/svg/right-arrow-b.svg"
+                  width="16"
+                  alt=""
                 />
               </div>
             </div>
@@ -59,6 +68,8 @@
           v-model="showWithdrawDialog"
           :amount="tonCount"
         ></WithdrawDialog>
+
+        <WithdrawLogDialog v-model="showWithdrawLogDialog"></WithdrawLogDialog>
       </v-container>
     </v-navigation-drawer>
   </div>
@@ -67,6 +78,7 @@
 import { mapState } from "vuex";
 import ICountUp from "vue-countup-v2";
 import WithdrawDialog from "./withdraw-dialog.vue";
+import WithdrawLogDialog from "./withdraw-log-dialog.vue";
 import InviteTaskContent from "./invite-components/invite-task-content.vue";
 export default {
   computed: {
@@ -85,11 +97,13 @@ export default {
     InviteTaskContent,
     ICountUp,
     WithdrawDialog,
+    WithdrawLogDialog,
   },
 
   data() {
     return {
       showWithdrawDialog: false,
+      showWithdrawLogDialog: false,
     };
   },
   methods: {
@@ -110,6 +124,7 @@ export default {
     showInviteDrawer(val) {
       if (!val) {
         this.showWithdrawDialog = false;
+        this.showWithdrawLogDialog = false;
       }
     },
   },
