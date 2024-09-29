@@ -308,7 +308,6 @@ import {
   onNext,
   fetchTasks_One,
   fetchPartner_Tasks,
-  fetchInvite_Tasks,
 } from "@/api/booster.js";
 import { bus } from "@/utils/bus";
 import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
@@ -331,7 +330,6 @@ export default {
     completedTaskList() {
       let completedTaskList = this.tasksLists
         .concat(this.tasksLists_one)
-
         .concat(this.tasksLists_partner);
       completedTaskList = completedTaskList.filter(
         (it) => it.actStatus == "DONE"
@@ -437,18 +435,22 @@ export default {
     async stepNext(item, index, taskListType) {
       let _this = this;
       if (item.extra.buttonName == "Go") {
-        if (this.isTgMiniApp) return this.$tg.openAuto(item.oriDescription);
-        window.open(item.oriDescription);
+        let url = item.oriDescription;
+        if (item.actType == "share_twitter") {
+          url += encodeURIComponent(this.inviteInfo.link);
+        }
+        if (this.isTgMiniApp) {
+          this.$tg.openAuto(url);
+        } else {
+          window.open(url);
+        }
       }
       if (item.extra.buttonName == "Check") {
         this.$set(this.loadingStatus, item.actId, true);
       }
       const id = item.actId;
       const { data } = await onNext(id);
-
       this.$set(this.loadingStatus, item.actId, false);
-      const actType = data.actType;
-
       item.extra.buttonName = data.action.web.nextButtonName;
       if (taskListType == "daily") {
         this.$set(_this.tasksLists, index, item);
@@ -458,11 +460,13 @@ export default {
         this.$set(_this.tasksLists_partner, index, item);
       }
 
+      //  const actType = data.actType;
       switch (data.action.web.next) {
         case "REDIRECT":
           if (this.isTgMiniApp) return this.$tg.openAuto(shareUrl);
           location.href = data.action.web.message;
           break;
+
         // case "JUMP_OUT":
         //   if (actType == "share_twitter") {
 
@@ -518,7 +522,7 @@ export default {
         //   break;
         case "CLAIM":
           this.$toast2(data.action.web.message, "success");
-          this.getTasks();
+          // this.getTasks();
           break;
         case "COMPLETE":
           this.getTasks();
@@ -532,7 +536,7 @@ export default {
           }
           break;
         default:
-          this.getTasks();
+          // this.getTasks();
           break;
       }
       this.$store.dispatch("getBoosterUserInfo");
