@@ -183,7 +183,7 @@ export default {
       }
     },
     onPress(e) {
-      e.preventDefault();
+      // e.preventDefault();
       this.tabTimer = setTimeout(() => {
         this.$store.commit("SET_EASTER_EGG_DIALOG", true);
       }, 2000);

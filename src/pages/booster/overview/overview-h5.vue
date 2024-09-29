@@ -137,6 +137,9 @@
           @touchstart="onPress"
           @touchend="onUp"
           @touchcancel="onUp"
+          @mousedown="onPress"
+          @mouseup="onUp"
+          @mouseleave="onUp"
         >
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>

@@ -1,9 +1,7 @@
 <template>
   <div>
     <v-overlay :value="value" opacity="1" v-if="asMobile">
-      <div
-        class="easter-egg-overlay d-flex flex-column align-center justify-center"
-      >
+      <div class="easter-egg-overlay d-flex flex-column">
         <img
           class="close-btn"
           @click="$store.commit('SET_EASTER_EGG_DIALOG', false)"
@@ -14,7 +12,7 @@
 
         <div
           class="py-2 d-flex flex-column align-center justify-center"
-          style="width: 100%; gap: 8px"
+          style="width: 100%; gap: 8px; margin-top: 150px"
         >
           <img src="/img/booster/easter-egg.png" width="94" alt="" />
           <div class="easter-egg-title">Mystery Code Surprise</div>
@@ -29,7 +27,7 @@
             height="40"
             :disabled="!code"
             :loading="loading"
-            @click="handleConfrim"
+            @click="handleConfirm"
           >
             Confirm
           </v-btn>
@@ -75,7 +73,7 @@
               height="40"
               :disabled="!code"
               :loading="loading"
-              @click="handleConfrim"
+              @click="handleConfirm"
             >
               Confirm
             </v-btn>
@@ -105,7 +103,7 @@ export default {
   },
 
   methods: {
-    async handleConfrim() {
+    async handleConfirm() {
       try {
         this.loading = true;
         const { code, message } = await onEasterEgg(this.code);
