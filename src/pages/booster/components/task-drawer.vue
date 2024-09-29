@@ -568,6 +568,8 @@ export default {
           break;
         case "JUMP_OUT":
           if (actType == "share_twitter") {
+            // let shareUrl = `🌌 Just heard the @4everland_org #BuildKey launch is live NOW! Let’s seize our chance for 0.3% of the total $4EVER supply!\nhttps://x.com/aspecta_ai/status/1839621427353563141\n\nBy the way, join me in #4EVERBoost to earn $4EVER points for exclusive #4EVERLAND #airdrops!\n`;
+
             let shareUrl = `Wow, I’m beyond excited to see #4EVERLAND take the top spot in User Growth and Transaction Growth within the @BNBCHAIN ecosystem! 🎉\nhttps://x.com/4everland_org/status/1839288817368371219\n\n🥳 Join #4EVERBoost to start earning $4EVER points— ticket to exclusive 4EVERLAND #airdrops!\n`;
             shareUrl += this.inviteInfo.link;
             shareUrl =
