@@ -6,6 +6,7 @@ import {
   fetchTgInviteInfo,
   fetchInviteCount,
 } from "@/api/booster";
+import { TonConnectUI } from "@tonconnect/ui";
 
 export default {
   state: () => {
@@ -42,6 +43,9 @@ export default {
       tonCount: 0,
       updateBoostUserInfo: false,
       userInviteCount: 0,
+      tonConnectUI: new TonConnectUI({
+        manifestUrl: "https://dashboard.4everland.org/tonconnect-manifest.json",
+      }),
     };
   },
   getters: {
@@ -124,6 +128,12 @@ export default {
 
       return (basicComputed + boostComputed) * (boosterInfo.rateBuff / 100 + 1);
     },
+    tonConnected(state) {
+      if (state.tonConnectUI) {
+        return state.tonConnectUI.connected;
+      }
+      return false;
+    },
   },
   mutations: {
     SHOWSTAKEDRAWER_STATE: (state, payload) => {
@@ -179,6 +189,13 @@ export default {
     },
     SET_USER_INVITE_COUNT(state, count) {
       state.userInviteCount = count;
+    },
+
+    SET_TON_WALLET_CLIENT(state) {
+      const tonConnectUI = new TonConnectUI({
+        manifestUrl: "https://dashboard.4everland.org/tonconnect-manifest.json",
+      });
+      state.tonConnectUI = tonConnectUI;
     },
   },
   actions: {

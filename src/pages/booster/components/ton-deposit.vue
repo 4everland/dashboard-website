@@ -85,8 +85,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { TonConnectUI } from "@tonconnect/ui";
+import { mapState, mapGetters } from "vuex";
 import {
   Address,
   TonClient,
@@ -105,7 +104,6 @@ export default {
   },
   data() {
     return {
-      tonConnectUI: null,
       load: false,
       customLand: "",
       tonClient: null,
@@ -114,14 +112,10 @@ export default {
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
+      tonConnectUI: (s) => s.moduleBooster.tonConnectUI,
     }),
-    connected() {
-      if (this.tonConnectUI) {
-        return this.tonConnectUI.connected;
-      }
-      return false;
-    },
 
+    ...mapGetters(["tonConnected"]),
     customAmount() {
       if (this.depositLand == 0) {
         return this.customLand * 1e6;
@@ -130,25 +124,19 @@ export default {
     },
   },
   mounted() {
-    const tonConnectUI = new TonConnectUI({
-      manifestUrl: "https://dashboard.4everland.org/tonconnect-manifest.json",
-    });
-    this.tonConnectUI = tonConnectUI;
-    this.tonConnectUI.onStatusChange((wallet) => {
-      if (
-        wallet &&
-        wallet.connectItems?.tonProof &&
-        "proof" in wallet.connectItems.tonProof
-      ) {
-        console.log(wallet.connectItems.tonProof, "-----");
-      }
-    });
-
+    // this.tonConnectUI.onStatusChange((wallet) => {
+    //   if (
+    //     wallet &&
+    //     wallet.connectItems?.tonProof &&
+    //     "proof" in wallet.connectItems.tonProof
+    //   ) {
+    //     console.log(wallet.connectItems.tonProof, "-----");
+    //   }
+    // });
     // const tonClient = new TonClient({
     //   endpoint: "https://toncenter.com/api/v2/jsonRPC",
     // });
     // this.tonClient = tonClient;
-
     // const cell = Cell.fromBase64(
     //   "te6cckEBBAEA5QAB5YgAh/lsmH38Kch1s+r5FHV2pMW2qrac4T4IDEAIkUmRzqIDm0s7c///+Is2Yj1gAAAATNd4k05gDmj7mlwK6i5+iQcUG9Y4a1XsOVZZmNncyzfBuvE4Ofv7cLnchRkBgyHyBF79awl9qt4cGz7UNvC7OgUBAgoOw8htAwIDAAAAxEIATrmDnYy542XjUEq0HgOm5Za2P4NuAu1ZfI6ltQVClP+gslpLKAAAAAAAAAAAAAAAAAAAAAAAeyJ1aWQiOiI1ODBmYTNhZTc5NGY0OTk4YTM1ODM4OWQyNWE2MDY2NyJ9F8yYPQ=="
     // );
@@ -181,7 +169,7 @@ export default {
     // },
 
     async handleDeposit() {
-      if (!this.connected) {
+      if (!this.tonConnected) {
         await this.tonConnectUI.connectWallet();
       }
       let payload = JSON.stringify({

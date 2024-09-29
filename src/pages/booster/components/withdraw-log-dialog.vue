@@ -158,6 +158,9 @@ export default {
         }
       };
     },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
   methods: {
     async getList() {
@@ -170,9 +173,18 @@ export default {
     },
 
     handleOpenTxs(item) {
+      if (!item.txs) return;
       if (this.$inDev) {
+        if (this.isTgMiniApp)
+          return this.$tg.openAuto(
+            "https://testnet.tonviewer.com/transaction/" + item.txs
+          );
         window.open("https://testnet.tonviewer.com/transaction/" + item.txs);
       } else {
+        if (this.isTgMiniApp)
+          return this.$tg.openAuto(
+            "https://tonviewer.com/transaction/" + item.txs
+          );
         window.open("https://tonviewer.com/transaction/" + item.txs);
       }
     },
@@ -202,8 +214,8 @@ export default {
 }
 .withdraw-overlay {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   background: linear-gradient(
       180deg,
       rgba(0, 10, 16, 0.5) 66.24%,
@@ -323,7 +335,7 @@ export default {
   :deep td {
     font-size: 12px !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.25) !important;
-    text-wrap: nowrap !important;
+    white-space: nowrap !important;
   }
 
   :deep tbody tr.trigger {

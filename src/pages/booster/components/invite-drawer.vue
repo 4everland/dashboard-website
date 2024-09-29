@@ -26,7 +26,10 @@
           <div class="usdt-withdraw d-flex align-center justify-space-between">
             <div>
               <div class="fz-12">Balance</div>
-              <div class="d-flex align-center">
+              <div
+                class="d-flex align-center"
+                @click="showWithdrawLogDialog = true"
+              >
                 <img src="/img/booster/ton-invite-icon.png" width="16" alt="" />
                 <ICountUp
                   class="usdt-enabled ml-1 fz-20"
@@ -43,7 +46,6 @@
                   }"
                 />
                 <img
-                  @click="showWithdrawLogDialog = true"
                   class="cursor-p"
                   src="/img/booster/svg/right-arrow-b.svg"
                   width="16"

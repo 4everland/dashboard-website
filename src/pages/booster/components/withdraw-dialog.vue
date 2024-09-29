@@ -15,13 +15,11 @@
             <span class="ml-1 fz-14">{{ amount }} Ton</span>
           </div>
         </div>
-        <div class="withdraw-log">
-          <div class="withdraw-log-title">Balance History</div>
-        </div>
-        <div class="withdraw-tips d-flex align-center fz-12">
-          🔈 The minimum withdrawal amount is 0.1 Ton.Withdrawal will be
-          processed within 24 hours.
-        </div>
+
+        <ul class="withdraw-tips fz-12 mt-4">
+          <li>The minimum withdrawal amount is 0.1 Ton.</li>
+          <li>Withdrawals may take time. Please be patient!</li>
+        </ul>
 
         <div class="mt-8 d-flex align-center" style="gap: 30px">
           <v-btn
@@ -78,10 +76,10 @@
             </div>
           </div>
 
-          <div class="withdraw-tips mt-4 d-flex align-center fz-12">
-            🔈 The minimum withdrawal amount is 0.1 Ton.Withdrawal will be
-            processed within 24 hours.
-          </div>
+          <ul class="withdraw-tips fz-12 mt-4">
+            <li>The minimum withdrawal amount is 0.1 Ton.</li>
+            <li>Withdrawals may take time. Please be patient!</li>
+          </ul>
 
           <div class="mt-auto d-flex align-center" style="gap: 8px">
             <v-btn
@@ -112,7 +110,8 @@
 
 <script>
 import { fetchClaimUSDTLog, tonWithdraw } from "@/api/booster";
-import { TonConnectUI, toUserFriendlyAddress } from "@tonconnect/ui";
+import { toUserFriendlyAddress } from "@tonconnect/ui";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   props: {
@@ -124,26 +123,17 @@ export default {
       size: 10,
       page: 1,
       usdtLogs: [],
-      tonConnectUI: null,
       loading: false,
     };
   },
   computed: {
+    ...mapState({
+      tonConnectUI: (s) => s.moduleBooster.tonConnectUI,
+    }),
+    ...mapGetters(["tonConnected"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-    connected() {
-      if (this.tonConnectUI) {
-        return this.tonConnectUI.connected;
-      }
-      return false;
-    },
-  },
-  mounted() {
-    const tonConnectUI = new TonConnectUI({
-      manifestUrl: "https://dashboard.4everland.org/tonconnect-manifest.json",
-    });
-    this.tonConnectUI = tonConnectUI;
   },
   methods: {
     async getList() {
@@ -158,10 +148,9 @@ export default {
     async handleTonWithdraw() {
       if (this.amount < 0.1) return this.$toast2("At Least 0.1 Ton", "info");
       try {
-        if (!this.connected) {
+        if (!this.tonConnected) {
           await this.tonConnectUI.connectWallet();
         }
-        console.log(this.tonConnectUI);
         this.loading = true;
         const address = toUserFriendlyAddress(
           this.tonConnectUI.account.address
@@ -286,9 +275,12 @@ export default {
     color: rgba(255, 255, 255, 0.5);
   }
 }
+ul,
+li {
+  list-style: disc;
+}
 .withdraw-tips {
   width: 100%;
-  padding: 2px 8px;
   color: rgba(255, 255, 255, 0.75);
   border-radius: 80px;
   background: rgba(97, 114, 243, 0.25);
