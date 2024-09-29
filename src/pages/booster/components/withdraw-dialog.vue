@@ -17,25 +17,6 @@
         </div>
         <div class="withdraw-log">
           <div class="withdraw-log-title">Balance History</div>
-          <div
-            class="d-flex flex-column"
-            style="gap: 8px; height: 117px; overflow: auto"
-          >
-            <div
-              v-for="item in usdtLogs"
-              :key="item.id"
-              class="d-flex align-center justify-space-between fz-14"
-              style="line-height: 16px"
-            >
-              <span class="withdraw-log-text"
-                >Invite {{ item.from.replace("invite_milestones_", "") }} new
-                boosters {{ item.value }} Ton.</span
-              >
-              <span class="withdraw-log-created">
-                {{ new Date(item.createdAt).format() }}</span
-              >
-            </div>
-          </div>
         </div>
         <div class="withdraw-tips d-flex align-center fz-12">
           🔈 The minimum withdrawal amount is 0.1 Ton.Withdrawal will be
@@ -58,6 +39,7 @@
             class="withdraw-btn"
             width="140"
             height="48"
+            :loading="loading"
             @click="handleTonWithdraw"
           >
             Withdraw
@@ -96,29 +78,7 @@
             </div>
           </div>
 
-          <div class="withdraw-log">
-            <div class="withdraw-log-title">Balance History</div>
-            <div
-              class="d-flex flex-column"
-              style="gap: 8px; height: 117px; overflow: auto"
-            >
-              <div
-                v-for="item in usdtLogs"
-                :key="item.id"
-                class="d-flex align-center justify-space-between fz-14"
-                style="line-height: 16px"
-              >
-                <span class="withdraw-log-text"
-                  >Invite {{ item.from.replace("invite_milestones_", "") }} new
-                  boosters {{ item.value }} Ton.</span
-                >
-                <span class="withdraw-log-created">
-                  {{ new Date(item.createdAt).format() }}</span
-                >
-              </div>
-            </div>
-          </div>
-          <div class="withdraw-tips d-flex align-center fz-12">
+          <div class="withdraw-tips mt-4 d-flex align-center fz-12">
             🔈 The minimum withdrawal amount is 0.1 Ton.Withdrawal will be
             processed within 24 hours.
           </div>
@@ -138,6 +98,7 @@
               class="withdraw-btn"
               width="200"
               height="48"
+              :loading="loading"
               @click="handleTonWithdraw"
             >
               Withdraw
@@ -150,7 +111,9 @@
 </template>
 
 <script>
-import { fetchClaimUSDTLog } from "@/api/booster";
+import { fetchClaimUSDTLog, tonWithdraw } from "@/api/booster";
+import { TonConnectUI, toUserFriendlyAddress } from "@tonconnect/ui";
+
 export default {
   props: {
     value: Boolean,
@@ -161,14 +124,27 @@ export default {
       size: 10,
       page: 1,
       usdtLogs: [],
+      tonConnectUI: null,
+      loading: false,
     };
   },
   computed: {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    connected() {
+      if (this.tonConnectUI) {
+        return this.tonConnectUI.connected;
+      }
+      return false;
+    },
   },
-
+  mounted() {
+    const tonConnectUI = new TonConnectUI({
+      manifestUrl: "https://dashboard.4everland.org/tonconnect-manifest.json",
+    });
+    this.tonConnectUI = tonConnectUI;
+  },
   methods: {
     async getList() {
       try {
@@ -179,12 +155,34 @@ export default {
         console.log(error);
       }
     },
-    handleTonWithdraw() {
-      if (this.amount < 0.1) {
-        this.$toast2("At Least 0.1 Ton", "info");
-      } else {
-        this.$toast2("Cash withdrawals will be available soon!", "info");
+    async handleTonWithdraw() {
+      if (this.amount < 0.1) return this.$toast2("At Least 0.1 Ton", "info");
+      try {
+        if (!this.connected) {
+          await this.tonConnectUI.connectWallet();
+        }
+        console.log(this.tonConnectUI);
+        this.loading = true;
+        const address = toUserFriendlyAddress(
+          this.tonConnectUI.account.address
+        );
+        console.log(address, "===== friendaddr");
+        const { data, code, message } = await tonWithdraw(address, "0.1");
+        console.log(data, code, message);
+        if (code == 11039) {
+          this.$toast2(message, "error");
+        } else if (code == 200) {
+          this.$emit("input", false);
+          this.$toast2(
+            "Your withdrawal request submitted, thank you for your patience.",
+            "success"
+          );
+          this.$store.dispatch("getBoostTonCount");
+        }
+      } catch (error) {
+        console.log(error);
       }
+      this.loading = false;
     },
   },
   watch: {

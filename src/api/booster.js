@@ -278,3 +278,13 @@ export const claimEliteQuest = async (activityId) => {
     url: `/elitequest/claim/${activityId}`,
   });
 };
+
+export const tonWithdraw = async (address, amount) => {
+  return boosterRequest.post({
+    url: `/node/withdraw`,
+    data: {
+      address,
+      amount,
+    },
+  });
+};

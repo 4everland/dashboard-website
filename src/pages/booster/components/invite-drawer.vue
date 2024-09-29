@@ -42,6 +42,13 @@
                     suffix: '',
                   }"
                 />
+                <img
+                  @click="showWithdrawLogDialog = true"
+                  class="cursor-p"
+                  src="/img/booster/svg/right-arrow-b.svg"
+                  width="16"
+                  alt=""
+                />
               </div>
             </div>
 
@@ -59,6 +66,8 @@
           v-model="showWithdrawDialog"
           :amount="tonCount"
         ></WithdrawDialog>
+
+        <WithdrawLogDialog v-model="showWithdrawLogDialog"></WithdrawLogDialog>
       </v-container>
     </v-navigation-drawer>
   </div>
@@ -67,6 +76,7 @@
 import { mapState } from "vuex";
 import ICountUp from "vue-countup-v2";
 import WithdrawDialog from "./withdraw-dialog.vue";
+import WithdrawLogDialog from "./withdraw-log-dialog.vue";
 import InviteTaskContent from "./invite-components/invite-task-content.vue";
 export default {
   computed: {
@@ -85,11 +95,13 @@ export default {
     InviteTaskContent,
     ICountUp,
     WithdrawDialog,
+    WithdrawLogDialog,
   },
 
   data() {
     return {
       showWithdrawDialog: false,
+      showWithdrawLogDialog: false,
     };
   },
   methods: {
@@ -110,6 +122,7 @@ export default {
     showInviteDrawer(val) {
       if (!val) {
         this.showWithdrawDialog = false;
+        this.showWithdrawLogDialog = false;
       }
     },
   },
