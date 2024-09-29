@@ -34,7 +34,9 @@
                     item.from == "withdraw" ? "Withdraw Ton" : "Invite Reward"
                   }}
                 </td>
-                <td>{{ item.value }}</td>
+                <td>
+                  {{ Number(item.value) > 0 ? "+" + item.value : item.value }}
+                </td>
                 <td>{{ logStatus(item) }}</td>
                 <td>{{ new Date(item.createdAt).format() }}</td>
                 <td
@@ -99,7 +101,10 @@
                       item.from == "withdraw" ? "Withdraw Ton" : "Invite Reward"
                     }}
                   </td>
-                  <td>{{ item.value }}</td>
+                  <td>
+                    {{ Number(item.value) > 0 ? "+" + item.value : item.value }}
+                  </td>
+
                   <td>{{ logStatus(item) }}</td>
 
                   <td>{{ new Date(item.createdAt).format() }}</td>
@@ -143,7 +148,7 @@ export default {
     },
     logStatus() {
       return function (item) {
-        if (Number(item.value) < 0) {
+        if (Number(Number(item.value)) < 0) {
           if (item.txs) return "Success";
           return "Pending";
         }
