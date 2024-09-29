@@ -228,8 +228,8 @@ export default {
 }
 .booster-module-dialog {
   padding: 13px;
-  height: 489px;
-  background: url("/img/booster/svg/withdraw-dialog-bg.svg") no-repeat;
+  height: 339px;
+  // background: url("/img/booster/svg/withdraw-dialog-bg.svg") no-repeat;
   background-size: contain;
   background-position: center;
 
