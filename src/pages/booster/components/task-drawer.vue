@@ -437,6 +437,7 @@ export default {
     async stepNext(item, index, taskListType) {
       let _this = this;
       if (item.extra.buttonName == "Go") {
+        if (this.isTgMiniApp) return this.$tg.openAuto(item.oriDescription);
         window.open(item.oriDescription);
       }
       if (item.extra.buttonName == "Check") {
@@ -640,6 +641,7 @@ export default {
       }
     },
     handleTitle(it) {
+      if (this.isTgMiniApp) return this.$tg.openAuto(it.oriDescription);
       window.open(it.oriDescription);
     },
   },
