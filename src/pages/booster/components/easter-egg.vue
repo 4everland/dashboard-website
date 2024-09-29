@@ -109,14 +109,15 @@ export default {
       try {
         this.loading = true;
         const { code, message } = await onEasterEgg(this.code);
-        console.log(data);
         if (code == 200) {
           this.$store.dispatch("getBoosterUserInfo");
-          this.$toast(message, "success");
+          this.$toast2(message, "success");
+        } else if (code == 111) {
+          this.$toast2(message, "error");
         } else {
-          this.$toast(message, "error");
+          this.$toast2(message, "info");
         }
-        this.$emit("input", false);
+        this.$store.commit("SET_EASTER_EGG_DIALOG", false);
       } catch (error) {
         console.log(error);
       }

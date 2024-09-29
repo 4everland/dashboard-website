@@ -664,7 +664,7 @@ export default {
         msg = data.message || msg;
       }
       if (/repriced/i.test(msg) && /replaced/i.test(msg)) {
-        return this.$toast("Transaction was replaced.");
+        return this.$toast2("Transaction was replaced.");
       }
       window.gtag("event", "contract_error", {
         message: msg,
