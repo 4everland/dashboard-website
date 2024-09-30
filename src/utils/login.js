@@ -62,6 +62,39 @@ export const ConnectPhantom = async () => {
   }
 };
 
+export const GetSignPhantom = async (accounts, nonce) => {
+  const getProvider = () => {
+    if ("phantom" in window) {
+      const provider = window.phantom?.solana;
+      if (provider?.isPhantom) {
+        return provider;
+      }
+    }
+  };
+  const uint8Array = (uint8Array) => {
+    return Array.prototype.map
+      .call(uint8Array, (x) => ("00" + x.toString(16)).slice(-2))
+      .join("");
+  };
+  try {
+    const provider = getProvider(); // see "Detecting the Provider"
+    const encodedMessage = new TextEncoder().encode(nonce);
+    // const signedMessage = await provider.request({
+    //   method: "signMessage",
+    //   params: {
+    //     message: encodedMessage,
+    //   },
+    // });
+
+    const signedMessage = await provider.signMessage(encodedMessage, "utf8");
+    const signature = uint8Array(signedMessage.signature);
+    return signature;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 export const SignPhantom = async (accounts, nonce, inviteCode, capToken) => {
   const getProvider = () => {
     if ("phantom" in window) {
@@ -110,6 +143,22 @@ export const ConnectFlow = async () => {
     return fcl.currentUser.snapshot();
   } catch (err) {
     console.log(err);
+    return false;
+  }
+};
+
+export const GetSignFlow = async (accounts, nonce) => {
+  try {
+    const MSG = Buffer.from(nonce).toString("hex");
+    const signUserMessage = await fcl.currentUser.signUserMessage(MSG);
+    const signature = signUserMessage[0].signature;
+    const keyId = signUserMessage[0].keyId;
+    if (!signature) {
+      return;
+    }
+    return { signature, keyId };
+  } catch (e) {
+    console.log(e);
     return false;
   }
 };

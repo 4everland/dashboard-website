@@ -76,7 +76,7 @@
 <script>
 import SignClient from "@walletconnect/sign-client";
 import qrcode from "qrcode";
-
+import WalletList from "./WalletList";
 import {
   ConnectPhantom,
   SignPhantom,
@@ -113,86 +113,7 @@ export default {
         "--icon": "",
       },
       loadingIcon: null,
-      walletItem: [
-        {
-          name: "MetaMask",
-          icon: require("@/assets/imgs/metamask.svg"),
-          provider: null,
-          walletType: "METAMASK",
-          isEvm: true,
-        },
-        {
-          name: "OKX Wallet",
-          icon: require("@/assets/imgs/okx.png"),
-          provider: null,
-          walletType: "OKX",
-          isEvm: true,
-        },
-        {
-          name: "Binance Web3 Wallet",
-          icon: require("@/assets/imgs/bn.png"),
-          provider: null,
-          walletType: "BN",
-          isEvm: true,
-        },
-        {
-          name: "Bitget Wallet",
-          icon: require("@/assets/imgs/Bitget.svg"),
-          provider: null,
-          walletType: "Bitget",
-          isEvm: true,
-        },
-        {
-          name: "TokenPocket",
-          icon: require("@/assets/imgs/TokenPocket.svg"),
-          provider: null,
-          walletType: "TokenPocket",
-          isEvm: true,
-        },
-        {
-          name: "imToken",
-          icon: require("@/assets/imgs/imToken.svg"),
-          provider: null,
-          walletType: "IMTOKEN",
-          isEvm: true,
-        },
-        {
-          name: "Coinbase Wallet",
-          icon: require("@/assets/imgs/coinbase.png"),
-          provider: null,
-          walletType: "COINBASE",
-          isEvm: true,
-        },
-
-        {
-          name: "WalletConnect",
-          icon: require("@/assets/imgs/walletConnect.svg"),
-          provider: null,
-          walletType: "Walletconnect",
-          isEvm: false,
-        },
-        {
-          name: "Phantom",
-          icon: require("@/assets/imgs/phantom.png"),
-          provider: null,
-          walletType: "PHANTOM",
-          isEvm: false,
-        },
-        {
-          name: "Petra",
-          icon: require("@/assets/imgs/petra.svg"),
-          provider: null,
-          walletType: "PETRA",
-          isEvm: false,
-        },
-        {
-          name: "Flow",
-          icon: require("@/assets/imgs/flow.svg"),
-          provider: null,
-          walletType: "ONFLOW",
-          isEvm: false,
-        },
-      ],
+      walletItem: WalletList,
       showQrcode: false,
       qrCodeUrl: "",
       qrcodeUri: "",
