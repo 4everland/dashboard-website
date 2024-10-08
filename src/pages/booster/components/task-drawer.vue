@@ -645,8 +645,15 @@ export default {
       }
     },
     handleTitle(it) {
-      if (this.isTgMiniApp) return this.$tg.openAuto(it.oriDescription);
-      window.open(it.oriDescription);
+      console.log(it, "---");
+
+      let url = it.oriDescription;
+      if (it.actType == "share_twitter") {
+        url += encodeURIComponent(this.inviteInfo.link);
+      }
+
+      if (this.isTgMiniApp) return this.$tg.openAuto(url);
+      window.open(url);
     },
   },
 };
