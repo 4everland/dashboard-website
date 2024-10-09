@@ -149,11 +149,11 @@ export default {
   },
   methods: {
     toggleStakeDrawer() {
-      if (this.notLogin || this.boostLocked) return;
+      if (this.boostLocked) return;
       this.$store.dispatch("StakeDrawerToggle");
     },
     toggleExplore() {
-      if (this.notLogin || this.boostLocked) return;
+      if (this.boostLocked) return;
       if (this.exploreRemain < 1)
         return this.$toast2(
           "Whoops, you've used all your exploration times. Try again tomorrow!",
@@ -162,15 +162,15 @@ export default {
       this.$router.push("/boost/explore");
     },
     toggleTaskDrawer() {
-      if (this.notLogin || this.boostLocked) return;
+      if (this.boostLocked) return;
       this.$store.dispatch("TaskDrawerToggle");
     },
     toggleToolDrawer() {
-      if (this.notLogin || this.boostLocked) return;
+      if (this.boostLocked) return this.$toast2("boost Locked", "error");
       this.$store.commit("SET_TOOL_BAR", true);
     },
     toggleInviteDrawer() {
-      if (this.notLogin || this.boostLocked) return;
+      if (this.boostLocked) return this.$toast2("boost Locked", "error");
       this.$store.commit("SET_INVITE_BAR", true);
     },
   },

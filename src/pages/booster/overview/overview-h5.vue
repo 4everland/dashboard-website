@@ -1,7 +1,12 @@
 <template>
   <div class="d-md-none d-block">
-    <TokenDialog class="pos-a" style="right: 8px; top: 70px"></TokenDialog>
+    <TokenDialog
+      class="pos-a"
+      style="right: 8px; top: 70px"
+      v-if="isTgMiniApp"
+    ></TokenDialog>
     <div
+      v-if="isTgMiniApp"
       class="trigger-icon pos-a"
       style="right: 8px; top: 136px"
       @click="$store.commit('SET_INVITE_BAR', true)"

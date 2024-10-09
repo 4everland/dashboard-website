@@ -43,10 +43,10 @@
         ></unlock-dialog>
         <EasterEgg v-model="showEasterEggDialog"></EasterEgg>
         <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar>
-        <nft-drawer v-if="userInfo.uid"></nft-drawer>
-        <task-drawer v-if="userInfo.uid"></task-drawer>
-        <tool-drawer v-if="userInfo.uid"></tool-drawer>
-        <invite-drawer v-if="userInfo.uid"></invite-drawer>
+        <nft-drawer></nft-drawer>
+        <task-drawer></task-drawer>
+        <tool-drawer></tool-drawer>
+        <invite-drawer></invite-drawer>
         <bind-dialog v-model="showBindWallet"></bind-dialog>
       </template>
       <!-- <end-boosting v-model="showEndBoost"></end-boosting> -->
