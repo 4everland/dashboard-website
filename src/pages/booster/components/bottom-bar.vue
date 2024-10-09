@@ -118,7 +118,7 @@ export default {
         {
           icon: "/img/booster/nav/earn.png",
           activityIcon: "/img/booster/nav/earn-active.png",
-          name: "Tasks",
+          name: "Earn",
           isOpen: true,
           action() {
             _this.toggleTaskDrawer();
