@@ -384,6 +384,7 @@ export default {
 @media screen and(max-width: 960px) {
   .booster-overview-bg {
     max-height: initial !important;
+    min-height: 100vh !important;
   }
   .booster-overview-task {
     position: absolute;

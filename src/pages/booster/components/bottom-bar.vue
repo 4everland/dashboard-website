@@ -31,15 +31,26 @@
             >
               x{{ exploreRemain }}
             </div>
+
+            <v-badge
+              v-if="asMobile"
+              class="undo-badge"
+              style="position: absolute; right: 0; top: 0"
+              v-show="item.undo"
+              color="red"
+              dot
+            >
+            </v-badge>
           </div>
 
           <div v-if="item.isOpen" class="mobile-name">
-            <v-badge v-show="item.undo" color="red" dot>
-              {{ item.name }}
-            </v-badge>
-            <span v-show="!item.undo">
-              {{ item.name }}
-            </span>
+            <template v-if="!asMobile">
+              <v-badge v-show="item.undo" color="red" dot>
+                {{ item.name }}
+              </v-badge>
+              <span v-show="!item.undo"> {{ item.name }}</span>
+            </template>
+            <span v-else> {{ item.name }}</span>
           </div>
           <div v-if="!item.isOpen" class="come-soon">
             <img src="/img/booster/nav/comesoon.png" alt="" />
@@ -105,8 +116,8 @@ export default {
           undo: false,
         },
         {
-          icon: "/img/booster/nav/tasks.png",
-          activityIcon: "/img/booster/nav/tasks-active.png",
+          icon: "/img/booster/nav/earn.png",
+          activityIcon: "/img/booster/nav/earn-active.png",
           name: "Tasks",
           isOpen: true,
           action() {
@@ -435,5 +446,11 @@ export default {
       position: fixed;
     }
   }
+}
+
+::v-deep .undo-badge .v-badge__badge {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
 }
 </style>
