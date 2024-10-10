@@ -20,7 +20,33 @@
             Enter your code to access exclusive rewards.
           </div>
           <div class="easter-egg-input mt-2">
-            <input type="text" v-model="code" placeholder="Enter the code" />
+            <input
+              type="text"
+              v-model="code"
+              @focus="message = ''"
+              placeholder="Enter the code"
+            />
+          </div>
+          <div v-if="message" class="d-flex align-center">
+            <img
+              v-show="status == 'error'"
+              src="/img/svg/error.svg"
+              width="20"
+              alt=""
+            />
+            <img
+              v-show="status == 'info'"
+              src="/img/svg/info.svg"
+              width="20"
+              alt=""
+            />
+            <span
+              class="fz-14"
+              style="margin-left: 2px"
+              :style="{ color: status == 'error' ? '#F04438' : '#C0C1C2' }"
+            >
+              {{ message }}
+            </span>
           </div>
           <v-btn
             class="start-boost-btn mt-4"
@@ -44,9 +70,7 @@
       style="background-color: transparent; box-shadow: none"
     >
       <div class="booster-module-dialog">
-        <div
-          class="easter-egg-dialog d-flex flex-column align-center justify-center"
-        >
+        <div class="easter-egg-dialog d-flex flex-column align-center">
           <img
             class="close-btn"
             @click="$store.commit('SET_EASTER_EGG_DIALOG', false)"
@@ -65,9 +89,36 @@
             Enter your code to access exclusive rewards.
           </div>
           <div class="easter-egg-input">
-            <input type="text" v-model="code" placeholder="Enter the code" />
+            <input
+              type="text"
+              v-model="code"
+              @focus="message = ''"
+              placeholder="Enter the code"
+            />
           </div>
-          <div class="mt-2">
+
+          <div v-if="message" class="d-flex align-center">
+            <img
+              v-show="status == 'error'"
+              src="/img/svg/error.svg"
+              width="20"
+              alt=""
+            />
+            <img
+              v-show="status == 'info'"
+              src="/img/svg/info.svg"
+              width="20"
+              alt=""
+            />
+            <span
+              class="fz-14"
+              style="margin-left: 2px"
+              :style="{ color: status == 'error' ? '#F04438' : '#C0C1C2' }"
+            >
+              {{ message }}
+            </span>
+          </div>
+          <div class="mt-2 easter-egg-footer">
             <v-btn
               class="start-boost-btn"
               height="40"
@@ -81,11 +132,24 @@
         </div>
       </div>
     </v-dialog>
+
+    <RewardDialog v-model="showRewardDialog" :reward="message">
+      <div class="mt-2">
+        <v-btn
+          class="confirm-btn"
+          width="103"
+          height="44"
+          @click="showRewardDialog = false"
+          >OK</v-btn
+        >
+      </div>
+    </RewardDialog>
   </div>
 </template>
 
 <script>
 import { onEasterEgg } from "@/api/booster";
+import RewardDialog from "./reward-dialog.vue";
 export default {
   props: {
     value: Boolean,
@@ -94,6 +158,9 @@ export default {
     return {
       code: "",
       loading: false,
+      message: "",
+      status: "error",
+      showRewardDialog: false,
     };
   },
   computed: {
@@ -101,26 +168,36 @@ export default {
       return this.$vuetify.breakpoint.smAndDown;
     },
   },
-
+  components: {
+    RewardDialog,
+  },
   methods: {
     async handleConfirm() {
       try {
         this.loading = true;
         const { code, message } = await onEasterEgg(this.code);
+        this.message = message;
         if (code == 200) {
           this.$store.dispatch("getBoosterUserInfo");
-          this.$toast2(message, "success");
+          this.$store.commit("SET_EASTER_EGG_DIALOG", false);
+          this.showRewardDialog = true;
         } else if (code == 7001) {
-          this.$toast2(message, "error");
+          this.status = "error";
         } else {
-          this.$toast2(message, "info");
+          this.status = "info";
         }
         this.code = "";
-        this.$store.commit("SET_EASTER_EGG_DIALOG", false);
       } catch (error) {
         console.log(error);
       }
       this.loading = false;
+    },
+  },
+  watch: {
+    value(val) {
+      if (val) {
+        this.message = "";
+      }
     },
   },
 };
@@ -153,7 +230,6 @@ export default {
 }
 .booster-module-dialog {
   padding: 13px;
-  height: 273px;
   background: url("/img/booster/svg/easter-egg-overlay-bg.svg") no-repeat;
   background-size: contain;
   background-position: center;
@@ -173,6 +249,7 @@ export default {
   backdrop-filter: blur(4px);
 }
 .easter-egg-title {
+  margin-top: 54px;
   font-size: 24px;
   font-weight: 600;
   text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.25);
@@ -201,6 +278,9 @@ export default {
   top: -50px;
 }
 
+.easter-egg-footer {
+  margin-bottom: 20px;
+}
 .start-boost-btn {
   padding: 16px 24px;
   border-radius: 4px;
@@ -225,4 +305,13 @@ export default {
 //   text-align: center;
 //   background: rgba(0, 129, 248, 0.1);
 // }
+
+.confirm-btn {
+  color: #fff !important;
+  padding: 0 !important;
+  letter-spacing: 0;
+  backdrop-filter: blur(2px);
+  border-radius: 8px;
+  background: #6172f3 !important;
+}
 </style>
