@@ -136,6 +136,20 @@
             >
           </div>
         </div>
+
+        <div class="daily-boost">
+          <div style="position: relative">
+            <div style="width: 10px; height: 10px"></div>
+          </div>
+
+          <img
+            class="daily-boost-btn"
+            src="/img/booster/daily-boost-btn.png"
+            width="121"
+            alt=""
+          />
+        </div>
+
         <div
           class="point-square"
           @click="handleClaim"
@@ -389,6 +403,19 @@ export default {
     top: -850%;
   }
   .unlocked-card {
+    position: absolute;
+    right: 50%;
+    transform: translateX(50%);
+    top: 200%;
+  }
+}
+
+.daily-boost {
+  position: absolute;
+  left: 49%;
+  top: 40%;
+
+  .daily-boost-btn {
     position: absolute;
     right: 50%;
     transform: translateX(50%);
