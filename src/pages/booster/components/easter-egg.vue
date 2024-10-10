@@ -133,7 +133,7 @@
       </div>
     </v-dialog>
 
-    <RewardDialog v-model="showRewardDialog" :reward="message">
+    <RewardDialog v-model="showRewardDialog" :reward="reward">
       <div class="mt-2">
         <v-btn
           class="confirm-btn"
@@ -160,6 +160,7 @@ export default {
       loading: false,
       message: "",
       status: "error",
+      reward: "",
       showRewardDialog: false,
     };
   },
@@ -176,14 +177,16 @@ export default {
       try {
         this.loading = true;
         const { code, message } = await onEasterEgg(this.code);
-        this.message = message;
         if (code == 200) {
           this.$store.dispatch("getBoosterUserInfo");
           this.$store.commit("SET_EASTER_EGG_DIALOG", false);
+          this.reward = message;
           this.showRewardDialog = true;
         } else if (code == 7001) {
+          this.message = message;
           this.status = "error";
         } else {
+          this.message = message;
           this.status = "info";
         }
         this.code = "";
