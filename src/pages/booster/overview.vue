@@ -42,6 +42,7 @@
           :unlockStage="unlockStage"
         ></unlock-dialog>
         <EasterEgg v-model="showEasterEggDialog"></EasterEgg>
+        <DailySignDialog v-model="showDailySign"></DailySignDialog>
         <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar>
         <nft-drawer></nft-drawer>
         <task-drawer></task-drawer>
@@ -69,6 +70,7 @@ import BindDialog from "./components/bind-dialog.vue";
 import UnlockDialog from "./components/unlock-dialog.vue";
 import TgStartBoostOverlay from "./components/tg-start-boost-overlay.vue";
 import EasterEgg from "./components/easter-egg.vue";
+import DailySignDialog from "./components/daily-sign-dialog.vue";
 
 import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
@@ -158,6 +160,7 @@ export default {
       showUnlockDialog: false,
       timer: null,
       unlockStage: 0,
+      showDailySign: true,
     };
   },
   computed: {
@@ -307,6 +310,7 @@ export default {
     ToolDrawer,
     InviteDrawer,
     EasterEgg,
+    DailySignDialog,
   },
 
   watch: {
