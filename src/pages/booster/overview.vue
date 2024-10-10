@@ -69,6 +69,7 @@ import BindDialog from "./components/bind-dialog.vue";
 import UnlockDialog from "./components/unlock-dialog.vue";
 import TgStartBoostOverlay from "./components/tg-start-boost-overlay.vue";
 import EasterEgg from "./components/easter-egg.vue";
+
 import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
 import { driver } from "driver.js";
