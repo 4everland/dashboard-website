@@ -53,14 +53,14 @@
                   opacity: it.signed && it.day !== today ? '0.25' : '1',
                 }"
                 src="/img/booster/daily-boost/battery.png"
-                width="64"
+                width="56"
                 alt=""
               />
               <img
                 v-if="it.day == today"
                 class="lightning-bg"
                 src="/img/booster/daily-boost/lightning-bg.png"
-                width="64"
+                width="56"
                 alt=""
               />
             </div>
@@ -72,28 +72,37 @@
           class="d-flex align-center daily-sign-footer mt-3"
           style="gap: 8px"
         >
-          <v-btn
-            class="checkin-btn"
-            :width="asMobile ? 260 : 176"
-            @click="handleCheckin"
-            height="44"
-            :disabled="checkinDisabled"
-            :loading="checkinLoading"
-          >
-            <span>Checkin</span>
-            <span>+1 pts/h</span>
-          </v-btn>
+          <div class="flex-1" style="width: 100%">
+            <v-btn
+              class="checkin-btn"
+              @click="handleCheckin"
+              style="width: 100%"
+              height="44"
+              :disabled="checkinDisabled"
+              :loading="checkinLoading"
+            >
+              <div v-if="!checkinDisabled">
+                <span>Checkin</span>
+                <span>+1 pts/h</span>
+              </div>
+              <div v-else>Checked</div>
+            </v-btn>
+          </div>
 
-          <v-btn
-            class="boost-btn"
-            :width="asMobile ? 260 : 176"
-            height="44"
-            @click="handleBoostClaim"
-          >
-            <div class="boost-btn-tips">CLAIM LAND</div>
-            <span>Boost</span>
-            <span>+{{ todayInfoReward }} pts/h</span>
-          </v-btn>
+          <div class="flex-1" style="width: 100%">
+            <v-btn
+              class="boost-btn"
+              style="width: 100%"
+              height="44"
+              @click="handleBoostClaim"
+            >
+              <div class="boost-btn-tips">CLAIM LAND</div>
+              <div class="d-flex align-center">
+                <span class="fz-20 fw-b" style="font-style: italic">Boost</span>
+                <span class="ml-2">+{{ todayInfoReward }} pts/h</span>
+              </div>
+            </v-btn>
+          </div>
         </div>
       </div>
     </v-dialog>
@@ -310,7 +319,7 @@ export default {
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
-    padding: 12px;
+    padding: 8px;
     border-radius: 16px;
     background: #121536;
     .sign-item {
@@ -367,8 +376,8 @@ export default {
     position: absolute;
     left: 0;
     top: 0;
-    width: 64px;
-    height: 64px;
+    width: 56px;
+    height: 56px;
   }
 }
 
