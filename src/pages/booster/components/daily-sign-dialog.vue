@@ -13,6 +13,14 @@
           width="169"
           alt=""
         />
+
+        <img
+          class="close-btn"
+          @click="$emit('input', false)"
+          src="/img/booster/svg/close.svg"
+          width="20"
+          alt=""
+        />
         <div class="daily-boost-title text-center">Daily Boost</div>
         <div class="sign-content">
           <div
@@ -258,6 +266,12 @@ export default {
   border-radius: 16px;
   background: url("/img/booster/daily-boost/bg.png");
   background-size: 100% 100%;
+  .close-btn {
+    position: absolute;
+    right: 0;
+    top: -40px;
+    cursor: pointer;
+  }
 
   .lightning {
     position: absolute;
