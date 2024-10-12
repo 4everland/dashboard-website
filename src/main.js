@@ -15,7 +15,7 @@ if (window.top !== window.self) {
 
 window.Buffer = Buffer;
 process.env.VUE_APP_TG_VERSION == "true" &&
-process.env.NODE_ENV == "development"
+(process.env.NODE_ENV == "development" || process.env.NODE_ENV == "alpha")
   ? new VConsole()
   : "";
 

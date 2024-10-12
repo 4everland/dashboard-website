@@ -259,11 +259,17 @@
           />
         </div>
 
-        <div class="lightning-bg" v-if="!showDailySign">
-          <img
-            src="/img/booster/daily-boost/lightning-overview-bg.png"
-            alt=""
-          />
+        <div class="lightning-bg" v-if="showDailySign">
+          <dotlottie-player
+            src="https://lottie.host/10211de3-1cbf-40d2-b3bb-e15c9c53e18f/84965ekRhy.json"
+            background="transparent"
+            speed="0.5"
+            style="width: 100%"
+            direction="1"
+            playMode="normal"
+            loop
+            autoplay
+          ></dotlottie-player>
         </div>
       </div>
     </div>
