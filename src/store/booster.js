@@ -5,6 +5,7 @@ import {
   fetchInviteInfo,
   fetchTgInviteInfo,
   fetchInviteCount,
+  fetchDailySign,
 } from "@/api/booster";
 import { TonConnectUI } from "@tonconnect/ui";
 
@@ -47,6 +48,7 @@ export default {
       tonConnectUI: new TonConnectUI({
         manifestUrl: "https://dashboard.4everland.org/tonconnect-manifest.json",
       }),
+      dailySign: null,
     };
   },
   getters: {
@@ -200,6 +202,9 @@ export default {
       });
       state.tonConnectUI = tonConnectUI;
     },
+    SET_DAILY_SIGN(state, value) {
+      state.dailySign = value;
+    },
   },
   actions: {
     StakeDrawerState: async (context, payload) => {
@@ -279,6 +284,15 @@ export default {
         if (data) {
           commit("SET_USER_INVITE_COUNT", data.count);
         }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getDailySign({ commit }) {
+      try {
+        const { data } = await fetchDailySign();
+        commit("SET_DAILY_SIGN", data.items);
       } catch (error) {
         console.log(error);
       }

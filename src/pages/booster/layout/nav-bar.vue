@@ -522,7 +522,6 @@ export default {
 };
 </script>
 
-<style></style>
 <style lang="scss" scoped>
 @media screen and (max-width: 960px) {
   .nav-bar {

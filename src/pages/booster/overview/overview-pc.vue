@@ -242,6 +242,29 @@
             </div>
           </div>
         </div>
+        <div
+          class="daily-boost"
+          @click="$emit('dailyClaim')"
+          v-if="showDailySign"
+        >
+          <div style="position: relative">
+            <div style="width: 10px; height: 10px"></div>
+          </div>
+
+          <img
+            class="daily-boost-btn"
+            src="/img/booster/daily-boost-btn.png"
+            width="181"
+            alt=""
+          />
+        </div>
+
+        <div class="lightning-bg" v-if="!showDailySign">
+          <img
+            src="/img/booster/daily-boost/lightning-overview-bg.png"
+            alt=""
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -556,6 +579,30 @@ export default {
     position: absolute;
     right: 50%;
     transform: translateX(50%);
+  }
+}
+
+.daily-boost {
+  position: absolute;
+  left: 51%;
+  bottom: 23%;
+
+  .daily-boost-btn {
+    position: absolute;
+    right: 50%;
+    transform: translateX(50%);
+    top: 200%;
+    cursor: pointer;
+  }
+}
+.lightning-bg {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 22%;
+  width: 35%;
+  img {
+    width: 100%;
   }
 }
 

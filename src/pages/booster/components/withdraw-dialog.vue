@@ -158,15 +158,15 @@ export default {
         console.log(address, "===== friendaddr");
         const { data, code, message } = await tonWithdraw(address, "0.1");
         console.log(data, code, message);
-        if (code == 11039) {
-          this.$toast2(message, "error");
-        } else if (code == 200) {
+        if (code == 200) {
           this.$emit("input", false);
           this.$toast2(
             "Your withdrawal request submitted, thank you for your patience.",
             "success"
           );
           this.$store.dispatch("getBoostTonCount");
+        } else {
+          this.$toast2(message, "error");
         }
       } catch (error) {
         console.log(error);

@@ -26,6 +26,7 @@ export default {
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
       updateBoostUserInfo: (s) => s.moduleBooster.updateBoostUserInfo,
       tgMiniOverlayLoading: (s) => s.moduleBooster.tgMiniOverlayLoading,
+      dailySign: (s) => s.moduleBooster.dailySign,
     }),
     ...mapGetters([
       "boostLocked",
@@ -77,6 +78,11 @@ export default {
         ? "/img/booster/3d-square-explored.png"
         : "/img/booster/3d-square.png";
     },
+
+    showDailySign() {
+      if (!this.dailySign) return "DONE";
+      return this.dailySign[0].actStatus !== "DONE";
+    },
   },
   async created() {
     this.timer = setInterval(() => {
@@ -97,6 +103,7 @@ export default {
       const { data } = await sendStoken(stoken);
       this.onLoginData(data);
     }
+    this.$store.dispatch("getDailySign");
   },
   methods: {
     handleStartBoost() {

@@ -137,7 +137,11 @@
           </div>
         </div>
 
-        <div class="daily-boost">
+        <div
+          class="daily-boost"
+          @click="$emit('dailyClaim')"
+          v-if="showDailySign"
+        >
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>
           </div>
@@ -146,6 +150,13 @@
             class="daily-boost-btn"
             src="/img/booster/daily-boost-btn.png"
             width="121"
+            alt=""
+          />
+        </div>
+
+        <div class="lightning-bg" v-if="!showDailySign">
+          <img
+            src="/img/booster/daily-boost/lightning-overview-bg.png"
             alt=""
           />
         </div>
@@ -361,7 +372,7 @@ export default {
 .storage-boost {
   position: absolute;
   left: 20%;
-  top: 50%;
+  top: 59%;
   .top-card {
     position: absolute;
     left: 50%;
@@ -372,13 +383,13 @@ export default {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 400%;
+    top: -20%;
   }
 }
 .computing-boost {
   position: absolute;
   right: 25%;
-  top: 58%;
+  top: 67%;
   .top-card {
     position: absolute;
     right: 50%;
@@ -389,13 +400,13 @@ export default {
     position: absolute;
     right: 50%;
     transform: translateX(50%);
-    top: 450%;
+    top: -20%;
   }
 }
 .network-boost {
   position: absolute;
   left: 24%;
-  bottom: 25%;
+  bottom: 16%;
   .top-card {
     position: absolute;
     right: 50%;
@@ -406,7 +417,7 @@ export default {
     position: absolute;
     right: 50%;
     transform: translateX(50%);
-    top: 200%;
+    top: -100%;
   }
 }
 
@@ -420,6 +431,18 @@ export default {
     right: 50%;
     transform: translateX(50%);
     top: 200%;
+    cursor: pointer;
+  }
+}
+
+.lightning-bg {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 22%;
+  width: 60%;
+  img {
+    width: 100%;
   }
 }
 
@@ -449,7 +472,7 @@ export default {
   position: absolute;
   left: 50.5%;
   transform: translateX(-50%);
-  top: 11%;
+  top: 15%;
   .points {
     z-index: 10;
     padding: 0px 8px;

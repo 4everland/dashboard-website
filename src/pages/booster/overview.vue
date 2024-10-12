@@ -27,11 +27,13 @@
           v-if="!asMobile"
           @handleStartBoost="handleShowStartBoost"
           @handleUnlock="handleShowUnlock"
+          @dailyClaim="showDailySign = true"
         ></overview-pc>
         <overview-h5
           v-else
           @handleStartBoost="handleShowStartBoost"
           @handleUnlock="handleShowUnlock"
+          @dailyClaim="showDailySign = true"
         ></overview-h5>
         <start-boosting
           v-model="showStartBoost"
@@ -160,7 +162,7 @@ export default {
       showUnlockDialog: false,
       timer: null,
       unlockStage: 0,
-      showDailySign: true,
+      showDailySign: false,
     };
   },
   computed: {
@@ -193,26 +195,32 @@ export default {
       return this.$vuetify.breakpoint.smAndDown;
     },
     bgImg() {
+      // let url = this.$inDev
+      //   ? " https://test-boost.4everland.store/"
+      //   : "https://static.4everland.org/";
+
+      let url = "https://test-boost.4everland.store/";
+
       if (this.asMobile) {
         if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
-          return "https://static.4everland.org/boost/background/mobile-bg.png";
+          return url + "boost/background/mobile-bg.png";
         if (!this.storageLocked && !this.networkLocked)
-          return "https://static.4everland.org/boost/background/mobile-bg-s2n.png";
+          return url + "boost/background/mobile-bg-s2n.png";
         if (!this.storageLocked && !this.computingLocked)
-          return "https://static.4everland.org/boost/background/mobile-bg-s2c.png";
-        if (!this.networkLocked && !this.computingLocked)
-          return "https://static.4everland.org/boost/background/mobile-bg-n2c.png";
+          return url + "boost/background/mobile-bg-s2c.png";
+        if (!this.networkLocked && this.computingLocked)
+          return url + "boost/background/mobile-bg-n2c.png";
         if (!this.storageLocked)
-          return "https://static.4everland.org/boost/background/mobile-bg-storage.png";
+          return url + "boost/background/mobile-bg-storage.png";
         if (!this.networkLocked)
-          return "https://static.4everland.org/boost/background/mobile-bg-network.png";
+          return url + "boost/background/mobile-bg-network.png";
         if (!this.computingLocked)
-          return "https://static.4everland.org/boost/background/mobile-bg-computed.png";
+          return url + "boost/background/mobile-bg-computed.png";
 
         if (this.boosterInfo.baseRate.length == 0) {
-          return "https://static.4everland.org/boost/background/mobile-bg-locked.png";
+          return url + "boost/background/mobile-bg-locked.png";
         }
-        return "https://static.4everland.org/boost/background/mobile-bg-unlocked.png";
+        return url + "boost/background/mobile-bg-unlocked.png";
       } else {
         if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
           return "https://static.4everland.org/boost/background/bg.webm";
