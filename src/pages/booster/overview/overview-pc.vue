@@ -259,7 +259,7 @@
           />
         </div>
 
-        <div class="lightning-bg" v-if="showDailySign">
+        <div class="lightning-bg" v-if="!showDailySign">
           <dotlottie-player
             src="https://lottie.host/10211de3-1cbf-40d2-b3bb-e15c9c53e18f/84965ekRhy.json"
             background="transparent"

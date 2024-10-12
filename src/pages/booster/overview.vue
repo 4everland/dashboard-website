@@ -199,7 +199,7 @@ export default {
       //   ? " https://test-boost.4everland.store/"
       //   : "https://static.4everland.org/";
 
-      let url = "https://test-boost.4everland.store/";
+      let url = "https://static.4everland.org/";
 
       if (this.asMobile) {
         if (!this.storageLocked && !this.networkLocked && !this.computingLocked)

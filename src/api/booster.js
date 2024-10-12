@@ -296,3 +296,12 @@ export const tonWithdraw = async (address, amount) => {
     },
   });
 };
+
+export const validPlayBot = async (code) => {
+  return boosterRequest.post({
+    url: "/node/valid/tg/play/bot",
+    data: {
+      code,
+    },
+  });
+};

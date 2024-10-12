@@ -145,7 +145,7 @@ export default {
       return this.computeBoost.length == 0;
     },
     bgImg() {
-      let url = "https://test-boost.4everland.store/";
+      let url = "https://static.4everland.org/";
       // let url = this.$inDev
       //   ? "https://test-boost.4everland.store/"
       //   : "https://static.4everland.org/";
