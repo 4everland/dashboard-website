@@ -174,7 +174,6 @@ export default {
       }
       let payload = JSON.stringify({
         uid: this.userInfo.uid,
-        // uid: "580fa3ae794f4998a358389d25a60667",
       });
 
       const body = beginCell()

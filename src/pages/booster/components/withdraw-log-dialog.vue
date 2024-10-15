@@ -138,7 +138,6 @@ export default {
       size: 10,
       page: 1,
       usdtLogs: [],
-      tonConnectUI: null,
       loading: false,
     };
   },
