@@ -2,7 +2,10 @@
   <div class="leaderboard-container">
     <div>
       <h3 class="tit">Leaderboard</h3>
-      <div class="desc">Collect, Explore, & invite friends to rank up.</div>
+      <div class="desc">
+        Top 500 rankings displayed. Collect, explore, and invite friends to
+        climb!
+      </div>
     </div>
 
     <div class="empty text-center" v-if="!list.length">
