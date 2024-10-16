@@ -449,6 +449,7 @@ export default {
             if (item.actType == "share_twitter") {
               url += encodeURIComponent(this.inviteInfo.link);
             }
+            url = url.replace(/^http:\/\//i, "https://");
             if (this.isTgMiniApp) {
               this.$tg.openAuto(url);
             } else {
