@@ -52,7 +52,6 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { OKXUniversalProvider } from "@okxconnect/universal-provider";
 import { fetchWeb3codeBind, fetchWeb3Vcode } from "@/api/login.js";
 
 import { ConnectWalletCon, onSignWalletCon } from "@/utils/login";
@@ -73,25 +72,14 @@ export default {
 
   data() {
     return {
-      okxUniversalProvider: null,
       showConnectDrawer: false,
       walletConnectLoading: false,
     };
   },
-  created() {
-    this.initOkx();
-  },
+  created() {},
   methods: {
     onShowConnect() {
       this.showConnectDrawer = true;
-    },
-    async initOkx() {
-      this.okxUniversalProvider = await OKXUniversalProvider.init({
-        dappMetaData: {
-          name: "4EVERLAND",
-          icon: "https://dashboard.4everland.org/favicon.ico",
-        },
-      });
     },
     async onConnectOkxWallet() {
       connectOkxWallet();
