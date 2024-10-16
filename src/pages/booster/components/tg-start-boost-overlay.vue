@@ -25,6 +25,7 @@ import TgStartBoostLoading from "./tg-start-boost-loading.vue";
 import { initTgBoost } from "@/api/booster";
 import { sendTGStoken, sendStoken } from "@/api/login.js";
 import { bus } from "@/utils/bus";
+import { conversionAds } from "@/api/ton-ads";
 
 export default {
   data() {
@@ -51,6 +52,7 @@ export default {
   methods: {
     async handleTGStartBoost() {
       let code = this.$tg.initDataUnsafe.start_param;
+
       if (code) {
         code = decodeURI(code);
       }

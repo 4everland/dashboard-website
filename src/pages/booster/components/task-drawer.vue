@@ -63,15 +63,7 @@
           </div>
         </div>
         <div class="task-box">
-          <TonAiAds></TonAiAds>
-
           <div v-if="tasksLists_without_done.length > 0">
-            <div
-              class="task-list-title"
-              style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
-            >
-              Daily Tasks
-            </div>
             <v-row no-gutters style="gap: 18px 0; margin: 12px 0">
               <v-col
                 v-for="(item, index) in tasksLists_without_done"
@@ -319,7 +311,7 @@ import {
 } from "@/api/booster.js";
 import { bus } from "@/utils/bus";
 import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
-import TonAiAds from "./ton-ai-ads/ton-ai-ads.vue";
+import { clickAds } from "@/api/ton-ads";
 
 export default {
   computed: {
@@ -459,6 +451,11 @@ export default {
       }
       const id = item.actId;
       const { data } = await onNext(id);
+      if (item.actType == "exchange_ads") {
+        let inOut = item.adDescription.split(",");
+        const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+        await clickAds(userId, inOut[0], inOut[1]);
+      }
       this.$set(this.loadingStatus, item.actId, false);
       item.extra.buttonName = data.action.web.nextButtonName;
       if (taskListType == "daily") {
@@ -664,9 +661,6 @@ export default {
       if (this.isTgMiniApp) return this.$tg.openAuto(url);
       window.open(url);
     },
-  },
-  components: {
-    TonAiAds,
   },
 };
 </script>

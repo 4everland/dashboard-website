@@ -29,7 +29,25 @@ export const clickAds = (
     {
       headers: {
         "content-type": "application/json",
-        "x-api-key": "ga9C3SzRL8rmnvVWmsO5ISoHDtwaNp",
+        "x-api-key": process.env.VUE_APP_TON_AI_ADS_KEY,
+      },
+    }
+  );
+};
+
+export const conversionAds = (userId) => {
+  return axios.post(
+    "https://staging.ton.ai/api/v2/openapi/exchange/event/report/conversion",
+    {
+      eventType: "conversion",
+      eventData: {
+        telegramUserId: userId,
+      },
+    },
+    {
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": process.env.VUE_APP_TON_AI_ADS_KEY,
       },
     }
   );

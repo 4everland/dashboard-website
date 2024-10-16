@@ -84,6 +84,10 @@ export default {
         let code = this.$tg.initDataUnsafe.start_param;
         if (code) {
           code = decodeURI(code);
+          if (code == "peaai") {
+            const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+            await conversionAds(userId);
+          }
           await validPlayBot(code);
         }
       } catch (error) {
