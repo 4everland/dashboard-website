@@ -12,7 +12,7 @@ import { Buffer } from "buffer";
 if (window.top !== window.self) {
   window.top.location = window.location.href;
 }
-
+new VConsole();
 window.Buffer = Buffer;
 process.env.VUE_APP_TG_VERSION == "true" &&
 (process.env.NODE_ENV == "development" || process.env.NODE_ENV == "alpha")

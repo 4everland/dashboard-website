@@ -14,6 +14,16 @@
       <img src="/img/booster/ton-claim-icon.png" width="56" alt="" />
       <div class="trigger-text fz-12 fw-b text-center">CLAIM</div>
     </div>
+    <div
+      v-if="isTgMiniApp && !userInfo.wallet"
+      class="trigger-icon pos-a"
+      style="right: 8px; top: 202px"
+      @click="onConnetc"
+    >
+      <img src="/img/booster/wallet-connect-icon.png" width="56" alt="" />
+      <div class="trigger-text fz-12 fw-b text-center">CONNECT</div>
+    </div>
+    <WalletConnect ref="walletConnect" />
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
 
@@ -223,8 +233,11 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 import MobilePointsSheet from "../components/mobile-points-sheet.vue";
 import TokenDialog from "../components/token-dialog.vue";
+import WalletConnect from "../components/wallet-connect.vue";
 import mixin from "./mixin";
 import { bus } from "@/utils/bus";
 
@@ -236,6 +249,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
     isTg() {
       return process.env.VUE_APP_TG_VERSION == "true";
     },
@@ -251,10 +267,16 @@ export default {
   components: {
     MobilePointsSheet,
     TokenDialog,
+    WalletConnect,
   },
   watch: {
     "boosterInfo.protectExpiredAt"() {
       this.protectCardTime();
+    },
+  },
+  methods: {
+    onConnetc() {
+      this.$refs.walletConnect.onShowConnect();
     },
   },
 };
@@ -534,7 +556,7 @@ export default {
     width: 60px;
     height: 20px;
     line-height: 20px;
-    background: url("/img/booster/svg/ton-text-bg.svg");
+    background-color: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(2px);
   }
 }
