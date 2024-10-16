@@ -52,11 +52,11 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import { OKXUniversalProvider } from "@okxconnect/universal-provider";
 import { fetchWeb3codeBind, fetchWeb3Vcode } from "@/api/login.js";
 
 import { ConnectWalletCon, onSignWalletCon } from "@/utils/login";
 
-import { connectOkxWallet } from "@/pages/booster/components/wallet-connect.js";
 export default {
   computed: {
     ...mapState({
@@ -72,17 +72,72 @@ export default {
 
   data() {
     return {
+      okxUniversalProvider: null,
       showConnectDrawer: false,
       walletConnectLoading: false,
     };
   },
-  created() {},
+  created() {
+    this.initOkx();
+  },
   methods: {
     onShowConnect() {
       this.showConnectDrawer = true;
     },
-    async onConnectOkxWallet() {
-      connectOkxWallet();
+    async initOkx() {
+      this.okxUniversalProvider = await OKXUniversalProvider.init({
+        dappMetaData: {
+          name: "4EVERLAND",
+          icon: "https://dashboard.4everland.org/favicon.ico",
+        },
+      });
+    },
+    async connectOkxWallet() {
+      const session = await this.okxUniversalProvider.connect({
+        namespaces: {
+          eip155: {
+            chains: ["eip155:1"],
+            rpcMap: {
+              1: "https://rpc", // set your own rpc url
+            },
+            defaultChain: "1",
+          },
+        },
+        // optionalNamespaces: {},
+        // sessionConfig: {
+        //   redirect: "tg://resolve",
+        // },
+      });
+      const accounts = session.namespaces.eip155.accounts;
+      const account = accounts[0].split(":")[2];
+      console.log(account);
+
+      const params = {
+        type: "7",
+        apply: account,
+      };
+      console.log(params);
+      const nonce = await this.onExchangeCode(params);
+      const msg = "0x" + Buffer.from(nonce).toString("hex");
+      console.log(msg);
+
+      const signature = await this.signWithOkx(msg);
+      console.log(signature);
+
+      if (signature) {
+        this.onVcode(7, signature);
+      }
+    },
+    async signWithOkx(msg) {
+      let params = {};
+
+      params = {
+        method: "personal_sign",
+        params: [msg],
+      };
+      const signature = await this.okxUniversalProvider.request(params);
+      console.log(signature);
+      return signature;
     },
     async onBindWithWalletConnect() {
       const type = 99;
@@ -124,8 +179,8 @@ export default {
         let params = {
           type,
         };
-        const { data } = await fetchWeb3Vcode(code, params);
 
+        const { data } = await fetchWeb3Vcode(code, params);
         if (data.nodeToken) {
           localStorage.nodeToken = data.nodeToken;
         }
