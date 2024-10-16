@@ -19,7 +19,7 @@ export const getOkxAccount = async () => {
       eip155: {
         chains: ["eip155:1"],
         rpcMap: {
-          1: "https://rpc", // set your own rpc url
+          1: "", // set your own rpc url
         },
         defaultChain: "1",
       },
