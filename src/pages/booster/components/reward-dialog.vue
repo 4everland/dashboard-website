@@ -4,6 +4,8 @@
     persistent
     content-class="reward-dialog"
     v-model="value"
+    overlay-opacity="0.5"
+    overlay-color="#000"
   >
     <div class="reward-content text-center">
       <img src="/img/booster/reward/reward-header.png" width="239" alt="" />
