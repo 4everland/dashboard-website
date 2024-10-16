@@ -175,6 +175,7 @@ export default {
       }
     },
     async onVcode(type, code) {
+      this.showConnectDrawer = false;
       try {
         let params = {
           type,
