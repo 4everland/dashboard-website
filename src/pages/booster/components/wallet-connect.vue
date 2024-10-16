@@ -185,6 +185,7 @@ export default {
         if (data.nodeToken) {
           localStorage.nodeToken = data.nodeToken;
         }
+
         this.$toast2("Connect successfully!", "success");
         this.$setMsg({
           name: "updateUser",
