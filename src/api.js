@@ -294,20 +294,21 @@ async function handleMsg(status, code, msg, config) {
     msg = msg || "Unknown Error";
     const vue = Vue.prototype;
     await vue.$sleep(10);
-    if (process.env.VUE_APP_TG_VERSION == "true") {
-      let boostGuide = false;
-      if (localStorage.guide) {
-        boostGuide = true;
-      }
-      localStorage.clear();
-      if (boostGuide) {
-        localStorage.guide = "1";
-      }
-      localStorage.loginTo = location.pathname + location.search;
-      location.reload();
-      return;
-    }
+
     if (status == 401 || code == 401) {
+      if (process.env.VUE_APP_TG_VERSION == "true") {
+        let boostGuide = false;
+        if (localStorage.guide) {
+          boostGuide = true;
+        }
+        localStorage.clear();
+        if (boostGuide) {
+          localStorage.guide = "1";
+        }
+        localStorage.loginTo = location.pathname + location.search;
+        location.reload();
+        return;
+      }
       setState({
         userInfo: {},
       });

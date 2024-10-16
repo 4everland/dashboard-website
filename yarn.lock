@@ -2751,6 +2751,35 @@
   resolved "https://registry.npmjs.org/@oclif/screen/-/screen-3.0.3.tgz"
   integrity sha512-KX8gMYA9ujBPOd1HFsV9e0iEx7Uoj8AG/3YsW4TtWQTg4lJvr82qNm7o/cFQfYRIt+jw7Ew/4oL4A22zOT+IRA==
 
+"@okxconnect/core@1.2.7":
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/@okxconnect/core/-/core-1.2.7.tgz#9de040eb69c7d9d2b64d7894c38eb23fd804b6a2"
+  integrity sha512-RdLVsDr5+cHvAp4/mlvEOo3KA8s4c6bkPxsdAySJwSg8Nxz2YHV5Ixc1GwSlbhTrUSZhffduZf4u1JLQ6XEFgQ==
+  dependencies:
+    "@stablelib/ed25519" "^1.0.2"
+    "@stablelib/random" "^1.0.1"
+    "@stablelib/sha256" "1.0.1"
+    core-js "2.6.12"
+    crypto-js "^4.2.0"
+    eventemitter3 "^5.0.1"
+    isutf8 "^4.0.0"
+    multiformats "9.4.2"
+    process "^0.11.10"
+    tweetnacl "^1.0.3"
+    tweetnacl-util "^0.15.1"
+    ua-parser-js "^1.0.35"
+    uint8arrays "3.1.0"
+
+"@okxconnect/universal-provider@^1.2.7":
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/@okxconnect/universal-provider/-/universal-provider-1.2.7.tgz#8579e5e1ee7a1f3bffe9c82524d67d19d83a38f1"
+  integrity sha512-rWRJYPRED7h4YWu/7L4uQxbq+5aqwRdvH+1nkEs5ycfXmcJLJKQBmqtzjGM5zp5bQ4pN7/xydjor0J/ih985MA==
+  dependencies:
+    "@okxconnect/core" "1.2.7"
+    "@types/lodash" "^4.17.7"
+    cross-fetch "^3.1.4"
+    eventemitter3 "^5.0.1"
+
 "@onflow/config@^1.0.3", "@onflow/config@^1.0.4", "@onflow/config@^1.0.5":
   version "1.0.5"
   resolved "https://registry.npmjs.org/@onflow/config/-/config-1.0.5.tgz"
@@ -3496,6 +3525,11 @@
   integrity sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==
   dependencies:
     "@types/node" "*"
+
+"@types/lodash@^4.17.7":
+  version "4.17.10"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.10.tgz#64f3edf656af2fe59e7278b73d3e62404144a6e6"
+  integrity sha512-YpS0zzoduEhuOWjAotS6A5AVCva7X4lVlYLF0FYHAY9sdraBfnatttHItlWeZdGhuEkf+OzMNg2ZYAx8t+52uQ==
 
 "@types/mime@*":
   version "3.0.1"
@@ -5906,6 +5940,11 @@ core-js-compat@^3.25.1, core-js-compat@^3.6.5:
   dependencies:
     browserslist "^4.21.4"
 
+core-js@2.6.12:
+  version "2.6.12"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
+  integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
+
 core-js@^3.11.0:
   version "3.38.0"
   resolved "https://registry.npmjs.org/core-js/-/core-js-3.38.0.tgz#8acb7c050bf2ccbb35f938c0d040132f6110f636"
@@ -6060,6 +6099,11 @@ crypto-browserify@3.12.0, crypto-browserify@^3.11.0, crypto-browserify@^3.12.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
     randomfill "^1.0.3"
+
+crypto-js@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.2.0.tgz#4d931639ecdfd12ff80e8186dba6af2c2e856631"
+  integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
 
 css-color-names@0.0.4, css-color-names@^0.0.4:
   version "0.0.4"
@@ -7174,6 +7218,11 @@ eventemitter3@^4.0.0, eventemitter3@^4.0.7:
   version "4.0.7"
   resolved "https://registry.npmjs.org/eventemitter3/-/eventemitter3-4.0.7.tgz"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
+
+eventemitter3@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-5.0.1.tgz#53f5ffd0a492ac800721bb42c66b841de96423c4"
+  integrity sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==
 
 events@3.3.0, events@^3.0.0, events@^3.3.0:
   version "3.3.0"
@@ -9003,6 +9052,11 @@ isstream@~0.1.2:
   resolved "https://registry.npmjs.org/isstream/-/isstream-0.1.2.tgz"
   integrity sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==
 
+isutf8@^4.0.0:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/isutf8/-/isutf8-4.0.1.tgz#046799bca926e9438c650def6ba94a8d9871da90"
+  integrity sha512-1pk2/2pE+G48eETnp4uOLxQ9WUCxD7oVauYwhFEAGREJPDxEO7iX9qstylrCcx3lNWa1RCS2DxGTxrHdWqS7/w==
+
 jake@^10.8.5:
   version "10.8.5"
   resolved "https://registry.npmjs.org/jake/-/jake-10.8.5.tgz"
@@ -9938,6 +9992,11 @@ multicodec@^3.0.1, multicodec@^3.2.0:
   dependencies:
     uint8arrays "^3.0.0"
     varint "^6.0.0"
+
+multiformats@9.4.2:
+  version "9.4.2"
+  resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-9.4.2.tgz#3995a0b23072657d7a2fa56b2afc745e0ce8e5bd"
+  integrity sha512-GXsulAzqA+EI/iObKWsg9n4PKNVpUTsWdA+Ijn3hJMaVHQ/+dJaClSZ55g8sVKniBjQkouGaVCKCu9c/wwMXQQ==
 
 multiformats@^9.4.2, multiformats@^9.5.8:
   version "9.9.0"
@@ -13098,6 +13157,13 @@ uglify-js@^3.1.4:
   version "3.17.4"
   resolved "https://registry.npmjs.org/uglify-js/-/uglify-js-3.17.4.tgz"
   integrity sha512-T9q82TJI9e/C1TAxYvfb16xO120tMVFZrGA3f9/P4424DNu6ypK103y0GPFVa17yotwSyZW5iYXgjYHkGrJW/g==
+
+uint8arrays@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/uint8arrays/-/uint8arrays-3.1.0.tgz#8186b8eafce68f28bd29bd29d683a311778901e2"
+  integrity sha512-ei5rfKtoRO8OyOIor2Rz5fhzjThwIHJZ3uyDPnDHTXbP0aMQ1RN/6AI5B5d9dBxJOU+BvOAk7ZQ1xphsX8Lrog==
+  dependencies:
+    multiformats "^9.4.2"
 
 uint8arrays@^3.0.0, uint8arrays@^3.1.0:
   version "3.1.1"

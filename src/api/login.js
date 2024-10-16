@@ -25,3 +25,7 @@ export function sendTGStoken(tgInitData) {
 export function fetchWeb3codeBind(data) {
   return request.post(`$auth/bind`, data);
 }
+
+export function fetchWeb3Vcode(code, params) {
+  return request.get(`$auth/auth/vcode/${code}`, { params });
+}
