@@ -57,21 +57,17 @@ export const onExchangeCode = async (params) => {
 };
 
 export const onVcode = async (type, code) => {
-  try {
-    let params = {
-      type,
-    };
-    const { data } = await fetchWeb3Vcode(code, params);
-    if (data.nodeToken) {
-      localStorage.nodeToken = data.nodeToken;
-    }
-    Vue.prototype.$toast2("Connect successfully!", "success");
-    Vue.prototype.$setMsg({
-      name: "updateUser",
-    });
-  } catch (error) {
-    console.log(error);
+  let params = {
+    type,
+  };
+  const { data } = await fetchWeb3Vcode(code, params);
+  if (data.nodeToken) {
+    localStorage.nodeToken = data.nodeToken;
   }
+  Vue.prototype.$toast2("Connect successfully!", "success");
+  Vue.prototype.$setMsg({
+    name: "updateUser",
+  });
 };
 
 export const connectOkxWallet = async (callback) => {
