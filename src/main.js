@@ -12,12 +12,11 @@ import { Buffer } from "buffer";
 if (window.top !== window.self) {
   window.top.location = window.location.href;
 }
-new VConsole();
+
 window.Buffer = Buffer;
-process.env.VUE_APP_TG_VERSION == "true" &&
-(process.env.NODE_ENV == "development" || process.env.NODE_ENV == "alpha")
-  ? new VConsole()
-  : "";
+const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
+
+process.env.VUE_APP_TG_VERSION == "true" && inDev ? new VConsole() : "";
 
 router.beforeEach((to, _, next) => {
   let { title, group } = to.meta || {};
