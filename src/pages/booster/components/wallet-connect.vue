@@ -13,13 +13,13 @@
       @input="handleToggle"
     >
       <v-container fluid style="padding: 24px 16px">
-        <div class="drawer-title mb-6">Connect your wallet</div>
+        <div class="drawer-title mb-6">Connect Your Wallet</div>
 
         <div class="mobile-invite-panel-content">
           <div class="wallet-item">
             <div class="wallet-icon-box">
               <img src="/img/booster/wallet/wallet-okx.png" width="44" alt="" />
-              <div>OKX wallet</div>
+              <div>OKX Wallet</div>
             </div>
             <div>
               <v-btn class="drawer-btn" @click="connectOkxWallet"
