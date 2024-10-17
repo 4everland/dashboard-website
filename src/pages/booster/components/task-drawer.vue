@@ -465,7 +465,7 @@ export default {
 
         const { data } = await onNext(id);
         if (item.actType == "exchange_ads") {
-          let inOut = item.adDescription.split(",");
+          let inOut = item.adDescription.split(";");
           const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
           await clickAds(userId, inOut[0], inOut[1]);
         }
