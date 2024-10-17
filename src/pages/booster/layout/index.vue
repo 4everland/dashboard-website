@@ -35,6 +35,7 @@ import DepositDialog from "../components/deposit-dialog.vue";
 import { bus } from "@/utils/bus";
 import TonDeposit from "../components/ton-deposit.vue";
 import { validPlayBot } from "@/api/booster";
+import { conversionAds } from "@/api/ton-ads";
 
 // import TonDepositTest from "../components/ton-deposit-test.vue";
 
@@ -82,6 +83,7 @@ export default {
     async handleValid() {
       try {
         let code = this.$tg.initDataUnsafe.start_param;
+
         if (code) {
           code = decodeURI(code);
           if (code == "t-peaai") {
