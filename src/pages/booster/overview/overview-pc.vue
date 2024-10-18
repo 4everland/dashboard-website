@@ -10,7 +10,10 @@
             class="act-btn"
             height="27"
             max-width="83"
-            @click="$store.commit('TASKDRAWER_TOGGLE')"
+            @click="
+              () =>
+                !this.boostLocked ? this.$store.commit('TASKDRAWER_TOGGLE') : ''
+            "
           >
             <img src="/img/booster/svg/more.svg" width="16" alt="" />
             <span class="ml-1 fz-16">More</span>
