@@ -59,7 +59,7 @@
               <v-btn
                 class="deposit-btn"
                 color="#6172F3"
-                @click="$router.push('/billing/deposit')"
+                @click="handleToDeposit"
                 :width="asMobile ? '80px' : '116px'"
               >
                 <img
@@ -146,6 +146,7 @@ import WithdrawDialog from "./withdraw-dialog.vue";
 import WithdrawLogDialog from "./withdraw-log-dialog.vue";
 import WalletConnect from "../components/wallet-connect.vue";
 import ICountUp from "vue-countup-v2";
+import { bus } from "@/utils/bus";
 
 export default {
   computed: {
@@ -154,7 +155,7 @@ export default {
       showProfileDrawer: (s) => s.moduleBooster.showProfileDrawer,
       tonCount: (s) => s.moduleBooster.tonCount,
     }),
-    ...mapGetters(["balance"]),
+    ...mapGetters(["balance", "notLogin"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
@@ -190,6 +191,13 @@ export default {
     handleShowConnect() {
       this.$store.commit("SET_PROFILE_BAR", false);
       this.$refs.walletConnect.onShowConnect();
+    },
+    handleToDeposit() {
+      if (this.isTgMiniApp) {
+        bus.$emit("showDepositDialog", { land: 0 });
+        return this.$emit("input", false);
+      }
+      if (!this.notLogin) this.$router.push("/billing/deposit");
     },
   },
   components: {

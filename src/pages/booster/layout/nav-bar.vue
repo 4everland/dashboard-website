@@ -139,7 +139,6 @@
 </template>
 
 <script>
-import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
 import { mapGetters, mapState } from "vuex";
 import PointLogs from "../components/point-logs.vue";
 import ICountUp from "vue-countup-v2";
@@ -163,13 +162,6 @@ export default {
           path: "/boost/leaderboard",
         },
       ],
-      inviteInfo: {
-        daily: "-",
-        inviteCode: "-",
-        invited: "-",
-        link: "-",
-      },
-      reloadBalance: false,
     };
   },
   computed: {
@@ -178,9 +170,7 @@ export default {
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
     }),
     ...mapGetters(["notLogin", "balance"]),
-    isTg() {
-      return process.env.VUE_APP_TG_VERSION == "true";
-    },
+
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
@@ -210,54 +200,6 @@ export default {
       localStorage.clear();
       localStorage.loginTo = location.pathname + location.search;
       location.reload();
-    },
-    async getInviteInfo() {
-      try {
-        const { data } = await fetchInviteInfo();
-        if (data) {
-          this.inviteInfo = data;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    async getTgInviteInfo() {
-      try {
-        const { data } = await fetchTgInviteInfo();
-        if (data) {
-          this.inviteInfo = data;
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    handleTriggerInvite(val) {
-      if (val) {
-        console.log(this.isTg);
-        if (this.isTg) {
-          this.getTgInviteInfo();
-        } else {
-          this.getInviteInfo();
-        }
-      }
-    },
-
-    handleTgShare() {
-      this.$tg.shareUrl(
-        this.inviteInfo.link,
-        "Embark on the exciting 4EVER Boost campaign to boost your $4EVER points and grab exciting upcoming airdrops!🚨"
-      );
-    },
-    async handleGetBalance() {
-      try {
-        this.reloadBalance = true;
-        await this.$store.dispatch("getBalance");
-        this.reloadBalance = false;
-      } catch (error) {
-        console.log(error);
-      }
     },
   },
   components: {

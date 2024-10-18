@@ -5,6 +5,13 @@ import AsyncLock from "async-lock";
 import store, { setState } from "./store";
 // console.log(axiosRetry);
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
+
+let isTgMiniApp = false;
+if (window.Telegram.WebApp) {
+  isTgMiniApp = Object.keys(window.Telegram.WebApp.initDataUnsafe).length > 0;
+}
+
+console.log(isTgMiniApp);
 Vue.prototype.$inDev = inDev;
 // const isLocal = /localhost/.test(location.host);
 
@@ -296,7 +303,8 @@ async function handleMsg(status, code, msg, config) {
     await vue.$sleep(10);
 
     if (status == 401 || code == 401) {
-      if (process.env.VUE_APP_TG_VERSION == "true") {
+      console.log(isTgMiniApp);
+      if (isTgMiniApp) {
         let boostGuide = false;
         if (localStorage.guide) {
           boostGuide = true;
