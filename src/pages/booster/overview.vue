@@ -50,6 +50,7 @@
         <task-drawer></task-drawer>
         <tool-drawer></tool-drawer>
         <invite-drawer></invite-drawer>
+        <profile-drawer></profile-drawer>
         <bind-dialog v-model="showBindWallet"></bind-dialog>
       </template>
       <!-- <end-boosting v-model="showEndBoost"></end-boosting> -->
@@ -66,7 +67,7 @@ import NftDrawer from "./components/nft-drawer.vue";
 import TaskDrawer from "./components/task-drawer.vue";
 import ToolDrawer from "./components/tool-drawer.vue";
 import InviteDrawer from "./components/invite-drawer.vue";
-
+import ProfileDrawer from "./components/profile-drawer.vue";
 import BottomBar from "./components/bottom-bar.vue";
 import BindDialog from "./components/bind-dialog.vue";
 import UnlockDialog from "./components/unlock-dialog.vue";
@@ -319,6 +320,7 @@ export default {
     InviteDrawer,
     EasterEgg,
     DailySignDialog,
+    ProfileDrawer,
   },
 
   watch: {

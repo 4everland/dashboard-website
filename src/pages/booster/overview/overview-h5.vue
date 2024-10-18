@@ -15,9 +15,21 @@
       <div class="trigger-text fz-12 fw-b text-center">CLAIM</div>
     </div>
     <div
-      v-if="isTgMiniApp && !userInfo.wallet"
+      v-if="isTgMiniApp"
       class="trigger-icon pos-a"
       style="right: 8px; top: 202px"
+      @click="
+        () =>
+          !this.boostLocked ? this.$store.dispatch('StakeDrawerToggle') : ''
+      "
+    >
+      <img src="/img/booster/staking-icon.png" width="56" alt="" />
+      <div class="trigger-text fz-12 fw-b text-center">STAKING</div>
+    </div>
+    <div
+      v-if="isTgMiniApp && !userInfo.wallet"
+      class="trigger-icon pos-a"
+      style="right: 8px; top: 268px"
       @click="onConnetc"
     >
       <img src="/img/booster/wallet-connect-icon.png" width="56" alt="" />
@@ -252,9 +264,6 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
     }),
-    isTg() {
-      return process.env.VUE_APP_TG_VERSION == "true";
-    },
   },
   created() {
     bus.$on("showMobileSheet", () => {

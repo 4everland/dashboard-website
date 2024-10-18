@@ -57,194 +57,44 @@
           <div class="info-content flex-1">
             <div
               class="d-flex align-center justify-space-between"
-              style="gap: 24px"
+              style="gap: 16px"
             >
               <span class="fw-b fz-14 ml-2">
                 {{ (userInfo.username || "unkown").cutStr(6, 4) }}
               </span>
 
-              <v-menu
-                offset-y
-                content-class="user-menu"
-                left
-                nudge-right="18"
-                nudge-bottom="20"
-                :close-on-content-click="true"
+              <div class="d-flex align-center pr-4" id="point-receive">
+                <img
+                  width="16"
+                  src="/img/booster/4ever-point-icon.png"
+                  alt=""
+                />
+
+                <ICountUp
+                  class="points mx-1"
+                  :delay="1000"
+                  :endVal="boosterInfo.totalPoint"
+                  :options="{
+                    useEasing: true,
+                    useGrouping: true,
+                    separator: ',',
+                    decimal: '.',
+                    prefix: '',
+                    suffix: '',
+                  }"
+                />
+                <PointLogs></PointLogs>
+              </div>
+
+              <div
+                class="logout d-flex align-center py-2 cursor-p"
+                @click="handleLogout"
               >
-                <template v-slot:activator="{ on, attrs }">
-                  <div v-on="on" v-bind="attrs">
-                    <div class="d-flex align-center" id="point-receive">
-                      <img
-                        width="16"
-                        src="/img/booster/4ever-point-icon.png"
-                        alt=""
-                      />
-
-                      <ICountUp
-                        class="points mx-1"
-                        :delay="1000"
-                        :endVal="boosterInfo.totalPoint"
-                        :options="{
-                          useEasing: true,
-                          useGrouping: true,
-                          separator: ',',
-                          decimal: '.',
-                          prefix: '',
-                          suffix: '',
-                        }"
-                      />
-
-                      <img
-                        src="/img/booster/svg/down-arrow.svg"
-                        width="12"
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                </template>
-                <div class="user-panel">
-                  <div class="user-panel-header">
-                    <div
-                      class="d-flex align-center justify-space-between py-2 mb-2"
-                    >
-                      <div>Total $4EVER points</div>
-                      <div class="d-flex align-center">
-                        <img
-                          width="16"
-                          src="/img/booster/4ever-point-icon.png"
-                          alt=""
-                        />
-                        <span class="points mx-1">{{
-                          boosterInfo.totalPoint
-                        }}</span>
-                        <PointLogs></PointLogs>
-                      </div>
-                    </div>
-                    <div class="d-flex align-center justify-space-between py-2">
-                      <div>
-                        <span>Balance: </span>
-                        <span>{{ balance.land }}</span>
-                        <span>{{ balance.unit }}</span>
-                        <span class="ml-1">LAND</span>
-
-                        <v-btn
-                          class="ml-1"
-                          small
-                          color="#fff"
-                          icon
-                          :loading="reloadBalance"
-                          @click.stop="handleGetBalance"
-                        >
-                          <v-icon color="#fff">mdi-refresh</v-icon>
-                        </v-btn>
-                      </div>
-                      <v-btn
-                        color="#6172F3"
-                        @click="$router.push('/billing/deposit')"
-                      >
-                        <img
-                          src="/img/booster/svg/pig_bank.svg"
-                          width="16"
-                          alt=""
-                        />
-                        <span class="ml-1" style="color: #fff">Deposit</span>
-                      </v-btn>
-                    </div>
-                  </div>
-                  <div
-                    class="logout d-flex align-center py-2 cursor-p"
-                    @click="handleLogout"
-                  >
-                    <img width="24" src="/img/booster/menu/logout.svg" alt="" />
-                    <span class="fz-14 ml-2" style="color: #e2e8f0"
-                      >Logout</span
-                    >
-                  </div>
-                </div>
-              </v-menu>
+                <img width="24" src="/img/booster/menu/logout.svg" alt="" />
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- <v-menu
-          offset-y
-          content-class="inviter-menu"
-          nudge-bottom="15"
-          left
-          nudge-left="-13"
-          @input="handleTriggerInvite"
-          :close-on-content-click="false"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              style="background: rgba(255, 255, 255, 0.1)"
-              class="ml-auto"
-              v-on="on"
-              v-bind="attrs"
-              width="80"
-            >
-              <img src="/img/booster/svg/invite-user.svg" width="16" alt="" />
-              <span class="ml-1" style="color: #fff">Invite</span>
-            </v-btn>
-          </template>
-          <div class="invite-panel">
-            <div class="invite-panel-content">
-              <div class="invite-panel-basic-item d-flex align-center fz-14">
-                <div>
-                  <span>Invite link:</span>
-                  <span class="ml-2">
-                    {{
-                      inviteInfo.link == "-"
-                        ? "-"
-                        : inviteInfo.link.slice(0, 12) +
-                          "..." +
-                          inviteInfo.link.slice(-8)
-                    }}</span
-                  >
-                </div>
-                <img
-                  class="ml-auto cursor-p"
-                  src="/img/booster/svg/copy.svg"
-                  width="24"
-                  alt=""
-                  v-clipboard="inviteInfo.link"
-                  @success="() => $toast2('Copied!', 'success')"
-                />
-              </div>
-              <div class="invite-panel-basic-item d-flex align-center fz-14">
-                <div>
-                  <span>Invite code:</span>
-                  <span class="ml-2">{{ inviteInfo.inviteCode }}</span>
-                </div>
-                <img
-                  class="ml-auto cursor-p"
-                  src="/img/booster/svg/copy.svg"
-                  width="24"
-                  alt=""
-                  v-clipboard="inviteInfo.inviteCode"
-                  @success="() => $toast2('Copied!', 'success')"
-                />
-              </div>
-              <div class="invite-panel-basic-item d-flex align-center fz-14">
-                <div>
-                  <span>Total invites:</span>
-                  <span class="ml-2">{{ inviteInfo.invited }}</span>
-                </div>
-              </div>
-              <div class="invite-panel-basic-item d-flex align-center fz-14">
-                <div>
-                  <span>Today's invites:</span>
-                  <span class="ml-2">{{ inviteInfo.daily }}</span>
-                </div>
-              </div>
-
-              <div class="fz-12 invite-panel-basic-item-desc">
-                For every 20+ Points collected by your invited Boosters, you'll
-                earn an additional 5% points reward!
-              </div>
-            </div>
-          </div>
-        </v-menu> -->
       </div>
 
       <div v-else class="login-content d-flex align-center justify-center px-4">
@@ -253,7 +103,7 @@
           class="fz-14"
           @click="handleLogin"
         >
-          <img src="/img/booster/svg/wallet.svg" width="16" alt="" />
+          <img src="/img/booster/svg/vg" width="16" alt="" />
           <span class="ml-1" style="color: #fff">Connect Wallet</span>
         </v-btn>
       </div>
@@ -273,103 +123,6 @@
       </div>
       <MobilePointsRate v-if="!notLogin"></MobilePointsRate>
       <div class="d-flex align-center">
-        <!-- <v-menu
-          offset-y
-          content-class="mobile-inviter-menu"
-          :close-on-content-click="false"
-          min-width="100%"
-          nudge-bottom="10"
-          @input="handleTriggerInvite"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <div
-              class="mobile-btn pa-2"
-              v-on="on"
-              v-bind="attrs"
-              v-show="!notLogin"
-            >
-              <img src="/img/booster/svg/invite-user.svg" width="24" alt="" />
-            </div>
-          </template>
-          <div class="mobile-invite-panel">
-            <div class="mobile-invite-title mb-4">Invite</div>
-            <div class="mobile-invite-panel-content">
-              <div
-                class="mobile-invite-panel-basic-item d-flex align-center fz-14"
-              >
-                <div>
-                  <span>Invite link:</span>
-                  <span class="ml-2">
-                    {{
-                      inviteInfo.link == "-"
-                        ? "-"
-                        : inviteInfo.link.slice(0, 12) +
-                          "..." +
-                          inviteInfo.link.slice(-8)
-                    }}</span
-                  >
-                </div>
-                <img
-                  class="ml-auto cursor-p"
-                  src="/img/booster/svg/copy.svg"
-                  width="24"
-                  alt=""
-                  v-clipboard="inviteInfo.link"
-                  @success="() => $toast2('Copied!', 'success')"
-                />
-              </div>
-              <div
-                class="mobile-invite-panel-basic-item d-flex align-center fz-14"
-              >
-                <div>
-                  <span>Invite code:</span>
-                  <span class="ml-2">{{ inviteInfo.inviteCode }}</span>
-                </div>
-                <img
-                  class="ml-auto cursor-p"
-                  src="/img/booster/svg/copy.svg"
-                  width="24"
-                  alt=""
-                  v-clipboard="inviteInfo.inviteCode"
-                  @success="() => $toast2('Copied!', 'success')"
-                />
-              </div>
-              <div
-                class="mobile-invite-panel-basic-item d-flex align-center fz-14"
-              >
-                <div>
-                  <span>Total invites:</span>
-                  <span class="ml-2">{{ inviteInfo.invited }}</span>
-                </div>
-              </div>
-              <div
-                class="mobile-invite-panel-basic-item d-flex align-center fz-14"
-              >
-                <div>
-                  <span>Today's invites:</span>
-                  <span class="ml-2">{{ inviteInfo.daily }}</span>
-                </div>
-                <img class="ml-auto" src="" width="24" alt="" />
-              </div>
-
-              <div class="fz-12 mobile-invite-panel-basic-item-desc">
-                For every 20+ Points collected by your invited Boosters, you'll
-                earn an additional 5% points reward!
-              </div>
-
-              <v-btn
-                class="tg-invite"
-                v-if="isTg"
-                :disabled="inviteInfo.link == '-'"
-                @click="handleTgShare"
-              >
-                <img src="/img/booster/svg/tg-icon.svg" width="16" alt="" />
-                <span class="ml-2">INVITE FRIENDS</span>
-              </v-btn>
-            </div>
-          </div>
-        </v-menu> -->
-
         <div
           class="connect-wallet"
           @click="handleLogin"
@@ -725,18 +478,12 @@ export default {
 
     .user-info {
       gap: 8px;
-
-      // .info-content {
-      //   padding-right: 16px;
-      //   border-right: 1px solid rgba(255, 255, 255, 0.25);
-      // }
       .balance {
         white-space: nowrap;
         color: #94a3b8;
       }
     }
     .login-content {
-      // width: 340px;
       border-left: 1px solid rgba(255, 255, 255, 0.25);
     }
   }
@@ -761,5 +508,11 @@ export default {
   border-radius: 4px;
   background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
   box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
+}
+
+#point-receive {
+  justify-content: flex-end;
+  min-width: 120px;
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
 }
 </style>
