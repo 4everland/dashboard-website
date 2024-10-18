@@ -3,7 +3,7 @@
     <div class="user-card d-none d-md-block">
       <div class="user-card-item fz-12">
         <div
-          class="user-card-item-title d-flex align-center justify-space-between mb-1"
+          class="user-card-item-title d-flex align-center justify-space-between mb-2"
         >
           <div>{{ Math.ceil(totalRate) }} pts/h</div>
           <v-btn
@@ -33,7 +33,7 @@
             </div>
           </div>
         </div>
-        <div class="user-card-item-content mt-5">
+        <div class="user-card-item-content mt-2">
           <div class="content-rate mb-1">Staking Yield</div>
           <div class="content-detail pt-2 fz-12">
             <div class="d-flex align-center justify-space-between mb-1">

@@ -1,140 +1,142 @@
 <template>
-  <div class="invite-drawer-box">
-    <v-navigation-drawer
-      class="invite-drawer"
-      :absolute="!asMobile"
-      :fixed="asMobile"
-      bottom
-      right
-      temporary
-      :hide-overlay="!asMobile"
-      color="#1E2234"
-      :value="showProfileDrawer"
-      @input="handleToggle"
-    >
-      <v-container fluid style="padding: 24px 16px">
-        <div class="drawer-title">Account</div>
-        <div class="d-flex align-center account-container">
-          <e-team-avatar
-            :src="userInfo.avatar"
-            :size="40"
-            :uid="userInfo.uid"
-          ></e-team-avatar>
-          <div class="ml-1">
-            <div class="fw-b" v-if="isTgMiniApp">
-              {{ userInfo.telegramAccount.name }}
-            </div>
-            <div :class="isTgMiniApp ? 'tg-username' : 'pc-username'">
-              {{ (userInfo.username || "unkown").cutStr(6, 4) }}
-            </div>
-          </div>
-
-          <v-btn
-            class="connect-btn ml-auto"
-            v-if="isTgMiniApp && !userInfo.wallet"
-            @click="handleShowConnect"
-          >
-            <img src="/img/booster/svg/wallet.svg" width="16" alt="" />
-            <span class="ml-1"> Connect </span>
-          </v-btn>
-        </div>
-
-        <div class="land-balance">
-          <div class="land-title">LAND Balance</div>
-          <div class="d-flex align-center justify-space-between">
-            <div class="d-flex align-center">
-              <span>{{ balance.land }}</span>
-              <span>{{ balance.unit }}</span>
-              <v-btn
-                small
-                color="#fff"
-                icon
-                :loading="reloadBalance"
-                @click.stop="handleGetBalance"
-              >
-                <v-icon color="#fff">mdi-refresh</v-icon>
-              </v-btn>
-            </div>
-            <v-btn
-              class="deposit-btn"
-              color="#6172F3"
-              @click="$router.push('/billing/deposit')"
-              :width="asMobile ? '80px' : '116px'"
-            >
-              <img
-                v-if="!asMobile"
-                src="/img/booster/svg/pig_bank.svg"
-                width="16"
-                alt=""
-              />
-              <span class="ml-1" style="color: #fff">Deposit</span>
-            </v-btn>
-          </div>
-        </div>
-        <div class="assets">
-          <div class="assets-title">My Assets</div>
-          <div class="d-flex align-center justify-space-between">
-            <div
-              class="d-flex align-center"
-              style="gap: 8px"
-              @click="showWithdrawLogDialog = true"
-            >
-              <img src="/img/booster/ton-invite-icon.png" width="40" alt="" />
-
-              <div class="d-flex flex-column">
-                <div class="d-flex align-center">
-                  <span>Ton</span>
-                  <img
-                    class="cursor-p"
-                    src="/img/booster/svg/right-arrow.svg"
-                    width="16"
-                    alt=""
-                  />
-                </div>
-                <ICountUp
-                  class="fz-12"
-                  style="color: #94a3b8"
-                  :delay="1000"
-                  :endVal="tonCount"
-                  :options="{
-                    decimalPlaces: 4,
-                    useEasing: true,
-                    useGrouping: true,
-                    separator: ',',
-                    decimal: '.',
-                    prefix: '',
-                    suffix: '',
-                  }"
-                />
+  <div>
+    <div class="profile-drawer-box">
+      <v-navigation-drawer
+        class="invite-drawer"
+        :absolute="!asMobile"
+        :fixed="asMobile"
+        bottom
+        right
+        temporary
+        :hide-overlay="!asMobile"
+        color="#1E2234"
+        :value="showProfileDrawer"
+        @input="handleToggle"
+      >
+        <v-container fluid style="padding: 24px 16px">
+          <div class="drawer-title">Account</div>
+          <div class="d-flex align-center account-container">
+            <e-team-avatar
+              :src="userInfo.avatar"
+              :size="40"
+              :uid="userInfo.uid"
+            ></e-team-avatar>
+            <div class="ml-1">
+              <div class="fw-b" v-if="isTgMiniApp">
+                {{ userInfo.telegramAccount.name }}
+              </div>
+              <div :class="isTgMiniApp ? 'tg-username' : 'pc-username'">
+                {{ (userInfo.username || "unkown").cutStr(6, 4) }}
               </div>
             </div>
 
             <v-btn
-              class="withdraw-btn"
-              :width="asMobile ? '80px' : '116px'"
-              :disabled="tonCount <= 0"
-              @click="showWithdrawDialog = true"
+              class="connect-btn ml-auto"
+              @click="handleShowConnect"
+              v-if="isTgMiniApp && !userInfo.wallet"
             >
-              <img
-                class="mr-1"
-                v-if="!asMobile"
-                src="/img/booster/svg/withdraw-icon.svg"
-                width="16"
-                alt=""
-              />
-              <span>Withdraw</span>
+              <img src="/img/booster/svg/wallet.svg" width="16" alt="" />
+              <span class="ml-1"> Connect </span>
             </v-btn>
           </div>
-        </div>
-      </v-container>
 
-      <WithdrawDialog
-        v-model="showWithdrawDialog"
-        :amount="tonCount"
-      ></WithdrawDialog>
+          <div class="land-balance">
+            <div class="land-title">LAND Balance</div>
+            <div class="d-flex align-center justify-space-between">
+              <div class="d-flex align-center">
+                <span>{{ balance.land }}</span>
+                <span>{{ balance.unit }}</span>
+                <v-btn
+                  small
+                  color="#fff"
+                  icon
+                  :loading="reloadBalance"
+                  @click.stop="handleGetBalance"
+                >
+                  <v-icon color="#fff">mdi-refresh</v-icon>
+                </v-btn>
+              </div>
+              <v-btn
+                class="deposit-btn"
+                color="#6172F3"
+                @click="$router.push('/billing/deposit')"
+                :width="asMobile ? '80px' : '116px'"
+              >
+                <img
+                  v-if="!asMobile"
+                  src="/img/booster/svg/pig_bank.svg"
+                  width="16"
+                  alt=""
+                />
+                <span class="ml-1" style="color: #fff">Deposit</span>
+              </v-btn>
+            </div>
+          </div>
+          <div class="assets">
+            <div class="assets-title">My Assets</div>
+            <div class="d-flex align-center justify-space-between">
+              <div
+                class="d-flex align-center"
+                style="gap: 8px"
+                @click="showWithdrawLogDialog = true"
+              >
+                <img src="/img/booster/ton-invite-icon.png" width="40" alt="" />
 
-      <WithdrawLogDialog v-model="showWithdrawLogDialog"></WithdrawLogDialog>
-    </v-navigation-drawer>
+                <div class="d-flex flex-column">
+                  <div class="d-flex align-center">
+                    <span>Ton</span>
+                    <img
+                      class="cursor-p"
+                      src="/img/booster/svg/right-arrow.svg"
+                      width="16"
+                      alt=""
+                    />
+                  </div>
+                  <ICountUp
+                    class="fz-12"
+                    style="color: #94a3b8"
+                    :delay="1000"
+                    :endVal="tonCount"
+                    :options="{
+                      decimalPlaces: 4,
+                      useEasing: true,
+                      useGrouping: true,
+                      separator: ',',
+                      decimal: '.',
+                      prefix: '',
+                      suffix: '',
+                    }"
+                  />
+                </div>
+              </div>
+
+              <v-btn
+                class="withdraw-btn"
+                :width="asMobile ? '80px' : '116px'"
+                :disabled="tonCount <= 0"
+                @click="showWithdrawDialog = true"
+              >
+                <img
+                  class="mr-1"
+                  v-if="!asMobile"
+                  src="/img/booster/svg/withdraw-icon.svg"
+                  width="16"
+                  alt=""
+                />
+                <span>Withdraw</span>
+              </v-btn>
+            </div>
+          </div>
+        </v-container>
+
+        <WithdrawDialog
+          v-model="showWithdrawDialog"
+          :amount="tonCount"
+        ></WithdrawDialog>
+
+        <WithdrawLogDialog v-model="showWithdrawLogDialog"></WithdrawLogDialog>
+      </v-navigation-drawer>
+    </div>
     <WalletConnect ref="walletConnect" />
   </div>
 </template>
@@ -208,7 +210,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.invite-drawer-box {
+.profile-drawer-box {
   ::v-deep .invite-drawer {
     width: 100% !important;
     height: 80% !important;
@@ -287,7 +289,7 @@ export default {
 }
 
 @media (min-width: 960px) {
-  .invite-drawer-box {
+  .profile-drawer-box {
     ::v-deep .invite-drawer {
       top: 74px !important;
       right: 24px !important;
