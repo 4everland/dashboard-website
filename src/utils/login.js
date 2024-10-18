@@ -328,8 +328,6 @@ export const ConnectWalletCon = async () => {
 
 export const onSignWalletCon = async (session, account, nonce) => {
   const msg = "0x" + Buffer.from(nonce).toString("hex");
-  console.log(msg);
-
   const signature = await _signClient.request({
     topic: session.topic,
     chainId: "eip155:1",
