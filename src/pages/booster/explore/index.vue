@@ -11,7 +11,7 @@
         muted
       ></video>
 
-      <div
+      <!-- <div
         class="pos-a"
         style="left: 50%; top: 50%; transform: translate(-50%, -50%)"
       >
@@ -21,7 +21,7 @@
           @verified="onVerified"
           @error="onError"
         />
-      </div>
+      </div> -->
 
       <div class="point-square">
         <div style="position: relative">
@@ -264,9 +264,9 @@ export default {
 
   async created() {
     if (this.notLogin) return this.$router.replace("/boost");
-    this.showExploring = true;
-    // await this.getExploreInfo();
-    // this.pointCount();
+    // this.showExploring = true;
+    await this.getExploreInfo();
+    this.pointCount();
   },
 
   methods: {
@@ -296,9 +296,9 @@ export default {
       return data.explorationId;
     },
     async getExploreInfo(loading = true) {
-      // if (loading) {
-      //   this.showExploring = true;
-      // }
+      if (loading) {
+        this.showExploring = true;
+      }
       try {
         let id = this.$route.params.id;
         if (!id) {
@@ -314,19 +314,19 @@ export default {
       } catch (error) {
         this.$toast2(error.message, "error");
       }
-      // this.showExploring = false;
+      this.showExploring = false;
     },
 
     handleExplore() {
       this.$router.replace({ name: "booster-explore" });
-      this.showExploring = true;
-      this.$refs.turnstile.execute();
-      // this.getExploreInfo();
+      // this.showExploring = true;
+      // this.$refs.turnstile.execute();
+      this.getExploreInfo();
     },
 
     async handleClaim() {
       try {
-        if (!this.token) return;
+        // if (!this.token) return;
         if (this.computedPoints < this.info.capacity) return;
         let id = this.$route.params.id;
         clearInterval(this.timer);
@@ -351,19 +351,19 @@ export default {
         console.log(error);
       }
     },
-    async onVerified(val) {
-      // console.log(val);
-      this.showExploring = true;
-      this.token = val;
-      await this.getExploreInfo();
-      this.pointCount();
-      this.showExploring = false;
-    },
+    // async onVerified(val) {
+    //   // console.log(val);
+    //   this.showExploring = true;
+    //   this.token = val;
+    //   await this.getExploreInfo();
+    //   this.pointCount();
+    //   this.showExploring = false;
+    // },
 
-    onError() {
-      this.$refs.turnstile.reset();
-      // this.showExploring = false
-    },
+    // onError() {
+    //   this.$refs.turnstile.reset();
+    //   // this.showExploring = false
+    // },
   },
 };
 </script>
