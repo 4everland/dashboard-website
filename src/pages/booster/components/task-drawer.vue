@@ -322,9 +322,6 @@ export default {
       userInfo: (s) => s.userInfo,
     }),
     ...mapGetters(["showTaskDrawer", "boostLocked"]),
-    isTg() {
-      return process.env.VUE_APP_TG_VERSION == "true";
-    },
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
@@ -549,7 +546,7 @@ export default {
       }
     },
     getInvite() {
-      if (this.isTg) {
+      if (this.isTgMiniApp) {
         this.getTgInviteInfo();
       } else {
         this.getInviteInfo();

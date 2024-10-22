@@ -11,7 +11,7 @@
         v-on="on"
         v-bind="attrs"
         srcset="/img/booster/svg/log.svg"
-        width="16"
+        width="24"
         src=""
         alt=""
       />

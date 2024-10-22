@@ -2,21 +2,28 @@
   <div>
     <div class="user-card d-none d-md-block">
       <div class="user-card-item fz-12">
-        <div class="user-card-item-title mb-1">Earning Rate</div>
-        <div class="linear-border mb-1"></div>
+        <div
+          class="user-card-item-title d-flex align-center justify-space-between mb-2"
+        >
+          <div>{{ Math.ceil(totalRate) }} pts/h</div>
+          <v-btn
+            class="act-btn"
+            height="27"
+            max-width="83"
+            @click="
+              () =>
+                !this.boostLocked ? this.$store.commit('TASKDRAWER_TOGGLE') : ''
+            "
+          >
+            <img src="/img/booster/svg/more.svg" width="16" alt="" />
+            <span class="ml-1 fz-16">More</span>
+          </v-btn>
+        </div>
+        <div class="linear-border mb-2"></div>
         <div class="user-card-item-content">
-          <div class="content-rate d-flex align-center justify-space-between">
+          <div class="content-rate">
             <!-- <img src="/img/booster/svg/union.svg" width="52" alt="" /> -->
-            <div>{{ Math.ceil(totalRate) }} pts/h</div>
-            <v-btn
-              class="act-btn"
-              height="24"
-              max-width="62"
-              @click="$store.commit('TASKDRAWER_TOGGLE')"
-            >
-              <img src="/img/booster/svg/more.svg" width="12" alt="" />
-              <span class="ml-1">More</span>
-            </v-btn>
+            Earning Rate
           </div>
           <div class="content-detail pt-2 fz-12">
             <div class="d-flex align-center justify-space-between">
@@ -27,9 +34,25 @@
               <span>Boost Rate</span>
               <span>+{{ boostRate }} pts/h</span>
             </div>
-            <div class="d-flex align-center justify-space-between mt-1">
-              <span>Staking Yield</span>
+          </div>
+        </div>
+        <div class="user-card-item-content mt-2">
+          <div class="content-rate mb-1">Staking Yield</div>
+          <div class="content-detail pt-2 fz-12">
+            <div class="d-flex align-center justify-space-between mb-1">
               <span>{{ boosterInfo.rateBuff }}%</span>
+              <v-btn
+                class="staking-btn"
+                width="59"
+                height="27"
+                @click="
+                  () =>
+                    !this.boostLocked
+                      ? this.$store.dispatch('StakeDrawerToggle')
+                      : ''
+                "
+                >Staking</v-btn
+              >
             </div>
           </div>
         </div>
@@ -400,6 +423,10 @@ export default {
   .user-card-item {
     .user-card-item-title {
       width: 100%;
+      color: #fff;
+      font-family: "DIN Alternate";
+      font-size: 20px;
+      font-weight: 700;
     }
     .user-card-item-content {
       padding: 4px 16px;
@@ -411,12 +438,16 @@ export default {
       backdrop-filter: blur(2px);
 
       .content-rate {
-        font-family: "DIN Alternate";
-        font-size: 24px;
-        font-weight: 700;
+        font-size: 12px;
       }
       .content-detail {
         border-top: 1px solid rgba(164, 188, 253, 0.25);
+      }
+      .staking-btn {
+        letter-spacing: 0;
+        color: #fff;
+        border-radius: 4px;
+        background: #6172f3;
       }
     }
   }
@@ -616,7 +647,6 @@ export default {
   border-radius: 4px;
   opacity: 1;
   color: #fff !important;
-  font-size: 12px;
   letter-spacing: 0;
   background: linear-gradient(
     97deg,

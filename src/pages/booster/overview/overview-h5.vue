@@ -12,16 +12,28 @@
       @click="$store.commit('SET_INVITE_BAR', true)"
     >
       <img src="/img/booster/ton-claim-icon.png" width="56" alt="" />
-      <div class="trigger-text fz-12 fw-b text-center">CLAIM</div>
+      <div class="trigger-text claim fz-12 fw-b text-center">CLAIM</div>
+    </div>
+    <div
+      v-if="isTgMiniApp"
+      class="trigger-icon pos-a"
+      style="right: 8px; top: 202px"
+      @click="
+        () =>
+          !this.boostLocked ? this.$store.dispatch('StakeDrawerToggle') : ''
+      "
+    >
+      <img src="/img/booster/staking-icon.png" width="56" alt="" />
+      <div class="trigger-text staking fz-12 fw-b text-center">STAKING</div>
     </div>
     <div
       v-if="isTgMiniApp && !userInfo.wallet"
       class="trigger-icon pos-a"
-      style="right: 8px; top: 202px"
+      style="right: 8px; top: 268px"
       @click="onConnetc"
     >
       <img src="/img/booster/wallet-connect-icon.png" width="56" alt="" />
-      <div class="trigger-text fz-12 fw-b text-center">CONNECT</div>
+      <div class="trigger-text connect fz-12 fw-b text-center">CONNECT</div>
     </div>
     <WalletConnect ref="walletConnect" />
 
@@ -252,9 +264,6 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
     }),
-    isTg() {
-      return process.env.VUE_APP_TG_VERSION == "true";
-    },
   },
   created() {
     bus.$on("showMobileSheet", () => {
@@ -554,10 +563,31 @@ export default {
     left: 0;
     bottom: 15%;
     width: 60px;
-    height: 20px;
-    line-height: 20px;
-    background-color: rgba(0, 0, 0, 0.2);
+    padding: 4px 1.5px;
+    line-height: 12px;
     backdrop-filter: blur(2px);
+    border-radius: 4px;
+  }
+  .claim {
+    background: linear-gradient(
+      135deg,
+      rgba(15, 225, 248, 0.5) 14.29%,
+      rgba(97, 114, 243, 0.5) 97.32%
+    );
+  }
+  .staking {
+    background: linear-gradient(
+      148deg,
+      rgba(255, 222, 127, 0.5) 13.1%,
+      rgba(248, 99, 0, 0.13) 82.44%
+    );
+  }
+  .connect {
+    background: linear-gradient(
+      120deg,
+      rgba(97, 114, 243, 0.5) 24.53%,
+      rgba(17, 2, 252, 0.5) 74.37%
+    );
   }
 }
 </style>

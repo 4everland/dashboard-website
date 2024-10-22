@@ -12,11 +12,7 @@
           <img src="/img/booster/svg/empty.svg" width="200" alt="" />
           <div>Empty</div>
         </div>
-        <v-simple-table
-          v-else
-          class="withdraw-log-table mt-4"
-          style="max-height: 600px; overflow: scroll"
-        >
+        <v-simple-table v-else class="withdraw-log-table mt-4">
           <template v-slot:default>
             <thead>
               <tr>
@@ -219,7 +215,7 @@ export default {
 .withdraw-overlay {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
   background: linear-gradient(
       180deg,
       rgba(0, 10, 16, 0.5) 66.24%,
@@ -331,6 +327,9 @@ export default {
   width: 100%;
   color: #fff !important;
   background: transparent;
+  height: calc(100% - 58px);
+  overflow: scroll;
+  padding-bottom: 30px;
   :deep th {
     border-bottom: 1px solid rgba(255, 255, 255, 0.25) !important;
     font-size: 12px !important;

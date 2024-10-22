@@ -95,15 +95,27 @@ export default {
           },
           undo: false,
         },
+        // {
+        //   icon: "/img/booster/nav/staking.png",
+        //   activityIcon: "/img/booster/nav/staking-active.png",
+        //   name: "Staking",
+        //   isOpen: true,
+        //   action() {
+        //     _this.toggleStakeDrawer();
+        //   },
+        //   undo: this.stakeUndo,
+        // },
         {
-          icon: "/img/booster/nav/staking.png",
-          activityIcon: "/img/booster/nav/staking-active.png",
-          name: "Staking",
+          icon: "/img/booster/nav/invite.png",
+          activityIcon: "/img/booster/nav/invite-active.png",
+          name: "Invite",
           isOpen: true,
           action() {
-            _this.toggleStakeDrawer();
+            _this.toggleInviteDrawer();
+            _this.inviteUndo = false;
+            localStorage.setItem("invite-drawer", "1");
           },
-          undo: this.stakeUndo,
+          undo: this.inviteUndo,
         },
         {
           icon: "/img/booster/nav/explore.png",
@@ -126,16 +138,14 @@ export default {
           undo: this.taskUndo,
         },
         {
-          icon: "/img/booster/nav/invite.png",
-          activityIcon: "/img/booster/nav/invite-active.png",
-          name: "Invite",
+          icon: "/img/booster/nav/account.png",
+          activityIcon: "/img/booster/nav/account-active.png",
+          name: "Account",
           isOpen: true,
           action() {
-            _this.toggleInviteDrawer();
-            _this.inviteUndo = false;
-            localStorage.setItem("invite-drawer", "1");
+            _this.toggleProfileDrawer();
           },
-          undo: this.inviteUndo,
+          undo: false,
         },
       ];
       return Arr;
@@ -172,6 +182,10 @@ export default {
     toggleInviteDrawer() {
       if (this.boostLocked) return this.$toast2("boost Locked", "error");
       this.$store.commit("SET_INVITE_BAR", true);
+    },
+    toggleProfileDrawer() {
+      if (this.boostLocked) return this.$toast2("boost Locked", "error");
+      this.$store.commit("SET_PROFILE_BAR", true);
     },
   },
 };

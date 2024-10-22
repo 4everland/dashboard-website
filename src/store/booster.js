@@ -37,6 +37,7 @@ export default {
       showTaskDrawer: false,
       showToolDrawer: false,
       showInviteDrawer: false,
+      showProfileDrawer: false,
       currentDate: +new Date() / 1000,
       showBindWallet: false,
       taskUndo: false,
@@ -175,13 +176,16 @@ export default {
     SET_INVITE_BAR(state, isShow) {
       state.showInviteDrawer = isShow;
     },
+    SET_PROFILE_BAR(state, isShow) {
+      state.showProfileDrawer = isShow;
+    },
     SET_BOOST_TASK_UNDO(state, undo) {
       state.taskUndo = undo;
     },
     SET_BOOST_STAKE_UNDO(state, undo) {
       state.stakeUndo = undo;
     },
-    SET_USDT_COUNT(state, count) {
+    SET_TON_COUNT(state, count) {
       state.tonCount = count;
     },
     SET_INVITE_INFO(state, info) {
@@ -253,7 +257,7 @@ export default {
       try {
         const { data } = await fetchClaimUSDT();
         if (data) {
-          commit("SET_USDT_COUNT", Number(data.balance));
+          commit("SET_TON_COUNT", Number(data.balance));
         }
       } catch (error) {
         console.log(error);

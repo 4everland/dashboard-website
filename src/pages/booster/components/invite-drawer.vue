@@ -89,9 +89,6 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-    isTg() {
-      return process.env.VUE_APP_TG_VERSION == "true";
-    },
   },
   components: {
     InviteTaskContent,

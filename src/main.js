@@ -16,7 +16,7 @@ if (window.top !== window.self) {
 window.Buffer = Buffer;
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 
-process.env.VUE_APP_TG_VERSION == "true" && inDev ? new VConsole() : "";
+inDev ? new VConsole() : "";
 
 router.beforeEach((to, _, next) => {
   let { title, group } = to.meta || {};
