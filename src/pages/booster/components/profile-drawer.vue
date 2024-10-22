@@ -275,8 +275,11 @@ export default {
 
   .deposit-btn.v-btn--disabled,
   .withdraw-btn.v-btn--disabled {
-    background: linear-gradient(0deg, #eaecf0 0%, #eaecf0 100%),
-      linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%) !important;
+    // background: linear-gradient(0deg, #eaecf0 0%, #eaecf0 100%),
+    //   linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%) !important;
+    color: #fff !important;
+    opacity: 0.5 !important;
+    background: #31383f !important;
   }
 
   .tg-username {

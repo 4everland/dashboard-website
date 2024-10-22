@@ -5,7 +5,6 @@
       :absolute="!asMobile"
       :fixed="asMobile"
       bottom
-      right
       temporary
       :hide-overlay="!asMobile"
       color="#1E2234"
@@ -182,7 +181,7 @@ export default {
   .invite-drawer-box {
     ::v-deep .invite-drawer {
       top: 74px !important;
-      right: 24px !important;
+      left: 24px !important;
       width: 558px !important;
       height: calc(100% - 74px - 64px - 24px) !important;
     }

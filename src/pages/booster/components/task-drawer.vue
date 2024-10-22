@@ -18,8 +18,8 @@
             <span class="fz-16 fw-b"> Daily Tasks </span>
             <v-btn
               :class="signed ? 'done-btn' : 'drawer-btn'"
-              :disabled="signed"
               @click="onSign"
+              :disabled="signed"
             >
               {{ signed ? "Done" : "Claim LAND" }}
             </v-btn>
@@ -752,6 +752,10 @@ export default {
 }
 ::v-deep .theme--light.v-btn.v-btn--disabled.done-btn {
   color: #fff !important;
+  border-radius: 21px;
+  background: #31383f !important;
+  color: #fff !important;
+  cursor: not-allowed;
 }
 .task-drawer-box {
   ::v-deep .task-drawer {
