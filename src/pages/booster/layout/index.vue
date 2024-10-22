@@ -62,19 +62,19 @@ export default {
   },
 
   async created() {
+    bus.$on("showDepositDialog", ({ land, report }) => {
+      if (report) {
+        this.report = report;
+      } else {
+        this.report = false;
+      }
+      this.depositLand = land;
+      this.showDeposit = true;
+    });
     try {
       await this.$store.dispatch("getBoosterUserInfo");
       this.$store.dispatch("getExploreRemain");
       this.handleValid();
-      bus.$on("showDepositDialog", ({ land, report }) => {
-        if (report) {
-          this.report = report;
-        } else {
-          this.report = false;
-        }
-        this.depositLand = land;
-        this.showDeposit = true;
-      });
     } catch (error) {
       console.log(error);
     }

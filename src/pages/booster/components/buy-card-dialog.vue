@@ -169,8 +169,6 @@ export default {
           this.$emit("input", false);
           bus.$emit("clearBuyCardCount", this.buyType);
         } else if (data.code == 10002) {
-          // bus.$emit("showDepositDialog", { land: Number(data.data.land) });
-
           let land = this.isTgMiniApp ? 0 : Number(data.data.land);
           bus.$emit("showDepositDialog", { land });
 

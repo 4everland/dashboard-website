@@ -86,14 +86,7 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import {
-  Address,
-  TonClient,
-  Cell,
-  beginCell,
-  storeStateInit,
-  toNano,
-} from "@ton/ton";
+import { beginCell } from "@ton/ton";
 import axios from "axios";
 
 export default {
@@ -123,51 +116,7 @@ export default {
       return this.depositLand;
     },
   },
-  mounted() {
-    // this.tonConnectUI.onStatusChange((wallet) => {
-    //   if (
-    //     wallet &&
-    //     wallet.connectItems?.tonProof &&
-    //     "proof" in wallet.connectItems.tonProof
-    //   ) {
-    //     console.log(wallet.connectItems.tonProof, "-----");
-    //   }
-    // });
-    // const tonClient = new TonClient({
-    //   endpoint: "https://toncenter.com/api/v2/jsonRPC",
-    // });
-    // this.tonClient = tonClient;
-    // const cell = Cell.fromBase64(
-    //   "te6cckEBBAEA5QAB5YgAh/lsmH38Kch1s+r5FHV2pMW2qrac4T4IDEAIkUmRzqIDm0s7c///+Is2Yj1gAAAATNd4k05gDmj7mlwK6i5+iQcUG9Y4a1XsOVZZmNncyzfBuvE4Ofv7cLnchRkBgyHyBF79awl9qt4cGz7UNvC7OgUBAgoOw8htAwIDAAAAxEIATrmDnYy542XjUEq0HgOm5Za2P4NuAu1ZfI6ltQVClP+gslpLKAAAAAAAAAAAAAAAAAAAAAAAeyJ1aWQiOiI1ODBmYTNhZTc5NGY0OTk4YTM1ODM4OWQyNWE2MDY2NyJ9F8yYPQ=="
-    // );
-    // const buffer = cell.hash();
-    // const hashHex = buffer.toString("hex");
-    // console.log(hashHex);
-  },
   methods: {
-    // async getTxs() {
-    //   try {
-    //     console.log(this.tonConnectUI.account);
-    //     if (this.tonConnectUI.account.address) {
-    //       const data = await this.tonClient.getTransactions(
-    //         Address.parse(this.tonConnectUI.account.address),
-    //         {
-    //           limit: 10,
-    //         }
-    //       );
-
-    //       // const data = await this.tonClient.getTransaction(
-    //       //   Address.parse(this.tonConnectUI.account.address),
-    //       //   "0",
-    //       //   "28b666c83471b0db08f9a6116b1f906b59df2cae9d9809aa2e88f8ff30cf1957"
-    //       // );
-    //       console.log(data);
-    //     }
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
-
     async handleDeposit() {
       if (!this.tonConnected) {
         await this.tonConnectUI.connectWallet();
@@ -208,112 +157,6 @@ export default {
         console.error(e);
       }
     },
-    // setTonDepositHash(hash) {
-    //   let hashJson = localStorage.getItem("ton_deposit_hash");
-    //   if (!hashJson) {
-    //     localStorage.setItem("ton_deposit_hash", JSON.stringify([hash]));
-    //   } else {
-    //     let hashArr = JSON.parse(hashJson);
-    //     hashArr.push(hash);
-    //     localStorage.setItem("ton_deposit_hash", JSON.stringify(hashArr));
-    //   }
-    // },
-
-    // async handleDepositUSDT() {
-    //   if (!this.connected) return this.handleShowModel();
-    //   try {
-    //     const jettonWalletContract = await this.initJettonWallet();
-    //     let payload = JSON.stringify({
-    //       uid: "580fa3ae794f4998a358389d25a60667",
-    //     });
-    //     // const body = beginCell()
-    //     //   .storeUint(0xf8a7ea5, 32)
-    //     //   .storeUint(0, 64)
-    //     //   .storeCoins(1000000)
-    //     //   .storeAddress(
-    //     //     Address.parse("UQCdcwc7GXPGy8aglWg8B03LLWx_BtwF2rL5HUtqCoUp_1Ge")
-    //     //   )
-    //     //   .storeAddress(
-    //     //     Address.parse("UQBD_LZMPv4U5DrZ9XyKOrtSYttVW05wnwQGIARIpMjnUcjk")
-    //     //   )
-    //     //   .storeUint(0, 1)
-    //     //   .storeCoins(toNano(0.05))
-    //     //   .storeUInt(0, 1)
-    //     //   .endCell();
-
-    //     const body = beginCell()
-    //       .storeUint(0xf8a7ea5, 32) // jetton 转账操作码
-    //       .storeUint(0, 64) // query_id:uint64
-    //       .storeCoins(1000000) // amount:(VarUInteger 16) -  转账的 Jetton 金额（小数位 = 6 - jUSDT, 9 - 默认）
-    //       .storeAddress(
-    //         Address.parse("")
-    //       ) // destination:MsgAddress
-    //       .storeAddress(
-    //         Address.parse("")
-    //       ) // response_destination:MsgAddress
-    //       .storeUint(0, 1) // custom_payload:(Maybe ^Cell)
-    //       .storeCoins(toNano(0.05)) // forward_ton_amount:(VarUInteger 16)
-    //       .storeUint(0, 1) // forward_payload:(Either Cell ^Cell)
-    //       .endCell();
-
-    //     const transaction = {
-    //       validUntil: Math.floor(Date.now() / 1000) + 360,
-    //       messages: [
-    //         {
-    //           address: "",
-    //           amount: toNano("0.05").toString(),
-    //           payload: body.toBoc().toString("base64"),
-    //         },
-    //       ],
-    //     };
-
-    //     const result = await this.tonConnectUI.sendTransaction(transaction);
-    //     console.log(result, "result");
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
-
-    // async initJettonWallet() {
-    //   const client = new TonClient({
-    //     endpoint: "https://toncenter.com/api/v2/jsonRPC",
-    //     apiKey:
-    //       "",
-    //   });
-
-    //   const jettonWalletAddress = Address.parse(
-    //     ""
-    //   );
-    //   let jettonWalletDataResult = await client.runMethod(
-    //     jettonWalletAddress,
-    //     "get_wallet_data"
-    //   );
-    //   jettonWalletDataResult.stack.readNumber();
-    //   const ownerAddress = jettonWalletDataResult.stack.readAddress();
-    //   const jettonMasterAddress = jettonWalletDataResult.stack.readAddress();
-    //   const jettonCode = jettonWalletDataResult.stack.readCell();
-
-    //   console.log(ownerAddress.toString(), jettonMasterAddress.toString());
-    //   const jettonData = beginCell()
-    //     .storeCoins(0)
-    //     .storeAddress(ownerAddress)
-    //     .storeAddress(jettonMasterAddress)
-    //     .storeRef(jettonCode)
-    //     .endCell();
-
-    //   const stateInit = {
-    //     code: jettonCode,
-    //     data: jettonData,
-    //   };
-
-    //   const stateInitCell = beginCell()
-    //     .store(storeStateInit(stateInit))
-    //     .endCell();
-
-    //   console.log(new Address(0, stateInitCell.hash()));
-
-    //   return new Address(0, stateInitCell.hash());
-    // },
   },
 };
 </script>

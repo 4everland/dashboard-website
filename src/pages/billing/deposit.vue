@@ -390,7 +390,7 @@ export default {
         try {
           let receipt = "";
           if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
-            if (!this.ethAmount) return;
+            if (this.ethAmount.toString() == "0") return;
             this.$loading();
             let tx = await this.LandRecharge.mintByETH(this.euid, {
               value: this.ethAmount,
