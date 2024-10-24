@@ -237,6 +237,18 @@
             </div> -->
           </div>
         </div>
+
+        <div
+          class="gold-square"
+          @click="$emit('startReward')"
+        >
+          <div style="position: relative">
+            <div style="width: 10px; height: 10px"></div>
+          </div>
+          <div class="top-card square-box" id="mobile-gold-ball">
+            <img src="/img/booster/spin/reward-ball.png" width="80" alt="" />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -546,6 +558,26 @@ export default {
     font-weight: bold;
     border-radius: 16px 16px 16px 0;
     background: #f04438;
+  }
+}
+
+.gold-square{
+  position: absolute;
+  left: 30%;
+  transform: translateX(-50%);
+  top: 15%;
+  .points {
+    z-index: 10;
+    padding: 0px 8px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 65%;
+    font-weight: bold;
+    border-radius: 16px;
+    border: 1px solid rgba(18, 21, 54, 0.5);
+    background: rgba(97, 114, 243, 0.75);
+    box-shadow: 0px 0px 4px 0px rgba(255, 255, 255, 0.5);
   }
 }
 

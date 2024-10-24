@@ -34,6 +34,7 @@
           @handleStartBoost="handleShowStartBoost"
           @handleUnlock="handleShowUnlock"
           @dailyClaim="showDailySign = true"
+          @startReward="showRewardStart = true"
         ></overview-h5>
         <start-boosting
           v-model="showStartBoost"
@@ -52,6 +53,7 @@
         <invite-drawer></invite-drawer>
         <profile-drawer></profile-drawer>
         <bind-dialog v-model="showBindWallet"></bind-dialog>
+        <RewardOpenFirst v-model="showRewardStart"></RewardOpenFirst>
       </template>
       <!-- <end-boosting v-model="showEndBoost"></end-boosting> -->
     </div>
@@ -74,6 +76,7 @@ import UnlockDialog from "./components/unlock-dialog.vue";
 import TgStartBoostOverlay from "./components/tg-start-boost-overlay.vue";
 import EasterEgg from "./components/easter-egg.vue";
 import DailySignDialog from "./components/daily-sign-dialog.vue";
+import RewardOpenFirst from "./components/reward-open-first.vue"
 
 import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
@@ -164,6 +167,7 @@ export default {
       timer: null,
       unlockStage: 0,
       showDailySign: false,
+      showRewardStart: false,
     };
   },
   computed: {
@@ -321,6 +325,7 @@ export default {
     EasterEgg,
     DailySignDialog,
     ProfileDrawer,
+    RewardOpenFirst,
   },
 
   watch: {
