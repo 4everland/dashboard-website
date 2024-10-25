@@ -305,6 +305,12 @@ export default {
               case "quest":
                 it.log = it.name + it.value;
                 break;
+              case "white_list_5":
+                it.log = `Dappbay Featured Activities: Live Guidance and Q&A! ${it.value} points.`;
+                break;
+              case "white_list_6":
+                it.log = `Chinese AMA in the BNBCHAIN TG Group ${it.value} points.`;
+                break;
               default:
                 break;
             }
