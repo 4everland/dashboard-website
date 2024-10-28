@@ -298,7 +298,7 @@ export default {
   data() {
     return {
       sheet: false,
-      showRewardReceive: true,
+      showRewardReceive: false,
       showRewardClaim: false,
       timeLeft: localStorage.getItem('countdownTime') ? parseInt(localStorage.getItem('countdownTime')) : 86400,
     };
