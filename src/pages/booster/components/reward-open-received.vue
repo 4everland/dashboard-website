@@ -151,7 +151,6 @@ export default {
   box-shadow: none !important;
   overflow: initial !important;
 }
-
 @media screen and (max-width: 900px) {
   .daily-sign-footer {
     flex-direction: column-reverse;

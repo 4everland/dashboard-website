@@ -247,7 +247,7 @@
           </div>
         </div>
 
-         <!-- <div class="gold-square" @click="$emit('receiveReward')" style="margin-top:60px;">
+         <!-- <div class="gold-square" @click="$emit('openClaim')" style="margin-top:60px;">
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>
           </div>
@@ -264,7 +264,7 @@
             rounded
             class="progress-time"
           ></v-progress-linear>
-          <div style="color: #121536" class="fz-10">24:00:00</div>
+          <div style="color: #121536" class="fz-10">{{ formattedTime }}</div>
           <img
             class="right-img"
             src="/img/booster/spin/background-right.png"
@@ -276,7 +276,8 @@
         </div>
       </div>
     </div>
-
+     <RewardOpenReceived v-model="showRewardReceive"></RewardOpenReceived>
+    <RewardOpenClaim v-model="showRewardClaim"></RewardOpenClaim>
     <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
   </div>
 </template>
@@ -289,18 +290,30 @@ import TokenDialog from "../components/token-dialog.vue";
 import WalletConnect from "../components/wallet-connect.vue";
 import mixin from "./mixin";
 import { bus } from "@/utils/bus";
+import RewardOpenReceived from "../components/reward-open-received.vue";
+import RewardOpenClaim from "../components/reward-open-claim.vue";
 
 export default {
   mixins: [mixin],
   data() {
     return {
       sheet: false,
+      showRewardReceive: true,
+      showRewardClaim: false,
+      timeLeft: localStorage.getItem('countdownTime') ? parseInt(localStorage.getItem('countdownTime')) : 86400,
     };
   },
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
     }),
+    formattedTime() {
+      const hours = Math.floor(this.timeLeft / 3600);
+      const minutes = Math.floor((this.timeLeft % 3600) / 60);
+      const seconds = this.timeLeft % 60;
+
+      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
   },
   created() {
     bus.$on("showMobileSheet", () => {
@@ -314,16 +327,32 @@ export default {
     MobilePointsSheet,
     TokenDialog,
     WalletConnect,
+    RewardOpenReceived,
+    RewardOpenClaim
   },
   watch: {
     "boosterInfo.protectExpiredAt"() {
       this.protectCardTime();
     },
   },
+  mounted() {
+    this.startCountdown();
+  },
   methods: {
     onConnetc() {
       this.$refs.walletConnect.onShowConnect();
     },
+     startCountdown() {
+      setInterval(() => {
+        if (this.timeLeft > 0) {
+          this.timeLeft--;
+          localStorage.setItem('countdownTime', this.timeLeft.toString());
+        } else {
+          this.timeLeft = 86400; // Reset time for another 24-hour cycle
+          localStorage.setItem('countdownTime', this.timeLeft.toString());
+        }
+      }, 1000);
+    }
   },
 };
 </script>
@@ -338,7 +367,6 @@ export default {
     transform: translateY(0);
   }
 }
-
 .square-box {
   animation: bounce 2s infinite linear;
 }
