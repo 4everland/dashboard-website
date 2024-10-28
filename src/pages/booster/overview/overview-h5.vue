@@ -238,16 +238,41 @@
           </div>
         </div>
 
-        <div
-          class="gold-square"
-          @click="$emit('startReward')"
-        >
+        <div class="gold-square" @click="$emit('startReward')">
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>
           </div>
           <div class="top-card square-box" id="mobile-gold-ball">
             <img src="/img/booster/spin/reward-ball.png" width="80" alt="" />
           </div>
+        </div>
+
+         <!-- <div class="gold-square" @click="$emit('receiveReward')" style="margin-top:60px;">
+          <div style="position: relative">
+            <div style="width: 10px; height: 10px"></div>
+          </div>
+          <div class="top-card square-box" id="mobile-gold-ball">
+            <img src="/img/booster/spin/reward-ball.png" width="80" alt="" />
+          </div>
+        </div> -->
+
+        <div class="points-swap d-flex flex-column align-center justify-center" style="box-shadow: 0px 0px 20px 0px #FF940840, 0px 0px 10px 0px #F8630080, 0px 0px 2.5px 0px #FFAD08BF;">
+          <div class="points-text">Point Swap</div>
+          <v-progress-linear
+            value="50"
+            height="10"
+            rounded
+            class="progress-time"
+          ></v-progress-linear>
+          <div style="color: #121536" class="fz-10">24:00:00</div>
+          <img
+            class="right-img"
+            src="/img/booster/spin/background-right.png"
+            width="8"
+            height="48"
+            alt=""
+          />
+          <v-icon small class="right-icon">mdi-menu-right</v-icon>
         </div>
       </div>
     </div>
@@ -561,7 +586,7 @@ export default {
   }
 }
 
-.gold-square{
+.gold-square {
   position: absolute;
   left: 30%;
   transform: translateX(-50%);
@@ -620,6 +645,50 @@ export default {
       rgba(97, 114, 243, 0.5) 24.53%,
       rgba(17, 2, 252, 0.5) 74.37%
     );
+  }
+}
+.points-swap {
+  position: absolute;
+  left: 0;
+  top: 10%;
+  width: 96px;
+  height: 48px;
+  gap: 0px;
+  border-radius: 0px 8px 8px 0px;
+  opacity: 0px;
+  background-image: url("/img/booster/spin/hands-coin.png"),
+    linear-gradient(180deg, #ffad08, #ffde7f);
+  background-size: auto, auto;
+  background-position: left, 0 0;
+  box-shadow: 0px 0px 20px 0px #FF940840;
+box-shadow: 0px 0px 10px 0px #F8630080;
+
+box-shadow: 0px 0px 2.5px 0px #FFAD08BF;
+
+  .right-img {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+  .right-icon {
+    position: absolute;
+    right: -4px;
+    top: 30%;
+    z-index: 2;
+  }
+  .progress-time {
+    width: 80px;
+    margin: 2px 0;
+    border: 1px solid #12153680;
+    background: #121536BF;
+  }
+  .points-text {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    line-height: 12px !important;
+    text-align: center !important;
+    color: #121536 !important;
   }
 }
 </style>
