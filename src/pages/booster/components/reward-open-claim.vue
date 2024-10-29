@@ -4,6 +4,7 @@
       max-width="100%"
       content-class="daily-boost-dialog"
       v-model="value"
+      overlay-opacity="0.9"
       @click:outside="$emit('input', false)"
     >
       <div class="daily-boost">

@@ -50,6 +50,7 @@
               class="reward-btn"
               style="width: 80%;"
               height="44"
+              @click="handleStartGetReward()"
             >
               <div class="btn-text">Continue</div>
             </v-btn>
@@ -91,6 +92,9 @@ export default {
   },
 
   methods: { 
+    handleStartGetReward() {
+      this.$router.push('/boost/spin');
+    }
   },
   components: {
     RewardDialog,

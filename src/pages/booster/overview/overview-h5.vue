@@ -276,8 +276,6 @@
         </div>
       </div>
     </div>
-     <RewardOpenReceived v-model="showRewardReceive"></RewardOpenReceived>
-    <RewardOpenClaim v-model="showRewardClaim"></RewardOpenClaim>
     <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
   </div>
 </template>
@@ -290,16 +288,12 @@ import TokenDialog from "../components/token-dialog.vue";
 import WalletConnect from "../components/wallet-connect.vue";
 import mixin from "./mixin";
 import { bus } from "@/utils/bus";
-import RewardOpenReceived from "../components/reward-open-received.vue";
-import RewardOpenClaim from "../components/reward-open-claim.vue";
 
 export default {
   mixins: [mixin],
   data() {
     return {
       sheet: false,
-      showRewardReceive: false,
-      showRewardClaim: false,
       timeLeft: localStorage.getItem('countdownTime') ? parseInt(localStorage.getItem('countdownTime')) : 86400,
     };
   },
@@ -327,8 +321,6 @@ export default {
     MobilePointsSheet,
     TokenDialog,
     WalletConnect,
-    RewardOpenReceived,
-    RewardOpenClaim
   },
   watch: {
     "boosterInfo.protectExpiredAt"() {

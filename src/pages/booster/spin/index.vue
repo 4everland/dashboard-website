@@ -5,7 +5,7 @@
         <div
           class="nav-mobile d-flex align-center justify-space-between"
         >
-          <div class="logo d-flex align-center">
+          <div class="logo d-flex align-center" @click="backtoindex">
             <img src="/img/booster/spin/chevron-left.png" width="24" alt="" />
           </div>
           <div class="mobile-title fz-16">
@@ -197,6 +197,9 @@ during the each Points Swap round. After each round, your invites will reset.
     <SpinSwapped v-model="showSwapped"></SpinSwapped>
     <SpinSorry v-model="showSpinSorry"></SpinSorry>
     <SpinInvite v-model="showInvite"></SpinInvite>
+    <RewardOpenReceived v-model="showRewardReceive"></RewardOpenReceived>
+    <RewardOpenClaim v-model="showRewardClaim"></RewardOpenClaim>
+    <SpinStartReward v-model="showStartClaim" @openStartNext="handleStartNext"></SpinStartReward>
   </div>
 </template>
 
@@ -207,10 +210,25 @@ import { fetchLeaderboard } from "@/api/booster";
 import SpinSwapped from "../components/spin-swapped.vue";
 import SpinSorry from "../components/spin-sorry.vue";
 import SpinInvite from "../components/spin-invite.vue";
+import RewardOpenReceived from "../components/reward-open-received.vue";
+import RewardOpenClaim from "../components/reward-open-claim.vue";
+import SpinStartReward from "../components/spin-start-reward.vue"
+
 export default {
+  components: {
+    RewardOpenReceived,
+    RewardOpenClaim,
+    SpinStartReward,
+    SpinSwapped,
+    SpinSorry,
+    SpinInvite
+  },
   data () {
     return {
       dialog: false,
+      showRewardReceive: false,
+      showRewardClaim: false,
+      showStartClaim: true,
       copyValue:'',
       showSwapped:false,
       showSpinSorry: false,
@@ -268,12 +286,14 @@ export default {
     },
     opendialog(){
       this.dialog = true
+    },
+    backtoindex() {
+      this.$router.push('/boost');
+    },
+    handleStartNext () {
+      this.showStartClaim = false
+      this.showRewardReceive = true
     }
-  },
-  components: {
-    SpinSwapped,
-    SpinSorry,
-    SpinInvite
   },
 };
 </script>
@@ -310,7 +330,7 @@ export default {
       border-bottom-left-radius: 16px;
       margin-right:-25px;
       text-align: center;
-    }
+   }
   }
   .spin-header {
     background: linear-gradient(142.14deg, #F5F8FF 9.63%, #C7D7FE 59.92%);
