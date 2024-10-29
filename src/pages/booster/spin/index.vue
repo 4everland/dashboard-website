@@ -194,6 +194,9 @@ during the each Points Swap round. After each round, your invites will reset.
         </v-list>
       </v-card>
     </v-dialog>
+    <SpinSwapped v-model="showSwapped"></SpinSwapped>
+    <SpinSorry v-model="showSpinSorry"></SpinSorry>
+    <SpinInvite v-model="showInvite"></SpinInvite>
   </div>
 </template>
 
@@ -201,11 +204,17 @@ during the each Points Swap round. After each round, your invites will reset.
 import { mapGetters } from "vuex";
 import BoosterPagination from "../components/booster-pagination.vue";
 import { fetchLeaderboard } from "@/api/booster";
+import SpinSwapped from "../components/spin-swapped.vue";
+import SpinSorry from "../components/spin-sorry.vue";
+import SpinInvite from "../components/spin-invite.vue";
 export default {
   data () {
     return {
       dialog: false,
       copyValue:'',
+      showSwapped:false,
+      showSpinSorry: false,
+      showInvite: false,
       blocks: [
       {
         imgs: [{
@@ -260,7 +269,12 @@ export default {
     opendialog(){
       this.dialog = true
     }
-  }
+  },
+  components: {
+    SpinSwapped,
+    SpinSorry,
+    SpinInvite
+  },
 };
 </script>
 
