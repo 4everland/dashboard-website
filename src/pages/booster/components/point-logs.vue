@@ -170,7 +170,9 @@ export default {
               case "white_list_6":
                 it.log = `Chinese AMA in the BNBCHAIN TG Group ${it.value} points.`;
                 break;
-
+              case "white_list_7":
+                it.log = `Vietnamese AMA in BNBCHAIN TG Group ${it.value} points.`;
+                break;
               default:
                 break;
             }
