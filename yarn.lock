@@ -2505,6 +2505,15 @@
   dependencies:
     "@lit-labs/ssr-dom-shim" "^1.0.0"
 
+"@lucky-canvas/vue@^0.1.11":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@lucky-canvas/vue/-/vue-0.1.11.tgz#79d79d1a07b71c572080e638bb78d8636d8d759d"
+  integrity sha512-5vm0txSKRBtMgrE/HZEvw1joSTx9NTdAkc8tBp/aX0LxyhQtiTVBLsRgdYUK/OiURCL8bo+046BTGnV+Q4JFlg==
+  dependencies:
+    "@vue/composition-api" "^1.0.0"
+    lucky-canvas "^1.7.23"
+    vue-demi "^0.7.4"
+
 "@mdi/js@^7.0.96":
   version "7.0.96"
   resolved "https://registry.npmjs.org/@mdi/js/-/js-7.0.96.tgz"
@@ -3953,6 +3962,11 @@
     vue-template-es2015-compiler "^1.9.0"
   optionalDependencies:
     prettier "^1.18.2 || ^2.0.0"
+
+"@vue/composition-api@^1.0.0":
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/@vue/composition-api/-/composition-api-1.7.2.tgz#0b656f3ec39fefc2cf40aaa8c12426bcfeae1b44"
+  integrity sha512-M8jm9J/laYrYT02665HkZ5l2fWTK4dcVg3BsDHm/pfz+MjDYwX+9FUaZyGwEyXEDonQYRCo0H7aLgdklcIELjw==
 
 "@vue/preload-webpack-plugin@^1.1.0":
   version "1.1.2"
@@ -9535,6 +9549,11 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
+lucky-canvas@^1.7.23:
+  version "1.7.27"
+  resolved "https://registry.yarnpkg.com/lucky-canvas/-/lucky-canvas-1.7.27.tgz#ce4689e99aa1945d981f0489304f5f3c1789023d"
+  integrity sha512-Ftz6qD+863bI7xijBmZg3dw3cNEc7odPr70EZQcGA14y3TgTAzH65HPosOCd6kKUlMwhntBaHMx3onoj9MtJRQ==
+
 make-dir@^2.0.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/make-dir/-/make-dir-2.1.0.tgz"
@@ -13530,6 +13549,11 @@ vue-countup-v2@^4.0.0:
   resolved "https://registry.npmjs.org/vue-countup-v2/-/vue-countup-v2-4.0.0.tgz#061a1ac8ee4aa207bb9d23d2bcc1d53a5f7c3675"
   integrity sha512-XjKeHo1ndRlJtXvHd6B1eWOpbrJDdNU3rdYZwVPv2YlUXbvthsBT4kms5Fc/mn9RdXPrMX2H/ktAAQtKjWFisw==
 
+vue-demi@^0.7.4:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.7.5.tgz#88dee7492fc99a0f911ff03fc02c658fa2a79af8"
+  integrity sha512-eFSQSvbQdY7C9ujOzvM6tn7XxwLjn0VQDXQsiYBLBwf28Na+2nTQR4BBBcomhmdP6mmHlBKAwarq6a0BPG87hQ==
+
 vue-eslint-parser@^7.0.0:
   version "7.11.0"
   resolved "https://registry.npmjs.org/vue-eslint-parser/-/vue-eslint-parser-7.11.0.tgz"
@@ -13567,6 +13591,13 @@ vue-loader@^15.9.2:
     loader-utils "^1.1.0"
     vue-hot-reload-api "^2.3.0"
     vue-style-loader "^4.1.0"
+
+vue-luckywheel@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/vue-luckywheel/-/vue-luckywheel-0.1.2.tgz#a974575baa5888dfbd6fbbc1fa7ba46c9d866a90"
+  integrity sha512-fSPUDE4BN9x4oHaXkWjc0R81o7myaCD6qfOT+FtVWNMAhsPkIZBzG78MJw7zokTV14c5LaBNTlJByj+mrJkytw==
+  dependencies:
+    vue "^2.5.17"
 
 vue-observe-visibility@^0.4.4:
   version "0.4.6"
@@ -13613,20 +13644,20 @@ vue-virtual-scroller@^1.0.10:
     vue-observe-visibility "^0.4.4"
     vue-resize "^0.4.5"
 
+vue@^2.5.17, vue@^2.7.16:
+  version "2.7.16"
+  resolved "https://registry.npmjs.org/vue/-/vue-2.7.16.tgz#98c60de9def99c0e3da8dae59b304ead43b967c9"
+  integrity sha512-4gCtFXaAA3zYZdTp5s4Hl2sozuySsgz4jy1EnpBHNfpMa9dK1ZCG7viqBPCwXtmgc8nHqUsAu3G4gtmXkkY3Sw==
+  dependencies:
+    "@vue/compiler-sfc" "2.7.16"
+    csstype "^3.1.0"
+
 vue@^2.6.11:
   version "2.7.14"
   resolved "https://registry.npmjs.org/vue/-/vue-2.7.14.tgz"
   integrity sha512-b2qkFyOM0kwqWFuQmgd4o+uHGU7T+2z3T+WQp8UBjADfEv2n4FEMffzBmCKNP0IGzOEEfYjvtcC62xaSKeQDrQ==
   dependencies:
     "@vue/compiler-sfc" "2.7.14"
-    csstype "^3.1.0"
-
-vue@^2.7.16:
-  version "2.7.16"
-  resolved "https://registry.npmjs.org/vue/-/vue-2.7.16.tgz#98c60de9def99c0e3da8dae59b304ead43b967c9"
-  integrity sha512-4gCtFXaAA3zYZdTp5s4Hl2sozuySsgz4jy1EnpBHNfpMa9dK1ZCG7viqBPCwXtmgc8nHqUsAu3G4gtmXkkY3Sw==
-  dependencies:
-    "@vue/compiler-sfc" "2.7.16"
     csstype "^3.1.0"
 
 vuetify-loader@1.7.1:
