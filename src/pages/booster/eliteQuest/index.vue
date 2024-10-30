@@ -87,6 +87,7 @@ export default {
 
     async handleClaim(it) {
       try {
+        if (it.endAt && it.endAt < +new Date() / 1000 && it.state == 0) return;
         if (it.state == 0) {
           if (this.isTgMiniApp) {
             this.$tg.openAuto(it.link);
@@ -99,6 +100,7 @@ export default {
           console.log(data);
           this.getList();
           this.$store.dispatch("getBoosterUserInfo");
+          this.$toast2("Claim Successfully!");
         }
       } catch (error) {
         console.log(error);
