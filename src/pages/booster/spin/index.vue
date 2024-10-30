@@ -2,47 +2,54 @@
   <div class="spin-container">
     <div class="containerin">
       <div class="nav-bar">
-        <div
-          class="nav-mobile d-flex align-center justify-space-between"
-        >
+        <div class="nav-mobile d-flex align-center justify-space-between">
           <div class="logo d-flex align-center" @click="backtoindex">
             <img src="/img/booster/spin/chevron-left.png" width="24" alt="" />
           </div>
-          <div class="mobile-title fz-16">
-            Points Swap
-          </div>
+          <div class="mobile-title fz-16">Points Swap</div>
           <div class="d-flex align-center">
-            <div class="spin-rules" @click="opendialog">
-              Rule
-            </div>
+            <div class="spin-rules" @click="opendialog">Rule</div>
           </div>
         </div>
       </div>
+      <div class="congratulations-users d-flex align-center justify-center">
+        <img src="/img/booster/spin/congratulations.png" width="24" alt="" />
+        <div>
+          Congrats <span style="font-weight: 700">ergou!</span> Swapped 100
+          points for
+          <span style="font-weight: 700; font-style: italic; font-size: 16px">
+            $0.1.
+          </span>
+        </div>
+      </div>
       <div class="spinwrap">
-        
         <div class="spin-header">
           <div class="d-flex align-center justify-center spin-header-img">
             <div class="d-flex justify-center flex-column">
               <div class="text-center">
                 <img src="/img/booster/spin/Maskgroup.png" width="68" alt="" />
               </div>
-              <div class="spin-header-name">
-                xxxsdfasdf
-              </div>
+              <div class="spin-header-name">xxxsdfasdf</div>
             </div>
-            
           </div>
           <div class="spin-header-number">$0.1</div>
           <div class="spin-header-tips">Available For Swap</div>
         </div>
         <div class="spin-content">
           <div class="spin-content-header-bg">
-            <div class="d-flex align-center justify-space-between spin-content-topheader ">
+            <div
+              class="d-flex align-center justify-space-between spin-content-topheader"
+            >
               <div class="d-flex justify-center flex-column">
+                <div class="d-flex align-center">Swap eligibility</div>
                 <div class="d-flex align-center">
-                  Swap eligibility
+                  <img
+                    src="/img/booster/spin/icon_point.png"
+                    width="16"
+                    alt=""
+                  />
+                  <span class="font-16">998 </span> Points
                 </div>
-                <div class="d-flex align-center"><img src="/img/booster/spin/icon_point.png" width="16" alt="" /> <span class="font-16">998 </span> Points</div>
               </div>
               <div class="d-flex justify-center flex-column">
                 <div class="d-flex align-center">Points Quote</div>
@@ -80,7 +87,9 @@
               @end="endCallback"
             />
             <div class="luck_button" @click="startCallback">
-              <div class="d-flex align-center justify-center flex-column luck_button_wrap">
+              <div
+                class="d-flex align-center justify-center flex-column luck_button_wrap"
+              >
                 <div class="font-weight-bold">Spin</div>
                 <div class="spin_left_time">20 Time</div>
               </div>
@@ -94,11 +103,8 @@
 
           <div class="mt-4">
             <div class="invite-detail d-flex align-center">
-              <v-btn
-                class="invite-act-btn flex-1"
-                height="48"
-              >
-              Invite new friends for more spins
+              <v-btn class="invite-act-btn flex-1" height="48">
+                Invite new friends for more spins
               </v-btn>
 
               <v-btn
@@ -126,69 +132,73 @@
             <tbody>
               <tr>
                 <td class="text-center">aaa</td>
-                <td class="text-center">
-                  123
-                </td>
+                <td class="text-center">123</td>
                 <td class="text-center">2024-10-25</td>
               </tr>
             </tbody>
           </v-simple-table>
         </div>
-
       </div>
-
     </div>
     <v-dialog
       v-model="dialog"
       fullscreen
       hide-overlay
-      
       transition="dialog-bottom-transition"
     >
       <v-card class="ruleDialog">
-        <v-toolbar
-          dark
-          class="ruleDialog-toolbar"
-        >
-          <v-btn
-            icon
-            dark
-            @click="dialog = false"
-          >
+        <v-toolbar dark class="ruleDialog-toolbar">
+          <v-btn icon dark @click="dialog = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>Swap Rules</v-toolbar-title>
-
         </v-toolbar>
         <v-list class="rulelist">
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title class="swap-rule-title">Points Swap</v-list-item-title>
-              <div class="swap-rule-content">Everyone can exchange their $4EVER Points for TON based on their allocated Point Quota. The more points you accumulate, the more TON you can swap.</div>
+              <v-list-item-title class="swap-rule-title"
+                >Points Swap</v-list-item-title
+              >
+              <div class="swap-rule-content">
+                Everyone can exchange their $4EVER Points for TON based on their
+                allocated Point Quota. The more points you accumulate, the more
+                TON you can swap.
+              </div>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title class="swap-rule-title">Point Quota</v-list-item-title>
-              <div class="swap-rule-content">The Point Quota specifies how many Points can be exchanged for TON. There 
-are three tiers: 100, 500, and 1000 Points, with an exchange rate of 
-100 Points = $0.10. The Quota is valid for 24 hours before they expire.
-</div>
+              <v-list-item-title class="swap-rule-title"
+                >Point Quota</v-list-item-title
+              >
+              <div class="swap-rule-content">
+                The Point Quota specifies how many Points can be exchanged for
+                TON. There are three tiers: 100, 500, and 1000 Points, with an
+                exchange rate of 100 Points = $0.10. The Quota is valid for 24
+                hours before they expire.
+              </div>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title class="swap-rule-title">Spin</v-list-item-title>
-              <div class="swap-rule-content">You earn one ‘Spin’ for each friend you successfully invite to join 4EVER Boost 
-
-during the each Points Swap round. After each round, your invites will reset.
-</div>
+              <v-list-item-title class="swap-rule-title"
+                >Spin</v-list-item-title
+              >
+              <div class="swap-rule-content">
+                You earn one ‘Spin’ for each friend you successfully invite to
+                join 4EVER Boost during the each Points Swap round. After each
+                round, your invites will reset.
+              </div>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="swap-rule-title">TON</v-list-item-title>
-              <div class="swap-rule-content">The amount you receive when exchanging Points may vary due to the fluctuating value of TON, reflecting the actual amount credited to your account.</div>
+              <div class="swap-rule-content">
+                The amount you receive when exchanging Points may vary due to
+                the fluctuating value of TON, reflecting the actual amount
+                credited to your account.
+              </div>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -199,7 +209,10 @@ during the each Points Swap round. After each round, your invites will reset.
     <SpinInvite v-model="showInvite"></SpinInvite>
     <RewardOpenReceived v-model="showRewardReceive"></RewardOpenReceived>
     <RewardOpenClaim v-model="showRewardClaim"></RewardOpenClaim>
-    <SpinStartReward v-model="showStartClaim" @openStartNext="handleStartNext"></SpinStartReward>
+    <SpinStartReward
+      v-model="showStartClaim"
+      @openStartNext="handleStartNext"
+    ></SpinStartReward>
   </div>
 </template>
 
@@ -212,7 +225,7 @@ import SpinSorry from "../components/spin-sorry.vue";
 import SpinInvite from "../components/spin-invite.vue";
 import RewardOpenReceived from "../components/reward-open-received.vue";
 import RewardOpenClaim from "../components/reward-open-claim.vue";
-import SpinStartReward from "../components/spin-start-reward.vue"
+import SpinStartReward from "../components/spin-start-reward.vue";
 
 export default {
   components: {
@@ -221,79 +234,84 @@ export default {
     SpinStartReward,
     SpinSwapped,
     SpinSorry,
-    SpinInvite
+    SpinInvite,
   },
-  data () {
+  data() {
     return {
       dialog: false,
       showRewardReceive: false,
       showRewardClaim: false,
       showStartClaim: true,
-      copyValue:'',
-      showSwapped:false,
+      copyValue: "",
+      showSwapped: false,
       showSpinSorry: false,
       showInvite: false,
       blocks: [
-      {
-        imgs: [{
-        src: '/img/booster/spin/bg.png',
-        width: '100%',
-        height: '100%',
-        rotate: true
-      }]
-        
-      },
+        {
+          imgs: [
+            {
+              src: "/img/booster/spin/bg.png",
+              width: "100%",
+              height: "100%",
+              rotate: true,
+            },
+          ],
+        },
       ],
       prizes: [
-      { title: '0' },
-      { title: '1' },
-      { title: '2' },
-      { title: '3' },
-      { title: '4' },
-      { title: '5' },
-      { title: '6' },
-      { title: '7' },
-    ],
-      buttons: [{
-        radius: '45%',
-        imgs: [{
-            src: '/img/booster/spin/spin-arrow.png',
-            width: '80%',
-            top: '-100%'
-          }]
-        }]
-        // {
-        //   fonts: [{ text: 'Spin\n20 Time', top: '-20px', fontSize: '12px', fontWeight: '700', fontColor: '#ffffff' }]
-        // }],
-    }
+        { title: "0" },
+        { title: "1" },
+        { title: "2" },
+        { title: "3" },
+        { title: "4" },
+        { title: "5" },
+        { title: "6" },
+        { title: "7" },
+      ],
+      buttons: [
+        {
+          radius: "45%",
+          imgs: [
+            {
+              src: "/img/booster/spin/spin-arrow.png",
+              width: "80%",
+              top: "-100%",
+            },
+          ],
+        },
+      ],
+      // {
+      //   fonts: [{ text: 'Spin\n20 Time', top: '-20px', fontSize: '12px', fontWeight: '700', fontColor: '#ffffff' }]
+      // }],
+    };
   },
   methods: {
     // 点击抽奖按钮会触发star回调
-    startCallback () {
+    startCallback() {
       // 调用抽奖组件的play方法开始游戏
-      this.$refs.myLucky.play()
+      this.$refs.myLucky.play();
       // 模拟调用接口异步抽奖
       setTimeout(() => {
         // 假设后端返回的中奖索引是0
-        const index = 0
+        const index = 0;
         // 调用stop停止旋转并传递中奖索引
-        this.$refs.myLucky.stop(index)
-      }, 3000)
+        this.$refs.myLucky.stop(index);
+      }, 3000);
     },
     // 抽奖结束会触发end回调
-    endCallback (prize) {
-      console.log(prize)
+    endCallback(prize) {
+      console.log(prize);
     },
-    opendialog(){
-      this.dialog = true
+    opendialog() {
+      this.dialog = true;
     },
     backtoindex() {
-      this.$router.push('/boost');
+      this.$router.push("/boost");
     },
-    handleStartNext () {
-      this.showStartClaim = false
-      this.showRewardReceive = true
-    }
+    handleStartNext() {
+      this.showStartClaim = false;
+      this.showRewardReceive = true;
+    },
   },
 };
 </script>
@@ -302,11 +320,16 @@ export default {
 @media screen and (max-width: 960px) {
 }
 .spin-container {
-  background: linear-gradient(180deg, #6172F3 0%, #3538CD 100%), linear-gradient(159.56deg, rgba(211, 212, 213, 0.35) 1.7%, rgba(139, 145, 147, 0.35) 94.8%);
+  background: linear-gradient(180deg, #6172f3 0%, #3538cd 100%),
+    linear-gradient(
+      159.56deg,
+      rgba(211, 212, 213, 0.35) 1.7%,
+      rgba(139, 145, 147, 0.35) 94.8%
+    );
   position: relative;
   width: 100%;
   height: 100%;
-  .nav-mobile{
+  .nav-mobile {
     height: 45px;
   }
   .containerin {
@@ -317,24 +340,40 @@ export default {
     height: 100%;
     padding: 0px 24px;
   }
-  .spinwrap{
+  .congratulations-users {
+    position: absolute;
+    height: Hug (40px);
+    top: 52px;
+    left: 8px;
+    right: 8px;
+    padding: 8px 16px 8px 16px;
+    gap: 4px;
+    border-radius: 8px;
+    opacity: 0px;
+    z-index: 3;
+    background: linear-gradient(97.34deg, #ffde7f 29.43%, #ffad08 55.71%),
+      linear-gradient(0deg, #ffde7f, #ffde7f);
+    color: #000;
+    font-size: 12px;
+  }
+  .spinwrap {
     width: 100%;
   }
   .nav-bar {
     height: 64px;
-    .spin-rules{
+    .spin-rules {
       width: 47px;
       height: 23px;
       background: #12153680;
       border-top-left-radius: 16px;
       border-bottom-left-radius: 16px;
-      margin-right:-25px;
+      margin-right: -25px;
       text-align: center;
-   }
+    }
   }
   .spin-header {
-    background: linear-gradient(142.14deg, #F5F8FF 9.63%, #C7D7FE 59.92%);
-    border: 4px solid #2D31A640;
+    background: linear-gradient(142.14deg, #f5f8ff 9.63%, #c7d7fe 59.92%);
+    border: 4px solid #2d31a640;
     backdrop-filter: blur(39.5px);
     height: 244px;
     border-radius: 24px;
@@ -343,25 +382,24 @@ export default {
     .spin-header-img {
       margin-top: -30px;
     }
-    .spin-header-name{
-      background: #6172F3;
+    .spin-header-name {
+      background: #6172f3;
       height: 20px;
       border-radius: 25px;
       padding: 0 10px;
       line-height: 100%;
       margin-top: -20px;
     }
-    .spin-header-number{
+    .spin-header-number {
       font-size: 32px;
       font-family: "Inter", sans-serif;
       font-style: italic;
       font-weight: 700;
-      color: #FFDE7F;
+      color: #ffde7f;
       text-align: center;
-      text-shadow: 1px 2px 0px #FF9408;
-
+      text-shadow: 1px 2px 0px #ff9408;
     }
-    .spin-header-tips{
+    .spin-header-tips {
       text-align: center;
       color: #121536;
     }
@@ -371,39 +409,43 @@ export default {
     height: 512px;
     position: relative;
     top: -100px;
-    background: linear-gradient(180deg, rgba(57, 59, 62, 0.9) 25.52%, rgba(36, 39, 42, 0.9) 100%), #4C5277;
+    background: linear-gradient(
+        180deg,
+        rgba(57, 59, 62, 0.9) 25.52%,
+        rgba(36, 39, 42, 0.9) 100%
+      ),
+      #4c5277;
     background-blend-mode: overlay;
     border-radius: 24px;
     padding: 20px;
     .spin-content-header-bg {
       height: 46px;
       margin: 0 20px;
-      background: #1102FC80;
+      background: #1102fc80;
       position: relative;
       padding: 0 20px;
       font-size: 12px;
     }
     .spin-content-topheader {
       height: 100%;
-      .font-16{
+      .font-16 {
         font-size: 16px;
         font-weight: bold;
       }
     }
-    .spin-content-header-bg::before{
-      content: '';
+    .spin-content-header-bg::before {
+      content: "";
       position: absolute;
       width: 43px;
       height: 46px;
       background: url("/img/booster/spin/icon_left.png");
       background-size: cover;
-      margin-left:-20px;
+      margin-left: -20px;
       left: 0;
       z-index: 1;
-
     }
-    .spin-content-header-bg::after{
-      content: '';
+    .spin-content-header-bg::after {
+      content: "";
       position: absolute;
       width: 43px;
       height: 46px;
@@ -455,12 +497,12 @@ export default {
   .spin-content-footer {
     text-align: center;
   }
-  .countdown{
+  .countdown {
     width: 108px;
     height: 24px;
     border-radius: 16px;
-    background-color: #FFDE7F40;
-    color: #FFDE7F;
+    background-color: #ffde7f40;
+    color: #ffde7f;
     font-size: 14px;
     display: inline-block;
   }
@@ -473,21 +515,26 @@ export default {
       color: #fff;
       letter-spacing: normal;
       border-radius: 24px;
-      background: linear-gradient(315.05deg, #1102FC 3.4%, #0FE1F8 92.46%);
+      background: linear-gradient(315.05deg, #1102fc 3.4%, #0fe1f8 92.46%);
     }
     .invite-act-copy {
       width: 48px;
       height: 48px;
       min-width: 48px;
-      background: #1102FC;
+      background: #1102fc;
       border-radius: 24px;
     }
   }
-  .spin-footer-swapList{
+  .spin-footer-swapList {
     width: 100%;
     min-height: 200px;
-    
-    background: linear-gradient(180deg, rgba(57, 59, 62, 0.9) 25.52%, rgba(36, 39, 42, 0.9) 100%), #4C5277;
+
+    background: linear-gradient(
+        180deg,
+        rgba(57, 59, 62, 0.9) 25.52%,
+        rgba(36, 39, 42, 0.9) 100%
+      ),
+      #4c5277;
     background-blend-mode: overlay;
     border-radius: 24px;
     padding: 20px;
@@ -526,7 +573,7 @@ export default {
       }
     }
   }
-  .luckWrap{
+  .luckWrap {
     position: relative;
     width: 100%;
     height: 300px;
@@ -554,8 +601,13 @@ export default {
     }
   }
 }
-.ruleDialog{
-  background: linear-gradient(180deg, rgba(57, 59, 62, 0.9) 25.52%, rgba(36, 39, 42, 0.9) 100%), #4C5277;
+.ruleDialog {
+  background: linear-gradient(
+      180deg,
+      rgba(57, 59, 62, 0.9) 25.52%,
+      rgba(36, 39, 42, 0.9) 100%
+    ),
+    #4c5277;
   background-blend-mode: overlay;
   color: #ffffff;
   .ruleDialog-toolbar {
@@ -581,14 +633,14 @@ export default {
     position: absolute;
     width: 20px;
     left: 0;
-}
+  }
   .swap-rule-content {
     font-family: "Inter", sans-serif;
     font-size: 12px;
     line-height: 16px;
-    color: #FFFFFFBF;
+    color: #ffffffbf;
   }
-  .rulelist{
+  .rulelist {
     background: transparent;
     color: #fff;
     .v-list-item {
@@ -596,5 +648,4 @@ export default {
     }
   }
 }
-
 </style>
