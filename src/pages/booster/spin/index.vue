@@ -148,7 +148,7 @@
       <v-card class="ruleDialog">
         <v-toolbar
           dark
-          color="primary"
+          class="ruleDialog-toolbar"
         >
           <v-btn
             icon
@@ -163,14 +163,14 @@
         <v-list class="rulelist">
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title>Points Swap</v-list-item-title>
-              <div>Everyone can exchange their $4EVER Points for TON based on their allocated Point Quota. The more points you accumulate, the more TON you can swap.</div>
+              <v-list-item-title class="swap-rule-title">Points Swap</v-list-item-title>
+              <div class="swap-rule-content">Everyone can exchange their $4EVER Points for TON based on their allocated Point Quota. The more points you accumulate, the more TON you can swap.</div>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title>Point Quota</v-list-item-title>
-              <div>The Point Quota specifies how many Points can be exchanged for TON. There 
+              <v-list-item-title class="swap-rule-title">Point Quota</v-list-item-title>
+              <div class="swap-rule-content">The Point Quota specifies how many Points can be exchanged for TON. There 
 are three tiers: 100, 500, and 1000 Points, with an exchange rate of 
 100 Points = $0.10. The Quota is valid for 24 hours before they expire.
 </div>
@@ -178,8 +178,8 @@ are three tiers: 100, 500, and 1000 Points, with an exchange rate of
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title>Spin</v-list-item-title>
-              <div>You earn one ‘Spin’ for each friend you successfully invite to join 4EVER Boost 
+              <v-list-item-title class="swap-rule-title">Spin</v-list-item-title>
+              <div class="swap-rule-content">You earn one ‘Spin’ for each friend you successfully invite to join 4EVER Boost 
 
 during the each Points Swap round. After each round, your invites will reset.
 </div>
@@ -187,8 +187,8 @@ during the each Points Swap round. After each round, your invites will reset.
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title>TON</v-list-item-title>
-              <div>The amount you receive when exchanging Points may vary due to the fluctuating value of TON, reflecting the actual amount credited to your account.</div>
+              <v-list-item-title class="swap-rule-title">TON</v-list-item-title>
+              <div class="swap-rule-content">The amount you receive when exchanging Points may vary due to the fluctuating value of TON, reflecting the actual amount credited to your account.</div>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -555,12 +555,45 @@ export default {
   }
 }
 .ruleDialog{
-  background: linear-gradient(180deg, rgba(57, 59, 62, 0.9) 25.52%, rgba(36, 39, 42, 0.9) 100%);
+  background: linear-gradient(180deg, rgba(57, 59, 62, 0.9) 25.52%, rgba(36, 39, 42, 0.9) 100%), #4C5277;
   background-blend-mode: overlay;
-  background: #4C5277;
+  color: #ffffff;
+  .ruleDialog-toolbar {
+    color: #fff;
+    background: transparent;
+    box-shadow: none;
+    .v-toolbar__title {
+      width: 80%;
+      text-align: center;
+    }
+  }
+  .swap-rule-title {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 700;
+    position: relative;
+    padding-left: 12px;
+    line-height: 20px;
+  }
+  .swap-rule-title::before {
+    content: "•";
+    position: absolute;
+    width: 20px;
+    left: 0;
+}
+  .swap-rule-content {
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    color: #FFFFFFBF;
+  }
   .rulelist{
     background: transparent;
     color: #fff;
+    .v-list-item {
+      color: #fff;
+    }
   }
 }
 
