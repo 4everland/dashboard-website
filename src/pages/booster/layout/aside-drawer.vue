@@ -79,6 +79,11 @@ export default {
             link: "https://link.medium.com/TONm0rEzbMb",
           },
           {
+            icon: "/img/booster/menu/elite.svg",
+            name: "Elite Quest",
+            path: "/boost/quest",
+          },
+          {
             icon: "/img/booster/menu/leaderboard.svg",
             name: "Leaderboard",
             path: "/boost/leaderboard",

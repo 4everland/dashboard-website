@@ -1,7 +1,17 @@
 <template>
   <div class="elite-quest-container">
     <div>
-      <h3 class="tit">Elite Quest</h3>
+      <div class="d-flex align-center">
+        <img
+          src="/img/booster/svg/back-arrow.svg"
+          width="24"
+          class="mr-1"
+          alt=""
+          v-if="asMobile"
+          @click="$router.push('/boost')"
+        />
+        <h3 class="tit">Elite Quest</h3>
+      </div>
       <div class="desc">
         Check the campaign details, complete the corresponding tasks, and earn
         points!
@@ -51,6 +61,9 @@ export default {
         if (state == 2) return "Ended";
       };
     },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
   data() {
     return {
@@ -75,7 +88,11 @@ export default {
     async handleClaim(it) {
       try {
         if (it.state == 0) {
-          this.asMobile ? (location.href = it.link) : window.open(it.link);
+          if (this.isTgMiniApp) {
+            this.$tg.openAuto(it.link);
+          } else {
+            this.asMobile ? (location.href = it.link) : window.open(it.link);
+          }
         }
         if (it.state == 1) {
           const { data } = await claimEliteQuest(it.id);
