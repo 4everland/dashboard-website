@@ -2,14 +2,24 @@
   <div>
     <v-dialog
       max-width="400"
-      content-class="daily-boost-dialog headShake"
+      content-class="daily-boost-dialog coin_show"
       v-model="value"
+      overlay-opacity="0.9"
       @click:outside="$emit('input', false)"
     >
-      <div class="daily-boost">
+      <div class="daily-boost" v-if="spinPlayReward.rewardType=='spin'"> 
+        <div class="d-flex align-center justify-center">
+         <img
+            src="/img/booster/spin/congratulations.png"
+            width="24"
+            alt=""
+            />
+          <div class="congratulations">Congratulations!</div>
+        </div>
+        <div class="received-text">Spin Times</div>
         <img
           class="lightning"
-          src="/img/booster/spin/logomark.png"
+          src="/img/booster/spin/spin-times.png"
           width="120"
           alt=""
         />
@@ -19,43 +29,54 @@
           width="240"
           alt=""
         />
-        <div class="reward-number">${{spinStartInfo.cashValue}}</div>
+        <div class="reward-number"><span style="font-size:30px">X</span>{{ spinPlayReward.rewardValue }}</div>
        </div>
-       <img
-          class="dialog-spin"
-          src="/img/booster/spin/background.png"
-          width="311"
-          alt=""
-        />
-        <img
-          class="close-btn"
-          @click="$emit('input', false)"
-          src="/img/booster/svg/close.svg"
-          width="20"
-          alt=""
-        />
-    
-       <div class="spin-background">
-        <div style="padding-top:160px;">
-          <div class="d-flex align-center justify-center">
-             <img
-              src="/img/booster/spin/congratulations.png"
-              width="24"
-              alt=""
-              />
-               <div class="congratulations">Congratulations!</div>
-          </div>
-          <div class="swap">Swap {{spinStartInfo.duration}} ＄4EVER Points ×1</div>
+        <div style="padding-top:60px;">
            <v-btn
               class="reward-btn"
+              @click="handleShowNextStartSpin"
               style="width: 80%;"
               height="44"
-              @click="handleStartGetReward()"
             >
-              <div class="btn-text">Continue</div>
+              <div class="btn-text">Continue(<span>{{ countdown }}</span>)</div>
             </v-btn>
         </div>
+      </div>
+
+      <div class="daily-boost" v-if="spinPlayReward.rewardType =='points'">
+        <div class="d-flex align-center justify-center">
+         <img
+            src="/img/booster/spin/congratulations.png"
+            width="24"
+            alt=""
+            />
+          <div class="congratulations">Congratulations!</div>
+        </div>
+        <div class="received-text">Points Quota</div>
+        <img
+          class="lightning"
+          src="/img/booster/spin/points-quota.png"
+          width="120"
+          alt=""
+        />
+       <div class="pattern_light">
+         <img
+          src="/img/booster/spin/pattern_light.png"
+          width="240"
+          alt=""
+        />
+        <div class="reward-number"><span style="font-size:30px">+</span>{{ spinPlayReward.rewardValue }}</div>
        </div>
+        <div style="padding-top:60px;">
+           <v-btn
+              class="reward-btn"
+              @click="handleQuoteNext"
+              style="width: 80%;"
+              height="44"
+            >
+              <div class="btn-text">Continue(<span>{{ countdown }}</span>)</div>
+            </v-btn>
+        </div>
       </div>
     </v-dialog>
   </div>
@@ -63,9 +84,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { onNext } from "@/api/booster";
-import { bus } from "@/utils/bus";
-import RewardDialog from "./reward-dialog.vue";
+
 
 export default {
   props: {
@@ -76,8 +95,10 @@ export default {
       list: [],
       checkinInfo: null,
       checkinLoading: false,
-      showReward: false,
-      today: 1,
+      countdown: 10,
+      showDialog: false,
+      countdownInterval: null,
+      showNextSpinTime: false,
     };
   },
 
@@ -86,22 +107,61 @@ export default {
       userInfo: (s) => s.userInfo,
       dailySign: (s) => s.moduleBooster.dailySign,
       spinStartInfo: (s) => s.moduleBooster.spinStartInfo,
+      spinPlayReward: (s) => s.moduleBooster.spinPlayReward,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
+    checkinDisabled() {
+      if (!this.checkinInfo) return true;
+      return this.checkinInfo.actStatus !== "CLAIM";
+    },
+    todayInfoReward() {
+      const list = this.list.filter((it) => it.day == this.today);
+      if (list.length > 0) {
+        return list[0].reward;
+      }
+      return "10";
+    },
   },
+  mounted(){
 
-  methods: { 
-    handleStartGetReward() {
-      this.$router.push('/boost/spin');
-    }
   },
-  components: {
-    RewardDialog,
+  methods: { 
+    sleep(timestamp) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, timestamp);
+      });
+    },
+    startCountdown() {
+      this.countdown = 10;
+      this.countdownInterval = setInterval(() => {
+        if (this.countdown > 0) {
+          this.countdown--;
+        } else {
+          this.resetCountdown();
+          this.$emit('input', false);
+        }
+      }, 1000);
+    },
+    resetCountdown() {
+      clearInterval(this.countdownInterval);
+      this.countdown = 10;
+    },
+    async handleQuoteNext(){
+      this.showNextSpinTime = true;
+      this.$emit('input', false);
+    },
+    handleShowNextStartSpin() {
+      this.$emit('input', false);
+    }
   },
 };
 </script>
+
 <style lang="scss" src="../spin.scss"></style>
 <style lang="scss" scoped>
 ::v-deep .daily-boost-dialog {
@@ -109,7 +169,6 @@ export default {
   box-shadow: none !important;
   overflow: initial !important;
 }
-
 @media screen and (max-width: 900px) {
   .daily-sign-footer {
     flex-direction: column-reverse;
@@ -127,8 +186,8 @@ export default {
     cursor: pointer;
   }
   .lightning {
-    position: absolute;
-    top: -38px;
+    position: relative;
+    top: 14px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 3;
@@ -140,46 +199,35 @@ export default {
   }
   .pattern_light{
     position: absolute;
-    top: -92px;
+    top: 52px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
     .reward-number{
-      font-family: Inter;
       font-size: 40px;
       font-style: italic;
       font-weight: 700;
-      line-height: 48.41px;
+      line-height: 48px;
       text-align: center;
       margin-right:24px;
       color: #FFDE7F;
-      margin-top: -68px;
+      margin-top: -58px;
     }
   }
-  .spin-background{
-    width:295px;
-    height:322px;
-    background: #121536;
-    border-radius: 16px;
-    .congratulations{
-      font-family: Inter;
-      font-size: 20px;
-      font-style: italic;
-      font-weight: 900;
-      line-height: 24px;
+  .congratulations{
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 19px;
       text-align: center;
-      text-transform: uppercase;
       color: #FFF;
     }
-    .swap{
-      font-family: Inter;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 16.94px;
-      text-align: center;
-      color: #0FE1F8;
-      margin-top:8px;
-    }
+  .received-text{
+    font-size: 32px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 39px;
+    text-align: center;
+    color: #FFF;
   }
 }
 

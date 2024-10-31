@@ -238,7 +238,7 @@
           </div>
         </div>
 
-        <div class="gold-square" @click="$emit('startReward')">
+        <div class="gold-square" @click="handleStartReward" v-if="showGoldBall">
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>
           </div>
@@ -256,15 +256,19 @@
           </div>
         </div> -->
 
-        <div class="points-swap d-flex flex-column align-center justify-center" style="box-shadow: 0px 0px 20px 0px #FF940840, 0px 0px 10px 0px #F8630080, 0px 0px 2.5px 0px #FFAD08BF;">
+        <div v-if="!showGoldBall" class="points-swap d-flex flex-column align-center justify-center" @click="handleStartSpin" style="box-shadow: 0px 0px 20px 0px #FF940840, 0px 0px 10px 0px #F8630080, 0px 0px 2.5px 0px #FFAD08BF;">
           <div class="points-text">Point Swap</div>
           <v-progress-linear
-            value="50"
+            :value="percent"
             height="10"
             rounded
             class="progress-time"
           ></v-progress-linear>
-          <div style="color: #121536" class="fz-10">{{ formattedTime }}</div>
+          <div class="fz-10 countTime">
+            <count-down
+              :endTimeStamp="spinStartInfo.endAt"
+            ></count-down>
+          </div>
           <img
             class="right-img"
             src="/img/booster/spin/background-right.png"
@@ -286,27 +290,35 @@ import { mapState } from "vuex";
 import MobilePointsSheet from "../components/mobile-points-sheet.vue";
 import TokenDialog from "../components/token-dialog.vue";
 import WalletConnect from "../components/wallet-connect.vue";
+import countDown from "../components/count-down.vue";
 import mixin from "./mixin";
 import { bus } from "@/utils/bus";
+import { fetchSpinStart } from "@/api/booster";
 
 export default {
   mixins: [mixin],
   data() {
     return {
       sheet: false,
+      showGoldCoin: false,
       timeLeft: localStorage.getItem('countdownTime') ? parseInt(localStorage.getItem('countdownTime')) : 86400,
     };
   },
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
+      spinStartInfo: (s) => s.moduleBooster.spinStartInfo,
     }),
-    formattedTime() {
-      const hours = Math.floor(this.timeLeft / 3600);
-      const minutes = Math.floor((this.timeLeft % 3600) / 60);
-      const seconds = this.timeLeft % 60;
-
-      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    percent() {
+      const curTimeStamp = +new Date() / 1e3;
+      let percent = Math.ceil(curTimeStamp - this.spinStartInfo.startAt)/86400;
+      if(percent>1){
+        percent = 1
+      }
+      return percent*100;
+    },
+    showGoldBall() {
+      return this.showGoldCoin || this.percent >= 100 || this.spinStartInfo.claimAt != null
     }
   },
   created() {
@@ -321,6 +333,7 @@ export default {
     MobilePointsSheet,
     TokenDialog,
     WalletConnect,
+    countDown
   },
   watch: {
     "boosterInfo.protectExpiredAt"() {
@@ -328,22 +341,34 @@ export default {
     },
   },
   mounted() {
-    this.startCountdown();
+    this.init()
   },
   methods: {
     onConnetc() {
       this.$refs.walletConnect.onShowConnect();
     },
-     startCountdown() {
-      setInterval(() => {
-        if (this.timeLeft > 0) {
-          this.timeLeft--;
-          localStorage.setItem('countdownTime', this.timeLeft.toString());
-        } else {
-          this.timeLeft = 86400; // Reset time for another 24-hour cycle
-          localStorage.setItem('countdownTime', this.timeLeft.toString());
-        }
-      }, 1000);
+    init() {
+      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
+      let spinInfo = localStorage.getItem('spinInfo'+info);
+      if(spinInfo){
+        this.$store.commit("SET_SPIN_INFO", JSON.parse(spinInfo));
+      } else {
+        this.showGoldCoin = true;
+      }
+    },
+    handleStartSpin() {
+      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
+      localStorage.removeItem('spinFirstStep'+info);
+      this.$router.push('/boost/spin');
+    },
+    async handleStartReward() {
+      const { data } = await fetchSpinStart();
+      this.$store.commit("SET_SPIN_INFO", data);
+      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
+      //this.$store.dispatch("getSpinInfo");
+      localStorage.setItem('spinInfo'+info, JSON.stringify(data));
+      localStorage.setItem('spinFirstStep'+info, 1);
+      this.$emit('startReward')
     }
   },
 };
@@ -710,5 +735,9 @@ box-shadow: 0px 0px 2.5px 0px #FFAD08BF;
     text-align: center !important;
     color: #121536 !important;
   }
+}
+.countTime{
+  color: #121536;
+  line-height: 12px;
 }
 </style>

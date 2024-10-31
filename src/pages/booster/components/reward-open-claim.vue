@@ -2,7 +2,7 @@
   <div>
     <v-dialog
       max-width="100%"
-      content-class="daily-boost-dialog"
+      content-class="daily-boost-dialog step1_show"
       v-model="value"
       overlay-opacity="0.9"
       @click:outside="$emit('input', false)"
@@ -12,8 +12,8 @@
           <img src="/img/booster/spin/SpinTimes.png" width="240" alt="" />
         </div>
          <div class="win-background d-flex flex-column align-center justify-center">
-            <div class="win-text">SPIN to win 50 Points</div>
-            <div class="win-text">Claim $0.1 for free</div>
+            <div class="win-text">SPIN to win {{ spinStartInfo.duration - spinStartInfo.currentDuration }} Points</div>
+            <div class="win-text">Claim ${{ spinStartInfo.cashValue }} for free</div>
           </div>
       </div>
     </v-dialog>
@@ -40,10 +40,19 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
       dailySign: (s) => s.moduleBooster.dailySign,
+      spinStartInfo: (s) => s.moduleBooster.spinStartInfo,
     }),
   },
   mounted() {
     this.startCountdown()
+  },
+  watch: {
+    value(newVal, oldVal) {
+      if(newVal === true){
+        this.startCountdown()
+      }
+      console.log('value 值发生了变化：', newVal, oldVal);
+    },
   },
   methods: {
     startCountdown() {
@@ -52,6 +61,7 @@ export default {
         if (this.countdown > 0) {
           this.countdown--;
         } else {
+          console.log(this.countdown)
           this.$emit('input', false);
           clearInterval(this.countdownInterval);
         }
@@ -60,7 +70,7 @@ export default {
   },
 };
 </script>
-
+<style lang="scss" src="../spin.scss"></style>
 <style lang="scss" scoped>
 ::v-deep .daily-boost-dialog {
   background: black !important;
@@ -72,7 +82,7 @@ export default {
   position: relative;
   width: 100%;
   border-radius: 16px;
-  animation: zoom 1s ease infinite; 
+  // animation: zoom 1s ease infinite; 
   .spin-win {
     position: absolute;
     top: -140px;

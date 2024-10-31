@@ -2,7 +2,7 @@
   <div>
     <v-dialog
       max-width="400"
-      content-class="daily-boost-dialog"
+      content-class="daily-boost-dialog step1_show"
       v-model="value"
       overlay-opacity="0.9"
       @click:outside="$emit('input', false)"
@@ -10,11 +10,11 @@
       <div class="spin-start-bg">
         <div class="d-flex align-center justify-center pt-11">
           <div class="spin-text-bg">
-            $0.1
+            ${{spinStartInfo.cashValue}}
           </div>
         </div>
         <div class="swaptext my-5 mb-10">Available For Swap</div>
-        <div class="swapText2 py-3">Get 100 points quota to star</div>
+        <div class="swapText2 py-3">Get {{spinStartInfo.duration}} points quota to star</div>
         <div class="d-flex align-center justify-center ">
             <v-btn
               class="reward-btn"
@@ -54,6 +54,7 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
       dailySign: (s) => s.moduleBooster.dailySign,
+      spinStartInfo: (s) => s.moduleBooster.spinStartInfo,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -71,7 +72,7 @@ export default {
   },
 };
 </script>
-
+<style lang="scss" src="../spin.scss"></style>
 <style lang="scss" scoped>
 ::v-deep v-overlay__scrim {
   opacity: 0.9;

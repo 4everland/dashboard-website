@@ -2,12 +2,12 @@
   <div>
     <v-dialog
       max-width="400"
-      content-class="daily-boost-dialog"
+      content-class="daily-boost-dialog coin_show"
       v-model="value"
       overlay-opacity="0.9"
       @click:outside="$emit('input', false)"
     >
-      <!-- <div class="daily-boost">
+      <div class="daily-boost coin_show" v-if="showNextSpinTime">
         <div class="d-flex align-center justify-center">
          <img
             src="/img/booster/spin/congratulations.png"
@@ -29,20 +29,21 @@
           width="240"
           alt=""
         />
-        <div class="reward-number"><span style="font-size:30px">X</span>1</div>
+        <div class="reward-number"><span style="font-size:30px">X</span>{{ spinStartInfo.remainSpins }}</div>
        </div>
         <div style="padding-top:60px;">
            <v-btn
               class="reward-btn"
-              @click="$emit('input', false)"
+              @click="handleShowNextStartSpin"
               style="width: 80%;"
               height="44"
             >
               <div class="btn-text">Continue(<span>{{ countdown }}</span>)</div>
             </v-btn>
         </div>
-      </div> -->
-      <div class="daily-boost">
+      </div>
+
+      <div class="daily-boost" v-if="!showNextSpinTime">
         <div class="d-flex align-center justify-center">
          <img
             src="/img/booster/spin/congratulations.png"
@@ -64,12 +65,12 @@
           width="240"
           alt=""
         />
-        <div class="reward-number"><span style="font-size:30px">+</span>50</div>
+        <div class="reward-number"><span style="font-size:30px">+</span>{{ spinStartInfo.currentDuration }}</div>
        </div>
         <div style="padding-top:60px;">
            <v-btn
               class="reward-btn"
-              @click="$emit('input', false)"
+              @click="handleQuoteNext"
               style="width: 80%;"
               height="44"
             >
@@ -96,7 +97,8 @@ export default {
       checkinLoading: false,
       countdown: 10,
       showDialog: false,
-      countdownInterval: null
+      countdownInterval: null,
+      showNextSpinTime: false,
     };
   },
 
@@ -104,6 +106,7 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
       dailySign: (s) => s.moduleBooster.dailySign,
+      spinStartInfo: (s) => s.moduleBooster.spinStartInfo,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -127,6 +130,11 @@ export default {
 
   },
   methods: { 
+    sleep(timestamp) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, timestamp);
+      });
+    },
     startCountdown() {
       this.countdown = 10;
       this.countdownInterval = setInterval(() => {
@@ -141,11 +149,21 @@ export default {
     resetCountdown() {
       clearInterval(this.countdownInterval);
       this.countdown = 10;
+    },
+    async handleQuoteNext(){
+      this.showNextSpinTime = true;
+      this.$emit('input', false);
+      await this.sleep(300);
+      this.$emit('input', true);
+    },
+    handleShowNextStartSpin() {
+      this.$emit('input', false);
+      this.$emit('openStartNext')
     }
   },
 };
 </script>
-
+<style lang="scss" src="../spin.scss"></style>
 <style lang="scss" scoped>
 ::v-deep .daily-boost-dialog {
   background: transparent !important;

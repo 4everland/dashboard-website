@@ -6,6 +6,7 @@ import {
   fetchTgInviteInfo,
   fetchInviteCount,
   fetchDailySign,
+  fetchSpinStart,
 } from "@/api/booster";
 import { TonConnectUI } from "@tonconnect/ui";
 
@@ -50,6 +51,27 @@ export default {
         manifestUrl: "https://dashboard.4everland.org/tonconnect-manifest.json",
       }),
       dailySign: null,
+      spinPlayReward: {
+        'rewardType': "points",
+        'rewardValue': "20"
+      },
+      spinStartInfo: {
+        "taskId": "0312e221-ca59-4b37-9a3d-4f3b9578e556",
+        "spinId": "0312e221-ca59-4b37-9a3d-4f3b9578e556",
+        "cashType": "usd",
+        "cashValue": "0.5",
+        "remainSpins": 2,
+        "duration": 500,
+        "currentDuration": 300.0,
+        "startAt": 1730271131,
+        "endAt": 1730357531,
+        "completeAt": null,
+        "claimAt": null,
+        "reward": {
+          'rewardType': "points",
+          'rewardValue': "20"
+        }
+      }
     };
   },
   getters: {
@@ -209,6 +231,12 @@ export default {
     SET_DAILY_SIGN(state, value) {
       state.dailySign = value;
     },
+    SET_SPIN_INFO(state, value) {
+      state.spinStartInfo = value;
+    },
+    SET_SPIN_PLAYREWARD(state, value) {
+      state.spinPlayReward = value;
+    },
   },
   actions: {
     StakeDrawerState: async (context, payload) => {
@@ -297,6 +325,15 @@ export default {
       try {
         const { data } = await fetchDailySign();
         commit("SET_DAILY_SIGN", data.items);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getSpinInfo({ commit }) {
+      try {
+        const { data } = await fetchSpinStart();
+        commit("SET_SPIN_INFO", data);
       } catch (error) {
         console.log(error);
       }
