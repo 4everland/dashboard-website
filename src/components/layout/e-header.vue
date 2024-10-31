@@ -127,11 +127,11 @@ export default {
           href: "https://docs.4everland.org",
           target: "_blank",
         },
-        {
-          label: "Changelog",
-          to: "/changelog",
-          badge: Math.max(0, this.newChagelogNum - this.changelogNum),
-        },
+        // {
+        //   label: "Changelog",
+        //   to: "/changelog",
+        //   badge: Math.max(0, this.newChagelogNum - this.changelogNum),
+        // },
       ],
       menuBtnList: [
         {
@@ -162,9 +162,10 @@ export default {
         {
           label: "Feedback",
           icon: "m-report",
-          noticeMsg: {
-            name: "feedback",
-          },
+          // noticeMsg: {
+          //   name: "feedback",
+          // },
+          href: "https://discord.com/channels/852482727164117022/1039457937594257448",
         },
         {
           label: "Disconnect",
