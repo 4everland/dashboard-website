@@ -27,6 +27,31 @@
             </div>
           </div>
         </div>
+        <div class="nft-drawer-top">
+          <div class="drawer-title nft-drawer-title">
+            ASPECTA 4EVER KEY STAKING
+          </div>
+          <div class="nft-drawer-desc">
+            Each 4EVER key staked contributes to a 1% Staking Yield.
+            <a
+              href="https://trade.aspecta.ai/projects/4EVERLAND"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Buy 4EVER KEY</a
+            >
+          </div>
+          <div class="nft-drawer-btn-box mt-4">
+            <div class="nft-drawer-logo">
+              <img class="logo" src="/favicon.ico" alt="" />
+              <div>Staked: {{ keyBalance }} 4EVER KEY</div>
+            </div>
+            <div>
+              <v-btn class="drawer-btn" @click="onStakeKey">{{
+                shouldRefresh ? "Refresh" : "Stake"
+              }}</v-btn>
+            </div>
+          </div>
+        </div>
         <div class="nft-box">
           <div class="drawer-title mb-4">NFT STAKING</div>
           <v-row v-if="nftList.length > 0" no-gutters style="gap: 16px 0">
@@ -80,16 +105,23 @@
       @onStaked="onStaked"
       ref="StakeDialog"
     />
+    <StakeKeyDialog
+      v-model="showStakeKeyDialog"
+      :keyBalance="keyBalance"
+      @onStaked="onKeyStaked"
+      ref="StakeKeyDialog"
+    />
     <stake-error v-model="showStakeError" />
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import {
   fetchStakeInfo,
   fetchNftLists,
   fetchNftIsStake,
   fetchNftBind,
+  fetchKeyBalance,
 } from "@/api/booster.js";
 
 import NFT_LISTS from "../nft.js";
@@ -97,12 +129,18 @@ import NFT_LISTS from "../nft.js";
 import StakeDialog from "@/pages/booster/components/stake-dialog";
 import StakeError from "@/pages/booster/components/stake-error";
 
+import StakeKeyDialog from "@/pages/booster/components/stake-key-dialog";
+
 export default {
   components: {
     StakeDialog,
     StakeError,
+    StakeKeyDialog,
   },
   computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
     ...mapGetters(["showStakeDrawer"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
@@ -119,11 +157,15 @@ export default {
       showStakeDialog: false,
       stakingAmount: 0,
       showStakeError: false,
+      showStakeKeyDialog: false,
+      keyBalance: "0",
+      shouldRefresh: false,
     };
   },
   created() {
     this.getStakeInfo();
     this.getNftLists();
+    this.getStakeKeyInfo();
   },
   methods: {
     onStake() {
@@ -141,11 +183,30 @@ export default {
       this.stateStakeDrawerShow(false);
       this.showStakeDialog = true;
     },
+    onStakeKey() {
+      if (!this.userInfo.wallet) {
+        this.$toast2("Please connect your wallet before continuing!", "error");
+        return;
+      }
+      if (this.shouldRefresh) {
+        this.getStakeKeyInfo();
+        this.$store.dispatch("getBoosterUserInfo");
+        this.$toast2("Balance refresh successfully!", "success");
+      } else {
+        this.stateStakeDrawerShow(false);
+        this.showStakeKeyDialog = true;
+      }
+    },
     async getStakeInfo() {
       const { data } = await fetchStakeInfo();
       this.staking = data.staking;
       this.everpayStaking = data.everpayStaking;
       this.stakingAmount = data.staking + data.everpayStaking;
+    },
+    async getStakeKeyInfo() {
+      const { data } = await fetchKeyBalance();
+      this.keyBalance = data.balance;
+      this.shouldRefresh = data.shouldRefresh;
     },
     async getNftLists() {
       const { data } = await fetchNftLists();
@@ -192,10 +253,15 @@ export default {
     onStaked() {
       this.getStakeInfo();
     },
+    onKeyStaked() {
+      this.getStakeKeyInfo();
+      this.$store.dispatch("getBoosterUserInfo");
+    },
     stateStakeDrawerShow(state) {
       if (state) {
         this.getStakeInfo();
         this.getNftLists();
+        this.getStakeKeyInfo();
       }
       this.$store.dispatch("StakeDrawerState", { state });
     },
