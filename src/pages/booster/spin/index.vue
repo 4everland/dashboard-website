@@ -80,7 +80,7 @@
             <div class="spin-points-tooltip">
               <div class="arrow-up"></div>
               <div class="points-short">
-                2 <span class="point-text">points short to swap</span>
+                {{ spinStartInfo.duration - spinStartInfo.currentDuration }} <span class="point-text">points short to swap</span>
               </div>
             </div>
           </div>
