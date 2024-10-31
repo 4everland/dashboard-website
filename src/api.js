@@ -183,6 +183,7 @@ http.interceptors.request.use(
                 headers: {
                   Authorization: "Bearer " + localStorage.token,
                 },
+                noTip: 1,
               }
             );
             localStorage.authData = JSON.stringify(data);
@@ -192,7 +193,10 @@ http.interceptors.request.use(
             }
           }
         })
-        .then(() => {});
+        .then(() => {})
+        .catch((err) => {
+          console.log(err);
+        });
     }
 
     const params = (config.params = config.params || {});
