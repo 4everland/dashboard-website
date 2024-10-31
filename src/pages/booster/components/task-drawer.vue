@@ -315,6 +315,7 @@ import { clickAds } from "@/api/ton-ads";
 // import { connectOkxWallet } from "@/pages/booster/components/wallet-connect.js";
 import { OKXUniversalProvider } from "@okxconnect/universal-provider";
 import { fetchWeb3codeBind, fetchWeb3Vcode } from "@/api/login.js";
+import { postEvent } from "@telegram-apps/sdk";
 
 export default {
   computed: {
@@ -441,6 +442,11 @@ export default {
         if (item.extra.buttonName == "Go") {
           if (item.actType == "okx_bind") {
             await this.connectOkxWallet();
+          } else if (item.actType == "telegram_daily_share") {
+            const oriDescriptionArr = item.oriDescription.split(";");
+            let [media_url, text] = oriDescriptionArr;
+            text += this.inviteInfo.link;
+            this.shareOnTgStory(media_url, text);
           } else {
             let url = item.oriDescription;
             if (item.actType == "share_twitter") {
@@ -612,12 +618,18 @@ export default {
     },
     handleTitle(it) {
       console.log(it, "---");
+      if (it.actType == "telegram_daily_share") {
+        const oriDescriptionArr = it.oriDescription.split(";");
+        let [media_url, text] = oriDescriptionArr;
+        text += this.inviteInfo.link;
+        this.shareOnTgStory(media_url, text);
+        return;
+      }
 
       let url = it.oriDescription;
       if (it.actType == "share_twitter") {
         url += encodeURIComponent(this.inviteInfo.link);
       }
-
       if (this.isTgMiniApp) return this.$tg.openAuto(url);
       window.open(url);
     },
@@ -706,6 +718,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async shareOnTgStory(media_url, text) {
+      postEvent("web_app_share_to_story", { media_url, text });
     },
   },
 };
