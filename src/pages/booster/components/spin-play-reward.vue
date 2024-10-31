@@ -127,6 +127,13 @@ export default {
       return "10";
     },
   },
+  watch: {
+    value(newVal, oldVal) {
+      if(newVal === true){
+        this.startCountdown()
+      }
+    },
+  },
   mounted(){
 
   },

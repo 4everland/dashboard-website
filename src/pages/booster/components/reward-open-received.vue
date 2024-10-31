@@ -101,7 +101,13 @@ export default {
       showNextSpinTime: false,
     };
   },
-
+  watch: {
+    value(newVal, oldVal) {
+      if(newVal === true){
+        this.startCountdown()
+      }
+    },
+  },
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,

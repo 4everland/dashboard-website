@@ -23,8 +23,8 @@
 
         <div class="spin-background">
           <div class="congratulations">Congratulations!</div>
-          <div class="swap">You have swapped 1,000 points for</div>
-          <div class="reward-number">$0.1</div>
+          <div class="swap">You have swapped {{spinStartInfo.duration}} points for</div>
+          <div class="reward-number">${{spinStartInfo.cashValue}}</div>
           <div class="view-account d-flex justify-center align-center">
             <img
               src="/img/booster/spin/annotation-alert.svg"
@@ -33,8 +33,8 @@
             />
             <div>&nbsp; It can be viewed in your account.</div>
           </div>
-          <v-btn class="reward-btn" style="width: 90%" height="44">
-            <div class="btn-text">ok</div>
+          <v-btn class="reward-btn" style="width: 90%" height="44" @click="handleClaimSwap">
+            <div class="btn-text">OK</div>
           </v-btn>
         </div>
       </div>
@@ -66,13 +66,22 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
       dailySign: (s) => s.moduleBooster.dailySign,
+      spinStartInfo: (s) => s.moduleBooster.spinStartInfo,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
   },
 
-  methods: {},
+  methods: {
+    handleClaimSwap() {
+      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
+      this.$store.commit("SET_SPIN_INFO", {});
+      localStorage.removeItem('spinInfo'+info);
+      this.$emit('input', false);  
+      this.$router.push('/boost');
+    },
+  },
 };
 </script>
 

@@ -6,7 +6,9 @@
           <div class="logo d-flex align-center" @click="backtoindex">
             <img src="/img/booster/spin/chevron-left.png" width="24" alt="" />
           </div>
-          <div class="mobile-title fz-16">Points Swap</div>
+          <div class="mobile-title fz-16 font-weight-bold">
+            Points Swap
+          </div>
           <div class="d-flex align-center">
             <div class="spin-rules" @click="opendialog">Rule</div>
           </div>
@@ -26,13 +28,19 @@
         <div class="spin-header">
           <div class="d-flex align-center justify-center spin-header-img">
             <div class="d-flex justify-center flex-column">
-              <div class="text-center">
-                <img src="/img/booster/spin/Maskgroup.png" width="68" alt="" />
+              <div class="d-flex justify-center">
+                <e-team-avatar
+                  :src="userInfo.avatar"
+                  :size="68"
+                  :uid="userInfo.uid"
+                ></e-team-avatar>
               </div>
-              <div class="spin-header-name">xxxsdfasdf</div>
+              <div class="spin-header-name">
+                {{ (userInfo.username || "unkown").cutStr(6, 4) }}
+              </div>
             </div>
           </div>
-          <div class="spin-header-number">$0.1</div>
+          <div class="spin-header-number">${{ spinStartInfo.cashValue }}</div>
           <div class="spin-header-tips">Available For Swap</div>
         </div>
         <div class="spin-content">
@@ -42,23 +50,17 @@
             >
               <div class="d-flex justify-center flex-column">
                 <div class="d-flex align-center">Swap eligibility</div>
-                <div class="d-flex align-center">
-                  <img
-                    src="/img/booster/spin/icon_point.png"
-                    width="16"
-                    alt=""
-                  />
-                  <span class="font-16">998 </span> Points
-                </div>
+                
+                <div class="d-flex align-center"><img src="/img/booster/spin/icon_point.png" width="16" alt="" /> <span class="font-16 mr-1">{{ spinStartInfo.currentDuration }} </span> Points</div>
               </div>
-              <div class="d-flex justify-center flex-column">
+              <div class="d-flex justify-center flex-column spin-content-top-right">
                 <div class="d-flex align-center">Points Quote</div>
                 <div class="progress-content">
                   <div class="progress">
                     <img
                       style="border-radius: 12px"
                       class="d-b"
-                      width="100%"
+                      :width="percent"
                       src="/img/booster/4ever-token-progress-mask.png"
                       height="12"
                       alt=""
@@ -67,7 +69,7 @@
 
                     <img
                       class="hot-icon"
-                      src="/img/booster/progress-hot.png"
+                      src="/img/booster/spin/spin-coin-progress.png"
                       height="26"
                       alt=""
                     />
@@ -75,7 +77,6 @@
                 </div>
               </div>
             </div>
-
             <div class="spin-points-tooltip">
               <div class="arrow-up"></div>
               <div class="points-short">
@@ -86,32 +87,51 @@
           <div class="luckWrap d-flex justify-center">
             <LuckyWheel
               ref="myLucky"
-              width="300px"
-              height="300px"
+              width="295px"
+              height="295px"
               :prizes="prizes"
               :blocks="blocks"
               :buttons="buttons"
+              :default-config="defaultConfig"
               @end="endCallback"
             />
             <div class="luck_button" @click="startCallback">
+              
               <div
                 class="d-flex align-center justify-center flex-column luck_button_wrap"
-              >
+                v-if="percent<100"
+              ><div class="luck_button_tips">
+                {{ spinStartInfo.remainSpins }}
+              </div>
                 <div class="font-weight-bold">Spin</div>
-                <div class="spin_left_time">20 Time</div>
+                <div class="spin_left_time">{{ spinStartInfo.remainSpins }} Time</div>
+              </div>
+              <div
+                class="d-flex align-center justify-center flex-column luck_button_wrap"
+                v-if="percent >= 100"
+              >
+                <div class="font-weight-bold">Swap</div>
               </div>
             </div>
           </div>
 
           <div class="spin-content-footer">
             <div>Reset countdown</div>
-            <div class="countdown">23:56:13</div>
+            <div class="countdown">
+              <count-down
+              :endTimeStamp="spinStartInfo.endAt"
+            ></count-down>
+            </div>
           </div>
 
           <div class="mt-4">
             <div class="invite-detail d-flex align-center">
-              <v-btn class="invite-act-btn flex-1" height="48">
-                Invite new friends for more spins
+              <v-btn
+                class="invite-act-btn flex-1"
+                height="48"
+                @click="handleShare"
+              >
+              Invite new friends for more spins
               </v-btn>
 
               <v-btn
@@ -137,13 +157,21 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="text-center">aaa</td>
-                <td class="text-center">123</td>
-                <td class="text-center">2024-10-25</td>
+              <tr v-for="(item, i) in list" :key="i">
+                <td class="text-center">{{item.username}}</td>
+                <td class="text-center">{{item.amount}}</td>
+                <td class="text-center">{{ new Date(item.claimAt * 1000).format() }}</td>
               </tr>
             </tbody>
           </v-simple-table>
+          <booster-pagination
+            v-show="list.length != 0"
+            :total-visible="5"
+            :length="totalPages"
+            class="my-5"
+            v-model="page"
+            @input="getList"
+          ></booster-pagination>
         </div>
       </div>
     </div>
@@ -214,25 +242,26 @@
     <SpinSwapped v-model="showSwapped"></SpinSwapped>
     <SpinSorry v-model="showSpinSorry"></SpinSorry>
     <SpinInvite v-model="showInvite"></SpinInvite>
-    <RewardOpenReceived v-model="showRewardReceive"></RewardOpenReceived>
+    <RewardOpenReceived v-model="showRewardReceive" @openStartNext="showRewardClaim = true"></RewardOpenReceived>
     <RewardOpenClaim v-model="showRewardClaim"></RewardOpenClaim>
-    <SpinStartReward
-      v-model="showStartClaim"
-      @openStartNext="handleStartNext"
-    ></SpinStartReward>
+    <SpinStartReward v-model="showStartClaim" @openStartNext="handleStartNext"></SpinStartReward>
+    <SpinPlayReward v-model="showPlayReward"></SpinPlayReward>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import BoosterPagination from "../components/booster-pagination.vue";
-import { fetchLeaderboard } from "@/api/booster";
+import countDown from "../components/count-down.vue";
 import SpinSwapped from "../components/spin-swapped.vue";
 import SpinSorry from "../components/spin-sorry.vue";
 import SpinInvite from "../components/spin-invite.vue";
 import RewardOpenReceived from "../components/reward-open-received.vue";
 import RewardOpenClaim from "../components/reward-open-claim.vue";
-import SpinStartReward from "../components/spin-start-reward.vue";
+import SpinStartReward from "../components/spin-start-reward.vue"
+import SpinPlayReward from "../components/spin-play-reward.vue"
+
+import { fetchSpinStart, playSpin, fetchClaimList, claimSpinReward } from "@/api/booster";
 
 export default {
   components: {
@@ -242,70 +271,124 @@ export default {
     SpinSwapped,
     SpinSorry,
     SpinInvite,
+    SpinPlayReward,
+    countDown,
+    BoosterPagination
+  },
+  computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+      inviteInfo: (s) => s.moduleBooster.inviteInfo,
+      spinStartInfo: (s) => s.moduleBooster.spinStartInfo,
+    }),
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
+    percent() {
+      const percent = this.spinStartInfo.currentDuration / this.spinStartInfo.duration;
+      return percent * 100;
+    },
+    copyValue() {
+      return (
+        "Invite link:" +
+        this.inviteInfo.link +
+        "\n" +
+        "Invite code:" +
+        this.inviteInfo.inviteCode
+      );
+    },
   },
   data() {
     return {
       dialog: false,
       showRewardReceive: false,
       showRewardClaim: false,
-      showStartClaim: true,
-      copyValue: "",
-      showSwapped: false,
+      showStartClaim: false,
+      showPlayReward: false,
+      showSwapped:false,
       showSpinSorry: false,
       showInvite: false,
+      page: 1,
+      size: 10,
+      totalPages: 0,
+      list: [],
       blocks: [
         {
-          imgs: [
-            {
-              src: "/img/booster/spin/bg.png",
-              width: "100%",
-              height: "100%",
-              rotate: true,
-            },
-          ],
+          imgs: [{
+            src: '/img/booster/spin/bg.png',
+            width: '100%',
+            height: '100%',
+            rotate: true
+          }]
         },
       ],
       prizes: [
-        { title: "0" },
-        { title: "1" },
-        { title: "2" },
-        { title: "3" },
-        { title: "4" },
-        { title: "5" },
-        { title: "6" },
-        { title: "7" },
+        { title: '0' },
+        { title: '1' },
+        { title: '2' },
+        { title: '3' },
+        { title: '4' },
+        { title: '5' },
       ],
-      buttons: [
-        {
-          radius: "45%",
-          imgs: [
-            {
-              src: "/img/booster/spin/spin-arrow.png",
-              width: "80%",
-              top: "-100%",
-            },
-          ],
-        },
-      ],
-      // {
-      //   fonts: [{ text: 'Spin\n20 Time', top: '-20px', fontSize: '12px', fontWeight: '700', fontColor: '#ffffff' }]
-      // }],
-    };
+      buttons: [{
+        radius: '45%',
+        imgs: [{
+            src: '/img/booster/spin/spin-arrow.png',
+            width: '80%',
+            top: '-100%'
+          }]
+      }],
+      defaultConfig: {
+        offsetDegree: -30,
+        accelerationTime: 1500,
+        decelerationTime: 1500,
+      }
+    }
+  },
+  mounted() {
+    this.init();
   },
   methods: {
-    // 点击抽奖按钮会触发star回调
-    startCallback() {
-      // 调用抽奖组件的play方法开始游戏
-      this.$refs.myLucky.play();
-      // 模拟调用接口异步抽奖
-      setTimeout(() => {
-        // 假设后端返回的中奖索引是0
-        const index = 0;
-        // 调用stop停止旋转并传递中奖索引
-        this.$refs.myLucky.stop(index);
-      }, 3000);
+    init(){
+      this.$store.dispatch("getInviteInfo");
+      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
+      let spinFirstStep = localStorage.getItem('spinFirstStep'+info);
+      if(spinFirstStep){
+        this.showStartClaim = true
+        localStorage.removeItem('spinFirstStep'+info);
+      }
+      let spinInfo = localStorage.getItem('spinInfo'+info);
+      if(spinInfo){
+        this.$store.commit("SET_SPIN_INFO", JSON.parse(spinInfo));
+      }
+      this.getList()
     },
-    // 抽奖结束会触发end回调
+    async startCallback () {
+      let taskId = this.spinStartInfo.taskId
+      if(this.percent >= 100) {
+        const res = await claimSpinReward(taskId)
+        this.showSwapped = true;
+      } else {
+        this.$refs.myLucky.play()
+        const { data } = await playSpin(taskId);
+        this.$store.commit("SET_SPIN_INFO", data);
+        let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
+        localStorage.setItem('spinInfo'+info, JSON.stringify(data));
+        this.$store.commit("SET_SPIN_PLAYREWARD", data.reward);
+        let index = 0
+        if(data.reward.rewardType == 'spin'){
+          index = 0
+        } else {
+          index = 1
+        }
+        this.$refs.myLucky.stop(index)
+        await this.$sleep(3000);
+        this.showPlayReward = true
+      }
+    },
     endCallback(prize) {
       console.log(prize);
     },
@@ -319,10 +402,36 @@ export default {
       this.showStartClaim = false;
       this.showRewardReceive = true;
     },
+    handleStartNext () {
+      this.showStartClaim = false
+      this.showRewardReceive = true
+    },
+    handleShare() {
+      if (this.isTgMiniApp) {
+        this.$tg.shareUrl(
+          this.inviteInfo.link,
+          "💎 Join me in the #4EVERBoost and reap amazing rewards! Earn $4EVER points, Ton rewards, and exciting @4everland_org #airdrops! Don't miss out—let's boost together! 🎗️🎊"
+        );
+      } else {
+        let shareUrl =
+          "💎 Join me in the #4EVERBoost and reap amazing rewards! Earn $4EVER points, Ton rewards, and exciting @4everland_org #airdrops! Don't miss out—let's boost together! 🎗️🎊 ";
+        shareUrl += this.inviteInfo.link;
+        shareUrl =
+          "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
+
+        this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
+      }
+    },
+    async getList() {
+      const { data } = await fetchClaimList();
+      this.list = data;
+    }
+    
   },
 };
 </script>
 
+<style lang="scss" src="../spin.scss"></style>
 <style lang="scss" scoped>
 @media screen and (max-width: 960px) {
 }
@@ -336,8 +445,8 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  .nav-mobile {
-    height: 45px;
+  .nav-mobile{
+    height: 64px;
   }
   .containerin {
     background-image: url("/img/booster/spin/background_pattern.png");
@@ -365,18 +474,24 @@ export default {
   }
   .spinwrap {
     width: 100%;
+    margin-top: 25px;
   }
   .nav-bar {
     height: 64px;
     .spin-rules {
       width: 47px;
       height: 23px;
+      font-family: "Inter", sans-serif;
+      font-size: 12px;
+      font-weight: 400;
       background: #12153680;
       border-top-left-radius: 16px;
       border-bottom-left-radius: 16px;
       margin-right: -25px;
       text-align: center;
-    }
+      line-height: 23px;
+   }
+
   }
   .spin-header {
     background: linear-gradient(142.14deg, #f5f8ff 9.63%, #c7d7fe 59.92%);
@@ -389,13 +504,16 @@ export default {
     .spin-header-img {
       margin-top: -30px;
     }
-    .spin-header-name {
-      background: #6172f3;
+    .spin-header-name{
+      background: #6172F3;
+      font-size: 12px;
       height: 20px;
       border-radius: 25px;
       padding: 0 10px;
-      line-height: 100%;
+      line-height: 20px;
       margin-top: -20px;
+      position: relative;
+      font-weight: bold;
     }
     .spin-header-number {
       font-size: 32px;
@@ -424,7 +542,7 @@ export default {
       #4c5277;
     background-blend-mode: overlay;
     border-radius: 24px;
-    padding: 20px;
+    padding: 20px 18px;
     .spin-content-header-bg {
       height: 46px;
       margin: 0 20px;
@@ -433,6 +551,7 @@ export default {
       padding: 0 20px;
       font-size: 12px;
     }
+
     .spin-points-tooltip {
       position: absolute;
       top: 40px;
@@ -494,12 +613,14 @@ export default {
       top: 0;
     }
   }
+  .spin-content-top-right {
+    min-width: 114px;
+  }
   .progress-content {
     position: relative;
     height: 20px;
     border-radius: 12px;
-    border: 4px solid #041f44;
-    background: #17191d;
+    padding: 0 4px;
     .progress {
       position: absolute;
       width: 97%;
@@ -519,7 +640,7 @@ export default {
       .hot-icon {
         position: absolute;
         right: -1%;
-        top: -87%;
+        top: -55%;
       }
       @keyframes run {
         from {
@@ -566,13 +687,8 @@ export default {
   .spin-footer-swapList {
     width: 100%;
     min-height: 200px;
-
-    background: linear-gradient(
-        180deg,
-        rgba(57, 59, 62, 0.9) 25.52%,
-        rgba(36, 39, 42, 0.9) 100%
-      ),
-      #4c5277;
+    margin-top: -80px;
+    background: linear-gradient(180deg, rgba(57, 59, 62, 0.9) 25.52%, rgba(36, 39, 42, 0.9) 100%), #4C5277;
     background-blend-mode: overlay;
     border-radius: 24px;
     padding: 20px;
@@ -625,6 +741,20 @@ export default {
       border-radius: 50%;
       color: #fff;
       cursor: pointer;
+      .luck_button_tips{
+        width: 24px;
+        height: 24px;
+        border-radius: 24px;
+        font-size: 12px;
+        line-height: 16px;
+        position: absolute;
+        background: #F04438;
+        text-align: center;
+        color: #fff;
+        padding: 4px;
+        right: 0;
+        top: 0;
+      }
       .luck_button_wrap {
         height: 80px;
       }

@@ -51,7 +51,6 @@ export default {
       if(newVal === true){
         this.startCountdown()
       }
-      console.log('value 值发生了变化：', newVal, oldVal);
     },
   },
   methods: {
