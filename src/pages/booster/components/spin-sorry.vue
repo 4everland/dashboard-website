@@ -23,8 +23,8 @@
 
         <div class="spin-background">
           <div class="congratulations">Sorry!</div>
-          <div class="swap">Minimum points for swap: <span style="font-weight: 700;font-style: italic;">1000</span> points.</div>
-          <v-btn class="reward-btn" style="width: 90%" height="44">
+          <div class="swap">Minimum points for swap: <span style="font-weight: 700;font-style: italic;">{{ spinStartInfo.duration }}</span> points.</div>
+          <v-btn class="reward-btn" style="width: 90%" height="44" @click="handleEarn">
             <div class="btn-text">Earn Points</div>
           </v-btn>
         </div>
@@ -57,13 +57,18 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
       dailySign: (s) => s.moduleBooster.dailySign,
+      spinStartInfo: (s) => s.moduleBooster.spinStartInfo,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
   },
 
-  methods: {},
+  methods: {
+    handleEarn() {
+      this.$emit('input', false);  
+    },
+  },
   components: {
 
   },

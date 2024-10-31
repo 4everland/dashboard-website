@@ -14,7 +14,7 @@
           </div>
         </div>
       </div>
-      <div class="congratulations-users d-flex align-center justify-center">
+      <div class="congratulations-users d-flex align-center justify-center" v-if="false">
         <img src="/img/booster/spin/congratulations.png" width="24" alt="" />
         <div>
           Congrats <span style="font-weight: 700">ergou!</span> Swapped 100
@@ -77,7 +77,7 @@
                 </div>
               </div>
             </div>
-            <div class="spin-points-tooltip">
+            <div class="spin-points-tooltip" v-if="percent<100">
               <div class="arrow-up"></div>
               <div class="points-short">
                 {{ spinStartInfo.duration - spinStartInfo.currentDuration }} <span class="point-text">points short to swap</span>
@@ -278,6 +278,7 @@ export default {
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
+      boosterInfo: (s) => s.moduleBooster.boosterInfo,
       inviteInfo: (s) => s.moduleBooster.inviteInfo,
       spinStartInfo: (s) => s.moduleBooster.spinStartInfo,
     }),
@@ -369,9 +370,16 @@ export default {
     async startCallback () {
       let taskId = this.spinStartInfo.taskId
       if(this.percent >= 100) {
+        if(this.boosterInfo.totalPoint < this.spinStartInfo.duration){
+          this.showSpinSorry = true
+        }
         const res = await claimSpinReward(taskId)
-        this.showSwapped = true;
+        if(res.code == 200){
+          this.showSwapped = true;
+        }
+        
       } else {
+        if( this.spinStartInfo.remainSpins==0) return;
         this.$refs.myLucky.play()
         const { data } = await playSpin(taskId);
         this.$store.commit("SET_SPIN_INFO", data);
@@ -390,7 +398,7 @@ export default {
       }
     },
     endCallback(prize) {
-      console.log(prize);
+      // console.log(prize);
     },
     opendialog() {
       this.dialog = true;
