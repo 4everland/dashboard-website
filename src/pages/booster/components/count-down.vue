@@ -34,15 +34,15 @@ export default {
     },
     hours() {
       const hours = Math.floor(this.residueTimeStamp / 3600);
-      return hours < 10 ? "0" + hours : hours;
+      return hours < 10 ? "0" + hours : hours<0? "00" : hours;
     },
     minutes() {
       const mins = Math.floor(this.residueTimeStamp / 60) % 60;
-      return mins < 10 ? "0" + mins : mins;
+      return mins < 10 ? "0" + mins : mins < 0? "00" : mins;
     },
     seconds() {
       const secs = this.residueTimeStamp % 60;
-      return secs < 10 ? "0" + secs : secs;
+      return secs < 10 ? "0" + secs : secs < 0? "00" : secs;
     },
   },
 
@@ -55,6 +55,7 @@ export default {
       this.timeInterval = setInterval(() => {
         this.curTimeStamp = +new Date() / 1e3;
         if (this.residueTimeStamp < 0) {
+          console.log("time over");
           this.$emit("timeOver");
 
           clearInterval(this.timeInterval);

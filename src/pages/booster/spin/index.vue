@@ -20,7 +20,7 @@
           Congrats <span style="font-weight: 700">ergou!</span> Swapped 100
           points for
           <span style="font-weight: 700; font-style: italic; font-size: 16px">
-            $0.1.
+            $0.1
           </span>
         </div>
       </div>
@@ -80,7 +80,7 @@
             <div class="spin-points-tooltip" v-if="percent<100">
               <div class="arrow-up"></div>
               <div class="points-short">
-                {{ spinStartInfo.duration - spinStartInfo.currentDuration }} <span class="point-text">points short to swap</span>
+                {{ (spinStartInfo.duration*10 - spinStartInfo.currentDuration*10)/10 }} <span class="point-text">points short to swap</span>
               </div>
             </div>
           </div>
@@ -115,11 +115,12 @@
             </div>
           </div>
 
-          <div class="spin-content-footer">
+          <div class="spin-content-footer" v-if="!taskEnd">
             <div>Reset countdown</div>
             <div class="countdown">
               <count-down
               :endTimeStamp="spinStartInfo.endAt"
+              @timeOver="timeOver"
             ></count-down>
             </div>
           </div>
@@ -246,6 +247,8 @@
     <RewardOpenClaim v-model="showRewardClaim"></RewardOpenClaim>
     <SpinStartReward v-model="showStartClaim" @openStartNext="handleStartNext"></SpinStartReward>
     <SpinPlayReward v-model="showPlayReward"></SpinPlayReward>
+    <SpinEndSorry v-model="showSpinEndSorry"></SpinEndSorry>
+
   </div>
 </template>
 
@@ -260,6 +263,7 @@ import RewardOpenReceived from "../components/reward-open-received.vue";
 import RewardOpenClaim from "../components/reward-open-claim.vue";
 import SpinStartReward from "../components/spin-start-reward.vue"
 import SpinPlayReward from "../components/spin-play-reward.vue"
+import SpinEndSorry from "../components/spin-end-sorry.vue"
 
 import { fetchSpinStart, playSpin, fetchClaimList, claimSpinReward } from "@/api/booster";
 
@@ -273,6 +277,7 @@ export default {
     SpinInvite,
     SpinPlayReward,
     countDown,
+    SpinEndSorry,
     BoosterPagination
   },
   computed: {
@@ -291,6 +296,10 @@ export default {
     percent() {
       const percent = this.spinStartInfo.currentDuration / this.spinStartInfo.duration;
       return percent * 100;
+    },
+    taskEnd() {
+      const curTimeStamp = +new Date() / 1e3;
+      return curTimeStamp > this.spinStartInfo.endAt
     },
     copyValue() {
       return (
@@ -312,6 +321,7 @@ export default {
       showSwapped:false,
       showSpinSorry: false,
       showInvite: false,
+      showSpinEndSorry: false,
       page: 1,
       size: 10,
       totalPages: 0,
@@ -353,9 +363,16 @@ export default {
     this.init();
   },
   methods: {
-    init(){
+    async init(){
       this.$store.dispatch("getInviteInfo");
       let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
+      const curTimeStamp = +new Date() / 1e3;
+      if(this.spinStartInfo.claimAt == null && (curTimeStamp < this.spinStartInfo.endAt)){
+        const { data } = await fetchSpinStart();
+        this.$store.commit("SET_SPIN_INFO", data);
+        localStorage.setItem('spinInfo'+info, JSON.stringify(data));
+      }
+      
       let spinFirstStep = localStorage.getItem('spinFirstStep'+info);
       if(spinFirstStep){
         this.showStartClaim = true
@@ -372,6 +389,12 @@ export default {
       if(this.percent >= 100) {
         if(this.boosterInfo.totalPoint < this.spinStartInfo.duration){
           this.showSpinSorry = true
+          return
+        } 
+        const curTimeStamp = +new Date() / 1e3;
+        if(curTimeStamp > this.spinStartInfo.endAt){
+          this.showSpinEndSorry = true;
+          return;
         }
         const res = await claimSpinReward(taskId)
         if(res.code == 200){
@@ -433,6 +456,11 @@ export default {
     async getList() {
       const { data } = await fetchClaimList();
       this.list = data;
+    },
+    timeOver() {
+      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
+      localStorage.removeItem('spinInfo'+info);
+      this.$router.push('/boost');
     }
     
   },

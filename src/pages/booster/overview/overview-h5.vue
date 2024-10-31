@@ -362,13 +362,20 @@ export default {
       this.$router.push('/boost/spin');
     },
     async handleStartReward() {
-      const { data } = await fetchSpinStart();
-      this.$store.commit("SET_SPIN_INFO", data);
-      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
-      //this.$store.dispatch("getSpinInfo");
-      localStorage.setItem('spinInfo'+info, JSON.stringify(data));
-      localStorage.setItem('spinFirstStep'+info, 1);
-      this.$emit('startReward')
+      const data = await fetchSpinStart();
+      if(data.data){
+        this.$store.commit("SET_SPIN_INFO", data.data);
+        let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
+        //this.$store.dispatch("getSpinInfo");
+        localStorage.setItem('spinInfo'+info, JSON.stringify(data.data));
+        localStorage.setItem('spinFirstStep'+info, 1);
+        this.$emit('startReward')
+      } else {
+        this.$toast2(
+          "Sorry, try it again later",
+          "info"
+        );
+      }
     }
   },
 };
