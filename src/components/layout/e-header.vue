@@ -154,11 +154,11 @@ export default {
           icon: "m-refer",
           to: "/referral",
         },
-        {
-          label: "Collection",
-          icon: "m-collect",
-          to: "/collections",
-        },
+        // {
+        //   label: "Collection",
+        //   icon: "m-collect",
+        //   to: "/collections",
+        // },
         {
           label: "Feedback",
           icon: "m-report",
