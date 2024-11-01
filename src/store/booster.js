@@ -52,25 +52,8 @@ export default {
       }),
       dailySign: null,
       spinPlayReward: {
-        'rewardType': "points",
-        'rewardValue': "20"
       },
       spinStartInfo: {
-        "taskId": "0312e221-ca59-4b37-9a3d-4f3b9578e556",
-        "spinId": "0312e221-ca59-4b37-9a3d-4f3b9578e556",
-        "cashType": "usd",
-        "cashValue": "0.5",
-        "remainSpins": 2,
-        "duration": 500,
-        "currentDuration": 300.0,
-        "startAt": 1730271131,
-        "endAt": 1730357531,
-        "completeAt": null,
-        "claimAt": null,
-        "reward": {
-          'rewardType': "points",
-          'rewardValue': "20"
-        }
       }
     };
   },

@@ -2,11 +2,11 @@
   <div class="al-c align-center justify-center">
     <div class="hours">
       <span class="d-ib label">{{ hours }}</span>
-      <span class="fz-14">:</span>
+      <span>:</span>
     </div>
     <div class="minutes">
       <span class="d-ib label">{{ minutes }}</span>
-      <span class="fz-14">:</span>
+      <span>:</span>
     </div>
     <div class="seconds">
       <span class="d-ib label">{{ seconds }}</span>
@@ -20,6 +20,7 @@ export default {
     endTimeStamp: {
       type: Number,
       required: true,
+      default: 1
     },
   },
   data() {
@@ -55,7 +56,6 @@ export default {
       this.timeInterval = setInterval(() => {
         this.curTimeStamp = +new Date() / 1e3;
         if (this.residueTimeStamp < 0) {
-          console.log("time over");
           this.$emit("timeOver");
 
           clearInterval(this.timeInterval);

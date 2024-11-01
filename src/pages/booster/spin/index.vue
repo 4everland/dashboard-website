@@ -14,13 +14,13 @@
           </div>
         </div>
       </div>
-      <div class="congratulations-users d-flex align-center justify-center" v-if="false">
+      <div class="congratulations-users d-flex align-center justify-center" :class="currentclass" v-if="list.length>0">
         <img src="/img/booster/spin/congratulations.png" width="24" alt="" />
         <div>
-          Congrats <span style="font-weight: 700">ergou!</span> Swapped 100
+          Congrats <span style="font-weight: 700">{{(current.username || "unkown").cutStr(4, 4)}}!</span> Swapped {{ current.amount * 1e3 }}
           points for
           <span style="font-weight: 700; font-style: italic; font-size: 16px">
-            $0.1
+            ${{current.amount}}
           </span>
         </div>
       </div>
@@ -72,6 +72,7 @@
                       src="/img/booster/spin/spin-coin-progress.png"
                       height="26"
                       alt=""
+                      @click="handleSwap"
                     />
                   </div>
                 </div>
@@ -81,6 +82,12 @@
               <div class="arrow-up"></div>
               <div class="points-short">
                 {{ (spinStartInfo.duration*10 - spinStartInfo.currentDuration*10)/10 }} <span class="point-text">points short to swap</span>
+              </div>
+            </div>
+            <div class="spin-swap-tooltip" v-if="percent==100">
+              <div class="arrow-up"></div>
+              <div class="points-short">
+                Swap
               </div>
             </div>
           </div>
@@ -100,11 +107,22 @@
               <div
                 class="d-flex align-center justify-center flex-column luck_button_wrap"
                 v-if="percent<100"
-              ><div class="luck_button_tips">
-                {{ spinStartInfo.remainSpins }}
-              </div>
+              >
+                <div class="luck_button_tips">
+                  {{ spinStartInfo.remainSpins }}
+                </div>
                 <div class="font-weight-bold">Spin</div>
                 <div class="spin_left_time">{{ spinStartInfo.remainSpins }} Time</div>
+
+                <div class="luck_button_hands">
+                  <img
+                    class="luck_button_hands_img updown"
+                    src="/img/booster/spin/icon_hands.png"
+                    width="37"
+                    height="40"
+                    alt=""
+                  />
+                </div>
               </div>
               <div
                 class="d-flex align-center justify-center flex-column luck_button_wrap"
@@ -147,7 +165,7 @@
             </div>
           </div>
         </div>
-        <div class="spin-footer-swapList">
+        <div class="spin-footer-swapList" v-if="false">
           <h3 class="tit">Swap List</h3>
           <v-simple-table class="swap-list-table mt-1">
             <thead>
@@ -159,8 +177,8 @@
             </thead>
             <tbody>
               <tr v-for="(item, i) in list" :key="i">
-                <td class="text-center">{{item.username}}</td>
-                <td class="text-center">{{item.amount}}</td>
+                <td class="text-center">{{item.username.cutStr(4, 4)}}</td>
+                <td class="text-center">${{item.amount}}</td>
                 <td class="text-center">{{ new Date(item.claimAt * 1000).format() }}</td>
               </tr>
             </tbody>
@@ -318,7 +336,7 @@ export default {
       showRewardClaim: false,
       showStartClaim: false,
       showPlayReward: false,
-      showSwapped:false,
+      showSwapped: false,
       showSpinSorry: false,
       showInvite: false,
       showSpinEndSorry: false,
@@ -356,7 +374,10 @@ export default {
         offsetDegree: -30,
         accelerationTime: 1500,
         decelerationTime: 1500,
-      }
+      },
+      current: '',
+      activeIndex: 0,
+      currentclass: 'hideItem',
     }
   },
   mounted() {
@@ -368,9 +389,16 @@ export default {
       let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
       const curTimeStamp = +new Date() / 1e3;
       if(this.spinStartInfo.claimAt == null && (curTimeStamp < this.spinStartInfo.endAt)){
-        const { data } = await fetchSpinStart();
-        this.$store.commit("SET_SPIN_INFO", data);
-        localStorage.setItem('spinInfo'+info, JSON.stringify(data));
+        const data = await fetchSpinStart();
+        if(data.data){
+          this.$store.commit("SET_SPIN_INFO", data.data);
+          localStorage.setItem('spinInfo'+info, JSON.stringify(data.data));
+        } else {
+          this.$toast2(
+          "Sorry, try it again later",
+          "info"
+        );
+        }
       }
       
       let spinFirstStep = localStorage.getItem('spinFirstStep'+info);
@@ -382,7 +410,8 @@ export default {
       if(spinInfo){
         this.$store.commit("SET_SPIN_INFO", JSON.parse(spinInfo));
       }
-      this.getList()
+      this.getList();
+      this.showNotice();
     },
     async startCallback () {
       let taskId = this.spinStartInfo.taskId
@@ -405,9 +434,9 @@ export default {
         if( this.spinStartInfo.remainSpins==0) return;
         this.$refs.myLucky.play()
         const { data } = await playSpin(taskId);
-        this.$store.commit("SET_SPIN_INFO", data);
+        
         let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
-        localStorage.setItem('spinInfo'+info, JSON.stringify(data));
+        
         this.$store.commit("SET_SPIN_PLAYREWARD", data.reward);
         let index = 0
         if(data.reward.rewardType == 'spin'){
@@ -417,7 +446,27 @@ export default {
         }
         this.$refs.myLucky.stop(index)
         await this.$sleep(3000);
+        this.$store.commit("SET_SPIN_INFO", data);
+        localStorage.setItem('spinInfo'+info, JSON.stringify(data));
         this.showPlayReward = true
+      }
+    },
+    async handleSwap (){
+      let taskId = this.spinStartInfo.taskId
+      if(this.percent >= 100) {
+        if(this.boosterInfo.totalPoint < this.spinStartInfo.duration){
+          this.showSpinSorry = true
+          return
+        } 
+        const curTimeStamp = +new Date() / 1e3;
+        if(curTimeStamp > this.spinStartInfo.endAt){
+          this.showSpinEndSorry = true;
+          return;
+        }
+        const res = await claimSpinReward(taskId)
+        if(res.code == 200){
+          this.showSwapped = true;
+        }
       }
     },
     endCallback(prize) {
@@ -461,7 +510,22 @@ export default {
       let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
       localStorage.removeItem('spinInfo'+info);
       this.$router.push('/boost');
-    }
+    },
+    showNotice() {
+      let nextIndex = 1
+      setInterval(() => {
+        nextIndex = this.activeIndex + 1
+        if (nextIndex > this.list.length - 1) {
+          nextIndex = 0
+        }
+        this.currentclass = 'hideItem'
+        setTimeout(() => {
+          this.currentclass = 'infoshow'
+          this.current = this.list[this.activeIndex]
+          this.activeIndex = nextIndex
+        }, 1000)
+      }, 5000)
+    },
     
   },
 };
@@ -488,25 +552,26 @@ export default {
     background-image: url("/img/booster/spin/background_pattern.png");
     background-repeat: repeat-x;
     position: relative;
-    width: 100%;
     height: 100%;
     padding: 0px 24px;
   }
   .congratulations-users {
     position: absolute;
-    height: Hug (40px);
+    height: 40px;
     top: 52px;
     left: 8px;
     right: 8px;
     padding: 8px 16px 8px 16px;
     gap: 4px;
     border-radius: 8px;
-    opacity: 0px;
     z-index: 3;
     background: linear-gradient(97.34deg, #ffde7f 29.43%, #ffad08 55.71%),
       linear-gradient(0deg, #ffde7f, #ffde7f);
     color: #000;
     font-size: 12px;
+  }
+  .hideItem {
+    display: none !important;
   }
   .spinwrap {
     width: 100%;
@@ -566,7 +631,6 @@ export default {
     }
   }
   .spin-content {
-    width: 100%;
     height: 512px;
     position: relative;
     top: -100px;
@@ -615,8 +679,35 @@ export default {
         .point-text{
           font-weight: 400 !important;
         }
-
-
+      }
+    }
+    .spin-swap-tooltip {
+      position: absolute;
+      top: 37px;
+      right: 2px;
+      z-index: 3;
+      .arrow-up {
+        margin-left: 22px;
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent; 
+        border-right: 6px solid transparent; 
+        border-bottom: 8px solid #ffde7f; 
+      }
+      .points-short {
+        width: 57px;
+        height: 16px;
+        padding: 2px 12px 2px 12px;
+        border-radius: 16px;
+        background: #ffde7f;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 12px;
+        text-align: center;
+        color: #f86300;
+        .point-text{
+          font-weight: 400 !important;
+        }
       }
     }
     .spin-content-topheader {
@@ -737,6 +828,9 @@ export default {
         color: rgba(255, 255, 255, 0.75) !important;
       }
       :deep td {
+        font-size: 12px;
+        padding-left:2px;
+        padding-right:2px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.25) !important;
       }
 
@@ -767,6 +861,11 @@ export default {
     position: relative;
     width: 100%;
     height: 300px;
+    :deep canvas {
+      width: 295px !important;
+      height: 295px !important;
+      transform: scale(1) !important;
+    }
     .luck_button {
       position: absolute;
       left: 50%;
@@ -790,6 +889,11 @@ export default {
         padding: 4px;
         right: 0;
         top: 0;
+      }
+      .luck_button_hands_img{
+        position: absolute;
+        right: 0;
+        bottom: -10px;
       }
       .luck_button_wrap {
         height: 80px;

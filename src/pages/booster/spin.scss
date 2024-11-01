@@ -28,8 +28,12 @@
   animation: bounceIn 0.5s ease;
 }
 
-.total_show {
+.fly_show {
   animation: bounceInDown 0.7s ease, bounceOut 0.7s ease 2s forwards;
+}
+
+.infoshow {
+  animation: bounceInDown 0.7s ease, bounceOutUp 0.7s ease 3s forwards;
 }
 
 .logo-head {
@@ -40,4 +44,16 @@
 
 .headShake {
   animation: headShake 0.7s ease-in-out;
+}
+
+.updown {
+  animation: up_donw 1s ease infinite;
+}
+@keyframes up_donw {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
 }

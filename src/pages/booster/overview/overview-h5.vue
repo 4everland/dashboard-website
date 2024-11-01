@@ -264,7 +264,7 @@
             rounded
             class="progress-time"
           ></v-progress-linear>
-          <div class="fz-10 countTime">
+          <div class="fz-10 countTime" v-if="spinStartInfo">
             <count-down
               :endTimeStamp="spinStartInfo.endAt"
             ></count-down>
@@ -318,8 +318,19 @@ export default {
       return percent*100;
     },
     showGoldBall() {
-      return this.showGoldCoin || this.percent >= 100 || this.spinStartInfo.claimAt != null
+      if(Object.keys(this.spinStartInfo).length>0){
+        return  this.percent >= 100 || this.spinStartInfo.claimAt != null
+      } else {
+        return true
+      }
+      
+    },
+    showGoldProgress() {
+      const curTimeStamp = +new Date() / 1e3;
+      let leftTime = this.spinStartInfo.endAt - curTimeStamp
+      return this.spinStartInfo.claimAt == null && leftTime > 0
     }
+
   },
   created() {
     bus.$on("showMobileSheet", () => {
@@ -707,15 +718,14 @@ export default {
   height: 48px;
   gap: 0px;
   border-radius: 0px 8px 8px 0px;
-  opacity: 0px;
   background-image: url("/img/booster/spin/hands-coin.png"),
     linear-gradient(180deg, #ffad08, #ffde7f);
   background-size: auto, auto;
   background-position: left, 0 0;
   box-shadow: 0px 0px 20px 0px #FF940840;
-box-shadow: 0px 0px 10px 0px #F8630080;
+  box-shadow: 0px 0px 10px 0px #F8630080;
 
-box-shadow: 0px 0px 2.5px 0px #FFAD08BF;
+  box-shadow: 0px 0px 2.5px 0px #FFAD08BF;
 
   .right-img {
     position: absolute;
