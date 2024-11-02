@@ -378,6 +378,7 @@ export default {
       current: '',
       activeIndex: 0,
       currentclass: 'hideItem',
+      playing: false
     }
   },
   mounted() {
@@ -431,7 +432,11 @@ export default {
         }
         
       } else {
-        if( this.spinStartInfo.remainSpins==0) return;
+        if(this.spinStartInfo.remainSpins==0) return;
+        
+        if(this.playing) return;
+
+        this.playing = true;
         this.$refs.myLucky.play()
         const { data } = await playSpin(taskId);
         
@@ -471,6 +476,7 @@ export default {
     },
     endCallback(prize) {
       // console.log(prize);
+      this.playing = false;
     },
     opendialog() {
       this.dialog = true;
@@ -865,6 +871,7 @@ export default {
       width: 295px !important;
       height: 295px !important;
       transform: scale(1) !important;
+      overflow: hidden;
     }
     .luck_button {
       position: absolute;
