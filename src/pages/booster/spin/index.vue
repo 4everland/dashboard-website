@@ -9,7 +9,7 @@
           <div class="mobile-title fz-16 font-weight-bold">
             Points Swap
           </div>
-          <div class="d-flex align-center">
+          <div class="">
             <div class="spin-rules" @click="opendialog">Rule</div>
           </div>
         </div>
@@ -585,6 +585,7 @@ export default {
   }
   .nav-bar {
     height: 64px;
+    position: relative;
     .spin-rules {
       width: 47px;
       height: 23px;
@@ -594,9 +595,11 @@ export default {
       background: #12153680;
       border-top-left-radius: 16px;
       border-bottom-left-radius: 16px;
-      margin-right: -25px;
       text-align: center;
       line-height: 23px;
+      position: absolute;
+      top: 20px;
+      right: -24px;
    }
 
   }
