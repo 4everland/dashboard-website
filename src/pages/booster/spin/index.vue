@@ -266,6 +266,7 @@
     <SpinStartReward v-model="showStartClaim" @openStartNext="handleStartNext"></SpinStartReward>
     <SpinPlayReward v-model="showPlayReward"></SpinPlayReward>
     <SpinEndSorry v-model="showSpinEndSorry"></SpinEndSorry>
+    <SpinSwapAchieved v-model="showSwapAchieved"></SpinSwapAchieved>
 
   </div>
 </template>
@@ -282,6 +283,7 @@ import RewardOpenClaim from "../components/reward-open-claim.vue";
 import SpinStartReward from "../components/spin-start-reward.vue"
 import SpinPlayReward from "../components/spin-play-reward.vue"
 import SpinEndSorry from "../components/spin-end-sorry.vue"
+import SpinSwapAchieved from "../components/spin-swap-achieved.vue"
 
 import { fetchSpinStart, playSpin, fetchClaimList, claimSpinReward } from "@/api/booster";
 
@@ -296,7 +298,8 @@ export default {
     SpinPlayReward,
     countDown,
     SpinEndSorry,
-    BoosterPagination
+    BoosterPagination,
+    SpinSwapAchieved
   },
   computed: {
     ...mapState({
@@ -340,6 +343,7 @@ export default {
       showSpinSorry: false,
       showInvite: false,
       showSpinEndSorry: false,
+      showSwapAchieved: false,
       page: 1,
       size: 10,
       totalPages: 0,
