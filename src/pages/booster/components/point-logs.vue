@@ -161,6 +161,9 @@ export default {
               case "white_list_4":
                 it.log = `VoteRaffle with Cellula ${it.value} points.`;
                 break;
+              case "spin":
+                it.log = `Points Swap ${it.value} Points`;
+                break;
               case "quest":
                 it.log = it.name + " " + it.value + " points.";
                 break;
