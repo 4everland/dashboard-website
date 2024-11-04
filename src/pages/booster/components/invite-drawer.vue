@@ -15,70 +15,18 @@
       <v-container
         fluid
         class="d-flex flex-column"
-        style="padding: 24px 0 24px 16px; height: 100%"
+        style="padding: 24px 16px; height: 100%"
       >
-        <div
-          class="d-flex align-center justify-space-between mb-6"
-          style="gap: 8px"
-        >
-          <div class="drawer-title">Invite to Earn Ton Rewards!</div>
-          <div class="usdt-withdraw d-flex align-center justify-space-between">
-            <div>
-              <div class="fz-12">Balance</div>
-              <div
-                class="d-flex align-center"
-                @click="showWithdrawLogDialog = true"
-              >
-                <img src="/img/booster/ton-invite-icon.png" width="16" alt="" />
-                <ICountUp
-                  class="usdt-enabled ml-1 fz-20"
-                  :delay="1000"
-                  :endVal="tonCount"
-                  :options="{
-                    decimalPlaces: 4,
-                    useEasing: true,
-                    useGrouping: true,
-                    separator: ',',
-                    decimal: '.',
-                    prefix: '',
-                    suffix: '',
-                  }"
-                />
-                <img
-                  class="cursor-p"
-                  src="/img/booster/svg/right-arrow-b.svg"
-                  width="16"
-                  alt=""
-                />
-              </div>
-            </div>
+        <div class="drawer-title mb-6">Earn 5% Points for Every Invite!</div>
 
-            <v-btn
-              class="withdraw-btn"
-              :disabled="tonCount <= 0"
-              @click="handleWithdraw"
-              >Withdraw
-            </v-btn>
-          </div>
-        </div>
-
-        <InviteTaskContent class="flex-1"></InviteTaskContent>
-        <WithdrawDialog
-          v-model="showWithdrawDialog"
-          :amount="tonCount"
-        ></WithdrawDialog>
-
-        <WithdrawLogDialog v-model="showWithdrawLogDialog"></WithdrawLogDialog>
+        <InviteDetail></InviteDetail>
       </v-container>
     </v-navigation-drawer>
   </div>
 </template>
 <script>
 import { mapState } from "vuex";
-import ICountUp from "vue-countup-v2";
-import WithdrawDialog from "./withdraw-dialog.vue";
-import WithdrawLogDialog from "./withdraw-log-dialog.vue";
-import InviteTaskContent from "./invite-components/invite-task-content.vue";
+import InviteDetail from "./invite-components/invite-detail.vue";
 export default {
   computed: {
     ...mapState({
@@ -90,17 +38,11 @@ export default {
     },
   },
   components: {
-    InviteTaskContent,
-    ICountUp,
-    WithdrawDialog,
-    WithdrawLogDialog,
+    InviteDetail,
   },
 
   data() {
-    return {
-      showWithdrawDialog: false,
-      showWithdrawLogDialog: false,
-    };
+    return {};
   },
   methods: {
     handleToggle(val) {
@@ -110,17 +52,6 @@ export default {
         this.$store.dispatch("getInviteCount");
       } else {
         this.$store.commit("SET_INVITE_BAR", val);
-      }
-    },
-    handleWithdraw() {
-      this.showWithdrawDialog = true;
-    },
-  },
-  watch: {
-    showInviteDrawer(val) {
-      if (!val) {
-        this.showWithdrawDialog = false;
-        this.showWithdrawLogDialog = false;
       }
     },
   },
@@ -143,9 +74,6 @@ export default {
       font-weight: 500;
       color: #fff;
       text-shadow: 0px 0px 8px #6172f3;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
     }
 
     .usdt-withdraw {

@@ -166,7 +166,9 @@ export default {
     async getList() {
       try {
         const { data } = await fetchClaimUSDTLog(this.page, this.size);
-        this.usdtLogs = data.content;
+        if (data) {
+          this.usdtLogs = data.content;
+        }
       } catch (error) {
         console.log(error);
       }
