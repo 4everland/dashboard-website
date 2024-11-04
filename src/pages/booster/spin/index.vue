@@ -89,14 +89,13 @@
         </div>
         <div class="spin-content">
           <div class="spin-content-header-bg">
-            <div class="d-flex justify-start align-center" style="padding-top: 6px;">
-              <img src="/img/booster/spin/spin-icon.png" width="16" alt="" />
-              <div class="chip-text">100</div>
-            </div>
-            <div
-              class="d-flex align-center justify-space-between spin-content-topheader"
-            >
-              <div class="d-flex align-center spin-content-pro">
+            <div class="d-flex align-center justify-center spin-content-topheader">
+              <div>
+                <div class="d-flex justify-start align-center">
+                 <img src="/img/booster/spin/spin-icon.png" width="16" alt="" />
+                 <div class="chip-text">100</div>
+                </div>
+                <div class="d-flex align-center spin-content-pro">
                 <div class="progress-content">
                   <div class="progress">
                     <img
@@ -118,6 +117,7 @@
                   </div>
                 </div>
               </div>
+              </div>
               <div class="d-flex align-center cash-value">
                 ${{ spinStartInfo.cashValue }}
               </div>
@@ -136,7 +136,7 @@
             />
             <div class="luck_button" @click="startCallback">
               <div
-                class="d-flex align-center justify-center flex-column luck_button_wrap"
+                class="d-flex align-center justify-around flex-column luck_button_wrap"
                 v-if="percent < 100"
               >
                 <div class="luck_button_tips">
@@ -742,7 +742,7 @@ export default {
       background: linear-gradient(99.62deg, #ff3821 0%, #dc33d6 100%);
       position: relative;
       border-radius: 50px;
-      padding: 0 20px;
+      padding: 0 10px;
       font-size: 12px;
     }
     .chip-text {
@@ -757,13 +757,12 @@ export default {
       font-weight: 700;
       line-height: 30px;
       color: #FFDE7F;
-      margin-top: -8px;
     }
     .spin-content-topheader {
       margin-top: -16px;
       height: 100%;
       .spin-content-pro {
-        min-width: 230px;
+        min-width: 220px;
       }
       .font-16 {
         font-size: 16px;
