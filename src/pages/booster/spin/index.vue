@@ -6,21 +6,27 @@
           <div class="logo d-flex align-center" @click="backtoindex">
             <img src="/img/booster/spin/chevron-left.png" width="24" alt="" />
           </div>
-          <div class="mobile-title fz-16 font-weight-bold">
-            Points Swap
-          </div>
+          <div class="mobile-title fz-16 font-weight-bold">Points Swap</div>
           <div class="">
             <div class="spin-rules" @click="opendialog">Rule</div>
           </div>
         </div>
       </div>
-      <div class="congratulations-users d-flex align-center justify-center" :class="currentclass" v-if="list.length>0">
+      <div
+        class="congratulations-users d-flex align-center justify-center"
+        :class="currentclass"
+        v-if="list.length > 0"
+      >
         <img src="/img/booster/spin/congratulations.png" width="24" alt="" />
         <div>
-          Congrats <span style="font-weight: 700">{{(current.username || "unkown").cutStr(4, 4)}}!</span> Swapped {{ current.amount * 1e3 }}
+          Congrats
+          <span style="font-weight: 700"
+            >{{ (current.username || "unkown").cutStr(4, 4) }}!</span
+          >
+          Swapped {{ current.amount * 1e3 }}
           points for
           <span style="font-weight: 700; font-style: italic; font-size: 16px">
-            ${{current.amount}}
+            ${{ current.amount }}
           </span>
         </div>
       </div>
@@ -40,28 +46,58 @@
               </div>
             </div>
           </div>
-          <div class="spin-header-tips fz-14"><span class="spin-header-number">${{ spinStartInfo.cashValue }}</span> available, more point quota required</div>
-          <div class="spin-header-number-short">{{ (spinStartInfo.duration*10 - spinStartInfo.currentDuration*10)/10 }}</div>
-          <div class="d-flex align-center justify-space-between spin-header-quota">
+          <div class="spin-header-tips fz-14">
+            <span class="spin-header-number"
+              >${{ spinStartInfo.cashValue }}</span
+            >
+            available, more point quota required
+          </div>
+          <div class="spin-header-number-short">
+            {{
+              (spinStartInfo.duration * 10 -
+                spinStartInfo.currentDuration * 10) /
+              10
+            }}
+          </div>
+          <div
+            class="d-flex align-center justify-space-between spin-header-quota"
+          >
             <div class="d-flex justify-center flex-column">
               <div class="d-flex align-center fz-12">Point Quota Earned</div>
-              
-              <div class="d-flex align-center justify-center"> <span class="font-14 mr-1 quota-left">{{ spinStartInfo.currentDuration }} </span></div>
+
+              <div class="d-flex align-center justify-center">
+                <span class="font-14 mr-1 quota-left"
+                  >{{ spinStartInfo.currentDuration }}
+                </span>
+              </div>
             </div>
-            <div class="d-flex justify-center flex-column spin-content-top-right">
+            <div
+              class="d-flex justify-center flex-column spin-content-top-right"
+            >
               <div class="d-flex align-center fz-12">Point Quota Required</div>
-              <div class="d-flex align-center justify-center"> <span class="font-16 mr-1 quota-right">{{ (spinStartInfo.duration*10 - spinStartInfo.currentDuration*10)/10 }} </span></div>
-              
+              <div class="d-flex align-center justify-center">
+                <span class="font-16 mr-1 quota-right"
+                  >{{
+                    (spinStartInfo.duration * 10 -
+                      spinStartInfo.currentDuration * 10) /
+                    10
+                  }}
+                </span>
+              </div>
             </div>
           </div>
         </div>
         <div class="spin-content">
           <div class="spin-content-header-bg">
+            <div class="d-flex justify-start align-center" style="padding-top: 6px;">
+              <img src="/img/booster/spin/spin-icon.png" width="16" alt="" />
+              <div class="chip-text">100</div>
+            </div>
             <div
               class="d-flex align-center justify-space-between spin-content-topheader"
             >
               <div class="d-flex align-center spin-content-pro">
-                <div class="progress-content"> 
+                <div class="progress-content">
                   <div class="progress">
                     <img
                       style="border-radius: 12px"
@@ -82,10 +118,9 @@
                   </div>
                 </div>
               </div>
-              <div class="d-flex align-center">
+              <div class="d-flex align-center cash-value">
                 ${{ spinStartInfo.cashValue }}
               </div>
-              
             </div>
           </div>
           <div class="luckWrap d-flex justify-center">
@@ -100,16 +135,17 @@
               @end="endCallback"
             />
             <div class="luck_button" @click="startCallback">
-              
               <div
                 class="d-flex align-center justify-center flex-column luck_button_wrap"
-                v-if="percent<100"
+                v-if="percent < 100"
               >
                 <div class="luck_button_tips">
                   {{ spinStartInfo.remainSpins }}
                 </div>
                 <div class="font-weight-bold">Spin</div>
-                <div class="spin_left_time">{{ spinStartInfo.remainSpins }} Time</div>
+                <div class="spin_left_time">
+                  {{ spinStartInfo.remainSpins }} Time
+                </div>
 
                 <div class="luck_button_hands">
                   <img
@@ -134,9 +170,9 @@
             <div>Reset countdown</div>
             <div class="countdown">
               <count-down
-              :endTimeStamp="spinStartInfo.endAt"
-              @timeOver="timeOver"
-            ></count-down>
+                :endTimeStamp="spinStartInfo.endAt"
+                @timeOver="timeOver"
+              ></count-down>
             </div>
           </div>
 
@@ -147,7 +183,7 @@
                 height="48"
                 @click="handleShare"
               >
-              Invite new friends for more spins
+                Invite new friends for more spins
               </v-btn>
 
               <v-btn
@@ -174,9 +210,11 @@
             </thead>
             <tbody>
               <tr v-for="(item, i) in list" :key="i">
-                <td class="text-center">{{item.username.cutStr(4, 4)}}</td>
-                <td class="text-center">${{item.amount}}</td>
-                <td class="text-center">{{ new Date(item.claimAt * 1000).format() }}</td>
+                <td class="text-center">{{ item.username.cutStr(4, 4) }}</td>
+                <td class="text-center">${{ item.amount }}</td>
+                <td class="text-center">
+                  {{ new Date(item.claimAt * 1000).format() }}
+                </td>
               </tr>
             </tbody>
           </v-simple-table>
@@ -258,13 +296,18 @@
     <SpinSwapped v-model="showSwapped"></SpinSwapped>
     <SpinSorry v-model="showSpinSorry"></SpinSorry>
     <SpinInvite v-model="showInvite"></SpinInvite>
-    <RewardOpenReceived v-model="showRewardReceive" @openStartNext="showRewardClaim = true"></RewardOpenReceived>
+    <RewardOpenReceived
+      v-model="showRewardReceive"
+      @openStartNext="showRewardClaim = true"
+    ></RewardOpenReceived>
     <RewardOpenClaim v-model="showRewardClaim"></RewardOpenClaim>
-    <SpinStartReward v-model="showStartClaim" @openStartNext="handleStartNext"></SpinStartReward>
+    <SpinStartReward
+      v-model="showStartClaim"
+      @openStartNext="handleStartNext"
+    ></SpinStartReward>
     <SpinPlayReward v-model="showPlayReward"></SpinPlayReward>
     <SpinEndSorry v-model="showSpinEndSorry"></SpinEndSorry>
     <SpinSwapAchieved v-model="showSwapAchieved"></SpinSwapAchieved>
-
   </div>
 </template>
 
@@ -277,12 +320,17 @@ import SpinSorry from "../components/spin-sorry.vue";
 import SpinInvite from "../components/spin-invite.vue";
 import RewardOpenReceived from "../components/reward-open-received.vue";
 import RewardOpenClaim from "../components/reward-open-claim.vue";
-import SpinStartReward from "../components/spin-start-reward.vue"
-import SpinPlayReward from "../components/spin-play-reward.vue"
-import SpinEndSorry from "../components/spin-end-sorry.vue"
-import SpinSwapAchieved from "../components/spin-swap-achieved.vue"
+import SpinStartReward from "../components/spin-start-reward.vue";
+import SpinPlayReward from "../components/spin-play-reward.vue";
+import SpinEndSorry from "../components/spin-end-sorry.vue";
+import SpinSwapAchieved from "../components/spin-swap-achieved.vue";
 
-import { fetchSpinStart, playSpin, fetchClaimList, claimSpinReward } from "@/api/booster";
+import {
+  fetchSpinStart,
+  playSpin,
+  fetchClaimList,
+  claimSpinReward,
+} from "@/api/booster";
 
 export default {
   components: {
@@ -296,7 +344,7 @@ export default {
     countDown,
     SpinEndSorry,
     BoosterPagination,
-    SpinSwapAchieved
+    SpinSwapAchieved,
   },
   computed: {
     ...mapState({
@@ -312,12 +360,13 @@ export default {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
     percent() {
-      const percent = this.spinStartInfo.currentDuration / this.spinStartInfo.duration;
+      const percent =
+        this.spinStartInfo.currentDuration / this.spinStartInfo.duration;
       return percent * 100;
     },
     taskEnd() {
       const curTimeStamp = +new Date() / 1e3;
-      return curTimeStamp > this.spinStartInfo.endAt
+      return curTimeStamp > this.spinStartInfo.endAt;
     },
     copyValue() {
       return (
@@ -347,130 +396,139 @@ export default {
       list: [],
       blocks: [
         {
-          imgs: [{
-            src: '/img/booster/spin/bg.png',
-            width: '100%',
-            height: '100%',
-            rotate: true
-          }]
+          imgs: [
+            {
+              src: "/img/booster/spin/bg.png",
+              width: "100%",
+              height: "100%",
+              rotate: true,
+            },
+          ],
         },
       ],
       prizes: [
-        { title: '0' },
-        { title: '1' },
-        { title: '2' },
-        { title: '3' },
-        { title: '4' },
-        { title: '5' },
+        { title: "0" },
+        { title: "1" },
+        { title: "2" },
+        { title: "3" },
+        { title: "4" },
+        { title: "5" },
       ],
-      buttons: [{
-        radius: '45%',
-        imgs: [{
-            src: '/img/booster/spin/spin-arrow.png',
-            width: '80%',
-            top: '-100%'
-          }]
-      }],
+      buttons: [
+        {
+          radius: "45%",
+          imgs: [
+            {
+              src: "/img/booster/spin/spin-arrow.png",
+              width: "80%",
+              top: "-100%",
+            },
+          ],
+        },
+      ],
       defaultConfig: {
         offsetDegree: -30,
         accelerationTime: 1500,
         decelerationTime: 1500,
       },
-      current: '',
+      current: "",
       activeIndex: 0,
-      currentclass: 'hideItem',
-      playing: false
-    }
+      currentclass: "hideItem",
+      playing: false,
+    };
   },
   mounted() {
     this.init();
   },
   methods: {
-    async init(){
+    async init() {
       this.$store.dispatch("getInviteInfo");
-      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
+      let info = this.userInfo.username
+        ? this.userInfo.username.cutStr(6, 4)
+        : "unknown";
       const curTimeStamp = +new Date() / 1e3;
-      if(this.spinStartInfo.claimAt == null && (curTimeStamp < this.spinStartInfo.endAt)){
+      if (
+        this.spinStartInfo.claimAt == null &&
+        curTimeStamp < this.spinStartInfo.endAt
+      ) {
         const data = await fetchSpinStart();
-        if(data.data){
+        if (data.data) {
           this.$store.commit("SET_SPIN_INFO", data.data);
-          localStorage.setItem('spinInfo'+info, JSON.stringify(data.data));
+          localStorage.setItem("spinInfo" + info, JSON.stringify(data.data));
         } else {
-          this.$toast2(
-          "Sorry, try it again later",
-          "info"
-        );
+          this.$toast2("Sorry, try it again later", "info");
         }
       }
-      
-      let spinFirstStep = localStorage.getItem('spinFirstStep'+info);
-      if(spinFirstStep){
-        this.showStartClaim = true
-        localStorage.removeItem('spinFirstStep'+info);
+
+      let spinFirstStep = localStorage.getItem("spinFirstStep" + info);
+      if (spinFirstStep) {
+        this.showStartClaim = true;
+        localStorage.removeItem("spinFirstStep" + info);
       }
-      let spinInfo = localStorage.getItem('spinInfo'+info);
-      if(spinInfo){
+      let spinInfo = localStorage.getItem("spinInfo" + info);
+      if (spinInfo) {
         this.$store.commit("SET_SPIN_INFO", JSON.parse(spinInfo));
       }
       this.getList();
       this.showNotice();
     },
-    async startCallback () {
-      let taskId = this.spinStartInfo.taskId
-      if(this.percent >= 100) {
-        if(this.boosterInfo.totalPoint < this.spinStartInfo.duration){
-          this.showSpinSorry = true
-          return
-        } 
+    async startCallback() {
+      let taskId = this.spinStartInfo.taskId;
+      if (this.percent >= 100) {
+        if (this.boosterInfo.totalPoint < this.spinStartInfo.duration) {
+          this.showSpinSorry = true;
+          return;
+        }
         const curTimeStamp = +new Date() / 1e3;
-        if(curTimeStamp > this.spinStartInfo.endAt){
+        if (curTimeStamp > this.spinStartInfo.endAt) {
           this.showSpinEndSorry = true;
           return;
         }
-        const res = await claimSpinReward(taskId)
-        if(res.code == 200){
+        const res = await claimSpinReward(taskId);
+        if (res.code == 200) {
           this.showSwapped = true;
         }
-        
       } else {
-        if(this.spinStartInfo.remainSpins==0) return;
-        
-        if(this.playing) return;
+        if (this.spinStartInfo.remainSpins == 0) return;
+
+        if (this.playing) return;
 
         this.playing = true;
-        this.$refs.myLucky.play()
+        this.$refs.myLucky.play();
         const { data } = await playSpin(taskId);
-        
-        let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
-        
+
+        let info = this.userInfo.username
+          ? this.userInfo.username.cutStr(6, 4)
+          : "unknown";
+
         this.$store.commit("SET_SPIN_PLAYREWARD", data.reward);
-        let index = 0
-        if(data.reward.rewardType == 'spin'){
-          index = 0
+        let index = 0;
+        if (data.reward.rewardType == "spin") {
+          index = 0;
         } else {
-          index = 1
+          index = 1;
         }
-        this.$refs.myLucky.stop(index)
+        this.$refs.myLucky.stop(index);
         await this.$sleep(3000);
         this.$store.commit("SET_SPIN_INFO", data);
-        localStorage.setItem('spinInfo'+info, JSON.stringify(data));
-        this.showPlayReward = true
+        localStorage.setItem("spinInfo" + info, JSON.stringify(data));
+        this.showPlayReward = true;
       }
     },
-    async handleSwap (){
-      let taskId = this.spinStartInfo.taskId
-      if(this.percent >= 100) {
-        if(this.boosterInfo.totalPoint < this.spinStartInfo.duration){
-          this.showSpinSorry = true
-          return
-        } 
+    async handleSwap() {
+      let taskId = this.spinStartInfo.taskId;
+      if (this.percent >= 100) {
+        if (this.boosterInfo.totalPoint < this.spinStartInfo.duration) {
+          this.showSpinSorry = true;
+          return;
+        }
         const curTimeStamp = +new Date() / 1e3;
-        if(curTimeStamp > this.spinStartInfo.endAt){
+        if (curTimeStamp > this.spinStartInfo.endAt) {
           this.showSpinEndSorry = true;
           return;
         }
-        const res = await claimSpinReward(taskId)
-        if(res.code == 200){
+        const res = await claimSpinReward(taskId);
+        if (res.code == 200) {
           this.showSwapped = true;
         }
       }
@@ -489,9 +547,9 @@ export default {
       this.showStartClaim = false;
       this.showRewardReceive = true;
     },
-    handleStartNext () {
-      this.showStartClaim = false
-      this.showRewardReceive = true
+    handleStartNext() {
+      this.showStartClaim = false;
+      this.showRewardReceive = true;
     },
     handleShare() {
       if (this.isTgMiniApp) {
@@ -514,26 +572,27 @@ export default {
       this.list = data;
     },
     timeOver() {
-      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
-      localStorage.removeItem('spinInfo'+info);
-      this.$router.push('/boost');
+      let info = this.userInfo.username
+        ? this.userInfo.username.cutStr(6, 4)
+        : "unknown";
+      localStorage.removeItem("spinInfo" + info);
+      this.$router.push("/boost");
     },
     showNotice() {
-      let nextIndex = 1
+      let nextIndex = 1;
       setInterval(() => {
-        nextIndex = this.activeIndex + 1
+        nextIndex = this.activeIndex + 1;
         if (nextIndex > this.list.length - 1) {
-          nextIndex = 0
+          nextIndex = 0;
         }
-        this.currentclass = 'hideItem'
+        this.currentclass = "hideItem";
         setTimeout(() => {
-          this.currentclass = 'infoshow'
-          this.current = this.list[this.activeIndex]
-          this.activeIndex = nextIndex
-        }, 1000)
-      }, 5000)
+          this.currentclass = "infoshow";
+          this.current = this.list[this.activeIndex];
+          this.activeIndex = nextIndex;
+        }, 1000);
+      }, 5000);
     },
-    
   },
 };
 </script>
@@ -552,7 +611,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  .nav-mobile{
+  .nav-mobile {
     height: 64px;
   }
   .containerin {
@@ -601,11 +660,10 @@ export default {
       position: absolute;
       top: 20px;
       right: -24px;
-   }
-
+    }
   }
   .spin-header {
-    background: linear-gradient(0deg, #F5F8FF, #F5F8FF);
+    background: linear-gradient(0deg, #f5f8ff, #f5f8ff);
     border: 4px solid #2d31a640;
     backdrop-filter: blur(39.5px);
     height: 244px;
@@ -615,8 +673,8 @@ export default {
     .spin-header-img {
       margin-top: -30px;
     }
-    .spin-header-name{
-      background: #6172F3;
+    .spin-header-name {
+      background: #6172f3;
       font-size: 12px;
       height: 20px;
       border-radius: 25px;
@@ -635,14 +693,14 @@ export default {
       text-align: center;
       text-shadow: 1px 2px 0px #ff9408;
     }
-    .spin-header-number-short{
+    .spin-header-number-short {
       font-size: 48px;
       font-family: "Inter", sans-serif;
       font-style: italic;
       font-weight: 700;
-      color: #FF9408;
+      color: #ff9408;
       text-align: center;
-      text-shadow: 1px 2px 0px #FFDE7F;
+      text-shadow: 1px 2px 0px #ffde7f;
     }
     .spin-header-tips {
       text-align: center;
@@ -650,17 +708,17 @@ export default {
     }
     .spin-header-quota {
       color: #667085;
-      background-color: #C7D7FE;
+      background-color: #c7d7fe;
       border-radius: 8px;
       height: 100px;
       margin: 0 20px;
       padding: 0 10px;
-      .quota-left{
+      .quota-left {
         color: #121536;
         margin-bottom: 45px;
       }
-      .quota-right{
-        color: #FF9408;
+      .quota-right {
+        color: #ff9408;
         margin-bottom: 45px;
         font-weight: 700;
       }
@@ -681,15 +739,28 @@ export default {
     padding: 20px 18px;
     .spin-content-header-bg {
       height: 46px;
-      background: linear-gradient(99.62deg, #FF3821 0%, #DC33D6 100%);
+      background: linear-gradient(99.62deg, #ff3821 0%, #dc33d6 100%);
       position: relative;
       border-radius: 50px;
       padding: 0 20px;
       font-size: 12px;
     }
-
-    
+    .chip-text {
+      color: #fff;
+      font-size: 12px;
+      line-height: 16px;
+      font-weight: 700;
+    }
+    .cash-value {
+      font-size: 24px;
+      font-style: italic;
+      font-weight: 700;
+      line-height: 30px;
+      color: #FFDE7F;
+      margin-top: -8px;
+    }
     .spin-content-topheader {
+      margin-top: -16px;
       height: 100%;
       .spin-content-pro {
         min-width: 230px;
@@ -707,7 +778,7 @@ export default {
     position: relative;
     height: 16px;
     border-radius: 12px;
-    border: 2px solid #FFFFFF80;
+    border: 2px solid #ffffff80;
     background: #17191d;
     width: 100%;
     .progress {
@@ -777,7 +848,12 @@ export default {
     width: 100%;
     min-height: 200px;
     margin-top: -80px;
-    background: linear-gradient(180deg, rgba(57, 59, 62, 0.9) 25.52%, rgba(36, 39, 42, 0.9) 100%), #4C5277;
+    background: linear-gradient(
+        180deg,
+        rgba(57, 59, 62, 0.9) 25.52%,
+        rgba(36, 39, 42, 0.9) 100%
+      ),
+      #4c5277;
     background-blend-mode: overlay;
     border-radius: 24px;
     padding: 20px;
@@ -791,8 +867,8 @@ export default {
       }
       :deep td {
         font-size: 12px;
-        padding-left:2px;
-        padding-right:2px;
+        padding-left: 2px;
+        padding-right: 2px;
         border-bottom: 1px solid rgba(255, 255, 255, 0.25) !important;
       }
 
@@ -839,21 +915,21 @@ export default {
       border-radius: 50%;
       color: #fff;
       cursor: pointer;
-      .luck_button_tips{
+      .luck_button_tips {
         width: 24px;
         height: 24px;
         border-radius: 24px;
         font-size: 12px;
         line-height: 16px;
         position: absolute;
-        background: #F04438;
+        background: #f04438;
         text-align: center;
         color: #fff;
         padding: 4px;
         right: 0;
         top: 0;
       }
-      .luck_button_hands_img{
+      .luck_button_hands_img {
         position: absolute;
         right: 0;
         bottom: -10px;

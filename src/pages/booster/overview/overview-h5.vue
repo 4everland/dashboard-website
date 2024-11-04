@@ -244,19 +244,19 @@
           </div>
           <div class="top-card square-box" id="mobile-gold-ball">
             <img src="/img/booster/spin/reward-ball.png" width="80" alt="" />
+            <div class="ball-text">$100</div>
           </div>
         </div>
 
-         <!-- <div class="gold-square" @click="$emit('openClaim')" style="margin-top:60px;">
-          <div style="position: relative">
-            <div style="width: 10px; height: 10px"></div>
-          </div>
-          <div class="top-card square-box" id="mobile-gold-ball">
-            <img src="/img/booster/spin/reward-ball.png" width="80" alt="" />
-          </div>
-        </div> -->
-
-        <div v-if="!showGoldBall" class="points-swap d-flex flex-column align-center justify-center" @click="handleStartSpin" style="box-shadow: 0px 0px 20px 0px #FF940840, 0px 0px 10px 0px #F8630080, 0px 0px 2.5px 0px #FFAD08BF;">
+        <div
+          v-if="!showGoldBall"
+          class="points-swap d-flex flex-column align-center justify-center"
+          @click="handleStartSpin"
+          style="
+            box-shadow: 0px 0px 20px 0px #ff940840, 0px 0px 10px 0px #f8630080,
+              0px 0px 2.5px 0px #ffad08bf;
+          "
+        >
           <div class="points-text">Point Swap</div>
           <v-progress-linear
             :value="percent"
@@ -265,9 +265,7 @@
             class="progress-time"
           ></v-progress-linear>
           <div class="fz-10 countTime" v-if="spinStartInfo">
-            <count-down
-              :endTimeStamp="spinStartInfo.endAt"
-            ></count-down>
+            <count-down :endTimeStamp="spinStartInfo.endAt"></count-down>
           </div>
           <img
             class="right-img"
@@ -301,7 +299,9 @@ export default {
     return {
       sheet: false,
       showGoldCoin: false,
-      timeLeft: localStorage.getItem('countdownTime') ? parseInt(localStorage.getItem('countdownTime')) : 86400,
+      timeLeft: localStorage.getItem("countdownTime")
+        ? parseInt(localStorage.getItem("countdownTime"))
+        : 86400,
     };
   },
   computed: {
@@ -311,26 +311,25 @@ export default {
     }),
     percent() {
       const curTimeStamp = +new Date() / 1e3;
-      let percent = Math.ceil(curTimeStamp - this.spinStartInfo.startAt)/86400;
-      if(percent>1){
-        percent = 1
+      let percent =
+        Math.ceil(curTimeStamp - this.spinStartInfo.startAt) / 86400;
+      if (percent > 1) {
+        percent = 1;
       }
-      return percent*100;
+      return percent * 100;
     },
     showGoldBall() {
-      if(Object.keys(this.spinStartInfo).length>0){
-        return  this.percent >= 100 || this.spinStartInfo.claimAt != null
+      if (Object.keys(this.spinStartInfo).length > 0) {
+        return this.percent >= 100 || this.spinStartInfo.claimAt != null;
       } else {
-        return true
+        return true;
       }
-      
     },
     showGoldProgress() {
       const curTimeStamp = +new Date() / 1e3;
-      let leftTime = this.spinStartInfo.endAt - curTimeStamp
-      return this.spinStartInfo.claimAt == null && leftTime > 0
-    }
-
+      let leftTime = this.spinStartInfo.endAt - curTimeStamp;
+      return this.spinStartInfo.claimAt == null && leftTime > 0;
+    },
   },
   created() {
     bus.$on("showMobileSheet", () => {
@@ -344,7 +343,7 @@ export default {
     MobilePointsSheet,
     TokenDialog,
     WalletConnect,
-    countDown
+    countDown,
   },
   watch: {
     "boosterInfo.protectExpiredAt"() {
@@ -352,42 +351,45 @@ export default {
     },
   },
   mounted() {
-    this.init()
+    this.init();
   },
   methods: {
     onConnetc() {
       this.$refs.walletConnect.onShowConnect();
     },
     init() {
-      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
-      let spinInfo = localStorage.getItem('spinInfo'+info);
-      if(spinInfo){
+      let info = this.userInfo.username
+        ? this.userInfo.username.cutStr(6, 4)
+        : "unknown";
+      let spinInfo = localStorage.getItem("spinInfo" + info);
+      if (spinInfo) {
         this.$store.commit("SET_SPIN_INFO", JSON.parse(spinInfo));
       } else {
         this.showGoldCoin = true;
       }
     },
     handleStartSpin() {
-      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
-      localStorage.removeItem('spinFirstStep'+info);
-      this.$router.push('/boost/spin');
+      let info = this.userInfo.username
+        ? this.userInfo.username.cutStr(6, 4)
+        : "unknown";
+      localStorage.removeItem("spinFirstStep" + info);
+      this.$router.push("/boost/spin");
     },
     async handleStartReward() {
       const data = await fetchSpinStart();
-      if(data.data){
+      if (data.data) {
         this.$store.commit("SET_SPIN_INFO", data.data);
-        let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
+        let info = this.userInfo.username
+          ? this.userInfo.username.cutStr(6, 4)
+          : "unknown";
         //this.$store.dispatch("getSpinInfo");
-        localStorage.setItem('spinInfo'+info, JSON.stringify(data.data));
-        localStorage.setItem('spinFirstStep'+info, 1);
-        this.$emit('startReward')
+        localStorage.setItem("spinInfo" + info, JSON.stringify(data.data));
+        localStorage.setItem("spinFirstStep" + info, 1);
+        this.$emit("startReward");
       } else {
-        this.$toast2(
-          "Sorry, try it again later",
-          "info"
-        );
+        this.$toast2("Sorry, try it again later", "info");
       }
-    }
+    },
   },
 };
 </script>
@@ -522,6 +524,13 @@ export default {
     transform: translateX(-50%);
     top: -20%;
   }
+}
+.ball-text {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 12px;
+  text-align: center;
+  margin-top: -20px;
 }
 .computing-boost {
   position: absolute;
@@ -722,10 +731,10 @@ export default {
     linear-gradient(180deg, #ffad08, #ffde7f);
   background-size: auto, auto;
   background-position: left, 0 0;
-  box-shadow: 0px 0px 20px 0px #FF940840;
-  box-shadow: 0px 0px 10px 0px #F8630080;
+  box-shadow: 0px 0px 20px 0px #ff940840;
+  box-shadow: 0px 0px 10px 0px #f8630080;
 
-  box-shadow: 0px 0px 2.5px 0px #FFAD08BF;
+  box-shadow: 0px 0px 2.5px 0px #ffad08bf;
 
   .right-img {
     position: absolute;
@@ -743,7 +752,7 @@ export default {
     width: 80px;
     margin: 2px 0;
     border: 1px solid #12153680;
-    background: #121536BF;
+    background: #121536bf;
   }
   .points-text {
     font-size: 12px !important;
@@ -753,7 +762,7 @@ export default {
     color: #121536 !important;
   }
 }
-.countTime{
+.countTime {
   color: #121536;
   line-height: 12px;
 }
