@@ -89,34 +89,40 @@
         </div>
         <div class="spin-content">
           <div class="spin-content-header-bg">
-            <div class="d-flex align-center justify-center spin-content-topheader">
-              <div>
+            <div
+              class="d-flex align-center justify-center spin-content-topheader"
+            >
+              <div style="width: 80%">
                 <div class="d-flex justify-start align-center">
-                 <img src="/img/booster/spin/spin-icon.png" width="16" alt="" />
-                 <div class="chip-text">100</div>
+                  <img
+                    src="/img/booster/spin/spin-icon.png"
+                    width="16"
+                    alt=""
+                  />
+                  <div class="chip-text">100</div>
                 </div>
                 <div class="d-flex align-center spin-content-pro">
-                <div class="progress-content">
-                  <div class="progress">
-                    <img
-                      style="border-radius: 12px"
-                      class="d-b"
-                      :width="80"
-                      src="/img/booster/4ever-token-progress-mask.png"
-                      height="12"
-                      alt=""
-                    />
-                    <div class="zebra-stripe-content"></div>
+                  <div class="progress-content">
+                    <div class="progress">
+                      <img
+                        style="border-radius: 12px"
+                        class="d-b"
+                        :width="80"
+                        src="/img/booster/4ever-token-progress-mask.png"
+                        height="12"
+                        alt=""
+                      />
+                      <div class="zebra-stripe-content"></div>
 
-                    <img
-                      class="hot-icon"
-                      src="/img/booster/progress-hot.png"
-                      height="26"
-                      alt=""
-                    />
+                      <img
+                        class="hot-icon"
+                        src="/img/booster/progress-hot.png"
+                        height="26"
+                        alt=""
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
               </div>
               <div class="d-flex align-center cash-value">
                 ${{ spinStartInfo.cashValue }}
@@ -738,6 +744,7 @@ export default {
     border-radius: 24px;
     padding: 20px 18px;
     .spin-content-header-bg {
+      margin-top: 20px;
       height: 46px;
       background: linear-gradient(99.62deg, #ff3821 0%, #dc33d6 100%);
       position: relative;
@@ -756,13 +763,14 @@ export default {
       font-style: italic;
       font-weight: 700;
       line-height: 30px;
-      color: #FFDE7F;
+      color: #ffde7f;
     }
     .spin-content-topheader {
       margin-top: -16px;
       height: 100%;
       .spin-content-pro {
         min-width: 220px;
+        width: 100%;
       }
       .font-16 {
         font-size: 16px;
