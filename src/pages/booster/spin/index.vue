@@ -7,8 +7,14 @@
             <img src="/img/booster/spin/chevron-left.png" width="24" alt="" />
           </div>
           <div class="mobile-title fz-16 font-weight-bold">Points Swap</div>
-          <div class="">
-            <div class="spin-rules" @click="opendialog">Rule</div>
+          <div>
+            <div class="spin-rules d-flex justify-center align-center" @click="opendialog">
+              <img
+                src="/img/booster/spin/rules-icon.svg"
+                width="16"
+                alt=""
+              /> &nbsp;Rules
+            </div>
           </div>
         </div>
       </div>
@@ -653,7 +659,7 @@ export default {
     height: 64px;
     position: relative;
     .spin-rules {
-      width: 47px;
+      width: 67px;
       height: 23px;
       font-family: "Inter", sans-serif;
       font-size: 12px;
