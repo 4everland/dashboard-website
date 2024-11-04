@@ -98,7 +98,6 @@ export default {
       countdown: 10,
       showDialog: false,
       countdownInterval: null,
-      showNextSpinTime: false,
     };
   },
 
@@ -159,8 +158,8 @@ export default {
       this.countdown = 10;
     },
     async handleQuoteNext(){
-      this.showNextSpinTime = true;
       this.$emit('input', false);
+      this.$emit('showpoint');
     },
     handleShowNextStartSpin() {
       this.$emit('input', false);

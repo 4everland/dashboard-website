@@ -58,12 +58,25 @@
             >
             available, more point quota required
           </div>
-          <div class="spin-header-number-short">
-            {{
+          <div class="spin-header-number-short point_pulse">
+            <ICountUp
+                  class="points mx-1"
+                  :delay="1000"
+                  :endVal="shortPoint"
+                  :options="{
+                    useEasing: true,
+                    useGrouping: true,
+                    separator: ',',
+                    decimal: '.',
+                    prefix: '',
+                    suffix: '',
+                  }"
+                />
+            <!-- {{
               (spinStartInfo.duration * 10 -
                 spinStartInfo.currentDuration * 10) /
               10
-            }}
+            }} -->
           </div>
           <div
             class="d-flex align-center justify-space-between spin-header-quota"
@@ -109,11 +122,11 @@
                 </div>
                 <div class="d-flex align-center spin-content-pro">
                   <div class="progress-content">
-                    <div class="progress">
+                    <div class="progress" :style="{ width: percent + '%'}" >
                       <img
                         style="border-radius: 12px"
                         class="d-b"
-                        :width="percent+'%'"
+                        width="100%"
                         src="/img/booster/4ever-token-progress-mask.png"
                         height="12"
                         alt=""
@@ -167,6 +180,14 @@
                     height="40"
                     alt=""
                   />
+                </div>
+                <div class="luck_button_point" v-show="showpoint">
+                  <img
+                    class="luck_button_point_img coin_fly"
+                    src="/img/booster/spin/icon_Points_Quota.png"
+                    width="37"
+                    height="40"
+                  >
                 </div>
               </div>
               <div
@@ -326,7 +347,7 @@
       v-model="showStartClaim"
       @openStartNext="handleStartNext"
     ></SpinStartReward>
-    <SpinPlayReward v-model="showPlayReward"></SpinPlayReward>
+    <SpinPlayReward v-model="showPlayReward" @showpoint="doCoinAnim"></SpinPlayReward>
     <SpinEndSorry v-model="showSpinEndSorry"></SpinEndSorry>
     <SpinSwapAchieved v-model="showSwapAchieved" @openSwapDialog="handleSwap"></SpinSwapAchieved>
   </div>
@@ -345,6 +366,7 @@ import SpinStartReward from "../components/spin-start-reward.vue";
 import SpinPlayReward from "../components/spin-play-reward.vue";
 import SpinEndSorry from "../components/spin-end-sorry.vue";
 import SpinSwapAchieved from "../components/spin-swap-achieved.vue";
+import ICountUp from "vue-countup-v2";
 
 import {
   fetchSpinStart,
@@ -366,6 +388,7 @@ export default {
     SpinEndSorry,
     BoosterPagination,
     SpinSwapAchieved,
+    ICountUp
   },
   computed: {
     ...mapState({
@@ -398,6 +421,15 @@ export default {
         this.inviteInfo.inviteCode
       );
     },
+    shortPoint() {
+      if(this.spinStartInfo.duration){
+        return (this.spinStartInfo.duration * 10 -
+          this.spinStartInfo.currentDuration * 10) / 10 ;
+      } else {
+        return 0
+      }
+      
+    }
   },
   data() {
     return {
@@ -411,10 +443,12 @@ export default {
       showInvite: false,
       showSpinEndSorry: false,
       showSwapAchieved: false,
+      showpoint: false,
       page: 1,
       size: 10,
       totalPages: 0,
       list: [],
+      spinData: {},
       blocks: [
         {
           imgs: [
@@ -542,10 +576,25 @@ export default {
         }
         this.$refs.myLucky.stop(index);
         await this.$sleep(3000);
-        this.$store.commit("SET_SPIN_INFO", data);
-        localStorage.setItem("spinInfo" + info, JSON.stringify(data));
+        this.spinData = data;
+        if (data.reward.rewardType == "spin") {
+          this.saveData();
+        }
+        
         this.showPlayReward = true;
         this.playing = false;
+      }
+    },
+    saveData(){
+      let info = this.userInfo.username
+        ? this.userInfo.username.cutStr(6, 4)
+        : "unknown";
+      this.$store.commit("SET_SPIN_INFO", this.spinData);
+      localStorage.setItem("spinInfo" + info, JSON.stringify(this.spinData));
+    },
+    async handleShowSwapDialog() {
+      if (this.percent >= 100){
+        this.showSwapAchieved = true;
       }
     },
     async handleSwap() {
@@ -641,6 +690,14 @@ export default {
           this.activeIndex = nextIndex;
         }, 1000);
       }, 5000);
+    },
+    doCoinAnim() {
+      this.showpoint = true;
+      setTimeout(() => {
+        this.showpoint = false;
+      }, 600);
+      this.saveData();
+      this.handleShowSwapDialog()
     },
   },
 };
@@ -988,6 +1045,11 @@ export default {
         padding: 4px;
         right: 0;
         top: 0;
+      }
+      .luck_button_point{
+        position: absolute;
+        top: -53px;
+        right: 27%;
       }
       .luck_button_hands_img {
         position: absolute;

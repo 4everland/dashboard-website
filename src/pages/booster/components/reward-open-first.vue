@@ -204,10 +204,6 @@ export default {
     linear-gradient(to top right, rgba(199, 81, 255, 0) 0%, #c751ff 50%) top
       right / 50% 50% no-repeat,
     linear-gradient(90deg, rgba(255, 53, 53, 0) 28%, #ff3535 100%), #ff35ba;
-  box-shadow: 0px 3px 1px 0px rgba(255, 255, 255, 0.4) inset,
-    0px 4px 1px 0px rgba(255, 255, 255, 0.86) inset,
-    0px 0px 6px 0px rgba(0, 0, 0, 0.2) inset,
-    0px -2px 5px 0px rgba(0, 0, 0, 0.3) inset;
   .btn-text{
     font-family: Inter;
     font-size: 16px;

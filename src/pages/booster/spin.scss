@@ -9,7 +9,7 @@
     opacity: 1;
   }
   90% {
-    transform: translate(140px, -160px);
+    transform: translate(0px, -240px);
     opacity: 0.6;
   }
   100% {
@@ -56,4 +56,7 @@
   50% {
     transform: translateY(10px);
   }
+}
+.point_pulse {
+  animation: pulse 2s ease-in-out infinite;
 }

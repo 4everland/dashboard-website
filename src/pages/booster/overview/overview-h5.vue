@@ -242,7 +242,7 @@
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>
           </div>
-          <div class="top-card square-box" id="mobile-gold-ball">
+          <div class="top-card square-box-up" id="mobile-gold-ball">
             <img src="/img/booster/spin/reward-ball.png" width="80" alt="" />
             <div class="ball-text">$100</div>
           </div>
@@ -404,8 +404,20 @@ export default {
     transform: translateY(0);
   }
 }
+@keyframes bounceup {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10%);
+  }
+}
 .square-box {
   animation: bounce 2s infinite linear;
+}
+.square-box-up {
+  animation: bounceup 2s infinite linear;
 }
 .not-login {
   position: absolute;
