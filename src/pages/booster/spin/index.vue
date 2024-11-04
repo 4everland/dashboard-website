@@ -40,27 +40,33 @@
               </div>
             </div>
           </div>
-          <div class="spin-header-number">${{ spinStartInfo.cashValue }}</div>
-          <div class="spin-header-tips">Available For Swap</div>
+          <div class="spin-header-tips fz-14"><span class="spin-header-number">${{ spinStartInfo.cashValue }}</span> available, more point quota required</div>
+          <div class="spin-header-number-short">{{ (spinStartInfo.duration*10 - spinStartInfo.currentDuration*10)/10 }}</div>
+          <div class="d-flex align-center justify-space-between spin-header-quota">
+            <div class="d-flex justify-center flex-column">
+              <div class="d-flex align-center fz-12">Point Quota Earned</div>
+              
+              <div class="d-flex align-center justify-center"> <span class="font-14 mr-1 quota-left">{{ spinStartInfo.currentDuration }} </span></div>
+            </div>
+            <div class="d-flex justify-center flex-column spin-content-top-right">
+              <div class="d-flex align-center fz-12">Point Quota Required</div>
+              <div class="d-flex align-center justify-center"> <span class="font-16 mr-1 quota-right">{{ (spinStartInfo.duration*10 - spinStartInfo.currentDuration*10)/10 }} </span></div>
+              
+            </div>
+          </div>
         </div>
         <div class="spin-content">
           <div class="spin-content-header-bg">
             <div
               class="d-flex align-center justify-space-between spin-content-topheader"
             >
-              <div class="d-flex justify-center flex-column">
-                <div class="d-flex align-center">Swap eligibility</div>
-                
-                <div class="d-flex align-center"><img src="/img/booster/spin/icon_point.png" width="16" alt="" /> <span class="font-16 mr-1">{{ spinStartInfo.currentDuration }} </span> Points</div>
-              </div>
-              <div class="d-flex justify-center flex-column spin-content-top-right">
-                <div class="d-flex align-center">Points Quote</div>
-                <div class="progress-content">
+              <div class="d-flex align-center spin-content-pro">
+                <div class="progress-content"> 
                   <div class="progress">
                     <img
                       style="border-radius: 12px"
                       class="d-b"
-                      :width="percent"
+                      :width="80"
                       src="/img/booster/4ever-token-progress-mask.png"
                       height="12"
                       alt=""
@@ -69,26 +75,17 @@
 
                     <img
                       class="hot-icon"
-                      src="/img/booster/spin/spin-coin-progress.png"
+                      src="/img/booster/progress-hot.png"
                       height="26"
                       alt=""
-                      @click="handleSwap"
                     />
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="spin-points-tooltip" v-if="percent<100">
-              <div class="arrow-up"></div>
-              <div class="points-short">
-                {{ (spinStartInfo.duration*10 - spinStartInfo.currentDuration*10)/10 }} <span class="point-text">points short to swap</span>
+              <div class="d-flex align-center">
+                ${{ spinStartInfo.cashValue }}
               </div>
-            </div>
-            <div class="spin-swap-tooltip" v-if="percent==100">
-              <div class="arrow-up"></div>
-              <div class="points-short">
-                Swap
-              </div>
+              
             </div>
           </div>
           <div class="luckWrap d-flex justify-center">
@@ -608,7 +605,7 @@ export default {
 
   }
   .spin-header {
-    background: linear-gradient(142.14deg, #f5f8ff 9.63%, #c7d7fe 59.92%);
+    background: linear-gradient(0deg, #F5F8FF, #F5F8FF);
     border: 4px solid #2d31a640;
     backdrop-filter: blur(39.5px);
     height: 244px;
@@ -630,7 +627,7 @@ export default {
       font-weight: bold;
     }
     .spin-header-number {
-      font-size: 32px;
+      font-size: 20px;
       font-family: "Inter", sans-serif;
       font-style: italic;
       font-weight: 700;
@@ -638,15 +635,41 @@ export default {
       text-align: center;
       text-shadow: 1px 2px 0px #ff9408;
     }
+    .spin-header-number-short{
+      font-size: 48px;
+      font-family: "Inter", sans-serif;
+      font-style: italic;
+      font-weight: 700;
+      color: #FF9408;
+      text-align: center;
+      text-shadow: 1px 2px 0px #FFDE7F;
+    }
     .spin-header-tips {
       text-align: center;
       color: #121536;
+    }
+    .spin-header-quota {
+      color: #667085;
+      background-color: #C7D7FE;
+      border-radius: 8px;
+      height: 100px;
+      margin: 0 20px;
+      padding: 0 10px;
+      .quota-left{
+        color: #121536;
+        margin-bottom: 45px;
+      }
+      .quota-right{
+        color: #FF9408;
+        margin-bottom: 45px;
+        font-weight: 700;
+      }
     }
   }
   .spin-content {
     height: 512px;
     position: relative;
-    top: -100px;
+    top: -45px;
     background: linear-gradient(
         180deg,
         rgba(57, 59, 62, 0.9) 25.52%,
@@ -658,99 +681,23 @@ export default {
     padding: 20px 18px;
     .spin-content-header-bg {
       height: 46px;
-      margin: 0 20px;
-      background: #1102fc80;
+      background: linear-gradient(99.62deg, #FF3821 0%, #DC33D6 100%);
       position: relative;
+      border-radius: 50px;
       padding: 0 20px;
       font-size: 12px;
     }
 
-    .spin-points-tooltip {
-      position: absolute;
-      top: 40px;
-      left: 0;
-      z-index: 3;
-      .arrow-up {
-        margin-left: 50px;
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent; 
-        border-right: 6px solid transparent; 
-        border-bottom: 8px solid #ffde7f; 
-      }
-      .points-short {
-        width: 107px;
-        height: 28px;
-        padding: 2px 12px 2px 12px;
-        border-radius: 16px;
-        background: #ffde7f;
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 12px;
-        text-align: center;
-        color: #f86300;
-        .point-text{
-          font-weight: 400 !important;
-        }
-      }
-    }
-    .spin-swap-tooltip {
-      position: absolute;
-      top: 37px;
-      right: 2px;
-      z-index: 3;
-      .arrow-up {
-        margin-left: 22px;
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent; 
-        border-right: 6px solid transparent; 
-        border-bottom: 8px solid #ffde7f; 
-      }
-      .points-short {
-        width: 57px;
-        height: 16px;
-        padding: 2px 12px 2px 12px;
-        border-radius: 16px;
-        background: #ffde7f;
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 12px;
-        text-align: center;
-        color: #f86300;
-        .point-text{
-          font-weight: 400 !important;
-        }
-      }
-    }
+    
     .spin-content-topheader {
       height: 100%;
+      .spin-content-pro {
+        min-width: 230px;
+      }
       .font-16 {
         font-size: 16px;
         font-weight: bold;
       }
-    }
-    .spin-content-header-bg::before {
-      content: "";
-      position: absolute;
-      width: 43px;
-      height: 46px;
-      background: url("/img/booster/spin/icon_left.png");
-      background-size: cover;
-      margin-left: -20px;
-      left: 0;
-      z-index: 1;
-    }
-    .spin-content-header-bg::after {
-      content: "";
-      position: absolute;
-      width: 43px;
-      height: 46px;
-      background: url("/img/booster/spin/icon_right.png");
-      background-size: cover;
-      z-index: 1;
-      right: -20px;
-      top: 0;
     }
   }
   .spin-content-top-right {
@@ -758,9 +705,11 @@ export default {
   }
   .progress-content {
     position: relative;
-    height: 20px;
+    height: 16px;
     border-radius: 12px;
-    padding: 0 4px;
+    border: 2px solid #FFFFFF80;
+    background: #17191d;
+    width: 100%;
     .progress {
       position: absolute;
       width: 97%;
@@ -780,7 +729,7 @@ export default {
       .hot-icon {
         position: absolute;
         right: -1%;
-        top: -55%;
+        top: -87%;
       }
       @keyframes run {
         from {
