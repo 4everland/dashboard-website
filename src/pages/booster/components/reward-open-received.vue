@@ -43,7 +43,7 @@
         </div>
       </div>
 
-      <div class="daily-boost" v-if="!showNextSpinTime">
+      <div class="daily-boost" v-if="!showNextSpinTime" :class="currentclass">
         <div class="d-flex align-center justify-center">
          <img
             src="/img/booster/spin/congratulations.png"
@@ -65,7 +65,7 @@
           width="240"
           alt=""
         />
-        <div class="reward-number"><span style="font-size:30px">+</span>{{ spinStartInfo.currentDuration }}</div>
+        <div class="reward-number"><span style="font-size:30px">+</span>{{ current }}</div>
        </div>
         <div style="padding-top:60px;">
            <v-btn
@@ -95,17 +95,35 @@ export default {
       list: [],
       checkinInfo: null,
       checkinLoading: false,
-      countdown: 10,
+      countdown: 5,
       showDialog: false,
       countdownInterval: null,
       showNextSpinTime: false,
+      spinList1:[
+        50,30
+      ],
+      spinList2:[
+        100,100,70,30
+      ],
+      spinList3:[
+        200,100,100,100
+      ],
+      spinList:[],
+      current: "",
+      activeIndex: 0,
+      currentclass: "hideItem",
+
     };
   },
   watch: {
     value(newVal, oldVal) {
       if(newVal === true){
         this.startCountdown()
+        if(!this.showNextSpinTime){
+          this.showNext()
+        }
       }
+
     },
   },
   computed: {
@@ -133,7 +151,7 @@ export default {
     },
   },
   mounted(){
-
+    
   },
   methods: { 
     sleep(timestamp) {
@@ -142,30 +160,77 @@ export default {
       });
     },
     startCountdown() {
-      this.countdown = 10;
-      this.countdownInterval = setInterval(() => {
+      this.countdown = 5;
+      this.countdownInterval = setInterval(async () => {
         if (this.countdown > 0) {
           this.countdown--;
         } else {
           this.resetCountdown();
-          this.$emit('input', false);
+          this.showNextStep();
+          console.log("showNextStep",this.activeIndex,this.spinList.length)
+          if(!this.showNextSpinTime){
+            if(this.activeIndex >= this.spinList.length){
+              this.showNextSpinTime = true;
+              this.$emit('input', false);
+              await this.sleep(300);
+              this.$emit('input', true);
+            } else {
+              this.startCountdown()
+            }
+          } else {
+            this.handleShowNextStartSpin()
+          }
         }
       }, 1000);
     },
     resetCountdown() {
       clearInterval(this.countdownInterval);
-      this.countdown = 10;
+      this.countdown = 5;
     },
     async handleQuoteNext(){
-      this.showNextSpinTime = true;
-      this.$emit('input', false);
-      await this.sleep(300);
-      this.$emit('input', true);
+      this.resetCountdown();
+      this.currentclass = "";
+      if(this.activeIndex <= this.spinList.length-1){
+        await this.sleep(300);
+        this.startCountdown()
+        this.currentclass = "coin_show";
+        this.current = this.spinList[this.activeIndex];
+        this.activeIndex = this.activeIndex+1 ;
+      } else {
+        this.showNextSpinTime = true;
+        this.$emit('input', false);
+        await this.sleep(300);
+        this.$emit('input', true);
+      }
     },
     handleShowNextStartSpin() {
+      this.resetCountdown();
       this.$emit('input', false);
       this.$emit('openStartNext')
+    },
+    async showNext() {
+      let nextIndex = 1;
+      this.spinList = this.spinList1;
+      if(this.spinStartInfo.duration == 100){
+        this.spinList = this.spinList1;
+      } else if(this.spinStartInfo.duration == 500){
+        this.spinList = this.spinList2;
+      } else if(this.spinStartInfo.duration == 1000){
+        this.spinList = this.spinList3;
+      }
+      this.currentclass = 'coin_show'
+      this.current = this.spinList[this.activeIndex]
+      this.activeIndex = nextIndex
+    },
+    async showNextStep(){
+      this.currentclass = "";
+      setTimeout(() => {
+          this.currentclass = "coin_show";
+          this.current = this.spinList[this.activeIndex];
+          this.activeIndex = this.activeIndex+1;
+        }, 200);
     }
+
   },
 };
 </script>

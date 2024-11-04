@@ -105,7 +105,7 @@
                     width="16"
                     alt=""
                   />
-                  <div class="chip-text">100</div>
+                  <div class="chip-text">{{ spinStartInfo.duration }}</div>
                 </div>
                 <div class="d-flex align-center spin-content-pro">
                   <div class="progress-content">
@@ -113,7 +113,7 @@
                       <img
                         style="border-radius: 12px"
                         class="d-b"
-                        :width="80"
+                        :width="percent+'%'"
                         src="/img/booster/4ever-token-progress-mask.png"
                         height="12"
                         alt=""
@@ -148,10 +148,10 @@
             />
             <div class="luck_button" @click="startCallback">
               <div
-                class="d-flex align-center justify-around flex-column luck_button_wrap"
+                class="d-flex align-center justify-center flex-column luck_button_wrap"
                 v-if="percent < 100"
               >
-                <div class="luck_button_tips">
+                <div class="luck_button_tips" v-if="spinStartInfo.remainSpins>0">
                   {{ spinStartInfo.remainSpins }}
                 </div>
                 <div class="font-weight-bold">Spin</div>
@@ -159,7 +159,7 @@
                   {{ spinStartInfo.remainSpins }} Time
                 </div>
 
-                <div class="luck_button_hands">
+                <div class="luck_button_hands" v-if="spinStartInfo.remainSpins>0">
                   <img
                     class="luck_button_hands_img updown"
                     src="/img/booster/spin/icon_hands.png"
@@ -178,7 +178,7 @@
             </div>
           </div>
 
-          <div class="spin-content-footer" v-if="!taskEnd">
+          <div class="d-flex align-center justify-center spin-content-footer" v-if="!taskEnd">
             <div>Reset countdown</div>
             <div class="countdown">
               <count-down
@@ -188,7 +188,7 @@
             </div>
           </div>
 
-          <div class="mt-4">
+          <div class="mt-4 inviteWrap">
             <div class="invite-detail d-flex align-center">
               <v-btn
                 class="invite-act-btn flex-1"
@@ -207,6 +207,15 @@
               >
                 <img src="/img/booster/invite/copy.svg" width="24" alt="" />
               </v-btn>
+            </div>
+            <div class="invite_button_hands" v-if="spinStartInfo.remainSpins == 0">
+              <img
+                class="luck_button_hands_img updown"
+                src="/img/booster/spin/icon_hands.png"
+                width="37"
+                height="40"
+                alt=""
+              />
             </div>
           </div>
         </div>
@@ -319,7 +328,7 @@
     ></SpinStartReward>
     <SpinPlayReward v-model="showPlayReward"></SpinPlayReward>
     <SpinEndSorry v-model="showSpinEndSorry"></SpinEndSorry>
-    <SpinSwapAchieved v-model="showSwapAchieved"></SpinSwapAchieved>
+    <SpinSwapAchieved v-model="showSwapAchieved" @openSwapDialog="handleSwap"></SpinSwapAchieved>
   </div>
 </template>
 
@@ -486,6 +495,9 @@ export default {
     },
     async startCallback() {
       let taskId = this.spinStartInfo.taskId;
+      let info = this.userInfo.username
+        ? this.userInfo.username.cutStr(6, 4)
+        : "unknown";
       if (this.percent >= 100) {
         if (this.boosterInfo.totalPoint < this.spinStartInfo.duration) {
           this.showSpinSorry = true;
@@ -501,17 +513,25 @@ export default {
           this.showSwapped = true;
         }
       } else {
-        if (this.spinStartInfo.remainSpins == 0) return;
-
         if (this.playing) return;
-
         this.playing = true;
+        const data1 = await fetchSpinStart();
+        if (data1.data) {
+          this.$store.commit("SET_SPIN_INFO", data1.data);
+          localStorage.setItem("spinInfo" + info, JSON.stringify(data1.data));
+        } else {
+          this.$toast2("Sorry, try it again later", "info");
+        }
+
+        if (this.spinStartInfo.remainSpins == 0) return;
+        if(this.spinStartInfo.claimAt!= null){
+          this.showSpinEndSorry = true;
+          return;
+        }
+
+
         this.$refs.myLucky.play();
         const { data } = await playSpin(taskId);
-
-        let info = this.userInfo.username
-          ? this.userInfo.username.cutStr(6, 4)
-          : "unknown";
 
         this.$store.commit("SET_SPIN_PLAYREWARD", data.reward);
         let index = 0;
@@ -525,10 +545,26 @@ export default {
         this.$store.commit("SET_SPIN_INFO", data);
         localStorage.setItem("spinInfo" + info, JSON.stringify(data));
         this.showPlayReward = true;
+        this.playing = false;
       }
     },
     async handleSwap() {
       let taskId = this.spinStartInfo.taskId;
+      let info = this.userInfo.username
+        ? this.userInfo.username.cutStr(6, 4)
+        : "unknown";
+      const data1 = await fetchSpinStart();
+      if (data1.data) {
+        this.$store.commit("SET_SPIN_INFO", data1.data);
+        localStorage.setItem("spinInfo" + info, JSON.stringify(data1.data));
+      } else {
+        this.$toast2("Sorry, try it again later", "info");
+      }
+      if(this.spinStartInfo.claimAt != null){
+        this.showSpinEndSorry = true;
+        return;
+      }
+
       if (this.percent >= 100) {
         if (this.boosterInfo.totalPoint < this.spinStartInfo.duration) {
           this.showSpinSorry = true;
@@ -541,13 +577,14 @@ export default {
         }
         const res = await claimSpinReward(taskId);
         if (res.code == 200) {
+          this.$store.dispatch("getBoosterUserInfo");
           this.showSwapped = true;
         }
       }
     },
     endCallback(prize) {
       // console.log(prize);
-      this.playing = false;
+      // this.playing = false;
     },
     opendialog() {
       this.dialog = true;
@@ -653,7 +690,7 @@ export default {
   }
   .spinwrap {
     width: 100%;
-    margin-top: 25px;
+    margin-top: 20px;
   }
   .nav-bar {
     height: 64px;
@@ -739,7 +776,7 @@ export default {
   .spin-content {
     height: 512px;
     position: relative;
-    top: -45px;
+    top: -50px;
     background: linear-gradient(
         180deg,
         rgba(57, 59, 62, 0.9) 25.52%,
@@ -748,7 +785,7 @@ export default {
       #4c5277;
     background-blend-mode: overlay;
     border-radius: 24px;
-    padding: 20px 18px;
+    padding: 15px 18px;
     .spin-content-header-bg {
       margin-top: 20px;
       height: 46px;
@@ -830,13 +867,23 @@ export default {
     text-align: center;
   }
   .countdown {
-    width: 108px;
+    width: 86px;
     height: 24px;
+    margin-left:10px;
     border-radius: 16px;
     background-color: #ffde7f40;
     color: #ffde7f;
-    font-size: 14px;
     display: inline-block;
+  }
+  .inviteWrap {
+    position: relative;
+    .invite_button_hands {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      z-index: 1;
+      border-radius: 24px;
+    }
   }
   .invite-detail {
     gap: 12px;

@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="swaptext my-5 mb-10">Available For Swap</div>
-        <div class="swapText2 py-3">Get {{spinStartInfo.duration}} points quota to star</div>
+        <div class="swapText2 py-3">Get {{spinStartInfo.duration}} points quota to start</div>
         <div class="d-flex align-center justify-center ">
             <v-btn
               class="reward-btn"

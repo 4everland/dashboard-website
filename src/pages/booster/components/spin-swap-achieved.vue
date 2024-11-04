@@ -28,18 +28,20 @@
                     width="24"
                     alt=""
                   />
-                  <div class="chip-text">100</div>
+                  <div class="chip-text">{{ spinStartInfo.duration }}</div>
                 </div>
                 <img
                   src="/img/booster/spin/arrows-left.png"
                   width="12"
                   alt=""
                 />
-                <div class="chip-text2">$0.1</div>
+                <div class="chip-text2">${{spinStartInfo.cashValue}}</div>
               </v-chip>
             </div>
           </div>
-          <v-btn class="reward-btn" style="width: 80%" height="44">
+          <v-btn class="reward-btn" style="width: 80%" height="44"
+            @click="handleSwap"
+          >
             <div class="btn-text">Swap</div>
           </v-btn>
         </div>
@@ -77,7 +79,12 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    handleSwap() {
+      this.$emit("input", false);
+      this.$emit("openSwapDialog");
+    },
+  },
 };
 </script>
 
@@ -169,10 +176,7 @@ export default {
         linear-gradient(to top right, rgba(199, 81, 255, 0) 0%, #c751ff 50%) top
           right / 50% 50% no-repeat,
         linear-gradient(90deg, rgba(255, 53, 53, 0) 28%, #ff3535 100%), #ff35ba;
-      box-shadow: 0px 3px 1px 0px rgba(255, 255, 255, 0.4) inset,
-        0px 4px 1px 0px rgba(255, 255, 255, 0.86) inset,
-        0px 0px 6px 0px rgba(0, 0, 0, 0.2) inset,
-        0px -2px 5px 0px rgba(0, 0, 0, 0.3) inset;
+      
       .btn-text {
         font-family: Inter;
         font-size: 16px;
