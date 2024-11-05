@@ -32,7 +32,7 @@
             <v-btn class="got-btn" height="40" @click="handleok">
               <div class="btn-text">Got!</div>
             </v-btn>
-            <v-btn class="reward-btn" height="40" @click="handleok">
+            <v-btn class="reward-btn" height="40" @click="handleInvite">
               <div class="btn-text">Invite</div>
             </v-btn>
           </div>
@@ -66,16 +66,40 @@ export default {
     ...mapState({
       userInfo: (s) => s.userInfo,
       dailySign: (s) => s.moduleBooster.dailySign,
+      inviteInfo: (s) => s.moduleBooster.inviteInfo,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
   },
 
   methods: {
     handleok(){
       this.$emit('input', false);
-    }
+    },
+    handleInvite(){
+      this.$emit('input', false);
+      this.handleShare()
+    },
+    handleShare() {
+      if (this.isTgMiniApp) {
+        this.$tg.shareUrl(
+          this.inviteInfo.link,
+          "💎 Join me in the #4EVERBoost and reap amazing rewards! Earn $4EVER points, Ton rewards, and exciting @4everland_org #airdrops! Don't miss out—let's boost together! 🎗️🎊"
+        );
+      } else {
+        let shareUrl =
+          "💎 Join me in the #4EVERBoost and reap amazing rewards! Earn $4EVER points, Ton rewards, and exciting @4everland_org #airdrops! Don't miss out—let's boost together! 🎗️🎊 ";
+        shareUrl += this.inviteInfo.link;
+        shareUrl =
+          "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
+
+        this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
+      }
+    },
   },
 };
 </script>
@@ -145,7 +169,6 @@ export default {
   width: 150px;
   border-radius: 8px;
   border: 1px #ffffff solid;
-  opacity: 0px;
   margin-right: 10px;
   background: #121536 !important;
   .btn-text {
