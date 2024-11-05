@@ -24,7 +24,6 @@
       :depositLand="depositLand"
       :report="report"
     ></TonDeposit>
-    <!-- <TonDepositTest></TonDepositTest> -->
   </div>
 </template>
 
@@ -37,15 +36,12 @@ import TonDeposit from "../components/ton-deposit.vue";
 import { validPlayBot } from "@/api/booster";
 import { conversionAds } from "@/api/ton-ads";
 
-// import TonDepositTest from "../components/ton-deposit-test.vue";
-
 export default {
   components: {
     Navbar,
     DepositDialog,
     AsideDrawer,
     TonDeposit,
-    // TonDepositTest,
   },
   data() {
     return {

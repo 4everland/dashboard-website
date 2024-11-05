@@ -27,6 +27,7 @@ export default {
       updateBoostUserInfo: (s) => s.moduleBooster.updateBoostUserInfo,
       tgMiniOverlayLoading: (s) => s.moduleBooster.tgMiniOverlayLoading,
       dailySign: (s) => s.moduleBooster.dailySign,
+      tonConnectUI: (s) => s.moduleBooster.tonConnectUI,
     }),
     ...mapGetters([
       "boostLocked",

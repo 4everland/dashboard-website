@@ -21,7 +21,7 @@
         </div>
         <div class="linear-border mb-2"></div>
         <div class="user-card-item-content">
-          <div class="content-rate">
+          <div class="content-rate" @click="handleTest">
             <!-- <img src="/img/booster/svg/union.svg" width="52" alt="" /> -->
             Earning Rate
           </div>
@@ -309,6 +309,14 @@ export default {
   watch: {
     "boosterInfo.protectExpiredAt"() {
       this.protectCardTime();
+    },
+  },
+  methods: {
+    async handleTest() {
+      console.log(this.tonConnectUI);
+
+      const data = await this.tonConnectUI.getWallets();
+      console.log(data);
     },
   },
 };

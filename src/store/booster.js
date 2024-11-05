@@ -7,7 +7,7 @@ import {
   fetchInviteCount,
   fetchDailySign,
 } from "@/api/booster";
-import { TonConnectUI } from "@tonconnect/ui";
+import { TonConnect, TonConnectUI } from "@tonconnect/ui";
 
 export default {
   state: () => {
@@ -48,6 +48,9 @@ export default {
       showEasterEggDialog: false,
       tonConnectUI: new TonConnectUI({
         manifestUrl: "https://dashboard.4everland.org/tonconnect-manifest.json",
+        connector: new TonConnect({
+          walletsListSource: "/tonconnect-wallets.json",
+        }),
       }),
       dailySign: null,
     };
@@ -199,12 +202,6 @@ export default {
     },
     SET_EASTER_EGG_DIALOG(state, val) {
       state.showEasterEggDialog = val;
-    },
-    SET_TON_WALLET_CLIENT(state) {
-      const tonConnectUI = new TonConnectUI({
-        manifestUrl: "https://dashboard.4everland.org/tonconnect-manifest.json",
-      });
-      state.tonConnectUI = tonConnectUI;
     },
     SET_DAILY_SIGN(state, value) {
       state.dailySign = value;
