@@ -119,12 +119,11 @@ export default {
       this.$emit("handleUnlock", index);
     },
     async handleClaim() {
-      coinMove("mobile-point-send", "activity_Account");
       try {
         if (this.computedPoints < 1)
           return this.$toast2("Points below 1 unclaimable.", "info");
         if (this.asMobile) {
-          coinMove("mobile-point-send", "activity_Account");
+          coinMove("mobile-point-send", "mobile-point-receive");
         } else {
           coinMove("point-send", "point-receive");
         }

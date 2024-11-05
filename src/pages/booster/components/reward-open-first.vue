@@ -52,7 +52,7 @@
               height="44"
               @click="handleStartGetReward()"
             >
-              <div class="btn-text">Continue</div>
+              <div class="btn-text">Open Swap Card</div>
             </v-btn>
         </div>
        </div>

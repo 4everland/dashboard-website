@@ -91,7 +91,7 @@
                   <ICountUp
                   class="points mx-1"
                   :delay="1000"
-                  :endVal="spinStartInfo.currentDuration"
+                  :endVal="currentPoint"
                   :options="{
                     useEasing: true,
                     useGrouping: true,
@@ -436,6 +436,14 @@ export default {
         this.inviteInfo.inviteCode
       );
     },
+    currentPoint() {
+      if(this.spinStartInfo.currentDuration){
+        return this.spinStartInfo.currentDuration
+      } else {
+        return 0
+      }
+      
+    },
     shortPoint() {
       if(this.spinStartInfo.duration){
         return (this.spinStartInfo.duration * 10 -
@@ -572,7 +580,10 @@ export default {
           this.$toast2("Sorry, try it again later", "info");
         }
 
-        if (this.spinStartInfo.remainSpins == 0) return;
+        if (this.spinStartInfo.remainSpins == 0){
+          this.showInvite = true;
+          return;
+        }
         if(this.spinStartInfo.claimAt!= null){
           this.showSpinEndSorry = true;
           return;
@@ -624,7 +635,7 @@ export default {
       } else {
         this.$toast2("Sorry, try it again later", "info");
       }
-      if(this.spinStartInfo.claimAt != null){
+      if(data1.data.claimAt != null){
         this.showSpinEndSorry = true;
         return;
       }
@@ -710,9 +721,11 @@ export default {
       this.showpoint = true;
       setTimeout(() => {
         this.showpoint = false;
+        this.$store.commit("SET_SPIN_PLAYREWARD", {});
+        this.handleShowSwapDialog()
       }, 600);
       this.saveData();
-      this.handleShowSwapDialog()
+      
     },
   },
 };

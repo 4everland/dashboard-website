@@ -292,7 +292,7 @@ import countDown from "../components/count-down.vue";
 import mixin from "./mixin";
 import { bus } from "@/utils/bus";
 import { fetchSpinStart } from "@/api/booster";
-import { coinMove } from "../../../utils/animation";
+import { tonMove } from "../../../utils/animation";
 
 export default {
   mixins: [mixin],
@@ -379,7 +379,7 @@ export default {
       }
     },
     showTonReceive() {
-      coinMove("mobile-gold-ball", "activity_Account");
+      tonMove("mobile-gold-ball", "activity_Account");
     },
     handleStartSpin() {
       let info = this.userInfo.username
