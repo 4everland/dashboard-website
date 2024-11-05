@@ -13,7 +13,7 @@
         @mouseleave="currentHoverIdx = -1"
         @click="item.action"
       >
-        <div class="item-box">
+        <div class="item-box"  :id="'activity_' + item.name">
           <div class="icon-box">
             <img
               class="pc-icon"

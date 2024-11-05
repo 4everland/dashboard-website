@@ -66,6 +66,7 @@
                   :options="{
                     useEasing: true,
                     useGrouping: true,
+                    decimalPlaces: 1,
                     separator: ',',
                     decimal: '.',
                     prefix: '',
@@ -86,7 +87,21 @@
 
               <div class="d-flex align-center justify-center">
                 <span class="font-14 mr-1 quota-left"
-                  >{{ spinStartInfo.currentDuration }}
+                  >
+                  <ICountUp
+                  class="points mx-1"
+                  :delay="1000"
+                  :endVal="spinStartInfo.currentDuration"
+                  :options="{
+                    useEasing: true,
+                    useGrouping: true,
+                    decimalPlaces: 1,
+                    separator: ',',
+                    decimal: '.',
+                    prefix: '',
+                    suffix: '',
+                  }"
+                />
                 </span>
               </div>
             </div>
@@ -136,7 +151,7 @@
                       <img
                         class="hot-icon"
                         src="/img/booster/progress-hot.png"
-                        height="26"
+                        height="32"
                         alt=""
                       />
                     </div>
@@ -906,8 +921,8 @@ export default {
 
       .hot-icon {
         position: absolute;
-        right: -1%;
-        top: -87%;
+        right: -3%;
+        top: -120%;
       }
       @keyframes run {
         from {

@@ -259,7 +259,7 @@
         >
           <div class="points-text">Point Swap</div>
           <v-progress-linear
-            :value="percent"
+            :value="pointPercent"
             height="10"
             rounded
             class="progress-time"
@@ -292,6 +292,7 @@ import countDown from "../components/count-down.vue";
 import mixin from "./mixin";
 import { bus } from "@/utils/bus";
 import { fetchSpinStart } from "@/api/booster";
+import { coinMove } from "../../../utils/animation";
 
 export default {
   mixins: [mixin],
@@ -318,6 +319,11 @@ export default {
       }
       return percent * 100;
     },
+    pointPercent(){
+      const percent =
+        this.spinStartInfo.currentDuration / this.spinStartInfo.duration;
+      return percent * 100;
+    },
     showGoldBall() {
       if (Object.keys(this.spinStartInfo).length > 0) {
         return this.percent >= 100 || this.spinStartInfo.claimAt != null;
@@ -335,6 +341,10 @@ export default {
     bus.$on("showMobileSheet", () => {
       this.sheet = true;
     });
+    bus.$on("showSwapSuccess", () => {
+      this.showTonReceive()
+      this.$store.dispatch("getBoosterUserInfo");
+    })
   },
   beforeDestroy() {
     clearInterval(this.protectTimer);
@@ -367,6 +377,9 @@ export default {
       } else {
         this.showGoldCoin = true;
       }
+    },
+    showTonReceive() {
+      coinMove("mobile-gold-ball", "activity_Account");
     },
     handleStartSpin() {
       let info = this.userInfo.username

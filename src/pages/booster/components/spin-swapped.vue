@@ -75,11 +75,20 @@ export default {
 
   methods: {
     handleClaimSwap() {
-      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown'
+      let info = this.userInfo.username ? this.userInfo.username.cutStr(6, 4): 'unknown';
       this.$store.commit("SET_SPIN_INFO", {});
       localStorage.removeItem('spinInfo'+info);
       this.$emit('input', false);  
-      this.$router.push('/boost');
+      // this.$router.push('/boost?info=swapcuccess');
+      this.$router.push({
+        path: '/boost',
+        query: {
+          info: 'swapcuccess',
+        }
+      });
+      setTimeout(() => {
+        bus.$emit("showSwapSuccess");
+      },1000)
     },
   },
 };

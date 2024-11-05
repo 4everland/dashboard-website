@@ -95,7 +95,7 @@ export default {
       list: [],
       checkinInfo: null,
       checkinLoading: false,
-      countdown: 10,
+      countdown: 5,
       showDialog: false,
       countdownInterval: null,
     };
@@ -143,25 +143,30 @@ export default {
       });
     },
     startCountdown() {
-      this.countdown = 10;
+      this.countdown = 5;
       this.countdownInterval = setInterval(() => {
         if (this.countdown > 0) {
           this.countdown--;
         } else {
           this.resetCountdown();
           this.$emit('input', false);
+          if(this.spinPlayReward.rewardType =='points'){
+            this.$emit('showpoint');
+          }
         }
       }, 1000);
     },
     resetCountdown() {
       clearInterval(this.countdownInterval);
-      this.countdown = 10;
+      this.countdown = 5;
     },
     async handleQuoteNext(){
+      this.resetCountdown();
       this.$emit('input', false);
       this.$emit('showpoint');
     },
     handleShowNextStartSpin() {
+      this.resetCountdown();
       this.$emit('input', false);
     }
   },
