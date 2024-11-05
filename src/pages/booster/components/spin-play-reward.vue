@@ -5,6 +5,7 @@
       content-class="daily-boost-dialog coin_show"
       v-model="value"
       overlay-opacity="0.9"
+      overlay-color="black"
       @click:outside="$emit('input', false)"
     >
       <div class="daily-boost" v-if="spinPlayReward.rewardType=='spin'"> 

@@ -47,12 +47,12 @@
           </div>
           <div class="swap">Swap {{spinStartInfo.duration}} ＄4EVER Points ×1</div>
            <v-btn
-              class="reward-btn"
+              class="reward-btn point_pulse"
               style="width: 80%;"
               height="44"
               @click="handleStartGetReward()"
             >
-              <div class="btn-text">Open Swap Card</div>
+              <div class="btn-text">Continue</div>
             </v-btn>
         </div>
        </div>

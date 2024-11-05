@@ -5,78 +5,123 @@
       content-class="daily-boost-dialog coin_show"
       v-model="value"
       overlay-opacity="0.9"
+      overlay-color="black"
       @click:outside="$emit('input', false)"
     >
-      <div class="daily-boost coin_show" v-if="showNextSpinTime">
-        <div class="d-flex align-center justify-center">
-         <img
-            src="/img/booster/spin/congratulations.png"
-            width="24"
-            alt=""
+      <div class="daily-boost " v-if="showNextSpinTime">
+        <div v-show="showCard">
+          <div class="pattern_light">
+            <img
+             class="light_img"
+              src="/img/booster/spin/spin-light.png"
+              width="240"
+              alt=""
             />
-          <div class="congratulations">Congratulations!</div>
+            
+          </div>
+          <div class="d-flex align-center justify-center img_swap">
+            <img
+              class="img_card card_show"
+              src="/img/booster/spin/swapcard.png"
+              width="280"
+              alt=""
+            />
+          </div>
         </div>
-        <div class="received-text">Spin Times</div>
-        <img
-          class="lightning"
-          src="/img/booster/spin/spin-times.png"
-          width="120"
-          alt=""
-        />
-       <div class="pattern_light">
-         <img
-          src="/img/booster/spin/pattern_light.png"
-          width="240"
-          alt=""
-        />
-        <div class="reward-number"><span style="font-size:30px">X</span>{{ spinStartInfo.remainSpins }}</div>
-       </div>
-        <div style="padding-top:60px;">
-           <v-btn
-              class="reward-btn"
-              @click="handleShowNextStartSpin"
-              style="width: 80%;"
-              height="44"
-            >
-              <div class="btn-text">Continue(<span>{{ countdown }}</span>)</div>
-            </v-btn>
+        <div v-show="showreward" class="daily-boost coin_show">
+          <div class="d-flex align-center justify-center">
+          <img
+              src="/img/booster/spin/congratulations.png"
+              width="24"
+              alt=""
+              />
+            <div class="congratulations">Congratulations!</div>
+          </div>
+          <div class="received-text">Spin Times</div>
+          <img
+            class="lightning"
+            src="/img/booster/spin/spin-times.png"
+            width="120"
+            alt=""
+          />
+        <div class="pattern_light">
+          <img
+            src="/img/booster/spin/pattern_light.png"
+            width="240"
+            alt=""
+          />
+          <div class="reward-number"><span style="font-size:30px">X</span>{{ spinStartInfo.remainSpins }}</div>
+        </div>
+          <div style="padding-top:60px;">
+            <v-btn
+                class="reward-btn"
+                @click="handleShowNextStartSpin"
+                style="width: 80%;"
+                height="44"
+              >
+                <div class="btn-text">Continue(<span>{{ countdown }}</span>)</div>
+              </v-btn>
+          </div>
         </div>
       </div>
 
-      <div class="daily-boost" v-if="!showNextSpinTime" :class="currentclass">
-        <div class="d-flex align-center justify-center">
-         <img
-            src="/img/booster/spin/congratulations.png"
-            width="24"
-            alt=""
+      <div class="daily-boost" v-if="!showNextSpinTime" >
+        
+        <div v-show="showCard">
+          <div class="pattern_light">
+            <img
+             class="light_img"
+              src="/img/booster/spin/spin-light.png"
+              width="240"
+              alt=""
             />
-          <div class="congratulations">Congratulations!</div>
+            
+          </div>
+          <div class="d-flex align-center justify-center img_swap">
+            <img
+              class="img_card card_show"
+              src="/img/booster/spin/swapcard.png"
+              width="280"
+              alt=""
+            />
+          </div>
         </div>
-        <div class="received-text">Points Quota</div>
-        <img
-          class="lightning"
-          src="/img/booster/spin/points-quota.png"
-          width="120"
-          alt=""
-        />
-       <div class="pattern_light">
-         <img
-          src="/img/booster/spin/pattern_light.png"
-          width="240"
-          alt=""
-        />
-        <div class="reward-number"><span style="font-size:30px">+</span>{{ current }}</div>
-       </div>
-        <div style="padding-top:60px;">
-           <v-btn
-              class="reward-btn"
-              @click="handleQuoteNext"
-              style="width: 80%;"
-              height="44"
-            >
-              <div class="btn-text">Continue(<span>{{ countdown }}</span>)</div>
-            </v-btn>
+        <div v-show="showreward" class="daily-boost" :class="currentclass">
+          <div class="d-flex align-center justify-center">
+          <img
+              src="/img/booster/spin/congratulations.png"
+              width="24"
+              alt=""
+              />
+            <div class="congratulations">Congratulations!</div>
+          </div>
+          <div class="received-text">Points Quota</div>
+          <img
+            class="lightning "
+            src="/img/booster/spin/points-quota.png"
+            width="120"
+            alt=""
+          />
+        <div class="pattern_light">
+          <img
+            class="light_img"
+            src="/img/booster/spin/spin-light.png"
+            width="240"
+            alt=""
+          />
+          <div class="reward-number"><span style="font-size:30px">+</span>{{ current }}</div>
         </div>
+          <div style="padding-top:60px;">
+            <v-btn
+                class="reward-btn"
+                @click="handleQuoteNext"
+                style="width: 80%;"
+                height="44"
+              >
+                <div class="btn-text">Continue(<span>{{ countdown }}</span>)</div>
+              </v-btn>
+          </div>
+      </div>
       </div>
     </v-dialog>
   </div>
@@ -99,6 +144,8 @@ export default {
       showDialog: false,
       countdownInterval: null,
       showNextSpinTime: false,
+      showreward: false,
+      showCard: false,
       spinList1:[
         50,30
       ],
@@ -190,9 +237,18 @@ export default {
     async handleQuoteNext(){
       this.resetCountdown();
       this.currentclass = "";
+         
       if(this.activeIndex <= this.spinList.length-1){
+        
         await this.sleep(300);
-        this.startCountdown()
+       
+          this.showreward = false;
+          this.showCard = true;
+          await this.sleep(1500);
+          this.showCard = false;
+          this.showreward = true;
+          this.startCountdown()
+
         this.currentclass = "coin_show";
         this.current = this.spinList[this.activeIndex];
         this.activeIndex = this.activeIndex+1 ;
@@ -201,6 +257,12 @@ export default {
         this.$emit('input', false);
         await this.sleep(300);
         this.$emit('input', true);
+
+        this.showreward = false;
+        this.showCard = true;
+        await this.sleep(1500);
+        this.showCard = false;
+        this.showreward = true;
       }
     },
     handleShowNextStartSpin() {
@@ -218,13 +280,22 @@ export default {
       } else if(this.spinStartInfo.duration == 1000){
         this.spinList = this.spinList3;
       }
+      this.showCard = true;
+      await this.sleep(1500);
+      this.showCard = false;
+      this.showreward = true;
       this.currentclass = 'coin_show'
       this.current = this.spinList[this.activeIndex]
       this.activeIndex = nextIndex
     },
     async showNextStep(){
       this.currentclass = "";
-      setTimeout(() => {
+      setTimeout(async () => {
+          this.showreward = false;
+          this.showCard = true;
+          await this.sleep(1500);
+          this.showCard = false;
+          this.showreward = true;
           this.currentclass = "coin_show";
           this.current = this.spinList[this.activeIndex];
           this.activeIndex = this.activeIndex+1;
@@ -285,6 +356,9 @@ export default {
       color: #FFDE7F;
       margin-top: -58px;
     }
+  }
+  .light_img{
+    animation: rotate 5s linear infinite;
   }
   .congratulations{
       font-size: 16px;
@@ -348,4 +422,17 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(2px);
 }
+.img_card {
+  position: relative;
+  margin-top: 30px;
+  z-index: 3;
+}
+@keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
 </style>

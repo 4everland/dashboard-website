@@ -5,6 +5,7 @@
       content-class="daily-boost-dialog step1_show"
       v-model="value"
       overlay-opacity="0.9"
+      overlay-color="black"
       @click:outside="$emit('input', false)"
     >
       <div class="daily-boost">
@@ -12,7 +13,7 @@
           <img src="/img/booster/spin/SpinTimes.png" width="240" alt="" />
         </div>
          <div class="win-background d-flex flex-column align-center justify-center">
-            <div class="win-text">SPIN to win {{ spinStartInfo.duration - spinStartInfo.currentDuration }} Points</div>
+            <div class="win-text">SPIN to win {{ (spinStartInfo.duration*10 - spinStartInfo.currentDuration*10)/10 }} Points</div>
             <div class="win-text">Claim ${{ spinStartInfo.cashValue }} for free</div>
           </div>
       </div>

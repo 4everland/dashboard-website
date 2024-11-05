@@ -578,14 +578,18 @@ export default {
           localStorage.setItem("spinInfo" + info, JSON.stringify(data1.data));
         } else {
           this.$toast2("Sorry, try it again later", "info");
+          this.playing = false;
+          return;
         }
 
         if (this.spinStartInfo.remainSpins == 0){
           this.showInvite = true;
+          this.playing = false;
           return;
         }
         if(this.spinStartInfo.claimAt!= null){
           this.showSpinEndSorry = true;
+          this.playing = false;
           return;
         }
 
@@ -652,6 +656,7 @@ export default {
         }
         const res = await claimSpinReward(taskId);
         if (res.code == 200) {
+          this.$store.commit("SET_CLAIMED_INFO", res.data);
           this.$store.dispatch("getBoosterUserInfo");
           this.showSwapped = true;
         }

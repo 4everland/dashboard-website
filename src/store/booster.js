@@ -54,7 +54,8 @@ export default {
       spinPlayReward: {
       },
       spinStartInfo: {
-      }
+      },
+      spinClaimedInfo: ''
     };
   },
   getters: {
@@ -219,6 +220,9 @@ export default {
     },
     SET_SPIN_PLAYREWARD(state, value) {
       state.spinPlayReward = value;
+    },
+    SET_CLAIMED_INFO(state, value) {
+      state.spinClaimedInfo = value;
     },
   },
   actions: {

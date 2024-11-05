@@ -238,7 +238,7 @@
           </div>
         </div>
 
-        <div class="gold-square" @click="handleStartReward" v-if="showGoldBall">
+        <div class="gold-square" @click="handleStartReward" v-if="taskEnd">
           <div style="position: relative">
             <div style="width: 10px; height: 10px"></div>
           </div>
@@ -249,7 +249,7 @@
         </div>
 
         <div
-          v-if="!showGoldBall"
+          v-if="!taskEnd"
           class="points-swap d-flex flex-column align-center justify-center"
           @click="handleStartSpin"
           style="
@@ -335,6 +335,14 @@ export default {
       const curTimeStamp = +new Date() / 1e3;
       let leftTime = this.spinStartInfo.endAt - curTimeStamp;
       return this.spinStartInfo.claimAt == null && leftTime > 0;
+    },
+    taskEnd() {
+      const curTimeStamp = +new Date() / 1e3;
+      if (Object.keys(this.spinStartInfo).length > 0) {
+        return curTimeStamp > this.spinStartInfo.endAt || this.spinStartInfo.claimAt != null;
+      }else {
+        return true;
+      }
     },
   },
   created() {

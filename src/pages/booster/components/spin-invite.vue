@@ -4,6 +4,8 @@
       max-width="400"
       content-class="daily-boost-dialog"
       v-model="value"
+       overlay-opacity="0.9"
+      overlay-color="black"
       @click:outside="$emit('input', false)"
     >
       <div class="daily-boost">
@@ -27,11 +29,11 @@
             Invite new friends to SPIN! More friends, more spins.
           </div>
           <div class="invite-btn d-flex justify-center align-center">
-            <v-btn class="got-btn" height="40">
+            <v-btn class="got-btn" height="40" @click="handleok">
               <div class="btn-text">Got!</div>
             </v-btn>
-            <v-btn class="reward-btn" height="40">
-              <div class="btn-text">invite</div>
+            <v-btn class="reward-btn" height="40" @click="handleok">
+              <div class="btn-text">Invite</div>
             </v-btn>
           </div>
         </div>
@@ -70,7 +72,11 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    handleok(){
+      this.$emit('input', false);
+    }
+  },
 };
 </script>
 

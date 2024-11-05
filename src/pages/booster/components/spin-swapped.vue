@@ -4,6 +4,8 @@
       max-width="400"
       content-class="daily-boost-dialog"
       v-model="value"
+      overlay-opacity="0.9"
+      overlay-color="black"
       @click:outside="$emit('input', false)"
     >
       <div class="daily-boost">
@@ -24,7 +26,7 @@
         <div class="spin-background">
           <div class="congratulations">Congratulations!</div>
           <div class="swap">You have swapped {{spinStartInfo.duration}} points for</div>
-          <div class="reward-number">${{spinStartInfo.cashValue}}</div>
+          <div class="reward-number">{{spinClaimedInfo ? spinClaimedInfo.toFixed(2): 0}} Ton</div>
           <div class="view-account d-flex justify-center align-center">
             <img
               src="/img/booster/spin/annotation-alert.svg"
@@ -67,6 +69,7 @@ export default {
       userInfo: (s) => s.userInfo,
       dailySign: (s) => s.moduleBooster.dailySign,
       spinStartInfo: (s) => s.moduleBooster.spinStartInfo,
+      spinClaimedInfo: (s) => s.moduleBooster.spinClaimedInfo,
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;

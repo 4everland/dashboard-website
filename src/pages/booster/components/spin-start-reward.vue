@@ -5,6 +5,7 @@
       content-class="daily-boost-dialog step1_show"
       v-model="value"
       overlay-opacity="0.9"
+      overlay-color="black"
       @click:outside="$emit('input', false)"
     >
       <div class="spin-start-bg">
@@ -22,7 +23,7 @@
               height="44"
               @click="handleStartGetReward()"
             >
-              <div class="btn-text">Continue</div>
+              <div class="btn-text">Open Swap Card</div>
             </v-btn>
         </div>
       </div>
@@ -81,6 +82,9 @@ export default {
   background: transparent !important;
   box-shadow: none !important;
   overflow: initial !important;
+}
+.btn-text {
+  letter-spacing:normal;
 }
 
 @media screen and (max-width: 900px) {
