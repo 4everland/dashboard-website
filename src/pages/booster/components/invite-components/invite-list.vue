@@ -128,11 +128,4 @@ export default {
     border-bottom: 1px solid rgba(97, 114, 243, 0.5) !important;
   }
 }
-
-.empty {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
 </style>
