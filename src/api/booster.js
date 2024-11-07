@@ -305,3 +305,33 @@ export const validPlayBot = async (code) => {
     },
   });
 };
+
+export const fetchSpinStart = async () => {
+  return boosterRequest.get({
+    url: "/node/spin/random",
+  });
+};
+
+export const playSpin = async (taskId) => {
+  return boosterRequest.post({
+    url: "/node/spin",
+    params: {
+      taskId,
+    },
+  });
+};
+
+export const fetchClaimList = async (page = 1, size = 10) => {
+  return boosterRequest.get({
+    url: `/node/spin/history?page=${page}&size=${size}`,
+  });
+};
+
+export const claimSpinReward = async (taskId) => {
+  return boosterRequest.post({
+    url: "/node/spin/claim",
+    params: {
+      taskId,
+    },
+  });
+};

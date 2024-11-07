@@ -45,6 +45,17 @@ export default [
           noLogin: 1,
         },
       },
+      {
+        path: "/boost/spin",
+        component: () => import("./spin"),
+        meta: {
+          title: "Points Swap",
+          hideNav: 1,
+          isTab: 1,
+          noLogin: 1,
+          hideBoostNav: 1
+        },
+      },
     ],
   },
 ];
