@@ -26,9 +26,7 @@
             <tbody>
               <tr v-for="item in usdtLogs" :key="item.name" class="text-white">
                 <td>
-                  {{
-                    item.from == "withdraw" ? "Withdraw Ton" : "Invite Reward"
-                  }}
+                  {{ logType(item.from) }}
                 </td>
                 <td>
                   {{ Number(item.value) > 0 ? "+" + item.value : item.value }}
@@ -160,6 +158,19 @@ export default {
     },
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
+
+    logType() {
+      return function (type) {
+        switch (type) {
+          case "withdraw":
+            return "Withdraw Ton";
+          case "SPIN":
+            return "Points Withdraw";
+          default:
+            return "Invite Reward";
+        }
+      };
     },
   },
   methods: {
