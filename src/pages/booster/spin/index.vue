@@ -111,7 +111,22 @@
                           width="14"
                           alt=""
                           style="margin-left: 2px;"
-                        /> {{ shortPoint }}
+                        /> 
+                        <ICountUp
+                        class="points"
+                        :delay="1000"
+                        :endVal="shortPoint"
+                        :options="{
+                          useEasing: true,
+                          useGrouping: true,
+                          decimalPlaces: 1,
+                          separator: ',',
+                          decimal: '.',
+                          prefix: '',
+                          suffix: '',
+                        }"
+                      />
+
                       </div>
                       <div>
                         to withdraw
