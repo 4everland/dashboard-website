@@ -2,6 +2,9 @@ import Vue from "vue";
 import "./css/style.scss";
 import "./components";
 import VueClipboards from "vue-clipboards";
+import VueLuckyCanvas from '@lucky-canvas/vue'
+
+
 
 import router from "./router";
 import { CID } from "multiformats/cid";
@@ -11,6 +14,7 @@ import { BigNumber } from "ethers";
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 
 Vue.use(VueClipboards);
+Vue.use(VueLuckyCanvas)
 
 Vue.prototype.$color1 = "#6172f3";
 Vue.prototype.$color2 = "#ff6960";

@@ -6,6 +6,7 @@ import {
   fetchTgInviteInfo,
   fetchInviteCount,
   fetchDailySign,
+  fetchSpinStart,
 } from "@/api/booster";
 import { TonConnect, TonConnectUI } from "@tonconnect/ui";
 
@@ -53,6 +54,11 @@ export default {
         }),
       }),
       dailySign: null,
+      spinPlayReward: {
+      },
+      spinStartInfo: {
+      },
+      spinClaimedInfo: ''
     };
   },
   getters: {
@@ -206,6 +212,15 @@ export default {
     SET_DAILY_SIGN(state, value) {
       state.dailySign = value;
     },
+    SET_SPIN_INFO(state, value) {
+      state.spinStartInfo = value;
+    },
+    SET_SPIN_PLAYREWARD(state, value) {
+      state.spinPlayReward = value;
+    },
+    SET_CLAIMED_INFO(state, value) {
+      state.spinClaimedInfo = value;
+    },
   },
   actions: {
     StakeDrawerState: async (context, payload) => {
@@ -294,6 +309,15 @@ export default {
       try {
         const { data } = await fetchDailySign();
         commit("SET_DAILY_SIGN", data.items);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getSpinInfo({ commit }) {
+      try {
+        const { data } = await fetchSpinStart();
+        commit("SET_SPIN_INFO", data);
       } catch (error) {
         console.log(error);
       }

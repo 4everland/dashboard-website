@@ -88,4 +88,11 @@ export default {
     font-weight: normal;
   }
 }
+.points-swap{
+  .v-progress-linear__determinate {
+    background: linear-gradient(90deg, #FF35BA 27.76%, #FFF6B6 73.98%) !important;
+    border-radius: 16px !important;
+    height: 8px !important;
+  }
+}
 </style>

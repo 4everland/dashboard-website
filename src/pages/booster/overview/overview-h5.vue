@@ -237,9 +237,47 @@
             </div> -->
           </div>
         </div>
+
+        <div class="gold-square" @click="handleStartReward" v-if="taskEnd">
+          <div style="position: relative">
+            <div style="width: 10px; height: 10px"></div>
+          </div>
+          <div class="top-card square-box-up" id="mobile-gold-ball">
+            <img src="/img/booster/spin/reward-ball.png" width="80" alt="" />
+            <div class="ball-text">$100</div>
+          </div>
+        </div>
+
+        <div
+          v-if="!taskEnd"
+          class="points-swap d-flex flex-column align-center justify-center"
+          @click="handleStartSpin"
+          style="
+            box-shadow: 0px 0px 20px 0px #ff940840, 0px 0px 10px 0px #f8630080,
+              0px 0px 2.5px 0px #ffad08bf;
+          "
+        >
+          <div class="points-text">Withdraw</div>
+          <v-progress-linear
+            :value="pointPercent"
+            height="10"
+            rounded
+            class="progress-time"
+          ></v-progress-linear>
+          <div class="fz-10 countTime" v-if="spinStartInfo">
+            <count-down :endTimeStamp="spinStartInfo.endAt"></count-down>
+          </div>
+          <img
+            class="right-img"
+            src="/img/booster/spin/background-right.png"
+            width="8"
+            height="48"
+            alt=""
+          />
+          <v-icon small class="right-icon">mdi-menu-right</v-icon>
+        </div>
       </div>
     </div>
-
     <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
   </div>
 </template>
@@ -250,25 +288,71 @@ import { mapState } from "vuex";
 import MobilePointsSheet from "../components/mobile-points-sheet.vue";
 import TokenDialog from "../components/token-dialog.vue";
 import WalletConnect from "../components/wallet-connect.vue";
+import countDown from "../components/count-down.vue";
 import mixin from "./mixin";
 import { bus } from "@/utils/bus";
+import { fetchSpinStart } from "@/api/booster";
+import { tonMove } from "../../../utils/animation";
 
 export default {
   mixins: [mixin],
   data() {
     return {
       sheet: false,
+      showGoldCoin: false,
+      timeLeft: localStorage.getItem("countdownTime")
+        ? parseInt(localStorage.getItem("countdownTime"))
+        : 86400,
     };
   },
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
+      spinStartInfo: (s) => s.moduleBooster.spinStartInfo,
     }),
+    percent() {
+      const curTimeStamp = +new Date() / 1e3;
+      let percent =
+        Math.ceil(curTimeStamp - this.spinStartInfo.startAt) / 86400;
+      if (percent > 1) {
+        percent = 1;
+      }
+      return percent * 100;
+    },
+    pointPercent(){
+      const percent =
+        this.spinStartInfo.currentDuration / this.spinStartInfo.duration;
+      return percent * 100;
+    },
+    showGoldBall() {
+      if (Object.keys(this.spinStartInfo).length > 0) {
+        return this.percent >= 100 || this.spinStartInfo.claimAt != null;
+      } else {
+        return true;
+      }
+    },
+    showGoldProgress() {
+      const curTimeStamp = +new Date() / 1e3;
+      let leftTime = this.spinStartInfo.endAt - curTimeStamp;
+      return this.spinStartInfo.claimAt == null && leftTime > 0;
+    },
+    taskEnd() {
+      const curTimeStamp = +new Date() / 1e3;
+      if (Object.keys(this.spinStartInfo).length > 0) {
+        return curTimeStamp > this.spinStartInfo.endAt || this.spinStartInfo.claimAt != null;
+      }else {
+        return true;
+      }
+    },
   },
   created() {
     bus.$on("showMobileSheet", () => {
       this.sheet = true;
     });
+    bus.$on("showSwapSuccess", () => {
+      this.showTonReceive()
+      this.$store.dispatch("getBoosterUserInfo");
+    })
   },
   beforeDestroy() {
     clearInterval(this.protectTimer);
@@ -277,15 +361,55 @@ export default {
     MobilePointsSheet,
     TokenDialog,
     WalletConnect,
+    countDown,
   },
   watch: {
     "boosterInfo.protectExpiredAt"() {
       this.protectCardTime();
     },
   },
+  mounted() {
+    this.init();
+  },
   methods: {
     onConnetc() {
       this.$refs.walletConnect.onShowConnect();
+    },
+    init() {
+      let info = this.userInfo.username
+        ? this.userInfo.username.cutStr(6, 4)
+        : "unknown";
+      let spinInfo = localStorage.getItem("spinInfo" + info);
+      if (spinInfo) {
+        this.$store.commit("SET_SPIN_INFO", JSON.parse(spinInfo));
+      } else {
+        this.showGoldCoin = true;
+      }
+    },
+    showTonReceive() {
+      tonMove("mobile-gold-ball", "activity_Account");
+    },
+    handleStartSpin() {
+      let info = this.userInfo.username
+        ? this.userInfo.username.cutStr(6, 4)
+        : "unknown";
+      localStorage.removeItem("spinFirstStep" + info);
+      this.$router.push("/boost/spin");
+    },
+    async handleStartReward() {
+      const data = await fetchSpinStart();
+      if (data.data) {
+        this.$store.commit("SET_SPIN_INFO", data.data);
+        let info = this.userInfo.username
+          ? this.userInfo.username.cutStr(6, 4)
+          : "unknown";
+        //this.$store.dispatch("getSpinInfo");
+        localStorage.setItem("spinInfo" + info, JSON.stringify(data.data));
+        localStorage.setItem("spinFirstStep" + info, 1);
+        this.$emit("startReward");
+      } else {
+        this.$toast2("Sorry, try it again later", "info");
+      }
     },
   },
 };
@@ -301,9 +425,20 @@ export default {
     transform: translateY(0);
   }
 }
-
+@keyframes bounceup {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10%);
+  }
+}
 .square-box {
   animation: bounce 2s infinite linear;
+}
+.square-box-up {
+  animation: bounceup 2s infinite linear;
 }
 .not-login {
   position: absolute;
@@ -422,6 +557,13 @@ export default {
     transform: translateX(-50%);
     top: -20%;
   }
+}
+.ball-text {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 12px;
+  text-align: center;
+  margin-top: -20px;
 }
 .computing-boost {
   position: absolute;
@@ -549,6 +691,26 @@ export default {
   }
 }
 
+.gold-square {
+  position: absolute;
+  left: 30%;
+  transform: translateX(-50%);
+  top: 15%;
+  .points {
+    z-index: 10;
+    padding: 0px 8px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 65%;
+    font-weight: bold;
+    border-radius: 16px;
+    border: 1px solid rgba(18, 21, 54, 0.5);
+    background: rgba(97, 114, 243, 0.75);
+    box-shadow: 0px 0px 4px 0px rgba(255, 255, 255, 0.5);
+  }
+}
+
 .start-booster-btn {
   position: absolute;
   left: 50%;
@@ -589,5 +751,52 @@ export default {
       rgba(17, 2, 252, 0.5) 74.37%
     );
   }
+}
+.points-swap {
+  position: absolute;
+  left: 0;
+  top: 10%;
+  width: 96px;
+  height: 48px;
+  gap: 0px;
+  border-radius: 0px 8px 8px 0px;
+  background-image: url("/img/booster/spin/hands-coin.png"),
+    linear-gradient(180deg, #ffad08, #ffde7f);
+  background-size: auto, auto;
+  background-position: left, 0 0;
+  box-shadow: 0px 0px 20px 0px #ff940840;
+  box-shadow: 0px 0px 10px 0px #f8630080;
+
+  box-shadow: 0px 0px 2.5px 0px #ffad08bf;
+
+  .right-img {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1;
+  }
+  .right-icon {
+    position: absolute;
+    right: -4px;
+    top: 30%;
+    z-index: 2;
+  }
+  .progress-time {
+    width: 80px;
+    margin: 2px 0;
+    border: 1px solid #12153680;
+    background: #121536bf;
+  }
+  .points-text {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    line-height: 12px !important;
+    text-align: center !important;
+    color: #121536 !important;
+  }
+}
+.countTime {
+  color: #121536;
+  line-height: 12px;
 }
 </style>

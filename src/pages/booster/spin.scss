@@ -1,0 +1,66 @@
+@import "./animate";
+
+.coin_fly {
+  animation: coin_fly 0.7s ease forwards;
+}
+@keyframes coin_fly {
+  0% {
+    transform: translate(0);
+    opacity: 1;
+  }
+  90% {
+    transform: translate(120px, -110px);
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.step1_show {
+  animation: lightSpeedInLeft 0.7s ease, tada 0.6s ease 1s forwards;
+}
+.card1_out {
+  animation: backOutRight 0.6s ease forwards;
+}
+
+.coin_show {
+  animation: bounceIn 0.5s ease;
+}
+
+.fly_show {
+  animation: bounceInDown 0.7s ease, bounceOut 0.7s ease 2s forwards;
+}
+
+.infoshow {
+  animation: fadeInDown 0.5s ease, fadeOutUp 0.5s ease 3s forwards;
+}
+
+.logo-head {
+  width: 80px;
+  transform-origin: 80% bottom;
+  transform: scale(1.5);
+}
+
+.headShake {
+  animation: headShake 0.7s ease-in-out;
+}
+
+.updown {
+  animation: up_donw 1s ease infinite;
+}
+@keyframes up_donw {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+.point_pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.card_show {
+  animation: flipOutY 1.5s ease-in-out ;
+}
