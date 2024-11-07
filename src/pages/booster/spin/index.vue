@@ -27,7 +27,7 @@
         <div>
           Congrats! 
           <span style="font-weight: 700"
-            >{{ (current.username || "unkown").cutStr(4, 4) }}!</span
+            >{{ (current.username || "unkown").cutStr(4, 4) }}</span
           >
           withdrew 
           <span style="font-weight: 700; font-style: italic; font-size: 16px">
@@ -55,7 +55,7 @@
                 src="/img/booster/spin/icon_points.png"
                 width="16"
                 alt=""
-              /> {{boosterInfo.totalPoint}} ≈ {{boosterInfo.totalPoint /1e3}}
+              /> {{boosterInfo.totalPoint ? Number(boosterInfo.totalPoint).toLocaleString(): 0}} ≈ ${{boosterInfo.totalPoint ? Number(Number(boosterInfo.totalPoint /1e3).toFixed(2)).toLocaleString(): 0}}
             </div>
           </div>
           <div class="d-flex justify-center flex-column spin-header-tips fz-14">
@@ -69,8 +69,8 @@
                 alt=""
               />{{ spinStartInfo.duration }}
             </div>
-            <div class="points ">
-              = <span class="pointsCash point_pulse">${{ spinStartInfo.cashValue }}</span>
+            <div class="points point_pulse">
+              = ${{ spinStartInfo.cashValue }}
             </div>
               
           </div>
@@ -110,7 +110,8 @@
                           src="/img/booster/spin/icon_Points_Quota.png"
                           width="14"
                           alt=""
-                        />{{ shortPoint }}
+                          style="margin-left: 2px;"
+                        /> {{ shortPoint }}
                       </div>
                       <div>
                         to withdraw
@@ -155,7 +156,7 @@
                 </div>
                 <div class="font-weight-bold">Spin</div>
                 <div class="spin_left_time">
-                  {{ spinStartInfo.remainSpins }} Time
+                  {{ spinStartInfo.remainSpins }} Times
                 </div>
 
                 <div class="luck_button_hands" v-if="spinStartInfo.remainSpins>0">
@@ -529,6 +530,9 @@ export default {
         }
         const res = await claimSpinReward(taskId);
         if (res.code == 200) {
+          this.$store.commit("SET_CLAIMED_INFO", res.data);
+          this.$store.dispatch("getBoosterUserInfo");
+          await this.$sleep(300);
           this.showSwapped = true;
         }
       } else {
@@ -620,6 +624,7 @@ export default {
         if (res.code == 200) {
           this.$store.commit("SET_CLAIMED_INFO", res.data);
           this.$store.dispatch("getBoosterUserInfo");
+          await this.$sleep(300);
           this.showSwapped = true;
         }
       }
@@ -764,7 +769,6 @@ export default {
   }
   .spin-header {
     background: linear-gradient(0deg, #f5f8ff, #f5f8ff);
-    border: 4px solid #2d31a640;
     backdrop-filter: blur(39.5px);
     height: 244px;
     border-radius: 24px;
@@ -784,6 +788,7 @@ export default {
       color: #121536;
       font-family: "Inter", sans-serif;
       font-size: 12px;
+      font-weight: bold;
     }
     .spin-header-name {
       font-size: 12px;
@@ -792,7 +797,6 @@ export default {
       padding: 0 10px;
       line-height: 20px;
       position: relative;
-      font-weight: bold;
     }
     .spin-header-number {
       font-size: 20px;
@@ -824,15 +828,17 @@ export default {
         font-weight: 900;
         text-align: center;
         color: #6172F3;
-        line-height: 48px;
+        line-height: 45px;
       }
       .points {
         font-size: 24px;
         font-weight: 900;
         color: #FF9408;
         font-style: italic;
+        line-height: 24px;
         .pointsCash{
           display: inline-block;
+          min-width: 40px;
         }
       }
     }
@@ -870,9 +876,7 @@ export default {
     .spin-content-header-bg {
       margin: 20px auto 0;
       height: 40px;
-      background: #24272A radial-gradient(16.61% 111.36% at 94.24% 50%, rgba(255, 222, 127, 0.25) 0%, rgba(255, 222, 127, 0) 100%);
-      background-blend-mode: overlay;
-      background-color: #4C5277;
+      background-color: #151927;
 
       position: relative;
       border-radius: 50px;
@@ -898,7 +902,7 @@ export default {
       margin-top: -16px;
       height: 100%;
       .spin-content-topheader-bg{
-        padding-left: 10px;
+        padding-left: 20px;
       }
       .spin-content-pro {
         min-width: 220px;

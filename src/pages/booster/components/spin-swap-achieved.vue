@@ -2,7 +2,6 @@
   <div>
     <v-dialog
       v-model="value"
-      @click:outside="$emit('input', false)"
       fullscreen
       hide-overlay
     >

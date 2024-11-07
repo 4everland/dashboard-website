@@ -26,7 +26,7 @@
         <div class="spin-background">
           <div class="congratulations">Congratulations!</div>
           <div class="swap">You have received</div>
-          <div class="reward-number">{{spinClaimedInfo ? spinClaimedInfo.toFixed(2): 0}} Ton <span class="reward-number-usd">≈ ${{spinStartInfo.cashValue}}</span></div>
+          <div class="reward-number">{{spinClaimedInfo ? spinClaimedInfo.toFixed(3): 0}} Ton <span class="reward-number-usd">≈ ${{spinStartInfo.cashValue}}</span></div>
           <div class="view-account d-flex justify-center align-center">
             <img
               src="/img/booster/spin/annotation-alert.svg"

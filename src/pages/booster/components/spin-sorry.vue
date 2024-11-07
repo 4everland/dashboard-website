@@ -67,6 +67,7 @@ export default {
   methods: {
     handleEarn() {
       this.$emit('input', false);  
+      this.$router.push('/boost');
     },
   },
   components: {
