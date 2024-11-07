@@ -49,7 +49,7 @@ export default [
         path: "/boost/spin",
         component: () => import("./spin"),
         meta: {
-          title: "Points Swap",
+          title: "Withdraw",
           hideNav: 1,
           isTab: 1,
           noLogin: 1,

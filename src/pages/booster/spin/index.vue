@@ -205,7 +205,7 @@
             <div>Reset countdown</div>
             <div class="countdown">
               <count-down
-                :endTimeStamp="spinStartInfo.endAt"
+                :endTimeStamp="endTime"
                 @timeOver="timeOver"
               ></count-down>
             </div>
@@ -429,6 +429,18 @@ export default {
       } else {
         return 0
       }
+    },
+    endTime() {
+      if(this.spinStartInfo.endAt){
+        return this.spinStartInfo.endAt;
+      } else {
+        let info = this.userInfo.username
+        ? this.userInfo.username.cutStr(6, 4)
+        : "unknown";
+        let spinInfo = localStorage.getItem("spinInfo" + info);
+        const _spinInfo = JSON.parse(spinInfo);
+        return _spinInfo.endAt;
+      }
       
     }
   },
@@ -503,6 +515,10 @@ export default {
         ? this.userInfo.username.cutStr(6, 4)
         : "unknown";
       const curTimeStamp = +new Date() / 1e3;
+      let spinInfo = localStorage.getItem("spinInfo" + info);
+      if (spinInfo) {
+        this.$store.commit("SET_SPIN_INFO", JSON.parse(spinInfo));
+      }
       if (
         this.spinStartInfo.claimAt == null &&
         curTimeStamp < this.spinStartInfo.endAt
@@ -521,10 +537,7 @@ export default {
         this.showStartClaim = true;
         localStorage.removeItem("spinFirstStep" + info);
       }
-      let spinInfo = localStorage.getItem("spinInfo" + info);
-      if (spinInfo) {
-        this.$store.commit("SET_SPIN_INFO", JSON.parse(spinInfo));
-      }
+      
       this.getList();
       this.showNotice();
     },

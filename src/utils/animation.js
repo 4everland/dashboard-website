@@ -102,7 +102,7 @@ export const tonMove = (curId, targetId) => {
     duration: 1.5,
     x: function () {
       //function-based value
-      return targetRect.left - targetRect.width * 0.5 - 16 - walletRect.left;
+      return targetRect.left + targetRect.width * 0.5 - 32 - walletRect.left;
     },
     y: function () {
       //function-based value
