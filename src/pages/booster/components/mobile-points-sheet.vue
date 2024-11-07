@@ -303,7 +303,7 @@ export default {
                 it.log = `VoteRaffle with Cellula ${it.value} points.`;
                 break;
               case "spin":
-                it.log = `Points Swap ${it.value} Points`;
+                it.log = `Points Withdrew ${it.value} Points`;
                 break;
               case "quest":
                 it.log = it.name + it.value;
