@@ -26,7 +26,7 @@
         <div class="spin-background">
           <div class="congratulations">0 Times</div>
           <div class="swap">
-            Invite new friends to SPIN! More friends, more spins.
+            Get more Spin times by inviting new friends!
           </div>
           <div class="invite-btn d-flex justify-center align-center">
             <v-btn class="got-btn" height="40" @click="handleok">

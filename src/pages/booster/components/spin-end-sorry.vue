@@ -25,7 +25,7 @@
 
         <div class="spin-background">
           <div class="congratulations">Sorry!</div>
-          <div class="swap">The Points Swap for this round has now ended.</div>
+          <div class="swap">The points withdraw for this round has ended.</div>
           <v-btn class="reward-btn" style="width: 90%" height="44" @click="handleclose">
             <div class="btn-text">OK</div>
           </v-btn>

@@ -6,7 +6,7 @@
           <div class="logo d-flex align-center" @click="backtoindex">
             <img src="/img/booster/spin/chevron-left.png" width="24" alt="" />
           </div>
-          <div class="mobile-title fz-16 font-weight-bold">Points Swap</div>
+          <div class="mobile-title fz-16 font-weight-bold">Withdraw</div>
           <div>
             <div class="spin-rules d-flex justify-center align-center" @click="opendialog">
               <img
@@ -25,12 +25,11 @@
       >
         <img src="/img/booster/spin/congratulations.png" width="24" alt="" />
         <div>
-          Congrats
+          Congrats! 
           <span style="font-weight: 700"
             >{{ (current.username || "unkown").cutStr(4, 4) }}!</span
           >
-          Swapped {{ current.amount * 1e3 }}
-          points for
+          withdrew 
           <span style="font-weight: 700; font-style: italic; font-size: 16px">
             ${{ current.amount }}
           </span>
@@ -38,12 +37,12 @@
       </div>
       <div class="spinwrap">
         <div class="spin-header">
-          <div class="d-flex align-center justify-center spin-header-img">
-            <div class="d-flex justify-center flex-column">
-              <div class="d-flex justify-center">
+          <div class="d-flex align-center justify-space-between spin-header-top-bg">
+            <div class="d-flex justify-center align-center">
+              <div class="d-flex justify-center align-center">
                 <e-team-avatar
                   :src="userInfo.avatar"
-                  :size="68"
+                  :size="24"
                   :uid="userInfo.uid"
                 ></e-team-avatar>
               </div>
@@ -51,90 +50,38 @@
                 {{ (userInfo.username || "unkown").cutStr(6, 4) }}
               </div>
             </div>
-          </div>
-          <div class="spin-header-tips fz-14">
-            <span class="spin-header-number"
-              >${{ spinStartInfo.cashValue }}</span
-            >
-            available, more point quota required
-          </div>
-          <div class="spin-header-number-short point_pulse">
-            <ICountUp
-                  class="points mx-1"
-                  :delay="1000"
-                  :endVal="shortPoint"
-                  :options="{
-                    useEasing: true,
-                    useGrouping: true,
-                    decimalPlaces: 1,
-                    separator: ',',
-                    decimal: '.',
-                    prefix: '',
-                    suffix: '',
-                  }"
-                />
-            <!-- {{
-              (spinStartInfo.duration * 10 -
-                spinStartInfo.currentDuration * 10) /
-              10
-            }} -->
-          </div>
-          <div
-            class="d-flex align-center justify-space-between spin-header-quota"
-          >
-            <div class="d-flex justify-center flex-column">
-              <div class="d-flex align-center fz-12">Point Quota Earned</div>
-
-              <div class="d-flex align-center justify-center">
-                <span class="font-14 mr-1 quota-left"
-                  >
-                  <ICountUp
-                  class="points mx-1"
-                  :delay="1000"
-                  :endVal="currentPoint"
-                  :options="{
-                    useEasing: true,
-                    useGrouping: true,
-                    decimalPlaces: 1,
-                    separator: ',',
-                    decimal: '.',
-                    prefix: '',
-                    suffix: '',
-                  }"
-                />
-                </span>
-              </div>
+            <div class="spin-header-right d-flex justify-center align-center">
+              <img
+                src="/img/booster/spin/icon_points.png"
+                width="16"
+                alt=""
+              /> {{boosterInfo.totalPoint}} ≈ {{boosterInfo.totalPoint /1e3}}
             </div>
-            <div
-              class="d-flex justify-center flex-column spin-content-top-right"
-            >
-              <div class="d-flex align-center fz-12">Point Quota Required</div>
-              <div class="d-flex align-center justify-center">
-                <span class="font-16 mr-1 quota-right"
-                  >{{
-                    (spinStartInfo.duration * 10 -
-                      spinStartInfo.currentDuration * 10) /
-                    10
-                  }}
-                </span>
-              </div>
+          </div>
+          <div class="d-flex justify-center flex-column spin-header-tips fz-14">
+            <div class="spin-header-tips-item1">
+              🎉Congrats! You can withdraw
             </div>
+            <div class="spin-header-tips-item2">
+              <img
+                src="/img/booster/spin/icon_points.png"
+                width="32"
+                alt=""
+              />{{ spinStartInfo.duration }}
+            </div>
+            <div class="points ">
+              = <span class="pointsCash point_pulse">${{ spinStartInfo.cashValue }}</span>
+            </div>
+              
           </div>
         </div>
         <div class="spin-content">
           <div class="spin-content-header-bg">
             <div
-              class="d-flex align-center justify-center spin-content-topheader"
+              class="d-flex align-center justify-space-between spin-content-topheader"
             >
-              <div style="width: 80%">
-                <div class="d-flex justify-start align-center">
-                  <img
-                    src="/img/booster/spin/spin-icon.png"
-                    width="16"
-                    alt=""
-                  />
-                  <div class="chip-text">{{ spinStartInfo.duration }}</div>
-                </div>
+              <div class="spin-content-topheader-bg" style="width: 80%">
+                
                 <div class="d-flex align-center spin-content-pro">
                   <div class="progress-content">
                     <div class="progress" :style="{ width: percent + '%'}" >
@@ -143,7 +90,7 @@
                         class="d-b"
                         width="100%"
                         src="/img/booster/4ever-token-progress-mask.png"
-                        height="12"
+                        height="10"
                         alt=""
                       />
                       <div class="zebra-stripe-content"></div>
@@ -156,10 +103,34 @@
                       />
                     </div>
                   </div>
+                  <div class="spin-points-tooltip" :style="{ left: percent + '%'}">
+                    <div class="points-short d-flex justify-center flex-column">
+                      <div class="d-flex align-center  justify-center ">
+                      Just <img
+                          src="/img/booster/spin/icon_Points_Quota.png"
+                          width="14"
+                          alt=""
+                        />{{ shortPoint }}
+                      </div>
+                      <div>
+                        to withdraw
+                      </div>
+                     
+                    </div>
+                    <div class="arrow-up"></div>
+                  </div>
+                </div>
+                <div class="d-flex justify-space-between align-center">
+                  <div class="chip-text">0</div>
+                  <div class="chip-text">{{ spinStartInfo.duration }}</div>
                 </div>
               </div>
               <div class="d-flex align-center cash-value">
-                ${{ spinStartInfo.cashValue }}
+                <img
+                  class="points-icon"
+                  src="/img/booster/spin/icon_Points_Quota.png"
+                  height="48"
+                />
               </div>
             </div>
           </div>
@@ -209,12 +180,12 @@
                 class="d-flex align-center justify-center flex-column luck_button_wrap"
                 v-if="percent >= 100"
               >
-                <div class="font-weight-bold">Swap</div>
+                <div class="font-weight-bold fz-14">Withdraw</div>
               </div>
             </div>
           </div>
 
-          <div class="d-flex align-center justify-center spin-content-footer" v-if="!taskEnd">
+          <div class=" spin-content-footer" v-if="!taskEnd">
             <div>Reset countdown</div>
             <div class="countdown">
               <count-down
@@ -256,7 +227,7 @@
           </div>
         </div>
         <div class="spin-footer-swapList" v-if="false">
-          <h3 class="tit">Swap List</h3>
+          <h3 class="tit">Withdraw List</h3>
           <v-simple-table class="swap-list-table mt-1">
             <thead>
               <tr>
@@ -297,31 +268,26 @@
           <v-btn icon dark @click="dialog = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
-          <v-toolbar-title>Swap Rules</v-toolbar-title>
+          <v-toolbar-title>Withdraw Rules</v-toolbar-title>
         </v-toolbar>
         <v-list class="rulelist">
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="swap-rule-title"
-                >Points Swap</v-list-item-title
+                >Points Withdraw</v-list-item-title
               >
               <div class="swap-rule-content">
-                Everyone can exchange their $4EVER Points for TON based on their
-                allocated Point Quota. The more points you accumulate, the more
-                TON you can swap.
+                Everyone can withdraw their $4EVER Points for Ton based on their allocated ‘Points Quota’. The more points you have, the more Ton you can withdraw.
               </div>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="swap-rule-title"
-                >Point Quota</v-list-item-title
+                >Points Quota</v-list-item-title
               >
               <div class="swap-rule-content">
-                The Point Quota specifies how many Points can be exchanged for
-                TON. There are three tiers: 100, 500, and 1000 Points, with an
-                exchange rate of 100 Points = $0.10. The Quota is valid for 24
-                hours before they expire.
+                The Points Quota specifies how many points can be withdrawn for Ton, with an withdraw rate of 100 points=$0.1. The Quotas is valid for 24 hours before they expire.
               </div>
             </v-list-item-content>
           </v-list-item>
@@ -331,9 +297,7 @@
                 >Spin</v-list-item-title
               >
               <div class="swap-rule-content">
-                You earn one ‘Spin’ for each friend you successfully invite to
-                join 4EVER Boost during the each Points Swap round. After each
-                round, your invites will reset.
+                You earn one ‘Spin’ time for each friend you successfully invite to join 4EVER Boost during the each withdraw round. After each round, your invites will reset.
               </div>
             </v-list-item-content>
           </v-list-item>
@@ -341,9 +305,7 @@
             <v-list-item-content>
               <v-list-item-title class="swap-rule-title">TON</v-list-item-title>
               <div class="swap-rule-content">
-                The amount you receive when exchanging Points may vary due to
-                the fluctuating value of TON, reflecting the actual amount
-                credited to your account.
+                The Ton amount you receive may vary due to the fluctuating value of Ton, reflecting the actual amount credited to your account.
               </div>
             </v-list-item-content>
           </v-list-item>
@@ -780,7 +742,6 @@ export default {
   }
   .spinwrap {
     width: 100%;
-    margin-top: 20px;
   }
   .nav-bar {
     height: 64px;
@@ -809,17 +770,27 @@ export default {
     border-radius: 24px;
     position: relative;
     margin: 0 10px;
+    padding: 15px 15px 0;
+    .spin-header-top-bg{
+      background: #A4BCFD40;
+      border-radius: 8px;
+      height: 32px;
+      padding: 0 10px;
+    }
     .spin-header-img {
       margin-top: -30px;
     }
-    .spin-header-name {
-      background: #6172f3;
+    .spin-header-right {
+      color: #121536;
+      font-family: "Inter", sans-serif;
       font-size: 12px;
+    }
+    .spin-header-name {
+      font-size: 12px;
+      color: #121536;
       height: 20px;
-      border-radius: 25px;
       padding: 0 10px;
       line-height: 20px;
-      margin-top: -20px;
       position: relative;
       font-weight: bold;
     }
@@ -844,6 +815,26 @@ export default {
     .spin-header-tips {
       text-align: center;
       color: #121536;
+      font-weight: 700;
+      padding-top: 10px;
+      .spin-header-tips-item2{
+        font-family: "Inter", sans-serif;
+        font-size: 40px;
+        font-style: italic;
+        font-weight: 900;
+        text-align: center;
+        color: #6172F3;
+        line-height: 48px;
+      }
+      .points {
+        font-size: 24px;
+        font-weight: 900;
+        color: #FF9408;
+        font-style: italic;
+        .pointsCash{
+          display: inline-block;
+        }
+      }
     }
     .spin-header-quota {
       color: #667085;
@@ -866,7 +857,7 @@ export default {
   .spin-content {
     height: 512px;
     position: relative;
-    top: -50px;
+    top: -70px;
     background: linear-gradient(
         180deg,
         rgba(57, 59, 62, 0.9) 25.52%,
@@ -877,13 +868,18 @@ export default {
     border-radius: 24px;
     padding: 15px 18px;
     .spin-content-header-bg {
-      margin-top: 20px;
-      height: 46px;
-      background: linear-gradient(99.62deg, #ff3821 0%, #dc33d6 100%);
+      margin: 20px auto 0;
+      height: 40px;
+      background: #24272A radial-gradient(16.61% 111.36% at 94.24% 50%, rgba(255, 222, 127, 0.25) 0%, rgba(255, 222, 127, 0) 100%);
+      background-blend-mode: overlay;
+      background-color: #4C5277;
+
       position: relative;
       border-radius: 50px;
-      padding: 0 10px;
       font-size: 12px;
+    }
+    .spin-topheader-mid {
+      min-width: 150px;
     }
     .chip-text {
       color: #fff;
@@ -896,27 +892,67 @@ export default {
       font-style: italic;
       font-weight: 700;
       line-height: 30px;
-      color: #ffde7f;
+      color: #FFDE7F;
     }
     .spin-content-topheader {
       margin-top: -16px;
       height: 100%;
+      .spin-content-topheader-bg{
+        padding-left: 10px;
+      }
       .spin-content-pro {
         min-width: 220px;
         width: 100%;
+        position: relative;
+        padding-top: 5px;
       }
       .font-16 {
         font-size: 16px;
         font-weight: bold;
       }
     }
+    .spin-points-tooltip {
+      position: absolute;
+      top: -43px;
+      left: 50%;
+      z-index: 3;
+      margin-left: -62px;
+      .arrow-up {
+        margin-left: 46px;
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent; 
+        border-right: 6px solid transparent; 
+        border-top: 8px solid #FF3821; 
+      }
+      .points-short {
+        width: 92px;
+        height: 32px;
+        padding: 2px 12px 2px 12px;
+        border-radius: 16px;
+        background: 
+                linear-gradient(99.62deg, #FF3821 0%, #DC33D6 100%);
+
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 12px;
+        text-align: center;
+        color: #FFFFFF;
+        .point-text{
+          font-weight: 400 !important;
+        }
+
+
+      }
+    }
+
   }
   .spin-content-top-right {
     min-width: 114px;
   }
   .progress-content {
     position: relative;
-    height: 16px;
+    height: 14px;
     border-radius: 12px;
     border: 2px solid #ffffff80;
     background: #17191d;
@@ -929,7 +965,7 @@ export default {
         left: 0;
         top: 0;
         width: 100%;
-        height: 12px;
+        height: 10px;
         border-radius: 12px;
         position: absolute;
         background-image: url("/img/booster/zebra-stripe.png");
@@ -940,7 +976,7 @@ export default {
       .hot-icon {
         position: absolute;
         right: -3%;
-        top: -120%;
+        top: -150%;
       }
       @keyframes run {
         from {

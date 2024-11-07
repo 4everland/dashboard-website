@@ -25,8 +25,8 @@
 
         <div class="spin-background">
           <div class="congratulations">Congratulations!</div>
-          <div class="swap">You have swapped {{spinStartInfo.duration}} points for</div>
-          <div class="reward-number">{{spinClaimedInfo ? spinClaimedInfo.toFixed(2): 0}} Ton</div>
+          <div class="swap">You have received</div>
+          <div class="reward-number">{{spinClaimedInfo ? spinClaimedInfo.toFixed(2): 0}} Ton <span class="reward-number-usd">≈ ${{spinStartInfo.cashValue}}</span></div>
           <div class="view-account d-flex justify-center align-center">
             <img
               src="/img/booster/spin/annotation-alert.svg"
@@ -126,12 +126,22 @@ export default {
   }
     .reward-number {
       font-family: Inter;
-      font-size: 32px;
+      font-size: 20px;
       font-style: italic;
       font-weight: 700;
-      line-height: 48.41px;
+      line-height: 24px;
       text-align: center;
       margin-right: 24px;
+      color: #039CFF;
+      text-shadow: 1px 2px 0px 0px #FF9408, 0.5px 0.75px 0px 0px #FFF6B6 inset;
+    }
+    .reward-number-usd{
+      font-family: Inter;
+      font-size: 20px;
+      font-style: italic;
+      font-weight: 700;
+      line-height: 24.2px;
+      text-align: center;
       color: #ffde7f;
       text-shadow: 1px 2px 0px 0px #FF9408, 0.5px 0.75px 0px 0px #FFF6B6 inset;
     }
@@ -151,9 +161,9 @@ export default {
     font-family: Inter;
     font-size: 14px;
     font-weight: 400;
-    line-height: 16.94px;
+    line-height: 24px;
     text-align: center;
-    margin-top: 8px;
+    margin: 5px auto;
     color: #FFFFFF;
   }
   .view-account{

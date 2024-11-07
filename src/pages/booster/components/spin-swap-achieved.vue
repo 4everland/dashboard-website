@@ -9,8 +9,7 @@
       <v-card class="swap-success">
         <div class="swap-content">
           <div class="success-text">
-            <div>Point quota collected!</div>
-            <div>Swap eligibility achieved.</div>
+            <div>Points quota collected!</div>
           </div>
           <div>
             <img
@@ -21,7 +20,7 @@
             />
             <div class="success-img">
               <img src="/img/booster/spin/success.png" width="300" alt="" />
-              <v-chip class="swap-chip d-flex justify-between align-center">
+              <v-chip class="swap-chip d-flex justify-center align-center">
                 <div class="d-flex justify-center align-center">
                   <img
                     src="/img/booster/spin/spin-icon.png"
@@ -42,7 +41,7 @@
           <v-btn class="reward-btn" style="width: 80%" height="44"
             @click="handleSwap"
           >
-            <div class="btn-text">Swap</div>
+            <div class="btn-text">Withdraw</div>
           </v-btn>
         </div>
       </v-card>
@@ -131,7 +130,7 @@ export default {
       left: 50%;
       transform: translateX(-50%);
       z-index: 2;
-      width: 128px;
+      min-width: 128px;
       height: 28px;
       background: linear-gradient(
         180deg,

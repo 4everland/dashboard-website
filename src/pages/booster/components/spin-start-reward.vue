@@ -14,7 +14,7 @@
             ${{spinStartInfo.cashValue}}
           </div>
         </div>
-        <div class="swaptext my-5 mb-10">Available For Swap</div>
+        <div class="swaptext my-5 mb-10">Available to Withdraw</div>
         <div class="swapText2 py-3">Get {{spinStartInfo.duration}} points quota to start</div>
         <div class="d-flex align-center justify-center ">
             <v-btn
@@ -23,7 +23,7 @@
               height="44"
               @click="handleStartGetReward()"
             >
-              <div class="btn-text">Open Swap Card</div>
+              <div class="btn-text">Start</div>
             </v-btn>
         </div>
       </div>

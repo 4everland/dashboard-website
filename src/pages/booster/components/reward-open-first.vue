@@ -4,7 +4,6 @@
       max-width="400"
       content-class="daily-boost-dialog headShake"
       v-model="value"
-      @click:outside="$emit('input', false)"
     >
       <div class="daily-boost">
         <img
@@ -19,33 +18,38 @@
           width="240"
           alt=""
         />
-        <div class="reward-number">${{spinStartInfo.cashValue}}</div>
+        
+        <div class="reward-title">
+          <div>
+            🎉CONGRATS!
+          </div>
+          <div>
+            YOU CAN WITHDRAW
+          </div>
+        </div>
        </div>
        <img
-          class="dialog-spin"
           src="/img/booster/spin/background.png"
-          width="311"
-          alt=""
-        />
-        <img
-          class="close-btn"
-          @click="$emit('input', false)"
-          src="/img/booster/svg/close.svg"
-          width="20"
+          width="325"
           alt=""
         />
     
        <div class="spin-background">
-        <div style="padding-top:160px;">
-          <div class="d-flex align-center justify-center">
-             <img
-              src="/img/booster/spin/congratulations.png"
-              width="24"
-              alt=""
-              />
-               <div class="congratulations">Congratulations!</div>
+        <div style="padding-top:100px;">
+          <div class="">
+            <div class="reward_points">
+              <img
+                src="/img/booster/spin/icon_points.png"
+                width="32"
+                alt=""
+              />{{spinStartInfo.duration}}
+            </div>
+            <div class="reward_cashes">
+              =${{spinStartInfo.cashValue}}
+            </div>
+            
+            
           </div>
-          <div class="swap">Swap {{spinStartInfo.duration}} ＄4EVER Points ×1</div>
            <v-btn
               class="reward-btn point_pulse"
               style="width: 80%;"
@@ -120,15 +124,10 @@ export default {
   width: 100%;
   padding: 36px 16px 24px 16px;
   border-radius: 16px;
-  .close-btn {
-    position: absolute;
-    right: 0;
-    top: -40px;
-    cursor: pointer;
-  }
+  text-align: center;
   .lightning {
     position: absolute;
-    top: -38px;
+    top: -5px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 3;
@@ -140,10 +139,21 @@ export default {
   }
   .pattern_light{
     position: absolute;
-    top: -92px;
+    top: -54px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
+    .reward-title {
+      font-family:  "Inter", sans-serif;
+      font-size: 20px;
+      font-style: italic;
+      font-weight: 900;
+      line-height: 24.21px;
+      margin-top: -68px;
+      color: #FFFFFF;
+      text-align: center;
+    }
+    
     .reward-number{
       font-family: Inter;
       font-size: 40px;
@@ -158,11 +168,31 @@ export default {
   }
   .spin-background{
     width:295px;
-    height:322px;
+    height:280px;
     background: #121536;
     border-radius: 16px;
+    margin: 0 auto;
+    margin-top: -115px;
+    .reward_points{
+      font-family:  "Inter", sans-serif;
+      font-size: 40px;
+      font-style: italic;
+      font-weight: 900;
+      line-height: 48px;
+      color: #6172F3;
+      text-align: center;
+    }
+    .reward_cashes{
+      font-family:  "Inter", sans-serif;
+      font-size: 24px;
+      font-style: italic;
+      font-weight: 700;
+      line-height: 24.21px;
+      color: #FFDE7F;
+      text-align: center;
+    }
     .congratulations{
-      font-family: Inter;
+      font-family:  "Inter", sans-serif;
       font-size: 20px;
       font-style: italic;
       font-weight: 900;
@@ -191,7 +221,6 @@ export default {
   backdrop-filter: blur(2px);
   border-radius: 12px;
   margin-top: 20px;
-  margin-left: 10%;
   background: linear-gradient(180deg, #ffa927 0%, rgba(255, 169, 39, 0) 59.56%),
     linear-gradient(270deg, rgba(255, 114, 114, 0) 27%, #ff7272 100%),
     linear-gradient(327deg, #ff7c32 2.65%, rgba(255, 169, 39, 0) 33.12%),

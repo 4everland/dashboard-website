@@ -23,7 +23,7 @@
 
         <div class="spin-background">
           <div class="congratulations">Sorry!</div>
-          <div class="swap">Minimum points for swap: <span style="font-weight: 700;font-style: italic;">{{ spinStartInfo.duration }}</span> points.</div>
+          <div class="swap">Your $4EVER points are not enough to process a withdrawal. Get out there and earn more:)</div>
           <v-btn class="reward-btn" style="width: 90%" height="44" @click="handleEarn">
             <div class="btn-text">Earn Points</div>
           </v-btn>

@@ -257,7 +257,7 @@
               0px 0px 2.5px 0px #ffad08bf;
           "
         >
-          <div class="points-text">Point Swap</div>
+          <div class="points-text">Withdraw</div>
           <v-progress-linear
             :value="pointPercent"
             height="10"

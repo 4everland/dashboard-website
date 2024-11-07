@@ -50,7 +50,7 @@
             width="240"
             alt=""
           />
-          <div class="reward-number"><span style="font-size:30px">X</span>{{ spinStartInfo.remainSpins }}</div>
+          <div class="reward-number"><span style="font-size:30px">+</span>{{ spinStartInfo.remainSpins }}</div>
         </div>
           <div style="padding-top:60px;">
             <v-btn
