@@ -6,7 +6,7 @@
       v-model="value"
       overlay-opacity="0.9"
       overlay-color="black"
-      @click:outside="$emit('input', false)"
+      persistent
     >
       <div class="daily-boost " v-if="showNextSpinTime">
         <div v-show="showCard">

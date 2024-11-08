@@ -6,7 +6,7 @@
       v-model="value"
       overlay-opacity="0.9"
       overlay-color="black"
-      @click:outside="$emit('input', false)"
+      persistent
     >
       <div class="daily-boost">
         <img
@@ -92,7 +92,7 @@ export default {
       setTimeout(() => {
         bus.$emit("showSwapSuccess");
       },1000)
-    },
+    }
   },
 };
 </script>

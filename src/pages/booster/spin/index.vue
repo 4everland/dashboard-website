@@ -679,7 +679,7 @@ export default {
       if (this.isTgMiniApp) {
         this.$tg.shareUrl(
           this.inviteInfo.link,
-          "💎 Join me in the #4EVERBoost and reap amazing rewards! Earn $4EVER points, Ton rewards, and exciting @4everland_org #airdrops! Don't miss out—let's boost together! 🎗️🎊"
+          "💥 I'm excited to share that I can now withdraw my $4EVER Points for $TON in the 4EVERLAND Mini App! This new feature makes earning so much fun. Join me, and let’s spin and withdraw earning! 🎊🔥"
         );
       } else {
         let shareUrl =

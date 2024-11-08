@@ -4,6 +4,7 @@
       v-model="value"
       fullscreen
       hide-overlay
+      persistent
     >
       <v-card class="swap-success">
         <div class="swap-content">
