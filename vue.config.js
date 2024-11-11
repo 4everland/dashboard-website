@@ -11,6 +11,7 @@ module.exports = {
     "@ton/crypto",
     "@ton/ton",
     "buffer",
+    "@bitget-wallet/omni-connect",
   ],
   outputDir: "dist",
   publicPath: process.env.NODE_ENV === "production" ? "/" : "/",

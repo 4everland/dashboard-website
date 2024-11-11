@@ -27,7 +27,6 @@
       <div class="trigger-text staking fz-12 fw-b text-center">STAKING</div>
     </div>
     <div
-      v-if="isTgMiniApp && !userInfo.wallet"
       class="trigger-icon pos-a"
       style="right: 8px; top: 268px"
       @click="onConnetc"
@@ -319,7 +318,7 @@ export default {
       }
       return percent * 100;
     },
-    pointPercent(){
+    pointPercent() {
       const percent =
         this.spinStartInfo.currentDuration / this.spinStartInfo.duration;
       return percent * 100;
@@ -339,8 +338,11 @@ export default {
     taskEnd() {
       const curTimeStamp = +new Date() / 1e3;
       if (Object.keys(this.spinStartInfo).length > 0) {
-        return curTimeStamp > this.spinStartInfo.endAt || this.spinStartInfo.claimAt != null;
-      }else {
+        return (
+          curTimeStamp > this.spinStartInfo.endAt ||
+          this.spinStartInfo.claimAt != null
+        );
+      } else {
         return true;
       }
     },
@@ -350,9 +352,9 @@ export default {
       this.sheet = true;
     });
     bus.$on("showSwapSuccess", () => {
-      this.showTonReceive()
+      this.showTonReceive();
       this.$store.dispatch("getBoosterUserInfo");
-    })
+    });
   },
   beforeDestroy() {
     clearInterval(this.protectTimer);
