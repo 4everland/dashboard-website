@@ -39,6 +39,7 @@ export default {
       showToolDrawer: false,
       showInviteDrawer: false,
       showProfileDrawer: false,
+      showConnectDrawer: false,
       currentDate: +new Date() / 1000,
       showBindWallet: false,
       taskUndo: false,
@@ -54,11 +55,9 @@ export default {
         }),
       }),
       dailySign: null,
-      spinPlayReward: {
-      },
-      spinStartInfo: {
-      },
-      spinClaimedInfo: ''
+      spinPlayReward: {},
+      spinStartInfo: {},
+      spinClaimedInfo: "",
     };
   },
   getters: {
@@ -67,6 +66,7 @@ export default {
     },
     showStakeDrawer: (state) => state.showStakeDrawer,
     showTaskDrawer: (state) => state.showTaskDrawer,
+    showConnectDrawer: (state) => state.showConnectDrawer,
     showBindWallet: (state) => state.showBindWallet,
     boostLocked({ boosterInfo }) {
       return boosterInfo.baseRate.length == 0;
@@ -167,6 +167,12 @@ export default {
     BINDWALLET_TOGGLE: (state) => {
       state.showBindWallet = !state.showBindWallet;
     },
+    SHOWCONNECTDRAWER_STATE: (state, payload) => {
+      state.showConnectDrawer = payload.state;
+    },
+    CONNECTDRAWER_TOGGLE: (state) => {
+      state.showConnectDrawer = !state.showConnectDrawer;
+    },
     SET_BOOST_INFO(state, info) {
       state.boosterInfo = info;
     },
@@ -241,7 +247,12 @@ export default {
     BindWalletToggle: async (context, payload) => {
       context.commit("BINDWALLET_TOGGLE", payload);
     },
-
+    ConnectDrawerState: async (context, payload) => {
+      context.commit("SHOWCONNECTDRAWER_STATE", payload);
+    },
+    ConnectDrawerToggle: async (context, payload) => {
+      context.commit("CONNECTDRAWER_TOGGLE", payload);
+    },
     async getBoosterUserInfo({ commit, state }) {
       const { code, data, message } = await fetchUserBoostInfo();
       if (data) {

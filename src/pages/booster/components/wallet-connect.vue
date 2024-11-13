@@ -47,10 +47,10 @@
       :hide-overlay="!asMobile"
       color="#1E2234"
       :value="showConnectLoadingDrawer"
-      @input="handleToggle"
+      @input="handleLoadingToggle"
     >
       <v-container fluid style="padding: 24px 16px">
-        <div class="drawer-title mb-6">OKX Wallet</div>
+        <div class="drawer-title mb-6">{{ walletType }} Wallet</div>
         <div class="mobile-invite-panel-content">
           <div class="text-center">
             <img
@@ -60,16 +60,21 @@
             />
           </div>
         </div>
-        <div class="my-5">Continue in OKX Wallet</div>
+        <div v-if="!walletAccount" class="my-5">
+          Continue in {{ walletType }} Wallet
+        </div>
+        <div v-else class="my-5">
+          Confirm the signature in your wallet to complete the connect.
+        </div>
         <div class="my-5">
           <v-btn
             v-if="!walletAccount"
-            class="confrm-btn"
+            class="confirm-btn"
             @click="onConnect(walletType)"
             >Open Wallet</v-btn
           >
-          <v-btn v-else class="confrm-btn" @click="onSign(walletType)"
-            >Confrm</v-btn
+          <v-btn v-else class="confirm-btn" @click="onSign(walletType)"
+            >Confirm</v-btn
           >
         </div>
       </v-container>
@@ -77,7 +82,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 
 import { OKXUniversalProvider } from "@okxconnect/universal-provider";
 
@@ -102,6 +107,8 @@ const connector = new OmniConnect({
 
 export default {
   computed: {
+    ...mapGetters(["showConnectDrawer"]),
+
     ...mapState({
       showInviteDrawer: (s) => s.moduleBooster.showInviteDrawer,
     }),
@@ -113,7 +120,6 @@ export default {
   data() {
     return {
       okxUniversalProvider: null,
-      showConnectDrawer: false,
       showConnectLoadingDrawer: false,
       walletConnectLoading: false,
       loadingIndex: null,
@@ -123,17 +129,17 @@ export default {
         {
           name: "OKX Wallet",
           icon: "/img/booster/wallet/wallet-okx.png",
-          type: "okx",
+          type: "OKX",
         },
         {
           name: "WalletConnect",
           icon: "/img/booster/wallet/wallet-walletconnect.png",
-          type: "walletconnect",
+          type: "WalletcConnect",
         },
         {
           name: "Bitget Wallet",
           icon: "/img/booster/wallet/wallet-bitget.png",
-          type: "bitget",
+          type: "Bitget",
         },
       ],
     };
@@ -141,10 +147,11 @@ export default {
   created() {},
   mounted() {
     this.initOkx();
+    this.subscription();
   },
   methods: {
     onShowConnect() {
-      this.showConnectDrawer = true;
+      this.$store.dispatch("ConnectDrawerState", { state });
     },
     async initOkx() {
       this.okxUniversalProvider = await OKXUniversalProvider.init({
@@ -153,18 +160,18 @@ export default {
           icon: "https://dashboard.4everland.org/favicon.ico",
         },
       });
-      console.log("创建了一个okxUniversalProvider");
     },
     async onConnect(type) {
+      this.walletAccount = null;
       switch (type) {
-        case "okx":
+        case "OKX":
           this.connectOkxWallet(type);
           break;
-        case "walletconnect":
+        case "WalletcConnect":
           this.onBindWithWalletConnect();
           break;
-        case "bitget":
-          this.connectBitget();
+        case "Bitget":
+          this.connectBitget(type);
           break;
         default:
           break;
@@ -172,13 +179,13 @@ export default {
     },
     async onSign(type) {
       switch (type) {
-        case "okx":
+        case "OKX":
           this.signWithOkx();
           break;
-        case "walletconnect":
+        case "WalletcConnect":
           this.onBindWithWalletConnect();
           break;
-        case "bitget":
+        case "Bitget":
           this.signWithBitget();
           break;
         default:
@@ -208,17 +215,24 @@ export default {
       const account = accounts[0].split(":")[2];
       console.log(account);
       this.walletAccount = account;
+      this.msg = await this.getMsg("7");
     },
     async signWithOkx() {
-      const msg = await this.getMsg("7");
+      // window.open(
+      //   "https://www.okx.com/download?deeplink=okx%3A%2F%2Fweb3%2Fwallet%2Fconnect",
+      //   "_self"
+      // );
+      const msg = this.msg;
       let chain = "eip155:1";
-      let params = {};
-      params = {
+      let data = {};
+
+      data = {
         method: "personal_sign",
-        params: [msg, this.walletAccount],
+        params: [msg],
       };
 
-      const signature = await this.okxUniversalProvider.request(params, chain);
+      const signature = await this.okxUniversalProvider.request(data, chain);
+
       console.log(signature);
 
       if (signature) {
@@ -252,14 +266,13 @@ export default {
       }
     },
     async connectBitget(type) {
-      this.subscription();
       this.showLoading(type);
       connector.connect();
     },
     async signWithBitget() {
       try {
         const address = this.walletAccount;
-        const msg = await this.getMsg("104");
+        const msg = this.msg;
         console.log(msg);
 
         await connector.signMessage({
@@ -270,26 +283,32 @@ export default {
         console.log(error);
       }
     },
+    async setBitgetInfo(account) {
+      this.walletAccount = account;
+      this.msg = await this.getMsg("104");
+      console.log("walletAccount", this.walletAccount);
+    },
     async subscription() {
+      const _that = this;
       const subscription = connector.onStatusChange(
         (walletInfo) => {
           console.log("onStatusChange", walletInfo);
           const { id, namespaceKey, event, connected, result } = walletInfo;
           switch (event) {
-            case "connect":
-              this.walletAccount = result?.address;
+            case "Connect":
+              _that.setBitgetInfo(result?.address);
               break;
-            case "disconnect":
+            case "Disconnect":
               // connected or disconnect logic..
-              this.walletAccount = result?.address;
+              _that.walletAccount = result?.address;
               break;
-            case "signMessage":
+            case "SignMessage":
               if (result?.signature) {
-                this.onVcode(104, result?.signature);
+                _that.onVcode(104, result?.signature);
               }
               break;
-            case "signTransaction":
-            case "sendTransaction":
+            case "SignTransaction":
+            case "SendTransaction":
               // handle result?.signature, result?.reciept
               break;
             default:
@@ -323,13 +342,19 @@ export default {
       }
     },
     async onVcode(type, code) {
-      this.showConnectDrawer = false;
       try {
         let params = {
           type,
         };
 
         const { data } = await fetchWeb3Vcode(code, params);
+
+        this.$store.dispatch("ConnectDrawerState", { state: false });
+        this.showConnectLoadingDrawer = false;
+        this.loadingIndex = null;
+        this.walletType = null;
+        this.walletAccount = null;
+
         if (data.nodeToken) {
           localStorage.nodeToken = data.nodeToken;
         }
@@ -342,8 +367,11 @@ export default {
         console.log(error);
       }
     },
-    handleToggle(val) {
-      this.showConnectDrawer = val;
+    handleToggle(state) {
+      this.$store.dispatch("ConnectDrawerState", { state });
+    },
+    handleLoadingToggle(val) {
+      this.showConnectLoadingDrawer = val;
     },
   },
 };
@@ -353,7 +381,7 @@ export default {
 .invite-drawer-box {
   ::v-deep .invite-drawer {
     width: 100% !important;
-    height: 30% !important;
+    height: 40% !important;
     max-height: 100% !important;
 
     overflow: scroll;
@@ -449,7 +477,7 @@ export default {
   }
 }
 
-.confrm-btn {
+.confirm-btn {
   background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
   box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
   color: #fff !important;

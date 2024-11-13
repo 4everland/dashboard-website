@@ -144,7 +144,7 @@
 import { mapState, mapGetters } from "vuex";
 import WithdrawDialog from "./withdraw-dialog.vue";
 import WithdrawLogDialog from "./withdraw-log-dialog.vue";
-import WalletConnect from "../components/wallet-connect.vue";
+// import WalletConnect from "../components/wallet-connect.vue";
 import ICountUp from "vue-countup-v2";
 import { bus } from "@/utils/bus";
 
@@ -189,8 +189,8 @@ export default {
       }
     },
     handleShowConnect() {
-      // this.$store.commit("SET_PROFILE_BAR", false);
-      // this.$refs.walletConnect.onShowConnect();
+      this.$store.commit("SET_PROFILE_BAR", false);
+      this.$store.dispatch("ConnectDrawerState", { state: true });
     },
     handleToDeposit() {
       if (this.isTgMiniApp) {
@@ -204,7 +204,6 @@ export default {
     ICountUp,
     WithdrawDialog,
     WithdrawLogDialog,
-    WalletConnect,
   },
   watch: {
     showProfileDrawer(val) {
