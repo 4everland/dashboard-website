@@ -693,7 +693,7 @@ export default {
     },
     async getList() {
       const res = await fetchClaimList();
-      this.list = res?.data || [];
+      this.list = res?.data?.list || [];
     },
     timeOver() {
       let info = this.userInfo.username
