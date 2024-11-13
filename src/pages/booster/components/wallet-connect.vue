@@ -153,6 +153,7 @@ export default {
           icon: "https://dashboard.4everland.org/favicon.ico",
         },
       });
+      console.log("创建了一个okxUniversalProvider");
     },
     async onConnect(type) {
       switch (type) {

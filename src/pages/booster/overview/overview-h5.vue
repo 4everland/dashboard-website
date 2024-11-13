@@ -19,6 +19,7 @@
       <div class="trigger-text staking fz-12 fw-b text-center">STAKING</div>
     </div>
     <div
+      v-if="isTgMiniApp"
       class="trigger-icon pos-a"
       style="right: 8px; top: 202px"
       @click="onConnetc"

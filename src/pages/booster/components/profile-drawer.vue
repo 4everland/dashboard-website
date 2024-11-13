@@ -137,7 +137,7 @@
         <WithdrawLogDialog v-model="showWithdrawLogDialog"></WithdrawLogDialog>
       </v-navigation-drawer>
     </div>
-    <WalletConnect ref="walletConnect" />
+    <!-- <WalletConnect ref="walletConnect" /> -->
   </div>
 </template>
 <script>
@@ -189,8 +189,8 @@ export default {
       }
     },
     handleShowConnect() {
-      this.$store.commit("SET_PROFILE_BAR", false);
-      this.$refs.walletConnect.onShowConnect();
+      // this.$store.commit("SET_PROFILE_BAR", false);
+      // this.$refs.walletConnect.onShowConnect();
     },
     handleToDeposit() {
       if (this.isTgMiniApp) {
