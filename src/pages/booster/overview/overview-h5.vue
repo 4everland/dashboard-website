@@ -5,19 +5,11 @@
       style="right: 8px; top: 70px"
       v-if="isTgMiniApp"
     ></TokenDialog>
+
     <div
       v-if="isTgMiniApp"
       class="trigger-icon pos-a"
       style="right: 8px; top: 136px"
-      @click="$store.commit('SET_INVITE_BAR', true)"
-    >
-      <img src="/img/booster/ton-claim-icon.png" width="56" alt="" />
-      <div class="trigger-text claim fz-12 fw-b text-center">CLAIM</div>
-    </div>
-    <div
-      v-if="isTgMiniApp"
-      class="trigger-icon pos-a"
-      style="right: 8px; top: 202px"
       @click="
         () =>
           !this.boostLocked ? this.$store.dispatch('StakeDrawerToggle') : ''
@@ -28,7 +20,7 @@
     </div>
     <div
       class="trigger-icon pos-a"
-      style="right: 8px; top: 268px"
+      style="right: 8px; top: 202px"
       @click="onConnetc"
     >
       <img src="/img/booster/wallet-connect-icon.png" width="56" alt="" />
