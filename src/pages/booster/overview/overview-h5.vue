@@ -257,7 +257,7 @@
               0px 0px 2.5px 0px #ffad08bf;
           "
         >
-          <div class="points-text">Withdraw</div>
+          <div class="points-text">${{ spinStartInfo.cashValue }} Withdraw</div>
           <v-progress-linear
             :value="pointPercent"
             height="10"
@@ -756,7 +756,7 @@ export default {
   position: absolute;
   left: 0;
   top: 10%;
-  width: 96px;
+  width: 100px;
   height: 48px;
   gap: 0px;
   border-radius: 0px 8px 8px 0px;

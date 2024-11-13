@@ -4,7 +4,7 @@
       max-width="400"
       content-class="daily-boost-dialog"
       v-model="value"
-      @click:outside="$emit('input', false)"
+      persistent
     >
       <div class="daily-boost">
         <img

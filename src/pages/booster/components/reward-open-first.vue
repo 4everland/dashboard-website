@@ -4,6 +4,7 @@
       max-width="400"
       content-class="daily-boost-dialog headShake"
       v-model="value"
+      persistent
     >
       <div class="daily-boost">
         <img
