@@ -49,7 +49,7 @@
           </div>
         </div>
 
-        <div class="fz-12 text-center">
+        <div class="fz-12 text-center" @click="handleDisconnect">
           Claiming LAND may take some time. Please wait.
         </div>
 
@@ -117,6 +117,11 @@ export default {
     },
   },
   methods: {
+    async handleDisconnect() {
+      if (this.tonConnected) {
+        await this.tonConnectUI.disconnect();
+      }
+    },
     async handleDeposit() {
       console.log(
         this.tonConnectUI,
@@ -124,6 +129,7 @@ export default {
         this.tonConnected,
         "====="
       );
+
       if (!this.tonConnected) {
         await this.tonConnectUI.connectWallet();
       }
