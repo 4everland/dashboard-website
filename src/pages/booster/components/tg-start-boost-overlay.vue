@@ -67,7 +67,7 @@ export default {
     },
 
     async tgMiniAppLogin() {
-      const { data: datas } = await sendTGStoken(this.$tg.initDataUnsafe);
+      const { data: datas } = await sendTGStoken(this.$tg.initData);
       console.log(datas);
       const { data } = await sendStoken(datas.stToken);
       this.onLoginData(data);
