@@ -125,7 +125,7 @@ export default {
         "====="
       );
       if (!this.tonConnected) {
-        await this.tonConnectUI.openModal();
+        await this.tonConnectUI.connectWallet();
       }
       let payload = JSON.stringify({
         uid: this.userInfo.uid,

@@ -12,7 +12,7 @@ import { Buffer } from "buffer";
 if (window.top !== window.self) {
   window.top.location = window.location.href;
 }
-// new VConsole();
+new VConsole();
 
 window.Buffer = Buffer;
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
