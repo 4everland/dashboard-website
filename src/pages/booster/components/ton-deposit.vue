@@ -125,7 +125,7 @@ export default {
         "====="
       );
 
-      await this.tonConnectUI.disconnect();
+      // await this.tonConnectUI.disconnect();
       if (!this.tonConnected) {
         await this.tonConnectUI.connectWallet();
       }
