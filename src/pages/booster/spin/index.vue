@@ -692,8 +692,8 @@ export default {
       }
     },
     async getList() {
-      const { data } = await fetchClaimList();
-      this.list = data;
+      const res = await fetchClaimList();
+      this.list = res?.data || [];
     },
     timeOver() {
       let info = this.userInfo.username
