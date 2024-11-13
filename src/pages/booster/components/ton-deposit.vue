@@ -118,12 +118,9 @@ export default {
   },
   methods: {
     async handleDeposit() {
+      console.log(this.tonConnectUI.connected, this.tonConnected, "=====");
       if (!this.tonConnected) {
-        await this.tonConnectUI.connectWallet();
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        if (!this.tonConnectUI.connected) {
-          throw new Error("Failed to connect wallet");
-        }
+        await this.tonConnectUI.openModal();
       }
       let payload = JSON.stringify({
         uid: this.userInfo.uid,
