@@ -124,6 +124,8 @@ export default {
         this.tonConnected,
         "====="
       );
+
+      await this.tonConnectUI.disconnect();
       if (!this.tonConnected) {
         await this.tonConnectUI.connectWallet();
       }
