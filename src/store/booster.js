@@ -141,9 +141,7 @@ export default {
     },
     tonConnected(state) {
       if (state.tonConnectUI) {
-        return (
-          state.tonConnectUI.connected && state.tonConnectUI.account.address
-        );
+        return state.tonConnectUI.connected;
       }
       return false;
     },
