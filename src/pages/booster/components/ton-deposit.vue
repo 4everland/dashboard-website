@@ -118,7 +118,12 @@ export default {
   },
   methods: {
     async handleDeposit() {
-      console.log(this.tonConnectUI.connected, this.tonConnected, "=====");
+      console.log(
+        this.tonConnectUI,
+        this.tonConnectUI.account,
+        this.tonConnected,
+        "====="
+      );
       if (!this.tonConnected) {
         await this.tonConnectUI.openModal();
       }

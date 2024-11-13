@@ -54,11 +54,9 @@ export default {
         }),
       }),
       dailySign: null,
-      spinPlayReward: {
-      },
-      spinStartInfo: {
-      },
-      spinClaimedInfo: ''
+      spinPlayReward: {},
+      spinStartInfo: {},
+      spinClaimedInfo: "",
     };
   },
   getters: {
@@ -143,7 +141,9 @@ export default {
     },
     tonConnected(state) {
       if (state.tonConnectUI) {
-        return state.tonConnectUI.connected;
+        return (
+          state.tonConnectUI.connected && state.tonConnectUI.account.address
+        );
       }
       return false;
     },
