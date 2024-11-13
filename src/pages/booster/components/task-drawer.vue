@@ -370,7 +370,7 @@ export default {
   },
 
   created() {
-    this.initOkx();
+    // this.initOkx();
     this.getDailySign();
     this.getTasks();
     bus.$on("getDailyTasks", () => {

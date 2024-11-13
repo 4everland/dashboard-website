@@ -80,6 +80,7 @@
 import { mapState } from "vuex";
 
 import { OKXUniversalProvider } from "@okxconnect/universal-provider";
+
 import { OmniConnect } from "@bitget-wallet/omni-connect";
 
 import { fetchWeb3codeBind, fetchWeb3Vcode } from "@/api/login.js";
@@ -137,7 +138,8 @@ export default {
       ],
     };
   },
-  created() {
+  created() {},
+  mounted() {
     this.initOkx();
   },
   methods: {
@@ -192,16 +194,14 @@ export default {
         namespaces: {
           eip155: {
             chains: ["eip155:1"],
-            rpcMap: {
-              1: "", // set your own rpc url
-            },
+            rpcMap: {},
             defaultChain: "1",
           },
         },
         // optionalNamespaces: {},
-        // sessionConfig: {
-        //   redirect: "tg://resolve",
-        // },
+        sessionConfig: {
+          redirect: "tg://resolve",
+        },
       });
       const accounts = session.namespaces.eip155.accounts;
       const account = accounts[0].split(":")[2];
@@ -210,12 +210,11 @@ export default {
     },
     async signWithOkx() {
       const msg = await this.getMsg("7");
-      console.log(msg);
       let chain = "eip155:1";
       let params = {};
       params = {
         method: "personal_sign",
-        params: [msg],
+        params: [msg, this.walletAccount],
       };
 
       const signature = await this.okxUniversalProvider.request(params, chain);
@@ -252,9 +251,9 @@ export default {
       }
     },
     async connectBitget(type) {
+      this.subscription();
       this.showLoading(type);
       connector.connect();
-      this.subscription();
     },
     async signWithBitget() {
       try {
@@ -284,9 +283,8 @@ export default {
               this.walletAccount = result?.address;
               break;
             case "signMessage":
-              const signature = result?.signature;
-              if (signature) {
-                this.onVcode(104, signature);
+              if (result?.signature) {
+                this.onVcode(104, result?.signature);
               }
               break;
             case "signTransaction":

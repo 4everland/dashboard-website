@@ -11,6 +11,7 @@ export const initOkx = async () => {
       icon: "https://dashboard.4everland.org/favicon.ico",
     },
   });
+  console.log("创建了一个okxUniversalProvider");
 };
 
 export const getOkxAccount = async () => {
