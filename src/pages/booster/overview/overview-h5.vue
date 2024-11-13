@@ -5,19 +5,11 @@
       style="right: 8px; top: 70px"
       v-if="isTgMiniApp"
     ></TokenDialog>
+
     <div
       v-if="isTgMiniApp"
       class="trigger-icon pos-a"
       style="right: 8px; top: 136px"
-      @click="$store.commit('SET_INVITE_BAR', true)"
-    >
-      <img src="/img/booster/ton-claim-icon.png" width="56" alt="" />
-      <div class="trigger-text claim fz-12 fw-b text-center">CLAIM</div>
-    </div>
-    <div
-      v-if="isTgMiniApp"
-      class="trigger-icon pos-a"
-      style="right: 8px; top: 202px"
       @click="
         () =>
           !this.boostLocked ? this.$store.dispatch('StakeDrawerToggle') : ''
@@ -29,7 +21,7 @@
     <div
       v-if="isTgMiniApp && !userInfo.wallet"
       class="trigger-icon pos-a"
-      style="right: 8px; top: 268px"
+      style="right: 8px; top: 202px"
       @click="onConnetc"
     >
       <img src="/img/booster/wallet-connect-icon.png" width="56" alt="" />
@@ -319,7 +311,7 @@ export default {
       }
       return percent * 100;
     },
-    pointPercent(){
+    pointPercent() {
       const percent =
         this.spinStartInfo.currentDuration / this.spinStartInfo.duration;
       return percent * 100;
@@ -339,8 +331,11 @@ export default {
     taskEnd() {
       const curTimeStamp = +new Date() / 1e3;
       if (Object.keys(this.spinStartInfo).length > 0) {
-        return curTimeStamp > this.spinStartInfo.endAt || this.spinStartInfo.claimAt != null;
-      }else {
+        return (
+          curTimeStamp > this.spinStartInfo.endAt ||
+          this.spinStartInfo.claimAt != null
+        );
+      } else {
         return true;
       }
     },
@@ -350,9 +345,9 @@ export default {
       this.sheet = true;
     });
     bus.$on("showSwapSuccess", () => {
-      this.showTonReceive()
+      this.showTonReceive();
       this.$store.dispatch("getBoosterUserInfo");
-    })
+    });
   },
   beforeDestroy() {
     clearInterval(this.protectTimer);

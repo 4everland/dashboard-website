@@ -120,6 +120,10 @@ export default {
     async handleDeposit() {
       if (!this.tonConnected) {
         await this.tonConnectUI.connectWallet();
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        if (!this.tonConnectUI.connected) {
+          throw new Error("Failed to connect wallet");
+        }
       }
       let payload = JSON.stringify({
         uid: this.userInfo.uid,
