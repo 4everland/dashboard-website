@@ -140,7 +140,7 @@ export default {
           type: "WalletcConnect",
         },
         {
-          name: "Bitget Wallet",
+          name: "Bitget Wallet Lite",
           icon: "/img/booster/wallet/wallet-bitget.jpg",
           type: "Bitget",
         },
