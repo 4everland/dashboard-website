@@ -441,6 +441,7 @@ export default {
         if (item.extra.buttonName == "Go") {
           if (item.actType == "okx_bind") {
             // await this.connectOkxWallet();
+            this.stateTaskDrawerShow(false);
             this.$store.dispatch("ConnectDrawerState", { state: true });
           } else if (item.actType == "telegram_daily_share") {
             const oriDescriptionArr = item.oriDescription.split(";");

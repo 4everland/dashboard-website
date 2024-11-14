@@ -50,7 +50,9 @@
       @input="handleLoadingToggle"
     >
       <v-container fluid style="padding: 24px 16px">
-        <div class="drawer-title mb-6">{{ walletType }} Wallet</div>
+        <div class="drawer-title mb-6">
+          {{ walletType }} Wallet {{ walletType == "Bitget" ? "Lite" : "" }}
+        </div>
         <div class="mobile-invite-panel-content">
           <div class="text-center">
             <img
@@ -62,6 +64,7 @@
         </div>
         <div v-if="!walletAccount" class="my-5">
           Continue in {{ walletType }} Wallet
+          {{ walletType == "Bitget" ? "Lite" : "" }}
         </div>
         <div v-else class="my-5">
           Confirm the signature in your wallet to complete the connect.
@@ -138,7 +141,7 @@ export default {
         },
         {
           name: "Bitget Wallet",
-          icon: "/img/booster/wallet/wallet-bitget.png",
+          icon: "/img/booster/wallet/wallet-bitget.jpg",
           type: "Bitget",
         },
       ],
@@ -437,6 +440,9 @@ export default {
     display: flex;
     align-items: center;
     gap: 12px;
+    img {
+      border-radius: 8px;
+    }
   }
   .drawer-btn {
     background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
