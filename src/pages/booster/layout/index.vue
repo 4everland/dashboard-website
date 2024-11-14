@@ -1,7 +1,11 @@
 <template>
   <div class="booster-container">
-    <Navbar class="nav" @open-drawer="drawer = true" v-if="!meta.hideBoostNav"></Navbar>
-    
+    <Navbar
+      class="nav"
+      @open-drawer="drawer = true"
+      v-if="!meta.hideBoostNav"
+    ></Navbar>
+
     <AsideDrawer
       v-model="drawer"
       @showDepositDialog="
@@ -54,7 +58,7 @@ export default {
   },
   computed: {
     isTgMiniApp() {
-      console.log(this.meta)
+      console.log(this.meta);
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
     meta() {
