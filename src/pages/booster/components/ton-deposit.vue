@@ -49,7 +49,15 @@
           </div>
         </div>
 
-        <div class="fz-12 text-center" @click="handleDisconnect">
+        <div class="fz-12 text-center" v-if="tonConnected">
+          Having trouble claiming? Please click '<span
+            @click="handleDisconnect"
+            style="color: #34a9ff"
+          >
+            Disconnect </span
+          >' and try again.
+        </div>
+        <div class="fz-12 text-center" v-else>
           Claiming LAND may take some time. Please wait.
         </div>
 
@@ -120,6 +128,10 @@ export default {
     async handleDisconnect() {
       if (this.tonConnected) {
         await this.tonConnectUI.disconnect();
+        this.$toast2(
+          "Disconnected successfully. Please proceed to claim.",
+          "success"
+        );
       }
     },
     async handleDeposit() {
