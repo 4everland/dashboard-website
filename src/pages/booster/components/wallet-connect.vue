@@ -197,46 +197,60 @@ export default {
       this.showConnectLoadingDrawer = true;
     },
     async connectOkxWallet(type) {
-      this.showLoading(type);
-      const session = await this.okxUniversalProvider.connect({
-        namespaces: {
-          eip155: {
-            chains: ["eip155:1"],
-            rpcMap: {},
-            defaultChain: "1",
+      try {
+        this.showLoading(type);
+        const session = await this.okxUniversalProvider.connect({
+          namespaces: {
+            eip155: {
+              chains: ["eip155:1"],
+              rpcMap: {},
+              defaultChain: "1",
+            },
           },
-        },
-        // optionalNamespaces: {},
-        sessionConfig: {
-          redirect: "tg://resolve",
-        },
-      });
-      const accounts = session.namespaces.eip155.accounts;
-      const account = accounts[0].split(":")[2];
-      console.log(account);
-      this.walletAccount = account;
-      this.msg = await this.getMsg("7");
+          // optionalNamespaces: {},
+          sessionConfig: {
+            redirect: "tg://resolve",
+          },
+        });
+        const accounts = session.namespaces.eip155.accounts;
+        const account = accounts[0].split(":")[2];
+        console.log(account);
+        this.walletAccount = account;
+        this.msg = await this.getMsg("7");
+      } catch (error) {
+        console.log("进入错误");
+        console.log(error);
+        await this.okxUniversalProvider.disconnect();
+        this.loadingIndex = null;
+        this.walletType = null;
+        this.walletAccount = null;
+      }
     },
     async signWithOkx() {
       // window.open(
       //   "https://www.okx.com/download?deeplink=okx%3A%2F%2Fweb3%2Fwallet%2Fconnect",
       //   "_self"
       // );
-      const msg = this.msg;
-      let chain = "eip155:1";
-      let data = {};
 
-      data = {
-        method: "personal_sign",
-        params: [msg],
-      };
+      try {
+        const msg = this.msg;
+        let chain = "eip155:1";
+        let data = {};
 
-      const signature = await this.okxUniversalProvider.request(data, chain);
+        data = {
+          method: "personal_sign",
+          params: [msg],
+        };
 
-      console.log(signature);
+        const signature = await this.okxUniversalProvider.request(data, chain);
 
-      if (signature) {
-        this.onVcode(7, signature);
+        console.log(signature);
+
+        if (signature) {
+          this.onVcode(7, signature);
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
     async onBindWithWalletConnect() {
@@ -284,9 +298,15 @@ export default {
       }
     },
     async setBitgetInfo(account) {
-      this.walletAccount = account;
-      this.msg = await this.getMsg("104");
-      console.log("walletAccount", this.walletAccount);
+      try {
+        this.walletAccount = account;
+        this.msg = await this.getMsg("104");
+        console.log("walletAccount", this.walletAccount);
+      } catch (error) {
+        this.loadingIndex = null;
+        this.walletType = null;
+        this.walletAccount = null;
+      }
     },
     async subscription() {
       const _that = this;

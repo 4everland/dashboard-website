@@ -370,7 +370,6 @@ export default {
   },
 
   created() {
-    // this.initOkx();
     this.getDailySign();
     this.getTasks();
     bus.$on("getDailyTasks", () => {
@@ -441,7 +440,8 @@ export default {
         let _this = this;
         if (item.extra.buttonName == "Go") {
           if (item.actType == "okx_bind") {
-            await this.connectOkxWallet();
+            // await this.connectOkxWallet();
+            this.$store.dispatch("ConnectDrawerState", { state: true });
           } else if (item.actType == "telegram_daily_share") {
             const oriDescriptionArr = item.oriDescription.split(";");
             let [media_url, text] = oriDescriptionArr;
@@ -632,92 +632,6 @@ export default {
       }
       if (this.isTgMiniApp) return this.$tg.openAuto(url);
       window.open(url);
-    },
-
-    async initOkx() {
-      this.okxUniversalProvider = await OKXUniversalProvider.init({
-        dappMetaData: {
-          name: "4EVERLAND",
-          icon: "https://dashboard.4everland.org/favicon.ico",
-        },
-      });
-    },
-    async connectOkxWallet() {
-      const session = await this.okxUniversalProvider.connect({
-        namespaces: {
-          eip155: {
-            chains: ["eip155:1"],
-            rpcMap: {
-              1: "https://rpc", // set your own rpc url
-            },
-            defaultChain: "1",
-          },
-        },
-        // optionalNamespaces: {},
-        // sessionConfig: {
-        //   redirect: "tg://resolve",
-        // },
-      });
-      const accounts = session.namespaces.eip155.accounts;
-      const account = accounts[0].split(":")[2];
-      console.log(account);
-
-      const params = {
-        type: "7",
-        apply: account,
-      };
-      console.log(params);
-      const nonce = await this.onExchangeCode(params);
-      const msg = "0x" + Buffer.from(nonce).toString("hex");
-      console.log(msg);
-
-      const signature = await this.signWithOkx(msg);
-      console.log(signature);
-
-      if (signature) {
-        this.onVcode(7, signature);
-      }
-    },
-    async signWithOkx(msg) {
-      let params = {};
-
-      params = {
-        method: "personal_sign",
-        params: [msg],
-      };
-      const signature = await this.okxUniversalProvider.request(params);
-      console.log(signature);
-      return signature;
-    },
-
-    async onExchangeCode(params) {
-      try {
-        const { data } = await fetchWeb3codeBind(params);
-        return data.applyR;
-      } catch (error) {
-        console.log(error);
-        this.$toast2(error.message, "error");
-      }
-    },
-    async onVcode(type, code) {
-      this.showConnectDrawer = false;
-      try {
-        let params = {
-          type,
-        };
-
-        const { data } = await fetchWeb3Vcode(code, params);
-        if (data.nodeToken) {
-          localStorage.nodeToken = data.nodeToken;
-        }
-
-        this.$toast2("Connect successfully!", "success");
-        this.$setMsg({
-          name: "updateUser",
-        });
-      } catch (error) {
-        console.log(error);
-      }
     },
     async shareOnTgStory(media_url, text) {
       postEvent("web_app_share_to_story", { media_url, text });
