@@ -335,3 +335,15 @@ export const claimSpinReward = async (taskId) => {
     },
   });
 };
+
+export const fetchKeyBalance = async () => {
+  return boosterRequest.get({
+    url: "/hooks/stake/balance",
+  });
+};
+
+export const fetchKeyBalanceStake = async () => {
+  return boosterRequest.post({
+    url: "/hooks/stake/balance/dostake",
+  });
+};

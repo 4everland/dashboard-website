@@ -161,6 +161,9 @@ export default {
           name: "Leaderboard",
           path: "/boost/leaderboard",
         },
+        // {
+        //   name: "Staking",
+        // },
       ],
     };
   },
@@ -169,7 +172,7 @@ export default {
       userInfo: (s) => s.userInfo,
       boosterInfo: (s) => s.moduleBooster.boosterInfo,
     }),
-    ...mapGetters(["notLogin", "balance"]),
+    ...mapGetters(["notLogin", "balance", "boostLocked"]),
 
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
@@ -188,7 +191,10 @@ export default {
         this.$router.push("/login");
         return;
       }
-
+      // if (item.name == "Staking" && !this.boostLocked) {
+      //   this.$store.dispatch("StakeDrawerToggle");
+      //   return;
+      // }
       this.$router.push(item.path);
     },
 
