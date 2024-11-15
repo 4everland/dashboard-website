@@ -27,7 +27,7 @@
             </div>
           </div>
         </div>
-        <div class="nft-drawer-top">
+        <!-- <div class="nft-drawer-top">
           <div class="drawer-title nft-drawer-title">
             ASPECTA 4EVER KEY STAKING
           </div>
@@ -51,7 +51,7 @@
               }}</v-btn>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="nft-box">
           <div class="drawer-title mb-4">NFT STAKING</div>
           <v-row v-if="nftList.length > 0" no-gutters style="gap: 16px 0">
