@@ -243,6 +243,7 @@ export default {
         data = {
           method: "personal_sign",
           params: [msg],
+          redirect: "tg://resolve",
         };
 
         const signature = await this.okxUniversalProvider.request(data, chain);
