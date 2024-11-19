@@ -242,7 +242,7 @@
             </div>
           </div>
         </div>
-        <div class="spin-footer-swapList" v-if="false">
+        <div class="spin-footer-swapList">
           <h3 class="tit">Withdraw List</h3>
           <v-simple-table class="swap-list-table mt-1">
             <thead>
@@ -692,8 +692,12 @@ export default {
       }
     },
     async getList() {
-      const res = await fetchClaimList();
+      const res = await fetchClaimList(this.page, this.size);
       this.list = res?.data?.list || [];
+
+      let _dataTotal = res?.data?.total || 0;
+
+      this.totalPages = Math.ceil(_dataTotal / this.size);
     },
     timeOver() {
       let info = this.userInfo.username
@@ -1065,7 +1069,7 @@ export default {
   .spin-footer-swapList {
     width: 100%;
     min-height: 200px;
-    margin-top: -80px;
+    margin-top: -45px;
     background: linear-gradient(
         180deg,
         rgba(57, 59, 62, 0.9) 25.52%,
