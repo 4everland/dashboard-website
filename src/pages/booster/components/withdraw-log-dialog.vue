@@ -6,8 +6,18 @@
       opacity="1"
       v-if="asMobile"
     >
-      <div class="withdraw-overlay">
-        <div class="withdraw-title pt-5">Balance History</div>
+      <div class="withdraw-overlay" style="overflow: hidden">
+        <div class="withdraw-title mt-5 pos-r">
+          <img
+            class="pos-a cursor-p"
+            src="/img/booster/svg/back-arrow.svg"
+            width="24"
+            alt=""
+            style="left: 20px; top: 50%; transform: translateY(-50%)"
+            @click="$emit('input', false)"
+          />
+          <span> Balance History </span>
+        </div>
         <div class="empty text-center" v-if="!usdtLogs.length">
           <img src="/img/booster/svg/empty.svg" width="200" alt="" />
           <div>Empty</div>
@@ -276,7 +286,7 @@ export default {
 }
 .withdraw-title {
   padding: 8px 64px;
-  background: rgba(0, 129, 248, 0.1);
+  background: transparent;
   text-align: center;
   text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.25);
   font-size: 20px;
