@@ -150,10 +150,13 @@ export default {
         50,30
       ],
       spinList2:[
-        100,100,70,30
+        60,40
       ],
       spinList3:[
-        200,100,100,100
+        100,100,50
+      ],
+      spinList4:[
+        100,100,70,30
       ],
       spinList:[],
       current: "",
@@ -273,12 +276,14 @@ export default {
     async showNext() {
       let nextIndex = 1;
       this.spinList = this.spinList1;
-      if(this.spinStartInfo.duration == 100){
+      if(this.spinStartInfo.spinId == 'd16de24a-da99-40c8-897d-1dbba25f205a' || this.spinStartInfo.spinId == 'f4eff4ea-11a9-49ec-ae46-0392bc772aee' ){
         this.spinList = this.spinList1;
-      } else if(this.spinStartInfo.duration == 500){
+      } else if(this.spinStartInfo.spinId == '77319c24-2816-47a0-bd91-25f7f8605e2d' || this.spinStartInfo.spinId == '6ae26d73-369e-475d-aa92-f400a8eda599' ){
         this.spinList = this.spinList2;
-      } else if(this.spinStartInfo.duration == 1000){
+      } else if(this.spinStartInfo.spinId == '75809212-a816-43b8-8def-11927d45b7a3'){
         this.spinList = this.spinList3;
+      } else if(this.spinStartInfo.spinId == '5940e95c-ab34-4ec2-aa2e-861ff1a44b38'){
+        this.spinList = this.spinList4;
       }
       this.showCard = true;
       await this.sleep(1500);
