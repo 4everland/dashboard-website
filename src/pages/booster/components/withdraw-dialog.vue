@@ -146,7 +146,7 @@ export default {
       }
     },
     async handleTonWithdraw() {
-      if (this.amount < 0.1) return this.$toast2("At Least 0.1 Ton", "info");
+      if (this.amount < 0.02) return this.$toast2("At Least 0.02 Ton", "info");
       try {
         if (!this.tonConnected) {
           await this.tonConnectUI.connectWallet();

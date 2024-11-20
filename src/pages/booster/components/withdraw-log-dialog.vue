@@ -41,7 +41,18 @@
                 <td>
                   {{ Number(item.value) > 0 ? "+" + item.value : item.value }}
                 </td>
-                <td>{{ logStatus(item) }}</td>
+                <td class="al-c">
+                  <span>{{ logStatus(item) }}</span>
+                  <e-tooltip top v-if="item.from == 'boottickettowithdraw'">
+                    <v-icon slot="ref" size="18" color="#999" class="pa-1 d-ib"
+                      >mdi-alert-circle-outline</v-icon
+                    >
+                    <span class="fz-12"
+                      >Having issues with withdrawals? Open a ticket in Discord
+                      for help.</span
+                    >
+                  </e-tooltip>
+                </td>
                 <td>{{ new Date(item.createdAt).format() }}</td>
                 <td
                   @click="handleOpenTxs(item)"
@@ -101,15 +112,27 @@
                   class="text-white"
                 >
                   <td>
-                    {{
-                      item.from == "withdraw" ? "Withdraw Ton" : "Invite Reward"
-                    }}
+                    {{ logType(item.from) }}
                   </td>
                   <td>
                     {{ Number(item.value) > 0 ? "+" + item.value : item.value }}
                   </td>
-
-                  <td>{{ logStatus(item) }}</td>
+                  <td class="al-c">
+                    <span>{{ logStatus(item) }}</span>
+                    <e-tooltip top v-if="item.from == 'boottickettowithdraw'">
+                      <v-icon
+                        slot="ref"
+                        size="18"
+                        color="#999"
+                        class="pa-1 d-ib"
+                        >mdi-alert-circle-outline</v-icon
+                      >
+                      <span class="fz-12"
+                        >Having issues with withdrawals? Open a ticket in
+                        Discord for help.</span
+                      >
+                    </e-tooltip>
+                  </td>
 
                   <td>{{ new Date(item.createdAt).format() }}</td>
                   <td
@@ -151,6 +174,7 @@ export default {
     },
     logStatus() {
       return function (item) {
+        if (item.from == "boottickettowithdraw") return "Withdrawing";
         if (Number(Number(item.value)) < 0) {
           if (item.txs) return "Success";
           return "Pending";
@@ -176,6 +200,8 @@ export default {
           case "withdraw":
             return "Withdraw Ton";
           case "SPIN":
+            return "Points Withdraw";
+          case "boottickettowithdraw":
             return "Points Withdraw";
           default:
             return "Invite Reward";
