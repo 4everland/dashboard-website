@@ -27,7 +27,7 @@
       <img src="/img/booster/wallet-connect-icon.png" width="56" alt="" />
       <div class="trigger-text connect fz-12 fw-b text-center">CONNECT</div>
     </div>
-    <WalletConnect ref="walletConnect" />
+    <WalletConnect />
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
 
@@ -368,7 +368,8 @@ export default {
   },
   methods: {
     onConnetc() {
-      this.$refs.walletConnect.onShowConnect();
+      let state = true;
+      this.$store.dispatch("ConnectDrawerState", { state });
     },
     init() {
       let info = this.userInfo.username

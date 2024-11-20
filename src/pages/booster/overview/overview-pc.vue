@@ -43,7 +43,7 @@
               <span>{{ boosterInfo.rateBuff }}%</span>
               <v-btn
                 class="staking-btn"
-                width="59"
+                width="86"
                 height="27"
                 @click="
                   () =>
@@ -51,7 +51,9 @@
                       ? this.$store.dispatch('StakeDrawerToggle')
                       : ''
                 "
-                >Staking</v-btn
+              >
+                <img src="/img/booster/stake-icon.png" alt="" width="22" />
+                Staking</v-btn
               >
             </div>
           </div>
@@ -453,9 +455,11 @@ export default {
       }
       .staking-btn {
         letter-spacing: 0;
+        font-style: italic;
+        font-weight: bold;
         color: #fff;
         border-radius: 4px;
-        background: #6172f3;
+        background: linear-gradient(90deg, #f8008c 0%, #f86300 100%);
       }
     }
   }
