@@ -7,11 +7,22 @@ export default function (input) {
   if (input.length >= 64) {
     throw new Error("illegal input string");
   }
+
+  let xxx = false;
+  if (input.startsWith("xxx")) {
+    input = input.substring(3);
+    xxx = true;
+  }
+
   let bytes = hexStringToByteArray(input);
   let padding = new Array(32);
   padding.fill(0);
   padding.splice(0, bytes.length, ...bytes);
   padding[31] = b ? bytes.length + 32 : bytes.length;
+
+  if (xxx) {
+    padding[30] = 1;
+  }
   return "0x" + bytesToHex(padding);
 }
 
