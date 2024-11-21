@@ -1078,7 +1078,10 @@ export default {
       #4c5277;
     background-blend-mode: overlay;
     border-radius: 24px;
-    padding: 20px;
+    padding: 20px 15px;
+    .tit{
+      padding: 0 5px;
+    }
     .swap-list-table {
       color: #fff !important;
 

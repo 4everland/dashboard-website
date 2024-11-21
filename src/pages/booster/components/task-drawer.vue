@@ -141,7 +141,8 @@
                 v-show="
                   item.deployOn == 'all' ||
                   (item.deployOn == 'pc' && !isTgMiniApp) ||
-                  (item.deployOn == 'tg' && isTgMiniApp)
+                  (item.deployOn == 'tg' && isTgMiniApp && isAndroid) ||
+                  (item.deployOn == 'tg' && isTgMiniApp && !isAndroid && item.actType != 'save_home_screen')
                 "
               >
                 <div class="task-item-box">
@@ -329,6 +330,9 @@ export default {
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
+    isAndroid() {
+      return this.$tg.platform == "android";
+    },
     completedTaskList() {
       let completedTaskList = this.tasksLists
         .concat(this.tasksLists_one)
@@ -418,7 +422,8 @@ export default {
         if (
           it.deployOn == "all" ||
           (it.deployOn == "pc" && !this.isTgMiniApp) ||
-          (it.deployOn == "tg" && this.isTgMiniApp)
+          (it.deployOn == 'tg' && this.isTgMiniApp && this.isAndroid ) ||
+          (it.deployOn == 'tg' && this.isTgMiniApp && !this.isAndroid && it.actType != 'save_home_screen')
         ) {
           return it;
         }
@@ -448,6 +453,8 @@ export default {
             let [media_url, text] = oriDescriptionArr;
             text += this.inviteInfo.link;
             this.shareOnTgStory(media_url, text);
+          } else if (item.actType == "save_home_screen") {
+            bus.$emit('showSaveToHomeEvent')
           } else {
             let url = item.oriDescription;
             if (item.actType == "share_twitter") {
