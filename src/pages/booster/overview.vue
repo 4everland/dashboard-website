@@ -54,6 +54,7 @@
         <profile-drawer></profile-drawer>
         <bind-dialog v-model="showBindWallet"></bind-dialog>
         <RewardOpenFirst v-model="showRewardStart"></RewardOpenFirst>
+        <SaveToHome v-model="showSaveToHome" @hideShowSaveToHome="showSaveToHome=false"></SaveToHome>
       </template>
       <!-- <end-boosting v-model="showEndBoost"></end-boosting> -->
     </div>
@@ -77,6 +78,7 @@ import TgStartBoostOverlay from "./components/tg-start-boost-overlay.vue";
 import EasterEgg from "./components/easter-egg.vue";
 import DailySignDialog from "./components/daily-sign-dialog.vue";
 import RewardOpenFirst from "./components/reward-open-first.vue";
+import SaveToHome from "./components/save-to-homescreen.vue";
 
 import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
@@ -168,6 +170,7 @@ export default {
       unlockStage: 0,
       showDailySign: false,
       showRewardStart: false,
+      showSaveToHome: false
       // showRewardReceive: false,
       // showRewardClaim: false,
     };
@@ -261,6 +264,9 @@ export default {
     bus.$on("showEndBoostEvent", () => {
       this.showEndBoost = true;
     });
+    bus.$on("showSaveToHomeEvent", () => {
+      this.showSaveToHome = true;
+    });
     this.timer = setInterval(() => {
       this.$store.commit("updateDate");
     }, 1000);
@@ -328,6 +334,7 @@ export default {
     DailySignDialog,
     ProfileDrawer,
     RewardOpenFirst,
+    SaveToHome
   },
 
   watch: {
@@ -340,6 +347,9 @@ export default {
         }, 2000);
       }
     },
+    showSaveToHome(val) {
+      console.log('val',val)
+    }
   },
 };
 </script>
