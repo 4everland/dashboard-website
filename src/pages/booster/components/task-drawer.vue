@@ -634,6 +634,11 @@ export default {
         return;
       }
 
+      if (it.actType == "save_home_screen") {
+        bus.$emit('showSaveToHomeEvent')
+        return;
+      }
+
       let url = it.oriDescription;
       if (it.actType == "share_twitter") {
         url += encodeURIComponent(this.inviteInfo.link);
