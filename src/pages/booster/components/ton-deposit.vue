@@ -129,6 +129,7 @@
 import { mapState, mapGetters } from "vuex";
 import { beginCell } from "@ton/ton";
 import axios from "axios";
+import { tgPaymentInvoice } from "@/api/booster";
 
 export default {
   props: {
@@ -225,8 +226,22 @@ export default {
         this.handlePayAsStar();
       }
     },
-    handlePayAsStar(){
-
+    async handlePayAsStar(){
+      try {
+        this.load = true;
+        const { data } = await tgPaymentInvoice(String(this.customAmount));
+        console.log('data',data?.data)
+        this.load = false;
+        this.$tg.openInvoice(data?.data, (status) => {
+          if (status == "paid") {
+            this.$toast2("Submission successful. Claiming in progress!", "success");
+            this.$emit("input", false);
+          }
+        });
+      } catch (e) {
+        console.error(e);
+        this.load = false;
+      }
     }
   },
 };
