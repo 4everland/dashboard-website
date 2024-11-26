@@ -3,7 +3,7 @@
     <div class="container-top">
       <div class="nav-bar">
         <div class="nav-mobile d-flex align-center justify-space-between">
-          <div class="logo d-flex align-center">
+          <div class="logo d-flex align-center" @click="backtoindex">
             <img src="/img/booster/spin/chevron-left.png" width="24" alt="" />
           </div>
           <div class="mobile-title">Unlock Diverse Earnings</div>
@@ -198,7 +198,10 @@ export default {
     },
     openEarn(){
         this.showEarn = true;
-    }
+    },
+    backtoindex() {
+      this.$router.push("/boost");
+    },
   },
 };
 </script>
@@ -239,7 +242,7 @@ export default {
   .earn-list {
     position: relative;
     top: -28px;
-    height: 100vh;
+    height: 87vh;
     // bottom: 0;
     border-radius: 24px 24px 0px 0px;
     border: 1px 0px 0px 0px;

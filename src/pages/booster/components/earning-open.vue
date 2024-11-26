@@ -38,12 +38,66 @@
               Tomarket is a play-to-earn bot that lets you win Tether and TON by
               playing games and completing exciting tasks!
             </div>
-            <div class="countdown mt-2">
+            <div
+              class="countdown d-flex justify-space-between align-center mt-2"
+            >
               <div>Ended</div>
-              <div></div>
+              <div class="d-flex align-center">
+                <div class="timer">30</div>
+                &nbsp;D:
+                <div class="timer">22</div>
+                &nbsp;H:
+                <div class="timer">32</div>
+                &nbsp;M:
+                <div class="timer">09</div>
+                &nbsp;S
+              </div>
             </div>
             <div class="unlock-node mt-4">Complete To Unlock Tomarket Node</div>
-            <div class=""></div>
+            <div class="back-step">
+              <div class="d-flex justify-space-between align-center mt-2 step">
+                <div class="d-flex justify-start">
+                  <div class="step-number">1</div>
+                  <div class="step-text">Follow @Tomarket on X</div>
+                </div>
+                <v-btn class="go-btn">
+                  <span class="btn-text">Go</span>
+                </v-btn>
+              </div>
+            </div>
+            <div class="back-step">
+              <div class="d-flex justify-space-between align-center mt-2 step">
+                <div class="d-flex justify-start">
+                  <div class="step-number">2</div>
+                  <div class="step-text">Share on X</div>
+                </div>
+                <v-btn class="go-btn">
+                  <span class="btn-text">Go</span>
+                </v-btn>
+              </div>
+            </div>
+            <div class="back-step">
+              <div class="d-flex justify-space-between align-center mt-2 step">
+                <div class="d-flex justify-start">
+                  <div class="step-number">3</div>
+                  <div class="step-text">Join Telegram</div>
+                </div>
+                <v-btn class="go-btn">
+                  <span class="btn-text">Go</span>
+                </v-btn>
+              </div>
+            </div>
+            <div class="back-step">
+              <div class="d-flex justify-space-between align-center mt-2 step">
+                <div class="d-flex justify-start">
+                  <div class="step-number">4</div>
+                  <div class="step-text">Join Discord</div>
+                </div>
+                <v-btn class="go-btn">
+                  <span class="btn-text">Go</span>
+                </v-btn>
+              </div>
+            </div>
             <div class="d-flex justify-start mt-2">
               <div>
                 <img
@@ -96,23 +150,21 @@ export default {
   .close-btn {
     position: absolute;
     right: 18px;
-    top: 18px;
+    top: 0;
     cursor: pointer;
   }
   .earn-content {
     color: #fff;
     width: 327px;
-    height: 478px;
     border-radius: 16px;
     border: 1px solid;
-    padding: 0 12px;
-    border: 1px solid;
-
+    padding: 12px;
     border-image-source: linear-gradient(
       165.76deg,
       rgba(69, 81, 111, 0.5) -11.63%,
       #11b7ff 88.45%
     );
+    border-image-slice: 1;
 
     background: linear-gradient(179.52deg, #000a10 8.53%, #003e70 99.59%),
       linear-gradient(
@@ -131,7 +183,6 @@ export default {
       height: 34px;
       padding: 8px 16px;
       border-radius: 4px;
-      margin-top: 12px;
       background: linear-gradient(99.62deg, #dc33d6 0%, #ff3821 100%);
       .btn-text {
         font-size: 14px;
@@ -160,26 +211,85 @@ export default {
       line-height: 17px;
       text-align: left;
       color: #ffce56;
+      .timer {
+        width: 20px;
+        height: 24px;
+        text-align: center;
+        line-height: 24px;
+        border-radius: 2px;
+        background: #ffce56;
+        color: #000;
+        font-size: 12px;
+        font-weight: 400;
+        margin-left:2px;
+      }
     }
     .unlock-node {
       font-size: 16px;
       font-weight: 700;
       line-height: 20px;
-      text-shadow: 0px 0px 10px 0px #6172f3;
+      text-shadow: 0px 0px 10px #6172f3;
+    }
+    .back-step {
+      background: linear-gradient(
+        270.31deg,
+        rgba(255, 255, 255, 0) 0.18%,
+        rgba(0, 114, 248, 0.2) 100.11%
+      );
+    }
+    .step {
+      padding: 8px 12px;
+      background: linear-gradient(
+        135deg,
+        rgb(33, 61, 92) 0,
+        rgb(33, 61, 92) 10%,
+        transparent 10%,
+        transparent 50%,
+        rgb(33, 61, 92) 50%,
+        rgb(33, 61, 92) 60%,
+        transparent 60%,
+        transparent 100%
+      );
+      background-size: 8px 8px;
+      color: #fff;
+      .step-number {
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        background: #6172f380;
+      }
+      .step-text {
+        font-size: 14px;
+        font-weight: 400;
+        margin-left: 8px;
+      }
+      .go-btn {
+        padding: 4px 16px;
+        border-radius: 4px;
+        background: linear-gradient(96.98deg, #0fe1f8 -22.19%, #1102fc 99.83%);
+        .btn-text {
+          font-size: 14px;
+          font-weight: 400;
+          color: #fff;
+        }
+      }
     }
     .view {
       font-size: 12px;
       font-weight: 400;
       line-height: 14.52px;
       color: #c0c1c2;
-      margin-left:4px;
+      margin-left: 4px;
     }
   }
 }
 .cancel-btn {
   color: #fff !important;
   font-weight: 500;
-  font-family: Inter;
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;
