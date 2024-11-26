@@ -56,6 +56,17 @@ export default [
           hideBoostNav: 1
         },
       },
+      {
+        path: "/boost/earnings",
+        component: () => import("./earnings"),
+        meta: {
+          title: "Earnings",
+          hideNav: 1,
+          isTab: 1,
+          noLogin: 1,
+          hideBoostNav: 1
+        },
+      },
     ],
   },
 ];

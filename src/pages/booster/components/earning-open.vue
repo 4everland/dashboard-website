@@ -1,0 +1,192 @@
+<template>
+  <div>
+    <v-dialog
+      max-width="400"
+      content-class="earn-boost-dialog"
+      v-model="value"
+      overlay-opacity="0.5"
+    >
+      <div class="earn-dialog">
+        <img
+          class="close-btn"
+          @click="$emit('input', false)"
+          src="/img/booster/svg/close.svg"
+          width="20"
+          alt=""
+        />
+        <div class="earn-content">
+          <img
+            class="logo"
+            src="/img/booster/earnings/tomarket.png"
+            width="80"
+            alt=""
+          />
+          <div class="d-flex justify-end align-center">
+            <v-btn class="earning-btn">
+              <img
+                class="hot-icon"
+                src="/img/booster/progress-hot.png"
+                height="32"
+                alt=""
+              />
+              <span class="btn-text">10M $Tomarket</span>
+            </v-btn>
+          </div>
+          <div>
+            <div class="title mt-8">Tomarket</div>
+            <div class="text mt-2">
+              Tomarket is a play-to-earn bot that lets you win Tether and TON by
+              playing games and completing exciting tasks!
+            </div>
+            <div class="countdown mt-2">
+              <div>Ended</div>
+              <div></div>
+            </div>
+            <div class="unlock-node mt-4">Complete To Unlock Tomarket Node</div>
+            <div class=""></div>
+            <div class="d-flex justify-start mt-2">
+              <div>
+                <img
+                  src="/img/booster/earnings/subtract.png"
+                  width="16"
+                  alt=""
+                />
+              </div>
+              <div class="view">
+                Unlock to view your balance in Account. Rewards will be
+                distributed after the event.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </v-dialog>
+  </div>
+</template>
+  
+  <script>
+export default {
+  props: {
+    value: Boolean,
+  },
+  data() {
+    return {};
+  },
+
+  computed: {},
+
+  methods: {},
+  components: {},
+};
+</script>
+  
+  <style lang="scss" scoped>
+::v-deep .earn-boost-dialog {
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: initial !important;
+  margin: 24px 12px !important;
+}
+
+.earn-dialog {
+  position: relative;
+  width: 100%;
+  padding: 36px 16px 24px 16px;
+  border-radius: 16px;
+  .close-btn {
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    cursor: pointer;
+  }
+  .earn-content {
+    color: #fff;
+    width: 327px;
+    height: 478px;
+    border-radius: 16px;
+    border: 1px solid;
+    padding: 0 12px;
+    border: 1px solid;
+
+    border-image-source: linear-gradient(
+      165.76deg,
+      rgba(69, 81, 111, 0.5) -11.63%,
+      #11b7ff 88.45%
+    );
+
+    background: linear-gradient(179.52deg, #000a10 8.53%, #003e70 99.59%),
+      linear-gradient(
+        180deg,
+        rgba(17, 2, 252, 0.15) 28.41%,
+        rgba(15, 225, 248, 0) 100%
+      );
+    .logo {
+      position: absolute;
+      top: 0;
+      left: 20%;
+      transform: translateX(-50%);
+      z-index: 3;
+    }
+    .earning-btn {
+      height: 34px;
+      padding: 8px 16px;
+      border-radius: 4px;
+      margin-top: 12px;
+      background: linear-gradient(99.62deg, #dc33d6 0%, #ff3821 100%);
+      .btn-text {
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 16px;
+        color: #fff;
+      }
+      .hot-icon {
+        margin-bottom: 4px;
+      }
+    }
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+    }
+    .text {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: #0fe1f8;
+    }
+    .countdown {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 17px;
+      text-align: left;
+      color: #ffce56;
+    }
+    .unlock-node {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 20px;
+      text-shadow: 0px 0px 10px 0px #6172f3;
+    }
+    .view {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 14.52px;
+      color: #c0c1c2;
+      margin-left:4px;
+    }
+  }
+}
+.cancel-btn {
+  color: #fff !important;
+  font-weight: 500;
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 19px;
+  background: transparent !important;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(2px);
+}
+</style>
+  

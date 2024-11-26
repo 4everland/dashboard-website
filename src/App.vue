@@ -88,11 +88,20 @@ export default {
     font-weight: normal;
   }
 }
-.points-swap{
+.points-swap {
   .v-progress-linear__determinate {
-    background: linear-gradient(90deg, #FF35BA 27.76%, #FFF6B6 73.98%) !important;
+    background: linear-gradient(
+      90deg,
+      #ff35ba 27.76%,
+      #fff6b6 73.98%
+    ) !important;
     border-radius: 16px !important;
     height: 8px !important;
+  }
+}
+.earn-list {
+  .v-slide-group__wrapper {
+    height: 28px !important;
   }
 }
 </style>

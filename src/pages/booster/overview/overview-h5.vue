@@ -240,6 +240,12 @@
           </div>
         </div>
 
+        <!-- <div class="gold-square" @click="handleStartGetReward" style="margin-top: 80px">
+          <div class="top-card square-box-up" id="mobile-gold-ball">
+            <img src="/img/booster/spin/reward-ball.png" width="80" alt="" />
+          </div>
+        </div> -->
+
         <div
           v-if="!taskEnd"
           class="points-swap d-flex flex-column align-center justify-center"
@@ -367,6 +373,9 @@ export default {
     this.init();
   },
   methods: {
+    handleStartGetReward() {
+      this.$router.push('/boost/earnings');
+    },
     onConnetc() {
       let state = true;
       this.$store.dispatch("ConnectDrawerState", { state });
