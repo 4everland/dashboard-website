@@ -347,3 +347,12 @@ export const fetchKeyBalanceStake = async () => {
     url: "/hooks/stake/balance/dostake",
   });
 };
+
+export const tgPaymentInvoice = async (targetValue) => {
+  return boosterRequest.post({
+    url: "/node/tg/payment/invoice",
+    data: {
+      targetValue,
+    },
+  });
+};

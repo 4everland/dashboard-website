@@ -32,24 +32,57 @@
             <span class="ml-1 fz-14">LAND</span>
           </div>
         </div>
-        <div class="paragraph d-flex align-center justify-space-between">
-          <div>Token</div>
-          <div>
-            <div class="d-flex align-center px-3 py-2" style="gap: 12px">
-              <!-- <img
-                width="16"
-                src="/img/booster/svg/choose-token-active.svg"
-                alt=""
-              /> -->
-              <div class="d-flex align-center">
-                <img width="24" src="/img/booster/ton-icon.png" alt="" />
-                <span class="ml-1">Toncoin</span>
+        <div class="paragraph ">
+          <div class="pb-4">Choose Asset</div>
+          <div class="d-flex align-center justify-space-between">
+            <div class="coinWrap" :class="{'activeselect': paytype == 'toncoin'}" @click="handleSelect('toncoin')">
+              <div class="d-flex align-center px-3 py-3" style="gap: 12px">
+                <img
+                 v-if="paytype == 'toncoin'"
+                  width="16"
+                  src="/img/booster/svg/choose-token-active.svg"
+                  alt=""
+                />
+                <img
+                  v-else
+                  width="16"
+                  src="/img/booster/svg/choose-token.svg"
+                  alt=""
+                />
+                <div class="d-flex align-center">
+                  <img width="24" src="/img/booster/ton-icon.png" alt="" />
+                  <span class="ml-1">Toncoin</span>
+                </div>
+              </div>
+            </div>
+            <div class="coinWrap" :class="{'activeselect': paytype == 'starcoin'}" @click="handleSelect('starcoin')">
+              <div class="d-flex align-center px-3 py-3" style="gap: 12px">
+                <img
+                 v-if="paytype == 'starcoin'"
+                  width="16"
+                  src="/img/booster/svg/choose-token-active.svg"
+                  alt=""
+                />
+                <img
+                  v-else
+                  width="16"
+                  src="/img/booster/svg/choose-token.svg"
+                  alt=""
+                />
+                <div class="d-flex align-center">
+                  <img width="24" src="/img/booster/icon_star.png" alt="" />
+                  <span class="ml-1">Star</span>
+                </div>
+                <div class="discountWrap">
+                  20% off
+                </div>
               </div>
             </div>
           </div>
+          
         </div>
 
-        <div class="fz-12 text-center" v-if="tonConnected">
+        <div class="fz-12 text-center" v-if="tonConnected&&paytype == 'toncoin'">
           Having trouble claiming? Please click '<span
             @click="handleDisconnect"
             style="color: #34a9ff"
@@ -83,7 +116,7 @@
             width="180"
             :disabled="customAmount == 0"
             :loading="load"
-            @click="handleDeposit"
+            @click="handleClaim"
             >Claim</v-btn
           >
         </div>
@@ -96,6 +129,7 @@
 import { mapState, mapGetters } from "vuex";
 import { beginCell } from "@ton/ton";
 import axios from "axios";
+import { tgPaymentInvoice } from "@/api/booster";
 
 export default {
   props: {
@@ -108,6 +142,7 @@ export default {
       load: false,
       customLand: "",
       tonClient: null,
+      paytype: 'toncoin'
     };
   },
   computed: {
@@ -181,6 +216,33 @@ export default {
         console.error(e);
       }
     },
+    handleSelect(type) {
+      this.paytype = type;
+    },
+    handleClaim(){
+      if(this.paytype == 'toncoin') {
+        this.handleDeposit();
+      } else {
+        this.handlePayAsStar();
+      }
+    },
+    async handlePayAsStar(){
+      try {
+        this.load = true;
+        const { data } = await tgPaymentInvoice(String(this.customAmount));
+        console.log('data',data?.data)
+        this.load = false;
+        this.$tg.openInvoice(data?.data, (status) => {
+          if (status == "paid") {
+            this.$toast2("Submission successful. Claiming in progress!", "success");
+            this.$emit("input", false);
+          }
+        });
+      } catch (e) {
+        console.error(e);
+        this.load = false;
+      }
+    }
   },
 };
 </script>
@@ -235,5 +297,31 @@ export default {
   //   background: rgba(49, 49, 49, 0.9);
   //   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.35);
   // }
+  .coinWrap {
+    background: #00000080;
+    border: 1px solid #8C8CA140;
+    min-width: 45%;
+    min-height: 48px;
+    position: relative;
+    border-radius: 4px;
+  }
+
+  .activeselect{
+    background: #00305CCC;
+    border: 1px solid;
+    border-image: linear-gradient(to right, #43E7FA -22.19%, #4135FD 99.83%) 1;
+    border-radius: 4px;
+  }
+  .discountWrap{
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #fff;
+    font-size: 12px;
+    padding: 0 4px;
+    background: linear-gradient(90deg, #1102FC 0%, #0FE1F8 100%);
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
 }
 </style>
