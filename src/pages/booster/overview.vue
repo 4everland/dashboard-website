@@ -331,15 +331,15 @@ export default {
   },
 
   watch: {
-    boostLocked(val) {
-      if (localStorage.guide) return;
-      if (!val && this.isTgMiniApp) {
-        setTimeout(() => {
-          driverObj.drive();
-          localStorage.setItem("guide", "1");
-        }, 2000);
-      }
-    },
+    // boostLocked(val) {
+    //   if (localStorage.guide) return;
+    //   if (!val && this.isTgMiniApp) {
+    //     setTimeout(() => {
+    //       driverObj.drive();
+    //       localStorage.setItem("guide", "1");
+    //     }, 2000);
+    //   }
+    // },
   },
 };
 </script>
