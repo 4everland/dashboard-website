@@ -44,26 +44,95 @@
                   <div class="item-text">{{ item.text }}</div>
                 </div>
               </div>
+              <v-btn
+                v-if="item.status === 'unlock'"
+                class="earning-btn"
+                @click="openEarn"
+              >
+                <img src="/img/booster/earnings/check.svg" width="16" alt="" />
+                <span class="btn-text">Earning</span>
+              </v-btn>
+              <v-btn v-else-if="item.status === 'lock'" class="unLock-btn">
+                <img src="/img/booster/earnings/lock.svg" width="16" alt="" />
+                <span class="btn-text">UnLock</span>
+              </v-btn>
+              <div
+                v-else-if="item.status === 'distributing'"
+                class="distributing"
+              >
+                <img src="/img/booster/earnings/data.svg" width="16" alt="" />
+                <span class="btn-text">Distributing</span>
+              </div>
+              <div v-else class="ended">
+                <span class="btn-text">Ended</span>
+              </div>
+            </div>
+          </v-tab-item>
+          <v-tab-item>
+            <div
+              class="d-flex justify-space-between align-center"
+              v-for="(item, i) in filteredEarnList"
+              :key="i"
+              style="padding: 10px 0"
+            >
+              <div class="d-flex justify-start align-center">
+                <div>
+                  <img :src="item.logo" width="44" alt="" />
+                </div>
+                <div style="margin-left: 12px">
+                  <div class="item-title">{{ item.title }}</div>
+                  <div class="item-text">{{ item.text }}</div>
+                </div>
+              </div>
               <v-btn class="earning-btn" @click="openEarn">
                 <img src="/img/booster/earnings/check.svg" width="16" alt="" />
                 <span class="btn-text">Earning</span>
               </v-btn>
-              <!-- <v-btn class="unLock-btn">
+            </div>
+          </v-tab-item>
+          <v-tab-item>
+            <div
+              class="d-flex justify-space-between align-center"
+              v-for="(item, i) in filteredEarnList"
+              :key="i"
+              style="padding: 10px 0"
+            >
+              <div class="d-flex justify-start align-center">
+                <div>
+                  <img :src="item.logo" width="44" alt="" />
+                </div>
+                <div style="margin-left: 12px">
+                  <div class="item-title">{{ item.title }}</div>
+                  <div class="item-text">{{ item.text }}</div>
+                </div>
+              </div>
+              <v-btn class="unLock-btn">
                 <img src="/img/booster/earnings/lock.svg" width="16" alt="" />
                 <span class="btn-text">UnLock</span>
               </v-btn>
-              <div class="distributing">
-                <img src="/img/booster/earnings/data.svg" width="16" alt="" />
-                <span class="btn-text">Distributing</span>
+            </div>
+          </v-tab-item>
+          <v-tab-item>
+            <div
+              class="d-flex justify-space-between align-center"
+              v-for="(item, i) in filteredEarnList"
+              :key="i"
+              style="padding: 10px 0"
+            >
+              <div class="d-flex justify-start align-center">
+                <div>
+                  <img :src="item.logo" width="44" alt="" />
+                </div>
+                <div style="margin-left: 12px">
+                  <div class="item-title">{{ item.title }}</div>
+                  <div class="item-text">{{ item.text }}</div>
+                </div>
               </div>
               <div class="ended">
                 <span class="btn-text">Ended</span>
-              </div> -->
+              </div>
             </div>
           </v-tab-item>
-          <v-tab-item>222222</v-tab-item>
-          <v-tab-item>333333</v-tab-item>
-          <v-tab-item>444444</v-tab-item>
         </v-tabs-items>
       </div>
     </div>
@@ -134,59 +203,79 @@
 </template>
   
   <script>
-  import EarnDialog from "../components/earning-open.vue";
+import EarnDialog from "../components/earning-open.vue";
 export default {
   components: {
-    EarnDialog
+    EarnDialog,
   },
-  computed: {},
+  computed: {
+    filteredEarnList() {
+      if (this.tab === 0) {
+        return this.earnList;
+      } else {
+        if (this.tab === 1) {
+          return this.earnList.filter((item) => {
+            return item.status === "unlock";
+          });
+        }else if(this.tab === 2){
+          return this.earnList.filter((item) => {
+            return item.status === "lock";
+          });
+        }else{
+          return this.earnList.filter((item) => {
+            return item.status === "ended";
+          });
+        }
+      }
+    },
+  },
   data() {
     return {
       dialog: false,
       tab: null,
-      showEarn:false,
+      showEarn: false,
       earnList: [
         {
           logo: require("/public/img/booster/earnings/tomarket.png"),
           title: "Tomarket",
           text: "10M $Tomarket",
-          status: "",
+          status: "unlock",
         },
         {
           logo: require("/public/img/booster/earnings/piggy.png"),
           title: "PiggyPiggy",
           text: "10M $PiggyPiggy",
-          status: "",
+          status: "unlock",
         },
         {
           logo: require("/public/img/booster/earnings/duckchain.png"),
           title: "DuckChain",
           text: "10M $DuckChain",
-          status: "",
+          status: "lock",
         },
         {
           logo: require("/public/img/booster/earnings/capybara-logo.png"),
           title: "Capybara",
           text: "10M $Capybara",
-          status: "",
+          status: "lock",
         },
         {
           logo: require("/public/img/booster/earnings/yescoin.png"),
           title: "Yescoin",
           text: "10M $Yescoin",
-          status: "",
+          status: "lock",
         },
         {
           logo: require("/public/img/booster/earnings/ton-lucky.png"),
           title: "TON Lucky",
           text: "10M $TON Lucky",
-          status: "",
+          status: "distributing",
         },
         {
           logo: require("/public/img/booster/earnings/cherry-game.png"),
           title: "Cherry Game",
           text: "10M $Cherry Game",
-          status: "",
+          status: "ended",
         },
       ],
     };
@@ -196,8 +285,8 @@ export default {
     opendialog() {
       this.dialog = true;
     },
-    openEarn(){
-        this.showEarn = true;
+    openEarn() {
+      this.showEarn = true;
     },
     backtoindex() {
       this.$router.push("/boost");
@@ -242,7 +331,7 @@ export default {
   .earn-list {
     position: relative;
     top: -28px;
-    height: 87vh;
+    // height: 87vh;
     // bottom: 0;
     border-radius: 24px 24px 0px 0px;
     border: 1px 0px 0px 0px;

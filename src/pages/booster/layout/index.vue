@@ -113,5 +113,6 @@ img {
   position: relative;
   height: 100%;
   color: #fff;
+  background: #000;
 }
 </style>

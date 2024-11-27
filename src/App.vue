@@ -99,7 +99,8 @@ export default {
     height: 8px !important;
   }
 }
-.earn-list {
+.earn-list,
+.assets-tab {
   .v-slide-group__wrapper {
     height: 28px !important;
   }

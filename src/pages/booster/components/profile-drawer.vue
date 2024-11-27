@@ -72,60 +72,120 @@
               </v-btn>
             </div>
           </div>
-          <div class="assets">
+          <div class="assets assets-tab">
             <div class="assets-title">My Assets</div>
-            <div class="d-flex align-center justify-space-between">
-              <div
-                class="d-flex align-center"
-                style="gap: 8px"
-                @click="showWithdrawLogDialog = true"
-              >
-                <img src="/img/booster/ton-invite-icon.png" width="40" alt="" />
-
-                <div class="d-flex flex-column">
-                  <div class="d-flex align-center">
-                    <span>Ton</span>
+            <v-tabs v-model="tab" background-color="#1E2234" centered>
+              <v-tab>Token Balance</v-tab>
+              <v-tab>Points Balance</v-tab>
+            </v-tabs>
+            <v-tabs-items v-model="tab" background-color="#1E2234">
+              <v-tab-item>
+                <div class="d-flex align-center justify-space-between assets-item">
+                  <div
+                    class="d-flex align-center"
+                    style="gap: 8px"
+                    @click="showWithdrawLogDialog = true"
+                  >
                     <img
-                      class="cursor-p"
-                      src="/img/booster/svg/right-arrow.svg"
+                      src="/img/booster/ton-invite-icon.png"
+                      width="40"
+                      alt=""
+                    />
+
+                    <div class="d-flex flex-column">
+                      <div class="d-flex align-center">
+                        <span>Ton</span>
+                        <img
+                          class="cursor-p"
+                          src="/img/booster/svg/right-arrow.svg"
+                          width="16"
+                          alt=""
+                        />
+                      </div>
+                      <ICountUp
+                        class="fz-12"
+                        style="color: #94a3b8"
+                        :delay="1000"
+                        :endVal="tonCount"
+                        :options="{
+                          decimalPlaces: 4,
+                          useEasing: true,
+                          useGrouping: true,
+                          separator: ',',
+                          decimal: '.',
+                          prefix: '',
+                          suffix: '',
+                        }"
+                      />
+                    </div>
+                  </div>
+
+                  <v-btn
+                    class="withdraw-btn"
+                    :width="asMobile ? '80px' : '116px'"
+                    :disabled="tonCount <= 0"
+                    @click="showWithdrawDialog = true"
+                  >
+                    <img
+                      class="mr-1"
+                      v-if="!asMobile"
+                      src="/img/booster/svg/withdraw-icon.svg"
                       width="16"
                       alt=""
                     />
+                    <span>Withdraw</span>
+                  </v-btn>
+                </div>
+              </v-tab-item>
+              <v-tab-item>
+                <div class="d-flex align-center justify-space-between assets-item">
+                  <div
+                    class="d-flex align-center"
+                    style="gap: 8px"
+                  >
+                    <img
+                      src="/img/booster/earnings/tomarket.png"
+                      width="40"
+                      alt=""
+                    />
+
+                    <div class="d-flex flex-column">
+                      <div class="d-flex align-center">
+                        <span>Tomarket</span>
+                        <img
+                          class="cursor-p"
+                          src="/img/booster/svg/right-arrow.svg"
+                          width="16"
+                          alt=""
+                        />
+                      </div>
+                      <ICountUp
+                        class="fz-12"
+                        style="color: #94a3b8"
+                        :delay="1000"
+                        :endVal="tonCount"
+                        :options="{
+                          decimalPlaces: 4,
+                          useEasing: true,
+                          useGrouping: true,
+                          separator: ',',
+                          decimal: '.',
+                          prefix: '',
+                          suffix: '',
+                        }"
+                      />
+                    </div>
                   </div>
-                  <ICountUp
-                    class="fz-12"
-                    style="color: #94a3b8"
-                    :delay="1000"
-                    :endVal="tonCount"
-                    :options="{
-                      decimalPlaces: 4,
-                      useEasing: true,
-                      useGrouping: true,
-                      separator: ',',
-                      decimal: '.',
-                      prefix: '',
-                      suffix: '',
-                    }"
+                  <img
+                    class="cursor-p"
+                    src="/img/booster/svg/right-arrow.svg"
+                    width="24"
+                    alt=""
                   />
                 </div>
-              </div>
-
-              <v-btn
-                class="withdraw-btn"
-                :width="asMobile ? '80px' : '116px'"
-                :disabled="tonCount <= 0"
-                @click="showWithdrawDialog = true"
-              >
-                <img
-                  class="mr-1"
-                  v-if="!asMobile"
-                  src="/img/booster/svg/withdraw-icon.svg"
-                  width="16"
-                  alt=""
-                />
-                <span>Withdraw</span>
-              </v-btn>
-            </div>
+                
+              </v-tab-item>
+            </v-tabs-items>
           </div>
         </v-container>
 
@@ -169,6 +229,7 @@ export default {
       reloadBalance: false,
       showWithdrawDialog: false,
       showWithdrawLogDialog: false,
+      tab: null,
     };
   },
   methods: {
@@ -251,7 +312,11 @@ export default {
   .assets {
     margin-top: 16px;
     padding: 8px 0 16px 0;
+    // border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  }
+  .assets-item{
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    padding-bottom: 12px;
   }
   .land-title {
     margin-bottom: 8px;
@@ -297,7 +362,26 @@ export default {
     box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
   }
 }
-
+.v-tabs {
+  .v-tab {
+    color: #d0d5dd !important;
+    min-width: 0 !important;
+    padding: 0;
+    height: 24px;
+    margin-left: 20px;
+    font-size: 16px;
+  }
+  .v-tab.v-tab--active {
+    color: #fff !important;
+    font-weight: bold !important;
+  }
+}
+.v-tabs-bar .v-tabs-slider {
+  min-width: 0 !important;
+}
+.theme--light.v-tabs-items {
+  background: transparent !important;
+}
 @media (min-width: 960px) {
   .profile-drawer-box {
     ::v-deep .invite-drawer {
