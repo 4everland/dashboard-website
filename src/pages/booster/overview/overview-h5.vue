@@ -2,14 +2,39 @@
   <div class="d-md-none d-block">
     <TokenDialog
       class="pos-a"
-      style="right: 8px; top: 70px"
-      v-if="isTgMiniApp"
+      style="right: 130px; top: 61px"
+      v-if="!isTgMiniApp"
     ></TokenDialog>
 
     <div
+      v-if="!isTgMiniApp"
+      class="trigger-icon pos-a"
+      style="right: 67px; top: 61px"
+      @click="
+        () =>
+          !this.boostLocked ? this.$store.commit('SET_PROFILE_BAR', true) : ''
+      "
+    >
+      <img src="/img/booster/icon-account.png" width="48" alt="" />
+      <div class="trigger-text staking fz-12 fw-b text-center">Account</div>
+    </div>
+    <div
+      v-if="!isTgMiniApp"
+      class="trigger-icon pos-a"
+      style="right: 0px; top: 61px"
+      @click="
+        () =>
+          this.$router.push('/boost/earnings')
+      "
+    >
+      <img src="/img/booster/icon-partner.png" width="48" alt="" />
+      <div class="trigger-text partner fz-12 fw-b text-center">Partner</div>
+    </div>
+
+    <!-- <div
       v-if="isTgMiniApp"
       class="trigger-icon pos-a"
-      style="right: 8px; top: 136px"
+      style="right: 67px; top: 57px"
       @click="
         () =>
           !this.boostLocked ? this.$store.dispatch('StakeDrawerToggle') : ''
@@ -17,7 +42,7 @@
     >
       <img src="/img/booster/staking-icon.png" width="56" alt="" />
       <div class="trigger-text staking fz-12 fw-b text-center">STAKING</div>
-    </div>
+    </div> -->
     <div
       v-if="isTgMiniApp && !userInfo.wallet"
       class="trigger-icon pos-a"
@@ -231,10 +256,10 @@
         </div>
 
         <div class="gold-square" @click="handleStartReward" v-if="taskEnd">
-          <div style="position: relative">
-            <div style="width: 10px; height: 10px"></div>
+          <div class="coin-card-light">
+            <img src="/img/booster/icon-small-light.png" width="61" alt="" />
           </div>
-          <div class="top-card square-box-up" id="mobile-gold-ball">
+          <div class="coin-card" id="mobile-gold-ball">
             <img src="/img/booster/spin/reward-ball.png" width="80" alt="" />
             <div class="ball-text">$100</div>
           </div>
@@ -437,6 +462,14 @@ export default {
   }
   50% {
     transform: translateY(-10%);
+  }
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 .square-box {
@@ -698,9 +731,21 @@ export default {
 
 .gold-square {
   position: absolute;
-  left: 30%;
-  transform: translateX(-50%);
-  top: 15%;
+  left: -5px;
+  top: 45px;
+  .coin-card-light{
+    position: absolute;
+    left: 9px;
+    top: 10px;
+    z-index: 0;
+    img {
+      animation: rotate 5s linear infinite;
+    }
+  }
+  .coin-card {
+    position: relative;
+    z-index: 1;
+  }
   .points {
     z-index: 10;
     padding: 0px 8px;
@@ -729,7 +774,7 @@ export default {
     position: absolute;
     left: 0;
     bottom: 15%;
-    width: 60px;
+    width: 52px;
     padding: 4px 1.5px;
     line-height: 12px;
     backdrop-filter: blur(2px);
@@ -748,6 +793,10 @@ export default {
       rgba(255, 222, 127, 0.5) 13.1%,
       rgba(248, 99, 0, 0.13) 82.44%
     );
+  }
+  .partner {
+    background: linear-gradient(120deg, rgba(97, 114, 243, 0.5) 24.53%, rgba(17, 2, 252, 0.5) 74.37%);
+
   }
   .connect {
     background: linear-gradient(

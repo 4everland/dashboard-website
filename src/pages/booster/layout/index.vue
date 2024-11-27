@@ -58,7 +58,6 @@ export default {
   },
   computed: {
     isTgMiniApp() {
-      console.log(this.meta);
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
     meta() {
