@@ -27,6 +27,7 @@
               v-model="customLand"
               autofocus
               type="number"
+              @input="handleInput"
             />
             <span class="num">,000,000</span>
             <span class="ml-1 fz-14">LAND</span>
@@ -168,6 +169,9 @@ export default {
           "success"
         );
       }
+    },
+    handleInput(e){
+      this.customLand = e.target.value.replace(/[^\d]/g, "");
     },
     async handleDeposit() {
       console.log(
