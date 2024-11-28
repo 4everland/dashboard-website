@@ -80,7 +80,9 @@
             </v-tabs>
             <v-tabs-items v-model="tab" background-color="#1E2234">
               <v-tab-item>
-                <div class="d-flex align-center justify-space-between assets-item">
+                <div
+                  class="d-flex align-center justify-space-between assets-item"
+                >
                   <div
                     class="d-flex align-center"
                     style="gap: 8px"
@@ -138,11 +140,11 @@
                 </div>
               </v-tab-item>
               <v-tab-item>
-                <div class="d-flex align-center justify-space-between assets-item">
-                  <div
-                    class="d-flex align-center"
-                    style="gap: 8px"
-                  >
+                <div
+                  class="d-flex align-center justify-space-between assets-item"
+                  
+                >
+                  <div class="d-flex align-center" style="gap: 8px">
                     <img
                       src="/img/booster/earnings/tomarket.png"
                       width="40"
@@ -152,28 +154,8 @@
                     <div class="d-flex flex-column">
                       <div class="d-flex align-center">
                         <span>Tomarket</span>
-                        <img
-                          class="cursor-p"
-                          src="/img/booster/svg/right-arrow.svg"
-                          width="16"
-                          alt=""
-                        />
                       </div>
-                      <ICountUp
-                        class="fz-12"
-                        style="color: #94a3b8"
-                        :delay="1000"
-                        :endVal="tonCount"
-                        :options="{
-                          decimalPlaces: 4,
-                          useEasing: true,
-                          useGrouping: true,
-                          separator: ',',
-                          decimal: '.',
-                          prefix: '',
-                          suffix: '',
-                        }"
-                      />
+                      <div class="balance-number">0.00</div>
                     </div>
                   </div>
                   <img
@@ -183,7 +165,6 @@
                     alt=""
                   />
                 </div>
-                
               </v-tab-item>
             </v-tabs-items>
           </div>
@@ -195,6 +176,7 @@
         ></WithdrawDialog>
 
         <WithdrawLogDialog v-model="showWithdrawLogDialog"></WithdrawLogDialog>
+        <!-- <PointsBalance v-modal="showPointsBalance"></PointsBalance> -->
       </v-navigation-drawer>
     </div>
     <!-- <WalletConnect ref="walletConnect" /> -->
@@ -204,6 +186,7 @@
 import { mapState, mapGetters } from "vuex";
 import WithdrawDialog from "./withdraw-dialog.vue";
 import WithdrawLogDialog from "./withdraw-log-dialog.vue";
+import PointsBalance from "./points-balance-history.vue";
 // import WalletConnect from "../components/wallet-connect.vue";
 import ICountUp from "vue-countup-v2";
 import { bus } from "@/utils/bus";
@@ -229,6 +212,7 @@ export default {
       reloadBalance: false,
       showWithdrawDialog: false,
       showWithdrawLogDialog: false,
+      showPointsBalance: false,
       tab: null,
     };
   },
@@ -265,6 +249,7 @@ export default {
     ICountUp,
     WithdrawDialog,
     WithdrawLogDialog,
+    PointsBalance
   },
   watch: {
     showProfileDrawer(val) {
@@ -314,9 +299,17 @@ export default {
     padding: 8px 0 16px 0;
     // border-bottom: 1px solid rgba(255, 255, 255, 0.25);
   }
-  .assets-item{
+  .assets-item {
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+  .balance-number {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: left;
+    color: #94a3b8;
   }
   .land-title {
     margin-bottom: 8px;
