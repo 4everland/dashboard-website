@@ -12,7 +12,9 @@
             max-width="83"
             @click="
               () =>
-                !this.boostLocked ? this.$store.commit('TASKDRAWER_TOGGLE') : ''
+                !this.boostLocked
+                  ? this.$store.commit('TASKDRAWER_TOGGLE')
+                  : handleStartBoost()
             "
           >
             <img src="/img/booster/svg/more.svg" width="16" alt="" />
@@ -49,7 +51,7 @@
                   () =>
                     !this.boostLocked
                       ? this.$store.dispatch('StakeDrawerToggle')
-                      : ''
+                      : handleStartBoost()
                 "
               >
                 <img src="/img/booster/stake-icon.png" alt="" width="22" />
