@@ -174,7 +174,7 @@ export default {
         // this.showStakeError = true;
         // window.open("https://dashboard.4everland.org/boost");
         this.$toast2(
-          "This feature is coming soon for the bot. Stay tuned!",
+          "The staking feature is only supported on the webpage.",
           "info"
         );
         return;
