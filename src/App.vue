@@ -105,4 +105,29 @@ export default {
     height: 28px !important;
   }
 }
+.select-confirm {
+  .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat)
+    > .v-input__control
+    > .v-input__slot {
+    box-shadow: none !important;
+    border: 1px solid #ffffff40 !important;
+  }
+  .theme--light.v-icon {
+    color: #fff;
+  }
+  .v-input__slot {
+    border-radius: 4px !important;
+    border: 1px solid #ffffff40 !important;
+    padding: 2px 12px !important;
+    background: #ffffff0d !important;
+  }
+  .theme--light.v-text-field:not(.v-input--has-state):hover
+    > .v-input__control
+    > .v-input__slot:before {
+    border: none !important;
+  }
+.theme--light.v-input input, .theme--light.v-input textarea{
+    color: #FFF !important;
+}
+}
 </style>

@@ -28,6 +28,7 @@
           @handleStartBoost="handleShowStartBoost"
           @handleUnlock="handleShowUnlock"
           @dailyClaim="showDailySign = true"
+          @startBind="showBindExchange = true"
         ></overview-pc>
         <overview-h5
           v-else
@@ -35,6 +36,7 @@
           @handleUnlock="handleShowUnlock"
           @dailyClaim="showDailySign = true"
           @startReward="showRewardStart = true"
+          @startBind="showBindExchange = true"
         ></overview-h5>
         <start-boosting
           v-model="showStartBoost"
@@ -55,6 +57,7 @@
         <bind-dialog v-model="showBindWallet"></bind-dialog>
         <RewardOpenFirst v-model="showRewardStart"></RewardOpenFirst>
         <SaveToHome v-model="showSaveToHome" @hideShowSaveToHome="showSaveToHome=false"></SaveToHome>
+        <BindExchange v-model="showBindExchange"></BindExchange>
       </template>
       <!-- <end-boosting v-model="showEndBoost"></end-boosting> -->
     </div>
@@ -79,6 +82,7 @@ import EasterEgg from "./components/easter-egg.vue";
 import DailySignDialog from "./components/daily-sign-dialog.vue";
 import RewardOpenFirst from "./components/reward-open-first.vue";
 import SaveToHome from "./components/save-to-homescreen.vue";
+import BindExchange from "./components/bind-exchange.vue";
 
 import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
@@ -170,7 +174,8 @@ export default {
       unlockStage: 0,
       showDailySign: false,
       showRewardStart: false,
-      showSaveToHome: false
+      showSaveToHome: false,
+      showBindExchange: false,
       // showRewardReceive: false,
       // showRewardClaim: false,
     };
@@ -335,7 +340,8 @@ export default {
     DailySignDialog,
     ProfileDrawer,
     RewardOpenFirst,
-    SaveToHome
+    SaveToHome,
+    BindExchange
   },
 
   watch: {

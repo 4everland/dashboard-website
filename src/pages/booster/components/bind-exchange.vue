@@ -1,0 +1,482 @@
+<template>
+  <div>
+    <v-dialog
+      max-width="400"
+      content-class="bind-boost-dialog"
+      v-model="value"
+      overlay-opacity="0.5"
+    >
+      <div class="bind-dialog">
+        <img
+          class="close-btn"
+          @click="$emit('input', false)"
+          src="/img/booster/svg/close.svg"
+          width="20"
+          alt=""
+        />
+        <div class="bind-header">
+          <img
+            class="head-img"
+            src="/img/booster/earnings/bind-exchange.png"
+            width="295"
+            alt=""
+          />
+          <div class="bind-title">Bind Exchange</div>
+        </div>
+        <div class="bind-content">
+          <!-- <div class="bind-receive">
+            <ul>
+              <li>
+                Your $4EVER will be deposited there during the TGE once bind
+                your exchange account.
+              </li>
+              <li>No Gas fees will be consumed when receiving your $4EVER.</li>
+            </ul>
+            <div class="head-img">
+              <img
+                src="/img/booster/earnings/bind-receive.png"
+                width="120"
+                alt=""
+              />
+              <div class="bind-text">Bind to receive your $4EVER</div>
+              <v-btn class="continue-btn mt-4">
+                <span class="bind-text" @click="showNext">Continue</span>
+              </v-btn>
+            </div>
+          </div> -->
+          <!-- <div class="bind-select" v-if="showSelectExchange">
+            <div class="bind-text">Select Exchange</div>
+            <div class="d-flex justify-space-between align-center">
+              <v-radio-group v-model="radioGroup">
+                <v-radio
+                  v-for="(item, i) in selectList"
+                  :key="i"
+                  :value="i"
+                  class="mt-2 select"
+                  color="#0FE1F8"
+                >
+                  <template v-slot:label>
+                    <div class="d-flex justify-end align-center">
+                      <div>
+                        <img
+                          :src="item.logo"
+                          width="24"
+                          alt=""
+                        />
+                      </div>
+                      <div class="step-text">{{ item.title }}</div>
+                    </div>
+                  </template>
+                </v-radio>
+              </v-radio-group>
+            </div>
+            <div class="d-flex justify-start mt-2">
+              <div>
+                <img
+                  src="/img/booster/earnings/subtract.png"
+                  width="16"
+                  alt=""
+                />
+              </div>
+              <div class="view">
+                The exchange binding deadline is 00:00 UTC on Dec 31, 2024.
+              </div>
+            </div>
+          </div> -->
+          <div class="select-confirm" v-if="showSelectExchange">
+            <div class="bind-text">Select Exchange</div>
+            <v-select
+              :items="selectList"
+              dense
+              solo
+              background-color="#31313140"
+              color="#FFF"
+              class="mt-4 exchange-list"
+              style="box-shadow: none"
+            >
+              <template v-slot:label>
+                <div class="d-flex justify-end align-center">
+                  <img
+                    src="/img/booster/earnings/gate-logo.png"
+                    width="16"
+                    alt=""
+                  />
+                  <div class="step-text ml-2">Gate</div>
+                </div>
+              </template>
+              <template v-slot:item="{ item }">
+                <div class="d-flex justify-end align-center">
+                  <img :src="item.logo" width="24" alt="" />
+                  <div class="step-text ml-2" style="color:#FFF;">{{ item.title }}</div>
+                </div>
+              </template>
+              <template v-slot:selection="{ item }">
+                <div class="d-flex justify-end align-center">
+                  <img :src="item.logo" width="24" alt="" />
+                  <div class="step-text ml-2" style="color:#FFF;">{{ item.title }}</div>
+                </div>
+              </template>
+            </v-select>
+            <div>
+              <div class="step-text">UID</div>
+              <div>
+                <v-text-field
+                  label="Enter your Gate UID"
+                  :rules="rules"
+                  background-color="#31313140"
+                  outlined
+                  solo-inverted
+                  hide-details="auto"
+                  color="#039cff"
+                  dense
+                ></v-text-field>
+              </div>
+            </div>
+            <div class="mt-4">
+              <div class="step-text">Deposit Address</div>
+              <div>
+                <v-text-field
+                  label="Enter your Gate UID"
+                  :rules="rules"
+                  background-color="#31313140"
+                  outlined
+                  solo-inverted
+                  hide-details="auto"
+                  color="#039cff"
+                  dense
+                ></v-text-field>
+              </div>
+            </div>
+            <div class="bind-tips mt-4">
+              <div>How to obtain UiD & deposit address</div>
+              <div class="mt-1">No exchange account? Create one</div>
+            </div>
+            <v-btn class="bind-btn mt-4">
+              <span class="bind-text" @click="showNext">Bind</span>
+            </v-btn>
+          </div>
+          <div class="rebind-exchange" v-show="rebindExchange == true">
+            <ul>
+              <li>
+                Your $4EVER will be deposited there during the TGE once bind
+                your exchange account.
+              </li>
+              <li>No Gas fees will be consumed when receiving your $4EVER.</li>
+            </ul>
+            <div class="bind-address mt-4">
+              <div class="d-flex justify-space-between align-center">
+                <div class="rebind-text">Exchange</div>
+                <div class="d-flex justify-end align-center">
+                  <img
+                    src="/img/booster/earnings/gate-logo.png"
+                    width="24"
+                    alt=""
+                  />
+                  <div class="step-text ml-2">Gate</div>
+                </div>
+              </div>
+              <div class="d-flex justify-space-between align-center mt-3">
+                <div class="rebind-text">UID</div>
+                <div style="font-size: 12px; font-weight: 400">1438492090</div>
+              </div>
+              <div class="d-flex justify-space-between align-center mt-3">
+                <div class="rebind-text">Deposit Address</div>
+                <div style="font-size: 12px; font-weight: 400">UQA3...nh1R</div>
+              </div>
+            </div>
+            <!-- <v-btn class="rebind-btn mt-6">
+              <img
+                src="/img/booster/earnings/rebind.svg"
+                width="16"
+                alt=""
+              />
+              <span class="bind-text ml-1">Rebind</span>
+            </v-btn> -->
+            <v-btn class="submit-btn mt-6">
+              <img
+                src="/img/booster/earnings/bind-check.svg"
+                width="16"
+                alt=""
+              />
+              <span class="bind-text ml-1">Submitted</span>
+            </v-btn>
+            <div class="d-flex justify-start align-center mt-4">
+              <div>
+                <img
+                  src="/img/booster/earnings/subtract.png"
+                  width="16"
+                  alt=""
+                />
+              </div>
+              <div class="view">
+                The exchange binding deadline is 00:00 UTC on Dec 31, 2024.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </v-dialog>
+  </div>
+</template>
+    
+    <script>
+export default {
+  props: {
+    value: Boolean,
+  },
+  data() {
+    return {
+      showSelectExchange: true,
+      showBind: false,
+      rebindExchange: false,
+      radioGroup: null,
+      selectList: [
+        {
+          title: "Gate",
+          logo: require("/public/img/booster/earnings/gate-logo.png"),
+        },
+        {
+          title: "BingX",
+          logo: require("/public/img/booster/earnings/bingx-logo.png"),
+        },
+        {
+          title: "MEXC",
+          logo: require("/public/img/booster/earnings/mexc-logo.png"),
+        },
+      ],
+      selectedItem: null,
+    };
+  },
+  watch: {
+    selectedItem(newVal, oldVal) {
+      if (!newVal) {
+        this.selectedItem = this.selectList[0];
+      }
+    },
+  },
+  computed: {},
+
+  methods: {
+    showNextDiv() {
+      this.showSelectExchange = true;
+    },
+  },
+  components: {},
+};
+</script>
+    
+    <style lang="scss" scoped>
+::v-deep .bind-boost-dialog {
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: initial !important;
+}
+
+.bind-dialog {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  padding: 36px 16px;
+  border-radius: 16px;
+  .close-btn {
+    position: absolute;
+    right: 18px;
+    top: 0;
+    cursor: pointer;
+  }
+  .bind-header {
+    width: 295px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    .bind-title {
+      position: absolute;
+      top: 45px;
+      left: 12px;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+      text-align: left;
+      color: #fff;
+      text-shadow: 0px 0px 8px #ffffff80;
+    }
+  }
+  .bind-content {
+    width: 327px;
+    // height: 348px;
+    margin: 0 auto;
+    top: 72px;
+    padding: 24px 16px;
+    gap: 24px;
+    border-radius: 16px;
+    margin-top: -22px;
+    background: linear-gradient(179.52deg, #000a10 8.53%, #003e70 99.59%),
+      linear-gradient(
+        180deg,
+        rgba(17, 2, 252, 0.15) 28.41%,
+        rgba(15, 225, 248, 0) 100%
+      );
+    border: 1px solid;
+    border-image-source: linear-gradient(
+      165.76deg,
+      rgba(69, 81, 111, 0.5) -11.63%,
+      #11b7ff 88.45%
+    );
+    .bind-receive {
+      ul {
+        list-style-type: disc;
+        li {
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 16px;
+          text-align: left;
+          color: #0fe1f8;
+          margin-top: 8px;
+        }
+        li::before {
+          content: "•";
+          color: #0fe1f8;
+          position: absolute;
+          left: 42px;
+        }
+      }
+      .head-img {
+        margin-top: 24px;
+        text-align: center;
+      }
+      .continue-btn {
+        width: 100%;
+        height: 34px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        background: linear-gradient(99.62deg, #dc33d6 0%, #ff3821 100%);
+      }
+    }
+    .bind-text {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 16px;
+      color: #ffffff;
+    }
+    .bind-select {
+      .select {
+        padding: 16px;
+        background: linear-gradient(
+          135deg,
+          rgb(33, 61, 92) 0,
+          rgb(33, 61, 92) 10%,
+          transparent 10%,
+          transparent 50%,
+          rgb(33, 61, 92) 50%,
+          rgb(33, 61, 92) 60%,
+          transparent 60%,
+          transparent 100%
+        );
+        background-size: 8px 8px;
+        width: 295px;
+      }
+    }
+    .step-text {
+      font-size: 16px;
+      font-weight: 400;
+      margin-left: 8px;
+      color: #fff;
+    }
+    .v-item--active {
+      border: 1px solid #0fe1f8;
+    }
+    .view {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 14.52px;
+      color: #c0c1c2;
+      margin-left: 4px;
+    }
+    .select-confirm {
+      .v-text-field {
+        padding-top: 0 !important;
+      }
+      .bind-tips {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 14.52px;
+        text-align: left;
+        text-decoration: underline;
+        color: #039cff;
+      }
+      .bind-btn {
+        width: 295px;
+        height: 44px;
+        padding: 12px 24px;
+        border-radius: 16px;
+        background: linear-gradient(90.97deg, #0fe1f8 0.68%, #1102fc 99.51%);
+      }
+    }
+    .rebind-exchange {
+      ul {
+        list-style-type: disc;
+        li {
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 16px;
+          text-align: left;
+          color: #0fe1f8;
+          margin-top: 8px;
+        }
+        li::before {
+          content: "•";
+          color: #0fe1f8;
+          position: absolute;
+          left: 42px;
+        }
+      }
+      .bind-address {
+        width: 287px;
+        height: 120px;
+        padding: 16px;
+        border-radius: 16px;
+        color: #fff;
+        border: 1px solid #039cff;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.0375) 0%,
+          rgba(255, 255, 255, 0.15) 100%
+        );
+        .rebind-text {
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 16px;
+          color: #98a2b3;
+        }
+      }
+      .rebind-btn {
+        width: 295px;
+        height: 44px;
+        padding: 12px 24px 12px 24px;
+        border-radius: 16px;
+        border: 1px solid #ffffff80;
+        background: #ffffff0d;
+      }
+      .submit-btn {
+        width: 295px;
+        height: 44px;
+        padding: 12px 24px 12px 24px;
+        border-radius: 16px;
+        // border: 1px solid;
+        border: 1px solid #039cff;
+        background: #00305c80;
+      }
+    }
+  }
+}
+.exchange-list{
+    color: #FFF !important;
+}
+.v-list.v-select-list.v-sheet.theme--light.v-list--dense.theme--light {
+  border-radius: 4px !important;
+  background: #000a10 !important;
+  margin-top: 40px !important;
+}
+</style>
+    
