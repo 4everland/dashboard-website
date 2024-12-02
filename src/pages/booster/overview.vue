@@ -236,7 +236,7 @@ export default {
         //   return url + "boost/background/mobile-bg-locked.png";
         // }
         //return url + "boost/background/mobile-bg-unlocked.png";
-        return "/img/booster/mobile-bg-unlocked-new.png"
+        return "/img/booster/mobile-bg-unlocked-new1.png"
       } else {
         if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
           return "https://static.4everland.org/boost/background/bg.webm";

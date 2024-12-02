@@ -203,21 +203,9 @@
         </div>
 
         <div
-          v-if="isTgMiniApp"
-          class="trigger-icon pos-a"
-          style="left: 8px; top: 69%"
-          @click="
-            () =>
-              !this.boostLocked ? this.$store.dispatch('StakeDrawerToggle') : ''
-          "
-        >
-          <img src="/img/booster/new/icon-staking.png" width="40" alt="" />
-          <div class="trigger-text tools fz-12 fw-b text-center">Staking</div>
-        </div>
-        <div
           v-if="asMobile"
           class="trigger-icon pos-a"
-          style="left: 55px; top: 69%"
+          style="left: 8px; top: 77%"
           @click="
             () =>
               !this.boostLocked ? this.$store.commit('SET_TOOL_BAR', true) : ''
@@ -230,7 +218,7 @@
         <div
           v-if="asMobile"
           class="trigger-icon pos-a"
-          style="left: 103px; top: 69%"
+          style="left: 55px; top: 77%"
           @click="
             () =>
               !this.boostLocked ? this.$store.dispatch('TaskDrawerToggle') : ''
@@ -241,7 +229,7 @@
           <v-badge
               v-if="asMobile"
               class="undo-badge"
-              style="position: absolute; right: 5px; top: 5px"
+              style="position: absolute; right: 8px; top: 8px"
               v-show="taskUndo"
               color="red"
               dot
@@ -252,7 +240,7 @@
         <div
           v-if="asMobile"
           class="trigger-icon pos-a"
-          style="left: 153px; top: 69%"
+          style="left: 103px; top: 77%"
           @click="
             () =>
               !this.boostLocked ? this.$store.commit('SET_INVITE_BAR', true) : ''
@@ -261,20 +249,38 @@
           <img src="/img/booster/new/icon-invite.png" width="40" alt="" />
           <div class="trigger-text tools fz-12 fw-b text-center">Invite</div>
         </div>
+        <div
+          v-if="isTgMiniApp"
+          class="trigger-icon pos-a"
+          style="left: 153px; top: 77%"
+          @click="
+            () =>
+              !this.boostLocked ? this.$store.dispatch('StakeDrawerToggle') : ''
+          "
+        >
+          <img src="/img/booster/new/icon-staking.png" width="40" alt="" />
+          <div class="trigger-text tools fz-12 fw-b text-center">Staking</div>
+        </div>
 
 
         <div
           v-if="asMobile"
           class="trigger-icon pos-a"
-          style="right: 0px; top: 69%"
+          style="right: 0px; top: 78%"
           @click="
             () =>
               !this.boostLocked ? this.toggleExplore() : ''
           "
         >
           <img src="/img/booster/new/icon-explore.png" width="90" alt="" />
-          
+          <!-- <div
+              v-if="!boostLocked && exploreRemain > 0"
+              class="count pos-a"
+            >
+              x{{ exploreRemain }}
+          </div> -->
         </div>
+        
 
         <div class="nodeBoostWrap">
           <div class="nodeboost-title pa-4 ">
@@ -769,7 +775,7 @@ export default {
 .daily-boost {
   position: absolute;
   left: 47%;
-  top: 58%;
+  top: 56%;
 
   .daily-boost-btn {
     position: absolute;
@@ -817,7 +823,7 @@ export default {
   position: absolute;
   left: 50.5%;
   transform: translateX(-50%);
-  top: 33%;
+  top: 31%;
   .points {
     z-index: 10;
     padding: 0px 8px;
@@ -993,15 +999,15 @@ export default {
 .nodeBoostWrap{
   width: 100%;
   position: absolute;
-  top: 75%;
+  top: 85%;
   background:
     linear-gradient(180deg, rgba(58, 71, 98, 0.25) 0%, rgba(58, 71, 98, 0) 69.08%),
     linear-gradient(154.45deg, rgba(97, 114, 243, 0) 42.1%, #6172F3 100%),#06090F;
-  border: 1px solid;
-  
+  border: 1px solid rgba(98,112,151);
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
-  border-image: linear-gradient(180deg, rgba(164, 188, 253, 0.5) 0%, rgba(98, 112, 151, 0) 11.9%);
+  border-image-slice: 1;
+  border-bottom-color: transparent;
   padding-bottom: 20px;
   .nodeboost-title{
     font-size: 16px;
@@ -1035,5 +1041,16 @@ export default {
   width: 10px;
   height: 10px;
   border-radius: 100%;
+}
+.count {
+  position: absolute;
+  right: 0;
+  top: 4px;
+  font-size: 12px;
+  line-height: 9px;
+  padding: 2px 4px;
+  background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
+  box-shadow: 0px 1.582px 4.746px 0px rgba(0, 50, 228, 0.4);
+  border-radius: 12px;
 }
 </style>
