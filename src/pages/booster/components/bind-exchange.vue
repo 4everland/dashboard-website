@@ -132,7 +132,7 @@
                   ></v-text-field>
                 </div>
               </div>
-              <div class="mt-4">
+              <!-- <div class="mt-4">
                 <div class="step-text">Deposit Address</div>
                 <div>
                   <v-text-field
@@ -147,9 +147,9 @@
                     dense
                   ></v-text-field>
                 </div>
-              </div>
+              </div> -->
               <div class="bind-tips mt-4">
-                <div><a href="" target="_blank">How to obtain UiD & deposit address</a></div>
+                <div><a href="" target="_blank">How to obtain UiD</a></div>
                 <div class="mt-1"><a href="" target="_blank">No exchange account? Create one </a></div>
               </div>
               <v-btn class="bind-btn mt-4" @click="showNextBind" :loading="loading">
@@ -181,12 +181,12 @@
                 <div class="rebind-text">UID</div>
                 <div style="font-size: 12px; font-weight: 400">{{ bindInfo?.exchangeUid }}</div>
               </div>
-              <div class="d-flex justify-space-between align-center mt-3">
+              <!-- <div class="d-flex justify-space-between align-center mt-3">
                 <div class="rebind-text">Deposit Address</div>
                 <div style="font-size: 12px; font-weight: 400">{{ bindInfo?.exchangeAddress?.cutStr(6, 4) }}</div>
-              </div>
+              </div> -->
             </div>
-            <v-btn class="rebind-btn mt-6" @click="handleRebind">
+            <v-btn class="rebind-btn mt-6" v-if="!taskEnd" @click="handleRebind">
               <img
                 src="/img/booster/earnings/rebind.svg"
                 width="16"
@@ -194,14 +194,14 @@
               />
               <span class="bind-text ml-1">Rebind</span>
             </v-btn>
-            <!-- <v-btn class="submit-btn mt-6">
+            <v-btn class="submit-btn mt-6" v-if="taskEnd">
               <img
                 src="/img/booster/earnings/bind-check.svg"
                 width="16"
                 alt=""
               />
               <span class="bind-text ml-1">Submitted</span>
-            </v-btn> -->
+            </v-btn>
             <div class="d-flex justify-start align-center mt-4">
               <div>
                 <img
@@ -268,12 +268,13 @@ export default {
       loading: false,
       rules: [
         (v) =>!!v || "UID is required",
-        (v) => (v && v.length <= 10) || "UID must be less than 10 characters",
+        (v) => (v.trim().length >= 3 ) || "The input format is incorrect.",
       ],
       rulesAddress: [
         (v) =>!!v || "Address is required",
         (v) => (v && v.length <= 42) || "Address must be less than 42 characters",
-      ]
+      ],
+      endTime: 1733702400000
     }
   },
   watch: {
@@ -295,7 +296,11 @@ export default {
     },
     addresslabel() {
       return "Enter your "+this.form.market+" Address"
-    }
+    },
+    taskEnd() {
+      const curTimeStamp = +new Date();
+      return curTimeStamp > this.endTime;
+    },
   },
   mounted() {
     this.getBindInfo();
@@ -356,7 +361,6 @@ export default {
         const data =  await handleBindExchange({
             "market": this.form.market,
             "exchangeUid": this.form.uid,
-            "exchangeAddress": this.form.address,
             "id": this.bindInfo.id
           })
           if (data.code == 200) {
@@ -364,7 +368,8 @@ export default {
             this.step = null;
             this.bindInfo.exchangeUid = this.form.uid;
             this.bindInfo.exchangeAddress = this.form.address;
-            this.market = this.form.market;
+            this.bindInfo.market = this.form.market;
+            this.bindInfoImage = this.selectList.find(item => item.value === this.bindInfo.market);
           } else {
             this.$toast2(
               data.message,
@@ -552,7 +557,7 @@ export default {
       }
       .bind-address {
         width: 287px;
-        height: 120px;
+        height: 90px;
         padding: 16px;
         border-radius: 16px;
         color: #fff;

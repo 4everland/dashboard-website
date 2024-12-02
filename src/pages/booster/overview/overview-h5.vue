@@ -25,8 +25,9 @@
     ></TokenDialog>
 
     <div
-      v-if="isTgMiniApp"
+      v-if="asMobile"
       class="trigger-icon pos-a"
+      id="activity_Account"
       style="right: 10px; top: 61px"
       @click="
         () =>
@@ -202,7 +203,7 @@
         </div>
 
         <div
-          v-if="!isTgMiniApp"
+          v-if="isTgMiniApp"
           class="trigger-icon pos-a"
           style="left: 8px; top: 69%"
           @click="
@@ -214,7 +215,7 @@
           <div class="trigger-text tools fz-12 fw-b text-center">Staking</div>
         </div>
         <div
-          v-if="!isTgMiniApp"
+          v-if="asMobile"
           class="trigger-icon pos-a"
           style="left: 55px; top: 69%"
           @click="
@@ -227,7 +228,7 @@
         </div>
 
         <div
-          v-if="!isTgMiniApp"
+          v-if="asMobile"
           class="trigger-icon pos-a"
           style="left: 103px; top: 69%"
           @click="
@@ -249,7 +250,7 @@
         </div>
 
         <div
-          v-if="!isTgMiniApp"
+          v-if="asMobile"
           class="trigger-icon pos-a"
           style="left: 153px; top: 69%"
           @click="
@@ -263,7 +264,7 @@
 
 
         <div
-          v-if="!isTgMiniApp"
+          v-if="asMobile"
           class="trigger-icon pos-a"
           style="right: 0px; top: 69%"
           @click="
