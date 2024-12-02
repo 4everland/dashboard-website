@@ -48,7 +48,7 @@
         ></unlock-dialog>
         <EasterEgg v-model="showEasterEggDialog"></EasterEgg>
         <DailySignDialog v-model="showDailySign"></DailySignDialog>
-        <!-- <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar> -->
+        <bottom-bar v-if="!asMobile" @handleStartBoost="handleShowStartBoost"></bottom-bar>
         <nft-drawer></nft-drawer>
         <task-drawer></task-drawer>
         <tool-drawer></tool-drawer>
@@ -273,6 +273,9 @@ export default {
     bus.$on("showSaveToHomeEvent", () => {
       this.showSaveToHome = true;
     });
+    bus.$on("showBindExchangeEvent", () => {
+      this.showBindExchange = true;
+    });
     this.timer = setInterval(() => {
       this.$store.commit("updateDate");
     }, 1000);
@@ -446,8 +449,6 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
-
   .booster-overview-bg {
     max-height: 100vh;
     width: 100%;

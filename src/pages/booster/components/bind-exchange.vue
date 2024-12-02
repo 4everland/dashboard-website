@@ -3,7 +3,7 @@
     <v-dialog
       max-width="400"
       content-class="bind-boost-dialog"
-      v-model="value"
+      :value="value"
       overlay-opacity="0.5"
     >
       <div class="bind-dialog">
@@ -24,7 +24,7 @@
           <div class="bind-title">Bind Exchange</div>
         </div>
         <div class="bind-content">
-          <!-- <div class="bind-receive">
+          <div class="bind-receive" v-if="step=='1'">
             <ul>
               <li>
                 Your $4EVER will be deposited there during the TGE once bind
@@ -40,18 +40,18 @@
               />
               <div class="bind-text">Bind to receive your $4EVER</div>
               <v-btn class="continue-btn mt-4">
-                <span class="bind-text" @click="showNext">Continue</span>
+                <span class="bind-text" @click="showNext('2')">Continue</span>
               </v-btn>
             </div>
-          </div> -->
-          <!-- <div class="bind-select" v-if="showSelectExchange">
+          </div>
+           <div class="bind-select" v-if="step=='2'">
             <div class="bind-text">Select Exchange</div>
             <div class="d-flex justify-space-between align-center">
-              <v-radio-group v-model="radioGroup">
+              <v-radio-group v-model="radioGroup" @change="showNext('3')">
                 <v-radio
                   v-for="(item, i) in selectList"
                   :key="i"
-                  :value="i"
+                  :value="item.value"
                   class="mt-2 select"
                   color="#0FE1F8"
                 >
@@ -82,78 +82,79 @@
                 The exchange binding deadline is 00:00 UTC on Dec 31, 2024.
               </div>
             </div>
-          </div> -->
-          <div class="select-confirm" v-if="showSelectExchange">
+          </div>
+          <div class="select-confirm" v-if="step=='3'">
             <div class="bind-text">Select Exchange</div>
-            <v-select
-              :items="selectList"
-              dense
-              solo
-              background-color="#31313140"
-              color="#FFF"
-              class="mt-4 exchange-list"
-              style="box-shadow: none"
-            >
-              <template v-slot:label>
-                <div class="d-flex justify-end align-center">
-                  <img
-                    src="/img/booster/earnings/gate-logo.png"
-                    width="16"
-                    alt=""
-                  />
-                  <div class="step-text ml-2">Gate</div>
-                </div>
-              </template>
-              <template v-slot:item="{ item }">
-                <div class="d-flex justify-end align-center">
-                  <img :src="item.logo" width="24" alt="" />
-                  <div class="step-text ml-2" style="color:#FFF;">{{ item.title }}</div>
-                </div>
-              </template>
-              <template v-slot:selection="{ item }">
-                <div class="d-flex justify-end align-center">
-                  <img :src="item.logo" width="24" alt="" />
-                  <div class="step-text ml-2" style="color:#FFF;">{{ item.title }}</div>
-                </div>
-              </template>
-            </v-select>
-            <div>
-              <div class="step-text">UID</div>
+              <v-form
+                  ref="formBind"
+                  v-model="valid"
+                  lazy-validation
+              >
+              <v-select
+                :items="selectList"
+                dense
+                solo
+                background-color="#31313140"
+                color="#FFF"
+                class="mt-4 exchange-list"
+                style="box-shadow: none"
+                v-model="form.market"
+                @change="(v) => onSelect(v)"
+              >
+                
+                <template v-slot:item="{ item }">
+                  <div class="d-flex justify-end align-center">
+                    <img :src="item.logo" width="24" alt="" />
+                    <div class="step-text ml-2" style="color:#FFF;">{{ item.title }}</div>
+                  </div>
+                </template>
+                <template v-slot:selection="{ item }">
+                  <div class="d-flex justify-end align-center">
+                    <img :src="item.logo" width="24" alt="" />
+                    <div class="step-text ml-2" style="color:#FFF;">{{ item.title }}</div>
+                  </div>
+                </template>
+              </v-select>
               <div>
-                <v-text-field
-                  label="Enter your Gate UID"
-                  :rules="rules"
-                  background-color="#31313140"
-                  outlined
-                  solo-inverted
-                  hide-details="auto"
-                  color="#039cff"
-                  dense
-                ></v-text-field>
+                <div class="step-text">UID</div>
+                <div>
+                  <v-text-field
+                    label="Enter your Gate UID"
+                    :rules="rules"
+                    background-color="#31313140"
+                    outlined
+                    solo-inverted
+                    hide-details="auto"
+                    color="#039cff"
+                    v-model="form.uid"
+                    dense
+                  ></v-text-field>
+                </div>
               </div>
-            </div>
-            <div class="mt-4">
-              <div class="step-text">Deposit Address</div>
-              <div>
-                <v-text-field
-                  label="Enter your Gate UID"
-                  :rules="rules"
-                  background-color="#31313140"
-                  outlined
-                  solo-inverted
-                  hide-details="auto"
-                  color="#039cff"
-                  dense
-                ></v-text-field>
+              <div class="mt-4">
+                <div class="step-text">Deposit Address</div>
+                <div>
+                  <v-text-field
+                    label="Enter your Gate UID"
+                    :rules="rulesAddress"
+                    background-color="#31313140"
+                    outlined
+                    solo-inverted
+                    hide-details="auto"
+                    color="#039cff"
+                    v-model="form.address"
+                    dense
+                  ></v-text-field>
+                </div>
               </div>
-            </div>
-            <div class="bind-tips mt-4">
-              <div>How to obtain UiD & deposit address</div>
-              <div class="mt-1">No exchange account? Create one</div>
-            </div>
-            <v-btn class="bind-btn mt-4">
-              <span class="bind-text" @click="showNext">Bind</span>
-            </v-btn>
+              <div class="bind-tips mt-4">
+                <div>How to obtain UiD & deposit address</div>
+                <div class="mt-1">No exchange account? Create one</div>
+              </div>
+              <v-btn class="bind-btn mt-4" @click="showNextBind" :loading="loading">
+                <span class="bind-text" >Bind</span>
+              </v-btn>
+            </v-form>
           </div>
           <div class="rebind-exchange" v-show="rebindExchange == true">
             <ul>
@@ -168,38 +169,38 @@
                 <div class="rebind-text">Exchange</div>
                 <div class="d-flex justify-end align-center">
                   <img
-                    src="/img/booster/earnings/gate-logo.png"
+                    :src="bindInfoImage.logo"
                     width="24"
                     alt=""
                   />
-                  <div class="step-text ml-2">Gate</div>
+                  <div class="step-text ml-2">{{bindInfo.market}}</div>
                 </div>
               </div>
               <div class="d-flex justify-space-between align-center mt-3">
                 <div class="rebind-text">UID</div>
-                <div style="font-size: 12px; font-weight: 400">1438492090</div>
+                <div style="font-size: 12px; font-weight: 400">{{ bindInfo?.exchangeUid }}</div>
               </div>
               <div class="d-flex justify-space-between align-center mt-3">
                 <div class="rebind-text">Deposit Address</div>
-                <div style="font-size: 12px; font-weight: 400">UQA3...nh1R</div>
+                <div style="font-size: 12px; font-weight: 400">{{ bindInfo?.exchangeAddress?.cutStr(6, 4) }}</div>
               </div>
             </div>
-            <!-- <v-btn class="rebind-btn mt-6">
+            <v-btn class="rebind-btn mt-6" @click="handleRebind">
               <img
                 src="/img/booster/earnings/rebind.svg"
                 width="16"
                 alt=""
               />
               <span class="bind-text ml-1">Rebind</span>
-            </v-btn> -->
-            <v-btn class="submit-btn mt-6">
+            </v-btn>
+            <!-- <v-btn class="submit-btn mt-6">
               <img
                 src="/img/booster/earnings/bind-check.svg"
                 width="16"
                 alt=""
               />
               <span class="bind-text ml-1">Submitted</span>
-            </v-btn>
+            </v-btn> -->
             <div class="d-flex justify-start align-center mt-4">
               <div>
                 <img
@@ -219,7 +220,9 @@
   </div>
 </template>
     
-    <script>
+<script>
+import { bus } from "@/utils/bus";
+import { handleBindExchange, fetchBindInfo } from "@/api/booster";
 export default {
   props: {
     value: Boolean,
@@ -230,22 +233,47 @@ export default {
       showBind: false,
       rebindExchange: false,
       radioGroup: null,
+      valid: false,
+      form: {
+        uid: '',
+        address: '',
+        market:''
+      },
       selectList: [
         {
           title: "Gate",
           logo: require("/public/img/booster/earnings/gate-logo.png"),
+          value: "Gate"
         },
         {
           title: "BingX",
           logo: require("/public/img/booster/earnings/bingx-logo.png"),
+          value: "BingX"
         },
         {
           title: "MEXC",
           logo: require("/public/img/booster/earnings/mexc-logo.png"),
+          value: "Mexc"
         },
       ],
       selectedItem: null,
-    };
+      step: null,
+      bindInfo: {
+
+      },
+      bindInfoImage: {
+
+      },
+      loading: false,
+      rules: [
+        (v) =>!!v || "UID is required",
+        (v) => (v && v.length <= 10) || "UID must be less than 10 characters",
+      ],
+      rulesAddress: [
+        (v) =>!!v || "Address is required",
+        (v) => (v && v.length <= 42) || "Address must be less than 42 characters",
+      ]
+    }
   },
   watch: {
     selectedItem(newVal, oldVal) {
@@ -253,13 +281,85 @@ export default {
         this.selectedItem = this.selectList[0];
       }
     },
+    radioGroup(newVal, oldVal) {
+      if (newVal!= null) {
+        this.form.market = newVal;
+        this.showNext('3');
+      }
+    },
   },
   computed: {},
-
+  mounted() {
+    bus.$on("showBindExchangeEvent", async () => {
+      this.step = '1';
+      this.radioGroup = null;
+      this.rebindExchange = false;
+      const { data } = await fetchBindInfo();
+      if(data){
+        this.rebindExchange = true;
+        this.bindInfo = data;
+        this.bindInfoImage = this.selectList.find(item => item.value === this.bindInfo.market);
+        this.step = null
+      } else {
+        this.step = '1';
+        this.radioGroup = null;
+      }
+     
+    });
+  },
   methods: {
-    showNextDiv() {
-      this.showSelectExchange = true;
+    async onSelect(type) {
+      try {
+        this.form.market = type;
+        
+      } catch (error) {
+        // user cancel
+        console.log(error, "==================");
+      }
     },
+    handleRebind() {
+      this.step = '2';
+      this.rebindExchange = false;
+      this.radioGroup = null;
+    },
+    handleClick() {
+      this.$emit("input", false);
+    },
+    showNext(step){
+      this.step = step;
+    },
+    async showNextBind() {
+      if (this.loading) return;
+      this.loading = true;
+      this.valid = await this.$refs.formBind.validate();
+      if (!this.valid) return;
+      try {
+          const data =  await handleBindExchange({
+              "market": this.form.market,
+              "exchangeUid": this.form.uid,
+              "exchangeAddress": this.form.address,
+              "id": this.bindInfo.id
+            })
+            if (data.code == 200) {
+              this.rebindExchange = true;
+              this.step = null;
+              this.bindInfo.exchangeUid = this.form.uid;
+              this.bindInfo.exchangeAddress = this.form.address;
+              this.market = this.form.market;
+            } else {
+              this.$toast2(
+                data.message,
+                "error"
+              );
+            }
+            this.loading = false;
+        } 
+      catch (error) {
+       
+        console.log(error, "==================");
+        this.loading = false;
+      }
+    }
   },
   components: {},
 };

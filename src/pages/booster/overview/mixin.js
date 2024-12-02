@@ -1,4 +1,5 @@
 import { mapGetters, mapState } from "vuex";
+import { bus } from "@/utils/bus";
 import { claimPoints } from "@/api/booster";
 import { sendStoken } from "@/api/login.js";
 import { coinMove } from "../../../utils/animation";
@@ -114,6 +115,9 @@ export default {
       } else {
         this.$emit("handleStartBoost");
       }
+    },
+    showBindExchange(){
+      bus.$emit('showBindExchangeEvent');
     },
 
     async handleUnlock(index) {

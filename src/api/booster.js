@@ -347,3 +347,16 @@ export const fetchKeyBalanceStake = async () => {
     url: "/hooks/stake/balance/dostake",
   });
 };
+
+export const handleBindExchange = async (param) => {
+  return boosterRequest.post({
+    url: "/node/exchange/profile",
+    data: param,
+  });
+};
+
+export const fetchBindInfo = async () => {
+  return boosterRequest.get({
+    url: `node/exchange/profile`,
+  });
+};

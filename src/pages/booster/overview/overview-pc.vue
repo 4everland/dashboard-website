@@ -60,6 +60,14 @@
         </div>
       </div>
     </div>
+    <div
+      class="trigger-icon pos-a"
+      style="left: 20px; top: 100px"
+      @click="showBindExchange"
+    >
+      <img src="/img/booster/new/bind_4x.gif" width="96" alt="" />
+      <div class="trigger-text bind fz-22 fw-b text-center">Bind</div>
+    </div>
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
 
@@ -666,5 +674,25 @@ export default {
     #1102fc 99.83%
   ) !important;
   box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
+}
+.trigger-icon {
+  cursor: pointer;
+  .trigger-text {
+    position: absolute;
+    left: 0;
+    bottom: 15%;
+    width: 52px;
+    padding: 2px 1.5px;
+    line-height: 12px;
+    backdrop-filter: blur(2px);
+    border-radius: 4px;
+  }
+  .bind {
+    width: 100px;
+    height: 24px;
+    line-height: 20px;
+    background: linear-gradient(180deg, rgba(97, 114, 243, 0.5) 0%, rgba(97, 114, 243, 0.125) 166.67%);
+    backdrop-filter: blur(4px)
+  }
 }
 </style>
