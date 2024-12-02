@@ -74,12 +74,12 @@
           </div>
           <div class="assets assets-tab">
             <div class="assets-title">My Assets</div>
-            <v-tabs v-model="tab" background-color="#1E2234" centered>
+            <!-- <v-tabs v-model="tab" background-color="#1E2234" centered>
               <v-tab>Token Balance</v-tab>
               <v-tab>Points Balance</v-tab>
-            </v-tabs>
-            <v-tabs-items v-model="tab" background-color="#1E2234">
-              <v-tab-item>
+            </v-tabs> -->
+            <!-- <v-tabs-items v-model="tab" background-color="#1E2234">
+              <v-tab-item> -->
                 <div
                   class="d-flex align-center justify-space-between assets-item"
                 >
@@ -138,7 +138,7 @@
                     <span>Withdraw</span>
                   </v-btn>
                 </div>
-              </v-tab-item>
+              <!-- </v-tab-item>
               <v-tab-item>
                 <div
                   class="d-flex align-center justify-space-between assets-item"
@@ -166,7 +166,7 @@
                   />
                 </div>
               </v-tab-item>
-            </v-tabs-items>
+            </v-tabs-items> -->
           </div>
         </v-container>
 

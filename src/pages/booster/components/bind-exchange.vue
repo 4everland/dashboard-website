@@ -5,6 +5,7 @@
       content-class="bind-boost-dialog"
       :value="value"
       overlay-opacity="0.5"
+      persistent
     >
       <div class="bind-dialog">
         <img
@@ -119,7 +120,7 @@
                 <div class="step-text">UID</div>
                 <div>
                   <v-text-field
-                    label="Enter your Gate UID"
+                    :label="uidlabel"
                     :rules="rules"
                     background-color="#31313140"
                     outlined
@@ -135,7 +136,7 @@
                 <div class="step-text">Deposit Address</div>
                 <div>
                   <v-text-field
-                    label="Enter your Gate UID"
+                    :label="addresslabel"
                     :rules="rulesAddress"
                     background-color="#31313140"
                     outlined
@@ -148,8 +149,8 @@
                 </div>
               </div>
               <div class="bind-tips mt-4">
-                <div>How to obtain UiD & deposit address</div>
-                <div class="mt-1">No exchange account? Create one</div>
+                <div><a href="" target="_blank">How to obtain UiD & deposit address</a></div>
+                <div class="mt-1"><a href="" target="_blank">No exchange account? Create one </a></div>
               </div>
               <v-btn class="bind-btn mt-4" @click="showNextBind" :loading="loading">
                 <span class="bind-text" >Bind</span>
@@ -288,33 +289,50 @@ export default {
       }
     },
   },
-  computed: {},
+  computed: {
+    uidlabel() {
+      return "Enter your "+this.form.market+" UID"
+    },
+    addresslabel() {
+      return "Enter your "+this.form.market+" Address"
+    }
+  },
   mounted() {
+    this.getBindInfo();
     bus.$on("showBindExchangeEvent", async () => {
-      this.step = '1';
-      this.radioGroup = null;
-      this.rebindExchange = false;
-      const { data } = await fetchBindInfo();
-      if(data){
-        this.rebindExchange = true;
-        this.bindInfo = data;
-        this.bindInfoImage = this.selectList.find(item => item.value === this.bindInfo.market);
-        this.step = null
+      
+      if(this.bindInfo.id){
+        this.getBindInfo();
       } else {
         this.step = '1';
         this.radioGroup = null;
+        this.rebindExchange = false;
       }
-     
     });
   },
   methods: {
+    async getBindInfo() {
+      try {
+        const { data } = await fetchBindInfo();
+        if(data){
+          this.rebindExchange = true;
+          this.bindInfo = data;
+          this.bindInfoImage = this.selectList.find(item => item.value === this.bindInfo.market);
+          this.step = null
+        } else {
+          this.step = '1';
+          this.radioGroup = null;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async onSelect(type) {
       try {
         this.form.market = type;
         
       } catch (error) {
-        // user cancel
-        console.log(error, "==================");
+        console.log(error);
       }
     },
     handleRebind() {
@@ -330,29 +348,30 @@ export default {
     },
     async showNextBind() {
       if (this.loading) return;
-      this.loading = true;
+      
       this.valid = await this.$refs.formBind.validate();
       if (!this.valid) return;
       try {
-          const data =  await handleBindExchange({
-              "market": this.form.market,
-              "exchangeUid": this.form.uid,
-              "exchangeAddress": this.form.address,
-              "id": this.bindInfo.id
-            })
-            if (data.code == 200) {
-              this.rebindExchange = true;
-              this.step = null;
-              this.bindInfo.exchangeUid = this.form.uid;
-              this.bindInfo.exchangeAddress = this.form.address;
-              this.market = this.form.market;
-            } else {
-              this.$toast2(
-                data.message,
-                "error"
-              );
-            }
-            this.loading = false;
+        this.loading = true;
+        const data =  await handleBindExchange({
+            "market": this.form.market,
+            "exchangeUid": this.form.uid,
+            "exchangeAddress": this.form.address,
+            "id": this.bindInfo.id
+          })
+          if (data.code == 200) {
+            this.rebindExchange = true;
+            this.step = null;
+            this.bindInfo.exchangeUid = this.form.uid;
+            this.bindInfo.exchangeAddress = this.form.address;
+            this.market = this.form.market;
+          } else {
+            this.$toast2(
+              data.message,
+              "error"
+            );
+          }
+          this.loading = false;
         } 
       catch (error) {
        
@@ -365,7 +384,7 @@ export default {
 };
 </script>
     
-    <style lang="scss" scoped>
+<style lang="scss" scoped>
 ::v-deep .bind-boost-dialog {
   background: transparent !important;
   box-shadow: none !important;
