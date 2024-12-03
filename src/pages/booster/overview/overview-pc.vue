@@ -680,7 +680,7 @@ export default {
   .trigger-text {
     position: absolute;
     left: 0;
-    bottom: 15%;
+    bottom: 5%;
     width: 52px;
     padding: 2px 1.5px;
     line-height: 12px;

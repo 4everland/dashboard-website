@@ -132,7 +132,7 @@
                   ></v-text-field>
                 </div>
               </div>
-              <!-- <div class="mt-4">
+              <div class="mt-4">
                 <div class="step-text">Deposit Address</div>
                 <div>
                   <v-text-field
@@ -147,9 +147,9 @@
                     dense
                   ></v-text-field>
                 </div>
-              </div> -->
+              </div>
               <div class="bind-tips mt-4">
-                <div><a href="" target="_blank">How to obtain UiD</a></div>
+                <div><a href="" target="_blank">How to obtain UiD & deposit address</a></div>
                 <div class="mt-1"><a href="" target="_blank">No exchange account? Create one </a></div>
               </div>
               <v-btn class="bind-btn mt-4" @click="showNextBind" :loading="loading">
@@ -181,10 +181,10 @@
                 <div class="rebind-text">UID</div>
                 <div style="font-size: 12px; font-weight: 400">{{ bindInfo?.exchangeUid }}</div>
               </div>
-              <!-- <div class="d-flex justify-space-between align-center mt-3">
+              <div class="d-flex justify-space-between align-center mt-3">
                 <div class="rebind-text">Deposit Address</div>
                 <div style="font-size: 12px; font-weight: 400">{{ bindInfo?.exchangeAddress?.cutStr(6, 4) }}</div>
-              </div> -->
+              </div>
             </div>
             <v-btn class="rebind-btn mt-6" v-if="!taskEnd" @click="handleRebind">
               <img
@@ -361,6 +361,7 @@ export default {
         const data =  await handleBindExchange({
             "market": this.form.market,
             "exchangeUid": this.form.uid,
+            "exchangeAddress": this.form.address,
             "id": this.bindInfo.id
           })
           if (data.code == 200) {
@@ -557,7 +558,7 @@ export default {
       }
       .bind-address {
         width: 287px;
-        height: 90px;
+        height: 120px;
         padding: 16px;
         border-radius: 16px;
         color: #fff;

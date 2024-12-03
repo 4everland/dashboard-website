@@ -205,26 +205,26 @@
         <div
           v-if="asMobile"
           class="trigger-icon pos-a"
-          style="left: 8px; top: 77%"
+          style="left: 8px; top: 76%"
           @click="
             () =>
               !this.boostLocked ? this.$store.commit('SET_TOOL_BAR', true) : ''
           "
         >
-          <img src="/img/booster/new/icon-tools.png" width="40" alt="" />
+          <img src="/img/booster/new/icon-tools.png" width="48" alt="" />
           <div class="trigger-text tools fz-12 fw-b text-center">Tools</div>
         </div>
 
         <div
           v-if="asMobile"
           class="trigger-icon pos-a"
-          style="left: 55px; top: 77%"
+          style="left: 64px; top: 76%"
           @click="
             () =>
               !this.boostLocked ? this.$store.dispatch('TaskDrawerToggle') : ''
           "
         >
-          <img src="/img/booster/new/icon-earn.png" width="40" alt="" />
+          <img src="/img/booster/new/icon-earn.png" width="48" alt="" />
           <div class="trigger-text tools fz-12 fw-b text-center">Earn</div>
           <v-badge
               v-if="asMobile"
@@ -240,25 +240,25 @@
         <div
           v-if="asMobile"
           class="trigger-icon pos-a"
-          style="left: 103px; top: 77%"
+          style="left: 120px; top: 76%"
           @click="
             () =>
               !this.boostLocked ? this.$store.commit('SET_INVITE_BAR', true) : ''
           "
         >
-          <img src="/img/booster/new/icon-invite.png" width="40" alt="" />
+          <img src="/img/booster/new/icon-invite.png" width="48" alt="" />
           <div class="trigger-text tools fz-12 fw-b text-center">Invite</div>
         </div>
         <div
           v-if="isTgMiniApp"
           class="trigger-icon pos-a"
-          style="left: 153px; top: 77%"
+          style="left: 176px; top: 76%"
           @click="
             () =>
               !this.boostLocked ? this.$store.dispatch('StakeDrawerToggle') : ''
           "
         >
-          <img src="/img/booster/new/icon-staking.png" width="40" alt="" />
+          <img src="/img/booster/new/icon-staking.png" width="48" alt="" />
           <div class="trigger-text tools fz-12 fw-b text-center">Staking</div>
         </div>
 
@@ -266,13 +266,13 @@
         <div
           v-if="asMobile"
           class="trigger-icon pos-a"
-          style="right: 0px; top: 78%"
+          style="right: 0px; top: 76%"
           @click="
             () =>
               !this.boostLocked ? this.toggleExplore() : ''
           "
         >
-          <img src="/img/booster/new/icon-explore.png" width="90" alt="" />
+          <img src="/img/booster/new/icon-explore.png" width="99" alt="" style="margin-top: 8px" />
           <!-- <div
               v-if="!boostLocked && exploreRemain > 0"
               class="count pos-a"
@@ -907,7 +907,7 @@ export default {
   .trigger-text {
     position: absolute;
     left: 0;
-    bottom: 15%;
+    bottom: 5%;
     width: 52px;
     padding: 2px 1.5px;
     line-height: 12px;
@@ -915,7 +915,7 @@ export default {
     border-radius: 4px;
   }
   .tools {
-    width: 40px;
+    width: 48px;
     font-weight: normal;
     font-size: 10px;
   }
