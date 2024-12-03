@@ -40,8 +40,8 @@
                 alt=""
               />
               <div class="bind-text">Bind to receive your $4EVER</div>
-              <v-btn class="continue-btn mt-4">
-                <span class="bind-text" @click="showNext('2')">Continue</span>
+              <v-btn class="continue-btn mt-4" @click="showNext('2')">
+                <span class="bind-text">Continue</span>
               </v-btn>
             </div>
           </div>
@@ -57,8 +57,8 @@
                   color="#0FE1F8"
                 >
                   <template v-slot:label>
-                    <div class="d-flex justify-end align-center">
-                      <div>
+                    <div class="d-flex justify-end align-center radioItemRight">
+                      <div class="pr-2">
                         <img
                           :src="item.logo"
                           width="24"
@@ -116,7 +116,10 @@
                   </div>
                 </template>
               </v-select>
-              <div>
+              <div class="step-subtitle">
+                Submit Exchange Info
+              </div>
+              <div class="bind_lablel_item">
                 <div class="step-text">UID</div>
                 <div>
                   <v-text-field
@@ -132,11 +135,11 @@
                   ></v-text-field>
                 </div>
               </div>
-              <div class="mt-4">
+              <div class="mt-4 bind_lablel_item">
                 <div class="step-text">Deposit Address</div>
                 <div>
                   <v-text-field
-                    :label="addresslabel"
+                    label="Enter an ETH deposit address"
                     :rules="rulesAddress"
                     background-color="#31313140"
                     outlined
@@ -150,7 +153,7 @@
               </div>
               <div class="bind-tips mt-4">
                 <div><a href="" target="_blank">How to obtain UiD & deposit address</a></div>
-                <div class="mt-1"><a href="" target="_blank">No exchange account? Create one </a></div>
+                <div class="mt-3"><a href="" target="_blank">No exchange account? Create one </a></div>
               </div>
               <v-btn class="bind-btn mt-4" @click="showNextBind" :loading="loading">
                 <span class="bind-text" >Bind</span>
@@ -174,7 +177,7 @@
                     width="24"
                     alt=""
                   />
-                  <div class="step-text ml-2">{{bindInfo.market}}</div>
+                  <div class="step-text ml-2">{{bindInfoImage.title}}</div>
                 </div>
               </div>
               <div class="d-flex justify-space-between align-center mt-3">
@@ -242,7 +245,7 @@ export default {
       },
       selectList: [
         {
-          title: "Gate",
+          title: "Gate.io",
           logo: require("/public/img/booster/earnings/gate-logo.png"),
           value: "Gate"
         },
@@ -286,13 +289,16 @@ export default {
     radioGroup(newVal, oldVal) {
       if (newVal!= null) {
         this.form.market = newVal;
+        this.form.address = '';
+        this.form.uid = '';
         this.showNext('3');
       }
     },
   },
   computed: {
     uidlabel() {
-      return "Enter your "+this.form.market+" UID"
+      const market = this.selectList.find(item => item.value === this.form.market);
+      return "Enter your "+ market.title +" UID"
     },
     addresslabel() {
       return "Enter your "+this.form.market+" Address"
@@ -301,12 +307,17 @@ export default {
       const curTimeStamp = +new Date();
       return curTimeStamp > this.endTime;
     },
+    marketlabel() {
+      return this.form.market;
+    }
   },
   mounted() {
     this.getBindInfo();
     bus.$on("showBindExchangeEvent", async () => {
       
-      if(this.bindInfo.id){
+      if(this.bindInfo.exchangeUid){
+        this.rebindExchange = true;
+        this.step = null;
         this.getBindInfo();
       } else {
         this.step = '1';
@@ -501,12 +512,23 @@ export default {
         background-size: 8px 8px;
         width: 295px;
       }
+      .radioItemRight {
+        position: absolute;
+        left: 150px;
+      }
     }
     .step-text {
       font-size: 16px;
       font-weight: 400;
-      margin-left: 8px;
+      margin-left: 0px;
       color: #fff;
+    }
+    .step-subtitle{
+      font-size: 14px;
+      color: #FFF;
+      font-weight: 700;
+      line-height: 16px;
+      padding-bottom: 10px;
     }
     .v-item--active {
       border: 1px solid #0fe1f8;
@@ -602,6 +624,9 @@ export default {
   border-radius: 4px !important;
   background: #000a10 !important;
   margin-top: 40px !important;
+}
+.bind_lablel_item ::v-deep .v-text-field__slot label {
+  font-size: 16px;
 }
 </style>
     
