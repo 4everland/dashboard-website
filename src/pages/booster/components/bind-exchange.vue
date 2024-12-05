@@ -71,16 +71,14 @@
                 </v-radio>
               </v-radio-group>
             </div>
-            <div class="d-flex justify-start mt-2">
-              <div>
+            <div class="d-flex justify-start align-center mt-2">
                 <img
                   src="/img/booster/earnings/subtract.png"
                   width="16"
                   alt=""
                 />
-              </div>
               <div class="view">
-                The exchange binding deadline is 00:00 AM UTC on Dec 11, 2024.
+                Snapshot Time: Dec 11, 2024, at 00:00 AM UTC
               </div>
             </div>
           </div>
@@ -152,7 +150,7 @@
                 </div>
               </div>
               <div class="bind-tips mt-4">
-                <div><a :href="docUrl" target="_blank">How to obtain UiD & deposit address</a></div>
+                <div><a :href="docUrl" target="_blank">How to obtain UID & deposit address</a></div>
                 <div class="mt-3"><a :href="inviteUrl" target="_blank">No exchange account? Create one </a></div>
               </div>
               <v-btn class="bind-btn mt-4" @click="showNextBind" :loading="loading">
@@ -203,18 +201,16 @@
                 width="16"
                 alt=""
               />
-              <span class="bind-text ml-1">Submitted</span>
+              <span class="bind-text ml-1">Snapshot Finished</span>
             </v-btn>
             <div class="d-flex justify-start align-center mt-4">
-              <div>
-                <img
-                  src="/img/booster/earnings/subtract.png"
-                  width="16"
-                  alt=""
-                />
-              </div>
+              <img
+                src="/img/booster/earnings/subtract.png"
+                width="16"
+                alt=""
+              />
               <div class="view">
-                The exchange binding deadline is 00:00 AM UTC on Dec 11, 2024.
+                Snapshot Time: Dec 11, 2024, at 00:00 AM UTC
               </div>
             </div>
           </div>
@@ -345,10 +341,13 @@ export default {
       try {
         const { data } = await fetchBindInfo();
         if(data){
-          this.rebindExchange = true;
+          if(this.step == null){
+            this.rebindExchange = true;
+            this.step = null
+          }
           this.bindInfo = data;
           this.bindInfoImage = this.selectList.find(item => item.value === this.bindInfo.market);
-          this.step = null
+          
         } else {
           this.step = '1';
           this.radioGroup = null;
@@ -550,7 +549,7 @@ export default {
     .view {
       font-size: 12px;
       font-weight: 400;
-      line-height: 14.52px;
+      line-height: 15px;
       color: #c0c1c2;
       margin-left: 4px;
     }
