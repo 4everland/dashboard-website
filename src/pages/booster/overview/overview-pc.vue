@@ -67,7 +67,7 @@
       @click="showBindExchange"
     >
       <img src="/img/booster/new/bind_4x.gif" width="96" alt="" />
-      <div class="trigger-text bind fz-22 fw-b text-center">Bind</div>
+      <div class="trigger-text bind fz-22 fw-b text-center">CEX</div>
     </div>
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>

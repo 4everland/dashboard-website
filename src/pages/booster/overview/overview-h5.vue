@@ -16,7 +16,7 @@
       @click="showBindExchange"
     >
       <img src="/img/booster/new/bind_2x.gif" width="48" alt="" />
-      <div class="trigger-text connect fz-12 fw-b text-center">Bind</div>
+      <div class="trigger-text connect fz-12 fw-b text-center">CEX</div>
     </div>
     <TokenDialog
       class="pos-a"

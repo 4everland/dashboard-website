@@ -153,7 +153,7 @@ export default {
   .trigger-text {
     position: absolute;
     left: 0;
-    bottom: 15%;
+    bottom: 5%;
     width: 52px;
     height: 16px;
     line-height: 16px;
