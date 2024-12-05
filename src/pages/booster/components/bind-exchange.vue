@@ -80,7 +80,7 @@
                 />
               </div>
               <div class="view">
-                The exchange binding deadline is 00:00 UTC on Dec 31, 2024.
+                The exchange binding deadline is 00:00 AM UTC on Dec 11, 2024.
               </div>
             </div>
           </div>
@@ -152,8 +152,8 @@
                 </div>
               </div>
               <div class="bind-tips mt-4">
-                <div><a href="" target="_blank">How to obtain UiD & deposit address</a></div>
-                <div class="mt-3"><a href="" target="_blank">No exchange account? Create one </a></div>
+                <div><a :href="docUrl" target="_blank">How to obtain UiD & deposit address</a></div>
+                <div class="mt-3"><a :href="inviteUrl" target="_blank">No exchange account? Create one </a></div>
               </div>
               <v-btn class="bind-btn mt-4" @click="showNextBind" :loading="loading">
                 <span class="bind-text" >Bind</span>
@@ -214,7 +214,7 @@
                 />
               </div>
               <div class="view">
-                The exchange binding deadline is 00:00 UTC on Dec 31, 2024.
+                The exchange binding deadline is 00:00 AM UTC on Dec 11, 2024.
               </div>
             </div>
           </div>
@@ -247,16 +247,22 @@ export default {
         {
           title: "Gate.io",
           logo: require("/public/img/booster/earnings/gate-logo.png"),
+          inviteUrl: "https://www.gateio24.com/signup/VLMVUL8MBA?ref_type=103",
+          docUrl: "",
           value: "Gate"
         },
         {
           title: "BingX",
           logo: require("/public/img/booster/earnings/bingx-logo.png"),
+          inviteUrl: "https://bingx.com/invite/HZCVIG/",
+          docUrl: "",
           value: "BingX"
         },
         {
           title: "MEXC",
           logo: require("/public/img/booster/earnings/mexc-logo.png"),
+          inviteUrl: "https://www.mexc.com/register?inviteCode=mexc-2fy7c",
+          docUrl: "",
           value: "Mexc"
         },
       ],
@@ -277,7 +283,7 @@ export default {
         (v) =>!!v || "Address is required",
         (v) => (v && v.length <= 42) || "Address must be less than 42 characters",
       ],
-      endTime: 1733702400000
+      endTime: 1733875200000
     }
   },
   watch: {
@@ -302,6 +308,14 @@ export default {
     },
     addresslabel() {
       return "Enter your "+this.form.market+" Address"
+    },
+    docUrl() {
+      const market = this.selectList.find(item => item.value === this.form.market);
+      return market.docUrl;
+    },
+    inviteUrl() {
+      const market = this.selectList.find(item => item.value === this.form.market);
+      return market.inviteUrl;
     },
     taskEnd() {
       const curTimeStamp = +new Date();
