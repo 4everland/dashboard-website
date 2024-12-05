@@ -157,8 +157,12 @@ export default {
     width: 52px;
     height: 16px;
     line-height: 16px;
-    background: url("/img/booster/svg/4ever-token-text-bg.svg");
-    backdrop-filter: blur(2px);
+    border-radius:4px;
+    background: linear-gradient(
+      120deg,
+      rgba(97, 114, 243, 0.5) 24.53%,
+      rgba(17, 2, 252, 0.5) 74.37%
+    );
   }
 }
 .token-dialog-content {

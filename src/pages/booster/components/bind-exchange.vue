@@ -4,7 +4,8 @@
       max-width="400"
       content-class="bind-boost-dialog"
       :value="value"
-      overlay-opacity="0.5"
+      overlay-opacity="0.9"
+      overlay-color="black"
       persistent
     >
       <div class="bind-dialog">
@@ -134,7 +135,7 @@
                 </div>
               </div>
               <div class="mt-4 bind_lablel_item">
-                <div class="step-text">Deposit Address</div>
+                <div class="step-text">ETH Deposit Address</div>
                 <div>
                   <v-text-field
                     label="Enter an ETH deposit address"
@@ -180,11 +181,11 @@
               </div>
               <div class="d-flex justify-space-between align-center mt-3">
                 <div class="rebind-text">UID</div>
-                <div style="font-size: 12px; font-weight: 400">{{ bindInfo?.exchangeUid }}</div>
+                <div style="font-size: 14px; font-weight: 400">{{ bindInfo?.exchangeUid }}</div>
               </div>
               <div class="d-flex justify-space-between align-center mt-3">
                 <div class="rebind-text">Deposit Address</div>
-                <div style="font-size: 12px; font-weight: 400">{{ bindInfo?.exchangeAddress?.cutStr(6, 4) }}</div>
+                <div style="font-size: 14px; font-weight: 400">{{ bindInfo?.exchangeAddress?.cutStr(6, 4) }}</div>
               </div>
             </div>
             <v-btn class="rebind-btn mt-6" v-if="!taskEnd" @click="handleRebind">
@@ -277,7 +278,6 @@ export default {
       ],
       rulesAddress: [
         (v) =>!!v || "Address is required",
-        (v) => (v && v.length <= 42) || "Address must be less than 42 characters",
       ],
       endTime: 1733875200000
     }
@@ -456,7 +456,7 @@ export default {
     // height: 348px;
     margin: 0 auto;
     top: 72px;
-    padding: 24px 16px;
+    padding: 16px;
     gap: 24px;
     border-radius: 16px;
     margin-top: -22px;
@@ -467,11 +467,6 @@ export default {
         rgba(15, 225, 248, 0) 100%
       );
     border: 1px solid;
-    border-image-source: linear-gradient(
-      165.76deg,
-      rgba(69, 81, 111, 0.5) -11.63%,
-      #11b7ff 88.45%
-    );
     .bind-receive {
       ul {
         list-style-type: disc;
@@ -531,7 +526,7 @@ export default {
       }
     }
     .step-text {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 400;
       margin-left: 0px;
       color: #fff;
@@ -639,7 +634,7 @@ export default {
   margin-top: 40px !important;
 }
 .bind_lablel_item ::v-deep .v-text-field__slot label {
-  font-size: 16px;
+  font-size: 14px;
 }
 </style>
     

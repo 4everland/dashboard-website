@@ -7,7 +7,7 @@
       @click="onConnetc"
     >
       <img src="/img/booster/new/icon-connect.png" width="48" alt="" />
-      <div class="trigger-text connect fz-12 fw-b text-center">Connect</div>
+      <div class="trigger-text connect fz-12 fw-b text-center" style="width: 52px;">Connect</div>
     </div>
     <div
       v-if="isTgMiniApp"
@@ -16,7 +16,7 @@
       @click="showBindExchange"
     >
       <img src="/img/booster/new/bind_2x.gif" width="48" alt="" />
-      <div class="trigger-text connect fz-12 fw-b text-center">CEX</div>
+      <div class="trigger-text connect fz-12 fw-b text-center">Airdrop</div>
     </div>
     <TokenDialog
       class="pos-a"
@@ -35,7 +35,7 @@
       "
     >
       <img src="/img/booster/icon-account.png" width="48" alt="" />
-      <div class="trigger-text staking fz-12 fw-b text-center">Account</div>
+      <div class="trigger-text staking fz-12 fw-b text-center" style="width: 52px;">Account</div>
     </div>
     
 
