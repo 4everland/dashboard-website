@@ -455,6 +455,8 @@ export default {
             this.shareOnTgStory(media_url, text);
           } else if (item.actType == "save_home_screen") {
             bus.$emit('showSaveToHomeEvent')
+          } else if (item.actType == "bind_exchange_address") {
+            bus.$emit('showBindExchangeEvent')
           } else {
             let url = item.oriDescription;
             if (item.actType == "share_twitter") {
@@ -636,6 +638,10 @@ export default {
 
       if (it.actType == "save_home_screen") {
         bus.$emit('showSaveToHomeEvent')
+        return;
+      }
+      if (it.actType == "bind_exchange_address") {
+        bus.$emit('showBindExchangeEvent')
         return;
       }
 

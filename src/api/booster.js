@@ -348,6 +348,20 @@ export const fetchKeyBalanceStake = async () => {
   });
 };
 
+
+export const handleBindExchange = async (param) => {
+  return boosterRequest.post({
+    url: "/node/exchange/profile",
+    data: param,
+  });
+};
+
+export const fetchBindInfo = async () => {
+  return boosterRequest.get({
+    url: `node/exchange/profile`,
+  });
+};
+
 export const tgPaymentInvoice = async (targetValue) => {
   return boosterRequest.post({
     url: "/node/tg/payment/invoice",
