@@ -245,21 +245,21 @@ export default {
           title: "Gate.io",
           logo: require("/public/img/booster/earnings/gate-logo.png"),
           inviteUrl: "https://www.gateio24.com/signup/VLMVUL8MBA?ref_type=103",
-          docUrl: "",
+          docUrl: "https://4everland.medium.com/how-to-locate-your-gate-io-uid-and-participate-in-the-4everland-airdrop-campaign-2af8eaaa4f6b",
           value: "Gate"
         },
         {
           title: "BingX",
           logo: require("/public/img/booster/earnings/bingx-logo.png"),
           inviteUrl: "https://bingx.com/invite/HZCVIG/",
-          docUrl: "",
+          docUrl: "https://4everland.medium.com/how-to-locate-your-bingx-uid-and-participate-in-the-4everland-airdrop-campaign-c76825913f6d",
           value: "BingX"
         },
         {
           title: "MEXC",
           logo: require("/public/img/booster/earnings/mexc-logo.png"),
           inviteUrl: "https://www.mexc.com/register?inviteCode=mexc-2fy7c",
-          docUrl: "",
+          docUrl: "https://4everland.medium.com/how-to-find-your-mexc-uid-and-participate-in-the-4everland-airdrop-4adff0e95eea",
           value: "Mexc"
         },
       ],
