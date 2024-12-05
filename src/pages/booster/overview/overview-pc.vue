@@ -61,6 +61,7 @@
       </div>
     </div>
     <div
+      v-if="!boostLocked"
       class="trigger-icon pos-a"
       style="left: 20px; top: 100px"
       @click="showBindExchange"
