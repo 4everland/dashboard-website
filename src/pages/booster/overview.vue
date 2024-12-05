@@ -56,6 +56,7 @@
         <profile-drawer></profile-drawer>
         <bind-dialog v-model="showBindWallet"></bind-dialog>
         <RewardOpenFirst v-model="showRewardStart"></RewardOpenFirst>
+
         <SaveToHome v-model="showSaveToHome" @hideShowSaveToHome="showSaveToHome=false"></SaveToHome>
         <BindExchange v-model="showBindExchange"></BindExchange>
       </template>
@@ -348,18 +349,18 @@ export default {
   },
 
   watch: {
-    boostLocked(val) {
-      if (localStorage.guide) return;
-      if (!val && this.isTgMiniApp) {
-        setTimeout(() => {
-          driverObj.drive();
-          localStorage.setItem("guide", "1");
-        }, 2000);
-      }
-    },
+    // boostLocked(val) {
+    //   if (localStorage.guide) return;
+    //   if (!val && this.isTgMiniApp) {
+    //     setTimeout(() => {
+    //       driverObj.drive();
+    //       localStorage.setItem("guide", "1");
+    //     }, 2000);
+    //   }
+    // },
     showSaveToHome(val) {
-      console.log('val',val)
-    }
+      console.log("val", val);
+    },
   },
 };
 </script>
