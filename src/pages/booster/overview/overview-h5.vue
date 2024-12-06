@@ -167,7 +167,7 @@
           </div>
         </div>
 
-        <!-- <div class="gold-square" @click="handleStartGetReward" style="margin-top: 80px">
+        <!-- <div class="gold-square" @click="airdropDialog = true" style="margin-top: 80px">
           <div class="top-card square-box-up" id="mobile-gold-ball">
             <img src="/img/booster/spin/reward-ball.png" width="80" alt="" />
           </div>
@@ -453,6 +453,8 @@
       </div>
     </div>
     <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
+    <AirdropDialog v-model="airdropDialog"></AirdropDialog>
+    <StartQuery v-model="startQuery"></StartQuery>
   </div>
 </template>
 
@@ -461,6 +463,8 @@ import { mapState } from "vuex";
 
 import MobilePointsSheet from "../components/mobile-points-sheet.vue";
 import TokenDialog from "../components/token-dialog.vue";
+import AirdropDialog from "../components/airdrop-query.vue";
+import StartQuery from "../components/start-query.vue";
 import WalletConnect from "../components/wallet-connect.vue";
 import countDown from "../components/count-down.vue";
 import mixin from "./mixin";
@@ -474,6 +478,8 @@ export default {
     return {
       sheet: false,
       showGoldCoin: false,
+      airdropDialog: false,
+      startQuery:false,
       timeLeft: localStorage.getItem("countdownTime")
         ? parseInt(localStorage.getItem("countdownTime"))
         : 86400,
@@ -544,6 +550,8 @@ export default {
     TokenDialog,
     WalletConnect,
     countDown,
+    AirdropDialog,
+    StartQuery
   },
   watch: {
     "boosterInfo.protectExpiredAt"() {
