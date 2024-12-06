@@ -273,12 +273,12 @@
           "
         >
           <img src="/img/booster/new/icon-explore.png" width="99" alt="" style="margin-top: 8px" />
-          <!-- <div
+          <div
               v-if="!boostLocked && exploreRemain > 0"
               class="count pos-a"
             >
               x{{ exploreRemain }}
-          </div> -->
+          </div>
         </div>
         
 
@@ -1044,11 +1044,11 @@ export default {
 }
 .count {
   position: absolute;
-  right: 0;
-  top: 4px;
+  right: 57px;
+  top: 2px;
   font-size: 12px;
   line-height: 9px;
-  padding: 2px 4px;
+  padding: 4px;
   background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
   box-shadow: 0px 1.582px 4.746px 0px rgba(0, 50, 228, 0.4);
   border-radius: 12px;
