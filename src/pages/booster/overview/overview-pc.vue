@@ -54,8 +54,11 @@
                       : handleStartBoost()
                 "
               >
+                <div class="endTime" v-if="!stakeEnd">
+                  <count-down :endTimeStamp="endTimeStake"></count-down>
+                </div>
                 <img src="/img/booster/stake-icon.png" alt="" width="22" />
-                Staking</v-btn
+                {{ !stakeEnd ? "Staking": "End"}}</v-btn
               >
             </div>
           </div>
@@ -471,6 +474,21 @@ export default {
         color: #fff;
         border-radius: 4px;
         background: linear-gradient(90deg, #f8008c 0%, #f86300 100%);
+        position: relative;
+        .endTime {
+          position: absolute;
+          right: -10px;
+          top: -15px;
+          font-size: 10px;
+          font-style:normal;
+          padding: 2px 4px;
+          color: #1102FC;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 2px;
+          border-bottom-left-radius: 2px;
+          border-bottom-right-radius: 8px;
+          background-color: #FFFFFF;
+        }
       }
     }
   }

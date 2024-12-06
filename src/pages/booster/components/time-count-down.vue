@@ -2,14 +2,15 @@
   <div class="al-c align-center justify-center">
     <div class="hours">
       <span class="d-ib label">{{ hours }}</span>
-      <span>:</span>
+      <span>H :</span>
     </div>
     <div class="minutes">
       <span class="d-ib label">{{ minutes }}</span>
-      <span>:</span>
+      <span>M :</span>
     </div>
     <div class="seconds">
       <span class="d-ib label">{{ seconds }}</span>
+      <span>S</span>
     </div>
   </div>
 </template>

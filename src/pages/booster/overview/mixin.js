@@ -4,6 +4,7 @@ import { claimPoints } from "@/api/booster";
 import { sendStoken } from "@/api/login.js";
 import { coinMove } from "../../../utils/animation";
 import TgStartBoostLoading from "../components/tg-start-boost-loading.vue";
+import CountDown from "../components/count-down.vue";
 
 export default {
   data() {
@@ -17,10 +18,12 @@ export default {
       protectTimer: null,
       isProtecting: false,
       tabTimer: null,
+      endTimeStake: 1733875200
     };
   },
   components: {
     TgStartBoostLoading,
+    CountDown
   },
   computed: {
     ...mapState({
@@ -84,6 +87,10 @@ export default {
     showDailySign() {
       if (!this.dailySign) return "DONE";
       return this.dailySign[0].actStatus !== "DONE";
+    },
+    stakeEnd() {
+      const curTimeStamp = +new Date() / 1e3;
+      return curTimeStamp > this.endTimeStake;
     },
   },
   async created() {

@@ -317,6 +317,9 @@ export default {
               case "white_list_7":
                 it.log = `Vietnamese AMA in BNBCHAIN TG Group ${it.value} points.`;
                 break;
+              case "bind_exchange_address":
+                it.log = `Bind exchange to claim 4EVERLAND airdrop ${it.value} points.`;
+                break;
               default:
                 break;
             }

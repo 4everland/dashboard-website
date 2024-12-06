@@ -13,6 +13,9 @@
     >
       <v-container fluid>
         <div class="nft-drawer-top">
+          <div class="d-flex justify-center align-center endTime mb-5" v-if="!taskEnd">
+            <div class="pr-2">Ended</div> <time-count-down :endTimeStamp="endTimeStake"></time-count-down>
+          </div>
           <div class="drawer-title nft-drawer-title">T4EVER STAKING</div>
           <div class="nft-drawer-desc">
             Each T4EVER token staked contributes to a 0.005% Staking Yield.
@@ -23,7 +26,7 @@
               <div>Staked: {{ stakingAmount }} T4EVER</div>
             </div>
             <div>
-              <v-btn class="drawer-btn" @click="onStake">Stake</v-btn>
+              <v-btn class="drawer-btn" @click="onStake" :disabled="taskEnd">{{ !taskEnd ? "Stake": "End" }}</v-btn>
             </div>
           </div>
         </div>
@@ -90,7 +93,8 @@
                   class="nft-item-btn-box"
                 >
                   <v-btn class="drawer-btn" @click="onBindNft(item)"
-                    >Stake</v-btn
+                    :disabled="taskEnd"
+                    >{{ !taskEnd ? "Stake": "End" }}</v-btn
                   >
                 </div>
               </div>
@@ -130,12 +134,14 @@ import StakeDialog from "@/pages/booster/components/stake-dialog";
 import StakeError from "@/pages/booster/components/stake-error";
 
 import StakeKeyDialog from "@/pages/booster/components/stake-key-dialog";
+import TimeCountDown from "@/pages/booster/components/time-count-down";
 
 export default {
   components: {
     StakeDialog,
     StakeError,
     StakeKeyDialog,
+    TimeCountDown
   },
   computed: {
     ...mapState({
@@ -147,6 +153,10 @@ export default {
     },
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
+    taskEnd() {
+      const curTimeStamp = +new Date() / 1e3;
+      return curTimeStamp > this.endTimeStake;
     },
   },
   data() {
@@ -160,6 +170,7 @@ export default {
       showStakeKeyDialog: false,
       keyBalance: "0",
       shouldRefresh: false,
+      endTimeStake: 1733875200
     };
   },
   created() {
@@ -289,6 +300,14 @@ export default {
   font-weight: 400;
   cursor: pointer;
 }
+.drawer-btn:disabled{
+  background: #98a2b3 !important;
+  box-shadow: none;
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}
 .nft-drawer-box {
   ::v-deep .nft-drawer {
     width: 100% !important;
@@ -308,7 +327,18 @@ export default {
     .nft-drawer-top {
       padding: 24px 16px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-
+      .endTime {
+        font-size: 14px;
+        color: #0FE1F8;
+        .label {
+          background-color: #000000;
+          padding: 0px 4px;
+          border: 1px solid #A4BCFD40;
+          margin-right: 2px;
+          margin-left: 2px;
+          border-radius: 2px;
+        }
+      }
       .nft-drawer-title {
       }
       .nft-drawer-desc {
