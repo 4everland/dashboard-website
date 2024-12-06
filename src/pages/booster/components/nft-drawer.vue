@@ -170,7 +170,7 @@ export default {
       showStakeKeyDialog: false,
       keyBalance: "0",
       shouldRefresh: false,
-      endTimeStake: 1733875200
+      endTimeStake: 1733803200
     };
   },
   created() {

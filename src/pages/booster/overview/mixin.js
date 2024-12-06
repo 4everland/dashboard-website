@@ -18,7 +18,7 @@ export default {
       protectTimer: null,
       isProtecting: false,
       tabTimer: null,
-      endTimeStake: 1733875200
+      endTimeStake: 1733803200
     };
   },
   components: {
