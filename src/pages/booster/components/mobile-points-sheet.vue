@@ -320,6 +320,9 @@ export default {
               case "bind_exchange_address":
                 it.log = `Bind exchange to claim 4EVERLAND airdrop ${it.value} points.`;
                 break;
+              case "first_snapshot":
+                it.log = `Airdrop Snapshot Settlement: Points reduced by ${it.value} Points.`;
+                break;
               default:
                 break;
             }
