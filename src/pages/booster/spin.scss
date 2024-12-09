@@ -68,3 +68,19 @@
 .airdrop_text {
   animation: fadeInDown 2s ease;
 } 
+
+.airdrop_img {
+  animation: up_down_bottom 2s ease 2s;
+}
+
+@keyframes up_down_bottom {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(170px);
+  }
+  100% {
+    opacity: 0;
+  }
+}

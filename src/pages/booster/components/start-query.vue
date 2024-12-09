@@ -20,7 +20,7 @@
           <div class="start-text airdrop_text">
             Click the button below to start the query
           </div>
-          <div class="circle-img">
+          <div class="circle-img airdrop_img">
             <img src="/img/booster/earnings/circle.png" width="40" alt="" />
           </div>
           <div class="d-flex justify-center">

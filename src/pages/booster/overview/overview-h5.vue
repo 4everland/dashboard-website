@@ -19,7 +19,7 @@
       <div class="trigger-text connect fz-12 fw-b text-center">Airdrop</div>
     </div>
     <div
-      v-if="isTgMiniApp"
+      v-if="!isTgMiniApp"
       class="trigger-icon pos-a"
       style="right: 132px; top: 61px"
       @click="showStartQueryDialog"
