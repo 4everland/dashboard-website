@@ -24,12 +24,14 @@
             <img src="/img/booster/earnings/circle.png" width="40" alt="" />
           </div>
           <div class="d-flex justify-center">
-            <div class="unlock">
-              <img
-                src="/img/booster/earnings/unlock-dark.png"
-                width="64"
-                alt=""
-              />
+            <div class="unlock light-btn d-flex justify-center align-center">
+              <div class="light-img">
+                <img
+                  src="/img/booster/earnings/unlock-light.png"
+                  width="64"
+                  alt=""
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -106,6 +108,56 @@ export default {
       margin-top: 117px;
     }
   }
+}
+
+.light-btn {
+  position: relative;
+  height: 66px;
+  width: 66px;
+  border: 0;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.light-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from var(--rotation),
+    transparent,
+    #0FE1F8 60deg,
+    transparent 61deg
+  );
+  animation: spin 4s infinite linear;
+}
+@property --rotation {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+@keyframes spin {
+  0% {
+    --rotation: 0deg;
+  }
+
+  100% {
+    --rotation: 360deg;
+  }
+}
+.light-btn::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 999px;
+  background: var(--bg);
+}
+.light-img {
+  height: 64px;
+  width: 64px;
+  border-radius: 16px;
+  background: #000000;
+  position: relative;
+  z-index: 2;
 }
 </style>
         

@@ -85,10 +85,16 @@
               alt=""
             />
           </div>
-          <v-btn class="submit-btn">
-            <span class="number">99888</span>
-            <span class="btn-text">4EVER</span>
-          </v-btn>
+          <div class="d-flex justify-center">
+            <div class="light-btn d-flex justify-center align-center">
+              <div class="light-span">
+                <v-btn class="submit-btn">
+                  <span class="number">99888</span>
+                  <span class="btn-text">4EVER</span>
+                </v-btn>
+              </div>
+            </div>
+          </div>
           <v-btn class="share-btn">
             <span class="btn-text">Share to X</span>
           </v-btn>
@@ -215,13 +221,10 @@ export default {
       right: 12px;
     }
     .submit-btn {
-      margin-top: 12px;
-      width: 295px;
+      width: 286px;
       height: 53px;
-      padding: 8px 16px;
       border-radius: 16px;
-      position: relative;
-      overflow: hidden;
+      padding: 0 !important;
       .number {
         font-family: DIN Alternate;
         font-size: 32px;
@@ -253,6 +256,52 @@ export default {
         line-height: 20px;
         color: #fff;
       }
+    }
+    .light-btn {
+      position: relative;
+      padding: 2px;
+      border: 0;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .light-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: conic-gradient(
+        from var(--rotation),
+        transparent,
+        #0fe1f8 60deg,
+        transparent 61deg
+      );
+      animation: spin 4s infinite linear;
+    }
+    @property --rotation {
+      syntax: "<angle>";
+      inherits: true;
+      initial-value: 0deg;
+    }
+    @keyframes spin {
+      0% {
+        --rotation: 0deg;
+      }
+      100% {
+        --rotation: 360deg;
+      }
+    }
+    .light-btn::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      border-radius: 999px;
+      background: var(--bg);
+    }
+    .light-span {
+      padding: 2px;
+      border-radius: 16px;
+      background: #000000;
+      position: relative;
+      z-index: 2;
     }
   }
 }
