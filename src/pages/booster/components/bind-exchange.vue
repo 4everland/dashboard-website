@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-dialog
-      max-width="400"
+      max-width="360"
       content-class="bind-boost-dialog"
       :value="value"
       overlay-opacity="0.9"
@@ -46,7 +46,7 @@
               </v-btn>
             </div>
           </div>
-           <div class="bind-select" v-if="step=='2'">
+          <div class="bind-select" v-if="step=='2'">
             <div class="bind-text">Select Exchange</div>
             <div class="d-flex justify-space-between align-center">
               <v-radio-group v-model="radioGroup" @change="showNext('3')">
@@ -79,7 +79,10 @@
                   alt=""
                 />
               <div class="view">
-                Snapshot Time: Dec 11, 2024, at 00:00 AM UTC
+                Snapshot Time: Dec 11, 2024, at 00:00 AM UTC.
+                <span v-if="taskEnd">
+                Snapshot finished. Forget to bind exchange? Please wait for the next round of airdrop.
+                </span>
               </div>
             </div>
           </div>
@@ -211,7 +214,10 @@
                 alt=""
               />
               <div class="view">
-                Snapshot Time: Dec 11, 2024, at 00:00 AM UTC
+                Snapshot Time: Dec 11, 2024, at 00:00 AM UTC.
+                <span v-if="taskEnd">
+                Snapshot finished. Forget to bind exchange? Please wait for the next round of airdrop.
+                </span>
               </div>
             </div>
           </div>
@@ -395,6 +401,9 @@ export default {
             this.bindInfo.exchangeAddress = this.form.address;
             this.bindInfo.market = this.form.market;
             this.bindInfoImage = this.selectList.find(item => item.value === this.bindInfo.market);
+            if(this.taskEnd){
+              this.$toast2('Snapshot finished. Stay tuned for the second airdrop batch.', "info");
+            }
           } else {
             this.$toast2(
               data.message,
