@@ -3,7 +3,7 @@
     <div
       v-if="isTgMiniApp && !userInfo.wallet"
       class="trigger-icon pos-a"
-      style="right: 193px; top: 61px"
+      style="right: 254px; top: 61px"
       @click="onConnetc"
     >
       <img src="/img/booster/new/icon-connect.png" width="48" alt="" />
@@ -12,11 +12,20 @@
     <div
       v-if="isTgMiniApp"
       class="trigger-icon pos-a"
-      style="right: 132px; top: 61px"
+      style="right: 193px; top: 61px"
       @click="showBindExchange"
     >
-      <img src="/img/booster/new/bind_2x.gif" width="48" alt="" />
+      <img src="/img/booster/new/icon-bind.png" width="48" alt="" />
       <div class="trigger-text connect fz-12 fw-b text-center">Airdrop</div>
+    </div>
+    <div
+      v-if="isTgMiniApp"
+      class="trigger-icon pos-a"
+      style="right: 132px; top: 61px"
+      @click="showStartQueryDialog"
+    >
+      <img src="/img/booster/new/bind_2x.gif" width="48" alt="" />
+      <div class="trigger-text connect fz-12 fw-b text-center">Query</div>
     </div>
     <TokenDialog
       class="pos-a"
@@ -453,8 +462,7 @@
       </div>
     </div>
     <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
-    <AirdropDialog v-model="airdropDialog"></AirdropDialog>
-    <StartQuery v-model="startQuery"></StartQuery>
+    
   </div>
 </template>
 
@@ -463,8 +471,6 @@ import { mapState } from "vuex";
 
 import MobilePointsSheet from "../components/mobile-points-sheet.vue";
 import TokenDialog from "../components/token-dialog.vue";
-import AirdropDialog from "../components/airdrop-query.vue";
-import StartQuery from "../components/start-query.vue";
 import WalletConnect from "../components/wallet-connect.vue";
 import countDown from "../components/count-down.vue";
 import mixin from "./mixin";
@@ -478,8 +484,6 @@ export default {
     return {
       sheet: false,
       showGoldCoin: false,
-      airdropDialog: false,
-      startQuery:false,
       timeLeft: localStorage.getItem("countdownTime")
         ? parseInt(localStorage.getItem("countdownTime"))
         : 86400,
@@ -550,8 +554,6 @@ export default {
     TokenDialog,
     WalletConnect,
     countDown,
-    AirdropDialog,
-    StartQuery
   },
   watch: {
     "boosterInfo.protectExpiredAt"() {

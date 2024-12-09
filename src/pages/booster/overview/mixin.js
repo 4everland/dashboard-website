@@ -126,6 +126,9 @@ export default {
     showBindExchange(){
       bus.$emit('showBindExchangeEvent');
     },
+    showStartQueryDialog(){
+      bus.$emit('showStartQueryEvent');
+    },
 
     async handleUnlock(index) {
       this.$emit("handleUnlock", index);

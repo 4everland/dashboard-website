@@ -59,6 +59,8 @@
 
         <SaveToHome v-model="showSaveToHome" @hideShowSaveToHome="showSaveToHome=false"></SaveToHome>
         <BindExchange v-model="showBindExchange"></BindExchange>
+        <AirdropDialog v-model="airdropDialog"></AirdropDialog>
+        <StartQuery v-model="startQuery"></StartQuery>
       </template>
       <!-- <end-boosting v-model="showEndBoost"></end-boosting> -->
     </div>
@@ -84,6 +86,8 @@ import DailySignDialog from "./components/daily-sign-dialog.vue";
 import RewardOpenFirst from "./components/reward-open-first.vue";
 import SaveToHome from "./components/save-to-homescreen.vue";
 import BindExchange from "./components/bind-exchange.vue";
+import AirdropDialog from "./components/airdrop-query.vue";
+import StartQuery from "./components/start-query.vue";
 
 import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
@@ -177,6 +181,8 @@ export default {
       showRewardStart: false,
       showSaveToHome: false,
       showBindExchange: false,
+      airdropDialog: false,
+      startQuery:false,
       // showRewardReceive: false,
       // showRewardClaim: false,
     };
@@ -218,25 +224,6 @@ export default {
       let url = "https://static.4everland.org/";
 
       if (this.asMobile) {
-        // if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
-        //   return url + "boost/background/mobile-bg.png";
-        // if (!this.storageLocked && !this.networkLocked)
-        //   return url + "boost/background/mobile-bg-s2n.png";
-        // if (!this.storageLocked && !this.computingLocked)
-        //   return url + "boost/background/mobile-bg-s2c.png";
-        // if (!this.networkLocked && this.computingLocked)
-        //   return url + "boost/background/mobile-bg-n2c.png";
-        // if (!this.storageLocked)
-        //   return url + "boost/background/mobile-bg-storage.png";
-        // if (!this.networkLocked)
-        //   return url + "boost/background/mobile-bg-network.png";
-        // if (!this.computingLocked)
-        //   return url + "boost/background/mobile-bg-computed.png";
-
-        // if (this.boosterInfo.baseRate.length == 0) {
-        //   return url + "boost/background/mobile-bg-locked.png";
-        // }
-        //return url + "boost/background/mobile-bg-unlocked.png";
         return "/img/booster/mobile-bg-unlocked-new1.png"
       } else {
         if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
@@ -276,6 +263,12 @@ export default {
     });
     bus.$on("showBindExchangeEvent", () => {
       this.showBindExchange = true;
+    });
+    bus.$on("showQueryDialogEvent", () => {
+      this.airdropDialog = true;
+    });
+    bus.$on("showStartQueryEvent", () => {
+      this.startQuery = true;
     });
     this.timer = setInterval(() => {
       this.$store.commit("updateDate");
@@ -345,7 +338,9 @@ export default {
     ProfileDrawer,
     RewardOpenFirst,
     SaveToHome,
-    BindExchange
+    BindExchange,
+    AirdropDialog,
+    StartQuery
   },
 
   watch: {

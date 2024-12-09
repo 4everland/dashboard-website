@@ -16,8 +16,8 @@
           alt=""
         />
         <div class="airdrop-content">
-          <div class="start-title">$4EVER Airdrop Query</div>
-          <div class="start-text">
+          <div class="start-title airdrop_text">$4EVER Airdrop Query</div>
+          <div class="start-text airdrop_text">
             Click the button below to start the query
           </div>
           <div class="circle-img">
@@ -37,7 +37,7 @@
     </v-dialog>
   </div>
 </template>
-    <script>
+<script>
 export default {
   props: {
     value: Boolean,
@@ -51,8 +51,8 @@ export default {
   components: {},
 };
 </script>
-        
-    <style lang="scss" scoped>
+<style lang="scss" src="../spin.scss"></style>
+<style lang="scss" scoped>
 ::v-deep .airdrop-boost-dialog {
   background: transparent !important;
   box-shadow: none !important;
