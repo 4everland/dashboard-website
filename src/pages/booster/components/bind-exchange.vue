@@ -271,7 +271,7 @@ export default {
           inviteUrl: "https://www.mexc.com/register?inviteCode=mexc-2fy7c",
           docUrl: "https://4everland.medium.com/how-to-find-your-mexc-uid-and-participate-in-the-4everland-airdrop-4adff0e95eea",
           value: "Mexc",
-          disabled: true
+          disabled: false
         },
       ],
       selectedItem: null,
