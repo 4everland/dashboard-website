@@ -109,6 +109,7 @@ export default {
     background: url("/img/booster/earnings/start-query.png") no-repeat #000000;
     background-size: contain;
     padding-top: 80px;
+    position: relative;
     .start-title {
       width: 255px;
       margin: 0 36px;
