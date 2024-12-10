@@ -70,6 +70,7 @@
 } 
 
 .airdrop_img {
+  opacity: 0;
   animation: up_down_bottom 2s ease 2s;
   animation-fill-mode: forwards; /* 保持动画结束后的最后一帧状态 */
   animation-iteration-count: 1;
@@ -77,10 +78,12 @@
 
 @keyframes up_down_bottom {
   0% {
+    opacity: 1;
     transform: translateY(0);
   }
   50% {
     transform: translateY(170px);
+    opacity: 0;
   }
   100% {
     opacity: 0;

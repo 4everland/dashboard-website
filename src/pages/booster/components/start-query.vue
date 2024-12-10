@@ -22,9 +22,18 @@
             Click the button below to start the query
           </div>
           <div class="circle-img airdrop_img">
-            <img src="/img/booster/earnings/circle.png" width="40" alt="" />
+            <img src="/img/booster/earnings/circle.png" width="120" alt="" />
           </div>
           <div class="d-flex justify-center">
+            <div class="unlock d-flex justify-center align-center" v-if="!showbutton">
+              <div >
+                <img
+                  src="/img/booster/earnings/unlock-dark.png"
+                  width="64"
+                  alt=""
+                />
+              </div>
+            </div>
             <div class="unlock light-btn d-flex justify-center align-center queryItem" @click="handleShowQuery" v-if="showbutton">
               <div class="light-img">
                 <img
@@ -120,10 +129,10 @@ export default {
     }
     .circle-img {
       text-align: center;
-      margin-top: -20px;
+      margin-top: -65px;
     }
     .unlock {
-      margin-top: 117px;
+      margin-top: 75px;
     }
   }
 }

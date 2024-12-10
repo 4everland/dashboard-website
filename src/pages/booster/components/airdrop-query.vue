@@ -44,7 +44,7 @@
           <div v-for="(item, index) in dataList" :key="index" v-if="item.status !== 'hide'" :class="{'queryItem': item.status !='hide'}">
             <div class="d-flex justify-space-between">
               <div class="list-left">
-                <div class="list-title">{{ item.title }}</div>
+                <div class="list-title" :class="{'list-title-no': item.status === false}">{{ item.title }}</div>
                 <div class="list-text mb-1">{{ item.subtitle }}</div>
               </div>
               <div class="list-right">
@@ -319,6 +319,9 @@ export default {
       font-weight: 700;
       line-height: 16px;
       color: #0FE1F8;
+    }
+    .list-title-no {
+      color: #ffffff70;
     }
     .list-title2 {
       font-size: 14px;
