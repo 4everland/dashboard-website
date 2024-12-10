@@ -4,7 +4,8 @@
       max-width="400"
       content-class="airdrop-boost-dialog"
       :value="value"
-      overlay-opacity="0.5"
+      overlay-opacity="0.9"
+      overlay-color="black"
       persistent
     >
       <div class="airdrop-dialog">
@@ -24,7 +25,7 @@
             <img src="/img/booster/earnings/circle.png" width="40" alt="" />
           </div>
           <div class="d-flex justify-center">
-            <div class="unlock light-btn d-flex justify-center align-center">
+            <div class="unlock light-btn d-flex justify-center align-center" @click="handleShowQuery">
               <div class="light-img">
                 <img
                   src="/img/booster/earnings/unlock-light.png"
@@ -40,6 +41,7 @@
   </div>
 </template>
 <script>
+import { bus } from "@/utils/bus";
 export default {
   props: {
     value: Boolean,
@@ -49,7 +51,12 @@ export default {
   },
 
   mounted() {},
-  methods: {},
+  methods: {
+    handleShowQuery() {
+      this.$emit('input', false);
+      bus.$emit('showQueryDialogEvent');
+    },
+  },
   components: {},
 };
 </script>

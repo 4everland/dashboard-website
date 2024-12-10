@@ -4,7 +4,8 @@
       max-width="400"
       content-class="airdrop-boost-dialog"
       :value="value"
-      overlay-opacity="0.5"
+      overlay-opacity="0.9"
+      overlay-color="black"
       persistent
     >
       <div class="airdrop-dialog">
@@ -29,27 +30,40 @@
             </div>
             <div class="user d-flex justify-center align-center">
               <div>
-                <img
-                  class="head-img"
-                  src="/img/booster/earnings/avatar.png"
-                  width="24"
-                  alt=""
-                />
+                <e-team-avatar
+                  :src="userInfo.avatar"
+                  :size="24"
+                  :uid="userInfo.uid"
+                ></e-team-avatar>
               </div>
-              <div class="user-name">ergoueth</div>
+              <div class="user-name">{{ (userInfo.username || "unkown").cutStr(4, 4) }}</div>
             </div>
           </div>
         </div>
         <div class="airdrop-content">
-          <div>
+          <div v-for="(item, index) in dataList" :key="index" v-if="item.status" :class="{'queryItem': item.status !=0}">
             <div class="d-flex justify-space-between">
               <div class="list-left">
-                <div class="list-title">Hold and stake -4EVER</div>
-                <div class="list-text mb-1">Based on staked T-4EVER.</div>
+                <div class="list-title">{{ item.title }}</div>
+                <div class="list-text mb-1">{{ item.subtitle }}</div>
               </div>
               <div class="list-right">
                 <img
+                  v-if="item.status === 1"
+                  class="imgLoading"
                   src="/img/booster/earnings/waiting-icon.png"
+                  width="24"
+                  alt=""
+                />
+                <img
+                  v-if="item.status === 2"
+                  src="/img/booster/earnings/completed.png"
+                  width="24"
+                  alt=""
+                />
+                <img
+                  v-if="item.status === 3"
+                  src="/img/booster/earnings/x-circle.png"
                   width="24"
                   alt=""
                 />
@@ -63,62 +77,112 @@
               alt=""
             />
           </div>
-          <div>
-            <div class="d-flex justify-space-between">
-              <div class="list-left">
-                <div class="list-title2">Hold and stake -4EVER</div>
-                <div class="list-text mb-1">Based on staked T-4EVER.</div>
-              </div>
-              <div class="list-right">
-                <img
-                  src="/img/booster/earnings/completed.png"
-                  width="24"
-                  alt=""
-                />
-              </div>
-            </div>
-            <img
-              class="mb-1"
-              style="width: 100%"
-              src="/img/booster/earnings/diver-light.png"
-              height="9"
-              alt=""
-            />
-          </div>
-          <div class="d-flex justify-center">
-            <div class="light-btn d-flex justify-center align-center">
-              <div class="light-span">
-                <v-btn class="submit-btn">
-                  <span class="number">99888</span>
-                  <span class="btn-text">4EVER</span>
-                </v-btn>
+          <div v-if="showPoint">
+            <div class="d-flex justify-center">
+              <div class="light-btn d-flex justify-center align-center">
+                <div class="light-span">
+                  <v-btn class="submit-btn">
+                    <span class="number">
+                      <ICountUp
+                        class="points"
+                        :delay="1000"
+                        :endVal="shortPoint"
+                        :options="{
+                          useEasing: true,
+                          useGrouping: true,
+                          decimalPlaces: 0,
+                          separator: ',',
+                          decimal: '.',
+                          prefix: '',
+                          suffix: '',
+                        }"
+                      />
+                    </span>
+                    <span class="btn-text">4EVER</span>
+                  </v-btn>
+                </div>
               </div>
             </div>
+            <v-btn class="share-btn">
+              <span class="btn-text">Share to X</span>
+            </v-btn>
           </div>
-          <v-btn class="share-btn">
-            <span class="btn-text">Share to X</span>
-          </v-btn>
         </div>
       </div>
     </v-dialog>
   </div>
 </template>
-  <script>
+<script>
+import { bus } from "@/utils/bus";
+import { mapGetters, mapState } from "vuex";
+import ICountUp from "vue-countup-v2";
 export default {
   props: {
     value: Boolean,
   },
   data() {
-    return {};
+    return {
+      showPoint: false,
+      shortPoint: 10000,
+      dataList: [
+        {
+          title: "Staked T4EVER Token",
+          subtitle: "The amount of T4EVER staked.",
+          status: 0,
+        },
+        {
+          title: "Have $4EVER Points",
+          subtitle: "The $4EVER Points you've earned.",
+          status: 0,
+        },
+        {
+          title: "Product Interaction",
+          subtitle: "Engaged with 4EVERLAND products prior to ",
+          status: 0,
+        },
+        {
+          title: "On-chain Interaction",
+          subtitle: "Performed on-chain interaction prior to xxx.",
+          status: 0,
+        },
+        {
+          title: "Gitcoin Donation",
+          subtitle: "Made a donation to 4EVERLAND on Gitcoin.",
+          status: 0,
+        },
+      ]
+    };
   },
+  computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    })
+  },
+  mounted() {
+    bus.$on("showQueryDialogEvent", () => {
+      this.handleListStatus();
+    });
+  },
+  methods: {
+    async handleListStatus() {
+      for (const item of this.dataList) {
+        await this.$sleep(2000);
+        item.status = 1;
+        await this.$sleep(2000);
+        item.status = 2;
+      }
+      this.showPoint = true;
 
-  mounted() {},
-  methods: {},
-  components: {},
+    },
+  },
+  components: {
+    ICountUp
+  },
 };
 </script>
-      
-  <style lang="scss" scoped>
+
+<style lang="scss" src="../spin.scss"></style>
+<style lang="scss" scoped>
 ::v-deep .airdrop-boost-dialog {
   background: transparent !important;
   box-shadow: none !important;
@@ -176,7 +240,7 @@ export default {
   }
   .airdrop-content {
     width: 327px;
-    height: 421px;
+    height: 521px;
     margin: 0 auto;
     top: 72px;
     padding: 24px 16px;
