@@ -72,7 +72,7 @@
       @click="showBindExchange"
     >
       <img src="/img/booster/new/icon-bind-pc.png" width="96" alt="" />
-      <div class="trigger-text bind fz-22 fw-b text-center" style="width: 96px;">Airdrop</div>
+      <div class="trigger-text bind fz-22 fw-b text-center" style="width: 96px;">Bind</div>
     </div>
     <div
       v-if="!boostLocked"
@@ -81,7 +81,7 @@
       @click="showStartQueryDialog"
     >
       <img src="/img/booster/new/Query_4x_1.gif" width="96" alt="" />
-      <div class="trigger-text bind fz-22 fw-b text-center" style="width: 96px;">Query</div>
+      <div class="trigger-text bind fz-22 fw-b text-center" style="width: 96px;">Airdrop</div>
     </div>
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>

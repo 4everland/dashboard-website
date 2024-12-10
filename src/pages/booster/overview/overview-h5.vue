@@ -3,7 +3,7 @@
     <div
       v-if="isTgMiniApp && !userInfo.wallet"
       class="trigger-icon pos-a"
-      style="right: 254px; top: 61px"
+      style="right: 193px; top: 61px"
       @click="onConnetc"
     >
       <img src="/img/booster/new/icon-connect.png" width="48" alt="" />
@@ -12,26 +12,26 @@
     <div
       v-if="asMobile"
       class="trigger-icon pos-a"
-      style="right: 193px; top: 61px"
+      style="right: 132px; top: 61px"
       @click="showBindExchange"
     >
       <img src="/img/booster/new/icon-bind.png" width="48" alt="" />
-      <div class="trigger-text connect fz-12 fw-b text-center">Airdrop</div>
+      <div class="trigger-text connect fz-12 fw-b text-center">Bind</div>
     </div>
     <div
       v-if="asMobile"
       class="trigger-icon pos-a"
-      style="right: 132px; top: 61px"
+      style="right: 71px; top: 61px"
       @click="showStartQueryDialog"
     >
       <img src="/img/booster/new/Query_2x.gif" width="48" alt="" />
-      <div class="trigger-text connect fz-12 fw-b text-center">Query</div>
+      <div class="trigger-text connect fz-12 fw-b text-center">Airdrop</div>
     </div>
-    <TokenDialog
+    <!-- <TokenDialog
       class="pos-a"
       style="right: 71px; top: 61px"
       v-if="isTgMiniApp"
-    ></TokenDialog>
+    ></TokenDialog> -->
 
     <div
       v-if="asMobile"

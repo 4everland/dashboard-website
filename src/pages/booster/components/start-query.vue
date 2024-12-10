@@ -17,12 +17,25 @@
           alt=""
         />
         <div class="airdrop-content">
+          <!-- <video
+            class="airdrop-bg"
+            src="/img/booster/earnings/airdrop-bg.webm"
+            autoplay
+            loop
+            muted
+          ></video> -->
+          <img
+            class="airdrop-bg"
+            src="/img/booster/earnings/airdrop-bg.png"
+            width="250"
+            alt=""
+          />
           <div class="start-title airdrop_text">$4EVER Airdrop Query</div>
           <div class="start-text airdrop_text">
             Click the button below to start the query
           </div>
           <div class="circle-img airdrop_img">
-            <img src="/img/booster/earnings/circle.png" width="120" alt="" />
+            <img src="/img/booster/earnings/circle-big.png" width="120" alt="" />
           </div>
           <div class="d-flex justify-center">
             <div class="unlock d-flex justify-center align-center" v-if="!showbutton">
@@ -37,7 +50,7 @@
             <div class="unlock light-btn d-flex justify-center align-center queryItem" @click="handleShowQuery" v-if="showbutton">
               <div class="light-img">
                 <img
-                  class="light-img-out"
+                  :class="{ 'light-img-out': !isTgMiniApp}"
                   src="/img/booster/earnings/btn-unlock-air.png"
                   width="64"
                   alt=""
@@ -60,6 +73,11 @@ export default {
     return {
       showbutton: false,
     };
+  },
+  computed: {
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
 
   mounted() {
@@ -110,6 +128,14 @@ export default {
     background-size: contain;
     padding-top: 80px;
     position: relative;
+    .airdrop-bg{
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      width: 100%;
+      transform: translateX(-50%);
+      z-index: 0;
+    }
     .start-title {
       width: 255px;
       margin: 0 36px;

@@ -106,6 +106,16 @@
             <v-btn class="share-btn" @click="handleShare">
               <span class="btn-text">Share on X</span>
             </v-btn>
+            <div class="d-flex justify-start align-center mt-4">
+              <img
+                src="/img/booster/earnings/subtract.png"
+                width="16"
+                alt=""
+              />
+              <div class="view">
+                Snapshot finished. Forget to bind exchange? Please wait for the next round of airdrop.
+              </div>
+            </div>
           </div>
           <starrise id="starRise"></starrise>
         </div>
@@ -174,6 +184,7 @@ export default {
     },
   },
   mounted() {
+    this.$store.dispatch("getInviteInfo");
     bus.$on("showQueryDialogEvent", () => {
       this.handleListStatus();
     });
@@ -216,18 +227,15 @@ export default {
 
     },
     handleShare() {
-      if (this.isTgMiniApp) {
-        this.$tg.shareUrl(
-          this.inviteInfo.link,
-          "🔥 Wow! I’m eligible for the @4everland_org #airdrop, with xxxx $4EVER tokens on the way! Be sure to check your eligibility too! 👀💰"
-        );
-      } else {
-        let shareUrl =
-          "🔥 Wow! I’m eligible for the @4everland_org #airdrop, with xxxx $4EVER tokens on the way! Be sure to check your eligibility too! 👀💰";
-        shareUrl += this.inviteInfo.link;
+      console.log(this.inviteInfo.link)
+      let shareUrl =  "🔥 Wow! I’m eligible for the @4everland_org #airdrop, with "+this.shortPoint+" $4EVER tokens on the way! Be sure to check your eligibility too! 👀💰";
+        shareUrl =  shareUrl + this.inviteInfo.link;
         shareUrl =
           "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
-
+      if (this.isTgMiniApp) {
+        this.$tg.openAuto(shareUrl);
+      } else {
+        
         this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
       }
     },
@@ -252,6 +260,7 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
+  margin-top: -50px;
   padding: 36px 16px;
   border-radius: 16px;
   .close-btn {
@@ -298,7 +307,7 @@ export default {
   }
   .airdrop-content {
     width: 327px;
-    height: 500px;
+    height: 530px;
     position: relative;
     margin: 0 auto;
     top: 0px;
@@ -373,8 +382,12 @@ export default {
       .btn-text {
         font-size: 16px;
         font-weight: 700;
-        line-height: 20px;
+        line-height: 28px;
         color: #fff;
+        display: inline-block;
+        background: url("/img/booster/earnings/share-btn-bg.png") no-repeat;
+        width: 200px;
+        height: 28px;
       }
     }
     .light-btn {
@@ -435,6 +448,13 @@ export default {
     .btnWrap{
       position: relative;
       z-index: 1;
+    }
+    .view {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 15px;
+      color: #c0c1c2;
+      margin-left: 4px;
     }
   }
 }
