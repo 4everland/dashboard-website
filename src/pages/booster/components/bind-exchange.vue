@@ -54,8 +54,10 @@
                   v-for="(item, i) in selectList"
                   :key="i"
                   :value="item.value"
+                  :disabled="item.disabled"
                   class="mt-2 select"
                   color="#0FE1F8"
+                  :class="{ 'gray_select': item.disabled}"
                 >
                   <template v-slot:label>
                     <div class="d-flex justify-end align-center radioItemRight">
@@ -106,7 +108,7 @@
               >
                 
                 <template v-slot:item="{ item }">
-                  <div class="d-flex justify-end align-center">
+                  <div class="d-flex justify-end align-center" :class="{ 'gray_select': item.disabled}">
                     <img :src="item.logo" width="24" alt="" />
                     <div class="step-text ml-2" style="color:#FFF;">{{ item.title }}</div>
                   </div>
@@ -252,21 +254,24 @@ export default {
           logo: require("/public/img/booster/earnings/gate-logo.png"),
           inviteUrl: "https://www.gateio24.com/signup/VLMVUL8MBA?ref_type=103",
           docUrl: "https://4everland.medium.com/how-to-locate-your-gate-io-uid-and-participate-in-the-4everland-airdrop-campaign-2af8eaaa4f6b",
-          value: "Gate"
+          value: "Gate",
+          disabled: false
         },
         {
           title: "BingX",
           logo: require("/public/img/booster/earnings/bingx-logo.png"),
           inviteUrl: "https://bingx.com/invite/HZCVIG/",
           docUrl: "https://4everland.medium.com/how-to-locate-your-bingx-uid-and-participate-in-the-4everland-airdrop-campaign-c76825913f6d",
-          value: "BingX"
+          value: "BingX",
+          disabled: false
         },
         {
           title: "MEXC",
           logo: require("/public/img/booster/earnings/mexc-logo.png"),
           inviteUrl: "https://www.mexc.com/register?inviteCode=mexc-2fy7c",
           docUrl: "https://4everland.medium.com/how-to-find-your-mexc-uid-and-participate-in-the-4everland-airdrop-4adff0e95eea",
-          value: "Mexc"
+          value: "Mexc",
+          disabled: true
         },
       ],
       selectedItem: null,
@@ -644,6 +649,9 @@ export default {
 }
 .bind_lablel_item ::v-deep .v-text-field__slot label {
   font-size: 14px;
+}
+.gray_select{
+  filter: grayscale(1);
 }
 </style>
     
