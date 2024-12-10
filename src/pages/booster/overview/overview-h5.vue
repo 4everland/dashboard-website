@@ -10,7 +10,7 @@
       <div class="trigger-text connect fz-12 fw-b text-center" style="width: 52px;">Connect</div>
     </div>
     <div
-      v-if="isTgMiniApp"
+      v-if="asMobile"
       class="trigger-icon pos-a"
       style="right: 193px; top: 61px"
       @click="showBindExchange"
@@ -19,12 +19,12 @@
       <div class="trigger-text connect fz-12 fw-b text-center">Airdrop</div>
     </div>
     <div
-      v-if="!isTgMiniApp"
+      v-if="asMobile"
       class="trigger-icon pos-a"
       style="right: 132px; top: 61px"
       @click="showStartQueryDialog"
     >
-      <img src="/img/booster/new/bind_2x.gif" width="48" alt="" />
+      <img src="/img/booster/new/Query_2x.gif" width="48" alt="" />
       <div class="trigger-text connect fz-12 fw-b text-center">Query</div>
     </div>
     <TokenDialog

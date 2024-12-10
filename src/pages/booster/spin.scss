@@ -71,6 +71,8 @@
 
 .airdrop_img {
   animation: up_down_bottom 2s ease 2s;
+  animation-fill-mode: forwards; /* 保持动画结束后的最后一帧状态 */
+  animation-iteration-count: 1;
 }
 
 @keyframes up_down_bottom {
@@ -99,6 +101,15 @@
 }
 
 .queryItem {
-  animation: feadIn 1s ease;
+  animation: fadeIn 2s ease;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

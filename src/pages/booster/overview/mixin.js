@@ -32,6 +32,7 @@ export default {
       tgMiniOverlayLoading: (s) => s.moduleBooster.tgMiniOverlayLoading,
       dailySign: (s) => s.moduleBooster.dailySign,
       tonConnectUI: (s) => s.moduleBooster.tonConnectUI,
+      userInfo: (s) => s.userInfo,
     }),
     ...mapGetters([
       "boostLocked",
@@ -127,7 +128,13 @@ export default {
       bus.$emit('showBindExchangeEvent');
     },
     showStartQueryDialog(){
-      bus.$emit('showStartQueryEvent');
+      let info = this.userInfo.username;
+      let airInfo = localStorage.getItem("airdrop" + info);
+      if(!airInfo){
+        bus.$emit('showStartQueryEvent');
+      } else {
+        bus.$emit('showQueryDialogEvent');
+      }
     },
 
     async handleUnlock(index) {

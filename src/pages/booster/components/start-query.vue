@@ -25,10 +25,11 @@
             <img src="/img/booster/earnings/circle.png" width="40" alt="" />
           </div>
           <div class="d-flex justify-center">
-            <div class="unlock light-btn d-flex justify-center align-center" @click="handleShowQuery">
+            <div class="unlock light-btn d-flex justify-center align-center queryItem" @click="handleShowQuery" v-if="showbutton">
               <div class="light-img">
                 <img
-                  src="/img/booster/earnings/unlock-light.png"
+                  class="light-img-out"
+                  src="/img/booster/earnings/btn-unlock-air.png"
                   width="64"
                   alt=""
                 />
@@ -47,10 +48,20 @@ export default {
     value: Boolean,
   },
   data() {
-    return {};
+    return {
+      showbutton: false,
+    };
   },
 
-  mounted() {},
+  mounted() {
+    
+    bus.$on("showStartQueryEvent", () => {
+      this.showbutton = false;
+      setTimeout(() => {
+        this.showbutton = true;
+      }, 3000);
+    });
+  },
   methods: {
     handleShowQuery() {
       this.$emit('input', false);
@@ -165,6 +176,10 @@ export default {
   background: #000000;
   position: relative;
   z-index: 2;
+  cursor: pointer;
+}
+.light-img-out {
+  filter: drop-shadow(0px 0px 10px #6172f3);
 }
 </style>
         

@@ -41,7 +41,7 @@
           </div>
         </div>
         <div class="airdrop-content">
-          <div v-for="(item, index) in dataList" :key="index" v-if="item.status" :class="{'queryItem': item.status !=0}">
+          <div v-for="(item, index) in dataList" :key="index" v-if="item.status !== 'hide'" :class="{'queryItem': item.status !='hide'}">
             <div class="d-flex justify-space-between">
               <div class="list-left">
                 <div class="list-title">{{ item.title }}</div>
@@ -49,20 +49,20 @@
               </div>
               <div class="list-right">
                 <img
-                  v-if="item.status === 1"
+                  v-if="item.status === 'loading'"
                   class="imgLoading"
                   src="/img/booster/earnings/waiting-icon.png"
                   width="24"
                   alt=""
                 />
                 <img
-                  v-if="item.status === 2"
+                  v-if="item.status === true"
                   src="/img/booster/earnings/completed.png"
                   width="24"
                   alt=""
                 />
                 <img
-                  v-if="item.status === 3"
+                  v-if="item.status === false"
                   src="/img/booster/earnings/x-circle.png"
                   width="24"
                   alt=""
@@ -77,7 +77,7 @@
               alt=""
             />
           </div>
-          <div v-if="showPoint">
+          <div v-if="showPoint" class="queryItem btnWrap">
             <div class="d-flex justify-center">
               <div class="light-btn d-flex justify-center align-center">
                 <div class="light-span">
@@ -103,10 +103,11 @@
                 </div>
               </div>
             </div>
-            <v-btn class="share-btn">
-              <span class="btn-text">Share to X</span>
+            <v-btn class="share-btn" @click="handleShare">
+              <span class="btn-text">Share on X</span>
             </v-btn>
           </div>
+          <starrise id="starRise"></starrise>
         </div>
       </div>
     </v-dialog>
@@ -115,7 +116,9 @@
 <script>
 import { bus } from "@/utils/bus";
 import { mapGetters, mapState } from "vuex";
+import { fetchAirdropInfo } from "@/api/booster";
 import ICountUp from "vue-countup-v2";
+import starrise from "./star-rise.vue";
 export default {
   props: {
     value: Boolean,
@@ -128,27 +131,32 @@ export default {
         {
           title: "Staked T4EVER Token",
           subtitle: "The amount of T4EVER staked.",
-          status: 0,
+          status: 'hide',
+          realStatus: false,
         },
         {
           title: "Have $4EVER Points",
           subtitle: "The $4EVER Points you've earned.",
-          status: 0,
+          status: 'hide',
+          realStatus: false,
         },
         {
           title: "Product Interaction",
-          subtitle: "Engaged with 4EVERLAND products prior to ",
-          status: 0,
+          subtitle: "Engaged with 4EVERLAND products prior to xxx.",
+          status: 'hide',
+          realStatus: false,
         },
         {
           title: "On-chain Interaction",
           subtitle: "Performed on-chain interaction prior to xxx.",
-          status: 0,
+          status: 'hide',
+          realStatus: false,
         },
         {
           title: "Gitcoin Donation",
           subtitle: "Made a donation to 4EVERLAND on Gitcoin.",
-          status: 0,
+          status: 'hide',
+          realStatus: false,
         },
       ]
     };
@@ -156,7 +164,14 @@ export default {
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
-    })
+      inviteInfo: (s) => s.moduleBooster.inviteInfo,
+    }),
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
   },
   mounted() {
     bus.$on("showQueryDialogEvent", () => {
@@ -165,18 +180,61 @@ export default {
   },
   methods: {
     async handleListStatus() {
-      for (const item of this.dataList) {
-        await this.$sleep(2000);
-        item.status = 1;
-        await this.$sleep(2000);
-        item.status = 2;
+      await this.getAirdrop();
+      let info = this.userInfo.username;
+      let airInfo = localStorage.getItem("airdrop" + info);
+      if(!airInfo){
+        for (const item of this.dataList) {
+          item.status = 'loading';
+          await this.$sleep(1000);
+          item.status = item.realStatus;
+          await this.$sleep(1000);
+        }
+        this.showPoint = true;
+      } else {
+        for (const item of this.dataList) {
+          item.status = item.realStatus;
+        }
+        this.showPoint = true;
       }
-      this.showPoint = true;
+      localStorage.setItem("airdrop" + info, true);
+    },
+    async getAirdrop(){
+      try {
+        const { data } = await fetchAirdropInfo();
+        if(data){
+          this.dataList[0].realStatus = data.stakeT4ever;
+          this.dataList[1].realStatus = data.holdPoints;
+          this.dataList[2].realStatus = data.productIteracted;
+          this.dataList[3].realStatus = data.onChainInteracted;
+          this.dataList[4].realStatus = data.gitcoinDonation;
+          this.shortPoint = Number(data.t4ever);
+        }
+      } catch (error) {
+        console.log(error)
+      }
 
+    },
+    handleShare() {
+      if (this.isTgMiniApp) {
+        this.$tg.shareUrl(
+          this.inviteInfo.link,
+          "🔥 Wow! I’m eligible for the @4everland_org #airdrop, with xxxx $4EVER tokens on the way! Be sure to check your eligibility too! 👀💰"
+        );
+      } else {
+        let shareUrl =
+          "🔥 Wow! I’m eligible for the @4everland_org #airdrop, with xxxx $4EVER tokens on the way! Be sure to check your eligibility too! 👀💰";
+        shareUrl += this.inviteInfo.link;
+        shareUrl =
+          "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
+
+        this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
+      }
     },
   },
   components: {
-    ICountUp
+    ICountUp,
+    starrise
   },
 };
 </script>
@@ -240,11 +298,11 @@ export default {
   }
   .airdrop-content {
     width: 327px;
-    height: 521px;
+    height: 500px;
+    position: relative;
     margin: 0 auto;
-    top: 72px;
+    top: 0px;
     padding: 24px 16px;
-    gap: 24px;
     border-radius: 16px;
     margin-top: -7px;
     background: linear-gradient(179.52deg, #000a10 8.53%, #003e70 99.59%),
@@ -254,18 +312,13 @@ export default {
         rgba(15, 225, 248, 0) 100%
       );
 
-    border: 1px solid;
-    border-image-source: linear-gradient(
-      165.76deg,
-      rgba(69, 81, 111, 0.5) -11.63%,
-      #11b7ff 88.45%
-    );
-    border-image-slice: 1;
+    border: 1px solid #45516F80;
+    
     .list-title {
       font-size: 14px;
       font-weight: 700;
       line-height: 16px;
-      color: #ffffff;
+      color: #0FE1F8;
     }
     .list-title2 {
       font-size: 14px;
@@ -277,7 +330,7 @@ export default {
       font-size: 12px;
       font-weight: 400;
       line-height: 16px;
-      color: #ffffffbf;
+      color: #FFFFFFBF;
     }
     .list-right {
       position: relative;
@@ -327,6 +380,7 @@ export default {
       border: 0;
       border-radius: 16px;
       overflow: hidden;
+      z-index: 1;
     }
     .light-btn::before {
       content: "";
@@ -366,6 +420,18 @@ export default {
       background: #000000;
       position: relative;
       z-index: 2;
+    }
+    #starRise{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      z-index: 0;
+    }
+    .btnWrap{
+      position: relative;
+      z-index: 1;
     }
   }
 }
