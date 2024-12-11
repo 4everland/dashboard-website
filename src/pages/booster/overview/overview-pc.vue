@@ -71,8 +71,17 @@
       style="left: 20px; top: 100px"
       @click="showBindExchange"
     >
-      <img src="/img/booster/new/bind_4x.gif" width="96" alt="" />
-      <div class="trigger-text bind fz-22 fw-b text-center">Airdrop</div>
+      <img src="/img/booster/new/icon-bind-pc.png" width="96" alt="" />
+      <div class="trigger-text bind fz-22 fw-b text-center" style="width: 96px;">Bind</div>
+    </div>
+    <div
+      v-if="!boostLocked"
+      class="trigger-icon pos-a"
+      style="left: 125px; top: 100px"
+      @click="showStartQueryDialog"
+    >
+      <img src="/img/booster/new/Query_4x_1.gif" width="96" alt="" />
+      <div class="trigger-text bind fz-22 fw-b text-center" style="width: 96px;">Airdrop</div>
     </div>
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>

@@ -10,19 +10,28 @@
       <div class="trigger-text connect fz-12 fw-b text-center" style="width: 52px;">Connect</div>
     </div>
     <div
-      v-if="isTgMiniApp"
+      v-if="asMobile"
       class="trigger-icon pos-a"
-      style="right: 132px; top: 61px"
+      style="right: 71px; top: 61px"
       @click="showBindExchange"
     >
-      <img src="/img/booster/new/bind_2x.gif" width="48" alt="" />
+      <img src="/img/booster/new/icon-bind.png" width="48" alt="" />
+      <div class="trigger-text connect fz-12 fw-b text-center">Bind</div>
+    </div>
+    <div
+      v-if="asMobile"
+      class="trigger-icon pos-a"
+      style="right: 132px; top: 61px"
+      @click="showStartQueryDialog"
+    >
+      <img src="/img/booster/new/Query_2x.gif" width="48" alt="" />
       <div class="trigger-text connect fz-12 fw-b text-center">Airdrop</div>
     </div>
-    <TokenDialog
+    <!-- <TokenDialog
       class="pos-a"
       style="right: 71px; top: 61px"
       v-if="isTgMiniApp"
-    ></TokenDialog>
+    ></TokenDialog> -->
 
     <div
       v-if="asMobile"
@@ -167,7 +176,7 @@
           </div>
         </div>
 
-        <!-- <div class="gold-square" @click="handleStartGetReward" style="margin-top: 80px">
+        <!-- <div class="gold-square" @click="airdropDialog = true" style="margin-top: 80px">
           <div class="top-card square-box-up" id="mobile-gold-ball">
             <img src="/img/booster/spin/reward-ball.png" width="80" alt="" />
           </div>
@@ -453,6 +462,7 @@
       </div>
     </div>
     <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
+    
   </div>
 </template>
 

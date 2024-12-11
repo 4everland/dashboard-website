@@ -358,7 +358,7 @@ export const handleBindExchange = async (param) => {
 
 export const fetchBindInfo = async () => {
   return boosterRequest.get({
-    url: `node/exchange/profile`,
+    url: `/node/exchange/profile`,
   });
 };
 
@@ -370,3 +370,10 @@ export const tgPaymentInvoice = async (targetValue) => {
     },
   });
 };
+
+export const fetchAirdropInfo = async () => {
+  return boosterRequest.get({
+    url: `/node/airdrop`,
+  });
+};
+

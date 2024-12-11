@@ -64,3 +64,69 @@
 .card_show {
   animation: flipOutY 1.5s ease-in-out ;
 }
+
+.airdrop_text {
+  animation: fadeInDown 2s ease;
+} 
+
+.airdrop_img {
+  opacity: 0;
+  animation: up_down_bottom 2s ease 2s;
+  animation-fill-mode: forwards; /* 保持动画结束后的最后一帧状态 */
+  animation-iteration-count: 1;
+}
+
+@keyframes up_down_bottom {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(170px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.imgLoading {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.queryItem {
+  animation: fadeIn 2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.queryButton {
+  animation: fadeInshort 2s ease;
+}
+
+@keyframes fadeInshort {
+  from {
+    opacity: 0.6;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
