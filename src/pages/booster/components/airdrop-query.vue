@@ -103,17 +103,25 @@
                 </div>
               </div>
             </div>
-            <v-btn class="share-btn" @click="handleShare">
-              <span class="btn-text">Share on X</span>
-            </v-btn>
-            <div class="d-flex justify-start align-center mt-4">
-              <img
-                src="/img/booster/earnings/subtract.png"
-                width="16"
-                alt=""
-              />
-              <div class="view">
-                Snapshot finished. Forget to bind exchange? Please wait for the next round of airdrop.
+            <div v-if="shortPoint>0">
+              <v-btn class="share-btn" @click="handleShare">
+                <span class="btn-text d-flex justify-center align-center">
+                  <img
+                    v-if="linkShared === true"
+                    src="/img/booster/earnings/completed.png"
+                    width="24"
+                    alt=""
+                  />{{ linkShared ? "Shared" : "Share on X" }}</span>
+              </v-btn>
+              <div class="d-flex justify-start align-center mt-4">
+                <img
+                  src="/img/booster/earnings/subtract.png"
+                  width="16"
+                  alt=""
+                />
+                <div class="view">
+                  Airdrop will be sent to linked exchanges; otherwise, please wait for the second round.
+                </div>
               </div>
             </div>
           </div>
@@ -136,35 +144,30 @@ export default {
   data() {
     return {
       showPoint: false,
-      shortPoint: 10000,
+      shortPoint: 0,
+      linkShared: false,
       dataList: [
         {
-          title: "Staked T4EVER Token",
-          subtitle: "The amount of T4EVER staked.",
+          title: "Staked T4EVER",
+          subtitle: "0.5% of tokens for 1:1 T4EVER exchange.",
           status: 'hide',
           realStatus: false,
         },
         {
-          title: "Have $4EVER Points",
-          subtitle: "The $4EVER Points you've earned.",
+          title: "$4EVER Points",
+          subtitle: "3% of tokens for users with $4EVER Points.",
           status: 'hide',
           realStatus: false,
         },
         {
           title: "Product Interaction",
-          subtitle: "Engaged with 4EVERLAND products prior to xxx.",
+          subtitle: "1% of tokens for early users who engage with products and on-chain activities.",
           status: 'hide',
           realStatus: false,
         },
         {
-          title: "On-chain Interaction",
-          subtitle: "Performed on-chain interaction prior to xxx.",
-          status: 'hide',
-          realStatus: false,
-        },
-        {
-          title: "Gitcoin Donation",
-          subtitle: "Made a donation to 4EVERLAND on Gitcoin.",
+          title: "Early Contributors",
+          subtitle: "0.5% of tokens for early ecosystem contributors and Gitcoin donation.",
           status: 'hide',
           realStatus: false,
         },
@@ -217,8 +220,7 @@ export default {
           this.dataList[0].realStatus = data.stakeT4ever;
           this.dataList[1].realStatus = data.holdPoints;
           this.dataList[2].realStatus = data.productIteracted;
-          this.dataList[3].realStatus = data.onChainInteracted;
-          this.dataList[4].realStatus = data.gitcoinDonation;
+          this.dataList[3].realStatus = data.gitcoinDonation;
           this.shortPoint = Number(data.t4ever);
         }
       } catch (error) {
@@ -227,7 +229,6 @@ export default {
 
     },
     handleShare() {
-      console.log(this.inviteInfo.link)
       let shareUrl =  "🔥 Wow! I’m eligible for the @4everland_org #airdrop, with "+this.shortPoint+" $4EVER tokens on the way! Be sure to check your eligibility too! 👀💰";
         shareUrl =  shareUrl + this.inviteInfo.link;
         shareUrl =
@@ -236,8 +237,11 @@ export default {
         this.$tg.openAuto(shareUrl);
       } else {
         
-        this.asMobile ? (location.href = shareUrl) : window.open(shareUrl);
+        this.asMobile ? (location.href = shareUrl) : window.open(shareUrl, "_blank");
       }
+      setTimeout(() => {
+        this.linkShared = true;
+      }, 20000);
     },
   },
   components: {
@@ -307,7 +311,7 @@ export default {
   }
   .airdrop-content {
     width: 327px;
-    height: 530px;
+    min-height: 400px;
     position: relative;
     margin: 0 auto;
     top: 0px;
@@ -343,6 +347,7 @@ export default {
       font-weight: 400;
       line-height: 16px;
       color: #FFFFFFBF;
+      margin-right: 20px;
     }
     .list-right {
       position: relative;
