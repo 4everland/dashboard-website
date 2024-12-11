@@ -231,6 +231,7 @@ export default {
     },
     handleShare() {
       let shareUrl =  `🪂Awesome! I've just checked my eligibility for the @4everland_org #airdrop! Don’t wait - come check your $4EVER airdrop details here! 💰
+More info: https://x.com/4everland_org/status/1866783372850446538
 Airdrop: `
         shareUrl =  shareUrl + this.inviteInfo.link;
         shareUrl =
