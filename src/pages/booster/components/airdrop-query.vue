@@ -98,7 +98,7 @@
                         }"
                       />
                     </span>
-                    <span class="btn-text">4EVER</span>
+                    <span class="btn-text">$4EVER</span>
                   </v-btn>
                 </div>
               </div>
