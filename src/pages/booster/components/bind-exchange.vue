@@ -409,6 +409,13 @@ export default {
             if(this.taskEnd){
               this.$toast2('Snapshot finished. Stay tuned for the second airdrop batch.', "info");
             }
+          } else if (data.code == 13203) {
+            this.$toast2('Snapshot finished. Stay tuned for the second airdrop batch.', "info");
+            const { data } = await fetchBindInfo();
+            this.rebindExchange = true;
+            this.step = null;
+            this.bindInfo = data;
+            this.bindInfoImage = this.selectList.find(item => item.value === this.bindInfo.market);
           } else {
             this.$toast2(
               data.message,
