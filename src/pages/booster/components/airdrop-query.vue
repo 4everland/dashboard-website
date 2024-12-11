@@ -110,6 +110,7 @@
                     v-if="linkShared === true"
                     src="/img/booster/earnings/completed.png"
                     width="24"
+                    style="margin-right: 10px;"
                     alt=""
                   />{{ linkShared ? "Shared" : "Share on X" }}</span>
               </v-btn>
@@ -229,7 +230,8 @@ export default {
 
     },
     handleShare() {
-      let shareUrl =  "🔥 Wow! I’m eligible for the @4everland_org #airdrop, with "+this.shortPoint+" $4EVER tokens on the way! Be sure to check your eligibility too! 👀💰";
+      let shareUrl =  `🪂Awesome! I've just checked my eligibility for the @4everland_org #airdrop! Don’t wait - come check your $4EVER airdrop details here! 💰
+Airdrop: `
         shareUrl =  shareUrl + this.inviteInfo.link;
         shareUrl =
           "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
