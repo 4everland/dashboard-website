@@ -12,7 +12,7 @@
     <div
       v-if="asMobile"
       class="trigger-icon pos-a"
-      style="right: 132px; top: 61px"
+      style="right: 71px; top: 61px"
       @click="showBindExchange"
     >
       <img src="/img/booster/new/icon-bind.png" width="48" alt="" />
@@ -21,7 +21,7 @@
     <div
       v-if="asMobile"
       class="trigger-icon pos-a"
-      style="right: 71px; top: 61px"
+      style="right: 132px; top: 61px"
       @click="showStartQueryDialog"
     >
       <img src="/img/booster/new/Query_2x.gif" width="48" alt="" />
