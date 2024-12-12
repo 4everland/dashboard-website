@@ -98,7 +98,7 @@
                         }"
                       />
                     </span>
-                    <span class="btn-text">$4EVER</span>
+                    <span class="btn-text"> $4EVER </span>
                   </v-btn>
                 </div>
               </div>
@@ -267,8 +267,8 @@ Airdrop: `
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  margin-top: -50px;
-  padding: 36px 16px;
+  margin-top: 0px;
+  padding: 26px 16px 36px;
   border-radius: 16px;
   .close-btn {
     position: absolute;
