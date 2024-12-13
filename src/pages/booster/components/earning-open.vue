@@ -3,8 +3,10 @@
     <v-dialog
       max-width="400"
       content-class="earn-boost-dialog"
-      v-model="value"
-      overlay-opacity="0.5"
+      :value="value"
+      overlay-opacity="0.9"
+      overlay-color="black"
+      persistent
     >
       <div class="earn-dialog">
         <img
@@ -17,7 +19,7 @@
         <div class="earn-content">
           <img
             class="logo"
-            src="/img/booster/earnings/tomarket.png"
+            :src="info.logo"
             width="80"
             alt=""
           />
@@ -29,11 +31,11 @@
                 height="32"
                 alt=""
               />
-              <span class="btn-text">10M $Tomarket</span>
+              <span class="btn-text">{{ info.text }}</span>
             </v-btn>
           </div>
           <div>
-            <div class="title mt-8">Tomarket</div>
+            <div class="title mt-8">{{ info.title }}</div>
             <div class="text mt-2">
               Tomarket is a play-to-earn bot that lets you win Tether and TON by
               playing games and completing exciting tasks!
@@ -122,12 +124,21 @@
 export default {
   props: {
     value: Boolean,
+    info: Object,
   },
   data() {
     return {};
   },
+  watch: {
+    value(newVal, oldVal) {
+      if(newVal === true){
+        console.log('info', this.info)
+      }
+    }
+  },
+  computed: {
 
-  computed: {},
+  },
 
   methods: {},
   components: {},

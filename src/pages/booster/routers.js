@@ -57,10 +57,10 @@ export default [
         },
       },
       {
-        path: "/boost/earnings",
-        component: () => import("./earnings"),
+        path: "/boost/partner",
+        component: () => import("./pointspool"),
         meta: {
-          title: "Earnings",
+          title: "partner",
           hideNav: 1,
           isTab: 1,
           noLogin: 1,

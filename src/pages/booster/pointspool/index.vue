@@ -47,7 +47,7 @@
               <v-btn
                 v-if="item.status === 'unlock'"
                 class="earning-btn"
-                @click="openEarn"
+                @click="openEarn(item)"
               >
                 <img src="/img/booster/earnings/check.svg" width="16" alt="" />
                 <span class="btn-text">Earning</span>
@@ -198,7 +198,7 @@
         </v-list>
       </v-card>
     </v-dialog>
-    <EarnDialog v-model="showEarn"></EarnDialog>
+    <EarnDialog v-model="showEarn" :info="partnerInfo"></EarnDialog>
   </div>
 </template>
   
@@ -234,6 +234,7 @@ export default {
       dialog: false,
       tab: null,
       showEarn: false,
+      partnerInfo: {},
       earnList: [
         {
           logo: require("/public/img/booster/earnings/tomarket.png"),
@@ -285,7 +286,8 @@ export default {
     opendialog() {
       this.dialog = true;
     },
-    openEarn() {
+    openEarn(info) {
+      this.partnerInfo = info;
       this.showEarn = true;
     },
     backtoindex() {
