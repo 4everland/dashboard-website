@@ -15,61 +15,63 @@
       >
         <v-container fluid style="padding: 24px 16px">
           <div class="drawer-title">Account</div>
-          <div class="d-flex align-center account-container">
-            <e-team-avatar
-              :src="userInfo.avatar"
-              :size="40"
-              :uid="userInfo.uid"
-            ></e-team-avatar>
-            <div class="ml-1">
-              <div class="fw-b" v-if="isTgMiniApp">
-                {{ userInfo.telegramAccount.name }}
+          <div class="account-container">
+            <div class="d-flex align-center land-balance">
+              <e-team-avatar
+                :src="userInfo.avatar"
+                :size="40"
+                :uid="userInfo.uid"
+              ></e-team-avatar>
+              <div class="ml-1">
+                <div class="fw-b" v-if="isTgMiniApp">
+                  {{ userInfo.telegramAccount.name }}
+                </div>
+                <div :class="isTgMiniApp ? 'tg-username' : 'pc-username'">
+                  {{ (userInfo.username || "unkown").cutStr(6, 4) }}
+                </div>
               </div>
-              <div :class="isTgMiniApp ? 'tg-username' : 'pc-username'">
-                {{ (userInfo.username || "unkown").cutStr(6, 4) }}
-              </div>
+
+              <v-btn
+                class="connect-btn ml-auto"
+                @click="handleShowConnect"
+                v-if="isTgMiniApp && !userInfo.wallet"
+              >
+                <img src="/img/booster/svg/wallet.svg" width="16" alt="" />
+                <span class="ml-1"> Connect </span>
+              </v-btn>
             </div>
 
-            <v-btn
-              class="connect-btn ml-auto"
-              @click="handleShowConnect"
-              v-if="isTgMiniApp && !userInfo.wallet"
-            >
-              <img src="/img/booster/svg/wallet.svg" width="16" alt="" />
-              <span class="ml-1"> Connect </span>
-            </v-btn>
-          </div>
-
-          <div class="land-balance">
-            <div class="land-title">LAND Balance</div>
-            <div class="d-flex align-center justify-space-between">
-              <div class="d-flex align-center">
-                <span>{{ balance.land }}</span>
-                <span>{{ balance.unit }}</span>
+            <div class="mt-4">
+              <div class="land-title">LAND Balance</div>
+              <div class="d-flex align-center justify-space-between">
+                <div class="d-flex align-center">
+                  <span>{{ balance.land }}</span>
+                  <span>{{ balance.unit }}</span>
+                  <v-btn
+                    small
+                    color="#fff"
+                    icon
+                    :loading="reloadBalance"
+                    @click.stop="handleGetBalance"
+                  >
+                    <v-icon color="#fff">mdi-refresh</v-icon>
+                  </v-btn>
+                </div>
                 <v-btn
-                  small
-                  color="#fff"
-                  icon
-                  :loading="reloadBalance"
-                  @click.stop="handleGetBalance"
+                  class="deposit-btn"
+                  color="#6172F3"
+                  @click="handleToDeposit"
+                  :width="asMobile ? '80px' : '116px'"
                 >
-                  <v-icon color="#fff">mdi-refresh</v-icon>
+                  <img
+                    v-if="!asMobile"
+                    src="/img/booster/svg/pig_bank.svg"
+                    width="16"
+                    alt=""
+                  />
+                  <span class="ml-1" style="color: #fff">Deposit</span>
                 </v-btn>
               </div>
-              <v-btn
-                class="deposit-btn"
-                color="#6172F3"
-                @click="handleToDeposit"
-                :width="asMobile ? '80px' : '116px'"
-              >
-                <img
-                  v-if="!asMobile"
-                  src="/img/booster/svg/pig_bank.svg"
-                  width="16"
-                  alt=""
-                />
-                <span class="ml-1" style="color: #fff">Deposit</span>
-              </v-btn>
             </div>
           </div>
           <div class="assets assets-tab">
@@ -140,30 +142,30 @@
                 </div>
               </v-tab-item>
               <v-tab-item>
-                <div
-                  class="d-flex align-center justify-space-between assets-item"
-                  @click="showPointsBalance = true"
-                >
-                  <div class="d-flex align-center" style="gap: 8px" >
+                <div v-for="(item, index) in tokenList" :key="index">
+                  <div
+                    class="d-flex align-center justify-space-between assets-item"
+                    @click="showBalance(item.projectId)"
+                  >
+                    <div class="d-flex align-center" style="gap: 8px">
+                      <img :src="item.logoUrl" width="40" alt="" />
+
+                      <div class="d-flex flex-column">
+                        <div class="d-flex align-center">
+                          <span>{{ item.name }}</span>
+                        </div>
+                        <div class="balance-number">
+                          {{ Number(item.balance).toFixed(2) }}
+                        </div>
+                      </div>
+                    </div>
                     <img
-                      src="/img/booster/earnings/tomarket.png"
-                      width="40"
+                      class="cursor-p"
+                      src="/img/booster/svg/right-arrow.svg"
+                      width="24"
                       alt=""
                     />
-
-                    <div class="d-flex flex-column">
-                      <div class="d-flex align-center">
-                        <span>Tomarket</span>
-                      </div>
-                      <div class="balance-number">0.00</div>
-                    </div>
                   </div>
-                  <img
-                    class="cursor-p"
-                    src="/img/booster/svg/right-arrow.svg"
-                    width="24"
-                    alt=""
-                  />
                 </div>
               </v-tab-item>
             </v-tabs-items>
@@ -174,9 +176,11 @@
           v-model="showWithdrawDialog"
           :amount="tonCount"
         ></WithdrawDialog>
-
         <WithdrawLogDialog v-model="showWithdrawLogDialog"></WithdrawLogDialog>
-        <PointsBalance v-model="showPointsBalance"></PointsBalance>
+        <PointsBalance
+          v-model="showPointsBalance"
+          :projectId="projectId"
+        ></PointsBalance>
       </v-navigation-drawer>
     </div>
     <!-- <WalletConnect ref="walletConnect" /> -->
@@ -190,6 +194,7 @@ import PointsBalance from "./points-balance-history.vue";
 // import WalletConnect from "../components/wallet-connect.vue";
 import ICountUp from "vue-countup-v2";
 import { bus } from "@/utils/bus";
+import { fetchTokenList } from "@/api/booster";
 
 export default {
   computed: {
@@ -197,6 +202,7 @@ export default {
       userInfo: (s) => s.userInfo,
       showProfileDrawer: (s) => s.moduleBooster.showProfileDrawer,
       tonCount: (s) => s.moduleBooster.tonCount,
+      info: (s) => s.projectInfo,
     }),
     ...mapGetters(["balance", "notLogin"]),
     asMobile() {
@@ -214,7 +220,15 @@ export default {
       showWithdrawLogDialog: false,
       showPointsBalance: false,
       tab: 0,
+      tokenList: [],
+      size: 10,
+      page: 1,
+      type: "point",
+      projectId: "",
     };
+  },
+  mounted() {
+    this.getTokenList();
   },
   methods: {
     handleToggle(val) {
@@ -244,12 +258,24 @@ export default {
       }
       if (!this.notLogin) this.$router.push("/billing/deposit");
     },
+    async getTokenList() {
+      try {
+        const { data } = await fetchTokenList(this.type);
+        this.tokenList = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    showBalance(projectId) {
+      this.projectId = projectId;
+      this.showPointsBalance = true;
+    },
   },
   components: {
     ICountUp,
     WithdrawDialog,
     WithdrawLogDialog,
-    PointsBalance
+    PointsBalance,
   },
   watch: {
     showProfileDrawer(val) {
@@ -257,7 +283,6 @@ export default {
         this.showWithdrawDialog = false;
         this.showWithdrawLogDialog = false;
         this.showPointsBalance = false;
-        
       }
     },
   },
@@ -265,8 +290,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.profile-drawer-box {
-  ::v-deep .invite-drawer {
+::v-deep .profile-drawer-box {
+  .invite-drawer {
     width: 100% !important;
     height: 80% !important;
     max-height: 100% !important;
@@ -289,7 +314,6 @@ export default {
     border-radius: 8px;
     background: #000;
   }
-
   .land-title,
   .assets-title {
     font-size: 16px;
