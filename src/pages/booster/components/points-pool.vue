@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="poolcontainer">
-      <div class="item" v-for="(item, index) in newDataList" @click="getProjectInfo(item)">
-        <img :src="item.img" width="32" alt="" />
-        <div class="trigger-text fz-12 fw-b text-center">{{ item.points }}</div>
+      <div class="item" v-for="(item, index) in newDataList" :key="index" @click="getProjectInfo(item)">
+        <img :src="item?.projectLogoUrl" width="32" alt="" />
+        <div class="trigger-text fz-12 fw-b text-center">{{ item?.points }}</div>
       </div>
     </div>
   </div>
@@ -17,50 +17,50 @@ export default {
     return {
       dataList: [
         {
-          id: 3,
-          img: "/img/booster/earnings/coin/icon_tomarket.png",
+          projectId: "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          projectLogoUrl: "/img/booster/earnings/coin/icon_tomarket.png",
           points: 100,
           unlocked: true
         },
         {
-          id: 3,
-          img: "/img/booster/earnings/coin/icon_banana.png",
+          projectId: "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          projectLogoUrl: "/img/booster/earnings/coin/icon_banana.png",
           points: 100,
           unlocked: true
         },
         {
-          id: 1,
-          img: "/img/booster/earnings/coin/icon_moss.png",
+          projectId: "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          projectLogoUrl: "/img/booster/earnings/coin/icon_moss.png",
           points: 100,
           unlocked: true
         },
         {
-          id: 2,
-          img: "/img/booster/earnings/coin/icon_capy.png",
+          projectId: "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          projectLogoUrl: "/img/booster/earnings/coin/icon_capy.png",
           points: 100,
           unlocked: true
         },
         {
-          id: 3,
-          img: "/img/booster/earnings/coin/icon_piggy.png",
+          projectId: "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          projectLogoUrl: "/img/booster/earnings/coin/icon_piggy.png",
           points: 100,
           unlocked: true
         },
         {
-          id: 3,
-          img: "/img/booster/earnings/coin/icon_cherry.png",
+          projectId: "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          projectLogoUrl: "/img/booster/earnings/coin/icon_cherry.png",
           points: 100,
           unlocked: true
         },
         {
-          id: 3,
-          img: "/img/booster/earnings/coin/icon_yes.png",
+          projectId: "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          projectLogoUrl: "/img/booster/earnings/coin/icon_yes.png",
           points: 100,
           unlocked: true
         },
         {
-          id: 3,
-          img: "/img/booster/earnings/coin/icon_duck.png",
+          projectId: "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          projectLogoUrl: "/img/booster/earnings/coin/icon_duck.png",
           points: 100,
           unlocked: true
         }
@@ -75,20 +75,15 @@ export default {
     async init() {
       const { data } =  await fetchProjectPointsList()
       console.log(data)
-      const arrorder = [6, 4, 2, 0, 1, 3, 5, 7];
+      const arrorder = [8, 6, 4, 2, 0, 1, 3, 5, 7, 9];
       this.newDataList = arrorder.map((index) => this.dataList[index]);
     },
     async handleClaimPoint(){
       await claimProjectPoints()
     },
-    async getProjectInfo() {
-      const { data } =  await fetchProjectInfo()
-      bus.$emit('showPartnerInfoEvent', {
-          logo: "/public/img/booster/earnings/piggy.png",
-          title: "PiggyPiggy",
-          text: "10M $PiggyPiggy",
-          status: "unlock",
-        },)
+    async getProjectInfo(item) {
+      const { data } =  await fetchProjectInfo(item.projectId)
+      bus.$emit('showPartnerInfoEvent', data)
       console.log(data)
     }
   },
@@ -112,19 +107,19 @@ export default {
 }
 
 .item:nth-child(1) {
-  transform: translateX(0px) translateY(90px);
+  transform: translateY(120px);
 }
 
 .item:nth-child(2) {
-  transform:  translateY(60px);
+  transform:  translateY(90px);
 }
 
 .item:nth-child(3) {
-  transform:  translateY(30px);
+  transform:  translateY(60px);
 }
 
 .item:nth-child(4) {
-  transform:  translateY(0px);
+  transform:  translateY(30px);
 }
 
 .item:nth-child(5) {
@@ -132,14 +127,22 @@ export default {
 }
 
 .item:nth-child(6) {
-  transform:  translateY(30px);
+  transform:  translateY(0px);
 }
 
 .item:nth-child(7) {
-  transform: translateY(60px);
+  transform: translateY(30px);
 }
 
 .item:nth-child(8) {
+  transform:  translateY(60px);
+}
+
+.item:nth-child(9) {
   transform:  translateY(90px);
+}
+
+.item:nth-child(10) {
+  transform:  translateY(120px);
 }
 </style>
