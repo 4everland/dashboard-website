@@ -407,3 +407,23 @@ export const fetchProjectTasks = async (areaName) => {
   });
 };
 
+export const fetchTokenBalanceLog = async (projectId, page, size) => {
+  return boosterRequest.get({
+    url: `/node/usdt/log/${page}`,
+    params: {
+      'project-id': projectId,
+      'size': size
+    },
+  });
+};
+
+export const fetchTokenList = async (type, page, size) => {
+  return boosterRequest.get({
+    url: `/node/tokens`,
+    params: {
+      'type': type,
+      'page': page,
+      'size': size
+    },
+  });
+};
