@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-overlay
+      :value="value"
       class="withdraw-log-overlay"
       opacity="1"
       v-if="asMobile"
@@ -96,7 +97,7 @@ import { fetchClaimUSDTLog } from "@/api/booster";
 
 export default {
   props: {
-
+    value: Boolean,
   },
   data() {
     return {

@@ -414,6 +414,10 @@ Vue.prototype.$utils = {
     return formatVal + " " + unit;
     // return result;
   },
+  formatCompactNumbers (number) {
+    const formatador = Intl.NumberFormat("en", { notation: "compact" });
+    return formatador.format(number);
+  }
 };
 
 Vue.prototype.$goChat = (path, type = 1) => {

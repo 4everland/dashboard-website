@@ -19,7 +19,7 @@
         <div class="earn-content">
           <img
             class="logo"
-            :src="info.logo"
+            :src="info.projectLogoUrl"
             width="80"
             alt=""
           />
@@ -31,28 +31,21 @@
                 height="32"
                 alt=""
               />
-              <span class="btn-text">{{ info.text }}</span>
+              <span class="btn-text">{{ $utils.formatCompactNumbers(info.projectTotalPoints) }}{{ ' ' }}${{ info.projectName }}</span>
             </v-btn>
           </div>
           <div>
-            <div class="title mt-8">{{ info.title }}</div>
+            <div class="title mt-8">{{ info.projectName }}</div>
             <div class="text mt-2">
-              Tomarket is a play-to-earn bot that lets you win Tether and TON by
-              playing games and completing exciting tasks!
+              {{ info.projectDesc }}
             </div>
             <div
               class="countdown d-flex justify-space-between align-center mt-2"
             >
               <div>Ended</div>
-              <div class="d-flex align-center">
-                <div class="timer">30</div>
-                &nbsp;D:
-                <div class="timer">22</div>
-                &nbsp;H:
-                <div class="timer">32</div>
-                &nbsp;M:
-                <div class="timer">09</div>
-                &nbsp;S
+              <div class="d-flex align-center endtime">
+                <time-count-down :endTimeStamp="info.endAt"></time-count-down>
+                
               </div>
             </div>
             <div class="unlock-node mt-4">Complete To Unlock Tomarket Node</div>
@@ -120,19 +113,23 @@
   </div>
 </template>
   
-  <script>
+<script>
+import TimeCountDown from "@/pages/booster/components/time-count-down";
+import { fetchPoolProjectList, fetchProjectTasks } from "@/api/booster";
 export default {
   props: {
     value: Boolean,
     info: Object,
   },
   data() {
-    return {};
+    return {
+      endTimetTask: 1735082613,
+    };
   },
   watch: {
     value(newVal, oldVal) {
       if(newVal === true){
-        console.log('info', this.info)
+        this.init()
       }
     }
   },
@@ -140,8 +137,16 @@ export default {
 
   },
 
-  methods: {},
-  components: {},
+  methods: {
+    async init() {
+      fetchProjectTasks(this.info.id).then((res) => {
+        console.log('res', res)
+      })
+    },
+  },
+  components: {
+    TimeCountDown
+  },
 };
 </script>
   
@@ -222,6 +227,20 @@ export default {
       line-height: 17px;
       text-align: left;
       color: #ffce56;
+      .endtime {
+        font-size: 14px;
+        color: #0FE1F8;
+        ::v-deep .label {
+          background-color: #FFCE56;
+          padding: 0px 4px;
+          margin-right: 2px;
+          margin-left: 2px;
+          border-radius: 2px;
+          color: #000;
+          height: 24px;
+          line-height: 24px;
+        }
+      }
       .timer {
         width: 20px;
         height: 24px;
@@ -279,6 +298,8 @@ export default {
         margin-left: 8px;
       }
       .go-btn {
+        height: 25px;
+        min-width: 51px;
         padding: 4px 16px;
         border-radius: 4px;
         background: linear-gradient(96.98deg, #0fe1f8 -22.19%, #1102fc 99.83%);

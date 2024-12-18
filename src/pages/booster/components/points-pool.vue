@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="poolcontainer">
-      <div class="item" v-for="(item, index) in newDataList">
+      <div class="item" v-for="(item, index) in newDataList" @click="getProjectInfo(item)">
         <img :src="item.img" width="32" alt="" />
         <div class="trigger-text fz-12 fw-b text-center">{{ item.points }}</div>
       </div>
@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { fetchProjectPointsList, claimProjectPoints, fetchProjectInfo } from "@/api/booster";
+import { bus } from "@/utils/bus";
 export default {
   data() {
     return {
@@ -70,9 +72,24 @@ export default {
     this.init();
   },
   methods: {
-    init() {
+    async init() {
+      const { data } =  await fetchProjectPointsList()
+      console.log(data)
       const arrorder = [6, 4, 2, 0, 1, 3, 5, 7];
       this.newDataList = arrorder.map((index) => this.dataList[index]);
+    },
+    async handleClaimPoint(){
+      await claimProjectPoints()
+    },
+    async getProjectInfo() {
+      const { data } =  await fetchProjectInfo()
+      bus.$emit('showPartnerInfoEvent', {
+          logo: "/public/img/booster/earnings/piggy.png",
+          title: "PiggyPiggy",
+          text: "10M $PiggyPiggy",
+          status: "unlock",
+        },)
+      console.log(data)
     }
   },
 };

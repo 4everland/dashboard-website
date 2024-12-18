@@ -74,12 +74,12 @@
           </div>
           <div class="assets assets-tab">
             <div class="assets-title">My Assets</div>
-            <!-- <v-tabs v-model="tab" background-color="#1E2234" centered>
+            <v-tabs v-model="tab" background-color="#1E2234" centered>
               <v-tab>Token Balance</v-tab>
               <v-tab>Points Balance</v-tab>
-            </v-tabs> -->
-            <!-- <v-tabs-items v-model="tab" background-color="#1E2234">
-              <v-tab-item> -->
+            </v-tabs>
+            <v-tabs-items v-model="tab" background-color="#1E2234">
+              <v-tab-item>
                 <div
                   class="d-flex align-center justify-space-between assets-item"
                 >
@@ -138,13 +138,13 @@
                     <span>Withdraw</span>
                   </v-btn>
                 </div>
-              <!-- </v-tab-item>
+              </v-tab-item>
               <v-tab-item>
                 <div
                   class="d-flex align-center justify-space-between assets-item"
-                  
+                  @click="showPointsBalance = true"
                 >
-                  <div class="d-flex align-center" style="gap: 8px">
+                  <div class="d-flex align-center" style="gap: 8px" >
                     <img
                       src="/img/booster/earnings/tomarket.png"
                       width="40"
@@ -166,7 +166,7 @@
                   />
                 </div>
               </v-tab-item>
-            </v-tabs-items> -->
+            </v-tabs-items>
           </div>
         </v-container>
 
@@ -176,7 +176,7 @@
         ></WithdrawDialog>
 
         <WithdrawLogDialog v-model="showWithdrawLogDialog"></WithdrawLogDialog>
-        <!-- <PointsBalance v-modal="showPointsBalance"></PointsBalance> -->
+        <PointsBalance v-model="showPointsBalance"></PointsBalance>
       </v-navigation-drawer>
     </div>
     <!-- <WalletConnect ref="walletConnect" /> -->
@@ -213,7 +213,7 @@ export default {
       showWithdrawDialog: false,
       showWithdrawLogDialog: false,
       showPointsBalance: false,
-      tab: null,
+      tab: 0,
     };
   },
   methods: {
@@ -256,6 +256,8 @@ export default {
       if (!val) {
         this.showWithdrawDialog = false;
         this.showWithdrawLogDialog = false;
+        this.showPointsBalance = false;
+        
       }
     },
   },

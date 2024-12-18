@@ -448,7 +448,7 @@
     </div>
     <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
     <points-pool></points-pool>
-    <EarnDialog v-model="showPartnerInfo"></EarnDialog>
+    <EarnDialog v-model="showPartnerInfo" :info="partnerInfo"></EarnDialog>
   </div>
 </template>
 
@@ -472,7 +472,8 @@ export default {
     return {
       sheet: false,
       showGoldCoin: false,
-      showPartnerInfo: true,
+      showPartnerInfo: false,
+      partnerInfo: {},
       timeLeft: localStorage.getItem("countdownTime")
         ? parseInt(localStorage.getItem("countdownTime"))
         : 86400,
@@ -534,7 +535,8 @@ export default {
       this.showTonReceive();
       this.$store.dispatch("getBoosterUserInfo");
     });
-    bus.$on('showPartnerInfoEvent', () => {
+    bus.$on('showPartnerInfoEvent', (info) => {
+      this.partnerInfo = info;
       this.showPartnerInfo = true;
     })
   },

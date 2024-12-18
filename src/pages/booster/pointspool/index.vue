@@ -34,30 +34,31 @@
               v-for="(item, i) in earnList"
               :key="i"
               style="padding: 10px 0"
+              @click="openEarn(item)"
             >
               <div class="d-flex justify-start align-center">
                 <div>
-                  <img :src="item.logo" width="44" alt="" />
+                  <img :src="item.projectLogoUrl" width="44" alt="" />
                 </div>
                 <div style="margin-left: 12px">
-                  <div class="item-title">{{ item.title }}</div>
-                  <div class="item-text">{{ item.text }}</div>
+                  <div class="item-title">{{ item.projectName }}</div>
+                  <div class="item-text">{{ $utils.formatCompactNumbers(item.projectTotalPoints) }}{{ ' ' }}${{ item.projectName }}</div>
                 </div>
               </div>
               <v-btn
-                v-if="item.status === 'unlock'"
+                v-if="item.type === 'unlocked'"
                 class="earning-btn"
-                @click="openEarn(item)"
+                
               >
                 <img src="/img/booster/earnings/check.svg" width="16" alt="" />
                 <span class="btn-text">Earning</span>
               </v-btn>
-              <v-btn v-else-if="item.status === 'lock'" class="unLock-btn">
+              <v-btn v-else-if="item.type === 'locked'" class="unLock-btn">
                 <img src="/img/booster/earnings/lock.svg" width="16" alt="" />
                 <span class="btn-text">UnLock</span>
               </v-btn>
               <div
-                v-else-if="item.status === 'distributing'"
+                v-else-if="item.type === 'distributing'"
                 class="distributing"
               >
                 <img src="/img/booster/earnings/data.svg" width="16" alt="" />
@@ -74,14 +75,15 @@
               v-for="(item, i) in filteredEarnList"
               :key="i"
               style="padding: 10px 0"
+              @click="openEarn(item)"
             >
               <div class="d-flex justify-start align-center">
                 <div>
-                  <img :src="item.logo" width="44" alt="" />
+                  <img :src="item.projectLogoUrl" width="44" alt="" />
                 </div>
                 <div style="margin-left: 12px">
-                  <div class="item-title">{{ item.title }}</div>
-                  <div class="item-text">{{ item.text }}</div>
+                  <div class="item-title">{{ item.projectName }}</div>
+                  <div class="item-text">{{ $utils.formatCompactNumbers(item.projectTotalPoints) }}{{ ' ' }}${{ item.projectName }}</div>
                 </div>
               </div>
               <v-btn class="earning-btn" @click="openEarn">
@@ -96,14 +98,15 @@
               v-for="(item, i) in filteredEarnList"
               :key="i"
               style="padding: 10px 0"
+              @click="openEarn(item)"
             >
               <div class="d-flex justify-start align-center">
                 <div>
-                  <img :src="item.logo" width="44" alt="" />
+                  <img :src="item.projectLogoUrl" width="44" alt="" />
                 </div>
                 <div style="margin-left: 12px">
-                  <div class="item-title">{{ item.title }}</div>
-                  <div class="item-text">{{ item.text }}</div>
+                  <div class="item-title">{{ item.projectName }}</div>
+                  <div class="item-text">{{ $utils.formatCompactNumbers(item.projectTotalPoints) }}{{ ' ' }}${{ item.projectName }}</div>
                 </div>
               </div>
               <v-btn class="unLock-btn">
@@ -118,14 +121,15 @@
               v-for="(item, i) in filteredEarnList"
               :key="i"
               style="padding: 10px 0"
+              @click="openEarn(item)"
             >
               <div class="d-flex justify-start align-center">
                 <div>
-                  <img :src="item.logo" width="44" alt="" />
+                  <img :src="item.projectLogoUrl" width="44" alt="" />
                 </div>
                 <div style="margin-left: 12px">
-                  <div class="item-title">{{ item.title }}</div>
-                  <div class="item-text">{{ item.text }}</div>
+                  <div class="item-title">{{ item.projectName }}</div>
+                  <div class="item-text">{{ $utils.formatCompactNumbers(item.projectTotalPoints) }} {{ ' ' }}${{ item.projectName }}</div>
                 </div>
               </div>
               <div class="ended">
@@ -204,6 +208,7 @@
   
   <script>
 import EarnDialog from "../components/earning-open.vue";
+import { fetchPoolProjectList, fetchProjectTasks } from "@/api/booster";
 export default {
   components: {
     EarnDialog,
@@ -215,15 +220,15 @@ export default {
       } else {
         if (this.tab === 1) {
           return this.earnList.filter((item) => {
-            return item.status === "unlock";
+            return item.type === "unlocked";
           });
         }else if(this.tab === 2){
           return this.earnList.filter((item) => {
-            return item.status === "lock";
+            return item.type === "locked";
           });
         }else{
           return this.earnList.filter((item) => {
-            return item.status === "ended";
+            return item.type === "ended";
           });
         }
       }
@@ -237,46 +242,94 @@ export default {
       partnerInfo: {},
       earnList: [
         {
-          logo: require("/public/img/booster/earnings/tomarket.png"),
-          title: "Tomarket",
-          text: "10M $Tomarket",
-          status: "unlock",
+          "id": "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          "projectName": "Tomarket",
+          "projectLogoUrl": "https://booster.4everland.store/Bind.png",
+          "projectTotalPoints": 1000000.00,
+          "projectInitTotalPoints": 200000.00,
+          "projectDesc": "Tomarket is a play-to-earn bot that lets you win Tether and TON by playing games and completing exciting tasks!",
+          "unlockDays": 7,
+          "dailyRewardPoints": 100.00,
+          "startAt": 1733270400,
+          "endAt": 1735082613,
+          "type": "locked"
         },
         {
-          logo: require("/public/img/booster/earnings/piggy.png"),
-          title: "PiggyPiggy",
-          text: "10M $PiggyPiggy",
-          status: "unlock",
+          "id": "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          "projectName": "10M $Tomarket",
+          "projectLogoUrl": "https://booster.4everland.store/Bind.png",
+          "projectTotalPoints": 1000000.00,
+          "projectInitTotalPoints": 200000.00,
+          "projectDesc": "Tomarket is a play-to-earn bot that lets you win Tether and TON by playing games and completing exciting tasks!",
+          "unlockDays": 7,
+          "dailyRewardPoints": 100.00,
+          "startAt": 1733270400,
+          "endAt": 1735082613,
+          "type": "unlocked"
         },
         {
-          logo: require("/public/img/booster/earnings/duckchain.png"),
-          title: "DuckChain",
-          text: "10M $DuckChain",
-          status: "lock",
+          "projectName": "DuckChain",
+          "projectLogoUrl": "https://booster.4everland.store/Bind.png",
+          "projectTotalPoints": 1000000.00,
+          "projectInitTotalPoints": 200000.00,
+          "projectDesc": "DuckChain is a play-to-earn bot that lets you win Tether and TON by playing games and completing exciting tasks!",
+          "unlockDays": 7,
+          "dailyRewardPoints": 100.00,
+          "startAt": 1733270400,
+          "endAt": 1735082613,
+          "type": "unlocked"
         },
         {
-          logo: require("/public/img/booster/earnings/capybara-logo.png"),
-          title: "Capybara",
-          text: "10M $Capybara",
-          status: "lock",
+          "id": "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          "projectName": "Capybara",
+          "projectLogoUrl": "https://booster.4everland.store/Bind.png",
+          "projectTotalPoints": 1000000.00,
+          "projectInitTotalPoints": 200000.00,
+          "projectDesc": "DuckChain is a play-to-earn bot that lets you win Tether and TON by playing games and completing exciting tasks!",
+          "unlockDays": 7,
+          "dailyRewardPoints": 100.00,
+          "startAt": 1733270400,
+          "endAt": 1735082613,
+          "type": "unlocked"
         },
         {
-          logo: require("/public/img/booster/earnings/yescoin.png"),
-          title: "Yescoin",
-          text: "10M $Yescoin",
-          status: "lock",
+          "id": "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          "projectName": "yescoin",
+          "projectLogoUrl": require("/public/img/booster/earnings/yescoin.png"),
+          "projectTotalPoints": 1000000.00,
+          "projectInitTotalPoints": 200000.00,
+          "projectDesc": "DuckChain is a play-to-earn bot that lets you win Tether and TON by playing games and completing exciting tasks!",
+          "unlockDays": 7,
+          "dailyRewardPoints": 100.00,
+          "startAt": 1733270400,
+          "endAt": 1735082613,
+          "type": "ended"
         },
         {
-          logo: require("/public/img/booster/earnings/ton-lucky.png"),
-          title: "TON Lucky",
-          text: "10M $TON Lucky",
-          status: "distributing",
+          "id": "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          "projectName": "TON Lucky",
+          "projectLogoUrl": "https://booster.4everland.store/Bind.png",
+          "projectTotalPoints": 1000000.00,
+          "projectInitTotalPoints": 200000.00,
+          "projectDesc": "DuckChain is a play-to-earn bot that lets you win Tether and TON by playing games and completing exciting tasks!",
+          "unlockDays": 7,
+          "dailyRewardPoints": 100.00,
+          "startAt": 1733270400,
+          "endAt": 1735082613,
+          "type": "ended"
         },
         {
-          logo: require("/public/img/booster/earnings/cherry-game.png"),
-          title: "Cherry Game",
-          text: "10M $Cherry Game",
-          status: "ended",
+          "id": "69450cf7-f006-461e-b0fe-964a9ee8f400",
+          "projectName": "Cherry Game",
+          "projectLogoUrl": "https://booster.4everland.store/Bind.png",
+          "projectTotalPoints": 1000000.00,
+          "projectInitTotalPoints": 200000.00,
+          "projectDesc": "DuckChain is a play-to-earn bot that lets you win Tether and TON by playing games and completing exciting tasks!",
+          "unlockDays": 7,
+          "dailyRewardPoints": 100.00,
+          "startAt": 1733270400,
+          "endAt": 1735082613,
+          "type": "ended"
         },
       ],
     };

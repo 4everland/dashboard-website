@@ -377,3 +377,33 @@ export const fetchAirdropInfo = async () => {
   });
 };
 
+export const fetchPoolProjectList = async () => {
+  return boosterRequest.get({
+    url: `/node/project/list`,
+  });
+};
+
+export const fetchProjectPointsList = async () => {
+  return boosterRequest.get({
+    url: `/node/project/points`,
+  });
+};
+
+export const fetchProjectInfo = async (projectId) => {
+  return boosterRequest.get({
+    url: `/node/project/${projectId}`,
+  });
+};
+
+export const claimProjectPoints = async () => {
+  return boosterRequest.get({
+    url: `/node/project/points/claim`,
+  });
+};
+
+export const fetchProjectTasks = async (areaName) => {
+  return boosterRequest.get({
+    url: `/node/activities/${areaName}`,
+  });
+};
+
