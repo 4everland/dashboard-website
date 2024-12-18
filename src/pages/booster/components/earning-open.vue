@@ -139,7 +139,7 @@ export default {
 
   methods: {
     async init() {
-      fetchProjectTasks(this.info.id).then((res) => {
+      fetchProjectTasks(this.info.projectId).then((res) => {
         console.log('res', res)
       })
     },
