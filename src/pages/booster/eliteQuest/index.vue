@@ -17,7 +17,7 @@
         points!
       </div>
     </div>
-    <v-row class="quest-list mt-6">
+    <v-row class="quest-list mt-6" v-if="!boostLocked">
       <v-col :md="3" v-for="(item, i) in quests" :key="i" class="quest">
         <div class="pa-6">
           <img :src="item.image" width="100%" alt="" />
@@ -43,13 +43,18 @@
         <div></div>
       </v-col>
     </v-row>
+    
   </div>
 </template>
 
 <script>
+import { mapGetters, mapState } from "vuex";
 import { fetchEliteQuest, claimEliteQuest } from "@/api/booster";
 export default {
   computed: {
+    ...mapGetters([
+      "boostLocked",
+    ]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
@@ -64,18 +69,22 @@ export default {
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
+
   },
   data() {
     return {
       quests: [],
     };
   },
-
   created() {
     this.getList();
   },
   methods: {
     async getList() {
+      if(this.boostLocked) {
+        this.$router.push("/boost");
+        return
+      } 
       try {
         const { data } = await fetchEliteQuest();
         console.log(data);
