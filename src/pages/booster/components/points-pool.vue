@@ -68,7 +68,7 @@ export default {
   justify-content: space-around;
   align-items: center;
   position: absolute;
-  top: 210px;
+  top: 180px;
   width: 100%;
 }
 

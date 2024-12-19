@@ -68,6 +68,7 @@
                 <span class="btn-text">Ended</span>
               </div>
             </div>
+            
           </v-tab-item>
           <v-tab-item>
             <div
@@ -210,6 +211,7 @@
 import EarnDialog from "../components/earning-open.vue";
 import { bus } from "@/utils/bus";
 import { fetchPoolProjectList, fetchProjectTasks } from "@/api/booster";
+import BoosterPagination from "../components/booster-pagination.vue";
 export default {
   components: {
     EarnDialog,

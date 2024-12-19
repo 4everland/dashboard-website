@@ -270,11 +270,12 @@ export default {
     async getTokenList() {
       try {
         const { data } = await fetchTokenList(this.type,this.page,this.size);
-        this.tokenList = data;
+        this.tokenList = data.content;
+        this.totalPages = data.totalPages;
       } catch (error) {
         console.log(error);
       }
-      this.totalPages = this.tokenList.totalPages;
+      
     },
     showBalance(projectId) {
       this.projectId = projectId;
