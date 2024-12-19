@@ -51,6 +51,7 @@
           :length="totalPages"
           class="mt-5"
           v-model="page"
+          @input="getHistoryList"
         ></booster-pagination>
       </div>
     </v-overlay>
@@ -109,6 +110,7 @@
             :length="totalPages"
             class="mt-5"
             v-model="page"
+            @input="getHistoryList"
           ></booster-pagination>
         </div>
       </div>

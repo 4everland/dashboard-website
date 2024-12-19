@@ -167,6 +167,13 @@
                     />
                   </div>
                 </div>
+                <booster-pagination
+                  v-show="tokenList.length != 0"
+                  :length="totalPages"
+                  class="mt-5"
+                  v-model="page"
+                  @input="getTokenList"
+                ></booster-pagination>
               </v-tab-item>
             </v-tabs-items>
           </div>
@@ -195,6 +202,7 @@ import PointsBalance from "./points-balance-history.vue";
 import ICountUp from "vue-countup-v2";
 import { bus } from "@/utils/bus";
 import { fetchTokenList } from "@/api/booster";
+import BoosterPagination from "./booster-pagination.vue";
 
 export default {
   computed: {
@@ -225,6 +233,7 @@ export default {
       page: 1,
       type: "point",
       projectId: "",
+      totalPages: 0,
     };
   },
   mounted() {
@@ -260,11 +269,12 @@ export default {
     },
     async getTokenList() {
       try {
-        const { data } = await fetchTokenList(this.type);
+        const { data } = await fetchTokenList(this.type,this.page,this.size);
         this.tokenList = data;
       } catch (error) {
         console.log(error);
       }
+      this.totalPages = this.tokenList.totalPages;
     },
     showBalance(projectId) {
       this.projectId = projectId;
@@ -276,6 +286,7 @@ export default {
     WithdrawDialog,
     WithdrawLogDialog,
     PointsBalance,
+    BoosterPagination
   },
   watch: {
     showProfileDrawer(val) {
