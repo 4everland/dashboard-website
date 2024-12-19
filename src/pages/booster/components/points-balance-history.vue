@@ -352,7 +352,6 @@ export default {
   width: 100%;
   color: #fff !important;
   background: transparent;
-  height: calc(100% - 58px);
   overflow: scroll;
   padding-bottom: 30px;
   :deep th {

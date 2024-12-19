@@ -395,9 +395,13 @@ export const fetchProjectInfo = async (projectId) => {
   });
 };
 
-export const claimProjectPoints = async () => {
-  return boosterRequest.get({
+export const claimProjectPoints = async (projectId, type ) => {
+  return boosterRequest.post({
     url: `/node/project/points/claim`,
+    data: {
+      projectId,
+      type
+    },
   });
 };
 
@@ -407,7 +411,7 @@ export const fetchProjectTasks = async (areaName) => {
   });
 };
 
-export const fetchTokenBalanceLog = async (projectId, page, size) => {
+export const fetchTokenBalanceLog = async (projectId, page=1, size=10) => {
   return boosterRequest.get({
     url: `/node/usdt/log/${page}`,
     params: {
@@ -417,7 +421,7 @@ export const fetchTokenBalanceLog = async (projectId, page, size) => {
   });
 };
 
-export const fetchTokenList = async (type, page, size) => {
+export const fetchTokenList = async (type, page=1, size=10) => {
   return boosterRequest.get({
     url: `/node/tokens`,
     params: {

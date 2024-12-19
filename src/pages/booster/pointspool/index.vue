@@ -55,7 +55,7 @@
               </v-btn>
               <v-btn v-else-if="item.type === 'locked'" class="unLock-btn">
                 <img src="/img/booster/earnings/lock.svg" width="16" alt="" />
-                <span class="btn-text">UnLock</span>
+                <span class="btn-text">Locked</span>
               </v-btn>
               <div
                 v-else-if="item.type === 'distributing'"
@@ -111,7 +111,7 @@
               </div>
               <v-btn class="unLock-btn">
                 <img src="/img/booster/earnings/lock.svg" width="16" alt="" />
-                <span class="btn-text">UnLock</span>
+                <span class="btn-text">Locked</span>
               </v-btn>
             </div>
           </v-tab-item>
@@ -208,6 +208,7 @@
   
   <script>
 import EarnDialog from "../components/earning-open.vue";
+import { bus } from "@/utils/bus";
 import { fetchPoolProjectList, fetchProjectTasks } from "@/api/booster";
 export default {
   components: {
@@ -334,8 +335,21 @@ export default {
       ],
     };
   },
-  mounted() {},
+  mounted() {
+    this.init();
+  },
+  created() {
+    bus.$on('refreshPartnerList', (info) => {
+      this.init();
+    })
+  },
   methods: {
+    async init() {
+      const res = await fetchPoolProjectList();
+      if (res.code === 200) {
+        this.earnList = res.data;
+      }
+    },
     opendialog() {
       this.dialog = true;
     },
@@ -469,6 +483,54 @@ export default {
       }
     }
   }
+  
 }
+.ruleDialog {
+    background: linear-gradient(
+        180deg,
+        rgba(57, 59, 62, 0.9) 25.52%,
+        rgba(36, 39, 42, 0.9) 100%
+      ),
+      #4c5277;
+    background-blend-mode: overlay;
+    color: #ffffff;
+    .ruleDialog-toolbar {
+      color: #fff;
+      background: transparent;
+      box-shadow: none;
+      .v-toolbar__title {
+        width: 80%;
+        text-align: center;
+      }
+    }
+    .swap-rule-title {
+      font-family: "Inter", sans-serif;
+      font-size: 14px;
+      color: #ffffff;
+      font-weight: 700;
+      position: relative;
+      padding-left: 12px;
+      line-height: 20px;
+    }
+    .swap-rule-title::before {
+      content: "•";
+      position: absolute;
+      width: 20px;
+      left: 0;
+    }
+    .swap-rule-content {
+      font-family: "Inter", sans-serif;
+      font-size: 12px;
+      line-height: 16px;
+      color: #ffffffbf;
+    }
+    .rulelist {
+      background: transparent;
+      color: #fff;
+      .v-list-item {
+        color: #fff;
+      }
+    }
+  }
 </style>
   

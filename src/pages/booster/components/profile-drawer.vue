@@ -142,7 +142,7 @@
                 </div>
               </v-tab-item>
               <v-tab-item>
-                <div v-for="(item, index) in tokenList" :key="index">
+                <div v-if="!showPointsBalance" v-for="(item, index) in tokenList" :key="index">
                   <div
                     class="d-flex align-center justify-space-between assets-item"
                     @click="showBalance(item.projectId)"

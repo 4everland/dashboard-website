@@ -49,48 +49,32 @@
               </div>
             </div>
             <div class="unlock-node mt-4">Complete To Unlock Tomarket Node</div>
-            <div class="back-step">
+            <div class="back-step"
+              v-for="(item, index) in tasksLists"
+                :key="item.actId"
+                cols="12"
+            >
               <div class="d-flex justify-space-between align-center mt-2 step">
                 <div class="d-flex justify-start">
-                  <div class="step-number">1</div>
-                  <div class="step-text">Follow @Tomarket on X</div>
+                  <div class="step-number">{{ index+1 }}</div>
+                  <div class="step-text">{{ item.actName }}</div>
                 </div>
-                <v-btn class="go-btn">
-                  <span class="btn-text">Go</span>
+                <v-btn 
+                  v-if="item.actStatus !== 'DONE'"
+                  :class="
+                        item.extra.buttonName == 'Go' ? 'go-btn' : 'drawer-btn'
+                      "
+                      :loading="false || loadingStatus[item.actId]"
+                      @click="stepNext(item, index, 'one')"
+                >
+                  <span class="btn-text">{{ item.extra.buttonName }}</span>
                 </v-btn>
-              </div>
-            </div>
-            <div class="back-step">
-              <div class="d-flex justify-space-between align-center mt-2 step">
-                <div class="d-flex justify-start">
-                  <div class="step-number">2</div>
-                  <div class="step-text">Share on X</div>
-                </div>
-                <v-btn class="go-btn">
-                  <span class="btn-text">Go</span>
-                </v-btn>
-              </div>
-            </div>
-            <div class="back-step">
-              <div class="d-flex justify-space-between align-center mt-2 step">
-                <div class="d-flex justify-start">
-                  <div class="step-number">3</div>
-                  <div class="step-text">Join Telegram</div>
-                </div>
-                <v-btn class="go-btn">
-                  <span class="btn-text">Go</span>
-                </v-btn>
-              </div>
-            </div>
-            <div class="back-step">
-              <div class="d-flex justify-space-between align-center mt-2 step">
-                <div class="d-flex justify-start">
-                  <div class="step-number">4</div>
-                  <div class="step-text">Join Discord</div>
-                </div>
-                <v-btn class="go-btn">
-                  <span class="btn-text">Go</span>
-                </v-btn>
+                <v-btn
+                      v-if="item.actStatus == 'DONE'"
+                      class="done-btn"
+                      width="84"
+                      >Done</v-btn
+                    >
               </div>
             </div>
             <div class="d-flex justify-start mt-2">
@@ -115,7 +99,8 @@
   
 <script>
 import TimeCountDown from "@/pages/booster/components/time-count-down";
-import { fetchPoolProjectList, fetchProjectTasks } from "@/api/booster";
+import { bus } from "@/utils/bus";
+import { fetchPoolProjectList, fetchProjectTasks, onNext } from "@/api/booster";
 export default {
   props: {
     value: Boolean,
@@ -124,24 +109,96 @@ export default {
   data() {
     return {
       endTimetTask: 1735082613,
+      loadingStatus: {},
+      tasksLists: []
     };
   },
   watch: {
     value(newVal, oldVal) {
       if(newVal === true){
-        this.init()
+        this.getTaskList()
       }
     }
   },
   computed: {
-
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
 
   methods: {
-    async init() {
-      fetchProjectTasks(this.info.projectId).then((res) => {
-        console.log('res', res)
+    async getTaskList(flag) {
+      fetchProjectTasks(this.info.id).then((res) => {
+        this.tasksLists = res.data.items;
+        if(flag == 'check'){
+          const completedTaskList = this.tasksLists.filter(
+            (it) => it.actStatus == "DONE"
+          );
+          if(completedTaskList.length == this.tasksLists.length){ 
+            bus.$emit('refreshPartnerList');
+            this.$toast2(`${this.info.projectName} is unlocked yet`);
+          }
+        }
       })
+    },
+    async stepNext(item, index, taskListType) {
+      try {
+        let _this = this;
+        if (item.extra.buttonName == "Go") {
+          let url = item.oriDescription;
+          if (item.actType == "share_twitter") {
+            url += encodeURIComponent(this.inviteInfo.link);
+          }
+          url = url.replace(/^http:\/\//i, "https://");
+          if (this.isTgMiniApp) {
+            this.$tg.openAuto(url);
+          } else {
+            window.open(url);
+          }
+        }
+        if (item.extra.buttonName == "Check") {
+          this.$set(this.loadingStatus, item.actId, true);
+        }
+
+        const id = item.actId;
+
+        const { data } = await onNext(id);
+        if (item.actType == "exchange_ads") {
+          let inOut = item.adDescription.split(";");
+          const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+          await clickAds(userId, inOut[0], inOut[1]);
+        }
+
+        this.$set(this.loadingStatus, item.actId, false);
+        item.extra.buttonName = data.action.web.nextButtonName;
+        this.$set(_this.tasksLists, index, item);
+
+        //  const actType = data.actType;
+        switch (data.action.web.next) {
+          case "REDIRECT":
+            if (this.isTgMiniApp) return this.$tg.openAuto(shareUrl);
+            location.href = data.action.web.message;
+            break;
+          case "CLAIM":
+            this.$toast2(data.action.web.message, "success");
+            break;
+          case "COMPLETE":
+            this.getTaskList('check');
+            break;
+          case "COPY":
+            if (this.isTgMiniApp) {
+              this.$tg.shareUrl(
+                this.inviteInfo.link,
+                "Embark on the exciting 4EVER Boost campaign to boost your $4EVER points and grab exciting upcoming airdrops!🚨"
+              );
+            }
+            break;
+          default:
+            break;
+        }
+      } catch (error) {
+        console.log(error, "--------");
+      }
     },
   },
   components: {
@@ -308,6 +365,20 @@ export default {
           font-weight: 400;
           color: #fff;
         }
+      }
+      .drawer-btn {
+        background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
+        box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
+        color: #fff !important;
+        font-size: 14px;
+        font-weight: 400;
+        cursor: pointer;
+      }
+      .done-btn {
+        border-radius: 21px;
+        background: #31383f !important;
+        color: #fff !important;
+        cursor: not-allowed;
       }
     }
     .view {
