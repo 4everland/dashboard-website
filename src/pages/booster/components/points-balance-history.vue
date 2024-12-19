@@ -191,11 +191,12 @@ export default {
         );
         // if (data) {
         this.historyList = data.content;
+        this.totalPages = data.totalPages;
         // }
       } catch (error) {
         console.log(error);
       }
-      this.totalPages = this.historyList.totalPages;
+      
       // console.log("historyList", this.historyList, this.projectId);
     },
 
