@@ -171,12 +171,12 @@
             </v-tabs-items>
           </div>
         </v-container>
-
         <WithdrawDialog
           v-model="showWithdrawDialog"
           :amount="tonCount"
         ></WithdrawDialog>
         <WithdrawLogDialog v-model="showWithdrawLogDialog"></WithdrawLogDialog>
+
         <PointsBalance
           v-model="showPointsBalance"
           :projectId="projectId"
@@ -284,6 +284,7 @@ export default {
         this.showWithdrawLogDialog = false;
         this.showPointsBalance = false;
       }
+      this.getTokenList();
     },
   },
 };

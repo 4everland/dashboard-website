@@ -46,6 +46,12 @@
             </tbody>
           </template>
         </v-simple-table>
+        <booster-pagination
+          v-show="historyList.length != 0"
+          :length="totalPages"
+          class="mt-5"
+          v-model="page"
+        ></booster-pagination>
       </div>
     </v-overlay>
 
@@ -98,6 +104,12 @@
               </tbody>
             </template>
           </v-simple-table>
+          <booster-pagination
+            v-show="historyList.length != 0"
+            :length="totalPages"
+            class="mt-5"
+            v-model="page"
+          ></booster-pagination>
         </div>
       </div>
     </v-dialog>
@@ -106,11 +118,15 @@
   
   <script>
 import { fetchTokenBalanceLog } from "@/api/booster";
+import BoosterPagination from "./booster-pagination.vue";
 
 export default {
   props: {
     value: Boolean,
     projectId: String,
+  },
+  components: {
+    BoosterPagination,
   },
   data() {
     return {
@@ -118,6 +134,7 @@ export default {
       page: 1,
       historyList: [],
       loading: false,
+      totalPages: 0,
     };
   },
   computed: {
@@ -165,13 +182,18 @@ export default {
   methods: {
     async getHistoryList() {
       try {
-        const { data } = await fetchTokenBalanceLog(this.projectId);
-        if (data) {
-          this.historyList = data.content;
-        }
+        const { data } = await fetchTokenBalanceLog(
+          this.projectId,
+          this.page,
+          this.size
+        );
+        // if (data) {
+        this.historyList = data.content;
+        // }
       } catch (error) {
         console.log(error);
       }
+      this.totalPages = this.historyList.totalPages;
       // console.log("historyList", this.historyList, this.projectId);
     },
 
@@ -205,7 +227,7 @@ export default {
   <style>
 .withdraw-log-overlay .v-overlay__content {
   width: 100%;
-  height: 100% !important;
+  height: 675px !important;
 }
 </style>
   <style lang="scss" scoped>
