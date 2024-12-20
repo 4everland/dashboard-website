@@ -42,14 +42,13 @@
                 </div>
                 <div style="margin-left: 12px">
                   <div class="item-title">{{ item.projectName }}</div>
-                  <div class="item-text">{{ $utils.formatCompactNumbers(item.projectTotalPoints) }}{{ ' ' }}${{ item.projectName }}</div>
+                  <div class="item-text">
+                    {{ $utils.formatCompactNumbers(item.projectTotalPoints)
+                    }}{{ " " }}${{ item.projectName }}
+                  </div>
                 </div>
               </div>
-              <v-btn
-                v-if="item.type === 'unlocked'"
-                class="earning-btn"
-                
-              >
+              <v-btn v-if="item.type === 'unlocked'" class="earning-btn">
                 <img src="/img/booster/earnings/check.svg" width="16" alt="" />
                 <span class="btn-text">Earning</span>
               </v-btn>
@@ -68,12 +67,11 @@
                 <span class="btn-text">Ended</span>
               </div>
             </div>
-            
           </v-tab-item>
           <v-tab-item>
             <div
               class="d-flex justify-space-between align-center"
-              v-for="(item, i) in filteredEarnList"
+              v-for="(item, i) in earnList"
               :key="i"
               style="padding: 10px 0"
               @click="openEarn(item)"
@@ -84,7 +82,10 @@
                 </div>
                 <div style="margin-left: 12px">
                   <div class="item-title">{{ item.projectName }}</div>
-                  <div class="item-text">{{ $utils.formatCompactNumbers(item.projectTotalPoints) }}{{ ' ' }}${{ item.projectName }}</div>
+                  <div class="item-text">
+                    {{ $utils.formatCompactNumbers(item.projectTotalPoints)
+                    }}{{ " " }}${{ item.projectName }}
+                  </div>
                 </div>
               </div>
               <v-btn class="earning-btn" @click="openEarn">
@@ -96,7 +97,7 @@
           <v-tab-item>
             <div
               class="d-flex justify-space-between align-center"
-              v-for="(item, i) in filteredEarnList"
+              v-for="(item, i) in earnList"
               :key="i"
               style="padding: 10px 0"
               @click="openEarn(item)"
@@ -107,7 +108,10 @@
                 </div>
                 <div style="margin-left: 12px">
                   <div class="item-title">{{ item.projectName }}</div>
-                  <div class="item-text">{{ $utils.formatCompactNumbers(item.projectTotalPoints) }}{{ ' ' }}${{ item.projectName }}</div>
+                  <div class="item-text">
+                    {{ $utils.formatCompactNumbers(item.projectTotalPoints)
+                    }}{{ " " }}${{ item.projectName }}
+                  </div>
                 </div>
               </div>
               <v-btn class="unLock-btn">
@@ -119,7 +123,7 @@
           <v-tab-item>
             <div
               class="d-flex justify-space-between align-center"
-              v-for="(item, i) in filteredEarnList"
+              v-for="(item, i) in earnList"
               :key="i"
               style="padding: 10px 0"
               @click="openEarn(item)"
@@ -130,7 +134,10 @@
                 </div>
                 <div style="margin-left: 12px">
                   <div class="item-title">{{ item.projectName }}</div>
-                  <div class="item-text">{{ $utils.formatCompactNumbers(item.projectTotalPoints) }} {{ ' ' }}${{ item.projectName }}</div>
+                  <div class="item-text">
+                    {{ $utils.formatCompactNumbers(item.projectTotalPoints) }}
+                    {{ " " }}${{ item.projectName }}
+                  </div>
                 </div>
               </div>
               <div class="ended">
@@ -138,6 +145,13 @@
               </div>
             </div>
           </v-tab-item>
+          <booster-pagination
+            v-show="dataList.length != 0"
+            :length="totalPages"
+            class="mt-5"
+            v-model="page"
+            @input="init"
+          ></booster-pagination>
         </v-tabs-items>
       </div>
     </div>
@@ -215,27 +229,43 @@ import BoosterPagination from "../components/booster-pagination.vue";
 export default {
   components: {
     EarnDialog,
+    BoosterPagination,
   },
   computed: {
+    // filteredEarnList() {
+    //   if (this.tab === 0) {
+    //     return this.earnList;
+    //   } else {
+    //     if (this.tab === 1) {
+    //       return this.dataList.filter((item) => {
+    //         return item.type === "unlocked";
+    //       });
+    //     } else if (this.tab === 2) {
+    //       return this.dataList.filter((item) => {
+    //         return item.type === "locked";
+    //       });
+    //     } else {
+    //       return this.dataList.filter((item) => {
+    //         return item.type === "ended";
+    //       });
+    //     }
+    //   }
+    // },
     filteredEarnList() {
-      if (this.tab === 0) {
-        return this.earnList;
-      } else {
+    if (this.tab === 0) {
+      return this.dataList;
+    } else {
+      return this.dataList.filter((item) => {
         if (this.tab === 1) {
-          return this.earnList.filter((item) => {
-            return item.type === "unlocked";
-          });
-        }else if(this.tab === 2){
-          return this.earnList.filter((item) => {
-            return item.type === "locked";
-          });
-        }else{
-          return this.earnList.filter((item) => {
-            return item.type === "ended";
-          });
+          return item.type === "unlocked";
+        } else if (this.tab === 2) {
+          return item.type === "locked";
+        } else {
+          return item.type === "ended";
         }
-      }
-    },
+      });
+    }
+  },
   },
   data() {
     return {
@@ -244,22 +274,35 @@ export default {
       showEarn: false,
       partnerInfo: {},
       earnList: [],
+      dataList: [],
+      page: 1,
+      size: 10,
+      totalPages: 0,
     };
   },
   mounted() {
     this.init();
   },
   created() {
-    bus.$on('refreshPartnerList', (info) => {
+    bus.$on("refreshPartnerList", (info) => {
       this.init();
-    })
+    });
   },
   methods: {
     async init() {
       const res = await fetchPoolProjectList();
       if (res.code === 200) {
-        this.earnList = res.data;
+        this.dataList = res.data;
       }
+      this.totalPages = Math.ceil(res.data.length / this.size);
+      this.updateEarnList();
+    },
+    updateEarnList() {
+      const filteredData = this.filteredEarnList;
+      let num1 = this.size * (this.page - 1);
+      let num2 = this.size * this.page;
+      this.earnList = filteredData.slice(num1, num2);
+      console.log("earnList", this.earnList);
     },
     opendialog() {
       this.dialog = true;
@@ -271,6 +314,17 @@ export default {
     backtoindex() {
       this.$router.push("/boost");
     },
+  },
+  watch: {
+    page(val) {
+    this.page = val;
+    this.updateEarnList();
+  },
+  tab() {
+    this.page = 1; 
+    console.log('filteredEarnList',this.filteredEarnList)
+    this.updateEarnList();
+  },
   },
 };
 </script>
@@ -394,54 +448,53 @@ export default {
       }
     }
   }
-  
 }
 .ruleDialog {
-    background: linear-gradient(
-        180deg,
-        rgba(57, 59, 62, 0.9) 25.52%,
-        rgba(36, 39, 42, 0.9) 100%
-      ),
-      #4c5277;
-    background-blend-mode: overlay;
-    color: #ffffff;
-    .ruleDialog-toolbar {
-      color: #fff;
-      background: transparent;
-      box-shadow: none;
-      .v-toolbar__title {
-        width: 80%;
-        text-align: center;
-      }
-    }
-    .swap-rule-title {
-      font-family: "Inter", sans-serif;
-      font-size: 14px;
-      color: #ffffff;
-      font-weight: 700;
-      position: relative;
-      padding-left: 12px;
-      line-height: 20px;
-    }
-    .swap-rule-title::before {
-      content: "•";
-      position: absolute;
-      width: 20px;
-      left: 0;
-    }
-    .swap-rule-content {
-      font-family: "Inter", sans-serif;
-      font-size: 12px;
-      line-height: 16px;
-      color: #ffffffbf;
-    }
-    .rulelist {
-      background: transparent;
-      color: #fff;
-      .v-list-item {
-        color: #fff;
-      }
+  background: linear-gradient(
+      180deg,
+      rgba(57, 59, 62, 0.9) 25.52%,
+      rgba(36, 39, 42, 0.9) 100%
+    ),
+    #4c5277;
+  background-blend-mode: overlay;
+  color: #ffffff;
+  .ruleDialog-toolbar {
+    color: #fff;
+    background: transparent;
+    box-shadow: none;
+    .v-toolbar__title {
+      width: 80%;
+      text-align: center;
     }
   }
+  .swap-rule-title {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 700;
+    position: relative;
+    padding-left: 12px;
+    line-height: 20px;
+  }
+  .swap-rule-title::before {
+    content: "•";
+    position: absolute;
+    width: 20px;
+    left: 0;
+  }
+  .swap-rule-content {
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    color: #ffffffbf;
+  }
+  .rulelist {
+    background: transparent;
+    color: #fff;
+    .v-list-item {
+      color: #fff;
+    }
+  }
+}
 </style>
   
