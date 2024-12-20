@@ -302,7 +302,6 @@ export default {
       let num1 = this.size * (this.page - 1);
       let num2 = this.size * this.page;
       this.earnList = filteredData.slice(num1, num2);
-      console.log("earnList", this.earnList);
     },
     opendialog() {
       this.dialog = true;
@@ -322,7 +321,6 @@ export default {
   },
   tab() {
     this.page = 1; 
-    console.log('filteredEarnList',this.filteredEarnList)
     this.updateEarnList();
   },
   },
