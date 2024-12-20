@@ -146,7 +146,7 @@
             </div>
           </v-tab-item>
           <booster-pagination
-            v-show="dataList.length != 0"
+            v-show="earnList.length != 0"
             :length="totalPages"
             class="mt-5"
             v-model="page"
@@ -232,25 +232,6 @@ export default {
     BoosterPagination,
   },
   computed: {
-    // filteredEarnList() {
-    //   if (this.tab === 0) {
-    //     return this.earnList;
-    //   } else {
-    //     if (this.tab === 1) {
-    //       return this.dataList.filter((item) => {
-    //         return item.type === "unlocked";
-    //       });
-    //     } else if (this.tab === 2) {
-    //       return this.dataList.filter((item) => {
-    //         return item.type === "locked";
-    //       });
-    //     } else {
-    //       return this.dataList.filter((item) => {
-    //         return item.type === "ended";
-    //       });
-    //     }
-    //   }
-    // },
     filteredEarnList() {
     if (this.tab === 0) {
       return this.dataList;
