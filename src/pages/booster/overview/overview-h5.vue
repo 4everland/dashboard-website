@@ -447,7 +447,7 @@
       </div>
     </div>
     <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
-    <points-pool></points-pool>
+    <points-pool v-if="!boostLocked"></points-pool>
     <EarnDialog v-model="showPartnerInfo" :info="partnerInfo"></EarnDialog>
   </div>
 </template>

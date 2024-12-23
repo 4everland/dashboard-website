@@ -8,7 +8,7 @@
       <div class="item" v-if="dataList.length>1" v-for="(item, index) in newDataList" :key="index" @click="getProjectInfo(item, index)" :id="'partner_' + index">
         <div class="inneritem">
           <img :src="item?.projectLogoUrl" width="32" alt="" />
-          <div class="trigger-text fz-12 fw-b text-center">{{ item?.points ? $utils.formatCompactNumbers(item?.points): '' }}</div>
+          <div class="trigger-text fz-12 fw-b text-center">{{ item?.points ? $utils.formatCompactNumbers(item?.points): item?.projectName }}</div>
         </div>
       </div>
     </div>
@@ -25,6 +25,11 @@ export default {
       dataList: [],
       newDataList: []
     };
+  },
+  created() {
+    bus.$on('initPointsPool', () => {
+      this.init();
+    })
   },
   mounted() {
     this.init();
@@ -44,6 +49,7 @@ export default {
         const res = await claimProjectPoints(item.projectId, item.type)
         if(res.code === 200) {
           coinMove('partner_'+index, "activity_Account", item.projectLogoUrl, '64' )
+          await this.$sleep(2000)
           this.init();
         } else {
           this.$toast2(res.msg, 'error')
@@ -75,9 +81,16 @@ export default {
 .item {
   position: relative;
   transition: transform 0.5s;
+  text-align: center;
+}
+.trigger-text {
+  max-width: 45px;
+  overflow: hidden;
+
 }
 .itemone{
   animation: bounceup 2s infinite linear;
+  text-align: center;
 }
 
 .item:nth-child(1) {

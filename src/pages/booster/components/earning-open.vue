@@ -136,6 +136,8 @@ export default {
           );
           if(completedTaskList.length == this.tasksLists.length){ 
             bus.$emit('refreshPartnerList');
+            bus.$emit('initPointsPool');
+            this.$emit('input', false);
             this.$toast2(`${this.info.projectName} is unlocked yet`);
           }
         }
