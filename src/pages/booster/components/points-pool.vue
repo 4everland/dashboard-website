@@ -7,7 +7,7 @@
       </div>
       <div class="item" v-if="dataList.length>1" v-for="(item, index) in newDataList" :key="index" @click="getProjectInfo(item, index)" :id="'partner_' + index">
         <div class="inneritem">
-          <img :src="item?.projectLogoUrl" width="32" alt="" />
+          <img :src="item?.projectLogoUrl" v-if="item?.projectLogoUrl" width="32" alt="" />
           <div class="trigger-text fz-12 fw-b text-center">{{ item?.points ? $utils.formatCompactNumbers(item?.points): item?.projectName }}</div>
         </div>
       </div>
@@ -26,13 +26,14 @@ export default {
       newDataList: []
     };
   },
-  created() {
+  mounted() {
     bus.$on('initPointsPool', () => {
       this.init();
     })
-  },
-  mounted() {
     this.init();
+  },
+  beforeDestroy() {
+    bus.$off('initPointsPool');
   },
   methods: {
     async init() {

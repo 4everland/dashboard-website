@@ -306,7 +306,7 @@ export default {
 ::v-deep .profile-drawer-box {
   .invite-drawer {
     width: 100% !important;
-    height: 80% !important;
+    height: 86% !important;
     max-height: 100% !important;
     background-image: url("/img/booster/drawer/profile-bg.png");
     background-size: contain;

@@ -96,7 +96,7 @@
                   </div>
                 </div>
               </div>
-              <v-btn class="earning-btn" @click="openEarn">
+              <v-btn class="earning-btn" >
                 <img src="/img/booster/earnings/check.svg" width="16" alt="" />
                 <span class="btn-text">Earning</span>
               </v-btn>
@@ -278,13 +278,15 @@ export default {
     };
   },
   mounted() {
-    this.init();
-  },
-  created() {
     bus.$on("refreshPartnerList", (info) => {
       this.init();
     });
+    this.init();
   },
+  beforeDestroy() {
+    bus.$off("refreshPartnerList");
+  },
+  
   methods: {
     async init() {
       const res = await fetchPoolProjectList();
@@ -492,7 +494,7 @@ export default {
   }
 }
 .empty {
-  margin-top: 150px;
+  margin: 50px 0;
 }
 </style>
   
