@@ -29,6 +29,10 @@
         </v-tabs>
         <v-tabs-items v-model="tab">
           <v-tab-item>
+            <div class="empty text-center" v-if="!earnList.length">
+              <img src="/img/booster/svg/empty.svg" width="200" alt="" />
+              <div>Empty</div>
+            </div>
             <div
               class="d-flex justify-space-between align-center"
               v-for="(item, i) in earnList"
@@ -69,6 +73,10 @@
             </div>
           </v-tab-item>
           <v-tab-item>
+            <div class="empty text-center" v-if="!earnList.length">
+              <img src="/img/booster/svg/empty.svg" width="200" alt="" />
+              <div>Empty</div>
+            </div>
             <div
               class="d-flex justify-space-between align-center"
               v-for="(item, i) in earnList"
@@ -95,6 +103,10 @@
             </div>
           </v-tab-item>
           <v-tab-item>
+            <div class="empty text-center" v-if="!earnList.length">
+              <img src="/img/booster/svg/empty.svg" width="200" alt="" />
+              <div>Empty</div>
+            </div>
             <div
               class="d-flex justify-space-between align-center"
               v-for="(item, i) in earnList"
@@ -121,6 +133,10 @@
             </div>
           </v-tab-item>
           <v-tab-item>
+            <div class="empty text-center" v-if="!earnList.length">
+              <img src="/img/booster/svg/empty.svg" width="200" alt="" />
+              <div>Empty</div>
+            </div>
             <div
               class="d-flex justify-space-between align-center"
               v-for="(item, i) in earnList"
@@ -233,20 +249,20 @@ export default {
   },
   computed: {
     filteredEarnList() {
-    if (this.tab === 0) {
-      return this.dataList;
-    } else {
-      return this.dataList.filter((item) => {
-        if (this.tab === 1) {
-          return item.type === "unlocked";
-        } else if (this.tab === 2) {
-          return item.type === "locked";
-        } else {
-          return item.type === "ended";
-        }
-      });
-    }
-  },
+      if (this.tab === 0) {
+        return this.dataList;
+      } else {
+        return this.dataList.filter((item) => {
+          if (this.tab === 1) {
+            return item.type === "unlocked";
+          } else if (this.tab === 2) {
+            return item.type === "locked";
+          } else {
+            return item.type === "ended";
+          }
+        });
+      }
+    },
   },
   data() {
     return {
@@ -297,13 +313,13 @@ export default {
   },
   watch: {
     page(val) {
-    this.page = val;
-    this.updateEarnList();
-  },
-  tab() {
-    this.page = 1; 
-    this.updateEarnList();
-  },
+      this.page = val;
+      this.updateEarnList();
+    },
+    tab() {
+      this.page = 1;
+      this.updateEarnList();
+    },
   },
 };
 </script>
@@ -474,6 +490,9 @@ export default {
       color: #fff;
     }
   }
+}
+.empty {
+  margin-top: 150px;
 }
 </style>
   

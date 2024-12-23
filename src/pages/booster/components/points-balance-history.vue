@@ -26,9 +26,9 @@
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-center">Type</th>
-                <th class="text-center">Amount</th>
-                <th class="text-center">CreateAt</th>
+                <th class="text-left">Type</th>
+                <th class="text-left">Amount</th>
+                <th class="text-left">CreateAt</th>
               </tr>
             </thead>
             <tbody>
@@ -37,11 +37,11 @@
                 :key="index"
                 class="text-white"
               >
-                <td>{{ item.from }}</td>
-                <td>
+                <td class="text-left">{{ item.from }}</td>
+                <td class="text-left">
                   {{ Number(item.value) > 0 ? "+" + item.value : item.value }}
                 </td>
-                <td>{{ new Date(item.createdAt).format() }}</td>
+                <td class="text-left">{{ new Date(item.createdAt).format() }}</td>
               </tr>
             </tbody>
           </template>
@@ -85,9 +85,9 @@
             <template v-slot:default>
               <thead>
                 <tr>
-                  <th class="text-center">Type</th>
-                  <th class="text-center">Amount</th>
-                  <th class="text-center">CreateAt</th>
+                  <th class="text-left">Type</th>
+                  <th class="text-left">Amount</th>
+                  <th class="text-left">CreateAt</th>
                 </tr>
               </thead>
               <tbody>
