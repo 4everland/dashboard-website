@@ -70,11 +70,10 @@
                   <span class="btn-text">{{ item.extra.buttonName }}</span>
                 </v-btn>
                 <v-btn
-                      v-if="item.actStatus == 'DONE'"
-                      class="done-btn"
-                      width="84"
-                      >Done</v-btn
-                    >
+                  v-if="item.actStatus == 'DONE'"
+                  class="done-btn"
+                  >Done
+                </v-btn>
               </div>
             </div>
             <div class="d-flex justify-start mt-2">
@@ -232,15 +231,8 @@ export default {
     color: #fff;
     width: 327px;
     border-radius: 16px;
-    border: 1px solid;
+    border: 1px solid #45516F80;
     padding: 12px;
-    border-image-source: linear-gradient(
-      165.76deg,
-      rgba(69, 81, 111, 0.5) -11.63%,
-      #11b7ff 88.45%
-    );
-    border-image-slice: 1;
-
     background: linear-gradient(179.52deg, #000a10 8.53%, #003e70 99.59%),
       linear-gradient(
         180deg,
@@ -369,6 +361,8 @@ export default {
         }
       }
       .drawer-btn {
+        height: 25px;
+        min-width: 51px;
         background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
         box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
         color: #fff !important;
@@ -377,6 +371,8 @@ export default {
         cursor: pointer;
       }
       .done-btn {
+        height: 25px;
+        min-width: 51px;
         border-radius: 21px;
         background: #31383f !important;
         color: #fff !important;

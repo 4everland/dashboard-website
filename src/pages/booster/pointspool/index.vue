@@ -298,6 +298,7 @@ export default {
     },
     updateEarnList() {
       const filteredData = this.filteredEarnList;
+      this.totalPages = Math.ceil(filteredData.length / this.size);
       let num1 = this.size * (this.page - 1);
       let num2 = this.size * this.page;
       this.earnList = filteredData.slice(num1, num2);
@@ -403,7 +404,6 @@ export default {
         height: 33px;
         padding: 8px 16px;
         border-radius: 4px;
-        opacity: 0px;
         border: 1px solid;
         background: #00305ccc;
         border-color: linear-gradient(

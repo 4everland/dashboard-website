@@ -1,14 +1,16 @@
 <template>
   <div>
     <div class="poolcontainer">
-      <div class="itemone" v-if="dataList.length==1" v-for="(item, index) in dataList" :key="'index'+index" @click="getProjectInfo(item, index)" :id="'partner_' + index">
-        <img :src="item?.projectLogoUrl" width="32" alt="" />
-        <div class="trigger-text fz-12 fw-b text-center">{{ item?.points ? $utils.formatCompactNumbers(item?.points): '' }}</div>
+      <div class="itemone" v-if="dataList.length%2 == 1" v-for="(item, index) in newDataList" :key="'index'+index" @click="getProjectInfo(item, index)" :id="'partner_' + index">
+        <div class="inneritem">
+          <img :src="item?.projectLogoUrl" width="32" alt="" />
+          <div class="trigger-text fz-10 fw-b text-center">{{ item?.points ? $utils.formatCompactNumbers(item?.points): item?.projectName }}</div>
+        </div>
       </div>
-      <div class="item" v-if="dataList.length>1" v-for="(item, index) in newDataList" :key="index" @click="getProjectInfo(item, index)" :id="'partner_' + index">
+      <div class="item" v-if="dataList.length%2 == 0" v-for="(item, index) in newDataList" :key="index" @click="getProjectInfo(item, index)" :id="'partner_' + index">
         <div class="inneritem">
           <img :src="item?.projectLogoUrl" v-if="item?.projectLogoUrl" width="32" alt="" />
-          <div class="trigger-text fz-12 fw-b text-center">{{ item?.points ? $utils.formatCompactNumbers(item?.points): item?.projectName }}</div>
+          <div class="trigger-text fz-10 fw-b text-center">{{ item?.points ? $utils.formatCompactNumbers(item?.points): item?.projectName }}</div>
         </div>
       </div>
     </div>
@@ -23,7 +25,9 @@ export default {
   data() {
     return {
       dataList: [],
-      newDataList: []
+      newDataList: [],
+      allPointsNumber: 0,
+      claimed: 0,
     };
   },
   mounted() {
@@ -42,6 +46,8 @@ export default {
       const tasks = data.tasks || [];
       const arrorder = [8, 6, 4, 2, 0, 1, 3, 5, 7, 9];
       this.dataList = list.length === 0 ? tasks: list;
+      this.allPointsNumber = list.length;
+
       
       this.newDataList = arrorder.map((index) => this.dataList[index]);
     },
@@ -51,7 +57,10 @@ export default {
         if(res.code === 200) {
           coinMove('partner_'+index, "activity_Account", item.projectLogoUrl, '64' )
           await this.$sleep(2000)
-          this.init();
+          this.claimed++
+          if(this.claimed == this.allPointsNumber) {
+            this.init();
+          }
         } else {
           this.$toast2(res.msg, 'error')
         }
@@ -73,26 +82,85 @@ export default {
 .poolcontainer {
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  align-items: top;
   position: absolute;
   top: 180px;
   width: 100%;
 }
 
-.item {
+.item, .itemone {
   position: relative;
   transition: transform 0.5s;
   text-align: center;
 }
 .trigger-text {
-  max-width: 45px;
+  max-width: 38px;
   overflow: hidden;
 
 }
-.itemone{
-  animation: bounceup 2s infinite linear;
-  text-align: center;
+
+.itemone:nth-child(1) {
+  transform: translateY(120px);
+  .inneritem {
+    animation: bounce 2s infinite linear;
+  }
 }
+
+.itemone:nth-child(2) {
+  transform:  translateY(90px);
+  .inneritem {
+    animation: bounceup 2s infinite linear;
+  }
+}
+
+.itemone:nth-child(3) {
+  transform:  translateY(60px);
+  .inneritem {
+    animation: bounce 2s infinite linear;
+  }
+}
+
+.itemone:nth-child(4) {
+  transform:  translateY(30px);
+  .inneritem {
+    animation: bounceup 2s infinite linear;
+  }
+}
+
+.itemone:nth-child(5) {
+  transform:  translateY(0px);
+  .inneritem {
+    animation: bounce 2s infinite linear;
+  }
+}
+
+.itemone:nth-child(6) {
+  transform:  translateY(30px);
+  .inneritem {
+    animation: bounceup 2s infinite linear;
+  }
+}
+
+.itemone:nth-child(7) {
+  transform: translateY(60px);
+  .inneritem {
+    animation: bounce 2s infinite linear;
+  }
+}
+
+.itemone:nth-child(8) {
+  transform:  translateY(90px);
+  .inneritem {
+    animation: bounceup 2s infinite linear;
+  }
+}
+.itemone:nth-child(9) {
+  transform:  translateY(120px);
+  .inneritem {
+    animation: bounceup 2s infinite linear;
+  }
+}
+
 
 .item:nth-child(1) {
   transform: translateY(120px);
