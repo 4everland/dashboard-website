@@ -18,7 +18,7 @@
           />
           <span> Balance History</span>
         </div>
-        <div class="empty text-center" v-if="!historyList.length">
+        <div class="empty text-center" v-if="!loading&&!historyList.length">
           <img src="/img/booster/svg/empty.svg" width="200" alt="" />
           <div>Empty</div>
         </div>
@@ -46,6 +46,18 @@
             </tbody>
           </template>
         </v-simple-table>
+        <v-sheet
+          v-if="loading"
+          class="pa-1"
+        >
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="300"
+            type="list-item"
+            width="100%"
+            height="50"
+          ></v-skeleton-loader>
+        </v-sheet>
         <booster-pagination
           v-show="historyList.length != 0"
           :length="totalPages"
@@ -53,6 +65,7 @@
           v-model="page"
           @input="getHistoryList"
         ></booster-pagination>
+        
       </div>
     </v-overlay>
 
@@ -107,6 +120,7 @@
               </tbody>
             </template>
           </v-simple-table>
+          
           <booster-pagination
             v-show="historyList.length != 0"
             :length="totalPages"
@@ -186,13 +200,13 @@ export default {
   methods: {
     async getHistoryList() {
       try {
-        //this.loading = true;
+        this.loading = true;
         const { data } = await fetchTokenBalanceLog(
           this.projectId,
           this.page,
           this.size
         );
-        //this.loading = false;
+        this.loading = false;
         // if (data) {
         this.historyList = data.content;
         this.totalPages = data.totalPages;
