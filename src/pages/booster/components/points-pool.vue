@@ -8,8 +8,8 @@
             <div class="lockedWrap"></div>
           </div>
           <div class="trigger-text fz-10 fw-b text-center " >
-            {{ item?.points ? $utils.formatCompactNumbers(item?.points): item?.projectName }}
-              <img v-if="item?.type == 'locked'" src="/img/booster/svg/right-arrow.svg" width="14" alt="" />
+            <div class="projecttitle">{{ item?.points ? $utils.formatCompactNumbers(item?.points): item?.projectName }}</div>
+            <img v-if="item?.type == 'locked'" src="/img/booster/svg/right-arrow.svg" width="14" alt="" />
           </div>
         </div>
       </div>
@@ -119,6 +119,10 @@ export default {
   max-width: 45px;
   line-height: 100%;
   position: relative;
+  .projecttitle {
+    max-width: 45px;
+    overflow-wrap: break-word;
+  }
   img {
     position: absolute;
     right: -11px;
