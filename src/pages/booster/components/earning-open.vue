@@ -49,7 +49,16 @@
               </div>
             </div>
             <div class="unlock-node mt-4">Complete To Unlock Tomarket Node</div>
+            <v-skeleton-loader
+              v-if="loading"
+              class="mx-auto"
+              height="50"
+              width="100%"
+              type="list-item"
+              dark
+            ></v-skeleton-loader>
             <div class="back-step"
+              v-if="!loading"
               v-for="(item, index) in tasksLists"
                 :key="item.actId"
                 cols="12"
@@ -109,12 +118,14 @@ export default {
     return {
       endTimetTask: 1735082613,
       loadingStatus: {},
-      tasksLists: []
+      tasksLists: [],
+      loading: false
     };
   },
   watch: {
     value(newVal, oldVal) {
       if(newVal === true){
+        this.tasksLists = []
         this.getTaskList()
       }
     }
@@ -127,8 +138,10 @@ export default {
 
   methods: {
     async getTaskList(flag) {
+      this.loading = true;
       fetchProjectTasks(this.info.id).then((res) => {
         this.tasksLists = res.data.items;
+        this.loading = false;
         if(flag == 'check'){
           const completedTaskList = this.tasksLists.filter(
             (it) => it.actStatus == "DONE"

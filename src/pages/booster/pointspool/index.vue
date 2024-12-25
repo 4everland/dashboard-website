@@ -37,7 +37,7 @@
               class="d-flex justify-space-between align-center"
               v-for="(item, i) in earnList"
               :key="i"
-              style="padding: 10px 0"
+              style="padding: 4px 0"
               @click="openEarn(item)"
             >
               <div class="d-flex justify-start align-center">
@@ -404,13 +404,8 @@ export default {
         height: 33px;
         padding: 8px 16px;
         border-radius: 4px;
-        border: 1px solid;
-        background: #00305ccc;
-        border-color: linear-gradient(
-          96.98deg,
-          #43e7fa -22.19%,
-          #4135fd 99.83%
-        );
+        background: transparent;
+       
       }
       .unLock-btn {
         width: 102px;
@@ -427,15 +422,13 @@ export default {
         height: 33px;
         padding: 8px 16px;
         border-radius: 21px;
-        background: #31383f;
-        border: 1px solid #ffffff1a;
+        background: transparent;
       }
       .ended {
         height: 33px;
         padding: 8px 16px;
         line-height: 18px;
-        border-radius: 21px;
-        background: #31383f;
+        background: transparent;
       }
       .btn-text {
         font-size: 14px;

@@ -1,16 +1,16 @@
 <template>
   <div>
     <div class="poolcontainer">
-      <div class="itemone" v-if="dataList.length%2 == 1" v-for="(item, index) in newDataList" :key="'index'+index" @click="getProjectInfo(item, index)" :id="'partner_' + index">
+      <div v-for="(item, index) in newDataList" :key="index" @click="getProjectInfo(item, index)" :id="'partner_' + index" :class="{'item': dataList.length%2 === 0, 'itemone': dataList.length%2 === 1, 'fadeItem': item?.hidden }" >
         <div class="inneritem">
-          <img :src="item?.projectLogoUrl" width="32" alt="" />
-          <div class="trigger-text fz-10 fw-b text-center">{{ item?.points ? $utils.formatCompactNumbers(item?.points): item?.projectName }}</div>
-        </div>
-      </div>
-      <div class="item" v-if="dataList.length%2 == 0" v-for="(item, index) in newDataList" :key="index" @click="getProjectInfo(item, index)" :id="'partner_' + index">
-        <div class="inneritem">
-          <img :src="item?.projectLogoUrl" v-if="item?.projectLogoUrl" width="32" alt="" />
-          <div class="trigger-text fz-10 fw-b text-center">{{ item?.points ? $utils.formatCompactNumbers(item?.points): item?.projectName }}</div>
+          <div :class="{'itemLocked': item?.type == 'locked' }" style="min-width: 32px">
+            <img :src="item?.projectLogoUrl" v-if="item?.projectLogoUrl" width="32" alt=""   />
+            <div class="lockedWrap"></div>
+          </div>
+          <div class="trigger-text fz-10 fw-b text-center " >
+            {{ item?.points ? $utils.formatCompactNumbers(item?.points): item?.projectName }}
+              <img v-if="item?.type == 'locked'" src="/img/booster/svg/right-arrow.svg" width="14" alt="" />
+          </div>
         </div>
       </div>
     </div>
@@ -44,19 +44,35 @@ export default {
       const { data } =  await fetchProjectPointsList()
       const list = data.list || [];
       const tasks = data.tasks || [];
-      const arrorder = [8, 6, 4, 2, 0, 1, 3, 5, 7, 9];
+      const arrorder = [6, 4, 2, 0, 1, 3, 5, 7];
+      const arrorder2 = [5, 3, 1, 0, 2, 4, 6];
       this.dataList = list.length === 0 ? tasks: list;
       this.allPointsNumber = list.length;
 
+      if(this.dataList.length%2 === 1) {
+        this.newDataList = arrorder2.map((index) => this.dataList[index]);
+      } else {
+        this.newDataList = arrorder.map((index) => this.dataList[index]);
+      }
       
-      this.newDataList = arrorder.map((index) => this.dataList[index]);
     },
     async getProjectInfo(item,index) {
+      if(!item) return;
       if(item.projectId) {
+        if(item.hidden) return;
         const res = await claimProjectPoints(item.projectId, item.type)
         if(res.code === 200) {
           coinMove('partner_'+index, "activity_Account", item.projectLogoUrl, '64' )
           await this.$sleep(2000)
+          this.newDataList = this.newDataList.map((i, idx) => {
+            if(idx === index) {
+              return {
+                ...i,
+                hidden: true
+              }
+            }
+            return i;
+          })
           this.claimed++
           if(this.claimed == this.allPointsNumber) {
             this.init();
@@ -82,10 +98,11 @@ export default {
 .poolcontainer {
   display: flex;
   justify-content: space-around;
-  align-items: top;
+  align-items: flex-start;
   position: absolute;
   top: 180px;
   width: 100%;
+  padding: 0 8px;
 }
 
 .item, .itemone {
@@ -94,143 +111,143 @@ export default {
   text-align: center;
 }
 .trigger-text {
-  max-width: 38px;
-  overflow: hidden;
-
+  max-width: 45px;
+  line-height: 100%;
+  position: relative;
+  img {
+    position: absolute;
+    right: -11px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+.itemLocked {
+  position: relative;
+  .lockedWrap {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 32px;
+    border: solid 2px #667085;
+    border-radius: 35px;
+    background: #66708540 url("/img/booster/earnings/icon_lock.png") -3px -3px no-repeat;
+  }
+}
+.right-arrow {
+  background: url("/img/booster/svg/right-arrow.svg") right center no-repeat;
 }
 
+
 .itemone:nth-child(1) {
-  transform: translateY(120px);
+  transform:  translateY(75px);
   .inneritem {
-    animation: bounce 2s infinite linear;
+    animation: bounceup 4s infinite linear;
   }
 }
 
 .itemone:nth-child(2) {
-  transform:  translateY(90px);
+  transform:  translateY(45px);
   .inneritem {
-    animation: bounceup 2s infinite linear;
+    animation: bounce 4s infinite linear;
   }
 }
 
 .itemone:nth-child(3) {
-  transform:  translateY(60px);
+  transform:  translateY(15px);
   .inneritem {
-    animation: bounce 2s infinite linear;
+    animation: bounceup 4s infinite linear;
   }
 }
 
 .itemone:nth-child(4) {
-  transform:  translateY(30px);
+  transform:  translateY(0px);
   .inneritem {
-    animation: bounceup 2s infinite linear;
+    animation: bounce 4s infinite linear;
   }
 }
 
 .itemone:nth-child(5) {
-  transform:  translateY(0px);
+  transform:  translateY(15px);
   .inneritem {
-    animation: bounce 2s infinite linear;
+    animation: bounceup 4s infinite linear;
   }
 }
 
 .itemone:nth-child(6) {
-  transform:  translateY(30px);
+  transform: translateY(45px);
   .inneritem {
-    animation: bounceup 2s infinite linear;
+    animation: bounce 4s infinite linear;
   }
 }
 
 .itemone:nth-child(7) {
-  transform: translateY(60px);
+  transform:  translateY(75px);
   .inneritem {
-    animation: bounce 2s infinite linear;
+    animation: bounceup 4s infinite linear;
   }
 }
 
-.itemone:nth-child(8) {
-  transform:  translateY(90px);
-  .inneritem {
-    animation: bounceup 2s infinite linear;
-  }
-}
-.itemone:nth-child(9) {
-  transform:  translateY(120px);
-  .inneritem {
-    animation: bounceup 2s infinite linear;
-  }
-}
+
 
 
 .item:nth-child(1) {
-  transform: translateY(120px);
+  transform:  translateY(75px);
   .inneritem {
-    animation: bounce 2s infinite linear;
+    animation: bounceup 4s infinite linear;
   }
 }
 
 .item:nth-child(2) {
-  transform:  translateY(90px);
+  transform:  translateY(45px);
   .inneritem {
-    animation: bounceup 2s infinite linear;
+    animation: bounce 4s infinite linear;
   }
 }
 
 .item:nth-child(3) {
-  transform:  translateY(60px);
+  transform:  translateY(15px);
   .inneritem {
-    animation: bounce 2s infinite linear;
+    animation: bounceup 4s infinite linear;
   }
 }
 
 .item:nth-child(4) {
-  transform:  translateY(30px);
+  transform:  translateY(0px);
   .inneritem {
-    animation: bounceup 2s infinite linear;
+    animation: bounce 4s infinite linear;
   }
 }
 
 .item:nth-child(5) {
   transform:  translateY(0px);
   .inneritem {
-    animation: bounce 2s infinite linear;
+    animation: bounceup 4s infinite linear;
   }
 }
 
 .item:nth-child(6) {
-  transform:  translateY(0px);
+  transform: translateY(15px);
   .inneritem {
-    animation: bounceup 2s infinite linear;
+    animation: bounce 4s infinite linear;
   }
 }
 
 .item:nth-child(7) {
-  transform: translateY(30px);
+  transform:  translateY(45px);
   .inneritem {
-    animation: bounce 2s infinite linear;
+    animation: bounceup 4s infinite linear;
   }
 }
 
 .item:nth-child(8) {
-  transform:  translateY(60px);
+  transform:  translateY(75px);
   .inneritem {
-    animation: bounceup 2s infinite linear;
+    animation: bounce 4s infinite linear;
   }
 }
 
-.item:nth-child(9) {
-  transform:  translateY(90px);
-  .inneritem {
-    animation: bounce 2s infinite linear;
-  }
-}
-
-.item:nth-child(10) {
-  transform:  translateY(120px);
-  .inneritem {
-    animation: bounceup 2s infinite linear;
-  }
-}
 
 @keyframes bounce {
   0%,
@@ -248,6 +265,19 @@ export default {
   }
   50% {
     transform: translateY(-10%);
+  }
+}
+.fadeItem {
+  animation: fadeOut 0.5s ease-in forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
   }
 }
 
