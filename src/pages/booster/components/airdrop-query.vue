@@ -117,7 +117,7 @@
             </div>
             <div v-if="!dropped" class="d-flex justify-space-between align-center mt-3">
               <div class="evm-wallet" style="font-weight:700;">Your EVM Wallet</div>
-              <v-btn v-if="!address" class="bind-btn" @click="onConnetc"
+              <v-btn v-if="!address" class="bind-btn" @click="asMobile?onConnetc():toConfig()"
                 >Bind</v-btn
               >
               <div class="d-flex justify-start align-center" v-else>
@@ -290,6 +290,9 @@ Airdrop: `;
       let state = true;
       this.$store.dispatch("ConnectDrawerState", { state });
     },
+    toConfig() {
+      this.$router.push("/account/config");
+    }
   },
   components: {
     ICountUp,
