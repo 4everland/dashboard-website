@@ -81,7 +81,7 @@
               class="d-flex justify-space-between align-center"
               v-for="(item, i) in earnList"
               :key="i"
-              style="padding: 10px 0"
+              style="padding: 4px 0"
               @click="openEarn(item)"
             >
               <div class="d-flex justify-start align-center">
@@ -111,7 +111,7 @@
               class="d-flex justify-space-between align-center"
               v-for="(item, i) in earnList"
               :key="i"
-              style="padding: 10px 0"
+              style="padding: 4px 0"
               @click="openEarn(item)"
             >
               <div class="d-flex justify-start align-center">
@@ -141,7 +141,7 @@
               class="d-flex justify-space-between align-center"
               v-for="(item, i) in earnList"
               :key="i"
-              style="padding: 10px 0"
+              style="padding: 4px 0"
               @click="openEarn(item)"
             >
               <div class="d-flex justify-start align-center">
@@ -387,6 +387,9 @@ export default {
         color: #fff !important;
         font-weight: bold !important;
       }
+    }
+    .v-tab:before {
+      background: transparent !important;
     }
     .v-tabs-bar .v-tabs-slider {
       min-width: 0 !important;

@@ -3,7 +3,7 @@
     <div class="poolcontainer">
       <div v-for="(item, index) in newDataList" :key="index" @click="getProjectInfo(item, index)" :id="'partner_' + index" :class="{'item': dataList.length%2 === 0, 'itemone': dataList.length%2 === 1, 'fadeItem': item?.hidden }" >
         <div class="inneritem">
-          <div :class="{'itemLocked': item?.type == 'locked' }" style="min-width: 32px">
+          <div :class="{'itemLocked': item?.type == 'locked' }" style="min-width: 45px">
             <img :src="item?.projectLogoUrl" v-if="item?.projectLogoUrl" width="32" alt=""   />
             <div class="lockedWrap"></div>
           </div>
@@ -28,6 +28,7 @@ export default {
       newDataList: [],
       allPointsNumber: 0,
       claimed: 0,
+      loading: false
     };
   },
   mounted() {
@@ -48,6 +49,7 @@ export default {
       const arrorder2 = [5, 3, 1, 0, 2, 4, 6];
       this.dataList = list.length === 0 ? tasks: list;
       this.allPointsNumber = list.length;
+      this.claimed = 0;
 
       if(this.dataList.length%2 === 1) {
         this.newDataList = arrorder2.map((index) => this.dataList[index]);
@@ -58,8 +60,10 @@ export default {
     },
     async getProjectInfo(item,index) {
       if(!item) return;
+      if(this.loading) return;
       if(item.projectId) {
         if(item.hidden) return;
+        this.loading = true;
         const res = await claimProjectPoints(item.projectId, item.type)
         if(res.code === 200) {
           coinMove('partner_'+index, "activity_Account", item.projectLogoUrl, '64' )
@@ -77,6 +81,7 @@ export default {
           if(this.claimed == this.allPointsNumber) {
             this.init();
           }
+          this.loading = false;
         } else {
           this.$toast2(res.msg, 'error')
         }

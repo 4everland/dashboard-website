@@ -73,6 +73,7 @@
             alt=""
           />
           <div class="withdraw-title">Balance History</div>
+          
           <div class="empty text-center" v-if="!historyList.length">
             <img src="/img/booster/svg/empty.svg" width="200" alt="" />
             <div>Empty</div>
@@ -90,6 +91,7 @@
                   <th class="text-left">CreateAt</th>
                 </tr>
               </thead>
+              
               <tbody>
                 <tr
                   v-for="(item, index) in historyList"
@@ -184,11 +186,13 @@ export default {
   methods: {
     async getHistoryList() {
       try {
+        //this.loading = true;
         const { data } = await fetchTokenBalanceLog(
           this.projectId,
           this.page,
           this.size
         );
+        //this.loading = false;
         // if (data) {
         this.historyList = data.content;
         this.totalPages = data.totalPages;
@@ -220,6 +224,7 @@ export default {
   watch: {
     value(val) {
       if (val) {
+        this.historyList = [];
         this.getHistoryList();
       }
     },
