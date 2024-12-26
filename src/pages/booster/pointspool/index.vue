@@ -48,7 +48,7 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints)
-                    }}{{ " " }}${{ item.projectName }}
+                    }}{{ " " }}{{ item.projectName }} Points
                   </div>
                 </div>
               </div>
@@ -92,7 +92,7 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints)
-                    }}{{ " " }}${{ item.projectName }}
+                    }}{{ " " }}{{ item.projectName }}  Points
                   </div>
                 </div>
               </div>
@@ -122,7 +122,7 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints)
-                    }}{{ " " }}${{ item.projectName }}
+                    }}{{ " " }}{{ item.projectName }} Points
                   </div>
                 </div>
               </div>
@@ -152,7 +152,7 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints) }}
-                    {{ " " }}${{ item.projectName }}
+                    {{ " " }}{{ item.projectName }} Points
                   </div>
                 </div>
               </div>

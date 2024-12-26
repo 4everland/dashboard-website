@@ -25,13 +25,7 @@
           />
           <div class="d-flex justify-end align-center">
             <v-btn class="earning-btn">
-              <img
-                class="hot-icon"
-                src="/img/booster/progress-hot.png"
-                height="32"
-                alt=""
-              />
-              <span class="btn-text">{{ $utils.formatCompactNumbers(info.projectTotalPoints) }}{{ ' ' }}${{ info.projectName }}</span>
+              <span class="btn-text">{{ $utils.formatCompactNumbers(info.projectTotalPoints) }}{{ ' ' }}{{ info.projectName }} Points</span>
             </v-btn>
           </div>
           <div>
@@ -39,7 +33,7 @@
             <div class="text mt-2">
               {{ info.projectDesc }}
             </div>
-            <div
+            <!-- <div
               class="countdown d-flex justify-space-between align-center mt-2"
             >
               <div>Ended</div>
@@ -47,7 +41,7 @@
                 <time-count-down :endTimeStamp="info.endAt"></time-count-down>
                 
               </div>
-            </div>
+            </div> -->
             <div class="unlock-node mt-4">Complete To Unlock Tomarket Node</div>
             <v-skeleton-loader
               v-if="loading"
@@ -269,6 +263,7 @@ export default {
         font-weight: 700;
         line-height: 16px;
         color: #fff;
+        letter-spacing:normal;
       }
       .hot-icon {
         margin-bottom: 4px;
