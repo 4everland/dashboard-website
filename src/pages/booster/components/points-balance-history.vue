@@ -249,7 +249,7 @@ export default {
   <style>
 .withdraw-log-overlay .v-overlay__content {
   width: 100%;
-  height: 675px !important;
+  height: 100% !important;
 }
 </style>
   <style lang="scss" scoped>
@@ -262,7 +262,7 @@ export default {
 .withdraw-overlay {
   position: fixed;
   width: 100vw;
-  height: 675px;
+  height: 100%;
   background: linear-gradient(
       180deg,
       rgba(0, 10, 16, 0.5) 66.24%,
