@@ -105,7 +105,7 @@ export default {
   justify-content: space-around;
   align-items: flex-start;
   position: absolute;
-  top: 180px;
+  top: 21%;
   width: 100%;
   padding: 0 8px;
 }
