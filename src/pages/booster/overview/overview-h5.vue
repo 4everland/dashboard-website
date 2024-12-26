@@ -18,24 +18,10 @@
       <img src="/img/booster/new/icon-bind.png" width="48" alt="" />
       <div class="trigger-text connect fz-12 fw-b text-center">Bind</div>
     </div>
-   
     <div
       v-if="asMobile"
       class="trigger-icon pos-a"
-      id="activity_Account"
       style="right: 132px; top: 61px"
-      @click="
-        () =>
-          !this.boostLocked ? this.$store.commit('SET_PROFILE_BAR', true) : ''
-      "
-    >
-      <img src="/img/booster/icon-account.png" width="48" alt="" />
-      <div class="trigger-text staking fz-12 fw-b text-center" style="width: 52px;">Account</div>
-    </div>
-    <div
-      v-if="asMobile"
-      class="trigger-icon pos-a"
-      style="right: 71px; top: 61px"
       @click="showStartQueryDialog"
     >
       <img src="/img/booster/new/Query_2x.gif" width="48" alt="" />
@@ -45,14 +31,27 @@
       v-if="asMobile"
       class="trigger-icon pos-a"
       id="activity_Account"
-      style="right: 10px; top: 61px"
+      style="right: 71px; top: 61px"
       @click="
         () =>
           this.$router.push('/boost/partner')
       "
     >
       <img src="/img/booster/icon-partner.png" width="48" alt="" />
-      <div class="trigger-text staking fz-12 fw-b text-center" style="width: 52px;">Partner</div>
+      <div class="trigger-text staking fz-12 fw-b text-center" style="width: 52px;">Mining</div>
+    </div>
+    <div
+      v-if="asMobile"
+      class="trigger-icon pos-a"
+      id="activity_Account"
+      style="right: 10px; top: 61px"
+      @click="
+        () =>
+          !this.boostLocked ? this.$store.commit('SET_PROFILE_BAR', true) : ''
+      "
+    >
+      <img src="/img/booster/icon-account.png" width="48" alt="" />
+      <div class="trigger-text staking fz-12 fw-b text-center" style="width: 52px;">Account</div>
     </div>
     <WalletConnect />
 

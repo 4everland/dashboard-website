@@ -60,7 +60,7 @@ export default [
         path: "/boost/partner",
         component: () => import("./pointspool"),
         meta: {
-          title: "partner",
+          title: "Mining",
           hideNav: 1,
           isTab: 1,
           noLogin: 1,
