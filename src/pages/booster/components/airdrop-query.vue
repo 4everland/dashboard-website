@@ -115,24 +115,7 @@
                 </div>
               </div>
             </div>
-            <div v-if="!dropped" class="d-flex justify-space-between align-center mt-3">
-              <div class="evm-wallet" style="font-weight:700;">Your EVM Wallet</div>
-              <v-btn v-if="!address" class="bind-btn" @click="asMobile?onConnetc():toConfig()"
-                >Bind</v-btn
-              >
-              <div class="d-flex justify-start align-center" v-else>
-                <span class="evm-wallet">{{ address.cutStr(4, 4) }}</span>
-                <v-btn
-                  class="e-btn-text"
-                  icon
-                  @click.stop
-                  v-clipboard="address"
-                  @success="$toast('Copied!')"
-                >
-                  <img src="/img/svg/copy.svg" width="14" />
-                </v-btn>
-              </div>
-            </div>
+            
             <div v-if="shortPoint > 0">
               <v-btn class="share-btn" @click="handleShare">
                 <span class="btn-text d-flex justify-center align-center">
@@ -145,6 +128,24 @@
                   />{{ linkShared ? "Shared" : "Share on X" }}</span
                 >
               </v-btn>
+              <div v-if="!dropped" class="d-flex justify-space-between align-center mt-3">
+                <div class="evm-wallet fz-14">Your EVM Wallet</div>
+                <v-btn v-if="!address" class="bind-btn" @click="asMobile?onConnetc():toConfig()"
+                  >Bind</v-btn
+                >
+                <div class="d-flex justify-start align-center" v-else>
+                  <span class="evm-wallet" style="font-weight: bold;">{{ address.cutStr(4, 4) }}</span>
+                  <v-btn
+                    class="e-btn-text"
+                    icon
+                    @click.stop
+                    v-clipboard="address"
+                    @success="$toast2('Copied!')"
+                  >
+                    <img src="/img/svg/copy.svg" width="14" />
+                  </v-btn>
+                </div>
+              </div>
               <div class="d-flex justify-start align-center mt-4">
                 <img
                   src="/img/booster/earnings/subtract.png"
@@ -152,11 +153,11 @@
                   alt=""
                 />
                 <div class="view">
-                  Airdrop will be sent to linked exchanges; otherwise, please
-                  wait for the second round.
+                  Please bind your EVM address to claim the second round of airdrop. Timing will be announced!
                 </div>
               </div>
             </div>
+
           </div>
           <starrise id="starRise"></starrise>
         </div>
@@ -510,11 +511,11 @@ Airdrop: `;
     }
     .bind-btn {
       width: 100px;
-      background: #000000;
-      color: #0fe1f8;
+      background: #6172F3;
+      color: #fff;
     }
     .view {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 400;
       line-height: 15px;
       color: #c0c1c2;
