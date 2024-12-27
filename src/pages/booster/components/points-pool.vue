@@ -94,8 +94,19 @@ export default {
     playaudio() {
       const audio = this.$refs.audioPlayer;
       audio.play();
+      if ("vibrate" in navigator) {
+        navigator.vibrate(200);
+      }
+      
+    },
+    async handleShadow() {
+      const box = document.getElementById("navtop-mobile-points");
+      box.classList.add('box-shadow-animate');
+      await this.$sleep(500);
+      box.classList.remove('box-shadow-animate');
     },
     async getProjectInfo(item,index) {
+      
       if(!item || this.loading) return;
       if(item.projectId) {
         if(item.hidden) return;
@@ -105,6 +116,7 @@ export default {
           this.playaudio();
           coinMove('partner_'+index, "mobile-point-receive", item.projectLogoUrl, '64' )
           await this.$sleep(2000)
+          this.handleShadow();
 
           this.newDataList = this.newDataList.map((i, idx) => {
             if (idx === index) {
@@ -125,7 +137,13 @@ export default {
         }
       } else {
         if (item.type == "locked") {
-          this.$router.push('/boost/partner')
+          //this.$router.push('/boost/partner')
+          this.$router.push({
+            path: '/boost/partner',
+            query: {
+              id: item.id,
+            }
+          });
         } else {
           const { data } = await fetchProjectInfo(item.id);
           if (data) {
@@ -334,4 +352,5 @@ export default {
 .square-box-up {
   animation: bounceup 2s infinite linear;
 }
+
 </style>

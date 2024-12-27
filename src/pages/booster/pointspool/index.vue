@@ -6,7 +6,7 @@
           <div class="logo d-flex align-center" @click="backtoindex">
             <img src="/img/booster/spin/chevron-left.png" width="24" alt="" />
           </div>
-          <div class="mobile-title">Unlock Diverse Earnings</div>
+          
           <div>
             <div
               class="spin-rules d-flex justify-center align-center"
@@ -18,16 +18,34 @@
           </div>
         </div>
       </div>
+      <div class="mx-4">
+        <h3 class="mobile-title fz-16 mb-2">Aggregator Mining</h3>
+        <div class="mobile-subtitle fz-12">
+          Complete tasks to start mining and share abundant points and token rewards.
+        </div>
+      </div>
     </div>
     <div class="earn-list">
       <div class="item-tab">
-        <v-tabs v-model="tab" left background-color="#000">
-          <v-tab>All</v-tab>
-          <v-tab>Activated</v-tab>
-          <v-tab>Inactive</v-tab>
-          <v-tab>Ended</v-tab>
+        <v-tabs class="tabWrap"
+          v-model="tab"
+          centered
+          background-color="#121536"
+        >
+          <v-tab>
+            <div class="itemActive">All</div>
+          </v-tab>
+          <v-tab>
+            <div class="itemActive">Activated</div>
+          </v-tab>
+          <v-tab>
+            <div class="itemActive">Inactive</div>
+          </v-tab>
+          <v-tab>
+            <div class="itemActive">Ended</div>
+          </v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tab">
+        <v-tabs-items v-model="tab" class="mt-3">
           <v-tab-item>
             <div class="empty text-center" v-if="!earnList.length">
               <img src="/img/booster/svg/empty.svg" width="200" alt="" />
@@ -57,7 +75,6 @@
                 <span class="btn-text">Mining</span>
               </v-btn>
               <v-btn v-else-if="item.type === 'locked'" class="unLock-btn">
-                <img src="/img/booster/earnings/lock.svg" width="16" alt="" />
                 <span class="btn-text">Start Mining</span>
               </v-btn>
               <div
@@ -68,6 +85,7 @@
                 <span class="btn-text">Distributing</span>
               </div>
               <div v-else class="ended">
+                <img src="/img/booster/earnings/icon_mining_check.png" width="16" alt="" />
                 <span class="btn-text">Ended</span>
               </div>
             </div>
@@ -127,7 +145,6 @@
                 </div>
               </div>
               <v-btn class="unLock-btn">
-                <img src="/img/booster/earnings/lock.svg" width="16" alt="" />
                 <span class="btn-text">Start Mining</span>
               </v-btn>
             </div>
@@ -157,6 +174,7 @@
                 </div>
               </div>
               <div class="ended">
+                <img src="/img/booster/earnings/icon_mining_check.png" width="16" alt="" />
                 <span class="btn-text">Ended</span>
               </div>
             </div>
@@ -166,7 +184,7 @@
             :length="totalPages"
             class="mt-5"
             v-model="page"
-            @input="init"
+            @input="getList"
           ></booster-pagination>
         </v-tabs-items>
       </div>
@@ -344,6 +362,20 @@ export default {
       }
       this.totalPages = Math.ceil(res.data.length / this.size);
       this.updateEarnList();
+      if(this.$route.query.id) {
+        this.partnerInfo = this.dataList.find(
+          (item) => item.id === this.$route.query.id
+        );
+        this.showEarn = true;
+      }
+    },
+    async getList() {
+      const res = await fetchPoolProjectList();
+      if (res.code === 200) {
+        this.dataList = res.data;
+      }
+      this.totalPages = Math.ceil(res.data.length / this.size);
+      this.updateEarnList();
     },
     updateEarnList() {
       const filteredData = this.filteredEarnList;
@@ -372,6 +404,14 @@ export default {
       this.page = 1;
       this.updateEarnList();
     },
+    "$route.query"() {
+      console.log('val');
+      if (val) {
+        
+        this.partnerInfo = info;
+        this.showEarn = true;
+      }
+    },
   },
 };
 </script>
@@ -382,8 +422,8 @@ export default {
 .earn-container {
   background: #000;
   .container-top {
-    height: 125px;
-    background: url("/img/booster/earnings/head-top.png");
+    height: 188px;
+    background: url("/img/booster/earnings/mining-bg.png");
     background-size: contain;
     .nav-bar {
       height: 64px;
@@ -411,37 +451,42 @@ export default {
   }
   .earn-list {
     position: relative;
-    top: -28px;
-    // height: 87vh;
-    // bottom: 0;
-    border-radius: 24px 24px 0px 0px;
-    border: 1px 0px 0px 0px;
-    padding-top: 12px;
-    background: linear-gradient(0deg, #06090f, #06090f),
-      linear-gradient(
-        180deg,
-        rgba(58, 71, 98, 0.25) 0%,
-        rgba(58, 71, 98, 0) 69.08%
-      );
-    .v-tabs {
+    margin-top: -20px;
+    padding-top: 0px;
+    background: #0C111D;
+    .tabWrap {
+      height: 35px;
+      border-radius: 100px;
+    }
+    ::v-deep .v-tabs {
       .v-tab {
         color: #d0d5dd !important;
-        min-width: 0 !important;
         padding: 0;
-        height: 24px;
-        margin-left: 20px;
         font-size: 16px;
+        
       }
+      .v-tabs-bar {
+          height: 35px;
+          padding: 4px;
+          margin: 0 10px;
+        }
       .v-tab.v-tab--active {
         color: #fff !important;
         font-weight: bold !important;
+        .itemActive {
+          border-radius: 100px;
+          padding: 3px 15px;
+          background: #6172F3;
+          font-weight: 900;
+        }
       }
     }
     .v-tab:before {
       background: transparent !important;
     }
-    .v-tabs-bar .v-tabs-slider {
-      min-width: 0 !important;
+    ::v-deep .v-tabs-bar .v-tabs-slider {
+      width: 0 !important;
+      height: 0;
     }
     .theme--light.v-tabs-items {
       background: transparent !important;
@@ -459,7 +504,7 @@ export default {
         background: transparent;
       }
       .unLock-btn {
-        width: 130px;
+        width: 113px;
         height: 33px;
         padding: 8px 16px;
         border-radius: 4px;
@@ -478,14 +523,18 @@ export default {
       .ended {
         height: 33px;
         padding: 8px 16px;
-        line-height: 18px;
+        border-radius: 4px;
         background: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
       .btn-text {
         font-size: 14px;
         font-weight: 400;
         color: #fff;
         margin-left: 4px;
+        letter-spacing: normal;
       }
     }
   }

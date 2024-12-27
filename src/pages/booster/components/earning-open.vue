@@ -40,7 +40,7 @@
                 
               </div>
             </div> -->
-            <div class="unlock-node mt-4">Complete To Unlock Tomarket Node</div>
+            <div class="unlock-node mt-4">Complete Tasks To Start Project Mining</div>
             <v-skeleton-loader
               v-if="loading"
               class="mx-auto"
@@ -72,10 +72,17 @@
                   <span class="btn-text">{{ item.extra.buttonName }}</span>
                 </v-btn>
                 <v-btn v-if="item.actStatus == 'DONE'" class="done-btn"
-                  >Done
+                  ><img src="/img/booster/earnings/icon_task_check.png" width="16" alt="">
                 </v-btn>
               </div>
             </div>
+            <v-btn 
+              class="start-btn mt-3"
+              :disabled="disabled"
+              @click="backtoindex"
+            >
+              Start Mining Now
+            </v-btn>
             <div class="d-flex justify-start mt-2">
               <div>
                 <img
@@ -85,8 +92,7 @@
                 />
               </div>
               <div class="view">
-                Unlock to view your balance in Account. Rewards will be
-                distributed after the event.
+                Rewards are generated based on your earning rate.
               </div>
             </div>
           </div>
@@ -125,9 +131,26 @@ export default {
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
+    disabled() {
+      if(this.tasksLists.length == 0) {
+        return true;
+      }
+      const completedTaskList = this.tasksLists.filter(
+        (it) => it.actStatus == "DONE"
+      );
+      if (completedTaskList.length == this.tasksLists.length) {
+        return false;
+      }else {
+        return true;
+      }
+
+    },
   },
 
   methods: {
+    backtoindex() {
+      this.$router.push("/boost");
+    },
     async getTaskList(flag) {
       if (flag !== "check") {
         this.loading = true;
@@ -216,7 +239,7 @@ export default {
 };
 </script>
   
-  <style lang="scss" scoped>
+<style lang="scss" scoped>
 ::v-deep .earn-boost-dialog {
   background: transparent !important;
   box-shadow: none !important;
@@ -315,7 +338,7 @@ export default {
       }
     }
     .unlock-node {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 700;
       line-height: 20px;
       text-shadow: 0px 0px 10px #6172f3;
@@ -360,13 +383,15 @@ export default {
       .go-btn {
         height: 25px;
         min-width: 51px;
-        padding: 4px 16px;
+        padding: 4px 13px;
         border-radius: 4px;
+        letter-spacing: normal;
         background: linear-gradient(96.98deg, #0fe1f8 -22.19%, #1102fc 99.83%);
         .btn-text {
           font-size: 14px;
           font-weight: 400;
           color: #fff;
+          letter-spacing: normal;
         }
       }
       .drawer-btn {
@@ -377,7 +402,9 @@ export default {
         color: #fff !important;
         font-size: 14px;
         font-weight: 400;
+        padding: 0 10px;
         cursor: pointer;
+        letter-spacing: normal;
       }
       .done-btn {
         height: 25px;
@@ -387,6 +414,20 @@ export default {
         color: #fff !important;
         cursor: not-allowed;
       }
+      
+    }
+    .start-btn {
+      height: 32px;
+      width: 100%;
+      padding: 4px 13px;
+      border-radius: 4px;
+      background: linear-gradient(96.98deg, #0fe1f8 -22.19%, #1102fc 99.83%);
+      color: #fff;
+      letter-spacing: normal;
+    }
+    ::v-deep .v-btn--disabled {
+      background: #31383F!important;
+      color: #FFFFFF50 !important;
     }
     .view {
       font-size: 12px;
@@ -397,6 +438,7 @@ export default {
     }
   }
 }
+
 .cancel-btn {
   color: #fff !important;
   font-weight: 500;
