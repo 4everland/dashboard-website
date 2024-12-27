@@ -10,7 +10,7 @@
                 @click="showRule = true"
               >
                 <img src="/img/booster/spin/rules-icon.svg" width="16" alt="" />
-                &nbsp;Rules
+                &nbsp;Key Concepts
               </div>
             </div>
             <div class="linear-border mb-1"></div>
@@ -28,12 +28,6 @@
                       alt=""
                     />
                   </div>
-                </div>
-                <div class="content-rate-tips mt-1 d-flex align-center">
-                  <img src="/img/booster/airdrop.png" width="20" alt="" />
-                  <span class="fz-12"
-                    >$4EVER Points to qualify for 4EVERLAND airdrops!</span
-                  >
                 </div>
               </div>
             </div>

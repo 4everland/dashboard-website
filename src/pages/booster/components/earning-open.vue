@@ -79,7 +79,7 @@
             <v-btn 
               class="start-btn mt-3"
               :disabled="disabled"
-              @click="backtoindex"
+              @click="startMining"
             >
               Start Mining Now
             </v-btn>
@@ -165,13 +165,15 @@ export default {
           if (completedTaskList.length == this.tasksLists.length) {
             bus.$emit("refreshPartnerList");
             bus.$emit("initPointsPool");
-            this.$emit("input", false);
-            this.$toast2(
-              `Activated successfully! Claim rewards on the homepage.`
-            );
           }
         }
       });
+    },
+    startMining(){
+      this.$emit("input", false);
+      this.$toast2(
+        `Activated successfully! Claim rewards on the homepage.`
+      );
     },
     async stepNext(item, index, taskListType) {
       try {

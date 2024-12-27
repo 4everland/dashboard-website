@@ -30,6 +30,7 @@
         <v-tabs class="tabWrap"
           v-model="tab"
           centered
+          hide-slider
           background-color="#121536"
         >
           <v-tab>
@@ -469,6 +470,9 @@ export default {
           height: 35px;
           padding: 4px;
           margin: 0 10px;
+        }
+      .v-ripple__container {
+          display: none;
         }
       .v-tab.v-tab--active {
         color: #fff !important;
