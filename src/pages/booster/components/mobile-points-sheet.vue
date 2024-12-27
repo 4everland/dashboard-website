@@ -140,10 +140,10 @@
             </div>
           </div>
         </div>
-        <PointsBalance
+        <points-balance
           v-model="showPointsBalance"
           :projectId="projectId"
-        ></PointsBalance>
+        ></points-balance>
       </div>
     </v-bottom-sheet>
     <points-rules-dialog v-model="showRule"></points-rules-dialog>

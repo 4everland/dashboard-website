@@ -43,6 +43,7 @@
         </div>
       </div>
     </div>
+    <audio ref="audioPlayer" src="/audio/collect.mp3"></audio>
   </div>
 </template>
 
@@ -90,21 +91,21 @@ export default {
         this.newDataList = arrorder.map((index) => this.dataList[index]);
       }
     },
-    async getProjectInfo(item, index) {
-      if (!item) return;
-      if (this.loading) return;
-      if (item.projectId) {
-        if (item.hidden) return;
+    playaudio() {
+      const audio = this.$refs.audioPlayer;
+      audio.play();
+    },
+    async getProjectInfo(item,index) {
+      if(!item || this.loading) return;
+      if(item.projectId) {
+        if(item.hidden) return;
         this.loading = true;
-        const res = await claimProjectPoints(item.projectId, item.type);
-        if (res.code === 200) {
-          coinMove(
-            "partner_" + index,
-            "activity_Account",
-            item.projectLogoUrl,
-            "64"
-          );
-          await this.$sleep(2000);
+        const res = await claimProjectPoints(item.projectId, item.type)
+        if(res.code === 200) {
+          this.playaudio();
+          coinMove('partner_'+index, "mobile-point-receive", item.projectLogoUrl, '64' )
+          await this.$sleep(2000)
+
           this.newDataList = this.newDataList.map((i, idx) => {
             if (idx === index) {
               return {
