@@ -144,7 +144,7 @@ export default {
             bus.$emit('refreshPartnerList');
             bus.$emit('initPointsPool');
             this.$emit('input', false);
-            this.$toast2(`${this.info.projectName} is unlocked yet`);
+            this.$toast2(`Activated successfully! Claim rewards on the homepage.`);
           }
         }
       })

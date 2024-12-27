@@ -23,8 +23,8 @@
       <div class="item-tab">
         <v-tabs v-model="tab" left background-color="#000">
           <v-tab>All</v-tab>
-          <v-tab>Unlocked</v-tab>
-          <v-tab>Locked</v-tab>
+          <v-tab>Activated</v-tab>
+          <v-tab>Inactive</v-tab>
           <v-tab>Ended</v-tab>
         </v-tabs>
         <v-tabs-items v-model="tab">
@@ -54,11 +54,11 @@
               </div>
               <v-btn v-if="item.type === 'unlocked'" class="earning-btn">
                 <img src="/img/booster/earnings/check.svg" width="16" alt="" />
-                <span class="btn-text">Earning</span>
+                <span class="btn-text">Mining</span>
               </v-btn>
               <v-btn v-else-if="item.type === 'locked'" class="unLock-btn">
                 <img src="/img/booster/earnings/lock.svg" width="16" alt="" />
-                <span class="btn-text">Locked</span>
+                <span class="btn-text">Start Mining</span>
               </v-btn>
               <div
                 v-else-if="item.type === 'distributing'"
@@ -98,7 +98,7 @@
               </div>
               <v-btn class="earning-btn" >
                 <img src="/img/booster/earnings/check.svg" width="16" alt="" />
-                <span class="btn-text">Earning</span>
+                <span class="btn-text">Mining</span>
               </v-btn>
             </div>
           </v-tab-item>
@@ -128,7 +128,7 @@
               </div>
               <v-btn class="unLock-btn">
                 <img src="/img/booster/earnings/lock.svg" width="16" alt="" />
-                <span class="btn-text">Locked</span>
+                <span class="btn-text">Start Mining</span>
               </v-btn>
             </div>
           </v-tab-item>
@@ -411,7 +411,7 @@ export default {
        
       }
       .unLock-btn {
-        width: 102px;
+        width: 130px;
         height: 33px;
         padding: 8px 16px;
         border-radius: 4px;
