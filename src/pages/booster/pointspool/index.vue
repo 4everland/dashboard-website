@@ -92,11 +92,11 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints)
-                    }}{{ " " }}{{ item.projectName }}  Points
+                    }}{{ " " }}{{ item.projectName }} Points
                   </div>
                 </div>
               </div>
-              <v-btn class="earning-btn" >
+              <v-btn class="earning-btn">
                 <img src="/img/booster/earnings/check.svg" width="16" alt="" />
                 <span class="btn-text">Mining</span>
               </v-btn>
@@ -182,51 +182,100 @@
           <v-btn icon dark @click="dialog = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
-          <v-toolbar-title>Withdraw Rules</v-toolbar-title>
+          <v-toolbar-title>Aggregator Mining Rules</v-toolbar-title>
         </v-toolbar>
         <v-list class="rulelist">
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title class="swap-rule-title"
-                >Points Withdraw</v-list-item-title
-              >
-              <div class="swap-rule-content">
-                Everyone can withdraw their $4EVER Points for Ton based on their
-                allocated ‘Points Quota’. The more points you have, the more Ton
-                you can withdraw.
+              <div class="swap-title-content">
+                <span class="rules-text">Aggregator mining</span> is a
+                collaborative effort brought to you by 4EVERLAND and our project
+                partners, where you can start project mining by completing
+                engaging tasks to earn valuable points and token rewards.
               </div>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title class="swap-rule-title"
-                >Points Quota</v-list-item-title
+              <v-list-item-title class="swap-title"
+                >1.Participation Process</v-list-item-title
               >
               <div class="swap-rule-content">
-                The Points Quota specifies how many points can be withdrawn for
-                Ton, with an withdraw rate of 100 points=$0.1. The Quotas is
-                valid for 24 hours before they expire.
+                <span class="rules-text">Start Boost:</span> To qualify for
+                mining, all new users must first click
+                <span class="rules-text">"Start Boost"</span> before moving on
+                to the next step.
+              </div>
+              <div class="swap-rule-content">
+                <span class="rules-text">Complete Tasks:</span> Go to the
+                <span class="rules-text">Mining</span> module and complete the
+                simple tasks set by our project partners.
+              </div>
+              <div class="swap-rule-content">
+                <span class="rules-text">Points/Token Rewards:</span> Once you
+                complete the tasks, you'll activate
+                <span class="rules-text">project mining</span> and earn points
+                and token rewards.
               </div>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title class="swap-rule-title"
-                >Spin</v-list-item-title
-              >
-              <div class="swap-rule-content">
-                You earn one ‘Spin’ time for each friend you successfully invite
-                to join 4EVER Boost during the each withdraw round. After each
-                round, your invites will reset.
+              <v-list-item-title class="swap-title"
+                >2.Rewards Info
+              </v-list-item-title>
+              <div class="swap-rule-title">Rewards rules:</div>
+              <div class="pl-4">
+                <div class="swap-rule-content">
+                  The amount of points and tokens generated is based on your
+                  individual <span class="rules-text">earning rate.</span>
+                </div>
+                <div class="swap-rule-content">
+                  Rewards are generated
+                  <span class="rules-text">every 4 hours.</span> If you have 6
+                  unclaimed rewards, reward generation will stop, so please make
+                  sure to claim them on time.
+                </div>
+              </div>
+              <div class="swap-rule-title">Distribution Instructions:</div>
+              <div class="pl-4">
+                <div class="swap-rule-content">
+                  Project mining will stop once points and tokens are fully
+                  mined. You can then check the
+                  <span class="rules-text">distribution status</span> in the
+                  <span class="rules-text">Mining</span> module.
+                </div>
+                <div class="swap-rule-content">
+                  Mining rewards will be distributed to your account by the
+                  project team. You can visit
+                  <span class="rules-text">their telegram miniapp</span> to view
+                  the details.
+                </div>
               </div>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title class="swap-rule-title">TON</v-list-item-title>
+              <v-list-item-title class="swap-title"
+                >3.Important Notes</v-list-item-title
+              >
               <div class="swap-rule-content">
-                The Ton amount you receive may vary due to the fluctuating value
-                of Ton, reflecting the actual amount credited to your account.
+                Users who fail to complete the required project tasks will not
+                receive mining rewards at settlement.
+              </div>
+              <div class="swap-rule-content">
+                <span class="rules-text">Cheating methods,</span> including
+                scripts or automated tools, etc,
+                <span class="rules-text">are not allowed.</span>
+                Anyone caught violating this rule will be disqualified and will
+                lose their rewards.
+              </div>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-content>
+              <div class="swap-title-content">
+                If you have any questions, please contact us for assistance.
               </div>
             </v-list-item-content>
           </v-list-item>
@@ -286,7 +335,7 @@ export default {
   beforeDestroy() {
     bus.$off("refreshPartnerList");
   },
-  
+
   methods: {
     async init() {
       const res = await fetchPoolProjectList();
@@ -408,7 +457,6 @@ export default {
         padding: 8px 16px;
         border-radius: 4px;
         background: transparent;
-       
       }
       .unLock-btn {
         width: 130px;
@@ -460,11 +508,13 @@ export default {
       text-align: center;
     }
   }
+  .swap-title {
+    font-weight: 700;
+  }
   .swap-rule-title {
     font-family: "Inter", sans-serif;
     font-size: 14px;
     color: #ffffff;
-    font-weight: 700;
     position: relative;
     padding-left: 12px;
     line-height: 20px;
@@ -475,11 +525,30 @@ export default {
     width: 20px;
     left: 0;
   }
-  .swap-rule-content {
+  .swap-title-content {
     font-family: "Inter", sans-serif;
     font-size: 12px;
     line-height: 16px;
     color: #ffffffbf;
+  }
+  .swap-rule-content {
+    margin-top:3px;
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    color: #ffffffbf;
+    position: relative;
+    padding-left: 12px;
+  }
+  .rules-text {
+    font-weight: 500;
+    color: #fff;
+  }
+  .swap-rule-content::before {
+    content: "•";
+    position: absolute;
+    width: 20px;
+    left: 0;
   }
   .rulelist {
     background: transparent;

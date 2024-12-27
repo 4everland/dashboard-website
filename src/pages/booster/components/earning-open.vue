@@ -17,15 +17,13 @@
           alt=""
         />
         <div class="earn-content">
-          <img
-            class="logo"
-            :src="info.projectLogoUrl"
-            width="80"
-            alt=""
-          />
+          <img class="logo" :src="info.projectLogoUrl" width="80" alt="" />
           <div class="d-flex justify-end align-center">
             <v-btn class="earning-btn">
-              <span class="btn-text">{{ $utils.formatCompactNumbers(info.projectTotalPoints) }}{{ ' ' }}{{ info.projectName }} Points</span>
+              <span class="btn-text"
+                >{{ $utils.formatCompactNumbers(info.projectTotalPoints)
+                }}{{ " " }}{{ info.projectName }} Points</span
+              >
             </v-btn>
           </div>
           <div>
@@ -51,30 +49,29 @@
               type="list-item"
               dark
             ></v-skeleton-loader>
-            <div class="back-step"
+            <div
+              class="back-step"
               v-if="!loading"
               v-for="(item, index) in tasksLists"
-                :key="item.actId"
-                cols="12"
+              :key="item.actId"
+              cols="12"
             >
               <div class="d-flex justify-space-between align-center mt-2 step">
                 <div class="d-flex justify-start">
-                  <div class="step-number">{{ index+1 }}</div>
+                  <div class="step-number">{{ index + 1 }}</div>
                   <div class="step-text">{{ item.actName }}</div>
                 </div>
-                <v-btn 
+                <v-btn
                   v-if="item.actStatus !== 'DONE'"
                   :class="
-                        item.extra.buttonName == 'Go' ? 'go-btn' : 'drawer-btn'
-                      "
-                      :loading="false || loadingStatus[item.actId]"
-                      @click="stepNext(item, index, 'one')"
+                    item.extra.buttonName == 'Go' ? 'go-btn' : 'drawer-btn'
+                  "
+                  :loading="false || loadingStatus[item.actId]"
+                  @click="stepNext(item, index, 'one')"
                 >
                   <span class="btn-text">{{ item.extra.buttonName }}</span>
                 </v-btn>
-                <v-btn
-                  v-if="item.actStatus == 'DONE'"
-                  class="done-btn"
+                <v-btn v-if="item.actStatus == 'DONE'" class="done-btn"
                   >Done
                 </v-btn>
               </div>
@@ -113,16 +110,16 @@ export default {
       endTimetTask: 1735082613,
       loadingStatus: {},
       tasksLists: [],
-      loading: false
+      loading: false,
     };
   },
   watch: {
     value(newVal, oldVal) {
-      if(newVal === true){
-        this.tasksLists = []
-        this.getTaskList()
+      if (newVal === true) {
+        this.tasksLists = [];
+        this.getTaskList();
       }
-    }
+    },
   },
   computed: {
     isTgMiniApp() {
@@ -132,22 +129,26 @@ export default {
 
   methods: {
     async getTaskList(flag) {
-      this.loading = true;
+      if (flag !== "check") {
+        this.loading = true;
+      }
       fetchProjectTasks(this.info.id).then((res) => {
         this.tasksLists = res.data.items;
         this.loading = false;
-        if(flag == 'check'){
+        if (flag == "check") {
           const completedTaskList = this.tasksLists.filter(
             (it) => it.actStatus == "DONE"
           );
-          if(completedTaskList.length == this.tasksLists.length){ 
-            bus.$emit('refreshPartnerList');
-            bus.$emit('initPointsPool');
-            this.$emit('input', false);
-            this.$toast2(`Activated successfully! Claim rewards on the homepage.`);
+          if (completedTaskList.length == this.tasksLists.length) {
+            bus.$emit("refreshPartnerList");
+            bus.$emit("initPointsPool");
+            this.$emit("input", false);
+            this.$toast2(
+              `Activated successfully! Claim rewards on the homepage.`
+            );
           }
         }
-      })
+      });
     },
     async stepNext(item, index, taskListType) {
       try {
@@ -191,7 +192,7 @@ export default {
             this.$toast2(data.action.web.message, "success");
             break;
           case "COMPLETE":
-            this.getTaskList('check');
+            this.getTaskList("check");
             break;
           case "COPY":
             if (this.isTgMiniApp) {
@@ -210,7 +211,7 @@ export default {
     },
   },
   components: {
-    TimeCountDown
+    TimeCountDown,
   },
 };
 </script>
@@ -238,7 +239,7 @@ export default {
     color: #fff;
     width: 327px;
     border-radius: 16px;
-    border: 1px solid #45516F80;
+    border: 1px solid #45516f80;
     padding: 12px;
     background: linear-gradient(179.52deg, #000a10 8.53%, #003e70 99.59%),
       linear-gradient(
@@ -263,7 +264,7 @@ export default {
         font-weight: 700;
         line-height: 16px;
         color: #fff;
-        letter-spacing:normal;
+        letter-spacing: normal;
       }
       .hot-icon {
         margin-bottom: 4px;
@@ -288,9 +289,9 @@ export default {
       color: #ffce56;
       .endtime {
         font-size: 14px;
-        color: #0FE1F8;
+        color: #0fe1f8;
         ::v-deep .label {
-          background-color: #FFCE56;
+          background-color: #ffce56;
           padding: 0px 4px;
           margin-right: 2px;
           margin-left: 2px;
@@ -310,7 +311,7 @@ export default {
         color: #000;
         font-size: 12px;
         font-weight: 400;
-        margin-left:2px;
+        margin-left: 2px;
       }
     }
     .unlock-node {
