@@ -50,7 +50,7 @@
                 @click="
                   () =>
                     !this.boostLocked
-                      ? this.$store.dispatch('StakeDrawerToggle')
+                      ? this.$store.dispatch('HoldProveToggle')
                       : handleStartBoost()
                 "
               >

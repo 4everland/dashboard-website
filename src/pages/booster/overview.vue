@@ -50,6 +50,7 @@
         <DailySignDialog v-model="showDailySign"></DailySignDialog>
         <bottom-bar v-if="!asMobile" @handleStartBoost="handleShowStartBoost"></bottom-bar>
         <nft-drawer></nft-drawer>
+        <hold-prove></hold-prove>
         <task-drawer></task-drawer>
         <tool-drawer></tool-drawer>
         <invite-drawer></invite-drawer>
@@ -73,6 +74,7 @@ import OverviewH5 from "./overview/overview-h5.vue";
 import StartBoosting from "./components/start-boosting.vue";
 import EndBoosting from "./components/end-boosting.vue";
 import NftDrawer from "./components/nft-drawer.vue";
+import HoldProve from "./components/hold-prove.vue";
 import TaskDrawer from "./components/task-drawer.vue";
 import ToolDrawer from "./components/tool-drawer.vue";
 import InviteDrawer from "./components/invite-drawer.vue";
@@ -326,6 +328,7 @@ export default {
     StartBoosting,
     EndBoosting,
     NftDrawer,
+    HoldProve,
     TaskDrawer,
     BottomBar,
     BindDialog,

@@ -264,7 +264,7 @@
           style="left: 176px; top: 76%"
           @click="
             () =>
-              !this.boostLocked ? this.$store.dispatch('StakeDrawerToggle') : ''
+              !this.boostLocked ? this.$store.dispatch('HoldProveToggle') : ''
           "
         >
           <img src="/img/booster/new/icon-staking.png" width="48" alt="" />

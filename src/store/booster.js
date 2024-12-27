@@ -35,6 +35,7 @@ export default {
       tgMiniOverlayLoading: true,
       exploreRemain: 0,
       showStakeDrawer: false,
+      showHoldProve: false,
       showTaskDrawer: false,
       showToolDrawer: false,
       showInviteDrawer: false,
@@ -65,6 +66,7 @@ export default {
       return Object.keys(window.$tg.initDataUnsafe).length > 0;
     },
     showStakeDrawer: (state) => state.showStakeDrawer,
+    showHoldProve: (state) => state.showHoldProve,
     showTaskDrawer: (state) => state.showTaskDrawer,
     showConnectDrawer: (state) => state.showConnectDrawer,
     showBindWallet: (state) => state.showBindWallet,
@@ -155,6 +157,9 @@ export default {
     STAKEDRAWER_TOGGLE: (state) => {
       state.showStakeDrawer = !state.showStakeDrawer;
     },
+    HOLDPROVE_TOGGLE: (state) => {
+      state.showHoldProve = !state.showHoldProve;
+    },
     SHOWTASKDRAWER_STATE: (state, payload) => {
       state.showTaskDrawer = payload.state;
     },
@@ -234,6 +239,9 @@ export default {
     },
     StakeDrawerToggle: async (context, payload) => {
       context.commit("STAKEDRAWER_TOGGLE", payload);
+    },
+    HoldProveToggle: async (context, payload) => {
+      context.commit("HOLDPROVE_TOGGLE", payload);
     },
     TaskDrawerState: async (context, payload) => {
       context.commit("SHOWTASKDRAWER_STATE", payload);

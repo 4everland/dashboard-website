@@ -437,6 +437,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   margin: 8px 0;
+  color: #fff;
   .wallet-icon-box {
     display: flex;
     align-items: center;
