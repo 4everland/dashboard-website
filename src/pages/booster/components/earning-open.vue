@@ -419,7 +419,7 @@ export default {
       
     }
     .start-btn {
-      height: 32px;
+      height: 40px;
       width: 100%;
       padding: 4px 13px;
       border-radius: 4px;

@@ -30,7 +30,6 @@
         <v-tabs class="tabWrap"
           v-model="tab"
           centered
-          hide-slider
           background-color="#121536"
         >
           <v-tab>
@@ -46,7 +45,7 @@
             <div class="itemActive">Ended</div>
           </v-tab>
         </v-tabs>
-        <v-tabs-items v-model="tab" class="mt-3">
+        <v-tabs-items v-model="tab" class="pt-3">
           <v-tab-item>
             <div class="empty text-center" v-if="!earnList.length">
               <img src="/img/booster/svg/empty.svg" width="200" alt="" />
@@ -495,6 +494,7 @@ export default {
     .theme--light.v-tabs-items {
       background: transparent !important;
       padding: 0 16px;
+      height: 650px;
       .item-text {
         font-size: 12px;
         font-weight: 400;
