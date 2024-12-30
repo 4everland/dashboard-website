@@ -262,11 +262,6 @@ export default {
       window.walletConnectModal.subscribeModal((state) => {
         if (!state.open) {
           this.walletConnectLoading = false;
-          let modalElement = document.getElementById("wcm-modal");
-          if (modalElement) {
-            // 设置 z-index 为 100
-            modalElement.style.zIndex = 100;
-          }
         }
       });
       const { session, account } = await ConnectWalletCon();
