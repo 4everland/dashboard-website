@@ -173,8 +173,8 @@ export default {
       }
     },
     async getHold() {
-      this.$store.dispatch('HoldProveState',{});
       this.$emit('input', false);
+      this.$store.dispatch('HoldProveState', { state: true });
     },
     onConnetc() {
       if (this.asMobile) {
