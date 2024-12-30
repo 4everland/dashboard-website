@@ -11,6 +11,7 @@
       color="#1E2234"
       :value="showConnectDrawer"
       @input="handleToggle"
+      style="z-index:999"
     >
       <v-container fluid style="padding: 24px 16px">
         <div class="drawer-title mb-6">Connect Your Wallet</div>
@@ -407,7 +408,6 @@ export default {
     width: 100% !important;
     height: 40% !important;
     max-height: 100% !important;
-
     overflow: scroll;
     .drawer-title {
       font-size: 20px;

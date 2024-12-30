@@ -162,7 +162,6 @@
           <starrise id="starRise"></starrise>
         </div>
       </div>
-      <WalletConnect />
     </v-dialog>
   </div>
 </template>
@@ -172,7 +171,6 @@ import { mapGetters, mapState } from "vuex";
 import { fetchAirdropInfo } from "@/api/booster";
 import ICountUp from "vue-countup-v2";
 import starrise from "./star-rise.vue";
-import WalletConnect from "../components/wallet-connect.vue";
 export default {
   props: {
     value: Boolean,
@@ -298,7 +296,6 @@ Airdrop: `;
   components: {
     ICountUp,
     starrise,
-    WalletConnect,
   },
 };
 </script>
