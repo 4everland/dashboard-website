@@ -11,6 +11,7 @@
       color="#1E2234"
       :value="showConnectDrawer"
       @input="handleToggle"
+      style="z-index:999"
     >
       <v-container fluid style="padding: 24px 16px">
         <div class="drawer-title mb-6">Connect Your Wallet</div>
@@ -48,6 +49,7 @@
       color="#1E2234"
       :value="showConnectLoadingDrawer"
       @input="handleLoadingToggle"
+      style="z-index:999"
     >
       <v-container fluid style="padding: 24px 16px">
         <div class="drawer-title mb-6">
@@ -85,14 +87,11 @@
   </div>
 </template>
 <script>
+import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
-
 import { OKXUniversalProvider } from "@okxconnect/universal-provider";
-
 import { OmniConnect } from "@bitget-wallet/omni-connect";
-
 import { fetchWeb3codeBind, fetchWeb3Vcode } from "@/api/login.js";
-
 import { ConnectWalletCon, onSignWalletCon } from "@/utils/login";
 
 const connector = new OmniConnect({
@@ -382,7 +381,7 @@ export default {
         if (data.nodeToken) {
           localStorage.nodeToken = data.nodeToken;
         }
-
+        bus.$emit('showQueryDialogEvent');
         this.$toast2("Connect successfully!", "success");
         this.$setMsg({
           name: "updateUser",
@@ -407,7 +406,6 @@ export default {
     width: 100% !important;
     height: 40% !important;
     max-height: 100% !important;
-
     overflow: scroll;
     .drawer-title {
       font-size: 20px;
