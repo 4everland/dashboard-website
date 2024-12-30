@@ -128,32 +128,38 @@
                   />{{ linkShared ? "Shared" : "Share on X" }}</span
                 >
               </v-btn>
-              <div v-if="!dropped" class="d-flex justify-space-between align-center mt-3">
+              
+              <div v-show="!dropped" class="d-flex justify-space-between align-center mt-3">
                 <div class="evm-wallet fz-14">Your EVM Wallet</div>
-                <v-btn v-if="!address" class="bind-btn" @click="asMobile?onConnetc():toConfig()"
+                <v-btn v-if="!address" :loading="loading" class="bind-btn" @click="asMobile?onConnetc():toConfig()"
                   >Bind</v-btn
                 >
                 <div class="d-flex justify-start align-center" v-else>
+                  
                   <span class="evm-wallet" style="font-weight: bold;">{{ address.cutStr(4, 4) }}</span>
+                  
                   <v-btn
                     class="e-btn-text"
                     icon
-                    @click.stop
-                    v-clipboard="address"
-                    @success="$toast2('Copied!')"
+                    v-clipboard="addressCopy"
+                    @success="() => $toast2('Copied!', 'success')"
                   >
                     <img src="/img/svg/copy.svg" width="14" />
                   </v-btn>
                 </div>
               </div>
+              
               <div class="d-flex justify-start align-center mt-4">
                 <img
                   src="/img/booster/earnings/subtract.png"
                   width="16"
                   alt=""
                 />
-                <div class="view">
+                <div class="view" v-if="!dropped" >
                   Please bind your EVM address to claim the second round of airdrop. Timing will be announced!
+                </div>
+                <div class="view" v-else>
+                  Your airdrop has been sent to your linked exchange. For any questions, contact us on Telegram.
                 </div>
               </div>
             </div>
@@ -210,6 +216,7 @@ export default {
       ],
       address: "",
       dropped: false,
+      loading: false,
     };
   },
   computed: {
@@ -223,6 +230,18 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    addressCopy(){
+      return this.address
+    },
+    copyValue() {
+      return (
+        "Invite link:" +
+        this.inviteInfo.link +
+        "\n" +
+        "Invite code:" +
+        this.inviteInfo.inviteCode
+      );
+    },
   },
   mounted() {
     this.$store.dispatch("getInviteInfo");
@@ -232,6 +251,7 @@ export default {
   },
   methods: {
     async handleListStatus() {
+      this.loading = true;
       await this.getAirdrop();
       let info = this.userInfo.username;
       let airInfo = localStorage.getItem("airdrop" + info);
@@ -249,6 +269,7 @@ export default {
         }
         this.showPoint = true;
       }
+      this.loading = false;
       localStorage.setItem("airdrop" + info, true);
     },
     async getAirdrop() {
@@ -260,9 +281,10 @@ export default {
           this.dataList[2].realStatus = data.productIteracted;
           this.dataList[3].realStatus = data.gitcoinDonation;
           this.shortPoint = Number(data.t4ever);
+          this.dropped = data.dropped;
+          this.address = data.address;
         }
-        this.dropped = data.dropped;
-        this.address = data.address;
+        
       } catch (error) {
         console.log(error);
       }
