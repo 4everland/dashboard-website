@@ -23,7 +23,7 @@
             <div class="d-flex justify-space-between align-center">
               <div class="prove-title">Wallet address</div>
               <div class="prove-text">
-                {{ (userInfo.username || "Not bound").cutStr(4, 4) }}
+                {{  stakeInfo?.address ? (stakeInfo?.address).cutStr(4, 4) : 'Not bound' }}
               </div>
             </div>
             <div class="d-flex justify-space-between align-center mt-4">
@@ -50,6 +50,7 @@
               class="staking-btn"
               width="146px"
               height="40px"
+              :disabled="!disabled"
               @click="showStakeYield = true"
               >Get Staking Yield</v-btn
             >
@@ -80,13 +81,16 @@ export default {
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+    disabled() {
+      return this.stakeInfo.value ? false : true;
+    }
   },
   data() {
     return {
       showStakeYield: false,
       stakeInfo: {
         address:'',
-        value: 0,
+        value: null,
         coefficient: 0,
       },
       stakeTotalInfo: {
@@ -109,6 +113,7 @@ export default {
       try {
         const { data } = await fetch4everStakeInfo();
         this.stakeInfo = data;
+
       } catch (error) {
         console.log(error);
       }

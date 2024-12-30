@@ -111,6 +111,9 @@
   <script>
 import { mapState, mapGetters } from "vuex";
 // import WalletConnect from "../components/wallet-connect.vue";
+import {
+  fetch4everBalance,
+} from "@/api/booster.js";
 
 export default {
   props: {
@@ -121,9 +124,6 @@ export default {
     return {
       stakeLoading: false,
     };
-  },
-  components: {
-    // WalletConnect,
   },
   computed: {
     ...mapState({
@@ -139,7 +139,6 @@ export default {
     onConnetc() {
       if(this.asMobile){
         let state = true;
-        console.log('ConnectDrawerState');
         this.$store.dispatch("ConnectDrawerState", { state: true });
       } else {
         

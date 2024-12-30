@@ -394,3 +394,9 @@ export const fetch4everStakeTotal = async () => {
     url: `/4ever/stake/total`,
   });
 }
+
+export const fetch4everBalance = async () => {
+  return boosterRequest.get({
+    url: `/4ever/stake/balance`,
+  });
+}
