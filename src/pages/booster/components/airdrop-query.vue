@@ -129,7 +129,7 @@
                 >
               </v-btn>
               
-              <div v-show="!dropped" class="d-flex justify-space-between align-center mt-3">
+              <div v-if="!dropped" class="d-flex justify-space-between align-center mt-3">
                 <div class="evm-wallet fz-14">Your EVM Wallet</div>
                 <v-btn v-if="!address" :loading="loading" class="bind-btn" @click="asMobile?onConnetc():toConfig()"
                   >Bind</v-btn
