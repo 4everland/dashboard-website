@@ -135,15 +135,14 @@
                 <v-btn v-if="!address" :loading="loading" class="bind-btn" @click="asMobile?onConnetc():toConfig()"
                   >Bind</v-btn
                 >
-                <div class="d-flex justify-start align-center" v-else>
+                <div class="d-flex justify-start align-center" v-if="address">
                   
                   <span class="evm-wallet" style="font-weight: bold;">{{ address.cutStr(4, 4) }}</span>
                   
                   <v-btn
                     class="e-btn-text"
                     icon
-                    v-clipboard="addressCopy"
-                    @success="() => $toast2('Copied!', 'success')"
+                    @click="copytext"
                   >
                     <img src="/img/svg/copy.svg" width="14" />
                   </v-btn>
@@ -252,6 +251,9 @@ export default {
     });
   },
   methods: {
+    copytext() {
+      this.$copy2(this.addressCopy);
+    },
     async handleListStatus() {
       this.loading = true;
       await this.getAirdrop();

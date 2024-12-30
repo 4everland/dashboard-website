@@ -36,6 +36,15 @@ Vue.prototype.$copy = async (text, tip = "Copied!") => {
   }
 };
 
+Vue.prototype.$copy2 = async (text, tip = "Copied!") => {
+  try {
+    await clipboard.writeText(text);
+    Vue.prototype.$toast2(tip);
+  } catch (error) {
+    Vue.prototype.$toast2("Copied fail !");
+  }
+};
+
 Vue.prototype.$navTo = (url) => {
   if (/^https?:/.test(url)) {
     window.open(url);
