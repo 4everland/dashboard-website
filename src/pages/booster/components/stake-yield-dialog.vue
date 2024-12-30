@@ -52,6 +52,7 @@
             <v-btn
               v-else
               class="get-btn"
+              :disabled="disabled"
               outlined
               color="#fff"
               width="180"
