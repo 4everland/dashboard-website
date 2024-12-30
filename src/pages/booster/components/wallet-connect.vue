@@ -86,14 +86,11 @@
   </div>
 </template>
 <script>
+import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
-
 import { OKXUniversalProvider } from "@okxconnect/universal-provider";
-
 import { OmniConnect } from "@bitget-wallet/omni-connect";
-
 import { fetchWeb3codeBind, fetchWeb3Vcode } from "@/api/login.js";
-
 import { ConnectWalletCon, onSignWalletCon } from "@/utils/login";
 
 const connector = new OmniConnect({
@@ -388,6 +385,7 @@ export default {
         this.$setMsg({
           name: "updateUser",
         });
+        bus.$emit('showQueryDialogEvent')
       } catch (error) {
         console.log(error);
       }
