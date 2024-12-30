@@ -377,3 +377,20 @@ export const fetchAirdropInfo = async () => {
   });
 };
 
+export const handle4everStake = async () => {
+  return boosterRequest.post({
+    url: `/4ever/stake/bind`,
+  });
+}
+
+export const fetch4everStakeInfo = async () => {
+  return boosterRequest.get({
+    url: `/4ever/stake/info`,
+  });
+}
+
+export const fetch4everStakeTotal = async () => {
+  return boosterRequest.get({
+    url: `/4ever/stake/total`,
+  });
+}

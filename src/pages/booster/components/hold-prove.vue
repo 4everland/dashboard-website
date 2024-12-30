@@ -9,6 +9,7 @@
       :hide-overlay="!asMobile"
       color="#1E2234"
       :value="showHoldProve"
+      @input="stateHoldDrawerShow"
     >
       <v-container fluid>
         <div class="nft-drawer-top">
@@ -62,6 +63,10 @@
   <script>
 import { mapState, mapGetters } from "vuex";
 import StakeYieldDialog from "@/pages/booster/components/stake-yield-dialog";
+import {
+  fetch4everStakeInfo,
+  fetch4everStakeTotal,
+} from "@/api/booster.js";
 
 export default {
   components: {
@@ -84,7 +89,25 @@ export default {
   created() {},
   mounted() {
   },
-  methods: {},
+  methods: {
+    stateHoldDrawerShow(state) {
+      if (state) {
+        // this.getStakeInfo();
+        // this.getNftLists();
+        // this.getStakeKeyInfo();
+      }
+      this.$store.dispatch("HoldProveState", { state });
+    },
+    get4everStakeInfo() {
+      fetch4everStakeInfo().then((res) => {
+        console.log(res);
+      });
+
+      fetch4everStakeTotal().then((res) => {
+        console.log(res);
+      });
+    },
+  },
 };
 </script>
   
@@ -100,7 +123,7 @@ export default {
     background-position: bottom;
     overflow: scroll;
     .drawer-title {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 500;
       color: #fff;
       text-shadow: 0px 0px 8px #6172f3;
@@ -135,11 +158,13 @@ export default {
         .prove-title {
           font-family: Inter;
           font-weight: 400;
+          font-size: 16px;
           line-height: 20px;
         }
         .prove-text {
           font-weight: 700;
           line-height: 20px;
+          font-size: 16px;
         }
         .prove-border {
           border-top: 1px solid rgba(255, 255, 255, 0.3);
@@ -154,6 +179,7 @@ export default {
         font-weight: 400;
         line-height: 16px;
         color: #fff;
+        letter-spacing: normal;
       }
     }
   }
@@ -172,6 +198,7 @@ export default {
 
         .nft-drawer-desc {
           font-size: 12px;
+          color: #FFFFFF99;
         }
       }
     }

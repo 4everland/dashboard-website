@@ -15,9 +15,9 @@
         <div class="first-dialog-content">
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Wallet address</span>
-            <span>{{ (userInfo.username || "Not bound").cutStr(4, 4) }}</span>
+            <span class="font-weight-bold">{{ (userInfo.username || "Not bound").cutStr(4, 4) }}</span>
           </div>
-          <div class="paragraph d-flex align-center justify-space-between">
+          <div class="paragraph d-flex align-center justify-space-between ">
             <span>$4EVER balance</span>
             <span>100</span>
           </div>

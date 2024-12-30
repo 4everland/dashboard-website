@@ -157,6 +157,9 @@ export default {
     STAKEDRAWER_TOGGLE: (state) => {
       state.showStakeDrawer = !state.showStakeDrawer;
     },
+    SHOWHOLDPROVE_STATE: (state, payload)=> {
+      state.showHoldProve = payload.state;
+    },
     HOLDPROVE_TOGGLE: (state) => {
       state.showHoldProve = !state.showHoldProve;
     },
@@ -239,6 +242,9 @@ export default {
     },
     StakeDrawerToggle: async (context, payload) => {
       context.commit("STAKEDRAWER_TOGGLE", payload);
+    },
+    HoldProveState: async (context, payload) => {
+      context.commit("SHOWHOLDPROVE_STATE", payload);
     },
     HoldProveToggle: async (context, payload) => {
       context.commit("HOLDPROVE_TOGGLE", payload);
