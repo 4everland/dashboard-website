@@ -49,6 +49,7 @@
       color="#1E2234"
       :value="showConnectLoadingDrawer"
       @input="handleLoadingToggle"
+      style="z-index:999"
     >
       <v-container fluid style="padding: 24px 16px">
         <div class="drawer-title mb-6">
@@ -380,12 +381,11 @@ export default {
         if (data.nodeToken) {
           localStorage.nodeToken = data.nodeToken;
         }
-
+        bus.$emit('showQueryDialogEvent');
         this.$toast2("Connect successfully!", "success");
         this.$setMsg({
           name: "updateUser",
         });
-        bus.$emit('showQueryDialogEvent')
       } catch (error) {
         console.log(error);
       }
