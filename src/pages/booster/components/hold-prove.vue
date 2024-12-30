@@ -17,7 +17,7 @@
           <div class="nft-drawer-desc">
             We randomly snapshot $4EVER balance in your wallet. Every 100 $4EVER
             contributes 0.0005% to a staking yield.
-            <span class="get-more">Get more $4EVER!</span>
+            <a class="get-more" href="" target="_blank">Get more $4EVER!</a>
           </div>
           <div class="hold-prove mt-6">
             <div class="d-flex justify-space-between align-center">
@@ -257,6 +257,10 @@ export default {
   }
   .prove-text {
     font-size: 14px;
+  }
+  .nft-drawer-desc {
+    font-size: 12px;
+    color: #ffffff99;
   }
 }
 </style>
