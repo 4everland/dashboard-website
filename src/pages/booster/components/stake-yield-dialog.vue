@@ -173,8 +173,13 @@ export default {
       }
     },
     async getHold() {
-      this.$emit('input', false);
-      this.$store.dispatch('HoldProveState', { state: true });
+      try {
+        await handle4everStake();
+      } catch (error) {
+        console.log(error);
+      }
+      this.$emit("input", false);
+      this.$store.dispatch("HoldProveState", { state: true });
     },
     onConnetc() {
       if (this.asMobile) {
