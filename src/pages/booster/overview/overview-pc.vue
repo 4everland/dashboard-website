@@ -54,6 +54,7 @@
                       : handleStartBoost()
                 "
               >
+                <img src="/img/booster/icon_tg_new.png" width="24" alt=""  style="right: -7px;top: -5px;position: absolute;" />
                 <img src="/img/booster/icon_stake_4ever.png" alt="" width="24" />
                 Staking</v-btn
               >
@@ -68,17 +69,28 @@
       style="left: 20px; top: 100px"
       @click="showBindExchange"
     >
-      <img src="/img/booster/new/icon-bind-pc.png" width="96" alt="" />
-      <div class="trigger-text bind fz-22 fw-b text-center" style="width: 96px;">Bind</div>
+      <img src="/img/booster/new/icon-bind-pc.png" width="72" alt="" />
+      <div class="trigger-text bind fz-16 fw-b text-center" style="width: 72px;">Bind</div>
     </div>
     <div
       v-if="!boostLocked"
       class="trigger-icon pos-a"
-      style="left: 125px; top: 100px"
+      style="left: 20px; top: 180px"
       @click="showStartQueryDialog"
     >
-      <img src="/img/booster/new/Query_4x_1.gif" width="96" alt="" />
-      <div class="trigger-text bind fz-22 fw-b text-center" style="width: 96px;">Airdrop</div>
+      <img src="/img/booster/new/Query_4x_1.gif" width="72" alt="" />
+      <div class="trigger-text bind fz-16 fw-b text-center" style="width: 72px;">Airdrop</div>
+    </div>
+
+    <div
+      v-if="!boostLocked"
+      class="trigger-icon pos-a"
+      style="left: 20px; top: 260px"
+      @click="()=> this.$store.dispatch('HoldProveToggle') "
+    >
+      <img src="/img/booster/icon_tg_new.png" width="33" alt=""  style="right: 0px;top: 0px;position: absolute;" />
+      <img src="/img/booster/pc-staking.png" width="72" alt="" />
+      <div class="trigger-text bind fz-16 fw-b text-center" style="width: 72px;">Staking</div>
     </div>
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>

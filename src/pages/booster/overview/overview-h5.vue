@@ -267,6 +267,7 @@
               !this.boostLocked ? this.$store.dispatch('HoldProveToggle') : ''
           "
         >
+          <img src="/img/booster/icon_tg_new.png" width="24" alt=""  style="right: 0px;top: 0px;position: absolute;" />
           <img src="/img/booster/icon_tg_Staking.png" width="48" alt="" />
           <div class="trigger-text tools fz-12 fw-b text-center">Staking</div>
         </div>

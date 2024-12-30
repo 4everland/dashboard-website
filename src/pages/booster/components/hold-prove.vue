@@ -46,21 +46,29 @@
               <div class="prove-title">Total $4EVER holders</div>
               <div class="prove-text">{{ stakeTotalInfo?.total }}</div>
             </div> -->
-            <div class="d-flex justify-space-between align-center mt-4">
+            <!-- <div class="d-flex justify-space-between align-center mt-4">
               <div class="prove-title">Total $4EVER staked</div>
               <div class="prove-text">
                 {{ stakeTotalInfo?.totalStake }} $4EVER
               </div>
-            </div>
+            </div> -->
           </div>
           <div class="mt-6 d-flex justify-end">
             <v-btn
+              v-if="!stakeInfo?.value"
               class="staking-btn"
               width="146px"
               height="40px"
-              :disabled="!disabled"
               @click="showStakeYield = true"
               >Get Staking Yield</v-btn
+            >
+            <v-btn
+              v-else
+              class="staked-btn"
+              height="48px"
+              >
+              <img src="/img/booster/icon-wallet-check.png" alt="" width="24" />
+              $4EVER Balance Tracking</v-btn
             >
           </div>
         </div>
@@ -69,6 +77,7 @@
     <StakeYieldDialog
       v-model="showStakeYield"
       :info="stakeInfo"
+      @onstakesuccess="get4everStakeInfo"
     ></StakeYieldDialog>
   </div>
 </template>
@@ -90,7 +99,7 @@ export default {
       return this.$vuetify.breakpoint.smAndDown;
     },
     disabled() {
-      return this.stakeInfo.value ? false : true;
+      return this.stakeInfo?.value ? false : true;
     },
   },
   data() {
@@ -202,6 +211,17 @@ export default {
         font-weight: 400;
         line-height: 16px;
         color: #fff;
+        letter-spacing: normal;
+      }
+      .staked-btn{
+        padding: 12px 16px;
+        border-radius: 4px;
+        background: #FFFFFF1A;
+        font-family: Inter;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 16px;
+        color: #FFFFFF;
         letter-spacing: normal;
       }
     }

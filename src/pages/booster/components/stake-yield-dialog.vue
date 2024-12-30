@@ -16,12 +16,12 @@
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Wallet address</span>
             <span class="font-weight-bold">{{
-              (userInfo.username || "Not bound").cutStr(4, 4)
+              address ? (address).cutStr(4, 4) : "Not bound"
             }}</span>
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>$4EVER balance</span>
-            <span>100</span>
+            <span class="font-weight-bold">{{balance}}</span>
           </div>
           <ul class="stake-tips">
             <li>
@@ -41,7 +41,7 @@
               >Cancel</v-btn
             >
             <v-btn
-              v-if="!userInfo.username"
+              v-if="!address"
               class="get-btn"
               outlined
               color="#fff"
@@ -54,15 +54,15 @@
               class="get-btn"
               :disabled="disabled"
               outlined
+              :loading="stakeLoading"
               color="#fff"
               width="180"
-              @click="getHold"
+              @click="handleStake"
               >Continue</v-btn
             >
           </div>
         </div>
       </div>
-      <!-- <WalletConnect class="wallet-connect" /> -->
     </v-overlay>
 
     <v-dialog
@@ -80,7 +80,7 @@
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Wallet address</span>
-            <span>{{ (userInfo.username || "Not bound").cutStr(4, 4) }}</span>
+            <span>{{ address ? (address).cutStr(4, 4) : "Not bound" }}</span>
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>$4EVER balance</span>
@@ -105,7 +105,7 @@
               >Cancel</v-btn
             >
             <v-btn
-              v-if="!userInfo.username"
+              v-if="!address"
               class="get-btn"
               color="#fff"
               outlined
@@ -119,8 +119,9 @@
               class="get-btn"
               color="#fff"
               outlined
+              :loading="stakeLoading"
               :disabled="disabled"
-              @click="getHold"
+              @click="handleStake"
               width="240px"
               height="56px"
               >Continue</v-btn
@@ -128,7 +129,6 @@
           </div>
         </div>
       </div>
-      <!-- <WalletConnect  /> -->
     </v-dialog>
   </div>
 </template>
@@ -147,6 +147,7 @@ export default {
       stakeLoading: false,
       balance: 0,
       disabled: false,
+      address:''
     };
   },
   computed: {
@@ -157,15 +158,19 @@ export default {
       return this.$vuetify.breakpoint.smAndDown;
     },
   },
-  created() {},
-  mounted() {
-    this.getBalance();
+  watch: {
+    value(newVal, oldVal) {
+      if(newVal === true){
+        this.getBalance()
+      }
+    },
   },
   methods: {
     async getBalance() {
       try {
         const { data } = await fetch4everBalance();
         this.balance = data.balance;
+        this.address = data.address;
         if (!this.balance) {
           this.disabled = true;
         }
@@ -173,14 +178,21 @@ export default {
         console.log(error);
       }
     },
-    async getHold() {
+    async handleStake() {
       try {
-        await handle4everStake();
+        this.stakeLoading = true;
+        const res = await handle4everStake();
+        if(res.code == 200) {
+          this.$emit("input", false);
+          //this.$emit("onstakesuccess");
+          await this.$sleep(200)
+          this.$store.dispatch("HoldProveState", { state: true });
+        }
+        this.stakeLoading = false;
       } catch (error) {
         console.log(error);
       }
-      this.$emit("input", false);
-      this.$store.dispatch("HoldProveState", { state: true });
+      
     },
     onConnetc() {
       if (this.asMobile) {
@@ -189,6 +201,7 @@ export default {
       } else {
         this.$router.push("/account/config");
       }
+      this.$emit("input", false);
     },
   },
 };
