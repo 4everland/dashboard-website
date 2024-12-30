@@ -57,7 +57,7 @@
         </div>
       </v-container>
     </v-navigation-drawer>
-    <StakeYieldDialog v-model="showStakeYield"></StakeYieldDialog>
+    <StakeYieldDialog v-model="showStakeYield" :info="stakeInfo"></StakeYieldDialog>
   </div>
 </template>
   <script>
@@ -84,6 +84,8 @@ export default {
   data() {
     return {
       showStakeYield: false,
+      stakeInfo: {},
+      stakeTotalInfo: {},
     };
   },
   created() {},
@@ -92,20 +94,26 @@ export default {
   methods: {
     stateHoldDrawerShow(state) {
       if (state) {
-        // this.getStakeInfo();
-        // this.getNftLists();
-        // this.getStakeKeyInfo();
+        this.get4everStakeInfo();
+        this.get4everStakeTotal();
       }
       this.$store.dispatch("HoldProveState", { state });
     },
-    get4everStakeInfo() {
-      fetch4everStakeInfo().then((res) => {
-        console.log(res);
-      });
-
-      fetch4everStakeTotal().then((res) => {
-        console.log(res);
-      });
+    async get4everStakeInfo() {
+      try {
+        const { data } = await fetch4everStakeInfo();
+        this.stakeInfo = data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async get4everStakeTotal() {
+      try {
+        const { data } = await fetch4everStakeTotal();
+        this.stakeTotalInfo = data;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
