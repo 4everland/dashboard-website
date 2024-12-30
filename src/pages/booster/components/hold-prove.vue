@@ -28,21 +28,21 @@
             </div>
             <div class="d-flex justify-space-between align-center mt-4">
               <div class="prove-title">My $4EVER</div>
-              <div class="prove-text">1,111,111</div>
+              <div class="prove-text">{{ stakeInfo?.value }}</div>
             </div>
             <div class="d-flex justify-space-between align-center mt-4">
               <div class="prove-title">Staking yield</div>
-              <div class="prove-text">0</div>
+              <div class="prove-text">{{ stakeInfo?.coefficient }}</div>
             </div>
             <div
               class="d-flex justify-space-between align-center mt-4 pt-4 prove-border"
             >
               <div class="prove-title">Total $4EVER holders</div>
-              <div class="prove-text">17,608</div>
+              <div class="prove-text">{{ stakeTotalInfo?.total }}</div>
             </div>
             <div class="d-flex justify-space-between align-center mt-4">
               <div class="prove-title">Total $4EVER staked</div>
-              <div class="prove-text">4,317,608 $4EVER</div>
+              <div class="prove-text">{{ stakeTotalInfo?.totalStake }} $4EVER</div>
             </div>
           </div>
           <div class="mt-6 d-flex justify-end">
@@ -84,8 +84,14 @@ export default {
   data() {
     return {
       showStakeYield: false,
-      stakeInfo: {},
-      stakeTotalInfo: {},
+      stakeInfo: {
+        address:'',
+        value: 0,
+        coefficient: 0,
+      },
+      stakeTotalInfo: {
+
+      },
     };
   },
   created() {},

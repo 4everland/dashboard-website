@@ -49,7 +49,7 @@
           </div>
         </div>
       </div>
-      <WalletConnect class="wallet-connect" />
+      <!-- <WalletConnect class="wallet-connect" /> -->
     </v-overlay>
 
     <v-dialog
@@ -103,14 +103,14 @@
           </div>
         </div>
       </div>
-      <WalletConnect  />
+      <!-- <WalletConnect  /> -->
     </v-dialog>
   </div>
 </template>
   
   <script>
 import { mapState, mapGetters } from "vuex";
-import WalletConnect from "../components/wallet-connect.vue";
+// import WalletConnect from "../components/wallet-connect.vue";
 
 export default {
   props: {
@@ -123,7 +123,7 @@ export default {
     };
   },
   components: {
-    WalletConnect,
+    // WalletConnect,
   },
   computed: {
     ...mapState({
@@ -137,8 +137,14 @@ export default {
 
   methods: {
     onConnetc() {
-      let state = true;
-      this.$store.dispatch("ConnectDrawerState", { state });
+      if(this.asMobile){
+        let state = true;
+        console.log('ConnectDrawerState');
+        this.$store.dispatch("ConnectDrawerState", { state: true });
+      } else {
+        
+      }
+     
     },
   },
 };

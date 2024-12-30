@@ -259,7 +259,7 @@
           <div class="trigger-text tools fz-12 fw-b text-center">Invite</div>
         </div>
         <div
-          v-if="isTgMiniApp"
+          v-if="asMobile"
           class="trigger-icon pos-a"
           style="left: 176px; top: 76%"
           @click="
@@ -267,7 +267,7 @@
               !this.boostLocked ? this.$store.dispatch('HoldProveToggle') : ''
           "
         >
-          <img src="/img/booster/new/icon-staking.png" width="48" alt="" />
+          <img src="/img/booster/icon_tg_Staking.png" width="48" alt="" />
           <div class="trigger-text tools fz-12 fw-b text-center">Staking</div>
         </div>
 
