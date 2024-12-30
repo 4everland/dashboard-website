@@ -15,9 +15,11 @@
         <div class="first-dialog-content">
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Wallet address</span>
-            <span class="font-weight-bold">{{ (userInfo.username || "Not bound").cutStr(4, 4) }}</span>
+            <span class="font-weight-bold">{{
+              (userInfo.username || "Not bound").cutStr(4, 4)
+            }}</span>
           </div>
-          <div class="paragraph d-flex align-center justify-space-between ">
+          <div class="paragraph d-flex align-center justify-space-between">
             <span>$4EVER balance</span>
             <span>100</span>
           </div>
@@ -39,12 +41,22 @@
               >Cancel</v-btn
             >
             <v-btn
+              v-if="!userInfo.username"
               class="get-btn"
               outlined
               color="#fff"
               width="180"
               @click="onConnetc"
               >Connect Wallet</v-btn
+            >
+            <v-btn
+              v-else
+              class="get-btn"
+              outlined
+              color="#fff"
+              width="180"
+              @click="getHold"
+              >Continue</v-btn
             >
           </div>
         </div>
@@ -71,7 +83,7 @@
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>$4EVER balance</span>
-            <span>100</span>
+            <span>{{ balance }}</span>
           </div>
           <ul class="stake-tips mt-4">
             <li>
@@ -92,6 +104,7 @@
               >Cancel</v-btn
             >
             <v-btn
+              v-if="!userInfo.username"
               class="get-btn"
               color="#fff"
               outlined
@@ -99,6 +112,17 @@
               width="240px"
               height="56px"
               >Connect Wallet</v-btn
+            >
+            <v-btn
+              v-else
+              class="get-btn"
+              color="#fff"
+              outlined
+              :disabled="disabled"
+              @click="getHold"
+              width="240px"
+              height="56px"
+              >Continue</v-btn
             >
           </div>
         </div>
@@ -110,10 +134,7 @@
   
   <script>
 import { mapState, mapGetters } from "vuex";
-// import WalletConnect from "../components/wallet-connect.vue";
-import {
-  fetch4everBalance,
-} from "@/api/booster.js";
+import { fetch4everBalance, handle4everStake } from "@/api/booster.js";
 
 export default {
   props: {
@@ -123,6 +144,8 @@ export default {
   data() {
     return {
       stakeLoading: false,
+      balance: 0,
+      disabled: false,
     };
   },
   computed: {
@@ -134,16 +157,32 @@ export default {
     },
   },
   created() {},
-
+  mounted() {
+    this.getBalance();
+  },
   methods: {
+    async getBalance() {
+      try {
+        const { data } = await fetch4everBalance();
+        this.balance = data.balance;
+        if (!this.balance) {
+          this.disabled = true;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getHold() {
+      this.$store.dispatch('HoldProveState',{});
+      this.$emit('input', false);
+    },
     onConnetc() {
-      if(this.asMobile){
+      if (this.asMobile) {
         let state = true;
         this.$store.dispatch("ConnectDrawerState", { state: true });
       } else {
-        
+        this.$router.push("/account/config");
       }
-     
     },
   },
 };

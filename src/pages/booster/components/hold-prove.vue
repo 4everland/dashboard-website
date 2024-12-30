@@ -23,26 +23,34 @@
             <div class="d-flex justify-space-between align-center">
               <div class="prove-title">Wallet address</div>
               <div class="prove-text">
-                {{  stakeInfo?.address ? (stakeInfo?.address).cutStr(4, 4) : 'Not bound' }}
+                {{
+                  stakeInfo?.address
+                    ? (stakeInfo?.address).cutStr(4, 4)
+                    : "Not bound"
+                }}
               </div>
             </div>
             <div class="d-flex justify-space-between align-center mt-4">
               <div class="prove-title">My $4EVER</div>
-              <div class="prove-text">{{ stakeInfo?.value }}</div>
+              <div class="prove-text">
+                {{ stakeInfo?.value ? stakeInfo?.value : "0" }}
+              </div>
             </div>
             <div class="d-flex justify-space-between align-center mt-4">
               <div class="prove-title">Staking yield</div>
               <div class="prove-text">{{ stakeInfo?.coefficient }}</div>
             </div>
-            <div
+            <!-- <div
               class="d-flex justify-space-between align-center mt-4 pt-4 prove-border"
             >
               <div class="prove-title">Total $4EVER holders</div>
               <div class="prove-text">{{ stakeTotalInfo?.total }}</div>
-            </div>
+            </div> -->
             <div class="d-flex justify-space-between align-center mt-4">
               <div class="prove-title">Total $4EVER staked</div>
-              <div class="prove-text">{{ stakeTotalInfo?.totalStake }} $4EVER</div>
+              <div class="prove-text">
+                {{ stakeTotalInfo?.totalStake }} $4EVER
+              </div>
             </div>
           </div>
           <div class="mt-6 d-flex justify-end">
@@ -58,16 +66,16 @@
         </div>
       </v-container>
     </v-navigation-drawer>
-    <StakeYieldDialog v-model="showStakeYield" :info="stakeInfo"></StakeYieldDialog>
+    <StakeYieldDialog
+      v-model="showStakeYield"
+      :info="stakeInfo"
+    ></StakeYieldDialog>
   </div>
 </template>
   <script>
 import { mapState, mapGetters } from "vuex";
 import StakeYieldDialog from "@/pages/booster/components/stake-yield-dialog";
-import {
-  fetch4everStakeInfo,
-  fetch4everStakeTotal,
-} from "@/api/booster.js";
+import { fetch4everStakeInfo, fetch4everStakeTotal } from "@/api/booster.js";
 
 export default {
   components: {
@@ -83,24 +91,21 @@ export default {
     },
     disabled() {
       return this.stakeInfo.value ? false : true;
-    }
+    },
   },
   data() {
     return {
       showStakeYield: false,
       stakeInfo: {
-        address:'',
+        address: "",
         value: null,
         coefficient: 0,
       },
-      stakeTotalInfo: {
-
-      },
+      stakeTotalInfo: {},
     };
   },
   created() {},
-  mounted() {
-  },
+  mounted() {},
   methods: {
     stateHoldDrawerShow(state) {
       if (state) {
@@ -113,7 +118,6 @@ export default {
       try {
         const { data } = await fetch4everStakeInfo();
         this.stakeInfo = data;
-
       } catch (error) {
         console.log(error);
       }
@@ -217,7 +221,7 @@ export default {
 
         .nft-drawer-desc {
           font-size: 12px;
-          color: #FFFFFF99;
+          color: #ffffff99;
         }
       }
     }
@@ -232,7 +236,7 @@ export default {
     font-size: 14px !important;
   }
   .prove-text {
-    font-size: 14px ;
+    font-size: 14px;
   }
 }
 </style>
