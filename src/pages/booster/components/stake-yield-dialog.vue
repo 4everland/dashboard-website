@@ -16,12 +16,12 @@
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Wallet address</span>
             <span class="font-weight-bold">{{
-              address ? (address).cutStr(4, 4) : "Not bound"
+              address ? address.cutStr(4, 4) : "Not bound"
             }}</span>
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>$4EVER balance</span>
-            <span class="font-weight-bold">{{balance}}</span>
+            <span class="font-weight-bold">{{ balance }}</span>
           </div>
           <ul class="stake-tips">
             <li>
@@ -80,7 +80,7 @@
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Wallet address</span>
-            <span>{{ address ? (address).cutStr(4, 4) : "Not bound" }}</span>
+            <span>{{ address ? address.cutStr(4, 4) : "Not bound" }}</span>
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>$4EVER balance</span>
@@ -147,7 +147,7 @@ export default {
       stakeLoading: false,
       balance: 0,
       disabled: false,
-      address:''
+      address: "",
     };
   },
   computed: {
@@ -160,8 +160,8 @@ export default {
   },
   watch: {
     value(newVal, oldVal) {
-      if(newVal === true){
-        this.getBalance()
+      if (newVal === true) {
+        this.getBalance();
       }
     },
   },
@@ -182,17 +182,16 @@ export default {
       try {
         this.stakeLoading = true;
         const res = await handle4everStake();
-        if(res.code == 200) {
+        if (res.code == 200) {
           this.$emit("input", false);
           //this.$emit("onstakesuccess");
-          await this.$sleep(200)
+          await this.$sleep(200);
           this.$store.dispatch("HoldProveState", { state: true });
         }
         this.stakeLoading = false;
       } catch (error) {
         console.log(error);
       }
-      
     },
     onConnetc() {
       if (this.asMobile) {
@@ -294,6 +293,7 @@ export default {
   font-family: Inter;
   font-weight: 400;
   line-height: 20px;
+  font-size: 12px;
 }
 .get-btn {
   border: 1px solid #0e6cc6;

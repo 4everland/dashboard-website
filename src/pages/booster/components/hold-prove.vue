@@ -13,7 +13,7 @@
     >
       <v-container fluid>
         <div class="nft-drawer-top">
-          <div class="drawer-title nft-drawer-title">$4EVER HOLD PROVE</div>
+          <div class="drawer-title nft-drawer-title">$4EVER HOLD</div>
           <div class="nft-drawer-desc">
             We randomly snapshot $4EVER balance in your wallet. Every 100 $4EVER
             contributes 0.0005% to a staking yield.
@@ -33,12 +33,27 @@
             <div class="d-flex justify-space-between align-center mt-4">
               <div class="prove-title">My $4EVER</div>
               <div class="prove-text">
-                {{ stakeInfo?.value ? stakeInfo?.value : "0" }}
+                <ICountUp
+                        class="points"
+                        :delay="1000"
+                        :endVal="stakeInfo?.value ? stakeInfo?.value : '0'"
+                        :options="{
+                          useEasing: true,
+                          useGrouping: true,
+                          decimalPlaces: 0,
+                          separator: ',',
+                          decimal: '.',
+                          prefix: '',
+                          suffix: '',
+                        }"
+                      />
+                <!-- {{  }} -->
               </div>
             </div>
             <div class="d-flex justify-space-between align-center mt-4">
               <div class="prove-title">Staking yield</div>
-              <div class="prove-text">{{ stakeInfo?.coefficient }}</div>
+              <div class="prove-text" v-if="stakeInfo?.coefficient">{{ stakeInfo?.coefficient }}%</div>
+              <div class="prove-text" v-else>0</div>
             </div>
             <!-- <div
               class="d-flex justify-space-between align-center mt-4 pt-4 prove-border"
@@ -85,10 +100,12 @@
 import { mapState, mapGetters } from "vuex";
 import StakeYieldDialog from "@/pages/booster/components/stake-yield-dialog";
 import { fetch4everStakeInfo, fetch4everStakeTotal } from "@/api/booster.js";
+import ICountUp from "vue-countup-v2";
 
 export default {
   components: {
     StakeYieldDialog,
+    ICountUp
   },
   computed: {
     ...mapState({
@@ -161,7 +178,7 @@ export default {
       text-shadow: 0px 0px 8px #6172f3;
     }
     .nft-drawer-top {
-      padding: 24px 16px;
+      padding: 12px 4px;
       border-bottom: none !important;
       .endTime {
         font-size: 14px;
