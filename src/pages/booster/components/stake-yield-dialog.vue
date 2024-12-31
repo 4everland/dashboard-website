@@ -15,13 +15,29 @@
         <div class="first-dialog-content">
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Wallet address</span>
-            <span class="font-weight-bold">{{
+            <v-skeleton-loader
+                v-if="loading"
+                :loading="loading"
+                dark
+                width="100"
+                height="25"
+                type="text"
+              ></v-skeleton-loader>
+            <span class="font-weight-bold" v-else>{{
               address ? address.cutStr(4, 4) : "Not bound"
             }}</span>
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>$4EVER balance</span>
-            <span class="font-weight-bold">{{ balance }}</span>
+            <v-skeleton-loader
+                v-if="loading"
+                :loading="loading"
+                dark
+                width="100"
+                height="25"
+                type="text"
+              ></v-skeleton-loader>
+            <span class="font-weight-bold" v-else>{{ balance }}</span>
           </div>
           <ul class="stake-tips">
             <li>
@@ -80,11 +96,27 @@
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Wallet address</span>
-            <span>{{ address ? address.cutStr(4, 4) : "Not bound" }}</span>
+            <v-skeleton-loader
+                v-if="loading"
+                :loading="loading"
+                dark
+                width="100"
+                height="25"
+                type="text"
+              ></v-skeleton-loader>
+            <span v-else>{{ address ? address.cutStr(4, 4) : "Not bound" }}</span>
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>$4EVER balance</span>
-            <span>{{ balance }}</span>
+            <v-skeleton-loader
+                v-if="loading"
+                :loading="loading"
+                dark
+                width="100"
+                height="25"
+                type="text"
+              ></v-skeleton-loader>
+            <span v-else>{{ balance }}</span>
           </div>
           <ul class="stake-tips mt-4">
             <li>
@@ -147,6 +179,7 @@ export default {
       stakeLoading: false,
       balance: 0,
       address: "",
+      loading: false,
     };
   },
   computed: {
@@ -170,9 +203,11 @@ export default {
   methods: {
     async getBalance() {
       try {
+        this.loading = true;
         const { data } = await fetch4everBalance();
         this.balance = data.balance;
         this.address = data.address;
+        this.loading = false;
       } catch (error) {
         console.log(error);
       }
@@ -186,6 +221,7 @@ export default {
           //this.$emit("onstakesuccess");
           await this.$sleep(200);
           this.$store.dispatch("HoldProveState", { state: true });
+          this.$toast2("Snapshot successful!");
         }
         this.stakeLoading = false;
       } catch (error) {

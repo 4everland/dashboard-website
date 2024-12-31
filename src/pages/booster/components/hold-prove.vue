@@ -22,7 +22,15 @@
           <div class="hold-prove mt-6">
             <div class="d-flex justify-space-between align-center">
               <div class="prove-title">Wallet address</div>
-              <div class="prove-text">
+              <v-skeleton-loader
+                v-if="loading"
+                :loading="loading"
+                dark
+                width="100"
+                height="20"
+                type="text"
+              ></v-skeleton-loader>
+              <div class="prove-text" v-else>
                 {{
                   stakeInfo?.address
                     ? (stakeInfo?.address).cutStr(4, 4)
@@ -32,7 +40,15 @@
             </div>
             <div class="d-flex justify-space-between align-center mt-4">
               <div class="prove-title">My $4EVER</div>
-              <div class="prove-text">
+              <v-skeleton-loader
+                v-if="loading"
+                :loading="loading"
+                dark
+                width="100"
+                height="20"
+                type="text"
+              ></v-skeleton-loader>
+              <div class="prove-text" v-else>
                 <ICountUp
                         class="points"
                         :delay="1000"
@@ -52,10 +68,20 @@
             </div>
             <div class="d-flex justify-space-between align-center mt-4">
               <div class="prove-title">Staking yield</div>
-              <div class="prove-text" v-if="stakeInfo?.coefficient">
-                {{ stakeInfo?.coefficient }}%
+              <v-skeleton-loader
+                v-if="loading"
+                :loading="loading"
+                dark
+                width="100"
+                height="20"
+                type="text"
+              ></v-skeleton-loader>
+              <div v-else>
+                <div class="prove-text" v-if="stakeInfo?.coefficient">
+                  {{ stakeInfo?.coefficient }}%
+                </div>
+                <div class="prove-text" v-else>0</div>
               </div>
-              <div class="prove-text" v-else>0</div>
             </div>
             <!-- <div
               class="d-flex justify-space-between align-center mt-4 pt-4 prove-border"
@@ -126,6 +152,7 @@ export default {
         coefficient: 0,
       },
       stakeTotalInfo: {},
+      loading: false,
     };
   },
   created() {},
@@ -140,8 +167,10 @@ export default {
     },
     async get4everStakeInfo() {
       try {
+        this.loading = true;
         const { data } = await fetch4everStakeInfo();
         this.stakeInfo = data;
+        this.loading = false;
       } catch (error) {
         console.log(error);
       }
