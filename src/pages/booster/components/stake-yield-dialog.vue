@@ -27,7 +27,7 @@
             <li>
               Randomly snapshot your $4EVER balance to update staking yield.
             </li>
-            <li>Every 100 $4EVER contributes to a 0.0005% staking yield.</li>
+            <li>Every $4EVER contributes to a 0.002% staking yield.</li>
           </ul>
           <div
             class="act-btn d-flex align-center justify-center mt-10"

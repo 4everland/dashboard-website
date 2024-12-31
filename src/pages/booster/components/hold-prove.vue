@@ -15,8 +15,8 @@
         <div class="nft-drawer-top">
           <div class="drawer-title nft-drawer-title">$4EVER HOLD</div>
           <div class="nft-drawer-desc">
-            We randomly snapshot $4EVER balance in your wallet. Every 100 $4EVER
-            contributes 0.0005% to a staking yield.
+            We randomly snapshot $4EVER balance in your wallet. Every $4EVER
+            contributes 0.002% to a staking yield.
             <a class="get-more" href="" target="_blank">Get more $4EVER!</a>
           </div>
           <div class="hold-prove mt-6">
@@ -34,25 +34,27 @@
               <div class="prove-title">My $4EVER</div>
               <div class="prove-text">
                 <ICountUp
-                        class="points"
-                        :delay="1000"
-                        :endVal="stakeInfo?.value ? stakeInfo?.value : '0'"
-                        :options="{
-                          useEasing: true,
-                          useGrouping: true,
-                          decimalPlaces: 0,
-                          separator: ',',
-                          decimal: '.',
-                          prefix: '',
-                          suffix: '',
-                        }"
-                      />
+                  class="points"
+                  :delay="1000"
+                  :endVal="stakeInfo?.value ? stakeInfo?.value : '0'"
+                  :options="{
+                    useEasing: true,
+                    useGrouping: true,
+                    decimalPlaces: 0,
+                    separator: ',',
+                    decimal: '.',
+                    prefix: '',
+                    suffix: '',
+                  }"
+                />
                 <!-- {{  }} -->
               </div>
             </div>
             <div class="d-flex justify-space-between align-center mt-4">
               <div class="prove-title">Staking yield</div>
-              <div class="prove-text" v-if="stakeInfo?.coefficient">{{ stakeInfo?.coefficient }}%</div>
+              <div class="prove-text" v-if="stakeInfo?.coefficient">
+                {{ stakeInfo?.coefficient }}%
+              </div>
               <div class="prove-text" v-else>0</div>
             </div>
             <!-- <div
@@ -77,11 +79,7 @@
               @click="showStakeYield = true"
               >Get Staking Yield</v-btn
             >
-            <v-btn
-              v-else
-              class="staked-btn"
-              height="48px"
-              >
+            <v-btn v-else class="staked-btn" height="48px">
               <img src="/img/booster/icon-wallet-check.png" alt="" width="24" />
               $4EVER Balance Tracking</v-btn
             >
@@ -105,7 +103,7 @@ import ICountUp from "vue-countup-v2";
 export default {
   components: {
     StakeYieldDialog,
-    ICountUp
+    ICountUp,
   },
   computed: {
     ...mapState({
@@ -230,15 +228,15 @@ export default {
         color: #fff;
         letter-spacing: normal;
       }
-      .staked-btn{
+      .staked-btn {
         padding: 12px 16px;
         border-radius: 4px;
-        background: #FFFFFF1A;
+        background: #ffffff1a;
         font-family: Inter;
         font-size: 14px;
         font-weight: 400;
         line-height: 16px;
-        color: #FFFFFF;
+        color: #ffffff;
         letter-spacing: normal;
       }
     }
