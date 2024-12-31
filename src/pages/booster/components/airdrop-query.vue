@@ -249,6 +249,9 @@ export default {
     bus.$on("showQueryDialogEvent", () => {
       this.handleListStatus();
     });
+    bus.$on("refreshAirdropQuery", () => {
+      this.handleListStatus();
+    });
   },
   methods: {
     copytext() {

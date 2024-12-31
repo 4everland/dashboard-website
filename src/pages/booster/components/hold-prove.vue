@@ -36,7 +36,7 @@
                 <ICountUp
                         class="points"
                         :delay="1000"
-                        :endVal="stakeInfo?.value ? stakeInfo?.value : '0'"
+                        :endVal="stakeInfo?.value ? stakeInfo?.value : 0"
                         :options="{
                           useEasing: true,
                           useGrouping: true,
