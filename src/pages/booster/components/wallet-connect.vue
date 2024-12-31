@@ -381,7 +381,8 @@ export default {
         if (data.nodeToken) {
           localStorage.nodeToken = data.nodeToken;
         }
-        bus.$emit('showQueryDialogEvent');
+        bus.$emit('refreshAirdropQuery');
+        this.$store.dispatch('HoldProveToggle');
         this.$toast2("Connect successfully!", "success");
         this.$setMsg({
           name: "updateUser",
