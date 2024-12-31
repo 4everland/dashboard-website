@@ -17,7 +17,7 @@
           <div class="nft-drawer-desc">
             We randomly snapshot $4EVER balance in your wallet. Every 100 $4EVER
             contributes 0.0005% to a staking yield.
-            <a class="get-more" href="" target="_blank">Get more $4EVER!</a>
+            <a class="get-more" href="https://www.gateio24.com/signup/VLMVUL8MBA?ref_type=103" target="_blank">Get more $4EVER!</a>
           </div>
           <div class="hold-prove mt-6">
             <div class="d-flex justify-space-between align-center">
