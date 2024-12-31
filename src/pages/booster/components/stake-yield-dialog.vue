@@ -146,7 +146,6 @@ export default {
     return {
       stakeLoading: false,
       balance: 0,
-      disabled: false,
       address: "",
     };
   },
@@ -156,6 +155,9 @@ export default {
     }),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+    disabled() {
+      return this.balance ? false : true;
     },
   },
   watch: {
@@ -171,9 +173,6 @@ export default {
         const { data } = await fetch4everBalance();
         this.balance = data.balance;
         this.address = data.address;
-        if (!this.balance) {
-          this.disabled = true;
-        }
       } catch (error) {
         console.log(error);
       }
