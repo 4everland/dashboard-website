@@ -59,6 +59,7 @@ export default {
       spinPlayReward: {},
       spinStartInfo: {},
       spinClaimedInfo: "",
+      walletConnectCallback: null,
     };
   },
   getters: {
@@ -149,6 +150,7 @@ export default {
       }
       return false;
     },
+    walletConnectCallback: (state) => state.walletConnectCallback,
   },
   mutations: {
     SHOWSTAKEDRAWER_STATE: (state, payload) => {
@@ -235,6 +237,9 @@ export default {
     SET_CLAIMED_INFO(state, value) {
       state.spinClaimedInfo = value;
     },
+    SET_WALLET_CONNECT_CALLBACK(state, payload) {
+      state.walletConnectCallback = payload.callback;
+    },
   },
   actions: {
     StakeDrawerState: async (context, payload) => {
@@ -263,6 +268,7 @@ export default {
     },
     ConnectDrawerState: async (context, payload) => {
       context.commit("SHOWCONNECTDRAWER_STATE", payload);
+      context.commit("SET_WALLET_CONNECT_CALLBACK", payload);
     },
     ConnectDrawerToggle: async (context, payload) => {
       context.commit("CONNECTDRAWER_TOGGLE", payload);

@@ -231,7 +231,11 @@ export default {
     onConnetc() {
       if (this.asMobile) {
         let state = true;
-        this.$store.dispatch("ConnectDrawerState", { state: true });
+        this.$store.dispatch("ConnectDrawerState", { state: true,
+           callback: () => {
+            this.$store.dispatch('HoldProveToggle');
+          }
+        });
       } else {
         this.$router.push("/account/config");
       }

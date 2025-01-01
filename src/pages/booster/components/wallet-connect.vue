@@ -109,7 +109,7 @@ const connector = new OmniConnect({
 
 export default {
   computed: {
-    ...mapGetters(["showConnectDrawer"]),
+    ...mapGetters(["showConnectDrawer", "walletConnectCallback"]),
 
     ...mapState({
       showInviteDrawer: (s) => s.moduleBooster.showInviteDrawer,
@@ -381,8 +381,8 @@ export default {
         if (data.nodeToken) {
           localStorage.nodeToken = data.nodeToken;
         }
-        bus.$emit('refreshAirdropQuery');
-        this.$store.dispatch('HoldProveToggle');
+        
+        this.walletConnectCallback && this.walletConnectCallback();
         this.$toast2("Connect successfully!", "success");
         this.$setMsg({
           name: "updateUser",
@@ -392,7 +392,7 @@ export default {
       }
     },
     handleToggle(state) {
-      this.$store.dispatch("ConnectDrawerState", { state });
+      this.$store.dispatch("ConnectDrawerState", { state, callback: this.walletConnectCallback });
     },
     handleLoadingToggle(val) {
       this.showConnectLoadingDrawer = val;
