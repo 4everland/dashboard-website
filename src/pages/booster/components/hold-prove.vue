@@ -121,6 +121,7 @@
                   src="/img/booster/icon-wallet-check.png"
                   alt=""
                   width="24"
+                  style="margin-right:4px"
                 />
                 $4EVER Balance Tracking
               </div>
