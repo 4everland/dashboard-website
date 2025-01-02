@@ -388,17 +388,14 @@ export const ConnectBitget = async () => {
 let BinanceProvider = getBinanceProvider({ chainId: 56 });
 
 export const ConnectBinance = async () => {
-  if (BinanceProvider.signClient.connected) {
-    BinanceProvider.disconnect();
-  }
   try {
     BinanceProvider = getBinanceProvider({ chainId: 56 });
+
+    if (!BinanceProvider.isBinance && BinanceProvider.connected) {
+      BinanceProvider.disconnect();
+    }
     const accounts = await BinanceProvider.enable();
 
-    console.log("🚀 ~ enable accounts:", accounts);
-    if (!accounts) {
-      await BinanceProvider.off();
-    }
     return accounts;
   } catch (error) {
     console.log(error);
@@ -412,7 +409,6 @@ export const SignBinance = async (account, nonce, inviteCode, capToken) => {
       method: "personal_sign",
       params: [msg, account],
     });
-    console.log("🚀 ~ signMessage ~ res:", signature);
     const data = {
       signature,
       appName: "BUCKET",
@@ -436,7 +432,6 @@ export const getSignBinance = async (account, nonce) => {
     method: "personal_sign",
     params: [msg, account],
   });
-  console.log("🚀 ~ signMessage ~ res:", signature);
 
   return signature;
 };
