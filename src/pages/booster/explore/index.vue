@@ -52,6 +52,145 @@
         :totalPoint="info.totalPoint"
         @onExplore="handleExplore"
       ></ExploreBar>
+      <div class="nodeBoostWrap" v-if="asMobile">
+        <div class="nodeboost-title pa-4 ">
+          Node Boost
+        </div>
+        <div class="nodeboost-content px-4">
+          <div class="d-flex justify-space-between">
+            <div class="nodeboost-item" :class="{ 'storage-activity': !storageLocked }">
+              <div class="storage-boost">
+                <div style="position: relative">
+                  <div class="text-center">
+                    <img
+                      v-if="storageLocked"
+                      class="storage-boost-img"
+                      src="/img/booster/new/icon-storage.png"
+                      height="58"
+                      alt=""
+                      />
+                    <img
+                      v-else
+                      class="storage-boost-img"
+                      src="/img/booster/new/icon-storage-active.png"
+                      height="58"
+                      alt=""
+                      />
+                  </div>
+                </div>
+                <div class="top-card" id="storage-boost" v-if="storageLocked">
+                  <div class="card-storage" :class="{ locked: storageLocked }">
+                    <div class="task-title d-flex align-center" style="gap: 2px">
+                      <img src="/img/booster/svg/locked-icon.svg" width="16" alt="" />
+                      <span class="text-center"> STORAGE<br> BOOST</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="unlocked-card text-center" id="storage-boost">
+                  <div class="card-storage" v-if="!storageLocked">
+                    <div
+                      class="unlocked-card-title d-flex align-center justify-center"
+                      
+                      style="gap: 2px"
+                    >
+                      <span class="text-center"> STORAGE <br> BOOST</span>
+                      
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+            <div class="nodeboost-item" :class="{ 'computing-activity': !computingLocked }">
+              <div class="computing-boost">
+                <div style="position: relative">
+                  <div class="text-center">
+                    <img
+                      v-if="computingLocked"
+                      class="storage-boost-img"
+                      src="/img/booster/new/icon-computing.png"
+                      height="58"
+                      alt=""
+                      />
+                      <img
+                      v-else
+                      class="storage-boost-img"
+                      src="/img/booster/new/icon-computing-active.png"
+                      height="58"
+                      alt=""
+                      />
+                  </div>
+                </div>
+                <div class="top-card" v-if="computingLocked">
+                  <div class="card-storage" :class="{ locked: computingLocked }">
+                    <div class="task-title d-flex align-center" style="gap: 2px">
+                      <img src="/img/booster/svg/locked-icon.svg" width="16" alt="" />
+                      <span class="text-center"> COMPUTING<br>BOOST</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="unlocked-card text-center">
+                  <div class="card-storage" v-if="!computingLocked">
+                    <div
+                      class="unlocked-card-title d-flex align-center justify-center"
+                      v-if="!computingLocked"
+                      style="gap: 2px"
+                    >
+                      <span class="text-center"> COMPUTING<br> BOOST</span>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              
+            </div>
+            <div class="nodeboost-item" :class="{ 'network-activity': !networkLocked }">
+              <div class="network-boost">
+                <div style="position: relative">
+                  <div class="text-center">
+                    <img
+                      v-if="networkLocked"
+                      class="storage-boost-img"
+                      src="/img/booster/new/icon-network-boost.png"
+                      height="58"
+                      alt=""
+                      />
+                    <img
+                      v-else
+                      class="storage-boost-img"
+                      src="/img/booster/new/icon-network-boost-active.png"
+                      height="58"
+                      alt=""
+                      />
+                  </div>
+                </div>
+                <div class="top-card" v-if="networkLocked">
+                  <div class="card-storage" :class="{ locked: networkLocked }">
+                    <div class="task-title d-flex align-center" style="gap: 2px">
+                      <img src="/img/booster/svg/locked-icon.svg" width="16" alt="" />
+
+                      <span class="text-center">NETWORK<br> BOOST</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="unlocked-card text-center">
+                  <div class="card-storage" v-if="!networkLocked">
+                  <div
+                    class="unlocked-card-title d-flex align-center justify-center"
+                    
+                    style="gap: 2px"
+                  >
+                    <span class="text-center"> NETWORK<br> BOOST</span>
+                  </div>
+                  
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <v-dialog
@@ -150,25 +289,7 @@ export default {
       //   ? "https://test-boost.4everland.store/"
       //   : "https://static.4everland.org/";
       if (this.asMobile) {
-        if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
-          return url + "boost/background/mobile-bg.png";
-        if (!this.storageLocked && !this.networkLocked)
-          return url + "boost/background/mobile-bg-s2n.png";
-        if (!this.storageLocked && !this.computingLocked)
-          return url + "boost/background/mobile-bg-s2c.png";
-        if (!this.networkLocked && this.computingLocked)
-          return url + "boost/background/mobile-bg-n2c.png";
-        if (!this.storageLocked)
-          return url + "boost/background/mobile-bg-storage.png";
-        if (!this.networkLocked)
-          return url + "boost/background/mobile-bg-network.png";
-        if (!this.computingLocked)
-          return url + "boost/background/mobile-bg-computed.png";
-
-        if (this.info.baseRate.length == 0) {
-          return url + "boost/background/mobile-bg-locked.png";
-        }
-        return url + "boost/background/mobile-bg-unlocked.png";
+        return "/img/booster/mobile-bg-unlocked-new1.png"
       } else {
         if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
           return "https://static.4everland.org/boost/background/bg.webm";
@@ -372,7 +493,7 @@ export default {
 @media screen and (max-width: 960px) {
   .point-square {
     left: 48% !important;
-    top: 21% !important;
+    top: 35% !important;
   }
 }
 @keyframes bounce {
@@ -413,7 +534,6 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
 
   .booster-overview-bg {
     max-height: 100vh;
@@ -473,5 +593,81 @@ export default {
   border-radius: 24px;
   background: rgba(35, 36, 42, 0.9);
   backdrop-filter: blur(8.649999618530273px);
+}
+.nodeBoostWrap{
+  width: 100%;
+  position: absolute;
+  top: 98%;
+  background:
+    linear-gradient(180deg, rgba(58, 71, 98, 0.25) 0%, rgba(58, 71, 98, 0) 69.08%),
+    linear-gradient(154.45deg, rgba(97, 114, 243, 0) 42.1%, #6172F3 100%),#06090F;
+  border: 1px solid rgba(98,112,151);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  border-image-slice: 1;
+  border-bottom-color: transparent;
+  padding-bottom: 20px;
+  .nodeboost-title{
+    font-size: 16px;
+    color: #fff;
+    text-shadow: 0px 0px 8px #6172F3;
+    font-weight: bold;
+    height: 75px;
+  }
+  .nodeboost-item{
+    position: relative;
+    width: 30%;
+    background: linear-gradient(162.54deg, #0C111D 15.68%, #182230 91.11%);
+    border-radius: 8px;
+    border-bottom-right-radius: 16px;
+    height: 90px;
+    .storage-boost, .computing-boost, .network-boost{
+      margin-top:-18px;
+    }
+  }
+  .storage-activity {
+    background: linear-gradient(162.54deg, #1102FC 15.68%, #0FE1F8 91.11%);
+  }
+  .computing-activity {
+    background: linear-gradient(162.54deg, #6938EF 15.68%, #6172F3 91.11%);
+  }
+  .network-activity {
+    background: linear-gradient(162.54deg, #009393 15.68%, #1EEFA4 91.11%);
+  }
+}
+.card-storage {
+  white-space: nowrap;
+  padding: 4px;
+  border-radius: 4px;
+  backdrop-filter: blur(2px);
+  > img {
+    position: absolute;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .task-title {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 4px;
+    color: rgba(255, 255, 255, 0.75);
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    background: url("/img/booster/svg/fringe-bg.svg") no-repeat 100%;
+    text-shadow: none;
+    line-height: 10px;
+  }
+}
+.unlocked-card-title {
+  white-space: nowrap;
+  padding: 2px 4px;
+  border-top: 1px solid rgba(164, 188, 253, 0.25);
+  border-bottom: 1px solid rgba(164, 188, 253, 0.25);
+  background: rgba(97, 114, 243, 0.1);
+  backdrop-filter: blur(2px);
+  color: rgba(255, 255, 255, 1);
+  text-align: center;
+  font-size: 10px;
+  font-weight: 400;
 }
 </style>
