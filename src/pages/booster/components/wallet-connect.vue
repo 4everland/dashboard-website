@@ -372,7 +372,7 @@ export default {
 
         const { data } = await fetchWeb3Vcode(code, params);
 
-        this.$store.dispatch("ConnectDrawerState", { state: false });
+        this.$store.dispatch("ConnectDrawerState", { state: false, callback: this.walletConnectCallback  });
         this.showConnectLoadingDrawer = false;
         this.loadingIndex = null;
         this.walletType = null;
