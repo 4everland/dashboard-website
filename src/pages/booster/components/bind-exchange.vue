@@ -252,7 +252,7 @@ export default {
         {
           title: "Gate.io",
           logo: require("/public/img/booster/earnings/gate-logo.png"),
-          inviteUrl: "https://www.gateio24.com/signup/VLMVUL8MBA?ref_type=103",
+          inviteUrl: "https://www.gate.io/signup/VLMVUL8MBA?ref_type=103",
           docUrl: "https://4everland.medium.com/how-to-locate-your-gate-io-uid-and-participate-in-the-4everland-airdrop-campaign-2af8eaaa4f6b",
           value: "Gate",
           disabled: false

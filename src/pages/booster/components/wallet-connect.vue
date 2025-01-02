@@ -109,7 +109,7 @@ const connector = new OmniConnect({
 
 export default {
   computed: {
-    ...mapGetters(["showConnectDrawer"]),
+    ...mapGetters(["showConnectDrawer", "walletConnectCallback"]),
 
     ...mapState({
       showInviteDrawer: (s) => s.moduleBooster.showInviteDrawer,
@@ -372,7 +372,7 @@ export default {
 
         const { data } = await fetchWeb3Vcode(code, params);
 
-        this.$store.dispatch("ConnectDrawerState", { state: false });
+        this.$store.dispatch("ConnectDrawerState", { state: false, callback: this.walletConnectCallback  });
         this.showConnectLoadingDrawer = false;
         this.loadingIndex = null;
         this.walletType = null;
@@ -381,7 +381,8 @@ export default {
         if (data.nodeToken) {
           localStorage.nodeToken = data.nodeToken;
         }
-        bus.$emit('showQueryDialogEvent');
+        
+        this.walletConnectCallback && this.walletConnectCallback();
         this.$toast2("Connect successfully!", "success");
         this.$setMsg({
           name: "updateUser",
@@ -391,7 +392,7 @@ export default {
       }
     },
     handleToggle(state) {
-      this.$store.dispatch("ConnectDrawerState", { state });
+      this.$store.dispatch("ConnectDrawerState", { state, callback: this.walletConnectCallback });
     },
     handleLoadingToggle(val) {
       this.showConnectLoadingDrawer = val;
@@ -435,6 +436,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   margin: 8px 0;
+  color: #fff;
   .wallet-icon-box {
     display: flex;
     align-items: center;

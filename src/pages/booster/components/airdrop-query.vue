@@ -249,6 +249,9 @@ export default {
     bus.$on("showQueryDialogEvent", () => {
       this.handleListStatus();
     });
+    bus.$on("refreshAirdropQuery", () => {
+      this.handleListStatus();
+    });
   },
   methods: {
     copytext() {
@@ -313,7 +316,10 @@ Airdrop: `;
     },
     onConnetc() {
       let state = true;
-      this.$store.dispatch("ConnectDrawerState", { state });
+      this.$store.dispatch("ConnectDrawerState", { state, callback: () => {
+          bus.$emit('refreshAirdropQuery');
+        }
+      });
     },
     toConfig() {
       this.$router.push("/account/config");
