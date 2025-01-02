@@ -20,7 +20,7 @@ const WalletList = [
     icon: require("@/assets/imgs/bn.png"),
     provider: null,
     walletType: "BN",
-    isEvm: true,
+    isEvm: false,
     type: 103,
   },
   {

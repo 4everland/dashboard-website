@@ -86,6 +86,8 @@ import {
   SignPetra,
   ConnectWalletCon,
   SignWalletCon,
+  ConnectBinance,
+  SignBinance,
 } from "@/utils/login";
 import * as fcl from "@onflow/fcl";
 
@@ -245,6 +247,9 @@ export default {
         case "WalletConnect":
           this.walletConnect(item);
           break;
+        case "Binance Web3 Wallet":
+          this.binanceConnect(item);
+          break;
         default:
           break;
       }
@@ -331,6 +336,27 @@ export default {
         this.inviteCode,
         this.capToken,
         session
+      );
+      if (stoken) {
+        this.ssoLogin(stoken);
+      }
+    },
+    async binanceConnect() {
+      const accounts = await ConnectBinance();
+
+      if (!accounts) return;
+
+      const account = accounts[0];
+
+      const nonce = await this.onExchangeCode(account);
+      if (!nonce) {
+        return;
+      }
+      const stoken = await SignBinance(
+        account,
+        nonce,
+        this.inviteCode,
+        this.capToken
       );
       if (stoken) {
         this.ssoLogin(stoken);

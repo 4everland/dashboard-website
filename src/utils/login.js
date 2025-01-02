@@ -6,6 +6,8 @@ import noWallet from "@/components/noWallet/index.js";
 import SignClient from "@walletconnect/sign-client";
 import { WalletConnectModal } from "@walletconnect/modal";
 
+import { getProvider as getBinanceProvider } from "@binance/w3w-ethereum-provider";
+
 Vue.use(noWallet);
 
 let _signClient = null;
@@ -380,4 +382,60 @@ export const ConnectBitget = async () => {
   }
   const accounts = await provider.request({ method: "eth_requestAccounts" });
   return accounts;
+};
+
+let BinanceProvider = getBinanceProvider({ chainId: 56 });
+
+export const ConnectBinance = async () => {
+  if (BinanceProvider.signClient.connected) {
+    BinanceProvider.disconnect();
+  }
+  try {
+    BinanceProvider = getBinanceProvider({ chainId: 56 });
+    const accounts = await BinanceProvider.enable();
+
+    console.log("🚀 ~ enable accounts:", accounts);
+    if (!accounts) {
+      await BinanceProvider.off();
+    }
+    return accounts;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const SignBinance = async (account, nonce, inviteCode, capToken) => {
+  const msg = "0x" + Buffer.from(nonce).toString("hex");
+  try {
+    const signature = await BinanceProvider.request({
+      method: "personal_sign",
+      params: [msg, account],
+    });
+    console.log("🚀 ~ signMessage ~ res:", signature);
+    const data = {
+      signature,
+      appName: "BUCKET",
+      inviteCode,
+      type: "ETH",
+      walletType: "BN",
+      capT: capToken,
+    };
+
+    const stoken = await Web3Login(account, data);
+    return stoken;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getSignBinance = async (account, nonce) => {
+  const msg = "0x" + Buffer.from(nonce).toString("hex");
+
+  const signature = await BinanceProvider.request({
+    method: "personal_sign",
+    params: [msg, account],
+  });
+  console.log("🚀 ~ signMessage ~ res:", signature);
+
+  return signature;
 };
