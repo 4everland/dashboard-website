@@ -17,7 +17,12 @@
           <div class="nft-drawer-desc">
             We randomly snapshot $4EVER balance in your wallet. Every $4EVER
             contributes 0.002% to a staking yield.
-            <a class="get-more" href="https://www.gate.io/signup/VLMVUL8MBA?ref_type=103" target="_blank">Get more $4EVER!</a>
+            <a
+              class="get-more"
+              href="https://www.gate.io/signup/VLMVUL8MBA?ref_type=103"
+              target="_blank"
+              >Get more $4EVER!</a
+            >
           </div>
           <div class="hold-prove mt-6">
             <div class="d-flex justify-space-between align-center">
@@ -50,19 +55,19 @@
               ></v-skeleton-loader>
               <div class="prove-text" v-else>
                 <ICountUp
-                        class="points"
-                        :delay="1000"
-                        :endVal="stakeInfo?.value ? stakeInfo?.value : 0"
-                        :options="{
-                          useEasing: true,
-                          useGrouping: true,
-                          decimalPlaces: 0,
-                          separator: ',',
-                          decimal: '.',
-                          prefix: '',
-                          suffix: '',
-                        }"
-                      />
+                  class="points"
+                  :delay="1000"
+                  :endVal="stakeInfo?.value ? stakeInfo?.value : 0"
+                  :options="{
+                    useEasing: true,
+                    useGrouping: true,
+                    decimalPlaces: 0,
+                    separator: ',',
+                    decimal: '.',
+                    prefix: '',
+                    suffix: '',
+                  }"
+                />
                 <!-- {{  }} -->
               </div>
             </div>
@@ -95,20 +100,31 @@
                 {{ stakeTotalInfo?.totalStake }} $4EVER
               </div>
             </div> -->
-          </div>
-          <div class="mt-6 d-flex justify-end">
-            <v-btn
-              v-if="!stakeInfo?.value"
-              class="staking-btn"
-              width="146px"
-              height="40px"
-              @click="showStakeYield = true"
-              >Get Staking Yield</v-btn
+            <div
+              class="mt-6 d-flex justify-center align-center btn-border pt-6 mb-2"
             >
-            <v-btn v-else class="staked-btn" height="48px">
-              <img src="/img/booster/icon-wallet-check.png" alt="" width="24" />
-              $4EVER Balance Tracking</v-btn
-            >
+              <v-btn
+                v-if="!stakeInfo?.value"
+                class="staking-btn"
+                height="32px"
+                @click="showStakeYield = true"
+                >Get Staking Yield
+                <img
+                class="ml-1"
+                  src="/img/booster/arrow-narrow-right.png"
+                  alt=""
+                  width="24"
+                />
+              </v-btn>
+              <div v-else class="staked-btn d-flex justify-center align-center">
+                <img
+                  src="/img/booster/icon-wallet-check.png"
+                  alt=""
+                  width="24"
+                />
+                $4EVER Balance Tracking
+              </div>
+            </div>
           </div>
         </div>
       </v-container>
@@ -246,6 +262,9 @@ export default {
           border-top: 1px solid rgba(255, 255, 255, 0.3);
         }
       }
+      .btn-border {
+        border-top: 1px solid rgba(255, 255, 255, 0.3);
+      }
       .staking-btn {
         padding: 12px 16px;
         border-radius: 4px;
@@ -256,17 +275,20 @@ export default {
         line-height: 16px;
         color: #fff;
         letter-spacing: normal;
+        width: 100%;
       }
       .staked-btn {
         padding: 12px 16px;
         border-radius: 4px;
-        background: #ffffff1a;
+        background: transparent;
         font-family: Inter;
         font-size: 14px;
         font-weight: 400;
         line-height: 16px;
         color: #ffffff;
         letter-spacing: normal;
+        width: 100%;
+        height: 32px;
       }
     }
   }
