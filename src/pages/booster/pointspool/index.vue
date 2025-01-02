@@ -463,12 +463,12 @@ export default {
         color: #d0d5dd !important;
         padding: 0;
         font-size: 16px;
-        
+        min-width: 90px;
       }
       .v-tabs-bar {
           height: 35px;
           padding: 4px;
-          margin: 0 10px;
+          margin: 0 5px;
         }
       .v-ripple__container {
           display: none;
@@ -478,9 +478,10 @@ export default {
         font-weight: bold !important;
         .itemActive {
           border-radius: 100px;
-          padding: 3px 15px;
+          padding: 3px 5px;
           background: #6172F3;
-          font-weight: 900;
+          font-weight: 700;
+          min-width: 90px;
         }
       }
     }
