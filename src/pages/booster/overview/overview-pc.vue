@@ -50,15 +50,13 @@
                 @click="
                   () =>
                     !this.boostLocked
-                      ? this.$store.dispatch('StakeDrawerToggle')
+                      ? this.$store.dispatch('HoldProveToggle')
                       : handleStartBoost()
                 "
               >
-                <div class="endTime" v-if="!stakeEnd">
-                  <count-down :endTimeStamp="endTimeStake"></count-down>
-                </div>
-                <img src="/img/booster/stake-icon.png" alt="" width="22" />
-                {{ !stakeEnd ? "Staking": "End"}}</v-btn
+                <img src="/img/booster/icon_tg_new.png" width="24" alt=""  style="right: -7px;top: -5px;position: absolute;" />
+                <img src="/img/booster/icon_stake_4ever.png" alt="" width="24" />
+                Staking</v-btn
               >
             </div>
           </div>
@@ -71,17 +69,28 @@
       style="left: 20px; top: 100px"
       @click="showBindExchange"
     >
-      <img src="/img/booster/new/icon-bind-pc.png" width="96" alt="" />
-      <div class="trigger-text bind fz-22 fw-b text-center" style="width: 96px;">Bind</div>
+      <img src="/img/booster/new/icon-bind-pc.png" width="72" alt="" />
+      <div class="trigger-text bind fz-16 fw-b text-center" style="width: 72px;">Bind</div>
     </div>
     <div
       v-if="!boostLocked"
       class="trigger-icon pos-a"
-      style="left: 125px; top: 100px"
+      style="left: 20px; top: 180px"
       @click="showStartQueryDialog"
     >
-      <img src="/img/booster/new/Query_4x_1.gif" width="96" alt="" />
-      <div class="trigger-text bind fz-22 fw-b text-center" style="width: 96px;">Airdrop</div>
+      <img src="/img/booster/new/Query_4x_1.gif" width="72" alt="" />
+      <div class="trigger-text bind fz-16 fw-b text-center" style="width: 72px;">Airdrop</div>
+    </div>
+
+    <div
+      v-if="!boostLocked"
+      class="trigger-icon pos-a"
+      style="left: 20px; top: 260px"
+      @click="()=> this.$store.dispatch('HoldProveToggle') "
+    >
+      <img src="/img/booster/icon_tg_new.png" width="33" alt=""  style="right: 0px;top: 0px;position: absolute;" />
+      <img src="/img/booster/pc-staking.png" width="72" alt="" />
+      <div class="trigger-text bind fz-16 fw-b text-center" style="width: 72px;">Staking</div>
     </div>
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
@@ -479,25 +488,13 @@ export default {
       .staking-btn {
         letter-spacing: 0;
         font-style: italic;
+        font-size: 12px;
         font-weight: bold;
-        color: #fff;
+        color: #06090F;
         border-radius: 4px;
-        background: linear-gradient(90deg, #f8008c 0%, #f86300 100%);
+        background: linear-gradient(155.14deg, #C0833E 9.04%, #FFDE7F 88.73%);
         position: relative;
-        .endTime {
-          position: absolute;
-          right: -10px;
-          top: -15px;
-          font-size: 10px;
-          font-style:normal;
-          padding: 2px 4px;
-          color: #1102FC;
-          border-top-left-radius: 8px;
-          border-top-right-radius: 2px;
-          border-bottom-left-radius: 2px;
-          border-bottom-right-radius: 8px;
-          background-color: #FFFFFF;
-        }
+        
       }
     }
   }

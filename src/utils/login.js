@@ -263,6 +263,7 @@ const walletConnectModal = new WalletConnectModal({
   standaloneChains: ["eip155:1"],
   themeVariables: {
     "--wcm-background-color": "#735EA1",
+    "--wcm-z-index": "1000",
     // "--wcm-accent-color": "#735EA1",
   },
 });
