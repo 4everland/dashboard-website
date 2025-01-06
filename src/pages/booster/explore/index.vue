@@ -47,6 +47,7 @@
       </div>
       <ExploreBar
         class="explore-bar"
+        :class="{'explore-bar-mobile': asMobile }"
         :uid="info.uid"
         :address="info.address"
         :totalPoint="info.totalPoint"
@@ -493,7 +494,7 @@ export default {
 @media screen and (max-width: 960px) {
   .point-square {
     left: 48% !important;
-    top: 35% !important;
+    top: 41% !important;
   }
 }
 @keyframes bounce {
@@ -536,9 +537,11 @@ export default {
   height: 100%;
 
   .booster-overview-bg {
-    max-height: 100vh;
+    max-height: initial !important;
     width: 100%;
     display: block;
+    object-fit: cover;
+    min-height: 100vh;
   }
   .booster-overview-bg.vid {
     object-fit: cover;
@@ -581,6 +584,13 @@ export default {
     transform: translateX(-50%);
     bottom: 20px;
   }
+  .explore-bar-mobile {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 76%;
+    bottom: unset;
+  }
 }
 ::v-deep .exploring-dialog {
   background: transparent !important;
@@ -597,7 +607,7 @@ export default {
 .nodeBoostWrap{
   width: 100%;
   position: absolute;
-  top: 98%;
+  top: 85%;
   background:
     linear-gradient(180deg, rgba(58, 71, 98, 0.25) 0%, rgba(58, 71, 98, 0) 69.08%),
     linear-gradient(154.45deg, rgba(97, 114, 243, 0) 42.1%, #6172F3 100%),#06090F;
