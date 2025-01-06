@@ -634,7 +634,7 @@ export default {
     },
     async onBindWithBinance(item) {
       this.walletConnectLoading = true;
-      this.loadingName = "Binance Web3 Wallet";
+      this.loadingName = "Binance Wallet";
 
       const accounts = await ConnectBinance();
       const account = accounts[0];

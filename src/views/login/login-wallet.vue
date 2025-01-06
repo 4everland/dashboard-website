@@ -247,7 +247,7 @@ export default {
         case "WalletConnect":
           this.walletConnect(item);
           break;
-        case "Binance Web3 Wallet":
+        case "Binance Wallet":
           this.binanceConnect(item);
           break;
         default:

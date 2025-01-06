@@ -16,7 +16,7 @@ const WalletList = [
     type: 7,
   },
   {
-    name: "Binance Web3 Wallet",
+    name: "Binance Wallet",
     icon: require("@/assets/imgs/bn.png"),
     provider: null,
     walletType: "BN",
