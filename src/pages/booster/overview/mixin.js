@@ -140,12 +140,29 @@ export default {
     async handleUnlock(index) {
       this.$emit("handleUnlock", index);
     },
+    playaudio() {
+      const audio = this.$refs.audioPlayer;
+      audio.play();
+      if ("vibrate" in navigator) {
+        navigator.vibrate(200);
+      }
+      
+    },
+    async handleShadow() {
+      const box = document.getElementById("navtop-mobile-points");
+      box.classList.add('box-shadow-animate');
+      await this.$sleep(500);
+      box.classList.remove('box-shadow-animate');
+    },
     async handleClaim() {
       try {
         if (this.computedPoints < 1)
           return this.$toast2("Points below 1 unclaimable.", "info");
         if (this.asMobile) {
+          this.playaudio();
           coinMove("mobile-point-send", "mobile-point-receive");
+          await this.$sleep(2000)
+          this.handleShadow();
         } else {
           coinMove("point-send", "point-receive");
         }

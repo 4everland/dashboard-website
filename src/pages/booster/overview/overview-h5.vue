@@ -448,6 +448,7 @@
     <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
     <points-pool v-if="!boostLocked"></points-pool>
     <EarnDialog v-model="showPartnerInfo" :info="partnerInfo"></EarnDialog>
+    <audio ref="audioPlayer" src="/audio/collect.mp3"></audio>
   </div>
 </template>
 
