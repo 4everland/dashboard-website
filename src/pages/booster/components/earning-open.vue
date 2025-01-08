@@ -22,7 +22,7 @@
             <v-btn class="earning-btn">
               <span class="btn-text"
                 >{{ $utils.formatCompactNumbers(info.projectTotalPoints)
-                }}{{ " " }}{{ info.projectName }} Points</span
+                }}{{ " " }}{{ info.projectName }} {{ info.rewardType == 'POINT'? 'Points': 'Tokens' }}</span
               >
             </v-btn>
           </div>
@@ -278,6 +278,7 @@ export default {
       left: 20%;
       transform: translateX(-50%);
       z-index: 3;
+      border-radius: 80px;
     }
     .earning-btn {
       height: 34px;

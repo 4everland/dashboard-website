@@ -60,13 +60,13 @@
             >
               <div class="d-flex justify-start align-center">
                 <div>
-                  <img :src="item.projectLogoUrl" width="44" alt="" />
+                  <img :src="item.projectLogoUrl" width="44" class="projectImg" alt="" />
                 </div>
                 <div style="margin-left: 12px">
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints)
-                    }}{{ " " }}{{ item.projectName }} Points
+                    }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
                   </div>
                 </div>
               </div>
@@ -104,13 +104,13 @@
             >
               <div class="d-flex justify-start align-center">
                 <div>
-                  <img :src="item.projectLogoUrl" width="44" alt="" />
+                  <img :src="item.projectLogoUrl" width="44" class="projectImg" alt="" />
                 </div>
                 <div style="margin-left: 12px">
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints)
-                    }}{{ " " }}{{ item.projectName }} Points
+                    }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
                   </div>
                 </div>
               </div>
@@ -134,13 +134,13 @@
             >
               <div class="d-flex justify-start align-center">
                 <div>
-                  <img :src="item.projectLogoUrl" width="44" alt="" />
+                  <img :src="item.projectLogoUrl" width="44" class="projectImg" alt="" />
                 </div>
                 <div style="margin-left: 12px">
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints)
-                    }}{{ " " }}{{ item.projectName }} Points
+                    }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
                   </div>
                 </div>
               </div>
@@ -163,13 +163,13 @@
             >
               <div class="d-flex justify-start align-center">
                 <div>
-                  <img :src="item.projectLogoUrl" width="44" alt="" />
+                  <img :src="item.projectLogoUrl" width="44" class="projectImg" alt="" />
                 </div>
                 <div style="margin-left: 12px">
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints) }}
-                    {{ " " }}{{ item.projectName }} Points
+                    {{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
                   </div>
                 </div>
               </div>
@@ -454,6 +454,9 @@ export default {
     margin-top: -20px;
     padding-top: 0px;
     background: #0C111D;
+    .projectImg {
+      border-radius: 44px;
+    }
     .tabWrap {
       height: 35px;
       border-radius: 100px;

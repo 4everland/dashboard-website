@@ -60,7 +60,7 @@
           </div>
 
           <div class="user-card-item fz-12 mt-4">
-            <div class="user-card-item-title">Points Balance</div>
+            <div class="user-card-item-title">Mining Balance</div>
             <div class="linear-border mb-1"></div>
             <div v-if="!showPointsBalance" v-for="(item, index) in tokenList" :key="index">
               <div
@@ -68,7 +68,7 @@
                 @click="showBalance(item.projectId)"
               >
                 <div class="d-flex align-center" style="gap: 8px">
-                  <img :src="item.logoUrl" width="40" alt="" />
+                  <img :src="item.logoUrl" width="40" class="projectImg" alt="" />
 
                   <div class="d-flex flex-column">
                     <div class="d-flex align-center">
@@ -439,6 +439,9 @@ export default {
     line-height: 16px;
     text-align: left;
     color: #94a3b8;
+  }
+  .projectImg {
+    border-radius: 40px;
   }
 }
 </style>
