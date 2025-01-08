@@ -21,6 +21,7 @@
               :src="item?.projectLogoUrl"
               v-if="item?.projectLogoUrl"
               width="32"
+              class="projectImg"
               alt=""
             />
             <div class="lockedWrap"></div>
@@ -312,6 +313,10 @@ export default {
   .inneritem {
     animation: bounce 4s infinite linear;
   }
+}
+
+.projectImg {
+  border-radius: 32px;
 }
 
 @keyframes bounce {
