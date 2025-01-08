@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="trigger-icon token-dialog-icon" @click="showTokenDialog = true">
-      <img src="/img/booster/4ever-token-icon.gif" width="56" alt="" />
+      <img src="/img/booster/new/icon-4EVER.png" width="48" alt="" />
       <div class="trigger-text fz-12 fw-b text-center">$4EVER</div>
     </div>
     <v-dialog
@@ -153,12 +153,16 @@ export default {
   .trigger-text {
     position: absolute;
     left: 0;
-    bottom: 15%;
-    width: 60px;
-    height: 20px;
-    line-height: 20px;
-    background: url("/img/booster/svg/4ever-token-text-bg.svg");
-    backdrop-filter: blur(2px);
+    bottom: 5%;
+    width: 52px;
+    height: 16px;
+    line-height: 16px;
+    border-radius:4px;
+    background: linear-gradient(
+      120deg,
+      rgba(97, 114, 243, 0.5) 24.53%,
+      rgba(17, 2, 252, 0.5) 74.37%
+    );
   }
 }
 .token-dialog-content {

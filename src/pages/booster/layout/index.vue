@@ -58,7 +58,6 @@ export default {
   },
   computed: {
     isTgMiniApp() {
-      console.log(this.meta);
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
     meta() {
@@ -113,5 +112,6 @@ img {
   position: relative;
   height: 100%;
   color: #fff;
+  background: #000;
 }
 </style>

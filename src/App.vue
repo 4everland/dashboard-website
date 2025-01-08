@@ -88,11 +88,46 @@ export default {
     font-weight: normal;
   }
 }
-.points-swap{
+.points-swap {
   .v-progress-linear__determinate {
-    background: linear-gradient(90deg, #FF35BA 27.76%, #FFF6B6 73.98%) !important;
+    background: linear-gradient(
+      90deg,
+      #ff35ba 27.76%,
+      #fff6b6 73.98%
+    ) !important;
     border-radius: 16px !important;
     height: 8px !important;
   }
+}
+.earn-list,
+.assets-tab {
+  .v-slide-group__wrapper {
+    height: 28px !important;
+  }
+}
+.select-confirm {
+  .v-text-field.v-text-field--solo:not(.v-text-field--solo-flat)
+    > .v-input__control
+    > .v-input__slot {
+    box-shadow: none !important;
+    border: 1px solid #ffffff40 !important;
+  }
+  .theme--light.v-icon {
+    color: #fff;
+  }
+  .v-input__slot {
+    border-radius: 4px !important;
+    border: 1px solid #ffffff40 !important;
+    padding: 2px 12px !important;
+    background: #ffffff0d !important;
+  }
+  .theme--light.v-text-field:not(.v-input--has-state):hover
+    > .v-input__control
+    > .v-input__slot:before {
+    border: none !important;
+  }
+.theme--light.v-input input, .theme--light.v-input textarea{
+    color: #FFF !important;
+}
 }
 </style>

@@ -31,7 +31,8 @@ export default {
   },
   computed: {
     residueTimeStamp() {
-      return Math.ceil(this.endTimeStamp - this.curTimeStamp);
+      const _residueTimeStamp = Math.ceil(this.endTimeStamp - this.curTimeStamp);
+      return _residueTimeStamp < 0 ? 0 : _residueTimeStamp;
     },
     hours() {
       const hours = Math.floor(this.residueTimeStamp / 3600);

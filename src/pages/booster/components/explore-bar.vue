@@ -1,5 +1,5 @@
 <template>
-  <div class="explore-bar py-2 d-flex align-center">
+  <div class="explore-bar py-1 d-flex align-center">
     <div
       class="px-2 px-md-6 flex-1 d-flex align-center cursor-p"
       @click="$router.push('/boost')"
@@ -121,7 +121,7 @@ export default {
     align-items: center;
     justify-content: space-around;
     gap: 8px;
-    height: 48px;
+    height: 30px;
     font-family: "DIN Alternate";
     font-size: 20px;
     background: linear-gradient(

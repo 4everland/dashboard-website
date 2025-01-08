@@ -12,7 +12,9 @@
             max-width="83"
             @click="
               () =>
-                !this.boostLocked ? this.$store.commit('TASKDRAWER_TOGGLE') : ''
+                !this.boostLocked
+                  ? this.$store.commit('TASKDRAWER_TOGGLE')
+                  : handleStartBoost()
             "
           >
             <img src="/img/booster/svg/more.svg" width="16" alt="" />
@@ -48,17 +50,47 @@
                 @click="
                   () =>
                     !this.boostLocked
-                      ? this.$store.dispatch('StakeDrawerToggle')
-                      : ''
+                      ? this.$store.dispatch('HoldProveToggle')
+                      : handleStartBoost()
                 "
               >
-                <img src="/img/booster/stake-icon.png" alt="" width="22" />
+                <img src="/img/booster/icon_tg_new.png" width="24" alt=""  style="right: -7px;top: -5px;position: absolute;" />
+                <img src="/img/booster/icon_stake_4ever.png" alt="" width="24" />
                 Staking</v-btn
               >
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div
+      v-if="!boostLocked"
+      class="trigger-icon pos-a"
+      style="left: 20px; top: 100px"
+      @click="showBindExchange"
+    >
+      <img src="/img/booster/new/icon-bind-pc.png" width="72" alt="" />
+      <div class="trigger-text bind fz-16 fw-b text-center" style="width: 72px;">Bind</div>
+    </div>
+    <div
+      v-if="!boostLocked"
+      class="trigger-icon pos-a"
+      style="left: 20px; top: 180px"
+      @click="showStartQueryDialog"
+    >
+      <img src="/img/booster/new/Query_4x_1.gif" width="72" alt="" />
+      <div class="trigger-text bind fz-16 fw-b text-center" style="width: 72px;">Airdrop</div>
+    </div>
+
+    <div
+      v-if="!boostLocked"
+      class="trigger-icon pos-a"
+      style="left: 20px; top: 260px"
+      @click="()=> this.$store.dispatch('HoldProveToggle') "
+    >
+      <img src="/img/booster/icon_tg_new.png" width="33" alt=""  style="right: 0px;top: 0px;position: absolute;" />
+      <img src="/img/booster/pc-staking.png" width="72" alt="" />
+      <div class="trigger-text bind fz-16 fw-b text-center" style="width: 72px;">Staking</div>
     </div>
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
@@ -456,10 +488,13 @@ export default {
       .staking-btn {
         letter-spacing: 0;
         font-style: italic;
+        font-size: 12px;
         font-weight: bold;
-        color: #fff;
+        color: #06090F;
         border-radius: 4px;
-        background: linear-gradient(90deg, #f8008c 0%, #f86300 100%);
+        background: linear-gradient(155.14deg, #C0833E 9.04%, #FFDE7F 88.73%);
+        position: relative;
+        
       }
     }
   }
@@ -666,5 +701,25 @@ export default {
     #1102fc 99.83%
   ) !important;
   box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
+}
+.trigger-icon {
+  cursor: pointer;
+  .trigger-text {
+    position: absolute;
+    left: 0;
+    bottom: 5%;
+    width: 52px;
+    padding: 2px 1.5px;
+    line-height: 12px;
+    backdrop-filter: blur(2px);
+    border-radius: 4px;
+  }
+  .bind {
+    width: 100px;
+    height: 24px;
+    line-height: 20px;
+    background: linear-gradient(180deg, rgba(97, 114, 243, 0.5) 0%, rgba(97, 114, 243, 0.125) 166.67%);
+    backdrop-filter: blur(4px)
+  }
 }
 </style>

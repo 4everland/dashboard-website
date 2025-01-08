@@ -347,3 +347,56 @@ export const fetchKeyBalanceStake = async () => {
     url: "/hooks/stake/balance/dostake",
   });
 };
+
+
+export const handleBindExchange = async (param) => {
+  return boosterRequest.post({
+    url: "/node/exchange/profile",
+    data: param,
+  });
+};
+
+export const fetchBindInfo = async () => {
+  return boosterRequest.get({
+    url: `/node/exchange/profile`,
+  });
+};
+
+export const tgPaymentInvoice = async (targetValue) => {
+  return boosterRequest.post({
+    url: "/node/tg/payment/invoice",
+    data: {
+      targetValue,
+    },
+  });
+};
+
+export const fetchAirdropInfo = async () => {
+  return boosterRequest.get({
+    url: `/node/airdrop`,
+  });
+};
+
+export const handle4everStake = async () => {
+  return boosterRequest.post({
+    url: `/4ever/stake/bind`,
+  });
+}
+
+export const fetch4everStakeInfo = async () => {
+  return boosterRequest.get({
+    url: `/4ever/stake/info`,
+  });
+}
+
+export const fetch4everStakeTotal = async () => {
+  return boosterRequest.get({
+    url: `/4ever/stake/total`,
+  });
+}
+
+export const fetch4everBalance = async () => {
+  return boosterRequest.get({
+    url: `/4ever/stake/balance`,
+  });
+}

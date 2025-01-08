@@ -28,6 +28,7 @@
           @handleStartBoost="handleShowStartBoost"
           @handleUnlock="handleShowUnlock"
           @dailyClaim="showDailySign = true"
+          @startBind="showBindExchange = true"
         ></overview-pc>
         <overview-h5
           v-else
@@ -35,6 +36,7 @@
           @handleUnlock="handleShowUnlock"
           @dailyClaim="showDailySign = true"
           @startReward="showRewardStart = true"
+          @startBind="showBindExchange = true"
         ></overview-h5>
         <start-boosting
           v-model="showStartBoost"
@@ -46,18 +48,20 @@
         ></unlock-dialog>
         <EasterEgg v-model="showEasterEggDialog"></EasterEgg>
         <DailySignDialog v-model="showDailySign"></DailySignDialog>
-        <bottom-bar @handleStartBoost="handleShowStartBoost"></bottom-bar>
+        <bottom-bar v-if="!asMobile" @handleStartBoost="handleShowStartBoost"></bottom-bar>
         <nft-drawer></nft-drawer>
+        <hold-prove></hold-prove>
         <task-drawer></task-drawer>
         <tool-drawer></tool-drawer>
         <invite-drawer></invite-drawer>
         <profile-drawer></profile-drawer>
         <bind-dialog v-model="showBindWallet"></bind-dialog>
         <RewardOpenFirst v-model="showRewardStart"></RewardOpenFirst>
-        <SaveToHome
-          v-model="showSaveToHome"
-          @hideShowSaveToHome="showSaveToHome = false"
-        ></SaveToHome>
+
+        <SaveToHome v-model="showSaveToHome" @hideShowSaveToHome="showSaveToHome=false"></SaveToHome>
+        <BindExchange v-model="showBindExchange"></BindExchange>
+        <AirdropDialog v-model="airdropDialog"></AirdropDialog>
+        <StartQuery v-model="startQuery"></StartQuery>
       </template>
       <!-- <end-boosting v-model="showEndBoost"></end-boosting> -->
     </div>
@@ -70,6 +74,7 @@ import OverviewH5 from "./overview/overview-h5.vue";
 import StartBoosting from "./components/start-boosting.vue";
 import EndBoosting from "./components/end-boosting.vue";
 import NftDrawer from "./components/nft-drawer.vue";
+import HoldProve from "./components/hold-prove.vue";
 import TaskDrawer from "./components/task-drawer.vue";
 import ToolDrawer from "./components/tool-drawer.vue";
 import InviteDrawer from "./components/invite-drawer.vue";
@@ -82,6 +87,9 @@ import EasterEgg from "./components/easter-egg.vue";
 import DailySignDialog from "./components/daily-sign-dialog.vue";
 import RewardOpenFirst from "./components/reward-open-first.vue";
 import SaveToHome from "./components/save-to-homescreen.vue";
+import BindExchange from "./components/bind-exchange.vue";
+import AirdropDialog from "./components/airdrop-query.vue";
+import StartQuery from "./components/start-query.vue";
 
 import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
@@ -174,6 +182,9 @@ export default {
       showDailySign: false,
       showRewardStart: false,
       showSaveToHome: false,
+      showBindExchange: false,
+      airdropDialog: false,
+      startQuery:false,
       // showRewardReceive: false,
       // showRewardClaim: false,
     };
@@ -215,25 +226,7 @@ export default {
       let url = "https://static.4everland.org/";
 
       if (this.asMobile) {
-        if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
-          return url + "boost/background/mobile-bg.png";
-        if (!this.storageLocked && !this.networkLocked)
-          return url + "boost/background/mobile-bg-s2n.png";
-        if (!this.storageLocked && !this.computingLocked)
-          return url + "boost/background/mobile-bg-s2c.png";
-        if (!this.networkLocked && this.computingLocked)
-          return url + "boost/background/mobile-bg-n2c.png";
-        if (!this.storageLocked)
-          return url + "boost/background/mobile-bg-storage.png";
-        if (!this.networkLocked)
-          return url + "boost/background/mobile-bg-network.png";
-        if (!this.computingLocked)
-          return url + "boost/background/mobile-bg-computed.png";
-
-        if (this.boosterInfo.baseRate.length == 0) {
-          return url + "boost/background/mobile-bg-locked.png";
-        }
-        return url + "boost/background/mobile-bg-unlocked.png";
+        return "/img/booster/mobile-bg-unlocked-new1.png"
       } else {
         if (!this.storageLocked && !this.networkLocked && !this.computingLocked)
           return "https://static.4everland.org/boost/background/bg.webm";
@@ -269,6 +262,15 @@ export default {
     });
     bus.$on("showSaveToHomeEvent", () => {
       this.showSaveToHome = true;
+    });
+    bus.$on("showBindExchangeEvent", () => {
+      this.showBindExchange = true;
+    });
+    bus.$on("showQueryDialogEvent", () => {
+      this.airdropDialog = true;
+    });
+    bus.$on("showStartQueryEvent", () => {
+      this.startQuery = true;
     });
     this.timer = setInterval(() => {
       this.$store.commit("updateDate");
@@ -326,6 +328,7 @@ export default {
     StartBoosting,
     EndBoosting,
     NftDrawer,
+    HoldProve,
     TaskDrawer,
     BottomBar,
     BindDialog,
@@ -338,6 +341,9 @@ export default {
     ProfileDrawer,
     RewardOpenFirst,
     SaveToHome,
+    BindExchange,
+    AirdropDialog,
+    StartQuery
   },
 
   watch: {
@@ -442,8 +448,6 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;
-
   .booster-overview-bg {
     max-height: 100vh;
     width: 100%;

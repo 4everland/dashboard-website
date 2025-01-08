@@ -1,8 +1,10 @@
 import { mapGetters, mapState } from "vuex";
+import { bus } from "@/utils/bus";
 import { claimPoints } from "@/api/booster";
 import { sendStoken } from "@/api/login.js";
 import { coinMove } from "../../../utils/animation";
 import TgStartBoostLoading from "../components/tg-start-boost-loading.vue";
+import CountDown from "../components/count-down.vue";
 
 export default {
   data() {
@@ -16,10 +18,12 @@ export default {
       protectTimer: null,
       isProtecting: false,
       tabTimer: null,
+      endTimeStake: 1733803200
     };
   },
   components: {
     TgStartBoostLoading,
+    CountDown
   },
   computed: {
     ...mapState({
@@ -28,6 +32,7 @@ export default {
       tgMiniOverlayLoading: (s) => s.moduleBooster.tgMiniOverlayLoading,
       dailySign: (s) => s.moduleBooster.dailySign,
       tonConnectUI: (s) => s.moduleBooster.tonConnectUI,
+      userInfo: (s) => s.userInfo,
     }),
     ...mapGetters([
       "boostLocked",
@@ -84,6 +89,10 @@ export default {
       if (!this.dailySign) return "DONE";
       return this.dailySign[0].actStatus !== "DONE";
     },
+    stakeEnd() {
+      const curTimeStamp = +new Date() / 1e3;
+      return curTimeStamp > this.endTimeStake;
+    },
   },
   async created() {
     this.timer = setInterval(() => {
@@ -113,6 +122,18 @@ export default {
         this.$router.push("/login");
       } else {
         this.$emit("handleStartBoost");
+      }
+    },
+    showBindExchange(){
+      bus.$emit('showBindExchangeEvent');
+    },
+    showStartQueryDialog(){
+      let info = this.userInfo.username;
+      let airInfo = localStorage.getItem("airdrop" + info);
+      if(!airInfo){
+        bus.$emit('showStartQueryEvent');
+      } else {
+        bus.$emit('showQueryDialogEvent');
       }
     },
 
