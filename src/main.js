@@ -28,7 +28,7 @@ let coze = new CozeWebSDK.WebChatClient({
   },
   ui: {
     base: {
-      icon: "https://4ever-img.4everland.store/icon_4ever.png",
+      icon: "https://static.4everland.org/icon_4ever_rounded.png",
       layout: "pc",
       lang: "en",
       zIndex: 1000,
@@ -39,8 +39,6 @@ let coze = new CozeWebSDK.WebChatClient({
     },
   },
 });
-console.log(coze);
-
 router.beforeEach((to, _, next) => {
   let { title, group } = to.meta || {};
   if (to.fullPath.startsWith("/boost")) {
@@ -56,7 +54,7 @@ router.beforeEach((to, _, next) => {
         },
         ui: {
           base: {
-            icon: "https://4ever-img.4everland.store/icon_4ever.png",
+            icon: "https://static.4everland.org/icon_4ever_rounded.png",
             layout: "pc",
             lang: "en",
             zIndex: 1000,
