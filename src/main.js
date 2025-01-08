@@ -9,7 +9,6 @@ import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 import tgUtil from "@/utils/tg.js";
 import VConsole from "vconsole";
 import { Buffer } from "buffer";
-import cozeInit from "@/utils/cozeChat";
 if (window.top !== window.self) {
   window.top.location = window.location.href;
 }
@@ -20,10 +19,56 @@ const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 
 inDev ? new VConsole() : "";
 
-cozeInit();
+let coze = new CozeWebSDK.WebChatClient({
+  config: {
+    bot_id: "7455307600716906503",
+  },
+  componentProps: {
+    title: "4EVERLAND AI",
+  },
+  ui: {
+    base: {
+      icon: "https://4ever-img.4everland.store/icon_4ever.png",
+      layout: "pc",
+      lang: "en",
+      zIndex: 1000,
+    },
+    footer: {
+      isShow: true,
+      expressionText: "Powered by 4EVERLAND AIRPC ",
+    },
+  },
+});
+console.log(coze);
 
 router.beforeEach((to, _, next) => {
   let { title, group } = to.meta || {};
+  if (to.fullPath.startsWith("/boost")) {
+    coze.destroy();
+  } else {
+    if (!coze.root._internalRoot) {
+      coze = new CozeWebSDK.WebChatClient({
+        config: {
+          bot_id: "7455307600716906503",
+        },
+        componentProps: {
+          title: "4EVERLAND AI",
+        },
+        ui: {
+          base: {
+            icon: "https://4ever-img.4everland.store/icon_4ever.png",
+            layout: "pc",
+            lang: "en",
+            zIndex: 1000,
+          },
+          footer: {
+            isShow: true,
+            expressionText: "Powered by 4EVERLAND AIRPC ",
+          },
+        },
+      });
+    }
+  }
   const name = "4EVERLAND";
   if (title) {
     if (group) {
