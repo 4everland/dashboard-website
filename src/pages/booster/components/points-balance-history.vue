@@ -39,7 +39,7 @@
               >
                 <td class="text-left">{{ item.from }}</td>
                 <td class="text-left">
-                  {{ Number(item.value) > 0 ? "+" + item.value : item.value }}
+                  {{ Number(item.value) > 0 ? "+" + Number(item.value).toFixed(2) : Number(item.value).toFixed(2) }}
                 </td>
                 <td class="text-left">{{ new Date(item.createdAt).format() }}</td>
               </tr>

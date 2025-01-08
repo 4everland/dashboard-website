@@ -197,7 +197,7 @@ export default {
   methods: {
     async getTokenList() {
       try {
-        const { data } = await fetchTokenList('point',this.page2,this.size);
+        const { data } = await fetchTokenList('all',this.page2,this.size);
         this.tokenList = data.content;
         this.totalPages2 = data.totalPages;
       } catch (error) {
