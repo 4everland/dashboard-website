@@ -28,7 +28,7 @@ let coze = new CozeWebSDK.WebChatClient({
   },
   ui: {
     base: {
-      icon: "https://static.4everland.org/icon_4ever_rounded.png",
+      icon: "https://static.4everland.org/Ask-AI.png",
       layout: "pc",
       lang: "en",
       zIndex: 1000,
@@ -54,7 +54,7 @@ router.beforeEach((to, _, next) => {
         },
         ui: {
           base: {
-            icon: "https://static.4everland.org/icon_4ever_rounded.png",
+            icon: "https://static.4everland.org/Ask-AI.png",
             layout: "pc",
             lang: "en",
             zIndex: 1000,
