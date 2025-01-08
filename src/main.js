@@ -9,6 +9,7 @@ import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 import tgUtil from "@/utils/tg.js";
 import VConsole from "vconsole";
 import { Buffer } from "buffer";
+import cozeInit from "@/utils/cozeChat";
 if (window.top !== window.self) {
   window.top.location = window.location.href;
 }
@@ -18,6 +19,8 @@ window.Buffer = Buffer;
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 
 inDev ? new VConsole() : "";
+
+cozeInit();
 
 router.beforeEach((to, _, next) => {
   let { title, group } = to.meta || {};
