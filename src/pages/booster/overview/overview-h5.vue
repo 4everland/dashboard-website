@@ -29,6 +29,7 @@
       "
     >
       <img src="/img/booster/icon-partner.png" width="48" alt="" />
+      <img src="/img/booster/tag_hot.png" width="32" alt="" style="position: absolute; left: 0px; top: 0px" />
       <div class="trigger-text partner fz-12 fw-b text-center" style="width: 52px;">Mining</div>
     </div>
     <div

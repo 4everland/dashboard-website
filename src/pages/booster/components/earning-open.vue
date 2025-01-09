@@ -197,6 +197,9 @@ export default {
         const id = item.actId;
 
         const { data } = await onNext(id);
+          if(data.alert){
+            this.$toast2(data.alert, "info");
+          }
         if (item.actType == "exchange_ads") {
           let inOut = item.adDescription.split(";");
           const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
@@ -279,6 +282,7 @@ export default {
       transform: translateX(-50%);
       z-index: 3;
       border-radius: 80px;
+      border: 4px solid rgba(15, 225, 248, 0.25);
     }
     .earning-btn {
       height: 34px;
@@ -413,7 +417,7 @@ export default {
         height: 25px;
         min-width: 51px;
         border-radius: 21px;
-        background: #31383f !important;
+        background: #17B26A !important;
         color: #fff !important;
         cursor: not-allowed;
       }
