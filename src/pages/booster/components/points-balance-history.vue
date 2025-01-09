@@ -37,7 +37,7 @@
                 :key="index"
                 class="text-white"
               >
-                <td class="text-left">{{ item.from == 'unlock' ? 'Complete Tasks': item.from }}</td>
+                <td class="text-left">{{ item.from == 'unlock' ? 'Complete Tasks': item.from == 'output' ? 'Mining': item.from }}</td>
                 <td class="text-left">
                   {{ Number(item.value) > 0 ? "+" + Number(item.value).toFixed(4) : Number(item.value).toFixed(4) }}
                 </td>
