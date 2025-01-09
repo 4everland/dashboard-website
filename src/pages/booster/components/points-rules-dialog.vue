@@ -11,7 +11,7 @@
           <v-btn icon dark @click="$emit('input', false)">
             <v-icon>mdi-close</v-icon>
           </v-btn>
-          <v-toolbar-title>Key Concepts</v-toolbar-title>
+          <v-toolbar-title>Rules</v-toolbar-title>
         </v-toolbar>
         <v-list class="rulelist">
           <div

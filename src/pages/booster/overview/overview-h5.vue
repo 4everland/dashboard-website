@@ -1,15 +1,6 @@
 <template>
   <div class="d-md-none d-block">
     <div
-      v-if="isTgMiniApp && !userInfo.wallet"
-      class="trigger-icon pos-a"
-      style="right: 254px; top: 61px"
-      @click="onConnetc"
-    >
-      <img src="/img/booster/new/icon-connect.png" width="48" alt="" />
-      <div class="trigger-text connect fz-12 fw-b text-center" style="width: 52px;">Connect</div>
-    </div>
-    <div
       v-if="asMobile"
       class="trigger-icon pos-a"
       style="right: 193px; top: 61px"
