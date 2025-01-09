@@ -12,6 +12,8 @@ module.exports = {
     "@ton/ton",
     "buffer",
     "@bitget-wallet/omni-connect",
+    "@binance/w3w-ethereum-provider",
+    "@binance/w3w-utils",
   ],
   outputDir: "dist",
   publicPath: process.env.NODE_ENV === "production" ? "/" : "/",

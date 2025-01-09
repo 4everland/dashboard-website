@@ -19,8 +19,54 @@ const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 
 inDev ? new VConsole() : "";
 
+let coze = new CozeWebSDK.WebChatClient({
+  config: {
+    bot_id: "7455307600716906503",
+  },
+  componentProps: {
+    title: "4EVERLAND AI",
+  },
+  ui: {
+    base: {
+      icon: "https://static.4everland.org/Ask-AI.png",
+      layout: "pc",
+      lang: "en",
+      zIndex: 1000,
+    },
+    footer: {
+      isShow: true,
+      expressionText: "Powered by 4EVERLAND AIRPC ",
+    },
+  },
+});
 router.beforeEach((to, _, next) => {
   let { title, group } = to.meta || {};
+  if (to.fullPath.startsWith("/boost")) {
+    coze.destroy();
+  } else {
+    if (!coze.root._internalRoot) {
+      coze = new CozeWebSDK.WebChatClient({
+        config: {
+          bot_id: "7455307600716906503",
+        },
+        componentProps: {
+          title: "4EVERLAND AI",
+        },
+        ui: {
+          base: {
+            icon: "https://static.4everland.org/Ask-AI.png",
+            layout: "pc",
+            lang: "en",
+            zIndex: 1000,
+          },
+          footer: {
+            isShow: true,
+            expressionText: "Powered by 4EVERLAND AIRPC ",
+          },
+        },
+      });
+    }
+  }
   const name = "4EVERLAND";
   if (title) {
     if (group) {

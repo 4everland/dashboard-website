@@ -194,6 +194,7 @@ export default {
         return true;
       } catch (error) {
         console.log(error);
+
         this.onErr(error);
         return false;
       }
@@ -280,6 +281,11 @@ export default {
         if (error.code == 4902 || error.data?.originalError.code == 4902) {
           await this.addChain(chainId, id);
         } else {
+          if (!this.walletObj) {
+            throw this.$toast(
+              "Wallet does not exist, please install wallet first!"
+            );
+          }
           throw new Error(error.message);
         }
       }
@@ -512,12 +518,18 @@ export default {
         console.log("add chain err", error);
       }
     },
-    onErr(err, retry) {
+    async onErr(err, retry) {
       if (!err) return console.log("---- err null");
       const { data } = err;
       let msg = err.message;
       if (data) {
         msg = data.message || msg;
+      }
+
+      if (/unknown account/i.test(msg)) {
+        return await this.walletObj.request({
+          method: "eth_requestAccounts",
+        });
       }
       if (/repriced/i.test(msg) && /replaced/i.test(msg)) {
         return this.$toast("Transaction was replaced.");

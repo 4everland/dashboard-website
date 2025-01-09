@@ -195,7 +195,7 @@
               !this.boostLocked ? this.$store.commit('SET_TOOL_BAR', true) : ''
           "
         >
-          <img src="/img/booster/new/icon-tools.png" width="48" alt="" />
+          <img src="/img/booster/icon_tg_Tools.png" width="48" alt="" />
           <div class="trigger-text tools fz-12 fw-b text-center">Tools</div>
         </div>
 
@@ -208,7 +208,7 @@
               !this.boostLocked ? this.$store.dispatch('TaskDrawerToggle') : ''
           "
         >
-          <img src="/img/booster/new/icon-earn.png" width="48" alt="" />
+          <img src="/img/booster/icon_tg_Earn.png" width="48" alt="" />
           <div class="trigger-text tools fz-12 fw-b text-center">Earn</div>
           <v-badge
               v-if="asMobile"
@@ -230,19 +230,20 @@
               !this.boostLocked ? this.$store.commit('SET_INVITE_BAR', true) : ''
           "
         >
-          <img src="/img/booster/new/icon-invite.png" width="48" alt="" />
+          <img src="/img/booster/icon_tg_invite.png" width="48" alt="" />
           <div class="trigger-text tools fz-12 fw-b text-center">Invite</div>
         </div>
         <div
-          v-if="isTgMiniApp"
+          v-if="asMobile"
           class="trigger-icon pos-a"
           style="left: 176px; top: 76%"
           @click="
             () =>
-              !this.boostLocked ? this.$store.dispatch('StakeDrawerToggle') : ''
+              !this.boostLocked ? this.$store.dispatch('HoldProveToggle') : ''
           "
         >
-          <img src="/img/booster/new/icon-staking.png" width="48" alt="" />
+          <img src="/img/booster/icon_tg_new.png" width="24" alt=""  style="right: 0px;top: 0px;position: absolute;" />
+          <img src="/img/booster/icon_tg_Staking.png" width="48" alt="" />
           <div class="trigger-text tools fz-12 fw-b text-center">Staking</div>
         </div>
 

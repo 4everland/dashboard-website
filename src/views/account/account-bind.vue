@@ -107,6 +107,8 @@ import {
   ConnectPetra,
   ConnectWalletCon,
   onSignWalletCon,
+  ConnectBinance,
+  getSignBinance,
 } from "@/utils/login";
 
 import * as fcl from "@onflow/fcl";
@@ -630,6 +632,29 @@ export default {
         this.onVcode(item.type, signature);
       }
     },
+    async onBindWithBinance(item) {
+      this.walletConnectLoading = true;
+      this.loadingName = "Binance Wallet";
+
+      const accounts = await ConnectBinance();
+      const account = accounts[0];
+      if (!account) {
+        return;
+      }
+      const params = {
+        type: item.type,
+        apply: account,
+      };
+      const nonce = await this.onExchangeCode(params);
+      if (!nonce) {
+        return;
+      }
+      this.walletConnectLoading = false;
+      const signature = await getSignBinance(account, nonce);
+      if (signature) {
+        this.onVcode(item.type, signature);
+      }
+    },
     onConnectWithOther(item) {
       switch (item.type) {
         case 1:
@@ -652,6 +677,9 @@ export default {
           break;
         case 99:
           this.onBindWithWalletConnect(item);
+          break;
+        case 103:
+          this.onBindWithBinance(item);
           break;
         default:
           break;
