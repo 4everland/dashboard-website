@@ -81,7 +81,7 @@
                       <span>{{ item.name }}</span>
                     </div>
                     <div class="balance-number">
-                      {{ Number(item.balance).toFixed(2) }}
+                      {{ Number(item.balance).toFixed(4) }}
                     </div>
                   </div>
                 </div>

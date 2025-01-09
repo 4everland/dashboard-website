@@ -331,7 +331,7 @@ export default {
   },
   mounted() {
     bus.$on("refreshPartnerList", (info) => {
-      this.init();
+      this.getList();
     });
     this.init();
   },
@@ -373,6 +373,7 @@ export default {
       this.dialog = true;
     },
     openEarn(info) {
+      console.log('info',info);
       this.partnerInfo = info;
       this.showEarn = true;
     },
@@ -393,8 +394,8 @@ export default {
       console.log('val');
       if (val) {
         
-        this.partnerInfo = info;
-        this.showEarn = true;
+        // this.partnerInfo = info;
+        // this.showEarn = true;
       }
     },
   },
