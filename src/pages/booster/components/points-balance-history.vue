@@ -1,11 +1,12 @@
 <template>
   <div>
     <v-overlay
+      :value="value"
       class="withdraw-log-overlay"
       opacity="1"
       v-if="asMobile"
     >
-      <div class="withdraw-overlay" style="overflow: hidden">
+      <div class="withdraw-overlay">
         <div class="withdraw-title mt-5 pos-r">
           <img
             class="pos-a cursor-p"
@@ -17,28 +18,54 @@
           />
           <span> Balance History</span>
         </div>
-        <!-- <div class="empty text-center" v-if="!usdtLogs.length">
+        <div class="empty text-center" v-if="!loading&&!historyList.length">
           <img src="/img/booster/svg/empty.svg" width="200" alt="" />
           <div>Empty</div>
-        </div> -->
+        </div>
         <v-simple-table class="withdraw-log-table mt-4">
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-center">Type</th>
-                <th class="text-center">Amount</th>
-                <th class="text-center">CreateAt</th>
+                <th class="text-left">Type</th>
+                <th class="text-left">Amount</th>
+                <th class="text-left">CreateAt</th>
               </tr>
             </thead>
             <tbody>
-              <tr class="text-white">
-                <td>Points Collection</td>
-                <td>+1211.2121</td>
-                <td>Aug 21 2024 19:27:21</td>
+              <tr
+                v-for="(item, index) in historyList"
+                :key="index"
+                class="text-white"
+              >
+                <td class="text-left">{{ item.from }}</td>
+                <td class="text-left">
+                  {{ Number(item.value) > 0 ? "+" + Number(item.value).toFixed(2) : Number(item.value).toFixed(2) }}
+                </td>
+                <td class="text-left">{{ new Date(item.createdAt).format() }}</td>
               </tr>
             </tbody>
           </template>
         </v-simple-table>
+        <v-sheet
+          v-if="loading"
+          class="pa-1"
+        >
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="300"
+            type="list-item"
+            width="100%"
+            height="50"
+          ></v-skeleton-loader>
+        </v-sheet>
+        <booster-pagination
+          v-show="historyList.length != 0"
+          :length="totalPages"
+          class="mt-5"
+          v-model="page"
+          @input="getHistoryList"
+        ></booster-pagination>
+        
       </div>
     </v-overlay>
 
@@ -59,7 +86,8 @@
             alt=""
           />
           <div class="withdraw-title">Balance History</div>
-          <div class="empty text-center" v-if="!usdtLogs.length">
+          
+          <div class="empty text-center" v-if="!historyList.length">
             <img src="/img/booster/svg/empty.svg" width="200" alt="" />
             <div>Empty</div>
           </div>
@@ -68,23 +96,38 @@
             class="withdraw-log-table mt-4"
             style="max-height: 500px; overflow: scroll"
           >
-          <template v-slot:default>
-            <thead>
-              <tr>
-                <th class="text-center">Type</th>
-                <th class="text-center">Amount</th>
-                <th class="text-center">CreateAt</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in usdtLogs" :key="item.name" class="text-white">
-                <td>Points Collection</td>
-                <td>+1211.2121</td>
-                <td>Aug 21 2024 19:27:21</td>
-              </tr>
-            </tbody>
-          </template>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left">Type</th>
+                  <th class="text-left">Amount</th>
+                  <th class="text-left">CreateAt</th>
+                </tr>
+              </thead>
+              
+              <tbody>
+                <tr
+                  v-for="(item, index) in historyList"
+                  :key="index"
+                  class="text-white"
+                >
+                  <td>{{ item.from }}</td>
+                  <td>
+                    {{ Number(item.value) > 0 ? "+" + item.value : item.value }}
+                  </td>
+                  <td>{{ new Date(item.createdAt).format() }}</td>
+                </tr>
+              </tbody>
+            </template>
           </v-simple-table>
+          
+          <booster-pagination
+            v-show="historyList.length != 0"
+            :length="totalPages"
+            class="mt-5"
+            v-model="page"
+            @input="getHistoryList"
+          ></booster-pagination>
         </div>
       </div>
     </v-dialog>
@@ -92,18 +135,24 @@
 </template>
   
   <script>
-import { fetchClaimUSDTLog } from "@/api/booster";
+import { fetchTokenBalanceLog } from "@/api/booster";
+import BoosterPagination from "./booster-pagination.vue";
 
 export default {
   props: {
-
+    value: Boolean,
+    projectId: String,
+  },
+  components: {
+    BoosterPagination,
   },
   data() {
     return {
       size: 10,
       page: 1,
-      usdtLogs: [],
+      historyList: [],
       loading: false,
+      totalPages: 0,
     };
   },
   computed: {
@@ -147,16 +196,26 @@ export default {
       };
     },
   },
+  mounted() {},
   methods: {
-    async getList() {
+    async getHistoryList() {
       try {
-        const { data } = await fetchClaimUSDTLog(this.page, this.size);
-        if (data) {
-          this.usdtLogs = data.content;
-        }
+        this.loading = true;
+        const { data } = await fetchTokenBalanceLog(
+          this.projectId,
+          this.page,
+          this.size
+        );
+        this.loading = false;
+        // if (data) {
+        this.historyList = data.content;
+        this.totalPages = data.totalPages;
+        // }
       } catch (error) {
         console.log(error);
       }
+      
+      // console.log("historyList", this.historyList, this.projectId);
     },
 
     handleOpenTxs(item) {
@@ -179,7 +238,8 @@ export default {
   watch: {
     value(val) {
       if (val) {
-        this.getList();
+        this.historyList = [];
+        this.getHistoryList();
       }
     },
   },
@@ -200,7 +260,7 @@ export default {
   cursor: pointer;
 }
 .withdraw-overlay {
-  position: relative;
+  position: fixed;
   width: 100vw;
   height: 100%;
   background: linear-gradient(
@@ -314,7 +374,6 @@ export default {
   width: 100%;
   color: #fff !important;
   background: transparent;
-  height: calc(100% - 58px);
   overflow: scroll;
   padding-bottom: 30px;
   :deep th {

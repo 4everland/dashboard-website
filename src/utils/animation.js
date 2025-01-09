@@ -1,4 +1,4 @@
-export const coinMove = (curId, targetId) => {
+export const coinMove = (curId, targetId, imgurl, offset=0) => {
   const wallet = document.getElementById(curId);
   const targetDiv = document.getElementById(targetId);
   const coinCount = 24;
@@ -11,7 +11,7 @@ export const coinMove = (curId, targetId) => {
     const coin = document.createElement("img");
     coin.className = "coin";
 
-    coin.src = "/img/booster/4ever-point-icon.png";
+    coin.src = imgurl || "/img/booster/4ever-point-icon.png";
     coin.style.left = "50%";
     coin.style.top = "50%";
     coin.style.transform = "translate(-50%, -50%)";
@@ -41,7 +41,7 @@ export const coinMove = (curId, targetId) => {
     duration: 1.5,
     x: function () {
       //function-based value
-      return targetRect.left - targetRect.width * 0.5 - 16 - walletRect.left;
+      return targetRect.left - targetRect.width * 0.5 - 16 - walletRect.left + offset*1;
     },
     y: function () {
       //function-based value
@@ -59,7 +59,7 @@ export const coinMove = (curId, targetId) => {
   });
 };
 
-export const tonMove = (curId, targetId) => {
+export const tonMove = (curId, targetId, imgurl) => {
   const wallet = document.getElementById(curId);
   const targetDiv = document.getElementById(targetId);
   const coinCount = 24;
@@ -72,7 +72,7 @@ export const tonMove = (curId, targetId) => {
     const coin = document.createElement("img");
     coin.className = "coin";
 
-    coin.src = "/img/booster/ton-icon.png";
+    coin.src = imgurl || "/img/booster/ton-icon.png";
     coin.style.left = "50%";
     coin.style.top = "50%";
     coin.style.transform = "translate(-50%, -50%)";

@@ -1,18 +1,9 @@
 <template>
   <div class="d-md-none d-block">
     <div
-      v-if="isTgMiniApp && !userInfo.wallet"
-      class="trigger-icon pos-a"
-      style="right: 193px; top: 61px"
-      @click="onConnetc"
-    >
-      <img src="/img/booster/new/icon-connect.png" width="48" alt="" />
-      <div class="trigger-text connect fz-12 fw-b text-center" style="width: 52px;">Connect</div>
-    </div>
-    <div
       v-if="asMobile"
       class="trigger-icon pos-a"
-      style="right: 71px; top: 61px"
+      style="right: 193px; top: 61px"
       @click="showBindExchange"
     >
       <img src="/img/booster/new/icon-bind.png" width="48" alt="" />
@@ -27,12 +18,19 @@
       <img src="/img/booster/new/Query_2x.gif" width="48" alt="" />
       <div class="trigger-text connect fz-12 fw-b text-center">Airdrop</div>
     </div>
-    <!-- <TokenDialog
-      class="pos-a"
+    <div
+      v-if="asMobile"
+      class="trigger-icon pos-a"
+      id="activity_Account"
       style="right: 71px; top: 61px"
-      v-if="isTgMiniApp"
-    ></TokenDialog> -->
-
+      @click="
+        () =>
+          this.$router.push('/boost/partner')
+      "
+    >
+      <img src="/img/booster/icon-partner.png" width="48" alt="" />
+      <div class="trigger-text partner fz-12 fw-b text-center" style="width: 52px;">Mining</div>
+    </div>
     <div
       v-if="asMobile"
       class="trigger-icon pos-a"
@@ -46,29 +44,6 @@
       <img src="/img/booster/icon-account.png" width="48" alt="" />
       <div class="trigger-text staking fz-12 fw-b text-center" style="width: 52px;">Account</div>
     </div>
-    
-
-    <!-- <div
-      v-if="isTgMiniApp"
-      class="trigger-icon pos-a"
-      style="right: 67px; top: 57px"
-      @click="
-        () =>
-          !this.boostLocked ? this.$store.dispatch('StakeDrawerToggle') : ''
-      "
-    >
-      <img src="/img/booster/staking-icon.png" width="56" alt="" />
-      <div class="trigger-text staking fz-12 fw-b text-center">STAKING</div>
-    </div> -->
-    <!-- <div
-      v-if="isTgMiniApp && !userInfo.wallet"
-      class="trigger-icon pos-a"
-      style="right: 8px; top: 202px"
-      @click="onConnetc"
-    >
-      <img src="/img/booster/wallet-connect-icon.png" width="56" alt="" />
-      <div class="trigger-text connect fz-12 fw-b text-center">CONNECT</div>
-    </div> -->
     <WalletConnect />
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
@@ -463,7 +438,9 @@
       </div>
     </div>
     <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
-    
+    <points-pool v-if="!boostLocked"></points-pool>
+    <EarnDialog v-model="showPartnerInfo" :info="partnerInfo"></EarnDialog>
+    <audio ref="audioPlayer" src="/audio/collect.mp3"></audio>
   </div>
 </template>
 
@@ -478,6 +455,8 @@ import mixin from "./mixin";
 import { bus } from "@/utils/bus";
 import { fetchSpinStart } from "@/api/booster";
 import { tonMove } from "../../../utils/animation";
+import pointsPool from "../components/points-pool.vue";
+import EarnDialog from "../components/earning-open.vue";
 
 export default {
   mixins: [mixin],
@@ -485,6 +464,8 @@ export default {
     return {
       sheet: false,
       showGoldCoin: false,
+      showPartnerInfo: false,
+      partnerInfo: {},
       timeLeft: localStorage.getItem("countdownTime")
         ? parseInt(localStorage.getItem("countdownTime"))
         : 86400,
@@ -546,6 +527,10 @@ export default {
       this.showTonReceive();
       this.$store.dispatch("getBoosterUserInfo");
     });
+    bus.$on('showPartnerInfoEvent', (info) => {
+      this.partnerInfo = info;
+      this.showPartnerInfo = true;
+    })
   },
   beforeDestroy() {
     clearInterval(this.protectTimer);
@@ -555,6 +540,8 @@ export default {
     TokenDialog,
     WalletConnect,
     countDown,
+    pointsPool,
+    EarnDialog
   },
   watch: {
     "boosterInfo.protectExpiredAt"() {

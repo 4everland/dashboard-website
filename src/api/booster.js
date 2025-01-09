@@ -377,6 +377,62 @@ export const fetchAirdropInfo = async () => {
   });
 };
 
+
+export const fetchPoolProjectList = async () => {
+  return boosterRequest.get({
+    url: `/node/project/list`,
+  });
+};
+
+export const fetchProjectPointsList = async () => {
+  return boosterRequest.get({
+    url: `/node/project/points`,
+  });
+};
+
+export const fetchProjectInfo = async (projectId) => {
+  return boosterRequest.get({
+    url: `/node/project/${projectId}`,
+  });
+};
+
+export const claimProjectPoints = async (projectId, type ) => {
+  return boosterRequest.post({
+    url: `/node/project/points/claim`,
+    data: {
+      projectId,
+      type
+    },
+  });
+};
+
+export const fetchProjectTasks = async (areaName) => {
+  return boosterRequest.get({
+    url: `/node/activities/${areaName}`,
+  });
+};
+
+export const fetchTokenBalanceLog = async (projectId, page=1, size=10) => {
+  return boosterRequest.get({
+    url: `/node/usdt/log/${page}`,
+    params: {
+      'project-id': projectId,
+      'size': size
+    },
+  });
+};
+
+export const fetchTokenList = async (type, page=1, size=10) => {
+  return boosterRequest.get({
+    url: `/node/tokens`,
+    params: {
+      'type': type,
+      'page': page,
+      'size': size
+    },
+  });
+};
+
 export const handle4everStake = async () => {
   return boosterRequest.post({
     url: `/4ever/stake/bind`,
