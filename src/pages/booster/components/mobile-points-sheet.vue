@@ -29,7 +29,7 @@
                     />
                   </div>
                 </div>
-                <div class="content-rate-tips mt-1 d-flex align-center">
+                <div class="content-rate-tips mt-1 mb-2 d-flex align-center">
                   <img src="/img/booster/airdrop.png" width="20" alt="" />
                   <span class="fz-11"
                     >$4EVER Points will be converted into $4EVER Tokens.</span
@@ -67,7 +67,7 @@
 
           <div class="user-card-item fz-12 mt-4">
             <div class="user-card-item-title">Mining Balance</div>
-            <div class="linear-border mb-1"></div>
+            <div class="mb-4"></div>
             <div v-if="!showPointsBalance" v-for="(item, index) in tokenList" :key="index">
               <div
                 class="d-flex align-center justify-space-between assets-item"
@@ -435,9 +435,8 @@ export default {
     }
   }
   .assets-item {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     padding-bottom: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
   }
   .balance-number {
     font-size: 12px;

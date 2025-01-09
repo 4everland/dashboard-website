@@ -200,66 +200,52 @@
           <v-btn icon dark @click="dialog = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
-          <v-toolbar-title>Aggregator Mining Rules</v-toolbar-title>
+          <v-toolbar-title>4EVERLAND Aggregator Mining Rules</v-toolbar-title>
         </v-toolbar>
         <v-list class="rulelist">
           <v-list-item>
             <v-list-item-content>
               <div class="swap-title-content">
-                <span class="rules-text">Aggregator mining</span> is a
-                collaborative effort brought to you by 4EVERLAND and our project
-                partners, where you can start project mining by completing
-                engaging tasks to earn valuable points and token rewards.
+                <span class="rules-text">4EVERLAND Aggregator Mining</span> is a Telegram Mining brought to you by 4EVERLAND and our <strong class="rules-text">eco projects</strong>, where you can earn airdrops and token rewards from multiple projects at the same time!
               </div>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="swap-title"
-                >1.Participation Process</v-list-item-title
+                >1. Engagement Process</v-list-item-title
               >
               <div class="swap-rule-content">
-                <span class="rules-text">Start Boost:</span> To qualify for
-                mining, all new users must first click
-                <span class="rules-text">"Start Boost"</span> before moving on
-                to the next step.
+                <span class="rules-text">Start Boost:</span> To qualify for mining, all new users must first launch  4EVERLAND TG MiniApp before moving on to the next step.
               </div>
               <div class="swap-rule-content">
                 <span class="rules-text">Complete Tasks:</span> Go to the
-                <span class="rules-text">Mining</span> module and complete the
-                simple tasks set by our project partners.
+                <span class="rules-text">Mining</span> module and complete the simple tasks set by our project partners.
               </div>
               <div class="swap-rule-content">
-                <span class="rules-text">Points/Token Rewards:</span> Once you
-                complete the tasks, you'll activate
-                <span class="rules-text">project mining</span> and earn points
-                and token rewards.
+                <span class="rules-text">Airdrops/Token Rewards:</span> Log in daily to collect your mining rewards.
               </div>
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="swap-title"
-                >2.Rewards Info
+                >2.Rewards Breakdown
               </v-list-item-title>
               <div class="swap-rule-title">Rewards rules:</div>
               <div class="pl-4">
                 <div class="swap-rule-content">
-                  The amount of points and tokens generated is based on your
-                  individual <span class="rules-text">earning rate.</span>
+                  The rewards generated are based on your individual <span class="rules-text">earning rate.</span>
                 </div>
                 <div class="swap-rule-content">
                   Rewards are generated
-                  <span class="rules-text">every 4 hours.</span> If you have 6
-                  unclaimed rewards, reward generation will stop, so please make
-                  sure to claim them on time.
+                  <span class="rules-text">every 4 hours.</span> If you have 6 unclaimed rewards, it will pause, so be sure to claim them on time.
                 </div>
               </div>
               <div class="swap-rule-title">Distribution Instructions:</div>
               <div class="pl-4">
                 <div class="swap-rule-content">
-                  Project mining will stop once points and tokens are fully
-                  mined. You can then check the
+                  Project mining will stop once points and tokens are fully mined. You can then check the
                   <span class="rules-text">distribution status</span> in the
                   <span class="rules-text">Mining</span> module.
                 </div>
@@ -275,11 +261,10 @@
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="swap-title"
-                >3.Important Notes</v-list-item-title
+                >3.Friendly Reminder</v-list-item-title
               >
               <div class="swap-rule-content">
-                Users who fail to complete the required project tasks will not
-                receive mining rewards at settlement.
+                Users who fail to complete the required project tasks will not receive mining rewards.
               </div>
               <div class="swap-rule-content">
                 <span class="rules-text">Cheating methods,</span> including
@@ -561,8 +546,10 @@ export default {
     background: transparent;
     box-shadow: none;
     .v-toolbar__title {
-      width: 80%;
+      
+      font-size: 1rem;
       text-align: center;
+      padding-left: 8px !important;
     }
   }
   .swap-title {

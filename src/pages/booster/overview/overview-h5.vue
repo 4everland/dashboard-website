@@ -29,7 +29,7 @@
       "
     >
       <img src="/img/booster/icon-partner.png" width="48" alt="" />
-      <div class="trigger-text staking fz-12 fw-b text-center" style="width: 52px;">Mining</div>
+      <div class="trigger-text partner fz-12 fw-b text-center" style="width: 52px;">Mining</div>
     </div>
     <div
       v-if="asMobile"
