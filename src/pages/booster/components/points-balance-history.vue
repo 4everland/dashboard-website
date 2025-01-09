@@ -37,11 +37,11 @@
                 :key="index"
                 class="text-white"
               >
-                <td class="text-left">{{ item.from }}</td>
+                <td class="text-left">{{ item.from == 'unlock' ? 'Complete Tasks': item.from }}</td>
                 <td class="text-left">
                   {{ Number(item.value) > 0 ? "+" + Number(item.value).toFixed(2) : Number(item.value).toFixed(2) }}
                 </td>
-                <td class="text-left">{{ new Date(item.createdAt).format() }}</td>
+                <td class="text-left">{{ new Date(item.createdAt*1000).format() }}</td>
               </tr>
             </tbody>
           </template>
