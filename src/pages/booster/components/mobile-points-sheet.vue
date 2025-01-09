@@ -197,6 +197,13 @@ export default {
     pointsRulesDialog,
     PointsBalance
   },
+  watch: {
+    value(newVal, oldVal) {
+      if (newVal === true) {
+        this.getTokenList();
+      }
+    },
+  },
   mounted() {
     this.getTokenList();
   },
