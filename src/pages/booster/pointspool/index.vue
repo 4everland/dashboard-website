@@ -65,7 +65,7 @@
                 <div style="margin-left: 12px">
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
-                    {{ $utils.formatCompactNumbers(item.projectTotalPoints)
+                    {{ $utils.formatCompactNumbers(item.projectTotalPoints+item.projectInitTotalPoints)
                     }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
                   </div>
                 </div>
@@ -109,7 +109,7 @@
                 <div style="margin-left: 12px">
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
-                    {{ $utils.formatCompactNumbers(item.projectTotalPoints)
+                    {{ $utils.formatCompactNumbers(item.projectTotalPoints+item.projectInitTotalPoints)
                     }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
                   </div>
                 </div>
@@ -139,7 +139,7 @@
                 <div style="margin-left: 12px">
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
-                    {{ $utils.formatCompactNumbers(item.projectTotalPoints)
+                    {{ $utils.formatCompactNumbers(item.projectTotalPoints+item.projectInitTotalPoints)
                     }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
                   </div>
                 </div>
@@ -168,7 +168,7 @@
                 <div style="margin-left: 12px">
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
-                    {{ $utils.formatCompactNumbers(item.projectTotalPoints) }}
+                    {{ $utils.formatCompactNumbers(item.projectTotalPoints+item.projectInitTotalPoints) }}
                     {{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
                   </div>
                 </div>
