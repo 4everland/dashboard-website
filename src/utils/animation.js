@@ -17,6 +17,7 @@ export const coinMove = (curId, targetId, imgurl, offset=0) => {
     coin.style.transform = "translate(-50%, -50%)";
     coin.style.width = "16px";
     coin.style.height = "16px";
+    coin.style.borderRadius = "16px";
     coin.style.position = "absolute";
     coin.style.zIndex = "9999";
     wallet.appendChild(coin);
