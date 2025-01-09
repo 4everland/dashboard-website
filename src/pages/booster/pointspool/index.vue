@@ -373,7 +373,6 @@ export default {
       this.dialog = true;
     },
     openEarn(info) {
-      console.log('info',info);
       this.partnerInfo = info;
       this.showEarn = true;
     },
