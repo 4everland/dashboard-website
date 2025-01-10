@@ -120,7 +120,7 @@
               </div>
             </div> -->
             <div
-              class="mt-6 d-flex justify-center align-center btn-border pt-6 mb-2"
+              class="mt-3 d-flex justify-center align-center btn-border pt-3 mb-2"
             >
               <v-btn
                 v-if="!stakeInfo?.value"
