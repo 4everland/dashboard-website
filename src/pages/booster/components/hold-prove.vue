@@ -284,6 +284,7 @@ export default {
           padding: 0px 12px;
           color: #0C111D;
           border-radius: 20px;
+          line-height: 20px;
           background: #FFE205;
         }
         .prove-border {
