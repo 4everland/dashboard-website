@@ -77,11 +77,19 @@
               </div>
             </div>
             <v-btn 
-              class="start-btn mt-3"
+              class="start-btn mt-3 "
               :disabled="disabled"
+              :class="{
+                'unlock-btn': info.type == 'unlocked'}"
               @click="startMining"
-            >
-              Start Mining Now
+            > 
+              <img
+                v-if="info.type == 'unlocked'"
+                src="/img/booster/icon_hammer.png"
+                width="14"
+                alt=""
+              />
+            {{ info.type == 'unlocked' ? 'Mining ...' : 'Start Mining Now' }}
             </v-btn>
             <div class="d-flex justify-start mt-2">
               <div>
@@ -171,6 +179,9 @@ export default {
     },
     startMining(){
       this.$emit("input", false);
+      if (this.info.type == "unlocked") {
+        return;
+      }
       this.$toast2(
         `Activated successfully! Claim rewards on the homepage.`
       );
@@ -431,6 +442,19 @@ export default {
       background: linear-gradient(96.98deg, #0fe1f8 -22.19%, #1102fc 99.83%);
       color: #fff;
       letter-spacing: normal;
+    }
+    .unlock-btn {
+      height: 40px;
+      width: 100%;
+      padding: 4px 13px;
+      border-radius: 4px;
+      background: #0FE1F80D;
+      color: #0FE1F8;
+      font-size: 14px;
+      letter-spacing: normal;
+      img {
+        margin-right: 4px;
+      }
     }
     ::v-deep .v-btn--disabled {
       background: #31383F!important;

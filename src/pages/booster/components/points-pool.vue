@@ -112,13 +112,12 @@ export default {
       if(item.projectId) {
         if(item.hidden) return;
         this.loading = true;
+        this.playaudio();
+        coinMove('partner_'+index, "mobile-point-receive", item.projectLogoUrl, '64' )
+        await this.$sleep(2000)
+        this.handleShadow();
         const res = await claimProjectPoints(item.projectId, item.type)
         if(res.code === 200) {
-          this.playaudio();
-          coinMove('partner_'+index, "mobile-point-receive", item.projectLogoUrl, '64' )
-          await this.$sleep(2000)
-          this.handleShadow();
-
           this.newDataList = this.newDataList.map((i, idx) => {
             if (idx === index) {
               return {
