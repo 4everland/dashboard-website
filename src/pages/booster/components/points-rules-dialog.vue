@@ -42,13 +42,13 @@ export default {
         {
           title: "$4EVER Points",
           list: [
-            "$4EVER Points are the crucial proof for snagging 4EVERLAND <b style='color:#fff'>airdrops</b>.",
+            "$4EVER Points will be converted into <b style='color:#fff'>$4EVER</b> Tokens.",
           ],
         },
         {
           title: "Earning Rate",
           list: [
-            "Earning Rate = (Base Rate + Boost Rate) * (1 + Staking Yield).",
+            "Earning Rate = (Base Rate + Boost Rate) * (1 + Earning Rate Multiplier).",
             "Points generation at the earning rate but must be collected manually.",
             "Collect $4EVER points on time! <b style='color:#fff'>If not, generation stops and you could lose 50% to others</b>.",
           ],
@@ -70,10 +70,9 @@ export default {
           ],
         },
         {
-          title: "Staking Yield",
+          title: "Earning Rate Multiplier",
           list: [
-            "Increase your earning rate by staking <b style='color:#fff'>T4EVER/NFTs</b>.",
-            "Invalid if NFT is transferred.",
+            "Increase your earning rate by staking <b style='color:#fff'>$4EVER</b>.",
           ],
         },
         {

@@ -58,7 +58,7 @@
                   <span>+{{ boostRate }} pts/h</span>
                 </div>
                 <div class="d-flex align-center justify-space-between mt-1">
-                  <span>Staking Yield</span>
+                  <span>Earning Rate Multiplier</span>
                   <span>{{ boosterInfo.rateBuff }}%</span>
                 </div>
               </div>

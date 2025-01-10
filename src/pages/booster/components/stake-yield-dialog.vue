@@ -10,7 +10,7 @@
           alt=""
         />
         <div class="first-dialog-title py-2 fz-20 text-center mb-2">
-          Get Staking Yield
+          Get Earning Rate Multiplier
         </div>
         <div class="first-dialog-content">
           <div class="paragraph d-flex align-center justify-space-between">
@@ -41,9 +41,9 @@
           </div>
           <ul class="stake-tips">
             <li>
-              Randomly snapshot your $4EVER balance to update staking yield.
+              Randomly snapshot your $4EVER balance to update earning rate multiplier.
             </li>
-            <li>Every $4EVER contributes to a 0.002% staking yield.</li>
+            <li>Every $4EVER contributes to a 0.002% earning rate multiplier.</li>
           </ul>
           <div
             class="act-btn d-flex align-center justify-center mt-10"
@@ -92,7 +92,7 @@
       <div class="booster-module-dialog">
         <div class="start-boosting-dialog">
           <div class="deposit-dialog-title text-center fz-20 mb-5">
-            Get Staking Yield
+            Get Earning Rate Multiplier
           </div>
           <div class="paragraph d-flex align-center justify-space-between">
             <span>Wallet address</span>
@@ -120,9 +120,9 @@
           </div>
           <ul class="stake-tips mt-4">
             <li>
-              Randomly snapshot your $4EVER balance to update staking yield.
+              Randomly snapshot your $4EVER balance to update earning rate multiplier.
             </li>
-            <li>Every $4EVER contributes to a 0.002% staking yield.</li>
+            <li>Every $4EVER contributes to a 0.002% earning rate multiplier.</li>
           </ul>
           <div
             class="act-btn d-flex align-center justify-center mt-8"
