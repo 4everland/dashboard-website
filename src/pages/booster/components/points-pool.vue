@@ -8,11 +8,11 @@
         :id="'partner_' + index"
         :class="{
           item: dataList.length % 2 === 0,
-          itemone: dataList.length % 2 === 1,
-          fadeItem: item?.hidden,
+          itemone: dataList.length % 2 === 1
+          
         }"
       >
-        <div class="inneritem">
+        <div class="inneritem" :class="{fadeItem: item?.hidden}">
           <div
             :class="{ itemLocked: item?.type == 'locked' }"
             style="min-width: 45px"
@@ -44,7 +44,7 @@
         </div>
       </div>
     </div>
-    <audio ref="audioPlayer" src="/audio/collect.mp3"></audio>
+    <audio ref="audioPlayer" src="/audio/collect.mp3" preload="auto"></audio>
   </div>
 </template>
 
@@ -54,7 +54,7 @@ import {
   claimProjectPoints,
   fetchProjectInfo,
 } from "@/api/booster";
-import { coinMove } from "@/utils/animation";
+import { pointMove } from "@/utils/animation";
 import { bus } from "@/utils/bus";
 export default {
   data() {
@@ -94,6 +94,7 @@ export default {
     },
     playaudio() {
       const audio = this.$refs.audioPlayer;
+      audio.currentTime = 0;
       audio.play();
       if ("vibrate" in navigator) {
         navigator.vibrate(200);
@@ -108,17 +109,11 @@ export default {
     },
     async getProjectInfo(item,index) {
       
-      if(!item || this.loading) return;
+      if(!item) return;
       if(item.projectId) {
         if(item.hidden) return;
-        this.loading = true;
         this.playaudio();
-        coinMove('partner_'+index, "mobile-point-receive", item.projectLogoUrl, '64' )
-        await this.$sleep(2000)
-        this.handleShadow();
-        const res = await claimProjectPoints(item.projectId, item.type)
-        if(res.code === 200) {
-          this.newDataList = this.newDataList.map((i, idx) => {
+        this.newDataList = this.newDataList.map((i, idx) => {
             if (idx === index) {
               return {
                 ...i,
@@ -127,11 +122,17 @@ export default {
             }
             return i;
           });
+        pointMove('partner_'+index, "mobile-point-receive", item.projectLogoUrl, '64' )
+        await this.$sleep(2000)
+        this.handleShadow();
+        
+        const res = await claimProjectPoints(item.projectId, item.type)
+        if(res.code === 200) {
           this.claimed++;
           if (this.claimed == this.allPointsNumber) {
             this.init();
           }
-          this.loading = false;
+          // this.loading = false;
         } else {
           this.$toast2(res.msg, "error");
         }
@@ -337,7 +338,7 @@ export default {
   }
 }
 .fadeItem {
-  animation: fadeOut 0.5s ease-in forwards;
+  animation: fadeOut 0.5s ease-in forwards !important;
 }
 
 @keyframes fadeOut {
