@@ -12,7 +12,7 @@
         v-bind="attrs"
         srcset="/img/booster/svg/log.svg"
         width="24"
-        src=""
+        src="/img/booster/svg/log.svg"
         alt=""
       />
     </template>
