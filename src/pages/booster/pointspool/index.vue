@@ -286,6 +286,7 @@
       </v-card>
     </v-dialog>
     <EarnDialog v-model="showEarn" :info="partnerInfo"></EarnDialog>
+    <WalletConnect />
   </div>
 </template>
   
@@ -294,10 +295,12 @@ import EarnDialog from "../components/earning-open.vue";
 import { bus } from "@/utils/bus";
 import { fetchPoolProjectList, fetchProjectTasks } from "@/api/booster";
 import BoosterPagination from "../components/booster-pagination.vue";
+import WalletConnect from "../components/wallet-connect.vue";
 export default {
   components: {
     EarnDialog,
     BoosterPagination,
+    WalletConnect
   },
   computed: {
     filteredEarnList() {

@@ -91,6 +91,11 @@
               />
             {{ info.type == 'unlocked' ? 'Mining ...' : 'Start Mining Now' }}
             </v-btn>
+            <div v-if="showBind"  class="d-flex justify-space-between align-center mt-3">
+              <div class="evm-wallet fz-14">Bind your EVM wallet before claiming rewards.</div>
+              <v-btn small class="bind-btn" @click="onConnect"
+                >Bind</v-btn>
+            </div>
             <div class="d-flex justify-start mt-2">
               <div>
                 <img
@@ -114,6 +119,7 @@
 import TimeCountDown from "@/pages/booster/components/time-count-down";
 import { bus } from "@/utils/bus";
 import { fetchPoolProjectList, fetchProjectTasks, onNext } from "@/api/booster";
+import { mapState } from "vuex";
 export default {
   props: {
     value: Boolean,
@@ -136,6 +142,9 @@ export default {
     },
   },
   computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
     isTgMiniApp() {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
@@ -153,6 +162,12 @@ export default {
       }
 
     },
+    currentAddress() {
+      return this.userInfo.wallet?.address;
+    },
+    showBind() {
+      return this.info.projectName == "DeepLink" && !this.currentAddress;
+    }
   },
 
   methods: {
@@ -176,6 +191,10 @@ export default {
           }
         }
       });
+    },
+    onConnect() {
+      let state = true;
+      this.$store.dispatch("ConnectDrawerState", { state });
     },
     startMining(){
       this.$emit("input", false);
@@ -321,6 +340,14 @@ export default {
       font-weight: 500;
       line-height: 16px;
       color: #0fe1f8;
+    }
+    .evm-wallet {
+      color: #fff;
+    }
+    .bind-btn {
+      width: 60px;
+      background: #6172F3;
+      color: #fff;
     }
     .countdown {
       font-size: 14px;
