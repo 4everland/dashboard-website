@@ -27,7 +27,7 @@
             </v-btn>
           </div>
           <div>
-            <div class="title mt-8">{{ info.projectName }}</div>
+            <div class="title mt-3">{{ info.projectName }}</div>
             <div class="text mt-2">
               {{ info.projectDesc }}
             </div>
@@ -91,11 +91,7 @@
               />
             {{ info.type == 'unlocked' ? 'Mining ...' : 'Start Mining Now' }}
             </v-btn>
-            <div v-if="showBind"  class="d-flex justify-space-between align-center mt-3">
-              <div class="evm-wallet fz-14">Bind your EVM wallet before claiming rewards.</div>
-              <v-btn small class="bind-btn" @click="onConnect"
-                >Bind</v-btn>
-            </div>
+            
             <div class="d-flex justify-start mt-2">
               <div>
                 <img
@@ -109,6 +105,11 @@
               </div>
             </div>
           </div>
+        </div>
+        <div v-if="showBind" class="d-flex justify-space-between align-center project-info-footer">
+          <div class="evm-wallet fz-12">Bind your EVM wallet before claiming rewards.</div>
+          <v-btn small class="bind-btn fz-14 d-flex align-center" @click="onConnect"
+            ><img src="/img/booster/earnings/icon_wallet.png" width="16" alt="">Bind</v-btn>
         </div>
       </div>
     </v-dialog>
@@ -294,6 +295,8 @@ export default {
     cursor: pointer;
   }
   .earn-content {
+    z-index: 1;
+    position: relative;
     color: #fff;
     width: 327px;
     border-radius: 16px;
@@ -307,9 +310,8 @@ export default {
       );
     .logo {
       position: absolute;
-      top: 0;
-      left: 20%;
-      transform: translateX(-50%);
+      top: -28px;
+      
       z-index: 3;
       border-radius: 80px;
       border: 4px solid rgba(15, 225, 248, 0.25);
@@ -341,14 +343,7 @@ export default {
       line-height: 16px;
       color: #0fe1f8;
     }
-    .evm-wallet {
-      color: #fff;
-    }
-    .bind-btn {
-      width: 60px;
-      background: #6172F3;
-      color: #fff;
-    }
+    
     .countdown {
       font-size: 14px;
       font-weight: 300;
@@ -493,6 +488,35 @@ export default {
       line-height: 14.52px;
       color: #c0c1c2;
       margin-left: 4px;
+    }
+  }
+  .project-info-footer{
+    position: relative;
+    background-color: #6172F3;
+    color: #fff;
+    margin-top: -14px;
+    z-index: 0;
+    width: 327px;
+    border-radius: 16px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border: 1px solid #45516f80;
+    padding: 20px 12px 10px 12px;
+    .evm-wallet {
+      color: #fff;
+    }
+    .bind-btn {
+      width: 80px;
+      font-size: 14px;
+      background: #FFFFFF;
+      color: #121536;
+      letter-spacing: normal;
+      ::v-deep .v-btn__content{
+        line-height: 16px;
+      }
+      img{
+        margin-right: 4px;
+      }
     }
   }
 }
