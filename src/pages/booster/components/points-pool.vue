@@ -177,11 +177,11 @@ export default {
   text-align: center;
 }
 .trigger-text {
-  max-width: 45px;
+  max-width: 46px;
   line-height: 100%;
   position: relative;
   .projecttitle {
-    max-width: 45px;
+    max-width: 46px;
     overflow-wrap: break-word;
   }
   img {
