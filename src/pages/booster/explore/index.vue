@@ -114,6 +114,7 @@ export default {
       token: "",
       siteKey: process.env.VUE_APP_CF_TURNSTILE_SITE_KEY,
       sheet: false,
+      isloading: false,
     };
   },
   components: {
@@ -287,10 +288,12 @@ export default {
       return data.explorationId;
     },
     async getExploreInfo(loading = true) {
+      if (this.isloading) return;
       if (loading) {
         this.showExploring = true;
       }
       try {
+        this.isloading = true;
         let id = this.$route.params.id;
         if (!id) {
           id = await this.getExploreId();
@@ -301,8 +304,10 @@ export default {
           this.info = data.node;
           this.computedPoints = 0;
           this.pointCount();
+          this.isloading = false;
         }
       } catch (error) {
+        this.isloading = false;
         this.$toast2(error.message, "error");
       }
       this.showExploring = false;
