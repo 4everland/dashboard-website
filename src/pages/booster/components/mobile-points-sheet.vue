@@ -4,72 +4,147 @@
       <div class="sheet-content">
         <div class="user-card" v-show="!showLog">
           <div class="user-card-item fz-12">
-            <div class="user-card-item-title">Total $4EVER Points</div>
-            <div class="linear-border mb-1"></div>
+            <div class="user-card-item-title d-flex justify-space-between align-center mb-2">Total $4EVER Points
+              <div
+                class="spin-rules d-flex  align-center fz-12"
+                @click="showRule = true"
+              >
+                <img src="/img/booster/spin/rules-icon.svg" width="16" alt="" />
+                &nbsp;Rules
+              </div>
+            </div>
             <div class="user-card-item-content">
               <div class="content-rate">
-                <div class="d-flex align-center justify-space-between">
-                  <img src="/img/booster/svg/union.svg" width="52" alt="" />
+                <div class="d-flex align-center justify-space-between px-2">
                   <div>
-                    <span>{{ boosterInfo.totalPoint }}</span>
+                    <ICountUp
+                      class="points mx-1"
+                      :delay="1000"
+                      :endVal="boosterInfo.totalPoint"
+                      :options="{
+                        useEasing: true,
+                        useGrouping: true,
+                        separator: ',',
+                        decimal: '.',
+                        prefix: '',
+                        suffix: '',
+                      }"
+                    />
+                  </div>
+                  <div class="fz-14 point-right d-flex align-center" @click="handleShowLog">
+                    <span>Details</span>
                     <img
-                      @click="handleShowLog"
+                      
                       class="ml-1"
-                      width="16"
-                      src="/img/booster/svg/log.svg"
+                      width="24"
+                      src="/img/booster/svg/right-arrow.svg"
                       alt=""
                     />
                   </div>
                 </div>
-                <div class="content-rate-tips mt-1 d-flex align-center">
+                <div class="content-rate-tips mt-1 mb-2 d-flex align-center">
                   <img src="/img/booster/airdrop.png" width="20" alt="" />
                   <span class="fz-12"
-                    >$4EVER Points to qualify for 4EVERLAND airdrops!</span
+                    >$4EVER Points will be converted into $4EVER Tokens.</span
                   >
                 </div>
               </div>
             </div>
           </div>
           <div class="user-card-item fz-12 mt-4">
-            <div class="user-card-item-title">Earning Rate</div>
-            <div class="linear-border mb-1"></div>
-            <div class="user-card-item-content">
+            <div class="user-card-item-title mb-2">Earning Rate</div>
+            <div class="user-card-item-content user-card-item-content-total pb-2">
               <div
-                class="content-rate d-flex align-center justify-space-between"
+                class="content-rate d-flex align-center justify-space-between content-rate-total"
               >
-                <img src="/img/booster/svg/union.svg" width="52" alt="" />
                 <div>{{ Math.ceil(totalRate) }} pts/h</div>
+                <div class="user-card-more d-flex align-center justify-center"
+                  @click="
+                  () =>
+                    this.$emit('input', false) &&
+                    this.$store.dispatch('TaskDrawerToggle')
+                  ">
+                  <img
+                      
+                      class="mr-1"
+                      width="16"
+                      src="/img/booster/earnings/icon_plus.png"
+                      alt=""
+                    />
+                  More
+                </div>
               </div>
-              <div class="content-detail pt-2 fz-12">
-                <div class="d-flex align-center justify-space-between">
-                  <span>Base Rate</span>
-                  <span>{{ baseRate }} pts/h</span>
+              <div class="content-detail pt-2 fz-12 d-flex align-center justify-start">
+                <div class="content-detail-item">
+                  <div>Base Rate</div>
+                  <div class="rate-item">{{ baseRate }} pts/h</div>
                 </div>
-                <div class="d-flex align-center justify-space-between mt-1">
-                  <span>Boost Rate</span>
-                  <span>+{{ boostRate }} pts/h</span>
+                <div class="mt-1">
+                  <div>Boost Rate</div>
+                  <div class="rate-item">+{{ boostRate }} pts/h</div>
                 </div>
-                <div class="d-flex align-center justify-space-between mt-1">
-                  <span>Staking Yield</span>
-                  <span>{{ boosterInfo.rateBuff }}%</span>
+              </div>
+              <div class="d-flex align-center justify-space-between">
+                <div class="mt-1 content-detail-item">
+                  <div>Earning Rate Multiplier</div>
+                  <div class="rate-item">{{ boosterInfo.rateBuff }}%</div>
+                </div>
+                <div class="mt-1 content-detail-item-right">
+                <v-btn
+                  class="staking-btn"
+                  width="86"
+                  height="27"
+                  @click="
+                    () =>
+                    this.$emit('input', false) &&
+                    this.$store.dispatch('HoldProveToggle')
+                  "
+                >
+                  <img src="/img/booster/icon_tg_new.png" width="24" alt=""  style="right: -7px;top: -5px;position: absolute;" />
+                  <img src="/img/booster/icon_stake_4ever.png" alt="" width="24" />
+                  Staking</v-btn
+                >
                 </div>
               </div>
             </div>
           </div>
 
           <div class="user-card-item fz-12 mt-4">
-            <div class="user-card-item-title">Key Concepts</div>
-            <div class="linear-border mb-1"></div>
-            <div
-              v-for="(item, index) in concepts"
-              :key="index"
-              class="concepts"
-            >
-              <div class="fw-b" style="opacity: 0.75">{{ item.title }}</div>
-              <ul>
-                <li v-for="(it, idx) in item.list" :key="idx" v-html="it"></li>
-              </ul>
+            <div class="user-card-item-title">Mining Balance</div>
+            <div class="mb-4"></div>
+            <div v-if="!showPointsBalance" v-for="(item, index) in tokenList" :key="index">
+              <div
+                class="d-flex align-center justify-space-between assets-item"
+                @click="showBalance(item.projectId)"
+              >
+                <div class="d-flex align-center" style="gap: 8px">
+                  <img :src="item.logoUrl" width="40" class="projectImg" alt="" />
+
+                  <div class="d-flex flex-column">
+                    <div class="d-flex align-center">
+                      <span class="fz-16">{{ item.name }}</span>
+                    </div>
+                    
+                  </div>
+                </div>
+                <div class="balance-number d-flex align-center fz-14">
+                      {{ Number(item.balance).toFixed(2) }}
+                  <img
+                    class="cursor-p"
+                    src="/img/booster/svg/right-arrow.svg"
+                    width="24"
+                    alt=""
+                  />
+                </div>
+              </div>
             </div>
+            <booster-pagination
+              v-show="tokenList.length != 0"
+              :length="totalPages2"
+              class="mt-5"
+              v-model="page2"
+              @input="getTokenList"
+            ></booster-pagination>
           </div>
         </div>
 
@@ -110,15 +185,24 @@
             </div>
           </div>
         </div>
+        <points-balance
+          v-model="showPointsBalance"
+          :projectId="projectId"
+        ></points-balance>
       </div>
     </v-bottom-sheet>
+    <points-rules-dialog v-model="showRule"></points-rules-dialog>
+   
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import { fetchPointsHistory } from "@/api/booster";
+import { fetchPointsHistory,fetchTokenList } from "@/api/booster";
 import BoosterPagination from "./booster-pagination.vue";
+import pointsRulesDialog from "./points-rules-dialog.vue";
+import PointsBalance from "./points-balance-history.vue";
+import ICountUp from "vue-countup-v2";
 
 export default {
   props: {
@@ -129,56 +213,15 @@ export default {
   data() {
     return {
       showLog: false,
+      showRule: false,
       list: [],
       page: 1,
       totalPages: 0,
-      concepts: [
-        {
-          title: "$4EVER Points",
-          list: [
-            "$4EVER Points are the crucial proof for snagging 4EVERLAND <b style='color:#fff'>airdrops</b>.",
-          ],
-        },
-        {
-          title: "Earning Rate",
-          list: [
-            "Earning Rate = (Base Rate + Boost Rate) * (1 + Staking Yield).",
-            "Points generation at the earning rate but must be collected manually.",
-            "Collect $4EVER points on time! <b style='color:#fff'>If not, generation stops and you could lose 50% to others</b>.",
-          ],
-        },
-        {
-          title: "Base Rate",
-          list: [
-            "Permanently valid.",
-            "Miniapp: <b style='color:#fff'>10 pts/h</b>.",
-            "Webpage: <b style='color:#fff'>30 pts/h</b>.",
-            "Unlock Storage, Network, or Computing nodes to earn <b style='color:#fff'>100 pts/h</b> and get <b style='color:#fff'>2,500</b> capacity.",
-          ],
-        },
-        {
-          title: "Boost Rate",
-          list: [
-            "Valid for 24 hours.",
-            "Earn through tasks, raffles, or referral codes <b style='color:#fff'>(+10pts/h)</b>.",
-          ],
-        },
-        {
-          title: "Staking Yield",
-          list: [
-            "Increase your earning rate by staking <b style='color:#fff'>T4EVER/NFTs</b>.",
-            "Invalid if NFT is transferred.",
-          ],
-        },
-        {
-          title: "Capacity Limit",
-          list: [
-            "Miniapp: <b style='color:#fff'>100 points</b>.",
-            "Webpage: <b style='color:#fff'>300 points</b>.",
-            "Increase capacity with unlocked 3 nodes, capacity cards, or raffles.",
-          ],
-        },
-      ],
+      tokenList: [],
+      totalPages2: 0,
+      page2: 1,
+      showPointsBalance: false,
+      projectId: "",
     };
   },
   computed: {
@@ -197,8 +240,34 @@ export default {
   },
   components: {
     BoosterPagination,
+    pointsRulesDialog,
+    PointsBalance,
+    ICountUp
+  },
+  watch: {
+    value(newVal, oldVal) {
+      if (newVal === true) {
+        this.getTokenList();
+      }
+    },
+  },
+  mounted() {
+    this.getTokenList();
   },
   methods: {
+    async getTokenList() {
+      try {
+        const { data } = await fetchTokenList('all',this.page2,this.size);
+        this.tokenList = data.content;
+        this.totalPages2 = data.totalPages;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    showBalance(projectId) {
+      this.projectId = projectId;
+      this.showPointsBalance = true;
+    },
     async handleShowLog() {
       this.showLog = true;
       try {
@@ -356,15 +425,42 @@ export default {
   background-blend-mode: overlay, normal;
   backdrop-filter: blur(19.75px);
   overflow: auto;
+  .spin-rules {
+    background-color: #000;
+    border-radius: 100px;
+    padding: 4px 12px;
+    height: 24px;
+    line-height: 16px;
 
+  }
+  .point-right{
+    font-family: Inter;
+    font-weight: 400;
+  }
+  .user-card-more{
+    width: 78px;
+    height: 32px;
+    background: linear-gradient(96.98deg, #0FE1F8 -22.19%, #1102FC 99.83%);
+    border-radius: 4px;
+    font-family: Inter;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 32px;
+  }
+  .rate-item {
+    font-family: "DIN Alternate";
+    font-size: 16px;
+    color: #A4BCFD;
+    font-weight: 700;
+  }
   .user-card {
     .user-card-item {
       .user-card-item-content {
-        padding: 4px 16px;
+        padding: 8px 8px;
         background: linear-gradient(
           90deg,
-          rgba(97, 114, 243, 0.05) 0%,
-          rgba(97, 114, 243, 0.5) 100%
+          rgba(97, 114, 243, 0.5) 0%,
+          rgba(97, 114, 243, 0.05) 100%
         );
         backdrop-filter: blur(2px);
 
@@ -382,9 +478,25 @@ export default {
             background: #ffe205;
           }
         }
+        .content-detail-item{
+          width: 50%;
+        }
+        .content-rate-total {
+          height: 40px;
+          margin: 12px 0px;
+        }
         .content-detail {
           border-top: 1px solid rgba(164, 188, 253, 0.25);
         }
+      }
+      .user-card-item-content-total{
+        padding: 4px 16px;
+      }
+      .user-card-item-title {
+        font-size: 16px;
+        font-family: Inter;
+        font-weight: 500;
+        text-shadow: 0px 0px 8px #6172F3;
       }
     }
     .linear-border {
@@ -418,6 +530,31 @@ export default {
     li {
       list-style: disc;
     }
+  }
+  .assets-item {
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+  }
+  .balance-number {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16px;
+    text-align: left;
+    color: #A4BCFD;
+  }
+  .projectImg {
+    border-radius: 40px;
+  }
+  .staking-btn {
+    letter-spacing: 0;
+    font-style: italic;
+    font-size: 12px;
+    font-weight: bold;
+    color: #06090F;
+    border-radius: 4px;
+    background: linear-gradient(155.14deg, #C0833E 9.04%, #FFDE7F 88.73%);
+    position: relative;
+    
   }
 }
 </style>

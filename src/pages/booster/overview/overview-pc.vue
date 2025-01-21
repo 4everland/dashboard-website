@@ -39,7 +39,7 @@
           </div>
         </div>
         <div class="user-card-item-content mt-2">
-          <div class="content-rate mb-1">Staking Yield</div>
+          <div class="content-rate mb-1">Earning Rate Multiplier</div>
           <div class="content-detail pt-2 fz-12">
             <div class="d-flex align-center justify-space-between mb-1">
               <span>{{ boosterInfo.rateBuff }}%</span>

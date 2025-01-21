@@ -158,6 +158,12 @@ export default {
       spinList4:[
         100,100,70,30
       ],
+      spinList5:[
+        70,40
+      ],
+      spinList6:[
+        300,200,150,100
+      ],
       spinList:[],
       current: "",
       activeIndex: 0,
@@ -276,14 +282,18 @@ export default {
     async showNext() {
       let nextIndex = 1;
       this.spinList = this.spinList1;
-      if(this.spinStartInfo.spinId == 'd16de24a-da99-40c8-897d-1dbba25f205a' || this.spinStartInfo.spinId == 'f4eff4ea-11a9-49ec-ae46-0392bc772aee' ){
+      if(this.spinStartInfo.spinId == 'd16de24a-da99-40c8-897d-1dbba25f205a' || this.spinStartInfo.spinId == 'f4eff4ea-11a9-49ec-ae46-0392bc772aee'  || this.spinStartInfo.spinId == 'b37ed3c4-eb6b-4577-a218-056c1df57caa' ){
         this.spinList = this.spinList1;
-      } else if(this.spinStartInfo.spinId == '77319c24-2816-47a0-bd91-25f7f8605e2d' || this.spinStartInfo.spinId == '6ae26d73-369e-475d-aa92-f400a8eda599' ){
+      } else if(this.spinStartInfo.spinId == '77319c24-2816-47a0-bd91-25f7f8605e2d' || this.spinStartInfo.spinId == '6ae26d73-369e-475d-aa92-f400a8eda599' || this.spinStartInfo.spinId == '45e83b26-f41c-4175-af71-12a5dd3934d8' ){
         this.spinList = this.spinList2;
-      } else if(this.spinStartInfo.spinId == '75809212-a816-43b8-8def-11927d45b7a3'){
+      } else if(this.spinStartInfo.spinId == '75809212-a816-43b8-8def-11927d45b7a3' || this.spinStartInfo.spinId == 'e7b59e3c-13da-45d5-8740-72f78caf3421'){
         this.spinList = this.spinList3;
-      } else if(this.spinStartInfo.spinId == '5940e95c-ab34-4ec2-aa2e-861ff1a44b38'){
+      } else if(this.spinStartInfo.spinId == '5940e95c-ab34-4ec2-aa2e-861ff1a44b38' || this.spinStartInfo.spinId == '17ab01a2-115f-4462-b894-58b724df1d4f'){
         this.spinList = this.spinList4;
+      } else if(this.spinStartInfo.spinId == 'b2492cf3-53ca-41ab-bb8c-c94880f964c1'){
+        this.spinList = this.spinList5;
+      } else if(this.spinStartInfo.spinId == '7ea15c37-8362-41b7-bc32-7b539e78b7bc'){
+        this.spinList = this.spinList6;
       }
       this.showCard = true;
       await this.sleep(1500);

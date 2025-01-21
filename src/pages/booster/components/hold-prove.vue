@@ -16,7 +16,7 @@
           <div class="drawer-title nft-drawer-title">$4EVER HOLD</div>
           <div class="nft-drawer-desc">
             We randomly snapshot $4EVER balance in your wallet. Every $4EVER
-            contributes 0.002% to a staking yield.
+            contributes to a 0.002% earning rate multiplier.
             <a
               class="get-more"
               href="https://www.gate.io/signup/VLMVUL8MBA?ref_type=103"
@@ -72,7 +72,7 @@
               </div>
             </div>
             <div class="d-flex justify-space-between align-center mt-4">
-              <div class="prove-title">Staking yield</div>
+              <div class="prove-title">Earning Rate Multiplier</div>
               <v-skeleton-loader
                 v-if="loading"
                 :loading="loading"
@@ -88,6 +88,25 @@
                 <div class="prove-text" v-else>0</div>
               </div>
             </div>
+            <div class="d-flex justify-space-between align-center mt-4">
+              <div class="prove-title">APY</div>
+              <v-skeleton-loader
+                v-if="loading"
+                :loading="loading"
+                dark
+                width="100"
+                height="20"
+                type="text"
+              ></v-skeleton-loader>
+              <div v-else>
+                <div class="prove-rate-text">
+                  66.5%
+                </div>
+              </div>
+            </div>
+            <div class="fz-12 rate-tips py-2">
+              * APY is estimated based on the total mining rewards you claimed after staking.
+            </div>
             <!-- <div
               class="d-flex justify-space-between align-center mt-4 pt-4 prove-border"
             >
@@ -101,14 +120,14 @@
               </div>
             </div> -->
             <div
-              class="mt-6 d-flex justify-center align-center btn-border pt-6 mb-2"
+              class="mt-3 d-flex justify-center align-center btn-border pt-3 mb-2"
             >
               <v-btn
                 v-if="!stakeInfo?.value"
                 class="staking-btn"
                 height="32px"
                 @click="showStakeYield = true"
-                >Get Staking Yield
+                >Get Earning Rate Multiplier
                 <img
                 class="ml-1"
                   src="/img/booster/arrow-narrow-right.png"
@@ -259,8 +278,20 @@ export default {
           line-height: 20px;
           font-size: 16px;
         }
+        .prove-rate-text {
+          font-size: 16px;
+          font-weight: 700;
+          padding: 0px 12px;
+          color: #0C111D;
+          border-radius: 20px;
+          line-height: 20px;
+          background: #FFE205;
+        }
         .prove-border {
           border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .rate-tips {
+          color: #A4BCFD;
         }
       }
       .btn-border {

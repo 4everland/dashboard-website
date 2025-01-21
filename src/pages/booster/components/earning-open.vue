@@ -3,8 +3,10 @@
     <v-dialog
       max-width="400"
       content-class="earn-boost-dialog"
-      v-model="value"
-      overlay-opacity="0.5"
+      :value="value"
+      overlay-opacity="0.9"
+      overlay-color="black"
+      persistent
     >
       <div class="earn-dialog">
         <img
@@ -15,89 +17,81 @@
           alt=""
         />
         <div class="earn-content">
-          <img
-            class="logo"
-            src="/img/booster/earnings/tomarket.png"
-            width="80"
-            alt=""
-          />
+          <img class="logo" :src="info.projectLogoUrl" width="80" alt="" />
           <div class="d-flex justify-end align-center">
             <v-btn class="earning-btn">
-              <img
-                class="hot-icon"
-                src="/img/booster/progress-hot.png"
-                height="32"
-                alt=""
-              />
-              <span class="btn-text">10M $Tomarket</span>
+              <span class="btn-text"
+                >{{ $utils.formatCompactNumbers(info.projectTotalPoints+info.projectInitTotalPoints)
+                }}{{ " " }}{{ info.projectName }} {{ info.rewardType == 'POINT'? 'Points': 'Tokens' }}</span
+              >
             </v-btn>
           </div>
           <div>
-            <div class="title mt-8">Tomarket</div>
+            <div class="title mt-3">{{ info.projectName }}</div>
             <div class="text mt-2">
-              Tomarket is a play-to-earn bot that lets you win Tether and TON by
-              playing games and completing exciting tasks!
+              {{ info.projectDesc }}
             </div>
-            <div
+            <!-- <div
               class="countdown d-flex justify-space-between align-center mt-2"
             >
               <div>Ended</div>
-              <div class="d-flex align-center">
-                <div class="timer">30</div>
-                &nbsp;D:
-                <div class="timer">22</div>
-                &nbsp;H:
-                <div class="timer">32</div>
-                &nbsp;M:
-                <div class="timer">09</div>
-                &nbsp;S
+              <div class="d-flex align-center endtime">
+                <time-count-down :endTimeStamp="info.endAt"></time-count-down>
+                
               </div>
-            </div>
-            <div class="unlock-node mt-4">Complete To Unlock Tomarket Node</div>
-            <div class="back-step">
+            </div> -->
+            <div class="unlock-node mt-4">Complete Tasks To Start Project Mining</div>
+            <v-skeleton-loader
+              v-if="loading"
+              class="mx-auto"
+              height="50"
+              width="100%"
+              type="list-item"
+              dark
+            ></v-skeleton-loader>
+            <div
+              class="back-step"
+              v-if="!loading"
+              v-for="(item, index) in tasksLists"
+              :key="item.actId"
+              cols="12"
+            >
               <div class="d-flex justify-space-between align-center mt-2 step">
                 <div class="d-flex justify-start">
-                  <div class="step-number">1</div>
-                  <div class="step-text">Follow @Tomarket on X</div>
+                  <div class="step-number">{{ index + 1 }}</div>
+                  <div class="step-text">{{ item.actName }}</div>
                 </div>
-                <v-btn class="go-btn">
-                  <span class="btn-text">Go</span>
+                <v-btn
+                  v-if="item.actStatus !== 'DONE'"
+                  :class="
+                    item.extra.buttonName == 'Go' ? 'go-btn' : 'drawer-btn'
+                  "
+                  :loading="false || loadingStatus[item.actId]"
+                  @click="stepNext(item, index, 'one')"
+                >
+                  <span class="btn-text">{{ item.extra.buttonName }}</span>
+                </v-btn>
+                <v-btn v-if="item.actStatus == 'DONE'" class="done-btn"
+                  ><img src="/img/booster/earnings/icon_task_check.png" width="16" alt="">
                 </v-btn>
               </div>
             </div>
-            <div class="back-step">
-              <div class="d-flex justify-space-between align-center mt-2 step">
-                <div class="d-flex justify-start">
-                  <div class="step-number">2</div>
-                  <div class="step-text">Share on X</div>
-                </div>
-                <v-btn class="go-btn">
-                  <span class="btn-text">Go</span>
-                </v-btn>
-              </div>
-            </div>
-            <div class="back-step">
-              <div class="d-flex justify-space-between align-center mt-2 step">
-                <div class="d-flex justify-start">
-                  <div class="step-number">3</div>
-                  <div class="step-text">Join Telegram</div>
-                </div>
-                <v-btn class="go-btn">
-                  <span class="btn-text">Go</span>
-                </v-btn>
-              </div>
-            </div>
-            <div class="back-step">
-              <div class="d-flex justify-space-between align-center mt-2 step">
-                <div class="d-flex justify-start">
-                  <div class="step-number">4</div>
-                  <div class="step-text">Join Discord</div>
-                </div>
-                <v-btn class="go-btn">
-                  <span class="btn-text">Go</span>
-                </v-btn>
-              </div>
-            </div>
+            <v-btn 
+              class="start-btn mt-3 "
+              :disabled="disabled"
+              :class="{
+                'unlock-btn': info.type == 'unlocked'}"
+              @click="startMining"
+            > 
+              <img
+                v-if="info.type == 'unlocked'"
+                src="/img/booster/icon_hammer.png"
+                width="14"
+                alt=""
+              />
+            {{ info.type == 'unlocked' ? 'Mining ...' : 'Start Mining Now' }}
+            </v-btn>
+            
             <div class="d-flex justify-start mt-2">
               <div>
                 <img
@@ -107,34 +101,181 @@
                 />
               </div>
               <div class="view">
-                Unlock to view your balance in Account. Rewards will be
-                distributed after the event.
+                Rewards are generated based on your earning rate.
               </div>
             </div>
           </div>
+        </div>
+        <div v-if="showBind" class="d-flex justify-space-between align-center project-info-footer">
+          <div class="evm-wallet fz-12">Bind your EVM wallet before claiming rewards.</div>
+          <v-btn small class="bind-btn fz-14 d-flex align-center" @click="onConnect"
+            ><img src="/img/booster/earnings/icon_wallet.png" width="16" alt="">Bind</v-btn>
         </div>
       </div>
     </v-dialog>
   </div>
 </template>
   
-  <script>
+<script>
+import TimeCountDown from "@/pages/booster/components/time-count-down";
+import { bus } from "@/utils/bus";
+import { fetchPoolProjectList, fetchProjectTasks, onNext } from "@/api/booster";
+import { mapState } from "vuex";
 export default {
   props: {
     value: Boolean,
+    info: Object,
   },
   data() {
-    return {};
+    return {
+      endTimetTask: 1735082613,
+      loadingStatus: {},
+      tasksLists: [],
+      loading: false,
+    };
+  },
+  watch: {
+    value(newVal, oldVal) {
+      if (newVal === true) {
+        this.tasksLists = [];
+        this.getTaskList();
+      }
+    },
+  },
+  computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+    }),
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
+    disabled() {
+      if(this.tasksLists.length == 0) {
+        return true;
+      }
+      const completedTaskList = this.tasksLists.filter(
+        (it) => it.actStatus == "DONE"
+      );
+      if (completedTaskList.length == this.tasksLists.length) {
+        return false;
+      }else {
+        return true;
+      }
+
+    },
+    currentAddress() {
+      return this.userInfo.wallet?.address;
+    },
+    showBind() {
+      return this.info.projectName == "DeepLink" && !this.currentAddress;
+    }
   },
 
-  computed: {},
+  methods: {
+    backtoindex() {
+      this.$router.push("/boost");
+    },
+    async getTaskList(flag) {
+      if (flag !== "check") {
+        this.loading = true;
+      }
+      fetchProjectTasks(this.info.id).then((res) => {
+        this.tasksLists = res.data.items;
+        this.loading = false;
+        if (flag == "check") {
+          const completedTaskList = this.tasksLists.filter(
+            (it) => it.actStatus == "DONE"
+          );
+          if (completedTaskList.length == this.tasksLists.length) {
+            bus.$emit("refreshPartnerList");
+            bus.$emit("initPointsPool");
+          }
+        }
+      });
+    },
+    onConnect() {
+      let state = true;
+      this.$store.dispatch("ConnectDrawerState", { state });
+    },
+    startMining(){
+      this.$emit("input", false);
+      if (this.info.type == "unlocked") {
+        return;
+      }
+      this.$toast2(
+        `Activated successfully! Claim rewards on the homepage.`
+      );
+    },
+    async stepNext(item, index, taskListType) {
+      try {
+        let _this = this;
+        if (item.extra.buttonName == "Go") {
+          let url = item.oriDescription;
+          if (item.actType == "share_twitter") {
+            url += encodeURIComponent(this.inviteInfo.link);
+          }
+          url = url.replace(/^http:\/\//i, "https://");
+          if (this.isTgMiniApp) {
+            this.$tg.openAuto(url);
+          } else {
+            window.open(url);
+          }
+        }
+        if (item.extra.buttonName == "Check") {
+          this.$set(this.loadingStatus, item.actId, true);
+        }
 
-  methods: {},
-  components: {},
+        const id = item.actId;
+
+        const { data } = await onNext(id);
+          if(data.alert){
+            this.$toast2(data.alert, "info");
+          }
+        if (item.actType == "exchange_ads") {
+          let inOut = item.adDescription.split(";");
+          const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+          await clickAds(userId, inOut[0], inOut[1]);
+        }
+
+        this.$set(this.loadingStatus, item.actId, false);
+        item.extra.buttonName = data.action.web.nextButtonName;
+        this.$set(_this.tasksLists, index, item);
+
+        //  const actType = data.actType;
+        switch (data.action.web.next) {
+          case "REDIRECT":
+            if (this.isTgMiniApp) return this.$tg.openAuto(shareUrl);
+            location.href = data.action.web.message;
+            break;
+          case "CLAIM":
+            this.$toast2(data.action.web.message, "success");
+            break;
+          case "COMPLETE":
+            this.getTaskList("check");
+            break;
+          case "COPY":
+            if (this.isTgMiniApp) {
+              this.$tg.shareUrl(
+                this.inviteInfo.link,
+                "Embark on the exciting 4EVER Boost campaign to boost your $4EVER points and grab exciting upcoming airdrops!🚨"
+              );
+            }
+            break;
+          default:
+            break;
+        }
+      } catch (error) {
+        console.log(error, "--------");
+      }
+    },
+  },
+  components: {
+    TimeCountDown,
+  },
 };
 </script>
   
-  <style lang="scss" scoped>
+<style lang="scss" scoped>
 ::v-deep .earn-boost-dialog {
   background: transparent !important;
   box-shadow: none !important;
@@ -154,18 +295,13 @@ export default {
     cursor: pointer;
   }
   .earn-content {
+    z-index: 1;
+    position: relative;
     color: #fff;
     width: 327px;
     border-radius: 16px;
-    border: 1px solid;
+    border: 1px solid #45516f80;
     padding: 12px;
-    border-image-source: linear-gradient(
-      165.76deg,
-      rgba(69, 81, 111, 0.5) -11.63%,
-      #11b7ff 88.45%
-    );
-    border-image-slice: 1;
-
     background: linear-gradient(179.52deg, #000a10 8.53%, #003e70 99.59%),
       linear-gradient(
         180deg,
@@ -174,10 +310,11 @@ export default {
       );
     .logo {
       position: absolute;
-      top: 0;
-      left: 20%;
-      transform: translateX(-50%);
+      top: -28px;
+      
       z-index: 3;
+      border-radius: 80px;
+      border: 4px solid rgba(15, 225, 248, 0.25);
     }
     .earning-btn {
       height: 34px;
@@ -189,6 +326,7 @@ export default {
         font-weight: 700;
         line-height: 16px;
         color: #fff;
+        letter-spacing: normal;
       }
       .hot-icon {
         margin-bottom: 4px;
@@ -205,12 +343,27 @@ export default {
       line-height: 16px;
       color: #0fe1f8;
     }
+    
     .countdown {
       font-size: 14px;
       font-weight: 300;
       line-height: 17px;
       text-align: left;
       color: #ffce56;
+      .endtime {
+        font-size: 14px;
+        color: #0fe1f8;
+        ::v-deep .label {
+          background-color: #ffce56;
+          padding: 0px 4px;
+          margin-right: 2px;
+          margin-left: 2px;
+          border-radius: 2px;
+          color: #000;
+          height: 24px;
+          line-height: 24px;
+        }
+      }
       .timer {
         width: 20px;
         height: 24px;
@@ -221,11 +374,11 @@ export default {
         color: #000;
         font-size: 12px;
         font-weight: 400;
-        margin-left:2px;
+        margin-left: 2px;
       }
     }
     .unlock-node {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 700;
       line-height: 20px;
       text-shadow: 0px 0px 10px #6172f3;
@@ -268,15 +421,66 @@ export default {
         margin-left: 8px;
       }
       .go-btn {
-        padding: 4px 16px;
+        height: 25px;
+        min-width: 51px;
+        padding: 4px 13px;
         border-radius: 4px;
+        letter-spacing: normal;
         background: linear-gradient(96.98deg, #0fe1f8 -22.19%, #1102fc 99.83%);
         .btn-text {
           font-size: 14px;
           font-weight: 400;
           color: #fff;
+          letter-spacing: normal;
         }
       }
+      .drawer-btn {
+        height: 25px;
+        min-width: 51px;
+        background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
+        box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
+        color: #fff !important;
+        font-size: 14px;
+        font-weight: 400;
+        padding: 0 10px;
+        cursor: pointer;
+        letter-spacing: normal;
+      }
+      .done-btn {
+        height: 25px;
+        min-width: 51px;
+        border-radius: 21px;
+        background: #17B26A !important;
+        color: #fff !important;
+        cursor: not-allowed;
+      }
+      
+    }
+    .start-btn {
+      height: 40px;
+      width: 100%;
+      padding: 4px 13px;
+      border-radius: 4px;
+      background: linear-gradient(96.98deg, #0fe1f8 -22.19%, #1102fc 99.83%);
+      color: #fff;
+      letter-spacing: normal;
+    }
+    .unlock-btn {
+      height: 40px;
+      width: 100%;
+      padding: 4px 13px;
+      border-radius: 4px;
+      background: #0FE1F80D;
+      color: #0FE1F8;
+      font-size: 14px;
+      letter-spacing: normal;
+      img {
+        margin-right: 4px;
+      }
+    }
+    ::v-deep .v-btn--disabled {
+      background: #31383F!important;
+      color: #FFFFFF50 !important;
     }
     .view {
       font-size: 12px;
@@ -286,7 +490,37 @@ export default {
       margin-left: 4px;
     }
   }
+  .project-info-footer{
+    position: relative;
+    background-color: #6172F3;
+    color: #fff;
+    margin-top: -14px;
+    z-index: 0;
+    width: 327px;
+    border-radius: 16px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border: 1px solid #45516f80;
+    padding: 20px 12px 10px 12px;
+    .evm-wallet {
+      color: #fff;
+    }
+    .bind-btn {
+      width: 80px;
+      font-size: 14px;
+      background: #FFFFFF;
+      color: #121536;
+      letter-spacing: normal;
+      ::v-deep .v-btn__content{
+        line-height: 16px;
+      }
+      img{
+        margin-right: 4px;
+      }
+    }
+  }
 }
+
 .cancel-btn {
   color: #fff !important;
   font-weight: 500;

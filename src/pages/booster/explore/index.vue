@@ -47,151 +47,11 @@
       </div>
       <ExploreBar
         class="explore-bar"
-        :class="{'explore-bar-mobile': asMobile }"
         :uid="info.uid"
         :address="info.address"
         :totalPoint="info.totalPoint"
         @onExplore="handleExplore"
       ></ExploreBar>
-      <div class="nodeBoostWrap" v-if="asMobile">
-        <div class="nodeboost-title pa-4 ">
-          Node Boost
-        </div>
-        <div class="nodeboost-content px-4">
-          <div class="d-flex justify-space-between">
-            <div class="nodeboost-item" :class="{ 'storage-activity': !storageLocked }">
-              <div class="storage-boost">
-                <div style="position: relative">
-                  <div class="text-center">
-                    <img
-                      v-if="storageLocked"
-                      class="storage-boost-img"
-                      src="/img/booster/new/icon-storage.png"
-                      height="58"
-                      alt=""
-                      />
-                    <img
-                      v-else
-                      class="storage-boost-img"
-                      src="/img/booster/new/icon-storage-active.png"
-                      height="58"
-                      alt=""
-                      />
-                  </div>
-                </div>
-                <div class="top-card" id="storage-boost" v-if="storageLocked">
-                  <div class="card-storage" :class="{ locked: storageLocked }">
-                    <div class="task-title d-flex align-center" style="gap: 2px">
-                      <img src="/img/booster/svg/locked-icon.svg" width="16" alt="" />
-                      <span class="text-center"> STORAGE<br> BOOST</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="unlocked-card text-center" id="storage-boost">
-                  <div class="card-storage" v-if="!storageLocked">
-                    <div
-                      class="unlocked-card-title d-flex align-center justify-center"
-                      
-                      style="gap: 2px"
-                    >
-                      <span class="text-center"> STORAGE <br> BOOST</span>
-                      
-                    </div>
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-            <div class="nodeboost-item" :class="{ 'computing-activity': !computingLocked }">
-              <div class="computing-boost">
-                <div style="position: relative">
-                  <div class="text-center">
-                    <img
-                      v-if="computingLocked"
-                      class="storage-boost-img"
-                      src="/img/booster/new/icon-computing.png"
-                      height="58"
-                      alt=""
-                      />
-                      <img
-                      v-else
-                      class="storage-boost-img"
-                      src="/img/booster/new/icon-computing-active.png"
-                      height="58"
-                      alt=""
-                      />
-                  </div>
-                </div>
-                <div class="top-card" v-if="computingLocked">
-                  <div class="card-storage" :class="{ locked: computingLocked }">
-                    <div class="task-title d-flex align-center" style="gap: 2px">
-                      <img src="/img/booster/svg/locked-icon.svg" width="16" alt="" />
-                      <span class="text-center"> COMPUTING<br>BOOST</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="unlocked-card text-center">
-                  <div class="card-storage" v-if="!computingLocked">
-                    <div
-                      class="unlocked-card-title d-flex align-center justify-center"
-                      v-if="!computingLocked"
-                      style="gap: 2px"
-                    >
-                      <span class="text-center"> COMPUTING<br> BOOST</span>
-                    </div>
-                  </div>
-                  
-                </div>
-              </div>
-              
-            </div>
-            <div class="nodeboost-item" :class="{ 'network-activity': !networkLocked }">
-              <div class="network-boost">
-                <div style="position: relative">
-                  <div class="text-center">
-                    <img
-                      v-if="networkLocked"
-                      class="storage-boost-img"
-                      src="/img/booster/new/icon-network-boost.png"
-                      height="58"
-                      alt=""
-                      />
-                    <img
-                      v-else
-                      class="storage-boost-img"
-                      src="/img/booster/new/icon-network-boost-active.png"
-                      height="58"
-                      alt=""
-                      />
-                  </div>
-                </div>
-                <div class="top-card" v-if="networkLocked">
-                  <div class="card-storage" :class="{ locked: networkLocked }">
-                    <div class="task-title d-flex align-center" style="gap: 2px">
-                      <img src="/img/booster/svg/locked-icon.svg" width="16" alt="" />
-
-                      <span class="text-center">NETWORK<br> BOOST</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="unlocked-card text-center">
-                  <div class="card-storage" v-if="!networkLocked">
-                  <div
-                    class="unlocked-card-title d-flex align-center justify-center"
-                    
-                    style="gap: 2px"
-                  >
-                    <span class="text-center"> NETWORK<br> BOOST</span>
-                  </div>
-                  
-                </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <v-dialog
@@ -214,6 +74,8 @@
         <div class="pb-4">LOADING...</div>
       </div>
     </v-dialog>
+    <audio ref="audioPlayer" src="/audio/collect.mp3"></audio>
+    <mobile-points-sheet v-model="sheet"></mobile-points-sheet>
   </div>
 </template>
 
@@ -226,6 +88,8 @@ import {
 import ExploreBar from "../components/explore-bar.vue";
 import { coinMove } from "../../../utils/animation";
 import VueTurnstile from "@gaviti/vue-turnstile";
+import MobilePointsSheet from "../components/mobile-points-sheet.vue";
+import { bus } from "@/utils/bus";
 
 import { mapState, mapGetters } from "vuex";
 export default {
@@ -249,11 +113,14 @@ export default {
       timer: null,
       token: "",
       siteKey: process.env.VUE_APP_CF_TURNSTILE_SITE_KEY,
+      sheet: false,
+      isloading: false,
     };
   },
   components: {
     ExploreBar,
     VueTurnstile,
+    MobilePointsSheet,
   },
   computed: {
     ...mapState({
@@ -389,6 +256,9 @@ export default {
     // this.showExploring = true;
     await this.getExploreInfo();
     this.pointCount();
+    bus.$on("showMobileSheet", () => {
+      this.sheet = true;
+    });
   },
 
   methods: {
@@ -418,10 +288,12 @@ export default {
       return data.explorationId;
     },
     async getExploreInfo(loading = true) {
+      if (this.isloading) return;
       if (loading) {
         this.showExploring = true;
       }
       try {
+        this.isloading = true;
         let id = this.$route.params.id;
         if (!id) {
           id = await this.getExploreId();
@@ -432,8 +304,10 @@ export default {
           this.info = data.node;
           this.computedPoints = 0;
           this.pointCount();
+          this.isloading = false;
         }
       } catch (error) {
+        this.isloading = false;
         this.$toast2(error.message, "error");
       }
       this.showExploring = false;
@@ -444,6 +318,20 @@ export default {
       // this.showExploring = true;
       // this.$refs.turnstile.execute();
       this.getExploreInfo();
+    },
+    playaudio() {
+      const audio = this.$refs.audioPlayer;
+      audio.play();
+      if ("vibrate" in navigator) {
+        navigator.vibrate(200);
+      }
+      
+    },
+    async handleShadow() {
+      const box = document.getElementById("navtop-mobile-points");
+      box.classList.add('box-shadow-animate');
+      await this.$sleep(500);
+      box.classList.remove('box-shadow-animate');
     },
 
     async handleClaim() {
@@ -456,14 +344,18 @@ export default {
         const data = await claimExplorePoints(id);
         if (data.data) {
           if (this.asMobile) {
+            this.playaudio();
             coinMove("point-explore-send", "mobile-point-receive");
+            await this.$sleep(2000)
+            this.handleShadow();
           } else {
             coinMove("point-explore-send", "point-receive");
+            this.$toast2(
+              `Successfully collected, you earn a ${data.data}-point share.`,
+              "success"
+            );
           }
-          this.$toast2(
-            `Successfully collected, you earn a ${data.data}-point share.`,
-            "success"
-          );
+          
         } else {
           this.$toast2(data.message, "error");
         }

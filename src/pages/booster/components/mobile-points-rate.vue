@@ -1,5 +1,5 @@
 <template>
-  <div class="mobile-points fz-12">
+  <div class="mobile-points fz-12" id="navtop-mobile-points" @click="handleShowMoileSheet">
     <div class="mobile-points-content d-flex align-center" style="gap: 4px">
       <img src="/img/booster/4ever-point-icon.png" width="24" alt="" />
       <ICountUp
@@ -20,7 +20,7 @@
     <div
       style="width: 1px; height: 16px; background: rgba(255, 255, 255, 0.25)"
     ></div>
-    <div class="rate d-flex align-center" @click="handleShowMoileSheet">
+    <div class="rate d-flex align-center">
       <img src="/img/booster/3d-square-full.png" width="24" alt="" />
       <span>{{ Math.ceil(totalRate) }} pts/h</span>
       <img
@@ -79,6 +79,17 @@ export default {
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.56px;
+  }
+}
+.box-shadow-animate {
+  animation: boxShadowAnimation 1.5s forwards;
+}
+@keyframes boxShadowAnimation {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0);
   }
 }
 </style>
