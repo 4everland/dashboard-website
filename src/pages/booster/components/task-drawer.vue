@@ -142,7 +142,10 @@
                   item.deployOn == 'all' ||
                   (item.deployOn == 'pc' && !isTgMiniApp) ||
                   (item.deployOn == 'tg' && isTgMiniApp && isAndroid) ||
-                  (item.deployOn == 'tg' && isTgMiniApp && !isAndroid && item.actType != 'save_home_screen')
+                  (item.deployOn == 'tg' &&
+                    isTgMiniApp &&
+                    !isAndroid &&
+                    item.actType != 'save_home_screen')
                 "
               >
                 <div class="task-item-box">
@@ -191,6 +194,49 @@
               </v-col>
             </v-row>
           </div>
+
+          <!-- ton ai ads -->
+
+          <div style="margin: 12px 0" v-if="tonAds.length > 0">
+            <div
+              class="task-list-title"
+              style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
+            >
+              Ton AI Ads Tasks
+            </div>
+            <v-row no-gutters style="gap: 18px 0">
+              <v-col v-for="item in tonAds" :key="item.adId" cols="12">
+                <div class="task-item-box">
+                  <div class="task-item-left">
+                    <img class="task-item-image" :src="item.icon" alt="" />
+                    <div class="task-text-box">
+                      <div class="task-name">{{ item.brandName }}</div>
+                      <div class="task-desc">+5 pts/h, valid for 24 hours</div>
+                    </div>
+                  </div>
+
+                  <div class="task-item-right">
+                    <v-btn
+                      v-if="item.buttonText == 'Go'"
+                      width="84"
+                      class="go-btn"
+                      @click="showPopupAdd(item)"
+                      :loading="item.load"
+                      >Go</v-btn
+                    >
+
+                    <v-btn
+                      v-if="item.buttonText == 'done'"
+                      class="done-btn"
+                      width="84"
+                      >Done</v-btn
+                    >
+                  </div>
+                </div>
+              </v-col>
+            </v-row>
+          </div>
+
           <!-- partner task -->
           <div
             v-if="isTgMiniApp && tasksLists_partner_without_done.length > 0"
@@ -314,9 +360,9 @@ import { bus } from "@/utils/bus";
 import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
 import { clickAds } from "@/api/ton-ads";
 // import { connectOkxWallet } from "@/pages/booster/components/wallet-connect.js";
-import { OKXUniversalProvider } from "@okxconnect/universal-provider";
-import { fetchWeb3codeBind, fetchWeb3Vcode } from "@/api/login.js";
 import { postEvent } from "@telegram-apps/sdk";
+
+import { TonAdInit, GetMultiTonAd, TonAdPopupShow } from "ton-ai-sdk";
 
 export default {
   computed: {
@@ -370,6 +416,7 @@ export default {
       },
       loadingStatus: {},
       okxUniversalProvider: null,
+      tonAds: [],
     };
   },
 
@@ -380,6 +427,13 @@ export default {
       // this.getDailySign();
       this.signed = true;
     });
+  },
+
+  async mounted() {
+    TonAdInit({
+      appId: "670a71808f26dee225e26a86",
+    });
+    await this.getMultiTOnAdd();
   },
   methods: {
     async getDailySign() {
@@ -422,8 +476,11 @@ export default {
         if (
           it.deployOn == "all" ||
           (it.deployOn == "pc" && !this.isTgMiniApp) ||
-          (it.deployOn == 'tg' && this.isTgMiniApp && this.isAndroid ) ||
-          (it.deployOn == 'tg' && this.isTgMiniApp && !this.isAndroid && it.actType != 'save_home_screen')
+          (it.deployOn == "tg" && this.isTgMiniApp && this.isAndroid) ||
+          (it.deployOn == "tg" &&
+            this.isTgMiniApp &&
+            !this.isAndroid &&
+            it.actType != "save_home_screen")
         ) {
           return it;
         }
@@ -454,9 +511,9 @@ export default {
             text += this.inviteInfo.link;
             this.shareOnTgStory(media_url, text);
           } else if (item.actType == "save_home_screen") {
-            bus.$emit('showSaveToHomeEvent')
+            bus.$emit("showSaveToHomeEvent");
           } else if (item.actType == "bind_exchange_address") {
-            bus.$emit('showBindExchangeEvent')
+            bus.$emit("showBindExchangeEvent");
           } else {
             let url = item.oriDescription;
             if (item.actType == "share_twitter") {
@@ -550,7 +607,6 @@ export default {
         console.log(error);
       }
     },
-
     async getTgInviteInfo() {
       try {
         const { data } = await fetchTgInviteInfo();
@@ -627,7 +683,6 @@ export default {
       }
     },
     handleTitle(it) {
-      console.log(it, "---");
       if (it.actType == "telegram_daily_share") {
         const oriDescriptionArr = it.oriDescription.split(";");
         let [media_url, text] = oriDescriptionArr;
@@ -637,11 +692,11 @@ export default {
       }
 
       if (it.actType == "save_home_screen") {
-        bus.$emit('showSaveToHomeEvent')
+        bus.$emit("showSaveToHomeEvent");
         return;
       }
       if (it.actType == "bind_exchange_address") {
-        bus.$emit('showBindExchangeEvent')
+        bus.$emit("showBindExchangeEvent");
         return;
       }
 
@@ -654,6 +709,61 @@ export default {
     },
     async shareOnTgStory(media_url, text) {
       postEvent("web_app_share_to_story", { media_url, text });
+    },
+
+    async getMultiTOnAdd() {
+      try {
+        const { ads } = await GetMultiTonAd("6784b61a1dc5294b8f00272f", 5);
+        if (ads && ads.length > 0) {
+          this.tonAds = ads.map((it) => {
+            return {
+              ...it,
+              load: false,
+              buttonText: "Go",
+            };
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
+    async showPopupAdd(tonAd) {
+      const i = this.tonAds.findIndex((ad) => {
+        return ad.adId == tonAd.adId;
+      });
+      this.tonAds[i].load = true;
+      let timer = setTimeout(() => {
+        this.$set(this.tonAds, i, {
+          ...this.tonAds[i],
+          load: false,
+          buttonText: "done",
+        });
+        this.$toast2("completed", "success");
+        const isCompleted =
+          this.tonAds.map((it) => {
+            return it.buttonText == "Go";
+          }).length == 0;
+
+        if (isCompleted) {
+          this.getMultiTOnAdd();
+        }
+      }, 15000);
+
+      TonAdPopupShow({
+        tonAd,
+        onAdClick: (ad) => {
+          console.log("Ad clicked:", ad);
+        },
+        onAdError: (error) => {
+          console.error("Ad error:", error);
+        },
+        onAdClose: () => {
+          this.tonAds[i].load = false;
+          clearTimeout(timer);
+          this.showTaskDrawer = true;
+        },
+      });
     },
   },
 };

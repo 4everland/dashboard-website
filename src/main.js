@@ -9,6 +9,7 @@ import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 import tgUtil from "@/utils/tg.js";
 import VConsole from "vconsole";
 import { Buffer } from "buffer";
+
 if (window.top !== window.self) {
   window.top.location = window.location.href;
 }

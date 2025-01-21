@@ -13851,6 +13851,11 @@ toidentifier@1.0.1:
   resolved "https://registry.npmjs.org/toidentifier/-/toidentifier-1.0.1.tgz"
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
 
+ton-ai-sdk@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.npmjs.org/ton-ai-sdk/-/ton-ai-sdk-2.2.2.tgz#7450cf5a448d86c8679908a17acdf4b792a96f65"
+  integrity sha512-jxhjzO47G3KbVBAz+RFxFCd6L+NeSHHWFRjNzKMRirneA5efmPTJnIGDYyHlObc2ADOJNUdRwtxLTo/S1A/NAg==
+
 toposort@^1.0.0:
   version "1.0.7"
   resolved "https://registry.npmjs.org/toposort/-/toposort-1.0.7.tgz"
