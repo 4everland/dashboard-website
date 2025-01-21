@@ -202,12 +202,12 @@
               class="task-list-title"
               style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
             >
-              Ton AI Ads Tasks
+              Partner Tasks
             </div>
             <v-row no-gutters style="gap: 18px 0">
               <v-col v-for="item in tonAds" :key="item.adId" cols="12">
                 <div class="task-item-box">
-                  <div class="task-item-left">
+                  <div class="task-item-left" @click="handleTonAdTitle(item)">
                     <img class="task-item-image" :src="item.icon" alt="" />
                     <div class="task-text-box">
                       <div class="task-name">{{ item.brandName }}</div>
@@ -238,7 +238,7 @@
           </div>
 
           <!-- partner task -->
-          <div
+          <!-- <div
             v-if="isTgMiniApp && tasksLists_partner_without_done.length > 0"
             style="margin: 12px 0"
           >
@@ -304,7 +304,7 @@
                 </div>
               </v-col>
             </v-row>
-          </div>
+          </div> -->
 
           <!-- done task -->
           <div v-if="completedTaskList.length > 0" style="margin: 12px 0">
@@ -362,7 +362,12 @@ import { clickAds } from "@/api/ton-ads";
 // import { connectOkxWallet } from "@/pages/booster/components/wallet-connect.js";
 import { postEvent } from "@telegram-apps/sdk";
 
-import { TonAdInit, GetMultiTonAd, TonAdPopupShow } from "ton-ai-sdk";
+import {
+  TonAdInit,
+  GetMultiTonAd,
+  TonAdPopupShow,
+  OnAdClick,
+} from "ton-ai-sdk";
 
 export default {
   computed: {
@@ -431,7 +436,7 @@ export default {
 
   async mounted() {
     TonAdInit({
-      appId: "670a71808f26dee225e26a86",
+      appId: process.env.VUE_APP_TON_AI_ADS_ID,
     });
     await this.getMultiTOnAdd();
   },
@@ -707,13 +712,20 @@ export default {
       if (this.isTgMiniApp) return this.$tg.openAuto(url);
       window.open(url);
     },
+
+    handleTonAdTitle(it) {
+      this.$tg.openAuto(it.url);
+    },
     async shareOnTgStory(media_url, text) {
       postEvent("web_app_share_to_story", { media_url, text });
     },
 
     async getMultiTOnAdd() {
       try {
-        const { ads } = await GetMultiTonAd("6784b61a1dc5294b8f00272f", 5);
+        const { ads } = await GetMultiTonAd(
+          process.env.VUE_APP_TON_AI_ADS_BLOCK_ID,
+          5
+        );
         if (ads && ads.length > 0) {
           this.tonAds = ads.map((it) => {
             return {
@@ -739,9 +751,10 @@ export default {
           load: false,
           buttonText: "done",
         });
-        this.$toast2("completed", "success");
+        this.$toast2("Completed", "success");
+
         const isCompleted =
-          this.tonAds.map((it) => {
+          this.tonAds.filter((it) => {
             return it.buttonText == "Go";
           }).length == 0;
 
@@ -750,20 +763,29 @@ export default {
         }
       }, 15000);
 
-      TonAdPopupShow({
-        tonAd,
-        onAdClick: (ad) => {
-          console.log("Ad clicked:", ad);
-        },
-        onAdError: (error) => {
-          console.error("Ad error:", error);
-        },
-        onAdClose: () => {
-          this.tonAds[i].load = false;
-          clearTimeout(timer);
-          this.showTaskDrawer = true;
-        },
-      });
+      if (tonAd.billingType === "CPC" || tonAd.billingType === "oCPC") {
+        OnAdClick(tonAd, (success) => {
+          if (!success) {
+            clearTimeout(timer);
+            this.tonAds[i].load = false;
+          }
+        });
+      } else {
+        TonAdPopupShow({
+          tonAd,
+          onAdClick: (ad) => {
+            console.log("Ad clicked:", ad);
+          },
+          onAdError: (error) => {
+            console.error("Ad error:", error);
+          },
+          onAdClose: () => {
+            this.tonAds[i].load = false;
+            clearTimeout(timer);
+            this.showTaskDrawer = true;
+          },
+        });
+      }
     },
   },
 };
