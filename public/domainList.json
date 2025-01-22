@@ -61,6 +61,16 @@
       "placeholder": "BNS Domain",
       "icon": "bns.svg",
       "display": "true"
+    },
+    {
+      "name": "SPACE ID",
+      "key": "spaceid",
+      "network": "function(domain){return 'https://' + domain +'.bnb'}",
+      "host": "https://space.id",
+      "rule": ".+.bnb$",
+      "placeholder": "SPACE ID",
+      "icon": "spaceid.svg",
+      "display": "true"
     }
   ]
 }
