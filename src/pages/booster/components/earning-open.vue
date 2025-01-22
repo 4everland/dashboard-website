@@ -167,7 +167,8 @@ export default {
       return this.userInfo.wallet?.address;
     },
     showBind() {
-      return this.info.projectName == "DeepLink" && !this.currentAddress;
+      let _project = this.info.projectName;
+      return ["DeepLink", "AILayer"].includes(_project) && !this.currentAddress;
     }
   },
 

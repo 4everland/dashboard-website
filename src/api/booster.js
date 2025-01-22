@@ -456,3 +456,10 @@ export const fetch4everBalance = async () => {
     url: `/4ever/stake/balance`,
   });
 }
+
+export const fetchTonAdsLimit = async () => {
+  return boosterRequest.get({
+    url: `/node/ad/ton/limit`,
+  });
+}
+
