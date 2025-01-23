@@ -423,8 +423,8 @@ Vue.prototype.$utils = {
     return formatVal + " " + unit;
     // return result;
   },
-  formatCompactNumbers (number) {
-    const formatador = Intl.NumberFormat("en", { notation: "compact" });
+  formatCompactNumbers (number, maximum=2) {
+    const formatador = Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: maximum });
     return formatador.format(number);
   }
 };

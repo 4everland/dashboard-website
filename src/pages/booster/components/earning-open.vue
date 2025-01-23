@@ -168,7 +168,7 @@ export default {
     },
     showBind() {
       let _project = this.info.projectName;
-      return ["DeepLink", "AILayer"].includes(_project) && !this.currentAddress;
+      return ["DeepLink", "AILayer", "LSP Finance"].includes(_project) && !this.currentAddress;
     }
   },
 

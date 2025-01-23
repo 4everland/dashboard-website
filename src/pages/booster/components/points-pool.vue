@@ -30,7 +30,7 @@
             <div class="projecttitle">
               {{
                 item?.points
-                  ? $utils.formatCompactNumbers(item?.points)
+                  ? $utils.formatCompactNumbers(item?.points, item?.points>1?2:4)
                   : item?.projectName
               }}
             </div>
