@@ -420,6 +420,7 @@ export default {
         font-size: 14px;
         font-weight: 400;
         margin-left: 8px;
+        width: fit-content;
       }
       .go-btn {
         height: 25px;
