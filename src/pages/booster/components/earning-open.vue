@@ -22,7 +22,7 @@
             <v-btn class="earning-btn">
               <span class="btn-text"
                 >{{ $utils.formatCompactNumbers(info.projectTotalPoints+info.projectInitTotalPoints)
-                }}{{ " " }}{{ info.projectName }} {{ info.rewardType == 'POINT'? 'Points': 'Tokens' }}</span
+                }}{{ " " }}{{ info.projectName }} {{ info.rewardType == 'POINT'? 'Points': info.rewardType == 'TOKEN'? 'Tokens': 'Gems' }}</span
               >
             </v-btn>
           </div>

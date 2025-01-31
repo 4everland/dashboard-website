@@ -66,7 +66,7 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints+item.projectInitTotalPoints)
-                    }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
+                    }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': item.rewardType == 'TOKEN' ? 'Tokens': 'Gems' }}
                   </div>
                 </div>
               </div>
@@ -110,7 +110,7 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints+item.projectInitTotalPoints)
-                    }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
+                    }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': item.rewardType == 'TOKEN' ? 'Tokens': 'Gems' }}
                   </div>
                 </div>
               </div>
@@ -140,7 +140,7 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints+item.projectInitTotalPoints)
-                    }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
+                    }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': item.rewardType == 'TOKEN' ? 'Tokens': 'Gems' }}
                   </div>
                 </div>
               </div>
@@ -169,7 +169,7 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints+item.projectInitTotalPoints) }}
-                    {{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
+                    {{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': item.rewardType == 'TOKEN' ? 'Tokens': 'Gems' }}
                   </div>
                 </div>
               </div>
