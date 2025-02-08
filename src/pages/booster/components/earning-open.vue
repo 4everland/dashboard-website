@@ -89,7 +89,7 @@
                 width="14"
                 alt=""
               />
-            {{ info.type == 'unlocked' ? 'Mining ...' : 'Start Mining Now' }}
+            {{ info.type == 'unlocked' ? 'Mining ...' : info.type == 'ended' ? 'Ended' : info.type == 'locked' ? 'Start Mining Now' : info.type == 'distributing'? 'Distributing' : 'Distributed' }}
             </v-btn>
             
             <div class="d-flex justify-start mt-2">
@@ -150,6 +150,9 @@ export default {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
     disabled() {
+      if(this.info.type == "ended" || this.info.type == "distributing" || this.info.type == "distributed") {
+        return true;
+      }
       if(this.tasksLists.length == 0) {
         return true;
       }
