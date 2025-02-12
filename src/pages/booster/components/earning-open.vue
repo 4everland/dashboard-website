@@ -184,7 +184,7 @@ export default {
         this.loading = true;
       }
       fetchProjectTasks(this.info.id).then((res) => {
-        this.tasksLists = res.data.items;
+        this.tasksLists = res.data?.items || [];
         this.loading = false;
         if (flag == "check") {
           const completedTaskList = this.tasksLists.filter(
@@ -195,6 +195,8 @@ export default {
             bus.$emit("initPointsPool");
           }
         }
+      }).catch((err) => {
+        console.log(err);
       });
     },
     onConnect() {
