@@ -313,10 +313,11 @@ export default {
       this.showExploring = false;
     },
 
-    handleExplore() {
+    async handleExplore() {
       this.$router.replace({ name: "booster-explore" });
       // this.showExploring = true;
       // this.$refs.turnstile.execute();
+      await this.$sleep(200);
       this.getExploreInfo();
     },
     playaudio() {

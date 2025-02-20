@@ -22,7 +22,7 @@
             <v-btn class="earning-btn">
               <span class="btn-text"
                 >{{ $utils.formatCompactNumbers(info.projectTotalPoints+info.projectInitTotalPoints)
-                }}{{ " " }}{{ info.projectName }} {{ info.rewardType == 'POINT'? 'Points': 'Tokens' }}</span
+                }}{{ " " }}{{ info.projectName }} {{ info.projectName == 'LSP Finance' ? 'Gems' : info.rewardType == 'POINT'? 'Points': info.rewardType == 'TOKEN'? 'Tokens': 'Gems' }}</span
               >
             </v-btn>
           </div>
@@ -89,7 +89,7 @@
                 width="14"
                 alt=""
               />
-            {{ info.type == 'unlocked' ? 'Mining ...' : 'Start Mining Now' }}
+            {{ info.type == 'unlocked' ? 'Mining ...' : info.type == 'ended' ? 'Ended' : info.type == 'locked' ? 'Start Mining Now' : info.type == 'distributing'? 'Distributing' : 'Distributed' }}
             </v-btn>
             
             <div class="d-flex justify-start mt-2">
@@ -150,6 +150,9 @@ export default {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
     disabled() {
+      if(this.info.type == "ended" || this.info.type == "distributing" || this.info.type == "distributed") {
+        return true;
+      }
       if(this.tasksLists.length == 0) {
         return true;
       }
@@ -167,7 +170,8 @@ export default {
       return this.userInfo.wallet?.address;
     },
     showBind() {
-      return this.info.projectName == "DeepLink" && !this.currentAddress;
+      let _project = this.info.projectName;
+      return ["DeepLink", "AILayer", "LSP Finance", "LOL"].includes(_project) && !this.currentAddress;
     }
   },
 
@@ -180,7 +184,7 @@ export default {
         this.loading = true;
       }
       fetchProjectTasks(this.info.id).then((res) => {
-        this.tasksLists = res.data.items;
+        this.tasksLists = res.data?.items || [];
         this.loading = false;
         if (flag == "check") {
           const completedTaskList = this.tasksLists.filter(
@@ -191,6 +195,8 @@ export default {
             bus.$emit("initPointsPool");
           }
         }
+      }).catch((err) => {
+        console.log(err);
       });
     },
     onConnect() {
@@ -419,6 +425,7 @@ export default {
         font-size: 14px;
         font-weight: 400;
         margin-left: 8px;
+        width: fit-content;
       }
       .go-btn {
         height: 25px;

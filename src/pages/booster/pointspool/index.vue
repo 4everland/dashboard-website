@@ -66,7 +66,7 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints+item.projectInitTotalPoints)
-                    }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
+                    }}{{ " " }}{{ item.projectName }} {{ item.projectName == 'LSP Finance' ? 'Gems' : item.rewardType == 'POINT'? 'Points': item.rewardType == 'TOKEN' ? 'Tokens': 'Gems' }}
                   </div>
                 </div>
               </div>
@@ -83,6 +83,13 @@
               >
                 <img src="/img/booster/earnings/data.svg" width="16" alt="" />
                 <span class="btn-text">Distributing</span>
+              </div>
+              <div
+                v-else-if="item.type === 'distributed'"
+                class="distributing"
+              >
+                <img src="/img/booster/earnings/icon_check.png" width="16" alt="" />
+                <span class="btn-text">Distributed</span>
               </div>
               <div v-else class="ended">
                 <img src="/img/booster/earnings/icon_mining_check.png" width="16" alt="" />
@@ -110,7 +117,7 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints+item.projectInitTotalPoints)
-                    }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
+                    }}{{ " " }}{{ item.projectName }} {{ item.projectName == 'LSP Finance' ? 'Gems' : item.rewardType == 'POINT'? 'Points': item.rewardType == 'TOKEN' ? 'Tokens': 'Gems' }}
                   </div>
                 </div>
               </div>
@@ -140,7 +147,7 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints+item.projectInitTotalPoints)
-                    }}{{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
+                    }}{{ " " }}{{ item.projectName }} {{ item.projectName == 'LSP Finance' ? 'Gems' : item.rewardType == 'POINT'? 'Points': item.rewardType == 'TOKEN' ? 'Tokens': 'Gems' }}
                   </div>
                 </div>
               </div>
@@ -169,11 +176,26 @@
                   <div class="item-title">{{ item.projectName }}</div>
                   <div class="item-text">
                     {{ $utils.formatCompactNumbers(item.projectTotalPoints+item.projectInitTotalPoints) }}
-                    {{ " " }}{{ item.projectName }} {{ item.rewardType == 'POINT'? 'Points': 'Tokens' }}
+                    {{ " " }}{{ item.projectName }} {{ item.projectName == 'LSP Finance' ? 'Gems' : item.rewardType == 'POINT'? 'Points': item.rewardType == 'TOKEN' ? 'Tokens': 'Gems' }}
                   </div>
                 </div>
               </div>
-              <div class="ended">
+              
+              <div
+                v-if="item.type === 'distributing'"
+                class="distributing"
+              >
+                <img src="/img/booster/earnings/data.svg" width="16" alt="" />
+                <span class="btn-text">Distributing</span>
+              </div>
+              <div
+                v-else-if="item.type === 'distributed'"
+                class="distributing"
+              >
+                <img src="/img/booster/earnings/icon_check.png" width="16" alt="" />
+                <span class="btn-text">Distributed</span>
+              </div>
+              <div v-else class="ended">
                 <img src="/img/booster/earnings/icon_mining_check.png" width="16" alt="" />
                 <span class="btn-text">Ended</span>
               </div>
@@ -313,7 +335,7 @@ export default {
           } else if (this.tab === 2) {
             return item.type === "locked";
           } else {
-            return item.type === "ended";
+            return item.type === "ended" || item.type === "distributing" || item.type === "distributed";
           }
         });
       }

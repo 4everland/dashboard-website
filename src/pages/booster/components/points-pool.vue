@@ -30,7 +30,7 @@
             <div class="projecttitle">
               {{
                 item?.points
-                  ? $utils.formatCompactNumbers(item?.points)
+                  ? $utils.formatCompactNumbers(item?.points, item?.points>1?2:4)
                   : item?.projectName
               }}
             </div>
@@ -77,9 +77,13 @@ export default {
   },
   methods: {
     async init() {
+      const curTimeStamp = +new Date() / 1e3;
       const { data } = await fetchProjectPointsList();
       const list = data.list || [];
-      const tasks = data.tasks || [];
+      const _task = data.tasks || [];
+      const tasks = _task?.filter((item) => {
+        return item.endAt > curTimeStamp;
+      });
       const arrorder = [6, 4, 2, 0, 1, 3, 5, 7];
       const arrorder2 = [5, 3, 1, 0, 2, 4, 6];
       this.dataList = list.length === 0 ? tasks : list;

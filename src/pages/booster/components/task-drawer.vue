@@ -197,7 +197,7 @@
 
           <!-- ton ai ads -->
 
-          <div style="margin: 12px 0" v-if="tonAds.length > 0">
+          <div style="margin: 12px 0" v-if="tonAds.length > 0 && tonAdsLimit?.overLimit === false">
             <div
               class="task-list-title"
               style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
@@ -357,7 +357,7 @@ import {
   fetchPartner_Tasks,
 } from "@/api/booster.js";
 import { bus } from "@/utils/bus";
-import { fetchInviteInfo, fetchTgInviteInfo } from "@/api/booster";
+import { fetchInviteInfo, fetchTgInviteInfo, fetchTonAdsLimit } from "@/api/booster";
 import { clickAds } from "@/api/ton-ads";
 // import { connectOkxWallet } from "@/pages/booster/components/wallet-connect.js";
 import { postEvent } from "@telegram-apps/sdk";
@@ -422,6 +422,7 @@ export default {
       loadingStatus: {},
       okxUniversalProvider: null,
       tonAds: [],
+      tonAdsLimit: {}
     };
   },
 
@@ -734,6 +735,10 @@ export default {
               buttonText: "Go",
             };
           });
+        }
+        const { data } = await fetchTonAdsLimit();
+        if (data) {
+          this.tonAdsLimit = data;
         }
       } catch (err) {
         console.log(err);
