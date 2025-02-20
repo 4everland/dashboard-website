@@ -104,11 +104,11 @@ export default {
       if (this.isTgMiniApp) {
         this.$tg.shareUrl(
           this.inviteInfo.link,
-          "💎 Join me in the #4EVERBoost and reap amazing rewards! Earn $4EVER points, Ton rewards, and exciting @4everland_org #airdrops! Don't miss out—let's boost together! 🎗️🎊"
+          "💎 Join me in the #4EVERBoost, your one-stop aggregator platform to explore diverse project mining opportunities and earn valuable points or token rewards."
         );
       } else {
         let shareUrl =
-          "💎 Join me in the #4EVERBoost and reap amazing rewards! Earn $4EVER points, Ton rewards, and exciting @4everland_org #airdrops! Don't miss out—let's boost together! 🎗️🎊 ";
+          "💎 Join me in the #4EVERBoost, your one-stop aggregator platform to explore diverse project mining opportunities and earn valuable points or token rewards.";
         shareUrl += this.inviteInfo.link;
         shareUrl =
           "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
