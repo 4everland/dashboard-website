@@ -96,6 +96,7 @@ import {
   scrollUSDC,
   scrollUSDT,
   scrollDAI,
+  Token4ever
 } from "../../../plugins/pay/contracts/contracts-addr";
 export default {
   props: {
@@ -114,6 +115,7 @@ export default {
       USDTbalance: "",
       DAIbalance: "",
       originBalance: "",
+      Token4everBalance: "",
     };
   },
   computed: {
@@ -203,7 +205,67 @@ export default {
         ];
       }
 
-      if (this.chainId == 1 || this.chainId == 10 || this.chainId == 534352) {
+      if (this.chainId == 1) {
+        return [
+          {
+            label: "4EVER",
+            showLabel: "4EVER",
+            name: "4EVER",
+            img: "/img/svg/pay/eth.svg",
+            addr: Token4ever,
+            balance: this.Token4everBalance,
+          },
+          {
+            label: "USDC",
+            showLabel: "USDC",
+            name: "USDC Coin",
+            img: "/img/svg/pay/usdc.svg",
+            addr:
+              this.chainId == 1
+                ? GoerliUSDC
+                : this.chainId == 10
+                ? optimisUSDC
+                : scrollUSDC,
+            balance: this.USDCbalance,
+          },
+          {
+            label: "USDT",
+            showLabel: "USDT",
+            name: "Tether USD",
+            img: "/img/svg/pay/usdt.svg",
+            addr:
+              this.chainId == 1
+                ? GoerliUSDT
+                : this.chainId == 10
+                ? optimisUSDT
+                : scrollUSDT,
+            balance: this.USDTbalance,
+          },
+          {
+            label: "DAI",
+            showLabel: "DAI",
+            name: "Dai Stablecoin",
+            img: "/img/svg/pay/dai.svg",
+            addr:
+              this.chainId == 1
+                ? GoerliDAI
+                : this.chainId == 10
+                ? optimisDAI
+                : scrollDAI,
+            balance: this.DAIbalance,
+          },
+          {
+            label: "ETH",
+            showLabel: "ETH",
+            name: "ETH",
+            img: "/img/svg/pay/eth.svg",
+            addr: "",
+            balance: this.originBalance,
+          },
+        ];
+      }
+
+      if (this.chainId == 10 || this.chainId == 534352) {
         return [
           {
             label: "USDC",
@@ -434,8 +496,9 @@ export default {
           );
 
           const tokenBalance = await contract.balanceOf(address);
+          const _balance = tokenBalance||0;
           const balance = ethers.utils.formatUnits(
-            tokenBalance,
+            _balance,
             await contract.decimals()
           );
 
@@ -456,7 +519,11 @@ export default {
           if (!it.addr) {
             this.originBalance = res;
           } else {
-            this[varibal] = res;
+            if(it.label == '4EVER') {
+              this.Token4everBalance = res;
+            } else {
+              this[varibal] = res||0;
+            }
           }
         });
       });
