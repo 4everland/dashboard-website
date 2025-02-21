@@ -28,6 +28,12 @@
         >
           <div>
             <div class="fz-14 model-name fw-b">{{ it.name }}</div>
+            <div class="fz-13 mt-1 al-c">
+              <span>{{ it.id }}</span>
+              <div class="ml-1 pa-1 hover-1" @click="$copy2(it.id)">
+                <img src="img/svg/ai-rpc/copy.svg" width="14" class="d-b" />
+              </div>
+            </div>
             <div class="my-2 fz-12 model-desc" v-html="it.markdown"></div>
             <div
               class="fz-12"
