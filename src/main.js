@@ -18,7 +18,7 @@ if (window.top !== window.self) {
 window.Buffer = Buffer;
 const inDev = /xyz/.test(process.env.VUE_APP_BASE_URL);
 
-//inDev ? new VConsole() : "";
+inDev ? new VConsole() : "";
 
 let coze = new CozeWebSDK.WebChatClient({
   config: {
