@@ -33,6 +33,7 @@ import {
   blastRecharge,
   opBNBRecharge,
   taikoRecharge,
+  Token4ever,
 } from "../../plugins/pay/contracts/contracts-addr";
 import { mapGetters } from "vuex";
 export default {
@@ -53,6 +54,7 @@ export default {
         {
           name: "Ethereum",
           coin: {
+            '4ever': Token4ever,
             usdc: GoerliUSDC,
             usdt: GoerliUSDT,
             dai: GoerliDAI,

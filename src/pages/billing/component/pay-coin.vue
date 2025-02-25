@@ -207,14 +207,7 @@ export default {
 
       if (this.chainId == 1) {
         return [
-          {
-            label: "4EVER",
-            showLabel: "4EVER",
-            name: "4EVER",
-            img: "/img/svg/pay/eth.svg",
-            addr: Token4ever,
-            balance: this.Token4everBalance,
-          },
+          
           {
             label: "USDC",
             showLabel: "USDC",
@@ -227,6 +220,14 @@ export default {
                 ? optimisUSDC
                 : scrollUSDC,
             balance: this.USDCbalance,
+          },
+          {
+            label: "4EVER",
+            showLabel: "4EVER",
+            name: "4EVER",
+            img: "/img/svg/pay/token-4ever.svg",
+            addr: Token4ever,
+            balance: this.Token4everBalance,
           },
           {
             label: "USDT",
@@ -258,7 +259,7 @@ export default {
             label: "ETH",
             showLabel: "ETH",
             name: "ETH",
-            img: "/img/svg/pay/eth.svg",
+            img: "/img/svg/pay/token-eth.svg",
             addr: "",
             balance: this.originBalance,
           },
