@@ -138,7 +138,7 @@ import {
   formatEther,
   formatUnits,
 } from "ethers/lib/utils";
-import { ICoin__factory, BlastOracleLand__factory } from "@4everland-contracts";
+import { ICoin__factory, BlastOracleLand__factory, ETHOracleLand__factory } from "@4everland-contracts";
 import { getProvider } from "@/plugins/ens";
 import uidToEuid from "@/utils/uid2euid";
 import mixin from "./mixin";
@@ -227,6 +227,12 @@ export default {
     },
     LandRecharge() {
       return BlastOracleLand__factory.connect(
+        this.landRechargeAddr,
+        this.signer
+      );
+    },
+    LandEthRecharge() {
+      return ETHOracleLand__factory.connect(
         this.landRechargeAddr,
         this.signer
       );
@@ -407,7 +413,9 @@ export default {
           } else if(this.coinSelect == "4EVER"){
             if (this.token4everAmount.toString() == "0") return;
             this.$loading();
-            let tx = await this.LandRecharge.mintBy4EVER(this.euid, this.token4everAmount);
+            const _amount = parseEther(this.token4everAmount.toString());
+            console.log('amount',_amount);
+            let tx = await this.LandEthRecharge.mintBy4EVER(this.euid, _amount);
             receipt = await tx.wait();
             this.$loading.close();
           } else {
@@ -486,8 +494,13 @@ export default {
       if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
         this.getBlastEthUnitPrice();
       } else if(this.coinSelect == "4EVER" ){
-        this.get4everUnitPrice();
+        await this.get4everUnitPrice();
         await this.checkApproved();
+        let value = this.usdcAmount
+            .mul((1e18).toString())
+            .mul((1e18).toString())
+            .div(this.token4everUnitPrice);
+        this.token4everAmount = value;
       } else {
         await this.checkApproved();
       }
@@ -643,6 +656,7 @@ export default {
             .mul((1e18).toString())
             .mul((1e18).toString())
             .div(this.blastUnitPrice);
+            console.log('eth',value);
           this.ethAmount = value;
         });
       }
@@ -672,15 +686,13 @@ export default {
     },
     async get4everUnitPrice() {
       try {
-        let provider = new providers.Web3Provider(this.walletObj);
-        const signer = provider.getSigner();
-        const BlastOracleLand = BlastOracleLand__factory.connect(
-          this.landRechargeAddr,
-          signer
-        );
-        const ethPrice = await BlastOracleLand.callStatic.fetchPrice();
+        if(this.blastUnitPrice.toString() == "0") {
+          await this.getBlastEthUnitPrice();
+        }
+        
         const token4everEthprice = await this.fetchPrice(custom4everPriceFeedAddress);
-        this.token4everUnitPrice = BigNumber.from(token4everEthprice).mul(ethPrice);
+        this.token4everUnitPrice = BigNumber.from(token4everEthprice).mul(this.blastUnitPrice);
+        console.log(this.token4everUnitPrice.toString());
       } catch (error) {
         console.log(error);
       }
@@ -700,7 +712,6 @@ export default {
             abi4everPrice.abi,
             provider
           );
-
           const tokenprice = await contract.fetchPrice(Token4ever);
           console.log('tokenBalance',tokenprice);
           const _balance = tokenprice||0;
