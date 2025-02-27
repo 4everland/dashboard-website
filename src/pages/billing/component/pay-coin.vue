@@ -221,14 +221,14 @@ export default {
                 : scrollUSDC,
             balance: this.USDCbalance,
           },
-          // {
-          //   label: "4EVER",
-          //   showLabel: "4EVER",
-          //   name: "4EVER",
-          //   img: "/img/svg/pay/token-4ever.svg",
-          //   addr: Token4ever,
-          //   balance: this.Token4everBalance,
-          // },
+          {
+            label: "4EVER",
+            showLabel: "4EVER",
+            name: "4EVER",
+            img: "/img/svg/pay/token-4ever.svg",
+            addr: Token4ever,
+            balance: this.Token4everBalance,
+          },
           {
             label: "USDT",
             showLabel: "USDT",
