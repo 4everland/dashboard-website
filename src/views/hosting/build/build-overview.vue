@@ -56,7 +56,7 @@
                 <e-link
                   class="fz-14"
                   :href="
-                    $utils.getCidLink(info.hash, info.platform, projInfo.online, 'hosting')
+                    $utils.getCidLink(info.hash, info.platform, projInfo.online)
                   "
                 >
                   <span>{{ showHashVal(info.hash, info.platform) }}</span>

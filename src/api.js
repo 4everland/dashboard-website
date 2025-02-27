@@ -17,7 +17,7 @@ Vue.prototype.$inDev = inDev;
 
 Vue.prototype.$arHashPre = inDev
   ? "https://arweave.net/"
-  : "https://ar-io.dev/"; // https://ar.foreverland.xyz/
+  : "https://ar.4everland.io/"; // https://ar.foreverland.xyz/
 Vue.prototype.$arVerifyPre = "https://viewblock.io/arweave/tx/"; // https://ar.foreverland.xyz/tx/
 Vue.prototype.$axios = axios;
 

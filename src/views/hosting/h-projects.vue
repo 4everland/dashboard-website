@@ -169,7 +169,7 @@
                         :href="
                           it.greenfield
                             ? $utils.getGreenfieldLink(it.greenfield.tx)
-                            : $utils.getCidLink(it.hash, it.platform, it.online, 'hosting')
+                            : $utils.getCidLink(it.hash, it.platform, it.online)
                         "
                         target="_blank"
                         @click.stop

@@ -179,7 +179,7 @@ Vue.prototype.$utils = {
     }
     return cid;
   },
-  getCidLink(cid, plat, type, module) {
+  getCidLink(cid, plat) {
     //, assign = true
     if (!cid) return "";
     if (plat == "IPNS") {
@@ -192,7 +192,7 @@ Vue.prototype.$utils = {
       return `https://${cid}.raw.icp0.io/`;
     }
     if (plat == "AR") {
-      return inDev ? `https://arweave.net/${cid}` : module == 'hosting' ? `https://ar.4everland.io/${cid}` : `https://ar-io.dev/${cid}`;
+      return inDev ? `https://arweave.net/${cid}` : `https://ar.4everland.io/${cid}`;
       // : `https://arweave.4everland.xyz/${cid}`;
     }
     return `https://${this.getCidV1(cid)}.ipfs.dweb.link`;
