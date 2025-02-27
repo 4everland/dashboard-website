@@ -14,6 +14,9 @@ export const GoerliSrcChainPayment =
   "0x293b579B8da5538EaDD70B811E4eC2C3C6Ac0f05";
 export const GoerliRegister = "0x548293a09EA83Fb4101671D307Daf87C1acd3a3e";
 
+export const Token4ever = "0xe355De6a6043b0580Ff5A26b46051A4809B12793";
+export const custom4everPriceFeedAddress = '0x178891500C3342D1B468FbC7CC9a448793943aA3';
+
 // src chain bsc
 export const ChapelUSDC = "0x0092190380bAD586d68fB788D62CdB7300Af1c2c";
 export const ChapelUSDT = "0x5e338E7a9C3Be53a3e494Bb753104C480FeeDe7D";

@@ -185,7 +185,7 @@ export default {
         } else {
           link = it.arHash;
         }
-        return this.$utils.getCidLink(link, it.platform, this.projInfo.online);
+        return this.$utils.getCidLink(link, it.platform, this.projInfo.online, 'hosting');
       };
     },
     hashDeploy() {
