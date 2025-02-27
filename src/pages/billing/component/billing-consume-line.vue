@@ -58,7 +58,7 @@ export default {
             "RPC Requests",
             "AI RPC",
             "RaaS",
-            "ASS Node",
+            "4EVER Boost",
           ],
         },
         grid: {
@@ -177,7 +177,7 @@ export default {
             data: this.RAAS,
           },
           {
-            name: "ASS Node",
+            name: "4EVER Boost",
             type: "line",
             itemStyle: {
               color: "#70707B",

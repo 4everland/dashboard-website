@@ -19,10 +19,6 @@
           <div class="ml-2 fw-b fz-16 pos-r">
             <span> {{ it.label }}</span>
           </div>
-
-          <div class="pos-a tag fw-b fz-12" v-if="it.name == 'GREENFIELD'">
-            Mainnet
-          </div>
         </div>
       </v-col>
       <v-col v-if="platform == 'AR'">

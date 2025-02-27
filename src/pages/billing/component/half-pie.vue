@@ -27,7 +27,7 @@ export default {
           { value: 0, name: "Build Time" },
           { value: 0, name: "RPC Requests" },
           { value: 0, name: "AI RPC" },
-          { value: 0, name: "ASS Node" },
+          { value: 0, name: "4EVER Boost" },
         ];
       },
     },

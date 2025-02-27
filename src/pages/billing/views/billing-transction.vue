@@ -76,7 +76,7 @@ export default {
             COMPUTE_UNIT: "RPC Request",
             AI_RPC: "AI RPC",
             RAAS: "RaaS",
-            ASS_NODE: "ASS Node",
+            ASS_NODE: "4EVER Boost",
           };
 
           let formatLand = this.$utils.formatLand(it.landUsed, true);

@@ -85,7 +85,7 @@ export default {
             resourceUsed = this.$utils.getFileSize(it.resourceUsed);
             break;
           case "ASS_NODE":
-            name = "ASS Node";
+            name = "4EVER Boost";
             color = "#70707B";
             resourceUsed = this.$utils.getFileSize(it.resourceUsed);
             break;
