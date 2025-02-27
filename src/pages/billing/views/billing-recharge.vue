@@ -181,6 +181,15 @@ export default {
             );
             if (findCoinAddr) coinType = key;
           }
+          if (
+            it.amountType == "0xe355De6a6043b0580Ff5A26b46051A4809B12793" &&
+            it.network == "Ethereum"
+          ) {
+            coinType = "4EVER";
+            it.amount = Number(
+                formatEther(BigNumber.from(it.originalValue))
+              );
+          }
 
           if (
             it.amountType == "0x0000000000000000000000000000000000000000" &&

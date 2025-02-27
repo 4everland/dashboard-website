@@ -130,4 +130,8 @@ export default {
     color: #FFF !important;
 }
 }
+.theme--light.v-data-table .v-data-table-header th.sortable:hover, .theme--light.v-data-table .v-data-table-header th.sortable.active{
+  background-color: transparent !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
 </style>

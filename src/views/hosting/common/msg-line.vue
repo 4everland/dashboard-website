@@ -62,7 +62,7 @@ export default {
       return this.value.replace("ipfs://", "").replace("ipns://", "");
     },
     link() {
-      return this.$utils.getCidLink(this.copyVal, this.platForm, this.online);
+      return this.$utils.getCidLink(this.copyVal, this.platForm, this.online, 'hosting');
     },
   },
   components: {

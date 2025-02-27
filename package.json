@@ -18,7 +18,7 @@
     "format": "vue-cli-service lint --format"
   },
   "dependencies": {
-    "@4everland-contracts": "npm:@4everland/land-v5@0.0.5",
+    "@4everland-contracts": "npm:@4everland/land-v6@1.0.2",
     "@4everland/minio": "^7.0.37",
     "@4everland/registration": "0.0.3",
     "@4everland/s3-lib-storage": "^3.427.1",

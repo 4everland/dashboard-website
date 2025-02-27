@@ -37,7 +37,7 @@
             <div class="al-c" v-if="info.platform != 'GREENFIELD'">
               <e-link
                 class="fz-14"
-                :href="$utils.getCidLink(info.hash, info.platform, info.online)"
+                :href="$utils.getCidLink(info.hash, info.platform, info.online, 'hosting')"
                 v-if="info.hash"
               >
                 {{ showHashVal(info.hash, info.platform) }}
@@ -86,7 +86,7 @@
             <div class="al-c" v-if="info.ipns">
               <e-link
                 class="fz-14"
-                :href="$utils.getCidLink(info.ipns, 'IPNS', info.online)"
+                :href="$utils.getCidLink(info.ipns, 'IPNS', info.online, 'hosting')"
               >
                 {{ showHashVal(info.ipns, "IPNS") }}
               </e-link>

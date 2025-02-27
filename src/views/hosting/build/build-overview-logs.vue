@@ -102,7 +102,7 @@
       >
         <a
           class="u"
-          :href="$utils.getCidLink(info.hash, info.platform, projInfo.online)"
+          :href="$utils.getCidLink(info.hash, info.platform, projInfo.online, 'hosting')"
           target="_blank"
           >{{ showHashVal(info.hash, info.platform) }}</a
         >

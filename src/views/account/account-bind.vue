@@ -518,7 +518,7 @@ export default {
       );
       this.$loading();
       await this.$http.post("$auth/bind", {
-        type: it.type,
+        type: item.type,
         apply: email,
         entranceId: 100,
       });
