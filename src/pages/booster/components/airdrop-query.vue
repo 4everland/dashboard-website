@@ -129,37 +129,14 @@
                 >
               </v-btn>
               
-              <div v-show="!dropped">
-              <div  class="d-flex justify-space-between align-center mt-3">
-                <div class="evm-wallet fz-14">Your EVM Wallet</div>
-                <v-btn v-if="!address" :loading="loading" class="bind-btn" @click="asMobile?onConnetc():toConfig()"
-                  >Bind</v-btn
-                >
-                <div class="d-flex justify-start align-center" v-if="address">
-                  
-                  <span class="evm-wallet" style="font-weight: bold;">{{ address.cutStr(4, 4) }}</span>
-                  
-                  <v-btn
-                    class="e-btn-text"
-                    icon
-                    @click="copytext"
-                  >
-                    <img src="/img/svg/copy.svg" width="14" />
-                  </v-btn>
-                </div>
-              </div>
-            </div>
-              
               <div class="d-flex justify-start align-center mt-4">
                 <img
                   src="/img/booster/earnings/subtract.png"
                   width="16"
                   alt=""
                 />
-                <div class="view" v-if="!dropped" >
-                  Please bind your EVM address to claim the second round of airdrop. Timing will be announced!
-                </div>
-                <div class="view" v-else>
+                
+                <div class="view">
                   Your airdrop has been sent to your linked exchange. For any questions, contact us on Telegram.
                 </div>
               </div>

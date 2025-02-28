@@ -107,9 +107,8 @@
           </div>
         </div>
         <div v-if="showBind" class="d-flex justify-space-between align-center project-info-footer">
-          <div class="evm-wallet fz-12">Bind your EVM wallet before claiming rewards.</div>
-          <v-btn small class="bind-btn fz-14 d-flex align-center" @click="onConnect"
-            ><img src="/img/booster/earnings/icon_wallet.png" width="16" alt="">Bind</v-btn>
+          <div class="evm-wallet fz-12">To ensure rewards are distributed, please bind your wallet on the <span style="text-decoration: underline;" @click="onConnect">Dashboard</span>.</div>
+          
         </div>
       </div>
     </v-dialog>
@@ -200,8 +199,14 @@ export default {
       });
     },
     onConnect() {
-      let state = true;
-      this.$store.dispatch("ConnectDrawerState", { state });
+      if (this.isTgMiniApp){
+        this.$tg.openAuto(
+            "https://dashboard.4everland.org/"
+          );
+        window.open("https://dashboard.4everland.org/");
+      } else {
+        this.$router.push("/account/config");
+      }
     },
     startMining(){
       this.$emit("input", false);

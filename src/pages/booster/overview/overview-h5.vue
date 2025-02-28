@@ -45,7 +45,6 @@
       <img src="/img/booster/icon-account.png" width="48" alt="" />
       <div class="trigger-text staking fz-12 fw-b text-center" style="width: 52px;">Account</div>
     </div>
-    <WalletConnect />
 
     <TgStartBoostLoading v-if="tgMiniOverlayLoading"></TgStartBoostLoading>
 
@@ -450,7 +449,7 @@ import { mapState } from "vuex";
 
 import MobilePointsSheet from "../components/mobile-points-sheet.vue";
 import TokenDialog from "../components/token-dialog.vue";
-import WalletConnect from "../components/wallet-connect.vue";
+// import WalletConnect from "../components/wallet-connect.vue";
 import countDown from "../components/count-down.vue";
 import mixin from "./mixin";
 import { bus } from "@/utils/bus";
@@ -539,7 +538,6 @@ export default {
   components: {
     MobilePointsSheet,
     TokenDialog,
-    WalletConnect,
     countDown,
     pointsPool,
     EarnDialog
