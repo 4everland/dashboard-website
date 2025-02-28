@@ -30,15 +30,6 @@
                   {{ (userInfo.username || "unkown").cutStr(6, 4) }}
                 </div>
               </div>
-
-              <v-btn
-                class="connect-btn ml-auto"
-                @click="handleShowConnect"
-                v-if="isTgMiniApp && !userInfo.wallet"
-              >
-                <img src="/img/booster/svg/wallet.svg" width="16" alt="" />
-                <span class="ml-1"> Connect </span>
-              </v-btn>
             </div>
           </div>
           <div class="land-balance">

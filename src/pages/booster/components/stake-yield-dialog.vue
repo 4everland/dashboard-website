@@ -44,6 +44,7 @@
               Randomly snapshot your $4EVER balance to update earning rate multiplier.
             </li>
             <li>Every $4EVER contributes to a 0.002% earning rate multiplier.</li>
+            <li>Please bind your wallet on the Dashboard.</li>
           </ul>
           <div
             class="act-btn d-flex align-center justify-center mt-10"
@@ -62,8 +63,8 @@
               outlined
               color="#fff"
               width="180"
-              @click="onConnetc"
-              >Connect Wallet</v-btn
+              @click="goToDashboard"
+              >Go To Dashboard</v-btn
             >
             <v-btn
               v-else
@@ -192,6 +193,9 @@ export default {
     disabled() {
       return this.balance ? false : true;
     },
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
   watch: {
     value(newVal, oldVal) {
@@ -230,16 +234,21 @@ export default {
     },
     onConnetc() {
       if (this.asMobile) {
-        let state = true;
-        this.$store.dispatch("ConnectDrawerState", { state: true,
-           callback: () => {
-            this.$store.dispatch('HoldProveToggle');
-          }
-        });
+        
       } else {
         this.$router.push("/account/config");
       }
       this.$emit("input", false);
+    },
+    goToDashboard() {
+      if (this.isTgMiniApp){
+        this.$tg.openAuto(
+            "https://dashboard.4everland.org/"
+          );
+        window.open("https://dashboard.4everland.org/");
+      } else {
+        this.$router.push("/account/config");
+      }
     },
   },
 };
