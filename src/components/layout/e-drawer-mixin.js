@@ -94,7 +94,6 @@ const menuMap = {
     icon: "$drawer/raasIcon",
     to: "/raas",
     active: false,
-    suffixImg: "/img/svg/hosting/tag_fire.png",
     group: /^\/raas/i,
   },
   AIRPC: {
@@ -108,7 +107,7 @@ const menuMap = {
         to: "/ai-rpc?tab=Models",
       },
       {
-        label: "Chat",
+        label: "4EVERChat",
         href:
           process.env.NODE_ENV == "development"
             ? "https://ai-dev.4everland.app"
