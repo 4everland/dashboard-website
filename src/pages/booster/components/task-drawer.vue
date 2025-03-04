@@ -195,9 +195,30 @@
             </v-row>
           </div>
 
+          <!-- adsgram ads -->
+          <div style="margin: 12px 0" v-if="tonAdsLimit?.overLimit === false">
+            <div
+              class="task-list-title"
+              style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
+            >
+              Partner Tasks
+            </div>
+            <v-row no-gutters style="gap: 18px 0">
+              <v-col cols="12">
+                <div class="task-item-box">
+                  <adsgram-task
+                    data-block-id="task-8642"
+                    data-debug="true"
+                    class="task"
+                  ></adsgram-task>
+                </div>
+              </v-col>
+            </v-row>
+          </div>
+
           <!-- ton ai ads -->
 
-          <div style="margin: 12px 0" v-if="tonAds.length > 0 && tonAdsLimit?.overLimit === false">
+          <!-- <div style="margin: 12px 0" v-if="tonAds.length > 0 && tonAdsLimit?.overLimit === false">
             <div
               class="task-list-title"
               style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
@@ -235,7 +256,7 @@
                 </div>
               </v-col>
             </v-row>
-          </div>
+          </div> -->
 
           <!-- partner task -->
           <!-- <div
@@ -422,7 +443,8 @@ export default {
       loadingStatus: {},
       okxUniversalProvider: null,
       tonAds: [],
-      tonAdsLimit: {}
+      tonAdsLimit: {},
+      blockId: process.env.VUE_APP_ADS_BLOCK_ID
     };
   },
 
@@ -436,10 +458,11 @@ export default {
   },
 
   async mounted() {
-    TonAdInit({
-      appId: process.env.VUE_APP_TON_AI_ADS_ID,
-    });
-    await this.getMultiTOnAdd();
+    // TonAdInit({
+    //   appId: process.env.VUE_APP_TON_AI_ADS_ID,
+    // });
+    // await this.getMultiTOnAdd();
+    await this.getTonAdsLimit();
   },
   methods: {
     async getDailySign() {
@@ -723,19 +746,7 @@ export default {
 
     async getMultiTOnAdd() {
       try {
-        const { ads } = await GetMultiTonAd(
-          process.env.VUE_APP_TON_AI_ADS_BLOCK_ID,
-          5
-        );
-        if (ads && ads.length > 0) {
-          this.tonAds = ads.map((it) => {
-            return {
-              ...it,
-              load: false,
-              buttonText: "Go",
-            };
-          });
-        }
+        
         const { data } = await fetchTonAdsLimit();
         if (data) {
           this.tonAdsLimit = data;
@@ -744,7 +755,16 @@ export default {
         console.log(err);
       }
     },
-
+    async getTonAdsLimit(){
+      try {
+        const { data } = await fetchTonAdsLimit();
+        if (data) {
+          this.tonAdsLimit = data;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async showPopupAdd(tonAd) {
       const i = this.tonAds.findIndex((ad) => {
         return ad.adId == tonAd.adId;
@@ -764,7 +784,7 @@ export default {
           }).length == 0;
 
         if (isCompleted) {
-          this.getMultiTOnAdd();
+          //this.getMultiTOnAdd();
         }
       }, 15000);
 
