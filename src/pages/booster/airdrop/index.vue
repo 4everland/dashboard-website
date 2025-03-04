@@ -1,12 +1,12 @@
 <template>
   
-  <v-container class="airdrop-container">
+  <div class="airdrop-container">
     <div class="airdrop-in-container">
       <v-row>
         <v-col cols="12" md="6">
           <!-- 左侧空投信息列表 -->
           <v-list class="transparent">
-            <v-list-item v-for="(item, index) in airdropItems" :key="index" class="airdrop-item">
+            <v-list-item v-for="(item, index) in airdropItems" :key="index" class="airdrop-item content-bg">
               <v-list-item-avatar size="40">
                 <v-icon size="30" color="white">{{ item.icon }}</v-icon>
               </v-list-item-avatar>
@@ -32,14 +32,31 @@
               ></v-img>
               <div class="right-content">
                 <div class="white--text mb-4 text-left">You will receive:</div>
-                <v-card dark class="receipt-card">
-                  <v-card-text>
-                    <div class="d-flex justify-space-between align-center">
-                      <div class="timeline-line"></div>
-                      <div class="token-amount">$4EVER</div>
+                <div class="d-flex justify-center">
+                  <div class="light-btn d-flex justify-center align-center">
+                    <div class="light-span">
+                      <v-btn class="submit-btn">
+                        <span class="number">
+                          <ICountUp
+                            class="points"
+                            :delay="1000"
+                            :endVal="shortPoint"
+                            :options="{
+                              useEasing: true,
+                              useGrouping: true,
+                              decimalPlaces: 0,
+                              separator: ',',
+                              decimal: '.',
+                              prefix: '',
+                              suffix: '',
+                            }"
+                          />
+                        </span>
+                        <span class="btn-text"> $4EVER </span>
+                      </v-btn>
                     </div>
-                  </v-card-text>
-                </v-card>
+                  </div>
+                </div>
                 <v-btn
                   block
                   color="grey darken-3"
@@ -63,15 +80,22 @@
         </v-col>
       </v-row>
     </div>
-  </v-container>
+  </div>
 
 </template>
 
 <script>
+import ICountUp from "vue-countup-v2";
+import starrise from "../components/star-rise.vue";
 export default {
   name: 'Airdrop',
+  components: {
+    ICountUp,
+    starrise,
+  },
   data: () => ({
     canClaim: true,
+    shortPoint: 0,
     airdropItems: [
       {
         icon: 'mdi-diamond-stone',
@@ -98,17 +122,25 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .airdrop-container {
-  max-width: 1032px;
+  width: 100%;
+  height: 100%;
   padding-top: 140px;
+  background: url("/img/booster/bg_airdrop_second.svg") repeat #000000;
 }
 .airdrop-in-container {
+  max-width: 1032px;
+  padding-top: 140px;
+  margin: 0 auto;
   border: 1px solid #0FE1F81A;
   background: linear-gradient(281.05deg, rgba(0, 62, 112, 0.5) 19.1%, rgba(0, 10, 16, 0.5) 100%);
   backdrop-filter: blur(8px);
   padding: 40px;
 
+}
+.content-bg{
+  background: url("/img/booster/svg/fringe-bg.svg") !important;
 }
 .img-right{
   position: absolute;
@@ -117,6 +149,89 @@ export default {
 }
 .right-content{
   margin-top: 95px;
+  .submit-btn {
+    width: 286px;
+    height: 53px;
+    border-radius: 16px;
+    padding: 0 !important;
+    .number {
+      font-family: DIN Alternate;
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 37.25px;
+      color: #40e8ff;
+    }
+    .btn-text {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #fff;
+      margin-top: 8px;
+    }
+    background: url("/img/booster/earnings/grid.png") no-repeat #000000;
+    background-size: contain;
+  }
+}
+
+
+.light-btn {
+  position: relative;
+  padding: 2px;
+  border: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 1;
+}
+.light-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(
+    from var(--rotation),
+    transparent,
+    #0fe1f8 60deg,
+    transparent 61deg
+  );
+  animation: spin 4s infinite linear;
+}
+@property --rotation {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+@keyframes spin {
+  0% {
+    --rotation: 0deg;
+  }
+  100% {
+    --rotation: 360deg;
+  }
+}
+.light-btn::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 999px;
+  background: var(--bg);
+}
+.light-span {
+  padding: 2px;
+  border-radius: 16px;
+  background: #000000;
+  position: relative;
+  z-index: 2;
+}
+#starRise {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  z-index: 0;
+}
+.btnWrap {
+  position: relative;
+  z-index: 1;
 }
 
 .airdrop-item {
