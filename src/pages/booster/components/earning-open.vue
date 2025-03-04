@@ -201,9 +201,9 @@ export default {
     onConnect() {
       if (this.isTgMiniApp){
         this.$tg.openAuto(
-            "https://dashboard.4everland.org/"
+            "https://docs.4everland.org/get-started/quick-start-guide/account/linking-wallet-to-your-4everland-account"
           );
-        window.open("https://dashboard.4everland.org/");
+        window.open("https://docs.4everland.org/get-started/quick-start-guide/account/linking-wallet-to-your-4everland-account");
       } else {
         this.$router.push("/account/config");
       }

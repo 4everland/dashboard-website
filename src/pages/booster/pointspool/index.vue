@@ -272,10 +272,8 @@
                   <span class="rules-text">Mining</span> module.
                 </div>
                 <div class="swap-rule-content">
-                  Mining rewards will be distributed to your account by the
-                  project team. You can visit
-                  <span class="rules-text">their telegram miniapp</span> to view
-                  the details.
+                  Mining rewards will be distributed to your linked EVM wallet by the mining project. Please follow this <a target="_blank" class="rules-text" style="text-decoration: underline;"  href="https://docs.4everland.org/get-started/quick-start-guide/account/linking-wallet-to-your-4everland-account">tutorial</a> to link your wallet if you haven't done so before.
+
                 </div>
               </div>
             </v-list-item-content>
