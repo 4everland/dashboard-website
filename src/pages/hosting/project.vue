@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <v-skeleton-loader
       v-if="!info.deployType"
       type="article"
@@ -103,6 +110,17 @@ export default {
       id,
       projName,
       // list,
+      breadcrumbsItems: [
+        {
+          text: "project",
+          disabled: false,
+          href: "/hosting/projects",
+        },
+        {
+          text: this.$route.params.projName,
+          disabled: true,
+        },
+      ],
     };
   },
   watch: {
@@ -145,3 +163,21 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top:-12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
+</style>

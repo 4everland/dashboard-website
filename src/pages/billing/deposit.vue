@@ -1,123 +1,132 @@
 <template>
-  <div class="deposite-container d-flex flex-column flex-md-row pa-md-6">
-    <div class="deposite-content flex-1 h-flex">
-      <div class="purchase-plate">
-        <h2 class="fz-16">Deposit</h2>
-        <div class="deposite-section mt-4">
-          <div class="al-c deposite-control">
-            <input
-              maxlength="8"
-              class="deposite-input flex-1"
-              v-model="landAmount"
-              @input="handleInput"
-              type="text"
-            />
-            <span class="num">,000,000</span>
-            <span class="d-ib deposite-btn fz-14">LAND</span>
-          </div>
-          <div class="mt-1 fz-12">
-            1000,000 LAND is equivalent to 1 USD, and it cannot be withdrawn.
-          </div>
-        </div>
-      </div>
-
-      <resouce-counter
-        @estimateInput="estimateInput"
-        :inputVal="landAmount"
-      ></resouce-counter>
+  <div>
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
     </div>
-    <div class="act-control pos-r h-flex">
-      <h2 class="fz-16">Network</h2>
-      <pay-network @onNetwork="onNetwork" />
-      <everpay-bar
-        ref="everpay"
-        class="flex-1"
-        @onEverpay="onEverpay"
-        v-if="isEverpay"
-        :payAmounts="payAmounts"
-      ></everpay-bar>
-      <pay-coin
-        v-else
-        v-model="coinSelect"
-        class="flex-1"
-        ref="payCoin"
-        :chainId="chainId"
-        @onSelectCoin="handleSelectCoin"
-      ></pay-coin>
-
-      <div class="pay-confirm-container pos-a">
-        <div class="pay-confirm primary pa-4 al-c space-btw">
-          <div class="amout-info">
-            <div class="fz-16 fw-b">Total</div>
-
-            <div class="mt-1">
-              <span class="amount fw-b">{{ displayPrice }}</span>
-              <span class="unit fz-14 ml-1">{{ CoinType }}</span>
+    <div class="deposite-container d-flex flex-column flex-md-row pa-md-6">
+      <div class="deposite-content flex-1 h-flex">
+        <div class="purchase-plate">
+          <h2 class="fz-16">Deposit</h2>
+          <div class="deposite-section mt-4">
+            <div class="al-c deposite-control">
+              <input
+                maxlength="8"
+                class="deposite-input flex-1"
+                v-model="landAmount"
+                @input="handleInput"
+                type="text"
+              />
+              <span class="num">,000,000</span>
+              <span class="d-ib deposite-btn fz-14">LAND</span>
+            </div>
+            <div class="mt-1 fz-12">
+              1000,000 LAND is equivalent to 1 USD, and it cannot be withdrawn.
             </div>
           </div>
-          <!-- everpay confirm btn -->
-          <div
-            class="confirm-btn fw-b cursor-p"
-            v-ripple
-            v-if="isEverpay"
-            @click="handleEverpayPayment"
-            :class="everpayDisabled ? 'disabled' : ''"
-          >
-            Confirm
-          </div>
-          <!-- eth bsc another payment btn -->
+        </div>
 
-          <div
-            class="confirm-btn fw-b cursor-p"
-            v-ripple
-            :class="ethAmount.toString() == '0' ? 'disabled' : ''"
-            v-else-if="coinSelect == 'ETH' || coinSelect == 'BNB'"
-            @click="handleRechargeLand"
-          >
-            Confirm
-          </div>
-          <!-- other confirm btn -->
-          <div
-            class="confirm-btn fw-b cursor-p pos-r"
-            :class="disabled ? 'disabled' : ''"
-            v-ripple="!checkApproving"
-            v-else
-            @click="
-              () => {
-                if (disabled) return '';
-                return checkApproving ? '' : handleShowStep();
-              }
-            "
-          >
-            <v-btn
-              v-show="checkApproving"
-              text
-              :loading="true"
-              class="primary--text"
+        <resouce-counter
+          @estimateInput="estimateInput"
+          :inputVal="landAmount"
+        ></resouce-counter>
+      </div>
+      <div class="act-control pos-r h-flex">
+        <h2 class="fz-16">Network</h2>
+        <pay-network @onNetwork="onNetwork" />
+        <everpay-bar
+          ref="everpay"
+          class="flex-1"
+          @onEverpay="onEverpay"
+          v-if="isEverpay"
+          :payAmounts="payAmounts"
+        ></everpay-bar>
+        <pay-coin
+          v-else
+          v-model="coinSelect"
+          class="flex-1"
+          ref="payCoin"
+          :chainId="chainId"
+          @onSelectCoin="handleSelectCoin"
+        ></pay-coin>
+
+        <div class="pay-confirm-container pos-a">
+          <div class="pay-confirm primary pa-4 al-c space-btw">
+            <div class="amout-info">
+              <div class="fz-16 fw-b">Total</div>
+
+              <div class="mt-1">
+                <span class="amount fw-b">{{ displayPrice }}</span>
+                <span class="unit fz-14 ml-1">{{ CoinType }}</span>
+              </div>
+            </div>
+            <!-- everpay confirm btn -->
+            <div
+              class="confirm-btn fw-b cursor-p"
+              v-ripple
+              v-if="isEverpay"
+              @click="handleEverpayPayment"
+              :class="everpayDisabled ? 'disabled' : ''"
             >
-            </v-btn>
-            <span v-show="!checkApproving">
-              {{ confirmText }}
-            </span>
+              Confirm
+            </div>
+            <!-- eth bsc another payment btn -->
 
-            <div class="pos-a confirm-tip" v-if="!onChain">
-              After your first deposit, we'll upgrade you to a Standard User
-              with free on-chain identity minting.
+            <div
+              class="confirm-btn fw-b cursor-p"
+              v-ripple
+              :class="ethAmount.toString() == '0' ? 'disabled' : ''"
+              v-else-if="coinSelect == 'ETH' || coinSelect == 'BNB'"
+              @click="handleRechargeLand"
+            >
+              Confirm
+            </div>
+            <!-- other confirm btn -->
+            <div
+              class="confirm-btn fw-b cursor-p pos-r"
+              :class="disabled ? 'disabled' : ''"
+              v-ripple="!checkApproving"
+              v-else
+              @click="
+                () => {
+                  if (disabled) return '';
+                  return checkApproving ? '' : handleShowStep();
+                }
+              "
+            >
+              <v-btn
+                v-show="checkApproving"
+                text
+                :loading="true"
+                class="primary--text"
+              >
+              </v-btn>
+              <span v-show="!checkApproving">
+                {{ confirmText }}
+              </span>
+
+              <div class="pos-a confirm-tip" v-if="!onChain">
+                After your first deposit, we'll upgrade you to a Standard User
+                with free on-chain identity minting.
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <recharge-step-dialog
-      ref="rechargeDialog"
-      :step="step"
-      :approving="approving"
-      :depositing="depositing"
-      @handleApprove="handleApprove"
-      @handleConfirm="handleRechargeLand"
-      @handleClose="handleClose"
-    ></recharge-step-dialog>
+      <recharge-step-dialog
+        ref="rechargeDialog"
+        :step="step"
+        :approving="approving"
+        :depositing="depositing"
+        @handleApprove="handleApprove"
+        @handleConfirm="handleRechargeLand"
+        @handleClose="handleClose"
+      ></recharge-step-dialog>
+    </div>
   </div>
 </template>
 
@@ -173,6 +182,17 @@ export default {
         ? "0xA8425124C2B26E6b52983aFfbB5176187375CdC8"
         : "0xb7b4360f7f6298de2e7a11009270f35f189bd77e",
       blastUnitPriceTimer: null,
+      breadcrumbsItems: [
+        {
+          text: "Billing",
+          disabled: false,
+          href: "/billing",
+        },
+        {
+          text: "Deposit",
+          disabled: true,
+        },
+      ],
     };
   },
   computed: {
@@ -670,6 +690,19 @@ export default {
   .act-control {
     width: 100% !important;
   }
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
 }
 .deposite-container {
   min-height: 100%;

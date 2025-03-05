@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <v-skeleton-loader
       type="article"
       v-if="available === null || !isGetList"
@@ -137,6 +144,12 @@ export default {
       list: [],
       loading: false,
       isGetList: false,
+      breadcrumbsItems: [
+        {
+          text: "Gateway",
+          disabled: true,
+        },
+      ],
     };
   },
   computed: {
@@ -208,6 +221,21 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
 .action-btn {
   cursor: pointer;
   color: var(--v-primary-base);

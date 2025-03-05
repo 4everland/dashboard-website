@@ -4,7 +4,15 @@
       <!-- Operation Tab -->
       <v-row class="operation-tab">
         <!-- Upload Btn -->
-        <v-col :md="9" class="d-flex">
+        <v-col :md="9" class="d-flex justify-space-between">
+          <div class="breadcrumbs-files">
+          <v-breadcrumbs :items="breadcrumbsItems">
+            <template v-slot:divider>
+              <v-icon>mdi-chevron-right</v-icon>
+            </template>
+          </v-breadcrumbs>
+        </div>
+          <div class="d-flex">
           <bucket-upload
             ref="bucketUpload"
             :info="pathInfo"
@@ -29,6 +37,7 @@
             v-model="drawer"
             :pathInfo="pathInfo"
           ></bucket-parts-list>
+          </div>
         </v-col>
         <!-- Search-Input -->
         <v-col :md="3" :cols="6">
@@ -374,6 +383,7 @@ export default {
       generateSnapshotLoading: false,
       accessKeyExpired: false,
       isPublish: true,
+      breadcrumbsItems: []
     };
   },
   async created() {
@@ -406,6 +416,7 @@ export default {
       })
       .catch((err) => err);
   },
+  mounted() {},
   computed: {
     ...mapGetters(["bucketDefaultGateWay"]),
     ...mapState({
@@ -433,6 +444,9 @@ export default {
         { text: "Last Modified", value: "updateAt" },
       ];
     },
+    path() {
+      return this.$route.path;
+    }
   },
   methods: {
     onCopied() {
@@ -599,10 +613,44 @@ export default {
     ipfsLink(ipfs) {
       return this.bucketDefaultGateWay + "/ipfs/" + ipfs;
     },
+    generateBreadcrumbs(path) {
+      const cleanPath = path.split("?")[0];
+      const parts = cleanPath.split("/").filter(Boolean);
+
+      const bucketItem = {
+        text: "bucket",
+        disabled: false,
+        href: "/bucket/storage/"
+      };
+
+      const remainingParts = parts.slice(2);
+      const remainingBreadcrumbs = remainingParts.map((part, index) => ({
+        text: part.length > 10 ? part.cutStr(6, 4) : part,
+        disabled: index === remainingParts.length - 1, 
+        href: `/bucket/storage/${remainingParts.slice(0, index + 1).join("/")}/?tab=files` 
+      }));
+
+      const breadcrumbs = [bucketItem, ...remainingBreadcrumbs];
+      if (breadcrumbs.length > 4) {
+        this.breadcrumbsItems = [
+          breadcrumbs[0], 
+          { text: "...", disabled: true, href: "#" }, 
+          breadcrumbs[breadcrumbs.length - 2], 
+          breadcrumbs[breadcrumbs.length - 1] 
+        ];
+      } else {
+        this.breadcrumbsItems = breadcrumbs;
+      }
+    }
+
+  },
+  mounted(){
+    this.generateBreadcrumbs(this.path);
   },
   watch: {
-    path() {
+    path(newPath) {
       this.onRouteChange();
+      this.generateBreadcrumbs(newPath);
     },
     selected: {
       handler(val) {

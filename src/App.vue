@@ -126,12 +126,49 @@ export default {
     > .v-input__slot:before {
     border: none !important;
   }
-.theme--light.v-input input, .theme--light.v-input textarea{
-    color: #FFF !important;
+  .theme--light.v-input input,
+  .theme--light.v-input textarea {
+    color: #fff !important;
+  }
 }
-}
-.theme--light.v-data-table .v-data-table-header th.sortable:hover, .theme--light.v-data-table .v-data-table-header th.sortable.active{
+.theme--light.v-data-table .v-data-table-header th.sortable:hover,
+.theme--light.v-data-table .v-data-table-header th.sortable.active {
   background-color: transparent !important;
   border-color: rgba(0, 0, 0, 0.12) !important;
+}
+.breadcrumbs {
+  .v-breadcrumbs__item--disabled{
+    font-size: 20px;
+    color: #000 !important;
+  }
+  .v-breadcrumbs__item{
+    font-size: 20px;
+    color: grey;
+  }
+  .v-breadcrumbs li .v-icon{
+    font-size: 24px;
+  }
+}
+.breadcrumbs-files{
+  .v-breadcrumbs{
+    padding-left: 0 !important;
+    padding-top: 10px !important;
+  }
+  .v-breadcrumbs__item--disabled{
+    font-size: 14px;
+    color: #000 !important;
+    font-weight: 400 !important;
+  }
+  .v-breadcrumbs__item{
+    font-size: 14px;
+    color: grey;
+    font-weight: 400 !important;
+  }
+  .v-breadcrumbs li{
+    padding: 0 !important;
+  }
+  .v-breadcrumbs li .v-icon{
+    font-size: 16px;
+  }
 }
 </style>

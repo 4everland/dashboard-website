@@ -1,4 +1,19 @@
 <style lang="scss">
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
 .mobile .projects .v-expansion-panel-header .mdi-chevron-down {
   position: relative;
   right: -16px;
@@ -67,6 +82,13 @@
 
 <template>
   <div class="projects">
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <e-right-opt-wrap>
       <!-- <v-text-field></v-text-field> -->
       <!-- <v-btn></v-btn> -->
@@ -420,6 +442,12 @@ export default {
       sortArr: ["Last Update", "Create Time"],
       refreshAt: Date.now(),
       searchKey: "",
+      breadcrumbsItems: [
+        {
+          text: "project",
+          disabled: true,
+        },
+      ],
     };
   },
   watch: {

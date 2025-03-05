@@ -1,5 +1,12 @@
 <template>
   <div class="billing-container">
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <h3 class="mb-4">Plan</h3>
     <v-row class="plan-row" v-show="resourceLoading">
       <v-col> <v-skeleton-loader type="article"></v-skeleton-loader></v-col>
@@ -330,6 +337,12 @@ export default {
       fromValid: false,
       alertLoading: false,
       defaultAlert: {},
+      breadcrumbsItems: [
+        {
+          text: "Billing",
+          disabled: true,
+        },
+      ],
     };
   },
   computed: {
@@ -770,6 +783,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top:-12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
 .plan-row,
 .land-row,
 .statistics-row {
