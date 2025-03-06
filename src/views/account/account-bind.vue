@@ -190,10 +190,44 @@ export default {
       if (noWallet) {
         wArr.push(...walletArr);
       } else {
-        const walletItem = walletArr.filter((item) => {
-          return item.walletType == info.wallet?.walletType;
-        });
+        // const walletItem = walletArr.filter((item) => {
+        //   return item.walletType == info.wallet?.walletType;
+        // });
+
         // wArr.push(...walletArr);
+
+        const walletItem = [];
+        const walletType = info.wallet.walletType;
+
+        switch (walletType) {
+          case "PHANTOM":
+            walletItem.push({
+              title: "Phantom",
+              account: (info.wallet || {}).address,
+              icon: require("@/assets/imgs/phantom.png"),
+            });
+            break;
+          case "PETRA":
+            walletItem.push({
+              title: "Petra",
+              account: (info.wallet || {}).address,
+              icon: require("@/assets/imgs/petra.svg"),
+            });
+            break;
+          case "ONFLOW":
+            walletItem.push({
+              title: "Flow",
+              account: (info.wallet || {}).address,
+              icon: require("@/assets/imgs/flow.svg"),
+            });
+            break;
+          default:
+            walletItem.push({
+              title: "EVM Wallet",
+              account: (info.wallet || {}).address,
+              icon: require("@/assets/imgs/EVM_Wallet.png"),
+            });
+        }
 
         wArr.push(...walletItem);
       }
