@@ -132,7 +132,7 @@ export default {
         },
         {
           text: "Community",
-          href: "http://discord.gg/4everland",
+          href: "https://discord.com/invite/Cun2VpsdjF",
           target: "_blank",
         },
       ],

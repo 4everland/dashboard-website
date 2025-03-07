@@ -255,7 +255,7 @@ export default {
           label: "Telegram",
         },
         {
-          url: "http://discord.gg/4everland",
+          url: "https://discord.com/invite/Cun2VpsdjF",
           label: "Discord",
         },
         // {

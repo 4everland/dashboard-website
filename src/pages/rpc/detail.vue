@@ -46,7 +46,7 @@
             1000 CUPS </a
           >. For enhanced configurations, feel free to
           <a
-            href="http://discord.gg/4everland"
+            href="https://discord.com/invite/Cun2VpsdjF"
             target="_blank"
             rel="noopener noreferrer"
             class="text-link"

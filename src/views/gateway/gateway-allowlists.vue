@@ -307,7 +307,7 @@ export default {
           "ParamsError: origins or useragent exceed the limit error"
         ) {
           let html =
-            'Maximum allowed is 100 domains. In case of capacity expansion, please <a href="http://discord.gg/4everland" target="__blank">contact us</a> .';
+            'Maximum allowed is 100 domains. In case of capacity expansion, please <a href="https://discord.com/invite/Cun2VpsdjF" target="__blank">contact us</a> .';
           this.$alert(html);
         } else {
           this.$alert(error.message);
@@ -489,7 +489,7 @@ export default {
           "ParamsError: origins or useragent exceed the limit error"
         ) {
           let html =
-            'Maximum allowed is 100 domains. In case of capacity expansion, please <a href="http://discord.gg/4everland" target="__blank">contact us</a>.';
+            'Maximum allowed is 100 domains. In case of capacity expansion, please <a href="https://discord.com/invite/Cun2VpsdjF" target="__blank">contact us</a>.';
           this.$alert(html);
         } else {
           this.$alert(error.message);

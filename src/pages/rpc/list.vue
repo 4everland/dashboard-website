@@ -181,7 +181,7 @@
           Please note that currently, only three paid API Keys can be created
           per account. If you need to create more, please
           <a
-            href="http://discord.gg/4everland"
+            href="https://discord.com/invite/Cun2VpsdjF"
             target="_blank"
             rel="noopener noreferrer"
             >contact us</a
