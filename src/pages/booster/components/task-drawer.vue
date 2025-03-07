@@ -196,7 +196,7 @@
           </div>
 
           <!-- adsgram ads -->
-          <div style="margin: 12px 0" v-if="tonAdsLimit?.overLimit === false">
+          <!-- <div style="margin: 12px 0" v-if="isTgMiniApp" v-show="tonAdsLimit?.overLimit === false">
             <div
               class="task-list-title"
               style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
@@ -207,18 +207,23 @@
               <v-col cols="12">
                 <div class="task-item-box">
                   <adsgram-task
-                    data-block-id="task-8642"
-                    data-debug="true"
+                    id="taskAds"
+                    ref="taskAds"
+                    :data-block-id="blockId"
                     class="task"
-                  ></adsgram-task>
+                  >
+                  <div slot='reward' class='task__reward task-desc'>+5 pts/h, valid for 24 hours</div>
+                  <div slot='button' class='task__button'>Go</div>
+                  <div slot='done' class='task__button task__button_done'>Done</div>
+                </adsgram-task>
                 </div>
               </v-col>
             </v-row>
-          </div>
+          </div> -->
 
-          <!-- ton ai ads -->
+          <!-- ton ai ads  tonAds.length > 0 &&    v-if="tonAds.length > 0 && tonAdsLimit?.overLimit === false && tonAdsLimit?.overLimit === false" -->
 
-          <!-- <div style="margin: 12px 0" v-if="tonAds.length > 0 && tonAdsLimit?.overLimit === false">
+          <div style="margin: 12px 0" v-if="tonAdsLimit?.overLimit === false && tonAdsLimit?.overLimit === false && isTgMiniApp">
             <div
               class="task-list-title"
               style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
@@ -255,8 +260,54 @@
                   </div>
                 </div>
               </v-col>
+              <!-- adsgram ads -->
+              <v-col cols="12">
+                <div class="task-item-box">
+                  <adsgram-task
+                    id="taskAds"
+                    ref="taskAds"
+                    :data-block-id="blockId"
+                    class="task"
+                  >
+                  <div slot='reward' class='task__reward task-desc'>+5 pts/h, valid for 24 hours</div>
+                  <div slot='button' class='task__button'>Go</div>
+                  <div slot='done' class='task__button task__button_done'>Done</div>
+                </adsgram-task>
+                </div>
+              </v-col>
+              <!-- adsgram ads -->
+              <v-col cols="12">
+                <div class="task-item-box">
+                  <adsgram-task
+                    id="taskAds"
+                    ref="taskAds"
+                    :data-block-id="blockId"
+                    class="task"
+                  >
+                  <div slot='reward' class='task__reward task-desc'>+5 pts/h, valid for 24 hours</div>
+                  <div slot='button' class='task__button'>Go</div>
+                  <div slot='done' class='task__button task__button_done'>Done</div>
+                </adsgram-task>
+                </div>
+              </v-col>
+              <!-- adsgram ads -->
+              <v-col cols="12">
+                <div class="task-item-box">
+                  <adsgram-task
+                    id="taskAds"
+                    ref="taskAds"
+                    :data-block-id="blockId"
+                    class="task"
+                  >
+                  <div slot='reward' class='task__reward task-desc'>+5 pts/h, valid for 24 hours</div>
+                  <div slot='button' class='task__button'>Go</div>
+                  <div slot='done' class='task__button task__button_done'>Done</div>
+                </adsgram-task>
+                </div>
+              </v-col>
+              
             </v-row>
-          </div> -->
+          </div>
 
           <!-- partner task -->
           <!-- <div
@@ -424,6 +475,23 @@ export default {
     tasksLists_partner_without_done() {
       return this.tasksLists_partner.filter((it) => it.actStatus != "DONE");
     },
+    hideAdsTask(){
+      const taskElement = document.querySelector(".task");
+      let flag = false;
+      if (taskElement) {
+        // 在 task 元素内部查找 img 元素
+        const imgElement = taskElement.querySelector("img");
+        if (imgElement) {
+          console.log(".task 容器中存在 img 元素");
+          flag = false;
+        } else {
+          console.log(".task 容器中不存在 img 元素");
+          flag = true;
+        }
+      }
+      return flag;
+    },
+
   },
   data() {
     return {
@@ -458,13 +526,35 @@ export default {
   },
 
   async mounted() {
-    // TonAdInit({
-    //   appId: process.env.VUE_APP_TON_AI_ADS_ID,
-    // });
-    // await this.getMultiTOnAdd();
-    await this.getTonAdsLimit();
+
+    TonAdInit({
+      appId: process.env.VUE_APP_TON_AI_ADS_ID,
+    });
+    await this.getMultiTOnAdd();
+
+    console.log(this.blockId)
+    this.$nextTick(() => {
+      this.handleAds();
+    });
   },
   methods: {
+    
+    handleAds(){
+      const task = document.getElementById("taskAds");
+      console.log('task',task)
+      task.addEventListener("reward", (event) => {
+        // event.detail contains your block id
+        console.log(`Reward in block ${event.detail}`);
+      });
+
+      task.addEventListener("onBannerNotFound", (event) => {
+        console.log(`Can't found banner for block ${event.detail}`);
+      });
+      console.log('this.$refs.taskAds',this.$refs.taskAds)
+      // this.$refs.taskAds.addEventListener("onBannerNotFound", (event) => {
+      //   console.log(`Can't found banner for block ${event.detail}`);
+      // });
+    },
     async getDailySign() {
       const { data } = await fetchDailySign();
 
@@ -746,7 +836,19 @@ export default {
 
     async getMultiTOnAdd() {
       try {
-        
+        const { ads } = await GetMultiTonAd(
+          process.env.VUE_APP_TON_AI_ADS_BLOCK_ID,
+          3
+        );
+        if (ads && ads.length > 0) {
+          this.tonAds = ads.map((it) => {
+            return {
+              ...it,
+              load: false,
+              buttonText: "Go",
+            };
+          });
+        }
         const { data } = await fetchTonAdsLimit();
         if (data) {
           this.tonAdsLimit = data;
@@ -784,7 +886,7 @@ export default {
           }).length == 0;
 
         if (isCompleted) {
-          //this.getMultiTOnAdd();
+          this.getMultiTOnAdd();
         }
       }, 15000);
 
@@ -862,6 +964,52 @@ export default {
   color: #fff !important;
   cursor: not-allowed;
 }
+
+.task {
+  --adsgram-task-font-size: 14px; /* min 14px */
+  --adsgram-task-icon-size: 44px; /* min 30px */
+  --adsgram-task-icon-title-gap: 12px; /* min 5px max 40px */
+  --adsgram-task-button-width: 84px; /* min 40px */
+  --adsgram-task-icon-border-radius: 100%;
+
+  display: block;
+  width: 100%;
+  padding: 8px 0px 8px 0px;
+  border-radius: 16px;
+  background-color: transparent;
+  font-family: "Inter", sans-serif;
+  color: white;
+}
+
+.task__reward {
+  font-size: 12px;
+  font-weight: 400;
+  color: #a4bcfd;
+}
+
+.task__button {
+  border-radius: 4px;
+  border: 1px solid #43e7fa;
+  background: rgba(0, 48, 92, 0.8) !important;
+  box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  height: 36px;
+  line-height: 36px;
+}
+
+.task__button_done {
+  border-radius: 21px;
+  background: #31383f !important;
+  color: #fff !important;
+  cursor: not-allowed;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+
 .task-drawer-box {
   ::v-deep .task-drawer {
     width: 100% !important;
