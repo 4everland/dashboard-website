@@ -11,8 +11,8 @@
                 <v-icon size="30" color="white">{{ item.icon }}</v-icon>
               </v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title class="white--text font-weight-bold">{{ item.title }}</v-list-item-title>
-                <v-list-item-subtitle class="grey--text text--lighten-1">{{ item.subtitle }}</v-list-item-subtitle>
+                <v-list-item-title class="white--text font-weight-bold airdrop-title">{{ item.title }}</v-list-item-title>
+                <v-list-item-subtitle class="grey--text text--lighten-1 fz-12">{{ item.subtitle }}</v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
                 <v-icon color="cyan">mdi-check-circle</v-icon>
@@ -238,7 +238,7 @@ export default {
 .airdrop-item {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 25px;
 }
 
 .receipt-card {
@@ -272,5 +272,11 @@ export default {
 .btn-claim {
   background-color: #344054 !important;
   color: #fff !important;
+}
+.airdrop-title{
+  margin-top: -35px;
+}
+:deep .v-list-item__content{
+  overflow: inherit;
 }
 </style>
