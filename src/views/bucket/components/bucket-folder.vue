@@ -4,46 +4,58 @@
       <!-- Operation Tab -->
       <v-row class="operation-tab">
         <!-- Upload Btn -->
-        <v-col :md="9" class="d-flex justify-space-between">
+        <v-col class="d-flex justify-space-between align-center" style="padding-right: 0">
           <div class="breadcrumbs-files">
-          <v-breadcrumbs :items="breadcrumbsItems">
-            <template v-slot:divider>
-              <v-icon>mdi-chevron-right</v-icon>
-            </template>
-          </v-breadcrumbs>
-        </div>
+            <v-breadcrumbs :items="breadcrumbsItems">
+              <template v-slot:item="{ item }">
+                <router-link
+                  v-if="!item.disabled"
+                  :to="item.to"
+                  class="breadcrumb-link"
+                >
+                  {{ item.text }}
+                </router-link>
+                <span v-else>
+                  {{ item.text }}
+                </span>
+              </template>
+              <template v-slot:divider>
+                <v-icon>mdi-chevron-right</v-icon>
+              </template>
+            </v-breadcrumbs>
+          </div>
           <div class="d-flex">
-          <bucket-upload
-            ref="bucketUpload"
-            :info="pathInfo"
-            :baseUrl="bucketInfo.originList[0]"
-          ></bucket-upload>
-          <v-btn
-            class="ml-5"
-            outlined
-            :disabled="folderLen >= 20"
-            @click="addFolder"
-          >
-            <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
-            <img src="/img/svg/add0.svg" width="12" />
-            <span class="ml-2">New Folder</span>
-          </v-btn>
-          <!-- Fragments Btn -->
-          <v-btn class="ml-5" outlined @click="drawer = true">
-            <img src="/img/svg/parts_icon.svg" width="12" />
-            <span class="ml-2">Fragments</span>
-          </v-btn>
-          <bucket-parts-list
-            v-model="drawer"
-            :pathInfo="pathInfo"
-          ></bucket-parts-list>
+            <bucket-upload
+              ref="bucketUpload"
+              :info="pathInfo"
+              :baseUrl="bucketInfo.originList[0]"
+            ></bucket-upload>
+            <v-btn
+              class="ml-2"
+              outlined
+              :disabled="folderLen >= 20"
+              @click="addFolder"
+            >
+              <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
+              <img src="/img/svg/add0.svg" width="12" />
+              <span class="ml-2">New Folder</span>
+            </v-btn>
+            <!-- Fragments Btn -->
+            <v-btn class="ml-2" outlined @click="drawer = true">
+              <img src="/img/svg/parts_icon.svg" width="12" />
+              <span class="ml-2">Fragments</span>
+            </v-btn>
+            <bucket-parts-list
+              v-model="drawer"
+              :pathInfo="pathInfo"
+            ></bucket-parts-list>
           </div>
         </v-col>
         <!-- Search-Input -->
-        <v-col :md="3" :cols="6">
+        <div class="search-input">
           <div
             :class="selected.length ? 'ml-auto' : 'ml-auto'"
-            style="min-width: 150px"
+            style="min-width: 150px; width: 282px !important"
           >
             <v-text-field
               class="hide-msg bd-1"
@@ -55,7 +67,7 @@
               v-model="searchKey"
             ></v-text-field>
           </div>
-        </v-col>
+        </div>
       </v-row>
       <!-- File-header -->
       <div class="d-flex justify-end pt-4">
@@ -383,7 +395,7 @@ export default {
       generateSnapshotLoading: false,
       accessKeyExpired: false,
       isPublish: true,
-      breadcrumbsItems: []
+      breadcrumbsItems: [],
     };
   },
   async created() {
@@ -446,7 +458,7 @@ export default {
     },
     path() {
       return this.$route.path;
-    }
+    },
   },
   methods: {
     onCopied() {
@@ -620,31 +632,32 @@ export default {
       const bucketItem = {
         text: "Buckets",
         disabled: false,
-        href: "/bucket/storage/"
+        to: "/bucket/storage/",
       };
 
       const remainingParts = parts.slice(2);
       const remainingBreadcrumbs = remainingParts.map((part, index) => ({
         text: part.length > 10 ? part.cutStr(6, 4) : part,
-        disabled: index === remainingParts.length - 1, 
-        href: `/bucket/storage/${remainingParts.slice(0, index + 1).join("/")}/?tab=files` 
+        disabled: index === remainingParts.length - 1,
+        to: `/bucket/storage/${remainingParts
+          .slice(0, index + 1)
+          .join("/")}/?tab=files`,
       }));
 
       const breadcrumbs = [bucketItem, ...remainingBreadcrumbs];
       if (breadcrumbs.length > 4) {
         this.breadcrumbsItems = [
-          breadcrumbs[0], 
-          { text: "...", disabled: true, href: "#" }, 
-          breadcrumbs[breadcrumbs.length - 2], 
-          breadcrumbs[breadcrumbs.length - 1] 
+          breadcrumbs[0],
+          { text: "...", disabled: true, to: "#" },
+          breadcrumbs[breadcrumbs.length - 2],
+          breadcrumbs[breadcrumbs.length - 1],
         ];
       } else {
         this.breadcrumbsItems = breadcrumbs;
       }
-    }
-
+    },
   },
-  mounted(){
+  mounted() {
     this.generateBreadcrumbs(this.path);
   },
   watch: {
@@ -710,7 +723,7 @@ export default {
 }
 .bucket-item-container {
   width: 100%;
-  padding: 18px 13px 33px 32px;
+  padding: 18px 12px 33px 12px;
   border-radius: 10px;
   box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
   background: #fff;
@@ -719,7 +732,7 @@ export default {
     position: relative;
     // min-height: 1000px;
     .file-head {
-      width: 250px;
+      width: 282px;
       .pack-up {
         cursor: pointer;
       }
@@ -733,6 +746,10 @@ export default {
         .selected-count {
           color: #1e8e3e;
         }
+      }
+      .search-input {
+        width: 282px;
+        margin:20px 12px 0 8px;
       }
     }
     .table-data {

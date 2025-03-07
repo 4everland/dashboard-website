@@ -2,6 +2,18 @@
   <div class="api-detail">
     <div class="breadcrumbs">
       <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:item="{ item }">
+          <router-link
+            v-if="!item.disabled"
+            :to="item.to"
+            class="breadcrumb-link"
+          >
+            {{ item.text }}
+          </router-link>
+          <span v-else>
+            {{ item.text }}
+          </span>
+        </template>
         <template v-slot:divider>
           <v-icon>mdi-chevron-right</v-icon>
         </template>
@@ -418,7 +430,7 @@ export default {
         {
           text: "RPC",
           disabled: false,
-          href: "/rpc",
+          to: "/rpc",
         },
         {
           text: this.$route.params.name,
@@ -432,8 +444,7 @@ export default {
     this.id = this.$route.params.id;
     this.init();
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     parseTime,
     async init() {

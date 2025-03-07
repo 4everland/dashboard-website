@@ -29,17 +29,17 @@ export default {
         {
           text: "Projects",
           disabled: false,
-          href: "/hosting/projects",
+          to: "/hosting/projects",
         },
         {
           text: this.$route.params.projName,
           disabled: false,
-          href: `/hosting/project/${this.$route.params.projName}/${this.$route.params.id}`,
+          to: `/hosting/project/${this.$route.params.projName}/${this.$route.params.id}`,
         },
         {
           text: 'Deployments',
           disabled: false,
-          href: `/hosting/project/${this.$route.params.projName}/${this.$route.params.id}?tab=deployments`,
+          to: `/hosting/project/${this.$route.params.projName}/${this.$route.params.id}?tab=deployments`,
         },
         {
           text: this.$route.params.taskId.cutStr(6, 4),

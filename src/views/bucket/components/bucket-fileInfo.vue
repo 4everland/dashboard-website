@@ -446,7 +446,7 @@ export default {
 }
 .nav {
   position: relative;
-  width: 250px;
+  width: 282px;
   min-width: 250px;
   padding-left: 20px;
   border-left: 1px solid #d7dfeb;

@@ -137,37 +137,51 @@ export default {
   border-color: rgba(0, 0, 0, 0.12) !important;
 }
 .breadcrumbs {
-  .v-breadcrumbs__item--disabled{
+  .v-breadcrumbs__item--disabled {
     font-size: 20px;
     color: #000 !important;
   }
-  .v-breadcrumbs__item{
+  .v-breadcrumbs__item {
     font-size: 20px;
     color: grey;
   }
-  .v-breadcrumbs li .v-icon{
+  .v-breadcrumbs li {
+    padding: 0  4px !important;
+  }
+  .v-breadcrumbs li .v-icon {
     font-size: 24px;
   }
+  .v-breadcrumbs {
+    font-size: 20px;
+  }
+  .breadcrumb-link {
+    font-size: 20px;
+    color: grey !important;
+  }
 }
-.breadcrumbs-files{
-  .v-breadcrumbs{
+.breadcrumbs-files {
+  .v-breadcrumbs {
     padding-left: 0 !important;
     padding-top: 10px !important;
   }
-  .v-breadcrumbs__item--disabled{
+  .breadcrumb-link {
+    font-size: 14px;
+    color: grey !important;
+  }
+  .v-breadcrumbs__item--disabled {
     font-size: 14px;
     color: #000 !important;
     font-weight: 400 !important;
   }
-  .v-breadcrumbs__item{
+  .v-breadcrumbs__item {
     font-size: 14px;
     color: grey;
     font-weight: 400 !important;
   }
-  .v-breadcrumbs li{
+  .v-breadcrumbs li {
     padding: 0 !important;
   }
-  .v-breadcrumbs li .v-icon{
+  .v-breadcrumbs li .v-icon {
     font-size: 16px;
   }
 }

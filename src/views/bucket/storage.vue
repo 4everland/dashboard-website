@@ -12,6 +12,18 @@
     <e-right-opt-wrap :top="-55">
       <div class="breadcrumbs" v-if="!showBreadcrumbs">
         <v-breadcrumbs :items="breadcrumbsItems">
+          <template v-slot:item="{ item }">
+            <router-link
+              v-if="!item.disabled"
+              :to="item.to"
+              class="breadcrumb-link"
+            >
+              {{ item.text }}
+            </router-link>
+            <span v-else>
+              {{ item.text }}
+            </span>
+          </template>
           <template v-slot:divider>
             <v-icon>mdi-chevron-right</v-icon>
           </template>
@@ -365,7 +377,7 @@ export default {
         {
           text: "AI History",
           disabled: false,
-          href: "/bucket/arweave/",
+          to: "/bucket/arweave/",
         },
         {
           text: "",
@@ -448,7 +460,7 @@ export default {
     },
     showBreadcrumbs() {
       return this.$route.path.indexOf("/bucket/arweave");
-    }
+    },
   },
   mounted() {
     this.breadcrumbsItems[1].text = this.lastPartOfPath;

@@ -114,7 +114,7 @@ export default {
         {
           text: "Projects",
           disabled: false,
-          href: "/hosting/projects",
+          to: "/hosting/projects",
         },
         {
           text: this.$route.params.projName,

@@ -2,6 +2,18 @@
   <div>
     <div class="breadcrumbs">
       <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:item="{ item }">
+          <router-link
+            v-if="!item.disabled"
+            :to="item.to"
+            class="breadcrumb-link"
+          >
+            {{ item.text }}
+          </router-link>
+          <span v-else>
+            {{ item.text }}
+          </span>
+        </template>
         <template v-slot:divider>
           <v-icon>mdi-chevron-right</v-icon>
         </template>
@@ -186,7 +198,7 @@ export default {
         {
           text: "Billing",
           disabled: false,
-          href: "/billing",
+          to: "/billing",
         },
         {
           text: "Deposit",
