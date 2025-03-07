@@ -59,8 +59,7 @@
                 </div>
                 <v-btn
                   block
-                  color="grey darken-3"
-                  class="mt-6"
+                  class="mt-6 btn-claim"
                   height="48"
                   :disabled="!canClaim"
                 >
@@ -126,17 +125,17 @@ export default {
 .airdrop-container {
   width: 100%;
   height: 100%;
-  padding-top: 140px;
+  padding-top: 200px;
   background: url("/img/booster/bg_airdrop_second.svg") repeat #000000;
 }
 .airdrop-in-container {
   max-width: 1032px;
-  padding-top: 140px;
   margin: 0 auto;
   border: 1px solid #0FE1F81A;
   background: linear-gradient(281.05deg, rgba(0, 62, 112, 0.5) 19.1%, rgba(0, 10, 16, 0.5) 100%);
   backdrop-filter: blur(8px);
   padding: 40px;
+  border-radius: 8px;
 
 }
 .content-bg{
@@ -150,8 +149,8 @@ export default {
 .right-content{
   margin-top: 95px;
   .submit-btn {
-    width: 286px;
-    height: 53px;
+    width: 100%;
+    height: 79px;
     border-radius: 16px;
     padding: 0 !important;
     .number {
@@ -181,6 +180,7 @@ export default {
   border-radius: 16px;
   overflow: hidden;
   z-index: 1;
+  width: 100%;
 }
 .light-btn::before {
   content: "";
@@ -220,6 +220,7 @@ export default {
   background: #000000;
   position: relative;
   z-index: 2;
+  width: 100%;
 }
 #starRise {
   position: absolute;
@@ -267,5 +268,9 @@ export default {
   font-size: 20px;
   font-weight: bold;
   color: white;
+}
+.btn-claim {
+  background-color: #344054 !important;
+  color: #fff !important;
 }
 </style>
