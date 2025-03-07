@@ -1,13 +1,13 @@
 <template>
   <div style="height: 100%">
-    <!-- <div class="breadcrumbs" v-if="inFolder">
+    <div class="breadcrumbs" v-if="inFolder&&!showBreadcrumbs">
       <v-breadcrumbs :items="breadcrumbsItems">
         <template v-slot:divider>
           <v-icon>mdi-chevron-right</v-icon>
         </template>
       </v-breadcrumbs>
-    </div> -->
-    <!-- <div class="Buckets">Buckets</div> -->
+    </div>
+   <div class="Buckets" v-else-if="!showBreadcrumbs">Buckets</div>
     <!-- <keep-alive v-if="inFolder || inFile"> -->
     <e-tabs v-if="inFolder" :list="list" bucket noRouter ignorePath />
     <!-- </keep-alive> -->
@@ -58,6 +58,7 @@ export default {
       ],
       currentFolder: "",
       isShowOperationBar: false,
+      breadcrumbsItems:[]
     };
   },
   computed: {
@@ -70,6 +71,9 @@ export default {
     inFile() {
       return !/\/$/.test(this.path);
     },
+    showBreadcrumbs() {
+      return this.$route.path.indexOf("/bucket/storage");
+    }
   },
   created() {
     this.$store.dispatch("initS3");
@@ -79,32 +83,35 @@ export default {
     bus.$on("showOperationBar", (val) => {
       this.isShowOperationBar = val;
     });
-    // this.updateCurrentFolder(this.path);
+     this.updateCurrentFolder(this.path);
   },
   watch: {
-    // path(newPath) {
-    //   this.updateCurrentFolder(newPath);
-    // }
+     path(newPath) {
+       this.updateCurrentFolder(newPath);
+     }
   },
 
   methods: {
     updateCurrentFolder(path) {
-      const cleanPath = path.endsWith("/") ? path.slice(0, -1) : path;
-      const parts = cleanPath.split("/").filter(Boolean);
-      const lastPart = parts[parts.length - 1];
-      this.currentFolder = lastPart;
-      this.breadcrumbsItems = [
-        {
-          text: "Buckets",
-          disabled: false,
-          href: "/bucket/storage/",
-        },
-        {
-          text: this.currentFolder,
-          disabled: true,
-        }
-      ];
+  const cleanPath = path.split("?")[0];
+  const prefix = "/bucket/storage/";
+  const remainingPath = cleanPath.replace(prefix, "");
+  const parts = remainingPath.split("/").filter(Boolean);
+  const firstPartAfterPrefix = parts[0] || "";
+  this.currentFolder = firstPartAfterPrefix;
+  this.breadcrumbsItems = [
+    {
+      text: "Buckets",
+      disabled: false,
+      href: "/bucket/storage/",
+    },
+    {
+      text: this.currentFolder,
+      disabled: true,
     }
+  ];
+}
+
   },
   components: {
     Storage,

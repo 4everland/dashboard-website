@@ -112,7 +112,7 @@ export default {
       // list,
       breadcrumbsItems: [
         {
-          text: "project",
+          text: "Projects",
           disabled: false,
           href: "/hosting/projects",
         },

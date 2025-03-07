@@ -618,7 +618,7 @@ export default {
       const parts = cleanPath.split("/").filter(Boolean);
 
       const bucketItem = {
-        text: "bucket",
+        text: "Buckets",
         disabled: false,
         href: "/bucket/storage/"
       };

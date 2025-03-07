@@ -444,7 +444,7 @@ export default {
       searchKey: "",
       breadcrumbsItems: [
         {
-          text: "project",
+          text: "Projects",
           disabled: true,
         },
       ],
