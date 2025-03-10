@@ -261,7 +261,7 @@
                 </div>
               </v-col>
               <!-- adsgram ads -->
-              <v-col cols="12">
+              <v-col cols="12" v-show="hasShadowImg">
                 <div class="task-item-box">
                   <adsgram-task
                     id="taskAds"
@@ -275,37 +275,6 @@
                 </adsgram-task>
                 </div>
               </v-col>
-              <!-- adsgram ads -->
-              <v-col cols="12">
-                <div class="task-item-box">
-                  <adsgram-task
-                    id="taskAds"
-                    ref="taskAds"
-                    :data-block-id="blockId"
-                    class="task"
-                  >
-                  <div slot='reward' class='task__reward task-desc'>+5 pts/h, valid for 24 hours</div>
-                  <div slot='button' class='task__button'>Go</div>
-                  <div slot='done' class='task__button task__button_done'>Done</div>
-                </adsgram-task>
-                </div>
-              </v-col>
-              <!-- adsgram ads -->
-              <v-col cols="12">
-                <div class="task-item-box">
-                  <adsgram-task
-                    id="taskAds"
-                    ref="taskAds"
-                    :data-block-id="blockId"
-                    class="task"
-                  >
-                  <div slot='reward' class='task__reward task-desc'>+5 pts/h, valid for 24 hours</div>
-                  <div slot='button' class='task__button'>Go</div>
-                  <div slot='done' class='task__button task__button_done'>Done</div>
-                </adsgram-task>
-                </div>
-              </v-col>
-              
             </v-row>
           </div>
 
@@ -476,21 +445,28 @@ export default {
       return this.tasksLists_partner.filter((it) => it.actStatus != "DONE");
     },
     hideAdsTask(){
-      const taskElement = document.querySelector(".task");
+      const taskElement = document.querySelector("#taskAds");
+      console.log('taskElement',taskElement)
       let flag = false;
       if (taskElement) {
-        // 在 task 元素内部查找 img 元素
-        const imgElement = taskElement.querySelector("img");
-        if (imgElement) {
-          console.log(".task 容器中存在 img 元素");
-          flag = false;
-        } else {
-          console.log(".task 容器中不存在 img 元素");
-          flag = true;
+        const shadowRoot = taskElement.shadowRoot;
+        if (shadowRoot) {
+          const imgElement = shadowRoot.querySelector("img");
+          if (imgElement) {
+            flag = false;
+            console.log(".task容器的Shadow DOM中存在img元素");
+          } else {
+            flag = true;
+            console.log(".task容器的Shadow DOM中不存在img元素");
+          }
         }
       }
       return flag;
     },
+    showTask(){
+      return this.hasShadowImg;
+    }
+    
 
   },
   data() {
@@ -512,7 +488,11 @@ export default {
       okxUniversalProvider: null,
       tonAds: [],
       tonAdsLimit: {},
-      blockId: process.env.VUE_APP_ADS_BLOCK_ID
+      blockId: process.env.VUE_APP_ADS_BLOCK_ID,
+      hasShadowImg: false,
+      intervalId: null,
+      countNumber: 0
+
     };
   },
 
@@ -533,27 +513,34 @@ export default {
     await this.getMultiTOnAdd();
 
     console.log(this.blockId)
-    this.$nextTick(() => {
-      this.handleAds();
-    });
+    this.handleTaskImg();
+  },
+  beforeDestroy() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   },
   methods: {
-    
-    handleAds(){
-      const task = document.getElementById("taskAds");
-      console.log('task',task)
-      task.addEventListener("reward", (event) => {
-        // event.detail contains your block id
-        console.log(`Reward in block ${event.detail}`);
-      });
-
-      task.addEventListener("onBannerNotFound", (event) => {
-        console.log(`Can't found banner for block ${event.detail}`);
-      });
-      console.log('this.$refs.taskAds',this.$refs.taskAds)
-      // this.$refs.taskAds.addEventListener("onBannerNotFound", (event) => {
-      //   console.log(`Can't found banner for block ${event.detail}`);
-      // });
+    handleTaskImg() {
+      const taskElement = document.querySelector("#taskAds");
+      if (taskElement) {
+        this.intervalId = setInterval(() => {
+          const taskElement1 = document.querySelector("#taskAds");
+          const shadowRoot = taskElement1.shadowRoot;
+          if (shadowRoot) {
+            const divElement = shadowRoot.querySelector('div');
+            if(divElement&&divElement.querySelector("img")) {
+              clearInterval(this.intervalId);
+              const imgElement = divElement.querySelector("img");
+              this.hasShadowImg = !!imgElement;
+            }
+            if(this.countNumber>60){
+              clearInterval(this.intervalId);
+            }
+            this.countNumber++
+          }
+        }, 500);
+      }
     },
     async getDailySign() {
       const { data } = await fetchDailySign();
