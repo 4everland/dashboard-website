@@ -195,9 +195,35 @@
             </v-row>
           </div>
 
-          <!-- ton ai ads -->
+          <!-- adsgram ads -->
+          <!-- <div style="margin: 12px 0" v-if="isTgMiniApp" v-show="tonAdsLimit?.overLimit === false">
+            <div
+              class="task-list-title"
+              style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
+            >
+              Partner Tasks
+            </div>
+            <v-row no-gutters style="gap: 18px 0">
+              <v-col cols="12">
+                <div class="task-item-box">
+                  <adsgram-task
+                    id="taskAds"
+                    ref="taskAds"
+                    :data-block-id="blockId"
+                    class="task"
+                  >
+                  <div slot='reward' class='task__reward task-desc'>+5 pts/h, valid for 24 hours</div>
+                  <div slot='button' class='task__button'>Go</div>
+                  <div slot='done' class='task__button task__button_done'>Done</div>
+                </adsgram-task>
+                </div>
+              </v-col>
+            </v-row>
+          </div> -->
 
-          <div style="margin: 12px 0" v-if="tonAds.length > 0 && tonAdsLimit?.overLimit === false">
+          <!-- ton ai ads  tonAds.length > 0 &&    v-if="tonAds.length > 0 && tonAdsLimit?.overLimit === false && tonAdsLimit?.overLimit === false" -->
+
+          <div style="margin: 12px 0" v-if="tonAdsLimit?.overLimit === false && tonAdsLimit?.overLimit === false && isTgMiniApp">
             <div
               class="task-list-title"
               style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
@@ -232,6 +258,21 @@
                       >Done</v-btn
                     >
                   </div>
+                </div>
+              </v-col>
+              <!-- adsgram ads -->
+              <v-col cols="12" v-show="hasShadowImg">
+                <div class="task-item-box">
+                  <adsgram-task
+                    id="taskAds"
+                    ref="taskAds"
+                    :data-block-id="blockId"
+                    class="task"
+                  >
+                  <div slot='reward' class='task__reward task-desc'>+5 pts/h, valid for 24 hours</div>
+                  <div slot='button' class='task__button'>Go</div>
+                  <div slot='done' class='task__button task__button_done'>Done</div>
+                </adsgram-task>
                 </div>
               </v-col>
             </v-row>
@@ -403,6 +444,30 @@ export default {
     tasksLists_partner_without_done() {
       return this.tasksLists_partner.filter((it) => it.actStatus != "DONE");
     },
+    hideAdsTask(){
+      const taskElement = document.querySelector("#taskAds");
+      console.log('taskElement',taskElement)
+      let flag = false;
+      if (taskElement) {
+        const shadowRoot = taskElement.shadowRoot;
+        if (shadowRoot) {
+          const imgElement = shadowRoot.querySelector("img");
+          if (imgElement) {
+            flag = false;
+            console.log(".task容器的Shadow DOM中存在img元素");
+          } else {
+            flag = true;
+            console.log(".task容器的Shadow DOM中不存在img元素");
+          }
+        }
+      }
+      return flag;
+    },
+    showTask(){
+      return this.hasShadowImg;
+    }
+    
+
   },
   data() {
     return {
@@ -422,7 +487,12 @@ export default {
       loadingStatus: {},
       okxUniversalProvider: null,
       tonAds: [],
-      tonAdsLimit: {}
+      tonAdsLimit: {},
+      blockId: process.env.VUE_APP_ADS_BLOCK_ID,
+      hasShadowImg: false,
+      intervalId: null,
+      countNumber: 0
+
     };
   },
 
@@ -436,12 +506,42 @@ export default {
   },
 
   async mounted() {
+
     TonAdInit({
       appId: process.env.VUE_APP_TON_AI_ADS_ID,
     });
     await this.getMultiTOnAdd();
+
+    console.log(this.blockId)
+    this.handleTaskImg();
+  },
+  beforeDestroy() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   },
   methods: {
+    handleTaskImg() {
+      const taskElement = document.querySelector("#taskAds");
+      if (taskElement) {
+        this.intervalId = setInterval(() => {
+          const taskElement1 = document.querySelector("#taskAds");
+          const shadowRoot = taskElement1.shadowRoot;
+          if (shadowRoot) {
+            const divElement = shadowRoot.querySelector('div');
+            if(divElement&&divElement.querySelector("img")) {
+              clearInterval(this.intervalId);
+              const imgElement = divElement.querySelector("img");
+              this.hasShadowImg = !!imgElement;
+            }
+            if(this.countNumber>60){
+              clearInterval(this.intervalId);
+            }
+            this.countNumber++
+          }
+        }, 500);
+      }
+    },
     async getDailySign() {
       const { data } = await fetchDailySign();
 
@@ -725,7 +825,7 @@ export default {
       try {
         const { ads } = await GetMultiTonAd(
           process.env.VUE_APP_TON_AI_ADS_BLOCK_ID,
-          5
+          3
         );
         if (ads && ads.length > 0) {
           this.tonAds = ads.map((it) => {
@@ -744,7 +844,16 @@ export default {
         console.log(err);
       }
     },
-
+    async getTonAdsLimit(){
+      try {
+        const { data } = await fetchTonAdsLimit();
+        if (data) {
+          this.tonAdsLimit = data;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async showPopupAdd(tonAd) {
       const i = this.tonAds.findIndex((ad) => {
         return ad.adId == tonAd.adId;
@@ -842,6 +951,52 @@ export default {
   color: #fff !important;
   cursor: not-allowed;
 }
+
+.task {
+  --adsgram-task-font-size: 14px; /* min 14px */
+  --adsgram-task-icon-size: 44px; /* min 30px */
+  --adsgram-task-icon-title-gap: 12px; /* min 5px max 40px */
+  --adsgram-task-button-width: 84px; /* min 40px */
+  --adsgram-task-icon-border-radius: 100%;
+
+  display: block;
+  width: 100%;
+  padding: 8px 0px 8px 0px;
+  border-radius: 16px;
+  background-color: transparent;
+  font-family: "Inter", sans-serif;
+  color: white;
+}
+
+.task__reward {
+  font-size: 12px;
+  font-weight: 400;
+  color: #a4bcfd;
+}
+
+.task__button {
+  border-radius: 4px;
+  border: 1px solid #43e7fa;
+  background: rgba(0, 48, 92, 0.8) !important;
+  box-shadow: 0px 6px 8px 0px rgba(0, 50, 228, 0.4);
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  height: 36px;
+  line-height: 36px;
+}
+
+.task__button_done {
+  border-radius: 21px;
+  background: #31383f !important;
+  color: #fff !important;
+  cursor: not-allowed;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+
 .task-drawer-box {
   ::v-deep .task-drawer {
     width: 100% !important;
