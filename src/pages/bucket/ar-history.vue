@@ -51,7 +51,6 @@
     <div class="main-wrap mt-6">
       <v-data-table
         class="hide-bdb"
-        fixed-header
         :headers="headers"
         :items="list"
         :loading="tableLoading"

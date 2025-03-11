@@ -2,54 +2,33 @@
   <div class="bucket-item-container bg-white">
     <div class="file-container" v-if="inFolder">
       <!-- Operation Tab -->
-      <v-row class="operation-tab">
+      <v-row class="operation-tab align-center">
         <!-- Upload Btn -->
-        <v-col class="d-flex justify-space-between align-center" style="padding-right: 0">
-          <div class="breadcrumbs-files">
-            <v-breadcrumbs :items="breadcrumbsItems">
-              <template v-slot:item="{ item }">
-                <router-link
-                  v-if="!item.disabled"
-                  :to="item.to"
-                  class="breadcrumb-link"
-                >
-                  {{ item.text }}
-                </router-link>
-                <span v-else>
-                  {{ item.text }}
-                </span>
-              </template>
-              <template v-slot:divider>
-                <v-icon>mdi-chevron-right</v-icon>
-              </template>
-            </v-breadcrumbs>
-          </div>
-          <div class="d-flex">
-            <bucket-upload
-              ref="bucketUpload"
-              :info="pathInfo"
-              :baseUrl="bucketInfo.originList[0]"
-            ></bucket-upload>
-            <v-btn
-              class="ml-2"
-              outlined
-              :disabled="folderLen >= 20"
-              @click="addFolder"
-            >
-              <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
-              <img src="/img/svg/add0.svg" width="12" />
-              <span class="ml-2">New Folder</span>
-            </v-btn>
-            <!-- Fragments Btn -->
-            <v-btn class="ml-2" outlined @click="drawer = true">
-              <img src="/img/svg/parts_icon.svg" width="12" />
-              <span class="ml-2">Fragments</span>
-            </v-btn>
-            <bucket-parts-list
-              v-model="drawer"
-              :pathInfo="pathInfo"
-            ></bucket-parts-list>
-          </div>
+        <v-col class="d-flex" style="padding-right: 0">
+          <bucket-upload
+            ref="bucketUpload"
+            :info="pathInfo"
+            :baseUrl="bucketInfo.originList[0]"
+          ></bucket-upload>
+          <v-btn
+            class="ml-2"
+            outlined
+            :disabled="folderLen >= 20"
+            @click="addFolder"
+          >
+            <!-- <v-icon size="15">mdi-folder-plus-outline</v-icon> -->
+            <img src="/img/svg/add0.svg" width="12" />
+            <span class="ml-2">New Folder</span>
+          </v-btn>
+          <!-- Fragments Btn -->
+          <v-btn class="ml-2" outlined @click="drawer = true">
+            <img src="/img/svg/parts_icon.svg" width="12" />
+            <span class="ml-2">Fragments</span>
+          </v-btn>
+          <bucket-parts-list
+            v-model="drawer"
+            :pathInfo="pathInfo"
+          ></bucket-parts-list>
         </v-col>
         <!-- Search-Input -->
         <div class="search-input">
@@ -70,13 +49,33 @@
         </div>
       </v-row>
       <!-- File-header -->
-      <div class="d-flex justify-end pt-4">
+      <div class="d-flex justify-space-between pt-4">
+        <div class="breadcrumbs-files">
+          <v-breadcrumbs :items="breadcrumbsItems">
+            <template v-slot:item="{ item }">
+              <router-link
+                v-if="!item.disabled"
+                :to="item.to"
+                class="breadcrumb-link"
+              >
+                {{ item.text }}
+              </router-link>
+              <span v-else>
+                {{ item.text }}
+              </span>
+            </template>
+            <template v-slot:divider>
+              <v-icon>mdi-chevron-right</v-icon>
+            </template>
+          </v-breadcrumbs>
+        </div>
         <div
-          class="file-head d-flex align-center pl-5"
-          :class="fileInfoDrawer ? 'justify-space-between' : 'justify-end'"
-          style="float: right"
+          class="d-flex align-center justify-end"
+          @click="fileInfoDrawer = !fileInfoDrawer"
+          :class="fileInfoDrawer ? 'file-head' : 'file-head-close'"
         >
           <div v-show="fileInfoDrawer">
+            <v-icon class="mr-1 file-icon">mdi-information-outline</v-icon>
             <span v-if="selected.length > 1"
               >Select {{ selected.length }} files</span
             >
@@ -85,7 +84,11 @@
             >
             <span v-if="selected.length == 0">Flie Info</span>
           </div>
-          <div
+          <div v-if="!fileInfoDrawer">
+            <v-icon class="mr-1 file-icon">mdi-information-outline</v-icon>
+            <span>Flie Info</span>
+          </div>
+          <!-- <div
             @click="fileInfoDrawer = !fileInfoDrawer"
             class="fz-12 d-flex align-center pack-up"
           >
@@ -95,7 +98,7 @@
               width="12"
             />
             <span class="ml-2">{{ fileInfoDrawer ? "Close" : "Open" }}</span>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="d-flex" style="height: 100%; min-height: 700px">
@@ -104,7 +107,6 @@
           <v-data-table
             v-show="list.length"
             class="hide-bdb data-table"
-            fixed-header
             mobile-breakpoint="1000"
             :headers="headers"
             :items="list"
@@ -630,7 +632,7 @@ export default {
       const parts = cleanPath.split("/").filter(Boolean);
 
       const bucketItem = {
-        text: "Buckets",
+        text: "Bucket",
         disabled: false,
         to: "/bucket/storage/",
       };
@@ -688,6 +690,11 @@ export default {
 </script>
 
 <style>
+.v-data-table > .v-data-table__wrapper > table > thead > tr > th:first-child,
+.v-data-table > .v-data-table__wrapper > table > tbody > tr > td,
+.v-data-table > .v-data-table__wrapper > table > tbody > tr > th:first-child {
+  padding-left: 12px !important;
+}
 .file-tab .v-slide-group__content {
   background: #f8fafb;
 }
@@ -723,18 +730,39 @@ export default {
 }
 .bucket-item-container {
   width: 100%;
-  padding: 18px 12px 33px 12px;
+  padding: 4px 12px 33px 12px;
   border-radius: 10px;
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
+  // box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
   background: #fff;
   overflow: hidden;
   .file-container {
     position: relative;
     // min-height: 1000px;
     .file-head {
-      width: 282px;
-      .pack-up {
-        cursor: pointer;
+      height: 32px;
+      border-radius: 100px;
+      padding: 8px;
+      background: #f5f8ff;
+      border: 1px solid #e0eaff;
+      font-size: 14px;
+      color: #6172f3;
+      cursor: pointer;
+      .file-icon {
+        font-size: 14px;
+        color: #6172f3;
+      }
+    }
+    .file-head-close {
+      height: 32px;
+      border-radius: 100px;
+      padding: 8px;
+      border: 1px solid #eaecf0;
+      font-size: 14px;
+      color: #101828;
+      cursor: pointer;
+      .file-icon {
+        font-size: 14px;
+        color: #101828;
       }
     }
     .operation-tab {
@@ -749,7 +777,9 @@ export default {
       }
       .search-input {
         width: 282px;
-        margin:20px 12px 0 8px;
+        .hide-msg.v-input {
+          border-color: #eaecf0;
+        }
       }
     }
     .table-data {

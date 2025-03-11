@@ -19,7 +19,7 @@
         </template>
       </v-breadcrumbs>
     </div>
-    <div class="Buckets" v-else-if="!showBreadcrumbs">Buckets</div>
+    <div class="Buckets" v-else-if="!showBreadcrumbs">Bucket</div>
     <!-- <keep-alive v-if="inFolder || inFile"> -->
     <e-tabs v-if="inFolder" :list="list" bucket noRouter ignorePath />
     <!-- </keep-alive> -->
@@ -113,7 +113,7 @@ export default {
       this.currentFolder = firstPartAfterPrefix;
       this.breadcrumbsItems = [
         {
-          text: "Buckets",
+          text: "Bucket",
           disabled: false,
           to: "/bucket/storage/",
         },

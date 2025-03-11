@@ -146,7 +146,7 @@ export default {
     color: grey;
   }
   .v-breadcrumbs li {
-    padding: 0  4px !important;
+    padding: 0 4px !important;
   }
   .v-breadcrumbs li .v-icon {
     font-size: 24px;
@@ -184,5 +184,18 @@ export default {
   .v-breadcrumbs li .v-icon {
     font-size: 16px;
   }
+}
+.operation-tab {
+  .search-input {
+    .theme--light.v-icon {
+      color: #98A2B3 !important;
+    }
+  }
+}
+.theme--light.v-data-table > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > td:not(.v-data-table__mobile-row), .theme--light.v-data-table > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > th:not(.v-data-table__mobile-row){
+  border-bottom-color:#EAECF0 !important;
+}
+.theme--light.v-data-table > .v-data-table__wrapper > table > thead > tr > th{
+  border-bottom:#EAECF0 1px solid !important;
 }
 </style>

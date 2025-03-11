@@ -224,7 +224,7 @@ export default {
 .e-settings {
   .v3-horizon {
     .v-slide-group__content {
-      border-bottom: 1px solid #d0dae9;
+      border-bottom: 1px solid #EAECF0;
     }
     .v-tab {
       min-width: 110px;
