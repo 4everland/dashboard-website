@@ -678,12 +678,13 @@ export default {
 
       const breadcrumbs = [bucketItem, ...remainingBreadcrumbs];
 
-      if (breadcrumbs.length > 4) {
-        this.ellipsisItems = breadcrumbs.slice(2, -1);
+      if (breadcrumbs.length > 5) {
+        this.ellipsisItems = breadcrumbs.slice(2, -2);
         this.breadcrumbsItems = [
           breadcrumbs[0],
           breadcrumbs[1],
           { text: "...", disabled: true, to: "#" },
+          breadcrumbs[breadcrumbs.length - 2],
           breadcrumbs[breadcrumbs.length - 1],
         ];
       } else {
