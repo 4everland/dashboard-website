@@ -777,6 +777,7 @@ export default {
       }
       .search-input {
         width: 282px;
+        margin-right:12px !important;
         .hide-msg.v-input {
           border-color: #eaecf0;
         }
