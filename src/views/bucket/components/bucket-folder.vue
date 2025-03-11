@@ -53,8 +53,37 @@
         <div class="breadcrumbs-files">
           <v-breadcrumbs :items="breadcrumbsItems">
             <template v-slot:item="{ item }">
+              <v-menu
+                v-if="item.text === '...'"
+                open-on-hover
+                offset-y
+                rounded-lg
+                close-on-content-click
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <div>
+                    <!-- <v-icon class="folder-icon">mdi-folder</v-icon> -->
+                    <span v-bind="attrs" v-on="on" class="ellipsis">
+                      {{ item.text }}
+                    </span>
+                  </div>
+                </template>
+                <v-list>
+                  <v-list-item
+                  dense
+                    v-for="(ellipsisItem, index) in ellipsisItems"
+                    :key="index"
+                    @click="navigateTo(ellipsisItem.to)"
+                  >
+                    <v-list-item-title class="d-flex align-center menu-list-item"
+                      ><v-icon class="folder-icon mr-2">mdi-folder</v-icon
+                      >{{ ellipsisItem.text }}</v-list-item-title
+                    >
+                  </v-list-item>
+                </v-list>
+              </v-menu>
               <router-link
-                v-if="!item.disabled"
+                v-else-if="!item.disabled"
                 :to="item.to"
                 class="breadcrumb-link"
               >
@@ -398,6 +427,7 @@ export default {
       accessKeyExpired: false,
       isPublish: true,
       breadcrumbsItems: [],
+      ellipsisItems: [],
     };
   },
   async created() {
@@ -647,16 +677,22 @@ export default {
       }));
 
       const breadcrumbs = [bucketItem, ...remainingBreadcrumbs];
+
       if (breadcrumbs.length > 4) {
+        this.ellipsisItems = breadcrumbs.slice(2, -1);
         this.breadcrumbsItems = [
           breadcrumbs[0],
+          breadcrumbs[1],
           { text: "...", disabled: true, to: "#" },
-          breadcrumbs[breadcrumbs.length - 2],
           breadcrumbs[breadcrumbs.length - 1],
         ];
       } else {
         this.breadcrumbsItems = breadcrumbs;
       }
+    },
+
+    navigateTo(path) {
+      this.$router.push(path);
     },
   },
   mounted() {
@@ -777,7 +813,7 @@ export default {
       }
       .search-input {
         width: 282px;
-        margin-right:12px !important;
+        margin-right: 12px !important;
         .hide-msg.v-input {
           border-color: #eaecf0;
         }
@@ -795,7 +831,17 @@ export default {
     }
   }
 }
-
+.folder-icon {
+  font-size: 18px;
+}
+.menu-list-item{
+  font-size: 14px;
+  color: #808080;
+}
+.ellipsis {
+  cursor: pointer;
+  color: #646F82;
+}
 .v3-horizon {
   .v-slide-group__content {
     padding-top: 4px;
