@@ -164,6 +164,21 @@ export default {
       spinList6:[
         300,200,150,100
       ],
+      spinList7:[
+        400,200,100
+      ],
+      spinList8:[
+        1000,1000,1000
+      ],
+      spinList9:[
+        1500,1000,500,500
+      ],
+      spinList10:[
+        3500,2000,1500,500
+      ],
+      spinList11:[
+        2000,2000,2000
+      ],
       spinList:[],
       current: "",
       activeIndex: 0,
@@ -281,7 +296,7 @@ export default {
     },
     async showNext() {
       let nextIndex = 1;
-      this.spinList = this.spinList1;
+      this.spinList = this.spinList5;
       if(this.spinStartInfo.spinId == 'd16de24a-da99-40c8-897d-1dbba25f205a' || this.spinStartInfo.spinId == 'f4eff4ea-11a9-49ec-ae46-0392bc772aee'  || this.spinStartInfo.spinId == 'b37ed3c4-eb6b-4577-a218-056c1df57caa' ){
         this.spinList = this.spinList1;
       } else if(this.spinStartInfo.spinId == '77319c24-2816-47a0-bd91-25f7f8605e2d' || this.spinStartInfo.spinId == '6ae26d73-369e-475d-aa92-f400a8eda599' || this.spinStartInfo.spinId == '45e83b26-f41c-4175-af71-12a5dd3934d8' ){
@@ -294,6 +309,26 @@ export default {
         this.spinList = this.spinList5;
       } else if(this.spinStartInfo.spinId == '7ea15c37-8362-41b7-bc32-7b539e78b7bc'){
         this.spinList = this.spinList6;
+      } else if(this.spinStartInfo.spinId == 'c7d7f472-377e-4229-ab60-7c468b5f3bbf'){
+        this.spinList = this.spinList5
+      } else if(this.spinStartInfo.spinId == '19f8eafa-c6e0-45ca-9d1c-d2ace8663b60'){
+        this.spinList = this.spinList2
+      } else if(this.spinStartInfo.spinId == '4b483e65-0229-4df3-ba01-d387ab668a18'){
+        this.spinList = this.spinList3
+      } else if(this.spinStartInfo.spinId == 'dbbb030c-7cf5-4b5d-adfe-83fe4c8e0382'){
+        this.spinList = this.spinList4
+      } else if(this.spinStartInfo.spinId == '17a97757-d191-4df7-b838-49e6c6abcce0'){
+        this.spinList = this.spinList6
+      } else if(this.spinStartInfo.spinId == '0c29e318-f971-4746-b211-c06f39ef5758'){
+        this.spinList = this.spinList7
+      } else if(this.spinStartInfo.spinId == '3db58d60-ba10-4039-841a-5dc4cc3c5dfd'){
+        this.spinList = this.spinList8
+      } else if(this.spinStartInfo.spinId == 'c85eaf5a-f0e9-45d1-91ea-bb0dfbc1dc0e'){
+        this.spinList = this.spinList9
+      } else if(this.spinStartInfo.spinId == 'cc1878f5-aef3-4787-9fd0-7aa168681fd7'){
+        this.spinList = this.spinList10
+      } else if(this.spinStartInfo.spinId == '8585ffd1-e206-4453-b425-ec5a3e14b169'){
+        this.spinList = this.spinList11
       }
       this.showCard = true;
       await this.sleep(1500);
