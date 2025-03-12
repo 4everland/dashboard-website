@@ -839,6 +839,9 @@ export default {
   font-size: 14px;
   color: #808080;
 }
+.v-menu__content{
+  margin-top: -4px;
+}
 .ellipsis {
   cursor: pointer;
   color: #646F82;
