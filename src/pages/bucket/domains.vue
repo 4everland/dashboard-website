@@ -7,6 +7,13 @@
     ></v-skeleton-loader>
   </div>
   <div v-else>
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <e-right-opt-wrap :top="-55">
       <div class="btn-wrap d-flex justify-end">
         <v-btn color="primary" @click="showPop = true" width="120">
@@ -167,6 +174,12 @@ export default {
       deleting: false,
       keyword: "",
       selectBucket: null,
+      breadcrumbsItems: [
+        {
+          text: "Bucket",
+          disabled: true,
+        },
+      ],
     };
   },
   watch: {
@@ -275,6 +288,21 @@ export default {
 };
 </script>
 <style lang="scss">
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
 .e-btn-text {
   padding: 0 !important;
   font-weight: normal !important;

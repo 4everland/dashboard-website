@@ -1,5 +1,12 @@
 <template>
   <div style="height: 100%">
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <v-skeleton-loader v-if="!loaded" type="article"></v-skeleton-loader>
     <div v-else style="height: 100%">
       <div v-if="rollupList.length == 0" class="raas-home">
@@ -35,6 +42,12 @@ export default {
       loading: false,
       land: 0,
       $land: 0,
+      breadcrumbsItems: [
+        {
+          text: "RaaS",
+          disabled: true,
+        },
+      ],
     };
   },
   computed: {
@@ -173,6 +186,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
 .raas-home {
   display: flex;
   align-items: center;

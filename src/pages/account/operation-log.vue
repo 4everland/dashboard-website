@@ -1,5 +1,12 @@
 <template>
   <div class="pos-r">
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <e-right-opt-wrap fix style="top: -30px">
       <div class="al-c">
         <v-select
@@ -114,6 +121,12 @@ export default {
         "OAUTH_MINT_CHAIN",
         "OAUTH_CREATE_GATEWAY",
         "OAUTH_INVITE_TEAM",
+      ],
+      breadcrumbsItems: [
+        {
+          text: "Operation Log",
+          disabled: true,
+        },
       ],
     };
   },
@@ -504,6 +517,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
 ::v-deep .ipfs-input {
   width: 130px;
 }

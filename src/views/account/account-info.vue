@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <v-card class="user-info d-flex al-c pa-8">
       <div>
         <div class="avatar-box" @click="$refs.uploadInput.onClick(false)">
@@ -168,6 +175,12 @@ export default {
       teamAvatar: "",
       showStep: false,
       isEdit: false,
+      breadcrumbsItems: [
+        {
+          text: "Configurations",
+          disabled: true,
+        },
+      ],
     };
   },
   created() {
@@ -241,6 +254,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
 .identification-tag {
   color: #fff;
   line-height: 24px;

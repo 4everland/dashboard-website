@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <e-right-opt-wrap>
       <v-btn color="primary" min-width="100" @click="showPop = true">
         <img src="/img/svg/add1.svg" width="12" />
@@ -160,6 +167,12 @@ export default {
       deleting: false,
       keyword: "",
       domainOptions: [],
+      breadcrumbsItems: [
+        {
+          text: "Domains",
+          disabled: true,
+        },
+      ],
     };
   },
   computed: {
@@ -359,3 +372,20 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
+</style>
