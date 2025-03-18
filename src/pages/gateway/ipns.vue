@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <e-right-opt-wrap :top="-74" :customStyle="{ right: '-20px' }">
       <div class="al-c ml-8">
         <div>
@@ -157,6 +164,12 @@ export default {
       ensIpns: null,
       curItem: {},
       ENSInstance: null,
+      breadcrumbsItems: [
+        {
+          text: "IPNS Manager",
+          disabled: true,
+        },
+      ],
     };
   },
   computed: {
@@ -460,6 +473,21 @@ export default {
 };
 </script>
 <style lang="scss" scpoed>
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
 .action-btn {
   cursor: pointer;
   color: var(--v-primary-base);

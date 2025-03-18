@@ -1,5 +1,12 @@
 <template>
   <div class="pinning-service-container">
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <div class="pos-r">
       <div class="al-c justify-space-between flex-wrap">
         <div class="al-c">
@@ -222,6 +229,12 @@ export default {
       processLimit: 10,
       noMore: false,
       showControl: false,
+      breadcrumbsItems: [
+        {
+          text: "4EVER Pin",
+          disabled: true,
+        },
+      ],
     };
   },
   computed: {
@@ -386,6 +399,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .act-control {
+    width: 100% !important;
+  }
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
 .pinning-status {
   text-transform: capitalize;
 }

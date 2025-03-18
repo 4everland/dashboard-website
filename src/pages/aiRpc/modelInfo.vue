@@ -1,5 +1,24 @@
 <template>
   <div class="model-info">
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:item="{ item }">
+          <router-link
+            v-if="!item.disabled"
+            :to="item.to"
+            class="breadcrumb-link"
+          >
+            {{ item.text }}
+          </router-link>
+          <span v-else>
+            {{ item.text }}
+          </span>
+        </template>
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <div class="model-intro pa-4">
       <div v-if="modelInfo">
         <div class="al-c space-btw">
@@ -177,6 +196,17 @@ export default {
 `,
         },
       ],
+      breadcrumbsItems: [
+        {
+          text: "AI RPC",
+          disabled: false,
+          to: "/ai-rpc",
+        },
+        {
+          text: "",
+          disabled: true,
+        },
+      ],
     };
   },
   created() {
@@ -189,7 +219,6 @@ export default {
       this.html = md.render(str);
     },
   },
-
   methods: {
     async getItems() {
       try {
@@ -208,6 +237,9 @@ export default {
           return it;
         });
         this.modelInfo = arr.find((it) => it.id == this.$route.params.id);
+        if (this.modelInfo) {
+          this.breadcrumbsItems[1].text = this.modelInfo.name;
+        }
       } catch (error) {
         console.log(error);
       }
@@ -261,6 +293,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
 .model-info {
   .model-intro {
     border-radius: 12px;

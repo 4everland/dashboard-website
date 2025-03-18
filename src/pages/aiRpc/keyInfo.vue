@@ -1,5 +1,24 @@
 <template>
   <div class="key-info">
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:item="{ item }">
+          <router-link
+            v-if="!item.disabled"
+            :to="item.to"
+            class="breadcrumb-link"
+          >
+            {{ item.text }}
+          </router-link>
+          <span v-else>
+            {{ item.text }}
+          </span>
+        </template>
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <div class="key-info-header">
       <div v-if="keyInfo">
         <div class="al-c mb-4">
@@ -280,6 +299,17 @@ export default {
       activityList: [],
       modelList: [{ text: "All", value: "" }],
       curModel: "",
+      breadcrumbsItems: [
+        {
+          text: "AI RPC",
+          disabled: false,
+          to: "/ai-rpc",
+        },
+        {
+          text: this.$route.params.name,
+          disabled: true,
+        },
+      ],
     };
   },
   computed: {
@@ -434,6 +464,21 @@ input[type="number"] {
 </style>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
 .key-info {
   .key-info-header {
     padding: 16px 16px 0 16px;

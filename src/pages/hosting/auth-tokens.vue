@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <e-right-opt-wrap :top="-65">
       <v-btn color="primary" @click="clickAdd">
         <span class="fz-18">+</span>
@@ -101,6 +108,12 @@ export default {
       newToken: "",
       popCopy: false,
       copied: false,
+      breadcrumbsItems: [
+        {
+          text: "Auth Token",
+          disabled: true,
+        },
+      ],
     };
   },
   mounted() {
@@ -179,3 +192,20 @@ export default {
   },
 };
 </script>
+<style scoped lang="scss">
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
+</style>

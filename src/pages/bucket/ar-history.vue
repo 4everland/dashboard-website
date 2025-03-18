@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <div class="d-flex al-c mb-2">
       <e-right-opt-wrap style="width: 100%" :top="-60">
         <v-row class="d-flex">
@@ -44,7 +51,6 @@
     <div class="main-wrap mt-6">
       <v-data-table
         class="hide-bdb"
-        fixed-header
         :headers="headers"
         :items="list"
         :loading="tableLoading"
@@ -152,6 +158,12 @@ export default {
         { text: "Synced", value: "synced" },
         { text: "Time Out", value: "timeout" },
         { text: "Failure", value: "failure" },
+      ],
+      breadcrumbsItems: [
+        {
+          text: "AR History",
+          disabled: true,
+        },
       ],
     };
   },
@@ -281,3 +293,21 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
+</style>

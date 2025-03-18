@@ -126,12 +126,76 @@ export default {
     > .v-input__slot:before {
     border: none !important;
   }
-.theme--light.v-input input, .theme--light.v-input textarea{
-    color: #FFF !important;
+  .theme--light.v-input input,
+  .theme--light.v-input textarea {
+    color: #fff !important;
+  }
 }
-}
-.theme--light.v-data-table .v-data-table-header th.sortable:hover, .theme--light.v-data-table .v-data-table-header th.sortable.active{
+.theme--light.v-data-table .v-data-table-header th.sortable:hover,
+.theme--light.v-data-table .v-data-table-header th.sortable.active {
   background-color: transparent !important;
   border-color: rgba(0, 0, 0, 0.12) !important;
+}
+.breadcrumbs {
+  .v-breadcrumbs__item--disabled {
+    font-size: 20px;
+    color: #000 !important;
+  }
+  .v-breadcrumbs__item {
+    font-size: 20px;
+    color: grey;
+  }
+  .v-breadcrumbs li {
+    padding: 0 4px !important;
+  }
+  .v-breadcrumbs li .v-icon {
+    font-size: 24px;
+  }
+  .v-breadcrumbs {
+    font-size: 20px;
+  }
+  .breadcrumb-link {
+    font-size: 20px;
+    color: grey !important;
+  }
+}
+.breadcrumbs-files {
+  .v-breadcrumbs {
+    padding-left: 0 !important;
+    padding-top: 10px !important;
+  }
+  .breadcrumb-link {
+    font-size: 14px;
+    color: grey !important;
+  }
+  .v-breadcrumbs__item--disabled {
+    font-size: 14px;
+    color: #000 !important;
+    font-weight: 400 !important;
+  }
+  .v-breadcrumbs__item {
+    font-size: 14px;
+    color: grey;
+    font-weight: 400 !important;
+  }
+  .v-breadcrumbs li {
+    padding: 0 !important;
+  }
+  .v-breadcrumbs li .v-icon {
+    font-size: 16px;
+  }
+}
+.operation-tab {
+  .search-input {
+    .theme--light.v-icon {
+      color: #98A2B3 !important;
+    }
+  }
+}
+.theme--light.v-data-table > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > td:not(.v-data-table__mobile-row), .theme--light.v-data-table > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > th:not(.v-data-table__mobile-row){
+  border-bottom-color:#EAECF0 !important;
+}
+.theme--light.v-data-table > .v-data-table__wrapper > table > thead > tr > th{
+  border-bottom:#EAECF0 1px solid !important;
 }
 </style>

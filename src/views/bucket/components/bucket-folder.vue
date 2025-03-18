@@ -2,16 +2,16 @@
   <div class="bucket-item-container bg-white">
     <div class="file-container" v-if="inFolder">
       <!-- Operation Tab -->
-      <v-row class="operation-tab">
+      <v-row class="operation-tab align-center">
         <!-- Upload Btn -->
-        <v-col :md="9" class="d-flex">
+        <v-col class="d-flex" style="padding-right: 0">
           <bucket-upload
             ref="bucketUpload"
             :info="pathInfo"
             :baseUrl="bucketInfo.originList[0]"
           ></bucket-upload>
           <v-btn
-            class="ml-5"
+            class="ml-2"
             outlined
             :disabled="folderLen >= 20"
             @click="addFolder"
@@ -21,7 +21,7 @@
             <span class="ml-2">New Folder</span>
           </v-btn>
           <!-- Fragments Btn -->
-          <v-btn class="ml-5" outlined @click="drawer = true">
+          <v-btn class="ml-2" outlined @click="drawer = true">
             <img src="/img/svg/parts_icon.svg" width="12" />
             <span class="ml-2">Fragments</span>
           </v-btn>
@@ -31,10 +31,10 @@
           ></bucket-parts-list>
         </v-col>
         <!-- Search-Input -->
-        <v-col :md="3" :cols="6">
+        <div class="search-input">
           <div
             :class="selected.length ? 'ml-auto' : 'ml-auto'"
-            style="min-width: 150px"
+            style="min-width: 150px; width: 282px !important"
           >
             <v-text-field
               class="hide-msg bd-1"
@@ -46,16 +46,65 @@
               v-model="searchKey"
             ></v-text-field>
           </div>
-        </v-col>
+        </div>
       </v-row>
       <!-- File-header -->
-      <div class="d-flex justify-end pt-4">
+      <div class="d-flex justify-space-between pt-4">
+        <div class="breadcrumbs-files">
+          <v-breadcrumbs :items="breadcrumbsItems">
+            <template v-slot:item="{ item }">
+              <v-menu
+                v-if="item.text === '...'"
+                open-on-hover
+                offset-y
+                rounded-lg
+                close-on-content-click
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <div>
+                    <!-- <v-icon class="folder-icon">mdi-folder</v-icon> -->
+                    <span v-bind="attrs" v-on="on" class="ellipsis">
+                      {{ item.text }}
+                    </span>
+                  </div>
+                </template>
+                <v-list>
+                  <v-list-item
+                  dense
+                    v-for="(ellipsisItem, index) in ellipsisItems"
+                    :key="index"
+                    @click="navigateTo(ellipsisItem.to)"
+                  >
+                    <v-list-item-title class="d-flex align-center menu-list-item"
+                      ><v-icon class="folder-icon mr-2">mdi-folder</v-icon
+                      >{{ ellipsisItem.text }}</v-list-item-title
+                    >
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+              <router-link
+                v-else-if="!item.disabled"
+                :to="item.to"
+                class="breadcrumb-link"
+              >
+                {{ item.text }}
+              </router-link>
+              <span v-else>
+                {{ item.text }}
+              </span>
+            </template>
+            <template v-slot:divider>
+              <v-icon>mdi-chevron-right</v-icon>
+            </template>
+          </v-breadcrumbs>
+        </div>
         <div
-          class="file-head d-flex align-center pl-5"
-          :class="fileInfoDrawer ? 'justify-space-between' : 'justify-end'"
-          style="float: right"
+          class="d-flex align-center justify-end"
+          @click="fileInfoDrawer = !fileInfoDrawer"
+          :class="fileInfoDrawer ? 'file-head' : 'file-head-close'"
         >
           <div v-show="fileInfoDrawer">
+            <v-icon class="mr-1 file-icon">mdi-information-outline</v-icon>
             <span v-if="selected.length > 1"
               >Select {{ selected.length }} files</span
             >
@@ -64,7 +113,11 @@
             >
             <span v-if="selected.length == 0">Flie Info</span>
           </div>
-          <div
+          <div v-if="!fileInfoDrawer">
+            <v-icon class="mr-1 file-icon">mdi-information-outline</v-icon>
+            <span>Flie Info</span>
+          </div>
+          <!-- <div
             @click="fileInfoDrawer = !fileInfoDrawer"
             class="fz-12 d-flex align-center pack-up"
           >
@@ -74,7 +127,7 @@
               width="12"
             />
             <span class="ml-2">{{ fileInfoDrawer ? "Close" : "Open" }}</span>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="d-flex" style="height: 100%; min-height: 700px">
@@ -83,7 +136,6 @@
           <v-data-table
             v-show="list.length"
             class="hide-bdb data-table"
-            fixed-header
             mobile-breakpoint="1000"
             :headers="headers"
             :items="list"
@@ -374,6 +426,8 @@ export default {
       generateSnapshotLoading: false,
       accessKeyExpired: false,
       isPublish: true,
+      breadcrumbsItems: [],
+      ellipsisItems: [],
     };
   },
   async created() {
@@ -406,6 +460,7 @@ export default {
       })
       .catch((err) => err);
   },
+  mounted() {},
   computed: {
     ...mapGetters(["bucketDefaultGateWay"]),
     ...mapState({
@@ -432,6 +487,9 @@ export default {
         { text: "Size", value: "size" },
         { text: "Last Modified", value: "updateAt" },
       ];
+    },
+    path() {
+      return this.$route.path;
     },
   },
   methods: {
@@ -599,10 +657,52 @@ export default {
     ipfsLink(ipfs) {
       return this.bucketDefaultGateWay + "/ipfs/" + ipfs;
     },
+    generateBreadcrumbs(path) {
+      const cleanPath = path.split("?")[0];
+      const parts = cleanPath.split("/").filter(Boolean);
+
+      const bucketItem = {
+        text: "Bucket",
+        disabled: false,
+        to: "/bucket/storage/",
+      };
+
+      const remainingParts = parts.slice(2);
+      const remainingBreadcrumbs = remainingParts.map((part, index) => ({
+        text: part.length > 10 ? part.cutStr(6, 4) : part,
+        disabled: index === remainingParts.length - 1,
+        to: `/bucket/storage/${remainingParts
+          .slice(0, index + 1)
+          .join("/")}/?tab=files`,
+      }));
+
+      const breadcrumbs = [bucketItem, ...remainingBreadcrumbs];
+
+      if (breadcrumbs.length > 5) {
+        this.ellipsisItems = breadcrumbs.slice(2, -2);
+        this.breadcrumbsItems = [
+          breadcrumbs[0],
+          breadcrumbs[1],
+          { text: "...", disabled: true, to: "#" },
+          breadcrumbs[breadcrumbs.length - 2],
+          breadcrumbs[breadcrumbs.length - 1],
+        ];
+      } else {
+        this.breadcrumbsItems = breadcrumbs;
+      }
+    },
+
+    navigateTo(path) {
+      this.$router.push(path);
+    },
+  },
+  mounted() {
+    this.generateBreadcrumbs(this.path);
   },
   watch: {
-    path() {
+    path(newPath) {
       this.onRouteChange();
+      this.generateBreadcrumbs(newPath);
     },
     selected: {
       handler(val) {
@@ -627,6 +727,11 @@ export default {
 </script>
 
 <style>
+.v-data-table > .v-data-table__wrapper > table > thead > tr > th:first-child,
+.v-data-table > .v-data-table__wrapper > table > tbody > tr > td,
+.v-data-table > .v-data-table__wrapper > table > tbody > tr > th:first-child {
+  padding-left: 12px !important;
+}
 .file-tab .v-slide-group__content {
   background: #f8fafb;
 }
@@ -662,18 +767,39 @@ export default {
 }
 .bucket-item-container {
   width: 100%;
-  padding: 18px 13px 33px 32px;
+  padding: 4px 12px 33px 12px;
   border-radius: 10px;
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
+  // box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.11);
   background: #fff;
   overflow: hidden;
   .file-container {
     position: relative;
     // min-height: 1000px;
     .file-head {
-      width: 250px;
-      .pack-up {
-        cursor: pointer;
+      height: 32px;
+      border-radius: 100px;
+      padding: 8px;
+      background: #f5f8ff;
+      border: 1px solid #e0eaff;
+      font-size: 14px;
+      color: #6172f3;
+      cursor: pointer;
+      .file-icon {
+        font-size: 14px;
+        color: #6172f3;
+      }
+    }
+    .file-head-close {
+      height: 32px;
+      border-radius: 100px;
+      padding: 8px;
+      border: 1px solid #eaecf0;
+      font-size: 14px;
+      color: #101828;
+      cursor: pointer;
+      .file-icon {
+        font-size: 14px;
+        color: #101828;
       }
     }
     .operation-tab {
@@ -684,6 +810,13 @@ export default {
         }
         .selected-count {
           color: #1e8e3e;
+        }
+      }
+      .search-input {
+        width: 282px;
+        margin-right: 12px !important;
+        .hide-msg.v-input {
+          border-color: #eaecf0;
         }
       }
     }
@@ -699,7 +832,20 @@ export default {
     }
   }
 }
-
+.folder-icon {
+  font-size: 18px;
+}
+.menu-list-item{
+  font-size: 14px;
+  color: #808080;
+}
+.v-menu__content{
+  margin-top: -4px;
+}
+.ellipsis {
+  cursor: pointer;
+  color: #646F82;
+}
 .v3-horizon {
   .v-slide-group__content {
     padding-top: 4px;

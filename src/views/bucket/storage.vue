@@ -10,6 +10,25 @@
   <div v-else>
     <!-- Operation tab -->
     <e-right-opt-wrap :top="-55">
+      <div class="breadcrumbs" v-if="!showBreadcrumbs">
+        <v-breadcrumbs :items="breadcrumbsItems">
+          <template v-slot:item="{ item }">
+            <router-link
+              v-if="!item.disabled"
+              :to="item.to"
+              class="breadcrumb-link"
+            >
+              {{ item.text }}
+            </router-link>
+            <span v-else>
+              {{ item.text }}
+            </span>
+          </template>
+          <template v-slot:divider>
+            <v-icon>mdi-chevron-right</v-icon>
+          </template>
+        </v-breadcrumbs>
+      </div>
       <div class="d-flex nowrap ov-a btn-wrap">
         <div v-show="inFile">
           <v-btn
@@ -354,6 +373,17 @@ export default {
       deleteFoldersTasks: [],
       deleteFolderLimit: 2,
       uploadingTaskLength: 0,
+      breadcrumbsItems: [
+        {
+          text: "AI History",
+          disabled: false,
+          to: "/bucket/arweave/",
+        },
+        {
+          text: "",
+          disabled: true,
+        },
+      ],
     };
   },
   computed: {
@@ -423,6 +453,17 @@ export default {
     fileUrl() {
       return this.fileUrls[0] || "";
     },
+    lastPartOfPath() {
+      const path = this.$route.path;
+      const parts = path.split("/").filter(Boolean);
+      return parts[parts.length - 1];
+    },
+    showBreadcrumbs() {
+      return this.$route.path.indexOf("/bucket/arweave");
+    },
+  },
+  mounted() {
+    this.breadcrumbsItems[1].text = this.lastPartOfPath;
   },
   methods: {
     onRouteChange() {
@@ -498,11 +539,29 @@ export default {
     path() {
       this.onRouteChange();
     },
+    lastPartOfPath(newPart) {
+      this.breadcrumbsItems[1].text = newPart;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 230px;
+  z-index: 10;
+}
 .e-btn-text {
   padding: 0 !important;
   font-weight: normal !important;
