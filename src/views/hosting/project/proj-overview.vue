@@ -118,7 +118,7 @@
               <h-domain
                 class="mr-6"
                 :val="domains[0]"
-                :disabled="!info.online"
+                :disabled="getDomainDisableStatus(0)"
               />
               <e-menu v-if="domains.length > 1" offset-y open-on-hover>
                 <v-btn
@@ -135,7 +135,10 @@
                     v-for="(row, j) in domains.slice(1)"
                     :key="j"
                   >
-                    <h-domain :val="row" :disabled="!info.online" />
+                    <h-domain
+                      :val="row"
+                      :disabled="getDomainDisableStatus(j + 1)"
+                    />
                   </div>
                 </div>
               </e-menu>
@@ -143,7 +146,9 @@
           </e-kv>
           <div class="mt-9 d-flex">
             <e-kv label="Status">
-              <h-status :val="!info.online ? 'Removed' : info.state"></h-status>
+              <h-status
+                :val="info.onlineStatus === 0 ? 'Removed' : info.state"
+              ></h-status>
             </e-kv>
             <e-kv class="ml-auto" label="Created" style="min-width: 195px">
               <e-time>{{ info.createAt }}</e-time>
@@ -287,6 +292,17 @@ export default {
         //
       }
       this.loadingIpns = false;
+    },
+    getDomainDisableStatus(index) {
+      if (this.info.onlineStatus === 0) {
+        return true;
+      } else if (this.info.onlineStatus === 1) {
+        return index === 0;
+      } else if (this.info.onlineStatus === 2) {
+        return index === 1;
+      } else {
+        return false;
+      }
     },
   },
   components: {
