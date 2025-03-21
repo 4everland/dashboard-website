@@ -439,9 +439,9 @@ export default {
       if (this.projInfo.onlineStatus === 0) {
         return true;
       } else if (this.projInfo.onlineStatus === 1) {
-        return index === 0;
+        return !this.projInfo.domains[index]?.createType ? true : false;
       } else if (this.projInfo.onlineStatus === 2) {
-        return index === 1;
+        return this.projInfo.domains[index]?.createType ? true : false;
       } else {
         return false;
       }

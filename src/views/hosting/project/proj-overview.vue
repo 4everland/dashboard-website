@@ -297,9 +297,9 @@ export default {
       if (this.info.onlineStatus === 0) {
         return true;
       } else if (this.info.onlineStatus === 1) {
-        return index === 0;
+        return !this.info.domains[index]?.createType ? true : false;
       } else if (this.info.onlineStatus === 2) {
-        return index === 1;
+        return this.info.domains[index]?.createType ? true : false;
       } else {
         return false;
       }

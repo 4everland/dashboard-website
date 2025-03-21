@@ -227,7 +227,7 @@
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status
                     class="ta-l"
-                    :val="onlineStatus === 0 ? 'Removed' : it.state"
+                    :val="it.onlineStatus === 0 ? 'Removed' : it.state"
                   ></h-status>
                 </div>
 
@@ -243,7 +243,7 @@
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status
                     class="ta-l"
-                    :val="onlineStatus === 0 ? 'Removed' : it.state"
+                    :val="it.onlineStatus === 0 ? 'Removed' : it.state"
                   ></h-status>
                 </div>
                 <div v-if="it.ownerGithub">
@@ -442,7 +442,6 @@ export default {
       sortArr: ["Last Update", "Create Time"],
       refreshAt: Date.now(),
       searchKey: "",
-      onlineStatus: 0,
       breadcrumbsItems: [
         {
           text: "Projects",
@@ -597,7 +596,6 @@ export default {
           },
         ];
         this.$set(it, "statisList", statisList);
-        this.onlineStatus = statisList[1].data.onlineStatus;
         if (data.latest) {
           this.$set(it, "taskId", data.latest.taskId);
         }
