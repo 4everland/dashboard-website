@@ -233,6 +233,17 @@ export default {
       let arr = this.info.domains.map((it) => it.domain);
       if (arr.includes(this.info.domain)) return arr;
       arr.push(this.info.domain);
+      arr.sort((a, b) => {
+        const indexCustom = this.info.domains.findIndex(
+          (it) => it.domain === a
+        );
+        const indexDefault = this.info.domains.findIndex(
+          (it) => it.domain === b
+        );
+        const disabledCustom = this.getDomainDisableStatus(indexCustom);
+        const disabledDefault = this.getDomainDisableStatus(indexDefault);
+        return disabledCustom - disabledDefault;
+      });
       return arr;
     },
     showIpns() {
