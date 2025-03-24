@@ -118,7 +118,11 @@
               <h-domain
                 class="mr-6"
                 :val="domains[0]"
-                :disabled="getDomainDisableStatus(0)"
+                :disabled="
+                  getDomainDisableStatus(
+                    info.domains.findIndex((it) => it.domain === domains[0])
+                  )
+                "
               />
               <e-menu v-if="domains.length > 1" offset-y open-on-hover>
                 <v-btn
@@ -137,7 +141,11 @@
                   >
                     <h-domain
                       :val="row"
-                      :disabled="getDomainDisableStatus(j + 1)"
+                      :disabled="
+                        getDomainDisableStatus(
+                          info.domains.findIndex((it) => it.domain === row)
+                        )
+                      "
                     />
                   </div>
                 </div>
@@ -233,19 +241,21 @@ export default {
       let arr = this.info.domains.map((it) => it.domain);
       if (arr.includes(this.info.domain)) return arr;
       arr.push(this.info.domain);
+      const disabledStatus = arr.map((domain, index) => {
+        const originalIndex = this.info.domains.findIndex(
+          (it) => it.domain === domain
+        );
+        return this.getDomainDisableStatus(originalIndex);
+      });
+
       arr.sort((a, b) => {
-        const indexCustom = this.info.domains.findIndex(
-          (it) => it.domain === a
-        );
-        const indexDefault = this.info.domains.findIndex(
-          (it) => it.domain === b
-        );
-        const disabledCustom = this.getDomainDisableStatus(indexCustom);
-        const disabledDefault = this.getDomainDisableStatus(indexDefault);
-        return disabledCustom - disabledDefault;
+        const indexCustom = arr.indexOf(a);
+        const indexDefault = arr.indexOf(b);
+        return disabledStatus[indexCustom] - disabledStatus[indexDefault];
       });
       return arr;
     },
+
     showIpns() {
       return (
         this.info.platform != "IC" &&
