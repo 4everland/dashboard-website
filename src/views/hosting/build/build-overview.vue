@@ -19,7 +19,7 @@
             <v-col>
               <e-kv2 label="Status">
                 <h-status
-                  :val="!projInfo.online ? 'Removed' : state"
+                  :val="projInfo.onlineStatus === 0 ? 'Removed' : state"
                 ></h-status>
               </e-kv2>
             </v-col>

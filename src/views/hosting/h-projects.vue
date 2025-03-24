@@ -227,7 +227,7 @@
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status
                     class="ta-l"
-                    :val="!it.online ? 'Removed' : it.state"
+                    :val="it.onlineStatus === 0 ? 'Removed' : it.state"
                   ></h-status>
                 </div>
 
@@ -243,7 +243,7 @@
                   <!-- @click.native.stop="onStatus(it)" -->
                   <h-status
                     class="ta-l"
-                    :val="!it.online ? 'Removed' : it.state"
+                    :val="it.onlineStatus === 0 ? 'Removed' : it.state"
                   ></h-status>
                 </div>
                 <div v-if="it.ownerGithub">

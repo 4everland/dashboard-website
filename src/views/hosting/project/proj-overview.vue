@@ -118,7 +118,11 @@
               <h-domain
                 class="mr-6"
                 :val="domains[0]"
-                :disabled="!info.online"
+                :disabled="
+                  getDomainDisableStatus(
+                    info.domains.findIndex((it) => it.domain === domains[0])
+                  )
+                "
               />
               <e-menu v-if="domains.length > 1" offset-y open-on-hover>
                 <v-btn
@@ -135,7 +139,14 @@
                     v-for="(row, j) in domains.slice(1)"
                     :key="j"
                   >
-                    <h-domain :val="row" :disabled="!info.online" />
+                    <h-domain
+                      :val="row"
+                      :disabled="
+                        getDomainDisableStatus(
+                          info.domains.findIndex((it) => it.domain === row)
+                        )
+                      "
+                    />
                   </div>
                 </div>
               </e-menu>
@@ -143,7 +154,9 @@
           </e-kv>
           <div class="mt-9 d-flex">
             <e-kv label="Status">
-              <h-status :val="!info.online ? 'Removed' : info.state"></h-status>
+              <h-status
+                :val="info.onlineStatus === 0 ? 'Removed' : info.state"
+              ></h-status>
             </e-kv>
             <e-kv class="ml-auto" label="Created" style="min-width: 195px">
               <e-time>{{ info.createAt }}</e-time>
@@ -228,8 +241,21 @@ export default {
       let arr = this.info.domains.map((it) => it.domain);
       if (arr.includes(this.info.domain)) return arr;
       arr.push(this.info.domain);
+      const disabledStatus = arr.map((domain, index) => {
+        const originalIndex = this.info.domains.findIndex(
+          (it) => it.domain === domain
+        );
+        return this.getDomainDisableStatus(originalIndex);
+      });
+
+      arr.sort((a, b) => {
+        const indexCustom = arr.indexOf(a);
+        const indexDefault = arr.indexOf(b);
+        return disabledStatus[indexCustom] - disabledStatus[indexDefault];
+      });
       return arr;
     },
+
     showIpns() {
       return (
         this.info.platform != "IC" &&
@@ -287,6 +313,17 @@ export default {
         //
       }
       this.loadingIpns = false;
+    },
+    getDomainDisableStatus(index) {
+      if (this.info.onlineStatus === 0) {
+        return true;
+      } else if (this.info.onlineStatus === 1) {
+        return !this.info.domains[index]?.createType ? true : false;
+      } else if (this.info.onlineStatus === 2) {
+        return this.info.domains[index]?.createType ? true : false;
+      } else {
+        return false;
+      }
     },
   },
   components: {

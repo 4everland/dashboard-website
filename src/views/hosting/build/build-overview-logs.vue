@@ -74,7 +74,7 @@
           <h-domain
             :val="it"
             class="fz-14"
-            :disabled="!projInfo.online"
+            :disabled="isDomainDisabled(i)"
           ></h-domain>
         </p>
       </div>
@@ -162,6 +162,7 @@ export default {
       errMsg: "",
       openIds: [],
       timer: null,
+      domainDisable:false,
     };
   },
   computed: {
@@ -432,6 +433,17 @@ export default {
         }
       } catch (error) {
         console.log(error);
+      }
+    },
+    isDomainDisabled(index) {
+      if (this.projInfo.onlineStatus === 0) {
+        return true;
+      } else if (this.projInfo.onlineStatus === 1) {
+        return !this.projInfo.domains[index]?.createType ? true : false;
+      } else if (this.projInfo.onlineStatus === 2) {
+        return this.projInfo.domains[index]?.createType ? true : false;
+      } else {
+        return false;
       }
     },
     initOpenIds() {
