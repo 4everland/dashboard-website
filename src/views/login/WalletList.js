@@ -6,6 +6,7 @@ const WalletList = [
     walletType: "METAMASK",
     isEvm: true,
     type: 2,
+    verifyWallet: "EVM",
   },
   {
     name: "OKX Wallet",
@@ -14,6 +15,7 @@ const WalletList = [
     walletType: "OKX",
     isEvm: true,
     type: 7,
+    verifyWallet: "all",
   },
   {
     name: "Binance Wallet",
@@ -22,6 +24,7 @@ const WalletList = [
     walletType: "BN",
     isEvm: false,
     type: 103,
+    verifyWallet: "all",
   },
   {
     name: "Bitget Wallet",
@@ -30,14 +33,7 @@ const WalletList = [
     walletType: "Bitget",
     isEvm: true,
     type: 100,
-  },
-  {
-    name: "TokenPocket",
-    icon: require("@/assets/imgs/TokenPocket.svg"),
-    provider: null,
-    walletType: "TokenPocket",
-    isEvm: true,
-    type: 102,
+    verifyWallet: "Solona",
   },
   {
     name: "imToken",
@@ -46,6 +42,25 @@ const WalletList = [
     walletType: "IMTOKEN",
     isEvm: true,
     type: 101,
+    verifyWallet: "EVM",
+  },
+  {
+    name: "TokenPocket",
+    icon: require("@/assets/imgs/TokenPocket.svg"),
+    provider: null,
+    walletType: "TokenPocket",
+    isEvm: true,
+    type: 102,
+    verifyWallet: "all",
+  },
+  {
+    name: "WalletConnect",
+    icon: require("@/assets/imgs/walletConnect.svg"),
+    provider: null,
+    walletType: "Walletconnect",
+    isEvm: false,
+    type: 99,
+    verifyWallet: "all",
   },
   {
     name: "Coinbase Wallet",
@@ -54,15 +69,7 @@ const WalletList = [
     walletType: "COINBASE",
     isEvm: true,
     type: 9,
-  },
-
-  {
-    name: "WalletConnect",
-    icon: require("@/assets/imgs/walletConnect.svg"),
-    provider: null,
-    walletType: "Walletconnect",
-    isEvm: false,
-    type: 99,
+    verifyWallet: "all",
   },
   {
     name: "Phantom",
@@ -71,6 +78,7 @@ const WalletList = [
     walletType: "PHANTOM",
     isEvm: false,
     type: 4,
+    verifyWallet: "Solona",
   },
   {
     name: "Petra",
@@ -79,6 +87,7 @@ const WalletList = [
     walletType: "PETRA",
     isEvm: false,
     type: 8,
+    verifyWallet: "EVM",
   },
   {
     name: "Flow",
