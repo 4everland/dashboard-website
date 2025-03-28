@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white px-8 bd-1 bdrs-10">
-    <div v-if="noWallet">
+    <div v-if="!userInfo.wallet && !userInfo.solana && !userInfo.onFlow">
       <div class="al-c py-4">
         <img src="@/assets/imgs/EVM_Wallet.png" alt="" height="50" />
         <div
@@ -366,7 +366,6 @@ export default {
 
         const walletItem = [];
         const walletType = info.wallet.walletType;
-
         switch (walletType) {
           case "PHANTOM":
             walletItem.push({
