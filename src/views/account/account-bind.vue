@@ -530,6 +530,8 @@ export default {
           console.error(err);
         }
       }
+      this.showEVMWallet = false;
+      this.showSolonaWallet = false;
     },
     async onUnbind(it) {
       const type = it.type;

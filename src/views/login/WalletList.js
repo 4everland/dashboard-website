@@ -33,7 +33,7 @@ const WalletList = [
     walletType: "Bitget",
     isEvm: true,
     type: 100,
-    verifyWallet: "Solona",
+    verifyWallet: "all",
   },
   {
     name: "imToken",
