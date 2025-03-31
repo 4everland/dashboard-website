@@ -1,7 +1,54 @@
 <template>
   <div class="bg-white px-8 bd-1 bdrs-10">
-    <div class="item py-4" v-for="(it, i) in list" :key="i">
-      <div class="al-c">
+    <div v-if="!userInfo.wallet && !userInfo.solana && !userInfo.onFlow">
+      <div class="al-c py-4">
+        <img src="@/assets/imgs/EVM_Wallet.png" alt="" height="50" />
+        <div
+          class="mt-2 ml-4 fz-14 d-flex flex-column"
+          style="min-height: 40px"
+        >
+          <span class="fz-16">EVM Wallet</span>
+          <span class="mt-2 gray"
+            >Get verified by connecting your EVM Wallet Account</span
+          >
+        </div>
+        <div class="ml-auto d-flex al-c">
+          <v-btn
+            color="primary"
+            min-width="75"
+            width="160"
+            max-width="160"
+            @click="showEVMWallet = true"
+            >Verify</v-btn
+          >
+        </div>
+      </div>
+      <div class="al-c py-4 wallet-border">
+        <img src="/img/svg/settings/solona.png" alt="" height="50" />
+        <div
+          class="mt-2 ml-4 fz-14 d-flex flex-column"
+          style="min-height: 40px"
+        >
+          <span class="fz-16">Solona Wallet</span>
+          <span class="mt-2 gray"
+            >Get verified by connecting your Solona Wallet Account</span
+          >
+        </div>
+        <div class="ml-auto d-flex al-c">
+          <v-btn
+            color="primary"
+            min-width="75"
+            width="160"
+            max-width="160"
+            @click="showSolonaWallet = true"
+            >Verify</v-btn
+          >
+        </div>
+      </div>
+    </div>
+    <div v-for="(it, i) in list" :key="i">
+      <div class="list-border py-4" v-if="!it.verifyWallet" :class="{ 'no-border': i === list.length - 1 && !list[i].verifyWallet }">
+        <div class="al-c">
         <img :src="it.icon" alt="" height="50" />
         <div
           class="mt-2 ml-4 fz-14 d-flex flex-column"
@@ -41,6 +88,7 @@
             >{{ it.account ? "Verified" : "Verify" }}</v-btn
           >
         </div>
+      </div>
       </div>
     </div>
     <div>
@@ -83,6 +131,124 @@
             <div class="mt-2">
               Scan this QR code with your mobile wallet or camera to get
               connected.
+            </div>
+          </div>
+        </div>
+      </v-dialog>
+      <v-dialog v-model="showEVMWallet" max-width="528">
+        <div class="wallet-dialog">
+          <div class="d-flex align-center justify-space-between">
+            <span class="wallet-title">Verify EVM Wallet</span>
+            <v-btn icon class="close-icon" @click="showEVMWallet = false">
+              <v-icon> mdi-close</v-icon>
+            </v-btn>
+          </div>
+          <div v-for="(it, i) in list" :key="i">
+            <div
+              class="py-2 px-4 item-dialog"
+              v-if="it.verifyWallet === 'EVM' || it.verifyWallet === 'all'"
+            >
+              <div class="al-c d-flex align-center">
+                <img :src="it.icon" alt="" height="32" />
+                <div
+                  class="mt-4 ml-2 fz-14 d-flex flex-column"
+                  style="min-height: 40px"
+                >
+                  <span class="fz-14">{{ it.title }}</span>
+                </div>
+                <div class="ml-auto d-flex al-c">
+                  <v-btn
+                    v-if="it.type == 1 && it.account"
+                    color="primary"
+                    width="160"
+                    max-width="160"
+                    min-width="75"
+                    @click="onDisconnect(it)"
+                    >Disconnect</v-btn
+                  >
+
+                  <v-btn
+                    v-else-if="it.type == 3"
+                    class="fz-14"
+                    color="primary"
+                    min-width="75"
+                    width="72"
+                    max-width="160"
+                    @click="onBind(it)"
+                    >{{ it.account ? "Rebind" : "Verify" }}</v-btn
+                  >
+                  <v-btn
+                    v-else
+                    color="primary"
+                    class="fz-14"
+                    :disabled="!!it.account"
+                    min-width="72"
+                    width="72"
+                    max-width="160"
+                    @click="onBind(it)"
+                    >{{ it.account ? "Verified" : "Verify" }}</v-btn
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </v-dialog>
+      <v-dialog v-model="showSolonaWallet" max-width="528">
+        <div class="wallet-dialog">
+          <div class="d-flex align-center justify-space-between">
+            <span class="wallet-title">Verify Solona Wallet</span>
+            <v-btn icon class="close-icon" @click="showSolonaWallet = false">
+              <v-icon> mdi-close</v-icon>
+            </v-btn>
+          </div>
+          <div v-for="(it, i) in list" :key="i">
+            <div
+              class="py-2 px-4 item-dialog"
+              v-if="it.verifyWallet === 'all' || it.verifyWallet === 'Solona'"
+            >
+              <div class="al-c d-flex align-center">
+                <img :src="it.icon" alt="" height="32" />
+                <div
+                  class="mt-4 ml-2 fz-14 d-flex flex-column"
+                  style="min-height: 40px"
+                >
+                  <span class="fz-14">{{ it.title }}</span>
+                </div>
+                <div class="ml-auto d-flex al-c">
+                  <v-btn
+                    v-if="it.type == 1 && it.account"
+                    color="primary"
+                    width="160"
+                    max-width="160"
+                    min-width="75"
+                    @click="onDisconnect(it)"
+                    >Disconnect</v-btn
+                  >
+
+                  <v-btn
+                    v-else-if="it.type == 3"
+                    class="fz-14"
+                    color="primary"
+                    min-width="75"
+                    width="72"
+                    max-width="160"
+                    @click="onBind(it)"
+                    >{{ it.account ? "Rebind" : "Verify" }}</v-btn
+                  >
+                  <v-btn
+                    v-else
+                    color="primary"
+                    class="fz-14"
+                    :disabled="!!it.account"
+                    min-width="72"
+                    width="72"
+                    max-width="160"
+                    @click="onBind(it)"
+                    >{{ it.account ? "Verified" : "Verify" }}</v-btn
+                  >
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -144,6 +310,8 @@ export default {
       qrCodeUrl: "",
       qrcodeUri: "",
       providerDetails: {},
+      showEVMWallet: false,
+      showSolonaWallet: false,
     };
   },
   computed: {
@@ -198,7 +366,6 @@ export default {
 
         const walletItem = [];
         const walletType = info.wallet.walletType;
-
         switch (walletType) {
           case "PHANTOM":
             walletItem.push({
@@ -214,13 +381,13 @@ export default {
               icon: require("@/assets/imgs/petra.svg"),
             });
             break;
-          case "ONFLOW":
-            walletItem.push({
-              title: "Flow",
-              account: (info.wallet || {}).address,
-              icon: require("@/assets/imgs/flow.svg"),
-            });
-            break;
+          // case "ONFLOW":
+          //   walletItem.push({
+          //     title: "Flow",
+          //     account: (info.wallet || {}).address,
+          //     icon: require("@/assets/imgs/flow.svg"),
+          //   });
+          //   break;
           default:
             walletItem.push({
               title: "EVM Wallet",
@@ -363,6 +530,8 @@ export default {
           console.error(err);
         }
       }
+      this.showEVMWallet = false;
+      this.showSolonaWallet = false;
     },
     async onUnbind(it) {
       const type = it.type;
@@ -726,7 +895,16 @@ export default {
 .item + .item {
   border-top: 1px solid #d0dae9;
 }
-
+.list-border{
+  border-bottom: 1px solid #d0dae9;
+}
+.list-border.no-border {
+  border-bottom: none;
+}
+.wallet-border{
+  border-top: 1px solid #d0dae9;
+  border-bottom: 1px solid #d0dae9;
+}
 .qrcode-dialog {
   border-radius: 16px !important;
 }
@@ -780,5 +958,17 @@ export default {
 :deep .v-dialog,
 .v-dialog--active {
   border-radius: 16px !important;
+}
+.wallet-dialog {
+  padding: 24px !important;
+  border-radius: 8px !important;
+  .wallet-title {
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .item-dialog {
+    background: #f9fafb;
+    margin-top: 12px;
+  }
 }
 </style>
