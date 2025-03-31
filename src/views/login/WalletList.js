@@ -89,14 +89,14 @@ const WalletList = [
     type: 8,
     verifyWallet: "EVM",
   },
-  {
-    name: "Flow",
-    icon: require("@/assets/imgs/flow.svg"),
-    provider: null,
-    walletType: "ONFLOW",
-    isEvm: false,
-    type: 5,
-  },
+  // {
+  //   name: "Flow",
+  //   icon: require("@/assets/imgs/flow.svg"),
+  //   provider: null,
+  //   walletType: "ONFLOW",
+  //   isEvm: false,
+  //   type: 5,
+  // },
 ];
 
 export default WalletList;

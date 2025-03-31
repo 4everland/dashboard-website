@@ -381,13 +381,13 @@ export default {
               icon: require("@/assets/imgs/petra.svg"),
             });
             break;
-          case "ONFLOW":
-            walletItem.push({
-              title: "Flow",
-              account: (info.wallet || {}).address,
-              icon: require("@/assets/imgs/flow.svg"),
-            });
-            break;
+          // case "ONFLOW":
+          //   walletItem.push({
+          //     title: "Flow",
+          //     account: (info.wallet || {}).address,
+          //     icon: require("@/assets/imgs/flow.svg"),
+          //   });
+          //   break;
           default:
             walletItem.push({
               title: "EVM Wallet",
