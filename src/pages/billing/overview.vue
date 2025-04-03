@@ -115,7 +115,7 @@
               plain
               elevation="0"
               color="#0079F2"
-              @click="balanceAlertShow = true"
+              @click="balanceAlert()"
               >Balance Alert</v-btn
             >
           </div>
@@ -376,8 +376,6 @@ export default {
         },
       ],
       exists: false,
-      accountToken: "",
-      boosterToken: "",
     };
   },
   computed: {
@@ -783,6 +781,10 @@ export default {
         this.$loading.close();
       }
     },
+    balanceAlert(){
+      this.balanceAlertShow = true;
+      this.checkTelegramBind();
+    },
     async onTelegramBind() {
       try {
         this.$loading();
@@ -794,8 +796,7 @@ export default {
         const code = data.data.token;
         const tgLink = `https://t.me/test_gqf_go_bot?start=${code}`;
         window.open(tgLink, "_blank");
-        await this.$sleep(3000);
-        await this.checkTelegramBind();
+        this.balanceAlertShow = false;
       } catch (error) {
         console.error(error);
       } finally {
