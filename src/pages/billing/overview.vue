@@ -266,10 +266,10 @@
               style="gap: 30px"
             >
               <h2 class="fz-16">Telegram Notifications</h2>
+              <span class="fz-14" v-if="exists">
+                  {{ userName }}
+                </span>
               <div class="fz-14">
-                <!-- <span v-if="!exists">
-                  {{ email }}
-                </span> -->
                 <v-btn
                   v-if="!exists"
                   elevation="0"
@@ -376,6 +376,7 @@ export default {
         },
       ],
       exists: false,
+      userName:"",
     };
   },
   computed: {
@@ -829,6 +830,7 @@ export default {
           },
         })
         this.exists = data.data.exists;
+        this.userName = data.data.username;
       } catch (error) {
         console.error(error);
       }
