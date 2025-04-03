@@ -241,8 +241,11 @@
                 </div>
               </div>
             </div>
-            <div class="d-flex al-c mb-8" style="gap: 30px">
-              <h2 class="fz-16" style="width: 120px">Email</h2>
+            <div
+              class="d-flex al-c mb-4 justify-space-between"
+              style="gap: 30px"
+            >
+              <h2 class="fz-16">Email Notifications</h2>
               <div class="fz-14">
                 <span v-if="email">
                   {{ email }}
@@ -255,6 +258,35 @@
                   @click="onBind"
                 >
                   Bind Email
+                </v-btn>
+              </div>
+            </div>
+            <div
+              class="d-flex al-c mb-8 justify-space-between"
+              style="gap: 30px"
+            >
+              <h2 class="fz-16">Telegram Notifications</h2>
+              <div class="fz-14">
+                <!-- <span v-if="!exists">
+                  {{ email }}
+                </span> -->
+                <v-btn
+                  v-if="!exists"
+                  elevation="0"
+                  color="primary"
+                  small
+                  @click="onTelegramBind"
+                >
+                  Connect Telegram
+                </v-btn>
+                <v-btn
+                  v-else
+                  elevation="0"
+                  color="primary"
+                  small
+                  @click="disconnectBind"
+                >
+                  Disconnect Telegram
                 </v-btn>
               </div>
             </div>
@@ -343,6 +375,9 @@ export default {
           disabled: true,
         },
       ],
+      exists: false,
+      accountToken: "",
+      boosterToken: "",
     };
   },
   computed: {
@@ -350,6 +385,7 @@ export default {
     ...mapState({
       onChain: (s) => s.onChain,
       email: (s) => s.userInfo.email,
+      token: (s) => s.token(),
     }),
 
     efficientDate() {
@@ -380,6 +416,7 @@ export default {
     this.getAnalyticsAiRpc();
     this.getLandUsedMonthly();
     this.getAlert();
+    this.checkTelegramBind();
   },
   methods: {
     async getUserResource() {
@@ -746,6 +783,55 @@ export default {
         this.$loading.close();
       }
     },
+    async onTelegramBind() {
+      try {
+        this.$loading();
+        const data = await this.$http.get("$auth/onetimetoken", {
+          headers: {
+            Authorization: "Bearer " + this.token,
+          },
+        });
+        const code = data.data.token;
+        const tgLink = `https://t.me/test_gqf_go_bot?start=${code}`;
+        window.open(tgLink, "_blank");
+        await this.$sleep(3000);
+        await this.checkTelegramBind();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.$loading.close();
+      }
+    },
+
+    async disconnectBind() {
+      try {
+        this.$loading();
+        const authUrl = "https://assnode.foreverland.xyz/node/tgbot";
+        await this.$http.delete(authUrl, {
+          headers: {
+            Authorization: "Bearer " + localStorage.nodeToken,
+          },
+        });
+        await this.checkTelegramBind();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.$loading.close();
+      }
+    },
+    async checkTelegramBind() {
+      try {
+        const authUrl = "https://assnode.foreverland.xyz/node/tgbot";
+        const data = await this.$http.get(authUrl, {
+          headers: {
+            Authorization: "Bearer " + localStorage.nodeToken,
+          },
+        })
+        this.exists = data.data.exists;
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async getAlert() {
       try {
         const { data } = await this.$http.get(
@@ -789,7 +875,7 @@ export default {
   }
   .v-breadcrumbs {
     padding: 0 0 16px 0;
-    margin-top:-12px;
+    margin-top: -12px;
   }
 }
 .breadcrumbs {
