@@ -12,7 +12,7 @@
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title class="white--text font-weight-bold airdrop-title">{{ item.title }}</v-list-item-title>
-                <v-list-item-subtitle class="grey--text text--lighten-1 fz-12">{{ item.subtitle }}</v-list-item-subtitle>
+                <v-list-item-subtitle class="grey--text fz-12 text-wrap">{{ item.subtitle }}</v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
                 <v-icon color="cyan">mdi-check-circle</v-icon>
@@ -86,6 +86,7 @@
 <script>
 import ICountUp from "vue-countup-v2";
 import starrise from "../components/star-rise.vue";
+import { fetchAirdropList } from "@/api/booster";
 export default {
   name: 'Airdrop',
   components: {
@@ -99,25 +100,43 @@ export default {
       {
         icon: 'mdi-diamond-stone',
         title: 'Staked T4EVER',
-        subtitle: '0.5% of tokens for 1:1 T4EVER exchange.'
+        subtitle: '0.5% of tokens for 1:1 T4EVER exchange.',
+        status: "hide",
+        realStatus: false,
       },
       {
         icon: 'mdi-medal',
         title: '$4EVER Points',
-        subtitle: '3% of tokens for users with $4EVER Points.'
+        subtitle: '3% of tokens for users with $4EVER Points.',
+        status: "hide",
+        realStatus: false,
       },
       {
         icon: 'mdi-account-group',
         title: 'Product Interaction',
-        subtitle: '1% of tokens for early users who engage with products and on-chain activities.'
+        subtitle: '1% of tokens for early users who engage with products and on-chain activities.',
+        status: "hide",
+        realStatus: false,
       },
       {
         icon: 'mdi-account-clock',
         title: 'Early Contributors',
-        subtitle: '0.5% of tokens for 1:1 T4EVER exchange.'
+        subtitle: '0.5% of tokens for early ecosystem contributors and Gitcoin donation.',
+        status: "hide",
+        realStatus: false,
       }
     ]
-  })
+  }),
+  async mounted() {
+    const { data } = await fetchAirdropList();
+    console.log(data);
+    //this.airdropItems = data;
+    this.airdropItems.forEach(item => {
+      item.status = data.find(it => it.title === item.title)?.status || "hide";
+      item.realStatus = data.find(it => it.title === item.title)?.realStatus || false;
+    });
+
+  }
 }
 </script>
 
