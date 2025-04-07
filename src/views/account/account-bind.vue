@@ -47,48 +47,54 @@
       </div>
     </div>
     <div v-for="(it, i) in list" :key="i">
-      <div class="list-border py-4" v-if="!it.verifyWallet" :class="{ 'no-border': i === list.length - 1 && !list[i].verifyWallet }">
+      <div
+        class="list-border py-4"
+        v-if="!it.verifyWallet"
+        :class="{ 'no-border': i === list.length - 1 && !list[i].verifyWallet }"
+      >
         <div class="al-c">
-        <img :src="it.icon" alt="" height="50" />
-        <div
-          class="mt-2 ml-4 fz-14 d-flex flex-column"
-          style="min-height: 40px"
-        >
-          <span class="fz-16">{{ it.title }}</span>
-          <span class="mt-2 gray">{{ it.account ? it.account : it.desc }}</span>
-        </div>
-        <div class="ml-auto d-flex al-c">
-          <v-btn
-            v-if="it.type == 1 && it.account"
-            color="primary"
-            width="160"
-            max-width="160"
-            min-width="75"
-            @click="onDisconnect(it)"
-            >Disconnect</v-btn
+          <img :src="it.icon" alt="" height="50" />
+          <div
+            class="mt-2 ml-4 fz-14 d-flex flex-column"
+            style="min-height: 40px"
           >
+            <span class="fz-16">{{ it.title }}</span>
+            <span class="mt-2 gray">{{
+              it.account ? it.account : it.desc
+            }}</span>
+          </div>
+          <div class="ml-auto d-flex al-c">
+            <v-btn
+              v-if="it.type == 1 && it.account"
+              color="primary"
+              width="160"
+              max-width="160"
+              min-width="75"
+              @click="onDisconnect(it)"
+              >Disconnect</v-btn
+            >
 
-          <v-btn
-            v-else-if="it.type == 3"
-            color="primary"
-            min-width="75"
-            width="160"
-            max-width="160"
-            @click="onBind(it)"
-            >{{ it.account ? "Rebind" : "Verify" }}</v-btn
-          >
-          <v-btn
-            v-else
-            color="primary"
-            :disabled="!!it.account"
-            min-width="75"
-            width="160"
-            max-width="160"
-            @click="onBind(it)"
-            >{{ it.account ? "Verified" : "Verify" }}</v-btn
-          >
+            <v-btn
+              v-else-if="it.type == 3"
+              color="primary"
+              min-width="75"
+              width="160"
+              max-width="160"
+              @click="onBind(it)"
+              >{{ it.account ? "Rebind" : "Verify" }}</v-btn
+            >
+            <v-btn
+              v-else
+              color="primary"
+              :disabled="!!it.account"
+              min-width="75"
+              width="160"
+              max-width="160"
+              @click="onBind(it)"
+              >{{ it.account ? "Verified" : "Verify" }}</v-btn
+            >
+          </div>
         </div>
-      </div>
       </div>
     </div>
     <div>
@@ -260,6 +266,7 @@
 <script>
 import SignClient from "@walletconnect/sign-client";
 import qrcode from "qrcode";
+import { Connection, Transaction } from "@solana/web3.js";
 
 import WalletList from "@/views/login/WalletList.js";
 
@@ -312,6 +319,8 @@ export default {
       providerDetails: {},
       showEVMWallet: false,
       showSolonaWallet: false,
+      solanaProvider: null,
+      solanaAccount: null,
     };
   },
   computed: {
@@ -381,13 +390,6 @@ export default {
               icon: require("@/assets/imgs/petra.svg"),
             });
             break;
-          // case "ONFLOW":
-          //   walletItem.push({
-          //     title: "Flow",
-          //     account: (info.wallet || {}).address,
-          //     icon: require("@/assets/imgs/flow.svg"),
-          //   });
-          //   break;
           default:
             walletItem.push({
               title: "EVM Wallet",
@@ -395,7 +397,6 @@ export default {
               icon: require("@/assets/imgs/EVM_Wallet.png"),
             });
         }
-
         wArr.push(...walletItem);
       }
       return [
@@ -510,24 +511,44 @@ export default {
       } else if (!this.providerDetails[item.name]) {
         this.onShowQrcode(item);
       } else {
-        const providerDetail = this.providerDetails[item.name];
-        let accounts = [];
-        try {
-          accounts = await providerDetail.provider.request({
-            method: "eth_requestAccounts",
-          });
-          const account = accounts[0];
-          const params = {
-            type: item.type,
-            apply: account,
-          };
-          const nonce = await this.onExchangeCode(params);
-          const signature = await this.onSign(account, nonce, providerDetail);
-          if (signature) {
-            this.onVcode(item.type, signature);
+        if (this.showEVMWallet) {
+          const providerDetail = this.providerDetails[item.name];
+          let accounts = [];
+          try {
+            accounts = await providerDetail.provider.request({
+              method: "eth_requestAccounts",
+            });
+            const account = accounts[0];
+            const params = {
+              type: item.type,
+              apply: account,
+            };
+            const nonce = await this.onExchangeCode(params);
+            const signature = await this.onSign(account, nonce, providerDetail);
+            if (signature) {
+              this.onVcode(item.type, signature);
+            }
+          } catch (err) {
+            console.error(err);
           }
-        } catch (err) {
-          console.error(err);
+        } else if (this.showSolonaWallet) {
+          // console.log(this.solanaAccount);
+          try {
+            const provider = window.okxwallet.solana;
+            const resp = await provider.connect();
+            this.solanaAccount = resp.publicKey.toString();
+            const params = {
+              type: item.type,
+              apply: this.solanaAccount,
+            };
+            const nonce = await this.onExchangeCode(params);
+            const signature = await this.signSolanaTransaction(nonce);
+            if (signature) {
+              this.onVcode(item.type, signature);
+            }
+          } catch (error) {
+            console.error(error);
+          }
         }
       }
       this.showEVMWallet = false;
@@ -560,6 +581,18 @@ export default {
           "Failed to unbundle the Github account, please try again after binding any wallet address.",
           "Alert"
         );
+      }
+    },
+    async signSolanaTransaction(nonce) {
+      try {
+        const provider = window.okxwallet.solana;
+        const nonceBuffer = new TextEncoder().encode(nonce);
+        const signature = await provider.signMessage(nonceBuffer);
+        const signatureBase64 = Buffer.from(signature).toString("base64");
+        return signatureBase64;
+      } catch (error) {
+        console.error(error);
+        throw error;
       }
     },
 
@@ -895,13 +928,13 @@ export default {
 .item + .item {
   border-top: 1px solid #d0dae9;
 }
-.list-border{
+.list-border {
   border-bottom: 1px solid #d0dae9;
 }
 .list-border.no-border {
   border-bottom: none;
 }
-.wallet-border{
+.wallet-border {
   border-top: 1px solid #d0dae9;
   border-bottom: 1px solid #d0dae9;
 }
