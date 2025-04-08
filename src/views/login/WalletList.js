@@ -69,7 +69,7 @@ const WalletList = [
     walletType: "COINBASE",
     isEvm: true,
     type: 9,
-    verifyWallet: "all",
+    verifyWallet: "EVM",
   },
   {
     name: "Phantom",
@@ -78,7 +78,7 @@ const WalletList = [
     walletType: "PHANTOM",
     isEvm: false,
     type: 4,
-    verifyWallet: "Solona",
+    verifyWallet: "Solana",
   },
   {
     name: "Petra",
