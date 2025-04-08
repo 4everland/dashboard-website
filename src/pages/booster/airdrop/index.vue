@@ -15,7 +15,25 @@
                 <v-list-item-subtitle class="grey--text fz-12 text-wrap">{{ item.subtitle }}</v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
-                <v-icon color="cyan">mdi-check-circle</v-icon>
+                <img
+                  v-if="item.status === 'loading'"
+                  class="imgLoading"
+                  src="/img/booster/earnings/waiting-icon.png"
+                  width="24"
+                  alt=""
+                />
+                <img
+                  v-if="item.status === true"
+                  src="/img/booster/earnings/completed.png"
+                  width="24"
+                  alt=""
+                />
+                <img
+                  v-if="item.status === false"
+                  src="/img/booster/earnings/x-circle.png"
+                  width="24"
+                  alt=""
+                />
               </v-list-item-action>
             </v-list-item>
           </v-list>
@@ -101,6 +119,7 @@ export default {
         icon: 'mdi-diamond-stone',
         title: 'Staked T4EVER',
         subtitle: '0.5% of tokens for 1:1 T4EVER exchange.',
+        keyStr:'NOT_DROPPED',
         status: "hide",
         realStatus: false,
       },
@@ -109,6 +128,7 @@ export default {
         title: '$4EVER Points',
         subtitle: '3% of tokens for users with $4EVER Points.',
         status: "hide",
+        keyStr:'',
         realStatus: false,
       },
       {
@@ -116,6 +136,7 @@ export default {
         title: 'Product Interaction',
         subtitle: '1% of tokens for early users who engage with products and on-chain activities.',
         status: "hide",
+        keyStr: 'RECOVER',
         realStatus: false,
       },
       {
@@ -123,23 +144,41 @@ export default {
         title: 'Early Contributors',
         subtitle: '0.5% of tokens for early ecosystem contributors and Gitcoin donation.',
         status: "hide",
+        keyStr:'ZKLITE',
         realStatus: false,
       }
     ]
   }),
   async mounted() {
-    const { data } = await fetchAirdropList();
-    console.log(data);
+    let { data: airdropData } = await fetchAirdropList();
+    console.log(airdropData);
     //this.airdropItems = data;
+    airdropData = {
+        "uid": "", 
+        "address": "", 
+        "dropType": ['NOT_DROPPED','ZKLITE'],
+        "dropValue": "6560", 
+        "node": "", 
+        "access": true
+    }
     this.airdropItems.forEach(item => {
-      item.status = data.find(it => it.title === item.title)?.status || "hide";
-      item.realStatus = data.find(it => it.title === item.title)?.realStatus || false;
+      item.realStatus = airdropData.dropType.includes(item.keyStr);
+      console.log(item.realStatus);
     });
+
+    for (const item of this.airdropItems) {
+      item.status = "loading";
+      await this.$sleep(1000);
+      item.status = item.realStatus;
+      await this.$sleep(1000);
+    }
+
 
   }
 }
 </script>
 
+<style lang="scss" src="../spin.scss"></style>
 <style scoped lang="scss">
 .airdrop-container {
   width: 100%;
