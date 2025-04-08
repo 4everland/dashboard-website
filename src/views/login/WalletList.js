@@ -15,7 +15,7 @@ const WalletList = [
     walletType: "OKX",
     isEvm: true,
     type: 7,
-    verifyWallet: "all",
+    verifyWallet: "EVM",
   },
   {
     name: "Binance Wallet",
@@ -24,7 +24,7 @@ const WalletList = [
     walletType: "BN",
     isEvm: false,
     type: 103,
-    verifyWallet: "all",
+    verifyWallet: "EVM",
   },
   {
     name: "Bitget Wallet",
@@ -33,7 +33,7 @@ const WalletList = [
     walletType: "Bitget",
     isEvm: true,
     type: 100,
-    verifyWallet: "all",
+    verifyWallet: "EVM",
   },
   {
     name: "imToken",
@@ -51,7 +51,7 @@ const WalletList = [
     walletType: "TokenPocket",
     isEvm: true,
     type: 102,
-    verifyWallet: "all",
+    verifyWallet: "EVM",
   },
   {
     name: "WalletConnect",
@@ -60,7 +60,7 @@ const WalletList = [
     walletType: "Walletconnect",
     isEvm: false,
     type: 99,
-    verifyWallet: "all",
+    verifyWallet: "EVM",
   },
   {
     name: "Coinbase Wallet",
@@ -69,7 +69,7 @@ const WalletList = [
     walletType: "COINBASE",
     isEvm: true,
     type: 9,
-    verifyWallet: "all",
+    verifyWallet: "EVM",
   },
   {
     name: "Phantom",
@@ -78,7 +78,7 @@ const WalletList = [
     walletType: "PHANTOM",
     isEvm: false,
     type: 4,
-    verifyWallet: "Solona",
+    verifyWallet: "Solana",
   },
   {
     name: "Petra",
