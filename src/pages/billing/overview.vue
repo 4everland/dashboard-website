@@ -795,7 +795,12 @@ export default {
           },
         });
         const code = data.data.token;
-        const tgLink = `https://t.me/test_gqf_go_bot?start=${code}`;
+        const tgLink = '';
+        if (process.env.NODE_ENV == "development") {
+          tgLink = `https://t.me/test_gqf_go_bot?start=${code}`;
+        }else{
+          tgLink = `https://t.me/BalanceAlert_4EVERLAND_Bot?start=${code}`;
+        }
         window.open(tgLink, "_blank");
         this.balanceAlertShow = false;
       } catch (error) {
@@ -808,7 +813,7 @@ export default {
     async disconnectBind() {
       try {
         this.$loading();
-        const authUrl = "https://assnode.foreverland.xyz/node/tgbot";
+        const authUrl = `${process.env.VUE_APP_BOOSTER_URL}/node/tgbot`;
         await this.$http.delete(authUrl, {
           headers: {
             Authorization: "Bearer " + localStorage.nodeToken,
@@ -823,7 +828,7 @@ export default {
     },
     async checkTelegramBind() {
       try {
-        const authUrl = "https://assnode.foreverland.xyz/node/tgbot";
+        const authUrl = `${process.env.VUE_APP_BOOSTER_URL}/node/tgbot`;
         const data = await this.$http.get(authUrl, {
           headers: {
             Authorization: "Bearer " + localStorage.nodeToken,
