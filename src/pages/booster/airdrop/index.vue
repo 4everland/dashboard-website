@@ -6,9 +6,10 @@
         <v-col cols="12" md="6">
           <!-- 左侧空投信息列表 -->
           <v-list class="transparent">
-            <v-list-item v-for="(item, index) in airdropItems" :key="index" class="airdrop-item content-bg">
-              <v-list-item-avatar size="40">
-                <v-icon size="30" color="white">{{ item.icon }}</v-icon>
+            <v-list-item v-for="(item, index) in airdropItems" :key="index" class="airdrop-item content-bg" :class="{'content-bg-check': item.status === true}">
+              <v-list-item-avatar size="32" tile>
+                
+                <v-img :src="item.icon"  size="32"></v-img>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title class="white--text font-weight-bold airdrop-title">{{ item.title }}</v-list-item-title>
@@ -18,19 +19,19 @@
                 <img
                   v-if="item.status === 'loading'"
                   class="imgLoading"
-                  src="/img/booster/earnings/waiting-icon.png"
+                  src="/img/airdrop/icon_loading.png"
                   width="24"
                   alt=""
                 />
                 <img
                   v-if="item.status === true"
-                  src="/img/booster/earnings/completed.png"
+                  src="/img/airdrop/icon_check.png"
                   width="24"
                   alt=""
                 />
                 <img
                   v-if="item.status === false"
-                  src="/img/booster/earnings/x-circle.png"
+                  src="/img/airdrop/icon_error.png"
                   width="24"
                   alt=""
                 />
@@ -116,34 +117,34 @@ export default {
     shortPoint: 0,
     airdropItems: [
       {
-        icon: 'mdi-diamond-stone',
+        icon: '/img/airdrop/icon_stake.png',
         title: 'Staked T4EVER',
         subtitle: '0.5% of tokens for 1:1 T4EVER exchange.',
         keyStr:'NOT_DROPPED',
-        status: "hide",
+        status: "loading",
         realStatus: false,
       },
       {
-        icon: 'mdi-medal',
+        icon: '/img/airdrop/icon_4ever.png',
         title: '$4EVER Points',
         subtitle: '3% of tokens for users with $4EVER Points.',
-        status: "hide",
+        status: "loading",
         keyStr:'',
         realStatus: false,
       },
       {
-        icon: 'mdi-account-group',
+        icon: '/img/airdrop/icon_product.png',
         title: 'Product Interaction',
         subtitle: '1% of tokens for early users who engage with products and on-chain activities.',
-        status: "hide",
+        status: "loading",
         keyStr: 'RECOVER',
         realStatus: false,
       },
       {
-        icon: 'mdi-account-clock',
+        icon: '/img/airdrop/icon_early.png',
         title: 'Early Contributors',
         subtitle: '0.5% of tokens for early ecosystem contributors and Gitcoin donation.',
-        status: "hide",
+        status: "loading",
         keyStr:'ZKLITE',
         realStatus: false,
       }
@@ -197,7 +198,10 @@ export default {
 
 }
 .content-bg{
-  background: url("/img/booster/svg/fringe-bg.svg") !important;
+  background: url("/img/booster/svg/fringe-bg.svg");
+}
+.content-bg-check{
+  background: linear-gradient(270.31deg, rgba(15, 225, 248, 0.2) 0.18%, rgba(0, 114, 248, 0.2) 100.11%), url("/img/booster/svg/fringe-bg.svg");
 }
 .img-right{
   position: absolute;
@@ -294,9 +298,8 @@ export default {
 }
 
 .airdrop-item {
-  background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  margin-bottom: 25px;
+  margin-bottom: 35px;
 }
 
 .receipt-card {
