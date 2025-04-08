@@ -267,8 +267,8 @@
             >
               <h2 class="fz-16">Telegram Notifications</h2>
               <span class="fz-14" v-if="exists">
-                  {{ userName }}
-                </span>
+                {{ userName }}
+              </span>
               <div class="fz-14">
                 <v-btn
                   v-if="!exists"
@@ -376,7 +376,7 @@ export default {
         },
       ],
       exists: false,
-      userName:"",
+      userName: "",
     };
   },
   computed: {
@@ -782,7 +782,7 @@ export default {
         this.$loading.close();
       }
     },
-    balanceAlert(){
+    balanceAlert() {
       this.balanceAlertShow = true;
       this.checkTelegramBind();
     },
@@ -795,10 +795,10 @@ export default {
           },
         });
         const code = data.data.token;
-        const tgLink = '';
+        let tgLink = "";
         if (process.env.NODE_ENV == "development") {
           tgLink = `https://t.me/test_gqf_go_bot?start=${code}`;
-        }else{
+        } else {
           tgLink = `https://t.me/BalanceAlert_4EVERLAND_Bot?start=${code}`;
         }
         window.open(tgLink, "_blank");
@@ -833,7 +833,7 @@ export default {
           headers: {
             Authorization: "Bearer " + localStorage.nodeToken,
           },
-        })
+        });
         this.exists = data.data.exists;
         this.userName = data.data.username;
       } catch (error) {
