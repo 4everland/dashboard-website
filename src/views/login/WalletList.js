@@ -60,7 +60,7 @@ const WalletList = [
     walletType: "Walletconnect",
     isEvm: false,
     type: 99,
-    verifyWallet: "all",
+    verifyWallet: "EVM",
   },
   {
     name: "Coinbase Wallet",
