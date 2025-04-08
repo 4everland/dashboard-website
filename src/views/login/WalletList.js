@@ -15,7 +15,7 @@ const WalletList = [
     walletType: "OKX",
     isEvm: true,
     type: 7,
-    verifyWallet: "all",
+    verifyWallet: "EVM",
   },
   {
     name: "Binance Wallet",
@@ -24,7 +24,7 @@ const WalletList = [
     walletType: "BN",
     isEvm: false,
     type: 103,
-    verifyWallet: "all",
+    verifyWallet: "EVM",
   },
   {
     name: "Bitget Wallet",
@@ -33,7 +33,7 @@ const WalletList = [
     walletType: "Bitget",
     isEvm: true,
     type: 100,
-    verifyWallet: "all",
+    verifyWallet: "EVM",
   },
   {
     name: "imToken",
@@ -51,7 +51,7 @@ const WalletList = [
     walletType: "TokenPocket",
     isEvm: true,
     type: 102,
-    verifyWallet: "all",
+    verifyWallet: "EVM",
   },
   {
     name: "WalletConnect",

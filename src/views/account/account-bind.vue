@@ -29,9 +29,9 @@
           class="mt-2 ml-4 fz-14 d-flex flex-column"
           style="min-height: 40px"
         >
-          <span class="fz-16">Solona Wallet</span>
+          <span class="fz-16">Solana Wallet</span>
           <span class="mt-2 gray"
-            >Get verified by connecting your Solona Wallet Account</span
+            >Get verified by connecting your Solana Wallet Account</span
           >
         </div>
         <div class="ml-auto d-flex al-c">
@@ -40,7 +40,7 @@
             min-width="75"
             width="160"
             max-width="160"
-            @click="showSolonaWallet = true"
+            @click="showSolanaWallet = true"
             >Verify</v-btn
           >
         </div>
@@ -200,18 +200,18 @@
           </div>
         </div>
       </v-dialog>
-      <v-dialog v-model="showSolonaWallet" max-width="528">
+      <v-dialog v-model="showSolanaWallet" max-width="528">
         <div class="wallet-dialog">
           <div class="d-flex align-center justify-space-between">
-            <span class="wallet-title">Verify Solona Wallet</span>
-            <v-btn icon class="close-icon" @click="showSolonaWallet = false">
+            <span class="wallet-title">Verify Solana Wallet</span>
+            <v-btn icon class="close-icon" @click="showSolanaWallet = false">
               <v-icon> mdi-close</v-icon>
             </v-btn>
           </div>
           <div v-for="(it, i) in list" :key="i">
             <div
               class="py-2 px-4 item-dialog"
-              v-if="it.verifyWallet === 'all' || it.verifyWallet === 'Solona'"
+              v-if="it.verifyWallet === 'all' || it.verifyWallet === 'Solana'"
             >
               <div class="al-c d-flex align-center">
                 <img :src="it.icon" alt="" height="32" />
@@ -318,7 +318,7 @@ export default {
       qrcodeUri: "",
       providerDetails: {},
       showEVMWallet: false,
-      showSolonaWallet: false,
+      showSolanaWallet: false,
       solanaProvider: null,
       solanaAccount: null,
     };
@@ -511,7 +511,7 @@ export default {
       } else if (!this.providerDetails[item.name]) {
         this.onShowQrcode(item);
       } else {
-        if (this.showEVMWallet) {
+        // if (this.showEVMWallet) {
           const providerDetail = this.providerDetails[item.name];
           let accounts = [];
           try {
@@ -531,28 +531,30 @@ export default {
           } catch (err) {
             console.error(err);
           }
-        } else if (this.showSolonaWallet) {
-          // console.log(this.solanaAccount);
-          try {
-            const provider = window.okxwallet.solana;
-            const resp = await provider.connect();
-            this.solanaAccount = resp.publicKey.toString();
-            const params = {
-              type: item.type,
-              apply: this.solanaAccount,
-            };
-            const nonce = await this.onExchangeCode(params);
-            const signature = await this.signSolanaTransaction(nonce);
-            if (signature) {
-              this.onVcode(item.type, signature);
-            }
-          } catch (error) {
-            console.error(error);
-          }
-        }
+        // } else if (this.showSolanaWallet) {
+        //   console.log(this.solanaAccount);
+        //   try {
+        //     const provider = window.okxwallet.solana;
+        //     const resp = await provider.connect();
+        //     this.solanaAccount = resp.publicKey.toString();
+        //     const params = {
+        //       type: item.type,
+        //       apply: this.solanaAccount,
+        //     };
+            
+        //     const nonce = await this.onExchangeCode(params);
+        //     const signature = await this.signSolanaTransaction(nonce);
+        //     // console.log('-----',signature)
+        //     if (signature) {
+        //       this.onVcode(item.type, signature);
+        //     }
+        //   } catch (error) {
+        //     console.error(error);
+        //   }
+        // }
       }
       this.showEVMWallet = false;
-      this.showSolonaWallet = false;
+      this.showSolanaWallet = false;
     },
     async onUnbind(it) {
       const type = it.type;
@@ -585,11 +587,12 @@ export default {
     },
     async signSolanaTransaction(nonce) {
       try {
-        const provider = window.okxwallet.solana;
-        const nonceBuffer = new TextEncoder().encode(nonce);
-        const signature = await provider.signMessage(nonceBuffer);
-        const signatureBase64 = Buffer.from(signature).toString("base64");
-        return signatureBase64;
+        const encodedMessage = new TextEncoder().encode(nonce);
+        const signedMessage = await window.okxwallet.solana.signMessage(
+          encodedMessage,
+          "utf8"
+        );
+        return signedMessage;
       } catch (error) {
         console.error(error);
         throw error;
