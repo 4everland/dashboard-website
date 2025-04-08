@@ -141,6 +141,12 @@ export default {
   :deep td {
     border-bottom: 1px solid rgba(255, 255, 255, 0.25) !important;
   }
+  .v-data-table__wrapper > table > thead > tr > th {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25) !important;
+  }
+  .v-data-table__wrapper > table > tbody > tr:not(:last-child) > td:not(.v-data-table__mobile-row){
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25) !important;
+  }
 
   :deep tbody tr.trigger {
     font-weight: bold;
