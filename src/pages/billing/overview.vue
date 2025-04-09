@@ -207,7 +207,12 @@
       @click:outside="cancelAlert"
     >
       <div class="pa-4">
-        <h3 class="mb-4">Balance Alert</h3>
+        <div class="mb-6 mt-2 mx-4 d-flex justify-space-between">
+          <h3>Balance Alert</h3>
+           <div>
+            <v-icon @click="cancelAlert">mdi-close</v-icon>
+           </div>
+        </div>
         <span class="fz-14 pa-4">
           Once the alert is activated, an email will be sent if the account
           balance falls below the threshold.
@@ -240,18 +245,29 @@
                   </div>
                 </div>
               </div>
+              <v-btn
+                :disabled="!email"
+                :loading="alertLoading"
+                elevation="0"
+                color="primary"
+                large
+                class="ml-8"
+                @click="saveAlert"
+              >
+                Save
+              </v-btn>
             </div>
             <div
               class="d-flex al-c mb-4 justify-space-between"
               style="gap: 30px"
             >
               <h2 class="fz-16">Email Notifications</h2>
-              <div class="fz-14">
-                <span v-if="email">
-                  {{ email }}
-                </span>
+              <span class="fz-14" v-if="email">
+                {{ email }}
+              </span>
+              <div class="fz-14" style="width: 96px; height: 28px">
                 <v-btn
-                  v-else
+                  v-if="!email"
                   elevation="0"
                   color="primary"
                   small
@@ -262,7 +278,7 @@
               </div>
             </div>
             <div
-              class="d-flex al-c mb-8 justify-space-between"
+              class="d-flex al-c justify-space-between"
               style="gap: 30px"
             >
               <h2 class="fz-16">Telegram Notifications</h2>
@@ -289,20 +305,6 @@
                   Disconnect Telegram
                 </v-btn>
               </div>
-            </div>
-            <div class="d-flex justify-center">
-              <v-btn elevation="0" large @click="cancelAlert"> Cancel </v-btn>
-              <v-btn
-                :disabled="!email"
-                :loading="alertLoading"
-                elevation="0"
-                color="primary"
-                large
-                class="ml-8"
-                @click="saveAlert"
-              >
-                Save
-              </v-btn>
             </div>
           </v-col>
         </v-row>
