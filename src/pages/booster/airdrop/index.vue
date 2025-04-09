@@ -8,12 +8,13 @@
           <v-list class="transparent">
             <v-list-item v-for="(item, index) in airdropItems" :key="index" class="airdrop-item content-bg" :class="{'content-bg-check': item.status === true}">
               <v-list-item-avatar size="32" tile>
-                
                 <v-img :src="item.icon"  size="32"></v-img>
               </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title class="white--text font-weight-bold airdrop-title">{{ item.title }}</v-list-item-title>
-                <v-list-item-subtitle class="grey--text fz-12 text-wrap">{{ item.subtitle }}</v-list-item-subtitle>
+                <v-list-item-subtitle class="grey--text fz-12 text-wrap airdrop-subtitle flex align-center">
+                  {{ item.subtitle }}
+                </v-list-item-subtitle>
               </v-list-item-content>
               <v-list-item-action>
                 <img
@@ -50,8 +51,18 @@
                 class="mx-auto mb-4 img-right"
               ></v-img>
               <div class="right-content">
-                <div class="white--text mb-4 text-left">You will receive:</div>
-                <div class="d-flex justify-center">
+                <div>
+                  <div v-if="access" class="big-title mb-4 text-left fz-28">🎉Congratulations, you're eligible</div>
+                  <div v-if="loading || access" class="white--text mb-4 text-left">You will receive:</div>
+                </div>
+                <div v-if="!loading&&!access" class="mt-16">
+                  <div class="big-title mb-4 text-left fz-28">Sorry</div>
+                  <div class="big-title mb-4 text-left fz-28">You're not eligible</div>
+                  <div class="white--text mb-4 text-left" style="letter-spacing: normal;">
+                    Don't be discouraged! You can still participate in 4EVER Boost, and you'll have the opportunity to receive it in the future.
+                  </div>
+                </div>
+                <div v-if="access" class="d-flex justify-center">
                   <div class="light-btn d-flex justify-center align-center">
                     <div class="light-span">
                       <v-btn class="submit-btn">
@@ -77,12 +88,23 @@
                   </div>
                 </div>
                 <v-btn
+                  v-if="access"
                   block
                   class="mt-6 btn-claim"
                   height="48"
                   :disabled="!canClaim"
+                  @click="handleClaim"
                 >
                   Claim Now
+                </v-btn>
+                <v-btn
+                  v-if="!access"
+                  block
+                  class="mt-6 btn-boost"
+                  height="48"
+                  @click="handleClaim"
+                >
+                  4EVER Boost
                 </v-btn>
               </div>
             </v-card-text>
@@ -103,6 +125,11 @@
 </template>
 
 <script>
+import { ethers } from "ethers";
+import { mapState, mapGetters } from "vuex";
+import { formatEther } from "ethers/lib/utils";
+import { airdropAbi } from "@/plugins/abi/airdropAbi";
+
 import ICountUp from "vue-countup-v2";
 import starrise from "../components/star-rise.vue";
 import { fetchAirdropList } from "@/api/booster";
@@ -114,13 +141,16 @@ export default {
   },
   data: () => ({
     canClaim: true,
+    access: false,
+    loading: true,
     shortPoint: 0,
+    proof: [],
     airdropItems: [
       {
         icon: '/img/airdrop/icon_stake.png',
         title: 'Staked T4EVER',
         subtitle: '0.5% of tokens for 1:1 T4EVER exchange.',
-        keyStr:'NOT_DROPPED',
+        keyStr:'stakeT4ever',
         status: "loading",
         realStatus: false,
       },
@@ -129,7 +159,7 @@ export default {
         title: '$4EVER Points',
         subtitle: '3% of tokens for users with $4EVER Points.',
         status: "loading",
-        keyStr:'',
+        keyStr:'holdPoints',
         realStatus: false,
       },
       {
@@ -137,7 +167,7 @@ export default {
         title: 'Product Interaction',
         subtitle: '1% of tokens for early users who engage with products and on-chain activities.',
         status: "loading",
-        keyStr: 'RECOVER',
+        keyStr: 'productIteracted',
         realStatus: false,
       },
       {
@@ -145,25 +175,24 @@ export default {
         title: 'Early Contributors',
         subtitle: '0.5% of tokens for early ecosystem contributors and Gitcoin donation.',
         status: "loading",
-        keyStr:'ZKLITE',
+        keyStr:'gitcoinDonation',
         realStatus: false,
       }
     ]
   }),
+  computed: {
+    ...mapState({
+      userInfo: (s) => s.userInfo,
+      connectAddr: (s) => s.connectAddr,
+    }),
+    ...mapGetters(["walletObj"]),
+  },
   async mounted() {
     let { data: airdropData } = await fetchAirdropList();
     console.log(airdropData);
-    //this.airdropItems = data;
-    airdropData = {
-        "uid": "", 
-        "address": "", 
-        "dropType": ['NOT_DROPPED','ZKLITE'],
-        "dropValue": "6560", 
-        "node": "", 
-        "access": true
-    }
+    
     this.airdropItems.forEach(item => {
-      item.realStatus = airdropData.dropType.includes(item.keyStr);
+      item.realStatus = airdropData[item.keyStr];
       console.log(item.realStatus);
     });
 
@@ -173,8 +202,55 @@ export default {
       item.status = item.realStatus;
       await this.$sleep(1000);
     }
+    this.shortPoint = airdropData.dropValue/1e18;
+    this.proof = airdropData.node;
+    this.access = airdropData.access;
+    this.loading = false;
+    this.handleCanClaim();
+  },
+  methods: {
+    async handleCanClaim() {
+      try {
+        console.log('walletObj', this.userInfo.wallet);
+        let address = this.userInfo.wallet.address;
 
+        if (!address) return;
+        const tokenAddress = process.env.VUE_APP_AIRDROP_ADDRESS;
+        const provider = new ethers.providers.Web3Provider(this.walletObj);
+        const contract = new ethers.Contract(
+          tokenAddress,
+          airdropAbi,
+          provider
+        );
+        const canClaim = await contract.canClaim(address, ethers.utils.parseEther('1000').toString(), this.proof);
+        console.log('canClaim', canClaim);
+        this.canClaim = canClaim;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async handleClaim() {
+      try {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        let address = accounts[0];
 
+        if (!address) return;
+        const tokenAddress = process.env.VUE_APP_AIRDROP_ADDRESS;
+        const provider = new ethers.providers.Web3Provider(this.walletObj);
+        const contract = new ethers.Contract(
+          tokenAddress,
+          airdropAbi,
+          provider
+        );
+
+        const canClaim = await contract.canClaim(address, ethers.utils.parseEther('1000').toString(), this.proof);
+        console.log('canClaim', canClaim);
+      } catch (err) {
+        console.log(err);
+      }
+    },
   }
 }
 </script>
@@ -209,7 +285,16 @@ export default {
   top: -90px;
 }
 .right-content{
-  margin-top: 95px;
+  margin-top: 20px;
+  .big-title{
+    color: #0FE1F8;
+    max-width: 68%;
+  }
+  .fz-28{
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 34px;
+  }
   .submit-btn {
     width: 100%;
     height: 79px;
@@ -220,7 +305,7 @@ export default {
       font-size: 32px;
       font-weight: 700;
       line-height: 37.25px;
-      color: #40e8ff;
+      color: #039CFF;
     }
     .btn-text {
       font-size: 16px;
@@ -296,10 +381,16 @@ export default {
   position: relative;
   z-index: 1;
 }
+.airdrop-title {
+  position: absolute;
+  top: -10px;
+}
 
 .airdrop-item {
   border-radius: 8px;
-  margin-bottom: 35px;
+  margin-bottom: 25px;
+  min-height: 60px;
+  position: relative;
 }
 
 .receipt-card {
@@ -334,8 +425,9 @@ export default {
   background-color: #344054 !important;
   color: #fff !important;
 }
-.airdrop-title{
-  margin-top: -35px;
+.btn-boost {
+  background: linear-gradient(90.97deg, #0FE1F8 0.68%, #1102FC 99.51%);
+  color: #fff !important;
 }
 :deep .v-list-item__content{
   overflow: inherit;
