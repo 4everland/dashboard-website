@@ -4,7 +4,6 @@
     <div class="airdrop-in-container">
       <v-row>
         <v-col cols="12" md="6">
-          <!-- 左侧空投信息列表 -->
           <v-list class="transparent">
             <v-list-item v-for="(item, index) in airdropItems" :key="index" class="airdrop-item content-bg" :class="{'content-bg-check': item.status === true}">
               <v-list-item-avatar size="32" tile>
@@ -42,7 +41,6 @@
         </v-col>
 
         <v-col cols="12" md="6">
-          <!-- 右侧代币展示 -->
           <v-card class="transparent" flat>
             <v-card-text class="text-center position-relative">
               <v-img
@@ -56,13 +54,13 @@
                   <div v-if="loading || access" class="white--text mb-4 text-left">You will receive:</div>
                 </div>
                 <div v-if="!loading&&!access" class="mt-16">
-                  <div class="big-title mb-4 text-left fz-28">Sorry</div>
+                  <div class="big-title mt-4 text-left fz-28">Sorry</div>
                   <div class="big-title mb-4 text-left fz-28">You're not eligible</div>
                   <div class="white--text mb-4 text-left" style="letter-spacing: normal;">
                     Don't be discouraged! You can still participate in 4EVER Boost, and you'll have the opportunity to receive it in the future.
                   </div>
                 </div>
-                <div v-if="access" class="d-flex justify-center">
+                <div v-if="loading || access" class="d-flex justify-center">
                   <div class="light-btn d-flex justify-center align-center">
                     <div class="light-span">
                       <v-btn class="submit-btn">
@@ -88,9 +86,10 @@
                   </div>
                 </div>
                 <v-btn
-                  v-if="access"
+                  v-if="loading || access"
                   block
                   class="mt-6 btn-claim"
+                  :class="{'btn-claim-can': canClaim}"
                   height="48"
                   :disabled="!canClaim"
                   @click="handleClaim"
@@ -98,11 +97,11 @@
                   Claim Now
                 </v-btn>
                 <v-btn
-                  v-if="!access"
+                  v-if="!loading && !access"
                   block
                   class="mt-6 btn-boost"
                   height="48"
-                  @click="handleClaim"
+                  @click="$router.push('/boost')"
                 >
                   4EVER Boost
                 </v-btn>
@@ -140,10 +139,11 @@ export default {
     starrise,
   },
   data: () => ({
-    canClaim: true,
+    canClaim: false,
     access: false,
     loading: true,
     shortPoint: 0,
+    airdropInfo: {},
     proof: [],
     airdropItems: [
       {
@@ -191,6 +191,7 @@ export default {
     let { data: airdropData } = await fetchAirdropList();
     console.log(airdropData);
     
+    
     this.airdropItems.forEach(item => {
       item.realStatus = airdropData[item.keyStr];
       console.log(item.realStatus);
@@ -202,18 +203,18 @@ export default {
       item.status = item.realStatus;
       await this.$sleep(1000);
     }
-    this.shortPoint = airdropData.dropValue/1e18;
+    this.shortPoint = Number(ethers.utils.formatEther(airdropData.dropValue||0));
     this.proof = airdropData.node;
     this.access = airdropData.access;
     this.loading = false;
+    this.airdropInfo = airdropData;
     this.handleCanClaim();
   },
   methods: {
     async handleCanClaim() {
       try {
-        console.log('walletObj', this.userInfo.wallet);
         let address = this.userInfo.wallet.address;
-
+        console.log(address, this.shortPoint, this.proof)
         if (!address) return;
         const tokenAddress = process.env.VUE_APP_AIRDROP_ADDRESS;
         const provider = new ethers.providers.Web3Provider(this.walletObj);
@@ -222,7 +223,9 @@ export default {
           airdropAbi,
           provider
         );
-        const canClaim = await contract.canClaim(address, ethers.utils.parseEther('1000').toString(), this.proof);
+        console.log(address, ethers.utils.parseEther(String(this.shortPoint)).toString(), this.proof, tokenAddress)
+        const canClaim = await contract.canClaim(address, ethers.utils.parseEther(String(this.shortPoint)).toString(), this.proof);
+
         console.log('canClaim', canClaim);
         this.canClaim = canClaim;
       } catch (err) {
@@ -424,6 +427,9 @@ export default {
 .btn-claim {
   background-color: #344054 !important;
   color: #fff !important;
+}
+.btn-claim-can {
+  background-color: #039CFF !important;
 }
 .btn-boost {
   background: linear-gradient(90.97deg, #0FE1F8 0.68%, #1102FC 99.51%);
