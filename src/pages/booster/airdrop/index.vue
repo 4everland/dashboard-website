@@ -45,8 +45,9 @@
             <v-card-text class="text-center position-relative">
               <v-img
                 src="/img/booster/icon_fourever.png"
-                max-width="200"
+                :max-width="asMobile ? 120 : 200"
                 class="mx-auto mb-4 img-right"
+                :class="{'img-right-mobile': asMobile}"
               ></v-img>
               <div class="right-content">
                 <div>
@@ -91,10 +92,11 @@
                   class="mt-6 btn-claim"
                   :class="{'btn-claim-can': canClaim}"
                   height="48"
-                  :disabled="!canClaim"
+                  :disabled="!canClaim || alreadyClaim"
+                  :loading="claimLoading"
                   @click="handleClaim"
                 >
-                  Claim Now
+                  {{ alreadyClaim ? 'Already Claimed' : 'Claim Now' }}
                 </v-btn>
                 <v-btn
                   v-if="!loading && !access"
@@ -113,8 +115,8 @@
 
       <v-row>
         <v-col cols="12">
-          <div class="text-caption grey--text text--lighten-1 text-center mt-4">
-            This airdrop claim will be conducted on BSC MainNet, with a deadline of 8:00 UTC on March 14. Eligible users, please complete your airdrop claim as soon as possible.
+          <div class="text-caption grey--text text--lighten-1 text-center mt-4" style="letter-spacing: normal !important;">
+            This airdrop claim will be conducted on BSC MainNet, with a deadline of 8:00 UTC on April 14. Eligible users, please complete your airdrop claim as soon as possible.
           </div>
         </v-col>
       </v-row>
@@ -145,6 +147,8 @@ export default {
     shortPoint: 0,
     airdropInfo: {},
     proof: [],
+    claimLoading: false,
+    alreadyClaim: false,
     airdropItems: [
       {
         icon: '/img/airdrop/icon_stake.png',
@@ -186,11 +190,13 @@ export default {
       connectAddr: (s) => s.connectAddr,
     }),
     ...mapGetters(["walletObj"]),
+    asMobile() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
   },
   async mounted() {
     let { data: airdropData } = await fetchAirdropList();
     console.log(airdropData);
-    
     
     this.airdropItems.forEach(item => {
       item.realStatus = airdropData[item.keyStr];
@@ -203,11 +209,16 @@ export default {
       item.status = item.realStatus;
       await this.$sleep(1000);
     }
-    this.shortPoint = Number(ethers.utils.formatEther(airdropData.dropValue||0));
-    this.proof = airdropData.node;
+    const dropValue = airdropData.dropValue||0;
+    this.shortPoint = Number(ethers.utils.formatEther(dropValue));
+    this.proof = airdropData.node||[];
     this.access = airdropData.access;
     this.loading = false;
     this.airdropInfo = airdropData;
+    const claimInfo = localStorage.getItem("claimInfo" + this.userInfo.wallet.address);
+    if(claimInfo){
+      this.alreadyClaim = true;
+    }
     this.handleCanClaim();
   },
   methods: {
@@ -218,6 +229,14 @@ export default {
         if (!address) return;
         const tokenAddress = process.env.VUE_APP_AIRDROP_ADDRESS;
         const provider = new ethers.providers.Web3Provider(this.walletObj);
+        const { chainId } = await provider.getNetwork();
+        console.log('chainId', chainId);
+        if (process.env.NODE_ENV == "development" && chainId != 97) {
+          await this.switchNet('BSC');
+        }
+        if (process.env.NODE_ENV == "production" && chainId != 56) {
+          await this.switchNet('BSC');
+        }
         const contract = new ethers.Contract(
           tokenAddress,
           airdropAbi,
@@ -240,18 +259,136 @@ export default {
         let address = accounts[0];
 
         if (!address) return;
+        if(address.toLowerCase() !== this.airdropInfo.address.toLowerCase()){
+          this.$toast2(`Please switch to the correct account ${this.airdropInfo?.address}`);
+          return;
+        }
         const tokenAddress = process.env.VUE_APP_AIRDROP_ADDRESS;
         const provider = new ethers.providers.Web3Provider(this.walletObj);
+        const { chainId } = await provider.getNetwork();
+        if (process.env.NODE_ENV == "development" && chainId != 97) {
+          await this.switchNet('BSC');
+        }
+        if (process.env.NODE_ENV == "production" && chainId != 56) {
+          await this.switchNet('BSC');
+        }
+        const signer = provider.getSigner();
         const contract = new ethers.Contract(
           tokenAddress,
           airdropAbi,
-          provider
+          signer
         );
 
-        const canClaim = await contract.canClaim(address, ethers.utils.parseEther('1000').toString(), this.proof);
-        console.log('canClaim', canClaim);
-      } catch (err) {
-        console.log(err);
+        const canClaim = await contract.canClaim(
+          address,
+          ethers.utils.parseEther(String(this.shortPoint)).toString(),
+          this.proof
+        );
+        console.log('Can claim:', canClaim);
+        
+        if (!canClaim) {
+          this.$toast2("You cannot claim at this time");
+          return;
+        }
+
+  
+        const gasLimit = await contract.estimateGas.claim(
+          ethers.utils.parseEther(String(this.shortPoint)).toString(),
+          this.proof
+        );
+        this.claimLoading = true;
+
+        const tx = await contract.claim(
+          ethers.utils.parseEther(String(this.shortPoint)).toString(),
+          this.proof,
+          {
+            gasLimit: gasLimit,
+          }
+        );
+
+        const receipt = await tx.wait();
+        this.$toast2("Successfully Claimed!");
+        let info = this.userInfo.wallet.address;
+        localStorage.setItem("claimInfo" + info, true);
+        this.claimLoading = false;
+        console.log('Transaction receipt:', receipt);
+      } catch (error) {
+        console.log('error', error);
+        const regex = /"message": "([^"]+)"/;
+        const match = String(error).match(regex);
+        if (match) {
+          const extractedMessage = match[1];
+          console.log('error message:', extractedMessage);
+          this.$toast2(extractedMessage, 'error');
+        } else if(/insufficient|estimateGas/.test(String(error)||'')) {
+          this.$toast2('Insufficient funds', 'error');
+        } else if(/rejected action"([\w\s]+)"/.test(String(error))) {
+          this.$toast2('user rejected action', 'error');
+        } else {
+          this.$toast2('send transaction failed', 'error');
+        }
+        this.claimLoading = false;
+      }
+    },
+    async switchNet(chainName) {
+      const id = this.getChainId(chainName);
+      const chainId = "0x" + id.toString(16);
+      try {
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId }],
+        });
+      } catch (error) {
+        console.log("switch error 2", error);
+        if (error.code == 4902 || error.data?.originalError.code == 4902) {
+          await this.addChain(chainId, id);
+        } else {
+          throw new Error(error.message);
+        }
+      }
+    },
+    getChainId(type) {
+      if (type == "BSC") return this.$inDev ? 97 : 56;
+      return this.$inDev ? 5 : 1;
+    },
+    async addChain(chainId, id) {
+      let params = {
+        
+        56: {
+          chainId,
+          chainName: "BSC Mainnet",
+          rpcUrls: ["https://rpc.ankr.com/bsc"],
+          nativeCurrency: {
+            name: "Binance Coin",
+            symbol: "BNB",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://bscscan.com"],
+        },
+        
+        97: {
+          chainId,
+          chainName: "BSC Chapel",
+          rpcUrls: ["https://bsc-testnet.public.blastapi.io"],
+          nativeCurrency: {
+            name: "BNB Coin",
+            symbol: "tBNB",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        }
+      }[id];
+      if (!params) return;
+      try {
+        await window.ethereum.request(
+          {
+            method: "wallet_addEthereumChain",
+            params: [params],
+          },
+          this.connectAddr
+        );
+      } catch (error) {
+        console.log("add chain err", error);
       }
     },
   }
@@ -270,7 +407,7 @@ export default {
   max-width: 1032px;
   margin: 0 auto;
   border: 1px solid #0FE1F81A;
-  background: linear-gradient(281.05deg, rgba(0, 62, 112, 0.5) 19.1%, rgba(0, 10, 16, 0.5) 100%);
+  background: linear-gradient(281.05deg, rgba(0, 62, 112, 0.5) 19.1%, rgba(0, 10, 16, 0.5) 100.11%);
   backdrop-filter: blur(8px);
   padding: 40px;
   border-radius: 8px;
@@ -286,6 +423,10 @@ export default {
   position: absolute;
   right: -46px;
   top: -90px;
+}
+.img-right-mobile{
+  right: -20px;
+  top: 25px;
 }
 .right-content{
   margin-top: 20px;
