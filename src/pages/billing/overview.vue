@@ -209,9 +209,9 @@
       <div class="pa-4">
         <div class="mb-6 mt-2 mx-4 d-flex justify-space-between">
           <h3>Balance Alert</h3>
-           <div>
+          <div>
             <v-icon @click="cancelAlert">mdi-close</v-icon>
-           </div>
+          </div>
         </div>
         <span class="fz-14 pa-4">
           Once the alert is activated, an email will be sent if the account
@@ -257,15 +257,12 @@
                 Save
               </v-btn>
             </div>
-            <div
-              class="d-flex al-c mb-4 justify-space-between"
-              style="gap: 30px"
-            >
-              <h2 class="fz-16">Email Notifications</h2>
-              <span class="fz-14" v-if="email">
+            <div class="d-flex al-cx justify-space-between" style="gap: 30px">
+              <h2 class="fz-16" style="width: 178px">Email Notifications</h2>
+              <div class="fz-14 user-bind" v-if="email">
                 {{ email }}
-              </span>
-              <div class="fz-14" style="width: 96px; height: 28px">
+              </div>
+              <div class="fz-14 bind-btn">
                 <v-btn
                   v-if="!email"
                   elevation="0"
@@ -277,14 +274,11 @@
                 </v-btn>
               </div>
             </div>
-            <div
-              class="d-flex al-c justify-space-between"
-              style="gap: 30px"
-            >
+            <div class="d-flex al-c justify-space-between mt-4" style="gap: 30px">
               <h2 class="fz-16">Telegram Notifications</h2>
-              <span class="fz-14" v-if="exists">
+              <div class="fz-14 user-bind" v-if="exists">
                 {{ userName }}
-              </span>
+              </div>
               <div class="fz-14">
                 <v-btn
                   v-if="!exists"
@@ -1038,5 +1032,14 @@ export default {
   line-height: 48px;
   background: #f1f5f9;
   border-radius: 0 4px 4px 0;
+}
+.user-bind {
+  width: 200px;
+  text-align: left;
+}
+.bind-btn {
+  width: 148px;
+  height: 28px;
+  text-align: right;
 }
 </style>
