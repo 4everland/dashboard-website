@@ -1038,7 +1038,7 @@ export default {
   text-align: left;
 }
 .bind-btn {
-  width: 148px;
+  width: 168px;
   height: 28px;
   text-align: right;
 }
