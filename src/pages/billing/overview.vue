@@ -795,7 +795,7 @@ export default {
         if (process.env.NODE_ENV == "development") {
           tgLink = `https://t.me/test_gqf_go_bot?start=${code}`;
         } else {
-          tgLink = `https://t.me/BalanceAlert_4EVERLAND_Bot?start=${code}`;
+          tgLink = `https://t.me/notify_4everland_bot?start=${code}`;
         }
         window.open(tgLink, "_blank");
         this.balanceAlertShow = false;
