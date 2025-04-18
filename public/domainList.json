@@ -23,16 +23,6 @@
       "registerLink": "https://sns.id/?ref=4everland"
     },
     {
-      "name": "SuiNS",
-      "key": "suins",
-      "network": "function(domain){return 'https://' +  domain + '.id'}",
-      "host": "https://suins.io",
-      "rule": ".+.sui$",
-      "placeholder": "SuiNS Domain",
-      "icon": "suins.svg",
-      "display": "true"
-    },
-    {
       "name": "SPACE ID",
       "key": "spaceid",
       "network": "function(domain){return 'https://' + domain +'.bnb'}",
