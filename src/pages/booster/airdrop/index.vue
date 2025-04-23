@@ -231,10 +231,10 @@ export default {
         const provider = new ethers.providers.Web3Provider(this.walletObj);
         const { chainId } = await provider.getNetwork();
         console.log('chainId', chainId);
-        if (process.env.NODE_ENV == "development" && chainId != 97) {
+        if (this.$inDev && chainId != 97) {
           await this.switchNet('BSC');
         }
-        if (process.env.NODE_ENV == "production" && chainId != 56) {
+        if (!this.$inDev && chainId != 56) {
           await this.switchNet('BSC');
         }
         const contract = new ethers.Contract(
@@ -266,10 +266,10 @@ export default {
         const tokenAddress = process.env.VUE_APP_AIRDROP_ADDRESS;
         const provider = new ethers.providers.Web3Provider(this.walletObj);
         const { chainId } = await provider.getNetwork();
-        if (process.env.NODE_ENV == "development" && chainId != 97) {
+        if (this.$inDev && chainId != 97) {
           await this.switchNet('BSC');
         }
-        if (process.env.NODE_ENV == "production" && chainId != 56) {
+        if (!this.$inDev && chainId != 56) {
           await this.switchNet('BSC');
         }
         const signer = provider.getSigner();
@@ -310,6 +310,7 @@ export default {
         this.$toast2("Successfully Claimed!");
         let info = this.userInfo.wallet.address;
         localStorage.setItem("claimInfo" + info, true);
+        this.alreadyClaim = true;
         this.claimLoading = false;
         console.log('Transaction receipt:', receipt);
       } catch (error) {
