@@ -26,7 +26,7 @@
       "name": "SPACE ID",
       "key": "spaceid",
       "network": "function(domain){return 'https://' + domain +'.bnb'}",
-      "host": "https://space.id",
+      "host": "https://bnb.me/flow/ipfs",
       "rule": ".+.bnb$",
       "placeholder": "SPACE ID",
       "icon": "spaceid.svg",
