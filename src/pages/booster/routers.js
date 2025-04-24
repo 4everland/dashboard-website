@@ -15,16 +15,6 @@ export default [
         },
       },
       {
-        path: "/boost/quest",
-        component: () => import("./eliteQuest"),
-        meta: {
-          title: "Elite Quest",
-          hideNav: 1,
-          isTab: 1,
-          noLogin: 1,
-        },
-      },
-      {
         path: "/boost/leaderboard",
         component: () => import("./leaderboard"),
         meta: {

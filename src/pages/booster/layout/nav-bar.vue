@@ -154,10 +154,6 @@ export default {
           path: "/boost",
         },
         {
-          name: "Elite Quest",
-          path: "/boost/quest",
-        },
-        {
           name: "Leaderboard",
           path: "/boost/leaderboard",
         },

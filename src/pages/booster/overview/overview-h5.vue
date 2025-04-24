@@ -3,15 +3,6 @@
     <div
       v-if="asMobile"
       class="trigger-icon pos-a"
-      style="right: 193px; top: 61px"
-      @click="showBindExchange"
-    >
-      <img src="/img/booster/new/icon-bind.png" width="48" alt="" />
-      <div class="trigger-text connect fz-12 fw-b text-center">Bind</div>
-    </div>
-    <div
-      v-if="asMobile"
-      class="trigger-icon pos-a"
       style="right: 132px; top: 61px"
       @click="showStartQueryDialog"
     >
