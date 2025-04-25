@@ -200,7 +200,10 @@
               for binding.
             </div>
             <div class="d-flex al-c mt-4">
-              <div class="gray mt-1 fz-14">
+              <div
+                class="gray mt-1 fz-14 mr-10"
+                v-if="getDomainByType(item.type).key !== 'spaceid'"
+              >
                 <span>IPNS:</span>
                 <span>{{ item.ipns.cutStr(6, 4) }}</span>
                 <img
@@ -222,7 +225,7 @@
                   {{ item.content == item.ipns ? "Bound" : "Bind" }}
                 </v-btn>
               </div>
-              <div class="gray mt-1 fz-14 ml-10">
+              <div class="gray mt-1 fz-14">
                 <span>IPFS:</span>
                 <span>{{ item.ipfs.cutStr(6, 4) }}</span>
                 <img
