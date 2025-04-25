@@ -25,7 +25,7 @@
       "display": "true",
       "register": "true",
       "registerLink": "https://sns.id/?ref=4everland",
-      "bindLink":"main-management/sns-setup-guide"
+      "bindLink":"https://docs.4everland.org/hositng/guides/domain-management/sns-setup-guide"
     },
     {
       "name": "SPACE ID",
