@@ -23,12 +23,26 @@
                 class="ipfs-input hide-msg"
                 outlined
                 :items="items"
-                item-text="name"
+                :item-text="name"
                 item-value="key"
                 dense
                 @change="handleChangeSelect"
                 v-model="seleted"
-              ></v-select>
+              >
+                <template v-slot:item="{ item }">
+                  <div>
+                    {{ item.name }}
+                    <span> ({{ item.text }})</span>
+                  </div>
+                </template>
+
+                <template v-slot:selection="{ item }">
+                  <div>
+                    {{ item.name }}
+                    <span>({{ item.text }})</span>
+                  </div>
+                </template>
+              </v-select>
             </div>
             <v-text-field
               outlined
@@ -50,7 +64,7 @@
               Add
             </v-btn>
           </div>
-          <div
+          <!-- <div
             class="mt-4 fz-12"
             v-if="getDomainByType(seleted).register == 'true'"
           >
@@ -58,6 +72,15 @@
             <a :href="getDomainByType(seleted).registerLink" target="_blank">
               Register now</a
             >
+          </div> -->
+          <div class="mt-4 fz-12">
+            Need a Decentralized Domain?
+            <a :href="getDomainByType(seleted).registerLink" target="_blank">
+              Get <span></span>{{ getDomainByType(seleted).name }} </a
+            >/
+            <a :href="getDomainByType(seleted).bindLink" target="_blank">
+              Binding Tutorial
+            </a>
           </div>
         </div>
       </div>
@@ -170,7 +193,9 @@
             <div class="gray mt-1 fz-14" v-else>
               Copy the hash to
               <a :href="getDomainByType(item.type).host" target="_blank">{{
-                getDomainByType(item.type).host.replace("https://", "").split('/')[0]
+                getDomainByType(item.type)
+                  .host.replace("https://", "")
+                  .split("/")[0]
               }}</a>
               for binding.
             </div>

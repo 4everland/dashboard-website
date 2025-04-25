@@ -2,16 +2,20 @@
   "list": [
     {
       "name": "ENS",
+      "text":".eth",
       "key": "ens",
       "network": "function(domain){return 'https://' +  domain + '.limo'}",
       "host": "https://app.ens.domains",
       "rule": ".+.eth$",
       "placeholder": "ENS Domain",
       "icon": "ens.svg",
-      "display": "true"
+      "display": "true",
+      "registerLink": "https://app.ens.domains/",
+      "bindLink":"https://docs.4everland.org/hositng/guides/domain-management/ens-setup-guide"
     },
     {
       "name": "SNS",
+      "text":".sol",
       "key": "sns",
       "network": "function(domain){return 'https://' + domain.split('.')[0] + '.4sol.xyz'}",
       "host": "https://naming.bonfida.org",
@@ -20,17 +24,21 @@
       "icon": "sns.svg",
       "display": "true",
       "register": "true",
-      "registerLink": "https://sns.id/?ref=4everland"
+      "registerLink": "https://sns.id/?ref=4everland",
+      "bindLink":"main-management/sns-setup-guide"
     },
     {
       "name": "SPACE ID",
+      "text":".bnb",
       "key": "spaceid",
       "network": "function(domain){return 'https://' + domain +'.bnb'}",
       "host": "https://bnb.me/flow/ipfs",
       "rule": ".+.bnb$",
       "placeholder": "SPACE ID",
       "icon": "spaceid.svg",
-      "display": "true"
+      "display": "true",
+      "registerLink": "https://www.space.id/",
+      "bindLink":"https://docs.4everland.org/hositng/guides/domain-management/spaceid-setup-guide"
     }
   ]
 }
