@@ -53,6 +53,7 @@ import {
   fetchProjectPointsList,
   claimProjectPoints,
   fetchProjectInfo,
+  fetchTonAdsLimit
 } from "@/api/booster";
 import { pointMove } from "@/utils/animation";
 import { bus } from "@/utils/bus";
@@ -64,7 +65,15 @@ export default {
       allPointsNumber: 0,
       claimed: 0,
       loading: false,
+      AdsLimit: {
+      },
+      AdController: null,
     };
+  },
+  computed: {
+    isTgMiniApp() {
+      return Object.keys(this.$tg.initDataUnsafe).length > 0;
+    },
   },
   mounted() {
     bus.$on("initPointsPool", () => {
@@ -77,8 +86,15 @@ export default {
   },
   methods: {
     async init() {
+      if(this.isTgMiniApp){
+        this.AdController = window.Adsgram.init({ blockId: process.env.VUE_APP_ADS_REWARD_BLOCK_ID });
+      }
       const curTimeStamp = +new Date() / 1e3;
       const { data } = await fetchProjectPointsList();
+      const { data: limitdata } = await fetchTonAdsLimit();
+        if (limitdata) {
+          this.AdsLimit = limitdata;
+        }
       const list = data.list || [];
       const _task = data.tasks || [];
       const tasks = _task?.filter((item) => {
@@ -87,7 +103,24 @@ export default {
       const arrorder = [6, 4, 2, 0, 1, 3, 5, 7];
       const arrorder2 = [5, 3, 1, 0, 2, 4, 6];
       this.dataList = list.length === 0 ? tasks : list;
-      this.allPointsNumber = list.length;
+      if(this.isTgMiniApp){
+        await this.$sleep(10000);
+        let _limit = this.AdsLimit?.poolLimit - this.AdsLimit?.poolComplete;
+        if(_limit > 0) {
+          this.dataList.push({
+            projectLogoUrl: "/img/booster/ton-invite-icon.png",
+            type: "unlocked",
+            projectType: "Ads",
+            points: 0.002,
+            idx: "ads1",
+          });
+        }
+        this.dataList = this.dataList.slice(0, 8);
+      }
+      let adsList = this.dataList.filter((item) => {
+        return item.projectType == "Ads";
+      });
+      this.allPointsNumber = list.length+adsList.length;
       this.claimed = 0;
 
       if (this.dataList.length % 2 === 1) {
@@ -111,9 +144,42 @@ export default {
       await this.$sleep(500);
       box.classList.remove('box-shadow-animate');
     },
+    async handleAccountShadow() {
+      const box = document.getElementById("activity_Account_img");
+      box.classList.add('box-scale-animate');
+      await this.$sleep(500);
+      box.classList.remove('box-scale-animate');
+    },
     async getProjectInfo(item,index) {
       
       if(!item) return;
+      if(item.projectType == "Ads") {
+        if(item.hidden) return;
+            await this.AdController.show().then(async (result) => {
+              console.log(result);
+              this.newDataList = this.newDataList.map((i, idx) => {
+                if (idx === index) {
+                  return {
+                    ...i,
+                    hidden: true,
+                  };
+                }
+                return i;
+              });
+              pointMove('partner_'+index, "activity_Account", item.projectLogoUrl, '124' )
+              this.playaudio();
+              await this.$sleep(2000)
+              this.handleAccountShadow();
+              this.claimed++;
+              if (this.claimed == this.allPointsNumber) {
+                this.init();
+              }
+        }).catch((error) => {
+            this.$toast2('Show Task error', "error");
+            console.log('error',error);
+        })
+        return;
+      }
       if(item.projectId) {
         if(item.hidden) return;
         this.playaudio();

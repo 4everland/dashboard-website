@@ -12,7 +12,7 @@
     <div
       v-if="asMobile"
       class="trigger-icon pos-a"
-      id="activity_Account"
+      id="activity_Account_partner"
       style="right: 71px; top: 61px"
       @click="
         () =>
@@ -33,7 +33,7 @@
           !this.boostLocked ? this.$store.commit('SET_PROFILE_BAR', true) : ''
       "
     >
-      <img src="/img/booster/icon-account.png" width="48" alt="" />
+      <img id="activity_Account_img" src="/img/booster/icon-account.png" width="48" alt="" />
       <div class="trigger-text staking fz-12 fw-b text-center" style="width: 52px;">Account</div>
     </div>
 
@@ -1040,5 +1040,27 @@ export default {
   background: linear-gradient(97deg, #0fe1f8 -22.19%, #1102fc 99.83%);
   box-shadow: 0px 1.582px 4.746px 0px rgba(0, 50, 228, 0.4);
   border-radius: 12px;
+}
+.box-shadow-animate {
+  animation: boxShadowAnimation 1.5s forwards;
+}
+@keyframes boxShadowAnimation {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0);
+  }
+}
+.box-scale-animate {
+  animation: boxScaleAnimation 1.5s forwards;
+}
+@keyframes boxScaleAnimation {
+  0% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>
