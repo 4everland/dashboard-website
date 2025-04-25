@@ -108,18 +108,18 @@ export default {
 
        
         let _limit = this.AdsLimit?.poolLimit - this.AdsLimit?.poolComplete;
-        // if(_limit==1){
-        //   await this.$sleep(7000);
-        // }
-        // if(_limit > 0) {
-        //   this.dataList.push({
-        //     projectLogoUrl: "/img/booster/ton-invite-icon.png",
-        //     type: "unlocked",
-        //     projectType: "Ads",
-        //     points: 0.002,
-        //     idx: "ads1",
-        //   });
-        // }
+        if(_limit==1){
+          await this.$sleep(7000);
+        }
+        if(_limit > 0) {
+          this.dataList.push({
+            projectLogoUrl: "/img/booster/ton-invite-icon.png",
+            type: "unlocked",
+            projectType: "Ads",
+            points: Number(this.AdsLimit?.poolReward),
+            idx: "ads1",
+          });
+        }
         this.dataList = this.dataList.slice(0, 8);
       }
       let adsList = this.dataList.filter((item) => {
