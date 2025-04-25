@@ -17,7 +17,7 @@
         </div>
 
         <ul class="withdraw-tips fz-12 mt-4">
-          <li>The minimum withdrawal amount is 0.1 Ton.</li>
+          <li>The minimum withdrawal amount is 0.02 Ton.</li>
           <li>Withdrawals may take time. Please be patient!</li>
         </ul>
 
@@ -77,7 +77,7 @@
           </div>
 
           <ul class="withdraw-tips fz-12 mt-4">
-            <li>The minimum withdrawal amount is 0.1 Ton.</li>
+            <li>The minimum withdrawal amount is 0.02 Ton.</li>
             <li>Withdrawals may take time. Please be patient!</li>
           </ul>
 
@@ -156,7 +156,7 @@ export default {
           this.tonConnectUI.account.address
         );
         console.log(address, "===== friendaddr");
-        const { data, code, message } = await tonWithdraw(address, "0.1");
+        const { data, code, message } = await tonWithdraw(address, this.amount);
         console.log(data, code, message);
         if (code == 200) {
           this.$emit("input", false);

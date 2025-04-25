@@ -121,7 +121,7 @@ export const tonMove = (curId, targetId, imgurl) => {
   });
 };
 
-export const pointMove = (curId, targetId, imgurl, offset=0) => {
+export const pointMove = (curId, targetId, imgurl, offset=0, offsety=0) => {
   const wallet = document.getElementById(curId);
   const targetDiv = document.getElementById(targetId);
   const coinCount = 1;
@@ -170,7 +170,7 @@ export const pointMove = (curId, targetId, imgurl, offset=0) => {
     },
     y: function () {
       //function-based value
-      return targetRect.top - targetRect.height * 0.5 - 16 - walletRect.top;
+      return targetRect.top - targetRect.height * 0.5 - 16 - walletRect.top + offsety*1;
     },
     opacity: 0,
     stagger: 0.05,

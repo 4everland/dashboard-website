@@ -204,7 +204,7 @@ export default {
           case "boottickettowithdraw":
             return "Points Withdraw";
           case "AD_REWARD":
-            return "AD Reward";
+            return "Mining Reward";
           default:
             return "Invite Reward";
         }

@@ -45,6 +45,7 @@
       </div>
     </div>
     <audio ref="audioPlayer" src="/audio/collect.mp3" preload="auto"></audio>
+    <audio ref="audioPlayer2" src="/audio/collect.mp3" preload="auto"></audio>
   </div>
 </template>
 
@@ -104,8 +105,12 @@ export default {
       const arrorder2 = [5, 3, 1, 0, 2, 4, 6];
       this.dataList = list.length === 0 ? tasks : list;
       if(this.isTgMiniApp){
-        await this.$sleep(10000);
+
+       
         let _limit = this.AdsLimit?.poolLimit - this.AdsLimit?.poolComplete;
+        if(_limit==1){
+          await this.$sleep(5000);
+        }
         if(_limit > 0) {
           this.dataList.push({
             projectLogoUrl: "/img/booster/ton-invite-icon.png",
@@ -138,6 +143,14 @@ export default {
       }
       
     },
+    playaudio2() {
+      const audio = this.$refs.audioPlayer2;
+      audio.play();
+      if ("vibrate" in navigator) {
+        navigator.vibrate(200);
+      }
+      
+    },
     async handleShadow() {
       const box = document.getElementById("navtop-mobile-points");
       box.classList.add('box-shadow-animate');
@@ -151,12 +164,13 @@ export default {
       box.classList.remove('box-scale-animate');
     },
     async getProjectInfo(item,index) {
-      
+      let self = this;
       if(!item) return;
       if(item.projectType == "Ads") {
         if(item.hidden) return;
-            await this.AdController.show().then(async (result) => {
+        this.AdController.show().then(async (result) => {
               console.log(result);
+              self.playaudio2();
               this.newDataList = this.newDataList.map((i, idx) => {
                 if (idx === index) {
                   return {
@@ -166,9 +180,10 @@ export default {
                 }
                 return i;
               });
-              pointMove('partner_'+index, "activity_Account", item.projectLogoUrl, '124' )
-              this.playaudio();
-              await this.$sleep(2000)
+              
+              pointMove('partner_'+index, "activity_Account_img", item.projectLogoUrl, '40', '60' )
+              
+              await this.$sleep(1500)
               this.handleAccountShadow();
               this.claimed++;
               if (this.claimed == this.allPointsNumber) {
