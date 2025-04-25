@@ -109,7 +109,7 @@ export default {
        
         let _limit = this.AdsLimit?.poolLimit - this.AdsLimit?.poolComplete;
         if(_limit==1){
-          await this.$sleep(5000);
+          await this.$sleep(7000);
         }
         if(_limit > 0) {
           this.dataList.push({
