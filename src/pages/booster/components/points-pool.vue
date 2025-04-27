@@ -58,6 +58,13 @@ import {
 } from "@/api/booster";
 import { pointMove } from "@/utils/animation";
 import { bus } from "@/utils/bus";
+import {
+  TonAdInit,
+  GetMultiTonAd,
+  TonAdPopupShow,
+  OnAdClick,
+} from "ton-ai-sdk";
+
 export default {
   data() {
     return {
@@ -76,19 +83,36 @@ export default {
       return Object.keys(this.$tg.initDataUnsafe).length > 0;
     },
   },
-  mounted() {
+  async mounted() {
+    TonAdInit({
+      appId: process.env.VUE_APP_TON_AI_ADS_POOL_APP_ID,
+    });
+   
     bus.$on("initPointsPool", () => {
       this.init();
     });
     this.init();
+
   },
   beforeDestroy() {
     bus.$off("initPointsPool");
   },
   methods: {
+    async getMultiTOnAdd() {
+      try {
+        const { ads } = await GetMultiTonAd(
+          process.env.VUE_APP_TON_AI_ADS_POOL_BLOCK_ID,
+          3
+        );
+        this.tonAds = ads;
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async init() {
       if(this.isTgMiniApp){
         this.AdController = window.Adsgram.init({ blockId: process.env.VUE_APP_ADS_REWARD_BLOCK_ID });
+        await this.getMultiTOnAdd();
       }
       const curTimeStamp = +new Date() / 1e3;
       const { data } = await fetchProjectPointsList();
@@ -105,25 +129,40 @@ export default {
       const arrorder2 = [5, 3, 1, 0, 2, 4, 6];
       this.dataList = list.length === 0 ? tasks : list;
       if(this.isTgMiniApp){
-
-       
-        let _limit = this.AdsLimit?.poolLimit - this.AdsLimit?.poolComplete;
-        if(_limit==1){
+        // ton ai
+        let rand = Math.random();
+        let randIndex = parseInt(rand * 10) % this.tonAds.length;
+        let _tonlimit = this.AdsLimit?.tonPoolLimit - this.AdsLimit?.tonPoolComplete;
+        if(_tonlimit==1){
           await this.$sleep(7000);
         }
-        if(_limit > 0) {
+        if(_tonlimit > 0) {
           this.dataList.push({
             projectLogoUrl: "/img/booster/ton-invite-icon.png",
             type: "unlocked",
-            projectType: "Ads",
+            projectType: "tonai",
             points: Number(this.AdsLimit?.poolReward),
             idx: "ads1",
+            tonAd: this.tonAds[randIndex],
           });
         }
+        // let _limit = this.AdsLimit?.poolLimit - this.AdsLimit?.poolComplete;
+        // if(_limit==1){
+        //   await this.$sleep(7000);
+        // }
+        // if(_limit > 0) {
+        //   this.dataList.push({
+        //     projectLogoUrl: "/img/booster/ton-invite-icon.png",
+        //     type: "unlocked",
+        //     projectType: "Ads",
+        //     points: Number(this.AdsLimit?.poolReward),
+        //     idx: "ads1",
+        //   });
+        // }
         this.dataList = this.dataList.slice(0, 8);
       }
       let adsList = this.dataList.filter((item) => {
-        return item.projectType == "Ads";
+        return item.projectType == "Ads" || item.projectType == "tonai";
       });
       this.allPointsNumber = list.length+adsList.length;
       this.claimed = 0;
@@ -163,6 +202,56 @@ export default {
       await this.$sleep(500);
       box.classList.remove('box-scale-animate');
     },
+    async handleTonAdItem(item,index) {
+      this.playaudio2();
+      await this.$sleep(2000)
+      this.newDataList = this.newDataList.map((i, idx) => {
+        if (idx === index) {
+          return {
+            ...i,
+            hidden: true,
+          };
+        }
+        return i;
+      });
+      pointMove('partner_'+index, "activity_Account_img", item.projectLogoUrl, '40', '60' )
+            
+      await this.$sleep(1500)
+      this.handleAccountShadow();
+      this.claimed++;
+      if (this.claimed == this.allPointsNumber) {
+        this.init();
+      }
+    },
+    async onAdItem(tonAd,item,index) {
+      let self = this;
+      if (/cpc/i.test(tonAd.billingType)) {
+        OnAdClick(tonAd, (success) => {
+          console.log('success',success);
+          self.handleTonAdItem(item,index);
+        });
+        return;
+      }
+      TonAdPopupShow({
+        tonAd,
+        onAdClick: (ad) => {
+          console.log('adclick',ad);
+          self.handleTonAdItem(item,index);
+        },
+        onAdError: (error) => {
+          console.error("Ad error:", error);
+        },
+        onAdClose: () => {
+          console.log('onAdClose');
+          // $toast("viewed", 1);
+        },
+        onAdComplete: (ad) => {
+          console.log('onAdComplete',ad);
+          self.handleTonAdItem(item,index);
+          // $toast("viewed", 1);
+        },
+      });
+    },
     async getProjectInfo(item,index) {
       let self = this;
       if(!item) return;
@@ -193,6 +282,13 @@ export default {
             this.$toast2('Show Task error', "error");
             console.log('error',error);
         })
+        return;
+      }
+
+      if(item.projectType == "tonai") {
+        if(item.hidden) return;
+        this.onAdItem(item.tonAd,item,index);
+        
         return;
       }
       if(item.projectId) {
