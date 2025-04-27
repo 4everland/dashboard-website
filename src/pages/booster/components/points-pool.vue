@@ -133,9 +133,7 @@ export default {
         let rand = Math.random();
         let randIndex = parseInt(rand * 10) % this.tonAds.length;
         let _tonlimit = this.AdsLimit?.tonPoolLimit - this.AdsLimit?.tonPoolComplete;
-        if(_tonlimit==1){
-          await this.$sleep(7000);
-        }
+
         if(_tonlimit > 0) {
           this.dataList.push({
             projectLogoUrl: "/img/booster/ton-invite-icon.png",
@@ -220,6 +218,7 @@ export default {
       this.handleAccountShadow();
       this.claimed++;
       if (this.claimed == this.allPointsNumber) {
+        await this.$sleep(10000);
         this.init();
       }
     },
@@ -276,6 +275,7 @@ export default {
               this.handleAccountShadow();
               this.claimed++;
               if (this.claimed == this.allPointsNumber) {
+                await this.$sleep(10000);
                 this.init();
               }
         }).catch((error) => {
