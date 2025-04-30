@@ -218,7 +218,7 @@ export default {
       this.handleAccountShadow();
       this.claimed++;
       if (this.claimed == this.allPointsNumber) {
-        await this.$sleep(10000);
+        await this.$sleep(30000);
         this.init();
       }
     },
@@ -275,7 +275,7 @@ export default {
               this.handleAccountShadow();
               this.claimed++;
               if (this.claimed == this.allPointsNumber) {
-                await this.$sleep(10000);
+                await this.$sleep(30000);
                 this.init();
               }
         }).catch((error) => {
