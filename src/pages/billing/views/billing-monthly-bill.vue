@@ -62,6 +62,7 @@ export default {
     return {
       curIndex: 0,
       list: {},
+      curYear: new Date().getFullYear().toString(),
     };
   },
   computed: {
@@ -76,9 +77,6 @@ export default {
           value: (2023 + i).toString(),
         })
       );
-    },
-    curYear() {
-      return new Date().getFullYear().toString();
     },
   },
   created() {
