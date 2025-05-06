@@ -62,16 +62,23 @@ export default {
     return {
       curIndex: 0,
       list: {},
-      items: [
-        { text: "2023", value: "2023" },
-        { text: "2024", value: "2024" },
-      ],
-      curYear: "2024",
     };
   },
   computed: {
     curData() {
       return this.list[this.curIndex];
+    },
+    items() {
+      return Array.from(
+        { length: new Date().getFullYear() - 2022 },
+        (_, i) => ({
+          text: (2023 + i).toString(),
+          value: (2023 + i).toString(),
+        })
+      );
+    },
+    curYear() {
+      return new Date().getFullYear().toString();
     },
   },
   created() {
