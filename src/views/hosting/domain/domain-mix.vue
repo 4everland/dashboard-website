@@ -167,6 +167,9 @@ export default {
         if (this.type == "suins") {
           this.headers[0].text = "SuiNS";
         }
+        if (this.type == "spaceid") {
+          this.headers[0].text = "SPACE ID";
+        }
         const params = {
           page: this.page - 1,
           pageSize: 10,
