@@ -223,7 +223,7 @@
 
           <!-- ton ai ads  tonAds.length > 0 &&    v-if="tonAds.length > 0 && tonAdsLimit?.overLimit === false && tonAdsLimit?.overLimit === false" -->
 
-          <div style="margin: 12px 0" v-if="tonAdsLimit?.overLimit === false && tonAdsLimit?.overLimit === false && isTgMiniApp">
+          <div style="margin: 12px 0" v-if="tonAds.length > 0 && tonAdsLimit?.overLimit === false && tonAdsLimit?.overLimit === false && isTgMiniApp">
             <div
               class="task-list-title"
               style="border-top: 1px solid rgba(255, 255, 255, 0.3)"
@@ -261,7 +261,7 @@
                 </div>
               </v-col>
               <!-- adsgram ads -->
-              <v-col cols="12" v-show="hasShadowImg">
+              <!-- <v-col cols="12" v-show="hasShadowImg">
                 <div class="task-item-box">
                   <adsgram-task
                     id="taskAds"
@@ -274,7 +274,7 @@
                   <div slot='done' class='task__button task__button_done'>Done</div>
                 </adsgram-task>
                 </div>
-              </v-col>
+              </v-col> -->
             </v-row>
           </div>
 
