@@ -233,7 +233,7 @@
             <v-row no-gutters style="gap: 18px 0">
               <v-col v-for="item in tonAds" :key="item.adId" cols="12">
                 <div class="task-item-box">
-                  <div class="task-item-left" @click="handleTonAdTitle(item)">
+                  <div class="task-item-left" @click="showPopupAdd(item)">
                     <img class="task-item-image" :src="item.icon" alt="" />
                     <div class="task-text-box">
                       <div class="task-name">{{ item.brandName }}</div>
@@ -812,10 +812,6 @@ export default {
       }
       if (this.isTgMiniApp) return this.$tg.openAuto(url);
       window.open(url);
-    },
-
-    handleTonAdTitle(it) {
-      this.$tg.openAuto(it.url);
     },
     async shareOnTgStory(media_url, text) {
       postEvent("web_app_share_to_story", { media_url, text });
