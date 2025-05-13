@@ -873,18 +873,21 @@ export default {
         }
       }, 15000);
 
-      if (tonAd.billingType === "CPC" || tonAd.billingType === "oCPC") {
-        OnAdClick(tonAd, (success) => {
-          if (!success) {
-            clearTimeout(timer);
-            this.tonAds[i].load = false;
-          }
-        });
-      } else {
+      // if (tonAd.billingType === "CPC" || tonAd.billingType === "oCPC") {
+      //   OnAdClick(tonAd, (success) => {
+      //     if (!success) {
+      //       clearTimeout(timer);
+      //       this.tonAds[i].load = false;
+      //     }
+      //   });
+      // } else {
         TonAdPopupShow({
           tonAd,
           onAdClick: (ad) => {
             console.log("Ad clicked:", ad);
+            this.tonAds[i].load = false;
+            clearTimeout(timer);
+            this.showTaskDrawer = true;
           },
           onAdError: (error) => {
             console.error("Ad error:", error);
@@ -895,7 +898,7 @@ export default {
             this.showTaskDrawer = true;
           },
         });
-      }
+      //}
     },
   },
 };

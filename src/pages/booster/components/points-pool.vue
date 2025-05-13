@@ -224,13 +224,13 @@ export default {
     },
     async onAdItem(tonAd,item,index) {
       let self = this;
-      if (/cpc/i.test(tonAd.billingType)) {
-        OnAdClick(tonAd, (success) => {
-          console.log('success',success);
-          self.handleTonAdItem(item,index);
-        });
-        return;
-      }
+      // if (/cpc/i.test(tonAd.billingType)) {
+      //   OnAdClick(tonAd, (success) => {
+      //     console.log('success',success);
+      //     self.handleTonAdItem(item,index);
+      //   });
+      //   return;
+      // }
       TonAdPopupShow({
         tonAd,
         onAdClick: (ad) => {
