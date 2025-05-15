@@ -170,7 +170,7 @@ export default {
     },
     showBind() {
       let _project = this.info.projectName;
-      return ["OPAI", "DeepLink", "AILayer", "LSP Finance", "LOL", "LingoAI", "AI SIM", "FusionFi Protocol"].includes(_project) && !this.currentAddress;
+      return ["OPAI", "DeepLink", "AILayer", "LSP Finance", "LOL", "LingoAI", "AI SIM", "FusionFi Protocol", "Rei Network"].includes(_project) && !this.currentAddress;
     }
   },
 
