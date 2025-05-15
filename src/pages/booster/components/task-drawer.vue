@@ -261,7 +261,7 @@
                 </div>
               </v-col>
               <!-- adsgram ads -->
-              <v-col cols="12" v-show="hasShadowImg">
+              <v-col cols="12" v-if="isTgMiniApp" v-show="hasShadowImg">
                 <div class="task-item-box">
                   <adsgram-task
                     id="taskAds"
