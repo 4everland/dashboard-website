@@ -84,35 +84,25 @@
     <div class="mt-6">
       <div class="d-flex al-c mb-4 justify-space-between">
         <span class="list-tit">API Key</span>
-      </div>
-      <div class="d-flex al-c">
-        <div class="api-key-box">
-          <span>{{ userKey }}</span>
-          <v-btn icon v-clipboard="userKey" @success="$toast('Copied!')">
-            <img :src="require('/public/img/svg/rpc/copy.svg')" width="24" />
-          </v-btn>
-        </div>
-        <div class="ml-2 api-time" v-if="updatedAt">
-          Updated on {{ parseTime(updatedAt, "{y}-{m}-{d}") }}
-        </div>
-        <div class="ml-2 api-time" v-else-if="createdAt">
-          Created on {{ parseTime(createdAt, "{y}-{m}-{d}") }}
-        </div>
-      </div>
-      <div class="d-flex al-c mt-2">
-        <a
-          href="https://docs.4everland.org/rpc/guides"
-          target="_blank"
-          rel="noopener noreferrer"
-          style="
-            color: #6172f3;
-            font-size: 14px;
-            font-weight: 400;
-            text-decoration-line: underline;
-          "
-          >API Reference Doc
-        </a>
-        <svg
+        <div class="d-flex al-c mt-2">
+          <a
+            href="https://docs.4everland.org/rpc/guides"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="
+              color: #6172f3;
+              font-size: 14px;
+              font-weight: 400;
+              text-decoration-line: underline;
+            "
+            >API Reference Doc
+          </a>
+          <img
+            class="ml-1"
+            :src="require('/public/img/svg/rpc/right.svg')"
+            width="16"
+          />
+          <!-- <svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
           height="17"
@@ -126,7 +116,34 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           />
-        </svg>
+        </svg> -->
+        </div>
+      </div>
+      <div class="d-flex al-c">
+        <div class="api-key-box">
+          <span>{{ userKey }}</span>
+          <div class="d-flex justify-end align-center">
+            <div class="ml-2 api-time" v-if="updatedAt">
+              Updated on {{ parseTime(updatedAt, "{y}-{m}-{d}") }}
+            </div>
+            <div class="ml-2 api-time" v-else-if="createdAt">
+              Created on {{ parseTime(createdAt, "{y}-{m}-{d}") }}
+            </div>
+            <v-btn
+              icon
+              v-clipboard="userKey"
+              @success="$toast('Copied!')"
+              class="key-copy ml-4"
+            >
+              <img
+                class="mr-1"
+                :src="require('/public/img/svg/rpc/copy-r.svg')"
+                width="16"
+              />
+              Copy
+            </v-btn>
+          </div>
+        </div>
       </div>
     </div>
     <div class="mt-10 endpoints-box">
@@ -147,7 +164,78 @@
           @input="changeType"
         ></e-radio-btn>
       </div>
-      <div class="endpoints-list-box mt-4">
+      <v-data-table
+        class="endpoints-list-table mt-4"
+        :headers="headers"
+        :items="chainList"
+        :loading="tableLoading"
+        hide-default-footer
+        disable-pagination
+      >
+        <template v-slot:item.name="{ item }">
+          <div class="d-flex al-c">
+            <img :src="item.logo" width="24" />
+            <span class="item-name ml-2">{{ item.name }}</span>
+          </div>
+        </template>
+        <template v-slot:item.network="{ item }">
+          <div class="d-flex">
+            <div>
+              <v-select
+                class="hide-msg"
+                outlined
+                :items="item.networks"
+                item-text="name"
+                item-value="key"
+                dense
+                @change="
+                  (val) => {
+                    changeSelectNetwork(val, item);
+                  }
+                "
+                v-model="item.seleted"
+              ></v-select>
+            </div>
+          </div>
+        </template>
+        <template v-slot:item.link="{ item }">
+          <div class="d-flex endpoints-link-box">
+            <div class="endpoints-link">
+              {{ item.rpcUrl }}
+            </div>
+
+            <div class="copy-btn">
+              <v-btn
+                icon
+                v-clipboard="item.rpcUrl"
+                @success="$toast('Copied!')"
+              >
+                <img
+                  :src="require('/public/img/svg/rpc/copy-link.svg')"
+                  width="16"
+                />
+              </v-btn>
+            </div>
+          </div>
+        </template>
+        <template v-slot:item.action="{ item }">
+          <div>
+            <v-btn
+              color="#6172f3"
+              class="wallet-btn"
+              @click="connectWallet(item)"
+              :disabled="isConnected"
+              >{{ !isConnected ? "Connect Wallet" : "Connected" }}</v-btn
+            >
+          </div>
+        </template>
+      </v-data-table>
+      <div class="ta-c mt-8" v-if="!chainList.length">
+        <e-empty :loading="tableLoading">
+          {{ tableLoading ? `Loading files...` : `No files` }}
+        </e-empty>
+      </div>
+      <!-- <div class="endpoints-list-box mt-4">
         <div
           class="endpoints-list-item"
           v-for="(item, index) in chainList"
@@ -206,7 +294,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -222,6 +310,12 @@ export default {
       tipsShow: true,
       typeList: ["Https", "WebSockets"],
       typeIdx: 0,
+      headers: [
+        { text: "Name", value: "name" },
+        { text: "Network", value: "network" },
+        { text: "Link", value: "link" },
+        { text: "Action", value: "action" },
+      ],
       apiKeyLise: [
         {
           icon: require("/public/img/svg/rpc/logo/Ethereum.png"),
@@ -420,6 +514,8 @@ export default {
           seleted: "Mainnet",
         },
       ],
+      isConnected: false,
+      tableLoading: false,
       chainList: [],
       userKey: "",
       createdAt: null,
@@ -461,6 +557,7 @@ export default {
       this.keyType = data.keyType;
     },
     async getEndpoints(type) {
+      this.tableLoading = true;
       const params = { type: type };
       const { data } = await fetchEndpoints(params);
       data.map((item) => {
@@ -469,6 +566,139 @@ export default {
         return item;
       });
       this.chainList = data;
+      this.tableLoading = false;
+    },
+    getChainId(type, inDev) {
+      if (type === "Polygon") return inDev !== "mainnet" ? 80001 : 137;
+      if (type === "BSC") return inDev !== "mainnet" ? 97 : 56;
+      if (type == "Optimism") return 10;
+      if (type == "Ethereum") return inDev !== "mainnet" ? 11155111 : 1;
+      if (type === "opBNB") return inDev !== "mainnet" ? 5611 : 204;
+      if (type == "Taiko") return 167000;
+    },
+    async connectWallet(item) {
+      const id = this.getChainId(item.name, item.seleted);
+      const chainId = "0x" + id.toString(16);
+      try {
+        await this.addChain(chainId, id, item);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async addChain(chainId, id, item) {
+      let params = {
+        137: {
+          chainId,
+          chainName: "Polygon Mainnet",
+          rpcUrls: [item.rpcUrl],
+          nativeCurrency: {
+            name: "Polygon Coin",
+            symbol: "MATIC",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://polygonscan.com"],
+        },
+        80001: {
+          chainId,
+          chainName: "polygon mumbai",
+          rpcUrls: [item.rpcUrl],
+          nativeCurrency: {
+            name: "matic Coin",
+            symbol: "MATIC",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        56: {
+          chainId,
+          chainName: "BSC Mainnet",
+          rpcUrls: [item.rpcUrl],
+          nativeCurrency: {
+            name: "Binance Coin",
+            symbol: "BNB",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://bscscan.com"],
+        },
+        97: {
+          chainId,
+          chainName: "BSC Chapel",
+          rpcUrls: [item.rpcUrl],
+          nativeCurrency: {
+            name: "BNB Coin",
+            symbol: "tBNB",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        10: {
+          chainId,
+          chainName: "Optimism LlamaNodes",
+          rpcUrls: [item.rpcUrl],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        11155111: {
+          chainId,
+          chainName: "Spolia",
+          rpcUrls: [item.rpcUrl],
+          nativeCurrency: {
+            name: "Sepolia-ETH",
+            symbol: "SepoliaETH",
+            decimals: 18,
+          },
+          // blockExplorerUrls: ["https://goerli.etherscan.io/"],
+        },
+        167000: {
+          chainId,
+          chainName: "Taiko Mainnet",
+          rpcUrls:[item.rpcUrl],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://taikoscan.network"],
+        },
+        5611: {
+          chainId,
+          chainName: "opBNB Testnet",
+          rpcUrls: [item.rpcUrl],
+          nativeCurrency: {
+            name: "BNB Coin",
+            symbol: "tBNB",
+            decimals: 18,
+          },
+          // blockExplorerUrls: [],
+        },
+        204: {
+          chainId,
+          chainName: "opBNB Mainnet",
+          rpcUrls: [item.rpcUrl],
+          nativeCurrency: {
+            name: "BNB Coin",
+            symbol: "BNB",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
+        },
+      }[id];
+      if (!params) return;
+      try {
+        await window.ethereum.request(
+          {
+            method: "wallet_addEthereumChain",
+            params: [params],
+          },
+          this.connectAddr
+        );
+      } catch (error) {
+        console.log("add chain err", error);
+      }
     },
     changeType(val) {
       switch (val) {
@@ -535,12 +765,23 @@ export default {
   }
   .api-key-box {
     display: flex;
-    padding: 10px;
-    justify-content: center;
+    padding: 8px 16px;
+    justify-content: space-between;
     align-items: center;
-    border-radius: 4px;
-    background: #f1f5f9;
-    gap: 236px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #eaecf0;
+    background: #f9fafb;
+    .key-copy {
+      border-radius: 4px;
+      background: #6172f3;
+      color: #fff;
+      display: flex;
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 400;
+      width: 87px;
+    }
   }
   .api-time {
     color: #64748b;
@@ -598,6 +839,35 @@ export default {
     }
     .endpoints-list-item:last-child {
       border: none;
+    }
+  }
+  .endpoints-list-table {
+    border-radius: 8px;
+    border: 1px solid #eaecf0;
+    .hide-msg {
+      width: 122px;
+      margin: 12px 0 12px 0;
+      padding-right: 0;
+    }
+    .item-name {
+      width: 130px;
+    }
+    .endpoints-link-box {
+      display: flex;
+      height: 40px;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 400;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-left: 8px;
+      border: 1px solid #eaecf0;
+      background: #f9fafb;
+      .endpoints-link {
+        min-width: 550px;
+        padding: 12px 8px;
+      }
     }
   }
 }
