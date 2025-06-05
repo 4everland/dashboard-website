@@ -164,76 +164,78 @@
           @input="changeType"
         ></e-radio-btn>
       </div>
-      <v-data-table
-        class="endpoints-list-table mt-4"
-        :headers="headers"
-        :items="chainList"
-        :loading="tableLoading"
-        hide-default-footer
-        disable-pagination
-      >
-        <template v-slot:item.name="{ item }">
-          <div class="d-flex al-c">
-            <img :src="item.logo" width="24" />
-            <span class="item-name ml-2">{{ item.name }}</span>
-          </div>
-        </template>
-        <template v-slot:item.network="{ item }">
-          <div class="d-flex">
-            <div>
-              <v-select
-                class="hide-msg"
-                outlined
-                :items="item.networks"
-                item-text="name"
-                item-value="key"
-                dense
-                @change="
-                  (val) => {
-                    changeSelectNetwork(val, item);
-                  }
-                "
-                v-model="item.seleted"
-              ></v-select>
+      <div class="endpoints-list-table mt-4">
+        <v-data-table
+          :headers="headers"
+          :items="chainList"
+          :loading="tableLoading"
+          hide-default-footer
+          disable-pagination
+          disable-sort
+        >
+          <template v-slot:item.name="{ item }">
+            <div class="d-flex al-c">
+              <img :src="item.logo" width="24" />
+              <span class="item-name ml-2">{{ item.name }}</span>
             </div>
-          </div>
-        </template>
-        <template v-slot:item.link="{ item }">
-          <div class="d-flex endpoints-link-box">
-            <div class="endpoints-link">
-              {{ item.rpcUrl }}
+          </template>
+          <template v-slot:item.network="{ item }">
+            <div class="d-flex">
+              <div>
+                <v-select
+                  class="hide-msg"
+                  outlined
+                  :items="item.networks"
+                  item-text="name"
+                  item-value="key"
+                  dense
+                  @change="
+                    (val) => {
+                      changeSelectNetwork(val, item);
+                    }
+                  "
+                  v-model="item.seleted"
+                ></v-select>
+              </div>
             </div>
+          </template>
+          <template v-slot:item.link="{ item }">
+            <div class="d-flex endpoints-link-box">
+              <div class="endpoints-link">
+                {{ item.rpcUrl }}
+              </div>
 
-            <div class="copy-btn">
-              <v-btn
-                icon
-                v-clipboard="item.rpcUrl"
-                @success="$toast('Copied!')"
-              >
-                <img
-                  :src="require('/public/img/svg/rpc/copy-link.svg')"
-                  width="16"
-                />
-              </v-btn>
+              <div class="copy-btn">
+                <v-btn
+                  icon
+                  v-clipboard="item.rpcUrl"
+                  @success="$toast('Copied!')"
+                >
+                  <img
+                    :src="require('/public/img/svg/rpc/copy-link.svg')"
+                    width="16"
+                  />
+                </v-btn>
+              </div>
             </div>
+          </template>
+          <template v-slot:item.action="{ item }">
+            <div>
+              <v-btn
+                color="#6172f3"
+                class="wallet-btn"
+                @click="connectWallet(item)"
+                :disabled="isConnected"
+                >{{ !isConnected ? "Connect Wallet" : "Connected" }}</v-btn
+              >
+            </div>
+          </template>
+        </v-data-table>
+        <div class="ta-c mt-8" v-if="!chainList.length">
+            <e-empty :loading="tableLoading">
+              {{ tableLoading ? `Loading files...` : `No files` }}
+            </e-empty>
           </div>
-        </template>
-        <template v-slot:item.action="{ item }">
-          <div>
-            <v-btn
-              color="#6172f3"
-              class="wallet-btn"
-              @click="connectWallet(item)"
-              :disabled="isConnected"
-              >{{ !isConnected ? "Connect Wallet" : "Connected" }}</v-btn
-            >
-          </div>
-        </template>
-      </v-data-table>
-      <div class="ta-c mt-8" v-if="!chainList.length">
-        <e-empty :loading="tableLoading">
-          {{ tableLoading ? `Loading files...` : `No files` }}
-        </e-empty>
       </div>
       <!-- <div class="endpoints-list-box mt-4">
         <div
@@ -642,13 +644,24 @@ export default {
           },
           // blockExplorerUrls: [],
         },
+        1: {
+          chainId,
+          chainName: "Ethereum Mainnet",
+          rpcUrls: [item.rpcUrl],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://etherscan.io"],
+        },
         11155111: {
           chainId,
           chainName: "Spolia",
           rpcUrls: [item.rpcUrl],
           nativeCurrency: {
             name: "Sepolia-ETH",
-            symbol: "SepoliaETH",
+            symbol: "ETH",
             decimals: 18,
           },
           // blockExplorerUrls: ["https://goerli.etherscan.io/"],
@@ -656,7 +669,7 @@ export default {
         167000: {
           chainId,
           chainName: "Taiko Mainnet",
-          rpcUrls:[item.rpcUrl],
+          rpcUrls: [item.rpcUrl],
           nativeCurrency: {
             name: "ETH",
             symbol: "ETH",
