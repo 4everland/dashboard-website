@@ -25,14 +25,14 @@
         </div>
         <overview-pc
           v-if="!asMobile"
-          @handleStartBoost="handleShowStartBoost"
+          @handleStartBoost="handleStartBoost"
           @handleUnlock="handleShowUnlock"
           @dailyClaim="showDailySign = true"
           @startBind="showBindExchange = true"
         ></overview-pc>
         <overview-h5
           v-else
-          @handleStartBoost="handleShowStartBoost"
+          @handleStartBoost="handleStartBoost"
           @handleUnlock="handleShowUnlock"
           @dailyClaim="showDailySign = true"
           @startReward="showRewardStart = true"
@@ -91,6 +91,7 @@ import BindExchange from "./components/bind-exchange.vue";
 import AirdropDialog from "./components/airdrop-query.vue";
 import StartQuery from "./components/start-query.vue";
 
+import { fetchPreTaskActivity, initBoost, onNext } from "@/api/booster";
 import { bus } from "@/utils/bus";
 import { mapState, mapGetters } from "vuex";
 import { driver } from "driver.js";
@@ -185,6 +186,7 @@ export default {
       showBindExchange: false,
       airdropDialog: false,
       startQuery:false,
+      inviteCode: "",
       // showRewardReceive: false,
       // showRewardClaim: false,
     };
@@ -280,7 +282,7 @@ export default {
     //   localStorage.loginTo = location.pathname + location.search;
     // }
     if (this.$route.query && this.$route.query.showStart) {
-      this.showStartBoost = true;
+      //this.showStartBoost = true;
       let query = this.$route.query;
       let queryKeys = Object.keys(query).filter((it) => it != "showStart");
       let queryObj = {};
@@ -295,6 +297,11 @@ export default {
           query: queryObj,
         });
       }
+    }
+    if (this.$route.query) {
+      localStorage.setItem("boosterCode", this.$route.query.boosterCode || "");
+      this.inviteCode =
+        this.$route.query.boosterCode || localStorage.getItem("boosterCode");
     }
   },
 
@@ -314,11 +321,28 @@ export default {
         this.$store.dispatch("BindWalletToggle");
       } else {
         this.showStartBoost = true;
+        //this.handleStartBoost();
       }
     },
     handleShowUnlock(val) {
       this.unlockStage = val;
       this.showUnlockDialog = true;
+    },
+    async handleStartBoost() {
+      this.loading = true;
+      try {
+        const { data } = await initBoost(this.inviteCode);
+        console.log(data);
+        await this.$store.dispatch("getBoosterUserInfo");
+        //this.$emit("input", false);
+
+        if (this.boosterInfo.totalPoint > 0) {
+          this.$emit("showEndPoints");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      this.loading = false;
     },
   },
 
@@ -396,17 +420,17 @@ export default {
 <style lang="scss" scoped>
 .booster-overview-task {
   position: absolute;
-  top: 88px;
-  left: 38px;
+  top: 248px;
+  left: 11px;
   cursor: pointer;
   img {
-    width: 94px;
+    width: 90px;
   }
   span {
-    width: 120px;
+    width: 100px;
     display: block;
-    font-size: 14px;
-    padding: 4px 8px;
+    font-size: 12px;
+    padding: 2px 4px;
     align-items: center;
     border-radius: 4px;
     background: rgba(71, 205, 137, 0.75);
