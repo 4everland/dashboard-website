@@ -11,8 +11,9 @@
         />
       </div>
       <div class="router-link d-flex align-center">
+        
         <div
-          class="router-item"
+          class="router-item d-flex align-center justify-center"
           :class="{
             corner: currentHoverIdx == index,
             'corner trigger': $route.path == item.path,
@@ -23,6 +24,7 @@
           :key="index"
           @click="handleNavChange(item)"
         >
+          <img v-if="item.path =='/boost/airdrop' " src="/img/airdrop/icon_airdrop.png" width="30">
           {{ item.name }}
           <span
             class="top-left"
