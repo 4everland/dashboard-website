@@ -232,10 +232,10 @@
           </template>
         </v-data-table>
         <div class="ta-c mt-8" v-if="!chainList.length">
-            <e-empty :loading="tableLoading">
-              {{ tableLoading ? `Loading files...` : `No files` }}
-            </e-empty>
-          </div>
+          <e-empty :loading="tableLoading">
+            {{ tableLoading ? `Loading files...` : `No files` }}
+          </e-empty>
+        </div>
       </div>
       <!-- <div class="endpoints-list-box mt-4">
         <div
@@ -571,12 +571,12 @@ export default {
       this.tableLoading = false;
     },
     getChainId(type, inDev) {
-      if (type === "Polygon") return inDev !== "mainnet" ? 80001 : 137;
+      if (type === "Polygon") return 137;
       if (type === "BSC") return inDev !== "mainnet" ? 97 : 56;
       if (type == "Optimism") return 10;
       if (type == "Ethereum") return inDev !== "mainnet" ? 11155111 : 1;
       if (type === "opBNB") return inDev !== "mainnet" ? 5611 : 204;
-      if (type == "Taiko") return 167000;
+      if (type == "Taiko") return inDev !== "mainnet" ? 167009 : 167000;
     },
     async connectWallet(item) {
       const id = this.getChainId(item.name, item.seleted);
@@ -588,21 +588,22 @@ export default {
       }
     },
     async addChain(chainId, id, item) {
+      let chainName = item.name + " " + item.seleted;
       let params = {
         137: {
           chainId,
-          chainName: "Polygon Mainnet",
+          chainName: chainName,
           rpcUrls: [item.rpcUrl],
           nativeCurrency: {
             name: "Polygon Coin",
-            symbol: "MATIC",
+            symbol: "POL",
             decimals: 18,
           },
           blockExplorerUrls: ["https://polygonscan.com"],
         },
         80001: {
           chainId,
-          chainName: "polygon mumbai",
+          chainName: chainName,
           rpcUrls: [item.rpcUrl],
           nativeCurrency: {
             name: "matic Coin",
@@ -613,7 +614,7 @@ export default {
         },
         56: {
           chainId,
-          chainName: "BSC Mainnet",
+          chainName: chainName,
           rpcUrls: [item.rpcUrl],
           nativeCurrency: {
             name: "Binance Coin",
@@ -624,7 +625,7 @@ export default {
         },
         97: {
           chainId,
-          chainName: "BSC Chapel",
+          chainName: chainName,
           rpcUrls: [item.rpcUrl],
           nativeCurrency: {
             name: "BNB Coin",
@@ -635,7 +636,7 @@ export default {
         },
         10: {
           chainId,
-          chainName: "Optimism LlamaNodes",
+          chainName: chainName,
           rpcUrls: [item.rpcUrl],
           nativeCurrency: {
             name: "ETH",
@@ -646,7 +647,7 @@ export default {
         },
         1: {
           chainId,
-          chainName: "Ethereum Mainnet",
+          chainName: chainName,
           rpcUrls: [item.rpcUrl],
           nativeCurrency: {
             name: "ETH",
@@ -657,7 +658,7 @@ export default {
         },
         11155111: {
           chainId,
-          chainName: "Spolia",
+          chainName: chainName,
           rpcUrls: [item.rpcUrl],
           nativeCurrency: {
             name: "Sepolia-ETH",
@@ -668,7 +669,18 @@ export default {
         },
         167000: {
           chainId,
-          chainName: "Taiko Mainnet",
+          chainName: chainName,
+          rpcUrls: [item.rpcUrl],
+          nativeCurrency: {
+            name: "ETH",
+            symbol: "ETH",
+            decimals: 18,
+          },
+          blockExplorerUrls: ["https://taikoscan.network"],
+        },
+        167009: {
+          chainId,
+          chainName: chainName,
           rpcUrls: [item.rpcUrl],
           nativeCurrency: {
             name: "ETH",
@@ -679,7 +691,7 @@ export default {
         },
         5611: {
           chainId,
-          chainName: "opBNB Testnet",
+          chainName: chainName,
           rpcUrls: [item.rpcUrl],
           nativeCurrency: {
             name: "BNB Coin",
@@ -690,7 +702,7 @@ export default {
         },
         204: {
           chainId,
-          chainName: "opBNB Mainnet",
+          chainName: chainName,
           rpcUrls: [item.rpcUrl],
           nativeCurrency: {
             name: "BNB Coin",
