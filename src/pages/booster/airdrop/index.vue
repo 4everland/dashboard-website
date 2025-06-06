@@ -189,10 +189,16 @@ export default {
       userInfo: (s) => s.userInfo,
       connectAddr: (s) => s.connectAddr,
     }),
-    ...mapGetters(["walletObj"]),
+    ...mapGetters(["walletObj","notLogin"]),
     asMobile() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+  },
+  created() {
+    if (this.notLogin) {
+      this.$router.push("/boost");
+      return;
+    }
   },
   async mounted() {
     let { data: airdropData } = await fetchAirdropList();

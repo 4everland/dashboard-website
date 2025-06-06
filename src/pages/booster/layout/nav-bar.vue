@@ -195,6 +195,10 @@ export default {
         this.$router.push("/login");
         return;
       }
+      if (item.name == "Airdrop" && this.notLogin) {
+        this.$router.push("/login");
+        return;
+      }
       // if (item.name == "Staking" && !this.boostLocked) {
       //   this.$store.dispatch("StakeDrawerToggle");
       //   return;
