@@ -225,7 +225,9 @@ export default {
     if(claimInfo){
       this.alreadyClaim = true;
     }
-    this.handleCanClaim();
+    if(this.access){
+      this.handleCanClaim();
+    }
   },
   methods: {
     async handleCanClaim() {
