@@ -420,7 +420,7 @@ export default {
 <style lang="scss" scoped>
 .booster-overview-task {
   position: absolute;
-  top: 248px;
+  top: 180px;
   left: 11px;
   cursor: pointer;
   img {

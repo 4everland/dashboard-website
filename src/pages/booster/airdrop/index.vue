@@ -115,8 +115,9 @@
 
       <v-row>
         <v-col cols="12">
-          <div class="text-caption grey--text text--lighten-1 text-center mt-4" style="letter-spacing: normal !important;">
-            This airdrop claim will be conducted on BSC MainNet, with a deadline of 8:00 UTC on April 14. Eligible users, please complete your airdrop claim as soon as possible.
+          <div class="text-caption grey--text text--lighten-1 text-left mt-4 pl-4" style="letter-spacing: normal !important;">
+            ✨ No duplicate rewards for those who have already claimed airdrops on exchanges previously.<br>
+            ✨ This airdrop will be distributed on the BSC. Please claim yours before 8:00AM July 8 UTC.
           </div>
         </v-col>
       </v-row>
@@ -358,15 +359,15 @@ export default {
     },
     getChainId(type) {
       if (type == "BSC") return this.$inDev ? 97 : 56;
-      return this.$inDev ? 5 : 1;
+      return this.$inDev ? 97 : 56;
     },
     async addChain(chainId, id) {
       let params = {
         
         56: {
           chainId,
-          chainName: "BSC Mainnet",
-          rpcUrls: ["https://rpc.ankr.com/bsc"],
+          chainName: "Binance Smart Chain",
+          rpcUrls: ["https://bsc-dataseed1.bnbchain.org"],
           nativeCurrency: {
             name: "Binance Coin",
             symbol: "BNB",
@@ -377,8 +378,8 @@ export default {
         
         97: {
           chainId,
-          chainName: "BSC Chapel",
-          rpcUrls: ["https://bsc-testnet.public.blastapi.io"],
+          chainName: "BNB Smart Chain Testnet",
+          rpcUrls: ["https://data-seed-prebsc-1-s1.bnbchain.org:8545"],
           nativeCurrency: {
             name: "BNB Coin",
             symbol: "tBNB",

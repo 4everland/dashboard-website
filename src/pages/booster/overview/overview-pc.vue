@@ -75,7 +75,7 @@
       <img src="/img/booster/new/icon-bind-pc.png" width="72" alt="" />
       <div class="trigger-text bind fz-16 fw-b text-center" style="width: 72px;">Bind</div>
     </div> -->
-    <div
+    <!-- <div
       v-if="!boostLocked"
       class="trigger-icon pos-a"
       style="left: 20px; top: 100px"
@@ -83,12 +83,12 @@
     >
       <img src="/img/booster/new/Query_4x_1.gif" width="72" alt="" />
       <div class="trigger-text bind fz-16 fw-b text-center" style="width: 72px;">Airdrop</div>
-    </div>
+    </div> -->
 
     <div
       v-if="!boostLocked"
       class="trigger-icon pos-a"
-      style="left: 20px; top: 180px"
+      style="left: 20px; top: 100px"
       @click="()=> this.$store.dispatch('HoldProveToggle') "
     >
       <img src="/img/booster/icon_tg_new.png" width="33" alt=""  style="right: 0px;top: 0px;position: absolute;" />
