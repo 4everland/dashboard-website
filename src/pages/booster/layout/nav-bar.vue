@@ -17,6 +17,7 @@
           :class="{
             corner: currentHoverIdx == index,
             'corner trigger': $route.path == item.path,
+            'router-item2': item.path == '/boost/airdrop',
           }"
           @mouseenter="currentHoverIdx = index"
           @mouseleave="currentHoverIdx = -1"
@@ -376,6 +377,9 @@ export default {
         line-height: 16px;
         box-sizing: border-box;
         cursor: pointer;
+      }
+      .router-item2 {
+        padding: 6px 0;
       }
 
       .router-item.trigger {
