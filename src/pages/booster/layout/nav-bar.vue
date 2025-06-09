@@ -11,11 +11,13 @@
         />
       </div>
       <div class="router-link d-flex align-center">
+        
         <div
-          class="router-item"
+          class="router-item d-flex align-center justify-center"
           :class="{
             corner: currentHoverIdx == index,
             'corner trigger': $route.path == item.path,
+            'router-item2': item.path == '/boost/airdrop',
           }"
           @mouseenter="currentHoverIdx = index"
           @mouseleave="currentHoverIdx = -1"
@@ -23,6 +25,7 @@
           :key="index"
           @click="handleNavChange(item)"
         >
+          <img v-if="item.path =='/boost/airdrop' " src="/img/airdrop/icon_airdrop.png" width="30">
           {{ item.name }}
           <span
             class="top-left"
@@ -157,6 +160,10 @@ export default {
           name: "Leaderboard",
           path: "/boost/leaderboard",
         },
+        {
+          name: "Airdrop",
+          path: "/boost/airdrop",
+        },
         // {
         //   name: "Staking",
         // },
@@ -184,6 +191,10 @@ export default {
   methods: {
     handleNavChange(item) {
       if (item.name == "Leaderboard" && this.notLogin) {
+        this.$router.push("/login");
+        return;
+      }
+      if (item.name == "Airdrop" && this.notLogin) {
         this.$router.push("/login");
         return;
       }
@@ -362,6 +373,9 @@ export default {
         line-height: 16px;
         box-sizing: border-box;
         cursor: pointer;
+      }
+      .router-item2 {
+        padding: 6px 0;
       }
 
       .router-item.trigger {

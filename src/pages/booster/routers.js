@@ -25,6 +25,16 @@ export default [
         },
       },
       {
+        path: "/boost/airdrop",
+        component: () => import("./airdrop"),
+        meta: {
+          title: "Airdrop",
+          hideNav: 1,
+          isTab: 1,
+          noLogin: 1,
+        },
+      },
+      {
         name: "booster-explore",
         path: "/boost/explore/:id?",
         component: () => import("./explore"),
