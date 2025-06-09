@@ -304,6 +304,7 @@
 <script>
 import { fetchKeyDetail, fetchEndpoints } from "@/api/rpc.js";
 import { parseTime } from "@/utils";
+import { mapGetters, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -537,6 +538,12 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapGetters(["walletObj"]),
+    ...mapState({
+      connectAddr: (s) => s.connectAddr,
+    }),
+  },
   created() {
     this.name = this.$route.params.name;
     this.id = this.$route.params.id;
@@ -582,9 +589,23 @@ export default {
       const id = this.getChainId(item.name, item.seleted);
       const chainId = "0x" + id.toString(16);
       try {
-        await this.addChain(chainId, id, item);
+        await this.getAccount();
+        if (!this.connectAddr) {
+          throw new Error("Wallet connection failed");
+        }
+        // await this.addChain(chainId, id, item);
+        await window.ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId }],
+        });
+        this.$toast("This network has already been added", "success");
       } catch (error) {
-        console.log(error);
+        console.log("switch error 2", error);
+        if (error.code == 4902 || error.data?.originalError.code == 4902) {
+          await this.addChain(chainId, id, item);
+        } else {
+          throw new Error(error.message);
+        }
       }
     },
     async addChain(chainId, id, item) {
@@ -714,16 +735,20 @@ export default {
       }[id];
       if (!params) return;
       try {
-        await window.ethereum.request(
+        await this.walletObj.request(
           {
             method: "wallet_addEthereumChain",
             params: [params],
           },
           this.connectAddr
         );
+        this.$toast("Network added successfully", "success");
       } catch (error) {
         console.log("add chain err", error);
       }
+    },
+    async getAccount() {
+      await this.$store.dispatch("getWalletAccount");
     },
     changeType(val) {
       switch (val) {
