@@ -49,7 +49,7 @@
                 class="mx-auto mb-4 img-right"
                 :class="{'img-right-mobile': asMobile}"
               ></v-img>
-              <div class="right-content">
+              <div class="right-content" :class="{'right-content2': access}">
                 <div>
                   <div v-if="access" class="big-title mb-4 text-left fz-28">🎉Congratulations, you're eligible</div>
                   <div v-if="loading || access" class="white--text mb-4 text-left">You will receive:</div>
@@ -98,6 +98,26 @@
                 >
                   {{ alreadyClaim ? 'Already Claimed' : 'Claim Now' }}
                 </v-btn>
+                <!-- <div class="flex justify-between  mt-4">
+                  <v-btn
+                  
+                  class="btn-share"
+                  
+                  height="48"
+                  
+                  @click="handleClaim"
+                >
+                  Share to X
+                </v-btn>
+                <v-btn
+                  class=" btn-claim"
+                  height="40"
+                  @click="handleClaim"
+                >
+                  Add Token to Wallet
+                </v-btn>
+
+                </div> -->
                 <v-btn
                   v-if="!loading && !access"
                   block
@@ -220,6 +240,7 @@ export default {
     this.shortPoint = Number(ethers.utils.formatEther(dropValue));
     this.proof = airdropData.node||[];
     this.access = airdropData.access;
+    // this.access = true; // For testing purposes, set access to true
     this.loading = false;
     this.airdropInfo = airdropData;
     const claimInfo = localStorage.getItem("claimInfo" + this.userInfo.wallet.address);
@@ -439,7 +460,7 @@ export default {
   top: 25px;
 }
 .right-content{
-  margin-top: 20px;
+  margin-top: 97px;
   .big-title{
     color: #0FE1F8;
     max-width: 68%;
@@ -471,6 +492,9 @@ export default {
     background: url("/img/booster/earnings/grid.png") no-repeat #000000;
     background-size: contain;
   }
+}
+.right-content2{
+  margin-top: 15px;
 }
 
 
@@ -577,6 +601,14 @@ export default {
 }
 .btn-claim {
   background-color: #344054 !important;
+  color: #fff !important;
+}
+.btn-share{
+  background-color: #000 !important;
+  color: #fff !important;
+}
+.btn-add-token {
+  background: linear-gradient(90.97deg, #0FE1F8 0.68%, #1102FC 99.51%);
   color: #fff !important;
 }
 .btn-claim-can {
