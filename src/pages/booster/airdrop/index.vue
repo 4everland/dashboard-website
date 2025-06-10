@@ -1,7 +1,7 @@
 <template>
   
   <div class="airdrop-container">
-    <div class="airdrop-in-container">
+    <div class="airdrop-in-container" :class="{'airdrop-in-container-mobile': asMobile}">
       <v-row>
         <v-col cols="12" md="6">
           <v-list class="transparent">
@@ -113,7 +113,7 @@
                     height="40"
                     @click="handleShare"
                   >
-                    <span class="mr-2 fz-14">Share to </span>
+                    <span class="mr-2 fz-14" style="letter-spacing: normal;">Share to </span>
                     <img src="/img/booster/invite/x.svg" width="16" alt="" />
 
                   </v-btn>
@@ -122,8 +122,8 @@
                     height="40"
                     @click="handleAddToken"
                   >
-                    <span class="fz-14">
-                    Add $4ever to Wallet
+                    <span class="fz-14" style="letter-spacing: normal;">
+                    Add $4EVER to Wallet
                     </span>
                   </v-btn>
 
@@ -481,6 +481,9 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   padding: 40px;
   border-radius: 8px;
 
+}
+.airdrop-in-container-mobile {
+  padding: 20px;
 }
 .content-bg{
   background: url("/img/booster/svg/fringe-bg.svg");
