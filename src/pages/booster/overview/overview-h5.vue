@@ -1,14 +1,6 @@
 <template>
   <div class="d-md-none d-block">
-    <div
-      v-if="asMobile"
-      class="trigger-icon pos-a"
-      style="right: 132px; top: 61px"
-      @click="showStartQueryDialog"
-    >
-      <img src="/img/booster/new/Query_2x.gif" width="48" alt="" />
-      <div class="trigger-text connect fz-12 fw-b text-center">Airdrop</div>
-    </div>
+    
     <div
       v-if="asMobile"
       class="trigger-icon pos-a"
