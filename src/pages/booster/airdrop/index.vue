@@ -49,7 +49,7 @@
                 class="mx-auto mb-4 img-right"
                 :class="{'img-right-mobile': asMobile}"
               ></v-img>
-              <div class="right-content" :class="{'right-content2': access}">
+              <div class="right-content" :class="{'right-content2': access, 'right-content3': alreadyClaim, 'right-contentloading': loading}">
                 <div>
                   <div v-if="access" class="big-title mb-4 text-left fz-28">🎉Congratulations, you're eligible</div>
                   <div v-if="loading || access" class="white--text mb-4 text-left">You will receive:</div>
@@ -63,7 +63,13 @@
                 </div>
                 <div v-if="loading || access" class="d-flex justify-center">
                   <div class="light-btn d-flex justify-center align-center">
-                    <div class="light-span">
+                    <div class="light-span relative d-flex justify-center align-center">
+                      <span
+                      v-if="alreadyClaim"
+                      class="airdrop-title-aleady-claim d-flex justify-center align-center">
+                        <img src="/img/booster/earnings/icon_check.png" width="16" alt="" />
+                        Already Claimed
+                      </span>
                       <v-btn class="submit-btn">
                         <span class="number">
                           <ICountUp
@@ -87,10 +93,11 @@
                   </div>
                 </div>
                 <v-btn
-                  v-if="loading || access"
+                  v-if="loading || (access && !alreadyClaim)"
                   block
-                  class="mt-6 btn-claim"
-                  :class="{'btn-claim-can': canClaim}"
+                  class="mt-4 btn-claim"
+                  :class="{'btn-claim-can': canClaim, 'btn-claim2': alreadyClaim}"
+                  
                   height="48"
                   :disabled="!canClaim || alreadyClaim"
                   :loading="claimLoading"
@@ -98,26 +105,29 @@
                 >
                   {{ alreadyClaim ? 'Already Claimed' : 'Claim Now' }}
                 </v-btn>
-                <!-- <div class="flex justify-between  mt-4">
+                <div
+                  v-if="alreadyClaim"
+                  class="d-flex justify-space-between align-center mt-4 gap-2">
                   <v-btn
-                  
-                  class="btn-share"
-                  
-                  height="48"
-                  
-                  @click="handleClaim"
-                >
-                  Share to X
-                </v-btn>
-                <v-btn
-                  class=" btn-claim"
-                  height="40"
-                  @click="handleClaim"
-                >
-                  Add Token to Wallet
-                </v-btn>
+                    class="btn-share"
+                    height="40"
+                    @click="handleShare"
+                  >
+                    <span class="mr-2 fz-14">Share to </span>
+                    <img src="/img/booster/invite/x.svg" width="16" alt="" />
 
-                </div> -->
+                  </v-btn>
+                  <v-btn
+                    class="btn-add-token"
+                    height="40"
+                    @click="handleAddToken"
+                  >
+                    <span class="fz-14">
+                    Add $4ever to Wallet
+                    </span>
+                  </v-btn>
+
+                </div>
                 <v-btn
                   v-if="!loading && !access"
                   block
@@ -240,7 +250,7 @@ export default {
     this.shortPoint = Number(ethers.utils.formatEther(dropValue));
     this.proof = airdropData.node||[];
     this.access = airdropData.access;
-    // this.access = true; // For testing purposes, set access to true
+    //this.access = true; // For testing purposes, set access to true
     this.loading = false;
     this.airdropInfo = airdropData;
     const claimInfo = localStorage.getItem("claimInfo" + this.userInfo.wallet.address);
@@ -252,6 +262,34 @@ export default {
     }
   },
   methods: {
+    handleShare() {
+      let shareUrl = `Nice! Just claimed my $4EVER airdrop from @4everland_org 🤑
+Turns out I had some free tokens waiting - maybe you do too? Last day to check is July 8.
+Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
+      shareUrl =
+        "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
+      
+      this.asMobile
+        ? (location.href = shareUrl)
+        : window.open(shareUrl, "_blank");
+      
+    },
+    async handleAddToken() {
+      this.walletObj.request(
+        {
+          method: "wallet_watchAsset",
+          params: {
+            type: "ERC20",
+            options: {
+              address: "0xe355De6a6043b0580Ff5A26b46051A4809B12793",
+              symbol: "4EVER",
+              decimals: 18,
+              image: location.origin + "/img/svg/pay/token-4ever.svg",
+            },
+          },
+        }
+      )
+    },
     async handleCanClaim() {
       try {
         let address = this.userInfo.wallet.address;
@@ -496,6 +534,12 @@ export default {
 .right-content2{
   margin-top: 15px;
 }
+.right-content3{
+  margin-top: 33px;
+}
+.right-contentloading{
+  margin-top: 106px;
+}
 
 
 .light-btn {
@@ -563,6 +607,19 @@ export default {
   position: absolute;
   top: -10px;
 }
+.airdrop-title-aleady-claim {
+  position: absolute;
+  top: -2px;
+  right: 0;
+  text-align: center;
+  z-index: 10;
+  line-height: 24px;
+  color: #fff;
+  background: #039CFF;
+  width: 140px;
+  padding: 5px 0;
+  border-bottom-left-radius: 10px;
+}
 
 .airdrop-item {
   border-radius: 8px;
@@ -604,10 +661,12 @@ export default {
   color: #fff !important;
 }
 .btn-share{
+  width: 48%;
   background-color: #000 !important;
   color: #fff !important;
 }
 .btn-add-token {
+  width: 48%;
   background: linear-gradient(90.97deg, #0FE1F8 0.68%, #1102FC 99.51%);
   color: #fff !important;
 }
