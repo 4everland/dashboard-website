@@ -593,21 +593,12 @@ export default {
         if (!this.connectAddr) {
           throw new Error("Wallet connection failed");
         }
-        // await this.addChain(chainId, id, item);
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId }],
-        });
-        this.$toast("This network has already been added", "success");
+        await this.addChain(chainId, id, item);
       } catch (error) {
-        console.log("switch error 2", error);
-        if (error.code == 4902 || error.data?.originalError.code == 4902) {
-          await this.addChain(chainId, id, item);
-        } else {
-          throw new Error(error.message);
-        }
+        console.log("error", error);
       }
     },
+    
     async addChain(chainId, id, item) {
       let chainName = item.name + " " + item.seleted;
       let params = {
@@ -742,9 +733,13 @@ export default {
           },
           this.connectAddr
         );
-        this.$toast("Network added successfully", "success");
       } catch (error) {
         console.log("add chain err", error);
+         await this.walletObj.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId }],
+        });
+        this.$toast("Network added successfully", "success");
       }
     },
     async getAccount() {
