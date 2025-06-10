@@ -281,7 +281,7 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
           params: {
             type: "ERC20",
             options: {
-              address: "0xe355De6a6043b0580Ff5A26b46051A4809B12793",
+              address: "0x63eC886286f30AD392749b9e8f24f67F5b8Ac394",
               symbol: "4EVER",
               decimals: 18,
               image: location.origin + "/img/svg/pay/token-4ever.svg",
