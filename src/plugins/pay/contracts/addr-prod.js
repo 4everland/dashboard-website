@@ -27,6 +27,9 @@ export const ChapelBridge = "0xdd90E5E87A2081Dcf0391920868eBc2FFB81a1aF";
 export const ChapelSrcChainPayment =
   "0x3cA298d7A98262C0598dd91Ce926f23e51c4b293";
 export const ChapelRegister = "0xE663E0E3f9b034E9911d4746760efE00115D11E5";
+export const BscToken4ever = "0x63eC886286f30AD392749b9e8f24f67F5b8Ac394";
+export const BscUsdone = "0x8d0D000Ee44948FC98c9B98A4FA4921476f08B0d";
+
 
 // src chain arbitrum one
 export const ArbitrumUSDC = "0xaf88d065e77c8cC2239327C5EDb3A432268e5831";

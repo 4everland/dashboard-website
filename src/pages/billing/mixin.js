@@ -34,6 +34,8 @@ import {
   opBNBRecharge,
   taikoRecharge,
   Token4ever,
+  BscToken4ever,
+  BscUsdone
 } from "../../plugins/pay/contracts/contracts-addr";
 import { mapGetters } from "vuex";
 export default {
@@ -66,8 +68,10 @@ export default {
         {
           name: "BSC",
           coin: {
+            '4ever': BscToken4ever,
             usdc: ChapelUSDC,
             usdt: ChapelUSDT,
+            usd1: BscUsdone,
             dai: ChapelDAI,
             bnb: "",
           },

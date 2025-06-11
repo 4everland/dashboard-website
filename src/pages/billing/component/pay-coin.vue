@@ -96,7 +96,9 @@ import {
   scrollUSDC,
   scrollUSDT,
   scrollDAI,
-  Token4ever
+  Token4ever,
+  BscToken4ever,
+  BscUsdone
 } from "../../../plugins/pay/contracts/contracts-addr";
 export default {
   props: {
@@ -116,6 +118,8 @@ export default {
       DAIbalance: "",
       originBalance: "",
       Token4everBalance: "",
+      BscToken4everBalance: "",
+      BscUsdoneBalance: "",
     };
   },
   computed: {
@@ -347,6 +351,14 @@ export default {
       if (this.chainId == 56 || this.chainId == 97) {
         return [
           {
+            label: "Bsc4EVER",
+            showLabel: "4EVER",
+            name: "4EVER",
+            img: "/img/svg/pay/token-4ever.svg",
+            addr: BscToken4ever,
+            balance: this.Bsc4EVERbalance,
+          },
+          {
             label: "BNB",
             showLabel: "BNB",
             name: "BNB",
@@ -361,6 +373,14 @@ export default {
             img: "/img/svg/pay/usdc.svg",
             addr: ChapelUSDC,
             balance: this.USDCbalance,
+          },
+          {
+            label: "USD1",
+            showLabel: "USD1",
+            name: "World Liberty Financial USD",
+            img: "/img/logos/usdone.png",
+            addr: BscUsdone,
+            balance: this.USD1balance,
           },
           {
             label: "USDT",
