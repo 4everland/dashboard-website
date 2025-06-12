@@ -80,6 +80,8 @@ import {
   scrollDAI,
   scrollETH,
   blastETH,
+  BscToken4ever,
+  BscUsdone
 } from "@/plugins/pay/contracts/contracts-addr";
 import { formatEther } from "ethers/lib/utils";
 
@@ -127,6 +129,8 @@ export default {
           scrollDAI,
         ],
         ETH: [optimisETH, scrollETH, blastETH],
+        '4EVER': [ BscToken4ever],
+        USD1: [BscUsdone]
       },
       finished: false,
       loadingMore: false,
@@ -186,6 +190,25 @@ export default {
             it.network == "Ethereum"
           ) {
             coinType = "4EVER";
+            it.amount = Number(
+                formatEther(BigNumber.from(it.originalValue))
+              );
+          }
+
+          if (
+            it.amountType == BscToken4ever &&
+            it.network == "BSC"
+          ) {
+            coinType = "4EVER";
+            it.amount = Number(
+                formatEther(BigNumber.from(it.originalValue))
+              );
+          }
+          if (
+            it.amountType == BscUsdone &&
+            it.network == "BSC"
+          ) {
+            coinType = "USD1";
             it.amount = Number(
                 formatEther(BigNumber.from(it.originalValue))
               );

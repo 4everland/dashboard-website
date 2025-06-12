@@ -186,6 +186,8 @@ export default {
       blastUnitPrice: BigNumber.from("0"),
       token4everUnitPrice: BigNumber.from("0"),
       token4everAmount: BigNumber.from("0"),
+      token4everBscUnitPrice: BigNumber.from("0"),
+      token4everBscAmount: BigNumber.from("0"),
       curAmountDecimals: 18,
       chainId: 0,
       rechargeSuccess: false,
@@ -233,8 +235,10 @@ export default {
     displayPrice() {
       if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
         return (formatEther(this.ethAmount) * 1).toFixed(5);
-      } else if(this.coinSelect == "4EVER"){
+      } else if(this.coinSelect == "4EVER" && this.coinAddr == Token4ever){
         return this.token4everAmount.toString();
+      } else if(this.coinSelect == "4EVER" && this.coinAddr == BscToken4ever){
+        return this.token4everBscAmount.toString();
       } else {
         return this.usdcAmount.toString();
       }
@@ -338,11 +342,23 @@ export default {
       ) {
 
         this.coinSelect = "BNB";
-        if (chainId == 56 || chainId == 97){
-           this.coinSelect = "4EVER";
-           await this.getBsc4everUnitPrice();
-        }
+        // if (chainId == 56 || chainId == 97){
+        //   //  this.coinSelect = "4EVER";
+        //    await this.getBsc4everUnitPrice();
+        // }
         await this.getBlastEthUnitPrice();
+        if (this.blastUnitPriceTimer) {
+          clearInterval(this.blastUnitPriceTimer);
+        }
+        this.blastUnitPriceTimer = setInterval(
+          this.getBlastEthUnitPrice,
+          20000
+        );
+      } else if (
+        chainId == 1
+      ) {
+        this.coinSelect = "4EVER";
+        await this.get4everUnitPrice();
         if (this.blastUnitPriceTimer) {
           clearInterval(this.blastUnitPriceTimer);
         }
@@ -447,10 +463,18 @@ export default {
             });
             receipt = await tx.wait();
             this.$loading.close();
-          } else if(this.coinSelect == "4EVER"){
+          } else if(this.coinSelect == "4EVER" && this.coinAddr == Token4ever){
             if (this.token4everAmount.toString() == "0") return;
             this.$loading();
             const _amount = parseEther(this.token4everAmount.toString());
+            console.log('amount',_amount);
+            let tx = await this.LandEthRecharge.mintBy4EVER(this.euid, _amount);
+            receipt = await tx.wait();
+            this.$loading.close();
+          } else if(this.coinSelect == "4EVER" && this.coinAddr == BscToken4ever){
+            if (this.token4everBscAmount.toString() == "0") return;
+            this.$loading();
+            const _amount = parseEther(this.token4everBscAmount.toString());
             console.log('amount',_amount);
             let tx = await this.LandEthRecharge.mintBy4EVER(this.euid, _amount);
             receipt = await tx.wait();
@@ -544,8 +568,9 @@ export default {
         await this.checkApproved();
         let value = this.usdcAmount
             .mul((1e18).toString())
-            .div(this.token4everUnitPrice);
-        this.token4everAmount = value;
+            .div(this.token4everBscUnitPrice);
+            console.log('value', value);
+        this.token4everBscAmount = value;
       } else {
         await this.checkApproved();
       }
@@ -720,8 +745,8 @@ export default {
 
           let value = this.usdcAmount
             .mul((1e18).toString())
-            .div(this.token4everUnitPrice);
-          this.token4everAmount = value;
+            .div(this.token4everBscUnitPrice);
+          this.token4everBscAmount = value;
         });
       }
     },
@@ -741,9 +766,9 @@ export default {
     },
     async get4everUnitPrice() {
       try {
-        if(this.blastUnitPrice.toString() == "0") {
+        //if(this.blastUnitPrice.toString() == "0") {
           await this.getBlastEthUnitPrice();
-        }
+        //}
         
         const token4everEthprice = await this.fetchPrice(custom4everPriceFeedAddress);
         this.token4everUnitPrice = BigNumber.from(token4everEthprice).mul(this.blastUnitPrice);
@@ -757,7 +782,7 @@ export default {
         
         const token4everbscprice = await this.fetchPrice(Bsc4everPriceFeed);
         console.log('token4everbscprice', token4everbscprice);
-        this.token4everUnitPrice = BigNumber.from(token4everbscprice);
+        this.token4everBscUnitPrice = BigNumber.from(token4everbscprice);
       } catch (error) {
         console.log(error);
       }
