@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="fz-16 mt-6 mb-4">Choose Token</h2>
-    <div style="height: 100%; margin-bottom: 100px; overflow: auto">
+    <div style="max-height: 300px; margin-bottom: 100px; overflow: scroll">
       <div
         @click="onSelect(it.label)"
         class="coin-label py-2 px-4 cursor-p d-flex space-btw mr-2 mb-2"
@@ -351,12 +351,12 @@ export default {
       if (this.chainId == 56 || this.chainId == 97) {
         return [
           {
-            label: "Bsc4EVER",
+            label: "4EVER",
             showLabel: "4EVER",
             name: "4EVER",
             img: "/img/svg/pay/token-4ever.svg",
             addr: BscToken4ever,
-            balance: this.Bsc4EVERbalance,
+            balance: this.Token4everBalance,
           },
           {
             label: "BNB",
@@ -374,14 +374,7 @@ export default {
             addr: ChapelUSDC,
             balance: this.USDCbalance,
           },
-          {
-            label: "USD1",
-            showLabel: "USD1",
-            name: "World Liberty Financial USD",
-            img: "/img/logos/usdone.png",
-            addr: BscUsdone,
-            balance: this.USD1balance,
-          },
+          
           {
             label: "USDT",
             showLabel: "USDT",
@@ -389,6 +382,14 @@ export default {
             img: "/img/svg/pay/usdt.svg",
             addr: ChapelUSDT,
             balance: this.USDTbalance,
+          },
+          {
+            label: "USD1",
+            showLabel: "USD1",
+            name: "World Liberty Financial USD",
+            img: "/img/logos/usdone.png",
+            addr: BscUsdone,
+            balance: this.USD1balance,
           },
           {
             label: "DAI",

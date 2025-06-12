@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import { custom4everPriceFeedAddress, Token4ever } from "../../plugins/pay/contracts/contracts-addr";
+import { custom4everPriceFeedAddress, Bsc4everPriceFeed, Token4ever, BscToken4ever } from "../../plugins/pay/contracts/contracts-addr";
 import payNetwork from "./component/pay-network.vue";
 import payCoin from "./component/pay-coin.vue";
 import everpayBar from "./component/everpay-bar.vue";
@@ -278,7 +278,7 @@ export default {
     },
     coinAddr() {
       const coinType = this.coinSelect.toLowerCase();
-      // console.log(this.curChainInfo.coin);
+      // console.log('curChainInfo',this.curChainInfo.coin,coinType);
       return this.curChainInfo?.coin[coinType];
     },
     step() {
@@ -336,7 +336,12 @@ export default {
         chainId == 204 ||
         chainId == 5611
       ) {
+
         this.coinSelect = "BNB";
+        if (chainId == 56 || chainId == 97){
+           this.coinSelect = "4EVER";
+           await this.getBsc4everUnitPrice();
+        }
         await this.getBlastEthUnitPrice();
         if (this.blastUnitPriceTimer) {
           clearInterval(this.blastUnitPriceTimer);
@@ -523,13 +528,21 @@ export default {
     },
     async handleSelectCoin(val) {
       this.coinSelect = val;
+      // console.log("handleSelectCoin", this.coinSelect);
       if (this.coinSelect == "ETH" || this.coinSelect == "BNB") {
         this.getBlastEthUnitPrice();
-      } else if(this.coinSelect == "4EVER" ){
+      } else if(this.coinSelect == "4EVER" && this.coinAddr == Token4ever) {
         await this.get4everUnitPrice();
         await this.checkApproved();
         let value = this.usdcAmount
             .mul((1e18).toString())
+            .mul((1e18).toString())
+            .div(this.token4everUnitPrice);
+        this.token4everAmount = value;
+      } else if(this.coinSelect == "4EVER" && this.coinAddr == BscToken4ever) {
+        await this.getBsc4everUnitPrice();
+        await this.checkApproved();
+        let value = this.usdcAmount
             .mul((1e18).toString())
             .div(this.token4everUnitPrice);
         this.token4everAmount = value;
@@ -692,11 +705,20 @@ export default {
           this.ethAmount = value;
         });
       }
-      if(this.coinSelect == "4EVER") {
+      if(this.coinSelect == "4EVER" && this.coinAddr == Token4ever) {
         debounce(() => {
 
           let value = this.usdcAmount
             .mul((1e18).toString())
+            .mul((1e18).toString())
+            .div(this.token4everUnitPrice);
+          this.token4everAmount = value;
+        });
+      }
+      if(this.coinSelect == "4EVER" && this.coinAddr == BscToken4ever) {
+        debounce(() => {
+
+          let value = this.usdcAmount
             .mul((1e18).toString())
             .div(this.token4everUnitPrice);
           this.token4everAmount = value;
@@ -712,6 +734,7 @@ export default {
           signer
         );
         this.blastUnitPrice = await BlastOracleLand.callStatic.fetchPrice();
+
       } catch (error) {
         console.log(error);
       }
@@ -725,6 +748,16 @@ export default {
         const token4everEthprice = await this.fetchPrice(custom4everPriceFeedAddress);
         this.token4everUnitPrice = BigNumber.from(token4everEthprice).mul(this.blastUnitPrice);
         console.log(this.token4everUnitPrice.toString());
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getBsc4everUnitPrice() {
+      try {
+        
+        const token4everbscprice = await this.fetchPrice(Bsc4everPriceFeed);
+        console.log('token4everbscprice', token4everbscprice);
+        this.token4everUnitPrice = BigNumber.from(token4everbscprice);
       } catch (error) {
         console.log(error);
       }
@@ -744,15 +777,10 @@ export default {
             abi4everPrice.abi,
             provider
           );
-          const tokenprice = await contract.fetchPrice(Token4ever);
+          
+          const tokenprice = await contract.fetchPrice(this.curChainInfo.coin['4ever']);
           console.log('tokenBalance',tokenprice);
-          const _balance = tokenprice||0;
-          // const balance = ethers.utils.formatUnits(
-          //   _balance,
-          //   18
-          // );
-          console.log(_balance);
-
+          
           return tokenprice;
         }
       } catch (err) {

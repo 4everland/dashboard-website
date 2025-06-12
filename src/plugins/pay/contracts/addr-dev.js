@@ -28,6 +28,7 @@ export const ChapelSrcChainPayment =
 export const ChapelRegister = "0x657E18668dA0b80D9d7F60D6a9C96B44533E71aE";
 export const BscToken4ever = "0x63eC886286f30AD392749b9e8f24f67F5b8Ac394";
 export const BscUsdone = "0x8d0D000Ee44948FC98c9B98A4FA4921476f08B0d";
+export const Bsc4everPriceFeed = "0xa5512330349F3ec115Ead4b81AaFb3C00c02cD69";
 
 
 // src chain arbitrum one
