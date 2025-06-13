@@ -350,14 +350,14 @@ export default {
 
       if (this.chainId == 56 || this.chainId == 97) {
         return [
-          // {
-          //   label: "4EVER",
-          //   showLabel: "4EVER",
-          //   name: "4EVER",
-          //   img: "/img/svg/pay/token-4ever.svg",
-          //   addr: BscToken4ever,
-          //   balance: this.Token4everBalance,
-          // },
+          {
+            label: "4EVER",
+            showLabel: "4EVER",
+            name: "4EVER",
+            img: "/img/svg/pay/token-4ever.svg",
+            addr: BscToken4ever,
+            balance: this.Token4everBalance,
+          },
           {
             label: "BNB",
             showLabel: "BNB",

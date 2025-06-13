@@ -342,10 +342,15 @@ export default {
       ) {
 
         this.coinSelect = "BNB";
-        // if (chainId == 56 || chainId == 97){
-        //   //  this.coinSelect = "4EVER";
-        //    await this.getBsc4everUnitPrice();
-        // }
+        if (chainId == 56 || chainId == 97){
+          this.coinSelect = "4EVER";
+          await this.getBsc4everUnitPrice();
+          let value = this.usdcAmount
+            .mul((1e18).toString())
+            .div(this.token4everBscUnitPrice);
+            console.log('value', value);
+          this.token4everBscAmount = value;
+        }
         await this.getBlastEthUnitPrice();
         if (this.blastUnitPriceTimer) {
           clearInterval(this.blastUnitPriceTimer);
