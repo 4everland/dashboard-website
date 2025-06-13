@@ -364,6 +364,13 @@ export default {
       ) {
         this.coinSelect = "4EVER";
         await this.get4everUnitPrice();
+        debounce(() => {
+          let value = this.usdcAmount
+            .mul((1e18).toString())
+            .mul((1e18).toString())
+            .div(this.token4everUnitPrice);
+          this.token4everAmount = value;
+        });
         if (this.blastUnitPriceTimer) {
           clearInterval(this.blastUnitPriceTimer);
         }
