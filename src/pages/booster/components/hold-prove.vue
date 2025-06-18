@@ -15,8 +15,7 @@
         <div class="nft-drawer-top">
           <div class="drawer-title nft-drawer-title">$4EVER HOLD</div>
           <div class="nft-drawer-desc">
-            We randomly snapshot $4EVER balance in your wallet. Every $4EVER
-            contributes to a 0.002% earning rate multiplier.
+            📊 Snapshot Alert: Your $4EVER holdings on Ethereum or BSC will be randomly captured. Every $4EVER contributes to a 0.002% earning rate multiplier.
             <a
               class="get-more"
               href="https://www.gate.io/signup/VLMVUL8MBA?ref_type=103"

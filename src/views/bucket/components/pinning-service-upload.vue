@@ -265,9 +265,6 @@
 import { PinningServiceTaskWrapper } from "../task";
 import PinningServiceControl from "@/views/bucket/components/pinning-service-control.vue";
 import InputUpload from "@/views/bucket/components/input-upload";
-const addr = MultiformatsMultiaddr.multiaddr("/ip4/203.0.113.142/tcp/4001acs");
-const result = MultiformatsMultiaddr.isMultiaddr(addr);
-console.log(result);
 export default {
   props: {
     accessToken: String,
