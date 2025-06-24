@@ -225,8 +225,7 @@
                 color="#6172f3"
                 class="wallet-btn"
                 @click="connectWallet(item)"
-                :disabled="isConnected"
-                >{{ !isConnected ? "Connect Wallet" : "Connected" }}</v-btn
+                >Add to Wallet</v-btn
               >
             </div>
           </template>
@@ -517,7 +516,6 @@ export default {
           seleted: "Mainnet",
         },
       ],
-      isConnected: false,
       tableLoading: false,
       chainList: [],
       userKey: "",
@@ -598,9 +596,9 @@ export default {
         console.log("error", error);
       }
     },
-    
     async addChain(chainId, id, item) {
-      let chainName = item.name + " " + item.seleted;
+      let seleted = item.seleted.charAt(0).toUpperCase() + item.seleted.slice(1);
+      let chainName = item.name + " " + seleted + " - 4EVER";
       let params = {
         137: {
           chainId,
@@ -735,7 +733,7 @@ export default {
         );
       } catch (error) {
         console.log("add chain err", error);
-         await this.walletObj.request({
+        await this.walletObj.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId }],
         });
