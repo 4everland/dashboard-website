@@ -100,7 +100,7 @@
               </div>
             </v-col>
             <v-col cols="12" sm="2">
-              <div class="param-title">Limits</div>
+              <div class="param-title">Monthly Limits</div>
               <div class="param-data">
                 {{
                   keyInfo.limit
