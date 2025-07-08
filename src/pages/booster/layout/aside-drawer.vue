@@ -95,11 +95,11 @@ export default {
           name: "Leaderboard",
           path: "/boost/leaderboard",
         },
-        {
-          icon: "/img/airdrop/airdrop-menu.svg",
-          name: "Airdrop",
-          path: "/boost/airdrop",
-        },
+        // {
+        //   icon: "/img/airdrop/airdrop-menu.svg",
+        //   name: "Airdrop",
+        //   path: "/boost/airdrop",
+        // },
 
       ];
     },
