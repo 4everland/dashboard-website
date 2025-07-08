@@ -1,5 +1,5 @@
 <template>
-  <div class="api-detail">
+  <div class="api-detail px-3">
     <div class="breadcrumbs">
       <v-breadcrumbs :items="breadcrumbsItems">
         <template v-slot:item="{ item }">
@@ -597,7 +597,8 @@ export default {
       }
     },
     async addChain(chainId, id, item) {
-      let seleted = item.seleted.charAt(0).toUpperCase() + item.seleted.slice(1);
+      let seleted =
+        item.seleted.charAt(0).toUpperCase() + item.seleted.slice(1);
       let chainName = item.name + " " + seleted + " - 4EVER";
       let params = {
         137: {

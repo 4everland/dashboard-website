@@ -1,5 +1,24 @@
 <template>
-  <div class="settings-page">
+  <div class="settings-page px-3">
+    <div class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbsItems">
+        <template v-slot:item="{ item }">
+          <router-link
+            v-if="!item.disabled"
+            :to="item.to"
+            class="breadcrumb-link"
+          >
+            {{ item.text }}
+          </router-link>
+          <span v-else>
+            {{ item.text }}
+          </span>
+        </template>
+        <template v-slot:divider>
+          <v-icon>mdi-chevron-right</v-icon>
+        </template>
+      </v-breadcrumbs>
+    </div>
     <div>
       <div class="d-flex al-c mb-4 justify-space-between">
         <span class="list-tit">General Settings</span>
@@ -290,6 +309,22 @@ export default {
       addLoading: false,
       resetLoading: false,
       deleteLoading: false,
+      breadcrumbsItems: [
+        {
+          text: "RPC",
+          disabled: false,
+          to: "/rpc",
+        },
+        {
+          text: this.$route.params.name,
+          disabled: false,
+          to: `/rpc/detail/${this.$route.params.name}/${this.$route.params.id}`,
+        },
+        {
+          text: "General Settings",
+          disabled: true,
+        },
+      ],
     };
   },
   created() {
@@ -415,6 +450,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 960px) {
+  .breadcrumbs {
+    position: static !important;
+  }
+  .v-breadcrumbs {
+    padding: 0 0 16px 0;
+    margin-top: -12px;
+  }
+}
+.breadcrumbs {
+  position: fixed;
+  top: 0;
+  left: 242px;
+  z-index: 10;
+}
 .settings-page {
   .list-tit {
     color: #000;
