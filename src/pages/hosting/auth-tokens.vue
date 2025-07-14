@@ -88,6 +88,7 @@
 </template>
 
 <script>
+import { bus } from "@/utils/bus";
 export default {
   data() {
     return {
@@ -149,7 +150,12 @@ export default {
         // this.$toast("Added successfully");
         this.getList();
       } catch (error) {
-        //
+        //console.log(error.response.data.code);
+        if (error.response.data.code == 100077) {
+          bus.$emit("showDialog");
+        }
+        console.error(error);
+       
       }
       this.adding = false;
     },

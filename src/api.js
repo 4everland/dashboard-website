@@ -339,8 +339,10 @@ async function handleMsg(status, code, msg, config) {
     ) {
       await Vue.prototype.$utils.resourceInsufficient();
     } else if (msg && msg != "Request aborted" && !config.noTip) {
-      await vue.$alert(msg);
-      if (status == 403) {
+      if(code != 100077){
+        await vue.$alert(msg);
+      }
+      if (status == 403 && code != 100077) {
         location.href = "/";
       }
     }
