@@ -111,7 +111,7 @@
               </div>
             </v-col>
             <v-col cols="12" sm="2">
-              <div class="param-title">Used</div>
+              <div class="param-title">Monthly Used</div>
               <div class="param-data">
                 {{ $utils.formatLand(keyInfo.used, false, false) }} LAND
               </div>
