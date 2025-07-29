@@ -193,6 +193,9 @@
             <div class="gray mt-1 fz-14" v-else>
               Copy the hash to
               <a :href="getDomainByType(item.type).host" target="_blank">{{
+                getDomainByType(item.type).hostDescription? 
+                  getDomainByType(item.type).hostDescription
+                : 
                 getDomainByType(item.type)
                   .host.replace("https://", "")
                   .split("/")[0]
