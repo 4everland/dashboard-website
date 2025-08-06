@@ -468,7 +468,7 @@ export default {
       };
     },
     downloadJson() {
-      let url = "https://raas.4everland.store/footer.json";
+      let url = "https://raas.bucket.4everland.xyz/footer.json";
       fetch(url)
         .then((response) => response.blob())
         .then((blob) => {

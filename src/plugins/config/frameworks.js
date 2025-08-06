@@ -829,6 +829,6 @@ export default [
     },
   },
 ].map((it) => {
-  it.logo = "https://4ever-web.4everland.store" + it.logo;
+  it.logo = "https://4ever-web.bucket.4everland.xyz" + it.logo;
   return it;
 });

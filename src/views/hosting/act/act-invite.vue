@@ -28,7 +28,7 @@
               <div class="pos-r" ref="imgWrap">
                 <img
                   @load="isBgLoad = true"
-                  src="https://4ever-web.4everland.store/bg/act/act-share.png"
+                  src="https://4ever-web.bucket.4everland.xyz/bg/act/act-share.png"
                   style="width: 200px"
                   class="ev-n"
                 />

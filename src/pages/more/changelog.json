@@ -1,7 +1,7 @@
 [
   {
     "time": "2023-8-1",
-    "img": "https://4ever-web.4everland.store/img/log/2023-4-20.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2023-4-20.png",
     "title": "Feature Updates",
     "lines": [
       "1. Mint On-Chain Identity Additions (BSC, Arbtrum, ETH, Polygon zkEVM, Linea).",
@@ -12,7 +12,7 @@
   },
   {
     "time": "2023-4-20",
-    "img": "https://4ever-web.4everland.store/img/log/2023-4-20.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2023-4-20.png",
     "title": "Feature Updates",
     "lines": [
       "1. Added ENS domain name deployment feature.",
@@ -25,7 +25,7 @@
   },
   {
     "time": "2023-4-4",
-    "img": "https://tever.4everland.store/2023-4-4.jpg",
+    "img": "https://tever.bucket.4everland.xyz/2023-4-4.jpg",
     "title": "Feature Updates",
     "lines": [
       "1. Adjusted user account system, distinguished between centralized UIDs and decentralized UIDs for on-chain identities.",
@@ -36,7 +36,7 @@
   },
   {
     "time": "2023-3-9",
-    "img": "https://4ever-2.4everland.store/img/2023-3-9.png",
+    "img": "https://4ever-2.bucket.4everland.xyz/img/2023-3-9.png",
     "title": "Feature Updates",
     "lines": [
       "1. All projects will be available again if you unbind and then bind your Github the same account again ",
@@ -50,7 +50,7 @@
   },
   {
     "time": "2023-2-24",
-    "img": "https://4ever-2.4everland.store/img/2023-2-24.png",
+    "img": "https://4ever-2.bucket.4everland.xyz/img/2023-2-24.png",
     "title": "Add 4EVER Pin Feature",
     "lines": [
       "1. Support for single or bulk CID pinning to IPFS network.",
@@ -59,7 +59,7 @@
   },
   {
     "time": "2023-2-16",
-    "img": "https://4ever-2.4everland.store/img/2023-2-16.png",
+    "img": "https://4ever-2.bucket.4everland.xyz/img/2023-2-16.png",
     "title": "Add IPNS Deployment Feature",
     "lines": [
       "1. The IPFS Path deployment module supports the input of IPNS for project deployment.",
@@ -68,7 +68,7 @@
   },
   {
     "time": "2023-2-10",
-    "img": "https://4ever-2.4everland.store/img/2023-2-10.png",
+    "img": "https://4ever-2.bucket.4everland.xyz/img/2023-2-10.png",
     "title": "Collaboration version v3.8 is live! The following new features were included in this release",
     "lines": [
       "1. Add the collaboration account feature, which is currently limited to 3 collaborators.",
@@ -80,7 +80,7 @@
   },
   {
     "time": "2022-12-29",
-    "img": "https://4ever-web.4everland.store/img/log/2022-12-29.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-12-29.png",
     "title": "New Optimization",
     "lines": [
       "1. Hosting cli support for CID deployment.",
@@ -91,13 +91,13 @@
   },
   {
     "time": "2022-12-14",
-    "img": "https://4ever-web.4everland.store/img/log/2022-12-14.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-12-14.png",
     "title": "OKX Wallet integration is live!",
     "lines": []
   },
   {
     "time": "2022-12-08",
-    "img": "https://4ever-web.4everland.store/img/log/2022-12-08.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-12-08.png",
     "title": "Vouchers and cross-chain deposit features are live!  The following new features were included in this release:",
     "lines": [
       "1. Support creating resource vouchers and credit in the backend management.",
@@ -110,7 +110,7 @@
   },
   {
     "time": "2022-11-04",
-    "img": "https://4ever-web.4everland.store/img/log/2022-11-04.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-11-04.png",
     "title": "IPNS Manager is now live!",
     "lines": [
       "1. Support creating IPNS based on CID.",
@@ -123,7 +123,7 @@
   },
   {
     "time": "2022-10-31",
-    "img": "https://4ever-web.4everland.store/img/log/2022-10-31.jpg",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-10-31.jpg",
     "title": "Dedicated gateway is live!",
     "lines": [
       "1. Deposit to unlock this service.",
@@ -134,7 +134,7 @@
   },
   {
     "time": "2022-10-24",
-    "img": "https://4ever-web.4everland.store/img/log/2022-10-24.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-10-24.png",
     "title": "Task Hub is live!",
     "lines": [
       "1. oin 4EVERLAND Discord to get 1GB IPFS storage.",
@@ -145,7 +145,7 @@
   },
   {
     "time": "2022-09-29",
-    "img": "https://4ever-web.4everland.store/img/log/2022-9-29.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-9-29.png",
     "title": "Add and improve some features.",
     "lines": [
       "1. Support CID upload in Bucket.",
@@ -157,7 +157,7 @@
   },
   {
     "time": "2022-09-01",
-    "img": "https://4ever-web.4everland.store/img/log/2022-9-1.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-9-1.png",
     "title": "Ar Hosting is live!",
     "lines": [
       "1. Support Ar Hosting deployment.",
@@ -169,7 +169,7 @@
   },
   {
     "time": "2022-08-25",
-    "img": "https://4ever-web.4everland.store/img/log/2022-8-25.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-8-25.png",
     "title": "Resource Center is live!",
     "lines": [
       "1. Revise the Resource Center's UI including its modules for purchase, deposit, withdraw, and billing.",
@@ -182,7 +182,7 @@
   },
   {
     "time": "2022-08-18",
-    "img": "https://4ever-web.4everland.store/img/log/2022-8-18.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-8-18.png",
     "title": "IC Hosting is live!",
     "lines": [
       "1. Support IC Hosting deployment.",
@@ -193,7 +193,7 @@
   },
   {
     "time": "2022-08-08",
-    "img": "https://4ever-web.4everland.store/img/log/2022-8-8.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-8-8.png",
     "title": "Add and improve some features.",
     "lines": [
       "1. Revise the style of Dashboard's UI.",
@@ -222,7 +222,7 @@
   },
   {
     "time": "2022-05-11",
-    "img": "https://4ever-web.4everland.store/img/log/2022-5-11.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-5-11.png",
     "title": "Added some new features",
     "lines": [
       "Support fragment management.",
@@ -235,8 +235,8 @@
   },
   {
     "time": "2022-04-18",
-    "img": "https://4ever-web.4everland.store/img/log/2022-4-18.png",
-    "video": "https://4ever-web.4everland.store/video/2022-4-18.mp4",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-4-18.png",
+    "video": "https://4ever-web.bucket.4everland.xyz/video/2022-4-18.mp4",
     "title": "Added some new features",
     "lines": [
       "Support SNS domain.",
@@ -247,7 +247,7 @@
   },
   {
     "time": "2022-04-07",
-    "img": "https://4ever-web.4everland.store/img/log/2022-4-7.jpg",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-4-7.jpg",
     "title": "4EVERLAND new Dashboard is officially launched!",
     "lines": [
       "Redesign the official website's UI and merge Hosting & Bucket display page.",
@@ -260,7 +260,7 @@
   },
   {
     "time": "2022-03-11",
-    "img": "https://docs-images.4everland.store/bucketchangelog.gif",
+    "img": "https://docs-images.bucket.4everland.xyz/bucketchangelog.gif",
     "title": "Add AR storage to 4EVERLAND Bucket",
     "lines": [
       "Added the function to automatically sync to AR when creating a Bucket",
@@ -272,7 +272,7 @@
   },
   {
     "time": "2022-01-10",
-    "img": "https://4ever-web.4everland.store/img/log/2022-1-10.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-1-10.png",
     "title": "Added some new features",
     "lines": [
       "Support ENS and IPNS"
@@ -280,7 +280,7 @@
   },
   {
     "time": "2022-01-07",
-    "img": "https://4ever-web.4everland.store/img/log/2022-1-7.png",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2022-1-7.png",
     "title": "Improved some details of 4EVERLAND HOSTING",
     "lines": [
       "Optimized the custom pricing plan and its payment process ",
@@ -289,7 +289,7 @@
   },
   {
     "time": "2021-12-10",
-    "img": "https://4ever-web.4everland.store/img/log/2021-12-10.gif",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2021-12-10.gif",
     "title": "We support the CLI now !",
     "lines": [
       "Hosting offers a command-line interface for the 4everland CLI, which enables you to deploy and manage projects with a set of commands. ",
@@ -298,7 +298,7 @@
   },
   {
     "time": "2021-12-06",
-    "img": "https://4ever-web.4everland.store/img/log/2021-12-06.jpeg",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2021-12-06.jpeg",
     "title": "We offered you pricing plans to subscribe.",
     "lines": [
       "Added pricing plan, you can subscribe it based on your specific needs.",
@@ -308,7 +308,7 @@
   },
   {
     "time": "2021-12-06",
-    "img": "https://4ever-web.4everland.store/img/log/2021-12-06-2.jpeg",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2021-12-06-2.jpeg",
     "title": "Modified the billing model and bill display page.",
     "lines": [
       "Billing statistics are modified to the three dimensions of bandwidth, storage, and build time. Users before the HOSTING beta release will have access to 100M bandwidth and 40G storage until December 31, 2021.",
@@ -318,7 +318,7 @@
   },
   {
     "time": "2021-12-06",
-    "img": "https://4ever-web.4everland.store/img/log/2021-12-06-3.jpeg",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2021-12-06-3.jpeg",
     "title": "Optimized statistics function.",
     "lines": [
       "Added the function to view new user retention rate by date filter.",
@@ -328,7 +328,7 @@
   },
   {
     "time": "2021-10-25",
-    "img": "https://4ever-web.4everland.store/img/log/2021-10-25.jpeg",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2021-10-25.jpeg",
     "title": "Published new functions in 4EVERLAND-HOSTING.",
     "lines": [
       "Published new gateway ",
@@ -337,7 +337,7 @@
   },
   {
     "time": "2021-10-11",
-    "img": "https://4ever-web.4everland.store/img/log/2021-10-11.jpeg",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2021-10-11.jpeg",
     "title": "More details in 4EVERLAND HOSTING have improved.",
     "lines": [
       "Set the corresponding browser title according to the page route ",
@@ -346,7 +346,7 @@
   },
   {
     "time": "2021-9-27",
-    "img": "https://4ever-web.4everland.store/img/log/2021-9-27.jpeg",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2021-9-27.jpeg",
     "title": "Improvements on the statistics page and breadcrumb navigation is added.",
     "lines": [
       "Breadcrumb navigation added on project details and build page",
@@ -356,7 +356,7 @@
   },
   {
     "time": "2021-9-13",
-    "img": "https://4ever-web.4everland.store/img/log/2021-9-13.jpeg",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2021-9-13.jpeg",
     "title": "Optimized the deployment process.",
     "lines": [
       "Optimized the construction process and added branch selection function",
@@ -366,7 +366,7 @@
   },
   {
     "time": "2021-9-6",
-    "img": "https://4ever-web.4everland.store/img/log/2021-9-6.jpeg",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2021-9-6.jpeg",
     "title": "Intercom is now up. Now you can speak to us in no time and also we have optimized couples details such as import Git repository etc.",
     "lines": [
       "Optimized the Build command, scroll down for the default scripts in package.json",
@@ -378,7 +378,7 @@
   },
   {
     "time": "2021-8-31",
-    "img": "https://4ever-web.4everland.store/img/log/2021-8-31.jpg",
+    "img": "https://4ever-web.bucket.4everland.xyz/img/log/2021-8-31.jpg",
     "title": "We have done more functional support and detailed optimization for 4EVERLAND HOSTING, as follows:",
     "lines": [
       "Support multiple GitHub accounts login and also org Github accounts. ",

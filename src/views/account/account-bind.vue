@@ -647,7 +647,7 @@ export default {
           description:
             "As a Web3 infrastructure, 4EVERLAND simplifies the hosting of front-end, the storage of data, and access to the emerging open web, making projects faster and easier to manage.",
           url: "https://dashboard.4everland.org/",
-          icons: ["https://4evericon.4everland.store/1024.png"],
+          icons: ["https://4evericon.bucket.4everland.xyz/1024.png"],
         },
       });
 

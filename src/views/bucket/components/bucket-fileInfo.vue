@@ -247,7 +247,8 @@ export default {
       const list = this.bucketInfo.originList
         .concat(this.domains)
         .map((origin) => {
-          return encodeURI(origin + "/" + Key);
+          // replace 4everland.store with bucket.4everland.xyz
+          return encodeURI(origin.replaceAll("4everland.store", "bucket.4everland.xyz") + "/" + Key);
         });
       if (!list.length) list.push(this.fileInfo.url);
       return list;

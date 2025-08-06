@@ -216,7 +216,7 @@ export default {
     ...mapActions(["checkClaim"]),
     async getNewChagneLogNum() {
       const { data } = await Axios.get(
-        "https://4ever-web.4everland.store/config/header.json"
+        "https://4ever-web.bucket.4everland.xyz/config/header.json"
       );
       this.newChagelogNum = data.changeLogNum;
       // localStorage.changelogNum = this.newChagelogNum;
