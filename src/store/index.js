@@ -105,7 +105,8 @@ const store = new Vuex.Store({
       // if (process.env.NODE_ENV != "production")
       if (Vue.prototype.$inDev)
         return "http://" + md5(state.teamId) + ".ipfs.foreverland-link.xyz";
-      return "https://" + md5(state.teamId) + ".ipfs.4everland.link";
+      //return "https://" + md5(state.teamId) + ".ipfs.4everland.io";
+      return "https://ipfs.4everland.io";
     },
     notLogin(state) {
       return Object.keys(state.userInfo).length == 0;
