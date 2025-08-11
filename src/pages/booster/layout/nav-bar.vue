@@ -160,10 +160,10 @@ export default {
           name: "Leaderboard",
           path: "/boost/leaderboard",
         },
-        // {
-        //   name: "Airdrop",
-        //   path: "/boost/airdrop",
-        // },
+        {
+          name: "Airdrop",
+          path: "/boost/airdrop",
+        },
         // {
         //   name: "Staking",
         // },

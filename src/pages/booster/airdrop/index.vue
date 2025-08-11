@@ -1,11 +1,46 @@
 <template>
   
   <div class="airdrop-container">
-    <div class="airdrop-in-container" :class="{'airdrop-in-container-mobile': asMobile}">
+    <div class="airdrop-in-container airdrop-in-container-mobile">
+      <div class="airdrop-content mb-8">
+          <div class="airdrop-img">
+            <img src="/img/airdrop/airdrop_img.png" alt=""></img>
+          </div>
+            <div class="d-flex justify-end">
+              <div>
+                <div class="white--text mb-4 text-left">You will receive:</div>
+                <div class="light-btn d-flex justify-center align-center">
+                  <div class="light-span relative d-flex justify-center align-center">
+                    
+                    <v-btn class="submit-btn">
+                      <span class="number">
+                        <ICountUp
+                          class="points"
+                          :delay="1000"
+                          :endVal="shortPoint"
+                          :options="{
+                            useEasing: true,
+                            useGrouping: true,
+                            decimalPlaces: 0,
+                            separator: ',',
+                            decimal: '.',
+                            prefix: '',
+                            suffix: '',
+                          }"
+                        />
+                      </span>
+                      <span class="btn-text"> $4EVER </span>
+                    </v-btn>
+                  </div>
+                </div>
+            </div>
+          </div>
+      </div>
+
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="12">
           <v-list class="transparent">
-            <v-list-item v-for="(item, index) in airdropItems" :key="index" class="airdrop-item content-bg" :class="{'content-bg-check': item.status === true}">
+            <v-list-item v-for="(item, index) in airdropItems" :key="index" class="airdrop-item content-bg" :class="{'content-bg-check': item.status == true}">
               <v-list-item-avatar size="32" tile>
                 <v-img :src="item.icon"  size="32"></v-img>
               </v-list-item-avatar>
@@ -38,62 +73,10 @@
               </v-list-item-action>
             </v-list-item>
           </v-list>
-        </v-col>
-
-        <v-col cols="12" md="6">
-          <v-card class="transparent" flat>
-            <v-card-text class="text-center position-relative">
-              <v-img
-                src="/img/booster/icon_fourever.png"
-                :max-width="asMobile ? 120 : 200"
-                class="mx-auto mb-4 img-right"
-                :class="{'img-right-mobile': asMobile}"
-              ></v-img>
-              <div class="right-content" :class="{'right-content2': access, 'right-content3': alreadyClaim, 'right-contentloading': loading}">
-                <div>
-                  <div v-if="access" class="big-title mb-4 text-left fz-28">🎉Congratulations, you're eligible</div>
-                  <div v-if="loading || access" class="white--text mb-4 text-left">You will receive:</div>
-                </div>
-                <div v-if="!loading&&!access" class="mt-16">
-                  <div class="big-title mt-4 text-left fz-28">Sorry</div>
-                  <div class="big-title mb-4 text-left fz-28">You're not eligible</div>
-                  <div class="white--text mb-4 text-left" style="letter-spacing: normal;">
-                    Don't be discouraged! You can still participate in 4EVER Boost, and you'll have the opportunity to receive it in the future.
-                  </div>
-                </div>
-                <div v-if="loading || access" class="d-flex justify-center">
-                  <div class="light-btn d-flex justify-center align-center">
-                    <div class="light-span relative d-flex justify-center align-center">
-                      <span
-                      v-if="alreadyClaim"
-                      class="airdrop-title-aleady-claim d-flex justify-center align-center">
-                        <img src="/img/booster/earnings/icon_check.png" width="16" alt="" />
-                        Already Claimed
-                      </span>
-                      <v-btn class="submit-btn">
-                        <span class="number">
-                          <ICountUp
-                            class="points"
-                            :delay="1000"
-                            :endVal="shortPoint"
-                            :options="{
-                              useEasing: true,
-                              useGrouping: true,
-                              decimalPlaces: 0,
-                              separator: ',',
-                              decimal: '.',
-                              prefix: '',
-                              suffix: '',
-                            }"
-                          />
-                        </span>
-                        <span class="btn-text"> $4EVER </span>
-                      </v-btn>
-                    </div>
-                  </div>
-                </div>
+          <div class="mt-4 right-content">
+            
                 <v-btn
-                  v-if="loading || (access && !alreadyClaim)"
+                  
                   block
                   class="mt-4 btn-claim"
                   :class="{'btn-claim-can': canClaim, 'btn-claim2': alreadyClaim}"
@@ -128,6 +111,26 @@
                   </v-btn>
 
                 </div>
+              </div>
+        </v-col>
+
+        <!-- <v-col cols="12" md="6">
+          <v-card class="transparent" flat>
+            <v-card-text class="text-center position-relative">
+              
+              <div class="right-content" :class="{'right-content2': access, 'right-content3': alreadyClaim, 'right-contentloading': loading}">
+                <div>
+                  <div v-if="access" class="big-title mb-4 text-left fz-28">🎉Congratulations, you're eligible</div>
+                  <div v-if="loading || access" class="white--text mb-4 text-left">You will receive:</div>
+                </div>
+                <div v-if="!loading&&!access" class="mt-16">
+                  <div class="big-title mt-4 text-left fz-28">Sorry</div>
+                  <div class="big-title mb-4 text-left fz-28">You're not eligible</div>
+                  <div class="white--text mb-4 text-left" style="letter-spacing: normal;">
+                    Don't be discouraged! You can still participate in 4EVER Boost, and you'll have the opportunity to receive it in the future.
+                  </div>
+                </div>
+                
                 <v-btn
                   v-if="!loading && !access"
                   block
@@ -140,7 +143,7 @@
               </div>
             </v-card-text>
           </v-card>
-        </v-col>
+        </v-col> -->
       </v-row>
 
       <v-row>
@@ -469,11 +472,11 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
 .airdrop-container {
   width: 100%;
   height: 100%;
-  padding-top: 200px;
+  padding-top: 117px;
   background: url("/img/booster/bg_airdrop_second.svg") repeat #000000;
 }
 .airdrop-in-container {
-  max-width: 1032px;
+  max-width: 560px;
   margin: 0 auto;
   border: 1px solid #0FE1F81A;
   background: linear-gradient(281.05deg, rgba(0, 62, 112, 0.5) 19.1%, rgba(0, 10, 16, 0.5) 100.11%);
@@ -483,13 +486,27 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
 
 }
 .airdrop-in-container-mobile {
-  padding: 20px;
+  padding: 40px;
+}
+.airdrop-img{
+  position: absolute;
+  top: -87px;
+  left: -65px;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 .content-bg{
-  background: url("/img/booster/svg/fringe-bg.svg");
+  
+  border: 1px solid #F9F9F980;
+  background: #FFFFFF1A;
 }
 .content-bg-check{
-  background: linear-gradient(270.31deg, rgba(15, 225, 248, 0.2) 0.18%, rgba(0, 114, 248, 0.2) 100.11%), url("/img/booster/svg/fringe-bg.svg");
+  backdrop-filter: blur(25px);
+  box-shadow: 0px 1px 4px 2px #D2EAFF80 inset;
+  box-shadow: 0px 1px 18px 2px #D2EAFF80 inset;
+
+  //background: linear-gradient(270.31deg, rgba(15, 225, 248, 0.2) 0.18%, rgba(0, 114, 248, 0.2) 100.11%), url("/img/booster/svg/fringe-bg.svg");
 }
 .img-right{
   position: absolute;
@@ -500,8 +517,9 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   right: -20px;
   top: 25px;
 }
-.right-content{
-  margin-top: 97px;
+.airdrop-content{
+  min-height: 160px;
+  background: url("/img/airdrop/airdrop_bg.png") no-repeat;
   .big-title{
     color: #0FE1F8;
     max-width: 68%;
@@ -552,7 +570,7 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   border-radius: 16px;
   overflow: hidden;
   z-index: 1;
-  width: 100%;
+  width: 280px;
 }
 .light-btn::before {
   content: "";
@@ -607,8 +625,7 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   z-index: 1;
 }
 .airdrop-title {
-  position: absolute;
-  top: -10px;
+
 }
 .airdrop-title-aleady-claim {
   position: absolute;
