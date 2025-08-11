@@ -672,7 +672,7 @@ export default {
     },
     getViewUrl(item) {
       const { Prefix } = this.pathInfo;
-      let url = this.bucketInfo.originList[0] + "/" + Prefix + item.name;
+      let url = this.bucketInfo.originList[0].replaceAll("4everland.store", "bucket.4everland.xyz") + "/" + Prefix + item.name;
       return url.encode();
     },
     onView(it) {
