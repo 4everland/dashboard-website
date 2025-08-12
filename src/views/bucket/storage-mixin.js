@@ -1,4 +1,4 @@
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import debounce from "../../plugins/debounce";
 
 const BasePath = "/bucket/storage/";
@@ -20,6 +20,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["bucketDefaultGateWay"]),
     ...mapState({
       s3: (s) => s.moduleS3.s3,
       s3m: (s) => s.moduleS3.s3m,
@@ -672,8 +673,13 @@ export default {
     },
     getViewUrl(item) {
       const { Prefix } = this.pathInfo;
-      let url = this.bucketInfo.originList[0].replaceAll("4everland.store", "bucket.4everland.xyz") + "/" + Prefix + item.name;
+      console.log(item)
+      //let url = this.bucketInfo.originList[0].replaceAll("4everland.store", "bucket.4everland.xyz") + "/" + Prefix + item.name;
+      let url = this.ipfsLink(item.hash);
       return url.encode();
+    },
+    ipfsLink(ipfs) {
+      return this.bucketDefaultGateWay + "/ipfs/" + ipfs;
     },
     onView(it) {
       window.open(this.getViewUrl(it));

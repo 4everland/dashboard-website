@@ -235,20 +235,22 @@ export default {
           name: "arHash",
           value: info.arHash,
         },
-        {
-          label: "Object URL",
-          name: "url",
-          value: this.fileUrls,
-        },
+        // {
+        //   label: "Object URL",
+        //   name: "url",
+        //   value: this.fileUrls,
+        // },
       ];
     },
     fileUrls() {
       const { Key } = this.pathInfo;
+      
       const list = this.bucketInfo.originList
         .concat(this.domains)
         .map((origin) => {
           // replace 4everland.store with bucket.4everland.xyz
           return encodeURI(origin.replaceAll("4everland.store", "bucket.4everland.xyz") + "/" + Key);
+          //return this.ipfsLink(this.fileInfo?.hash);
         });
       if (!list.length) list.push(this.fileInfo.url);
       return list;
