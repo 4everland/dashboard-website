@@ -7,8 +7,8 @@
             <img src="/img/airdrop/airdrop_img.png" alt=""></img>
           </div>
             <div class="d-flex justify-end">
-              <div>
-                <div class="white--text mb-4 text-left">You will receive:</div>
+              <div class="mt-9 mr-2">
+                <div class="white--text  text-left">You will receive:</div>
                 <div class="light-btn d-flex justify-center align-center">
                   <div class="light-span relative d-flex justify-center align-center">
                     
@@ -41,9 +41,11 @@
         <v-col cols="12" md="12">
           <v-list class="transparent">
             <v-list-item v-for="(item, index) in airdropItems" :key="index" class="airdrop-item content-bg" :class="{'content-bg-check': item.status == true}">
-              <v-list-item-avatar size="32" tile>
-                <v-img :src="item.icon"  size="32"></v-img>
+             <div class="d-flex align-center justify-center airdrop-item-avatar">
+              <v-list-item-avatar size="24" tile class="mx-auto">
+                <v-img :src="item.icon"  size="24" width="24"></v-img>
               </v-list-item-avatar>
+            </div>
               <v-list-item-content>
                 <v-list-item-title class="white--text font-weight-bold airdrop-title">{{ item.title }}</v-list-item-title>
                 <v-list-item-subtitle class="grey--text fz-12 text-wrap airdrop-subtitle flex align-center">
@@ -66,7 +68,7 @@
                 />
                 <img
                   v-if="item.status === false"
-                  src="/img/airdrop/icon_error.png"
+                  src="/img/airdrop/x-circle.svg"
                   width="24"
                   alt=""
                 />
@@ -76,7 +78,7 @@
           <div class="mt-4 right-content">
             
                 <v-btn
-                  
+                  v-if="!loading&&access"
                   block
                   class="mt-4 btn-claim"
                   :class="{'btn-claim-can': canClaim, 'btn-claim2': alreadyClaim}"
@@ -87,6 +89,18 @@
                   @click="handleClaim"
                 >
                   {{ alreadyClaim ? 'Already Claimed' : 'Claim Now' }}
+                </v-btn>
+                <v-btn
+                  v-if="!loading&&!access"
+                  block
+                  class="mt-4 btn-claim btn-claim-not-eligible"
+                  
+                  height="48"
+                  
+                  :loading="claimLoading"
+                  
+                >
+                Sorry! you're not eligible
                 </v-btn>
                 <div
                   v-if="alreadyClaim"
@@ -146,11 +160,14 @@
         </v-col> -->
       </v-row>
 
+      
+    </div>
+    <div class="airdrop-footer">
       <v-row>
         <v-col cols="12">
-          <div class="text-caption grey--text text--lighten-1 text-left mt-4 pl-4" style="letter-spacing: normal !important;">
-            ✨ No duplicate rewards for those who have already claimed airdrops on exchanges previously.<br>
-            ✨ This airdrop will be distributed on the BSC. Please claim yours before 8:00AM July 8 UTC.
+          <div class="text-caption grey--text text--lighten-1 text-center mt-4 pl-4" style="letter-spacing: normal !important;">
+            This airdrop claim will be conducted on BSC MaiNet, with a deadline of 8:00 UTC on March 14. Eligible users, please complete your airdrop claim as soon as possible.
+
           </div>
         </v-col>
       </v-row>
@@ -473,13 +490,14 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   width: 100%;
   height: 100%;
   padding-top: 117px;
-  background: url("/img/booster/bg_airdrop_second.svg") repeat #000000;
+  background: url("/img/airdrop/bg.png") repeat #000000;
 }
 .airdrop-in-container {
   max-width: 560px;
   margin: 0 auto;
-  border: 1px solid #0FE1F81A;
-  background: linear-gradient(281.05deg, rgba(0, 62, 112, 0.5) 19.1%, rgba(0, 10, 16, 0.5) 100.11%);
+  border: 1px solid rgba(209, 187, 247, 0.25);
+  
+  background: radial-gradient(70.64% 82.75% at 62.7% 0%, rgba(161, 196, 253, 0.23) 0%, rgba(255, 255, 255, 0.00) 100%), rgba(0, 0, 0, 0.50);
   backdrop-filter: blur(8px);
   padding: 40px;
   border-radius: 8px;
@@ -498,7 +516,8 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
 }
 .content-bg{
   
-  border: 1px solid #F9F9F980;
+  border: 1px solid rgba(64, 64, 64, 0.70);
+  backdrop-filter: blur(12.5px);
   background: #FFFFFF1A;
 }
 .content-bg-check{
@@ -531,8 +550,8 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   }
   .submit-btn {
     width: 100%;
-    height: 79px;
-    border-radius: 16px;
+    height: 54px;
+    border-radius: 8px;
     padding: 0 !important;
     .number {
       font-family: DIN Alternate;
@@ -550,7 +569,15 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
     }
     background: url("/img/booster/earnings/grid.png") no-repeat #000000;
     background-size: contain;
+    box-shadow: 0px 0px 16px 0px #039CFF80 inset;
   }
+}
+.airdrop-item-avatar{
+  background: #000000;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  margin-right: 16px;
 }
 .right-content2{
   margin-top: 15px;
@@ -567,7 +594,7 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   position: relative;
   padding: 2px;
   border: 0;
-  border-radius: 16px;
+  border-radius: 8px;
   overflow: hidden;
   z-index: 1;
   width: 280px;
@@ -605,8 +632,8 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   background: var(--bg);
 }
 .light-span {
-  padding: 2px;
-  border-radius: 16px;
+  padding: 0px;
+  border-radius: 8px;
   background: #000000;
   position: relative;
   z-index: 2;
@@ -692,6 +719,13 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
 }
 .btn-claim-can {
   background-color: #039CFF !important;
+}
+.btn-claim2 {
+  background: rgba(3, 156, 255, 0.24);
+}
+.btn-claim-not-eligible{
+  background: #344054;
+  color: #FFFFFF80 !important;
 }
 .btn-boost {
   background: linear-gradient(90.97deg, #0FE1F8 0.68%, #1102FC 99.51%);
