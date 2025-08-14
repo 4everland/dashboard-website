@@ -393,9 +393,9 @@ export default {
       console.log(this.teamInfo.createAt);
       if (this.onChain) return "Permanent";
       let timestamp = +new Date();
-      if (timestamp > this.teamInfo.createAt + 86400 * 30 * 1000)
+      if (timestamp > this.teamInfo.createAt + 86400 * 7 * 1000)
         return "Expired";
-      return new Date(this.teamInfo.createAt + 86400 * 30 * 1000).format(
+      return new Date(this.teamInfo.createAt + 86400 * 7 * 1000).format(
         "date"
       );
     },
