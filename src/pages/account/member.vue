@@ -7,137 +7,162 @@
         </template>
       </v-breadcrumbs>
     </div>
-    <div class="main-wrap auto">
-      <h3>Invite members</h3>
-      <div class="gray fz-14 mt-2">
-        You can invite up to 3 team members to this Beta version. Please,
-        contact
-        <a href="https://discord.gg/4everland" target="_blank">us</a>
-        if you want to invite more.
+    <div v-if="!onChain">
+      <div class="pa-3 mt-5 ta-c">
+        <img src="/img/svg/gateway/lock.svg" width="180" />
       </div>
-      <v-form ref="form">
-        <v-row class="mt-3">
-          <v-col cols="12" md="7">
-            <h4>Members</h4>
-            <div class="al-c">
-              <v-select
-                :items="typeItems"
-                item-text="text"
-                item-value="value"
-                v-model="accBody.type"
-                @change="onSeleted"
-                outlined
-                dense
-                style="max-width: 140px"
-              ></v-select>
-              <v-text-field
-                v-model="accBody.target"
-                ref="targetIpt"
-                :placeholder="
-                  accBody.type == 'EMAIL' ? 'Enter email' : 'Enter wallet'
-                "
-                outlined
-                :rules="[
-                  (v) => (v && !!v.trim()) || 'Invalid Address',
-                  (v) => {
-                    if (accBody.type == 'EMAIL') {
-                      return (
-                        this.$regMap.email.test(accBody.target) ||
-                        'Invalid Email Address'
-                      );
-                    }
-                    return true;
-                  },
-                ]"
-                dense
-                class="ml-4"
-              ></v-text-field>
-            </div>
-          </v-col>
-          <v-col cols="12" md="5">
-            <h4>Permissions</h4>
-            <div>
-              <v-text-field
-                placeholder="Set permissions"
-                outlined
-                dense
-                readonly
-                :rules="[
-                  (v) =>
-                    (v && !!v.trim()) ||
-                    'The permissions for member are not configured',
-                ]"
-                :value="getText(accBody.access)"
-                @click="onAccess(accBody.access)"
-              ></v-text-field>
-            </div>
-          </v-col>
-        </v-row>
-      </v-form>
-      <div class="ta-r">
-        <v-btn color="primary" width="100px" @click="addMember">Invite</v-btn>
+      <div class="d-flex f-center">
+        <div style="max-width: 550px">
+          Activate your account to unlock the Team Member.
+        </div>
+      </div>
+      <div
+        class="ta-c mt-8"
+        :class="{
+          hidden:
+            teamInfo.isMember && teamInfo.access?.indexOf('RESOURCE') == -1,
+        }"
+      >
+        <v-btn color="primary" width="120" @click="handleUpgrad"
+          >Activate</v-btn
+        >
       </div>
     </div>
 
-    <v-dialog v-model="showPermission" max-width="700px" eager>
-      <account-permission
-        ref="permission"
-        v-model="curAccess"
-        @close="showPermission = false"
-        @save="onSaveAccess"
-      />
-    </v-dialog>
+    <div v-else>
+      <div class="main-wrap auto">
+        <h3>Invite members</h3>
+        <div class="gray fz-14 mt-2">
+          You can invite up to 3 team members to this Beta version. Please,
+          contact
+          <a href="https://discord.gg/4everland" target="_blank">us</a>
+          if you want to invite more.
+        </div>
+        <v-form ref="form">
+          <v-row class="mt-3">
+            <v-col cols="12" md="7">
+              <h4>Members</h4>
+              <div class="al-c">
+                <v-select
+                  :items="typeItems"
+                  item-text="text"
+                  item-value="value"
+                  v-model="accBody.type"
+                  @change="onSeleted"
+                  outlined
+                  dense
+                  style="max-width: 140px"
+                ></v-select>
+                <v-text-field
+                  v-model="accBody.target"
+                  ref="targetIpt"
+                  :placeholder="
+                    accBody.type == 'EMAIL' ? 'Enter email' : 'Enter wallet'
+                  "
+                  outlined
+                  :rules="[
+                    (v) => (v && !!v.trim()) || 'Invalid Address',
+                    (v) => {
+                      if (accBody.type == 'EMAIL') {
+                        return (
+                          this.$regMap.email.test(accBody.target) ||
+                          'Invalid Email Address'
+                        );
+                      }
+                      return true;
+                    },
+                  ]"
+                  dense
+                  class="ml-4"
+                ></v-text-field>
+              </div>
+            </v-col>
+            <v-col cols="12" md="5">
+              <h4>Permissions</h4>
+              <div>
+                <v-text-field
+                  placeholder="Set permissions"
+                  outlined
+                  dense
+                  readonly
+                  :rules="[
+                    (v) =>
+                      (v && !!v.trim()) ||
+                      'The permissions for member are not configured',
+                  ]"
+                  :value="getText(accBody.access)"
+                  @click="onAccess(accBody.access)"
+                ></v-text-field>
+              </div>
+            </v-col>
+          </v-row>
+        </v-form>
+        <div class="ta-r">
+          <v-btn color="primary" width="100px" @click="addMember">Invite</v-btn>
+        </div>
+      </div>
 
-    <div class="main-wrap auto mt-5">
-      <h3>Members</h3>
-      <v-data-table
-        :loading="listLoading"
-        :headers="headers"
-        hide-default-footer
-        :items="list"
-      >
-        <template v-slot:item.act="{ item }">
-          <div v-if="item.role == 'OWNER'">
-            <v-btn
-              text
-              color="primary"
-              small
-              :disabled="teamInfo.isMember"
-              @click="onDisband"
-              v-if="list.length > 1"
-              >Disband</v-btn
-            >
-            <span v-else class="pl-3">--</span>
-          </div>
-          <div v-else>
-            <v-btn
-              text
-              color="primary"
-              small
-              :disabled="
-                item.status == 'PENDING' ||
-                item.status == 'REJECT' ||
-                isMemberMe(item)
-              "
-              @click="onAccess(item.access, item.invitationId)"
-              >Edit</v-btn
-            >
-            <v-btn text color="primary" small @click="onAct(item, 'REMOVE')"
-              >Remove</v-btn
-            >
-            <v-btn text color="primary" small @click="onAct(item, 'note')"
-              >Note</v-btn
-            >
-          </div>
-        </template>
-      </v-data-table>
+      <v-dialog v-model="showPermission" max-width="700px" eager>
+        <account-permission
+          ref="permission"
+          v-model="curAccess"
+          @close="showPermission = false"
+          @save="onSaveAccess"
+        />
+      </v-dialog>
 
-      <e-empty v-if="!list.length" class="pt-6">No Invitations</e-empty>
+      <div class="main-wrap auto mt-5">
+        <h3>Members</h3>
+        <v-data-table
+          :loading="listLoading"
+          :headers="headers"
+          hide-default-footer
+          :items="list"
+        >
+          <template v-slot:item.act="{ item }">
+            <div v-if="item.role == 'OWNER'">
+              <v-btn
+                text
+                color="primary"
+                small
+                :disabled="teamInfo.isMember"
+                @click="onDisband"
+                v-if="list.length > 1"
+                >Disband</v-btn
+              >
+              <span v-else class="pl-3">--</span>
+            </div>
+            <div v-else>
+              <v-btn
+                text
+                color="primary"
+                small
+                :disabled="
+                  item.status == 'PENDING' ||
+                  item.status == 'REJECT' ||
+                  isMemberMe(item)
+                "
+                @click="onAccess(item.access, item.invitationId)"
+                >Edit</v-btn
+              >
+              <v-btn text color="primary" small @click="onAct(item, 'REMOVE')"
+                >Remove</v-btn
+              >
+              <v-btn text color="primary" small @click="onAct(item, 'note')"
+                >Note</v-btn
+              >
+            </div>
+          </template>
+        </v-data-table>
+
+        <e-empty v-if="!list.length" class="pt-6">No Invitations</e-empty>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { bus } from "@/utils/bus";
 import AccountPermission from "@/views/account/account-permission.vue";
 import { mapGetters, mapState } from "vuex";
 
@@ -148,6 +173,7 @@ export default {
   computed: {
     ...mapState({
       userInfo: (s) => s.userInfo,
+      onChain: (s) => s.onChain,
     }),
     ...mapGetters(["teamInfo"]),
   },
@@ -215,6 +241,9 @@ export default {
     this.getList();
   },
   methods: {
+    handleUpgrad() {
+      bus.$emit("showDialog");
+    },
     isMemberMe(item) {
       return this.teamInfo.isMember && item.uid == this.userInfo.uid;
     },

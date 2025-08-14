@@ -17,8 +17,7 @@
       </div>
       <div class="d-flex f-center">
         <div style="max-width: 550px">
-          Complete your first deposit for LAND to unlock the dedicated gateway,
-          starting from $1.
+          Activate your account to unlock the Dedicated Gateway. 
         </div>
       </div>
       <div
@@ -28,8 +27,8 @@
             teamInfo.isMember && teamInfo.access?.indexOf('RESOURCE') == -1,
         }"
       >
-        <v-btn color="primary" width="120" @click="handleDeposit"
-          >Deposit</v-btn
+        <v-btn color="primary" width="120" @click="handleUpgrad"
+          >Activate</v-btn
         >
       </div>
     </div>
@@ -126,6 +125,7 @@
 <script>
 import GatewayGenerate from "@/views/gateway/gateway-generate";
 import { mapGetters } from "vuex";
+import { bus } from "@/utils/bus";
 export default {
   components: {
     GatewayGenerate,
@@ -216,6 +216,9 @@ export default {
         );
       }
       this.$router.push("/billing/deposit");
+    },
+    handleUpgrad() {
+      bus.$emit("showDialog");
     },
   },
 };
