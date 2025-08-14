@@ -24,7 +24,7 @@
             <div class="fz-14 mt-2 mb-4 ta-c" v-show="!trialExpired">
               The trial account is valid until
               <b>{{
-                new Date(teamInfo.createAt + 30 * 24 * 3600 * 1000).format(
+                new Date(teamInfo.createAt + 7 * 24 * 3600 * 1000).format(
                   "date"
                 )
               }}</b>

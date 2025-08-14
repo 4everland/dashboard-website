@@ -177,6 +177,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { bus } from "../../utils/bus";
 import PinningServiceUpload from "@/views/bucket/components/pinning-service-upload.vue";
 import { PinningServiceDeleteTaskWrapper } from "@/views/bucket/task";
@@ -238,6 +239,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      onChain: (s) => s.onChain,
+    }),
     compeleted() {
       return !this.deleteTasks.some((it) => it.status != 3 && it.status != 4);
     },
@@ -279,8 +283,17 @@ export default {
   },
   methods: {
     async handleGetToken() {
-      await this.getAccessToken();
-      this.showPop = true;
+       if (!this.onChain) {
+        this.$confirm("Activate your account to unlock the 4EVER PIN API.", "Notice", {
+          cancelText: "Cancel",
+          confirmText: "Activate",
+        }).then(async () => {
+          bus.$emit("showDialog");
+        });
+      } else {
+        await this.getAccessToken();
+        this.showPop = true;
+      }
     },
     handleInput: debounce(function () {
       this.getList({}, true);

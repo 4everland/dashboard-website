@@ -79,16 +79,16 @@ export default {
       this.$land = this.numberWithCommas(land / 1e6);
     },
     async onCreate() {
-      if (!this.onChain) {
-        this.$confirm("Activate your account to get started", "Notice", {
-          cancelText: "Cancel",
-          confirmText: "Activate",
-        }).then(async () => {
-          bus.$emit("showDialog");
-        });
-      } else {
+      // if (!this.onChain) {
+      //   this.$confirm("Activate your account to get started", "Notice", {
+      //     cancelText: "Cancel",
+      //     confirmText: "Activate",
+      //   }).then(async () => {
+      //     bus.$emit("showDialog");
+      //   });
+      // } else {
         this.$router.push("/raas/create");
-      }
+      // }
 
       // let limitBalance = 1000000000;
       // if (process.env.NODE_ENV == "development") {

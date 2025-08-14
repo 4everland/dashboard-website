@@ -7,34 +7,57 @@
         </template>
       </v-breadcrumbs>
     </div>
-    <e-right-opt-wrap :top="-65">
-      <v-btn color="primary" @click="clickAdd">
-        <span class="fz-18">+</span>
-        <span class="ml-1">Create</span>
-      </v-btn>
-      <v-btn
-        outlined
-        width="120"
-        class="ml-5"
-        @click="onDelete"
-        :loading="deleting"
-        v-if="selected.length > 0"
+    <div v-if="!onChain">
+      <div class="pa-3 mt-5 ta-c">
+        <img src="/img/svg/gateway/lock.svg" width="180" />
+      </div>
+      <div class="d-flex f-center">
+        <div style="max-width: 550px">
+          Activate your account to unlock the Hosting API.
+        </div>
+      </div>
+      <div
+        class="ta-c mt-8"
+        :class="{
+          hidden:
+            teamInfo.isMember && teamInfo.access?.indexOf('RESOURCE') == -1,
+        }"
       >
-        <img src="/img/svg/delete.svg" width="12" />
-        <span class="ml-2">Delete</span>
-      </v-btn>
-    </e-right-opt-wrap>
-    <div class="main-wrap">
-      <v-data-table
-        v-model="selected"
-        :loading="loading"
-        :show-select="list.length > 0"
-        item-key="id"
-        :headers="headers"
-        :items="list"
-        hide-default-footer
-      ></v-data-table>
-      <e-empty v-if="!loading && !list.length">No Tokens</e-empty>
+        <v-btn color="primary" width="120" @click="handleUpgrad"
+          >Activate</v-btn
+        >
+      </div>
+    </div>
+    <div v-else>
+      <e-right-opt-wrap :top="-65">
+        <v-btn color="primary" @click="clickAdd">
+          <span class="fz-18">+</span>
+          <span class="ml-1">Create</span>
+        </v-btn>
+        <v-btn
+          outlined
+          width="120"
+          class="ml-5"
+          @click="onDelete"
+          :loading="deleting"
+          v-if="selected.length > 0"
+        >
+          <img src="/img/svg/delete.svg" width="12" />
+          <span class="ml-2">Delete</span>
+        </v-btn>
+      </e-right-opt-wrap>
+      <div class="main-wrap">
+        <v-data-table
+          v-model="selected"
+          :loading="loading"
+          :show-select="list.length > 0"
+          item-key="id"
+          :headers="headers"
+          :items="list"
+          hide-default-footer
+        ></v-data-table>
+        <e-empty v-if="!loading && !list.length">No Tokens</e-empty>
+      </div>
     </div>
 
     <v-dialog v-model="popNew" max-width="500">
@@ -89,6 +112,7 @@
 
 <script>
 import { bus } from "@/utils/bus";
+import { mapState, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -120,7 +144,16 @@ export default {
   mounted() {
     this.getList();
   },
+  computed: {
+    ...mapGetters(["teamInfo"]),
+    ...mapState({
+      onChain: (s) => s.onChain,
+    }),
+  },
   methods: {
+    handleUpgrad() {
+      bus.$emit("showDialog");
+    },
     onCopied() {
       this.$copy(this.newToken, "Copied!");
       this.copied = true;
@@ -155,7 +188,6 @@ export default {
           bus.$emit("showDialog");
         }
         console.error(error);
-       
       }
       this.adding = false;
     },

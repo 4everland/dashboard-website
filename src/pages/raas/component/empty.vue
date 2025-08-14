@@ -1,37 +1,71 @@
 <template>
   <div class="empty-box">
     <!-- <create-select /> -->
-    <div class="create-box" @click="toCreate">
-      <v-img
-        max-height="80"
-        max-width="80"
-        src="@/assets/imgs/raas/empty_create.png"
-      ></v-img>
-      <div>Create</div>
-    </div>
-    <div class="empty-tips mt-6">
-      You haven't created a Rollup yet. (
-      <a
-        href="https://docs.4everland.org/raas-beta/whats-rollups"
-        target="_blank"
-        class="primary--text"
-        rel="noopener noreferrer"
-        >What's RaaS?</a
+    <div v-if="!onChain">
+      <div class="pa-3 mt-5 ta-c">
+        <img src="/img/svg/gateway/lock.svg" width="180" />
+      </div>
+      <div class="d-flex f-center">
+        <div style="max-width: 550px">
+          Activate your account to unlock the RaaS.
+        </div>
+      </div>
+      <div
+        class="ta-c mt-8"
+        :class="{
+          hidden:
+            teamInfo.isMember && teamInfo.access?.indexOf('RESOURCE') == -1,
+        }"
       >
-      )
+        <v-btn color="primary" width="120" @click="handleUpgrad"
+          >Activate</v-btn
+        >
+      </div>
+    </div>
+    <div v-else>
+      <div class="create-box" @click="toCreate">
+        <v-img
+          max-height="80"
+          max-width="80"
+          src="@/assets/imgs/raas/empty_create.png"
+        ></v-img>
+        <div>Create</div>
+      </div>
+      <div class="empty-tips mt-6">
+        You haven't created a Rollup yet. (
+        <a
+          href="https://docs.4everland.org/raas-beta/whats-rollups"
+          target="_blank"
+          class="primary--text"
+          rel="noopener noreferrer"
+          >What's RaaS?</a
+        >
+        )
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import createSelect from "./create-select.vue";
+import { bus } from "@/utils/bus";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   components: { createSelect },
   data() {
     return {};
   },
+  computed: {
+    ...mapGetters(["teamInfo"]),
+    ...mapState({
+      onChain: (s) => s.onChain,
+    }),
+  },
   methods: {
+    handleUpgrad() {
+      bus.$emit("showDialog");
+    },
     toCreate() {
       this.$emit("onCreate");
     },
