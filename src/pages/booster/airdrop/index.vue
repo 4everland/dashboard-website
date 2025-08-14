@@ -6,7 +6,7 @@
           <div class="airdrop-img">
             <img src="/img/airdrop/airdrop_img.png" alt=""></img>
           </div>
-            <div class="d-flex justify-end">
+            <div class="d-flex justify-end airdrop-content-right">
               <div class="mt-9 mr-2">
                 <div class="white--text  text-left">You will receive:</div>
                 <div class="light-btn d-flex justify-center align-center">
@@ -83,7 +83,7 @@
                   class="mt-4 btn-claim"
                   :class="{'btn-claim-can': canClaim, 'btn-claim2': alreadyClaim}"
                   
-                  height="48"
+                  height="44"
                   :disabled="!canClaim || alreadyClaim"
                   :loading="claimLoading"
                   @click="handleClaim"
@@ -94,9 +94,7 @@
                   v-if="!loading&&!access"
                   block
                   class="mt-4 btn-claim btn-claim-not-eligible"
-                  
-                  height="48"
-                  
+                  height="44"
                   :loading="claimLoading"
                   
                 >
@@ -111,7 +109,7 @@
                     @click="handleShare"
                   >
                     <span class="mr-2 fz-14" style="letter-spacing: normal;">Share to </span>
-                    <img src="/img/booster/invite/x.svg" width="16" alt="" />
+                    <img src="/img/airdrop/icon_x.svg" width="16" alt="" />
 
                   </v-btn>
                   <v-btn
@@ -159,18 +157,11 @@
           </v-card>
         </v-col> -->
       </v-row>
-
-      
     </div>
-    <div class="airdrop-footer">
-      <v-row>
-        <v-col cols="12">
-          <div class="text-caption grey--text text--lighten-1 text-center mt-4 pl-4" style="letter-spacing: normal !important;">
-            This airdrop claim will be conducted on BSC MaiNet, with a deadline of 8:00 UTC on March 14. Eligible users, please complete your airdrop claim as soon as possible.
-
-          </div>
-        </v-col>
-      </v-row>
+    <div class="airdrop-footer px-4">
+      <div class="text-caption grey--text text--lighten-1 text-center p-4 my-4" style="letter-spacing: normal !important;">
+        This airdrop claim will be conducted on BSC MaiNet, with a deadline of 8:00 UTC on March 14. Eligible users, please complete your airdrop claim as soon as possible.
+      </div>
     </div>
   </div>
 
@@ -220,7 +211,7 @@ export default {
       {
         icon: '/img/airdrop/icon_product.png',
         title: 'Product Interaction',
-        subtitle: '1% of tokens for early users who engage with products and on-chain activities.',
+        subtitle: '1% of tokens for early users who engage with products.',
         status: "loading",
         keyStr: 'productIteracted',
         realStatus: false,
@@ -228,7 +219,7 @@ export default {
       {
         icon: '/img/airdrop/icon_early.png',
         title: 'Early Contributors',
-        subtitle: '0.5% of tokens for early ecosystem contributors and Gitcoin donation.',
+        subtitle: '0.5% of tokens for 1:1 T4EVER exchange.',
         status: "loading",
         keyStr:'gitcoinDonation',
         realStatus: false,
@@ -521,9 +512,13 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   background: #FFFFFF1A;
 }
 .content-bg-check{
-  backdrop-filter: blur(25px);
-  box-shadow: 0px 1px 4px 2px #D2EAFF80 inset;
-  box-shadow: 0px 1px 18px 2px #D2EAFF80 inset;
+  background:url("/img/airdrop/item_bg.png") lightgray 0% 0% / 30.000001192092896px 30.000001192092896px repeat, 
+              linear-gradient(180deg, rgba(0, 115, 255, 0.20) 0%, rgba(13, 162, 255, 0.20) 100%), 
+              rgba(255, 255, 255, 0.10);;
+  background-blend-mode: plus-lighter, normal, normal;
+  box-shadow: 0 1px 18px 2px rgba(210, 234, 255, 0.50) inset, 0 1px 4px 2px rgba(210, 234, 255, 0.50) inset;
+  backdrop-filter: blur(12.5px);
+  border: 1px solid #08F;
 
   //background: linear-gradient(270.31deg, rgba(15, 225, 248, 0.2) 0.18%, rgba(0, 114, 248, 0.2) 100.11%), url("/img/booster/svg/fringe-bg.svg");
 }
@@ -589,6 +584,11 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   margin-top: 106px;
 }
 
+.airdrop-content-right{
+  position: relative;
+  z-index: 1;
+}
+
 
 .light-btn {
   position: relative;
@@ -651,9 +651,6 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   position: relative;
   z-index: 1;
 }
-.airdrop-title {
-
-}
 .airdrop-title-aleady-claim {
   position: absolute;
   top: -2px;
@@ -709,16 +706,19 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
 }
 .btn-share{
   width: 48%;
-  background-color: #000 !important;
-  color: #fff !important;
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border-radius: 8px;
 }
 .btn-add-token {
   width: 48%;
   background: linear-gradient(90.97deg, #0FE1F8 0.68%, #1102FC 99.51%);
   color: #fff !important;
+  border-radius: 8px;
 }
 .btn-claim-can {
   background-color: #039CFF !important;
+  border-radius: 12px;
 }
 .btn-claim2 {
   background: rgba(3, 156, 255, 0.24);
