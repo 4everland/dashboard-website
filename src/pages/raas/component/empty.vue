@@ -1,7 +1,7 @@
 <template>
   <div class="empty-box">
     <!-- <create-select /> -->
-    <div v-if="!onChain">
+    <div v-if="!onChain" style="margin-bottom:300px;">
       <div class="pa-3 mt-5 ta-c">
         <img src="/img/svg/gateway/lock.svg" width="180" />
       </div>
