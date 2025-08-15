@@ -1,6 +1,8 @@
 <template>
   <div>
-    
+    <div class="user-card-airdrop-banner">
+      <img src="/img/airdrop/4ever_banner2.png" width="256" @click="gotoAirdrop">
+    </div>
     <div class="user-card d-none d-md-block">
       <div class="user-card-item fz-12">
         <div
@@ -464,7 +466,7 @@ export default {
 .user-card {
   position: absolute;
   right: 20px;
-  top: 86px;
+  top: 195px;
   padding: 16px;
   width: 264px;
   background: url("/img/booster/user_card_bg.png") no-repeat;
