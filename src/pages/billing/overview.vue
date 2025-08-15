@@ -45,7 +45,7 @@
             <span class="fee">$0</span>
             <span>/mo</span>
           </div>
-          <h3 v-else class="fz-20 trial">Free for one-month</h3>
+          <h3 v-else class="fz-20 trial">Free for 7 Days</h3>
         </div>
         <div>
           <p class="mb-0 fz-12 al-c">

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <div class="breadcrumbs">
       <v-breadcrumbs :items="breadcrumbsItems">
         <template v-slot:divider>
@@ -7,25 +7,27 @@
         </template>
       </v-breadcrumbs>
     </div>
-    <div v-if="!onChain">
-      <div class="pa-3 mt-5 ta-c">
-        <img src="/img/svg/gateway/lock.svg" width="180" />
-      </div>
-      <div class="d-flex f-center">
-        <div style="max-width: 550px">
-          Activate your account to unlock the Hosting API.
+    <div v-if="!onChain" class="activate">
+      <div class="empty">
+        <div class="pa-3 mt-5 ta-c">
+          <img src="/img/svg/gateway/lock.svg" width="180" />
         </div>
-      </div>
-      <div
-        class="ta-c mt-8"
-        :class="{
-          hidden:
-            teamInfo.isMember && teamInfo.access?.indexOf('RESOURCE') == -1,
-        }"
-      >
-        <v-btn color="primary" width="120" @click="handleUpgrad"
-          >Activate</v-btn
+        <div class="d-flex f-center">
+          <div style="max-width: 550px">
+            Activate your account to unlock the Hosting API.
+          </div>
+        </div>
+        <div
+          class="ta-c mt-8"
+          :class="{
+            hidden:
+              teamInfo.isMember && teamInfo.access?.indexOf('RESOURCE') == -1,
+          }"
         >
+          <v-btn color="primary" width="120" @click="handleUpgrad"
+            >Activate</v-btn
+          >
+        </div>
       </div>
     </div>
     <div v-else>
@@ -245,5 +247,15 @@ export default {
   top: 0;
   left: 230px;
   z-index: 10;
+}
+.activate {
+  height: 100%;
+  position: relative;
+  .empty {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -90%);
+  }
 }
 </style>
