@@ -51,34 +51,9 @@ export default {
 
   methods: {
     onNext(data) {
-      if (data.fastDeploy) {
-        this.step = 1;
-        this.step0Data = data;
-        this.fastDeploy = data.fastDeploy;
-      }
-      if (!data.fastDeploy) {
-        let limitBalance = 1000000000;
-        if (process.env.NODE_ENV == "development") {
-          limitBalance = 10000000;
-        }
-        const balance = this.originBalance / 1e18;
-        if (Number(balance) >= limitBalance) {
-          this.step = 1;
-          this.step0Data = data;
-          this.fastDeploy = data.fastDeploy;
-        } else {
-          this.$confirm(
-            "To create a Rollup, ensure your account balance exceeds 1,000,000,000 LAND (1,000 USD). Please deposit before proceeding.",
-            "Notice",
-            {
-              cancelText: "Cancel",
-              confirmText: "Deposit",
-            }
-          ).then(async () => {
-            this.$router.push("/billing/deposit");
-          });
-        }
-      }
+      this.step = 1;
+      this.step0Data = data;
+      this.fastDeploy = false;
     },
     onStep1Submit(data) {
       this.step1Data = data;
