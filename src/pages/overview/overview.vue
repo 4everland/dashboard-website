@@ -232,19 +232,19 @@ export default {
     banners() {
       return [
         {
-          img: "https://overview-banner.bucket.4everland.xyz/boost1.png",
+          img: "https://static.4everland.org/banner/boost1.png",
           to: "/boost",
         },
         {
-          img: "https://overview-banner.bucket.4everland.xyz/land1.png",
+          img: "https://static.4everland.org/banner/land1.png",
           href: "https://medium.com/4everland/embracing-efficiency-and-innovation-introducing-land-as-the-unified-payment-unit-on-4everland-3a935f6b0d9e",
         },
         {
-          img: "https://overview-banner.bucket.4everland.xyz/feedback1.png",
+          img: "https://static.4everland.org/banner/feedback1.png",
           href: "https://forms.gle/SAzZ2Sw31atnSSsB8",
         },
         {
-          img: "https://overview-banner.bucket.4everland.xyz/arweave1.png",
+          img: "https://static.4everland.org/banner/booarweave1st1.png",
           to: "/bucket/storage/",
         },
       ];
