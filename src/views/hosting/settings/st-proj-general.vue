@@ -275,6 +275,18 @@ export default {
       savingRoot: false,
       nodeVersionList: [
         {
+          name: "24.x",
+          value: "MAINTENANCE_24",
+        },
+        {
+          name: "22.x",
+          value: "MAINTENANCE_22",
+        },
+        {
+          name: "20.x",
+          value: "MAINTENANCE_20",
+        },
+        {
           name: "18.x",
           value: "LTS",
         },
@@ -324,6 +336,15 @@ export default {
           break;
         case 14:
           config.nodeVersion = "MAINTENANCE_2";
+          break;
+        case 20:
+          config.nodeVersion = "MAINTENANCE_20";
+          break;
+        case 22:
+          config.nodeVersion = "MAINTENANCE_22";
+          break;
+        case 24:
+          config.nodeVersion = "MAINTENANCE_24";
           break;
         default:
           config.nodeVersion = "LTS";

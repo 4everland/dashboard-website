@@ -286,6 +286,18 @@ export default {
       branchList: [],
       nodeVersionList: [
         {
+          name: "24.x",
+          value: "MAINTENANCE_24",
+        },
+        {
+          name: "22.x",
+          value: "MAINTENANCE_22",
+        },
+        {
+          name: "20.x",
+          value: "MAINTENANCE_20",
+        },
+        {
           name: "18.x",
           value: "LTS",
         },
@@ -424,7 +436,7 @@ export default {
         if (data.engines) {
           engines = JSON.parse(data.engines);
           // let node = this.matchNodeVersion(engines.node);
-          let supportedNodeList = ["14.21.1", "16.18.1", "18.12.1"];
+          let supportedNodeList = ["14.21.1", "16.18.1", "18.12.1", "20.19.4", "22.19.0", "24.7.0"];
           let node = this.matchNodeVersion(supportedNodeList, engines.node);
           switch (node) {
             case "14":
@@ -435,6 +447,15 @@ export default {
               break;
             case "18":
               form.nodeVersion = "LTS";
+              break;
+            case "20":
+              form.nodeVersion = "MAINTENANCE_20";
+              break;
+            case "22":
+              form.nodeVersion = "MAINTENANCE_22";
+              break;
+            case "24":
+              form.nodeVersion = "MAINTENANCE_24";
               break;
             default:
               form.nodeVersion = "MAINTENANCE_2";
