@@ -195,7 +195,8 @@ export default {
         this.loading = true;
         const { data } = await this.$http.get("$gateway/gateway/");
         data.forEach((it) => (it.type = "IPFS"));
-        this.list = data;
+        // filter bucket gateway, hide system allocated for bucket
+        this.list = data.filter((it) => it.is_bucket == 0);
       } catch (error) {
         console.log(error);
       }
