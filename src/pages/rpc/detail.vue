@@ -38,7 +38,7 @@
             rel="noopener noreferrer"
             class="text-link"
           >
-            300 CUPS </a
+            150 CUPS </a
           >, with a monthly cap of 150,000,000 CU (currently used:
           {{ usage }} CU).
         </span>
