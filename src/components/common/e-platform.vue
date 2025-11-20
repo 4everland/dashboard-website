@@ -4,7 +4,7 @@
     <v-row>
       <v-col
         cols="12"
-        md="3"
+        class="five-per-row"
         v-for="(it, i) in platList"
         :key="i"
         @click="$emit('update:platform', it.name)"
@@ -58,6 +58,11 @@ export default {
           icon: "h-greenfield.svg",
         },
         {
+          label: "Walrus",
+          name: "WALRUS",
+          icon: "icon_walrus.svg",
+        },
+        {
           label: "Internet Computer",
           name: "IC",
           icon: "h-ic.svg",
@@ -93,5 +98,11 @@ export default {
   position: absolute;
   right: -55px;
   top: -7px;
+}
+@media (min-width: 960px) {
+  .five-per-row {
+    flex: 0 0 20% !important;
+    max-width: 20% !important;
+  }
 }
 </style>
