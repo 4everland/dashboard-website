@@ -1,14 +1,51 @@
 <template>
   
   <div class="airdrop-container">
-    <div class="airdrop-in-container" :class="{'airdrop-in-container-mobile': asMobile}">
+    <div class="airdrop-in-container airdrop-in-container-mobile">
+      <div class="airdrop-content mb-8">
+          <div class="airdrop-img">
+            <img src="/img/airdrop/airdrop_img.png" alt=""></img>
+          </div>
+            <div class="d-flex justify-end airdrop-content-right">
+              <div class="mt-9 mr-2">
+                <div class="white--text  text-left">You will receive:</div>
+                <div class="light-btn d-flex justify-center align-center">
+                  <div class="light-span relative d-flex justify-center align-center">
+                    
+                    <v-btn class="submit-btn">
+                      <span class="number">
+                        <ICountUp
+                          class="points"
+                          :delay="1000"
+                          :endVal="shortPoint"
+                          :options="{
+                            useEasing: true,
+                            useGrouping: true,
+                            decimalPlaces: 0,
+                            separator: ',',
+                            decimal: '.',
+                            prefix: '',
+                            suffix: '',
+                          }"
+                        />
+                      </span>
+                      <span class="btn-text"> $4EVER </span>
+                    </v-btn>
+                  </div>
+                </div>
+            </div>
+          </div>
+      </div>
+
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="12">
           <v-list class="transparent">
-            <v-list-item v-for="(item, index) in airdropItems" :key="index" class="airdrop-item content-bg" :class="{'content-bg-check': item.status === true}">
-              <v-list-item-avatar size="32" tile>
-                <v-img :src="item.icon"  size="32"></v-img>
+            <v-list-item v-for="(item, index) in airdropItems" :key="index" class="airdrop-item content-bg" :class="{'content-bg-check': item.status == true}">
+             <div class="d-flex align-center justify-center airdrop-item-avatar">
+              <v-list-item-avatar size="24" tile class="mx-auto">
+                <v-img :src="item.icon"  size="24" width="24"></v-img>
               </v-list-item-avatar>
+            </div>
               <v-list-item-content>
                 <v-list-item-title class="white--text font-weight-bold airdrop-title">{{ item.title }}</v-list-item-title>
                 <v-list-item-subtitle class="grey--text fz-12 text-wrap airdrop-subtitle flex align-center">
@@ -31,79 +68,37 @@
                 />
                 <img
                   v-if="item.status === false"
-                  src="/img/airdrop/icon_error.png"
+                  src="/img/airdrop/x-circle.svg"
                   width="24"
                   alt=""
                 />
               </v-list-item-action>
             </v-list-item>
           </v-list>
-        </v-col>
-
-        <v-col cols="12" md="6">
-          <v-card class="transparent" flat>
-            <v-card-text class="text-center position-relative">
-              <v-img
-                src="/img/booster/icon_fourever.png"
-                :max-width="asMobile ? 120 : 200"
-                class="mx-auto mb-4 img-right"
-                :class="{'img-right-mobile': asMobile}"
-              ></v-img>
-              <div class="right-content" :class="{'right-content2': access, 'right-content3': alreadyClaim, 'right-contentloading': loading}">
-                <div>
-                  <div v-if="access" class="big-title mb-4 text-left fz-28">🎉Congratulations, you're eligible</div>
-                  <div v-if="loading || access" class="white--text mb-4 text-left">You will receive:</div>
-                </div>
-                <div v-if="!loading&&!access" class="mt-16">
-                  <div class="big-title mt-4 text-left fz-28">Sorry</div>
-                  <div class="big-title mb-4 text-left fz-28">You're not eligible</div>
-                  <div class="white--text mb-4 text-left" style="letter-spacing: normal;">
-                    Don't be discouraged! You can still participate in 4EVER Boost, and you'll have the opportunity to receive it in the future.
-                  </div>
-                </div>
-                <div v-if="loading || access" class="d-flex justify-center">
-                  <div class="light-btn d-flex justify-center align-center">
-                    <div class="light-span relative d-flex justify-center align-center">
-                      <span
-                      v-if="alreadyClaim"
-                      class="airdrop-title-aleady-claim d-flex justify-center align-center">
-                        <img src="/img/booster/earnings/icon_check.png" width="16" alt="" />
-                        Already Claimed
-                      </span>
-                      <v-btn class="submit-btn">
-                        <span class="number">
-                          <ICountUp
-                            class="points"
-                            :delay="1000"
-                            :endVal="shortPoint"
-                            :options="{
-                              useEasing: true,
-                              useGrouping: true,
-                              decimalPlaces: 0,
-                              separator: ',',
-                              decimal: '.',
-                              prefix: '',
-                              suffix: '',
-                            }"
-                          />
-                        </span>
-                        <span class="btn-text"> $4EVER </span>
-                      </v-btn>
-                    </div>
-                  </div>
-                </div>
+          <div class="mt-4 right-content">
+            
                 <v-btn
-                  v-if="loading || (access && !alreadyClaim)"
+                  v-if="!loading&&access"
                   block
                   class="mt-4 btn-claim"
                   :class="{'btn-claim-can': canClaim, 'btn-claim2': alreadyClaim}"
                   
-                  height="48"
+                  height="44"
                   :disabled="!canClaim || alreadyClaim"
                   :loading="claimLoading"
                   @click="handleClaim"
                 >
                   {{ alreadyClaim ? 'Already Claimed' : 'Claim Now' }}
+                </v-btn>
+                <v-btn
+                  v-if="!loading&&!access"
+                  block
+                  class="mt-4 btn-claim btn-claim-not-eligible"
+                  height="44"
+                  :loading="claimLoading"
+                  
+                >
+                Sorry! you're not eligible
                 </v-btn>
                 <div
                   v-if="alreadyClaim"
@@ -114,7 +109,7 @@
                     @click="handleShare"
                   >
                     <span class="mr-2 fz-14" style="letter-spacing: normal;">Share to </span>
-                    <img src="/img/booster/invite/x.svg" width="16" alt="" />
+                    <img src="/img/airdrop/icon_x.svg" width="16" alt="" />
 
                   </v-btn>
                   <v-btn
@@ -128,6 +123,26 @@
                   </v-btn>
 
                 </div>
+              </div>
+        </v-col>
+
+        <!-- <v-col cols="12" md="6">
+          <v-card class="transparent" flat>
+            <v-card-text class="text-center position-relative">
+              
+              <div class="right-content" :class="{'right-content2': access, 'right-content3': alreadyClaim, 'right-contentloading': loading}">
+                <div>
+                  <div v-if="access" class="big-title mb-4 text-left fz-28">🎉Congratulations, you're eligible</div>
+                  <div v-if="loading || access" class="white--text mb-4 text-left">You will receive:</div>
+                </div>
+                <div v-if="!loading&&!access" class="mt-16">
+                  <div class="big-title mt-4 text-left fz-28">Sorry</div>
+                  <div class="big-title mb-4 text-left fz-28">You're not eligible</div>
+                  <div class="white--text mb-4 text-left" style="letter-spacing: normal;">
+                    Don't be discouraged! You can still participate in 4EVER Boost, and you'll have the opportunity to receive it in the future.
+                  </div>
+                </div>
+                
                 <v-btn
                   v-if="!loading && !access"
                   block
@@ -140,17 +155,16 @@
               </div>
             </v-card-text>
           </v-card>
-        </v-col>
+        </v-col> -->
       </v-row>
-
-      <v-row>
-        <v-col cols="12">
-          <div class="text-caption grey--text text--lighten-1 text-left mt-4 pl-4" style="letter-spacing: normal !important;">
-            ✨ No duplicate rewards for those who have already claimed airdrops on exchanges previously.<br>
-            ✨ This airdrop will be distributed on the BSC. Please claim yours before 8:00AM July 8 UTC.
-          </div>
-        </v-col>
-      </v-row>
+    </div>
+    <div class="airdrop-footer px-4">
+      <div class="text-caption airdrop-footer-text grey--text text--lighten-1 text-left p-4 " style="letter-spacing: normal !important;">
+        ⚠️ Eligibility Notice: This airdrop is exclusively for on-chain activated Standard Edition users. Users without a bound EVM wallet are not eligible.
+        <p>🕙Time Notice: The airdrop claim is available on the BSC Mainnet. All Eligible users must claim their $4EVER before 08:00 UTC on December 8, 2025.</p>
+      </div>
+      
+      
     </div>
   </div>
 
@@ -181,38 +195,47 @@ export default {
     claimLoading: false,
     alreadyClaim: false,
     airdropItems: [
+      
       {
-        icon: '/img/airdrop/icon_stake.png',
-        title: 'Staked T4EVER',
-        subtitle: '0.5% of tokens for 1:1 T4EVER exchange.',
-        keyStr:'stakeT4ever',
-        status: "loading",
-        realStatus: false,
-      },
-      {
-        icon: '/img/airdrop/icon_4ever.png',
+        icon: '/img/airdrop/4EVERPoints.svg',
         title: '$4EVER Points',
-        subtitle: '3% of tokens for users with $4EVER Points.',
+        subtitle: 'Rewards are distributed based on your share of the total community points.',
         status: "loading",
-        keyStr:'holdPoints',
+        keyStr:'foreverPoint',
         realStatus: false,
       },
       {
-        icon: '/img/airdrop/icon_product.png',
-        title: 'Product Interaction',
-        subtitle: '1% of tokens for early users who engage with products and on-chain activities.',
+        icon: '/img/airdrop/ProductUser.svg',
+        title: 'Product User',
+        subtitle: 'Rewards are calculated based on your usage frequency and resource consumption of core products like Hosting, Bucket, Gateway, and RPC.',
         status: "loading",
-        keyStr: 'productIteracted',
+        keyStr: 'productUser',
         realStatus: false,
       },
       {
-        icon: '/img/airdrop/icon_early.png',
-        title: 'Early Contributors',
-        subtitle: '0.5% of tokens for early ecosystem contributors and Gitcoin donation.',
+        icon: '/img/airdrop/AIUser.svg',
+        title: 'AI User',
+        subtitle: 'Rewards are calculated based on your usage of AI services like AI RPC and 4EVER Chat.',
         status: "loading",
-        keyStr:'gitcoinDonation',
+        keyStr:'aiUser',
         realStatus: false,
-      }
+      },
+      {
+        icon: '/img/airdrop/LANDDepositor.svg',
+        title: 'LAND Depositor',
+        subtitle: 'Rewards are distributed based on the amount of LAND you have deposited and consumed.',
+        keyStr:'landDepositor',
+        status: "loading",
+        realStatus: false,
+      },
+      {
+        icon: '/img/airdrop/Ecosystem.svg',
+        title: 'Ecosystem Contributor',
+        subtitle: 'Special rewards are granted to those who have made profound contributions to the core ecosystem.',
+        keyStr:'ecosystem',
+        status: "loading",
+        realStatus: false,
+      },
     ]
   }),
   computed: {
@@ -253,19 +276,20 @@ export default {
     //this.access = true; // For testing purposes, set access to true
     this.loading = false;
     this.airdropInfo = airdropData;
-    const claimInfo = localStorage.getItem("claimInfo" + this.userInfo.wallet.address);
+    const claimInfo = localStorage.getItem("claimInfoV3" + this.userInfo.wallet.address);
     if(claimInfo){
       this.alreadyClaim = true;
     }
+
     if(this.access){
       this.handleCanClaim();
     }
   },
   methods: {
     handleShare() {
-      let shareUrl = `Nice! Just claimed my $4EVER airdrop from @4everland_org 🤑
-Turns out I had some free tokens waiting - maybe you do too? Last day to check is July 8.
-Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
+      let shareUrl = `🪂 Nice! Just claimed my $4EVER airdrop from @4everland_org  
+🚀 Turns out I had some free tokens waiting - maybe you do too? Last day to claim is December 8.
+🎯 Super easy to claim: https://dashboard.4everland.org/boost/airdrop`;
       shareUrl =
         "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
       
@@ -315,6 +339,9 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
 
         console.log('canClaim', canClaim);
         this.canClaim = canClaim;
+        const hasClaimed = await contract.hasClaimed(address);
+        console.log('hasClaimed', hasClaimed);
+        this.alreadyClaim = hasClaimed;
       } catch (err) {
         console.log(err);
       }
@@ -377,7 +404,7 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
         const receipt = await tx.wait();
         this.$toast2("Successfully Claimed!");
         let info = this.userInfo.wallet.address;
-        localStorage.setItem("claimInfo" + info, true);
+        localStorage.setItem("claimInfoV3" + info, true);
         this.alreadyClaim = true;
         this.claimLoading = false;
         console.log('Transaction receipt:', receipt);
@@ -469,27 +496,47 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
 .airdrop-container {
   width: 100%;
   height: 100%;
-  padding-top: 200px;
-  background: url("/img/booster/bg_airdrop_second.svg") repeat #000000;
+  padding-top: 117px;
+  background: url("/img/airdrop/bg.png") repeat #000000;
 }
 .airdrop-in-container {
-  max-width: 1032px;
+  max-width: 560px;
   margin: 0 auto;
-  border: 1px solid #0FE1F81A;
-  background: linear-gradient(281.05deg, rgba(0, 62, 112, 0.5) 19.1%, rgba(0, 10, 16, 0.5) 100.11%);
+  border: 1px solid rgba(209, 187, 247, 0.25);
+  
+  background: radial-gradient(70.64% 82.75% at 62.7% 0%, rgba(161, 196, 253, 0.23) 0%, rgba(255, 255, 255, 0.00) 100%), rgba(0, 0, 0, 0.50);
   backdrop-filter: blur(8px);
   padding: 40px;
   border-radius: 8px;
 
 }
 .airdrop-in-container-mobile {
-  padding: 20px;
+  padding: 40px;
+}
+.airdrop-img{
+  position: absolute;
+  top: -87px;
+  left: -65px;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 .content-bg{
-  background: url("/img/booster/svg/fringe-bg.svg");
+  
+  border: 1px solid rgba(64, 64, 64, 0.70);
+  backdrop-filter: blur(12.5px);
+  background: #FFFFFF1A;
 }
 .content-bg-check{
-  background: linear-gradient(270.31deg, rgba(15, 225, 248, 0.2) 0.18%, rgba(0, 114, 248, 0.2) 100.11%), url("/img/booster/svg/fringe-bg.svg");
+  background:url("/img/airdrop/item_bg.png") lightgray 0% 0% / 30.000001192092896px 30.000001192092896px repeat, 
+              linear-gradient(180deg, rgba(0, 115, 255, 0.20) 0%, rgba(13, 162, 255, 0.20) 100%), 
+              rgba(255, 255, 255, 0.10);;
+  background-blend-mode: plus-lighter, normal, normal;
+  box-shadow: 0 1px 18px 2px rgba(210, 234, 255, 0.50) inset, 0 1px 4px 2px rgba(210, 234, 255, 0.50) inset;
+  backdrop-filter: blur(12.5px);
+  border: 1px solid #08F;
+
+  //background: linear-gradient(270.31deg, rgba(15, 225, 248, 0.2) 0.18%, rgba(0, 114, 248, 0.2) 100.11%), url("/img/booster/svg/fringe-bg.svg");
 }
 .img-right{
   position: absolute;
@@ -500,8 +547,9 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   right: -20px;
   top: 25px;
 }
-.right-content{
-  margin-top: 97px;
+.airdrop-content{
+  min-height: 160px;
+  background: url("/img/airdrop/airdrop_bg.png") no-repeat;
   .big-title{
     color: #0FE1F8;
     max-width: 68%;
@@ -513,8 +561,8 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   }
   .submit-btn {
     width: 100%;
-    height: 79px;
-    border-radius: 16px;
+    height: 54px;
+    border-radius: 8px;
     padding: 0 !important;
     .number {
       font-family: DIN Alternate;
@@ -532,7 +580,15 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
     }
     background: url("/img/booster/earnings/grid.png") no-repeat #000000;
     background-size: contain;
+    box-shadow: 0px 0px 16px 0px #039CFF80 inset;
   }
+}
+.airdrop-item-avatar{
+  background: #000000;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  margin-right: 16px;
 }
 .right-content2{
   margin-top: 15px;
@@ -544,15 +600,20 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   margin-top: 106px;
 }
 
+.airdrop-content-right{
+  position: relative;
+  z-index: 1;
+}
+
 
 .light-btn {
   position: relative;
   padding: 2px;
   border: 0;
-  border-radius: 16px;
+  border-radius: 8px;
   overflow: hidden;
   z-index: 1;
-  width: 100%;
+  width: 280px;
 }
 .light-btn::before {
   content: "";
@@ -587,8 +648,8 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
   background: var(--bg);
 }
 .light-span {
-  padding: 2px;
-  border-radius: 16px;
+  padding: 0px;
+  border-radius: 8px;
   background: #000000;
   position: relative;
   z-index: 2;
@@ -605,10 +666,6 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
 .btnWrap {
   position: relative;
   z-index: 1;
-}
-.airdrop-title {
-  position: absolute;
-  top: -10px;
 }
 .airdrop-title-aleady-claim {
   position: absolute;
@@ -665,16 +722,26 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
 }
 .btn-share{
   width: 48%;
-  background-color: #000 !important;
-  color: #fff !important;
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  border-radius: 8px;
 }
 .btn-add-token {
   width: 48%;
   background: linear-gradient(90.97deg, #0FE1F8 0.68%, #1102FC 99.51%);
   color: #fff !important;
+  border-radius: 8px;
 }
 .btn-claim-can {
   background-color: #039CFF !important;
+  border-radius: 12px;
+}
+.btn-claim2 {
+  background: rgba(3, 156, 255, 0.24);
+}
+.btn-claim-not-eligible{
+  background: #344054;
+  color: #FFFFFF80 !important;
 }
 .btn-boost {
   background: linear-gradient(90.97deg, #0FE1F8 0.68%, #1102FC 99.51%);
@@ -682,5 +749,14 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
 }
 :deep .v-list-item__content{
   overflow: inherit;
+}
+.airdrop-footer{
+  min-width: 860px;
+  
+  text-align: left;
+  .airdrop-footer-text{
+    width: 860px;
+    margin: 0 auto;
+  }
 }
 </style>
