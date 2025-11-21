@@ -159,9 +159,12 @@
       </v-row>
     </div>
     <div class="airdrop-footer px-4">
-      <div class="text-caption grey--text text--lighten-1 text-center p-4 my-4" style="letter-spacing: normal !important;">
-        This airdrop claim will be conducted on BSC MaiNet, with a deadline of 8:00 UTC on March 14. Eligible users, please complete your airdrop claim as soon as possible.
+      <div class="text-caption airdrop-footer-text grey--text text--lighten-1 text-left p-4 " style="letter-spacing: normal !important;">
+        ⚠️ Eligibility Notice: This airdrop is exclusively for on-chain activated Standard Edition users. Users without a bound EVM wallet are not eligible.
+        <p>🕙Time Notice: The airdrop claim is available on the BSC Mainnet. All Eligible users must claim their $4EVER before 08:00 UTC on December 8, 2025.</p>
       </div>
+      
+      
     </div>
   </div>
 
@@ -192,38 +195,47 @@ export default {
     claimLoading: false,
     alreadyClaim: false,
     airdropItems: [
+      
       {
-        icon: '/img/airdrop/icon_stake.png',
-        title: 'Staked T4EVER',
-        subtitle: '0.5% of tokens for 1:1 T4EVER exchange.',
-        keyStr:'stakeT4ever',
-        status: "loading",
-        realStatus: false,
-      },
-      {
-        icon: '/img/airdrop/icon_4ever.png',
+        icon: '/img/airdrop/4EVERPoints.svg',
         title: '$4EVER Points',
-        subtitle: '3% of tokens for users with $4EVER Points.',
+        subtitle: 'Rewards are distributed based on your share of the total community points.',
         status: "loading",
-        keyStr:'holdPoints',
+        keyStr:'foreverPoint',
         realStatus: false,
       },
       {
-        icon: '/img/airdrop/icon_product.png',
-        title: 'Product Interaction',
-        subtitle: '1% of tokens for early users who engage with products.',
+        icon: '/img/airdrop/ProductUser.svg',
+        title: 'Product User',
+        subtitle: 'Rewards are calculated based on your usage frequency and resource consumption of core products like Hosting, Bucket, Gateway, and RPC.',
         status: "loading",
-        keyStr: 'productIteracted',
+        keyStr: 'productUser',
         realStatus: false,
       },
       {
-        icon: '/img/airdrop/icon_early.png',
-        title: 'Early Contributors',
-        subtitle: '0.5% of tokens for 1:1 T4EVER exchange.',
+        icon: '/img/airdrop/AIUser.svg',
+        title: 'AI User',
+        subtitle: 'Rewards are calculated based on your usage of AI services like AI RPC and 4EVER Chat.',
         status: "loading",
-        keyStr:'gitcoinDonation',
+        keyStr:'aiUser',
         realStatus: false,
-      }
+      },
+      {
+        icon: '/img/airdrop/LANDDepositor.svg',
+        title: 'LAND Depositor',
+        subtitle: 'Rewards are distributed based on the amount of LAND you have deposited and consumed.',
+        keyStr:'landDepositor',
+        status: "loading",
+        realStatus: false,
+      },
+      {
+        icon: '/img/airdrop/Ecosystem.svg',
+        title: 'Ecosystem Contributor',
+        subtitle: 'Special rewards are granted to those who have made profound contributions to the core ecosystem.',
+        keyStr:'ecosystem',
+        status: "loading",
+        realStatus: false,
+      },
     ]
   }),
   computed: {
@@ -264,19 +276,20 @@ export default {
     //this.access = true; // For testing purposes, set access to true
     this.loading = false;
     this.airdropInfo = airdropData;
-    const claimInfo = localStorage.getItem("claimInfo" + this.userInfo.wallet.address);
+    const claimInfo = localStorage.getItem("claimInfoV3" + this.userInfo.wallet.address);
     if(claimInfo){
       this.alreadyClaim = true;
     }
+
     if(this.access){
       this.handleCanClaim();
     }
   },
   methods: {
     handleShare() {
-      let shareUrl = `Nice! Just claimed my $4EVER airdrop from @4everland_org 🤑
-Turns out I had some free tokens waiting - maybe you do too? Last day to check is July 8.
-Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
+      let shareUrl = `🪂 Nice! Just claimed my $4EVER airdrop from @4everland_org  
+🚀 Turns out I had some free tokens waiting - maybe you do too? Last day to claim is December 8.
+🎯 Super easy to claim: https://dashboard.4everland.org/boost/airdrop`;
       shareUrl =
         "https://x.com/intent/tweet?text=" + encodeURIComponent(shareUrl);
       
@@ -326,6 +339,9 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
 
         console.log('canClaim', canClaim);
         this.canClaim = canClaim;
+        const hasClaimed = await contract.hasClaimed(address);
+        console.log('hasClaimed', hasClaimed);
+        this.alreadyClaim = hasClaimed;
       } catch (err) {
         console.log(err);
       }
@@ -388,7 +404,7 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
         const receipt = await tx.wait();
         this.$toast2("Successfully Claimed!");
         let info = this.userInfo.wallet.address;
-        localStorage.setItem("claimInfo" + info, true);
+        localStorage.setItem("claimInfoV3" + info, true);
         this.alreadyClaim = true;
         this.claimLoading = false;
         console.log('Transaction receipt:', receipt);
@@ -733,5 +749,14 @@ Super easy to claim:  https://dashboard.4everland.org/boost/airdrop`;
 }
 :deep .v-list-item__content{
   overflow: inherit;
+}
+.airdrop-footer{
+  min-width: 860px;
+  
+  text-align: left;
+  .airdrop-footer-text{
+    width: 860px;
+    margin: 0 auto;
+  }
 }
 </style>

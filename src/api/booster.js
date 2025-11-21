@@ -465,7 +465,7 @@ export const fetchTonAdsLimit = async () => {
 
 export const fetchAirdropList = async () => {
   return boosterRequest.get({
-    url: `/node/airdrop/v2`,
+    url: `/node/airdrop/v3`,
   });
 }
 
