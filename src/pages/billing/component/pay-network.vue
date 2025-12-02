@@ -133,12 +133,12 @@ export default {
           img: "/img/svg/billing/ic-optimism.svg",
           chainId: 10,
         },
-        {
-          label: "everPay",
-          name: "everPay",
-          img: "/img/svg/billing/ic-everpay.svg",
-          chainId: 9999999,
-        },
+        // {
+        //   label: "everPay",
+        //   name: "everPay",
+        //   img: "/img/svg/billing/ic-everpay.svg",
+        //   chainId: 9999999,
+        // },
         {
           label: "Scroll",
           name: "Scroll",
@@ -157,12 +157,12 @@ export default {
           img: "/img/svg/billing/ic-taiko.svg",
           chainId: 167000,
         },
-        {
-          label: "ZksyncLite",
-          name: "Zksync Lite",
-          img: "/img/svg/logo-no-letters.svg",
-          chainId: 1,
-        },
+        // {
+        //   label: "ZksyncLite",
+        //   name: "Zksync Lite",
+        //   img: "/img/svg/logo-no-letters.svg",
+        //   chainId: 1,
+        // },
       ];
       if (!this.allow) return list;
       return list.filter((it) => this.allow.includes(it.label));

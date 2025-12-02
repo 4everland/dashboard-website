@@ -311,13 +311,13 @@ export default {
           type: "zkSyncV2",
           contractAddr: zkSyncLandRecharge,
         },
-        {
-          name: "zkSync Lite",
-          icon: require("/public/img/svg/logo-no-letters.svg"),
-          type: "zkSync",
-          tips: "Please ensure that you have sufficient ETH in zkSync Lite. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
-          contractAddr: "",
-        },
+        // {
+        //   name: "zkSync Lite",
+        //   icon: require("/public/img/svg/logo-no-letters.svg"),
+        //   type: "zkSync",
+        //   tips: "Please ensure that you have sufficient ETH in zkSync Lite. Interaction with the zkSync network will rely on cross-chain communication services to complete on-chain identity registration on Polygon.",
+        //   contractAddr: "",
+        // },
         {
           name: "BNB Smart Chain",
           icon: require("/public/img/svg/billing/ic-opbnb-test.svg"),
