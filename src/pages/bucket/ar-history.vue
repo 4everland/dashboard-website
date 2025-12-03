@@ -37,7 +37,7 @@
     </div>
 
     <v-row v-if="usageInfo.length">
-      <v-col cols="12" md="3" v-for="usage in usageInfo" :key="usage.title">
+      <v-col cols="12" md="6" v-for="usage in usageInfo" :key="usage.title">
         <nav-item :info="usage" :value="usage.value"></nav-item>
       </v-col>
     </v-row>
@@ -262,19 +262,6 @@ export default {
             title: "Synchronizing",
             icon: require("/public/img/svg/ar-sync/syncing.svg"),
             value: arweaveSyncingStorage,
-          },
-          {
-            title: "≤150KB (free)",
-            icon: require("/public/img/svg/ar-sync/free.svg"),
-            value: arweaveFreeStorage,
-            tips: "Aggregate Storage for Files Smaller Than 150KB",
-          },
-          {
-            title: ">150KB ",
-            icon: require("/public/img/svg/ar-sync/paid.svg"),
-            value: arweavePaidStorage,
-            tips: "Aggregate Storage for Files Larger Than 150KB",
-            link: "https://forms.gle/tgcHTQC86Yyer2HX7",
           },
         ];
       } catch (error) {
