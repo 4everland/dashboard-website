@@ -243,10 +243,6 @@ export default {
           img: "https://static.4everland.org/banner/feedback1.png",
           href: "https://forms.gle/SAzZ2Sw31atnSSsB8",
         },
-        {
-          img: "https://static.4everland.org/banner/booarweave1st1.png",
-          to: "/bucket/storage/",
-        },
       ];
     },
     asMobile() {
