@@ -32,7 +32,7 @@
                 target="_blank"
                 @click.stop="onStop"
                 style="min-width: 100px"
-                v-if="it.cid && it.state == 'SUCCESS'"
+                v-if="it.cid && it.state == 'SUCCESS' && it.platform != 'WALRUS'"
               >
                 <span v-if="it.platform == 'IPFS'">
                   <!-- {{ it.cid.cutStr(4, 4) }} -->
@@ -54,7 +54,11 @@
                     )
                   }}
                 </span>
+                
               </a>
+              <span class="ml-2 fz-13 d-ib" v-if="it.platform == 'WALRUS'">
+                  {{ showHashVal(it.walrus.siteIdentifier, it.platform) }}
+                </span>
               <span
                 class="ml-2 fz-13 d-ib"
                 v-else-if="it.state == 'FAILURE'"
@@ -205,6 +209,8 @@ export default {
           return "ar://" + val;
         } else if (plat == "GREENFIELD") {
           return "gnfd://" + val;
+        } else if (plat == "WALRUS") {
+          return "Blob ID://" + val;
         } else if (plat == "IPNS") {
           return "ipns://" + val;
         } else {

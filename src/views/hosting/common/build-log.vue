@@ -9,7 +9,7 @@
     >
       <div class="mb-2" v-for="(it, i) in list" :key="i">
         <e-kv :label="new Date(it.timestamp).format('HH:mm:ss.S')">
-          <span class="wb-all">{{ it.content }}</span>
+          <span class="wb-all">{{ info.platform == "WALRUS" ? it.content.startsWith("deploy site success:") ? "deploy site success: "+info.walrus.siteIdentifier : it.content : it.content }}</span>
         </e-kv>
       </div>
       <div v-if="errMsg">
@@ -40,6 +40,7 @@ export default {
   props: {
     taskId: String,
     list: Array,
+    info: Object,
     height: {
       type: String,
       default: "140px",

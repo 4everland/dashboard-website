@@ -186,16 +186,18 @@
                         :src="`/img/svg/hosting/h-${it.platform.toLowerCase()}.svg`"
                         height="20"
                       />
+                      
                       <a
+                      
                         class="u ml-2 fz-12 gray"
                         :href="
                           it.greenfield
                             ? $utils.getGreenfieldLink(it.greenfield.tx)
-                            : $utils.getCidLink(it.hash, it.platform, it.online)
+                            : it.walrus? '' : $utils.getCidLink(it.hash, it.platform, it.online)
                         "
                         target="_blank"
                         @click.stop
-                        v-if="it.hash && it.state == 'SUCCESS'"
+                        v-if="it.hash && it.state == 'SUCCESS' && it.platform != 'WALRUS'"
                       >
                         <!-- {{ it.hash.cutStr(4, 4) }} -->
                         {{
@@ -206,7 +208,7 @@
                                   it.greenfield.object,
                                 it.platform
                               )
-                            : showHashVal(it.hash, it.platform)
+                            : it.walrus? showHashVal(it.walrus.siteIdentifier, it.platform) : showHashVal(it.hash, it.platform)
                         }}
                       </a>
                       <span v-else-if="it.state == 'FAILURE'" class="ml-1 fz-14"
@@ -215,8 +217,8 @@
                       <span v-else-if="it.state == 'SYNCING'" class="ml-1 fz-14"
                         >Syncing</span
                       >
-                      <span v-else class="ml-1 fz-14">{{
-                        it.platform == "IC" ? "Internet Computer" : it.platform
+                      <span v-else class="ml-2 fz-12">{{
+                        it.platform == "IC" ? "Internet Computer" : it.platform == "WALRUS" ? showHashVal(it.walrus.siteIdentifier, it.platform) : it.platform
                       }}</span>
                     </div>
                   </div>
@@ -419,6 +421,8 @@ export default {
           return "ar://" + val;
         } else if (plat == "GREENFIELD") {
           return "gnfd://" + val;
+        } else if (plat == "WALRUS") {
+          return "Blob ID://" + val;
         } else if (plat == "IPNS") {
           return "ipns://" + val;
         } else {

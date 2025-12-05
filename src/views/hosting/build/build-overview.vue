@@ -51,7 +51,7 @@
               (showLabel && !hashDeploy(info.deployType))
             "
           >
-            <div v-if="info.platform != 'GREENFIELD'">
+            <div v-if="info.platform != 'GREENFIELD' && info.platform != 'WALRUS'">
               <div class="al-c" v-if="info.hash">
                 <e-link
                   class="fz-14"
@@ -325,6 +325,8 @@ export default {
           return "ar://" + val;
         } else if (plat == "GREENFIELD") {
           return "gnfd://" + val;
+        } else if (plat == "WALRUS") {
+          return "Blob ID://" + val;
         } else if (plat == "IPNS") {
           return "ipns://" + val;
         } else {
