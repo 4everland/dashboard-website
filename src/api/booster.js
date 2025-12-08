@@ -371,11 +371,11 @@ export const tgPaymentInvoice = async (targetValue) => {
   });
 };
 
-export const fetchAirdropInfo = async () => {
-  return boosterRequest.get({
-    url: `/node/airdrop`,
-  });
-};
+// export const fetchAirdropInfo = async () => {
+//   return boosterRequest.get({
+//     url: `/node/airdrop`,
+//   });
+// };
 
 
 export const fetchPoolProjectList = async () => {
