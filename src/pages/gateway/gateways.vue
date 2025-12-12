@@ -285,7 +285,7 @@ export default {
 .top-tips {
     border-radius: 4px;
     background: var(--v-background2-base);
-    color: var(--v-primary-base);
+    color: #ff6960;
     font-size: 14px;
     font-weight: 400;
     display: flex;
@@ -293,9 +293,10 @@ export default {
     justify-content: space-between;
     align-items: center;
     .text-link {
-      color: var(--v-primary-base);
+      color: #0a9e71;
       font-size: 14px;
       font-weight: 700;
+
       text-decoration-line: underline;
     }
   }
