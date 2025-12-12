@@ -35,12 +35,23 @@
       </div>
     </div>
     <div v-else>
+      
+        
       <e-right-opt-wrap :top="-55">
         <gateway-generate
           @getList="getList"
           :listLength="maxGatewayList.length"
         />
       </e-right-opt-wrap>
+      <div class="top-tips mb-4" >
+        <div class="d-flex al-c">
+          <img :src="require('/public/img/svg/common/ic-error.svg')" width="24" />
+          <span class="ml-2">
+            The default gateway domain xxx.4everland.link is temporarily unavailable. Please bind your own domain. 
+            
+          </span>
+        </div>
+      </div>
       <div class="main-wrap">
         <v-data-table
           :loading="loading"
@@ -271,4 +282,21 @@ export default {
     transform: translate(-50%, -90%);
   }
 }
+.top-tips {
+    border-radius: 4px;
+    background: var(--v-background2-base);
+    color: var(--v-primary-base);
+    font-size: 14px;
+    font-weight: 400;
+    display: flex;
+    padding: 16px 24px;
+    justify-content: space-between;
+    align-items: center;
+    .text-link {
+      color: var(--v-primary-base);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration-line: underline;
+    }
+  }
 </style>
