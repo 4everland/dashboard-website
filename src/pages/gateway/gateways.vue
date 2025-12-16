@@ -43,15 +43,7 @@
           :listLength="maxGatewayList.length"
         />
       </e-right-opt-wrap>
-      <div class="top-tips mb-4" >
-        <div class="d-flex al-c">
-          <img :src="require('/public/img/svg/common/ic-error.svg')" width="24" />
-          <span class="ml-2">
-            The default gateway domain xxx.4everland.link is temporarily unavailable. Please bind your own domain. 
-            
-          </span>
-        </div>
-      </div>
+      
       <div class="main-wrap">
         <v-data-table
           :loading="loading"
