@@ -674,8 +674,8 @@ export default {
     getViewUrl(item) {
       const { Prefix } = this.pathInfo;
       console.log(item)
-      //let url = this.bucketInfo.originList[0].replaceAll("4everland.store", "bucket.4everland.xyz") + "/" + Prefix + item.name;
-      let url = this.ipfsLink(item.hash);
+      let url = this.bucketInfo.originList[0].replaceAll("4everland.store", "4everbucket.com") + "/" + Prefix + item.name;
+      //let url = this.ipfsLink(item.hash);
       return url.encode();
     },
     ipfsLink(ipfs) {
