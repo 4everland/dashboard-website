@@ -320,7 +320,7 @@ export default {
             vipKeyCount += 1;
           }
         });
-        if (vipKeyCount >= 3) {
+        if (vipKeyCount >= 10) {
           isVerify = false;
           this.noMoreKey = true;
         } else if (Number(balance) < 10000000) {
