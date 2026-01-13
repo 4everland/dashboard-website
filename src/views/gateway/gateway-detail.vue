@@ -29,7 +29,7 @@ export default {
     return {
       list: [
         { text: "Settings", comp: "gateway-settings" },
-        { text: "Allowlists", comp: "gateway-allowlists" },
+        // { text: "Allowlists", comp: "gateway-allowlists" },
         { text: "Domains", comp: "gateway-domains" },
       ],
       breadcrumbsItems: [
