@@ -205,7 +205,7 @@ Vue.prototype.$utils = {
     return `https://greenfieldscan.com/tx/${tx}`;
   },
   getSuiTxLink(tx) {
-    return `https://suiscan.xyz/mainnet/object/${tx}`;
+    return `https://walruscan.com/mainnet/blob/${tx}`;
   },
 
   cutFixed(num, keep = 2) {
