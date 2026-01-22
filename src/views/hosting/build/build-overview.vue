@@ -122,7 +122,7 @@
 
             <div v-else>
               <div
-                v-if="info.platform != 'GREENFIELD' && info.platform != 'AR'"
+                v-if="info.platform != 'GREENFIELD' && info.platform != 'AR' && info.platform != 'WALRUS'"
               >
                 <msg-line
                   v-if="info.deployType == 'CID'"

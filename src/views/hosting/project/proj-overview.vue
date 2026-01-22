@@ -167,7 +167,8 @@
             v-if="
               hashDeploy(info.deployType) &&
               info.platform != 'GREENFIELD' &&
-              info.platform != 'AR'
+              info.platform != 'AR' &&
+              info.platform != 'WALRUS'
             "
           >
             <msg-line-vertical

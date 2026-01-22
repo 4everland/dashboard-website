@@ -54,8 +54,13 @@
           </p>
           <p v-if="isFail && !isSyncErr">{{ errMsg }}</p>
           <p v-else>
+            <p v-if="info.platform !== 'WALRUS'">
             {{ web3TplDeploy ? "Generate Hash" : "IPFS Hash" }}:
             {{ ipfsHash ? ipfsHash : "Resolving pending" }}
+            </p>
+            <p v-if="info.platform === 'WALRUS'">
+              Blob ID: {{ info.walrus.siteIdentifier }}
+            </p>
           </p>
         </div>
       </div>
