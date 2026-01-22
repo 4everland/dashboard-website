@@ -204,6 +204,9 @@ Vue.prototype.$utils = {
   getGreenfieldLink(tx) {
     return `https://greenfieldscan.com/tx/${tx}`;
   },
+  getSuiTxLink(tx) {
+    return `https://suiscan.xyz/mainnet/object/${tx}`;
+  },
 
   cutFixed(num, keep = 2) {
     const str = num + "";

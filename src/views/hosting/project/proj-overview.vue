@@ -34,7 +34,7 @@
                 {{ info.greenfield.bucket }} greenfield bucket.
               </span>
             </e-tooltip>
-            <div class="al-c" v-if="info.platform != 'GREENFIELD'">
+            <div class="al-c" v-if="info.platform != 'GREENFIELD' && info.platform != 'WALRUS'">
               <e-link
                 class="fz-14"
                 :href="$utils.getCidLink(info.hash, info.platform, info.online)"
@@ -260,7 +260,8 @@ export default {
       return (
         this.info.platform != "IC" &&
         this.info.platform != "AR" &&
-        this.info.platform != "GREENFIELD"
+        this.info.platform != "GREENFIELD" &&
+        this.info.platform != "WALRUS"
       );
     },
     hashDeploy() {
@@ -288,6 +289,8 @@ export default {
           return "ar://" + val;
         } else if (plat == "GREENFIELD") {
           return "gnfd://" + val;
+        } else if (plat == "WALRUS") {
+          return "Blob ID://" + val;
         } else if (plat == "IPNS") {
           return "ipns://" + val;
         } else {

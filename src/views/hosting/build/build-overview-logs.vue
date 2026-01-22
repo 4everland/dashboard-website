@@ -46,7 +46,7 @@
           @success="$toast('Copied!')"
           width="14"
         />
-        <build-log v-if="info && !hashDeploy" :list="logs" :errMsg="errMsg" />
+        <build-log v-if="info && !hashDeploy" :list="logs" :info="info" :errMsg="errMsg" />
         <div v-else class="fz-14">
           <p v-if="web3TplDeploy">
             Start: Download the file directory and update the configuration
@@ -98,7 +98,7 @@
       <e-kv
         min-width="70px"
         :label="`${info.platform} Hash:`"
-        v-if="info && info.hash && info.platform != 'GREENFIELD'"
+        v-if="info && info.hash && info.platform != 'GREENFIELD' && info.platform != 'WALRUS'"
       >
         <a
           class="u"
@@ -119,6 +119,29 @@
           >{{ showHashVal(greenfieldHash, info.platform) }}</a
         >
       </e-kv>
+      <div v-else-if="info && info.walrus && info.platform == 'WALRUS'">
+        
+        <e-kv
+          min-width="70px"
+          :label="`Blob ID :`"
+          
+        >
+        {{info.walrus.siteIdentifier }}
+        </e-kv>
+        <e-kv
+          min-width="70px"
+          :label="`Sui Tx Hash :`"
+          
+        >
+        <a
+          class="u"
+          :href="$utils.getSuiTxLink(info.walrus.blobObjectId)"
+          target="_blank"
+          >
+        {{info.walrus.blobObjectId }}
+        </a>
+        </e-kv>
+        </div>
       <div class="fz-14 gray" v-else>
         <div v-if="isSyncErr" class="red-1">Not synchronized</div>
         <div v-else-if="info && info.platform == 'IC'">
@@ -135,6 +158,7 @@
           <h-status :val="state"></h-status>
         </span>
       </div>
+      
     </e-toggle-card>
   </div>
 </template>
@@ -306,6 +330,8 @@ export default {
           return "ar://" + val;
         } else if (plat == "GREENFIELD") {
           return "gnfd://" + val;
+        } else if (plat == "WALRUS") {
+          return "Blob ID://" + val;
         } else if (plat == "IPNS") {
           return "ipns://" + val;
         } else {
@@ -344,6 +370,9 @@ export default {
             this.getInfo();
           }
         } else if (last && last.content != data.content) {
+
+          this.info.platform == "WALRUS" ? data.content = data.content.startsWith("deploy site success:") ? "deploy site success: "+this.info.walrus.siteIdentifier : data.content : data.content;
+          console.log(data.content, "data.content");
           this.logs.push(data);
         }
         this.state = data.state.toLowerCase();
