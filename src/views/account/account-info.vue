@@ -10,49 +10,23 @@
     <v-card class="user-info d-flex al-c pa-8">
       <div>
         <div class="avatar-box" @click="$refs.uploadInput.onClick(false)">
-          <e-team-avatar
-            class="cursor-p"
-            :src="teamAvatar"
-            :uid="teamInfo.teamId"
-            :size="100"
-          ></e-team-avatar>
+          <e-team-avatar class="cursor-p" :src="teamAvatar" :uid="teamInfo.teamId" :size="100"></e-team-avatar>
           <div class="avatar-mask">
             <img :src="`/img/svg/account/upload.svg`" height="20" />
           </div>
         </div>
-        <input-upload
-          @input="onInput"
-          accept="image/jpg, image/jpeg, image/png, image/webp"
-          ref="uploadInput"
-          :limitSize="29 * 1e4"
-          @onLimitSize="onLimitSize"
-        ></input-upload>
+        <input-upload @input="onInput" accept="image/jpg, image/jpeg, image/png, image/webp" ref="uploadInput"
+          :limitSize="29 * 1e4" @onLimitSize="onLimitSize"></input-upload>
       </div>
       <div class="ml-8">
         <div>
           <div v-if="!isEdit" class="al-c">
             <span> {{ teamName }}</span>
-            <v-icon
-              color="primary"
-              class="cursor-p ml-3"
-              size="20"
-              @click="onEdit"
-              >mdi-pencil-outline</v-icon
-            >
+            <v-icon color="primary" class="cursor-p ml-3" size="20" @click="onEdit">mdi-pencil-outline</v-icon>
           </div>
           <div v-else class="al-c" style="width: 400px">
-            <v-text-field
-              v-model="teamName"
-              maxlength="70"
-              counter="70"
-            ></v-text-field>
-            <v-icon
-              color="primary"
-              class="cursor-p ml-3"
-              size="20"
-              @click="handleSave"
-              >mdi-check</v-icon
-            >
+            <v-text-field v-model="teamName" maxlength="70" counter="70"></v-text-field>
+            <v-icon color="primary" class="cursor-p ml-3" size="20" @click="handleSave">mdi-check</v-icon>
           </div>
         </div>
 
@@ -61,38 +35,20 @@
             <div>DID</div>
             <div class="mt-3 fz-14 al-c">
               <span>{{ onChain ? userInfo.euid.cutStr(6, 4) : "--" }}</span>
-              <img
-                class="ml-2 cursor-p"
-                v-if="onChain"
-                src="/img/icon/copy.svg"
-                width="16"
-                v-clipboard="userInfo.euid"
-                @success="$toast('Copied!')"
-              />
+              <img class="ml-2 cursor-p" v-if="onChain" src="/img/icon/copy.svg" width="16" v-clipboard="userInfo.euid"
+                @success="$toast('Copied!')" />
             </div>
           </div>
           <div class="ml-15">
             <div>
               <span class="ml-2">User Type</span>
-              <v-icon
-                class="ml-2"
-                size="20"
-                color="gray"
-                @click="showStep = true"
-                >mdi-alert-circle-outline</v-icon
-              >
+              <v-icon class="ml-2" size="20" color="gray" @click="showStep = true">mdi-alert-circle-outline</v-icon>
             </div>
-            <div
-              class="identification-tag px-3 al-c fz-14 mt-3 cursor-p d-ib"
-              :style="{
-                background: onChain ? '#6172F3' : '#dbdbdb',
-              }"
-              @click="$router.push('/billing/records?tab=Deposit History')"
-            >
+            <div class="identification-tag px-3 al-c fz-14 mt-3 cursor-p d-ib" :style="{
+              background: onChain ? '#6172F3' : '#dbdbdb',
+            }" @click="$router.push('/billing/records?tab=Deposit History')">
               <span class="fz-14"> {{ onChain ? "Standard" : "Trial" }}</span>
-              <v-icon class="ml-3" size="16" color="#fff"
-                >mdi-arrow-right-circle-outline</v-icon
-              >
+              <v-icon class="ml-3" size="16" color="#fff">mdi-arrow-right-circle-outline</v-icon>
             </div>
           </div>
         </div>
@@ -119,17 +75,10 @@
           </ul>
         </div>
         <div class="step-title mt-4">
-          <v-icon :color="onChain ? '#f49e28' : '#BDBDBD'" size="20"
-            >mdi-check-circle</v-icon
-          >
-          <span class="ml-2" :class="{ 'compeleted-status': onChain }"
-            >Standard</span
-          >
+          <v-icon :color="onChain ? '#f49e28' : '#BDBDBD'" size="20">mdi-check-circle</v-icon>
+          <span class="ml-2" :class="{ 'compeleted-status': onChain }">Standard</span>
         </div>
-        <div
-          class="step-content px-4 py-2 mx-2 mt-3"
-          :class="{ 'step-content-compeleted': onChain }"
-        >
+        <div class="step-content px-4 py-2 mx-2 mt-3" :class="{ 'step-content-compeleted': onChain }">
           <div>
             Web3 decentralized on-chain identity, fully experience all the
             functionalities available.
@@ -168,7 +117,7 @@ export default {
   components: {
     InputUpload,
   },
-  data() {
+  data () {
     return {
       teamName: "",
       file: null,
@@ -183,7 +132,7 @@ export default {
       ],
     };
   },
-  created() {
+  created () {
     this.initInfo();
   },
   computed: {
@@ -194,7 +143,7 @@ export default {
     ...mapGetters(["teamInfo"]),
   },
   methods: {
-    async initInfo() {
+    async initInfo () {
       this.teamName = this.teamInfo.teamName;
       if (this.teamInfo.teamAvatar) {
         this.teamAvatar = this.teamInfo.teamAvatar;
@@ -202,7 +151,7 @@ export default {
         this.teamAvatar = "";
       }
     },
-    async getAvatarSrc(file) {
+    async getAvatarSrc (file) {
       try {
         this.teamAvatar = URL.createObjectURL(file);
         const formData = new FormData();
@@ -218,7 +167,7 @@ export default {
       }
       this.$loading.close();
     },
-    async onInput(file) {
+    async onInput (file) {
       try {
         this.file = file[0];
         await this.getAvatarSrc(file[0]);
@@ -226,7 +175,7 @@ export default {
         console.log(error);
       }
     },
-    async handleSave() {
+    async handleSave () {
       try {
         const data = {
           teamName: this.teamName,
@@ -243,10 +192,10 @@ export default {
         this.$refs.teamNameRef.onFocus();
       }
     },
-    onLimitSize() {
+    onLimitSize () {
       this.$alert("The uploaded image shouldn't be larger than 280KB.");
     },
-    onEdit() {
+    onEdit () {
       this.isEdit = true;
     },
   },
@@ -258,25 +207,30 @@ export default {
   .breadcrumbs {
     position: static !important;
   }
+
   .v-breadcrumbs {
     padding: 0 0 16px 0;
     margin-top: -12px;
   }
 }
+
 .breadcrumbs {
   position: fixed;
   top: 0;
   left: 230px;
   z-index: 10;
 }
+
 .identification-tag {
   color: #fff;
   line-height: 24px;
   background: #dbdbdb;
   border-radius: 12px;
 }
+
 .avatar-box {
   position: relative;
+
   .avatar-mask {
     width: 100px;
     height: 100px;
@@ -294,15 +248,19 @@ export default {
 .step-title {
   color: #bdbdbd;
 }
+
 .step-content {
   border-left: 2px solid #dbdbdb;
 }
+
 .step-content-compeleted {
   border-left: 2px solid #f49e28 !important;
 }
+
 .compeleted-status {
   color: #f49e28;
 }
+
 ul,
 li {
   list-style: disc;
