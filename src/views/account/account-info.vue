@@ -112,10 +112,10 @@
           </div>
           <div class="gray fz-14 mt-3">Equity:</div>
           <ul class="gray fz-14 pl-3">
-            <li>5 GB IPFS storage</li>
-            <li>20 MB Arweave storage</li>
-            <li>10 GB bandwidth</li>
-            <li>100 build time</li>
+            <li>1 GB IPFS storage</li>
+            <li>10 MB Arweave storage</li>
+            <li>1 GB bandwidth</li>
+            <li>50 build time</li>
           </ul>
         </div>
         <div class="step-title mt-4">
@@ -149,7 +149,7 @@
               <ul class="gray fz-14 pl-3">
                 <li>6 GB IPFS storage</li>
                 <li>100 MB Arweave storage</li>
-                <li>100 GB bandwidth</li>
+                <li>10 GB bandwidth</li>
                 <li>250 build time</li>
               </ul>
             </div>

@@ -231,6 +231,11 @@ export default {
         if (error.code == 4902 || error.data?.originalError.code == 4902) {
           await this.addChain(chainId, id);
         } else {
+          if (!this.walletObj) {
+            throw this.$toast(
+              "Wallet does not exist, please install wallet first!"
+            );
+          }
           throw new Error(error.message);
         }
       }
