@@ -39,7 +39,7 @@
             class="text-link"
           >
             150 CUPS </a
-          >, with a monthly cap of 150,000,000 CU (currently used:
+          >, with a monthly cap of 100,000 CU (currently used:
           {{ usage }} CU).
         </span>
       </div>
