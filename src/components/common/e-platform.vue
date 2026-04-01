@@ -60,7 +60,7 @@ export default {
         {
           label: "Walrus",
           name: "WALRUS",
-          icon: "icon_walrus.svg",
+          icon: "walrus-token.png",
         },
         {
           label: "Internet Computer",
