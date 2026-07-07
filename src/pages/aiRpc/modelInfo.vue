@@ -23,16 +23,16 @@
       <div v-if="modelInfo">
         <div class="al-c space-btw">
           <div>
-            <h3 class="fz-16">{{ modelInfo.name }}</h3>
+            <h3 class="fz-16">{{ modelInfo.displayName || modelInfo.name }}</h3>
             <div class="al-c mt-3">
-              <div class="fz-16">{{ modelInfo.id }}</div>
+              <div class="fz-16">{{ modelInfo.name }}</div>
               <img
                 src="/img/svg/ai-rpc/copy.svg"
                 class="ml-2 cursor-p"
                 width="16"
                 height="16"
                 alt=""
-                v-clipboard="modelInfo.id"
+                v-clipboard="modelInfo.name"
                 @success="$toast('Copied!')"
               />
             </div>
@@ -223,22 +223,24 @@ export default {
     async getItems() {
       try {
         const { data } = await axios.get(
-          "https://ai.api.4everland.org/api/v1/models"
+          "https://ai.api.4everland.org/api/v1/models",
+          { params: { size: 200 } },
         );
 
-        const arr = data.data.map((it) => {
-          if (/openrouter\/auto/g.test(it.id)) {
-            console.log(it);
-            return {
-              ...it,
-              id: "4ever/auto",
-            };
-          }
-          return it;
-        });
-        this.modelInfo = arr.find((it) => it.id == this.$route.params.id);
+        const arr = (data.data.items || []).map((it) => ({
+          ...it,
+          pricing: {
+            prompt: it.priceInput,
+            completion: it.priceOutput,
+          },
+        }));
+        const modelId = decodeURIComponent(this.$route.params.id);
+        this.modelInfo = arr.find(
+          (it) => it.name === modelId || it.id === modelId,
+        );
         if (this.modelInfo) {
-          this.breadcrumbsItems[1].text = this.modelInfo.name;
+          this.breadcrumbsItems[1].text =
+            this.modelInfo.displayName || this.modelInfo.name;
         }
       } catch (error) {
         console.log(error);
@@ -248,7 +250,19 @@ export default {
       if (val == 0 || val == -1) {
         return "Free";
       }
-      return (val * 1e6).toFixed(4) + " LAND";
+      const amount = val * 1e6;
+      const units = [
+        { value: 1e9, suffix: "B" },
+        { value: 1e6, suffix: "M" },
+        { value: 1e3, suffix: "K" },
+      ];
+      for (const { value, suffix } of units) {
+        if (Math.abs(amount) >= value) {
+          const formatted = (amount / value).toFixed(2).replace(/\.?0+$/, "");
+          return `${formatted}${suffix} LAND`;
+        }
+      }
+      return `${Number(amount.toFixed(4))} LAND`;
     },
     transferDesc(str) {
       var result = str.replace(/\[(.*?)\]\((.*?)\)/g, function (match, p1, p2) {
@@ -284,8 +298,8 @@ export default {
     handleOpenChat() {
       this.$goChat(
         `/login?model=${this.$route.params.id}&t=${encodeURIComponent(
-          localStorage.token
-        )}`
+          localStorage.token,
+        )}`,
       );
     },
   },
