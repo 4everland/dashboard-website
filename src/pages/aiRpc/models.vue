@@ -29,7 +29,7 @@
           <div>
             <div class="al-c model-title-row">
               <img
-                :src="getProviderIcon(it)"
+                :src="it.providerEndpoints.iconUrl"
                 class="provider-icon"
                 @error="onProviderIconError"
                 alt=""
