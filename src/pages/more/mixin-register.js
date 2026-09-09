@@ -31,9 +31,13 @@ export default {
       return uidToEuid(this.teamId);
     },
     ProviderController() {
+      // Pass network explicitly to avoid ethers auto-detect failing on flaky RPCs
+      const network = this.$inDev
+        ? { name: "maticmum", chainId: 80001 }
+        : { name: "matic", chainId: 137 };
       return ProviderControllerV2__factory.connect(
         MumbaiProviderController,
-        new providers.JsonRpcProvider(GoerliRpc)
+        new providers.JsonRpcProvider(GoerliRpc, network)
       );
     },
   },
@@ -296,7 +300,7 @@ export default {
           chainId,
           chainName: "Polygon Mainnet",
           rpcUrls: [
-            "https://rpc.ankr.com/polygon",
+            "https://polygon-bor-rpc.publicnode.com",
             // "https://polygon-rpc.com",
           ],
           nativeCurrency: {
